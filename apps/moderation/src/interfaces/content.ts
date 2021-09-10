@@ -14,7 +14,7 @@ export interface IContentProps {
   determinationLabel?: string;
   determination?: string;
   reportedLabel: string;
-  contentType: string;
+  itemType: string;
   forLabel: string;
   andLabel?: string;
   reportedByLabel: string;

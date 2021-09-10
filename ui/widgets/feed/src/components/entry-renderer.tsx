@@ -26,7 +26,7 @@ export interface IEntryRenderer {
   bookmarksQuery: ReturnType<typeof useGetBookmarks>;
   style?: React.CSSProperties;
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
-  onFlag?: (entryId: string, contentType: string, reporterEthAddress?: string | null) => () => void;
+  onFlag?: (entryId: string, itemType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;

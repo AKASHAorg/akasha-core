@@ -38,9 +38,9 @@ const ReportModalComponent = (props: RootComponentProps) => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  const contentType = React.useMemo(() => {
-    if (activeModal.hasOwnProperty('contentType') && typeof activeModal.contentType === 'string') {
-      return activeModal.contentType;
+  const itemType = React.useMemo(() => {
+    if (activeModal.hasOwnProperty('itemType') && typeof activeModal.itemType === 'string') {
+      return activeModal.itemType;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -52,22 +52,20 @@ const ReportModalComponent = (props: RootComponentProps) => {
       reportMutation.mutate({
         dataToSign,
         contentId: activeModal.entryId,
-        contentType: contentType,
+        contentType: itemType,
         url: `${BASE_REPORT_URL}/new`,
         modalName: 'report-modal',
       }),
 
-    [contentType, activeModal.entryId, reportMutation],
+    [itemType, activeModal.entryId, reportMutation],
   );
 
   return (
     <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
       <ReportModal
-        titleLabel={t(`Report ${contentType === 'account' ? activeModal.user : contentType}`)}
+        titleLabel={t(`Report ${itemType === 'account' ? activeModal.user : itemType}`)}
         successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-        successMessageLabel={t(
-          `We will investigate this ${contentType} and take appropriate action.`,
-        )}
+        successMessageLabel={t(`We will investigate this ${itemType} and take appropriate action.`)}
         optionsTitleLabel={t('Please select a reason')}
         optionLabels={reasons.map((el: string) => t(el))}
         optionValues={reasons}
@@ -85,7 +83,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
         closeLabel={t('Close')}
         user={loginState.pubKey ? loginState.pubKey : ''}
         contentId={activeModal.entryId}
-        contentType={contentType}
+        itemType={itemType}
         requesting={reportMutation.status === 'loading'}
         success={reportMutation.status === 'success'}
         closeModal={handleModalClose}

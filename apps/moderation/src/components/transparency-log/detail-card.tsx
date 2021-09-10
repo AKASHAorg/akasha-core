@@ -36,12 +36,12 @@ const DetailCard: React.FC<IDetailCard> = props => {
 
   const { t } = useTranslation();
 
-  const handleClickViewItem = (contentType: string, contentID: string) => () => {
-    if (contentType === 'post') {
+  const handleClickViewItem = (itemType: string, contentID: string) => () => {
+    if (itemType === 'post') {
       navigateToUrl(`${BASE_SOCIAL_URL}/post/${contentID}`);
-    } else if (contentType === 'reply' || contentType === 'comment') {
+    } else if (itemType === 'reply' || itemType === 'comment') {
       navigateToUrl(`${BASE_SOCIAL_URL}/reply/${contentID}`);
-    } else if (contentType === 'account') {
+    } else if (itemType === 'account') {
       navigateToUrl(`${BASE_PROFILE_URL}/${contentID}`);
     }
   };

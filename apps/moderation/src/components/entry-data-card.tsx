@@ -10,12 +10,12 @@ const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 export interface IEntryDataCardProps {
   entryData: any;
   locale: ILocale;
-  contentType: string;
+  itemType: string;
   singleSpa: any;
 }
 
 const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
-  const { entryData, contentType, locale } = props;
+  const { entryData, itemType, locale } = props;
 
   const { t } = useTranslation();
 
@@ -26,7 +26,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
       {entryData ? (
         <>
           {/* for other contents (reply | comment, post) */}
-          {contentType !== 'account' && entryData && (
+          {itemType !== 'account' && entryData && (
             <EntryCard
               entryData={entryData}
               repostsLabel={t('Reposts')}
@@ -40,7 +40,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               isModerated={true}
             />
           )}
-          {contentType === 'account' && (
+          {itemType === 'account' && (
             <ProfileCard
               flaggable={true}
               canUserEdit={false}

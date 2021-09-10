@@ -20,7 +20,7 @@ const Content: React.FC<IContentProps> = props => {
 
   const handleClick = () => {
     if (props.entryId) {
-      props.handleButtonClick(props.entryId, props.contentType);
+      props.handleButtonClick(props.entryId, props.itemType);
     }
   };
 
@@ -31,7 +31,7 @@ const Content: React.FC<IContentProps> = props => {
       {props.entryData && (
         <EntryDataCard
           entryData={props.entryData}
-          contentType={props.contentType}
+          itemType={props.itemType}
           locale={props.locale}
           singleSpa={props.singleSpa}
         />
@@ -43,8 +43,8 @@ const Content: React.FC<IContentProps> = props => {
         align="center"
       >
         <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={textStyle}>{`${
-          props.contentType && props.contentType[0].toUpperCase()
-        }${props.contentType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
+          props.itemType && props.itemType[0].toUpperCase()
+        }${props.itemType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
 
         {props.reasons.map((reason, idx) => (
           <React.Fragment key={idx}>
