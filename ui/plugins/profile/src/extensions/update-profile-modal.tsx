@@ -89,6 +89,37 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
     setPartialUsername(userName);
   };
 
+  const userNameValidationErrors = React.useMemo(() => {
+    if (usernameValidationQuery.status === 'success' && !usernameValidationQuery.data) {
+      return t(
+        'Sorry, this username has already beed claimed by another Etherean. Please try a different one.',
+      );
+    }
+    if (usernameValidationQuery.status === 'error') {
+      return t('Sorry, there is an error validating the username. Please try again later.');
+    }
+    // local username validation
+    if (
+      partialUsername &&
+      partialUsername.length > 0 &&
+      // eslint-disable-next-line no-useless-escape
+      /^([a-z0-9.](?![0-9].]$))+$/g.test(partialUsername)
+    ) {
+      if (partialUsername.length < 3) {
+        return t('Username must be at least 3 characters long.');
+      }
+    } else {
+      if (partialUsername && parseInt(partialUsername.split('').pop())) {
+        return t('Username cannot end with a number.');
+      }
+      if (partialUsername) {
+        return t(
+          'Sorry, username can contain lowercase letters, numbers and must end in a letter.',
+        );
+      }
+    }
+  }, [usernameValidationQuery, partialUsername, t]);
+
   return (
     <ModalContainer>
       {profileDataQuery.status !== 'success' && (
@@ -126,12 +157,8 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
           onUsernameChange={handleUsernameChange}
           onUsernameBlur={handleUsernameChange}
           isValidatingUsername={usernameValidationQuery.status === 'loading'}
-          // usernameSuccess={props.profileUpdateStatus.isValidUsername ? ' ' : undefined}
-          usernameError={
-            usernameValidationQuery.status === 'error'
-              ? (usernameValidationQuery.error as Error).message
-              : undefined
-          }
+          usernameSuccess={usernameValidationQuery.data ? ' ' : undefined}
+          usernameError={userNameValidationErrors}
         />
       )}
     </ModalContainer>
