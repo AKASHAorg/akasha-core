@@ -98,7 +98,6 @@ const getEnsFormOptions = (
   t: TFunction,
 ) => {
   const options: EnsFormOption[] = [];
-  console.log(usernameTypes, 'username types', ens, '<<<ens');
   const hasEnsSubdomainAvail = usernameTypes.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN);
   const hasEnsDomainAvail = usernameTypes.available.includes(UsernameTypes.ENS_DOMAIN);
   const currentDefault = usernameTypes.default;

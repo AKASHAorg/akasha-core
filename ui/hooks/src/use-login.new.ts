@@ -10,7 +10,7 @@ const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
 interface LoginState extends CurrentUser {
   isReady?: boolean;
-  signInReceived: boolean;
+
   // boolean to indicate if the user was previously logged in
   // data from cache!
   // if this is true, we can assume that the user is logged in
@@ -23,7 +23,7 @@ export function useGetLogin() {
 
   useGlobalLogin({
     onLogin: data => {
-      queryClient.setQueryData([LOGIN_STATE_KEY], { ...data, signInReceived: true });
+      queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({ ...prev, ...data }));
     },
     onLogout: () => {
       queryClient.setQueryData([LOGIN_STATE_KEY], { ethAddress: null, pubKey: null });
@@ -51,7 +51,7 @@ export function useGetLogin() {
         /* empty fn */
       }),
     {
-      initialData: { ethAddress: null, pubKey: null, isReady: false, signInReceived: false },
+      initialData: { ethAddress: null, pubKey: null, isReady: false },
     },
   );
 }
