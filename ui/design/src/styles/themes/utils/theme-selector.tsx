@@ -90,7 +90,7 @@ const ThemeSelector = (props: IThemeSelector) => {
   return (
     <>
       {loadedTheme && (
-        <Grommet theme={loadedTheme.theme} {...props}>
+        <Grommet style={{ width: '100%' }} theme={loadedTheme.theme} {...props}>
           {props.children}
         </Grommet>
       )}

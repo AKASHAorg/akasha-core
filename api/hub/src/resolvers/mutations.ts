@@ -262,6 +262,7 @@ const mutations = {
     }
     const postIDCache = dataSources.postsAPI.getPostCacheKey(comment.postID);
     await queryCache.del(postIDCache);
+    await queryCache.del(dataSources.postsAPI.getInitialPostCacheKey(comment.postID));
     return commentID[0];
   },
   editComment: async (_, { content, comment, id }, { dataSources, user, signature }) => {
