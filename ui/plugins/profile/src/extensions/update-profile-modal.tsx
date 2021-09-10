@@ -88,7 +88,7 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
   const handleUsernameChange = (userName: string) => {
     setPartialUsername(userName);
   };
-
+  console.log(usernameValidationQuery, '<<< validation query');
   return (
     <ModalContainer>
       {profileDataQuery.status !== 'success' && (
