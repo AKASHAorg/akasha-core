@@ -40,7 +40,7 @@ export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseCon
   position: sticky;
   top: ${TOPBAR_HEIGHT}px;
   flex-grow: 1;
-  max-height: calc(100vh - ${TOPBAR_HEIGHT}px);
+  max-height: calc(100vh - ${TOPBAR_HEIGHT}px - 0.5em);
 `;
 
 export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box)``;
