@@ -392,10 +392,39 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
           request.data.admin,
           request.data.active,
         );
-        ctx.status = 200;
+        ctx.status = 201;
       }
     } catch (error) {
       ctx.body = `Cannot add moderator! Error: ${error}`;
+      ctx.status = 500;
+    }
+  }
+  await next();
+});
+
+/**
+ * Update an existing moderator.
+ */
+api.post('/moderation/moderators/:user', async (ctx: koa.Context, next: () => Promise<any>) => {
+  const user = ctx?.params?.user;
+  const request: any = ctx?.request.body;
+  if (!user || !request.data || !request.secret) {
+    ctx.status = 400;
+  } else {
+    try {
+      const allowed = await isAdmin(request, ctx);
+      ctx = allowed.ctx;
+      if (allowed.ok) {
+        // add the new moderator
+        await dataSources.moderatorsAPI.updateModerator(
+          user,
+          request.data.admin,
+          request.data.active,
+        );
+        ctx.status = 200;
+      }
+    } catch (error) {
+      ctx.body = `Cannot update moderator! Error: ${error}`;
       ctx.status = 500;
     }
   }
@@ -446,9 +475,9 @@ api.post('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<any
   const request: any = ctx?.request.body;
   ctx.set('Content-Type', 'application/json');
   ctx.body =
-    request && request.active
-      ? await dataSources.reasonsAPI.listReasons(true)
-      : await dataSources.reasonsAPI.listReasons(false);
+    request && !request.active
+      ? await dataSources.reasonsAPI.listReasons(false)
+      : await dataSources.reasonsAPI.listReasons(true);
   ctx.status = 200;
   await next();
 });
