@@ -132,7 +132,16 @@ const ProfilePage = (props: ProfilePageProps) => {
         </title>
       </Helmet>
       {profileDataQuery.status === 'loading' && <></>}
-      {profileDataQuery.status === 'success' && (
+      {(profileDataQuery.status === 'error' ||
+        (profileDataQuery.status === 'success' && !profileState)) && (
+        <ErrorLoader
+          type="script-error"
+          title={t('There was an error loading this profile')}
+          details={t('We cannot show this profile now')}
+          devDetails={profileDataQuery.error}
+        />
+      )}
+      {profileDataQuery.status === 'success' && profileState && (
         <>
           {profileState.moderated && profileState.delisted && (
             <EntryCardHidden
