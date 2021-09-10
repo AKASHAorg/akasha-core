@@ -23,6 +23,7 @@ import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard } = DS;
 

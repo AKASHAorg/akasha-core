@@ -6,7 +6,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-
+import { useLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 const { SignInModal } = DS;
 
 const SignInModalContainer = (props: RootComponentProps) => {
@@ -22,9 +22,11 @@ const SignInModalContainer = (props: RootComponentProps) => {
 
   const [errorState, errorActions] = useErrors({ logger });
 
-  const [loginState, loginActions] = useLoginState({
+  const [loginState] = useLoginState({
     onError: errorActions.createError,
   });
+
+  const loginMutation = useLogin();
 
   const handleModalClose = React.useCallback(() => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -48,7 +50,8 @@ const SignInModalContainer = (props: RootComponentProps) => {
   }, [loginState.ethAddress, props, props.navigateToModal, handleModalClose]);
 
   const handleLogin = (providerId: number) => {
-    loginActions.login(providerId, !acceptedTerms);
+    // loginActions.login(providerId, !acceptedTerms);
+    loginMutation.mutate({ selectedProvider: providerId, checkRegistered: !acceptedTerms });
   };
 
   const loginErrors: string | null = React.useMemo(() => {

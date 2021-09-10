@@ -15,9 +15,9 @@ const checkNetworkState = async () => {
   return res;
 };
 
-export function useNetworkState(loggedEthAddress: string | null) {
+export function useNetworkState(enabler?: boolean) {
   return useQuery([NETWORK_STATE_KEY], () => checkNetworkState(), {
-    enabled: !!loggedEthAddress,
+    enabled: !!enabler,
     keepPreviousData: true,
   });
 }
