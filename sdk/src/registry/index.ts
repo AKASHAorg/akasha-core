@@ -86,7 +86,7 @@ export default class AWF_ENS implements AWF_IENS {
       throw new Error('Subdomain already taken!');
     }
     const isOwner = await this.userIsOwnerOf(validatedName);
-    if (!isOwner) {
+    if (!isOwner.data) {
       const registerTx = await this._AkashaRegistrarInstance.register(
         validatedName,
         this.RESOLVER_ADDRESS,
@@ -134,7 +134,7 @@ export default class AWF_ENS implements AWF_IENS {
       await this.setupContracts();
     }
     const isOwner = await this.userIsOwnerOf(name);
-    if (isOwner) {
+    if (isOwner.data) {
       return createFormattedValue(true);
     }
     const result = await this._AkashaRegistrarInstance.isAvailable(name);
