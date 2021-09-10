@@ -126,7 +126,7 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
           onUsernameChange={handleUsernameChange}
           onUsernameBlur={handleUsernameChange}
           isValidatingUsername={usernameValidationQuery.status === 'loading'}
-          // usernameSuccess={props.profileUpdateStatus.isValidUsername ? ' ' : undefined}
+          usernameSuccess={usernameValidationQuery.data ? ' ' : undefined}
           usernameError={
             usernameValidationQuery.status === 'error'
               ? (usernameValidationQuery.error as Error).message
