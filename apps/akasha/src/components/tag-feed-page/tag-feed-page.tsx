@@ -80,11 +80,11 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     props.singleSpa.navigateToUrl(url);
   };
 
-  const handleEntryFlag = (entryId: string, contentType: string) => () => {
+  const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginState.pubKey) {
-      return showLoginModal({ name: 'report-modal', entryId, contentType });
+      return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, contentType });
+    props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
   const handleTagSubscribe = (tagName: string) => {

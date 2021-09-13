@@ -26,7 +26,7 @@ export interface IEntryRenderer {
   bookmarksQuery: ReturnType<typeof useGetBookmarks>;
   style?: React.CSSProperties;
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
-  onFlag?: (entryId: string, contentType: string, reporterEthAddress?: string | null) => () => void;
+  onFlag?: (entryId: string, itemType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
@@ -76,7 +76,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const { t } = useTranslation('ui-widget-feed');
 
-  const postReq = usePost(itemId, props.itemType === ItemTypes.ENTRY);
+  const postReq = usePost({ postId: itemId, enabler: props.itemType === ItemTypes.ENTRY });
   const commentReq = useComment(itemId, props.itemType === ItemTypes.COMMENT);
   const authorEthAddress = React.useMemo(() => {
     if (props.itemType === ItemTypes.COMMENT && commentReq.status === 'success') {

@@ -55,9 +55,9 @@ const EditorModalContainer = (props: RootComponentProps) => {
     }
   }, [props.activeModal]);
 
-  const embeddedPost = usePost(embedEntryId, hasEmbed);
+  const embeddedPost = usePost({ postId: embedEntryId, enabler: hasEmbed });
 
-  const editingPost = usePost(props.activeModal.entryId, isEditing);
+  const editingPost = usePost({ postId: props.activeModal.entryId, enabler: isEditing });
 
   const editPost = useEditPost();
 

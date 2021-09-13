@@ -27,9 +27,9 @@ const ModerateModalComponent = (props: RootComponentProps) => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
-  const contentType = React.useMemo(() => {
-    if (activeModal.hasOwnProperty('contentType') && typeof activeModal.contentType === 'string') {
-      return activeModal.contentType;
+  const itemType = React.useMemo(() => {
+    if (activeModal.hasOwnProperty('itemType') && typeof activeModal.itemType === 'string') {
+      return activeModal.itemType;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -41,12 +41,12 @@ const ModerateModalComponent = (props: RootComponentProps) => {
       moderateMutation.mutate({
         dataToSign,
         contentId: activeModal.entryId,
-        contentType: contentType,
+        contentType: itemType,
         url: `${BASE_DECISION_URL}/moderate`,
         modalName: 'moderate-modal',
       });
     },
-    [contentType, activeModal.entryId, moderateMutation],
+    [itemType, activeModal.entryId, moderateMutation],
   );
 
   React.useEffect(() => {
