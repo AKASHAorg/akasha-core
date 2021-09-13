@@ -94,11 +94,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     props.navigateToModal({ name: 'editor' });
   };
 
-  const handleEntryFlag = (entryId: string, contentType: string) => () => {
+  const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginState.pubKey) {
-      return showLoginModal({ name: 'report-modal', entryId, contentType });
+      return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, contentType });
+    props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
   const handleEntryRemove = (entryId: string) => {

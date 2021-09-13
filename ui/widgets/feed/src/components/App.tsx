@@ -32,7 +32,7 @@ export interface IFeedWidgetProps {
   hasNextPage: boolean;
   loggedProfile?: any;
   contentClickable?: boolean;
-  onEntryFlag: (entryId: string, contentType: string) => () => void;
+  onEntryFlag: (entryId: string, itemType: string) => () => void;
   onEntryRemove?: (entryId: string) => void;
   removeEntryLabel?: string;
   removedByMeLabel?: string;

@@ -85,11 +85,6 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     }
   };
 
-  // const handleFlipCard = (entry: any) => () => {
-  //   const modifiedEntry = { ...entry, reported: false };
-  //   postActions.updatePostsState(modifiedEntry);
-  // };
-
   return (
     <>
       {bookmarksReq.status === 'error' && (
