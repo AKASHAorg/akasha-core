@@ -35,7 +35,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   cancelLabel?: string;
   reportLabel?: string;
   user?: string;
-  contentType?: string;
+  itemType?: string;
   requesting: boolean;
   success: boolean;
   onReport: (data: Record<string, unknown>) => void;
@@ -64,7 +64,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     closeLabel,
     user,
     contentId,
-    contentType,
+    itemType,
     requesting,
     success,
     closeModal,
@@ -97,8 +97,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const handleReport = () => {
-    // hard check: makes sure contentType is specified
-    if (!contentType || contentType?.length < 1) {
+    // hard check: makes sure itemType is specified
+    if (!itemType || itemType?.length < 1) {
       return closeModal();
     }
 

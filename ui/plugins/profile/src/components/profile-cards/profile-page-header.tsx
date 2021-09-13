@@ -69,14 +69,14 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     }
   };
 
-  const handleEntryFlag = (entryId: string, contentType: string, user: string) => () => {
+  const handleEntryFlag = (entryId: string, itemType: string, user: string) => () => {
     if (!loggedUserEthAddress) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { name: 'report-modal', entryId, contentType, user },
+        redirectTo: { name: 'report-modal', entryId, itemType, user },
       });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, contentType, user });
+    props.navigateToModal({ name: 'report-modal', entryId, itemType, user });
   };
 
   const showUpdateProfileModal = () => {

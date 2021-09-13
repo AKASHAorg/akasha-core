@@ -158,12 +158,12 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
     }
   };
 
-  const handleButtonClick = (entryId: string, contentType: string) => {
+  const handleButtonClick = (entryId: string, itemType: string) => {
     props.navigateToModal({
       name: 'moderate-modal',
       status: isPending ? 'pending' : 'moderated',
       entryId,
-      contentType,
+      itemType,
     });
   };
 
@@ -224,7 +224,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                 showExplanationsLabel={t('Show explanations')}
                 hideExplanationsLabel={t('Hide explanations')}
                 reportedLabel={t('reported')}
-                contentType={pendingItem.type}
+                itemType={pendingItem.type}
                 forLabel={t('for')}
                 reportedByLabel={t('Reported by')}
                 originallyReportedByLabel={t('Initially reported by')}
@@ -265,7 +265,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                   determinationLabel={t('Determination')}
                   determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
                   reportedLabel={t('reported')}
-                  contentType={moderatedItem.type}
+                  itemType={moderatedItem.type}
                   forLabel={t('for')}
                   reportedByLabel={t('Reported by')}
                   originallyReportedByLabel={t('Initially reported by')}

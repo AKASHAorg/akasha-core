@@ -292,8 +292,8 @@ export default class AppLoader {
   public onModalUnmount(modalData: UIEventData['data']) {
     if (this.activeModal && this.activeModal.name === modalData.name) {
       const parcelData = this.findParcel(modalData.name);
-      this.loaderLogger.info(`Unmounting parcel: ${parcelData.id}`);
       if (parcelData) {
+        this.loaderLogger.info(`Unmounting parcel: ${parcelData.id}`);
         parcelData.parcel
           .unmount()
           .then(() => {
