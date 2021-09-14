@@ -15,7 +15,7 @@ Endpoint: `https://moderation.ethereum.world`.
 **signature** - signature over the "data" attribute
 
 ```
-POST https://moderation.ethereum.world/moderation/reports/new
+POST https://api.ethereum.world/api/moderation/reports/new
 Content-Type: application/json
 {
   "contentId": "01fdys08e4psf1g95a5mdazjne",
@@ -42,7 +42,7 @@ using `start` and `end` attributes, in UTC date format. You can optionally omit 
 dates in order to get all results at once.
 
 ```
-POST https://moderation.ethereum.world/moderation/reports/list/01fdys08e4psf1g95a5mdazjne
+POST https://api.ethereum.world/api/moderation/reports/list/01fdys08e4psf1g95a5mdazjne
 
 Returns an array of report requests:
 [
@@ -76,7 +76,7 @@ display/hide content that has been reported or delisted.
 Content can be moderated and NOT delisted (=false), in the case of posts that have been kept!
 
 ```
-POST https://moderation.ethereum.world/moderation/status
+POST https://api.ethereum.world/api/moderation/status
 Content-Type: application/json
 {
   "user": "bbyareibr3twqugilmczodsqc53l6s7wlwq4suckv2oclnmuh3x5irpdbjy",
@@ -112,7 +112,7 @@ Returns counters with the total number of pending requests, moderated (delisted)
 moderated (kept) decisions.
 
 ```
-GET https://moderation.ethereum.world/moderation/status/counters
+GET https://api.ethereum.world/api/moderation/status/counters
 
 Returns an object with three counters:
 {
@@ -143,7 +143,7 @@ instead of unique identifiers when performing requests.
 **signature** - signature over the `data` attribute
 
 ```
-POST https://moderation.ethereum.world/moderation/decisions/moderate
+POST https://api.ethereum.world/api/moderation/decisions/moderate
 Content-Type: application/json
 {
   "contentId": "01fdyq8kgde9q7kvpp6nxka0s7",
@@ -166,7 +166,7 @@ Content-Type: application/json
 ## View moderation decision for a given content ID
 
 ```
-GET https://moderation.ethereum.world/moderation/decisions/01fdyq8kgde9q7kvpp6nxka0s7
+GET https://api.ethereum.world/api/moderation/decisions/01fdyq8kgde9q7kvpp6nxka0s7
 
 Returns:
 {
@@ -271,7 +271,7 @@ content or not. Setting `delisted` to false is useful when looking at content th
 reviewed and has been deemed OK.
 
 ```
-POST https://moderation.ethereum.world/moderation/decisions/moderated
+POST https://api.ethereum.world/api/moderation/decisions/moderated
 Content-Type: application/json
 {
   "delisted": true
@@ -328,7 +328,7 @@ Same as above, only this time with a moderation decision structure as a result t
 Get a public log of all content that has been moderated, for transparency purposes.
 
 ```
-POST https://moderation.ethereum.world/moderation/decisions/log
+POST https://api.ethereum.world/api/moderation/decisions/log
 Content-Type: application/json
 {
   "moderated": true,
@@ -372,7 +372,7 @@ Returns a results set with information about the moderation decision:
 Get a log (history) of all moderation actions for a given content identifier.
 
 ```
-GET https://moderation.ethereum.world/moderation/decisions/actions/01fdyq8kgde9q7kvpp6nxka0s7
+GET https://api.ethereum.world/api/moderation/decisions/actions/01fdyq8kgde9q7kvpp6nxka0s7
 
 {
   "_id": "01ff04ss22w3xmeerrarsnkjg5",
@@ -419,7 +419,7 @@ This feature requires admin priviledges (currently token-based). It assigns mode
 **active** - whether to make this user active immediately (boolean)
 
 ```
-POST https://moderation.ethereum.world/moderation/moderators/new
+POST https://api.ethereum.world/api/moderation/moderators/new
 Content-Type: application/json
 {
   "secret": "foo",
@@ -446,7 +446,7 @@ The following attributes can be updated:
 
 
 ```
-POST https://moderation.ethereum.world/moderation/moderators/byareibr3tw...lnmuh3x5irpdbjy
+POST https://api.ethereum.world/api/moderation/moderators/byareibr3tw...lnmuh3x5irpdbjy
 Content-Type: application/json
 {
   "secret": "foo",
@@ -469,7 +469,7 @@ Content-Type: application/json
 Easily check if the user is a moderator.
 
 ```
-HEAD https://moderation.ethereum.world/moderation/moderators/status/byareibr3tw...lnmuh3x5irpdbjy
+HEAD https://api.ethereum.world/api/moderation/moderators/status/byareibr3tw...lnmuh3x5irpdbjy
 ```
 
 **Response codes:**
@@ -479,7 +479,7 @@ HEAD https://moderation.ethereum.world/moderation/moderators/status/byareibr3tw.
 ## Get data for a given moderator.
 
 ```
-GET https://moderation.ethereum.world/moderation/moderators/status/byareibr3tw...lnmuh3x5irpdbjy
+GET https://api.ethereum.world/api/moderation/moderators/status/byareibr3tw...lnmuh3x5irpdbjy
 
 {
   "_id": "byareibr3tw...lnmuh3x5irpdbjy",
@@ -509,7 +509,7 @@ list of reporting reasons.
 **active** - whether to make this reason active immediately (boolean)
 
 ```
-POST https://moderation.ethereum.world/moderation/reasons/new
+POST https://api.ethereum.world/api/moderation/reasons/new
 Content-Type: application/json
 {
   "secret": "foo",
@@ -533,7 +533,7 @@ list of reporting reasons.
 **active** - return only active reasons or only inactive (boolean)
 
 ```
-POST https://moderation.ethereum.world/moderation/reasons
+POST https://api.ethereum.world/api/moderation/reasons
 Content-Type: application/json
 {
   "active": true
