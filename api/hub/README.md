@@ -2,7 +2,6 @@
 
 ## Prerequisites
 ### Textile
-* You will need an invitation to the Textile Organization AWF_DEV
 * Get the Textile daemon running on your local machine
   * From a prebuilt package https://github.com/textileio/textile/releases, or
   * From source https://github.com/textileio/textile, you will need to install Go as well
