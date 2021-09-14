@@ -112,11 +112,11 @@ const ProfilePage = (props: ProfilePageProps) => {
     return [];
   }, [reqPosts.data]);
 
-  const handleEntryFlag = (entryId: string, contentType: string) => () => {
+  const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginState.pubKey) {
-      return showLoginModal({ name: 'report-modal', entryId, contentType });
+      return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, contentType });
+    props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
   const handleEntryRemove = (entryId: string) => {
@@ -132,7 +132,16 @@ const ProfilePage = (props: ProfilePageProps) => {
         </title>
       </Helmet>
       {profileDataQuery.status === 'loading' && <></>}
-      {profileDataQuery.status === 'success' && (
+      {(profileDataQuery.status === 'error' ||
+        (profileDataQuery.status === 'success' && !profileState)) && (
+        <ErrorLoader
+          type="script-error"
+          title={t('There was an error loading this profile')}
+          details={t('We cannot show this profile now')}
+          devDetails={profileDataQuery.error}
+        />
+      )}
+      {profileDataQuery.status === 'success' && profileState && (
         <>
           {profileState.moderated && profileState.delisted && (
             <EntryCardHidden

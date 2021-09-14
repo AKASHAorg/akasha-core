@@ -23,6 +23,7 @@ import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard } = DS;
 
@@ -93,11 +94,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     props.navigateToModal({ name: 'editor' });
   };
 
-  const handleEntryFlag = (entryId: string, contentType: string) => () => {
+  const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginState.pubKey) {
-      return showLoginModal({ name: 'report-modal', entryId, contentType });
+      return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, contentType });
+    props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
   const handleEntryRemove = (entryId: string) => {

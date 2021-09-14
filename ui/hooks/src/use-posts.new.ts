@@ -19,6 +19,12 @@ export interface Publish_Options {
   post: { title?: string; tags?: string[]; quotes?: string[] };
 }
 
+export type usePostParam = {
+  postId: string;
+  loggedUser?: string;
+  enabler: boolean;
+};
+
 const getPosts = async (queryClient: QueryClient, limit: number, offset?: string) => {
   const sdk = getSDK();
   try {
@@ -140,14 +146,14 @@ export function useInfinitePostsByAuthor(
   );
 }
 
-const getPost = async postID => {
+const getPost = async (postID: string, loggedUser?: string) => {
   const sdk = getSDK();
 
   try {
     const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
     // check entry's moderation status
     const modStatus = await moderationRequest.checkStatus(true, {
-      user: user.data ? user.data.pubKey : '',
+      user: loggedUser || user?.data?.pubKey || '',
       contentIds: [postID],
     });
     const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
@@ -159,11 +165,9 @@ const getPost = async postID => {
 };
 
 // hook for fetching data for a specific postID/entryID
-
-// @TODO: convert to  usePost({postID, loggedUser, enabler=true}: payload) where payload = {postID: string, enabler: boolean, loggedUser: string}
-export function usePost(postID: string, enabler: boolean) {
-  return useQuery([ENTRY_KEY, postID], () => getPost(postID), {
-    enabled: !!(postID && enabler),
+export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
+  return useQuery([ENTRY_KEY, postId], () => getPost(postId, loggedUser), {
+    enabled: !!(postId && enabler),
     keepPreviousData: true,
   });
 }

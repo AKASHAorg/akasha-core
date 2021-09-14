@@ -19,7 +19,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     determinationLabel,
     determination,
     reportedLabel,
-    contentType,
+    itemType,
     forLabel,
     andLabel,
     reportedByLabel,
@@ -47,17 +47,17 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
   const profileDataReq = useGetProfile(entryId);
   const profile = profileDataReq.data;
 
-  const postReq = usePost(entryId, !!entryId);
+  const postReq = usePost({ postId: entryId, enabler: !!entryId });
   const commentReq = useComment(entryId);
 
   const entryData = React.useMemo(() => {
-    if (contentType === 'post') {
+    if (itemType === 'post') {
       if (postReq.data) {
         return mapEntry(postReq.data);
       }
       return undefined;
     }
-    if (['reply', 'comment'].includes(contentType)) {
+    if (['reply', 'comment'].includes(itemType)) {
       if (commentReq.data) {
         return mapEntry(commentReq.data);
       }
@@ -71,13 +71,13 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
         <Content
           isPending={isPending}
           locale={locale}
-          entryData={contentType === 'account' ? profile : entryData}
+          entryData={itemType === 'account' ? profile : entryData}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}
           determination={determination}
           reportedLabel={reportedLabel}
-          contentType={contentType}
+          itemType={itemType}
           forLabel={forLabel}
           andLabel={andLabel}
           reportedByLabel={reportedByLabel}
