@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
 

@@ -63,6 +63,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const handleProfileClick = (pubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
+
   const handleFollowProfile = (ethAddress: string) => {
     if (!loginState.ethAddress) {
       showLoginModal();
