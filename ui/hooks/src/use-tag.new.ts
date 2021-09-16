@@ -65,9 +65,10 @@ export function useToggleTagSubscription() {
       }
       logError('useTagSubscribe.toggleTagSub', err as Error);
     },
-    onSettled: async () => {
-      await queryClient.invalidateQueries([TAG_SUBSCRIPTIONS_KEY]);
-    },
+    // this is not required anymore because there is a fallback mechanism
+    // onSettled: async () => {
+    //   await queryClient.invalidateQueries([TAG_SUBSCRIPTIONS_KEY]);
+    // },
   });
 }
 
