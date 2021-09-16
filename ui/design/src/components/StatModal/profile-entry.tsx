@@ -10,6 +10,9 @@ import { IProfileData } from '../ProfileCard/profile-widget-card';
 export interface IProfileEntry {
   ipfsGateway?: string;
 
+  // hides follow button it matches with entry's pubKey
+  loggedUser?: string;
+
   entries?: IProfileData[];
   followedProfiles?: string[];
 
@@ -29,6 +32,7 @@ export interface IProfileEntry {
 const ProfileEntry: React.FC<IProfileEntry> = props => {
   const {
     ipfsGateway,
+    loggedUser,
     entries,
     followedProfiles,
     followLabel,
@@ -65,17 +69,19 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                 </Box>
               }
             />
-            <Box width="7rem">
-              <DuplexButton
-                inactiveLabel={followLabel}
-                activeLabel={followingLabel}
-                activeHoverLabel={unfollowLabel}
-                onClickInactive={() => handleFollowProfile(entry.ethAddress)}
-                onClickActive={() => handleUnfollowProfile(entry.ethAddress)}
-                active={followedProfiles?.includes(entry.ethAddress)}
-                icon={<Icon type="following" />}
-              />
-            </Box>
+            {loggedUser !== entry.pubKey && (
+              <Box width="7rem">
+                <DuplexButton
+                  inactiveLabel={followLabel}
+                  activeLabel={followingLabel}
+                  activeHoverLabel={unfollowLabel}
+                  onClickInactive={() => handleFollowProfile(entry.ethAddress)}
+                  onClickActive={() => handleUnfollowProfile(entry.ethAddress)}
+                  active={followedProfiles?.includes(entry.ethAddress)}
+                  icon={<Icon type="following" />}
+                />
+              </Box>
+            )}
           </Box>
         ))}
     </Box>

@@ -116,6 +116,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
       ipfsGateway={ipfsGateway}
+      loggedUser={loginState.pubKey}
       stats={[profileData.totalFollowers, profileData.totalFollowing, profileData.totalInterests]}
       titleLabel={profileData.name || profileData.userName}
       tabLabelsArr={[t('Followers'), t('Following'), t('Topics')]}

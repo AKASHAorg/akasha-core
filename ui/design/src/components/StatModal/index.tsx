@@ -51,6 +51,7 @@ const StatModal: React.FC<IStatModal> = props => {
     activeIndex,
     setActiveIndex,
     ipfsGateway,
+    loggedUser,
     stats,
     titleLabel,
     tabLabelsArr,
@@ -146,6 +147,7 @@ const StatModal: React.FC<IStatModal> = props => {
                       {followersReqStatus.isSuccess && followers && followers.length !== 0 && (
                         <ProfileEntry
                           ipfsGateway={ipfsGateway}
+                          loggedUser={loggedUser}
                           entries={followers}
                           followedProfiles={followedProfiles}
                           followLabel={followLabel}
@@ -180,6 +182,7 @@ const StatModal: React.FC<IStatModal> = props => {
                       {followingReqStatus.isSuccess && following && following.length !== 0 && (
                         <ProfileEntry
                           ipfsGateway={ipfsGateway}
+                          loggedUser={loggedUser}
                           entries={following}
                           followedProfiles={followedProfiles}
                           followLabel={followLabel}
