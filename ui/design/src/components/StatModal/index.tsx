@@ -38,7 +38,12 @@ export interface IStatModal extends IProfileEntry, ITagEntry {
   following?: IProfileData[];
   interests?: (ITag | string)[];
 
-  followersReqStatus: ReqStatus;
+  followersReqStatus: {
+    isIdle?: boolean;
+    isLoading?: boolean;
+    isSuccess?: boolean;
+    isError?: boolean;
+  };
   followingReqStatus: ReqStatus;
   interestsReqStatus: ReqStatus;
 
@@ -128,23 +133,15 @@ const StatModal: React.FC<IStatModal> = props => {
                 <Box height="32rem" pad={{ horizontal: 'large' }}>
                   {index === 0 && (
                     <>
-                      {followersReqStatus === 'loading' && <ListLoading type="profile" />}
-                      {['error', 'idle'].includes(followersReqStatus) && (
-                        <ListError
-                          errorTitleLabel={errorTitleLabel}
-                          errorSubtitleLabel={errorSubtitleLabel}
-                          buttonLabel={buttonLabel}
-                          handleButtonClick={handleButtonClick}
-                        />
-                      )}
-                      {followersReqStatus === 'success' && followers && followers.length === 0 && (
+                      {followersReqStatus.isLoading && <ListLoading type="profile" />}
+                      {followersReqStatus.isSuccess && followers && followers.length === 0 && (
                         <ListEmpty
                           assetName={'no-followers'}
                           placeholderTitleLabel={placeholderTitleLabel}
                           placeholderSubtitleLabel={placeholderSubtitleLabel}
                         />
                       )}
-                      {followersReqStatus === 'success' && followers && followers.length !== 0 && (
+                      {followersReqStatus.isSuccess && followers && followers.length !== 0 && (
                         <ProfileEntry
                           ipfsGateway={ipfsGateway}
                           entries={followers}
@@ -156,6 +153,14 @@ const StatModal: React.FC<IStatModal> = props => {
                           onClickProfile={onClickProfile}
                           handleFollowProfile={handleFollowProfile}
                           handleUnfollowProfile={handleUnfollowProfile}
+                        />
+                      )}
+                      {followersReqStatus.isError && (
+                        <ListError
+                          errorTitleLabel={errorTitleLabel}
+                          errorSubtitleLabel={errorSubtitleLabel}
+                          buttonLabel={buttonLabel}
+                          handleButtonClick={handleButtonClick}
                         />
                       )}
                     </>

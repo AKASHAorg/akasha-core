@@ -31,13 +31,13 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const [activeIndex, setActiveIndex] = React.useState<number>(0);
 
-  // get followers for this profile
-  const followersReq = useFollowers(profileData.pubKey, 10);
-  const followers = followersReq.data?.pages[0].results;
-
   // get accounts this profile is following
   const followingReq = useFollowing(profileData.pubKey, 10);
   const following = followingReq.data?.pages[0].results;
+
+  // get followers for this profile
+  const followersReq = useFollowers(profileData.pubKey, 10);
+  const followers = followersReq.data?.pages[0].results;
 
   // get interests for this profile
   const interestsReq = useInterests(profileData.pubKey);
@@ -127,7 +127,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       followers={followers}
       following={following}
       interests={interests}
-      followersReqStatus={followReq.status}
+      followersReqStatus={followersReq}
       followingReqStatus={followingReq.status}
       interestsReqStatus={interestsReq.status}
       followLabel={t('Follow')}
