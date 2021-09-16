@@ -10,7 +10,7 @@ import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/medi
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
-import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ENTRY_KEY, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -50,7 +50,7 @@ const {
 } = DS;
 
 interface IPostPageProps {
-  loginState: ILoginState;
+  loginState: LoginState;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   navigateToUrl: (path: string) => void;
 }
@@ -68,7 +68,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const postReq = usePost({
     postId,
     loggedUser: loginState.pubKey,
-    enabler: loginState.currentUserCalled,
+    enabler: loginState.fromCache,
   });
   const entryData = React.useMemo(() => {
     if (postReq.data) {
@@ -111,7 +111,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
+  const bookmarksReq = useGetBookmarks(loginState.isReady && loginState.ethAddress);
   const bookmarks = bookmarksReq.data;
   const addBookmark = useSaveBookmark();
   const deleteBookmark = useDeleteBookmark();
@@ -131,11 +131,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const isFollowing = followedProfiles.includes(entryData?.author?.ethAddress);
 
   const handleLoadMore = () => {
-    if (
-      reqComments.status === 'success' &&
-      reqComments.hasNextPage &&
-      loginState.currentUserCalled
-    ) {
+    if (reqComments.status === 'success' && reqComments.hasNextPage && loginState.fromCache) {
       reqComments.fetchNextPage();
     }
   };
@@ -426,7 +422,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 getShareUrl={(itemId: string) =>
                   `${window.location.origin}/social-app/post/${itemId}`
                 }
-                ethAddress={loginState.ready?.ethAddress}
+                ethAddress={loginState.isReady && loginState.ethAddress}
                 profilePubKey={loginState.pubKey}
                 onNavigate={handleNavigation}
                 singleSpaNavigate={props.singleSpa.navigateToUrl}

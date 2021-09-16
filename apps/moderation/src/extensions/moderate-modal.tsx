@@ -5,10 +5,11 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 import { useModeration } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
 import { BASE_DECISION_URL } from '../services/constants';
 import i18n, { setupI18next } from '../i18n';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { ModerateModal, ToastProvider } = DS;
 
@@ -17,9 +18,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
 
   const [, errorActions] = useErrors({ logger });
 
-  const [loginState] = useLoginState({
-    onError: errorActions.createError,
-  });
+  const loginQuery = useGetLogin({ onError: errorActions.createError });
 
   const { t } = useTranslation();
 
@@ -70,7 +69,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
         footerLink1Label={t('Code of Conduct')}
         footerUrl1={'/legal/code-of-conduct'}
         cancelLabel={t('Cancel')}
-        user={loginState.pubKey ? loginState.pubKey : ''}
+        user={loginQuery.data.pubKey || ''}
         requesting={moderateMutation.status === 'loading'}
         isReview={activeModal.status !== 'pending'}
         closeModal={handleModalClose}

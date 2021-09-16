@@ -4,9 +4,10 @@ import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useGetLogin, useLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+
 const { SignInModal } = DS;
 
 const SignInModalContainer = (props: RootComponentProps) => {
@@ -22,18 +23,15 @@ const SignInModalContainer = (props: RootComponentProps) => {
 
   const [errorState, errorActions] = useErrors({ logger });
 
-  const [loginState] = useLoginState({
-    onError: errorActions.createError,
-  });
-
-  const loginMutation = useLogin();
+  const loginQuery = useGetLogin({ onError: errorActions.createError });
+  const loginMutation = useLogin(errorActions.createError);
 
   const handleModalClose = React.useCallback(() => {
     props.singleSpa.navigateToUrl(location.pathname);
   }, [props.singleSpa]);
 
   React.useEffect(() => {
-    if (loginState.ethAddress) {
+    if (loginQuery.data.ethAddress) {
       if (
         props.activeModal.hasOwnProperty('redirectTo') &&
         typeof props.activeModal.redirectTo === 'object'
@@ -47,7 +45,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
         setTimeout(() => handleModalClose(), 500);
       }
     }
-  }, [loginState.ethAddress, props, props.navigateToModal, handleModalClose]);
+  }, [loginQuery.data.ethAddress, props, props.navigateToModal, handleModalClose]);
 
   const handleLogin = (providerId: number) => {
     // loginActions.login(providerId, !acceptedTerms);
@@ -56,8 +54,8 @@ const SignInModalContainer = (props: RootComponentProps) => {
 
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
-      const txt = Object.keys(errorState)
-        .filter(key => key.split('.')[0] === 'useLoginState')
+      return Object.keys(errorState)
+        .filter(key => key.split('.')[0] === 'useLogin')
         .map(k => {
           if (errorState[k].error.message === 'Profile not found' && !acceptedTerms) {
             setSuggestSignUp(true);
@@ -65,7 +63,6 @@ const SignInModalContainer = (props: RootComponentProps) => {
           return errorState[k];
         })
         .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
-      return txt;
     }
     return null;
   }, [acceptedTerms, errorState]);

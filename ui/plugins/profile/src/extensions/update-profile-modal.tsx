@@ -2,7 +2,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
-import { useLoginState, withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 import DS from '@akashaproject/design-system';
 import {
   useGetProfile,
@@ -14,6 +14,7 @@ import { useUsernameValidation } from '@akashaproject/ui-awf-hooks/lib/use-usern
 import { useTranslation } from 'react-i18next';
 import { useQueryListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
 import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const {
   ThemeSelector,
@@ -46,15 +47,15 @@ const ProfileForm = styled(BoxFormCard)`
 `;
 
 const UpdateProfileModal: React.FC<RootComponentProps> = props => {
-  const [loginState] = useLoginState({});
+  const loginQuery = useGetLogin();
   const [partialUsername, setPartialUsername] = React.useState<string>();
-  const profileDataQuery = useGetProfile(loginState.pubKey);
-  const profileUpdateMutation = useProfileUpdate(loginState.pubKey);
+  const profileDataQuery = useGetProfile(loginQuery.data.pubKey);
+  const profileUpdateMutation = useProfileUpdate(loginQuery.data.pubKey);
   const usernameValidationQuery = useUsernameValidation(partialUsername);
   const { t } = useTranslation();
   const updateStatusKey = React.useMemo(
-    () => [UPDATE_PROFILE_STATUS, loginState.pubKey],
-    [loginState.pubKey],
+    () => [UPDATE_PROFILE_STATUS, loginQuery.data.pubKey],
+    [loginQuery.data.pubKey],
   );
   const updateStatusQuery = useQueryListener<{
     status: UpdateProfileStatus;
@@ -152,7 +153,7 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
           providerData={profileDataQuery.data}
           onSave={handleFormSubmit}
           onCancel={onModalClose}
-          updateStatus={updateStatusQuery.data?.status || UpdateProfileStatus.UPDATE_IDLE}
+          updateStatus={updateStatusQuery?.data?.status || UpdateProfileStatus.UPDATE_IDLE}
           showUsername={!profileDataQuery.data.userName}
           onUsernameChange={handleUsernameChange}
           onUsernameBlur={handleUsernameChange}

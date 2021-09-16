@@ -4,7 +4,7 @@ import DS from '@akashaproject/design-system';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ENTRY_KEY, useInfinitePostsByTag } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import {
@@ -20,7 +20,7 @@ const { Box, TagProfileCard, Helmet, styled, ErrorLoader } = DS;
 
 interface ITagFeedPage {
   loggedProfileData?: IProfileData;
-  loginState: ILoginState;
+  loginState: LoginState;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
 }
 
@@ -37,7 +37,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
+  const tagSubscriptionsReq = useTagSubscriptions(loginState.isReady && loginState.ethAddress);
   const tagSubscriptions = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -50,10 +50,10 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   }, [reqPosts.data]);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.currentUserCalled) {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.fromCache) {
       reqPosts.fetchNextPage();
     }
-  }, [reqPosts, loginState.currentUserCalled]);
+  }, [reqPosts, loginState.fromCache]);
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
     let url;
@@ -122,7 +122,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         pages={postPages}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
         requestStatus={reqPosts.status}
-        ethAddress={loginState.ready?.ethAddress}
+        ethAddress={loginState.isReady && loginState.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}

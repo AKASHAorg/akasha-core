@@ -19,7 +19,7 @@ import {
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { useSearch } from '@akashaproject/ui-awf-hooks/lib/use-search.new';
-import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const {
@@ -36,7 +36,7 @@ const {
 
 interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
-  loginState: ILoginState;
+  loginState: LoginState;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
 }
 
@@ -51,12 +51,12 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
+  const bookmarksReq = useGetBookmarks(loginState.isReady && loginState.ethAddress);
   const bookmarks = bookmarksReq.data;
   const addBookmark = useSaveBookmark();
   const deleteBookmark = useDeleteBookmark();
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
+  const tagSubscriptionsReq = useTagSubscriptions(loginState.isReady && loginState.ethAddress);
   const tagSubscriptionsState = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -64,7 +64,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchReq = useSearch(
     decodeURIComponent(searchKeyword),
     loginState.pubKey,
-    loginState.currentUserCalled,
+    loginState.fromCache,
   );
   const searchState = searchReq.data;
 

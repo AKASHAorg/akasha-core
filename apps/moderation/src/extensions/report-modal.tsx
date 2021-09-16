@@ -10,9 +10,10 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useLoginState, useErrors, withProviders, useReasons } from '@akashaproject/ui-awf-hooks';
+import { useErrors, withProviders, useReasons } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
 import { useModeration } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { ReportModal, ToastProvider } = DS;
 
@@ -21,7 +22,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
 
   const [, errorActions] = useErrors({ logger });
 
-  const [loginState] = useLoginState({
+  const loginQuery = useGetLogin({
     onError: errorActions.createError,
   });
 
@@ -81,7 +82,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
         reportLabel={t('Report')}
         blockLabel={t('Block User')}
         closeLabel={t('Close')}
-        user={loginState.pubKey ? loginState.pubKey : ''}
+        user={loginQuery.data.pubKey || ''}
         contentId={activeModal.entryId}
         itemType={itemType}
         requesting={reportMutation.status === 'loading'}

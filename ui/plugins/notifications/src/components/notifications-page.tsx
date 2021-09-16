@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import {
   useFetchNotifications,
   useMarkAsRead,
@@ -16,11 +16,11 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const [loginState] = useLoginState({});
+  const loginQuery = useGetLogin();
 
   const [notifErrors] = useErrorState({ logger });
 
-  const notifReq = useFetchNotifications(loginState.ethAddress);
+  const notifReq = useFetchNotifications(loginQuery.data.ethAddress);
   const notificationsState = notifReq.data;
 
   const markAsRead = useMarkAsRead();
