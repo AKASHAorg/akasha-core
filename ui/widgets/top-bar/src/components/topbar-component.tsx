@@ -145,7 +145,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleLogout = async () => {
-    logoutMutation.mutate();
+    await logoutMutation.mutateAsync();
     navigateToUrl('/');
     setTimeout(() => window.location.reload(), 50);
   };
