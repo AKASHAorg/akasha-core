@@ -1,25 +1,30 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IProfileData, UsernameTypes } from '@akashaproject/ui-awf-typings/lib/profile';
 import {
   useIsFollowing,
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { IProfileData, UsernameTypes } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+
+import StatModalWrapper from './stat-modal-wrapper';
 import { getUsernameTypes } from '../../utils/username-utils';
 
-const { ProfileCard, styled } = DS;
+const { ModalRenderer, ProfileCard, styled } = DS;
 
 const ProfilePageCard = styled(ProfileCard)`
   margin-bottom: 0.5rem;
 `;
 
 export interface IProfileHeaderProps {
+  slotId: string;
   profileId: string;
   profileData: IProfileData;
-  loggedUserEthAddress: string | null;
+  loginState: ILoginState;
 }
 
 type ProfilePageCardProps = IProfileHeaderProps &
@@ -39,12 +44,17 @@ type ProfilePageCardProps = IProfileHeaderProps &
   >;
 
 export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
-  const { profileData, loggedUserEthAddress, profileId } = props;
+  const { profileData, loginState, profileId, slotId } = props;
+
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [selectedStat, setSelectedStat] = React.useState<number>(0);
 
   const { t } = useTranslation();
 
-  const isFollowingReq = useIsFollowing(loggedUserEthAddress, profileData.ethAddress);
+  const isFollowingReq = useIsFollowing(loginState.ethAddress, profileData.ethAddress);
+
   const followedProfiles = isFollowingReq.data;
+
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
@@ -55,7 +65,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
   }, [profileData]);
 
   const handleFollow = () => {
-    if (!loggedUserEthAddress) {
+    if (!loginState.ethAddress) {
       return props.navigateToModal({ name: 'login-modal', profileId });
     }
     if (profileData?.ethAddress) {
@@ -69,8 +79,12 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     }
   };
 
+  const showLoginModal = () => {
+    props.navigateToModal({ name: 'login' });
+  };
+
   const handleEntryFlag = (entryId: string, itemType: string, user: string) => () => {
-    if (!loggedUserEthAddress) {
+    if (!loginState.ethAddress) {
       return props.navigateToModal({
         name: 'login',
         redirectTo: { name: 'report-modal', entryId, itemType, user },
@@ -91,18 +105,39 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     props.navigateToModal({ name: 'profile-share' });
   };
 
+  const handleStatIconClick = (positionIndex: number) => () => {
+    setSelectedStat(positionIndex);
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+
   return (
     <>
+      <ModalRenderer slotId={slotId}>
+        {modalOpen && (
+          <StatModalWrapper
+            loginState={loginState}
+            selectedStat={selectedStat}
+            profileData={profileData}
+            singleSpa={props.singleSpa}
+            showLoginModal={showLoginModal}
+            handleClose={handleClose}
+          />
+        )}
+      </ModalRenderer>
       <ProfilePageCard
-        onClickFollowers={() => null}
-        onClickFollowing={() => null}
         onClickPosts={() => null}
-        onClickInterests={() => null}
+        onClickFollowers={handleStatIconClick(0)}
+        onClickFollowing={handleStatIconClick(1)}
+        onClickInterests={handleStatIconClick(2)}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
         isFollowing={followedProfiles.includes(profileData.ethAddress)}
-        loggedEthAddress={loggedUserEthAddress}
+        loggedEthAddress={loginState.ethAddress}
         profileData={profileData}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
@@ -117,8 +152,8 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         changeCoverImageLabel={t('Change cover image')}
         cancelLabel={t('Cancel')}
         saveChangesLabel={t('Save changes')}
-        canUserEdit={loggedUserEthAddress === profileData.ethAddress}
-        flaggable={loggedUserEthAddress !== profileData.ethAddress}
+        canUserEdit={loginState.ethAddress === profileData.ethAddress}
+        flaggable={loginState.ethAddress !== profileData.ethAddress}
         flagAsLabel={t('Report')}
         blockLabel={t('Block')}
         userNameType={userNameTypes}

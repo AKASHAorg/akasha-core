@@ -170,9 +170,10 @@ const ProfilePage = (props: ProfilePageProps) => {
             <>
               <ProfilePageHeader
                 {...props}
+                slotId={props.layoutConfig.modalSlotId}
                 profileData={profileState}
                 profileId={pubKey}
-                loggedUserEthAddress={loginState.ethAddress}
+                loginState={loginState}
               />
               {reqPosts.status === 'error' && reqPosts.error && (
                 <ErrorLoader
