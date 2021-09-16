@@ -41,7 +41,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
   } = props;
 
   return (
-    <Box pad={{ top: 'large' }} gap="medium">
+    <Box flex={false} pad={{ top: 'large' }} gap="medium">
       {entries &&
         entries.map((entry, index) => (
           <Box key={index} direction="row" justify="between" align="center">

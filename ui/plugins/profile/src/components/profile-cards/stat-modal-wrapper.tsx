@@ -45,8 +45,8 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
+  const followProfileReq = useFollow();
+  const unfollowProfileReq = useUnfollow();
 
   const sdk = getSDK();
 
@@ -82,7 +82,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       props.showLoginModal();
       return;
     }
-    followReq.mutate(ethAddress);
+    followProfileReq.mutate(ethAddress);
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
@@ -90,7 +90,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       props.showLoginModal();
       return;
     }
-    unfollowReq.mutate(ethAddress);
+    unfollowProfileReq.mutate(ethAddress);
   };
 
   const handleButtonClick = () => {
@@ -128,8 +128,10 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       following={following}
       interests={interests}
       followersReqStatus={followersReq}
-      followingReqStatus={followingReq.status}
-      interestsReqStatus={interestsReq.status}
+      followingReqStatus={followingReq}
+      interestsReqStatus={interestsReq}
+      // followedProfiles={}
+      // subscribedTags={}
       followLabel={t('Follow')}
       followingLabel={t('Following')}
       unfollowLabel={t('Unfollow')}

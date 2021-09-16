@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Tabs, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
+import { QueryStatus } from '@akashaproject/ui-awf-typings';
 
 import ListEmpty from './list-empty';
 import ListError from './list-error';
@@ -16,8 +17,6 @@ import { ModalWrapper, StyledBox } from '../ListModal/styled-modal';
 
 import { useViewportSize } from '../Providers/viewport-dimension';
 import { IProfileData } from '../ProfileCard/profile-widget-card';
-
-type ReqStatus = 'success' | 'error' | 'loading' | 'idle';
 
 export interface IStatModal extends IProfileEntry, ITagEntry {
   className?: string;
@@ -38,14 +37,9 @@ export interface IStatModal extends IProfileEntry, ITagEntry {
   following?: IProfileData[];
   interests?: (ITag | string)[];
 
-  followersReqStatus: {
-    isIdle?: boolean;
-    isLoading?: boolean;
-    isSuccess?: boolean;
-    isError?: boolean;
-  };
-  followingReqStatus: ReqStatus;
-  interestsReqStatus: ReqStatus;
+  followersReqStatus: QueryStatus;
+  followingReqStatus: QueryStatus;
+  interestsReqStatus: QueryStatus;
 
   handleButtonClick: () => void;
   closeModal: () => void;
@@ -130,10 +124,18 @@ const StatModal: React.FC<IStatModal> = props => {
                 key={index}
                 title={`${label}${stats[index] > 0 ? ` (${stats[index]})` : ''}`}
               >
-                <Box height="32rem" pad={{ horizontal: 'large' }}>
+                <Box height="30rem" pad={{ horizontal: 'large' }} overflow={{ vertical: 'auto' }}>
                   {index === 0 && (
                     <>
                       {followersReqStatus.isLoading && <ListLoading type="profile" />}
+                      {followersReqStatus.isError && (
+                        <ListError
+                          errorTitleLabel={errorTitleLabel}
+                          errorSubtitleLabel={errorSubtitleLabel}
+                          buttonLabel={buttonLabel}
+                          handleButtonClick={handleButtonClick}
+                        />
+                      )}
                       {followersReqStatus.isSuccess && followers && followers.length === 0 && (
                         <ListEmpty
                           assetName={'no-followers'}
@@ -155,20 +157,12 @@ const StatModal: React.FC<IStatModal> = props => {
                           handleUnfollowProfile={handleUnfollowProfile}
                         />
                       )}
-                      {followersReqStatus.isError && (
-                        <ListError
-                          errorTitleLabel={errorTitleLabel}
-                          errorSubtitleLabel={errorSubtitleLabel}
-                          buttonLabel={buttonLabel}
-                          handleButtonClick={handleButtonClick}
-                        />
-                      )}
                     </>
                   )}
                   {index === 1 && (
                     <>
-                      {followingReqStatus === 'loading' && <ListLoading type="profile" />}
-                      {['error', 'idle'].includes(followingReqStatus) && (
+                      {followingReqStatus.isLoading && <ListLoading type="profile" />}
+                      {followingReqStatus.isError && (
                         <ListError
                           errorTitleLabel={errorTitleLabel}
                           errorSubtitleLabel={errorSubtitleLabel}
@@ -176,14 +170,14 @@ const StatModal: React.FC<IStatModal> = props => {
                           handleButtonClick={handleButtonClick}
                         />
                       )}
-                      {followingReqStatus === 'success' && following && following.length === 0 && (
+                      {followingReqStatus.isSuccess && following && following.length === 0 && (
                         <ListEmpty
                           assetName={'no-following'}
                           placeholderTitleLabel={placeholderTitleLabel}
                           placeholderSubtitleLabel={placeholderSubtitleLabel}
                         />
                       )}
-                      {followingReqStatus === 'success' && following && following.length !== 0 && (
+                      {followingReqStatus.isSuccess && following && following.length !== 0 && (
                         <ProfileEntry
                           ipfsGateway={ipfsGateway}
                           entries={following}
@@ -201,8 +195,8 @@ const StatModal: React.FC<IStatModal> = props => {
                   )}
                   {index === 2 && (
                     <>
-                      {interestsReqStatus === 'loading' && <ListLoading type="topic" />}
-                      {['error', 'idle'].includes(interestsReqStatus) && (
+                      {interestsReqStatus.isLoading && <ListLoading type="topic" />}
+                      {interestsReqStatus.isError && (
                         <ListError
                           errorTitleLabel={errorTitleLabel}
                           errorSubtitleLabel={errorSubtitleLabel}
@@ -210,14 +204,14 @@ const StatModal: React.FC<IStatModal> = props => {
                           handleButtonClick={handleButtonClick}
                         />
                       )}
-                      {interestsReqStatus === 'success' && interests && interests.length === 0 && (
+                      {interestsReqStatus.isSuccess && interests && interests.length === 0 && (
                         <ListEmpty
                           assetName={'no-interests'}
                           placeholderTitleLabel={placeholderTitleLabel}
                           placeholderSubtitleLabel={placeholderSubtitleLabel}
                         />
                       )}
-                      {interestsReqStatus === 'success' && interests && interests.length !== 0 && (
+                      {interestsReqStatus.isSuccess && interests && interests.length !== 0 && (
                         <TagEntry
                           tags={interests}
                           subscribedTags={subscribedTags}
