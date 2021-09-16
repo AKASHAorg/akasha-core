@@ -22,7 +22,11 @@ const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
 const MODERATION_EMAIL_SOURCE = process.env.MAILGUN_EMAIL_SOURCE;
 let mailGun;
 if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
-  mailGun = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
+  mailGun = mailgun({
+    apiKey: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN,
+    host: process.env.MAILGUN_HOST,
+  });
 }
 
 export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -222,6 +226,7 @@ ${MODERATION_APP_URL}
       logger.error(error);
     }
   });
+  return Promise.resolve();
 };
 
 export const decodeString = (value: string) => {
