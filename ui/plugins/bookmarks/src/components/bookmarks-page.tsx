@@ -1,13 +1,13 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
 import {
   useGetBookmarks,
   useDeleteBookmark,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { ErrorLoader, Spinner, EntryList } = DS;
 
@@ -16,7 +16,6 @@ type BookmarksPageProps = Omit<
   | 'layout'
   | 'getMenuItems'
   | 'events'
-  | 'domElement'
   | 'domElement'
   | 'name'
   | 'unmountSelf'
@@ -28,11 +27,9 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const { singleSpa, logger } = props;
   const { t } = useTranslation();
 
-  const [loginState] = useLoginState({
-    onLogout: () => props.singleSpa.navigateToUrl('/'),
-  });
+  const loginQuery = useGetLogin();
 
-  const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
+  const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && loginQuery.data?.ethAddress);
   const bookmarks = bookmarksReq.data;
   const deleteBookmark = useDeleteBookmark();
 
@@ -77,7 +74,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleRepost = (_withComment: boolean, embedEntryId: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginQuery.data?.ethAddress) {
       props.navigateToModal({ name: 'login' });
       return;
     } else {
@@ -119,7 +116,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                   logger={logger}
                   singleSpa={singleSpa}
                   bookmarks={bookmarksReq.data}
-                  ethAddress={loginState.ethAddress}
+                  ethAddress={loginQuery.data?.ethAddress}
                   onBookmark={handleBookmarkClick}
                   onNavigate={handleNavigateToPost}
                   onRepost={handleRepost}

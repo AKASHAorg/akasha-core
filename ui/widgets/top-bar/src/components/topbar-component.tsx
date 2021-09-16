@@ -7,12 +7,13 @@ import {
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useLoginState, useErrors, moderationRequest } from '@akashaproject/ui-awf-hooks';
+import { useErrors, moderationRequest } from '@akashaproject/ui-awf-hooks';
 import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
+import { useGetLogin, useLogout } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
@@ -25,16 +26,19 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   const [, errorActions] = useErrors({ logger });
 
-  const [loginState, loginActions] = useLoginState({
+  const loginQuery = useGetLogin({
     onError: errorActions.createError,
   });
+  const logoutMutation = useLogout();
 
   const [isModerator, setIsModerator] = React.useState(false);
 
-  const profileDataReq = useGetProfile(loginState.pubKey);
+  const profileDataReq = useGetProfile(loginQuery.data.pubKey);
   const loggedProfileData = profileDataReq.data;
 
-  const checkNotifsReq = useCheckNewNotifications(loginState.ready?.ethAddress);
+  const checkNotifsReq = useCheckNewNotifications(
+    loginQuery.data.isReady && loginQuery.data.ethAddress,
+  );
 
   // React.useEffect(() => {
   //   if (loginState.ready?.ethAddress && loginState.ethAddress) {
@@ -115,8 +119,8 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
-    if (loginState.ethAddress && !isLoadingProfile) {
-      getModeratorStatus(loginState.pubKey);
+    if (loginQuery.data?.ethAddress && !isLoadingProfile) {
+      getModeratorStatus(loginQuery.data?.pubKey);
       if (loggedProfileData && !loggedProfileData.userName) {
         return props.navigateToModal({
           name: 'update-profile',
@@ -125,9 +129,9 @@ const TopbarComponent = (props: RootComponentProps) => {
     }
   }, [
     profileDataReq.isLoading,
-    loginState.ethAddress,
+    loginQuery.data?.ethAddress,
     loggedProfileData,
-    loginState.pubKey,
+    loginQuery.data?.pubKey,
     getModeratorStatus,
     props,
   ]);
@@ -141,10 +145,9 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleLogout = async () => {
-    await Promise.resolve(loginActions.logout()).then(_ => {
-      navigateToUrl('/');
-      setTimeout(() => window.location.reload(), 50);
-    });
+    await logoutMutation.mutateAsync();
+    navigateToUrl('/');
+    setTimeout(() => window.location.reload(), 50);
   };
 
   const handleSignUpClick = () => {

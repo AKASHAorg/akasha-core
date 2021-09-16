@@ -4,11 +4,12 @@ import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import { useGlobalLogin } from '.';
-import { logError } from './utils/error-handler';
+import { createErrorHandler, logError } from './utils/error-handler';
+import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
-interface LoginState extends CurrentUser {
+export interface LoginState extends CurrentUser {
   isReady?: boolean;
 
   // boolean to indicate if the user was previously logged in
@@ -18,7 +19,13 @@ interface LoginState extends CurrentUser {
   fromCache?: boolean;
 }
 
-export function useGetLogin() {
+export interface UseGetLoginProps {
+  /* error handler */
+  onError?: (err: IAkashaError) => void;
+}
+
+export function useGetLogin(props?: UseGetLoginProps) {
+  const { onError } = props || {};
   const queryClient = useQueryClient();
 
   useGlobalLogin({
@@ -43,6 +50,9 @@ export function useGetLogin() {
         fromCache: true,
       }));
     },
+    onError: payload => {
+      if (onError) createErrorHandler('useGetLogin.globalLogin', false, onError)(payload.error);
+    },
   });
   return useQuery(
     [LOGIN_STATE_KEY],
@@ -56,7 +66,7 @@ export function useGetLogin() {
   );
 }
 
-export function useLogin() {
+export function useLogin(onError?: (err: IAkashaError) => void) {
   const queryClient = useQueryClient();
   const sdk = getSDK();
   return useMutation(
@@ -82,6 +92,11 @@ export function useLogin() {
         logError('use-login', error);
         throw error;
       }
+    },
+    {
+      onError: (payload: Error) => {
+        if (onError) createErrorHandler('useLogin', false, onError)(payload);
+      },
     },
   );
 }

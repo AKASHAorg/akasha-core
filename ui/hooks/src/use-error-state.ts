@@ -35,10 +35,13 @@ const useErrorState = (props: UseErrorStateProps): [ErrorState, ErrorActions] =>
     },
     removeLoginErrors() {
       setErrors(prev => {
-        // target keys that are from useLoginState
+        // target keys that are from useGetState
         // @TODO: make this constants and build the keys using them like
         // `${CONSTANT_LOGIN}`.methodName.context
-        const errorKeys = Object.keys(prev).filter(key => key.split('.')[0] === 'useLoginState');
+        const errorKeys = Object.keys(prev).filter(key => {
+          const errorKey = key.split('.')[0];
+          return errorKey === 'useGetLogin' || errorKey === 'useLogin';
+        });
         const newErrors = { ...prev };
         errorKeys.forEach(key => {
           delete newErrors[key];

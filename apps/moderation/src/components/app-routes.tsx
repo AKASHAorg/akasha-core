@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 import routes, { HOME, HISTORY, UNAUTHENTICATED, rootRoute } from '../routes';
 
@@ -17,15 +17,18 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const { layoutConfig } = props;
 
   const { t } = useTranslation();
-
-  const [loginState] = useLoginState({});
+  const loginQuery = useGetLogin();
 
   return (
     <Box>
       <Router>
         <Switch>
           <Route path={routes[HOME]}>
-            <ContentList {...props} user={loginState.pubKey} slotId={layoutConfig.modalSlotId} />
+            <ContentList
+              {...props}
+              user={loginQuery.data?.pubKey}
+              slotId={layoutConfig.modalSlotId}
+            />
           </Route>
           <Route path={routes[UNAUTHENTICATED]}>
             <PromptAuthentication
@@ -34,13 +37,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 'To view this page, you must be an Ethereum World Moderator and log in with your wallet to continue.',
               )}
               buttonLabel={t('Moderation history')}
-              ethAddress={loginState.ethAddress}
+              ethAddress={loginQuery.data?.ethAddress}
               singleSpa={props.singleSpa}
             />
           </Route>
           <Route path={routes[HISTORY]}>
             <TransparencyLog
-              user={loginState.pubKey}
+              user={loginQuery.data?.pubKey}
               logger={props.logger}
               isMobile={props.isMobile}
               navigateToUrl={props.singleSpa.navigateToUrl}
