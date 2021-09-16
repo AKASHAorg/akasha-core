@@ -77,11 +77,24 @@
         "design",
         "video"
       ]
+    },
+    {
+      "login": "josenriagu",
+      "name": "Josemaria Nriagu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49484425?v=4",
+      "profile": "http://about.me/josenriagu",
+      "contributions": [
+        "code",
+        "maintenance",
+        "doc",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "akasha-world-framework",
-  "projectOwner": "AkashaProject",
+  "projectOwner": "AKASHAorg",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
