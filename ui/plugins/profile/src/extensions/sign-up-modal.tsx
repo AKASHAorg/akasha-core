@@ -55,7 +55,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (loginQuery.data.ethAddress) {
+    if (loginQuery.data?.ethAddress) {
       if (
         props.activeModal.hasOwnProperty('redirectTo') &&
         typeof props.activeModal.redirectTo === 'object'
@@ -69,7 +69,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
         setTimeout(() => handleSignUpModalClose(), 500);
       }
     }
-  }, [loginQuery.data.ethAddress, props, props.navigateToModal, handleSignUpModalClose]);
+  }, [loginQuery.data?.ethAddress, props, props.navigateToModal, handleSignUpModalClose]);
 
   const _handleModalClose = () => {
     setInviteToken(null);

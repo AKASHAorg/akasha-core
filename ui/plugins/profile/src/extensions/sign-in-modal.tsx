@@ -31,7 +31,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
   }, [props.singleSpa]);
 
   React.useEffect(() => {
-    if (loginQuery.data.ethAddress) {
+    if (loginQuery.data?.ethAddress) {
       if (
         props.activeModal.hasOwnProperty('redirectTo') &&
         typeof props.activeModal.redirectTo === 'object'
@@ -45,7 +45,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
         setTimeout(() => handleModalClose(), 500);
       }
     }
-  }, [loginQuery.data.ethAddress, props, props.navigateToModal, handleModalClose]);
+  }, [loginQuery.data?.ethAddress, props, props.navigateToModal, handleModalClose]);
 
   const handleLogin = (providerId: number) => {
     // loginActions.login(providerId, !acceptedTerms);

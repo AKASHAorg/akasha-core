@@ -49,13 +49,13 @@ const ProfileForm = styled(BoxFormCard)`
 const UpdateProfileModal: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
   const [partialUsername, setPartialUsername] = React.useState<string>();
-  const profileDataQuery = useGetProfile(loginQuery.data.pubKey);
-  const profileUpdateMutation = useProfileUpdate(loginQuery.data.pubKey);
+  const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
+  const profileUpdateMutation = useProfileUpdate(loginQuery.data?.pubKey);
   const usernameValidationQuery = useUsernameValidation(partialUsername);
   const { t } = useTranslation();
   const updateStatusKey = React.useMemo(
-    () => [UPDATE_PROFILE_STATUS, loginQuery.data.pubKey],
-    [loginQuery.data.pubKey],
+    () => [UPDATE_PROFILE_STATUS, loginQuery.data?.pubKey],
+    [loginQuery.data?.pubKey],
   );
   const updateStatusQuery = useQueryListener<{
     status: UpdateProfileStatus;

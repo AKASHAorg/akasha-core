@@ -37,7 +37,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState.isReady && loginState.ethAddress);
+  const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
   const tagSubscriptions = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
@@ -50,10 +50,10 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   }, [reqPosts.data]);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.fromCache) {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState?.fromCache) {
       reqPosts.fetchNextPage();
     }
-  }, [reqPosts, loginState.fromCache]);
+  }, [reqPosts, loginState?.fromCache]);
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
     let url;
@@ -81,14 +81,14 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
-    if (!loginState.pubKey) {
+    if (!loginState?.pubKey) {
       return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginState?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -122,13 +122,13 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         pages={postPages}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
         requestStatus={reqPosts.status}
-        ethAddress={loginState.isReady && loginState.ethAddress}
+        ethAddress={loginState?.isReady && loginState?.ethAddress}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
         hasNextPage={reqPosts.hasNextPage}
-        profilePubKey={loginState.pubKey}
+        profilePubKey={loginState?.pubKey}
         loggedProfile={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}

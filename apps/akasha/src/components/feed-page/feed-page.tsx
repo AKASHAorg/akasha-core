@@ -53,10 +53,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   //@Todo: replace this with fetchNextPage() from useInfinitePosts object
   const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage && loginState.fromCache) {
+    if (!postsReq.isLoading && postsReq.hasNextPage && loginState?.fromCache) {
       postsReq.fetchNextPage();
     }
-  }, [postsReq, loginState.fromCache]);
+  }, [postsReq, loginState?.fromCache]);
 
   const postPages = React.useMemo(() => {
     if (postsReq.data) {
@@ -113,9 +113,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      {loginState.ethAddress && (
+      {loginState?.ethAddress && (
         <EditorPlaceholder
-          ethAddress={loginState.ethAddress}
+          ethAddress={loginState?.ethAddress}
           onClick={handleShowEditor}
           avatar={loggedProfileData?.avatar}
           style={{ marginBottom: '0.5rem' }}
@@ -158,8 +158,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        ethAddress={loginState.isReady && loginState.ethAddress}
-        profilePubKey={loginState.pubKey}
+        ethAddress={loginState?.isReady && loginState?.ethAddress}
+        profilePubKey={loginState?.pubKey}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}

@@ -29,7 +29,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const loginQuery = useGetLogin();
 
-  const bookmarksReq = useGetBookmarks(loginQuery.data.isReady && loginQuery.data.ethAddress);
+  const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && loginQuery.data?.ethAddress);
   const bookmarks = bookmarksReq.data;
   const deleteBookmark = useDeleteBookmark();
 
@@ -74,7 +74,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
 
   const handleRepost = (_withComment: boolean, embedEntryId: string) => {
-    if (!loginQuery.data.ethAddress) {
+    if (!loginQuery.data?.ethAddress) {
       props.navigateToModal({ name: 'login' });
       return;
     } else {
@@ -116,7 +116,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                   logger={logger}
                   singleSpa={singleSpa}
                   bookmarks={bookmarksReq.data}
-                  ethAddress={loginQuery.data.ethAddress}
+                  ethAddress={loginQuery.data?.ethAddress}
                   onBookmark={handleBookmarkClick}
                   onNavigate={handleNavigateToPost}
                   onRepost={handleRepost}

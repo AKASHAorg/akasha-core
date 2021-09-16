@@ -26,7 +26,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetEntryAuthor(params.postId);
   const profileData = profileDataReq.data;
 
-  const isFollowingReq = useIsFollowing(loginQuery.data.ethAddress, profileData.ethAddress);
+  const isFollowingReq = useIsFollowing(loginQuery.data?.ethAddress, profileData.ethAddress);
   const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
@@ -66,7 +66,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         isFollowing={isFollowing}
-        loggedEthAddress={loginQuery.data.ethAddress}
+        loggedEthAddress={loginQuery.data?.ethAddress}
         profileData={profileData}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}

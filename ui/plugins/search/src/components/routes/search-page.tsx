@@ -51,25 +51,25 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const bookmarksReq = useGetBookmarks(loginState.isReady && loginState.ethAddress);
+  const bookmarksReq = useGetBookmarks(loginState?.isReady && loginState?.ethAddress);
   const bookmarks = bookmarksReq.data;
   const addBookmark = useSaveBookmark();
   const deleteBookmark = useDeleteBookmark();
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState.isReady && loginState.ethAddress);
+  const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
   const tagSubscriptionsState = tagSubscriptionsReq.data;
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
   const searchReq = useSearch(
     decodeURIComponent(searchKeyword),
-    loginState.pubKey,
-    loginState.fromCache,
+    loginState?.pubKey,
+    loginState?.fromCache,
   );
   const searchState = searchReq.data;
 
   const followEthAddressArr = searchState?.profiles?.slice(0, 4).map(profile => profile.ethAddress);
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState.ethAddress, followEthAddressArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.ethAddress, followEthAddressArr);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
@@ -92,7 +92,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchReq.status, searchState]);
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginState?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -103,7 +103,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
   const handleFollowProfile = (ethAddress: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginState?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -111,7 +111,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginState?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -127,7 +127,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleEntryBookmark = (itemType: ItemTypes) => (entryId: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginState?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -138,7 +138,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
-    if (!loginState.pubKey) {
+    if (!loginState?.pubKey) {
       return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
@@ -146,7 +146,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   // repost related
   const handleRepost = (_withComment: boolean, entryId: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginState?.ethAddress) {
       showLoginModal();
       return;
     } else {
@@ -195,7 +195,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         hasMobileDesign={true}
         buttonLabels={buttonLabels}
         buttonValues={buttonValues}
-        loggedUser={loginState.pubKey}
+        loggedUser={loginState?.pubKey}
       />
 
       {searchReq.isFetching && (
@@ -226,7 +226,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   handleFollow={() => handleFollowProfile(profileData.ethAddress)}
                   handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
                   isFollowing={followedProfiles.includes(profileData?.ethAddress)}
-                  loggedEthAddress={loginState.ethAddress}
+                  loggedEthAddress={loginState?.ethAddress}
                   profileData={profileData}
                   followLabel={t('Follow')}
                   unfollowLabel={t('Unfollow')}
@@ -293,7 +293,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     shareLabel={t('Share')}
                     copyLinkLabel={t('Copy Link')}
                     flagAsLabel={t('Report Post')}
-                    loggedProfileEthAddress={loginState.ethAddress}
+                    loggedProfileEthAddress={loginState?.ethAddress}
                     locale={locale || 'en'}
                     style={{ height: 'auto' }}
                     bookmarkLabel={t('Save')}
@@ -355,7 +355,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     shareLabel={t('Share')}
                     copyLinkLabel={t('Copy Link')}
                     flagAsLabel={t('Report Comment')}
-                    loggedProfileEthAddress={loginState.ethAddress}
+                    loggedProfileEthAddress={loginState?.ethAddress}
                     locale={locale || 'en'}
                     style={{ height: 'auto' }}
                     bookmarkLabel={t('Save')}

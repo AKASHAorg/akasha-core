@@ -26,7 +26,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path={routes[HOME]}>
             <ContentList
               {...props}
-              user={loginQuery.data.pubKey}
+              user={loginQuery.data?.pubKey}
               slotId={layoutConfig.modalSlotId}
             />
           </Route>
@@ -37,13 +37,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 'To view this page, you must be an Ethereum World Moderator and log in with your wallet to continue.',
               )}
               buttonLabel={t('Moderation history')}
-              ethAddress={loginQuery.data.ethAddress}
+              ethAddress={loginQuery.data?.ethAddress}
               singleSpa={props.singleSpa}
             />
           </Route>
           <Route path={routes[HISTORY]}>
             <TransparencyLog
-              user={loginQuery.data.pubKey}
+              user={loginQuery.data?.pubKey}
               logger={props.logger}
               isMobile={props.isMobile}
               navigateToUrl={props.singleSpa.navigateToUrl}

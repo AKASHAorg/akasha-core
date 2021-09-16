@@ -48,8 +48,8 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const profileDataQuery = useGetProfile(
     publicKey,
-    loginQuery.data.pubKey,
-    loginQuery.data.fromCache,
+    loginQuery.data?.pubKey,
+    loginQuery.data?.fromCache,
   );
   const profileState = profileDataQuery.data;
 
@@ -66,10 +66,10 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [reqPosts, erroredHooks]);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginQuery.data.fromCache) {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginQuery.data?.fromCache) {
       reqPosts.fetchNextPage();
     }
-  }, [reqPosts, loginQuery.data.fromCache]);
+  }, [reqPosts, loginQuery.data?.fromCache]);
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
     let url;
@@ -113,7 +113,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [reqPosts.data]);
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
-    if (!loginQuery.data.pubKey) {
+    if (!loginQuery.data?.pubKey) {
       return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
@@ -172,7 +172,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                 {...props}
                 profileData={profileState}
                 profileId={pubKey}
-                loggedUserEthAddress={loginQuery.data.ethAddress}
+                loggedUserEthAddress={loginQuery.data?.ethAddress}
               />
               {reqPosts.status === 'error' && reqPosts.error && (
                 <ErrorLoader
@@ -192,7 +192,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   }
                   pages={postPages}
                   requestStatus={reqPosts.status}
-                  ethAddress={loginQuery.data.isReady && loginQuery.data.ethAddress}
+                  ethAddress={loginQuery.data?.isReady && loginQuery.data?.ethAddress}
                   onNavigate={handleNavigation}
                   singleSpaNavigate={props.singleSpa.navigateToUrl}
                   navigateToModal={props.navigateToModal}

@@ -35,7 +35,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
   const mentionSearch = useMentionSearch(mentionQuery);
   const tagSearch = useTagSearch(tagQuery);
 
-  const profileDataReq = useGetProfile(loginQuery.data.pubKey);
+  const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
 
   // const [mentionsState, mentionsActions] = useMentions({});
   const isEditing = React.useMemo(
@@ -132,7 +132,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
           <EditorModal
             titleLabel={isEditing ? t('Edit Post') : t('New Post')}
             avatar={profileDataReq.data?.avatar}
-            ethAddress={loginQuery.data.ethAddress}
+            ethAddress={loginQuery.data?.ethAddress}
             postLabel={t('Publish')}
             placeholderLabel={t('Write something')}
             emojiPlaceholderLabel={t('Search')}

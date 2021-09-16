@@ -22,7 +22,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const [, errorActions] = useErrors({ logger });
   const loginQuery = useGetLogin({ onError: errorActions.createError });
 
-  const profileDataReq = useGetProfile(loginQuery.data.pubKey);
+  const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
   const loggedProfileData = profileDataReq.data;
 
   const showLoginModal = (redirectTo?: ModalNavigationOptions) => {

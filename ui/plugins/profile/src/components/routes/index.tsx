@@ -13,7 +13,7 @@ const { Box } = DS;
 
 const Routes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
-  const loggedProfileQuery = useGetProfile(loginQuery.data.pubKey);
+  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
   const { t } = useTranslation();
 

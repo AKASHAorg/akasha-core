@@ -119,8 +119,8 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
-    if (loginQuery.data.ethAddress && !isLoadingProfile) {
-      getModeratorStatus(loginQuery.data.pubKey);
+    if (loginQuery.data?.ethAddress && !isLoadingProfile) {
+      getModeratorStatus(loginQuery.data?.pubKey);
       if (loggedProfileData && !loggedProfileData.userName) {
         return props.navigateToModal({
           name: 'update-profile',
@@ -129,9 +129,9 @@ const TopbarComponent = (props: RootComponentProps) => {
     }
   }, [
     profileDataReq.isLoading,
-    loginQuery.data.ethAddress,
+    loginQuery.data?.ethAddress,
     loggedProfileData,
-    loginQuery.data.pubKey,
+    loginQuery.data?.pubKey,
     getModeratorStatus,
     props,
   ]);

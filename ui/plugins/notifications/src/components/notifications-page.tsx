@@ -20,7 +20,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const [notifErrors] = useErrorState({ logger });
 
-  const notifReq = useFetchNotifications(loginQuery.data.ethAddress);
+  const notifReq = useFetchNotifications(loginQuery.data?.ethAddress);
   const notificationsState = notifReq.data;
 
   const markAsRead = useMarkAsRead();

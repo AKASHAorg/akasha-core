@@ -82,7 +82,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
         reportLabel={t('Report')}
         blockLabel={t('Block User')}
         closeLabel={t('Close')}
-        user={loginQuery.data.pubKey || ''}
+        user={loginQuery.data?.pubKey || ''}
         contentId={activeModal.entryId}
         itemType={itemType}
         requesting={reportMutation.status === 'loading'}
