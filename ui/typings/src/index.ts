@@ -56,3 +56,19 @@ export enum LEGAL_DOCS {
 }
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
+
+export type QueryStatus = {
+  error?: null | unknown;
+  isError?: boolean;
+  isFetched?: boolean;
+  isFetchedAfterMount?: boolean;
+  isFetching?: boolean;
+  isIdle?: boolean;
+  isLoading?: boolean;
+  isLoadingError?: boolean;
+  isPlaceholderData?: boolean;
+  isPreviousData?: boolean;
+  isRefetchError?: boolean;
+  isStale?: boolean;
+  isSuccess?: boolean;
+};
