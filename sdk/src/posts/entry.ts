@@ -103,7 +103,7 @@ export default class AWF_Entry implements AWF_IEntry {
    */
   postEntry(opt: {
     data: DataProviderInput[];
-    post: { title?: string; tags?: string[]; quotes?: string[] };
+    post: { title?: string; tags?: string[]; quotes?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
     textContent.value = Buffer.from(textContent.value).toString('base64');
@@ -146,7 +146,7 @@ export default class AWF_Entry implements AWF_IEntry {
   editEntry(opt: {
     entryID: string;
     data: DataProviderInput[];
-    post: { title?: string; tags?: string[]; quotes?: string[] };
+    post: { title?: string; tags?: string[]; quotes?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
     textContent.value = Buffer.from(textContent.value).toString('base64');
