@@ -131,7 +131,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const isFollowing = followedProfiles.includes(entryData?.author?.ethAddress);
 
   const handleLoadMore = () => {
-    if (reqComments.status === 'success' && reqComments.hasNextPage && loginState?.fromCache) {
+    if (reqComments.isSuccess && reqComments.hasNextPage && loginState?.fromCache) {
       reqComments.fetchNextPage();
     }
   };
