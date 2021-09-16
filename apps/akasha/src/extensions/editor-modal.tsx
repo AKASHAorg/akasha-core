@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { useLoginState, withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { useCreatePost, useEditPost, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
@@ -13,6 +13,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import i18next, { setupI18next } from '../i18n';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const {
   EditorModal,
@@ -28,13 +29,13 @@ const {
 const EditorModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
 
-  const [loginState] = useLoginState({});
+  const loginQuery = useGetLogin();
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionSearch = useMentionSearch(mentionQuery);
   const tagSearch = useTagSearch(tagQuery);
 
-  const profileDataReq = useGetProfile(loginState.pubKey);
+  const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
 
   // const [mentionsState, mentionsActions] = useMentions({});
   const isEditing = React.useMemo(
@@ -131,7 +132,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
           <EditorModal
             titleLabel={isEditing ? t('Edit Post') : t('New Post')}
             avatar={profileDataReq.data?.avatar}
-            ethAddress={loginState.ethAddress}
+            ethAddress={loginQuery.data?.ethAddress}
             postLabel={t('Publish')}
             placeholderLabel={t('Write something')}
             emojiPlaceholderLabel={t('Search')}

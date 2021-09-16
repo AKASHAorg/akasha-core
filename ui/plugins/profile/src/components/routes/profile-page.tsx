@@ -4,7 +4,6 @@ import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import useLoginState, { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 // import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
@@ -15,13 +14,14 @@ import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks
 import { useQueryClient } from 'react-query';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { LoginState, useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
-  loginState: ILoginState;
+  loginState: LoginState;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
@@ -44,12 +44,12 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [pubKey, loggedProfileData, location.pathname]);
 
-  const [loginState] = useLoginState({});
+  const loginQuery = useGetLogin();
 
   const profileDataQuery = useGetProfile(
     publicKey,
-    loginState.pubKey,
-    loginState.currentUserCalled,
+    loginQuery.data?.pubKey,
+    loginQuery.data?.fromCache,
   );
   const profileState = profileDataQuery.data;
 
@@ -66,10 +66,10 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [reqPosts, erroredHooks]);
 
   const handleLoadMore = React.useCallback(() => {
-    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState.currentUserCalled) {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginQuery.data?.fromCache) {
       reqPosts.fetchNextPage();
     }
-  }, [reqPosts, loginState.currentUserCalled]);
+  }, [reqPosts, loginQuery.data?.fromCache]);
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
     let url;
@@ -113,7 +113,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [reqPosts.data]);
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
-    if (!loginState.pubKey) {
+    if (!loginQuery.data?.pubKey) {
       return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
@@ -172,7 +172,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                 {...props}
                 profileData={profileState}
                 profileId={pubKey}
-                loggedUserEthAddress={loginState.ethAddress}
+                loggedUserEthAddress={loginQuery.data?.ethAddress}
               />
               {reqPosts.status === 'error' && reqPosts.error && (
                 <ErrorLoader
@@ -192,7 +192,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   }
                   pages={postPages}
                   requestStatus={reqPosts.status}
-                  ethAddress={loginState.ready?.ethAddress}
+                  ethAddress={loginQuery.data?.isReady && loginQuery.data?.ethAddress}
                   onNavigate={handleNavigation}
                   singleSpaNavigate={props.singleSpa.navigateToUrl}
                   navigateToModal={props.navigateToModal}
