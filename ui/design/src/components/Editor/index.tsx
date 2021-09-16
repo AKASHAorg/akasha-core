@@ -48,6 +48,7 @@ export interface IEditorBox {
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
+  getLinkPreview: (url: string) => any;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
   mentions?: {
@@ -83,6 +84,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     embedEntryData,
     minHeight,
     withMeter,
+    getLinkPreview,
     getMentions,
     getTags,
     mentions = [],
@@ -137,7 +139,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    */
   const editor = useAndroidPlugin(
     useMemo(
-      () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
+      () =>
+        withLinks(
+          withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
+          getLinkPreview,
+        ),
       [],
     ),
   );
@@ -213,7 +219,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     let textLength = 0;
 
     /**
-     * include tags and mentions in the text length
+     * include tags, mentions and links in the text length
      * keeps track of the number of images in the content
      */
     (function computeLength(nodeArr: Descendant[]) {
@@ -224,6 +230,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           }
           if (Element.isElement(node) && node.type === 'tag' && node.name?.length) {
             textLength += node.name?.length;
+          }
+          if (Element.isElement(node) && node.type === 'link' && node.url?.length) {
+            textLength += node.url?.length;
           }
           if (Element.isElement(node) && node.type === 'image') {
             imageCounter++;

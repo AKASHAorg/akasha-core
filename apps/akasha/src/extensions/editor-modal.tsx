@@ -3,7 +3,10 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import {
+  uploadMediaToTextile,
+  getLinkPreview,
+} from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { useLoginState, withProviders } from '@akashaproject/ui-awf-hooks';
 import { useCreatePost, useEditPost, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
@@ -142,6 +145,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
             keepEditingLabel={t('Keep Editing')}
             onPublish={handleEntryPublish}
             handleNavigateBack={handleModalClose}
+            getLinkPreview={getLinkPreview}
             getMentions={handleMentionQueryChange}
             getTags={handleTagQueryChange}
             tags={tagSearch.data}

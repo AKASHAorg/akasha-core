@@ -14,7 +14,7 @@ export type ImageElement = {
   children: EmptyText[];
 };
 
-export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
+export type LinkElement = { type: 'link'; url: string; metadata?: any; children: EmptyText[] };
 
 export type MentionElement = {
   type: 'mention';

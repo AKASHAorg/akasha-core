@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
+import { Box, Text } from 'grommet';
+import LinkIconButton from '../IconLink';
 import Icon from '../Icon';
 import { StyledAnchor } from '../TextInputIconForm/styles';
 import { StyledCloseDiv } from './styled-editor-box';
@@ -13,6 +15,11 @@ const StyledImg = styled.img`
   position: absolute;
 `;
 
+const Favicon = styled.img`
+  width: 1rem;
+  height: 1rem;
+`;
+
 const StyledMention = styled.span`
   color: ${props => props.theme.colors.accent};
   cursor: pointer;
@@ -20,6 +27,10 @@ const StyledMention = styled.span`
 
 const DisabledSpan = styled.span`
   color: ${props => props.theme.colors.secondaryText};
+`;
+
+const StyledBox = styled(Box)`
+  background-color: ${props => props.theme.colors.ultraLightGrey};
 `;
 
 const ImgElement = ({
@@ -101,8 +112,75 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
     </StyledMention>
   );
 };
+function htmlDecode(input) {
+  const doc = new DOMParser().parseFromString(input, 'text/html');
+  return doc.documentElement.textContent;
+}
 
 const LinkElement = ({ attributes, children, element, handleLinkClick }: any) => {
+  const linkPreviewData = element.metadata;
+  if (linkPreviewData) {
+    return (
+      <Box
+        onClick={(ev: Event) => {
+          if (new URL(element.url).origin === window.location.origin) {
+            handleLinkClick(element.url);
+            ev.stopPropagation();
+            ev.preventDefault();
+            return false;
+          } else {
+            window.open(element.url, '_blank', 'noopener');
+          }
+          return ev.stopPropagation();
+        }}
+      >
+        {linkPreviewData.images.length > 0 && (
+          <Box
+            background={{
+              color: '#DDD',
+              image: `url(${linkPreviewData.images[0]})`,
+              repeat: 'no-repeat',
+              size: 'cover',
+            }}
+            height="18rem"
+            pad="none"
+            round={{ corner: 'top', size: 'xsmall' }}
+          />
+        )}
+
+        <StyledBox
+          pad="medium"
+          gap="medium"
+          round="xsmall"
+          border={{
+            color: 'border',
+            size: 'xsmall',
+            style: 'solid',
+            side: 'all',
+          }}
+        >
+          <Box direction="row" gap="small" pad="small" align="center">
+            <LinkIconButton
+              icon={
+                linkPreviewData.favicons?.length ? (
+                  <Favicon src={linkPreviewData.favicons[0]} />
+                ) : (
+                  <Icon type="link" size="xxs" accentColor={true} />
+                )
+              }
+              label={linkPreviewData.url}
+              active={true}
+            />
+          </Box>
+          <Text size="large" weight="bold" color="primaryText">
+            {linkPreviewData.title}
+          </Text>
+          <Text>{htmlDecode(linkPreviewData.description)}</Text>
+          <Box></Box>
+        </StyledBox>
+      </Box>
+    );
+  }
   return (
     <StyledAnchor
       {...attributes}

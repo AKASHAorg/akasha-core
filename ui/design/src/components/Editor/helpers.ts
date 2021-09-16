@@ -84,7 +84,7 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
-  insertLink(editor: Editor, linkData: { url: string }) {
+  insertLink(editor: Editor, linkData: { url: string; metadata?: any }) {
     const baseLink: { type: 'link'; children: [{ text: '' }] } = {
       type: 'link',
       children: [{ text: '' }],
@@ -94,6 +94,7 @@ const CustomEditor = {
     ReactEditor.focus(editor);
     Transforms.move(editor);
   },
+
   deleteImage(editor: Editor, element: Element) {
     const path = ReactEditor.findPath(editor, element);
     Transforms.removeNodes(editor, {
@@ -101,7 +102,7 @@ const CustomEditor = {
       at: path,
     });
     ReactEditor.focus(editor);
-    Transforms.select(editor, Editor.end(editor, []));
+    Transforms.move(editor);
   },
 };
 

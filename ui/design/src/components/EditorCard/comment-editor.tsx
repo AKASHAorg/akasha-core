@@ -20,6 +20,7 @@ const CommentEditor: React.FC<
     placeholderLabel,
     emojiPlaceholderLabel,
     onPublish,
+    getLinkPreview,
     getMentions,
     getTags,
     mentions,
@@ -80,6 +81,7 @@ const CommentEditor: React.FC<
             placeholderLabel={placeholderLabel}
             emojiPlaceholderLabel={emojiPlaceholderLabel}
             onPublish={handlePublish}
+            getLinkPreview={getLinkPreview}
             getMentions={getMentions}
             getTags={getTags}
             mentions={mentions}
