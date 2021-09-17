@@ -16,7 +16,7 @@ class Logging implements ILogService {
    */
   create(nameSpace?: string): ILogger {
     const logger = this._appLogger.child({ module: nameSpace });
-    logger.level = process.env.LOG_LEVEL || 'info';
+    logger.level = process.env.LOG_LEVEL || 'warn';
     return logger;
   }
 }
