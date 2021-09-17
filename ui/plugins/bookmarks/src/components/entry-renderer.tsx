@@ -11,7 +11,6 @@ import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import ExtensionPoint from '@akashaproject/design-system/lib/utils/extension-point';
-import { entryData } from '@akashaproject/design-system/lib/utils/dummy-data';
 
 const { ErrorLoader, EntryCard, /* EntryCardHidden, */ EntryCardLoading } = DS;
 
@@ -65,6 +64,12 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const postReq = usePost({ postId: itemId, enabler: type === ItemTypes.ENTRY });
   const commentReq = useComment(itemId, type === ItemTypes.COMMENT);
+  const entryData = React.useMemo(() => {
+    if (postReq.data) {
+      return mapEntry(postReq.data);
+    }
+    return undefined;
+  }, [postReq.data]);
 
   const itemData = React.useMemo(() => {
     if (type === ItemTypes.COMMENT && commentReq.status === 'success') {
