@@ -9,10 +9,17 @@ import {
   useFollowing,
   useInterests,
 } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-import { useToggleTagSubscription } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
+import {
+  useTagSubscriptions,
+  useToggleTagSubscription,
+} from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 
 import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import { useFollow, useUnfollow } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import {
+  useFollow,
+  useIsFollowingMultiple,
+  useUnfollow,
+} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import getSDK from '@akashaproject/awf-sdk';
 
 interface IStatModalWrapper {
@@ -31,26 +38,66 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const [activeIndex, setActiveIndex] = React.useState<number>(0);
 
-  // get accounts this profile is following
-  const followingReq = useFollowing(profileData.pubKey, 10);
-  const following = followingReq.data?.pages[0].results;
+  const { t } = useTranslation();
+
+  const sdk = getSDK();
 
   // get followers for this profile
   const followersReq = useFollowers(profileData.pubKey, 10);
   const followers = followersReq.data?.pages[0].results;
 
+  // get accounts this profile is following
+  const followingReq = useFollowing(profileData.pubKey, 10);
+  const following = followingReq.data?.pages[0].results;
+
   // get interests for this profile
   const interestsReq = useInterests(profileData.pubKey);
   const interests = interestsReq.data;
 
+  let profiles: IProfileData[] = [];
+
+  // wait for followers and following queries to finish
+  if (Array.isArray(followers)) {
+    profiles = [...profiles, ...followers];
+  }
+  if (Array.isArray(following)) {
+    profiles = [...profiles, ...following];
+  }
+
+  // get followed profiles for logged user
+  const isFollowingMultipleReq = useIsFollowingMultiple(
+    loginState.ethAddress,
+    profiles.map((profile: { ethAddress: string }) => profile.ethAddress),
+  );
+
+  const followedProfiles = isFollowingMultipleReq.data;
+
+  // get tag subscriptions for logged user
+  const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
+
+  const tagSubscriptions = tagSubscriptionsReq.data;
+
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
+  // hooks to follow/unfollow profiles
   const followProfileReq = useFollow();
   const unfollowProfileReq = useUnfollow();
 
-  const sdk = getSDK();
-
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
+  const followersPages = React.useMemo(() => {
+    if (followersReq.data) {
+      return followersReq.data.pages;
+    }
+    return [];
+  }, [followersReq.data]);
+
+  const followingPages = React.useMemo(() => {
+    if (followingReq.data) {
+      return followingReq.data.pages;
+    }
+    return [];
+  }, [followingReq.data]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => setInitialActiveTab(), []);
@@ -59,7 +106,17 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     setActiveIndex(selectedStat);
   };
 
-  const { t } = useTranslation();
+  const loadMoreFollowers = React.useCallback(() => {
+    if (!followersReq.isLoading && followersReq.hasNextPage) {
+      followersReq.fetchNextPage();
+    }
+  }, [followersReq]);
+
+  const loadMoreFollowing = React.useCallback(() => {
+    if (!followingReq.isLoading && followingReq.hasNextPage) {
+      followingReq.fetchNextPage();
+    }
+  }, [followingReq]);
 
   const handleTagClick = (tagName: string) => {
     singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
@@ -67,6 +124,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const handleTagSubscribe = (tagName: string) => {
     if (!loginState.ethAddress) {
+      handleClose();
       props.showLoginModal();
       return;
     }
@@ -79,6 +137,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const handleFollowProfile = (ethAddress: string) => {
     if (!loginState.ethAddress) {
+      handleClose();
       props.showLoginModal();
       return;
     }
@@ -87,6 +146,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const handleUnfollowProfile = (ethAddress: string) => {
     if (!loginState.ethAddress) {
+      handleClose();
       props.showLoginModal();
       return;
     }
@@ -131,8 +191,8 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       followersReqStatus={followersReq}
       followingReqStatus={followingReq}
       interestsReqStatus={interestsReq}
-      // followedProfiles={}
-      // subscribedTags={}
+      followedProfiles={followedProfiles}
+      subscribedTags={tagSubscriptions}
       followLabel={t('Follow')}
       followingLabel={t('Following')}
       unfollowLabel={t('Unfollow')}
@@ -141,6 +201,11 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       unsubscribeLabel={t('Unsubscribe')}
       tagAnchorLink={'/social-app/tags'}
       profileAnchorLink={'/profile'}
+      followersPages={followersPages}
+      followingPages={followingPages}
+      loadingMoreLabel={t('Loading more ...')}
+      loadMoreFollowers={loadMoreFollowers}
+      loadMoreFollowing={loadMoreFollowing}
       closeModal={handleClose}
       onClickTag={handleTagClick}
       onClickProfile={handleProfileClick}

@@ -41,6 +41,12 @@ export interface IStatModal extends IProfileEntry, ITagEntry {
   followingReqStatus: QueryStatus;
   interestsReqStatus: QueryStatus;
 
+  followersPages: any[];
+  followingPages: any[];
+
+  loadMoreFollowers: () => void;
+  loadMoreFollowing: () => void;
+
   handleButtonClick: () => void;
   closeModal: () => void;
 }
@@ -76,12 +82,17 @@ const StatModal: React.FC<IStatModal> = props => {
     subscribedLabel,
     tagAnchorLink,
     profileAnchorLink,
+    followersPages,
+    followingPages,
+    loadingMoreLabel,
     onClickTag,
     onClickProfile,
     handleFollowProfile,
     handleUnfollowProfile,
     handleSubscribeTag,
     handleUnsubscribeTag,
+    loadMoreFollowers,
+    loadMoreFollowing,
     handleButtonClick,
     closeModal,
   } = props;
@@ -148,12 +159,16 @@ const StatModal: React.FC<IStatModal> = props => {
                         <ProfileEntry
                           ipfsGateway={ipfsGateway}
                           loggedUser={loggedUser}
-                          entries={followers}
                           followedProfiles={followedProfiles}
                           followLabel={followLabel}
                           followingLabel={followingLabel}
                           unfollowLabel={unfollowLabel}
                           profileAnchorLink={profileAnchorLink}
+                          pages={followersPages}
+                          status={followersReqStatus.status}
+                          hasNextPage={followersReqStatus.hasNextPage}
+                          loadingMoreLabel={loadingMoreLabel}
+                          onLoadMore={loadMoreFollowers}
                           onClickProfile={onClickProfile}
                           handleFollowProfile={handleFollowProfile}
                           handleUnfollowProfile={handleUnfollowProfile}
@@ -183,12 +198,16 @@ const StatModal: React.FC<IStatModal> = props => {
                         <ProfileEntry
                           ipfsGateway={ipfsGateway}
                           loggedUser={loggedUser}
-                          entries={following}
                           followedProfiles={followedProfiles}
                           followLabel={followLabel}
                           followingLabel={followingLabel}
                           unfollowLabel={unfollowLabel}
                           profileAnchorLink={profileAnchorLink}
+                          pages={followingPages}
+                          status={followingReqStatus.status}
+                          hasNextPage={followingReqStatus.hasNextPage}
+                          loadingMoreLabel={loadingMoreLabel}
+                          onLoadMore={loadMoreFollowing}
                           onClickProfile={onClickProfile}
                           handleFollowProfile={handleFollowProfile}
                           handleUnfollowProfile={handleUnfollowProfile}
