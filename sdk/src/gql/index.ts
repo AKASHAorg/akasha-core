@@ -1,13 +1,12 @@
 import { inject, injectable } from 'inversify';
 import IGqlClient from '@akashaproject/sdk-typings/lib/interfaces/gql';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
-import { ApolloLink, HttpLink, gql, GraphQLRequest } from '@apollo/client';
+import { gql, GraphQLRequest, HttpLink } from '@apollo/client';
 
 import hash from 'object-hash';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Stash, { IQuickLRU } from '../stash';
-import { createObservableStreamGql, createObservableValue, toPromise } from '../helpers/observable';
-import { tap } from 'rxjs/operators';
+import { createObservableStreamGql, createObservableValue } from '../helpers/observable';
 
 export interface GqlOperation {
   query: string;
@@ -32,7 +31,7 @@ class Gql implements IGqlClient<unknown> {
     this._stash
       .create({
         maxSize: 1280,
-        maxAge: 1000 * 30,
+        maxAge: 1000 * 10,
       })
       .subscribe(x => (this._gqlStash = x.data));
   }
@@ -48,13 +47,14 @@ class Gql implements IGqlClient<unknown> {
     if (this._gqlStash.has(opHash)) {
       return createObservableValue<T>(this._gqlStash.get(opHash));
     }
-    const execution = toPromise(ApolloLink.execute(this._link, operation));
-    const obs = createObservableStreamGql<T>(execution);
-    if (saveCache) {
-      obs.pipe(tap({ next: value => this._gqlStash.set(opHash, value.data) }));
-    }
-
-    return obs;
+    return createObservableStreamGql<T>(
+      this._link,
+      operation,
+      saveCache &&
+        (value => {
+          this._gqlStash.set(opHash, value);
+        }),
+    );
   }
 
   /**
