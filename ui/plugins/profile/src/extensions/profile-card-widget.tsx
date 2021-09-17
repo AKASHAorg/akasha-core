@@ -5,7 +5,7 @@ import { useRouteMatch } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useGetEntryAuthor } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import {
-  useIsFollowing,
+  useIsFollowingMultiple,
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
@@ -26,7 +26,9 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetEntryAuthor(params.postId);
   const profileData = profileDataReq.data;
 
-  const isFollowingReq = useIsFollowing(loginQuery.data?.ethAddress, profileData.ethAddress);
+  const isFollowingReq = useIsFollowingMultiple(loginQuery.data?.ethAddress, [
+    profileData.ethAddress,
+  ]);
   const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();

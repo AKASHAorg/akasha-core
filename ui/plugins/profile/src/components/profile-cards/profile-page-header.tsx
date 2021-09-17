@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
-  useIsFollowing,
+  useIsFollowingMultiple,
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
@@ -43,7 +43,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   const { t } = useTranslation();
 
-  const isFollowingReq = useIsFollowing(loggedUserEthAddress, profileData.ethAddress);
+  const isFollowingReq = useIsFollowingMultiple(loggedUserEthAddress, [profileData.ethAddress]);
   const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
