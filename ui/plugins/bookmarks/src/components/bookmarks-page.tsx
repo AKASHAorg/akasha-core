@@ -128,6 +128,8 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                   sharePostUrl={`${window.location.origin}/social-app/post/`}
                   moderatedContentLabel={t('This content has been moderated')}
                   ctaLabel={t('See it anyway')}
+                  uiEvents={props.uiEvents}
+                  navigateToModal={props.navigateToModal}
                 />
               }
             />

@@ -2,7 +2,7 @@ import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useIsFollowing } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
@@ -10,6 +10,8 @@ import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import ExtensionPoint from '@akashaproject/design-system/lib/utils/extension-point';
+import { entryData } from '@akashaproject/design-system/lib/utils/dummy-data';
 
 const { ErrorLoader, EntryCard, /* EntryCardHidden, */ EntryCardLoading } = DS;
 
@@ -45,6 +47,8 @@ export interface IEntryCardRendererProps {
   moderatedContentLabel?: string;
   ctaLabel?: string;
   handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
+  uiEvents: RootComponentProps['uiEvents'];
+  navigateToModal: RootComponentProps['navigateToModal'];
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -75,6 +79,32 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     itemData?.author.ethAddress,
     !!itemData && !!itemData.author && !!itemData.author.ethAddress,
   );
+  const onEditButtonMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: itemId,
+        entryType: type,
+      },
+    });
+  };
+
+  const onEditButtonUnmount = () => {
+    /* todo */
+  };
+
+  const handleEntryRemove = (entryId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: ItemTypes.ENTRY,
+      entryId,
+    });
+  };
+
+  const handleEntryFlag = (entryId: string, itemType: ItemTypes) => () => {
+    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+  };
 
   const handleFollow = () => {
     /* todo */
@@ -155,6 +185,18 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               singleSpaNavigate={props.singleSpa.navigateToUrl}
               contentClickable={contentClickable}
               disableReposting={disableReposting}
+              removeEntryLabel={t('Delete Post')}
+              onEntryRemove={handleEntryRemove}
+              onEntryFlag={handleEntryFlag(entryData.entryId, ItemTypes.ENTRY)}
+              headerMenuExt={
+                ethAddress === itemData.author.ethAddress && (
+                  <ExtensionPoint
+                    name={`entry-card-edit-button_${itemId}`}
+                    onMount={onEditButtonMount}
+                    onUnmount={onEditButtonUnmount}
+                  />
+                )
+              }
             />
           )}
         </>
