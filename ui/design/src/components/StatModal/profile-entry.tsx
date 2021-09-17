@@ -76,7 +76,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                 weight="normal"
                 href={`${profileAnchorLink}/${entry.pubKey}`}
                 label={
-                  <Box width="11rem" pad="none">
+                  <Box width="15rem" pad="none">
                     <ProfileAvatarButton
                       ethAddress={entry.ethAddress}
                       onClick={() => onClickProfile(entry.pubKey)}
