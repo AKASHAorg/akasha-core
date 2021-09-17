@@ -2,10 +2,9 @@ import { asapScheduler, defer, from, of, scheduled, ObservableInput } from 'rxjs
 import { map } from 'rxjs/operators';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 import { ApolloLink, GraphQLRequest } from '@apollo/client';
-import { rpcUnknown } from '@nomiclabs/buidler/internal/buidler-evm/provider/input';
 
 /**
- * @param val
+ * @param val - Data value
  * @returns object with data attribute
  */
 export const createFormattedValue = <T>(val: T): { data: T } => {
