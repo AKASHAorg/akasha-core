@@ -106,15 +106,16 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const handleEntryRemove = (entryId: string) => {
-    props.navigateToModal({
-      name: 'entry-remove-confirmation',
-      entryType: ItemTypes.ENTRY,
-      entryId,
-    });
+    if (entryId)
+      props.navigateToModal({
+        name: 'entry-remove-confirmation',
+        entryType: ItemTypes.ENTRY,
+        entryId,
+      });
   };
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
   const handleFollow = () => {
