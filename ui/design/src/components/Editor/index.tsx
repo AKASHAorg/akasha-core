@@ -28,6 +28,7 @@ import EditorMeter from '../EditorMeter';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
+import LinkPreview from './link-preview';
 
 const MAX_LENGTH = 280;
 
@@ -47,6 +48,7 @@ export interface IEditorBox {
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
+  getLinkPreview: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
   mentions?: {
@@ -82,6 +84,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     embedEntryData,
     minHeight,
     withMeter,
+    getLinkPreview,
     getMentions,
     getTags,
     mentions = [],
@@ -111,6 +114,17 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
+  const [linkPreviewState, setLinkPreviewState] = useState(null);
+
+  const handleGetLinkPreview = async (url: string) => {
+    const linkPreview = await getLinkPreview(url);
+    setLinkPreviewState(linkPreview);
+  };
+
+  const handleDeletePreview = () => {
+    setLinkPreviewState(null);
+  };
+
   /**
    * display only 3 results in the tag and mention popovers
    */
@@ -135,7 +149,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    * initialise editor with all the required plugins
    */
   const editor = useMemo(
-    () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
+    () =>
+      withLinks(
+        withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
+        handleGetLinkPreview,
+      ),
     [],
   );
 
@@ -173,6 +191,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData,
+      linkPreview: linkPreviewState,
       tags: [],
       mentions: [],
       version: 1,
@@ -210,7 +229,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     let textLength = 0;
 
     /**
-     * include tags and mentions in the text length
+     * include tags, mentions and links in the text length
      * keeps track of the number of images in the content
      */
     (function computeLength(nodeArr: Descendant[]) {
@@ -221,6 +240,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           }
           if (Element.isElement(node) && node.type === 'tag' && node.name?.length) {
             textLength += node.name?.length;
+          }
+          if (Element.isElement(node) && node.type === 'link' && node.url?.length) {
+            textLength += node.url?.length;
           }
           if (Element.isElement(node) && node.type === 'image') {
             imageCounter++;
@@ -509,6 +531,12 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 />
               )}
             </Slate>
+            {linkPreviewState && (
+              <LinkPreview
+                linkPreviewData={linkPreviewState}
+                handleDeletePreview={handleDeletePreview}
+              />
+            )}
             {embedEntryData && (
               <Box pad={{ vertical: 'medium' }}>
                 <EmbedBox embedEntryData={embedEntryData} />

@@ -13,6 +13,7 @@ export const MEDIA_URL_PREFIX = 'CID:';
 export const PROVIDER_AKASHA = 'AkashaApp';
 export const PROPERTY_SLATE_CONTENT = 'slateContent';
 export const PROPERTY_TEXT_CONTENT = 'textContent';
+export const PROPERTY_LINK_PREVIEW = 'linkPreview';
 
 function toBinary(data: string) {
   const codeUnits = new Uint16Array(data.length);
@@ -34,7 +35,11 @@ function fromBinary(binary: string) {
   return result;
 }
 
-export const decodeb64SlateContent = (base64Content: string, logger?: ILogger) => {
+export const decodeb64SlateContent = (
+  base64Content: string,
+  logger?: ILogger,
+  handleOldSlateFormat?: boolean,
+) => {
   const stringContent = window.atob(base64Content);
   let result;
   try {
@@ -45,7 +50,7 @@ export const decodeb64SlateContent = (base64Content: string, logger?: ILogger) =
       logger.error(`Error parsing content: ${err.message}`);
     }
   }
-  if (!Array.isArray(result)) {
+  if (handleOldSlateFormat && !Array.isArray(result)) {
     result = JSON.parse(stringContent);
   }
   return result;
@@ -63,7 +68,9 @@ export const serializeSlateToBase64 = (slateContent: unknown) => {
  */
 export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger): IEntryData => {
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
+  const linkPreviewData = entry.content.find(elem => elem.property === PROPERTY_LINK_PREVIEW);
   let content;
+  let linkPreview;
   let quotedByAuthors: IEntryData['author'][];
   let quotedEntry: IEntryData;
   const isRemoved = entry.content.length === 1 && entry.content[0].property === 'removed';
@@ -78,7 +85,7 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     ]; */
   } else {
     try {
-      const decodedContent = decodeb64SlateContent(slateContent.value, logger);
+      const decodedContent = decodeb64SlateContent(slateContent.value, logger, true);
       content = decodedContent.map(node => {
         if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
           node.url = getMediaUrl(node.url.replace(MEDIA_URL_PREFIX, ''));
@@ -97,6 +104,15 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
       ];
     }
   }
+
+  try {
+    linkPreview = decodeb64SlateContent(linkPreviewData.value, logger);
+  } catch (error) {
+    if (logger) {
+      logger.error(`Error serializing base64 to linkPreview: ${error.message}`);
+    }
+  }
+
   if (entry.hasOwnProperty('quotes') && entry['quotes'] && entry['quotes'][0]) {
     quotedEntry = mapEntry(entry['quotes'][0], logger);
   }
@@ -128,6 +144,7 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
       coverImage: getMediaUrl(entry.author.coverImage),
     },
     content,
+    linkPreview,
     quote: quotedEntry,
     entryId: entry._id,
     time: entry.creationDate,
@@ -208,6 +225,7 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
     quotes.push(data.metadata.quote.entryId);
   }
 
+  // to add new post related data enhance this with another object
   const postObj = {
     data: [
       {
@@ -223,6 +241,14 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
       },
     ],
   };
+
+  if (data.metadata.linkPreview) {
+    postObj.data.push({
+      provider: PROVIDER_AKASHA,
+      property: PROPERTY_LINK_PREVIEW,
+      value: serializeSlateToBase64(data.metadata.linkPreview),
+    });
+  }
   // logic specific to comments
   if (parentEntryId) {
     return {
