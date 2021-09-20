@@ -1,6 +1,7 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaproject/awf-sdk';
-import { lastValueFrom } from 'rxjs';
+import { combineLatest, lastValueFrom } from 'rxjs';
+import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
 import moderationRequest from './moderation-request';
 import { getMediaUrl } from './utils/media-utils';
@@ -11,7 +12,6 @@ import {
   ProfileProviders,
   UpdateProfileStatus,
 } from '@akashaproject/ui-awf-typings/lib/profile';
-import { DataProviderInput } from '../../../sdk/typings/lib/interfaces/common';
 
 export const FOLLOWERS_KEY = 'FOLLOWERS';
 export const FOLLOWING_KEY = 'FOLLOWING';
@@ -144,7 +144,14 @@ const getInterests = async (pubKey: string) => {
   const sdk = getSDK();
   try {
     const res = await lastValueFrom(sdk.api.profile.getInterests(pubKey));
-    return res.data.getInterests;
+
+    const getTagCalls = res.data.getInterests.map(interest => {
+      return sdk.api.tags.getTag(interest);
+    });
+
+    const tagsRes = await lastValueFrom(combineLatest(getTagCalls));
+
+    return tagsRes.map(res => res.data.getTag);
   } catch (error) {
     logError('useProfile.getInterests', error);
   }
