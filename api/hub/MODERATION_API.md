@@ -464,7 +464,7 @@ Content-Type: application/json
  * HTTP 500 (Internal server error) for any other backend-related errors.
 
 
-## Check if the given ETH address is _currently_ a moderator
+## Check if the given user is _currently_ a moderator
 
 Easily check if the user is a moderator.
 
@@ -474,7 +474,7 @@ HEAD https://api.ethereum.world/api/moderation/moderators/status/byareibr3tw...l
 
 **Response codes:**
  * HTTP 200 (OK) for a successful request stating that the user is indeed a moderator.
- * HTTP 404 (Not found) if the ETH address owner is not a moderator or is a disabled account.
+ * HTTP 404 (Not found) if the user is not a moderator or is a disabled account.
 
 ## Get data for a given moderator.
 
