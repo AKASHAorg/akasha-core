@@ -148,14 +148,14 @@ const StatModal: React.FC<IStatModal> = props => {
                           handleButtonClick={handleButtonClick}
                         />
                       )}
-                      {followersReqStatus.isSuccess && followers && followers.length === 0 && (
+                      {followersReqStatus.isSuccess && followers && !followers.length && (
                         <ListEmpty
                           assetName={'no-followers'}
                           placeholderTitleLabel={placeholderTitleLabel}
                           placeholderSubtitleLabel={placeholderSubtitleLabel}
                         />
                       )}
-                      {followersReqStatus.isSuccess && followers && followers.length !== 0 && (
+                      {followersReqStatus.isSuccess && followers && !!followers.length && (
                         <ProfileEntry
                           ipfsGateway={ipfsGateway}
                           loggedUser={loggedUser}
@@ -187,14 +187,14 @@ const StatModal: React.FC<IStatModal> = props => {
                           handleButtonClick={handleButtonClick}
                         />
                       )}
-                      {followingReqStatus.isSuccess && following && following.length === 0 && (
+                      {followingReqStatus.isSuccess && following && !following.length && (
                         <ListEmpty
                           assetName={'no-following'}
                           placeholderTitleLabel={placeholderTitleLabel}
                           placeholderSubtitleLabel={placeholderSubtitleLabel}
                         />
                       )}
-                      {followingReqStatus.isSuccess && following && following.length !== 0 && (
+                      {followingReqStatus.isSuccess && following && !!following.length && (
                         <ProfileEntry
                           ipfsGateway={ipfsGateway}
                           loggedUser={loggedUser}
@@ -226,14 +226,14 @@ const StatModal: React.FC<IStatModal> = props => {
                           handleButtonClick={handleButtonClick}
                         />
                       )}
-                      {interestsReqStatus.isSuccess && interests && interests.length === 0 && (
+                      {interestsReqStatus.isSuccess && interests && !interests.length && (
                         <ListEmpty
                           assetName={'no-interests'}
                           placeholderTitleLabel={placeholderTitleLabel}
                           placeholderSubtitleLabel={placeholderSubtitleLabel}
                         />
                       )}
-                      {interestsReqStatus.isSuccess && interests && interests.length !== 0 && (
+                      {interestsReqStatus.isSuccess && interests && !!interests.length && (
                         <TagEntry
                           tags={interests}
                           subscribedTags={subscribedTags}
