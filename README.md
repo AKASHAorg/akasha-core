@@ -134,6 +134,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/marianagomes"><img src="https://avatars2.githubusercontent.com/u/22957731?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mariana Gomes</b></sub></a><br /><a href="#design-marianagomes" title="Design">🎨</a> <a href="#video-marianagomes" title="Videos">📹</a></td>
     <td align="center"><a href="http://about.me/josenriagu"><img src="https://avatars.githubusercontent.com/u/49484425?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Josemaria Nriagu</b></sub></a><br /><a href="https://github.com/AKASHAorg/akasha-world-framework/commits?author=josenriagu" title="Code">💻</a> <a href="#maintenance-josenriagu" title="Maintenance">🚧</a> <a href="https://github.com/AKASHAorg/akasha-world-framework/commits?author=josenriagu" title="Documentation">📖</a> <a href="https://github.com/AKASHAorg/akasha-world-framework/pulls?q=is%3Apr+reviewed-by%3Ajosenriagu" title="Reviewed Pull Requests">👀</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://deiu.me"><img src="https://avatars.githubusercontent.com/u/346820?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andrei</b></sub></a><br /><a href="https://github.com/AKASHAorg/akasha-world-framework/commits?author=deiu" title="Code">💻</a> <a href="https://github.com/AKASHAorg/akasha-world-framework/commits?author=deiu" title="Documentation">📖</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
