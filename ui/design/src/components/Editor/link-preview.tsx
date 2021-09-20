@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Box, Text } from 'grommet';
 import Icon from '../Icon';
 import { StyledCloseDiv } from './styled-editor-box';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const Favicon = styled.img`
   width: 1rem;
@@ -25,7 +26,7 @@ function htmlDecode(input) {
 export interface ILinkPreview {
   handleLinkClick?: (url: string) => void;
   handleDeletePreview?: () => void;
-  linkPreviewData: any;
+  linkPreviewData: IEntryData['linkPreview'];
 }
 
 const LinkPreview: React.FC<ILinkPreview> = props => {
