@@ -67,8 +67,9 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const handleProfileClick = (pubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
+
   const handleFollowProfile = (ethAddress: string) => {
-    if (!ethAddress) {
+    if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -76,7 +77,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
-    if (!ethAddress) {
+    if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
     }

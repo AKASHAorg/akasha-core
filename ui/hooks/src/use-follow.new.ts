@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, combineLatest } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
 
@@ -12,12 +11,14 @@ const getIsFollowingMultiple = async (
 ) => {
   const sdk = getSDK();
   try {
-    const getFollowedProfilesCalls = followingEthAddressArray.map((profile: string) => {
-      return sdk.api.profile.isFollowing({
-        follower: followerEthAddress,
-        following: profile,
+    const getFollowedProfilesCalls = followingEthAddressArray
+      .filter(profile => !!profile)
+      .map((profile: string) => {
+        return sdk.api.profile.isFollowing({
+          follower: followerEthAddress,
+          following: profile,
+        });
       });
-    });
     const res = await lastValueFrom(combineLatest(getFollowedProfilesCalls));
     const followedProfiles: string[] = [];
     followingEthAddressArray.forEach((profile, index) => {
@@ -54,6 +55,7 @@ export function useIsFollowingMultiple(
     {
       enabled: !!(followerEthAddress && followingEthAddressArray?.length),
       keepPreviousData: false,
+      initialData: [],
     },
   );
 }
