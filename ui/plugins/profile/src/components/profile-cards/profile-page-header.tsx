@@ -135,7 +135,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
-        isFollowing={followedProfiles.includes(profileData.ethAddress)}
+        isFollowing={followedProfiles?.includes(profileData.ethAddress)}
         loggedEthAddress={loginState.ethAddress}
         profileData={profileData}
         followLabel={t('Follow')}
