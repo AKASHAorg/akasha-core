@@ -5,11 +5,11 @@ import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IProfileData, UsernameTypes } from '@akashaproject/ui-awf-typings/lib/profile';
 import {
-  useIsFollowing,
+  useIsFollowingMultiple,
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 import StatModalWrapper from './stat-modal-wrapper';
 import { getUsernameTypes } from '../../utils/username-utils';
@@ -24,7 +24,7 @@ export interface IProfileHeaderProps {
   slotId: string;
   profileId: string;
   profileData: IProfileData;
-  loginState: ILoginState;
+  loginState: LoginState;
 }
 
 type ProfilePageCardProps = IProfileHeaderProps &
@@ -51,8 +51,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   const { t } = useTranslation();
 
-  const isFollowingReq = useIsFollowing(loginState.ethAddress, profileData.ethAddress);
-
+  const isFollowingReq = useIsFollowingMultiple(loginState.ethAddress, [profileData.ethAddress]);
   const followedProfiles = isFollowingReq.data;
 
   const followReq = useFollow();

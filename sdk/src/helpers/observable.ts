@@ -1,9 +1,10 @@
 import { asapScheduler, defer, from, of, scheduled, ObservableInput } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
+import { ApolloLink, GraphQLRequest } from '@apollo/client';
 
 /**
- * @param val
+ * @param val - Data value
  * @returns object with data attribute
  */
 export const createFormattedValue = <T>(val: T): { data: T } => {
@@ -37,21 +38,28 @@ export const createObservableStream = <T>(val: ObservableInput<T>): ServiceCallR
   );
 };
 
-export const createObservableStreamGql = <T>(val: ObservableInput<any>): ServiceCallResult<T> => {
+export const createObservableStreamGql = <T>(
+  link: ApolloLink,
+  operation: GraphQLRequest,
+  fn?: (v: T) => void,
+): ServiceCallResult<T> => {
   return scheduled(
     defer(() =>
-      from(val).pipe(
-        map(v => {
+      from(toPromise(ApolloLink.execute(link, operation))).pipe(
+        map((v: { errors?: unknown[]; data?: T }) => {
           // for graphql error responses
           if (v.errors && v.errors.length) {
             throw v.errors[0];
           }
           // for graphql response data
           if (v.data) {
+            if (fn) {
+              fn(v.data);
+            }
             return { data: v.data };
           }
           // everything else
-          return { data: v };
+          return { data: undefined };
         }),
       ),
     ),

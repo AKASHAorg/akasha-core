@@ -1,7 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
 import {
   useTrendingTags,
   useTrendingProfiles,
@@ -16,6 +15,7 @@ import {
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { TrendingWidgetCard, ErrorLoader } = DS;
 
@@ -23,8 +23,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const { singleSpa } = props;
 
   const { t } = useTranslation();
-
-  const [loginState] = useLoginState({});
+  const loginQuery = useGetLogin();
 
   const trendingTagsReq = useTrendingTags();
   const trendingTags = trendingTagsReq.data || [];
@@ -35,12 +34,17 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     .slice(0, 4)
     .map((profile: { ethAddress: string }) => profile.ethAddress);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState.ethAddress, followEthAddressArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(
+    loginQuery.data?.ethAddress,
+    followEthAddressArr,
+  );
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
+  const tagSubscriptionsReq = useTagSubscriptions(
+    loginQuery.data?.isReady && loginQuery.data?.ethAddress,
+  );
   const tagSubscriptions = tagSubscriptionsReq.data;
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
@@ -53,7 +57,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleTagSubscribe = (tagName: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -65,7 +69,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleFollowProfile = (ethAddress: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -73,7 +77,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
     }
@@ -113,7 +117,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         onClickProfile={handleProfileClick}
         handleFollowProfile={handleFollowProfile}
         handleUnfollowProfile={handleUnfollowProfile}
-        loggedEthAddress={loginState.ethAddress}
+        loggedEthAddress={loginQuery.data?.ethAddress}
       />
     </>
   );

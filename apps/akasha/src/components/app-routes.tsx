@@ -2,7 +2,8 @@ import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import DS from '@akashaproject/design-system';
-import { useLoginState, useErrors } from '@akashaproject/ui-awf-hooks';
+import { useErrors } from '@akashaproject/ui-awf-hooks';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -18,14 +19,10 @@ const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { logger } = props;
-
   const [, errorActions] = useErrors({ logger });
+  const loginQuery = useGetLogin({ onError: errorActions.createError });
 
-  const [loginState] = useLoginState({
-    onError: errorActions.createError,
-  });
-
-  const profileDataReq = useGetProfile(loginState.pubKey);
+  const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
   const loggedProfileData = profileDataReq.data;
 
   const showLoginModal = (redirectTo?: ModalNavigationOptions) => {
@@ -40,14 +37,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <FeedPage
               {...props}
               loggedProfileData={loggedProfileData}
-              loginState={loginState}
+              loginState={loginQuery.data}
               showLoginModal={showLoginModal}
             />
           </Route>
           <Route path={`${routes[POST]}/:postId`}>
             <PostPage
               {...props}
-              loginState={loginState}
+              loginState={loginQuery.data}
               showLoginModal={showLoginModal}
               navigateToUrl={props.singleSpa.navigateToUrl}
               isMobile={props.isMobile}
@@ -57,7 +54,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <TagFeedPage
               {...props}
               loggedProfileData={loggedProfileData}
-              loginState={loginState}
+              loginState={loginQuery.data}
               showLoginModal={showLoginModal}
             />
           </Route>

@@ -1,7 +1,7 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useIsFollowing } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import { useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
@@ -70,11 +70,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   }, [type, postReq.data, postReq.status, commentReq.data, commentReq.status]);
 
-  const isFollowing = useIsFollowing(
-    ethAddress,
-    itemData?.author.ethAddress,
-    !!itemData && !!itemData.author && !!itemData.author.ethAddress,
-  );
+  const isFollowing = useIsFollowingMultiple(ethAddress, [itemData?.author?.ethAddress]);
 
   const handleFollow = () => {
     /* todo */

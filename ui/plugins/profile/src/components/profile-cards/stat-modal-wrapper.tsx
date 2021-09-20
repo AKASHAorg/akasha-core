@@ -14,7 +14,7 @@ import {
   useToggleTagSubscription,
 } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 
-import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import {
   useFollow,
   useIsFollowingMultiple,
@@ -23,7 +23,7 @@ import {
 import getSDK from '@akashaproject/awf-sdk';
 
 interface IStatModalWrapper {
-  loginState: ILoginState;
+  loginState: LoginState;
   selectedStat: number;
   profileData: IProfileData;
   singleSpa: typeof singleSpa;
@@ -73,7 +73,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const followedProfiles = isFollowingMultipleReq.data;
 
   // get tag subscriptions for logged user
-  const tagSubscriptionsReq = useTagSubscriptions(loginState.ready?.ethAddress);
+  const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
 
   const tagSubscriptions = tagSubscriptionsReq.data;
 

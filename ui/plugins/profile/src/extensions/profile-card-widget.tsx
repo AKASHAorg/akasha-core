@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
 import { useRouteMatch } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
 import { useGetEntryAuthor } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import {
-  useIsFollowing,
+  useIsFollowingMultiple,
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { Box, ProfileMiniCard } = DS;
 
@@ -17,7 +17,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation();
 
-  const [loginState] = useLoginState({
+  const loginQuery = useGetLogin({
     onError: (errorInfo: IAkashaError) => {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo.errorKey}`);
     },
@@ -26,7 +26,9 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const profileDataReq = useGetEntryAuthor(params.postId);
   const profileData = profileDataReq.data;
 
-  const isFollowingReq = useIsFollowing(loginState.ethAddress, profileData.ethAddress);
+  const isFollowingReq = useIsFollowingMultiple(loginQuery.data?.ethAddress, [
+    profileData.ethAddress,
+  ]);
   const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
@@ -66,7 +68,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         isFollowing={isFollowing}
-        loggedEthAddress={loginState.ethAddress}
+        loggedEthAddress={loginQuery.data?.ethAddress}
         profileData={profileData}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
