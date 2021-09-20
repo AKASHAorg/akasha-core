@@ -15,7 +15,7 @@ import {
 import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
 import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
@@ -23,14 +23,13 @@ import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard } = DS;
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   loggedProfileData?: IProfileData;
-  loginState: ILoginState;
+  loginState: LoginState;
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
@@ -54,10 +53,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   //@Todo: replace this with fetchNextPage() from useInfinitePosts object
   const handleLoadMore = React.useCallback(() => {
-    if (!postsReq.isLoading && postsReq.hasNextPage && loginState.currentUserCalled) {
+    if (!postsReq.isLoading && postsReq.hasNextPage && loginState?.fromCache) {
       postsReq.fetchNextPage();
     }
-  }, [postsReq, loginState.currentUserCalled]);
+  }, [postsReq, loginState?.fromCache]);
 
   const postPages = React.useMemo(() => {
     if (postsReq.data) {
@@ -114,9 +113,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      {loginState.ethAddress && (
+      {loginState?.ethAddress && (
         <EditorPlaceholder
-          ethAddress={loginState.ethAddress}
+          ethAddress={loginState?.ethAddress}
           onClick={handleShowEditor}
           avatar={loggedProfileData?.avatar}
           style={{ marginBottom: '0.5rem' }}
@@ -159,8 +158,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        ethAddress={loginState.ready?.ethAddress}
-        profilePubKey={loginState.pubKey}
+        ethAddress={loginState?.isReady && loginState?.ethAddress}
+        profilePubKey={loginState?.pubKey}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
