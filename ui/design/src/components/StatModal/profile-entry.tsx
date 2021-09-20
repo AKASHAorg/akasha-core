@@ -63,7 +63,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
   });
 
   return (
-    <Box flex={false} pad={{ top: 'large' }}>
+    <Box flex={false} pad={{ top: 'large' }} gap="medium">
       {pages.map((page, index) => (
         <Box key={index} flex={false} gap="medium">
           {page.results.map((entry, index) => (
