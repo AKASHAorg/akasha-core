@@ -16,8 +16,10 @@ const MobileSearchBar: React.FC<ISearchBar> = props => {
   const [showSearch, setShowSearch] = React.useState(true);
 
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+    const trimmedValue = inputValue.trim();
+    if (!trimmedValue) return;
     if (ev.key === 'Enter') {
-      onSearch(inputValue);
+      onSearch(trimmedValue);
     }
   };
 
