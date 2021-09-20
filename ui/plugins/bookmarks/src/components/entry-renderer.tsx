@@ -1,9 +1,7 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import {
-  useIsFollowingMultiple,
-} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import { useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
@@ -78,7 +76,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     } else if (type === ItemTypes.ENTRY && postReq.isSuccess) {
       return mapEntry(postReq.data);
     }
-  }, [type, postReq.data, postReq.status, commentReq.data, commentReq.status]);
+  }, [type, postReq.data, postReq.isSuccess, commentReq.data, commentReq.isSuccess]);
 
   const isReported = React.useMemo(() => {
     if (showAnyway) {
@@ -114,7 +112,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
-  
+
   const isFollowing = useIsFollowingMultiple(ethAddress, [itemData?.author?.ethAddress]);
 
   const handleFollow = () => {
