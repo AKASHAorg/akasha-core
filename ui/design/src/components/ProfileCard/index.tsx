@@ -106,6 +106,10 @@ const EditButton = styled(TextIcon)`
 `;
 
 const StatIconWrapper = styled(Box)<{ isMobile?: boolean }>`
+  color: ${props => props.theme.colors.secondaryText};
+  &:hover {
+    color: ${props => props.theme.colors.accent};
+  }
   ${props => {
     if (props.isMobile) {
       return `
@@ -333,21 +337,24 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           justify={isMobileOnly ? 'between' : 'start'}
         >
           {stats.map((stat, id) => (
-            <StatIconWrapper key={stat.label + id} isMobile={isMobileOnly}>
+            <StatIconWrapper
+              key={stat.label + id}
+              isMobile={isMobileOnly}
+              onClick={stat.clickHandler}
+            >
               <TextIcon
                 iconType={stat.iconType}
                 iconBackground={true}
                 iconSize="xxs"
                 label={stat.count}
-                onClick={stat.clickHandler}
                 datatestid={stat.dataTestId}
+                clickable={true}
               />
               <Text
                 margin={{
                   ...(isMobileOnly && { top: 'xxsmall' }),
                   ...(!isMobileOnly && { left: 'xxsmall' }),
                 }}
-                color="secondaryText"
               >
                 {stat.label}
               </Text>

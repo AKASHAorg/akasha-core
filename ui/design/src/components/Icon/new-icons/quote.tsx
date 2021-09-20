@@ -5,7 +5,7 @@ const Quote = (props: React.SVGProps<SVGSVGElement>) => (
     <g
       fill="none"
       fillRule="evenodd"
-      stroke="#132540"
+      stroke="#949EB3"
       strokeLinecap="round"
       strokeLinejoin="round"
       transform="translate(2 2)"
