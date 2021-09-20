@@ -55,8 +55,7 @@ const withLinks = (editor: Editor, getLinkPreview?: (url: string) => any) => {
   editor.insertText = async text => {
     if (text && isUrl(text)) {
       if (getLinkPreview && typeof getLinkPreview === 'function') {
-        const linkPreviewData = await getLinkPreview(text);
-        CustomEditor.insertLink(editor, { url: text, metadata: linkPreviewData });
+        CustomEditor.insertLink(editor, { url: text });
       } else {
         CustomEditor.insertLink(editor, { url: text });
       }
@@ -70,8 +69,7 @@ const withLinks = (editor: Editor, getLinkPreview?: (url: string) => any) => {
 
     if (text && isUrl(text)) {
       if (getLinkPreview && typeof getLinkPreview === 'function') {
-        const linkPreviewData = await getLinkPreview(text);
-        CustomEditor.insertLink(editor, { url: text, metadata: linkPreviewData });
+        CustomEditor.insertLink(editor, { url: text });
       } else {
         CustomEditor.insertLink(editor, { url: text });
       }

@@ -84,7 +84,7 @@ const CustomEditor = {
     Transforms.move(editor);
   },
 
-  insertLink(editor: Editor, linkData: { url: string; metadata?: any }) {
+  insertLink(editor: Editor, linkData: { url: string }) {
     const baseLink: { type: 'link'; children: [{ text: '' }] } = {
       type: 'link',
       children: [{ text: '' }],
