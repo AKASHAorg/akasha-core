@@ -29,6 +29,7 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import { useAndroidPlugin } from 'slate-android-plugin';
+import LinkPreview from './link-preview';
 
 const MAX_LENGTH = 280;
 
@@ -114,6 +115,17 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
+  const [linkPreviewState, setLinkPreviewState] = useState(null);
+
+  const handleGetLinkPreview = async (url: string) => {
+    const linkPreview = await getLinkPreview(url);
+    setLinkPreviewState(linkPreview);
+  };
+
+  const handleDeletePreview = () => {
+    setLinkPreviewState(null);
+  };
+
   /**
    * display only 3 results in the tag and mention popovers
    */
@@ -142,7 +154,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       () =>
         withLinks(
           withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
-          getLinkPreview,
+          handleGetLinkPreview,
         ),
       [],
     ),
@@ -182,6 +194,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData,
+      linkPreview: linkPreviewState,
       tags: [],
       mentions: [],
       version: 1,
@@ -521,6 +534,12 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 />
               )}
             </Slate>
+            {linkPreviewState && (
+              <LinkPreview
+                linkPreviewData={linkPreviewState}
+                handleDeletePreview={handleDeletePreview}
+              />
+            )}
             {embedEntryData && (
               <Box pad={{ vertical: 'medium' }}>
                 <EmbedBox embedEntryData={embedEntryData} />

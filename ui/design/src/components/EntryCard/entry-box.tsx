@@ -20,6 +20,7 @@ import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import LinkPreview from '../Editor/link-preview';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -421,6 +422,22 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               content={entryData.content}
               handleMentionClick={onMentionClick}
               handleTagClick={onTagClick}
+              handleLinkClick={singleSpaNavigate}
+            />
+          </Box>
+        )}
+        {entryData.linkPreview && (
+          <Box
+            pad="medium"
+            onClick={() => {
+              if (disableActions) {
+                return;
+              }
+              handleContentClick(entryData.quote);
+            }}
+          >
+            <LinkPreview
+              linkPreviewData={entryData.linkPreview}
               handleLinkClick={singleSpaNavigate}
             />
           </Box>

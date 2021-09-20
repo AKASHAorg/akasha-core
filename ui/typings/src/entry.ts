@@ -2,6 +2,7 @@ import { Descendant } from 'slate';
 import {
   Comment_Response,
   Post_Response,
+  LinkPreview_Response,
 } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { IProfileData } from './profile';
 
@@ -32,6 +33,7 @@ export interface ImageNode {
 
 export interface IEntryData {
   CID?: string;
+  linkPreview?: LinkPreview_Response;
   content: (Descendant & ImageNode & RemovedEntryContent)[];
   time?: string | number | Date;
   replies?: number;
@@ -63,6 +65,7 @@ export interface IPublishData {
 export interface IMetadata {
   app: string;
   version: number;
+  linkPreview?: LinkPreview_Response;
   quote?: IEntryData;
   tags: string[];
   mentions: string[];
