@@ -49,13 +49,13 @@ const TagEntry: React.FC<ITagEntry> = props => {
                 return false;
               }}
               weight="normal"
-              href={`${tagAnchorLink}/${tag.name || tag}`}
+              href={`${tagAnchorLink}/${tag.name}`}
               label={
                 <Box width="11rem" pad="none" align="start">
                   <SubtitleTextIcon
                     onClick={() => onClickTag(tag.name)}
-                    label={`#${tag.name || tag}`}
-                    subtitle={`Used in ${tag.totalPosts || 20} posts`}
+                    label={`#${tag.name}`}
+                    subtitle={`Used in ${tag.totalPosts} posts`}
                     labelSize="large"
                     gap="xxsmall"
                     maxWidth="10rem"
@@ -68,9 +68,9 @@ const TagEntry: React.FC<ITagEntry> = props => {
                 inactiveLabel={subscribeLabel}
                 activeLabel={subscribedLabel}
                 activeHoverLabel={unsubscribeLabel}
-                onClickInactive={() => handleSubscribeTag(tag.name || tag)}
-                onClickActive={() => handleUnsubscribeTag(tag.name || tag)}
-                active={subscribedTags?.includes(tag.name || tag)}
+                onClickInactive={() => handleSubscribeTag(tag.name)}
+                onClickActive={() => handleUnsubscribeTag(tag.name)}
+                active={subscribedTags?.includes(tag.name)}
                 icon={<Icon type="subscribe" />}
               />
             </Box>
