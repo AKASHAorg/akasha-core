@@ -27,6 +27,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     keepEditingLabel,
     onPublish,
     handleNavigateBack,
+    getLinkPreview,
     getMentions,
     getTags,
     mentions,
@@ -64,6 +65,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
           emojiPlaceholderLabel={emojiPlaceholderLabel}
           onPublish={onPublish}
           handleNavigateBack={handleToggleShowCancel}
+          getLinkPreview={getLinkPreview}
           getMentions={getMentions}
           getTags={getTags}
           mentions={mentions}

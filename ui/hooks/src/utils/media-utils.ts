@@ -1,4 +1,5 @@
 import getSDK from '@akashaproject/awf-sdk';
+import { lastValueFrom } from 'rxjs';
 
 export interface IConfig {
   quality?: number;
@@ -71,4 +72,10 @@ export const uploadMediaToTextile = async (data: any, isUrl = false) => {
       error: error,
     };
   }
+};
+
+export const getLinkPreview = async (url: string) => {
+  const sdk = getSDK();
+  const linkPreview = await lastValueFrom(sdk.api.entries.getLinkPreview(url));
+  return linkPreview.data.getLinkPreview;
 };

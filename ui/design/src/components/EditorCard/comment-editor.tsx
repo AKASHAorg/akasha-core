@@ -9,7 +9,6 @@ import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const CommentEditor: React.FC<
   Omit<IEditorBox, 'editorState' | 'setEditorState'> & {
-    editorState?: IEditorBox['editorState'];
     isShown?: boolean;
   }
 > = props => {
@@ -20,12 +19,12 @@ const CommentEditor: React.FC<
     placeholderLabel,
     emojiPlaceholderLabel,
     onPublish,
+    getLinkPreview,
     getMentions,
     getTags,
     mentions,
     tags,
     uploadRequest,
-    editorState = editorDefaultValue,
     isShown = false,
     showCancelButton,
     cancelButtonLabel,
@@ -33,19 +32,20 @@ const CommentEditor: React.FC<
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(isShown);
-  const [contentState, setContentState] = React.useState(editorState);
+  const [contentState, setContentState] = React.useState(editorDefaultValue);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const editorRef: React.RefObject<any> = React.useRef(null);
 
   const handleClickAway = () => {
     if (
       showEditor &&
-      isEqual(editorState, editorDefaultValue) &&
+      isEqual(contentState, editorDefaultValue) &&
       !editorRef.current?.getPopoversState()
     ) {
       setShowEditor(false);
     }
   };
+
   const handlePublish = (data: IPublishData) => {
     onPublish(data);
     if (props.isShown) {
@@ -80,6 +80,7 @@ const CommentEditor: React.FC<
             placeholderLabel={placeholderLabel}
             emojiPlaceholderLabel={emojiPlaceholderLabel}
             onPublish={handlePublish}
+            getLinkPreview={getLinkPreview}
             getMentions={getMentions}
             getTags={getTags}
             mentions={mentions}
