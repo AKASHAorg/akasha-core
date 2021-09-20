@@ -6,7 +6,10 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import {
+  getLinkPreview,
+  uploadMediaToTextile,
+} from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
@@ -365,6 +368,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
                     emojiPlaceholderLabel={t('Search')}
                     onPublish={handlePublishComment}
+                    getLinkPreview={getLinkPreview}
                     getMentions={handleMentionQueryChange}
                     getTags={handleTagQueryChange}
                     tags={tagQueryReq.data}

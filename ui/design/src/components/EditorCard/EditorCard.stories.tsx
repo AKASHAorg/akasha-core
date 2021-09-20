@@ -37,6 +37,7 @@ const EditorComponent = ({ ...args }) => {
       tags={tags}
       mentions={mentionables}
       editorState={editorState}
+      getLinkPreview={() => null}
       getTags={getTags}
       getMentions={getMentions}
       setEditorState={setEditorState}
