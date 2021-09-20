@@ -85,11 +85,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return (postReq.isSuccess || commentReq.isSuccess) && itemData?.reported;
   }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
 
-  const isFollowing = useIsFollowing(
-    ethAddress,
-    itemData?.author.ethAddress,
-    !!itemData && !!itemData.author && !!itemData.author.ethAddress,
-  );
   const onEditButtonMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -117,6 +112,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
+  
+  const isFollowing = useIsFollowingMultiple(ethAddress, [itemData?.author?.ethAddress]);
 
   const handleFollow = () => {
     /* todo */
@@ -199,7 +196,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onRepost={props.onRepost}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
-                  isFollowingAuthor={isFollowing.data.includes(ethAddress)}
+                  isFollowingAuthor={isFollowing.data?.includes(ethAddress)}
                   onContentClick={() => {
                     props.onNavigate({
                       authorEthAddress: itemData.author.ethAddress,

@@ -21,7 +21,7 @@ export function useTagSubscriptions(loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY], () => getTagSubscriptions(), {
     initialData: [],
     enabled: !!loggedEthAddress,
-    keepPreviousData: true,
+    keepPreviousData: false,
   });
 }
 
@@ -38,7 +38,7 @@ const getIsSubscribedToTag = async (tagName: string) => {
 export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY, tagName], () => getIsSubscribedToTag(tagName), {
     enabled: !!loggedEthAddress,
-    keepPreviousData: true,
+    keepPreviousData: false,
   });
 }
 

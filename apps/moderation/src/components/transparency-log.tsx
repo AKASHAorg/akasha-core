@@ -182,7 +182,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           {requesting && logItems.length > 0 && (
             <Box pad="large" align="center">
               <Icon type="loading" accentColor={true} clickable={false} />
-              <Text color="accentText">Loading more...</Text>
+              <Text color="accentText">{t('Loading more ...')}</Text>
             </Box>
           )}
           {/* triggers intersection observer */}

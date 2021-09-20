@@ -24,7 +24,7 @@ import {
   useCreateComment,
 } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
-  useIsFollowing,
+  useIsFollowingMultiple,
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
@@ -103,10 +103,9 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const profileDataReq = useGetProfile(loginState?.pubKey);
   const loggedProfileData = profileDataReq.data;
 
-  const isFollowingMultipleReq = useIsFollowing(
-    loginState?.ethAddress,
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.ethAddress, [
     entryData?.author?.ethAddress,
-  );
+  ]);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();

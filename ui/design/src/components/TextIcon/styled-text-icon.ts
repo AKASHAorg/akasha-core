@@ -28,7 +28,7 @@ const StyledTextIcon = styled.div<ITextIconProps>`
         margin-right: ${spacing ? spacing : '0.625em'};
       }
       background-color: ${backgroundColor ? backgroundColor : ''};
-      color: ${color ? color : colors.dark};
+      color: ${color ? color : colors.primaryText};
       user-select: none;
       display: inline-flex;
       ${
