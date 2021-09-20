@@ -48,7 +48,7 @@ export interface IEditorBox {
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
-  getLinkPreview: (url: string) => IEntryData['linkPreview'];
+  getLinkPreview: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
   mentions?: {
