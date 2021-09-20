@@ -1,28 +1,31 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom, forkJoin } from 'rxjs';
+import { lastValueFrom, combineLatest } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
 
-const getIsFollowingMultiple = async (followerEthAddress, followingEthAddressArray) => {
+const getIsFollowingMultiple = async (
+  followerEthAddress: string,
+  followingEthAddressArray: string[],
+) => {
   const sdk = getSDK();
   try {
-    const getFollowedProfilesCalls = followingEthAddressArray.map((profile: string) => {
-      return sdk.api.profile.isFollowing({
-        follower: followerEthAddress,
-        following: profile,
+    const getFollowedProfilesCalls = followingEthAddressArray
+      .filter(profile => !!profile)
+      .map((profile: string) => {
+        return sdk.api.profile.isFollowing({
+          follower: followerEthAddress,
+          following: profile,
+        });
       });
-    });
-    const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
+    const res = await lastValueFrom(combineLatest(getFollowedProfilesCalls));
     const followedProfiles: string[] = [];
-    followingEthAddressArray.map((profile, index) => {
+    followingEthAddressArray.forEach((profile, index) => {
       if (res[index].data.isFollowing === true) {
         followedProfiles.push(profile);
       }
     });
-
     return followedProfiles;
   } catch (error) {
     logError('useFollow.getIsFollowingMultiple', error);
@@ -44,63 +47,59 @@ export function useIsFollowingMultiple(
         followingEthAddressArray,
       );
       const filteredNewProfiles = newFollowedProfiles.filter(followedEthAddress => {
-        if (followedProfiles && followedProfiles.includes(followedEthAddress)) {
-          return;
-        }
-        return followedEthAddress;
+        return !followedProfiles.length || !followedProfiles.includes(followedEthAddress);
       });
 
       return [...followedProfiles, ...filteredNewProfiles];
     },
     {
-      initialData: [],
       enabled: !!(followerEthAddress && followingEthAddressArray?.length),
-      keepPreviousData: true,
-    },
-  );
-}
-
-const getIsFollowing = async (followerEthAddress: string, followingEthAddress: string) => {
-  const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(
-      sdk.api.profile.isFollowing({
-        follower: followerEthAddress,
-        following: followingEthAddress,
-      }),
-    );
-
-    return res.data.isFollowing;
-  } catch (error) {
-    logError('useFollow.getIsFollowing', error);
-    throw error;
-  }
-};
-
-export function useIsFollowing(followerEthAddress, followingEthAddress, enabled = true) {
-  const queryClient = useQueryClient();
-  return useQuery(
-    [FOLLOWED_PROFILES_KEY],
-    async () => {
-      const followedProfiles: string[] = queryClient.getQueryData([FOLLOWED_PROFILES_KEY]) || [];
-      let updatedFollowedProfiles = [...followedProfiles];
-      const isFollowing = await getIsFollowing(followerEthAddress, followingEthAddress);
-      if (isFollowing && !followedProfiles.includes(followingEthAddress)) {
-        updatedFollowedProfiles = [...followedProfiles, followingEthAddress];
-      } else if (!isFollowing) {
-        updatedFollowedProfiles = followedProfiles.filter(
-          profile => profile === followingEthAddress,
-        );
-      }
-      return updatedFollowedProfiles;
-    },
-    {
+      keepPreviousData: false,
       initialData: [],
-      enabled: !!followerEthAddress && !!followingEthAddress && enabled,
-      keepPreviousData: true,
     },
   );
 }
+
+// const getIsFollowing = async (followerEthAddress: string, followingEthAddress: string) => {
+//   const sdk = getSDK();
+//   try {
+//     const res = await lastValueFrom(
+//       sdk.api.profile.isFollowing({
+//         follower: followerEthAddress,
+//         following: followingEthAddress,
+//       }),
+//     );
+//
+//     return res.data.isFollowing;
+//   } catch (error) {
+//     logError('useFollow.getIsFollowing', error);
+//     throw error;
+//   }
+// };
+//
+// export function useIsFollowing(followerEthAddress, followingEthAddress, enabled = true) {
+//   const queryClient = useQueryClient();
+//   return useQuery(
+//     [FOLLOWED_PROFILES_KEY],
+//     async () => {
+//       const followedProfiles: string[] = queryClient.getQueryData([FOLLOWED_PROFILES_KEY]) || [];
+//       let updatedFollowedProfiles = [...followedProfiles];
+//       const isFollowing = await getIsFollowing(followerEthAddress, followingEthAddress);
+//       if (isFollowing && !followedProfiles.includes(followingEthAddress)) {
+//         updatedFollowedProfiles = [...followedProfiles, followingEthAddress];
+//       } else if (!isFollowing) {
+//         updatedFollowedProfiles = followedProfiles.filter(
+//           profile => profile === followingEthAddress,
+//         );
+//       }
+//       return updatedFollowedProfiles;
+//     },
+//     {
+//       enabled: !!followerEthAddress && !!followingEthAddress && enabled,
+//       keepPreviousData: false,
+//     },
+//   );
+// }
 
 export function useFollow() {
   const sdk = getSDK();
@@ -125,9 +124,10 @@ export function useFollow() {
       }
       logError('useFollow.follow', err as Error);
     },
-    onSettled: async () => {
-      await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);
-    },
+    // this creates a weird behaviour when following multiple in a sequence
+    // onSettled: async () => {
+    //   await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);
+    // },
   });
 }
 
@@ -155,9 +155,9 @@ export function useUnfollow() {
         }
         logError('useFollow.unfollow', err as Error);
       },
-      onSettled: async () => {
-        await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);
-      },
+      // onSettled: async () => {
+      //   await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);
+      // },
     },
   );
 }

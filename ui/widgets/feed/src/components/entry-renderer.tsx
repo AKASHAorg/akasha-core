@@ -12,7 +12,7 @@ import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.n
 import {
   useFollow,
   useUnfollow,
-  useIsFollowing,
+  useIsFollowingMultiple,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 
 const { ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
@@ -62,16 +62,12 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const unfollowProfileQuery = useUnfollow();
 
   const isBookmarked = React.useMemo(() => {
-    if (
+    return (
       bookmarksQuery.status === 'success' &&
       itemId &&
       Array.isArray(bookmarksQuery.data) &&
       bookmarksQuery.data.findIndex(bm => bm.entryId === itemId) >= 0
-    ) {
-      return true;
-    }
-
-    return false;
+    );
   }, [bookmarksQuery, itemId]);
 
   const { t } = useTranslation('ui-widget-feed');
@@ -87,7 +83,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
   }, [props.itemType, commentReq, postReq]);
 
-  const followedProfilesReq = useIsFollowing(props.ethAddress, authorEthAddress);
+  const followedProfilesReq = useIsFollowingMultiple(props.ethAddress, [authorEthAddress]);
 
   const postData = React.useMemo(() => {
     if (postReq.data && props.itemType === ItemTypes.ENTRY) {
@@ -104,13 +100,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [commentReq.data, props.itemType]);
 
   const isFollowing = React.useMemo(() => {
-    if (
+    return (
       followedProfilesReq.status === 'success' &&
       followedProfilesReq.data.includes(authorEthAddress)
-    ) {
-      return true;
-    }
-    return false;
+    );
   }, [authorEthAddress, followedProfilesReq.data, followedProfilesReq.status]);
 
   const itemData = React.useMemo(() => {

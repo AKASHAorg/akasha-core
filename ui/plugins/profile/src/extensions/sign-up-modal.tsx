@@ -5,10 +5,11 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useLoginState, useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { SignUpModal } = DS;
 
@@ -22,9 +23,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   const [inviteToken, setInviteToken] = React.useState<string | null>(null);
   const [, errorActions] = useErrors({ logger });
 
-  const [loginState] = useLoginState({
-    onError: errorActions.createError,
-  });
+  const loginQuery = useGetLogin({ onError: errorActions.createError });
 
   const [inviteTokenForm, setinviteTokenForm] = React.useState<{
     submitted: boolean;
@@ -56,7 +55,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   }, []);
 
   React.useEffect(() => {
-    if (loginState.ethAddress) {
+    if (loginQuery.data?.ethAddress) {
       if (
         props.activeModal.hasOwnProperty('redirectTo') &&
         typeof props.activeModal.redirectTo === 'object'
@@ -70,7 +69,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
         setTimeout(() => handleSignUpModalClose(), 500);
       }
     }
-  }, [loginState.ethAddress, props, props.navigateToModal, handleSignUpModalClose]);
+  }, [loginQuery.data?.ethAddress, props, props.navigateToModal, handleSignUpModalClose]);
 
   const _handleModalClose = () => {
     setInviteToken(null);

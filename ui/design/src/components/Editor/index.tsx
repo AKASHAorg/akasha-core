@@ -28,7 +28,6 @@ import EditorMeter from '../EditorMeter';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
-import { useAndroidPlugin } from 'slate-android-plugin';
 import LinkPreview from './link-preview';
 
 const MAX_LENGTH = 280;
@@ -149,15 +148,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   /**
    * initialise editor with all the required plugins
    */
-  const editor = useAndroidPlugin(
-    useMemo(
-      () =>
-        withLinks(
-          withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
-          handleGetLinkPreview,
-        ),
-      [],
-    ),
+  const editor = useMemo(
+    () =>
+      withLinks(
+        withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
+        handleGetLinkPreview,
+      ),
+    [],
   );
 
   /**

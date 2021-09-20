@@ -119,6 +119,7 @@ import ReportModal from './components/ReportModal';
 import ProfileCompletedModal from './components/ProfileCompletedModal';
 import FeedbackModal from './components/FeedbackModal';
 import ConfirmationModal from './components/ConfirmationModal';
+import StatModal from './components/StatModal';
 
 import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';
@@ -276,6 +277,7 @@ const exported = {
   StyledLayer,
   Helmet: Helmet as any,
   ConfirmationModal,
+  StatModal,
   EntryList,
   StyledSelectBox,
 };

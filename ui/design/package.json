@@ -122,7 +122,6 @@
     "slate": "0.65.3",
     "slate-history": "0.65.3",
     "slate-react": "0.65.3",
-    "slate-android-plugin": "0.0.4",
     "ts-jest": "27.0.5"
   },
   "peerDependencies": {

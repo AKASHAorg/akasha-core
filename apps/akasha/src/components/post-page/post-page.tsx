@@ -13,7 +13,7 @@ import {
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
-import { ILoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ENTRY_KEY, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -27,7 +27,7 @@ import {
   useCreateComment,
 } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
-  useIsFollowing,
+  useIsFollowingMultiple,
   useFollow,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
@@ -53,7 +53,7 @@ const {
 } = DS;
 
 interface IPostPageProps {
-  loginState: ILoginState;
+  loginState?: LoginState;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   navigateToUrl: (path: string) => void;
 }
@@ -70,8 +70,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const postReq = usePost({
     postId,
-    loggedUser: loginState.pubKey,
-    enabler: loginState.currentUserCalled,
+    loggedUser: loginState?.pubKey,
+    enabler: loginState?.fromCache,
   });
   const entryData = React.useMemo(() => {
     if (postReq.data) {
@@ -103,18 +103,17 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const profileDataReq = useGetProfile(loginState.pubKey);
+  const profileDataReq = useGetProfile(loginState?.pubKey);
   const loggedProfileData = profileDataReq.data;
 
-  const isFollowingMultipleReq = useIsFollowing(
-    loginState.ethAddress,
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.ethAddress, [
     entryData?.author?.ethAddress,
-  );
+  ]);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  const bookmarksReq = useGetBookmarks(loginState.ready?.ethAddress);
+  const bookmarksReq = useGetBookmarks(loginState?.isReady && loginState?.ethAddress);
   const bookmarks = bookmarksReq.data;
   const addBookmark = useSaveBookmark();
   const deleteBookmark = useDeleteBookmark();
@@ -134,11 +133,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const isFollowing = followedProfiles.includes(entryData?.author?.ethAddress);
 
   const handleLoadMore = () => {
-    if (
-      reqComments.status === 'success' &&
-      reqComments.hasNextPage &&
-      loginState.currentUserCalled
-    ) {
+    if (reqComments.isSuccess && reqComments.hasNextPage && loginState?.fromCache) {
       reqComments.fetchNextPage();
     }
   };
@@ -185,7 +180,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   };
 
   const handleEntryBookmark = (itemType: ItemTypes) => (entryId: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginState?.ethAddress) {
       return showLoginModal();
     }
     if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
@@ -195,7 +190,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   };
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
-    if (!loginState.pubKey) {
+    if (!loginState?.pubKey) {
       return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
@@ -208,7 +203,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   };
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
-    if (!loginState.ethAddress) {
+    if (!loginState?.ethAddress) {
       showLoginModal();
       return;
     } else {
@@ -325,7 +320,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
                   flagAsLabel={t('Report Post')}
-                  loggedProfileEthAddress={loginState.ethAddress}
+                  loggedProfileEthAddress={loginState?.ethAddress}
                   locale={locale}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
@@ -349,7 +344,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   removedByMeLabel={t('You deleted this post')}
                   removedByAuthorLabel={t('This post was deleted by its author')}
                   headerMenuExt={
-                    loginState.ethAddress === entryData.author.ethAddress && (
+                    loginState?.ethAddress === entryData.author.ethAddress && (
                       <ExtensionPoint
                         name={`entry-card-edit-button_${entryData.entryId}`}
                         onMount={onEditPostButtonMount}
@@ -359,16 +354,16 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   }
                 />
               </Box>
-              {!loginState.ethAddress && (
+              {!loginState?.ethAddress && (
                 <Box margin="medium">
                   <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
                 </Box>
               )}
-              {loginState.ethAddress && (
+              {loginState?.ethAddress && (
                 <Box margin="medium">
                   <CommentEditor
                     avatar={loggedProfileData?.avatar}
-                    ethAddress={loginState.ethAddress}
+                    ethAddress={loginState?.ethAddress}
                     postLabel={t('Reply')}
                     placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
                     emojiPlaceholderLabel={t('Search')}
@@ -430,8 +425,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 getShareUrl={(itemId: string) =>
                   `${window.location.origin}/social-app/post/${itemId}`
                 }
-                ethAddress={loginState.ready?.ethAddress}
-                profilePubKey={loginState.pubKey}
+                ethAddress={loginState?.isReady && loginState?.ethAddress}
+                profilePubKey={loginState?.pubKey}
                 onNavigate={handleNavigation}
                 singleSpaNavigate={props.singleSpa.navigateToUrl}
                 navigateToModal={props.navigateToModal}
