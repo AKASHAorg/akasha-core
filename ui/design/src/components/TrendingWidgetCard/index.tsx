@@ -85,8 +85,6 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     subscribedTags,
   } = props;
 
-  const iterateArr = [...Array(4).keys()];
-
   return (
     <WidgetAreaCardBox className={className}>
       <Box pad="medium" gap="medium">
@@ -98,7 +96,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
         <StyledTab title={topicsLabel}>
           <Box pad="medium" gap="medium">
             {tags.length === 0 &&
-              iterateArr.map((_el, index: number) => (
+              Array.from({ length: 9 }, (_, i) => i).map((_el, index: number) => (
                 <Box key={index} direction="row" justify="between" align="center">
                   <Box gap="xxsmall">
                     <TextLine title="tagName" animated={false} width="140px" />
@@ -148,7 +146,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
         <StyledTab title={profilesLabel}>
           <Box pad="medium" gap="medium">
             {profiles.length === 0 &&
-              iterateArr.map((_el, index: number) => (
+              Array.from({ length: 9 }, (_, i) => i).map((_el, index: number) => (
                 <Box key={index} direction="row" justify="between" align="center">
                   <Box direction="row" gap="xsmall">
                     <TextLine title="avatar" width="40px" height="40px" round={{ size: '50%' }} />

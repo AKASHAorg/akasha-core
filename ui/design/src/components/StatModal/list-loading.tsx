@@ -10,12 +10,10 @@ interface IListLoading {
 const ListLoading: React.FC<IListLoading> = props => {
   const { type } = props;
 
-  const iterateArr = [...Array(9).keys()];
-
   return (
     <Box pad={{ top: 'large' }} gap="medium">
       {type === 'topic' &&
-        iterateArr.map((_el, index: number) => (
+        Array.from({ length: 9 }, (_, i) => i).map((_el, index: number) => (
           <Box key={index} direction="row" justify="between" align="center">
             <Box gap="xxsmall">
               <TextLine title="tagName" animated={false} width="140px" />
@@ -25,7 +23,7 @@ const ListLoading: React.FC<IListLoading> = props => {
           </Box>
         ))}
       {type === 'profile' &&
-        iterateArr.map((_el, index: number) => (
+        Array.from({ length: 9 }, (_, i) => i).map((_el, index: number) => (
           <Box key={index} direction="row" justify="between" align="center">
             <Box direction="row" gap="xsmall">
               <TextLine title="avatar" width="40px" height="40px" round={{ size: '50%' }} />
