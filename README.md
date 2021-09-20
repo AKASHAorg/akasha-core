@@ -136,6 +136,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://deiu.me"><img src="https://avatars.githubusercontent.com/u/346820?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Andrei</b></sub></a><br /><a href="https://github.com/AKASHAorg/akasha-world-framework/commits?author=deiu" title="Code">💻</a> <a href="https://github.com/AKASHAorg/akasha-world-framework/commits?author=deiu" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/PrimarchAlpharius"><img src="https://avatars.githubusercontent.com/u/28538151?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Damir Sabolic</b></sub></a><br /><a href="https://github.com/AKASHAorg/akasha-world-framework/commits?author=PrimarchAlpharius" title="Code">💻</a> <a href="https://github.com/AKASHAorg/akasha-world-framework/commits?author=PrimarchAlpharius" title="Documentation">📖</a></td>
   </tr>
 </table>
 
