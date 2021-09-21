@@ -3,6 +3,7 @@ import { getAppDB, logger } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { Moderator } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
+import ProfileAPI from './profile';
 
 /**
  * The ModerationAdminAPI class handles all the interactions between the admin
@@ -78,7 +79,14 @@ class ModerationAdminAPI extends DataSource {
    * @param admin - A boolean flag for the admin status
    * @param active - A boolean flag for the active status
    */
-  async updateModerator(user: string, admin: boolean, active: boolean) {
+  async updateModerator(user: string, admin: boolean, active: boolean, profileAPI: ProfileAPI) {
+    // resolve ETH address to pubKey if needed
+    if (user.startsWith('0x')) {
+      const moderator = await profileAPI.getProfile(user);
+      if (moderator) {
+        user = moderator.pubKey;
+      }
+    }
     const moderatorCacheKey = this.getModeratorCacheKey(user);
     const db: Client = await getAppDB();
     // check if moderator already exists
