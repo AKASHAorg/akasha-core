@@ -3,6 +3,7 @@ import { getAppDB, logger } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { Moderator } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
+import { ethers } from 'ethers';
 import ProfileAPI from './profile';
 
 /**
@@ -81,7 +82,7 @@ class ModerationAdminAPI extends DataSource {
    */
   async updateModerator(user: string, admin: boolean, active: boolean, profileAPI: ProfileAPI) {
     // resolve ETH address to pubKey if needed
-    if (user.startsWith('0x')) {
+    if (ethers.utils.isAddress(user)) {
       const moderator = await profileAPI.getProfile(user);
       if (moderator) {
         user = moderator.pubKey;
