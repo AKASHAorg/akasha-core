@@ -403,6 +403,7 @@ api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Prom
           request.data.user,
           request.data.admin,
           request.data.active,
+          dataSources.profileAPI,
         );
         ctx.status = 201;
       }
@@ -432,6 +433,7 @@ api.post('/moderation/moderators/:user', async (ctx: koa.Context, next: () => Pr
           user,
           request.data.admin,
           request.data.active,
+          dataSources.profileAPI,
         );
         ctx.status = 200;
       }
