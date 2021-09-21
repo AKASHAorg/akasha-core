@@ -119,6 +119,8 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   }, [followingReq]);
 
   const handleTagClick = (tagName: string) => {
+    // close current modal before navigation
+    handleClose();
     singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
   };
 
@@ -132,6 +134,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   };
 
   const handleProfileClick = (pubKey: string) => {
+    handleClose();
     singleSpa.navigateToUrl(`/profile/${pubKey}`);
   };
 
