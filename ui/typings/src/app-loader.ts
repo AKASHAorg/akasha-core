@@ -271,6 +271,7 @@ export type EventDataTypes = {
   version?: string;
   entryId?: string;
   entryType?: ItemTypes;
+  clickHandler?: () => void;
 };
 
 export const enum ItemTypes {

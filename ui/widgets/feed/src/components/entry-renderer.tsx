@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { useComment, useEditComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import {
@@ -14,8 +14,17 @@ import {
   useUnfollow,
   useIsFollowingMultiple,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import { getLinkPreview } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
-const { ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
+const {
+  Box,
+  CommentEditor,
+  ErrorLoader,
+  EntryCardLoading,
+  EntryCard,
+  EntryCardHidden,
+  ExtensionPoint,
+} = DS;
 
 export interface IEntryRenderer {
   itemId?: string;
@@ -60,6 +69,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const followProfileQuery = useFollow();
   const unfollowProfileQuery = useUnfollow();
+  const [isEditingComment, setIsEditingComment] = React.useState<boolean>(false);
 
   const isBookmarked = React.useMemo(() => {
     return (
@@ -114,6 +124,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
   }, [postData, commentData, props.itemType]);
 
+  const commentEditReq = useEditComment(itemData?.entryId, !!commentData);
+
   const isReported = React.useMemo(() => {
     if (showAnyway) {
       return false;
@@ -132,6 +144,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
       unfollowProfileQuery.mutate(authorEthAddress);
     }
   }, [unfollowProfileQuery, authorEthAddress]);
+
+  const handleEditClick = React.useCallback(() => {
+    setIsEditingComment(true);
+  }, []);
 
   const handleAvatarClick = () => {
     onNavigate(ItemTypes.PROFILE, {
@@ -176,6 +192,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
         name,
         entryId: itemId,
         entryType: itemType,
+        clickHandler: handleEditClick,
       },
     });
   };
@@ -203,10 +220,19 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
   }, [t, props.itemType]);
 
+  const handleCancelClick = () => {
+    setIsEditingComment(false);
+  };
+
+  const handleEditComment = commentData => {
+    commentEditReq.mutate({ ...commentData, postID: itemData.postId });
+    setIsEditingComment(false);
+  };
+
   return (
     <>
-      {(postReq.status === 'loading' || commentReq.status === 'loading') && <EntryCardLoading />}
-      {(postReq.status === 'error' || commentReq.status === 'error') && (
+      {(postReq.isLoading || commentReq.isLoading) && <EntryCardLoading />}
+      {(postReq.isError || commentReq.isError) && (
         <ErrorLoader
           type="script-error"
           title={t(`There was an error loading the ${itemTypeName}`)}
@@ -231,6 +257,37 @@ const EntryRenderer = (props: IEntryRenderer) => {
               handleFlipCard={handleFlipCard}
             />
           )}
+          {isEditingComment && (
+            <Box margin="medium">
+              <CommentEditor
+                avatar={itemData.author.avatar}
+                ethAddress={itemData.author.ethAddress}
+                postLabel={t('Reply')}
+                placeholderLabel={`${t('Reply to')} ${itemData.author.name || ''}`}
+                emojiPlaceholderLabel={t('Search')}
+                onPublish={handleEditComment}
+                getLinkPreview={getLinkPreview}
+                getMentions={() => {
+                  /*  */
+                }}
+                getTags={() => {
+                  /*  */
+                }}
+                tags={[]}
+                mentions={[]}
+                uploadRequest={() => {
+                  /*  */
+                }}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
+                editorState={itemData.content}
+                isShown={true}
+                showCancelButton={true}
+                onCancelClick={handleCancelClick}
+                cancelButtonLabel={t('Cancel')}
+              />
+            </Box>
+          )}
           {!isReported && (
             <EntryCard
               className={props.className}
@@ -253,7 +310,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
               flagAsLabel={t(`Report ${itemTypeName}`)}
               loggedProfileEthAddress={ethAddress}
               locale={locale || 'en'}
-              style={{ height: 'auto', ...(style as React.CSSProperties) }}
+              style={{
+                height: 'auto',
+                ...(style as React.CSSProperties),
+                display: isEditingComment ? 'none' : 'block',
+              }}
               bookmarkLabel={t('Save')}
               bookmarkedLabel={t('Saved')}
               profileAnchorLink={'/profile'}
