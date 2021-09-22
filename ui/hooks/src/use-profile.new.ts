@@ -145,11 +145,6 @@ const getInterests = async (pubKey: string) => {
   try {
     const res = await lastValueFrom(sdk.api.profile.getInterests(pubKey));
 
-    // return, if empty
-    if (!res.data.getInterests.length) {
-      return res.data.getInterests;
-    }
-
     const getTagCalls = res.data.getInterests.map(interest => {
       return sdk.api.tags.getTag(interest);
     });
