@@ -176,7 +176,7 @@ export function useEditComment(commentID: string, hasCommentData: boolean) {
 
   return useMutation(
     async (comment: IPublishData & { postID: string }) => {
-      if (!hasCommentData) return Promise.resolve(null);
+      if (!hasCommentData) return Promise.resolve();
       const { postID, ...commentData } = comment;
       const publishObj = buildPublishObject(commentData, postID);
       return lastValueFrom(
