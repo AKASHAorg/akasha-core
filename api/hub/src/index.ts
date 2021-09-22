@@ -6,6 +6,7 @@ import bodyParser from 'koa-bodyparser';
 import webSockify from 'koa-websocket';
 import cors from '@koa/cors';
 import { ApolloServer } from 'apollo-server-koa';
+import helmet from 'koa-helmet';
 import typeDefs from './schema';
 import {
   ApolloServerPluginLandingPageDisabled,
@@ -41,6 +42,7 @@ const wsOptions = {};
 const app = webSockify(new Koa(), wsOptions);
 
 /** Middlewares */
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(json());
 app.use(logger());
 app.use(bodyParser());
