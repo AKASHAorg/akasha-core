@@ -8,7 +8,7 @@ import isEqual from 'lodash.isequal';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const CommentEditor: React.FC<
-  Omit<IEditorBox, 'editorState' | 'setEditorState'> & {
+  Omit<IEditorBox, 'setEditorState'> & {
     isShown?: boolean;
   }
 > = props => {
@@ -29,10 +29,11 @@ const CommentEditor: React.FC<
     showCancelButton,
     cancelButtonLabel,
     onCancelClick,
+    editorState,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(isShown);
-  const [contentState, setContentState] = React.useState(editorDefaultValue);
+  const [contentState, setContentState] = React.useState(editorState ?? editorDefaultValue);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const editorRef: React.RefObject<any> = React.useRef(null);
 

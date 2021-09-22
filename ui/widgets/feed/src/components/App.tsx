@@ -64,7 +64,7 @@ const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
           plain={true}
         >
           {props.itemType === ItemTypes.ENTRY && <EntryFeed {...props} />}
-          {props.itemType === ItemTypes.COMMENT && <EntryFeed {...props} />}
+          {props.itemType === ItemTypes.COMMENT && <EntryFeed {...props} itemSpacing={0} />}
           {props.itemType === ItemTypes.PROFILE && <ProfileFeed {...props} />}
         </ThemeSelector>
       </I18nextProvider>
