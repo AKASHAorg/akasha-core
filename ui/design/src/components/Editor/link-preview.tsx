@@ -19,6 +19,9 @@ const StyledWrapperBox = styled(Box)`
 `;
 
 function htmlDecode(input) {
+  if (!input) {
+    return;
+  }
   const doc = new DOMParser().parseFromString(input, 'text/html');
   return doc.documentElement.textContent;
 }
@@ -56,7 +59,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
           <Icon type="close" clickable={true} />
         </StyledCloseDiv>
       )}
-      {linkPreviewData.images.length > 0 && (
+      {!!linkPreviewData?.images?.length && (
         <Box
           background={{
             color: '#DDD',
@@ -74,7 +77,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         pad="medium"
         gap="medium"
         round={
-          linkPreviewData.images.length > 0
+          linkPreviewData?.images?.length
             ? { corner: 'bottom', size: 'xsmall' }
             : { size: 'xsmall' }
         }
@@ -86,19 +89,23 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         }}
       >
         <Box direction="row" gap="small" pad={{ vertical: 'small' }} align="center">
-          {linkPreviewData.favicons?.length ? (
+          {linkPreviewData?.favicons?.length ? (
             <Favicon src={linkPreviewData.favicons[0]} />
           ) : (
             <Icon type="link" size="xxs" accentColor={true} />
           )}
-          <Text color="accentText" truncate={true}>
-            {linkPreviewData.url}
-          </Text>
+          {!!linkPreviewData.url && (
+            <Text color="accentText" truncate={true}>
+              {linkPreviewData.url}
+            </Text>
+          )}
         </Box>
-        <Text size="large" weight="bold" color="primaryText">
-          {linkPreviewData.title}
-        </Text>
-        <Text>{htmlDecode(linkPreviewData.description)}</Text>
+        {!!linkPreviewData.title && (
+          <Text size="large" weight="bold" color="primaryText">
+            {linkPreviewData.title}
+          </Text>
+        )}
+        {!!linkPreviewData.description && <Text>{htmlDecode(linkPreviewData.description)}</Text>}
         <Box></Box>
       </StyledBox>
     </StyledWrapperBox>
