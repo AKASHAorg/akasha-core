@@ -14,12 +14,19 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation();
 
   const handleClick = () => {
-    if (props.extensionData && props.extensionData.hasOwnProperty('entryId')) {
+    if (
+      props.extensionData &&
+      props.extensionData.hasOwnProperty('entryId') &&
+      props.extensionData?.entryType === ItemTypes.ENTRY
+    ) {
       props.navigateToModal({
         name: 'editor',
         entryId: props.extensionData.entryId,
         action: 'edit',
       });
+    }
+    if (props.extensionData?.entryType === ItemTypes.COMMENT && props.extensionData?.clickHandler) {
+      props.extensionData.clickHandler();
     }
   };
 

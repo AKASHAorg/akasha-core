@@ -63,7 +63,7 @@ export interface IEditorBox {
   tags?: { name: string; totalPosts: number }[];
   uploadRequest?: (data: string | File, isUrl?: boolean) => any;
   publishingApp?: string;
-  editorState: Descendant[];
+  editorState?: Descendant[];
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
   ref?: React.Ref<unknown>;
   showCancelButton?: boolean;

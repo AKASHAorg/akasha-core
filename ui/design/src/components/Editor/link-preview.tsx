@@ -29,6 +29,9 @@ const StyledWrapperBox = styled(Box)`
 `;
 
 function htmlDecode(input) {
+  if (!input) {
+    return;
+  }
   const doc = new DOMParser().parseFromString(input, 'text/html');
   return doc.documentElement.textContent;
 }
@@ -78,7 +81,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
           <Icon type="close" clickable={true} />
         </StyledCloseDiv>
       )}
-      {linkPreviewData.images?.length > 0 && (
+      {!!linkPreviewData.images?.length && (
         <StyledCoverBox
           height="18rem"
           pad="none"
@@ -94,7 +97,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         pad="medium"
         gap="medium"
         round={
-          linkPreviewData.images?.length > 0 && showCover
+          linkPreviewData.images?.length && showCover
             ? { corner: 'bottom', size: 'xsmall' }
             : { size: 'xsmall' }
         }
@@ -111,16 +114,18 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
           ) : (
             <Icon type="link" size="xxs" accentColor={true} />
           )}
-          <Text color="accentText" truncate={true}>
-            {linkPreviewData.url}
-          </Text>
+          {!!linkPreviewData.url && (
+            <Text color="accentText" truncate={true}>
+              {linkPreviewData.url}
+            </Text>
+          )}
         </Box>
-        {linkPreviewData.title && (
+        {!!linkPreviewData.title && (
           <Text size="large" weight="bold" color="primaryText">
             {linkPreviewData.title}
           </Text>
         )}
-        {linkPreviewData.description && <Text>{htmlDecode(linkPreviewData.description)}</Text>}
+        {!!linkPreviewData.description && <Text>{htmlDecode(linkPreviewData.description)}</Text>}
         <Box></Box>
       </StyledBox>
     </StyledWrapperBox>
