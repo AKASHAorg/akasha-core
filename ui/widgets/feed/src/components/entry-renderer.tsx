@@ -49,6 +49,14 @@ export interface IEntryRenderer {
   className?: string;
 }
 
+const commentStyleExt = {
+  borderRadius: 0,
+  border: 0,
+  borderBottom: '1px solid #EDF0F5',
+  padding: '0 1rem',
+  boxShadow: 'none',
+};
+
 const EntryRenderer = (props: IEntryRenderer) => {
   const {
     ethAddress,
@@ -313,6 +321,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               style={{
                 height: 'auto',
                 ...(style as React.CSSProperties),
+                ...(commentData && commentStyleExt),
                 display: isEditingComment ? 'none' : 'block',
               }}
               bookmarkLabel={t('Save')}
