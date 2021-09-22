@@ -1,6 +1,6 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaproject/awf-sdk';
-import { combineLatest, lastValueFrom } from 'rxjs';
+import { forkJoin, lastValueFrom } from 'rxjs';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
 import moderationRequest from './moderation-request';
@@ -149,9 +149,12 @@ const getInterests = async (pubKey: string) => {
       return sdk.api.tags.getTag(interest);
     });
 
-    const tagsRes = await lastValueFrom(combineLatest(getTagCalls));
+    if (getTagCalls.length) {
+      const tagsRes = await lastValueFrom(forkJoin(getTagCalls));
 
-    return tagsRes.map(res => res.data.getTag);
+      return tagsRes.map(res => res.data.getTag);
+    }
+    return [];
   } catch (error) {
     logError('useProfile.getInterests', error);
   }
