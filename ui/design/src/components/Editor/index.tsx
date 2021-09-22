@@ -187,7 +187,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    * todo version should be passed as a prop
    */
   const handlePublish = () => {
-    const content = editorState;
+    const slateContent = editorState;
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData,
@@ -198,10 +198,10 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     };
 
     /**
-     * wrap content in object to make recursive getMetadata work
+     * wrap slateContent in object to make recursive getMetadata work
      * breaks slate typing
      */
-    const initContent: { children: Descendant[] } = { children: content };
+    const initContent: { children: Descendant[] } = { children: slateContent };
     (function getMetadata(node: Descendant | { children: Descendant[] }) {
       if (Element.isElement(node) && node.type === 'mention') {
         metadata.mentions.push(node.pubKey);
@@ -213,8 +213,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         node.children.map((n: Descendant) => getMetadata(n));
       }
     })(initContent);
-    const textContent: string = serializeToPlainText({ children: content });
-    const data = { metadata, content, textContent, author: ethAddress };
+    const textContent: string = serializeToPlainText({ children: slateContent });
+    const data = { metadata, slateContent, textContent, author: ethAddress };
     onPublish(data);
     setEditorState(editorDefaultValue);
   };

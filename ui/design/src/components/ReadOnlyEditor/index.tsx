@@ -8,7 +8,7 @@ import { Portal } from '../Editor/helpers';
 import Icon from '../Icon';
 import styled from 'styled-components';
 import { StyledCloseDiv } from '../Editor/styled-editor-box';
-import { ImageElement } from '../Editor/custom-types';
+import { ImageElement } from '@akashaproject/ui-awf-typings/lib/editor';
 
 export interface IReadOnlyEditor {
   content: Descendant[];

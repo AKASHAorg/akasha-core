@@ -301,9 +301,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 border={{ side: 'bottom', size: '1px', color: 'border' }}
               >
                 <EntryBox
-                  isRemoved={
-                    entryData.content.length === 1 && entryData.content[0].property === 'removed'
-                  }
+                  isRemoved={entryData.isRemoved}
                   isBookmarked={bookmarked}
                   entryData={entryData}
                   sharePostLabel={t('Share Post')}

@@ -22,19 +22,10 @@ export interface CommentResponse extends Comment_Response {
   isPublishing?: boolean;
 }
 
-export interface RemovedEntryContent {
-  property?: 'removed';
-}
-
-export interface ImageNode {
-  url?: string;
-  type?: string;
-}
-
 export interface IEntryData {
   CID?: string;
   linkPreview?: LinkPreview_Response;
-  content: (Descendant & ImageNode & RemovedEntryContent)[];
+  slateContent: Descendant[];
   time?: string | number | Date;
   replies?: number;
   reposts?: number;
@@ -49,14 +40,27 @@ export interface IEntryData {
   reported?: boolean;
   moderated?: boolean;
   reason?: string;
+  isRemoved?: boolean;
   type?: string;
   isPublishing?: boolean;
   postId?: string;
 }
 
+export interface PendingEntry {
+  author: IProfileData;
+  slateContent: IEntryData['slateContent'];
+  ipfsLink: string;
+  permalink: string;
+  entryId: string;
+  replies?: number;
+  reposts?: number;
+  time: string;
+  quote: IEntryData['quote'];
+}
+
 export interface IPublishData {
   metadata: IMetadata;
-  content: (Descendant & { url?: string; type?: string })[];
+  slateContent: (Descendant & { url?: string; type?: string })[];
   textContent: string;
   author: string | null;
   pubKey?: string;

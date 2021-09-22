@@ -154,7 +154,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
             uploadRequest={uploadMediaToTextile}
             embedEntryData={embedEntryData}
             style={{ width: '36rem' }}
-            editorState={entryData?.content}
+            editorState={entryData?.slateContent}
           />
         )}
     </>

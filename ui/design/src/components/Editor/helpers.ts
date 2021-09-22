@@ -1,7 +1,13 @@
 import { Editor, Text, Transforms, Element } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
-import { CustomText, ImageElement, LinkElement, MentionElement, TagElement } from './custom-types';
+import {
+  CustomText,
+  ImageElement,
+  LinkElement,
+  MentionElement,
+  TagElement,
+} from '@akashaproject/ui-awf-typings/lib/editor';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {
