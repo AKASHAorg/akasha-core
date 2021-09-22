@@ -10,8 +10,18 @@ const Favicon = styled.img`
   height: 1rem;
 `;
 
+const StyledCoverImg = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+`;
+
 const StyledBox = styled(Box)`
   background-color: ${props => props.theme.colors.ultraLightGrey};
+`;
+
+const StyledCoverBox = styled(Box)<{ showCover: boolean }>`
+  display: ${props => (props.showCover ? '' : 'none')};
 `;
 
 const StyledWrapperBox = styled(Box)`
@@ -31,6 +41,18 @@ export interface ILinkPreview {
 
 const LinkPreview: React.FC<ILinkPreview> = props => {
   const { handleLinkClick, handleDeletePreview, linkPreviewData } = props;
+
+  const [showCover, setShowCover] = React.useState(false);
+  const [faviconErr, setFaviconErr] = React.useState(false);
+
+  const handleCoverLoad = () => {
+    setShowCover(true);
+  };
+
+  const handleFaviconErr = () => {
+    setFaviconErr(true);
+  };
+
   return (
     <StyledWrapperBox
       onClick={(ev: Event) => {
@@ -57,24 +79,22 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         </StyledCloseDiv>
       )}
       {linkPreviewData.images.length > 0 && (
-        <Box
-          background={{
-            color: '#DDD',
-            image: `url(${linkPreviewData.images[0]})`,
-            repeat: 'no-repeat',
-            size: 'cover',
-          }}
+        <StyledCoverBox
           height="18rem"
           pad="none"
           round={{ corner: 'top', size: 'xsmall' }}
-        />
+          border={[{ color: 'border', side: 'all' }]}
+          showCover={showCover}
+        >
+          <StyledCoverImg src={linkPreviewData.images[0]} onLoad={handleCoverLoad} />
+        </StyledCoverBox>
       )}
 
       <StyledBox
         pad="medium"
         gap="medium"
         round={
-          linkPreviewData.images.length > 0
+          linkPreviewData.images.length > 0 && showCover
             ? { corner: 'bottom', size: 'xsmall' }
             : { size: 'xsmall' }
         }
@@ -86,8 +106,8 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         }}
       >
         <Box direction="row" gap="small" pad={{ vertical: 'small' }} align="center">
-          {linkPreviewData.favicons?.length ? (
-            <Favicon src={linkPreviewData.favicons[0]} />
+          {linkPreviewData.favicons?.length && !faviconErr ? (
+            <Favicon src={linkPreviewData.favicons[0]} onError={handleFaviconErr} />
           ) : (
             <Icon type="link" size="xxs" accentColor={true} />
           )}
