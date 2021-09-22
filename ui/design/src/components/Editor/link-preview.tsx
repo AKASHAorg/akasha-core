@@ -78,7 +78,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
           <Icon type="close" clickable={true} />
         </StyledCloseDiv>
       )}
-      {linkPreviewData.images.length > 0 && (
+      {linkPreviewData.images?.length > 0 && (
         <StyledCoverBox
           height="18rem"
           pad="none"
@@ -94,7 +94,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         pad="medium"
         gap="medium"
         round={
-          linkPreviewData.images.length > 0 && showCover
+          linkPreviewData.images?.length > 0 && showCover
             ? { corner: 'bottom', size: 'xsmall' }
             : { size: 'xsmall' }
         }
@@ -115,10 +115,12 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
             {linkPreviewData.url}
           </Text>
         </Box>
-        <Text size="large" weight="bold" color="primaryText">
-          {linkPreviewData.title}
-        </Text>
-        <Text>{htmlDecode(linkPreviewData.description)}</Text>
+        {linkPreviewData.title && (
+          <Text size="large" weight="bold" color="primaryText">
+            {linkPreviewData.title}
+          </Text>
+        )}
+        {linkPreviewData.description && <Text>{htmlDecode(linkPreviewData.description)}</Text>}
         <Box></Box>
       </StyledBox>
     </StyledWrapperBox>
