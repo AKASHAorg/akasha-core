@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom, combineLatest } from 'rxjs';
+import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
 
@@ -11,21 +11,22 @@ const getIsFollowingMultiple = async (
 ) => {
   const sdk = getSDK();
   try {
-    const getFollowedProfilesCalls = followingEthAddressArray
-      .filter(profile => !!profile)
-      .map((profile: string) => {
-        return sdk.api.profile.isFollowing({
-          follower: followerEthAddress,
-          following: profile,
-        });
+    const filteredList = followingEthAddressArray.filter(profile => !!profile);
+    const getFollowedProfilesCalls = filteredList.map((profile: string) => {
+      return sdk.api.profile.isFollowing({
+        follower: followerEthAddress,
+        following: profile,
       });
-    const res = await lastValueFrom(combineLatest(getFollowedProfilesCalls));
-    const followedProfiles: string[] = [];
-    followingEthAddressArray.forEach((profile, index) => {
-      if (res[index].data.isFollowing === true) {
-        followedProfiles.push(profile);
-      }
     });
+    const followedProfiles: string[] = [];
+    if (getFollowedProfilesCalls.length) {
+      const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
+      filteredList.forEach((profile, index) => {
+        if (res[index].data.isFollowing === true) {
+          followedProfiles.push(profile);
+        }
+      });
+    }
     return followedProfiles;
   } catch (error) {
     logError('useFollow.getIsFollowingMultiple', error);
