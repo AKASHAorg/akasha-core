@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom, EMPTY, forkJoin } from 'rxjs';
+import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
 
