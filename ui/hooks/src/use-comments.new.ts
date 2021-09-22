@@ -170,12 +170,12 @@ export function useCreateComment() {
 }
 
 // hook used for editing a comment
-export async function useEditComment(commentID: string, hasCommentData: boolean) {
+export function useEditComment(commentID: string, hasCommentData: boolean) {
   const sdk = getSDK();
   const queryClient = useQueryClient();
 
   return useMutation(
-    (comment: IPublishData & { postID: string }) => {
+    async (comment: IPublishData & { postID: string }) => {
       if (!hasCommentData) return Promise.resolve(null);
       const { postID, ...commentData } = comment;
       const publishObj = buildPublishObject(commentData, postID);
