@@ -3,6 +3,7 @@ import singleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
+import { truncateMiddle } from '@akashaproject/design-system/lib/utils/string-utils';
 import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
 import {
   useFollowers,
@@ -165,7 +166,9 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const placeholderTitleLabel = `${
     loginState.ethAddress === profileData.ethAddress
       ? `${t('You have no')}`
-      : `${profileData.name || profileData.userName} ${t('has no')}`
+      : `${profileData.name || profileData.userName || truncateMiddle(profileData.ethAddress)} ${t(
+          'has no',
+        )}`
   } ${activeIndexLabels[activeIndex]} ${t('yet')}`;
 
   // only shown when the profile matches logged user
@@ -181,7 +184,9 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       ipfsGateway={ipfsGateway}
       loggedUser={loginState.pubKey}
       stats={[profileData.totalFollowers, profileData.totalFollowing, profileData.totalInterests]}
-      titleLabel={profileData.name || profileData.userName}
+      titleLabel={
+        profileData.name || profileData.userName || truncateMiddle(profileData.ethAddress)
+      }
       tabLabelsArr={[t('Followers'), t('Following'), t('Topics')]}
       errorTitleLabel={t(`Sorry, we can't fetch the ${activeIndexLabels[activeIndex]} list.`)}
       errorSubtitleLabel={t("We can't display the list at the moment, please try again.")}
