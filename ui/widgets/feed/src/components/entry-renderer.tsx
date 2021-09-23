@@ -299,9 +299,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
           {!isReported && (
             <EntryCard
               className={props.className}
-              isRemoved={
-                itemData.content.length === 1 && itemData.content[0].property === 'removed'
-              }
+              isRemoved={itemData.isRemoved}
               isBookmarked={isBookmarked}
               entryData={itemData}
               sharePostUrl={sharePostUrl}

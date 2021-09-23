@@ -5,6 +5,7 @@ import {
   PostResponse,
   CommentResponse,
   IPublishData,
+  PendingEntry,
 } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import getSDK from '@akashaproject/awf-sdk';
@@ -103,13 +104,13 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
         },
       ];
     }
-  }
 
-  try {
-    linkPreview = decodeb64SlateContent(linkPreviewData.value, logger);
-  } catch (error) {
-    if (logger) {
-      logger.error(`Error serializing base64 to linkPreview: ${error.message}`);
+    try {
+      linkPreview = decodeb64SlateContent(linkPreviewData.value, logger);
+    } catch (error) {
+      if (logger) {
+        logger.error(`Error serializing base64 to linkPreview: ${error.message}`);
+      }
     }
   }
 
@@ -143,7 +144,8 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
       avatar: getMediaUrl(entry.author.avatar),
       coverImage: getMediaUrl(entry.author.coverImage),
     },
-    content,
+    isRemoved,
+    slateContent: content,
     linkPreview,
     quote: quotedEntry,
     entryId: entry._id,
@@ -156,18 +158,6 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
   };
 };
 
-interface PendingEntry {
-  author: IProfileData;
-  content: IPublishData['content'];
-  ipfsLink: string;
-  permalink: string;
-  entryId: string;
-  replies?: number;
-  reposts?: number;
-  time: string;
-  quote: IEntryData['quote'];
-}
-
 export const createPendingEntry = (
   author: IProfileData,
   entryPublishData: IPublishData & { entryId?: string },
@@ -176,7 +166,7 @@ export const createPendingEntry = (
   return {
     quote,
     author: author,
-    content: entryPublishData.content,
+    slateContent: entryPublishData.slateContent,
     replies: 0,
     reposts: 0,
     time: `${Date.now()}`,
@@ -212,7 +202,7 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
   // save only the ipfs CID prepended with `CID:` for the slate content image urls
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-  const cleanedContent = data.content.map(node => {
+  const cleanedContent = data.slateContent.map(node => {
     const nodeClone = Object.assign({}, node);
     if (node.type === 'image' && node.url.startsWith(ipfsGateway)) {
       const hashIndex = node.url.lastIndexOf('/');

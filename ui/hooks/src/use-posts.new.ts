@@ -199,6 +199,7 @@ export function useDeletePost(postID: string) {
             value: '1',
           },
         ],
+        isRemoved: true,
       });
       return { previousPost };
     },

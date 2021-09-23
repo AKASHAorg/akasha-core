@@ -33,7 +33,7 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
     />
 
     <Box>
-      <ReadOnlyEditor content={props.embedEntryData.content} />
+      <ReadOnlyEditor content={props.embedEntryData.slateContent} />
     </Box>
   </StyledBox>
 );

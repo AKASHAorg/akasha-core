@@ -419,7 +419,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             }
           >
             <ReadOnlyEditor
-              content={entryData.content}
+              content={entryData.slateContent}
               handleMentionClick={onMentionClick}
               handleTagClick={onTagClick}
               handleLinkClick={singleSpaNavigate}

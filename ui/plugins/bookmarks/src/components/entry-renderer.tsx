@@ -183,9 +183,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
               {!isReported && (
                 <EntryCard
-                  isRemoved={
-                    itemData.content.length === 1 && itemData.content[0].property === 'removed'
-                  }
+                  isRemoved={itemData.isRemoved}
                   isBookmarked={true}
                   entryData={itemData}
                   sharePostLabel={t('Share Post')}
