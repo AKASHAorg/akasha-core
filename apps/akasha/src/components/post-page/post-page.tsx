@@ -360,7 +360,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 </Box>
               )}
               {loginState?.ethAddress && (
-                <Box margin="medium">
+                <Box margin="medium" style={{ position: 'relative' }}>
                   <CommentEditor
                     avatar={loggedProfileData?.avatar}
                     ethAddress={loginState?.ethAddress}

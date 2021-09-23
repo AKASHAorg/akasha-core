@@ -10,8 +10,18 @@ const Favicon = styled.img`
   height: 1rem;
 `;
 
+const StyledCoverImg = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+`;
+
 const StyledBox = styled(Box)`
   background-color: ${props => props.theme.colors.ultraLightGrey};
+`;
+
+const StyledCoverBox = styled(Box)<{ showCover: boolean }>`
+  display: ${props => (props.showCover ? '' : 'none')};
 `;
 
 const StyledWrapperBox = styled(Box)`
@@ -19,6 +29,9 @@ const StyledWrapperBox = styled(Box)`
 `;
 
 function htmlDecode(input) {
+  if (!input) {
+    return;
+  }
   const doc = new DOMParser().parseFromString(input, 'text/html');
   return doc.documentElement.textContent;
 }
@@ -31,6 +44,18 @@ export interface ILinkPreview {
 
 const LinkPreview: React.FC<ILinkPreview> = props => {
   const { handleLinkClick, handleDeletePreview, linkPreviewData } = props;
+
+  const [showCover, setShowCover] = React.useState(false);
+  const [faviconErr, setFaviconErr] = React.useState(false);
+
+  const handleCoverLoad = () => {
+    setShowCover(true);
+  };
+
+  const handleFaviconErr = () => {
+    setFaviconErr(true);
+  };
+
   return (
     <StyledWrapperBox
       onClick={(ev: Event) => {
@@ -56,25 +81,23 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
           <Icon type="close" clickable={true} />
         </StyledCloseDiv>
       )}
-      {linkPreviewData.images.length > 0 && (
-        <Box
-          background={{
-            color: '#DDD',
-            image: `url(${linkPreviewData.images[0]})`,
-            repeat: 'no-repeat',
-            size: 'cover',
-          }}
+      {!!linkPreviewData.images?.length && (
+        <StyledCoverBox
           height="18rem"
           pad="none"
           round={{ corner: 'top', size: 'xsmall' }}
-        />
+          border={[{ color: 'border', side: 'all' }]}
+          showCover={showCover}
+        >
+          <StyledCoverImg src={linkPreviewData.images[0]} onLoad={handleCoverLoad} />
+        </StyledCoverBox>
       )}
 
       <StyledBox
         pad="medium"
         gap="medium"
         round={
-          linkPreviewData.images.length > 0
+          linkPreviewData.images?.length && showCover
             ? { corner: 'bottom', size: 'xsmall' }
             : { size: 'xsmall' }
         }
@@ -86,19 +109,23 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         }}
       >
         <Box direction="row" gap="small" pad={{ vertical: 'small' }} align="center">
-          {linkPreviewData.favicons?.length ? (
-            <Favicon src={linkPreviewData.favicons[0]} />
+          {linkPreviewData.favicons?.length && !faviconErr ? (
+            <Favicon src={linkPreviewData.favicons[0]} onError={handleFaviconErr} />
           ) : (
             <Icon type="link" size="xxs" accentColor={true} />
           )}
-          <Text color="accentText" truncate={true}>
-            {linkPreviewData.url}
-          </Text>
+          {!!linkPreviewData.url && (
+            <Text color="accentText" truncate={true}>
+              {linkPreviewData.url}
+            </Text>
+          )}
         </Box>
-        <Text size="large" weight="bold" color="primaryText">
-          {linkPreviewData.title}
-        </Text>
-        <Text>{htmlDecode(linkPreviewData.description)}</Text>
+        {!!linkPreviewData.title && (
+          <Text size="large" weight="bold" color="primaryText">
+            {linkPreviewData.title}
+          </Text>
+        )}
+        {!!linkPreviewData.description && <Text>{htmlDecode(linkPreviewData.description)}</Text>}
         <Box></Box>
       </StyledBox>
     </StyledWrapperBox>
