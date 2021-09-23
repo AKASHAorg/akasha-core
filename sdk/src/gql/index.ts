@@ -31,7 +31,7 @@ class Gql implements IGqlClient<unknown> {
     this._stash
       .create({
         maxSize: 1280,
-        maxAge: 1000 * 10,
+        maxAge: 1000 * 60 * 2,
       })
       .subscribe(x => (this._gqlStash = x.data));
   }
