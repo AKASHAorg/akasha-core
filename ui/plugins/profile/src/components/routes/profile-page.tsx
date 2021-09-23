@@ -166,7 +166,7 @@ const ProfilePage = (props: ProfilePageProps) => {
               userName={profileState.userName || ''}
             />
           )}
-          {!profileState.moderated && !profileState.delisted && (
+          {!profileState.delisted && (
             <>
               <ProfilePageHeader
                 {...props}
