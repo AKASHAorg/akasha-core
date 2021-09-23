@@ -39,11 +39,11 @@ export const fetchRequest = async (props: {
     ...(method === ('POST' || 'PUT' || 'PATCH') && { body: JSON.stringify(data) }),
   });
 
+  clearTimeout(timer);
+
   if (method === 'HEAD' || (method === 'POST' && statusOnly)) {
     return response.status;
   }
-
-  clearTimeout(timer);
 
   return response.json();
 };
