@@ -120,7 +120,11 @@ const ProfilePage = (props: ProfilePageProps) => {
   };
 
   const handleEntryRemove = (entryId: string) => {
-    props.navigateToModal({ name: 'entry-remove-confirmation', entryId, entryType: 'Post' });
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryId,
+      entryType: ItemTypes.ENTRY,
+    });
   };
 
   return (
