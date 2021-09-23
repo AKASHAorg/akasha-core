@@ -439,7 +439,7 @@ const entryData = {
   ipfsLink: 'ipfs.io/placeholder',
   permalink: 'ethereum.world/akasha/johngilbert/412412',
   author: profileData,
-  content: [
+  slateContent: [
     {
       type: 'paragraph',
       children: [

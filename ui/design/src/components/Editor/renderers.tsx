@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Icon from '../Icon';
 import { StyledAnchor } from '../TextInputIconForm/styles';
 import { StyledCloseDiv } from './styled-editor-box';
-import { ImageElement } from './custom-types';
+import { ImageElement } from '@akashaproject/ui-awf-typings/lib/editor';
 
 const StyledImg = styled.img`
   display: block;
