@@ -181,6 +181,7 @@ export interface EntryPublishObject {
   post: {
     tags: IPublishData['metadata']['tags'];
     mentions: IPublishData['metadata']['mentions'];
+    quotes: string[];
   };
 
   quotes: IPublishData['metadata']['quote']['entryId'][];
@@ -190,6 +191,7 @@ export interface CommentPublishObject {
   comment: {
     tags: IPublishData['metadata']['tags'];
     mentions: IPublishData['metadata']['mentions'];
+    quotes: string[];
     postID: string;
   };
 }
@@ -255,7 +257,7 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
     post: {
       tags: data.metadata.tags,
       mentions: data.metadata.mentions,
+      quotes,
     },
-    quotes,
   };
 }

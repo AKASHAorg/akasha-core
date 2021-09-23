@@ -8,6 +8,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 const { ErrorLoader, Spinner, EntryList } = DS;
 
@@ -52,26 +54,23 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     ev.preventDefault();
   };
 
-  const redirectToPost =
-    (navigateToUrl: (path: string) => void) =>
-    (details: {
-      authorEthAddress: string;
-      entryId: string;
-      replyTo: {
-        authorEthAddress: string;
-        entryId: string;
-      } | null;
-    }) => {
-      const { entryId, replyTo } = details;
-      let url = `/social-app/post/${entryId}`;
-      if (replyTo && replyTo.entryId) {
-        // handle the reply
-        url = `/social-app/post/${replyTo.entryId}`;
-      }
-      navigateToUrl(url);
-    };
-
-  const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
+  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
+    let url;
+    switch (itemType) {
+      case ItemTypes.PROFILE:
+        url = `/profile/${details.entryId}`;
+        break;
+      case ItemTypes.TAG:
+        url = `/social-app/tags/${details.entryId}`;
+        break;
+      case ItemTypes.ENTRY:
+        url = `/social-app/post/${details.entryId}`;
+        break;
+      default:
+        break;
+    }
+    props.singleSpa.navigateToUrl(url);
+  };
 
   const handleRepost = (_withComment: boolean, embedEntryId: string) => {
     if (!loginQuery.data?.ethAddress) {
@@ -118,7 +117,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                   bookmarks={bookmarksReq.data}
                   ethAddress={loginQuery.data?.ethAddress}
                   onBookmark={handleBookmarkClick}
-                  onNavigate={handleNavigateToPost}
+                  onNavigate={handleNavigation}
                   onRepost={handleRepost}
                   onAvatarClick={handleAvatarClick}
                   onMentionClick={handleMentionClick}

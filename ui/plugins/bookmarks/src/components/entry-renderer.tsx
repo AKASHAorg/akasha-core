@@ -11,6 +11,7 @@ import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import ExtensionPoint from '@akashaproject/design-system/lib/utils/extension-point';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading } = DS;
 
@@ -32,7 +33,7 @@ export interface IEntryCardRendererProps {
   locale?: ILocale;
   ethAddress?: string | null;
   onBookmark: (entryId: string) => void;
-  onNavigate: (details: NavigationDetails) => void;
+  onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
@@ -68,6 +69,22 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const handleFlipCard = () => {
     setShowAnyway(true);
+  };
+
+  const handleClickAvatar = () => {
+    props.onNavigate(ItemTypes.PROFILE, {
+      entryId: itemData?.author.pubKey,
+      authorEthAddress: itemData?.author.ethAddress,
+      replyTo: null,
+    });
+  };
+
+  const handleContentClick = () => {
+    props.onNavigate(type, {
+      entryId: itemData.entryId,
+      authorEthAddress: itemData.author.ethAddress,
+      replyTo: null,
+    });
   };
 
   const itemData = React.useMemo(() => {
@@ -172,9 +189,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
                   sharePostUrl={props.sharePostUrl}
-                  onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                    props.onAvatarClick(ev, itemData.author.ethAddress)
-                  }
+                  onClickAvatar={handleClickAvatar}
                   onEntryBookmark={props.onBookmark}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
@@ -195,15 +210,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing.data?.includes(ethAddress)}
-                  onContentClick={() => {
-                    props.onNavigate({
-                      authorEthAddress: itemData.author.ethAddress,
-                      entryId: itemData.entryId,
-                      replyTo: {
-                        entryId: type === ItemTypes.COMMENT ? itemData.postId : null,
-                      },
-                    });
-                  }}
+                  onContentClick={handleContentClick}
                   onMentionClick={props.onMentionClick}
                   onTagClick={props.onTagClick}
                   singleSpaNavigate={props.singleSpa.navigateToUrl}
