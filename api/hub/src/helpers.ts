@@ -25,8 +25,9 @@ const MODERATION_EMAIL_SOURCE = process.env.MAILGUN_EMAIL_SOURCE;
 const INFURA_IPFS_ID = process.env.INFURA_IPFS_ID;
 const INFURA_IPFS_SECRET = process.env.INFURA_IPFS_SECRET;
 const IPFS_GATEWAY = process.env.IPFS_GATEWAY;
+export const isIpfsEnabled = INFURA_IPFS_ID && INFURA_IPFS_SECRET && IPFS_GATEWAY;
 let ipfsClient;
-if (INFURA_IPFS_ID && INFURA_IPFS_SECRET) {
+if (isIpfsEnabled) {
   ipfsClient = create({
     host: 'ipfs.infura.io',
     port: 5001,

@@ -1,7 +1,7 @@
 import { getPreviewFromContent } from 'link-preview-js';
 import { commentsStats, REGEX_VALID_URL, statsProvider } from './constants';
 import { queryCache } from '../storage/cache';
-import { fetchWithTimeout, addToIpfs, createIpfsGatewayLink } from '../helpers';
+import { fetchWithTimeout, addToIpfs, createIpfsGatewayLink, isIpfsEnabled } from '../helpers';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
@@ -224,6 +224,9 @@ const query = {
       data: await response.text(),
     };
     const preview = await getPreviewFromContent(normalizedResponse);
+    if (!isIpfsEnabled) {
+      return preview;
+    }
     if (preview?.favicons?.length) {
       const pinFavicon = await addToIpfs(preview.favicons[0]);
       preview.favicons.unshift(createIpfsGatewayLink(pinFavicon.cid.toV1().toString()));
