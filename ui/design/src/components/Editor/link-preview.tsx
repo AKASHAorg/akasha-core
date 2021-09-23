@@ -89,7 +89,12 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
           border={[{ color: 'border', side: 'all' }]}
           showCover={showCover}
         >
-          <StyledCoverImg src={linkPreviewData.images[0]} onLoad={handleCoverLoad} />
+          <StyledCoverImg
+            src={linkPreviewData.images[0]}
+            onLoad={handleCoverLoad}
+            alt={linkPreviewData.images[0]}
+            referrerPolicy={'no-referrer'}
+          />
         </StyledCoverBox>
       )}
 
@@ -110,7 +115,12 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
       >
         <Box direction="row" gap="small" pad={{ vertical: 'small' }} align="center">
           {linkPreviewData.favicons?.length && !faviconErr ? (
-            <Favicon src={linkPreviewData.favicons[0]} onError={handleFaviconErr} />
+            <Favicon
+              src={linkPreviewData.favicons[0]}
+              alt={linkPreviewData.favicons[0]}
+              onError={handleFaviconErr}
+              referrerPolicy={'no-referrer'}
+            />
           ) : (
             <Icon type="link" size="xxs" accentColor={true} />
           )}
