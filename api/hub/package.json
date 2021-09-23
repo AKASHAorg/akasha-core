@@ -52,6 +52,7 @@
     "flatted": "3.2.2",
     "graphql": "15.5.3",
     "ioredis": "4.27.9",
+    "ipfs-http-client": "52.0.5",
     "koa": "2.13.1",
     "koa-bodyparser": "4.3.0",
     "koa-json": "2.0.2",
