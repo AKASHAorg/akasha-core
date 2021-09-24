@@ -343,6 +343,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               removeEntryLabel={props.removeEntryLabel}
               removedByMeLabel={props.removedByMeLabel}
               removedByAuthorLabel={props.removedByAuthorLabel}
+              disableReposting={itemData.isRemoved}
               headerMenuExt={
                 ethAddress === itemData.author.ethAddress && (
                   <ExtensionPoint
