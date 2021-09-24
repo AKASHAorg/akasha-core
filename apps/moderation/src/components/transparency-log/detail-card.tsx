@@ -58,7 +58,11 @@ const DetailCard: React.FC<IDetailCard> = props => {
       isDelisted={selected.delisted}
       moderator={selected.moderator.name}
       moderatedTimestamp={selected.moderatedDate.toString()}
-      moderatorAvatarUrl={`${ipfsGateway}/${selected.moderator.avatar}`}
+      moderatorAvatarUrl={
+        selected.moderator.avatar
+          ? `${ipfsGateway}/${selected.moderator.avatar}`
+          : selected.moderator.avatar
+      }
       moderatorEthAddress={selected.moderator.ethAddress}
       reportedTimesLabel={t(
         `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
