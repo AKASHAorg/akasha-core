@@ -36,6 +36,12 @@ export const fetchRequest = async (props: {
 }) => {
   const { method, url, data = {}, statusOnly = false, timeout = 12000 } = props;
   const rheaders = new Headers();
+  const sdk = getSDK();
+  const key = sdk.services.stash.computeKey({ method, url, data, statusOnly });
+  const uiCache = sdk.services.stash.getUiStash();
+  if (uiCache.has(key)) {
+    return Promise.resolve(uiCache.get(key));
+  }
   rheaders.append('Content-Type', 'application/json');
 
   const controller = new AbortController();
@@ -51,10 +57,14 @@ export const fetchRequest = async (props: {
   clearTimeout(timer);
 
   if (method === 'HEAD' || (method === 'POST' && statusOnly)) {
+    uiCache.set(key, response.status);
     return response.status;
   }
 
-  return response.json();
+  return response.json().then(serializedResponse => {
+    uiCache.set(key, serializedResponse);
+    return serializedResponse;
+  });
 };
 
 const handleModeration = async ({ dataToSign, contentId, contentType, url, modalName }) => {
