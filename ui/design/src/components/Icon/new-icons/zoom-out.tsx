@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const WalletConnectIcon = (props: React.SVGProps<SVGSVGElement>) => (
+const ZoomOutIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="16px"
     height="16px"
@@ -34,4 +34,4 @@ const WalletConnectIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default WalletConnectIcon;
+export default ZoomOutIcon;
