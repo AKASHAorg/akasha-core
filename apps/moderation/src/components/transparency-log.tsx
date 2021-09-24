@@ -31,7 +31,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
   const getCountQuery = useGetCount();
-  const count = getCountQuery.data;
+  const count = getCountQuery.data || { delisted: 0, kept: 0, pending: 0 };
 
   const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
   const logItemPages = React.useMemo(() => {
@@ -82,7 +82,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     <Box>
       <SwitchCard
         count={
-          activeButton === 'All' ? count?.kept + count?.delisted : count[activeButton.toLowerCase()]
+          activeButton === 'All' ? count.kept + count.delisted : count[activeButton.toLowerCase()]
         }
         activeButton={activeButton}
         countLabel={activeButton === 'All' ? t('Moderated items') : t(`${activeButton} items`)}

@@ -199,14 +199,14 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
         isPending={isPending}
         pendingLabel={t('Pending')}
         moderatedLabel={t('Moderated')}
-        countKept={count?.kept}
-        countPending={count?.pending}
-        countDelisted={count?.delisted}
+        countKept={count.kept}
+        countPending={count.pending}
+        countDelisted={count.delisted}
         setIsPending={setIsPending}
       />
       {!isPending && (
         <SwitchCard
-          count={isDelisted ? count?.delisted : count?.kept}
+          count={isDelisted ? count.delisted : count.kept}
           activeButton={activeButton}
           countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
           buttonLabels={buttonLabels}
