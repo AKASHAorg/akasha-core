@@ -52,7 +52,6 @@ const allowedOrigins = [
   'https://unpkg.com',
   'https://cdnjs.cloudflare.com',
   'https://cdn.jsdelivr.net',
-  'https://gateway.pinata.cloud',
 ];
 registerRoute(
   ({ url }) => allowedOrigins.includes(url.origin),
@@ -64,6 +63,22 @@ registerRoute(
       }),
       new ExpirationPlugin({
         maxEntries: 420,
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      }),
+    ],
+  }),
+);
+
+registerRoute(
+  ({ url }) => url.origin.includes('hub.textile.io') || url.origin.includes('ipfs.infura-ipfs.io'),
+  new CacheFirst({
+    cacheName: 'ipfs-cache',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 1420,
         maxAgeSeconds: 30 * 24 * 60 * 60,
       }),
     ],

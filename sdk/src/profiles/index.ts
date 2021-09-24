@@ -328,10 +328,14 @@ export default class AWF_Profile implements AWF_IProfile {
       throw new Error('Must specify a name for the media file');
     }
     if (data.isUrl) {
-      for await (const src of urlSource(data.content)) {
-        file = src.content;
-        path = data.name ? data.name : src.path;
+      const source = urlSource(data.content);
+      const arr = [];
+
+      for await (const entry of source.content) {
+        arr.push(entry);
       }
+      path = data.name ? data.name : source.path;
+      file = new File(arr, path, { type: 'image/*' });
     } else {
       file = data.content;
       path = data.name;
