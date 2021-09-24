@@ -135,7 +135,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                         title={t(
                           `${el.contentType.charAt(0).toUpperCase()}${el.contentType.substring(
                             1,
-                          )} ${el.delisted ? 'Delisted' : 'Kept'}`,
+                          )} ${el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT}`,
                         )}
                         content={t(`${el.explanation}`)}
                         isSelected={el.contentID === selected?.contentID}
