@@ -10,13 +10,13 @@ import TagEntry, { ITagEntry } from './tag-entry';
 import ProfileEntry, { IProfileEntry } from './profile-entry';
 
 import Icon from '../Icon';
-import { ITag } from '../TrendingWidgetCard';
+import { ITag } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { ModalWrapper, StyledBox } from '../ListModal/styled-modal';
 
 import { useViewportSize } from '../Providers/viewport-dimension';
-import { IProfileData } from '../ProfileCard/profile-widget-card';
 
 export interface IStatModal extends IProfileEntry, ITagEntry {
   className?: string;

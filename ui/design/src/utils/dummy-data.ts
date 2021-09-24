@@ -211,6 +211,7 @@ const trendingProfilesData = [
     totalFollowers: 312,
     postsNumber: 235,
     default: [],
+    providers: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -228,6 +229,7 @@ const trendingProfilesData = [
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     isFollowed: true,
     default: [],
+    providers: [],
   },
   {
     ethAddress: '0x003410490050000320006570034567114572000',
@@ -240,6 +242,7 @@ const trendingProfilesData = [
     totalFollowers: 312,
     postsNumber: 235,
     default: [],
+    providers: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -254,6 +257,7 @@ const trendingProfilesData = [
     totalFollowers: 312,
     postsNumber: 235,
     default: [],
+    providers: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
@@ -268,6 +272,7 @@ const trendingProfilesData = [
     totalFollowers: 312,
     postsNumber: 235,
     default: [],
+    providers: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
