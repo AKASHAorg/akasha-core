@@ -1,11 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import getSDK from '@akashaproject/awf-sdk';
 import DS from '@akashaproject/design-system';
-import { moderationRequest } from '@akashaproject/ui-awf-hooks';
-import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
+import { useGetCount, useInfiniteLog } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
 
-import { ICount } from './content-list';
 import Banner from './transparency-log/banner';
 import DetailCard, { ILogItem } from './transparency-log/detail-card';
 
@@ -14,83 +13,54 @@ const { Box, Text, Icon, Spinner, SwitchCard, TransparencyLogMiniCard, useInters
 
 export interface ITransparencyLogProps {
   user: string | null;
-  logger: ILogger;
   isMobile: boolean;
   navigateToUrl: (url: string) => void;
+}
+
+export enum ButtonValues {
+  ALL = 'All',
+  KEPT = 'Kept',
+  DELISTED = 'Delisted',
+  STATS = 'Stats',
 }
 
 const DEFAULT_LIMIT = 10;
 
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
-  const { user, logger, navigateToUrl, isMobile } = props;
+  const { user, navigateToUrl, isMobile } = props;
 
-  const [logItems, setLogItems] = React.useState<ILogItem[]>([]);
-  const [nextIndex, setNextIndex] = React.useState<string | null>(null);
-  const [requesting, setRequesting] = React.useState<boolean>(false);
-  const [activeButton, setActiveButton] = React.useState<string>('All');
-  const [count, setCount] = React.useState<ICount>({ kept: 0, pending: 0, delisted: 0 });
+  const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
 
   const { t } = useTranslation();
 
-  const elementRef = React.createRef<HTMLDivElement>();
-
   const sdk = getSDK();
-
-  useIntersectionObserver({
-    target: elementRef,
-    onIntersect: entries => {
-      if (entries[0].isIntersecting && nextIndex) {
-        // fetch more entries using nextIndex
-        fetchModerationLog(nextIndex);
-      }
-    },
-    threshold: 0,
-  });
-
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
-  React.useEffect(() => {
-    fetchModerationLog();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nextIndex]);
+  const getCountQuery = useGetCount();
+  const count = getCountQuery.data || { delisted: 0, kept: 0, pending: 0 };
 
-  const getStatusCount = async () => {
-    setRequesting(true);
-    try {
-      const response = await moderationRequest.getCount();
-      if (response) {
-        setCount(response);
-      }
-    } catch (error) {
-      logger.error(`[transparency-log.tsx]: getStatusCount err, ${JSON.stringify(error)}`);
-    } finally {
-      setRequesting(false);
+  const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
+  const logItemPages = React.useMemo(() => {
+    if (logItemsQuery.data) {
+      return logItemsQuery.data.pages;
     }
-  };
+    return [];
+  }, [logItemsQuery.data]);
 
-  const fetchModerationLog = async (offset?: string, limit?: number) => {
-    // fetch log of moderated contents
-    setRequesting(true);
-    try {
-      const response = await moderationRequest.getLog({
-        offset,
-        limit: limit || DEFAULT_LIMIT,
-      });
-      // check count only if fetching for the first time and offset is not yet defined
-      if (offset === undefined) {
-        getStatusCount();
-      }
-      if (response.results) {
-        setLogItems([...logItems, ...response.results]);
-      }
-      setNextIndex(response.nextIndex);
-    } catch (error) {
-      logger.error(`[transparency-log.tsx]: fetchModerationLog err, ${JSON.stringify(error)}`);
-    } finally {
-      setRequesting(false);
+  const handleLoadMore = React.useCallback(() => {
+    if (!logItemsQuery.isLoading && logItemsQuery.hasNextPage) {
+      logItemsQuery.fetchNextPage();
     }
-  };
+  }, [logItemsQuery]);
+
+  const loadmoreRef = React.createRef<HTMLDivElement>();
+
+  useIntersectionObserver({
+    target: loadmoreRef,
+    onIntersect: handleLoadMore,
+    threshold: 0,
+  });
 
   const onTabClick = (value: string) => {
     setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
@@ -109,20 +79,23 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const buttonValues = !isMobile
-    ? ['All', 'Kept', 'Delisted']
-    : ['All', 'Kept', 'Delisted', 'Stats'];
-  const buttonLabels = !isMobile
-    ? [t('All'), t('Kept'), t('Delisted')]
-    : [t('All'), t('Kept'), t('Delisted'), t('Stats')];
+    ? [ButtonValues.ALL, ButtonValues.KEPT, ButtonValues.DELISTED]
+    : [ButtonValues.ALL, ButtonValues.KEPT, ButtonValues.DELISTED, ButtonValues.STATS];
+
+  const buttonLabels = buttonValues.map(value => t(value));
 
   return (
     <Box>
       <SwitchCard
         count={
-          activeButton === 'All' ? count.kept + count.delisted : count[activeButton.toLowerCase()]
+          activeButton === ButtonValues.ALL
+            ? count.kept + count.delisted
+            : count[activeButton.toLowerCase()]
         }
         activeButton={activeButton}
-        countLabel={activeButton === 'All' ? t('Moderated items') : t(`${activeButton} items`)}
+        countLabel={
+          activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
+        }
         buttonLabels={buttonLabels}
         buttonValues={buttonValues}
         onTabClick={onTabClick}
@@ -137,56 +110,65 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           height={isMobile ? '100vh' : '80vh'}
           style={{ overflowY: 'scroll' }}
         >
-          {!requesting && logItems.length < 1 && (
+          {!logItemsQuery.isLoading && !logItemPages.length && (
             <Text>{t('No moderated items found. Please check again later.')}</Text>
           )}
-          {logItems.length > 0 &&
-            (activeButton === 'Stats' ? (
+          {!!logItemPages.length &&
+            (activeButton === ButtonValues.STATS ? (
               <Banner count={count} />
             ) : (
-              logItems
-                .filter(el =>
-                  activeButton === 'Kept'
-                    ? !el.delisted
-                    : activeButton === 'Delisted'
-                    ? el.delisted
-                    : el,
-                )
-                .map((el, idx) => (
-                  <TransparencyLogMiniCard
-                    key={idx}
-                    locale="en"
-                    title={t(
-                      `${el.contentType.charAt(0).toUpperCase()}${el.contentType.substring(1)} ${
-                        el.delisted ? 'Delisted' : 'Kept'
-                      }`,
-                    )}
-                    content={t(`${el.explanation}`)}
-                    isSelected={el.contentID === selected?.contentID}
-                    isDelisted={el.delisted}
-                    moderatedTimestamp={el.moderatedDate.toString()}
-                    moderatorAvatarUrl={`${ipfsGateway}/${el.moderator.avatar}`}
-                    moderatorEthAddress={el.moderator.ethAddress}
-                    onClickAvatar={handleClickAvatar}
-                    onClickCard={handleClickCard(el)}
-                  />
-                ))
+              // map through pages, for each page, filter results according to activeButton, then map through to render the mini card
+              logItemPages.map((page, index) => (
+                <Box key={index} flex={false}>
+                  {page.results
+                    .filter((el: { delisted: boolean }) =>
+                      activeButton === ButtonValues.KEPT
+                        ? !el.delisted
+                        : activeButton === ButtonValues.DELISTED
+                        ? el.delisted
+                        : el,
+                    )
+                    .map((el: ILogItem, index: number) => (
+                      <TransparencyLogMiniCard
+                        key={index}
+                        locale="en"
+                        title={t(
+                          `${el.contentType.charAt(0).toUpperCase()}${el.contentType.substring(
+                            1,
+                          )} ${el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT}`,
+                        )}
+                        content={t(`${el.explanation}`)}
+                        isSelected={el.contentID === selected?.contentID}
+                        isDelisted={el.delisted}
+                        moderatedTimestamp={el.moderatedDate.toString()}
+                        moderatorAvatarUrl={
+                          el.moderator.avatar
+                            ? `${ipfsGateway}/${el.moderator.avatar}`
+                            : el.moderator.avatar
+                        }
+                        moderatorEthAddress={el.moderator.ethAddress}
+                        onClickAvatar={handleClickAvatar}
+                        onClickCard={handleClickCard(el)}
+                      />
+                    ))}
+                </Box>
+              ))
             ))}
           {/* fetch indicator for initial page load */}
-          {requesting && logItems.length < 1 && (
+          {logItemsQuery.isLoading && logItemPages.length < 1 && (
             <Box pad="large">
               <Spinner />
             </Box>
           )}
           {/* fetch indicator for load more on scroll */}
-          {requesting && logItems.length > 0 && (
+          {logItemsQuery.isLoading && logItemPages.length > 0 && (
             <Box pad="large" align="center">
               <Icon type="loading" accentColor={true} clickable={false} />
               <Text color="accentText">{t('Loading more ...')}</Text>
             </Box>
           )}
           {/* triggers intersection observer */}
-          <Box pad="xxsmall" ref={elementRef} />
+          <Box pad="xxsmall" ref={loadmoreRef} />
         </Box>
         {isMobile && selected && (
           <Box width="100%" style={{ position: 'absolute', right: 0 }}>

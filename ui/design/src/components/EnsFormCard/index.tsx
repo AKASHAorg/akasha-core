@@ -3,7 +3,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Button from '../Button';
 import Icon from '../Icon';
-import { StyledLayer } from '../ListModal/styled-modal';
 import Spinner from '../Spinner';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledText } from '../BoxFormCard/styled-form-card';

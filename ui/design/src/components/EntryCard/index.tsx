@@ -67,6 +67,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     removeEntryLabel,
     isRemoved,
     onEntryRemove,
+    removedByMeLabel,
+    removedByAuthorLabel,
   } = props;
 
   return (
@@ -125,6 +127,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         removeEntryLabel={removeEntryLabel}
         onEntryRemove={onEntryRemove}
         isRemoved={isRemoved}
+        removedByMeLabel={removedByMeLabel}
+        removedByAuthorLabel={removedByAuthorLabel}
         headerMenuExt={props.headerMenuExt}
       />
     </MainAreaCardBox>

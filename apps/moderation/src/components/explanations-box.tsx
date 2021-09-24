@@ -1,8 +1,8 @@
 import React from 'react';
+
 import DS from '@akashaproject/design-system';
 import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
-
-import { moderationRequest } from '@akashaproject/ui-awf-hooks';
+import { useGetFlags } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
 
 import ExplanationsBoxEntry, {
   IExplanationsBoxEntryProps,
@@ -19,30 +19,13 @@ export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 
 const ExplanationsBox: React.FC<IExplanationsBoxProps> = props => {
   const { entryId, reportedByLabel, forLabel, logger } = props;
 
-  const [requesting, setRequesting] = React.useState<boolean>(false);
-  const [flagEntries, setFlagEntries] = React.useState<IFlagEntry[]>([]);
-
-  React.useEffect(() => {
-    fetchContentFlags();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchContentFlags = async () => {
-    setRequesting(true);
-    try {
-      const response = await moderationRequest.getFlags(entryId);
-      setFlagEntries(response);
-      setRequesting(false);
-    } catch (error) {
-      setRequesting(false);
-      logger.error(`[explanations-box.tsx]: fetchContentFlags err, ${JSON.stringify(error)}`);
-    }
-  };
+  const getFlagsQuery = useGetFlags(entryId);
+  const flagEntries = getFlagsQuery.data;
 
   return (
     <Box width="100%">
-      {requesting && <Text>Loading ...</Text>}
-      {!requesting && (
+      {getFlagsQuery.isLoading && <Text>Loading ...</Text>}
+      {getFlagsQuery.isSuccess && (
         <Box>
           {flagEntries.map((flagEntry: IFlagEntry, id: number) => (
             <ExplanationsBoxEntry
