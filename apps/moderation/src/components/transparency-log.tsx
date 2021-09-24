@@ -79,11 +79,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const buttonValues = !isMobile
-    ? ['All', 'Kept', 'Delisted']
-    : ['All', 'Kept', 'Delisted', 'Stats'];
-  const buttonLabels = !isMobile
-    ? [t('All'), t('Kept'), t('Delisted')]
-    : [t('All'), t('Kept'), t('Delisted'), t('Stats')];
+    ? [ButtonValues.ALL, ButtonValues.KEPT, ButtonValues.DELISTED]
+    : [ButtonValues.ALL, ButtonValues.KEPT, ButtonValues.DELISTED, ButtonValues.STATS];
+
+  const buttonLabels = buttonValues.map(value => t(value));
 
   return (
     <Box>
@@ -115,7 +114,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
             <Text>{t('No moderated items found. Please check again later.')}</Text>
           )}
           {!!logItemPages.length &&
-            (activeButton === 'Stats' ? (
+            (activeButton === ButtonValues.STATS ? (
               <Banner count={count} />
             ) : (
               // map through pages, for each page, filter results according to activeButton, then map through to render the mini card
@@ -123,9 +122,9 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                 <Box key={index} flex={false}>
                   {page.results
                     .filter((el: { delisted: boolean }) =>
-                      activeButton === 'Kept'
+                      activeButton === ButtonValues.KEPT
                         ? !el.delisted
-                        : activeButton === 'Delisted'
+                        : activeButton === ButtonValues.DELISTED
                         ? el.delisted
                         : el,
                     )
