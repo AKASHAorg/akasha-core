@@ -7,13 +7,14 @@ import {
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useErrors, moderationRequest } from '@akashaproject/ui-awf-hooks';
+import { useErrors } from '@akashaproject/ui-awf-hooks';
 import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
 import { useGetLogin, useLogout } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
@@ -31,14 +32,22 @@ const TopbarComponent = (props: RootComponentProps) => {
   });
   const logoutMutation = useLogout();
 
-  const [isModerator, setIsModerator] = React.useState(false);
-
   const profileDataReq = useGetProfile(loginQuery.data.pubKey);
   const loggedProfileData = profileDataReq.data;
 
   const checkNotifsReq = useCheckNewNotifications(
     loginQuery.data.isReady && loginQuery.data.ethAddress,
   );
+
+  const checkModeratorQuery = useCheckModerator(loginQuery.data?.pubKey);
+
+  const checkModeratorResp = checkModeratorQuery.data;
+
+  const isModerator = React.useMemo(() => {
+    if (checkModeratorResp === 200) {
+      return true;
+    } else return false;
+  }, [checkModeratorResp]);
 
   // React.useEffect(() => {
   //   if (loginState.ready?.ethAddress && loginState.ethAddress) {
@@ -69,6 +78,7 @@ const TopbarComponent = (props: RootComponentProps) => {
       },
     });
     return () => sub.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // *how to obtain different topbar menu sections
@@ -103,24 +113,9 @@ const TopbarComponent = (props: RootComponentProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
-  const getModeratorStatus = React.useCallback(
-    async (loggedUser: string) => {
-      try {
-        const response = await moderationRequest.checkModerator(loggedUser);
-        if (response === 200) {
-          setIsModerator(true);
-        }
-      } catch (error) {
-        logger.error(`[topbar-component.tsx]: getModeratorStatus err ${error.message || ''}`);
-      }
-    },
-    [logger],
-  );
-
   React.useEffect(() => {
     const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
     if (loginQuery.data?.ethAddress && !isLoadingProfile) {
-      getModeratorStatus(loginQuery.data?.pubKey);
       if (loggedProfileData && !loggedProfileData.userName) {
         return props.navigateToModal({
           name: 'update-profile',
@@ -132,7 +127,6 @@ const TopbarComponent = (props: RootComponentProps) => {
     loginQuery.data?.ethAddress,
     loggedProfileData,
     loginQuery.data?.pubKey,
-    getModeratorStatus,
     props,
   ]);
 
