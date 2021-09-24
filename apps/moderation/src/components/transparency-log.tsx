@@ -17,12 +17,19 @@ export interface ITransparencyLogProps {
   navigateToUrl: (url: string) => void;
 }
 
+export enum ButtonValues {
+  ALL = 'All',
+  KEPT = 'Kept',
+  DELISTED = 'Delisted',
+  STATS = 'Stats',
+}
+
 const DEFAULT_LIMIT = 10;
 
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const { user, navigateToUrl, isMobile } = props;
 
-  const [activeButton, setActiveButton] = React.useState<string>('All');
+  const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
 
   const { t } = useTranslation();
@@ -82,10 +89,14 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     <Box>
       <SwitchCard
         count={
-          activeButton === 'All' ? count.kept + count.delisted : count[activeButton.toLowerCase()]
+          activeButton === ButtonValues.ALL
+            ? count.kept + count.delisted
+            : count[activeButton.toLowerCase()]
         }
         activeButton={activeButton}
-        countLabel={activeButton === 'All' ? t('Moderated items') : t(`${activeButton} items`)}
+        countLabel={
+          activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
+        }
         buttonLabels={buttonLabels}
         buttonValues={buttonValues}
         onTabClick={onTabClick}
