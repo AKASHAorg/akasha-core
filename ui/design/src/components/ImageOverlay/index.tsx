@@ -85,10 +85,10 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
         >
           <StyledBox direction="row" gap="xsmall" pad="small">
             <StyledCloseDiv onClick={handleZoomIn}>
-              <Icon type="arrowUp" clickable={true} />
+              <Icon type="zoomIn" clickable={true} />
             </StyledCloseDiv>
             <StyledCloseDiv onClick={handleZoomOut}>
-              <Icon type="arrowDown" clickable={true} />
+              <Icon type="zoomOut" clickable={true} />
             </StyledCloseDiv>
             <StyledCloseDiv onClick={closeModal}>
               <Icon type="close" clickable={true} />

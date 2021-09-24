@@ -101,7 +101,9 @@ export type IconType =
   | 'upload'
   | 'video'
   | 'wallet'
-  | 'walletconnect';
+  | 'walletconnect'
+  | 'zoomIn'
+  | 'zoomOut';
 
 export const iconTypes: IconType[] = [
   'app3Box',
@@ -200,6 +202,8 @@ export const iconTypes: IconType[] = [
   'video',
   'wallet',
   'walletconnect',
+  'zoomIn',
+  'zoomOut',
 ];
 
 export interface IconProps extends CommonInterface<any> {
