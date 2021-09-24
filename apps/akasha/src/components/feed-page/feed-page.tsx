@@ -51,7 +51,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [errorState, logger]);
 
-  //@Todo: replace this with fetchNextPage() from useInfinitePosts object
   const handleLoadMore = React.useCallback(() => {
     if (!postsReq.isLoading && postsReq.hasNextPage && loginState?.fromCache) {
       postsReq.fetchNextPage();

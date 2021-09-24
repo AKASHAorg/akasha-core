@@ -22,10 +22,10 @@ const Banner: React.FC<IBanner> = props => {
       content={t(
         'Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy.',
       )}
-      keptCount={count.kept}
+      keptCount={count?.kept}
       keptCountLabel={t('kept')}
       totalCountLabel={t('total')}
-      delistedCount={count.delisted}
+      delistedCount={count?.delisted}
       delistedCountLabel={t('delisted')}
       footerLabel={t('Visit our Code of Conduct to learn more about our moderation criteria')}
       footerLinkLabel={t('Code of Conduct')}
