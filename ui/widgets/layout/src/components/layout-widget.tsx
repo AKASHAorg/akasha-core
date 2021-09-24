@@ -10,7 +10,7 @@ import {
 } from './styled-containers';
 import { ModalSlot, PluginSlot, TopbarSlot, SidebarSlot, WidgetSlot } from './styled-slots';
 import CookieWidget from './cookie-widget';
-import { EventTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from '../i18n';
 import { I18nextProvider } from 'react-i18next';
@@ -21,7 +21,7 @@ const {
   // darkTheme,
   ThemeSelector,
   responsiveBreakpoints,
-  ViewportSizeProvider,
+  // ViewportSizeProvider,
   // useViewportSize,
 } = DS;
 
@@ -83,6 +83,9 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
         if (eventInfo.event === EventTypes.ModalMountRequest && eventInfo.data) {
           if (activeModal && activeModal.name !== eventInfo.data.name) {
             handleModalNodeUnmount(activeModal.name);
+          }
+          if (typeof eventInfo.data.entryType === 'string') {
+            eventInfo.data.entryType = parseInt(eventInfo.data.entryType, 10) || ItemTypes.ENTRY;
           }
           setActiveModal(eventInfo.data);
         }
