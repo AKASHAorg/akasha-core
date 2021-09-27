@@ -1,4 +1,5 @@
 import React from 'react';
+import SingleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
@@ -11,7 +12,7 @@ export interface IEntryDataCardProps {
   entryData: any;
   locale: ILocale;
   itemType: string;
-  singleSpa: any;
+  singleSpa: typeof SingleSpa;
 }
 
 const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
@@ -28,6 +29,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
           {/* for other contents (reply | comment, post) */}
           {itemType !== 'account' && entryData && (
             <EntryCard
+              showMore={false}
               entryData={entryData}
               repostsLabel={t('Reposts')}
               repliesLabel={t('Replies')}
@@ -42,6 +44,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
           )}
           {itemType === 'account' && (
             <ProfileCard
+              showMore={false}
               flaggable={true}
               canUserEdit={false}
               profileData={entryData}
@@ -52,7 +55,6 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               followingLabel={t('Following')}
               descriptionLabel={t('About me')}
               shareProfileLabel={t('Share Profile')}
-              flagAsLabel={t('Report Profile')}
               onClickFollowers={() => null}
               onClickPosts={() => null}
               onClickFollowing={() => null}

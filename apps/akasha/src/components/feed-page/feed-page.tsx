@@ -144,6 +144,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           locale={locale || 'en'}
           bookmarkLabel={t('Save')}
           bookmarkedLabel={t('Saved')}
+          showMore={true}
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[POST]}
           contentClickable={false}

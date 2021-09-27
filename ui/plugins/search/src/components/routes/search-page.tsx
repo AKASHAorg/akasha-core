@@ -69,7 +69,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchState = searchReq.data;
 
   const followEthAddressArr = searchState?.profiles?.slice(0, 4).map(profile => profile.ethAddress);
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.ethAddress, followEthAddressArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(
+    loginState?.ethAddress,
+    followEthAddressArr,
+  );
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
@@ -298,6 +301,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     style={{ height: 'auto' }}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
+                    showMore={true}
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={'/social-app/post'}
                     onRepost={handleRepost}
@@ -360,6 +364,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     style={{ height: 'auto' }}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
+                    showMore={true}
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={'/social-app/post'}
                     onRepost={() => null}

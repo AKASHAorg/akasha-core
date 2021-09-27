@@ -41,6 +41,7 @@ describe('<EntryCard /> Component', () => {
             locale={'en'}
             repostLabel={'Repost'}
             sharePostLabel={'Share Post'}
+            showMore={true}
             profileAnchorLink={'/profile'}
             repliesAnchorLink={'/social-app/post'}
             sharePostUrl={'https://ethereum.world'}

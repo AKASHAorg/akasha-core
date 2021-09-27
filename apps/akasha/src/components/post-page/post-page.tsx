@@ -322,6 +322,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   locale={locale}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
+                  showMore={true}
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={routes[POST]}
                   onRepost={handleRepost}
@@ -403,6 +404,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     locale={'en'}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
+                    showMore={true}
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={routes[POST]}
                     handleFollowAuthor={handleFollow}
