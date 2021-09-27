@@ -3,6 +3,8 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
+import { IEntryData, ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import { useTranslation } from 'react-i18next';
 import {
   useGetBookmarks,
@@ -33,6 +35,14 @@ const {
   TagSearchCard,
   SwitchCard,
 } = DS;
+
+export enum ButtonValues {
+  ALL = 'All',
+  PEOPLE = 'People',
+  TOPICS = 'Topics',
+  POSTS = 'Posts',
+  REPLIES = 'Replies',
+}
 
 interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
@@ -69,7 +79,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchState = searchReq.data;
 
   const followEthAddressArr = searchState?.profiles?.slice(0, 4).map(profile => profile.ethAddress);
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.ethAddress, followEthAddressArr);
+  const isFollowingMultipleReq = useIsFollowingMultiple(
+    loginState?.ethAddress,
+    followEthAddressArr,
+  );
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
@@ -164,9 +177,16 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     searchState?.comments.length === 0 &&
     searchState?.tags.length === 0;
 
-  const [activeButton, setActiveButton] = React.useState<string>('All');
-  const buttonValues = ['All', 'People', 'Topics', 'Posts', 'Replies'];
-  const buttonLabels = [t('All'), t('People'), t('Topics'), t('Posts'), t('Replies')];
+  const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
+
+  const buttonValues = [
+    ButtonValues.ALL,
+    ButtonValues.PEOPLE,
+    ButtonValues.TOPICS,
+    ButtonValues.POSTS,
+    ButtonValues.REPLIES,
+  ];
+  const buttonLabels = buttonValues.map(value => t(value));
 
   const onTabClick = (value: string) => {
     setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
@@ -219,8 +239,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
       {!searchReq.isFetching && !emptySearchState && (
         <Box>
-          {(activeButton === buttonValues[0] || activeButton === buttonValues[1]) &&
-            searchState?.profiles.slice(0, 4).map((profileData: any, index: number) => (
+          {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.PEOPLE) &&
+            searchState?.profiles.slice(0, 4).map((profileData: IProfileData, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 <ProfileSearchCard
                   handleFollow={() => handleFollowProfile(profileData.ethAddress)}
@@ -241,8 +261,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               </Box>
             ))}
 
-          {(activeButton === buttonValues[0] || activeButton === buttonValues[2]) &&
-            searchState?.tags.map((tag: any, index: number) => (
+          {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.TOPICS) &&
+            searchState?.tags.map((tag: ITag, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 <TagSearchCard
                   tag={tag}
@@ -256,8 +276,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 />
               </Box>
             ))}
-          {(activeButton === buttonValues[0] || activeButton === buttonValues[3]) &&
-            searchState?.entries.slice(0, 4).map((entryData: any, index: number) => (
+          {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.POSTS) &&
+            searchState?.entries.slice(0, 4).map((entryData: IEntryData, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 {entryData.moderated && entryData.delisted && (
                   <EntryCardHidden
@@ -276,9 +296,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 )}
                 {!reportedItems.includes(entryData.entryId) && (
                   <EntryCard
-                    isRemoved={
-                      entryData.content.length === 1 && entryData.content[0].property === 'removed'
-                    }
+                    isRemoved={entryData.isRemoved}
                     isBookmarked={bookmarks?.findIndex(bm => bm.entryId === entryData.entryId) >= 0}
                     entryData={entryData}
                     sharePostLabel={t('Share Post')}
@@ -304,7 +322,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
                     handleFollowAuthor={() => handleFollowProfile(entryData.author.ethAddress)}
                     handleUnfollowAuthor={() => handleUnfollowProfile(entryData.author.ethAddress)}
-                    isFollowingAuthor={followedProfiles.includes(entryData.author)}
+                    isFollowingAuthor={followedProfiles.includes(entryData.author.pubKey)}
                     onContentClick={() => handlePostClick(entryData.entryId)}
                     onMentionClick={handleProfileClick}
                     onTagClick={handleTagClick}
@@ -315,8 +333,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 )}
               </Box>
             ))}
-          {(activeButton === buttonValues[0] || activeButton === buttonValues[4]) &&
-            searchState?.comments.slice(0, 4).map((commentData: any, index: number) => (
+          {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
+            searchState?.comments.slice(0, 4).map((commentData: IEntryData, index: number) => (
               <Box key={index} pad={{ bottom: 'medium' }}>
                 {commentData.moderated && commentData.delisted && (
                   <EntryCardHidden
@@ -335,10 +353,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 )}
                 {!reportedItems.includes(commentData.entryId) && (
                   <EntryCard
-                    isRemoved={
-                      commentData.content.length === 1 &&
-                      commentData.content[0].property === 'removed'
-                    }
+                    isRemoved={commentData.isRemoved}
                     isBookmarked={
                       bookmarks?.findIndex(bm => bm.entryId === commentData.entryId) >= 0
                     }
@@ -368,7 +383,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     handleUnfollowAuthor={() =>
                       handleUnfollowProfile(commentData.author.ethAddress)
                     }
-                    isFollowingAuthor={followedProfiles.includes(commentData.author)}
+                    isFollowingAuthor={followedProfiles.includes(commentData.author.pubKey)}
                     onContentClick={() => handlePostClick(commentData.postId)}
                     onMentionClick={handleProfileClick}
                     onTagClick={handleTagClick}

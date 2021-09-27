@@ -7,11 +7,13 @@ import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import DuplexButton from '../DuplexButton';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
+import { ITag } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface ITrendingWidgetCardProps {
   // data
   tags: ITag[];
-  profiles: IProfile[];
+  profiles: IProfileData[];
   followedProfiles?: string[];
   subscribedTags?: string[];
   loggedEthAddress?: string | null;
@@ -38,23 +40,6 @@ export interface ITrendingWidgetCardProps {
   handleUnsubscribeTag: (tagName: string) => void;
   // css
   className?: string;
-}
-
-export interface ITag {
-  name: string;
-  totalPosts: number;
-}
-
-export interface IProfile {
-  ethAddress: string;
-  pubKey: string;
-  avatar?: string;
-  coverImage?: string;
-  description?: string;
-  userName?: string;
-  name?: string;
-  totalFollowers?: number | string;
-  totalFollowing?: number | string;
 }
 
 const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {

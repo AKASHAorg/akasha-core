@@ -95,6 +95,8 @@ import upload from './upload';
 import video from './video';
 import wallet from './wallet';
 import walletconnect from './walletconnect';
+import zoomIn from './zoom-in';
+import zoomOut from './zoom-out';
 
 export {
   activity,
@@ -194,4 +196,6 @@ export {
   video,
   wallet,
   walletconnect,
+  zoomIn,
+  zoomOut,
 };

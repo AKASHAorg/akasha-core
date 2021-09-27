@@ -4,8 +4,9 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import IconLink from '../IconLink';
 import TextIcon from '../TextIcon';
 import SearchInput from '../SearchInput';
-import TagCard, { ITagData } from '../TagCard';
-import { IProfileData } from '../ProfileCard/profile-widget-card';
+import TagCard from '../TagCard';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ITagData } from '../TagCard';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
 import Icon from '../Icon';
 
@@ -245,7 +246,7 @@ const CustomizeFeedCard: React.FC<ICustomizeFeedCardProps> = props => {
             {profiles
               .filter(
                 profile =>
-                  profile.ensName?.toLowerCase().includes(inputValue.toLowerCase()) ||
+                  profile.name?.toLowerCase().includes(inputValue.toLowerCase()) ||
                   profile.userName?.toLowerCase().includes(inputValue.toLowerCase()) ||
                   profile.description?.toLowerCase().includes(inputValue.toLowerCase()),
               )
