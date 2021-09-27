@@ -201,7 +201,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         searchBarLabel={t('Search profiles or topics')}
         legalLabel={t('Legal')}
         isModerator={isModerator}
-        dashboardLabel={t('Moderator dashboard')}
+        dashboardLabel={t('Moderator Dashboard')}
         dashboardInfoLabel={t('Help moderate items!')}
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}
