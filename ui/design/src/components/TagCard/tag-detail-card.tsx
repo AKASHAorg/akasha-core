@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 
-import { ITag } from '../TrendingWidgetCard';
+import { ITag } from '@akashaproject/ui-awf-typings/lib/entry';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import IconButton from '../IconButton';
 import DuplexButton from '../DuplexButton';

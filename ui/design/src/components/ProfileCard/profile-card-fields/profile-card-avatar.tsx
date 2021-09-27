@@ -5,6 +5,7 @@ import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
+import ImageOverlay from '../../ImageOverlay';
 
 export interface IProfileCardAvatarProps {
   editable: boolean;
@@ -31,10 +32,26 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
 
   const editAvatarRef: React.RefObject<HTMLDivElement> = React.useRef(null);
 
+  const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
+
+  const handleClickImage = () => {
+    setImageOverlayOpen(true);
+  };
+
+  const closeImageOverlay = () => {
+    setImageOverlayOpen(false);
+  };
+
   return (
     <>
       <AvatarDiv>
-        <Avatar size="xxl" border="lg" ethAddress={ethAddress} src={avatar} />
+        <Avatar
+          size="xxl"
+          border="lg"
+          ethAddress={ethAddress}
+          src={avatar}
+          onClick={handleClickImage}
+        />
         {editable &&
           profileProvidersData &&
           profileProvidersData.avatarProviders &&
@@ -50,6 +67,9 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
             </StyledAvatarEditDiv>
           )}
       </AvatarDiv>
+      {imageOverlayOpen && avatar && (
+        <ImageOverlay imgUrl={avatar} closeModal={closeImageOverlay} />
+      )}
       {editAvatarRef.current &&
         avatarPopoverOpen &&
         profileProvidersData &&

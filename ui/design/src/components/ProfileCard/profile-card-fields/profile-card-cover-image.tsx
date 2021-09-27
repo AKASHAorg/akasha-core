@@ -7,6 +7,7 @@ import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
+import ImageOverlay from '../../ImageOverlay';
 
 export interface IProfileCardCoverImageProps {
   shareProfileLabel: string;
@@ -38,9 +39,19 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
 
   const editCoverImageRef: React.RefObject<HTMLDivElement> = React.useRef(null);
 
+  const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
+
+  const handleClickImage = () => {
+    setImageOverlayOpen(true);
+  };
+
+  const closeImageOverlay = () => {
+    setImageOverlayOpen(false);
+  };
+
   return (
     <Box
-      height="9em"
+      height="9rem"
       background={{
         color: '#DDD',
         image: `url(${coverImage})`,
@@ -49,8 +60,12 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
       }}
       pad="none"
       round={{ corner: 'top', size: 'xsmall' }}
+      onClick={handleClickImage}
       data-testid="profile-card-cover-image"
     >
+      {imageOverlayOpen && coverImage && (
+        <ImageOverlay imgUrl={coverImage} closeModal={closeImageOverlay} />
+      )}
       {/* disable sharing for v.01 */}
       {false && !editable && (
         <Box align="end" pad="none">
