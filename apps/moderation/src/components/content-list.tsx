@@ -325,11 +325,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
               </Box>
             )}
             {/* triggers intersection observer */}
-            <Box
-              pad="xxsmall"
-              ref={loadmoreDelistedRef}
-              border={{ color: 'red', size: '0.1rem' }}
-            />
+            <Box pad="xxsmall" ref={loadmoreDelistedRef} />
           </>
         ) : !keptItemsQuery.isLoading && !isDelisted && keptItemPages.length ? (
           <>
@@ -386,7 +382,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
               </Box>
             )}
             {/* triggers intersection observer */}
-            <Box pad="xxsmall" ref={loadmoreKeptRef} border={{ color: 'red', size: '0.1rem' }} />
+            <Box pad="xxsmall" ref={loadmoreKeptRef} />
           </>
         ) : (
           <NoItemsFound activeTab={'moderated'} />

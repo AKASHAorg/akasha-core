@@ -140,16 +140,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     /* todo */
   };
 
-  // if (itemData.reported) {
-  //   return (
-  //     <EntryCardHidden
-  //       awaitingModerationLabel={awaitingModerationLabel}
-  //       moderatedContentLabel={moderatedContentLabel}
-  //       ctaLabel={ctaLabel}
-  //       handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
-  //     />
-  //   );
-  // }
   return (
     <>
       {(postReq.isError || commentReq.isError) && (

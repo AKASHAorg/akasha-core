@@ -294,7 +294,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          {!entryData.moderated && !isReported && (
+          {!(entryData.moderated && entryData.delisted) && !isReported && (
             <>
               <Box
                 pad={{ bottom: 'small' }}

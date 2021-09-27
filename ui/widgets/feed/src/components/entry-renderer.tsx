@@ -296,7 +296,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               />
             </Box>
           )}
-          {!isReported && (
+          {!(itemData.moderated && itemData.delisted) && !isReported && (
             <EntryCard
               className={props.className}
               isRemoved={itemData.isRemoved}
