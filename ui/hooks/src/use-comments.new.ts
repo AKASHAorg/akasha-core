@@ -21,7 +21,6 @@ const getComments = async (
   const sdk = getSDK();
 
   try {
-    const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
     const res = await lastValueFrom(
       sdk.api.comments.getComments({
         limit: limit,
