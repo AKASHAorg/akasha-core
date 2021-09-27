@@ -84,8 +84,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     if (showAnyway) {
       return false;
     }
-    return postReq.status === 'success' && entryData.reported;
-  }, [entryData, showAnyway, postReq.status]);
+    return postReq.isSuccess && entryData.reported;
+  }, [entryData, showAnyway, postReq.isSuccess]);
 
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
@@ -268,8 +268,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Post | Ethereum World</title>
       </Helmet>
-      {postReq.status === 'loading' && <EntryCardLoading />}
-      {postReq.status === 'error' && (
+      {postReq.isLoading && <EntryCardLoading />}
+      {postReq.isError && (
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading the entry')}
@@ -277,7 +277,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
           devDetails={postReq.error}
         />
       )}
-      {postReq.status === 'success' && (
+      {postReq.isSuccess && (
         <>
           {entryData.moderated && entryData.delisted && (
             <EntryCardHidden

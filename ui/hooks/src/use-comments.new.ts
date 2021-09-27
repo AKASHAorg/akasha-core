@@ -21,6 +21,7 @@ const getComments = async (
   const sdk = getSDK();
 
   try {
+    const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
     const res = await lastValueFrom(
       sdk.api.comments.getComments({
         limit: limit,
@@ -64,7 +65,15 @@ const getComment = async (commentID): Promise<CommentResponse> => {
       contentIds: [commentID],
     });
     const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
-    return { ...res.data.getComment, ...modStatus[0] };
+    const modStatusAuthor = await moderationRequest.checkStatus(true, {
+      user: user?.data?.pubKey || '',
+      contentIds: [res.data?.getComment?.author?.pubKey],
+    });
+    return {
+      ...res.data.getComment,
+      ...modStatus[0],
+      author: { ...res.data.getComment.author, ...modStatusAuthor[0] },
+    };
   } catch (error) {
     logError('useComments.getComments', error);
   }
