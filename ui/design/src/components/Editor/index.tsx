@@ -115,10 +115,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
   const [linkPreviewState, setLinkPreviewState] = useState(null);
+  const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
 
   const handleGetLinkPreview = async (url: string) => {
+    setLinkPreviewUploading(true);
     const linkPreview = await getLinkPreview(url);
     setLinkPreviewState(linkPreview);
+    setLinkPreviewUploading(false);
   };
 
   const handleDeletePreview = () => {
@@ -531,8 +534,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 />
               )}
             </Slate>
-            {linkPreviewState && (
+            {(linkPreviewState || linkPreviewUploading) && (
               <LinkPreview
+                uploading={linkPreviewUploading}
                 linkPreviewData={linkPreviewState}
                 handleDeletePreview={handleDeletePreview}
               />

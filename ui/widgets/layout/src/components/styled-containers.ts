@@ -36,6 +36,7 @@ export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseC
 
 const TOPBAR_HEIGHT = 48;
 
+//@notice dont add add max-height calc here, it will break the scroll restoration
 export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   position: sticky;
   top: ${TOPBAR_HEIGHT}px;

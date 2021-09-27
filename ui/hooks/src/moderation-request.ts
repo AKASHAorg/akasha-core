@@ -18,6 +18,7 @@ export const KEPT_ITEMS_KEY = 'KEPT_ITEMS';
 export const PENDING_ITEMS_KEY = 'PENDING_ITEMS';
 export const DELISTED_ITEMS_KEY = 'DELISTED_ITEMS';
 export const CHECK_MODERATOR_KEY = 'CHECK_MODERATOR';
+export const MODERATION_STATUS_KEY = 'MODERATION_STATUS_KEY';
 
 export type UseModerationParam = {
   dataToSign: { [key: string]: string };
@@ -36,6 +37,12 @@ export const fetchRequest = async (props: {
 }) => {
   const { method, url, data = {}, statusOnly = false, timeout = 12000 } = props;
   const rheaders = new Headers();
+  const sdk = getSDK();
+  const key = sdk.services.stash.computeKey({ method, url, data, statusOnly });
+  const uiCache = sdk.services.stash.getUiStash();
+  if (uiCache.has(key)) {
+    return Promise.resolve(uiCache.get(key));
+  }
   rheaders.append('Content-Type', 'application/json');
 
   const controller = new AbortController();
@@ -51,10 +58,14 @@ export const fetchRequest = async (props: {
   clearTimeout(timer);
 
   if (method === 'HEAD' || (method === 'POST' && statusOnly)) {
+    uiCache.set(key, response.status);
     return response.status;
   }
 
-  return response.json();
+  return response.json().then(serializedResponse => {
+    uiCache.set(key, serializedResponse);
+    return serializedResponse;
+  });
 };
 
 const handleModeration = async ({ dataToSign, contentId, contentType, url, modalName }) => {
@@ -433,6 +444,23 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
       getNextPageParam: lastPage => lastPage.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
+    },
+  );
+}
+
+export function useModerationStatus(resourceId: string, data: Record<string, unknown>) {
+  const sdk = getSDK();
+  return useQuery(
+    [MODERATION_STATUS_KEY, resourceId, sdk.services.stash.computeKey(data)],
+    () =>
+      fetchRequest({
+        method: 'POST',
+        url: BASE_STATUS_URL,
+        data: data,
+      }),
+    {
+      keepPreviousData: true,
+      enabled: !!resourceId,
     },
   );
 }

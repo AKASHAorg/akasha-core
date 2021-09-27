@@ -34,7 +34,7 @@ export default interface AWF_IAuth {
 
   signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
-    base64Format,
+    base64Format?: boolean,
   ): Observable<{ data: { serializedData: any; signature: Uint8Array | string; pubKey: string } }>;
 
   verifySignature(args: {
@@ -47,9 +47,7 @@ export default interface AWF_IAuth {
     data: Record<string, unknown> | string | Record<string, unknown>[],
   ): Observable<{ signedData: unknown; token: unknown }>;
 
-  decryptMessage(
-    message,
-  ): Observable<{
+  decryptMessage(message): Observable<{
     data: {
       body: Record<string, any>;
       from: string;
@@ -59,9 +57,7 @@ export default interface AWF_IAuth {
     };
   }>;
 
-  getMessages(
-    args: InboxListOptions,
-  ): Observable<{
+  getMessages(args: InboxListOptions): Observable<{
     data: {
       body: Record<string, any>;
       from: string;
