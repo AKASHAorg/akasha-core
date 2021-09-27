@@ -22,6 +22,11 @@ export interface CommentResponse extends Comment_Response {
   isPublishing?: boolean;
 }
 
+export interface ITag {
+  name: string;
+  totalPosts: number;
+}
+
 export interface IEntryData {
   CID?: string;
   linkPreview?: LinkPreview_Response;

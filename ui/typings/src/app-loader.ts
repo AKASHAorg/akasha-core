@@ -30,6 +30,7 @@ export interface ModalNavigationOptions {
   name: string;
   pubKey?: string;
   entryId?: string;
+  entryType?: ItemTypes;
   [key: string]: string | unknown | undefined;
 }
 

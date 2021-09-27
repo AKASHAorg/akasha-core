@@ -27,11 +27,10 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   }, [props.singleSpa]);
 
   const handleDeletePost = React.useCallback(() => {
-    if (activeModal && activeModal.entryType && typeof activeModal.entryType === 'string') {
-      const entryType = parseInt(activeModal.entryType, 10);
-      if (entryType === ItemTypes.COMMENT) {
+    if (activeModal && typeof activeModal.entryType === 'number') {
+      if (activeModal.entryType === ItemTypes.COMMENT) {
         commentDeleteQuery.mutate(activeModal.entryId);
-      } else if (entryType === ItemTypes.ENTRY) {
+      } else if (activeModal.entryType === ItemTypes.ENTRY) {
         postDeleteQuery.mutate(activeModal.entryId);
       } else {
         logger.error('entryType is undefined!');
