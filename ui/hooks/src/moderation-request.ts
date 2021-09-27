@@ -14,9 +14,9 @@ const { BASE_REPORT_URL, BASE_STATUS_URL, BASE_DECISION_URL, BASE_MODERATOR_URL 
 export const COUNT_KEY = 'COUNT';
 export const FLAGS_KEY = 'FLAGS';
 export const LOG_ITEMS_KEY = 'LOG_ITEMS';
-export const KEPT_ITEMS_KEY = 'MODERATED_ITEMS';
+export const KEPT_ITEMS_KEY = 'KEPT_ITEMS';
 export const PENDING_ITEMS_KEY = 'PENDING_ITEMS';
-export const DELISTED_ITEMS_KEY = 'MODERATED_ITEMS';
+export const DELISTED_ITEMS_KEY = 'DELISTED_ITEMS';
 export const CHECK_MODERATOR_KEY = 'CHECK_MODERATOR';
 
 export type UseModerationParam = {

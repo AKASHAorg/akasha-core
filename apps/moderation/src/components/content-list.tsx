@@ -74,7 +74,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const getCountQuery = useGetCount();
-  const count = getCountQuery.data;
+  const count = getCountQuery.data || { delisted: 0, kept: 0, pending: 0 };
 
   const checkModeratorQuery = useCheckModerator(user);
   const checkModeratorResp = checkModeratorQuery.data;
@@ -269,9 +269,8 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
         ) : (
           <NoItemsFound activeTab={'pending'} />
         ))}
-      {!delistedItemsQuery.isLoading &&
-        !isPending &&
-        (isDelisted && delistedItemPages.length ? (
+      {!isPending &&
+        (!delistedItemsQuery.isLoading && isDelisted && delistedItemPages.length ? (
           <>
             {delistedItemPages.map((page, index) => (
               <Box key={index} flex={false}>
@@ -332,7 +331,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
               border={{ color: 'red', size: '0.1rem' }}
             />
           </>
-        ) : !isDelisted && keptItemPages.length ? (
+        ) : !keptItemsQuery.isLoading && !isDelisted && keptItemPages.length ? (
           <>
             {keptItemPages.map((page, index) => (
               <Box key={index} flex={false}>
