@@ -74,7 +74,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const getCountQuery = useGetCount();
-  const count = getCountQuery.data || { delisted: 0, kept: 0, pending: 0 };
+  const count = getCountQuery.data;
 
   const checkModeratorQuery = useCheckModerator(user);
   const checkModeratorResp = checkModeratorQuery.data;

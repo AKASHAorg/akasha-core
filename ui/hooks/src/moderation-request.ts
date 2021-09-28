@@ -169,7 +169,9 @@ const getCount = async () => {
 };
 
 export function useGetCount() {
-  return useQuery([COUNT_KEY], () => getCount(), {});
+  return useQuery([COUNT_KEY], () => getCount(), {
+    initialData: { delisted: 0, kept: 0, pending: 0 },
+  });
 }
 
 const getFlags = async (entryId: string) => {
