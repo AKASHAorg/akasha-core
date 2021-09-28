@@ -24,7 +24,7 @@ class Stash implements IStashService<IQuickLRU> {
    */
   getUiStash() {
     if (!this._uiStash) {
-      this._uiStash = new QuickLRU<never, unknown>({ maxSize: 999, maxAge: 1000 * 60 });
+      this._uiStash = new QuickLRU<never, unknown>({ maxSize: 999, maxAge: 1000 * 60 * 5 });
     }
     return this._uiStash;
   }

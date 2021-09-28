@@ -1,8 +1,10 @@
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import { getMediaUrl } from './utils/media-utils';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { PROFILE_KEY } from './use-profile.new';
 
 export const TRENDING_TAGS_KEY = 'Trending_Tags';
 export const TRENDING_PROFILES_KEY = 'Trending_Profiles';
@@ -24,11 +26,15 @@ export function useTrendingTags() {
   });
 }
 
-const getTrendingProfiles = async () => {
+const getTrendingProfiles = async (queryClient: QueryClient) => {
   const sdk = getSDK();
   try {
     const res = await lastValueFrom(sdk.api.profile.getTrending());
     const profiles = res.data.searchProfiles.map(profile => {
+      const profileCache = queryClient.getQueryData<IProfileData>([PROFILE_KEY, profile?.pubKey]);
+      if (profileCache) {
+        return profileCache;
+      }
       const { avatar, coverImage, ...other } = profile;
       const images: { avatar: string | null; coverImage: string | null } = {
         avatar: null,
@@ -40,8 +46,7 @@ const getTrendingProfiles = async () => {
       if (coverImage) {
         images.coverImage = getMediaUrl(coverImage);
       }
-      const profileData = { ...images, ...other };
-      return profileData;
+      return { ...images, ...other };
     });
     return profiles || [];
   } catch (error) {
@@ -50,7 +55,8 @@ const getTrendingProfiles = async () => {
 };
 
 export function useTrendingProfiles() {
-  return useQuery([TRENDING_PROFILES_KEY], () => getTrendingProfiles(), {
+  const queryClient = useQueryClient();
+  return useQuery([TRENDING_PROFILES_KEY], () => getTrendingProfiles(queryClient), {
     placeholderData: [],
     keepPreviousData: true,
   });

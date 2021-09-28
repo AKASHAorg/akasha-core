@@ -52,13 +52,13 @@ export interface IEditorBox {
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
   mentions?: {
-    name: string;
-    userName: string;
+    name?: string;
+    userName?: string;
     pubKey: string;
-    avatar: string;
+    avatar?: string;
     ethAddress: string;
-    description: string;
-    coverImage: string;
+    description?: string;
+    coverImage?: string;
   }[];
   tags?: { name: string; totalPosts: number }[];
   uploadRequest?: (data: string | File, isUrl?: boolean) => any;
