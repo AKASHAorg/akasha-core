@@ -22,12 +22,12 @@ export type LinkElement = { type: 'link'; url: string; children: EmptyText[] };
 
 export type MentionElement = {
   type: 'mention';
-  name: string;
-  userName: string;
+  name?: string;
+  userName?: string;
   pubKey: string;
-  avatar: string;
+  avatar?: string;
   ethAddress: string;
-  children: EmptyText[];
+  children?: EmptyText[];
 };
 
 export type TagElement = {
