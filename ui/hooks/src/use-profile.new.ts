@@ -16,7 +16,7 @@ import {
 export const FOLLOWERS_KEY = 'FOLLOWERS';
 export const FOLLOWING_KEY = 'FOLLOWING';
 export const PROFILE_KEY = 'PROFILE';
-export const ENTRY_AUTHOR_KEY = 'ENTRY_AUTHOR';
+export const ENTRY_AUTHOR_KEY = 'ENTRY_AUTHOR_KEY';
 export const INTERESTS_KEY = 'INTERESTS';
 export const UPDATE_PROFILE_DATA_KEY = 'UPDATE_PROFILE_DATA';
 export const ADD_PROFILE_PROVIDER_KEY = 'ADD_PROFILE_PROVIDER';
@@ -61,10 +61,17 @@ export function useGetProfile(pubKey: string, loggedUser?: string, enabler = tru
   });
 }
 
-const getEntryAuthorProfileData = async (entryId: string) => {
+const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClient) => {
   const sdk = getSDK();
   try {
     const res = await lastValueFrom(sdk.api.entries.getEntry(entryId));
+    const authorCache = queryClient.getQueryData<IProfileData>([
+      PROFILE_KEY,
+      res?.data?.getPost?.author?.pubKey,
+    ]);
+    if (authorCache) {
+      return authorCache;
+    }
     const { avatar, coverImage, ...other } = res.data.getPost.author;
     const images: { avatar?: string; coverImage?: string } = {};
     if (avatar) {
@@ -80,10 +87,15 @@ const getEntryAuthorProfileData = async (entryId: string) => {
 };
 
 export function useGetEntryAuthor(entryId: string) {
-  return useQuery([ENTRY_AUTHOR_KEY, entryId], () => getEntryAuthorProfileData(entryId), {
-    enabled: !!entryId,
-    keepPreviousData: true,
-  });
+  const queryClient = useQueryClient();
+  return useQuery(
+    [ENTRY_AUTHOR_KEY, entryId],
+    () => getEntryAuthorProfileData(entryId, queryClient),
+    {
+      enabled: !!entryId,
+      keepPreviousData: true,
+    },
+  );
 }
 
 const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
@@ -182,8 +194,7 @@ const saveMediaFile = async ({
 }) => {
   const sdk = getSDK();
   try {
-    const res = await sdk.api.profile.saveMediaFile({ isUrl, content, name });
-    return res;
+    return await sdk.api.profile.saveMediaFile({ isUrl, content, name });
   } catch (error) {
     logError('useProfile.saveFile', error);
     throw error;
@@ -383,8 +394,8 @@ export function useProfileUpdate(pubKey: string) {
     },
     onSuccess: async (providers, variables) => {
       /* todo */
-      queryClient.invalidateQueries([PROFILE_KEY, pubKey]);
-      queryClient.invalidateQueries([PROFILE_KEY, variables.profileData.ethAddress]);
+      await queryClient.invalidateQueries([PROFILE_KEY, pubKey]);
+      await queryClient.invalidateQueries([PROFILE_KEY, variables.profileData.ethAddress]);
       queryClient.removeQueries({
         queryKey: [UPDATE_PROFILE_STATUS, pubKey],
       });

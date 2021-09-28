@@ -203,8 +203,8 @@ export function useDeletePost(postID: string) {
       });
       return { previousPost };
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries([ENTRY_KEY, postID]);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries([ENTRY_KEY, postID]);
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {

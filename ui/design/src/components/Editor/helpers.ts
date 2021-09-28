@@ -62,10 +62,10 @@ const CustomEditor = {
   insertMention(
     editor: Editor,
     mentionData: {
-      name: string;
-      userName: string;
+      name?: string;
+      userName?: string;
       pubKey: string;
-      avatar: string;
+      avatar?: string;
       ethAddress: string;
     },
   ) {
