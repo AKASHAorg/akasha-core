@@ -113,7 +113,9 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       </Box>
 
       <Box direction="column" pad="medium" gap="medium">
-        <Text color="primaryText">{profileData.description}</Text>
+        <Text wordBreak="break-word" color="primaryText">
+          {profileData.description}
+        </Text>
 
         {!disableFollowing && showFollowingButton && (
           <DuplexButton
