@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { lastValueFrom, forkJoin } from 'rxjs';
+import { forkJoin, lastValueFrom } from 'rxjs';
 
 import getSDK from '@akashaproject/awf-sdk';
 
@@ -49,8 +49,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
       if (coverImage) {
         images.coverImage = getMediaUrl(coverImage);
       }
-      const profileData = { ...images, ...other, ...profilesModResp[idx][0] };
-      return profileData;
+      return { ...images, ...other, ...profilesModResp[idx][0] };
     });
 
     // get posts data

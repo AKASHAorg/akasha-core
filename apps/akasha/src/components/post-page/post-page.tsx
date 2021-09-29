@@ -15,7 +15,7 @@ import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ENTRY_KEY, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useGetBookmarks,
@@ -25,6 +25,7 @@ import {
 import {
   useInfiniteComments,
   useCreateComment,
+  COMMENT_KEY,
 } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
   useIsFollowingMultiple,
@@ -153,7 +154,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
         url = `/social-app/post/${
-          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
+          queryClient.getQueryData<{ postId: string }>([COMMENT_KEY, details.entryId])?.postId
         }`;
         break;
       default:
