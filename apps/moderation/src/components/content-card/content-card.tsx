@@ -44,26 +44,27 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     reviewDecisionLabel,
   } = props;
 
-  const profileDataReq = useGetProfile(entryId);
-  const profile = profileDataReq.data;
+  const profileDataQuery = useGetProfile(entryId, props.user, itemType === 'account');
+  const profile = profileDataQuery.data;
 
-  const postReq = usePost({ postId: entryId, enabler: !!entryId });
-  const commentReq = useComment(entryId);
+  const postQuery = usePost({ postId: entryId, enabler: itemType === 'post' });
+  const commentQuery = useComment(entryId, itemType === 'reply' || itemType === 'comment');
 
   const entryData = React.useMemo(() => {
     if (itemType === 'post') {
-      if (postReq.data) {
-        return mapEntry(postReq.data);
+      if (postQuery.data) {
+        return mapEntry(postQuery.data);
       }
       return undefined;
     }
     if (['reply', 'comment'].includes(itemType)) {
-      if (commentReq.data) {
-        return mapEntry(commentReq.data);
+      if (commentQuery.data) {
+        return mapEntry(commentQuery.data);
       }
       return undefined;
     }
-  }, [postReq.data, commentReq.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postQuery.data, commentQuery.data]);
 
   return (
     <Box margin={{ bottom: '1rem' }}>

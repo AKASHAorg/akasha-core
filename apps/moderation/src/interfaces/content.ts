@@ -5,6 +5,7 @@ import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 export interface IContentProps {
+  user?: string;
   isPending: boolean;
   locale: ILocale;
   entryData: IEntryData | IProfileData;
