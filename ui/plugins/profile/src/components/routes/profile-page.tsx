@@ -179,15 +179,15 @@ const ProfilePage = (props: ProfilePageProps) => {
                 profileId={pubKey}
                 loginState={loginQuery.data}
               />
-              {reqPosts.status === 'error' && reqPosts.error && (
+              {reqPosts.isError && reqPosts.error && (
                 <ErrorLoader
                   type="script-error"
                   title="Cannot get posts for this profile"
                   details={(reqPosts.error as Error).message}
                 />
               )}
-              {reqPosts.status === 'success' && !postPages && <div>There are no posts!</div>}
-              {reqPosts.status === 'success' && postPages && (
+              {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
+              {reqPosts.isSuccess && postPages && (
                 <FeedWidget
                   itemType={ItemTypes.ENTRY}
                   logger={props.logger}
@@ -211,6 +211,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   removeEntryLabel={t('Delete Post')}
                   removedByMeLabel={t('You deleted this post')}
                   removedByAuthorLabel={t('This post was deleted by its author')}
+                  parentIsProfilePage={true}
                   uiEvents={props.uiEvents}
                   itemSpacing={8}
                   i18n={i18n}
