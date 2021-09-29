@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
 import { useGetLogin, useLogout } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
+import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
