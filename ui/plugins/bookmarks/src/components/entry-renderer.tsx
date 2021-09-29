@@ -121,9 +121,10 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   }, [t, type]);
 
-  const reportedTypeName = React.useMemo(() => {
-    if (accountAwaitingModeration) return t(`the author of this ${itemTypeName}`);
-    return t(`this ${itemTypeName}`);
+  const hiddenEntryTextLabel = React.useMemo(() => {
+    const stringEnd = `${itemTypeName} ${t('for the following reason')}`;
+    if (accountAwaitingModeration) return `${t('You reported the author of this')} ${stringEnd}`;
+    return `${t('You reported this')} ${stringEnd}}`;
   }, [t, accountAwaitingModeration, itemTypeName]);
 
   const onEditButtonMount = (name: string) => {
@@ -188,7 +189,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               {(accountAwaitingModeration || entryAwaitingModeration) && (
                 <EntryCardHidden
                   reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
-                  headerTextLabel={t(`You reported ${reportedTypeName} for the following reason`)}
+                  headerTextLabel={hiddenEntryTextLabel}
                   footerTextLabel={t('It is awaiting moderation.')}
                   ctaLabel={t('See it anyway')}
                   handleFlipCard={handleFlipCard}
