@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
+import styled from 'styled-components';
 
 import Icon from '../Icon';
 import DuplexButton from '../DuplexButton';
@@ -35,6 +36,14 @@ export interface IProfileEntry {
   handleUnfollowProfile: (ethAddress: string) => void;
 }
 
+const ExtendedStyledAnchor = styled(StyledAnchor)`
+  width: 68%;
+`;
+
+const StyledBox = styled(Box)`
+  max-width: 7rem;
+`;
+
 const ProfileEntry: React.FC<IProfileEntry> = props => {
   const {
     ipfsGateway,
@@ -68,7 +77,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
         <Box key={index} flex={false} gap="medium">
           {page.results.map((entry, index) => (
             <Box key={index} direction="row" justify="between" align="center">
-              <StyledAnchor
+              <ExtendedStyledAnchor
                 onClick={e => {
                   e.preventDefault();
                   return false;
@@ -76,7 +85,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                 weight="normal"
                 href={`${profileAnchorLink}/${entry.pubKey}`}
                 label={
-                  <Box width="15rem" pad="none">
+                  <Box width="100%" pad="none">
                     <ProfileAvatarButton
                       ethAddress={entry.ethAddress}
                       onClick={() => onClickProfile(entry.pubKey)}
@@ -89,7 +98,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                 }
               />
               {loggedUser !== entry.pubKey && (
-                <Box width="7rem">
+                <StyledBox width="32%">
                   <DuplexButton
                     inactiveLabel={followLabel}
                     activeLabel={followingLabel}
@@ -99,7 +108,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                     active={followedProfiles?.includes(entry.ethAddress)}
                     icon={<Icon type="following" />}
                   />
-                </Box>
+                </StyledBox>
               )}
             </Box>
           ))}
