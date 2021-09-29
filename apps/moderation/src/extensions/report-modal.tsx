@@ -15,7 +15,7 @@ import { BASE_REPORT_URL } from '../services/constants';
 import { useModeration } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
-const { ReportModal, ToastProvider } = DS;
+const { ReportModal } = DS;
 
 const ReportModalComponent = (props: RootComponentProps) => {
   const { logger, activeModal } = props;
@@ -62,35 +62,34 @@ const ReportModalComponent = (props: RootComponentProps) => {
   );
 
   return (
-    <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-      <ReportModal
-        titleLabel={t(`Report ${itemType === 'account' ? activeModal.user : itemType}`)}
-        successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-        successMessageLabel={t(`We will investigate this ${itemType} and take appropriate action.`)}
-        optionsTitleLabel={t('Please select a reason')}
-        optionLabels={reasons.map((el: string) => t(el))}
-        optionValues={reasons}
-        descriptionLabel={t('Explanation')}
-        descriptionPlaceholder={t('Please explain your reason(s)')}
-        footerText1Label={t('If you are unsure, you can refer to our')}
-        footerLink1Label={t('Code of Conduct')}
-        footerUrl1={'/legal/code-of-conduct'}
-        footerText2Label={t('and')}
-        footerLink2Label={t('Terms of Service')}
-        footerUrl2={'/legal/terms-of-service'}
-        cancelLabel={t('Cancel')}
-        reportLabel={t('Report')}
-        blockLabel={t('Block User')}
-        closeLabel={t('Close')}
-        user={loginQuery.data?.pubKey || ''}
-        contentId={activeModal.entryId}
-        itemType={itemType}
-        requesting={reportMutation.status === 'loading'}
-        success={reportMutation.status === 'success'}
-        closeModal={handleModalClose}
-        onReport={onReport}
-      />
-    </ToastProvider>
+    <ReportModal
+      titleLabel={t(`Report ${itemType === 'account' ? activeModal.user : itemType}`)}
+      successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
+      successMessageLabel={t(`We will investigate this ${itemType} and take appropriate action.`)}
+      optionsTitleLabel={t('Please select a reason')}
+      optionLabels={reasons.map((el: string) => t(el))}
+      optionValues={reasons}
+      descriptionLabel={t('Explanation')}
+      descriptionPlaceholder={t('Please explain your reason(s)')}
+      footerText1Label={t('If you are unsure, you can refer to our')}
+      footerLink1Label={t('Code of Conduct')}
+      footerUrl1={'/legal/code-of-conduct'}
+      footerText2Label={t('and')}
+      footerLink2Label={t('Terms of Service')}
+      footerUrl2={'/legal/terms-of-service'}
+      cancelLabel={t('Cancel')}
+      reportLabel={t('Report')}
+      blockLabel={t('Block User')}
+      closeLabel={t('Close')}
+      errorText={reportMutation.error ? `${reportMutation.error}` : ''}
+      user={loginQuery.data?.pubKey || ''}
+      contentId={activeModal.entryId}
+      itemType={itemType}
+      requesting={reportMutation.status === 'loading'}
+      success={reportMutation.status === 'success'}
+      closeModal={handleModalClose}
+      onReport={onReport}
+    />
   );
 };
 

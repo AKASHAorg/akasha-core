@@ -11,7 +11,7 @@ import { BASE_DECISION_URL } from '../services/constants';
 import i18n, { setupI18next } from '../i18n';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
-const { ModerateModal, ToastProvider } = DS;
+const { ModerateModal } = DS;
 
 const ModerateModalComponent = (props: RootComponentProps) => {
   const { logger, activeModal } = props;
@@ -56,26 +56,25 @@ const ModerateModalComponent = (props: RootComponentProps) => {
   }, [moderateMutation]);
 
   return (
-    <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-      <ModerateModal
-        titleLabel={t('Make a Decision')}
-        altTitleLabel={t('Review a Decision')}
-        decisionLabel={t('Decision')}
-        optionLabels={[t('Delist'), t('Keep')]}
-        optionValues={['Delist', 'Keep']}
-        descriptionLabel={t('Evaluation')}
-        descriptionPlaceholder={t('Please explain the reason(s)')}
-        footerText1Label={t('If you are unsure, you can refer to our')}
-        footerLink1Label={t('Code of Conduct')}
-        footerUrl1={'/legal/code-of-conduct'}
-        cancelLabel={t('Cancel')}
-        user={loginQuery.data?.pubKey || ''}
-        requesting={moderateMutation.status === 'loading'}
-        isReview={activeModal.status !== 'pending'}
-        closeModal={handleModalClose}
-        onModerate={onModerate}
-      />
-    </ToastProvider>
+    <ModerateModal
+      titleLabel={t('Make a Decision')}
+      altTitleLabel={t('Review a Decision')}
+      decisionLabel={t('Decision')}
+      optionLabels={[t('Delist'), t('Keep')]}
+      optionValues={['Delist', 'Keep']}
+      descriptionLabel={t('Evaluation')}
+      descriptionPlaceholder={t('Please explain the reason(s)')}
+      footerText1Label={t('If you are unsure, you can refer to our')}
+      footerLink1Label={t('Code of Conduct')}
+      footerUrl1={'/legal/code-of-conduct'}
+      cancelLabel={t('Cancel')}
+      errorText={moderateMutation.error ? `${moderateMutation.error}` : ''}
+      user={loginQuery.data?.pubKey || ''}
+      requesting={moderateMutation.status === 'loading'}
+      isReview={activeModal.status !== 'pending'}
+      closeModal={handleModalClose}
+      onModerate={onModerate}
+    />
   );
 };
 

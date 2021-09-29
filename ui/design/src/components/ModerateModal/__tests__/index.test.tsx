@@ -1,5 +1,4 @@
 import React from 'react';
-import { ToastProvider } from 'react-toast-notifications';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -17,26 +16,24 @@ describe('<ModerateModal /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ModerateModal
-              titleLabel="Make a Decision"
-              altTitleLabel="Review a Decision"
-              decisionLabel="Decision"
-              optionLabels={['Delist', 'Keep']}
-              optionValues={['Delist', 'Keep']}
-              descriptionLabel="Evaluation"
-              descriptionPlaceholder="Please explain the reason(s)"
-              footerText1Label="If you are unsure, you can refer to our"
-              footerLink1Label="Code of Conduct"
-              footerUrl1="/legal/code-of-conduct"
-              cancelLabel="Cancel"
-              user="0x003410490050000320006570034567114572000"
-              requesting={false}
-              isReview={false}
-              closeModal={handleCloseModal}
-              onModerate={handleModerate}
-            />
-          </ToastProvider>,
+          <ModerateModal
+            titleLabel="Make a Decision"
+            altTitleLabel="Review a Decision"
+            decisionLabel="Decision"
+            optionLabels={['Delist', 'Keep']}
+            optionValues={['Delist', 'Keep']}
+            descriptionLabel="Evaluation"
+            descriptionPlaceholder="Please explain the reason(s)"
+            footerText1Label="If you are unsure, you can refer to our"
+            footerLink1Label="Code of Conduct"
+            footerUrl1="/legal/code-of-conduct"
+            cancelLabel="Cancel"
+            user="0x003410490050000320006570034567114572000"
+            requesting={false}
+            isReview={false}
+            closeModal={handleCloseModal}
+            onModerate={handleModerate}
+          />,
         ),
         {},
       );
