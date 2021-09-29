@@ -11,8 +11,8 @@ import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import {
   useFollow,
-  useUnfollow,
   useIsFollowingMultiple,
+  useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { getLinkPreview } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 
@@ -42,6 +42,7 @@ export interface IEntryRenderer {
   contentClickable?: boolean;
   itemType: ItemTypes;
   onEntryRemove?: (entryId: string) => void;
+  parentIsProfilePage?: boolean;
   removeEntryLabel?: string;
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;
@@ -72,6 +73,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     sharePostUrl,
     onRepost,
     contentClickable,
+    parentIsProfilePage,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -134,12 +136,13 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const commentEditReq = useEditComment(itemData?.entryId, !!commentData);
 
-  const isReported = React.useMemo(() => {
+  const [isReported, isAccountReported] = React.useMemo(() => {
     if (showAnyway) {
-      return false;
+      return [false, false];
     }
-    return (postReq.status === 'success' || commentReq.status === 'success') && itemData?.reported;
-  }, [itemData, showAnyway, postReq.status, commentReq.status]);
+    const reqSuccess = postReq.isSuccess || commentReq.isSuccess;
+    return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
+  }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
 
   const handleFollow = React.useCallback(() => {
     if (authorEthAddress) {
@@ -228,6 +231,15 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
   }, [t, props.itemType]);
 
+  const accountAwaitingModeration =
+    !itemData?.author?.moderated && isAccountReported && !parentIsProfilePage;
+  const entryAwaitingModeration = !itemData?.moderated && isReported;
+
+  const reportedTypeName = React.useMemo(() => {
+    if (accountAwaitingModeration) return `the author of this ${itemTypeName}`;
+    return `this ${itemTypeName}`;
+  }, [accountAwaitingModeration, itemTypeName]);
+
   const handleCancelClick = () => {
     setIsEditingComment(false);
   };
@@ -248,7 +260,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
           devDetails={postReq.error}
         />
       )}
-      {(postReq.status === 'success' || commentReq.status === 'success') && (
+      {(postReq.isSuccess || commentReq.isSuccess) && (
         <>
           {itemData.moderated && itemData.delisted && (
             <EntryCardHidden
@@ -256,10 +268,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
               isDelisted={true}
             />
           )}
-          {!itemData.moderated && isReported && (
+          {(accountAwaitingModeration || entryAwaitingModeration) && (
             <EntryCardHidden
-              reason={itemData.reason}
-              headerTextLabel={t(`You reported this ${itemTypeName} for the following reason`)}
+              reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
+              headerTextLabel={t(`You reported ${reportedTypeName} for the following reason`)}
               footerTextLabel={t('It is awaiting moderation.')}
               ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
@@ -296,7 +308,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               />
             </Box>
           )}
-          {!isReported && (
+          {!entryAwaitingModeration && !accountAwaitingModeration && (
             <EntryCard
               className={props.className}
               isRemoved={itemData.isRemoved}

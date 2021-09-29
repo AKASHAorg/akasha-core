@@ -57,6 +57,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           singleSpaNavigate={props.singleSpaNavigate}
           onFlag={props.onEntryFlag}
           onRepost={handleRepost}
+          parentIsProfilePage={props.parentIsProfilePage}
           contentClickable={props.contentClickable}
           onEntryRemove={props.onEntryRemove}
           removeEntryLabel={props.removeEntryLabel}

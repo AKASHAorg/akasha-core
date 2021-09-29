@@ -157,7 +157,15 @@ const getPost = async (postID: string, loggedUser?: string) => {
       contentIds: [postID],
     });
     const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
-    return { ...res.data.getPost, ...modStatus[0] };
+    const modStatusAuthor = await moderationRequest.checkStatus(true, {
+      user: loggedUser || user?.data?.pubKey || '',
+      contentIds: [res.data?.getPost?.author?.pubKey],
+    });
+    return {
+      ...res.data.getPost,
+      ...modStatus[0],
+      author: { ...res.data.getPost.author, ...modStatusAuthor[0] },
+    };
   } catch (error) {
     logError('usePosts.getPost', error);
     throw error;
