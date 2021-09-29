@@ -426,47 +426,45 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             />
           </Box>
         )}
-        {entryData.linkPreview && (
-          <Box
-            pad="medium"
-            onClick={() => {
-              if (disableActions) {
-                return;
-              }
-              handleContentClick(entryData.quote);
-            }}
-          >
+        {!props.isRemoved && entryData.linkPreview && (
+          <Box pad="medium">
             <LinkPreview
               linkPreviewData={entryData.linkPreview}
               handleLinkClick={singleSpaNavigate}
             />
           </Box>
         )}
-        {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
-          <Box
-            pad="medium"
-            onClick={() => {
-              if (disableActions) {
-                return;
-              }
-              handleContentClick(entryData.quote);
-            }}
-          >
-            <EmbedBox embedEntryData={entryData.quote} />
-          </Box>
-        )}
-        {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
-          <Box pad="medium" onClick={() => null}>
-            <EntryCardHidden
-              reason={entryData.reason}
-              headerTextLabel={headerTextLabel}
-              footerTextLabel={footerTextLabel}
-              ctaLabel={ctaLabel}
-              handleFlipCard={handleFlipCard}
-            />
-          </Box>
-        )}
-        {entryData.quote && entryData.quote.delisted && (
+        {!props.isRemoved &&
+          entryData.quote &&
+          !entryData.quote.delisted &&
+          !entryData.quote.reported && (
+            <Box
+              pad="medium"
+              onClick={() => {
+                if (disableActions) {
+                  return;
+                }
+                handleContentClick(entryData.quote);
+              }}
+            >
+              <EmbedBox embedEntryData={entryData.quote} />
+            </Box>
+          )}
+        {!props.isRemoved &&
+          entryData.quote &&
+          !entryData.quote.delisted &&
+          entryData.quote.reported && (
+            <Box pad="medium" onClick={() => null}>
+              <EntryCardHidden
+                reason={entryData.reason}
+                headerTextLabel={headerTextLabel}
+                footerTextLabel={footerTextLabel}
+                ctaLabel={ctaLabel}
+                handleFlipCard={handleFlipCard}
+              />
+            </Box>
+          )}
+        {!props.isRemoved && entryData.quote && entryData.quote.delisted && (
           <Box pad="medium" onClick={() => null}>
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>

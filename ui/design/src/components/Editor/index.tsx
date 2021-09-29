@@ -48,6 +48,7 @@ export interface IEditorBox {
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
+  linkPreview?: IEntryData['linkPreview'];
   getLinkPreview: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
@@ -84,6 +85,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     embedEntryData,
     minHeight,
     withMeter,
+    linkPreview,
     getLinkPreview,
     getMentions,
     getTags,
@@ -114,7 +116,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
-  const [linkPreviewState, setLinkPreviewState] = useState(null);
+  const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
 
   const handleGetLinkPreview = async (url: string) => {

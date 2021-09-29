@@ -1,4 +1,4 @@
-import { rootRoute } from './routes';
+import routes, { POST, rootRoute } from './routes';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import {
   IAppConfig,
@@ -42,6 +42,13 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
         }
       },
       loadingFn: () => import('./extensions/entry-edit-button'),
+    },
+    {
+      mountsIn: opts.layoutConfig.widgetSlotId,
+      activeWhen: (location, pathToActiveWhen) => {
+        return pathToActiveWhen(routes[POST])(location);
+      },
+      loadingFn: () => import('./extensions/profile-card-widget'),
     },
   ],
 });

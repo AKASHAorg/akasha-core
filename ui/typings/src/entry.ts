@@ -61,6 +61,7 @@ export interface PendingEntry {
   reposts?: number;
   time: string;
   quote: IEntryData['quote'];
+  linkPreview: IEntryData['linkPreview'];
 }
 
 export interface IPublishData {

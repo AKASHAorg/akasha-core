@@ -161,10 +161,10 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
 export const createPendingEntry = (
   author: IProfileData,
   entryPublishData: IPublishData & { entryId?: string },
-  quote?: IEntryData['quote'],
 ): PendingEntry => {
   return {
-    quote,
+    quote: entryPublishData.metadata.quote,
+    linkPreview: entryPublishData.metadata.linkPreview,
     author: author,
     slateContent: entryPublishData.slateContent,
     replies: 0,
