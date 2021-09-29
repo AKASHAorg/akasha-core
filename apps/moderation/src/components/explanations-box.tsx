@@ -3,11 +3,9 @@ import React from 'react';
 import DS from '@akashaproject/design-system';
 import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
 import { useGetFlags } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
+import { EntryReport } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
 
-import ExplanationsBoxEntry, {
-  IExplanationsBoxEntryProps,
-  IFlagEntry,
-} from './explanations-box-entry';
+import ExplanationsBoxEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
 
 const { Box, Text } = DS;
 
@@ -27,7 +25,7 @@ const ExplanationsBox: React.FC<IExplanationsBoxProps> = props => {
       {getFlagsQuery.isLoading && <Text>Loading ...</Text>}
       {getFlagsQuery.isSuccess && (
         <Box>
-          {flagEntries.map((flagEntry: IFlagEntry, id: number) => (
+          {flagEntries.map((flagEntry: EntryReport, id: number) => (
             <ExplanationsBoxEntry
               key={id}
               flagEntry={flagEntry}

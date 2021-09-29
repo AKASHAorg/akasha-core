@@ -11,6 +11,7 @@ import {
   useInfinitePending,
   useInfiniteDelisted,
 } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
+import { IModeratedItem, IPendingItem } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
 
 import ContentTab from './content-tab';
 import ContentCard from './content-card/content-card';
@@ -23,36 +24,6 @@ interface IContentListProps {
   slotId: string;
   user: string | null;
   singleSpa: typeof SingleSpa;
-}
-
-interface IBaseItem {
-  id: number;
-  type: string;
-  entryId: string;
-  reasons: string[];
-  description?: string;
-  count: number;
-  entryDate: string;
-}
-
-interface IProfile {
-  avatar: string;
-  ethAddress: string;
-  pubKey: string;
-  name: string;
-  userName: string;
-}
-
-interface IPendingItem extends IBaseItem {
-  reporter: string;
-  reporterProfile: IProfile;
-}
-
-interface IModeratedItem extends IPendingItem {
-  delisted: boolean;
-  moderator: string;
-  moderatorProfile: IProfile;
-  evaluationDate: string;
 }
 
 const DEFAULT_LIMIT = 10;
@@ -225,16 +196,16 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                     showExplanationsLabel={t('Show explanations')}
                     hideExplanationsLabel={t('Hide explanations')}
                     reportedLabel={t('reported')}
-                    itemType={pendingItem.type}
+                    itemType={pendingItem.contentType}
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={pendingItem.entryId}
+                    entryId={pendingItem.contentID}
                     reasons={pendingItem.reasons.map((el: string) => t(el))}
-                    reporter={pendingItem.reporter}
-                    reporterAvatar={pendingItem.reporterProfile.avatar}
-                    reporterName={pendingItem.reporterProfile.name}
-                    reporterENSName={pendingItem.reporterProfile.userName}
+                    reporter={pendingItem.reportedBy}
+                    reporterAvatar={pendingItem.reportedByProfile?.avatar}
+                    reporterName={pendingItem.reportedByProfile?.name}
+                    reporterENSName={pendingItem.reportedByProfile?.userName}
                     andLabel={t('and')}
                     otherReporters={
                       pendingItem.count
@@ -244,7 +215,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                         : ''
                     }
                     reportedOnLabel={t('On')}
-                    reportedDateTime={pendingItem.entryDate}
+                    reportedDateTime={pendingItem.reportedDate}
                     makeADecisionLabel={t('Make a Decision')}
                     handleButtonClick={handleButtonClick}
                   />
@@ -279,16 +250,16 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                     determinationLabel={t('Determination')}
                     determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
                     reportedLabel={t('reported')}
-                    itemType={moderatedItem.type}
+                    itemType={moderatedItem.contentType}
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={moderatedItem.entryId}
+                    entryId={moderatedItem.contentID}
                     reasons={moderatedItem.reasons.map(el => t(el))}
-                    reporter={moderatedItem.reporter}
-                    reporterAvatar={moderatedItem.reporterProfile.avatar}
-                    reporterName={moderatedItem.reporterProfile.name}
-                    reporterENSName={moderatedItem.reporterProfile.userName}
+                    reporter={moderatedItem.reportedBy}
+                    reporterAvatar={moderatedItem.reportedByProfile?.avatar}
+                    reporterName={moderatedItem.reportedByProfile?.name}
+                    reporterENSName={moderatedItem.reportedByProfile?.userName}
                     andLabel={t('and')}
                     otherReporters={
                       moderatedItem.count
@@ -298,14 +269,14 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                         : ''
                     }
                     reportedOnLabel={t('On')}
-                    reportedDateTime={moderatedItem.entryDate}
-                    moderatorDecision={moderatedItem.description}
+                    reportedDateTime={moderatedItem.reportedDate}
+                    moderatorDecision={moderatedItem.explanation}
                     moderator={moderatedItem.moderator}
                     moderatorName={moderatedItem.moderatorProfile.name}
                     moderatorENSName={moderatedItem.moderatorProfile.userName}
                     moderatedByLabel={t('Moderated by')}
                     moderatedOnLabel={t('On')}
-                    evaluationDateTime={moderatedItem.evaluationDate}
+                    evaluationDateTime={moderatedItem.moderatedDate}
                     reviewDecisionLabel={t('Review decision')}
                     handleButtonClick={handleButtonClick}
                   />
@@ -336,16 +307,16 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                     determinationLabel={t('Determination')}
                     determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
                     reportedLabel={t('reported')}
-                    itemType={moderatedItem.type}
+                    itemType={moderatedItem.contentType}
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={moderatedItem.entryId}
+                    entryId={moderatedItem.contentID}
                     reasons={moderatedItem.reasons.map(el => t(el))}
-                    reporter={moderatedItem.reporter}
-                    reporterAvatar={moderatedItem.reporterProfile.avatar}
-                    reporterName={moderatedItem.reporterProfile.name}
-                    reporterENSName={moderatedItem.reporterProfile.userName}
+                    reporter={moderatedItem.reportedBy}
+                    reporterAvatar={moderatedItem.reportedByProfile?.avatar}
+                    reporterName={moderatedItem.reportedByProfile?.name}
+                    reporterENSName={moderatedItem.reportedByProfile?.userName}
                     andLabel={t('and')}
                     otherReporters={
                       moderatedItem.count
@@ -355,14 +326,14 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                         : ''
                     }
                     reportedOnLabel={t('On')}
-                    reportedDateTime={moderatedItem.entryDate}
-                    moderatorDecision={moderatedItem.description}
+                    reportedDateTime={moderatedItem.reportedDate}
+                    moderatorDecision={moderatedItem.explanation}
                     moderator={moderatedItem.moderator}
                     moderatorName={moderatedItem.moderatorProfile.name}
                     moderatorENSName={moderatedItem.moderatorProfile.userName}
                     moderatedByLabel={t('Moderated by')}
                     moderatedOnLabel={t('On')}
-                    evaluationDateTime={moderatedItem.evaluationDate}
+                    evaluationDateTime={moderatedItem.moderatedDate}
                     reviewDecisionLabel={t('Review decision')}
                     handleButtonClick={handleButtonClick}
                   />

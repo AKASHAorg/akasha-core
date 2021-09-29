@@ -27,28 +27,6 @@ export const DELISTED_ITEMS_KEY = 'DELISTED_ITEMS';
 export const CHECK_MODERATOR_KEY = 'CHECK_MODERATOR';
 export const MODERATION_STATUS_KEY = 'MODERATION_STATUS_KEY';
 
-export interface ICount {
-  kept: number;
-  pending: number;
-  delisted: number;
-}
-
-export interface ILogItem {
-  contentID: string;
-  contentType: string;
-  moderatedDate: Date;
-  moderator: {
-    ethAddress: string;
-    name: string;
-    userName: string;
-    avatar: string;
-  };
-  delisted: false;
-  reasons: string[];
-  reports: number;
-  explanation: string;
-}
-
 export type UseModerationParam = {
   dataToSign: { [key: string]: string };
   contentId: string;
@@ -73,7 +51,8 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
     const status = await createModeration(url, data);
     if (status === 409) {
       throw new Error(
-        `This content has already been ${modalName === 'report-modal' ? 'reported' : 'moderated'
+        `This content has already been ${
+          modalName === 'report-modal' ? 'reported' : 'moderated'
         } by you`,
       );
     } else if (status === 403) {

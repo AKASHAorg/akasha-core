@@ -3,11 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import getSDK from '@akashaproject/awf-sdk';
 import DS from '@akashaproject/design-system';
-import {
-  ILogItem,
-  useGetCount,
-  useInfiniteLog,
-} from '@akashaproject/ui-awf-hooks/lib/use-moderation';
+import { ILogItem } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
+import { useGetCount, useInfiniteLog } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
 import Banner from './transparency-log/banner';
 import DetailCard from './transparency-log/detail-card';

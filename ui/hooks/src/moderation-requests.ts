@@ -11,6 +11,100 @@ const {
   DEFAULT_FETCH_TIMEOUT,
 } = constants;
 
+type Profile = {
+  pubKey: string;
+  ethAddress: string;
+  name: string;
+  userName: string;
+  avatar: string;
+};
+
+export interface ModerationStatus {
+  contentId: string;
+  delisted: boolean;
+  moderated: boolean;
+  reason: string;
+  reported: boolean;
+}
+
+export interface Reason {
+  _id: string;
+  _mod: Date;
+  creationDate: Date;
+  active: boolean;
+  description: string;
+  label: string;
+}
+
+export interface ICount {
+  kept: number;
+  pending: number;
+  delisted: number;
+}
+
+export interface EntryReport {
+  _id: string;
+  _mod: Date;
+  creationDate: Date;
+  author: string;
+  contentID: string;
+  contentType: string;
+  explanation: string;
+  reason: string;
+}
+
+export interface ILogItem {
+  contentID: string;
+  contentType: string;
+  delisted: false;
+  reasons: string[];
+  explanation: string;
+  moderator: Profile;
+  moderatedDate: Date;
+  reports: number;
+}
+
+export interface IPendingItem {
+  _id: string;
+  _mod: Date;
+  creationDate: Date;
+  contentID: string;
+  contentType: string;
+  delisted: boolean;
+  moderated: boolean;
+  reasons: string[];
+  explanation: string;
+  reportedBy: string;
+  reportedByProfile: Profile;
+  reportedDate: Date;
+  reports: number;
+  count: number;
+}
+
+export interface IModeratedItem extends IPendingItem {
+  moderator: string;
+  moderatedDate?: Date;
+  evaluationDate?: Date;
+  moderatorProfile: Profile;
+}
+
+interface PaginatedResponse {
+  nextIndex: string | null;
+  total: number;
+}
+
+export interface LogItemsReponse extends PaginatedResponse {
+  results: ILogItem[];
+}
+
+export interface PendingItemsReponse extends PaginatedResponse {
+  results: IPendingItem[];
+}
+
+export interface ModeratedItemsReponse extends PaginatedResponse {
+  results: IModeratedItem[];
+}
+
 export const createModeration = async (
   url: string,
   data: {
@@ -20,7 +114,7 @@ export const createModeration = async (
     signature: string;
   },
   timeout = DEFAULT_FETCH_TIMEOUT,
-) => {
+): Promise<number> => {
   const rheaders = new Headers();
 
   const sdk = getSDK();
@@ -60,7 +154,7 @@ export const getEntryModerationStatus = async (
     contentIds: string[];
   },
   timeout = DEFAULT_FETCH_TIMEOUT,
-) => {
+): Promise<ModerationStatus[]> => {
   const rheaders = new Headers();
 
   const sdk = getSDK();
@@ -73,7 +167,7 @@ export const getEntryModerationStatus = async (
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as ModerationStatus[];
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -98,7 +192,7 @@ export const getEntryModerationStatus = async (
 export const getModerationReasons = async (
   data: Record<string, unknown>,
   timeout = DEFAULT_FETCH_TIMEOUT,
-) => {
+): Promise<Reason[]> => {
   const rheaders = new Headers();
 
   const sdk = getSDK();
@@ -111,7 +205,7 @@ export const getModerationReasons = async (
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as Reason[];
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -133,7 +227,10 @@ export const getModerationReasons = async (
   });
 };
 
-export const getModeratorStatus = async (loggedUser: string, timeout = DEFAULT_FETCH_TIMEOUT) => {
+export const getModeratorStatus = async (
+  loggedUser: string,
+  timeout = DEFAULT_FETCH_TIMEOUT,
+): Promise<number> => {
   const rheaders = new Headers();
   const sdk = getSDK();
   const key = sdk.services.stash.computeKey({
@@ -163,7 +260,7 @@ export const getModeratorStatus = async (loggedUser: string, timeout = DEFAULT_F
   return response.status;
 };
 
-export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT) => {
+export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<ICount> => {
   const rheaders = new Headers();
   const sdk = getSDK();
   const key = sdk.services.stash.computeKey({
@@ -174,7 +271,7 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT) => 
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as ICount;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -194,7 +291,10 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT) => 
   });
 };
 
-export const getEntryReports = async (entryId: string, timeout = DEFAULT_FETCH_TIMEOUT) => {
+export const getEntryReports = async (
+  entryId: string,
+  timeout = DEFAULT_FETCH_TIMEOUT,
+): Promise<EntryReport[]> => {
   const rheaders = new Headers();
   const sdk = getSDK();
   const key = sdk.services.stash.computeKey({
@@ -205,7 +305,7 @@ export const getEntryReports = async (entryId: string, timeout = DEFAULT_FETCH_T
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as EntryReport[];
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -231,7 +331,7 @@ export const getLogItems = async (
     offset?: string;
   },
   timeout = DEFAULT_FETCH_TIMEOUT,
-) => {
+): Promise<LogItemsReponse> => {
   const rheaders = new Headers();
   const sdk = getSDK();
   const key = sdk.services.stash.computeKey({
@@ -242,7 +342,7 @@ export const getLogItems = async (
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as LogItemsReponse;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -269,7 +369,7 @@ export const getPendingItems = async (
     offset?: string;
   },
   timeout = DEFAULT_FETCH_TIMEOUT,
-) => {
+): Promise<PendingItemsReponse> => {
   const rheaders = new Headers();
 
   const sdk = getSDK();
@@ -283,7 +383,7 @@ export const getPendingItems = async (
 
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as PendingItemsReponse;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -302,15 +402,11 @@ export const getPendingItems = async (
     uiCache.set(key, serializedResponse);
     return {
       ...serializedResponse,
-      results: serializedResponse.results.map((item, idx: number) => {
+      results: serializedResponse.results.map((item: IPendingItem) => {
         // formatting data to match labels already in use
         return {
-          id: idx,
-          type: item.contentType,
-          entryId: item.contentID,
-          reasons: item.reasons,
-          reporter: item.reportedBy,
-          reporterProfile: {
+          ...item,
+          reportedByProfile: {
             ...item.reportedByProfile,
             avatar:
               item.reportedByProfile.avatar.length > 0
@@ -318,7 +414,6 @@ export const getPendingItems = async (
                 : null,
           },
           count: item.reports - 1, // minus reporter, to get count of other users
-          entryDate: item.reportedDate,
         };
       }),
     };
@@ -332,7 +427,7 @@ export const getModeratedItems = async (
     offset?: string;
   },
   timeout = DEFAULT_FETCH_TIMEOUT,
-) => {
+): Promise<ModeratedItemsReponse> => {
   const rheaders = new Headers();
 
   const sdk = getSDK();
@@ -345,7 +440,7 @@ export const getModeratedItems = async (
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as ModeratedItemsReponse;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -364,24 +459,17 @@ export const getModeratedItems = async (
     uiCache.set(key, serializedResponse);
     return {
       ...serializedResponse,
-      results: serializedResponse.results.map((item, idx: number) => {
+      results: serializedResponse.results.map((item: IModeratedItem) => {
         // formatting data to match labels already in use
         return {
-          id: idx,
-          type: item.contentType,
-          entryId: item.contentID,
-          reasons: item.reasons,
-          description: item.explanation,
-          reporter: item.reportedBy,
-          reporterProfile: {
+          ...item,
+          reportedByProfile: {
             ...item.reportedByProfile,
             avatar:
               item.reportedByProfile.avatar.length > 0
                 ? `${ipfsGateway}/${item.reportedByProfile.avatar}`
                 : null,
           },
-          count: item.reports - 1,
-          moderator: item.moderator,
           moderatorProfile: {
             ...item.moderatorProfile,
             avatar:
@@ -389,9 +477,7 @@ export const getModeratedItems = async (
                 ? `${ipfsGateway}/${item.moderatorProfile.avatar}`
                 : null,
           },
-          entryDate: item.reportedDate,
-          evaluationDate: item.moderatedDate,
-          delisted: item.delisted,
+          count: item.reports - 1,
         };
       }),
     };

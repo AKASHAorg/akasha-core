@@ -2,7 +2,7 @@ import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 import { createErrorHandler } from './utils/error-handler';
-import { getModerationReasons } from './moderation-requests';
+import { getModerationReasons, Reason } from './moderation-requests';
 
 export interface UseReasonsActions {
   /**
@@ -55,7 +55,7 @@ export const useReasons = (props: UseReasonsProps): [string[], UseReasonsActions
         if (Array.isArray(res)) {
           // pick only labels for each reason object
           const labels = res.reduce(
-            (acc: string[], cur: Record<string, unknown>) => [...acc, cur.label],
+            (acc: string[], cur: Reason) => [...acc, cur.label],
             [],
           );
           // dispatch labels, adding last option - 'Other'
