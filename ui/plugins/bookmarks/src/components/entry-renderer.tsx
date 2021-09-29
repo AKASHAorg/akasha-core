@@ -122,9 +122,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   }, [t, type]);
 
   const reportedTypeName = React.useMemo(() => {
-    if (accountAwaitingModeration) return `the author of this ${itemTypeName}`;
-    return `this ${itemTypeName}`;
-  }, [accountAwaitingModeration, itemTypeName]);
+    if (accountAwaitingModeration) return t(`the author of this ${itemTypeName}`);
+    return t(`this ${itemTypeName}`);
+  }, [t, accountAwaitingModeration, itemTypeName]);
 
   const onEditButtonMount = (name: string) => {
     props.uiEvents.next({
