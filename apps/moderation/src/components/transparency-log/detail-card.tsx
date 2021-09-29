@@ -1,22 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import DS from '@akashaproject/design-system';
 
-export interface ILogItem {
-  contentID: string;
-  contentType: string;
-  moderatedDate: Date;
-  moderator: {
-    ethAddress: string;
-    name: string;
-    userName: string;
-    avatar: string;
-  };
-  delisted: false;
-  reasons: string[];
-  reports: number;
-  explanation: string;
-}
+import DS from '@akashaproject/design-system';
+import { ILogItem } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
 export interface IDetailCard {
   selected: ILogItem;

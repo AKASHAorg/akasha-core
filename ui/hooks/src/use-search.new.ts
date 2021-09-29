@@ -3,7 +3,7 @@ import { forkJoin, lastValueFrom } from 'rxjs';
 
 import getSDK from '@akashaproject/awf-sdk';
 
-import moderationRequest from './moderation-request';
+import { checkStatus } from './use-moderation';
 import { getMediaUrl } from './utils/media-utils';
 import { mapEntry } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
@@ -25,7 +25,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
     // get profiles moderation status
     const getProfilesModStatus = searchResp.data?.globalSearch?.profiles?.map(
       (profile: { id: string }) =>
-        moderationRequest.checkStatus(true, {
+        checkStatus({
           user: loggedUser,
           contentIds: [profile.id],
         }),
@@ -59,7 +59,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
 
     // get posts moderation status
     const getEntriesModStatus = searchResp.data?.globalSearch?.posts?.map((entry: { id: string }) =>
-      moderationRequest.checkStatus(true, {
+      checkStatus({
         user: loggedUser,
         contentIds: [entry.id],
       }),
@@ -81,7 +81,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
     // get comments moderation status
     const getCommentsModStatus = searchResp.data?.globalSearch?.comments?.map(
       (comment: { id: string }) =>
-        moderationRequest.checkStatus(true, {
+        checkStatus({
           user: loggedUser,
           contentIds: [comment.id],
         }),

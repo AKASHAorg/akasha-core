@@ -10,7 +10,7 @@ import {
   useCheckModerator,
   useInfinitePending,
   useInfiniteDelisted,
-} from '@akashaproject/ui-awf-hooks/lib/moderation-request';
+} from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
 import ContentTab from './content-tab';
 import ContentCard from './content-card/content-card';
@@ -53,12 +53,6 @@ interface IModeratedItem extends IPendingItem {
   moderator: string;
   moderatorProfile: IProfile;
   evaluationDate: string;
-}
-
-export interface ICount {
-  kept: number;
-  pending: number;
-  delisted: number;
 }
 
 const DEFAULT_LIMIT = 10;

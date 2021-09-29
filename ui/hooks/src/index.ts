@@ -1,5 +1,5 @@
 import constants from './constants';
-import moderationRequest from './moderation-request';
+import useModeration from './use-moderation';
 import useGlobalLogin from './use-global-login';
 import useLoginState from './use-login-state';
 import useENSRegistration from './use-ens-registration';
@@ -11,7 +11,7 @@ import useReasons from './use-reasons';
 
 export {
   constants,
-  moderationRequest,
+  useModeration,
   useGlobalLogin,
   useLoginState,
   useENSRegistration,
