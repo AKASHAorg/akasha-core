@@ -1,8 +1,12 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
+import ReactDOM from 'react-dom';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import i18next, { setupI18next } from '../i18n';
+import singleSpaReact from 'single-spa-react';
 import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
-import { useRouteMatch } from 'react-router-dom';
+import { BrowserRouter as Router, useRouteMatch, Route } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { useGetEntryAuthor } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import {
   useIsFollowingMultiple,
@@ -10,6 +14,7 @@ import {
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import routes, { POST } from '../routes';
 
 const { Box, ProfileMiniCard } = DS;
 
@@ -27,27 +32,21 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const profileData = profileDataReq.data;
 
   const isFollowingReq = useIsFollowingMultiple(loginQuery.data?.ethAddress, [
-    profileData.ethAddress,
+    profileData?.ethAddress,
   ]);
   const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  // React.useEffect(() => {
-  //   if (loginState.ethAddress && profileState.ethAddress) {
-  //     followActions.isFollowing(loginState.ethAddress, profileState.ethAddress);
-  //   }
-  // }, [loginState.ethAddress, profileState.ethAddress]);
-
   const handleFollow = () => {
     if (profileData?.ethAddress) {
-      followReq.mutate(profileData.ethAddress);
+      followReq.mutate(profileData?.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
     if (profileData?.ethAddress) {
-      unfollowReq.mutate(profileData.ethAddress);
+      unfollowReq.mutate(profileData?.ethAddress);
     }
   };
 
@@ -56,7 +55,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
       return true;
     }
     return false;
-  }, [followedProfiles, profileData.ethAddress]);
+  }, [followedProfiles, profileData?.ethAddress]);
 
   if (!profileData?.ethAddress) {
     return null;
@@ -80,4 +79,36 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   );
 };
 
-export default ProfileCardWidget;
+const Wrapped = (props: RootComponentProps) => (
+  <Router>
+    <Route path={`${routes[POST]}/:postId`}>
+      <I18nextProvider i18n={i18next}>
+        <ProfileCardWidget {...props} />
+      </I18nextProvider>
+    </Route>
+  </Router>
+);
+
+const reactLifecycles = singleSpaReact({
+  React,
+  ReactDOM,
+  rootComponent: withProviders(Wrapped),
+  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+    if (props.logger) {
+      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
+    }
+    return <div>!</div>;
+  },
+});
+
+export const bootstrap = (props: RootComponentProps) => {
+  return setupI18next({
+    logger: props.logger,
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'app-akasha-integration',
+  });
+};
+
+export const mount = reactLifecycles.mount;
+
+export const unmount = reactLifecycles.unmount;

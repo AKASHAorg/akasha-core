@@ -22,6 +22,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
     emojiPlaceholderLabel,
     onPublish,
     handleNavigateBack,
+    linkPreview,
     getLinkPreview,
     getMentions,
     getTags,
@@ -55,6 +56,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
         placeholderLabel={placeholderLabel}
         emojiPlaceholderLabel={emojiPlaceholderLabel}
         minHeight={'192px'}
+        linkPreview={linkPreview}
         getLinkPreview={getLinkPreview}
         getMentions={getMentions}
         getTags={getTags}
