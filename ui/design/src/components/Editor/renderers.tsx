@@ -44,7 +44,7 @@ const ImgElement = ({
         aria-label={element.url}
         contentEditable={false}
         style={{
-          minHeight: element.size?.naturalHeight,
+          minHeight: Math.max(element.size?.naturalHeight, 30),
           width: '100%',
           position: 'relative',
           overflow: 'hidden',
