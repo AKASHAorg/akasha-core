@@ -21,6 +21,8 @@ import ViewportSizeProvider from '../Providers/viewport-dimension';
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import LinkPreview from '../Editor/link-preview';
+import Tooltip from '../Tooltip';
+import { IconDiv } from '../NotificationCard/styled-notifications';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -344,6 +346,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               <Text style={{ flexShrink: 0 }} color="secondaryText">
                 {formatRelativeTime(entryData.time, locale)}
               </Text>
+            )}
+            {!!entryData?.updatedAt && (
+              <Tooltip
+                dropProps={{ align: { right: 'left' } }}
+                message={`Last edited ${formatRelativeTime(entryData.updatedAt, locale)}`}
+                plain={true}
+                caretPosition={'right'}
+              >
+                <IconDiv>
+                  <Icon size="xs" type="editSimple" primaryColor={true} clickable={false} />
+                </IconDiv>
+              </Tooltip>
             )}
             <Icon
               type="akasha"

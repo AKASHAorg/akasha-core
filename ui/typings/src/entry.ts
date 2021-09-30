@@ -32,6 +32,7 @@ export interface IEntryData {
   linkPreview?: LinkPreview_Response;
   slateContent: Descendant[];
   time?: string | number | Date;
+  updatedAt?: string | number | Date;
   replies?: number;
   reposts?: number;
   ipfsLink?: string;

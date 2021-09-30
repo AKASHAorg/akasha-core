@@ -150,6 +150,7 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     quote: quotedEntry,
     entryId: entry._id,
     time: entry.creationDate,
+    updatedAt: entry.updatedAt,
     reposts: entry['quotedBy']?.length,
     // ipfsLink: entry._id,
     replies: totalComments,
