@@ -8,13 +8,22 @@ import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-// import { useEffect } from 'react';
-import { /* useLocation */ BrowserRouter } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, BrowserRouter } from 'react-router-dom';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
 export interface EntryListPage {
   results: string[];
+}
+export function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  return null;
 }
 export interface IFeedWidgetProps {
   logger: ILogger;
@@ -47,6 +56,7 @@ export interface IFeedWidgetProps {
 const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
   return (
     <BrowserRouter>
+      {/* <ScrollToTop /> */}
       <I18nextProvider i18n={props.i18n}>
         <ThemeSelector
           settings={{ activeTheme: 'Light-Theme' }}

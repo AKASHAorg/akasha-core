@@ -57,7 +57,7 @@ export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.di
 `;
 
 export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  z-index: 999;
+  z-index: 10;
   flex-grow: 1;
   top: ${TOPBAR_HEIGHT}px;
   position: sticky;

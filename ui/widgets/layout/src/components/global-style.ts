@@ -22,11 +22,7 @@ export const GlobalStyle: any = createGlobalStyle<{
     display: flex;
     background: #b8d7ff !important;
   }
-  body {
-    margin: 0;
-    overscroll-behavior-y: none;
-    overflow-y: scroll;
-  }
+  body {}
   #root {
     display: flex;
   }
