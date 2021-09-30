@@ -136,7 +136,11 @@ const StatModal: React.FC<IStatModal> = props => {
                 key={index}
                 title={`${label}${stats[index] > 0 ? ` (${stats[index]})` : ''}`}
               >
-                <Box height="30rem" pad={{ horizontal: 'large' }} overflow={{ vertical: 'auto' }}>
+                <Box
+                  height="30rem"
+                  pad={{ horizontal: isMobileOnly ? 'medium' : 'large' }}
+                  overflow={{ vertical: 'auto' }}
+                >
                   {index === 0 && (
                     <>
                       {followersReqStatus.isLoading && <ListLoading type="profile" />}

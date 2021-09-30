@@ -7,6 +7,7 @@ import DuplexButton from '../DuplexButton';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
 import useIntersectionObserver from '../../utils/intersection-observer';
+import { isMobileOnly } from 'react-device-detect';
 
 export interface IProfileEntry {
   ipfsGateway?: string;
@@ -105,6 +106,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                     activeHoverLabel={unfollowLabel}
                     onClickInactive={() => handleFollowProfile(entry.ethAddress)}
                     onClickActive={() => handleUnfollowProfile(entry.ethAddress)}
+                    gap={isMobileOnly && 'xsmall'}
                     active={followedProfiles?.includes(entry.ethAddress)}
                     icon={<Icon type="following" />}
                   />

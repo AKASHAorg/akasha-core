@@ -25,6 +25,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
     className,
     style,
     icon,
+    gap,
   } = props;
 
   const [hovered, setHovered] = React.useState(false);
@@ -34,6 +35,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
       active={active}
       className={className}
       style={style}
+      gap={gap}
       label={active ? (hovered ? activeHoverLabel : activeLabel) : inactiveLabel}
       onClick={active ? onClickActive : onClickInactive}
       onMouseEnter={() => setHovered(true)}
