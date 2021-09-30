@@ -37,14 +37,6 @@ export interface IProfileEntry {
   handleUnfollowProfile: (ethAddress: string) => void;
 }
 
-const ExtendedStyledAnchor = styled(StyledAnchor)`
-  width: 68%;
-`;
-
-const StyledBox = styled(Box)`
-  max-width: 7rem;
-`;
-
 const ProfileEntry: React.FC<IProfileEntry> = props => {
   const {
     ipfsGateway,
@@ -78,7 +70,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
         <Box key={index} flex={false} gap="medium">
           {page.results.map((entry, index) => (
             <Box key={index} direction="row" justify="between" align="center">
-              <ExtendedStyledAnchor
+              <StyledAnchor
                 onClick={e => {
                   e.preventDefault();
                   return false;
@@ -99,18 +91,17 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                 }
               />
               {loggedUser !== entry.pubKey && (
-                <StyledBox width="32%">
+                <Box>
                   <DuplexButton
-                    inactiveLabel={followLabel}
-                    activeLabel={followingLabel}
-                    activeHoverLabel={unfollowLabel}
+                    inactiveLabel={!isMobileOnly && followLabel}
+                    activeLabel={!isMobileOnly && followingLabel}
+                    activeHoverLabel={!isMobileOnly && unfollowLabel}
                     onClickInactive={() => handleFollowProfile(entry.ethAddress)}
                     onClickActive={() => handleUnfollowProfile(entry.ethAddress)}
-                    gap={isMobileOnly && 'xsmall'}
                     active={followedProfiles?.includes(entry.ethAddress)}
                     icon={<Icon type="following" />}
                   />
-                </StyledBox>
+                </Box>
               )}
             </Box>
           ))}

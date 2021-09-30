@@ -13,12 +13,6 @@ const StyledButton = styled(Button)<{ active: boolean }>`
   &:hover {
     box-shadow: none;
   }
-  @media screen and (max-width: 360px) {
-    font-size: 0.75rem;
-    svg {
-      width: 0.9rem;
-    }
-  }
   ${props => {
     if (props.active) {
       return css`
