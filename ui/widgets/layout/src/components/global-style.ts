@@ -19,7 +19,8 @@ export const GlobalStyle: any = createGlobalStyle<{
   body {
     font-family: Inter !important;
     font-size: 16px;
-    height: 100%;
+    display: flex;
+    background: #b8d7ff !important;
   }
   body {
     margin: 0;
@@ -28,16 +29,10 @@ export const GlobalStyle: any = createGlobalStyle<{
   }
   #root {
     display: flex;
-    height: 100%;
   }
   .container {
-    border: 0;
-    box-sizing: border-box;
     display: flex;
-    flex-basis: auto;
     flex-direction: column;
-    flex-shrink: 0;
-    margin: 0px;
     min-height: 0px;
     min-width: 0px;
     padding: 0px;

@@ -5,7 +5,6 @@ const { css, styled, Box } = DS;
 
 export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
   border: 0;
-  box-sizing: border-box;
   display: flex;
   flex-basis: auto;
   flex-direction: column;
@@ -19,10 +18,8 @@ export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
 `;
 
 export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  /* flex-direction: column-reverse !important; */
   max-width: 100%;
   margin-bottom: 0.5em;
-  height: 100%;
   border: 0;
   justify-content: flex-start;
   flex-grow: 1;
@@ -35,21 +32,17 @@ export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseC
 `;
 
 const TOPBAR_HEIGHT = 48;
-
-//@notice dont add add max-height calc here, it will break the scroll restoration
+const WIDGET_AREA_MARGIN_TOP = '0.5rem';
 export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   position: sticky;
   top: ${TOPBAR_HEIGHT}px;
-  flex-grow: 1;
-  max-height: calc(100vh - ${TOPBAR_HEIGHT}px);
+  max-height: calc((100vh - ${TOPBAR_HEIGHT}px) - ${WIDGET_AREA_MARGIN_TOP});
 `;
-
 export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box)``;
-
 export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.div`
   flex-grow: 1;
-  margin-top: 0.5rem;
-  height: calc(100vh - ${TOPBAR_HEIGHT}px - 0.5em);
+  margin-top: ${WIDGET_AREA_MARGIN_TOP};
+  max-height: 100%;
   ${props => css`
     &::-webkit-scrollbar {
       width: 0 !important;
@@ -65,7 +58,6 @@ export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.di
 export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   z-index: 999;
   flex-grow: 1;
-  max-height: calc(100vh - ${TOPBAR_HEIGHT}px);
   top: ${TOPBAR_HEIGHT}px;
   position: sticky;
   flex-direction: column;
@@ -75,9 +67,6 @@ export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseCont
       if (props.visible) {
         return css`
           position: fixed;
-          /* top: ${TOPBAR_HEIGHT}rem; */
-          /* width: 90vw; */
-          /* height: calc(100vh - ${TOPBAR_HEIGHT + 0.3}rem); */
         `;
       }
       return css`

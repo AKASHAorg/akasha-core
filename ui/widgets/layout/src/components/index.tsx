@@ -21,6 +21,7 @@ const reactLifecycles = singleSpaReact({
       <ThemeSelector
         availableThemes={[lightTheme, darkTheme]}
         settings={{ activeTheme: 'LightTheme' }}
+        style={{ display: 'flex', flexDirection: 'row', flexGrow: 1 }}
       >
         <ErrorLoader type="script-error" title="Error in layout widget" details={error.message} />
       </ThemeSelector>
