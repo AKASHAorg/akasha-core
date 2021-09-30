@@ -35,6 +35,7 @@ export interface IFeedWidgetProps {
   contentClickable?: boolean;
   onEntryFlag: (entryId: string, itemType: string) => () => void;
   onEntryRemove?: (entryId: string) => void;
+  parentIsProfilePage?: boolean;
   removeEntryLabel?: string;
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;

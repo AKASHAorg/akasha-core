@@ -18,6 +18,7 @@ export const KEPT_ITEMS_KEY = 'MODERATED_ITEMS';
 export const PENDING_ITEMS_KEY = 'PENDING_ITEMS';
 export const DELISTED_ITEMS_KEY = 'MODERATED_ITEMS';
 export const CHECK_MODERATOR_KEY = 'CHECK_MODERATOR';
+export const MODERATION_STATUS_KEY = 'MODERATION_STATUS_KEY';
 
 export type UseModerationParam = {
   dataToSign: { [key: string]: string };
@@ -443,6 +444,23 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
       getNextPageParam: lastPage => lastPage.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
+    },
+  );
+}
+
+export function useModerationStatus(resourceId: string, data: Record<string, unknown>) {
+  const sdk = getSDK();
+  return useQuery(
+    [MODERATION_STATUS_KEY, resourceId, sdk.services.stash.computeKey(data)],
+    () =>
+      fetchRequest({
+        method: 'POST',
+        url: BASE_STATUS_URL,
+        data: data,
+      }),
+    {
+      keepPreviousData: true,
+      enabled: !!resourceId,
     },
   );
 }

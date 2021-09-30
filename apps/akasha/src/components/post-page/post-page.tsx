@@ -15,7 +15,7 @@ import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ENTRY_KEY, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useGetBookmarks,
@@ -25,6 +25,7 @@ import {
 import {
   useInfiniteComments,
   useCreateComment,
+  COMMENT_KEY,
 } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import {
   useIsFollowingMultiple,
@@ -84,8 +85,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     if (showAnyway) {
       return false;
     }
-    return postReq.status === 'success' && entryData.reported;
-  }, [entryData, showAnyway, postReq.status]);
+    return postReq.isSuccess && entryData.reported;
+  }, [entryData, showAnyway, postReq.isSuccess]);
 
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
@@ -153,7 +154,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
         url = `/social-app/post/${
-          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
+          queryClient.getQueryData<{ postId: string }>([COMMENT_KEY, details.entryId])?.postId
         }`;
         break;
       default:
@@ -268,8 +269,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Post | Ethereum World</title>
       </Helmet>
-      {postReq.status === 'loading' && <EntryCardLoading />}
-      {postReq.status === 'error' && (
+      {postReq.isLoading && <EntryCardLoading />}
+      {postReq.isError && (
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading the entry')}
@@ -277,7 +278,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
           devDetails={postReq.error}
         />
       )}
-      {postReq.status === 'success' && (
+      {postReq.isSuccess && (
         <>
           {entryData.moderated && entryData.delisted && (
             <EntryCardHidden

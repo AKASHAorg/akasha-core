@@ -33,6 +33,7 @@ export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseC
 
 const TOPBAR_HEIGHT = 48;
 const WIDGET_AREA_MARGIN_TOP = '0.5rem';
+
 export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   position: sticky;
   top: ${TOPBAR_HEIGHT}px;
@@ -62,16 +63,4 @@ export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseCont
   position: sticky;
   flex-direction: column;
   align-items: flex-end;
-  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
-    ${props => {
-      if (props.visible) {
-        return css`
-          position: fixed;
-        `;
-      }
-      return css`
-        display: none;
-      `;
-    }}
-  }
 `;

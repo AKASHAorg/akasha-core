@@ -4,7 +4,19 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 const { ThemeSelector, lightTheme, darkTheme, ViewportSizeProvider } = DS;
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      keepPreviousData: true,
+      notifyOnChangePropsExclusions: ['isStale'],
+      staleTime: 60000,
+      initialDataUpdatedAt: Date.now() - 60000,
+      refetchOnWindowFocus: true,
+      notifyOnChangeProps: 'tracked',
+      refetchOnMount: true,
+    },
+  },
+});
 
 export default function withProviders<T>(WrappedComponent: React.ComponentType<T>) {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';

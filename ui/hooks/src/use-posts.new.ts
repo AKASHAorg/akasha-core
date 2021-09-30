@@ -157,7 +157,15 @@ const getPost = async (postID: string, loggedUser?: string) => {
       contentIds: [postID],
     });
     const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
-    return { ...res.data.getPost, ...modStatus[0] };
+    const modStatusAuthor = await moderationRequest.checkStatus(true, {
+      user: loggedUser || user?.data?.pubKey || '',
+      contentIds: [res.data?.getPost?.author?.pubKey],
+    });
+    return {
+      ...res.data.getPost,
+      ...modStatus[0],
+      author: { ...res.data.getPost.author, ...modStatusAuthor[0] },
+    };
   } catch (error) {
     logError('usePosts.getPost', error);
     throw error;
@@ -203,8 +211,8 @@ export function useDeletePost(postID: string) {
       });
       return { previousPost };
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries([ENTRY_KEY, postID]);
+    onSuccess: async () => {
+      await queryClient.invalidateQueries([ENTRY_KEY, postID]);
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {

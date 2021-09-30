@@ -3,7 +3,6 @@ import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
 import { logError } from './utils/error-handler';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
 export const NOTIFICATIONS_KEY = 'Notifications';
 export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
