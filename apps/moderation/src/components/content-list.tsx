@@ -222,18 +222,18 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                 ))}
               </Box>
             ))}
-            {/* fetch indicator for load more on scroll */}
-            {pendingItemsQuery.isLoading && pendingItemPages.length < 1 && (
-              <Box pad="large">
-                <Spinner />
-              </Box>
-            )}
             {/* triggers intersection observer */}
             <Box pad="xxsmall" ref={loadmorePendingRef} />
           </>
         ) : (
           <NoItemsFound activeTab={'pending'} />
         ))}
+      {/* fetch indicator for load more on scroll */}
+      {pendingItemsQuery.isLoading && isPending && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
       {!isPending &&
         (!delistedItemsQuery.isLoading && isDelisted && delistedItemPages.length ? (
           <>
@@ -283,12 +283,6 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                 ))}
               </Box>
             ))}
-            {/* fetch indicator for load more on scroll */}
-            {delistedItemsQuery.isLoading && delistedItemPages.length < 1 && (
-              <Box pad="large">
-                <Spinner />
-              </Box>
-            )}
             {/* triggers intersection observer */}
             <Box pad="xxsmall" ref={loadmoreDelistedRef} />
           </>
@@ -340,18 +334,24 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                 ))}
               </Box>
             ))}
-            {/* fetch indicator for load more on scroll */}
-            {keptItemsQuery.isLoading && keptItemPages.length < 1 && (
-              <Box pad="large">
-                <Spinner />
-              </Box>
-            )}
             {/* triggers intersection observer */}
             <Box pad="xxsmall" ref={loadmoreKeptRef} />
           </>
         ) : (
           <NoItemsFound activeTab={'moderated'} />
         ))}
+      {/* fetch indicator for load more on scroll */}
+      {delistedItemsQuery.isLoading && !isPending && isDelisted && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
+      {/* fetch indicator for load more on scroll */}
+      {keptItemsQuery.isLoading && !isPending && !isDelisted && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
     </Box>
   );
 };

@@ -68,6 +68,7 @@ const getComment = async (commentID): Promise<CommentResponse> => {
       user: user?.data?.pubKey || '',
       contentIds: [res.data?.getComment?.author?.pubKey],
     });
+    // @TODO: assign modStatus to a single prop
     return {
       ...res.data.getComment,
       ...modStatus[0],

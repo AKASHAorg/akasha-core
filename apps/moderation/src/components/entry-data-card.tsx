@@ -40,6 +40,9 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               onContentClick={handleNavigateToPost}
               disableReposting={true}
               isModerated={true}
+              isRemoved={entryData.isRemoved}
+              removedByMeLabel={t('You deleted this post')}
+              removedByAuthorLabel={t(`This ${itemType} was deleted by its author`)}
             />
           )}
           {itemType === 'account' && (
