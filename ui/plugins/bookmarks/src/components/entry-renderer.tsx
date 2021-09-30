@@ -95,12 +95,37 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   }, [type, postReq.data, postReq.isSuccess, commentReq.data, commentReq.isSuccess]);
 
-  const isReported = React.useMemo(() => {
+  const [isReported, isAccountReported] = React.useMemo(() => {
     if (showAnyway) {
-      return false;
+      return [false, false];
     }
-    return (postReq.isSuccess || commentReq.isSuccess) && itemData?.reported;
+    const reqSuccess = postReq.isSuccess || commentReq.isSuccess;
+    return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
   }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
+
+  const accountAwaitingModeration = !itemData?.author?.moderated && isAccountReported;
+  const entryAwaitingModeration = !itemData?.moderated && isReported;
+
+  const itemTypeName = React.useMemo(() => {
+    switch (type) {
+      case ItemTypes.ENTRY:
+        return t('post');
+      case ItemTypes.PROFILE:
+        return t('account');
+      case ItemTypes.COMMENT:
+        return t('reply');
+      case ItemTypes.TAG:
+        return t('tag');
+      default:
+        return t('unknown');
+    }
+  }, [t, type]);
+
+  const hiddenEntryTextLabel = React.useMemo(() => {
+    const stringEnd = `${itemTypeName} ${t('for the following reason')}`;
+    if (accountAwaitingModeration) return `${t('You reported the author of this')} ${stringEnd}`;
+    return `${t('You reported this')} ${stringEnd}}`;
+  }, [t, accountAwaitingModeration, itemTypeName]);
 
   const onEditButtonMount = (name: string) => {
     props.uiEvents.next({
@@ -161,17 +186,17 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   isDelisted={true}
                 />
               )}
-              {!itemData.moderated && isReported && (
+              {(accountAwaitingModeration || entryAwaitingModeration) && (
                 <EntryCardHidden
-                  reason={itemData.reason}
-                  headerTextLabel={t(`You reported this post for the following reason`)}
+                  reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
+                  headerTextLabel={hiddenEntryTextLabel}
                   footerTextLabel={t('It is awaiting moderation.')}
                   ctaLabel={t('See it anyway')}
                   handleFlipCard={handleFlipCard}
                 />
               )}
 
-              {!isReported && (
+              {!entryAwaitingModeration && !accountAwaitingModeration && (
                 <EntryCard
                   isRemoved={itemData.isRemoved}
                   isBookmarked={true}
