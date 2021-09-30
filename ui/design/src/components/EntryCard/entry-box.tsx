@@ -229,6 +229,46 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setDisplayCID(!displayCID);
   };
 
+  // memoized flags
+  const showCardMenu = React.useMemo(
+    () => !isMobile && menuIconRef.current && menuDropOpen,
+    [menuDropOpen],
+  );
+
+  const showMobileCardMenu = React.useMemo(() => isMobile && menuDropOpen, [menuDropOpen]);
+
+  const showProfileDrop = React.useMemo(
+    () => profileRef.current && profileDropOpen,
+    [profileDropOpen],
+  );
+
+  const showCID = React.useMemo(
+    () => entryData.CID && akashaRef.current && displayCID,
+    [displayCID, entryData.CID],
+  );
+
+  const showLinkPreview = React.useMemo(
+    () => !props.isRemoved && entryData.linkPreview,
+    [entryData.linkPreview, props.isRemoved],
+  );
+
+  const showQuote = React.useMemo(
+    () =>
+      !props.isRemoved && entryData.quote && !entryData.quote.delisted && !entryData.quote.reported,
+    [entryData.quote, props.isRemoved],
+  );
+
+  const showReportedQuote = React.useMemo(
+    () =>
+      !props.isRemoved && entryData.quote && !entryData.quote.delisted && entryData.quote.reported,
+    [entryData.quote, props.isRemoved],
+  );
+
+  const showDelistedQuote = React.useMemo(
+    () => !props.isRemoved && entryData.quote && entryData.quote.delisted,
+    [entryData.quote, props.isRemoved],
+  );
+
   return (
     <ViewportSizeProvider>
       <Box style={style}>
@@ -273,7 +313,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               />
             }
           />
-          {profileRef.current && profileDropOpen && (
+          {showProfileDrop && (
             <StyledProfileDrop
               overflow="hidden"
               target={profileRef.current}
@@ -327,7 +367,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             )}
           </Box>
         </Box>
-        {entryData.CID && akashaRef.current && displayCID && (
+        {showCID && (
           <CardHeaderAkashaDropdown
             target={akashaRef.current}
             onMenuClose={() => {
@@ -336,7 +376,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {!isMobile && menuIconRef.current && menuDropOpen && (
+        {showCardMenu && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
@@ -363,7 +403,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             headerMenuExt={props.headerMenuExt}
           />
         )}
-        {isMobile && menuDropOpen && (
+        {showMobileCardMenu && (
           <StyledDropAlt>
             <MobileListModal
               closeModal={closeMenuDrop}
@@ -426,7 +466,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             />
           </Box>
         )}
-        {!props.isRemoved && entryData.linkPreview && (
+        {showLinkPreview && (
           <Box pad="medium">
             <LinkPreview
               linkPreviewData={entryData.linkPreview}
@@ -434,37 +474,31 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             />
           </Box>
         )}
-        {!props.isRemoved &&
-          entryData.quote &&
-          !entryData.quote.delisted &&
-          !entryData.quote.reported && (
-            <Box
-              pad="medium"
-              onClick={() => {
-                if (disableActions) {
-                  return;
-                }
-                handleContentClick(entryData.quote);
-              }}
-            >
-              <EmbedBox embedEntryData={entryData.quote} />
-            </Box>
-          )}
-        {!props.isRemoved &&
-          entryData.quote &&
-          !entryData.quote.delisted &&
-          entryData.quote.reported && (
-            <Box pad="medium" onClick={() => null}>
-              <EntryCardHidden
-                reason={entryData.reason}
-                headerTextLabel={headerTextLabel}
-                footerTextLabel={footerTextLabel}
-                ctaLabel={ctaLabel}
-                handleFlipCard={handleFlipCard}
-              />
-            </Box>
-          )}
-        {!props.isRemoved && entryData.quote && entryData.quote.delisted && (
+        {showQuote && (
+          <Box
+            pad="medium"
+            onClick={() => {
+              if (disableActions) {
+                return;
+              }
+              handleContentClick(entryData.quote);
+            }}
+          >
+            <EmbedBox embedEntryData={entryData.quote} />
+          </Box>
+        )}
+        {showReportedQuote && (
+          <Box pad="medium" onClick={() => null}>
+            <EntryCardHidden
+              reason={entryData.reason}
+              headerTextLabel={headerTextLabel}
+              footerTextLabel={footerTextLabel}
+              ctaLabel={ctaLabel}
+              handleFlipCard={handleFlipCard}
+            />
+          </Box>
+        )}
+        {showDelistedQuote && (
           <Box pad="medium" onClick={() => null}>
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>
