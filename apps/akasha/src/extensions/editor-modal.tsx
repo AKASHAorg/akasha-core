@@ -146,6 +146,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
             keepEditingLabel={t('Keep Editing')}
             onPublish={handleEntryPublish}
             handleNavigateBack={handleModalClose}
+            linkPreview={entryData?.linkPreview}
             getLinkPreview={getLinkPreview}
             getMentions={handleMentionQueryChange}
             getTags={handleTagQueryChange}

@@ -126,11 +126,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       {createPostMutation && createPostMutation.state.status === 'loading' && (
         <EntryCard
           style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-          entryData={createPendingEntry(
-            loggedProfileData,
-            createPostMutation.state.variables,
-            createPostMutation.state.variables.metadata.quote,
-          )}
+          entryData={createPendingEntry(loggedProfileData, createPostMutation.state.variables)}
           sharePostLabel={t('Share Post')}
           shareTextLabel={t('Share this post with your friends')}
           repliesLabel={t('Replies')}
