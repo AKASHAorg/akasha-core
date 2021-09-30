@@ -349,14 +349,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             )}
             {!!entryData?.updatedAt && (
               <Tooltip
-                dropProps={{ align: { right: 'left' } }}
+                dropProps={{ align: { top: 'bottom' } }}
                 message={`Last edited ${formatRelativeTime(entryData.updatedAt, locale)}`}
                 plain={true}
-                caretPosition={'right'}
+                caretPosition={'top'}
               >
-                <IconDiv>
-                  <Icon size="xs" type="editSimple" primaryColor={true} clickable={false} />
-                </IconDiv>
+                <Icon size="sm" type="editSimple" primaryColor={true} clickable={false} />
               </Tooltip>
             )}
             <Icon
