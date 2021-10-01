@@ -1,16 +1,18 @@
 import React from 'react';
 import SingleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ButtonValues, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   useGetCount,
   useInfiniteKept,
   useCheckModerator,
   useInfinitePending,
   useInfiniteDelisted,
-} from '@akashaproject/ui-awf-hooks/lib/moderation-request';
+} from '@akashaproject/ui-awf-hooks/lib/use-moderation';
+import { IModeratedItem, IPendingItem } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
 
 import ContentTab from './content-tab';
 import ContentCard from './content-card/content-card';
@@ -25,42 +27,6 @@ interface IContentListProps {
   singleSpa: typeof SingleSpa;
 }
 
-interface IBaseItem {
-  id: number;
-  type: string;
-  entryId: string;
-  reasons: string[];
-  description?: string;
-  count: number;
-  entryDate: string;
-}
-
-interface IProfile {
-  avatar: string;
-  ethAddress: string;
-  pubKey: string;
-  name: string;
-  userName: string;
-}
-
-interface IPendingItem extends IBaseItem {
-  reporter: string;
-  reporterProfile: IProfile;
-}
-
-interface IModeratedItem extends IPendingItem {
-  delisted: boolean;
-  moderator: string;
-  moderatorProfile: IProfile;
-  evaluationDate: string;
-}
-
-export interface ICount {
-  kept: number;
-  pending: number;
-  delisted: number;
-}
-
 const DEFAULT_LIMIT = 10;
 
 const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
@@ -68,7 +34,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
 
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
-  const [activeButton, setActiveButton] = React.useState<string>('Delisted');
+  const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.DELISTED);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -167,20 +133,34 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
     });
   };
 
-  const buttonLabels = [t('Kept'), t('Delisted')];
+  const buttonValues = [ButtonValues.KEPT, ButtonValues.DELISTED];
 
-  const buttonValues = ['Kept', 'Delisted'];
+  const buttonLabels = buttonValues.map(value => t(value));
 
   const onTabClick = (value: string) => {
     // set active button state
     setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
     // toggle list accordingly
-    if (value === 'Kept') {
+    if (value === ButtonValues.KEPT) {
       setIsDelisted(false);
-    } else if (value === 'Delisted') {
+    } else if (value === ButtonValues.DELISTED) {
       setIsDelisted(true);
     }
   };
+
+  const showDelistedItems = React.useMemo(() => {
+    if (!delistedItemsQuery.isLoading && isDelisted && delistedItemPages.length) {
+      return true;
+    }
+    return false;
+  }, [isDelisted, delistedItemPages.length, delistedItemsQuery.isLoading]);
+
+  const showKeptItems = React.useMemo(() => {
+    if (!keptItemsQuery.isLoading && !isDelisted && keptItemPages.length) {
+      return true;
+    }
+    return false;
+  }, [isDelisted, keptItemPages.length, keptItemsQuery.isLoading]);
 
   if (!isAuthorised) {
     return (
@@ -231,16 +211,16 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                     showExplanationsLabel={t('Show explanations')}
                     hideExplanationsLabel={t('Hide explanations')}
                     reportedLabel={t('reported')}
-                    itemType={pendingItem.type}
+                    itemType={pendingItem.contentType}
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={pendingItem.entryId}
+                    entryId={pendingItem.contentID}
                     reasons={pendingItem.reasons.map((el: string) => t(el))}
-                    reporter={pendingItem.reporter}
-                    reporterAvatar={pendingItem.reporterProfile.avatar}
-                    reporterName={pendingItem.reporterProfile.name}
-                    reporterENSName={pendingItem.reporterProfile.userName}
+                    reporter={pendingItem.reportedBy}
+                    reporterAvatar={pendingItem.reportedByProfile?.avatar}
+                    reporterName={pendingItem.reportedByProfile?.name}
+                    reporterENSName={pendingItem.reportedByProfile?.userName}
                     andLabel={t('and')}
                     otherReporters={
                       pendingItem.count
@@ -250,28 +230,27 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                         : ''
                     }
                     reportedOnLabel={t('On')}
-                    reportedDateTime={pendingItem.entryDate}
+                    reportedDateTime={pendingItem.reportedDate}
                     makeADecisionLabel={t('Make a Decision')}
                     handleButtonClick={handleButtonClick}
                   />
                 ))}
               </Box>
             ))}
-            {/* fetch indicator for load more on scroll */}
-            {pendingItemsQuery.isLoading && pendingItemPages.length < 1 && (
-              <Box pad="large">
-                <Spinner />
-              </Box>
-            )}
             {/* triggers intersection observer */}
             <Box pad="xxsmall" ref={loadmorePendingRef} />
           </>
         ) : (
           <NoItemsFound activeTab={'pending'} />
         ))}
-      {!delistedItemsQuery.isLoading &&
-        !isPending &&
-        (isDelisted && delistedItemPages.length ? (
+      {/* fetch indicator for load more on scroll */}
+      {pendingItemsQuery.isLoading && isPending && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
+      {!isPending &&
+        (showDelistedItems ? (
           <>
             {delistedItemPages.map((page, index) => (
               <Box key={index} flex={false}>
@@ -286,16 +265,16 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                     determinationLabel={t('Determination')}
                     determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
                     reportedLabel={t('reported')}
-                    itemType={moderatedItem.type}
+                    itemType={moderatedItem.contentType}
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={moderatedItem.entryId}
+                    entryId={moderatedItem.contentID}
                     reasons={moderatedItem.reasons.map(el => t(el))}
-                    reporter={moderatedItem.reporter}
-                    reporterAvatar={moderatedItem.reporterProfile.avatar}
-                    reporterName={moderatedItem.reporterProfile.name}
-                    reporterENSName={moderatedItem.reporterProfile.userName}
+                    reporter={moderatedItem.reportedBy}
+                    reporterAvatar={moderatedItem.reportedByProfile?.avatar}
+                    reporterName={moderatedItem.reportedByProfile?.name}
+                    reporterENSName={moderatedItem.reportedByProfile?.userName}
                     andLabel={t('and')}
                     otherReporters={
                       moderatedItem.count
@@ -305,34 +284,24 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                         : ''
                     }
                     reportedOnLabel={t('On')}
-                    reportedDateTime={moderatedItem.entryDate}
-                    moderatorDecision={moderatedItem.description}
+                    reportedDateTime={moderatedItem.reportedDate}
+                    moderatorDecision={moderatedItem.explanation}
                     moderator={moderatedItem.moderator}
                     moderatorName={moderatedItem.moderatorProfile.name}
                     moderatorENSName={moderatedItem.moderatorProfile.userName}
                     moderatedByLabel={t('Moderated by')}
                     moderatedOnLabel={t('On')}
-                    evaluationDateTime={moderatedItem.evaluationDate}
+                    evaluationDateTime={moderatedItem.moderatedDate}
                     reviewDecisionLabel={t('Review decision')}
                     handleButtonClick={handleButtonClick}
                   />
                 ))}
               </Box>
             ))}
-            {/* fetch indicator for load more on scroll */}
-            {delistedItemsQuery.isLoading && delistedItemPages.length < 1 && (
-              <Box pad="large">
-                <Spinner />
-              </Box>
-            )}
             {/* triggers intersection observer */}
-            <Box
-              pad="xxsmall"
-              ref={loadmoreDelistedRef}
-              border={{ color: 'red', size: '0.1rem' }}
-            />
+            <Box pad="xxsmall" ref={loadmoreDelistedRef} />
           </>
-        ) : !isDelisted && keptItemPages.length ? (
+        ) : showKeptItems ? (
           <>
             {keptItemPages.map((page, index) => (
               <Box key={index} flex={false}>
@@ -347,16 +316,16 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                     determinationLabel={t('Determination')}
                     determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
                     reportedLabel={t('reported')}
-                    itemType={moderatedItem.type}
+                    itemType={moderatedItem.contentType}
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={moderatedItem.entryId}
+                    entryId={moderatedItem.contentID}
                     reasons={moderatedItem.reasons.map(el => t(el))}
-                    reporter={moderatedItem.reporter}
-                    reporterAvatar={moderatedItem.reporterProfile.avatar}
-                    reporterName={moderatedItem.reporterProfile.name}
-                    reporterENSName={moderatedItem.reporterProfile.userName}
+                    reporter={moderatedItem.reportedBy}
+                    reporterAvatar={moderatedItem.reportedByProfile?.avatar}
+                    reporterName={moderatedItem.reportedByProfile?.name}
+                    reporterENSName={moderatedItem.reportedByProfile?.userName}
                     andLabel={t('and')}
                     otherReporters={
                       moderatedItem.count
@@ -366,32 +335,38 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                         : ''
                     }
                     reportedOnLabel={t('On')}
-                    reportedDateTime={moderatedItem.entryDate}
-                    moderatorDecision={moderatedItem.description}
+                    reportedDateTime={moderatedItem.reportedDate}
+                    moderatorDecision={moderatedItem.explanation}
                     moderator={moderatedItem.moderator}
                     moderatorName={moderatedItem.moderatorProfile.name}
                     moderatorENSName={moderatedItem.moderatorProfile.userName}
                     moderatedByLabel={t('Moderated by')}
                     moderatedOnLabel={t('On')}
-                    evaluationDateTime={moderatedItem.evaluationDate}
+                    evaluationDateTime={moderatedItem.moderatedDate}
                     reviewDecisionLabel={t('Review decision')}
                     handleButtonClick={handleButtonClick}
                   />
                 ))}
               </Box>
             ))}
-            {/* fetch indicator for load more on scroll */}
-            {keptItemsQuery.isLoading && keptItemPages.length < 1 && (
-              <Box pad="large">
-                <Spinner />
-              </Box>
-            )}
             {/* triggers intersection observer */}
-            <Box pad="xxsmall" ref={loadmoreKeptRef} border={{ color: 'red', size: '0.1rem' }} />
+            <Box pad="xxsmall" ref={loadmoreKeptRef} />
           </>
         ) : (
           <NoItemsFound activeTab={'moderated'} />
         ))}
+      {/* fetch indicator for load more on scroll */}
+      {delistedItemsQuery.isLoading && !isPending && isDelisted && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
+      {/* fetch indicator for load more on scroll */}
+      {keptItemsQuery.isLoading && !isPending && !isDelisted && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
     </Box>
   );
 };

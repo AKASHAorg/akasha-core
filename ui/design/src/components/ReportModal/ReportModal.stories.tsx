@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-import { ToastProvider } from 'react-toast-notifications';
 
 import ReportModal from '.';
 import { IReportModalProps } from './report-modal';
@@ -50,11 +49,7 @@ const Template = (args: IReportModalProps) => {
             setModalOpen(true);
           }}
         />
-        {modalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal {...args} closeModal={() => setModalOpen(false)} />
-          </ToastProvider>
-        )}
+        {modalOpen && <ReportModal {...args} closeModal={() => setModalOpen(false)} />}
       </Box>
     </Grommet>
   );
@@ -72,11 +67,7 @@ const Template2 = (args: IReportSuccessModalProps) => {
             setModalOpen(true);
           }}
         />
-        {modalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportSuccessModal {...args} closeModal={() => setModalOpen(false)} />
-          </ToastProvider>
-        )}
+        {modalOpen && <ReportSuccessModal {...args} closeModal={() => setModalOpen(false)} />}
       </Box>
     </Grommet>
   );

@@ -42,6 +42,7 @@ interface ISimilarMenu {
   icon: IconType;
   labels: (string | undefined)[];
   handler: () => void;
+  preventRender?: boolean;
 }
 
 const ProfileMenu: React.FC<IProfileMenu> = props => {
@@ -119,6 +120,12 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   const similarMenu: ISimilarMenu[] = [
     { icon: 'feedback', labels: [feedbackLabel, feedbackInfoLabel], handler: handleFeedbackClick },
     {
+      icon: 'trendingApps',
+      labels: [dashboardLabel, dashboardInfoLabel],
+      handler: onDashboardClick,
+      preventRender: !isModerator,
+    },
+    {
       icon: 'book',
       labels: [moderationLabel, moderationInfoLabel],
       handler: handleModerationClick,
@@ -133,53 +140,33 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
             {renderAvatarMenuItem(menuItem)}
           </Box>
         ))}
-      {isModerator && (
-        <Box
-          border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
-          justify="start"
-          fill="horizontal"
-        >
-          <StyledPopoverBox
-            pad="xsmall"
-            margin={{ vertical: 'xsmall' }}
-            align="start"
-            onClick={onDashboardClick}
-            responsive={false}
+      {similarMenu.map((menu, idx) => {
+        if (menu.preventRender) return null;
+        return (
+          <Box
+            key={menu.icon + idx}
+            border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
+            justify="start"
+            fill="horizontal"
           >
-            <SubtitleTextIcon
-              label={dashboardLabel}
-              subtitle={dashboardInfoLabel}
-              subtitleColor={'secondaryText'}
-              iconType={'trendingApps'}
-              iconSize={'1.250rem'}
-            />
-          </StyledPopoverBox>
-        </Box>
-      )}
-      {similarMenu.map((menu, idx) => (
-        <Box
-          key={menu.icon + idx}
-          border={{ style: 'solid', size: '1px', color: 'border', side: 'bottom' }}
-          justify="start"
-          fill="horizontal"
-        >
-          <StyledPopoverBox
-            pad="xsmall"
-            margin={{ vertical: 'xsmall' }}
-            align="start"
-            onClick={menu.handler}
-            responsive={false}
-          >
-            <SubtitleTextIcon
-              label={menu.labels[0]}
-              subtitle={menu.labels[1]}
-              subtitleColor={'secondaryText'}
-              iconType={menu.icon}
-              iconSize={'1.250rem'}
-            />
-          </StyledPopoverBox>
-        </Box>
-      ))}
+            <StyledPopoverBox
+              pad="xsmall"
+              margin={{ vertical: 'xsmall' }}
+              align="start"
+              onClick={menu.handler}
+              responsive={false}
+            >
+              <SubtitleTextIcon
+                label={menu.labels[0]}
+                subtitle={menu.labels[1]}
+                subtitleColor={'secondaryText'}
+                iconType={menu.icon}
+                iconSize={'1.250rem'}
+              />
+            </StyledPopoverBox>
+          </Box>
+        );
+      })}
       <Box
         border={
           loggedProfileData?.ethAddress

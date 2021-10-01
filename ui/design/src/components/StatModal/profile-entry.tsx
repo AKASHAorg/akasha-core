@@ -1,11 +1,13 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
+import styled from 'styled-components';
 
 import Icon from '../Icon';
 import DuplexButton from '../DuplexButton';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
 import useIntersectionObserver from '../../utils/intersection-observer';
+import { isMobileOnly } from 'react-device-detect';
 
 export interface IProfileEntry {
   ipfsGateway?: string;
@@ -76,7 +78,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                 weight="normal"
                 href={`${profileAnchorLink}/${entry.pubKey}`}
                 label={
-                  <Box width="15rem" pad="none">
+                  <Box width="100%" pad="none">
                     <ProfileAvatarButton
                       ethAddress={entry.ethAddress}
                       onClick={() => onClickProfile(entry.pubKey)}
@@ -89,11 +91,11 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                 }
               />
               {loggedUser !== entry.pubKey && (
-                <Box width="7rem">
+                <Box>
                   <DuplexButton
-                    inactiveLabel={followLabel}
-                    activeLabel={followingLabel}
-                    activeHoverLabel={unfollowLabel}
+                    inactiveLabel={!isMobileOnly && followLabel}
+                    activeLabel={!isMobileOnly && followingLabel}
+                    activeHoverLabel={!isMobileOnly && unfollowLabel}
                     onClickInactive={() => handleFollowProfile(entry.ethAddress)}
                     onClickActive={() => handleUnfollowProfile(entry.ethAddress)}
                     active={followedProfiles?.includes(entry.ethAddress)}

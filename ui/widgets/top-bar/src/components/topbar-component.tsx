@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
 import { useGetLogin, useLogout } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
+import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
@@ -201,7 +201,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         searchBarLabel={t('Search profiles or topics')}
         legalLabel={t('Legal')}
         isModerator={isModerator}
-        dashboardLabel={t('Moderator dashboard')}
+        dashboardLabel={t('Moderator Dashboard')}
         dashboardInfoLabel={t('Help moderate items!')}
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}

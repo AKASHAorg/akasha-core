@@ -40,6 +40,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     isBookmarked,
     bookmarkLabel,
     bookmarkedLabel,
+    showMore,
     profileAnchorLink,
     repliesAnchorLink,
     onRepost,
@@ -101,6 +102,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         isBookmarked={isBookmarked}
         bookmarkLabel={bookmarkLabel}
         bookmarkedLabel={bookmarkedLabel}
+        showMore={showMore}
         profileAnchorLink={profileAnchorLink}
         repliesAnchorLink={repliesAnchorLink}
         onRepost={onRepost}

@@ -48,6 +48,7 @@ describe('<ProfileCard /> Component', () => {
             changeCoverImageLabel={changeCoverImageLabel}
             cancelLabel={cancelLabel}
             saveChangesLabel={saveChangesLabel}
+            showMore={true}
             flaggable={true}
             onClickFollowers={handleClickFollowers}
             onClickFollowing={handleClickFollowing}

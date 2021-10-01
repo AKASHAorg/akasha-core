@@ -1,23 +1,13 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { EntryReport } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
 
 const { Text } = DS;
 
-export type IFlagEntry = {
-  _id: string;
-  _mod: number;
-  author: string;
-  contentID: string;
-  contentType: string;
-  creationDate: number;
-  explanation: string;
-  reason: string;
-};
-
 export interface IExplanationsBoxEntryProps {
-  flagEntry: IFlagEntry;
+  flagEntry: EntryReport;
   reportedByLabel: string;
   forLabel: string;
   logger: ILogger;

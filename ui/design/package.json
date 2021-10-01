@@ -69,7 +69,6 @@
     "lodash.throttle": "4.1.1",
     "react-fast-compare": "3.2.0",
     "react-virtualized-auto-sizer": "1.0.6",
-    "react-toast-notifications": "2.5.1",
     "react-transition-group": "4.4.2",
     "styled-components": "5.3.1"
   },
