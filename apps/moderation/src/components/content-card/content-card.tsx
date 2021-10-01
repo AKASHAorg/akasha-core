@@ -1,9 +1,11 @@
 import React from 'react';
+
 import DS from '@akashaproject/design-system';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 import Content from './content';
 import { IContentProps } from '../../interfaces';
@@ -44,20 +46,28 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     reviewDecisionLabel,
   } = props;
 
-  const profileDataQuery = useGetProfile(entryId, props.user, itemType === 'account');
+  const profileDataQuery = useGetProfile(
+    entryId,
+    props.user,
+    itemType === ModerationItemTypes.ACCOUNT,
+  );
   const profile = profileDataQuery.data;
 
-  const postQuery = usePost({ postId: entryId, enabler: itemType === 'post' });
-  const commentQuery = useComment(entryId, itemType === 'reply' || itemType === 'comment');
+  const postQuery = usePost({ postId: entryId, enabler: itemType === ModerationItemTypes.POST });
+
+  const commentQuery = useComment(
+    entryId,
+    itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT,
+  );
 
   const entryData = React.useMemo(() => {
-    if (itemType === 'post') {
+    if (itemType === ModerationItemTypes.POST) {
       if (postQuery.data) {
         return mapEntry(postQuery.data);
       }
       return undefined;
     }
-    if (['reply', 'comment'].includes(itemType)) {
+    if (itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT) {
       if (commentQuery.data) {
         return mapEntry(commentQuery.data);
       }
@@ -72,7 +82,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
         <Content
           isPending={isPending}
           locale={locale}
-          entryData={itemType === 'account' ? profile : entryData}
+          entryData={itemType === ModerationItemTypes.ACCOUNT ? profile : entryData}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}

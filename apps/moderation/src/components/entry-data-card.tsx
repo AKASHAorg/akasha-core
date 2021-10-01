@@ -1,8 +1,10 @@
 import React from 'react';
 import SingleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 import { redirectToPost } from '../services/routing-service';
 
@@ -27,7 +29,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
       {entryData ? (
         <>
           {/* for other contents (reply | comment, post) */}
-          {itemType !== 'account' && entryData && (
+          {itemType !== ModerationItemTypes.ACCOUNT && entryData && (
             <EntryCard
               showMore={false}
               entryData={entryData}
@@ -45,7 +47,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               removedByAuthorLabel={t(`This ${itemType} was deleted by its author`)}
             />
           )}
-          {itemType === 'account' && (
+          {itemType === ModerationItemTypes.ACCOUNT && (
             <ProfileCard
               showMore={false}
               flaggable={true}

@@ -9,7 +9,7 @@ import LocalStorageBackend from 'i18next-localstorage-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ModerationItemTypes, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useErrors, withProviders, useReasons, useModeration } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
@@ -62,7 +62,9 @@ const ReportModalComponent = (props: RootComponentProps) => {
 
   return (
     <ReportModal
-      titleLabel={t(`Report ${itemType === 'account' ? activeModal.user : itemType}`)}
+      titleLabel={t(
+        `Report ${itemType === ModerationItemTypes.ACCOUNT ? activeModal.user : itemType}`,
+      )}
       successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
       successMessageLabel={t(`We will investigate this ${itemType} and take appropriate action.`)}
       optionsTitleLabel={t('Please select a reason')}

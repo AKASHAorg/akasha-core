@@ -1,9 +1,10 @@
 import React from 'react';
 import SingleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ButtonValues, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   useGetCount,
   useInfiniteKept,
@@ -33,7 +34,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
 
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
-  const [activeButton, setActiveButton] = React.useState<string>('Delisted');
+  const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.DELISTED);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -132,20 +133,34 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
     });
   };
 
-  const buttonLabels = [t('Kept'), t('Delisted')];
+  const buttonValues = [ButtonValues.KEPT, ButtonValues.DELISTED];
 
-  const buttonValues = ['Kept', 'Delisted'];
+  const buttonLabels = buttonValues.map(value => t(value));
 
   const onTabClick = (value: string) => {
     // set active button state
     setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
     // toggle list accordingly
-    if (value === 'Kept') {
+    if (value === ButtonValues.KEPT) {
       setIsDelisted(false);
-    } else if (value === 'Delisted') {
+    } else if (value === ButtonValues.DELISTED) {
       setIsDelisted(true);
     }
   };
+
+  const showDelistedItems = React.useMemo(() => {
+    if (!delistedItemsQuery.isLoading && isDelisted && delistedItemPages.length) {
+      return true;
+    }
+    return false;
+  }, [isDelisted, delistedItemPages.length, delistedItemsQuery.isLoading]);
+
+  const showKeptItems = React.useMemo(() => {
+    if (!keptItemsQuery.isLoading && !isDelisted && keptItemPages.length) {
+      return true;
+    }
+    return false;
+  }, [isDelisted, keptItemPages.length, keptItemsQuery.isLoading]);
 
   if (!isAuthorised) {
     return (
@@ -235,7 +250,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
         </Box>
       )}
       {!isPending &&
-        (!delistedItemsQuery.isLoading && isDelisted && delistedItemPages.length ? (
+        (showDelistedItems ? (
           <>
             {delistedItemPages.map((page, index) => (
               <Box key={index} flex={false}>
@@ -286,7 +301,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
             {/* triggers intersection observer */}
             <Box pad="xxsmall" ref={loadmoreDelistedRef} />
           </>
-        ) : !keptItemsQuery.isLoading && !isDelisted && keptItemPages.length ? (
+        ) : showKeptItems ? (
           <>
             {keptItemPages.map((page, index) => (
               <Box key={index} flex={false}>
