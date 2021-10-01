@@ -3,7 +3,7 @@ import getSDK from '@akashaproject/awf-sdk';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
-import moderationRequest from './moderation-request';
+import { checkStatus } from './use-moderation';
 import { getMediaUrl } from './utils/media-utils';
 import { logError } from './utils/error-handler';
 import {
@@ -30,7 +30,7 @@ const getProfileData = async (payload: {
 
   try {
     // check entry's moderation status
-    const modStatus = await moderationRequest.checkStatus(true, {
+    const modStatus = await checkStatus({
       user: payload.loggedUser,
       contentIds: [payload.pubKey],
     });

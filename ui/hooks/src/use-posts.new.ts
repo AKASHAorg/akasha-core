@@ -6,7 +6,7 @@ import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
-import moderationRequest from './moderation-request';
+import { checkStatus } from './use-moderation';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -152,12 +152,12 @@ const getPost = async (postID: string, loggedUser?: string) => {
   try {
     const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
     // check entry's moderation status
-    const modStatus = await moderationRequest.checkStatus(true, {
+    const modStatus = await checkStatus({
       user: loggedUser || user?.data?.pubKey || '',
       contentIds: [postID],
     });
     const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
-    const modStatusAuthor = await moderationRequest.checkStatus(true, {
+    const modStatusAuthor = await checkStatus({
       user: loggedUser || user?.data?.pubKey || '',
       contentIds: [res.data?.getPost?.author?.pubKey],
     });

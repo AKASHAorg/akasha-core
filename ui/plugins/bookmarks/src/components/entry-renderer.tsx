@@ -219,6 +219,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   moderatedContentLabel={t('This content has been moderated')}
+                  showMore={true}
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={'/social-app/post'}
                   onRepost={props.onRepost}

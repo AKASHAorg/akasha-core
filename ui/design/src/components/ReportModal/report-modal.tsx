@@ -34,6 +34,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
 
   cancelLabel?: string;
   reportLabel?: string;
+  errorText?: string;
   user?: string;
   itemType?: string;
   requesting: boolean;
@@ -62,6 +63,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     reportLabel,
     blockLabel,
     closeLabel,
+    errorText,
     user,
     contentId,
     itemType,
@@ -207,6 +209,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 />
               </Box>
             </FormField>
+            {/* display error message, if any */}
+            {errorText?.length > 0 && <Text color="errorText">{errorText}</Text>}
             <Box margin={{ top: 'medium' }}>
               <Text color="secondaryText" size="medium" margin={{ bottom: 'medium' }}>
                 {footerText1Label}{' '}

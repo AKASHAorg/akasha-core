@@ -336,6 +336,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               }}
               bookmarkLabel={t('Save')}
               bookmarkedLabel={t('Saved')}
+              showMore={true}
               profileAnchorLink={'/profile'}
               repliesAnchorLink={'/social-app/post'}
               onRepost={onRepost}
