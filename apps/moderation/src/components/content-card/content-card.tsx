@@ -1,9 +1,11 @@
 import React from 'react';
+
 import DS from '@akashaproject/design-system';
 import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 import Content from './content';
 import { IContentProps } from '../../interfaces';
@@ -44,26 +46,35 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     reviewDecisionLabel,
   } = props;
 
-  const profileDataReq = useGetProfile(entryId);
-  const profile = profileDataReq.data;
+  const profileDataQuery = useGetProfile(
+    entryId,
+    props.user,
+    itemType === ModerationItemTypes.ACCOUNT,
+  );
+  const profile = profileDataQuery.data;
 
-  const postReq = usePost({ postId: entryId, enabler: !!entryId });
-  const commentReq = useComment(entryId);
+  const postQuery = usePost({ postId: entryId, enabler: itemType === ModerationItemTypes.POST });
+
+  const commentQuery = useComment(
+    entryId,
+    itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT,
+  );
 
   const entryData = React.useMemo(() => {
-    if (itemType === 'post') {
-      if (postReq.data) {
-        return mapEntry(postReq.data);
+    if (itemType === ModerationItemTypes.POST) {
+      if (postQuery.data) {
+        return mapEntry(postQuery.data);
       }
       return undefined;
     }
-    if (['reply', 'comment'].includes(itemType)) {
-      if (commentReq.data) {
-        return mapEntry(commentReq.data);
+    if (itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT) {
+      if (commentQuery.data) {
+        return mapEntry(commentQuery.data);
       }
       return undefined;
     }
-  }, [postReq.data, commentReq.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postQuery.data, commentQuery.data]);
 
   return (
     <Box margin={{ bottom: '1rem' }}>
@@ -71,7 +82,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
         <Content
           isPending={isPending}
           locale={locale}
-          entryData={itemType === 'account' ? profile : entryData}
+          entryData={itemType === ModerationItemTypes.ACCOUNT ? profile : entryData}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}

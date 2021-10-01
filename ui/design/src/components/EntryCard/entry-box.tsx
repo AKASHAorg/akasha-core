@@ -52,6 +52,8 @@ export interface IEntryBoxProps {
   comment?: boolean;
   bookmarkLabel?: string;
   bookmarkedLabel?: string;
+  // determines when to render the 'show more' icon
+  showMore: boolean;
   // anchor link
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
@@ -118,6 +120,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     isBookmarked,
     bookmarkLabel,
     bookmarkedLabel,
+    showMore,
     profileAnchorLink,
     repliesAnchorLink,
     onEntryBookmark,
@@ -365,7 +368,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={false}
             />
-            {entryData.type !== 'REMOVED' && (
+            {showMore && entryData.type !== 'REMOVED' && (
               <StyledIcon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {

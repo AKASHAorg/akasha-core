@@ -29,6 +29,10 @@ const StyledCircle = styled(Box)`
   border-radius: 50%;
 `;
 
+const StyledBox = styled(Box)`
+  min-height: fit-content;
+`;
+
 const StyledText = styled(Text)`
   text-align: center;
   color: ${props => props.theme.colors.secondaryText};
@@ -71,14 +75,18 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
       <Box height={size} width={size} margin={{ bottom: 'small' }} alignSelf="center">
         <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
       </Box>
-      <Box>
+      <StyledBox>
         <Text size="xlarge" textAlign="center" weight="bold">
           {title}
         </Text>
         <StyledText size="large" margin={{ top: 'xsmall' }}>
           {content}
         </StyledText>
-        <Box direction="row" margin={{ vertical: 'xlarge', horizontal: 'auto' }} pad="0.15rem">
+        <StyledBox
+          direction="row"
+          margin={{ vertical: 'xlarge', horizontal: 'auto' }}
+          pad="0.15rem"
+        >
           <Meter
             type="circle"
             aria-label="meter"
@@ -108,8 +116,8 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
               </Box>
             ))}
           </Box>
-        </Box>
-      </Box>
+        </StyledBox>
+      </StyledBox>
       <Box border={{ color: 'border', side: 'bottom', style: 'solid' }} />
       <Box margin={{ top: 'large' }}>
         <StyledText>{footerLabel}</StyledText>

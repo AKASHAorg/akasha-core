@@ -5,6 +5,7 @@ import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 
 export interface IContentProps {
+  user?: string;
   isPending: boolean;
   locale: ILocale;
   entryData: IEntryData | IProfileData;
@@ -22,19 +23,19 @@ export interface IContentProps {
   entryId: string;
   reasons: string[];
   reporter?: string;
-  reporterAvatar?: string;
+  reporterAvatar?: string | null;
   reporterName?: string | null;
   reporterENSName?: string | null;
   otherReporters?: string;
   reportedOnLabel?: string;
-  reportedDateTime: string;
+  reportedDateTime: Date;
   moderatorDecision?: string;
   moderator?: string;
   moderatorName?: string | null;
   moderatorENSName?: string | null;
   moderatedByLabel?: string;
   moderatedOnLabel?: string;
-  evaluationDateTime?: string;
+  evaluationDateTime?: Date;
   makeADecisionLabel?: string;
   reviewDecisionLabel?: string;
   logger: ILogger;

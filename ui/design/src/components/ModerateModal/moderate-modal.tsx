@@ -30,6 +30,7 @@ export interface IModerateModalProps {
   footerLink1Label: string;
   footerUrl1: string;
   cancelLabel?: string;
+  errorText?: string;
   user: string | null;
   requesting: boolean;
   // indicates if making a fresh or reviewing an existing decision
@@ -52,6 +53,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     footerLink1Label,
     footerUrl1,
     cancelLabel,
+    errorText,
     user,
     requesting,
     isReview,
@@ -177,6 +179,8 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 />
               </Box>
             </FormField>
+            {/* display error message, if any */}
+            {errorText?.length > 0 && <Text color="errorText">{errorText}</Text>}
             <Box margin={{ top: 'medium' }}>
               <Text color="secondaryText" size="medium" margin={{ bottom: 'medium' }}>
                 {footerText1Label}{' '}

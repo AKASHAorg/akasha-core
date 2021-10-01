@@ -1,22 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import DS from '@akashaproject/design-system';
 
-export interface ILogItem {
-  contentID: string;
-  contentType: string;
-  moderatedDate: Date;
-  moderator: {
-    ethAddress: string;
-    name: string;
-    userName: string;
-    avatar: string;
-  };
-  delisted: false;
-  reasons: string[];
-  reports: number;
-  explanation: string;
-}
+import DS from '@akashaproject/design-system';
+import { ILogItem } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
+import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 export interface IDetailCard {
   selected: ILogItem;
@@ -37,11 +24,11 @@ const DetailCard: React.FC<IDetailCard> = props => {
   const { t } = useTranslation();
 
   const handleClickViewItem = (itemType: string, contentID: string) => () => {
-    if (itemType === 'post') {
+    if (itemType === ModerationItemTypes.POST) {
       navigateToUrl(`${BASE_SOCIAL_URL}/post/${contentID}`);
-    } else if (itemType === 'reply' || itemType === 'comment') {
+    } else if (itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT) {
       navigateToUrl(`${BASE_SOCIAL_URL}/reply/${contentID}`);
-    } else if (itemType === 'account') {
+    } else if (itemType === ModerationItemTypes.ACCOUNT) {
       navigateToUrl(`${BASE_PROFILE_URL}/${contentID}`);
     }
   };
@@ -68,7 +55,7 @@ const DetailCard: React.FC<IDetailCard> = props => {
         `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
       )}
       viewItemLink={`${window.location.origin}${
-        selected.contentType === 'account'
+        selected.contentType === ModerationItemTypes.ACCOUNT
           ? `${BASE_PROFILE_URL}/${selected.contentID}`
           : `${BASE_SOCIAL_URL}/${selected.contentType}/${selected.contentID}`
       }`}
