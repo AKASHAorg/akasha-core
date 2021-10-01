@@ -28,6 +28,7 @@ fragment PostResult on Post{
   type
   _id
   creationDate
+  updatedAt
   tags
   totalComments
   quotedBy
