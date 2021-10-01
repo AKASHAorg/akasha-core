@@ -92,6 +92,7 @@ export interface IEntryBoxProps {
   removedByAuthorLabel?: string;
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
+  editedLabel?: string;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -148,6 +149,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     removeEntryLabel,
     removedByMeLabel = 'You deleted this post',
     removedByAuthorLabel = 'This post was deleted by its author',
+    editedLabel = 'Last edited',
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -350,7 +352,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             {!!entryData?.updatedAt && (
               <Tooltip
                 dropProps={{ align: { top: 'bottom' } }}
-                message={`Last edited ${formatRelativeTime(entryData.updatedAt, locale)}`}
+                message={`${editedLabel} ${formatRelativeTime(entryData.updatedAt, locale)}`}
                 plain={true}
                 caretPosition={'top'}
               >
