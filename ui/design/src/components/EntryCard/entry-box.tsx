@@ -22,7 +22,6 @@ import { formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
-import { IconDiv } from '../NotificationCard/styled-notifications';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
