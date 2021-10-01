@@ -151,6 +151,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         changeCoverImageLabel={t('Change cover image')}
         cancelLabel={t('Cancel')}
         saveChangesLabel={t('Save changes')}
+        showMore={true}
         canUserEdit={loginState.ethAddress === profileData.ethAddress}
         flaggable={loginState.ethAddress !== profileData.ethAddress}
         flagAsLabel={t('Report')}

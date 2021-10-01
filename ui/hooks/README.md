@@ -130,12 +130,15 @@ This package contains all hooks required for proper functioning of the Akasha We
 - setTrendingTags
 - setTrendingProfiles
 
-## [moderation-request](./src/moderation-request.ts)
-- handles moderation status check for entries. Available methods include;
-- checkModerator
+## [useModeration](./src/use-moderation.ts)
+- handles moderation related actions. Available actions include;
+- createModerationMutation
 - checkStatus
+- checkModerator
 - getCount
 - getFlags
-- getAllPending
-- getAllModerated
+- getLog
+- getPending
+- getKept
+- getDelisted
 

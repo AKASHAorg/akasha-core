@@ -4,7 +4,7 @@ import getSDK from '@akashaproject/awf-sdk';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
-import moderationRequest from './moderation-request';
+import { checkStatus } from './use-moderation';
 import { IPublishData, CommentResponse } from '@akashaproject/ui-awf-typings/lib/entry';
 
 export const COMMENT_KEY = 'Comment';
@@ -59,15 +59,16 @@ const getComment = async (commentID): Promise<CommentResponse> => {
   try {
     const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
     // check entry's moderation status
-    const modStatus = await moderationRequest.checkStatus(true, {
+    const modStatus = await checkStatus({
       user: user.data ? user.data.pubKey : '',
       contentIds: [commentID],
     });
     const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
-    const modStatusAuthor = await moderationRequest.checkStatus(true, {
+    const modStatusAuthor = await checkStatus({
       user: user?.data?.pubKey || '',
       contentIds: [res.data?.getComment?.author?.pubKey],
     });
+    // @TODO: assign modStatus to a single prop
     return {
       ...res.data.getComment,
       ...modStatus[0],

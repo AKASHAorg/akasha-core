@@ -58,6 +58,8 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   // reporting and moderation related labels
   flagAsLabel?: string;
   blockLabel?: string;
+  // determines when to render the 'show more' icon
+  showMore: boolean;
   flaggable: boolean;
   onEntryFlag: () => void;
   getProfileProvidersData?: () => void;
@@ -137,6 +139,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     handleFollow,
     handleUnfollow,
     handleShareClick,
+    showMore,
     isFollowing,
     profileData,
     descriptionLabel,
@@ -324,7 +327,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 onClick={toggleMenu}
               />
             )}
-            {isMobile || (!isMobile && loggedEthAddress !== profileData.ethAddress) ? (
+            {showMore &&
+            (isMobile || (!isMobile && loggedEthAddress !== profileData.ethAddress)) ? (
               <Icon type="moreDark" onClick={toggleMenu} clickable={true} ref={menuRef} />
             ) : null}
           </Box>

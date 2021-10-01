@@ -316,6 +316,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     style={{ height: 'auto' }}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
+                    showMore={true}
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={'/social-app/post'}
                     onRepost={handleRepost}
@@ -375,6 +376,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                     style={{ height: 'auto' }}
                     bookmarkLabel={t('Save')}
                     bookmarkedLabel={t('Saved')}
+                    showMore={true}
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={'/social-app/post'}
                     onRepost={() => null}
