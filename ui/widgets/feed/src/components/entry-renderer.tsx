@@ -80,6 +80,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const followProfileQuery = useFollow();
   const unfollowProfileQuery = useUnfollow();
   const [isEditingComment, setIsEditingComment] = React.useState<boolean>(false);
+  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
 
   const isBookmarked = React.useMemo(() => {
     return (
@@ -157,8 +158,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [unfollowProfileQuery, authorEthAddress]);
 
   const handleEditClick = React.useCallback(() => {
-    setIsEditingComment(true);
-  }, []);
+    if (props.itemType === ItemTypes.COMMENT) {
+      setIsEditingComment(true);
+    }
+    setMenuDropOpen(false);
+  }, [props.itemType]);
 
   const handleAvatarClick = () => {
     onNavigate(ItemTypes.PROFILE, {
@@ -357,6 +361,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
               removedByMeLabel={props.removedByMeLabel}
               removedByAuthorLabel={props.removedByAuthorLabel}
               disableReposting={itemData.isRemoved}
+              menuDropOpen={menuDropOpen}
+              setMenuDropOpen={setMenuDropOpen}
               headerMenuExt={
                 ethAddress === itemData.author.ethAddress && (
                   <ExtensionPoint
