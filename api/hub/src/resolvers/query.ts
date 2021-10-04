@@ -1,7 +1,5 @@
-import { getPreviewFromContent } from 'link-preview-js';
-import { commentsStats, REGEX_VALID_URL, statsProvider } from './constants';
+import { commentsStats, statsProvider } from './constants';
 import { queryCache } from '../storage/cache';
-import { fetchWithTimeout, addToIpfs, createIpfsGatewayLink, isIpfsEnabled } from '../helpers';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
@@ -193,67 +191,7 @@ const query = {
     );
     return returned;
   },
-  getLinkPreview: async (_source, { link }) => {
-    if (!link || typeof link !== `string`) {
-      throw new Error(`did not receive a valid url`);
-    }
 
-    const detectedUrl = link
-      .replace(/\n/g, ` `)
-      .split(` `)
-      .find(token => REGEX_VALID_URL.test(token));
-
-    if (!detectedUrl) {
-      throw new Error(`did not receive a valid url`);
-    }
-    const options = {
-      timeout: 12000,
-      redirect: 'follow',
-      headers: {
-        'user-agent': 'Twitterbot',
-      },
-    };
-    const response = await fetchWithTimeout(detectedUrl, options);
-    const headers = {};
-    response.headers.forEach((header, key) => {
-      headers[key] = header;
-    });
-    const normalizedResponse = {
-      url: response.url,
-      headers: headers,
-      data: await response.text(),
-    };
-    const preview = await getPreviewFromContent(normalizedResponse);
-    if (!isIpfsEnabled) {
-      return preview;
-    }
-    if (preview?.favicons?.length) {
-      const pinFavicon = await addToIpfs(preview.favicons[0]);
-      preview.favicons.unshift(createIpfsGatewayLink(pinFavicon.cid.toV1().toString()));
-    }
-
-    // typings for link-preview lib are broken
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (preview.mediaType === 'image' && !preview?.images?.length) {
-      const pinImage = await addToIpfs(preview.url);
-      Object.defineProperty(preview, 'images', {
-        value: [createIpfsGatewayLink(pinImage.cid.toV1().toString())],
-      });
-      return preview;
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (preview?.images?.length) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const pinMedia = await addToIpfs(preview.images[0]);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      preview.images.unshift(createIpfsGatewayLink(pinMedia.cid.toV1().toString()));
-    }
-    return preview;
-  },
   /**
    * Returns posts made by the last 1000 accounts followed
    * @param _source
