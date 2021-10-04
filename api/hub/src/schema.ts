@@ -113,7 +113,6 @@ const typeDefs = gql`
     getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
     getFollowers(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
-    getLinkPreview(link: String!): LinkPreview
     getCustomFeed(limit: Int, offset: Int): NewPostsResult
     getInterests(pubKey: String!): [String]
   }
@@ -187,6 +186,7 @@ const typeDefs = gql`
     removePost(id: String!): Boolean
     removeComment(id: String!): Boolean
     toggleInterestSub(sub: String!): Boolean
+    getLinkPreview(link: String!): LinkPreview
   }
 
   type Tag {
