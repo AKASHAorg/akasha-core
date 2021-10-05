@@ -403,6 +403,8 @@ const mutations = {
       const pinFavicon = await addToIpfs(preview.favicons[0]);
       if (pinFavicon?.cid) {
         preview.favicons.unshift(createIpfsGatewayLink(pinFavicon.cid.toV1().toString()));
+      } else {
+        preview.favicons.splice(0);
       }
     }
 
@@ -415,7 +417,6 @@ const mutations = {
         Object.defineProperty(preview, 'images', {
           value: [createIpfsGatewayLink(pinImage.cid.toV1().toString())],
         });
-        return preview;
       }
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -429,6 +430,10 @@ const mutations = {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         preview.images.unshift(createIpfsGatewayLink(pinMedia.cid.toV1().toString()));
+      } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        preview.images.splice(0);
       }
     }
     return preview;
