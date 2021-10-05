@@ -6,11 +6,11 @@ module.exports = {
   presets: [
     '@babel/preset-env',
     '@babel/preset-react',
-    {
-      runtime: 'automatic',
-      development: process.env.NODE_ENV !== 'production',
-      importSource: '@welldone-software/why-did-you-render',
-    },
+    // {
+    //   runtime: 'automatic',
+    //   development: process.env.NODE_ENV !== 'production',
+    //   importSource: '@welldone-software/why-did-you-render',
+    // },
     '@babel/preset-typescript',
   ],
   plugins: [],
