@@ -175,8 +175,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [unfollowProfileQuery, authorEthAddress]);
 
   const handleEditClick = React.useCallback(() => {
-    setIsEditingComment(true);
-  }, []);
+    if (itemType === ItemTypes.COMMENT) {
+      setIsEditingComment(true);
+    }
+  }, [itemType]);
 
   const handleAvatarClick = () => {
     onNavigate(ItemTypes.PROFILE, {
