@@ -12,6 +12,7 @@ import {
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  StyledContentBox,
   BrandIcon,
   MenuIcon,
   VersionButton,
@@ -59,7 +60,7 @@ export interface ITopbarProps {
   className?: string;
   onLoginClick: () => void;
   onSignUpClick: () => void;
-  onLogout: any;
+  onLogout: () => void;
 }
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -110,8 +111,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   const [currentDropItem, setCurrentDropItem] = React.useState<IMenuItem | null>(null);
 
-  const menuItemRefs: React.RefObject<any> = React.useRef([]);
-  const feedbackMenuRef: React.RefObject<any> = React.useRef(null);
+  const menuItemRefs = React.useRef([]);
+  const feedbackMenuRef = React.useRef(null);
 
   const mobileSignedOutView = isMobileOnly && !loggedProfileData?.ethAddress;
   const iconSize = isMobileOnly ? 'md' : 'sm';
@@ -308,7 +309,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
       );
     }
     return (
-      <Box direction="row" align="center" justify="between" fill="horizontal" height="3rem">
+      <StyledContentBox
+        direction="row"
+        align="center"
+        justify="between"
+        fill="horizontal"
+        height="3rem"
+      >
         <Box
           direction="row"
           align="center"
@@ -334,7 +341,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           direction="row"
           align="center"
           gap="small"
-          pad={isMobileOnly ? 'none' : { horizontal: 'medium' }}
+          pad={isMobileOnly ? 'none' : { left: 'medium' }}
           fill="horizontal"
           justify="end"
         >
@@ -362,12 +369,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
             </IconDiv>
           )}
         </Box>
-      </Box>
+      </StyledContentBox>
     );
   };
 
   return (
     <TopbarWrapper
+      align="center"
       pad={{ vertical: 'small', horizontal: 'medium' }}
       fill="horizontal"
       className={className}

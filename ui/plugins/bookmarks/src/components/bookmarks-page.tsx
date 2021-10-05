@@ -115,7 +115,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                   logger={logger}
                   singleSpa={singleSpa}
                   bookmarks={bookmarksReq.data}
-                  ethAddress={loginQuery.data?.ethAddress}
+                  loginState={loginQuery.data}
                   onBookmark={handleBookmarkClick}
                   onNavigate={handleNavigation}
                   onRepost={handleRepost}

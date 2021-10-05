@@ -11,7 +11,8 @@ const LOGIN_STATE_KEY = 'LOGIN_STATE';
 
 export interface LoginState extends CurrentUser {
   isReady?: boolean;
-
+  waitForAuth?: boolean;
+  isSigningIn?: boolean;
   // boolean to indicate if the user was previously logged in
   // data from cache!
   // if this is true, we can assume that the user is logged in
@@ -30,10 +31,20 @@ export function useGetLogin(props?: UseGetLoginProps) {
 
   useGlobalLogin({
     onLogin: data => {
-      queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({ ...prev, ...data }));
+      queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
+        ...prev,
+        ...data,
+        isSigningIn: true,
+      }));
     },
     onLogout: () => {
       queryClient.setQueryData([LOGIN_STATE_KEY], { ethAddress: null, pubKey: null });
+    },
+    waitForAuth: data => {
+      queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
+        ...prev,
+        waitForAuth: data,
+      }));
     },
     onReady: data => {
       queryClient.setQueryData<LoginState>([LOGIN_STATE_KEY], prev => ({
@@ -41,6 +52,7 @@ export function useGetLogin(props?: UseGetLoginProps) {
         ethAddress: data.ethAddress,
         pubKey: data.pubKey,
         isReady: true,
+        isSigningIn: false,
       }));
     },
     onLoadFromCache: data => {
@@ -61,13 +73,18 @@ export function useGetLogin(props?: UseGetLoginProps) {
         /* empty fn */
       }),
     {
-      initialData: { ethAddress: null, pubKey: null, isReady: false },
+      initialData: {
+        ethAddress: null,
+        pubKey: null,
+        isReady: false,
+        waitForAuth: false,
+        isSigningIn: false,
+      },
     },
   );
 }
 
 export function useLogin(onError?: (err: IAkashaError) => void) {
-  const queryClient = useQueryClient();
   const sdk = getSDK();
   return useMutation(
     async ({
@@ -84,9 +101,6 @@ export function useLogin(onError?: (err: IAkashaError) => void) {
             checkRegistered,
           }),
         );
-        if (resp.data) {
-          queryClient.setQueryData([LOGIN_STATE_KEY], resp.data);
-        }
         return resp.data;
       } catch (error) {
         logError('use-login', error);

@@ -91,6 +91,11 @@ const StyledText = styled(Text)<IStyledTextProps>`
         color: ${props.theme.colors.accent};
       `;
     }
+    if (props.disabled) {
+      return `
+        color: ${props.theme.colors.disabled} !important;
+      `;
+    }
     return;
   }}
 `;

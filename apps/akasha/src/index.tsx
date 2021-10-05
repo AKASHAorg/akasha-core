@@ -32,10 +32,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       loadingFn: () => import('./extensions/editor-modal'),
     },
     {
-      mountsIn: 'entry-card-post-edit',
-      loadingFn: () => import('./extensions/entry-edit-button'),
-    },
-    {
       mountsIn: opts => {
         if (opts.extensionData && opts.extensionData.name.startsWith('entry-card-edit-button')) {
           return opts.extensionData.name;

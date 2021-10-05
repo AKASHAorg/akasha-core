@@ -3,11 +3,12 @@ import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import TextIcon from '../TextIcon';
 import { Box, ThemeContext } from 'grommet';
 import { IconType } from '../Icon';
+import { IMenuItem } from '../MobileListModal';
 
 export interface ICardHeaderMenuProps {
   target: HTMLDivElement;
   onMenuClose: () => void;
-  menuItems: ({ icon: IconType; label: string; handler: () => void } | null)[];
+  menuItems: (IMenuItem | null)[];
   headerMenuExt?: React.ReactElement;
 }
 
@@ -31,7 +32,8 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
       onEsc={onMenuClose}
     >
       <Box pad="xxsmall" onClick={onMenuClose}>
-        {props.headerMenuExt}
+        {!!props.headerMenuExt &&
+          React.cloneElement(props.headerMenuExt, { onWrapperClick: onMenuClose })}
         {menuItems.map((menuItem, idx) => {
           if (!menuItem) {
             return null;
@@ -39,12 +41,13 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
           return (
             <StyledSelectBox key={`${menuItem.label}-${idx}`}>
               <TextIcon
-                iconType={menuItem.icon}
+                iconType={menuItem.icon as IconType}
                 label={menuItem.label}
                 onClick={handleClick(menuItem.handler)}
                 color={theme.colors.errorText}
                 iconSize="xs"
                 fontSize="medium"
+                disabled={menuItem.disabled}
               />
             </StyledSelectBox>
           );
