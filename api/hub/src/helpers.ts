@@ -300,7 +300,7 @@ export async function addToIpfs(link: string) {
     // picking only the first job result
     return ipfsClient.add(processed[0]);
   } catch (e) {
-    logger.warn(e);
+    logger.warn(e?.message);
     return;
   }
 }
