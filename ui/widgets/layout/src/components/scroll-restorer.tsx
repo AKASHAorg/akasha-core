@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { RouteChildrenProps } from 'react-router';
-import { withRouter } from 'react-router-dom';
 import { SingleSpaCustomEventDetail } from 'single-spa';
 
 const getScrollTop = () => {
@@ -11,7 +9,7 @@ const getScrollTop = () => {
   return window.scrollY || scrollTop;
 };
 
-const ScrollRestorer: React.FC<RouteChildrenProps> = props => {
+const ScrollRestorer: React.FC = () => {
   const scrollMap = React.useRef(new Map());
   const scrollTimeout = React.useRef<NodeJS.Timeout>();
 
@@ -67,9 +65,9 @@ const ScrollRestorer: React.FC<RouteChildrenProps> = props => {
       window.removeEventListener('single-spa:before-routing-event', handleBeforeRouting);
       window.removeEventListener('single-spa:routing-event', handleRouting);
     };
-  }, [props.location, tryScrollTo]);
+  }, [tryScrollTo]);
 
   return null;
 };
 
-export default withRouter(ScrollRestorer);
+export default ScrollRestorer;
