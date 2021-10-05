@@ -150,6 +150,7 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     quote: quotedEntry,
     entryId: entry._id,
     time: entry.creationDate,
+    updatedAt: entry.updatedAt,
     reposts: entry['quotedBy']?.length,
     // ipfsLink: entry._id,
     replies: totalComments,
@@ -161,10 +162,10 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
 export const createPendingEntry = (
   author: IProfileData,
   entryPublishData: IPublishData & { entryId?: string },
-  quote?: IEntryData['quote'],
 ): PendingEntry => {
   return {
-    quote,
+    quote: entryPublishData.metadata.quote,
+    linkPreview: entryPublishData.metadata.linkPreview,
     author: author,
     slateContent: entryPublishData.slateContent,
     replies: 0,

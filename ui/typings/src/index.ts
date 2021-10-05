@@ -74,3 +74,18 @@ export type QueryStatus = {
   isStale?: boolean;
   isSuccess?: boolean;
 };
+
+export enum ButtonValues {
+  ALL = 'All',
+  KEPT = 'Kept',
+  DELISTED = 'Delisted',
+  STATS = 'Stats',
+}
+
+export enum ModerationItemTypes {
+  ACCOUNT = 'account',
+  POST = 'post',
+  COMMENT = 'comment',
+  REPLY = 'reply',
+  // @TODO: add support for tag type, when tag moderation is implemented
+}

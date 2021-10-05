@@ -21,6 +21,7 @@ import ViewportSizeProvider from '../Providers/viewport-dimension';
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import LinkPreview from '../Editor/link-preview';
+import Tooltip from '../Tooltip';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -51,6 +52,8 @@ export interface IEntryBoxProps {
   comment?: boolean;
   bookmarkLabel?: string;
   bookmarkedLabel?: string;
+  // determines when to render the 'show more' icon
+  showMore: boolean;
   // anchor link
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
@@ -90,6 +93,7 @@ export interface IEntryBoxProps {
   removedByAuthorLabel?: string;
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
+  editedLabel?: string;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -116,6 +120,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     isBookmarked,
     bookmarkLabel,
     bookmarkedLabel,
+    showMore,
     profileAnchorLink,
     repliesAnchorLink,
     onEntryBookmark,
@@ -146,6 +151,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     removeEntryLabel,
     removedByMeLabel = 'You deleted this post',
     removedByAuthorLabel = 'This post was deleted by its author',
+    editedLabel = 'Last edited',
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -229,6 +235,46 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     setDisplayCID(!displayCID);
   };
 
+  // memoized flags
+  const showCardMenu = React.useMemo(
+    () => !isMobile && menuIconRef.current && menuDropOpen,
+    [menuDropOpen],
+  );
+
+  const showMobileCardMenu = React.useMemo(() => isMobile && menuDropOpen, [menuDropOpen]);
+
+  const showProfileDrop = React.useMemo(
+    () => profileRef.current && profileDropOpen,
+    [profileDropOpen],
+  );
+
+  const showCID = React.useMemo(
+    () => entryData.CID && akashaRef.current && displayCID,
+    [displayCID, entryData.CID],
+  );
+
+  const showLinkPreview = React.useMemo(
+    () => !props.isRemoved && entryData.linkPreview,
+    [entryData.linkPreview, props.isRemoved],
+  );
+
+  const showQuote = React.useMemo(
+    () =>
+      !props.isRemoved && entryData.quote && !entryData.quote.delisted && !entryData.quote.reported,
+    [entryData.quote, props.isRemoved],
+  );
+
+  const showReportedQuote = React.useMemo(
+    () =>
+      !props.isRemoved && entryData.quote && !entryData.quote.delisted && entryData.quote.reported,
+    [entryData.quote, props.isRemoved],
+  );
+
+  const showDelistedQuote = React.useMemo(
+    () => !props.isRemoved && entryData.quote && entryData.quote.delisted,
+    [entryData.quote, props.isRemoved],
+  );
+
   return (
     <ViewportSizeProvider>
       <Box style={style}>
@@ -273,7 +319,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               />
             }
           />
-          {profileRef.current && profileDropOpen && (
+          {showProfileDrop && (
             <StyledProfileDrop
               overflow="hidden"
               target={profileRef.current}
@@ -305,6 +351,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 {formatRelativeTime(entryData.time, locale)}
               </Text>
             )}
+            {!!entryData?.updatedAt && (
+              <Tooltip
+                dropProps={{ align: { top: 'bottom' } }}
+                message={`${editedLabel} ${formatRelativeTime(entryData.updatedAt, locale)}`}
+                plain={true}
+                caretPosition={'top'}
+              >
+                <Icon size="sm" type="editSimple" primaryColor={true} clickable={false} />
+              </Tooltip>
+            )}
             <Icon
               type="akasha"
               size="sm"
@@ -312,7 +368,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={akashaRef}
               clickable={false}
             />
-            {entryData.type !== 'REMOVED' && (
+            {showMore && entryData.type !== 'REMOVED' && (
               <StyledIcon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
@@ -327,7 +383,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             )}
           </Box>
         </Box>
-        {entryData.CID && akashaRef.current && displayCID && (
+        {showCID && (
           <CardHeaderAkashaDropdown
             target={akashaRef.current}
             onMenuClose={() => {
@@ -336,7 +392,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             CID={entryData.CID}
           />
         )}
-        {!isMobile && menuIconRef.current && menuDropOpen && (
+        {showCardMenu && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
             onMenuClose={closeMenuDrop}
@@ -363,7 +419,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             headerMenuExt={props.headerMenuExt}
           />
         )}
-        {isMobile && menuDropOpen && (
+        {showMobileCardMenu && (
           <StyledDropAlt>
             <MobileListModal
               closeModal={closeMenuDrop}
@@ -426,23 +482,15 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             />
           </Box>
         )}
-        {entryData.linkPreview && (
-          <Box
-            pad="medium"
-            onClick={() => {
-              if (disableActions) {
-                return;
-              }
-              handleContentClick(entryData.quote);
-            }}
-          >
+        {showLinkPreview && (
+          <Box pad="medium">
             <LinkPreview
               linkPreviewData={entryData.linkPreview}
               handleLinkClick={singleSpaNavigate}
             />
           </Box>
         )}
-        {entryData.quote && !entryData.quote.delisted && !entryData.quote.reported && (
+        {showQuote && (
           <Box
             pad="medium"
             onClick={() => {
@@ -455,7 +503,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             <EmbedBox embedEntryData={entryData.quote} />
           </Box>
         )}
-        {entryData.quote && !entryData.quote.delisted && entryData.quote.reported && (
+        {showReportedQuote && (
           <Box pad="medium" onClick={() => null}>
             <EntryCardHidden
               reason={entryData.reason}
@@ -466,7 +514,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             />
           </Box>
         )}
-        {entryData.quote && entryData.quote.delisted && (
+        {showDelistedQuote && (
           <Box pad="medium" onClick={() => null}>
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
           </Box>

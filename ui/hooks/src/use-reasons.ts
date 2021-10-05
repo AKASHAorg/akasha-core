@@ -1,11 +1,8 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-import constants from './constants';
-import { fetchRequest } from './moderation-request';
 import { createErrorHandler } from './utils/error-handler';
-
-const { BASE_REASONS_URL } = constants;
+import { getModerationReasons, Reason } from './moderation-requests';
 
 export interface UseReasonsActions {
   /**
@@ -53,21 +50,19 @@ export const useReasons = (props: UseReasonsProps): [string[], UseReasonsActions
   const actions: UseReasonsActions = {
     async fetchReasons(data) {
       try {
-        const res = await fetchRequest({
-          method: 'POST',
-          url: BASE_REASONS_URL,
-          data,
-        });
+        const res = await getModerationReasons(data);
 
         if (Array.isArray(res)) {
           // pick only labels for each reason object
           const labels = res.reduce(
-            (acc: string[], cur: Record<string, unknown>) => [...acc, cur.label],
+            (acc: string[], cur: Reason) => [...acc, cur.label],
             [],
           );
           // dispatch labels, adding last option - 'Other'
           dispatch({ type: 'FETCH_REASONS_SUCCESS', payload: [...labels, 'Other'] });
-        } else throw new Error(res);
+        } else {
+          throw new Error('Response must be an array');
+        }
       } catch (error) {
         return createErrorHandler('useReasons.fetchReasons', false, onError);
       }

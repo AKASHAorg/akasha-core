@@ -28,6 +28,7 @@ fragment PostResult on Post{
   type
   _id
   creationDate
+  updatedAt
   tags
   totalComments
   quotedBy
@@ -123,7 +124,7 @@ fragment LinkPreviewF on LinkPreview {
   images
 }
 
-query GetLinkPreview($link: String!) {
+mutation GetLinkPreview($link: String!) {
   getLinkPreview(link: $link){
     ...LinkPreviewF
   }

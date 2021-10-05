@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import getSDK from '@akashaproject/awf-sdk';
 import DS from '@akashaproject/design-system';
-import { useGetCount, useInfiniteLog } from '@akashaproject/ui-awf-hooks/lib/moderation-request';
+import { ButtonValues } from '@akashaproject/ui-awf-typings';
+import { ILogItem } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
+import { useGetCount, useInfiniteLog } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
 import Banner from './transparency-log/banner';
-import DetailCard, { ILogItem } from './transparency-log/detail-card';
+import DetailCard from './transparency-log/detail-card';
 
 const { Box, Text, Icon, Spinner, SwitchCard, TransparencyLogMiniCard, useIntersectionObserver } =
   DS;
@@ -15,13 +17,6 @@ export interface ITransparencyLogProps {
   user: string | null;
   isMobile: boolean;
   navigateToUrl: (url: string) => void;
-}
-
-export enum ButtonValues {
-  ALL = 'All',
-  KEPT = 'Kept',
-  DELISTED = 'Delisted',
-  STATS = 'Stats',
 }
 
 const DEFAULT_LIMIT = 10;
@@ -86,23 +81,25 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   return (
     <Box>
-      <SwitchCard
-        count={
-          activeButton === ButtonValues.ALL
-            ? count.kept + count.delisted
-            : count[activeButton.toLowerCase()]
-        }
-        activeButton={activeButton}
-        countLabel={
-          activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
-        }
-        buttonLabels={buttonLabels}
-        buttonValues={buttonValues}
-        onTabClick={onTabClick}
-        buttonsWrapperWidth={'40%'}
-        loggedUser={user}
-        hasMobileDesign={true} // adjusts to new design on mobile screens
-      />
+      {!selected && (
+        <SwitchCard
+          count={
+            activeButton === ButtonValues.ALL
+              ? count.kept + count.delisted
+              : count[activeButton.toLowerCase()]
+          }
+          activeButton={activeButton}
+          countLabel={
+            activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
+          }
+          buttonLabels={buttonLabels}
+          buttonValues={buttonValues}
+          onTabClick={onTabClick}
+          buttonsWrapperWidth={'40%'}
+          loggedUser={user}
+          hasMobileDesign={true} // adjusts to new design on mobile screens
+        />
+      )}
       <Box direction="row" margin={{ top: '-0.5rem' }}>
         {/* setting height and overflow behaviour to make y-scrollable container */}
         <Box

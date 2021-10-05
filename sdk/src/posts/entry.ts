@@ -266,13 +266,24 @@ export default class AWF_Entry implements AWF_IEntry {
    * @param link
    */
   getLinkPreview(link: string) {
-    return this._gql.run<{ getLinkPreview: LinkPreview_Response }>(
-      {
-        query: GetLinkPreview,
-        variables: { link: link },
-        operationName: 'GetLinkPreview',
-      },
-      true,
+    return this._auth.authenticateMutationData({ link }).pipe(
+      map(res => {
+        return this._gql.run<{ getLinkPreview: LinkPreview_Response }>(
+          {
+            query: GetLinkPreview,
+            variables: { link: link },
+            operationName: 'GetLinkPreview',
+            context: {
+              headers: {
+                Authorization: `Bearer ${res.token.data}`,
+                Signature: res.signedData.data.signature,
+              },
+            },
+          },
+          false,
+        );
+      }),
+      concatAll(),
     );
   }
 

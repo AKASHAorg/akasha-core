@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaproject/design-system';
-import { ICount } from '../content-list';
+import { ICount } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
 
 export interface IBanner {
   count: ICount;

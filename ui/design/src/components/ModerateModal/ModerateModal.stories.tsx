@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-import { ToastProvider } from 'react-toast-notifications';
 
 import ModerateModal from '.';
 import { IModerateModalProps } from './moderate-modal';
@@ -42,11 +41,7 @@ const Template = (args: IModerateModalProps) => {
             setModalOpen(true);
           }}
         />
-        {modalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ModerateModal {...args} closeModal={() => setModalOpen(false)} />
-          </ToastProvider>
-        )}
+        {modalOpen && <ModerateModal {...args} closeModal={() => setModalOpen(false)} />}
       </Box>
     </Grommet>
   );

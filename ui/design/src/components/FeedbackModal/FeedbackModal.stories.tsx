@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-import { ToastProvider } from 'react-toast-notifications';
 
 import FeedbackModal, { IFeedbackModalProps } from '.';
 
@@ -46,11 +45,7 @@ const Template = (args: IFeedbackModalProps) => {
             setModalOpen(true);
           }}
         />
-        {modalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <FeedbackModal {...args} closeModal={handleCloseModal} />
-          </ToastProvider>
-        )}
+        {modalOpen && <FeedbackModal {...args} closeModal={handleCloseModal} />}
       </Box>
     </Grommet>
   );

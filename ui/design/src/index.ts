@@ -15,8 +15,6 @@ import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 
 import Autosizer from 'react-virtualized-auto-sizer';
 
-import { ToastProvider } from 'react-toast-notifications';
-
 import Avatar from './components/Avatar';
 import EditableAvatar from './components/EditableAvatar';
 
@@ -224,7 +222,6 @@ const exported = {
   TransparencyLogMiniCard,
   TransparencyLogDetailCard,
   TransparencyLogBanner,
-  ToastProvider,
   SelectPopover,
   SubtitleTextIcon,
   Sidebar,

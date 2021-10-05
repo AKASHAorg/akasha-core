@@ -1,5 +1,4 @@
 import React from 'react';
-import { ToastProvider } from 'react-toast-notifications';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -17,46 +16,44 @@ describe('<ReportModal /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal
-              titleLabel="Report a Post"
-              successTitleLabel="Thank you for helping us keep Ethereum World safe! 🙌"
-              successMessageLabel="We will investigate this post and take appropriate action."
-              optionsTitleLabel="Please select a reason"
-              optionLabels={[
-                'Suspicious, deceptive, or spam',
-                'Abusive or harmful to others',
-                'Self-harm or suicide',
-                'Illegal',
-                'Nudity',
-                'Violence',
-              ]}
-              optionValues={[
-                'Suspicious, deceptive, or spam',
-                'Abusive or harmful to others',
-                'Self-harm or suicide',
-                'Illegal',
-                'Nudity',
-                'Violence',
-              ]}
-              descriptionLabel="Explanation"
-              descriptionPlaceholder="Please explain your reason(s)"
-              footerText1Label="If you are unsure, you can refer to our"
-              footerLink1Label="Code of Conduct"
-              footerUrl1="https://akasha.ethereum.world/legal/code-of-conduct"
-              footerText2Label="and"
-              footerLink2Label="Terms of Service"
-              footerUrl2="https://akasha.ethereum.world/legal/terms-of-service"
-              cancelLabel="Cancel"
-              reportLabel="Report"
-              blockLabel="Block User"
-              closeLabel="Close"
-              requesting={false}
-              success={false}
-              closeModal={handleCloseModal}
-              onReport={handleReport}
-            />
-          </ToastProvider>,
+          <ReportModal
+            titleLabel="Report a Post"
+            successTitleLabel="Thank you for helping us keep Ethereum World safe! 🙌"
+            successMessageLabel="We will investigate this post and take appropriate action."
+            optionsTitleLabel="Please select a reason"
+            optionLabels={[
+              'Suspicious, deceptive, or spam',
+              'Abusive or harmful to others',
+              'Self-harm or suicide',
+              'Illegal',
+              'Nudity',
+              'Violence',
+            ]}
+            optionValues={[
+              'Suspicious, deceptive, or spam',
+              'Abusive or harmful to others',
+              'Self-harm or suicide',
+              'Illegal',
+              'Nudity',
+              'Violence',
+            ]}
+            descriptionLabel="Explanation"
+            descriptionPlaceholder="Please explain your reason(s)"
+            footerText1Label="If you are unsure, you can refer to our"
+            footerLink1Label="Code of Conduct"
+            footerUrl1="https://akasha.ethereum.world/legal/code-of-conduct"
+            footerText2Label="and"
+            footerLink2Label="Terms of Service"
+            footerUrl2="https://akasha.ethereum.world/legal/terms-of-service"
+            cancelLabel="Cancel"
+            reportLabel="Report"
+            blockLabel="Block User"
+            closeLabel="Close"
+            requesting={false}
+            success={false}
+            closeModal={handleCloseModal}
+            onReport={handleReport}
+          />,
         ),
         {},
       );

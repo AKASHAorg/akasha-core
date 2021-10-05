@@ -1,6 +1,14 @@
-import { commentsStats, postsStats, statsProvider } from './constants';
+import { commentsStats, postsStats, REGEX_VALID_URL, statsProvider } from './constants';
 import { queryCache } from '../storage/cache';
-import { logger, verifyEd25519Sig } from '../helpers';
+import {
+  addToIpfs,
+  createIpfsGatewayLink,
+  fetchWithTimeout,
+  isIpfsEnabled,
+  logger,
+  verifyEd25519Sig,
+} from '../helpers';
+import { getPreviewFromContent } from 'link-preview-js';
 
 const dataSigError = new Error('Data signature was not validated!');
 const mutations = {
@@ -344,6 +352,86 @@ const mutations = {
       return Promise.reject(dataSigError);
     }
     return dataSources.profileAPI.toggleInterestSub(user.pubKey, sub);
+  },
+  getLinkPreview: async (_source, { link }, { user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!link || typeof link !== `string`) {
+      throw new Error(`did not receive a valid url`);
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: { link },
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad getLinkPreview sig`);
+      return Promise.reject(dataSigError);
+    }
+
+    const detectedUrl = link
+      .replace(/\n/g, ` `)
+      .split(` `)
+      .find(token => REGEX_VALID_URL.test(token));
+
+    if (!detectedUrl) {
+      throw new Error(`did not receive a valid url`);
+    }
+    const options = {
+      timeout: 12000,
+      redirect: 'follow',
+      headers: {
+        'user-agent': 'Twitterbot',
+      },
+    };
+    const response = await fetchWithTimeout(detectedUrl, options);
+    const headers = {};
+    response.headers.forEach((header, key) => {
+      headers[key] = header;
+    });
+    const normalizedResponse = {
+      url: response.url,
+      headers: headers,
+      data: await response.text(),
+    };
+    const preview = await getPreviewFromContent(normalizedResponse);
+    if (!isIpfsEnabled) {
+      return preview;
+    }
+    if (preview?.favicons?.length) {
+      const pinFavicon = await addToIpfs(preview.favicons[0]);
+      if (pinFavicon?.cid) {
+        preview.favicons.unshift(createIpfsGatewayLink(pinFavicon.cid.toV1().toString()));
+      }
+    }
+
+    // typings for link-preview lib are broken
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (preview.mediaType === 'image' && !preview?.images?.length) {
+      const pinImage = await addToIpfs(preview.url);
+      if (pinImage?.cid) {
+        Object.defineProperty(preview, 'images', {
+          value: [createIpfsGatewayLink(pinImage.cid.toV1().toString())],
+        });
+        return preview;
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (preview?.images?.length) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const pinMedia = await addToIpfs(preview.images[0]);
+
+      if (pinMedia?.cid) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        preview.images.unshift(createIpfsGatewayLink(pinMedia.cid.toV1().toString()));
+      }
+    }
+    return preview;
   },
 };
 export default mutations;

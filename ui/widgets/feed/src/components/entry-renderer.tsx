@@ -322,6 +322,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               repliesLabel={t('Replies')}
               repostsLabel={t('Reposts')}
               repostLabel={t('Repost')}
+              editedLabel={t('Last edited')}
               repostWithCommentLabel={t('Repost with comment')}
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
@@ -335,6 +336,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               }}
               bookmarkLabel={t('Save')}
               bookmarkedLabel={t('Saved')}
+              showMore={true}
               profileAnchorLink={'/profile'}
               repliesAnchorLink={'/social-app/post'}
               onRepost={onRepost}

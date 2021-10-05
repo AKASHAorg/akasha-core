@@ -32,6 +32,7 @@ export interface IEntryData {
   linkPreview?: LinkPreview_Response;
   slateContent: Descendant[];
   time?: string | number | Date;
+  updatedAt?: string | number | Date;
   replies?: number;
   reposts?: number;
   ipfsLink?: string;
@@ -61,6 +62,7 @@ export interface PendingEntry {
   reposts?: number;
   time: string;
   quote: IEntryData['quote'];
+  linkPreview: IEntryData['linkPreview'];
 }
 
 export interface IPublishData {

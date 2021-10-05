@@ -700,6 +700,32 @@ export default class AppLoader {
     if (this.apps) {
       this.apps.onRouting(window.location);
     }
+    if (!this.apps || !this.widgets) {
+      return;
+    }
+    const appConfigs = this.apps.configs;
+    const widgetConfigs = this.widgets.configs;
+    const appInfos = this.apps.infos;
+    const widgetInfos = this.widgets.infos;
+    const appExtensions = this.apps.getExtensions();
+    const widgetExtensions = this.widgets.getExtensions();
+    for (const extensionName in this.extensionPoints) {
+      const extensionDatas = this.extensionPoints[extensionName];
+      extensionDatas.forEach(extensionData => {
+        // load extensions that must be mounted in this extention point
+        const extToLoad = this.filterExtensionsByMountPoint(
+          [...appExtensions, ...widgetExtensions],
+          { ...appConfigs, ...widgetConfigs },
+          [...appInfos, ...widgetInfos],
+          extensionData,
+        );
+        extToLoad.forEach((extension, index) => {
+          this.mountExtensionPoint(extension, index, extensionData).catch(err =>
+            this.loaderLogger.warn(err),
+          );
+        });
+      });
+    }
   }
 
   private beforeRouting() {
