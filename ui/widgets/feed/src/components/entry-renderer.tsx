@@ -14,8 +14,13 @@ import {
   useIsFollowingMultiple,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { getLinkPreview } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import {
+  getLinkPreview,
+  uploadMediaToTextile,
+} from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
 import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
+import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 
 const {
   Box,
@@ -80,6 +85,19 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const followProfileQuery = useFollow();
   const unfollowProfileQuery = useUnfollow();
   const [isEditingComment, setIsEditingComment] = React.useState<boolean>(false);
+
+  const [mentionQuery, setMentionQuery] = React.useState(null);
+  const [tagQuery, setTagQuery] = React.useState(null);
+  const mentionSearch = useMentionSearch(mentionQuery);
+  const tagSearch = useTagSearch(tagQuery);
+
+  const handleMentionQueryChange = (query: string) => {
+    setMentionQuery(query);
+  };
+
+  const handleTagQueryChange = (query: string) => {
+    setTagQuery(query);
+  };
 
   const isBookmarked = React.useMemo(() => {
     return (
@@ -292,20 +310,12 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 emojiPlaceholderLabel={t('Search')}
                 onPublish={handleEditComment}
                 getLinkPreview={getLinkPreview}
-                getMentions={() => {
-                  /*  */
-                }}
-                getTags={() => {
-                  /*  */
-                }}
-                tags={[]}
-                mentions={[]}
-                uploadRequest={() => {
-                  /*  */
-                }}
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-ignore
-                editorState={itemData.content}
+                getMentions={handleMentionQueryChange}
+                getTags={handleTagQueryChange}
+                tags={tagSearch.data}
+                mentions={mentionSearch.data}
+                uploadRequest={uploadMediaToTextile}
+                editorState={itemData.slateContent}
                 isShown={true}
                 showCancelButton={true}
                 onCancelClick={handleCancelClick}
