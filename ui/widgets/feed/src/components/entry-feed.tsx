@@ -15,10 +15,10 @@ const { EntryList } = DS;
 const EntryFeed = (props: IFeedWidgetProps) => {
   const saveBookmarkQuery = useSaveBookmark();
   const delBookmarkQuery = useDeleteBookmark();
-  const getBookmarksQuery = useGetBookmarks(props.ethAddress);
+  const getBookmarksQuery = useGetBookmarks(props.loginState.ethAddress, props.loginState.isReady);
 
   const handleBookmark = (isBookmarked: boolean, entryId: string) => {
-    if (props.loggedProfile.pubKey) {
+    if (props.loginState.isReady && props.loginState.pubKey) {
       if (!isBookmarked) {
         return saveBookmarkQuery.mutate({
           entryId,
@@ -48,8 +48,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       pageKeyPrefix={props.itemType === ItemTypes.ENTRY ? 'entry-page' : 'comment-page'}
       itemCard={
         <EntryRenderer
-          pubKey={props.profilePubKey}
-          ethAddress={props.ethAddress}
+          loginState={props.loginState}
           itemType={props.itemType}
           sharePostUrl={`${window.location.origin}/social-app/post/`}
           locale={props.i18n.languages[0] as ILocale}

@@ -77,6 +77,7 @@ export interface IEntryBoxProps {
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
+  disableReporting?: boolean;
   disableActions?: boolean;
   hideActionButtons?: boolean;
   hidePublishTime?: boolean;
@@ -137,6 +138,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     style,
     contentClickable,
     disableReposting,
+    disableReporting,
     disableActions,
     hideActionButtons,
     hidePublishTime,
@@ -403,6 +405,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                       icon: 'report' as IconType,
                       handler: handleEntryFlag,
                       label: flagAsLabel,
+                      disabled: disableReporting,
                     },
                   ]
                 : []),
@@ -424,12 +427,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             <MobileListModal
               closeModal={closeMenuDrop}
               menuItems={[
-                ...(onEntryFlag
+                ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
                   ? [
                       {
                         label: props.flagAsLabel,
                         icon: 'report',
                         handler: handleEntryFlag,
+                        disabled: disableReporting,
                       },
                     ]
                   : []),

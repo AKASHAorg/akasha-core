@@ -26,6 +26,20 @@ const StyledDiv = styled.div`
   cursor: pointer!;
 `;
 
+const StyledContentBox = styled(Box)`
+  ${props => css`
+    @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
+      max-width: 30rem;
+    }
+    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
+      max-width: 51rem;
+    }
+    @media screen and (min-width: ${props.theme.breakpoints.large.value}px) {
+      max-width: 64rem;
+    }
+  `}
+`;
+
 const BrandIcon = styled(Icon)`
   &:hover {
     & * {
@@ -108,6 +122,7 @@ export {
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  StyledContentBox,
   IconDiv,
   BrandIcon,
   MenuIcon,

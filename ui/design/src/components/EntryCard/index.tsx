@@ -55,6 +55,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     flagAsLabel,
     contentClickable,
     disableReposting,
+    disableReporting,
     hidePublishTime,
     headerTextLabel,
     footerTextLabel,
@@ -116,6 +117,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         singleSpaNavigate={singleSpaNavigate}
         contentClickable={contentClickable}
         disableReposting={disableReposting}
+        disableReporting={disableReporting}
         hidePublishTime={hidePublishTime}
         headerTextLabel={headerTextLabel}
         footerTextLabel={footerTextLabel}

@@ -50,7 +50,7 @@ export const createRootNode = (
   }
   const wrapNode = document.createElement('div');
   wrapNode.id = `${nodeID}`;
-  parent.appendChild(wrapNode);
+  parent.append(wrapNode);
   return wrapNode;
 };
 
