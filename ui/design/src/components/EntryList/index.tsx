@@ -16,11 +16,14 @@ export interface EntryListProps {
   itemSpacing?: number;
   status: 'loading' | 'success' | 'error' | 'idle';
   hasNextPage?: boolean;
+  /* string to be prepended to the page iteration index */
+  pageKeyPrefix?: string;
 }
 
 const EntryList = (props: EntryListProps) => {
-  const { pages, itemCard, itemSpacing = 0, onLoadMore } = props;
+  const { pages, itemCard, itemSpacing = 0, onLoadMore, pageKeyPrefix = 'page' } = props;
   const loadmoreRef = React.createRef<HTMLDivElement>();
+
   useIntersectionObserver({
     target: loadmoreRef,
     onIntersect: onLoadMore,
@@ -30,9 +33,9 @@ const EntryList = (props: EntryListProps) => {
   return (
     <>
       {pages.map((page, index) => (
-        <div key={index}>
+        <div data-page-idx={index} key={`${pageKeyPrefix}-${index}`}>
           {page.results.map((entryId, index) => (
-            <div style={{ marginBottom: itemSpacing }} key={index}>
+            <div style={{ marginBottom: itemSpacing }} key={entryId}>
               {React.cloneElement(itemCard, {
                 itemId: entryId,
                 index,
@@ -50,5 +53,4 @@ const EntryList = (props: EntryListProps) => {
     </>
   );
 };
-
-export default EntryList;
+export default React.memo(EntryList);

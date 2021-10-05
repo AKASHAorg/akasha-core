@@ -7,18 +7,19 @@ export interface ITheme {
   theme: Promise<{ default: DefaultTheme }> | DefaultTheme;
 }
 
-export interface IThemeSelector extends GrommetProps {
+export interface IThemeSelector {
   settings: { activeTheme: string };
   availableThemes: ITheme[];
   children: React.ReactNode;
-  [key: string]: any;
+  themeReadyEvent?: () => void;
 }
 
 /**
  * Default themes are: lightTheme and darkTheme
- * A world creator can add/install/create multiple themes
- * so he must pass those themes as props:
+ * A world creator can add/install/create multiple themes.
+ * Themes must be passed as props:
  *
+ *```ts
  * import lightTheme from '@akashaproject/design-system'
  *
  * availableThemes={[
@@ -31,7 +32,7 @@ export interface IThemeSelector extends GrommetProps {
  *    name: 'mySolarizedTheme',
  *    theme: import('./my-theme-solarized')
  *  }]}
- *
+ *```
  */
 
 // default to the first theme passed
@@ -59,7 +60,7 @@ const setTheme = (
   }
 };
 
-const ThemeSelector = (props: IThemeSelector) => {
+const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
   const [loadedTheme, setLoadedTheme] = React.useState<{ name: string; theme: DefaultTheme }>();
   React.useEffect(() => {
     if (!loadedTheme) {
@@ -83,10 +84,13 @@ const ThemeSelector = (props: IThemeSelector) => {
         }
       }
     }
-  }, [props.settings.activeTheme]);
-  if (loadedTheme && props.themeReadyEvent) {
-    props.themeReadyEvent();
-  }
+  }, [loadedTheme, props.availableThemes, props.settings.activeTheme]);
+  React.useEffect(() => {
+    if (props.themeReadyEvent) {
+      props.themeReadyEvent();
+    }
+  }, [loadedTheme, props]);
+
   return (
     <>
       {loadedTheme && (
