@@ -221,7 +221,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
         name,
         entryId: itemId,
         entryType: itemType,
-        clickHandler: handleEditClick,
       },
     });
   };
@@ -377,7 +376,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               headerMenuExt={
                 showEditButton && (
                   <ExtensionPoint
-                    // onClick={handleEditClick}
+                    onClick={handleEditClick}
                     name={`entry-card-edit-button_${itemId}`}
                     onMount={onEditButtonMount}
                     onUnmount={onEditButtonUnmount}

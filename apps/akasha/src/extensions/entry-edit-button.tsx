@@ -25,9 +25,6 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
         action: 'edit',
       });
     }
-    if (props.extensionData?.entryType === ItemTypes.COMMENT && props.extensionData?.clickHandler) {
-      props.extensionData.clickHandler();
-    }
   };
 
   const entryTypeLabel = React.useMemo(() => {
