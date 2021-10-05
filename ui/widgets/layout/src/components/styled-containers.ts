@@ -18,28 +18,21 @@ export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
 `;
 
 export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  max-width: 100%;
-  margin-bottom: 0.5em;
-  border: 0;
-  justify-content: flex-start;
   flex-grow: 1;
-  flex-direction: column;
-  ${props => css`
-    @media screen and (max-width: ${props.theme.breakpoints.small.value}px) {
-      padding: 0 0.25rem;
-    }
-  `}
 `;
 
 const TOPBAR_HEIGHT = 48;
 const WIDGET_AREA_MARGIN_TOP = '0.5rem';
 
 export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    display: none;
+  }
+`;
+export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box)`
   position: sticky;
   top: ${TOPBAR_HEIGHT}px;
-  max-height: calc((100vh - ${TOPBAR_HEIGHT}px) - ${WIDGET_AREA_MARGIN_TOP});
 `;
-export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box)``;
 export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.div`
   flex-grow: 1;
   margin-top: ${WIDGET_AREA_MARGIN_TOP};
@@ -59,8 +52,9 @@ export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.di
 export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   z-index: 10;
   flex-grow: 1;
-  top: ${TOPBAR_HEIGHT}px;
-  position: sticky;
   flex-direction: column;
   align-items: flex-end;
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    display: none;
+  }
 `;

@@ -329,7 +329,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
               loggedProfileEthAddress={ethAddress}
               locale={locale || 'en'}
               style={{
-                height: 'auto',
                 ...(style as React.CSSProperties),
                 ...(commentData && commentStyleExt),
                 display: isEditingComment ? 'none' : 'block',
@@ -373,4 +372,4 @@ const EntryRenderer = (props: IEntryRenderer) => {
   );
 };
 
-export default EntryRenderer;
+export default React.memo(EntryRenderer);

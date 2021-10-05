@@ -16,24 +16,20 @@ export const GlobalStyle: any = createGlobalStyle<{
     box-sizing: inherit;
   }
   html,
+  body,
+  #root {
+    display: flex;
+    flex: 1;
+  }
+  html,
   body {
     font-family: Inter !important;
     font-size: 16px;
-    display: flex;
-    background: #b8d7ff !important;
+    margin: 0;
+    padding: 0;
   }
-  body {}
-  #root {
-    display: flex;
-  }
-  .container {
-    display: flex;
-    flex-direction: column;
-    min-height: 0px;
-    min-width: 0px;
-    padding: 0px;
-    position: relative;
-    z-index: 0;
+  body {
+    overscroll-behavior-x: none;
   }
   ${props => css`
     // 1920 and lower

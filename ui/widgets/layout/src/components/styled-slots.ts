@@ -6,16 +6,8 @@ const { css, styled, ExtensionPoint } = DS;
 const BaseStyledSlot = styled(ExtensionPoint)`
   border: 0;
   box-sizing: border-box;
-  display: flex;
-  flex-basis: auto;
-  flex-direction: column;
-  flex-shrink: 0;
   margin: 0px;
-  min-height: 0px;
-  min-width: 0px;
   padding: 0px;
-  position: relative;
-  z-index: 0;
 `;
 
 // eslint-disable-next-line prettier/prettier
@@ -23,6 +15,8 @@ export const SidebarSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)
   visible: boolean;
 }>`
   flex-grow: 1;
+  position: sticky;
+  top: 0;
   ${props => css`
     @media screen and (max-width: ${props.theme.breakpoints.small.value}px) {
       ${props.visible && 'height: calc(100vh - 3rem)'}
@@ -32,10 +26,9 @@ export const SidebarSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)
 `;
 
 export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
-  z-index: 10;
+  z-index: 100;
   position: sticky;
   top: 0;
-  width: 100%;
 `;
 
 export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
