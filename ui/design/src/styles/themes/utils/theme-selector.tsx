@@ -7,12 +7,11 @@ export interface ITheme {
   theme: Promise<{ default: DefaultTheme }> | DefaultTheme;
 }
 
-export interface IThemeSelector extends GrommetProps {
+export interface IThemeSelector {
   settings: { activeTheme: string };
   availableThemes: ITheme[];
   children: React.ReactNode;
   themeReadyEvent?: () => void;
-  style?: React.CSSProperties;
 }
 
 /**
@@ -61,7 +60,7 @@ const setTheme = (
   }
 };
 
-const ThemeSelector = (props: IThemeSelector) => {
+const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
   const [loadedTheme, setLoadedTheme] = React.useState<{ name: string; theme: DefaultTheme }>();
   React.useEffect(() => {
     if (!loadedTheme) {
@@ -95,7 +94,7 @@ const ThemeSelector = (props: IThemeSelector) => {
   return (
     <>
       {loadedTheme && (
-        <Grommet plain={true} style={{ width: '100%' }} theme={loadedTheme.theme} {...props}>
+        <Grommet style={{ width: '100%' }} theme={loadedTheme.theme} {...props}>
           {props.children}
         </Grommet>
       )}
