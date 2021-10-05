@@ -12,11 +12,12 @@ import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
 import mailgun from 'mailgun-js';
-import { fetch } from 'cross-fetch';
+import fetch from 'node-fetch';
 import path from 'path';
 import { AbortController } from 'node-abort-controller';
 import { Worker } from 'worker_threads';
-import { create, urlSource } from 'ipfs-http-client';
+import { create } from 'ipfs-http-client';
+import sharp from 'sharp';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -26,6 +27,7 @@ const INFURA_IPFS_ID = process.env.INFURA_IPFS_ID;
 const INFURA_IPFS_SECRET = process.env.INFURA_IPFS_SECRET;
 const IPFS_GATEWAY = process.env.IPFS_GATEWAY;
 export const isIpfsEnabled = INFURA_IPFS_ID && INFURA_IPFS_SECRET && IPFS_GATEWAY;
+
 let ipfsClient;
 if (isIpfsEnabled) {
   ipfsClient = create({
@@ -275,7 +277,32 @@ export async function addToIpfs(link: string) {
   if (!ipfsClient) {
     return Promise.resolve();
   }
-  return ipfsClient.add(urlSource(link));
+  const response = await fetchWithTimeout(link, {
+    timeout: 16000,
+    redirect: 'follow',
+  });
+  const resizePipeline = sharp({ failOnError: false });
+  // can specify for example to store the image in multiple formats
+  const processSteps = [];
+  // transform to a different format
+  processSteps.push(
+    resizePipeline
+      .clone()
+      .resize({ width: 500, height: 500, fit: sharp.fit.inside })
+      .webp({ lossless: true })
+      .toBuffer(),
+  );
+  // apply
+  response.body.pipe(resizePipeline);
+  try {
+    // wait for all processes to finish
+    const processed = await Promise.all(processSteps);
+    // picking only the first job result
+    return ipfsClient.add(processed[0]);
+  } catch (e) {
+    logger.warn(e);
+    return;
+  }
 }
 
 export function createIpfsGatewayLink(cid: string) {
