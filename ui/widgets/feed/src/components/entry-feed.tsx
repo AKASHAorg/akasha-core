@@ -8,6 +8,7 @@ import {
   useGetBookmarks,
   useDeleteBookmark,
 } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { EntryList } = DS;
 
@@ -44,6 +45,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       status={props.requestStatus}
       itemSpacing={props.itemSpacing}
       hasNextPage={props.hasNextPage}
+      pageKeyPrefix={props.itemType === ItemTypes.ENTRY ? 'entry-page' : 'comment-page'}
       itemCard={
         <EntryRenderer
           pubKey={props.profilePubKey}

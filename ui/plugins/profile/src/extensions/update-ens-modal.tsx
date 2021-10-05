@@ -40,26 +40,6 @@ const {
   Icon,
 } = DS;
 
-// const ENSForm = styled(EnsFormCard)`
-//   max-width: 100%;
-//   max-height: 100vh;
-//   overflow: auto;
-//   min-height: 100vh;
-//   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-//     max-width: 66%;
-//     max-height: 75%;
-//     min-height: max-content;
-//   }
-//   @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
-//     max-width: 50%;
-//     min-height: max-content;
-//   }
-//   @media screen and (min-width: ${props => props.theme.breakpoints.xlarge.value}px) {
-//     max-width: 33%;
-//     min-height: max-content;
-//   }
-// `;
-
 const getUsernameTypes = (profileData: IProfileData) => {
   const types: UsernameTypes[] = [];
   if (!profileData) {

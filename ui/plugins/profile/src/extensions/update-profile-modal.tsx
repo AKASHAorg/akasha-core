@@ -92,12 +92,14 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
 
   const userNameValidationErrors = React.useMemo(() => {
     if (usernameValidationQuery.status === 'success' && !usernameValidationQuery.data) {
-      return t(
-        'Sorry, this username has already beed claimed by another Etherean. Please try a different one.',
-      );
+      return `${t(
+        'Sorry, this username has already beed claimed by another Etherean. Please try a different one',
+      )}.`;
     }
     if (usernameValidationQuery.status === 'error') {
-      return t('Sorry, there is an error validating the username. Please try again later.');
+      return `${t(
+        'Sorry, there is an error validating the username. Please try again later',
+      )}. Error: ${usernameValidationQuery.error.toString()}`;
     }
     // local username validation
     if (
@@ -107,16 +109,16 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
       /^([a-z0-9.](?![0-9].]$))+$/g.test(partialUsername)
     ) {
       if (partialUsername.length < 3) {
-        return t('Username must be at least 3 characters long.');
+        return `${t('Username must be at least 3 characters long')}.`;
       }
     } else {
       if (partialUsername && parseInt(partialUsername.split('').pop())) {
-        return t('Username cannot end with a number.');
+        return `${t('Username cannot end with a number')}.`;
       }
       if (partialUsername) {
-        return t(
-          'Sorry, username can contain lowercase letters, numbers and must end in a letter.',
-        );
+        return `${t(
+          'Sorry, username can contain lowercase letters, numbers and must end in a letter',
+        )}.`;
       }
     }
   }, [usernameValidationQuery, partialUsername, t]);

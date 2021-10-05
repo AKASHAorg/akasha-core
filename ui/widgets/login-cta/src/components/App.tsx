@@ -13,7 +13,6 @@ const LoginCTAWidgetRoot: React.FC<RootComponentProps> = () => {
       <ThemeSelector
         settings={{ activeTheme: 'Light-Theme' }}
         availableThemes={[lightTheme, darkTheme]}
-        style={{ height: '100%' }}
         plain={true}
       >
         <LoginWidget />
