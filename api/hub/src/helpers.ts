@@ -294,10 +294,15 @@ export async function addToIpfs(link: string) {
   );
   // apply
   response.body.pipe(resizePipeline);
-  // wait for all processes to finish
-  const processed = await Promise.all(processSteps);
-  // picking only the first job result
-  return ipfsClient.add(processed[0]);
+  try {
+    // wait for all processes to finish
+    const processed = await Promise.all(processSteps);
+    // picking only the first job result
+    return ipfsClient.add(processed[0]);
+  } catch (e) {
+    logger.warn(e);
+    return;
+  }
 }
 
 export function createIpfsGatewayLink(cid: string) {

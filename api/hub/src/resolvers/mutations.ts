@@ -401,7 +401,9 @@ const mutations = {
     }
     if (preview?.favicons?.length) {
       const pinFavicon = await addToIpfs(preview.favicons[0]);
-      preview.favicons.unshift(createIpfsGatewayLink(pinFavicon.cid.toV1().toString()));
+      if (pinFavicon?.cid) {
+        preview.favicons.unshift(createIpfsGatewayLink(pinFavicon.cid.toV1().toString()));
+      }
     }
 
     // typings for link-preview lib are broken
@@ -409,10 +411,12 @@ const mutations = {
     // @ts-ignore
     if (preview.mediaType === 'image' && !preview?.images?.length) {
       const pinImage = await addToIpfs(preview.url);
-      Object.defineProperty(preview, 'images', {
-        value: [createIpfsGatewayLink(pinImage.cid.toV1().toString())],
-      });
-      return preview;
+      if (pinImage?.cid) {
+        Object.defineProperty(preview, 'images', {
+          value: [createIpfsGatewayLink(pinImage.cid.toV1().toString())],
+        });
+        return preview;
+      }
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -420,9 +424,12 @@ const mutations = {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const pinMedia = await addToIpfs(preview.images[0]);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      preview.images.unshift(createIpfsGatewayLink(pinMedia.cid.toV1().toString()));
+
+      if (pinMedia?.cid) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        preview.images.unshift(createIpfsGatewayLink(pinMedia.cid.toV1().toString()));
+      }
     }
     return preview;
   },
