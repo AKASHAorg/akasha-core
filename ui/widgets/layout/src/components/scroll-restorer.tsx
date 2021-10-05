@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { RouteChildrenProps } from 'react-router';
+import { withRouter } from 'react-router-dom';
+import { SingleSpaCustomEventDetail } from 'single-spa';
 
 const getScrollTop = () => {
   let scrollTop = 0;
@@ -9,46 +11,65 @@ const getScrollTop = () => {
   return window.scrollY || scrollTop;
 };
 
-const ScrollRestorer: React.FC = () => {
-  const history = useHistory();
-  const location = useLocation();
+const ScrollRestorer: React.FC<RouteChildrenProps> = props => {
   const scrollMap = React.useRef(new Map());
+  const scrollTimeout = React.useRef<NodeJS.Timeout>();
+
+  const tryScrollTo = React.useCallback((scrollY: number) => {
+    clearTimeout(scrollTimeout.current);
+    const body = document.body;
+    const html = document.documentElement;
+
+    const documentHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight,
+    );
+    if (documentHeight >= scrollY) {
+      window.scrollTo(0, scrollY);
+    } else {
+      scrollTimeout.current = setTimeout(() => tryScrollTo(scrollY), 50);
+    }
+  }, []);
 
   React.useLayoutEffect(() => {
-    const onPopState = event => {
-      const currentLocation = history.location;
-      const prevLoc = location;
-      const scrollTop = getScrollTop();
-      // save the position for the page we are leaving
-      scrollMap.current.set(prevLoc.pathname, scrollTop);
-      // if we have the position for the page we are going to, restore it
-      // else scroll to the top
-      if (scrollMap.current.has(currentLocation.pathname)) {
-        window.scrollTo(0, scrollMap.current.get(currentLocation.pathname));
-      } else {
-        window.scrollTo(0, 0);
+    const handleBeforeRouting = (evt: CustomEvent<SingleSpaCustomEventDetail>) => {
+      const oldUrl = evt.detail.oldUrl;
+      const newUrl = evt.detail.newUrl;
+      if (oldUrl !== newUrl) {
+        const scrollY = getScrollTop();
+        scrollMap.current.set(oldUrl, scrollY);
       }
-
-      console.group();
-      console.log(event.type);
-      console.log('prev location', prevLoc.pathname);
-      console.log('current location', currentLocation.pathname);
-      console.groupEnd();
     };
-    // set scrollRestoration to 'manual' to prevent browser
-    // from restoring scroll position
+    const handleRouting = (evt: CustomEvent<SingleSpaCustomEventDetail>) => {
+      const newUrl = evt.detail.newUrl;
+      const oldUrl = evt.detail.oldUrl;
+      if (oldUrl !== newUrl) {
+        if (scrollMap.current.has(newUrl)) {
+          const scrollY = scrollMap.current.get(newUrl);
+          tryScrollTo(scrollY);
+        } else {
+          window.scrollTo(0, 0);
+        }
+      }
+    };
     if (window.history.scrollRestoration) {
       window.history.scrollRestoration = 'manual';
     }
-
-    window.addEventListener('popstate', onPopState, true);
+    // save scroll position
+    window.addEventListener('single-spa:before-routing-event', handleBeforeRouting);
+    // restore scroll position
+    window.addEventListener('single-spa:routing-event', handleRouting);
 
     return () => {
-      window.removeEventListener('popstate', onPopState, true);
+      window.removeEventListener('single-spa:before-routing-event', handleBeforeRouting);
+      window.removeEventListener('single-spa:routing-event', handleRouting);
     };
-  }, [history.location, location]);
+  }, [props.location, tryScrollTo]);
 
   return null;
 };
 
-export default ScrollRestorer;
+export default withRouter(ScrollRestorer);

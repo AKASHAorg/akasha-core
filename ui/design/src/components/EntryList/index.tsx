@@ -53,5 +53,4 @@ const EntryList = (props: EntryListProps) => {
     </>
   );
 };
-EntryList.whyDidYouRender = true;
 export default React.memo(EntryList);
