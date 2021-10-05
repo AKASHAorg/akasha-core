@@ -15,6 +15,7 @@ import {
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { getLinkPreview } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const {
   Box,
@@ -29,8 +30,7 @@ const {
 export interface IEntryRenderer {
   itemId?: string;
   sharePostUrl: string;
-  ethAddress: string | null;
-  pubKey: string | null;
+  loginState: LoginState;
   locale: ILocale;
   bookmarksQuery: ReturnType<typeof useGetBookmarks>;
   style?: React.CSSProperties;
@@ -60,7 +60,7 @@ const commentStyleExt = {
 
 const EntryRenderer = (props: IEntryRenderer) => {
   const {
-    ethAddress,
+    loginState,
     locale,
     bookmarksQuery,
     itemId,
@@ -103,7 +103,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
   }, [props.itemType, commentReq, postReq]);
 
-  const followedProfilesReq = useIsFollowingMultiple(props.ethAddress, [authorEthAddress]);
+  const followedProfilesReq = useIsFollowingMultiple(loginState.ethAddress, [authorEthAddress]);
 
   const postData = React.useMemo(() => {
     if (postReq.data && props.itemType === ItemTypes.ENTRY) {
@@ -249,6 +249,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
     setIsEditingComment(false);
   };
 
+  const showEditButton = React.useMemo(
+    () => loginState.isReady && loginState.ethAddress === itemData?.author?.ethAddress,
+    [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+  );
+
   return (
     <>
       {(postReq.isLoading || commentReq.isLoading) && <EntryCardLoading />}
@@ -327,7 +332,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
               flagAsLabel={t(`Report ${itemTypeName}`)}
-              loggedProfileEthAddress={ethAddress}
+              loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
               locale={locale || 'en'}
               style={{
                 height: 'auto',
@@ -358,9 +363,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
               removedByMeLabel={props.removedByMeLabel}
               removedByAuthorLabel={props.removedByAuthorLabel}
               disableReposting={itemData.isRemoved}
+              disableReporting={loginState.waitForAuth || loginState.isSigningIn}
               headerMenuExt={
-                ethAddress === itemData.author.ethAddress && (
+                showEditButton && (
                   <ExtensionPoint
+                    // onClick={handleEditClick}
                     name={`entry-card-edit-button_${itemId}`}
                     onMount={onEditButtonMount}
                     onUnmount={onEditButtonUnmount}

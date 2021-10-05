@@ -10,6 +10,8 @@ import i18n from '../i18n';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { useEffect } from 'react';
 import { useLocation, BrowserRouter } from 'react-router-dom';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -31,16 +33,14 @@ export interface IFeedWidgetProps {
   itemType: ItemTypes;
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
-  /* eth address of the logged in user */
-  ethAddress: string | null;
-  profilePubKey: string | null;
+  loginState: LoginState;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
   navigateToModal: (props: any) => void;
   onLoginModalOpen: () => void;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
   hasNextPage: boolean;
-  loggedProfile?: any;
+  loggedProfile?: IProfileData;
   contentClickable?: boolean;
   onEntryFlag: (entryId: string, itemType: string) => () => void;
   onEntryRemove?: (entryId: string) => void;

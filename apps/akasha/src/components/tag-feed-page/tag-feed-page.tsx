@@ -122,14 +122,13 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         pages={postPages}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
         requestStatus={reqPosts.status}
-        ethAddress={loginState?.isReady && loginState?.ethAddress}
+        loginState={loginState}
+        loggedProfile={loggedProfileData}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={showLoginModal}
         hasNextPage={reqPosts.hasNextPage}
-        profilePubKey={loginState?.pubKey}
-        loggedProfile={loggedProfileData}
         contentClickable={true}
         onEntryFlag={handleEntryFlag}
         uiEvents={props.uiEvents}

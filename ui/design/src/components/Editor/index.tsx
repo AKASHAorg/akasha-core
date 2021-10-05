@@ -163,6 +163,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   );
 
   /**
+   * set the selection at the end of the content when component is mounted
+   */
+  useEffect(() => {
+    Transforms.move(editor);
+  }, []);
+
+  /**
    * position the mention and tag popovers based on the matching text range
    */
   useEffect(() => {
@@ -204,7 +211,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
     /**
      * wrap slateContent in object to make recursive getMetadata work
-     * breaks slate typing
      */
     const initContent: { children: Descendant[] } = { children: slateContent };
     (function getMetadata(node: Descendant | { children: Descendant[] }) {

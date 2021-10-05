@@ -59,7 +59,7 @@ export interface ITopbarProps {
   className?: string;
   onLoginClick: () => void;
   onSignUpClick: () => void;
-  onLogout: any;
+  onLogout: () => void;
 }
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -110,8 +110,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   const [currentDropItem, setCurrentDropItem] = React.useState<IMenuItem | null>(null);
 
-  const menuItemRefs: React.RefObject<any> = React.useRef([]);
-  const feedbackMenuRef: React.RefObject<any> = React.useRef(null);
+  const menuItemRefs = React.useRef([]);
+  const feedbackMenuRef = React.useRef(null);
 
   const mobileSignedOutView = isMobileOnly && !loggedProfileData?.ethAddress;
   const iconSize = isMobileOnly ? 'md' : 'sm';

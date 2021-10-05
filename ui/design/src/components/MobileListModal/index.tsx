@@ -19,10 +19,11 @@ export interface IMobileListModal {
   menuItems: IMenuItem[];
 }
 
-interface IMenuItem {
+export interface IMenuItem {
   label?: string;
   icon?: string;
   handler?: (arg1?: any) => void;
+  disabled?: boolean;
 }
 
 const MobileListModal: React.FC<IMobileListModal> = props => {
@@ -56,7 +57,7 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
                 }
               }
               key={index}
-              onClick={menuItem.handler}
+              onClick={menuItem.disabled ? undefined : menuItem.handler}
               align="center"
               pad="medium"
               fill="horizontal"
@@ -65,6 +66,7 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
               <Box align="center" direction="row">
                 {menuItem.icon && (
                   <Icon
+                    disabled={menuItem.disabled}
                     type={menuItem.icon}
                     size="md"
                     clickable={false}

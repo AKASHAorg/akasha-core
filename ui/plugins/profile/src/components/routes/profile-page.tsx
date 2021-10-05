@@ -197,14 +197,13 @@ const ProfilePage = (props: ProfilePageProps) => {
                   }
                   pages={postPages}
                   requestStatus={reqPosts.status}
-                  ethAddress={loginQuery.data?.isReady && loginQuery.data?.ethAddress}
+                  loginState={loginQuery.data}
+                  loggedProfile={loggedProfileData}
                   onNavigate={handleNavigation}
                   singleSpaNavigate={props.singleSpa.navigateToUrl}
                   navigateToModal={props.navigateToModal}
                   onLoginModalOpen={showLoginModal}
                   hasNextPage={reqPosts.hasNextPage}
-                  profilePubKey={pubKey}
-                  loggedProfile={loggedProfileData}
                   contentClickable={true}
                   onEntryFlag={handleEntryFlag}
                   onEntryRemove={handleEntryRemove}
