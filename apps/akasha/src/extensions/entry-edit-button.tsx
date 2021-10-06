@@ -27,7 +27,7 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
       });
     }
     if (props.extensionData?.entryType === ItemTypes.COMMENT) {
-      props.extensionData.clickHandler();
+      props.extensionData?.clickHandler();
     }
   };
 

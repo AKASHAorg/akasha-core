@@ -7,6 +7,7 @@ import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/com
 import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
 import { checkStatus } from './use-moderation';
+import { SEARCH_KEY } from './use-search.new';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -287,6 +288,7 @@ export const useEditPost = () => {
       },
       onSuccess: async (data, vars) => {
         await queryClient.invalidateQueries([ENTRY_KEY, vars.entryID]);
+        await queryClient.invalidateQueries(SEARCH_KEY);
         await queryClient.fetchQuery([ENTRY_KEY, vars.entryID], () => getPost(vars.entryID));
       },
     },
