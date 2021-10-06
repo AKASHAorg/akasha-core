@@ -74,6 +74,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
           duration: 250,
           delay: 0,
         }}
+        style={{ zIndex: 1000 }}
       >
         <StyledOverlay
           onClick={(ev: React.SyntheticEvent) => {
