@@ -36,17 +36,19 @@ const ScrollRestorer: React.FC = () => {
     const handleBeforeRouting = (evt: CustomEvent<SingleSpaCustomEventDetail>) => {
       const oldUrl = new URL(evt.detail.oldUrl);
       const newUrl = new URL(evt.detail.newUrl);
+
       if (oldUrl.pathname !== newUrl.pathname) {
         const scrollY = getScrollTop();
-        scrollMap.current.set(oldUrl, scrollY);
+        scrollMap.current.set(oldUrl.pathname, scrollY);
       }
     };
     const handleRouting = (evt: CustomEvent<SingleSpaCustomEventDetail>) => {
       const newUrl = new URL(evt.detail.newUrl);
       const oldUrl = new URL(evt.detail.oldUrl);
+
       if (oldUrl.pathname !== newUrl.pathname) {
-        if (scrollMap.current.has(newUrl)) {
-          const scrollY = scrollMap.current.get(newUrl);
+        if (scrollMap.current.has(newUrl.pathname)) {
+          const scrollY = scrollMap.current.get(newUrl.pathname);
           tryScrollTo(scrollY);
         } else {
           window.scrollTo(0, 0);
