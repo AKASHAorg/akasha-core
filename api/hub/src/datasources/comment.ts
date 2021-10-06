@@ -4,6 +4,7 @@ import { Client, ThreadID, Where } from '@textile/hub';
 import { DataProvider, Comment, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
+import { stringify } from 'flatted';
 
 class CommentAPI extends DataSource {
   private readonly collection: string;
@@ -11,6 +12,7 @@ class CommentAPI extends DataSource {
   private db: Client;
   private readonly dbID: ThreadID;
   private readonly graphqlCommentsApi = 'awf.graphql.comments.api';
+  private readonly graphqlCommentVersion = 'awf.comment.version.content';
   constructor({ collection, dbID }) {
     super();
     this.collection = collection;
@@ -168,9 +170,13 @@ class CommentAPI extends DataSource {
     if (currentComment.author !== author) {
       throw new Error('Not authorized');
     }
-
-    currentComment.metaData = currentComment.metaData.concat(currentComment.content);
-    currentComment.metaData = Array.from(new Set(currentComment.metaData));
+    if (currentComment?.metaData?.length) {
+      currentComment.metaData.push({
+        provider: this.graphqlCommentsApi,
+        property: this.graphqlCommentVersion,
+        value: Buffer.from(stringify(currentComment.content)).toString('base64'),
+      });
+    }
     currentComment.content = Array.from(content);
     let removedTags = [];
     let addedTags = [];
