@@ -660,6 +660,7 @@ export default class AppLoader {
       extension: extensionPoint,
       navigateToModal: navigateToModal,
       layoutConfig: this.layoutConfig,
+
       activeModal: this.activeModal,
       logger: this.sdk.services.log.create(`ext-${extensionPoint.parentApp}-${rootNode}-${index}`),
       extensionData,

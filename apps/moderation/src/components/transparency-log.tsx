@@ -81,23 +81,25 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   return (
     <Box>
-      <SwitchCard
-        count={
-          activeButton === ButtonValues.ALL
-            ? count.kept + count.delisted
-            : count[activeButton.toLowerCase()]
-        }
-        activeButton={activeButton}
-        countLabel={
-          activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
-        }
-        buttonLabels={buttonLabels}
-        buttonValues={buttonValues}
-        onTabClick={onTabClick}
-        buttonsWrapperWidth={'40%'}
-        loggedUser={user}
-        hasMobileDesign={true} // adjusts to new design on mobile screens
-      />
+      {!selected && (
+        <SwitchCard
+          count={
+            activeButton === ButtonValues.ALL
+              ? count.kept + count.delisted
+              : count[activeButton.toLowerCase()]
+          }
+          activeButton={activeButton}
+          countLabel={
+            activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
+          }
+          buttonLabels={buttonLabels}
+          buttonValues={buttonValues}
+          onTabClick={onTabClick}
+          buttonsWrapperWidth={'40%'}
+          loggedUser={user}
+          hasMobileDesign={true} // adjusts to new design on mobile screens
+        />
+      )}
       <Box direction="row" margin={{ top: '-0.5rem' }}>
         {/* setting height and overflow behaviour to make y-scrollable container */}
         <Box

@@ -12,6 +12,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import ExtensionPoint from '@akashaproject/design-system/lib/utils/extension-point';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading } = DS;
 
@@ -31,7 +32,7 @@ export interface IEntryCardRendererProps {
   itemData?: IEntryData;
   isBookmarked?: boolean;
   locale?: ILocale;
-  ethAddress?: string | null;
+  loginState: LoginState;
   onBookmark: (entryId: string) => void;
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   onLinkCopy?: () => void;
@@ -52,7 +53,7 @@ export interface IEntryCardRendererProps {
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const { ethAddress, locale, bookmarks, itemId, style, contentClickable, disableReposting } =
+  const { loginState, locale, bookmarks, itemId, style, contentClickable, disableReposting } =
     props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -155,7 +156,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
-  const isFollowing = useIsFollowingMultiple(ethAddress, [itemData?.author?.ethAddress]);
+  const isFollowing = useIsFollowingMultiple(loginState.ethAddress, [itemData?.author?.ethAddress]);
 
   const handleFollow = () => {
     /* todo */
@@ -164,6 +165,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const handleUnfollow = () => {
     /* todo */
   };
+
+  const showEditButton = React.useMemo(
+    () => loginState.isReady && loginState.ethAddress === itemData?.author?.ethAddress,
+    [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+  );
 
   return (
     <>
@@ -213,19 +219,20 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
                   flagAsLabel={t('Report Post')}
-                  loggedProfileEthAddress={ethAddress}
+                  loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
                   locale={locale || 'en'}
                   style={{ height: 'auto', ...style }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
                   moderatedContentLabel={t('This content has been moderated')}
+                  editedLabel={t('Last edited')}
                   showMore={true}
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={'/social-app/post'}
                   onRepost={props.onRepost}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
-                  isFollowingAuthor={isFollowing.data?.includes(ethAddress)}
+                  isFollowingAuthor={isFollowing.data?.includes(loginState.ethAddress)}
                   onContentClick={handleContentClick}
                   onMentionClick={props.onMentionClick}
                   onTagClick={props.onTagClick}
@@ -236,7 +243,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onEntryRemove={handleEntryRemove}
                   onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
                   headerMenuExt={
-                    ethAddress === itemData.author.ethAddress && (
+                    showEditButton && (
                       <ExtensionPoint
                         name={`entry-card-edit-button_${itemId}`}
                         onMount={onEditButtonMount}

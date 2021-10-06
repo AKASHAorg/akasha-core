@@ -92,7 +92,7 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
 
   return (
     <StyledTextIcon
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
       margin={margin}
       backgroundColor={backgroundColor}
       color={color}

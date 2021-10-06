@@ -264,6 +264,11 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     setTagQuery(query);
   };
 
+  const showEditButton = React.useMemo(
+    () => loginState.isReady && loginState.ethAddress === entryData?.author?.ethAddress,
+    [entryData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+  );
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -319,7 +324,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
                   flagAsLabel={t('Report Post')}
-                  loggedProfileEthAddress={loginState?.ethAddress}
+                  loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
                   locale={locale}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
@@ -343,8 +348,10 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   removeEntryLabel={t('Delete Post')}
                   removedByMeLabel={t('You deleted this post')}
                   removedByAuthorLabel={t('This post was deleted by its author')}
+                  disableReposting={entryData.isRemoved}
+                  disableReporting={loginState.waitForAuth || loginState.isSigningIn}
                   headerMenuExt={
-                    loginState?.ethAddress === entryData.author.ethAddress && (
+                    showEditButton && (
                       <ExtensionPoint
                         name={`entry-card-edit-button_${entryData.entryId}`}
                         onMount={onEditPostButtonMount}
@@ -426,8 +433,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 getShareUrl={(itemId: string) =>
                   `${window.location.origin}/social-app/post/${itemId}`
                 }
-                ethAddress={loginState?.isReady && loginState?.ethAddress}
-                profilePubKey={loginState?.pubKey}
+                loginState={loginState}
                 onNavigate={handleNavigation}
                 singleSpaNavigate={props.singleSpa.navigateToUrl}
                 navigateToModal={props.navigateToModal}

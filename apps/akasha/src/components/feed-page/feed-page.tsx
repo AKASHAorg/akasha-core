@@ -33,7 +33,7 @@ export interface FeedPageProps {
 }
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
-  const { showLoginModal, logger, loggedProfileData, loginState } = props;
+  const { logger, loggedProfileData, loginState } = props;
 
   const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
@@ -44,6 +44,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
+
+  const navigateToModal = React.useRef(props.navigateToModal);
+  const showLoginModal = React.useRef(props.showLoginModal);
 
   React.useEffect(() => {
     if (Object.keys(errorState).length) {
@@ -64,48 +67,54 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return [];
   }, [postsReq.data]);
 
-  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
-    let url;
-    switch (itemType) {
-      case ItemTypes.PROFILE:
-        url = `/profile/${details.entryId}`;
-        break;
-      case ItemTypes.TAG:
-        url = `/social-app/tags/${details.entryId}`;
-        break;
-      case ItemTypes.ENTRY:
-        url = `/social-app/post/${details.entryId}`;
-        break;
-      case ItemTypes.COMMENT:
-        /* Navigate to parent post because we don't have the comment page yet */
-        url = `/social-app/post/${
-          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
-        }`;
-        break;
-      default:
-        break;
-    }
-    props.singleSpa.navigateToUrl(url);
-  };
+  const handleNavigation = React.useCallback(
+    (itemType: ItemTypes, details: IContentClickDetails) => {
+      let url;
+      switch (itemType) {
+        case ItemTypes.PROFILE:
+          url = `/profile/${details.entryId}`;
+          break;
+        case ItemTypes.TAG:
+          url = `/social-app/tags/${details.entryId}`;
+          break;
+        case ItemTypes.ENTRY:
+          url = `/social-app/post/${details.entryId}`;
+          break;
+        case ItemTypes.COMMENT:
+          /* Navigate to parent post because we don't have the comment page yet */
+          url = `/social-app/post/${
+            queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
+          }`;
+          break;
+        default:
+          break;
+      }
+      props.singleSpa.navigateToUrl(url);
+    },
+    [queryClient, props.singleSpa],
+  );
 
-  const handleShowEditor = () => {
-    props.navigateToModal({ name: 'editor' });
-  };
+  const handleShowEditor = React.useCallback(() => {
+    navigateToModal.current({ name: 'editor' });
+  }, []);
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
-    if (!loginState.pubKey) {
-      return showLoginModal({ name: 'report-modal', entryId, itemType });
-    }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
-  };
+  const handleEntryFlag = React.useCallback(
+    (entryId: string, itemType: string) => () => {
+      if (!loginState.pubKey) {
+        return showLoginModal.current({ name: 'report-modal', entryId, itemType });
+      }
+      navigateToModal.current({ name: 'report-modal', entryId, itemType });
+    },
+    [loginState.pubKey],
+  );
 
-  const handleEntryRemove = (entryId: string) => {
-    props.navigateToModal({
+  const handleEntryRemove = React.useCallback((entryId: string) => {
+    navigateToModal.current({
       name: 'entry-remove-confirmation',
       entryType: ItemTypes.ENTRY,
       entryId,
     });
-  };
+  }, []);
 
   return (
     <Box fill="horizontal">
@@ -154,12 +163,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        ethAddress={loginState?.isReady && loginState?.ethAddress}
-        profilePubKey={loginState?.pubKey}
+        loginState={loginState}
         onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
-        onLoginModalOpen={showLoginModal}
+        onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}
         hasNextPage={postsReq.hasNextPage}
         loggedProfile={loggedProfileData}

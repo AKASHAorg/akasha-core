@@ -7,6 +7,14 @@ import LayoutWidget from './layout-widget';
 import DS from '@akashaproject/design-system';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 
+// import whyDidYouRender from '@welldone-software/why-did-you-render';
+
+// if (process.env.NODE_ENV !== 'production') {
+//   whyDidYouRender(React, {
+//     trackAllPureComponents: true,
+//   });
+// }
+
 const { ErrorLoader, ThemeSelector, lightTheme, darkTheme } = DS;
 
 const reactLifecycles = singleSpaReact({

@@ -14,7 +14,13 @@ import {
   useIsFollowingMultiple,
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { getLinkPreview } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import {
+  getLinkPreview,
+  uploadMediaToTextile,
+} from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
+import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
 
 const {
   Box,
@@ -29,8 +35,7 @@ const {
 export interface IEntryRenderer {
   itemId?: string;
   sharePostUrl: string;
-  ethAddress: string | null;
-  pubKey: string | null;
+  loginState: LoginState;
   locale: ILocale;
   bookmarksQuery: ReturnType<typeof useGetBookmarks>;
   style?: React.CSSProperties;
@@ -60,7 +65,7 @@ const commentStyleExt = {
 
 const EntryRenderer = (props: IEntryRenderer) => {
   const {
-    ethAddress,
+    loginState,
     locale,
     bookmarksQuery,
     itemId,
@@ -80,6 +85,19 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const followProfileQuery = useFollow();
   const unfollowProfileQuery = useUnfollow();
   const [isEditingComment, setIsEditingComment] = React.useState<boolean>(false);
+
+  const [mentionQuery, setMentionQuery] = React.useState(null);
+  const [tagQuery, setTagQuery] = React.useState(null);
+  const mentionSearch = useMentionSearch(mentionQuery);
+  const tagSearch = useTagSearch(tagQuery);
+
+  const handleMentionQueryChange = (query: string) => {
+    setMentionQuery(query);
+  };
+
+  const handleTagQueryChange = (query: string) => {
+    setTagQuery(query);
+  };
 
   const isBookmarked = React.useMemo(() => {
     return (
@@ -103,7 +121,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     }
   }, [props.itemType, commentReq, postReq]);
 
-  const followedProfilesReq = useIsFollowingMultiple(props.ethAddress, [authorEthAddress]);
+  const followedProfilesReq = useIsFollowingMultiple(loginState.ethAddress, [authorEthAddress]);
 
   const postData = React.useMemo(() => {
     if (postReq.data && props.itemType === ItemTypes.ENTRY) {
@@ -157,8 +175,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [unfollowProfileQuery, authorEthAddress]);
 
   const handleEditClick = React.useCallback(() => {
-    setIsEditingComment(true);
-  }, []);
+    if (itemType === ItemTypes.COMMENT) {
+      setIsEditingComment(true);
+    }
+  }, [itemType]);
 
   const handleAvatarClick = () => {
     onNavigate(ItemTypes.PROFILE, {
@@ -203,7 +223,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
         name,
         entryId: itemId,
         entryType: itemType,
-        clickHandler: handleEditClick,
       },
     });
   };
@@ -249,6 +268,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
     setIsEditingComment(false);
   };
 
+  const showEditButton = React.useMemo(
+    () => loginState.isReady && loginState.ethAddress === itemData?.author?.ethAddress,
+    [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+  );
+
   return (
     <>
       {(postReq.isLoading || commentReq.isLoading) && <EntryCardLoading />}
@@ -287,20 +311,12 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 emojiPlaceholderLabel={t('Search')}
                 onPublish={handleEditComment}
                 getLinkPreview={getLinkPreview}
-                getMentions={() => {
-                  /*  */
-                }}
-                getTags={() => {
-                  /*  */
-                }}
-                tags={[]}
-                mentions={[]}
-                uploadRequest={() => {
-                  /*  */
-                }}
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-ignore
-                editorState={itemData.content}
+                getMentions={handleMentionQueryChange}
+                getTags={handleTagQueryChange}
+                tags={tagSearch.data}
+                mentions={mentionSearch.data}
+                uploadRequest={uploadMediaToTextile}
+                editorState={itemData.slateContent}
                 isShown={true}
                 showCancelButton={true}
                 onCancelClick={handleCancelClick}
@@ -322,14 +338,14 @@ const EntryRenderer = (props: IEntryRenderer) => {
               repliesLabel={t('Replies')}
               repostsLabel={t('Reposts')}
               repostLabel={t('Repost')}
+              editedLabel={t('Last edited')}
               repostWithCommentLabel={t('Repost with comment')}
               shareLabel={t('Share')}
               copyLinkLabel={t('Copy Link')}
               flagAsLabel={t(`Report ${itemTypeName}`)}
-              loggedProfileEthAddress={ethAddress}
+              loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
               locale={locale || 'en'}
               style={{
-                height: 'auto',
                 ...(style as React.CSSProperties),
                 ...(commentData && commentStyleExt),
                 display: isEditingComment ? 'none' : 'block',
@@ -357,9 +373,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
               removedByMeLabel={props.removedByMeLabel}
               removedByAuthorLabel={props.removedByAuthorLabel}
               disableReposting={itemData.isRemoved}
+              disableReporting={loginState.waitForAuth || loginState.isSigningIn}
               headerMenuExt={
-                ethAddress === itemData.author.ethAddress && (
+                showEditButton && (
                   <ExtensionPoint
+                    onClick={handleEditClick}
                     name={`entry-card-edit-button_${itemId}`}
                     onMount={onEditButtonMount}
                     onUnmount={onEditButtonUnmount}
@@ -374,4 +392,4 @@ const EntryRenderer = (props: IEntryRenderer) => {
   );
 };
 
-export default EntryRenderer;
+export default React.memo(EntryRenderer);

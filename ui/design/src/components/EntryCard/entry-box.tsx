@@ -21,6 +21,7 @@ import ViewportSizeProvider from '../Providers/viewport-dimension';
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import LinkPreview from '../Editor/link-preview';
+import Tooltip from '../Tooltip';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -76,6 +77,7 @@ export interface IEntryBoxProps {
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
+  disableReporting?: boolean;
   disableActions?: boolean;
   hideActionButtons?: boolean;
   hidePublishTime?: boolean;
@@ -92,6 +94,7 @@ export interface IEntryBoxProps {
   removedByAuthorLabel?: string;
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
+  editedLabel?: string;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -135,6 +138,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     style,
     contentClickable,
     disableReposting,
+    disableReporting,
     disableActions,
     hideActionButtons,
     hidePublishTime,
@@ -149,6 +153,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     removeEntryLabel,
     removedByMeLabel = 'You deleted this post',
     removedByAuthorLabel = 'This post was deleted by its author',
+    editedLabel = 'Last edited',
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -348,6 +353,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 {formatRelativeTime(entryData.time, locale)}
               </Text>
             )}
+            {!!entryData?.updatedAt && (
+              <Tooltip
+                dropProps={{ align: { top: 'bottom' } }}
+                message={`${editedLabel} ${formatRelativeTime(entryData.updatedAt, locale)}`}
+                plain={true}
+                caretPosition={'top'}
+              >
+                <Icon size="sm" type="editSimple" primaryColor={true} clickable={false} />
+              </Tooltip>
+            )}
             <Icon
               type="akasha"
               size="sm"
@@ -390,6 +405,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                       icon: 'report' as IconType,
                       handler: handleEntryFlag,
                       label: flagAsLabel,
+                      disabled: disableReporting,
                     },
                   ]
                 : []),
@@ -411,12 +427,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             <MobileListModal
               closeModal={closeMenuDrop}
               menuItems={[
-                ...(onEntryFlag
+                ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
                   ? [
                       {
                         label: props.flagAsLabel,
                         icon: 'report',
                         handler: handleEntryFlag,
+                        disabled: disableReporting,
                       },
                     ]
                   : []),

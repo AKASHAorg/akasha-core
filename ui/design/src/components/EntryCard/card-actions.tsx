@@ -96,8 +96,8 @@ const CardActions: React.FC<CardActionProps> = props => {
   const [repostDropOpen, setRepostDropOpen] = React.useState(false);
   const [shareDropOpen, setShareDropOpen] = React.useState(false);
 
-  const repostNodeRef: React.RefObject<any> = React.useRef(null);
-  const shareNodeRef: React.RefObject<any> = React.useRef(null);
+  const repostNodeRef = React.useRef(null);
+  const shareNodeRef = React.useRef(null);
 
   const shareData: ShareData = {
     // @TODO: replace with appropriate title, text and url of the post to be shared

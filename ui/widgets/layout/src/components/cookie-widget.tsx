@@ -59,4 +59,4 @@ const CookieWidget: React.FC<ICookieWidgetProps> = props => {
   );
 };
 
-export default CookieWidget;
+export default React.memo(CookieWidget);
