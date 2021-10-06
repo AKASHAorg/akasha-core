@@ -51,6 +51,7 @@ export function useGetLogin(props?: UseGetLoginProps) {
         ...prev,
         ethAddress: data.ethAddress,
         pubKey: data.pubKey,
+        waitForAuth: false,
         isReady: true,
         isSigningIn: false,
       }));

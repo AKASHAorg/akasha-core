@@ -58,7 +58,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
     const sub = waitForAuthCall.subscribe(payload => {
       const { data } = payload;
       if (waitForAuthHandler.current) {
-        waitForAuthHandler.current(data as boolean);
+        waitForAuthHandler.current(!!data);
       }
     });
     return () => sub.unsubscribe();
