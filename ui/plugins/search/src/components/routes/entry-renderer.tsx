@@ -13,15 +13,6 @@ import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.n
 
 const { EntryCard, EntryCardHidden } = DS;
 
-export interface NavigationDetails {
-  authorEthAddress: string;
-  entryId: string;
-  replyTo: {
-    authorEthAddress?: string;
-    entryId: string;
-  } | null;
-}
-
 export interface IEntryCardRendererProps {
   logger: ILogger;
   singleSpa: RootComponentProps['singleSpa'];
@@ -63,7 +54,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const { entryId } = itemData || {};
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const { t } = useTranslation();
 
   const isBookmarked = React.useMemo(() => {
@@ -126,10 +116,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return `${t('You reported this')} ${stringEnd}}`;
   }, [t, accountAwaitingModeration, itemTypeName]);
 
-  const handleEditClick = React.useCallback(() => {
-    setMenuDropOpen(false);
-  }, []);
-
   const onEditButtonMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -137,7 +123,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
         name,
         entryId,
         entryType: itemType,
-        clickHandler: handleEditClick,
       },
     });
   };
@@ -238,8 +223,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               removeEntryLabel={t('Delete Post')}
               onEntryRemove={handleEntryRemove}
               onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
-              menuDropOpen={menuDropOpen}
-              setMenuDropOpen={setMenuDropOpen}
               headerMenuExt={
                 ethAddress === itemData.author.ethAddress && (
                   <ExtensionPoint
