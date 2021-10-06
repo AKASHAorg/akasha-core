@@ -13,8 +13,6 @@ export interface IEntryCardProps extends IEntryBoxProps {
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
   contentClickable?: boolean;
-  menuDropOpen?: boolean;
-  setMenuDropOpen?: (isOpen: boolean) => void;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -72,8 +70,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onEntryRemove,
     removedByMeLabel,
     removedByAuthorLabel,
-    menuDropOpen,
-    setMenuDropOpen,
   } = props;
 
   return (
@@ -135,8 +131,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         isRemoved={isRemoved}
         removedByMeLabel={removedByMeLabel}
         removedByAuthorLabel={removedByAuthorLabel}
-        menuDropOpen={menuDropOpen}
-        setMenuDropOpen={setMenuDropOpen}
         headerMenuExt={props.headerMenuExt}
       />
     </MainAreaCardBox>

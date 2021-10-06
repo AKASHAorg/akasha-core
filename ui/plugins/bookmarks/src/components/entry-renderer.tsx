@@ -56,7 +56,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const { t } = useTranslation();
   const type = React.useMemo(() => {
     if (bookmarks) {
@@ -128,10 +127,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return `${t('You reported this')} ${stringEnd}}`;
   }, [t, accountAwaitingModeration, itemTypeName]);
 
-  const handleEditClick = React.useCallback(() => {
-    setMenuDropOpen(false);
-  }, []);
-
   const onEditButtonMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -139,7 +134,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
         name,
         entryId: itemId,
         entryType: type,
-        clickHandler: handleEditClick,
       },
     });
   };
@@ -241,8 +235,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   removeEntryLabel={t('Delete Post')}
                   onEntryRemove={handleEntryRemove}
                   onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
-                  menuDropOpen={menuDropOpen}
-                  setMenuDropOpen={setMenuDropOpen}
                   headerMenuExt={
                     ethAddress === itemData.author.ethAddress && (
                       <ExtensionPoint

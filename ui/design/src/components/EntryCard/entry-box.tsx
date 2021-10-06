@@ -91,8 +91,6 @@ export interface IEntryBoxProps {
   removedByMeLabel?: string;
   removedByAuthorLabel?: string;
   isRemoved?: boolean;
-  menuDropOpen?: boolean;
-  setMenuDropOpen?: (isOpen: boolean) => void;
   headerMenuExt?: React.ReactElement;
 }
 
@@ -151,10 +149,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     removeEntryLabel,
     removedByMeLabel = 'You deleted this post',
     removedByAuthorLabel = 'This post was deleted by its author',
-    menuDropOpen,
-    setMenuDropOpen,
   } = props;
 
+  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [profileDropOpen, setProfileDropOpen] = React.useState(false);
   const [displayCID, setDisplayCID] = React.useState(false);
 
@@ -163,12 +160,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   const closeMenuDrop = () => {
-    if (setMenuDropOpen) setMenuDropOpen(false);
+    setMenuDropOpen(false);
   };
 
   const toggleMenuDrop = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
-    if (setMenuDropOpen) setMenuDropOpen(!menuDropOpen);
+    setMenuDropOpen(!menuDropOpen);
   };
 
   const handleEntryBookmark = () => {

@@ -19,15 +19,11 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
       props.extensionData.hasOwnProperty('entryId') &&
       props.extensionData?.entryType === ItemTypes.ENTRY
     ) {
-      props.extensionData?.clickHandler();
       props.navigateToModal({
         name: 'editor',
         entryId: props.extensionData.entryId,
         action: 'edit',
       });
-    }
-    if (props.extensionData?.entryType === ItemTypes.COMMENT) {
-      props.extensionData?.clickHandler();
     }
   };
 
