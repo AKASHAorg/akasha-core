@@ -324,7 +324,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               />
             </Box>
           )}
-          {!entryAwaitingModeration && !accountAwaitingModeration && (
+          {!entryAwaitingModeration && !accountAwaitingModeration && !itemData.delisted && (
             <EntryCard
               className={props.className}
               isRemoved={itemData.isRemoved}

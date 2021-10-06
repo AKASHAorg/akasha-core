@@ -33,6 +33,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     getTags,
     mentions,
     tags,
+    titleLabel,
     uploadRequest,
     embedEntryData,
     editorState = editorDefaultValue,
@@ -77,6 +78,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
           style={{ width: '36rem' }}
           editorState={contentState}
           setEditorState={setContentState}
+          titleLabel={titleLabel}
         />
       )}
       {showCancel && (
