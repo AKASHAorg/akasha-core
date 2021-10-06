@@ -260,6 +260,16 @@ export function useCreatePost() {
     },
   );
 }
+const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
+  if (index !== postIndex) {
+    return entry;
+  }
+  return {
+    ...entry,
+    slateContent,
+    updatedAt: Date.now().toString(),
+  };
+};
 
 export const useEditPost = () => {
   const sdk = getSDK();
@@ -283,12 +293,33 @@ export const useEditPost = () => {
             isPublishing: true,
           };
         });
+        queryClient.setQueriesData<unknown>(SEARCH_KEY, oldData => {
+          if (!oldData) return;
+          const postIndex = oldData.entries.findIndex(
+            entry => entry.entryId === editedPost.entryID,
+          );
+          const commentIndex = oldData.comments.findIndex(
+            entry => entry.entryId === editedPost.entryID,
+          );
+          if (postIndex > -1) {
+            return {
+              ...oldData,
+              entries: oldData.entries.map(updateSearchEntry(postIndex, editedPost.slateContent)),
+            };
+          }
+          if (commentIndex > -1) {
+            return {
+              ...oldData,
+              comments: oldData.entries.map(updateSearchEntry(commentIndex, editedPost.slateContent)),
+            };
+          }
+          return oldData;
+        });
 
         return { editedPost };
       },
       onSuccess: async (data, vars) => {
         await queryClient.invalidateQueries([ENTRY_KEY, vars.entryID]);
-        await queryClient.invalidateQueries(SEARCH_KEY);
         await queryClient.fetchQuery([ENTRY_KEY, vars.entryID], () => getPost(vars.entryID));
       },
     },
