@@ -13,6 +13,7 @@ class PostAPI extends DataSource {
   private readonly allPostsCache: string;
   private readonly quotedByPost = 'quoted.by.post';
   private readonly graphqlPostsApi = 'awf.graphql.posts.api';
+  private readonly graphqlPostVersion = 'awf.post.version.content';
   constructor({ collection, dbID }) {
     super();
     this.collection = collection;
@@ -192,8 +193,13 @@ class PostAPI extends DataSource {
     if (currentPost.author !== author) {
       throw new Error('Not authorized');
     }
-    currentPost.metaData = currentPost.metaData.concat(currentPost.content);
-    currentPost.metaData = Array.from(new Set(currentPost.metaData));
+    if (currentPost?.metaData?.length) {
+      currentPost.metaData.push({
+        provider: this.graphqlPostsApi,
+        property: this.graphqlPostVersion,
+        value: Buffer.from(stringify(currentPost.content)).toString('base64'),
+      });
+    }
     currentPost.content = Array.from(content);
     currentPost.title = opt.title || currentPost.title;
     let removedTags = [];
@@ -227,8 +233,20 @@ class PostAPI extends DataSource {
       .then(_ => logger.info(`index edited post: ${id}`))
       // tslint:disable-next-line:no-console
       .catch(e => logger.error(e));
-    await queryCache.del(this.getPostCacheKey(id));
-    await queryCache.del(this.getInitialPostCacheKey(id));
+    const quotedBy = currentPost.metaData.filter(
+      ds => ds.property === this.quotedByPost && ds.provider === this.graphqlPostsApi,
+    );
+    try {
+      for (const dsRecord of quotedBy) {
+        await queryCache.del(this.getPostCacheKey(dsRecord.value));
+        await queryCache.del(this.getInitialPostCacheKey(dsRecord.value));
+      }
+      await queryCache.del(this.getPostCacheKey(id));
+      await queryCache.del(this.getInitialPostCacheKey(id));
+    } catch (e) {
+      logger.warn('could not clear editPost cache');
+    }
+
     return { removedTags, addedTags };
   }
 
@@ -263,6 +281,7 @@ class PostAPI extends DataSource {
     currentPost.mentions = [];
     currentPost.quotes = [];
     currentPost.title = 'Removed';
+    currentPost.metaData = [];
     searchIndex
       .deleteObject(currentPost._id)
       .then(() => logger.info(`removed post: ${id}`))
