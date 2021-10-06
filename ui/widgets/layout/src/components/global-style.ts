@@ -29,7 +29,7 @@ export const GlobalStyle: any = createGlobalStyle<{
     padding: 0;
   }
   body {
-    overscroll-behavior-x: none;
+    /* overscroll-behavior-x: none; */
   }
   ${props => css`
     // 1920 and lower
