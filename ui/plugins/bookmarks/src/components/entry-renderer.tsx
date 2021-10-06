@@ -202,7 +202,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 />
               )}
 
-              {!entryAwaitingModeration && !accountAwaitingModeration && (
+              {!entryAwaitingModeration && !accountAwaitingModeration && !itemData.delisted && (
                 <EntryCard
                   isRemoved={itemData.isRemoved}
                   isBookmarked={true}

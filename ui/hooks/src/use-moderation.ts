@@ -94,6 +94,15 @@ function useModeration() {
             reason: variables.dataToSign.reason,
             reported: true,
           }));
+          queryClient.setQueriesData<unknown>(ENTRY_KEY, oldData => {
+            if (oldData?.author?.pubKey === variables.contentId) {
+              return {
+                ...oldData,
+                author: { ...oldData.author, reported: true, reason: variables.dataToSign.reason },
+              };
+            }
+            return oldData;
+          });
           break;
         default:
           break;
