@@ -16,10 +16,13 @@ promClient.collectDefaultMetrics({ register: promRegistry });
 
 const adminSecret = process.env.MODERATION_ADMIN_SECRET;
 
+let dbID;
 /**
  * Init ThreadDB and collections APIs.
  */
-const dbID = ThreadID.fromString(process.env.AWF_THREADdb);
+if (process.env.AWF_THREADdb) {
+  dbID = ThreadID.fromString(process.env.AWF_THREADdb);
+}
 const dataSources = {
   postsAPI: new PostsAPI({ dbID, collection: 'Posts' }),
   profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
