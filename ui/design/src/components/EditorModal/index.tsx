@@ -25,6 +25,8 @@ const EditorModal: React.FC<IEditorModal> = props => {
     discardPostLabel,
     discardPostInfoLabel,
     keepEditingLabel,
+    disablePublishLabel,
+    disablePublish,
     onPublish,
     handleNavigateBack,
     linkPreview,
@@ -65,6 +67,8 @@ const EditorModal: React.FC<IEditorModal> = props => {
           postLabel={postLabel}
           placeholderLabel={placeholderLabel}
           emojiPlaceholderLabel={emojiPlaceholderLabel}
+          disablePublishLabel={disablePublishLabel}
+          disablePublish={disablePublish}
           onPublish={onPublish}
           handleNavigateBack={handleToggleShowCancel}
           linkPreview={linkPreview}

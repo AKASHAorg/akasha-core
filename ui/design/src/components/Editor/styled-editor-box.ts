@@ -102,7 +102,7 @@ const StyledPopoverDiv = styled.div`
   top: -9999px;
   left: -9999px;
   position: absolute;
-  z-index: 100;
+  z-index: 99999;
   padding: ${props => `${props.theme.shapes.baseSpacing}px`};
   background: ${props => props.theme.colors.white};
   border-radius: ${props => props.theme.shapes.borderRadius};
@@ -110,11 +110,12 @@ const StyledPopoverDiv = styled.div`
   box-shadow: ${props => props.theme.colors.shadow};
 `;
 
-const StyledPopoverValueBox = styled(Box)<{ background: boolean }>`
+const StyledPopoverValueBox = styled(Box)<{ selectedBackground: boolean }>`
   cursor: pointer;
   padding: ${props => `${props.theme.shapes.baseSpacing}px`};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
-  background: ${props => (props.background ? props.theme.colors.lightestGrey : 'transparent')};
+  background: ${props =>
+    props.selectedBackground ? props.theme.colors.lightestGrey : 'transparent'};
   max-width: 20rem;
   min-width: 12rem;
   white-space: nowrap;
