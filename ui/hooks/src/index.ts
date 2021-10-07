@@ -1,5 +1,15 @@
 import constants from './constants';
-import useModeration from './use-moderation';
+import {
+  useModeration,
+  useModerationStatus,
+  useCheckModerator,
+  useGetCount,
+  useGetFlags,
+  useInfiniteLog,
+  useInfinitePending,
+  useInfiniteKept,
+  useInfiniteDelisted,
+} from './use-moderation';
 import useGlobalLogin from './use-global-login';
 import useLoginState from './use-login-state';
 import useErrors from './use-error-state';
@@ -11,6 +21,14 @@ import useReasons from './use-reasons';
 export {
   constants,
   useModeration,
+  useModerationStatus,
+  useCheckModerator,
+  useGetCount,
+  useGetFlags,
+  useInfiniteLog,
+  useInfinitePending,
+  useInfiniteKept,
+  useInfiniteDelisted,
   useGlobalLogin,
   useLoginState,
   useErrors,

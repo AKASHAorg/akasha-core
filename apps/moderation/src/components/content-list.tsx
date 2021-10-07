@@ -11,7 +11,7 @@ import {
   useCheckModerator,
   useInfinitePending,
   useInfiniteDelisted,
-} from '@akashaproject/ui-awf-hooks/lib/use-moderation';
+} from '@akashaproject/ui-awf-hooks';
 import { IModeratedItem, IPendingItem } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
 
 import ContentTab from './content-tab';
