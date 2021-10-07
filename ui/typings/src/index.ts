@@ -32,6 +32,8 @@ export interface RootComponentProps {
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
   activeModal: AppLoaderTypes.ModalNavigationOptions;
   extensionData?: AppLoaderTypes.UIEventData['data'];
+  homepageApp?: string;
+  getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
 }
 
 export enum LogoTypeSource {

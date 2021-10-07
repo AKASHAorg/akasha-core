@@ -176,6 +176,7 @@ export default class AppLoader {
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
       isMobile: this.isMobile,
+      getAppRoutes: appId => this.apps.getAppRoutes(appId),
     });
 
     integrationInfos.forEach(integration => {
