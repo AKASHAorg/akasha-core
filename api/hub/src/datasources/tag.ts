@@ -70,7 +70,7 @@ class TagAPI extends DataSource {
       return result;
     }
     logger.warn(`tag ${name} not found`);
-    throw new Error('tag not found');
+    return;
   }
 
   // threadsdb doesn't have limit and offset selectors atm
