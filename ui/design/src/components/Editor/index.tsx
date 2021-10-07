@@ -44,7 +44,9 @@ export interface IEditorBox {
   emojiPlaceholderLabel?: string;
   uploadFailedLabel?: string;
   uploadingImageLabel?: string;
+  disablePublishLabel?: string;
   onPublish: (publishData: IPublishData) => void;
+  disablePublish?: boolean;
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
@@ -81,6 +83,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     emojiPlaceholderLabel,
     uploadFailedLabel,
     uploadingImageLabel,
+    disablePublishLabel,
+    disablePublish,
     onPublish,
     embedEntryData,
     minHeight,
@@ -111,7 +115,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [letterCount, setLetterCount] = useState(0);
 
-  const [publishDisabled, setPublishDisabled] = useState(true);
+  const [publishDisabledInternal, setPublishDisabledInternal] = useState(true);
   const [imageUploadDisabled, setImageUploadDisabled] = useState(false);
 
   const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
@@ -267,9 +271,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
     /** disable publishing if no images/text or text too long */
     if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
-      setPublishDisabled(false);
+      setPublishDisabledInternal(false);
     } else if ((textLength === 0 && imageCounter === 0) || textLength > MAX_LENGTH) {
-      setPublishDisabled(true);
+      setPublishDisabledInternal(true);
     }
 
     /** limits to only 1 image*/
@@ -596,9 +600,10 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           )}
           <Button
             primary={true}
-            label={postLabel}
+            icon={disablePublish ? <Icon type="loading" color="white" /> : null}
+            label={disablePublish ? disablePublishLabel : postLabel}
             onClick={handlePublish}
-            disabled={publishDisabled}
+            disabled={publishDisabledInternal || disablePublish}
           />
         </Box>
       </Box>
@@ -616,6 +621,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
 EditorBox.defaultProps = {
   postLabel: 'Post',
+  disablePublishLabel: 'Authenticating',
   placeholderLabel: 'Share your thoughts',
   uploadingImageLabel: 'Uploading Image',
   uploadFailedLabel: 'Upload failed.',

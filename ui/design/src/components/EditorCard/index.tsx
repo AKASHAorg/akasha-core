@@ -20,6 +20,8 @@ const EditorCard: React.FC<IEditorCard> = props => {
     titleLabel,
     placeholderLabel,
     emojiPlaceholderLabel,
+    disablePublishLabel,
+    disablePublish,
     onPublish,
     handleNavigateBack,
     linkPreview,
@@ -50,9 +52,11 @@ const EditorCard: React.FC<IEditorCard> = props => {
       <EditorBox
         avatar={avatar}
         ethAddress={ethAddress}
+        disablePublish={disablePublish}
         onPublish={onPublish}
         postLabel={postLabel}
         withMeter={true}
+        disablePublishLabel={disablePublishLabel}
         placeholderLabel={placeholderLabel}
         emojiPlaceholderLabel={emojiPlaceholderLabel}
         minHeight={'192px'}
