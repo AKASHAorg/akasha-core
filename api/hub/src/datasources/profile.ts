@@ -8,7 +8,7 @@ import {
   validateName,
 } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
-import { DataProvider, Profile } from '../collections/interfaces';
+import { DataProvider, PostItem, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 import { postsStats, statsProvider } from '../resolvers/constants';
