@@ -10,7 +10,7 @@ import {
 import { ThreadID, Where, Client } from '@textile/hub';
 import { DataProvider, PostItem, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
-import { searchIndex } from './search-indexes';
+import { clearSearchCache, searchIndex } from './search-indexes';
 import { postsStats, statsProvider } from '../resolvers/constants';
 import { parse, stringify } from 'flatted';
 import objHash from 'object-hash';
@@ -167,6 +167,7 @@ class ProfileAPI extends DataSource {
       .then(_ => _)
       // tslint:disable-next-line:no-console
       .catch(e => console.error(e));
+    await clearSearchCache();
     return profile._id;
   }
 
