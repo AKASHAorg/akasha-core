@@ -23,7 +23,7 @@ export const TagPopover: React.FC<IMentionPopover> = React.forwardRef((props, re
           <StyledPopoverValueBox
             pad="small"
             key={i}
-            background={i === currentIndex}
+            selectedBackground={i === currentIndex}
             onClick={() => {
               handleSelect(i);
             }}

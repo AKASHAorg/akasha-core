@@ -18,6 +18,8 @@ const CommentEditor: React.FC<
     postLabel,
     placeholderLabel,
     emojiPlaceholderLabel,
+    disablePublishLabel,
+    disablePublish,
     onPublish,
     getLinkPreview,
     getMentions,
@@ -35,7 +37,7 @@ const CommentEditor: React.FC<
   const [showEditor, setShowEditor] = React.useState(isShown);
   const [contentState, setContentState] = React.useState(editorState ?? editorDefaultValue);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
-  const editorRef: React.RefObject<any> = React.useRef(null);
+  const editorRef = React.useRef(null);
 
   const handleClickAway = () => {
     if (
@@ -80,6 +82,8 @@ const CommentEditor: React.FC<
             postLabel={postLabel}
             placeholderLabel={placeholderLabel}
             emojiPlaceholderLabel={emojiPlaceholderLabel}
+            disablePublishLabel={disablePublishLabel}
+            disablePublish={disablePublish}
             onPublish={handlePublish}
             getLinkPreview={getLinkPreview}
             getMentions={getMentions}

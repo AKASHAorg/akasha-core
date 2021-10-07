@@ -44,17 +44,21 @@ class TagAPI extends DataSource {
     return results.sort((x, y) => y.totalPosts - x.totalPosts);
   }
 
-  async getTag(name: string) {
+  async getTag(name: string, allowFromCache = true) {
     const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
     const key = this.getTagCacheKey(formattedName);
     const hasCachedValue = await queryCache.has(key);
-    if (hasCachedValue) {
+    if (hasCachedValue && allowFromCache) {
       return queryCache.get(key);
     }
     const query = new Where('name').eq(formattedName);
     const tag = await db.find<Tag>(this.dbID, this.collection, query);
     if (tag.length) {
+      // return db record for mutations
+      if (!allowFromCache) {
+        return tag[0];
+      }
       // const searchFacet = await searchIndex.search(``, {
       //   facetFilters: ['category:interests', `tagName:${name}`],
       //   hitsPerPage: 20,
@@ -103,11 +107,11 @@ class TagAPI extends DataSource {
     if (!postExists) {
       return Promise.reject(`postID: ${postID} was not found`);
     }
-    let tag = await this.getTag(tagName);
+    let tag = await this.getTag(tagName, false);
 
     if (!tag) {
       await this.addTag(tagName);
-      tag = await this.getTag(tagName);
+      tag = await this.getTag(tagName, false);
     }
     tag.posts.unshift(postID);
     await queryCache.del(this.getTagCacheKey(tagName));
@@ -116,7 +120,7 @@ class TagAPI extends DataSource {
 
   async removePostIndex(postID: string, tagName: string) {
     const db: Client = await getAppDB();
-    const tag = await this.getTag(tagName);
+    const tag = await this.getTag(tagName, false);
     const postIndex = tag.posts.indexOf(postID);
     tag.posts.splice(postIndex, 1);
     await queryCache.del(this.getTagCacheKey(tagName));
@@ -125,7 +129,7 @@ class TagAPI extends DataSource {
 
   async removeCommentIndex(commentID: string, tagName: string) {
     const db: Client = await getAppDB();
-    const tag = await this.getTag(tagName);
+    const tag = await this.getTag(tagName, false);
     const commentIndex = tag.comments.indexOf(commentID);
     tag.posts.splice(commentIndex, 1);
     await queryCache.del(this.getTagCacheKey(tagName));
@@ -138,11 +142,11 @@ class TagAPI extends DataSource {
     if (!postExists) {
       return Promise.reject(`commentID: ${commentID} was not found`);
     }
-    let tag = await this.getTag(tagName);
+    let tag = await this.getTag(tagName, false);
 
     if (!tag) {
       await this.addTag(tagName);
-      tag = await this.getTag(tagName);
+      tag = await this.getTag(tagName, false);
     }
     tag.comments.unshift(commentID);
     await queryCache.del(this.getTagCacheKey(tagName));

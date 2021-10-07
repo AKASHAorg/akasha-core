@@ -162,6 +162,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
     return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
   }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
 
+  const disablePublishing = React.useMemo(
+    () => loginState.waitForAuth || !loginState.isReady,
+    [loginState],
+  );
+
   const handleFollow = React.useCallback(() => {
     if (authorEthAddress) {
       followProfileQuery.mutate(authorEthAddress);
@@ -309,6 +314,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 postLabel={t('Reply')}
                 placeholderLabel={`${t('Reply to')} ${itemData.author.name || ''}`}
                 emojiPlaceholderLabel={t('Search')}
+                disablePublishLabel={t('Authenticating')}
+                disablePublish={disablePublishing}
                 onPublish={handleEditComment}
                 getLinkPreview={getLinkPreview}
                 getMentions={handleMentionQueryChange}

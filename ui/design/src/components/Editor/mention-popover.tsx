@@ -22,7 +22,7 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
           <StyledPopoverValueBox
             pad="small"
             key={i}
-            background={i === currentIndex}
+            selectedBackground={i === currentIndex}
             onClick={() => {
               handleSelect(i);
             }}
