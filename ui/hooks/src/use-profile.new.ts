@@ -317,6 +317,7 @@ const completeProfileUpdate = async (pubKey: string, queryClient: QueryClient) =
     status: UpdateProfileStatus.UPDATE_COMPLETE,
     remainingFields: [],
   });
+  return;
 };
 
 export function useProfileUpdate(pubKey: string) {
@@ -386,24 +387,23 @@ export function useProfileUpdate(pubKey: string) {
         if (makeDefaultRes.hasOwnProperty('error')) {
           throw new Error(makeDefaultRes['error']);
         }
+
         return Promise.resolve({ currentProfile });
       } catch (err) {
         // do not throw error here, just log it
         logError('useProfile.useProfileUpdate.onMutate', err);
       }
     },
-    onSuccess: async (providers, variables) => {
-      /* todo */
-      await queryClient.invalidateQueries([PROFILE_KEY, pubKey]);
-      await queryClient.invalidateQueries([PROFILE_KEY, variables.profileData.ethAddress]);
+    onSuccess: async () => {
       queryClient.removeQueries({
-        queryKey: [UPDATE_PROFILE_STATUS, pubKey],
+        queryKey: UPDATE_PROFILE_STATUS,
       });
+      await queryClient.invalidateQueries(PROFILE_KEY);
     },
     onError: async (error, vars, context: { currentProfile: IProfileData }) => {
       queryClient.setQueryData([PROFILE_KEY, pubKey], context.currentProfile);
       queryClient.removeQueries({
-        queryKey: [UPDATE_PROFILE_STATUS, pubKey],
+        queryKey: UPDATE_PROFILE_STATUS,
       });
       logError(
         'useProfile.useProfileUpdate.onError',
