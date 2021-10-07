@@ -274,6 +274,11 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     [entryData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
   );
 
+  const showEntry = React.useMemo(
+    () => !entryData.delisted && (!isReported || (isReported && entryData.moderated)),
+    [entryData.delisted, entryData.moderated, isReported],
+  );
+
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -305,7 +310,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          {!(entryData.moderated && entryData.delisted) && !isReported && (
+          {showEntry && (
             <>
               <Box
                 pad={{ bottom: 'small' }}
