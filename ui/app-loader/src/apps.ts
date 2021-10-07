@@ -236,6 +236,14 @@ class Apps extends BaseIntegration {
     }
   }
 
+  public getAppRoutes(appId: string) {
+    const appConfig = this.appConfigs[appId];
+    if (!appConfig) {
+      return null;
+    }
+    return appConfig.routes;
+  }
+
   get configs() {
     return this.appConfigs;
   }

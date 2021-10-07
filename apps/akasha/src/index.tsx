@@ -1,4 +1,4 @@
-import routes, { POST, rootRoute } from './routes';
+import routes, { FEED, POST, rootRoute } from './routes';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import {
   IAppConfig,
@@ -19,6 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
    */
   routes: {
     rootRoute,
+    defaultRoute: routes[FEED],
   },
   title: 'Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
