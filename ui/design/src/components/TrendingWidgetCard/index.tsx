@@ -20,8 +20,8 @@ export interface ITrendingWidgetCardProps {
   isLoadingTags?: boolean;
   isLoadingProfiles?: boolean;
   // labels
-  noTagsLabel: string;
-  noProfilesLabel: string;
+  noTagsLabel?: string;
+  noProfilesLabel?: string;
   titleLabel: string;
   topicsLabel: string;
   profilesLabel: string;
@@ -219,6 +219,8 @@ TrendingWidgetCard.defaultProps = {
   subscribedLabel: 'Subscribed',
   subscribeLabel: 'Subscribe',
   unsubscribeLabel: 'Unsubscribe',
+  noTagsLabel: 'No tags found!',
+  noProfilesLabel: 'No profiles found!',
 };
 
 export default TrendingWidgetCard;
