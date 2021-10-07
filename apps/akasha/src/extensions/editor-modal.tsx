@@ -59,6 +59,11 @@ const EditorModalContainer = (props: RootComponentProps) => {
     }
   }, [props.activeModal]);
 
+  const disablePublishing = React.useMemo(
+    () => loginQuery.data.waitForAuth || !loginQuery.data.isReady,
+    [loginQuery.data],
+  );
+
   const embeddedPost = usePost({ postId: embedEntryId, enabler: hasEmbed });
 
   const editingPost = usePost({ postId: props.activeModal.entryId, enabler: isEditing });
@@ -143,7 +148,9 @@ const EditorModalContainer = (props: RootComponentProps) => {
             discardPostInfoLabel={t(
               "You have not posted yet. If you leave now you'll discard your post.",
             )}
+            disablePublishLabel={t('Authenticating')}
             keepEditingLabel={t('Keep Editing')}
+            disablePublish={disablePublishing}
             onPublish={handleEntryPublish}
             handleNavigateBack={handleModalClose}
             linkPreview={entryData?.linkPreview}

@@ -88,6 +88,11 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     return postReq.isSuccess && entryData.reported;
   }, [entryData, showAnyway, postReq.isSuccess]);
 
+  const disablePublishing = React.useMemo(
+    () => loginState.waitForAuth || !loginState.isReady,
+    [loginState],
+  );
+
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionQueryReq = useMentionSearch(mentionQuery);
@@ -374,6 +379,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     postLabel={t('Reply')}
                     placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
                     emojiPlaceholderLabel={t('Search')}
+                    disablePublishLabel={t('Authenticating')}
+                    disablePublish={disablePublishing}
                     onPublish={handlePublishComment}
                     getLinkPreview={getLinkPreview}
                     getMentions={handleMentionQueryChange}
