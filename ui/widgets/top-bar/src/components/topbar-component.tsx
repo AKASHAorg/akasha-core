@@ -1,13 +1,12 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   IMenuItem,
   EventTypes,
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useErrors } from '@akashaproject/ui-awf-hooks';
 import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useTranslation } from 'react-i18next';
@@ -19,17 +18,15 @@ import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/use-moderatio
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
-  const { singleSpa, getMenuItems, uiEvents, logger } = props;
+  const { singleSpa, getMenuItems, uiEvents } = props;
 
   const { navigateToUrl } = singleSpa;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
 
-  const [, errorActions] = useErrors({ logger });
+  const history = useHistory();
 
-  const loginQuery = useGetLogin({
-    onError: errorActions.createError,
-  });
+  const loginQuery = useGetLogin();
   const logoutMutation = useLogout();
 
   const profileDataReq = useGetProfile(loginQuery.data.pubKey);
@@ -169,6 +166,20 @@ const TopbarComponent = (props: RootComponentProps) => {
     }
   };
 
+  const handleBrandClick = () => {
+    if (!props.homepageApp) {
+      return;
+    }
+    const homeAppRoutes = props.getAppRoutes(props.homepageApp);
+    if (homeAppRoutes && homeAppRoutes.hasOwnProperty('defaultRoute')) {
+      if (location.pathname === homeAppRoutes.defaultRoute) {
+        scrollTo(0, 0);
+      } else {
+        handleNavigation(homeAppRoutes.defaultRoute);
+      }
+    }
+  };
+
   const { t } = useTranslation();
   const location = useLocation();
 
@@ -223,6 +234,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         onDashboardClick={handleDashboardClick}
         hasNewNotifications={checkNotifsReq.data}
         currentLocation={location?.pathname}
+        onBrandClick={handleBrandClick}
       >
         <ExtensionPoint
           name={extensionPointsMap.QuickAccess}

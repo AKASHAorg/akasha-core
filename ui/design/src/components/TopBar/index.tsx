@@ -61,6 +61,7 @@ export interface ITopbarProps {
   onLoginClick: () => void;
   onSignUpClick: () => void;
   onLogout: () => void;
+  onBrandClick?: () => void;
 }
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -97,6 +98,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onDashboardClick,
     onLogout,
     hasNewNotifications,
+    onBrandClick,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -316,19 +318,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
         fill="horizontal"
         height="3rem"
       >
-        <Box
-          direction="row"
-          align="center"
-          flex={{ shrink: 0 }}
-          gap="small"
-          onClick={() => {
-            onNavigation('/');
-          }}
-        >
+        <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small" onClick={onBrandClick}>
           <Box direction="row" gap="small" align="center">
             <BrandIcon type="ethereumWorldLogo" clickable={true} />
             {!isMobileOnly && (
-              <StyledText unselectable="on" size="large">
+              <StyledText style={{ userSelect: 'none' }} size="large">
                 {brandLabel}
               </StyledText>
             )}
@@ -441,6 +435,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
 Topbar.defaultProps = {
   onNavigation: () => {
+    return;
+  },
+  onBrandClick: () => {
     return;
   },
   signUpLabel: 'Sign Up',

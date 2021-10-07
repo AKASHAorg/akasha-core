@@ -1,5 +1,6 @@
 import {
   ExtensionPointDefinition,
+  IAppConfig,
   IWidgetConfig,
   UIEventData,
   WidgetRegistryInfo,
@@ -14,13 +15,20 @@ class Widgets extends BaseIntegration {
   private readonly widgetModules: Record<string, IntegrationModule>;
   private readonly widgetConfigs: Record<string, IWidgetConfig>;
   private readonly widgetParcels: Record<string, singleSpa.Parcel>;
-  constructor(opts: BaseIntegrationClassOptions) {
+  private getAppRoutes: (appId: string) => IAppConfig['routes'];
+
+  constructor(
+    opts: BaseIntegrationClassOptions & {
+      getAppRoutes: (appId: string) => IAppConfig['routes'];
+    },
+  ) {
     super(opts);
     this.widgetInfos = [];
     this.widgetModules = {};
     this.widgetConfigs = {};
     this.widgetParcels = {};
     this.layoutConfig = opts.layoutConfig;
+    this.getAppRoutes = opts.getAppRoutes;
   }
   add(integration: WidgetRegistryInfo) {
     // todo
@@ -85,6 +93,7 @@ class Widgets extends BaseIntegration {
       // uninstallIntegration: this.uninstallIntegration.bind(this),
       navigateToModal: navigateToModal,
       getMenuItems: this.getMenuItems,
+      getAppRoutes: this.getAppRoutes,
     };
 
     const widgetParcel = singleSpa.mountRootParcel(widgetConfig.loadingFn, widgetProps);

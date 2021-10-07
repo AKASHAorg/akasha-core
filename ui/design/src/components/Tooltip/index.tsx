@@ -52,7 +52,7 @@ const TooltipContent = ({
       {caretPosition === 'left' && <Caret position={caretPosition} />}
       <ContentWrapper background="darkGrey" direction="row" pad="xxsmall" round="xxsmall">
         {icon && <Icon type={icon} style={{ marginRight: '0.3em' }} color="green" />}
-        <Text size="small" color="white">
+        <Text size="small" color="white" style={{ whiteSpace: 'nowrap' }}>
           {message}
         </Text>
       </ContentWrapper>
