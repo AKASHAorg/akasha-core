@@ -29,9 +29,12 @@ const wss = route.all('/ws/userauth', ctx => {
           if (!data.pubkey) {
             throw new Error('missing pubkey');
           }
+          logger.info(`wss:refreshAppDB`);
           const db = await getAppDB();
+          logger.info(`wss:refreshClientDB`);
           const client = await newClientDB();
           const query = new Where('pubKey').eq(data.pubkey);
+          logger.info(`wss:checkingUserFound`);
           // check if the key is already registered
           const userFound = await db.find(dbId, 'Profiles', query);
           const token = await client.getTokenChallenge(data.pubkey, (challenge: Uint8Array) => {
