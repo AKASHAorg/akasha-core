@@ -45,7 +45,10 @@ export const generatePrivateKey = async (
 ): Promise<PrivateKey> => {
   const ethAddress = await lastValueFrom(signer.getCurrentAddress());
   const secret = ethers.utils.keccak256(sig);
-  const message = metamaskGen(ethAddress.data, secret, 'ethereum.world');
+  let message = metamaskGen(ethAddress.data, secret, 'ethereum.world');
+  if (process.env.NODE_ENV === 'development') {
+    message += '==DEV Key==';
+  }
   const signedText = await signer.signMessage(message);
   const hash = ethers.utils.keccak256(signedText);
   if (hash === null) {

@@ -216,7 +216,10 @@ export default class AWF_Auth implements AWF_IAuth {
       }
     });
     await this.fil.getToken(this.identity);
-    const [filAddress] = await this.fil.addresses();
+    const timeoutApi = new Promise<never[]>(resolve => {
+      setTimeout(resolve, 15000, [null]);
+    });
+    const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
     sessionStorage.setItem(this.providerKey, currentProvider.toString());
     sessionStorage.setItem(this.sessKey, this.identity.toString());
     sessionStorage.setItem(this.currentUserKey, JSON.stringify(this.currentUser));
