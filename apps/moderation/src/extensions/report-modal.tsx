@@ -1,18 +1,14 @@
 import * as React from 'react';
-import i18next from 'i18next';
 import ReactDOM from 'react-dom';
-import Fetch from 'i18next-fetch-backend';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
-import Backend from 'i18next-chained-backend';
-import LocalStorageBackend from 'i18next-localstorage-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import { I18nextProvider, initReactI18next, useTranslation } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ModerationItemTypes, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useErrors, withProviders, useReasons, useModeration } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import i18n, { setupI18next } from '../i18n';
 
 const { ReportModal } = DS;
 
@@ -94,53 +90,15 @@ const ReportModalComponent = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => {
-  const { logger } = props;
-
-  i18next
-    .use(initReactI18next)
-    .use(Backend)
-    .use(LanguageDetector)
-    .use({
-      type: 'logger',
-      log: logger.info,
-      warn: logger.warn,
-      error: logger.error,
-    })
-    .init({
-      fallbackLng: 'en',
-      ns: ['moderation-app'],
-      saveMissing: false,
-      saveMissingTo: 'all',
-      load: 'languageOnly',
-      debug: true,
-      cleanCode: true,
-      keySeparator: false,
-      defaultNS: 'moderation-app',
-      backend: {
-        backends: [LocalStorageBackend, Fetch],
-        backendOptions: [
-          {
-            prefix: 'i18next_res_v0',
-            expirationTime: 24 * 60 * 60 * 1000,
-          },
-          {
-            loadPath: '/locales/{{lng}}/{{ns}}.json',
-          },
-        ],
-      },
-    });
-
-  return (
-    <Router>
-      <React.Suspense fallback={<></>}>
-        <I18nextProvider i18n={i18next}>
-          <ReportModalComponent {...props} />
-        </I18nextProvider>
-      </React.Suspense>
-    </Router>
-  );
-};
+const Wrapped = (props: RootComponentProps) => (
+  <Router>
+    <React.Suspense fallback={<></>}>
+      <I18nextProvider i18n={i18n}>
+        <ReportModalComponent {...props} />
+      </I18nextProvider>
+    </React.Suspense>
+  </Router>
+);
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -154,7 +112,13 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = reactLifecycles.bootstrap;
+export const bootstrap = (props: RootComponentProps) => {
+  return setupI18next({
+    logger: props.logger,
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'app-moderation-ewa',
+  });
+};
 
 export const mount = reactLifecycles.mount;
 
