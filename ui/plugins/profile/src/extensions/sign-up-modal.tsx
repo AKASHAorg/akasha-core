@@ -2,7 +2,7 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useTranslation } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
@@ -10,6 +10,7 @@ import getSDK from '@akashaproject/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import i18n, { setupI18next } from '../i18n';
 
 const { SignUpModal } = DS;
 
@@ -181,7 +182,9 @@ const SignUpModalContainer = (props: RootComponentProps) => {
 const Wrapped = (props: RootComponentProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
-      <SignUpModalContainer {...props} />
+      <I18nextProvider i18n={i18n}>
+        <SignUpModalContainer {...props} />
+      </I18nextProvider>
     </React.Suspense>
   </Router>
 );
@@ -198,7 +201,13 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = reactLifecycles.bootstrap;
+export const bootstrap = (props: RootComponentProps) => {
+  return setupI18next({
+    logger: props.logger,
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'ui-plugin-profile',
+  });
+};
 
 export const mount = reactLifecycles.mount;
 
