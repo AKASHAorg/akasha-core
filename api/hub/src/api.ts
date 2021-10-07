@@ -150,44 +150,44 @@ api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<
 /**
  * Create a new moderation report.
  */
-api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-  const report: any = ctx?.request.body;
-  if (!report.data || !report.contentId || !report.contentType || !report.signature) {
-    ctx.status = 400;
-  } else {
-    // verify request signature (from client)
-    const { verified, error } = await verifySignature(
-      report.data.user,
-      report.data,
-      report.signature,
-    );
-    if (!verified) {
-      ctx.body = error;
-      ctx.status = error ? 401 : 403;
-    } else {
-      try {
-        // add report
-        await dataSources.reportingAPI.addReport(
-          'ModerationDecisions',
-          report.contentType,
-          report.contentId,
-          report.data.user,
-          report.data.reason,
-          report.data.explanation,
-        );
-        ctx.status = 201;
-      } catch (error) {
-        ctx.status = 500;
-        ctx.body = error;
-        if (error.status && error.status === 409) {
-          ctx.status = 409;
-          ctx.body = 'You cannot report this content twice.';
-        }
-      }
-    }
-  }
-  await next();
-});
+// api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
+//   const report: any = ctx?.request.body;
+//   if (!report.data || !report.contentId || !report.contentType || !report.signature) {
+//     ctx.status = 400;
+//   } else {
+//     // verify request signature (from client)
+//     const { verified, error } = await verifySignature(
+//       report.data.user,
+//       report.data,
+//       report.signature,
+//     );
+//     if (!verified) {
+//       ctx.body = error;
+//       ctx.status = error ? 401 : 403;
+//     } else {
+//       try {
+//         // add report
+//         await dataSources.reportingAPI.addReport(
+//           'ModerationDecisions',
+//           report.contentType,
+//           report.contentId,
+//           report.data.user,
+//           report.data.reason,
+//           report.data.explanation,
+//         );
+//         ctx.status = 201;
+//       } catch (error) {
+//         ctx.status = 500;
+//         ctx.body = error;
+//         if (error.status && error.status === 409) {
+//           ctx.status = 409;
+//           ctx.body = 'You cannot report this content twice.';
+//         }
+//       }
+//     }
+//   }
+//   await next();
+// });
 
 /**
  * List reports for a specific content identifier.
