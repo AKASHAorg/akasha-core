@@ -74,7 +74,7 @@ export const newClientDB = async () => {
     return Promise.resolve(userDBClient);
   }
   const API = process.env.API || undefined;
-  const client = await Client.withUserAuth(
+  const client = Client.withUserAuth(
     await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
     API,
     process.env.NODE_ENV !== 'production',
