@@ -275,8 +275,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   );
 
   const showEntry = React.useMemo(
-    () => !entryData.delisted && (!isReported || (isReported && entryData.moderated)),
-    [entryData.delisted, entryData.moderated, isReported],
+    () => !entryData?.delisted && (!isReported || (isReported && entryData?.moderated)),
+    [entryData?.delisted, entryData?.moderated, isReported],
   );
 
   return (
