@@ -150,44 +150,44 @@ api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<
 /**
  * Create a new moderation report.
  */
-// api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-//   const report: any = ctx?.request.body;
-//   if (!report.data || !report.contentId || !report.contentType || !report.signature) {
-//     ctx.status = 400;
-//   } else {
-//     // verify request signature (from client)
-//     const { verified, error } = await verifySignature(
-//       report.data.user,
-//       report.data,
-//       report.signature,
-//     );
-//     if (!verified) {
-//       ctx.body = error;
-//       ctx.status = error ? 401 : 403;
-//     } else {
-//       try {
-//         // add report
-//         await dataSources.reportingAPI.addReport(
-//           'ModerationDecisions',
-//           report.contentType,
-//           report.contentId,
-//           report.data.user,
-//           report.data.reason,
-//           report.data.explanation,
-//         );
-//         ctx.status = 201;
-//       } catch (error) {
-//         ctx.status = 500;
-//         ctx.body = error;
-//         if (error.status && error.status === 409) {
-//           ctx.status = 409;
-//           ctx.body = 'You cannot report this content twice.';
-//         }
-//       }
-//     }
-//   }
-//   await next();
-// });
+api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
+  const report: any = ctx?.request.body;
+  if (!report.data || !report.contentId || !report.contentType || !report.signature) {
+    ctx.status = 400;
+  } else {
+    // verify request signature (from client)
+    const { verified, error } = await verifySignature(
+      report.data.user,
+      report.data,
+      report.signature,
+    );
+    if (!verified) {
+      ctx.body = error;
+      ctx.status = error ? 401 : 403;
+    } else {
+      try {
+        // add report
+        await dataSources.reportingAPI.addReport(
+          'ModerationDecisions',
+          report.contentType,
+          report.contentId,
+          report.data.user,
+          report.data.reason,
+          report.data.explanation,
+        );
+        ctx.status = 201;
+      } catch (error) {
+        ctx.status = 500;
+        ctx.body = error;
+        if (error.status && error.status === 409) {
+          ctx.status = 409;
+          ctx.body = 'You cannot report this content twice.';
+        }
+      }
+    }
+  }
+  await next();
+});
 
 /**
  * List reports for a specific content identifier.
@@ -392,31 +392,31 @@ api.get(
 /**
  * Add a new moderator.
  */
-api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-  const request: any = ctx?.request.body;
-  if (!request.data || !request.secret) {
-    ctx.status = 400;
-  } else {
-    try {
-      const allowed = await isAdmin(request, ctx);
-      ctx = allowed.ctx;
-      if (allowed.ok) {
-        // add the new moderator
-        await dataSources.moderatorsAPI.updateModerator(
-          request.data.user,
-          request.data.admin,
-          request.data.active,
-          dataSources.profileAPI,
-        );
-        ctx.status = 201;
-      }
-    } catch (error) {
-      ctx.body = `Cannot add moderator! Error: ${error}`;
-      ctx.status = 500;
-    }
-  }
-  await next();
-});
+// api.post('/moderation/moderators/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
+//   const request: any = ctx?.request.body;
+//   if (!request.data || !request.secret) {
+//     ctx.status = 400;
+//   } else {
+//     try {
+//       const allowed = await isAdmin(request, ctx);
+//       ctx = allowed.ctx;
+//       if (allowed.ok) {
+//         // add the new moderator
+//         await dataSources.moderatorsAPI.updateModerator(
+//           request.data.user,
+//           request.data.admin,
+//           request.data.active,
+//           dataSources.profileAPI,
+//         );
+//         ctx.status = 201;
+//       }
+//     } catch (error) {
+//       ctx.body = `Cannot add moderator! Error: ${error}`;
+//       ctx.status = 500;
+//     }
+//   }
+//   await next();
+// });
 
 /**
  * Update an existing moderator.
