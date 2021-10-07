@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {
   IMenuItem,
   EventTypes,
@@ -23,8 +23,6 @@ const TopbarComponent = (props: RootComponentProps) => {
   const { navigateToUrl } = singleSpa;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
-
-  const history = useHistory();
 
   const loginQuery = useGetLogin();
   const logoutMutation = useLogout();
