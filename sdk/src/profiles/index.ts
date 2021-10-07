@@ -352,6 +352,7 @@ export default class AWF_Profile implements AWF_IProfile {
       data.config = {
         maxWidth: 640,
         maxHeight: 640,
+        autoRotate: false,
       };
     }
     const resized = await resizeImage({
