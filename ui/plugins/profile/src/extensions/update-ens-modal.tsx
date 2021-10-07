@@ -11,7 +11,7 @@ import {
   IProfileData,
   ProfileProviderProperties,
 } from '@akashaproject/ui-awf-typings/lib/profile';
-import { TFunction, useTranslation } from 'react-i18next';
+import { I18nextProvider, TFunction, useTranslation } from 'react-i18next';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import {
   ENSOptionTypes,
@@ -24,6 +24,7 @@ import {
 } from '@akashaproject/ui-awf-hooks/lib/use-username.new';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { DataProviderInput } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
+import i18n, { setupI18next } from '../i18n';
 
 const {
   ErrorLoader,
@@ -329,10 +330,18 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
   );
 };
 
+const EnsModal: React.FC<RootComponentProps> = props => (
+  <React.Suspense fallback={<></>}>
+    <I18nextProvider i18n={i18n}>
+      <UpdateENSModal {...props} />
+    </I18nextProvider>
+  </React.Suspense>
+);
+
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: withProviders(UpdateENSModal),
+  rootComponent: withProviders(EnsModal),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
@@ -352,7 +361,13 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = reactLifecycles.bootstrap;
+export const bootstrap = (props: RootComponentProps) => {
+  return setupI18next({
+    logger: props.logger,
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'ui-plugin-profile',
+  });
+};
 
 export const mount = reactLifecycles.mount;
 
