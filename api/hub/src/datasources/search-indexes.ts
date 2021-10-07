@@ -12,10 +12,13 @@ const hostsCache = createFallbackableCache({
   caches: [createInMemoryCache()],
 });
 
-export const clearCacheInterval = setInterval(async () => {
+export const clearSearchCache = async () => {
   await responsesCache.clear();
   await requestsCache.clear();
   await hostsCache.clear();
+};
+export const clearCacheInterval = setInterval(async () => {
+  await clearSearchCache();
   logger.info('cleared algolia search cache');
 }, 1000 * 60 * 30);
 
