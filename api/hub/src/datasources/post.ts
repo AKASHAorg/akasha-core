@@ -4,7 +4,7 @@ import { Client, ThreadID } from '@textile/hub';
 import { DataProvider, PostItem } from '../collections/interfaces';
 import { parse, stringify } from 'flatted';
 import { queryCache } from '../storage/cache';
-import { searchIndex } from './search-indexes';
+import { clearSearchCache, searchIndex } from './search-indexes';
 
 class PostAPI extends DataSource {
   private readonly collection: string;
@@ -140,6 +140,8 @@ class PostAPI extends DataSource {
     if (currentPosts.length) {
       currentPosts.unshift(postID[0]);
       await queryCache.set(this.allPostsCache, currentPosts);
+    } else {
+      await queryCache.set(this.allPostsCache, [postID[0]]);
     }
     await this.addQuotes(post.quotes, postID[0], author);
     if (post.mentions && post.mentions.length) {
@@ -159,6 +161,7 @@ class PostAPI extends DataSource {
       .then(_ => logger.info(`indexed post: ${postID}`))
       // tslint:disable-next-line:no-console
       .catch(e => logger.error(e));
+    await clearSearchCache();
     return postID;
   }
 

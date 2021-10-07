@@ -17,7 +17,11 @@ export interface ITrendingWidgetCardProps {
   followedProfiles?: string[];
   subscribedTags?: string[];
   loggedEthAddress?: string | null;
+  isLoadingTags?: boolean;
+  isLoadingProfiles?: boolean;
   // labels
+  noTagsLabel?: string;
+  noProfilesLabel?: string;
   titleLabel: string;
   topicsLabel: string;
   profilesLabel: string;
@@ -55,6 +59,10 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     titleLabel,
     tags,
     profiles,
+    isLoadingTags,
+    isLoadingProfiles,
+    noTagsLabel,
+    noProfilesLabel,
     topicsLabel,
     profilesLabel,
     followLabel,
@@ -80,7 +88,13 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
       <Tabs>
         <StyledTab title={topicsLabel}>
           <Box pad="medium" gap="medium">
+            {tags.length === 0 && !isLoadingTags && (
+              <Box pad="medium" align="center" justify="center">
+                <Text>{noTagsLabel}</Text>
+              </Box>
+            )}
             {tags.length === 0 &&
+              isLoadingTags &&
               Array.from({ length: 4 }, (_el, index: number) => (
                 <Box key={index} direction="row" justify="between" align="center">
                   <Box gap="xxsmall">
@@ -130,7 +144,13 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
         </StyledTab>
         <StyledTab title={profilesLabel}>
           <Box pad="medium" gap="medium">
+            {profiles.length === 0 && !isLoadingProfiles && (
+              <Box pad="medium" align="center" justify="center">
+                <Text>{noProfilesLabel}</Text>
+              </Box>
+            )}
             {profiles.length === 0 &&
+              isLoadingProfiles &&
               Array.from({ length: 4 }, (_el, index: number) => (
                 <Box key={index} direction="row" justify="between" align="center">
                   <Box direction="row" gap="xsmall">
@@ -199,6 +219,8 @@ TrendingWidgetCard.defaultProps = {
   subscribedLabel: 'Subscribed',
   subscribeLabel: 'Subscribe',
   unsubscribeLabel: 'Unsubscribe',
+  noTagsLabel: 'No tags found!',
+  noProfilesLabel: 'No profiles found!',
 };
 
 export default TrendingWidgetCard;

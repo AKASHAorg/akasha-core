@@ -79,6 +79,7 @@ class ModerationAdminAPI extends DataSource {
    * @param user - The moderator user
    * @param admin - A boolean flag for the admin status
    * @param active - A boolean flag for the active status
+   * @param profileAPI
    */
   async updateModerator(user: string, admin: boolean, active: boolean, profileAPI: ProfileAPI) {
     // resolve ETH address to pubKey if needed
