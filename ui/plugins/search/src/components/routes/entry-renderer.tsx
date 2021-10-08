@@ -7,11 +7,10 @@ import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import ExtensionPoint from '@akashaproject/design-system/lib/utils/extension-point';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 
-const { EntryCard, EntryCardHidden } = DS;
+const { EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
 export interface IEntryCardRendererProps {
   logger: ILogger;
