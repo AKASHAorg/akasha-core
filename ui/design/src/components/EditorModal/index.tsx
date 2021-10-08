@@ -59,7 +59,9 @@ const EditorModal: React.FC<IEditorModal> = props => {
   };
 
   return (
-    <ModalContainer style={{ display: 'flex', justifyContent: isMobileOnly ? 'start' : 'center' }}>
+    <ModalContainer
+      innerStyle={{ display: 'flex', justifyContent: isMobileOnly ? 'start' : 'center' }}
+    >
       {!showCancel && (
         <EditorCard
           avatar={avatar}
