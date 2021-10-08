@@ -24,13 +24,14 @@ const PageWrapper: any = styled(Box)`
 `;
 
 const ContentWrapper: any = styled(Box)`
-  margin: auto;
-  position: absolute;
-  top: 40%;
+  margin: 15rem auto auto;
   transform: translate(0, -50%);
   border-radius: 0.5rem;
   span {
     letter-spacing: 0.03em;
+  }
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    padding: 0rem;
   }
 `;
 
