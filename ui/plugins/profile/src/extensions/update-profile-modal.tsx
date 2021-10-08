@@ -11,10 +11,11 @@ import {
   UPDATE_PROFILE_STATUS,
 } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useUsernameValidation } from '@akashaproject/ui-awf-hooks/lib/use-username.new';
-import { useTranslation } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useQueryListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
 import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import i18n, { setupI18next } from '../i18n';
 
 const {
   ThemeSelector,
@@ -168,10 +169,18 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
   );
 };
 
+const ProfileModal: React.FC<RootComponentProps> = props => (
+  <React.Suspense fallback={<></>}>
+    <I18nextProvider i18n={i18n}>
+      <UpdateProfileModal {...props} />
+    </I18nextProvider>
+  </React.Suspense>
+);
+
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: withProviders(UpdateProfileModal),
+  rootComponent: withProviders(ProfileModal),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
@@ -191,7 +200,13 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = reactLifecycles.bootstrap;
+export const bootstrap = (props: RootComponentProps) => {
+  return setupI18next({
+    logger: props.logger,
+    // must be the same as the one in ../../i18next.parser.config.js
+    namespace: 'ui-plugin-profile',
+  });
+};
 
 export const mount = reactLifecycles.mount;
 

@@ -317,12 +317,14 @@ const completeProfileUpdate = async (pubKey: string, queryClient: QueryClient) =
     status: UpdateProfileStatus.UPDATE_COMPLETE,
     remainingFields: [],
   });
+  return;
 };
 
 export function useProfileUpdate(pubKey: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: UPDATE_PROFILE_DATA_KEY,
     mutationFn: async () => await completeProfileUpdate(pubKey, queryClient),
     onMutate: async (formData: UpdateProfileFormData) => {
       const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
@@ -386,30 +388,45 @@ export function useProfileUpdate(pubKey: string) {
         if (makeDefaultRes.hasOwnProperty('error')) {
           throw new Error(makeDefaultRes['error']);
         }
+
         return Promise.resolve({ currentProfile });
       } catch (err) {
         // do not throw error here, just log it
         logError('useProfile.useProfileUpdate.onMutate', err);
       }
     },
-    onSuccess: async (providers, variables) => {
-      /* todo */
-      await queryClient.invalidateQueries([PROFILE_KEY, pubKey]);
-      await queryClient.invalidateQueries([PROFILE_KEY, variables.profileData.ethAddress]);
+    onSuccess: async () => {
       queryClient.removeQueries({
-        queryKey: [UPDATE_PROFILE_STATUS, pubKey],
+        queryKey: UPDATE_PROFILE_STATUS,
       });
+      await queryClient.invalidateQueries(PROFILE_KEY);
     },
     onError: async (error, vars, context: { currentProfile: IProfileData }) => {
       queryClient.setQueryData([PROFILE_KEY, pubKey], context.currentProfile);
       queryClient.removeQueries({
-        queryKey: [UPDATE_PROFILE_STATUS, pubKey],
+        queryKey: UPDATE_PROFILE_STATUS,
       });
       logError(
         'useProfile.useProfileUpdate.onError',
         new Error(error instanceof Error ? error.message : (error as string)),
       );
     },
-    mutationKey: UPDATE_PROFILE_DATA_KEY,
+    onSettled: async (_data, error, variables) => {
+      if (!error) {
+        const { changedFields, profileData } = variables;
+        if (changedFields.includes('name')) {
+          queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], prev => ({
+            ...prev,
+            name: profileData.name,
+          }));
+        }
+        if (changedFields.includes('description')) {
+          queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], prev => ({
+            ...prev,
+            description: profileData.description,
+          }));
+        }
+      }
+    },
   });
 }
