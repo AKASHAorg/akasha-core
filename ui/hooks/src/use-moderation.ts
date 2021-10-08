@@ -107,6 +107,10 @@ export function useModeration() {
         default:
           break;
       }
+      queryClient.invalidateQueries(PENDING_ITEMS_KEY);
+      queryClient.invalidateQueries(KEPT_ITEMS_KEY);
+      queryClient.invalidateQueries(DELISTED_ITEMS_KEY);
+      queryClient.invalidateQueries(COUNT_KEY);
     },
   });
 }
