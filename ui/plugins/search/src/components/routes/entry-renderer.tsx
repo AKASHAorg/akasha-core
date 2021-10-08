@@ -163,6 +163,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   };
 
+  const hideActionButtons = React.useMemo(() => itemType === ItemTypes.COMMENT, [itemType]);
+
   return (
     <>
       {itemData && itemData.author?.ethAddress && (
@@ -222,6 +224,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               removeEntryLabel={t('Delete Post')}
               onEntryRemove={handleEntryRemove}
               onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
+              hideActionButtons={hideActionButtons}
               headerMenuExt={
                 ethAddress === itemData.author.ethAddress && (
                   <ExtensionPoint
