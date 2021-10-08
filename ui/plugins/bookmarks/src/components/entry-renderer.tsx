@@ -10,11 +10,10 @@ import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import ExtensionPoint from '@akashaproject/design-system/lib/utils/extension-point';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
-const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading } = DS;
+const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
 export interface NavigationDetails {
   authorEthAddress: string;
