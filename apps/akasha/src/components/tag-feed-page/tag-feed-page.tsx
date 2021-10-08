@@ -87,6 +87,14 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
+  const handleEntryRemove = (entryId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryId,
+      entryType: ItemTypes.ENTRY,
+    });
+  };
+
   const handleTagSubscribe = (tagName: string) => {
     if (!loginState?.ethAddress) {
       showLoginModal();
@@ -130,7 +138,11 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         onLoginModalOpen={showLoginModal}
         hasNextPage={reqPosts.hasNextPage}
         contentClickable={true}
+        onEntryRemove={handleEntryRemove}
         onEntryFlag={handleEntryFlag}
+        removeEntryLabel={t('Delete Post')}
+        removedByMeLabel={t('You deleted this post')}
+        removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
         itemSpacing={8}
         i18n={i18n}
