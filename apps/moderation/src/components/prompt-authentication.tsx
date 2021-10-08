@@ -22,7 +22,7 @@ const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
 
   return (
     <ModerationAppErrorCard
-      size={'18.75rem'}
+      boxSize={'18.75rem'}
       errorType={'no-authentication'}
       titleLabel={titleLabel}
       subtitleLabel={subtitleLabel}
