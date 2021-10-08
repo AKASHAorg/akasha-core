@@ -9,8 +9,8 @@ const queryClient = new QueryClient({
     queries: {
       keepPreviousData: true,
       notifyOnChangePropsExclusions: ['isStale'],
-      staleTime: 60000,
-      initialDataUpdatedAt: Date.now() - 60000,
+      staleTime: 6000,
+      initialDataUpdatedAt: Date.now() - 6000,
       refetchOnWindowFocus: true,
       notifyOnChangeProps: 'tracked',
       refetchOnMount: true,

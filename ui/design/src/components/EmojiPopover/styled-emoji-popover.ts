@@ -48,6 +48,7 @@ const StyledSearchContainer = styled.div`
 `;
 
 const StyledEmojiDrop = styled(Drop)`
+  z-index: 9999;
   width: 21.875em;
   margin-top: 0.313em;
   margin-left: -1.563em;
