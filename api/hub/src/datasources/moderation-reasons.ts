@@ -94,7 +94,9 @@ class ModerationReasonAPI extends DataSource {
       reason.description = decodeString(reason.description);
       list.push(reason);
     }
-    queryCache.set(reasonsCache, list);
+    if (list.length) {
+      await queryCache.set(reasonsCache, list);
+    }
     return list;
   }
 
