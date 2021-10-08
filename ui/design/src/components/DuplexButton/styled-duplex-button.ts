@@ -13,6 +13,16 @@ const StyledButton = styled(Button)<{ active: boolean }>`
   &:hover {
     box-shadow: none;
   }
+  @media screen and (max-width: ${props => props.theme.breakpoints.large.value}px) {
+    font-size: 0;
+    & div > :not(:first-child) {
+      display: none;
+    }
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
+    max-width: 7rem;
+    width: 7rem;
+  }
   ${props => {
     if (props.active) {
       return css`

@@ -62,7 +62,7 @@ const HiddenSpan = styled.span`
 
 const StyledLayer = styled(Layer)`
   max-width: 36.313em;
-  @media only screen and (min-width: ${props => props.theme.breakpoints.small.value}px) {
+  @media only screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     max-width: 22rem;
   }
   width: 100%;

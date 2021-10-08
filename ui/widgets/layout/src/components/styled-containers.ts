@@ -25,7 +25,7 @@ const TOPBAR_HEIGHT = 48;
 const WIDGET_AREA_MARGIN_TOP = '0.5rem';
 
 export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     display: none;
   }
 `;
@@ -42,6 +42,10 @@ export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.di
       width: 0 !important;
     }
     min-width: 22rem;
+
+    @media screen and (max-width: ${props.theme.breakpoints.large.value}px) {
+      min-width: 16rem;
+    }
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
       overflow-y: auto;
       overflow-x: hidden;
@@ -54,7 +58,7 @@ export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseCont
   flex-grow: 1;
   flex-direction: column;
   align-items: flex-end;
-  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     display: none;
   }
 `;

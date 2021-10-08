@@ -115,7 +115,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     weight="normal"
                     href={`${tagAnchorLink}/${tag.name}`}
                     label={
-                      <Box width="11rem" pad="none" align="start">
+                      <Box width="100%" pad="none" align="start">
                         <SubtitleTextIcon
                           onClick={() => onClickTag(tag.name)}
                           label={`#${tag.name}`}
@@ -127,7 +127,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                       </Box>
                     }
                   />
-                  <Box width="7rem">
+                  <Box>
                     <DuplexButton
                       inactiveLabel={subscribeLabel}
                       activeLabel={subscribedLabel}
@@ -174,7 +174,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     weight="normal"
                     href={`${profileAnchorLink}/${profile.pubKey}`}
                     label={
-                      <Box width="11rem" pad="none">
+                      <Box width="100%" pad="none">
                         <ProfileAvatarButton
                           ethAddress={profile.ethAddress}
                           onClick={() => onClickProfile(profile.pubKey)}
@@ -187,7 +187,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     }
                   />
                   {profile.ethAddress !== loggedEthAddress && (
-                    <Box width="7rem">
+                    <Box>
                       <DuplexButton
                         inactiveLabel={followLabel}
                         activeLabel={followingLabel}

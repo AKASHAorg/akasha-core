@@ -306,8 +306,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </Box>
           <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
             {loggedEthAddress !== profileData.ethAddress && (
-              // conditionally adjust width of wrapper containing duplex button
-              <Box width={isMobileOnly ? 'fit-content' : '7rem'}>
+              <Box>
                 <DuplexButton
                   icon={<Icon type="following" />}
                   active={isFollowing}
