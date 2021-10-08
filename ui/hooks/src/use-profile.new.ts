@@ -324,6 +324,7 @@ export function useProfileUpdate(pubKey: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: UPDATE_PROFILE_DATA_KEY,
     mutationFn: async () => await completeProfileUpdate(pubKey, queryClient),
     onMutate: async (formData: UpdateProfileFormData) => {
       const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
@@ -410,6 +411,22 @@ export function useProfileUpdate(pubKey: string) {
         new Error(error instanceof Error ? error.message : (error as string)),
       );
     },
-    mutationKey: UPDATE_PROFILE_DATA_KEY,
+    onSettled: async (_data, error, variables) => {
+      if (!error) {
+        const { changedFields, profileData } = variables;
+        if (changedFields.includes('name')) {
+          queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], prev => ({
+            ...prev,
+            name: profileData.name,
+          }));
+        }
+        if (changedFields.includes('description')) {
+          queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], prev => ({
+            ...prev,
+            description: profileData.description,
+          }));
+        }
+      }
+    },
   });
 }

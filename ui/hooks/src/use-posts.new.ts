@@ -310,7 +310,9 @@ export const useEditPost = () => {
           if (commentIndex > -1) {
             return {
               ...oldData,
-              comments: oldData.entries.map(updateSearchEntry(commentIndex, editedPost.slateContent)),
+              comments: oldData.entries.map(
+                updateSearchEntry(commentIndex, editedPost.slateContent),
+              ),
             };
           }
           return oldData;
