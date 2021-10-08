@@ -69,7 +69,7 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
   }
 };
 
-export function useModeration() {
+function useModeration() {
   const queryClient = useQueryClient();
   return useMutation((param: UseModerationParam) => createModerationMutation(param), {
     onSuccess: async (resp, variables) => {
@@ -305,3 +305,5 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
     },
   );
 }
+
+export default useModeration;
