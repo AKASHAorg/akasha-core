@@ -37,33 +37,35 @@ class PostAPI extends DataSource {
     return `${this.collection}:author:pubKey:${pubKey}`;
   }
 
-  async storeCacheKey(pubKey: string, cacheKey) {
-    if (!pubKey) {
-      return;
+  /**
+   *
+   * @param pubKey
+   * @param cacheKey
+   */
+  async storeCacheKey(pubKey: string, cacheKey: string) {
+    if (!pubKey || !cacheKey) {
+      return Promise.resolve();
     }
     const key = this.getAuthorCacheKeys(pubKey);
-    let cachedValues;
-    if (await queryCache.has(key)) {
-      cachedValues = await queryCache.get(key);
-    } else {
-      cachedValues = [];
-    }
-    cachedValues.push(cacheKey);
-    await queryCache.set(key, cachedValues);
+    await queryCache.sAdd(key, cacheKey);
   }
 
+  /**
+   *
+   * @param pubKey
+   */
   async invalidateStoredCachedKeys(pubKey: string) {
     if (!pubKey) {
-      return;
+      return Promise.resolve();
     }
     const key = this.getAuthorCacheKeys(pubKey);
-    if (await queryCache.has(key)) {
-      const cachedValues = await queryCache.get(key);
-      for (const cachedKey of cachedValues) {
-        await queryCache.del(cachedKey);
+    let record;
+    while ((record = await queryCache.sPop(key))) {
+      if (!record) {
+        break;
       }
+      await queryCache.del(record);
     }
-    await queryCache.set(key, []);
   }
 
   async getPost(id: string, pubKey?: string, stopIter = false) {
