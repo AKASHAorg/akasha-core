@@ -373,7 +373,6 @@ export const getPendingItems = async (
   const rheaders = new Headers();
 
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const key = sdk.services.stash.computeKey({
     method: 'POST',
     url: `${BASE_DECISION_URL}/pending`,
@@ -406,13 +405,6 @@ export const getPendingItems = async (
         // formatting data to match labels already in use
         return {
           ...item,
-          reportedByProfile: {
-            ...item.reportedByProfile,
-            avatar:
-              item.reportedByProfile.avatar.length > 0
-                ? `${ipfsGateway}/${item.reportedByProfile.avatar}`
-                : null,
-          },
           count: item.reports - 1, // minus reporter, to get count of other users
         };
       }),
@@ -431,7 +423,6 @@ export const getModeratedItems = async (
   const rheaders = new Headers();
 
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const key = sdk.services.stash.computeKey({
     method: 'POST',
     url: `${BASE_DECISION_URL}/moderated`,
@@ -463,20 +454,6 @@ export const getModeratedItems = async (
         // formatting data to match labels already in use
         return {
           ...item,
-          reportedByProfile: {
-            ...item.reportedByProfile,
-            avatar:
-              item.reportedByProfile.avatar.length > 0
-                ? `${ipfsGateway}/${item.reportedByProfile.avatar}`
-                : null,
-          },
-          moderatorProfile: {
-            ...item.moderatorProfile,
-            avatar:
-              item.moderatorProfile.avatar.length > 0
-                ? `${ipfsGateway}/${item.moderatorProfile.avatar}`
-                : null,
-          },
           count: item.reports - 1,
         };
       }),

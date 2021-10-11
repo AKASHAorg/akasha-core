@@ -12,7 +12,7 @@ const PromptAuthorization: React.FC<IPromptAuthorizationProps> = props => {
   const { titleLabel, subtitleLabel } = props;
   return (
     <ModerationAppErrorCard
-      size={'14rem'}
+      boxSize={'14rem'}
       errorType={'no-access-granted'}
       titleLabel={titleLabel}
       subtitleLabel={subtitleLabel}
