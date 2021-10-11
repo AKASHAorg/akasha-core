@@ -22,6 +22,7 @@ import { formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
+import { EntryCardRemoved } from './entry-card-removed';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -262,8 +263,17 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const showQuote = React.useMemo(
     () =>
-      !props.isRemoved && entryData.quote && !entryData.quote.delisted && !entryData.quote.reported,
+      !props.isRemoved &&
+      entryData.quote &&
+      !entryData.quote.isRemoved &&
+      !entryData.quote.delisted &&
+      !entryData.quote.reported,
     [entryData.quote, props.isRemoved],
+  );
+
+  const showRemovedQuote = React.useMemo(
+    () => entryData.quote && entryData.quote.isRemoved,
+    [entryData.quote],
   );
 
   const showReportedQuote = React.useMemo(
@@ -451,22 +461,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           </StyledDropAlt>
         )}
         {props.isRemoved && (
-          <Box pad={{ horizontal: 'medium' }} margin={{ vertical: 'small' }}>
-            <Box
-              pad="medium"
-              border={{ style: 'dashed', side: 'all', color: 'lightGrey' }}
-              round="xsmall"
-            >
-              <Box direction="row" align="center">
-                <Icon size="md" color="grey" type="trash" />
-                <Box margin={{ left: 'small' }}>
-                  {entryData.author.ethAddress === props.loggedProfileEthAddress
-                    ? `${removedByMeLabel}.`
-                    : `${removedByAuthorLabel}.`}
-                </Box>
-              </Box>
-            </Box>
-          </Box>
+          <EntryCardRemoved
+            isAuthor={entryData.author.ethAddress === props.loggedProfileEthAddress}
+            removedByAuthorLabel={removedByAuthorLabel}
+            removedByMeLabel={removedByMeLabel}
+          />
         )}
         {!props.isRemoved && (
           <Box
@@ -506,6 +505,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           >
             <EmbedBox embedEntryData={entryData.quote} />
           </Box>
+        )}
+        {showRemovedQuote && (
+          <EntryCardRemoved
+            isAuthor={entryData.author.ethAddress === props.loggedProfileEthAddress}
+            removedByAuthorLabel={removedByAuthorLabel}
+            removedByMeLabel={removedByMeLabel}
+          />
         )}
         {showReportedQuote && (
           <Box pad="medium" onClick={() => null}>
