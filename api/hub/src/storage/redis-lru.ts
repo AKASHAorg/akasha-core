@@ -38,7 +38,11 @@ export class RedisLRU implements ILRU {
     return parse(_value);
   }
 
-  public async del(key): Promise<void> {
+  public async del(key: string): Promise<void> {
     await this.cache.delete(`${this.prefix}${key}`);
+  }
+
+  public async delete(key: string): Promise<void> {
+    return this.del(key);
   }
 }
