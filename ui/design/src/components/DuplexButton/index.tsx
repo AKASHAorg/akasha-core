@@ -11,6 +11,7 @@ export interface IDuplexButtonProps extends ButtonProps {
   active: boolean;
   // external css
   className?: string;
+  allowMinimization?: boolean;
   style?: React.CSSProperties;
 }
 
@@ -25,6 +26,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
     className,
     style,
     icon,
+    allowMinimization,
   } = props;
 
   const [hovered, setHovered] = React.useState(false);
@@ -39,6 +41,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       icon={icon}
+      allowMinimization={allowMinimization}
     />
   );
 };

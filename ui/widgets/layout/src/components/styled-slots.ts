@@ -33,11 +33,9 @@ export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
 
 export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   margin-top: 0.5em;
+  width: 100%;
   ${props => css`
-    @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
-      width: 30rem;
-    }
-    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
+    @media screen and (min-width: ${props.theme.breakpoints.medium.value + 1}px) {
       width: 32rem;
     }
     @media screen and (min-width: ${props.theme.breakpoints.large.value}px) {

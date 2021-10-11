@@ -63,7 +63,7 @@ const TagEntry: React.FC<ITagEntry> = props => {
                 </Box>
               }
             />
-            <Box width="7rem">
+            <Box>
               <DuplexButton
                 inactiveLabel={subscribeLabel}
                 activeLabel={subscribedLabel}
