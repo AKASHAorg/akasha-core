@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import DS from '@akashaproject/design-system';
+import getSDK from '@akashaproject/awf-sdk';
 
 import { IContentProps } from '../../interfaces';
 
@@ -15,6 +16,9 @@ const Content: React.FC<IContentProps> = props => {
   const [showExplanations, setShowExplanations] = React.useState<boolean>(false);
 
   const { size } = useViewportSize();
+
+  const sdk = getSDK();
+  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
   const isMobile = size === 'small';
 
@@ -98,7 +102,11 @@ const Content: React.FC<IContentProps> = props => {
             <Text margin={{ right: '0.2rem' }}>{props.originallyReportedByLabel}</Text>
             <Avatar
               ethAddress={props.reporter || ''}
-              src={props.reporterAvatar}
+              src={
+                props.reporterAvatar
+                  ? `${ipfsGateway}/${props.reporterAvatar}`
+                  : props.reporterAvatar
+              }
               size="xs"
               margin={{ right: '0.2rem' }}
               backgroundColor={'lightBackground'}
