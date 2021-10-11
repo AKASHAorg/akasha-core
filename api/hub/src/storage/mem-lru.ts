@@ -11,6 +11,10 @@ export class MemLRU implements ILRU {
     return Promise.resolve(this.lru.del(key));
   }
 
+  delete(key: string): Promise<void> {
+    return this.del(key);
+  }
+
   get(key: string): Promise<any> {
     return Promise.resolve(this.lru.get(key));
   }

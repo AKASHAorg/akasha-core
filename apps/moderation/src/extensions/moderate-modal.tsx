@@ -44,6 +44,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
         modalName: 'moderate-modal',
       });
     },
+
     [itemType, activeModal.entryId, moderateMutation],
   );
 

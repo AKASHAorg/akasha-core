@@ -115,7 +115,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     weight="normal"
                     href={`${tagAnchorLink}/${tag.name}`}
                     label={
-                      <Box width="11rem" pad="none" align="start">
+                      <Box width="100%" pad="none" align="start">
                         <SubtitleTextIcon
                           onClick={() => onClickTag(tag.name)}
                           label={`#${tag.name}`}
@@ -127,7 +127,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                       </Box>
                     }
                   />
-                  <Box width="7rem">
+                  <Box>
                     <DuplexButton
                       inactiveLabel={subscribeLabel}
                       activeLabel={subscribedLabel}
@@ -136,6 +136,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                       onClickActive={() => handleUnsubscribeTag(tag.name)}
                       active={subscribedTags?.includes(tag.name)}
                       icon={<Icon type="subscribe" />}
+                      allowMinimization
                     />
                   </Box>
                 </Box>
@@ -187,7 +188,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     }
                   />
                   {profile.ethAddress !== loggedEthAddress && (
-                    <Box width="7rem">
+                    <Box>
                       <DuplexButton
                         inactiveLabel={followLabel}
                         activeLabel={followingLabel}
@@ -196,6 +197,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                         onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
                         active={followedProfiles?.includes(profile.ethAddress)}
                         icon={<Icon type="following" />}
+                        allowMinimization
                       />
                     </Box>
                   )}

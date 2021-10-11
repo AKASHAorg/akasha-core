@@ -12,7 +12,7 @@ describe('<ModerationAppErrorCard /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <ModerationAppErrorCard
-            size="18.75rem"
+            boxSize="18.75rem"
             errorType="no-authentication"
             titleLabel="This page is restricted to Ethereum World Moderators"
             subtitleLabel="To view this page, you must be an Ethereum World Moderator and log in with your wallet to continue."

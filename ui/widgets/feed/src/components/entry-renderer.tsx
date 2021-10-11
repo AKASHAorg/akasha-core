@@ -110,32 +110,32 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const { t } = useTranslation('ui-widget-feed');
 
-  const postReq = usePost({ postId: itemId, enabler: props.itemType === ItemTypes.ENTRY });
-  const commentReq = useComment(itemId, props.itemType === ItemTypes.COMMENT);
+  const postReq = usePost({ postId: itemId, enabler: itemType === ItemTypes.ENTRY });
+  const commentReq = useComment(itemId, itemType === ItemTypes.COMMENT);
   const authorEthAddress = React.useMemo(() => {
-    if (props.itemType === ItemTypes.COMMENT && commentReq.status === 'success') {
+    if (itemType === ItemTypes.COMMENT && commentReq.status === 'success') {
       return commentReq.data.author.ethAddress;
     }
-    if (props.itemType === ItemTypes.ENTRY && postReq.status === 'success') {
+    if (itemType === ItemTypes.ENTRY && postReq.status === 'success') {
       return postReq.data.author.ethAddress;
     }
-  }, [props.itemType, commentReq, postReq]);
+  }, [itemType, commentReq, postReq]);
 
   const followedProfilesReq = useIsFollowingMultiple(loginState.ethAddress, [authorEthAddress]);
 
   const postData = React.useMemo(() => {
-    if (postReq.data && props.itemType === ItemTypes.ENTRY) {
+    if (postReq.data && itemType === ItemTypes.ENTRY) {
       return mapEntry(postReq.data);
     }
     return undefined;
-  }, [postReq.data, props.itemType]);
+  }, [postReq.data, itemType]);
 
   const commentData = React.useMemo(() => {
-    if (commentReq.data && props.itemType === ItemTypes.COMMENT) {
+    if (commentReq.data && itemType === ItemTypes.COMMENT) {
       return mapEntry(commentReq.data);
     }
     return undefined;
-  }, [commentReq.data, props.itemType]);
+  }, [commentReq.data, itemType]);
 
   const isFollowing = React.useMemo(() => {
     return (
@@ -145,12 +145,12 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [authorEthAddress, followedProfilesReq.data, followedProfilesReq.status]);
 
   const itemData = React.useMemo(() => {
-    if (props.itemType === ItemTypes.ENTRY) {
+    if (itemType === ItemTypes.ENTRY) {
       return postData;
-    } else if (props.itemType === ItemTypes.COMMENT) {
+    } else if (itemType === ItemTypes.COMMENT) {
       return commentData;
     }
-  }, [postData, commentData, props.itemType]);
+  }, [postData, commentData, itemType]);
 
   const commentEditReq = useEditComment(itemData?.entryId, !!commentData);
 
@@ -194,7 +194,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
   };
 
   const handleNavigation = (details: IContentClickDetails) => {
-    onNavigate(props.itemType, details);
+    onNavigate(itemType, details);
   };
 
   const handleContentClick = (details: IContentClickDetails) => {
@@ -241,7 +241,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
   };
 
   const itemTypeName = React.useMemo(() => {
-    switch (props.itemType) {
+    switch (itemType) {
       case ItemTypes.ENTRY:
         return t('post');
       case ItemTypes.PROFILE:
@@ -253,7 +253,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
       default:
         return t('unknown');
     }
-  }, [t, props.itemType]);
+  }, [t, itemType]);
 
   const accountAwaitingModeration =
     !itemData?.author?.moderated && isAccountReported && !parentIsProfilePage;
@@ -277,6 +277,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
     () => loginState.isReady && loginState.ethAddress === itemData?.author?.ethAddress,
     [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
   );
+
+  const hideActionButtons = React.useMemo(() => itemType === ItemTypes.COMMENT, [itemType]);
 
   return (
     <>
@@ -381,6 +383,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               removedByAuthorLabel={props.removedByAuthorLabel}
               disableReposting={itemData.isRemoved}
               disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+              hideActionButtons={hideActionButtons}
               headerMenuExt={
                 showEditButton && (
                   <ExtensionPoint

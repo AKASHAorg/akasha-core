@@ -5,6 +5,7 @@ import styled from 'styled-components';
 export interface IModalContainerProps {
   onModalClose?: () => void;
   style?: React.CSSProperties;
+  innerStyle?: React.CSSProperties;
   animation?: BoxProps['animation'];
 }
 const StyledModalWrapper = styled(Box)`
@@ -15,10 +16,11 @@ const StyledModalWrapper = styled(Box)`
   right: 0;
 `;
 export const ModalContainer: React.FC<IModalContainerProps> = props => {
+  const innerStyle = Object.assign({ zIndex: 10 }, props.innerStyle);
   return (
     <StyledModalWrapper fill={true} justify="center" align="center" style={props.style}>
       <Box
-        style={{ zIndex: 10 }}
+        style={innerStyle}
         height="100vh"
         justify="center"
         align="center"

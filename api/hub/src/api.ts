@@ -502,31 +502,31 @@ api.post('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<unk
 /**
  * Add a new moderation reason.
  */
-api.post('/moderation/reasons/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-  const request: any = ctx?.request.body;
-  if (!request.data.label) {
-    ctx.status = 400;
-    ctx.body = 'Missing "label" attribute from request.';
-  } else {
-    const allowed = await isAdmin(request, ctx);
-    ctx = allowed.ctx;
-    if (allowed.ok) {
-      try {
-        // add the new reason
-        await dataSources.reasonsAPI.updateReason(
-          request.data.label,
-          request.data.description,
-          request.data.active,
-        );
-        ctx.status = 200;
-      } catch (error) {
-        ctx.body = `Cannot add reason! Error: ${error}`;
-        ctx.status = 500;
-      }
-    }
-  }
-  await next();
-});
+// api.post('/moderation/reasons/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
+//   const request: any = ctx?.request.body;
+//   if (!request.data.label) {
+//     ctx.status = 400;
+//     ctx.body = 'Missing "label" attribute from request.';
+//   } else {
+//     const allowed = await isAdmin(request, ctx);
+//     ctx = allowed.ctx;
+//     if (allowed.ok) {
+//       try {
+//         // add the new reason
+//         await dataSources.reasonsAPI.updateReason(
+//           request.data.label,
+//           request.data.description,
+//           request.data.active,
+//         );
+//         ctx.status = 200;
+//       } catch (error) {
+//         ctx.body = `Cannot add reason! Error: ${error}`;
+//         ctx.status = 500;
+//       }
+//     }
+//   }
+//   await next();
+// });
 
 /**
  * Delete a moderation reason.

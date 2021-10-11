@@ -4,7 +4,7 @@ import { Box, Text, Image } from 'grommet';
 import { PageWrapper, ContentWrapper, StyledButton } from '../ErrorLoader/styled-elements';
 
 export interface IModerationAppErrorCardProps {
-  size: string;
+  boxSize: string;
   errorType: string;
   titleLabel: string;
   subtitleLabel: string;
@@ -20,7 +20,7 @@ export interface IModerationAppErrorCardProps {
 
 const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => {
   const {
-    size,
+    boxSize,
     errorType,
     titleLabel,
     subtitleLabel,
@@ -41,10 +41,10 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
 
   return (
     <PageWrapper>
-      <ContentWrapper pad={{ top: '0rem', horizontal: '5rem', bottom: '1.2rem' }}>
+      <ContentWrapper>
         <Box
-          height={size}
-          width={size}
+          height={boxSize}
+          width={boxSize}
           margin={{ ...(imageBoxHasMargin && { bottom: 'small' }) }}
           alignSelf="center"
         >
