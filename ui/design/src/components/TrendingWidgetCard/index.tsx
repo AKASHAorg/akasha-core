@@ -174,7 +174,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                     weight="normal"
                     href={`${profileAnchorLink}/${profile.pubKey}`}
                     label={
-                      <Box width="100%" pad="none">
+                      <Box width="11rem" pad="none">
                         <ProfileAvatarButton
                           ethAddress={profile.ethAddress}
                           onClick={() => onClickProfile(profile.pubKey)}
