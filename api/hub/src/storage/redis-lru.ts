@@ -45,4 +45,16 @@ export class RedisLRU implements ILRU {
   public async delete(key: string): Promise<void> {
     return this.del(key);
   }
+
+  public async sAdd(key: string, value: string) {
+    return this.redis.multi().sadd(key, value).expire(key, 86400).exec();
+  }
+
+  public async sMembers(key: string) {
+    return this.redis.smembers(key);
+  }
+
+  public async sPop(key: string) {
+    return this.redis.spop(key);
+  }
 }
