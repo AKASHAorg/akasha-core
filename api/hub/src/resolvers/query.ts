@@ -56,10 +56,7 @@ const query = {
     }
     const result = Object.assign({}, postData, { totalComments });
     await queryCache.set(cacheKey, result);
-    await dataSources.profileAPI.storeCacheKey(
-      postData.author?.pubKey || postData.author,
-      cacheKey,
-    );
+    await dataSources.postsAPI.storeCacheKey(postData.author?.pubKey || postData.author, cacheKey);
     return result;
   },
 
