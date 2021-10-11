@@ -40,7 +40,9 @@ const mutations = {
       logger.warn(`bad makeDefaultProvider sig`);
       return Promise.reject(dataSigError);
     }
-    return dataSources.profileAPI.makeDefaultProvider(user.pubKey, data);
+    const response = await dataSources.profileAPI.makeDefaultProvider(user.pubKey, data);
+    await dataSources.postsAPI.invalidateStoredCachedKeys(user.pubKey);
+    return response;
   },
   registerUserName: async (_, { name }, { dataSources, user, signature }) => {
     if (!user) {

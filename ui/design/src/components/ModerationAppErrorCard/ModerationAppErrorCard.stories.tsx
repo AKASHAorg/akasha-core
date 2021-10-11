@@ -24,7 +24,7 @@ const Template = (args: IModerationAppErrorCardProps) => (
 
 export const BaseModerationAppErrorCard = Template.bind({});
 BaseModerationAppErrorCard.args = {
-  size: '18.75rem',
+  boxSize: '18.75rem',
   errorType: 'no-authentication',
   titleLabel: 'This page is restricted to Ethereum World Moderators',
   subtitleLabel:

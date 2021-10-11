@@ -33,6 +33,39 @@ class PostAPI extends DataSource {
     return `${this.collection}:postID${id}:initial`;
   }
 
+  getAuthorCacheKeys(pubKey: string) {
+    return `${this.collection}:author:pubKey:${pubKey}`;
+  }
+
+  async storeCacheKey(pubKey: string, cacheKey) {
+    if (!pubKey) {
+      return;
+    }
+    const key = this.getAuthorCacheKeys(pubKey);
+    let cachedValues;
+    if (await queryCache.has(key)) {
+      cachedValues = await queryCache.get(key);
+    } else {
+      cachedValues = [];
+    }
+    cachedValues.push(cacheKey);
+    await queryCache.set(key, cachedValues);
+  }
+
+  async invalidateStoredCachedKeys(pubKey: string) {
+    if (!pubKey) {
+      return;
+    }
+    const key = this.getAuthorCacheKeys(pubKey);
+    if (await queryCache.has(key)) {
+      const cachedValues = await queryCache.get(key);
+      for (const cachedKey of cachedValues) {
+        await queryCache.del(cachedKey);
+      }
+    }
+    await queryCache.set(key, []);
+  }
+
   async getPost(id: string, pubKey?: string, stopIter = false) {
     const db: Client = await getAppDB();
     const cacheKey = this.getInitialPostCacheKey(id);
@@ -54,6 +87,7 @@ class PostAPI extends DataSource {
       );
     }
     await queryCache.set(cacheKey, result);
+    await this.storeCacheKey(post.author, cacheKey);
     return result;
   }
   async getPosts(limit: number, offset: string, pubKey?: string) {
@@ -284,6 +318,9 @@ class PostAPI extends DataSource {
     currentPost.mentions = [];
     currentPost.quotes = [];
     currentPost.title = 'Removed';
+    const quotedBy = currentPost.metaData.filter(
+      ds => ds.property === this.quotedByPost && ds.provider === this.graphqlPostsApi,
+    );
     currentPost.metaData = [];
     searchIndex
       .deleteObject(currentPost._id)
@@ -291,6 +328,10 @@ class PostAPI extends DataSource {
       .catch(e => logger.error(e));
     await queryCache.del(this.getPostCacheKey(id));
     await queryCache.del(this.getInitialPostCacheKey(id));
+    for (const dsRecord of quotedBy) {
+      await queryCache.del(this.getPostCacheKey(dsRecord.value));
+      await queryCache.del(this.getInitialPostCacheKey(dsRecord.value));
+    }
     await db.save(this.dbID, this.collection, [currentPost]);
     return { removedTags };
   }
