@@ -136,6 +136,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                       onClickActive={() => handleUnsubscribeTag(tag.name)}
                       active={subscribedTags?.includes(tag.name)}
                       icon={<Icon type="subscribe" />}
+                      allowMinimization
                     />
                   </Box>
                 </Box>
@@ -196,6 +197,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                         onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
                         active={followedProfiles?.includes(profile.ethAddress)}
                         icon={<Icon type="following" />}
+                        allowMinimization
                       />
                     </Box>
                   )}

@@ -98,6 +98,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                     onClickActive={() => handleUnfollowProfile(entry.ethAddress)}
                     active={followedProfiles?.includes(entry.ethAddress)}
                     icon={<Icon type="following" />}
+                    allowMinimization
                   />
                 </Box>
               )}
