@@ -83,8 +83,11 @@ const EditorModalContainer = (props: RootComponentProps) => {
     if (embeddedPost.status === 'success') {
       return mapEntry(embeddedPost.data);
     }
+    if (editingPost.data?.quotes.length) {
+      return mapEntry(editingPost.data?.quotes[0]);
+    }
     return undefined;
-  }, [embeddedPost.status, embeddedPost.data]);
+  }, [embeddedPost.status, embeddedPost.data, editingPost.data?.quotes]);
 
   const handleEntryPublish = React.useCallback(
     (data: IPublishData) => {
