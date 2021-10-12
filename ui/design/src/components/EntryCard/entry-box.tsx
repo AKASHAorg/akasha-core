@@ -28,8 +28,8 @@ export interface IContentClickDetails {
   authorEthAddress: string;
   entryId: string;
   replyTo: {
-    authorEthAddress: string;
-    entryId: string;
+    authorEthAddress?: string;
+    entryId?: string;
   } | null;
 }
 export interface IEntryBoxProps {
