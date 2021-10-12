@@ -11,7 +11,6 @@ export interface IStyledTextInput {
 }
 
 const StyledTextInput = styled.input<IStyledTextInput>`
-  max-width: 20rem;
   outline: none;
   background: transparent;
   border: none;
