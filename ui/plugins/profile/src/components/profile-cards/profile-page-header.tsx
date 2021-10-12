@@ -155,7 +155,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         canUserEdit={loginState.ethAddress === profileData.ethAddress}
         flaggable={loginState.ethAddress !== profileData.ethAddress}
         flagAsLabel={t('Report')}
-        blockLabel={t('Block')}
+        // blockLabel={t('Block')}
         userNameType={userNameTypes}
         onEntryFlag={handleEntryFlag(
           profileData.pubKey ? profileData.pubKey : '',
