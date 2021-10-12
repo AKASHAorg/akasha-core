@@ -147,8 +147,8 @@ export function useFollow() {
         .find(([, profileData]) => profileData?.ethAddress === followEthAddress);
 
       if (profile) {
-        queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
-        queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
+        await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+        await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
       }
     },
     onError: (err, variables, context) => {
