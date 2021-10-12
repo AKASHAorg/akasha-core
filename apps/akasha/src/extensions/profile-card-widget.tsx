@@ -50,6 +50,10 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
     }
   };
 
+  const handleProfileClick = (pubKey: string) => {
+    props.singleSpa.navigateToUrl(`/profile/${pubKey}`);
+  };
+
   const isFollowing = React.useMemo(() => {
     if (followedProfiles.includes(profileData?.ethAddress)) {
       return true;
@@ -64,6 +68,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   return (
     <Box pad={{ bottom: 'medium' }}>
       <ProfileMiniCard
+        handleClick={handleProfileClick}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         isFollowing={isFollowing}
