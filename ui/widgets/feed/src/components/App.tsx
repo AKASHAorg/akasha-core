@@ -4,7 +4,7 @@ import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
@@ -28,7 +28,7 @@ export interface IFeedWidgetProps {
   onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
   navigateToModal: (props: any) => void;
-  onLoginModalOpen: () => void;
+  onLoginModalOpen: (redirectTo?: ModalNavigationOptions) => void;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
   hasNextPage: boolean;
   loggedProfile?: IProfileData;

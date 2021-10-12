@@ -46,14 +46,27 @@ const EditorModalContainer = (props: RootComponentProps) => {
     [props.activeModal],
   );
 
+  const hasEmbed = React.useMemo(
+    () => props.activeModal.hasOwnProperty('embedEntry'),
+    [props.activeModal],
+  );
+  const embedEntryId = React.useMemo(() => {
+    if (
+      props.activeModal.hasOwnProperty('embedEntry') &&
+      typeof props.activeModal.embedEntry === 'string'
+    ) {
+      return props.activeModal.embedEntry;
+    }
+  }, [props.activeModal]);
+
   const disablePublishing = React.useMemo(
     () => loginQuery.data.waitForAuth || !loginQuery.data.isReady,
     [loginQuery.data],
   );
 
-  const editingPost = usePost({ postId: props.activeModal.entryId, enabler: isEditing });
+  const embeddedPost = usePost({ postId: embedEntryId, enabler: hasEmbed });
 
-  const embeddedPost = editingPost?.data?.quotes[0];
+  const editingPost = usePost({ postId: props.activeModal.entryId, enabler: isEditing });
 
   const editPost = useEditPost();
 
@@ -67,11 +80,14 @@ const EditorModalContainer = (props: RootComponentProps) => {
   }, [editingPost.data, editingPost.status]);
 
   const embedEntryData = React.useMemo(() => {
-    if (embeddedPost) {
-      return mapEntry(embeddedPost);
+    if (embeddedPost.status === 'success') {
+      return mapEntry(embeddedPost.data);
+    }
+    if (editingPost.data?.quotes.length) {
+      return mapEntry(editingPost.data?.quotes[0]);
     }
     return undefined;
-  }, [embeddedPost]);
+  }, [embeddedPost.status, embeddedPost.data, editingPost.data?.quotes]);
 
   const handleEntryPublish = React.useCallback(
     (data: IPublishData) => {
@@ -100,16 +116,21 @@ const EditorModalContainer = (props: RootComponentProps) => {
     setTagQuery(query);
   };
 
-  if (isEditing && editingPost.isLoading) {
+  if (
+    (isEditing && editingPost.isLoading) ||
+    (props.activeModal.embedEntry && embeddedPost.isLoading)
+  ) {
     return <>{t('Loading Editor')}</>;
   }
   return (
     <>
       {profileDataReq.status === 'error' && <>Error occured</>}
-
+      {embeddedPost.status === 'error' && <>Error loading embedded content..</>}
       {editingPost.status === 'error' && <>Error loading post</>}
 
-      {(profileDataReq.status === 'loading' || editingPost.status === 'loading') && (
+      {(profileDataReq.status === 'loading' ||
+        embeddedPost.status === 'loading' ||
+        editingPost.status === 'loading') && (
         <ModalContainer>
           <ModalCard>
             <Spinner />
@@ -117,35 +138,36 @@ const EditorModalContainer = (props: RootComponentProps) => {
         </ModalContainer>
       )}
 
-      {!editingPost.isLoading && profileDataReq.status === 'success' && (
-        <EditorModal
-          titleLabel={isEditing ? t('Edit Post') : t('New Post')}
-          avatar={profileDataReq.data?.avatar}
-          ethAddress={loginQuery.data?.ethAddress}
-          postLabel={t('Publish')}
-          placeholderLabel={t('Write something')}
-          emojiPlaceholderLabel={t('Search')}
-          discardPostLabel={t('Discard Post')}
-          discardPostInfoLabel={t(
-            "You have not posted yet. If you leave now you'll discard your post.",
-          )}
-          disablePublishLabel={t('Authenticating')}
-          keepEditingLabel={t('Keep Editing')}
-          disablePublish={disablePublishing}
-          onPublish={handleEntryPublish}
-          handleNavigateBack={handleModalClose}
-          linkPreview={entryData?.linkPreview}
-          getLinkPreview={getLinkPreview}
-          getMentions={handleMentionQueryChange}
-          getTags={handleTagQueryChange}
-          tags={tagSearch.data}
-          mentions={mentionSearch.data}
-          uploadRequest={uploadMediaToTextile}
-          embedEntryData={embedEntryData}
-          style={{ width: '36rem' }}
-          editorState={entryData?.slateContent}
-        />
-      )}
+      {(!editingPost.isLoading || !embeddedPost.isLoading) &&
+        profileDataReq.status === 'success' && (
+          <EditorModal
+            titleLabel={isEditing ? t('Edit Post') : t('New Post')}
+            avatar={profileDataReq.data?.avatar}
+            ethAddress={loginQuery.data?.ethAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={t('Write something')}
+            emojiPlaceholderLabel={t('Search')}
+            discardPostLabel={t('Discard Post')}
+            discardPostInfoLabel={t(
+              "You have not posted yet. If you leave now you'll discard your post.",
+            )}
+            disablePublishLabel={t('Authenticating')}
+            keepEditingLabel={t('Keep Editing')}
+            disablePublish={disablePublishing}
+            onPublish={handleEntryPublish}
+            handleNavigateBack={handleModalClose}
+            linkPreview={entryData?.linkPreview}
+            getLinkPreview={getLinkPreview}
+            getMentions={handleMentionQueryChange}
+            getTags={handleTagQueryChange}
+            tags={tagSearch.data}
+            mentions={mentionSearch.data}
+            uploadRequest={uploadMediaToTextile}
+            embedEntryData={embedEntryData}
+            style={{ width: '36rem' }}
+            editorState={entryData?.slateContent}
+          />
+        )}
     </>
   );
 };
