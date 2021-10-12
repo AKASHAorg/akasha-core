@@ -46,7 +46,6 @@ export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
 
 export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   display: none;
-  margin-bottom: 0.5em;
   ${props => css`
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30em;

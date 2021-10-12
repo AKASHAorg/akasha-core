@@ -2,6 +2,9 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
+import { TRENDING_PROFILES_KEY } from './use-trending.new';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile.new';
 
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
 
@@ -119,16 +122,41 @@ export function useFollow() {
       }
       return { previousFollowedProfiles };
     },
+    onSuccess: async (_data, vars) => {
+      const followEthAddress = vars;
+      queryClient.setQueryData<IProfileData[]>([TRENDING_PROFILES_KEY], prev => {
+        return prev.map(profile => {
+          if (profile.ethAddress === followEthAddress) {
+            const followersCount = profile.totalFollowers;
+            let totalFollowers: number;
+            if (typeof followersCount === 'number') {
+              totalFollowers = followersCount + 1;
+            } else {
+              totalFollowers = parseInt(followersCount, 10) + 1;
+            }
+            return {
+              ...profile,
+              totalFollowers,
+            };
+          }
+          return profile;
+        });
+      });
+      const [, profile] = queryClient
+        .getQueriesData<IProfileData>([PROFILE_KEY])
+        .find(([, profileData]) => profileData?.ethAddress === followEthAddress);
+
+      if (profile) {
+        await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+        await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
+      }
+    },
     onError: (err, variables, context) => {
       if (context?.previousFollowedProfiles) {
         queryClient.setQueryData([FOLLOWED_PROFILES_KEY], context.previousFollowedProfiles);
       }
       logError('useFollow.follow', err as Error);
     },
-    // this creates a weird behaviour when following multiple in a sequence
-    // onSettled: async () => {
-    //   await queryClient.invalidateQueries([FOLLOWED_PROFILES_KEY]);
-    // },
   });
 }
 
@@ -149,6 +177,35 @@ export function useUnfollow() {
         queryClient.setQueryData([FOLLOWED_PROFILES_KEY], updatedFollowedProfiles);
 
         return { previousFollowedProfiles };
+      },
+      onSuccess: async (_data, vars) => {
+        const unfollowEthAddress = vars;
+        queryClient.setQueryData<IProfileData[]>([TRENDING_PROFILES_KEY], prev => {
+          return prev.map(profile => {
+            if (profile.ethAddress === unfollowEthAddress) {
+              const followersCount = profile.totalFollowers;
+              let totalFollowers: number;
+              if (typeof followersCount === 'number') {
+                totalFollowers = followersCount - 1;
+              } else {
+                totalFollowers = parseInt(followersCount, 10) - 1;
+              }
+              return {
+                ...profile,
+                totalFollowers,
+              };
+            }
+            return profile;
+          });
+        });
+        const [, profile] = queryClient
+          .getQueriesData<IProfileData>([PROFILE_KEY])
+          .find(([, profileData]) => profileData?.ethAddress === unfollowEthAddress);
+
+        if (profile) {
+          await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
+          await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+        }
       },
       onError: (err, variables, context) => {
         if (context?.previousFollowedProfiles) {

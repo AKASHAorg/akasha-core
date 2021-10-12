@@ -17,7 +17,7 @@ import {
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
-const { TrendingWidgetCard, ErrorLoader } = DS;
+const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const { singleSpa } = props;
@@ -85,7 +85,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <>
+    <Box pad={{ bottom: 'small' }}>
       {(trendingTagsReq.isError || trendingProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
@@ -123,7 +123,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         handleUnfollowProfile={handleUnfollowProfile}
         loggedEthAddress={loginQuery.data?.ethAddress}
       />
-    </>
+    </Box>
   );
 };
 

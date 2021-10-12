@@ -8,6 +8,7 @@ import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/respons
 import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
 import { checkStatus } from './use-moderation';
 import { SEARCH_KEY } from './use-search.new';
+import { TRENDING_TAGS_KEY } from './use-trending.new';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -255,6 +256,7 @@ export function useCreatePost() {
       },
       onSettled: async () => {
         await queryClient.invalidateQueries(ENTRIES_KEY);
+        await queryClient.invalidateQueries(TRENDING_TAGS_KEY);
       },
       mutationKey: CREATE_POST_MUTATION_KEY,
     },
