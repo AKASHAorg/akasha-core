@@ -65,7 +65,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   const handleFollow = () => {
     if (!loginState.ethAddress) {
-      return props.navigateToModal({ name: 'login-modal', profileId });
+      return props.navigateToModal({ name: 'login', profileId });
     }
     if (profileData?.ethAddress) {
       followReq.mutate(profileData.ethAddress);
