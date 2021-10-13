@@ -144,7 +144,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
             titleLabel={isEditing ? t('Edit Post') : t('New Post')}
             avatar={profileDataReq.data?.avatar}
             ethAddress={loginQuery.data?.ethAddress}
-            postLabel={t('Publish')}
+            postLabel={isEditing ? t('Save changes') : t('Publish')}
             placeholderLabel={t('Write something')}
             emojiPlaceholderLabel={t('Search')}
             discardPostLabel={t('Discard Post')}
