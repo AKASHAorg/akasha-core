@@ -106,6 +106,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       case ItemTypes.ENTRY:
         url = `/social-app/post/${details.entryId}`;
         break;
+      case ItemTypes.COMMENT:
+        url = `/social-app/post/${details.replyTo.entryId}`;
+        break;
       default:
         break;
     }

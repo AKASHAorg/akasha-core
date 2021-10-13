@@ -32,12 +32,18 @@ interface IStatModalWrapper {
   handleClose: () => void;
 }
 
+export const enum SelectedTab {
+  FOLLOWERS = 0,
+  FOLLOWING,
+  INTERESTS,
+}
+
 const { StatModal } = DS;
 
 const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const { loginState, selectedStat, profileData, singleSpa, handleClose } = props;
 
-  const [activeIndex, setActiveIndex] = React.useState<number>(0);
+  const [activeIndex, setActiveIndex] = React.useState<SelectedTab>(SelectedTab.FOLLOWERS);
 
   const { t } = useTranslation();
 
@@ -101,11 +107,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   }, [followingReq.data]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => setInitialActiveTab(), []);
-
-  const setInitialActiveTab = () => {
-    setActiveIndex(selectedStat);
-  };
+  React.useEffect(() => setActiveIndex(selectedStat), []);
 
   const loadMoreFollowers = React.useCallback(() => {
     if (!followersReq.isLoading && followersReq.hasNextPage) {
@@ -161,21 +163,69 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     /* TODO:  */
   };
 
-  const activeIndexLabels = [t('followers'), t('following'), t('topics')];
+  const currentTabName = React.useMemo(() => {
+    if (activeIndex === SelectedTab.FOLLOWERS) {
+      return t('followers');
+    }
+    if (activeIndex === SelectedTab.FOLLOWING) {
+      return t('following');
+    }
+    if (activeIndex === SelectedTab.INTERESTS) {
+      return t('interests');
+    }
+  }, [activeIndex, t]);
 
-  const placeholderTitleLabel = `${
-    loginState.ethAddress === profileData.ethAddress
-      ? `${t('You have no')}`
-      : `${profileData.name || profileData.userName || truncateMiddle(profileData.ethAddress)} ${t(
-          'has no',
-        )}`
-  } ${activeIndexLabels[activeIndex]} ${t('yet')}`;
-
-  // only shown when the profile matches logged user
-  const placeholderSubtitleLabel =
-    loginState.ethAddress === profileData.ethAddress
-      ? `${t('When you have')} ${activeIndexLabels[activeIndex]}, ${t('they will be listed here')}.`
-      : '';
+  const placeholderStrings = React.useMemo(() => {
+    if (loginState.ethAddress === profileData.ethAddress) {
+      if (activeIndex === SelectedTab.FOLLOWERS) {
+        return {
+          title: t('You no followers yet'),
+          subtitle: t('When you have followers, they will be listed here.'),
+        };
+      }
+      if (activeIndex === SelectedTab.FOLLOWING) {
+        return {
+          title: t('You are not following anyone yet'),
+          subtitle: t(
+            'Go to the feed or search for some trending profiles to start following someone',
+          ),
+        };
+      }
+      if (activeIndex === SelectedTab.INTERESTS) {
+        return {
+          title: t('You do not have any topics yet'),
+          subtitle: t('Go to the feed or search for some trending topics and subscribe to them'),
+        };
+      }
+    }
+    if (loginState.ethAddress !== profileData.ethAddress) {
+      const displayName = `${
+        profileData.name || `@${profileData.userName}` || truncateMiddle(profileData.ethAddress)
+      }`;
+      if (activeIndex === SelectedTab.FOLLOWERS) {
+        return {
+          title: `${displayName} ${t('has no followers yet')}`,
+        };
+      }
+      if (activeIndex === SelectedTab.FOLLOWING) {
+        return {
+          title: `${displayName} ${t('is not following anyone yet')}`,
+        };
+      }
+      if (activeIndex === SelectedTab.INTERESTS) {
+        return {
+          title: `${displayName} ${t('does not have any topics yet')}`,
+        };
+      }
+    }
+  }, [
+    loginState.ethAddress,
+    profileData.ethAddress,
+    profileData.name,
+    profileData.userName,
+    activeIndex,
+    t,
+  ]);
 
   return (
     <StatModal
@@ -188,10 +238,10 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
         profileData.name || profileData.userName || truncateMiddle(profileData.ethAddress)
       }
       tabLabelsArr={[t('Followers'), t('Following'), t('Topics')]}
-      errorTitleLabel={t(`Sorry, we can't fetch the ${activeIndexLabels[activeIndex]} list.`)}
+      errorTitleLabel={t(`Sorry, we can't fetch the ${currentTabName} list.`)}
       errorSubtitleLabel={t("We can't display the list at the moment, please try again.")}
-      placeholderTitleLabel={placeholderTitleLabel}
-      placeholderSubtitleLabel={placeholderSubtitleLabel}
+      placeholderTitleLabel={placeholderStrings.title}
+      placeholderSubtitleLabel={placeholderStrings.subtitle}
       buttonLabel={t('Try again')}
       followers={followers}
       following={following}
@@ -211,7 +261,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       profileAnchorLink={'/profile'}
       followersPages={followersPages}
       followingPages={followingPages}
-      loadingMoreLabel={t('Loading more ...')}
+      loadingMoreLabel={`${t('Loading more')} ...`}
       loadMoreFollowers={loadMoreFollowers}
       loadMoreFollowing={loadMoreFollowing}
       closeModal={handleClose}

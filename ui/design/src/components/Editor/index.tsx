@@ -546,6 +546,15 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 />
               )}
             </Slate>
+            <ImageUpload
+              uploading={uploading}
+              setUploading={setUploading}
+              uploadFailedLabel={uploadFailedLabel}
+              uploadingImageLabel={uploadingImageLabel}
+              uploadRequest={uploadRequest}
+              handleInsertImage={handleInsertImageLink}
+              ref={uploadInputRef}
+            />
             {(linkPreviewState || linkPreviewUploading) && (
               <LinkPreview
                 uploading={linkPreviewUploading}
@@ -558,15 +567,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 <EmbedBox embedEntryData={embedEntryData} />
               </Box>
             )}
-            <ImageUpload
-              uploading={uploading}
-              setUploading={setUploading}
-              uploadFailedLabel={uploadFailedLabel}
-              uploadingImageLabel={uploadingImageLabel}
-              uploadRequest={uploadRequest}
-              handleInsertImage={handleInsertImageLink}
-              ref={uploadInputRef}
-            />
           </Box>
         </Box>
       </Box>
