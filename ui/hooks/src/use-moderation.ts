@@ -17,6 +17,7 @@ import {
   getModerationCounters,
   getModeratorStatus,
   getPendingItems,
+  ICount,
 } from './moderation-requests';
 
 export const MODERATION_ITEMS_COUNT_KEY = 'MODERATION_ITEMS_COUNT';
@@ -67,8 +68,27 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
 };
 
 function useModeration() {
-  // const queryClient = useQueryClient();
-  return useMutation((param: UseModerationParam) => createModerationMutation(param), {});
+  const queryClient = useQueryClient();
+  return useMutation((param: UseModerationParam) => createModerationMutation(param), {
+    onSuccess: async (resp, variables) => {
+      if (variables.isPending) {
+        // update moderation count: moderating a pending item
+        queryClient.setQueryData<ICount>(MODERATION_ITEMS_COUNT_KEY, prev => ({
+          ...prev,
+          pending: prev.pending - 1,
+          delisted: variables.dataToSign.delisted ? prev.delisted + 1 : prev.delisted,
+          kept: !variables.dataToSign.delisted ? prev.kept + 1 : prev.kept,
+        }));
+      } else {
+        // update moderation count: reviewing decision for an already moderated item
+        queryClient.setQueryData<ICount>(MODERATION_ITEMS_COUNT_KEY, prev => ({
+          ...prev,
+          delisted: variables.dataToSign.delisted ? prev.delisted + 1 : prev.delisted - 1,
+          kept: !variables.dataToSign.delisted ? prev.kept + 1 : prev.kept - 1,
+        }));
+      }
+    },
+  });
 }
 
 // create report mutation
