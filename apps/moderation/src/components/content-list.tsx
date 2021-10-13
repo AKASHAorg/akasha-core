@@ -146,18 +146,18 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
   };
 
   const showDelistedItems = React.useMemo(() => {
-    if (!delistedItemsQuery.isLoading && isDelisted && delistedItemPages.length) {
+    if (!delistedItemsQuery.isLoading && isDelisted && delistedItemPages[0].results.length) {
       return true;
     }
     return false;
-  }, [isDelisted, delistedItemPages.length, delistedItemsQuery.isLoading]);
+  }, [isDelisted, delistedItemPages, delistedItemsQuery.isLoading]);
 
   const showKeptItems = React.useMemo(() => {
-    if (!keptItemsQuery.isLoading && !isDelisted && keptItemPages.length) {
+    if (!keptItemsQuery.isLoading && !isDelisted && keptItemPages[0].results.length) {
       return true;
     }
     return false;
-  }, [isDelisted, keptItemPages.length, keptItemsQuery.isLoading]);
+  }, [isDelisted, keptItemPages, keptItemsQuery.isLoading]);
 
   if (!isAuthorised) {
     return (
@@ -195,7 +195,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
       )}
       {!pendingItemsQuery.isLoading &&
         isPending &&
-        (pendingItemPages.length ? (
+        (pendingItemPages[0].results.length ? (
           <>
             {pendingItemPages.map((page, index) => (
               <Box key={index} flex={false}>
