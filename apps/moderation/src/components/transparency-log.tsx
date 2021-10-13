@@ -65,8 +65,8 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     setSelected(null);
   };
 
-  const handleClickAvatar = () => {
-    /* TODO */
+  const handleClickAvatar = (pubKey: string) => () => {
+    navigateToUrl(`/profile/${pubKey}`);
   };
 
   const handleClickCard = (el: ILogItem) => () => {
@@ -137,6 +137,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                         content={t(`${el.explanation}`)}
                         isSelected={el.contentID === selected?.contentID}
                         isDelisted={el.delisted}
+                        moderator={el.moderator.name}
                         moderatedTimestamp={el.moderatedDate.toString()}
                         moderatorAvatarUrl={
                           el.moderator.avatar
@@ -144,7 +145,6 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                             : el.moderator.avatar
                         }
                         moderatorEthAddress={el.moderator.ethAddress}
-                        onClickAvatar={handleClickAvatar}
                         onClickCard={handleClickCard(el)}
                       />
                     ))}
@@ -172,7 +172,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
             <DetailCard
               selected={selected}
               ipfsGateway={ipfsGateway}
-              handleClickAvatar={handleClickAvatar}
+              handleClickAvatar={handleClickAvatar(selected.moderator.pubKey)}
               handleClickArrowLeft={handleClickArrowLeft}
               navigateToUrl={navigateToUrl}
             />
@@ -184,7 +184,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               <DetailCard
                 selected={selected}
                 ipfsGateway={ipfsGateway}
-                handleClickAvatar={handleClickAvatar}
+                handleClickAvatar={handleClickAvatar(selected.moderator.pubKey)}
                 handleClickArrowLeft={handleClickArrowLeft}
                 navigateToUrl={navigateToUrl}
               />
