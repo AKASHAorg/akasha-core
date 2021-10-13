@@ -4,6 +4,7 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-q
 import getSDK from '@akashaproject/awf-sdk';
 import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
+import constants from './constants';
 import { ENTRY_KEY } from './use-posts.new';
 import { PROFILE_KEY } from './use-profile.new';
 import { COMMENT_KEY } from './use-comments.new';
@@ -17,17 +18,21 @@ import {
   getModerationCounters,
   getModeratorStatus,
   getPendingItems,
-  ICount,
 } from './moderation-requests';
 
-export const MODERATION_ITEMS_COUNT_KEY = 'MODERATION_ITEMS_COUNT';
-export const MODERATION_ITEM_FLAGS_KEY = 'MODERATION_ITEM_FLAGS';
-export const LOG_ITEMS_KEY = 'LOG_ITEMS';
-export const KEPT_ITEMS_KEY = 'KEPT_ITEMS';
-export const PENDING_ITEMS_KEY = 'PENDING_ITEMS';
-export const DELISTED_ITEMS_KEY = 'DELISTED_ITEMS';
-export const CHECK_MODERATOR_KEY = 'CHECK_MODERATOR';
-export const MODERATION_STATUS_KEY = 'MODERATION_STATUS_KEY';
+const {
+  PENDING_CACHE_KEY_PREFIX,
+  MODERATED_CACHE_KEY_PREFIX,
+  MODERATION_COUNT_CACHE_KEY_PREFIX,
+  LOG_ITEMS_KEY,
+  KEPT_ITEMS_KEY,
+  PENDING_ITEMS_KEY,
+  DELISTED_ITEMS_KEY,
+  CHECK_MODERATOR_KEY,
+  MODERATION_STATUS_KEY,
+  MODERATION_ITEM_FLAGS_KEY,
+  MODERATION_ITEMS_COUNT_KEY,
+} = constants;
 
 export type UseModerationParam = {
   dataToSign: { [key: string]: string };
@@ -69,24 +74,26 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
 
 function useModeration() {
   const queryClient = useQueryClient();
+  const sdk = getSDK();
   return useMutation((param: UseModerationParam) => createModerationMutation(param), {
-    onSuccess: async (resp, variables) => {
-      if (variables.isPending) {
-        // update moderation count: moderating a pending item
-        queryClient.setQueryData<ICount>(MODERATION_ITEMS_COUNT_KEY, prev => ({
-          ...prev,
-          pending: prev.pending - 1,
-          delisted: variables.dataToSign.delisted ? prev.delisted + 1 : prev.delisted,
-          kept: !variables.dataToSign.delisted ? prev.kept + 1 : prev.kept,
-        }));
-      } else {
-        // update moderation count: reviewing decision for an already moderated item
-        queryClient.setQueryData<ICount>(MODERATION_ITEMS_COUNT_KEY, prev => ({
-          ...prev,
-          delisted: variables.dataToSign.delisted ? prev.delisted + 1 : prev.delisted - 1,
-          kept: !variables.dataToSign.delisted ? prev.kept + 1 : prev.kept - 1,
-        }));
+    onSuccess: () => {
+      // remove keys from cache
+      const uiCache = sdk.services.stash.getUiStash();
+      for (const key of uiCache.keys()) {
+        if (
+          key.startsWith(PENDING_CACHE_KEY_PREFIX) ||
+          key.startsWith(MODERATED_CACHE_KEY_PREFIX) ||
+          key.startsWith(MODERATION_COUNT_CACHE_KEY_PREFIX)
+        ) {
+          uiCache.delete(key);
+        }
       }
+
+      // refetch queries
+      queryClient.refetchQueries(PENDING_ITEMS_KEY);
+      queryClient.refetchQueries(KEPT_ITEMS_KEY);
+      queryClient.refetchQueries(DELISTED_ITEMS_KEY);
+      queryClient.refetchQueries(MODERATION_ITEMS_COUNT_KEY);
     },
   });
 }
