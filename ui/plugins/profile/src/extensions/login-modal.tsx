@@ -8,7 +8,7 @@ import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import i18n, { setupI18next } from '../i18n';
 
-const { Box, Button, ModalContainer, ModalCard } = DS;
+const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon } = DS;
 
 const LoginModal = (props: RootComponentProps) => {
   const { t } = useTranslation();
@@ -27,24 +27,42 @@ const LoginModal = (props: RootComponentProps) => {
   };
 
   return (
-    <ModalContainer onModalClose={handleModalClose}>
-      <ModalCard>
-        <Box
-          direction="row"
-          align="center"
-          gap="small"
-          fill="horizontal"
-          pad={{ horizontal: 'xlarge', vertical: 'medium' }}
-        >
-          <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
-          <Button
-            primary={true}
-            onClick={handleSignUpClick}
-            label={t('Sign Up')}
+    <ModalContainer onModalClose={handleModalClose} innerStyle={{ maxWidth: '90%' }}>
+      <ModalCardLogin>
+        <Icon
+          type="close"
+          color="gray"
+          onClick={handleModalClose}
+          style={{ position: 'absolute', right: '0.4rem' }}
+          clickable
+        />
+        <Box direction="column" align="center" justify="center">
+          <Box direction="column" align="center" fill="horizontal">
+            <Text weight="bold" size="large" margin={{ vertical: '0.5rem' }}>
+              {t('Ethereum World')}
+            </Text>
+            <Text color="gray" size="large" textAlign="center" margin={{ vertical: '0.5rem' }}>
+              {t('To continue you need an Ethereum World account')}
+            </Text>
+          </Box>
+          <Box
+            direction="row"
+            align="center"
+            gap="small"
             fill="horizontal"
-          />
+            pad={{ vertical: 'medium' }}
+            style={{ maxWidth: '12rem' }}
+          >
+            <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
+            <Button
+              primary={true}
+              onClick={handleSignUpClick}
+              label={t('Sign Up')}
+              fill="horizontal"
+            />
+          </Box>
         </Box>
-      </ModalCard>
+      </ModalCardLogin>
     </ModalContainer>
   );
 };
