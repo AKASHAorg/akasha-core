@@ -19,6 +19,7 @@ export interface IProfileMiniCard {
   unfollowLabel?: string;
   postsLabel?: string;
   // handlers
+  handleClick?: (arg1?: any) => void;
   handleFollow?: (profileEthAddress: string) => void;
   handleUnfollow?: (profileEthAddress: string) => void;
   disableFollowing?: boolean;
@@ -33,21 +34,30 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     followersLabel,
     unfollowLabel,
     postsLabel,
+    handleClick,
     handleFollow,
     handleUnfollow,
     isFollowing,
     disableFollowing,
   } = props;
 
-  const onFollow = () => {
+  const onFollow = (ev: React.SyntheticEvent) => {
     if (handleFollow) {
       handleFollow(profileData.ethAddress);
     }
+    ev.stopPropagation();
   };
 
-  const onUnfollow = () => {
+  const onUnfollow = (ev: React.SyntheticEvent) => {
     if (handleUnfollow) {
       handleUnfollow(profileData.ethAddress);
+    }
+    ev.stopPropagation();
+  };
+
+  const onClick = () => {
+    if (handleClick) {
+      handleClick(profileData.pubKey);
     }
   };
 
@@ -59,6 +69,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       round="xsmall"
       direction="column"
       border={{ side: 'all', color: 'border', size: 'xsmall', style: 'solid' }}
+      onClick={onClick}
     >
       <Box
         height="4rem"

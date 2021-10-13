@@ -80,7 +80,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     props.onNavigate(itemType, {
       entryId: itemData.entryId,
       authorEthAddress: itemData.author.ethAddress,
-      replyTo: null,
+      replyTo: { entryId: itemData.postId } || null,
     });
   };
 

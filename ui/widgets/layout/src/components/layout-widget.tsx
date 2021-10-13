@@ -129,12 +129,12 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
                   <WidgetAreaContainer>
                     <ScrollableWidgetArea>
                       <WidgetSlot
-                        name={props.layoutConfig.rootWidgetSlotId}
+                        name={props.layoutConfig.widgetSlotId}
                         onMount={handleExtensionMount}
                         onUnmount={handleExtensionUnmount}
                       />
                       <WidgetSlot
-                        name={props.layoutConfig.widgetSlotId}
+                        name={props.layoutConfig.rootWidgetSlotId}
                         onMount={handleExtensionMount}
                         onUnmount={handleExtensionUnmount}
                       />
