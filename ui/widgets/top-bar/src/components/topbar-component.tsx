@@ -27,7 +27,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   const loginQuery = useGetLogin();
   const logoutMutation = useLogout();
 
-  const profileDataReq = useGetProfile(loginQuery.data.pubKey);
+  const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
   const loggedProfileData = profileDataReq.data;
 
   const checkNotifsReq = useCheckNewNotifications(

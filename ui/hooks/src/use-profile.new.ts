@@ -56,7 +56,7 @@ const getProfileData = async (payload: {
 
 export function useGetProfile(pubKey: string, loggedUser?: string, enabler = true) {
   return useQuery([PROFILE_KEY, pubKey], () => getProfileData({ pubKey, loggedUser }), {
-    enabled: !!(pubKey && enabler),
+    enabled: !!pubKey && enabler,
     keepPreviousData: true,
   });
 }
