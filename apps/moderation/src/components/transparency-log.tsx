@@ -57,6 +57,12 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     threshold: 0,
   });
 
+  const sidebarHeight = React.useMemo(() => {
+    if (isMobile) return '100vh';
+    if (selected) return 'calc(100vh - 3rem)';
+    return 'calc(100vh - 8.5rem)';
+  }, [selected, isMobile]);
+
   const onTabClick = (value: string) => {
     setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
   };
@@ -102,11 +108,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
       )}
       <Box direction="row" margin={{ top: '-0.5rem' }}>
         {/* setting height and overflow behaviour to make y-scrollable container */}
-        <Box
-          width={isMobile ? '100%' : '40%'}
-          height={isMobile ? '100vh' : 'calc(100vh - 8.5rem)'}
-          style={{ overflowY: 'scroll' }}
-        >
+        <Box width={isMobile ? '100%' : '40%'} height={sidebarHeight} style={{ overflowY: 'scroll' }}>
           {!logItemsQuery.isLoading && !logItemPages.length && (
             <Text>{t('No moderated items found. Please check again later.')}</Text>
           )}
