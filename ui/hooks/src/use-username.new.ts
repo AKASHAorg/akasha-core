@@ -135,6 +135,7 @@ const registerENS = async ({ userName }: { userName: string }) => {
 export function useEnsRegistration(pubKey?: string) {
   const queryClient = useQueryClient();
   return useMutation(registerENS, {
+    mutationKey: REGISTER_ENS_KEY,
     onMutate: ({ userName }: { userName: string }) => {
       // optimistic update only if pubKey is provided
       const providerData = {
@@ -170,7 +171,9 @@ export function useEnsRegistration(pubKey?: string) {
       }
       logError('use-username.useEnsRegistration.onError', error);
     },
-    mutationKey: REGISTER_ENS_KEY,
+    onSettled: async () => {
+      await queryClient.invalidateQueries([PROFILE_KEY, pubKey]);
+    },
   });
 }
 

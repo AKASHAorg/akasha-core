@@ -28,6 +28,7 @@ const ListEmpty: React.FC<IListEmpty> = props => {
           margin={{ top: '0.75rem' }}
           size="large"
           style={{ lineHeight: '1.6' }}
+          textAlign="center"
         >
           {placeholderSubtitleLabel}
         </Text>
