@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom, forkJoin } from 'rxjs';
+import { lastValueFrom, forkJoin, catchError, of } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
 import { logError } from './utils/error-handler';
@@ -15,14 +15,19 @@ const getNotifications = async () => {
     const getProfilesCalls = getMessagesResp.data.map(message => {
       const pubKey = message.body.value.author || message.body.value.follower;
       if (pubKey) {
-        return sdk.api.profile.getProfile({ pubKey });
+        return sdk.api.profile.getProfile({ pubKey }).pipe(
+          catchError(err => {
+            logError('useNotifications.getNotifications.getProfileCalls', err);
+            return of(null);
+          }),
+        );
       }
     });
     const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls));
 
     let completeMessages: any = [];
     profilesResp
-      ?.filter(res => res.data)
+      ?.filter(res => res?.data)
       .map(profileResp => {
         const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
         const images: { avatar: string | null; coverImage: string | null } = {
