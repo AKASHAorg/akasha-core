@@ -34,7 +34,6 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
 
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
-  const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.DELISTED);
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
@@ -138,8 +137,6 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
   const buttonLabels = buttonValues.map(value => t(value));
 
   const onTabClick = (value: string) => {
-    // set active button state
-    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
     // toggle list accordingly
     if (value === ButtonValues.KEPT) {
       setIsDelisted(false);
@@ -187,7 +184,7 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
       {!isPending && (
         <SwitchCard
           count={isDelisted ? count.delisted : count.kept}
-          activeButton={activeButton}
+          activeButton={isDelisted ? ButtonValues.DELISTED : ButtonValues.KEPT}
           countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
           buttonLabels={buttonLabels}
           buttonValues={buttonValues}
