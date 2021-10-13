@@ -34,6 +34,7 @@ import {
   MainAreaCardBox,
   WidgetAreaCardBox,
   ModalCard,
+  ModalCardLogin,
 } from './components/EntryCard/basic-card-box';
 
 import BoxFormCard from './components/BoxFormCard';
@@ -253,6 +254,7 @@ const exported = {
   useIntersectionObserver,
   WidgetAreaCardBox,
   ModalCard,
+  ModalCardLogin,
   EthProviderListModal,
   EthProviderModal,
   MobileListModal,

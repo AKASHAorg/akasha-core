@@ -114,6 +114,16 @@ const ModalCard = styled(BasicCardBox)`
   padding: 1em;
 `;
 
+const ModalCardLogin = styled(BasicCardBox)`
+  padding: 1rem 5rem;
+  position: relative;
+  box-sizing: content-box;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+`;
+
 const StyledAnchor = styled(Anchor)`
   user-select: none;
   text-decoration: none;
@@ -125,4 +135,11 @@ const StyledAnchor = styled(Anchor)`
   }
 `;
 
-export { BasicCardBox, MainAreaCardBox, WidgetAreaCardBox, ModalCard, StyledAnchor };
+export {
+  BasicCardBox,
+  MainAreaCardBox,
+  WidgetAreaCardBox,
+  ModalCard,
+  ModalCardLogin,
+  StyledAnchor,
+};
