@@ -261,7 +261,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       profileAnchorLink={'/profile'}
       followersPages={followersPages}
       followingPages={followingPages}
-      loadingMoreLabel={t('Loading more ...')}
+      loadingMoreLabel={`${t('Loading more')} ...`}
       loadMoreFollowers={loadMoreFollowers}
       loadMoreFollowing={loadMoreFollowing}
       closeModal={handleClose}
