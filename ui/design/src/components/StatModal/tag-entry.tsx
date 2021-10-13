@@ -72,6 +72,7 @@ const TagEntry: React.FC<ITagEntry> = props => {
                 onClickActive={() => handleUnsubscribeTag(tag.name)}
                 active={subscribedTags?.includes(tag.name)}
                 icon={<Icon type="subscribe" />}
+                allowMinimization
               />
             </Box>
           </Box>

@@ -104,7 +104,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         {/* setting height and overflow behaviour to make y-scrollable container */}
         <Box
           width={isMobile ? '100%' : '40%'}
-          height={isMobile ? '100vh' : '80vh'}
+          height={isMobile ? '100vh' : 'calc(100vh - 8.5rem)'}
           style={{ overflowY: 'scroll' }}
         >
           {!logItemsQuery.isLoading && !logItemPages.length && (
