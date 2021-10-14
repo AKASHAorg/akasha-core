@@ -45,26 +45,30 @@ const ProfileMenuDropdown = (props: IProfileEditMenuProps) => {
       <Box pad="xxsmall" width="fit-content">
         {flaggable && (
           <>
-            <MenuOption>
-              <TextIcon
-                iconType="block"
-                label={props.blockLabel}
-                onClick={onBlockClick}
-                color={theme.colors.errorText}
-                iconSize="xs"
-                fontSize="medium"
-              />
-            </MenuOption>
-            <MenuOption>
-              <TextIcon
-                iconType="report"
-                label={props.flagAsLabel}
-                onClick={onReportClick}
-                color={theme.colors.errorText}
-                iconSize="xs"
-                fontSize="medium"
-              />
-            </MenuOption>
+            {props.blockLabel && (
+              <MenuOption>
+                <TextIcon
+                  iconType="block"
+                  label={props.blockLabel}
+                  onClick={onBlockClick}
+                  color={theme.colors.errorText}
+                  iconSize="xs"
+                  fontSize="medium"
+                />
+              </MenuOption>
+            )}
+            {props.flagAsLabel && (
+              <MenuOption>
+                <TextIcon
+                  iconType="report"
+                  label={props.flagAsLabel}
+                  onClick={onReportClick}
+                  color={theme.colors.errorText}
+                  iconSize="xs"
+                  fontSize="medium"
+                />
+              </MenuOption>
+            )}
           </>
         )}
         {!flaggable && (

@@ -5,10 +5,13 @@ import constants from './constants';
 const {
   BASE_REPORT_URL,
   BASE_STATUS_URL,
+  BASE_REASONS_URL,
   BASE_DECISION_URL,
   BASE_MODERATOR_URL,
-  BASE_REASONS_URL,
   DEFAULT_FETCH_TIMEOUT,
+  PENDING_CACHE_KEY_PREFIX,
+  MODERATED_CACHE_KEY_PREFIX,
+  MODERATION_COUNT_CACHE_KEY_PREFIX,
 } = constants;
 
 type Profile = {
@@ -270,8 +273,8 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Pr
     statusOnly: false,
   });
   const uiCache = sdk.services.stash.getUiStash();
-  if (uiCache.has(key)) {
-    return uiCache.get(key) as ICount;
+  if (uiCache.has(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`)) {
+    return uiCache.get(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`) as ICount;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -286,7 +289,7 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Pr
   clearTimeout(timer);
 
   return response.json().then(serializedResponse => {
-    uiCache.set(key, serializedResponse);
+    uiCache.set(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`, serializedResponse);
     return serializedResponse;
   });
 };
@@ -381,8 +384,8 @@ export const getPendingItems = async (
   });
 
   const uiCache = sdk.services.stash.getUiStash();
-  if (uiCache.has(key)) {
-    return uiCache.get(key) as PendingItemsReponse;
+  if (uiCache.has(`${PENDING_CACHE_KEY_PREFIX}-${key}`)) {
+    return uiCache.get(`${PENDING_CACHE_KEY_PREFIX}-${key}`) as PendingItemsReponse;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -398,7 +401,7 @@ export const getPendingItems = async (
   clearTimeout(timer);
 
   return response.json().then(serializedResponse => {
-    uiCache.set(key, serializedResponse);
+    uiCache.set(`${PENDING_CACHE_KEY_PREFIX}-${key}`, serializedResponse);
     return {
       ...serializedResponse,
       results: serializedResponse.results.map((item: IPendingItem) => {
@@ -430,8 +433,8 @@ export const getModeratedItems = async (
     statusOnly: false,
   });
   const uiCache = sdk.services.stash.getUiStash();
-  if (uiCache.has(key)) {
-    return uiCache.get(key) as ModeratedItemsReponse;
+  if (uiCache.has(`${MODERATED_CACHE_KEY_PREFIX}-${key}`)) {
+    return uiCache.get(`${MODERATED_CACHE_KEY_PREFIX}-${key}`) as ModeratedItemsReponse;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -447,7 +450,7 @@ export const getModeratedItems = async (
   clearTimeout(timer);
 
   return response.json().then(serializedResponse => {
-    uiCache.set(key, serializedResponse);
+    uiCache.set(`${MODERATED_CACHE_KEY_PREFIX}-${key}`, serializedResponse);
     return {
       ...serializedResponse,
       results: serializedResponse.results.map((item: IModeratedItem) => {
