@@ -56,15 +56,18 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
     };
 
     const status = await createModeration(url, data);
-    if (status === 409) {
-      throw new Error(`This content has already been moderated by you`);
-    } else if (status === 403) {
-      throw new Error('You are not authorized to perform this operation');
-    } else if (status === 400) {
-      throw new Error('Bad request. Please try again later');
-    } else if (status >= 400) {
-      throw new Error('Unable to process your request right now. Please try again later');
+
+    switch (true) {
+      case status === 409:
+        throw new Error(`This content has already been moderated by you`);
+      case status === 403:
+        throw new Error('You are not authorized to perform this operation');
+      case status === 400:
+        throw new Error('Bad request. Please try again later');
+      case status >= 400:
+        throw new Error('Bad request. Please try again later');
     }
+
     return status;
   } catch (error) {
     logError('[moderation-request.tsx]: createModerationMutation err', error);
@@ -76,24 +79,25 @@ function useModeration() {
   const queryClient = useQueryClient();
   const sdk = getSDK();
   return useMutation((param: UseModerationParam) => createModerationMutation(param), {
-    onSuccess: () => {
+    onSuccess: async () => {
       // remove keys from cache
       const uiCache = sdk.services.stash.getUiStash();
       for (const key of uiCache.keys()) {
         if (
-          key.startsWith(PENDING_CACHE_KEY_PREFIX) ||
-          key.startsWith(MODERATED_CACHE_KEY_PREFIX) ||
-          key.startsWith(MODERATION_COUNT_CACHE_KEY_PREFIX)
+          key &&
+          (key.startsWith(PENDING_CACHE_KEY_PREFIX) ||
+            key.startsWith(MODERATED_CACHE_KEY_PREFIX) ||
+            key.startsWith(MODERATION_COUNT_CACHE_KEY_PREFIX))
         ) {
           uiCache.delete(key);
         }
       }
 
       // refetch queries
-      queryClient.refetchQueries(PENDING_ITEMS_KEY);
-      queryClient.refetchQueries(KEPT_ITEMS_KEY);
-      queryClient.refetchQueries(DELISTED_ITEMS_KEY);
-      queryClient.refetchQueries(MODERATION_ITEMS_COUNT_KEY);
+      await queryClient.refetchQueries(PENDING_ITEMS_KEY);
+      await queryClient.refetchQueries(KEPT_ITEMS_KEY);
+      await queryClient.refetchQueries(DELISTED_ITEMS_KEY);
+      await queryClient.refetchQueries(MODERATION_ITEMS_COUNT_KEY);
     },
   });
 }
@@ -112,15 +116,18 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
     };
 
     const status = await createModeration(url, data);
-    if (status === 409) {
-      throw new Error(`This content has already been reported by you`);
-    } else if (status === 403) {
-      throw new Error('You are not authorized to perform this operation');
-    } else if (status === 400) {
-      throw new Error('Bad request. Please try again later');
-    } else if (status >= 400) {
-      throw new Error('Unable to process your request right now. Please try again later');
+
+    switch (true) {
+      case status === 409:
+        throw new Error(`This content has already been reported by you`);
+      case status === 403:
+        throw new Error('You are not authorized to perform this operation');
+      case status === 400:
+        throw new Error('Bad request. Please try again later');
+      case status >= 400:
+        throw new Error('Bad request. Please try again later');
     }
+
     return status;
   } catch (error) {
     logError('[moderation-request.tsx]: createReportMutation err', error);
