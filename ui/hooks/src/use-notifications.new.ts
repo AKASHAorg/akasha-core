@@ -80,13 +80,18 @@ export function useMarkAsRead() {
         }
         return notif;
       });
+      const previousCheckNotifs: boolean = queryClient.getQueryData([HAS_NEW_NOTIFICATIONS_KEY]);
       queryClient.setQueryData([NOTIFICATIONS_KEY], updated);
+      queryClient.setQueryData([HAS_NEW_NOTIFICATIONS_KEY], false);
 
-      return { previousNotifs };
+      return { previousNotifs, previousCheckNotifs };
     },
     onError: (err, variables, context) => {
       if (context?.previousNotifs) {
         queryClient.setQueryData([NOTIFICATIONS_KEY], context.previousNotifs);
+      }
+      if (context?.previousCheckNotifs) {
+        queryClient.setQueryData([HAS_NEW_NOTIFICATIONS_KEY], context.previousCheckNotifs);
       }
       logError('useNotifications.markAsRead', err as Error);
     },
