@@ -36,6 +36,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
   const loginMutation = useLogin(loginErrorHandler);
 
   const handleModalClose = React.useCallback(() => {
+    setSuggestSignUp(false);
     props.singleSpa.navigateToUrl(location.pathname);
     loginMutation.reset();
   }, [props.singleSpa, loginMutation]);

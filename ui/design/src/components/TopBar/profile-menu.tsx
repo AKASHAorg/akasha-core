@@ -24,6 +24,7 @@ export interface IProfileMenu {
   feedbackInfoLabel?: string;
   moderationLabel?: string;
   moderationInfoLabel?: string;
+  mobileSignedOutView?: boolean;
   legalCopyRightLabel?: string;
   // moderator tools
   isModerator?: boolean;
@@ -58,6 +59,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     feedbackInfoLabel,
     moderationLabel,
     moderationInfoLabel,
+    mobileSignedOutView,
     legalCopyRightLabel,
     isModerator,
     dashboardLabel,
@@ -245,7 +247,13 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
         }}
       >
         <StyledOverlay border={{ style: 'solid', size: '1px', color: 'border', side: 'left' }}>
-          <Box pad="small">
+          <Box
+            pad={{
+              horizontal: 'small',
+              bottom: 'small',
+              top: mobileSignedOutView ? '4.75rem' : 'large',
+            }}
+          >
             <Box direction="row" justify="end" align="center">
               <Icon type="close" onClick={closePopover} primaryColor={true} />
             </Box>

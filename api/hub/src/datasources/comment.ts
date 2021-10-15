@@ -122,16 +122,17 @@ class CommentAPI extends DataSource {
   async getComment(commentId: string) {
     const db: Client = await getAppDB();
 
-    const commentCache = this.getCommentCacheKey(commentId);
-    if (await queryCache.has(commentCache)) {
-      return queryCache.get(commentCache);
+    const commentCacheKey = this.getCommentCacheKey(commentId);
+    if (await queryCache.has(commentCacheKey)) {
+      return queryCache.get(commentCacheKey);
     }
     const comment = await db.findByID<Comment>(this.dbID, this.collection, commentId);
     if (!comment) {
       logger.warn(`comment ${commentId} not found`);
       throw new Error(`Comment not found`);
     }
-    await queryCache.set(commentCache, comment);
+    await queryCache.set(commentCacheKey, comment);
+    await queryCache.sAdd(comment.author, commentCacheKey);
     return comment;
   }
 

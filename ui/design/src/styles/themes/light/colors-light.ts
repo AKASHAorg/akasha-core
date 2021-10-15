@@ -37,13 +37,13 @@ const colors: IColorsLight = {
   secondaryText: '#949EB3', // grey
   disabledText: '#9ea0a5', // disabled
   errorText: '#FF4040', // red
-  background: '#FFF', // white
+  background: '#FFFFFF', // white
   ultraLightBackground: '#FBFCFD', // ultralightGrey
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',
   modalBackground: '#7F7F7F', // deepGrey
   modalBackgroundAlt: '#87909E', // deeperGrey
-  modalBackgroundTransparent: 'rgba(97, 120, 158, 0.45)', // transparentGrey
+  modalBackgroundTransparent: 'rgba(0, 0, 0, 0.6)', // transparentBlack
   activeCardBackground: '#F6F8FF', // aquamarine
   accent: '#4E71FF', // blue
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity

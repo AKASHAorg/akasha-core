@@ -39,11 +39,11 @@ const ModerateModalComponent = (props: RootComponentProps) => {
         contentId: activeModal.entryId,
         contentType: itemType,
         url: `${BASE_DECISION_URL}/moderate`,
-        modalName: 'moderate-modal',
+        isPending: activeModal.status === 'pending' ? true : false,
       });
     },
 
-    [itemType, activeModal.entryId, moderateMutation],
+    [itemType, activeModal.entryId, activeModal.status, moderateMutation],
   );
 
   React.useEffect(() => {

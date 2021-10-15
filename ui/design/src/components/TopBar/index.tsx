@@ -402,6 +402,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           feedbackInfoLabel={feedbackInfoLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
+          mobileSignedOutView={mobileSignedOutView}
           legalCopyRightLabel={legalCopyRightLabel}
           menuItems={dropItems}
           legalMenu={legalMenu}
@@ -426,6 +427,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           feedbackInfoLabel={feedbackInfoLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
+          mobileSignedOutView={mobileSignedOutView}
           legalCopyRightLabel={legalCopyRightLabel}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}

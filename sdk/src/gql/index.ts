@@ -42,10 +42,13 @@ class Gql implements IGqlClient<unknown> {
    * @param saveCache - Cache the result
    * @returns ServiceCallResult<Record<string, T>>
    */
-  run<T>(operation: GraphQLRequest, saveCache = false): ServiceCallResult<T> {
+  run<T>(operation: GraphQLRequest, saveCache = true): ServiceCallResult<T> {
     const opHash = this._stash.computeKey(operation);
-    if (this._gqlStash.has(opHash)) {
+    if (this._gqlStash.has(opHash) && saveCache) {
       return createObservableValue<T>(this._gqlStash.get(opHash));
+    }
+    if (!saveCache) {
+      this.clearCache();
     }
     return createObservableStreamGql<T>(
       this._link,

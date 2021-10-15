@@ -125,11 +125,14 @@ export default class AWF_Auth implements AWF_IAuth {
    */
   checkIfSignedUp(ethAddress: string) {
     const variables = { ethAddress: ethAddress };
-    const check = this._gql.run<{ errors?: never }>({
-      query: GetProfile,
-      variables: variables,
-      operationName: 'GetProfile',
-    });
+    const check = this._gql.run<{ errors?: never }>(
+      {
+        query: GetProfile,
+        variables: variables,
+        operationName: 'GetProfile',
+      },
+      false,
+    );
     return check.pipe(
       tap(response => {
         if (!response.data || response.data?.errors) {
@@ -199,6 +202,7 @@ export default class AWF_Auth implements AWF_IAuth {
       const pubKey = this.identity.public.toString();
       this.currentUser = { pubKey, ethAddress: address.data };
     } catch (e) {
+      this._lockSignIn = false;
       sessionStorage.clear();
       this._log.error(e);
       throw e;
