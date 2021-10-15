@@ -113,17 +113,20 @@ export default class AWF_Entry implements AWF_IEntry {
       .pipe(
         map(res => {
           return this._gql
-            .run<{ createPost: string }>({
-              query: CreateEntry,
-              variables: { content: opt.data, post: opt.post },
-              operationName: 'CreateEntry',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
+            .run<{ createPost: string }>(
+              {
+                query: CreateEntry,
+                variables: { content: opt.data, post: opt.post },
+                operationName: 'CreateEntry',
+                context: {
+                  headers: {
+                    Authorization: `Bearer ${res.token.data}`,
+                    Signature: res.signedData.data.signature,
+                  },
                 },
               },
-            })
+              false,
+            )
             .pipe(
               tap(ev => {
                 // @emits ENTRY_EVENTS.CREATE
@@ -156,17 +159,20 @@ export default class AWF_Entry implements AWF_IEntry {
       .pipe(
         map(res => {
           return this._gql
-            .run<{ editPost: boolean }>({
-              query: EditEntry,
-              variables: { content: opt.data, post: opt.post, id: opt.entryID },
-              operationName: 'EditEntry',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
+            .run<{ editPost: boolean }>(
+              {
+                query: EditEntry,
+                variables: { content: opt.data, post: opt.post, id: opt.entryID },
+                operationName: 'EditEntry',
+                context: {
+                  headers: {
+                    Authorization: `Bearer ${res.token.data}`,
+                    Signature: res.signedData.data.signature,
+                  },
                 },
               },
-            })
+              false,
+            )
             .pipe(
               tap(ev => {
                 // @emits ENTRY_EVENTS.EDIT
@@ -236,17 +242,20 @@ export default class AWF_Entry implements AWF_IEntry {
     return this._auth.authenticateMutationData(entryID).pipe(
       map(res => {
         return this._gql
-          .run<{ removePost: boolean }>({
-            query: RemoveEntry,
-            variables: { id: entryID },
-            operationName: 'RemoveEntry',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ removePost: boolean }>(
+            {
+              query: RemoveEntry,
+              variables: { id: entryID },
+              operationName: 'RemoveEntry',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits ENTRY_EVENTS.REMOVE
@@ -280,7 +289,7 @@ export default class AWF_Entry implements AWF_IEntry {
               },
             },
           },
-          false,
+          true,
         );
       }),
       concatAll(),
