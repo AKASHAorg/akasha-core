@@ -10,7 +10,6 @@ const StyledImg = styled.img`
   display: block;
   max-width: 100%;
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
-  // position: absolute;
 `;
 
 const StyledMention = styled.span`
