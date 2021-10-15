@@ -21,7 +21,6 @@ import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 const {
   EditorModal,
   ModalContainer,
-  ModalRenderer,
   ModalCard,
   Spinner,
   ThemeSelector,
