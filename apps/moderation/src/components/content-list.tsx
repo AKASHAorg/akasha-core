@@ -284,8 +284,8 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                     reportedDateTime={moderatedItem.reportedDate}
                     moderatorDecision={moderatedItem.explanation}
                     moderator={moderatedItem.moderator}
-                    moderatorName={moderatedItem.moderatorProfile.name}
-                    moderatorENSName={moderatedItem.moderatorProfile.userName}
+                    moderatorName={moderatedItem.moderatorProfile?.name}
+                    moderatorENSName={moderatedItem.moderatorProfile?.userName}
                     moderatedByLabel={t('Moderated by')}
                     moderatedOnLabel={t('On')}
                     evaluationDateTime={moderatedItem.moderatedDate}
@@ -335,8 +335,8 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
                     reportedDateTime={moderatedItem.reportedDate}
                     moderatorDecision={moderatedItem.explanation}
                     moderator={moderatedItem.moderator}
-                    moderatorName={moderatedItem.moderatorProfile.name}
-                    moderatorENSName={moderatedItem.moderatorProfile.userName}
+                    moderatorName={moderatedItem.moderatorProfile?.name}
+                    moderatorENSName={moderatedItem.moderatorProfile?.userName}
                     moderatedByLabel={t('Moderated by')}
                     moderatedOnLabel={t('On')}
                     evaluationDateTime={moderatedItem.moderatedDate}
