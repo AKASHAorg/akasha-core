@@ -378,6 +378,8 @@ const mutations = {
     const result = await dataSources.commentsAPI.deleteComment(user.pubKey, id);
     if (postData) {
       await dataSources.postsAPI.updatePosts([postData]);
+      await queryCache.del(dataSources.postsAPI.getPostCacheKey(commentData.postId));
+      await queryCache.del(dataSources.postsAPI.getInitialPostCacheKey(commentData.postId));
     }
 
     if (result?.removedTags?.length) {
