@@ -58,6 +58,7 @@ const UsernameInputSection: React.FC<IUsernameInputSectionProps> = props => {
       </Box>
       <FormField
         name="name"
+        width="100%"
         htmlFor="username-input"
         info={
           usernameError ? (
@@ -71,13 +72,14 @@ const UsernameInputSection: React.FC<IUsernameInputSectionProps> = props => {
           )
         }
       >
-        <Box justify="between" direction="row">
+        <Box justify="between" direction="row" fill="horizontal">
           <Box fill="horizontal" direction="row" align="center">
             {'@'}
             <StyledTextInput
               spellCheck={false}
-              computedWidth={'100%'}
+              computedWidth="100%"
               id="username-input"
+              maxLength={32}
               required={true}
               value={formValues.userName}
               onChange={handleUsernameChange}

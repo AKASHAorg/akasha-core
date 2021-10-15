@@ -293,12 +293,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
       )}
       {(postReq.isSuccess || commentReq.isSuccess) && (
         <>
-          {itemData.moderated && itemData.delisted && (
-            <EntryCardHidden
-              moderatedContentLabel={t('This content has been moderated')}
-              isDelisted={true}
-            />
-          )}
           {(accountAwaitingModeration || entryAwaitingModeration) && (
             <EntryCardHidden
               reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
@@ -333,69 +327,73 @@ const EntryRenderer = (props: IEntryRenderer) => {
               />
             </Box>
           )}
-          {!entryAwaitingModeration && !accountAwaitingModeration && !itemData.delisted && (
-            <EntryCard
-              className={props.className}
-              isRemoved={itemData.isRemoved}
-              isBookmarked={isBookmarked}
-              entryData={itemData}
-              sharePostUrl={sharePostUrl}
-              sharePostLabel={t('Share Post')}
-              shareTextLabel={t('Share this post with your friends')}
-              onClickAvatar={handleAvatarClick}
-              onEntryBookmark={handleEntryBookmark}
-              repliesLabel={t('Replies')}
-              repostsLabel={t('Reposts')}
-              repostLabel={t('Repost')}
-              editedLabel={t('Last edited')}
-              repostWithCommentLabel={t('Repost with comment')}
-              shareLabel={t('Share')}
-              copyLinkLabel={t('Copy Link')}
-              flagAsLabel={t(`Report ${itemTypeName}`)}
-              loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
-              locale={locale || 'en'}
-              style={{
-                ...(style as React.CSSProperties),
-                ...(commentData && commentStyleExt),
-                display: isEditingComment ? 'none' : 'block',
-              }}
-              bookmarkLabel={t('Save')}
-              bookmarkedLabel={t('Saved')}
-              showMore={true}
-              profileAnchorLink={'/profile'}
-              repliesAnchorLink={'/social-app/post'}
-              onRepost={onRepost}
-              onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
-              handleFollowAuthor={handleFollow}
-              handleUnfollowAuthor={handleUnfollow}
-              isFollowingAuthor={isFollowing}
-              onContentClick={handleContentClick}
-              onMentionClick={handleMentionClick}
-              onTagClick={handleTagClick}
-              singleSpaNavigate={singleSpaNavigate}
-              contentClickable={contentClickable}
-              moderatedContentLabel={t('This content has been moderated')}
-              ctaLabel={t('See it anyway')}
-              handleFlipCard={handleFlipCard}
-              onEntryRemove={props.onEntryRemove}
-              removeEntryLabel={props.removeEntryLabel}
-              removedByMeLabel={props.removedByMeLabel}
-              removedByAuthorLabel={props.removedByAuthorLabel}
-              disableReposting={itemData.isRemoved}
-              disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-              hideActionButtons={hideActionButtons}
-              headerMenuExt={
-                showEditButton && (
-                  <ExtensionPoint
-                    onClick={handleEditClick}
-                    name={`entry-card-edit-button_${itemId}`}
-                    onMount={onEditButtonMount}
-                    onUnmount={onEditButtonUnmount}
-                  />
-                )
-              }
-            />
-          )}
+          {!entryAwaitingModeration &&
+            !accountAwaitingModeration &&
+            !itemData.delisted &&
+            !itemData.isRemoved && (
+              <EntryCard
+                className={props.className}
+                isRemoved={itemData.isRemoved}
+                isBookmarked={isBookmarked}
+                entryData={itemData}
+                sharePostUrl={sharePostUrl}
+                sharePostLabel={t('Share Post')}
+                shareTextLabel={t('Share this post with your friends')}
+                onClickAvatar={handleAvatarClick}
+                onEntryBookmark={handleEntryBookmark}
+                repliesLabel={t('Replies')}
+                repostsLabel={t('Reposts')}
+                repostLabel={t('Repost')}
+                editedLabel={t('Last edited')}
+                repostWithCommentLabel={t('Repost with comment')}
+                shareLabel={t('Share')}
+                copyLinkLabel={t('Copy Link')}
+                flagAsLabel={t(`Report ${itemTypeName}`)}
+                loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
+                locale={locale || 'en'}
+                style={{
+                  ...(style as React.CSSProperties),
+                  ...(commentData && commentStyleExt),
+                  display: isEditingComment ? 'none' : 'block',
+                }}
+                bookmarkLabel={t('Save')}
+                bookmarkedLabel={t('Saved')}
+                showMore={true}
+                profileAnchorLink={'/profile'}
+                repliesAnchorLink={'/social-app/post'}
+                onRepost={onRepost}
+                onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
+                handleFollowAuthor={handleFollow}
+                handleUnfollowAuthor={handleUnfollow}
+                isFollowingAuthor={isFollowing}
+                onContentClick={handleContentClick}
+                onMentionClick={handleMentionClick}
+                onTagClick={handleTagClick}
+                singleSpaNavigate={singleSpaNavigate}
+                contentClickable={contentClickable}
+                moderatedContentLabel={t('This content has been moderated')}
+                ctaLabel={t('See it anyway')}
+                handleFlipCard={handleFlipCard}
+                onEntryRemove={props.onEntryRemove}
+                removeEntryLabel={props.removeEntryLabel}
+                removedByMeLabel={props.removedByMeLabel}
+                removedByAuthorLabel={props.removedByAuthorLabel}
+                disableReposting={itemData.isRemoved}
+                disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+                hideActionButtons={hideActionButtons}
+                headerMenuExt={
+                  showEditButton && (
+                    <ExtensionPoint
+                      style={{ width: '100%' }}
+                      onClick={handleEditClick}
+                      name={`entry-card-edit-button_${itemId}`}
+                      onMount={onEditButtonMount}
+                      onUnmount={onEditButtonUnmount}
+                    />
+                  )
+                }
+              />
+            )}
         </>
       )}
     </>

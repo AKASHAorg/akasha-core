@@ -376,7 +376,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
                 </Box>
               )}
-              {loginState?.ethAddress && (
+              {loginState?.ethAddress && !entryData.isRemoved && (
                 <Box margin="medium" style={{ position: 'relative' }}>
                   <CommentEditor
                     avatar={loggedProfileData?.avatar}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
-import { isMobile } from 'react-device-detect';
+import { isMobileOnly } from 'react-device-detect';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
@@ -28,8 +28,8 @@ export interface IContentClickDetails {
   authorEthAddress: string;
   entryId: string;
   replyTo: {
-    authorEthAddress: string;
-    entryId: string;
+    authorEthAddress?: string;
+    entryId?: string;
   } | null;
 }
 export interface IEntryBoxProps {
@@ -240,11 +240,11 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   // memoized flags
   const showCardMenu = React.useMemo(
-    () => !isMobile && menuIconRef.current && menuDropOpen,
+    () => !isMobileOnly && menuIconRef.current && menuDropOpen,
     [menuDropOpen],
   );
 
-  const showMobileCardMenu = React.useMemo(() => isMobile && menuDropOpen, [menuDropOpen]);
+  const showMobileCardMenu = React.useMemo(() => isMobileOnly && menuDropOpen, [menuDropOpen]);
 
   const showProfileDrop = React.useMemo(
     () => profileRef.current && profileDropOpen,
@@ -457,6 +457,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                     ]
                   : []),
               ]}
+              headerMenuExt={props.headerMenuExt}
             />
           </StyledDropAlt>
         )}

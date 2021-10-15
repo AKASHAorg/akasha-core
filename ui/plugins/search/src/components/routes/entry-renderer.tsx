@@ -80,7 +80,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     props.onNavigate(itemType, {
       entryId: itemData.entryId,
       authorEthAddress: itemData.author.ethAddress,
-      replyTo: null,
+      replyTo: { entryId: itemData.postId } || null,
     });
   };
 
@@ -169,12 +169,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     <>
       {itemData && itemData.author?.ethAddress && (
         <div style={{ marginBottom: '8px' }}>
-          {itemData.moderated && itemData.delisted && (
-            <EntryCardHidden
-              moderatedContentLabel={t('This content has been moderated')}
-              isDelisted={true}
-            />
-          )}
           {(accountAwaitingModeration || entryAwaitingModeration) && (
             <EntryCardHidden
               reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
@@ -185,57 +179,60 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
             />
           )}
 
-          {!entryAwaitingModeration && !accountAwaitingModeration && !itemData.delisted && (
-            <EntryCard
-              isRemoved={itemData.isRemoved}
-              isBookmarked={isBookmarked}
-              entryData={itemData}
-              sharePostLabel={t('Share Post')}
-              shareTextLabel={t('Share this post with your friends')}
-              sharePostUrl={props.sharePostUrl}
-              onClickAvatar={handleClickAvatar}
-              onEntryBookmark={handleEntryBookmark}
-              repliesLabel={t('Replies')}
-              repostsLabel={t('Reposts')}
-              repostLabel={t('Repost')}
-              repostWithCommentLabel={t('Repost with comment')}
-              shareLabel={t('Share')}
-              copyLinkLabel={t('Copy Link')}
-              flagAsLabel={t('Report Post')}
-              loggedProfileEthAddress={ethAddress}
-              locale={locale || 'en'}
-              style={{ height: 'auto', ...style }}
-              bookmarkLabel={t('Save')}
-              bookmarkedLabel={t('Saved')}
-              moderatedContentLabel={t('This content has been moderated')}
-              showMore={true}
-              profileAnchorLink={'/profile'}
-              repliesAnchorLink={'/social-app/post'}
-              onRepost={handleRepost}
-              handleFollowAuthor={handleFollow}
-              handleUnfollowAuthor={handleUnfollow}
-              isFollowingAuthor={isFollowing.data?.includes(ethAddress)}
-              onContentClick={handleContentClick}
-              onMentionClick={props.onMentionClick}
-              onTagClick={props.onTagClick}
-              singleSpaNavigate={props.singleSpa.navigateToUrl}
-              contentClickable={contentClickable}
-              disableReposting={itemData.isRemoved}
-              removeEntryLabel={t('Delete Post')}
-              onEntryRemove={handleEntryRemove}
-              onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
-              hideActionButtons={hideActionButtons}
-              headerMenuExt={
-                ethAddress === itemData.author.ethAddress && (
-                  <ExtensionPoint
-                    name={`entry-card-edit-button_${entryId}`}
-                    onMount={onEditButtonMount}
-                    onUnmount={onEditButtonUnmount}
-                  />
-                )
-              }
-            />
-          )}
+          {!entryAwaitingModeration &&
+            !accountAwaitingModeration &&
+            !itemData.delisted &&
+            !itemData.isRemoved && (
+              <EntryCard
+                isRemoved={itemData.isRemoved}
+                isBookmarked={isBookmarked}
+                entryData={itemData}
+                sharePostLabel={t('Share Post')}
+                shareTextLabel={t('Share this post with your friends')}
+                sharePostUrl={props.sharePostUrl}
+                onClickAvatar={handleClickAvatar}
+                onEntryBookmark={handleEntryBookmark}
+                repliesLabel={t('Replies')}
+                repostsLabel={t('Reposts')}
+                repostLabel={t('Repost')}
+                repostWithCommentLabel={t('Repost with comment')}
+                shareLabel={t('Share')}
+                copyLinkLabel={t('Copy Link')}
+                flagAsLabel={t('Report Post')}
+                loggedProfileEthAddress={ethAddress}
+                locale={locale || 'en'}
+                style={{ height: 'auto', ...style }}
+                bookmarkLabel={t('Save')}
+                bookmarkedLabel={t('Saved')}
+                moderatedContentLabel={t('This content has been moderated')}
+                showMore={true}
+                profileAnchorLink={'/profile'}
+                repliesAnchorLink={'/social-app/post'}
+                onRepost={handleRepost}
+                handleFollowAuthor={handleFollow}
+                handleUnfollowAuthor={handleUnfollow}
+                isFollowingAuthor={isFollowing.data?.includes(ethAddress)}
+                onContentClick={handleContentClick}
+                onMentionClick={props.onMentionClick}
+                onTagClick={props.onTagClick}
+                singleSpaNavigate={props.singleSpa.navigateToUrl}
+                contentClickable={contentClickable}
+                disableReposting={itemData.isRemoved}
+                removeEntryLabel={t('Delete Post')}
+                onEntryRemove={handleEntryRemove}
+                onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
+                hideActionButtons={hideActionButtons}
+                headerMenuExt={
+                  ethAddress === itemData.author.ethAddress && (
+                    <ExtensionPoint
+                      name={`entry-card-edit-button_${entryId}`}
+                      onMount={onEditButtonMount}
+                      onUnmount={onEditButtonUnmount}
+                    />
+                  )
+                }
+              />
+            )}
         </div>
       )}
     </>

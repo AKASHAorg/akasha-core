@@ -65,7 +65,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   const handleFollow = () => {
     if (!loginState.ethAddress) {
-      return props.navigateToModal({ name: 'login-modal', profileId });
+      return props.navigateToModal({ name: 'login', profileId });
     }
     if (profileData?.ethAddress) {
       followReq.mutate(profileData.ethAddress);
@@ -155,7 +155,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         canUserEdit={loginState.ethAddress === profileData.ethAddress}
         flaggable={loginState.ethAddress !== profileData.ethAddress}
         flagAsLabel={t('Report')}
-        blockLabel={t('Block')}
+        // blockLabel={t('Block')}
         userNameType={userNameTypes}
         onEntryFlag={handleEntryFlag(
           profileData.pubKey ? profileData.pubKey : '',

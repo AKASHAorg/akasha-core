@@ -8,6 +8,7 @@ import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/respons
 import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
 import { checkStatus } from './use-moderation';
 import { SEARCH_KEY } from './use-search.new';
+import { TRENDING_TAGS_KEY } from './use-trending.new';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -212,9 +213,6 @@ export function useDeletePost(postID: string) {
       });
       return { previousPost };
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries([ENTRY_KEY, postID]);
-    },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {
       if (context?.previousPost) {
@@ -255,6 +253,7 @@ export function useCreatePost() {
       },
       onSettled: async () => {
         await queryClient.invalidateQueries(ENTRIES_KEY);
+        await queryClient.invalidateQueries(TRENDING_TAGS_KEY);
       },
       mutationKey: CREATE_POST_MUTATION_KEY,
     },
