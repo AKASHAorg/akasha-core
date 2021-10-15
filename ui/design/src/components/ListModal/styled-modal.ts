@@ -15,15 +15,20 @@ export interface IModalWrapperProps extends IMobileProps {
 }
 
 const StyledBox = styled(Box)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(0, 0);
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
   ${props => css`
-    @media (min-width: ${props.theme.breakpoints.small}) {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    @media (min-width: ${props.theme.breakpoints.small.value}px) {
+      max-width: 75%;
+      height: auto;
+    }
+    @media (min-width: ${props.theme.breakpoints.medium.value}px) {
+      max-width: 50%;
+    }
+    @media (min-width: ${props.theme.breakpoints.xlarge.value}px) {
+      max-width: 35%;
     }
   `};
 `;
