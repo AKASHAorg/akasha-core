@@ -20,6 +20,7 @@ describe('<TransparencyLogMiniCard /> Component', () => {
             isSelected={true}
             isDelisted={true}
             moderatedTimestamp="2021-06-14T16:48:00.000Z"
+            moderator="somebody"
             moderatorAvatarUrl="https://placebeard.it/360x360"
             moderatorEthAddress="0x003410490050000320006570034567114572000"
             onClickAvatar={handleClickAvatar}

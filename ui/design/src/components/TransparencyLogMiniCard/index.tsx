@@ -6,6 +6,7 @@ import { isMobileOnly } from 'react-device-detect';
 import Avatar from '../Avatar';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { formatRelativeTime, ILocale } from '../../utils/time';
+import Tooltip from '../Tooltip';
 
 export interface ITransparencyLogMiniCardProps {
   locale: ILocale;
@@ -16,6 +17,7 @@ export interface ITransparencyLogMiniCardProps {
   moderatedTimestamp: string;
   moderatorAvatarUrl: string;
   moderatorEthAddress: string;
+  moderator: string;
   onClickAvatar?: () => void;
   onClickCard?: () => void;
 }
@@ -40,6 +42,7 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
     moderatedTimestamp,
     moderatorAvatarUrl,
     moderatorEthAddress,
+    moderator,
     onClickAvatar,
     onClickCard,
   } = props;
@@ -66,12 +69,21 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
             </Text>
           </Box>
           <Box margin={{ left: 'xsmall' }} flex={{ shrink: 0 }}>
-            <Avatar
-              size="xs"
-              src={moderatorAvatarUrl}
-              ethAddress={moderatorEthAddress}
-              onClick={onClickAvatar}
-            />
+            <Tooltip
+              dropProps={{ align: { right: 'left' } }}
+              message={moderator}
+              plain={true}
+              caretPosition={'right'}
+            >
+              <span>
+                <Avatar
+                  size="xs"
+                  src={moderatorAvatarUrl}
+                  ethAddress={moderatorEthAddress}
+                  onClick={onClickAvatar}
+                />
+              </span>
+            </Tooltip>
           </Box>
         </Box>
         <Box direction="row" justify="between" align="start">
