@@ -37,7 +37,7 @@ const colors: IColorsLight = {
   secondaryText: '#949EB3', // grey
   disabledText: '#9ea0a5', // disabled
   errorText: '#FF4040', // red
-  background: '#FFF', // white
+  background: '#FFFFFF', // white
   ultraLightBackground: '#FBFCFD', // ultralightGrey
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',
