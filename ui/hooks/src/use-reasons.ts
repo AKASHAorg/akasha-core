@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-import { createErrorHandler } from './utils/error-handler';
+import { createErrorHandler, logError } from './utils/error-handler';
 import { getModerationReasons, Reason } from './moderation-requests';
 
 export interface UseReasonsActions {
@@ -42,9 +42,7 @@ const ReasonStateReducer = (state: IReasonsState, action: IReasonsAction) => {
 };
 
 /* A hook to get predefined reasons from moderation API */
-export const useReasons = (props: UseReasonsProps): [string[], UseReasonsActions] => {
-  const { onError } = props;
-
+export const useReasons = (): [string[], UseReasonsActions] => {
   const [reasonsState, dispatch] = React.useReducer(ReasonStateReducer, initialReasonstate);
 
   const actions: UseReasonsActions = {
@@ -54,17 +52,14 @@ export const useReasons = (props: UseReasonsProps): [string[], UseReasonsActions
 
         if (Array.isArray(res)) {
           // pick only labels for each reason object
-          const labels = res.reduce(
-            (acc: string[], cur: Reason) => [...acc, cur.label],
-            [],
-          );
+          const labels = res.reduce((acc: string[], cur: Reason) => [...acc, cur.label], []);
           // dispatch labels, adding last option - 'Other'
           dispatch({ type: 'FETCH_REASONS_SUCCESS', payload: [...labels, 'Other'] });
         } else {
           throw new Error('Response must be an array');
         }
       } catch (error) {
-        return createErrorHandler('useReasons.fetchReasons', false, onError);
+        logError('useReasons', error);
       }
     },
   };

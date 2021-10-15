@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { useGetLogin, useLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import i18n, { setupI18next } from '../i18n';
@@ -12,8 +12,6 @@ import i18n, { setupI18next } from '../i18n';
 const { SignInModal } = DS;
 
 const SignInModalContainer = (props: RootComponentProps) => {
-  const { logger } = props;
-
   const acceptedTerms = React.useMemo(() => {
     return localStorage.getItem('@acceptedTermsAndPrivacy');
   }, []);
@@ -21,15 +19,26 @@ const SignInModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
 
   const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
+  const [errorMessages, setErrorMessages] = React.useState<string[]>([]);
 
-  const [errorState, errorActions] = useErrors({ logger });
+  const loginErrorHandler = React.useCallback(
+    error => {
+      // @TODO: find a way to avoid this
+      if (error.message === 'Profile not found' && !acceptedTerms) {
+        setSuggestSignUp(true);
+      }
+      setErrorMessages(prev => [...prev, error.message]);
+    },
+    [acceptedTerms],
+  );
 
-  const loginQuery = useGetLogin({ onError: errorActions.createError });
-  const loginMutation = useLogin(errorActions.createError);
+  const loginQuery = useGetLogin();
+  const loginMutation = useLogin(loginErrorHandler);
 
   const handleModalClose = React.useCallback(() => {
     props.singleSpa.navigateToUrl(location.pathname);
-  }, [props.singleSpa]);
+    loginMutation.reset();
+  }, [props.singleSpa, loginMutation]);
 
   React.useEffect(() => {
     if (loginQuery.data?.ethAddress) {
@@ -53,21 +62,6 @@ const SignInModalContainer = (props: RootComponentProps) => {
     loginMutation.mutate({ selectedProvider: providerId, checkRegistered: !acceptedTerms });
   };
 
-  const loginErrors: string | null = React.useMemo(() => {
-    if (errorState && Object.keys(errorState).length) {
-      return Object.keys(errorState)
-        .filter(key => key.split('.')[0] === 'useLogin')
-        .map(k => {
-          if (errorState[k].error.message === 'Profile not found' && !acceptedTerms) {
-            setSuggestSignUp(true);
-          }
-          return errorState[k];
-        })
-        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
-    }
-    return null;
-  }, [acceptedTerms, errorState]);
-
   const handleSignUpClick = () => {
     props.navigateToModal({ name: 'signup', redirectTo: props.activeModal.redirectTo });
   };
@@ -81,7 +75,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
       titleLabel={t('Connect a wallet')}
       metamaskModalHeadline={t('Connecting')}
       metamaskModalMessage={t('Please complete the process in your wallet')}
-      error={loginErrors}
+      error={errorMessages.join('\n')}
     />
   );
 };

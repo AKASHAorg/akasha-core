@@ -142,6 +142,8 @@ export function useFollow() {
           return profile;
         });
       });
+      // invalidate the queries of the profile if it's already fetched
+      // eg. we are on his profile page
       const profileQuery = queryClient.getQueriesData<IProfileData>({
         queryKey: PROFILE_KEY,
         predicate: (query: Query<IProfileData>) => {
@@ -203,6 +205,8 @@ export function useUnfollow() {
             return profile;
           });
         });
+        // invalidate the queries of the profile if it's already fetched
+        // eg. we are on his profile page
         const profileQuery = queryClient.getQueriesData<IProfileData>({
           queryKey: PROFILE_KEY,
           predicate: (query: Query<IProfileData>) => {

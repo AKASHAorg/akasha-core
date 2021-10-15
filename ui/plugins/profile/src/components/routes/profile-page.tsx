@@ -174,7 +174,7 @@ const ProfilePage = (props: ProfilePageProps) => {
             <>
               <ProfilePageHeader
                 {...props}
-                slotId={props.layoutConfig.modalSlotId}
+                modalSlotId={props.layoutConfig.modalSlotId}
                 profileData={profileState}
                 profileId={pubKey}
                 loginState={loginQuery.data}

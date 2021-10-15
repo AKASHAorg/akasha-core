@@ -16,10 +16,16 @@ export interface IModalWrapperProps extends IMobileProps {
 
 const StyledBox = styled(Box)`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  transform: translate(0, 0);
+  ${props => css`
+    @media (min-width: ${props.theme.breakpoints.small}) {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  `};
 `;
 
 const StyledText = styled(Text)`

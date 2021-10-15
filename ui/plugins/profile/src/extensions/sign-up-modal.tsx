@@ -5,7 +5,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -19,12 +19,9 @@ const SignUpModalContainer = (props: RootComponentProps) => {
 
   const sdk = getSDK();
 
-  const { logger } = props;
-
   const [inviteToken, setInviteToken] = React.useState<string | null>(null);
-  const [, errorActions] = useErrors({ logger });
 
-  const loginQuery = useGetLogin({ onError: errorActions.createError });
+  const loginQuery = useGetLogin();
 
   const [inviteTokenForm, setinviteTokenForm] = React.useState<{
     submitted: boolean;
@@ -52,7 +49,6 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   const handleSignUpModalClose = React.useCallback(() => {
     props.singleSpa.navigateToUrl(location.pathname);
     _handleModalClose();
-    errorActions.removeLoginErrors();
   }, []);
 
   React.useEffect(() => {

@@ -47,7 +47,6 @@ const getProfileData = async (payload: {
     if (coverImage) {
       images.coverImage = getMediaUrl(coverImage);
     }
-
     return { ...images, ...other, ...modStatus[0] };
   } catch (error) {
     logError('useProfile.getProfileData', error);

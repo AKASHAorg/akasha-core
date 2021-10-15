@@ -22,11 +22,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation();
 
-  const loginQuery = useGetLogin({
-    onError: (errorInfo: IAkashaError) => {
-      props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo.errorKey}`);
-    },
-  });
+  const loginQuery = useGetLogin();
 
   const profileDataReq = useGetEntryAuthor(params.postId);
   const profileData = profileDataReq.data;

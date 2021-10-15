@@ -233,6 +233,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         hasNewNotifications={checkNotifsReq.data}
         currentLocation={location?.pathname}
         onBrandClick={handleBrandClick}
+        modalSlotId={props.layoutConfig.modalSlotId}
       >
         <ExtensionPoint
           name={extensionPointsMap.QuickAccess}

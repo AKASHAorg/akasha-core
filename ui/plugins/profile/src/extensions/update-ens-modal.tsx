@@ -301,8 +301,8 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
             loginQuery.data.isReady && (
               <EnsFormCard
                 titleLabel={
-                  userNameTypes.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ||
-                  userNameTypes.available.includes(UsernameTypes.ENS_DOMAIN)
+                  userNameTypes?.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ||
+                  userNameTypes?.available.includes(UsernameTypes.ENS_DOMAIN)
                     ? t('Manage Ethereum name')
                     : t('Add an Ethereum name')
                 }
