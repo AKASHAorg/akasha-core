@@ -72,7 +72,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const handleClickAvatar = (pubKey: string) => () => {
-    navigateToUrl(`/profile/${pubKey}`);
+    if (pubKey) navigateToUrl(`/profile/${pubKey}`);
   };
 
   const handleClickCard = (el: ILogItem) => () => {
@@ -174,7 +174,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
             <DetailCard
               selected={selected}
               ipfsGateway={ipfsGateway}
-              handleClickAvatar={handleClickAvatar(selected.moderator.pubKey)}
+              handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
               handleClickArrowLeft={handleClickArrowLeft}
               navigateToUrl={navigateToUrl}
             />
@@ -186,7 +186,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               <DetailCard
                 selected={selected}
                 ipfsGateway={ipfsGateway}
-                handleClickAvatar={handleClickAvatar(selected.moderator.pubKey)}
+                handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
                 handleClickArrowLeft={handleClickArrowLeft}
                 navigateToUrl={navigateToUrl}
               />
