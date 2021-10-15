@@ -28,6 +28,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
   const loginMutation = useLogin(errorActions.createError);
 
   const handleModalClose = React.useCallback(() => {
+    setSuggestSignUp(false);
     props.singleSpa.navigateToUrl(location.pathname);
   }, [props.singleSpa]);
 
@@ -55,6 +56,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
 
   const loginErrors: string | null = React.useMemo(() => {
     if (errorState && Object.keys(errorState).length) {
+      loginMutation.reset();
       return Object.keys(errorState)
         .filter(key => key.split('.')[0] === 'useLogin')
         .map(k => {

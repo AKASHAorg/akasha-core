@@ -90,17 +90,20 @@ export default class AWF_Profile implements AWF_IProfile {
     return this._auth.authenticateMutationData(opt as unknown as Record<string, unknown>[]).pipe(
       map(res => {
         return this._gql
-          .run<{ addProfileProvider: string }>({
-            query: AddProfileProvider,
-            variables: { data: opt },
-            operationName: 'AddProfileProvider',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ addProfileProvider: string }>(
+            {
+              query: AddProfileProvider,
+              variables: { data: opt },
+              operationName: 'AddProfileProvider',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits PROFILE_EVENTS.ADD_PROVIDER
@@ -124,17 +127,20 @@ export default class AWF_Profile implements AWF_IProfile {
     return this._auth.authenticateMutationData(opt as unknown as Record<string, unknown>[]).pipe(
       map(res => {
         return this._gql
-          .run<{ makeDefaultProvider: string }>({
-            query: MakeDefaultProvider,
-            variables: { data: opt },
-            operationName: 'MakeDefaultProvider',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ makeDefaultProvider: string }>(
+            {
+              query: MakeDefaultProvider,
+              variables: { data: opt },
+              operationName: 'MakeDefaultProvider',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits PROFILE_EVENTS.DEFAULT_PROVIDER
@@ -164,17 +170,20 @@ export default class AWF_Profile implements AWF_IProfile {
     return this._auth.authenticateMutationData(userName).pipe(
       map(res => {
         return this._gql
-          .run<{ registerUserName: string }>({
-            query: RegisterUsername,
-            variables: { name: userName },
-            operationName: 'RegisterUsername',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ registerUserName: string }>(
+            {
+              query: RegisterUsername,
+              variables: { name: userName },
+              operationName: 'RegisterUsername',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits PROFILE_EVENTS.REGISTER_USERNAME
@@ -230,17 +239,20 @@ export default class AWF_Profile implements AWF_IProfile {
       map(res => {
         this._gql.clearCache();
         return this._gql
-          .run<{ follow: boolean }>({
-            query: Follow,
-            variables: { ethAddress: ethAddress },
-            operationName: 'Follow',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ follow: boolean }>(
+            {
+              query: Follow,
+              variables: { ethAddress: ethAddress },
+              operationName: 'Follow',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits PROFILE_EVENTS.FOLLOW
@@ -265,17 +277,20 @@ export default class AWF_Profile implements AWF_IProfile {
       map(res => {
         this._gql.clearCache();
         return this._gql
-          .run<{ unFollow: boolean }>({
-            query: UnFollow,
-            variables: { ethAddress: ethAddress },
-            operationName: 'UnFollow',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ unFollow: boolean }>(
+            {
+              query: UnFollow,
+              variables: { ethAddress: ethAddress },
+              operationName: 'UnFollow',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits PROFILE_EVENTS.UNFOLLOW
@@ -387,17 +402,20 @@ export default class AWF_Profile implements AWF_IProfile {
       this._auth.authenticateMutationData(dataFinal as unknown as Record<string, unknown>[]).pipe(
         map(res => {
           this._gql.clearCache();
-          return this._gql.run({
-            query: SaveMetaData,
-            variables: { data: dataFinal },
-            operationName: 'SaveMetaData',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          return this._gql.run(
+            {
+              query: SaveMetaData,
+              variables: { data: dataFinal },
+              operationName: 'SaveMetaData',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          });
+            false,
+          );
         }),
         concatAll(),
       ),
@@ -437,17 +455,20 @@ export default class AWF_Profile implements AWF_IProfile {
       map(res => {
         this._gql.clearCache();
         return this._gql
-          .run<{ toggleInterestSub: boolean }>({
-            query: ToggleInterestSub,
-            variables: { sub: tagName },
-            operationName: 'ToggleInterestSub',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ toggleInterestSub: boolean }>(
+            {
+              query: ToggleInterestSub,
+              variables: { sub: tagName },
+              operationName: 'ToggleInterestSub',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
