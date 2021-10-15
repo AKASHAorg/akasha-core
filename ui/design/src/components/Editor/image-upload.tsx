@@ -117,7 +117,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           </Box>
         </StyledUploadingDiv>
       )}
-      <StyledImageInput value="" onChange={handleFileUpload} type="file" ref={ref} />
+      <StyledImageInput accept={'image/*'} onChange={handleFileUpload} type="file" ref={ref} />
     </>
   );
 });

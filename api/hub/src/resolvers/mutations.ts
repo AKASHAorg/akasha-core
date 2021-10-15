@@ -178,6 +178,30 @@ const mutations = {
         await dataSources.tagsAPI.removePostIndex(id, tag);
       }
     }
+    const profile = await dataSources.profileAPI.resolveProfile(user.pubKey, true);
+    const profileData = profile.length && profile[0];
+    if (profileData) {
+      const totalPostsIndex = profileData.metaData.findIndex(
+        m => m.provider === statsProvider && m.property === postsStats,
+      );
+      if (totalPostsIndex !== -1) {
+        profileData.metaData[totalPostsIndex].value =
+          +profileData.metaData[totalPostsIndex].value - 1;
+        profileData.metaData[totalPostsIndex].value =
+          profileData.metaData[totalPostsIndex].value > 0
+            ? profileData.metaData[totalPostsIndex].value.toString()
+            : '0';
+      } else {
+        profileData.metaData.push({
+          provider: statsProvider,
+          property: postsStats,
+          value: '0',
+        });
+      }
+      await dataSources.profileAPI.updateProfile([profileData]);
+      const cacheKey = dataSources.profileAPI.getCacheKey(user.pubKey);
+      await queryCache.del(cacheKey);
+    }
     return true;
   },
   follow: async (_, { ethAddress }, { dataSources, user, signature }) => {
@@ -329,7 +353,33 @@ const mutations = {
       logger.warn(`bad removeComment sig`);
       return Promise.reject(dataSigError);
     }
+    const commentData = await dataSources.commentsAPI.getComment(id);
+    let postData;
+    if (commentData?.postId) {
+      postData = await dataSources.postsAPI.getRealPost(commentData.postId);
+      const totalCommentsIndex = postData.metaData.findIndex(
+        m => m.provider === statsProvider && m.property === commentsStats,
+      );
+      if (totalCommentsIndex !== -1) {
+        postData.metaData[totalCommentsIndex].value =
+          +postData.metaData[totalCommentsIndex].value - 1;
+        postData.metaData[totalCommentsIndex].value =
+          postData.metaData[totalCommentsIndex].value > 0
+            ? postData.metaData[totalCommentsIndex].value.toString()
+            : '0';
+      } else {
+        postData.metaData.push({
+          provider: statsProvider,
+          property: commentsStats,
+          value: '0',
+        });
+      }
+    }
     const result = await dataSources.commentsAPI.deleteComment(user.pubKey, id);
+    if (postData) {
+      await dataSources.postsAPI.updatePosts([postData]);
+    }
+
     if (result?.removedTags?.length) {
       for (const tag of result.removedTags) {
         await dataSources.tagsAPI.removeCommentIndex(id, tag);
