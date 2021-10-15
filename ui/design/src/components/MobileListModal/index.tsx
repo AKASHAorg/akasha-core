@@ -17,6 +17,7 @@ export interface IMobileListModal {
   cancelLabel?: string;
   closeModal: () => void;
   menuItems: IMenuItem[];
+  headerMenuExt?: React.ReactElement;
 }
 
 export interface IMenuItem {
@@ -37,6 +38,8 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
     <ModalWrapper isTransparent={true} onClick={closeModal}>
       <StyledBox>
         <Box align="center" round="small" margin={{ bottom: 'medium' }}>
+          {!!props.headerMenuExt &&
+            React.cloneElement(props.headerMenuExt, { onWrapperClick: closeModal })}
           {menuItems.map((menuItem, index) => (
             <Box
               round={

@@ -3,6 +3,7 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import EditorBox, { IEditorBox } from '../Editor';
 import { Box, Text } from 'grommet';
 import Icon from '../Icon';
+import { isMobileOnly } from 'react-device-detect';
 
 export interface IEditorCard extends IEditorBox {
   className?: string;
@@ -36,8 +37,10 @@ const EditorCard: React.FC<IEditorCard> = props => {
     setEditorState,
   } = props;
 
+  const wrapperStyle = Object.assign(props.style, { height: isMobileOnly ? '100vh' : '' });
+
   return (
-    <MainAreaCardBox className={className} style={props.style}>
+    <MainAreaCardBox className={className} style={wrapperStyle}>
       <Box direction="row" justify="between" pad="medium" align="center" flex={false}>
         <Icon
           type="arrowLeft"

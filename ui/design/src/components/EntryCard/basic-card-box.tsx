@@ -45,6 +45,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     style={style}
     direction="column"
     elevation={elevation || 'shadow'}
+    background="background"
     fill="horizontal"
     pad={pad || 'none'}
     margin={margin || 'none'}

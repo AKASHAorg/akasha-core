@@ -28,6 +28,7 @@ import { EditorPlaceholder } from './components/EditorCard/editor-placeholder';
 import EntryCard from './components/EntryCard';
 import EntryList from './components/EntryList';
 import { EntryBox } from './components/EntryCard/entry-box';
+import { MenuItemButton } from './components/EntryCard/menu-item-button';
 import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
 import {
   BasicCardBox,
@@ -260,6 +261,7 @@ const exported = {
   MobileListModal,
   ModalContainer,
   ModalRenderer,
+  MenuItemButton,
   Notification,
   NotificationsCard,
   notify,
