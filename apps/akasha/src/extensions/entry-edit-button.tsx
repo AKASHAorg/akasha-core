@@ -8,7 +8,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import i18next, { setupI18next } from '../i18n';
 
-const { StyledSelectBox, TextIcon } = DS;
+const { MenuItemButton } = DS;
 
 const EntryEditButton: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation();
@@ -37,16 +37,7 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
   }, [props.extensionData.entryType, t]);
 
   return (
-    <StyledSelectBox>
-      <TextIcon
-        iconType={'edit'}
-        label={`${t('Edit')} ${entryTypeLabel}`}
-        onClick={handleClick}
-        // color={theme.colors.errorText}
-        iconSize="xs"
-        fontSize="medium"
-      />
-    </StyledSelectBox>
+    <MenuItemButton icon={'edit'} label={`${t('Edit')} ${entryTypeLabel}`} onClick={handleClick} />
   );
 };
 
