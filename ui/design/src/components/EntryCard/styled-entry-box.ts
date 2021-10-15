@@ -19,11 +19,12 @@ const StyledDrop = styled(Drop)`
 
 const StyledDropAlt = styled(Drop)`
   position: fixed;
+  background: transparent;
   z-index: 9999;
   height: 100vh;
   width: 100vw;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
 `;
 
 const StyledProfileDrop = styled(Drop)`

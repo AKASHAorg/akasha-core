@@ -13,7 +13,6 @@ import { formatRelativeTime } from '../../utils/time';
 
 export interface ITransparencyLogDetailCardProps
   extends Omit<ITransparencyLogMiniCardProps, 'isSelected'> {
-  moderator: string;
   reportedTimesLabel: string;
   viewItemLabel: string;
   viewItemLink: string;
@@ -24,6 +23,7 @@ export interface ITransparencyLogDetailCardProps
   contactModeratorsLink: string;
   onClickArrowLeft: () => void;
   onClickViewItem: () => void;
+  onClickAvatar: () => void;
 }
 
 const StyledBox = styled(Box)`
