@@ -90,21 +90,24 @@ export default class AWF_Comments implements AWF_IComments {
     textContent.value = Buffer.from(textContent.value).toString('base64');
     this._gql.clearCache();
     return this._auth
-      .authenticateMutationData((opt.data as unknown) as Record<string, unknown>[])
+      .authenticateMutationData(opt.data as unknown as Record<string, unknown>[])
       .pipe(
         map(res => {
           return this._gql
-            .run<{ addComment: string }>({
-              query: AddComment,
-              variables: { content: opt.data, comment: opt.comment },
-              operationName: 'AddComment',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
+            .run<{ addComment: string }>(
+              {
+                query: AddComment,
+                variables: { content: opt.data, comment: opt.comment },
+                operationName: 'AddComment',
+                context: {
+                  headers: {
+                    Authorization: `Bearer ${res.token.data}`,
+                    Signature: res.signedData.data.signature,
+                  },
                 },
               },
-            })
+              false,
+            )
             .pipe(
               tap(ev => {
                 // @emits COMMENTS_EVENTS.CREATE
@@ -133,7 +136,7 @@ export default class AWF_Comments implements AWF_IComments {
     textContent.value = Buffer.from(textContent.value).toString('base64');
     this._gql.clearCache();
     return this._auth
-      .authenticateMutationData((opt.data as unknown) as Record<string, unknown>[])
+      .authenticateMutationData(opt.data as unknown as Record<string, unknown>[])
       .pipe(
         map(res => {
           return this._gql
@@ -171,17 +174,20 @@ export default class AWF_Comments implements AWF_IComments {
     return this._auth.authenticateMutationData(commentID).pipe(
       map(res => {
         return this._gql
-          .run<{ removeComment: boolean }>({
-            query: RemoveComment,
-            variables: { id: commentID },
-            operationName: 'RemoveComment',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ removeComment: boolean }>(
+            {
+              query: RemoveComment,
+              variables: { id: commentID },
+              operationName: 'RemoveComment',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits COMMENTS_EVENTS.REMOVE

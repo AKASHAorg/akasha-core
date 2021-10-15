@@ -71,11 +71,14 @@ export default class AWF_Tags implements AWF_ITags {
    * @param name
    */
   searchTags(name: string) {
-    return this._gql.run<{ searchTags: SearchTagsResult_Response[] }>({
-      query: SearchTags,
-      variables: { name: name },
-      operationName: 'SearchTags',
-    });
+    return this._gql.run<{ searchTags: SearchTagsResult_Response[] }>(
+      {
+        query: SearchTags,
+        variables: { name: name },
+        operationName: 'SearchTags',
+      },
+      true,
+    );
   }
 
   /**
@@ -86,17 +89,20 @@ export default class AWF_Tags implements AWF_ITags {
     return this._auth.authenticateMutationData(tagName).pipe(
       map(res => {
         return this._gql
-          .run<{ createTag: string }>({
-            query: CreateTag,
-            variables: { name: tagName },
-            operationName: 'CreateTag',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
+          .run<{ createTag: string }>(
+            {
+              query: CreateTag,
+              variables: { name: tagName },
+              operationName: 'CreateTag',
+              context: {
+                headers: {
+                  Authorization: `Bearer ${res.token.data}`,
+                  Signature: res.signedData.data.signature,
+                },
               },
             },
-          })
+            false,
+          )
           .pipe(
             tap(ev => {
               // @emits TAG_EVENTS.CREATE
