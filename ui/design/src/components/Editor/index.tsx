@@ -603,7 +603,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
             icon={disablePublish ? <Icon type="loading" color="white" /> : null}
             label={disablePublish ? disablePublishLabel : postLabel}
             onClick={handlePublish}
-            disabled={publishDisabledInternal || disablePublish}
+            disabled={publishDisabledInternal || disablePublish || uploading}
           />
         </Box>
       </Box>

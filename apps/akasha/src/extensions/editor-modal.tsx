@@ -117,23 +117,6 @@ const EditorModalContainer = (props: RootComponentProps) => {
     setTagQuery(query);
   };
 
-  const [modalHeight, setModalHeight] = React.useState<number>(null);
-  console.log('MODAL HEIGHT: ', modalHeight);
-  React.useEffect(() => {
-    const modalSlotDiv = document.getElementById(props.activeModal.name);
-    if (!modalSlotDiv) {
-      return;
-    }
-    window.addEventListener('resize', () => {
-      if (modalSlotDiv) {
-        const rect = modalSlotDiv.getBoundingClientRect();
-        if (rect.height) {
-          setModalHeight(rect.height);
-        }
-      }
-    });
-  }, []);
-
   if (
     (isEditing && editingPost.isLoading) ||
     (props.activeModal.embedEntry && embeddedPost.isLoading)
@@ -156,36 +139,36 @@ const EditorModalContainer = (props: RootComponentProps) => {
         </ModalContainer>
       )}
 
-      {(!editingPost.isLoading || !embeddedPost.isLoading) && profileDataReq.status === 'success' && (
-        <EditorModal
-          // wrapperHeight={modalHeight}
-          titleLabel={isEditing ? t('Edit Post') : t('New Post')}
-          avatar={profileDataReq.data?.avatar}
-          ethAddress={loginQuery.data?.ethAddress}
-          postLabel={isEditing ? t('Save Changes') : t('Publish')}
-          placeholderLabel={t('Write something')}
-          emojiPlaceholderLabel={t('Search')}
-          discardPostLabel={t('Discard Post')}
-          discardPostInfoLabel={t(
-            "You have not posted yet. If you leave now you'll discard your post.",
-          )}
-          disablePublishLabel={t('Authenticating')}
-          keepEditingLabel={t('Keep Editing')}
-          disablePublish={disablePublishing}
-          onPublish={handleEntryPublish}
-          handleNavigateBack={handleModalClose}
-          linkPreview={entryData?.linkPreview}
-          getLinkPreview={getLinkPreview}
-          getMentions={handleMentionQueryChange}
-          getTags={handleTagQueryChange}
-          tags={tagSearch.data}
-          mentions={mentionSearch.data}
-          uploadRequest={uploadMediaToTextile}
-          embedEntryData={embedEntryData}
-          style={{ width: '36rem' }}
-          editorState={entryData?.slateContent}
-        />
-      )}
+      {(!editingPost.isLoading || !embeddedPost.isLoading) &&
+        profileDataReq.status === 'success' && (
+          <EditorModal
+            titleLabel={isEditing ? t('Edit Post') : t('New Post')}
+            avatar={profileDataReq.data?.avatar}
+            ethAddress={loginQuery.data?.ethAddress}
+            postLabel={isEditing ? t('Save Changes') : t('Publish')}
+            placeholderLabel={t('Write something')}
+            emojiPlaceholderLabel={t('Search')}
+            discardPostLabel={t('Discard Post')}
+            discardPostInfoLabel={t(
+              "You have not posted yet. If you leave now you'll discard your post.",
+            )}
+            disablePublishLabel={t('Authenticating')}
+            keepEditingLabel={t('Keep Editing')}
+            disablePublish={disablePublishing}
+            onPublish={handleEntryPublish}
+            handleNavigateBack={handleModalClose}
+            linkPreview={entryData?.linkPreview}
+            getLinkPreview={getLinkPreview}
+            getMentions={handleMentionQueryChange}
+            getTags={handleTagQueryChange}
+            tags={tagSearch.data}
+            mentions={mentionSearch.data}
+            uploadRequest={uploadMediaToTextile}
+            embedEntryData={embedEntryData}
+            style={{ width: '36rem' }}
+            editorState={entryData?.slateContent}
+          />
+        )}
     </>
   );
 };

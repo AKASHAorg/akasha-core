@@ -10,7 +10,7 @@ const StyledImg = styled.img`
   display: block;
   max-width: 100%;
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
-  position: absolute;
+  // position: absolute;
 `;
 
 const StyledMention = styled.span`
@@ -44,7 +44,8 @@ const ImgElement = ({
         aria-label={element.url}
         contentEditable={false}
         style={{
-          minHeight: Math.max(element.size?.naturalHeight, 30),
+          minHeight: 30,
+          height: '100%',
           width: '100%',
           position: 'relative',
           overflow: 'hidden',
