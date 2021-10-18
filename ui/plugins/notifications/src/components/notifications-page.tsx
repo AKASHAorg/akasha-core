@@ -25,18 +25,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const markAsRead = useMarkAsRead();
 
-  // React.useEffect(() => {
-  //   if (loginState.waitForAuth && !loginState.ready) {
-  //     return;
-  //   }
-  //   if (
-  //     (loginState.waitForAuth && loginState.ready) ||
-  //     (loginState.currentUserCalled && loginState.ethAddress)
-  //   ) {
-  //     return notificationsActions.getMessages();
-  //   }
-  // }, [JSON.stringify(loginState)]);
-
   // @todo: extract routes from config
   const handleAvatarClick = (profilePubKey: string) => {
     singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
