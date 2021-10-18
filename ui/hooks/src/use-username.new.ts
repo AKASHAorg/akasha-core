@@ -76,7 +76,6 @@ export function useUpdateUsernameProvider(pubKey?: string) {
         };
         if (pubKey) {
           const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
-          queryClient.cancelQueries([PROFILE_KEY, pubKey]);
 
           queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], {
             ...currentProfile,

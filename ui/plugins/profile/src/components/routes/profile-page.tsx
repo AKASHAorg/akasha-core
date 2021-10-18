@@ -141,7 +141,7 @@ const ProfilePage = (props: ProfilePageProps) => {
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading this profile')}
-          details={t('We cannot show this profile now')}
+          details={t('We cannot show this profile right now')}
           devDetails={profileDataQuery.error}
         />
       )}

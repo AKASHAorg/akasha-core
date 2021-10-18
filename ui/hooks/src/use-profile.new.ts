@@ -112,12 +112,11 @@ export function useFollowers(pubKey: string, limit: number, offset?: number) {
     [FOLLOWERS_KEY, pubKey],
     async ({ pageParam = offset }) => getFollowers(pubKey, limit, pageParam),
     {
-      getNextPageParam: lastPage => {
-        if (!lastPage.nextIndex) {
-          return undefined;
-        }
-        return lastPage.nextIndex;
-      },
+      /**
+       * Return undefined to indicate there is no next page available.
+       * https://react-query.tanstack.com/reference/useInfiniteQuery
+       */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
@@ -139,12 +138,11 @@ export function useFollowing(pubKey: string, limit: number, offset?: number) {
     [FOLLOWING_KEY, pubKey],
     async ({ pageParam = offset }) => getFollowing(pubKey, limit, pageParam),
     {
-      getNextPageParam: lastPage => {
-        if (!lastPage.nextIndex) {
-          return undefined;
-        }
-        return lastPage.nextIndex;
-      },
+      /**
+       * Return undefined to indicate there is no next page available.
+       * https://react-query.tanstack.com/reference/useInfiniteQuery
+       */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
