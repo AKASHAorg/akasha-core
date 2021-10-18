@@ -49,7 +49,6 @@ class ModerationAdminAPI extends DataSource {
       await queryCache.set(moderatorCacheKey, moderator);
       return moderator;
     } catch (err) {
-      logger.warn(`could not find moderator: ${user}`);
       return undefined;
     }
   }

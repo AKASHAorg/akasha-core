@@ -287,7 +287,7 @@ class ModerationDecisionAPI extends DataSource {
         },
       });
     } else {
-      logger.warn(`[moderation] could not find moderator for finalDecision ${contentID}`);
+      logger.warn(`[moderation]: Could not find moderator for finalDecision ${contentID}!`);
     }
     // add first report data
     const first = await reportingAPI.getFirstReport(contentID);
@@ -352,6 +352,10 @@ class ModerationDecisionAPI extends DataSource {
     const moderated = [];
     for (const result of results) {
       const decision = await this.getFinalDecision(result.contentID, profileAPI, reportingAPI);
+      if (!decision.moderator) {
+        console.error(decision);
+        continue;
+      }
       // load moderator info
       const moderator = decision.moderator.startsWith('0x')
         ? await profileAPI.getProfile(decision.moderator)
