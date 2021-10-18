@@ -353,7 +353,8 @@ class ModerationDecisionAPI extends DataSource {
     for (const result of results) {
       const decision = await this.getFinalDecision(result.contentID, profileAPI, reportingAPI);
       if (!decision.moderator) {
-        console.error(decision);
+        logger.warn(`${result.contentID} should not be in the moderated list!`);
+        logger.warn(decision);
         continue;
       }
       // load moderator info
