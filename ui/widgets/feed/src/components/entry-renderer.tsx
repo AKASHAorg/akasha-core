@@ -307,7 +307,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
               <CommentEditor
                 avatar={itemData.author.avatar}
                 ethAddress={itemData.author.ethAddress}
-                postLabel={t('Reply')}
+                postLabel={t('Save')}
                 placeholderLabel={`${t('Reply to')} ${itemData.author.name || ''}`}
                 emojiPlaceholderLabel={t('Search')}
                 disablePublishLabel={t('Authenticating')}
