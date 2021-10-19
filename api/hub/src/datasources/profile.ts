@@ -215,23 +215,16 @@ class ProfileAPI extends DataSource {
     const exists = profile1.following.indexOf(profile.pubKey);
     const exists1 = profile.followers.indexOf(profile1.pubKey);
 
-    logger.info('profile');
-    logger.info(profile);
-
-    logger.info('profile1');
-    logger.info(profile1);
-
-    logger.info('exists');
-    logger.info(exists);
-
-    logger.info('exists1');
-    logger.info(exists1);
-    if (!profile || !profile1 || exists !== -1 || exists1 !== -1) {
+    if (!profile || !profile1) {
       return false;
     }
 
-    profile1.following.unshift(profile.pubKey);
-    profile.followers.unshift(profile1.pubKey);
+    if (exists === -1) {
+      profile1.following.unshift(profile.pubKey);
+    }
+    if (exists1 === -1) {
+      profile.followers.unshift(profile1.pubKey);
+    }
 
     await db.save(this.dbID, this.collection, [profile, profile1]);
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
@@ -261,11 +254,17 @@ class ProfileAPI extends DataSource {
     const [profile1] = await db.find<Profile>(this.dbID, this.collection, query1);
     const exists = profile1.following.indexOf(profile.pubKey);
     const exists1 = profile.followers.indexOf(profile1.pubKey);
-    if (!profile || !profile1 || exists === -1 || exists1 === -1) {
+    if (!profile || !profile1) {
       return false;
     }
-    profile1.following.splice(exists, 1);
-    profile.followers.splice(exists1, 1);
+    if (exists !== -1) {
+      profile1.following.splice(exists, 1);
+    }
+
+    if (exists1 !== -1) {
+      profile.followers.splice(exists1, 1);
+    }
+
     await db.save(this.dbID, this.collection, [profile, profile1]);
 
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
