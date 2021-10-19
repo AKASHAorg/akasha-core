@@ -107,12 +107,12 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
   const sdk = getSDK();
 
   try {
-    const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign));
+    const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign, true));
     const data = {
       contentId,
       contentType,
       data: dataToSign,
-      signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+      signature: resp.data.signature as string,
     };
 
     const status = await createModeration(url, data);

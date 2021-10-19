@@ -102,8 +102,7 @@ class ModerationReportAPI extends DataSource {
       reports[0].explanation = decodeString(reports[0].explanation);
       return reports[0];
     }
-    logger.warn(`report not found for contentID:${contentID} and author:${author}`);
-    return undefined;
+    return;
   }
 
   /**
