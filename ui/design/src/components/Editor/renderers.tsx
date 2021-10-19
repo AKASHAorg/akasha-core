@@ -56,7 +56,7 @@ const ImgElement = ({
         {handleDeleteImage && (
           <StyledCloseDiv
             onClick={ev => {
-              if (handleDeleteImage && typeof handleClickImage === 'function') {
+              if (handleDeleteImage && typeof handleDeleteImage === 'function') {
                 handleDeleteImage(element);
               }
               ev.stopPropagation();

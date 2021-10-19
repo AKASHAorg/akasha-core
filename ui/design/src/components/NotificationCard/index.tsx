@@ -161,7 +161,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         justify="between"
         align="center"
         pad="small"
-        onClick={() => handleMessageRead(notif.id)}
+        onClick={clickHandler}
       >
         <ProfileAvatarButton
           ethAddress={profileData.ethAddress}
@@ -173,11 +173,19 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
           active={!notif.read}
         />
         {!notif.read && (
-          <BlueDot
-            onClick={() => {
+          <Box
+            pad="small"
+            align="center"
+            justify="center"
+            onClick={ev => {
               handleMessageRead(notif.id);
+              ev.stopPropagation();
+              ev.preventDefault();
+              return false;
             }}
-          />
+          >
+            <BlueDot />
+          </Box>
         )}
       </StyledNotifBox>
     );

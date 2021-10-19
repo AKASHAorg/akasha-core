@@ -17,7 +17,7 @@ import Icon from '../Icon';
 import EmojiPopover from '../EmojiPopover';
 import EmbedBox from '../EmbedBox';
 import { CustomEditor } from './helpers';
-import { withMentions, withImages, withTags, withLinks, withCorrectVoidBehavior } from './plugins';
+import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
 import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
 import { ImageData, ImageUpload } from './image-upload';
@@ -160,9 +160,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const editor = useMemo(
     () =>
       withLinks(
-        withCorrectVoidBehavior(
-          withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
-        ),
+        withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
         handleGetLinkPreview,
       ),
     [],
