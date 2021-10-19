@@ -214,6 +214,18 @@ class ProfileAPI extends DataSource {
     const [profile1] = await db.find<Profile>(this.dbID, this.collection, query1);
     const exists = profile1.following.indexOf(profile.pubKey);
     const exists1 = profile.followers.indexOf(profile1.pubKey);
+
+    logger.info('profile');
+    logger.info(profile);
+
+    logger.info('profile1');
+    logger.info(profile1);
+
+    logger.info('exists');
+    logger.info(exists);
+
+    logger.info('exists1');
+    logger.info(exists1);
     if (!profile || !profile1 || exists !== -1 || exists1 !== -1) {
       return false;
     }
