@@ -225,6 +225,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 headerMenuExt={
                   ethAddress === itemData.author.ethAddress && (
                     <ExtensionPoint
+                      style={{ width: '100%' }}
                       name={`entry-card-edit-button_${entryId}`}
                       onMount={onEditButtonMount}
                       onUnmount={onEditButtonUnmount}

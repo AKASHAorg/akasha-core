@@ -244,6 +244,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   headerMenuExt={
                     showEditButton && (
                       <ExtensionPoint
+                        style={{ width: '100%' }}
                         name={`entry-card-edit-button_${itemId}`}
                         onMount={onEditButtonMount}
                         onUnmount={onEditButtonUnmount}

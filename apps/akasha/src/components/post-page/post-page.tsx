@@ -363,6 +363,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   headerMenuExt={
                     showEditButton && (
                       <ExtensionPoint
+                        style={{ width: '100%' }}
                         name={`entry-card-edit-button_${entryData.entryId}`}
                         onMount={onEditPostButtonMount}
                         onUnmount={onEditPostButtonUnmount}
