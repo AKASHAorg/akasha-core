@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
-import { StyledDropAlt, StyledProfileDrop, StyledIcon } from './styled-entry-box';
+import { StyledProfileDrop, StyledIcon } from './styled-entry-box';
 
 import { EntryCardHidden } from './entry-card-hidden';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
@@ -433,33 +433,31 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {showMobileCardMenu && (
-          <StyledDropAlt>
-            <MobileListModal
-              closeModal={closeMenuDrop}
-              menuItems={[
-                ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
-                  ? [
-                      {
-                        label: props.flagAsLabel,
-                        icon: 'report',
-                        handler: handleEntryFlag,
-                        disabled: disableReporting,
-                      },
-                    ]
-                  : []),
-                ...(entryData.author.ethAddress === loggedProfileEthAddress
-                  ? [
-                      {
-                        icon: 'trash' as IconType,
-                        handler: handleEntryRemove,
-                        label: removeEntryLabel,
-                      },
-                    ]
-                  : []),
-              ]}
-              headerMenuExt={props.headerMenuExt}
-            />
-          </StyledDropAlt>
+          <MobileListModal
+            closeModal={closeMenuDrop}
+            menuItems={[
+              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
+                ? [
+                    {
+                      label: props.flagAsLabel,
+                      icon: 'report',
+                      handler: handleEntryFlag,
+                      disabled: disableReporting,
+                    },
+                  ]
+                : []),
+              ...(entryData.author.ethAddress === loggedProfileEthAddress
+                ? [
+                    {
+                      icon: 'trash' as IconType,
+                      handler: handleEntryRemove,
+                      label: removeEntryLabel,
+                    },
+                  ]
+                : []),
+            ]}
+            headerMenuExt={props.headerMenuExt}
+          />
         )}
         {props.isRemoved && (
           <EntryCardRemoved

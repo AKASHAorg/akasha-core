@@ -12,6 +12,7 @@ export interface IOptionalButtonProps extends IMobileProps {
 
 export interface IModalWrapperProps extends IMobileProps {
   readonly isTransparent?: boolean;
+  zIndex?: number;
 }
 
 const StyledBox = styled(Box)`
@@ -76,7 +77,7 @@ const ModalWrapper = styled(Box)<IModalWrapperProps>`
   cursor: auto;
   left: 0;
   top: 0;
-  z-index: 199;
+  z-index: ${props => props.zIndex || 199};
   background: ${props =>
     props.isTransparent
       ? props.theme.colors.modalBackgroundTransparent

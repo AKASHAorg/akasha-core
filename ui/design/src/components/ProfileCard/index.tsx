@@ -23,7 +23,6 @@ import {
   ProfileProviders,
   UsernameTypes,
 } from '@akashaproject/ui-awf-typings/lib/profile';
-import { StyledDropAlt } from '../EntryCard/styled-entry-box';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -394,48 +393,46 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         />
       )}
       {isMobile && menuOpen && (
-        <StyledDropAlt style={{ backgroundColor: 'transparent' }}>
-          <MobileListModal
-            closeModal={closeMenu}
-            menuItems={
-              props.flaggable
-                ? [
-                    {
-                      label: props.blockLabel,
-                      icon: 'block',
-                      handler: () => {
-                        /* @todo: replace with handler to block account */
-                        closeMenu();
-                      },
+        <MobileListModal
+          closeModal={closeMenu}
+          menuItems={
+            props.flaggable
+              ? [
+                  {
+                    label: props.blockLabel,
+                    icon: 'block',
+                    handler: () => {
+                      /* @todo: replace with handler to block account */
+                      closeMenu();
                     },
-                    {
-                      label: props.flagAsLabel,
-                      icon: 'report',
-                      handler: () => {
-                        props.onEntryFlag();
-                        closeMenu();
-                      },
+                  },
+                  {
+                    label: props.flagAsLabel,
+                    icon: 'report',
+                    handler: () => {
+                      props.onEntryFlag();
+                      closeMenu();
                     },
-                  ]
-                : [
-                    {
-                      label: props.updateProfileLabel,
-                      handler: () => {
-                        props.onUpdateClick();
-                        closeMenu();
-                      },
+                  },
+                ]
+              : [
+                  {
+                    label: props.updateProfileLabel,
+                    handler: () => {
+                      props.onUpdateClick();
+                      closeMenu();
                     },
-                    {
-                      label: props.changeENSLabel,
-                      handler: () => {
-                        props.onENSChangeClick();
-                        closeMenu();
-                      },
+                  },
+                  {
+                    label: props.changeENSLabel,
+                    handler: () => {
+                      props.onENSChangeClick();
+                      closeMenu();
                     },
-                  ]
-            }
-          />
-        </StyledDropAlt>
+                  },
+                ]
+          }
+        />
       )}
       <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
         <ProfileCardEthereumId

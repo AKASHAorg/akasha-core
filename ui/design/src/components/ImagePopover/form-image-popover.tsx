@@ -8,7 +8,6 @@ import {
 } from './styled-form-image-popover';
 import Icon from '../Icon';
 import MobileListModal from '../MobileListModal';
-import { StyledDropAlt } from '../EntryCard/styled-entry-box';
 
 export interface IFormImagePopover {
   uploadLabel?: string;
@@ -62,33 +61,32 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
   if (onMobile) {
     return (
       <>
-        <StyledDropAlt>
-          <MobileListModal
-            closeModal={closePopover}
-            menuItems={[
-              {
-                label: uploadLabel,
-                icon: 'upload',
-                handler: () => {
-                  handleUploadInputClick();
-                  closePopover();
-                },
+        <MobileListModal
+          closeModal={closePopover}
+          menuItems={[
+            {
+              label: uploadLabel,
+              icon: 'upload',
+              handler: () => {
+                handleUploadInputClick();
+                closePopover();
               },
-              ...(currentImage
-                ? [
-                    {
-                      label: deleteLabel,
-                      icon: 'trash',
-                      handler: () => {
-                        handleDeleteClick();
-                        closePopover();
-                      },
+            },
+            ...(currentImage
+              ? [
+                  {
+                    label: deleteLabel,
+                    icon: 'trash',
+                    handler: () => {
+                      handleDeleteClick();
+                      closePopover();
                     },
-                  ]
-                : []),
-            ]}
-          />
-        </StyledDropAlt>
+                  },
+                ]
+              : []),
+          ]}
+        />
+
         <StyledImageInput onChange={handleFileUpload} type="file" ref={uploadInputRef} />
       </>
     );
