@@ -126,6 +126,7 @@ const ModalCardLogin = styled(BasicCardBox)`
 `;
 
 const StyledAnchor = styled(Anchor)`
+  max-width: 100%;
   user-select: none;
   text-decoration: none;
   -ms-user-select: none;
