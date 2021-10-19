@@ -66,7 +66,6 @@ export function useGetLogin(onError?: (error: Error) => void) {
       }));
     },
     onError: payload => {
-      console.log('onError', payload);
       if (onError) {
         onError(payload.error);
       }
