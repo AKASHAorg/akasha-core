@@ -123,6 +123,7 @@ export function useDeleteComment(commentID: string) {
             value: '1',
           },
         ],
+        updatedAt: Date.now().toString(),
       });
       return { previousComment };
     },
@@ -200,6 +201,7 @@ export function useEditComment(commentID: string, hasCommentData: boolean) {
             ...current,
             content: commentPublishObj.data,
             isPublishing: true,
+            updatedAt: Date.now().toString(),
           };
         });
 
