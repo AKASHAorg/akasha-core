@@ -5,7 +5,7 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ModerationItemTypes, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useErrors, withProviders, useReasons } from '@akashaproject/ui-awf-hooks';
+import { withProviders, useReasons } from '@akashaproject/ui-awf-hooks';
 import { useReport } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 import { BASE_REPORT_URL } from '../services/constants';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
@@ -14,15 +14,11 @@ import i18n, { setupI18next } from '../i18n';
 const { ReportModal } = DS;
 
 const ReportModalComponent = (props: RootComponentProps) => {
-  const { logger, activeModal } = props;
+  const { activeModal } = props;
 
-  const [, errorActions] = useErrors({ logger });
+  const loginQuery = useGetLogin();
 
-  const loginQuery = useGetLogin({
-    onError: errorActions.createError,
-  });
-
-  const [reasons, reasonsActions] = useReasons({ onError: errorActions.createError });
+  const [reasons, reasonsActions] = useReasons();
 
   const { t } = useTranslation();
 

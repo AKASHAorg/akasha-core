@@ -21,7 +21,7 @@ const ProfilePageCard = styled(ProfileCard)`
 `;
 
 export interface IProfileHeaderProps {
-  slotId: string;
+  modalSlotId: string;
   profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
@@ -44,7 +44,7 @@ type ProfilePageCardProps = IProfileHeaderProps &
   >;
 
 export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
-  const { profileData, loginState, profileId, slotId } = props;
+  const { profileData, loginState, profileId, modalSlotId } = props;
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
@@ -115,7 +115,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   return (
     <>
-      <ModalRenderer slotId={slotId}>
+      <ModalRenderer slotId={modalSlotId}>
         {modalOpen && (
           <StatModalWrapper
             loginState={loginState}

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
@@ -142,13 +142,20 @@ export function useFollow() {
           return profile;
         });
       });
-      const [, profile] = queryClient
-        .getQueriesData<IProfileData>([PROFILE_KEY])
-        .find(([, profileData]) => profileData?.ethAddress === followEthAddress);
-
-      if (profile) {
-        await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
-        await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
+      // invalidate the queries of the profile if it's already fetched
+      // eg. we are on his profile page
+      const profileQuery = queryClient.getQueriesData<IProfileData>({
+        queryKey: PROFILE_KEY,
+        predicate: (query: Query<IProfileData>) => {
+          return query.state.data && query.state.data.ethAddress === followEthAddress;
+        },
+      })[0];
+      if (profileQuery) {
+        const [, profile] = profileQuery;
+        if (profile) {
+          await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
+          await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+        }
       }
     },
     onError: (err, variables, context) => {
@@ -198,13 +205,20 @@ export function useUnfollow() {
             return profile;
           });
         });
-        const [, profile] = queryClient
-          .getQueriesData<IProfileData>([PROFILE_KEY])
-          .find(([, profileData]) => profileData?.ethAddress === unfollowEthAddress);
-
-        if (profile) {
-          await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
-          await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+        // invalidate the queries of the profile if it's already fetched
+        // eg. we are on his profile page
+        const profileQuery = queryClient.getQueriesData<IProfileData>({
+          queryKey: PROFILE_KEY,
+          predicate: (query: Query<IProfileData>) => {
+            return query.state.data && query.state.data.ethAddress === unfollowEthAddress;
+          },
+        })[0];
+        if (profileQuery) {
+          const [, profile] = profileQuery;
+          if (profile) {
+            await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
+            await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+          }
         }
       },
       onError: (err, variables, context) => {
