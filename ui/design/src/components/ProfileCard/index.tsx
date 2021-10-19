@@ -74,6 +74,7 @@ export interface IProfileCardProps extends IProfileWidgetCard {
     default?: { provider: string; property: string; value: string };
     available: UsernameTypes[];
   };
+  modalSlotId: string;
 }
 
 interface IStat {
@@ -153,6 +154,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     changeCoverImageLabel,
     profileProvidersData,
     canUserEdit,
+    modalSlotId,
   } = props;
 
   const [editable /* , setEditable */] = useState(false);
@@ -394,6 +396,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       )}
       {isMobile && menuOpen && (
         <MobileListModal
+          modalSlotId={modalSlotId}
           closeModal={closeMenu}
           menuItems={
             props.flaggable

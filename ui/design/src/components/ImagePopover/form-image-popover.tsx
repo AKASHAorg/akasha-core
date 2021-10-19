@@ -19,6 +19,7 @@ export interface IFormImagePopover {
   currentImage?: boolean;
   onMobile: any;
   handleDeleteImage?: () => void;
+  modalSlotId: string;
 }
 
 const FormImagePopover: React.FC<IFormImagePopover> = props => {
@@ -31,6 +32,7 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     currentImage,
     onMobile,
     handleDeleteImage,
+    modalSlotId,
   } = props;
 
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
@@ -62,6 +64,7 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     return (
       <>
         <MobileListModal
+          modalSlotId={modalSlotId}
           closeModal={closePopover}
           menuItems={[
             {

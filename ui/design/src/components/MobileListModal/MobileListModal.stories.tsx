@@ -44,7 +44,11 @@ const Template = (args: { repostLabel: string; repostWithCommentLabel: string })
           }}
         />
         {modalOpen && (
-          <MobileListModal menuItems={menuItems} closeModal={() => setModalOpen(false)} />
+          <MobileListModal
+            menuItems={menuItems}
+            closeModal={() => setModalOpen(false)}
+            modalSlotId={''}
+          />
         )}
       </Box>
     </Grommet>

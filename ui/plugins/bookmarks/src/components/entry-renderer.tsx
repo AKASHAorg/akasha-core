@@ -49,11 +49,20 @@ export interface IEntryCardRendererProps {
   handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
   uiEvents: RootComponentProps['uiEvents'];
   navigateToModal: RootComponentProps['navigateToModal'];
+  modalSlotId: string;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const { loginState, locale, bookmarks, itemId, style, contentClickable, disableReposting } =
-    props;
+  const {
+    loginState,
+    locale,
+    bookmarks,
+    itemId,
+    style,
+    contentClickable,
+    disableReposting,
+    modalSlotId,
+  } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const { t } = useTranslation();
@@ -241,6 +250,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   removeEntryLabel={t('Delete Post')}
                   onEntryRemove={handleEntryRemove}
                   onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
+                  modalSlotId={modalSlotId}
                   headerMenuExt={
                     showEditButton && (
                       <ExtensionPoint

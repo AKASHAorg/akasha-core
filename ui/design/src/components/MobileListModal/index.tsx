@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { ModalWrapper } from '../ListModal/styled-modal';
 import Icon from '../Icon';
-import { Portal } from '../Editor/helpers';
+import { ModalRenderer } from '../SignInModal/modal-renderer';
 
 const StyledBox = styled(Box)`
   width: calc(100% - 1rem);
@@ -18,6 +18,7 @@ export interface IMobileListModal {
   closeModal: () => void;
   menuItems: IMenuItem[];
   headerMenuExt?: React.ReactElement;
+  modalSlotId: string;
 }
 
 export interface IMenuItem {
@@ -28,14 +29,14 @@ export interface IMenuItem {
 }
 
 const MobileListModal: React.FC<IMobileListModal> = props => {
-  const { closeModal, menuItems, cancelLabel } = props;
+  const { closeModal, menuItems, cancelLabel, modalSlotId } = props;
 
   const theme: any = React.useContext(ThemeContext);
 
   const redIcons = ['report', 'trash', 'block'];
 
   return (
-    <Portal>
+    <ModalRenderer slotId={modalSlotId}>
       <ModalWrapper isTransparent={true} onClick={closeModal} zIndex={9999}>
         <StyledBox>
           <Box align="center" round="small" margin={{ bottom: 'medium' }}>
@@ -110,7 +111,7 @@ const MobileListModal: React.FC<IMobileListModal> = props => {
           </Box>
         </StyledBox>
       </ModalWrapper>
-    </Portal>
+    </ModalRenderer>
   );
 };
 

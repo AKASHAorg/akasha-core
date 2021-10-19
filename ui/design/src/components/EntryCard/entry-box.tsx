@@ -53,6 +53,13 @@ export interface IEntryBoxProps {
   comment?: boolean;
   bookmarkLabel?: string;
   bookmarkedLabel?: string;
+  editedLabel?: string;
+  headerTextLabel?: string;
+  footerTextLabel?: string;
+  moderatedContentLabel?: string;
+  ctaLabel?: string;
+  removedByMeLabel?: string;
+  removedByAuthorLabel?: string;
   // determines when to render the 'show more' icon
   showMore: boolean;
   // anchor link
@@ -82,20 +89,14 @@ export interface IEntryBoxProps {
   disableActions?: boolean;
   hideActionButtons?: boolean;
   hidePublishTime?: boolean;
-  headerTextLabel?: string;
-  footerTextLabel?: string;
-  moderatedContentLabel?: string;
-  ctaLabel?: string;
   handleFlipCard?: () => void;
   isModerated?: boolean;
   scrollHiddenContent?: boolean;
   removeEntryLabel?: string;
   onEntryRemove?: (entryId: string) => void;
-  removedByMeLabel?: string;
-  removedByAuthorLabel?: string;
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
-  editedLabel?: string;
+  modalSlotId: string;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -155,6 +156,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     removedByMeLabel = 'You deleted this post',
     removedByAuthorLabel = 'This post was deleted by its author',
     editedLabel = 'Last edited',
+    modalSlotId,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -434,6 +436,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {showMobileCardMenu && (
           <MobileListModal
+            modalSlotId={modalSlotId}
             closeModal={closeMenuDrop}
             menuItems={[
               ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
@@ -554,6 +557,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             disableReposting={disableReposting}
             disableActions={disableActions}
             isModerated={isModerated}
+            modalSlotId={modalSlotId}
           />
         )}
       </Box>

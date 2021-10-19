@@ -53,6 +53,7 @@ export interface IEntryRenderer {
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
   className?: string;
+  modalSlotId: string;
 }
 
 const commentStyleExt = {
@@ -79,6 +80,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     onRepost,
     contentClickable,
     parentIsProfilePage,
+    modalSlotId,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -381,6 +383,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 disableReposting={itemData.isRemoved}
                 disableReporting={loginState.waitForAuth || loginState.isSigningIn}
                 hideActionButtons={hideActionButtons}
+                modalSlotId={modalSlotId}
                 headerMenuExt={
                   showEditButton && (
                     <ExtensionPoint

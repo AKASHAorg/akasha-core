@@ -189,6 +189,7 @@ const ProfilePage = (props: ProfilePageProps) => {
               {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
               {reqPosts.isSuccess && postPages && (
                 <FeedWidget
+                  modalSlotId={props.layoutConfig.modalSlotId}
                   itemType={ItemTypes.ENTRY}
                   logger={props.logger}
                   onLoadMore={handleLoadMore}

@@ -172,6 +172,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         }
         copyLabel={t('Copy to clipboard')}
         copiedLabel={t('Copied')}
+        modalSlotId={props.layoutConfig.modalSlotId}
       />
     </>
   );

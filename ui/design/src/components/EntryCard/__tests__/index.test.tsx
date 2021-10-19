@@ -27,6 +27,7 @@ describe('<EntryCard /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <EntryCard
+            modalSlotId={''}
             style={{ height: 'auto' }}
             isBookmarked={false}
             entryData={entryData as IEntryData}
