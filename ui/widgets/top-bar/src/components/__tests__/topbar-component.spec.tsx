@@ -1,14 +1,8 @@
 import * as React from 'react';
 import TopbarComponent from '../topbar-component';
 
-import {
-  RenderResult,
-  renderWithAllProviders,
-  globalChannelMock,
-  getSDKMocks,
-  act,
-} from '@akashaproject/ui-awf-testing-utils';
-import { ReplaySubject } from 'rxjs';
+import { RenderResult, renderWithAllProviders, act } from '@akashaproject/ui-awf-testing-utils';
+import { BehaviorSubject } from 'rxjs';
 
 const mockLocationValue = {
   pathname: '/profile',
@@ -17,26 +11,38 @@ const mockLocationValue = {
   state: null,
 };
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
-  useLocation: jest.fn().mockImplementation(() => {
-    return mockLocationValue;
+jest.mock('react-router', () =>
+  Object.assign(jest.requireActual('react-router'), {
+    useLocation: jest.fn().mockImplementation(() => {
+      return mockLocationValue;
+    }),
   }),
-}));
+);
 
 describe('<TopbarComponent />', () => {
   let renderResult: RenderResult;
-  const sdkMocks = getSDKMocks({});
   const BaseComponent = (
     <TopbarComponent
-      navigateToUrl={jest.fn()}
-      toggleSidebar={jest.fn()}
       getMenuItems={jest.fn().mockImplementation(() => [])}
-      loaderEvents={new ReplaySubject()}
-      modalSlotId=""
-      globalChannel={globalChannelMock}
-      logger={{}}
-      sdkModules={sdkMocks}
+      logger={{} as any}
+      domElement={document.body}
+      uiEvents={new BehaviorSubject({} as any)}
+      isMobile={false}
+      layoutConfig={{
+        modalSlotId: '',
+        pluginSlotId: '',
+        topbarSlotId: '',
+        rootWidgetSlotId: '',
+        widgetSlotId: '',
+        sidebarSlotId: '',
+      }}
+      mountParcel={() => {
+        /*  */
+      }}
+      singleSpa={{} as any}
+      name=""
+      navigateToModal={jest.fn()}
+      activeModal={null}
     />
   );
   beforeEach(() => {

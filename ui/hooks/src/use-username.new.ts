@@ -76,7 +76,6 @@ export function useUpdateUsernameProvider(pubKey?: string) {
         };
         if (pubKey) {
           const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
-          queryClient.cancelQueries([PROFILE_KEY, pubKey]);
 
           queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], {
             ...currentProfile,
@@ -119,13 +118,14 @@ const registerENS = async ({ userName }: { userName: string }) => {
       logError('useProfile.registerENS', new Error('Cannot register username.'));
       throw new Error('Cannot register username.');
     }
-    const makeDefaultRes = await lastValueFrom(sdk.api.profile.makeDefaultProvider([providerData]));
-    if (!makeDefaultRes.data) {
-      logError('useProfile.registerENS', new Error('Cannot set default username.'));
-      throw new Error('Cannot set default username.');
-    }
     const addProviderRes = await lastValueFrom(sdk.api.profile.addProfileProvider([providerData]));
-    return addProviderRes.data;
+    if (!addProviderRes.data) {
+      logError('useProfile.registerENS', new Error('Cannot add username provider.'));
+      throw new Error('Cannot add username provider.');
+    }
+
+    const makeDefaultRes = await lastValueFrom(sdk.api.profile.makeDefaultProvider([providerData]));
+    return makeDefaultRes.data;
   } catch (error) {
     logError('use-username.registerENS', error);
     throw error;
@@ -170,9 +170,6 @@ export function useEnsRegistration(pubKey?: string) {
         queryClient.setQueryData<IProfileData>([PROFILE_KEY, pubKey], context.currentProfile);
       }
       logError('use-username.useEnsRegistration.onError', error);
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries([PROFILE_KEY, pubKey]);
     },
   });
 }

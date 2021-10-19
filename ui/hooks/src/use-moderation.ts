@@ -282,7 +282,8 @@ export function useInfiniteLog(limit: number, offset?: string) {
     LOG_ITEMS_KEY,
     async ({ pageParam = offset }) => getLog(limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
@@ -306,7 +307,8 @@ export function useInfinitePending(limit: number, offset?: string) {
     PENDING_ITEMS_KEY,
     async ({ pageParam = offset }) => getPending(limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
@@ -333,7 +335,8 @@ export function useInfiniteKept(limit: number, offset?: string) {
     KEPT_ITEMS_KEY,
     async ({ pageParam = offset }) => getKept(limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
@@ -361,7 +364,8 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
     DELISTED_ITEMS_KEY,
     async ({ pageParam = offset }) => getDelisted(limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
