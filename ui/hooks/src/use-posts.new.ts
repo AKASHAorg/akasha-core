@@ -6,9 +6,11 @@ import { logError } from './utils/error-handler';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { checkStatus } from './use-moderation';
 import { SEARCH_KEY } from './use-search.new';
 import { TRENDING_TAGS_KEY } from './use-trending.new';
+import { PROFILE_KEY } from './use-profile.new';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -215,6 +217,24 @@ export function useDeletePost(postID: string) {
         isRemoved: true,
       });
       return { previousPost };
+    },
+    onSuccess: async () => {
+      const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+      if (user) {
+        queryClient.setQueryData<IProfileData>([PROFILE_KEY, user.data?.pubKey], profile => {
+          const postsCount = profile.totalPosts;
+          let totalPosts: number;
+          if (typeof postsCount === 'number') {
+            totalPosts = postsCount - 1;
+          } else {
+            totalPosts = parseInt(postsCount, 10) - 1;
+          }
+          return {
+            ...profile,
+            totalPosts,
+          };
+        });
+      }
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {
