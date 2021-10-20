@@ -29,7 +29,9 @@ describe('<MobileListModal /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<MobileListModal menuItems={menuItems} closeModal={handleCloseModal} />),
+        wrapWithTheme(
+          <MobileListModal menuItems={menuItems} closeModal={handleCloseModal} modalSlotId={''} />,
+        ),
         {},
       );
     });

@@ -42,6 +42,7 @@ export interface IFeedWidgetProps {
   uiEvents: RootComponentProps['uiEvents'];
   itemSpacing?: number;
   i18n: typeof i18n;
+  modalSlotId: string;
 }
 
 const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {

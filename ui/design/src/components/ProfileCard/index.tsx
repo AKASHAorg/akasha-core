@@ -23,7 +23,6 @@ import {
   ProfileProviders,
   UsernameTypes,
 } from '@akashaproject/ui-awf-typings/lib/profile';
-import { StyledDropAlt } from '../EntryCard/styled-entry-box';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -75,6 +74,7 @@ export interface IProfileCardProps extends IProfileWidgetCard {
     default?: { provider: string; property: string; value: string };
     available: UsernameTypes[];
   };
+  modalSlotId: string;
 }
 
 interface IStat {
@@ -154,6 +154,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     changeCoverImageLabel,
     profileProvidersData,
     canUserEdit,
+    modalSlotId,
   } = props;
 
   const [editable /* , setEditable */] = useState(false);
@@ -394,48 +395,47 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         />
       )}
       {isMobile && menuOpen && (
-        <StyledDropAlt style={{ backgroundColor: 'transparent' }}>
-          <MobileListModal
-            closeModal={closeMenu}
-            menuItems={
-              props.flaggable
-                ? [
-                    {
-                      label: props.blockLabel,
-                      icon: 'block',
-                      handler: () => {
-                        /* @todo: replace with handler to block account */
-                        closeMenu();
-                      },
+        <MobileListModal
+          modalSlotId={modalSlotId}
+          closeModal={closeMenu}
+          menuItems={
+            props.flaggable
+              ? [
+                  {
+                    label: props.blockLabel,
+                    icon: 'block',
+                    handler: () => {
+                      /* @todo: replace with handler to block account */
+                      closeMenu();
                     },
-                    {
-                      label: props.flagAsLabel,
-                      icon: 'report',
-                      handler: () => {
-                        props.onEntryFlag();
-                        closeMenu();
-                      },
+                  },
+                  {
+                    label: props.flagAsLabel,
+                    icon: 'report',
+                    handler: () => {
+                      props.onEntryFlag();
+                      closeMenu();
                     },
-                  ]
-                : [
-                    {
-                      label: props.updateProfileLabel,
-                      handler: () => {
-                        props.onUpdateClick();
-                        closeMenu();
-                      },
+                  },
+                ]
+              : [
+                  {
+                    label: props.updateProfileLabel,
+                    handler: () => {
+                      props.onUpdateClick();
+                      closeMenu();
                     },
-                    {
-                      label: props.changeENSLabel,
-                      handler: () => {
-                        props.onENSChangeClick();
-                        closeMenu();
-                      },
+                  },
+                  {
+                    label: props.changeENSLabel,
+                    handler: () => {
+                      props.onENSChangeClick();
+                      closeMenu();
                     },
-                  ]
-            }
-          />
-        </StyledDropAlt>
+                  },
+                ]
+          }
+        />
       )}
       <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
         <ProfileCardEthereumId

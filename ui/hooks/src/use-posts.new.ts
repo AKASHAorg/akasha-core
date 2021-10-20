@@ -212,6 +212,7 @@ export function useDeletePost(postID: string) {
             value: '1',
           },
         ],
+        updatedAt: Date.now().toString(),
         isRemoved: true,
       });
       return { previousPost };
@@ -293,6 +294,7 @@ export const useEditPost = () => {
             ...current,
             content: data,
             isPublishing: true,
+            updatedAt: Date.now().toString(),
           };
         });
         queryClient.setQueriesData<unknown>(SEARCH_KEY, oldData => {

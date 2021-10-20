@@ -71,6 +71,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onEntryRemove,
     removedByMeLabel,
     removedByAuthorLabel,
+    modalSlotId,
   } = props;
 
   return (
@@ -133,6 +134,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         isRemoved={isRemoved}
         removedByMeLabel={removedByMeLabel}
         removedByAuthorLabel={removedByAuthorLabel}
+        modalSlotId={modalSlotId}
         headerMenuExt={props.headerMenuExt}
       />
     </MainAreaCardBox>

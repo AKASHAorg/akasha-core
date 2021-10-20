@@ -16,6 +16,7 @@ describe('<BoxFormCard /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <BoxFormCard
+            modalSlotId={''}
             nameLabel={'Name'}
             saveLabel={'Save'}
             urlLabel={'By url'}

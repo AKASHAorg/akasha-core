@@ -46,6 +46,7 @@ export interface CardActionProps {
   onRepostWithComment?: () => void;
   disableReposting?: boolean;
   isModerated?: boolean;
+  modalSlotId: string;
 }
 
 const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
@@ -91,6 +92,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     disableReposting,
     disableActions,
     isModerated,
+    modalSlotId,
   } = props;
 
   const [repostDropOpen, setRepostDropOpen] = React.useState(false);
@@ -170,6 +172,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     if (isMobile) {
       return (
         <MobileListModal
+          modalSlotId={modalSlotId}
           menuItems={menuItems}
           cancelLabel={cancelLabel}
           closeModal={handleRepostsClose}

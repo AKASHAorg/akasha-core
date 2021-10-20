@@ -290,6 +290,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   ctaLabel={t('See it anyway')}
                   uiEvents={props.uiEvents}
                   navigateToModal={props.navigateToModal}
+                  modalSlotId={props.layoutConfig.modalSlotId}
                 />
               ))}
           {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
@@ -317,6 +318,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   ctaLabel={t('See it anyway')}
                   uiEvents={props.uiEvents}
                   navigateToModal={props.navigateToModal}
+                  modalSlotId={props.layoutConfig.modalSlotId}
                 />
               ))}
         </Box>

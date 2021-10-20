@@ -48,6 +48,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       pageKeyPrefix={props.itemType === ItemTypes.ENTRY ? 'entry-page' : 'comment-page'}
       itemCard={
         <EntryRenderer
+          modalSlotId={props.modalSlotId}
           loginState={props.loginState}
           itemType={props.itemType}
           sharePostUrl={`${window.location.origin}/social-app/post/`}

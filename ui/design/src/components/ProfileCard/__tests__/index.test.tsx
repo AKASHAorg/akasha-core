@@ -37,6 +37,7 @@ describe('<ProfileCard /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <ProfileCard
+            modalSlotId={''}
             profileData={profileData}
             descriptionLabel={aboutMeLabel}
             followingLabel={followingLabel}
