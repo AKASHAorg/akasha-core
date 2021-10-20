@@ -12,6 +12,7 @@ import { CoverImageSection } from './sections/CoverImageSection';
 import { DescriptionSection } from './sections/DescriptionSection';
 import { ActionButtonsSection } from './sections/ActionButtonsSection';
 import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
+import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 
 export interface IBoxFormCardProps {
   className?: string;
@@ -118,7 +119,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
   const avatarInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
   const coverInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-
+  useBodyScrollLock();
   // Update internal state based on providerData prop
   React.useEffect(() => {
     const updatedFields = {};
