@@ -140,6 +140,7 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
       )}
       {profileDataQuery.status === 'success' && (
         <ProfileForm
+          modalSlotId={props.layoutConfig.modalSlotId}
           titleLabel={profileDataQuery.data.userName ? t('Update Profile') : t('Create Profile')}
           avatarLabel={t('Avatar')}
           nameLabel={t('Name')}

@@ -139,14 +139,14 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         };
         break;
       case 'MODERATED_ACCOUNT':
-          label = moderatedAccountLabel;
-          clickHandler = () => {
-            handleMessageRead(notif.id);
-            if (moderatedID) {
-              handleProfileClick(moderatedID);
-            }
-          };
-          break;
+        label = moderatedAccountLabel;
+        clickHandler = () => {
+          handleMessageRead(notif.id);
+          if (moderatedID) {
+            handleProfileClick(moderatedID);
+          }
+        };
+        break;
       default:
         label = '';
         break;
@@ -161,7 +161,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         justify="between"
         align="center"
         pad="small"
-        onClick={() => handleMessageRead(notif.id)}
+        onClick={clickHandler}
       >
         <ProfileAvatarButton
           ethAddress={profileData.ethAddress}
@@ -173,11 +173,19 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
           active={!notif.read}
         />
         {!notif.read && (
-          <BlueDot
-            onClick={() => {
+          <Box
+            pad="small"
+            align="center"
+            justify="center"
+            onClick={ev => {
               handleMessageRead(notif.id);
+              ev.stopPropagation();
+              ev.preventDefault();
+              return false;
             }}
-          />
+          >
+            <BlueDot />
+          </Box>
         )}
       </StyledNotifBox>
     );
@@ -210,7 +218,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
 
   const renderContent = () => (
     <>
-      {isFetching && (
+      {isFetching && notifications.length === 0 && (
         <Box pad="large">
           <Spinner />
         </Box>
@@ -233,10 +241,15 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
           />
         </Box>
       )}
-      {!isFetching && notifications.length !== 0 && (
+      {notifications.length !== 0 && (
         <Box pad={isMobileOnly ? 'xsmall' : 'small'}>
           {renderHeader()}
           {notifications?.map((notif: any, index: number) => renderNotificationCard(notif, index))}
+          {isFetching && (
+            <Box pad="small">
+              <Spinner />
+            </Box>
+          )}
         </Box>
       )}
     </>

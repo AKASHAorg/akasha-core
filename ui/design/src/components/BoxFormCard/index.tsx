@@ -44,6 +44,7 @@ export interface IBoxFormCardProps {
   usernameSuccess?: string;
   onUsernameChange?: (value: string) => void;
   onUsernameBlur?: (username: string) => void;
+  modalSlotId: string;
 }
 
 export interface IImageSrc {
@@ -98,6 +99,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     usernameFieldInfo,
     usernameError,
     usernameSuccess,
+    modalSlotId,
   } = props;
 
   const [avatarPopoverOpen, setAvatarPopoverOpen] = React.useState(false);
@@ -340,6 +342,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
       {avatarPopoverOpen && avatarRef.current && formValues.avatar && (
         <FormImagePopover
+          modalSlotId={modalSlotId}
           uploadLabel={uploadLabel}
           urlLabel={urlLabel}
           deleteLabel={deleteLabel}
@@ -354,6 +357,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
       {coverImagePopoverOpen && coverImageRef.current && formValues.coverImage && (
         <FormImagePopover
+          modalSlotId={modalSlotId}
           uploadLabel={uploadLabel}
           urlLabel={urlLabel}
           deleteLabel={deleteLabel}

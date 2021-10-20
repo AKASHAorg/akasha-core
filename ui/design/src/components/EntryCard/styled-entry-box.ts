@@ -17,23 +17,13 @@ const StyledDrop = styled(Drop)`
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 
-const StyledDropAlt = styled(Drop)`
-  position: fixed;
-  background: transparent;
-  z-index: 9999;
-  height: 100vh;
-  width: 100vw;
-  left: 0;
-  top: 0;
-`;
-
 const StyledProfileDrop = styled(Drop)`
   max-width: 20rem;
   position: fixed;
   border-radius: ${props => props.theme.shapes.borderRadius};
 `;
 
-const StyledBox: any = styled(Box)`
+const StyledBox = styled(Box)`
   background-color: ${props => props.theme.colors.accentLight};
 `;
 
@@ -57,7 +47,6 @@ const StyledIcon = styled(Icon)`
 export {
   StyledLayerElemDiv,
   StyledDrop,
-  StyledDropAlt,
   StyledProfileDrop,
   StyledBox,
   StyledSelectBox,

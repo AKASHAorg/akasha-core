@@ -34,16 +34,8 @@ const StyledLayerElemDiv = styled.div`
 `;
 
 const ListModal: React.FC<IlistModal> = props => {
-  const {
-    closeModal,
-    label,
-    list,
-    className,
-    secondaryLabel,
-    onClickAvatar,
-    locale,
-    iconType,
-  } = props;
+  const { closeModal, label, list, className, secondaryLabel, onClickAvatar, locale, iconType } =
+    props;
   const handleClickAvatar = (ethAddress: string) => () => {
     onClickAvatar(ethAddress);
   };
