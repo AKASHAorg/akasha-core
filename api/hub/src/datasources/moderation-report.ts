@@ -55,10 +55,7 @@ class ModerationReportAPI extends DataSource {
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID).and('author').eq(author);
     const report = await db.find<ModerationReport>(this.dbID, this.collection, query);
-    if (report.length) {
-      return true;
-    }
-    return false;
+    return !!report.length;
   }
 
   /**
@@ -173,10 +170,11 @@ class ModerationReportAPI extends DataSource {
     if (exists) {
       return Promise.reject({ status: 409 });
     }
-
+    const t_decisions = db.writeTransaction(this.dbID, decisionsCollection);
+    await t_decisions.start();
     // we need to check if a pending decision was created for this post
     const query = new Where('contentID').eq(contentID);
-    const results = await db.find<ModerationReport>(this.dbID, decisionsCollection, query);
+    const results = await t_decisions.find<ModerationReport>(query);
     if (results.length < 1) {
       // need to create a pending decision to track moderation status
       // how to avoid race condition here?
@@ -189,7 +187,7 @@ class ModerationReportAPI extends DataSource {
         moderated: false,
         actions: [],
       };
-      const decisionID = await db.create(this.dbID, decisionsCollection, [decision]);
+      const decisionID = await t_decisions.create([decision]);
       if (!decisionID || !decisionID.length) {
         logger.warn(`pending decision could not be created for contentID ${contentID}`);
         // throw new Error('pending decision could not be created');
@@ -198,7 +196,6 @@ class ModerationReportAPI extends DataSource {
         await sendEmailNotification();
       }
     }
-
     const report: ModerationReport = {
       _id: '',
       creationDate: new Date().getTime(),
@@ -208,11 +205,15 @@ class ModerationReportAPI extends DataSource {
       reason: reason,
       explanation: encodeString(explanation),
     };
-    const reportID = await db.create(this.dbID, this.collection, [report]);
+    const t = db.writeTransaction(this.dbID, this.collection);
+    await t.start();
+    const reportID = await t.create([report]);
     if (!reportID || !reportID.length) {
       logger.warn(`report by ${author} for contentID ${contentID} could not be created`);
       throw new Error('report could not be created');
     }
+    await t_decisions.end();
+    await t.end();
     // cache the report
     const reportCache = this.getReportCacheKey(contentID, author);
     await queryCache.set(reportCache, report);
