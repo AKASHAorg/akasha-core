@@ -2,7 +2,6 @@ import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import DS from '@akashaproject/design-system';
-import { useErrors } from '@akashaproject/ui-awf-hooks';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
@@ -18,9 +17,7 @@ import routes, { FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
 const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const { logger } = props;
-  const [, errorActions] = useErrors({ logger });
-  const loginQuery = useGetLogin({ onError: errorActions.createError });
+  const loginQuery = useGetLogin();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
   const loggedProfileData = profileDataReq.data;

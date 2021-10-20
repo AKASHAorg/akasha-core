@@ -47,7 +47,6 @@ const getProfileData = async (payload: {
     if (coverImage) {
       images.coverImage = getMediaUrl(coverImage);
     }
-
     return { ...images, ...other, ...modStatus[0] };
   } catch (error) {
     logError('useProfile.getProfileData', error);
@@ -56,7 +55,7 @@ const getProfileData = async (payload: {
 
 export function useGetProfile(pubKey: string, loggedUser?: string, enabler = true) {
   return useQuery([PROFILE_KEY, pubKey], () => getProfileData({ pubKey, loggedUser }), {
-    enabled: !!(pubKey && enabler),
+    enabled: !!pubKey && enabler,
     keepPreviousData: true,
   });
 }
@@ -113,12 +112,11 @@ export function useFollowers(pubKey: string, limit: number, offset?: number) {
     [FOLLOWERS_KEY, pubKey],
     async ({ pageParam = offset }) => getFollowers(pubKey, limit, pageParam),
     {
-      getNextPageParam: lastPage => {
-        if (!lastPage.nextIndex) {
-          return undefined;
-        }
-        return lastPage.nextIndex;
-      },
+      /**
+       * Return undefined to indicate there is no next page available.
+       * https://react-query.tanstack.com/reference/useInfiniteQuery
+       */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
@@ -140,12 +138,11 @@ export function useFollowing(pubKey: string, limit: number, offset?: number) {
     [FOLLOWING_KEY, pubKey],
     async ({ pageParam = offset }) => getFollowing(pubKey, limit, pageParam),
     {
-      getNextPageParam: lastPage => {
-        if (!lastPage.nextIndex) {
-          return undefined;
-        }
-        return lastPage.nextIndex;
-      },
+      /**
+       * Return undefined to indicate there is no next page available.
+       * https://react-query.tanstack.com/reference/useInfiniteQuery
+       */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },

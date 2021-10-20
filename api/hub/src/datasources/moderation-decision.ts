@@ -170,6 +170,9 @@ class ModerationDecisionAPI extends DataSource {
    */
   async getDecision(contentID: string) {
     const decisionCache = this.getDecisionCacheKey(contentID);
+    if (!contentID) {
+      throw new Error('Must provide a resource id!');
+    }
     if (await queryCache.has(decisionCache)) {
       return queryCache.get(decisionCache);
     }
@@ -181,6 +184,7 @@ class ModerationDecisionAPI extends DataSource {
       await queryCache.set(decisionCache, decisions[0]);
       return decisions[0];
     }
+    logger.warn(`[moderation-decision]: Could not find decision for ${contentID}!`);
     return undefined;
   }
 
@@ -250,6 +254,7 @@ class ModerationDecisionAPI extends DataSource {
    * first report, number of total reports, and full list of reasons it was reported for.
    * @param contentID - The content identifier
    * @param profileAPI - The profile data source API
+   * @param reportingAPI
    * @returns An object with all the relevant data
    */
   async getFinalDecision(
@@ -267,7 +272,7 @@ class ModerationDecisionAPI extends DataSource {
       delete finalDecision.actions;
     }
     // add moderator data
-    if (finalDecision.moderator && finalDecision.moderator.length) {
+    if (finalDecision.moderator) {
       const moderator = finalDecision.moderator.startsWith('0x')
         ? await profileAPI.getProfile(finalDecision.moderator)
         : await profileAPI.resolveProfile(finalDecision.moderator);
@@ -281,6 +286,8 @@ class ModerationDecisionAPI extends DataSource {
           avatar: moderator.avatar || '',
         },
       });
+    } else {
+      logger.warn(`[moderation]: Could not find moderator for finalDecision ${contentID}!`);
     }
     // add first report data
     const first = await reportingAPI.getFirstReport(contentID);
@@ -313,6 +320,8 @@ class ModerationDecisionAPI extends DataSource {
 
   /**
    * Compiles a special list of all moderated content to be used for the public transparency log.
+   * @param profileAPI
+   * @param reportingAPI
    * @param offset - Offset by number of records
    * @param limit - Limit number of records returned
    * @returns A list of objects with minimal info about the moderated content
@@ -343,6 +352,11 @@ class ModerationDecisionAPI extends DataSource {
     const moderated = [];
     for (const result of results) {
       const decision = await this.getFinalDecision(result.contentID, profileAPI, reportingAPI);
+      if (!decision.moderator) {
+        logger.warn(`${result.contentID} should not be in the moderated list!`);
+        logger.warn(decision);
+        continue;
+      }
       // load moderator info
       const moderator = decision.moderator.startsWith('0x')
         ? await profileAPI.getProfile(decision.moderator)

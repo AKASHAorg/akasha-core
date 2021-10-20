@@ -51,11 +51,11 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   // get followers for this profile
   const followersReq = useFollowers(profileData.pubKey, 10);
-  const followers = followersReq.data?.pages[0].results;
+  const followers = followersReq.data?.pages[0]?.results;
 
   // get accounts this profile is following
   const followingReq = useFollowing(profileData.pubKey, 10);
-  const following = followingReq.data?.pages[0].results;
+  const following = followingReq.data?.pages[0]?.results;
 
   // get interests for this profile
   const interestsReq = useInterests(profileData.pubKey);

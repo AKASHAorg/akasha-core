@@ -34,7 +34,7 @@ const EntryList = (props: EntryListProps) => {
     <>
       {pages.map((page, index) => (
         <div data-page-idx={index} key={`${pageKeyPrefix}-${index}`}>
-          {page.results.map((entryId, index) => (
+          {page?.results.map((entryId, index) => (
             <div style={{ marginBottom: itemSpacing }} key={entryId}>
               {React.cloneElement(itemCard, {
                 itemId: entryId,

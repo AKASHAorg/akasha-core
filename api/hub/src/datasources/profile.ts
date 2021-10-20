@@ -207,21 +207,29 @@ class ProfileAPI extends DataSource {
   }
   async followProfile(pubKey: string, ethAddress: string) {
     const db: Client = await getAppDB();
+    const t = db.writeTransaction(this.dbID, this.collection);
+    await t.start();
     const query = new Where('ethAddress').eq(ethAddress);
-    const [profile] = await db.find<Profile>(this.dbID, this.collection, query);
+    const [profile] = await t.find<Profile>(query);
 
     const query1 = new Where('pubKey').eq(pubKey);
-    const [profile1] = await db.find<Profile>(this.dbID, this.collection, query1);
+    const [profile1] = await t.find<Profile>(query1);
     const exists = profile1.following.indexOf(profile.pubKey);
     const exists1 = profile.followers.indexOf(profile1.pubKey);
-    if (!profile || !profile1 || exists !== -1 || exists1 !== -1) {
+
+    if (!profile || !profile1) {
+      await t.end();
       return false;
     }
 
-    profile1.following.unshift(profile.pubKey);
-    profile.followers.unshift(profile1.pubKey);
-
-    await db.save(this.dbID, this.collection, [profile, profile1]);
+    if (exists === -1) {
+      profile1.following.unshift(profile.pubKey);
+    }
+    if (exists1 === -1) {
+      profile.followers.unshift(profile1.pubKey);
+    }
+    await t.save([profile, profile1]);
+    await t.end();
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
     const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
 
@@ -242,19 +250,29 @@ class ProfileAPI extends DataSource {
 
   async unFollowProfile(pubKey: string, ethAddress: string) {
     const db: Client = await getAppDB();
+    const t = db.writeTransaction(this.dbID, this.collection);
+    await t.start();
     const query = new Where('ethAddress').eq(ethAddress);
-    const [profile] = await db.find<Profile>(this.dbID, this.collection, query);
+    const [profile] = await t.find<Profile>(query);
 
     const query1 = new Where('pubKey').eq(pubKey);
-    const [profile1] = await db.find<Profile>(this.dbID, this.collection, query1);
+    const [profile1] = await t.find<Profile>(query1);
     const exists = profile1.following.indexOf(profile.pubKey);
     const exists1 = profile.followers.indexOf(profile1.pubKey);
-    if (!profile || !profile1 || exists === -1 || exists1 === -1) {
+    if (!profile || !profile1) {
+      await t.end();
       return false;
     }
-    profile1.following.splice(exists, 1);
-    profile.followers.splice(exists1, 1);
-    await db.save(this.dbID, this.collection, [profile, profile1]);
+    if (exists !== -1) {
+      profile1.following.splice(exists, 1);
+    }
+
+    if (exists1 !== -1) {
+      profile.followers.splice(exists1, 1);
+    }
+
+    await t.save([profile, profile1]);
+    await t.end();
 
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
     const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);

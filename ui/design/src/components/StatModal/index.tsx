@@ -16,8 +16,6 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { ModalWrapper, StyledBox } from '../ListModal/styled-modal';
 
-import { useViewportSize } from '../Providers/viewport-dimension';
-
 export interface IStatModal extends IProfileEntry, ITagEntry {
   className?: string;
   activeIndex: number;
@@ -97,14 +95,10 @@ const StatModal: React.FC<IStatModal> = props => {
     closeModal,
   } = props;
 
-  const {
-    dimensions: { width },
-  } = useViewportSize();
-
   return (
-    <ModalWrapper isTransparent={true} isMobile={isMobileOnly}>
-      <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
-        <MainAreaCardBox className={className}>
+    <ModalWrapper isTransparent={true} isMobile={isMobileOnly} justify="center" align="center">
+      <StyledBox>
+        <MainAreaCardBox className={className} verticalFill={true}>
           <Box direction="column" pad={{ top: 'large', horizontal: 'large' }}>
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
               {isMobileOnly && (
@@ -135,13 +129,21 @@ const StatModal: React.FC<IStatModal> = props => {
               )}
             </Box>
           </Box>
-          <Tabs activeIndex={activeIndex} onActive={idx => setActiveIndex(idx)}>
+          <Tabs
+            style={{ height: '100%' }}
+            activeIndex={activeIndex}
+            onActive={idx => setActiveIndex(idx)}
+          >
             {tabLabelsArr.map((label, index) => (
               <StyledTab
                 key={index}
                 title={`${label}${stats[index] > 0 ? ` (${stats[index]})` : ''}`}
               >
-                <Box height="30rem" pad={{ horizontal: 'large' }} overflow={{ vertical: 'auto' }}>
+                <Box
+                  height={isMobileOnly ? '100%' : '30rem'}
+                  pad={{ horizontal: 'large' }}
+                  overflow={{ vertical: 'auto' }}
+                >
                   {index === 0 && (
                     <>
                       {followersReqStatus.isLoading && <ListLoading type="profile" />}

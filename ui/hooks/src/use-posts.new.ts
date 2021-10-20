@@ -55,7 +55,8 @@ export function useInfinitePosts(limit: number, offset?: string) {
     ENTRIES_KEY,
     async ({ pageParam = offset }) => getPosts(queryClient, limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       keepPreviousData: true,
@@ -95,7 +96,8 @@ export function useInfinitePostsByTag(name: string, limit: number, offset?: stri
     [ENTRIES_BY_TAG_KEY, name],
     async ({ pageParam = offset }) => getPostsByTag(queryClient, name, limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       // keepPreviousData: true,
@@ -141,7 +143,8 @@ export function useInfinitePostsByAuthor(
     [ENTRIES_BY_AUTHOR_KEY, pubKey],
     async ({ pageParam = offset }) => getPostsByAuthor(queryClient, pubKey, limit, pageParam),
     {
-      getNextPageParam: lastPage => !!lastPage && lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: enabled,
       keepPreviousData: true,
     },
