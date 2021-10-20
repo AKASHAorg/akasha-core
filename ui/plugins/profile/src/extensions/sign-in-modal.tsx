@@ -53,7 +53,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
           props.navigateToModal(navigationOptions as ModalNavigationOptions);
         }
       } else {
-        setTimeout(() => handleModalClose(), 500);
+        handleModalClose();
       }
     }
   }, [loginQuery.data?.ethAddress, props, props.navigateToModal, handleModalClose]);

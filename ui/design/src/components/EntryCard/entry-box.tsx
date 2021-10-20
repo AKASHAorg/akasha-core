@@ -302,6 +302,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               return false;
             }}
             weight="normal"
+            style={{ display: 'flex', minWidth: 0 }}
             href={`${profileAnchorLink}/${entryData.author.pubKey}`}
             label={
               <StyledProfileAvatarButton
