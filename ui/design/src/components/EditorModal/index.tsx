@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
-import { isMobileOnly } from 'react-device-detect';
-
 import Button from '../Button';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import EditorCard, { IEditorCard } from '../EditorCard';
 import { editorDefaultValue } from '../Editor/initialValue';
 import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
+import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 
 export interface IEditorModal extends Omit<IEditorCard, 'setEditorState'> {
   // labels
@@ -43,6 +42,8 @@ const EditorModal: React.FC<IEditorModal> = props => {
 
   const [showCancel, setShowCancel] = React.useState(false);
   const [contentState, setContentState] = React.useState(editorState);
+
+  useBodyScrollLock();
 
   const handleToggleShowCancel = () => {
     if (contentState === editorDefaultValue) {

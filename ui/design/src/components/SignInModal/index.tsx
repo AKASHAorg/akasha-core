@@ -10,6 +10,7 @@ import Icon from '../Icon';
 import ErrorLoader from '../ErrorLoader';
 import { ModalContainer } from './fullscreen-modal-container';
 import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dimension';
+import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 
 export interface SignInModalProps {
   onLogin: (providerId: number) => void;
@@ -54,6 +55,8 @@ const SignInModal: React.FC<SignInModalProps> = props => {
   const [modalState, setModalState] = React.useState<{ selectedProvider: string | null }>({
     selectedProvider: null,
   });
+
+  useBodyScrollLock();
 
   const handleProviderClick = (providerId: string) => {
     setModalState({
