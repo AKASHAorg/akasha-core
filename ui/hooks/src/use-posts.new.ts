@@ -64,12 +64,7 @@ export function useInfinitePosts(limit: number, offset?: string) {
   );
 }
 
-const getPostsByTag = async (
-  queryClient: QueryClient,
-  name: string,
-  limit: number,
-  offset?: string,
-) => {
+const getPostsByTag = async (name: string, limit: number, offset?: string) => {
   const sdk = getSDK();
   try {
     const res = await lastValueFrom(
@@ -91,10 +86,9 @@ const getPostsByTag = async (
 };
 
 export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
-  const queryClient = useQueryClient();
   return useInfiniteQuery(
     [ENTRIES_BY_TAG_KEY, name],
-    async ({ pageParam = offset }) => getPostsByTag(queryClient, name, limit, pageParam),
+    async ({ pageParam = offset }) => getPostsByTag(name, limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
@@ -105,12 +99,7 @@ export function useInfinitePostsByTag(name: string, limit: number, offset?: stri
   );
 }
 
-const getPostsByAuthor = async (
-  queryClient: QueryClient,
-  pubKey: string,
-  limit: number,
-  offset?: number,
-) => {
+const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
   try {
     const res = await lastValueFrom(
@@ -138,10 +127,9 @@ export function useInfinitePostsByAuthor(
   enabled = true,
   offset?: number,
 ) {
-  const queryClient = useQueryClient();
   return useInfiniteQuery(
     [ENTRIES_BY_AUTHOR_KEY, pubKey],
-    async ({ pageParam = offset }) => getPostsByAuthor(queryClient, pubKey, limit, pageParam),
+    async ({ pageParam = offset }) => getPostsByAuthor(pubKey, limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
