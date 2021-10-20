@@ -6,6 +6,7 @@ import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 import LinkInput from '../TextInputIconForm';
 import { ModalCard } from '../EntryCard/basic-card-box';
 import { StyledDivider, StyledAnchor } from '../TextInputIconForm/styles';
+import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 
 const SignUpModal = (props: {
   onModalClose: () => void;
@@ -26,6 +27,8 @@ const SignUpModal = (props: {
   waitForCheckTerms?: boolean;
   onAcceptTerms?: (ev: any) => void;
 }) => {
+  useBodyScrollLock();
+
   return (
     <ModalContainer onModalClose={props.onModalClose}>
       <ModalCard>

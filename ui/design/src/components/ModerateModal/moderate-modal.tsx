@@ -14,6 +14,7 @@ import {
   StyledTextArea,
 } from '../ListModal/styled-modal';
 import { useViewportSize } from '../Providers/viewport-dimension';
+import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 
 export interface IModerateModalProps {
   className?: string;
@@ -67,7 +68,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
 
   const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
-
+  useBodyScrollLock();
   const {
     dimensions: { width },
   } = useViewportSize();
@@ -105,7 +106,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
     };
 
   return (
-    <ModalWrapper isTransparent={true} isMobile={isMobileOnly}>
+    <ModalWrapper isTransparent={true} isMobile={isMobileOnly} justify="center" align="center">
       <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
