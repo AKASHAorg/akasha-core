@@ -418,9 +418,8 @@ class ModerationDecisionAPI extends DataSource {
       moderatedDate: decision.moderatedDate,
       explanation: decision.explanation,
     });
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
-    await t.save([decision]);
+
+    await db.save(this.dbID, this.collection, [decision]);
     // send notifications only when delisting
     if (decision.delisted) {
       let destUser = '';
@@ -445,7 +444,6 @@ class ModerationDecisionAPI extends DataSource {
         },
       });
     }
-    await t.end();
     // handle caching
     await queryCache.del(this.getDecisionCacheKey(report.contentId));
     await queryCache.del(this.getModeratedDecisionCacheKey(report.contentId));

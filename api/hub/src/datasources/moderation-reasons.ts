@@ -48,18 +48,17 @@ class ModerationReasonAPI extends DataSource {
   async updateReason(label: string, description: string, active: boolean) {
     const reasonCache = this.getReasonCacheKey(label);
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
+
     // check if reason already exists
     let reason: ModerationReason;
     const query = new Where('label').eq(label);
-    const results = await t.find<ModerationReason>(query);
+    const results = await db.find<ModerationReason>(this.dbID, this.collection, query);
     if (results.length) {
       reason = results[0];
       reason.label = encodeString(label);
       reason.description = encodeString(description);
       reason.active = active;
-      await t.save([reason]);
+      await db.save(this.dbID, this.collection, [reason]);
     } else {
       reason = {
         label: encodeString(label),
@@ -68,10 +67,9 @@ class ModerationReasonAPI extends DataSource {
         _id: '',
         creationDate: new Date().getTime(),
       };
-      const id = await t.create([reason]);
+      const id = await db.create(this.dbID, this.collection, [reason]);
       reason._id = id[0];
     }
-    await t.end();
     await queryCache.set(reasonCache, reason);
     // clear cache for list of reasons
     await queryCache.del(this.getReasonListCacheKey(active));
