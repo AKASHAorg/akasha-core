@@ -111,10 +111,8 @@ class ProfileAPI extends DataSource {
 
   async addProfileProvider(pubKey: string, data: DataProvider[]) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const query = new Where('pubKey').eq(pubKey);
-    const profilesFound = await t.find<Profile>(query);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profilesFound?.length || !data?.length) {
       logger.warn(NOT_FOUND_PROFILE);
       throw NOT_FOUND_PROFILE;
@@ -132,17 +130,14 @@ class ProfileAPI extends DataSource {
         profile.providers.unshift(rec);
       }
     }
-    await t.save([profile]);
-    await t.end();
+    await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
   }
   async makeDefaultProvider(pubKey: string, data: DataProvider[]) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const query = new Where('pubKey').eq(pubKey);
-    const profilesFound = await t.find<Profile>(query);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profilesFound?.length) {
       logger.warn(`${pubKey} not registered`);
       throw NOT_REGISTERED;
@@ -157,8 +152,7 @@ class ProfileAPI extends DataSource {
         profile.default.push(rec);
       }
     }
-    await t.save([profile]);
-    await t.end();
+    await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
     const name = profile.default.find(p => p.property === 'name')?.value;
     searchIndex
@@ -179,19 +173,16 @@ class ProfileAPI extends DataSource {
 
   async registerUserName(pubKey: string, name: string) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const validatedName = validateName(name);
     const query = new Where('userName').eq(validatedName);
-    const profilesFound = await t.find<Profile>(query);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (profilesFound.length && profilesFound[0].pubKey !== pubKey) {
-      await t.end();
       logger.warn(`userName ${name} already taken`);
       throw new Error('userName already taken');
     }
 
     const query1 = new Where('pubKey').eq(pubKey);
-    const profilesFound1 = await t.find<Profile>(query1);
+    const profilesFound1 = await db.find<Profile>(this.dbID, this.collection, query1);
     if (!profilesFound1?.length) {
       logger.warn(`${pubKey} not registered`);
       throw NOT_REGISTERED;
@@ -199,8 +190,7 @@ class ProfileAPI extends DataSource {
     const profile = profilesFound1[0];
 
     profile.userName = validatedName;
-    await t.save([profile]);
-    await t.end();
+    await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
     searchIndex
       .saveObject({
@@ -296,12 +286,9 @@ class ProfileAPI extends DataSource {
 
   async saveMetadata(pubKey: string, data: DataProvider) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const query = new Where('pubKey').eq(pubKey);
-    const profilesFound = await t.find<Profile>(query);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profilesFound?.length) {
-      await t.end();
       logger.warn(NOT_REGISTERED);
       throw NOT_REGISTERED;
     }
@@ -316,8 +303,7 @@ class ProfileAPI extends DataSource {
       profile.metaData.push(data);
     }
 
-    await t.save([profile]);
-    await t.end();
+    await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
   }
@@ -417,10 +403,8 @@ class ProfileAPI extends DataSource {
    */
   async toggleInterestSub(pubKey: string, tagName: string) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const query = new Where('pubKey').eq(pubKey);
-    const [profile] = await t.find<Profile>(query);
+    const [profile] = await db.find<Profile>(this.dbID, this.collection, query);
     if (!profile) {
       throw NOT_REGISTERED;
     }
@@ -435,8 +419,7 @@ class ProfileAPI extends DataSource {
       }
     }
     const objID = objHash({ [profile._id]: tagName });
-    await t.save([profile]);
-    await t.end();
+    await db.save(this.dbID, this.collection, [profile]);
     await queryCache.del(this.getCacheKey(pubKey));
     const isSubscribed = profile.interests[0] === tagName;
     if (isSubscribed) {

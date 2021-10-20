@@ -52,11 +52,8 @@ class TagAPI extends DataSource {
     if (hasCachedValue && allowFromCache) {
       return queryCache.get(key);
     }
-    const t = db.readTransaction(this.dbID, this.collection);
-    await t.start();
     const query = new Where('name').eq(formattedName);
-    const tag = await t.find<Tag>(query);
-    await t.end();
+    const tag = await db.find<Tag>(this.dbID, this.collection, query);
     if (tag.length) {
       // return db record for mutations
       if (!allowFromCache) {
@@ -105,9 +102,7 @@ class TagAPI extends DataSource {
 
   async indexPost(postsCollection: string, postID: string, tagName: string) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
-    const postExists = await t.has([postID]);
+    const postExists = await db.has(this.dbID, postsCollection, [postID]);
     logger.info(`indexing tags for post: ${postID} -- ${tagName}`);
     if (!postExists) {
       return Promise.reject(`postID: ${postID} was not found`);
@@ -120,41 +115,31 @@ class TagAPI extends DataSource {
     }
     tag.posts.unshift(postID);
     await queryCache.del(this.getTagCacheKey(tagName));
-    await t.save([tag]);
-    return t.end();
+    return await db.save(this.dbID, this.collection, [tag]);
   }
 
   async removePostIndex(postID: string, tagName: string) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const tag = await this.getTag(tagName, false);
     const postIndex = tag.posts.indexOf(postID);
     tag.posts.splice(postIndex, 1);
     await queryCache.del(this.getTagCacheKey(tagName));
-    await t.save([tag]);
-    return t.end();
+    return await db.save(this.dbID, this.collection, [tag]);
   }
 
   async removeCommentIndex(commentID: string, tagName: string) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const tag = await this.getTag(tagName, false);
     const commentIndex = tag.comments.indexOf(commentID);
     tag.posts.splice(commentIndex, 1);
     await queryCache.del(this.getTagCacheKey(tagName));
-    await t.save([tag]);
-    return t.end();
+    return await db.save(this.dbID, this.collection, [tag]);
   }
 
   async indexComment(commentsCollection: string, commentID: string, tagName: string) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
-    const postExists = await t.has([commentID]);
+    const postExists = await db.has(this.dbID, commentsCollection, [commentID]);
     if (!postExists) {
-      await t.end();
       return Promise.reject(`commentID: ${commentID} was not found`);
     }
     let tag = await this.getTag(tagName, false);
@@ -165,14 +150,12 @@ class TagAPI extends DataSource {
     }
     tag.comments.unshift(commentID);
     await queryCache.del(this.getTagCacheKey(tagName));
-    await t.save([tag]);
-    return t.end();
+    return await db.save(this.dbID, this.collection, [tag]);
   }
 
   async addTag(name: string) {
     const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
-    const t = db.writeTransaction(this.dbID, this.collection);
     if (formattedName.length > 32) {
       return Promise.reject('Tags can have a maximum of 32 characters!');
     }
@@ -185,10 +168,9 @@ class TagAPI extends DataSource {
     if (!this.allowedChars.test(formattedName)) {
       return Promise.reject('Tags can contain only alphanumeric, hyphen and dot!');
     }
-    await t.start();
+
     const exists = await this.getTag(formattedName);
     if (exists) {
-      await t.end();
       return null;
     }
     const tag: Tag = {
@@ -198,8 +180,7 @@ class TagAPI extends DataSource {
       posts: [],
       comments: [],
     };
-    const tagID = await t.create([tag]);
-    await t.end();
+    const tagID = await db.create(this.dbID, this.collection, [tag]);
     if (!tagID || !tagID.length) {
       logger.warn(`tag ${formattedName} could not be created`);
       throw new Error('tag could not be created');
