@@ -34,6 +34,7 @@ const Content: React.FC<IContentProps> = props => {
     <Box pad="1rem">
       {props.entryData && (
         <EntryDataCard
+          modalSlotId={props.layoutConfig.modalSlotId}
           entryData={props.entryData}
           itemType={props.itemType}
           locale={props.locale}

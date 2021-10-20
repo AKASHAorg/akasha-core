@@ -113,7 +113,12 @@ const StatModal: React.FC<IStatModal> = props => {
                   onClick={closeModal}
                 />
               )}
-              <Text weight={600} margin={{ bottom: '1rem', horizontal: 'auto' }} size="xlarge">
+              <Text
+                weight={600}
+                margin={{ bottom: '1rem', horizontal: 'auto' }}
+                size="xlarge"
+                truncate={true}
+              >
                 {titleLabel}
               </Text>
               {!isMobileOnly && (

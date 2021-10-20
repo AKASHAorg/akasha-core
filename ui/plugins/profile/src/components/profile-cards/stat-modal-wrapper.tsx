@@ -179,7 +179,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     if (loginState.ethAddress === profileData.ethAddress) {
       if (activeIndex === SelectedTab.FOLLOWERS) {
         return {
-          title: t('You no followers yet'),
+          title: t('You do not have followers yet'),
           subtitle: t('When you have followers, they will be listed here.'),
         };
       }

@@ -32,7 +32,9 @@ const ImgElement = ({
     <div
       {...attributes}
       onClick={ev => {
-        handleClickImage(element);
+        if (handleClickImage && typeof handleClickImage === 'function') {
+          handleClickImage(element);
+        }
         ev.stopPropagation();
         ev.preventDefault();
         return false;
@@ -52,7 +54,16 @@ const ImgElement = ({
         }}
       >
         {handleDeleteImage && (
-          <StyledCloseDiv onClick={() => handleDeleteImage(element)}>
+          <StyledCloseDiv
+            onClick={ev => {
+              if (handleDeleteImage && typeof handleDeleteImage === 'function') {
+                handleDeleteImage(element);
+              }
+              ev.stopPropagation();
+              ev.preventDefault();
+              return false;
+            }}
+          >
             <Icon type="close" clickable={true} />
           </StyledCloseDiv>
         )}
