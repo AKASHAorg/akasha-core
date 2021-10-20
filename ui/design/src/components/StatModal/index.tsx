@@ -15,6 +15,7 @@ import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { ModalWrapper, StyledBox } from '../ListModal/styled-modal';
+import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 
 export interface IStatModal extends IProfileEntry, ITagEntry {
   className?: string;
@@ -94,6 +95,8 @@ const StatModal: React.FC<IStatModal> = props => {
     handleButtonClick,
     closeModal,
   } = props;
+
+  useBodyScrollLock();
 
   return (
     <ModalWrapper isTransparent={true} isMobile={isMobileOnly} justify="center" align="center">

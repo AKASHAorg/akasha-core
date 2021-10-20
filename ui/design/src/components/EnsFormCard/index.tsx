@@ -6,6 +6,7 @@ import Icon from '../Icon';
 import Spinner from '../Spinner';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledText } from '../BoxFormCard/styled-form-card';
+import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 
 export enum ENSOptionTypes {
   ENS_AKASHA_SUBDOMAIN = 0,
@@ -62,6 +63,8 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
     registrationStatus,
   } = props;
   const [activeOption, setActiveOption] = React.useState<EnsFormOption | null>(null);
+
+  useBodyScrollLock();
 
   const handleCancel = () => {
     if (props.onCancel) {

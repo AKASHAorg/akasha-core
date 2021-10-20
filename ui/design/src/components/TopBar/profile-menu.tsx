@@ -251,7 +251,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
             pad={{
               horizontal: 'small',
               bottom: 'small',
-              top: mobileSignedOutView ? '4.75rem' : 'large',
+              top: mobileSignedOutView ? '1rem' : 'large',
             }}
           >
             <Box direction="row" justify="end" align="center">
