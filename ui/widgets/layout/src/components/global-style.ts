@@ -28,9 +28,11 @@ export const GlobalStyle: any = createGlobalStyle<{
     margin: 0;
     padding: 0;
   }
-  body {
-    /* overscroll-behavior-x: none; */
+
+  body.noscroll {
+    overflow: hidden;
   }
+
   ${props => css`
     // 1920 and lower
     @media only screen and (min-width: ${props.theme.breakpoints.xlarge.value}px) {

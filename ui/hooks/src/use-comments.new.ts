@@ -45,7 +45,8 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
     [COMMENTS_KEY, postID],
     async ({ pageParam = offset }) => getComments(queryClient, limit, postID, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       keepPreviousData: true,

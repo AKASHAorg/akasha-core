@@ -3,11 +3,11 @@ import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import { useGlobalLogin } from '.';
-import { createErrorHandler, logError } from './utils/error-handler';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
+import { useGlobalLogin } from './';
+import { logError } from './utils/error-handler';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
+const CHECK_SIGNUP_KEY = 'CHECK_SIGNUP_KEY';
 
 export interface LoginState extends CurrentUser {
   isReady?: boolean;
@@ -20,13 +20,15 @@ export interface LoginState extends CurrentUser {
   fromCache?: boolean;
 }
 
-export interface UseGetLoginProps {
-  /* error handler */
-  onError?: (err: IAkashaError) => void;
-}
+const initialData = {
+  ethAddress: null,
+  pubKey: null,
+  isReady: false,
+  waitForAuth: false,
+  isSigningIn: false,
+};
 
-export function useGetLogin(props?: UseGetLoginProps) {
-  const { onError } = props || {};
+export function useGetLogin(onError?: (error: Error) => void) {
   const queryClient = useQueryClient();
 
   useGlobalLogin({
@@ -64,28 +66,27 @@ export function useGetLogin(props?: UseGetLoginProps) {
       }));
     },
     onError: payload => {
-      if (onError) createErrorHandler('useGetLogin.globalLogin', false, onError)(payload.error);
+      if (onError) {
+        onError(payload.error);
+      }
+      logError('useGetLogin', payload.error);
     },
   });
+
   return useQuery(
     [LOGIN_STATE_KEY],
     () =>
       new Promise<LoginState>(() => {
-        /* empty fn */
+        const currentData = queryClient.getQueryData<LoginState>([LOGIN_STATE_KEY]);
+        return currentData || initialData;
       }),
     {
-      initialData: {
-        ethAddress: null,
-        pubKey: null,
-        isReady: false,
-        waitForAuth: false,
-        isSigningIn: false,
-      },
+      initialData: initialData,
     },
   );
 }
 
-export function useLogin(onError?: (err: IAkashaError) => void) {
+export function useLogin(onError?: (err: Error) => void) {
   const sdk = getSDK();
   return useMutation(
     async ({
@@ -105,12 +106,15 @@ export function useLogin(onError?: (err: IAkashaError) => void) {
         return resp.data;
       } catch (error) {
         logError('use-login', error);
+        if (onError) {
+          onError(error);
+        }
         throw error;
       }
     },
     {
       onError: (payload: Error) => {
-        if (onError) createErrorHandler('useLogin', false, onError)(payload);
+        logError('use-login', payload);
       },
     },
   );
@@ -136,4 +140,24 @@ export function useLogout() {
       throw error;
     }
   });
+}
+
+// hook to check if an ethAddress is already registered
+export function useCheckSignup(ethAddress) {
+  const sdk = getSDK();
+  return useQuery(
+    CHECK_SIGNUP_KEY,
+    async () => {
+      try {
+        const resp = await lastValueFrom(sdk.api.auth.checkIfSignedUp(ethAddress));
+        return resp.data;
+      } catch (error) {
+        logError('useCheckSignup', error);
+        throw error;
+      }
+    },
+    {
+      enabled: !!ethAddress,
+    },
+  );
 }

@@ -33,6 +33,7 @@ describe('<Topbar /> Component', () => {
             onModerationClick={handleModerationClick}
             onDashboardClick={handleDashboardClick}
             currentLocation=""
+            modalSlotId="modal-slot"
           />,
         ),
         {},

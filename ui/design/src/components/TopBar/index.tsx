@@ -62,6 +62,7 @@ export interface ITopbarProps {
   onSignUpClick: () => void;
   onLogout: () => void;
   onBrandClick?: () => void;
+  modalSlotId: string;
 }
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -99,6 +100,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onLogout,
     hasNewNotifications,
     onBrandClick,
+    modalSlotId,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -408,6 +410,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}
+          modalSlotId={modalSlotId}
         />
       )}
       {menuDropOpen && !loggedProfileData?.ethAddress && (
@@ -429,6 +432,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}
+          modalSlotId={modalSlotId}
         />
       )}
     </TopbarWrapper>

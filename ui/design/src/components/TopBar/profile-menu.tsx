@@ -10,7 +10,7 @@ import SubtitleTextIcon from '../SubtitleTextIcon';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledDrop, StyledPopoverBox, StyledOverlay, StyledAccordionPanel } from './styled-topbar';
 import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
-import { Portal } from '../Editor/helpers';
+import { ModalRenderer } from '../SignInModal/modal-renderer';
 
 export interface IProfileMenu {
   loggedProfileData?: Partial<IProfileData>;
@@ -37,6 +37,7 @@ export interface IProfileMenu {
   onModerationClick: () => void;
   onDashboardClick: () => void;
   onLogout?: () => void;
+  modalSlotId: string;
 }
 
 interface ISimilarMenu {
@@ -69,6 +70,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     onModerationClick,
     onDashboardClick,
     onLogout,
+    modalSlotId,
   } = props;
 
   const handleNavigation = (menuItem: IMenuItem) => () => {
@@ -234,7 +236,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   );
 
   const renderProfileOverlay = () => (
-    <Portal>
+    <ModalRenderer slotId={modalSlotId}>
       <ModalContainer
         onModalClose={closePopover}
         style={{ alignItems: 'flex-end' }}
@@ -249,7 +251,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
             pad={{
               horizontal: 'small',
               bottom: 'small',
-              top: mobileSignedOutView ? '4.75rem' : 'large',
+              top: mobileSignedOutView ? '1rem' : 'large',
             }}
           >
             <Box direction="row" justify="end" align="center">
@@ -260,7 +262,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
           </Box>
         </StyledOverlay>
       </ModalContainer>
-    </Portal>
+    </ModalRenderer>
   );
   return <>{isMobileOnly ? renderProfileOverlay() : renderProfileDrop()} </>;
 };

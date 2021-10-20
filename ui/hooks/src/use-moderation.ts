@@ -107,12 +107,12 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
   const sdk = getSDK();
 
   try {
-    const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign));
+    const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign, true));
     const data = {
       contentId,
       contentType,
       data: dataToSign,
-      signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+      signature: resp.data.signature as string,
     };
 
     const status = await createModeration(url, data);
@@ -282,7 +282,8 @@ export function useInfiniteLog(limit: number, offset?: string) {
     LOG_ITEMS_KEY,
     async ({ pageParam = offset }) => getLog(limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
@@ -306,7 +307,8 @@ export function useInfinitePending(limit: number, offset?: string) {
     PENDING_ITEMS_KEY,
     async ({ pageParam = offset }) => getPending(limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
@@ -333,7 +335,8 @@ export function useInfiniteKept(limit: number, offset?: string) {
     KEPT_ITEMS_KEY,
     async ({ pageParam = offset }) => getKept(limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
@@ -361,7 +364,8 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
     DELISTED_ITEMS_KEY,
     async ({ pageParam = offset }) => getDelisted(limit, pageParam),
     {
-      getNextPageParam: lastPage => lastPage.nextIndex,
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
     },
