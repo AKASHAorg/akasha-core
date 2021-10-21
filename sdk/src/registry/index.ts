@@ -156,7 +156,7 @@ export default class AWF_ENS implements AWF_IENS {
 
   public async setupContracts() {
     if (!this._chainChecked && this._web3.provider) {
-      await this._web3.checkCurrentNetwork();
+      await lastValueFrom(this._web3.checkCurrentNetwork());
       this._chainChecked = true;
     }
     const AkashaRegistrar = await ContractFactory.fromSolidity(AkashaRegistrarABI);
