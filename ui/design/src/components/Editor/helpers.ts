@@ -52,12 +52,18 @@ const CustomEditor = {
     Transforms.insertNodes(editor, image);
     // give slate time to render the image element
     requestAnimationFrame(() => {
-      const endPath = ReactEditor.findPath(editor, editor.children[editor.children.length - 1]);
-      const endNode = Node.get(editor, endPath);
-      // move the selection before the image
-      if (Node.isNode(endNode) && Element.isElement(endNode) && endNode.type === 'image') {
-        ReactEditor.focus(editor);
-        Transforms.select(editor, Editor.end(editor, Path.previous(endPath)));
+      const [match] = Editor.nodes(editor, {
+        match: n => Element.isElement(n) && n.type === 'image',
+        mode: 'all',
+      });
+      if (match?.length) {
+        const imageNode = match[0];
+        const imagePath = ReactEditor.findPath(editor, imageNode);
+        // move the selection before the image
+        if (Node.isNode(imageNode)) {
+          ReactEditor.focus(editor);
+          Transforms.select(editor, Editor.end(editor, Path.previous(imagePath)));
+        }
       }
     });
   },
@@ -66,15 +72,17 @@ const CustomEditor = {
     ReactEditor.focus(editor);
     // if the last element is an image and the user doesn't have
     // an active selection move the selection before the image
-    const endPath = ReactEditor.findPath(editor, editor.children[editor.children.length - 1]);
-    const endNode = Node.get(editor, endPath);
-    if (
-      !editor.selection &&
-      Node.isNode(endNode) &&
-      Element.isElement(endNode) &&
-      endNode.type === 'image'
-    ) {
-      Transforms.select(editor, Editor.end(editor, Path.previous(endPath)));
+    const [match] = Editor.nodes(editor, {
+      match: n => Element.isElement(n) && n.type === 'image',
+      mode: 'all',
+    });
+    if (match?.length) {
+      const imageNode = match[0];
+      const imagePath = ReactEditor.findPath(editor, imageNode);
+      // move the selection before the image
+      if (Node.isNode(imageNode) && !editor.selection) {
+        Transforms.select(editor, Editor.end(editor, Path.previous(imagePath)));
+      }
     }
     const textElem: CustomText = { text };
     Transforms.insertNodes(editor, textElem);
