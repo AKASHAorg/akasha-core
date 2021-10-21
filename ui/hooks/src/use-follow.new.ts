@@ -132,7 +132,9 @@ export function useFollow() {
     followEthAddress => {
       const input = { type: 'follow', ethAddress: followEthAddress, ts: Date.now() };
       FollowQueue.addToQueue(input);
-      return lastValueFrom(FollowQueue.results.pipe(first(ev => ev.ts === input.ts)));
+      return lastValueFrom(
+        FollowQueue.results.pipe(first(ev => ev.ts === input.ts && ev.type === input.type)),
+      );
     },
     {
       onMutate: async (followEthAddress: string) => {
@@ -156,9 +158,9 @@ export function useFollow() {
               const followersCount = profile.totalFollowers;
               let totalFollowers: number;
               if (typeof followersCount === 'number') {
-                totalFollowers = followersCount + 1;
+                totalFollowers = Math.max(followersCount + 1);
               } else {
-                totalFollowers = parseInt(followersCount, 10) + 1;
+                totalFollowers = Math.max(0, parseInt(followersCount, 10) + 1);
               }
               return {
                 ...profile,
@@ -207,7 +209,9 @@ export function useUnfollow() {
     unfollowEthAddress => {
       const input = { type: 'unFollow', ethAddress: unfollowEthAddress, ts: Date.now() };
       FollowQueue.addToQueue(input);
-      return lastValueFrom(FollowQueue.results.pipe(first(ev => ev.ts === input.ts)));
+      return lastValueFrom(
+        FollowQueue.results.pipe(first(ev => ev.ts === input.ts && ev.type === input.type)),
+      );
     },
     {
       onMutate: async (unfollowEthAddress: string) => {

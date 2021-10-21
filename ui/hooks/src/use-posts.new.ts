@@ -225,9 +225,9 @@ export function useDeletePost(postID: string) {
           const postsCount = profile.totalPosts;
           let totalPosts: number;
           if (typeof postsCount === 'number') {
-            totalPosts = postsCount - 1;
+            totalPosts = Math.max(0, postsCount - 1);
           } else {
-            totalPosts = parseInt(postsCount, 10) - 1;
+            totalPosts = Math.max(0, parseInt(postsCount, 10) - 1);
           }
           return {
             ...profile,
