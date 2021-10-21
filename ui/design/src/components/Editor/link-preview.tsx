@@ -5,7 +5,6 @@ import isUrl from 'is-url';
 import Icon from '../Icon';
 import { StyledCloseDiv, StyledUploadingDiv, StyledText } from './styled-editor-box';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { isMobileOnly } from 'react-device-detect';
 
 const Favicon = styled.img`
   width: 1rem;
@@ -13,6 +12,11 @@ const Favicon = styled.img`
 `;
 
 const StyledCoverImg = styled.img`
+  // don't resize the image to fit the width of the container
+  // because the image width might be smaller than the container width
+  width: fit-content;
+  // align the image to the center of the container
+  margin: 0 auto;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -110,7 +114,6 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
           )}
           {!!linkPreviewData.images?.length && (
             <StyledCoverBox
-              height={isMobileOnly ? '9.5rem' : '18rem'}
               pad="none"
               round={{ corner: 'top', size: 'xsmall' }}
               border={[{ color: 'border', side: 'all' }]}
