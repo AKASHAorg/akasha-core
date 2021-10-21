@@ -28,7 +28,18 @@ const withMentions = (editor: Editor) => {
 };
 
 const withTags = (editor: Editor) => {
-  const { isInline, isVoid } = editor;
+  const { isInline, isVoid, insertText } = editor;
+
+  editor.insertText = (text: string) => {
+    const { selection } = editor;
+    const [parentNode]: any = selection ? Editor.parent(editor, selection) : [undefined];
+
+    if (parentNode?.type === 'tag') {
+      Transforms.insertText(editor, text);
+    } else {
+      insertText(text);
+    }
+  };
 
   editor.isInline = element => {
     return element.type === 'tag' ? true : isInline(element);

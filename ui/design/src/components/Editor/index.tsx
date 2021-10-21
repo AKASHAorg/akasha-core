@@ -327,6 +327,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         setTagTargetRange(beforeRange);
         getTags(tagName);
         setCreateTag(tagName);
+        Transforms.select(editor, afterRange);
+        CustomEditor.insertTag(editor, { name: tagName, totalPosts: 0 });
         setIndex(0);
         return;
       } else {
@@ -515,6 +517,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 autoComplete="off"
                 spellCheck={false}
                 autoFocus={true}
+                readOnly={emojiPopoverOpen}
                 renderElement={(renderProps: RenderElementProps) =>
                   renderElement(
                     renderProps,
