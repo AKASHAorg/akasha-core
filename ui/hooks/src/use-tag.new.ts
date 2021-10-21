@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
+import { PROFILE_KEY } from './use-profile.new';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export const TAG_SUBSCRIPTIONS_KEY = 'TAG_SUBSCRIPTIONS';
 export const GET_TAG_KEY = 'GET_TAG';
@@ -58,6 +60,26 @@ export function useToggleTagSubscription() {
       }
       queryClient.setQueryData([TAG_SUBSCRIPTIONS_KEY], newTagsSubs);
       return { previousTagSubs };
+    },
+    onSuccess: async ({ data }) => {
+      const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+      const ownPubKey = user.data?.pubKey;
+      if (user) {
+        queryClient.setQueryData<IProfileData>([PROFILE_KEY, ownPubKey], profile => {
+          const interestCount = profile.totalInterests;
+          const operation = data?.toggleInterestSub ? +1 : -1;
+          let totalInterests: number;
+          if (typeof interestCount === 'number') {
+            totalInterests = Math.max(0, interestCount + operation);
+          } else {
+            totalInterests = Math.max(0, parseInt(interestCount, 10) + operation);
+          }
+          return {
+            ...profile,
+            totalInterests,
+          };
+        });
+      }
     },
     onError: (err, variables, context) => {
       if (context?.previousTagSubs) {
