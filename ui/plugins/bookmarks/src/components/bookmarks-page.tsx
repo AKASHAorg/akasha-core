@@ -112,6 +112,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               itemSpacing={8}
               itemCard={
                 <EntryCardRenderer
+                  modalSlotId={props.layoutConfig.modalSlotId}
                   logger={logger}
                   singleSpa={singleSpa}
                   bookmarks={bookmarksReq.data}

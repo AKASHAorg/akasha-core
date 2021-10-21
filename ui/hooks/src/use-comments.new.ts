@@ -5,19 +5,23 @@ import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/com
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
-import { IPublishData, CommentResponse } from '@akashaproject/ui-awf-typings/lib/entry';
+import {
+  IPublishData,
+  CommentResponse,
+  PostResponse,
+} from '@akashaproject/ui-awf-typings/lib/entry';
+import {
+  Comment_Response,
+  Post_Response,
+} from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import { ENTRY_KEY } from './use-posts.new';
 
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
 
 export const PUBLISH_PENDING_KEY = 'PendingPublish_Comments';
 
-const getComments = async (
-  queryClient: QueryClient,
-  limit: number,
-  postID: string,
-  offset?: string,
-) => {
+const getComments = async (limit: number, postID: string, offset?: string) => {
   const sdk = getSDK();
 
   try {
@@ -40,10 +44,9 @@ const getComments = async (
 };
 
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
-  const queryClient = useQueryClient();
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
-    async ({ pageParam = offset }) => getComments(queryClient, limit, postID, pageParam),
+    async ({ pageParam = offset }) => getComments(limit, postID, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
@@ -124,8 +127,23 @@ export function useDeleteComment(commentID: string) {
             value: '1',
           },
         ],
+        updatedAt: Date.now().toString(),
       });
       return { previousComment };
+    },
+    onSuccess: () => {
+      const parentEntryId = queryClient.getQueryData<Comment_Response>([
+        COMMENT_KEY,
+        commentID,
+      ]).postId;
+      queryClient.setQueryData<Post_Response>([ENTRY_KEY, parentEntryId], currentEntry => {
+        if (currentEntry) {
+          return {
+            ...currentEntry,
+            totalComments: `${+currentEntry.totalComments - 1}`,
+          };
+        }
+      });
     },
     // If the mutation fails, use the context returned from onMutate to roll back
     onError: (err, variables, context) => {
@@ -160,16 +178,20 @@ export function useCreateComment() {
 
         return { optimisticComment, entryId: pendingID };
       },
-      onError: (err, variables, context) => {
-        if (context?.optimisticComment) {
-          return Promise.resolve({
-            optimisticComment: { ...context.optimisticComment },
-          });
-        }
+      onError: err => {
         logError('useComments.createComment', err as Error);
       },
-      onSuccess: async id => {
+      onSuccess: async (id, variables) => {
         await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));
+        const { postID } = variables;
+        queryClient.setQueryData<PostResponse>([ENTRY_KEY, postID], currentEntry => {
+          if (currentEntry) {
+            return {
+              ...currentEntry,
+              totalComments: `${+currentEntry.totalComments + 1}`,
+            };
+          }
+        });
       },
       onSettled: async () => {
         await queryClient.invalidateQueries(COMMENTS_KEY);
@@ -201,6 +223,7 @@ export function useEditComment(commentID: string, hasCommentData: boolean) {
             ...current,
             content: commentPublishObj.data,
             isPublishing: true,
+            updatedAt: Date.now().toString(),
           };
         });
 

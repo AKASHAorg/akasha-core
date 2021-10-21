@@ -36,6 +36,7 @@ export interface IEntryCardRendererProps {
   handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
   uiEvents: RootComponentProps['uiEvents'];
   navigateToModal: RootComponentProps['navigateToModal'];
+  modalSlotId: string;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
@@ -49,6 +50,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     bookmarksQuery,
     onBookmark,
     onRepost,
+    modalSlotId,
   } = props;
 
   const { entryId } = itemData || {};
@@ -222,9 +224,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 onEntryRemove={handleEntryRemove}
                 onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
                 hideActionButtons={hideActionButtons}
+                modalSlotId={modalSlotId}
                 headerMenuExt={
                   ethAddress === itemData.author.ethAddress && (
                     <ExtensionPoint
+                      style={{ width: '100%' }}
                       name={`entry-card-edit-button_${entryId}`}
                       onMount={onEditButtonMount}
                       onUnmount={onEditButtonUnmount}

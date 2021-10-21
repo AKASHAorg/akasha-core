@@ -80,6 +80,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     <Box margin={{ bottom: '1rem' }}>
       <MainAreaCardBox>
         <Content
+          {...props}
           isPending={isPending}
           locale={locale}
           entryData={itemType === ModerationItemTypes.ACCOUNT ? profile : entryData}

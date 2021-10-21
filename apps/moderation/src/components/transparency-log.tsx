@@ -108,7 +108,11 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
       )}
       <Box direction="row" margin={{ top: '-0.5rem' }}>
         {/* setting height and overflow behaviour to make y-scrollable container */}
-        <Box width={isMobile ? '100%' : '40%'} height={sidebarHeight} style={{ overflowY: 'scroll' }}>
+        <Box
+          width={isMobile ? '100%' : '40%'}
+          height={sidebarHeight}
+          style={{ overflowY: 'scroll' }}
+        >
           {!logItemsQuery.isLoading && !logItemPages.length && (
             <Text>{t('No moderated items found. Please check again later.')}</Text>
           )}

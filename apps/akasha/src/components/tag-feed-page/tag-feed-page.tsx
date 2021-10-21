@@ -124,6 +124,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
         />
       )}
       <FeedWidget
+        modalSlotId={props.layoutConfig.modalSlotId}
         itemType={ItemTypes.ENTRY}
         logger={props.logger}
         onLoadMore={handleLoadMore}

@@ -15,10 +15,11 @@ export interface IEntryDataCardProps {
   locale: ILocale;
   itemType: string;
   singleSpa: typeof SingleSpa;
+  modalSlotId: string;
 }
 
 const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
-  const { entryData, itemType, locale } = props;
+  const { entryData, itemType, locale, modalSlotId } = props;
 
   const { t } = useTranslation();
 
@@ -31,6 +32,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
           {/* for other contents (reply | comment, post) */}
           {itemType !== ModerationItemTypes.ACCOUNT && entryData && (
             <EntryCard
+              modalSlotId={modalSlotId}
               showMore={false}
               entryData={entryData}
               repostsLabel={t('Reposts')}
@@ -49,6 +51,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
           )}
           {itemType === ModerationItemTypes.ACCOUNT && (
             <ProfileCard
+              modalSlotId={modalSlotId}
               showMore={false}
               flaggable={true}
               canUserEdit={false}

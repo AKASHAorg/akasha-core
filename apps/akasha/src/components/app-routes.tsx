@@ -13,6 +13,7 @@ import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 
 import routes, { FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
+import ReplyPage from './post-page/reply-page';
 
 const { Box } = DS;
 
@@ -55,8 +56,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               showLoginModal={showLoginModal}
             />
           </Route>
-          <Route path={`${routes[REPLY]}/:postId`}>
-            <div>Coming Soon!</div>
+          <Route path={`${routes[REPLY]}/:commentId`}>
+            <ReplyPage {...props} />
           </Route>
           <Route path={`${routes[INVITE]}/:inviteCode`}>
             <InvitePage {...props} />

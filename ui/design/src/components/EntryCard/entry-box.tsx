@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
-import { StyledDropAlt, StyledProfileDrop, StyledIcon } from './styled-entry-box';
+import { StyledProfileDrop, StyledIcon } from './styled-entry-box';
 
 import { EntryCardHidden } from './entry-card-hidden';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
@@ -53,6 +53,13 @@ export interface IEntryBoxProps {
   comment?: boolean;
   bookmarkLabel?: string;
   bookmarkedLabel?: string;
+  editedLabel?: string;
+  headerTextLabel?: string;
+  footerTextLabel?: string;
+  moderatedContentLabel?: string;
+  ctaLabel?: string;
+  removedByMeLabel?: string;
+  removedByAuthorLabel?: string;
   // determines when to render the 'show more' icon
   showMore: boolean;
   // anchor link
@@ -82,20 +89,14 @@ export interface IEntryBoxProps {
   disableActions?: boolean;
   hideActionButtons?: boolean;
   hidePublishTime?: boolean;
-  headerTextLabel?: string;
-  footerTextLabel?: string;
-  moderatedContentLabel?: string;
-  ctaLabel?: string;
   handleFlipCard?: () => void;
   isModerated?: boolean;
   scrollHiddenContent?: boolean;
   removeEntryLabel?: string;
   onEntryRemove?: (entryId: string) => void;
-  removedByMeLabel?: string;
-  removedByAuthorLabel?: string;
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
-  editedLabel?: string;
+  modalSlotId: string;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -155,6 +156,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     removedByMeLabel = 'You deleted this post',
     removedByAuthorLabel = 'This post was deleted by its author',
     editedLabel = 'Last edited',
+    modalSlotId,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -434,33 +436,32 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {showMobileCardMenu && (
-          <StyledDropAlt>
-            <MobileListModal
-              closeModal={closeMenuDrop}
-              menuItems={[
-                ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
-                  ? [
-                      {
-                        label: props.flagAsLabel,
-                        icon: 'report',
-                        handler: handleEntryFlag,
-                        disabled: disableReporting,
-                      },
-                    ]
-                  : []),
-                ...(entryData.author.ethAddress === loggedProfileEthAddress
-                  ? [
-                      {
-                        icon: 'trash' as IconType,
-                        handler: handleEntryRemove,
-                        label: removeEntryLabel,
-                      },
-                    ]
-                  : []),
-              ]}
-              headerMenuExt={props.headerMenuExt}
-            />
-          </StyledDropAlt>
+          <MobileListModal
+            modalSlotId={modalSlotId}
+            closeModal={closeMenuDrop}
+            menuItems={[
+              ...(onEntryFlag && !(entryData.author.ethAddress === loggedProfileEthAddress)
+                ? [
+                    {
+                      label: props.flagAsLabel,
+                      icon: 'report',
+                      handler: handleEntryFlag,
+                      disabled: disableReporting,
+                    },
+                  ]
+                : []),
+              ...(entryData.author.ethAddress === loggedProfileEthAddress
+                ? [
+                    {
+                      icon: 'trash' as IconType,
+                      handler: handleEntryRemove,
+                      label: removeEntryLabel,
+                    },
+                  ]
+                : []),
+            ]}
+            headerMenuExt={props.headerMenuExt}
+          />
         )}
         {props.isRemoved && (
           <EntryCardRemoved
@@ -557,6 +558,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             disableReposting={disableReposting}
             disableActions={disableActions}
             isModerated={isModerated}
+            modalSlotId={modalSlotId}
           />
         )}
       </Box>

@@ -3,8 +3,9 @@ import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-export interface IContentProps {
+export interface IContentProps extends RootComponentProps {
   user?: string;
   isPending: boolean;
   locale: ILocale;

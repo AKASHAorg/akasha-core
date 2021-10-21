@@ -360,9 +360,11 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   removedByAuthorLabel={t('This post was deleted by its author')}
                   disableReposting={entryData.isRemoved}
                   disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+                  modalSlotId={props.layoutConfig.modalSlotId}
                   headerMenuExt={
                     showEditButton && (
                       <ExtensionPoint
+                        style={{ width: '100%' }}
                         name={`entry-card-edit-button_${entryData.entryId}`}
                         onMount={onEditPostButtonMount}
                         onUnmount={onEditPostButtonUnmount}
@@ -434,10 +436,12 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     hidePublishTime={true}
                     disableActions={true}
                     hideActionButtons={true}
+                    modalSlotId={props.layoutConfig.modalSlotId}
                   />
                 </Box>
               )}
               <FeedWidget
+                modalSlotId={props.layoutConfig.modalSlotId}
                 logger={logger}
                 pages={commentPages}
                 itemType={ItemTypes.COMMENT}

@@ -288,7 +288,7 @@ export async function addToIpfs(link: string) {
   processSteps.push(
     resizePipeline
       .clone()
-      .resize({ width: 500, height: 500, fit: sharp.fit.inside })
+      .resize({ width: 640, height: 500, fit: sharp.fit.inside })
       .webp({ lossless: true })
       .toBuffer(),
   );

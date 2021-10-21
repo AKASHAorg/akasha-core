@@ -155,9 +155,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           contentClickable={false}
           hidePublishTime={true}
           disableActions={true}
+          modalSlotId={props.layoutConfig.modalSlotId}
         />
       )}
       <FeedWidget
+        modalSlotId={props.layoutConfig.modalSlotId}
         logger={logger}
         itemType={ItemTypes.ENTRY}
         pages={postPages}
