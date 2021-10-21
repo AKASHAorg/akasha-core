@@ -97,8 +97,8 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
           </StyledBox>
 
           {imgUrl && (
-            <TransformWrapper ref={transformRef}>
-              <TransformComponent>
+            <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
+              <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <picture>
                   <img src={imgUrl} />
                 </picture>

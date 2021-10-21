@@ -31,7 +31,7 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
     };
 
   return (
-    <ModalWrapper isTransparent={true}>
+    <ModalWrapper isTransparent={true} justify="center" align="center">
       <StyledBox width={size === 'small' ? '90%' : '33%'}>
         <MainAreaCardBox className={className}>
           <Box direction="column" pad="large">
