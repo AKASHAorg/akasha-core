@@ -24,7 +24,6 @@ const Caret = styled.div<{ position: ITooltipProps['caretPosition'] }>`
     return `
         border-top: 0.5em solid transparent;
         border-bottom: 0.5em solid transparent;
-        margin-left: calc(50% - 0.42rem);
       `;
   }};
   border-bottom: 0.3em solid
@@ -67,7 +66,7 @@ const TooltipContent = ({
           </Text>
         </ContentWrapper>
         {caretPosition === 'right' && <Caret position={caretPosition} />}
-      </Box>{' '}
+      </Box>
       {caretPosition === 'bottom' && <Caret position={caretPosition} />}
     </>
   );
