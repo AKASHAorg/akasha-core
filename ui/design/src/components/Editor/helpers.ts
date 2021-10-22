@@ -1,4 +1,4 @@
-import { Editor, Text, Transforms, Element } from 'slate';
+import { Editor, Text, Transforms, Element, Node, Path } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
 import {
@@ -47,14 +47,20 @@ const CustomEditor = {
   ) {
     const text = { text: '' };
     const image: ImageElement = { url, size, type: 'image', children: [text] };
-    Transforms.insertNodes(editor, image);
-    ReactEditor.focus(editor);
+    // move selection to the end before inserting to make sure image is last element
     Transforms.select(editor, Editor.end(editor, []));
+    Transforms.insertNodes(editor, image);
+    // give slate time to render the image element
+    requestAnimationFrame(() => moveSelectionBeforeImage(editor));
   },
 
   insertText(editor: Editor, text: string) {
     ReactEditor.focus(editor);
-    Transforms.select(editor, Editor.end(editor, []));
+    // if the last element is an image and the user doesn't have
+    // an active selection move the selection before the image
+    if (!editor.selection) {
+      moveSelectionBeforeImage(editor);
+    }
     const textElem: CustomText = { text };
     Transforms.insertNodes(editor, textElem);
   },
@@ -110,6 +116,22 @@ const CustomEditor = {
     ReactEditor.focus(editor);
     Transforms.move(editor);
   },
+};
+
+export const moveSelectionBeforeImage = (editor: Editor) => {
+  const [match] = Editor.nodes(editor, {
+    match: n => Element.isElement(n) && n.type === 'image',
+    mode: 'all',
+  });
+  if (match?.length) {
+    const imageNode = match[0];
+    const imagePath = ReactEditor.findPath(editor, imageNode);
+    // move the selection before the image
+    if (Node.isNode(imageNode)) {
+      ReactEditor.focus(editor);
+      Transforms.select(editor, Editor.end(editor, Path.previous(imagePath)));
+    }
+  }
 };
 
 export const Portal = ({ children }: any) => {
