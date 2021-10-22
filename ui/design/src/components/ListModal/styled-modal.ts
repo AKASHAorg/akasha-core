@@ -34,6 +34,11 @@ const StyledBox = styled(Box)`
   `};
 `;
 
+const StyledReportModalBox = styled(Box)`
+  display: block;
+  overflow-y: auto;
+`;
+
 const StyledText = styled(Text)`
   text-transform: uppercase;
 `;
@@ -188,6 +193,7 @@ export {
   ContentWrapper,
   StyledContentArea,
   StyledButtonWrapper,
+  StyledReportModalBox,
   ModalButton,
   StyledFooterArea,
 };

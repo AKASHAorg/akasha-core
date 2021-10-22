@@ -1,9 +1,9 @@
 import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { logError } from './utils/error-handler';
 import { TRENDING_PROFILES_KEY } from './use-trending.new';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile.new';
 
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
@@ -130,9 +130,9 @@ export function useFollow() {
             const followersCount = profile.totalFollowers;
             let totalFollowers: number;
             if (typeof followersCount === 'number') {
-              totalFollowers = followersCount + 1;
+              totalFollowers = Math.max(followersCount + 1);
             } else {
-              totalFollowers = parseInt(followersCount, 10) + 1;
+              totalFollowers = Math.max(0, parseInt(followersCount, 10) + 1);
             }
             return {
               ...profile,
@@ -155,6 +155,13 @@ export function useFollow() {
         if (profile) {
           await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
           await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+        }
+      } else {
+        const sdk = getSDK();
+        const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+        if (user) {
+          await queryClient.invalidateQueries([PROFILE_KEY, user.data?.pubKey]);
+          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.data?.pubKey]);
         }
       }
     },
@@ -218,6 +225,13 @@ export function useUnfollow() {
           if (profile) {
             await queryClient.invalidateQueries([PROFILE_KEY, profile.pubKey]);
             await queryClient.invalidateQueries([FOLLOWERS_KEY, profile.pubKey]);
+          }
+        } else {
+          const sdk = getSDK();
+          const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+          if (user) {
+            await queryClient.invalidateQueries([PROFILE_KEY, user.data?.pubKey]);
+            await queryClient.invalidateQueries([FOLLOWERS_KEY, user.data?.pubKey]);
           }
         }
       },

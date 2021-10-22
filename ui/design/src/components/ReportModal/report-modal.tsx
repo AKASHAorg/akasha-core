@@ -13,6 +13,7 @@ import {
   ModalButton,
   ModalWrapper,
   StyledTextArea,
+  StyledReportModalBox,
 } from '../ListModal/styled-modal';
 import { useViewportSize } from '../Providers/viewport-dimension';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
@@ -136,7 +137,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     <ModalWrapper isTransparent={true} isMobile={isMobileOnly} justify="center" align="center">
       <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
-          <Box direction="column" pad="large">
+          <StyledReportModalBox pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
               {isMobileOnly && (
                 <Icon
@@ -165,6 +166,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               weight="normal"
               color="secondaryText"
               size="medium"
+              style={{ display: 'block' }}
             >
               {optionsTitleLabel}
               <Text color="accentText" margin="0 0 0 0.15rem">
@@ -193,6 +195,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
               weight="normal"
               color="secondaryText"
               size="medium"
+              style={{ display: 'block' }}
             >
               {descriptionLabel}
             </StyledText>
@@ -214,7 +217,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
             </FormField>
             {/* display error message, if any */}
             {errorText?.length > 0 && <Text color="errorText">{errorText}</Text>}
-            <Box margin={{ top: 'medium' }}>
+            <Box margin={{ top: 'large' }}>
               <Text color="secondaryText" size="medium" margin={{ bottom: 'medium' }}>
                 {footerText1Label}{' '}
                 <Text
@@ -255,7 +258,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 disabled={requesting || !reason.length}
               />
             </Box>
-          </Box>
+          </StyledReportModalBox>
         </MainAreaCardBox>
       </StyledBox>
     </ModalWrapper>
