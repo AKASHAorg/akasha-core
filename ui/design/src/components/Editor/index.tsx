@@ -515,6 +515,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 autoComplete="off"
                 spellCheck={false}
                 autoFocus={true}
+                readOnly={emojiPopoverOpen}
                 renderElement={(renderProps: RenderElementProps) =>
                   renderElement(
                     renderProps,
