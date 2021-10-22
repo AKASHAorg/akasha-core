@@ -51,38 +51,15 @@ const CustomEditor = {
     Transforms.select(editor, Editor.end(editor, []));
     Transforms.insertNodes(editor, image);
     // give slate time to render the image element
-    requestAnimationFrame(() => {
-      const [match] = Editor.nodes(editor, {
-        match: n => Element.isElement(n) && n.type === 'image',
-        mode: 'all',
-      });
-      if (match?.length) {
-        const imageNode = match[0];
-        const imagePath = ReactEditor.findPath(editor, imageNode);
-        // move the selection before the image
-        if (Node.isNode(imageNode)) {
-          ReactEditor.focus(editor);
-          Transforms.select(editor, Editor.end(editor, Path.previous(imagePath)));
-        }
-      }
-    });
+    requestAnimationFrame(() => moveSelectionBeforeImage(editor));
   },
 
   insertText(editor: Editor, text: string) {
     ReactEditor.focus(editor);
     // if the last element is an image and the user doesn't have
     // an active selection move the selection before the image
-    const [match] = Editor.nodes(editor, {
-      match: n => Element.isElement(n) && n.type === 'image',
-      mode: 'all',
-    });
-    if (match?.length) {
-      const imageNode = match[0];
-      const imagePath = ReactEditor.findPath(editor, imageNode);
-      // move the selection before the image
-      if (Node.isNode(imageNode) && !editor.selection) {
-        Transforms.select(editor, Editor.end(editor, Path.previous(imagePath)));
-      }
+    if (!editor.selection) {
+      moveSelectionBeforeImage(editor);
     }
     const textElem: CustomText = { text };
     Transforms.insertNodes(editor, textElem);
@@ -139,6 +116,22 @@ const CustomEditor = {
     ReactEditor.focus(editor);
     Transforms.move(editor);
   },
+};
+
+export const moveSelectionBeforeImage = (editor: Editor) => {
+  const [match] = Editor.nodes(editor, {
+    match: n => Element.isElement(n) && n.type === 'image',
+    mode: 'all',
+  });
+  if (match?.length) {
+    const imageNode = match[0];
+    const imagePath = ReactEditor.findPath(editor, imageNode);
+    // move the selection before the image
+    if (Node.isNode(imageNode)) {
+      ReactEditor.focus(editor);
+      Transforms.select(editor, Editor.end(editor, Path.previous(imagePath)));
+    }
+  }
 };
 
 export const Portal = ({ children }: any) => {
