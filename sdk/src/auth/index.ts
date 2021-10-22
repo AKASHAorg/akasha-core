@@ -177,7 +177,7 @@ export default class AWF_Auth implements AWF_IAuth {
     }
     try {
       await this._web3.connect(currentProvider);
-      await this._web3.checkCurrentNetwork();
+      await lastValueFrom(this._web3.checkCurrentNetwork());
       const endPoint = process.env.AUTH_ENDPOINT;
       const address = await lastValueFrom(this._web3.getCurrentAddress());
       if (args.checkRegistered) {
