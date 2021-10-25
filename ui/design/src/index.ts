@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* Components */
 import {
   Box,
@@ -16,108 +15,144 @@ import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 
 import Autosizer from 'react-virtualized-auto-sizer';
 
-import { Avatar, EditableAvatar } from './components/Avatar';
+import Avatar from './components/Avatar';
+import EditableAvatar from './components/EditableAvatar';
 
-import { Sidebar, Topbar } from './components/Bars/index';
+import Sidebar from './components/SideBar';
+import Topbar from './components/TopBar';
+
+import EditorCard from './components/EditorCard';
+import { CommentEditor } from './components/EditorCard/comment-editor';
+import { EditorPlaceholder } from './components/EditorCard/editor-placeholder';
+
+import EntryCard from './components/EntryCard';
+import EntryList from './components/EntryList';
+import { EntryBox } from './components/EntryCard/entry-box';
+import { MenuItemButton } from './components/EntryCard/menu-item-button';
+import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
+import {
+  BasicCardBox,
+  MainAreaCardBox,
+  WidgetAreaCardBox,
+  ModalCard,
+  ModalCardLogin,
+} from './components/EntryCard/basic-card-box';
+
+import BoxFormCard from './components/BoxFormCard';
+import EnsFormCard from './components/EnsFormCard';
+
+import NotificationsCard from './components/NotificationCard';
+
+import CustomizeFeedCard from './components/OnboardingCard';
+
+import ProfileCard from './components/ProfileCard';
+import { ProfileDelistedCard } from './components/ProfileCard/profile-delisted-card';
+import { ProfileSearchCard } from './components/ProfileCard/profile-search-card';
+import { ProfileWidgetCard } from './components/ProfileCard/profile-widget-card';
+import { ProfileMiniCard } from './components/ProfileCard/profile-mini-card';
+
+import TagCard from './components/TagCard';
+import { TagDetailCard } from './components/TagCard/tag-detail-card';
+import { TagProfileCard } from './components/TagCard/tag-profile-card';
+import { TagSearchCard } from './components/TagCard/tag-search-card';
+
+import FilterCard from './components/FilterCard';
+import SwitchCard from './components/SwitchCard';
+import MdCard from './components/MdCard';
+
+import AppInfoWidgetCard from './components/AppInfoWidgetCard';
+import AppsWidgetCard from './components/AppsWidgetCard';
+import CookieWidgetCard from './components/CookieCard';
+import LoginCTAWidgetCard from './components/LoginCTAWidgetCard';
+import SourcesWidgetCard from './components/SourcesWidgetCard';
+import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
+import TopicsWidgetCard from './components/TopicsWidgetCard';
+import TrendingWidgetCard from './components/TrendingWidgetCard';
+import TutorialWidgetCard from './components/TutorialWidgetCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
-import EntryPublishErrorCard from './components/Errors/entry-publish-error-card';
+import Button from './components/Button';
+import DuplexButton from './components/DuplexButton';
+import IconButton from './components/IconButton';
+import IconLink from './components/IconLink';
+import ProfileAvatarButton from './components/ProfileAvatarButton';
+import VoteIconButton from './components/VoteIconButton';
 
-import {
-  Button,
-  DuplexButton,
-  IconButton,
-  IconLink,
-  ProfileAvatarButton,
-  VoteIconButton,
-} from './components/Buttons';
-import { AreaChart, LineChart, ResponsiveChart } from './components/Charts';
+import AreaChart from './components/AreaChart';
+import LineChart from './components/LineChart';
+import ResponsiveChart from './components/ResponsiveChart';
 
-import {
-  AppInfoWidgetCard,
-  AppsWidgetCard,
-  BasicCardBox,
-  MainAreaCardBox,
-  BoxFormCard,
-  CommentEditor,
-  EditorCard,
-  EditorPlaceholder,
-  EnsFormCard,
-  EntryBox,
-  EntryCard,
-  EntryCardHidden,
-  MiniInfoWidgetCard,
-  ProfileCard,
-  ProfileSearchCard,
-  ProfileWidgetCard,
-  ProfileMiniCard,
-  TopicsWidgetCard,
-  WidgetAreaCardBox,
-  ModalCard,
-  LoginCTAWidgetCard,
-  TrendingWidgetCard,
-  SourcesWidgetCard,
-  TutorialWidgetCard,
-  CookieWidgetCard,
-  CustomizeFeedCard,
-  TagCard,
-  TagDetailCard,
-  TagProfileCard,
-  TagSearchCard,
-  FilterCard,
-  SwitchCard,
-  NotificationsCard,
-  MdCard,
-} from './components/Cards';
+import EditorBox from './components/Editor';
+import { editorDefaultValue } from './components/Editor/initialValue';
+import EditorMeter from './components/EditorMeter';
 
-import { EditorBox, EditorMeter, editorDefaultValue } from './components/Editor';
+import HorizontalDivider from './components/HorizontalDivider';
 
-import TextInputField from './components/Forms/text-input-field';
-import { AppIcon, Icon, iconTypes } from './components/Icon';
-import ErrorInfoCard from './components/Errors/error-info-card';
-import ErrorLoader from './components/Errors/error-loader';
-import ModerationAppErrorCard from './components/Errors/moderation-app-error-card';
+import ErrorLoader from './components/ErrorLoader';
+import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
+import EntryPublishErrorCard from './components/EntryPublishErrorCard';
+import ModerationAppErrorCard from './components/ModerationAppErrorCard';
 
-import { CommentInput, SearchInput, DropSearchInput } from './components/Input';
-import {
-  ShareModal,
-  ModalContainer,
-  ModalRenderer,
-  EthProviderListModal,
-  EthProviderModal,
-  MobileListModal,
-  LoginModal,
-  ReportModal,
-  ModerateModal,
-  ProfileCompletedModal,
-  FeedbackModal,
-  ToastProvider,
-  EditorModal,
-  StyledLayer,
-} from './components/Modals';
+import TextInputField from './components/TextInputField';
 
-import { NotificationsPopover, SelectPopover } from './components/Popovers';
+import Icon, { iconTypes } from './components/Icon';
+import { AppIcon } from './components/Icon/app-icon';
+
+import CommentInput from './components/CommentInput';
+import SearchInput from './components/SearchInput';
+import DropSearchInput from './components/DropSearchInput';
+
+import EditorModal from './components/EditorModal';
+import ExtensionPoint from './utils/extension-point';
+import ShareModal from './components/ShareModal';
+import { StyledLayer } from './components/ListModal/styled-modal';
+import SignInModal from './components/SignInModal';
+import SignUpModal from './components/SignUpModal';
+import EthProviderModal from './components/SignInModal/eth-provider-modal';
+import EthProviderListModal from './components/SignInModal/eth-provider-list-modal';
+import { ModalContainer } from './components/SignInModal/fullscreen-modal-container';
+import { ModalRenderer } from './components/SignInModal/modal-renderer';
+import MobileListModal from './components/MobileListModal';
+import ModerateModal from './components/ModerateModal';
+import ReportModal from './components/ReportModal';
+import ProfileCompletedModal from './components/ProfileCompletedModal';
+import FeedbackModal from './components/FeedbackModal';
+import ConfirmationModal from './components/ConfirmationModal';
+import StatModal from './components/StatModal';
+
+import BookmarkPill from './components/BookmarkPill';
+import NewPostsPill from './components/NewPostsPill';
+import { Notification, notify } from './components/NotificationToast';
+
+import NotificationsPopover from './components/NotificationsPopover';
+import SelectPopover from './components/SelectPopover';
+
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
-import { SubtitleTextIcon, TextIcon } from './components/TextIcon';
-import VirtualList from './components/VirtualList';
-import type { Helmet as HelmetType } from '@types/react-helmet';
+import TextIcon from './components/TextIcon';
+import SubtitleTextIcon from './components/SubtitleTextIcon';
+// import VirtualList from './components/VirtualList';
 import Helmet from 'react-helmet';
-import { HorizontalDivider } from './components/Dividers';
-import { Notification, notify, BookmarkPill, NewPostsPill } from './components/Notification';
 import Spinner from './components/Spinner';
+
+import TransparencyLogMiniCard from './components/TransparencyLogMiniCard';
+import TransparencyLogDetailCard from './components/TransparencyLogDetailCard';
+import TransparencyLogBanner from './components/TransparencyLogBanner';
 
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
 import { isBase64 } from './utils/string-utils';
 import { formatRelativeTime } from './utils/time';
+import useIntersectionObserver from './utils/intersection-observer';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
 import lightTheme from './styles/themes/light';
 import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
+
+import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
 
 /* Grommet utils */
 // @TODO: fix this export style...
@@ -145,6 +180,7 @@ const exported = {
   EditorBox,
   EditorMeter,
   editorDefaultValue,
+  ExtensionPoint,
   CommentEditor,
   EditorCard,
   EditorPlaceholder,
@@ -157,6 +193,7 @@ const exported = {
   EnsFormCard,
   MiniInfoWidgetCard,
   ProfileCard,
+  ProfileDelistedCard,
   ProfileSearchCard,
   ProfileWidgetCard,
   ProfileMiniCard,
@@ -170,7 +207,8 @@ const exported = {
   iconTypes,
   IconButton,
   IconLink,
-  LoginModal,
+  SignInModal,
+  SignUpModal,
   ProfileAvatarButton,
   VoteIconButton,
   CommentInput,
@@ -183,7 +221,9 @@ const exported = {
   ProfileCompletedModal,
   FeedbackModal,
   Spinner,
-  ToastProvider,
+  TransparencyLogMiniCard,
+  TransparencyLogDetailCard,
+  TransparencyLogBanner,
   SelectPopover,
   SubtitleTextIcon,
   Sidebar,
@@ -208,20 +248,22 @@ const exported = {
   createGlobalStyle,
   ViewportSizeProvider,
   useViewportSize,
-  VirtualList,
+  // VirtualList,
   isBase64,
   formatImageSrc,
   formatRelativeTime,
+  useIntersectionObserver,
   WidgetAreaCardBox,
   ModalCard,
+  ModalCardLogin,
   EthProviderListModal,
   EthProviderModal,
   MobileListModal,
   ModalContainer,
   ModalRenderer,
+  MenuItemButton,
   Notification,
   NotificationsCard,
-  Spinner,
   notify,
   HorizontalDivider,
   LoginCTAWidgetCard,
@@ -234,7 +276,11 @@ const exported = {
   MdCard,
   EntryPublishErrorCard,
   StyledLayer,
-  Helmet: Helmet as HelmetType,
+  Helmet: Helmet as any,
+  ConfirmationModal,
+  StatModal,
+  EntryList,
+  StyledSelectBox,
 };
 
 export default exported;

@@ -5,168 +5,77 @@ import {
   IMenuItem,
   EventTypes,
   MenuItemAreaType,
+  UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  useLoginState,
-  useErrors,
-  useNotifications,
-  useProfile,
-  useModalState,
-} from '@akashaproject/ui-awf-hooks';
-import { MODAL_NAMES } from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
+import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { useTranslation } from 'react-i18next';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { extensionPointsMap } from '../extension-points';
+import { useGetLogin, useLogout } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
-const { lightTheme, Topbar, ThemeSelector, LoginModal, FeedbackModal, ModalRenderer } = DS;
+const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
-interface TopBarProps {
-  navigateToUrl: (url: string) => void;
-  toggleSidebar: (visible: boolean) => void;
-  getMenuItems: () => IMenuItem[];
-  loaderEvents: any;
-  modalSlotId: string;
-  globalChannel: any;
-  logger: any;
-  sdkModules: any;
-  rxjsOperators: any;
-}
+const TopbarComponent = (props: RootComponentProps) => {
+  const { singleSpa, getMenuItems, uiEvents } = props;
 
-const TopbarComponent = (props: TopBarProps) => {
-  const {
-    navigateToUrl,
-    getMenuItems,
-    loaderEvents,
-    toggleSidebar,
-    modalSlotId,
-    globalChannel,
-    rxjsOperators,
-    logger,
-  } = props;
+  const { navigateToUrl } = singleSpa;
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
-  const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
-  const [showSignUpModal, setshowSignUpModal] = React.useState<{
-    inviteToken: string | null;
-    status: boolean;
-  }>({
-    inviteToken: null,
-    status: false,
-  });
-  const [errorState, errorActions] = useErrors({ logger });
 
-  const [loginState, loginActions] = useLoginState({
-    rxjsOperators,
-    globalChannel,
-    onError: errorActions.createError,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    authService: props.sdkModules.auth.authService,
-  });
-  const [inviteTokenForm, setinviteTokenForm] = React.useState<{
-    submitted: boolean;
-    submitting: boolean;
-    success: boolean;
-    hasError: boolean;
-    errorMsg: string;
-  }>({
-    submitted: false,
-    submitting: false,
-    success: false,
-    hasError: false,
-    errorMsg: '',
-  });
-  const [termsState, setTermsState] = React.useState<{
-    waitForCheckTerms: boolean;
-    checkedTermsValues: string[];
-    acceptedTerms: boolean;
-  }>({
-    waitForCheckTerms: true,
-    checkedTermsValues: [],
-    acceptedTerms: false,
-  });
-  const [loggedProfileData, loggedProfileActions] = useProfile({
-    onError: err => logger.error(err),
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    globalChannel: props.globalChannel,
-    rxjsOperators: props.rxjsOperators,
-  });
+  const loginQuery = useGetLogin();
+  const logoutMutation = useLogout();
 
-  const [notificationsState, notificationActions] = useNotifications({
-    rxjsOperators,
-    globalChannel,
-    onError: err => logger.error(err),
-    authService: props.sdkModules.auth.authService,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    loggedEthAddress: loginState.ethAddress,
-  });
+  const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
+  const loggedProfileData = profileDataReq.data;
 
-  const [modalState, modalStateActions] = useModalState({
-    initialState: {
-      feedback: false,
-    },
-    isLoggedIn: !!loginState.ethAddress,
-  });
+  const checkNotifsReq = useCheckNewNotifications(
+    loginQuery.data.isReady && loginQuery.data.ethAddress,
+  );
 
-  React.useEffect(() => {
-    if (loginState.ready?.ethAddress && loginState.ethAddress) {
-      notificationActions.hasNewNotifications();
-    }
-  }, [loginState.ready?.ethAddress, loginState.ethAddress]);
+  const checkModeratorQuery = useCheckModerator(loginQuery.data?.pubKey);
 
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
-    }
-  }, [loginState.pubKey]);
+  const checkModeratorResp = checkModeratorQuery.data;
 
-  const loginErrors: string | null = React.useMemo(() => {
-    if (errorState && Object.keys(errorState).length) {
-      const txt = Object.keys(errorState)
-        .filter(key => key.split('.')[0] === 'useLoginState')
-        .map(k => {
-          if (errorState[k].error.name === 'UserNotRegistered') {
-            setSuggestSignUp(true);
-          }
-          return errorState[k];
-        })
-        .reduce((acc, errObj) => `${acc}\n${errObj.error.message}`, '');
-      return txt;
-    }
-    return null;
-  }, [errorState]);
+  const isModerator = React.useMemo(() => {
+    if (checkModeratorResp === 200) {
+      return true;
+    } else return false;
+  }, [checkModeratorResp]);
+
+  // React.useEffect(() => {
+  //   if (loginState.ready?.ethAddress && loginState.ethAddress) {
+  //     notificationActions.hasNewNotifications();
+  //   }
+  // }, [loginState.ready?.ethAddress, loginState.ethAddress]);
+
+  // React.useEffect(() => {
+  //   if (loginState.pubKey) {
+  //     loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
+  //   }
+  // }, [loginState.pubKey]);
 
   React.useEffect(() => {
     const updateMenu = () => {
-      const menuItems = getMenuItems();
-      setCurrentMenu(menuItems);
+      const menuItems = getMenuItems ? getMenuItems() : { items: [] };
+      setCurrentMenu(menuItems.items);
     };
     updateMenu();
-    loaderEvents.subscribe((evMsg: EventTypes) => {
-      if (evMsg === EventTypes.AppInstall || evMsg === EventTypes.PluginInstall) {
-        updateMenu();
-      }
+    const sub = uiEvents.subscribe({
+      next: (eventData: UIEventData) => {
+        if (
+          eventData.event === EventTypes.InstallIntegration ||
+          eventData.event === EventTypes.UninstallIntegration
+        ) {
+          updateMenu();
+        }
+      },
     });
-    return function cleanup() {
-      loaderEvents.unsubscribe();
-    };
+    return () => sub.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(() => {
-    if (loginState.ethAddress && modalState[MODAL_NAMES.LOGIN]) {
-      setTimeout(() => handleLoginModalClose(), 500);
-    }
-  }, [loginState.ethAddress, modalState[MODAL_NAMES.LOGIN]]);
-
-  React.useEffect(() => {
-    const isLoadingProfile =
-      loggedProfileData.isLoading !== undefined && loggedProfileData.isLoading;
-    if (loginState.ethAddress && !isLoadingProfile) {
-      if (!loggedProfileData.userName) {
-        return props.navigateToUrl('/profile/my-profile/update-info');
-      }
-    }
-  }, [loggedProfileData.isLoading, loginState.ethAddress]);
   // *how to obtain different topbar menu sections
   const quickAccessItems = currentMenu?.filter(
     menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
@@ -199,146 +108,96 @@ const TopbarComponent = (props: TopBarProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
+  React.useEffect(() => {
+    const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
+    if (loginQuery.data?.ethAddress && !isLoadingProfile) {
+      if (loggedProfileData && !loggedProfileData.userName) {
+        return props.navigateToModal({
+          name: 'update-profile',
+        });
+      }
+    }
+  }, [
+    profileDataReq.isLoading,
+    loginQuery.data?.ethAddress,
+    loggedProfileData,
+    loginQuery.data?.pubKey,
+    props,
+  ]);
+
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
   };
 
   const handleLoginClick = () => {
-    modalStateActions.show(MODAL_NAMES.LOGIN);
-  };
-  const handleLogin = (provider: 2 | 3) => {
-    loginActions.login(provider, !showSignUpModal?.status);
+    props.navigateToModal({ name: 'signin' });
   };
 
   const handleLogout = async () => {
-    await Promise.resolve(loginActions.logout()).then(_ => {
-      navigateToUrl('/');
-      setTimeout(() => window.location.reload(), 50);
-    });
+    await logoutMutation.mutateAsync();
+    navigateToUrl('/');
+    setTimeout(() => window.location.reload(), 50);
   };
-  const _handleModalClose = () => {
-    setshowSignUpModal({
-      inviteToken: null,
-      status: false,
-    });
-    setSuggestSignUp(false);
-    errorActions.removeLoginErrors();
-  };
+
   const handleSignUpClick = () => {
-    const state = {
-      inviteToken: localStorage.getItem('@signUpToken'),
-      status: true,
-    };
-    setshowSignUpModal(state);
-    if (showSignUpModal.inviteToken) {
-      triggerInviteValidation();
-    }
-    modalStateActions.show(MODAL_NAMES.LOGIN);
-  };
-
-  const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setinviteTokenForm({
-      submitted: false,
-      submitting: false,
-      success: false,
-      hasError: false,
-      errorMsg: '',
-    });
-    setshowSignUpModal({
-      inviteToken: e.target.value,
-      status: true,
-    });
-  };
-  const triggerInviteValidation = () => {
-    if (showSignUpModal.inviteToken?.length && showSignUpModal.inviteToken.length === 24) {
-      checkIsValidToken();
-    }
-  };
-  const checkIsValidToken = () => {
-    setinviteTokenForm({
-      submitted: false,
-      submitting: true,
-      success: false,
-      hasError: false,
-      errorMsg: '',
-    });
-    props.sdkModules.auth.authService
-      .validateInvite(showSignUpModal.inviteToken)
-      .toPromise()
-      .then((_: any) => {
-        setinviteTokenForm({
-          submitted: true,
-          submitting: false,
-          success: true,
-          hasError: false,
-          errorMsg: '',
-        });
-      })
-      .catch((err: Error) => {
-        setinviteTokenForm({
-          submitted: true,
-          submitting: false,
-          success: false,
-          hasError: true,
-          errorMsg: err.message,
-        });
-      });
-  };
-  const validateTokenFn = (e: any) => {
-    e.preventDefault();
-    checkIsValidToken();
-  };
-  const onCheckedTermsValues = (e: any) => {
-    setTermsState(prevState => {
-      return {
-        ...prevState,
-        checkedTermsValues: e.value,
-      };
-    });
-  };
-  const onAcceptTerms = (_: any) => {
-    setTermsState(prevState => {
-      return {
-        ...prevState,
-        acceptedTerms: true,
-      };
-    });
-    localStorage.setItem('@acceptedTermsAndPrivacy', new Date().toISOString());
-  };
-  const activateAcceptButton = () => {
-    setTermsState(prevState => {
-      return {
-        ...prevState,
-        waitForCheckTerms: !(termsState.checkedTermsValues.length === 2),
-      };
-    });
-  };
-  React.useEffect(triggerInviteValidation, [showSignUpModal]);
-  React.useEffect(activateAcceptButton, [termsState.checkedTermsValues]);
-
-  const handleLoginModalClose = () => {
-    modalStateActions.hide(MODAL_NAMES.LOGIN);
-    _handleModalClose();
-    errorActions.removeLoginErrors();
-  };
-
-  const handleFeedbackModalClose = () => {
-    modalStateActions.hide(MODAL_NAMES.FEEDBACK);
+    props.navigateToModal({ name: 'signup' });
   };
 
   const handleFeedbackModalShow = () => {
-    modalStateActions.show(MODAL_NAMES.FEEDBACK);
+    props.navigateToModal({ name: 'feedback' });
+  };
+
+  const handleModerationClick = () => {
+    navigateToUrl('/moderation-app/history');
+  };
+
+  const handleDashboardClick = () => {
+    navigateToUrl('/moderation-app/home');
   };
 
   const handleSearch = (inputValue: string) => {
-    const encodedSearchKey = encodeURIComponent(inputValue);
+    const trimmedValue = inputValue.trim();
+    if (!trimmedValue) return;
+    const encodedSearchKey = encodeURIComponent(trimmedValue);
     if (searchAreaItem) {
       handleNavigation(`${searchAreaItem.route}/${encodedSearchKey}`);
     }
   };
 
+  const handleBrandClick = () => {
+    if (!props.homepageApp) {
+      return;
+    }
+    const homeAppRoutes = props.getAppRoutes(props.homepageApp);
+    if (homeAppRoutes && homeAppRoutes.hasOwnProperty('defaultRoute')) {
+      if (location.pathname === homeAppRoutes.defaultRoute) {
+        scrollTo(0, 0);
+      } else {
+        handleNavigation(homeAppRoutes.defaultRoute);
+      }
+    }
+  };
+
   const { t } = useTranslation();
   const location = useLocation();
+
+  const onExtMount = (name: string) => {
+    uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+      },
+    });
+  };
+
+  const onExtUnmount = (name: string) => {
+    uiEvents.next({
+      event: EventTypes.ExtensionPointUnmount,
+      data: {
+        name,
+      },
+    });
+  };
 
   return (
     <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
@@ -350,14 +209,18 @@ const TopbarComponent = (props: TopBarProps) => {
         signOutLabel={t('Sign Out')}
         searchBarLabel={t('Search profiles or topics')}
         legalLabel={t('Legal')}
+        isModerator={isModerator}
+        dashboardLabel={t('Moderator Dashboard')}
+        dashboardInfoLabel={t('Help moderate items!')}
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}
+        moderationLabel={t('Moderation History')}
+        moderationInfoLabel={t('Help keep us accountable!')}
         legalCopyRightLabel={'© Ethereum World Association'}
         versionLabel="ALPHA"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         onNavigation={handleNavigation}
         onSearch={handleSearch}
-        onSidebarToggle={toggleSidebar}
         quickAccessItems={sortedQuickAccessItems}
         searchAreaItem={searchAreaItem}
         otherAreaItems={otherAreaItems}
@@ -365,55 +228,20 @@ const TopbarComponent = (props: TopBarProps) => {
         onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
         onFeedbackClick={handleFeedbackModalShow}
-        hasNewNotifications={notificationsState.hasNewNotifications}
+        onModerationClick={handleModerationClick}
+        onDashboardClick={handleDashboardClick}
+        hasNewNotifications={checkNotifsReq.data}
         currentLocation={location?.pathname}
-      />
-      <ModalRenderer slotId={modalSlotId}>
-        {modalState[MODAL_NAMES.FEEDBACK] && (
-          <FeedbackModal
-            titleLabel={t("We'd love to hear your feedback!")}
-            subtitleLabel={t('If you find any bugs or problems, please let us know')}
-            openAnIssueLabel={t('Open an Issue')}
-            emailUsLabel={t('Email Us')}
-            footerTextLabel={t(
-              'Join our Discord channel to meet everyone, say "Hello!", provide feedback and share ideas.',
-            )}
-            footerLinkText1Label={t('Join in')}
-            footerLinkText2Label={t('Discord')}
-            openIssueLink={'https://github.com/AKASHAorg/akasha-world-framework/issues/new/choose'}
-            emailUsLink={'mailto:feedback@ethereum.world'}
-            joinDiscordLink={'https://discord.gg/A5wfg6ZCRt'}
-            closeModal={handleFeedbackModalClose}
-          />
-        )}
-      </ModalRenderer>
-      <LoginModal
-        slotId={modalSlotId}
-        onLogin={handleLogin}
-        showSignUpModal={showSignUpModal}
-        onInputTokenChange={onInputTokenChange}
-        validateTokenFn={validateTokenFn}
-        submitted={inviteTokenForm.submitted}
-        submitting={inviteTokenForm.submitting}
-        success={inviteTokenForm.success}
-        hasError={inviteTokenForm.hasError}
-        errorMsg={inviteTokenForm.errorMsg}
-        onModalClose={handleLoginModalClose}
-        showModal={modalState[MODAL_NAMES.LOGIN]}
-        subtitleLabel={t('Please enter your invitation code')}
-        headerLabel={t('Sign Up')}
-        titleLabel={t('Connect a wallet')}
-        metamaskModalHeadline={t('Connecting')}
-        metamaskModalMessage={t('Please complete the process in your wallet')}
-        error={loginErrors}
-        onAcceptTerms={onAcceptTerms}
-        onCheckedTermsValues={onCheckedTermsValues}
-        waitForCheckTerms={termsState.waitForCheckTerms}
-        checkedTermsValues={termsState.checkedTermsValues}
-        acceptedTerms={termsState.acceptedTerms}
-        suggestSignUp={suggestSignUp}
-        suggestedSignUpFn={handleSignUpClick}
-      />
+        onBrandClick={handleBrandClick}
+        modalSlotId={props.layoutConfig.modalSlotId}
+      >
+        <ExtensionPoint
+          name={extensionPointsMap.QuickAccess}
+          shouldMount={!!loggedProfileData?.ethAddress}
+          onMount={name => onExtMount(name)}
+          onUnmount={name => onExtUnmount(name)}
+        />
+      </Topbar>
     </ThemeSelector>
   );
 };

@@ -15,7 +15,9 @@ import arrowUp from './arrow-up';
 import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
 import available from './available';
+import block from './block';
 import bold from './bold';
+import book from './book';
 import bookmark from './bookmark';
 import calendar from './calendar';
 import check from './check';
@@ -40,6 +42,7 @@ import feedback from './feedback';
 import following from './following';
 import github from './github';
 import hashtag from './hashtag';
+import hashtagGray from './hashtag-gray';
 import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
@@ -92,6 +95,8 @@ import upload from './upload';
 import video from './video';
 import wallet from './wallet';
 import walletconnect from './walletconnect';
+import zoomIn from './zoom-in';
+import zoomOut from './zoom-out';
 
 export {
   activity,
@@ -134,6 +139,8 @@ export {
   arrowLeft,
   arrowRight,
   bookmark,
+  book,
+  block,
   bold,
   comments,
   close,
@@ -143,6 +150,7 @@ export {
   email,
   emoji,
   hashtag,
+  hashtagGray,
   heart,
   home,
   hotTopics,
@@ -188,4 +196,6 @@ export {
   video,
   wallet,
   walletconnect,
+  zoomIn,
+  zoomOut,
 };

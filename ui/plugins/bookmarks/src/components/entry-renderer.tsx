@@ -1,11 +1,19 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useFollow } from '@akashaproject/ui-awf-hooks';
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { BookmarkTypes, IBookmarkState } from '@akashaproject/ui-awf-hooks/lib/use-entry-bookmark';
+import { useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
-const { ErrorInfoCard, ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading } = DS;
+const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
 export interface NavigationDetails {
   authorEthAddress: string;
@@ -17,132 +25,200 @@ export interface NavigationDetails {
 }
 
 export interface IEntryCardRendererProps {
-  sdkModules: any;
-  logger: any;
-  singleSpa: any;
-  globalChannel: any;
-  rxjsOperators: any;
+  logger: ILogger;
+  singleSpa: RootComponentProps['singleSpa'];
   itemId?: string;
-  itemData?: any;
+  itemData?: IEntryData;
   isBookmarked?: boolean;
-  locale?: any;
-  ethAddress?: string | null;
+  locale?: ILocale;
+  loginState: LoginState;
   onBookmark: (entryId: string) => void;
-  onNavigate: (details: NavigationDetails) => void;
+  onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   onLinkCopy?: () => void;
-  onRepost: (withComment: boolean, entryData: any) => void;
+  onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   onTagClick: (name: string) => void;
-  bookmarkState?: IBookmarkState;
+  bookmarks?: { entryId: string; type: ItemTypes }[];
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableReposting?: boolean;
   moderatedContentLabel?: string;
-  awaitingModerationLabel?: string;
   ctaLabel?: string;
-  handleFlipCard?: (entry: any, isQuote: boolean) => () => void;
+  handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
+  uiEvents: RootComponentProps['uiEvents'];
+  navigateToModal: RootComponentProps['navigateToModal'];
+  modalSlotId: string;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const {
-    itemData,
-    ethAddress,
+    loginState,
     locale,
-    bookmarkState,
+    bookmarks,
     itemId,
     style,
-    sdkModules,
-    logger,
-    globalChannel,
-    rxjsOperators,
     contentClickable,
     disableReposting,
-    moderatedContentLabel,
-    awaitingModerationLabel,
-    ctaLabel,
-    handleFlipCard,
+    modalSlotId,
   } = props;
 
-  const isBookmarked = React.useMemo(() => {
-    if (
-      bookmarkState &&
-      !bookmarkState.isFetching &&
-      itemId &&
-      bookmarkState.bookmarks.findIndex(bm => bm.entryId === itemId) >= 0
-    ) {
-      return true;
-    }
-    return false;
-  }, [bookmarkState]);
+  const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const { t } = useTranslation();
-
-  const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
-    onError: (errorInfo: IAkashaError) => {
-      logger.error(errorInfo.error.message, errorInfo.errorKey);
-    },
-  });
-
-  React.useEffect(() => {
-    if (ethAddress && itemData.author.ethAddress) {
-      followActions.isFollowing(ethAddress, itemData.author.ethAddress);
+  const type = React.useMemo(() => {
+    if (bookmarks) {
+      return bookmarks.find(b => b.entryId === itemId).type;
     }
-  }, [ethAddress, itemData.author.ethAddress]);
+    return undefined;
+  }, [bookmarks, itemId]);
+
+  const postReq = usePost({ postId: itemId, enabler: type === ItemTypes.ENTRY });
+  const commentReq = useComment(itemId, type === ItemTypes.COMMENT);
+
+  const handleFlipCard = () => {
+    setShowAnyway(true);
+  };
+
+  const handleClickAvatar = () => {
+    props.onNavigate(ItemTypes.PROFILE, {
+      entryId: itemData?.author.pubKey,
+      authorEthAddress: itemData?.author.ethAddress,
+      replyTo: null,
+    });
+  };
+
+  const handleContentClick = () => {
+    props.onNavigate(type, {
+      entryId: itemData.entryId,
+      authorEthAddress: itemData.author.ethAddress,
+      replyTo: null,
+    });
+  };
+
+  const itemData = React.useMemo(() => {
+    if (type === ItemTypes.COMMENT && commentReq.isSuccess) {
+      return mapEntry(commentReq.data);
+    } else if (type === ItemTypes.ENTRY && postReq.isSuccess) {
+      return mapEntry(postReq.data);
+    }
+  }, [type, postReq.data, postReq.isSuccess, commentReq.data, commentReq.isSuccess]);
+
+  const [isReported, isAccountReported] = React.useMemo(() => {
+    if (showAnyway) {
+      return [false, false];
+    }
+    const reqSuccess = postReq.isSuccess || commentReq.isSuccess;
+    return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
+  }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
+
+  const accountAwaitingModeration = !itemData?.author?.moderated && isAccountReported;
+  const entryAwaitingModeration = !itemData?.moderated && isReported;
+
+  const itemTypeName = React.useMemo(() => {
+    switch (type) {
+      case ItemTypes.ENTRY:
+        return t('post');
+      case ItemTypes.PROFILE:
+        return t('account');
+      case ItemTypes.COMMENT:
+        return t('reply');
+      case ItemTypes.TAG:
+        return t('tag');
+      default:
+        return t('unknown');
+    }
+  }, [t, type]);
+
+  const hiddenEntryTextLabel = React.useMemo(() => {
+    const stringEnd = `${itemTypeName} ${t('for the following reason')}`;
+    if (accountAwaitingModeration) return `${t('You reported the author of this')} ${stringEnd}`;
+    return `${t('You reported this')} ${stringEnd}}`;
+  }, [t, accountAwaitingModeration, itemTypeName]);
+
+  const onEditButtonMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: itemId,
+        entryType: type,
+      },
+    });
+  };
+
+  const onEditButtonUnmount = () => {
+    /* todo */
+  };
+
+  const handleEntryRemove = (entryId: string) => {
+    if (entryId)
+      props.navigateToModal({
+        name: 'entry-remove-confirmation',
+        entryType: ItemTypes.ENTRY,
+        entryId,
+      });
+  };
+
+  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+    if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
+  };
+
+  const isFollowing = useIsFollowingMultiple(loginState.ethAddress, [itemData?.author?.ethAddress]);
 
   const handleFollow = () => {
-    if (itemData.author.ethAddress) {
-      followActions.follow(itemData.author.ethAddress);
-    }
+    /* todo */
   };
 
   const handleUnfollow = () => {
-    if (itemData.author.ethAddress) {
-      followActions.unfollow(itemData.author.ethAddress);
-    }
+    /* todo */
   };
 
-  const isFollowing = followedProfiles.includes(itemData.author.ethAddress);
-
-  if (itemData.reported) {
-    return (
-      <EntryCardHidden
-        awaitingModerationLabel={awaitingModerationLabel}
-        moderatedContentLabel={moderatedContentLabel}
-        ctaLabel={ctaLabel}
-        handleFlipCard={handleFlipCard && handleFlipCard(itemData, false)}
-      />
-    );
-  }
+  const showEditButton = React.useMemo(
+    () => loginState.isReady && loginState.ethAddress === itemData?.author?.ethAddress,
+    [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+  );
 
   return (
-    <ErrorInfoCard errors={{}}>
-      {(errorMessages: any, hasCriticalErrors: boolean) => (
+    <>
+      {(postReq.isError || commentReq.isError) && (
+        <ErrorLoader
+          type="script-error"
+          title={t('There was an error loading the entry')}
+          details={t('We cannot show this entry right now')}
+          devDetails={postReq.error || commentReq.error}
+        />
+      )}
+      {(postReq.isSuccess || commentReq.isSuccess) && (
         <>
-          {errorMessages && (
-            <ErrorLoader
-              type="script-error"
-              title={t('There was an error loading the entry')}
-              details={t('We cannot show this entry right now')}
-              devDetails={errorMessages}
-            />
-          )}
-          {!hasCriticalErrors && (
+          {(postReq.isLoading || commentReq.isLoading) && <EntryCardLoading />}
+          {itemData && itemData.author?.ethAddress && (
             <>
-              {(!itemData || !itemData.author?.ethAddress) && <EntryCardLoading />}
-              {itemData && itemData.author.ethAddress && (
+              {itemData.moderated && itemData.delisted && (
+                <EntryCardHidden
+                  moderatedContentLabel={t('This content has been moderated')}
+                  isDelisted={true}
+                />
+              )}
+              {(accountAwaitingModeration || entryAwaitingModeration) && (
+                <EntryCardHidden
+                  reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
+                  headerTextLabel={hiddenEntryTextLabel}
+                  footerTextLabel={t('It is awaiting moderation.')}
+                  ctaLabel={t('See it anyway')}
+                  handleFlipCard={handleFlipCard}
+                />
+              )}
+
+              {!entryAwaitingModeration && !accountAwaitingModeration && !itemData.delisted && (
                 <EntryCard
-                  isBookmarked={isBookmarked}
+                  isRemoved={itemData.isRemoved}
+                  isBookmarked={true}
                   entryData={itemData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
                   sharePostUrl={props.sharePostUrl}
-                  onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                    props.onAvatarClick(ev, itemData.author.ethAddress)
-                  }
+                  onClickAvatar={handleClickAvatar}
                   onEntryBookmark={props.onBookmark}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
@@ -151,43 +227,47 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   shareLabel={t('Share')}
                   copyLinkLabel={t('Copy Link')}
                   flagAsLabel={t('Report Post')}
-                  loggedProfileEthAddress={ethAddress as any}
+                  loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
                   locale={locale || 'en'}
                   style={{ height: 'auto', ...style }}
                   bookmarkLabel={t('Save')}
                   bookmarkedLabel={t('Saved')}
+                  moderatedContentLabel={t('This content has been moderated')}
+                  editedLabel={t('Last edited')}
+                  showMore={true}
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={'/social-app/post'}
                   onRepost={props.onRepost}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
-                  isFollowingAuthor={isFollowing}
-                  onContentClick={() => {
-                    props.onNavigate({
-                      authorEthAddress: itemData.author.ethAddress,
-                      entryId: itemData.entryId,
-                      replyTo: {
-                        entryId: bookmarkState?.bookmarks.some(
-                          bm =>
-                            bm.entryId === itemData.entryId && bm.type === BookmarkTypes.COMMENT,
-                        )
-                          ? itemData.postId
-                          : null,
-                      },
-                    });
-                  }}
+                  isFollowingAuthor={isFollowing.data?.includes(loginState.ethAddress)}
+                  onContentClick={handleContentClick}
                   onMentionClick={props.onMentionClick}
                   onTagClick={props.onTagClick}
                   singleSpaNavigate={props.singleSpa.navigateToUrl}
                   contentClickable={contentClickable}
                   disableReposting={disableReposting}
+                  removeEntryLabel={t('Delete Post')}
+                  onEntryRemove={handleEntryRemove}
+                  onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
+                  modalSlotId={modalSlotId}
+                  headerMenuExt={
+                    showEditButton && (
+                      <ExtensionPoint
+                        style={{ width: '100%' }}
+                        name={`entry-card-edit-button_${itemId}`}
+                        onMount={onEditButtonMount}
+                        onUnmount={onEditButtonUnmount}
+                      />
+                    )
+                  }
                 />
               )}
             </>
           )}
         </>
       )}
-    </ErrorInfoCard>
+    </>
   );
 };
 

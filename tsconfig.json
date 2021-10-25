@@ -1,6 +1,7 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "module": "esnext",
+    "module": "es2020",
     "moduleResolution": "node",
     "alwaysStrict": true,
     "declaration": true,
@@ -13,11 +14,31 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "target": "es2018",
+    "target": "es2020",
     "sourceMap": true,
     "pretty": true,
     "skipLibCheck": true,
-    "lib": ["es2019", "dom"]
+    "lib": ["es2020", "dom"]
   },
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "references": [
+    { "path": "./ui/design" },
+    { "path": "./ui/typings" },
+    { "path": "./ui/testing-utils"},
+    { "path": "./ui/hooks" },
+    { "path": "./ui/widgets/feed" },
+    { "path": "./ui/widgets/layout" },
+    { "path": "./ui/widgets/sidebar" },
+    { "path": "./ui/widgets/top-bar" },
+    { "path": "./ui/widgets/trending" },
+    { "path": "./ui/plugins/app-center" },
+    { "path": "./ui/plugins/bookmarks" },
+    { "path": "./ui/plugins/legal" },
+    { "path": "./ui/plugins/notifications" },
+    { "path": "./ui/plugins/profile" },
+    { "path": "./ui/plugins/search" },
+    { "path": "./sdk"},
+    {"path":  "./sdk/typings"}
+  ],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"],
+  "files": ["./sdk/src/definitions/graphql.d.ts"]
 }

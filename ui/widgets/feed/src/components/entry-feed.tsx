@@ -1,202 +1,74 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { IFeedWidgetProps, ItemTypes } from './App';
-import {
-  useErrors,
-  useFollow,
-  useBookmarks,
-  useLoginState,
-  useMentions,
-} from '@akashaproject/ui-awf-hooks';
+import { IFeedWidgetProps } from './App';
 import EntryRenderer from './entry-renderer';
-import { useTranslation } from 'react-i18next';
-import { ILocale } from '@akashaproject/design-system/src/utils/time';
-import { uploadMediaToTextile } from '../utils/media-utils';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import {
+  useSaveBookmark,
+  useGetBookmarks,
+  useDeleteBookmark,
+} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-const { VirtualList, ErrorInfoCard, ErrorLoader, EditorModal } = DS;
+const { EntryList } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
-  const { errors, sdkModules, globalChannel, rxjsOperators } = props;
-  const [errorState, errorActions] = useErrors({ logger: props.logger });
-  const { t, i18n } = useTranslation('ui-widget-feed');
-
-  const [loginState] = useLoginState({
-    rxjsOperators,
-    profileService: sdkModules.profiles.profileService,
-    ipfsService: sdkModules.commons.ipfsService,
-    onError: errorActions.createError,
-    authService: sdkModules.auth.authService,
-    globalChannel: globalChannel,
-  });
-
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-  const [showEditor, setShowEditor] = React.useState<boolean>(false);
-
-  const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
-    globalChannel: globalChannel,
-    profileService: sdkModules.profiles.profileService,
-    onError: errorActions.createError,
-  });
-
-  const [bookmarkState, bookmarkActions] = useBookmarks({
-    dbService: sdkModules.db,
-    onError: errorActions.createError,
-  });
-
-  const [mentionsState, mentionsActions] = useMentions({
-    onError: errorActions.createError,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts.tags,
-  });
-
-  React.useEffect(() => {
-    if (loginState.waitForAuth && !loginState.ready) {
-      return;
-    }
-    if (
-      (loginState.waitForAuth && loginState.ready) ||
-      (loginState.currentUserCalled && loginState.ethAddress)
-    ) {
-      bookmarkActions.getBookmarks();
-    }
-  }, [JSON.stringify(loginState)]);
+  const saveBookmarkQuery = useSaveBookmark();
+  const delBookmarkQuery = useDeleteBookmark();
+  const getBookmarksQuery = useGetBookmarks(props.loginState.ethAddress, props.loginState.isReady);
 
   const handleBookmark = (isBookmarked: boolean, entryId: string) => {
-    if (props.loggedProfile.pubKey) {
-      if (props.itemType === ItemTypes.COMMENT) {
-        if (!isBookmarked) {
-          return bookmarkActions.bookmarkComment(entryId);
-        }
-        return bookmarkActions.removeBookmark(entryId);
+    if (props.loginState.isReady && props.loginState.pubKey) {
+      if (!isBookmarked) {
+        return saveBookmarkQuery.mutate({
+          entryId,
+          itemType: props.itemType,
+        });
       }
-      if (props.itemType === ItemTypes.ENTRY) {
-        if (!isBookmarked) {
-          return bookmarkActions.bookmarkPost(entryId);
-        }
-        return bookmarkActions.removeBookmark(entryId);
-      }
+      return delBookmarkQuery.mutate(entryId);
     } else {
       props.onLoginModalOpen();
     }
   };
-  const handleRepost = (_withComment: boolean, entryData: any) => {
-    if (!props.loggedProfile.pubKey) {
-      props.onLoginModalOpen();
+  const handleRepost = (_withComment: boolean, entryId: string) => {
+    if (!props.loginState.pubKey) {
+      props.onLoginModalOpen({ name: 'editor', embedEntry: entryId });
     } else {
-      setCurrentEmbedEntry(entryData);
-      setShowEditor(true);
+      props.navigateToModal({ name: 'editor', embedEntry: entryId });
     }
   };
-  const locale: any = i18n.languages[0];
-
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
-
-  const handleToggleEditor = () => {
-    setShowEditor(prev => !prev);
-    setCurrentEmbedEntry(undefined);
-  };
-
-  const handleEntryPublish = (entryData: any) => {
-    if (!props.loggedProfile.ethAddress && !props.loggedProfile.pubKey) {
-      props.onLoginModalOpen();
-      return;
-    }
-
-    if (props.onRepostPublish) {
-      props.onRepostPublish(entryData, currentEmbedEntry);
-      setShowEditor(false);
-    }
-  };
-  const hasMoreItems = React.useMemo(() => {
-    if (props.totalItems && props.itemIds?.length) {
-      return props.totalItems > props.itemIds.length;
-    }
-    // defaults to true,
-    // meaning that the list will try to fetch
-    // the first/next batch of items
-    return true;
-  }, [props.totalItems, props.itemIds?.length]);
 
   return (
-    <ErrorInfoCard errors={{ ...errors, ...errorState }}>
-      {(messages, hasCriticalErrors) => (
-        <>
-          {messages && (
-            <ErrorLoader
-              style={{ marginTop: '.5em' }}
-              type="script-error"
-              title={t('There was an error loading the list')}
-              details={messages}
-            />
-          )}
-          {showEditor && props.modalSlotId && (
-            <EditorModal
-              slotId={props.modalSlotId}
-              avatar={props.loggedProfile.avatar}
-              showModal={showEditor}
-              ethAddress={props.loggedProfile.ethAddress}
-              postLabel={t('Publish')}
-              placeholderLabel={t('Write something')}
-              discardPostLabel={t('Discard Post')}
-              discardPostInfoLabel={t(
-                "You have not posted yet. If you leave now you'll discard your post.",
-              )}
-              keepEditingLabel={t('Keep Editing')}
-              onPublish={handleEntryPublish}
-              handleNavigateBack={handleToggleEditor}
-              getMentions={mentionsActions.getMentions}
-              getTags={mentionsActions.getTags}
-              tags={mentionsState.tags}
-              mentions={mentionsState.mentions}
-              uploadRequest={onUploadRequest}
-              embedEntryData={currentEmbedEntry}
-              style={{ width: '36rem' }}
-            />
-          )}
-          {!hasCriticalErrors && (
-            <VirtualList
-              ref={props.virtualListRef}
-              items={props.itemIds}
-              itemsData={props.itemsData}
-              loadMore={props.loadMore}
-              loadItemData={props.loadItemData}
-              listHeader={props.listHeader}
-              hasMoreItems={hasMoreItems}
-              itemCard={
-                <EntryRenderer
-                  pubKey={props.profilePubKey}
-                  ethAddress={props.ethAddress}
-                  itemType={props.itemType}
-                  sharePostUrl={`${window.location.origin}/social-app/post/`}
-                  locale={locale as ILocale}
-                  bookmarkState={bookmarkState}
-                  followedProfiles={followedProfiles}
-                  checkIsFollowing={followActions.isFollowing}
-                  onFollow={followActions.follow}
-                  onUnfollow={followActions.unfollow}
-                  onBookmark={handleBookmark}
-                  onNavigate={props.onNavigate}
-                  singleSpaNavigate={props.singleSpaNavigate}
-                  onReport={props.onReport}
-                  onRepost={handleRepost}
-                  contentClickable={props.contentClickable}
-                  awaitingModerationLabel={t(
-                    'You have reported this post. It is awaiting moderation.',
-                  )}
-                  moderatedContentLabel={t('This content has been moderated')}
-                  ctaLabel={t('See it anyway')}
-                  handleFlipCard={props.handleFlipCard}
-                />
-              }
-            />
-          )}
-        </>
-      )}
-    </ErrorInfoCard>
+    <EntryList
+      pages={props.pages}
+      onLoadMore={props.onLoadMore}
+      status={props.requestStatus}
+      itemSpacing={props.itemSpacing}
+      hasNextPage={props.hasNextPage}
+      pageKeyPrefix={props.itemType === ItemTypes.ENTRY ? 'entry-page' : 'comment-page'}
+      itemCard={
+        <EntryRenderer
+          modalSlotId={props.modalSlotId}
+          loginState={props.loginState}
+          itemType={props.itemType}
+          sharePostUrl={`${window.location.origin}/social-app/post/`}
+          locale={props.i18n.languages[0] as ILocale}
+          bookmarksQuery={getBookmarksQuery}
+          onBookmark={handleBookmark}
+          onNavigate={props.onNavigate}
+          singleSpaNavigate={props.singleSpaNavigate}
+          onFlag={props.onEntryFlag}
+          onRepost={handleRepost}
+          parentIsProfilePage={props.parentIsProfilePage}
+          contentClickable={props.contentClickable}
+          onEntryRemove={props.onEntryRemove}
+          removeEntryLabel={props.removeEntryLabel}
+          removedByMeLabel={props.removedByMeLabel}
+          removedByAuthorLabel={props.removedByAuthorLabel}
+          uiEvents={props.uiEvents}
+        />
+      }
+    />
   );
 };
 

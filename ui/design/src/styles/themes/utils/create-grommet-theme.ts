@@ -1,6 +1,6 @@
 import { base } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
-import { DefaultTheme } from 'styled-components';
+import { DefaultTheme } from '../interfaces';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
   const customTheme = deepMerge(styledComponentsTheme, base);
@@ -53,6 +53,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         modalBackground: styledComponentsTheme.colors.modalBackground,
         modalBackgroundAlt: styledComponentsTheme.colors.modalBackgroundAlt,
         modalBackgroundTransparent: styledComponentsTheme.colors.modalBackgroundTransparent,
+        activeCardBackground: styledComponentsTheme.colors.activeCardBackground,
         lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
         focus: styledComponentsTheme.colors.accent,

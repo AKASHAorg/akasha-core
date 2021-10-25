@@ -36,6 +36,13 @@ const schema = {
         type: 'string',
       },
     },
+    interests: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+      uniqueItems: true,
+    },
     providers: {
       type: 'array',
       uniqueItems: true,

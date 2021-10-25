@@ -5,15 +5,61 @@ import {
   PrivateKey,
   PublicKey,
   createUserAuth,
-  Users,
 } from '@textile/hub';
 import { updateCollections, initCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
 import { ethers, utils, providers } from 'ethers';
 import objHash from 'object-hash';
+import mailgun from 'mailgun-js';
+import fetch from 'node-fetch';
+import path from 'path';
+import { AbortController } from 'node-abort-controller';
+import { Worker } from 'worker_threads';
+import { create } from 'ipfs-http-client';
+import sharp from 'sharp';
 
-export const getAPISig = async (minutes: number = 30) => {
+const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
+const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
+const MODERATION_EMAIL_SOURCE = process.env.MAILGUN_EMAIL_SOURCE;
+
+const INFURA_IPFS_ID = process.env.INFURA_IPFS_ID;
+const INFURA_IPFS_SECRET = process.env.INFURA_IPFS_SECRET;
+const IPFS_GATEWAY = process.env.IPFS_GATEWAY;
+export const isIpfsEnabled = INFURA_IPFS_ID && INFURA_IPFS_SECRET && IPFS_GATEWAY;
+
+let ipfsClient;
+if (isIpfsEnabled) {
+  ipfsClient = create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+      authorization:
+        'Basic ' + Buffer.from(INFURA_IPFS_ID + ':' + INFURA_IPFS_SECRET).toString('base64'),
+    },
+  });
+}
+
+let mailGun;
+if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
+  mailGun = mailgun({
+    apiKey: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN,
+    host: process.env.MAILGUN_HOST,
+  });
+}
+
+export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+export const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
+
+export const EMPTY_PROFILE = {
+  _id: EMPTY_KEY,
+  ethAddress: EMPTY_ADDRESS,
+  pubKey: EMPTY_KEY,
+};
+
+export const getAPISig = async (minutes = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
   return await createAPISig(process.env.USER_GROUP_API_SECRET, expiration);
 };
@@ -28,7 +74,7 @@ export const newClientDB = async () => {
     return Promise.resolve(userDBClient);
   }
   const API = process.env.API || undefined;
-  const client = await Client.withUserAuth(
+  const client = Client.withUserAuth(
     await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
     API,
     process.env.NODE_ENV !== 'production',
@@ -37,7 +83,6 @@ export const newClientDB = async () => {
   return client;
 };
 const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
-const mailSenderIdentity = () => PrivateKey.fromString(process.env.AWF_MAILSENDER_KEY);
 let appDBClient;
 export const getAppDB = async () => {
   if (appDBClient) {
@@ -61,38 +106,6 @@ export const getAppDB = async () => {
   return client;
 };
 
-let mailSender;
-export const getMailSender = async () => {
-  if (mailSender) {
-    if (mailSender.api.context.isExpired) {
-      // tslint:disable-next-line:no-console
-      logger.info('==refreshing mail sender grpc session==');
-      mailSender = undefined;
-      return getMailSender();
-    }
-    return Promise.resolve(mailSender);
-  }
-  const api = Users.withUserAuth(
-    await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
-    { debug: process.env.NODE_ENV !== 'production' },
-  );
-  const mailSenderID = mailSenderIdentity();
-  await api.getToken(mailSenderID);
-  await api.setupMailbox();
-  // const mailID = await api.getMailboxID();
-  // if (!mailID) {
-  //   await api.setupMailbox();
-  // }
-  mailSender = {
-    sendMessage: async (to: string, message: Uint8Array) => {
-      const toPubKey = PublicKey.fromString(to);
-      return await api.sendMessage(mailSenderID, toPubKey, message);
-    },
-    api: api,
-  };
-  return mailSender;
-};
-
 export const setupDBCollections = async () => {
   const appDB = await getAppDB();
   const threadID = process.env.AWF_THREADdb
@@ -105,19 +118,6 @@ export const setupDBCollections = async () => {
   await initCollections(appDB, threadID);
   await updateCollections(appDB, threadID);
   return { threadID, client: appDB };
-};
-
-export const sendNotification = async (recipient: string, notificationObj: object) => {
-  const ms = await getMailSender();
-  const textEncoder = new TextEncoder();
-  const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));
-  logger.info('sending notification');
-  try {
-    await ms.sendMessage(recipient, encodedNotification);
-  } catch (e) {
-    logger.warn('notification error');
-    logger.error(e);
-  }
 };
 
 export const logger = winston.createLogger({
@@ -144,11 +144,7 @@ export const validateName = (name: string) => {
   const normalizedArray = nameArray.map(label => {
     return isEncodedLabelhash(label) ? label : normalize(label);
   });
-  try {
-    return normalizedArray.join('.');
-  } catch (e) {
-    throw e;
-  }
+  return normalizedArray.join('.');
 };
 
 const eip1271Abi = [
@@ -177,7 +173,7 @@ const encoder = new TextEncoder();
 // @Todo: Use the sdk lib for this
 export const verifyEd25519Sig = async (args: {
   pubKey: string;
-  data: Uint8Array | string | object;
+  data: Uint8Array | string | Record<string, unknown>;
   signature: Uint8Array | string;
 }) => {
   const pub = PublicKey.fromString(args.pubKey);
@@ -199,6 +195,25 @@ export const verifyEd25519Sig = async (args: {
   return pub.verify(serializedData, sig);
 };
 
+export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
+  const worker = new Worker(path.resolve(__dirname, './notifications.js'), {
+    workerData: {
+      recipient,
+      notificationObj,
+    },
+  });
+  worker.on('message', msg => {
+    if (!msg) {
+      logger.info('Notification sent from worker');
+    } else {
+      logger.error(msg);
+    }
+  });
+  worker.on('error', error => {
+    logger.error(error);
+  });
+};
+
 export const sendAuthorNotification = async (
   recipient: string,
   notification: { property: string; provider: string; value: any },
@@ -208,3 +223,88 @@ export const sendAuthorNotification = async (
   }
   return sendNotification(recipient, notification);
 };
+
+/**
+ * Send an email notifications for moderation purposes.
+ * @param email - Object containing the required data for sending the email
+ * @returns A promise that resolves upon sending the email
+ */
+export const sendEmailNotification = async () => {
+  if (!mailGun) {
+    return Promise.resolve();
+  }
+  logger.info('Sending email notification to moderators');
+  const data = {
+    from: `Moderation Notifications <${MODERATION_EMAIL_SOURCE}>`,
+    to: MODERATION_EMAIL,
+    subject: 'New moderation request',
+    text: `There is a new pending request for moderation. To moderate this content please visit the moderation app at:\n
+${MODERATION_APP_URL}
+\nThank you!`,
+  };
+  mailGun.messages().send(data, function (error) {
+    if (error) {
+      logger.error(error);
+    }
+  });
+  return Promise.resolve();
+};
+
+export const decodeString = (value: string) => {
+  return value ? Buffer.from(value, 'base64').toString() : '';
+};
+
+export const encodeString = (value: string) => {
+  return value ? Buffer.from(value).toString('base64') : '';
+};
+
+export async function fetchWithTimeout(resource, options) {
+  const { timeout = 12000 } = options;
+
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  const response = await fetch(resource, {
+    ...options,
+    signal: controller.signal,
+  });
+  clearTimeout(id);
+
+  return response;
+}
+
+export async function addToIpfs(link: string) {
+  if (!ipfsClient) {
+    return Promise.resolve();
+  }
+  const response = await fetchWithTimeout(link, {
+    timeout: 16000,
+    redirect: 'follow',
+  });
+  const resizePipeline = sharp({ failOnError: false });
+  // can specify for example to store the image in multiple formats
+  const processSteps = [];
+  // transform to a different format
+  processSteps.push(
+    resizePipeline
+      .clone()
+      .resize({ width: 640, height: 500, fit: sharp.fit.inside })
+      .webp({ lossless: true })
+      .toBuffer(),
+  );
+  // apply
+  response.body.pipe(resizePipeline);
+  try {
+    // wait for all processes to finish
+    const processed = await Promise.all(processSteps);
+    // picking only the first job result
+    return ipfsClient.add(processed[0]);
+  } catch (e) {
+    logger.warn(e?.message);
+    return;
+  }
+}
+
+export function createIpfsGatewayLink(cid: string) {
+  return `https://${cid}.${IPFS_GATEWAY}`;
+}

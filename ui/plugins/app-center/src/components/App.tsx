@@ -1,57 +1,42 @@
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import i18next from '../i18n';
 
 const { Box, Helmet } = DS;
 
-export interface IProps {
-  singleSpa: any;
-  activeWhen: {
-    path: string;
-  };
-
-  mountParcel: (config: any, props: any) => void;
-  rootNodeId: string;
-  sdkModules: any;
-  logger: any;
-  i18n?: any;
-}
-
-class App extends PureComponent<IProps> {
-  public state: { hasErrors: boolean };
-
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      hasErrors: false,
+const App: React.FC<RootComponentProps> = props => {
+  const install = (name: string) => {
+    return () => {
+      if (props.installIntegration) {
+        props.installIntegration(name);
+      }
     };
-  }
-
-  public componentDidCatch(err: Error, info: React.ErrorInfo) {
-    this.setState({
-      hasErrors: true,
-    });
-    const { logger } = this.props;
-    logger.error(err, info);
-  }
-  public render() {
-    const { i18n } = this.props;
-
-    if (this.state.hasErrors) {
-      return <div>Oh no, something went wrong in {'app-center-plugin'}</div>;
-    }
-
-    return (
-      <Box width="100vw">
-        <I18nextProvider i18n={i18n ? i18n : null}>
-          <Helmet>
-            <title>App Center</title>
-          </Helmet>
-          <h1>App Center Plugin</h1>
-        </I18nextProvider>
-      </Box>
-    );
-  }
-}
+  };
+  const uninstall = (name: string) => {
+    return () => {
+      if (props.uninstallIntegration) {
+        props.uninstallIntegration(name);
+      }
+    };
+  };
+  return (
+    <Box width="100vw">
+      <I18nextProvider i18n={i18next}>
+        <Helmet>
+          <title>App Center</title>
+        </Helmet>
+        <h1>App Center Plugin</h1>
+        <div>
+          Bookmarks App
+          <button onClick={install('@akashaproject/ui-plugin-bookmarks')}>Install</button>
+          <button onClick={uninstall('@akashaproject/ui-plugin-bookmarks')}>Uninstall</button>
+          <button onClick={() => props.navigateToModal({ name: 'signin' })}>Signin Modal</button>
+        </div>
+      </I18nextProvider>
+    </Box>
+  );
+};
 
 export default App;

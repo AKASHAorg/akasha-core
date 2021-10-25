@@ -26,42 +26,32 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/plugins/legal",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
-    "watch": "nodemon"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "lib/*",
-      "dist/*",
-      "build/*"
-    ],
-    "exec": "npm run pack || exit 1",
-    "ext": "ts,tsx"
+    "watch": "webpack --config ./webpack.config.js --watch",
+    "clean": "tsc --build --clean"
   },
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-common": "*",
-    "@types/i18next": "13.0.0",
-    "@types/react-i18next": "8.1.0",
-    "@types/react-router": "5.1.8",
-    "@types/react-router-dom": "5.1.6",
-    "react-i18next": "11.3.1",
-    "react-router-dom": "5.2.0",
-    "single-spa-react": "3.2.0"
+    "@types/react-router": "5.1.16",
+    "@types/react-router-dom": "5.1.8",
+    "react-i18next": "11.12.0",
+    "react-router-dom": "5.3.0",
+    "single-spa-react": "4.4.0",
+    "i18next": "20.6.1",
+    "i18next-browser-languagedetector": "6.1.2",
+    "i18next-fetch-backend": "3.0.0",
+    "i18next-chained-backend": "3.0.2",
+    "i18next-localstorage-backend": "3.1.3"
   },
   "devDependencies": {
-    "@types/react": "16.9.56",
-    "@types/react-dom": "16.9.9",
-    "@types/react-test-renderer": "16.9.3",
-    "@types/single-spa-react": "2.12.0",
-    "acorn-jsx": "5.3.1",
-    "jest-styled-components": "7.0.3",
-    "react-test-renderer": "16.14.0"
+    "@types/react": "17.0.20",
+    "@types/react-dom": "17.0.9",
+    "@types/react-test-renderer": "17.0.1"
   },
   "peerDependencies": {
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "files": [
     "lib"

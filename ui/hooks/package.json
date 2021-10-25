@@ -21,20 +21,28 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc"
+    "prepare": "npm run tsc",
+    "pretest": "tsc -m commonjs",
+    "test": "jest",
+    "clean": "tsc --build --clean",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "postpack": "copyfiles -f ./dist/* ../build/hooks"
   },
   "files": [
     "lib"
   ],
   "dependencies": {
     "@akashaproject/design-system": "*",
-    "rxjs": "6.6.7"
+    "@akashaproject/awf-sdk": "*",
+    "@akashaproject/sdk-typings": "*",
+    "rxjs": "7.3.0",
+    "react-query": "3.23.2"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@types/react": "16.9.56"
+    "@types/react": "17.0.20"
   },
   "peerDependencies": {
-    "react": "16.14.0"
+    "react": "17.0.2"
   }
 }

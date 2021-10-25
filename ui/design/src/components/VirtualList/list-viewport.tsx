@@ -21,9 +21,9 @@ const ListViewport: React.FC<IListViewportProps> = props => {
     usePlaceholders,
   } = props;
 
-  const siblingCustomEntities = customEntities
-    .filter(ent => ent.position === 'before' && !ent.itemId)
-    .map((entity, idx) => entity.getComponent({ key: idx, style: { marginBottom: itemSpacing } }));
+  // const siblingCustomEntities = customEntities
+  //   .filter(ent => ent.position === 'before' && !ent.itemId)
+  //   .map((entity, idx) => entity.getComponent({ key: idx, style: { marginBottom: itemSpacing } }));
 
   const placeholders: string[] = React.useMemo(() => {
     if (!renderSlice.length && usePlaceholders) {
@@ -32,12 +32,12 @@ const ListViewport: React.FC<IListViewportProps> = props => {
         .map((_v, i) => `${PLACEHOLDER_KEY}-${i}`);
     }
     return [];
-  }, [renderSlice.length]);
+  }, [renderSlice.length, loadLimit, usePlaceholders]);
 
   return (
     <>
-      {listHeader && React.cloneElement(listHeader)}
-      {siblingCustomEntities}
+      {listHeader && React.cloneElement(listHeader, { key: 'list-header' })}
+      {/* {siblingCustomEntities} */}
 
       {renderSlice.map(itemId => {
         return (

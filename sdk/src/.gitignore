@@ -1,0 +1,4 @@
+*.js
+*.map
+*.d.ts
+!definitions/graphql.d.ts

@@ -1,13 +1,14 @@
 import React from 'react';
-import { combineLatest } from 'rxjs';
-import DS from '@akashaproject/design-system';
-import { useProfile } from '@akashaproject/ui-awf-hooks';
 
-import { IContentProps } from '../../interfaces';
+import DS from '@akashaproject/design-system';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 import Content from './content';
-
-import { mapEntry } from '../../services/posting-service';
+import { IContentProps } from '../../interfaces';
 
 const { Box, MainAreaCardBox } = DS;
 
@@ -20,7 +21,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     determinationLabel,
     determination,
     reportedLabel,
-    contentType,
+    itemType,
     forLabel,
     andLabel,
     reportedByLabel,
@@ -28,11 +29,16 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     entryId,
     reasons,
     reporter,
+    reporterAvatar,
+    reporterENSName,
+    reporterName,
     otherReporters,
     reportedOnLabel,
     reportedDateTime,
     moderatorDecision,
     moderator,
+    moderatorName,
+    moderatorENSName,
     moderatedByLabel,
     moderatedOnLabel,
     evaluationDateTime,
@@ -40,78 +46,50 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     reviewDecisionLabel,
   } = props;
 
-  const [entryData, setEntryData] = React.useState<any>(null);
-  const [profile, profileActions] = useProfile({
-    onError: error => {
-      props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
-    },
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    globalChannel: props.globalChannel,
-  });
+  const profileDataQuery = useGetProfile(
+    entryId,
+    props.user,
+    itemType === ModerationItemTypes.ACCOUNT,
+  );
+  const profile = profileDataQuery.data;
 
-  const [reporterProfile, reporterProfileActions] = useProfile({
-    onError: error => {
-      props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
-    },
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    globalChannel: props.globalChannel,
-  });
+  const postQuery = usePost({ postId: entryId, enabler: itemType === ModerationItemTypes.POST });
 
-  const [moderatorProfile, moderatorProfileActions] = useProfile({
-    onError: error => {
-      props.logger.error('[content-card.tsx]: useProfile err %j', error.error || '');
-    },
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    globalChannel: props.globalChannel,
-  });
+  const commentQuery = useComment(
+    entryId,
+    itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT,
+  );
 
-  React.useEffect(() => {
-    if (contentType === 'post') {
-      const entryCall = props.sdkModules.posts.entries.getEntry({ entryId });
-      const ipfsGatewayCall = props.sdkModules.commons.ipfsService.getSettings({});
-      const getEntryCall = combineLatest([ipfsGatewayCall, entryCall]);
-      getEntryCall.subscribe((resp: any) => {
-        const ipfsGateway = resp[0].data;
-        const entry = resp[1].data?.getPost;
-        if (entry) {
-          const mappedEntry = mapEntry(entry, ipfsGateway);
-          setEntryData(mappedEntry);
-        }
-      });
+  const entryData = React.useMemo(() => {
+    if (itemType === ModerationItemTypes.POST) {
+      if (postQuery.data) {
+        return mapEntry(postQuery.data);
+      }
+      return undefined;
     }
-    if (contentType === 'profile') {
-      profileActions.getProfileData({ ethAddress: entryId });
+    if (itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT) {
+      if (commentQuery.data) {
+        return mapEntry(commentQuery.data);
+      }
+      return undefined;
     }
-  }, [entryId]);
-
-  React.useEffect(() => {
-    if (reporter) {
-      reporterProfileActions.getProfileData({ ethAddress: reporter });
-    }
-  }, [reporter]);
-
-  React.useEffect(() => {
-    if (moderator) {
-      moderatorProfileActions.getProfileData({ ethAddress: moderator });
-    }
-  }, [moderator]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postQuery.data, commentQuery.data]);
 
   return (
     <Box margin={{ bottom: '1rem' }}>
       <MainAreaCardBox>
         <Content
+          {...props}
           isPending={isPending}
           locale={locale}
-          entryData={contentType === 'profile' ? profile : entryData}
+          entryData={itemType === ModerationItemTypes.ACCOUNT ? profile : entryData}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}
           determination={determination}
           reportedLabel={reportedLabel}
-          contentType={contentType}
+          itemType={itemType}
           forLabel={forLabel}
           andLabel={andLabel}
           reportedByLabel={reportedByLabel}
@@ -119,16 +97,16 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           entryId={entryId}
           reasons={reasons}
           reporter={reporter}
-          reporterAvatar={reporterProfile.avatar}
-          reporterName={reporterProfile.name}
-          reporterENSName={reporterProfile.userName}
+          reporterAvatar={reporterAvatar}
+          reporterName={reporterName}
+          reporterENSName={reporterENSName}
           otherReporters={otherReporters}
           reportedOnLabel={reportedOnLabel}
           reportedDateTime={reportedDateTime}
           moderatorDecision={moderatorDecision}
           moderator={moderator}
-          moderatorName={moderatorProfile.name}
-          moderatorENSName={moderatorProfile.userName}
+          moderatorName={moderatorName}
+          moderatorENSName={moderatorENSName}
           moderatedByLabel={moderatedByLabel}
           moderatedOnLabel={moderatedOnLabel}
           evaluationDateTime={evaluationDateTime}
@@ -136,9 +114,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           reviewDecisionLabel={reviewDecisionLabel}
           logger={props.logger}
           singleSpa={props.singleSpa}
-          sdkModules={props.sdkModules}
           handleButtonClick={props.handleButtonClick}
-          globalChannel={props.globalChannel}
         />
       </MainAreaCardBox>
     </Box>

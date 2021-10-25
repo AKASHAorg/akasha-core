@@ -1,54 +1,23 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useLoginState } from '@akashaproject/ui-awf-hooks';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
-import routes, { HOME, UNAUTHENTICATED, rootRoute } from '../routes';
+import routes, { HOME, HISTORY, UNAUTHENTICATED, rootRoute } from '../routes';
 
 import ContentList from './content-list';
 import PromptAuthentication from './prompt-authentication';
+import TransparencyLog from './transparency-log';
 
-const { Box, LoginModal } = DS;
+const { Box } = DS;
 
-interface AppRoutesProps {
-  onError: (err: IAkashaError) => void;
-}
-
-const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
-  const { sdkModules, globalChannel, layout, onError, rxjsOperators } = props;
-
-  const [loginModalState, setLoginModalState] = React.useState(false);
+const AppRoutes: React.FC<RootComponentProps> = props => {
+  const { layoutConfig } = props;
 
   const { t } = useTranslation();
-
-  const [loginState, loginActions] = useLoginState({
-    rxjsOperators,
-    globalChannel: globalChannel,
-    onError: onError,
-    authService: sdkModules.auth.authService,
-    ipfsService: sdkModules.commons.ipfsService,
-    profileService: sdkModules.profiles.profileService,
-  });
-
-  const showLoginModal = () => {
-    setLoginModalState(true);
-  };
-
-  const hideLoginModal = () => {
-    setLoginModalState(false);
-  };
-
-  const handleLogin = (providerId: number) => {
-    loginActions.login(providerId);
-  };
-
-  React.useEffect(() => {
-    if (loginState.ethAddress) {
-      setLoginModalState(false);
-    }
-  }, [loginState.ethAddress]);
+  const loginQuery = useGetLogin();
 
   return (
     <Box>
@@ -57,8 +26,8 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
           <Route path={routes[HOME]}>
             <ContentList
               {...props}
-              ethAddress={loginState.ethAddress}
-              slotId={layout.app.modalSlotId}
+              user={loginQuery.data?.pubKey}
+              slotId={layoutConfig.modalSlotId}
             />
           </Route>
           <Route path={routes[UNAUTHENTICATED]}>
@@ -67,25 +36,21 @@ const AppRoutes: React.FC<RootComponentProps & AppRoutesProps> = props => {
               subtitleLabel={t(
                 'To view this page, you must be an Ethereum World Moderator and log in with your wallet to continue.',
               )}
-              buttonLabel={t('Connect a wallet')}
-              ethAddress={loginState.ethAddress}
+              buttonLabel={t('Moderation history')}
+              ethAddress={loginQuery.data?.ethAddress}
               singleSpa={props.singleSpa}
-              showLoginModal={showLoginModal}
+            />
+          </Route>
+          <Route path={routes[HISTORY]}>
+            <TransparencyLog
+              user={loginQuery.data?.pubKey}
+              isMobile={props.isMobile}
+              navigateToUrl={props.singleSpa.navigateToUrl}
             />
           </Route>
           <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
         </Switch>
       </Router>
-      <LoginModal
-        showModal={loginModalState}
-        slotId={layout.app.modalSlotId}
-        onLogin={handleLogin}
-        onModalClose={hideLoginModal}
-        titleLabel={t('Connect a wallet')}
-        metamaskModalHeadline={t('Connecting')}
-        metamaskModalMessage={t('Please complete the process in your wallet')}
-        error={null}
-      />
     </Box>
   );
 };

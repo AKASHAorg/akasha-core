@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon, IconType, iconTypes } from './icon';
+import Icon, { IconType, iconTypes } from '.';
 import { StyledIconDiv, StyledImage } from './styled-icon';
 import { LogoSourceType, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 

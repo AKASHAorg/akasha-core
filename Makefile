@@ -25,7 +25,7 @@ build.staging.feed:
 	npm run build:ewa
 build.staging.feed.static: build build.staging.feed
 build.staging.storybook:
-	./node_modules/.bin/lerna run build:storybook
+	npm run build:storybook
 build.staging.storybook.static: install build.tsc.ui build.staging.storybook
 build.translations:
 	npm run extract:translations

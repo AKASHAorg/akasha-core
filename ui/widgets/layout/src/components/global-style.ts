@@ -1,8 +1,10 @@
 import DS from '@akashaproject/design-system';
+import { DefaultTheme } from '@akashaproject/design-system/lib/styles/themes/interfaces';
 
 const { createGlobalStyle, css } = DS;
-
-export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
+export const GlobalStyle: any = createGlobalStyle<{
+  theme: DefaultTheme;
+}>`
   html {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -14,35 +16,24 @@ export const GlobalStyle: any = createGlobalStyle<{ theme: any }>`
     box-sizing: inherit;
   }
   html,
+  body,
+  #root {
+    display: flex;
+    flex: 1;
+  }
+  html,
   body {
     font-family: Inter !important;
     font-size: 16px;
-    height: 100%;
-  }
-  body {
     margin: 0;
-    overscroll-behavior-y: none;
-    overflow-y: scroll;
+    padding: 0;
   }
-  #root {
-    display: flex;
-    height: 100%;
+
+  body.noscroll {
+    overflow: hidden;
   }
-  .container {
-    border: 0;
-    box-sizing: border-box;
-    display: flex;
-    flex-basis: auto;
-    flex-direction: column;
-    flex-shrink: 0;
-    margin: 0px;
-    min-height: 0px;
-    min-width: 0px;
-    padding: 0px;
-    position: relative;
-    z-index: 0;
-  }
-  ${props => css<any>`
+
+  ${props => css`
     // 1920 and lower
     @media only screen and (min-width: ${props.theme.breakpoints.xlarge.value}px) {
       :root {

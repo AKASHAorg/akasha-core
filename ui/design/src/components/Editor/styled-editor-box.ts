@@ -26,11 +26,8 @@ const StyledBox = styled(Box)<{ isMobile?: boolean }>`
   ${props => {
     if (props.isMobile) {
       return css`
-        height: 100vh;
+        height: 45vh;
         background-color: ${props.theme.colors.background};
-        &:focus-within {
-          height: 45vh;
-        }
       `;
     }
     return css`
@@ -98,6 +95,34 @@ const StyledEditable = styled(Editable)`
   }
 `;
 
+const StyledPopoverDiv = styled.div`
+  top: -9999px;
+  left: -9999px;
+  position: absolute;
+  z-index: 99999;
+  padding: ${props => `${props.theme.shapes.baseSpacing}px`};
+  background: ${props => props.theme.colors.white};
+  border-radius: ${props => props.theme.shapes.borderRadius};
+  border: 1px solid ${props => props.theme.colors.border};
+  box-shadow: ${props => props.theme.colors.shadow};
+`;
+
+const StyledPopoverValueBox = styled(Box)<{ selectedBackground: boolean }>`
+  cursor: pointer;
+  padding: ${props => `${props.theme.shapes.baseSpacing}px`};
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  background: ${props =>
+    props.selectedBackground ? props.theme.colors.lightestGrey : 'transparent'};
+  max-width: 20rem;
+  min-width: 12rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:hover {
+    color: ${props => props.theme.colors.accent};
+  }
+`;
+
 export {
   StyledBox,
   StyledDiv,
@@ -110,4 +135,6 @@ export {
   StyledValueText,
   StyledText,
   StyledCloseDiv,
+  StyledPopoverDiv,
+  StyledPopoverValueBox,
 };

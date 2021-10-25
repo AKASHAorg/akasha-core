@@ -1,188 +1,176 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
-import { ILoadItemDataPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import {
-  constants,
-  usePosts,
-  useBookmarks,
-  useMentions,
-  useProfile,
-  useFollow,
-  useErrors,
-} from '@akashaproject/ui-awf-hooks';
+import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
+
+import DS from '@akashaproject/design-system';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { uploadMediaToTextile } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+import {
+  getLinkPreview,
+  uploadMediaToTextile,
+} from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
+
+import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  useGetBookmarks,
+  useSaveBookmark,
+  useDeleteBookmark,
+} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import {
+  useInfiniteComments,
+  useCreateComment,
+  COMMENT_KEY,
+} from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import {
+  useIsFollowingMultiple,
+  useFollow,
+  useUnfollow,
+} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
+import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
+import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { redirect, redirectToPost } from '../../services/routing-service';
-import PostRenderer from './post-renderer';
-import { getPendingComments } from './post-page-pending-comments';
 import routes, { POST } from '../../routes';
-import { IAkashaError, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { UseLoginState } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
 
 const {
   Box,
   MainAreaCardBox,
   EntryBox,
-  ReportModal,
-  ToastProvider,
-  ModalRenderer,
-  VirtualList,
   Helmet,
   CommentEditor,
   EditorPlaceholder,
   EntryCardHidden,
-  ErrorInfoCard,
   ErrorLoader,
   EntryCardLoading,
-  EditorModal,
+  ExtensionPoint,
 } = DS;
 
-interface IPostPage {
-  loggedProfileData?: any;
-  loginState: UseLoginState;
-  flagged: string;
-  setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  reportModalOpen: boolean;
-  setReportModalOpen: () => void;
-  closeReportModal: () => void;
-  editorModalOpen: boolean;
-  setEditorModalOpen: () => void;
-  closeEditorModal: () => void;
-  showLoginModal: () => void;
+interface IPostPageProps {
+  loginState?: LoginState;
+  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
   navigateToUrl: (path: string) => void;
-  isMobile: boolean;
-  onError: (err: IAkashaError) => void;
 }
 
-const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
-  const {
-    sdkModules,
-    globalChannel,
-    rxjsOperators,
-    flagged,
-    reportModalOpen,
-    setFlagged,
-    setReportModalOpen,
-    closeReportModal,
-    editorModalOpen,
-    setEditorModalOpen,
-    closeEditorModal,
-    showLoginModal,
-    logger,
-    navigateToUrl,
-    loggedProfileData,
-    loginState,
-    isMobile,
-  } = props;
+const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
+  const { showLoginModal, logger, navigateToUrl, loginState } = props;
+
+  const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
-  const [, errorActions] = useErrors({ logger });
 
-  const [postsState, postsActions] = usePosts({
-    user: loginState.ethAddress,
-    postsService: sdkModules.posts,
-    ipfsService: sdkModules.commons.ipfsService,
-    onError: errorActions.createError,
+  const queryClient = useQueryClient();
+
+  const postReq = usePost({
+    postId,
+    loggedUser: loginState?.pubKey,
+    enabler: loginState?.fromCache,
   });
-
-  const [mentionsState, mentionsActions] = useMentions({
-    onError: errorActions.createError,
-    profileService: sdkModules.profiles.profileService,
-    postsService: sdkModules.posts.tags,
-  });
-
   const entryData = React.useMemo(() => {
-    if (postId && postsState.postsData[postId]) {
-      return postsState.postsData[postId];
+    if (postReq.data) {
+      return mapEntry(postReq.data);
     }
-    return null;
-  }, [postId, postsState.postsData[postId]]);
+    return undefined;
+  }, [postReq.data]);
+
+  const isReported = React.useMemo(() => {
+    if (showAnyway) {
+      return false;
+    }
+    return postReq.isSuccess && entryData.reported;
+  }, [entryData, showAnyway, postReq.isSuccess]);
+
+  const disablePublishing = React.useMemo(
+    () => loginState.waitForAuth || !loginState.isReady,
+    [loginState],
+  );
+
+  const [mentionQuery, setMentionQuery] = React.useState(null);
+  const [tagQuery, setTagQuery] = React.useState(null);
+  const mentionQueryReq = useMentionSearch(mentionQuery);
+  const tagQueryReq = useTagSearch(tagQuery);
+
+  const reqComments = useInfiniteComments(15, postId);
+
+  const commentPages = React.useMemo(() => {
+    if (reqComments.data) {
+      return reqComments.data.pages;
+    }
+    return [];
+  }, [reqComments.data]);
 
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const [loginProfile, loginProfileActions] = useProfile({
-    profileService: props.sdkModules.profiles.profileService,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    onError: errorActions.createError,
-    rxjsOperators: props.rxjsOperators,
-    globalChannel: props.globalChannel,
-  });
+  const profileDataReq = useGetProfile(loginState?.pubKey);
+  const loggedProfileData = profileDataReq.data;
 
-  React.useEffect(() => {
-    if (loginState.pubKey) {
-      loginProfileActions.getProfileData({ pubKey: loginState.pubKey });
-    }
-  }, [loginState.pubKey]);
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.ethAddress, [
+    entryData?.author?.ethAddress,
+  ]);
+  const followedProfiles = isFollowingMultipleReq.data;
+  const followReq = useFollow();
+  const unfollowReq = useUnfollow();
 
-  const [bookmarkState, bookmarkActions] = useBookmarks({
-    dbService: sdkModules.db,
-    onError: errorActions.createError,
-  });
-
-  const [followedProfiles, followActions] = useFollow({
-    rxjsOperators,
-    globalChannel,
-    profileService: sdkModules.profiles.profileService,
-    onError: errorActions.createError,
-  });
-
-  React.useEffect(() => {
-    if (loginState.ethAddress && entryData?.author.ethAddress) {
-      followActions.isFollowing(loginState.ethAddress, entryData.author.ethAddress);
-    }
-  }, [loginState.ethAddress, entryData?.author.ethAddress]);
+  const bookmarksReq = useGetBookmarks(loginState?.isReady && loginState?.ethAddress);
+  const bookmarks = bookmarksReq.data;
+  const addBookmark = useSaveBookmark();
+  const deleteBookmark = useDeleteBookmark();
 
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
-      followActions.follow(entryData?.author.ethAddress);
+      followReq.mutate(entryData?.author.ethAddress);
     }
   };
 
   const handleUnfollow = () => {
     if (entryData.author.ethAddress) {
-      followActions.unfollow(entryData?.author.ethAddress);
+      unfollowReq.mutate(entryData?.author.ethAddress);
     }
   };
 
   const isFollowing = followedProfiles.includes(entryData?.author?.ethAddress);
 
-  const handleLoadMore = async (payload: any) => {
-    const req: { limit: number; offset?: string; postID: string } = {
-      limit: payload.limit,
-      postID: postId,
-    };
-    if (!postsState.isFetchingComments) {
-      postsActions.getComments(req);
+  const handleLoadMore = () => {
+    if (reqComments.isSuccess && reqComments.hasNextPage && loginState?.fromCache) {
+      reqComments.fetchNextPage();
     }
   };
 
-  const loadItemData = async (payload: ILoadItemDataPayload) => {
-    postsActions.getComment(payload.itemId);
-  };
-
-  React.useEffect(() => {
-    // this is used to initialise comments when navigating to other post ids
-    if (postId && loginState.currentUserCalled) {
-      postsActions.getPost(postId);
-      handleLoadMore({ limit: 5, postID: postId });
-      if (loginState.ethAddress) {
-        bookmarkActions.getBookmarks();
-      }
+  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
+    let url;
+    switch (itemType) {
+      case ItemTypes.PROFILE:
+        url = `/profile/${details.entryId}`;
+        break;
+      case ItemTypes.TAG:
+        url = `/social-app/tags/${details.entryId}`;
+        break;
+      case ItemTypes.ENTRY:
+        url = `/social-app/post/${details.entryId}`;
+        break;
+      case ItemTypes.COMMENT:
+        /* Navigate to parent post because we don't have the comment page yet */
+        url = `/social-app/post/${
+          queryClient.getQueryData<{ postId: string }>([COMMENT_KEY, details.entryId])?.postId
+        }`;
+        break;
+      default:
+        break;
     }
-  }, [postId, loginState.currentUserCalled, loginState.ethAddress]);
+    props.singleSpa.navigateToUrl(url);
+  };
 
   const bookmarked = React.useMemo(() => {
-    if (
-      !bookmarkState.isFetching &&
-      bookmarkState.bookmarks.findIndex(bm => bm.entryId === postId) >= 0
-    ) {
-      return true;
-    }
-    return false;
-  }, [bookmarkState]);
+    return !bookmarksReq.isFetching && bookmarks?.findIndex(bm => bm.entryId === postId) >= 0;
+  }, [bookmarksReq.isFetching, bookmarks, postId]);
 
   const handleMentionClick = (pubKey: string) => {
     navigateToUrl(`/profile/${pubKey}`);
@@ -197,362 +185,292 @@ const PostPage: React.FC<IPostPage & RootComponentProps> = props => {
     ev.preventDefault();
   };
 
-  const handleEntryBookmark = (entryId: string) => {
-    if (!loginState.ethAddress) {
+  const handleEntryBookmark = (itemType: ItemTypes) => (entryId: string) => {
+    if (!loginState?.ethAddress) {
       return showLoginModal();
     }
-    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
-      return bookmarkActions.removeBookmark(entryId);
+    if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
+      return deleteBookmark.mutate(entryId);
     }
-    return bookmarkActions.bookmarkPost(entryId);
+    return addBookmark.mutate({ entryId, itemType });
   };
 
-  const handleCommentBookmark = (commentId: string) => {
-    if (!loginState.ethAddress) {
-      return showLoginModal();
+  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+    if (!loginState?.pubKey) {
+      return showLoginModal({ name: 'report-modal', entryId, itemType });
     }
-    if (bookmarkState.bookmarks.findIndex(bm => bm.entryId === commentId) >= 0) {
-      return bookmarkActions.removeBookmark(commentId);
-    }
-    return bookmarkActions.bookmarkComment(commentId);
+    props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
-  const handleCommentRepost = () => {
-    // todo
-  };
-  const handleEntryFlag = (entryId: string) => () => {
-    setFlagged(entryId);
-    setReportModalOpen();
+  const publishComment = useCreateComment();
+
+  const handlePublishComment = async (data: IPublishData) => {
+    publishComment.mutate({ ...data, postID: postId });
   };
 
-  const handlePublishComment = async (data: {
-    metadata: {
-      app: string;
-      version: number;
-      quote?: string;
-      tags: string[];
-      mentions: string[];
-    };
-    author: string;
-    content: any;
-    textContent: any;
-  }) => {
-    if (!loginState.ethAddress) {
+  const handleRepost = (_withComment: boolean, entryId: string) => {
+    if (!loginState?.ethAddress) {
       showLoginModal();
       return;
-    }
-    postsActions.optimisticPublishComment(data, postId, loginProfile);
-  };
-
-  const [currentEmbedEntry, setCurrentEmbedEntry] = React.useState(undefined);
-
-  const handleRepost = (_withComment: boolean, entry: any) => {
-    setCurrentEmbedEntry(entry);
-    setEditorModalOpen();
-  };
-
-  const handleToggleEditor = () => {
-    setCurrentEmbedEntry(undefined);
-    if (editorModalOpen) {
-      closeEditorModal();
     } else {
-      setEditorModalOpen();
+      props.navigateToModal({ name: 'editor', embedEntry: entryId });
     }
   };
 
-  const handleEntryPublish = (entry: any) => {
-    if (!loginState.ethAddress || !loginState.pubKey) {
-      showLoginModal();
-      return;
-    }
+  const handleNavigateToPost = redirectToPost(navigateToUrl, postId);
 
-    postsActions.optimisticPublishPost(entry, loggedProfileData, currentEmbedEntry, true);
-    closeEditorModal();
+  const handleSingleSpaNavigate = redirect(navigateToUrl);
+
+  const handleFlipCard = () => {
+    setShowAnyway(true);
   };
 
-  const handleNavigateToPost = redirectToPost(navigateToUrl, postId, postsActions.resetPostIds);
-
-  const handleSingleSpaNavigate = redirect(navigateToUrl, postsActions.resetPostIds);
-
-  const onUploadRequest = uploadMediaToTextile(
-    sdkModules.profiles.profileService,
-    sdkModules.commons.ipfsService,
-  );
-
-  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
-    // modify entry or its quote (if applicable)
-    const modifiedEntry = isQuote
-      ? { ...entry, quote: { ...entry.quote, reported: false } }
-      : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
+  const onEditPostButtonMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: entryData.entryId,
+        entryType: ItemTypes.ENTRY,
+      },
+    });
   };
-
-  const updateEntry = (entryId: string) => {
-    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
-    postsActions.updatePostsState(modifiedEntry);
+  const onEditPostButtonUnmount = () => {
+    /* todo */
   };
-
-  const handleListFlipCard = (entry: any, isQuote: boolean) => () => {
-    const modifiedEntry = isQuote
-      ? { ...entry, quote: { ...entry.quote, reported: false } }
-      : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
-  };
-
-  if (postsState.delistedItems.includes(postId)) {
-    return (
-      <EntryCardHidden
-        moderatedContentLabel={t('This content has been moderated')}
-        isDelisted={true}
-      />
-    );
-  }
-
-  if (!postsState.delistedItems.includes(postId) && postsState.reportedItems.includes(postId)) {
-    return (
-      <EntryCardHidden
-        awaitingModerationLabel={t('You have reported this post. It is awaiting moderation.')}
-        ctaLabel={t('See it anyway')}
-        handleFlipCard={handleFlipCard(entryData, false)}
-      />
-    );
-  }
-
-  const postErrors = errorActions.getFilteredErrors('usePost.getPost');
-  const commentErrors = errorActions.getFilteredErrors('usePosts.getComments');
 
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
+
+  const handleCommentRemove = (commentId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: ItemTypes.COMMENT,
+      entryId: commentId,
+    });
+  };
+
+  const handlePostRemove = (commentId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryType: ItemTypes.ENTRY,
+      entryId: commentId,
+    });
+  };
+
+  const handlePlaceholderClick = () => {
+    showLoginModal();
+  };
+
+  const handleMentionQueryChange = (query: string) => {
+    setMentionQuery(query);
+  };
+  const handleTagQueryChange = (query: string) => {
+    setTagQuery(query);
+  };
+
+  const showEditButton = React.useMemo(
+    () => loginState.isReady && loginState.ethAddress === entryData?.author?.ethAddress,
+    [entryData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
+  );
+
+  const showEntry = React.useMemo(
+    () => !entryData?.delisted && (!isReported || (isReported && entryData?.moderated)),
+    [entryData?.delisted, entryData?.moderated, isReported],
+  );
 
   return (
     <MainAreaCardBox style={{ height: 'auto' }}>
       <Helmet>
         <title>Post | Ethereum World</title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
-        {reportModalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal
-              titleLabel={t('Report a Post')}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-              successMessageLabel={t('We will investigate this post and take appropriate action.')}
-              optionsTitleLabel={t('Please select a reason')}
-              optionLabels={[
-                t('Suspicious, deceptive, or spam'),
-                t('Abusive or harmful to others'),
-                t('Self-harm or suicide'),
-                t('Illegal'),
-                t('Nudity'),
-                t('Violence'),
-              ]}
-              optionValues={[
-                'Suspicious, deceptive, or spam',
-                'Abusive or harmful to others',
-                'Self-harm or suicide',
-                'Illegal',
-                'Nudity',
-                'Violence',
-              ]}
-              descriptionLabel={t('Explanation')}
-              descriptionPlaceholder={t('Please explain your reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              reportLabel={t('Report')}
-              blockLabel={t('Block User')}
-              closeLabel={t('Close')}
-              user={loginState.ethAddress ? loginState.ethAddress : ''}
-              contentId={flagged}
-              contentType="post"
-              baseUrl={constants.BASE_FLAG_URL}
-              updateEntry={updateEntry}
-              closeModal={closeReportModal}
+      {postReq.isLoading && <EntryCardLoading />}
+      {postReq.isError && (
+        <ErrorLoader
+          type="script-error"
+          title={t('There was an error loading the entry')}
+          details={t('We cannot show this entry right now')}
+          devDetails={postReq.error}
+        />
+      )}
+      {postReq.isSuccess && (
+        <>
+          {entryData.moderated && entryData.delisted && (
+            <EntryCardHidden
+              moderatedContentLabel={t('This content has been moderated')}
+              isDelisted={true}
             />
-          </ToastProvider>
-        )}
-        {editorModalOpen && props.layout.app.modalSlotId && (
-          <EditorModal
-            slotId={props.layout.app.modalSlotId}
-            avatar={loggedProfileData.avatar}
-            showModal={editorModalOpen}
-            ethAddress={loggedProfileData.ethAddress}
-            postLabel={t('Publish')}
-            placeholderLabel={t('Write something')}
-            discardPostLabel={t('Discard Post')}
-            discardPostInfoLabel={t(
-              "You have not posted yet. If you leave now you'll discard your post.",
-            )}
-            keepEditingLabel={t('Keep Editing')}
-            onPublish={handleEntryPublish}
-            handleNavigateBack={handleToggleEditor}
-            getMentions={mentionsActions.getMentions}
-            getTags={mentionsActions.getTags}
-            tags={mentionsState.tags}
-            mentions={mentionsState.mentions}
-            uploadRequest={onUploadRequest}
-            embedEntryData={currentEmbedEntry}
-            style={{ width: '36rem' }}
-          />
-        )}
-      </ModalRenderer>
-      <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
-        <ErrorInfoCard errors={postErrors}>
-          {(errorMessages, hasCriticalErrors) => (
+          )}
+          {!entryData.moderated && isReported && (
+            <EntryCardHidden
+              reason={entryData.reason}
+              headerTextLabel={t('You reported this post for the following reason')}
+              footerTextLabel={t('It is awaiting moderation.')}
+              ctaLabel={t('See it anyway')}
+              handleFlipCard={handleFlipCard}
+            />
+          )}
+          {showEntry && (
             <>
-              {hasCriticalErrors && (
-                <ErrorLoader
-                  type="script-error"
-                  title={t('Sorry, there was an error loading this post')}
-                  details={t('We cannot recover from this error!')}
-                  devDetails={errorMessages}
+              <Box
+                pad={{ bottom: 'small' }}
+                border={{ side: 'bottom', size: '1px', color: 'border' }}
+              >
+                <EntryBox
+                  isRemoved={entryData.isRemoved}
+                  isBookmarked={bookmarked}
+                  entryData={entryData}
+                  sharePostLabel={t('Share Post')}
+                  shareTextLabel={t('Share this post with your friends')}
+                  sharePostUrl={`${window.location.origin}${routes[POST]}/`}
+                  onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
+                    handleAvatarClick(ev, entryData.author.pubKey)
+                  }
+                  onEntryBookmark={handleEntryBookmark(ItemTypes.ENTRY)}
+                  repliesLabel={t('Replies')}
+                  repostsLabel={t('Reposts')}
+                  repostLabel={t('Repost')}
+                  repostWithCommentLabel={t('Repost with comment')}
+                  shareLabel={t('Share')}
+                  copyLinkLabel={t('Copy Link')}
+                  flagAsLabel={t('Report Post')}
+                  loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
+                  locale={locale}
+                  bookmarkLabel={t('Save')}
+                  bookmarkedLabel={t('Saved')}
+                  showMore={true}
+                  profileAnchorLink={'/profile'}
+                  repliesAnchorLink={routes[POST]}
+                  onRepost={handleRepost}
+                  onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
+                  handleFollowAuthor={handleFollow}
+                  handleUnfollowAuthor={handleUnfollow}
+                  isFollowingAuthor={isFollowing}
+                  onContentClick={handleNavigateToPost}
+                  singleSpaNavigate={handleSingleSpaNavigate}
+                  onMentionClick={handleMentionClick}
+                  onTagClick={handleTagClick}
+                  moderatedContentLabel={t('This content has been moderated')}
+                  ctaLabel={t('See it anyway')}
+                  handleFlipCard={handleFlipCard}
+                  scrollHiddenContent={true}
+                  onEntryRemove={handlePostRemove}
+                  removeEntryLabel={t('Delete Post')}
+                  removedByMeLabel={t('You deleted this post')}
+                  removedByAuthorLabel={t('This post was deleted by its author')}
+                  disableReposting={entryData.isRemoved}
+                  disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+                  modalSlotId={props.layoutConfig.modalSlotId}
+                  headerMenuExt={
+                    showEditButton && (
+                      <ExtensionPoint
+                        style={{ width: '100%' }}
+                        name={`entry-card-edit-button_${entryData.entryId}`}
+                        onMount={onEditPostButtonMount}
+                        onUnmount={onEditPostButtonUnmount}
+                      />
+                    )
+                  }
                 />
+              </Box>
+              {!loginState?.ethAddress && (
+                <Box margin="medium">
+                  <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
+                </Box>
               )}
-              {errorMessages && !hasCriticalErrors && (
-                <ErrorLoader
-                  type="script-error"
-                  title={t('Loading the post failed')}
-                  details={t('An unexpected error occured! Please try to refresh the page')}
-                  devDetails={errorMessages}
-                />
+              {loginState?.ethAddress && !entryData.isRemoved && (
+                <Box margin="medium" style={{ position: 'relative' }}>
+                  <CommentEditor
+                    avatar={loggedProfileData?.avatar}
+                    ethAddress={loginState?.ethAddress}
+                    postLabel={t('Reply')}
+                    placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
+                    emojiPlaceholderLabel={t('Search')}
+                    disablePublishLabel={t('Authenticating')}
+                    disablePublish={disablePublishing}
+                    onPublish={handlePublishComment}
+                    getLinkPreview={getLinkPreview}
+                    getMentions={handleMentionQueryChange}
+                    getTags={handleTagQueryChange}
+                    tags={tagQueryReq.data}
+                    mentions={mentionQueryReq.data}
+                    uploadRequest={uploadMediaToTextile}
+                  />
+                </Box>
               )}
-              {!hasCriticalErrors && (
-                <>
-                  {!entryData && (
-                    <EntryCardLoading
-                      style={{ background: 'transparent', boxShadow: 'none', border: 0 }}
-                    />
-                  )}
-                  {entryData && (
-                    <EntryBox
-                      isBookmarked={bookmarked}
-                      entryData={entryData}
-                      sharePostLabel={t('Share Post')}
-                      shareTextLabel={t('Share this post with your friends')}
-                      sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-                      onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                        handleAvatarClick(ev, entryData.author.pubKey)
-                      }
-                      onEntryBookmark={handleEntryBookmark}
-                      repliesLabel={t('Replies')}
-                      repostsLabel={t('Reposts')}
-                      repostLabel={t('Repost')}
-                      repostWithCommentLabel={t('Repost with comment')}
-                      shareLabel={t('Share')}
-                      copyLinkLabel={t('Copy Link')}
-                      flagAsLabel={t('Report Post')}
-                      loggedProfileEthAddress={loginState.ethAddress}
-                      locale={locale}
-                      bookmarkLabel={t('Save')}
-                      bookmarkedLabel={t('Saved')}
-                      profileAnchorLink={'/profile'}
-                      repliesAnchorLink={routes[POST]}
-                      onRepost={handleRepost}
-                      onEntryFlag={handleEntryFlag(entryData.entryId)}
-                      handleFollowAuthor={handleFollow}
-                      handleUnfollowAuthor={handleUnfollow}
-                      isFollowingAuthor={isFollowing}
-                      onContentClick={handleNavigateToPost}
-                      singleSpaNavigate={handleSingleSpaNavigate}
-                      onMentionClick={handleMentionClick}
-                      onTagClick={handleTagClick}
-                      awaitingModerationLabel={t(
-                        'You have reported this post. It is awaiting moderation.',
-                      )}
-                      moderatedContentLabel={t('This content has been moderated')}
-                      ctaLabel={t('See it anyway')}
-                      handleFlipCard={handleFlipCard}
-                      scrollHiddenContent={true}
-                    />
-                  )}
-                </>
+              {publishComment.isLoading && publishComment.variables.postID === postId && (
+                <Box
+                  pad={{ horizontal: 'medium' }}
+                  border={{ side: 'bottom', size: '1px', color: 'border' }}
+                  style={{ backgroundColor: '#4e71ff0f' }}
+                >
+                  <EntryBox
+                    isBookmarked={false}
+                    entryData={{
+                      ...publishComment.variables,
+                      author: loggedProfileData,
+                      ipfsLink: '',
+                      permalink: '',
+                      entryId: '',
+                    }}
+                    sharePostLabel={t('Share Post')}
+                    shareTextLabel={t('Share this post with your friends')}
+                    repliesLabel={t('Replies')}
+                    repostsLabel={t('Reposts')}
+                    repostLabel={t('Repost')}
+                    repostWithCommentLabel={t('Repost with comment')}
+                    shareLabel={t('Share')}
+                    copyLinkLabel={t('Copy Link')}
+                    flagAsLabel={t('Report Comment')}
+                    loggedProfileEthAddress={loggedProfileData.ethAddress}
+                    locale={'en'}
+                    bookmarkLabel={t('Save')}
+                    bookmarkedLabel={t('Saved')}
+                    showMore={true}
+                    profileAnchorLink={'/profile'}
+                    repliesAnchorLink={routes[POST]}
+                    handleFollowAuthor={handleFollow}
+                    handleUnfollowAuthor={handleUnfollow}
+                    isFollowingAuthor={isFollowing}
+                    contentClickable={false}
+                    hidePublishTime={true}
+                    disableActions={true}
+                    hideActionButtons={true}
+                    modalSlotId={props.layoutConfig.modalSlotId}
+                  />
+                </Box>
               )}
+              <FeedWidget
+                modalSlotId={props.layoutConfig.modalSlotId}
+                logger={logger}
+                pages={commentPages}
+                itemType={ItemTypes.COMMENT}
+                onLoadMore={handleLoadMore}
+                getShareUrl={(itemId: string) =>
+                  `${window.location.origin}/social-app/post/${itemId}`
+                }
+                loginState={loginState}
+                onNavigate={handleNavigation}
+                singleSpaNavigate={props.singleSpa.navigateToUrl}
+                navigateToModal={props.navigateToModal}
+                onLoginModalOpen={showLoginModal}
+                requestStatus={reqComments.status}
+                hasNextPage={reqComments.hasNextPage}
+                loggedProfile={loggedProfileData}
+                contentClickable={true}
+                onEntryFlag={handleEntryFlag}
+                onEntryRemove={handleCommentRemove}
+                removeEntryLabel={t('Delete Reply')}
+                removedByMeLabel={t('You deleted this reply')}
+                removedByAuthorLabel={t('This reply was deleted by its author')}
+                uiEvents={props.uiEvents}
+                itemSpacing={8}
+                i18n={i18n}
+              />
             </>
           )}
-        </ErrorInfoCard>
-      </Box>
-      {!loginState.ethAddress && (
-        <Box margin="medium">
-          <EditorPlaceholder onClick={showLoginModal} ethAddress={null} />
-        </Box>
+        </>
       )}
-      {loginState.ethAddress && (
-        <Box margin="medium">
-          <CommentEditor
-            avatar={loginProfile.avatar}
-            ethAddress={loginState.ethAddress}
-            postLabel={t('Reply')}
-            placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
-            onPublish={handlePublishComment}
-            getMentions={mentionsActions.getMentions}
-            getTags={mentionsActions.getTags}
-            tags={mentionsState.tags}
-            mentions={mentionsState.mentions}
-            uploadRequest={onUploadRequest}
-          />
-        </Box>
-      )}
-      <ErrorInfoCard errors={commentErrors}>
-        {(errorMessages, hasCriticalErrors) => (
-          <>
-            {hasCriticalErrors && (
-              <ErrorLoader
-                type="script-error"
-                title={t('A critical error occured when loading the list')}
-                details={t('Cannot fetch one or more comments!')}
-              />
-            )}
-            {!hasCriticalErrors && errorMessages && (
-              <ErrorLoader
-                type="script-error"
-                title={t('Loading the list of comments failed')}
-                details={t('An unexpected error occured! Please try to refresh the page')}
-              />
-            )}
-            {!hasCriticalErrors && (
-              <VirtualList
-                items={postsState.commentIds}
-                itemsData={postsState.postsData}
-                loadMore={handleLoadMore}
-                loadItemData={loadItemData}
-                hasMoreItems={!!postsState.nextCommentIndex}
-                itemCard={
-                  <PostRenderer
-                    sdkModules={sdkModules}
-                    logger={logger}
-                    globalChannel={globalChannel}
-                    rxjsOperators={rxjsOperators}
-                    bookmarkState={bookmarkState}
-                    ethAddress={loginState.ethAddress}
-                    locale={locale}
-                    onBookmark={handleCommentBookmark}
-                    onNavigate={handleNavigateToPost}
-                    sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-                    onFlag={handleEntryFlag}
-                    onRepost={handleCommentRepost}
-                    onAvatarClick={handleAvatarClick}
-                    onMentionClick={handleMentionClick}
-                    onTagClick={handleTagClick}
-                    singleSpaNavigate={handleSingleSpaNavigate}
-                    handleFlipCard={handleListFlipCard}
-                  />
-                }
-                customEntities={getPendingComments({
-                  logger,
-                  globalChannel,
-                  rxjsOperators,
-                  locale,
-                  isMobile,
-                  sdkModules,
-                  feedItems: postsState.postIds,
-                  loggedEthAddress: loginState.ethAddress,
-                  pendingComments: postsState.pendingComments,
-                })}
-              />
-            )}
-          </>
-        )}
-      </ErrorInfoCard>
     </MainAreaCardBox>
   );
 };

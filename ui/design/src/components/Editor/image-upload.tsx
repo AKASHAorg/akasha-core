@@ -9,7 +9,7 @@ import {
   StyledImageInput,
 } from './styled-editor-box';
 
-import { Icon } from '../Icon/index';
+import Icon from '../Icon';
 
 export interface IImageUpload {
   // labels
@@ -17,25 +17,27 @@ export interface IImageUpload {
   uploadingImageLabel?: string;
   // parent state
   uploading: boolean;
-  setUploading: any;
+  setUploading: React.Dispatch<React.SetStateAction<boolean>>;
   // handlers
-  uploadRequest?: (data: string | File, isUrl?: boolean) => any;
-  handleInsertImage: (data: {
-    src: string;
-    size: {
-      width: string;
-      height: string;
-      naturalWidth: string;
-      naturalHeight: string;
-    };
-  }) => void;
+  uploadRequest?: (data: string | File, isUrl?: boolean) => { data?: ImageData; error?: Error };
+  handleInsertImage: (data: ImageData) => void;
   // ref for hidden input
   ref: React.Ref<HTMLInputElement>;
 }
 
+export interface ImageData {
+  src: string;
+  size: {
+    width: string;
+    height: string;
+    naturalWidth: string;
+    naturalHeight: string;
+  };
+}
+
 const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
   const {
-    uploadFailedLabel,
+    // uploadFailedLabel,
     uploadingImageLabel,
     uploadRequest,
     handleInsertImage,
@@ -46,17 +48,17 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
   const [uploadValueName, setUploadValueName] = React.useState('');
 
   const [imageSize, setImageSize] = React.useState<{ height: number; width: number } | null>(null);
-  const [uploadErrorState, setUploadErrorState] = React.useState(false);
+  const [uploadErrorState, setUploadErrorState] = React.useState<string | null>(null);
 
   const handleCancelUpload = () => {
-    setUploadErrorState(false);
+    setUploadErrorState(null);
     setUploading(false);
     setImageSize(null);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!(e.target.files && e.target.files[0])) {
-      setUploadErrorState(true);
+      setUploadErrorState('No file provided');
       return;
     }
     const file = e.target.files[0];
@@ -65,7 +67,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
     fileReader.readAsDataURL(file);
     fileReader.addEventListener('load', async () => {
       setUploadValueName(fileName);
-      setUploadErrorState(false);
+      setUploadErrorState(null);
       if (uploadRequest && fileReader.result) {
         const img = new Image();
         img.onload = () => {
@@ -75,7 +77,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
         img.src = fileReader.result as string;
         const resp = await uploadRequest(file);
         if (resp.error) {
-          setUploadErrorState(true);
+          setUploadErrorState(resp.error.message);
         } else if (resp.data) {
           handleInsertImage(resp.data);
         }
@@ -97,17 +99,16 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           <Box direction="column" gap="small" pad={{ left: 'small' }}>
             <StyledValueText>{uploadValueName}</StyledValueText>
 
-            <Box direction="row" gap="xsmall" align="center">
-              <Text color="errorText">{uploadFailedLabel}</Text>
+            <Box direction="row" gap="xsmall" align="center" width={{ max: '20rem' }}>
+              <Text wordBreak="break-all" color="errorText">
+                {uploadErrorState}
+              </Text>
             </Box>
           </Box>
         </StyledUploadingDiv>
       )}
       {uploading && (
         <StyledUploadingDiv>
-          <StyledCloseDiv onClick={handleCancelUpload}>
-            <Icon type="close" clickable={true} />
-          </StyledCloseDiv>
           <Box direction="column" gap="medium" align="center" justify="center">
             <Icon type="loading" />
             <StyledText size="medium" color="accentText">
@@ -116,9 +117,11 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           </Box>
         </StyledUploadingDiv>
       )}
-      <StyledImageInput value="" onChange={handleFileUpload} type="file" ref={ref} />
+      <StyledImageInput accept={'image/*'} onChange={handleFileUpload} type="file" ref={ref} />
     </>
   );
 });
+
+ImageUpload.displayName = 'ImageUpload';
 
 export { ImageUpload };

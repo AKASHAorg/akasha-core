@@ -2,65 +2,40 @@ import React, { PureComponent } from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
 import NotificationsPage from './notifications-page';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import i18next from '../i18n';
 
-const { Box, lightTheme, ThemeSelector, ViewportSizeProvider } = DS;
+const { Box } = DS;
 
-export interface IProps {
-  singleSpa: any;
-  activeWhen: {
-    path: string;
-  };
+// @TODO: convert to function component
 
-  mountParcel: (config: any, props: any) => void;
-  rootNodeId: string;
-  sdkModules: any;
-  globalChannel: any;
-  logger: any;
-  i18n?: any;
-  rxjsOperators: any;
-}
-
-class App extends PureComponent<IProps> {
+class App extends PureComponent<RootComponentProps> {
   public state: { hasErrors: boolean };
 
-  constructor(props: IProps) {
+  constructor(props) {
     super(props);
     this.state = {
       hasErrors: false,
     };
   }
 
-  public componentDidCatch(err: Error, info: React.ErrorInfo) {
+  public componentDidCatch(err: Error) {
     this.setState({
       hasErrors: true,
     });
     const { logger } = this.props;
-    logger.error(err, info);
+    logger.error(`${JSON.stringify(err)}`);
   }
   public render() {
-    const { i18n } = this.props;
-
     if (this.state.hasErrors) {
       return <div>Oh no, something went wrong in {'notifications-plugin'}</div>;
     }
 
     return (
       <Box width="100vw">
-        <React.Suspense fallback={<>Loading</>}>
-          <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-            <I18nextProvider i18n={i18n ? i18n : null}>
-              <ViewportSizeProvider>
-                <NotificationsPage
-                  logger={this.props.logger}
-                  sdkModules={this.props.sdkModules}
-                  singleSpa={this.props.singleSpa}
-                  globalChannel={this.props.globalChannel}
-                  rxjsOperators={this.props.rxjsOperators}
-                />
-              </ViewportSizeProvider>
-            </I18nextProvider>
-          </ThemeSelector>
-        </React.Suspense>
+        <I18nextProvider i18n={i18next}>
+          <NotificationsPage {...this.props} />
+        </I18nextProvider>
       </Box>
     );
   }

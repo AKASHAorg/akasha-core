@@ -1,0 +1,66 @@
+fragment DataProviderFragment on DataProvider{
+  provider
+  property
+  value
+}
+
+fragment UserProfileFragment on UserProfile{
+  pubKey
+  name
+  userName
+  avatar
+  coverImage
+  description
+  ethAddress
+  totalPosts
+  totalFollowers
+  totalFollowing
+}
+
+query GetComment($commentID: String!) {
+  getComment(commentID:$commentID){
+    content{
+      ...DataProviderFragment
+    }
+    author{
+     ...UserProfileFragment
+    }
+    creationDate
+    updatedAt
+    replyTo
+    postId
+    _id
+  }
+}
+
+query GetComments($offset: String, $limit: Int, $postID: String!) {
+  getComments(postID:$postID, offset: $offset, limit: $limit){
+    total
+    nextIndex
+    results{
+      content{
+       ...DataProviderFragment
+      }
+      author{
+       ...UserProfileFragment
+      }
+      creationDate
+      replyTo
+      postId
+      _id
+    }
+  }
+}
+
+
+mutation AddComment($content: [DataProviderInput!], $comment: CommentData) {
+  addComment(content: $content, comment: $comment)
+}
+
+mutation EditComment($content: [DataProviderInput!], $comment: CommentData, $id: String!) {
+  editComment(content: $content, comment: $comment, id: $id)
+}
+
+mutation RemoveComment($id: String!) {
+  removeComment(id: $id)
+}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-const AvatarImage = (props: any) => {
-  const { image } = props;
+const AvatarImage = (props: { image: string; faded?: boolean }) => {
+  const { image, faded } = props;
   let avatar;
   // if (typeof image === 'object' && image.hasOwnProperty('read')) {
   //   avatar = image.read();
@@ -10,7 +10,11 @@ const AvatarImage = (props: any) => {
     avatar = image;
   }
 
-  return <img data-testid="avatar-image" src={avatar} />;
+  return (
+    <picture style={{ ...(faded && { opacity: '0.5' }) }}>
+      <img data-testid="avatar-image" src={avatar} />
+    </picture>
+  );
 };
 
 export default AvatarImage;

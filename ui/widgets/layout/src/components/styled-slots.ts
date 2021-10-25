@@ -1,12 +1,22 @@
 import DS from '@akashaproject/design-system';
-import { BaseContainer } from './styled-containers';
+import { ExtensionPointProps } from '@akashaproject/design-system/lib/utils/extension-point';
 
-const { css, styled } = DS;
+const { css, styled, ExtensionPoint } = DS;
 
-export const SidebarSlot: any = styled(BaseContainer)<{
+const BaseStyledSlot = styled(ExtensionPoint)`
+  border: 0;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+`;
+
+// eslint-disable-next-line prettier/prettier
+export const SidebarSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)<{
   visible: boolean;
 }>`
   flex-grow: 1;
+  position: sticky;
+  top: 0;
   ${props => css`
     @media screen and (max-width: ${props.theme.breakpoints.small.value}px) {
       ${props.visible && 'height: calc(100vh - 3rem)'}
@@ -15,33 +25,27 @@ export const SidebarSlot: any = styled(BaseContainer)<{
   `}
 `;
 
-export const TopbarSlot: any = styled.div`
+export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
   z-index: 100;
   position: sticky;
   top: 0;
-  width: 100%;
 `;
 
-export const PluginSlot: any = styled(BaseContainer)`
-  flex-grow: 1;
-  flex-shrink: 1;
+export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   margin-top: 0.5em;
+  width: 100%;
   ${props => css`
-    @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
-      max-width: 30em;
-    }
-    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
-      max-width: 32em;
+    @media screen and (min-width: ${props.theme.breakpoints.medium.value + 1}px) {
+      width: 32rem;
     }
     @media screen and (min-width: ${props.theme.breakpoints.large.value}px) {
-      max-width: 42em;
+      width: 42rem;
     }
   `}
 `;
 
-export const WidgetSlot: any = styled(BaseContainer)`
+export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   display: none;
-  margin-top: 0.5em;
   ${props => css`
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30em;
@@ -63,6 +67,6 @@ export const WidgetSlot: any = styled(BaseContainer)`
   }
 `;
 
-export const ModalSlot: any = styled.div`
+export const ModalSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
   z-index: 300;
 `;

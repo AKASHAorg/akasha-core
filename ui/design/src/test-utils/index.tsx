@@ -17,13 +17,15 @@ export const customRender = (ui: ReactElement, options: any) =>
   render(ui, { wrapper: WithProviders, queries: { ...queries }, ...options });
 
 export const resizeWindow = (width: number, height: number) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   window.innerWidth = width;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   window.innerHeight = height;
   fireEvent(window, new Event('resize'));
 };
 
-export const createFile = (name: string, type: string = 'image/png') => {
+export const createFile = (name: string, type = 'image/png') => {
   return new File(['test-file-content'], name, { type });
 };

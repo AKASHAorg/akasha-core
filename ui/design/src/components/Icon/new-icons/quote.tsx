@@ -1,11 +1,11 @@
 import React from 'react';
 
 const Quote = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" {...props}>
     <g
       fill="none"
       fillRule="evenodd"
-      stroke="#132540"
+      stroke="#949EB3"
       strokeLinecap="round"
       strokeLinejoin="round"
       transform="translate(2 2)"

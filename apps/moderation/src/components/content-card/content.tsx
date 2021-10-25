@@ -1,11 +1,12 @@
 import React from 'react';
 import moment from 'moment';
 import DS from '@akashaproject/design-system';
+import getSDK from '@akashaproject/awf-sdk';
 
 import { IContentProps } from '../../interfaces';
 
 import EntryDataCard from '../entry-data-card';
-import ExplanationsCard from '../explanations-box';
+import ExplanationsBox from '../explanations-box';
 
 import { ContentCardButton, StyledBox } from '../styled';
 
@@ -16,11 +17,14 @@ const Content: React.FC<IContentProps> = props => {
 
   const { size } = useViewportSize();
 
+  const sdk = getSDK();
+  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+
   const isMobile = size === 'small';
 
   const handleClick = () => {
     if (props.entryId) {
-      props.handleButtonClick(props.entryId, props.contentType);
+      props.handleButtonClick(props.entryId, props.itemType);
     }
   };
 
@@ -30,8 +34,9 @@ const Content: React.FC<IContentProps> = props => {
     <Box pad="1rem">
       {props.entryData && (
         <EntryDataCard
+          modalSlotId={props.layoutConfig.modalSlotId}
           entryData={props.entryData}
-          contentType={props.contentType}
+          itemType={props.itemType}
           locale={props.locale}
           singleSpa={props.singleSpa}
         />
@@ -43,11 +48,11 @@ const Content: React.FC<IContentProps> = props => {
         align="center"
       >
         <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={textStyle}>{`${
-          props.contentType && props.contentType[0].toUpperCase()
-        }${props.contentType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
+          props.itemType && props.itemType[0].toUpperCase()
+        }${props.itemType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
 
         {props.reasons.map((reason, idx) => (
-          <>
+          <React.Fragment key={idx}>
             {/* show 'and' at the appropriate position, if more than one reason */}
             {props.reasons.length > 1 && idx === props.reasons.length - 1 && (
               <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} style={textStyle}>
@@ -55,7 +60,6 @@ const Content: React.FC<IContentProps> = props => {
               </Text>
             )}
             <StyledBox
-              key={idx}
               margin={{ left: '0.2rem', bottom: '0.2rem' }}
               pad={{ horizontal: '0.2rem' }}
               round={'0.125rem'}
@@ -64,7 +68,7 @@ const Content: React.FC<IContentProps> = props => {
                 {reason}
               </Text>
             </StyledBox>
-          </>
+          </React.Fragment>
         ))}
       </Box>
 
@@ -78,13 +82,11 @@ const Content: React.FC<IContentProps> = props => {
         {showExplanations ? props.hideExplanationsLabel : props.showExplanationsLabel}
       </Text>
       {showExplanations && (
-        <ExplanationsCard
+        <ExplanationsBox
           entryId={props.entryId}
           reportedByLabel={props.reportedByLabel}
           forLabel={props.forLabel}
           logger={props.logger}
-          sdkModules={props.sdkModules}
-          globalChannel={props.globalChannel}
         />
       )}
       <Box
@@ -101,7 +103,11 @@ const Content: React.FC<IContentProps> = props => {
             <Text margin={{ right: '0.2rem' }}>{props.originallyReportedByLabel}</Text>
             <Avatar
               ethAddress={props.reporter || ''}
-              src={props.reporterAvatar}
+              src={
+                props.reporterAvatar
+                  ? `${ipfsGateway}/${props.reporterAvatar}`
+                  : props.reporterAvatar
+              }
               size="xs"
               margin={{ right: '0.2rem' }}
               backgroundColor={'lightBackground'}

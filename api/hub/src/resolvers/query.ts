@@ -56,6 +56,7 @@ const query = {
     }
     const result = Object.assign({}, postData, { totalComments });
     await queryCache.set(cacheKey, result);
+    await dataSources.postsAPI.storeCacheKey(postData.author?.pubKey || postData.author, cacheKey);
     return result;
   },
 
@@ -161,7 +162,7 @@ const query = {
     return Object.assign({}, returned, { results: posts });
   },
   globalSearch: async (_source, { keyword }, { dataSources }) => {
-    const results = await dataSources.postsAPI.globalSearch(keyword);
+    const results = await dataSources.postsAPI.globalSearch(keyword?.trim());
     results.tags = await (async () => {
       const res = [];
       for (const rec of results.tags) {
@@ -171,6 +172,59 @@ const query = {
       return res;
     })();
     return results;
+  },
+  getFollowers: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+    const returned = await dataSources.profileAPI.getFollowers(pubKey, limit, offset);
+    returned.results = await Promise.all(
+      returned.results.map(_pubKey => {
+        return query.resolveProfile(_source, { pubKey: _pubKey }, { dataSources });
+      }),
+    );
+    return returned;
+  },
+
+  getFollowing: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+    const returned = await dataSources.profileAPI.getFollowing(pubKey, limit, offset);
+    returned.results = await Promise.all(
+      returned.results.map(_pubKey => {
+        return query.resolveProfile(_source, { pubKey: _pubKey }, { dataSources });
+      }),
+    );
+    return returned;
+  },
+
+  /**
+   * Returns posts made by the last 1000 accounts followed
+   * @param _source
+   * @param limit
+   * @param offset
+   * @param dataSources
+   * @param user
+   */
+  getCustomFeed: async (_source, { limit, offset }, { dataSources, user }) => {
+    if (!user?.pubKey) {
+      return Promise.reject('Must be authenticated!');
+    }
+    const res = await dataSources.profileAPI.getFollowing(user.pubKey, 1000, 0);
+    const profile = await dataSources.profileAPI.resolveProfile(user.pubKey);
+    const followingList: string[] = res.results;
+    const postsIDs = await dataSources.postsAPI.getPostsByAuthorsAndTags(
+      followingList || [],
+      profile?.interests || [],
+      offset,
+      limit,
+    );
+    const posts = await Promise.all(
+      postsIDs.results.map(post => {
+        return query.getPost(_source, { pubKey: user.pubKey, id: post.objectID }, { dataSources });
+      }),
+    );
+    return Object.assign({}, postsIDs, { results: posts });
+  },
+
+  getInterests: async (_source, { pubKey }, { dataSources }) => {
+    const interests: string[] = await dataSources.profileAPI.getInterests(pubKey);
+    return Array.from(interests);
   },
 };
 

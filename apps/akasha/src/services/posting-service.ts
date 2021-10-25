@@ -5,16 +5,13 @@ export const PROVIDER_AKASHA = 'AkashaApp';
 export const PROPERTY_SLATE_CONTENT = 'slateContent';
 export const PROPERTY_TEXT_CONTENT = 'textContent';
 
-export const serializeLegacyContentToSlate = (
-  entryData: {
-    CID: string;
-    excerpt: string;
-    featuredImage: { hash: string; data: { xs?: any; md?: any; sm?: any } };
-    tags: string[];
-    title: string;
-  },
-  ipfsGateway: string,
-) => {
+export const serializeLegacyContentToSlate = (entryData: {
+  CID: string;
+  excerpt: string;
+  featuredImage: { hash: string; data: { xs?: any; md?: any; sm?: any } };
+  tags: string[];
+  title: string;
+}) => {
   const serializedContent = [];
 
   if (entryData.title) {
@@ -32,11 +29,7 @@ export const serializeLegacyContentToSlate = (
   }
 
   if (entryData.featuredImage) {
-    const mediaUrl = getMediaUrl(
-      ipfsGateway,
-      entryData.featuredImage.hash,
-      entryData.featuredImage.data,
-    );
+    const mediaUrl = getMediaUrl(entryData.featuredImage.hash, entryData.featuredImage.data);
     if (mediaUrl) {
       serializedContent.push({
         type: 'image',
@@ -72,7 +65,7 @@ interface PendingEntry {
     ethAddress: string;
     userName?: string;
   };
-  content: {};
+  content: Record<string, unknown>;
   ipfsLink?: string;
   entryId?: string;
   replies?: number;

@@ -77,11 +77,44 @@
         "design",
         "video"
       ]
+    },
+    {
+      "login": "josenriagu",
+      "name": "Josemaria Nriagu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49484425?v=4",
+      "profile": "http://about.me/josenriagu",
+      "contributions": [
+        "code",
+        "maintenance",
+        "doc",
+        "review"
+      ]
+    },
+    {
+      "login": "deiu",
+      "name": "Andrei",
+      "avatar_url": "https://avatars.githubusercontent.com/u/346820?v=4",
+      "profile": "https://deiu.me",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "PrimarchAlpharius",
+      "name": "Damir Sabolic",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28538151?v=4",
+      "profile": "https://github.com/PrimarchAlpharius",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "akasha-world-framework",
-  "projectOwner": "AkashaProject",
+  "projectOwner": "AKASHAorg",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }

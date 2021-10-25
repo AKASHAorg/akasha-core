@@ -1,0 +1,28 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "types": ["reflect-metadata", "node"],
+    "typeRoots": [ "./src/definitions", "./node_modules/@types"]
+  },
+  "include": [
+    "./src",
+  ],
+  "exclude": [
+    "./lib"
+  ],
+  "references": [
+    {
+      "path": "./typings"
+    }
+  ],
+  "files": [
+    "./src/contracts/artifacts/ENS.json",
+    "./src/contracts/artifacts/AkashaRegistrar.json",
+    "./src/contracts/artifacts/ReverseRegistrar.json"
+  ],
+
+
+}

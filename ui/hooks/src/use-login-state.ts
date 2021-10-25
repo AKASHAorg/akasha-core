@@ -4,23 +4,26 @@
 import * as React from 'react';
 import useGlobalLogin from './use-global-login';
 import { IAkashaError, EthProviders } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaproject/awf-sdk';
+import { events } from '@akashaproject/sdk-typings';
 import { race } from 'rxjs';
+import { filter, takeLast } from 'rxjs/operators';
 import { createErrorHandler } from './utils/error-handler';
 
 export interface UseLoginProps {
-  /* sdk global events observable */
-  globalChannel: any;
   /* error handler */
   onError?: (err: IAkashaError) => void;
   // handler called when the user is logging out
   onLogout?: () => void;
-  /* sdk authentication module */
-  authService: any;
-  profileService: any;
-  ipfsService: any;
-  rxjsOperators: any;
 }
-export interface UseLoginState {
+export interface UseLoginActions {
+  /* Login */
+  login: (provider: EthProviders, checkRegistered?: boolean) => void;
+  /* Logout */
+  logout: () => void;
+}
+
+export interface ILoginState {
   /* logged in user's ethAddress */
   ethAddress: string | null;
   pubKey: string | null;
@@ -33,49 +36,81 @@ export interface UseLoginState {
   currentUserCalled: boolean;
   ready: { ethAddress: string; pubKey: string } | null;
   waitForAuth: boolean | null;
-}
-export interface UseLoginActions {
-  /* Login */
-  login: (provider: EthProviders, checkRegistered?: boolean) => void;
-  /* Logout */
-  logout: () => void;
+  // reducer related
+  loginQuery: { selectedProvider: EthProviders; checkRegistered: boolean } | null;
+  logoutQuery: boolean;
 }
 
-const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] => {
-  const { globalChannel, onError, authService, rxjsOperators } = props;
-  const [loginState, setLoginState] = React.useState<UseLoginState>({
-    ethAddress: null,
-    pubKey: null,
-    currentUserCalled: false,
-    ready: null,
-    waitForAuth: null,
-  });
+const initialLoginState: ILoginState = {
+  ethAddress: null,
+  pubKey: null,
+  currentUserCalled: false,
+  ready: null,
+  waitForAuth: false,
+  loginQuery: null,
+  logoutQuery: false,
+};
+
+export type ILoginAction =
+  | { type: 'LOGIN'; payload: { selectedProvider: EthProviders; checkRegistered: boolean } }
+  | { type: 'LOGIN_SUCCESS'; payload: { ethAddress: string; pubKey: string } }
+  | { type: 'LOGOUT' }
+  | { type: 'LOGOUT_SUCCESS' }
+  | { type: 'WAIT_AUTH'; payload: boolean }
+  | { type: 'READY'; payload: { ethAddress: string; pubKey: string } | null }
+  | { type: 'LOAD_FROM_CACHE'; payload: { ethAddress: string; pubKey: string } };
+
+const loginStateReducer = (state: ILoginState, action: ILoginAction) => {
+  switch (action.type) {
+    case 'LOGIN':
+      return { ...state, loginQuery: action.payload };
+    case 'LOGIN_SUCCESS': {
+      const { ethAddress, pubKey } = action.payload;
+      return { ...state, loginQuery: null, ethAddress, pubKey };
+    }
+    case 'LOGOUT':
+      return { ...state, logoutQuery: true };
+    case 'LOGOUT_SUCCESS': {
+      return { ...state, logoutQuery: false, ethAddress: null, pubKey: null };
+    }
+    case 'WAIT_AUTH':
+      return { ...state, waitAuth: action.payload };
+    case 'READY':
+      return { ...state, ready: action.payload };
+    case 'LOAD_FROM_CACHE': {
+      if (action.payload?.ethAddress && action.payload?.pubKey) {
+        return {
+          ...state,
+          currentUserCalled: true,
+          ethAddress: action.payload.ethAddress,
+          pubKey: action.payload.pubKey,
+        };
+      }
+      return { ...state, currentUserCalled: true };
+    }
+
+    default:
+      throw new Error('[UseLoginStateReducer] action is not defined!');
+  }
+};
+
+const useLoginState = (props: UseLoginProps): [ILoginState, UseLoginActions] => {
+  const { onError } = props;
+
+  const sdk = getSDK();
+
+  const [loginState, dispatch] = React.useReducer(loginStateReducer, initialLoginState);
+
   // this will also reset profile data
   useGlobalLogin({
-    globalChannel,
-    rxjsOperators,
-    onLogin: payload =>
-      setLoginState(prev => ({
-        ...prev,
-        ethAddress: payload.ethAddress,
-        pubKey: payload.pubKey,
-      })),
-    waitForAuth: data =>
-      setLoginState(prev => ({
-        ...prev,
-        waitForAuth: data,
-      })),
-    onReady: data => setLoginState(prev => ({ ...prev, ready: data })),
+    onLogin: payload => payload && dispatch({ type: 'LOGIN_SUCCESS', payload }),
+    waitForAuth: data => dispatch({ type: 'WAIT_AUTH', payload: data }),
+    onReady: data => data && dispatch({ type: 'READY', payload: data }),
     onLogout: () => {
       if (props.onLogout) {
         props.onLogout();
       }
-      setLoginState(prev => ({
-        ...prev,
-        ethAddress: null,
-        pubKey: null,
-        ready: null,
-      }));
+      dispatch({ type: 'LOGOUT_SUCCESS' }), dispatch({ type: 'READY', payload: null });
     },
     onError: payload => {
       createErrorHandler('useLoginState.globalLogin', false, onError)(payload.error);
@@ -84,73 +119,57 @@ const useLoginState = (props: UseLoginProps): [UseLoginState, UseLoginActions] =
 
   React.useLayoutEffect(() => {
     // make an attempt to load the eth address from cache;
-    if (authService) {
-      const getDeps = authService.getCurrentUser(null);
-      getDeps.subscribe((resp: { data: any }) => {
-        const { data } = resp;
-        setLoginState(prev => {
-          if (!data) {
-            return {
-              ...prev,
-              currentUserCalled: true,
-            };
-          }
-          return {
-            ...prev,
-            currentUserCalled: true,
-            ethAddress: data.ethAddress,
-            pubKey: data.pubKey,
-          };
-        });
-      }, createErrorHandler('useLoginState.authService', false, onError));
-    }
+
+    const getDepsCall = sdk.api.auth.getCurrentUser();
+    const sub = getDepsCall.subscribe({
+      next: resp => {
+        dispatch({ type: 'LOAD_FROM_CACHE', payload: resp.data });
+      },
+    });
+    return () => sub.unsubscribe();
   }, []);
+
+  React.useEffect(() => {
+    if (loginState.loginQuery) {
+      const call = sdk.api.auth.signIn({
+        provider: loginState.loginQuery.selectedProvider,
+        checkRegistered: loginState.loginQuery.checkRegistered,
+      });
+      // handle the case where signIn was triggered from another place
+      const globalCall = sdk.api.globalChannel.pipe(
+        filter(response => response.event === events.AUTH_EVENTS.SIGN_IN),
+        takeLast(1),
+      );
+      const callSub = race(call, globalCall).subscribe({
+        next: resp => {
+          if (resp.data) {
+            dispatch({ type: 'LOGIN_SUCCESS', payload: resp.data as any });
+          }
+        },
+        error: createErrorHandler('useLoginState.login.subscription', false, onError),
+      });
+      return () => callSub.unsubscribe();
+    }
+    return;
+  }, [loginState.loginQuery]);
+
+  React.useEffect(() => {
+    if (loginState.logoutQuery) {
+      (async () => {
+        const call = await sdk.api.auth.signOut();
+        if (call) {
+          dispatch({ type: 'LOGOUT_SUCCESS' });
+        }
+      })();
+    }
+  }, [loginState.logoutQuery]);
 
   const actions: UseLoginActions = {
     login(selectedProvider: EthProviders, checkRegistered = true) {
-      try {
-        const call = authService.signIn({
-          provider: selectedProvider,
-          checkRegistered: checkRegistered,
-        });
-        // handle the case where signIn was triggered from another place
-        const globalCall = globalChannel.pipe(
-          rxjsOperators.filter((response: any) => response.channelInfo.method === 'signIn'),
-          rxjsOperators.takeLast(1),
-        );
-        race(call, globalCall).subscribe((response: any) => {
-          const { pubKey, ethAddress } = response.data;
-          setLoginState(prev => ({
-            ...prev,
-            pubKey,
-            ethAddress,
-          }));
-        }, createErrorHandler('useLoginState.login.subscription', false, onError));
-      } catch (ex) {
-        createErrorHandler('useLoginState.login', false, onError)(ex);
-      }
+      dispatch({ type: 'LOGIN', payload: { selectedProvider, checkRegistered } });
     },
     logout() {
-      const call = authService.signOut(null);
-      call.subscribe(
-        (resp: any) => {
-          if (resp.data) {
-            setLoginState(prev => ({
-              ...prev,
-              ethAddress: null,
-              token: null,
-            }));
-          }
-        },
-        (err: Error) => {
-          createErrorHandler('useLoginState.logout', false, onError)(err);
-          setLoginState(prev => ({
-            ...prev,
-            ethAddress: null,
-            pubKey: null,
-          }));
-        },
-      );
+      dispatch({ type: 'LOGOUT' });
     },
   };
   return [loginState, actions];

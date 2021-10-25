@@ -39,27 +39,42 @@ class TagAPI extends DataSource {
     const results = [];
     for (const tag of tags) {
       const tagData = await this.getTag(tag);
-      results.push({ name: tag, totalPosts: tagData?.posts?.length || 0 });
+      results.push({ name: tag, totalPosts: tagData.totalPosts });
     }
     return results.sort((x, y) => y.totalPosts - x.totalPosts);
   }
 
-  async getTag(name: string) {
+  async getTag(name: string, allowFromCache = true) {
     const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
     const key = this.getTagCacheKey(formattedName);
     const hasCachedValue = await queryCache.has(key);
-    if (hasCachedValue) {
+    if (hasCachedValue && allowFromCache) {
       return queryCache.get(key);
     }
     const query = new Where('name').eq(formattedName);
     const tag = await db.find<Tag>(this.dbID, this.collection, query);
     if (tag.length) {
-      await queryCache.set(key, tag[0]);
-      return tag[0];
+      // return db record for mutations
+      if (!allowFromCache) {
+        return tag[0];
+      }
+      // const searchFacet = await searchIndex.search(``, {
+      //   facetFilters: ['category:interests', `tagName:${name}`],
+      //   hitsPerPage: 20,
+      //   attributesToRetrieve: ['name'],
+      // });
+      const result = Object.assign({}, tag[0], {
+        totalPosts: tag[0]?.posts?.length || 0,
+        totalComments: tag[0]?.comments?.length || 0,
+        posts: [],
+        comments: [],
+      });
+      await queryCache.set(key, result);
+      return result;
     }
     logger.warn(`tag ${name} not found`);
-    throw new Error('tag not found');
+    return;
   }
 
   // threadsdb doesn't have limit and offset selectors atm
@@ -92,13 +107,31 @@ class TagAPI extends DataSource {
     if (!postExists) {
       return Promise.reject(`postID: ${postID} was not found`);
     }
-    let tag = await this.getTag(tagName);
+    let tag = await this.getTag(tagName, false);
 
     if (!tag) {
       await this.addTag(tagName);
-      tag = await this.getTag(tagName);
+      tag = await this.getTag(tagName, false);
     }
     tag.posts.unshift(postID);
+    await queryCache.del(this.getTagCacheKey(tagName));
+    return await db.save(this.dbID, this.collection, [tag]);
+  }
+
+  async removePostIndex(postID: string, tagName: string) {
+    const db: Client = await getAppDB();
+    const tag = await this.getTag(tagName, false);
+    const postIndex = tag.posts.indexOf(postID);
+    tag.posts.splice(postIndex, 1);
+    await queryCache.del(this.getTagCacheKey(tagName));
+    return await db.save(this.dbID, this.collection, [tag]);
+  }
+
+  async removeCommentIndex(commentID: string, tagName: string) {
+    const db: Client = await getAppDB();
+    const tag = await this.getTag(tagName, false);
+    const commentIndex = tag.comments.indexOf(commentID);
+    tag.posts.splice(commentIndex, 1);
     await queryCache.del(this.getTagCacheKey(tagName));
     return await db.save(this.dbID, this.collection, [tag]);
   }
@@ -109,11 +142,11 @@ class TagAPI extends DataSource {
     if (!postExists) {
       return Promise.reject(`commentID: ${commentID} was not found`);
     }
-    let tag = await this.getTag(tagName);
+    let tag = await this.getTag(tagName, false);
 
     if (!tag) {
       await this.addTag(tagName);
-      tag = await this.getTag(tagName);
+      tag = await this.getTag(tagName, false);
     }
     tag.comments.unshift(commentID);
     await queryCache.del(this.getTagCacheKey(tagName));

@@ -19,7 +19,19 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc"
+    "prepare": "npm run tsc",
+    "pretest": "tsc -m commonjs",
+    "test": "jest",
+    "clean": "tsc --build --clean"
+  },
+  "devDependencies": {
+    "@akashaproject/sdk-typings": "*",
+    "rxjs": "7.3.0",
+    "slate": "0.66.1",
+    "slate-react": "0.66.1",
+    "slate-history": "0.66.0",
+    "i18next": "20.6.1",
+    "single-spa": "5.9.3"
   },
   "files": [
     "lib"

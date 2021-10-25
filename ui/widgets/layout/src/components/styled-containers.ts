@@ -1,10 +1,10 @@
 import DS from '@akashaproject/design-system';
+import React from 'react';
 
-const { css, styled } = DS;
+const { css, styled, Box } = DS;
 
-export const BaseContainer: any = styled.div`
+export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
   border: 0;
-  box-sizing: border-box;
   display: flex;
   flex-basis: auto;
   flex-direction: column;
@@ -17,60 +17,48 @@ export const BaseContainer: any = styled.div`
   z-index: 0;
 `;
 
-export const MainAreaContainer: any = styled(BaseContainer)`
+export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   flex-grow: 1;
-  flex-direction: column-reverse !important;
-  max-width: 100%;
-  margin-bottom: 0.5em;
-  ${props => css<any>`
-    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
-      flex-direction: row !important;
-    }
-    @media screen and (max-width: ${props.theme.breakpoints.small.value}px) {
-      padding: 0 0.25rem;
-    }
-  `}
 `;
 
 const TOPBAR_HEIGHT = 48;
+const WIDGET_AREA_MARGIN_TOP = '0.5rem';
 
-export const WidgetContainer: any = styled(BaseContainer)`
-  position: sticky;
-  top: calc(${TOPBAR_HEIGHT}px + 0.5em);
+export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: none;
+  }
 `;
-
-export const ScrollableWidgetArea: any = styled.div`
+export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box)`
+  position: sticky;
+  top: ${TOPBAR_HEIGHT}px;
+`;
+export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.div`
+  flex-grow: 1;
+  margin-top: ${WIDGET_AREA_MARGIN_TOP};
+  max-height: 100%;
   ${props => css`
     &::-webkit-scrollbar {
       width: 0 !important;
     }
+    min-width: 22rem;
+
+    @media screen and (max-width: ${props.theme.breakpoints.large.value}px) {
+      min-width: 16rem;
+    }
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
       overflow-y: auto;
       overflow-x: hidden;
-      height: calc(100vh - ${TOPBAR_HEIGHT}px - 1em);
     }
   `}
 `;
 
-export const SidebarWrapper: any = styled(BaseContainer)<{ visible: boolean }>`
-  z-index: 999;
+export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseContainer)`
+  z-index: 10;
   flex-grow: 1;
-  /* height: calc(100vh - ${TOPBAR_HEIGHT}rem); */
-  /* top: ${TOPBAR_HEIGHT}rem; */
-  position: sticky;
-  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
-    ${props => {
-      if (props.visible) {
-        return css`
-          position: fixed;
-          /* top: ${TOPBAR_HEIGHT}rem; */
-          width: 90vw;
-          /* height: calc(100vh - ${TOPBAR_HEIGHT + 0.3}rem); */
-        `;
-      }
-      return css`
-        display: none;
-      `;
-    }}
+  flex-direction: column;
+  align-items: flex-end;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: none;
   }
 `;

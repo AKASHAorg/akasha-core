@@ -2,7 +2,7 @@ import React from 'react';
 import { Editor, Range } from 'slate';
 import { ReactEditor, useSlate } from 'slate-react';
 import styled from 'styled-components';
-import { Icon, IconType } from '../Icon/icon';
+import Icon, { IconType } from '../Icon';
 import { CustomEditor, Portal } from './helpers';
 
 const StyledDiv = styled.div`

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
 import styled from 'styled-components';
-import { Icon } from '../Icon';
-import { StyledAnchor } from '../Input/text-input-icon-form/styles';
+import Icon from '../Icon';
+import { StyledAnchor } from '../TextInputIconForm/styles';
 import { StyledCloseDiv } from './styled-editor-box';
+import { ImageElement } from '@akashaproject/ui-awf-typings/lib/editor';
 
 const StyledImg = styled.img`
   display: block;
@@ -20,32 +21,55 @@ const DisabledSpan = styled.span`
   color: ${props => props.theme.colors.secondaryText};
 `;
 
-const ImageElement = ({ attributes, children, element, handleDeleteImage }: any) => {
+const ImgElement = ({
+  attributes,
+  children,
+  element,
+  handleDeleteImage,
+  handleClickImage,
+}: any) => {
   return (
-    <div {...attributes}>
+    <div
+      {...attributes}
+      onClick={ev => {
+        if (handleClickImage && typeof handleClickImage === 'function') {
+          handleClickImage(element);
+        }
+        ev.stopPropagation();
+        ev.preventDefault();
+        return false;
+      }}
+    >
       <div
         role="img"
         aria-label={element.url}
         contentEditable={false}
         style={{
-          minHeight: element.size?.naturalHeight,
-          width: '100%',
+          minHeight: 30,
+          height: 'fit-content',
+          width: 'fit-content',
           position: 'relative',
           overflow: 'hidden',
           contain: 'layout',
         }}
       >
         {handleDeleteImage && (
-          <StyledCloseDiv onClick={() => handleDeleteImage(element)}>
+          <StyledCloseDiv
+            onClick={ev => {
+              if (handleDeleteImage && typeof handleDeleteImage === 'function') {
+                handleDeleteImage(element);
+              }
+              ev.stopPropagation();
+              ev.preventDefault();
+              return false;
+            }}
+          >
             <Icon type="close" clickable={true} />
           </StyledCloseDiv>
         )}
-        <StyledImg
-          src={element.url}
-          style={{
-            position: 'absolute',
-          }}
-        />
+        <picture>
+          <StyledImg src={element.url} />
+        </picture>
       </div>
       {children}
     </div>
@@ -60,9 +84,11 @@ const MentionElement = (props: any) => {
     <StyledMention
       {...attributes}
       contentEditable={false}
-      onClick={ev => {
+      onClick={(ev: Event) => {
         handleMentionClick(element.pubKey);
         ev.stopPropagation();
+        ev.preventDefault();
+        return false;
       }}
     >
       {displayedMention}
@@ -76,7 +102,7 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
     <StyledMention
       {...attributes}
       contentEditable={false}
-      onClick={ev => {
+      onClick={(ev: Event) => {
         handleTagClick(element.name);
         ev.stopPropagation();
       }}
@@ -96,7 +122,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
       size="large"
       target="_blank"
       rel="noopener noreferrer"
-      onClick={ev => {
+      onClick={(ev: Event) => {
         if (new URL(element.url).origin === window.location.origin) {
           handleLinkClick(element.url);
           ev.stopPropagation();
@@ -117,13 +143,18 @@ const renderElement = (
   handleMentionClick?: (pubKey: string) => void,
   handleTagClick?: (name: string) => void,
   handleLinkClick?: (url: string) => void,
-  handleDeleteImage?: (element: any) => void,
+  handleDeleteImage?: ((element: ImageElement) => void) | null,
+  handleClickImage?: (element: ImageElement) => void,
 ) => {
   switch (props.element.type) {
-    case 'quote':
-      return <blockquote {...props.attributes}>{props.children}</blockquote>;
     case 'image':
-      return <ImageElement handleDeleteImage={handleDeleteImage} {...props} />;
+      return (
+        <ImgElement
+          handleDeleteImage={handleDeleteImage}
+          handleClickImage={handleClickImage}
+          {...props}
+        />
+      );
     case 'mention':
       return <MentionElement handleMentionClick={handleMentionClick} {...props} />;
     case 'tag':

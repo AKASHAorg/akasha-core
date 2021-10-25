@@ -6,7 +6,12 @@ import bodyParser from 'koa-bodyparser';
 import webSockify from 'koa-websocket';
 import cors from '@koa/cors';
 import { ApolloServer } from 'apollo-server-koa';
+import helmet from 'koa-helmet';
 import typeDefs from './schema';
+import {
+  ApolloServerPluginLandingPageDisabled,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+} from 'apollo-server-core';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -37,6 +42,7 @@ const wsOptions = {};
 const app = webSockify(new Koa(), wsOptions);
 
 /** Middlewares */
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(json());
 app.use(logger());
 app.use(bodyParser());
@@ -94,13 +100,17 @@ const server = new ApolloServer({
     }
     return { user, signature };
   },
-  plugins: [createMetricsPlugin(promRegistry)],
+  plugins: [
+    createMetricsPlugin(promRegistry),
+    process.env.NODE_ENV === 'production'
+      ? ApolloServerPluginLandingPageDisabled()
+      : ApolloServerPluginLandingPageGraphQLPlayground(),
+  ],
 });
 
-server.applyMiddleware({ app });
-/** Start the server! */
-// tslint:disable-next-line:no-console
-app.listen(PORT, () => {
-  // tslint:disable-next-line:no-console
+(async () => {
+  await server.start();
+  server.applyMiddleware({ app });
+  await new Promise(resolve => app.listen({ port: PORT }, resolve));
   console.log(`graphql ready at http://localhost:${PORT}${server.graphqlPath}`);
-});
+})();

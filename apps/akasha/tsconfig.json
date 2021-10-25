@@ -2,18 +2,9 @@
   "extends": "../../ui/tsconfig.json",
   "compilerOptions": {
     "outDir": "./lib",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "jsx": "react"
   },
-  "references": [
-    {
-      "path": "../../sdk-packages/core"
-    },
-    {
-      "path": "../../sdk-packages/common"
-    },
-    {
-      "path": "../../sdk-packages/runtime"
-    }
-  ],
-  "include": ["./src"]
+  "include": ["./src"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

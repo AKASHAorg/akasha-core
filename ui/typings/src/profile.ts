@@ -1,7 +1,8 @@
+import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 export interface IProfileProvider {
-  property: string;
-  provider: string;
-  value: any;
+  property: ProfileProviderProperties;
+  provider: ProfileProviders;
+  value: string;
 }
 
 export interface IProfileData {
@@ -11,19 +12,19 @@ export interface IProfileData {
   userName?: string;
   description?: string;
   name?: string;
-  url?: string;
-  ensName?: string;
   ethAddress: string;
   pubKey: string;
   totalPosts?: string | number;
   totalFollowers?: string | number;
   totalFollowing?: string | number;
-  default: IProfileProvider[];
-  providers: IProfileProvider[];
-  apps?: string | number;
-  profileType?: string;
-  users?: string | number;
-  actions?: string;
+  totalInterests?: number;
+  default: DataProviderInput[];
+  providers: DataProviderInput[];
+  contentId?: string;
+  reported?: boolean;
+  delisted?: boolean;
+  moderated?: boolean;
+  reason?: string;
 }
 
 export enum UsernameTypes {
@@ -43,4 +44,15 @@ export enum ProfileProviderProperties {
   DESCRIPTION = 'description',
   NAME = 'name',
   USERNAME = 'userName',
+}
+
+export enum UpdateProfileStatus {
+  UPDATE_IDLE = 0,
+  UPDATE_INITIATED,
+  UPLOADING_AVATAR,
+  UPLOADING_COVER_IMAGE,
+  REGISTERING_USERNAME,
+  // generic status for when the profile update is in progress
+  UPDATE_IN_PROGRESS,
+  UPDATE_COMPLETE,
 }

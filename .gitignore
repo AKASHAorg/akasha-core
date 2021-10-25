@@ -38,3 +38,5 @@ release/
 *.tsbuildinfo
 lib
 dist
+*.d.ts
+docs

@@ -2,119 +2,74 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { constants, useErrors, usePosts, useProfile } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings/src';
-import {
-  ModalState,
-  ModalStateActions,
-  MODAL_NAMES,
-} from '@akashaproject/ui-awf-hooks/lib/use-modal-state';
-import { UseLoginActions } from '@akashaproject/ui-awf-hooks/lib/use-login-state';
-import FeedWidget, { ItemTypes } from '@akashaproject/ui-widget-feed/lib/components/App';
-import { ILoadItemsPayload } from '@akashaproject/design-system/lib/components/VirtualList/interfaces';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/Cards/entry-cards/entry-box';
-
-import { ProfilePageCard } from '../profile-cards/profile-page-header';
+import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+// import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import { useQueryClient } from 'react-query';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { LoginState, useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
-const { Box, Helmet, ReportModal, ToastProvider, ModalRenderer } = DS;
+const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
-  modalActions: ModalStateActions;
-  modalState: ModalState;
-  loggedEthAddress: string | null;
-  loginActions: UseLoginActions;
-  loggedProfileData: any;
-  flagged: string;
-  reportModalOpen: boolean;
-  showLoginModal: () => void;
-  setFlagged: React.Dispatch<React.SetStateAction<string>>;
-  setReportModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  loggedProfileData: IProfileData;
+  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
+  loginState: LoginState;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const {
-    loggedEthAddress,
-    loginActions,
-    loggedProfileData,
-    flagged,
-    reportModalOpen,
-    setFlagged,
-    showLoginModal,
-    setReportModalOpen,
-    rxjsOperators,
-  } = props;
+  const { t, i18n } = useTranslation();
+  const { loggedProfileData, showLoginModal } = props;
+  const [erroredHooks, setErroredHooks] = React.useState([]);
+
   const location = useLocation();
+  const queryClient = useQueryClient();
 
-  let { pubKey } = useParams() as any;
-  if (location.pathname.includes(menuRoute[MY_PROFILE])) {
-    pubKey = loggedProfileData.pubKey;
-  }
-  const [errorState, errorActions] = useErrors({
-    logger: props.logger,
-  });
+  const { pubKey } = useParams<{ pubKey: string }>();
 
-  const [profileState, profileActions, profileUpdateStatus] = useProfile({
-    onError: errorActions.createError,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    profileService: props.sdkModules.profiles.profileService,
-    ensService: props.sdkModules.registry.ens,
-    rxjsOperators: props.rxjsOperators,
-    globalChannel: props.globalChannel,
-    logger: props.logger,
-  });
+  const publicKey = React.useMemo(() => {
+    if (location.pathname.includes(menuRoute[MY_PROFILE])) {
+      if (loggedProfileData && loggedProfileData.pubKey) {
+        return loggedProfileData.pubKey;
+      }
+      return undefined;
+    }
+    return pubKey;
+  }, [pubKey, loggedProfileData, location.pathname]);
 
-  const [postsState, postsActions] = usePosts({
-    postsService: props.sdkModules.posts,
-    ipfsService: props.sdkModules.commons.ipfsService,
-    onError: errorActions.createError,
-    user: loggedEthAddress,
-  });
+  const loginQuery = useGetLogin();
+
+  const profileDataQuery = useGetProfile(
+    publicKey,
+    loginQuery.data?.pubKey,
+    loginQuery.data?.fromCache,
+  );
+  const profileState = profileDataQuery.data;
+
+  const reqPosts = useInfinitePostsByAuthor(
+    publicKey,
+    15,
+    !!publicKey && !erroredHooks.includes('useInfinitePostsByAuthor'),
+  );
 
   React.useEffect(() => {
-    // reset post ids and virtual list, if user logs in
-    if (loggedEthAddress) {
-      postsActions.resetPostIds();
+    if (reqPosts.status === 'error' && !erroredHooks.includes('useInfinitePostsByAuthor')) {
+      setErroredHooks(['useInfinitePostsByAuthor']);
     }
-  }, [loggedEthAddress]);
+  }, [reqPosts, erroredHooks]);
 
-  React.useEffect(() => {
-    if (pubKey) {
-      profileActions.resetProfileData();
-      profileActions.getProfileData({ pubKey });
-      postsActions.resetPostIds();
+  const handleLoadMore = React.useCallback(() => {
+    if (!reqPosts.isLoading && reqPosts.hasNextPage && loginQuery.data?.fromCache) {
+      reqPosts.fetchNextPage();
     }
-  }, [pubKey]);
-
-  /**
-   * Hook used in the /profile/my-profile route
-   * because we don't have the /:pubkey url param
-   */
-  React.useEffect(() => {
-    if (
-      loggedProfileData.pubKey &&
-      pubKey === loggedProfileData.pubKey &&
-      !postsState.postIds.length &&
-      !postsState.isFetchingPosts
-    ) {
-      postsActions.getUserPosts({ pubKey: loggedProfileData.pubKey, limit: 5 });
-    }
-  }, [loggedProfileData.pubKey, pubKey]);
-
-  const { t } = useTranslation();
-
-  const handleLoadMore = (payload: ILoadItemsPayload) => {
-    const req: { limit: number; offset?: string } = {
-      limit: payload.limit,
-    };
-    if (!postsState.isFetchingPosts && pubKey) {
-      postsActions.getUserPosts({ pubKey, ...req });
-    }
-  };
-
-  const handleItemDataLoad = ({ itemId }: { itemId: string }) => {
-    postsActions.getPost(itemId);
-  };
+  }, [reqPosts, loginQuery.data?.fromCache]);
 
   const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
     let url;
@@ -133,8 +88,9 @@ const ProfilePage = (props: ProfilePageProps) => {
         break;
       case ItemTypes.COMMENT:
         /* Navigate to parent post because we don't have the comment page yet */
-        const parentId = postsState.postsData[details.entryId].postId;
-        url = `/social-app/post/${parentId}`;
+        url = `/social-app/post/${
+          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
+        }`;
         break;
       default:
         break;
@@ -142,137 +98,129 @@ const ProfilePage = (props: ProfilePageProps) => {
     props.singleSpa.navigateToUrl(url);
   };
 
-  const handleLoginModalOpen = () => {
-    props.modalActions.show(MODAL_NAMES.LOGIN);
-  };
-
-  const handleRepostPublish = (entryData: any, embedEntry: any) => {
-    postsActions.optimisticPublishPost(entryData, loggedProfileData, embedEntry, true);
-  };
-
   const profileUserName = React.useMemo(() => {
-    if (profileState.name) {
+    if (profileState && profileState.name) {
       return profileState.name;
-    }
-    if (profileState.ensName) {
-      return profileState.ensName;
     }
     return pubKey;
   }, [profileState, pubKey]);
 
-  const handleEntryFlag = (entryId: string, user?: string | null) => {
-    if (!user) {
-      // setting entryId to state first, if not logged in
-      setFlagged(entryId);
-      return showLoginModal();
+  const postPages = React.useMemo(() => {
+    if (reqPosts.data) {
+      return reqPosts.data.pages;
     }
-    setFlagged(entryId);
-    setReportModalOpen(true);
+    return [];
+  }, [reqPosts.data]);
+
+  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+    if (!loginQuery.data?.pubKey) {
+      return showLoginModal({ name: 'report-modal', entryId, itemType });
+    }
+    props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
-  const handleFlipCard = (entry: any, isQuote: boolean) => () => {
-    const modifiedEntry = isQuote
-      ? { ...entry, quote: { ...entry.quote, reported: false } }
-      : { ...entry, reported: false };
-    postsActions.updatePostsState(modifiedEntry);
-  };
-
-  const updateEntry = (entryId: string) => {
-    const modifiedEntry = { ...postsState.postsData[entryId], reported: true };
-    postsActions.updatePostsState(modifiedEntry);
+  const handleEntryRemove = (entryId: string) => {
+    props.navigateToModal({
+      name: 'entry-remove-confirmation',
+      entryId,
+      entryType: ItemTypes.ENTRY,
+    });
   };
 
   return (
     <Box fill="horizontal">
       <Helmet>
         <title>
-          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName })} | Ethereum World
+          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | Ethereum
+          World
         </title>
       </Helmet>
-      <ModalRenderer slotId={props.layout.app.modalSlotId}>
-        {reportModalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ReportModal
-              titleLabel={t('Report a post')}
-              successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-              successMessageLabel={t('We will investigate this post and take appropriate action.')}
-              optionsTitleLabel={t('Please select a reason')}
-              optionLabels={[
-                t('Suspicious, deceptive, or spam'),
-                t('Abusive or harmful to others'),
-                t('Self-harm or suicide'),
-                t('Illegal'),
-                t('Nudity'),
-                t('Violence'),
-              ]}
-              optionValues={[
-                'Suspicious, deceptive, or spam',
-                'Abusive or harmful to others',
-                'Self-harm or suicide',
-                'Illegal',
-                'Nudity',
-                'Violence',
-              ]}
-              descriptionLabel={t('Explanation')}
-              descriptionPlaceholder={t('Please explain your reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              reportLabel={t('Report')}
-              blockLabel={t('Block User')}
-              closeLabel={t('Close')}
-              user={loggedEthAddress ? loggedEthAddress : ''}
-              contentId={flagged}
-              contentType="post"
-              baseUrl={constants.BASE_FLAG_URL}
-              updateEntry={updateEntry}
-              closeModal={() => {
-                setReportModalOpen(false);
-              }}
+      {profileDataQuery.status === 'loading' && <></>}
+      {(profileDataQuery.status === 'error' ||
+        (profileDataQuery.status === 'success' && !profileState)) && (
+        <ErrorLoader
+          type="script-error"
+          title={t('There was an error loading this profile')}
+          details={t('We cannot show this profile right now')}
+          devDetails={profileDataQuery.error}
+        />
+      )}
+      {profileDataQuery.status === 'success' && profileState && (
+        <>
+          {profileState.moderated && profileState.delisted && (
+            <EntryCardHidden
+              isDelisted={profileState.delisted}
+              delistedAccount={profileState.delisted}
+              moderatedContentLabel={t('This account was suspended for violating the')}
+              ctaLabel={t('Code of Conduct')}
+              ctaUrl="/legal/code-of-conduct"
             />
-          </ToastProvider>
-        )}
-      </ModalRenderer>
-      <ProfilePageCard
-        {...props}
-        profileState={profileState}
-        profileActions={profileActions}
-        profileUpdateStatus={profileUpdateStatus}
-        profileId={pubKey}
-        loggedUserEthAddress={loggedEthAddress}
-        modalActions={props.modalActions}
-        modalState={props.modalState}
-        loginActions={loginActions}
-      />
-      <FeedWidget
-        // pass i18n from props (the i18next instance, not the react one!)
-        i18n={props.i18n}
-        itemType={ItemTypes.ENTRY}
-        logger={props.logger}
-        loadMore={handleLoadMore}
-        loadItemData={handleItemDataLoad}
-        getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        itemIds={postsState.postIds}
-        itemsData={postsState.postsData}
-        errors={errorState}
-        sdkModules={props.sdkModules}
-        layout={props.layout}
-        globalChannel={props.globalChannel}
-        rxjsOperators={rxjsOperators}
-        ethAddress={loggedEthAddress}
-        onNavigate={handleNavigation}
-        singleSpaNavigate={props.singleSpa.navigateToUrl}
-        onLoginModalOpen={handleLoginModalOpen}
-        totalItems={postsState.totalItems}
-        profilePubKey={pubKey}
-        modalSlotId={props.layout.app.modalSlotId}
-        loggedProfile={loggedProfileData}
-        onRepostPublish={handleRepostPublish}
-        contentClickable={true}
-        onReport={handleEntryFlag}
-        handleFlipCard={handleFlipCard}
-      />
+          )}
+          {!profileState.moderated && profileState.reported && (
+            <EntryCardHidden
+              reportedAccount={profileState.reported}
+              reason={profileState.reason}
+              headerTextLabel={t(`You reported this account for the following reason`)}
+              footerTextLabel={t('It is awaiting moderation.')}
+            />
+          )}
+          {profileState.moderated && profileState.delisted && (
+            <ProfileDelistedCard
+              name={t('Suspended Account')}
+              userName={profileState.userName || ''}
+            />
+          )}
+          {!profileState.delisted && (
+            <>
+              <ProfilePageHeader
+                {...props}
+                modalSlotId={props.layoutConfig.modalSlotId}
+                profileData={profileState}
+                profileId={pubKey}
+                loginState={loginQuery.data}
+              />
+              {reqPosts.isError && reqPosts.error && (
+                <ErrorLoader
+                  type="script-error"
+                  title="Cannot get posts for this profile"
+                  details={(reqPosts.error as Error).message}
+                />
+              )}
+              {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
+              {reqPosts.isSuccess && postPages && (
+                <FeedWidget
+                  modalSlotId={props.layoutConfig.modalSlotId}
+                  itemType={ItemTypes.ENTRY}
+                  logger={props.logger}
+                  onLoadMore={handleLoadMore}
+                  getShareUrl={(itemId: string) =>
+                    `${window.location.origin}/social-app/post/${itemId}`
+                  }
+                  pages={postPages}
+                  requestStatus={reqPosts.status}
+                  loginState={loginQuery.data}
+                  loggedProfile={loggedProfileData}
+                  onNavigate={handleNavigation}
+                  singleSpaNavigate={props.singleSpa.navigateToUrl}
+                  navigateToModal={props.navigateToModal}
+                  onLoginModalOpen={showLoginModal}
+                  hasNextPage={reqPosts.hasNextPage}
+                  contentClickable={true}
+                  onEntryFlag={handleEntryFlag}
+                  onEntryRemove={handleEntryRemove}
+                  removeEntryLabel={t('Delete Post')}
+                  removedByMeLabel={t('You deleted this post')}
+                  removedByAuthorLabel={t('This post was deleted by its author')}
+                  parentIsProfilePage={true}
+                  uiEvents={props.uiEvents}
+                  itemSpacing={8}
+                  i18n={i18n}
+                />
+              )}
+            </>
+          )}
+        </>
+      )}
     </Box>
   );
 };

@@ -1,54 +1,37 @@
 import React from 'react';
+
 import DS from '@akashaproject/design-system';
+import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
+import { useGetFlags } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
+import { EntryReport } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
 
-import { moderationRequest } from '@akashaproject/ui-awf-hooks';
-
-import ExplanationsCardEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
+import ExplanationsBoxEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
 
 const { Box, Text } = DS;
 
-export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'entry'> {
+export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'flagEntry'> {
   entryId: string;
-  logger: any;
-  sdkModules: any;
+  logger: ILogger;
 }
 
-const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
-  const { entryId, reportedByLabel, forLabel, logger, sdkModules } = props;
+const ExplanationsBox: React.FC<IExplanationsBoxProps> = props => {
+  const { entryId, reportedByLabel, forLabel, logger } = props;
 
-  const [requesting, setRequesting] = React.useState<boolean>(false);
-  const [flags, setFlags] = React.useState<any>([]);
-
-  React.useEffect(() => {
-    fetchContentFlags();
-  }, []);
-
-  const fetchContentFlags = async () => {
-    setRequesting(true);
-    try {
-      const response = await moderationRequest.getFlags(entryId);
-      setFlags(response);
-      setRequesting(false);
-    } catch (error) {
-      setRequesting(false);
-      logger.error('[explanations-box.tsx]: fetchContentFlags err %j', error.message || '');
-    }
-  };
+  const getFlagsQuery = useGetFlags(entryId);
+  const flagEntries = getFlagsQuery.data;
 
   return (
     <Box width="100%">
-      {requesting && <Text>Loading ...</Text>}
-      {!requesting && (
+      {getFlagsQuery.isLoading && <Text>Loading ...</Text>}
+      {getFlagsQuery.isSuccess && (
         <Box>
-          {flags.map((flag: any, id: number) => (
-            <ExplanationsCardEntry
+          {flagEntries.map((flagEntry: EntryReport, id: number) => (
+            <ExplanationsBoxEntry
               key={id}
-              entry={flag}
+              flagEntry={flagEntry}
               reportedByLabel={reportedByLabel}
               forLabel={forLabel}
               logger={logger}
-              sdkModules={sdkModules}
-              globalChannel={props.globalChannel}
             />
           ))}
         </Box>
@@ -57,4 +40,4 @@ const ExplanationsCard: React.FC<IExplanationsBoxProps> = props => {
   );
 };
 
-export default ExplanationsCard;
+export default ExplanationsBox;

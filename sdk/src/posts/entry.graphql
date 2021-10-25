@@ -1,0 +1,137 @@
+fragment DataProviderFragment on DataProvider{
+  provider
+  property
+  value
+}
+
+fragment UserProfileFragment on UserProfile{
+  pubKey
+  name
+  userName
+  avatar
+  coverImage
+  description
+  ethAddress
+  totalPosts
+  totalFollowers
+  totalFollowing
+}
+
+fragment PostResult on Post{
+  content{
+    ...DataProviderFragment
+  }
+  author{
+    ...UserProfileFragment
+  }
+  title
+  type
+  _id
+  creationDate
+  updatedAt
+  tags
+  totalComments
+  quotedBy
+  quotedByAuthors{
+    ...UserProfileFragment
+  }
+  quotes{
+    content{
+      ...DataProviderFragment
+    }
+    author{
+      ...UserProfileFragment
+    }
+    title
+    type
+    _id
+    creationDate
+    updatedAt
+    tags
+  }
+}
+
+fragment FeedResult on NewPostsResult{
+  results{
+    ...PostResult
+  }
+  nextIndex
+  total
+}
+
+
+query GetEntry($id: String!, $pubKey: String) {
+  getPost(id: $id, pubKey:$pubKey) {
+    ...PostResult
+  }
+}
+
+
+
+query GetEntries($offset: String, $limit: Int, $pubKey: String) {
+  posts(offset: $offset, limit: $limit, pubKey:$pubKey) {
+    results{
+      ...PostResult
+    }
+    nextIndex
+    total
+  }
+}
+
+
+mutation CreateEntry($content: [DataProviderInput!], $post: PostData) {
+  createPost(content: $content, post: $post)
+}
+
+mutation EditEntry($content: [DataProviderInput!], $post: PostData, $id: String!) {
+  editPost(content: $content, post: $post, id: $id)
+}
+
+mutation RemoveEntry($id: String!) {
+  removePost(id: $id)
+}
+
+query GetPostsByAuthor($author: String!, $offset: Int, $limit: Int, $pubKey: String) {
+  getPostsByAuthor(author: $author, offset: $offset, limit: $limit, pubKey:$pubKey) {
+    ...FeedResult
+  }
+}
+
+
+
+query GetPostsByTag($tag: String!, $offset: Int, $limit: Int, $pubKey: String) {
+  getPostsByTag(tag: $tag, offset: $offset, limit: $limit, pubKey:$pubKey) {
+    ...FeedResult
+  }
+}
+
+fragment VideoPreviewF on VideoPreview {
+  url
+  secureUrl
+  type
+  width
+  height
+}
+fragment LinkPreviewF on LinkPreview {
+  url
+  mediaType
+  contentType
+  favicons
+  videos {...VideoPreviewF}
+  title
+  siteName
+  description
+  images
+}
+
+mutation GetLinkPreview($link: String!) {
+  getLinkPreview(link: $link){
+    ...LinkPreviewF
+  }
+}
+
+query GetCustomFeed($limit: Int, $offset: Int) {
+  getCustomFeed(limit: $limit, offset: $offset){
+    ...FeedResult
+  }
+}

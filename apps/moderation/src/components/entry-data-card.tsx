@@ -1,7 +1,10 @@
 import React from 'react';
+import SingleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 import { redirectToPost } from '../services/routing-service';
 
@@ -10,12 +13,13 @@ const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 export interface IEntryDataCardProps {
   entryData: any;
   locale: ILocale;
-  contentType: string;
-  singleSpa: any;
+  itemType: string;
+  singleSpa: typeof SingleSpa;
+  modalSlotId: string;
 }
 
 const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
-  const { entryData, contentType, locale } = props;
+  const { entryData, itemType, locale, modalSlotId } = props;
 
   const { t } = useTranslation();
 
@@ -25,8 +29,11 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
     <MainAreaCardBox>
       {entryData ? (
         <>
-          {contentType === 'post' && entryData && (
+          {/* for other contents (reply | comment, post) */}
+          {itemType !== ModerationItemTypes.ACCOUNT && entryData && (
             <EntryCard
+              modalSlotId={modalSlotId}
+              showMore={false}
               entryData={entryData}
               repostsLabel={t('Reposts')}
               repliesLabel={t('Replies')}
@@ -37,10 +44,15 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               onContentClick={handleNavigateToPost}
               disableReposting={true}
               isModerated={true}
+              isRemoved={entryData.isRemoved}
+              removedByMeLabel={t('You deleted this post')}
+              removedByAuthorLabel={t(`This ${itemType} was deleted by its author`)}
             />
           )}
-          {contentType === 'profile' && (
+          {itemType === ModerationItemTypes.ACCOUNT && (
             <ProfileCard
+              modalSlotId={modalSlotId}
+              showMore={false}
               flaggable={true}
               canUserEdit={false}
               profileData={entryData}
@@ -49,9 +61,9 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               unfollowLabel={t('Unfollow')}
               followersLabel={t('Followers')}
               followingLabel={t('Following')}
+              interestsLabel={t('Interests')}
               descriptionLabel={t('About me')}
               shareProfileLabel={t('Share Profile')}
-              flagAsLabel={t('Report Profile')}
               onClickFollowers={() => null}
               onClickPosts={() => null}
               onClickFollowing={() => null}

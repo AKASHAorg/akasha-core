@@ -1,174 +1,165 @@
 import React from 'react';
+import SingleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { moderationRequest } from '@akashaproject/ui-awf-hooks';
+import { ButtonValues, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import {
+  useGetCount,
+  useInfiniteKept,
+  useCheckModerator,
+  useInfinitePending,
+  useInfiniteDelisted,
+} from '@akashaproject/ui-awf-hooks/lib/use-moderation';
+import { IModeratedItem, IPendingItem } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
 
 import ContentTab from './content-tab';
 import ContentCard from './content-card/content-card';
+import NoItemsFound from './no-items-found';
 import PromptAuthorization from './prompt-authorization';
 
-import { BASE_DECISION_URL } from '../services/constants';
-
-const { Box, Text, ModalRenderer, ToastProvider, ModerateModal, SwitchCard } = DS;
+const { Box, Spinner, SwitchCard, useIntersectionObserver } = DS;
 
 interface IContentListProps {
   slotId: string;
-  ethAddress: string | null;
-  logger: any;
-  singleSpa: any;
-  sdkModules: any;
-  globalChannel: any;
+  user: string | null;
+  singleSpa: typeof SingleSpa;
 }
 
-interface IBaseItem {
-  id: number;
-  type: string;
-  entryId: string;
-  reasons: string[];
-  description?: string;
-  count: number;
-  entryDate: string;
-}
+const DEFAULT_LIMIT = 10;
 
-interface IPendingItem extends IBaseItem {
-  reporter: string;
-}
+const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
+  const { user } = props;
 
-interface IModeratedItem extends IPendingItem {
-  delisted: boolean;
-  moderator: string;
-  evaluationDate: string;
-}
-
-interface ICount {
-  kept: number;
-  pending: number;
-  delisted: number;
-}
-
-const ContentList: React.FC<IContentListProps> = props => {
-  const { slotId, ethAddress, logger, sdkModules } = props;
-
-  const [pendingItems, setPendingItems] = React.useState<IPendingItem[]>([]);
-  const [moderatedItems, setModeratedItems] = React.useState<IModeratedItem[]>([]);
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [contentType, setContentType] = React.useState<string>('post');
-  const [flagged, setFlagged] = React.useState<string>('');
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
-  const [requesting, setRequesting] = React.useState<boolean>(false);
-  const [count, setCount] = React.useState<ICount>({ kept: 0, pending: 0, delisted: 0 });
-  const [isAuthorised, setIsAuthorised] = React.useState<boolean>(false);
-  const [activeButton, setActiveButton] = React.useState<string>('Delisted');
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
+  const getCountQuery = useGetCount();
+  const count = getCountQuery.data;
+
+  const checkModeratorQuery = useCheckModerator(user);
+  const checkModeratorResp = checkModeratorQuery.data;
+  const isAuthorised = React.useMemo(() => {
+    if (checkModeratorResp === 200) {
+      return true;
+    } else return false;
+  }, [checkModeratorResp]);
+
+  const pendingItemsQuery = useInfinitePending(DEFAULT_LIMIT);
+  const pendingItemPages = React.useMemo(() => {
+    if (pendingItemsQuery.data) {
+      return pendingItemsQuery.data.pages;
+    }
+    return [];
+  }, [pendingItemsQuery.data]);
+
+  const keptItemsQuery = useInfiniteKept(DEFAULT_LIMIT);
+  const keptItemPages = React.useMemo(() => {
+    if (keptItemsQuery.data) {
+      return keptItemsQuery.data.pages;
+    }
+    return [];
+  }, [keptItemsQuery.data]);
+
+  const delistedItemsQuery = useInfiniteDelisted(DEFAULT_LIMIT);
+  const delistedItemPages = React.useMemo(() => {
+    if (delistedItemsQuery.data) {
+      return delistedItemsQuery.data.pages;
+    }
+    return [];
+  }, [delistedItemsQuery.data]);
+
   React.useEffect(() => {
-    if (!ethAddress) {
+    if (!user) {
       // if not authenticated, prompt to authenticate
       props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
-    } else {
-      // if authenticated, check authorisation status
-      getModeratorStatus(ethAddress);
     }
-  }, [ethAddress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
-  React.useEffect(() => {
-    // if authorised,
-    if (isAuthorised && isPending) {
-      // check for pending contents while pending tab is active
-      fetchPendingContents();
+  const handleLoadMorePending = React.useCallback(() => {
+    if (!pendingItemsQuery.isLoading && pendingItemsQuery.hasNextPage) {
+      pendingItemsQuery.fetchNextPage();
     }
-    if (isAuthorised && !isPending) {
-      // check for moderated contents while moderated tab is active
-      fetchModeratedContents();
-    }
-  }, [isPending, isAuthorised]);
+  }, [pendingItemsQuery]);
 
-  const getModeratorStatus = async (loggedEthAddress: string) => {
-    setRequesting(true);
-    try {
-      const response = await moderationRequest.checkModerator(loggedEthAddress);
-      if (response === 200) {
-        setIsAuthorised(true);
-      }
-    } catch (error) {
-      logger.error('[content-list.tsx]: getModeratorStatus err %j', error.message || '');
-    } finally {
-      setRequesting(false);
+  const handleLoadMoreKept = React.useCallback(() => {
+    if (!keptItemsQuery.isLoading && keptItemsQuery.hasNextPage) {
+      keptItemsQuery.fetchNextPage();
     }
+  }, [keptItemsQuery]);
+
+  const handleLoadMoreDelisted = React.useCallback(() => {
+    if (!delistedItemsQuery.isLoading && delistedItemsQuery.hasNextPage) {
+      delistedItemsQuery.fetchNextPage();
+    }
+  }, [delistedItemsQuery]);
+
+  // loadmore refs
+  const loadmorePendingRef = React.createRef<HTMLDivElement>();
+  const loadmoreKeptRef = React.createRef<HTMLDivElement>();
+  const loadmoreDelistedRef = React.createRef<HTMLDivElement>();
+
+  // intersection observers
+  useIntersectionObserver({
+    target: loadmorePendingRef,
+    onIntersect: handleLoadMorePending,
+    threshold: 0,
+  });
+
+  useIntersectionObserver({
+    target: loadmoreKeptRef,
+    onIntersect: handleLoadMoreKept,
+    threshold: 0,
+  });
+
+  useIntersectionObserver({
+    target: loadmoreDelistedRef,
+    onIntersect: handleLoadMoreDelisted,
+    threshold: 0,
+  });
+
+  const handleButtonClick = (entryId: string, itemType: string) => {
+    props.navigateToModal({
+      name: 'moderate-modal',
+      status: isPending ? 'pending' : 'moderated',
+      entryId,
+      itemType,
+    });
   };
 
-  const getStatusCount = async () => {
-    setRequesting(true);
-    try {
-      const response = await moderationRequest.getCount();
-      setCount(response);
-    } catch (error) {
-      logger.error('[content-list.tsx]: getStatusCount err %j', error.message || '');
-    } finally {
-      setRequesting(false);
-    }
-  };
+  const buttonValues = [ButtonValues.KEPT, ButtonValues.DELISTED];
 
-  const fetchPendingContents = async () => {
-    // fetch pending (reported) contents
-    setRequesting(true);
-    try {
-      const modResponse = await moderationRequest.getAllPending();
-      setPendingItems(modResponse);
-      getStatusCount();
-    } catch (error) {
-      logger.error('[content-list.tsx]: fetchPendingContents err %j', error.message || '');
-    } finally {
-      setRequesting(false);
-    }
-  };
-
-  const fetchModeratedContents = async () => {
-    // fetch delisted (moderated) contents
-    setRequesting(true);
-    try {
-      const modResponse = await moderationRequest.getAllModerated();
-      setModeratedItems(modResponse);
-      getStatusCount();
-    } catch (error) {
-      logger.error('[content-list.tsx]: fetchModeratedContents err %j', error.message || '');
-    } finally {
-      setRequesting(false);
-    }
-  };
-
-  const handleButtonClick = (entryId: string, content: string) => {
-    setFlagged(entryId);
-    setModalOpen(true);
-    setContentType(content);
-  };
-
-  const renderNotFound = (activeTab: string) => {
-    return (
-      <Text textAlign="center">{t(`No ${activeTab} items found. Please check again later`)}</Text>
-    );
-  };
-
-  const buttonLabels = [t('Kept'), t('Delisted')];
-
-  const buttonValues = ['Kept', 'Delisted'];
+  const buttonLabels = buttonValues.map(value => t(value));
 
   const onTabClick = (value: string) => {
-    // set active button state
-    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
     // toggle list accordingly
-    if (value === 'Kept') {
+    if (value === ButtonValues.KEPT) {
       setIsDelisted(false);
-    } else if (value === 'Delisted') {
+    } else if (value === ButtonValues.DELISTED) {
       setIsDelisted(true);
     }
   };
 
-  if (ethAddress && !isAuthorised) {
+  const showDelistedItems = React.useMemo(() => {
+    if (!delistedItemsQuery.isLoading && isDelisted && delistedItemPages[0].results.length) {
+      return true;
+    }
+    return false;
+  }, [isDelisted, delistedItemPages, delistedItemsQuery.isLoading]);
+
+  const showKeptItems = React.useMemo(() => {
+    if (!keptItemsQuery.isLoading && !isDelisted && keptItemPages[0].results.length) {
+      return true;
+    }
+    return false;
+  }, [isDelisted, keptItemPages, keptItemsQuery.isLoading]);
+
+  if (!isAuthorised) {
     return (
       <PromptAuthorization
         titleLabel={t('You must be an Ethereum World Moderator to access this page')}
@@ -181,39 +172,6 @@ const ContentList: React.FC<IContentListProps> = props => {
 
   return (
     <Box>
-      <ModalRenderer slotId={slotId}>
-        {modalOpen && (
-          <ToastProvider autoDismiss={true} autoDismissTimeout={5000}>
-            <ModerateModal
-              titleLabel={t('Make a Decision')}
-              altTitleLabel={t('Review a Decision')}
-              contentType={contentType}
-              decisionLabel={t('Decision')}
-              optionLabels={[t('Delist'), t('Keep')]}
-              optionValues={['Delist', 'Keep']}
-              descriptionLabel={t('Evaluation')}
-              descriptionPlaceholder={t('Please explain the reason(s)')}
-              footerText1Label={t('If you are unsure, you can refer to our')}
-              footerLink1Label={t('Code of Conduct')}
-              footerUrl1={'/legal/code-of-conduct'}
-              cancelLabel={t('Cancel')}
-              user={ethAddress}
-              contentId={flagged}
-              baseUrl={BASE_DECISION_URL}
-              isReview={!isPending}
-              onModalClose={() => {
-                setModalOpen(false);
-                // on modal close, update current contents in view
-                isPending ? fetchPendingContents() : fetchModeratedContents();
-              }}
-              closeModal={() => {
-                setModalOpen(false);
-              }}
-              signData={sdkModules.auth.authService.signData}
-            />
-          </ToastProvider>
-        )}
-      </ModalRenderer>
       <ContentTab
         isPending={isPending}
         pendingLabel={t('Pending')}
@@ -226,95 +184,186 @@ const ContentList: React.FC<IContentListProps> = props => {
       {!isPending && (
         <SwitchCard
           count={isDelisted ? count.delisted : count.kept}
-          activeButton={activeButton}
+          activeButton={isDelisted ? ButtonValues.DELISTED : ButtonValues.KEPT}
           countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
           buttonLabels={buttonLabels}
           buttonValues={buttonValues}
           onTabClick={onTabClick}
           buttonsWrapperWidth={'40%'}
-          loggedEthAddress={ethAddress}
+          loggedUser={user}
         />
       )}
-      {requesting && <Text textAlign="center">Fetching items. Please wait...</Text>}
-      {!requesting &&
+      {!pendingItemsQuery.isLoading &&
         isPending &&
-        (pendingItems.length
-          ? pendingItems.map((pendingItem: IPendingItem) => (
-              <ContentCard
-                {...props}
-                key={pendingItem.id}
-                isPending={isPending}
-                locale={locale}
-                showExplanationsLabel={t('Show explanations')}
-                hideExplanationsLabel={t('Hide explanations')}
-                reportedLabel={t('reported')}
-                contentType={pendingItem.type}
-                forLabel={t('for')}
-                reportedByLabel={t('Reported by')}
-                originallyReportedByLabel={t('Initially reported by')}
-                entryId={pendingItem.entryId}
-                reasons={pendingItem.reasons.map((el: string) => t(el))}
-                reporter={pendingItem.reporter}
-                andLabel={t('and')}
-                otherReporters={
-                  pendingItem.count
-                    ? `${pendingItem.count} ${
-                        pendingItem.count === 1 ? `${t('other')}` : `${t('others')}`
-                      }`
-                    : ''
-                }
-                reportedOnLabel={t('On')}
-                reportedDateTime={pendingItem.entryDate}
-                makeADecisionLabel={t('Make a Decision')}
-                handleButtonClick={handleButtonClick}
-                globalChannel={props.globalChannel}
-              />
-            ))
-          : renderNotFound('pending'))}
-      {!requesting &&
-        !isPending &&
-        (moderatedItems.length
-          ? moderatedItems
-              .filter(item => item.delisted === isDelisted)
-              .map(moderatedItem => (
-                <ContentCard
-                  {...props}
-                  key={moderatedItem.id}
-                  isPending={isPending}
-                  locale={locale}
-                  showExplanationsLabel={t('Show explanations')}
-                  hideExplanationsLabel={t('Hide explanations')}
-                  determinationLabel={t('Determination')}
-                  determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
-                  reportedLabel={t('reported')}
-                  contentType={moderatedItem.type}
-                  forLabel={t('for')}
-                  reportedByLabel={t('Reported by')}
-                  originallyReportedByLabel={t('Initially reported by')}
-                  entryId={moderatedItem.entryId}
-                  reasons={moderatedItem.reasons.map(el => t(el))}
-                  reporter={moderatedItem.reporter}
-                  andLabel={t('and')}
-                  otherReporters={
-                    moderatedItem.count
-                      ? `${moderatedItem.count} ${
-                          moderatedItem.count === 1 ? `${t('other')}` : `${t('others')}`
-                        }`
-                      : ''
-                  }
-                  reportedOnLabel={t('On')}
-                  reportedDateTime={moderatedItem.entryDate}
-                  moderatorDecision={moderatedItem.description}
-                  moderator={moderatedItem.moderator}
-                  moderatedByLabel={t('Moderated by')}
-                  moderatedOnLabel={t('On')}
-                  evaluationDateTime={moderatedItem.evaluationDate}
-                  reviewDecisionLabel={t('Review decision')}
-                  handleButtonClick={handleButtonClick}
-                  globalChannel={props.globalChannel}
-                />
-              ))
-          : renderNotFound('moderated'))}
+        (pendingItemPages[0].results.length ? (
+          <>
+            {pendingItemPages.map((page, index) => (
+              <Box key={index} flex={false}>
+                {page.results.map((pendingItem: IPendingItem, index: number) => (
+                  <ContentCard
+                    {...props}
+                    key={index}
+                    isPending={isPending}
+                    locale={locale}
+                    showExplanationsLabel={t('Show explanations')}
+                    hideExplanationsLabel={t('Hide explanations')}
+                    reportedLabel={t('reported')}
+                    itemType={pendingItem.contentType}
+                    forLabel={t('for')}
+                    reportedByLabel={t('Reported by')}
+                    originallyReportedByLabel={t('Initially reported by')}
+                    entryId={pendingItem.contentID}
+                    reasons={pendingItem.reasons.map((el: string) => t(el))}
+                    reporter={pendingItem.reportedBy}
+                    reporterAvatar={pendingItem.reportedByProfile?.avatar}
+                    reporterName={pendingItem.reportedByProfile?.name}
+                    reporterENSName={pendingItem.reportedByProfile?.userName}
+                    andLabel={t('and')}
+                    otherReporters={
+                      pendingItem.count
+                        ? `${pendingItem.count} ${
+                            pendingItem.count === 1 ? `${t('other')}` : `${t('others')}`
+                          }`
+                        : ''
+                    }
+                    reportedOnLabel={t('On')}
+                    reportedDateTime={pendingItem.reportedDate}
+                    makeADecisionLabel={t('Make a Decision')}
+                    handleButtonClick={handleButtonClick}
+                  />
+                ))}
+              </Box>
+            ))}
+            {/* triggers intersection observer */}
+            <Box pad="xxsmall" ref={loadmorePendingRef} />
+          </>
+        ) : (
+          <NoItemsFound activeTab={'pending'} />
+        ))}
+      {/* fetch indicator for load more on scroll */}
+      {pendingItemsQuery.isLoading && isPending && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
+      {!isPending &&
+        (showDelistedItems ? (
+          <>
+            {delistedItemPages.map((page, index) => (
+              <Box key={index} flex={false}>
+                {page.results.map((moderatedItem: IModeratedItem, index: number) => (
+                  <ContentCard
+                    {...props}
+                    key={index}
+                    isPending={isPending}
+                    locale={locale}
+                    showExplanationsLabel={t('Show explanations')}
+                    hideExplanationsLabel={t('Hide explanations')}
+                    determinationLabel={t('Determination')}
+                    determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
+                    reportedLabel={t('reported')}
+                    itemType={moderatedItem.contentType}
+                    forLabel={t('for')}
+                    reportedByLabel={t('Reported by')}
+                    originallyReportedByLabel={t('Initially reported by')}
+                    entryId={moderatedItem.contentID}
+                    reasons={moderatedItem.reasons.map(el => t(el))}
+                    reporter={moderatedItem.reportedBy}
+                    reporterAvatar={moderatedItem.reportedByProfile?.avatar}
+                    reporterName={moderatedItem.reportedByProfile?.name}
+                    reporterENSName={moderatedItem.reportedByProfile?.userName}
+                    andLabel={t('and')}
+                    otherReporters={
+                      moderatedItem.count
+                        ? `${moderatedItem.count} ${
+                            moderatedItem.count === 1 ? `${t('other')}` : `${t('others')}`
+                          }`
+                        : ''
+                    }
+                    reportedOnLabel={t('On')}
+                    reportedDateTime={moderatedItem.reportedDate}
+                    moderatorDecision={moderatedItem.explanation}
+                    moderator={moderatedItem.moderator}
+                    moderatorName={moderatedItem.moderatorProfile?.name}
+                    moderatorENSName={moderatedItem.moderatorProfile?.userName}
+                    moderatedByLabel={t('Moderated by')}
+                    moderatedOnLabel={t('On')}
+                    evaluationDateTime={moderatedItem.moderatedDate}
+                    reviewDecisionLabel={t('Review decision')}
+                    handleButtonClick={handleButtonClick}
+                  />
+                ))}
+              </Box>
+            ))}
+            {/* triggers intersection observer */}
+            <Box pad="xxsmall" ref={loadmoreDelistedRef} />
+          </>
+        ) : showKeptItems ? (
+          <>
+            {keptItemPages.map((page, index) => (
+              <Box key={index} flex={false}>
+                {page.results.map((moderatedItem: IModeratedItem, index: number) => (
+                  <ContentCard
+                    {...props}
+                    key={index}
+                    isPending={isPending}
+                    locale={locale}
+                    showExplanationsLabel={t('Show explanations')}
+                    hideExplanationsLabel={t('Hide explanations')}
+                    determinationLabel={t('Determination')}
+                    determination={moderatedItem.delisted ? t('Delisted') : t('Kept')}
+                    reportedLabel={t('reported')}
+                    itemType={moderatedItem.contentType}
+                    forLabel={t('for')}
+                    reportedByLabel={t('Reported by')}
+                    originallyReportedByLabel={t('Initially reported by')}
+                    entryId={moderatedItem.contentID}
+                    reasons={moderatedItem.reasons.map(el => t(el))}
+                    reporter={moderatedItem.reportedBy}
+                    reporterAvatar={moderatedItem.reportedByProfile?.avatar}
+                    reporterName={moderatedItem.reportedByProfile?.name}
+                    reporterENSName={moderatedItem.reportedByProfile?.userName}
+                    andLabel={t('and')}
+                    otherReporters={
+                      moderatedItem.count
+                        ? `${moderatedItem.count} ${
+                            moderatedItem.count === 1 ? `${t('other')}` : `${t('others')}`
+                          }`
+                        : ''
+                    }
+                    reportedOnLabel={t('On')}
+                    reportedDateTime={moderatedItem.reportedDate}
+                    moderatorDecision={moderatedItem.explanation}
+                    moderator={moderatedItem.moderator}
+                    moderatorName={moderatedItem.moderatorProfile?.name}
+                    moderatorENSName={moderatedItem.moderatorProfile?.userName}
+                    moderatedByLabel={t('Moderated by')}
+                    moderatedOnLabel={t('On')}
+                    evaluationDateTime={moderatedItem.moderatedDate}
+                    reviewDecisionLabel={t('Review decision')}
+                    handleButtonClick={handleButtonClick}
+                  />
+                ))}
+              </Box>
+            ))}
+            {/* triggers intersection observer */}
+            <Box pad="xxsmall" ref={loadmoreKeptRef} />
+          </>
+        ) : (
+          <NoItemsFound activeTab={'moderated'} />
+        ))}
+      {/* fetch indicator for load more on scroll */}
+      {delistedItemsQuery.isLoading && !isPending && isDelisted && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
+      {/* fetch indicator for load more on scroll */}
+      {keptItemsQuery.isLoading && !isPending && !isDelisted && (
+        <Box pad="large">
+          <Spinner />
+        </Box>
+      )}
     </Box>
   );
 };

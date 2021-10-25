@@ -1,5 +1,9 @@
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { BehaviorSubject } from 'rxjs';
+import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
 
+import i18n from 'i18next';
 export interface IAkashaError {
   errorKey: string;
   error: Error;
@@ -10,77 +14,26 @@ export interface LogoSourceType {
   type: LogoTypeSource;
   value: string;
 }
-export interface Application {
-  activeWhen: { path: string; exact?: boolean };
-  i18nConfig: AppLoaderTypes.II18nConfig;
-  loadingFn: () => Promise<any>;
-  name: string;
-  sdkModules?: AppLoaderTypes.SDKdependency[];
-  title: string;
-  menuItems?: { [p: string]: string };
-  logo?: LogoSourceType;
-  /**
-   * Declare widgets loaded in the widget area of the layout
-   * key => string
-   * value => an array of widgets
-   *          widget = singlespa lifecycle methods
-   */
-  widgets?: {
-    [key: string]: AppLoaderTypes.IWidget[];
-  };
-}
-export interface LayoutConfig {
-  loadingFn: () => any;
-  /**
-   * load modals inside this node
-   */
-  modalSlotId: string;
-  name: string;
-  /**
-   * main app and plugin area
-   */
-  pluginSlotId: string;
-  /**
-   * load root widgets inside this node
-   * do not use this for app defined widgets
-   */
-  rootWidgetSlotId: string;
-  /**
-   * sidebar area slot
-   */
-  // sidebarSlotId: string;
-  title: string;
-  /**
-   * topbar loading node
-   */
-  topbarSlotId: string;
-  /**
-   * load app defined widgets into this node
-   */
-  widgetSlotId: string;
-}
+
 export interface RootComponentProps {
-  activeWhen: { path: string };
+  activeWhen?: { path: string };
   domElement: HTMLElement;
-  events: any;
-  getMenuItems: () => any;
-  globalChannel: any;
-  i18n: any;
-  i18nConfig: any;
+  uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData>;
+  i18n?: typeof i18n;
+  getMenuItems?: () => AppLoaderTypes.IMenuList;
   isMobile: boolean;
-  layout: {
-    app: LayoutConfig;
-  };
-  logger: any;
-  mountParcel: (parcel: any, config?: any) => any;
+  layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
+  logger: ILogger;
+  mountParcel: (parcel: unknown, config?: unknown) => unknown;
   name: string;
-  rootNodeId: string;
-  sdkModules: {
-    [key: string]: { [key: string]: any };
-  };
-  singleSpa: any;
-  unmountSelf: () => void;
-  rxjsOperators: any;
+  singleSpa: typeof singleSpa;
+  installIntegration?: (name: string) => void;
+  uninstallIntegration?: (name: string) => void;
+  navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
+  activeModal: AppLoaderTypes.ModalNavigationOptions;
+  extensionData?: AppLoaderTypes.UIEventData['data'];
+  homepageApp?: string;
+  getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
 }
 
 export enum LogoTypeSource {
@@ -95,7 +48,6 @@ export enum EthProviders {
   WalletConnect,
   FallbackProvider,
 }
-export const AppLoader = AppLoaderTypes;
 
 export enum LEGAL_DOCS {
   TERMS_OF_USE = 'TermsOfUse',
@@ -103,4 +55,39 @@ export enum LEGAL_DOCS {
   PRIVACY_POLICY = 'PrivacyPolicy',
   CODE_OF_CONDUCT = 'CodeOfConduct',
   APP_GUIDE = 'AppGuide',
+}
+
+export type Awaited<T> = T extends PromiseLike<infer U> ? Awaited<U> : T;
+
+export type QueryStatus = {
+  status?: 'idle' | 'loading' | 'success' | 'error';
+  error?: null | unknown;
+  hasNextPage?: boolean;
+  isError?: boolean;
+  isFetched?: boolean;
+  isFetchedAfterMount?: boolean;
+  isFetching?: boolean;
+  isIdle?: boolean;
+  isLoading?: boolean;
+  isLoadingError?: boolean;
+  isPlaceholderData?: boolean;
+  isPreviousData?: boolean;
+  isRefetchError?: boolean;
+  isStale?: boolean;
+  isSuccess?: boolean;
+};
+
+export enum ButtonValues {
+  ALL = 'All',
+  KEPT = 'Kept',
+  DELISTED = 'Delisted',
+  STATS = 'Stats',
+}
+
+export enum ModerationItemTypes {
+  ACCOUNT = 'account',
+  POST = 'post',
+  COMMENT = 'comment',
+  REPLY = 'reply',
+  // @TODO: add support for tag type, when tag moderation is implemented
 }
