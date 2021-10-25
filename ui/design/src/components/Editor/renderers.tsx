@@ -46,8 +46,8 @@ const ImgElement = ({
         contentEditable={false}
         style={{
           minHeight: 30,
-          height: '100%',
-          width: '100%',
+          height: 'fit-content',
+          width: 'fit-content',
           position: 'relative',
           overflow: 'hidden',
           contain: 'layout',
