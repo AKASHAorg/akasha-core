@@ -231,7 +231,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
       onContentClick({
         authorEthAddress: data.author.ethAddress,
         entryId: data.entryId,
-        replyTo: null,
+        replyTo: data.postId ? { entryId: data.postId } : null,
       });
     }
   };
