@@ -119,7 +119,7 @@ class CommentAPI extends DataSource {
     return { results: results, nextIndex: nextIndex, total: comments.length };
   }
 
-  async getComment(commentId: string) {
+  async getComment(commentId: string): Promise<Comment> {
     const db: Client = await getAppDB();
 
     const commentCacheKey = this.getCommentCacheKey(commentId);
