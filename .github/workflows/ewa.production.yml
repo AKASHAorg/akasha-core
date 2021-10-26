@@ -1,11 +1,8 @@
 name: deploy production ethereum.world api
 
 on:
-  push:
-    tags:
-      - '**'
-    branches:
-      - releases
+  release:
+    types: [published]
     paths:
       - '.github/workflows/**'
       - 'api/**'
@@ -16,14 +13,17 @@ jobs:
     steps:
       - name: executing remote ssh deployment
         uses: appleboy/ssh-action@v0.1.4
+        env:
+          RELEASE_TAG: ${{ github.ref }}
         with:
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           KEY: ${{ secrets.SSHKEY }}
+          envs: RELEASE_TAG
           script: |
             cd apps/ewa-api-prod
-            git checkout releases
-            git pull
+            git fetch --all --prune
+            git checkout $RELEASE_TAG
             cd api/hub
             docker-compose -p ewa-api-production -f docker-compose.production.yml down
             docker-compose -p ewa-api-production -f docker-compose.production.yml build --no-cache

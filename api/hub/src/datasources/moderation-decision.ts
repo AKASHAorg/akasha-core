@@ -7,6 +7,7 @@ import ProfileAPI from './profile';
 import ModerationReportAPI from './moderation-report';
 import { queryCache } from '../storage/cache';
 import { parse, stringify } from 'flatted';
+import CommentAPI from './comment';
 
 /**
  * The ModerationDecisionAPI class handles all the interactions between the
@@ -387,10 +388,10 @@ class ModerationDecisionAPI extends DataSource {
    * Moderate content by making a formal decision.
    * @param report - The object containing relevant data for the report
    * @param postsAPI - The posts data source API
-   * @param delisted - Outcome of the moderation action (delisted or kept)
+   * @param commentsAPI
    * @returns The ModerationDecision object
    */
-  async makeDecision(report: any, postsAPI: PostsAPI) {
+  async makeDecision(report: any, postsAPI: PostsAPI, commentsAPI: CommentAPI) {
     const db: Client = await getAppDB();
     if (!report.data.moderator) {
       throw new Error('Not authorized');
@@ -424,9 +425,13 @@ class ModerationDecisionAPI extends DataSource {
     if (decision.delisted) {
       let destUser = '';
       // get post author
-      if (decision.contentType === 'post' || decision.contentType === 'reply') {
+      if (decision.contentType === 'post') {
         const post = await postsAPI.getPost(report.contentId);
         destUser = post.author;
+      }
+      if (decision.contentType === 'reply') {
+        const comment = await commentsAPI.getComment(report.contentId);
+        destUser = comment.author;
       }
       let notificationType = 'MODERATED_POST';
       if (decision.contentType === 'reply') {
@@ -435,14 +440,16 @@ class ModerationDecisionAPI extends DataSource {
         notificationType = 'MODERATED_ACCOUNT';
         destUser = report.contentId;
       }
-      await sendAuthorNotification(destUser, {
-        property: notificationType,
-        provider: 'awf.moderation.api',
-        value: {
-          author: report.data.moderator,
-          moderatedID: report.contentId,
-        },
-      });
+      if (destUser) {
+        await sendAuthorNotification(destUser, {
+          property: notificationType,
+          provider: 'awf.moderation.api',
+          value: {
+            author: report.data.moderator,
+            moderatedID: report.contentId,
+          },
+        });
+      }
     }
     // handle caching
     await queryCache.del(this.getDecisionCacheKey(report.contentId));

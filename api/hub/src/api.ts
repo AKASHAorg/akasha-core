@@ -9,6 +9,7 @@ import ModerationReportAPI from './datasources/moderation-report';
 import ModerationDecisionAPI from './datasources/moderation-decision';
 import ModerationAdminAPI from './datasources/moderation-admin';
 import ModerationReasonAPI from './datasources/moderation-reasons';
+import CommentAPI from './datasources/comment';
 // import { Invite } from './collections/interfaces';
 
 export const promRegistry = new promClient.Registry();
@@ -30,6 +31,7 @@ const dataSources = {
   decisionsAPI: new ModerationDecisionAPI({ dbID, collection: 'ModerationDecisions' }),
   reasonsAPI: new ModerationReasonAPI({ dbID, collection: 'ModerationReasons' }),
   moderatorsAPI: new ModerationAdminAPI({ dbID, collection: 'Moderators' }),
+  commentsAPI: new CommentAPI({ dbID, collection: 'Comments' }),
 };
 
 /**
@@ -261,7 +263,11 @@ api.post(
       } else {
         try {
           // store moderation decision
-          await dataSources.decisionsAPI.makeDecision(report, dataSources.postsAPI);
+          await dataSources.decisionsAPI.makeDecision(
+            report,
+            dataSources.postsAPI,
+            dataSources.commentsAPI,
+          );
           ctx.status = 200;
         } catch (error) {
           ctx.body = `Cannot moderate content! Error: ${error}`;
