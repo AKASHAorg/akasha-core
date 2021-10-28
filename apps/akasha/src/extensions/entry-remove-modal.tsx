@@ -3,7 +3,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
-import { useErrors, withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useDeletePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useDeleteComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
@@ -14,9 +14,6 @@ const { ConfirmationModal, ThemeSelector, lightTheme, darkTheme, ModalContainer,
 
 const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const { activeModal, logger } = props;
-  const [errorState] = useErrors({
-    logger: props.logger,
-  });
   const { t } = useTranslation('app-akasha-integration');
 
   const postDeleteQuery = useDeletePost(activeModal.entryId);
@@ -66,7 +63,7 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
       }
       cancelLabel={t('Cancel')}
       confirmLabel={t('Delete')}
-      errors={errorState}
+      error={(postDeleteQuery.error || commentDeleteQuery.error) as Error | null}
     />
   );
 };

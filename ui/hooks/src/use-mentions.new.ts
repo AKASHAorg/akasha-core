@@ -4,6 +4,7 @@ import getSDK from '@akashaproject/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { PROFILE_KEY } from './use-profile.new';
+import { logError } from './utils/error-handler';
 
 export const MENTION_SEARCH_KEY = 'MENTION_SEARCH_KEY';
 
@@ -35,5 +36,6 @@ export function useMentionSearch(mention: string) {
   return useQuery([MENTION_SEARCH_KEY, mention], () => getMentions(mention, queryClient), {
     enabled: !!mention,
     keepPreviousData: true,
+    onError: (err: Error) => logError('useMentionSearch', err),
   });
 }

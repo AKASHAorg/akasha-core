@@ -1,5 +1,5 @@
 import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom, forkJoin } from 'rxjs';
+import { lastValueFrom, forkJoin, catchError, EMPTY, of, filter } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { logError } from './utils/error-handler';
@@ -13,27 +13,30 @@ const getIsFollowingMultiple = async (
   followingEthAddressArray: string[],
 ) => {
   const sdk = getSDK();
-  try {
-    const filteredList = followingEthAddressArray.filter(profile => !!profile);
-    const getFollowedProfilesCalls = filteredList.map((profile: string) => {
-      return sdk.api.profile.isFollowing({
+  const filteredList = followingEthAddressArray.filter(profile => !!profile);
+  const getFollowedProfilesCalls = filteredList.map((profile: string) => {
+    return sdk.api.profile
+      .isFollowing({
         follower: followerEthAddress,
         following: profile,
-      });
+      })
+      .pipe(
+        catchError(err => {
+          logError('useFollow.getIsFollowingMultiple', err);
+          return of({ data: null });
+        }),
+      );
+  });
+  const followedProfiles: string[] = [];
+  if (getFollowedProfilesCalls.length) {
+    const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
+    filteredList.forEach((profile, index) => {
+      if (res[index].data?.isFollowing === true) {
+        followedProfiles.push(profile);
+      }
     });
-    const followedProfiles: string[] = [];
-    if (getFollowedProfilesCalls.length) {
-      const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
-      filteredList.forEach((profile, index) => {
-        if (res[index].data.isFollowing === true) {
-          followedProfiles.push(profile);
-        }
-      });
-    }
-    return followedProfiles;
-  } catch (error) {
-    logError('useFollow.getIsFollowingMultiple', error);
   }
+  return followedProfiles;
 };
 
 export function useIsFollowingMultiple(

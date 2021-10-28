@@ -96,25 +96,20 @@ export function useLogin(onError?: (err: Error) => void) {
       selectedProvider: EthProviders;
       checkRegistered: boolean;
     }) => {
-      try {
-        const resp = await lastValueFrom(
-          sdk.api.auth.signIn({
-            provider: selectedProvider,
-            checkRegistered,
-          }),
-        );
-        return resp.data;
-      } catch (error) {
-        logError('use-login', error);
-        if (onError) {
-          onError(error);
-        }
-        throw error;
-      }
+      const resp = await lastValueFrom(
+        sdk.api.auth.signIn({
+          provider: selectedProvider,
+          checkRegistered,
+        }),
+      );
+      return resp.data;
     },
     {
       onError: (payload: Error) => {
         logError('use-login', payload);
+        if (onError) {
+          onError(payload);
+        }
       },
     },
   );
@@ -122,8 +117,8 @@ export function useLogin(onError?: (err: Error) => void) {
 export function useLogout() {
   const queryClient = useQueryClient();
   const sdk = getSDK();
-  return useMutation(async () => {
-    try {
+  return useMutation(
+    async () => {
       const resp = await lastValueFrom(sdk.api.auth.signOut());
       if (resp.data) {
         queryClient.setQueryData([LOGIN_STATE_KEY], {
@@ -135,11 +130,11 @@ export function useLogout() {
         });
         return resp.data;
       }
-    } catch (error) {
-      logError('use-logout', error);
-      throw error;
-    }
-  });
+    },
+    {
+      onError: (err: Error) => logError('use-logout', err),
+    },
+  );
 }
 
 // hook to check if an ethAddress is already registered
@@ -148,16 +143,12 @@ export function useCheckSignup(ethAddress) {
   return useQuery(
     CHECK_SIGNUP_KEY,
     async () => {
-      try {
-        const resp = await lastValueFrom(sdk.api.auth.checkIfSignedUp(ethAddress));
-        return resp.data;
-      } catch (error) {
-        logError('useCheckSignup', error);
-        throw error;
-      }
+      const resp = await lastValueFrom(sdk.api.auth.checkIfSignedUp(ethAddress));
+      return resp.data;
     },
     {
       enabled: !!ethAddress,
+      onError: (err: Error) => logError('useCheckSignup', err),
     },
   );
 }

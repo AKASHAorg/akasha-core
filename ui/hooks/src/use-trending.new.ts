@@ -11,47 +11,40 @@ export const TRENDING_PROFILES_KEY = 'Trending_Profiles';
 
 const getTrendingTags = async () => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.tags.getTrending());
-    return res.data.searchTags;
-  } catch (error) {
-    logError('useTrending.getTags', error);
-  }
+  const res = await lastValueFrom(sdk.api.tags.getTrending());
+  return res.data.searchTags;
 };
 
 export function useTrendingTags() {
   return useQuery([TRENDING_TAGS_KEY], () => getTrendingTags(), {
     placeholderData: [],
     keepPreviousData: true,
+    onError: (err: Error) => logError('useTrending.getTags', err),
   });
 }
 
 const getTrendingProfiles = async (queryClient: QueryClient) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.profile.getTrending());
-    const profiles = res.data.searchProfiles.map(profile => {
-      const profileCache = queryClient.getQueryData<IProfileData>([PROFILE_KEY, profile?.pubKey]);
-      if (profileCache) {
-        return profileCache;
-      }
-      const { avatar, coverImage, ...other } = profile;
-      const images: { avatar: string | null; coverImage: string | null } = {
-        avatar: null,
-        coverImage: null,
-      };
-      if (avatar) {
-        images.avatar = getMediaUrl(avatar);
-      }
-      if (coverImage) {
-        images.coverImage = getMediaUrl(coverImage);
-      }
-      return { ...images, ...other };
-    });
-    return profiles || [];
-  } catch (error) {
-    logError('useTrending.getProfiles', error);
-  }
+  const res = await lastValueFrom(sdk.api.profile.getTrending());
+  const profiles = res.data.searchProfiles.map(profile => {
+    const profileCache = queryClient.getQueryData<IProfileData>([PROFILE_KEY, profile?.pubKey]);
+    if (profileCache) {
+      return profileCache;
+    }
+    const { avatar, coverImage, ...other } = profile;
+    const images: { avatar: string | null; coverImage: string | null } = {
+      avatar: null,
+      coverImage: null,
+    };
+    if (avatar) {
+      images.avatar = getMediaUrl(avatar);
+    }
+    if (coverImage) {
+      images.coverImage = getMediaUrl(coverImage);
+    }
+    return { ...images, ...other };
+  });
+  return profiles || [];
 };
 
 export function useTrendingProfiles() {
@@ -59,5 +52,6 @@ export function useTrendingProfiles() {
   return useQuery([TRENDING_PROFILES_KEY], () => getTrendingProfiles(queryClient), {
     placeholderData: [],
     keepPreviousData: true,
+    onError: (err: Error) => logError('useTrending.getProfiles', err),
   });
 }

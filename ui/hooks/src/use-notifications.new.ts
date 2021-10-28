@@ -9,58 +9,55 @@ export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 
 const getNotifications = async () => {
   const sdk = getSDK();
-  try {
-    const getMessagesResp = await lastValueFrom(sdk.api.auth.getMessages({}));
+  const getMessagesResp = await lastValueFrom(sdk.api.auth.getMessages({}));
 
-    const getProfilesCalls = getMessagesResp.data.map(message => {
-      const pubKey = message.body.value.author || message.body.value.follower;
-      if (pubKey) {
-        return sdk.api.profile.getProfile({ pubKey }).pipe(
-          catchError(err => {
-            logError('useNotifications.getNotifications.getProfileCalls', err);
-            return of(null);
-          }),
-        );
+  const getProfilesCalls = getMessagesResp.data.map(message => {
+    const pubKey = message.body.value.author || message.body.value.follower;
+    if (pubKey) {
+      return sdk.api.profile.getProfile({ pubKey }).pipe(
+        catchError(err => {
+          logError('useNotifications.getNotifications.getProfileCalls', err);
+          return of(null);
+        }),
+      );
+    }
+  });
+  const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls));
+
+  let completeMessages: any = [];
+  profilesResp
+    ?.filter(res => res?.data)
+    .map(profileResp => {
+      const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
+      const images: { avatar: string | null; coverImage: string | null } = {
+        avatar: null,
+        coverImage: null,
+      };
+      if (avatar) {
+        images.avatar = getMediaUrl(avatar);
       }
-    });
-    const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls));
-
-    let completeMessages: any = [];
-    profilesResp
-      ?.filter(res => res?.data)
-      .map(profileResp => {
-        const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
-        const images: { avatar: string | null; coverImage: string | null } = {
-          avatar: null,
-          coverImage: null,
-        };
-        if (avatar) {
-          images.avatar = getMediaUrl(avatar);
+      if (coverImage) {
+        images.coverImage = getMediaUrl(coverImage);
+      }
+      const profileData = { ...images, ...other };
+      completeMessages = getMessagesResp.data?.map(message => {
+        if (message.body.value.author === profileData.pubKey) {
+          message.body.value.author = profileData;
         }
-        if (coverImage) {
-          images.coverImage = getMediaUrl(coverImage);
+        if (message.body.value.follower === profileData.pubKey) {
+          message.body.value.follower = profileData;
         }
-        const profileData = { ...images, ...other };
-        completeMessages = getMessagesResp.data?.map(message => {
-          if (message.body.value.author === profileData.pubKey) {
-            message.body.value.author = profileData;
-          }
-          if (message.body.value.follower === profileData.pubKey) {
-            message.body.value.follower = profileData;
-          }
-          return message;
-        });
+        return message;
       });
-    return completeMessages;
-  } catch (error) {
-    logError('useNotifications.getNotifications', error);
-  }
+    });
+  return completeMessages;
 };
 
 export function useFetchNotifications(loggedEthAddress: string) {
   return useQuery([NOTIFICATIONS_KEY], () => getNotifications(), {
     enabled: !!loggedEthAddress,
     keepPreviousData: true,
+    onError: (err: Error) => logError('useNotifications.getNotifications', err),
   });
 }
 
@@ -103,17 +100,14 @@ export function useMarkAsRead() {
 
 const checkNewNotifications = async () => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.auth.hasNewNotifications());
-    return res.data;
-  } catch (error) {
-    logError('useNotifications.checkNewNotifications', error);
-  }
+  const res = await lastValueFrom(sdk.api.auth.hasNewNotifications());
+  return res.data;
 };
 
 export function useCheckNewNotifications(loggedEthAddress: string) {
   return useQuery([HAS_NEW_NOTIFICATIONS_KEY], () => checkNewNotifications(), {
     enabled: !!loggedEthAddress,
     keepPreviousData: true,
+    onError: (err: Error) => logError('useNotifications.checkNewNotifications', err),
   });
 }

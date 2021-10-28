@@ -10,35 +10,20 @@ const ErrorElement = styled('pre')`
 `;
 
 export const ErrorInfoCard = ({
-  errors = {},
+  error,
   children,
 }: {
-  errors?: { [key: string]: { error: Error; critical: boolean } };
-  children: (
-    messages: React.ReactElement | null,
-    isCritical: boolean,
-    errors?: Record<string, unknown>[],
-  ) => React.ReactElement;
+  error?: Error;
+  children: (message: React.ReactElement | null) => React.ReactElement;
 }) => {
-  const errorArr =
-    errors &&
-    Object.keys(errors).map(errorKey => {
-      const errorObj = errors[errorKey];
-      return {
-        message: errorObj.error.message,
-        stackTrace: errorObj.error.stack,
-        isCritical: errorObj.critical,
-      };
-    });
-  const hasCriticalErrors = errorArr.some(err => err.isCritical);
-  if (errorArr?.length) {
-    const messages = errorArr.map((err, idx) => (
-      <Box key={idx}>
-        <ErrorElement>{err.message}</ErrorElement>
-        <ErrorElement>{err.stackTrace}</ErrorElement>
+  if (error) {
+    const message = (
+      <Box>
+        <ErrorElement>{error.message}</ErrorElement>
+        <ErrorElement>{error.stack}</ErrorElement>
       </Box>
-    ));
-    return children(<>{messages}</>, hasCriticalErrors, errorArr);
+    );
+    return children(<>{message}</>);
   }
-  return children(null, false);
+  return children(null);
 };

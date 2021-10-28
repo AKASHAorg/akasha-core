@@ -29,7 +29,12 @@ export default class AWF_IpfsConnector implements AWF_IIpfsConnector {
   }
 
   catDocument(doc: string) {
-    return createObservableStream(fetch(`${this.gateway}/${doc}`).then(data => data.text()));
+    return createObservableStream(
+      fetch(`${this.gateway}/${doc}`).then(res => {
+        if (res.ok) return res.text();
+        throw Error('An error occurred!');
+      }),
+    );
   }
 
   /**
