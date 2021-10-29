@@ -62,9 +62,9 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
       throw new Error('You are not authorized to perform this operation');
     case status >= 400:
       throw new Error('Bad request. Please try again later');
+    default:
+      return status;
   }
-
-  return status;
 };
 
 function useModeration() {
@@ -117,9 +117,9 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
       throw new Error('You are not authorized to perform this operation');
     case status >= 400:
       throw new Error('Bad request. Please try again later');
+    default:
+      return status;
   }
-
-  return status;
 };
 
 export function useReport() {
