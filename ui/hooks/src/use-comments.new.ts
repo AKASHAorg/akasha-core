@@ -1,5 +1,5 @@
-import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom } from 'rxjs';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
+import { catchError, lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { buildPublishObject } from './utils/entry-utils';
@@ -24,23 +24,19 @@ export const PUBLISH_PENDING_KEY = 'PendingPublish_Comments';
 const getComments = async (limit: number, postID: string, offset?: string) => {
   const sdk = getSDK();
 
-  try {
-    const res = await lastValueFrom(
-      sdk.api.comments.getComments({
-        limit: limit,
-        offset: offset,
-        postID: postID,
-      }),
-    );
-    return {
-      ...res.data.getComments,
-      results: res.data.getComments.results.map(comment => {
-        return comment._id;
-      }),
-    };
-  } catch (error) {
-    logError('useComments.getComments', error);
-  }
+  const res = await lastValueFrom(
+    sdk.api.comments.getComments({
+      limit: limit,
+      offset: offset,
+      postID: postID,
+    }),
+  );
+  return {
+    ...res.data.getComments,
+    results: res.data.getComments.results.map(comment => {
+      return comment._id;
+    }),
+  };
 };
 
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
@@ -53,6 +49,7 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       keepPreviousData: true,
+      onError: (err: Error) => logError('useComments.getComments', err),
     },
   );
 }
@@ -60,27 +57,23 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 const getComment = async (commentID): Promise<CommentResponse> => {
   const sdk = getSDK();
 
-  try {
-    const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
-    // check entry's moderation status
-    const modStatus = await checkStatus({
-      user: user.data ? user.data.pubKey : '',
-      contentIds: [commentID],
-    });
-    const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
-    const modStatusAuthor = await checkStatus({
-      user: user?.data?.pubKey || '',
-      contentIds: [res.data?.getComment?.author?.pubKey],
-    });
-    // @TODO: assign modStatus to a single prop
-    return {
-      ...res.data.getComment,
-      ...modStatus[0],
-      author: { ...res.data.getComment.author, ...modStatusAuthor[0] },
-    };
-  } catch (error) {
-    logError('useComments.getComments', error);
-  }
+  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+  // check entry's moderation status
+  const modStatus = await checkStatus({
+    user: user.data ? user.data.pubKey : '',
+    contentIds: [commentID],
+  });
+  const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
+  const modStatusAuthor = await checkStatus({
+    user: user?.data?.pubKey || '',
+    contentIds: [res.data?.getComment?.author?.pubKey],
+  });
+  // @TODO: assign modStatus to a single prop
+  return {
+    ...res.data.getComment,
+    ...modStatus[0],
+    author: { ...res.data.getComment.author, ...modStatusAuthor[0] },
+  };
 };
 
 // hook for fetching data for a specific commentID/entryID
@@ -90,6 +83,7 @@ export function useComment(commentID: string, enabler = true) {
     enabled: !!commentID && enabler,
     keepPreviousData: true,
     initialData: () => queryClient.getQueryData([COMMENT_KEY, commentID]),
+    onError: (err: Error) => logError('useComments.getComment', err),
   });
 }
 
@@ -229,13 +223,14 @@ export function useEditComment(commentID: string, hasCommentData: boolean) {
 
         return { comment };
       },
-      onError: (_err, _variables, context) => {
+      onError: (err, _variables, context) => {
         if (context?.comment) {
           queryClient.setQueryData(
             [COMMENT_KEY, commentID],
             Object.assign({}, context.comment, { hasErrored: true }),
           );
         }
+        logError('useComments.editComment', err as Error);
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries([COMMENT_KEY, commentID]);

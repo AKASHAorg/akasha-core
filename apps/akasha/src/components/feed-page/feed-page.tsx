@@ -6,7 +6,6 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { useErrors } from '@akashaproject/ui-awf-hooks';
 import {
   useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
@@ -39,20 +38,12 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
-  const [errorState] = useErrors({ logger });
-
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
   const navigateToModal = React.useRef(props.navigateToModal);
   const showLoginModal = React.useRef(props.showLoginModal);
-
-  React.useEffect(() => {
-    if (Object.keys(errorState).length) {
-      logger.error(JSON.stringify(errorState));
-    }
-  }, [errorState, logger]);
 
   const handleLoadMore = React.useCallback(() => {
     if (!postsReq.isLoading && postsReq.hasNextPage && loginState?.fromCache) {

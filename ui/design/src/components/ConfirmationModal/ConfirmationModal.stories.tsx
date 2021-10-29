@@ -31,7 +31,6 @@ BaseConfirmationModal.args = {
   confirmLabel: 'Confirm',
   cancelLabel: 'Cancel',
   closeLabel: 'Close',
-  errors: {},
   onClose: () => {
     /* clicked! */
   },

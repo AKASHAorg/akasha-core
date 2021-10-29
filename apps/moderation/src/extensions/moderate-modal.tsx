@@ -39,7 +39,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
         contentId: activeModal.entryId,
         contentType: itemType,
         url: `${BASE_DECISION_URL}/moderate`,
-        isPending: activeModal.status === 'pending' ? true : false,
+        isPending: activeModal.status === 'pending',
       });
     },
 

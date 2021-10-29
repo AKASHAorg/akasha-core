@@ -11,12 +11,8 @@ export const SEARCH_TAGS_KEY = 'SEARCH_TAGS';
 
 const getTagSubscriptions = async () => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.profile.getTagSubscriptions());
-    return res.data.getInterests;
-  } catch (error) {
-    logError('useTagSubscribe.getTagSubs', error);
-  }
+  const res = await lastValueFrom(sdk.api.profile.getTagSubscriptions());
+  return res.data.getInterests;
 };
 
 export function useTagSubscriptions(loggedEthAddress: string | null) {
@@ -24,23 +20,21 @@ export function useTagSubscriptions(loggedEthAddress: string | null) {
     initialData: [],
     enabled: !!loggedEthAddress,
     keepPreviousData: false,
+    onError: (err: Error) => logError('useTagSubscribe.getTagSubs', err),
   });
 }
 
 const getIsSubscribedToTag = async (tagName: string) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.profile.isSubscribedToTag(tagName));
-    return res.data;
-  } catch (error) {
-    logError('useTagSubscribe.getIsSubscribedToTag', error);
-  }
+  const res = await lastValueFrom(sdk.api.profile.isSubscribedToTag(tagName));
+  return res.data;
 };
 
 export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY, tagName], () => getIsSubscribedToTag(tagName), {
     enabled: !!loggedEthAddress,
     keepPreviousData: false,
+    onError: (err: Error) => logError('useTagSubscribe.getIsSubscribedToTag', err),
   });
 }
 
@@ -106,6 +100,7 @@ const getTag = async (tagName: string) => {
 export function useGetTag(tagName: string, enabler = true) {
   return useQuery([GET_TAG_KEY, tagName], () => getTag(tagName), {
     enabled: !!tagName && enabler,
+    onError: (err: Error) => logError('useTag.useGetTag', err),
   });
 }
 
@@ -122,5 +117,6 @@ export function useTagSearch(tagName: string) {
   return useQuery([SEARCH_TAGS_KEY, tagName], () => getTags(tagName), {
     enabled: !!tagName,
     keepPreviousData: true,
+    onError: (err: Error) => logError('useTag.useTagSearch', err),
   });
 }

@@ -6,19 +6,16 @@ import {
   useFetchNotifications,
   useMarkAsRead,
 } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
-import useErrorState from '@akashaproject/ui-awf-hooks/lib/use-error-state';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard } = DS;
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
-  const { logger, singleSpa } = props;
+  const { singleSpa } = props;
 
   const { t } = useTranslation();
 
   const loginQuery = useGetLogin();
-
-  const [notifErrors] = useErrorState({ logger });
 
   const notifReq = useFetchNotifications(loginQuery.data?.ethAddress);
   const notificationsState = notifReq.data;
@@ -39,26 +36,18 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       <Helmet>
         <title>{t('My notifications')}</title>
       </Helmet>
-      <ErrorInfoCard errors={notifErrors}>
-        {(messages, hasCriticalErrors) => (
+      <ErrorInfoCard error={notifReq?.error}>
+        {message => (
           <>
-            {hasCriticalErrors && (
+            {message && (
               <ErrorLoader
                 type="script-error"
                 title={t('Sorry, we cannot get the notifications this time')}
                 details={t('Please try again later!')}
-                devDetails={messages}
+                devDetails={message}
               />
             )}
-            {messages && (
-              <ErrorLoader
-                type="script-error"
-                title={t('Sorry, we cannot get the notifications this time')}
-                details={t('Please try again later!')}
-                devDetails={messages}
-              />
-            )}
-            {!hasCriticalErrors && (
+            {!message && (
               <NotificationsCard
                 notifications={notificationsState || []}
                 notificationsLabel={t('Notifications')}
