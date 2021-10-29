@@ -28,61 +28,54 @@ const getProfileData = async (payload: {
 }): Promise<IProfileData> => {
   const sdk = getSDK();
 
-  try {
-    // check entry's moderation status
-    const modStatus = await checkStatus({
-      user: payload.loggedUser,
-      contentIds: [payload.pubKey],
-    });
+  // check entry's moderation status
+  const modStatus = await checkStatus({
+    user: payload.loggedUser,
+    contentIds: [payload.pubKey],
+  });
 
-    const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
-    const { avatar, coverImage, ...other } = res.data.getProfile || res.data.resolveProfile;
-    const images: { avatar: string; coverImage: string } = {
-      avatar: '',
-      coverImage: '',
-    };
-    if (avatar) {
-      images.avatar = getMediaUrl(avatar);
-    }
-    if (coverImage) {
-      images.coverImage = getMediaUrl(coverImage);
-    }
-    return { ...images, ...other, ...modStatus[0] };
-  } catch (error) {
-    logError('useProfile.getProfileData', error);
+  const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
+  const { avatar, coverImage, ...other } = res.data.getProfile || res.data.resolveProfile;
+  const images: { avatar: string; coverImage: string } = {
+    avatar: '',
+    coverImage: '',
+  };
+  if (avatar) {
+    images.avatar = getMediaUrl(avatar);
   }
+  if (coverImage) {
+    images.coverImage = getMediaUrl(coverImage);
+  }
+  return { ...images, ...other, ...modStatus[0] };
 };
 
 export function useGetProfile(pubKey: string, loggedUser?: string, enabler = true) {
   return useQuery([PROFILE_KEY, pubKey], () => getProfileData({ pubKey, loggedUser }), {
     enabled: !!pubKey && enabler,
     keepPreviousData: true,
+    onError: (err: Error) => logError('useProfile.getProfileData', err),
   });
 }
 
 const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClient) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.entries.getEntry(entryId));
-    const authorCache = queryClient.getQueryData<IProfileData>([
-      PROFILE_KEY,
-      res?.data?.getPost?.author?.pubKey,
-    ]);
-    if (authorCache) {
-      return authorCache;
-    }
-    const { avatar, coverImage, ...other } = res.data.getPost.author;
-    const images: { avatar?: string; coverImage?: string } = {};
-    if (avatar) {
-      images.avatar = getMediaUrl(avatar);
-    }
-    if (coverImage) {
-      images.coverImage = getMediaUrl(coverImage);
-    }
-    return { ...images, ...other };
-  } catch (error) {
-    logError('useProfile.getEntryAuthor', error);
+  const res = await lastValueFrom(sdk.api.entries.getEntry(entryId));
+  const authorCache = queryClient.getQueryData<IProfileData>([
+    PROFILE_KEY,
+    res?.data?.getPost?.author?.pubKey,
+  ]);
+  if (authorCache) {
+    return authorCache;
   }
+  const { avatar, coverImage, ...other } = res.data.getPost.author;
+  const images: { avatar?: string; coverImage?: string } = {};
+  if (avatar) {
+    images.avatar = getMediaUrl(avatar);
+  }
+  if (coverImage) {
+    images.coverImage = getMediaUrl(coverImage);
+  }
+  return { ...images, ...other };
 };
 
 export function useGetEntryAuthor(entryId: string) {
@@ -93,18 +86,15 @@ export function useGetEntryAuthor(entryId: string) {
     {
       enabled: !!entryId,
       keepPreviousData: true,
+      onError: (err: Error) => logError('useProfile.getEntryAuthor', err),
     },
   );
 }
 
 const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.profile.getFollowers(pubKey, limit, offset));
-    return res.data.getFollowers;
-  } catch (error) {
-    logError('useProfile.getFollowers', error);
-  }
+  const res = await lastValueFrom(sdk.api.profile.getFollowers(pubKey, limit, offset));
+  return res.data.getFollowers;
 };
 
 export function useFollowers(pubKey: string, limit: number, offset?: number) {
@@ -119,18 +109,15 @@ export function useFollowers(pubKey: string, limit: number, offset?: number) {
       getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
+      onError: (err: Error) => logError('useProfile.getFollowers', err),
     },
   );
 }
 
 const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.profile.getFollowing(pubKey, limit, offset));
-    return res.data.getFollowing;
-  } catch (error) {
-    logError('useProfile.getFollowing', error);
-  }
+  const res = await lastValueFrom(sdk.api.profile.getFollowing(pubKey, limit, offset));
+  return res.data.getFollowing;
 };
 
 export function useFollowing(pubKey: string, limit: number, offset?: number) {
@@ -145,28 +132,25 @@ export function useFollowing(pubKey: string, limit: number, offset?: number) {
       getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
+      onError: (err: Error) => logError('useProfile.getFollowing', err),
     },
   );
 }
 
 const getInterests = async (pubKey: string) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(sdk.api.profile.getInterests(pubKey));
+  const res = await lastValueFrom(sdk.api.profile.getInterests(pubKey));
 
-    const getTagCalls = res.data.getInterests.map(interest => {
-      return sdk.api.tags.getTag(interest);
-    });
+  const getTagCalls = res.data.getInterests.map(interest => {
+    return sdk.api.tags.getTag(interest);
+  });
 
-    if (getTagCalls.length) {
-      const tagsRes = await lastValueFrom(forkJoin(getTagCalls));
+  if (getTagCalls.length) {
+    const tagsRes = await lastValueFrom(forkJoin(getTagCalls));
 
-      return tagsRes.map(res => res.data.getTag);
-    }
-    return [];
-  } catch (error) {
-    logError('useProfile.getInterests', error);
+    return tagsRes.map(res => res.data.getTag);
   }
+  return [];
 };
 
 /**
@@ -177,6 +161,7 @@ export function useInterests(pubKey) {
   return useQuery([INTERESTS_KEY, pubKey], () => getInterests(pubKey), {
     enabled: !!pubKey,
     keepPreviousData: true,
+    onError: (err: Error) => logError('useProfile.getInterests', err),
   });
 }
 

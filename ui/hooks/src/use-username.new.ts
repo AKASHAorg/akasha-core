@@ -196,16 +196,12 @@ export function useEnsByAddress(ethAddress: string) {
     [GET_ENS_BY_ADDRESS_KEY, ethAddress],
     async () => {
       const sdk = getSDK();
-      try {
-        const res = await sdk.api.ens.resolveAddress(ethAddress);
-        return res.data;
-      } catch (error) {
-        logError('useUsername.useEnsByAddress', error);
-        throw error;
-      }
+      const res = await sdk.api.ens.resolveAddress(ethAddress);
+      return res.data;
     },
     {
       enabled: !!ethAddress,
+      onError: (err: Error) => logError('useUsername.useEnsByAddress', err),
     },
   );
 }

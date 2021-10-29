@@ -18,7 +18,7 @@ export interface ConfirmationModalProps {
   /**
    * pass the errorState into this prop
    */
-  errors: Record<string, { error: Error; critical: boolean }>;
+  error?: Error | null;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = props => {
@@ -34,12 +34,12 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = props => {
               {props.textDetails}
             </Text>
           </Box>
-          <ErrorInfoCard errors={props.errors}>
-            {messages => {
-              if (messages) {
+          <ErrorInfoCard error={props.error as Error | null}>
+            {message => {
+              if (message) {
                 return (
                   <>
-                    <div>{messages}</div>
+                    <div>{message}</div>
                     <Button label={props.closeLabel} onClick={props.onClose} />
                   </>
                 );

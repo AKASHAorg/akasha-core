@@ -3,7 +3,6 @@ import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
@@ -18,11 +17,6 @@ export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
 export const CREATE_POST_MUTATION_KEY = 'CreatePost';
 
-export interface Publish_Options {
-  data: DataProviderInput[];
-  post: { title?: string; tags?: string[]; quotes?: string[] };
-}
-
 export type usePostParam = {
   postId: string;
   loggedUser?: string;
@@ -31,22 +25,18 @@ export type usePostParam = {
 
 const getPosts = async (queryClient: QueryClient, limit: number, offset?: string) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(
-      sdk.api.entries.getEntries({
-        limit: limit,
-        offset: offset,
-      }),
-    );
-    return {
-      ...res.data.posts,
-      results: res.data.posts.results.map(post => {
-        return post._id;
-      }),
-    };
-  } catch (error) {
-    logError('usePosts.getPosts', error);
-  }
+  const res = await lastValueFrom(
+    sdk.api.entries.getEntries({
+      limit: limit,
+      offset: offset,
+    }),
+  );
+  return {
+    ...res.data.posts,
+    results: res.data.posts.results.map(post => {
+      return post._id;
+    }),
+  };
 };
 
 // hook for fetching feed data
@@ -62,29 +52,26 @@ export function useInfinitePosts(limit: number, offset?: string) {
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       keepPreviousData: true,
+      onError: (err: Error) => logError('usePosts.getPosts', err),
     },
   );
 }
 
 const getPostsByTag = async (name: string, limit: number, offset?: string) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(
-      sdk.api.entries.entriesByTag({
-        name: name,
-        limit: limit,
-        offset: offset,
-      }),
-    );
-    return {
-      ...res.data.getPostsByTag,
-      results: res.data.getPostsByTag.results.map(post => {
-        return post._id;
-      }),
-    };
-  } catch (error) {
-    logError('usePosts.getPostsByTag', error);
-  }
+  const res = await lastValueFrom(
+    sdk.api.entries.entriesByTag({
+      name: name,
+      limit: limit,
+      offset: offset,
+    }),
+  );
+  return {
+    ...res.data.getPostsByTag,
+    results: res.data.getPostsByTag.results.map(post => {
+      return post._id;
+    }),
+  };
 };
 
 export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
@@ -96,6 +83,7 @@ export function useInfinitePostsByTag(name: string, limit: number, offset?: stri
       getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
+      onError: (err: Error) => logError('usePosts.getPostsByTag', err),
       // keepPreviousData: true,
     },
   );
@@ -103,24 +91,19 @@ export function useInfinitePostsByTag(name: string, limit: number, offset?: stri
 
 const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
-  try {
-    const res = await lastValueFrom(
-      sdk.api.entries.entriesByAuthor({
-        pubKey: pubKey,
-        limit: limit,
-        offset: offset,
-      }),
-    );
-    return {
-      ...res.data.getPostsByAuthor,
-      results: res.data.getPostsByAuthor.results.map(post => {
-        return post._id;
-      }),
-    };
-  } catch (error) {
-    logError('usePosts.getPostsByAuthor', error);
-    throw error;
-  }
+  const res = await lastValueFrom(
+    sdk.api.entries.entriesByAuthor({
+      pubKey: pubKey,
+      limit: limit,
+      offset: offset,
+    }),
+  );
+  return {
+    ...res.data.getPostsByAuthor,
+    results: res.data.getPostsByAuthor.results.map(post => {
+      return post._id;
+    }),
+  };
 };
 
 export function useInfinitePostsByAuthor(
@@ -137,34 +120,29 @@ export function useInfinitePostsByAuthor(
       getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: enabled,
       keepPreviousData: true,
+      onError: (err: Error) => logError('usePosts.getPostsByAuthor', err),
     },
   );
 }
 
 const getPost = async (postID: string, loggedUser?: string) => {
   const sdk = getSDK();
-
-  try {
-    const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
-    // check entry's moderation status
-    const modStatus = await checkStatus({
-      user: loggedUser || user?.data?.pubKey || '',
-      contentIds: [postID],
-    });
-    const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
-    const modStatusAuthor = await checkStatus({
-      user: loggedUser || user?.data?.pubKey || '',
-      contentIds: [res.data?.getPost?.author?.pubKey],
-    });
-    return {
-      ...res.data.getPost,
-      ...modStatus[0],
-      author: { ...res.data.getPost.author, ...modStatusAuthor[0] },
-    };
-  } catch (error) {
-    logError('usePosts.getPost', error);
-    throw error;
-  }
+  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+  // check entry's moderation status
+  const modStatus = await checkStatus({
+    user: loggedUser || user?.data?.pubKey || '',
+    contentIds: [postID],
+  });
+  const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
+  const modStatusAuthor = await checkStatus({
+    user: loggedUser || user?.data?.pubKey || '',
+    contentIds: [res.data?.getPost?.author?.pubKey],
+  });
+  return {
+    ...res.data.getPost,
+    ...modStatus[0],
+    author: { ...res.data.getPost.author, ...modStatusAuthor[0] },
+  };
 };
 
 // hook for fetching data for a specific postID/entryID
@@ -172,6 +150,7 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
   return useQuery([ENTRY_KEY, postId], () => getPost(postId, loggedUser), {
     enabled: !!(postId && enabler),
     keepPreviousData: true,
+    onError: (err: Error) => logError('usePosts.getPost', err),
   });
 }
 
@@ -336,6 +315,7 @@ export const useEditPost = () => {
         await queryClient.invalidateQueries([ENTRY_KEY, vars.entryID]);
         await queryClient.fetchQuery([ENTRY_KEY, vars.entryID], () => getPost(vars.entryID));
       },
+      onError: (err: Error) => logError('usePosts.editPost', err),
     },
   );
 };
