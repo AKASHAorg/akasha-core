@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { AxisLeft } from '@vx/axis';
-import { Group } from '@vx/group';
-import { GridRows } from '@vx/grid';
-import { curveCardinal } from '@vx/curve';
-import { scaleTime, scaleLinear } from '@vx/scale';
-import { LinePath, Bar } from '@vx/shape';
+import { AxisLeft } from '@visx/axis';
+import { Group } from '@visx/group';
+import { GridRows } from '@visx/grid';
+import { curveCardinal } from '@visx/curve';
+import { scaleTime, scaleLinear } from '@visx/scale';
+import { LinePath, Bar } from '@visx/shape';
 import { extent, max, bisector } from 'd3-array';
-import { useTooltip, TooltipWithBounds, defaultStyles } from '@vx/tooltip';
-import { localPoint } from '@vx/event';
+import { useTooltip, TooltipWithBounds, defaultStyles } from '@visx/tooltip';
+import { localPoint } from '@visx/event';
 import useSimpleClickAway from '../../utils/simpleClickAway';
 import { IMentionData } from '../AreaChart';
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AreaChart, { IMentionData } from '../AreaChart';
-import { ParentSize } from '@vx/responsive';
+import { ParentSize } from '@visx/responsive';
 
 const ResponsiveChart: React.FC<{ data: IMentionData[] }> = props => (
   <ParentSize>

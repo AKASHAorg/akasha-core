@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Group } from '@vx/group';
-import { curveLinear } from '@vx/curve';
-import { scaleTime, scaleLinear, TimeDomain } from '@vx/scale';
-import { AreaClosed, LinePath } from '@vx/shape';
+import { Group } from '@visx/group';
+import { curveLinear } from '@visx/curve';
+import { scaleTime, scaleLinear, TimeDomain } from '@visx/scale';
+import { AreaClosed, LinePath } from '@visx/shape';
 import { extent, max } from 'd3-array';
-import { useTooltip, TooltipWithBounds, defaultStyles } from '@vx/tooltip';
-import { localPoint } from '@vx/event';
+import { useTooltip, TooltipWithBounds, defaultStyles } from '@visx/tooltip';
+import { localPoint } from '@visx/event';
 import useSimpleClickAway from '../../utils/simpleClickAway';
 
 export interface IAreaChart {
