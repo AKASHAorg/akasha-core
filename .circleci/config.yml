@@ -39,14 +39,15 @@ jobs:
             - dependency-cache-v1-{{ checksum "package-lock.json" }}-{{ checksum "combined-package-lock.txt" }}
             - dependency-cache-v1
       - run:
-          command: |
-            sudo apt install -y git build-essential
-      - run:
           name: install-npm-wee
           command: npm install
       - run: # bootstrap packages
           name: bootstrap-install
           command: npm run bootstrap
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependency-cache-v1-{{ checksum "package-lock.json" }}-{{ checksum "combined-package-lock.txt" }}
 #      - run: # tslint check
 #          name: linter-check
 #          command: npm run linter:check
