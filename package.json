@@ -107,8 +107,8 @@
     "webpack-dev-server": "4.2.0"
   },
   "engines": {
-    "node": ">=12.13.0",
-    "npm": ">=6.12.0"
+    "node": ">=16.13.0",
+    "npm": ">=8.1.0"
   },
   "husky": {
     "hooks": {
