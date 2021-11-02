@@ -36,6 +36,9 @@ jobs:
       - run:
           name: install node-gyp
           command: 'sudo npm install -g node-gyp'
+      - run:
+          name: install sqlite3
+          command: 'sudo apt-get install libsqlite3-dev'
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           keys:
