@@ -142,7 +142,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           type="script-error"
           title={t('There was an error loading this profile')}
           details={t('We cannot show this profile right now')}
-          devDetails={profileDataQuery.error}
+          devDetails={profileDataQuery.error?.message}
         />
       )}
       {profileDataQuery.status === 'success' && profileState && (
