@@ -8,7 +8,7 @@
     "@apollo/client": "3.4.11",
     "@akashaproject/sdk-typings": "*",
     "@textile/hub": "6.3.0",
-    "@textile/threaddb": "0.2.0",
+    "@textile/threaddb": "0.2.1",
     "@metamask/detect-provider": "1.2.0",
     "@toruslabs/openlogin": "^0.10.1",
     "browser-image-resizer": "2.2.0",
