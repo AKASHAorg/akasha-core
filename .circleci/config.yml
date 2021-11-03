@@ -42,6 +42,9 @@ jobs:
             - dependency-cache-v1-{{ checksum "package-lock.json" }}-{{ checksum "combined-package-lock.txt" }}
             - dependency-cache-v1
       - run:
+          name: python-setup
+          command: 'npm config set python /usr/bin/python3'
+      - run:
           name: install-npm-wee
           command: npm ci
       - run: # bootstrap packages
