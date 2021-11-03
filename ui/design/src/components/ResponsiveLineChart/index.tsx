@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IMentionData } from '../AreaChart';
 import LineChart from '../LineChart';
-import { ParentSize } from '@vx/responsive';
+import { ParentSize } from '@visx/responsive';
 
 const ResponsiveLineChart: React.FC<{ data: IMentionData[] }> = props => (
   <ParentSize>
