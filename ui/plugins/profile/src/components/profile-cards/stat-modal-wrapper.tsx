@@ -71,10 +71,17 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     profiles = [...profiles, ...following];
   }
 
+  const profileEthAddresses = profiles.map((profile: { ethAddress: string }) => profile.ethAddress);
   // get followed profiles for logged user
   const isFollowingMultipleReq = useIsFollowingMultiple(
     loginState.ethAddress,
-    profiles.map((profile: { ethAddress: string }) => profile.ethAddress),
+    profileEthAddresses,
+    !!(
+      loginState.ethAddress &&
+      profileEthAddresses?.length &&
+      followersReq.isFetched &&
+      followingReq.isFetched
+    ),
   );
 
   const followedProfiles = isFollowingMultipleReq.data;

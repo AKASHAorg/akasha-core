@@ -42,10 +42,11 @@ const getIsFollowingMultiple = async (
 export function useIsFollowingMultiple(
   followerEthAddress: string,
   followingEthAddressArray: string[],
+  enabled = !!(followerEthAddress && followingEthAddressArray?.length),
 ) {
   const queryClient = useQueryClient();
   return useQuery(
-    [FOLLOWED_PROFILES_KEY],
+    [FOLLOWED_PROFILES_KEY, followingEthAddressArray],
     async () => {
       const followedProfiles: string[] = queryClient.getQueryData([FOLLOWED_PROFILES_KEY]) || [];
 
@@ -60,9 +61,10 @@ export function useIsFollowingMultiple(
       return [...followedProfiles, ...filteredNewProfiles];
     },
     {
-      enabled: !!(followerEthAddress && followingEthAddressArray?.length),
+      enabled,
       keepPreviousData: false,
       initialData: [],
+      onError: (err: Error) => logError('useFollow.useIsFollowingMultiple', err),
     },
   );
 }
