@@ -3,10 +3,8 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useDeletePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { useDeleteComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { useDeletePost, useDeleteComment, withProviders } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import i18next, { setupI18next } from '../i18n';
 

@@ -4,14 +4,15 @@ import DS from '@akashaproject/design-system';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ENTRY_KEY, useInfinitePostsByTag } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
   useGetTag,
-} from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
+  LoginState,
+  ENTRY_KEY,
+  useInfinitePostsByTag,
+} from '@akashaproject/ui-awf-hooks';
 import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';

@@ -13,7 +13,6 @@ import { Mutation } from 'react-query/types/core/mutation';
  * @param mutationKey - the key of the mutation to listen to
  * @returns Mutation | undefined
  */
-
 export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
   const [mutation, setMutation] = React.useState<Mutation<unknown, unknown, TVars>>();
   const queryClient = useQueryClient();

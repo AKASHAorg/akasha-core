@@ -9,15 +9,15 @@ import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import {
   useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
-} from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+  useMutationListener,
+  createPendingEntry,
+  LoginState,
+  ENTRY_KEY,
+} from '@akashaproject/ui-awf-hooks';
 
-import { useMutationListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
-import { createPendingEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ENTRY_KEY } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';

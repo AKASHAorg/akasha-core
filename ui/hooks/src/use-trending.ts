@@ -4,7 +4,7 @@ import { getMediaUrl } from './utils/media-utils';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { PROFILE_KEY } from './use-profile.new';
+import { PROFILE_KEY } from './use-profile';
 
 export const TRENDING_TAGS_KEY = 'Trending_Tags';
 export const TRENDING_PROFILES_KEY = 'Trending_Profiles';
@@ -15,6 +15,9 @@ const getTrendingTags = async () => {
   return res.data.searchTags;
 };
 
+/**
+ * Hook to fetch trending tags
+ */
 export function useTrendingTags() {
   return useQuery([TRENDING_TAGS_KEY], () => getTrendingTags(), {
     placeholderData: [],
@@ -47,6 +50,9 @@ const getTrendingProfiles = async (queryClient: QueryClient) => {
   return profiles || [];
 };
 
+/**
+ * Hook to fetch trending profiles
+ */
 export function useTrendingProfiles() {
   const queryClient = useQueryClient();
   return useQuery([TRENDING_PROFILES_KEY], () => getTrendingProfiles(queryClient), {

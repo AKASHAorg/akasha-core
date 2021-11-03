@@ -8,6 +8,11 @@ const BOOKMARKED_ENTRIES_KEY = 'AKASHA_APP_BOOKMARK_ENTRIES';
 const BOOKMARK_SAVE_KEY = 'BOOKMARK_SAVE';
 const entriesBookmarks = 'entries-bookmarks';
 
+/**
+ * Hook for gettting a user's saved posts and comments
+ * @param loggedEthAddress - currently logged in user's ethereum address
+ * @param enabler - flag for allowing the query
+ */
 export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
   return useQuery(
     [BOOKMARKED_ENTRIES_KEY],
@@ -35,7 +40,7 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
   );
 }
 
-/*
+/**
  * Hook used to save bookmarks
  * can be used to bookmark replies and posts (itemType is passed to mutate()).
  */
@@ -82,6 +87,9 @@ export function useSaveBookmark() {
   );
 }
 
+/**
+ * Hook used to delete a bookmark
+ */
 export function useDeleteBookmark() {
   const sdk = getSDK();
   const queryClient = useQueryClient();

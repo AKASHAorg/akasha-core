@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18next, { setupI18next } from '../i18n';
 import singleSpaReact from 'single-spa-react';
-import { RootComponentProps, IAkashaError } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, useRouteMatch, Route } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
-import { useGetEntryAuthor } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import {
+  useGetEntryAuthor,
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+  useGetLogin,
+  withProviders,
+} from '@akashaproject/ui-awf-hooks';
 import routes, { POST } from '../routes';
 
 const { Box, ProfileMiniCard } = DS;

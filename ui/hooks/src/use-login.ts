@@ -3,7 +3,7 @@ import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import { useGlobalLogin } from './';
+import { useGlobalLogin } from '.';
 import { logError } from './utils/error-handler';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
@@ -28,6 +28,10 @@ const initialData = {
   isSigningIn: false,
 };
 
+/**
+ * Hook for retrieving the current authentication state of the user
+ * @param onError - outside error handler
+ */
 export function useGetLogin(onError?: (error: Error) => void) {
   const queryClient = useQueryClient();
 
@@ -86,6 +90,10 @@ export function useGetLogin(onError?: (error: Error) => void) {
   );
 }
 
+/**
+ * Hook to sign in a user
+ * @param onError - outside error handler
+ */
 export function useLogin(onError?: (err: Error) => void) {
   const sdk = getSDK();
   return useMutation(
@@ -114,6 +122,10 @@ export function useLogin(onError?: (err: Error) => void) {
     },
   );
 }
+
+/**
+ * Hook to sign out the current user
+ */
 export function useLogout() {
   const queryClient = useQueryClient();
   const sdk = getSDK();
@@ -137,7 +149,10 @@ export function useLogout() {
   );
 }
 
-// hook to check if an ethAddress is already registered
+/**
+ * Hook to check if a user is already registered
+ * @param ethAddress - ethereum address to check for
+ */
 export function useCheckSignup(ethAddress) {
   const sdk = getSDK();
   return useQuery(

@@ -7,13 +7,16 @@ import {
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import {
+  useCheckNewNotifications,
+  useGetProfile,
+  useGetLogin,
+  useLogout,
+  useCheckModerator,
+} from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
-import { useGetLogin, useLogout } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 

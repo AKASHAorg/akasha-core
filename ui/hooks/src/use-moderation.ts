@@ -5,9 +5,9 @@ import getSDK from '@akashaproject/awf-sdk';
 import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 import constants from './constants';
-import { ENTRY_KEY } from './use-posts.new';
-import { PROFILE_KEY } from './use-profile.new';
-import { COMMENT_KEY } from './use-comments.new';
+import { ENTRY_KEY } from './use-posts';
+import { PROFILE_KEY } from './use-profile';
+import { COMMENT_KEY } from './use-comments';
 import { logError } from './utils/error-handler';
 import {
   createModeration,
@@ -67,7 +67,10 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
   }
 };
 
-function useModeration() {
+/**
+ * Hook for creating a moderation decision
+ */
+export function useModeration() {
   const queryClient = useQueryClient();
   const sdk = getSDK();
   return useMutation((param: UseModerationParam) => createModerationMutation(param), {
@@ -122,6 +125,9 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
   }
 };
 
+/**
+ * Hook for reporting a post, reply or account
+ */
 export function useReport() {
   const queryClient = useQueryClient();
   return useMutation((param: UseModerationParam) => createReportMutation(param), {
@@ -195,7 +201,10 @@ export function useModerationStatus(
   );
 }
 
-// check moderator status
+/**
+ * Hook to check if a user is a moderator
+ * @param loggedUser - textile public key of the user
+ */
 export function useCheckModerator(loggedUser: string) {
   return useQuery([CHECK_MODERATOR_KEY, loggedUser], () => getModeratorStatus(loggedUser), {
     enabled: !!loggedUser,
@@ -204,7 +213,9 @@ export function useCheckModerator(loggedUser: string) {
   });
 }
 
-// get moderation counters
+/**
+ * Hook to get moderation counters
+ */
 export function useGetCount() {
   return useQuery([MODERATION_ITEMS_COUNT_KEY], () => getModerationCounters(), {
     initialData: { delisted: 0, kept: 0, pending: 0 },
@@ -212,7 +223,10 @@ export function useGetCount() {
   });
 }
 
-// get flags per reported entry
+/**
+ * Hook to get report flags for a specific entry
+ * @param entryId - id of the post
+ */
 export function useGetFlags(entryId: string) {
   return useQuery([MODERATION_ITEM_FLAGS_KEY, entryId], () => getEntryReports(entryId), {
     enabled: !!entryId,
@@ -240,7 +254,11 @@ export function useInfiniteLog(limit: number, offset?: string) {
   );
 }
 
-// get pending moderation items
+/**
+ * Hook to get pending moderated items
+ * @param limit - number of items per page
+ * @param offset - index of query offset
+ */
 export function useInfinitePending(limit: number, offset?: string) {
   return useInfiniteQuery(
     PENDING_ITEMS_KEY,
@@ -255,7 +273,11 @@ export function useInfinitePending(limit: number, offset?: string) {
   );
 }
 
-// get kept moderation items
+/**
+ * Hook to get kept moderated items
+ * @param limit - number of items per page
+ * @param offset - index of query offset
+ */
 export function useInfiniteKept(limit: number, offset?: string) {
   return useInfiniteQuery(
     KEPT_ITEMS_KEY,
@@ -275,7 +297,11 @@ export function useInfiniteKept(limit: number, offset?: string) {
   );
 }
 
-// get delisted moderation items
+/**
+ * Hook to get delisted moderated items
+ * @param limit - number of items per page
+ * @param offset - index of query offset
+ */
 export function useInfiniteDelisted(limit: number, offset?: string) {
   return useInfiniteQuery(
     DELISTED_ITEMS_KEY,
@@ -294,5 +320,3 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
     },
   );
 }
-
-export default useModeration;

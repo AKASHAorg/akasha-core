@@ -5,8 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import { useGetLogin, useGetProfile } from '@akashaproject/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { Box } = DS;
