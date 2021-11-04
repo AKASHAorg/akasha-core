@@ -64,12 +64,12 @@ const withLinks = (editor: Editor, getLinkPreview?: (url: string) => any) => {
   };
 
   editor.insertText = async text => {
-    if (text && isUrl(text)) {
+    if (text && isUrl(text.trim())) {
       if (getLinkPreview && typeof getLinkPreview === 'function') {
-        CustomEditor.insertLink(editor, { url: text });
+        CustomEditor.insertLink(editor, { url: text.trim() });
         await getLinkPreview(text);
       } else {
-        CustomEditor.insertLink(editor, { url: text });
+        CustomEditor.insertLink(editor, { url: text.trim() });
       }
     } else {
       insertText(text);
@@ -79,12 +79,12 @@ const withLinks = (editor: Editor, getLinkPreview?: (url: string) => any) => {
   editor.insertData = async data => {
     const text = data.getData('text/plain');
 
-    if (text && isUrl(text)) {
+    if (text && isUrl(text.trim())) {
       if (getLinkPreview && typeof getLinkPreview === 'function') {
-        CustomEditor.insertLink(editor, { url: text });
+        CustomEditor.insertLink(editor, { url: text.trim() });
         await getLinkPreview(text);
       } else {
-        CustomEditor.insertLink(editor, { url: text });
+        CustomEditor.insertLink(editor, { url: text.trim() });
       }
     } else {
       insertData(data);

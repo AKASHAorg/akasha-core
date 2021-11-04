@@ -3,7 +3,7 @@ import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { PROFILE_KEY } from './use-profile.new';
+import { PROFILE_KEY } from './use-profile';
 import { logError } from './utils/error-handler';
 
 export const MENTION_SEARCH_KEY = 'MENTION_SEARCH_KEY';
@@ -31,6 +31,10 @@ const getMentions = async (mention: string, queryClient: QueryClient) => {
   });
 };
 
+/**
+ * Hook to search for profiles
+ * @param mention - profile name to search for
+ */
 export function useMentionSearch(mention: string) {
   const queryClient = useQueryClient();
   return useQuery([MENTION_SEARCH_KEY, mention], () => getMentions(mention, queryClient), {

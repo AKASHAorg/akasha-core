@@ -53,6 +53,10 @@ const getNotifications = async () => {
   return completeMessages;
 };
 
+/**
+ * Hook to get a user's notifications
+ * @param loggedEthAddress - currently logged in user's eth address
+ */
 export function useFetchNotifications(loggedEthAddress: string) {
   return useQuery([NOTIFICATIONS_KEY], () => getNotifications(), {
     enabled: !!loggedEthAddress,
@@ -61,6 +65,10 @@ export function useFetchNotifications(loggedEthAddress: string) {
   });
 }
 
+/**
+ * Hook to mark a notification as read
+ * pass the messageId to the mutate function
+ */
 export function useMarkAsRead() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -104,6 +112,10 @@ const checkNewNotifications = async () => {
   return res.data;
 };
 
+/**
+ * Hook to check for new notifications
+ * @param loggedEthAddress - currently logged in user's eth address
+ */
 export function useCheckNewNotifications(loggedEthAddress: string) {
   return useQuery([HAS_NEW_NOTIFICATIONS_KEY], () => checkNewNotifications(), {
     enabled: !!loggedEthAddress,

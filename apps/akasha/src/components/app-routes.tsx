@@ -2,9 +2,8 @@ import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import DS from '@akashaproject/design-system';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useGetLogin, useGetProfile } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 import FeedPage from './feed-page/feed-page';

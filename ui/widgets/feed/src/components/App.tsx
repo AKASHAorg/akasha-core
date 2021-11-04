@@ -10,7 +10,7 @@ import i18n from '../i18n';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { BrowserRouter } from 'react-router-dom';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { LoginState } from '@akashaproject/ui-awf-hooks';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 

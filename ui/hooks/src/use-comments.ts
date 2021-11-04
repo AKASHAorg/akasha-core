@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-import { catchError, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { buildPublishObject } from './utils/entry-utils';
@@ -14,7 +14,7 @@ import {
   Comment_Response,
   Post_Response,
 } from '@akashaproject/sdk-typings/lib/interfaces/responses';
-import { ENTRY_KEY } from './use-posts.new';
+import { ENTRY_KEY } from './use-posts';
 
 export const COMMENT_KEY = 'Comment';
 export const COMMENTS_KEY = 'Comments';
@@ -39,6 +39,12 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
   };
 };
 
+/**
+ * Hook to get the comments for a specific post
+ * @param limit - number of comments to fetch on a page
+ * @param postID - id of the parent post
+ * @param offset - id of where to start
+ */
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
@@ -76,7 +82,11 @@ const getComment = async (commentID): Promise<CommentResponse> => {
   };
 };
 
-// hook for fetching data for a specific commentID/entryID
+/**
+ * Hook for fetching data for a specific comment
+ * @param commentID - id of comment to fetch data for
+ * @param enabler - flag for allowing the query
+ */
 export function useComment(commentID: string, enabler = true) {
   const queryClient = useQueryClient();
   return useQuery([COMMENT_KEY, commentID], () => getComment(commentID), {
@@ -103,6 +113,11 @@ const deleteComment = async (commentId: string) => {
   }
   throw new Error('Cannot delete this comment. Please try again later.');
 };
+
+/**
+ * Hook for deleting a specific comment
+ * @param commentID - id of the comment to be deleted
+ */
 export function useDeleteComment(commentID: string) {
   const queryClient = useQueryClient();
   return useMutation((commentID: string) => deleteComment(commentID), {
@@ -153,6 +168,9 @@ export function useDeleteComment(commentID: string) {
   });
 }
 
+/**
+ * Hook for creating a new comment
+ */
 export function useCreateComment() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -195,7 +213,9 @@ export function useCreateComment() {
   );
 }
 
-// hook used for editing a comment
+/**
+ * Hook for editing a comment
+ */
 export function useEditComment(commentID: string, hasCommentData: boolean) {
   const sdk = getSDK();
   const queryClient = useQueryClient();

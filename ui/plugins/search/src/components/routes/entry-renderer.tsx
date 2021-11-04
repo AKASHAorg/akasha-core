@@ -1,14 +1,13 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import { useGetBookmarks, useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks';
 
 const { EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 

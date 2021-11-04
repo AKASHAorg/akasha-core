@@ -106,6 +106,13 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
   };
 };
 
+/**
+ * Hook for fetching search results for a specific query
+ * @param searchQuery - query for the search
+ * @param loggedUser - pubKey of the logged in user
+ * @param enabler - flag to allow the query
+ * @returns search results for posts, comments, tags and profiles
+ */
 export function useSearch(searchQuery: string, loggedUser?: string, enabler = true) {
   return useQuery([SEARCH_KEY, searchQuery], () => getSearch(searchQuery, loggedUser), {
     initialData: { profiles: [], entries: [], comments: [], tags: [] },

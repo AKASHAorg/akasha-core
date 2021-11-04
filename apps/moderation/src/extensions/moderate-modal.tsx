@@ -5,10 +5,9 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { useModeration, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useModeration, withProviders, useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
 import i18n, { setupI18next } from '../i18n';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { ModerateModal } = DS;
 

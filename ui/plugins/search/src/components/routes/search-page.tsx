@@ -10,18 +10,14 @@ import {
   useGetBookmarks,
   useSaveBookmark,
   useDeleteBookmark,
-} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
-import {
   useTagSubscriptions,
   useToggleTagSubscription,
-} from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
-import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { useSearch } from '@akashaproject/ui-awf-hooks/lib/use-search.new';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+  useSearch,
+  LoginState,
+} from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';

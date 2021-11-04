@@ -5,22 +5,21 @@ import { IContentClickDetails } from '@akashaproject/design-system/lib/component
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { useComment, useEditComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
-import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
-import { useGetBookmarks } from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
 import {
+  usePost,
+  useComment,
+  useEditComment,
+  mapEntry,
+  useGetBookmarks,
   useFollow,
   useIsFollowingMultiple,
   useUnfollow,
-} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import {
   getLinkPreview,
   uploadMediaToTextile,
-} from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
-import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
+  LoginState,
+  useTagSearch,
+  useMentionSearch,
+} from '@akashaproject/ui-awf-hooks';
 
 const {
   Box,
