@@ -6,7 +6,7 @@ import {
   ProfileProviders,
 } from '@akashaproject/ui-awf-typings/lib/profile';
 import { logError } from './utils/error-handler';
-import { PROFILE_KEY } from './use-profile.new';
+import { PROFILE_KEY } from './use-profile';
 import { lastValueFrom } from 'rxjs';
 
 export const UPDATE_USERNAME_PROVIDER_KEY = 'UPDATE_USERNAME_PROVIDER';
@@ -62,6 +62,11 @@ const updateUsernameProvider = async (
     throw error;
   }
 };
+
+/**
+ * Hook to register a username for the user
+ * @param pubKey - textile public key of the user
+ */
 export function useUpdateUsernameProvider(pubKey?: string) {
   const queryClient = useQueryClient();
   return useMutation(
@@ -132,6 +137,10 @@ const registerENS = async ({ userName }: { userName: string }) => {
   }
 };
 
+/**
+ * Hook to register a new ENS name
+ * @param pubKey - textile public key of the user
+ */
 export function useEnsRegistration(pubKey?: string) {
   const queryClient = useQueryClient();
   return useMutation(registerENS, {
@@ -185,12 +194,20 @@ const validateUsername = async (username: string) => {
   }
 };
 
+/**
+ * Hook to check if a username is available
+ * @param username - name to check for
+ */
 export function useUsernameValidation(username: string) {
   return useQuery([VALIDATE_USERNAME_KEY, username], async () => validateUsername(username), {
     enabled: !!username,
   });
 }
 
+/**
+ * Hook to resolve an ethAddress to an ENS name
+ * @param ethAddress - ethereum address to resolve
+ */
 export function useEnsByAddress(ethAddress: string) {
   return useQuery(
     [GET_ENS_BY_ADDRESS_KEY, ethAddress],

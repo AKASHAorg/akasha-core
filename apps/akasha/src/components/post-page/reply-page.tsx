@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
+import { useComment } from '@akashaproject/ui-awf-hooks';
 import routes, { POST } from '../../routes';
 
 const ReplyPage: React.FC<any> = props => {

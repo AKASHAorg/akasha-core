@@ -1,11 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import {
-  useFetchNotifications,
-  useMarkAsRead,
-} from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
+import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard } = DS;
@@ -36,7 +32,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       <Helmet>
         <title>{t('My notifications')}</title>
       </Helmet>
-      <ErrorInfoCard error={notifReq?.error}>
+      <ErrorInfoCard error={notifReq?.error as Error}>
         {message => (
           <>
             {message && (

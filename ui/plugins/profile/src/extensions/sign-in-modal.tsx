@@ -6,7 +6,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useGetLogin, useLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useGetLogin, useLogin } from '@akashaproject/ui-awf-hooks';
 import i18n, { setupI18next } from '../i18n';
 
 const { SignInModal } = DS;

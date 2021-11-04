@@ -1,17 +1,19 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+import {
+  useIsFollowingMultiple,
+  usePost,
+  useComment,
+  mapEntry,
+  LoginState,
+} from '@akashaproject/ui-awf-hooks';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
-import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 
 import routes, { HOME, HISTORY, UNAUTHENTICATED, rootRoute } from '../routes';
 

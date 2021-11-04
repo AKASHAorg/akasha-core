@@ -1,10 +1,7 @@
 import React from 'react';
 
 import DS from '@akashaproject/design-system';
-import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { useComment } from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+import { usePost, useComment, useGetProfile, mapEntry } from '@akashaproject/ui-awf-hooks';
 import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 import Content from './content';

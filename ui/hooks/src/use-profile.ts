@@ -49,6 +49,12 @@ const getProfileData = async (payload: {
   return { ...images, ...other, ...modStatus[0] };
 };
 
+/**
+ * Hook to get a user's profile data
+ * @param pubKey - the textile generated public key of the user
+ * @param loggedUser - the textile generated public key of the currently logged in user
+ * @param enabler - flag to allow the query
+ */
 export function useGetProfile(pubKey: string, loggedUser?: string, enabler = true) {
   return useQuery([PROFILE_KEY, pubKey], () => getProfileData({ pubKey, loggedUser }), {
     enabled: !!pubKey && enabler,
@@ -78,6 +84,10 @@ const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClie
   return { ...images, ...other };
 };
 
+/**
+ * Hook to get an entry author's profile data
+ * @param entryId - the id of the specific post
+ */
 export function useGetEntryAuthor(entryId: string) {
   const queryClient = useQueryClient();
   return useQuery(
@@ -97,6 +107,12 @@ const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
   return res.data.getFollowers;
 };
 
+/**
+ * Hook to get followers for a user
+ * @param pubKey - textile generated public key of the user
+ * @param limit - number of followers to return per page
+ * @param offset - offset for query
+ */
 export function useFollowers(pubKey: string, limit: number, offset?: number) {
   return useInfiniteQuery(
     [FOLLOWERS_KEY, pubKey],
@@ -120,6 +136,12 @@ const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
   return res.data.getFollowing;
 };
 
+/**
+ * Hook to get a list of profiles following the user
+ * @param pubKey - textile generated public key of the user
+ * @param limit - number of profiles following the user to return per page
+ * @param offset - offset for query
+ */
 export function useFollowing(pubKey: string, limit: number, offset?: number) {
   return useInfiniteQuery(
     [FOLLOWING_KEY, pubKey],
@@ -155,7 +177,7 @@ const getInterests = async (pubKey: string) => {
 
 /**
  * Fetch the list of subscribed tags for a specific pub key
- * @param pubKey - the pub key of the user
+ * @param pubKey - the textile generated public key of the user
  */
 export function useInterests(pubKey) {
   return useQuery([INTERESTS_KEY, pubKey], () => getInterests(pubKey), {
@@ -302,6 +324,10 @@ const completeProfileUpdate = async (pubKey: string, queryClient: QueryClient) =
   return;
 };
 
+/**
+ * Hook to update a user's profile data
+ * @param pubKey - the textile generated public key of the user
+ */
 export function useProfileUpdate(pubKey: string) {
   const queryClient = useQueryClient();
 

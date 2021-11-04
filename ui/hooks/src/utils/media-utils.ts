@@ -9,6 +9,9 @@ export interface IConfig {
   mimeType?: string;
 }
 
+/**
+ * Utility to append an ipfs gateway to an ipfs hash
+ */
 export const getMediaUrl = (hash?: string, data?: any) => {
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;

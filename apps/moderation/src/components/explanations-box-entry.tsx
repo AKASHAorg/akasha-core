@@ -1,8 +1,7 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-import { EntryReport } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
+import { useGetProfile, EntryReport } from '@akashaproject/ui-awf-hooks';
 
 const { Text } = DS;
 
