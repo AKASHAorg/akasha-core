@@ -87,7 +87,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   return (
     <Box>
-      {!selected && (
+      {((!selected && isMobile) || !isMobile) && (
         <SwitchCard
           count={
             activeButton === ButtonValues.ALL
