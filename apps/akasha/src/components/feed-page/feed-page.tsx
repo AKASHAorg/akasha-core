@@ -23,7 +23,7 @@ import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard } = DS;
+const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
@@ -112,13 +112,24 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      {loginState?.ethAddress && (
+      {loginState?.ethAddress ? (
         <EditorPlaceholder
           ethAddress={loginState?.ethAddress}
           onClick={handleShowEditor}
           avatar={loggedProfileData?.avatar}
           style={{ marginBottom: '0.5rem' }}
         />
+      ) : (
+        <Box margin={{ bottom: 'medium' }}>
+          <LoginCTAWidgetCard
+            title={`🚀 ${t(' Welcome to Ethereum World!')}`}
+            subtitle={t('We are in private alpha at this time. ')}
+            beforeLinkLabel={t("If you'd like to participate,")}
+            afterLinkLabel={t("and we'll add you to our wait list!")}
+            writeToUsLabel={t('write to us')}
+            writeToUsUrl={'mailto:alpha@ethereum.world'}
+          />
+        </Box>
       )}
       {createPostMutation && createPostMutation.state.status === 'error' && (
         <EntryPublishErrorCard message={t('Cannot publish this entry. Please try again later!')} />
