@@ -92,6 +92,7 @@ const getTag = async (tagName: string) => {
   const sdk = getSDK();
 
   const res = await lastValueFrom(sdk.api.tags.getTag(tagName));
+
   if (res.data.getTag) {
     return res.data.getTag;
   }

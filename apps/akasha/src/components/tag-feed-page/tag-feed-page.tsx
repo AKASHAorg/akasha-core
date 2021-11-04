@@ -16,7 +16,7 @@ import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
-const { Box, TagProfileCard, Helmet, styled, ErrorLoader } = DS;
+const { Box, TagProfileCard, Helmet, styled, ErrorLoader, Spinner } = DS;
 
 interface ITagFeedPage {
   loggedProfileData?: IProfileData;
@@ -102,52 +102,55 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     }
     toggleTagSubscriptionReq.mutate(tagName);
   };
+
   return (
     <Box fill="horizontal">
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
-      {getTagQuery.status === 'loading' && <></>}
+      {getTagQuery.status === 'loading' && <Spinner />}
       {getTagQuery.status === 'error' && (
         <ErrorLoader
           type="script-error"
           title={t('Error loading tag data')}
-          details={getTagQuery.error}
+          details={getTagQuery.error?.message}
         />
       )}
       {getTagQuery.status === 'success' && (
-        <TagInfoCard
-          tag={getTagQuery.data}
-          subscribedTags={tagSubscriptions}
-          handleSubscribeTag={handleTagSubscribe}
-          handleUnsubscribeTag={handleTagSubscribe}
-        />
+        <>
+          <TagInfoCard
+            tag={getTagQuery.data}
+            subscribedTags={tagSubscriptions}
+            handleSubscribeTag={handleTagSubscribe}
+            handleUnsubscribeTag={handleTagSubscribe}
+          />
+          <FeedWidget
+            modalSlotId={props.layoutConfig.modalSlotId}
+            itemType={ItemTypes.ENTRY}
+            logger={props.logger}
+            onLoadMore={handleLoadMore}
+            pages={postPages}
+            getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
+            requestStatus={reqPosts.status}
+            loginState={loginState}
+            loggedProfile={loggedProfileData}
+            onNavigate={handleNavigation}
+            singleSpaNavigate={props.singleSpa.navigateToUrl}
+            navigateToModal={props.navigateToModal}
+            onLoginModalOpen={showLoginModal}
+            hasNextPage={reqPosts.hasNextPage}
+            contentClickable={true}
+            onEntryRemove={handleEntryRemove}
+            onEntryFlag={handleEntryFlag}
+            removeEntryLabel={t('Delete Post')}
+            removedByMeLabel={t('You deleted this post')}
+            removedByAuthorLabel={t('This post was deleted by its author')}
+            uiEvents={props.uiEvents}
+            itemSpacing={8}
+            i18n={i18n}
+          />
+        </>
       )}
-      <FeedWidget
-        modalSlotId={props.layoutConfig.modalSlotId}
-        itemType={ItemTypes.ENTRY}
-        logger={props.logger}
-        onLoadMore={handleLoadMore}
-        pages={postPages}
-        getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
-        requestStatus={reqPosts.status}
-        loginState={loginState}
-        loggedProfile={loggedProfileData}
-        onNavigate={handleNavigation}
-        singleSpaNavigate={props.singleSpa.navigateToUrl}
-        navigateToModal={props.navigateToModal}
-        onLoginModalOpen={showLoginModal}
-        hasNextPage={reqPosts.hasNextPage}
-        contentClickable={true}
-        onEntryRemove={handleEntryRemove}
-        onEntryFlag={handleEntryFlag}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
-        uiEvents={props.uiEvents}
-        itemSpacing={8}
-        i18n={i18n}
-      />
     </Box>
   );
 };
