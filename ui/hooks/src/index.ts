@@ -72,7 +72,6 @@ import {
   useInfiniteLog,
   useInfinitePending,
   useModeration,
-  useModerationStatus,
   useReport,
 } from './use-moderation';
 import { ICount, ILogItem, IModeratedItem, IPendingItem, EntryReport } from './moderation-requests';
@@ -171,7 +170,6 @@ export {
   useInfiniteLog,
   useInfinitePending,
   useModeration,
-  useModerationStatus,
   useReport,
   // moderation-requests
   ICount,

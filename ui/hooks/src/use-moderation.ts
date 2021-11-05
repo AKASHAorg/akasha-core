@@ -29,7 +29,6 @@ const {
   PENDING_ITEMS_KEY,
   DELISTED_ITEMS_KEY,
   CHECK_MODERATOR_KEY,
-  MODERATION_STATUS_KEY,
   MODERATION_ITEM_FLAGS_KEY,
   MODERATION_ITEMS_COUNT_KEY,
 } = constants;
@@ -94,8 +93,7 @@ export function useModeration() {
       await queryClient.refetchQueries(DELISTED_ITEMS_KEY);
       await queryClient.refetchQueries(MODERATION_ITEMS_COUNT_KEY);
     },
-    onError: (err: Error) =>
-      logError('[moderation-request.tsx]: createModerationMutation err', err),
+    onError: (err: Error) => logError('[use-moderation.ts]: useModeration err', err),
   });
 }
 
@@ -167,7 +165,7 @@ export function useReport() {
           break;
       }
     },
-    onError: (err: Error) => logError('[moderation-request.tsx]: createReportMutation err', err),
+    onError: (err: Error) => logError('[use-moderation.ts]: useReport err', err),
   });
 }
 
@@ -178,28 +176,10 @@ export const checkStatus = async (data: { user: string; contentIds: string[] }) 
 
     return response;
   } catch (error) {
-    logError('[moderation-request.tsx]: checkStatus err', error);
+    logError('[use-moderation.ts]: checkStatus err', error);
     throw error;
   }
 };
-
-export function useModerationStatus(
-  resourceId: string,
-  data: {
-    user: string;
-    contentIds: string[];
-  },
-) {
-  const sdk = getSDK();
-  return useQuery(
-    [MODERATION_STATUS_KEY, resourceId, sdk.services.stash.computeKey(data)],
-    () => getEntryModerationStatus(data),
-    {
-      keepPreviousData: true,
-      enabled: !!resourceId,
-    },
-  );
-}
 
 /**
  * Hook to check if a user is a moderator
@@ -209,7 +189,7 @@ export function useCheckModerator(loggedUser: string) {
   return useQuery([CHECK_MODERATOR_KEY, loggedUser], () => getModeratorStatus(loggedUser), {
     enabled: !!loggedUser,
     keepPreviousData: true,
-    onError: (err: Error) => logError('[moderation-request.tsx]: checkModerator err', err),
+    onError: (err: Error) => logError('[use-moderation.ts]: useCheckModerator err', err),
   });
 }
 
@@ -219,23 +199,27 @@ export function useCheckModerator(loggedUser: string) {
 export function useGetCount() {
   return useQuery([MODERATION_ITEMS_COUNT_KEY], () => getModerationCounters(), {
     initialData: { delisted: 0, kept: 0, pending: 0 },
-    onError: (err: Error) => logError('[moderation-request.tsx]: useGetCount err', err),
+    onError: (err: Error) => logError('[use-moderation.ts]: useGetCount err', err),
   });
 }
 
 /**
  * Hook to get report flags for a specific entry
- * @param entryId - id of the post
+ * @param entryId - id of the entry
  */
 export function useGetFlags(entryId: string) {
   return useQuery([MODERATION_ITEM_FLAGS_KEY, entryId], () => getEntryReports(entryId), {
     enabled: !!entryId,
     keepPreviousData: true,
-    onError: (err: Error) => logError('[moderation-request.tsx]: useGetFlags err', err),
+    onError: (err: Error) => logError('[use-moderation.ts]: useGetFlags err', err),
   });
 }
 
-// get transparency log items
+/**
+ * Hook to get log of moderated items
+ * @param limit - number of items per page
+ * @param offset - index of query offset
+ */
 export function useInfiniteLog(limit: number, offset?: string) {
   return useInfiniteQuery(
     LOG_ITEMS_KEY,
@@ -249,13 +233,13 @@ export function useInfiniteLog(limit: number, offset?: string) {
       getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
-      onError: (err: Error) => logError('[moderation-request.tsx]: getLog err', err),
+      onError: (err: Error) => logError('[use-moderation.tsx]: useInfiniteLog err', err),
     },
   );
 }
 
 /**
- * Hook to get pending moderated items
+ * Hook to get pending moderation items
  * @param limit - number of items per page
  * @param offset - index of query offset
  */
@@ -268,7 +252,7 @@ export function useInfinitePending(limit: number, offset?: string) {
       getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
-      onError: (err: Error) => logError('[moderation-request.tsx]: getPending err', err),
+      onError: (err: Error) => logError('[use-moderation.ts]: useInfinitePending err', err),
     },
   );
 }
@@ -292,7 +276,7 @@ export function useInfiniteKept(limit: number, offset?: string) {
       getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
-      onError: (err: Error) => logError('[moderation-request.tsx]: getKept err', err),
+      onError: (err: Error) => logError('[use-moderation.ts]: useInfiniteKept err', err),
     },
   );
 }
@@ -316,7 +300,7 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
       getNextPageParam: lastPage => lastPage?.nextIndex,
       enabled: !!(offset || limit),
       keepPreviousData: true,
-      onError: (err: Error) => logError('[moderation-request.tsx]: getDelisted err', err),
+      onError: (err: Error) => logError('[use-moderation.ts]: useInfiniteDelisted err', err),
     },
   );
 }
