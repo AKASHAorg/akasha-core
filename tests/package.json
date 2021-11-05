@@ -1,0 +1,11 @@
+{
+  "name": "@akashaproject/tests",
+  "version": "0.0.1",
+  "scripts": {
+    "ethereum-world-staging": "cypress open --project ethereum-world --env configFile=staging"
+  },
+  "devDependencies": {
+    "cypress": "8.7.0",
+    "fs-extra": "10.0.0"
+  }
+}
