@@ -1,13 +1,9 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import {
-  useGetBookmarks,
-  useDeleteBookmark,
-} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
+import { useGetBookmarks, useDeleteBookmark, useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 

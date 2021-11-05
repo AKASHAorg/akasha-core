@@ -8,8 +8,8 @@ import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+  LoginState,
+} from '@akashaproject/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
 import { getUsernameTypes } from '../../utils/username-utils';

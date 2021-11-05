@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import { ILogItem } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
+import { ILogItem } from '@akashaproject/ui-awf-hooks';
 import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 export interface IDetailCard {

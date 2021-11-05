@@ -142,7 +142,7 @@ import TransparencyLogBanner from './components/TransparencyLogBanner';
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
-import { isBase64 } from './utils/string-utils';
+import { isBase64, truncateMiddle } from './utils/string-utils';
 import { formatRelativeTime } from './utils/time';
 import useIntersectionObserver from './utils/intersection-observer';
 
@@ -250,6 +250,7 @@ const exported = {
   useViewportSize,
   // VirtualList,
   isBase64,
+  truncateMiddle,
   formatImageSrc,
   formatRelativeTime,
   useIntersectionObserver,

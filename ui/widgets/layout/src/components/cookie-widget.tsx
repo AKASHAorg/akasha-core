@@ -1,6 +1,5 @@
 import DS from '@akashaproject/design-system';
-import { useAnalytics } from '@akashaproject/ui-awf-hooks';
-import { CookieConsentTypes } from '@akashaproject/ui-awf-hooks/lib/use-analytics';
+import { useAnalytics, CookieConsentTypes } from '@akashaproject/ui-awf-hooks';
 import React from 'react';
 import { Translation } from 'react-i18next';
 

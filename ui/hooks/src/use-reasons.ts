@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IAkashaError } from '@akashaproject/ui-awf-typings';
 
-import { createErrorHandler, logError } from './utils/error-handler';
+import { logError } from './utils/error-handler';
 import { getModerationReasons, Reason } from './moderation-requests';
 
 export interface UseReasonsActions {
@@ -41,7 +41,9 @@ const ReasonStateReducer = (state: IReasonsState, action: IReasonsAction) => {
   }
 };
 
-/* A hook to get predefined reasons from moderation API */
+/**
+ * A hook to get predefined reasons from moderation API
+ */
 export const useReasons = (): [string[], UseReasonsActions] => {
   const [reasonsState, dispatch] = React.useReducer(ReasonStateReducer, initialReasonstate);
 

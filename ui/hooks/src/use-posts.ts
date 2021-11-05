@@ -7,9 +7,9 @@ import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/respons
 import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { checkStatus } from './use-moderation';
-import { SEARCH_KEY } from './use-search.new';
-import { TRENDING_TAGS_KEY } from './use-trending.new';
-import { PROFILE_KEY } from './use-profile.new';
+import { SEARCH_KEY } from './use-search';
+import { TRENDING_TAGS_KEY } from './use-trending';
+import { PROFILE_KEY } from './use-profile';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
@@ -39,7 +39,9 @@ const getPosts = async (queryClient: QueryClient, limit: number, offset?: string
   };
 };
 
-// hook for fetching feed data
+/**
+ * Hook to get posts for feed, sorted chronologically
+ */
 export function useInfinitePosts(limit: number, offset?: string) {
   const queryClient = useQueryClient();
 
@@ -74,6 +76,10 @@ const getPostsByTag = async (name: string, limit: number, offset?: string) => {
   };
 };
 
+/**
+ * Hook to get posts that contain a specific tag
+ * @param name - tag name
+ */
 export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
   return useInfiniteQuery(
     [ENTRIES_BY_TAG_KEY, name],
@@ -106,6 +112,10 @@ const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) 
   };
 };
 
+/**
+ * Hook to get an author's posts
+ * @param pubKey - textile public key of the user
+ */
 export function useInfinitePostsByAuthor(
   pubKey: string,
   limit: number,
@@ -145,7 +155,11 @@ const getPost = async (postID: string, loggedUser?: string) => {
   };
 };
 
-// hook for fetching data for a specific postID/entryID
+/**
+ * Hook to get data for a specific post
+ * @param postId - id of the post
+ * @param loggedUser - pubKey of the currently logged in user
+ */
 export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
   return useQuery([ENTRY_KEY, postId], () => getPost(postId, loggedUser), {
     enabled: !!(postId && enabler),
@@ -155,11 +169,8 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
 }
 
 /**
- * Example:
- * ```
- * const delPost = useDeletePost();
- * delPost.mutate("myEntryId");
- * ```
+ * Hook to delete a post
+ * @param postID - id of the post to be deleted
  */
 export function useDeletePost(postID: string) {
   const sdk = getSDK();
@@ -217,6 +228,10 @@ export function useDeletePost(postID: string) {
   });
 }
 
+/**
+ * Hook to create a new post
+ * pass the publish data from the editor to the mutate function
+ */
 export function useCreatePost() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -261,6 +276,10 @@ const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
   };
 };
 
+/**
+ * Hook to edit a post
+ * pass the edited post data to the mutation function
+ */
 export const useEditPost = () => {
   const sdk = getSDK();
   const queryClient = useQueryClient();

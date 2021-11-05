@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
-import { PROFILE_KEY } from './use-profile.new';
+import { PROFILE_KEY } from './use-profile';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export const TAG_SUBSCRIPTIONS_KEY = 'TAG_SUBSCRIPTIONS';
@@ -15,6 +15,10 @@ const getTagSubscriptions = async () => {
   return res.data.getInterests;
 };
 
+/**
+ * Hook to get a user's subscribed tags
+ * @param loggedEthAddress - eth address of the logged in user
+ */
 export function useTagSubscriptions(loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY], () => getTagSubscriptions(), {
     initialData: [],
@@ -30,6 +34,11 @@ const getIsSubscribedToTag = async (tagName: string) => {
   return res.data;
 };
 
+/**
+ * Hook to check if a user subscribes to a tag
+ * @param tagName - name of the tag
+ * @param loggedEthAddress - eth address of the logged in user
+ */
 export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY, tagName], () => getIsSubscribedToTag(tagName), {
     enabled: !!loggedEthAddress,
@@ -38,6 +47,10 @@ export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string |
   });
 }
 
+/**
+ * Hook to toggle a user's tag subscription
+ * pass the tagName to the mutation function
+ */
 export function useToggleTagSubscription() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -92,11 +105,18 @@ const getTag = async (tagName: string) => {
   const sdk = getSDK();
 
   const res = await lastValueFrom(sdk.api.tags.getTag(tagName));
+
   if (res.data.getTag) {
     return res.data.getTag;
   }
   throw new Error('Tag not found');
 };
+
+/**
+ * Hook to get a specific tag by name
+ * @param tagName - name of the tag
+ * @param enabler - flag to allow the query
+ */
 export function useGetTag(tagName: string, enabler = true) {
   return useQuery([GET_TAG_KEY, tagName], () => getTag(tagName), {
     enabled: !!tagName && enabler,
@@ -113,6 +133,10 @@ const getTags = async tagName => {
   return res.data.searchTags;
 };
 
+/**
+ * Hook to search for tags
+ * @param tagName - name of the tag
+ */
 export function useTagSearch(tagName: string) {
   return useQuery([SEARCH_TAGS_KEY, tagName], () => getTags(tagName), {
     enabled: !!tagName,

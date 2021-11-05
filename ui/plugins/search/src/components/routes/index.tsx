@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { rootRoute } from '../../routes';
 import SearchPage from './search-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 
 const { Box } = DS;
 

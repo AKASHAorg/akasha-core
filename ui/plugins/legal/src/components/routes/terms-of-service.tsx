@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { useLegalDoc } from '@akashaproject/ui-awf-hooks/lib/use-legal.new';
+import { useLegalDoc } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps, LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
 
 const { ErrorInfoCard, ErrorLoader, MdCard } = DS;

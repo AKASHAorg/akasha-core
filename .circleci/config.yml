@@ -17,7 +17,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: cimg/node:14.15.0
+      - image: cimg/node:16.13.0
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -42,8 +42,11 @@ jobs:
             - dependency-cache-v1-{{ checksum "package-lock.json" }}-{{ checksum "combined-package-lock.txt" }}
             - dependency-cache-v1
       - run:
+          name: python-setup
+          command: 'npm config set python /usr/bin/python3'
+      - run:
           name: install-npm-wee
-          command: npm install
+          command: npm ci
       - run: # bootstrap packages
           name: bootstrap-install
           command: npm run bootstrap

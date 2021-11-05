@@ -2,9 +2,16 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
 import DS from '@akashaproject/design-system';
-import { useNetworkState } from '@akashaproject/ui-awf-hooks/lib/use-network-state.new';
+import {
+  useNetworkState,
+  useGetProfile,
+  useUpdateUsernameProvider,
+  useEnsRegistration,
+  useEnsByAddress,
+  useGetLogin,
+  withProviders,
+} from '@akashaproject/ui-awf-hooks';
 import {
   UsernameTypes,
   ProfileProviders,
@@ -12,17 +19,10 @@ import {
   ProfileProviderProperties,
 } from '@akashaproject/ui-awf-typings/lib/profile';
 import { I18nextProvider, TFunction, useTranslation } from 'react-i18next';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import {
   ENSOptionTypes,
   EnsFormOption,
 } from '@akashaproject/design-system/lib/components/EnsFormCard';
-import {
-  useUpdateUsernameProvider,
-  useEnsRegistration,
-  useEnsByAddress,
-} from '@akashaproject/ui-awf-hooks/lib/use-username.new';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { DataProviderInput } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
 import i18n, { setupI18next } from '../i18n';
 

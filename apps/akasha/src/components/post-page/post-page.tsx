@@ -9,33 +9,27 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import {
   getLinkPreview,
   uploadMediaToTextile,
-} from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-
-import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  useGetBookmarks,
-  useSaveBookmark,
-  useDeleteBookmark,
-} from '@akashaproject/ui-awf-hooks/lib/use-bookmarks.new';
-import {
-  useInfiniteComments,
-  useCreateComment,
-  COMMENT_KEY,
-} from '@akashaproject/ui-awf-hooks/lib/use-comments.new';
-import {
+  LoginState,
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
-import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
-import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+  useInfiniteComments,
+  useCreateComment,
+  COMMENT_KEY,
+  useGetBookmarks,
+  useSaveBookmark,
+  useDeleteBookmark,
+  usePost,
+  useTagSearch,
+  mapEntry,
+  useGetProfile,
+  useMentionSearch,
+} from '@akashaproject/ui-awf-hooks';
+
+import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { redirect, redirectToPost } from '../../services/routing-service';
 import routes, { POST } from '../../routes';

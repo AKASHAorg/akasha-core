@@ -4,18 +4,14 @@ import { useTranslation } from 'react-i18next';
 import {
   useTrendingTags,
   useTrendingProfiles,
-} from '@akashaproject/ui-awf-hooks/lib/use-trending.new';
-import {
   useTagSubscriptions,
   useToggleTagSubscription,
-} from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
-import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+  useGetLogin,
+} from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 

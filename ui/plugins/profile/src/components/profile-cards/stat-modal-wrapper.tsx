@@ -3,24 +3,18 @@ import singleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import { truncateMiddle } from '@akashaproject/design-system/lib/utils/string-utils';
 import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
 import {
   useFollowers,
   useFollowing,
   useInterests,
-} from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-import {
   useTagSubscriptions,
   useToggleTagSubscription,
-} from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
-
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import {
+  LoginState,
   useFollow,
   useIsFollowingMultiple,
   useUnfollow,
-} from '@akashaproject/ui-awf-hooks/lib/use-follow.new';
+} from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 
 interface IStatModalWrapper {
@@ -38,7 +32,7 @@ export const enum SelectedTab {
   INTERESTS,
 }
 
-const { StatModal } = DS;
+const { StatModal, truncateMiddle } = DS;
 
 const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const { loginState, selectedStat, profileData, singleSpa, handleClose } = props;

@@ -2,8 +2,7 @@ import React from 'react';
 
 import DS from '@akashaproject/design-system';
 import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
-import { useGetFlags } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
-import { EntryReport } from '@akashaproject/ui-awf-hooks/lib/moderation-requests';
+import { useGetFlags, EntryReport } from '@akashaproject/ui-awf-hooks';
 
 import ExplanationsBoxEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
 

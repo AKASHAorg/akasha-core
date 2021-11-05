@@ -9,7 +9,7 @@ import { withProviders } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 import i18n, { setupI18next } from '../i18n';
 
 const { SignUpModal } = DS;

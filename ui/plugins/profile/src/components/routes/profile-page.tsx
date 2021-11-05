@@ -2,19 +2,22 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-// import { useFollowers } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { ENTRY_KEY, useInfinitePostsByAuthor } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
+import {
+  useGetProfile,
+  ENTRY_KEY,
+  useInfinitePostsByAuthor,
+  LoginState,
+  useGetLogin,
+} from '@akashaproject/ui-awf-hooks';
 import { useQueryClient } from 'react-query';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LoginState, useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 
@@ -142,7 +145,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           type="script-error"
           title={t('There was an error loading this profile')}
           details={t('We cannot show this profile right now')}
-          devDetails={profileDataQuery.error}
+          devDetails={profileDataQuery.error?.message}
         />
       )}
       {profileDataQuery.status === 'success' && profileState && (

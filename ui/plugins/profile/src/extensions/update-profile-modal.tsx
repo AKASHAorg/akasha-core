@@ -2,19 +2,19 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
 import DS from '@akashaproject/design-system';
 import {
   useGetProfile,
   useProfileUpdate,
   FormProfileData,
   UPDATE_PROFILE_STATUS,
-} from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
-import { useUsernameValidation } from '@akashaproject/ui-awf-hooks/lib/use-username.new';
+  useUsernameValidation,
+  useGetLogin,
+  useQueryListener,
+  withProviders,
+} from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useQueryListener } from '@akashaproject/ui-awf-hooks/lib/use-query-listener';
 import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import i18n, { setupI18next } from '../i18n';
 
 const {

@@ -6,17 +6,20 @@ import DS from '@akashaproject/design-system';
 import {
   uploadMediaToTextile,
   getLinkPreview,
-} from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
-import { useCreatePost, useEditPost, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
-import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
-import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
-import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
+  withProviders,
+  useCreatePost,
+  useEditPost,
+  usePost,
+  useTagSearch,
+  useMentionSearch,
+  mapEntry,
+  useGetProfile,
+  useGetLogin,
+} from '@akashaproject/ui-awf-hooks';
+
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import i18next, { setupI18next } from '../i18n';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 
 const {
   EditorModal,

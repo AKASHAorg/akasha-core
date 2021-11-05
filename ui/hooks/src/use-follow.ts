@@ -5,8 +5,8 @@ import { catchError, forkJoin, lastValueFrom, of } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { logError } from './utils/error-handler';
-import { TRENDING_PROFILES_KEY } from './use-trending.new';
-import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile.new';
+import { TRENDING_PROFILES_KEY } from './use-trending';
+import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile';
 
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
 
@@ -49,7 +49,11 @@ class GetFollowingBuffer {
     this.buffer = deduplicateArray([...this.buffer, ...arr]);
   }
 }
-
+/**
+ * Hook to check if a user is following other users
+ * @param followerEthAddress - ethereum address of user to check for
+ * @param followingEthAddressArray - array of ethereum addresses to check if followed
+ */
 export function useIsFollowingMultiple(
   followerEthAddress: string,
   followingEthAddressArray: string[],
@@ -138,6 +142,9 @@ export function useIsFollowingMultiple(
 //   );
 // }
 
+/**
+ * Hook to follow another user
+ */
 export function useFollow() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
@@ -207,6 +214,9 @@ export function useFollow() {
   });
 }
 
+/**
+ * Hook to unfollow another user
+ */
 export function useUnfollow() {
   const sdk = getSDK();
   const queryClient = useQueryClient();

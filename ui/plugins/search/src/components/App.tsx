@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
 import Routes from './routes';
