@@ -92,7 +92,12 @@ export function useIsFollowingMultiple(
   }, [shouldRefetch]);
 
   React.useEffect(() => {
-    if (!query.isFetching && refetchPending && followerEthAddress) {
+    if (
+      !query.isFetching &&
+      refetchPending &&
+      followerEthAddress &&
+      GetFollowingBuffer.buffer.length
+    ) {
       setRefetchPending(false);
       query.refetch();
     }
