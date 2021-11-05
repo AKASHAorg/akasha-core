@@ -109,8 +109,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         profileAnchorLink={'/profile'}
         noTagsLabel={t('No tags found!')}
         noProfilesLabel={t('No profiles found!')}
-        isLoadingTags={trendingTagsReq.isLoading}
-        isLoadingProfiles={trendingProfilesReq.isLoading}
+        isLoadingTags={trendingTagsReq.isFetching}
+        isLoadingProfiles={trendingProfilesReq.isFetching}
         tags={trendingTags}
         profiles={trendingProfiles}
         followedProfiles={followedProfiles}
