@@ -61,27 +61,23 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const interestsReq = useInterests(profileData.pubKey);
   const interests = interestsReq.data;
 
-  let profiles: IProfileData[] = [];
+  const profileEthAddresses: string[] = React.useMemo(() => {
+    let profiles: IProfileData[] = [];
 
-  // wait for followers and following queries to finish
-  if (Array.isArray(followers)) {
-    profiles = [...profiles, ...followers];
-  }
-  if (Array.isArray(following)) {
-    profiles = [...profiles, ...following];
-  }
+    // wait for followers and following queries to finish
+    if (Array.isArray(followers)) {
+      profiles = [...profiles, ...followers];
+    }
+    if (Array.isArray(following)) {
+      profiles = [...profiles, ...following];
+    }
+    return profiles.map((profile: { ethAddress: string }) => profile.ethAddress);
+  }, [followers, following]);
 
-  const profileEthAddresses = profiles.map((profile: { ethAddress: string }) => profile.ethAddress);
   // get followed profiles for logged user
   const isFollowingMultipleReq = useIsFollowingMultiple(
     loginState.ethAddress,
     profileEthAddresses,
-    !!(
-      loginState.ethAddress &&
-      profileEthAddresses?.length &&
-      followersReq.isFetched &&
-      followingReq.isFetched
-    ),
   );
 
   const followedProfiles = isFollowingMultipleReq.data;

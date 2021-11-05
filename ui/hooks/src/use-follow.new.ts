@@ -1,5 +1,7 @@
+import React from 'react';
+import objHash from 'object-hash';
 import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom, forkJoin, catchError, EMPTY, of, filter } from 'rxjs';
+import { catchError, forkJoin, lastValueFrom, of } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { logError } from './utils/error-handler';
@@ -39,34 +41,60 @@ const getIsFollowingMultiple = async (
   return followedProfiles;
 };
 
+const deduplicateArray = (arr: string[]): string[] => [...new Set(arr)];
+
+class GetFollowingBuffer {
+  static buffer: string[] = [];
+  static addToBuffer(arr: string[]) {
+    this.buffer = deduplicateArray([...this.buffer, ...arr]);
+  }
+}
+
 export function useIsFollowingMultiple(
   followerEthAddress: string,
   followingEthAddressArray: string[],
-  enabled = !!(followerEthAddress && followingEthAddressArray?.length),
 ) {
   const queryClient = useQueryClient();
-  return useQuery(
-    [FOLLOWED_PROFILES_KEY, followingEthAddressArray],
+  const [refetchPending, setRefetchPending] = React.useState(false);
+  const filteredFollowingEthArray = followingEthAddressArray.filter(_ => _); // often we end up with [undefined] as arg
+  const allAddresses: string[] = queryClient.getQueryData([FOLLOWED_PROFILES_KEY, 'all']) || [];
+  const newAllAddressess = deduplicateArray([...allAddresses, ...filteredFollowingEthArray]);
+  const shouldRefetch = objHash(newAllAddressess) !== objHash(allAddresses);
+
+  const query = useQuery(
+    [FOLLOWED_PROFILES_KEY],
     async () => {
+      const tempBuffer = GetFollowingBuffer.buffer;
+      GetFollowingBuffer.buffer = [];
+      const newFollowedProfiles = await getIsFollowingMultiple(followerEthAddress, tempBuffer);
+
       const followedProfiles: string[] = queryClient.getQueryData([FOLLOWED_PROFILES_KEY]) || [];
-
-      const newFollowedProfiles = await getIsFollowingMultiple(
-        followerEthAddress,
-        followingEthAddressArray,
-      );
-      const filteredNewProfiles = newFollowedProfiles.filter(followedEthAddress => {
-        return !followedProfiles.length || !followedProfiles.includes(followedEthAddress);
-      });
-
-      return [...followedProfiles, ...filteredNewProfiles];
+      return deduplicateArray([...followedProfiles, ...newFollowedProfiles]);
     },
     {
-      enabled,
+      enabled: !!(followerEthAddress && GetFollowingBuffer.buffer.length),
       keepPreviousData: false,
       initialData: [],
       onError: (err: Error) => logError('useFollow.useIsFollowingMultiple', err),
     },
   );
+
+  React.useEffect(() => {
+    if (shouldRefetch) {
+      queryClient.setQueryData([FOLLOWED_PROFILES_KEY, 'all'], newAllAddressess);
+      GetFollowingBuffer.addToBuffer(filteredFollowingEthArray);
+      setRefetchPending(true);
+    }
+  }, [shouldRefetch]);
+
+  React.useEffect(() => {
+    if (!query.isFetching && refetchPending) {
+      setRefetchPending(false);
+      query.refetch();
+    }
+  }, [refetchPending, query.isFetching]);
+
+  return query;
 }
 
 // const getIsFollowing = async (followerEthAddress: string, followingEthAddress: string) => {
