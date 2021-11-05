@@ -6,8 +6,9 @@ import DS from '@akashaproject/design-system';
 import { ButtonValues } from '@akashaproject/ui-awf-typings';
 import { useGetCount, useInfiniteLog, ILogItem } from '@akashaproject/ui-awf-hooks';
 
-import Banner from './transparency-log/banner';
-import DetailCard from './transparency-log/detail-card';
+import Banner from './banner';
+import DetailCard from './detail-card';
+import { NoItemsFound } from '../error-cards';
 
 const { Box, Text, Icon, Spinner, SwitchCard, TransparencyLogMiniCard, useIntersectionObserver } =
   DS;
@@ -113,7 +114,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           style={{ overflowY: 'scroll' }}
         >
           {!logItemsQuery.isLoading && !logItemPages.length && (
-            <Text>{t('No moderated items found. Please check again later.')}</Text>
+            <NoItemsFound activeTab={'moderated'} />
           )}
           {!!logItemPages.length &&
             (activeButton === ButtonValues.STATS ? (
@@ -157,13 +158,13 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               ))
             ))}
           {/* fetch indicator for initial page load */}
-          {logItemsQuery.isLoading && logItemPages.length < 1 && (
+          {logItemsQuery.isLoading && (
             <Box pad="large">
               <Spinner />
             </Box>
           )}
           {/* fetch indicator for load more on scroll */}
-          {logItemsQuery.isLoading && logItemPages.length > 0 && (
+          {logItemsQuery.isFetching && logItemPages.length > 0 && (
             <Box pad="large" align="center">
               <Icon type="loading" accentColor={true} clickable={false} />
               <Text color="accentText">{t('Loading more ...')}</Text>

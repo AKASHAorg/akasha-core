@@ -19,9 +19,9 @@ const ExplanationsBoxEntry: React.FC<IExplanationsBoxEntryProps> = props => {
 
   return (
     <>
-      {getProfileQuery.status === 'loading' && <Text>Loading...</Text>}
-      {getProfileQuery.status === 'error' && <Text>Error loading profile</Text>}
-      {getProfileQuery.status === 'success' && (
+      {getProfileQuery.isLoading && <Text>Loading...</Text>}
+      {getProfileQuery.isError && <Text>Error loading profile</Text>}
+      {getProfileQuery.isSuccess && (
         <>
           <Text as="p" margin={{ top: 'none', bottom: 'xxsmall' }}>
             {reportedByLabel}

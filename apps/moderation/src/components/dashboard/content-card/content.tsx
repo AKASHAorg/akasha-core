@@ -3,14 +3,22 @@ import moment from 'moment';
 import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
 
-import { IContentProps } from '../../interfaces';
+import { IContentProps } from '../../../interfaces';
 
-import EntryDataCard from '../entry-data-card';
-import ExplanationsBox from '../explanations-box';
+import EntryDataCard from './entry-data-card';
+import ExplanationsBox from './explanations-box';
 
-import { ContentCardButton, StyledBox } from '../styled';
+const { Box, Button, Text, Avatar, styled, useViewportSize } = DS;
 
-const { Box, Text, Avatar, useViewportSize } = DS;
+const StyledBox = styled(Box)`
+  background-color: ${props => props.theme.colors.accentLight};
+`;
+
+const ContentCardButton = styled(Button)`
+  height: auto;
+  padding: 0.3rem 0.6rem;
+  border-width: 0.1rem;
+`;
 
 const Content: React.FC<IContentProps> = props => {
   const [showExplanations, setShowExplanations] = React.useState<boolean>(false);
