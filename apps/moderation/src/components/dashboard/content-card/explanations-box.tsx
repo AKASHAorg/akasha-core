@@ -22,6 +22,7 @@ const ExplanationsBox: React.FC<IExplanationsBoxProps> = props => {
   return (
     <Box width="100%">
       {getFlagsQuery.isLoading && <Text>Loading ...</Text>}
+      {getFlagsQuery.isError && <Text>Error fetching flags</Text>}
       {getFlagsQuery.isSuccess && (
         <Box>
           {flagEntries.map((flagEntry: EntryReport, id: number) => (
