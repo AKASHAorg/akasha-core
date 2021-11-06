@@ -5,7 +5,7 @@ import { usePost, useComment, useGetProfile, mapEntry } from '@akashaproject/ui-
 import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
 import Content from './content';
-import { IContentProps } from '../../interfaces';
+import { IContentProps } from '../../../interfaces';
 
 const { Box, MainAreaCardBox } = DS;
 

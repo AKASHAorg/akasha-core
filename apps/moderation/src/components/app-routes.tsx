@@ -7,9 +7,9 @@ import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 
 import routes, { HOME, HISTORY, UNAUTHENTICATED, rootRoute } from '../routes';
 
-import ContentList from './content-list';
-import PromptAuthentication from './prompt-authentication';
+import Dashboard from './dashboard';
 import TransparencyLog from './transparency-log';
+import { PromptAuthentication } from './error-cards';
 
 const { Box } = DS;
 
@@ -24,7 +24,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       <Router>
         <Switch>
           <Route path={routes[HOME]}>
-            <ContentList
+            <Dashboard
               {...props}
               user={loginQuery.data?.pubKey}
               slotId={layoutConfig.modalSlotId}
