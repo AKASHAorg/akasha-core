@@ -1,0 +1,10 @@
+# dotenv environment variables file
+.env
+
+# IDE stuff
+.idea
+
+# Dependency directories
+node_modules/
+ethereum-world/cypress/videos/
+ethereum-world/cypress/screenshots/
