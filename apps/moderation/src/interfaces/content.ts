@@ -1,9 +1,9 @@
 import singleSpa from 'single-spa';
-import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ILogger } from '@akashaproject/awf-sdk/typings/lib/interfaces/log';
 
 export interface IContentProps extends RootComponentProps {
   user?: string;

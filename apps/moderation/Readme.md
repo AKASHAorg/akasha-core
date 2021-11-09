@@ -1,35 +1,41 @@
-# ETHEREUM WORLD APP moderation
+# Ethereum World App Moderation
 
 > Moderation app for Ethereum World
 ## Table of contents
 
 - [Background](#background)
 - [Components](#components)
-    - [Content-List](#content-list)
-    - [Content-Tab](#content-tab)
-    - [Prompt-Authentication](#prompt-authentication)
-    - [Prompt-Authorization](#prompt-authorization)
+    - [Dashboard](#dashboard)
+    - [Transparency Log](#transparency-log)
+    - [Error Pages](#error-pages)
+
 - [Services](#services)
 
 ## Background
 
-Moderation App is integrated into the Ethereum World to assist in reporting and moderating offensive contents. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
+Moderation App adds moderation-related functionalities of reporting/moderating offensive/abusive contents and maintaining a log of moderated items, to the Ethereum World. It consists of components, services and widgets which are standalone elements interacting with each other to form a wholesome system.
 
 ## Components
 
 The core components include:
 
-> ### Content List
-> A scrollable list of entries.
+### Dashboard
+> The [Dashboard](src/components/dashboard/index.tsx) is a scrollable list of pending or moderated (kept/delisted) entries and allows moderators to moderate or review decisions.
+The actively displayed list is controlled by the [Content Tab](src/components/dashboard/content-tab/index.tsx) component
 
-> ### Content Tab
-> Switch like component that controls the view between pending and moderated items.
+> Each entry in the list is rendered by [Content Card](src/components/dashboard/content-card/index.tsx) component. In each Content Card, an [Entry Data Card](src/components/dashboard/content-card/entry-data-card.tsx) component renders an `EntryCard` or `ProfileCard` depending on the specified `itemType` (post, reply, account).
 
-> ### Prompt Authentication
-> Blocks access to the moderation app for unauthenticated users.
+> Each card also has [Explanations Box](src/components/dashboard/content-card/explanations-box.tsx) which when toggled, loads all flags for an entry
 
-> ### Prompt Authorization
-> Blocks access to the moderation app for unauthorized users.
+### Transparency Log
+> The [Transparency Log](src/components/transparency-log/index.tsx) is a scrollable list  of moderated (kept/delisted) entries only. Its route is unrestricted and requires no authentication.
+
+### Error Pages
+> The [Prompt Authentication](src/components/error-pages/prompt-authentication.tsx) component is shown if the user trying to access the `Dashboard` is not authenticated.
+
+> The [Prompt Authorization](src/components/error-pages/prompt-authorization.tsx) component is shown if the user trying to access the `Dashboard` is authenticated but not an authorized Ethereum World Moderator.
+
+> The [Render Not Found](src/components/error-pages/render-not-found.tsx) component is utilised in the `Dashboard` lists if no  matching items are found.
 
 ## Services
 

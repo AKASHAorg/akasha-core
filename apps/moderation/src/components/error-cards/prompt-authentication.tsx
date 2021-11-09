@@ -1,4 +1,6 @@
 import React from 'react';
+import SingleSpa from 'single-spa';
+
 import DS from '@akashaproject/design-system';
 
 import { IPromptAuthorizationProps } from './prompt-authorization';
@@ -8,7 +10,7 @@ const { ModerationAppErrorCard } = DS;
 export interface IPromptAuthenticationProps extends IPromptAuthorizationProps {
   buttonLabel?: string;
   ethAddress: string | null;
-  singleSpa: any;
+  singleSpa: typeof SingleSpa;
 }
 
 const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
@@ -18,6 +20,7 @@ const PromptAuthentication: React.FC<IPromptAuthenticationProps> = props => {
     if (ethAddress) {
       props.singleSpa.navigateToUrl('/moderation-app/home');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ethAddress]);
 
   return (

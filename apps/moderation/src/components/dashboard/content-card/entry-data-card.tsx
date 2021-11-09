@@ -6,7 +6,7 @@ import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 
-import { redirectToPost } from '../services/routing-service';
+import { redirectToPost } from '../../../services/routing-service';
 
 const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 

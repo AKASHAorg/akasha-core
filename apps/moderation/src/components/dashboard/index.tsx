@@ -16,13 +16,12 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 
 import ContentTab from './content-tab';
-import ContentCard from './content-card/content-card';
-import NoItemsFound from './no-items-found';
-import PromptAuthorization from './prompt-authorization';
+import ContentCard from './content-card';
+import { NoItemsFound, PromptAuthorization } from '../error-cards';
 
 const { Box, Spinner, SwitchCard, useIntersectionObserver } = DS;
 
-interface IContentListProps {
+interface IDashboardProps {
   slotId: string;
   user: string | null;
   singleSpa: typeof SingleSpa;
@@ -30,7 +29,7 @@ interface IContentListProps {
 
 const DEFAULT_LIMIT = 10;
 
-const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
+const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
   const { user } = props;
 
   const [isPending, setIsPending] = React.useState<boolean>(true);
@@ -369,4 +368,4 @@ const ContentList: React.FC<IContentListProps & RootComponentProps> = props => {
   );
 };
 
-export default ContentList;
+export default Dashboard;
