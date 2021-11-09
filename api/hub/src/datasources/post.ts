@@ -70,7 +70,7 @@ class PostAPI extends DataSource {
 
   async getPost(id: string, pubKey?: string, stopIter = false) {
     const db: Client = await getAppDB();
-    const cacheKey = this.getInitialPostCacheKey(id);
+    const cacheKey = this.getInitialPostCacheKey(id + stopIter);
     if (await queryCache.has(cacheKey)) {
       return queryCache.get(cacheKey);
     }

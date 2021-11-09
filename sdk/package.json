@@ -20,7 +20,7 @@
     "@ensdomains/buffer": "0.0.13",
     "web3-utils": "1.5.2",
     "eth-ens-namehash": "2.0.8",
-    "ethers": "5.4.6",
+    "ethers": "5.5.1",
     "graphql": "15.5.3",
     "graphql-tag": "2.12.5",
     "object-hash": "2.2.0",
