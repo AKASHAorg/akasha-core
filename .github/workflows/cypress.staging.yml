@@ -5,10 +5,11 @@ jobs:
     runs-on: ubuntu-20.04
     name: E2E on Chrome
     steps:
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-        architecture: 'x64'
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
