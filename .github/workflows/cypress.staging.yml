@@ -6,8 +6,13 @@ jobs:
     name: E2E on Chrome
     steps:
       - uses: actions/checkout@v2
+      - name: Cypress info
+        uses: ./
+        with:
+          build: npx cypress info
+          working-directory: tests/ethereum-world
       - uses: cypress-io/github-action@v2
         with:
           browser: chrome
-          project: tests/ethereum-world
+          project: ethereum-world
           config-file: tests/ethereum-world/cypress/staging.json
