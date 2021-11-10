@@ -14,9 +14,10 @@ jobs:
         uses: ./
         with:
           build: npx cypress info
-          working-directory: tests/ethereum-world
+          install: false
+          project: tests/ethereum-world
       - uses: cypress-io/github-action@v2
         with:
           browser: chrome
-          project: ethereum-world
+          project: tests/ethereum-world
           config-file: tests/ethereum-world/cypress/staging.json
