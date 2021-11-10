@@ -5,6 +5,10 @@ jobs:
     runs-on: ubuntu-20.04
     name: E2E on Chrome
     steps:
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.13.0
       - uses: actions/checkout@v2
       - name: Cypress info
         uses: ./
