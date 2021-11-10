@@ -14,8 +14,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16.13.0
-      - uses: actions/checkout@v2
       - name: Cypress info
+        uses: cypress-io/github-action@v2
         with:
           build: npx cypress info
           project: tests/ethereum-world
