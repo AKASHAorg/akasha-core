@@ -50,6 +50,11 @@ class PostAPI extends DataSource {
     await queryCache.sAdd(key, cacheKey);
   }
 
+  async removeCachedPost(id: string) {
+    await queryCache.del(this.getPostCacheKey(id));
+    await queryCache.del(this.getInitialPostCacheKey(id + true));
+    await queryCache.del(this.getInitialPostCacheKey(id + false));
+  }
   /**
    *
    * @param pubKey
@@ -277,11 +282,9 @@ class PostAPI extends DataSource {
     );
     try {
       for (const dsRecord of quotedBy) {
-        await queryCache.del(this.getPostCacheKey(dsRecord.value));
-        await queryCache.del(this.getInitialPostCacheKey(dsRecord.value));
+        await this.removeCachedPost(dsRecord.value);
       }
-      await queryCache.del(this.getPostCacheKey(id));
-      await queryCache.del(this.getInitialPostCacheKey(id));
+      await this.removeCachedPost(id);
     } catch (e) {
       logger.warn('could not clear editPost cache');
     }
@@ -328,11 +331,9 @@ class PostAPI extends DataSource {
       .deleteObject(currentPost._id)
       .then(() => logger.info(`removed post: ${id}`))
       .catch(e => logger.error(e));
-    await queryCache.del(this.getPostCacheKey(id));
-    await queryCache.del(this.getInitialPostCacheKey(id));
+    await this.removeCachedPost(id);
     for (const dsRecord of quotedBy) {
-      await queryCache.del(this.getPostCacheKey(dsRecord.value));
-      await queryCache.del(this.getInitialPostCacheKey(dsRecord.value));
+      await this.removeCachedPost(dsRecord.value);
     }
     await db.save(this.dbID, this.collection, [currentPost]);
     return { removedTags };
