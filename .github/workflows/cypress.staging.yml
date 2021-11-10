@@ -1,4 +1,4 @@
-name: [Staging] E2E on Chrome
+name: Staging-E2E on Chrome
 on: [pull_request]
 jobs:
   cypress-run:
