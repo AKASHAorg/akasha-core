@@ -79,6 +79,7 @@ import IconLink from './components/IconLink';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
 import SelectAddressButton from './components/SelectAddressButton';
+import Web3ConnectButton from './components/Web3ConnectButton';
 
 import AreaChart from './components/AreaChart';
 import LineChart from './components/LineChart';
@@ -213,6 +214,7 @@ const exported = {
   ProfileAvatarButton,
   VoteIconButton,
   SelectAddressButton,
+  Web3ConnectButton,
   CommentInput,
   SearchInput,
   MainAreaCardBox,
