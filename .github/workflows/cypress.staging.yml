@@ -14,15 +14,23 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16.13.0
+      - name: Cypress verify
+        uses: cypress-io/github-action@v2
+        with:
+          command-prefix: yarn dlx
+          build: npx cypress verify
+          project: tests/ethereum-world
+      - name: Cypress info
+        uses: cypress-io/github-action@v2
+        with:
+          command-prefix: yarn dlx
+          build: npx cypress info
+          project: tests/ethereum-world
       - name: Checkout
         uses: actions/checkout@v2
       - uses: cypress-io/github-action@v2
         with:
+          command-prefix: yarn dlx
           browser: chrome
           project: tests/ethereum-world
           config-file: tests/ethereum-world/cypress/staging.json
-      - name: Cypress info
-        uses: cypress-io/github-action@v2
-        with:
-          build: npx cypress info
-          project: tests/ethereum-world
