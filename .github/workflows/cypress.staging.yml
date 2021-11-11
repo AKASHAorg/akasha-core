@@ -16,6 +16,11 @@ jobs:
           node-version: 16.13.0
       - name: Checkout
         uses: actions/checkout@v2
+      - name: install root dependencies
+        env:
+          CI: 1
+        run: |
+          npm ci
       - name: install dependencies and verify Cypress
         env:
           CI: 1
@@ -24,7 +29,7 @@ jobs:
           npm ci
           npx cypress verify
           npx cypress info
-      - name: Cypress tests
+      - name: e2e tests
         run: npm run cy:e2e:record
         working-directory: tests
         env:
