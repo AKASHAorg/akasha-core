@@ -44,22 +44,12 @@ jobs:
           npx cypress verify
           npx cypress info
       - name: e2e tests
-        run: npm run cy:e2e:record
+        run: npm run cy:e2e:chrome:record
         working-directory: tests
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          TERM: xterm
-      - uses: actions/upload-artifact@master
-        with:
-          name: screenshots
-          path: cypress/screenshots
-          if: failure()
-      - uses: actions/upload-artifact@master
-        with:
-          name: videos
-          path: cypress/videos
 #      - name: Install test deps
 #        uses: ./
 #        with:

@@ -5,7 +5,7 @@
   "scripts": {
     "ethereum-world-local": "cypress open --project ethereum-world --env configFile=local",
     "ethereum-world-prod": "cypress open --project ethereum-world --env configFile=production",
-    "cy:e2e:record": "cypress run --project ethereum-world --env configFile=staging --record --browser chrome"
+    "cy:e2e:chrome:record": "cypress run --project ethereum-world --env configFile=staging --record --browser chrome"
   },
   "devDependencies": {
     "cypress": "9.0.0",
