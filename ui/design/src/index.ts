@@ -78,6 +78,7 @@ import IconButton from './components/IconButton';
 import IconLink from './components/IconLink';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
+import SelectAddressButton from './components/SelectAddressButton';
 
 import AreaChart from './components/AreaChart';
 import LineChart from './components/LineChart';
@@ -211,6 +212,7 @@ const exported = {
   SignUpModal,
   ProfileAvatarButton,
   VoteIconButton,
+  SelectAddressButton,
   CommentInput,
   SearchInput,
   MainAreaCardBox,
