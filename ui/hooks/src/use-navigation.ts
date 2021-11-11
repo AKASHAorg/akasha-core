@@ -3,6 +3,7 @@ import { useQueryClient } from 'react-query';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import React from 'react';
 import { COMMENT_KEY } from './index';
+import { getLogger } from './utils/error-handler';
 
 const StaticUrlSegments = {
   [ItemTypes.PROFILE]: '/profile/',
@@ -22,7 +23,10 @@ export const useHandleNavigation = (navigateFn: (url: string) => void, currentPo
       }
 
       const staticUrlSegment = StaticUrlSegments[itemType];
-      if (!staticUrlSegment) return;
+      if (!staticUrlSegment) {
+        const logger = getLogger('useHandleNavigation');
+        return logger.warn(`ItemType ${itemType} not found in StaticUrlSegments`);
+      }
       const dynamicUrlSegment =
         /* Navigate to parent post because we don't have the comment page yet */
         itemType === ItemTypes.COMMENT
