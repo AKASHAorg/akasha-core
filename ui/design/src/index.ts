@@ -91,6 +91,8 @@ import EditorMeter from './components/EditorMeter';
 
 import HorizontalDivider from './components/HorizontalDivider';
 
+import StepIndicator from './components/StepIndicator';
+
 import ErrorLoader from './components/ErrorLoader';
 import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
 import EntryPublishErrorCard from './components/EntryPublishErrorCard';
@@ -271,6 +273,7 @@ const exported = {
   NotificationsCard,
   notify,
   HorizontalDivider,
+  StepIndicator,
   LoginCTAWidgetCard,
   TrendingWidgetCard,
   SourcesWidgetCard,
