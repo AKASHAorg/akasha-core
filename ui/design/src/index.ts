@@ -69,6 +69,7 @@ import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
 import TopicsWidgetCard from './components/TopicsWidgetCard';
 import TrendingWidgetCard from './components/TrendingWidgetCard';
 import TutorialWidgetCard from './components/TutorialWidgetCard';
+import SignUpCard from './components/SignUpCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
@@ -274,11 +275,12 @@ const exported = {
   notify,
   HorizontalDivider,
   StepIndicator,
+  CookieWidgetCard,
   LoginCTAWidgetCard,
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
-  CookieWidgetCard,
+  SignUpCard,
   FilterCard,
   SwitchCard,
   MdCard,
