@@ -14,7 +14,7 @@ const SelectAddressButton: React.FC<ISelectAddressButtonProps> = props => {
 
   return (
     <BasicCardBox pad="medium" callToAction={true} clickHandler={handleClick}>
-      <Box pad={{ vertical: 'xxsmall' }} direction="row" justify="between">
+      <Box pad={{ vertical: 'xxsmall' }} direction="row" justify="between" align="center">
         <Text color="accentText" size="1rem">
           {titleLabel}
         </Text>
