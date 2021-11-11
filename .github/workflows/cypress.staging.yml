@@ -16,21 +16,38 @@ jobs:
           node-version: 16.13.0
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Cypress verify
-        uses: cypress-io/github-action@v2
+      - name: install dependencies and verify Cypress
+        env:
+          CI: 1
+        working-directory: tests
+        run: |
+          npm ci
+          npx cypress verify
+          npx cypress info
+      - name: Cypress tests
+        run: npm run cy:e2e:record
+        working-directory: tests
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+          TERM: xterm
+      - uses: actions/upload-artifact@master
         with:
-          command-prefix: yarn dlx
-          build: npx cypress verify
-          project: tests/ethereum-world
-      - name: Cypress info
-        uses: cypress-io/github-action@v2
+          name: screenshots
+          path: cypress/screenshots
+          if: failure()
+      - uses: actions/upload-artifact@master
         with:
-          command-prefix: yarn dlx
-          build: npx cypress info
-          project: tests/ethereum-world
-      - uses: cypress-io/github-action@v2
-        with:
-          command-prefix: yarn dlx
-          browser: chrome
-          project: tests/ethereum-world
-          config-file: tests/ethereum-world/cypress/staging.json
+          name: videos
+          path: cypress/videos
+#      - name: Install test deps
+#        uses: ./
+#        with:
+#          working-directory: tests
+#          install-command: npm ci
+#      - uses: cypress-io/github-action@v2
+#        with:
+#          browser: chrome
+#          project: tests/ethereum-world
+#          config-file: tests/ethereum-world/cypress/staging.json
