@@ -12,18 +12,18 @@ describe('Feed Page', () => {
 
   describe('Posts', () => {
     it('should render posts on the page', () => {
-      cy.get('a[href^="/social-app/post"]').its('length').should('be.gt', 0);
+      cy.get('a[href^="/social-app/post"]', { timeout: 8000 }).its('length').should('be.gt', 0);
     });
 
     it('should render user avatars in posts', () => {
-      cy.get('[data-testid="avatar-image"]')
+      cy.get('[data-testid="avatar-image"]', { timeout: 6000 })
         .first()
         .should('have.attr', 'src')
         .and('contain', 'https://');
     });
 
     it('should open report popup on click', () => {
-      cy.get('svg[type="moreDark"]').first().click();
+      cy.get('svg[type="moreDark"]', { timeout: 6000 }).first().click();
     });
   });
 });
