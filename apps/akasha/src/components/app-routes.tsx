@@ -43,7 +43,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               {...props}
               loginState={loginQuery.data}
               showLoginModal={showLoginModal}
-              navigateToUrl={props.singleSpa.navigateToUrl}
               isMobile={props.isMobile}
             />
           </Route>

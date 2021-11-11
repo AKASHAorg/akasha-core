@@ -1,7 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -20,6 +19,7 @@ import {
   useTagSearch,
   useMentionSearch,
 } from '@akashaproject/ui-awf-hooks';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 const {
   Box,
@@ -41,7 +41,7 @@ export interface IEntryRenderer {
   onBookmark: (isBookmarked: boolean, entryId: string) => void;
   onFlag?: (entryId: string, itemType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
-  onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
+  onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
   singleSpaNavigate: (url: string) => void;
   contentClickable?: boolean;
   itemType: ItemTypes;
@@ -187,35 +187,37 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [itemType]);
 
   const handleAvatarClick = () => {
-    onNavigate(ItemTypes.PROFILE, {
-      entryId: itemData?.author.pubKey,
-      authorEthAddress: itemData?.author.ethAddress,
-      replyTo: null,
-    });
-  };
-
-  const handleNavigation = (details: IContentClickDetails) => {
-    onNavigate(itemType, details);
+    onNavigate(
+      {
+        id: itemData?.author.pubKey,
+        authorEthAddress: itemData?.author.ethAddress,
+      },
+      ItemTypes.PROFILE,
+    );
   };
 
   const handleContentClick = (details: IContentClickDetails) => {
-    handleNavigation(details);
+    onNavigate(details, itemType);
   };
 
   const handleMentionClick = (pubKey: string) => {
-    onNavigate(ItemTypes.PROFILE, {
-      entryId: pubKey,
-      authorEthAddress: pubKey,
-      replyTo: null,
-    });
+    onNavigate(
+      {
+        id: pubKey,
+        authorEthAddress: pubKey,
+      },
+      ItemTypes.PROFILE,
+    );
   };
 
   const handleTagClick = (name: string) => {
-    onNavigate(ItemTypes.TAG, {
-      entryId: name,
-      authorEthAddress: name,
-      replyTo: null,
-    });
+    onNavigate(
+      {
+        id: name,
+        authorEthAddress: name,
+      },
+      ItemTypes.TAG,
+    );
   };
 
   const handleEntryBookmark = (entryId: string) => {
