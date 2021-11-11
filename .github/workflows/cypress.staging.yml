@@ -1,0 +1,62 @@
+name: E2E on Chrome
+on: [pull_request]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-20.04
+    name: Staging-E2E on Chrome
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.13.0
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Cache Cypress binary
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-cypress-
+      - name: install root dependencies
+        env:
+          CI: 1
+        run: |
+          npm ci
+      - name: install dependencies and verify Cypress
+        env:
+          CI: 1
+        working-directory: tests
+        run: |
+          npm ci
+          npx cypress verify
+          npx cypress info
+      - name: e2e tests
+        run: npm run cy:e2e:chrome:record
+        working-directory: tests
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+#      - name: Install test deps
+#        uses: ./
+#        with:
+#          working-directory: tests
+#          install-command: npm ci
+#      - uses: cypress-io/github-action@v2
+#        with:
+#          browser: chrome
+#          project: tests/ethereum-world
+#          config-file: tests/ethereum-world/cypress/staging.json
