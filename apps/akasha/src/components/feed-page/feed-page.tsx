@@ -122,11 +122,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       ) : (
         <Box margin={{ bottom: 'medium' }}>
           <LoginCTAWidgetCard
-            title={`🚀 ${t(' Welcome to Ethereum World!')}`}
+            title={`${t('Welcome, fellow Ethereans!')} 💫`}
             subtitle={t('We are in private alpha at this time. ')}
-            beforeLinkLabel={t("If you'd like to participate,")}
-            afterLinkLabel={t("and we'll add you to our wait list!")}
-            writeToUsLabel={t('write to us')}
+            beforeLinkLabel={t("If you'd like to participate, just ")}
+            afterLinkLabel={t(
+              ' and we’ll send you a ticket for the next shuttle going to Ethereum World.',
+            )}
+            disclaimerLabel={t(
+              'Please bear in mind we’re onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀',
+            )}
+            writeToUsLabel={t('drop us a message')}
             writeToUsUrl={'mailto:alpha@ethereum.world'}
           />
         </Box>
