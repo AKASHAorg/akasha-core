@@ -67,6 +67,13 @@ export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   }
 `;
 
+export const StaticWidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
+  position: fixed;
+  bottom: 0;
+  margin-left: 1rem;
+  max-width: 21rem;
+`;
+
 export const ModalSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
   z-index: 300;
 `;

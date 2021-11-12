@@ -44,6 +44,9 @@ export interface ITrendingWidgetCardProps {
   handleUnsubscribeTag: (tagName: string) => void;
   // css
   className?: string;
+
+  // zero-based index of the current tab
+  onActiveTabChange?: (tabIdx: number) => void;
 }
 
 const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
@@ -78,6 +81,12 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     subscribedTags,
   } = props;
 
+  const handleTabChange = (tabIdx: number) => {
+    if (props.onActiveTabChange) {
+      props.onActiveTabChange(tabIdx);
+    }
+  };
+
   return (
     <WidgetAreaCardBox className={className}>
       <Box pad="medium" gap="medium">
@@ -85,7 +94,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           {titleLabel}
         </Text>
       </Box>
-      <Tabs>
+      <Tabs onActive={handleTabChange}>
         <StyledTab title={topicsLabel}>
           <Box pad="medium" gap="medium">
             {tags.length === 0 && !isLoadingTags && (

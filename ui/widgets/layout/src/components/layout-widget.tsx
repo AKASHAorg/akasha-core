@@ -8,8 +8,14 @@ import {
   WidgetAreaContainer,
   WidgetContainer,
 } from './styled-containers';
-import { ModalSlot, PluginSlot, TopbarSlot, SidebarSlot, WidgetSlot } from './styled-slots';
-import CookieWidget from './cookie-widget';
+import {
+  ModalSlot,
+  PluginSlot,
+  TopbarSlot,
+  SidebarSlot,
+  WidgetSlot,
+  StaticWidgetSlot,
+} from './styled-slots';
 import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from '../i18n';
@@ -139,13 +145,10 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
                         onUnmount={handleExtensionUnmount}
                       />
                       {!props.isMobile && (
-                        <CookieWidget
-                          style={{
-                            position: 'fixed',
-                            bottom: 0,
-                            marginLeft: '1rem',
-                            maxWidth: '21rem',
-                          }}
+                        <StaticWidgetSlot
+                          name={props.layoutConfig.staticWidgetSlotId}
+                          onMount={handleExtensionMount}
+                          onUnmount={handleExtensionUnmount}
                         />
                       )}
                     </ScrollableWidgetArea>
@@ -169,7 +172,14 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
             onUnmount={handleExtensionUnmount}
             style={{ position: 'relative', zIndex: 200 }}
           />
-          {props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
+          {props.isMobile && (
+            <StaticWidgetSlot
+              name={props.layoutConfig.staticWidgetSlotId}
+              onMount={handleExtensionMount}
+              onUnmount={handleExtensionUnmount}
+              style={{ position: 'fixed', bottom: 0 }}
+            />
+          )}
         </div>
       </div>
     </I18nextProvider>

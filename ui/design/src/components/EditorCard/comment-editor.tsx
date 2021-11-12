@@ -32,6 +32,7 @@ const CommentEditor: React.FC<
     cancelButtonLabel,
     onCancelClick,
     editorState,
+    onPlaceholderClick,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(isShown);
@@ -60,6 +61,9 @@ const CommentEditor: React.FC<
 
   const handleToggleEditor = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
+    if (onPlaceholderClick) {
+      onPlaceholderClick();
+    }
     setShowEditor(!showEditor);
   };
 

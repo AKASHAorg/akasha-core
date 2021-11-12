@@ -11,6 +11,7 @@ import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { BrowserRouter } from 'react-router-dom';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
@@ -43,6 +44,7 @@ export interface IFeedWidgetProps {
   itemSpacing?: number;
   i18n: typeof i18n;
   modalSlotId: string;
+  trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 }
 
 const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {

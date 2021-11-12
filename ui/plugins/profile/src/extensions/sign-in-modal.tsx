@@ -2,9 +2,9 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { EthProviders, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { useAnalytics, withProviders } from '@akashaproject/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { useGetLogin, useLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import i18n, { setupI18next } from '../i18n';
@@ -20,6 +20,7 @@ const SignInModalContainer = (props: RootComponentProps) => {
 
   const [suggestSignUp, setSuggestSignUp] = React.useState<boolean>(false);
   const [errorMessages, setErrorMessages] = React.useState<string[]>([]);
+  const [analyticsActions] = useAnalytics();
 
   const loginErrorHandler = React.useCallback(
     error => {
@@ -60,6 +61,22 @@ const SignInModalContainer = (props: RootComponentProps) => {
 
   const handleLogin = (providerId: number) => {
     // loginActions.login(providerId, !acceptedTerms);
+    switch (providerId) {
+      case EthProviders.Web3Injected:
+        analyticsActions.trackEvent({
+          category: 'Sign In',
+          action: 'Sign in with Metamask',
+        });
+        break;
+      case EthProviders.WalletConnect:
+        analyticsActions.trackEvent({
+          category: 'Sign In',
+          action: 'Sign in with WalletConnect',
+        });
+        break;
+      default:
+        break;
+    }
     loginMutation.mutate({ selectedProvider: providerId, checkRegistered: !acceptedTerms });
   };
 

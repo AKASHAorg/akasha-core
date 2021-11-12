@@ -44,6 +44,18 @@ interface SingleSpaEventDetail {
   totalAppChanges: number;
 }
 
+/**
+ * App loader is the central module for micro-frontends (apps)
+ * Built as a layer over the single-spa library, it provides the required functionality
+ * to install/uninstall, load/unload apps, widgets and plugins.
+ * @example
+ * ```
+ * import { AppLoader } from '@akashaproject/ui-app-loader';
+ * const appLoader = new AppLoader(options, sdkInstance);
+ * appLoader.start();
+ * ```
+ */
+
 export default class AppLoader {
   public readonly uiEvents: BehaviorSubject<UIEventData>;
 
@@ -134,6 +146,19 @@ export default class AppLoader {
       });
     }
   }
+
+  /**
+   * The main method to start the app-loader.
+   * @remarks
+   * When the `.start()` method is called, the app-loader will do the following:
+   * - mount the splash screen if a template with id `#splash-screen-tpl` is found in the DOM
+   * - call single-spa's `.start()` method
+   * - get default apps and widgets package infos from app registry
+   * - creates a systemjs-importmap script in the head section of the document in the form of [key: id of the app]: [value: url of the src file]
+   * - imports the apps/widgets
+   * - calls the `.register()` method of the app/widget
+   * - mounts the layout widget
+   */
 
   public async start(): Promise<void> {
     showSplash();
@@ -256,7 +281,7 @@ export default class AppLoader {
       },
     });
   }
-
+  // Just found https://core-econ.org/the-economy/?lang=en
   public onModalMount(modalData: UIEventData['data']) {
     this.loaderLogger.info(`Modal mounted: ${JSON.stringify(modalData)}`);
 
@@ -655,15 +680,17 @@ export default class AppLoader {
       return;
     }
 
+    const extensionId = `ext-${extensionPoint.parentApp}-${rootNode}-${index}`;
+
     const extensionProps = {
       domElement: wrapperNode,
       singleSpa,
+      uiEvents: this.uiEvents,
       extension: extensionPoint,
       navigateToModal: navigateToModal,
       layoutConfig: this.layoutConfig,
-
       activeModal: this.activeModal,
-      logger: this.sdk.services.log.create(`ext-${extensionPoint.parentApp}-${rootNode}-${index}`),
+      logger: this.sdk.services.log.create(extensionId),
       extensionData,
     };
 

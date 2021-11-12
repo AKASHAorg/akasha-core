@@ -39,6 +39,7 @@ import { mapEntry } from '@akashaproject/ui-awf-hooks/lib/utils/entry-utils';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { redirect, redirectToPost } from '../../services/routing-service';
 import routes, { POST } from '../../routes';
+import { useAnalytics } from '@akashaproject/ui-awf-hooks';
 
 const {
   Box,
@@ -99,6 +100,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const tagQueryReq = useTagSearch(tagQuery);
 
   const reqComments = useInfiniteComments(15, postId);
+  const [analyticsActions] = useAnalytics();
 
   const commentPages = React.useMemo(() => {
     if (reqComments.data) {
@@ -205,6 +207,10 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const publishComment = useCreateComment();
 
   const handlePublishComment = async (data: IPublishData) => {
+    analyticsActions.trackEvent({
+      category: 'Reply',
+      action: 'Publish',
+    });
     publishComment.mutate({ ...data, postID: postId });
   };
 
@@ -267,6 +273,13 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   };
   const handleTagQueryChange = (query: string) => {
     setTagQuery(query);
+  };
+
+  const handleEditorPlaceholderClick = () => {
+    analyticsActions.trackEvent({
+      category: 'Reply',
+      action: 'EditorPlaceholderClick',
+    });
   };
 
   const showEditButton = React.useMemo(
@@ -395,6 +408,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     tags={tagQueryReq.data}
                     mentions={mentionQueryReq.data}
                     uploadRequest={uploadMediaToTextile}
+                    onPlaceholderClick={handleEditorPlaceholderClick}
                   />
                 </Box>
               )}
@@ -466,6 +480,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 uiEvents={props.uiEvents}
                 itemSpacing={8}
                 i18n={i18n}
+                trackEvent={analyticsActions.trackEvent}
               />
             </>
           )}

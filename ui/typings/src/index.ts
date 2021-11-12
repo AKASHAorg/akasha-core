@@ -4,6 +4,7 @@ import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
 
 import i18n from 'i18next';
+import { AnalyticsEventData } from './analytics';
 export interface IAkashaError {
   errorKey: string;
   error: Error;
@@ -18,7 +19,7 @@ export interface LogoSourceType {
 export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
-  uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData>;
+  uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
   i18n?: typeof i18n;
   getMenuItems?: () => AppLoaderTypes.IMenuList;
   isMobile: boolean;
@@ -34,6 +35,10 @@ export interface RootComponentProps {
   extensionData?: AppLoaderTypes.UIEventData['data'];
   homepageApp?: string;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
+  analytics?: {
+    trackerUrl: string;
+    siteId: string;
+  };
 }
 
 export enum LogoTypeSource {

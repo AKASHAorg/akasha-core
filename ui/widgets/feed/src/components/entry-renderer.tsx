@@ -21,6 +21,7 @@ import {
 import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
+import { TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -54,6 +55,7 @@ export interface IEntryRenderer {
   uiEvents: RootComponentProps['uiEvents'];
   className?: string;
   modalSlotId: string;
+  trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
 }
 
 const commentStyleExt = {
@@ -81,6 +83,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     contentClickable,
     parentIsProfilePage,
     modalSlotId,
+    trackEvent,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -271,6 +274,12 @@ const EntryRenderer = (props: IEntryRenderer) => {
   };
 
   const handleEditComment = commentData => {
+    if (trackEvent) {
+      trackEvent({
+        category: 'Reply',
+        action: 'Edit',
+      });
+    }
     commentEditReq.mutate({ ...commentData, postID: itemData.postId });
     setIsEditingComment(false);
   };

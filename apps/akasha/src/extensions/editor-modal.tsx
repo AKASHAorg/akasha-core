@@ -7,7 +7,7 @@ import {
   uploadMediaToTextile,
   getLinkPreview,
 } from '@akashaproject/ui-awf-hooks/lib/utils/media-utils';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { useAnalytics, withProviders } from '@akashaproject/ui-awf-hooks';
 import { useCreatePost, useEditPost, usePost } from '@akashaproject/ui-awf-hooks/lib/use-posts.new';
 import { useTagSearch } from '@akashaproject/ui-awf-hooks/lib/use-tag.new';
 import { useMentionSearch } from '@akashaproject/ui-awf-hooks/lib/use-mentions.new';
@@ -17,6 +17,7 @@ import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import i18next, { setupI18next } from '../i18n';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
+import { AnalyticsEventTypes } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const {
   EditorModal,
@@ -37,6 +38,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionSearch = useMentionSearch(mentionQuery);
   const tagSearch = useTagSearch(tagQuery);
+  const [analyticsActions] = useAnalytics();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
 
@@ -95,13 +97,29 @@ const EditorModalContainer = (props: RootComponentProps) => {
         return;
       }
       if (isEditing) {
+        analyticsActions.trackEvent({
+          category: 'Post',
+          action: 'Edit',
+        });
         editPost.mutate({ entryID: props.activeModal.entryId, ...data });
       } else {
+        analyticsActions.trackEvent({
+          category: 'Post',
+          action: 'Publish',
+        });
         publishPost.mutate({ ...data, pubKey: profileDataReq.data.pubKey });
       }
       props.singleSpa.navigateToUrl(location.pathname);
     },
-    [isEditing, props.activeModal, props.singleSpa, editPost, publishPost, profileDataReq.data],
+    [
+      isEditing,
+      props.activeModal,
+      props.singleSpa,
+      editPost,
+      publishPost,
+      profileDataReq.data,
+      analyticsActions,
+    ],
   );
 
   const handleModalClose = () => {
@@ -173,6 +191,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => {
+  console.log('editorProps', props);
   return (
     <I18nextProvider i18n={i18next}>
       <EditorModalContainer {...props} />

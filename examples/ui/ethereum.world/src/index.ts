@@ -31,8 +31,13 @@ console.time('AppLoader:firstMount');
     defaultWidgets: [
       { name: '@akashaproject/ui-widget-topbar', version: '0.0.1' },
       '@akashaproject/ui-widget-trending',
+      '@akashaproject/ui-widget-analytics',
       // '@akashaproject/ui-widget-sidebar',
     ],
+    analytics: {
+      trackerUrl: 'https://hb88px.matomo.cloud',
+      siteId: '1',
+    },
   };
 
   const sdk = getSDK();

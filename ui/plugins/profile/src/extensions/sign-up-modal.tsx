@@ -5,7 +5,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { useAnalytics, withProviders } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { lastValueFrom } from 'rxjs';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -16,6 +16,7 @@ const { SignUpModal } = DS;
 
 const SignUpModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
+  const [analyticsActions] = useAnalytics();
 
   const sdk = getSDK();
 
@@ -136,6 +137,12 @@ const SignUpModalContainer = (props: RootComponentProps) => {
         acceptedTerms: true,
       };
     });
+
+    analyticsActions.trackEvent({
+      category: 'Sign Up',
+      action: 'Invitation Code Added',
+    });
+
     localStorage.setItem('@acceptedTermsAndPrivacy', new Date().toISOString());
     props.navigateToModal({ name: 'signin', redirectTo: props.activeModal.redirectTo });
   };

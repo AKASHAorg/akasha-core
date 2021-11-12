@@ -15,5 +15,6 @@ export const register: (props: IntegrationRegistrationOptions) => LayoutConfig =
     widgetSlotId: 'widget-slot',
     modalSlotId: 'modal-slot',
     mountsIn: 'root',
+    staticWidgetSlotId: 'static-widget-slot',
   };
 };
