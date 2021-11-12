@@ -4,16 +4,13 @@ import DS from '@akashaproject/design-system';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
   useGetTag,
   LoginState,
-  ENTRY_KEY,
   useInfinitePostsByTag,
 } from '@akashaproject/ui-awf-hooks';
-import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
@@ -33,7 +30,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
   const { t, i18n } = useTranslation();
   const { tagName } = useParams<{ tagName: string }>();
-  const queryClient = useQueryClient();
   const getTagQuery = useGetTag(tagName);
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
@@ -55,31 +51,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
       reqPosts.fetchNextPage();
     }
   }, [reqPosts, loginState?.fromCache]);
-
-  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
-    let url;
-    switch (itemType) {
-      case ItemTypes.PROFILE:
-        url = `/profile/${details.entryId}`;
-        break;
-      case ItemTypes.TAG:
-        url = `/social-app/tags/${details.entryId}`;
-        // postsActions.resetPostIds();
-        break;
-      case ItemTypes.ENTRY:
-        url = `/social-app/post/${details.entryId}`;
-        break;
-      case ItemTypes.COMMENT:
-        /* Navigate to parent post because we don't have the comment page yet */
-        url = `/social-app/post/${
-          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
-        }`;
-        break;
-      default:
-        break;
-    }
-    props.singleSpa.navigateToUrl(url);
-  };
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginState?.pubKey) {
@@ -135,7 +106,6 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             requestStatus={reqPosts.status}
             loginState={loginState}
             loggedProfile={loggedProfileData}
-            onNavigate={handleNavigation}
             singleSpaNavigate={props.singleSpa.navigateToUrl}
             navigateToModal={props.navigateToModal}
             onLoginModalOpen={showLoginModal}

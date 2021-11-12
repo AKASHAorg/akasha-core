@@ -17,10 +17,10 @@ import {
   useUnfollow,
   useSearch,
   LoginState,
+  useHandleNavigation,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 const { Box, BasicCardBox, ErrorLoader, Spinner, ProfileSearchCard, TagSearchCard, SwitchCard } =
   DS;
@@ -55,6 +55,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
+  const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
+
   const searchReq = useSearch(
     decodeURIComponent(searchKeyword),
     loginState?.pubKey,
@@ -88,27 +90,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return;
     }
     followReq.mutate(ethAddress);
-  };
-
-  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
-    let url;
-    switch (itemType) {
-      case ItemTypes.PROFILE:
-        url = `/profile/${details.entryId}`;
-        break;
-      case ItemTypes.TAG:
-        url = `/social-app/tags/${details.entryId}`;
-        break;
-      case ItemTypes.ENTRY:
-        url = `/social-app/post/${details.entryId}`;
-        break;
-      case ItemTypes.COMMENT:
-        url = `/social-app/post/${details.replyTo.entryId}`;
-        break;
-      default:
-        break;
-    }
-    props.singleSpa.navigateToUrl(url);
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
