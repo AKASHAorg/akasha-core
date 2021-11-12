@@ -4,18 +4,15 @@ import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useGetProfile,
-  ENTRY_KEY,
   useInfinitePostsByAuthor,
   LoginState,
   useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
-import { useQueryClient } from 'react-query';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
@@ -33,8 +30,6 @@ const ProfilePage = (props: ProfilePageProps) => {
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const location = useLocation();
-  const queryClient = useQueryClient();
-
   const { pubKey } = useParams<{ pubKey: string }>();
 
   const publicKey = React.useMemo(() => {
@@ -73,33 +68,6 @@ const ProfilePage = (props: ProfilePageProps) => {
       reqPosts.fetchNextPage();
     }
   }, [reqPosts, loginQuery.data?.fromCache]);
-
-  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
-    let url;
-    switch (itemType) {
-      case ItemTypes.PROFILE:
-        if (details.entryId === pubKey) {
-          return;
-        }
-        url = `/profile/${details.entryId}`;
-        break;
-      case ItemTypes.TAG:
-        url = `/social-app/tags/${details.entryId}`;
-        break;
-      case ItemTypes.ENTRY:
-        url = `/social-app/post/${details.entryId}`;
-        break;
-      case ItemTypes.COMMENT:
-        /* Navigate to parent post because we don't have the comment page yet */
-        url = `/social-app/post/${
-          queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
-        }`;
-        break;
-      default:
-        break;
-    }
-    props.singleSpa.navigateToUrl(url);
-  };
 
   const profileUserName = React.useMemo(() => {
     if (profileState && profileState.name) {
@@ -203,7 +171,6 @@ const ProfilePage = (props: ProfilePageProps) => {
                   requestStatus={reqPosts.status}
                   loginState={loginQuery.data}
                   loggedProfile={loggedProfileData}
-                  onNavigate={handleNavigation}
                   singleSpaNavigate={props.singleSpa.navigateToUrl}
                   navigateToModal={props.navigateToModal}
                   onLoginModalOpen={showLoginModal}

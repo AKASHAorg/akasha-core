@@ -1,7 +1,12 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetBookmarks, useDeleteBookmark, useGetLogin } from '@akashaproject/ui-awf-hooks';
+import {
+  useGetBookmarks,
+  useDeleteBookmark,
+  useGetLogin,
+  useHandleNavigation,
+} from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -27,6 +32,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const loginQuery = useGetLogin();
 
+  const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
   const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && loginQuery.data?.ethAddress);
   const bookmarks = bookmarksReq.data;
   const deleteBookmark = useDeleteBookmark();
@@ -48,24 +54,6 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
     props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
-  };
-
-  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
-    let url;
-    switch (itemType) {
-      case ItemTypes.PROFILE:
-        url = `/profile/${details.entryId}`;
-        break;
-      case ItemTypes.TAG:
-        url = `/social-app/tags/${details.entryId}`;
-        break;
-      case ItemTypes.ENTRY:
-        url = `/social-app/post/${details.entryId}`;
-        break;
-      default:
-        break;
-    }
-    props.singleSpa.navigateToUrl(url);
   };
 
   const handleRepost = (_withComment: boolean, embedEntryId: string) => {

@@ -17,15 +17,6 @@ import { IContentClickDetails } from '@akashaproject/design-system/lib/component
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
-export interface NavigationDetails {
-  authorEthAddress: string;
-  entryId: string;
-  replyTo: {
-    authorEthAddress?: string;
-    entryId: string;
-  } | null;
-}
-
 export interface IEntryCardRendererProps {
   logger: ILogger;
   singleSpa: RootComponentProps['singleSpa'];
@@ -35,7 +26,7 @@ export interface IEntryCardRendererProps {
   locale?: ILocale;
   loginState: LoginState;
   onBookmark: (entryId: string) => void;
-  onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
+  onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
   onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
@@ -83,19 +74,23 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const handleClickAvatar = () => {
-    props.onNavigate(ItemTypes.PROFILE, {
-      entryId: itemData?.author.pubKey,
-      authorEthAddress: itemData?.author.ethAddress,
-      replyTo: null,
-    });
+    props.onNavigate(
+      {
+        id: itemData?.author.pubKey,
+        authorEthAddress: itemData?.author.ethAddress,
+      },
+      ItemTypes.PROFILE,
+    );
   };
 
   const handleContentClick = () => {
-    props.onNavigate(type, {
-      entryId: itemData.entryId,
-      authorEthAddress: itemData.author.ethAddress,
-      replyTo: null,
-    });
+    props.onNavigate(
+      {
+        id: itemData.entryId,
+        authorEthAddress: itemData.author.ethAddress,
+      },
+      type,
+    );
   };
 
   const itemData = React.useMemo(() => {

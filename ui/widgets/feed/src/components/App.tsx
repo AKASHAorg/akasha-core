@@ -3,7 +3,6 @@ import DS from '@akashaproject/design-system';
 import EntryFeed from './entry-feed';
 import ProfileFeed from './profile-feed';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
@@ -25,7 +24,6 @@ export interface IFeedWidgetProps {
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
   loginState: LoginState;
-  onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
   singleSpaNavigate: (url: string) => void;
   navigateToModal: (props: any) => void;
   onLoginModalOpen: (redirectTo?: ModalNavigationOptions) => void;

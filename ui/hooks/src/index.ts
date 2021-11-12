@@ -63,6 +63,7 @@ import {
 } from './use-comments';
 import { useGetBookmarks, useSaveBookmark, useDeleteBookmark } from './use-bookmarks';
 import { useSearch } from './use-search';
+import { useHandleNavigation } from './use-navigation';
 import {
   useCheckModerator,
   useGetCount,
@@ -136,6 +137,8 @@ export {
   useNetworkState,
   // use-mentions
   useMentionSearch,
+  // use-navigation
+  useHandleNavigation,
   // use-login
   LoginState,
   useGetLogin,
