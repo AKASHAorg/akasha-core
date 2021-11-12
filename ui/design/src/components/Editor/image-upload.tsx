@@ -75,7 +75,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           setImageSize({ height: Math.min(img.height, 640), width: Math.min(img.width, 640) });
         };
         img.src = fileReader.result as string;
-        const resp = await uploadRequest(file);
+        const resp = uploadRequest(file);
         if (resp.error) {
           setUploadErrorState(resp.error.message);
         } else if (resp.data) {

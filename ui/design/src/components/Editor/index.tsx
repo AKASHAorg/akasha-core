@@ -29,6 +29,7 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import LinkPreview from './link-preview';
+import { ImageGallery } from './image-gallery';
 
 const MAX_LENGTH = 280;
 
@@ -208,6 +209,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       app: publishingApp,
       quote: embedEntryData,
       linkPreview: linkPreviewState,
+      images: images,
       tags: [],
       mentions: [],
       version: 1,
@@ -249,7 +251,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
      */
     (function computeLength(nodeArr: Descendant[]) {
       if (nodeArr.length) {
-        nodeArr.map((node: Descendant) => {
+        nodeArr.forEach((node: Descendant) => {
           if (SlateText.isText(node)) {
             textLength += node.text.length;
           }
@@ -472,26 +474,29 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [uploading, setUploading] = React.useState(false);
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
+  const [images, setImages] = React.useState([]);
 
   const handleInsertImageLink = (data: ImageData) => {
     if (!data.src || !data.size) {
       return;
     }
-    CustomEditor.insertImage(editor, data.src, data.size);
+    setImages(prev => [...prev, data]);
+    // CustomEditor.insertImage(editor, data.src, data.size);
   };
 
   /**
-   * disable uploading media if there is a picture uploading or there is one already inserted
+   * disable uploading media if there is a picture uploading or max number of images already
    */
   const handleMediaClick = () => {
     if (uploadInputRef.current && !uploading && !imageUploadDisabled) {
       uploadInputRef.current.click();
     }
-    return;
   };
 
-  const handleDeleteImage = (element: Element) => {
-    CustomEditor.deleteImage(editor, element);
+  const handleDeleteImage = (element: any) => {
+    const newImages = images.filter(image => image.url !== element.url);
+    setImages(newImages);
+    // CustomEditor.deleteImage(editor, element);
   };
 
   return (
@@ -547,6 +552,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 />
               )}
             </Slate>
+            <ImageGallery images={images} handleDeleteImage={handleDeleteImage} />
             <ImageUpload
               uploading={uploading}
               setUploading={setUploading}

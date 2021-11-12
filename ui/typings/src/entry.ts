@@ -30,6 +30,7 @@ export interface ITag {
 export interface IEntryData {
   CID?: string;
   linkPreview?: LinkPreview_Response;
+  images?: { url: string; size: any }[];
   slateContent: Descendant[];
   time?: string | number | Date;
   updatedAt?: string | number | Date;
@@ -77,6 +78,7 @@ export interface IMetadata {
   app: string;
   version: number;
   linkPreview?: LinkPreview_Response;
+  images?: { url: string; size: any }[];
   quote?: IEntryData;
   tags: string[];
   mentions: string[];
