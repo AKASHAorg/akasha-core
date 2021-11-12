@@ -281,7 +281,11 @@ export default class AppLoader {
       },
     });
   }
-  // Just found https://core-econ.org/the-economy/?lang=en
+  /**
+   * Handles the modal mounting logic into the slot defined by the layout widget.
+   * This is triggered when we receive a moudal-mount event via the eventBus and
+   * it iterates through the apps/widgets and finds an extention point that matches the modal name
+   */
   public onModalMount(modalData: UIEventData['data']) {
     this.loaderLogger.info(`Modal mounted: ${JSON.stringify(modalData)}`);
 
@@ -315,6 +319,10 @@ export default class AppLoader {
       }
     }
   }
+  /**
+   * Find the parcel that was mounted into the modal slot
+   * and call unmount() on it
+   */
   public onModalUnmount(modalData: UIEventData['data']) {
     if (this.activeModal && this.activeModal.name === modalData.name) {
       const parcelData = this.findParcel(modalData.name);
@@ -378,7 +386,13 @@ export default class AppLoader {
       return mountPoint === extensionData?.name && isActive;
     });
   }
-
+  /**
+   * Various apps can define one or more extension point slots.
+   * Whenever an extension point slot is mounted (aka rendered into the dom),
+   * it triggers a 'extension-point-mount' event.
+   * Here we iterate over the apps and widgets to find an extension point that matches the slot name.
+   * The actual mount/render of the extesion point is done in mountExtensionPoint method.
+   */
   public onExtensionPointMount(extensionData?: UIEventData['data']) {
     const layoutName = getNameFromDef(this.worldConfig.layout);
     if (!layoutName) {
@@ -508,7 +522,9 @@ export default class AppLoader {
       return null;
     }
   }
-
+  /**
+   * Renders the layout widget that is defined in the world config.
+   */
   public async loadLayout() {
     if (!this.layoutConfig) {
       this.loaderLogger.warn('Layout config is undefined!');
@@ -543,7 +559,10 @@ export default class AppLoader {
     });
     return layoutParcel.mountPromise;
   }
-
+  /**
+   * Install an integration
+   * WIP
+   */
   public async installIntegration(integration?: { name: string; version?: string }) {
     if (!integration) {
       return;
@@ -641,6 +660,11 @@ export default class AppLoader {
     this.menuItems.items.push({ ...menuItem, index: this.menuItems.nextIndex });
     this.menuItems.nextIndex += 1;
   }
+
+  /**
+   * call single-spa's mountRootParcel.
+   * this is the actual mounting logic of the extension point
+   */
 
   private async mountExtensionPoint(
     extensionPoint: ExtensionPointDefinition,
