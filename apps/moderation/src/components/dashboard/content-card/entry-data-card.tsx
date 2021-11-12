@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
-
-import { redirectToPost } from '../../../services/routing-service';
+import { useHandleNavigation } from '@akashaproject/ui-awf-hooks';
+import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { ITEM_TYPE_CONVERTER } from '../../../services/constants';
 
 const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 
@@ -23,7 +24,17 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
 
   const { t } = useTranslation();
 
-  const handleNavigateToPost = redirectToPost(props.singleSpa.navigateToUrl);
+  const handleNavigate = useHandleNavigation(props.singleSpa.navigateToUrl);
+
+  const handleContentClick = React.useCallback(
+    (details: IContentClickDetails) => {
+      const translatedItemType = ITEM_TYPE_CONVERTER[itemType];
+      if (translatedItemType >= 0) {
+        handleNavigate(details, translatedItemType);
+      }
+    },
+    [handleNavigate, itemType],
+  );
 
   return (
     <MainAreaCardBox>
@@ -41,7 +52,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               style={{ height: 'auto' }}
               contentClickable={true}
               onClickAvatar={() => null}
-              onContentClick={handleNavigateToPost}
+              onContentClick={handleContentClick}
               disableReposting={true}
               isModerated={true}
               isRemoved={entryData.isRemoved}
