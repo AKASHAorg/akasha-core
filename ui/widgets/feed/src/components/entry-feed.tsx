@@ -3,7 +3,12 @@ import DS from '@akashaproject/design-system';
 import { IFeedWidgetProps } from './App';
 import EntryRenderer from './entry-renderer';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { useSaveBookmark, useGetBookmarks, useDeleteBookmark } from '@akashaproject/ui-awf-hooks';
+import {
+  useSaveBookmark,
+  useGetBookmarks,
+  useDeleteBookmark,
+  useHandleNavigation,
+} from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { EntryList } = DS;
@@ -12,6 +17,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   const saveBookmarkQuery = useSaveBookmark();
   const delBookmarkQuery = useDeleteBookmark();
   const getBookmarksQuery = useGetBookmarks(props.loginState.ethAddress, props.loginState.isReady);
+  const handleNavigation = useHandleNavigation(props.singleSpaNavigate);
 
   const handleBookmark = (isBookmarked: boolean, entryId: string) => {
     if (props.loginState.isReady && props.loginState.pubKey) {
@@ -51,7 +57,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           locale={props.i18n.languages[0] as ILocale}
           bookmarksQuery={getBookmarksQuery}
           onBookmark={handleBookmark}
-          onNavigate={props.onNavigate}
+          onNavigate={handleNavigation}
           singleSpaNavigate={props.singleSpaNavigate}
           onFlag={props.onEntryFlag}
           onRepost={handleRepost}

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
@@ -15,7 +14,6 @@ import {
   useUnfollow,
   useInfiniteComments,
   useCreateComment,
-  COMMENT_KEY,
   useGetBookmarks,
   useSaveBookmark,
   useDeleteBookmark,
@@ -24,14 +22,14 @@ import {
   mapEntry,
   useGetProfile,
   useMentionSearch,
+  useHandleNavigation,
 } from '@akashaproject/ui-awf-hooks';
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { redirect, redirectToPost } from '../../services/routing-service';
+import { redirect } from '../../services/routing-service';
 import routes, { POST } from '../../routes';
 
 const {
@@ -50,18 +48,20 @@ const {
 interface IPostPageProps {
   loginState?: LoginState;
   showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
-  navigateToUrl: (path: string) => void;
 }
 
 const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
-  const { showLoginModal, logger, navigateToUrl, loginState } = props;
+  const {
+    showLoginModal,
+    logger,
+    singleSpa: { navigateToUrl },
+    loginState,
+  } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t, i18n } = useTranslation();
-
-  const queryClient = useQueryClient();
 
   const postReq = usePost({
     postId,
@@ -138,30 +138,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     }
   };
 
-  const handleNavigation = (itemType: ItemTypes, details: IContentClickDetails) => {
-    let url;
-    switch (itemType) {
-      case ItemTypes.PROFILE:
-        url = `/profile/${details.entryId}`;
-        break;
-      case ItemTypes.TAG:
-        url = `/social-app/tags/${details.entryId}`;
-        break;
-      case ItemTypes.ENTRY:
-        url = `/social-app/post/${details.entryId}`;
-        break;
-      case ItemTypes.COMMENT:
-        /* Navigate to parent post because we don't have the comment page yet */
-        url = `/social-app/post/${
-          queryClient.getQueryData<{ postId: string }>([COMMENT_KEY, details.entryId])?.postId
-        }`;
-        break;
-      default:
-        break;
-    }
-    props.singleSpa.navigateToUrl(url);
-  };
-
   const bookmarked = React.useMemo(() => {
     return !bookmarksReq.isFetching && bookmarks?.findIndex(bm => bm.entryId === postId) >= 0;
   }, [bookmarksReq.isFetching, bookmarks, postId]);
@@ -171,7 +147,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   };
 
   const handleTagClick = (name: string) => {
-    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
+    navigateToUrl(`/social-app/tags/${name}`);
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
@@ -211,7 +187,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     }
   };
 
-  const handleNavigateToPost = redirectToPost(navigateToUrl, postId);
+  const handleNavigate = useHandleNavigation(navigateToUrl, postId);
 
   const handleSingleSpaNavigate = redirect(navigateToUrl);
 
@@ -340,7 +316,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}
-                  onContentClick={handleNavigateToPost}
+                  onContentClick={handleNavigate}
                   singleSpaNavigate={handleSingleSpaNavigate}
                   onMentionClick={handleMentionClick}
                   onTagClick={handleTagClick}
@@ -444,8 +420,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   `${window.location.origin}/social-app/post/${itemId}`
                 }
                 loginState={loginState}
-                onNavigate={handleNavigation}
-                singleSpaNavigate={props.singleSpa.navigateToUrl}
+                singleSpaNavigate={navigateToUrl}
                 navigateToModal={props.navigateToModal}
                 onLoginModalOpen={showLoginModal}
                 requestStatus={reqComments.status}

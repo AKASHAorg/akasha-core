@@ -21,7 +21,7 @@ export interface IEntryCardRendererProps {
   ethAddress?: string | null;
   onBookmark: (isBookmarked: boolean, entryId: string, itemType: ItemTypes) => void;
   bookmarksQuery: ReturnType<typeof useGetBookmarks>;
-  onNavigate: (itemType: ItemTypes, details: IContentClickDetails) => void;
+  onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
   onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
@@ -70,19 +70,24 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const handleClickAvatar = () => {
-    props.onNavigate(ItemTypes.PROFILE, {
-      entryId: itemData?.author.pubKey,
-      authorEthAddress: itemData?.author.ethAddress,
-      replyTo: null,
-    });
+    props.onNavigate(
+      {
+        id: itemData?.author.pubKey,
+        authorEthAddress: itemData?.author.ethAddress,
+      },
+      ItemTypes.PROFILE,
+    );
   };
 
   const handleContentClick = () => {
-    props.onNavigate(itemType, {
-      entryId: itemData.entryId,
-      authorEthAddress: itemData.author.ethAddress,
-      replyTo: itemData.postId ? { entryId: itemData.postId } : null,
-    });
+    props.onNavigate(
+      {
+        id: itemData.entryId,
+        authorEthAddress: itemData.author.ethAddress,
+        replyTo: itemData.postId ? { entryId: itemData.postId } : null,
+      },
+      itemType,
+    );
   };
 
   const [isReported, isAccountReported] = React.useMemo(() => {
