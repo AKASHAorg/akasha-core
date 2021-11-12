@@ -25,6 +25,7 @@ import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { useAnalytics } from '@akashaproject/ui-awf-hooks';
 
 const { Box, BasicCardBox, ErrorLoader, Spinner, ProfileSearchCard, TagSearchCard, SwitchCard } =
   DS;
@@ -53,6 +54,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const bookmarksQuery = useGetBookmarks(loginState?.isReady && loginState?.ethAddress);
   const addBookmark = useSaveBookmark();
   const deleteBookmark = useDeleteBookmark();
+  const [analyticsActions] = useAnalytics();
 
   const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
   const tagSubscriptionsState = tagSubscriptionsReq.data;
@@ -80,6 +82,24 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: 'Trending Topic',
+      action: 'Subscribe',
+      name: 'Feed',
+    });
+    toggleTagSubscriptionReq.mutate(tagName);
+  };
+
+  const handleTagUnsubscribe = (tagName: string) => {
+    if (!loginState?.ethAddress) {
+      showLoginModal();
+      return;
+    }
+    analyticsActions.trackEvent({
+      category: 'Trending Topic',
+      action: 'Unsubscribe',
+      name: 'Feed',
+    });
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
@@ -91,6 +111,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: 'People',
+      action: 'Follow',
+      name: 'Feed',
+    });
     followReq.mutate(ethAddress);
   };
 
@@ -127,11 +152,21 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const handleBookmark = (isBookmarked: boolean, entryId: string, itemType: ItemTypes) => {
     if (loginState?.pubKey) {
       if (!isBookmarked) {
+        analyticsActions.trackEvent({
+          category: 'Post',
+          action: 'Bookmark',
+          name: 'Feed',
+        });
         return addBookmark.mutate({
           entryId,
           itemType,
         });
       }
+      analyticsActions.trackEvent({
+        category: 'Post',
+        action: 'Remove Bookmark',
+        name: 'Feed',
+      });
       return deleteBookmark.mutate(entryId);
     } else {
       showLoginModal();
@@ -143,6 +178,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: 'People',
+      action: 'Unfollow',
+      name: 'Feed',
+    });
     unfollowReq.mutate(ethAddress);
   };
 
@@ -178,6 +218,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const buttonLabels = buttonValues.map(value => t(value));
 
   const onTabClick = (value: string) => {
+    analyticsActions.trackEvent({
+      category: 'Filter Search',
+      action: `By ${value}`, // don't use translated strings
+    });
     setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
   };
 
@@ -261,7 +305,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   tagAnchorLink={'/social-app/tags'}
                   onClickTag={() => handleTagClick(tag.name)}
                   handleSubscribeTag={handleTagSubscribe}
-                  handleUnsubscribeTag={handleTagSubscribe}
+                  handleUnsubscribeTag={handleTagUnsubscribe}
                 />
               </Box>
             ))}
