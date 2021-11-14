@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useQueryClient } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
@@ -12,12 +11,10 @@ import {
   useMutationListener,
   createPendingEntry,
   LoginState,
-  ENTRY_KEY,
 } from '@akashaproject/ui-awf-hooks';
 
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
@@ -34,7 +31,6 @@ export interface FeedPageProps {
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
 
-  const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -57,33 +53,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     return [];
   }, [postsReq.data]);
-
-  const handleNavigation = React.useCallback(
-    (itemType: ItemTypes, details: IContentClickDetails) => {
-      let url;
-      switch (itemType) {
-        case ItemTypes.PROFILE:
-          url = `/profile/${details.entryId}`;
-          break;
-        case ItemTypes.TAG:
-          url = `/social-app/tags/${details.entryId}`;
-          break;
-        case ItemTypes.ENTRY:
-          url = `/social-app/post/${details.entryId}`;
-          break;
-        case ItemTypes.COMMENT:
-          /* Navigate to parent post because we don't have the comment page yet */
-          url = `/social-app/post/${
-            queryClient.getQueryData<{ postId: string }>([ENTRY_KEY, details.entryId]).postId
-          }`;
-          break;
-        default:
-          break;
-      }
-      props.singleSpa.navigateToUrl(url);
-    },
-    [queryClient, props.singleSpa],
-  );
 
   const handleShowEditor = React.useCallback(() => {
     navigateToModal.current({ name: 'editor' });
@@ -122,11 +91,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       ) : (
         <Box margin={{ bottom: 'medium' }}>
           <LoginCTAWidgetCard
-            title={`🚀 ${t(' Welcome to Ethereum World!')}`}
+            title={`${t('Welcome, fellow Ethereans!')} 💫`}
             subtitle={t('We are in private alpha at this time. ')}
-            beforeLinkLabel={t("If you'd like to participate,")}
-            afterLinkLabel={t("and we'll add you to our wait list!")}
-            writeToUsLabel={t('write to us')}
+            beforeLinkLabel={t("If you'd like to participate, just ")}
+            afterLinkLabel={t(
+              ' and we’ll send you a ticket for the next shuttle going to Ethereum World.',
+            )}
+            disclaimerLabel={t(
+              'Please bear in mind we’re onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀',
+            )}
+            writeToUsLabel={t('drop us a message')}
             writeToUsUrl={'mailto:alpha@ethereum.world'}
           />
         </Box>
@@ -168,7 +142,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
         loginState={loginState}
-        onNavigate={handleNavigation}
         singleSpaNavigate={props.singleSpa.navigateToUrl}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}

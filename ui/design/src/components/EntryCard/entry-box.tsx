@@ -23,14 +23,15 @@ import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
-  entryId: string;
-  replyTo: {
+  id: string;
+  replyTo?: {
     authorEthAddress?: string;
     entryId?: string;
-  } | null;
+  };
 }
 export interface IEntryBoxProps {
   // data
@@ -76,7 +77,7 @@ export interface IEntryBoxProps {
   handleUnfollowAuthor?: (profileEthAddress: string) => void;
   isFollowingAuthor?: boolean;
   // redirects
-  onContentClick?: (details: IContentClickDetails) => void;
+  onContentClick?: (details: IContentClickDetails, itemType?: ItemTypes) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
   onMentionClick?: (pubKey: string) => void;
@@ -228,11 +229,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const handleContentClick = (data?: IEntryData) => {
     if (onContentClick && typeof onContentClick === 'function' && data) {
-      onContentClick({
-        authorEthAddress: data.author.ethAddress,
-        entryId: data.entryId,
-        replyTo: data.postId ? { entryId: data.postId } : null,
-      });
+      const replyTo = data.postId ? { entryId: data.postId } : null;
+      const itemType = replyTo ? ItemTypes.COMMENT : ItemTypes.ENTRY;
+      onContentClick(
+        {
+          authorEthAddress: data.author.ethAddress,
+          id: data.entryId,
+          replyTo,
+        },
+        itemType,
+      );
     }
   };
 
@@ -476,9 +482,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             height={{ max: '50rem' }}
             overflow={scrollHiddenContent ? 'auto' : 'hidden'}
             style={{ cursor: contentClickable ? 'pointer' : 'default' }}
-            onClick={() =>
-              !disableActions && contentClickable ? handleContentClick(entryData) : false
-            }
+            onClick={() => !disableActions && contentClickable && handleContentClick(entryData)}
           >
             <ReadOnlyEditor
               content={entryData.slateContent}
