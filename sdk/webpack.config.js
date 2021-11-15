@@ -62,7 +62,12 @@ const config = {
     },
   },
   plugins: [
-    new Dotenv({ safe: process.env.NODE_ENV === 'production', systemvars: true }),
+    new Dotenv({
+      path: path.resolve(__dirname, '../.env'),
+      safe:
+        process.env.NODE_ENV === 'production' ? path.resolve(__dirname, '../.env.example') : false,
+      systemvars: true,
+    }),
     new webpack.DefinePlugin({
       __DEV__: process.env.NODE_ENV !== 'production',
     }),
