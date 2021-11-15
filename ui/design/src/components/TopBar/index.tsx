@@ -12,6 +12,8 @@ import {
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  StyledTextOnboarding,
+  StyledAnchor,
   StyledContentBox,
   BrandIcon,
   MenuIcon,
@@ -45,6 +47,9 @@ export interface ITopbarProps {
   moderationLabel?: string;
   moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
+  stuckLabel?: string;
+  helpLabel?: string;
+  writeToUs?: string;
   // moderator tools
   isModerator?: boolean;
   dashboardLabel?: string;
@@ -85,6 +90,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
     isModerator,
     dashboardLabel,
     dashboardInfoLabel,
+    stuckLabel,
+    helpLabel,
+    writeToUs,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -127,6 +135,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
       setLegalMenu(legal);
     }
   }, [otherAreaItems]);
+
+  const shouldRenderOnboarding = React.useMemo(
+    () => currentLocation.startsWith('/temp'),
+    [currentLocation],
+  );
 
   const handleNavigation = (menuItem: IMenuItem) => () => {
     if (onNavigation) {
@@ -199,6 +212,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   );
 
   const renderPluginIcon = (menuItem: IMenuItem) => {
+    if (shouldRenderOnboarding) return null;
     if (menuItem.name === 'ui-plugin-notifications') {
       return (
         <IconDiv
@@ -240,34 +254,35 @@ const Topbar: React.FC<ITopbarProps> = props => {
     if (menuItem.subRoutes?.length && currentLocation?.includes(menuItem?.subRoutes[0]?.route)) {
       return true;
     }
-    if (loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey)) {
-      return true;
-    }
-    return false;
+    return !!(loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey));
   };
 
-  const renderPluginButton = (menuItem: IMenuItem, index: number) => (
-    <StyledDiv
-      key={index}
-      ref={ref => {
-        menuItemRefs.current[menuItem.index] = ref;
-      }}
-    >
-      {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
-        <Avatar
-          active={checkActiveAvatar(menuItem)}
-          ethAddress={loggedProfileData?.ethAddress}
-          src={loggedProfileData?.avatar}
-          size="xs"
-          onClick={onClickAvatarButton(menuItem)}
-        />
-      ) : (
-        renderPluginIcon(menuItem)
-      )}
-    </StyledDiv>
-  );
+  const renderPluginButton = (menuItem: IMenuItem, index: number) => {
+    if (shouldRenderOnboarding) return null;
+    return (
+      <StyledDiv
+        key={index}
+        ref={ref => {
+          menuItemRefs.current[menuItem.index] = ref;
+        }}
+      >
+        {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
+          <Avatar
+            active={checkActiveAvatar(menuItem)}
+            ethAddress={loggedProfileData?.ethAddress}
+            src={loggedProfileData?.avatar}
+            size="xs"
+            onClick={onClickAvatarButton(menuItem)}
+          />
+        ) : (
+          renderPluginIcon(menuItem)
+        )}
+      </StyledDiv>
+    );
+  };
 
   const renderSearchArea = () => {
+    if (shouldRenderOnboarding) return null;
     if (searchAreaItem) {
       if (isMobileOnly) {
         return (
@@ -346,10 +361,18 @@ const Topbar: React.FC<ITopbarProps> = props => {
           {loggedProfileData?.ethAddress &&
             quickAccessItems &&
             quickAccessItems.map(renderPluginButton)}
-          {!isMobileOnly && !loggedProfileData?.ethAddress && (
+          {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
             <Box direction="row" align="center" gap="small">
               <Button onClick={onLoginClick} label={signInLabel} />
               <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
+            </Box>
+          )}
+          {shouldRenderOnboarding && (
+            <Box direction="row">
+              <StyledTextOnboarding margin={{ right: '0.2rem' }} alignSelf="center">
+                {stuckLabel}
+              </StyledTextOnboarding>
+              <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
             </Box>
           )}
           {!loggedProfileData?.ethAddress && (
@@ -376,11 +399,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
       fill="horizontal"
       className={className}
       elevation="shadow"
-      height={mobileSignedOutView ? '6rem' : '3rem'}
+      height={mobileSignedOutView && !shouldRenderOnboarding ? '6rem' : '3rem'}
       border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
     >
       {renderContent()}
-      {mobileSignedOutView && (
+      {mobileSignedOutView && !shouldRenderOnboarding && (
         <Box direction="row" align="center" gap="small" fill="horizontal">
           <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
           <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
@@ -433,6 +456,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
+          minimalMenu={shouldRenderOnboarding}
         />
       )}
     </TopbarWrapper>

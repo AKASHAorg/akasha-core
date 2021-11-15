@@ -38,6 +38,7 @@ export interface IProfileMenu {
   onDashboardClick: () => void;
   onLogout?: () => void;
   modalSlotId: string;
+  minimalMenu?: boolean;
 }
 
 interface ISimilarMenu {
@@ -71,6 +72,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     onDashboardClick,
     onLogout,
     modalSlotId,
+    minimalMenu,
   } = props;
 
   const handleNavigation = (menuItem: IMenuItem) => () => {
@@ -133,6 +135,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
       icon: 'book',
       labels: [moderationLabel, moderationInfoLabel],
       handler: handleModerationClick,
+      preventRender: minimalMenu,
     },
   ];
 
