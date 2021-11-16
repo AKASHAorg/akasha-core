@@ -114,17 +114,7 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
             <Router>
               <Routes>
                 <Route
-                  path="/sign-in"
-                  element={
-                    <ExtensionPoint
-                      name={props.layoutConfig.focusedPluginSlotId}
-                      onMount={handleExtensionMount}
-                      onUnmount={handleExtensionUnmount}
-                    />
-                  }
-                />
-                <Route
-                  path="/sign-up"
+                  path="/auth-app/*"
                   element={
                     <ExtensionPoint
                       name={props.layoutConfig.focusedPluginSlotId}
