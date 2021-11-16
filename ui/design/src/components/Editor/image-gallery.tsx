@@ -34,8 +34,6 @@ const ImageGallery: React.FC<IImageGallery> = props => {
         >
           <div
             role="img"
-            aria-label={image.url}
-            contentEditable={false}
             style={{
               minHeight: 30,
               height: 'fit-content',
@@ -60,7 +58,7 @@ const ImageGallery: React.FC<IImageGallery> = props => {
               </StyledCloseDiv>
             )}
             <picture>
-              <StyledImg src={image.url} />
+              <StyledImg src={image.src} />
             </picture>
           </div>
         </div>

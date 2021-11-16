@@ -19,7 +19,10 @@ export interface IImageUpload {
   uploading: boolean;
   setUploading: React.Dispatch<React.SetStateAction<boolean>>;
   // handlers
-  uploadRequest?: (data: string | File, isUrl?: boolean) => { data?: ImageData; error?: Error };
+  uploadRequest?: (
+    data: string | File,
+    isUrl?: boolean,
+  ) => Promise<{ data?: ImageData; error?: Error }>;
   handleInsertImage: (data: ImageData) => void;
   // ref for hidden input
   ref: React.Ref<HTMLInputElement>;
@@ -75,7 +78,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           setImageSize({ height: Math.min(img.height, 640), width: Math.min(img.width, 640) });
         };
         img.src = fileReader.result as string;
-        const resp = uploadRequest(file);
+        const resp = await uploadRequest(file);
         if (resp.error) {
           setUploadErrorState(resp.error.message);
         } else if (resp.data) {

@@ -494,7 +494,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   };
 
   const handleDeleteImage = (element: any) => {
-    const newImages = images.filter(image => image.url !== element.url);
+    const newImages = images.filter(image => image.src !== element.src);
     setImages(newImages);
     // CustomEditor.deleteImage(editor, element);
   };
