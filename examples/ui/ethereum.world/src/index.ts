@@ -19,6 +19,7 @@ console.time('AppLoader:firstMount');
     // homepageApp is always loaded by default
     defaultApps: [
       '@akashaproject/app-moderation-ewa',
+      '@akashaproject/app-auth-ewa',
       '@akashaproject/app-search',
       '@akashaproject/ui-plugin-app-center',
       '@akashaproject/ui-plugin-profile',
