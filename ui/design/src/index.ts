@@ -69,6 +69,7 @@ import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
 import TopicsWidgetCard from './components/TopicsWidgetCard';
 import TrendingWidgetCard from './components/TrendingWidgetCard';
 import TutorialWidgetCard from './components/TutorialWidgetCard';
+import SignUpCard from './components/SignUpCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
@@ -78,6 +79,8 @@ import IconButton from './components/IconButton';
 import IconLink from './components/IconLink';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
+import SelectAddressButton from './components/SelectAddressButton';
+import Web3ConnectButton from './components/Web3ConnectButton';
 
 import AreaChart from './components/AreaChart';
 import LineChart from './components/LineChart';
@@ -88,6 +91,8 @@ import { editorDefaultValue } from './components/Editor/initialValue';
 import EditorMeter from './components/EditorMeter';
 
 import HorizontalDivider from './components/HorizontalDivider';
+
+import StepIndicator from './components/StepIndicator';
 
 import ErrorLoader from './components/ErrorLoader';
 import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
@@ -211,6 +216,8 @@ const exported = {
   SignUpModal,
   ProfileAvatarButton,
   VoteIconButton,
+  SelectAddressButton,
+  Web3ConnectButton,
   CommentInput,
   SearchInput,
   MainAreaCardBox,
@@ -267,11 +274,13 @@ const exported = {
   NotificationsCard,
   notify,
   HorizontalDivider,
+  StepIndicator,
+  CookieWidgetCard,
   LoginCTAWidgetCard,
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
-  CookieWidgetCard,
+  SignUpCard,
   FilterCard,
   SwitchCard,
   MdCard,
