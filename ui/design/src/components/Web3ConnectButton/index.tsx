@@ -15,7 +15,7 @@ const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
   const { titleLabel, subtitleLabel, leftIconType, handleClick } = props;
 
   return (
-    <BasicCardBox pad="medium" callToAction={true} clickHandler={handleClick}>
+    <BasicCardBox pad="medium" callToAction={true} onClick={handleClick}>
       <Box direction="row" justify="between" align="center">
         <Box direction="row" align="center">
           {leftIconType && (

@@ -13,7 +13,7 @@ const SelectAddressButton: React.FC<ISelectAddressButtonProps> = props => {
   const { titleLabel, handleClick } = props;
 
   return (
-    <BasicCardBox pad="medium" callToAction={true} clickHandler={handleClick}>
+    <BasicCardBox pad="medium" callToAction={true} onClick={handleClick}>
       <Box pad={{ vertical: 'xxsmall' }} direction="row" justify="between" align="center">
         <Text color="accentText" size="1rem">
           {titleLabel}
