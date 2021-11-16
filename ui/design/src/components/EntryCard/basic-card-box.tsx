@@ -22,6 +22,7 @@ export interface IBasicCardBox {
   noBorderRadius?: boolean;
   bottomBorderOnly?: boolean;
   isSelected?: boolean;
+  onClick?: () => void;
 }
 
 const BasicCardBox: React.FC<IBasicCardBox> = ({
@@ -40,6 +41,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   noBorderRadius,
   bottomBorderOnly,
   isSelected,
+  onClick,
 }) => (
   <StyledBox
     style={style}
@@ -90,6 +92,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     }
     className={className}
     ref={rootNodeRef}
+    onClick={onClick}
   >
     {children}
   </StyledBox>
