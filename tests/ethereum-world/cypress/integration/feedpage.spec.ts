@@ -19,7 +19,7 @@ describe('Feed Page', () => {
       cy.get('[data-testid="avatar-image"]', { timeout: 6000 })
         .first()
         .should('have.attr', 'src')
-        .and('contain', 'https://');
+        .and('not.be.empty');
     });
 
     it('should open report popup on click', () => {
