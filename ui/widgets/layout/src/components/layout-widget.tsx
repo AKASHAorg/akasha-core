@@ -8,7 +8,14 @@ import {
   WidgetAreaContainer,
   WidgetContainer,
 } from './styled-containers';
-import { ModalSlot, PluginSlot, TopbarSlot, SidebarSlot, WidgetSlot } from './styled-slots';
+import {
+  ModalSlot,
+  PluginSlot,
+  TopbarSlot,
+  SidebarSlot,
+  WidgetSlot,
+  FocusedPluginSlot,
+} from './styled-slots';
 import CookieWidget from './cookie-widget';
 import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
@@ -17,7 +24,7 @@ import { I18nextProvider } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-const { Box, responsiveBreakpoints, ExtensionPoint } = DS;
+const { Box, responsiveBreakpoints } = DS;
 
 const LayoutWidget: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
@@ -116,11 +123,13 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
                 <Route
                   path="/auth-app/*"
                   element={
-                    <ExtensionPoint
-                      name={props.layoutConfig.focusedPluginSlotId}
-                      onMount={handleExtensionMount}
-                      onUnmount={handleExtensionUnmount}
-                    />
+                    <MainAreaContainer sidebarVisible={false}>
+                      <FocusedPluginSlot
+                        name={props.layoutConfig.focusedPluginSlotId}
+                        onMount={handleExtensionMount}
+                        onUnmount={handleExtensionUnmount}
+                      />
+                    </MainAreaContainer>
                   }
                 />
                 <Route

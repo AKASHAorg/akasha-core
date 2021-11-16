@@ -20,6 +20,7 @@ console.time('AppLoader:firstMount');
     defaultApps: [
       '@akashaproject/app-moderation-ewa',
       '@akashaproject/app-search',
+      '@akashaproject/app-auth-ewa',
       '@akashaproject/ui-plugin-app-center',
       '@akashaproject/ui-plugin-profile',
       '@akashaproject/ui-plugin-notifications',
