@@ -31,6 +31,8 @@ export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
   top: 0;
 `;
 
+export const FocusedPluginSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)``;
+
 export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   margin-top: 0.5em;
   width: 100%;
