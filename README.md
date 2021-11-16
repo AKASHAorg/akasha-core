@@ -67,18 +67,6 @@ This repository is split into four [lerna](https://github.com/lerna/lerna) works
 
 ### SDK
 
-#### Package Components
-
-- [Akasha](./sdk-packages/akasha/README.md)
-- [App-Loader](./sdk-packages/app-loader/README.md)
-- [Auth](./sdk-packages/auth/README.md)
-- [Common](./sdk-packages/common/README.md)
-- [Core](./sdk-packages/core/README.md)
-- [DB/persistence](./sdk-packages/db/README.md)
-- [Profiles](./sdk-packages/profiles/README.md)
-- [Registry](./sdk-packages/registry/README.md)
-- [Runtime](./sdk-packages/runtime/README.md)
-
 #### Build the sdk package
 
 From the root of the project:
@@ -111,12 +99,10 @@ where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-syst
 
 This [workspace](./examples) contains examples of applications that showcase the usage of AWF.
 
-### Scripts workspace
-- [Development database server](./scripts/server-db)
+### Getting started with local development
 
-### Translations
-TODO: expand documentation
-- [Translations server](./scripts/translations-server)
+Follow the steps described [here](./LOCAL_DEV.md)
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

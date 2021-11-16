@@ -4,6 +4,8 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const commons = require('./app.pack.conf');
+const path = require('path');
+const Dotenv = require('dotenv-webpack');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -32,12 +34,11 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
-    new webpack.EnvironmentPlugin({
-      MODERATION_API:
-        process.env.MODERATION_API || 'https://staging-api.ethereum.world/api/moderation',
-      INFURA_ID: process.env.INFURA_ID || '',
-      BUCKET_VERSION: process.env.BUCKET_VERSION || '',
-      EWA_MAILSENDER: process.env.EWA_MAILSENDER || '',
+    new Dotenv({
+      path: path.resolve(__dirname, '../.env'),
+      safe:
+        process.env.NODE_ENV === 'production' ? path.resolve(__dirname, '../.env.example') : false,
+      systemvars: true,
     }),
     new webpack.DefinePlugin({
       __DEV__: process.env.NODE_ENV !== 'production',
