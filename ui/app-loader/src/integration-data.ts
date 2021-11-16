@@ -11,6 +11,7 @@
 // "@plugins/search": "/plugins/search/index.js",
 // "@akashaproject/app-akasha-integration": "/apps/akasha/index.js",
 // "@akashaproject/app-moderation-ewa": "/apps/moderation/index.js"
+// "@akashaproject/app-onboarding-ewa": "/apps/akasha/index.js"
 
 export const integrationsData = {
   '@akashaproject/ui-widget-layout': {
@@ -56,6 +57,15 @@ export const integrationsData = {
     versions: {
       // we can have something like //gateway.ipfs.io/ipfs/Qem123dfea1234
       '0.0.1': '/apps/moderation/index.js',
+    },
+    type: 'app',
+  },
+  '@akashaproject/app-onboarding-ewa': {
+    name: '@akashaproject/app-onboarding-ewa',
+    lastVersion: '0.0.1',
+    description: 'Onboarding app',
+    versions: {
+      '0.0.1': '/apps/onboarding/index.js',
     },
     type: 'app',
   },
