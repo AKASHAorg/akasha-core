@@ -8,13 +8,21 @@ import {
   WidgetAreaContainer,
   WidgetContainer,
 } from './styled-containers';
-import { ModalSlot, PluginSlot, TopbarSlot, SidebarSlot, WidgetSlot } from './styled-slots';
+import {
+  ModalSlot,
+  PluginSlot,
+  TopbarSlot,
+  SidebarSlot,
+  WidgetSlot,
+  FocusedPluginSlot,
+} from './styled-slots';
 import CookieWidget from './cookie-widget';
 import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from '../i18n';
 import { I18nextProvider } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const { Box, responsiveBreakpoints } = DS;
 
@@ -110,49 +118,72 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
             onUnmount={handleExtensionUnmount}
           />
           <Box direction="row" flex={true}>
-            <SidebarWrapper visible={showSidebar}>
-              <SidebarSlot
-                name={props.layoutConfig.sidebarSlotId}
-                onMount={handleExtensionMount}
-                onUnmount={handleExtensionUnmount}
-              />
-            </SidebarWrapper>
-            <MainAreaContainer sidebarVisible={showSidebar}>
-              <Box direction="row">
-                <PluginSlot
-                  name={props.layoutConfig.pluginSlotId}
-                  onMount={handleExtensionMount}
-                  onUnmount={handleExtensionUnmount}
+            <Router>
+              <Routes>
+                <Route
+                  path="/auth-app/*"
+                  element={
+                    <MainAreaContainer sidebarVisible={false}>
+                      <FocusedPluginSlot
+                        name={props.layoutConfig.focusedPluginSlotId}
+                        onMount={handleExtensionMount}
+                        onUnmount={handleExtensionUnmount}
+                      />
+                    </MainAreaContainer>
+                  }
                 />
-                <WidgetContainer>
-                  {/* ^ sticky container for widgets */}
-                  <WidgetAreaContainer>
-                    <ScrollableWidgetArea>
-                      <WidgetSlot
-                        name={props.layoutConfig.widgetSlotId}
-                        onMount={handleExtensionMount}
-                        onUnmount={handleExtensionUnmount}
-                      />
-                      <WidgetSlot
-                        name={props.layoutConfig.rootWidgetSlotId}
-                        onMount={handleExtensionMount}
-                        onUnmount={handleExtensionUnmount}
-                      />
-                      {!props.isMobile && (
-                        <CookieWidget
-                          style={{
-                            position: 'fixed',
-                            bottom: 0,
-                            marginLeft: '1rem',
-                            maxWidth: '21rem',
-                          }}
+                <Route
+                  path="*"
+                  element={
+                    <>
+                      <SidebarWrapper visible={showSidebar}>
+                        <SidebarSlot
+                          name={props.layoutConfig.sidebarSlotId}
+                          onMount={handleExtensionMount}
+                          onUnmount={handleExtensionUnmount}
                         />
-                      )}
-                    </ScrollableWidgetArea>
-                  </WidgetAreaContainer>
-                </WidgetContainer>
-              </Box>
-            </MainAreaContainer>
+                      </SidebarWrapper>
+                      <MainAreaContainer sidebarVisible={showSidebar}>
+                        <Box direction="row">
+                          <PluginSlot
+                            name={props.layoutConfig.pluginSlotId}
+                            onMount={handleExtensionMount}
+                            onUnmount={handleExtensionUnmount}
+                          />
+                          <WidgetContainer>
+                            {/* ^ sticky container for widgets */}
+                            <WidgetAreaContainer>
+                              <ScrollableWidgetArea>
+                                <WidgetSlot
+                                  name={props.layoutConfig.widgetSlotId}
+                                  onMount={handleExtensionMount}
+                                  onUnmount={handleExtensionUnmount}
+                                />
+                                <WidgetSlot
+                                  name={props.layoutConfig.rootWidgetSlotId}
+                                  onMount={handleExtensionMount}
+                                  onUnmount={handleExtensionUnmount}
+                                />
+                                {!props.isMobile && (
+                                  <CookieWidget
+                                    style={{
+                                      position: 'fixed',
+                                      bottom: 0,
+                                      marginLeft: '1rem',
+                                      maxWidth: '21rem',
+                                    }}
+                                  />
+                                )}
+                              </ScrollableWidgetArea>
+                            </WidgetAreaContainer>
+                          </WidgetContainer>
+                        </Box>
+                      </MainAreaContainer>
+                    </>
+                  }
+                />
+              </Routes>
+            </Router>
           </Box>
           {activeModal && (
             <ModalSlot

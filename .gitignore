@@ -40,3 +40,4 @@ lib
 dist
 *.d.ts
 docs
+.env

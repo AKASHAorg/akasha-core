@@ -25,6 +25,7 @@ export interface ILoginWidgetCardProps {
   beforeLinkLabel: string;
   afterLinkLabel: string;
   writeToUsLabel: string;
+  disclaimerLabel?: string;
   writeToUsUrl: string;
   image?: React.ReactElement;
   publicImgPath?: string;
@@ -36,12 +37,13 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
     beforeLinkLabel,
     afterLinkLabel,
     writeToUsLabel,
+    disclaimerLabel,
     writeToUsUrl,
     publicImgPath = '/images',
   } = props;
   return (
     <BasicCardBox pad="medium" callToAction={true}>
-      {props.image && props.image}
+      {props.image}
       <Box direction={isMobile ? 'column-reverse' : 'row'} align="center" justify="between">
         <Box direction="column" width={isMobile ? '100%' : '50%'}>
           <Text weight="bold" size="1rem" margin={{ top: 'xsmall' }}>
@@ -49,10 +51,11 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           </Text>
           <StyledText margin={{ top: 'xsmall' }}>{subtitle}</StyledText>
           <StyledText margin={{ top: 'xsmall' }}>
-            {beforeLinkLabel}{' '}
-            <StyledAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />{' '}
+            {beforeLinkLabel}
+            <StyledAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />
             {afterLinkLabel}
           </StyledText>
+          <StyledText margin={{ top: 'xsmall' }}>{disclaimerLabel}</StyledText>
         </Box>
         <Box
           width={isMobile ? '100%' : '43%'}
