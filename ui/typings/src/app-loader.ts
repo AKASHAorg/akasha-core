@@ -79,6 +79,7 @@ export interface LayoutConfig {
    */
   widgetSlotId: string;
   sidebarSlotId: string;
+  focusedPluginSlotId: string;
 }
 
 export interface ExtensionPointDefinition {
