@@ -11,6 +11,7 @@ export const register: (props: IntegrationRegistrationOptions) => LayoutConfig =
     pluginSlotId: 'plugin-slot',
     topbarSlotId: 'topbar-slot',
     sidebarSlotId: 'sidebar-slot',
+    focusedPluginSlotId: 'focused-plugin-slot',
     rootWidgetSlotId: 'root-widget-slot',
     widgetSlotId: 'widget-slot',
     modalSlotId: 'modal-slot',
