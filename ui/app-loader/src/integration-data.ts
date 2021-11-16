@@ -11,7 +11,7 @@
 // "@plugins/search": "/plugins/search/index.js",
 // "@akashaproject/app-akasha-integration": "/apps/akasha/index.js",
 // "@akashaproject/app-moderation-ewa": "/apps/moderation/index.js"
-// "@akashaproject/app-onboarding-ewa": "/apps/akasha/index.js"
+// "@akashaproject/app-auth-ewa": "/apps/auth-app/index.js"
 
 export const integrationsData = {
   '@akashaproject/ui-widget-layout': {
@@ -60,12 +60,12 @@ export const integrationsData = {
     },
     type: 'app',
   },
-  '@akashaproject/app-onboarding-ewa': {
-    name: '@akashaproject/app-onboarding-ewa',
+  '@akashaproject/app-auth-ewa': {
+    name: '@akashaproject/app-auth-ewa',
     lastVersion: '0.0.1',
-    description: 'Onboarding app',
+    description: 'Auth app',
     versions: {
-      '0.0.1': '/apps/onboarding/index.js',
+      '0.0.1': '/apps/auth-app/index.js',
     },
     type: 'app',
   },

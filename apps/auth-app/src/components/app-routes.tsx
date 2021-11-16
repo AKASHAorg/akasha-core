@@ -4,8 +4,9 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 
-import routes, { HOME, rootRoute } from '../routes';
+import routes, { rootRoute, SIGN_IN, SIGN_UP } from '../routes';
 import SignUp from './sign-up';
+import SignIn from './sign-in';
 
 const { Box } = DS;
 
@@ -16,12 +17,17 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     <Box>
       <Router>
         <Switch>
-          <Route path={routes[HOME]}>
+          <Route path={routes[SIGN_UP]}>
             <div>
               <SignUp {...props} />
             </div>
           </Route>
-          <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
+          <Route path={routes[SIGN_IN]}>
+            <div>
+              <SignIn {...props} />
+            </div>
+          </Route>
+          <Redirect exact={true} from={rootRoute} to={routes[SIGN_IN]} />
         </Switch>
       </Router>
     </Box>

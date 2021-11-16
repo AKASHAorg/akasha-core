@@ -22,7 +22,7 @@ const reactLifecycles = singleSpaReact({
         availableThemes={[lightTheme, darkTheme]}
         settings={{ activeTheme: 'LightTheme' }}
       >
-        <ErrorLoader type="script-error" title="Error in onboarding app" details={error.message} />
+        <ErrorLoader type="script-error" title="Error in auth app" details={error.message} />
       </ThemeSelector>
     );
   },
@@ -32,7 +32,7 @@ export const bootstrap = (props: RootComponentProps) => {
   return setupI18next({
     logger: props.logger,
     // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-onboarding-ewa',
+    namespace: 'app-auth-ewa',
   });
 };
 

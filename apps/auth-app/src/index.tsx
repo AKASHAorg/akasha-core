@@ -11,12 +11,12 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       return pathToActiveWhen(rootRoute)(location);
     },
     loadingFn: () => import('./components'),
-    mountsIn: opts.layoutConfig?.pluginSlotId,
-    name: 'app-onboarding',
+    mountsIn: opts.layoutConfig?.focusedPluginSlotId,
+    name: 'app-auth',
     sdkModules: [],
     // menuItems: routes,
     title: 'TODO: add title',
-    logo: { type: LogoTypeSource.ICON, value: 'appOnboarding' },
+    logo: { type: LogoTypeSource.ICON, value: 'appAuth' },
     widgets: {},
     routes: {
       rootRoute,

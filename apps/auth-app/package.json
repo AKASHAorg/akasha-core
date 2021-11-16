@@ -1,8 +1,8 @@
 {
-  "name": "@akashaproject/app-onboarding-ewa",
+  "name": "@akashaproject/app-auth-ewa",
   "private": true,
   "version": "0.0.1",
-  "description": "ETHEREUM WORLD onboarding app",
+  "description": "ETHEREUM WORLD Auth app",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
@@ -31,7 +31,7 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/onboarding",
+    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/auth-app",
     "watch": "webpack --config webpack.config.js --watch",
     "clean": "tsc --build --clean"
   },
