@@ -18,7 +18,7 @@ export interface IInviteTokenForm {
 }
 
 const SignUp: React.FC<RootComponentProps> = _props => {
-  const [activeIndex] = React.useState(0);
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
   const [inviteToken, setInviteToken] = React.useState<string>('');
 
@@ -33,8 +33,15 @@ const SignUp: React.FC<RootComponentProps> = _props => {
   const { t } = useTranslation();
   const sdk = getSDK();
 
+  const DEFAULT_TOKEN_LENGTH = 24;
+
   const handleIconClick = () => {
-    /* TODO */
+    if (activeIndex === 0) return;
+    setActiveIndex(prev => prev - 1);
+  };
+
+  const handleNextStep = () => {
+    setActiveIndex(prev => prev + 1);
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +90,7 @@ const SignUp: React.FC<RootComponentProps> = _props => {
   };
 
   const triggerInviteValidation = () => {
-    if (inviteToken?.length && inviteToken?.length === 24) {
+    if (inviteToken?.length && inviteToken?.length === DEFAULT_TOKEN_LENGTH) {
       checkIsValidToken();
     }
   };
@@ -108,27 +115,32 @@ const SignUp: React.FC<RootComponentProps> = _props => {
         ]}
         handleIconClick={handleIconClick}
       >
-        <StepOne
-          textLine1={t(
-            'We are currently in a private alpha. You need the invitation code we emailed you to sign up.',
-          )}
-          textLine2bold={t('If you have not received an invitation code')}
-          textLine2accent={t('you can request to be placed on the waitlist')}
-          writeToUsUrl={'mailto:alpha@ethereum.world'}
-          textLine2={t('You will get one soon thereafter')}
-          inputLabel={t('Invitation Code')}
-          inputPlaceholder={t('Type your invitation code here')}
-          noArrowRight={true}
-          inputValue={inviteToken}
-          submitted={inviteTokenForm.submitted}
-          submitting={inviteTokenForm.submitting}
-          success={inviteTokenForm.success}
-          // also toggle hasError if input value exceeds 24 chars
-          hasError={inviteTokenForm.hasError || inviteToken.length > 24}
-          errorMsg={inviteTokenForm.errorMsg}
-          onChange={onInputTokenChange}
-          validateTokenFn={validateTokenFn}
-        />
+        {activeIndex === 0 && (
+          <StepOne
+            textLine1={t(
+              'We are currently in a private alpha. You need the invitation code we emailed you to sign up.',
+            )}
+            textLine2bold={t('If you have not received an invitation code')}
+            textLine2accent={t('you can request to be placed on the waitlist')}
+            writeToUsUrl={'mailto:alpha@ethereum.world'}
+            textLine2={t('You will get one soon thereafter')}
+            textLine3={t('Your invitation code is valid! Please proceed to create your account')}
+            buttonLabel={t('Continue to Step 2 ')}
+            inputLabel={t('Invitation Code')}
+            inputPlaceholder={t('Type your invitation code here')}
+            noArrowRight={true}
+            inputValue={inviteToken}
+            submitted={inviteTokenForm.submitted}
+            submitting={inviteTokenForm.submitting}
+            success={inviteTokenForm.success}
+            // also toggle hasError if input value exceeds default token length
+            hasError={inviteTokenForm.hasError || inviteToken.length > DEFAULT_TOKEN_LENGTH}
+            errorMsg={inviteTokenForm.errorMsg}
+            onChange={onInputTokenChange}
+            validateTokenFn={validateTokenFn}
+            onButtonClick={handleNextStep}
+          />
+        )}
       </SignUpCard>
     </Box>
   );
