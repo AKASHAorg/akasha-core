@@ -64,7 +64,7 @@ const shapes: IShapes = {
   },
   fontWeight: {
     regular: 400,
-    bold: 500,
+    bold: 600,
   },
 };
 

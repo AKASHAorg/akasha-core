@@ -60,6 +60,7 @@ const SignUpCard: React.FC<ISignUpCardProps> = props => {
         <Box
           direction="row"
           justify="center"
+          margin={{ bottom: 'xlarge' }}
           border={{ side: 'bottom', color: 'border', size: 'xsmall' }}
         >
           <StepIndicator stepLabels={stepLabels} activeIndex={activeIndex} margin="large" />

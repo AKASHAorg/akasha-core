@@ -63,7 +63,7 @@ import MdCard from './components/MdCard';
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
 import AppsWidgetCard from './components/AppsWidgetCard';
 import CookieWidgetCard from './components/CookieCard';
-import LoginCTAWidgetCard from './components/LoginCTAWidgetCard';
+import LoginCTAWidgetCard, { CTAAnchor } from './components/LoginCTAWidgetCard';
 import SourcesWidgetCard from './components/SourcesWidgetCard';
 import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
 import TopicsWidgetCard from './components/TopicsWidgetCard';
@@ -135,6 +135,7 @@ import SelectPopover from './components/SelectPopover';
 
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import TextIcon from './components/TextIcon';
+import LinkInput from './components/TextInputIconForm';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
 // import VirtualList from './components/VirtualList';
 import Helmet from 'react-helmet';
@@ -236,6 +237,7 @@ const exported = {
   Sidebar,
   Text,
   TextIcon,
+  LinkInput,
   Topbar,
   createTheme,
   darkTheme,
@@ -277,6 +279,7 @@ const exported = {
   StepIndicator,
   CookieWidgetCard,
   LoginCTAWidgetCard,
+  CTAAnchor,
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
