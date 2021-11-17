@@ -1,5 +1,6 @@
 import { Box, Stack } from 'grommet';
 import * as React from 'react';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Icon from '../Icon';
 import { SearchBar } from './search-bar';
 import { MobileSearchBar } from './mobile-search-bar';
@@ -136,11 +137,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     }
   }, [otherAreaItems]);
 
-  const shouldRenderOnboarding = React.useMemo(
-    () => currentLocation.startsWith('/temp'),
-    [currentLocation],
-  );
-
   const handleNavigation = (menuItem: IMenuItem) => () => {
     if (onNavigation) {
       onNavigation(menuItem.route);
@@ -212,7 +208,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
   );
 
   const renderPluginIcon = (menuItem: IMenuItem) => {
-    if (shouldRenderOnboarding) return null;
     if (menuItem.name === 'ui-plugin-notifications') {
       return (
         <IconDiv
@@ -258,7 +253,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
   };
 
   const renderPluginButton = (menuItem: IMenuItem, index: number) => {
-    if (shouldRenderOnboarding) return null;
     return (
       <StyledDiv
         key={index}
@@ -282,7 +276,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
   };
 
   const renderSearchArea = () => {
-    if (shouldRenderOnboarding) return null;
     if (searchAreaItem) {
       if (isMobileOnly) {
         return (
@@ -309,7 +302,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     return;
   };
 
-  const renderContent = () => {
+  const renderContent = (shouldRenderOnboarding?: boolean) => {
     if (isMobileOnly && mobileSearchOpen) {
       return (
         <MobileSearchBar
@@ -356,10 +349,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
           fill="horizontal"
           justify="end"
         >
-          {renderSearchArea()}
+          {!shouldRenderOnboarding && renderSearchArea()}
           {props.children}
           {loggedProfileData?.ethAddress &&
             quickAccessItems &&
+            shouldRenderOnboarding &&
             quickAccessItems.map(renderPluginButton)}
           {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
             <Box direction="row" align="center" gap="small">
@@ -392,25 +386,19 @@ const Topbar: React.FC<ITopbarProps> = props => {
     );
   };
 
-  return (
-    <TopbarWrapper
-      align="center"
-      pad={{ vertical: 'small', horizontal: 'medium' }}
-      fill="horizontal"
-      className={className}
-      elevation="shadow"
-      height={mobileSignedOutView && !shouldRenderOnboarding ? '6rem' : '3rem'}
-      border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
-    >
-      {renderContent()}
-      {mobileSignedOutView && !shouldRenderOnboarding && (
-        <Box direction="row" align="center" gap="small" fill="horizontal">
-          <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
-          <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
-        </Box>
-      )}
-      {dropOpen && renderDrop()}
-      {avatarDropOpen && loggedProfileData?.ethAddress && (
+  const renderMobileSignedOutView = () => {
+    if (!mobileSignedOutView) return null;
+    return (
+      <Box direction="row" align="center" gap="small" fill="horizontal">
+        <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
+        <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
+      </Box>
+    );
+  };
+
+  const renderLoggedInMenu = () => {
+    if (avatarDropOpen && loggedProfileData?.ethAddress) {
+      return (
         <ProfileMenu
           target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
           closePopover={() => setAvatarDropOpen(false)}
@@ -435,8 +423,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
         />
-      )}
-      {menuDropOpen && !loggedProfileData?.ethAddress && (
+      );
+    }
+  };
+
+  const renderLoggedOutMenu = () => {
+    if (menuDropOpen && !loggedProfileData?.ethAddress) {
+      return (
         <ProfileMenu
           target={feedbackMenuRef.current}
           closePopover={() => setMenuDropOpen(false)}
@@ -456,10 +449,53 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
-          minimalMenu={shouldRenderOnboarding}
         />
-      )}
-    </TopbarWrapper>
+      );
+    }
+  };
+
+  return (
+    <Router>
+      <Switch>
+        <Route
+          path="/auth-app/*"
+          render={() => (
+            <TopbarWrapper
+              align="center"
+              pad={{ vertical: 'small', horizontal: 'medium' }}
+              fill="horizontal"
+              className={className}
+              elevation="shadow"
+              height="3rem"
+              border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+            >
+              {renderContent(true)}
+              {dropOpen && renderDrop()}
+              {renderLoggedOutMenu()}
+            </TopbarWrapper>
+          )}
+        />
+        <Route
+          render={() => (
+            <TopbarWrapper
+              align="center"
+              pad={{ vertical: 'small', horizontal: 'medium' }}
+              fill="horizontal"
+              className={className}
+              elevation="shadow"
+              height={mobileSignedOutView ? '6rem' : '3rem'}
+              border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+            >
+              {renderContent()}
+              {renderMobileSignedOutView()}
+              {dropOpen && renderDrop()}
+              {renderLoggedInMenu()}
+              {renderLoggedOutMenu()}
+            </TopbarWrapper>
+          )}
+        />
+      </Switch>
+    </Router>
   );
 };
 
