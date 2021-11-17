@@ -2,17 +2,17 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useLocation } from 'react-router-dom';
 import {
-  IMenuItem,
   EventTypes,
+  IMenuItem,
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
-  useCheckNewNotifications,
-  useGetProfile,
-  useGetLogin,
-  useLogout,
   useCheckModerator,
+  useCheckNewNotifications,
+  useGetLogin,
+  useGetProfile,
+  useLogout,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
@@ -41,11 +41,7 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   const checkModeratorResp = checkModeratorQuery.data;
 
-  const isModerator = React.useMemo(() => {
-    if (checkModeratorResp === 200) {
-      return true;
-    } else return false;
-  }, [checkModeratorResp]);
+  const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   // React.useEffect(() => {
   //   if (loginState.ready?.ethAddress && loginState.ethAddress) {
@@ -88,8 +84,7 @@ const TopbarComponent = (props: RootComponentProps) => {
     if (menuItemA.name && menuItemB.name) {
       const getPluginName = (pluginName: string) => {
         const splitName = pluginName.split('-');
-        const name = splitName[splitName.length - 1];
-        return name;
+        return splitName[splitName.length - 1];
       };
 
       if (getPluginName(menuItemA.name) > getPluginName(menuItemB.name)) {
@@ -220,6 +215,9 @@ const TopbarComponent = (props: RootComponentProps) => {
         moderationLabel={t('Moderation History')}
         moderationInfoLabel={t('Help keep us accountable!')}
         legalCopyRightLabel={'© Ethereum World Association'}
+        stuckLabel={t('Stuck?')}
+        helpLabel={t('We can help')}
+        writeToUs="mailto:alpha@ethereum.world"
         versionLabel="ALPHA"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         onNavigation={handleNavigation}
