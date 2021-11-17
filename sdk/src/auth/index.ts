@@ -30,6 +30,7 @@ import { Buffer } from 'buffer';
 import { PublicKey } from '@textile/threaddb';
 import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
+import { ethers } from 'ethers';
 
 @injectable()
 export default class AWF_Auth implements AWF_IAuth {
@@ -145,7 +146,8 @@ export default class AWF_Auth implements AWF_IAuth {
   }
 
   signIn(args: { provider?: EthProviders; checkRegistered: boolean }) {
-    return createObservableStream(this._signIn(args));
+    const normalisedArgs = Object.assign({}, { checkRegistered: true }, args);
+    return createObservableStream(this._signIn(normalisedArgs));
   }
 
   /**
@@ -161,6 +163,11 @@ export default class AWF_Auth implements AWF_IAuth {
     if (this._lockSignIn) {
       return;
     }
+    if (this.currentUser) {
+      this._log.warn(`Already signed in!`);
+      return Promise.resolve(Object.assign({}, this.currentUser, authStatus));
+    }
+
     this._lockSignIn = true;
     let currentProvider: number;
     if (args.provider === EthProviders.None) {
@@ -180,6 +187,19 @@ export default class AWF_Auth implements AWF_IAuth {
       await lastValueFrom(this._web3.checkCurrentNetwork());
       const endPoint = process.env.AUTH_ENDPOINT;
       const address = await lastValueFrom(this._web3.getCurrentAddress());
+      const localUser = sessionStorage.getItem(this.currentUserKey);
+      if (localUser) {
+        const tmpSession = JSON.parse(localUser);
+        if (address.data && tmpSession?.ethAddress === address.data) {
+          this._globalChannel.next({
+            data: tmpSession,
+            event: AUTH_EVENTS.SIGN_IN,
+          });
+        } else {
+          // prevent check bypass on account switch
+          args.checkRegistered = true;
+        }
+      }
       if (args.checkRegistered) {
         await lastValueFrom(this.checkIfSignedUp(address.data));
       }
@@ -328,14 +348,6 @@ export default class AWF_Auth implements AWF_IAuth {
         data: { emit: true },
         event: AUTH_EVENTS.WAIT_FOR_AUTH,
       });
-      try {
-        this._globalChannel.next({
-          data: JSON.parse(localUser),
-          event: AUTH_EVENTS.SIGN_IN,
-        });
-      } catch (e) {
-        this._log.error(e);
-      }
     }
     return this._signIn({ provider: EthProviders.None, checkRegistered: false });
   }
@@ -359,6 +371,7 @@ export default class AWF_Auth implements AWF_IAuth {
     if (this.channel) {
       this.channel.postMessage({ type: this.SIGN_OUT_EVENT });
     }
+    await this._web3.disconnect();
     return true;
   }
 

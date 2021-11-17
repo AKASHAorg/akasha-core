@@ -10,6 +10,8 @@ export enum AUTH_EVENTS {
 export enum WEB3_EVENTS {
   CONNECTED = '#web3#connected',
   DISCONNECTED = '#web3#disconnected',
+  ACCOUNT_CHANGED = '#web3#accountChanged',
+  CHAIN_CHANGED = '#web3#chainChanged',
 }
 
 export enum PROFILE_EVENTS {
