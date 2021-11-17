@@ -457,43 +457,38 @@ const Topbar: React.FC<ITopbarProps> = props => {
   return (
     <Router>
       <Switch>
-        <Route
-          path="/auth-app/*"
-          render={() => (
-            <TopbarWrapper
-              align="center"
-              pad={{ vertical: 'small', horizontal: 'medium' }}
-              fill="horizontal"
-              className={className}
-              elevation="shadow"
-              height="3rem"
-              border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
-            >
-              {renderContent(true)}
-              {dropOpen && renderDrop()}
-              {renderLoggedOutMenu()}
-            </TopbarWrapper>
-          )}
-        />
-        <Route
-          render={() => (
-            <TopbarWrapper
-              align="center"
-              pad={{ vertical: 'small', horizontal: 'medium' }}
-              fill="horizontal"
-              className={className}
-              elevation="shadow"
-              height={mobileSignedOutView ? '6rem' : '3rem'}
-              border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
-            >
-              {renderContent()}
-              {renderMobileSignedOutView()}
-              {dropOpen && renderDrop()}
-              {renderLoggedInMenu()}
-              {renderLoggedOutMenu()}
-            </TopbarWrapper>
-          )}
-        />
+        <Route path="/auth-app/*">
+          <TopbarWrapper
+            align="center"
+            pad={{ vertical: 'small', horizontal: 'medium' }}
+            fill="horizontal"
+            className={className}
+            elevation="shadow"
+            height="3rem"
+            border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+          >
+            {renderContent(true)}
+            {dropOpen && renderDrop()}
+            {renderLoggedOutMenu()}
+          </TopbarWrapper>
+        </Route>
+        <Route>
+          <TopbarWrapper
+            align="center"
+            pad={{ vertical: 'small', horizontal: 'medium' }}
+            fill="horizontal"
+            className={className}
+            elevation="shadow"
+            height={mobileSignedOutView ? '6rem' : '3rem'}
+            border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+          >
+            {renderContent()}
+            {renderMobileSignedOutView()}
+            {dropOpen && renderDrop()}
+            {renderLoggedInMenu()}
+            {renderLoggedOutMenu()}
+          </TopbarWrapper>
+        </Route>
       </Switch>
     </Router>
   );
