@@ -19,10 +19,8 @@ export interface IInviteTokenForm {
 }
 
 const SignUp: React.FC<RootComponentProps> = _props => {
-  const [activeIndex, setActiveIndex] = React.useState(0);
-
+  const [activeIndex, setActiveIndex] = React.useState<number>(2);
   const [inviteToken, setInviteToken] = React.useState<string>('');
-
   const [inviteTokenForm, setinviteTokenForm] = React.useState<IInviteTokenForm>({
     submitted: false,
     submitting: false,

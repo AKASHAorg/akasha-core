@@ -6,7 +6,7 @@ import { BasicCardBox } from '../EntryCard/basic-card-box';
 import Icon from '../Icon';
 
 export interface IWeb3ConnectButtonProps {
-  margin?: MarginType;
+  boxMargin?: MarginType;
   titleLabel: string;
   subtitleLabel: string;
   leftIconType: string;
@@ -14,15 +14,23 @@ export interface IWeb3ConnectButtonProps {
 }
 
 const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
-  const { margin, titleLabel, subtitleLabel, leftIconType, handleClick } = props;
+  const { boxMargin, titleLabel, subtitleLabel, leftIconType, handleClick } = props;
+
+  // indicates when to show a larger size of specified icon
+  const largerIcon = leftIconType === 'walletconnect';
 
   return (
-    <BasicCardBox pad="medium" callToAction={true} onClick={handleClick} margin={margin}>
+    <BasicCardBox pad="medium" callToAction={true} onClick={handleClick} margin={boxMargin}>
       <Box direction="row" justify="between" align="center">
         <Box direction="row" align="center">
           {leftIconType && (
-            <Box pad="xxsmall" round={true} background="accentText" margin={{ right: 'xsmall' }}>
-              <Icon type={leftIconType} color="white" size="xs" />
+            <Box
+              pad={largerIcon ? '0rem' : 'xxsmall'}
+              round={true}
+              background={largerIcon ? 'none' : 'accentText'}
+              margin={{ right: 'xsmall' }}
+            >
+              <Icon type={leftIconType} color="white" size={largerIcon ? 'md' : 'xs'} />
             </Box>
           )}
           <Text weight="bold" size="1rem">
