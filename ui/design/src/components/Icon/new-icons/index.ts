@@ -24,6 +24,7 @@ import check from './check';
 import checkSimple from './checkSimple';
 import close from './close';
 import code from './code';
+import coinbase from './coinbase';
 import coins from './coins';
 import comments from './comments';
 import copy from './copy';
@@ -47,6 +48,7 @@ import heart from './heart';
 import home from './home';
 import hotTopics from './hot-topics';
 import image from './image';
+import imtoken from './imtoken';
 import info from './info';
 import italic from './italic';
 import key from './key';
@@ -62,6 +64,7 @@ import metamask from './metamask';
 import moreDark from './more-dark';
 import moreGrey from './more-grey';
 import notifications from './notifications';
+import opera from './opera';
 import payment from './payment';
 import person from './person';
 import pin from './pin';
@@ -73,10 +76,12 @@ import reddit from './reddit';
 import reload from './reload';
 import reply from './reply';
 import report from './report';
+import safe from './safe';
 import search from './search';
 import send from './send';
 import settings from './settings';
 import signOut from './sign-out';
+import status from './status';
 import share from './share';
 import shareSmallBlue from './share-small-blue';
 import shareSmallDark from './share-small-dark';
@@ -90,12 +95,14 @@ import thumbsUpWhite from './thumbs-up-white';
 import transfer from './transfer';
 import trash from './trash';
 import trendingApps from './trending-apps';
+import trust from './trust';
 import twitter from './twitter';
 import underline from './underline';
 import upload from './upload';
 import video from './video';
 import wallet from './wallet';
 import walletconnect from './walletconnect';
+import web3 from './web3';
 import zoomIn from './zoom-in';
 import zoomOut from './zoom-out';
 
@@ -117,6 +124,7 @@ export {
   transfer,
   calendar,
   code,
+  coinbase,
   coins,
   copy,
   check,
@@ -156,6 +164,7 @@ export {
   home,
   hotTopics,
   image,
+  imtoken,
   info,
   italic,
   key,
@@ -171,6 +180,7 @@ export {
   moreDark,
   moreGrey,
   notifications,
+  opera,
   person,
   plusDark,
   plusGrey,
@@ -179,9 +189,11 @@ export {
   reddit,
   reply,
   report,
+  safe,
   search,
   send,
   signOut,
+  status,
   share,
   shareSmallBlue,
   shareSmallDark,
@@ -192,12 +204,14 @@ export {
   thumbsUpWhite,
   thumbsUpGrey,
   trendingApps,
+  trust,
   twitter,
   underline,
   upload,
   video,
   wallet,
   walletconnect,
+  web3,
   zoomIn,
   zoomOut,
 };

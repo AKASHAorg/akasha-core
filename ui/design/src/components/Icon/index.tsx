@@ -30,6 +30,7 @@ export type IconType =
   | 'comments'
   | 'close'
   | 'code'
+  | 'coinbase'
   | 'coins'
   | 'copy'
   | 'check'
@@ -54,6 +55,7 @@ export type IconType =
   | 'home'
   | 'hotTopics'
   | 'image'
+  | 'imtoken'
   | 'italic'
   | 'key'
   | 'info'
@@ -69,6 +71,7 @@ export type IconType =
   | 'moreDark'
   | 'moreGrey'
   | 'notifications'
+  | 'opera'
   | 'payment'
   | 'person'
   | 'pin'
@@ -80,11 +83,13 @@ export type IconType =
   | 'reload'
   | 'reply'
   | 'report'
+  | 'safe'
   | 'search'
   | 'send'
   | 'settings'
   | 'share'
   | 'signOut'
+  | 'status'
   | 'subscribe'
   | 'stopwatch'
   | 'shareSmallBlue'
@@ -97,12 +102,14 @@ export type IconType =
   | 'transfer'
   | 'trash'
   | 'trendingApps'
+  | 'trust'
   | 'twitter'
   | 'underline'
   | 'upload'
   | 'video'
   | 'wallet'
   | 'walletconnect'
+  | 'web3'
   | 'zoomIn'
   | 'zoomOut';
 
@@ -132,6 +139,7 @@ export const iconTypes: IconType[] = [
   'comments',
   'close',
   'code',
+  'coinbase',
   'copy',
   'check',
   'checkSimple',
@@ -156,6 +164,7 @@ export const iconTypes: IconType[] = [
   'home',
   'hotTopics',
   'image',
+  'imtoken',
   'info',
   'italic',
   'key',
@@ -171,6 +180,7 @@ export const iconTypes: IconType[] = [
   'moreDark',
   'moreGrey',
   'notifications',
+  'opera',
   'payment',
   'person',
   'pin',
@@ -181,10 +191,12 @@ export const iconTypes: IconType[] = [
   'reload',
   'reply',
   'report',
+  'safe',
   'search',
   'send',
   'settings',
   'signOut',
+  'status',
   'share',
   'subscribe',
   'stopwatch',
@@ -198,12 +210,14 @@ export const iconTypes: IconType[] = [
   'transfer',
   'trash',
   'trendingApps',
+  'trust',
   'twitter',
   'underline',
   'upload',
   'video',
   'wallet',
   'walletconnect',
+  'web3',
   'zoomIn',
   'zoomOut',
 ];
