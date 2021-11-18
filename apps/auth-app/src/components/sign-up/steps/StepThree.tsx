@@ -1,0 +1,50 @@
+import * as React from 'react';
+import DS from '@akashaproject/design-system';
+
+const { Box, Text, Web3ConnectButton } = DS;
+
+export interface IStepThreeProps {
+  textLine1: string;
+  textLine2bold: string;
+  textLine2: string;
+}
+
+const StepThree: React.FC<IStepThreeProps> = props => {
+  const { textLine1, textLine2bold, textLine2 } = props;
+  const handleConnectWallet = () => {
+    /* TODO: */
+  };
+
+  const handleSocialLogin = () => {
+    /* TODO: */
+  };
+
+  return (
+    <Box>
+      <Text size="large" margin={{ bottom: 'large' }}>
+        {textLine1}
+      </Text>
+      <Text size="large" margin={{ bottom: 'large' }}>
+        <Text size="large" weight="bold">
+          {textLine2bold}
+        </Text>{' '}
+        {textLine2}
+      </Text>
+      <Web3ConnectButton
+        margin={{ bottom: 'medium' }}
+        titleLabel="Connect a Wallet"
+        subtitleLabel="Use this option to sign up using your Ethereum wallet. You'll be able to choose which wallet to connect in the next screen."
+        leftIconType="wallet"
+        handleClick={handleConnectWallet}
+      />
+      <Web3ConnectButton
+        titleLabel="Use Your Email or Social Login"
+        subtitleLabel="Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks"
+        leftIconType="login"
+        handleClick={handleSocialLogin}
+      />
+    </Box>
+  );
+};
+
+export { StepThree };

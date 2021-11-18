@@ -6,6 +6,7 @@ import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { StepOne } from './steps/StepOne';
+import { StepThree } from './steps/StepThree';
 
 const { Box, SignUpCard } = DS;
 
@@ -102,7 +103,7 @@ const SignUp: React.FC<RootComponentProps> = _props => {
   );
 
   return (
-    <Box width={'35%'} margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}>
+    <Box width={'38%'} margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}>
       <SignUpCard
         titleLabel="Sign Up"
         activeIndex={activeIndex}
@@ -139,6 +140,19 @@ const SignUp: React.FC<RootComponentProps> = _props => {
             onChange={onInputTokenChange}
             validateTokenFn={validateTokenFn}
             onButtonClick={handleNextStep}
+          />
+        )}
+        {activeIndex === 2 && (
+          <StepThree
+            textLine1={t(
+              "You now need to choose how you'll sign up on  Ethereum World. If you are experienced wth Ethereum, you may connect your wallet.",
+            )}
+            textLine2bold={t(
+              'If you are new to Ethereum, we recommend using the email or social login option.',
+            )}
+            textLine2={t(
+              "As part of signing up, you'll get a free Ethereum wallet tht you can use to send or receive crypto and sign in to other Ethereum sites.",
+            )}
           />
         )}
       </SignUpCard>
