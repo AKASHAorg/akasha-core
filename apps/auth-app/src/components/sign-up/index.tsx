@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
+
 import { StepOne } from './steps/StepOne';
 import { StepThree } from './steps/StepThree';
 
@@ -21,6 +23,9 @@ export interface IInviteTokenForm {
 const SignUp: React.FC<RootComponentProps> = _props => {
   const [activeIndex, setActiveIndex] = React.useState<number>(2);
   const [inviteToken, setInviteToken] = React.useState<string>('');
+  const [injectedProvider, setInjectedProvider] = React.useState<INJECTED_PROVIDERS>(
+    INJECTED_PROVIDERS.NOT_DETECTED,
+  );
   const [inviteTokenForm, setinviteTokenForm] = React.useState<IInviteTokenForm>({
     submitted: false,
     submitting: false,
@@ -33,6 +38,12 @@ const SignUp: React.FC<RootComponentProps> = _props => {
   const sdk = getSDK();
 
   const DEFAULT_TOKEN_LENGTH = 24;
+
+  const getInjectedProvider = async () => {
+    const injectedProvider = await lastValueFrom(sdk.services.common.web3.detectInjectedProvider());
+
+    setInjectedProvider(injectedProvider.data);
+  };
 
   const handleIconClick = () => {
     if (activeIndex === 0) return;
@@ -100,6 +111,14 @@ const SignUp: React.FC<RootComponentProps> = _props => {
     [inviteToken],
   );
 
+  React.useEffect(
+    () => {
+      getInjectedProvider();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   return (
     <Box width={'38%'} margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}>
       <SignUpCard
@@ -151,6 +170,7 @@ const SignUp: React.FC<RootComponentProps> = _props => {
             textLine2={t(
               "As part of signing up, you'll get a free Ethereum wallet tht you can use to send or receive crypto and sign in to other Ethereum sites.",
             )}
+            injectedProvider={injectedProvider}
           />
         )}
       </SignUpCard>

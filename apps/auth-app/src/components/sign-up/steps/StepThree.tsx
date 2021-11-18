@@ -1,5 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
 
 const { Box, Text, Web3ConnectButton } = DS;
 
@@ -7,12 +8,13 @@ export interface IStepThreeProps {
   textLine1: string;
   textLine2bold: string;
   textLine2: string;
+  injectedProvider: INJECTED_PROVIDERS;
 }
 
 const StepThree: React.FC<IStepThreeProps> = props => {
-  const { textLine1, textLine2bold, textLine2 } = props;
+  const { textLine1, textLine2bold, textLine2, injectedProvider } = props;
 
-  const handleConnectWallet = () => {
+  const handleConnectProvider = () => {
     /* TODO: */
   };
 
@@ -35,13 +37,25 @@ const StepThree: React.FC<IStepThreeProps> = props => {
         </Text>{' '}
         {textLine2}
       </Text>
-      <Web3ConnectButton
-        boxMargin={{ bottom: 'medium' }}
-        titleLabel="Connect a Wallet"
-        subtitleLabel="Use this option to sign up using your Ethereum wallet. You'll be able to choose which wallet to connect in the next screen."
-        leftIconType="wallet"
-        handleClick={handleConnectWallet}
-      />
+      {/* show open login option at the top if no provider is detected */}
+      {injectedProvider === INJECTED_PROVIDERS.NOT_DETECTED && (
+        <Web3ConnectButton
+          boxMargin={{ bottom: 'medium' }}
+          titleLabel="Use Your Email or Social Login"
+          subtitleLabel="Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks"
+          leftIconType="key"
+          handleClick={handleSocialLogin}
+        />
+      )}
+      {injectedProvider === INJECTED_PROVIDERS.METAMASK && (
+        <Web3ConnectButton
+          boxMargin={{ bottom: 'medium' }}
+          titleLabel="MetaMask"
+          subtitleLabel="We recommend using MetaMask. It's the wallet we've tested most extensively with Ethereum World. We're very sure it'll work"
+          leftIconType="metamask"
+          handleClick={handleConnectProvider}
+        />
+      )}
       <Web3ConnectButton
         boxMargin={{ bottom: 'medium' }}
         titleLabel="WalletConnect"
@@ -49,12 +63,15 @@ const StepThree: React.FC<IStepThreeProps> = props => {
         leftIconType="walletconnect"
         handleClick={handleWalletConnect}
       />
-      <Web3ConnectButton
-        titleLabel="Use Your Email or Social Login"
-        subtitleLabel="Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks"
-        leftIconType="key"
-        handleClick={handleSocialLogin}
-      />
+      {/* show open login option at the bottom if a provider is detected */}
+      {injectedProvider !== INJECTED_PROVIDERS.NOT_DETECTED && (
+        <Web3ConnectButton
+          titleLabel="Use Your Email or Social Login"
+          subtitleLabel="Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks"
+          leftIconType="key"
+          handleClick={handleSocialLogin}
+        />
+      )}
     </Box>
   );
 };
