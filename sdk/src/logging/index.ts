@@ -6,7 +6,7 @@ import pino from 'pino';
 class Logging implements ILogService {
   private _appLogger: pino;
   public constructor() {
-    this._appLogger = pino({ browser: { asObject: true }, level: 'error' });
+    this._appLogger = pino({ browser: { asObject: true }, level: process.env.LOG_LEVEL });
   }
 
   /**
