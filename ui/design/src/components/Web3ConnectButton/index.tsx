@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
+import { MarginType } from 'grommet/utils';
 
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import Icon from '../Icon';
 
 export interface IWeb3ConnectButtonProps {
+  margin?: MarginType;
   titleLabel: string;
   subtitleLabel: string;
   leftIconType: string;
@@ -12,10 +14,10 @@ export interface IWeb3ConnectButtonProps {
 }
 
 const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
-  const { titleLabel, subtitleLabel, leftIconType, handleClick } = props;
+  const { margin, titleLabel, subtitleLabel, leftIconType, handleClick } = props;
 
   return (
-    <BasicCardBox pad="medium" callToAction={true} onClick={handleClick}>
+    <BasicCardBox pad="medium" callToAction={true} onClick={handleClick} margin={margin}>
       <Box direction="row" justify="between" align="center">
         <Box direction="row" align="center">
           {leftIconType && (
