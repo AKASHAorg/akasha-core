@@ -18,3 +18,18 @@ export enum LEGAL_DOCS {
   CODE_OF_CONDUCT = 'CodeOfConduct',
   APP_GUIDE = 'AppGuide',
 }
+
+export enum INJECTED_PROVIDERS {
+  METAMASK = 'MetaMask',
+  SAFE = 'Safe',
+  NIFTY = 'Nifty',
+  DAPPER = 'Dapper',
+  OPERA = 'Opera',
+  TRUST = 'Trust',
+  COINBASE = 'Coinbase',
+  CIPHER = 'Cipher',
+  IM_TOKEN = 'imToken',
+  STATUS = 'Status',
+  FALLBACK = 'Web3',
+  NOT_DETECTED = 'NotDetected',
+}
