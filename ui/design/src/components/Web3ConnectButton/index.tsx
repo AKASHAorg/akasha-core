@@ -17,7 +17,7 @@ const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
   const { boxMargin, titleLabel, subtitleLabel, leftIconType, handleClick } = props;
 
   // indicates when to show a larger size of specified icon
-  const largerIcon = leftIconType === 'walletconnect';
+  const largerIcon = ['walletconnect', 'metamask'].includes(leftIconType);
 
   return (
     <BasicCardBox pad="medium" callToAction={true} onClick={handleClick} margin={boxMargin}>
@@ -30,7 +30,11 @@ const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
               background={largerIcon ? 'none' : 'accentText'}
               margin={{ right: 'xsmall' }}
             >
-              <Icon type={leftIconType} color="white" size={largerIcon ? 'md' : 'xs'} />
+              <Icon
+                type={leftIconType}
+                color={largerIcon ? 'initial' : 'white'}
+                size={largerIcon ? 'md' : 'xs'}
+              />
             </Box>
           )}
           <Text weight="bold" size="1rem">
