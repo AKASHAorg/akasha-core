@@ -55,6 +55,7 @@ export type IconType =
   | 'hotTopics'
   | 'image'
   | 'italic'
+  | 'key'
   | 'info'
   | 'legal'
   | 'link'
@@ -157,6 +158,7 @@ export const iconTypes: IconType[] = [
   'image',
   'info',
   'italic',
+  'key',
   'legal',
   'link',
   'loading',

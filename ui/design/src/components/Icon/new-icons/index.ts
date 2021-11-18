@@ -49,6 +49,7 @@ import hotTopics from './hot-topics';
 import image from './image';
 import info from './info';
 import italic from './italic';
+import key from './key';
 import legal from './legal';
 import link from './link';
 import loading from './loading';
@@ -157,6 +158,7 @@ export {
   image,
   info,
   italic,
+  key,
   legal,
   link,
   loading,
