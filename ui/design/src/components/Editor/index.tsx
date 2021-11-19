@@ -480,7 +480,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     if (!data.src || !data.size) {
       return;
     }
-    setImages(prev => [...prev, data]);
+    const imgData = { ...data, id: `${Date.now()}-${data.src}` };
+    setImages(prev => [...prev, imgData]);
     // CustomEditor.insertImage(editor, data.src, data.size);
   };
 
@@ -494,7 +495,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   };
 
   const handleDeleteImage = (element: any) => {
-    const newImages = images.filter(image => image.src !== element.src);
+    const newImages = images.filter(image => image.id !== element.id);
     setImages(newImages);
     // CustomEditor.deleteImage(editor, element);
   };
