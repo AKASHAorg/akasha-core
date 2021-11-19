@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "lib": ["dom", "es2019"],
+    "lib": ["dom", "es2020"],
     "module": "commonjs",
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,7 +17,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
-    "target": "es2019",
+    "target": "es2020",
     "sourceMap": true,
     "pretty": true
   },
