@@ -1,8 +1,6 @@
 import { base } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
 import { DefaultTheme } from '../interfaces';
-import React from 'react';
-// import Icon from '../../../components/Icon';
 import { FormCheckmark } from 'grommet-icons';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
