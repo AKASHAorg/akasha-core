@@ -4,19 +4,19 @@ import DS from '@akashaproject/design-system';
 const { Box, Text, Icon, Button, CTAAnchor, Checkbox, styled } = DS;
 
 export interface IStepTwoProps {
-  textLine1: string;
-  textLine1link1: string;
-  textLine1connector: string;
-  textLine1link2: string;
-  textLine2p1: string;
-  textLine2accent: string;
-  textLine2p2: string;
-  link1: string;
-  link2: string;
-  link3: string;
-  textOption1: string;
-  textOption2: string;
-  textOption3: string;
+  textLegalPartOne: string;
+  textLegalPartTwo: string;
+  textLegalPartThree: string;
+  textConnector: string;
+  textLegalTerms: string;
+  textLegalPrivacy: string;
+  textLegalConduct: string;
+  textLegalTermsLink: string;
+  textLegalPrivacyLink: string;
+  textLegalConductLink: string;
+  checkboxLabelTerms: string;
+  checkboxLabelPrivacy: string;
+  checkboxLabelConduct: string;
   buttonLabel: string;
   onButtonClick: () => void;
 }
@@ -32,19 +32,19 @@ const CONDUCT = 'conduct';
 
 const StepTwo: React.FC<IStepTwoProps> = props => {
   const {
-    textLine1,
-    textLine1link1,
-    textLine1connector,
-    textLine1link2,
-    textLine2p1,
-    textLine2accent,
-    textLine2p2,
-    link1,
-    link2,
-    link3,
-    textOption1,
-    textOption2,
-    textOption3,
+    textLegalPartOne,
+    textLegalPartTwo,
+    textLegalPartThree,
+    textConnector,
+    textLegalTerms,
+    textLegalPrivacy,
+    textLegalConduct,
+    textLegalTermsLink,
+    textLegalPrivacyLink,
+    textLegalConductLink,
+    checkboxLabelTerms,
+    checkboxLabelPrivacy,
+    checkboxLabelConduct,
     buttonLabel,
     onButtonClick,
   } = props;
@@ -60,43 +60,43 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
   return (
     <>
       <Text size="large" margin={{ bottom: 'large' }}>
-        {textLine1}{' '}
+        {textLegalPartOne}{' '}
         <CTAAnchor
           size="large"
           color="accentText"
-          href={link1}
-          label={textLine1link1}
+          href={textLegalTermsLink}
+          label={textLegalTerms}
           target="_blank"
           rel="noopener noreferrer"
         />{' '}
-        {textLine1connector}{' '}
+        {textConnector}{' '}
         <CTAAnchor
           size="large"
           color="accentText"
-          href={link2}
-          label={textLine1link2}
+          href={textLegalPrivacyLink}
+          label={textLegalPrivacy}
           target="_blank"
           rel="noopener noreferrer"
         />
         .
       </Text>
       <Text size="large">
-        {textLine2p1}{' '}
+        {textLegalPartTwo}{' '}
         <CTAAnchor
           size="large"
           color="accentText"
-          href={link3}
-          label={textLine2accent}
+          href={textLegalConductLink}
+          label={textLegalConduct}
           target="_blank"
           rel="noopener noreferrer"
         />{' '}
-        {textLine2p2}.
+        {textLegalPartThree}.
       </Text>
       <>
         <Box margin={{ vertical: '1.15rem' }}>
           <Checkbox
             checked={checked[TERMS]}
-            label={textOption1}
+            label={checkboxLabelTerms}
             pad={{ vertical: '0.35rem' }}
             setChecked={() =>
               setChecked(prevState => ({ ...prevState, [TERMS]: !prevState[TERMS] }))
@@ -104,7 +104,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
           />
           <Checkbox
             checked={checked[PRIVACY]}
-            label={textOption2}
+            label={checkboxLabelPrivacy}
             pad={{ vertical: '0.35rem' }}
             setChecked={() =>
               setChecked(prevState => ({ ...prevState, [PRIVACY]: !prevState[PRIVACY] }))
@@ -112,7 +112,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
           />
           <Checkbox
             checked={checked[CONDUCT]}
-            label={textOption3}
+            label={checkboxLabelConduct}
             pad={{ vertical: '0.35rem' }}
             setChecked={() =>
               setChecked(prevState => ({ ...prevState, [CONDUCT]: !prevState[CONDUCT] }))
