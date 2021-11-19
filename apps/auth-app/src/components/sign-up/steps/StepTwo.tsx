@@ -59,7 +59,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
 
   return (
     <>
-      <Text size="large" margin={{ bottom: 'xlarge' }}>
+      <Text size="large" margin={{ bottom: 'large' }}>
         {textLine1}{' '}
         <CTAAnchor
           size="large"
