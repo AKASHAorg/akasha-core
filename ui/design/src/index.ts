@@ -137,6 +137,7 @@ import ViewportSizeProvider, { useViewportSize } from './components/Providers/vi
 import TextIcon from './components/TextIcon';
 import LinkInput from './components/TextInputIconForm';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
+import Checkbox from './components/Checkbox';
 // import VirtualList from './components/VirtualList';
 import Helmet from 'react-helmet';
 import Spinner from './components/Spinner';
@@ -294,6 +295,7 @@ const exported = {
   StatModal,
   EntryList,
   StyledSelectBox,
+  Checkbox,
 };
 
 export default exported;

@@ -8,6 +8,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
 
 import { StepOne } from './steps/StepOne';
+import { StepTwo } from './steps/StepTwo';
 import { StepThree } from './steps/StepThree';
 
 const { Box, SignUpCard } = DS;
@@ -156,6 +157,27 @@ const SignUp: React.FC<RootComponentProps> = _props => {
             errorMsg={inviteTokenForm.errorMsg}
             onChange={onInputTokenChange}
             validateTokenFn={validateTokenFn}
+            onButtonClick={handleNextStep}
+          />
+        )}
+        {activeIndex === 1 && (
+          <StepTwo
+            textLine1={t('Please confirm below that you have read and agree to our')}
+            textLine1link1={t('Terms of Service')}
+            link1="/legal/terms-of-service"
+            textLine1connector={t('and')}
+            textLine1link2={t('Privacy Policy')}
+            link2="/legal/privacy-policy"
+            textLine2p1={t('Also acknowledge our')}
+            textLine2accent={t('Code of Conduct')}
+            link3="/legal/code-of-conduct"
+            textLine2p2={t(
+              'as the basis for respectful interactions with each other on Ethereum World',
+            )}
+            textOption1={t('I accept the Terms of Service')}
+            textOption2={t('I accept the Privacy Policy')}
+            textOption3={t('I acknowledge the Code of Conduct')}
+            buttonLabel={t('Continue to Step 3 ')}
             onButtonClick={handleNextStep}
           />
         )}

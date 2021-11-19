@@ -1,6 +1,9 @@
 import { base } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils';
 import { DefaultTheme } from '../interfaces';
+import React from 'react';
+// import Icon from '../../../components/Icon';
+import { FormCheckmark } from 'grommet-icons';
 
 const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
   const customTheme = deepMerge(styledComponentsTheme, base);
@@ -65,7 +68,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
     },
     radioButton: {
-      size: '16px',
+      size: '18px',
       border: {
         width: '1px',
         color: styledComponentsTheme.colors.accent,
@@ -83,6 +86,33 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         background: {
           // color: styledComponentsTheme.colors.accent,
         },
+      },
+    },
+    checkBox: {
+      size: '18px',
+      toggle: {
+        background: styledComponentsTheme.colors.accent,
+        color: styledComponentsTheme.colors.accent,
+      },
+      border: {
+        color: styledComponentsTheme.colors.accent,
+        width: styledComponentsTheme.shapes.thickness.small,
+      },
+      check: {
+        extend: ({ checked }) =>
+          `${checked && `background-color: ${styledComponentsTheme.colors.accent};`}`,
+      },
+      radius: styledComponentsTheme.shapes.smallBorderRadius,
+      hover: {
+        border: {
+          color: styledComponentsTheme.colors.accent,
+        },
+      },
+      icon: {
+        extend: `stroke: ${styledComponentsTheme.colors.white};`,
+      },
+      icons: {
+        checked: FormCheckmark,
       },
     },
     accordion: {
