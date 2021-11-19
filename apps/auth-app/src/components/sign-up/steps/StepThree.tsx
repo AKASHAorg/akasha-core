@@ -1,18 +1,33 @@
 import * as React from 'react';
+
 import DS from '@akashaproject/design-system';
 import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
+import { IInjectedProviderDetails } from '@akashaproject/ui-awf-hooks/lib/utils/getProviderDetails';
 
 const { Box, Text, Web3ConnectButton } = DS;
 
 export interface IStepThreeProps {
-  textLine1: string;
-  textLine2bold: string;
-  textLine2: string;
+  paragraphOneLabel: string;
+  paragraphTwoLabel: string;
+  paragraphTwoBoldLabel: string;
   injectedProvider: INJECTED_PROVIDERS;
+  providerDetails: IInjectedProviderDetails;
+  walletConnectDescription: string;
+  socialLoginTitleLabel: string;
+  socialLoginDescription: string;
 }
 
 const StepThree: React.FC<IStepThreeProps> = props => {
-  const { textLine1, textLine2bold, textLine2, injectedProvider } = props;
+  const {
+    paragraphOneLabel,
+    paragraphTwoLabel,
+    paragraphTwoBoldLabel,
+    injectedProvider,
+    providerDetails,
+    walletConnectDescription,
+    socialLoginTitleLabel,
+    socialLoginDescription,
+  } = props;
 
   const handleConnectProvider = () => {
     /* TODO: */
@@ -29,49 +44,36 @@ const StepThree: React.FC<IStepThreeProps> = props => {
   return (
     <Box>
       <Text size="large" margin={{ bottom: 'large' }}>
-        {textLine1}
+        {paragraphOneLabel}
       </Text>
       <Text size="large" margin={{ bottom: 'large' }}>
         <Text size="large" weight="bold">
-          {textLine2bold}
+          {paragraphTwoBoldLabel}
         </Text>{' '}
-        {textLine2}
+        {paragraphTwoLabel}
       </Text>
-      {/* show open login option at the top if no provider is detected */}
-      {injectedProvider === INJECTED_PROVIDERS.NOT_DETECTED && (
+      {injectedProvider !== INJECTED_PROVIDERS.NOT_DETECTED && (
         <Web3ConnectButton
           boxMargin={{ bottom: 'medium' }}
-          titleLabel="Use Your Email or Social Login"
-          subtitleLabel="Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks"
-          leftIconType="key"
-          handleClick={handleSocialLogin}
-        />
-      )}
-      {injectedProvider === INJECTED_PROVIDERS.METAMASK && (
-        <Web3ConnectButton
-          boxMargin={{ bottom: 'medium' }}
-          titleLabel="MetaMask"
-          subtitleLabel="We recommend using MetaMask. It's the wallet we've tested most extensively with Ethereum World. We're very sure it'll work"
-          leftIconType="metamask"
+          titleLabel={providerDetails.titleLabel}
+          subtitleLabel={providerDetails.subtitleLabel}
+          leftIconType={providerDetails.iconType}
           handleClick={handleConnectProvider}
         />
       )}
       <Web3ConnectButton
         boxMargin={{ bottom: 'medium' }}
         titleLabel="WalletConnect"
-        subtitleLabel="WalletConnect has had reliability problems for us in the past. Consider it experimental at this time."
+        subtitleLabel={walletConnectDescription}
         leftIconType="walletconnect"
         handleClick={handleWalletConnect}
       />
-      {/* show open login option at the bottom if a provider is detected */}
-      {injectedProvider !== INJECTED_PROVIDERS.NOT_DETECTED && (
-        <Web3ConnectButton
-          titleLabel="Use Your Email or Social Login"
-          subtitleLabel="Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks"
-          leftIconType="key"
-          handleClick={handleSocialLogin}
-        />
-      )}
+      <Web3ConnectButton
+        titleLabel={socialLoginTitleLabel}
+        subtitleLabel={socialLoginDescription}
+        leftIconType="key"
+        handleClick={handleSocialLogin}
+      />
     </Box>
   );
 };

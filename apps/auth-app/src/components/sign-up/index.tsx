@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
+import { useInjectedProvider } from '@akashaproject/ui-awf-hooks';
+
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
 
 import { StepOne } from './steps/StepOne';
 import { StepTwo } from './steps/StepTwo';
@@ -24,9 +25,6 @@ export interface IInviteTokenForm {
 const SignUp: React.FC<RootComponentProps> = _props => {
   const [activeIndex, setActiveIndex] = React.useState<number>(2);
   const [inviteToken, setInviteToken] = React.useState<string>('');
-  const [injectedProvider, setInjectedProvider] = React.useState<INJECTED_PROVIDERS>(
-    INJECTED_PROVIDERS.NOT_DETECTED,
-  );
   const [inviteTokenForm, setinviteTokenForm] = React.useState<IInviteTokenForm>({
     submitted: false,
     submitting: false,
@@ -35,16 +33,12 @@ const SignUp: React.FC<RootComponentProps> = _props => {
     errorMsg: '',
   });
 
+  const [injectedProvider, injectedProviderActions] = useInjectedProvider();
+
   const { t } = useTranslation();
   const sdk = getSDK();
 
   const DEFAULT_TOKEN_LENGTH = 24;
-
-  const getInjectedProvider = async () => {
-    const injectedProvider = await lastValueFrom(sdk.services.common.web3.detectInjectedProvider());
-
-    setInjectedProvider(injectedProvider.data);
-  };
 
   const handleIconClick = () => {
     if (activeIndex === 0) return;
@@ -114,7 +108,7 @@ const SignUp: React.FC<RootComponentProps> = _props => {
 
   React.useEffect(
     () => {
-      getInjectedProvider();
+      injectedProviderActions.getInjectedProvider();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -136,14 +130,16 @@ const SignUp: React.FC<RootComponentProps> = _props => {
       >
         {activeIndex === 0 && (
           <StepOne
-            textLine1={t(
+            paragraphOneLabel={t(
               'We are currently in a private alpha. You need the invitation code we emailed you to sign up.',
             )}
-            textLine2bold={t('If you have not received an invitation code')}
-            textLine2accent={t('you can request to be placed on the waitlist')}
+            paragraphTwoBoldLabel={t('If you have not received an invitation code')}
+            paragraphTwoAccentLabel={t('you can request to be placed on the waitlist')}
             writeToUsUrl={'mailto:alpha@ethereum.world'}
-            textLine2={t('You will get one soon thereafter')}
-            textLine3={t('Your invitation code is valid! Please proceed to create your account')}
+            paragraphTwoLabel={t('You will get one soon thereafter')}
+            paragraphThree={t(
+              'Your invitation code is valid! Please proceed to create your account',
+            )}
             buttonLabel={t('Continue to Step 2 ')}
             inputLabel={t('Invitation Code')}
             inputPlaceholder={t('Type your invitation code here')}
@@ -183,16 +179,27 @@ const SignUp: React.FC<RootComponentProps> = _props => {
         )}
         {activeIndex === 2 && (
           <StepThree
-            textLine1={t(
+            paragraphOneLabel={t(
               "You now need to choose how you'll sign up on  Ethereum World. If you are experienced wth Ethereum, you may connect your wallet.",
             )}
-            textLine2bold={t(
+            paragraphTwoBoldLabel={t(
               'If you are new to Ethereum, we recommend using the email or social login option.',
             )}
-            textLine2={t(
+            paragraphTwoLabel={t(
               "As part of signing up, you'll get a free Ethereum wallet tht you can use to send or receive crypto and sign in to other Ethereum sites.",
             )}
-            injectedProvider={injectedProvider}
+            injectedProvider={injectedProvider.name}
+            providerDetails={{
+              ...injectedProvider.details,
+              subtitleLabel: t(injectedProvider.details.subtitleLabel),
+            }}
+            walletConnectDescription={t(
+              'WalletConnect has had reliability problems for us in the past. Consider it experimental at this time.',
+            )}
+            socialLoginTitleLabel={t('Email or Social Login')}
+            socialLoginDescription={t(
+              'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
+            )}
           />
         )}
       </SignUpCard>

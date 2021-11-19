@@ -5,13 +5,13 @@ import { ILinkInput } from '@akashaproject/design-system/lib/components/TextInpu
 const { Box, Text, Icon, Button, CTAAnchor, LinkInput, styled } = DS;
 
 export interface IStepOneProps extends ILinkInput {
-  textLine1: string;
-  textLine2bold: string;
-  textLine2accent: string;
+  paragraphOneLabel: string;
+  paragraphTwoLabel: string;
+  paragraphTwoBoldLabel: string;
+  paragraphTwoAccentLabel: string;
+  paragraphThree: string;
   writeToUsUrl: string;
-  textLine2: string;
   inputLabel: string;
-  textLine3: string;
   buttonLabel: string;
   onButtonClick: () => void;
 }
@@ -23,13 +23,13 @@ const StyledButton = styled(Button)`
 
 const StepOne: React.FC<IStepOneProps> = props => {
   const {
-    textLine1,
-    textLine2bold,
-    textLine2accent,
+    paragraphOneLabel,
+    paragraphTwoLabel,
+    paragraphTwoBoldLabel,
+    paragraphTwoAccentLabel,
+    paragraphThree,
     writeToUsUrl,
-    textLine2,
     inputLabel,
-    textLine3,
     buttonLabel,
     inputPlaceholder,
     inputValue,
@@ -39,20 +39,20 @@ const StepOne: React.FC<IStepOneProps> = props => {
   return (
     <Box>
       <Text size="large" margin={{ bottom: 'large' }}>
-        {textLine1}
+        {paragraphOneLabel}
       </Text>
       <Text size="large" margin={{ bottom: 'xlarge' }}>
         <Text size="large" weight="bold">
-          {textLine2bold},
+          {paragraphTwoBoldLabel},
         </Text>{' '}
         <CTAAnchor
           size="large"
           isBold={true}
           color="accentText"
           href={writeToUsUrl}
-          label={textLine2accent}
+          label={paragraphTwoAccentLabel}
         />
-        . {textLine2}.
+        . {paragraphTwoLabel}.
       </Text>
       <Text size="large" color="secondaryText">
         {inputLabel}
@@ -73,7 +73,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
       {props.success && (
         <>
           <Text size="large" margin={{ vertical: 'large' }}>
-            {textLine3}
+            {paragraphThree}
           </Text>
           <Box
             align="flex-end"
