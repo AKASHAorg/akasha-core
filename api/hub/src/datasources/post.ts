@@ -5,6 +5,7 @@ import { DataProvider, PostItem } from '../collections/interfaces';
 import { parse, stringify } from 'flatted';
 import { queryCache } from '../storage/cache';
 import { clearSearchCache, searchIndex } from './search-indexes';
+import { getAuthorCacheKeys } from '../resolvers/constants';
 
 class PostAPI extends DataSource {
   private readonly collection: string;
@@ -33,10 +34,6 @@ class PostAPI extends DataSource {
     return `${this.collection}:postID${id}:initial`;
   }
 
-  getAuthorCacheKeys(pubKey: string) {
-    return `${this.collection}:author:pubKey:${pubKey}`;
-  }
-
   /**
    *
    * @param pubKey
@@ -46,7 +43,7 @@ class PostAPI extends DataSource {
     if (!pubKey || !cacheKey) {
       return Promise.resolve();
     }
-    const key = this.getAuthorCacheKeys(pubKey);
+    const key = getAuthorCacheKeys(pubKey);
     await queryCache.sAdd(key, cacheKey);
   }
 
@@ -63,7 +60,7 @@ class PostAPI extends DataSource {
     if (!pubKey) {
       return Promise.resolve();
     }
-    const key = this.getAuthorCacheKeys(pubKey);
+    const key = getAuthorCacheKeys(pubKey);
     let record;
     while ((record = await queryCache.sPop(key))) {
       if (!record) {

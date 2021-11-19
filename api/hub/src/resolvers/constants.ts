@@ -2,6 +2,10 @@ export const statsProvider = 'awf.api.stats';
 export const commentsStats = 'totalComments';
 export const postsStats = 'totalPosts';
 
+export const getAuthorCacheKeys = pubKey => {
+  return `Keys:author:pubKey:${pubKey}`;
+};
+
 // taken from link-preview-js since they don't export it in the build
 export const REGEX_VALID_URL = new RegExp(
   '^' +

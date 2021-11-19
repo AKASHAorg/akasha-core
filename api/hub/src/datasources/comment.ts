@@ -5,6 +5,7 @@ import { DataProvider, Comment, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 import { stringify } from 'flatted';
+import { getAuthorCacheKeys } from '../resolvers/constants';
 
 class CommentAPI extends DataSource {
   private readonly collection: string;
@@ -132,7 +133,7 @@ class CommentAPI extends DataSource {
       throw new Error(`Comment not found`);
     }
     await queryCache.set(commentCacheKey, comment);
-    await queryCache.sAdd(comment.author, commentCacheKey);
+    await queryCache.sAdd(getAuthorCacheKeys(comment.author), commentCacheKey);
     return comment;
   }
 
