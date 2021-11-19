@@ -61,13 +61,35 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
     <>
       <Text size="large" margin={{ bottom: 'xlarge' }}>
         {textLine1}{' '}
-        <CTAAnchor size="large" color="accentText" href={link1} label={textLine1link1} />{' '}
+        <CTAAnchor
+          size="large"
+          color="accentText"
+          href={link1}
+          label={textLine1link1}
+          target="_blank"
+          rel="noopener noreferrer"
+        />{' '}
         {textLine1connector}{' '}
-        <CTAAnchor size="large" color="accentText" href={link2} label={textLine1link2} />.
+        <CTAAnchor
+          size="large"
+          color="accentText"
+          href={link2}
+          label={textLine1link2}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+        .
       </Text>
       <Text size="large">
         {textLine2p1}{' '}
-        <CTAAnchor size="large" color="accentText" href={link3} label={textLine2accent} />{' '}
+        <CTAAnchor
+          size="large"
+          color="accentText"
+          href={link3}
+          label={textLine2accent}
+          target="_blank"
+          rel="noopener noreferrer"
+        />{' '}
         {textLine2p2}.
       </Text>
       <>
