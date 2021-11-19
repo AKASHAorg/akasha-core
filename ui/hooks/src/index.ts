@@ -76,6 +76,7 @@ import {
   useReport,
 } from './use-moderation';
 import { ICount, ILogItem, IModeratedItem, IPendingItem, EntryReport } from './moderation-requests';
+import useInjectedProvider from './use-injected-provider';
 
 export {
   constants,
@@ -180,4 +181,6 @@ export {
   IModeratedItem,
   IPendingItem,
   EntryReport,
+  // use-injected-provider
+  useInjectedProvider,
 };
