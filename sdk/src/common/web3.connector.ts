@@ -7,10 +7,11 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import OpenLogin from '@toruslabs/openlogin';
-import { createObservableStream } from '../helpers/observable';
+import { createObservableStream, createObservableValue } from '../helpers/observable';
 import EventBus from './event-bus';
 import { WEB3_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { throwError } from 'rxjs';
 
 @injectable()
 export default class Web3Connector
@@ -24,6 +25,7 @@ export default class Web3Connector
   #openLogin: OpenLogin;
   // only rinkeby network is supported atm
   readonly network = 'rinkeby';
+  #networkId = '0x4';
   // mapping for network name and ids
   readonly networkId = Object.freeze({
     mainnet: 1,
@@ -118,6 +120,24 @@ export default class Web3Connector
    */
   getCurrentAddress() {
     return createObservableStream(this.#_getCurrentAddress());
+  }
+
+  getRequiredNetworkName() {
+    if (!this.network) {
+      throw new Error('The required ethereum network was not set!');
+    }
+    return createObservableValue(this.network);
+  }
+
+  switchToRequiredNetwork() {
+    if (this.#web3Instance instanceof ethers.providers.Web3Provider)
+      return createObservableStream(
+        this.#web3Instance.send('wallet_switchEthereumChain', [{ chainId: this.#networkId }]),
+      );
+
+    return throwError(() => {
+      return new Error(`Method not supported on the current provider`);
+    });
   }
 
   async #_getCurrentAddress() {
