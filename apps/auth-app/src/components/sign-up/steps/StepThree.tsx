@@ -10,6 +10,10 @@ export interface IStepThreeProps {
   paragraphOneLabel: string;
   paragraphTwoLabel: string;
   paragraphTwoBoldLabel: string;
+  paragraphThreeLabel: string;
+  paragraphThreeBoldLabel: string;
+  paragraphFourLabel: string;
+  paragraphFourAccentLabel: string;
   injectedProvider: INJECTED_PROVIDERS;
   providerDetails: IInjectedProviderDetails;
   walletConnectDescription: string;
@@ -22,6 +26,10 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     paragraphOneLabel,
     paragraphTwoLabel,
     paragraphTwoBoldLabel,
+    paragraphThreeLabel,
+    paragraphThreeBoldLabel,
+    paragraphFourLabel,
+    paragraphFourAccentLabel,
     injectedProvider,
     providerDetails,
     walletConnectDescription,
@@ -52,6 +60,23 @@ const StepThree: React.FC<IStepThreeProps> = props => {
         </Text>{' '}
         {paragraphTwoLabel}
       </Text>
+      {/* show extra info if detected wallet is not METAMASK */}
+      {injectedProvider !== INJECTED_PROVIDERS.METAMASK && (
+        <>
+          <Text size="large" margin={{ bottom: 'large' }}>
+            {paragraphThreeLabel}{' '}
+            <Text size="large" weight="bold">
+              {paragraphThreeBoldLabel}
+            </Text>
+          </Text>
+          <Text size="large" margin={{ bottom: 'large' }}>
+            {paragraphFourLabel}{' '}
+            <Text size="large" color="accentText">
+              {paragraphFourAccentLabel}.
+            </Text>
+          </Text>
+        </>
+      )}
       {injectedProvider !== INJECTED_PROVIDERS.NOT_DETECTED && (
         <Web3ConnectButton
           boxMargin={{ bottom: 'medium' }}

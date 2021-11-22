@@ -115,7 +115,10 @@ const SignUp: React.FC<RootComponentProps> = _props => {
   );
 
   return (
-    <Box width={'38%'} margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}>
+    <Box
+      width={_props.isMobile ? '100%' : '38%'}
+      margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}
+    >
       <SignUpCard
         titleLabel="Sign Up"
         activeIndex={activeIndex}
@@ -186,8 +189,16 @@ const SignUp: React.FC<RootComponentProps> = _props => {
               'If you are new to Ethereum, we recommend using the email or social login option.',
             )}
             paragraphTwoLabel={t(
-              "As part of signing up, you'll get a free Ethereum wallet tht you can use to send or receive crypto and sign in to other Ethereum sites.",
+              "As part of signing up, you'll get a free Ethereum wallet that you can use to send or receive crypto and sign in to other Ethereum sites.",
             )}
+            paragraphThreeLabel={t(
+              "While you're free to conect any wallet that works with the Rinkeby Network,",
+            )}
+            paragraphThreeBoldLabel={t('we recommend MetaMask.')}
+            paragraphFourLabel={t(
+              'We have tested MetaMask the most out of all Ethereum Wallets. You can install it',
+            )}
+            paragraphFourAccentLabel={t('here')}
             injectedProvider={injectedProvider.name}
             providerDetails={{
               ...injectedProvider.details,
