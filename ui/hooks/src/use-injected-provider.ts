@@ -1,93 +1,40 @@
-import * as React from 'react';
 import { lastValueFrom } from 'rxjs';
+import { useQuery } from 'react-query';
 
 import getSDK from '@akashaproject/awf-sdk';
 import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
+import constants from './constants';
 import { logError } from './utils/error-handler';
-import getProviderDetails, { IInjectedProviderDetails } from './utils/getProviderDetails';
+import getProviderDetails from './utils/getProviderDetails';
 
-export interface UseInjectedProviderActions {
-  /**
-   *  get injected provider
-   */
-  getInjectedProvider: () => void;
-}
+const { INJECTED_PROVIDER_KEY } = constants;
 
-export interface IInjectedProviderState {
-  name: INJECTED_PROVIDERS;
-  details: IInjectedProviderDetails;
-}
+const getInjectedProvider = async () => {
+  const sdk = getSDK();
+  const provider = await lastValueFrom(sdk.services.common.web3.detectInjectedProvider());
 
-export type IInjectedProviderAction =
-  | {
-      type: 'GET_INJECTED_PROVIDER_SUCCESS';
-      payload: INJECTED_PROVIDERS;
-    }
-  | {
-      type: 'SET_PROVIDER_DETAILS';
-      payload: IInjectedProviderDetails;
-    };
+  // get detected provider details
+  const details = getProviderDetails(provider.data);
 
-const InjectedProviderStateReducer = (
-  state: IInjectedProviderState,
-  action: IInjectedProviderAction,
-) => {
-  switch (action.type) {
-    case 'GET_INJECTED_PROVIDER_SUCCESS': {
-      return {
-        ...state,
-        name: action.payload,
-      };
-    }
-    case 'SET_PROVIDER_DETAILS': {
-      return {
-        ...state,
-        details: action.payload,
-      };
-    }
-    default:
-      throw new Error('[InjectedProviderStateReducer] action is not defined!');
-  }
-};
-
-// initial state
-const initialInjectedProviderState = {
-  name: INJECTED_PROVIDERS.NOT_DETECTED,
-  details: {
-    iconType: '',
-    titleLabel: '',
-    subtitleLabel: '',
-  },
+  return { name: provider.data, details };
 };
 
 /**
  * A hook to get injected provider from the SDK
  */
-export const useInjectedProvider = (): [IInjectedProviderState, UseInjectedProviderActions] => {
-  const [injectedProvider, dispatch] = React.useReducer(
-    InjectedProviderStateReducer,
-    initialInjectedProviderState,
-  );
-
-  const actions: UseInjectedProviderActions = {
-    async getInjectedProvider() {
-      const sdk = getSDK();
-      try {
-        const provider = await lastValueFrom(sdk.services.common.web3.detectInjectedProvider());
-
-        dispatch({ type: 'GET_INJECTED_PROVIDER_SUCCESS', payload: provider.data });
-
-        const providerDetails = getProviderDetails(provider.data);
-
-        dispatch({ type: 'SET_PROVIDER_DETAILS', payload: providerDetails });
-      } catch (error) {
-        logError('useInjectedProvider', error);
-      }
+export function useInjectedProvider() {
+  return useQuery([INJECTED_PROVIDER_KEY], () => getInjectedProvider(), {
+    initialData: {
+      name: INJECTED_PROVIDERS.NOT_DETECTED,
+      details: {
+        iconType: '',
+        titleLabel: '',
+        subtitleLabel: '',
+      },
     },
-  };
-
-  return [injectedProvider, actions];
-};
+    onError: (err: Error) => logError('[use-injected-provider.ts]: useInjectedProvider err', err),
+  });
+}
 
 export default useInjectedProvider;

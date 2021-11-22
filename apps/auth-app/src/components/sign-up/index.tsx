@@ -34,7 +34,8 @@ const SignUp: React.FC<RootComponentProps> = _props => {
     errorMsg: '',
   });
 
-  const [injectedProvider, injectedProviderActions] = useInjectedProvider();
+  const getInjectedProviderQuery = useInjectedProvider();
+  const injectedProvider = getInjectedProviderQuery.data;
 
   const { t } = useTranslation();
   const sdk = getSDK();
@@ -105,14 +106,6 @@ const SignUp: React.FC<RootComponentProps> = _props => {
     triggerInviteValidation,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [inviteToken],
-  );
-
-  React.useEffect(
-    () => {
-      injectedProviderActions.getInjectedProvider();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
   );
 
   return (
