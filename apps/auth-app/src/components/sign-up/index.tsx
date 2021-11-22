@@ -11,6 +11,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { StepOne } from './steps/StepOne';
 import { StepTwo } from './steps/StepTwo';
 import { StepThree } from './steps/StepThree';
+import StepFour from './steps/StepFour';
 
 const { Box, SignUpCard } = DS;
 
@@ -23,7 +24,7 @@ export interface IInviteTokenForm {
 }
 
 const SignUp: React.FC<RootComponentProps> = _props => {
-  const [activeIndex, setActiveIndex] = React.useState<number>(2);
+  const [activeIndex, setActiveIndex] = React.useState<number>(3);
   const [inviteToken, setInviteToken] = React.useState<string>('');
   const [inviteTokenForm, setinviteTokenForm] = React.useState<IInviteTokenForm>({
     submitted: false,
@@ -211,6 +212,60 @@ const SignUp: React.FC<RootComponentProps> = _props => {
             socialLoginDescription={t(
               'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
             )}
+          />
+        )}
+        {activeIndex === 3 && (
+          <StepFour
+            textExplanation={t("We'll explain why we need each along the way")}
+            textExplanationBold={t(
+              "As part of your sign-up process, you'll be required to select the account to connect and sign three transactions in your wallet",
+            )}
+            textPacify={t(
+              'Additionally, we will not be privy to your wallet password, private key, balance, or any other information',
+            )}
+            textPacifyBold={t("Don't worry, signing up is free")}
+            textChooseAddress={t('Choose the Ethereum address to connect')}
+            textChooseAddressExplanation={t(
+              'We will associate your Ethereum World account with this address.',
+            )}
+            textButtonSelect={t('Select Address in Wallet')}
+            textCreateSignIn={t('Create a way to sign in to your account')}
+            textCreateSignInExplanation={t(
+              "You'll be able to sign in to your account with this wallet address. Think of it as using your wallet like a username and password.",
+            )}
+            textCreateSecure={t('Create a secure place to store your data')}
+            textCreateSecureExplanation={t(
+              'You will create a secure space to store your data (posts, photos, replies, and so forth). Moving forward we will need explicit permission from you to access you data.',
+            )}
+            textCreateProfile={t('Create your Ethereum World profile')}
+            textCreateProfileExplanation={t(
+              'We will create your Ethereum World profile in our systems.',
+            )}
+            textAddressComplete={t("You've connected an Ethereum address")}
+            textSignInComplete={t('You can sign in with this address')}
+            textSecureComplete={t('You have a secure place to store your data')}
+            textProfileComplete={t('You have created your Ethereum World profile')}
+            textCompleted={
+              "That's it! The hardest part is complete. Now you only need to choose a username and you’ll be done!"
+            }
+            textButtonSignInWallet={t('Sign in Wallet')}
+            textRequestProblem={t(
+              "Not seeing the wallet request? Please make sure to open your wallet extension. If you're still not seeing it, we can resend it.",
+            )}
+            textRequestResend={t('Resend request')}
+            textDeclinedError={t(
+              'You have declined the signature request. You will not be able to proceed unless you accept all signature requests.',
+            )}
+            textTimeoutError={t(
+              'The signature request has timed out. Please try again to sign the request.',
+            )}
+            textNetworkError={t(
+              'Ethereum World only works with the Rinkeby test network. Please set your network to Rinkeby to continue.',
+            )}
+            textAgain={t('Try Again')}
+            buttonLabel={t('Continue to Step 5')}
+            onButtonClick={handleNextStep}
+            injectedProvider={injectedProvider}
           />
         )}
       </SignUpCard>

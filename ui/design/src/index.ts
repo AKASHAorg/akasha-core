@@ -160,6 +160,7 @@ import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
 
 import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
+import WalletRequestStep from './components/WalletRequestStep';
 
 /* Grommet utils */
 // @TODO: fix this export style...
@@ -296,6 +297,7 @@ const exported = {
   EntryList,
   StyledSelectBox,
   Checkbox,
+  WalletRequestStep,
 };
 
 export default exported;

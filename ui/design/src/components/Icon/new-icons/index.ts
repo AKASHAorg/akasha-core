@@ -22,6 +22,7 @@ import bookmark from './bookmark';
 import calendar from './calendar';
 import check from './check';
 import checkSimple from './checkSimple';
+import circleDashed from './circleDashed';
 import close from './close';
 import code from './code';
 import coinbase from './coinbase';
@@ -129,6 +130,7 @@ export {
   copy,
   check,
   checkSimple,
+  circleDashed,
   discord,
   payment,
   eye,

@@ -35,6 +35,7 @@ export type IconType =
   | 'copy'
   | 'check'
   | 'checkSimple'
+  | 'circleDashed'
   | 'discord'
   | 'document'
   | 'editSimple'
@@ -143,6 +144,7 @@ export const iconTypes: IconType[] = [
   'copy',
   'check',
   'checkSimple',
+  'circleDashed',
   'coins',
   'discord',
   'document',
