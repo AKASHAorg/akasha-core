@@ -11,7 +11,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { StepOne } from './steps/StepOne';
 import { StepTwo } from './steps/StepTwo';
 import { StepThree } from './steps/StepThree';
-import StepFour from './steps/StepFour';
+import { StepFour } from './steps/StepFour';
 
 const { Box, SignUpCard } = DS;
 

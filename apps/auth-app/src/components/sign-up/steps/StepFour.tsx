@@ -182,4 +182,4 @@ const StepFour: React.FC<IStepFourProps> = props => {
   );
 };
 
-export default StepFour;
+export { StepFour };
