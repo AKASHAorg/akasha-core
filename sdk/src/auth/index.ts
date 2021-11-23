@@ -145,19 +145,11 @@ export default class AWF_Auth implements AWF_IAuth {
     );
   }
 
-  /**
-   *
-   * @param args: resumeSignIn
-   */
   signIn(args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean }) {
     const normalisedArgs = Object.assign({}, { checkRegistered: true }, args);
     return createObservableStream(this._signIn(normalisedArgs));
   }
 
-  /**
-   *
-   * @param args
-   */
   private async _signIn(
     args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean } = {
       provider: EthProviders.Web3Injected,
