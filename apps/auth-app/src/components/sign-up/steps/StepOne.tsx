@@ -2,7 +2,9 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { ILinkInput } from '@akashaproject/design-system/lib/components/TextInputIconForm';
 
-const { Box, Text, Icon, Button, CTAAnchor, LinkInput, styled } = DS;
+import { StyledButton } from './styles';
+
+const { Box, Text, Icon, CTAAnchor, LinkInput } = DS;
 
 export interface IStepOneProps extends ILinkInput {
   paragraphOneLabel: string;
@@ -15,11 +17,6 @@ export interface IStepOneProps extends ILinkInput {
   buttonLabel: string;
   onButtonClick: () => void;
 }
-
-const StyledButton = styled(Button)`
-  padding: ${props =>
-    `${props.theme.shapes.baseSpacing / 16}rem ${(props.theme.shapes.baseSpacing * 2.5) / 16}rem`};
-`;
 
 const StepOne: React.FC<IStepOneProps> = props => {
   const {

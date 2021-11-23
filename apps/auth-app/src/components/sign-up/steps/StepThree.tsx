@@ -3,8 +3,11 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
 import { IInjectedProviderDetails } from '@akashaproject/ui-awf-hooks/lib/utils/getProviderDetails';
+import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
 
-const { Box, Text, Web3ConnectButton } = DS;
+import { StyledButton } from './styles';
+
+const { Box, Text, Icon, VariableIconButton, Web3ConnectButton } = DS;
 
 export interface IStepThreeProps {
   paragraphOneLabel: string;
@@ -19,6 +22,15 @@ export interface IStepThreeProps {
   walletConnectDescription: string;
   socialLoginTitleLabel: string;
   socialLoginDescription: string;
+  changeProviderLabel: string;
+  setRinkebyLabel: string;
+  setRinkebyBoldLabel: string;
+  setRinkebyAccentLabel: string;
+  variableIconButtonLabel: string;
+  buttonLabel: string;
+  selectedProvider: EthProviders;
+  onProviderSelect: (provider: EthProviders) => void;
+  onButtonClick: () => void;
 }
 
 const StepThree: React.FC<IStepThreeProps> = props => {
@@ -35,70 +47,133 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     walletConnectDescription,
     socialLoginTitleLabel,
     socialLoginDescription,
+    changeProviderLabel,
+    setRinkebyLabel,
+    setRinkebyBoldLabel,
+    setRinkebyAccentLabel,
+    variableIconButtonLabel,
+    buttonLabel,
+    selectedProvider,
+    onProviderSelect,
+    onButtonClick,
   } = props;
 
-  const handleConnectProvider = () => {
-    /* TODO: */
+  const [isLoading] = React.useState(false);
+  const [isRinkeby] = React.useState(false);
+
+  const handleWeb3Injected = () => {
+    onProviderSelect(EthProviders.Web3Injected);
   };
 
   const handleWalletConnect = () => {
-    /* TODO: */
+    onProviderSelect(EthProviders.WalletConnect);
   };
 
   const handleSocialLogin = () => {
-    /* TODO: */
+    onProviderSelect(EthProviders.Torus);
   };
 
   return (
     <Box>
-      <Text size="large" margin={{ bottom: 'large' }}>
-        {paragraphOneLabel}
-      </Text>
-      <Text size="large" margin={{ bottom: 'large' }}>
-        <Text size="large" weight="bold">
-          {paragraphTwoBoldLabel}
-        </Text>{' '}
-        {paragraphTwoLabel}
-      </Text>
-      {/* show extra info if detected wallet is not METAMASK */}
-      {injectedProvider !== INJECTED_PROVIDERS.METAMASK && (
+      {selectedProvider === EthProviders.Web3Injected && (
         <>
-          <Text size="large" margin={{ bottom: 'large' }}>
-            {paragraphThreeLabel}{' '}
+          {/* show this, if selected provider is web3 injected && network is not Rinkeby */}
+          <Box direction="row" justify="between" margin={{ bottom: 'large' }}>
             <Text size="large" weight="bold">
-              {paragraphThreeBoldLabel}
+              {injectedProvider}
             </Text>
-          </Text>
-          <Text size="large" margin={{ bottom: 'large' }}>
-            {paragraphFourLabel}{' '}
             <Text size="large" color="accentText">
-              {paragraphFourAccentLabel}.
+              {changeProviderLabel}
             </Text>
+          </Box>
+          <Text size="large" margin={{ bottom: 'large' }}>
+            {setRinkebyLabel}
+            <Text size="large" weight="bold">
+              {setRinkebyBoldLabel}
+            </Text>{' '}
+            <Text size="large" weight="bold" color="accentText">
+              {setRinkebyAccentLabel}
+            </Text>
+            .
           </Text>
+          {/* video area (if injectedProvider is MetaMask): setting to Rinkeby on MetaMask */}
+          <VariableIconButton
+            titleLabel={variableIconButtonLabel}
+            isLoading={isLoading}
+            isError={!isRinkeby}
+            onClick={() => null}
+          />
+          {isRinkeby && (
+            <Box
+              align="flex-end"
+              justify="center"
+              margin={{ top: 'small' }}
+              pad={{ top: 'medium' }}
+              border={{ side: 'top', color: 'border', size: 'xsmall' }}
+            >
+              <StyledButton
+                primary={true}
+                icon={<Icon type="arrowRight" color="white" />}
+                reverse={true}
+                label={buttonLabel}
+                onClick={onButtonClick}
+              />
+            </Box>
+          )}
         </>
       )}
-      {injectedProvider !== INJECTED_PROVIDERS.NOT_DETECTED && (
-        <Web3ConnectButton
-          boxMargin={{ bottom: 'medium' }}
-          titleLabel={providerDetails.titleLabel}
-          subtitleLabel={providerDetails.subtitleLabel}
-          leftIconType={providerDetails.iconType}
-          handleClick={handleConnectProvider}
-        />
+      {selectedProvider === EthProviders.None && (
+        <>
+          <Text size="large" margin={{ bottom: 'large' }}>
+            {paragraphOneLabel}
+          </Text>
+          <Text size="large" margin={{ bottom: 'large' }}>
+            <Text size="large" weight="bold">
+              {paragraphTwoBoldLabel}
+            </Text>{' '}
+            {paragraphTwoLabel}
+          </Text>
+          {/* show extra info if detected wallet is not METAMASK */}
+          {injectedProvider !== INJECTED_PROVIDERS.METAMASK && (
+            <>
+              <Text size="large" margin={{ bottom: 'large' }}>
+                {paragraphThreeLabel}{' '}
+                <Text size="large" weight="bold">
+                  {paragraphThreeBoldLabel}
+                </Text>
+              </Text>
+              <Text size="large" margin={{ bottom: 'large' }}>
+                {paragraphFourLabel}{' '}
+                <Text size="large" color="accentText">
+                  {paragraphFourAccentLabel}.
+                </Text>
+              </Text>
+            </>
+          )}
+          {injectedProvider !== INJECTED_PROVIDERS.NOT_DETECTED && (
+            <Web3ConnectButton
+              boxMargin={{ bottom: 'medium' }}
+              titleLabel={providerDetails.titleLabel}
+              subtitleLabel={providerDetails.subtitleLabel}
+              leftIconType={providerDetails.iconType}
+              handleClick={handleWeb3Injected}
+            />
+          )}
+          <Web3ConnectButton
+            boxMargin={{ bottom: 'medium' }}
+            titleLabel="WalletConnect"
+            subtitleLabel={walletConnectDescription}
+            leftIconType="walletconnect"
+            handleClick={handleWalletConnect}
+          />
+          <Web3ConnectButton
+            titleLabel={socialLoginTitleLabel}
+            subtitleLabel={socialLoginDescription}
+            leftIconType="key"
+            handleClick={handleSocialLogin}
+          />
+        </>
       )}
-      <Web3ConnectButton
-        boxMargin={{ bottom: 'medium' }}
-        titleLabel="WalletConnect"
-        subtitleLabel={walletConnectDescription}
-        leftIconType="walletconnect"
-        handleClick={handleWalletConnect}
-      />
-      <Web3ConnectButton
-        titleLabel={socialLoginTitleLabel}
-        subtitleLabel={socialLoginDescription}
-        leftIconType="key"
-        handleClick={handleSocialLogin}
-      />
     </Box>
   );
 };

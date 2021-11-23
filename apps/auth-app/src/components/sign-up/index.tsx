@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
+import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
 import { useInjectedProvider } from '@akashaproject/ui-awf-hooks';
 
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
@@ -26,6 +27,7 @@ export interface IInviteTokenForm {
 const SignUp: React.FC<RootComponentProps> = _props => {
   const [activeIndex, setActiveIndex] = React.useState<number>(3);
   const [inviteToken, setInviteToken] = React.useState<string>('');
+  const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [inviteTokenForm, setinviteTokenForm] = React.useState<IInviteTokenForm>({
     submitted: false,
     submitting: false,
@@ -49,6 +51,10 @@ const SignUp: React.FC<RootComponentProps> = _props => {
 
   const handleNextStep = () => {
     setActiveIndex(prev => prev + 1);
+  };
+
+  const handleProviderSelect = (provider: EthProviders) => {
+    setSelectedProvider(provider);
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -205,6 +211,17 @@ const SignUp: React.FC<RootComponentProps> = _props => {
             socialLoginDescription={t(
               'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
             )}
+            changeProviderLabel={t('Change')}
+            setRinkebyLabel={t('To use Ethereum World during the alpha period, ')}
+            setRinkebyBoldLabel={`${t('you’ll need to set the')} ${injectedProvider.name} ${t(
+              'network to',
+            )}`}
+            setRinkebyAccentLabel={'Rinkeby'}
+            variableIconButtonLabel={t('I have set the network to Rinkeby')}
+            buttonLabel={t('Continue to Step 4 ')}
+            selectedProvider={selectedProvider}
+            onProviderSelect={handleProviderSelect}
+            onButtonClick={handleNextStep}
           />
         )}
         {activeIndex === 3 && (
