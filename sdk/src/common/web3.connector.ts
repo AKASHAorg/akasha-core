@@ -23,6 +23,7 @@ export default class Web3Connector
   #globalChannel: EventBus;
   #wallet: ethers.Wallet;
   #openLogin: OpenLogin;
+  #currentProviderId: EthProviders;
   // only rinkeby network is supported atm
   readonly network = 'rinkeby';
   #networkId = '0x4';
@@ -53,7 +54,12 @@ export default class Web3Connector
    */
   async connect(provider: EthProviders = EthProviders.None): Promise<void> {
     this.#log.info(`connecting to provider ${provider}`);
+    if (this.#web3Instance && this.#currentProviderId && this.#currentProviderId === provider) {
+      this.#log.info(`provider ${provider} already connected`);
+      return;
+    }
     this.#web3Instance = await this.#_getProvider(provider);
+    this.#currentProviderId = provider;
     this.#globalChannel.next({
       data: { provider },
       event: WEB3_EVENTS.CONNECTED,
@@ -61,6 +67,16 @@ export default class Web3Connector
     this.#log.info(`connected to provider ${provider}`);
   }
 
+  requestEthAddresses() {
+    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
+      return createObservableStream(
+        this.#web3Instance.send('wallet_requestPermissions', [{ eth_accounts: {} }]),
+      );
+    }
+    return throwError(() => {
+      return new Error(`Method wallet_requestPermissions not supported on the current provider`);
+    });
+  }
   /**
    * Get access to the web3 provider instance
    */
@@ -76,6 +92,7 @@ export default class Web3Connector
    */
   async disconnect(): Promise<void> {
     this.#web3Instance = null;
+    this.#currentProviderId = null;
     this.#globalChannel.next({
       data: undefined,
       event: WEB3_EVENTS.DISCONNECTED,
@@ -136,7 +153,7 @@ export default class Web3Connector
       );
 
     return throwError(() => {
-      return new Error(`Method not supported on the current provider`);
+      return new Error(`Method wallet_switchEthereumChain not supported on the current provider`);
     });
   }
 
