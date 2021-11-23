@@ -1,4 +1,3 @@
-import ILogService, { ILogger } from './log';
 import { Observable } from 'rxjs';
 
 export enum EthProviders {

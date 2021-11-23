@@ -19,10 +19,8 @@ export default interface AWF_IAuth {
   getSession(): Observable<{
     data: {
       buck: Buckets;
-      identity: PrivateKey;
       client: Client;
       user: Users;
-      tokenGenerator: () => Promise<UserAuth>;
     };
   }>;
 
