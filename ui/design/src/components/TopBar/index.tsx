@@ -353,7 +353,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           {props.children}
           {loggedProfileData?.ethAddress &&
             quickAccessItems &&
-            shouldRenderOnboarding &&
             quickAccessItems.map(renderPluginButton)}
           {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
             <Box direction="row" align="center" gap="small">
