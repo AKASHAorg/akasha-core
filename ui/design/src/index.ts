@@ -79,7 +79,7 @@ import IconButton from './components/IconButton';
 import IconLink from './components/IconLink';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
-import SelectAddressButton from './components/SelectAddressButton';
+import VariableIconButton from './components/VariableIconButton';
 import Web3ConnectButton from './components/Web3ConnectButton';
 
 import AreaChart from './components/AreaChart';
@@ -219,7 +219,7 @@ const exported = {
   SignUpModal,
   ProfileAvatarButton,
   VoteIconButton,
-  SelectAddressButton,
+  VariableIconButton,
   Web3ConnectButton,
   CommentInput,
   SearchInput,

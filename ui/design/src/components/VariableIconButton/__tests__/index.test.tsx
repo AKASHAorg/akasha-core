@@ -2,10 +2,10 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import SelectAddressButton from '../';
+import VariableIconButton from '..';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<SelectAddressButton /> Component', () => {
+describe('<VariableIconButton /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleClick = jest.fn();
@@ -14,7 +14,12 @@ describe('<SelectAddressButton /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <SelectAddressButton titleLabel="Select Address in Wallet" handleClick={handleClick} />,
+          <VariableIconButton
+            titleLabel="Select Address in Wallet"
+            isLoading={false}
+            isError={false}
+            onClick={handleClick}
+          />,
         ),
         {},
       );

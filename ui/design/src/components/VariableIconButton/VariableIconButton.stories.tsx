@@ -1,29 +1,29 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import SelectAddressButton, { ISelectAddressButtonProps } from '.';
+import VariableIconButton, { IVariableIconButtonProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
 export default {
-  title: 'Buttons/SelectAddressButton',
-  component: SelectAddressButton,
+  title: 'Buttons/VariableIconButton',
+  component: VariableIconButton,
   argTypes: {
     titleLabel: { control: 'text' },
     handleClick: { action: 'button clicked' },
   },
 };
 
-const Template = (args: ISelectAddressButtonProps) => (
+const Template = (args: IVariableIconButtonProps) => (
   <Grommet theme={lightTheme}>
     <Box width="30%" pad="none" align="center">
-      <SelectAddressButton {...args} />
+      <VariableIconButton {...args} />
     </Box>
   </Grommet>
 );
 
-export const BaseSelectAddressButton = Template.bind({});
+export const BaseVariableIconButton = Template.bind({});
 
-BaseSelectAddressButton.args = {
+BaseVariableIconButton.args = {
   titleLabel: 'Select Address in Wallet',
 };
