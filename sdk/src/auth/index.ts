@@ -276,9 +276,6 @@ export default class AWF_Auth implements AWF_IAuth {
       event: AUTH_EVENTS.SIGN_COMPOSED_MESSAGE,
     });
     this.#identity = await generatePrivateKey(this._web3, this.#signedAuthMessage);
-    const pubKey = this.#identity.public.toString();
-    const address = await lastValueFrom(this._web3.getCurrentAddress());
-    this.currentUser = { pubKey, ethAddress: address.data };
     this._globalChannel.next({
       data: {},
       event: AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS,
@@ -309,6 +306,8 @@ export default class AWF_Auth implements AWF_IAuth {
     if (!this.#tokenGenerator) {
       throw new Error('Token message was not signed!');
     }
+    const pubKey = this.#identity.public.toString();
+    const address = await lastValueFrom(this._web3.getCurrentAddress());
     const userAuth = loginWithChallenge(this.#identity, this._web3);
     this.hubClient = Client.withUserAuth(userAuth, process.env.AUTH_ENDPOINT);
     this.hubUser = Users.withUserAuth(userAuth);
@@ -330,7 +329,11 @@ export default class AWF_Auth implements AWF_IAuth {
       setTimeout(resolve, 15000, [null]);
     });
     const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
-    Object.assign(this.currentUser, { filAddress: filAddress?.address });
+    this.currentUser = {
+      pubKey,
+      ethAddress: address.data,
+      filAddress: filAddress?.address,
+    };
   }
   /**
    * Returns current session objects for textile
