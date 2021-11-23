@@ -29,6 +29,7 @@ import coinbase from './coinbase';
 import coins from './coins';
 import comments from './comments';
 import copy from './copy';
+import dapper from './dapper';
 import discord from './discord';
 import document from './document';
 import edit from './edit';
@@ -64,6 +65,7 @@ import menuPyramid from './menu-pyramid';
 import metamask from './metamask';
 import moreDark from './more-dark';
 import moreGrey from './more-grey';
+import nifty from './nifty';
 import notifications from './notifications';
 import opera from './opera';
 import payment from './payment';
@@ -128,6 +130,7 @@ export {
   coinbase,
   coins,
   copy,
+  dapper,
   check,
   checkSimple,
   circleDashed,
@@ -181,6 +184,7 @@ export {
   metamask,
   moreDark,
   moreGrey,
+  nifty,
   notifications,
   opera,
   person,

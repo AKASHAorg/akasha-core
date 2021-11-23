@@ -33,6 +33,7 @@ export type IconType =
   | 'coinbase'
   | 'coins'
   | 'copy'
+  | 'dapper'
   | 'check'
   | 'checkSimple'
   | 'circleDashed'
@@ -71,6 +72,7 @@ export type IconType =
   | 'metamask'
   | 'moreDark'
   | 'moreGrey'
+  | 'nifty'
   | 'notifications'
   | 'opera'
   | 'payment'
@@ -142,6 +144,7 @@ export const iconTypes: IconType[] = [
   'code',
   'coinbase',
   'copy',
+  'dapper',
   'check',
   'checkSimple',
   'circleDashed',
@@ -181,6 +184,7 @@ export const iconTypes: IconType[] = [
   'metamask',
   'moreDark',
   'moreGrey',
+  'nifty',
   'notifications',
   'opera',
   'payment',
@@ -247,7 +251,7 @@ const StyledRefDiv = styled.div`
 
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];
-  const { primaryColor, accentColor, clickable, testId, wrapperStyle, ...other } = props;
+  const { testId, wrapperStyle, ...other } = props;
   if (!Component) {
     // tslint:disable-next-line no-console
     console.error('There is no such icon', props.type);
