@@ -67,16 +67,7 @@ export default class AWF_ENS implements AWF_IENS {
   }
 
   registerName(name: string) {
-    return createObservableStream(this._registerName(name)).pipe(
-      tap(ev => {
-        // @emits ENS_EVENTS.REGISTER
-        this._globalChannel.next({
-          data: ev.data,
-          event: ENS_EVENTS.REGISTER,
-          args: { name },
-        });
-      }),
-    );
+    return createObservableStream(this._registerName(name));
   }
 
   private async _registerName(name: string) {
@@ -91,6 +82,12 @@ export default class AWF_ENS implements AWF_IENS {
         validatedName,
         this.RESOLVER_ADDRESS,
       );
+      // @emits ENS_EVENTS.REGISTER
+      this._globalChannel.next({
+        data: { tx: registerTx.toString() },
+        event: ENS_EVENTS.REGISTER,
+        args: { name },
+      });
       await registerTx.wait();
     }
     return this._claimName(validatedName);
@@ -99,7 +96,7 @@ export default class AWF_ENS implements AWF_IENS {
   claimName(name: string) {
     return createObservableStream(this._claimName(name)).pipe(
       tap(ev => {
-        // @emits ENS_EVENTS.REGISTER
+        // @emits ENS_EVENTS.CLAIM
         this._globalChannel.next({
           data: ev.data,
           event: ENS_EVENTS.CLAIM,

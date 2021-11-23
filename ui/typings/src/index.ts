@@ -47,6 +47,7 @@ export enum EthProviders {
   Web3Injected,
   WalletConnect,
   FallbackProvider,
+  Torus,
 }
 
 export enum LEGAL_DOCS {

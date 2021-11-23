@@ -7,10 +7,11 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import OpenLogin from '@toruslabs/openlogin';
-import { createObservableStream } from '../helpers/observable';
+import { createObservableStream, createObservableValue } from '../helpers/observable';
 import EventBus from './event-bus';
 import { WEB3_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { throwError } from 'rxjs';
 
 @injectable()
 export default class Web3Connector
@@ -22,8 +23,10 @@ export default class Web3Connector
   #globalChannel: EventBus;
   #wallet: ethers.Wallet;
   #openLogin: OpenLogin;
+  #currentProviderId: EthProviders;
   // only rinkeby network is supported atm
   readonly network = 'rinkeby';
+  #networkId = '0x4';
   // mapping for network name and ids
   readonly networkId = Object.freeze({
     mainnet: 1,
@@ -49,16 +52,32 @@ export default class Web3Connector
    *
    * @param provider - Number representing the provider option
    */
-  async connect(provider: EthProviders = EthProviders.None): Promise<void> {
+  async connect(provider: EthProviders = EthProviders.None): Promise<boolean> {
     this.#log.info(`connecting to provider ${provider}`);
+    if (this.#web3Instance && this.#currentProviderId && this.#currentProviderId === provider) {
+      this.#log.info(`provider ${provider} already connected`);
+      return true;
+    }
     this.#web3Instance = await this.#_getProvider(provider);
+    this.#currentProviderId = provider;
     this.#globalChannel.next({
       data: { provider },
       event: WEB3_EVENTS.CONNECTED,
     });
     this.#log.info(`connected to provider ${provider}`);
+    return true;
   }
 
+  requestWalletPermissions() {
+    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
+      return createObservableStream(
+        this.#web3Instance.send('wallet_requestPermissions', [{ eth_accounts: {} }]),
+      );
+    }
+    return throwError(() => {
+      return new Error(`Method wallet_requestPermissions not supported on the current provider`);
+    });
+  }
   /**
    * Get access to the web3 provider instance
    */
@@ -74,6 +93,7 @@ export default class Web3Connector
    */
   async disconnect(): Promise<void> {
     this.#web3Instance = null;
+    this.#currentProviderId = null;
     this.#globalChannel.next({
       data: undefined,
       event: WEB3_EVENTS.DISCONNECTED,
@@ -118,6 +138,24 @@ export default class Web3Connector
    */
   getCurrentAddress() {
     return createObservableStream(this.#_getCurrentAddress());
+  }
+
+  getRequiredNetworkName() {
+    if (!this.network) {
+      throw new Error('The required ethereum network was not set!');
+    }
+    return createObservableValue(this.network);
+  }
+
+  switchToRequiredNetwork() {
+    if (this.#web3Instance instanceof ethers.providers.Web3Provider)
+      return createObservableStream(
+        this.#web3Instance.send('wallet_switchEthereumChain', [{ chainId: this.#networkId }]),
+      );
+
+    return throwError(() => {
+      return new Error(`Method wallet_switchEthereumChain not supported on the current provider`);
+    });
   }
 
   async #_getCurrentAddress() {
