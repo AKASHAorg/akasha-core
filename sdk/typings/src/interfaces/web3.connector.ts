@@ -20,7 +20,7 @@ export interface IWeb3Connector<T> {
   }>;
   readonly provider: T;
 
-  connect(provider: EthProviders): Promise<void>;
+  connect(provider: EthProviders): Promise<boolean>;
 
   disconnect(): void;
 

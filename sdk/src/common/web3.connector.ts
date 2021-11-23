@@ -52,11 +52,11 @@ export default class Web3Connector
    *
    * @param provider - Number representing the provider option
    */
-  async connect(provider: EthProviders = EthProviders.None): Promise<void> {
+  async connect(provider: EthProviders = EthProviders.None): Promise<boolean> {
     this.#log.info(`connecting to provider ${provider}`);
     if (this.#web3Instance && this.#currentProviderId && this.#currentProviderId === provider) {
       this.#log.info(`provider ${provider} already connected`);
-      return;
+      return true;
     }
     this.#web3Instance = await this.#_getProvider(provider);
     this.#currentProviderId = provider;
@@ -65,9 +65,10 @@ export default class Web3Connector
       event: WEB3_EVENTS.CONNECTED,
     });
     this.#log.info(`connected to provider ${provider}`);
+    return true;
   }
 
-  requestEthAddresses() {
+  requestWalletPermissions() {
     if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
       return createObservableStream(
         this.#web3Instance.send('wallet_requestPermissions', [{ eth_accounts: {} }]),
