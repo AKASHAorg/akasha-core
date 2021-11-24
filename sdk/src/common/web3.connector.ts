@@ -9,8 +9,11 @@ import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import OpenLogin from '@toruslabs/openlogin';
 import { createObservableStream, createObservableValue } from '../helpers/observable';
 import EventBus from './event-bus';
-import { WEB3_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
-import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import {
+  INJECTED_PROVIDERS,
+  PROVIDER_ERROR_CODES,
+} from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { throwError } from 'rxjs';
 
 @injectable()
@@ -208,6 +211,10 @@ export default class Web3Connector
   async #_checkCurrentNetwork(): Promise<void> {
     const network = await this.#web3Instance.detectNetwork();
     if (network?.name !== this.network) {
+      this.#globalChannel.next({
+        data: { code: PROVIDER_ERROR_CODES.WrongNetwork },
+        event: AUTH_EVENTS.ERROR,
+      });
       throw new Error(`Please change the ethereum network to ${this.network}!`);
     }
     this.#log.info(`currently on network: ${network.name}`);

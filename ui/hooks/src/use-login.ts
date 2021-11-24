@@ -1,8 +1,10 @@
+import * as React from 'react';
 import getSDK from '@akashaproject/awf-sdk';
+import { events } from '@akashaproject/sdk-typings';
 import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom } from 'rxjs';
+import { filter, lastValueFrom } from 'rxjs';
 import { useGlobalLogin } from '.';
 import { logError } from './utils/error-handler';
 
@@ -18,6 +20,11 @@ export interface LoginState extends CurrentUser {
   // if this is true, we can assume that the user is logged in
   // otherwise, we can assume that the user is not logged in
   fromCache?: boolean;
+}
+
+interface SignUpPayload {
+  data: { code?: number; address?: string };
+  event: string;
 }
 
 const initialData = {
@@ -121,6 +128,92 @@ export function useLogin(onError?: (err: Error) => void) {
       },
     },
   );
+}
+
+const SIGNUP_STATES = {
+  [events.AUTH_EVENTS.CONNECT_ADDRESS]: 1,
+  [events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 2,
+  [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE]: 3,
+  [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS]: 4,
+  [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE]: 5,
+  [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS]: 6,
+  [events.AUTH_EVENTS.SIGN_TOKEN_MESSAGE]: 7,
+  [events.AUTH_EVENTS.READY]: 8,
+};
+
+export function useSignUp(provider: EthProviders) {
+  const sdk = getSDK();
+  const [signUpState, setSignUpState] = React.useState(1);
+  const [ethAddress, setEthAddress] = React.useState('');
+  const [errorCode, setErrorCode] = React.useState(null);
+
+  React.useEffect(() => {
+    const waitForAuth = sdk.api.globalChannel.pipe(
+      filter(
+        payload => payload.event in SIGNUP_STATES || payload.event === events.AUTH_EVENTS.ERROR,
+      ),
+    );
+
+    const sub = waitForAuth.subscribe((payload: SignUpPayload) => {
+      if (payload.event === events.AUTH_EVENTS.ERROR) {
+        return setErrorCode(payload.data.code);
+      }
+      setErrorCode(null);
+      setSignUpState(SIGNUP_STATES[payload.event]);
+      if (payload.event === events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS) {
+        setEthAddress(payload.data.address);
+      }
+    });
+    return () => sub.unsubscribe();
+  }, []);
+
+  const fullSignUp = useMutation(async () => {
+    lastValueFrom(
+      sdk.api.auth.signIn({
+        provider,
+        checkRegistered: false,
+        resumeSignIn: false,
+      }),
+    );
+  });
+
+  const connectWallet = useMutation(async () =>
+    lastValueFrom(sdk.api.auth.connectAddress(provider)),
+  );
+
+  const signAuthMessage = useMutation(async () => lastValueFrom(sdk.api.auth.signAuthMessage()));
+
+  const signComposedMessage = useMutation(async () =>
+    lastValueFrom(sdk.api.auth.signComposedMessage()),
+  );
+
+  const finishSignUp = useMutation(async () => {
+    await lastValueFrom(sdk.api.auth.signTokenMessage());
+    return lastValueFrom(
+      sdk.api.auth.signIn({
+        provider,
+        checkRegistered: false,
+        resumeSignIn: true,
+      }),
+    );
+  });
+
+  const fireRemainingMessages = React.useCallback(async () => {
+    const fullSeries = [connectWallet, signAuthMessage, signComposedMessage, finishSignUp];
+    const excludeIndexes = Math.floor(signUpState / 2);
+    const seriesToExecute = fullSeries.slice(excludeIndexes);
+    for (const request of seriesToExecute) {
+      await request.mutateAsync();
+    }
+  }, [signUpState, connectWallet, signAuthMessage, signComposedMessage, finishSignUp]);
+
+  return {
+    ethAddress,
+    fullSignUp,
+    signUpState,
+    errorCode,
+    fireRemainingMessages,
+  };
 }
 
 /**

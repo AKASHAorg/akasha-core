@@ -1,7 +1,10 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import { useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
+import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { StyledButton } from './styles';
 
-const { Box, Text, WalletRequestStep, Button, styled, Icon } = DS;
+const { Box, Text, WalletRequestStep, Icon } = DS;
 
 export interface IStepFourProps {
   textExplanation: string;
@@ -31,13 +34,14 @@ export interface IStepFourProps {
   textAgain: string;
   buttonLabel: string;
   onButtonClick: () => void;
-  injectedProvider: any;
 }
 
-const StyledButton = styled(Button)`
-  padding: ${props =>
-    `${props.theme.shapes.baseSpacing / 16}rem ${(props.theme.shapes.baseSpacing * 2.5) / 16}rem`};
-`;
+const REQUEST_STEPS = {
+  ONE: 1,
+  TWO: 3,
+  THREE: 5,
+  FOUR: 7,
+};
 
 const StepFour: React.FC<IStepFourProps> = props => {
   const {
@@ -68,13 +72,20 @@ const StepFour: React.FC<IStepFourProps> = props => {
     textAgain,
     buttonLabel,
     onButtonClick,
-    injectedProvider,
   } = props;
 
-  const [currentStep, setCurrentStep] = React.useState(1);
-  const nextStep = () => setCurrentStep(prevState => prevState + 1);
+  //TODO: pass provider via props, not hardcoded 2
+  const { ethAddress, fullSignUp, signUpState, errorCode, fireRemainingMessages } = useSignUp(2);
 
-  const mockRequest = () => new Promise(resolve => setTimeout(resolve, 2000));
+  const errorMapping = {
+    [PROVIDER_ERROR_CODES.UserRejected]: textDeclinedError,
+    [PROVIDER_ERROR_CODES.WrongNetwork]: textNetworkError,
+    [PROVIDER_ERROR_CODES.RequestTimeout]: textTimeoutError,
+  };
+
+  React.useEffect(() => {
+    fullSignUp.mutate();
+  }, []);
 
   return (
     <>
@@ -98,14 +109,12 @@ const StepFour: React.FC<IStepFourProps> = props => {
           resend={textRequestResend}
           complete={textAddressComplete}
           buttonLabel={textButtonSelect}
-          walletRequest={mockRequest}
-          nextStep={nextStep}
-          textDeclinedError={textDeclinedError}
-          textTimeoutError={textTimeoutError}
-          textNetworkError={textNetworkError}
+          walletRequest={fireRemainingMessages}
+          ethAddress={ethAddress}
           textAgain={textAgain}
-          step={1}
-          currentStep={currentStep}
+          pending={signUpState === REQUEST_STEPS.ONE}
+          completed={signUpState > REQUEST_STEPS.ONE}
+          error={signUpState === REQUEST_STEPS.ONE && errorMapping[errorCode]}
         />
         <WalletRequestStep
           heading={textCreateSignIn}
@@ -114,14 +123,11 @@ const StepFour: React.FC<IStepFourProps> = props => {
           resend={textRequestResend}
           complete={textSignInComplete}
           buttonLabel={textButtonSignInWallet}
-          walletRequest={mockRequest}
-          nextStep={nextStep}
-          textDeclinedError={textDeclinedError}
-          textTimeoutError={textTimeoutError}
-          textNetworkError={textNetworkError}
+          walletRequest={fireRemainingMessages}
           textAgain={textAgain}
-          step={2}
-          currentStep={currentStep}
+          pending={signUpState === REQUEST_STEPS.TWO}
+          completed={signUpState > REQUEST_STEPS.TWO}
+          error={signUpState === REQUEST_STEPS.TWO && errorMapping[errorCode]}
         />
         <WalletRequestStep
           heading={textCreateSecure}
@@ -130,14 +136,11 @@ const StepFour: React.FC<IStepFourProps> = props => {
           resend={textRequestResend}
           complete={textSecureComplete}
           buttonLabel={textButtonSignInWallet}
-          walletRequest={mockRequest}
-          nextStep={nextStep}
-          textDeclinedError={textDeclinedError}
-          textTimeoutError={textTimeoutError}
-          textNetworkError={textNetworkError}
+          walletRequest={fireRemainingMessages}
           textAgain={textAgain}
-          step={3}
-          currentStep={currentStep}
+          pending={signUpState === REQUEST_STEPS.THREE}
+          completed={signUpState > REQUEST_STEPS.THREE}
+          error={signUpState === REQUEST_STEPS.THREE && errorMapping[errorCode]}
         />
         <WalletRequestStep
           heading={textCreateProfile}
@@ -146,17 +149,14 @@ const StepFour: React.FC<IStepFourProps> = props => {
           resend={textRequestResend}
           complete={textProfileComplete}
           buttonLabel={textButtonSignInWallet}
-          walletRequest={mockRequest}
-          nextStep={nextStep}
-          textDeclinedError={textDeclinedError}
-          textTimeoutError={textTimeoutError}
-          textNetworkError={textNetworkError}
+          walletRequest={fireRemainingMessages}
           textAgain={textAgain}
-          step={4}
-          currentStep={currentStep}
+          pending={signUpState === REQUEST_STEPS.FOUR}
+          completed={signUpState > REQUEST_STEPS.FOUR}
+          error={signUpState === REQUEST_STEPS.FOUR && errorMapping[errorCode]}
         />
       </Box>
-      {currentStep === 5 && (
+      {signUpState > REQUEST_STEPS.FOUR && (
         <>
           <Text size="large" margin={{ vertical: 'medium' }}>
             {textCompleted}

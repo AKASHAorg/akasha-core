@@ -145,6 +145,19 @@ export default class AWF_Auth implements AWF_IAuth {
     );
   }
 
+  logSigningError(e) {
+    if (e.code) {
+      this._globalChannel.next({
+        data: { code: e.code },
+        event: AUTH_EVENTS.ERROR,
+      });
+    }
+    this._lockSignIn = false;
+    sessionStorage.clear();
+    this._log.error(e);
+    throw e;
+  }
+
   signIn(args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean }) {
     const normalisedArgs = Object.assign({}, { checkRegistered: true }, args);
     return createObservableStream(this._signIn(normalisedArgs));
@@ -180,7 +193,15 @@ export default class AWF_Auth implements AWF_IAuth {
       try {
         await this._web3.connect(currentProvider);
         await lastValueFrom(this._web3.checkCurrentNetwork());
+        this._globalChannel.next({
+          data: {},
+          event: AUTH_EVENTS.CONNECT_ADDRESS,
+        });
         const address = await lastValueFrom(this._web3.getCurrentAddress());
+        this._globalChannel.next({
+          data: { address: address.data },
+          event: AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS,
+        });
         const localUser = sessionStorage.getItem(this.currentUserKey);
         if (localUser) {
           const tmpSession = JSON.parse(localUser);
@@ -208,10 +229,7 @@ export default class AWF_Auth implements AWF_IAuth {
         }
         await this.#_signTokenMessage();
       } catch (e) {
-        this._lockSignIn = false;
-        sessionStorage.clear();
-        this._log.error(e);
-        throw e;
+        this.logSigningError(e);
       }
     }
     await this.#_setupHubClient();
@@ -249,57 +267,92 @@ export default class AWF_Auth implements AWF_IAuth {
     return Object.assign(this.currentUser, authStatus);
   }
 
+  async _connectAddress(provider: EthProviders) {
+    try {
+      await this._web3.connect(provider);
+      this._globalChannel.next({
+        data: {},
+        event: AUTH_EVENTS.CONNECT_ADDRESS,
+      });
+      await lastValueFrom(this._web3.checkCurrentNetwork());
+      const resp = await lastValueFrom(this._web3.getCurrentAddress());
+      this._globalChannel.next({
+        data: { address: resp.data },
+        event: AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS,
+      });
+      return resp.data;
+    } catch (e) {
+      this.logSigningError(e);
+    }
+  }
+
+  connectAddress(provider: EthProviders) {
+    return createObservableStream(this._connectAddress(provider));
+  }
+
   signAuthMessage() {
     return createObservableStream(this.#_signAuthMessage());
   }
   async #_signAuthMessage(): Promise<void> {
-    this._globalChannel.next({
-      data: {},
-      event: AUTH_EVENTS.SIGN_AUTH_MESSAGE,
-    });
-    this.#signedAuthMessage = await this._web3.signMessage(AUTH_MESSAGE);
-    this._globalChannel.next({
-      data: {},
-      event: AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS,
-    });
+    try {
+      this._globalChannel.next({
+        data: {},
+        event: AUTH_EVENTS.SIGN_AUTH_MESSAGE,
+      });
+      this.#signedAuthMessage = await this._web3.signMessage(AUTH_MESSAGE);
+      this._globalChannel.next({
+        data: {},
+        event: AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS,
+      });
+    } catch (e) {
+      this.logSigningError(e);
+    }
   }
 
   signComposedMessage() {
     return createObservableStream(this.#_signComposedMessage());
   }
   async #_signComposedMessage() {
-    if (!this.#signedAuthMessage) {
-      throw new Error('Auth message was not signed!');
+    try {
+      if (!this.#signedAuthMessage) {
+        throw new Error('Auth message was not signed!');
+      }
+      this._globalChannel.next({
+        data: {},
+        event: AUTH_EVENTS.SIGN_COMPOSED_MESSAGE,
+      });
+      this.#identity = await generatePrivateKey(this._web3, this.#signedAuthMessage);
+      this._globalChannel.next({
+        data: {},
+        event: AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS,
+      });
+      this.#signedAuthMessage = undefined;
+    } catch (e) {
+      this.logSigningError(e);
     }
-    this._globalChannel.next({
-      data: {},
-      event: AUTH_EVENTS.SIGN_COMPOSED_MESSAGE,
-    });
-    this.#identity = await generatePrivateKey(this._web3, this.#signedAuthMessage);
-    this._globalChannel.next({
-      data: {},
-      event: AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS,
-    });
-    this.#signedAuthMessage = undefined;
   }
 
   signTokenMessage() {
     return createObservableStream(this.#_signTokenMessage());
   }
   async #_signTokenMessage() {
-    if (!this.#identity) {
-      throw new Error('Composed message was not signed!');
+    try {
+      if (!this.#identity) {
+        throw new Error('Composed message was not signed!');
+      }
+      this.#tokenGenerator = loginWithChallenge(this.#identity, this._web3);
+      this._globalChannel.next({
+        data: {},
+        event: AUTH_EVENTS.SIGN_TOKEN_MESSAGE,
+      });
+      this.auth = await this.#tokenGenerator();
+      this._globalChannel.next({
+        data: {},
+        event: AUTH_EVENTS.SIGN_TOKEN_MESSAGE_SUCCESS,
+      });
+    } catch (e) {
+      this.logSigningError(e);
     }
-    this.#tokenGenerator = loginWithChallenge(this.#identity, this._web3);
-    this._globalChannel.next({
-      data: {},
-      event: AUTH_EVENTS.SIGN_TOKEN_MESSAGE,
-    });
-    this.auth = await this.#tokenGenerator();
-    this._globalChannel.next({
-      data: {},
-      event: AUTH_EVENTS.SIGN_TOKEN_MESSAGE_SUCCESS,
-    });
   }
 
   async #_setupHubClient() {

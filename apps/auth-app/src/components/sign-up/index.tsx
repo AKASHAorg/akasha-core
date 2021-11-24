@@ -287,7 +287,6 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             textAgain={t('Try Again')}
             buttonLabel={t('Continue to Step 5')}
             onButtonClick={handleNextStep}
-            injectedProvider={injectedProvider}
           />
         )}
         {activeIndex === 4 && (

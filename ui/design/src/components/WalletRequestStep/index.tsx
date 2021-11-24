@@ -9,15 +9,13 @@ export interface WalletRequestStepProps {
   problem: string;
   resend: string;
   complete: string;
-  textDeclinedError: string;
-  textTimeoutError: string;
-  textNetworkError: string;
   textAgain: string;
   buttonLabel: string;
-  walletRequest: () => Promise<any>;
-  nextStep: () => void;
-  step: number;
-  currentStep: number;
+  walletRequest: () => Promise<unknown>;
+  pending: boolean;
+  completed: boolean;
+  ethAddress?: string;
+  error?: string;
 }
 
 const WalletRequestStep = (props: WalletRequestStepProps) => {
@@ -26,41 +24,17 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
     explanation,
     buttonLabel,
     walletRequest,
-    nextStep,
-    step,
-    currentStep,
     complete,
-    textDeclinedError,
-    textTimeoutError,
-    textNetworkError,
+    ethAddress,
     textAgain,
     resend,
     problem,
+    pending,
+    completed,
+    error,
   } = props;
-  const [loading, setLoading] = React.useState(false); // mock
-  const [error, setError] = React.useState(null); // mock
-  const errors = [textDeclinedError, textTimeoutError, textNetworkError]; // mock
-
-  const onButtonClick = async () => {
-    setLoading(true);
-    await walletRequest();
-    setLoading(false);
-    const isError = Math.random() > 0.5;
-    if (isError) {
-      return setError(errors[Math.floor(Math.random() * 3)]); // mock
-    }
-    setError(null);
-    nextStep();
-  };
 
   const renderIcon = () => {
-    if (loading)
-      return (
-        <StyledIcon justify="center" align="center">
-          <Icon type="loading" size="md" accentColor />
-        </StyledIcon>
-      );
-
     if (error) {
       return (
         <StyledIcon>
@@ -68,6 +42,14 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
         </StyledIcon>
       );
     }
+
+    if (pending)
+      return (
+        <StyledIcon justify="center" align="center">
+          <Icon type="loading" size="md" accentColor />
+        </StyledIcon>
+      );
+
     return (
       <StyledArrowIcon justify="center" align="center">
         <Icon type="arrowRight" />
@@ -75,20 +57,20 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
     );
   };
 
-  if (currentStep > step) {
+  if (completed) {
     return (
       <Box direction="row" align="center" pad="xsmall">
         <StyledCheckmarkIcon justify="center" align="center">
           <Icon type="checkSimple" color="green" size="xxs" />
         </StyledCheckmarkIcon>
         <Text margin={{ horizontal: '0.75rem' }} size="large">
-          {complete}
+          {complete} {ethAddress ? `(${ethAddress})` : ''}
         </Text>
       </Box>
     );
   }
 
-  if (currentStep < step) {
+  if (!pending && !completed) {
     return (
       <Box direction="row" align="center" pad="xsmall">
         <Icon type="circleDashed" />
@@ -107,10 +89,10 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
           {heading}
         </Text>
         <Text size="large">{explanation}</Text>
-        {!loading && (
+        {error && (
           <>
             <StyledBox
-              onClick={onButtonClick}
+              onClick={walletRequest}
               justify="between"
               direction="row"
               margin={{ top: 'medium' }}
@@ -122,17 +104,15 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
               </Text>
               <Icon size="sm" type="arrowRight" color={error ? 'red' : 'accent'} />
             </StyledBox>
-            {error && (
-              <Text color="red" margin={{ top: 'xxsmall' }}>
-                {error}
-              </Text>
-            )}
+            <Text color="red" margin={{ top: 'xxsmall' }}>
+              {error}
+            </Text>
           </>
         )}
-        {loading && (
+        {pending && !error && (
           <Text margin={{ top: 'medium', bottom: 'xxsmall' }}>
             <Text color="gray">{problem}</Text>{' '}
-            <Text color="accent" style={{ cursor: 'pointer' }} onClick={onButtonClick}>
+            <Text color="accent" style={{ cursor: 'pointer' }} onClick={walletRequest}>
               {resend}
             </Text>
           </Text>
