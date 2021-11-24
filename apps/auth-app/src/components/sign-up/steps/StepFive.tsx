@@ -1,0 +1,173 @@
+import * as React from 'react';
+import DS from '@akashaproject/design-system';
+import { useUsernameValidation } from '@akashaproject/ui-awf-hooks';
+import { StyledButton } from './styles';
+
+const { Box, Text, styled, Icon, LinkInput } = DS;
+
+interface IStepFiveProps {
+  textIdentifier: string;
+  textUnchangeable: string;
+  textEnsure: string;
+  textCriterionLowercase: string;
+  textCriterionEndsWithLetter: string;
+  textCriterionCharCount: string;
+  textUsername: string;
+  textInputPlaceholder: string;
+  textUsernameTakenError: string;
+  textUsernameUnknownError: string;
+  textUsernameAvailable: string;
+  buttonLabel: string;
+}
+
+const StyledIcon = styled(Box)`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1.35rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  margin-right: 0.2rem;
+`;
+
+const CONDITION_LOWERCASE = new RegExp('^[a-z0-9]*$');
+const CONDITION_ENDS_WITH_LETTER = new RegExp('.*[a-zA-Z]$');
+const CONDITION_CHAR_COUNT = new RegExp('^\\S{3,14}$');
+
+const StepFive: React.FC<IStepFiveProps> = props => {
+  const {
+    textIdentifier,
+    textUnchangeable,
+    textEnsure,
+    textCriterionLowercase,
+    textCriterionEndsWithLetter,
+    textCriterionCharCount,
+    textUsername,
+    textInputPlaceholder,
+    textUsernameTakenError,
+    textUsernameUnknownError,
+    textUsernameAvailable,
+    buttonLabel,
+  } = props;
+  const conditions = React.useMemo(
+    () => [
+      {
+        text: textCriterionLowercase,
+        regex: CONDITION_LOWERCASE,
+      },
+      {
+        text: textCriterionEndsWithLetter,
+        regex: CONDITION_ENDS_WITH_LETTER,
+      },
+      {
+        text: textCriterionCharCount,
+        regex: CONDITION_CHAR_COUNT,
+      },
+    ],
+    [textCriterionLowercase, textCriterionEndsWithLetter, textCriterionCharCount],
+  );
+
+  const [username, setUsername] = React.useState('');
+
+  const allowUsernameCheckRequest = React.useMemo(
+    () => conditions.every(({ regex }) => regex.test(username)),
+    [username, conditions],
+  );
+
+  const usernameValidationQuery = useUsernameValidation(username, allowUsernameCheckRequest);
+  const userNameValidationError = React.useMemo(() => {
+    if (usernameValidationQuery.isSuccess && !usernameValidationQuery.data) {
+      return textUsernameTakenError;
+    }
+    if (usernameValidationQuery.isError) {
+      return textUsernameUnknownError;
+    }
+  }, [usernameValidationQuery, textUsernameTakenError, textUsernameUnknownError]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
+  };
+
+  const renderBullet = (satisfiesCondition: boolean) => {
+    if (!username.length) return <>•</>;
+    if (satisfiesCondition) return <Icon type="checkSimple" size="xxs" color="green" />;
+    return <Icon type="close" size="sm" color="red" style={{ marginLeft: '-0.1rem' }} />;
+  };
+
+  const renderConditions = () =>
+    conditions.map(({ text, regex }, index) => {
+      const satisfiesCondition = regex.test(username);
+      return (
+        <Box key={index} direction="row" margin={{ bottom: 'xxxsmall' }} align="center">
+          <StyledIcon>{renderBullet(satisfiesCondition)}</StyledIcon>
+          <Text size="large" weight={satisfiesCondition || !username.length ? 'normal' : 'bold'}>
+            {text}
+          </Text>
+        </Box>
+      );
+    });
+
+  return (
+    <>
+      <Text margin={{ bottom: 'large' }}>
+        <Text size="large">{textIdentifier}</Text>{' '}
+        <Text size="large" weight="bold">
+          {textUnchangeable}
+        </Text>
+      </Text>
+      <Box>
+        <Text size="large">
+          {textEnsure}
+          {': '}
+        </Text>
+        {renderConditions()}
+      </Box>
+      <Text color="gray" size="large" margin={{ top: 'large' }}>
+        {textUsername}
+      </Text>
+      <LinkInput
+        inputPlaceholder={textInputPlaceholder}
+        elevation="shadow"
+        margin={{ left: '0rem', top: 'small' }}
+        onChange={handleChange}
+        inputValue={username}
+        hasError={!!userNameValidationError}
+        errorMsg={userNameValidationError}
+        submitting={usernameValidationQuery.isFetching}
+        submitted={usernameValidationQuery.isFetched}
+        success={usernameValidationQuery.isSuccess}
+        noArrowRight
+      />
+      {userNameValidationError && (
+        <Text color="status-critical" margin={{ top: 'xxsmall' }}>
+          {userNameValidationError}
+        </Text>
+      )}
+      {usernameValidationQuery?.data && (
+        <>
+          <Text size="large" margin={{ vertical: 'medium' }}>
+            {textUsernameAvailable}
+          </Text>
+          <Box
+            align="flex-end"
+            justify="center"
+            margin={{ top: 'small' }}
+            pad={{ top: 'medium' }}
+            border={{ side: 'top', color: 'border', size: 'xsmall' }}
+          >
+            <StyledButton
+              icon={<Icon type="arrowRight" color="white" />}
+              label={buttonLabel}
+              onClick={() => {}} //TODO
+              primary
+              reverse
+            />
+          </Box>
+        </>
+      )}
+    </>
+  );
+};
+
+export { StepFive };

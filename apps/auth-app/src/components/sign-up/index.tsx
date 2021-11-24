@@ -9,10 +9,12 @@ import { useInjectedProvider } from '@akashaproject/ui-awf-hooks';
 
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
+import routes, { SIGN_UP_USERNAME } from '../../routes';
 import { StepOne } from './steps/StepOne';
 import { StepTwo } from './steps/StepTwo';
 import { StepThree } from './steps/StepThree';
 import { StepFour } from './steps/StepFour';
+import { StepFive } from './steps/StepFive';
 
 const { Box, SignUpCard } = DS;
 
@@ -24,8 +26,13 @@ export interface IInviteTokenForm {
   errorMsg: string;
 }
 
-const SignUp: React.FC<RootComponentProps> = _props => {
-  const [activeIndex, setActiveIndex] = React.useState<number>(3);
+export interface SignUpProps {
+  activeIndex?: number;
+}
+
+const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
+  const { navigateToUrl } = props.singleSpa;
+  const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 4);
   const [inviteToken, setInviteToken] = React.useState<string>('');
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [inviteTokenForm, setinviteTokenForm] = React.useState<IInviteTokenForm>({
@@ -50,6 +57,9 @@ const SignUp: React.FC<RootComponentProps> = _props => {
   };
 
   const handleNextStep = () => {
+    if (activeIndex === 3) {
+      navigateToUrl(routes[SIGN_UP_USERNAME]);
+    }
     setActiveIndex(prev => prev + 1);
   };
 
@@ -116,7 +126,7 @@ const SignUp: React.FC<RootComponentProps> = _props => {
 
   return (
     <Box
-      width={_props.isMobile ? '100%' : '38%'}
+      width={props.isMobile ? '100%' : '38%'}
       margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}
     >
       <SignUpCard
@@ -276,6 +286,26 @@ const SignUp: React.FC<RootComponentProps> = _props => {
             buttonLabel={t('Continue to Step 5')}
             onButtonClick={handleNextStep}
             injectedProvider={injectedProvider}
+          />
+        )}
+        {activeIndex === 4 && (
+          <StepFive
+            textIdentifier={t('Your username identifies you in Ethereum World.')}
+            textUnchangeable={t('It is unique to you and, once chosen, cannot be changed.')}
+            textEnsure={t('Please ensure your username meets the following criteria')}
+            textCriterionLowercase={t('Includes only lowercase letters and/or numbers')}
+            textCriterionEndsWithLetter={t('Ends with a letter')}
+            textCriterionCharCount={t('Between 3 and 14 characters')}
+            textUsername={t('Username')}
+            textInputPlaceholder={t('Type your username here')}
+            textUsernameTakenError={t(
+              'Sorry, this username has already been claimed by another Etherean. Please try a different one.',
+            )}
+            textUsernameUnknownError={t(
+              'Sorry, there is an error validating the username. Please try again later.',
+            )}
+            textUsernameAvailable={t('This username is available, hooray!')}
+            buttonLabel={t('Complete Sign-Up')}
           />
         )}
       </SignUpCard>
