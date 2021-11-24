@@ -6,15 +6,15 @@ import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
 import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
 import { useInjectedProvider } from '@akashaproject/ui-awf-hooks';
-
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-import routes, { SIGN_UP_USERNAME } from '../../routes';
 import { StepOne } from './steps/StepOne';
 import { StepTwo } from './steps/StepTwo';
 import { StepThree } from './steps/StepThree';
 import { StepFour } from './steps/StepFour';
 import { StepFive } from './steps/StepFive';
+
+import routes, { SIGN_UP_USERNAME } from '../../routes';
 
 const { Box, SignUpCard } = DS;
 
@@ -32,7 +32,8 @@ export interface SignUpProps {
 
 const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const { navigateToUrl } = props.singleSpa;
-  const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 4);
+
+  const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 2);
   const [inviteToken, setInviteToken] = React.useState<string>('');
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [inviteTokenForm, setinviteTokenForm] = React.useState<IInviteTokenForm>({
