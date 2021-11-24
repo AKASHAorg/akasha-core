@@ -145,6 +145,9 @@ import Spinner from './components/Spinner';
 import TransparencyLogMiniCard from './components/TransparencyLogMiniCard';
 import TransparencyLogDetailCard from './components/TransparencyLogDetailCard';
 import TransparencyLogBanner from './components/TransparencyLogBanner';
+import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
+import WalletRequestStep from './components/WalletRequestStep';
+import WelcomeCard from './components/WelcomeCard';
 
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
@@ -158,9 +161,6 @@ import darkTheme from './styles/themes/dark';
 import lightTheme from './styles/themes/light';
 import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
-
-import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
-import WalletRequestStep from './components/WalletRequestStep';
 
 /* Grommet utils */
 // @TODO: fix this export style...
@@ -298,6 +298,7 @@ const exported = {
   StyledSelectBox,
   Checkbox,
   WalletRequestStep,
+  WelcomeCard,
 };
 
 export default exported;
