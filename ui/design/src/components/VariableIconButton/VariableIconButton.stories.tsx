@@ -10,6 +10,7 @@ export default {
   component: VariableIconButton,
   argTypes: {
     titleLabel: { control: 'text' },
+    errorLabel: { control: 'text' },
     handleClick: { action: 'button clicked' },
   },
 };
@@ -26,4 +27,5 @@ export const BaseVariableIconButton = Template.bind({});
 
 BaseVariableIconButton.args = {
   titleLabel: 'Select Address in Wallet',
+  errorLabel: 'Please set the network to Rinkeby and try again.',
 };

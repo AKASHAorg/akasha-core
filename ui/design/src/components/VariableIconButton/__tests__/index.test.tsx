@@ -16,6 +16,7 @@ describe('<VariableIconButton /> Component', () => {
         wrapWithTheme(
           <VariableIconButton
             titleLabel="Select Address in Wallet"
+            errorLabel="some error text"
             isLoading={false}
             isError={false}
             onClick={handleClick}
