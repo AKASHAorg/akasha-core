@@ -27,6 +27,7 @@ export interface IStepThreeProps {
   setRinkebyBoldLabel: string;
   setRinkebyAccentLabel: string;
   variableIconButtonLabel: string;
+  variableIconErrorLabel: string;
   buttonLabel: string;
   selectedProvider: EthProviders;
   onProviderSelect: (provider: EthProviders) => void;
@@ -52,13 +53,16 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     setRinkebyBoldLabel,
     setRinkebyAccentLabel,
     variableIconButtonLabel,
+    variableIconErrorLabel,
     buttonLabel,
     selectedProvider,
     onProviderSelect,
     onButtonClick,
   } = props;
 
+  // replace with react-query flags
   const [isLoading] = React.useState(false);
+  const [isError] = React.useState(false);
   const [isRinkeby] = React.useState(false);
 
   const handleWeb3Injected = () => {
@@ -73,8 +77,20 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     onProviderSelect(EthProviders.Torus);
   };
 
+  const handleChangeProvider = () => {
+    onProviderSelect(EthProviders.None);
+  };
+
   return (
     <Box>
+      {/* show this, if selected provider is Email or Social Login */}
+      {selectedProvider == EthProviders.Torus && (
+        <Box direction="row" justify="between" margin={{ bottom: 'large' }}>
+          <Text size="large" weight="bold">
+            {socialLoginTitleLabel}
+          </Text>
+        </Box>
+      )}
       {selectedProvider === EthProviders.Web3Injected && (
         <>
           {/* show this, if selected provider is web3 injected && network is not Rinkeby */}
@@ -82,7 +98,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
             <Text size="large" weight="bold">
               {injectedProvider}
             </Text>
-            <Text size="large" color="accentText">
+            <Text size="large" color="accentText" onClick={handleChangeProvider}>
               {changeProviderLabel}
             </Text>
           </Box>
@@ -99,8 +115,9 @@ const StepThree: React.FC<IStepThreeProps> = props => {
           {/* video area (if injectedProvider is MetaMask): setting to Rinkeby on MetaMask */}
           <VariableIconButton
             titleLabel={variableIconButtonLabel}
+            errorLabel={variableIconErrorLabel}
             isLoading={isLoading}
-            isError={!isRinkeby}
+            isError={isError}
             onClick={() => null}
           />
           {isRinkeby && (

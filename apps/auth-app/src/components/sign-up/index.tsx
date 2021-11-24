@@ -229,6 +229,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             )}`}
             setRinkebyAccentLabel={'Rinkeby'}
             variableIconButtonLabel={t('I have set the network to Rinkeby')}
+            variableIconErrorLabel={t('Please set the network to Rinkeby and try again.')}
             buttonLabel={t('Continue to Step 4 ')}
             selectedProvider={selectedProvider}
             onProviderSelect={handleProviderSelect}
