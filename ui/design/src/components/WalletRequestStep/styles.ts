@@ -25,3 +25,7 @@ export const StyledArrowIcon = styled(StyledIcon)`
 export const StyledCheckmarkIcon = styled(StyledIcon)`
   border: 1px solid ${props => props.theme.colors.green};
 `;
+
+export const CircleDashed = styled(StyledIcon)`
+  border: 1px dashed ${props => props.theme.colors.grey};
+`;

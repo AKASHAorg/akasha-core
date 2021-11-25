@@ -1,7 +1,13 @@
 import { Box, Text } from 'grommet';
 import React from 'react';
 import Icon from '../Icon';
-import { StyledArrowIcon, StyledBox, StyledCheckmarkIcon, StyledIcon } from './styles';
+import {
+  CircleDashed,
+  StyledArrowIcon,
+  StyledBox,
+  StyledCheckmarkIcon,
+  StyledIcon,
+} from './styles';
 
 export interface WalletRequestStepProps {
   heading: string;
@@ -73,7 +79,7 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
   if (!pending && !completed) {
     return (
       <Box direction="row" align="center" pad="xsmall">
-        <Icon type="circleDashed" />
+        <CircleDashed />
         <Text color="gray" size="large" margin={{ horizontal: '0.75rem' }}>
           {heading}
         </Text>
