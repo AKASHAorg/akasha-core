@@ -20,9 +20,7 @@ const getInjectedProvider = async () => {
   return { name: provider.data, details };
 };
 
-/**
- * A hook to get injected provider from the SDK
- */
+/* A hook to get injected provider from the SDK */
 export function useInjectedProvider() {
   return useQuery([INJECTED_PROVIDER_KEY], () => getInjectedProvider(), {
     initialData: {
@@ -36,5 +34,3 @@ export function useInjectedProvider() {
     onError: (err: Error) => logError('[use-injected-provider.ts]: useInjectedProvider err', err),
   });
 }
-
-export default useInjectedProvider;
