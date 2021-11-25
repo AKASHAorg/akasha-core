@@ -3,6 +3,7 @@ import DS from '@akashaproject/design-system';
 import { useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
 import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { StyledButton } from './styles';
+import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 
 const { Box, Text, WalletRequestStep, Icon } = DS;
 
@@ -34,6 +35,7 @@ export interface IStepFourProps {
   textAgain: string;
   buttonLabel: string;
   onButtonClick: () => void;
+  provider: EthProviders;
 }
 
 const REQUEST_STEPS = {
@@ -72,10 +74,11 @@ const StepFour: React.FC<IStepFourProps> = props => {
     textAgain,
     buttonLabel,
     onButtonClick,
+    provider,
   } = props;
 
-  //TODO: pass provider via props, not hardcoded 2
-  const { ethAddress, fullSignUp, signUpState, errorCode, fireRemainingMessages } = useSignUp(2);
+  const { ethAddress, fullSignUp, signUpState, errorCode, fireRemainingMessages } =
+    useSignUp(provider);
 
   const errorMapping = {
     [PROVIDER_ERROR_CODES.UserRejected]: textDeclinedError,
