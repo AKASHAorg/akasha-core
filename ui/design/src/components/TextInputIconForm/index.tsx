@@ -66,7 +66,7 @@ const LinkInput: React.FC<ILinkInput> = props => {
             placeholder={placeHolder}
             value={inputValue}
             onChange={onChange}
-            disabled={success}
+            disabled={submitting || success}
           />
         </form>
       </Box>
