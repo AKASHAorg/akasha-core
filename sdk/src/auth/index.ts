@@ -33,7 +33,7 @@ import { createObservableStream } from '../helpers/observable';
 
 @injectable()
 export default class AWF_Auth implements AWF_IAuth {
-  private identity: PrivateKey;
+  #identity: PrivateKey;
   private hubClient: Client;
   private hubUser: Users;
   private buckClient: Buckets;
@@ -50,7 +50,8 @@ export default class AWF_Auth implements AWF_IAuth {
   private inboxWatcher;
   private currentUser: CurrentUser;
   private _lockSignIn: boolean;
-  private tokenGenerator: () => Promise<UserAuth>;
+  #signedAuthMessage: string;
+  #tokenGenerator: () => Promise<UserAuth>;
   public readonly waitForAuth = 'waitForAuth';
   public readonly providerKey = '@providerType';
   public readonly currentUserKey = '@currentUserType';
@@ -90,7 +91,7 @@ export default class AWF_Auth implements AWF_IAuth {
             const response = {
               [this.providerKey]: sessionStorage.getItem(this.providerKey),
               [this.currentUserKey]: sessionStorage.getItem(this.currentUserKey),
-              identity: { key: this.sessKey, value: this.identity?.toString() },
+              identity: { key: this.sessKey, value: this.#identity?.toString() },
             };
             this.channel.postMessage({ response, type: this.SYNC_RESPONSE });
           }
@@ -144,88 +145,78 @@ export default class AWF_Auth implements AWF_IAuth {
     );
   }
 
-  signIn(args: { provider?: EthProviders; checkRegistered: boolean }) {
-    return createObservableStream(this._signIn(args));
+  signIn(args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean }) {
+    const normalisedArgs = Object.assign({}, { checkRegistered: true }, args);
+    return createObservableStream(this._signIn(normalisedArgs));
   }
 
-  /**
-   *
-   * @param args
-   */
   private async _signIn(
-    args: { provider?: EthProviders; checkRegistered: boolean } = {
+    args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean } = {
       provider: EthProviders.Web3Injected,
       checkRegistered: true,
     },
   ): Promise<CurrentUser & { isNewUser: boolean }> {
-    if (this._lockSignIn) {
-      return;
-    }
-    this._lockSignIn = true;
-    let currentProvider: number;
-    if (args.provider === EthProviders.None) {
-      if (!sessionStorage.getItem(this.providerKey)) {
-        throw new Error('The provider must have a wallet/key in order to authenticate.');
+    let currentProvider: number = args.provider;
+    if (!args.resumeSignIn) {
+      if (this._lockSignIn) {
+        return;
       }
-      currentProvider = +sessionStorage.getItem(this.providerKey); // cast to int
-    } else {
-      currentProvider = args.provider;
-      if (currentProvider === EthProviders.WalletConnect) {
-        this._log.info('using wc bridge');
-        localStorage.removeItem('walletconnect');
+      if (this.currentUser) {
+        this._log.warn(`Already signed in!`);
+        return Promise.resolve(Object.assign({}, this.currentUser, authStatus));
       }
-    }
-    try {
-      await this._web3.connect(currentProvider);
-      await lastValueFrom(this._web3.checkCurrentNetwork());
-      const endPoint = process.env.AUTH_ENDPOINT;
-      const address = await lastValueFrom(this._web3.getCurrentAddress());
-      if (args.checkRegistered) {
-        await lastValueFrom(this.checkIfSignedUp(address.data));
-      }
-      this._log.info(`using eth address ${address.data}`);
-      this.sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
-      if (sessionStorage.getItem(this.sessKey)) {
-        this.identity = PrivateKey.fromString(sessionStorage.getItem(this.sessKey));
+      this._lockSignIn = true;
+      if (args.provider === EthProviders.None) {
+        if (!sessionStorage.getItem(this.providerKey)) {
+          throw new Error('The provider must have a wallet/key in order to authenticate.');
+        }
+        currentProvider = +sessionStorage.getItem(this.providerKey); // cast to int
       } else {
-        const sig = await this._web3.signMessage(AUTH_MESSAGE);
-        await new Promise(res => setTimeout(res, 600));
-        this.identity = await generatePrivateKey(this._web3, sig);
+        if (currentProvider === EthProviders.WalletConnect) {
+          this._log.info('using wc bridge');
+          localStorage.removeItem('walletconnect');
+        }
       }
-
-      const userAuth = loginWithChallenge(this.identity, this._web3);
-      this.hubClient = Client.withUserAuth(userAuth, endPoint);
-      this.hubUser = Users.withUserAuth(userAuth);
-      this.buckClient = Buckets.withUserAuth(userAuth);
-      this.fil = Filecoin.withUserAuth(userAuth);
-      this.tokenGenerator = loginWithChallenge(this.identity, this._web3);
-      const pubKey = this.identity.public.toString();
-      this.currentUser = { pubKey, ethAddress: address.data };
-    } catch (e) {
-      this._lockSignIn = false;
-      sessionStorage.clear();
-      this._log.error(e);
-      throw e;
+      try {
+        await this._web3.connect(currentProvider);
+        await lastValueFrom(this._web3.checkCurrentNetwork());
+        const address = await lastValueFrom(this._web3.getCurrentAddress());
+        const localUser = sessionStorage.getItem(this.currentUserKey);
+        if (localUser) {
+          const tmpSession = JSON.parse(localUser);
+          if (address.data && tmpSession?.ethAddress === address.data) {
+            this._globalChannel.next({
+              data: tmpSession,
+              event: AUTH_EVENTS.SIGN_IN,
+            });
+          } else {
+            // prevent check bypass on account switch
+            args.checkRegistered = true;
+          }
+        }
+        if (args.checkRegistered) {
+          await lastValueFrom(this.checkIfSignedUp(address.data));
+        }
+        this._log.info(`using eth address ${address.data}`);
+        this.sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
+        if (sessionStorage.getItem(this.sessKey)) {
+          this.#identity = PrivateKey.fromString(sessionStorage.getItem(this.sessKey));
+        } else {
+          await this.#_signAuthMessage();
+          await new Promise(res => setTimeout(res, 600));
+          await this.#_signComposedMessage();
+        }
+        await this.#_signTokenMessage();
+      } catch (e) {
+        this._lockSignIn = false;
+        sessionStorage.clear();
+        this._log.error(e);
+        throw e;
+      }
     }
-    this.auth = await this.tokenGenerator();
-    await this.hubUser.getToken(this.identity);
-    await this.hubUser.setupMailbox();
-    const mailboxID = await this.hubUser.getMailboxID();
-    this.inboxWatcher = await this.hubUser.watchInbox(mailboxID, ev => {
-      if (ev?.message?.body && ev?.message?.readAt === 0) {
-        this._globalChannel.next({
-          data: { emit: true },
-          event: AUTH_EVENTS.NEW_NOTIFICATIONS,
-        });
-      }
-    });
-    await this.fil.getToken(this.identity);
-    const timeoutApi = new Promise<never[]>(resolve => {
-      setTimeout(resolve, 15000, [null]);
-    });
-    const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
+    await this.#_setupHubClient();
     sessionStorage.setItem(this.providerKey, currentProvider.toString());
-    sessionStorage.setItem(this.sessKey, this.identity.toString());
+    sessionStorage.setItem(this.sessKey, this.#identity.toString());
     sessionStorage.setItem(this.currentUserKey, JSON.stringify(this.currentUser));
     if (this.channel) {
       const response = {
@@ -255,7 +246,94 @@ export default class AWF_Auth implements AWF_IAuth {
       event: AUTH_EVENTS.READY,
     });
     this._lockSignIn = false;
-    return Object.assign(this.currentUser, authStatus, { filAddress: filAddress?.address });
+    return Object.assign(this.currentUser, authStatus);
+  }
+
+  signAuthMessage() {
+    return createObservableStream(this.#_signAuthMessage());
+  }
+  async #_signAuthMessage(): Promise<void> {
+    this._globalChannel.next({
+      data: {},
+      event: AUTH_EVENTS.SIGN_AUTH_MESSAGE,
+    });
+    this.#signedAuthMessage = await this._web3.signMessage(AUTH_MESSAGE);
+    this._globalChannel.next({
+      data: {},
+      event: AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS,
+    });
+  }
+
+  signComposedMessage() {
+    return createObservableStream(this.#_signComposedMessage());
+  }
+  async #_signComposedMessage() {
+    if (!this.#signedAuthMessage) {
+      throw new Error('Auth message was not signed!');
+    }
+    this._globalChannel.next({
+      data: {},
+      event: AUTH_EVENTS.SIGN_COMPOSED_MESSAGE,
+    });
+    this.#identity = await generatePrivateKey(this._web3, this.#signedAuthMessage);
+    this._globalChannel.next({
+      data: {},
+      event: AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS,
+    });
+    this.#signedAuthMessage = undefined;
+  }
+
+  signTokenMessage() {
+    return createObservableStream(this.#_signTokenMessage());
+  }
+  async #_signTokenMessage() {
+    if (!this.#identity) {
+      throw new Error('Composed message was not signed!');
+    }
+    this.#tokenGenerator = loginWithChallenge(this.#identity, this._web3);
+    this._globalChannel.next({
+      data: {},
+      event: AUTH_EVENTS.SIGN_TOKEN_MESSAGE,
+    });
+    this.auth = await this.#tokenGenerator();
+    this._globalChannel.next({
+      data: {},
+      event: AUTH_EVENTS.SIGN_TOKEN_MESSAGE_SUCCESS,
+    });
+  }
+
+  async #_setupHubClient() {
+    if (!this.#tokenGenerator) {
+      throw new Error('Token message was not signed!');
+    }
+    const pubKey = this.#identity.public.toString();
+    const address = await lastValueFrom(this._web3.getCurrentAddress());
+    const userAuth = loginWithChallenge(this.#identity, this._web3);
+    this.hubClient = Client.withUserAuth(userAuth, process.env.AUTH_ENDPOINT);
+    this.hubUser = Users.withUserAuth(userAuth);
+    this.buckClient = Buckets.withUserAuth(userAuth);
+    this.fil = Filecoin.withUserAuth(userAuth);
+    await this.hubUser.getToken(this.#identity);
+    await this.hubUser.setupMailbox();
+    const mailboxID = await this.hubUser.getMailboxID();
+    this.inboxWatcher = await this.hubUser.watchInbox(mailboxID, ev => {
+      if (ev?.message?.body && ev?.message?.readAt === 0) {
+        this._globalChannel.next({
+          data: { emit: true },
+          event: AUTH_EVENTS.NEW_NOTIFICATIONS,
+        });
+      }
+    });
+    await this.fil.getToken(this.#identity);
+    const timeoutApi = new Promise<never[]>(resolve => {
+      setTimeout(resolve, 15000, [null]);
+    });
+    const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
+    this.currentUser = {
+      pubKey,
+      ethAddress: address.data,
+      filAddress: filAddress?.address,
+    };
   }
   /**
    * Returns current session objects for textile
@@ -263,10 +341,8 @@ export default class AWF_Auth implements AWF_IAuth {
   getSession() {
     return createObservableStream<{
       buck: Buckets;
-      identity: PrivateKey;
       client: Client;
       user: Users;
-      tokenGenerator: () => Promise<UserAuth>;
     }>(this._getSession());
   }
 
@@ -275,16 +351,14 @@ export default class AWF_Auth implements AWF_IAuth {
       throw new Error('No previous session found');
     }
 
-    if (!this.identity) {
+    if (!this.#identity) {
       await this.signIn({ provider: EthProviders.None, checkRegistered: false });
     }
 
     return {
-      tokenGenerator: this.tokenGenerator,
       client: this.hubClient,
       user: this.hubUser,
       buck: this.buckClient,
-      identity: this.identity,
     };
   }
 
@@ -303,7 +377,7 @@ export default class AWF_Auth implements AWF_IAuth {
     if (!isExpired && this.auth) {
       return this.auth.token;
     }
-    this.auth = await this.tokenGenerator();
+    this.auth = await this.#tokenGenerator();
     return this.auth.token;
   }
 
@@ -328,14 +402,6 @@ export default class AWF_Auth implements AWF_IAuth {
         data: { emit: true },
         event: AUTH_EVENTS.WAIT_FOR_AUTH,
       });
-      try {
-        this._globalChannel.next({
-          data: JSON.parse(localUser),
-          event: AUTH_EVENTS.SIGN_IN,
-        });
-      } catch (e) {
-        this._log.error(e);
-      }
     }
     return this._signIn({ provider: EthProviders.None, checkRegistered: false });
   }
@@ -349,7 +415,7 @@ export default class AWF_Auth implements AWF_IAuth {
 
   private async _signOut() {
     sessionStorage.clear();
-    this.identity = null;
+    this.#identity = null;
     this.hubClient = null;
     this.hubUser = null;
     this.inboxWatcher = null;
@@ -359,6 +425,7 @@ export default class AWF_Auth implements AWF_IAuth {
     if (this.channel) {
       this.channel.postMessage({ type: this.SIGN_OUT_EVENT });
     }
+    await this._web3.disconnect();
     return true;
   }
 
@@ -378,17 +445,19 @@ export default class AWF_Auth implements AWF_IAuth {
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format = false,
   ) {
-    const session = await this._getSession();
+    if (!this.#identity) {
+      throw new Error('No identity key found!');
+    }
     let serializedData;
     if (typeof data === 'object') {
       serializedData = hash(data);
     }
     serializedData = this.encoder.encode(serializedData);
-    let sig: Uint8Array | string = await session.identity.sign(serializedData);
+    let sig: Uint8Array | string = await this.#identity.sign(serializedData);
     if (base64Format) {
       sig = Buffer.from(sig).toString('base64');
     }
-    return { serializedData, signature: sig, pubKey: session.identity.public.toString() };
+    return { serializedData, signature: sig, pubKey: this.#identity.public.toString() };
   }
 
   /**
@@ -454,7 +523,7 @@ export default class AWF_Auth implements AWF_IAuth {
   }
 
   private async _decryptMessage(message) {
-    const decryptedBody = await this.identity.decrypt(message.body);
+    const decryptedBody = await this.#identity.decrypt(message.body);
     let body;
     try {
       body = JSON.parse(new TextDecoder().decode(decryptedBody));

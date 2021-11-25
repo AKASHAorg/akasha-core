@@ -1,4 +1,3 @@
-import ILogService, { ILogger } from './log';
 import { Observable } from 'rxjs';
 
 export enum EthProviders {
@@ -10,9 +9,6 @@ export enum EthProviders {
 }
 
 export interface IWeb3Connector<T> {
-  _logFactory: ILogService;
-  _log: ILogger;
-  _web3Instance: T;
   network: string;
   networkId: Readonly<{
     kovan: number;
@@ -23,7 +19,7 @@ export interface IWeb3Connector<T> {
   }>;
   readonly provider: T;
 
-  connect(provider: EthProviders): Promise<void>;
+  connect(provider: EthProviders): Promise<boolean>;
 
   disconnect(): void;
 

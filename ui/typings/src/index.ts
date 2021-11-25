@@ -1,4 +1,14 @@
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+export { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces/web3.connector';
+export {
+  AUTH_EVENTS,
+  ENS_EVENTS,
+  ENTRY_EVENTS,
+  COMMENTS_EVENTS,
+  TAG_EVENTS,
+  PROFILE_EVENTS,
+  WEB3_EVENTS,
+} from '@akashaproject/sdk-typings/lib/interfaces/events';
 import { BehaviorSubject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
@@ -41,12 +51,6 @@ export enum LogoTypeSource {
   String = 'string',
   IPFS = 'ipfs',
   AVATAR = 'avatar',
-}
-export enum EthProviders {
-  None = 1,
-  Web3Injected,
-  WalletConnect,
-  FallbackProvider,
 }
 
 export enum LEGAL_DOCS {

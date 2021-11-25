@@ -1,5 +1,6 @@
 import { Box, Stack } from 'grommet';
 import * as React from 'react';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Icon from '../Icon';
 import { SearchBar } from './search-bar';
 import { MobileSearchBar } from './mobile-search-bar';
@@ -12,6 +13,8 @@ import {
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  StyledTextOnboarding,
+  StyledAnchor,
   StyledContentBox,
   BrandIcon,
   MenuIcon,
@@ -45,6 +48,9 @@ export interface ITopbarProps {
   moderationLabel?: string;
   moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
+  stuckLabel?: string;
+  helpLabel?: string;
+  writeToUs?: string;
   // moderator tools
   isModerator?: boolean;
   dashboardLabel?: string;
@@ -85,6 +91,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
     isModerator,
     dashboardLabel,
     dashboardInfoLabel,
+    stuckLabel,
+    helpLabel,
+    writeToUs,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -240,32 +249,31 @@ const Topbar: React.FC<ITopbarProps> = props => {
     if (menuItem.subRoutes?.length && currentLocation?.includes(menuItem?.subRoutes[0]?.route)) {
       return true;
     }
-    if (loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey)) {
-      return true;
-    }
-    return false;
+    return !!(loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey));
   };
 
-  const renderPluginButton = (menuItem: IMenuItem, index: number) => (
-    <StyledDiv
-      key={index}
-      ref={ref => {
-        menuItemRefs.current[menuItem.index] = ref;
-      }}
-    >
-      {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
-        <Avatar
-          active={checkActiveAvatar(menuItem)}
-          ethAddress={loggedProfileData?.ethAddress}
-          src={loggedProfileData?.avatar}
-          size="xs"
-          onClick={onClickAvatarButton(menuItem)}
-        />
-      ) : (
-        renderPluginIcon(menuItem)
-      )}
-    </StyledDiv>
-  );
+  const renderPluginButton = (menuItem: IMenuItem, index: number) => {
+    return (
+      <StyledDiv
+        key={index}
+        ref={ref => {
+          menuItemRefs.current[menuItem.index] = ref;
+        }}
+      >
+        {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
+          <Avatar
+            active={checkActiveAvatar(menuItem)}
+            ethAddress={loggedProfileData?.ethAddress}
+            src={loggedProfileData?.avatar}
+            size="xs"
+            onClick={onClickAvatarButton(menuItem)}
+          />
+        ) : (
+          renderPluginIcon(menuItem)
+        )}
+      </StyledDiv>
+    );
+  };
 
   const renderSearchArea = () => {
     if (searchAreaItem) {
@@ -294,7 +302,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     return;
   };
 
-  const renderContent = () => {
+  const renderContent = (shouldRenderOnboarding?: boolean) => {
     if (isMobileOnly && mobileSearchOpen) {
       return (
         <MobileSearchBar
@@ -341,15 +349,23 @@ const Topbar: React.FC<ITopbarProps> = props => {
           fill="horizontal"
           justify="end"
         >
-          {renderSearchArea()}
+          {!shouldRenderOnboarding && renderSearchArea()}
           {props.children}
           {loggedProfileData?.ethAddress &&
             quickAccessItems &&
             quickAccessItems.map(renderPluginButton)}
-          {!isMobileOnly && !loggedProfileData?.ethAddress && (
+          {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
             <Box direction="row" align="center" gap="small">
               <Button onClick={onLoginClick} label={signInLabel} />
               <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
+            </Box>
+          )}
+          {shouldRenderOnboarding && (
+            <Box direction="row">
+              <StyledTextOnboarding margin={{ right: '0.2rem' }} alignSelf="center">
+                {stuckLabel}
+              </StyledTextOnboarding>
+              <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
             </Box>
           )}
           {!loggedProfileData?.ethAddress && (
@@ -369,25 +385,19 @@ const Topbar: React.FC<ITopbarProps> = props => {
     );
   };
 
-  return (
-    <TopbarWrapper
-      align="center"
-      pad={{ vertical: 'small', horizontal: 'medium' }}
-      fill="horizontal"
-      className={className}
-      elevation="shadow"
-      height={mobileSignedOutView ? '6rem' : '3rem'}
-      border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
-    >
-      {renderContent()}
-      {mobileSignedOutView && (
-        <Box direction="row" align="center" gap="small" fill="horizontal">
-          <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
-          <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
-        </Box>
-      )}
-      {dropOpen && renderDrop()}
-      {avatarDropOpen && loggedProfileData?.ethAddress && (
+  const renderMobileSignedOutView = () => {
+    if (!mobileSignedOutView) return null;
+    return (
+      <Box direction="row" align="center" gap="small" fill="horizontal">
+        <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
+        <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
+      </Box>
+    );
+  };
+
+  const renderLoggedInMenu = () => {
+    if (avatarDropOpen && loggedProfileData?.ethAddress) {
+      return (
         <ProfileMenu
           target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
           closePopover={() => setAvatarDropOpen(false)}
@@ -412,8 +422,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
         />
-      )}
-      {menuDropOpen && !loggedProfileData?.ethAddress && (
+      );
+    }
+  };
+
+  const renderLoggedOutMenu = () => {
+    if (menuDropOpen && !loggedProfileData?.ethAddress) {
+      return (
         <ProfileMenu
           target={feedbackMenuRef.current}
           closePopover={() => setMenuDropOpen(false)}
@@ -434,8 +449,47 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
         />
-      )}
-    </TopbarWrapper>
+      );
+    }
+  };
+
+  return (
+    <Router>
+      <Switch>
+        <Route path="/auth-app/*">
+          <TopbarWrapper
+            align="center"
+            pad={{ vertical: 'small', horizontal: 'medium' }}
+            fill="horizontal"
+            className={className}
+            elevation="shadow"
+            height="3rem"
+            border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+          >
+            {renderContent(true)}
+            {dropOpen && renderDrop()}
+            {renderLoggedOutMenu()}
+          </TopbarWrapper>
+        </Route>
+        <Route>
+          <TopbarWrapper
+            align="center"
+            pad={{ vertical: 'small', horizontal: 'medium' }}
+            fill="horizontal"
+            className={className}
+            elevation="shadow"
+            height={mobileSignedOutView ? '6rem' : '3rem'}
+            border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+          >
+            {renderContent()}
+            {renderMobileSignedOutView()}
+            {dropOpen && renderDrop()}
+            {renderLoggedInMenu()}
+            {renderLoggedOutMenu()}
+          </TopbarWrapper>
+        </Route>
+      </Switch>
+    </Router>
   );
 };
 

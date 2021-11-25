@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Box, Button, Text, Drop, AccordionPanel } from 'grommet';
+import { Box, Button, Text, Drop, AccordionPanel, Anchor } from 'grommet';
 import Icon from '../Icon';
 
 const TopbarWrapper = styled(Box)`
@@ -9,6 +9,20 @@ const TopbarWrapper = styled(Box)`
 const StyledText = styled(Text)`
   cursor: pointer;
   font-weight: 450;
+`;
+
+const StyledTextOnboarding = styled(Text)`
+  font-size: 0.8rem;
+  align-content: center;
+`;
+
+const StyledAnchor = styled(Anchor)`
+  font-size: 0.8rem;
+  font-weight: normal;
+
+  &:hover {
+    text-decoration: none;
+  }
 `;
 
 const StyledSearchContainer = styled(Box)`
@@ -119,9 +133,11 @@ const IconDiv = styled(Box)<{ isActive: boolean; isMobile?: boolean }>`
 export {
   TopbarWrapper,
   StyledText,
+  StyledTextOnboarding,
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  StyledAnchor,
   StyledContentBox,
   IconDiv,
   BrandIcon,
