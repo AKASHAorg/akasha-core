@@ -1,6 +1,10 @@
-import { Box, BoxExtendedProps } from 'grommet';
+import { Box, BoxExtendedProps, Text } from 'grommet';
 import styled from 'styled-components';
 
+export const AddressText = styled(Text)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 export const StyledBox = styled(Box)<BoxExtendedProps & { error: string }>`
   display: flex;
   justify-content: space-between;

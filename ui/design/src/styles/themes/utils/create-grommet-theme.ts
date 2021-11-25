@@ -87,7 +87,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
     },
     checkBox: {
-      size: '18px',
+      size: '20px',
       toggle: {
         background: styledComponentsTheme.colors.accent,
         color: styledComponentsTheme.colors.accent,

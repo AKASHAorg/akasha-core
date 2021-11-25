@@ -2,6 +2,7 @@ import { Box, Text } from 'grommet';
 import React from 'react';
 import Icon from '../Icon';
 import {
+  AddressText,
   CircleDashed,
   StyledArrowIcon,
   StyledBox,
@@ -65,20 +66,20 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
 
   if (completed) {
     return (
-      <Box direction="row" align="center" pad="xsmall">
+      <Box direction="row" align="center" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
         <StyledCheckmarkIcon justify="center" align="center">
           <Icon type="checkSimple" color="green" size="xxs" />
         </StyledCheckmarkIcon>
-        <Text margin={{ horizontal: '0.75rem' }} size="large">
-          {complete} {ethAddress ? `(${ethAddress})` : ''}
-        </Text>
+        <AddressText margin={{ horizontal: '0.75rem' }} size="large">
+          {complete} {ethAddress && <AddressText>{ethAddress}</AddressText>}
+        </AddressText>
       </Box>
     );
   }
 
   if (!pending && !completed) {
     return (
-      <Box direction="row" align="center" pad="xsmall">
+      <Box direction="row" align="center" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
         <CircleDashed />
         <Text color="gray" size="large" margin={{ horizontal: '0.75rem' }}>
           {heading}
@@ -88,7 +89,7 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
   }
 
   return (
-    <Box direction="row" pad="xsmall">
+    <Box direction="row" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
       {renderIcon()}
       <Box direction="column" pad={{ horizontal: 'small', vertical: 'xxsmall' }} fill>
         <Text margin={{ bottom: 'xsmall' }} weight="bold" size="large">

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useUsernameValidation } from '@akashaproject/ui-awf-hooks';
-import { StyledButton } from './styles';
+
+import { StyledButton, StyledBox } from './styles';
 
 const { Box, Text, styled, Icon, LinkInput } = DS;
 
@@ -149,7 +150,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
           <Text size="large" margin={{ vertical: 'medium' }}>
             {textUsernameAvailable}
           </Text>
-          <Box
+          <StyledBox
             align="flex-end"
             justify="center"
             margin={{ top: 'small' }}
@@ -163,7 +164,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
               primary
               reverse
             />
-          </Box>
+          </StyledBox>
         </>
       )}
     </>

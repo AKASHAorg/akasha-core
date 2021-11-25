@@ -1,7 +1,8 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import { StyledBox, StyledButton, CheckBoxWrap } from './styles';
 
-const { Box, Text, Icon, Button, CTAAnchor, Checkbox, styled } = DS;
+const { Text, Icon, CTAAnchor, Checkbox } = DS;
 
 export interface IStepTwoProps {
   textLegalPartOne: string;
@@ -20,11 +21,6 @@ export interface IStepTwoProps {
   buttonLabel: string;
   onButtonClick: () => void;
 }
-
-const StyledButton = styled(Button)`
-  padding: ${props =>
-    `${props.theme.shapes.baseSpacing / 16}rem ${(props.theme.shapes.baseSpacing * 2.5) / 16}rem`};
-`;
 
 const TERMS = 'terms';
 const PRIVACY = 'privacy';
@@ -92,51 +88,44 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
         />{' '}
         {textLegalPartThree}.
       </Text>
-      <>
-        <Box margin={{ vertical: '1.15rem' }}>
-          <Checkbox
-            checked={checked[TERMS]}
-            label={checkboxLabelTerms}
-            pad={{ vertical: '0.35rem' }}
-            setChecked={() =>
-              setChecked(prevState => ({ ...prevState, [TERMS]: !prevState[TERMS] }))
-            }
+      <CheckBoxWrap>
+        <Checkbox
+          checked={checked[TERMS]}
+          label={checkboxLabelTerms}
+          setChecked={() => setChecked(prevState => ({ ...prevState, [TERMS]: !prevState[TERMS] }))}
+        />
+        <Checkbox
+          checked={checked[PRIVACY]}
+          label={checkboxLabelPrivacy}
+          setChecked={() =>
+            setChecked(prevState => ({ ...prevState, [PRIVACY]: !prevState[PRIVACY] }))
+          }
+        />
+        <Checkbox
+          checked={checked[CONDUCT]}
+          label={checkboxLabelConduct}
+          setChecked={() =>
+            setChecked(prevState => ({ ...prevState, [CONDUCT]: !prevState[CONDUCT] }))
+          }
+        />
+      </CheckBoxWrap>
+      {allowNextStep && (
+        <StyledBox
+          align="flex-end"
+          justify="center"
+          margin={{ top: 'small' }}
+          pad={{ top: 'medium' }}
+          border={{ side: 'top', color: 'border', size: 'xsmall' }}
+        >
+          <StyledButton
+            primary={true}
+            icon={<Icon type="arrowRight" color="white" />}
+            reverse={true}
+            label={buttonLabel}
+            onClick={onButtonClick}
           />
-          <Checkbox
-            checked={checked[PRIVACY]}
-            label={checkboxLabelPrivacy}
-            pad={{ vertical: '0.35rem' }}
-            setChecked={() =>
-              setChecked(prevState => ({ ...prevState, [PRIVACY]: !prevState[PRIVACY] }))
-            }
-          />
-          <Checkbox
-            checked={checked[CONDUCT]}
-            label={checkboxLabelConduct}
-            pad={{ vertical: '0.35rem' }}
-            setChecked={() =>
-              setChecked(prevState => ({ ...prevState, [CONDUCT]: !prevState[CONDUCT] }))
-            }
-          />
-        </Box>
-        {allowNextStep && (
-          <Box
-            align="flex-end"
-            justify="center"
-            margin={{ top: 'small' }}
-            pad={{ top: 'medium' }}
-            border={{ side: 'top', color: 'border', size: 'xsmall' }}
-          >
-            <StyledButton
-              primary={true}
-              icon={<Icon type="arrowRight" color="white" />}
-              reverse={true}
-              label={buttonLabel}
-              onClick={onButtonClick}
-            />
-          </Box>
-        )}
-      </>
+        </StyledBox>
+      )}
     </>
   );
 };

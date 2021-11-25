@@ -2,8 +2,9 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
 import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { StyledButton } from './styles';
 import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
+
+import { StyledButton, StyledBox } from './styles';
 
 const { Box, Text, WalletRequestStep, Icon } = DS;
 
@@ -103,7 +104,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
         </Text>{' '}
         <Text size="large">{textPacify}.</Text>
       </Text>
-      <Box direction="column">
+      <Box direction="column" pad={{ bottom: '1rem' }}>
         <WalletRequestStep
           heading={textChooseAddress}
           explanation={textChooseAddressExplanation}
@@ -163,7 +164,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           <Text size="large" margin={{ vertical: 'medium' }}>
             {textCompleted}
           </Text>
-          <Box
+          <StyledBox
             align="flex-end"
             justify="center"
             margin={{ top: 'small' }}
@@ -177,7 +178,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
               primary
               reverse
             />
-          </Box>
+          </StyledBox>
         </>
       )}
     </>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { ILinkInput } from '@akashaproject/design-system/lib/components/TextInputIconForm';
 
-import { StyledButton } from './styles';
+import { StyledButton, StyledBox } from './styles';
 
 const { Box, Text, Icon, CTAAnchor, LinkInput } = DS;
 
@@ -72,7 +72,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
           <Text size="large" margin={{ vertical: 'large' }}>
             {paragraphThree}
           </Text>
-          <Box
+          <StyledBox
             align="flex-end"
             justify="center"
             margin={{ top: 'small' }}
@@ -86,7 +86,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
               label={buttonLabel}
               onClick={onButtonClick}
             />
-          </Box>
+          </StyledBox>
         </>
       )}
     </Box>
