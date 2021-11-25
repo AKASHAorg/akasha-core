@@ -4,17 +4,19 @@ import { MarginType } from 'grommet/utils';
 
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import Icon from '../Icon';
+import Tag from '../Tag';
 
 export interface IWeb3ConnectButtonProps {
   boxMargin?: MarginType;
   titleLabel: string;
   subtitleLabel: string;
   leftIconType: string;
+  tagLabel?: string;
   handleClick: () => void;
 }
 
 const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
-  const { boxMargin, titleLabel, subtitleLabel, leftIconType, handleClick } = props;
+  const { boxMargin, titleLabel, subtitleLabel, leftIconType, tagLabel, handleClick } = props;
 
   // indicates when to show a larger size of specified icon
   const largerIcon = ['walletconnect', 'metamask', 'safe', 'trust', 'coinbase'].includes(
@@ -42,6 +44,7 @@ const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
           <Text weight="bold" size="1rem">
             {titleLabel}
           </Text>
+          {tagLabel && <Tag titleLabel={tagLabel} />}
         </Box>
         <Icon type="arrowRight" size="sm" accentColor={true} clickable={true} />
       </Box>

@@ -215,6 +215,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
               ...injectedProvider.details,
               subtitleLabel: t(injectedProvider.details.subtitleLabel),
             }}
+            tagLabel={t('auto-detected')}
             walletConnectDescription={t(
               'WalletConnect has had reliability problems for us in the past. Consider it experimental at this time.',
             )}

@@ -19,6 +19,7 @@ export interface IStepThreeProps {
   paragraphFourAccentLabel: string;
   injectedProvider: INJECTED_PROVIDERS;
   providerDetails: IInjectedProviderDetails;
+  tagLabel: string;
   walletConnectDescription: string;
   socialLoginTitleLabel: string;
   socialLoginDescription: string;
@@ -45,6 +46,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     paragraphFourAccentLabel,
     injectedProvider,
     providerDetails,
+    tagLabel,
     walletConnectDescription,
     socialLoginTitleLabel,
     socialLoginDescription,
@@ -98,7 +100,12 @@ const StepThree: React.FC<IStepThreeProps> = props => {
             <Text size="large" weight="bold">
               {injectedProvider}
             </Text>
-            <Text size="large" color="accentText" onClick={handleChangeProvider}>
+            <Text
+              size="large"
+              color="accentText"
+              style={{ cursor: 'pointer' }}
+              onClick={handleChangeProvider}
+            >
               {changeProviderLabel}
             </Text>
           </Box>
@@ -173,6 +180,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
               titleLabel={providerDetails.titleLabel}
               subtitleLabel={providerDetails.subtitleLabel}
               leftIconType={providerDetails.iconType}
+              tagLabel={tagLabel}
               handleClick={handleWeb3Injected}
             />
           )}

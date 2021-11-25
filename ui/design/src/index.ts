@@ -58,6 +58,7 @@ import { TagSearchCard } from './components/TagCard/tag-search-card';
 
 import FilterCard from './components/FilterCard';
 import SwitchCard from './components/SwitchCard';
+import Tag from './components/Tag';
 import MdCard from './components/MdCard';
 
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
@@ -288,6 +289,7 @@ const exported = {
   SignUpCard,
   FilterCard,
   SwitchCard,
+  Tag,
   MdCard,
   EntryPublishErrorCard,
   StyledLayer,
