@@ -146,18 +146,16 @@ export function useSignUp(provider: EthProviders) {
   const [signUpState, setSignUpState] = React.useState(1);
   const [ethAddress, setEthAddress] = React.useState('');
   const [errorCode, setErrorCode] = React.useState(null);
+  const onError = (e: Error & { code?: number }) => {
+    setErrorCode(e.code);
+  };
 
   React.useEffect(() => {
     const waitForAuth = sdk.api.globalChannel.pipe(
-      filter(
-        payload => payload.event in SIGNUP_STATES || payload.event === events.AUTH_EVENTS.ERROR,
-      ),
+      filter(payload => payload.event in SIGNUP_STATES),
     );
 
     const sub = waitForAuth.subscribe((payload: SignUpPayload) => {
-      if (payload.event === events.AUTH_EVENTS.ERROR) {
-        return setErrorCode(payload.data.code);
-      }
       setErrorCode(null);
       setSignUpState(SIGNUP_STATES[payload.event]);
       if (payload.event === events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS) {
@@ -167,36 +165,53 @@ export function useSignUp(provider: EthProviders) {
     return () => sub.unsubscribe();
   }, []);
 
-  const fullSignUp = useMutation(async () => {
-    lastValueFrom(
-      sdk.api.auth.signIn({
-        provider,
-        checkRegistered: false,
-        resumeSignIn: false,
-      }),
-    );
-  });
-
-  const connectWallet = useMutation(async () =>
-    lastValueFrom(sdk.api.auth.connectAddress(provider)),
+  const fullSignUp = useMutation(
+    async () =>
+      lastValueFrom(
+        sdk.api.auth.signIn({
+          provider,
+          checkRegistered: false,
+          resumeSignIn: false,
+        }),
+      ),
+    {
+      onError,
+    },
   );
 
-  const signAuthMessage = useMutation(async () => lastValueFrom(sdk.api.auth.signAuthMessage()));
-
-  const signComposedMessage = useMutation(async () =>
-    lastValueFrom(sdk.api.auth.signComposedMessage()),
+  const connectWallet = useMutation(
+    async () => lastValueFrom(sdk.api.auth.connectAddress(provider)),
+    {
+      onError,
+    },
   );
 
-  const finishSignUp = useMutation(async () => {
-    await lastValueFrom(sdk.api.auth.signTokenMessage());
-    return lastValueFrom(
-      sdk.api.auth.signIn({
-        provider,
-        checkRegistered: false,
-        resumeSignIn: true,
-      }),
-    );
+  const signAuthMessage = useMutation(async () => lastValueFrom(sdk.api.auth.signAuthMessage()), {
+    onError,
   });
+
+  const signComposedMessage = useMutation(
+    async () => lastValueFrom(sdk.api.auth.signComposedMessage()),
+    {
+      onError,
+    },
+  );
+
+  const finishSignUp = useMutation(
+    async () => {
+      await lastValueFrom(sdk.api.auth.signTokenMessage());
+      return lastValueFrom(
+        sdk.api.auth.signIn({
+          provider,
+          checkRegistered: false,
+          resumeSignIn: true,
+        }),
+      );
+    },
+    {
+      onError,
+    },
+  );
 
   const fireRemainingMessages = React.useCallback(async () => {
     const fullSeries = [connectWallet, signAuthMessage, signComposedMessage, finishSignUp];

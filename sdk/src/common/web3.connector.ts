@@ -211,11 +211,11 @@ export default class Web3Connector
   async #_checkCurrentNetwork(): Promise<void> {
     const network = await this.#web3Instance.detectNetwork();
     if (network?.name !== this.network) {
-      this.#globalChannel.next({
-        data: { code: PROVIDER_ERROR_CODES.WrongNetwork },
-        event: AUTH_EVENTS.ERROR,
-      });
-      throw new Error(`Please change the ethereum network to ${this.network}!`);
+      const error: Error & { code?: number } = new Error(
+        `Please change the ethereum network to ${this.network}!`,
+      );
+      error.code = PROVIDER_ERROR_CODES.WrongNetwork;
+      throw error;
     }
     this.#log.info(`currently on network: ${network.name}`);
   }

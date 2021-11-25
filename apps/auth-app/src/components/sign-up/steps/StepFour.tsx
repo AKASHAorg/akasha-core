@@ -76,7 +76,6 @@ const StepFour: React.FC<IStepFourProps> = props => {
     onButtonClick,
     provider,
   } = props;
-
   const { ethAddress, fullSignUp, signUpState, errorCode, fireRemainingMessages } =
     useSignUp(provider);
 

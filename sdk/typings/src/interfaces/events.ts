@@ -13,7 +13,6 @@ export enum AUTH_EVENTS {
   SIGN_COMPOSED_MESSAGE_SUCCESS = '#auth#signComposedMessage#success',
   SIGN_TOKEN_MESSAGE = '#auth#signTokenMessage',
   SIGN_TOKEN_MESSAGE_SUCCESS = '#auth#signTokenMessage#success',
-  ERROR = '#auth#error',
 }
 
 export enum WEB3_EVENTS {
