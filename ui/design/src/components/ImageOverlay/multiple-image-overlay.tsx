@@ -62,13 +62,19 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
   const [currentImg, setCurrentImg] = React.useState(clickedImg);
 
   React.useEffect(() => {
-    const close = ev => {
+    const handler = ev => {
       if (ev.key === 'Escape') {
         closeModal();
       }
+      if (ev.key === 'ArrowRight') {
+        handleNextImg();
+      }
+      if (ev.key === 'ArrowLeft') {
+        handlePrevImg();
+      }
     };
-    window.addEventListener('keydown', close);
-    return () => window.removeEventListener('keydown', close);
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
   }, []);
 
   const transformRef = React.useRef(null);
@@ -126,12 +132,12 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
           </StyledBox>
           <StyledScrollLeft>
             <StyledCloseDiv onClick={handlePrevImg}>
-              <Icon type="arrowLeft" clickable={true} />
+              <Icon type="arrowUp" clickable={true} style={{ transform: 'rotate(270deg)' }} />
             </StyledCloseDiv>
           </StyledScrollLeft>
           <StyledScrollRight>
             <StyledCloseDiv onClick={handleNextImg}>
-              <Icon type="arrowRight" clickable={true} />
+              <Icon type="arrowUp" clickable={true} style={{ transform: 'rotate(90deg)' }} />
             </StyledCloseDiv>
           </StyledScrollRight>
 

@@ -29,7 +29,7 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import LinkPreview from './link-preview';
-import { ImageGallery } from './image-gallery';
+import { ImageGallery, ImageObject } from './image-gallery';
 
 const MAX_LENGTH = 280;
 
@@ -108,6 +108,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
   const mediaIconRef: React.RefObject<HTMLDivElement> = useRef(null);
   const emojiIconRef: React.RefObject<HTMLDivElement> = useRef(null);
+  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
@@ -124,7 +125,17 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
 
+  const [uploading, setUploading] = React.useState(false);
+  const [images, setImages] = React.useState<ImageObject[]>([]);
+
+  /**
+   * this function is consumed by the withLinks plugin
+   * @param url - URL to generate preview for
+   */
   const handleGetLinkPreview = async (url: string) => {
+    if (images.length > 0) {
+      return;
+    }
     setLinkPreviewUploading(true);
     const linkPreview = await getLinkPreview(url);
     setLinkPreviewState(linkPreview);
@@ -242,7 +253,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    *  handles selection for mentions and tags
    */
   const handleChange = (value: Descendant[]) => {
-    let imageCounter = 0;
     let textLength = 0;
 
     /**
@@ -261,9 +271,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           if (Element.isElement(node) && node.type === 'link' && node.url?.length) {
             textLength += node.url?.length;
           }
-          if (Element.isElement(node) && node.type === 'image') {
-            imageCounter++;
-          }
           if (Element.isElement(node) && node.children) {
             computeLength(node.children);
           }
@@ -272,17 +279,10 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     })(value);
 
     /** disable publishing if no images/text or text too long */
-    if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
+    if ((textLength > 0 || images.length !== 0) && textLength <= MAX_LENGTH) {
       setPublishDisabledInternal(false);
-    } else if ((textLength === 0 && imageCounter === 0) || textLength > MAX_LENGTH) {
+    } else if ((textLength === 0 && images.length === 0) || textLength > MAX_LENGTH) {
       setPublishDisabledInternal(true);
-    }
-
-    /** limits to only 1 image*/
-    if (imageCounter === 0) {
-      setImageUploadDisabled(false);
-    } else if (imageCounter > 0) {
-      setImageUploadDisabled(true);
     }
 
     if (typeof setLetterCount === 'function') {
@@ -472,16 +472,22 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   // image insertion
 
-  const [uploading, setUploading] = React.useState(false);
-  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-  const [images, setImages] = React.useState([]);
-
   const handleInsertImageLink = (data: ImageData) => {
     if (!data.src || !data.size) {
       return;
     }
+    if (images.length > 7) {
+      setImageUploadDisabled(true);
+    }
+    // clear any existing link preview when inserting an image
+    if (linkPreviewState) {
+      setLinkPreviewState(null);
+    }
     const imgData = { ...data, id: `${Date.now()}-${data.src}` };
-    setImages(prev => [...prev, imgData]);
+    if (images.length < 9) {
+      setImages(prev => [...prev, imgData]);
+    }
+
     // CustomEditor.insertImage(editor, data.src, data.size);
   };
 
@@ -494,8 +500,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     }
   };
 
-  const handleDeleteImage = (element: any) => {
+  const handleDeleteImage = (element: ImageObject) => {
     const newImages = images.filter(image => image.id !== element.id);
+    if (newImages.length < 9) {
+      setImageUploadDisabled(false);
+    }
     setImages(newImages);
     // CustomEditor.deleteImage(editor, element);
   };
@@ -528,7 +537,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                     () => null,
                     () => null,
                     () => null,
-                    handleDeleteImage,
                   )
                 }
                 renderLeaf={renderLeaf}

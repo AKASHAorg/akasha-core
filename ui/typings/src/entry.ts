@@ -30,7 +30,7 @@ export interface ITag {
 export interface IEntryData {
   CID?: string;
   linkPreview?: LinkPreview_Response;
-  images?: { url: string; size: any }[];
+  images?: IMetadata['images'];
   slateContent: Descendant[];
   time?: string | number | Date;
   updatedAt?: string | number | Date;
@@ -63,7 +63,8 @@ export interface PendingEntry {
   reposts?: number;
   time: string;
   quote: IEntryData['quote'];
-  linkPreview: IEntryData['linkPreview'];
+  linkPreview?: IEntryData['linkPreview'];
+  images?: IEntryData['images'];
 }
 
 export interface IPublishData {
@@ -78,7 +79,11 @@ export interface IMetadata {
   app: string;
   version: number;
   linkPreview?: LinkPreview_Response;
-  images?: { url: string; size: any }[];
+  images?: {
+    src: string;
+    size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
+    id: string;
+  }[];
   quote?: IEntryData;
   tags: string[];
   mentions: string[];

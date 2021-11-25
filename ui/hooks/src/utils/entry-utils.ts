@@ -177,6 +177,7 @@ export const createPendingEntry = (
   return {
     quote: entryPublishData.metadata.quote,
     linkPreview: entryPublishData.metadata.linkPreview,
+    images: entryPublishData.metadata.images,
     author: author,
     slateContent: entryPublishData.slateContent,
     replies: 0,
