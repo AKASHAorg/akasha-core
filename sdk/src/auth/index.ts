@@ -178,21 +178,11 @@ export default class AWF_Auth implements AWF_IAuth {
         }
       }
       try {
-        await this._web3.connect(currentProvider);
-        await lastValueFrom(this._web3.checkCurrentNetwork());
-        this._globalChannel.next({
-          data: {},
-          event: AUTH_EVENTS.CONNECT_ADDRESS,
-        });
-        const address = await lastValueFrom(this._web3.getCurrentAddress());
-        this._globalChannel.next({
-          data: { address: address.data },
-          event: AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS,
-        });
+        const address = await this._connectAddress(currentProvider);
         const localUser = sessionStorage.getItem(this.currentUserKey);
         if (localUser) {
           const tmpSession = JSON.parse(localUser);
-          if (address.data && tmpSession?.ethAddress === address.data) {
+          if (address && tmpSession?.ethAddress === address) {
             this._globalChannel.next({
               data: tmpSession,
               event: AUTH_EVENTS.SIGN_IN,
@@ -203,10 +193,10 @@ export default class AWF_Auth implements AWF_IAuth {
           }
         }
         if (args.checkRegistered) {
-          await lastValueFrom(this.checkIfSignedUp(address.data));
+          await lastValueFrom(this.checkIfSignedUp(address));
         }
-        this._log.info(`using eth address ${address.data}`);
-        this.sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
+        this._log.info(`using eth address ${address}`);
+        this.sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
         if (sessionStorage.getItem(this.sessKey)) {
           this.#identity = PrivateKey.fromString(sessionStorage.getItem(this.sessKey));
         } else {
