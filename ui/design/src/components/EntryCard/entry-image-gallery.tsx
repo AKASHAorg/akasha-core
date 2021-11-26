@@ -1,18 +1,11 @@
 import * as React from 'react';
-import { StyledCloseDiv } from './styled-editor-box';
+import { StyledCloseDiv } from '../Editor/styled-editor-box';
 import styled, { css } from 'styled-components';
 import Icon from '../Icon';
-import { isMobile } from 'react-device-detect';
+import { Box, Text } from 'grommet';
 
-const StyledImg = styled.img<{ singleImage?: boolean; isMobile?: boolean }>`
+const StyledImg = styled.img<{ singleImage?: boolean }>`
   ${props => {
-    if (props.isMobile) {
-      return css`
-        height: 10rem;
-        padding-right: 0.3rem;
-        aspect-ratio: 1;
-      `;
-    }
     if (props.singleImage) {
       return css`
         max-width: 100%;
@@ -31,24 +24,20 @@ const StyledImgContainer = styled.div`
   position: relative;
 `;
 
-const ScrollableContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  overflow: auto;
-  white-space: nowrap;
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-`;
-
 const StyledGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 0.3rem;
+  position: relative;
 `;
+
+const StyledPill = styled(Box)`
+  position: absolute;
+  bottom: 21px;
+  right: 16px;
+  z-index: 1;
+`;
+
 export interface ImageObject {
   src: string;
   size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
@@ -56,13 +45,14 @@ export interface ImageObject {
 }
 
 export interface IImageGallery {
+  imagesLabel?: string;
   images: ImageObject[];
   handleDeleteImage?: (image: ImageObject) => void;
   handleClickImage?: (image: ImageObject) => void;
 }
 
-const ImageGallery: React.FC<IImageGallery> = props => {
-  const { images, handleDeleteImage, handleClickImage } = props;
+const EntryImageGallery: React.FC<IImageGallery> = props => {
+  const { imagesLabel, images, handleDeleteImage, handleClickImage } = props;
 
   const ImageGridItem = ({ image }) => {
     const style = {
@@ -94,13 +84,31 @@ const ImageGallery: React.FC<IImageGallery> = props => {
               return false;
             }}
           >
-            <Icon type="trash" color="white" clickable={true} />
+            <Icon type="trash" clickable={true} />
           </StyledCloseDiv>
         )}
         {/* when we have a single image we need to keep the original aspect ratio,
         otherwise give images a 1:1 ratio */}
-        <StyledImg src={image.src} singleImage={images.length === 1} isMobile={isMobile} />
+        <StyledImg src={image.src} singleImage={images.length === 1} />
       </StyledImgContainer>
+    );
+  };
+
+  const MoreImagesPill = () => {
+    const hiddenImages = images.length - 4;
+    return (
+      <StyledPill
+        direction="row"
+        round="large"
+        background={{ color: 'accent' }}
+        fill="horizontal"
+        width={{ max: '6rem' }}
+        height="1.5rem"
+        align="center"
+        justify="center"
+      >
+        <Text color="white">{`+${hiddenImages} ${imagesLabel}`}</Text>
+      </StyledPill>
     );
   };
 
@@ -108,31 +116,27 @@ const ImageGallery: React.FC<IImageGallery> = props => {
     if (images.length === 1) {
       return 6;
     }
-    if (images.length === 2) {
-      return 3;
+    if (images.length === 3) {
+      return 2;
     }
-    if (images.length === 4) {
-      return 3;
-    }
-    return 2;
+    return 3;
   };
 
-  if (isMobile) {
-    return (
-      <ScrollableContainer>
-        {images.map((image, index) => (
-          <ImageGridItem image={image} key={index} />
-        ))}
-      </ScrollableContainer>
-    );
-  }
+  // limit shown images to 4
+  const displayedImages = images.slice(0, 4);
+
   return (
     <StyledGrid>
-      {images.map((image, index) => (
+      {displayedImages.map((image, index) => (
         <ImageGridItem image={image} key={index} />
       ))}
+      {images.length > 4 && <MoreImagesPill />}
     </StyledGrid>
   );
 };
 
-export { ImageGallery };
+EntryImageGallery.defaultProps = {
+  imagesLabel: 'images',
+};
+
+export { EntryImageGallery };

@@ -5,10 +5,11 @@ import { Portal } from '../Editor/helpers';
 import Icon from '../Icon';
 import styled from 'styled-components';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { ImageObject } from '../Editor/image-gallery';
 
 export interface IImageOverlay {
-  clickedImg: any;
-  images: any[];
+  clickedImg: ImageObject;
+  images: ImageObject[];
   closeModal: () => void;
 }
 
@@ -130,16 +131,20 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
               <Icon type="close" clickable={true} />
             </StyledCloseDiv>
           </StyledBox>
-          <StyledScrollLeft>
-            <StyledCloseDiv onClick={handlePrevImg}>
-              <Icon type="arrowUp" clickable={true} style={{ transform: 'rotate(270deg)' }} />
-            </StyledCloseDiv>
-          </StyledScrollLeft>
-          <StyledScrollRight>
-            <StyledCloseDiv onClick={handleNextImg}>
-              <Icon type="arrowUp" clickable={true} style={{ transform: 'rotate(90deg)' }} />
-            </StyledCloseDiv>
-          </StyledScrollRight>
+          {images.length > 1 && (
+            <StyledScrollLeft>
+              <StyledCloseDiv onClick={handlePrevImg}>
+                <Icon type="arrowUp" clickable={true} style={{ transform: 'rotate(270deg)' }} />
+              </StyledCloseDiv>
+            </StyledScrollLeft>
+          )}
+          {images.length > 1 && (
+            <StyledScrollRight>
+              <StyledCloseDiv onClick={handleNextImg}>
+                <Icon type="arrowUp" clickable={true} style={{ transform: 'rotate(90deg)' }} />
+              </StyledCloseDiv>
+            </StyledScrollRight>
+          )}
 
           {currentImg && (
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>

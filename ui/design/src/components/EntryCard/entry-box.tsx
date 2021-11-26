@@ -24,7 +24,7 @@ import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { ImageGallery } from '../Editor/image-gallery';
+import { EntryImageGallery, ImageObject } from './entry-image-gallery';
 import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
 
 export interface IContentClickDetails {
@@ -298,13 +298,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   );
 
   const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
-  const [currentImage, setCurrentImage] = React.useState<string | null>(null);
+  const [currentImage, setCurrentImage] = React.useState<ImageObject | null>(null);
 
   /**
    * opens the fullscreen image modal and shows the clicked upon image in it
    */
-  const handleClickImage = (element: any) => {
-    setCurrentImage(element);
+  const handleClickImage = (image: ImageObject) => {
+    setCurrentImage(image);
     setImageOverlayOpen(true);
   };
 
@@ -519,7 +519,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {entryData.images && (
           <Box pad="medium">
-            <ImageGallery images={entryData.images} handleClickImage={handleClickImage} />
+            <EntryImageGallery images={entryData.images} handleClickImage={handleClickImage} />
           </Box>
         )}
         {imageOverlayOpen && (

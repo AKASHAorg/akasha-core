@@ -61,12 +61,11 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
   let interval;
 
   const startLoadingProgress = () => {
-    let current_progress = 0;
-    const step = loadingProgress > 70 ? 0.1 : 0.3;
+    let currentProgress = 0;
+    const step = loadingProgress > 50 ? 0.1 : 0.3;
     interval = setInterval(() => {
-      current_progress += step;
-      const progress =
-        Math.round((Math.atan(current_progress) / (Math.PI / 2)) * 100 * 1000) / 1000;
+      currentProgress += step;
+      const progress = Math.round((Math.atan(currentProgress) / (Math.PI / 2)) * 100 * 1000) / 1000;
       setLoadingProgress(progress);
     }, 100);
   };
@@ -133,15 +132,22 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
       )}
       {uploading && (
         <StyledUploadingDiv height={75}>
-          <Box direction="column" gap="medium" align="center" justify="center">
+          <Box
+            direction="column"
+            gap="medium"
+            align="center"
+            justify="center"
+            pad={{ horizontal: 'small' }}
+          >
             <StyledMeter
               type="bar"
               round={true}
               value={loadingProgress}
               max={100}
-              color="#949EB3"
+              // color defined in grommet config
+              color="secondaryText"
             />
-            <StyledText size="medium" color="accentText">
+            <StyledText size="medium" color="primaryText">
               {uploadingImageLabel}
             </StyledText>
           </Box>

@@ -639,7 +639,7 @@ EditorBox.defaultProps = {
   postLabel: 'Post',
   disablePublishLabel: 'Authenticating',
   placeholderLabel: 'Share your thoughts',
-  uploadingImageLabel: 'Uploading Image',
+  uploadingImageLabel: 'Loading',
   uploadFailedLabel: 'Upload failed.',
 };
 
