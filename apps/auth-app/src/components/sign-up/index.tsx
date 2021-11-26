@@ -12,7 +12,7 @@ import { StepThree } from './steps/StepThree';
 import { StepFour } from './steps/StepFour';
 import { StepFive } from './steps/StepFive';
 
-import routes, { SIGN_UP_USERNAME } from '../../routes';
+import routes, { FEED_APP, SIGN_UP_USERNAME } from '../../routes';
 
 const { Box, SignUpCard } = DS;
 
@@ -48,8 +48,8 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const { t } = useTranslation();
 
   const handleIconClick = () => {
-    if (activeIndex === 0) return;
-    setActiveIndex(prev => prev - 1);
+    navigateToUrl(routes[FEED_APP]);
+    /* TODO: redirect to user's previous route instead*/
   };
 
   const handleNextStep = () => {
