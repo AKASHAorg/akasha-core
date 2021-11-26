@@ -49,6 +49,11 @@ const StyledGrid = styled.div`
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 0.3rem;
 `;
+
+const SingleImageContainer = styled.div`
+  display: flex;
+`;
+
 export interface ImageObject {
   src: string;
   size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
@@ -124,6 +129,15 @@ const ImageGallery: React.FC<IImageGallery> = props => {
           <ImageGridItem image={image} key={index} />
         ))}
       </ScrollableContainer>
+    );
+  }
+  if (images.length === 1) {
+    return (
+      <SingleImageContainer>
+        {images.map((image, index) => (
+          <ImageGridItem image={image} key={index} />
+        ))}
+      </SingleImageContainer>
     );
   }
   return (

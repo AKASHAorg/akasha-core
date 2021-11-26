@@ -30,6 +30,7 @@ import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import LinkPreview from './link-preview';
 import { ImageGallery, ImageObject } from './image-gallery';
+import isUrl from 'is-url';
 
 const MAX_LENGTH = 280;
 
@@ -128,14 +129,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const [uploading, setUploading] = React.useState(false);
   const [images, setImages] = React.useState<ImageObject[]>([]);
 
-  /**
-   * this function is consumed by the withLinks plugin
-   * @param url - URL to generate preview for
-   */
   const handleGetLinkPreview = async (url: string) => {
-    if (images.length > 0) {
-      return;
-    }
     setLinkPreviewUploading(true);
     const linkPreview = await getLinkPreview(url);
     setLinkPreviewState(linkPreview);
@@ -153,8 +147,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const slicedMentions = mentions.slice(0, 3);
 
   /**
-   * this is needed to check if any popover is open from the parent component
-   * if there are more popovers added their state should also be exposed here
+   * this is needed to check internal state from the parent component
+   * to prevent closing the comment editor when the user has uploaded images
+   * or has an open popover
    */
   React.useImperativeHandle(
     ref,
@@ -162,21 +157,54 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       getPopoversState: () => {
         return emojiPopoverOpen;
       },
+      getImagesState: () => {
+        return images.length > 0;
+      },
+      getUploadingState: () => {
+        return uploading;
+      },
     }),
-    [emojiPopoverOpen],
+    [emojiPopoverOpen, images, uploading],
   );
 
   /**
    * initialise editor with all the required plugins
    */
   const editor = useMemo(
-    () =>
-      withLinks(
-        withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
-        handleGetLinkPreview,
-      ),
+    () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
     [],
   );
+
+  /**
+   * insert links here to be able to access the image state
+   * and prevent link preview generation when there are images
+   * already uploaded or currently uploading
+   */
+  const { insertData, insertText } = editor;
+
+  const handleInsertLink = (text: string) => {
+    CustomEditor.insertLink(editor, { url: text.trim() });
+    if (images.length === 0 && !uploading) {
+      handleGetLinkPreview(text);
+    }
+  };
+
+  editor.insertText = text => {
+    if (text && isUrl(text.trim())) {
+      handleInsertLink(text);
+    } else {
+      insertText(text);
+    }
+  };
+
+  editor.insertData = data => {
+    const text = data.getData('text/plain');
+    if (text && isUrl(text.trim())) {
+      handleInsertLink(text);
+    } else {
+      insertData(data);
+    }
+  };
 
   /**
    * set the selection at the end of the content when component is mounted
@@ -487,6 +515,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     if (images.length < 9) {
       setImages(prev => [...prev, imgData]);
     }
+    setPublishDisabledInternal(false);
 
     // CustomEditor.insertImage(editor, data.src, data.size);
   };
@@ -504,6 +533,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const newImages = images.filter(image => image.id !== element.id);
     if (newImages.length < 9) {
       setImageUploadDisabled(false);
+    }
+    if (newImages.length === 0) {
+      setPublishDisabledInternal(true);
     }
     setImages(newImages);
     // CustomEditor.deleteImage(editor, element);

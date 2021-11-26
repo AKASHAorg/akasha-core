@@ -46,13 +46,14 @@ export interface ImageObject {
 
 export interface IImageGallery {
   imagesLabel?: string;
+  imageLabel?: string;
   images: ImageObject[];
   handleDeleteImage?: (image: ImageObject) => void;
   handleClickImage?: (image: ImageObject) => void;
 }
 
 const EntryImageGallery: React.FC<IImageGallery> = props => {
-  const { imagesLabel, images, handleDeleteImage, handleClickImage } = props;
+  const { imagesLabel, imageLabel, images, handleDeleteImage, handleClickImage } = props;
 
   const ImageGridItem = ({ image }) => {
     const style = {
@@ -96,6 +97,7 @@ const EntryImageGallery: React.FC<IImageGallery> = props => {
 
   const MoreImagesPill = () => {
     const hiddenImages = images.length - 4;
+    const label = hiddenImages > 1 ? imagesLabel : imageLabel;
     return (
       <StyledPill
         direction="row"
@@ -107,7 +109,7 @@ const EntryImageGallery: React.FC<IImageGallery> = props => {
         align="center"
         justify="center"
       >
-        <Text color="white">{`+${hiddenImages} ${imagesLabel}`}</Text>
+        <Text color="white">{`+${hiddenImages} ${label}`}</Text>
       </StyledPill>
     );
   };
@@ -137,6 +139,7 @@ const EntryImageGallery: React.FC<IImageGallery> = props => {
 
 EntryImageGallery.defaultProps = {
   imagesLabel: 'images',
+  imageLabel: 'image',
 };
 
 export { EntryImageGallery };

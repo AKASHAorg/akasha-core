@@ -43,7 +43,9 @@ const CommentEditor: React.FC<
     if (
       showEditor &&
       isEqual(contentState, editorDefaultValue) &&
-      !editorRef.current?.getPopoversState()
+      !editorRef.current?.getPopoversState() &&
+      !editorRef.current?.getUploadingState() &&
+      !editorRef.current?.getImagesState()
     ) {
       setShowEditor(false);
     }
