@@ -1,11 +1,9 @@
 import React from 'react';
-import { lastValueFrom } from 'rxjs';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import getSDK from '@akashaproject/awf-sdk';
 import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
-import { useInjectedProvider } from '@akashaproject/ui-awf-hooks';
+import { useInjectedProvider, useIsValidToken } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 import { StepOne } from './steps/StepOne';
@@ -33,24 +31,21 @@ export interface SignUpProps {
 const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const { navigateToUrl } = props.singleSpa;
 
-  const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 2);
+  const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [inviteToken, setInviteToken] = React.useState<string>('');
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
-  const [inviteTokenForm, setinviteTokenForm] = React.useState<IInviteTokenForm>({
-    submitted: false,
-    submitting: false,
-    success: false,
-    hasError: false,
-    errorMsg: '',
+
+  const DEFAULT_TOKEN_LENGTH = 24;
+
+  const inviteTokenQuery = useIsValidToken({
+    inviteToken,
+    enabler: inviteToken?.length === DEFAULT_TOKEN_LENGTH,
   });
 
   const getInjectedProviderQuery = useInjectedProvider();
   const injectedProvider = getInjectedProviderQuery.data;
 
   const { t } = useTranslation();
-  const sdk = getSDK();
-
-  const DEFAULT_TOKEN_LENGTH = 24;
 
   const handleIconClick = () => {
     if (activeIndex === 0) return;
@@ -69,61 +64,8 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setinviteTokenForm({
-      submitted: false,
-      submitting: false,
-      success: false,
-      hasError: false,
-      errorMsg: '',
-    });
     setInviteToken(e.target.value);
   };
-
-  const checkIsValidToken = () => {
-    setinviteTokenForm({
-      submitted: false,
-      submitting: true,
-      success: false,
-      hasError: false,
-      errorMsg: '',
-    });
-    lastValueFrom(sdk.api.auth.validateInvite(inviteToken))
-      .then(() => {
-        setinviteTokenForm({
-          submitted: true,
-          submitting: false,
-          success: true,
-          hasError: false,
-          errorMsg: '',
-        });
-      })
-      .catch((err: Error) => {
-        setinviteTokenForm({
-          submitted: true,
-          submitting: false,
-          success: false,
-          hasError: true,
-          errorMsg: err.message,
-        });
-      });
-  };
-
-  const validateTokenFn = (e: MouseEvent) => {
-    e.preventDefault();
-    checkIsValidToken();
-  };
-
-  const triggerInviteValidation = () => {
-    if (inviteToken?.length && inviteToken?.length === DEFAULT_TOKEN_LENGTH) {
-      checkIsValidToken();
-    }
-  };
-
-  React.useEffect(
-    triggerInviteValidation,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inviteToken],
-  );
 
   return (
     <Box
@@ -159,14 +101,13 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             inputPlaceholder={t('Type your invitation code here')}
             noArrowRight={true}
             inputValue={inviteToken}
-            submitted={inviteTokenForm.submitted}
-            submitting={inviteTokenForm.submitting}
-            success={inviteTokenForm.success}
+            submitted={!inviteTokenQuery?.isLoading}
+            submitting={inviteTokenQuery?.isLoading}
+            success={inviteTokenQuery?.isSuccess}
             // also toggle hasError if input value exceeds default token length
-            hasError={inviteTokenForm.hasError || inviteToken.length > DEFAULT_TOKEN_LENGTH}
-            errorMsg={inviteTokenForm.errorMsg}
+            hasError={inviteTokenQuery?.isError}
+            errorMsg={inviteTokenQuery?.error?.message}
             onChange={onInputTokenChange}
-            validateTokenFn={validateTokenFn}
             onButtonClick={handleNextStep}
           />
         )}
