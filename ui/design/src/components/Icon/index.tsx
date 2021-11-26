@@ -249,7 +249,8 @@ const StyledRefDiv = styled.div`
 
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];
-  const { testId, wrapperStyle, ...other } = props;
+  // here we destructure some props we don't want applied to DOM elements
+  const { primaryColor, accentColor, clickable, testId, wrapperStyle, ...other } = props;
   if (!Component) {
     // tslint:disable-next-line no-console
     console.error('There is no such icon', props.type);
