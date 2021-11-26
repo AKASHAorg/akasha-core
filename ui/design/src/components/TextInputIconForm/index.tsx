@@ -19,7 +19,9 @@ export interface ILinkInput {
   errorMsg?: string;
   margin?: MarginType | EdgeSizeType;
   elevation?: string;
+  inputInvalid?: boolean;
   noArrowRight?: boolean;
+  noDisable?: boolean;
 }
 
 const LinkInput: React.FC<ILinkInput> = props => {
@@ -35,14 +37,17 @@ const LinkInput: React.FC<ILinkInput> = props => {
     validateTokenFn,
     margin,
     elevation,
+    inputInvalid,
     noArrowRight,
+    noDisable,
   } = props;
 
   const isEmpty = !inputValue;
   const isWriting = inputValue && !submitted && !submitting;
   const inputColor = (isWriting && 'accent') || (hasError && 'errorText') || 'border';
   const placeHolder = inputPlaceholder || 'Invitation Code';
-  const Container = success ? StyledDisabledBox : Box;
+  const isDisabled = !noDisable && (submitting || success);
+  const Container = isDisabled ? StyledDisabledBox : Box;
   return (
     <Container
       fill="horizontal"
@@ -66,7 +71,7 @@ const LinkInput: React.FC<ILinkInput> = props => {
             placeholder={placeHolder}
             value={inputValue}
             onChange={onChange}
-            disabled={submitting || success}
+            disabled={isDisabled}
           />
         </form>
       </Box>
@@ -81,7 +86,9 @@ const LinkInput: React.FC<ILinkInput> = props => {
       )}
       {submitting && <Icon type="loading" />}
       {hasError && !isEmpty && <Icon type="error" />}
-      {success && <Icon type="available" color={'green'} />}
+      {success && !submitting && !hasError && !inputInvalid && (
+        <Icon type="available" color={'green'} />
+      )}
     </Container>
   );
 };

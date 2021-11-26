@@ -108,7 +108,11 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   React.useEffect(() => {
     const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
-    if (loginQuery.data?.ethAddress && !isLoadingProfile) {
+    if (
+      loginQuery.data?.ethAddress &&
+      !isLoadingProfile &&
+      singleSpa.getMountedApps().find(app => !app.includes('app-auth'))
+    ) {
       if (loggedProfileData && !loggedProfileData.userName) {
         return props.navigateToModal({
           name: 'update-profile',

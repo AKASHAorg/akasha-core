@@ -1,8 +1,13 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useUsernameValidation } from '@akashaproject/ui-awf-hooks';
+import {
+  useGetLogin,
+  useProfileUpdate,
+  useUsernameValidation,
+} from '@akashaproject/ui-awf-hooks';
 
 import { StyledButton, StyledBox } from './styles';
+import routes, { WELCOME } from '../../../routes';
 
 const { Box, Text, styled, Icon, LinkInput } = DS;
 
@@ -19,6 +24,7 @@ interface IStepFiveProps {
   textUsernameUnknownError: string;
   textUsernameAvailable: string;
   buttonLabel: string;
+  navigateToUrl: (url: string) => void;
 }
 
 const StyledIcon = styled(Box)`
@@ -50,6 +56,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
     textUsernameUnknownError,
     textUsernameAvailable,
     buttonLabel,
+    navigateToUrl,
   } = props;
   const conditions = React.useMemo(
     () => [
@@ -76,6 +83,8 @@ const StepFive: React.FC<IStepFiveProps> = props => {
     [username, conditions],
   );
 
+  const loginQuery = useGetLogin();
+  const profileUpdateMutation = useProfileUpdate(loginQuery.data?.pubKey);
   const usernameValidationQuery = useUsernameValidation(username, allowUsernameCheckRequest);
   const userNameValidationError = React.useMemo(() => {
     if (usernameValidationQuery.isSuccess && !usernameValidationQuery.data) {
@@ -109,6 +118,18 @@ const StepFive: React.FC<IStepFiveProps> = props => {
       );
     });
 
+  const finishSignUp = async () => {
+    await profileUpdateMutation.mutateAsync({
+      profileData: {
+        pubKey: loginQuery.data?.pubKey,
+        ethAddress: loginQuery.data?.ethAddress,
+        userName: username,
+      },
+      changedFields: ['userName'],
+    });
+    navigateToUrl(routes[WELCOME]);
+  };
+
   return (
     <>
       <Text margin={{ bottom: 'large' }}>
@@ -138,6 +159,8 @@ const StepFive: React.FC<IStepFiveProps> = props => {
         submitting={usernameValidationQuery.isFetching}
         submitted={usernameValidationQuery.isFetched}
         success={usernameValidationQuery.isSuccess}
+        inputInvalid={!allowUsernameCheckRequest}
+        noDisable
         noArrowRight
       />
       {userNameValidationError && (
@@ -158,9 +181,15 @@ const StepFive: React.FC<IStepFiveProps> = props => {
             border={{ side: 'top', color: 'border', size: 'xsmall' }}
           >
             <StyledButton
-              icon={<Icon type="arrowRight" color="white" />}
+              icon={
+                profileUpdateMutation.isLoading ? (
+                  <Icon type="loading" color="white" />
+                ) : (
+                  <Icon type="arrowRight" color="white" />
+                )
+              }
               label={buttonLabel}
-              onClick={() => {}} //TODO
+              onClick={finishSignUp}
               primary
               reverse
             />

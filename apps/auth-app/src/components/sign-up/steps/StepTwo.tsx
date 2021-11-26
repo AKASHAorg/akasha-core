@@ -53,6 +53,11 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
 
   const allowNextStep = !Object.values(checked).includes(false);
 
+  const handleClick = () => {
+    localStorage.setItem('@acceptedTermsAndPrivacy', new Date().toISOString());
+    onButtonClick();
+  };
+
   return (
     <>
       <Text size="large" margin={{ bottom: 'large' }}>
@@ -122,7 +127,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
             icon={<Icon type="arrowRight" color="white" />}
             reverse={true}
             label={buttonLabel}
-            onClick={onButtonClick}
+            onClick={handleClick}
           />
         </StyledBox>
       )}
