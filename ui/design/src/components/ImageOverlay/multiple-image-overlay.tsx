@@ -76,7 +76,7 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, []);
+  }, [images, currentImg]);
 
   const transformRef = React.useRef(null);
 

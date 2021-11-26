@@ -234,9 +234,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
   // @Todo: update this after ts-jest migration to ESM
   const handleImageInsert = (imageKey: string) => (src: File | string, isUrl: boolean) => {
-    if (isUrl) {
+    if (isUrl && typeof src === 'string') {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
-    } else {
+    } else if (typeof src !== 'string') {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: URL.createObjectURL(src) } });
     }
   };
