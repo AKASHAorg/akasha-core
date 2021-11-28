@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
 import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
-import { useInjectedProvider, useIsValidToken } from '@akashaproject/ui-awf-hooks';
+import {
+  useConnectProvider,
+  useInjectedProvider,
+  useIsValidToken,
+  useNetworkState,
+} from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 import { StepOne } from './steps/StepOne';
@@ -45,6 +50,11 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const getInjectedProviderQuery = useInjectedProvider();
   const injectedProvider = getInjectedProviderQuery.data;
 
+  const connectProviderQuery = useConnectProvider(selectedProvider);
+
+  // check network if connection is successfully established
+  const networkStateQuery = useNetworkState(connectProviderQuery.isFetched);
+
   const { t } = useTranslation();
 
   const handleIconClick = () => {
@@ -61,6 +71,9 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
 
   const handleProviderSelect = (provider: EthProviders) => {
     setSelectedProvider(provider);
+  };
+  const handleNetworkCheck = () => {
+    return networkStateQuery?.refetch();
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,10 +183,17 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
               'network to',
             )}`}
             setRinkebyAccentLabel={'Rinkeby'}
+            isOnRinkebyLabel={t(
+              'We have detected that the MetaMask network is set to Rinkeby. We’ll now proceed to connect your wallet to Ethereum World.',
+            )}
             variableIconButtonLabel={t('I have set the network to Rinkeby')}
             variableIconErrorLabel={t('Please set the network to Rinkeby and try again.')}
             buttonLabel={t('Continue to Step 4 ')}
             selectedProvider={selectedProvider}
+            isOnRinkeby={!networkStateQuery.data?.networkNotSupported}
+            isNetworkCheckLoading={networkStateQuery?.isFetching}
+            isNetworkCheckError={networkStateQuery?.isError}
+            onClickCheckNetwork={handleNetworkCheck}
             onProviderSelect={handleProviderSelect}
             onButtonClick={handleNextStep}
           />

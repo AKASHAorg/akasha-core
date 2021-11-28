@@ -27,10 +27,15 @@ export interface IStepThreeProps {
   setRinkebyLabel: string;
   setRinkebyBoldLabel: string;
   setRinkebyAccentLabel: string;
+  isOnRinkebyLabel: string;
   variableIconButtonLabel: string;
   variableIconErrorLabel: string;
   buttonLabel: string;
   selectedProvider: EthProviders;
+  isOnRinkeby: boolean;
+  isNetworkCheckLoading: boolean;
+  isNetworkCheckError: boolean;
+  onClickCheckNetwork: () => void;
   onProviderSelect: (provider: EthProviders) => void;
   onButtonClick: () => void;
 }
@@ -54,18 +59,18 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     setRinkebyLabel,
     setRinkebyBoldLabel,
     setRinkebyAccentLabel,
+    isOnRinkebyLabel,
     variableIconButtonLabel,
     variableIconErrorLabel,
     buttonLabel,
     selectedProvider,
+    isOnRinkeby,
+    isNetworkCheckLoading,
+    isNetworkCheckError,
+    onClickCheckNetwork,
     onProviderSelect,
     onButtonClick,
   } = props;
-
-  // replace with react-query flags
-  const [isLoading] = React.useState(false);
-  const [isError] = React.useState(false);
-  const [isRinkeby] = React.useState(false);
 
   const handleWeb3Injected = () => {
     onProviderSelect(EthProviders.Web3Injected);
@@ -93,9 +98,9 @@ const StepThree: React.FC<IStepThreeProps> = props => {
           </Text>
         </Box>
       )}
+      {/* show this, if selected provider is web3 injected */}
       {selectedProvider === EthProviders.Web3Injected && (
         <>
-          {/* show this, if selected provider is web3 injected && network is not Rinkeby */}
           <Box direction="row" justify="between" margin={{ bottom: 'large' }}>
             <Text size="large" weight="bold">
               {injectedProvider}
@@ -109,43 +114,55 @@ const StepThree: React.FC<IStepThreeProps> = props => {
               {changeProviderLabel}
             </Text>
           </Box>
-          <Text size="large" margin={{ bottom: 'large' }}>
-            {setRinkebyLabel}
-            <Text size="large" weight="bold">
-              {setRinkebyBoldLabel}
-            </Text>{' '}
-            <Text size="large" weight="bold" color="accentText">
-              {setRinkebyAccentLabel}
-            </Text>
-            .
-          </Text>
-          {/* video area (if injectedProvider is MetaMask): setting to Rinkeby on MetaMask */}
-          <VariableIconButton
-            titleLabel={variableIconButtonLabel}
-            errorLabel={variableIconErrorLabel}
-            isLoading={isLoading}
-            isError={isError}
-            onClick={() => null}
-          />
-          {isRinkeby && (
-            <Box
-              align="flex-end"
-              justify="center"
-              margin={{ top: 'small' }}
-              pad={{ top: 'medium' }}
-              border={{ side: 'top', color: 'border', size: 'xsmall' }}
-            >
-              <StyledButton
-                primary={true}
-                icon={<Icon type="arrowRight" color="white" />}
-                reverse={true}
-                label={buttonLabel}
-                onClick={onButtonClick}
+          {!isOnRinkeby && (
+            <>
+              {/* if network is not Rinkeby */}
+              <Text size="large" margin={{ bottom: 'large' }}>
+                {setRinkebyLabel}
+                <Text size="large" weight="bold">
+                  {setRinkebyBoldLabel}
+                </Text>{' '}
+                <Text size="large" weight="bold" color="accentText">
+                  {setRinkebyAccentLabel}
+                </Text>
+                .
+              </Text>
+              {/* video area (if injectedProvider is MetaMask): setting to Rinkeby on MetaMask */}
+              <VariableIconButton
+                titleLabel={variableIconButtonLabel}
+                errorLabel={variableIconErrorLabel}
+                isLoading={isNetworkCheckLoading}
+                isError={isNetworkCheckError}
+                onClick={onClickCheckNetwork}
               />
-            </Box>
+            </>
+          )}
+          {isOnRinkeby && (
+            <>
+              {/* if network is Rinkeby */}
+              <Text size="large" margin={{ bottom: 'large' }}>
+                {isOnRinkebyLabel}
+              </Text>
+              <Box
+                align="flex-end"
+                justify="center"
+                margin={{ top: 'small' }}
+                pad={{ top: 'medium' }}
+                border={{ side: 'top', color: 'border', size: 'xsmall' }}
+              >
+                <StyledButton
+                  primary={true}
+                  icon={<Icon type="arrowRight" color="white" />}
+                  reverse={true}
+                  label={buttonLabel}
+                  onClick={onButtonClick}
+                />
+              </Box>
+            </>
           )}
         </>
       )}
+      {/* show this, if no selected provider */}
       {selectedProvider === EthProviders.None && (
         <>
           <Text size="large" margin={{ bottom: 'large' }}>

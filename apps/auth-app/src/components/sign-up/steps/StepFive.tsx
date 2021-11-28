@@ -1,10 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import {
-  useGetLogin,
-  useProfileUpdate,
-  useUsernameValidation,
-} from '@akashaproject/ui-awf-hooks';
+import { useGetLogin, useProfileUpdate, useUsernameValidation } from '@akashaproject/ui-awf-hooks';
 
 import { StyledButton, StyledBox } from './styles';
 import routes, { WELCOME } from '../../../routes';
