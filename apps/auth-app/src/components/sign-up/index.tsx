@@ -8,6 +8,7 @@ import {
   useInjectedProvider,
   useIsValidToken,
   useNetworkState,
+  useRequiredNetworkName,
 } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
@@ -51,6 +52,12 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const injectedProvider = getInjectedProviderQuery.data;
 
   const connectProviderQuery = useConnectProvider(selectedProvider);
+
+  const requiredNetworkQuery = useRequiredNetworkName();
+  // convert to title case
+  const requiredNetworkName = requiredNetworkQuery.data
+    .toLocaleLowerCase()
+    .replace(/(^\s*\w|[.!?]\s*\w)/g, r => r.toUpperCase());
 
   // check network if connection is successfully established
   const networkStateQuery = useNetworkState(connectProviderQuery.isFetched);
@@ -157,7 +164,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
               "As part of signing up, you'll get a free Ethereum wallet that you can use to send or receive crypto and sign in to other Ethereum sites.",
             )}
             paragraphThreeLabel={t(
-              "While you're free to conect any wallet that works with the Rinkeby Network,",
+              `While you're free to conect any wallet that works with the ${requiredNetworkName} Network,`,
             )}
             paragraphThreeBoldLabel={t('we recommend MetaMask.')}
             paragraphFourLabel={t(
@@ -182,12 +189,14 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             setRequiredNetworkBoldLabel={`${t('you’ll need to set the')} ${
               injectedProvider.name
             } ${t('network to')}`}
-            setRequiredNetworkAccentLabel={'Rinkeby'}
+            setRequiredNetworkAccentLabel={requiredNetworkName}
             isOnRequiredNetworkLabel={t(
-              'We have detected that the MetaMask network is set to Rinkeby. We’ll now proceed to connect your wallet to Ethereum World.',
+              `We have detected that the MetaMask network is set to ${requiredNetworkName}. We’ll now proceed to connect your wallet to Ethereum World.`,
             )}
-            variableIconButtonLabel={t('I have set the network to Rinkeby')}
-            variableIconErrorLabel={t('Please set the network to Rinkeby and try again.')}
+            variableIconButtonLabel={t(`I have set the network to ${requiredNetworkName}`)}
+            variableIconErrorLabel={t(
+              `Please set the network to ${requiredNetworkName} and try again.`,
+            )}
             buttonLabel={t('Continue to Step 4 ')}
             selectedProvider={selectedProvider}
             isOnRequiredNetwork={!networkStateQuery.data?.networkNotSupported}
@@ -244,7 +253,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
               'The signature request has timed out. Please try again to sign the request.',
             )}
             textNetworkError={t(
-              'Ethereum World only works with the Rinkeby test network. Please set your network to Rinkeby to continue.',
+              `Ethereum World only works with the ${requiredNetworkName} test network. Please set your network to ${requiredNetworkName} to continue.`,
             )}
             textAgain={t('Try Again')}
             buttonLabel={t('Continue to Step 5')}
