@@ -9,7 +9,7 @@ import constants from './constants';
 import { logError } from './utils/error-handler';
 import getProviderDetails from './utils/getProviderDetails';
 
-const { INJECTED_PROVIDER_KEY, CONNECT_PROVIDER_KEY } = constants;
+const { INJECTED_PROVIDER_KEY, CONNECT_PROVIDER_KEY, REQUIRED_NETWORK_KEY } = constants;
 
 const getInjectedProvider = async () => {
   const sdk = getSDK();
@@ -24,6 +24,12 @@ const getInjectedProvider = async () => {
 const connectProvider = async (provider: EthProviders) => {
   const sdk = getSDK();
   await sdk.services.common.web3.connect(provider);
+};
+
+const getRequiredNetwork = async () => {
+  const sdk = getSDK();
+  const networkName = await lastValueFrom(sdk.services.common.web3.getRequiredNetworkName());
+  return networkName.data;
 };
 
 /* A hook to get injected provider from the SDK */
@@ -41,9 +47,18 @@ export function useInjectedProvider() {
   });
 }
 
+/* A hook to connect to injected provider */
 export function useConnectProvider(provider: EthProviders) {
   return useQuery([CONNECT_PROVIDER_KEY], () => connectProvider(provider), {
     enabled: provider !== EthProviders.None,
+    keepPreviousData: true,
+  });
+}
+
+/* A hook to get required network name from the SDK */
+export function useRequiredNetworkName() {
+  return useQuery([REQUIRED_NETWORK_KEY], () => getRequiredNetwork(), {
+    initialData: 'required',
     keepPreviousData: true,
   });
 }

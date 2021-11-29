@@ -76,7 +76,11 @@ import {
   useReport,
 } from './use-moderation';
 import { ICount, ILogItem, IModeratedItem, IPendingItem, EntryReport } from './moderation-requests';
-import { useConnectProvider, useInjectedProvider } from './use-injected-provider';
+import {
+  useConnectProvider,
+  useInjectedProvider,
+  useRequiredNetworkName,
+} from './use-injected-provider';
 import { useIsValidToken } from './use-invite-token-validation';
 
 export {
@@ -185,6 +189,7 @@ export {
   // use-injected-provider
   useInjectedProvider,
   useConnectProvider,
+  useRequiredNetworkName,
   // use-invite-token-validation
   useIsValidToken,
 };
