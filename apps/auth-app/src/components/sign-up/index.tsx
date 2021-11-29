@@ -178,19 +178,19 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
               'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
             )}
             changeProviderLabel={t('Change')}
-            setRinkebyLabel={t('To use Ethereum World during the alpha period, ')}
-            setRinkebyBoldLabel={`${t('you’ll need to set the')} ${injectedProvider.name} ${t(
-              'network to',
-            )}`}
-            setRinkebyAccentLabel={'Rinkeby'}
-            isOnRinkebyLabel={t(
+            setRequiredNetworkLabel={t('To use Ethereum World during the alpha period, ')}
+            setRequiredNetworkBoldLabel={`${t('you’ll need to set the')} ${
+              injectedProvider.name
+            } ${t('network to')}`}
+            setRequiredNetworkAccentLabel={'Rinkeby'}
+            isOnRequiredNetworkLabel={t(
               'We have detected that the MetaMask network is set to Rinkeby. We’ll now proceed to connect your wallet to Ethereum World.',
             )}
             variableIconButtonLabel={t('I have set the network to Rinkeby')}
             variableIconErrorLabel={t('Please set the network to Rinkeby and try again.')}
             buttonLabel={t('Continue to Step 4 ')}
             selectedProvider={selectedProvider}
-            isOnRinkeby={!networkStateQuery.data?.networkNotSupported}
+            isOnRequiredNetwork={!networkStateQuery.data?.networkNotSupported}
             isNetworkCheckLoading={networkStateQuery?.isFetching}
             isNetworkCheckError={networkStateQuery?.isError}
             onClickCheckNetwork={handleNetworkCheck}

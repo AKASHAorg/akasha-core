@@ -24,15 +24,15 @@ export interface IStepThreeProps {
   socialLoginTitleLabel: string;
   socialLoginDescription: string;
   changeProviderLabel: string;
-  setRinkebyLabel: string;
-  setRinkebyBoldLabel: string;
-  setRinkebyAccentLabel: string;
-  isOnRinkebyLabel: string;
+  setRequiredNetworkLabel: string;
+  setRequiredNetworkBoldLabel: string;
+  setRequiredNetworkAccentLabel: string;
+  isOnRequiredNetworkLabel: string;
   variableIconButtonLabel: string;
   variableIconErrorLabel: string;
   buttonLabel: string;
   selectedProvider: EthProviders;
-  isOnRinkeby: boolean;
+  isOnRequiredNetwork: boolean;
   isNetworkCheckLoading: boolean;
   isNetworkCheckError: boolean;
   onClickCheckNetwork: () => void;
@@ -56,15 +56,15 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     socialLoginTitleLabel,
     socialLoginDescription,
     changeProviderLabel,
-    setRinkebyLabel,
-    setRinkebyBoldLabel,
-    setRinkebyAccentLabel,
-    isOnRinkebyLabel,
+    setRequiredNetworkLabel,
+    setRequiredNetworkBoldLabel,
+    setRequiredNetworkAccentLabel,
+    isOnRequiredNetworkLabel,
     variableIconButtonLabel,
     variableIconErrorLabel,
     buttonLabel,
     selectedProvider,
-    isOnRinkeby,
+    isOnRequiredNetwork,
     isNetworkCheckLoading,
     isNetworkCheckError,
     onClickCheckNetwork,
@@ -114,20 +114,20 @@ const StepThree: React.FC<IStepThreeProps> = props => {
               {changeProviderLabel}
             </Text>
           </Box>
-          {!isOnRinkeby && (
+          {!isOnRequiredNetwork && (
             <>
-              {/* if network is not Rinkeby */}
+              {/* if on the required network */}
               <Text size="large" margin={{ bottom: 'large' }}>
-                {setRinkebyLabel}
+                {setRequiredNetworkLabel}
                 <Text size="large" weight="bold">
-                  {setRinkebyBoldLabel}
+                  {setRequiredNetworkBoldLabel}
                 </Text>{' '}
                 <Text size="large" weight="bold" color="accentText">
-                  {setRinkebyAccentLabel}
+                  {setRequiredNetworkAccentLabel}
                 </Text>
                 .
               </Text>
-              {/* video area (if injectedProvider is MetaMask): setting to Rinkeby on MetaMask */}
+              {/* video area (if injectedProvider is MetaMask): setting to the required network on MetaMask */}
               <VariableIconButton
                 titleLabel={variableIconButtonLabel}
                 errorLabel={variableIconErrorLabel}
@@ -137,11 +137,11 @@ const StepThree: React.FC<IStepThreeProps> = props => {
               />
             </>
           )}
-          {isOnRinkeby && (
+          {isOnRequiredNetwork && (
             <>
-              {/* if network is Rinkeby */}
+              {/* if on the required network */}
               <Text size="large" margin={{ bottom: 'large' }}>
-                {isOnRinkebyLabel}
+                {isOnRequiredNetworkLabel}
               </Text>
               <Box
                 align="flex-end"
