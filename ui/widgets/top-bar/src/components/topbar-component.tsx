@@ -106,26 +106,26 @@ const TopbarComponent = (props: RootComponentProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
-  React.useEffect(() => {
-    const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
-    if (
-      loginQuery.data?.ethAddress &&
-      !isLoadingProfile &&
-      singleSpa.getMountedApps().find(app => !app.includes('app-auth'))
-    ) {
-      if (loggedProfileData && !loggedProfileData.userName) {
-        return props.navigateToModal({
-          name: 'update-profile',
-        });
-      }
-    }
-  }, [
-    profileDataReq.isLoading,
-    loginQuery.data?.ethAddress,
-    loggedProfileData,
-    loginQuery.data?.pubKey,
-    props,
-  ]);
+  // React.useEffect(() => {
+  //   const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
+  //   if (
+  //     loginQuery.data?.ethAddress &&
+  //     !isLoadingProfile &&
+  //     singleSpa.getMountedApps().find(app => !app.includes('app-auth'))
+  //   ) {
+  //     if (loggedProfileData && !loggedProfileData.userName) {
+  //       return props.navigateToModal({
+  //         name: 'update-profile',
+  //       });
+  //     }
+  //   }
+  // }, [
+  //   profileDataReq.isLoading,
+  //   loginQuery.data?.ethAddress,
+  //   loggedProfileData,
+  //   loginQuery.data?.pubKey,
+  //   props,
+  // ]);
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
