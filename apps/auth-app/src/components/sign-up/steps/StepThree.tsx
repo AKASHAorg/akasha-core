@@ -9,7 +9,21 @@ import { StyledButton } from './styles';
 
 const { Box, Text, Icon, VariableIconButton, Web3ConnectButton } = DS;
 
-export interface IStepThreeProps {
+interface IRequiredNetworkStepProps {
+  isOnRequiredNetwork: boolean;
+  setRequiredNetworkLabel?: string;
+  setRequiredNetworkBoldLabel?: string;
+  setRequiredNetworkAccentLabel?: string;
+  variableIconButtonLabel?: string;
+  variableIconErrorLabel?: string;
+  isNetworkCheckLoading?: boolean;
+  isNetworkCheckError?: boolean;
+  isOnRequiredNetworkLabel?: string;
+  buttonLabel?: string;
+  onClickCheckNetwork?: () => void;
+  onButtonClick?: () => void;
+}
+export interface IStepThreeProps extends IRequiredNetworkStepProps {
   paragraphOneLabel: string;
   paragraphTwoLabel: string;
   paragraphTwoBoldLabel: string;
@@ -20,25 +34,78 @@ export interface IStepThreeProps {
   injectedProvider: INJECTED_PROVIDERS;
   providerDetails: IInjectedProviderDetails;
   tagLabel: string;
+  walletConnectTitleLabel: string;
   walletConnectDescription: string;
   socialLoginTitleLabel: string;
   socialLoginDescription: string;
+  providerConnected: boolean;
   changeProviderLabel: string;
-  setRequiredNetworkLabel: string;
-  setRequiredNetworkBoldLabel: string;
-  setRequiredNetworkAccentLabel: string;
-  isOnRequiredNetworkLabel: string;
-  variableIconButtonLabel: string;
-  variableIconErrorLabel: string;
-  buttonLabel: string;
   selectedProvider: EthProviders;
-  isOnRequiredNetwork: boolean;
-  isNetworkCheckLoading: boolean;
-  isNetworkCheckError: boolean;
-  onClickCheckNetwork: () => void;
   onProviderSelect: (provider: EthProviders) => void;
-  onButtonClick: () => void;
 }
+
+const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
+  const {
+    isOnRequiredNetwork,
+    setRequiredNetworkLabel,
+    setRequiredNetworkBoldLabel,
+    setRequiredNetworkAccentLabel,
+    variableIconButtonLabel,
+    variableIconErrorLabel,
+    isNetworkCheckLoading,
+    isNetworkCheckError,
+    isOnRequiredNetworkLabel,
+    buttonLabel,
+    onClickCheckNetwork,
+    onButtonClick,
+  } = props;
+  if (isOnRequiredNetwork) {
+    return (
+      <>
+        <Text size="large" margin={{ bottom: 'large' }}>
+          {isOnRequiredNetworkLabel}
+        </Text>
+        <Box
+          align="flex-end"
+          justify="center"
+          margin={{ top: 'small' }}
+          pad={{ top: 'medium' }}
+          border={{ side: 'top', color: 'border', size: 'xsmall' }}
+        >
+          <StyledButton
+            primary={true}
+            icon={<Icon type="arrowRight" color="white" />}
+            reverse={true}
+            label={buttonLabel}
+            onClick={onButtonClick}
+          />
+        </Box>
+      </>
+    );
+  }
+  return (
+    <>
+      <Text size="large" margin={{ bottom: 'large' }}>
+        {setRequiredNetworkLabel}
+        <Text size="large" weight="bold">
+          {setRequiredNetworkBoldLabel}
+        </Text>{' '}
+        <Text size="large" weight="bold" color="accentText">
+          {setRequiredNetworkAccentLabel}
+        </Text>
+        .
+      </Text>
+      {/* video area (if injectedProvider is MetaMask): setting to the required network on MetaMask */}
+      <VariableIconButton
+        titleLabel={variableIconButtonLabel}
+        errorLabel={variableIconErrorLabel}
+        isLoading={isNetworkCheckLoading}
+        isError={isNetworkCheckError}
+        onClick={onClickCheckNetwork}
+      />
+    </>
+  );
+};
 
 const StepThree: React.FC<IStepThreeProps> = props => {
   const {
@@ -52,24 +119,15 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     injectedProvider,
     providerDetails,
     tagLabel,
+    walletConnectTitleLabel,
     walletConnectDescription,
     socialLoginTitleLabel,
     socialLoginDescription,
+    providerConnected,
     changeProviderLabel,
-    setRequiredNetworkLabel,
-    setRequiredNetworkBoldLabel,
-    setRequiredNetworkAccentLabel,
-    isOnRequiredNetworkLabel,
-    variableIconButtonLabel,
-    variableIconErrorLabel,
-    buttonLabel,
     selectedProvider,
     isOnRequiredNetwork,
-    isNetworkCheckLoading,
-    isNetworkCheckError,
-    onClickCheckNetwork,
     onProviderSelect,
-    onButtonClick,
   } = props;
 
   const handleWeb3Injected = () => {
@@ -91,15 +149,35 @@ const StepThree: React.FC<IStepThreeProps> = props => {
   return (
     <Box>
       {/* show this, if selected provider is Email or Social Login */}
-      {selectedProvider == EthProviders.Torus && (
+      {selectedProvider == EthProviders.Torus && providerConnected && (
         <Box direction="row" justify="between" margin={{ bottom: 'large' }}>
           <Text size="large" weight="bold">
             {socialLoginTitleLabel}
           </Text>
         </Box>
       )}
+      {/* show this, if selected provider is WalletConnect */}
+      {selectedProvider == EthProviders.WalletConnect && providerConnected && (
+        <>
+          <Box direction="row" justify="between" margin={{ bottom: 'large' }}>
+            <Text size="large" weight="bold">
+              {walletConnectTitleLabel}
+            </Text>
+            <Text
+              size="large"
+              color="accentText"
+              style={{ cursor: 'pointer' }}
+              onClick={handleChangeProvider}
+            >
+              {changeProviderLabel}
+            </Text>
+          </Box>
+          {!isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
+          {isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
+        </>
+      )}
       {/* show this, if selected provider is web3 injected */}
-      {selectedProvider === EthProviders.Web3Injected && (
+      {selectedProvider === EthProviders.Web3Injected && providerConnected && (
         <>
           <Box direction="row" justify="between" margin={{ bottom: 'large' }}>
             <Text size="large" weight="bold">
@@ -114,56 +192,12 @@ const StepThree: React.FC<IStepThreeProps> = props => {
               {changeProviderLabel}
             </Text>
           </Box>
-          {!isOnRequiredNetwork && (
-            <>
-              {/* if on the required network */}
-              <Text size="large" margin={{ bottom: 'large' }}>
-                {setRequiredNetworkLabel}
-                <Text size="large" weight="bold">
-                  {setRequiredNetworkBoldLabel}
-                </Text>{' '}
-                <Text size="large" weight="bold" color="accentText">
-                  {setRequiredNetworkAccentLabel}
-                </Text>
-                .
-              </Text>
-              {/* video area (if injectedProvider is MetaMask): setting to the required network on MetaMask */}
-              <VariableIconButton
-                titleLabel={variableIconButtonLabel}
-                errorLabel={variableIconErrorLabel}
-                isLoading={isNetworkCheckLoading}
-                isError={isNetworkCheckError}
-                onClick={onClickCheckNetwork}
-              />
-            </>
-          )}
-          {isOnRequiredNetwork && (
-            <>
-              {/* if on the required network */}
-              <Text size="large" margin={{ bottom: 'large' }}>
-                {isOnRequiredNetworkLabel}
-              </Text>
-              <Box
-                align="flex-end"
-                justify="center"
-                margin={{ top: 'small' }}
-                pad={{ top: 'medium' }}
-                border={{ side: 'top', color: 'border', size: 'xsmall' }}
-              >
-                <StyledButton
-                  primary={true}
-                  icon={<Icon type="arrowRight" color="white" />}
-                  reverse={true}
-                  label={buttonLabel}
-                  onClick={onButtonClick}
-                />
-              </Box>
-            </>
-          )}
+          {!isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
+          {isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
         </>
       )}
       {/* show this, if no selected provider */}
-      {selectedProvider === EthProviders.None && (
+      {(selectedProvider === EthProviders.None || !providerConnected) && (
         <>
           <Text size="large" margin={{ bottom: 'large' }}>
             {paragraphOneLabel}
@@ -203,7 +237,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
           )}
           <Web3ConnectButton
             boxMargin={{ bottom: 'medium' }}
-            titleLabel="WalletConnect"
+            titleLabel={walletConnectTitleLabel}
             subtitleLabel={walletConnectDescription}
             leftIconType="walletconnect"
             handleClick={handleWalletConnect}

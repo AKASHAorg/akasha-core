@@ -54,10 +54,11 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const connectProviderQuery = useConnectProvider(selectedProvider);
 
   const requiredNetworkQuery = useRequiredNetworkName();
+
   // convert to title case
-  const requiredNetworkName = requiredNetworkQuery.data
-    .toLocaleLowerCase()
-    .replace(/(^\s*\w|[.!?]\s*\w)/g, r => r.toUpperCase());
+  const requiredNetworkName = `${requiredNetworkQuery.data
+    .charAt(0)
+    .toLocaleUpperCase()}${requiredNetworkQuery.data.substr(1).toLocaleLowerCase()}`;
 
   // check network if connection is successfully established
   const networkStateQuery = useNetworkState(connectProviderQuery.isFetched);
@@ -93,14 +94,14 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
       margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}
     >
       <SignUpCard
-        titleLabel="Sign Up"
+        titleLabel={t('Sign Up')}
         activeIndex={activeIndex}
         stepLabels={[
-          'Invitation Code',
-          'Legal Agreements',
-          'Choose How to Sign Up',
-          'Sign Wallet Requests',
-          'Choose Username',
+          t('Invitation Code'),
+          t('Legal Agreements'),
+          t('Choose How to Sign Up'),
+          t('Sign Wallet Requests'),
+          t('Choose Username'),
         ]}
         handleIconClick={handleIconClick}
       >
@@ -177,6 +178,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
               subtitleLabel: t(injectedProvider.details.subtitleLabel),
             }}
             tagLabel={t('auto-detected')}
+            walletConnectTitleLabel="WalletConnect"
             walletConnectDescription={t(
               'WalletConnect has had reliability problems for us in the past. Consider it experimental at this time.',
             )}
@@ -184,15 +186,22 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             socialLoginDescription={t(
               'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
             )}
+            providerConnected={connectProviderQuery.isSuccess}
             changeProviderLabel={t('Change')}
             setRequiredNetworkLabel={t('To use Ethereum World during the alpha period, ')}
             setRequiredNetworkBoldLabel={`${t('you’ll need to set the')} ${
-              injectedProvider.name
+              selectedProvider === EthProviders.WalletConnect
+                ? 'WalletConnect'
+                : injectedProvider.name
             } ${t('network to')}`}
             setRequiredNetworkAccentLabel={requiredNetworkName}
-            isOnRequiredNetworkLabel={t(
-              `We have detected that the MetaMask network is set to ${requiredNetworkName}. We’ll now proceed to connect your wallet to Ethereum World.`,
-            )}
+            isOnRequiredNetworkLabel={`${t('We have detected that the')} ${
+              selectedProvider === EthProviders.WalletConnect
+                ? 'WalletConnect'
+                : injectedProvider.name
+            } ${t(
+              `network is set to ${requiredNetworkName}. We’ll now proceed to connect your wallet to Ethereum World.`,
+            )}`}
             variableIconButtonLabel={t(`I have set the network to ${requiredNetworkName}`)}
             variableIconErrorLabel={t(
               `Please set the network to ${requiredNetworkName} and try again.`,
