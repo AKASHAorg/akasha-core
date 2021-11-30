@@ -111,24 +111,12 @@ export default class Web3Connector
    * @param message - Human readable string to sign
    */
   async signMessage(message: string) {
-    const normalizedMessage = ethers.utils.toUtf8Bytes(message);
-    if (this.#wallet instanceof ethers.Wallet) {
-      return this.#wallet.signMessage(message);
-    }
-    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
-      const signer = await this.#web3Instance.getSigner();
-      const address = await signer.getAddress();
-      return this.#web3Instance.send('personal_sign', [
-        ethers.utils.hexlify(normalizedMessage),
-        address.toLowerCase(),
-      ]);
-    }
-    throw new Error('Must provider a signer!');
+    return this.getSigner().signMessage(message);
   }
 
-  async getSigner() {
+  getSigner() {
     if (this.#wallet instanceof ethers.Wallet) {
-      return Promise.resolve(this.#wallet);
+      return this.#wallet;
     }
     if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
       return this.#web3Instance.getSigner();
