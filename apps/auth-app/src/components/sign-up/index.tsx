@@ -224,6 +224,9 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
         {activeIndex === 3 && (
           <StepFour
             textExplanation={t("We'll explain why we need each along the way")}
+            textExplanationOpenLogin={t(
+              'The following actions have been completed because you signed up using Email or social log in.',
+            )}
             textExplanationBold={t(
               "As part of your sign-up process, you'll be required to select the account to connect and sign three transactions in your wallet",
             )}
@@ -272,7 +275,8 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             textAgain={t('Try Again')}
             buttonLabel={t('Continue to Step 5')}
             onButtonClick={handleNextStep}
-            provider={EthProviders.Web3Injected} //TODO update with real provider from step 3
+            providerConnected={connectProviderQuery.isSuccess}
+            provider={selectedProvider}
           />
         )}
         {activeIndex === 4 && (

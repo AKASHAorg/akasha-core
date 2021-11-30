@@ -10,6 +10,7 @@ const { Box, Text, WalletRequestStep, Icon } = DS;
 
 export interface IStepFourProps {
   textExplanation: string;
+  textExplanationOpenLogin: string;
   textExplanationBold: string;
   textPacify: string;
   textPacifyBold: string;
@@ -36,6 +37,7 @@ export interface IStepFourProps {
   textAgain: string;
   buttonLabel: string;
   onButtonClick: () => void;
+  providerConnected: boolean;
   provider: EthProviders;
 }
 
@@ -49,6 +51,7 @@ const REQUEST_STEPS = {
 const StepFour: React.FC<IStepFourProps> = props => {
   const {
     textExplanation,
+    textExplanationOpenLogin,
     textExplanationBold,
     textPacify,
     textPacifyBold,
@@ -75,6 +78,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
     textAgain,
     buttonLabel,
     onButtonClick,
+    providerConnected,
     provider,
   } = props;
   const { ethAddress, fullSignUp, signUpState, errorCode, fireRemainingMessages } =
@@ -90,20 +94,33 @@ const StepFour: React.FC<IStepFourProps> = props => {
     fullSignUp.mutate();
   }, []);
 
+  const isOpenLogin = providerConnected && provider === EthProviders.Torus;
+
+  const renderExplanation = () => {
+    if (isOpenLogin) {
+      return <Text size="large">{textExplanationOpenLogin}</Text>;
+    }
+    return (
+      <>
+        <Text margin={{ bottom: 'large' }}>
+          <Text size="large" weight="bold">
+            {textExplanationBold}.
+          </Text>{' '}
+          <Text size="large">{textExplanation}.</Text>
+        </Text>
+        <Text margin={{ bottom: 'large' }}>
+          <Text size="large" weight="bold">
+            {textPacifyBold}.
+          </Text>{' '}
+          <Text size="large">{textPacify}.</Text>
+        </Text>
+      </>
+    );
+  };
+
   return (
     <>
-      <Text margin={{ bottom: 'large' }}>
-        <Text size="large" weight="bold">
-          {textExplanationBold}.
-        </Text>{' '}
-        <Text size="large">{textExplanation}.</Text>
-      </Text>
-      <Text margin={{ bottom: 'large' }}>
-        <Text size="large" weight="bold">
-          {textPacifyBold}.
-        </Text>{' '}
-        <Text size="large">{textPacify}.</Text>
-      </Text>
+      {renderExplanation()}
       <Box direction="column" pad={{ bottom: '1rem' }}>
         <WalletRequestStep
           heading={textChooseAddress}
@@ -116,7 +133,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           ethAddress={ethAddress}
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.ONE}
-          completed={signUpState > REQUEST_STEPS.ONE}
+          completed={signUpState > REQUEST_STEPS.ONE || isOpenLogin}
           error={signUpState === REQUEST_STEPS.ONE && errorMapping[errorCode]}
         />
         <WalletRequestStep
@@ -129,7 +146,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           walletRequest={fireRemainingMessages}
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.TWO}
-          completed={signUpState > REQUEST_STEPS.TWO}
+          completed={signUpState > REQUEST_STEPS.TWO || isOpenLogin}
           error={signUpState === REQUEST_STEPS.TWO && errorMapping[errorCode]}
         />
         <WalletRequestStep
@@ -142,7 +159,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           walletRequest={fireRemainingMessages}
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.THREE}
-          completed={signUpState > REQUEST_STEPS.THREE}
+          completed={signUpState > REQUEST_STEPS.THREE || isOpenLogin}
           error={signUpState === REQUEST_STEPS.THREE && errorMapping[errorCode]}
         />
         <WalletRequestStep
