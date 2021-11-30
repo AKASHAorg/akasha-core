@@ -195,13 +195,17 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
                 : injectedProvider.name
             } ${t('network to')}`}
             setRequiredNetworkAccentLabel={requiredNetworkName}
-            isOnRequiredNetworkLabel={`${t('We have detected that the')} ${
-              selectedProvider === EthProviders.WalletConnect
-                ? 'WalletConnect'
-                : injectedProvider.name
-            } ${t(
-              `network is set to ${requiredNetworkName}. We’ll now proceed to connect your wallet to Ethereum World.`,
-            )}`}
+            isOnRequiredNetworkLabel={
+              selectedProvider === EthProviders.Torus
+                ? t('You have connected using Email or Social login. Click the button to continue')
+                : `${t('We have detected that the')} ${
+                    selectedProvider === EthProviders.WalletConnect
+                      ? 'WalletConnect'
+                      : injectedProvider.name
+                  } ${t(
+                    `network is set to ${requiredNetworkName}. We’ll now proceed to connect your wallet to Ethereum World.`,
+                  )}`
+            }
             variableIconButtonLabel={t(`I have set the network to ${requiredNetworkName}`)}
             variableIconErrorLabel={t(
               `Please set the network to ${requiredNetworkName} and try again.`,

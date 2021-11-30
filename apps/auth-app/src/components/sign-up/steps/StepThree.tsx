@@ -150,11 +150,14 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     <Box>
       {/* show this, if selected provider is Email or Social Login */}
       {selectedProvider == EthProviders.Torus && providerConnected && (
-        <Box direction="row" justify="between" margin={{ bottom: 'large' }}>
-          <Text size="large" weight="bold">
-            {socialLoginTitleLabel}
-          </Text>
-        </Box>
+        <>
+          <Box direction="row" justify="between" margin={{ bottom: 'large' }}>
+            <Text size="large" weight="bold">
+              {socialLoginTitleLabel}
+            </Text>
+          </Box>
+          {isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
+        </>
       )}
       {/* show this, if selected provider is WalletConnect */}
       {selectedProvider == EthProviders.WalletConnect && providerConnected && (
