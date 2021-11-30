@@ -1,9 +1,9 @@
-pragma solidity ^0.5.0;
+// SPDX-License-Identifier: AGPL-3.0
+pragma solidity ^0.8.0;
 
 import "./AbstractSubdomainRegistrar.sol";
-import "@ensdomains/ens/contracts/Registrar.sol";
-import "@ensdomains/ens/contracts/ReverseRegistrar.sol";
-import "@ensdomains/resolver/contracts/Resolver.sol";
+import '@ensdomains/ens-contracts/contracts/ethregistrar/BaseRegistrar.sol';
+import '@ensdomains/ens-contracts/contracts/ethregistrar/BaseRegistrarImplementation.sol';
 
 contract AkashaRegistrar is AbstractSubdomainRegistrar {
 
@@ -22,7 +22,7 @@ contract AkashaRegistrar is AbstractSubdomainRegistrar {
      * @param label The label hash of the deed to check.
      * @return The address owning the subdomain/label.
      */
-    function owner(bytes32 label) public view returns (address) {
+    function owner(bytes32 label) public view override returns (address) {
         return ens.owner(keccak256(abi.encodePacked(ROOT_NODE, label)));
     }
 

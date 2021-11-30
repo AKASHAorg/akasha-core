@@ -2,7 +2,6 @@
   "contractName": "NameResolver",
   "abi": [
     {
-      "constant": false,
       "inputs": [
         {
           "internalType": "bytes32",
@@ -17,7 +16,6 @@
       ],
       "name": "setName",
       "outputs": [],
-      "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
     }
