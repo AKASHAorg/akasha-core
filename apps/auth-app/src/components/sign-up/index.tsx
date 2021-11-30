@@ -19,6 +19,7 @@ import { StepFour } from './steps/StepFour';
 import { StepFive } from './steps/StepFive';
 
 import routes, { FEED_APP, SIGN_UP_USERNAME } from '../../routes';
+import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const { Box, SignUpCard } = DS;
 
@@ -66,8 +67,8 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const { t } = useTranslation();
 
   const handleIconClick = () => {
-    navigateToUrl(routes[FEED_APP]);
-    /* TODO: redirect to user's previous route instead*/
+    const lastLocation = sessionStorage.getItem(StorageKeys.LAST_URL);
+    navigateToUrl(lastLocation || routes[FEED_APP]);
   };
 
   const handleNextStep = () => {
