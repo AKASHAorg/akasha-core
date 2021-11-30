@@ -1,10 +1,13 @@
-pragma solidity ^0.5.0;
+// SPDX-License-Identifier: AGPL-3.0
+pragma solidity ^0.8.0;
 
-import "@ensdomains/ens/contracts/ENS.sol";
-import "@ensdomains/ens/contracts/ReverseRegistrar.sol";
-import "@ensdomains/resolver/contracts/Resolver.sol";
+import '@ensdomains/ens-contracts/contracts/registry/ENS.sol';
+import '@ensdomains/ens-contracts/contracts/registry/ENSRegistry.sol';
+import '@ensdomains/ens-contracts/contracts/registry/ENSRegistryWithFallback.sol';
+import '@ensdomains/ens-contracts/contracts/registry/ReverseRegistrar.sol';
+import '@ensdomains/ens-contracts/contracts/resolvers/Resolver.sol';
 
-contract AbstractSubdomainRegistrar {
+abstract contract AbstractSubdomainRegistrar {
 
     // namehash('eth')
     bytes32 constant public TLD_NODE = 0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae;
@@ -34,7 +37,7 @@ contract AbstractSubdomainRegistrar {
         _;
     }
 
-    constructor(ENS _ens) public {
+    constructor(ENS _ens) {
         ens = _ens;
         registrar = ens.owner(TLD_NODE);
         registrarOwner = msg.sender;
@@ -77,5 +80,5 @@ contract AbstractSubdomainRegistrar {
         ens.setOwner(ROOT_NODE, registrarOwner);
     }
 
-    function owner(bytes32 label) public view returns (address);
+    function owner(bytes32 label) public view virtual returns (address);
 }
