@@ -69,6 +69,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
 
   const handleIconClick = () => {
     const lastLocation = sessionStorage.getItem(StorageKeys.LAST_URL);
+    sessionStorage.removeItem(StorageKeys.LAST_URL);
     navigateToUrl(lastLocation || routes[FEED_APP]);
   };
 
