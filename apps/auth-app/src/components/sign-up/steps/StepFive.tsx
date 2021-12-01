@@ -3,7 +3,7 @@ import DS from '@akashaproject/design-system';
 import { useGetLogin, useProfileUpdate, useUsernameValidation } from '@akashaproject/ui-awf-hooks';
 
 import { StyledButton, StyledBox } from './styles';
-import routes, { WELCOME } from '../../../routes';
+import routes, { rootRoute, WELCOME } from '../../../routes';
 
 const { Box, Text, styled, Icon, LinkInput } = DS;
 
@@ -38,6 +38,38 @@ const CONDITION_LOWERCASE = new RegExp('^[a-z0-9]*$');
 const CONDITION_ENDS_WITH_LETTER = new RegExp('.*[a-zA-Z]$');
 const CONDITION_CHAR_COUNT = new RegExp('^\\S{3,14}$');
 
+interface ConditionsProps {
+  conditions: {
+    text: string;
+    regex: RegExp;
+  }[];
+  username: string;
+}
+
+const Conditions = ({ conditions, username }: ConditionsProps) => (
+  <>
+    {conditions.map(({ text, regex }, index) => {
+      const satisfiesCondition = regex.test(username);
+      return (
+        <Box key={index} direction="row" margin={{ bottom: 'xxxsmall' }} align="center">
+          <StyledIcon>
+            {!username.length && <>•</>}
+            {!!username.length && satisfiesCondition && (
+              <Icon type="checkSimple" size="xxs" color="green" />
+            )}
+            {!!username.length && !satisfiesCondition && (
+              <Icon type="close" size="sm" color="red" style={{ marginLeft: '-0.1rem' }} />
+            )}
+          </StyledIcon>
+          <Text size="large" weight={satisfiesCondition || !username.length ? 'normal' : 'bold'}>
+            {text}
+          </Text>
+        </Box>
+      );
+    })}
+  </>
+);
+
 const StepFive: React.FC<IStepFiveProps> = props => {
   const {
     textIdentifier,
@@ -54,6 +86,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
     buttonLabel,
     navigateToUrl,
   } = props;
+  const [username, setUsername] = React.useState('');
   const conditions = React.useMemo(
     () => [
       {
@@ -71,8 +104,6 @@ const StepFive: React.FC<IStepFiveProps> = props => {
     ],
     [textCriterionLowercase, textCriterionEndsWithLetter, textCriterionCharCount],
   );
-
-  const [username, setUsername] = React.useState('');
 
   const allowUsernameCheckRequest = React.useMemo(
     () => conditions.every(({ regex }) => regex.test(username)),
@@ -94,25 +125,6 @@ const StepFive: React.FC<IStepFiveProps> = props => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
-
-  const renderBullet = (satisfiesCondition: boolean) => {
-    if (!username.length) return <>•</>;
-    if (satisfiesCondition) return <Icon type="checkSimple" size="xxs" color="green" />;
-    return <Icon type="close" size="sm" color="red" style={{ marginLeft: '-0.1rem' }} />;
-  };
-
-  const renderConditions = () =>
-    conditions.map(({ text, regex }, index) => {
-      const satisfiesCondition = regex.test(username);
-      return (
-        <Box key={index} direction="row" margin={{ bottom: 'xxxsmall' }} align="center">
-          <StyledIcon>{renderBullet(satisfiesCondition)}</StyledIcon>
-          <Text size="large" weight={satisfiesCondition || !username.length ? 'normal' : 'bold'}>
-            {text}
-          </Text>
-        </Box>
-      );
-    });
 
   const finishSignUp = async () => {
     await profileUpdateMutation.mutateAsync({
@@ -139,7 +151,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
           {textEnsure}
           {': '}
         </Text>
-        {renderConditions()}
+        <Conditions conditions={conditions} username={username} />
       </Box>
       <Text color="gray" size="large" margin={{ top: 'large' }}>
         {textUsername}

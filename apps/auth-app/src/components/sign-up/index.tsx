@@ -19,18 +19,17 @@ import { StepThree } from './steps/StepThree';
 import { StepFour } from './steps/StepFour';
 import { StepFive } from './steps/StepFive';
 
-import routes, { FEED_APP, SIGN_UP_USERNAME } from '../../routes';
+import routes, { rootAKASHARoute, SIGN_UP_USERNAME } from '../../routes';
 import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 
-const { Box, SignUpCard } = DS;
+const { SignUpCard, Box, styled } = DS;
 
-export interface IInviteTokenForm {
-  submitted: boolean;
-  submitting: boolean;
-  success: boolean;
-  hasError: boolean;
-  errorMsg: string;
-}
+const WrapperBox = styled(Box)`
+  width: 38%;
+  @media screen and(max-width: ${props => props.theme.breakpoints.medium}) {
+    width: 100%;
+  }
+`;
 
 export interface SignUpProps {
   activeIndex?: number;
@@ -70,7 +69,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const handleIconClick = () => {
     const lastLocation = sessionStorage.getItem(StorageKeys.LAST_URL);
     sessionStorage.removeItem(StorageKeys.LAST_URL);
-    navigateToUrl(lastLocation || routes[FEED_APP]);
+    navigateToUrl(lastLocation || `${rootAKASHARoute}/feed`);
   };
 
   const handleNextStep = () => {
@@ -96,10 +95,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   };
 
   return (
-    <Box
-      width={props.isMobile ? '100%' : '38%'}
-      margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}
-    >
+    <WrapperBox margin={{ top: 'small', horizontal: 'auto', bottom: '0' }}>
       <SignUpCard
         titleLabel={t('Sign Up')}
         activeIndex={activeIndex}
@@ -312,7 +308,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           />
         )}
       </SignUpCard>
-    </Box>
+    </WrapperBox>
   );
 };
 

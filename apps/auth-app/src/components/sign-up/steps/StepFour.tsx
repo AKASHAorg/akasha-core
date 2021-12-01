@@ -41,11 +41,49 @@ export interface IStepFourProps {
   provider: EthProviders;
 }
 
+interface ExplanationProps {
+  isOpenLogin: boolean;
+  textExplanationOpenLogin: string;
+  textExplanationBold: string;
+  textExplanation: string;
+  textPacifyBold: string;
+  textPacify: string;
+}
+
 const REQUEST_STEPS = {
   ONE: 1,
   TWO: 3,
   THREE: 5,
   FOUR: 7,
+};
+
+const Explanation = ({
+  isOpenLogin,
+  textExplanationOpenLogin,
+  textExplanationBold,
+  textExplanation,
+  textPacifyBold,
+  textPacify,
+}: ExplanationProps) => {
+  if (isOpenLogin) {
+    return <Text size="large">{textExplanationOpenLogin}</Text>;
+  }
+  return (
+    <>
+      <Text margin={{ bottom: 'large' }}>
+        <Text size="large" weight="bold">
+          {textExplanationBold}.
+        </Text>{' '}
+        <Text size="large">{textExplanation}.</Text>
+      </Text>
+      <Text margin={{ bottom: 'large' }}>
+        <Text size="large" weight="bold">
+          {textPacifyBold}.
+        </Text>{' '}
+        <Text size="large">{textPacify}.</Text>
+      </Text>
+    </>
+  );
 };
 
 const StepFour: React.FC<IStepFourProps> = props => {
@@ -96,31 +134,16 @@ const StepFour: React.FC<IStepFourProps> = props => {
 
   const isOpenLogin = providerConnected && provider === EthProviders.Torus;
 
-  const renderExplanation = () => {
-    if (isOpenLogin) {
-      return <Text size="large">{textExplanationOpenLogin}</Text>;
-    }
-    return (
-      <>
-        <Text margin={{ bottom: 'large' }}>
-          <Text size="large" weight="bold">
-            {textExplanationBold}.
-          </Text>{' '}
-          <Text size="large">{textExplanation}.</Text>
-        </Text>
-        <Text margin={{ bottom: 'large' }}>
-          <Text size="large" weight="bold">
-            {textPacifyBold}.
-          </Text>{' '}
-          <Text size="large">{textPacify}.</Text>
-        </Text>
-      </>
-    );
-  };
-
   return (
     <>
-      {renderExplanation()}
+      <Explanation
+        isOpenLogin={isOpenLogin}
+        textExplanation={textExplanation}
+        textExplanationOpenLogin={textExplanationOpenLogin}
+        textExplanationBold={textExplanationBold}
+        textPacify={textPacify}
+        textPacifyBold={textPacifyBold}
+      />
       <Box direction="column" pad={{ bottom: '1rem' }}>
         <WalletRequestStep
           heading={textChooseAddress}

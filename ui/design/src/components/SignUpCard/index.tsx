@@ -38,15 +38,6 @@ const SignUpCard: React.FC<ISignUpCardProps> = props => {
         height={{ min: 'fit-content' }}
       >
         <Box direction="row">
-          {/* back icon */}
-          {/* <Icon
-            type="arrowLeft"
-            size="sm"
-            accentColor={true}
-            clickable={true}
-            onClick={handleIconClick}
-            style={{ position: 'absolute' }} // allows proper centering of title box
-          /> */}
           {/* title Box */}
           <Box direction="row" margin={{ vertical: '0', horizontal: 'auto' }}>
             <BoldText size="xlarge">{titleLabel}</BoldText>

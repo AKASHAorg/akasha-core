@@ -1,14 +1,8 @@
 import { Box, Text } from 'grommet';
 import React from 'react';
 import Icon from '../Icon';
-import {
-  AddressText,
-  CircleDashed,
-  StyledArrowIcon,
-  StyledBox,
-  StyledCheckmarkIcon,
-  StyledIcon,
-} from './styles';
+import { AddressText, CircleDashed, StyledBox, StyledCheckmarkIcon } from './styles';
+import { WalletRequestIcon } from './icon';
 
 export interface WalletRequestStepProps {
   heading: string;
@@ -41,29 +35,6 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
     error,
   } = props;
 
-  const renderIcon = () => {
-    if (error) {
-      return (
-        <StyledIcon>
-          <Icon type="error" size="md" color="red" />
-        </StyledIcon>
-      );
-    }
-
-    if (pending)
-      return (
-        <StyledIcon justify="center" align="center">
-          <Icon type="loading" size="md" accentColor />
-        </StyledIcon>
-      );
-
-    return (
-      <StyledArrowIcon justify="center" align="center">
-        <Icon type="arrowRight" />
-      </StyledArrowIcon>
-    );
-  };
-
   if (completed) {
     return (
       <Box direction="row" align="center" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
@@ -90,7 +61,7 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
 
   return (
     <Box direction="row" pad={{ vertical: 'small', horizontal: 'xsmall' }}>
-      {renderIcon()}
+      <WalletRequestIcon error={error} pending={pending} />
       <Box direction="column" pad={{ horizontal: 'small', vertical: 'xxsmall' }} fill>
         <Text margin={{ bottom: 'xsmall' }} weight="bold" size="large">
           {heading}

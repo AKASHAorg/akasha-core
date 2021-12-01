@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import routes, { CUSTOMISE_PROFILE, FEED_APP, SIGN_IN } from '../../routes';
+import routes, { rootAKASHARoute, rootProfileRoute, SIGN_IN } from '../../routes';
 
 const { Box, WelcomeCard } = DS;
 
@@ -22,11 +22,11 @@ const Welcome: React.FC<RootComponentProps> = props => {
   }, []);
 
   const handlePrimaryButtonClick = () => {
-    props.singleSpa.navigateToUrl(routes[FEED_APP]);
+    props.singleSpa.navigateToUrl(`${rootAKASHARoute}/feed`);
   };
 
   const handleSecondaryButtonClick = () => {
-    props.singleSpa.navigateToUrl(routes[CUSTOMISE_PROFILE]);
+    props.singleSpa.navigateToUrl(`${rootProfileRoute}/my-profile?modal[name]=update-profile`);
   };
 
   return (
