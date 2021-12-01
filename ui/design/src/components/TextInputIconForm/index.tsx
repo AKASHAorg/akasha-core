@@ -1,11 +1,14 @@
-import { Box } from 'grommet';
 import * as React from 'react';
+import { Box } from 'grommet';
+import { EdgeSizeType, MarginType } from 'grommet/utils';
+
 import Icon from '../Icon';
+
 import { StyledTextInput, StyledArrowIcon, StyledDisabledBox } from './styles';
 
 export interface ILinkInput {
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
-  validateTokenFn?: (ev: any) => void;
+  validateTokenFn?: (ev: unknown) => void;
   className?: string;
   inputValue: string;
   inputPlaceholder?: string;
@@ -14,6 +17,11 @@ export interface ILinkInput {
   success?: boolean;
   hasError?: boolean;
   errorMsg?: string;
+  margin?: MarginType | EdgeSizeType;
+  elevation?: string;
+  inputInvalid?: boolean;
+  noArrowRight?: boolean;
+  noDisable?: boolean;
 }
 
 const LinkInput: React.FC<ILinkInput> = props => {
@@ -27,12 +35,19 @@ const LinkInput: React.FC<ILinkInput> = props => {
     success,
     inputPlaceholder,
     validateTokenFn,
+    margin,
+    elevation,
+    inputInvalid,
+    noArrowRight,
+    noDisable,
   } = props;
+
   const isEmpty = !inputValue;
   const isWriting = inputValue && !submitted && !submitting;
-  const inputColor = (isWriting && 'accent') || 'border';
+  const inputColor = (isWriting && 'accent') || (hasError && 'errorText') || 'border';
   const placeHolder = inputPlaceholder || 'Invitation Code';
-  const Container = success ? StyledDisabledBox : Box;
+  const isDisabled = !noDisable && (submitting || success);
+  const Container = isDisabled ? StyledDisabledBox : Box;
   return (
     <Container
       fill="horizontal"
@@ -40,14 +55,14 @@ const LinkInput: React.FC<ILinkInput> = props => {
       align="center"
       pad="small"
       round="xxsmall"
-      margin="xsmall"
+      margin={margin || 'xsmall'}
       border={{
         side: 'all',
         color: inputColor,
       }}
       className={className}
       justify="between"
-      elevation={'xsmall'}
+      elevation={elevation || 'xsmall'}
     >
       <Box direction="row" gap="small" align="center" flex={{ grow: 1 }} pad={{ right: 'small' }}>
         <form onSubmit={validateTokenFn} style={{ width: '100%' }}>
@@ -56,22 +71,24 @@ const LinkInput: React.FC<ILinkInput> = props => {
             placeholder={placeHolder}
             value={inputValue}
             onChange={onChange}
-            disabled={success}
+            disabled={isDisabled}
           />
         </form>
       </Box>
 
-      {(isEmpty || isWriting) && (
+      {!noArrowRight && (isEmpty || isWriting) && (
         <StyledArrowIcon
           type="arrowRight"
           clickable={true}
-          color={inputColor}
+          color="accent"
           onClick={validateTokenFn}
         />
       )}
       {submitting && <Icon type="loading" />}
       {hasError && !isEmpty && <Icon type="error" />}
-      {success && <Icon type="available" color={'green'} />}
+      {success && !submitting && !hasError && !inputInvalid && (
+        <Icon type="available" color={'green'} />
+      )}
     </Container>
   );
 };

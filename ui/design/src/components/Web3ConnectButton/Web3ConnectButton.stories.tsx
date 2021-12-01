@@ -31,4 +31,5 @@ BaseWeb3ConnectButton.args = {
   subtitleLabel:
     "Use this option to sign up using your Ethereum wallet. You'll be able to choose which wallet to connect in the next screen.",
   leftIconType: 'wallet',
+  tagLabel: 'auto-detected',
 };

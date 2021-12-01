@@ -8,7 +8,7 @@ const StyledTextInput = styled(TextInput)`
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
   line-height: ${props => props.theme.shapes.fontSizes.large.height};
   color: ${props => props.theme.colors.primaryText};
-  font-weight: 400;
+  font-weight: ${props => props.theme.shapes.fontWeight.regular};
   &:disabled {
     color: ${props => props.theme.colors.primaryText};
     opacity: 0.9;

@@ -8,6 +8,7 @@ export interface IMobileProps {
 }
 export interface IOptionalButtonProps extends IMobileProps {
   readonly isOnFeedback?: boolean;
+  readonly isFullWidthOnMobile?: boolean;
 }
 
 export interface IModalWrapperProps extends IMobileProps {
@@ -154,7 +155,7 @@ const ModalButton = styled(Button)<IOptionalButtonProps>`
   font-size: ${props => (props.isMobile ? '0.9rem' : '0.8rem')};
   padding: ${props => (props.isMobile ? '0.75rem' : '0.3rem 0.7rem')};
   ${props => {
-    if (props.isMobile) {
+    if (props.isMobile && !props.isFullWidthOnMobile) {
       return css`
         width: 50%;
       `;

@@ -7,6 +7,7 @@ export interface IButtonProps extends ButtonProps {
   onClick?: () => void;
   primary?: boolean;
   secondary?: boolean;
+  justify?: string;
 }
 
 const Button = (props: IButtonProps) => {

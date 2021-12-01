@@ -33,3 +33,9 @@ export enum INJECTED_PROVIDERS {
   FALLBACK = 'Web3',
   NOT_DETECTED = 'NotDetected',
 }
+
+export enum PROVIDER_ERROR_CODES {
+  UserRejected = 4001,
+  WrongNetwork = 4002,
+  RequestTimeout = 4003,
+}

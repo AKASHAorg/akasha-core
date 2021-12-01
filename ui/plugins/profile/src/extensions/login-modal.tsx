@@ -6,6 +6,7 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 import i18n, { setupI18next } from '../i18n';
 
 const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon } = DS;
@@ -23,7 +24,8 @@ const LoginModal = (props: RootComponentProps) => {
   };
 
   const handleSignUpClick = () => {
-    props.navigateToModal({ name: 'signup', redirectTo: props.activeModal.redirectTo });
+    sessionStorage.setItem(StorageKeys.LAST_URL, location.pathname);
+    props.singleSpa.navigateToUrl('/auth-app/sign-up');
   };
 
   return (
