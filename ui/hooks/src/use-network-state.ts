@@ -21,6 +21,7 @@ const checkNetworkState = async () => {
  */
 export function useNetworkState(enabler?: boolean) {
   return useQuery([NETWORK_STATE_KEY], () => checkNetworkState(), {
+    initialData: { networkNotSupported: true },
     enabled: !!enabler,
     keepPreviousData: true,
   });

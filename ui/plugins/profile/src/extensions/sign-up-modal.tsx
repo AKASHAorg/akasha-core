@@ -49,6 +49,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   const handleSignUpModalClose = React.useCallback(() => {
     props.singleSpa.navigateToUrl(location.pathname);
     _handleModalClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
@@ -150,7 +151,11 @@ const SignUpModalContainer = (props: RootComponentProps) => {
   React.useEffect(() => {
     setInviteToken(localStorage.getItem('@signUpToken'));
   }, []);
-  React.useEffect(triggerInviteValidation, [inviteToken]);
+  React.useEffect(
+    triggerInviteValidation,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inviteToken],
+  );
   React.useEffect(activateAcceptButton, [termsState.checkedTermsValues]);
 
   return (

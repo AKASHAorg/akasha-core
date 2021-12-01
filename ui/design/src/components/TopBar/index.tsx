@@ -352,6 +352,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           {!shouldRenderOnboarding && renderSearchArea()}
           {props.children}
           {loggedProfileData?.ethAddress &&
+            !shouldRenderOnboarding &&
             quickAccessItems &&
             quickAccessItems.map(renderPluginButton)}
           {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
@@ -368,7 +369,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
               <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
             </Box>
           )}
-          {!loggedProfileData?.ethAddress && (
+          {(!loggedProfileData?.ethAddress || shouldRenderOnboarding) && (
             <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
               <MenuIcon
                 rotate={isMobileOnly ? 90 : 0}
