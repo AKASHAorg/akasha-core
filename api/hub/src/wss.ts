@@ -10,10 +10,11 @@ const provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETW
   projectId: process.env.AWF_FAUCET_ID,
   projectSecret: process.env.AWF_FAUCET_SECRET,
 });
-const mainNetProvider = new ethers.providers.InfuraProvider('homestead', {
-  projectId: process.env.AWF_FAUCET_ID,
-  projectSecret: process.env.AWF_FAUCET_SECRET,
-});
+Emittery.isDebugEnabled = process.env.NODE_ENV !== 'production';
+// const mainNetProvider = new ethers.providers.InfuraProvider('homestead', {
+//   projectId: process.env.AWF_FAUCET_ID,
+//   projectSecret: process.env.AWF_FAUCET_SECRET,
+// });
 const wallet = new ethers.Wallet(process.env.AWF_FAUCET_KEY).connect(provider);
 const wss = route.all('/ws/userauth', ctx => {
   const emitter = new Emittery();
@@ -66,38 +67,25 @@ const wss = route.all('/ws/userauth', ctx => {
               );
               emitter.on('challenge', async (r: any) => {
                 if (addressChallenge) {
-                  if (!r.addressChallenge) {
-                    return reject(new Error('Missing ethereum address signature challenge'));
-                  }
-                  if (!r.signUpToken) {
-                    return reject(new Error('Missing ethereum.world invite token'));
-                  }
-                  if (!r.acceptedTermsAndPrivacy) {
-                    return reject(
-                      new Error('Terms of Service and Privacy Policy were not accepted'),
-                    );
-                  }
-                  exists = await db.findByID(dbId, 'Invites', r.signUpToken);
                   if (!exists) {
-                    return reject(new Error('The invite token is not valid.'));
-                  }
-                  if (exists.used) {
-                    return reject(new Error('The invite token was already used.'));
+                    exists = await db.findByID(dbId, 'Invites', r.signUpToken);
                   }
                   exists.used = true;
                   exists.updateDate = new Date().getTime();
-                  const recoveredAddress = utils.verifyMessage(
-                    addressChallenge,
-                    r.addressChallenge,
-                  );
-                  currentUser.metaData.push({
-                    provider: 'ewa.user.consent',
-                    property: 'acceptedTermsAndPrivacy',
-                    value: r.acceptedTermsAndPrivacy,
-                  });
-                  Object.assign(currentUser, { ethAddress: utils.getAddress(recoveredAddress) });
+                  const arrAddressChallenge = utils.arrayify(r.addressChallenge);
+                  let recoveredAddress;
+                  if (arrAddressChallenge.length === 65) {
+                    recoveredAddress = utils.verifyMessage(addressChallenge, arrAddressChallenge);
+                    currentUser.metaData.push({
+                      provider: 'ewa.user.consent',
+                      property: 'acceptedTermsAndPrivacy',
+                      value: r.acceptedTermsAndPrivacy,
+                    });
+                    Object.assign(currentUser, { ethAddress: utils.getAddress(recoveredAddress) });
+                  }
                   if (
                     !r.ethAddress ||
+                    !recoveredAddress ||
                     utils.getAddress(recoveredAddress) !== utils.getAddress(r.ethAddress)
                   ) {
                     const err = new Error(
@@ -111,7 +99,7 @@ const wss = route.all('/ws/userauth', ctx => {
                         addressChallenge,
                         r.addressChallenge,
                         r.ethAddress,
-                        mainNetProvider,
+                        provider,
                       ).then(valid => {
                         logger.info(r, { valid });
                         if (valid) {
@@ -120,17 +108,21 @@ const wss = route.all('/ws/userauth', ctx => {
                           });
                           return resolve(Buffer.from(r.sig));
                         }
-                        return reject(err);
+                        return resolve(Buffer.from('0x0'));
+                        //return reject(err);
                       });
                     }
-                    return reject(err);
+                    return resolve(Buffer.from('0x0'));
+                    //return reject(err);
                   }
                 }
                 resolve(Buffer.from(r.sig));
               });
               setTimeout(() => {
-                reject(new Error('signature checking timed out'));
-              }, 45000);
+                //must always resolve or it will trigger UncaughtError
+                resolve(Buffer.from('0x0'));
+                //reject(new Error('signature checking timed out'));
+              }, 60000);
             });
           });
           const auth = await getAPISig();
@@ -171,6 +163,25 @@ const wss = route.all('/ws/userauth', ctx => {
         case 'challenge': {
           if (!data.sig) {
             throw new Error('missing signature (sig)');
+          }
+          if (addressChallenge) {
+            if (!data.addressChallenge) {
+              throw new Error('Missing ethereum address signature challenge');
+            }
+            if (!data.signUpToken) {
+              throw new Error('Missing ethereum.world invite token');
+            }
+            if (!data.acceptedTermsAndPrivacy) {
+              throw new Error('Terms of Service and Privacy Policy were not accepted');
+            }
+            const db = await getAppDB();
+            exists = await db.findByID(dbId, 'Invites', data.signUpToken);
+            if (!exists) {
+              throw new Error('The invite token is not valid.');
+            }
+            if (exists.used) {
+              throw new Error('The invite token was already used.');
+            }
           }
           await emitter.emit('challenge', data);
           break;
