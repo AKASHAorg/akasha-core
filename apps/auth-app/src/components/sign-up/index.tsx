@@ -9,6 +9,7 @@ import {
   useIsValidToken,
   useNetworkState,
   useRequiredNetworkName,
+  switchToRequiredNetwork,
 } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
@@ -83,6 +84,10 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   };
   const handleNetworkCheck = () => {
     return networkStateQuery?.refetch();
+  };
+
+  const handleSwitchNetworkMetamask = () => {
+    switchToRequiredNetwork();
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,6 +201,10 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
                 : injectedProvider.name
             } ${t('network to')}`}
             setRequiredNetworkAccentLabel={requiredNetworkName}
+            metamaskCTAIntroLabel={t('Click')}
+            metamaskCTAAccentLabel={t('here')}
+            metamaskCTALabel={t('to change the network.')}
+            otherprovidersCTALabel={t('Please change the network manually')}
             isOnRequiredNetworkLabel={
               selectedProvider === EthProviders.Torus
                 ? t('You have connected using Email or Social login. Click the button to continue')
@@ -216,6 +225,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             isOnRequiredNetwork={!networkStateQuery.data?.networkNotSupported}
             isNetworkCheckLoading={networkStateQuery?.isFetching}
             isNetworkCheckError={networkStateQuery?.isError}
+            onClickSwitchMetamaskNetwork={handleSwitchNetworkMetamask}
             onClickCheckNetwork={handleNetworkCheck}
             onProviderSelect={handleProviderSelect}
             onButtonClick={handleNextStep}

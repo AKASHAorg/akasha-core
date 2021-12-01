@@ -10,16 +10,22 @@ import { StyledButton } from './styles';
 const { Box, Text, Icon, VariableIconButton, Web3ConnectButton } = DS;
 
 interface IRequiredNetworkStepProps {
+  injectedProvider: INJECTED_PROVIDERS;
   isOnRequiredNetwork: boolean;
   setRequiredNetworkLabel?: string;
   setRequiredNetworkBoldLabel?: string;
   setRequiredNetworkAccentLabel?: string;
+  metamaskCTAIntroLabel?: string;
+  metamaskCTAAccentLabel?: string;
+  metamaskCTALabel?: string;
+  otherprovidersCTALabel?: string;
   variableIconButtonLabel?: string;
   variableIconErrorLabel?: string;
   isNetworkCheckLoading?: boolean;
   isNetworkCheckError?: boolean;
   isOnRequiredNetworkLabel?: string;
   buttonLabel?: string;
+  onClickSwitchMetamaskNetwork: () => void;
   onClickCheckNetwork?: () => void;
   onButtonClick?: () => void;
 }
@@ -31,7 +37,6 @@ export interface IStepThreeProps extends IRequiredNetworkStepProps {
   paragraphThreeBoldLabel: string;
   paragraphFourLabel: string;
   paragraphFourAccentLabel: string;
-  injectedProvider: INJECTED_PROVIDERS;
   providerDetails: IInjectedProviderDetails;
   tagLabel: string;
   walletConnectTitleLabel: string;
@@ -46,16 +51,22 @@ export interface IStepThreeProps extends IRequiredNetworkStepProps {
 
 const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
   const {
+    injectedProvider,
     isOnRequiredNetwork,
     setRequiredNetworkLabel,
     setRequiredNetworkBoldLabel,
     setRequiredNetworkAccentLabel,
+    metamaskCTAIntroLabel,
+    metamaskCTAAccentLabel,
+    metamaskCTALabel,
+    otherprovidersCTALabel,
     variableIconButtonLabel,
     variableIconErrorLabel,
     isNetworkCheckLoading,
     isNetworkCheckError,
     isOnRequiredNetworkLabel,
     buttonLabel,
+    onClickSwitchMetamaskNetwork,
     onClickCheckNetwork,
     onButtonClick,
   } = props;
@@ -93,7 +104,28 @@ const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
         <Text size="large" weight="bold" color="accentText">
           {setRequiredNetworkAccentLabel}
         </Text>
-        .
+        .{' '}
+        {injectedProvider === INJECTED_PROVIDERS.METAMASK && (
+          <>
+            <Text size="large">
+              {metamaskCTAIntroLabel}{' '}
+              <Text
+                size="large"
+                color="accentText"
+                style={{ cursor: 'pointer' }}
+                onClick={onClickSwitchMetamaskNetwork}
+              >
+                {metamaskCTAAccentLabel}
+              </Text>{' '}
+              {metamaskCTALabel}
+            </Text>
+          </>
+        )}
+        {injectedProvider !== INJECTED_PROVIDERS.METAMASK && (
+          <>
+            <Text size="large">{otherprovidersCTALabel}</Text>
+          </>
+        )}
       </Text>
       {/* video area (if injectedProvider is MetaMask): setting to the required network on MetaMask */}
       <VariableIconButton
