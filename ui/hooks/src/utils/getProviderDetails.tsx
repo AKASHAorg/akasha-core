@@ -1,6 +1,16 @@
 import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
 
-const definedIconTypes = ['coinbase', 'safe', 'trust'];
+const definedIconTypes = [
+  'safe',
+  'nifty',
+  'dapper',
+  'opera',
+  'trust',
+  'coinbase',
+  'imtoken',
+  'status',
+  'web3',
+];
 
 export interface IInjectedProviderDetails {
   iconType: string;
