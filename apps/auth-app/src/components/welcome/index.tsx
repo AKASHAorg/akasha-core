@@ -2,12 +2,32 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import routes, { CUSTOMISE_PROFILE, FEED_APP, SIGN_IN } from '../../routes';
 
 const { Box, WelcomeCard } = DS;
 
 const Welcome: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation();
+
+  const loginQuery = useGetLogin();
+
+  React.useEffect(() => {
+    // redirect to sign in page if not logged in
+    if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
+      props.singleSpa.navigateToUrl(routes[SIGN_IN]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handlePrimaryButtonClick = () => {
+    props.singleSpa.navigateToUrl(routes[FEED_APP]);
+  };
+
+  const handleSecondaryButtonClick = () => {
+    props.singleSpa.navigateToUrl(routes[CUSTOMISE_PROFILE]);
+  };
 
   return (
     <Box
@@ -28,8 +48,8 @@ const Welcome: React.FC<RootComponentProps> = props => {
         paragraphThreeLabel={t('We are very happy you’ve joined us!')}
         primaryButtonLabel={t('Browse Ethereum World')}
         secondaryButtonLabel={t('Customize My Profile')}
-        handlePrimaryButtonClick={() => null}
-        handleSecondaryButtonClick={() => null}
+        handlePrimaryButtonClick={handlePrimaryButtonClick}
+        handleSecondaryButtonClick={handleSecondaryButtonClick}
       />
     </Box>
   );
