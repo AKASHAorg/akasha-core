@@ -32,7 +32,17 @@ const getRequiredNetwork = async () => {
   return networkName.data;
 };
 
-/* A hook to get injected provider from the SDK */
+/**
+ * An utility function to switch to required network - Metamask
+ * */
+export const switchToRequiredNetwork = async () => {
+  const sdk = getSDK();
+  await lastValueFrom(sdk.services.common.web3.switchToRequiredNetwork());
+};
+
+/**
+ * A hook to get injected provider from the SDK
+ * */
 export function useInjectedProvider() {
   return useQuery([INJECTED_PROVIDER_KEY], () => getInjectedProvider(), {
     initialData: {
@@ -47,7 +57,10 @@ export function useInjectedProvider() {
   });
 }
 
-/* A hook to connect to injected provider */
+/**
+ * A hook to connect to injected provider
+ * @param provider -: any of type EthProviders
+ * */
 export function useConnectProvider(provider: EthProviders) {
   return useQuery([CONNECT_PROVIDER_KEY], () => connectProvider(provider), {
     enabled: provider !== EthProviders.None,
@@ -55,7 +68,9 @@ export function useConnectProvider(provider: EthProviders) {
   });
 }
 
-/* A hook to get required network name from the SDK */
+/**
+ * A hook to get required network name from the SDK
+ * */
 export function useRequiredNetworkName() {
   return useQuery([REQUIRED_NETWORK_KEY], () => getRequiredNetwork(), {
     initialData: 'required',
