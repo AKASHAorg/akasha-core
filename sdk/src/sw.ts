@@ -126,13 +126,16 @@ const genKey = async () => {
 };
 
 self.addEventListener('message', async event => {
-  if (!event.data.type || !event.data.value || !event.ports?.length) {
+  if (!event.data.type || !event.ports?.length) {
     return;
   }
   switch (event.data.type) {
     case 'ENCRYPT_VALUE':
       if (!key) {
         await genKey();
+      }
+      if (!event.data.hasOwnProperty('value')) {
+        break;
       }
       const iv = self.crypto.getRandomValues(new Uint8Array(16));
       const ciphertext = await self.crypto.subtle.encrypt(
@@ -143,7 +146,11 @@ self.addEventListener('message', async event => {
         key,
         new TextEncoder().encode(event.data.value),
       );
-      event.ports[0].postMessage({ iv: iv.join(IV_SEPARATOR), ciphertext });
+      const ciphertextView = new Uint8Array(ciphertext);
+      event.ports[0].postMessage({
+        iv: iv.join(IV_SEPARATOR),
+        ciphertext: ciphertextView.join(IV_SEPARATOR),
+      });
       event.ports[0].close();
       break;
     case 'DECRYPT_VALUE':
@@ -154,13 +161,14 @@ self.addEventListener('message', async event => {
         await genKey();
       }
       const ivArray = Uint8Array.from(event.data.iv.split(IV_SEPARATOR));
+      const ciphertextArray = Uint8Array.from(event.data.ciphertext.split(IV_SEPARATOR));
       const decrypted = await self.crypto.subtle.decrypt(
         {
           name: 'AES-GCM',
           iv: ivArray,
         },
         key,
-        event.data.ciphertext,
+        ciphertextArray.buffer,
       );
       const decoded = new TextDecoder().decode(decrypted);
       event.ports[0].postMessage({ value: decoded });
