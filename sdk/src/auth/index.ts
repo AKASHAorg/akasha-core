@@ -197,7 +197,6 @@ export default class AWF_Auth implements AWF_IAuth {
         }
         this._log.info(`using eth address ${address}`);
         if (sessValue) {
-          console.time('Decrypt');
           const rawKey: { value?: string } = await executeOnSW(
             Object.assign(
               {
@@ -206,8 +205,6 @@ export default class AWF_Auth implements AWF_IAuth {
               JSON.parse(sessValue),
             ),
           );
-          console.timeEnd('Decrypt');
-          console.log('rawKey', rawKey);
           if (rawKey?.value) {
             this.#identity = PrivateKey.fromString(rawKey.value);
           }
@@ -228,12 +225,10 @@ export default class AWF_Auth implements AWF_IAuth {
       }
     }
     await this.#_setupHubClient();
-    console.time('Encrypt');
     const swResponse = await executeOnSW({
       type: SwActionType.ENCRYPT,
       value: this.#identity.toString(),
     });
-    console.timeEnd('Encrypt');
     if (swResponse) {
       localStorage.setItem(this.sessKey, JSON.stringify(swResponse));
     }
