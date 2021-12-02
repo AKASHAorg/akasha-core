@@ -16,6 +16,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 import { extensionPointsMap } from '../extension-points';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
@@ -24,6 +25,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   const { singleSpa, getMenuItems, uiEvents } = props;
 
   const { navigateToUrl } = singleSpa;
+  const location = useLocation();
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
 
@@ -106,22 +108,26 @@ const TopbarComponent = (props: RootComponentProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
-  React.useEffect(() => {
-    const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
-    if (loginQuery.data?.ethAddress && !isLoadingProfile) {
-      if (loggedProfileData && !loggedProfileData.userName) {
-        return props.navigateToModal({
-          name: 'update-profile',
-        });
-      }
-    }
-  }, [
-    profileDataReq.isLoading,
-    loginQuery.data?.ethAddress,
-    loggedProfileData,
-    loginQuery.data?.pubKey,
-    props,
-  ]);
+  // React.useEffect(() => {
+  //   const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
+  //   if (
+  //     loginQuery.data?.ethAddress &&
+  //     !isLoadingProfile &&
+  //     singleSpa.getMountedApps().find(app => !app.includes('app-auth'))
+  //   ) {
+  //     if (loggedProfileData && !loggedProfileData.userName) {
+  //       return props.navigateToModal({
+  //         name: 'update-profile',
+  //       });
+  //     }
+  //   }
+  // }, [
+  //   profileDataReq.isLoading,
+  //   loginQuery.data?.ethAddress,
+  //   loggedProfileData,
+  //   loginQuery.data?.pubKey,
+  //   props,
+  // ]);
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
@@ -138,7 +144,8 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleSignUpClick = () => {
-    props.navigateToModal({ name: 'signup' });
+    sessionStorage.setItem(StorageKeys.LAST_URL, location.pathname);
+    navigateToUrl('/auth-app/sign-up');
   };
 
   const handleFeedbackModalShow = () => {
@@ -177,7 +184,6 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const { t } = useTranslation();
-  const location = useLocation();
 
   const onExtMount = (name: string) => {
     uiEvents.next({

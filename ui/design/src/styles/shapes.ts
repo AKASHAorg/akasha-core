@@ -5,6 +5,11 @@ export interface IShapes {
   largeBorderRadius: string;
   fontFamily: string;
   defaultFontSize: string;
+  thickness: {
+    small: string;
+    medium: string;
+    large: string;
+  };
   fontSizes: {
     small: {
       size: string;
@@ -40,6 +45,11 @@ const shapes: IShapes = {
   largeBorderRadius: '11px',
   fontFamily: 'Inter, Content-font, Roboto, sans-serif',
   defaultFontSize: '1em',
+  thickness: {
+    small: '1px',
+    medium: '2px',
+    large: '3px',
+  },
   fontSizes: {
     small: {
       size: '0.688rem',
@@ -64,7 +74,7 @@ const shapes: IShapes = {
   },
   fontWeight: {
     regular: 400,
-    bold: 500,
+    bold: 600,
   },
 };
 

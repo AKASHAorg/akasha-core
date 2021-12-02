@@ -5,6 +5,8 @@ export enum AUTH_EVENTS {
   SIGN_OUT = '#auth#signOut',
   WAIT_FOR_AUTH = '#auth#waitForAuth',
   MARK_MSG_READ = '#auth#markMsgRead',
+  CONNECT_ADDRESS = '#auth#connectAddress',
+  CONNECT_ADDRESS_SUCCESS = '#auth#aconnectAddress#success',
   SIGN_AUTH_MESSAGE = '#auth#signAuthMessage',
   SIGN_AUTH_MESSAGE_SUCCESS = '#auth#signAuthMessage#success',
   SIGN_COMPOSED_MESSAGE = '#auth#signComposedMessage',

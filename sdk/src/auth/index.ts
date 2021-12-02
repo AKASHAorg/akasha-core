@@ -176,15 +176,13 @@ export default class AWF_Auth implements AWF_IAuth {
         }
       }
       try {
-        await this._web3.connect(currentProvider);
-        await lastValueFrom(this._web3.checkCurrentNetwork());
-        const address = await lastValueFrom(this._web3.getCurrentAddress());
+        const address = await this._connectAddress(currentProvider);
         const localUser = localStorage.getItem(this.currentUserKey);
-        this.sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
+        this.sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
         const sessValue = localStorage.getItem(this.sessKey);
         if (localUser && sessValue) {
           const tmpSession = JSON.parse(localUser);
-          if (address.data && tmpSession?.ethAddress === address.data) {
+          if (address && tmpSession?.ethAddress === address) {
             this._globalChannel.next({
               data: tmpSession,
               event: AUTH_EVENTS.SIGN_IN,
@@ -195,9 +193,9 @@ export default class AWF_Auth implements AWF_IAuth {
           }
         }
         if (args.checkRegistered) {
-          await lastValueFrom(this.checkIfSignedUp(address.data));
+          await lastValueFrom(this.checkIfSignedUp(address));
         }
-        this._log.info(`using eth address ${address.data}`);
+        this._log.info(`using eth address ${address}`);
         if (sessValue) {
           console.time('Decrypt');
           const rawKey: { value?: string } = await executeOnSW(
@@ -271,6 +269,25 @@ export default class AWF_Auth implements AWF_IAuth {
     });
     this._lockSignIn = false;
     return Object.assign(this.currentUser, authStatus);
+  }
+
+  async _connectAddress(provider: EthProviders) {
+    this._globalChannel.next({
+      data: {},
+      event: AUTH_EVENTS.CONNECT_ADDRESS,
+    });
+    await this._web3.connect(provider);
+    await lastValueFrom(this._web3.checkCurrentNetwork());
+    const resp = await lastValueFrom(this._web3.getCurrentAddress());
+    this._globalChannel.next({
+      data: { address: resp.data },
+      event: AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS,
+    });
+    return resp.data;
+  }
+
+  connectAddress(provider: EthProviders) {
+    return createObservableStream(this._connectAddress(provider));
   }
 
   signAuthMessage() {

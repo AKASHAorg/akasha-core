@@ -38,15 +38,6 @@ const SignUpCard: React.FC<ISignUpCardProps> = props => {
         height={{ min: 'fit-content' }}
       >
         <Box direction="row">
-          {/* back icon */}
-          <Icon
-            type="arrowLeft"
-            size="sm"
-            accentColor={true}
-            clickable={true}
-            onClick={handleIconClick}
-            style={{ position: 'absolute' }} // allows proper centering of title box
-          />
           {/* title Box */}
           <Box direction="row" margin={{ vertical: '0', horizontal: 'auto' }}>
             <BoldText size="xlarge">{titleLabel}</BoldText>
@@ -55,11 +46,20 @@ const SignUpCard: React.FC<ISignUpCardProps> = props => {
             </BoldText>
             <BoldText size="xlarge">{stepLabels[activeIndex]}</BoldText>
           </Box>
-          <Box style={{ visibility: 'hidden' }}></Box>
+          {/* close icon */}
+          <Icon
+            type="close"
+            size="sm"
+            accentColor={true}
+            clickable={true}
+            onClick={handleIconClick}
+            style={{ position: 'absolute' }} // allows proper centering of title box
+          />
         </Box>
         <Box
           direction="row"
           justify="center"
+          margin={{ bottom: 'xlarge' }}
           border={{ side: 'bottom', color: 'border', size: 'xsmall' }}
         >
           <StepIndicator stepLabels={stepLabels} activeIndex={activeIndex} margin="large" />

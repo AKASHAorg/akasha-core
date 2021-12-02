@@ -56,3 +56,7 @@ export enum UpdateProfileStatus {
   UPDATE_IN_PROGRESS,
   UPDATE_COMPLETE,
 }
+
+export enum StorageKeys {
+  LAST_URL = 'lastUrl',
+}
