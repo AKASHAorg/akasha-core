@@ -27,7 +27,7 @@ module.exports = Object.assign(baseConfig, {
     server: {
       type: 'https',
       options:
-        process.env.DEV_CERT_KEY && process.env.DEV_CERT
+        process.env.DEV_CERT_KEY_PATH && process.env.DEV_CERT_PATH
           ? {
               key: fs.readFileSync(process.env.DEV_CERT_KEY_PATH),
               cert: fs.readFileSync(process.env.DEV_CERT_PATH),
