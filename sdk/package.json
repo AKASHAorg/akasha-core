@@ -24,6 +24,7 @@
     "inversify": "6.0.1",
     "pino": "6.13.3",
     "quick-lru": "6.0.2",
+    "idb-keyval": "6.0.3",
     "ipfs-utils": "9.0.2",
     "reflect-metadata": "0.1.13",
     "rxjs": "7.3.0",
