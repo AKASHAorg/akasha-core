@@ -26,8 +26,8 @@ const { SignUpCard, Box, styled } = DS;
 
 const WrapperBox = styled(Box)`
   width: 38%;
-  @media screen and(max-width: ${props => props.theme.breakpoints.medium}) {
-    width: 100%;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    width: 95%;
   }
 `;
 
