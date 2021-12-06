@@ -5,7 +5,18 @@ import { utils, ethers } from 'ethers';
 import { getAPISig, getAppDB, isValidSignature, logger, newClientDB } from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
+import { promRegistry } from './api';
+import { Counter } from 'prom-client';
 
+const wssErrorsCounter = new Counter({
+  name: 'wss_requests_errored',
+  help: 'The amount of wss requests that have encountered errors.',
+  labelNames: ['eventName', 'errorType'],
+  registers: [promRegistry],
+});
+
+const GENERAL_ERROR_METRIC = 'general error, not breaking';
+const CHALLENGE_ERROR_METRIC = 'challenge event metric';
 const provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETWORK, {
   projectId: process.env.AWF_FAUCET_ID,
   projectSecret: process.env.AWF_FAUCET_SECRET,
@@ -28,7 +39,9 @@ const wss = route.all('/ws/userauth', ctx => {
       switch (data.type) {
         case 'token': {
           if (!data.pubkey) {
-            throw new Error('missing pubkey');
+            const msg = 'missing pubkey';
+            wssErrorsCounter.inc({ eventName: GENERAL_ERROR_METRIC, errorType: msg });
+            throw new Error(msg);
           }
           logger.info(`wss:refreshAppDB`);
           const db = await getAppDB();
@@ -124,9 +137,17 @@ const wss = route.all('/ws/userauth', ctx => {
                           return resolve(Buffer.from(r.sig));
                         }
                         //return resolve(Buffer.from('0x0'));
+                        wssErrorsCounter.inc({
+                          eventName: CHALLENGE_ERROR_METRIC,
+                          errorType: 'invariant sig',
+                        });
                         return reject(err);
                       });
                     }
+                    wssErrorsCounter.inc({
+                      eventName: CHALLENGE_ERROR_METRIC,
+                      errorType: 'bad request',
+                    });
                     //return resolve(Buffer.from('0x0'));
                     return reject(err);
                   }
@@ -137,6 +158,7 @@ const wss = route.all('/ws/userauth', ctx => {
                 //must always resolve or it will trigger UncaughtError
                 //resolve(Buffer.from('0x0'));
                 reject(new Error('signature checking timed out'));
+                wssErrorsCounter.inc({ eventName: CHALLENGE_ERROR_METRIC, errorType: 'timeout' });
               }, 60000);
             });
           });
@@ -177,7 +199,9 @@ const wss = route.all('/ws/userauth', ctx => {
         }
         case 'challenge': {
           if (!data.sig) {
-            throw new Error('missing signature (sig)');
+            const msg = 'missing signature (sig)';
+            wssErrorsCounter.inc({ eventName: GENERAL_ERROR_METRIC, errorType: msg });
+            throw new Error(msg);
           }
           await emitter.emit('challenge', data);
           break;
@@ -191,6 +215,7 @@ const wss = route.all('/ws/userauth', ctx => {
           value: error.message,
         }),
       );
+      wssErrorsCounter.inc({ eventName: GENERAL_ERROR_METRIC, errorType: 'all' });
     }
   });
 });
