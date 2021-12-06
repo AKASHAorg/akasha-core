@@ -29,6 +29,8 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import LinkPreview from './link-preview';
+import { ImageGallery, ImageObject } from './image-gallery';
+import isUrl from 'is-url';
 
 const MAX_LENGTH = 280;
 
@@ -107,6 +109,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
   const mediaIconRef: React.RefObject<HTMLDivElement> = useRef(null);
   const emojiIconRef: React.RefObject<HTMLDivElement> = useRef(null);
+  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
@@ -122,6 +125,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
+
+  const [uploading, setUploading] = React.useState(false);
+  const [images, setImages] = React.useState<ImageObject[]>([]);
 
   const handleGetLinkPreview = async (url: string) => {
     setLinkPreviewUploading(true);
@@ -141,8 +147,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const slicedMentions = mentions.slice(0, 3);
 
   /**
-   * this is needed to check if any popover is open from the parent component
-   * if there are more popovers added their state should also be exposed here
+   * this is needed to check internal state from the parent component
+   * to prevent closing the comment editor when the user has uploaded images
+   * or has an open popover
    */
   React.useImperativeHandle(
     ref,
@@ -150,21 +157,54 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       getPopoversState: () => {
         return emojiPopoverOpen;
       },
+      getImagesState: () => {
+        return images.length > 0;
+      },
+      getUploadingState: () => {
+        return uploading;
+      },
     }),
-    [emojiPopoverOpen],
+    [emojiPopoverOpen, images, uploading],
   );
 
   /**
    * initialise editor with all the required plugins
    */
   const editor = useMemo(
-    () =>
-      withLinks(
-        withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
-        handleGetLinkPreview,
-      ),
+    () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
     [],
   );
+
+  /**
+   * insert links here to be able to access the image state
+   * and prevent link preview generation when there are images
+   * already uploaded or currently uploading
+   */
+  const { insertData, insertText } = editor;
+
+  const handleInsertLink = (text: string) => {
+    CustomEditor.insertLink(editor, { url: text.trim() });
+    if (images.length === 0 && !uploading) {
+      handleGetLinkPreview(text);
+    }
+  };
+
+  editor.insertText = text => {
+    if (text && isUrl(text.trim())) {
+      handleInsertLink(text);
+    } else {
+      insertText(text);
+    }
+  };
+
+  editor.insertData = data => {
+    const text = data.getData('text/plain');
+    if (text && isUrl(text.trim())) {
+      handleInsertLink(text);
+    } else {
+      insertData(data);
+    }
+  };
 
   /**
    * set the selection at the end of the content when component is mounted
@@ -208,6 +248,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       app: publishingApp,
       quote: embedEntryData,
       linkPreview: linkPreviewState,
+      images: images,
       tags: [],
       mentions: [],
       version: 1,
@@ -240,7 +281,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    *  handles selection for mentions and tags
    */
   const handleChange = (value: Descendant[]) => {
-    let imageCounter = 0;
     let textLength = 0;
 
     /**
@@ -249,7 +289,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
      */
     (function computeLength(nodeArr: Descendant[]) {
       if (nodeArr.length) {
-        nodeArr.map((node: Descendant) => {
+        nodeArr.forEach((node: Descendant) => {
           if (SlateText.isText(node)) {
             textLength += node.text.length;
           }
@@ -259,9 +299,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           if (Element.isElement(node) && node.type === 'link' && node.url?.length) {
             textLength += node.url?.length;
           }
-          if (Element.isElement(node) && node.type === 'image') {
-            imageCounter++;
-          }
           if (Element.isElement(node) && node.children) {
             computeLength(node.children);
           }
@@ -270,17 +307,10 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     })(value);
 
     /** disable publishing if no images/text or text too long */
-    if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
+    if ((textLength > 0 || images.length !== 0) && textLength <= MAX_LENGTH) {
       setPublishDisabledInternal(false);
-    } else if ((textLength === 0 && imageCounter === 0) || textLength > MAX_LENGTH) {
+    } else if ((textLength === 0 && images.length === 0) || textLength > MAX_LENGTH) {
       setPublishDisabledInternal(true);
-    }
-
-    /** limits to only 1 image*/
-    if (imageCounter === 0) {
-      setImageUploadDisabled(false);
-    } else if (imageCounter > 0) {
-      setImageUploadDisabled(true);
     }
 
     if (typeof setLetterCount === 'function') {
@@ -470,28 +500,45 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   // image insertion
 
-  const [uploading, setUploading] = React.useState(false);
-  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-
   const handleInsertImageLink = (data: ImageData) => {
     if (!data.src || !data.size) {
       return;
     }
-    CustomEditor.insertImage(editor, data.src, data.size);
+    if (images.length > 7) {
+      setImageUploadDisabled(true);
+    }
+    // clear any existing link preview when inserting an image
+    if (linkPreviewState) {
+      setLinkPreviewState(null);
+    }
+    const imgData = { ...data, id: `${Date.now()}-${data.src}` };
+    if (images.length < 9) {
+      setImages(prev => [...prev, imgData]);
+    }
+    setPublishDisabledInternal(false);
+
+    // CustomEditor.insertImage(editor, data.src, data.size);
   };
 
   /**
-   * disable uploading media if there is a picture uploading or there is one already inserted
+   * disable uploading media if there is a picture uploading or max number of images already
    */
   const handleMediaClick = () => {
     if (uploadInputRef.current && !uploading && !imageUploadDisabled) {
       uploadInputRef.current.click();
     }
-    return;
   };
 
-  const handleDeleteImage = (element: Element) => {
-    CustomEditor.deleteImage(editor, element);
+  const handleDeleteImage = (element: ImageObject) => {
+    const newImages = images.filter(image => image.id !== element.id);
+    if (newImages.length < 9) {
+      setImageUploadDisabled(false);
+    }
+    if (newImages.length === 0) {
+      setPublishDisabledInternal(true);
+    }
+    setImages(newImages);
+    // CustomEditor.deleteImage(editor, element);
   };
 
   return (
@@ -522,7 +569,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                     () => null,
                     () => null,
                     () => null,
-                    handleDeleteImage,
                   )
                 }
                 renderLeaf={renderLeaf}
@@ -547,6 +593,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 />
               )}
             </Slate>
+            <ImageGallery images={images} handleDeleteImage={handleDeleteImage} />
             <ImageUpload
               uploading={uploading}
               setUploading={setUploading}
@@ -624,7 +671,7 @@ EditorBox.defaultProps = {
   postLabel: 'Post',
   disablePublishLabel: 'Authenticating',
   placeholderLabel: 'Share your thoughts',
-  uploadingImageLabel: 'Uploading Image',
+  uploadingImageLabel: 'Loading',
   uploadFailedLabel: 'Upload failed.',
 };
 

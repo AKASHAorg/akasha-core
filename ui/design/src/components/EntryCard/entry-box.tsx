@@ -24,6 +24,8 @@ import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { EntryImageGallery, ImageObject } from './entry-image-gallery';
+import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -295,6 +297,21 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     [entryData.quote, props.isRemoved],
   );
 
+  const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
+  const [currentImage, setCurrentImage] = React.useState<ImageObject | null>(null);
+
+  /**
+   * opens the fullscreen image modal and shows the clicked upon image in it
+   */
+  const handleClickImage = (image: ImageObject) => {
+    setCurrentImage(image);
+    setImageOverlayOpen(true);
+  };
+
+  const closeImageOverlay = () => {
+    setImageOverlayOpen(false);
+  };
+
   return (
     <ViewportSizeProvider>
       <Box style={style}>
@@ -499,6 +516,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               handleLinkClick={singleSpaNavigate}
             />
           </Box>
+        )}
+        {entryData.images && (
+          <Box pad="medium">
+            <EntryImageGallery images={entryData.images} handleClickImage={handleClickImage} />
+          </Box>
+        )}
+        {imageOverlayOpen && (
+          <MultipleImageOverlay
+            clickedImg={currentImage}
+            images={entryData.images}
+            closeModal={closeImageOverlay}
+          />
         )}
         {showQuote && (
           <Box

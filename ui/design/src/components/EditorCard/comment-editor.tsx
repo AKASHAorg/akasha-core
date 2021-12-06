@@ -43,7 +43,9 @@ const CommentEditor: React.FC<
     if (
       showEditor &&
       isEqual(contentState, editorDefaultValue) &&
-      !editorRef.current?.getPopoversState()
+      !editorRef.current?.getPopoversState() &&
+      !editorRef.current?.getUploadingState() &&
+      !editorRef.current?.getImagesState()
     ) {
       setShowEditor(false);
     }
@@ -51,9 +53,7 @@ const CommentEditor: React.FC<
 
   const handlePublish = (data: IPublishData) => {
     onPublish(data);
-    if (props.isShown) {
-      setShowEditor(false);
-    }
+    setShowEditor(false);
   };
 
   useOnClickAway(wrapperRef, handleClickAway);
