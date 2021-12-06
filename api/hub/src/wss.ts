@@ -67,9 +67,24 @@ const wss = route.all('/ws/userauth', ctx => {
               );
               emitter.on('challenge', async (r: any) => {
                 if (addressChallenge) {
-                  if (!exists) {
-                    exists = await db.findByID(dbId, 'Invites', r.signUpToken);
+                  if (!r.addressChallenge) {
+                    return reject(new Error('Missing ethereum address signature challenge'));
                   }
+                  if (!r.signUpToken) {
+                    return reject(new Error('Missing ethereum.world invite token'));
+                  }
+                  if (!r.acceptedTermsAndPrivacy) {
+                    return reject(
+                      new Error('Terms of Service and Privacy Policy were not accepted'),
+                    );
+                  }
+                  if (!exists) {
+                    return reject(new Error('The invite token is not valid.'));
+                  }
+                  if (exists.used) {
+                    return reject(new Error('The invite token was already used.'));
+                  }
+                  exists = await db.findByID(dbId, 'Invites', r.signUpToken);
                   exists.used = true;
                   exists.updateDate = new Date().getTime();
                   const arrAddressChallenge = utils.arrayify(r.addressChallenge);
@@ -108,20 +123,20 @@ const wss = route.all('/ws/userauth', ctx => {
                           });
                           return resolve(Buffer.from(r.sig));
                         }
-                        return resolve(Buffer.from('0x0'));
-                        //return reject(err);
+                        //return resolve(Buffer.from('0x0'));
+                        return reject(err);
                       });
                     }
-                    return resolve(Buffer.from('0x0'));
-                    //return reject(err);
+                    //return resolve(Buffer.from('0x0'));
+                    return reject(err);
                   }
                 }
                 resolve(Buffer.from(r.sig));
               });
               setTimeout(() => {
                 //must always resolve or it will trigger UncaughtError
-                resolve(Buffer.from('0x0'));
-                //reject(new Error('signature checking timed out'));
+                //resolve(Buffer.from('0x0'));
+                reject(new Error('signature checking timed out'));
               }, 60000);
             });
           });
@@ -163,25 +178,6 @@ const wss = route.all('/ws/userauth', ctx => {
         case 'challenge': {
           if (!data.sig) {
             throw new Error('missing signature (sig)');
-          }
-          if (addressChallenge) {
-            if (!data.addressChallenge) {
-              throw new Error('Missing ethereum address signature challenge');
-            }
-            if (!data.signUpToken) {
-              throw new Error('Missing ethereum.world invite token');
-            }
-            if (!data.acceptedTermsAndPrivacy) {
-              throw new Error('Terms of Service and Privacy Policy were not accepted');
-            }
-            const db = await getAppDB();
-            exists = await db.findByID(dbId, 'Invites', data.signUpToken);
-            if (!exists) {
-              throw new Error('The invite token is not valid.');
-            }
-            if (exists.used) {
-              throw new Error('The invite token was already used.');
-            }
           }
           await emitter.emit('challenge', data);
           break;
