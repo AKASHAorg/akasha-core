@@ -159,7 +159,7 @@ export default class AWF_ENS implements AWF_IENS {
     const AkashaRegistrar = await ContractFactory.fromSolidity(AkashaRegistrarABI);
     const ReverseRegistrar = await ContractFactory.fromSolidity(ReverseRegistrarABI);
     const ENS = await ContractFactory.fromSolidity(EnsABI);
-    const signer = await this._web3.getSigner();
+    const signer = this._web3.getSigner();
     this._AkashaRegistrarInstance = await AkashaRegistrar.connect(signer);
     this._AkashaRegistrarInstance = await this._AkashaRegistrarInstance.attach(
       this.REGISTRAR_ADDRESS,

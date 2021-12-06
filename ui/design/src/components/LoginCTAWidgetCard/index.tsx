@@ -9,10 +9,11 @@ const StyledText = styled(Text)`
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
 `;
 
-const StyledAnchor = styled(Anchor)`
+export const CTAAnchor = styled(Anchor)<{ isBold?: boolean }>`
   color: ${props => props.theme.colors.accent};
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
-  font-weight: ${props => props.theme.shapes.fontWeight.regular};
+  font-weight: ${props =>
+    props.isBold ? props.theme.shapes.fontWeight.bold : props.theme.shapes.fontWeight.regular};
   &:hover {
     text-decoration: none;
   }
@@ -52,7 +53,7 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           <StyledText margin={{ top: 'xsmall' }}>{subtitle}</StyledText>
           <StyledText margin={{ top: 'xsmall' }}>
             {beforeLinkLabel}
-            <StyledAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />
+            <CTAAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />
             {afterLinkLabel}
           </StyledText>
           <StyledText margin={{ top: 'xsmall' }}>{disclaimerLabel}</StyledText>

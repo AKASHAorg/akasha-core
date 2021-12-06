@@ -25,9 +25,8 @@ const StepIndicator: React.FC<IStepIndicatorProps> = props => {
       margin={{ vertical: margin }}
     >
       {stepLabels.map((step, idx) => (
-        <>
+        <React.Fragment key={idx + step}>
           <Box
-            key={idx + step}
             height="1.5rem"
             width="1.5rem"
             round={true}
@@ -50,7 +49,7 @@ const StepIndicator: React.FC<IStepIndicatorProps> = props => {
           {idx !== stepLabels.length - 1 && (
             <Box width="1rem" border={{ side: 'bottom', color: 'border', size: 'xsmall' }} />
           )}
-        </>
+        </React.Fragment>
       ))}
     </Box>
   );

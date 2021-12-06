@@ -197,10 +197,11 @@ const validateUsername = async (username: string) => {
 /**
  * Hook to check if a username is available
  * @param username - name to check for
+ * @param enabler - prevent hook from running in passed falsy
  */
-export function useUsernameValidation(username: string) {
+export function useUsernameValidation(username: string, enabler = true) {
   return useQuery([VALIDATE_USERNAME_KEY, username], async () => validateUsername(username), {
-    enabled: !!username,
+    enabled: enabler && !!username,
   });
 }
 

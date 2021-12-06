@@ -58,12 +58,13 @@ import { TagSearchCard } from './components/TagCard/tag-search-card';
 
 import FilterCard from './components/FilterCard';
 import SwitchCard from './components/SwitchCard';
+import Tag from './components/Tag';
 import MdCard from './components/MdCard';
 
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
 import AppsWidgetCard from './components/AppsWidgetCard';
 import CookieWidgetCard from './components/CookieCard';
-import LoginCTAWidgetCard from './components/LoginCTAWidgetCard';
+import LoginCTAWidgetCard, { CTAAnchor } from './components/LoginCTAWidgetCard';
 import SourcesWidgetCard from './components/SourcesWidgetCard';
 import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
 import TopicsWidgetCard from './components/TopicsWidgetCard';
@@ -79,7 +80,7 @@ import IconButton from './components/IconButton';
 import IconLink from './components/IconLink';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
-import SelectAddressButton from './components/SelectAddressButton';
+import VariableIconButton from './components/VariableIconButton';
 import Web3ConnectButton from './components/Web3ConnectButton';
 
 import AreaChart from './components/AreaChart';
@@ -135,7 +136,9 @@ import SelectPopover from './components/SelectPopover';
 
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import TextIcon from './components/TextIcon';
+import LinkInput from './components/TextInputIconForm';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
+import Checkbox from './components/Checkbox';
 // import VirtualList from './components/VirtualList';
 import Helmet from 'react-helmet';
 import Spinner from './components/Spinner';
@@ -143,6 +146,9 @@ import Spinner from './components/Spinner';
 import TransparencyLogMiniCard from './components/TransparencyLogMiniCard';
 import TransparencyLogDetailCard from './components/TransparencyLogDetailCard';
 import TransparencyLogBanner from './components/TransparencyLogBanner';
+import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
+import WalletRequestStep from './components/WalletRequestStep';
+import WelcomeCard from './components/WelcomeCard';
 
 /* Utilities (these are not components) */
 import responsiveBreakpoints from './styles/responsive-breakpoints';
@@ -156,8 +162,6 @@ import darkTheme from './styles/themes/dark';
 import lightTheme from './styles/themes/light';
 import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
-
-import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
 
 /* Grommet utils */
 // @TODO: fix this export style...
@@ -216,7 +220,7 @@ const exported = {
   SignUpModal,
   ProfileAvatarButton,
   VoteIconButton,
-  SelectAddressButton,
+  VariableIconButton,
   Web3ConnectButton,
   CommentInput,
   SearchInput,
@@ -236,6 +240,7 @@ const exported = {
   Sidebar,
   Text,
   TextIcon,
+  LinkInput,
   Topbar,
   createTheme,
   darkTheme,
@@ -277,12 +282,14 @@ const exported = {
   StepIndicator,
   CookieWidgetCard,
   LoginCTAWidgetCard,
+  CTAAnchor,
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
   SignUpCard,
   FilterCard,
   SwitchCard,
+  Tag,
   MdCard,
   EntryPublishErrorCard,
   StyledLayer,
@@ -291,6 +298,9 @@ const exported = {
   StatModal,
   EntryList,
   StyledSelectBox,
+  Checkbox,
+  WalletRequestStep,
+  WelcomeCard,
 };
 
 export default exported;

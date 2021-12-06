@@ -1,4 +1,4 @@
-import { AUTH_MESSAGE, authStatus } from './constants';
+import { AUTH_MESSAGE, authStatus, SwActionType } from './constants';
 import {
   Buckets,
   Client,
@@ -30,6 +30,7 @@ import { Buffer } from 'buffer';
 import { PublicKey } from '@textile/threaddb';
 import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
+import { executeOnSW } from './helpers';
 
 @injectable()
 export default class AWF_Auth implements AWF_IAuth {
@@ -89,9 +90,9 @@ export default class AWF_Auth implements AWF_IAuth {
         if (type === this.SYNC_REQUEST) {
           if (this.currentUser) {
             const response = {
-              [this.providerKey]: sessionStorage.getItem(this.providerKey),
-              [this.currentUserKey]: sessionStorage.getItem(this.currentUserKey),
-              identity: { key: this.sessKey, value: this.#identity?.toString() },
+              [this.providerKey]: localStorage.getItem(this.providerKey),
+              [this.currentUserKey]: localStorage.getItem(this.currentUserKey),
+              identity: { key: this.sessKey },
             };
             this.channel.postMessage({ response, type: this.SYNC_RESPONSE });
           }
@@ -99,9 +100,6 @@ export default class AWF_Auth implements AWF_IAuth {
           const { response } = event.data;
           if (response && response.identity.key !== this.sessKey) {
             this._log.info('syncing session');
-            sessionStorage.setItem(this.providerKey, response[this.providerKey]);
-            sessionStorage.setItem(response?.identity?.key, response?.identity?.value);
-            sessionStorage.setItem(this.currentUserKey, response[this.currentUserKey]);
             this.currentUser = null;
             this._getCurrentUser().then(data => this._log.info('logged in'));
           }
@@ -167,10 +165,10 @@ export default class AWF_Auth implements AWF_IAuth {
       }
       this._lockSignIn = true;
       if (args.provider === EthProviders.None) {
-        if (!sessionStorage.getItem(this.providerKey)) {
+        if (!localStorage.getItem(this.providerKey)) {
           throw new Error('The provider must have a wallet/key in order to authenticate.');
         }
-        currentProvider = +sessionStorage.getItem(this.providerKey); // cast to int
+        currentProvider = +localStorage.getItem(this.providerKey); // cast to int
       } else {
         if (currentProvider === EthProviders.WalletConnect) {
           this._log.info('using wc bridge');
@@ -178,13 +176,13 @@ export default class AWF_Auth implements AWF_IAuth {
         }
       }
       try {
-        await this._web3.connect(currentProvider);
-        await lastValueFrom(this._web3.checkCurrentNetwork());
-        const address = await lastValueFrom(this._web3.getCurrentAddress());
-        const localUser = sessionStorage.getItem(this.currentUserKey);
-        if (localUser) {
+        const address = await this._connectAddress(currentProvider);
+        const localUser = localStorage.getItem(this.currentUserKey);
+        this.sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
+        const sessValue = localStorage.getItem(this.sessKey);
+        if (localUser && sessValue) {
           const tmpSession = JSON.parse(localUser);
-          if (address.data && tmpSession?.ethAddress === address.data) {
+          if (address && tmpSession?.ethAddress === address) {
             this._globalChannel.next({
               data: tmpSession,
               event: AUTH_EVENTS.SIGN_IN,
@@ -195,13 +193,23 @@ export default class AWF_Auth implements AWF_IAuth {
           }
         }
         if (args.checkRegistered) {
-          await lastValueFrom(this.checkIfSignedUp(address.data));
+          await lastValueFrom(this.checkIfSignedUp(address));
         }
-        this._log.info(`using eth address ${address.data}`);
-        this.sessKey = `@identity:${address.data.toLowerCase()}:${currentProvider}`;
-        if (sessionStorage.getItem(this.sessKey)) {
-          this.#identity = PrivateKey.fromString(sessionStorage.getItem(this.sessKey));
-        } else {
+        this._log.info(`using eth address ${address}`);
+        if (sessValue) {
+          const rawKey: { value?: string } = await executeOnSW(
+            Object.assign(
+              {
+                type: SwActionType.DECRYPT,
+              },
+              JSON.parse(sessValue),
+            ),
+          );
+          if (rawKey?.value) {
+            this.#identity = PrivateKey.fromString(rawKey.value);
+          }
+        }
+        if (!this.#identity) {
           await this.#_signAuthMessage();
           await new Promise(res => setTimeout(res, 600));
           await this.#_signComposedMessage();
@@ -209,20 +217,29 @@ export default class AWF_Auth implements AWF_IAuth {
         await this.#_signTokenMessage();
       } catch (e) {
         this._lockSignIn = false;
-        sessionStorage.clear();
+        localStorage.removeItem(this.sessKey);
+        localStorage.removeItem(this.providerKey);
+        localStorage.removeItem(this.currentUserKey);
         this._log.error(e);
         throw e;
       }
     }
     await this.#_setupHubClient();
-    sessionStorage.setItem(this.providerKey, currentProvider.toString());
-    sessionStorage.setItem(this.sessKey, this.#identity.toString());
-    sessionStorage.setItem(this.currentUserKey, JSON.stringify(this.currentUser));
+    const swResponse = await executeOnSW({
+      type: SwActionType.ENCRYPT,
+      value: this.#identity.toString(),
+    });
+    if (swResponse) {
+      localStorage.setItem(this.sessKey, JSON.stringify(swResponse));
+    }
+    localStorage.setItem(this.providerKey, currentProvider.toString());
+    localStorage.setItem(this.currentUserKey, JSON.stringify(this.currentUser));
+
     if (this.channel) {
       const response = {
-        [this.providerKey]: sessionStorage.getItem(this.providerKey),
-        identity: { key: this.sessKey, value: sessionStorage.getItem(this.sessKey) },
-        [this.currentUserKey]: sessionStorage.getItem(this.currentUserKey),
+        [this.providerKey]: localStorage.getItem(this.providerKey),
+        identity: { key: this.sessKey },
+        [this.currentUserKey]: localStorage.getItem(this.currentUserKey),
       };
       this.channel.postMessage({ response, type: this.SYNC_RESPONSE });
     }
@@ -247,6 +264,25 @@ export default class AWF_Auth implements AWF_IAuth {
     });
     this._lockSignIn = false;
     return Object.assign(this.currentUser, authStatus);
+  }
+
+  async _connectAddress(provider: EthProviders) {
+    this._globalChannel.next({
+      data: {},
+      event: AUTH_EVENTS.CONNECT_ADDRESS,
+    });
+    await this._web3.connect(provider);
+    await lastValueFrom(this._web3.checkCurrentNetwork());
+    const resp = await lastValueFrom(this._web3.getCurrentAddress());
+    this._globalChannel.next({
+      data: { address: resp.data },
+      event: AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS,
+    });
+    return resp.data;
+  }
+
+  connectAddress(provider: EthProviders) {
+    return createObservableStream(this._connectAddress(provider));
   }
 
   signAuthMessage() {
@@ -347,7 +383,7 @@ export default class AWF_Auth implements AWF_IAuth {
   }
 
   private async _getSession() {
-    if (!sessionStorage.getItem(this.providerKey)) {
+    if (!localStorage.getItem(this.providerKey)) {
       throw new Error('No previous session found');
     }
 
@@ -393,10 +429,10 @@ export default class AWF_Auth implements AWF_IAuth {
     if (this.currentUser) {
       return Promise.resolve(this.currentUser);
     }
-    if (!sessionStorage.getItem(this.providerKey)) {
+    if (!localStorage.getItem(this.providerKey)) {
       return Promise.resolve(null);
     }
-    const localUser = sessionStorage.getItem(this.currentUserKey);
+    const localUser = localStorage.getItem(this.currentUserKey);
     if (localUser) {
       this._globalChannel.next({
         data: { emit: true },
@@ -415,6 +451,9 @@ export default class AWF_Auth implements AWF_IAuth {
 
   private async _signOut() {
     sessionStorage.clear();
+    localStorage.removeItem(this.sessKey);
+    localStorage.removeItem(this.providerKey);
+    localStorage.removeItem(this.currentUserKey);
     this.#identity = null;
     this.hubClient = null;
     this.hubUser = null;
