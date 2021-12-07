@@ -133,11 +133,12 @@ export default class AWF_Auth implements AWF_IAuth {
       false,
     );
     return check.pipe(
-      tap(() => {
-        this._globalChannel.next({
-          data: null,
-          event: AUTH_EVENTS.CHECK_SIGNUP,
-        });
+      tap(response => {
+        if (!response.data || response.data?.errors) {
+          const err = new Error('This ethereum key is not registered');
+          err.name = 'UserNotRegistered';
+          throw err;
+        }
       }),
     );
   }
