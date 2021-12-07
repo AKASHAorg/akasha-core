@@ -131,8 +131,9 @@ export function useLogin(onError?: (err: Error) => void) {
 }
 
 const SIGNUP_STATES = {
-  [events.AUTH_EVENTS.CONNECT_ADDRESS]: 1,
-  [events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 2,
+  [events.AUTH_EVENTS.CONNECT_ADDRESS]: 0,
+  [events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 1,
+  [events.AUTH_EVENTS.CHECK_SIGNUP]: 2,
   [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE]: 3,
   [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS]: 4,
   [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE]: 5,
@@ -143,7 +144,7 @@ const SIGNUP_STATES = {
 
 export function useSignUp(provider: EthProviders) {
   const sdk = getSDK();
-  const [signUpState, setSignUpState] = React.useState(1);
+  const [signUpState, setSignUpState] = React.useState(0);
   const [ethAddress, setEthAddress] = React.useState('');
   const [errorCode, setErrorCode] = React.useState(null);
   const onError = (e: Error & { code?: number }) => {
@@ -224,6 +225,7 @@ export function useSignUp(provider: EthProviders) {
 
   return {
     ethAddress,
+    connectWallet,
     fullSignUp,
     signUpState,
     errorCode,
@@ -271,6 +273,8 @@ export function useCheckSignup(ethAddress) {
     },
     {
       enabled: !!ethAddress,
+      refetchOnWindowFocus: false,
+      retry: false,
       onError: (err: Error) => logError('useCheckSignup', err),
     },
   );
