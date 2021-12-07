@@ -66,6 +66,14 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
 
   const { t } = useTranslation();
 
+  React.useEffect(() => {
+    // retrieve token if already saved
+    const savedToken = localStorage.getItem('@signUpToken');
+    if (savedToken) {
+      setInviteToken(savedToken);
+    }
+  }, []);
+
   const handleIconClick = () => {
     const lastLocation = sessionStorage.getItem(StorageKeys.LAST_URL);
     sessionStorage.removeItem(StorageKeys.LAST_URL);
@@ -82,6 +90,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const handleProviderSelect = (provider: EthProviders) => {
     setSelectedProvider(provider);
   };
+
   const handleNetworkCheck = () => {
     return networkStateQuery?.refetch();
   };
