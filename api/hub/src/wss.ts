@@ -91,13 +91,13 @@ const wss = route.all('/ws/userauth', ctx => {
                       new Error('Terms of Service and Privacy Policy were not accepted'),
                     );
                   }
+                  exists = await db.findByID(dbId, 'Invites', r.signUpToken);
                   if (!exists) {
                     return reject(new Error('The invite token is not valid.'));
                   }
                   if (exists.used) {
                     return reject(new Error('The invite token was already used.'));
                   }
-                  exists = await db.findByID(dbId, 'Invites', r.signUpToken);
                   exists.used = true;
                   exists.updateDate = new Date().getTime();
                   const arrAddressChallenge = utils.arrayify(r.addressChallenge);
