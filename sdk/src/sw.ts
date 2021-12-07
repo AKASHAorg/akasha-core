@@ -2,9 +2,12 @@ import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
-import { skipWaiting, clientsClaim, setCacheNameDetails } from 'workbox-core';
+import { clientsClaim, setCacheNameDetails } from 'workbox-core';
 import { precacheAndRoute } from 'workbox-precaching';
-import { get, set } from 'idb-keyval';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const idb = require('idb-keyval');
+//import { get as idbGet, set as idbSet } from 'idb-keyval/dist/compat';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -99,7 +102,7 @@ const ENC_KEY = 'ENC_KEY';
 const IV_SEPARATOR = '|';
 let key;
 const genKey = async () => {
-  let exportedKey = await get(ENC_KEY);
+  let exportedKey = await idb.get(ENC_KEY);
   if (!exportedKey) {
     const privateKey = await self.crypto.subtle.generateKey(
       {
@@ -111,7 +114,7 @@ const genKey = async () => {
     );
     const exportedKeyJWK = await self.crypto.subtle.exportKey('jwk', privateKey);
     exportedKey = JSON.stringify(exportedKeyJWK);
-    await set(ENC_KEY, exportedKey);
+    await idb.set(ENC_KEY, exportedKey);
   }
   key = await self.crypto.subtle.importKey(
     'jwk',
@@ -176,5 +179,7 @@ self.addEventListener('message', async event => {
       break;
   }
 });
-skipWaiting();
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+self.skipWaiting();
 clientsClaim();
