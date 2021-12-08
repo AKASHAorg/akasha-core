@@ -6,10 +6,11 @@ import {
   StyledUploadingDiv,
   StyledText,
   StyledCloseDiv,
-  StyledImageInput,
+  // StyledImageInput,
 } from './styled-editor-box';
 import styled from 'styled-components';
 import Icon from '../Icon';
+import { useDropzone } from 'react-dropzone';
 
 const StyledMeter = styled(Meter)`
   height: 0.5rem;
@@ -19,6 +20,7 @@ export interface IImageUpload {
   // labels
   uploadFailedLabel?: string;
   uploadingImageLabel?: string;
+  dropZoneActiveLabel?: string;
   // parent state
   uploading: boolean;
   setUploading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,6 +47,7 @@ export interface ImageData {
 const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
   const {
     // uploadFailedLabel,
+    dropZoneActiveLabel,
     uploadingImageLabel,
     uploadRequest,
     handleInsertImage,
@@ -76,12 +79,12 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
     setImageSize(null);
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!(e.target.files && e.target.files[0])) {
+  const handleFileUpload = acceptedFiles => {
+    if (!(acceptedFiles && acceptedFiles[0])) {
       setUploadErrorState('No file provided');
       return;
     }
-    const file = e.target.files[0];
+    const file = acceptedFiles[0];
     const fileName = file.name;
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
@@ -108,6 +111,8 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
       }
     });
   };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop: handleFileUpload });
 
   return (
     <>
@@ -153,11 +158,38 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           </Box>
         </StyledUploadingDiv>
       )}
-      <StyledImageInput accept={'image/*'} onChange={handleFileUpload} type="file" ref={ref} />
+      {/* <StyledImageInput accept={'image/*'} onChange={handleFileUpload} type="file" ref={ref} /> */}
+      <div {...getRootProps()}>
+        <input {...getInputProps({ ref, accept: 'image/*', type: 'file' })} />
+        {isDragActive ? (
+          <Box
+            pad={{ bottom: 'small' }}
+            round="small"
+            justify="center"
+            align="center"
+            fill="horizontal"
+            height="2rem"
+            border={{
+              color: 'accent',
+              style: 'dashed',
+              side: 'all',
+              size: '1px',
+            }}
+          >
+            <Text color="accent">{dropZoneActiveLabel}</Text>
+          </Box>
+        ) : (
+          <Box fill="vertical" height={{ min: '2rem' }} />
+        )}
+      </div>
     </>
   );
 });
 
 ImageUpload.displayName = 'ImageUpload';
+
+ImageUpload.defaultProps = {
+  dropZoneActiveLabel: 'Drop photos here',
+};
 
 export { ImageUpload };
