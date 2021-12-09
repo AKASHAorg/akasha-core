@@ -148,7 +148,7 @@ export const validateName = (name: string) => {
 };
 
 const eip1271Abi = [
-  'function isValidSignature( bytes32 _hash, bytes calldata _signature ) external override view returns (bytes4)',
+  'function isValidSignature( bytes32 _hash, bytes calldata _signature ) external view returns (bytes4)',
   //'function getMessageHash(bytes memory message) public view returns (bytes32)',
 ];
 export const magicValue = '0x1626ba7e';
@@ -164,9 +164,13 @@ export const isValidSignature = async (
   const hashMessage = utils.hashMessage(hexArray);
   try {
     const contract = new ethers.Contract(address, eip1271Abi, provider);
+    // give some time for the state to update
+    await new Promise(res => setTimeout(res, 10000));
     const valid = await contract.isValidSignature(hashMessage, signature);
     return Promise.resolve(valid === magicValue);
   } catch (err) {
+    logger.warn('eip1271 sig validation error');
+    logger.warn(err);
     const msgSigner = utils.verifyMessage(hexArray, signature);
     return Promise.resolve(utils.getAddress(msgSigner) === utils.getAddress(address));
   }

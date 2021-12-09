@@ -128,21 +128,29 @@ const wss = route.all('/ws/userauth', ctx => {
                         r.addressChallenge,
                         r.ethAddress,
                         provider,
-                      ).then(valid => {
-                        logger.info(r, { valid });
-                        if (valid) {
-                          Object.assign(currentUser, {
-                            ethAddress: utils.getAddress(r.ethAddress),
+                      )
+                        .then(valid => {
+                          logger.info(r, { valid });
+                          if (valid) {
+                            Object.assign(currentUser, {
+                              ethAddress: utils.getAddress(r.ethAddress),
+                            });
+                            return resolve(Buffer.from(r.sig));
+                          }
+                          //return resolve(Buffer.from('0x0'));
+                          wssErrorsCounter.inc({
+                            eventName: CHALLENGE_ERROR_METRIC,
+                            errorType: 'invariant sig',
                           });
-                          return resolve(Buffer.from(r.sig));
-                        }
-                        //return resolve(Buffer.from('0x0'));
-                        wssErrorsCounter.inc({
-                          eventName: CHALLENGE_ERROR_METRIC,
-                          errorType: 'invariant sig',
+                          return reject(err);
+                        })
+                        .catch(err => {
+                          wssErrorsCounter.inc({
+                            eventName: CHALLENGE_ERROR_METRIC,
+                            errorType: 'invariant sig final',
+                          });
+                          return reject(err);
                         });
-                        return reject(err);
-                      });
                     }
                     wssErrorsCounter.inc({
                       eventName: CHALLENGE_ERROR_METRIC,
