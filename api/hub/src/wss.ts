@@ -5,15 +5,27 @@ import { utils, ethers } from 'ethers';
 import { getAPISig, getAppDB, isValidSignature, logger, newClientDB } from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
+import { promRegistry } from './api';
+import { Counter } from 'prom-client';
 
+const wssErrorsCounter = new Counter({
+  name: 'wss_requests_errored',
+  help: 'The amount of wss requests that have encountered errors.',
+  labelNames: ['eventName', 'errorType'],
+  registers: [promRegistry],
+});
+
+const GENERAL_ERROR_METRIC = 'general error, not breaking';
+const CHALLENGE_ERROR_METRIC = 'challenge event metric';
 const provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETWORK, {
   projectId: process.env.AWF_FAUCET_ID,
   projectSecret: process.env.AWF_FAUCET_SECRET,
 });
-const mainNetProvider = new ethers.providers.InfuraProvider('homestead', {
-  projectId: process.env.AWF_FAUCET_ID,
-  projectSecret: process.env.AWF_FAUCET_SECRET,
-});
+Emittery.isDebugEnabled = process.env.NODE_ENV !== 'production';
+// const mainNetProvider = new ethers.providers.InfuraProvider('homestead', {
+//   projectId: process.env.AWF_FAUCET_ID,
+//   projectSecret: process.env.AWF_FAUCET_SECRET,
+// });
 const wallet = new ethers.Wallet(process.env.AWF_FAUCET_KEY).connect(provider);
 const wss = route.all('/ws/userauth', ctx => {
   const emitter = new Emittery();
@@ -27,7 +39,9 @@ const wss = route.all('/ws/userauth', ctx => {
       switch (data.type) {
         case 'token': {
           if (!data.pubkey) {
-            throw new Error('missing pubkey');
+            const msg = 'missing pubkey';
+            wssErrorsCounter.inc({ eventName: GENERAL_ERROR_METRIC, errorType: msg });
+            throw new Error(msg);
           }
           logger.info(`wss:refreshAppDB`);
           const db = await getAppDB();
@@ -86,18 +100,20 @@ const wss = route.all('/ws/userauth', ctx => {
                   }
                   exists.used = true;
                   exists.updateDate = new Date().getTime();
-                  const recoveredAddress = utils.verifyMessage(
-                    addressChallenge,
-                    r.addressChallenge,
-                  );
-                  currentUser.metaData.push({
-                    provider: 'ewa.user.consent',
-                    property: 'acceptedTermsAndPrivacy',
-                    value: r.acceptedTermsAndPrivacy,
-                  });
-                  Object.assign(currentUser, { ethAddress: utils.getAddress(recoveredAddress) });
+                  const arrAddressChallenge = utils.arrayify(r.addressChallenge);
+                  let recoveredAddress;
+                  if (arrAddressChallenge.length === 65) {
+                    recoveredAddress = utils.verifyMessage(addressChallenge, arrAddressChallenge);
+                    currentUser.metaData.push({
+                      provider: 'ewa.user.consent',
+                      property: 'acceptedTermsAndPrivacy',
+                      value: r.acceptedTermsAndPrivacy,
+                    });
+                    Object.assign(currentUser, { ethAddress: utils.getAddress(recoveredAddress) });
+                  }
                   if (
                     !r.ethAddress ||
+                    !recoveredAddress ||
                     utils.getAddress(recoveredAddress) !== utils.getAddress(r.ethAddress)
                   ) {
                     const err = new Error(
@@ -111,7 +127,7 @@ const wss = route.all('/ws/userauth', ctx => {
                         addressChallenge,
                         r.addressChallenge,
                         r.ethAddress,
-                        mainNetProvider,
+                        provider,
                       ).then(valid => {
                         logger.info(r, { valid });
                         if (valid) {
@@ -120,17 +136,30 @@ const wss = route.all('/ws/userauth', ctx => {
                           });
                           return resolve(Buffer.from(r.sig));
                         }
+                        //return resolve(Buffer.from('0x0'));
+                        wssErrorsCounter.inc({
+                          eventName: CHALLENGE_ERROR_METRIC,
+                          errorType: 'invariant sig',
+                        });
                         return reject(err);
                       });
                     }
+                    wssErrorsCounter.inc({
+                      eventName: CHALLENGE_ERROR_METRIC,
+                      errorType: 'bad request',
+                    });
+                    //return resolve(Buffer.from('0x0'));
                     return reject(err);
                   }
                 }
                 resolve(Buffer.from(r.sig));
               });
               setTimeout(() => {
+                //must always resolve or it will trigger UncaughtError
+                //resolve(Buffer.from('0x0'));
                 reject(new Error('signature checking timed out'));
-              }, 45000);
+                wssErrorsCounter.inc({ eventName: CHALLENGE_ERROR_METRIC, errorType: 'timeout' });
+              }, 60000);
             });
           });
           const auth = await getAPISig();
@@ -170,7 +199,9 @@ const wss = route.all('/ws/userauth', ctx => {
         }
         case 'challenge': {
           if (!data.sig) {
-            throw new Error('missing signature (sig)');
+            const msg = 'missing signature (sig)';
+            wssErrorsCounter.inc({ eventName: GENERAL_ERROR_METRIC, errorType: msg });
+            throw new Error(msg);
           }
           await emitter.emit('challenge', data);
           break;
@@ -184,6 +215,7 @@ const wss = route.all('/ws/userauth', ctx => {
           value: error.message,
         }),
       );
+      wssErrorsCounter.inc({ eventName: GENERAL_ERROR_METRIC, errorType: 'all' });
     }
   });
 });

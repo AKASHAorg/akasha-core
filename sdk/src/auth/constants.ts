@@ -8,6 +8,10 @@ export const tokenCache = 'token';
 
 export const moduleName = 'auth';
 
+export const enum SwActionType {
+  ENCRYPT = 'ENCRYPT_VALUE',
+  DECRYPT = 'DECRYPT_VALUE',
+}
 export const authStatus = {
   isNewUser: false,
 };

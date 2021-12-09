@@ -39,7 +39,7 @@
     "@algolia/logger-console": "4.11.0",
     "@koa/cors": "3.1.0",
     "koa-helmet": "6.1.0",
-    "@textile/hub": "6.3.1",
+    "@textile/hub": "6.3.2",
     "algoliasearch": "4.11.0",
     "apollo-server-cache-redis": "3.3.0",
     "apollo-server-koa": "3.5.0",

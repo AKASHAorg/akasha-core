@@ -173,7 +173,6 @@ export default class Web3Connector
       return INJECTED_PROVIDERS.NOT_DETECTED;
     }
     const injectedProviders = [
-      { flag: 'isMetaMask', name: INJECTED_PROVIDERS.METAMASK },
       { flag: 'isSafe', name: INJECTED_PROVIDERS.SAFE },
       { flag: 'isNiftyWallet', name: INJECTED_PROVIDERS.NIFTY },
       { flag: 'isDapper', name: INJECTED_PROVIDERS.DAPPER },
@@ -183,6 +182,7 @@ export default class Web3Connector
       { flag: 'isCipher', name: INJECTED_PROVIDERS.CIPHER },
       { flag: 'isImToken', name: INJECTED_PROVIDERS.IM_TOKEN },
       { flag: 'isStatus', name: INJECTED_PROVIDERS.STATUS },
+      { flag: 'isMetaMask', name: INJECTED_PROVIDERS.METAMASK },
     ];
     let detectedProvider = INJECTED_PROVIDERS.FALLBACK;
     for (const injectedProvider of injectedProviders) {
