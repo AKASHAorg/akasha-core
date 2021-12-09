@@ -148,8 +148,10 @@ export const validateName = (name: string) => {
 };
 
 const eip1271Abi = [
-  'function isValidSignature(bytes32 _message, bytes _signature) public view returns (bool)',
+  'function isValidSignature( bytes32 _hash, bytes calldata _signature ) external override view returns (bytes4)',
+  'function getMessageHash(bytes memory message) public view returns (bytes32)',
 ];
+export const magicValue = '0x1626ba7e';
 
 export const isValidSignature = async (
   message: string,
@@ -163,7 +165,7 @@ export const isValidSignature = async (
   try {
     const contract = new ethers.Contract(address, eip1271Abi, provider);
     const valid = await contract.isValidSignature(hashMessage, signature);
-    return Promise.resolve(valid);
+    return Promise.resolve(valid === magicValue);
   } catch (err) {
     const msgSigner = utils.verifyMessage(hexArray, signature);
     return Promise.resolve(utils.getAddress(msgSigner) === utils.getAddress(address));
