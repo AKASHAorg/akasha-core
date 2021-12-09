@@ -6,11 +6,11 @@ import {
   StyledUploadingDiv,
   StyledText,
   StyledCloseDiv,
-  // StyledImageInput,
 } from './styled-editor-box';
 import styled from 'styled-components';
 import Icon from '../Icon';
 import { useDropzone } from 'react-dropzone';
+import { isMobile } from 'react-device-detect';
 
 const StyledMeter = styled(Meter)`
   height: 0.5rem;
@@ -158,17 +158,16 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           </Box>
         </StyledUploadingDiv>
       )}
-      {/* <StyledImageInput accept={'image/*'} onChange={handleFileUpload} type="file" ref={ref} /> */}
       <div {...getRootProps()}>
         <input {...getInputProps({ ref, accept: 'image/*', type: 'file' })} />
-        {isDragActive ? (
+        {!isMobile && isDragActive ? (
           <Box
-            pad={{ bottom: 'small' }}
-            round="small"
+            margin={{ bottom: 'small' }}
+            round="xsmall"
             justify="center"
             align="center"
             fill="horizontal"
-            height="2rem"
+            height="3rem"
             border={{
               color: 'accent',
               style: 'dashed',
@@ -179,7 +178,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
             <Text color="accent">{dropZoneActiveLabel}</Text>
           </Box>
         ) : (
-          <Box fill="vertical" height={{ min: '2rem' }} />
+          <Box fill="vertical" height={{ min: '3rem' }} />
         )}
       </div>
     </>
