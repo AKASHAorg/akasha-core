@@ -149,7 +149,7 @@ export const validateName = (name: string) => {
 
 const eip1271Abi = [
   'function isValidSignature( bytes32 _hash, bytes calldata _signature ) external override view returns (bytes4)',
-  'function getMessageHash(bytes memory message) public view returns (bytes32)',
+  //'function getMessageHash(bytes memory message) public view returns (bytes32)',
 ];
 export const magicValue = '0x1626ba7e';
 
