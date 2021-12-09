@@ -4,6 +4,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
+import { QueryStringType, NavigationOptions } from '@akashaproject/ui-awf-typings';
 
 export const getNameFromDef = (def: AppOrWidgetDefinition) => {
   if (typeof def === 'string') {
@@ -74,4 +75,19 @@ export const navigateToModal = (opts: ModalNavigationOptions) => {
   if (`${currentPath}?${str}` !== `${currentPath}${currentSearch}`) {
     singleSpa.navigateToUrl(`${currentPath}?${str}`);
   }
+};
+
+export const navigateTo = (options: NavigationOptions) => {
+  const { pathname, search } = options;
+  const currentPath = location.pathname;
+  const currentSearch = location.search;
+  if (pathname === currentPath && qs.stringify(search) === currentSearch) {
+    return;
+  }
+  singleSpa.navigateToUrl(`${pathname}?${qs.stringify(search)}`);
+};
+
+export const parseQueryString = (queryString: string): QueryStringType => {
+  const query = qs.parse(queryString, { ignoreQueryPrefix: true });
+  return query;
 };

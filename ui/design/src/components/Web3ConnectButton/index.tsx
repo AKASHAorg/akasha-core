@@ -9,7 +9,7 @@ import Tag from '../Tag';
 export interface IWeb3ConnectButtonProps {
   boxMargin?: MarginType;
   titleLabel: string;
-  subtitleLabel: string;
+  subtitleLabel?: string;
   leftIconType: string;
   tagLabel?: string;
   handleClick: () => void;
@@ -39,16 +39,18 @@ const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
               />
             </Box>
           )}
-          <Text weight="bold" size="1rem">
+          <Text weight={600} size="1rem">
             {titleLabel}
           </Text>
           {tagLabel && <Tag titleLabel={tagLabel} />}
         </Box>
         <Icon type="arrowRight" size="sm" accentColor={true} clickable={true} />
       </Box>
-      <Text margin={{ top: 'xsmall' }} color="secondaryText">
-        {subtitleLabel}
-      </Text>
+      {subtitleLabel && (
+        <Text margin={{ top: 'xsmall' }} color="secondaryText">
+          {subtitleLabel}
+        </Text>
+      )}
     </BasicCardBox>
   );
 };

@@ -5,7 +5,6 @@ import {
   ExtensionPointDefinition,
   IAppConfig,
   ILoaderConfig,
-  IntegrationConfig,
   ISdkConfig,
   IWidgetConfig,
   LayoutConfig,
@@ -25,7 +24,14 @@ import { getIntegrationInfo, getIntegrationInfos } from './registry';
 import { hideSplash, showSplash } from './splash-screen';
 import detectMobile from 'ismobilejs';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { createRootNode, getNameFromDef, navigateToModal, toNormalDef } from './utils';
+import {
+  createRootNode,
+  getNameFromDef,
+  navigateTo,
+  navigateToModal,
+  parseQueryString,
+  toNormalDef,
+} from './utils';
 import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
@@ -51,14 +57,9 @@ export default class AppLoader {
    * World configuration object. Used to set necessary endpoints, default loaded apps and widgets.
    */
   private readonly worldConfig: ILoaderConfig & ISdkConfig;
-  private readonly logger: ILogger;
   private readonly loaderLogger: ILogger;
   private readonly sdk: IAwfSDK;
   private readonly menuItems: IMenuList;
-  public integrations: {
-    info: (AppRegistryInfo | WidgetRegistryInfo)[];
-    modules: Record<string, IntegrationConfig>;
-  };
   public layoutConfig?: LayoutConfig;
   private readonly isMobile: boolean;
   private extensionPoints: Record<string, UIEventData['data'][]>;
@@ -394,9 +395,12 @@ export default class AppLoader {
   }
 
   public onExtensionPointUnmount(extensionData?: { name: string }) {
-    if (!extensionData || extensionData.name) {
+    if (!extensionData || !extensionData.name) {
       return;
     }
+    // handle widget unmount
+    this.widgets.onExtensionPointUnmount(extensionData);
+
     const extPoint = this.extensionPoints[extensionData.name].find(
       extPoint => extPoint && extPoint.name === extensionData.name,
     );
@@ -515,6 +519,8 @@ export default class AppLoader {
       name: this.layoutConfig.name,
       navigateToModal: navigateToModal,
       activeModal: this.activeModal,
+      navigateTo: navigateTo,
+      parseQueryString: parseQueryString,
     });
     return layoutParcel.mountPromise;
   }
@@ -665,6 +671,8 @@ export default class AppLoader {
       activeModal: this.activeModal,
       logger: this.sdk.services.log.create(`ext-${extensionPoint.parentApp}-${rootNode}-${index}`),
       extensionData,
+      navigateTo: navigateTo,
+      parseQueryString: parseQueryString,
     };
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);

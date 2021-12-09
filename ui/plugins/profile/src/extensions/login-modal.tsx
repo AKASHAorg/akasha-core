@@ -20,7 +20,12 @@ const LoginModal = (props: RootComponentProps) => {
   };
 
   const handleSignInClick = () => {
-    props.navigateToModal({ name: 'signin', redirectTo: props.activeModal.redirectTo });
+    props.navigateTo({
+      pathname: '/auth-app/sign-in',
+      search: {
+        redirectTo: location.pathname,
+      },
+    });
   };
 
   const handleSignUpClick = () => {

@@ -134,7 +134,8 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleLoginClick = () => {
-    props.navigateToModal({ name: 'signin' });
+    props.singleSpa.navigateToUrl('/auth-app/sign-in');
+    // props.navigateToModal({ name: 'signin' });
   };
 
   const handleLogout = async () => {

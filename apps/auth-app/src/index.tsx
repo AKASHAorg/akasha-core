@@ -13,14 +13,13 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     loadingFn: () => import('./components'),
     mountsIn: opts.layoutConfig?.focusedPluginSlotId,
     name: 'app-auth',
-    sdkModules: [],
-    // menuItems: routes,
-    title: 'TODO: add title',
+    title: 'Auth',
     logo: { type: LogoTypeSource.ICON, value: 'appAuth' },
     widgets: {},
     routes: {
       rootRoute,
     },
+    tags: ['auth', 'signin', 'signup'],
     extends: [],
   };
 };

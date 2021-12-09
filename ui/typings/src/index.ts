@@ -25,6 +25,15 @@ export interface LogoSourceType {
   value: string;
 }
 
+export interface NavigationOptions {
+  pathname: string;
+  search: Record<string, string>;
+}
+
+export interface QueryStringType {
+  [key: string]: undefined | string | string[] | QueryStringType | QueryStringType[];
+}
+
 export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
@@ -44,6 +53,8 @@ export interface RootComponentProps {
   extensionData?: AppLoaderTypes.UIEventData['data'];
   homepageApp?: string;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
+  navigateTo: (options: NavigationOptions) => void;
+  parseQueryString: (queryString: string) => QueryStringType;
 }
 
 export enum LogoTypeSource {
