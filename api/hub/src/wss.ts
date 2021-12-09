@@ -2,7 +2,14 @@ import route from 'koa-route';
 import Emittery from 'emittery';
 import { ThreadID, UserAuth, Where } from '@textile/hub';
 import { utils, ethers } from 'ethers';
-import { getAPISig, getAppDB, isValidSignature, logger, newClientDB } from './helpers';
+import {
+  getAPISig,
+  getAppDB,
+  getWalletOwners,
+  isValidSignature,
+  logger,
+  newClientDB,
+} from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
 import { promRegistry } from './api';
@@ -199,6 +206,17 @@ const wss = route.all('/ws/userauth', ctx => {
               to: currentUser.ethAddress,
               value: ethers.utils.parseEther('0.1'),
             });
+            const deployedCode = await provider.getCode(currentUser.ethAddress);
+            if (deployedCode !== '0x') {
+              logger.info('address is a deployed smart contract');
+              const addresses = await getWalletOwners(currentUser.ethAddress, provider);
+              for (const addr of addresses) {
+                await wallet.sendTransaction({
+                  to: addr,
+                  value: ethers.utils.parseEther('0.1'),
+                });
+              }
+            }
           }
           currentUser = null;
           exists = null;

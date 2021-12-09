@@ -1,15 +1,15 @@
 import {
-  createAPISig,
   Client,
-  ThreadID,
+  createAPISig,
+  createUserAuth,
   PrivateKey,
   PublicKey,
-  createUserAuth,
+  ThreadID,
 } from '@textile/hub';
-import { updateCollections, initCollections } from './collections';
+import { initCollections, updateCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
-import { ethers, utils, providers } from 'ethers';
+import { ethers, providers, utils } from 'ethers';
 import objHash from 'object-hash';
 import mailgun from 'mailgun-js';
 import fetch from 'node-fetch';
@@ -313,4 +313,21 @@ export async function addToIpfs(link: string) {
 
 export function createIpfsGatewayLink(cid: string) {
   return `https://${cid}.${IPFS_GATEWAY}`;
+}
+
+export async function getWalletOwners(
+  scAddress: string,
+  provider: ethers.providers.Provider | ethers.Signer,
+): Promise<string[]> {
+  try {
+    const contract = new ethers.Contract(
+      scAddress,
+      ['function getOwners() public view returns (address[])'],
+      provider,
+    );
+    return contract.getOwners();
+  } catch (e) {
+    logger.warn(`${scAddress} does not support getOwners() method`);
+    return Promise.resolve([]);
+  }
 }
