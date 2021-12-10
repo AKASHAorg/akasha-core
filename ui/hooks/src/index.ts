@@ -62,7 +62,13 @@ import {
   COMMENTS_KEY,
 } from './use-comments';
 import { useGetBookmarks, useSaveBookmark, useDeleteBookmark } from './use-bookmarks';
-import { useSearch } from './use-search';
+import {
+  useSearch,
+  useSearchComments,
+  useSearchPosts,
+  useSearchProfiles,
+  useSearchTags,
+} from './use-search';
 import { useHandleNavigation } from './use-navigation';
 import {
   useCheckModerator,
@@ -171,6 +177,10 @@ export {
   useDeleteBookmark,
   // use-search
   useSearch,
+  useSearchTags,
+  useSearchComments,
+  useSearchPosts,
+  useSearchProfiles,
   // use-moderation
   useCheckModerator,
   useGetCount,
