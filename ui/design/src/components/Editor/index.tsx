@@ -593,7 +593,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 />
               )}
             </Slate>
-            <ImageGallery images={images} handleDeleteImage={handleDeleteImage} />
             <ImageUpload
               uploading={uploading}
               setUploading={setUploading}
@@ -603,6 +602,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               handleInsertImage={handleInsertImageLink}
               ref={uploadInputRef}
             />
+            <ImageGallery images={images} handleDeleteImage={handleDeleteImage} />
             {(linkPreviewState || linkPreviewUploading) && (
               <LinkPreview
                 uploading={linkPreviewUploading}

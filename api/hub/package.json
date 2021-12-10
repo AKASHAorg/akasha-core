@@ -47,7 +47,7 @@
     "dotenv": "10.0.0",
     "emittery": "0.10.0",
     "eth-ens-namehash": "2.0.8",
-    "ethers": "5.5.1",
+    "ethers": "5.5.2",
     "flatted": "3.2.4",
     "graphql": "16.0.1",
     "ioredis": "4.28.0",
