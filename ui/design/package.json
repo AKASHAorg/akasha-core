@@ -112,7 +112,7 @@
     "lodash.isequal": "4.5.0",
     "qrcode.react": "1.0.1",
     "react-device-detect": "1.17.0",
-    "react-dropzone": "11.3.4",
+    "react-dropzone": "11.4.2",
     "react-docgen-typescript": "2.1.0",
     "react-helmet": "6.1.0",
     "react-markdown": "7.0.1",
