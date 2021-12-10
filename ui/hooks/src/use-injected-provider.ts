@@ -21,9 +21,9 @@ const getInjectedProvider = async () => {
   return { name: provider.data, details };
 };
 
-const connectProvider = async (provider: EthProviders) => {
+const connectProvider = (provider: EthProviders) => {
   const sdk = getSDK();
-  return await sdk.services.common.web3.connect(provider);
+  return sdk.services.common.web3.connect(provider);
 };
 
 const getRequiredNetwork = async () => {
