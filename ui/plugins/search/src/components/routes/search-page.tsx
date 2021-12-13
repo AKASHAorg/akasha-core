@@ -15,7 +15,10 @@ import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
-  useSearch,
+  useSearchPosts,
+  useSearchProfiles,
+  useSearchComments,
+  useSearchTags,
   LoginState,
   useHandleNavigation,
 } from '@akashaproject/ui-awf-hooks';
@@ -57,14 +60,31 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
 
-  const searchReq = useSearch(
+  const searchProfilesReq = useSearchProfiles(
     decodeURIComponent(searchKeyword),
     loginState?.pubKey,
     loginState?.fromCache,
   );
-  const searchState = searchReq.data;
+  const searchProfilesState = searchProfilesReq.data;
 
-  const followEthAddressArr = searchState?.profiles?.slice(0, 4).map(profile => profile.ethAddress);
+  const searchPostsReq = useSearchPosts(
+    decodeURIComponent(searchKeyword),
+    loginState?.pubKey,
+    loginState?.fromCache,
+  );
+  const searchPostsState = searchPostsReq.data;
+
+  const searchCommentsReq = useSearchComments(
+    decodeURIComponent(searchKeyword),
+    loginState?.pubKey,
+    loginState?.fromCache,
+  );
+  const searchCommentsState = searchCommentsReq.data;
+
+  const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
+  const searchTagsState = searchTagsReq.data;
+
+  const followEthAddressArr = searchProfilesState?.slice(0, 4).map(profile => profile.ethAddress);
   const isFollowingMultipleReq = useIsFollowingMultiple(
     loginState?.ethAddress,
     followEthAddressArr,
@@ -138,10 +158,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const emptySearchState =
-    searchState?.profiles.length === 0 &&
-    searchState?.entries.length === 0 &&
-    searchState?.comments.length === 0 &&
-    searchState?.tags.length === 0;
+    searchProfilesState?.length === 0 &&
+    searchPostsState?.length === 0 &&
+    searchCommentsState?.length === 0 &&
+    searchTagsState?.length === 0;
 
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
 
@@ -162,12 +182,40 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     history.back();
   };
 
-  const searchCount = searchState
-    ? searchState.profiles?.length +
-      searchState.entries?.length +
-      searchState.tags?.length +
-      searchState.comments?.length
-    : 0;
+  const searchCount =
+    searchProfilesState?.length ||
+    0 + searchPostsState?.length ||
+    0 + searchCommentsState?.length ||
+    0 + searchTagsState?.length ||
+    0;
+
+  const isFetchingSearch = React.useMemo(() => {
+    return (
+      searchProfilesReq.isFetching ||
+      searchPostsReq.isFetching ||
+      searchCommentsReq.isFetching ||
+      searchTagsReq.isFetching
+    );
+  }, [
+    searchCommentsReq.isFetching,
+    searchPostsReq.isFetching,
+    searchProfilesReq.isFetching,
+    searchTagsReq.isFetching,
+  ]);
+
+  const allQueriesFinished = React.useMemo(() => {
+    return (
+      !searchProfilesReq.isFetching &&
+      !searchPostsReq.isFetching &&
+      !searchCommentsReq.isFetching &&
+      !searchTagsReq.isFetching
+    );
+  }, [
+    searchCommentsReq.isFetching,
+    searchPostsReq.isFetching,
+    searchProfilesReq.isFetching,
+    searchTagsReq.isFetching,
+  ]);
 
   return (
     <Box fill="horizontal">
@@ -183,15 +231,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         buttonValues={buttonValues}
         loggedUser={loginState?.pubKey}
       />
-
-      {searchReq.isFetching && (
-        <BasicCardBox>
-          <Box pad="large">
-            <Spinner />
-          </Box>
-        </BasicCardBox>
-      )}
-      {!searchReq.isFetching && emptySearchState && (
+      {allQueriesFinished && emptySearchState && (
         <BasicCardBox>
           <ErrorLoader
             type="no-login"
@@ -203,102 +243,107 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         </BasicCardBox>
       )}
 
-      {!searchReq.isFetching && !emptySearchState && (
-        <Box>
-          {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.PEOPLE) &&
-            searchState?.profiles.slice(0, 4).map((profileData: IProfileData, index: number) => (
-              <Box key={index} pad={{ bottom: 'medium' }}>
-                <ProfileSearchCard
-                  handleFollow={() => handleFollowProfile(profileData.ethAddress)}
-                  handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
-                  isFollowing={followedProfiles.includes(profileData?.ethAddress)}
-                  loggedEthAddress={loginState?.ethAddress}
-                  profileData={profileData}
-                  followLabel={t('Follow')}
-                  unfollowLabel={t('Unfollow')}
-                  descriptionLabel={t('About me')}
-                  followingLabel={t('Following')}
-                  followersLabel={t('Followers')}
-                  postsLabel={t('Posts')}
-                  shareProfileLabel={t('Share')}
-                  profileAnchorLink={'/profile'}
-                  onClickProfile={() => handleProfileClick(profileData.pubKey)}
-                />
-              </Box>
-            ))}
+      <Box>
+        {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.PEOPLE) &&
+          searchProfilesState?.slice(0, 4).map((profileData: IProfileData, index: number) => (
+            <Box key={index} pad={{ bottom: 'medium' }}>
+              <ProfileSearchCard
+                handleFollow={() => handleFollowProfile(profileData.ethAddress)}
+                handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
+                isFollowing={followedProfiles.includes(profileData?.ethAddress)}
+                loggedEthAddress={loginState?.ethAddress}
+                profileData={profileData}
+                followLabel={t('Follow')}
+                unfollowLabel={t('Unfollow')}
+                descriptionLabel={t('About me')}
+                followingLabel={t('Following')}
+                followersLabel={t('Followers')}
+                postsLabel={t('Posts')}
+                shareProfileLabel={t('Share')}
+                profileAnchorLink={'/profile'}
+                onClickProfile={() => handleProfileClick(profileData.pubKey)}
+              />
+            </Box>
+          ))}
 
-          {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.TOPICS) &&
-            searchState?.tags.map((tag: ITag, index: number) => (
-              <Box key={index} pad={{ bottom: 'medium' }}>
-                <TagSearchCard
-                  tag={tag}
-                  subscribedTags={tagSubscriptionsState}
-                  subscribeLabel={t('Subscribe')}
-                  unsubscribeLabel={t('Unsubscribe')}
-                  tagAnchorLink={'/social-app/tags'}
-                  onClickTag={() => handleTagClick(tag.name)}
-                  handleSubscribeTag={handleTagSubscribe}
-                  handleUnsubscribeTag={handleTagSubscribe}
-                />
-              </Box>
+        {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.TOPICS) &&
+          searchTagsState?.map((tag: ITag, index: number) => (
+            <Box key={index} pad={{ bottom: 'medium' }}>
+              <TagSearchCard
+                tag={tag}
+                subscribedTags={tagSubscriptionsState}
+                subscribeLabel={t('Subscribe')}
+                unsubscribeLabel={t('Unsubscribe')}
+                tagAnchorLink={'/social-app/tags'}
+                onClickTag={() => handleTagClick(tag.name)}
+                handleSubscribeTag={handleTagSubscribe}
+                handleUnsubscribeTag={handleTagSubscribe}
+              />
+            </Box>
+          ))}
+        {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.POSTS) &&
+          searchPostsState
+            ?.slice(0, 4)
+            .map(itemData => (
+              <EntryCardRenderer
+                key={itemData.entryId}
+                itemData={itemData}
+                itemType={ItemTypes.ENTRY}
+                logger={props.logger}
+                bookmarksQuery={bookmarksQuery}
+                singleSpa={singleSpa}
+                ethAddress={loginState?.ethAddress}
+                onNavigate={handleNavigation}
+                onRepost={handleRepost}
+                onBookmark={handleBookmark}
+                onAvatarClick={handleAvatarClick}
+                onMentionClick={handleMentionClick}
+                onTagClick={handleTagClick}
+                contentClickable={true}
+                locale={locale}
+                sharePostUrl={`${window.location.origin}/social-app/post/`}
+                moderatedContentLabel={t('This content has been moderated')}
+                ctaLabel={t('See it anyway')}
+                uiEvents={props.uiEvents}
+                navigateToModal={props.navigateToModal}
+                modalSlotId={props.layoutConfig.modalSlotId}
+              />
             ))}
-          {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.POSTS) &&
-            searchState?.entries
-              .slice(0, 4)
-              .map(itemData => (
-                <EntryCardRenderer
-                  key={itemData.entryId}
-                  itemData={itemData}
-                  itemType={ItemTypes.ENTRY}
-                  logger={props.logger}
-                  bookmarksQuery={bookmarksQuery}
-                  singleSpa={singleSpa}
-                  ethAddress={loginState?.ethAddress}
-                  onNavigate={handleNavigation}
-                  onRepost={handleRepost}
-                  onBookmark={handleBookmark}
-                  onAvatarClick={handleAvatarClick}
-                  onMentionClick={handleMentionClick}
-                  onTagClick={handleTagClick}
-                  contentClickable={true}
-                  locale={locale}
-                  sharePostUrl={`${window.location.origin}/social-app/post/`}
-                  moderatedContentLabel={t('This content has been moderated')}
-                  ctaLabel={t('See it anyway')}
-                  uiEvents={props.uiEvents}
-                  navigateToModal={props.navigateToModal}
-                  modalSlotId={props.layoutConfig.modalSlotId}
-                />
-              ))}
-          {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
-            searchState?.comments
-              .slice(0, 4)
-              .map(itemData => (
-                <EntryCardRenderer
-                  key={itemData.entryId}
-                  itemData={itemData}
-                  itemType={ItemTypes.COMMENT}
-                  logger={props.logger}
-                  bookmarksQuery={bookmarksQuery}
-                  singleSpa={singleSpa}
-                  ethAddress={loginState?.ethAddress}
-                  onNavigate={handleNavigation}
-                  onRepost={handleRepost}
-                  onBookmark={handleBookmark}
-                  onAvatarClick={handleAvatarClick}
-                  onMentionClick={handleMentionClick}
-                  onTagClick={handleTagClick}
-                  contentClickable={true}
-                  locale={locale}
-                  sharePostUrl={`${window.location.origin}/social-app/post/`}
-                  moderatedContentLabel={t('This content has been moderated')}
-                  ctaLabel={t('See it anyway')}
-                  uiEvents={props.uiEvents}
-                  navigateToModal={props.navigateToModal}
-                  modalSlotId={props.layoutConfig.modalSlotId}
-                />
-              ))}
-        </Box>
+        {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
+          searchCommentsState
+            ?.slice(0, 4)
+            .map(itemData => (
+              <EntryCardRenderer
+                key={itemData.entryId}
+                itemData={itemData}
+                itemType={ItemTypes.COMMENT}
+                logger={props.logger}
+                bookmarksQuery={bookmarksQuery}
+                singleSpa={singleSpa}
+                ethAddress={loginState?.ethAddress}
+                onNavigate={handleNavigation}
+                onRepost={handleRepost}
+                onBookmark={handleBookmark}
+                onAvatarClick={handleAvatarClick}
+                onMentionClick={handleMentionClick}
+                onTagClick={handleTagClick}
+                contentClickable={true}
+                locale={locale}
+                sharePostUrl={`${window.location.origin}/social-app/post/`}
+                moderatedContentLabel={t('This content has been moderated')}
+                ctaLabel={t('See it anyway')}
+                uiEvents={props.uiEvents}
+                navigateToModal={props.navigateToModal}
+                modalSlotId={props.layoutConfig.modalSlotId}
+              />
+            ))}
+      </Box>
+      {isFetchingSearch && (
+        <BasicCardBox>
+          <Box pad="large">
+            <Spinner />
+          </Box>
+        </BasicCardBox>
       )}
     </Box>
   );

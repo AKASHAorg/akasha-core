@@ -1,13 +1,14 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
+import { useCheckSignup, useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
 import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 
 import { StyledButton, StyledBox } from './styles';
 import { useTranslation } from 'react-i18next';
+import routes, { SIGN_IN } from '../../../routes';
 
-const { Box, Text, WalletRequestStep, Icon } = DS;
+const { Box, Text, WalletRequestStep, Icon, CTAAnchor } = DS;
 
 export interface IStepFourProps {
   textExplanation: string;
@@ -33,6 +34,8 @@ export interface IStepFourProps {
   textRequestProblem: string;
   textRequestResend: string;
   textAgain: string;
+  textSuggestSignIn: string;
+  textSuggestSignInLink: string;
   buttonLabel: string;
   onButtonClick: () => void;
   providerConnected: boolean;
@@ -119,28 +122,52 @@ const StepFour: React.FC<IStepFourProps> = props => {
     textRequestProblem,
     textRequestResend,
     textAgain,
+    textSuggestSignIn,
+    textSuggestSignInLink,
     buttonLabel,
     onButtonClick,
     providerConnected,
     provider,
     requiredNetworkName,
   } = props;
-  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages } = useSignUp(provider);
+  const { ethAddress, connectWallet, signUpState, error, fireRemainingMessages } =
+    useSignUp(provider);
+  const checkSignupQuery = useCheckSignup(ethAddress);
+  const [suggestSignIn, setSuggestSignIn] = React.useState(false);
+
   const { t } = useTranslation();
+  const tRef = React.useRef(t);
+  const fireRemainingMessagesRef = React.useRef(fireRemainingMessages);
 
   React.useEffect(() => {
-    fullSignUp.mutate();
+    connectWallet.mutate();
   }, []);
+
+  React.useEffect(() => {
+    // hook will be in error state if no user found
+    if (checkSignupQuery.isFetched && checkSignupQuery.isError) fireRemainingMessagesRef.current();
+    if (checkSignupQuery.isFetched && !checkSignupQuery.isError) setSuggestSignIn(true);
+  }, [checkSignupQuery.isFetched, checkSignupQuery.isError]);
 
   const isOpenLogin = providerConnected && provider === EthProviders.Torus;
   const errorMessage = React.useMemo(() => {
     if (error && error.code && errorMapping[error.code]) {
-      return t(errorMapping[error.code], { requiredNetworkName });
+      return tRef.current(errorMapping[error.code], { requiredNetworkName });
     }
     return error.message
       ? error.message
-      : t('An unknown error has occurred. Please refresh the page and try again.');
+      : tRef.current('An unknown error has occurred. Please refresh the page and try again.');
   }, [error, requiredNetworkName]);
+
+  if (suggestSignIn) {
+    return (
+      <Text>
+        <Text size="large">{textSuggestSignIn}</Text>{' '}
+        <CTAAnchor size="large" href={routes[SIGN_IN]} label={textSuggestSignInLink} />
+        <Text size="large">?</Text>
+      </Text>
+    );
+  }
 
   return (
     <>
@@ -160,7 +187,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           resend={textRequestResend}
           complete={textAddressComplete}
           buttonLabel={textButtonSelect}
-          walletRequest={fireRemainingMessages}
+          walletRequest={connectWallet.mutateAsync}
           ethAddress={ethAddress}
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.ONE}

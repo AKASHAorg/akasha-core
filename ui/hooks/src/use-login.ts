@@ -131,8 +131,8 @@ export function useLogin(onError?: (err: Error) => void) {
 }
 
 const SIGNUP_STATES = {
-  [events.AUTH_EVENTS.CONNECT_ADDRESS]: 1,
-  [events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 2,
+  [events.AUTH_EVENTS.CONNECT_ADDRESS]: 0,
+  [events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 1,
   [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE]: 3,
   [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS]: 4,
   [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE]: 5,
@@ -282,6 +282,8 @@ export function useCheckSignup(ethAddress) {
     },
     {
       enabled: !!ethAddress,
+      refetchOnWindowFocus: false,
+      retry: false,
       onError: (err: Error) => logError('useCheckSignup', err),
     },
   );

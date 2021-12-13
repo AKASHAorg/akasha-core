@@ -19,7 +19,7 @@ import { StepThree } from './steps/StepThree';
 import { StepFour } from './steps/StepFour';
 import { StepFive } from './steps/StepFive';
 
-import routes, { rootAKASHARoute, SIGN_UP_USERNAME } from '../../routes';
+import routes, { SIGN_UP_USERNAME } from '../../routes';
 import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const { SignUpCard } = DS;
@@ -36,6 +36,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
 
   const DEFAULT_TOKEN_LENGTH = 24;
+  const { t } = useTranslation();
 
   const inviteTokenQuery = useIsValidToken({
     inviteToken,
@@ -45,19 +46,39 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const getInjectedProviderQuery = useInjectedProvider();
   const injectedProvider = getInjectedProviderQuery.data;
 
-  const connectProviderQuery = useConnectProvider(selectedProvider);
+  const connectProviderMutation = useConnectProvider();
+
+  // check network if connection is successfully established
+  const networkStateQuery = useNetworkState(connectProviderMutation.isSuccess);
 
   const requiredNetworkQuery = useRequiredNetworkName();
 
   // convert to title case
   const requiredNetworkName = `${requiredNetworkQuery.data
     .charAt(0)
-    .toLocaleUpperCase()}${requiredNetworkQuery.data.substr(1).toLocaleLowerCase()}`;
+    .toLocaleUpperCase()}${requiredNetworkQuery.data.substring(1).toLocaleLowerCase()}`;
 
-  // check network if connection is successfully established
-  const networkStateQuery = useNetworkState(connectProviderQuery.isFetched);
+  React.useEffect(() => {
+    // retrieve token if already saved
+    const savedToken = localStorage.getItem('@signUpToken');
+    if (savedToken) {
+      setInviteToken(savedToken);
+    }
+  }, []);
+  React.useEffect(() => {
+    // if selected provider is not None, connect
+    if (selectedProvider !== EthProviders.None) {
+      connectProviderMutation.mutate(selectedProvider);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedProvider]);
 
-  const { t } = useTranslation();
+  React.useEffect(() => {
+    // if there is an error while trying to connect provider, revert selected provider state
+    if (connectProviderMutation.isError) {
+      setSelectedProvider(EthProviders.None);
+    }
+  }, [connectProviderMutation.isError]);
 
   const handleIconClick = () => {
     // const lastLocation = sessionStorage.getItem(StorageKeys.LAST_URL);
@@ -81,6 +102,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const handleProviderSelect = (provider: EthProviders) => {
     setSelectedProvider(provider);
   };
+
   const handleNetworkCheck = () => {
     return networkStateQuery?.refetch();
   };
@@ -185,7 +207,9 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           socialLoginDescription={t(
             'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
           )}
-          providerConnected={connectProviderQuery.isSuccess}
+          providerConnected={
+            connectProviderMutation.isSuccess && selectedProvider !== EthProviders.None
+          }
           changeProviderLabel={t('Change')}
           setRequiredNetworkLabel={t('To use Ethereum World during the alpha period, ')}
           setRequiredNetworkBoldLabel={`${t('you’ll need to set the')} ${
@@ -267,9 +291,15 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           )}
           textRequestResend={t('Resend request')}
           textAgain={t('Try Again')}
+          textSuggestSignIn={t(
+            'You already created an Ethereum World profile with the provided address. Perhaps you wish to',
+          )}
+          textSuggestSignInLink={t('Sign In')}
           buttonLabel={t('Continue to Step 5')}
           onButtonClick={handleNextStep}
-          providerConnected={connectProviderQuery.isSuccess}
+          providerConnected={
+            connectProviderMutation.isSuccess && selectedProvider !== EthProviders.None
+          }
           provider={selectedProvider}
           requiredNetworkName={requiredNetworkName}
         />

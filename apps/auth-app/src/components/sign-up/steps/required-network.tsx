@@ -2,11 +2,13 @@ import * as React from 'react';
 import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import DS from '@akashaproject/design-system';
 import { StyledButton } from './styles';
+import { EthProviders } from '@akashaproject/ui-awf-typings';
 
 const { Text, Icon, Box, VariableIconButton } = DS;
 
 export interface IRequiredNetworkStepProps {
   injectedProvider: INJECTED_PROVIDERS;
+  selectedProvider: EthProviders;
   isOnRequiredNetwork: boolean;
   setRequiredNetworkLabel?: string;
   setRequiredNetworkBoldLabel?: string;
@@ -29,6 +31,7 @@ export interface IRequiredNetworkStepProps {
 const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
   const {
     injectedProvider,
+    selectedProvider,
     isOnRequiredNetwork,
     setRequiredNetworkLabel,
     setRequiredNetworkBoldLabel,
@@ -47,6 +50,7 @@ const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
     onClickCheckNetwork,
     onButtonClick,
   } = props;
+
   if (isOnRequiredNetwork) {
     return (
       <>
@@ -81,23 +85,24 @@ const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
         <Text size="large" weight="bold" color="accentText">
           {setRequiredNetworkAccentLabel}
         </Text>
-        .{' '}
-        {injectedProvider === INJECTED_PROVIDERS.METAMASK && (
-          <>
-            <Text size="large">
-              {metamaskCTAIntroLabel}{' '}
-              <Text
-                size="large"
-                color="accentText"
-                style={{ cursor: 'pointer' }}
-                onClick={onClickSwitchMetamaskNetwork}
-              >
-                {metamaskCTAAccentLabel}
-              </Text>{' '}
-              {metamaskCTALabel}
-            </Text>
-          </>
-        )}
+        . {/* if selected provider is web3 injected and metamask, show option to switch network*/}
+        {selectedProvider === EthProviders.Web3Injected &&
+          injectedProvider === INJECTED_PROVIDERS.METAMASK && (
+            <>
+              <Text size="large">
+                {metamaskCTAIntroLabel}{' '}
+                <Text
+                  size="large"
+                  color="accentText"
+                  style={{ cursor: 'pointer' }}
+                  onClick={onClickSwitchMetamaskNetwork}
+                >
+                  {metamaskCTAAccentLabel}
+                </Text>{' '}
+                {metamaskCTALabel}
+              </Text>
+            </>
+          )}
         {injectedProvider !== INJECTED_PROVIDERS.METAMASK && (
           <>
             <Text size="large">{otherprovidersCTALabel}</Text>

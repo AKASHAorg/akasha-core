@@ -25,7 +25,6 @@ export interface IStepThreeProps extends IRequiredNetworkStepProps {
   socialLoginDescription: string;
   providerConnected: boolean;
   changeProviderLabel: string;
-  selectedProvider: EthProviders;
   onProviderSelect: (provider: EthProviders) => void;
 }
 

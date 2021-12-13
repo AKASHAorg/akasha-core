@@ -119,9 +119,9 @@
     "react-router-dom": "5.3.0",
     "react-toastify": "7.0.4",
     "remark-gfm": "2.0.0",
-    "slate": "0.66.1",
+    "slate": "0.72.0",
     "slate-history": "0.66.0",
-    "slate-react": "0.66.1",
+    "slate-react": "0.72.0",
     "ts-jest": "27.0.5",
     "react-zoom-pan-pinch": "2.1.3"
   },

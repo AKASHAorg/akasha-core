@@ -34,7 +34,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
 
-  const connectProviderQuery = useConnectProvider(selectedProvider);
+  const connectProviderQuery = useConnectProvider();
 
   const injectedProviderQuery = useInjectedProvider();
   const injectedProvider = React.useMemo(
@@ -168,6 +168,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
                 `Please set the network to ${requiredNetworkName} and try again.`,
               )}
               onClickCheckNetwork={handleNetworkRecheck}
+              selectedProvider={selectedProvider}
             />
           )}
         </MainAreaCardBox>
