@@ -1,12 +1,13 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
+import { useCheckSignup, useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
 import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 
 import { StyledButton, StyledBox } from './styles';
+import routes, { SIGN_IN } from '../../../routes';
 
-const { Box, Text, WalletRequestStep, Icon } = DS;
+const { Box, Text, WalletRequestStep, Icon, CTAAnchor } = DS;
 
 export interface IStepFourProps {
   textExplanation: string;
@@ -35,6 +36,8 @@ export interface IStepFourProps {
   textTimeoutError: string;
   textNetworkError: string;
   textAgain: string;
+  textSuggestSignIn: string;
+  textSuggestSignInLink: string;
   buttonLabel: string;
   onButtonClick: () => void;
   providerConnected: boolean;
@@ -114,13 +117,17 @@ const StepFour: React.FC<IStepFourProps> = props => {
     textTimeoutError,
     textNetworkError,
     textAgain,
+    textSuggestSignIn,
+    textSuggestSignInLink,
     buttonLabel,
     onButtonClick,
     providerConnected,
     provider,
   } = props;
-  const { ethAddress, fullSignUp, signUpState, errorCode, fireRemainingMessages } =
+  const { ethAddress, connectWallet, signUpState, errorCode, fireRemainingMessages } =
     useSignUp(provider);
+  const checkSignupQuery = useCheckSignup(ethAddress);
+  const [suggestSignIn, setSuggestSignIn] = React.useState(false);
 
   const errorMapping = {
     [PROVIDER_ERROR_CODES.UserRejected]: textDeclinedError,
@@ -129,10 +136,26 @@ const StepFour: React.FC<IStepFourProps> = props => {
   };
 
   React.useEffect(() => {
-    fullSignUp.mutate();
+    connectWallet.mutate();
   }, []);
 
+  React.useEffect(() => {
+    // hook will be in error state if no user found
+    if (checkSignupQuery.isFetched && checkSignupQuery.isError) fireRemainingMessages();
+    if (checkSignupQuery.isFetched && !checkSignupQuery.isError) setSuggestSignIn(true);
+  }, [checkSignupQuery.isFetched, checkSignupQuery.isError]);
+
   const isOpenLogin = providerConnected && provider === EthProviders.Torus;
+
+  if (suggestSignIn) {
+    return (
+      <Text>
+        <Text size="large">{textSuggestSignIn}</Text>{' '}
+        <CTAAnchor size="large" href={routes[SIGN_IN]} label={textSuggestSignInLink} />
+        <Text size="large">?</Text>
+      </Text>
+    );
+  }
 
   return (
     <>
@@ -152,7 +175,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           resend={textRequestResend}
           complete={textAddressComplete}
           buttonLabel={textButtonSelect}
-          walletRequest={fireRemainingMessages}
+          walletRequest={connectWallet.mutateAsync}
           ethAddress={ethAddress}
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.ONE}

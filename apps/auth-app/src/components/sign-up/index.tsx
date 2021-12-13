@@ -304,6 +304,10 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
               `Ethereum World only works with the ${requiredNetworkName} test network. Please set your network to ${requiredNetworkName} to continue.`,
             )}
             textAgain={t('Try Again')}
+            textSuggestSignIn={t(
+              'You already created an Ethereum World profile with the provided address. Perhaps you wish to',
+            )}
+            textSuggestSignInLink={t('Sign In')}
             buttonLabel={t('Continue to Step 5')}
             onButtonClick={handleNextStep}
             providerConnected={
