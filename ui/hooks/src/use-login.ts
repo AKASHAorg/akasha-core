@@ -140,23 +140,26 @@ const SIGNUP_STATES = {
   [events.AUTH_EVENTS.SIGN_TOKEN_MESSAGE]: 7,
   [events.AUTH_EVENTS.READY]: 8,
 };
+type ErrorTypes = { code?: number; message?: string; extensions?: { code?: string } };
 
-export function useSignUp(provider: EthProviders) {
+export function useSignUp(provider: EthProviders, checkRegistered = false) {
   const sdk = getSDK();
-  const [signUpState, setSignUpState] = React.useState(0);
-  const [ethAddress, setEthAddress] = React.useState('');
-  const [errorCode, setErrorCode] = React.useState(null);
-  const onError = (e: Error & { code?: number }) => {
-    setErrorCode(e.code);
+  const globalChannel = React.useRef(sdk.api.globalChannel);
+  const [signUpState, setSignUpState] = React.useState(1);
+  const [ethAddress, setEthAddress] = React.useState<string>('');
+  const [error, setError] = React.useState<ErrorTypes>(null);
+
+  const onError = (error: Error) => {
+    setError(error);
   };
 
   React.useEffect(() => {
-    const waitForAuth = sdk.api.globalChannel.pipe(
+    const waitForAuth = globalChannel.current.pipe(
       filter(payload => payload.event in SIGNUP_STATES),
     );
 
     const sub = waitForAuth.subscribe((payload: SignUpPayload) => {
-      setErrorCode(null);
+      setError(null);
       setSignUpState(SIGNUP_STATES[payload.event]);
       if (payload.event === events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS) {
         setEthAddress(payload.data.address);
@@ -170,7 +173,7 @@ export function useSignUp(provider: EthProviders) {
       lastValueFrom(
         sdk.api.auth.signIn({
           provider,
-          checkRegistered: false,
+          checkRegistered: checkRegistered,
           resumeSignIn: false,
         }),
       ),
@@ -223,11 +226,11 @@ export function useSignUp(provider: EthProviders) {
   }, [signUpState, connectWallet, signAuthMessage, signComposedMessage, finishSignUp]);
 
   return {
-    ethAddress,
     connectWallet,
+    ethAddress,
     fullSignUp,
     signUpState,
-    errorCode,
+    error,
     fireRemainingMessages,
   };
 }
@@ -267,8 +270,12 @@ export function useCheckSignup(ethAddress) {
   return useQuery(
     CHECK_SIGNUP_KEY,
     async () => {
-      const resp = await lastValueFrom(sdk.api.auth.checkIfSignedUp(ethAddress));
-      return resp.data;
+      try {
+        const resp = await lastValueFrom(sdk.api.auth.checkIfSignedUp(ethAddress));
+        return resp.data && resp.data.hasOwnProperty('getProfile');
+      } catch (err) {
+        return false;
+      }
     },
     {
       enabled: !!ethAddress,

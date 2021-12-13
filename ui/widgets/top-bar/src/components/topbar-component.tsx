@@ -22,7 +22,7 @@ import { extensionPointsMap } from '../extension-points';
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
-  const { singleSpa, getMenuItems, uiEvents } = props;
+  const { singleSpa, getMenuItems, uiEvents, navigateTo } = props;
 
   const { navigateToUrl } = singleSpa;
   const location = useLocation();
@@ -44,18 +44,6 @@ const TopbarComponent = (props: RootComponentProps) => {
   const checkModeratorResp = checkModeratorQuery.data;
 
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
-
-  // React.useEffect(() => {
-  //   if (loginState.ready?.ethAddress && loginState.ethAddress) {
-  //     notificationActions.hasNewNotifications();
-  //   }
-  // }, [loginState.ready?.ethAddress, loginState.ethAddress]);
-
-  // React.useEffect(() => {
-  //   if (loginState.pubKey) {
-  //     loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
-  //   }
-  // }, [loginState.pubKey]);
 
   React.useEffect(() => {
     const updateMenu = () => {
@@ -108,33 +96,17 @@ const TopbarComponent = (props: RootComponentProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
-  // React.useEffect(() => {
-  //   const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
-  //   if (
-  //     loginQuery.data?.ethAddress &&
-  //     !isLoadingProfile &&
-  //     singleSpa.getMountedApps().find(app => !app.includes('app-auth'))
-  //   ) {
-  //     if (loggedProfileData && !loggedProfileData.userName) {
-  //       return props.navigateToModal({
-  //         name: 'update-profile',
-  //       });
-  //     }
-  //   }
-  // }, [
-  //   profileDataReq.isLoading,
-  //   loginQuery.data?.ethAddress,
-  //   loggedProfileData,
-  //   loginQuery.data?.pubKey,
-  //   props,
-  // ]);
-
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
   };
 
   const handleLoginClick = () => {
-    props.navigateToModal({ name: 'signin' });
+    props.navigateTo({
+      appName: 'app-auth',
+      pathName: appRoutes => {
+        return appRoutes[appRoutes.SIGN_IN];
+      },
+    });
   };
 
   const handleLogout = async () => {
@@ -144,8 +116,10 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleSignUpClick = () => {
-    sessionStorage.setItem(StorageKeys.LAST_URL, location.pathname);
-    navigateToUrl('/auth-app/sign-up');
+    navigateTo({
+      appName: 'app-auth',
+      pathName: appRoutes => appRoutes[appRoutes.SIGN_UP],
+    });
   };
 
   const handleFeedbackModalShow = () => {

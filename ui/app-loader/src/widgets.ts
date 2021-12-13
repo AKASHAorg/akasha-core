@@ -8,7 +8,7 @@ import {
 import * as singleSpa from 'single-spa';
 import { IntegrationModule } from './apps';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
-import { navigateToModal } from './utils';
+import { navigateToModal, parseQueryString } from './utils';
 
 class Widgets extends BaseIntegration {
   private readonly widgetInfos: WidgetRegistryInfo[];
@@ -58,6 +58,18 @@ class Widgets extends BaseIntegration {
       this.registerWidget(widgetInfo.name);
     });
   }
+  public async onExtensionPointUnmount(extensionData?: UIEventData['data']) {
+    const toUnload = this.filterWidgetsByMountPoint(
+      this.widgetInfos,
+      this.widgetConfigs,
+      {}, // match every widget regardless if it's loaded on not
+      extensionData,
+    );
+    for (const widgetInfo of toUnload) {
+      await this.widgetParcels[widgetInfo.name].unmount();
+      delete this.widgetParcels[widgetInfo.name];
+    }
+  }
   async registerWidget(widgetName: string) {
     const widgetConfig: IWidgetConfig = this.widgetConfigs[widgetName];
     if (this.isMobile && widgetConfig.notOnMobile) {
@@ -94,6 +106,8 @@ class Widgets extends BaseIntegration {
       navigateToModal: navigateToModal,
       getMenuItems: this.getMenuItems,
       getAppRoutes: this.getAppRoutes,
+      navigateTo: this.navigateTo,
+      parseQueryString: parseQueryString,
     };
 
     const widgetParcel = singleSpa.mountRootParcel(widgetConfig.loadingFn, widgetProps);

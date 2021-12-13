@@ -31,8 +31,6 @@ export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
   top: 0;
 `;
 
-export const FocusedPluginSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)``;
-
 export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   margin-top: 0.5em;
   width: 100%;
@@ -44,6 +42,10 @@ export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
       width: 42rem;
     }
   `}
+`;
+
+export const FocusedPluginSlot: React.FC<ExtensionPointProps> = styled(PluginSlot)`
+  align-self: center;
 `;
 
 export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`

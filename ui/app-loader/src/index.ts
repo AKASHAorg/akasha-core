@@ -5,7 +5,6 @@ import {
   ExtensionPointDefinition,
   IAppConfig,
   ILoaderConfig,
-  IntegrationConfig,
   ISdkConfig,
   IWidgetConfig,
   LayoutConfig,
@@ -24,8 +23,15 @@ import { createImportMap, getCurrentImportMaps, writeImports } from './import-ma
 import { getIntegrationInfo, getIntegrationInfos } from './registry';
 import { hideSplash, showSplash } from './splash-screen';
 import detectMobile from 'ismobilejs';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { createRootNode, getNameFromDef, navigateToModal, toNormalDef } from './utils';
+import { NavigationFn, NavigationOptions, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import {
+  createRootNode,
+  findKey,
+  getNameFromDef,
+  navigateToModal,
+  parseQueryString,
+  toNormalDef,
+} from './utils';
 import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
@@ -51,14 +57,9 @@ export default class AppLoader {
    * World configuration object. Used to set necessary endpoints, default loaded apps and widgets.
    */
   private readonly worldConfig: ILoaderConfig & ISdkConfig;
-  private readonly logger: ILogger;
   private readonly loaderLogger: ILogger;
   private readonly sdk: IAwfSDK;
   private readonly menuItems: IMenuList;
-  public integrations: {
-    info: (AppRegistryInfo | WidgetRegistryInfo)[];
-    modules: Record<string, IntegrationConfig>;
-  };
   public layoutConfig?: LayoutConfig;
   private readonly isMobile: boolean;
   private extensionPoints: Record<string, UIEventData['data'][]>;
@@ -166,6 +167,7 @@ export default class AppLoader {
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
       isMobile: this.isMobile,
+      navigateTo: this.navigateTo.bind(this),
     });
 
     this.widgets = new Widgets({
@@ -177,6 +179,7 @@ export default class AppLoader {
       getMenuItems: this.getMenuItems.bind(this),
       isMobile: this.isMobile,
       getAppRoutes: appId => this.apps.getAppRoutes(appId),
+      navigateTo: this.navigateTo.bind(this),
     });
 
     integrationInfos.forEach(integration => {
@@ -392,11 +395,69 @@ export default class AppLoader {
       });
     }
   }
+  public navigateTo(options: string | NavigationOptions | NavigationFn) {
+    if (typeof options === 'string') {
+      singleSpa.navigateToUrl(options);
+    }
+    let redirectQueryString = findKey('redirectTo', parseQueryString(location.search));
+
+    if (typeof options === 'function') {
+      singleSpa.navigateToUrl(options(qs.stringify, redirectQueryString));
+    }
+    if (typeof options === 'object') {
+      const { appName, queryStrings } = options;
+      let { pathName } = options;
+
+      // @todo: check whether we have a use case for appName being a function
+      // if (typeof appName === 'function') {
+      //   try {
+      //     appName = appName(appConfigs);
+      //   } catch (err) {
+      //     this.loaderLogger.error(
+      //       'Application not found! In the future we should redirect to an application not found page.',
+      //     );
+      //     return;
+      //   }
+      // }
+
+      const appConfigs = Object.values(this.apps.configs);
+      const app = appConfigs.find(appConf => appConf.name === appName);
+
+      if (typeof pathName === 'function') {
+        try {
+          pathName = pathName(app.routes);
+        } catch (err) {
+          this.loaderLogger.error(
+            `Path not found! Tried to find a path for application: ${appName}. Defaulting to rootRoute!`,
+          );
+        }
+      }
+
+      if (!pathName) {
+        pathName = app.routes.rootRoute;
+      }
+
+      if (typeof queryStrings === 'function') {
+        // allow to modify the redirect params
+        redirectQueryString = queryStrings(qs.stringify, redirectQueryString);
+      }
+      const currentPath = location.pathname;
+      const currentSearch = location.search;
+
+      if (pathName === currentPath && redirectQueryString === currentSearch) {
+        return;
+      }
+      singleSpa.navigateToUrl(`${pathName}${redirectQueryString ? `?${redirectQueryString}` : ''}`);
+    }
+  }
 
   public onExtensionPointUnmount(extensionData?: { name: string }) {
-    if (!extensionData || extensionData.name) {
+    if (!extensionData || !extensionData.name) {
       return;
     }
+    // handle widget unmount
+    this.widgets.onExtensionPointUnmount(extensionData);
+
     const extPoint = this.extensionPoints[extensionData.name].find(
       extPoint => extPoint && extPoint.name === extensionData.name,
     );
@@ -515,6 +576,8 @@ export default class AppLoader {
       name: this.layoutConfig.name,
       navigateToModal: navigateToModal,
       activeModal: this.activeModal,
+      navigateTo: this.navigateTo.bind(this),
+      parseQueryString: parseQueryString,
     });
     return layoutParcel.mountPromise;
   }
@@ -665,6 +728,8 @@ export default class AppLoader {
       activeModal: this.activeModal,
       logger: this.sdk.services.log.create(`ext-${extensionPoint.parentApp}-${rootNode}-${index}`),
       extensionData,
+      navigateTo: this.navigateTo.bind(this),
+      parseQueryString: parseQueryString,
     };
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);
@@ -737,10 +802,10 @@ export default class AppLoader {
      * ev.detail.appsByNewStatus param.
      */
     const { search } = location;
+    const searchObj = qs.parse(search, { ignoreQueryPrefix: true }) as {
+      modal: ModalNavigationOptions;
+    };
     if (search.length) {
-      const searchObj = qs.parse(search, { ignoreQueryPrefix: true }) as {
-        modal: ModalNavigationOptions;
-      };
       if (
         searchObj.modal &&
         (!this.activeModal || this.activeModal.name !== searchObj.modal.name)
@@ -753,7 +818,7 @@ export default class AppLoader {
       }
     }
 
-    if (this.activeModal && !search.length) {
+    if (this.activeModal && !searchObj.hasOwnProperty('modal')) {
       this.loaderLogger.info(`Unmounting modal ${this.activeModal.name}`);
       this.uiEvents.next({
         event: EventTypes.ModalUnmountRequest,

@@ -34,9 +34,9 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   };
   const handleRepost = (_withComment: boolean, entryId: string) => {
     if (!props.loginState.pubKey) {
-      props.onLoginModalOpen({ name: 'editor', embedEntry: entryId });
+      props.onLoginModalOpen({ modal: { name: 'editor', embedEntry: entryId } });
     } else {
-      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+      props.navigateToModal({ modal: { name: 'editor', embedEntry: entryId } });
     }
   };
 

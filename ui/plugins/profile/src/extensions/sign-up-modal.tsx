@@ -138,7 +138,7 @@ const SignUpModalContainer = (props: RootComponentProps) => {
       };
     });
     localStorage.setItem('@acceptedTermsAndPrivacy', new Date().toISOString());
-    props.navigateToModal({ name: 'signin', redirectTo: props.activeModal.redirectTo });
+    props.navigateToModal({ name: 'signin', redirectTo: { modal: props.activeModal.redirectTo } });
   };
   const activateAcceptButton = () => {
     setTermsState(prevState => {

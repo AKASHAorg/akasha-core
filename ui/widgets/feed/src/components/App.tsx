@@ -26,7 +26,7 @@ export interface IFeedWidgetProps {
   loginState: LoginState;
   singleSpaNavigate: (url: string) => void;
   navigateToModal: (props: any) => void;
-  onLoginModalOpen: (redirectTo?: ModalNavigationOptions) => void;
+  onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
   hasNextPage: boolean;
   loggedProfile?: IProfileData;

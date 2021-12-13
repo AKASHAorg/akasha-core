@@ -20,7 +20,18 @@ const LoginModal = (props: RootComponentProps) => {
   };
 
   const handleSignInClick = () => {
-    props.navigateToModal({ name: 'signin', redirectTo: props.activeModal.redirectTo });
+    props.navigateTo({
+      appName: 'app-auth',
+      pathName: appRoutes => appRoutes[appRoutes.SIGN_IN],
+      queryStrings: (qsStringify, currentRedirect) => {
+        if (!currentRedirect) {
+          return qsStringify({ redirectTo: location.pathname });
+        }
+        return `${qsStringify({
+          redirectTo: `${location.pathname}?${qsStringify(currentRedirect)}`,
+        })}`;
+      },
+    });
   };
 
   const handleSignUpClick = () => {

@@ -15,6 +15,7 @@ import { BehaviorSubject } from 'rxjs';
 import { createRootNode } from './utils';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { IAwfSDK } from '@akashaproject/sdk-typings';
+import { NavigationOptions } from '@akashaproject/ui-awf-typings';
 
 export interface BaseIntegrationClassOptions {
   layoutConfig: LayoutConfig;
@@ -24,6 +25,7 @@ export interface BaseIntegrationClassOptions {
   sdk: IAwfSDK;
   addMenuItem: (menuItem: IMenuItem) => void;
   getMenuItems: () => IMenuList;
+  navigateTo: (options: NavigationOptions) => void;
 }
 
 class BaseIntegration {
@@ -35,6 +37,7 @@ class BaseIntegration {
   public addMenuItem: (menuItem: IMenuItem) => void;
   public getMenuItems: () => IMenuList;
   public logger: ILogger;
+  public navigateTo: BaseIntegrationClassOptions['navigateTo'];
   constructor(opts: BaseIntegrationClassOptions) {
     this.layoutConfig = opts.layoutConfig;
     this.uiEvents = opts.uiEvents;
@@ -44,6 +47,7 @@ class BaseIntegration {
     this.addMenuItem = opts.addMenuItem;
     this.getMenuItems = opts.getMenuItems;
     this.logger = this.sdk.services.log.create('app-loader.base-integration');
+    this.navigateTo = opts.navigateTo;
   }
   public getAppsForLocation(location: Location) {
     return singleSpa.checkActivityFunctions(location);

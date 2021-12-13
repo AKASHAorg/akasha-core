@@ -20,7 +20,7 @@ const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
-  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loginState: LoginState;
 }
 
@@ -85,7 +85,7 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginQuery.data?.pubKey) {
-      return showLoginModal({ name: 'report-modal', entryId, itemType });
+      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };

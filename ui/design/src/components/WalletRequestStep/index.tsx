@@ -12,7 +12,7 @@ export interface WalletRequestStepProps {
   complete: string;
   textAgain: string;
   buttonLabel: string;
-  walletRequest: () => Promise<unknown>;
+  walletRequest: () => void;
   pending: boolean;
   completed: boolean;
   ethAddress?: string;

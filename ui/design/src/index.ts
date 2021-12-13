@@ -9,6 +9,7 @@ import {
   ThemeContext,
   Text,
   Carousel,
+  Heading,
 } from 'grommet';
 
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
@@ -200,6 +201,7 @@ const exported = {
   EntryCardLoading,
   BoxFormCard,
   EnsFormCard,
+  Heading,
   MiniInfoWidgetCard,
   ProfileCard,
   ProfileDelistedCard,

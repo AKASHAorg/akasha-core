@@ -5,6 +5,7 @@ import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/
 import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 
 import { StyledButton, StyledBox } from './styles';
+import { useTranslation } from 'react-i18next';
 import routes, { SIGN_IN } from '../../../routes';
 
 const { Box, Text, WalletRequestStep, Icon, CTAAnchor } = DS;
@@ -32,9 +33,6 @@ export interface IStepFourProps {
   textButtonSignInWallet: string;
   textRequestProblem: string;
   textRequestResend: string;
-  textDeclinedError: string;
-  textTimeoutError: string;
-  textNetworkError: string;
   textAgain: string;
   textSuggestSignIn: string;
   textSuggestSignInLink: string;
@@ -42,6 +40,7 @@ export interface IStepFourProps {
   onButtonClick: () => void;
   providerConnected: boolean;
   provider: EthProviders;
+  requiredNetworkName: string;
 }
 
 interface ExplanationProps {
@@ -89,6 +88,15 @@ const Explanation = ({
   );
 };
 
+const errorMapping = {
+  [PROVIDER_ERROR_CODES.UserRejected]:
+    'You have declined the signature request. You will not be able to proceed unless you accept all signature requests.',
+  [PROVIDER_ERROR_CODES.WrongNetwork]:
+    'Ethereum World only works with the {{requiredNetworkName}} test network. Please set your network to ${requiredNetworkName} to continue.',
+  [PROVIDER_ERROR_CODES.RequestTimeout]:
+    'The signature request has timed out. Please try again to sign the request.',
+};
+
 const StepFour: React.FC<IStepFourProps> = props => {
   const {
     textExplanation,
@@ -113,9 +121,6 @@ const StepFour: React.FC<IStepFourProps> = props => {
     textButtonSignInWallet,
     textRequestProblem,
     textRequestResend,
-    textDeclinedError,
-    textTimeoutError,
-    textNetworkError,
     textAgain,
     textSuggestSignIn,
     textSuggestSignInLink,
@@ -123,17 +128,16 @@ const StepFour: React.FC<IStepFourProps> = props => {
     onButtonClick,
     providerConnected,
     provider,
+    requiredNetworkName,
   } = props;
-  const { ethAddress, connectWallet, signUpState, errorCode, fireRemainingMessages } =
+  const { ethAddress, connectWallet, signUpState, error, fireRemainingMessages } =
     useSignUp(provider);
   const checkSignupQuery = useCheckSignup(ethAddress);
   const [suggestSignIn, setSuggestSignIn] = React.useState(false);
 
-  const errorMapping = {
-    [PROVIDER_ERROR_CODES.UserRejected]: textDeclinedError,
-    [PROVIDER_ERROR_CODES.WrongNetwork]: textNetworkError,
-    [PROVIDER_ERROR_CODES.RequestTimeout]: textTimeoutError,
-  };
+  const { t } = useTranslation();
+  const tRef = React.useRef(t);
+  const fireRemainingMessagesRef = React.useRef(fireRemainingMessages);
 
   React.useEffect(() => {
     connectWallet.mutate();
@@ -141,11 +145,20 @@ const StepFour: React.FC<IStepFourProps> = props => {
 
   React.useEffect(() => {
     // hook will be in error state if no user found
-    if (checkSignupQuery.isFetched && checkSignupQuery.isError) fireRemainingMessages();
+    if (checkSignupQuery.isFetched && checkSignupQuery.isError) fireRemainingMessagesRef.current();
     if (checkSignupQuery.isFetched && !checkSignupQuery.isError) setSuggestSignIn(true);
   }, [checkSignupQuery.isFetched, checkSignupQuery.isError]);
 
   const isOpenLogin = providerConnected && provider === EthProviders.Torus;
+  const errorMessage = React.useMemo(() => {
+    if (error && error.code && errorMapping[error.code]) {
+      return tRef.current(errorMapping[error.code], { requiredNetworkName });
+    } else if (error) {
+      return error.message
+        ? error.message
+        : tRef.current('An unknown error has occurred. Please refresh the page and try again.');
+    }
+  }, [error, requiredNetworkName]);
 
   if (suggestSignIn) {
     return (
@@ -180,7 +193,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.ONE}
           completed={signUpState > REQUEST_STEPS.ONE || isOpenLogin}
-          error={signUpState === REQUEST_STEPS.ONE && errorMapping[errorCode]}
+          error={signUpState === REQUEST_STEPS.ONE && errorMessage}
         />
         <WalletRequestStep
           heading={textCreateSignIn}
@@ -193,7 +206,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.TWO}
           completed={signUpState > REQUEST_STEPS.TWO || isOpenLogin}
-          error={signUpState === REQUEST_STEPS.TWO && errorMapping[errorCode]}
+          error={signUpState === REQUEST_STEPS.TWO && errorMessage}
         />
         <WalletRequestStep
           heading={textCreateSecure}
@@ -206,7 +219,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.THREE}
           completed={signUpState > REQUEST_STEPS.THREE || isOpenLogin}
-          error={signUpState === REQUEST_STEPS.THREE && errorMapping[errorCode]}
+          error={signUpState === REQUEST_STEPS.THREE && errorMessage}
         />
         <WalletRequestStep
           heading={textCreateProfile}
@@ -219,7 +232,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
           textAgain={textAgain}
           pending={signUpState === REQUEST_STEPS.FOUR}
           completed={signUpState > REQUEST_STEPS.FOUR}
-          error={signUpState === REQUEST_STEPS.FOUR && errorMapping[errorCode]}
+          error={signUpState === REQUEST_STEPS.FOUR && errorMessage}
         />
       </Box>
       {signUpState > REQUEST_STEPS.FOUR && (
