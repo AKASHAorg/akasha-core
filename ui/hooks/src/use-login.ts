@@ -272,10 +272,7 @@ export function useCheckSignup(ethAddress) {
     async () => {
       try {
         const resp = await lastValueFrom(sdk.api.auth.checkIfSignedUp(ethAddress));
-        if (resp.data && resp.data.hasOwnProperty('getProfile')) {
-          return true;
-        }
-        return false;
+        return resp.data && resp.data.hasOwnProperty('getProfile');
       } catch (err) {
         return false;
       }

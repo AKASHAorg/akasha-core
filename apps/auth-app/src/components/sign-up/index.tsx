@@ -20,7 +20,6 @@ import { StepFour } from './steps/StepFour';
 import { StepFive } from './steps/StepFive';
 
 import routes, { SIGN_UP_USERNAME } from '../../routes';
-import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const { SignUpCard } = DS;
 
@@ -46,10 +45,10 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const getInjectedProviderQuery = useInjectedProvider();
   const injectedProvider = getInjectedProviderQuery.data;
 
-  const connectProviderMutation = useConnectProvider();
+  const connectProviderQuery = useConnectProvider(selectedProvider);
 
   // check network if connection is successfully established
-  const networkStateQuery = useNetworkState(connectProviderMutation.isSuccess);
+  const networkStateQuery = useNetworkState(connectProviderQuery.isSuccess);
 
   const requiredNetworkQuery = useRequiredNetworkName();
 
@@ -65,31 +64,21 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
       setInviteToken(savedToken);
     }
   }, []);
-  React.useEffect(() => {
-    // if selected provider is not None, connect
-    if (selectedProvider !== EthProviders.None) {
-      connectProviderMutation.mutate(selectedProvider);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProvider]);
 
   React.useEffect(() => {
     // if there is an error while trying to connect provider, revert selected provider state
-    if (connectProviderMutation.isError) {
+    if (connectProviderQuery.isError) {
       setSelectedProvider(EthProviders.None);
     }
-  }, [connectProviderMutation.isError]);
+  }, [connectProviderQuery.isError]);
 
   const handleIconClick = () => {
-    // const lastLocation = sessionStorage.getItem(StorageKeys.LAST_URL);
-    sessionStorage.removeItem(StorageKeys.LAST_URL);
     navigateTo((qStringify, currentRedirect) => {
       if (!currentRedirect) {
         return '/';
       }
       return currentRedirect;
     });
-    // navigateToUrl(lastLocation || `${rootAKASHARoute}/feed`);
   };
 
   const handleNextStep = () => {
@@ -208,7 +197,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
           )}
           providerConnected={
-            connectProviderMutation.isSuccess && selectedProvider !== EthProviders.None
+            connectProviderQuery.isSuccess && selectedProvider !== EthProviders.None
           }
           changeProviderLabel={t('Change')}
           setRequiredNetworkLabel={t('To use Ethereum World during the alpha period, ')}
@@ -298,7 +287,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           buttonLabel={t('Continue to Step 5')}
           onButtonClick={handleNextStep}
           providerConnected={
-            connectProviderMutation.isSuccess && selectedProvider !== EthProviders.None
+            connectProviderQuery.isSuccess && selectedProvider !== EthProviders.None
           }
           provider={selectedProvider}
           requiredNetworkName={requiredNetworkName}

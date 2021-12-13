@@ -153,10 +153,11 @@ const StepFour: React.FC<IStepFourProps> = props => {
   const errorMessage = React.useMemo(() => {
     if (error && error.code && errorMapping[error.code]) {
       return tRef.current(errorMapping[error.code], { requiredNetworkName });
+    } else if (error) {
+      return error.message
+        ? error.message
+        : tRef.current('An unknown error has occurred. Please refresh the page and try again.');
     }
-    return error.message
-      ? error.message
-      : tRef.current('An unknown error has occurred. Please refresh the page and try again.');
   }, [error, requiredNetworkName]);
 
   if (suggestSignIn) {

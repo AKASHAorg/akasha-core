@@ -28,13 +28,12 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const [signInComplete, setSignInComplete] = React.useState(false);
   const { t } = useTranslation();
 
-  const singleSpa = React.useRef(props.singleSpa);
   const navigateTo = React.useRef(props.navigateTo);
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
 
-  const connectProviderQuery = useConnectProvider();
+  const connectProviderQuery = useConnectProvider(selectedProvider);
 
   const injectedProviderQuery = useInjectedProvider();
   const injectedProvider = React.useMemo(
@@ -50,12 +49,16 @@ const SignIn: React.FC<RootComponentProps> = props => {
     true,
   );
 
-  const isNotRegistered = React.useMemo(() => {
-    if (error && error.message.toLowerCase().trim() === 'profile not found') {
-      return true;
+  const isNotRegistered = React.useMemo(
+    () => error && error.message.toLowerCase().trim() === 'profile not found',
+    [error],
+  );
+
+  React.useEffect(() => {
+    if (selectedProvider === EthProviders.WalletConnect && connectProviderQuery.isError) {
+      setSelectedProvider(EthProviders.None);
     }
-    return false;
-  }, [error]);
+  }, [selectedProvider, connectProviderQuery.isError]);
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {

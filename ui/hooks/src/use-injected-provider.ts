@@ -1,5 +1,5 @@
 import { lastValueFrom } from 'rxjs';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 
 import getSDK from '@akashaproject/awf-sdk';
 import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
@@ -9,7 +9,7 @@ import constants from './constants';
 import { logError } from './utils/error-handler';
 import getProviderDetails from './utils/getProviderDetails';
 
-const { INJECTED_PROVIDER_KEY, REQUIRED_NETWORK_KEY } = constants;
+const { INJECTED_PROVIDER_KEY, CONNECT_PROVIDER_KEY, REQUIRED_NETWORK_KEY } = constants;
 
 const getInjectedProvider = async () => {
   const sdk = getSDK();
@@ -61,8 +61,12 @@ export function useInjectedProvider() {
  * A hook to connect to injected provider
  * @param provider -: any of type EthProviders
  * */
-export function useConnectProvider() {
-  return useMutation(async (provider: EthProviders) => connectProvider(provider));
+export function useConnectProvider(provider: EthProviders) {
+  return useQuery([CONNECT_PROVIDER_KEY], () => connectProvider(provider), {
+    enabled: provider !== EthProviders.None,
+    keepPreviousData: true,
+    retry: false,
+  });
 }
 
 /**
