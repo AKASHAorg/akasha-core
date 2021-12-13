@@ -1,15 +1,15 @@
 import {
-  createAPISig,
   Client,
-  ThreadID,
+  createAPISig,
+  createUserAuth,
   PrivateKey,
   PublicKey,
-  createUserAuth,
+  ThreadID,
 } from '@textile/hub';
-import { updateCollections, initCollections } from './collections';
+import { initCollections, updateCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
-import { ethers, utils, providers } from 'ethers';
+import { ethers, providers, utils } from 'ethers';
 import objHash from 'object-hash';
 import mailgun from 'mailgun-js';
 import fetch from 'node-fetch';
@@ -148,8 +148,10 @@ export const validateName = (name: string) => {
 };
 
 const eip1271Abi = [
-  'function isValidSignature(bytes32 _message, bytes _signature) public view returns (bool)',
+  'function isValidSignature( bytes32 _hash, bytes calldata _signature ) external view returns (bytes4)',
+  //'function getMessageHash(bytes memory message) public view returns (bytes32)',
 ];
+export const magicValue = '0x1626ba7e';
 
 export const isValidSignature = async (
   message: string,
@@ -162,9 +164,13 @@ export const isValidSignature = async (
   const hashMessage = utils.hashMessage(hexArray);
   try {
     const contract = new ethers.Contract(address, eip1271Abi, provider);
+    // give some time for the state to update
+    await new Promise(res => setTimeout(res, 10000));
     const valid = await contract.isValidSignature(hashMessage, signature);
-    return Promise.resolve(valid);
+    return Promise.resolve(valid === magicValue);
   } catch (err) {
+    logger.warn('eip1271 sig validation error');
+    logger.warn(err);
     const msgSigner = utils.verifyMessage(hexArray, signature);
     return Promise.resolve(utils.getAddress(msgSigner) === utils.getAddress(address));
   }
@@ -307,4 +313,21 @@ export async function addToIpfs(link: string) {
 
 export function createIpfsGatewayLink(cid: string) {
   return `https://${cid}.${IPFS_GATEWAY}`;
+}
+
+export async function getWalletOwners(
+  scAddress: string,
+  provider: ethers.providers.Provider | ethers.Signer,
+): Promise<string[]> {
+  try {
+    const contract = new ethers.Contract(
+      scAddress,
+      ['function getOwners() public view returns (address[])'],
+      provider,
+    );
+    return contract.getOwners();
+  } catch (e) {
+    logger.warn(`${scAddress} does not support getOwners() method`);
+    return Promise.resolve([]);
+  }
 }

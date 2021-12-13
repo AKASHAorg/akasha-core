@@ -215,7 +215,7 @@ export default class AWF_Profile implements AWF_IProfile {
       operationName = 'GetProfile';
     } else {
       return throwError(() => {
-        return new Error('Must provide ethAddress of pubKey value');
+        return new Error('Must provide ethAddress or pubKey value');
       });
     }
     return this._gql.run<
