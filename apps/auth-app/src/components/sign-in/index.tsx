@@ -29,6 +29,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation();
 
   const singleSpa = React.useRef(props.singleSpa);
+  const navigateTo = React.useRef(props.navigateTo);
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
@@ -58,10 +59,15 @@ const SignIn: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
-      return singleSpa.current.navigateToUrl('/');
+      return navigateTo.current((qsStringify, currentRedirect) => {
+        if (!currentRedirect) {
+          return '/';
+        }
+        return currentRedirect;
+      });
     }
-    if (signInComplete && profileDataReq.isStale && !profileDataReq.data?.userName) {
-      singleSpa.current.navigateToUrl(routes[SIGN_UP_USERNAME]);
+    if (signInComplete && profileDataReq.isSuccess && !profileDataReq.data?.userName) {
+      navigateTo.current(routes[SIGN_UP_USERNAME]);
     }
   }, [signInComplete, profileDataReq]);
 
@@ -118,6 +124,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
           </Box>
           <ChooseProvider
             selectedProvider={selectedProvider}
+            providerIsConnected={connectProviderQuery.data}
             injectedProvider={injectedProvider}
             onProviderSelect={handleProviderSelect}
           />

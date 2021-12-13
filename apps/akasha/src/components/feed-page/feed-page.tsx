@@ -23,7 +23,7 @@ import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
 
 export interface FeedPageProps {
-  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loggedProfileData?: IProfileData;
   loginState: LoginState;
 }
@@ -61,7 +61,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryFlag = React.useCallback(
     (entryId: string, itemType: string) => () => {
       if (!loginState.pubKey) {
-        return showLoginModal.current({ name: 'report-modal', entryId, itemType });
+        return showLoginModal.current({ modal: { name: 'report-modal', entryId, itemType } });
       }
       navigateToModal.current({ name: 'report-modal', entryId, itemType });
     },

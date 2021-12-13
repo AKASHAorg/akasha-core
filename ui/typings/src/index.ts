@@ -24,14 +24,22 @@ export interface LogoSourceType {
   type: LogoTypeSource;
   value: string;
 }
+export type AppNameSelector = (apps: AppLoaderTypes.IAppConfig[]) => string;
+export type PathNameSelector = (appRoutes: AppLoaderTypes.IAppConfig['routes']) => string;
 
 export interface NavigationOptions {
-  pathname: string;
-  search: Record<string, string>;
+  appName?: string | AppNameSelector;
+  pathName?: string | PathNameSelector;
+  queryStrings?: string | NavigationFn;
 }
 
+export type NavigationFn = (
+  stringfyFn: (obj: unknown) => string,
+  currentRedirect?: string,
+) => string;
+
 export interface QueryStringType {
-  [key: string]: undefined | string | string[] | QueryStringType | QueryStringType[];
+  [key: string]: string | string[] | unknown | undefined;
 }
 
 export interface RootComponentProps {
@@ -53,7 +61,7 @@ export interface RootComponentProps {
   extensionData?: AppLoaderTypes.UIEventData['data'];
   homepageApp?: string;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
-  navigateTo: (options: NavigationOptions) => void;
+  navigateTo: (options: string | NavigationOptions | NavigationFn) => void;
   parseQueryString: (queryString: string) => QueryStringType;
 }
 
@@ -106,4 +114,3 @@ export enum ModerationItemTypes {
   REPLY = 'reply',
   // @TODO: add support for tag type, when tag moderation is implemented
 }
-

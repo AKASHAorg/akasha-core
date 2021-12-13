@@ -47,7 +47,7 @@ const {
 
 interface IPostPageProps {
   loginState?: LoginState;
-  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
 const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
@@ -167,7 +167,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginState?.pubKey) {
-      return showLoginModal({ name: 'report-modal', entryId, itemType });
+      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
     }
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };

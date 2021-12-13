@@ -29,7 +29,7 @@ export interface SignUpProps {
 }
 
 const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
-  const { navigateToUrl } = props.singleSpa;
+  const { navigateTo } = props;
 
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [inviteToken, setInviteToken] = React.useState<string>('');
@@ -60,14 +60,20 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const { t } = useTranslation();
 
   const handleIconClick = () => {
-    const lastLocation = sessionStorage.getItem(StorageKeys.LAST_URL);
+    // const lastLocation = sessionStorage.getItem(StorageKeys.LAST_URL);
     sessionStorage.removeItem(StorageKeys.LAST_URL);
-    navigateToUrl(lastLocation || `${rootAKASHARoute}/feed`);
+    navigateTo((qStringify, currentRedirect) => {
+      if (!currentRedirect) {
+        return '/';
+      }
+      return currentRedirect;
+    });
+    // navigateToUrl(lastLocation || `${rootAKASHARoute}/feed`);
   };
 
   const handleNextStep = () => {
     if (activeIndex === 3) {
-      navigateToUrl(routes[SIGN_UP_USERNAME]);
+      navigateTo(routes[SIGN_UP_USERNAME]);
     }
     setActiveIndex(prev => prev + 1);
   };

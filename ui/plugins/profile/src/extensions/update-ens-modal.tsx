@@ -183,7 +183,7 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
       /* User is not logged in. */
       navigateToModal({
         name: 'signin',
-        redirectTo: activeModal,
+        redirectTo: { modal: activeModal },
       });
     }
   }, [loginQuery.data, navigateToModal, activeModal]);

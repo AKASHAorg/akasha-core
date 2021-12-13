@@ -16,17 +16,18 @@ interface ChooseProviderProps {
     };
   };
   onProviderSelect: (provider: EthProviders) => void;
+  providerIsConnected: boolean;
 }
 
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
-  const { selectedProvider, injectedProvider, onProviderSelect } = props;
+  const { selectedProvider, injectedProvider, onProviderSelect, providerIsConnected } = props;
   const { t } = useTranslation();
 
   const handleProviderClick = (provider: EthProviders) => () => {
     onProviderSelect(provider);
   };
 
-  if (selectedProvider !== EthProviders.None) {
+  if (selectedProvider !== EthProviders.None && providerIsConnected) {
     return null;
   }
 

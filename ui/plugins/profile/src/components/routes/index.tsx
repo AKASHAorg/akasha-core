@@ -16,7 +16,7 @@ const Routes: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const showLoginModal = (redirectTo?: ModalNavigationOptions) => {
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
 

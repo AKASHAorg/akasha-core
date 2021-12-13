@@ -36,7 +36,7 @@ export enum ButtonValues {
 interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
   loginState: LoginState;
-  showLoginModal: (redirectTo?: ModalNavigationOptions) => void;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
 const SearchPage: React.FC<SearchPageProps> = props => {

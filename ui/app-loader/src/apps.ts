@@ -9,7 +9,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
 import * as singleSpa from 'single-spa';
-import { getNameFromDef, navigateTo, navigateToModal, parseQueryString } from './utils';
+import { getNameFromDef, navigateToModal, parseQueryString } from './utils';
 
 export interface IntegrationModule {
   register: (opts: IntegrationRegistrationOptions) => Promise<IAppConfig | IWidgetConfig>;
@@ -182,7 +182,7 @@ class Apps extends BaseIntegration {
           layoutConfig: this.layoutConfig,
           getMenuItems: this.getMenuItems,
           isMobile: this.isMobile,
-          navigateTo: navigateTo,
+          navigateTo: this.navigateTo,
           parseQueryString: parseQueryString,
         },
       });

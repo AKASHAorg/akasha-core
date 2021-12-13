@@ -86,7 +86,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { name: 'report-modal', entryId, itemType, user },
+        redirectTo: { modal: { name: 'report-modal', entryId, itemType, user } },
       });
     }
     props.navigateToModal({ name: 'report-modal', entryId, itemType, user });

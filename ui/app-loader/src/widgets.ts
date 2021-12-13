@@ -8,7 +8,7 @@ import {
 import * as singleSpa from 'single-spa';
 import { IntegrationModule } from './apps';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
-import { navigateTo, navigateToModal, parseQueryString } from './utils';
+import { navigateToModal, parseQueryString } from './utils';
 
 class Widgets extends BaseIntegration {
   private readonly widgetInfos: WidgetRegistryInfo[];
@@ -106,7 +106,7 @@ class Widgets extends BaseIntegration {
       navigateToModal: navigateToModal,
       getMenuItems: this.getMenuItems,
       getAppRoutes: this.getAppRoutes,
-      navigateTo: navigateTo,
+      navigateTo: this.navigateTo,
       parseQueryString: parseQueryString,
     };
 
