@@ -29,6 +29,8 @@ const StyledImg = styled.img<{ singleImage?: boolean; isMobile?: boolean }>`
 
 const StyledImgContainer = styled.div`
   position: relative;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
 `;
 
 const ScrollableContainer = styled.div`
