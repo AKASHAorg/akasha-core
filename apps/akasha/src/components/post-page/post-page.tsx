@@ -23,6 +23,7 @@ import {
   useGetProfile,
   useMentionSearch,
   useHandleNavigation,
+  createPendingEntry,
 } from '@akashaproject/ui-awf-hooks';
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
@@ -376,13 +377,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 >
                   <EntryBox
                     isBookmarked={false}
-                    entryData={{
-                      ...publishComment.variables,
-                      author: loggedProfileData,
-                      ipfsLink: '',
-                      permalink: '',
-                      entryId: '',
-                    }}
+                    entryData={createPendingEntry(loggedProfileData, publishComment.variables)}
                     sharePostLabel={t('Share Post')}
                     shareTextLabel={t('Share this post with your friends')}
                     repliesLabel={t('Replies')}
