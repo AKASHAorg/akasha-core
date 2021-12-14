@@ -145,7 +145,9 @@ type ErrorTypes = { code?: number; message?: string; extensions?: { code?: strin
 export function useSignUp(provider: EthProviders, checkRegistered = false) {
   const sdk = getSDK();
   const globalChannel = React.useRef(sdk.api.globalChannel);
-  const [signUpState, setSignUpState] = React.useState(1);
+  const [signUpState, setSignUpState] = React.useState(
+    SIGNUP_STATES[events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS],
+  );
   const [ethAddress, setEthAddress] = React.useState<string>('');
   const [error, setError] = React.useState<ErrorTypes>(null);
 
@@ -225,6 +227,12 @@ export function useSignUp(provider: EthProviders, checkRegistered = false) {
     }
   }, [signUpState, connectWallet, signAuthMessage, signComposedMessage, finishSignUp]);
 
+  const resetState = () => {
+    setSignUpState(SIGNUP_STATES[events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]);
+    setError(null);
+    setEthAddress('');
+  };
+
   return {
     connectWallet,
     ethAddress,
@@ -232,6 +240,7 @@ export function useSignUp(provider: EthProviders, checkRegistered = false) {
     signUpState,
     error,
     fireRemainingMessages,
+    resetState,
   };
 }
 

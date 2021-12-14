@@ -44,10 +44,8 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const requiredNetworkQuery = useRequiredNetworkName();
 
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
-  const { signUpState, ethAddress, fireRemainingMessages, error, fullSignUp } = useSignUp(
-    selectedProvider,
-    true,
-  );
+  const { signUpState, ethAddress, fireRemainingMessages, error, fullSignUp, resetState } =
+    useSignUp(selectedProvider, true);
 
   const isNotRegistered = React.useMemo(
     () => error && error.message.toLowerCase().trim() === 'profile not found',
@@ -62,6 +60,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
+      resetState();
       return navigateTo.current((qsStringify, currentRedirect) => {
         if (!currentRedirect) {
           return '/';
@@ -87,6 +86,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
   };
 
   const handleProviderSelect = (provider: EthProviders) => {
+    resetState();
     setSelectedProvider(provider);
   };
 

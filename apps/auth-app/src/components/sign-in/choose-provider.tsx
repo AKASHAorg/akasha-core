@@ -34,7 +34,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
 
   return (
     <Box direction="column">
-      {injectedProvider && (
+      {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
         <Box margin={{ vertical: 'xsmall' }}>
           <Web3ConnectButton
             leftIconType={injectedProvider.details.iconType}
