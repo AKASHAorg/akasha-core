@@ -22,6 +22,8 @@ const StyledImg = styled.img<{ singleImage?: boolean }>`
 
 const StyledImgContainer = styled.div`
   position: relative;
+  border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  border: 1px solid ${props => props.theme.colors.border};
 `;
 
 const StyledGrid = styled.div`

@@ -144,10 +144,9 @@ const StepFour: React.FC<IStepFourProps> = props => {
   }, []);
 
   React.useEffect(() => {
-    // hook will be in error state if no user found
-    if (checkSignupQuery.isFetched && checkSignupQuery.isError) fireRemainingMessagesRef.current();
-    if (checkSignupQuery.isFetched && !checkSignupQuery.isError) setSuggestSignIn(true);
-  }, [checkSignupQuery.isFetched, checkSignupQuery.isError]);
+    if (checkSignupQuery.data === false) fireRemainingMessagesRef.current();
+    if (checkSignupQuery.data === true) setSuggestSignIn(true);
+  }, [checkSignupQuery.data]);
 
   const isOpenLogin = providerConnected && provider === EthProviders.Torus;
   const errorMessage = React.useMemo(() => {

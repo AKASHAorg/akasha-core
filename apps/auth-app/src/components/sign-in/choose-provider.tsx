@@ -13,6 +13,7 @@ interface ChooseProviderProps {
     details: {
       iconType?: string;
       titleLabel?: string;
+      subtitleLabel?: string;
     };
   };
   onProviderSelect: (provider: EthProviders) => void;
@@ -33,18 +34,23 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
 
   return (
     <Box direction="column">
-      {injectedProvider && (
+      {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
         <Box margin={{ vertical: 'xsmall' }}>
           <Web3ConnectButton
             leftIconType={injectedProvider.details.iconType}
             titleLabel={injectedProvider.details.titleLabel}
+            subtitleLabel={t(injectedProvider.details.subtitleLabel)}
             handleClick={handleProviderClick(EthProviders.Web3Injected)}
+            tagLabel={t('auto-detected')}
           />
         </Box>
       )}
       <Box margin={{ vertical: 'xsmall' }}>
         <Web3ConnectButton
           leftIconType="walletconnect"
+          subtitleLabel={`${t(
+            'The wallet you are using must allow switching the Ethereum network to Rinkeby',
+          )}.`}
           titleLabel={`${t('Scan with')} WalletConnect`}
           handleClick={handleProviderClick(EthProviders.WalletConnect)}
         />
@@ -52,6 +58,9 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
       <Box margin={{ vertical: 'xsmall' }}>
         <Web3ConnectButton
           titleLabel={t('Email or Social Login')}
+          subtitleLabel={`${t(
+            'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
+          )}.`}
           handleClick={handleProviderClick(EthProviders.Torus)}
           leftIconType="key"
         />
