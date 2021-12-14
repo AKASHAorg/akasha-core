@@ -12,14 +12,14 @@ import {
 } from '@akashaproject/ui-awf-testing-utils';
 
 const mockLocationValue = {
-  pathname: '/search/ethereum%20world',
+  pathname: '/search/grhfsdfk',
   search: '',
   hash: '',
   state: null,
 };
 
 const mockRouteParams = {
-  searchKeyword: 'ethereum%20world',
+  searchKeyword: 'grhfsdfk',
 };
 
 jest.mock('react-router', () => ({
