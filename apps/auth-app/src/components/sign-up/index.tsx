@@ -189,13 +189,13 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           }}
           tagLabel={t('auto-detected')}
           walletConnectTitleLabel="WalletConnect"
-          walletConnectDescription={t(
-            'WalletConnect has had reliability problems for us in the past. Consider it experimental at this time.',
-          )}
+          walletConnectDescription={`${t(
+            'The wallet you are using must allow switching the Ethereum network to Rinkeby',
+          )}.`}
           socialLoginTitleLabel={t('Email or Social Login')}
-          socialLoginDescription={t(
+          socialLoginDescription={`${t(
             'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
-          )}
+          )}.`}
           providerConnected={
             connectProviderQuery.isSuccess && selectedProvider !== EthProviders.None
           }
@@ -209,7 +209,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           setRequiredNetworkAccentLabel={requiredNetworkName}
           metamaskCTAIntroLabel={t('Click')}
           metamaskCTAAccentLabel={t('here')}
-          metamaskCTALabel={t('to change the network.')}
+          metamaskCTALabel={`${t('to change the network')}.`}
           otherprovidersCTALabel={t('Please change the network manually')}
           isOnRequiredNetworkLabel={
             selectedProvider === EthProviders.Torus
