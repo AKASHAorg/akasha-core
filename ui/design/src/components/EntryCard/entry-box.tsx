@@ -26,6 +26,8 @@ import { EntryCardRemoved } from './entry-card-removed';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { EntryImageGallery, ImageObject } from './entry-image-gallery';
 import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
+import { editorDefaultValue } from '../Editor/initialValue';
+import isEqual from 'lodash.isequal';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -493,7 +495,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             removedByMeLabel={removedByMeLabel}
           />
         )}
-        {!props.isRemoved && (
+        {!props.isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
           <Box
             pad={{ horizontal: 'medium' }}
             height={{ max: '50rem' }}
