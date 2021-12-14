@@ -53,6 +53,7 @@ export interface IEditorBox {
   minHeight?: string;
   withMeter?: boolean;
   linkPreview?: IEntryData['linkPreview'];
+  uploadedImages?: IEntryData['images'];
   getLinkPreview: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
@@ -92,6 +93,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     minHeight,
     withMeter,
     linkPreview,
+    uploadedImages = [],
     getLinkPreview,
     getMentions,
     getTags,
@@ -127,7 +129,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
 
   const [uploading, setUploading] = React.useState(false);
-  const [images, setImages] = React.useState<ImageObject[]>([]);
+  const [images, setImages] = React.useState<ImageObject[]>(uploadedImages);
 
   const handleGetLinkPreview = async (url: string) => {
     setLinkPreviewUploading(true);
@@ -602,7 +604,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               handleInsertImage={handleInsertImageLink}
               ref={uploadInputRef}
             />
-            <ImageGallery images={images} handleDeleteImage={handleDeleteImage} />
+            {images?.length > 0 && (
+              <ImageGallery images={images} handleDeleteImage={handleDeleteImage} />
+            )}
             {(linkPreviewState || linkPreviewUploading) && (
               <LinkPreview
                 uploading={linkPreviewUploading}

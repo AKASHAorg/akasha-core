@@ -160,6 +160,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
             onPublish={handleEntryPublish}
             handleNavigateBack={handleModalClose}
             linkPreview={entryData?.linkPreview}
+            uploadedImages={entryData?.images}
             getLinkPreview={getLinkPreview}
             getMentions={handleMentionQueryChange}
             getTags={handleTagQueryChange}
