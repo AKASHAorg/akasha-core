@@ -267,7 +267,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           textCreateProfileExplanation={t('Create a public record on Ethereum World.')}
           textAddressComplete={t("You've connected an Ethereum address")}
           textVerifyOwnershipComplete={t('You have verified that you own this address')}
-          textGetAccessComplete={t('Message is signed. You are now connected')}
+          textGetAccessComplete={t('Message is signed and you are now connected')}
           textProfileComplete={t('You have registered your public profile on Ethereum World')}
           textCompleted={
             "That's it! The hardest part is complete. Now you only need to choose a username and you’ll be done!"
