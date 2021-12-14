@@ -166,7 +166,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
       {activeIndex === 2 && (
         <StepThree
           paragraphOneLabel={t(
-            "You now need to choose how you'll sign up on  Ethereum World. If you are experienced wth Ethereum, you may connect your wallet.",
+            "You now need to choose how you'll sign up on  Ethereum World. If you are experienced with Ethereum, you may connect your wallet.",
           )}
           paragraphTwoBoldLabel={t(
             'If you are new to Ethereum, we recommend using the email or social login option.',
