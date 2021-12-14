@@ -217,11 +217,11 @@ export default class AWF_Auth implements AWF_IAuth {
         await this.#_signTokenMessage();
       } catch (e) {
         this._lockSignIn = false;
-        await this._web3.disconnect();
         localStorage.removeItem(this.sessKey);
         localStorage.removeItem(this.providerKey);
         localStorage.removeItem(this.currentUserKey);
         this._log.error(e);
+        await this._web3.disconnect();
         throw e;
       }
     }
