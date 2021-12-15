@@ -111,7 +111,7 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
           'Not seeing the wallet request? Please make sure to open your wallet extension. If you’re still not seeing it, we can resend it.',
         )}
         resend={t('Resend request')}
-        complete={t('Message is signed. You are now connected')}
+        complete={t('Message is signed and you are now connected')}
         buttonLabel={''}
         walletRequest={onSignRequest}
         textAgain={t('Try Again')}
