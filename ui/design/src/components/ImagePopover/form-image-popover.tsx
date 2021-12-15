@@ -102,6 +102,7 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
       align={{ top: 'bottom', left: 'left' }}
       onClickOutside={closePopover}
       onEsc={closePopover}
+      style={{ zIndex: 999 }}
     >
       <Box direction="column" pad="xsmall">
         <StyledBox

@@ -16,7 +16,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 import { extensionPointsMap } from '../extension-points';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
@@ -106,6 +105,7 @@ const TopbarComponent = (props: RootComponentProps) => {
       pathName: appRoutes => {
         return appRoutes[appRoutes.SIGN_IN];
       },
+      queryStrings: qsStringify => qsStringify({ redirectTo: location.pathname }),
     });
   };
 
