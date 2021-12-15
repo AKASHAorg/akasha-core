@@ -172,7 +172,7 @@ export default class AWF_Auth implements AWF_IAuth {
       } else {
         if (currentProvider === EthProviders.WalletConnect) {
           this._log.info('using wc bridge');
-          localStorage.removeItem('walletconnect');
+          // localStorage.removeItem('walletconnect');
         }
       }
       try {
@@ -221,6 +221,7 @@ export default class AWF_Auth implements AWF_IAuth {
         localStorage.removeItem(this.providerKey);
         localStorage.removeItem(this.currentUserKey);
         this._log.error(e);
+        await this._web3.disconnect();
         throw e;
       }
     }

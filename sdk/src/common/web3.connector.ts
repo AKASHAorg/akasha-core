@@ -26,6 +26,7 @@ export default class Web3Connector
   #globalChannel: EventBus;
   #wallet: ethers.Wallet;
   #openLogin: OpenLogin;
+  #walletConnect: WalletConnectProvider;
   #currentProviderId: EthProviders;
   // only rinkeby network is supported atm
   readonly network = 'rinkeby';
@@ -101,8 +102,11 @@ export default class Web3Connector
       data: undefined,
       event: WEB3_EVENTS.DISCONNECTED,
     });
-    if (this.#openLogin) {
+    if (this.#openLogin instanceof OpenLogin) {
       await this.#openLogin.logout();
+    }
+    if (this.#walletConnect instanceof WalletConnectProvider) {
+      await this.#walletConnect.disconnect();
     }
   }
 
@@ -214,11 +218,8 @@ export default class Web3Connector
    */
   async #_getProvider(provider: EthProviders) {
     let ethProvider;
-    if (provider === EthProviders.None) {
-      return ethers.getDefaultProvider(this.network);
-    }
 
-    if (provider === EthProviders.FallbackProvider) {
+    if (provider === EthProviders.FallbackProvider || provider === EthProviders.None) {
       return ethers.getDefaultProvider(this.network, { infura: process.env.INFURA_ID });
     }
 
@@ -234,7 +235,8 @@ export default class Web3Connector
     }
 
     if (provider === EthProviders.WalletConnect) {
-      ethProvider = await this.#_getWalletConnectProvider();
+      this.#walletConnect = await this.#_getWalletConnectProvider();
+      ethProvider = this.#walletConnect;
     }
     const web3Provider = new ethers.providers.Web3Provider(ethProvider, this.network);
     this.#_registerProviderChangeEvents(web3Provider);
