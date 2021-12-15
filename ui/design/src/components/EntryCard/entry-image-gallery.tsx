@@ -21,6 +21,7 @@ const StyledImg = styled.img<{ singleImage?: boolean }>`
 `;
 
 const StyledImgContainer = styled.div`
+  display: flex;
   position: relative;
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   border: 1px solid ${props => props.theme.colors.border};
@@ -38,6 +39,10 @@ const StyledPill = styled(Box)`
   bottom: 21px;
   right: 16px;
   z-index: 1;
+`;
+
+const SingleImageContainer = styled.div`
+  display: flex;
 `;
 
 export interface ImageObject {
@@ -129,6 +134,15 @@ const EntryImageGallery: React.FC<IImageGallery> = props => {
   // limit shown images to 4
   const displayedImages = images.slice(0, 4);
 
+  if (images.length === 1) {
+    return (
+      <SingleImageContainer>
+        {images.map((image, index) => (
+          <ImageGridItem image={image} key={index} />
+        ))}
+      </SingleImageContainer>
+    );
+  }
   return (
     <StyledGrid>
       {displayedImages.map((image, index) => (
