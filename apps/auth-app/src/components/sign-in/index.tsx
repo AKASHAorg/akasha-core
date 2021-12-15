@@ -53,10 +53,10 @@ const SignIn: React.FC<RootComponentProps> = props => {
   );
 
   React.useEffect(() => {
-    if (selectedProvider === EthProviders.WalletConnect && connectProviderQuery.isError) {
+    if (connectProviderQuery.isError) {
       setSelectedProvider(EthProviders.None);
     }
-  }, [selectedProvider, connectProviderQuery.isError]);
+  }, [connectProviderQuery.isError]);
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
