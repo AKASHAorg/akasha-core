@@ -47,20 +47,21 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const { signUpState, ethAddress, fireRemainingMessages, error, fullSignUp, resetState } =
     useSignUp(selectedProvider, true);
 
+  const signupStateReset = React.useRef(resetState);
+
   const isNotRegistered = React.useMemo(
     () => error && error.message.toLowerCase().trim() === 'profile not found',
     [error],
   );
 
   React.useEffect(() => {
-    if (selectedProvider === EthProviders.WalletConnect && connectProviderQuery.isError) {
+    if (connectProviderQuery.isError) {
       setSelectedProvider(EthProviders.None);
     }
-  }, [selectedProvider, connectProviderQuery.isError]);
+  }, [connectProviderQuery.isError]);
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
-      resetState();
       return navigateTo.current((qsStringify, currentRedirect) => {
         if (!currentRedirect) {
           return '/';
@@ -149,7 +150,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
           {networkNotSupported && (
             <RequiredNetworkStep
               setRequiredNetworkLabel={t('To use Ethereum World during the alpha period, ')}
-              setRequiredNetworkBoldLabel={`${t('you’ll need to set the')} ${
+              setRequiredNetworkBoldLabel={`${t(`you'll need to set the`)} ${
                 selectedProvider === EthProviders.WalletConnect
                   ? 'WalletConnect'
                   : injectedProvider.name
