@@ -28,6 +28,7 @@ const StyledImg = styled.img<{ singleImage?: boolean; isMobile?: boolean }>`
 `;
 
 const StyledImgContainer = styled.div`
+  display: flex;
   position: relative;
   border: 1px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
