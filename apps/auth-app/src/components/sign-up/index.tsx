@@ -166,7 +166,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
       {activeIndex === 2 && (
         <StepThree
           paragraphOneLabel={t(
-            "You now need to choose how you'll sign up on  Ethereum World. If you are experienced wth Ethereum, you may connect your wallet.",
+            "You now need to choose how you'll sign up on  Ethereum World. If you are experienced with Ethereum, you may connect your wallet.",
           )}
           paragraphTwoBoldLabel={t(
             'If you are new to Ethereum, we recommend using the email or social login option.',
@@ -255,22 +255,20 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             'We will associate your Ethereum World account with this address.',
           )}
           textButtonSelect={t('Select Address in Wallet')}
-          textCreateSignIn={t('Create a way to sign in to your account')}
-          textCreateSignInExplanation={t(
-            "You'll be able to sign in to your account with this wallet address. Think of it as using your wallet like a username and password.",
+          textVerifyOwnership={t('Verify that you own this address')}
+          textVerifyOwnershipExplanation={t(
+            "You'll be able to sign in to Ethereum World using this address.",
           )}
-          textCreateSecure={t('Create a secure place to store your data')}
-          textCreateSecureExplanation={t(
-            'You will create a secure space to store your data (posts, photos, replies, and so forth). Moving forward we will need explicit permission from you to access you data.',
+          textGetAccess={t('Sign the message to get access to Ethereum World services')}
+          textGetAccessExplanation={t(
+            'You will be able to create, publish and store content on Ethereum World and interact with its services.',
           )}
-          textCreateProfile={t('Create your Ethereum World profile')}
-          textCreateProfileExplanation={t(
-            'We will create your Ethereum World profile in our systems.',
-          )}
+          textCreateProfile={t('Consent to register your public profile on Ethereum World')}
+          textCreateProfileExplanation={t('Create a public record on Ethereum World.')}
           textAddressComplete={t("You've connected an Ethereum address")}
-          textSignInComplete={t('You can sign in with this address')}
-          textSecureComplete={t('You have a secure place to store your data')}
-          textProfileComplete={t('You have created your Ethereum World profile')}
+          textVerifyOwnershipComplete={t('You have verified that you own this address')}
+          textGetAccessComplete={t('Message is signed and you are now connected')}
+          textProfileComplete={t('You have registered your public profile on Ethereum World')}
           textCompleted={
             "That's it! The hardest part is complete. Now you only need to choose a username and you’ll be done!"
           }
