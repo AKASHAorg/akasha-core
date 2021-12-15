@@ -19,15 +19,15 @@ export interface IStepFourProps {
   textChooseAddress: string;
   textChooseAddressExplanation: string;
   textButtonSelect: string;
-  textCreateSignIn: string;
-  textCreateSignInExplanation: string;
-  textCreateSecure: string;
-  textCreateSecureExplanation: string;
+  textVerifyOwnership: string;
+  textVerifyOwnershipExplanation: string;
+  textGetAccess: string;
+  textGetAccessExplanation: string;
   textCreateProfile: string;
   textCreateProfileExplanation: string;
   textAddressComplete: string;
-  textSignInComplete: string;
-  textSecureComplete: string;
+  textVerifyOwnershipComplete: string;
+  textGetAccessComplete: string;
   textProfileComplete: string;
   textCompleted: string;
   textButtonSignInWallet: string;
@@ -107,15 +107,15 @@ const StepFour: React.FC<IStepFourProps> = props => {
     textChooseAddress,
     textChooseAddressExplanation,
     textButtonSelect,
-    textCreateSignIn,
-    textCreateSignInExplanation,
-    textCreateSecure,
-    textCreateSecureExplanation,
+    textVerifyOwnership,
+    textVerifyOwnershipExplanation,
+    textGetAccess,
+    textGetAccessExplanation,
     textCreateProfile,
     textCreateProfileExplanation,
     textAddressComplete,
-    textSignInComplete,
-    textSecureComplete,
+    textVerifyOwnershipComplete,
+    textGetAccessComplete,
     textProfileComplete,
     textCompleted,
     textButtonSignInWallet,
@@ -195,11 +195,11 @@ const StepFour: React.FC<IStepFourProps> = props => {
           error={signUpState === REQUEST_STEPS.ONE && errorMessage}
         />
         <WalletRequestStep
-          heading={textCreateSignIn}
-          explanation={textCreateSignInExplanation}
+          heading={textVerifyOwnership}
+          explanation={textVerifyOwnershipExplanation}
           problem={textRequestProblem}
           resend={textRequestResend}
-          complete={textSignInComplete}
+          complete={textVerifyOwnershipComplete}
           buttonLabel={textButtonSignInWallet}
           walletRequest={fireRemainingMessages}
           textAgain={textAgain}
@@ -208,11 +208,11 @@ const StepFour: React.FC<IStepFourProps> = props => {
           error={signUpState === REQUEST_STEPS.TWO && errorMessage}
         />
         <WalletRequestStep
-          heading={textCreateSecure}
-          explanation={textCreateSecureExplanation}
+          heading={textGetAccess}
+          explanation={textGetAccessExplanation}
           problem={textRequestProblem}
           resend={textRequestResend}
-          complete={textSecureComplete}
+          complete={textGetAccessComplete}
           buttonLabel={textButtonSignInWallet}
           walletRequest={fireRemainingMessages}
           textAgain={textAgain}

@@ -90,13 +90,13 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
         error={status === 1 && errorMessage}
       />
       <WalletRequestStep
-        heading={t('Verify that you own this account')}
+        heading={t('Verify that you own this address')}
         explanation=""
         problem={t(
           'Not seeing the wallet request? Please make sure to open your wallet extension. If you’re still not seeing it, we can resend it.',
         )}
         resend={t('Resend request')}
-        complete={t('You have verified that you own this account')}
+        complete={t('You have verified that you own this address')}
         buttonLabel={''}
         walletRequest={onSignRequest}
         textAgain={t('Try Again')}
@@ -105,13 +105,13 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
         error={status === 3 && errorMessage}
       />
       <WalletRequestStep
-        heading={t('Allow us to access your profile')}
+        heading={t('Sign the message to get access to Ethereum World services')}
         explanation=""
         problem={t(
           'Not seeing the wallet request? Please make sure to open your wallet extension. If you’re still not seeing it, we can resend it.',
         )}
         resend={t('Resend request')}
-        complete={t('You have allowed us to access your profile')}
+        complete={t('Message is signed and you are now connected')}
         buttonLabel={''}
         walletRequest={onSignRequest}
         textAgain={t('Try Again')}
