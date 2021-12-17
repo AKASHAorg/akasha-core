@@ -664,7 +664,7 @@ export default class AppLoader {
     }
     await this.sdk.services.appSettings.uninstall(info.name);
     if (info.type === 'app') {
-      this.apps.uninstall(info);
+      await this.apps.uninstall(info);
     }
     if (info.type === 'widget') {
       this.widgets.uninstall(info);

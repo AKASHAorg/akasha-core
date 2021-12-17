@@ -183,7 +183,7 @@ class Widgets extends BaseIntegration {
         return;
       }
       this.widgetConfigs[widgetInfo.name] = widgetConfig;
-      this.registerWidget(widgetConfig.name);
+      await this.registerWidget(widgetConfig.name);
     } else {
       this.logger.warn(`App ${widgetInfo.name} has no exported .register() function!`);
     }

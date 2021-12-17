@@ -218,6 +218,7 @@ class ProfileAPI extends DataSource {
     const exists1 = profile.followers.indexOf(profile1.pubKey);
 
     if (!profile || !profile1) {
+      logger.warn(`profile for ${pubKey} or ${ethAddress} was not found`);
       await t.end();
       return false;
     }
@@ -228,7 +229,8 @@ class ProfileAPI extends DataSource {
     if (exists1 === -1) {
       profile.followers.unshift(profile1.pubKey);
     }
-    await t.save([profile, profile1]);
+    await t.save([profile]);
+    await t.save([profile1]);
     await t.end();
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
     const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
@@ -260,6 +262,7 @@ class ProfileAPI extends DataSource {
     const exists = profile1.following.indexOf(profile.pubKey);
     const exists1 = profile.followers.indexOf(profile1.pubKey);
     if (!profile || !profile1) {
+      logger.warn(`profile for ${pubKey} or ${ethAddress} was not found`);
       await t.end();
       return false;
     }
@@ -271,7 +274,8 @@ class ProfileAPI extends DataSource {
       profile.followers.splice(exists1, 1);
     }
 
-    await t.save([profile, profile1]);
+    await t.save([profile]);
+    await t.save([profile1]);
     await t.end();
 
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
