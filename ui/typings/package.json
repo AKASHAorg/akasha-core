@@ -27,8 +27,8 @@
   "devDependencies": {
     "@akashaproject/sdk-typings": "*",
     "rxjs": "7.3.0",
-    "slate": "0.72.0",
-    "slate-react": "0.72.0",
+    "slate": "0.72.3",
+    "slate-react": "0.72.1",
     "slate-history": "0.66.0",
     "i18next": "20.6.1",
     "single-spa": "5.9.3"
