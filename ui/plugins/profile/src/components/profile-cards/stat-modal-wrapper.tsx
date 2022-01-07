@@ -45,11 +45,17 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   // get followers for this profile
   const followersReq = useFollowers(profileData.pubKey, 10);
-  const followers = followersReq.data?.pages[0]?.results;
+  const followers = React.useMemo(
+    () => followersReq.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
+    [followersReq.data?.pages],
+  );
 
   // get accounts this profile is following
   const followingReq = useFollowing(profileData.pubKey, 10);
-  const following = followingReq.data?.pages[0]?.results;
+  const following = React.useMemo(
+    () => followingReq.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
+    [followingReq.data?.pages],
+  );
 
   // get interests for this profile
   const interestsReq = useInterests(profileData.pubKey);
@@ -107,13 +113,13 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   React.useEffect(() => setActiveIndex(selectedStat), []);
 
   const loadMoreFollowers = React.useCallback(() => {
-    if (!followersReq.isLoading && followersReq.hasNextPage) {
+    if (!followersReq.isFetching && followersReq.hasNextPage) {
       followersReq.fetchNextPage();
     }
   }, [followersReq]);
 
   const loadMoreFollowing = React.useCallback(() => {
-    if (!followingReq.isLoading && followingReq.hasNextPage) {
+    if (!followingReq.isFetching && followingReq.hasNextPage) {
       followingReq.fetchNextPage();
     }
   }, [followingReq]);
