@@ -34,7 +34,7 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-awf-typings": "*",
-    "single-spa-react": "4.4.0",
+    "single-spa-react": "4.6.0",
     "react-i18next": "11.12.0",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
