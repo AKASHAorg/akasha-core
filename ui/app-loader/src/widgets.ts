@@ -115,18 +115,23 @@ class Widgets extends BaseIntegration {
   }
   async importConfigs() {
     for (const name in this.widgetModules) {
-      const widgetModule = this.widgetModules[name];
+      if (this.widgetModules.hasOwnProperty(name)) {
+        const widgetModule = this.widgetModules[name];
 
-      if (widgetModule.hasOwnProperty('register') && typeof widgetModule.register === 'function') {
-        this.widgetConfigs[name] = (await widgetModule.register({
-          layoutConfig: this.layoutConfig,
-          uiEvents: this.uiEvents,
-          worldConfig: {
-            title: this.worldConfig.title,
-          },
-        })) as IWidgetConfig;
-      } else {
-        this.logger.warn(`Widget ${name} does not have a register() method exported!`);
+        if (
+          widgetModule.hasOwnProperty('register') &&
+          typeof widgetModule.register === 'function'
+        ) {
+          this.widgetConfigs[name] = (await widgetModule.register({
+            layoutConfig: this.layoutConfig,
+            uiEvents: this.uiEvents,
+            worldConfig: {
+              title: this.worldConfig.title,
+            },
+          })) as IWidgetConfig;
+        } else {
+          this.logger.warn(`Widget ${name} does not have a register() method exported!`);
+        }
       }
     }
     return Promise.resolve();

@@ -150,7 +150,7 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <picture>
-                  <img src={currentImg.src} />
+                  <img src={currentImg.src} alt="image" />
                 </picture>
               </TransformComponent>
             </TransformWrapper>

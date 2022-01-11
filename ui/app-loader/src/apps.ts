@@ -53,18 +53,20 @@ class Apps extends BaseIntegration {
   }
   async importConfigs() {
     for (const name in this.appModules) {
-      const appModule = this.appModules[name];
+      if (this.appModules.hasOwnProperty(name)) {
+        const appModule = this.appModules[name];
 
-      if (appModule.hasOwnProperty('register') && typeof appModule.register === 'function') {
-        this.appConfigs[name] = (await appModule.register({
-          layoutConfig: this.layoutConfig,
-          worldConfig: {
-            title: this.worldConfig.title,
-          },
-          uiEvents: this.uiEvents,
-        })) as IAppConfig;
-      } else {
-        this.logger.warn(`Integration ${name} does not have a register() method exported!`);
+        if (appModule.hasOwnProperty('register') && typeof appModule.register === 'function') {
+          this.appConfigs[name] = (await appModule.register({
+            layoutConfig: this.layoutConfig,
+            worldConfig: {
+              title: this.worldConfig.title,
+            },
+            uiEvents: this.uiEvents,
+          })) as IAppConfig;
+        } else {
+          this.logger.warn(`Integration ${name} does not have a register() method exported!`);
+        }
       }
     }
     return Promise.resolve();
