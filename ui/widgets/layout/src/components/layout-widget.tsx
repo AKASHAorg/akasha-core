@@ -2,6 +2,7 @@ import DS from '@akashaproject/design-system';
 import React from 'react';
 import { GlobalStyle } from './global-style';
 import {
+  CookieWidgetContainer,
   MainAreaContainer,
   ScrollableWidgetArea,
   SidebarWrapper,
@@ -164,16 +165,14 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
                                   onMount={handleExtensionMount}
                                   onUnmount={handleExtensionUnmount}
                                 />
-                                {!props.isMobile && (
-                                  <CookieWidget
-                                    style={{
-                                      position: 'fixed',
-                                      bottom: 0,
-                                      marginLeft: '1rem',
-                                      maxWidth: '21rem',
-                                    }}
-                                  />
-                                )}
+                                <CookieWidget
+                                  style={{
+                                    position: 'fixed',
+                                    bottom: 0,
+                                    marginLeft: '1rem',
+                                    maxWidth: '21rem',
+                                  }}
+                                />
                               </ScrollableWidgetArea>
                             </WidgetAreaContainer>
                           </WidgetContainer>
@@ -200,7 +199,9 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
             onUnmount={handleExtensionUnmount}
             style={{ position: 'relative', zIndex: 200 }}
           />
-          {props.isMobile && <CookieWidget style={{ position: 'fixed', bottom: 0 }} />}
+          <CookieWidgetContainer>
+            <CookieWidget />
+          </CookieWidgetContainer>
         </div>
       </div>
     </I18nextProvider>

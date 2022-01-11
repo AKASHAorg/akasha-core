@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 
 import Icon from '../Icon';
 import Avatar from '../Avatar';
-import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
+import { StyledAnchor } from '../EntryCard/basic-card-box';
 import { ITransparencyLogMiniCardProps } from '../TransparencyLogMiniCard';
 
 import { StyledText } from '../ListModal/styled-modal';
@@ -59,11 +59,8 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
   };
 
   return (
-    <MainAreaCardBox
+    <Box
       pad={{ vertical: 'medium', left: 'medium' }}
-      elevation={isMobileOnly ? 'none' : 'shadow'}
-      noBorderRadius={true}
-      noBorder={isMobileOnly}
       style={{ ...(isMobileOnly && { height: '100vh' }) }} // fills the available height in absolute positioning for mobile
     >
       <Box
@@ -192,7 +189,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
           </Box>
         }
       />
-    </MainAreaCardBox>
+    </Box>
   );
 };
 

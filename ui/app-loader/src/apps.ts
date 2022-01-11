@@ -62,7 +62,6 @@ class Apps extends BaseIntegration {
             title: this.worldConfig.title,
           },
           uiEvents: this.uiEvents,
-          isMobile: this.isMobile,
         })) as IAppConfig;
       } else {
         this.logger.warn(`Integration ${name} does not have a register() method exported!`);
@@ -181,7 +180,6 @@ class Apps extends BaseIntegration {
           navigateToModal: navigateToModal,
           layoutConfig: this.layoutConfig,
           getMenuItems: this.getMenuItems,
-          isMobile: this.isMobile,
           navigateTo: this.navigateTo,
           parseQueryString: parseQueryString,
         },
@@ -211,7 +209,6 @@ class Apps extends BaseIntegration {
           title: this.worldConfig.title,
         },
         uiEvents: this.uiEvents,
-        isMobile: this.isMobile,
       })) as IAppConfig;
       if (!appConfig) {
         return;

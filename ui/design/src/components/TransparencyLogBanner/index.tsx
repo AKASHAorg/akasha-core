@@ -66,12 +66,7 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
   };
 
   return (
-    <MainAreaCardBox
-      pad="large"
-      elevation={isMobileOnly ? 'none' : 'shadow'}
-      noBorderRadius={true}
-      noBorder={isMobileOnly}
-    >
+    <Box pad="large">
       <Box height={size} width={size} margin={{ bottom: 'small' }} alignSelf="center">
         <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
       </Box>
@@ -135,7 +130,7 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
           <Icon type="arrowRight" accentColor={true} clickable={true} />
         </Box>
       </Box>
-    </MainAreaCardBox>
+    </Box>
   );
 };
 

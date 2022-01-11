@@ -21,7 +21,6 @@ export interface BaseIntegrationClassOptions {
   layoutConfig: LayoutConfig;
   uiEvents: BehaviorSubject<UIEventData>;
   worldConfig: ISdkConfig & ILoaderConfig;
-  isMobile: boolean;
   sdk: IAwfSDK;
   addMenuItem: (menuItem: IMenuItem) => void;
   getMenuItems: () => IMenuList;
@@ -33,7 +32,6 @@ class BaseIntegration {
   public uiEvents: BehaviorSubject<UIEventData>;
   public worldConfig: ISdkConfig & ILoaderConfig;
   public sdk: IAwfSDK;
-  public isMobile: boolean;
   public addMenuItem: (menuItem: IMenuItem) => void;
   public getMenuItems: () => IMenuList;
   public logger: ILogger;
@@ -43,7 +41,6 @@ class BaseIntegration {
     this.uiEvents = opts.uiEvents;
     this.worldConfig = opts.worldConfig;
     this.sdk = opts.sdk;
-    this.isMobile = opts.isMobile;
     this.addMenuItem = opts.addMenuItem;
     this.getMenuItems = opts.getMenuItems;
     this.logger = this.sdk.services.log.create('app-loader.base-integration');

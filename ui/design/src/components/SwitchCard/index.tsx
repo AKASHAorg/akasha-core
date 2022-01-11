@@ -21,6 +21,8 @@ export interface ISwitchCard {
   buttonsWrapperWidth?: string;
   wrapperMarginBottom?: string;
   onTabClick: (value: string) => void;
+  style?: React.CSSProperties;
+  className?: string;
 }
 
 export interface IStyledButtonProps {
@@ -62,6 +64,8 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     onIconClick,
     onTabClick,
     buttonsWrapperWidth,
+    style,
+    className,
   } = props;
 
   const length = buttonLabels.length;
@@ -73,7 +77,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
   return (
     <>
       {!(isMobileOnly && hasMobileDesign) && (
-        <BasicCardBox margin={{ bottom: 'medium' }}>
+        <BasicCardBox margin={{ bottom: 'medium' }} style={style} className={className}>
           <Box direction="row" pad="1rem" justify="between" align="center">
             <Box direction="row">
               {hasIcon && (
@@ -119,7 +123,13 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
         </BasicCardBox>
       )}
       {isMobileOnly && hasMobileDesign && (
-        <StickyBox userSignedIn={!!loggedUser} direction="row" margin={{ bottom: 'medium' }}>
+        <StickyBox
+          userSignedIn={!!loggedUser}
+          direction="row"
+          className={className}
+          style={style}
+          margin={{ bottom: 'medium' }}
+        >
           {buttonLabels.map((el, idx) => (
             <Box
               key={idx}

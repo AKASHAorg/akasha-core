@@ -72,10 +72,10 @@ class Widgets extends BaseIntegration {
   }
   async registerWidget(widgetName: string) {
     const widgetConfig: IWidgetConfig = this.widgetConfigs[widgetName];
-    if (this.isMobile && widgetConfig.notOnMobile) {
-      this.logger.info(`will not display widget ** ${widgetConfig.name} ** on mobile`);
-      return;
-    }
+    // if (this.isMobile && widgetConfig.notOnMobile) {
+    //   this.logger.info(`will not display widget ** ${widgetConfig.name} ** on mobile`);
+    //   return;
+    // }
     this.logger.info(
       `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widgetConfig.name}`,
     );
@@ -99,7 +99,6 @@ class Widgets extends BaseIntegration {
       domElement: wrapperNode,
       globalChannel: this.sdk.api.globalChannel,
       uiEvents: this.uiEvents,
-      isMobile: this.isMobile,
       logger: this.sdk.services.log.create(widgetName),
       // installIntegration: this.installIntegration.bind(this),
       // uninstallIntegration: this.uninstallIntegration.bind(this),
@@ -125,7 +124,6 @@ class Widgets extends BaseIntegration {
           worldConfig: {
             title: this.worldConfig.title,
           },
-          isMobile: this.isMobile,
         })) as IWidgetConfig;
       } else {
         this.logger.warn(`Widget ${name} does not have a register() method exported!`);
@@ -177,7 +175,6 @@ class Widgets extends BaseIntegration {
           title: this.worldConfig.title,
         },
         uiEvents: this.uiEvents,
-        isMobile: this.isMobile,
       })) as IWidgetConfig;
       if (!widgetConfig) {
         return;
