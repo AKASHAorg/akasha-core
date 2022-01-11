@@ -14,20 +14,19 @@ export interface ISwitchCard {
   hasIcon?: boolean;
   countLabel?: string;
   activeButton: string;
+  tabButtons: React.ReactElement;
   buttonLabels: string[];
   buttonValues: string[];
   hasMobileDesign?: boolean;
   onIconClick?: () => void;
   buttonsWrapperWidth?: string;
   wrapperMarginBottom?: string;
-  onTabClick: (value: string) => void;
+  onTabClick: (value: string) => () => void;
   style?: React.CSSProperties;
   className?: string;
 }
 
-export interface IStyledButtonProps {
-  readonly first?: boolean;
-  readonly last?: boolean;
+export interface ISwitchCardButtonProps {
   readonly removeBorder?: boolean;
 }
 
@@ -38,10 +37,9 @@ const SwitchCardButton = styled(Button)`
   border-width: 0.1rem;
 `;
 
-const StyledButton = styled(SwitchCardButton)<IStyledButtonProps>`
+export const StyledSwitchCardButton = styled(SwitchCardButton)<ISwitchCardButtonProps>`
   border-left-width: ${props => props.removeBorder && '0'};
-  border-radius: ${props =>
-    props.first ? '0.25rem 0rem 0rem 0.25rem' : props.last ? '0rem 0.25rem 0.25rem 0rem' : '0'};
+  border-radius: 0;
 `;
 
 const StickyBox = styled(Box)<{ userSignedIn: boolean }>`
@@ -58,6 +56,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     activeButton,
     hasIcon = false,
     countLabel,
+    tabButtons,
     buttonLabels,
     buttonValues,
     hasMobileDesign,
@@ -69,10 +68,6 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
   } = props;
 
   const length = buttonLabels.length;
-
-  const handleTabClick = (value: string) => () => {
-    onTabClick(value);
-  };
 
   return (
     <>
@@ -106,18 +101,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                   : '30%'
               }
             >
-              {buttonLabels.map((el, idx) => (
-                <StyledButton
-                  key={idx}
-                  label={el}
-                  size="large"
-                  first={idx === 0}
-                  removeBorder={idx > 0}
-                  primary={buttonValues[buttonLabels.indexOf(el)] === activeButton}
-                  last={idx === length - 1}
-                  onClick={handleTabClick(el)}
-                />
-              ))}
+              {tabButtons}
             </Box>
           </Box>
         </BasicCardBox>
@@ -146,7 +130,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                       side: 'bottom',
                     }),
               }}
-              onClick={handleTabClick(el)}
+              onClick={onTabClick(buttonValues[buttonLabels.indexOf(el)])}
             >
               <Text color="secondaryText" textAlign="center">
                 {el}

@@ -17,6 +17,7 @@ const {
   Icon,
   Spinner,
   SwitchCard,
+  StyledSwitchCardButton,
   TransparencyLogMiniCard,
   useIntersectionObserver,
   BasicCardBox,
@@ -66,6 +67,12 @@ const TabsToolbar = styled(SwitchCard)`
   @media only screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     margin-bottom: 0;
   }
+  ${StyledSwitchCardButton}:first-child {
+    border-radius: 0.25rem 0rem 0rem 0.25rem;
+  }
+  ${StyledSwitchCardButton}:last-child {
+    border-radius: 0rem 0.25rem 0.25rem 0rem;
+  }
 `;
 
 const VerticalFillBox = styled(Box)`
@@ -108,8 +115,8 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     threshold: 0,
   });
 
-  const onTabClick = (value: string) => {
-    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
+  const onTabClick = (value: string) => () => {
+    setActiveButton(value);
   };
 
   const handleClickArrowLeft = () => {
@@ -143,6 +150,31 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         activeButton={activeButton}
         countLabel={
           activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
+        }
+        tabButtons={
+          <>
+            <StyledSwitchCardButton
+              label={t(ButtonValues.ALL)}
+              size="large"
+              removeBorder={false}
+              primary={ButtonValues.ALL === activeButton}
+              onClick={onTabClick(ButtonValues.ALL)}
+            />
+            <StyledSwitchCardButton
+              label={t(ButtonValues.KEPT)}
+              size="large"
+              removeBorder={true}
+              primary={ButtonValues.KEPT === activeButton}
+              onClick={onTabClick(ButtonValues.KEPT)}
+            />
+            <StyledSwitchCardButton
+              label={t(ButtonValues.DELISTED)}
+              size="large"
+              removeBorder={true}
+              primary={ButtonValues.DELISTED === activeButton}
+              onClick={onTabClick(ButtonValues.DELISTED)}
+            />
+          </>
         }
         buttonLabels={buttonLabels}
         buttonValues={buttonValues}
