@@ -37,7 +37,7 @@
     "@akashaproject/sdk-typings": "*",
     "object-hash": "2.2.0",
     "rxjs": "7.3.0",
-    "react-query": "3.23.2"
+    "react-query": "3.34.7"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

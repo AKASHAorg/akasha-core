@@ -33,7 +33,7 @@
   "dependencies": {
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "single-spa-react": "4.4.0",
+    "single-spa-react": "4.6.0",
     "react-i18next": "11.12.0",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
@@ -47,7 +47,7 @@
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/styled-components": "5.1.14",
-    "react-query": "3.23.2"
+    "react-query": "3.34.7"
   },
   "peerDependencies": {
     "react": "17.0.2",
