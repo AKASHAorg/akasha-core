@@ -279,10 +279,12 @@ export default class AppLoader {
   // iterate over all extension parcels and return parcel
   private findParcel(name: string) {
     for (const extName in this.extensionParcels) {
-      const parcels = this.extensionParcels[extName];
-      for (const parcel of parcels) {
-        if (parcel.id === name) {
-          return parcel;
+      if (this.extensionParcels.hasOwnProperty(extName)) {
+        const parcels = this.extensionParcels[extName];
+        for (const parcel of parcels) {
+          if (parcel.id === name) {
+            return parcel;
+          }
         }
       }
     }
@@ -296,10 +298,12 @@ export default class AppLoader {
           .unmount()
           .then(() => {
             for (const ext in this.extensionParcels) {
-              const parcels = this.extensionParcels[ext];
-              for (const parcel of parcels) {
-                if (parcel.id === parcelData.id) {
-                  this.extensionParcels[ext].splice(parcels.indexOf(parcel), 1);
+              if (this.extensionParcels.hasOwnProperty(ext)) {
+                const parcels = this.extensionParcels[ext];
+                for (const parcel of parcels) {
+                  if (parcel.id === parcelData.id) {
+                    this.extensionParcels[ext].splice(parcels.indexOf(parcel), 1);
+                  }
                 }
               }
             }
@@ -767,21 +771,23 @@ export default class AppLoader {
     const appExtensions = this.apps.getExtensions();
     const widgetExtensions = this.widgets.getExtensions();
     for (const extensionName in this.extensionPoints) {
-      const extensionDatas = this.extensionPoints[extensionName];
-      extensionDatas.forEach(extensionData => {
-        // load extensions that must be mounted in this extention point
-        const extToLoad = this.filterExtensionsByMountPoint(
-          [...appExtensions, ...widgetExtensions],
-          { ...appConfigs, ...widgetConfigs },
-          [...appInfos, ...widgetInfos],
-          extensionData,
-        );
-        extToLoad.forEach((extension, index) => {
-          this.mountExtensionPoint(extension, index, extensionData).catch(err =>
-            this.loaderLogger.warn(err),
+      if (this.extensionPoints.hasOwnProperty(extensionName)) {
+        const extensionDatas = this.extensionPoints[extensionName];
+        extensionDatas.forEach(extensionData => {
+          // load extensions that must be mounted in this extention point
+          const extToLoad = this.filterExtensionsByMountPoint(
+            [...appExtensions, ...widgetExtensions],
+            { ...appConfigs, ...widgetConfigs },
+            [...appInfos, ...widgetInfos],
+            extensionData,
           );
+          extToLoad.forEach((extension, index) => {
+            this.mountExtensionPoint(extension, index, extensionData).catch(err =>
+              this.loaderLogger.warn(err),
+            );
+          });
         });
-      });
+      }
     }
   }
 

@@ -173,8 +173,9 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const WalletConnectModalTrigger: React.FC<IWalletConnectModalProps> = props => {
+  const onLogin = React.useRef(props.onLogin);
   React.useEffect(() => {
-    props.onLogin();
+    onLogin.current();
   }, []);
 
   return <GlobalStyle />;

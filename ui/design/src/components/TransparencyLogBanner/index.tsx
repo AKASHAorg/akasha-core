@@ -1,9 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Box, Text, Image, Meter } from 'grommet';
-import { isMobileOnly } from 'react-device-detect';
-
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import Icon from '../Icon';
 
 export interface ITransparencyLogBannerProps {
