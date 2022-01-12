@@ -17,8 +17,9 @@ export interface IProviderModalProps {
 }
 
 const ProviderAuthModal: React.FC<IProviderModalProps> = props => {
+  const onLogin = React.useRef(props.onLogin);
   React.useEffect(() => {
-    props.onLogin();
+    onLogin.current();
   }, []);
 
   return (

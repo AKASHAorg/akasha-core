@@ -62,6 +62,30 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
 
   const [currentImg, setCurrentImg] = React.useState(clickedImg);
 
+  const transformRef = React.useRef(null);
+
+  const handleZoomIn = () => {
+    if (transformRef) {
+      transformRef.current.zoomIn();
+    }
+  };
+
+  const handleZoomOut = () => {
+    transformRef.current.zoomOut();
+  };
+
+  const handlePrevImg = React.useCallback(() => {
+    const currImgIndex = images.indexOf(currentImg);
+    const prevIndex = currImgIndex > 0 ? images[currImgIndex - 1] : images[images.length - 1];
+    setCurrentImg(prevIndex);
+  }, [currentImg, images]);
+
+  const handleNextImg = React.useCallback(() => {
+    const currImgIndex = images.indexOf(currentImg);
+    const nextIndex = currImgIndex < images.length - 1 ? images[currImgIndex + 1] : images[0];
+    setCurrentImg(nextIndex);
+  }, [currentImg, images]);
+
   React.useEffect(() => {
     const handler = ev => {
       if (ev.key === 'Escape') {
@@ -76,31 +100,7 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [images, currentImg]);
-
-  const transformRef = React.useRef(null);
-
-  const handleZoomIn = () => {
-    if (transformRef) {
-      transformRef.current.zoomIn();
-    }
-  };
-
-  const handleZoomOut = () => {
-    transformRef.current.zoomOut();
-  };
-
-  const handlePrevImg = () => {
-    const currImgIndex = images.indexOf(currentImg);
-    const prevIndex = currImgIndex > 0 ? images[currImgIndex - 1] : images[images.length - 1];
-    setCurrentImg(prevIndex);
-  };
-
-  const handleNextImg = () => {
-    const currImgIndex = images.indexOf(currentImg);
-    const nextIndex = currImgIndex < images.length - 1 ? images[currImgIndex + 1] : images[0];
-    setCurrentImg(nextIndex);
-  };
+  }, [images, currentImg, closeModal, handleNextImg, handlePrevImg]);
 
   return (
     <Portal>
@@ -150,7 +150,7 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <picture>
-                  <img src={currentImg.src} />
+                  <img src={currentImg.src} alt="" />
                 </picture>
               </TransformComponent>
             </TransformWrapper>

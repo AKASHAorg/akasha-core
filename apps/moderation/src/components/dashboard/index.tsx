@@ -19,7 +19,7 @@ import ContentTab from './content-tab';
 import ContentCard from './content-card';
 import { NoItemsFound, PromptAuthorization } from '../error-cards';
 
-const { Box, Spinner, SwitchCard, useIntersectionObserver } = DS;
+const { Box, Spinner, TabsToolbar, StyledSwitchCardButton, useIntersectionObserver } = DS;
 
 interface IDashboardProps {
   slotId: string;
@@ -136,7 +136,7 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
 
   const buttonLabels = buttonValues.map(value => t(value));
 
-  const onTabClick = (value: string) => {
+  const onTabClick = (value: string) => () => {
     // toggle list accordingly
     if (value === ButtonValues.KEPT) {
       setIsDelisted(false);
@@ -182,10 +182,28 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
         setIsPending={setIsPending}
       />
       {!isPending && (
-        <SwitchCard
+        <TabsToolbar
           count={isDelisted ? count.delisted : count.kept}
           activeButton={isDelisted ? ButtonValues.DELISTED : ButtonValues.KEPT}
           countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
+          tabButtons={
+            <>
+              <StyledSwitchCardButton
+                label={t(ButtonValues.KEPT)}
+                size="large"
+                removeBorder={false}
+                primary={!isDelisted}
+                onClick={onTabClick(ButtonValues.KEPT)}
+              />
+              <StyledSwitchCardButton
+                label={t(ButtonValues.DELISTED)}
+                size="large"
+                removeBorder={true}
+                primary={isDelisted}
+                onClick={onTabClick(ButtonValues.DELISTED)}
+              />
+            </>
+          }
           buttonLabels={buttonLabels}
           buttonValues={buttonValues}
           onTabClick={onTabClick}

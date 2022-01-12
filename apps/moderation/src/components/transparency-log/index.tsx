@@ -10,19 +10,64 @@ import Banner from './banner';
 import DetailCard from './detail-card';
 import { NoItemsFound } from '../error-cards';
 
-const { Box, Text, Icon, Spinner, SwitchCard, TransparencyLogMiniCard, useIntersectionObserver } =
-  DS;
+const {
+  styled,
+  Box,
+  Text,
+  Icon,
+  Spinner,
+  TabsToolbar,
+  StyledSwitchCardButton,
+  TransparencyLogMiniCard,
+  useIntersectionObserver,
+  BasicCardBox,
+} = DS;
 
 export interface ITransparencyLogProps {
   user: string | null;
-  isMobile: boolean;
   navigateToUrl: (url: string) => void;
 }
 
 const DEFAULT_LIMIT = 10;
 
+const DetailCardWrapper = styled(Box)`
+  width: 100%;
+`;
+
+const SidebarWrapper: React.FC<{ isSelected: boolean }> = styled(Box)<{ isSelected: boolean }>`
+  min-width: 100%;
+  height: 100%;
+  flex: 1;
+  overflow-y: scroll;
+  ${props => {
+    if (props.isSelected) {
+      return `
+        display: none;
+      `;
+    }
+  }}
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
+    min-width: 40%;
+    display: flex;
+  }
+
+  @media only screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
+    min-width: 33%;
+    display: flex;
+  }
+`;
+
+const ListWrapper = styled(BasicCardBox)`
+  flex-direction: row;
+  flex: 1;
+`;
+
+const VerticalFillBox = styled(Box)`
+  height: calc(100vh - 48px /* topbar height */ - 2rem /* offset bottom */);
+`;
+
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
-  const { user, navigateToUrl, isMobile } = props;
+  const { user, navigateToUrl } = props;
 
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
@@ -57,14 +102,8 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     threshold: 0,
   });
 
-  const sidebarHeight = React.useMemo(() => {
-    if (isMobile) return '100vh';
-    if (selected) return 'calc(100vh - 3rem)';
-    return 'calc(100vh - 8.5rem)';
-  }, [selected, isMobile]);
-
-  const onTabClick = (value: string) => {
-    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
+  const onTabClick = (value: string) => () => {
+    setActiveButton(value);
   };
 
   const handleClickArrowLeft = () => {
@@ -79,40 +118,62 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
   };
 
-  const buttonValues = !isMobile
-    ? [ButtonValues.ALL, ButtonValues.KEPT, ButtonValues.DELISTED]
-    : [ButtonValues.ALL, ButtonValues.KEPT, ButtonValues.DELISTED, ButtonValues.STATS];
-
+  const buttonValues = [
+    ButtonValues.ALL,
+    ButtonValues.KEPT,
+    ButtonValues.DELISTED,
+    ButtonValues.STATS,
+  ];
   const buttonLabels = buttonValues.map(value => t(value));
 
   return (
-    <Box>
-      {((!selected && isMobile) || !isMobile) && (
-        <SwitchCard
-          count={
-            activeButton === ButtonValues.ALL
-              ? count.kept + count.delisted
-              : count[activeButton.toLowerCase()]
-          }
-          activeButton={activeButton}
-          countLabel={
-            activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
-          }
-          buttonLabels={buttonLabels}
-          buttonValues={buttonValues}
-          onTabClick={onTabClick}
-          buttonsWrapperWidth={'40%'}
-          loggedUser={user}
-          hasMobileDesign={true} // adjusts to new design on mobile screens
-        />
-      )}
-      <Box direction="row" margin={{ top: '-0.5rem' }}>
+    <VerticalFillBox fill="vertical">
+      <TabsToolbar
+        noMarginBottom
+        count={
+          activeButton === ButtonValues.ALL
+            ? count.kept + count.delisted
+            : count[activeButton.toLowerCase()]
+        }
+        activeButton={activeButton}
+        countLabel={
+          activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
+        }
+        tabButtons={
+          <>
+            <StyledSwitchCardButton
+              label={t(ButtonValues.ALL)}
+              size="large"
+              removeBorder={false}
+              primary={ButtonValues.ALL === activeButton}
+              onClick={onTabClick(ButtonValues.ALL)}
+            />
+            <StyledSwitchCardButton
+              label={t(ButtonValues.KEPT)}
+              size="large"
+              removeBorder={true}
+              primary={ButtonValues.KEPT === activeButton}
+              onClick={onTabClick(ButtonValues.KEPT)}
+            />
+            <StyledSwitchCardButton
+              label={t(ButtonValues.DELISTED)}
+              size="large"
+              removeBorder={true}
+              primary={ButtonValues.DELISTED === activeButton}
+              onClick={onTabClick(ButtonValues.DELISTED)}
+            />
+          </>
+        }
+        buttonLabels={buttonLabels}
+        buttonValues={buttonValues}
+        onTabClick={onTabClick}
+        buttonsWrapperWidth={'40%'}
+        loggedUser={user}
+        hasMobileDesign={true} // adjusts to new design on mobile screens
+      />
+      <ListWrapper>
         {/* setting height and overflow behaviour to make y-scrollable container */}
-        <Box
-          width={isMobile ? '100%' : '40%'}
-          height={sidebarHeight}
-          style={{ overflowY: 'scroll' }}
-        >
+        <SidebarWrapper isSelected={!!selected}>
           {!logItemsQuery.isLoading && !logItemPages.length && (
             <NoItemsFound activeTab={'moderated'} />
           )}
@@ -172,9 +233,9 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           )}
           {/* triggers intersection observer */}
           <Box pad="xxsmall" ref={loadmoreRef} />
-        </Box>
-        {isMobile && selected && (
-          <Box width="100%" style={{ position: 'absolute', right: 0 }}>
+        </SidebarWrapper>
+        <DetailCardWrapper>
+          {selected && (
             <DetailCard
               selected={selected}
               ipfsGateway={ipfsGateway}
@@ -182,24 +243,11 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               handleClickArrowLeft={handleClickArrowLeft}
               navigateToUrl={navigateToUrl}
             />
-          </Box>
-        )}
-        {!isMobile && (
-          <Box width="60%">
-            {selected && (
-              <DetailCard
-                selected={selected}
-                ipfsGateway={ipfsGateway}
-                handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
-                handleClickArrowLeft={handleClickArrowLeft}
-                navigateToUrl={navigateToUrl}
-              />
-            )}
-            {!selected && <Banner count={count} />}
-          </Box>
-        )}
-      </Box>
-    </Box>
+          )}
+          {!selected && <Banner count={count} />}
+        </DetailCardWrapper>
+      </ListWrapper>
+    </VerticalFillBox>
   );
 };
 

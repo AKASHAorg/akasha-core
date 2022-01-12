@@ -40,7 +40,6 @@ export interface IntegrationRegistrationOptions {
   };
   uiEvents: BehaviorSubject<UIEventData>;
   layoutConfig?: LayoutConfig;
-  isMobile: boolean;
   integrations?: {
     infos: (AppRegistryInfo | WidgetRegistryInfo)[];
     configs: Record<string, IAppConfig | IWidgetConfig>;

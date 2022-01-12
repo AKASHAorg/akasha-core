@@ -1,5 +1,5 @@
 import { Box } from 'grommet';
-import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   createEditor,
   Editor,
@@ -67,7 +67,10 @@ export interface IEditorBox {
     coverImage?: string;
   }[];
   tags?: { name: string; totalPosts: number }[];
-  uploadRequest?: (data: string | File, isUrl?: boolean) => any;
+  uploadRequest?: (
+    data: string | File,
+    isUrl?: boolean,
+  ) => Promise<{ data?: ImageData; error?: Error }>;
   publishingApp?: string;
   editorState?: Descendant[];
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
@@ -77,6 +80,7 @@ export interface IEditorBox {
   cancelButtonLabel?: string;
 }
 
+/* eslint-disable complexity */
 const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const {
     avatar,
@@ -145,8 +149,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   /**
    * display only 3 results in the tag and mention popovers
    */
-  const slicedTags = tags.slice(0, 3);
-  const slicedMentions = mentions.slice(0, 3);
+  const slicedTags = React.useMemo(() => tags.slice(0, 3), [tags]);
+  const slicedMentions = React.useMemo(() => mentions.slice(0, 3), [mentions]);
 
   /**
    * this is needed to check internal state from the parent component
@@ -172,10 +176,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   /**
    * initialise editor with all the required plugins
    */
-  const editor = useMemo(
-    () => withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
-    [],
+  const editorRef = useRef(
+    withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
   );
+
+  const editor = editorRef.current;
 
   /**
    * insert links here to be able to access the image state
@@ -212,7 +217,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    * set the selection at the end of the content when component is mounted
    */
   useEffect(() => {
-    Transforms.move(editor);
+    Transforms.move(editorRef.current);
   }, []);
 
   /**
@@ -367,87 +372,86 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     }
   };
 
-  /**
-   * key handler for the mention popover
-   * inserts the mention on tab, enter or space keypress
-   */
-  const selectMention = (event: KeyboardEvent, mentionRange: Range) => {
-    switch (event.key) {
-      case 'ArrowDown': {
-        event.preventDefault();
-        const prevIndex = index >= slicedMentions.length - 1 ? 0 : index + 1;
-        setIndex(prevIndex);
-        break;
-      }
-      case 'ArrowUp': {
-        event.preventDefault();
-        const nextIndex = index <= 0 ? slicedMentions.length - 1 : index - 1;
-        setIndex(nextIndex);
-        break;
-      }
-      case 'Tab':
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        Transforms.select(editor, mentionRange);
-        CustomEditor.insertMention(editor, slicedMentions[index]);
-        setMentionTargetRange(null);
-        break;
-      case 'Escape':
-        event.preventDefault();
-        setMentionTargetRange(null);
-        break;
-    }
-  };
-
-  /**
-   * key handler for the tag popover
-   * inserts the tag on tab, enter keypress
-   * if the user is still on the first position of the popover, on space keypress creates a  new tag
-   * this handles new tag creation when we have tags matching the typed chars
-   */
-  const selectTag = (event: KeyboardEvent, tagRange: Range) => {
-    switch (event.key) {
-      case 'ArrowDown': {
-        event.preventDefault();
-        const prevIndex = index >= slicedTags.length - 1 ? 0 : index + 1;
-        setIndex(prevIndex);
-        break;
-      }
-      case 'ArrowUp': {
-        event.preventDefault();
-        const nextIndex = index <= 0 ? slicedTags.length - 1 : index - 1;
-        setIndex(nextIndex);
-        break;
-      }
-      case 'Tab':
-      case 'Enter':
-        event.preventDefault();
-        Transforms.select(editor, tagRange);
-        CustomEditor.insertTag(editor, slicedTags[index]);
-        setTagTargetRange(null);
-        break;
-      case ' ':
-        if (index === 0 && createTag.length > 1) {
-          event.preventDefault();
-          Transforms.select(editor, tagRange);
-          CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
-        } else {
-          event.preventDefault();
-          Transforms.select(editor, tagRange);
-          CustomEditor.insertTag(editor, slicedTags[index]);
-        }
-        setTagTargetRange(null);
-        break;
-      case 'Escape':
-        event.preventDefault();
-        setTagTargetRange(null);
-        break;
-    }
-  };
-
   const onKeyDown = useCallback(
     event => {
+      /**
+       * key handler for the mention popover
+       * inserts the mention on tab, enter or space keypress
+       */
+      const selectMention = (event: KeyboardEvent, mentionRange: Range) => {
+        switch (event.key) {
+          case 'ArrowDown': {
+            event.preventDefault();
+            const prevIndex = index >= slicedMentions.length - 1 ? 0 : index + 1;
+            setIndex(prevIndex);
+            break;
+          }
+          case 'ArrowUp': {
+            event.preventDefault();
+            const nextIndex = index <= 0 ? slicedMentions.length - 1 : index - 1;
+            setIndex(nextIndex);
+            break;
+          }
+          case 'Tab':
+          case 'Enter':
+          case ' ':
+            event.preventDefault();
+            Transforms.select(editor, mentionRange);
+            CustomEditor.insertMention(editor, slicedMentions[index]);
+            setMentionTargetRange(null);
+            break;
+          case 'Escape':
+            event.preventDefault();
+            setMentionTargetRange(null);
+            break;
+        }
+      };
+      /**
+       * key handler for the tag popover
+       * inserts the tag on tab, enter keypress
+       * if the user is still on the first position of the popover, on space keypress creates a  new tag
+       * this handles new tag creation when we have tags matching the typed chars
+       */
+      const selectTag = (event: KeyboardEvent, tagRange: Range) => {
+        switch (event.key) {
+          case 'ArrowDown': {
+            event.preventDefault();
+            const prevIndex = index >= slicedTags.length - 1 ? 0 : index + 1;
+            setIndex(prevIndex);
+            break;
+          }
+          case 'ArrowUp': {
+            event.preventDefault();
+            const nextIndex = index <= 0 ? slicedTags.length - 1 : index - 1;
+            setIndex(nextIndex);
+            break;
+          }
+          case 'Tab':
+          case 'Enter':
+            event.preventDefault();
+            Transforms.select(editor, tagRange);
+            CustomEditor.insertTag(editor, slicedTags[index]);
+            setTagTargetRange(null);
+            break;
+          case ' ':
+            if (index === 0 && createTag.length > 1) {
+              event.preventDefault();
+              Transforms.select(editor, tagRange);
+              CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
+            } else {
+              event.preventDefault();
+              Transforms.select(editor, tagRange);
+              CustomEditor.insertTag(editor, slicedTags[index]);
+            }
+            setTagTargetRange(null);
+            break;
+          case 'Escape':
+            event.preventDefault();
+            setTagTargetRange(null);
+            break;
+        }
+      };
+
       if (mentionTargetRange && mentions.length > 0) {
         selectMention(event, mentionTargetRange);
       }
@@ -463,7 +467,17 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         setTagTargetRange(null);
       }
     },
-    [index, mentionTargetRange, tagTargetRange, mentions, tags],
+    [
+      index,
+      mentionTargetRange,
+      tagTargetRange,
+      mentions,
+      tags,
+      editor,
+      slicedMentions,
+      slicedTags,
+      createTag,
+    ],
   );
 
   const openEmojiPicker = () => {
@@ -670,6 +684,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     </StyledBox>
   );
 });
+
+/* eslint-enable complexity */
 
 EditorBox.defaultProps = {
   postLabel: 'Post',

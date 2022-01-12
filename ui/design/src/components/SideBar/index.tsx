@@ -57,7 +57,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         }
       }
     }
-  }, [currentRoute, allMenuItems]);
+  }, [currentRoute, allMenuItems, currentAppData, activeOption]);
 
   const handleAppIconClick = (menuItem: IMenuItem) => () => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
