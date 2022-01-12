@@ -19,13 +19,23 @@ import ContentTab from './content-tab';
 import ContentCard from './content-card';
 import { NoItemsFound, PromptAuthorization } from '../error-cards';
 
-const { Box, Spinner, SwitchCard, useIntersectionObserver } = DS;
+const { styled, Box, Spinner, SwitchCard, StyledSwitchCardButton, useIntersectionObserver } = DS;
 
 interface IDashboardProps {
   slotId: string;
   user: string | null;
   singleSpa: typeof SingleSpa;
 }
+
+const TabsToolbar = styled(SwitchCard)`
+  font-synthesis: initial;
+  ${StyledSwitchCardButton}:first-child {
+    border-radius: 0.25rem 0rem 0rem 0.25rem;
+  }
+  ${StyledSwitchCardButton}:last-child {
+    border-radius: 0rem 0.25rem 0.25rem 0rem;
+  }
+`;
 
 const DEFAULT_LIMIT = 10;
 
@@ -136,7 +146,7 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
 
   const buttonLabels = buttonValues.map(value => t(value));
 
-  const onTabClick = (value: string) => {
+  const onTabClick = (value: string) => () => {
     // toggle list accordingly
     if (value === ButtonValues.KEPT) {
       setIsDelisted(false);
@@ -182,10 +192,28 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
         setIsPending={setIsPending}
       />
       {!isPending && (
-        <SwitchCard
+        <TabsToolbar
           count={isDelisted ? count.delisted : count.kept}
           activeButton={isDelisted ? ButtonValues.DELISTED : ButtonValues.KEPT}
           countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
+          tabButtons={
+            <>
+              <StyledSwitchCardButton
+                label={t(ButtonValues.KEPT)}
+                size="large"
+                removeBorder={false}
+                primary={!isDelisted}
+                onClick={onTabClick(ButtonValues.KEPT)}
+              />
+              <StyledSwitchCardButton
+                label={t(ButtonValues.DELISTED)}
+                size="large"
+                removeBorder={true}
+                primary={isDelisted}
+                onClick={onTabClick(ButtonValues.DELISTED)}
+              />
+            </>
+          }
           buttonLabels={buttonLabels}
           buttonValues={buttonValues}
           onTabClick={onTabClick}
