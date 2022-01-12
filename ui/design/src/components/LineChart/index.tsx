@@ -42,7 +42,7 @@ const LineChart: React.FC<ILineChart> = props => {
     fill: '#B6BFD1',
   };
 
-  const bisectDate = bisector<IMentionData, Date>(d => new Date(d.date)).left;
+  const bisectDate = React.useRef(bisector<IMentionData, Date>(d => new Date(d.date)).left);
 
   const { tooltipData, tooltipLeft, tooltipTop, showTooltip, hideTooltip } = useTooltip();
 
@@ -55,19 +55,19 @@ const LineChart: React.FC<ILineChart> = props => {
   // define scales
   const xScale = React.useMemo(
     () => scaleTime({ range: [0, xMax], domain: extent(data, getX) as any }),
-    [xMax],
+    [data, xMax],
   );
 
   const yScale = React.useMemo(
     () => scaleLinear({ range: [yMax, 0], domain: [0, max(data, getY)] as any, nice: true }),
-    [yMax],
+    [data, yMax],
   );
 
   const handleTooltip = React.useCallback(
     (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
       const { x } = localPoint(event) || { x: 0 };
       const x0 = xScale.invert(x);
-      const index = bisectDate(data, x0, 1);
+      const index = bisectDate.current(data, x0, 1);
       const d0 = data[index - 1];
       const d1 = data[index];
       let d = d0;
@@ -80,7 +80,7 @@ const LineChart: React.FC<ILineChart> = props => {
         tooltipTop: yScale(getY(d)),
       });
     },
-    [showTooltip, yScale, xScale],
+    [xScale, data, showTooltip, yScale],
   );
 
   const chart = (

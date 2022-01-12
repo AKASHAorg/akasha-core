@@ -67,7 +67,10 @@ export interface IEditorBox {
     coverImage?: string;
   }[];
   tags?: { name: string; totalPosts: number }[];
-  uploadRequest?: (data: string | File, isUrl?: boolean) => any;
+  uploadRequest?: (
+    data: string | File,
+    isUrl?: boolean,
+  ) => Promise<{ data?: ImageData; error?: Error }>;
   publishingApp?: string;
   editorState?: Descendant[];
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
@@ -77,6 +80,7 @@ export interface IEditorBox {
   cancelButtonLabel?: string;
 }
 
+/* eslint-disable complexity */
 const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const {
     avatar,
@@ -680,6 +684,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     </StyledBox>
   );
 });
+
+/* eslint-enable complexity */
 
 EditorBox.defaultProps = {
   postLabel: 'Post',
