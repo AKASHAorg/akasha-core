@@ -49,7 +49,7 @@ export const getLastRendered = (
     if (!rects.has(items[idx])) {
       break;
     }
-    const rect = rects.get(items[idx])!.rect;
+    const rect = rects.get(items[idx])?.rect;
     if (rect.getBottom() < viewportBottom) {
       idx += 1;
     } else {
@@ -84,9 +84,9 @@ export const computeAnchoredItem = (props: ComputeAnchorProps) => {
       newDelta < 0 &&
       i > 0 &&
       rects.get(items[i - 1]) &&
-      rects.get(items[i - 1])!.rect.getHeight()
+      rects.get(items[i - 1])?.rect.getHeight()
     ) {
-      newDelta += rects.get(items[i - 1])!.rect.getHeight() + itemSpacing;
+      newDelta += rects.get(items[i - 1])?.rect.getHeight() + itemSpacing;
       i -= 1;
     }
     renderedItems = Math.max(
@@ -98,9 +98,9 @@ export const computeAnchoredItem = (props: ComputeAnchorProps) => {
       newDelta > 0 &&
       i < rects.size &&
       rects.get(items[i]) &&
-      rects.get(items[i])!.rect.getHeight() + itemSpacing < newDelta
+      rects.get(items[i])?.rect.getHeight() + itemSpacing < newDelta
     ) {
-      newDelta -= rects.get(items[i])!.rect.getHeight() + itemSpacing;
+      newDelta -= rects.get(items[i])?.rect.getHeight() + itemSpacing;
       i += 1;
     }
     if (i >= rects.size || !rects.get(items[i])) {

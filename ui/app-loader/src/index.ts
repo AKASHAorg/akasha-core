@@ -48,7 +48,7 @@ interface SingleSpaEventDetail {
   };
   totalAppChanges: number;
 }
-
+/* eslint-disable complexity */
 export default class AppLoader {
   public readonly uiEvents: BehaviorSubject<UIEventData>;
 
