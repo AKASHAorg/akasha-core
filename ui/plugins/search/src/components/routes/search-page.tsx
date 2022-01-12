@@ -26,14 +26,13 @@ import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings
 import EntryCardRenderer from './entry-renderer';
 
 const {
-  styled,
   Box,
   BasicCardBox,
   ErrorLoader,
   Spinner,
   ProfileSearchCard,
   TagSearchCard,
-  SwitchCard,
+  TabsToolbar,
   StyledSwitchCardButton,
 } = DS;
 
@@ -44,19 +43,6 @@ export enum ButtonValues {
   POSTS = 'Posts',
   REPLIES = 'Replies',
 }
-
-const TabsToolbar = styled(SwitchCard)`
-  font-synthesis: initial;
-  @media only screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    margin-bottom: 0;
-  }
-  ${StyledSwitchCardButton}:first-child {
-    border-radius: 0.25rem 0rem 0rem 0.25rem;
-  }
-  ${StyledSwitchCardButton}:last-child {
-    border-radius: 0rem 0.25rem 0.25rem 0rem;
-  }
-`;
 
 interface SearchPageProps extends RootComponentProps {
   onError?: (err: Error) => void;
@@ -242,6 +228,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   return (
     <Box fill="horizontal">
       <TabsToolbar
+        noMarginBottom
         count={searchCount}
         countLabel={t('Results')}
         activeButton={activeButton}

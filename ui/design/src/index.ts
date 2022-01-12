@@ -58,7 +58,7 @@ import { TagProfileCard } from './components/TagCard/tag-profile-card';
 import { TagSearchCard } from './components/TagCard/tag-search-card';
 
 import FilterCard from './components/FilterCard';
-import SwitchCard, { StyledSwitchCardButton } from './components/SwitchCard';
+import SwitchCard, { StyledSwitchCardButton, TabsToolbar } from './components/SwitchCard';
 import Tag from './components/Tag';
 import MdCard from './components/MdCard';
 
@@ -292,6 +292,7 @@ const exported = {
   FilterCard,
   SwitchCard,
   StyledSwitchCardButton,
+  TabsToolbar,
   Tag,
   MdCard,
   EntryPublishErrorCard,

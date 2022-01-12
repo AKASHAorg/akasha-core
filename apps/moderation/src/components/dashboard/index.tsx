@@ -19,23 +19,13 @@ import ContentTab from './content-tab';
 import ContentCard from './content-card';
 import { NoItemsFound, PromptAuthorization } from '../error-cards';
 
-const { styled, Box, Spinner, SwitchCard, StyledSwitchCardButton, useIntersectionObserver } = DS;
+const { Box, Spinner, TabsToolbar, StyledSwitchCardButton, useIntersectionObserver } = DS;
 
 interface IDashboardProps {
   slotId: string;
   user: string | null;
   singleSpa: typeof SingleSpa;
 }
-
-const TabsToolbar = styled(SwitchCard)`
-  font-synthesis: initial;
-  ${StyledSwitchCardButton}:first-child {
-    border-radius: 0.25rem 0rem 0rem 0.25rem;
-  }
-  ${StyledSwitchCardButton}:last-child {
-    border-radius: 0rem 0.25rem 0.25rem 0rem;
-  }
-`;
 
 const DEFAULT_LIMIT = 10;
 

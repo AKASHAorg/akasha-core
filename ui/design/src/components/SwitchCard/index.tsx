@@ -1,7 +1,7 @@
 import React from 'react';
 import { isMobileOnly } from 'react-device-detect';
 import { Box, Text } from 'grommet';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import Button from '../Button';
 import Icon from '../Icon';
@@ -142,5 +142,22 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     </>
   );
 };
+
+export const TabsToolbar = styled(SwitchCard)<{ noMarginBottom?: boolean }>`
+  font-synthesis: initial;
+  ${props =>
+    props.noMarginBottom &&
+    css`
+      @media only screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+        margin-bottom: 0;
+      }
+    `}
+  ${StyledSwitchCardButton}:first-child {
+    border-radius: 0.25rem 0rem 0rem 0.25rem;
+  }
+  ${StyledSwitchCardButton}:last-child {
+    border-radius: 0rem 0.25rem 0.25rem 0rem;
+  }
+`;
 
 export default SwitchCard;

@@ -16,7 +16,7 @@ const {
   Text,
   Icon,
   Spinner,
-  SwitchCard,
+  TabsToolbar,
   StyledSwitchCardButton,
   TransparencyLogMiniCard,
   useIntersectionObserver,
@@ -60,19 +60,6 @@ const SidebarWrapper: React.FC<{ isSelected: boolean }> = styled(Box)<{ isSelect
 const ListWrapper = styled(BasicCardBox)`
   flex-direction: row;
   flex: 1;
-`;
-
-const TabsToolbar = styled(SwitchCard)`
-  font-synthesis: initial;
-  @media only screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    margin-bottom: 0;
-  }
-  ${StyledSwitchCardButton}:first-child {
-    border-radius: 0.25rem 0rem 0rem 0.25rem;
-  }
-  ${StyledSwitchCardButton}:last-child {
-    border-radius: 0rem 0.25rem 0.25rem 0rem;
-  }
 `;
 
 const VerticalFillBox = styled(Box)`
@@ -142,6 +129,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   return (
     <VerticalFillBox fill="vertical">
       <TabsToolbar
+        noMarginBottom
         count={
           activeButton === ButtonValues.ALL
             ? count.kept + count.delisted
