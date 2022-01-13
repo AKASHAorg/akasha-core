@@ -99,7 +99,7 @@ export type UseVirtualScrollProps = Pick<
 };
 
 export interface IListViewportProps {
-  itemsData: { [key: string]: any };
+  itemsData: { [key: string]: Record<string, unknown> };
   itemRects: Map<string, IItemStateRect>;
   itemCard: React.ReactElement;
   loadItemData: IVirtualListProps['loadItemData'];
@@ -119,7 +119,7 @@ export interface IListViewportProps {
 }
 export interface IRenderItemProps {
   itemId: string;
-  itemData?: any;
+  itemData?: Record<string, unknown>;
   loadItemData: IVirtualListProps['loadItemData'];
   itemSpacing: IVirtualListProps['itemSpacing'];
   customEntities: IListCustomEntity[];

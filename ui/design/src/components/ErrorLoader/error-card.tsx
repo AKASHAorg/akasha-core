@@ -1,12 +1,13 @@
 import { Box, Text } from 'grommet';
+import { AlignType, ColorType, EdgeSizeType } from 'grommet/utils';
 import * as React from 'react';
 import type { ErrorLoaderProps } from './interfaces';
 import { StyledErrorCard, StyledImage } from './styled-elements';
 
 interface ErrorRendererProps {
-  colorProp: any;
-  size: any;
-  textAlign: any;
+  colorProp: ColorType;
+  size: EdgeSizeType;
+  textAlign: AlignType;
   level: any;
   theme: any;
   className: string;
