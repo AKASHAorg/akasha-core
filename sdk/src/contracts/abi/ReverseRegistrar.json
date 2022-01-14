@@ -1,5 +1,7 @@
 {
+  "_format": "hh-sol-artifact-1",
   "contractName": "ReverseRegistrar",
+  "sourceName": "@ensdomains/ens-contracts/contracts/registry/ReverseRegistrar.sol",
   "abi": [
     {
       "inputs": [
