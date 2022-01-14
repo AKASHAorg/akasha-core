@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import StackedAvatar from '.';
+import StackedAvatar, { IStackedAvatarProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import { userData } from '../../utils/dummy-data';
@@ -11,7 +11,7 @@ export default {
   component: StackedAvatar,
 };
 
-const Template = (args: any) => (
+const Template = (args: IStackedAvatarProps) => (
   <Grommet theme={lightTheme}>
     <StackedAvatar {...args} />
   </Grommet>

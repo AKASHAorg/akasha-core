@@ -15,7 +15,7 @@ export interface IReportSuccessModalProps {
   size?: string;
   // @TODO: make prop required, and modify all instances appropriately
   closeModal: () => void;
-  signData?: any;
+  // signData?: any;
 }
 
 const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
