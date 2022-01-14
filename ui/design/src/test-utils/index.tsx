@@ -3,17 +3,17 @@ import { Grommet, ThemeType } from 'grommet';
 import React, { ReactElement } from 'react';
 import lightTheme from '../styles/themes/light/light-theme';
 
-export const wrapWithTheme = (children: any) => {
+export const wrapWithTheme = (children: React.ReactNode) => {
   return <Grommet theme={lightTheme as ThemeType}>{children}</Grommet>;
 };
 
-export const WithProviders = ({ children }: { children: any }) => {
+export const WithProviders = ({ children }: { children: React.ReactNode }) => {
   return <Grommet theme={lightTheme as ThemeType}>{children}</Grommet>;
 };
 
 export const delay = (ms = 100) => new Promise(res => setTimeout(res, ms));
 
-export const customRender = (ui: ReactElement, options: any) =>
+export const customRender = (ui: ReactElement, options: Record<string, unknown>) =>
   render(ui, { wrapper: WithProviders, queries: { ...queries }, ...options });
 
 export const resizeWindow = (width: number, height: number) => {

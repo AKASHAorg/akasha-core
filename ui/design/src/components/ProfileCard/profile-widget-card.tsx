@@ -9,7 +9,7 @@ import { IProfileData as ProfileDataType } from '@akashaproject/ui-awf-typings/l
 export interface DefaultProvider {
   property: string;
   provider: string;
-  value: any;
+  value: string;
 }
 
 export interface IProfileData {
