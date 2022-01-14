@@ -6,11 +6,11 @@ import { Box } from 'grommet';
 export interface IMenuDrop {
   closeDrop: () => void;
   menuItems: IMenuItem[];
-  target: any;
+  target: Record<string, unknown>;
 }
 
 const MenuDrop: React.FC<IMenuDrop> = ({ closeDrop, menuItems, target }) => {
-  const handleClick = (handler: any) => () => {
+  const handleClick = (handler: () => void) => () => {
     handler();
     closeDrop();
   };

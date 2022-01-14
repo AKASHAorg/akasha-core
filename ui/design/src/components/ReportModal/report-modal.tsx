@@ -187,7 +187,9 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 name="reasons"
                 options={optionLabels}
                 value={reason}
-                onChange={(event: any) => setReason(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setReason(event.target.value)
+                }
               />
             </Box>
             <StyledText

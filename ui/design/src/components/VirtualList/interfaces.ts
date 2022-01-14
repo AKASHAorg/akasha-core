@@ -1,3 +1,4 @@
+import React from 'react';
 import { Rect } from './rect';
 
 export interface ViewportRect {
@@ -30,7 +31,7 @@ export interface AnchorData {
 }
 export interface IVirtualListProps {
   items: string[];
-  itemsData: Record<string, any>;
+  itemsData: { [key: string]: Record<string, unknown> };
   /* Boolean to load item data in a second call (loadItemData) - default: false */
   useItemDataLoader?: boolean;
   loadMore: (payload: ILoadItemsPayload) => void;
@@ -54,7 +55,7 @@ export interface IVirtualListProps {
   showNotificationPill?: boolean;
   onItemRead?: (itemId: string) => void;
   averageItemHeight?: number;
-  ref?: React.Ref<any>;
+  ref?: React.Ref<HTMLElement>;
   usePlaceholders?: boolean;
 }
 
@@ -71,7 +72,9 @@ export interface IListCustomEntity {
   position: string | 'before' | 'after';
   itemIndex?: number;
   itemId?: string | null;
-  getComponent: React.FC<any> | ((props: any) => React.FC<any>);
+  getComponent:
+    | React.FC<React.ReactNode>
+    | ((props: Record<string, unknown>) => React.FC<React.ReactNode>);
 }
 
 export interface IListInitialState {

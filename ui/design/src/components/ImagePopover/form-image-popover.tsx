@@ -17,7 +17,7 @@ export interface IFormImagePopover {
   closePopover: () => void;
   insertImage?: (src: File | string, isUrl: boolean) => void;
   currentImage?: boolean;
-  onMobile: any;
+  onMobile: boolean;
   handleDeleteImage?: () => void;
   modalSlotId: string;
 }

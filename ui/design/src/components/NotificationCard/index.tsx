@@ -12,7 +12,7 @@ import ErrorLoader from '../ErrorLoader';
 
 export interface INotificationsCard {
   // data
-  notifications: any[];
+  notifications: Record<string, unknown>[];
   isFetching?: boolean;
   // labels
   notificationsLabel?: string;
@@ -57,7 +57,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
   } = props;
 
   const handleMarkAllAsRead = () => {
-    notifications.forEach((notif: any) => {
+    notifications.forEach((notif: Record<string, string>) => {
       handleMessageRead(notif.id);
     });
   };

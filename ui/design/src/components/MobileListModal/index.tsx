@@ -24,7 +24,7 @@ export interface IMobileListModal {
 export interface IMenuItem {
   label?: string;
   icon?: string;
-  handler?: (arg1?: any) => void;
+  handler?: (arg1?: React.SyntheticEvent) => void;
   disabled?: boolean;
 }
 
