@@ -31,7 +31,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'warn',
     'no-prototype-builtins': 'off',
     'no-case-declarations': 'off',
-    'no-explicit-any': 'off',
   },
   ignorePatterns: ['**/lib/*.js', '*.d.ts'],
 };
