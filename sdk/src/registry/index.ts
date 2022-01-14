@@ -221,6 +221,16 @@ export default class AWF_ENS implements AWF_IENS {
     });
   }
 
+  async getIntegrationId(name: string) {
+    const data = await this._IntegrationRegistryInstance.generateIntegrationId(name);
+    return createFormattedValue({ id: data });
+  }
+
+  async getIntegrationReleaseId(name: string, version: string) {
+    const data = await this._IntegrationRegistryInstance.generateReleaseId(name, version);
+    return createFormattedValue({ id: data.releaseId });
+  }
+
   public getContracts() {
     return {
       AkashaRegistrarInstance: this._AkashaRegistrarInstance,
