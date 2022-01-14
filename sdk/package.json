@@ -12,9 +12,9 @@
     "@metamask/detect-provider": "1.2.0",
     "@toruslabs/openlogin": "1.3.2",
     "browser-image-resizer": "2.2.1",
-    "@walletconnect/web3-provider": "1.7.0",
-    "@openzeppelin/contracts": "4.4.0",
-    "@ensdomains/ens-contracts": "^0.0.7",
+    "@walletconnect/web3-provider": "1.7.1",
+    "@openzeppelin/contracts": "4.4.1",
+    "@ensdomains/ens-contracts": "0.0.8",
     "web3-utils": "1.6.1",
     "eth-ens-namehash": "2.0.8",
     "ethers": "5.5.2",
@@ -63,7 +63,7 @@
     "build": "webpack --config webpack.config.js",
     "sc:test": "npx buidler --network development test",
     "sc:compile": "npx buidler compile",
-    "sc:deploy:local": "npx buidler run --network rinkeby scripts/beta.akasha.js"
+    "sc:deploy:local": "npx buidler run --network rinkeby src/contracts/scripts/deploy-integration-registry.js"
   },
   "browserslist": [
     "defaults",
