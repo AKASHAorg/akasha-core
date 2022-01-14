@@ -5,11 +5,10 @@ import Icon from '../Icon';
 import DuplexButton from '../DuplexButton';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
+import { ITag } from '@akashaproject/ui-awf-typings/lib/entry';
 
 export interface ITagEntry {
-  // @TODO: fix type of tag
-  //   tags?: ITag[];
-  tags?: any;
+  tags?: ITag[];
   subscribedTags?: string[];
 
   subscribeLabel: string;

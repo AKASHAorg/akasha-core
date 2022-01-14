@@ -4,7 +4,7 @@ import Icon from '../Icon';
 
 export interface ISearchBar {
   inputValue: string;
-  setInputValue: any;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
   inputPlaceholderLabel?: string;
   onSearch: (keyword: string) => void;
   handleCloseInput: () => void;

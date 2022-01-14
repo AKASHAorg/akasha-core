@@ -134,7 +134,11 @@ export const moveSelectionBeforeImage = (editor: Editor) => {
   }
 };
 
-export const Portal = ({ children }: any) => {
+interface IPortal {
+  children: React.ReactNode;
+}
+
+export const Portal = ({ children }: IPortal) => {
   return ReactDOM.createPortal(children, document.body);
 };
 

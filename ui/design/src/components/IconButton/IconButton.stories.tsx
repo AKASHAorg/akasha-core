@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import IconButton from '.';
+import IconButton, { IIconButtonProps } from '.';
 import Icon from '../Icon';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -16,7 +16,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: IIconButtonProps) => (
   <Grommet theme={lightTheme}>
     <IconButton {...args} />
   </Grommet>

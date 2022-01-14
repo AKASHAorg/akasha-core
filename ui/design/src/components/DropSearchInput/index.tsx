@@ -13,7 +13,7 @@ import {
 export interface ICustomSearchInput {
   className?: string;
   getData: () => void;
-  dataSource: any;
+  dataSource: DataSource;
   placeholder: string;
   resultsLabel: string;
   usersLabel: string;
@@ -23,6 +23,12 @@ export interface ICustomSearchInput {
   onClickTag: (tag: string) => void;
   onClickApp: (name: string) => void;
 }
+
+type DataSource = {
+  users: Record<string, unknown>[];
+  tags: string[];
+  apps: Record<string, unknown>[];
+};
 
 const DropSearchInput: React.FC<ICustomSearchInput> = props => {
   const {
@@ -40,9 +46,9 @@ const DropSearchInput: React.FC<ICustomSearchInput> = props => {
   } = props;
   const [inputValue, setInputValue] = useState('');
   const [dropOpen, setDropOpen] = useState(false);
-  const [suggestions, setSuggestions] = useState<any>({ users: [], tags: [], apps: [] });
+  const [suggestions, setSuggestions] = useState<DataSource>({ users: [], tags: [], apps: [] });
 
-  const boxRef: React.Ref<any> = useRef();
+  const boxRef: React.Ref<HTMLDivElement> = useRef();
 
   useEffect(() => {
     if (!inputValue.trim()) {
@@ -53,7 +59,7 @@ const DropSearchInput: React.FC<ICustomSearchInput> = props => {
     // eslint-disable-next-line
   }, [inputValue]);
 
-  const onChange = (event: any) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
     getData();
     setDropOpen(event.target.value !== '');

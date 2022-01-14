@@ -16,6 +16,7 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { ModalWrapper, StyledBox } from '../ListModal/styled-modal';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
+import { UserFollowers_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 export interface IStatModal extends IProfileEntry, ITagEntry {
   className?: string;
@@ -34,14 +35,14 @@ export interface IStatModal extends IProfileEntry, ITagEntry {
 
   followers?: IProfileData[];
   following?: IProfileData[];
-  interests?: (ITag | string)[];
+  interests?: ITag[];
 
   followersReqStatus: QueryStatus;
   followingReqStatus: QueryStatus;
   interestsReqStatus: QueryStatus;
 
-  followersPages: any[];
-  followingPages: any[];
+  followersPages: UserFollowers_Response[];
+  followingPages: UserFollowers_Response[];
 
   loadMoreFollowers: () => void;
   loadMoreFollowing: () => void;

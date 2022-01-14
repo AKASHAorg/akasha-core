@@ -19,7 +19,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
   const [inputValue, setInputValue] = useState('');
   const [textAreaOpen, setTextAreaOpen] = useState(false);
 
-  const wrapperRef: React.RefObject<any> = useRef();
+  const wrapperRef: React.Ref<HTMLDivElement> = useRef();
 
   const handleClickAway = () => {
     if (!inputValue && textAreaOpen) {
@@ -29,7 +29,7 @@ const CommentInput: React.FC<ICommentInput> = props => {
 
   useSimpleClickAway(wrapperRef, handleClickAway);
 
-  const onChange = (event: any) => {
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(event.target.value);
   };
 
