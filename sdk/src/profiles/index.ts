@@ -42,7 +42,7 @@ import { createFormattedValue, createObservableValue } from '../helpers/observab
 const urlSource = require('ipfs-utils/src/files/url-source');
 
 @injectable()
-export default class AWF_Profile implements AWF_IProfile {
+class AWF_Profile implements AWF_IProfile {
   private readonly _web3: Web3Connector;
   private _log: ILogger;
   private _gql: Gql;
@@ -574,3 +574,5 @@ export default class AWF_Profile implements AWF_IProfile {
     );
   }
 }
+
+export default AWF_Profile;

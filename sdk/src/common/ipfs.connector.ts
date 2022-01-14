@@ -7,7 +7,7 @@ import { createObservableStream } from '../helpers/observable';
 import AWF_IIpfsConnector from '@akashaproject/sdk-typings/lib/interfaces/ipfs.connector';
 
 @injectable()
-export default class AWF_IpfsConnector implements AWF_IIpfsConnector {
+class AWF_IpfsConnector implements AWF_IIpfsConnector {
   private _log: ILogger;
   readonly gateway = 'https://hub.textile.io/ipfs';
   private readonly LEGAL_DOCS_SOURCE = {
@@ -39,10 +39,12 @@ export default class AWF_IpfsConnector implements AWF_IIpfsConnector {
 
   /**
    *
-   * @param doc
+   * @param doc - legal docs
    */
   getLegalDoc(doc: LEGAL_DOCS) {
     const selectedDoc = this.LEGAL_DOCS_SOURCE[doc];
     return this.catDocument(selectedDoc);
   }
 }
+
+export default AWF_IpfsConnector;

@@ -17,7 +17,7 @@ import {
 import { throwError } from 'rxjs';
 
 @injectable()
-export default class Web3Connector
+class Web3Connector
   implements IWeb3Connector<ethers.providers.BaseProvider | ethers.providers.Web3Provider>
 {
   #logFactory: Logging;
@@ -314,3 +314,5 @@ export default class Web3Connector
     return provider;
   }
 }
+
+export default Web3Connector;

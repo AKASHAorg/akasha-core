@@ -11,7 +11,7 @@ import AWF_Auth from './auth';
 import AWF_Profile from './profiles';
 import AWF_ENS from './registry';
 import AWF_Entry from './posts/entry';
-import AWF_Comments from './posts/comments';
+import { AWF_Comments } from './posts/comments';
 import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
