@@ -4,7 +4,7 @@ import { Rect } from './rect';
 /* Viewport data */
 
 export interface ViewportState {
-  programmaticScrollListeners: ((data?: any) => void)[];
+  programmaticScrollListeners: ((data?: number) => void)[];
   scrollListeners: (() => void)[];
   window: Window;
   offsetTop: number;
@@ -16,7 +16,7 @@ export interface ViewportActions {
   getRelative: (toRect: Rect) => Rect;
   addResizeListener: (listener: () => void) => () => void;
   addScrollListener: (listener: () => void) => () => void;
-  addProgrammaticScrollListener: (listener: (data?: any) => void) => () => void;
+  addProgrammaticScrollListener: (listener: (data?: unknown) => void) => () => void;
   removeProgrammaticScrollListener: (listener: () => void) => void;
   scrollTo: (pos: number) => void;
   scrollBy: (by: number) => void;
@@ -42,18 +42,18 @@ export const useViewport = (offsetTop = 0): [ViewportState, ViewportActions] => 
     return () => _removeListener(type, cb);
   };
 
-  const _addMountListeners = () => {
+  const _addMountListeners = React.useCallback(() => {
     const cb = () => viewport.scrollListeners.forEach(listener => listener());
     viewport.window.addEventListener('scroll', cb);
     return () => {
       viewport.window.removeEventListener('scroll', cb);
     };
-  };
+  }, [viewport.scrollListeners, viewport.window]);
 
   React.useLayoutEffect(() => {
     const unlisten = _addMountListeners();
     return unlisten;
-  }, [viewport.scrollListeners]);
+  }, [_addMountListeners, viewport.scrollListeners]);
 
   const actions: ViewportActions = {
     getRect: () => {

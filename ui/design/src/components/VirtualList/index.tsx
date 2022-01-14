@@ -1,4 +1,4 @@
-import VirtualList from './virtual-list';
+// import VirtualList from './virtual-list';
 
 /* ************************
  *

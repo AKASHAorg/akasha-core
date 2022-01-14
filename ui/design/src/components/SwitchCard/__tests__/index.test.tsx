@@ -2,7 +2,7 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import SwitchCard from '../';
+import SwitchCard, { StyledSwitchCardButton } from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
 describe('<SwitchCard /> Component', () => {
@@ -18,10 +18,28 @@ describe('<SwitchCard /> Component', () => {
           <SwitchCard
             count={1276}
             countLabel="results"
-            buttonLabels={['All', 'Posts', 'Topics', 'People']}
-            buttonValues={['All', 'Posts', 'Topics', 'People']}
+            tabButtons={
+              <>
+                <StyledSwitchCardButton
+                  label="Kept"
+                  size="large"
+                  removeBorder={false}
+                  primary={true}
+                  onClick={handleTabClick}
+                />
+                <StyledSwitchCardButton
+                  label="Delisted"
+                  size="large"
+                  removeBorder={true}
+                  primary={false}
+                  onClick={handleTabClick}
+                />
+              </>
+            }
+            buttonLabels={['Kept', 'Delisted']}
+            buttonValues={['Kept', 'Delisted']}
             hasIcon={true}
-            activeButton={'All'}
+            activeButton={'Kept'}
             hasMobileDesign={true}
             onIconClick={handleIconClick}
             onTabClick={handleTabClick}
@@ -45,24 +63,20 @@ describe('<SwitchCard /> Component', () => {
   it('has correct labels on the tabs', () => {
     const { getByText } = componentWrapper;
 
-    const allTab = getByText('All');
-    const postsTab = getByText('Posts');
-    const topicsTab = getByText('Topics');
-    const peopleTab = getByText('People');
+    const keptItemsTab = getByText('Kept');
+    const delistedItemsTab = getByText('Delisted');
 
-    expect(allTab).toBeDefined();
-    expect(postsTab).toBeDefined();
-    expect(topicsTab).toBeDefined();
-    expect(peopleTab).toBeDefined();
+    expect(keptItemsTab).toBeDefined();
+    expect(delistedItemsTab).toBeDefined();
   });
 
   it('calls handler when clicked', () => {
     const { getByText } = componentWrapper;
 
-    const postsTab = getByText('Posts');
+    const delistedItemsTab = getByText('Delisted');
     expect(handleTabClick).toBeCalledTimes(0);
 
-    userEvent.click(postsTab);
+    userEvent.click(delistedItemsTab);
 
     expect(handleTabClick).toBeCalledTimes(1);
   });

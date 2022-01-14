@@ -50,7 +50,7 @@ const CardRenderer = (props: IRenderItemProps) => {
     if (itemId && !itemData && loadItemData) {
       loadItemData({ itemId });
     }
-  }, [itemId]);
+  }, [itemData, itemId, loadItemData]);
 
   React.useEffect(() => {
     ftRender.current = false;
@@ -60,7 +60,7 @@ const CardRenderer = (props: IRenderItemProps) => {
         onItemUnmount(itemId, itemRect);
       }
     };
-  }, []);
+  }, [itemId, itemRect, onItemUnmount]);
 
   React.useLayoutEffect(() => {
     if (cardWrapperRef.current) {

@@ -62,3 +62,12 @@ export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseCont
     display: none;
   }
 `;
+
+export const CookieWidgetContainer: React.FC<{ style?: React.CSSProperties }> = styled(Box)`
+  position: fixed;
+  bottom: 0;
+  display: none;
+  @media screen and (max-width: ${props => props.theme.breakpoints.small.value}px) {
+    display: block;
+  }
+`;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { isMobileOnly } from 'react-device-detect';
 import { Box, Text } from 'grommet';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import Button from '../Button';
 import Icon from '../Icon';
@@ -14,18 +14,19 @@ export interface ISwitchCard {
   hasIcon?: boolean;
   countLabel?: string;
   activeButton: string;
+  tabButtons: React.ReactElement;
   buttonLabels: string[];
   buttonValues: string[];
   hasMobileDesign?: boolean;
   onIconClick?: () => void;
   buttonsWrapperWidth?: string;
   wrapperMarginBottom?: string;
-  onTabClick: (value: string) => void;
+  onTabClick: (value: string) => () => void;
+  style?: React.CSSProperties;
+  className?: string;
 }
 
-export interface IStyledButtonProps {
-  readonly first?: boolean;
-  readonly last?: boolean;
+export interface ISwitchCardButtonProps {
   readonly removeBorder?: boolean;
 }
 
@@ -36,10 +37,9 @@ const SwitchCardButton = styled(Button)`
   border-width: 0.1rem;
 `;
 
-const StyledButton = styled(SwitchCardButton)<IStyledButtonProps>`
+export const StyledSwitchCardButton = styled(SwitchCardButton)<ISwitchCardButtonProps>`
   border-left-width: ${props => props.removeBorder && '0'};
-  border-radius: ${props =>
-    props.first ? '0.25rem 0rem 0rem 0.25rem' : props.last ? '0rem 0.25rem 0.25rem 0rem' : '0'};
+  border-radius: 0;
 `;
 
 const StickyBox = styled(Box)<{ userSignedIn: boolean }>`
@@ -56,24 +56,23 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     activeButton,
     hasIcon = false,
     countLabel,
+    tabButtons,
     buttonLabels,
     buttonValues,
     hasMobileDesign,
     onIconClick,
     onTabClick,
     buttonsWrapperWidth,
+    style,
+    className,
   } = props;
 
   const length = buttonLabels.length;
 
-  const handleTabClick = (value: string) => () => {
-    onTabClick(value);
-  };
-
   return (
     <>
       {!(isMobileOnly && hasMobileDesign) && (
-        <BasicCardBox margin={{ bottom: 'medium' }}>
+        <BasicCardBox margin={{ bottom: 'medium' }} style={style} className={className}>
           <Box direction="row" pad="1rem" justify="between" align="center">
             <Box direction="row">
               {hasIcon && (
@@ -102,24 +101,19 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                   : '30%'
               }
             >
-              {buttonLabels.map((el, idx) => (
-                <StyledButton
-                  key={idx}
-                  label={el}
-                  size="large"
-                  first={idx === 0}
-                  removeBorder={idx > 0}
-                  primary={buttonValues[buttonLabels.indexOf(el)] === activeButton}
-                  last={idx === length - 1}
-                  onClick={handleTabClick(el)}
-                />
-              ))}
+              {tabButtons}
             </Box>
           </Box>
         </BasicCardBox>
       )}
       {isMobileOnly && hasMobileDesign && (
-        <StickyBox userSignedIn={!!loggedUser} direction="row" margin={{ bottom: 'medium' }}>
+        <StickyBox
+          userSignedIn={!!loggedUser}
+          direction="row"
+          className={className}
+          style={style}
+          margin={{ bottom: 'medium' }}
+        >
           {buttonLabels.map((el, idx) => (
             <Box
               key={idx}
@@ -136,7 +130,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                       side: 'bottom',
                     }),
               }}
-              onClick={handleTabClick(el)}
+              onClick={onTabClick(buttonValues[buttonLabels.indexOf(el)])}
             >
               <Text color="secondaryText" textAlign="center">
                 {el}
@@ -148,5 +142,22 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     </>
   );
 };
+
+export const TabsToolbar = styled(SwitchCard)<{ noMarginBottom?: boolean }>`
+  font-synthesis: initial;
+  ${props =>
+    props.noMarginBottom &&
+    css`
+      @media only screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+        margin-bottom: 0;
+      }
+    `}
+  ${StyledSwitchCardButton}:first-child {
+    border-radius: 0.25rem 0rem 0rem 0.25rem;
+  }
+  ${StyledSwitchCardButton}:last-child {
+    border-radius: 0rem 0.25rem 0.25rem 0rem;
+  }
+`;
 
 export default SwitchCard;

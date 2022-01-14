@@ -1,8 +1,5 @@
 import { Editor, Node, Path, Range, Transforms } from 'slate';
 
-import isUrl from 'is-url';
-import { CustomEditor } from './helpers';
-
 const withImages = (editor: Editor) => {
   const { isVoid } = editor;
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import SwitchCard from '.';
+import SwitchCard, { StyledSwitchCardButton } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -16,10 +16,10 @@ export interface ISwitchCardComponent {
 
 const SwitchCardComponent: React.FC<ISwitchCardComponent> = props => {
   const { count, countLabel, buttonLabels, buttonValues, onIconClick } = props;
-  const [activeButton, setActiveButton] = React.useState<string>('All');
+  const [activeButton, setActiveButton] = React.useState<string>('Kept');
 
-  const onTabClick = (value: string) => {
-    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
+  const onTabClick = (value: string) => () => {
+    setActiveButton(value);
   };
 
   return (
@@ -28,6 +28,24 @@ const SwitchCardComponent: React.FC<ISwitchCardComponent> = props => {
       hasIcon={true}
       countLabel={countLabel}
       activeButton={activeButton}
+      tabButtons={
+        <>
+          <StyledSwitchCardButton
+            label="Kept"
+            size="large"
+            removeBorder={false}
+            primary={activeButton === 'Kept'}
+            onClick={onTabClick('Kept')}
+          />
+          <StyledSwitchCardButton
+            label="Delisted"
+            size="large"
+            removeBorder={true}
+            primary={activeButton === 'Delisted'}
+            onClick={onTabClick('Delisted')}
+          />
+        </>
+      }
       buttonLabels={buttonLabels}
       buttonValues={buttonValues}
       hasMobileDesign={true}
@@ -61,6 +79,6 @@ export const BaseSwitchCard = Template.bind({});
 BaseSwitchCard.args = {
   count: 1276,
   countLabel: 'results',
-  buttonLabels: ['All', 'Posts', 'Topics', 'People'],
-  buttonValues: ['All', 'Posts', 'Topics', 'People'],
+  buttonLabels: ['Kept', 'Delisted'],
+  buttonValues: ['Kept', 'Delisted'],
 };

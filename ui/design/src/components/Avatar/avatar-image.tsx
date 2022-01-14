@@ -12,7 +12,7 @@ const AvatarImage = (props: { image: string; faded?: boolean }) => {
 
   return (
     <picture style={{ ...(faded && { opacity: '0.5' }) }}>
-      <img data-testid="avatar-image" src={avatar} />
+      <img data-testid="avatar-image" alt="avatar" src={avatar} />
     </picture>
   );
 };

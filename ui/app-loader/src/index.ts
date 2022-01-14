@@ -22,7 +22,6 @@ import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
 import { getIntegrationInfo, getIntegrationInfos } from './registry';
 import { hideSplash, showSplash } from './splash-screen';
-import detectMobile from 'ismobilejs';
 import { NavigationFn, NavigationOptions, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   createRootNode,
@@ -49,7 +48,7 @@ interface SingleSpaEventDetail {
   };
   totalAppChanges: number;
 }
-
+/* eslint-disable complexity */
 export default class AppLoader {
   public readonly uiEvents: BehaviorSubject<UIEventData>;
 
@@ -61,7 +60,6 @@ export default class AppLoader {
   private readonly sdk: IAwfSDK;
   private readonly menuItems: IMenuList;
   public layoutConfig?: LayoutConfig;
-  private readonly isMobile: boolean;
   private extensionPoints: Record<string, UIEventData['data'][]>;
   private readonly extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
   private activeModal?: ModalNavigationOptions;
@@ -72,9 +70,7 @@ export default class AppLoader {
   constructor(worldConfig: ILoaderConfig & ISdkConfig, sdk: ReturnType<typeof getSDK>) {
     this.worldConfig = worldConfig;
     this.loaderLogger = sdk.services.log.create('app-loader');
-
     this.sdk = sdk;
-    this.isMobile = detectMobile().phone || detectMobile().tablet;
 
     this.uiEvents = new BehaviorSubject({ event: EventTypes.Instantiated });
 
@@ -166,7 +162,6 @@ export default class AppLoader {
       sdk: this.sdk,
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
-      isMobile: this.isMobile,
       navigateTo: this.navigateTo.bind(this),
     });
 
@@ -177,7 +172,6 @@ export default class AppLoader {
       sdk: this.sdk,
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
-      isMobile: this.isMobile,
       getAppRoutes: appId => this.apps.getAppRoutes(appId),
       navigateTo: this.navigateTo.bind(this),
     });
@@ -285,10 +279,12 @@ export default class AppLoader {
   // iterate over all extension parcels and return parcel
   private findParcel(name: string) {
     for (const extName in this.extensionParcels) {
-      const parcels = this.extensionParcels[extName];
-      for (const parcel of parcels) {
-        if (parcel.id === name) {
-          return parcel;
+      if (this.extensionParcels.hasOwnProperty(extName)) {
+        const parcels = this.extensionParcels[extName];
+        for (const parcel of parcels) {
+          if (parcel.id === name) {
+            return parcel;
+          }
         }
       }
     }
@@ -302,10 +298,12 @@ export default class AppLoader {
           .unmount()
           .then(() => {
             for (const ext in this.extensionParcels) {
-              const parcels = this.extensionParcels[ext];
-              for (const parcel of parcels) {
-                if (parcel.id === parcelData.id) {
-                  this.extensionParcels[ext].splice(parcels.indexOf(parcel), 1);
+              if (this.extensionParcels.hasOwnProperty(ext)) {
+                const parcels = this.extensionParcels[ext];
+                for (const parcel of parcels) {
+                  if (parcel.id === parcelData.id) {
+                    this.extensionParcels[ext].splice(parcels.indexOf(parcel), 1);
+                  }
                 }
               }
             }
@@ -340,7 +338,6 @@ export default class AppLoader {
             configs: integrationConfigs,
             infos: integrationInfos,
           },
-          isMobile: this.isMobile,
           extensionData,
         });
       }
@@ -569,7 +566,6 @@ export default class AppLoader {
       domElement: domEl,
       uiEvents: this.uiEvents,
       singleSpa: singleSpa,
-      isMobile: this.isMobile,
       layoutConfig: { ...layoutParams },
       logger: this.sdk.services.log.create(this.layoutConfig.name),
       mountParcel: singleSpa.mountRootParcel,
@@ -699,7 +695,6 @@ export default class AppLoader {
         },
         worldConfig: this.worldConfig,
         uiEvents: this.uiEvents,
-        isMobile: this.isMobile,
         extensionData: extensionData,
       });
     }
@@ -776,21 +771,23 @@ export default class AppLoader {
     const appExtensions = this.apps.getExtensions();
     const widgetExtensions = this.widgets.getExtensions();
     for (const extensionName in this.extensionPoints) {
-      const extensionDatas = this.extensionPoints[extensionName];
-      extensionDatas.forEach(extensionData => {
-        // load extensions that must be mounted in this extention point
-        const extToLoad = this.filterExtensionsByMountPoint(
-          [...appExtensions, ...widgetExtensions],
-          { ...appConfigs, ...widgetConfigs },
-          [...appInfos, ...widgetInfos],
-          extensionData,
-        );
-        extToLoad.forEach((extension, index) => {
-          this.mountExtensionPoint(extension, index, extensionData).catch(err =>
-            this.loaderLogger.warn(err),
+      if (this.extensionPoints.hasOwnProperty(extensionName)) {
+        const extensionDatas = this.extensionPoints[extensionName];
+        extensionDatas.forEach(extensionData => {
+          // load extensions that must be mounted in this extention point
+          const extToLoad = this.filterExtensionsByMountPoint(
+            [...appExtensions, ...widgetExtensions],
+            { ...appConfigs, ...widgetConfigs },
+            [...appInfos, ...widgetInfos],
+            extensionData,
           );
+          extToLoad.forEach((extension, index) => {
+            this.mountExtensionPoint(extension, index, extensionData).catch(err =>
+              this.loaderLogger.warn(err),
+            );
+          });
         });
-      });
+      }
     }
   }
 

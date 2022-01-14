@@ -44,7 +44,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path={routes[HISTORY]}>
             <TransparencyLog
               user={loginQuery.data?.pubKey}
-              isMobile={props.isMobile}
               navigateToUrl={props.singleSpa.navigateToUrl}
             />
           </Route>

@@ -58,15 +58,18 @@ const isDescendant = (parent: HTMLElement, child: HTMLElement) => {
  * @params handler <Function> Click handler
  * @params options <Object> Not used yet
  */
-const useOnClickAway = (ref: React.RefObject<any>, handler: (e: any) => void | undefined) => {
+const useOnClickAway = (
+  ref: React.RefObject<HTMLUnknownElement>,
+  handler: (e: Event) => void | undefined,
+) => {
   React.useEffect(() => {
     const listener = (ev: Event) => {
       if (
         !ref.current ||
         ref.current === ev.target ||
-        (ref.current.contains(ev.target) &&
+        (ref.current.contains(ev.target as Node) &&
           ev.target &&
-          isDescendant(ref.current, ev.target as HTMLElement))
+          isDescendant(ref.current, ev.target as HTMLUnknownElement))
       ) {
         return;
       }
@@ -97,8 +100,8 @@ const useOnClickAway = (ref: React.RefObject<any>, handler: (e: any) => void | u
  *  @params toggled<Boolean> -> initial state of the clickAwayElemRef. False means closed/off
  */
 const useTogglerWithClickAway = (
-  togglerElemRef: React.RefObject<any>,
-  clickAwayElemRef: React.RefObject<any>,
+  togglerElemRef: React.RefObject<HTMLUnknownElement>,
+  clickAwayElemRef: React.RefObject<HTMLUnknownElement>,
   handler: (toggled: boolean) => void,
   toggled: boolean,
 ) => {
@@ -142,13 +145,14 @@ const useTogglerWithClickAway = (
         document.addEventListener(event, listener);
       }
     });
+    const togglerElement = togglerElemRef.current;
     return () => {
       supportedEvents.forEach(event => {
-        togglerElemRef.current.removeEventListener(event, listener);
+        togglerElement.removeEventListener(event, listener);
         document.removeEventListener(event, listener);
       });
     };
-  }, [toggled]);
+  }, [toggled, clickAwayElemRef, togglerElemRef]);
 };
 
 export { useOnClickAway, useTogglerWithClickAway };
