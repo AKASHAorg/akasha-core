@@ -25,8 +25,16 @@ import {
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
 
-const { Box, BasicCardBox, ErrorLoader, Spinner, ProfileSearchCard, TagSearchCard, SwitchCard } =
-  DS;
+const {
+  Box,
+  BasicCardBox,
+  ErrorLoader,
+  Spinner,
+  ProfileSearchCard,
+  TagSearchCard,
+  TabsToolbar,
+  StyledSwitchCardButton,
+} = DS;
 
 export enum ButtonValues {
   ALL = 'All',
@@ -174,8 +182,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   ];
   const buttonLabels = buttonValues.map(value => t(value));
 
-  const onTabClick = (value: string) => {
-    setActiveButton(buttonValues[buttonLabels.indexOf(value)]);
+  const onTabClick = (value: string) => () => {
+    setActiveButton(value);
   };
 
   const onNavBack = () => {
@@ -219,10 +227,50 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   return (
     <Box fill="horizontal">
-      <SwitchCard
+      <TabsToolbar
+        noMarginBottom
         count={searchCount}
         countLabel={t('Results')}
         activeButton={activeButton}
+        tabButtons={
+          <>
+            <StyledSwitchCardButton
+              label={t(ButtonValues.ALL)}
+              size="large"
+              removeBorder={false}
+              primary={ButtonValues.ALL === activeButton}
+              onClick={onTabClick(ButtonValues.ALL)}
+            />
+            <StyledSwitchCardButton
+              label={t(ButtonValues.PEOPLE)}
+              size="large"
+              removeBorder={true}
+              primary={ButtonValues.PEOPLE === activeButton}
+              onClick={onTabClick(ButtonValues.PEOPLE)}
+            />
+            <StyledSwitchCardButton
+              label={t(ButtonValues.TOPICS)}
+              size="large"
+              removeBorder={true}
+              primary={ButtonValues.TOPICS === activeButton}
+              onClick={onTabClick(ButtonValues.TOPICS)}
+            />
+            <StyledSwitchCardButton
+              label={t(ButtonValues.POSTS)}
+              size="large"
+              removeBorder={true}
+              primary={ButtonValues.POSTS === activeButton}
+              onClick={onTabClick(ButtonValues.POSTS)}
+            />
+            <StyledSwitchCardButton
+              label={t(ButtonValues.REPLIES)}
+              size="large"
+              removeBorder={true}
+              primary={ButtonValues.REPLIES === activeButton}
+              onClick={onTabClick(ButtonValues.REPLIES)}
+            />
+          </>
+        }
         onTabClick={onTabClick}
         onIconClick={onNavBack}
         hasIcon={true}

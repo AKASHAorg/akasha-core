@@ -39,12 +39,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             />
           </Route>
           <Route path={`${routes[POST]}/:postId`}>
-            <PostPage
-              {...props}
-              loginState={loginQuery.data}
-              showLoginModal={showLoginModal}
-              isMobile={props.isMobile}
-            />
+            <PostPage {...props} loginState={loginQuery.data} showLoginModal={showLoginModal} />
           </Route>
           <Route path={`${routes[TAGS]}/:tagName`}>
             <TagFeedPage

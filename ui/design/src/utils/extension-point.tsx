@@ -14,33 +14,36 @@ export interface ExtensionPointProps {
 const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
   const { mountOnRequest = false, shouldMount = true } = props;
 
+  const onMount = React.useRef(props.onMount);
+  const onUnmount = React.useRef(props.onUnmount);
+
   const nodeRef = React.useRef(null);
-  const clickHandler = () => {
+  const clickHandler = React.useRef(() => {
     if (props.onClick) {
       props.onClick();
     }
     if (props.onWrapperClick) {
       props.onWrapperClick();
     }
-  };
-
+  });
   React.useEffect(() => {
     if (!mountOnRequest || (mountOnRequest && shouldMount)) {
-      props.onMount(`${props.name}`);
+      onMount.current(`${props.name}`);
       const node = document.querySelector(`#${props.name}`);
       if (node) {
         nodeRef.current = node;
-        node.addEventListener('click', clickHandler);
+        node.addEventListener('click', clickHandler.current);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.mountOnRequest, props.shouldMount, props.name]);
+  }, [mountOnRequest, shouldMount, props.name]);
   React.useEffect(() => {
+    const onClick = clickHandler.current;
+    const unmount = onUnmount.current;
     return () => {
-      nodeRef.current.removeEventListener('click', clickHandler);
-      props.onUnmount(`${props.name}`);
+      nodeRef.current.removeEventListener('click', onClick);
+      unmount(`${props.name}`);
     };
-  }, []);
+  }, [props.name]);
 
   if (!mountOnRequest || (mountOnRequest && shouldMount)) {
     return <div id={props.name} className={props.className} style={props.style} />;

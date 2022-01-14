@@ -1,9 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Box, Text, Image, Meter } from 'grommet';
-import { isMobileOnly } from 'react-device-detect';
-
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import Icon from '../Icon';
 
 export interface ITransparencyLogBannerProps {
@@ -66,12 +63,7 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
   };
 
   return (
-    <MainAreaCardBox
-      pad="large"
-      elevation={isMobileOnly ? 'none' : 'shadow'}
-      noBorderRadius={true}
-      noBorder={isMobileOnly}
-    >
+    <Box pad="large">
       <Box height={size} width={size} margin={{ bottom: 'small' }} alignSelf="center">
         <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
       </Box>
@@ -135,7 +127,7 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
           <Icon type="arrowRight" accentColor={true} clickable={true} />
         </Box>
       </Box>
-    </MainAreaCardBox>
+    </Box>
   );
 };
 

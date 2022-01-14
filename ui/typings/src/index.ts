@@ -48,7 +48,6 @@ export interface RootComponentProps {
   uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData>;
   i18n?: typeof i18n;
   getMenuItems?: () => AppLoaderTypes.IMenuList;
-  isMobile: boolean;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
   logger: ILogger;
   mountParcel: (parcel: unknown, config?: unknown) => unknown;

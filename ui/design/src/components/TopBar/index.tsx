@@ -312,7 +312,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           inputPlaceholderLabel={searchBarLabel}
           handleCloseInput={() => {
             if (currentLocation?.includes('search')) {
-              history.back();
+              window.history.back();
             }
             setInputValue('');
             setMobileSearchOpen(false);

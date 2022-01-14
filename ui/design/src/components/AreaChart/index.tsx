@@ -47,12 +47,12 @@ const AreaChart: React.FC<IAreaChart> = props => {
   // define scales
   const xScale = React.useMemo(
     () => scaleTime({ range: [0, xMax], domain: extent(data, getX) as TimeDomain }),
-    [xMax],
+    [data, xMax],
   );
 
   const yScale = React.useMemo(
     () => scaleLinear({ range: [yMax, 0], domain: [0, max(data, getY)] as TimeDomain, nice: true }),
-    [yMax],
+    [data, yMax],
   );
 
   const handleTooltip = React.useCallback(
@@ -68,7 +68,7 @@ const AreaChart: React.FC<IAreaChart> = props => {
         tooltipTop: y,
       });
     },
-    [showTooltip, yScale, xScale],
+    [showTooltip],
   );
 
   const chart = (

@@ -72,10 +72,10 @@ class Widgets extends BaseIntegration {
   }
   async registerWidget(widgetName: string) {
     const widgetConfig: IWidgetConfig = this.widgetConfigs[widgetName];
-    if (this.isMobile && widgetConfig.notOnMobile) {
-      this.logger.info(`will not display widget ** ${widgetConfig.name} ** on mobile`);
-      return;
-    }
+    // if (this.isMobile && widgetConfig.notOnMobile) {
+    //   this.logger.info(`will not display widget ** ${widgetConfig.name} ** on mobile`);
+    //   return;
+    // }
     this.logger.info(
       `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widgetConfig.name}`,
     );
@@ -99,7 +99,6 @@ class Widgets extends BaseIntegration {
       domElement: wrapperNode,
       globalChannel: this.sdk.api.globalChannel,
       uiEvents: this.uiEvents,
-      isMobile: this.isMobile,
       logger: this.sdk.services.log.create(widgetName),
       // installIntegration: this.installIntegration.bind(this),
       // uninstallIntegration: this.uninstallIntegration.bind(this),
@@ -116,19 +115,23 @@ class Widgets extends BaseIntegration {
   }
   async importConfigs() {
     for (const name in this.widgetModules) {
-      const widgetModule = this.widgetModules[name];
+      if (this.widgetModules.hasOwnProperty(name)) {
+        const widgetModule = this.widgetModules[name];
 
-      if (widgetModule.hasOwnProperty('register') && typeof widgetModule.register === 'function') {
-        this.widgetConfigs[name] = (await widgetModule.register({
-          layoutConfig: this.layoutConfig,
-          uiEvents: this.uiEvents,
-          worldConfig: {
-            title: this.worldConfig.title,
-          },
-          isMobile: this.isMobile,
-        })) as IWidgetConfig;
-      } else {
-        this.logger.warn(`Widget ${name} does not have a register() method exported!`);
+        if (
+          widgetModule.hasOwnProperty('register') &&
+          typeof widgetModule.register === 'function'
+        ) {
+          this.widgetConfigs[name] = (await widgetModule.register({
+            layoutConfig: this.layoutConfig,
+            uiEvents: this.uiEvents,
+            worldConfig: {
+              title: this.worldConfig.title,
+            },
+          })) as IWidgetConfig;
+        } else {
+          this.logger.warn(`Widget ${name} does not have a register() method exported!`);
+        }
       }
     }
     return Promise.resolve();
@@ -177,7 +180,6 @@ class Widgets extends BaseIntegration {
           title: this.worldConfig.title,
         },
         uiEvents: this.uiEvents,
-        isMobile: this.isMobile,
       })) as IWidgetConfig;
       if (!widgetConfig) {
         return;
