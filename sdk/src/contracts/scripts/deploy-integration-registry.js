@@ -1,10 +1,11 @@
-const { ethers } = require('@nomiclabs/buidler');
-
+const { ethers, upgrades } = require('hardhat');
 async function main() {
-  // const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
-  // const akRegistrar = await IntegrationRegistry.deploy();
+  const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
+  //const IntRegistrar = await upgrades.deployProxy(IntegrationRegistry);
+  // const safe = '0x4941D523fa837A536B8bed834F6e6c807FAba24C';
+  // await upgrades.admin.transferProxyAdminOwnership(safe);
   // const integrationRegistry = await IntegrationRegistry.attach(
-  //   '0x9D6cE57DAc0499286d18323F7eAEbf40F9412BF5',
+  //   '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC',
   // );
   // await integrationRegistry.release(
   //   'testPackageHehe',
@@ -19,7 +20,7 @@ async function main() {
   // const releaseData = await integrationRegistry.getReleaseData(packageInfo.latestReleaseId);
   // console.log('releaseData', releaseData);
   //await akRegistrar.deployed();
-  // console.log('IntegrationRegistry deployed to:', akRegistrar.address, akRegistrar.txhash);
+  //console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
 }
 
 main()

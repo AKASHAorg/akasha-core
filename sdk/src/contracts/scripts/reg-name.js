@@ -1,4 +1,4 @@
-const { ethers } = require('@nomiclabs/buidler');
+const { ethers } = require('hardhat');
 async function main() {
   const ReverseRegistrar = await ethers.getContractFactory('ReverseRegistrar');
   const AkashaRegistrar = await ethers.getContractFactory('AkashaRegistrar');

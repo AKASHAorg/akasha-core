@@ -1,5 +1,4 @@
-const { ethers } = require('@nomiclabs/buidler');
-
+const { ethers } = require('hardhat');
 async function main() {
   // We get the contract to deploy
   const ENS = await ethers.getContractFactory('ENS');

@@ -1,4 +1,9 @@
-usePlugin('@nomiclabs/buidler-waffle');
+require('@nomiclabs/hardhat-ethers');
+require('@openzeppelin/hardhat-upgrades');
+
+/**
+ * @type import('hardhat/config').HardhatUserConfig
+ */
 module.exports = {
   defaultNetwork: 'rinkeby',
   networks: {
@@ -10,11 +15,13 @@ module.exports = {
       accounts: [],
     },
   },
-  solc: {
+  solidity: {
     version: '0.8.9',
-    optimizer: {
-      enabled: true,
-      runs: 200,
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
     },
   },
   paths: {

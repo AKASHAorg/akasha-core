@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0
 pragma solidity ^0.8.0;
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-abstract contract AbstractIntegrationRegistry is Ownable {
+abstract contract AbstractIntegrationRegistry is OwnableUpgradeable {
 
     function getAllPackageIds(uint offset, uint limit) public view virtual
     returns (
@@ -45,4 +45,8 @@ abstract contract AbstractIntegrationRegistry is Ownable {
 
     // Returns the total number of unique releases belonging to the given packageName in a registry.
     function numReleaseIds(string memory integrationName) public view virtual returns (uint totalCount);
+
+    function initialize() initializer public {
+        __Ownable_init();
+    }
 }

@@ -8,10 +8,10 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { normalize } from 'eth-ens-namehash';
 import { ContractFactory } from 'ethers';
-import AkashaRegistrarABI from '../contracts/artifacts/AkashaRegistrar.json';
-import ReverseRegistrarABI from '../contracts/artifacts/ReverseRegistrar.json';
-import IntegrationRegistryABI from '../contracts/artifacts/IntegrationRegistry.json';
-import EnsABI from '../contracts/artifacts/ENS.json';
+import AkashaRegistrarABI from '../contracts/abi/AkashaRegistrar.json';
+import ReverseRegistrarABI from '../contracts/abi/ReverseRegistrar.json';
+import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
+import EnsABI from '../contracts/abi/ENS.json';
 import { AWF_IENS } from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { lastValueFrom } from 'rxjs';
 import { createFormattedValue, createObservableStream } from '../helpers/observable';
@@ -54,7 +54,7 @@ class AWF_ENS implements AWF_IENS {
   public readonly REVERSE_STRING =
     '0x91d1777781884d03a6757a803996e38de2a42967fb37eeaca72729271025a9e2';
 
-  public readonly INTEGRATION_REGISTRY_ADDRESS = '0x97D5e278FB0f3948F53C986934B0BBB990899e4f';
+  public readonly INTEGRATION_REGISTRY_ADDRESS = '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC';
   constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Gql) gql: Gql,
