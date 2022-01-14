@@ -96,7 +96,7 @@ describe.skip('<TopBar /> component on /auth-app* route', () => {
     expect(text).toBeDefined();
   });
   it('render with mailto link', () => {
-    const link: any = componentWrapper.getByRole('link');
+    const link: HTMLElement & { href?: string } = componentWrapper.getByRole('link');
     expect(link).toBeDefined();
     expect(link?.href).toEqual('mailto:alpha@ethereum.world');
   });

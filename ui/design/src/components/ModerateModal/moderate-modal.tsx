@@ -150,7 +150,9 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 name="action"
                 options={optionLabels}
                 value={action}
-                onChange={(event: any) => setAction(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setAction(event.target.value)
+                }
               />
             </Box>
             <StyledText
