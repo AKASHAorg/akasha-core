@@ -3,4 +3,5 @@ artifacts/*
 !artifacts/ENS.json
 !artifacts/AkashaRegistrar.json
 !artifacts/ReverseRegistrar.json
+!artifacts/IntegrationRegistry.json
 !scripts/*

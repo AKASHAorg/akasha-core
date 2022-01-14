@@ -21,7 +21,8 @@
   "files": [
     "./src/contracts/artifacts/ENS.json",
     "./src/contracts/artifacts/AkashaRegistrar.json",
-    "./src/contracts/artifacts/ReverseRegistrar.json"
+    "./src/contracts/artifacts/ReverseRegistrar.json",
+    "./src/contracts/artifacts/IntegrationRegistry.json"
   ],
 
 
