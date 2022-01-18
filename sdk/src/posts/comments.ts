@@ -23,7 +23,7 @@ import {
 } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 @injectable()
-export default class AWF_Comments implements AWF_IComments {
+class AWF_Comments implements AWF_IComments {
   private _log: ILogger;
   private _gql: Gql;
   private _auth: AWF_Auth;
@@ -203,3 +203,5 @@ export default class AWF_Comments implements AWF_IComments {
     );
   }
 }
+
+export default AWF_Comments;

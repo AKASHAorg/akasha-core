@@ -32,7 +32,7 @@ class Settings implements ISettingsService {
    *
    * @param service - The service name
    * @param options - Array of option pairs [optionName, value]
-   * @returns ServiceCallResult<string[]>
+   * @returns ServiceCallResult
    */
   set(service: string, options: [[string, unknown]]): ServiceCallResult<string[]> {
     return this.get(service).pipe(

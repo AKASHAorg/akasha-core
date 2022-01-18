@@ -1,7 +1,7 @@
 import { LEGAL_DOCS } from './common';
 import { Observable } from 'rxjs';
 
-export default interface AWF_IIpfsConnector {
+interface AWF_IIpfsConnector {
   gateway: string;
 
   getSettings(): { gateway: any };
@@ -14,3 +14,5 @@ export default interface AWF_IIpfsConnector {
    */
   getLegalDoc(doc: LEGAL_DOCS): any;
 }
+
+export default AWF_IIpfsConnector;
