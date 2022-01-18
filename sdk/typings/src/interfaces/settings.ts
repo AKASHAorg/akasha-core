@@ -1,6 +1,6 @@
 import { ServiceCallResult } from './responses';
 
-export default interface ISettingsService {
+interface ISettingsService {
   set(
     moduleName: string,
     value: Record<string, unknown> | [[string, unknown]],
@@ -33,3 +33,5 @@ export interface IAppSettings {
    */
   uninstall(appName: string): Promise<void>;
 }
+
+export default ISettingsService;

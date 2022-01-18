@@ -34,7 +34,7 @@ export const validateName = (name: string) => {
 };
 
 @injectable()
-export default class AWF_ENS implements AWF_IENS {
+class AWF_ENS implements AWF_IENS {
   private readonly _web3: Web3Connector;
   private _log: ILogger;
   private _gql: Gql;
@@ -240,3 +240,5 @@ export default class AWF_ENS implements AWF_IENS {
     };
   }
 }
+
+export default AWF_ENS;
