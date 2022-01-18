@@ -1,15 +1,11 @@
 {
-  "name": "@akashaproject/app-auth-ewa",
+  "name": "@akashaproject/app-settings-ewa",
   "private": true,
-  "version": "0.0.1",
-  "description": "ETHEREUM WORLD Auth app",
+  "version": "0.1.0",
+  "description": "ETHEREUM WORLD settings app",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
-    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
-    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
-    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
-    "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)",
-    "Damir Sabolic <damir.sabolic@akasha.world> (https://github.com/PrimarchAlpharius)"
+    "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)"
   ],
   "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
   "license": "AGPL-3.0",
@@ -31,7 +27,7 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/auth-app",
+    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/settings-app",
     "watch": "webpack --config webpack.config.js --watch",
     "clean": "tsc --build --clean"
   },
@@ -56,7 +52,6 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "@akashaproject/sdk-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/react-router-dom": "5.1.8",

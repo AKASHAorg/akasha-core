@@ -82,6 +82,7 @@ import safe from './safe';
 import search from './search';
 import send from './send';
 import settings from './settings';
+import settingsAlt from './settings-alt';
 import signOut from './sign-out';
 import status from './status';
 import share from './share';
@@ -122,6 +123,7 @@ export {
   reload,
   pin,
   settings,
+  settingsAlt,
   stopwatch,
   transfer,
   calendar,
