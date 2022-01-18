@@ -11,7 +11,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  name: 'moderation-app',
+  name: 'settings-app',
   sdkModules: [],
   // menuItems: routes,
   title: 'Settings | Ethereum World',
