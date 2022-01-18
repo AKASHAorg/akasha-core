@@ -1,3 +1,0 @@
-# ignore all translation folders except en (served as source)
-*
-!en/*
