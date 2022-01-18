@@ -20,7 +20,7 @@ class DB implements DBService<Database, Collection> {
 
   /**
    * Create a new DB instance
-   * @param name
+   * @param name - database name
    * @returns Database
    */
   public create(name: string) {

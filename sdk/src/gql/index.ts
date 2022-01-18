@@ -3,7 +3,6 @@ import IGqlClient from '@akashaproject/sdk-typings/lib/interfaces/gql';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 import { gql, GraphQLRequest, HttpLink } from '@apollo/client';
 
-import hash from 'object-hash';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Stash, { IQuickLRU } from '../stash';
 import { createObservableStreamGql, createObservableValue } from '../helpers/observable';
@@ -37,10 +36,9 @@ class Gql implements IGqlClient<unknown> {
   }
 
   /**
-   *
    * @param operation - graphQL request object
    * @param saveCache - Cache the result
-   * @returns ServiceCallResult<Record<string, T>>
+   * @returns ServiceCallResult
    */
   run<T>(operation: GraphQLRequest, saveCache = true): ServiceCallResult<T> {
     const opHash = this._stash.computeKey(operation);

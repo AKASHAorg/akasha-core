@@ -33,6 +33,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
 
   return (
     <StyledButton
+      data-testid="duplex-button"
       active={active}
       className={className}
       style={style}

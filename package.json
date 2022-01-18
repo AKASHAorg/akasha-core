@@ -52,7 +52,7 @@
     "test:app-loader": "lerna run test --scope @akashaproject/ui-app-loader --stream",
     "dev:server": "lerna run dev:server --stream",
     "update:deps": "lerna exec -- npx --package npm-check-updates ncu -u",
-    "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --packages ."
+    "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --entryPointStrategy packages 'sdk/typings' 'sdk' 'ui/*' 'ui/widgets/*' 'ui/plugins/*'"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
@@ -100,8 +100,9 @@
     "styled-components": "5.3.1",
     "ts-jest": "^27.0.5",
     "ts-loader": "9.2.5",
-    "typedoc": "0.21.9",
-    "typedoc-plugin-markdown": "3.10.4",
+    "typedoc": "0.22.10",
+    "typedoc-plugin-markdown": "3.11.11",
+    "typedoc-plugin-missing-exports": "0.22.6",
     "typescript": "4.4.3",
     "webpack": "5.65.0",
     "webpack-cli": "4.9.1",
