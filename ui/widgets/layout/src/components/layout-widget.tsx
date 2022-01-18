@@ -166,11 +166,12 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
                                   onUnmount={handleExtensionUnmount}
                                 />
                                 <CookieWidget
+                                  navigateToUrl={props.singleSpa.navigateToUrl}
                                   style={{
                                     position: 'fixed',
                                     bottom: 0,
-                                    marginLeft: '1rem',
-                                    maxWidth: '21rem',
+                                    marginLeft: '-12rem',
+                                    maxWidth: '34rem',
                                   }}
                                 />
                               </ScrollableWidgetArea>
@@ -200,7 +201,7 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
             style={{ position: 'relative', zIndex: 200 }}
           />
           <CookieWidgetContainer>
-            <CookieWidget />
+            <CookieWidget navigateToUrl={props.singleSpa.navigateToUrl} />
           </CookieWidgetContainer>
         </div>
       </div>

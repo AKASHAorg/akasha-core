@@ -26,9 +26,9 @@ export const BaseCookieWidgetCard = Template.bind({});
 
 BaseCookieWidgetCard.args = {
   titleLabel: 'Cookies 🍪',
-  contentLabel:
+  paragraphOneLabel:
     'To help provide you with the best experience when visiting this Website, we use cookies for security and product improvement purposes in accordance with our',
-
+  privacyCTALabel: 'For more info, see our ',
   privacyUrlLabel: 'Privacy Policy',
   privacyUrl: 'https://ethereum.world/privacy-policy',
   onlyEssentialLabel: 'Only essential',
