@@ -1,6 +1,6 @@
 import { DataProviderInput } from './common';
 
-export default interface AWF_IProfile {
+interface AWF_IProfile {
   graphQLDocs: {
     RegisterUsername: any;
     SearchProfiles: any;
@@ -133,3 +133,5 @@ export default interface AWF_IProfile {
    */
   getInterests(pubKey: string): unknown;
 }
+
+export default AWF_IProfile;

@@ -4,7 +4,7 @@ import { ReplaySubject, TimestampProvider } from 'rxjs';
 decorate(injectable(), ReplaySubject);
 
 @injectable()
-export default class EventBus extends ReplaySubject<{
+class EventBus extends ReplaySubject<{
   data: unknown;
   event: string;
   args?: unknown;
@@ -16,3 +16,5 @@ export default class EventBus extends ReplaySubject<{
     super(_size, _time, _timeStampProvider);
   }
 }
+
+export default EventBus;

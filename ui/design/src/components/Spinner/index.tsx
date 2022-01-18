@@ -77,9 +77,9 @@ const StyledSpinner = styled.svg`
 `;
 
 export interface SpinnerProps {
-  /** the size (width, height) of the spinner. @default 50 */
+  /** the size (width, height) of the spinner. @defaultvalue 50 */
   size?: number;
-  /** speed (in seconds). ex: 1.2 or 2. @default 1.2 */
+  /** speed (in seconds). ex: 1.2 or 2. @defaultvalue 1.2 */
   speed?: number;
   style?: React.CSSProperties;
 }

@@ -3,7 +3,7 @@ import { CurrentUser } from './common';
 import { Buckets, Client, InboxListOptions, PrivateKey, UserAuth, Users } from '@textile/hub';
 import { Observable } from 'rxjs';
 
-export default interface AWF_IAuth {
+interface AWF_IAuth {
   /**
    * enable key sync between opened tabs
    */
@@ -73,3 +73,5 @@ export default interface AWF_IAuth {
 
   validateInvite(inviteCode: string): Observable<{ data: boolean }>;
 }
+
+export default AWF_IAuth;

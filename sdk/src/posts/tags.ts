@@ -17,7 +17,7 @@ import {
 } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 @injectable()
-export default class AWF_Tags implements AWF_ITags {
+class AWF_Tags implements AWF_ITags {
   private readonly _web3: Web3Connector;
   private _log: ILogger;
   private _gql: Gql;
@@ -125,3 +125,5 @@ export default class AWF_Tags implements AWF_ITags {
     return this.searchTags('');
   }
 }
+
+export default AWF_Tags;

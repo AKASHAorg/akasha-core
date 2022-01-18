@@ -28,7 +28,7 @@ import {
 } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 @injectable()
-export default class AWF_Entry implements AWF_IEntry {
+class AWF_Entry implements AWF_IEntry {
   private _log: ILogger;
   private _gql: Gql;
   private _auth: AWF_Auth;
@@ -323,3 +323,5 @@ export default class AWF_Entry implements AWF_IEntry {
     );
   }
 }
+
+export default AWF_Entry;
