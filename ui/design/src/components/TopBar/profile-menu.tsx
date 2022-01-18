@@ -133,7 +133,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   };
 
   const similarMenu: ISimilarMenu[] = [
-    { icon: 'settings', labels: [settingsLabel], handler: handleSettingsClick },
+    { icon: 'settingsAlt', labels: [settingsLabel], handler: handleSettingsClick },
     { icon: 'feedback', labels: [feedbackLabel, feedbackInfoLabel], handler: handleFeedbackClick },
     {
       icon: 'trendingApps',
