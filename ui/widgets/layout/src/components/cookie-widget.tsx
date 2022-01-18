@@ -53,7 +53,7 @@ const CookieWidget: React.FC<ICookieWidgetProps> = props => {
                       color="accentText"
                       size="medium"
                       style={{ cursor: 'pointer' }}
-                      onClick={() => props.navigateToUrl('/settings')}
+                      onClick={() => props.navigateToUrl('/settings-app')}
                     >
                       {t('settings ')}
                     </Text>
