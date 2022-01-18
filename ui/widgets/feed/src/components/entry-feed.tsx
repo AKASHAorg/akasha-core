@@ -36,7 +36,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
     if (!props.loginState.pubKey) {
       props.onLoginModalOpen({ modal: { name: 'editor', embedEntry: entryId } });
     } else {
-      props.navigateToModal({ modal: { name: 'editor', embedEntry: entryId } });
+      props.navigateToModal({ name: 'editor', embedEntry: entryId });
     }
   };
 
