@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyledSelectBox } from '../drop-styled-search-input';
 
 export interface ISearchInputUsersProps {
-  users: any[];
+  users: Record<string, unknown>[];
   onClickUser: (name: string) => void;
 }
 

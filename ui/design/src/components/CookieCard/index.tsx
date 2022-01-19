@@ -9,7 +9,9 @@ import { BasicCardBox } from '../EntryCard/basic-card-box';
 
 export interface ICookieWidgetCard {
   titleLabel: string;
-  contentLabel: string | React.ReactElement;
+  paragraphOneLabel: string | React.ReactElement;
+  paragraphTwoLabel?: string | React.ReactElement;
+  privacyCTALabel: string;
   privacyUrl: string;
   privacyUrlLabel: string;
   onlyEssentialLabel: string;
@@ -28,7 +30,9 @@ const CookieCardButton = styled(Button)`
 const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
   const {
     titleLabel,
-    contentLabel,
+    paragraphOneLabel,
+    paragraphTwoLabel,
+    privacyCTALabel,
     onlyEssentialLabel,
     acceptAllLabel,
     privacyUrl,
@@ -38,7 +42,7 @@ const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
   } = props;
 
   return (
-    <BasicCardBox darkBorder={true} noBorderRadius={isMobileOnly}>
+    <BasicCardBox elevation="medium" darkBorder={true} noBorderRadius={isMobileOnly}>
       <Box margin="1rem">
         <Text weight={600} textAlign="start" margin={{ bottom: 'medium' }} size="large">
           {titleLabel}
@@ -48,7 +52,21 @@ const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
           margin={{ bottom: 'medium' }}
           style={{ lineHeight: '1.4', letterSpacing: '0.05em' }}
         >
-          {contentLabel}{' '}
+          {paragraphOneLabel}
+        </Text>
+        <Text
+          size="medium"
+          margin={{ bottom: 'medium' }}
+          style={{ lineHeight: '1.4', letterSpacing: '0.05em' }}
+        >
+          {paragraphTwoLabel}
+        </Text>
+        <Text
+          size="medium"
+          margin={{ bottom: 'medium' }}
+          style={{ lineHeight: '1.4', letterSpacing: '0.05em' }}
+        >
+          {privacyCTALabel}
           <Text
             color="accentText"
             size="medium"
@@ -58,7 +76,7 @@ const CookieWidgetCard: React.FC<ICookieWidgetCard> = props => {
             {privacyUrlLabel}
           </Text>
         </Text>
-        <Box width="100%" direction="row" align="center">
+        <Box width="80%" direction="row" align="center">
           <CookieCardButton
             size="large"
             label={onlyEssentialLabel}

@@ -89,6 +89,7 @@ export type IconType =
   | 'search'
   | 'send'
   | 'settings'
+  | 'settingsAlt'
   | 'share'
   | 'signOut'
   | 'status'
@@ -199,6 +200,7 @@ export const iconTypes: IconType[] = [
   'search',
   'send',
   'settings',
+  'settingsAlt',
   'signOut',
   'status',
   'share',

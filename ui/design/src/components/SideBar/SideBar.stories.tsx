@@ -26,7 +26,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ISidebarProps) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
       <SidebarComponent {...args} />

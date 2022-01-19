@@ -1,4 +1,5 @@
 import { Box, Anchor } from 'grommet';
+import { MarginType, PadType } from 'grommet/utils';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -16,8 +17,8 @@ export interface IBasicCardBox {
   darkBorder?: boolean;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
-  pad?: any;
-  margin?: any;
+  pad?: PadType;
+  margin?: MarginType;
   noBorder?: boolean;
   noBorderRadius?: boolean;
   bottomBorderOnly?: boolean;

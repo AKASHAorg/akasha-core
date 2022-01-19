@@ -122,6 +122,10 @@ const TopbarComponent = (props: RootComponentProps) => {
     });
   };
 
+  const handleSettingsClick = () => {
+    navigateToUrl('/settings-app');
+  };
+
   const handleFeedbackModalShow = () => {
     props.navigateToModal({ name: 'feedback' });
   };
@@ -192,6 +196,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         dashboardInfoLabel={t('Help moderate items!')}
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}
+        settingsLabel={t('Settings')}
         moderationLabel={t('Moderation History')}
         moderationInfoLabel={t('Help keep us accountable!')}
         legalCopyRightLabel={'© Ethereum World Association'}
@@ -208,6 +213,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         onLoginClick={handleLoginClick}
         onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
+        onSettingsClick={handleSettingsClick}
         onFeedbackClick={handleFeedbackModalShow}
         onModerationClick={handleModerationClick}
         onDashboardClick={handleDashboardClick}

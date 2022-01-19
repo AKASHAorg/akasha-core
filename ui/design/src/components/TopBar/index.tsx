@@ -45,6 +45,7 @@ export interface ITopbarProps {
   legalLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
+  settingsLabel?: string;
   moderationLabel?: string;
   moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
@@ -59,6 +60,7 @@ export interface ITopbarProps {
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
   onSearch: (inputValue: string) => void;
+  onSettingsClick: () => void;
   onFeedbackClick: () => void;
   onModerationClick: () => void;
   onDashboardClick: () => void;
@@ -85,6 +87,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     legalLabel,
     feedbackLabel,
     feedbackInfoLabel,
+    settingsLabel,
     moderationLabel,
     moderationInfoLabel,
     legalCopyRightLabel,
@@ -103,6 +106,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     // onSidebarToggle,
     onLoginClick,
     onSignUpClick,
+    onSettingsClick,
     onFeedbackClick,
     onModerationClick,
     onDashboardClick,
@@ -411,6 +415,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          settingsLabel={settingsLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
@@ -418,6 +423,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           menuItems={dropItems}
           legalMenu={legalMenu}
           onLogout={onLogout}
+          onSettingsClick={onSettingsClick}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}
@@ -441,10 +447,12 @@ const Topbar: React.FC<ITopbarProps> = props => {
           dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          settingsLabel={settingsLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
           legalCopyRightLabel={legalCopyRightLabel}
+          onSettingsClick={onSettingsClick}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}

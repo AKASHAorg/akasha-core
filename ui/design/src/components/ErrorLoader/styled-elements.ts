@@ -19,11 +19,11 @@ const StyledImage = styled.img`
   padding: 2em 0;
 `;
 
-const PageWrapper: any = styled(Box)`
+const PageWrapper = styled(Box)`
   background: white;
 `;
 
-const ContentWrapper: any = styled(Box)`
+const ContentWrapper = styled(Box)`
   padding: 0rem 5rem 1.2rem;
   border-radius: 0.5rem;
   span {

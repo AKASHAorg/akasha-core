@@ -69,6 +69,16 @@ export const integrationsData = {
     },
     type: 'app',
   },
+  '@akashaproject/app-settings-ewa': {
+    name: '@akashaproject/app-settings-ewa',
+    lastVersion: '0.0.1',
+    description: 'Settings App',
+    versions: {
+      // we can have something like //gateway.ipfs.io/ipfs/Qem123dfea1234
+      '0.0.1': '/apps/settings-app/index.js',
+    },
+    type: 'app',
+  },
   '@akashaproject/app-search': {
     name: '@akashaproject/app-search',
     lastVersion: '0.0.1',

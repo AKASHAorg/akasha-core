@@ -49,7 +49,7 @@ const LoginModal = (props: RootComponentProps) => {
           style={{ position: 'absolute', right: '0.4rem' }}
           clickable
         />
-        <Box direction="column" align="center" justify="center">
+        <Box direction="column" align="center" justify="center" data-testid="modal-card-login">
           <Box direction="column" align="center" fill="horizontal">
             <Text weight="bold" size="large" margin={{ vertical: '0.5rem' }}>
               {t('Ethereum World')}

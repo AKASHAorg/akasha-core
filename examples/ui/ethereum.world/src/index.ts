@@ -29,6 +29,7 @@ declare const __DEV__: boolean;
       '@akashaproject/app-moderation-ewa',
       '@akashaproject/app-search',
       '@akashaproject/app-auth-ewa',
+      '@akashaproject/app-settings-ewa',
       '@akashaproject/ui-plugin-app-center',
       '@akashaproject/ui-plugin-profile',
       '@akashaproject/ui-plugin-notifications',

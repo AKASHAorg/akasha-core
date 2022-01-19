@@ -33,7 +33,7 @@ import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
 
 @injectable()
-export default class AWF_Auth implements AWF_IAuth {
+class AWF_Auth implements AWF_IAuth {
   #identity: PrivateKey;
   private hubClient: Client;
   private hubUser: Users;
@@ -576,7 +576,7 @@ export default class AWF_Auth implements AWF_IAuth {
 
   /**
    * Returns all the inbox messages from Textile Users
-   * @param args
+   * @param args - InboxListOptions
    */
   getMessages(args: InboxListOptions) {
     return createObservableStream<
@@ -692,3 +692,5 @@ export default class AWF_Auth implements AWF_IAuth {
     throw new Error('Sorry, this code is not valid. Please try again.');
   }
 }
+
+export default AWF_Auth;

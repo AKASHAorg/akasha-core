@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import ProfileAvatarButton from '.';
+import ProfileAvatarButton, { ProfileAvatarButtonProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -13,7 +13,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ProfileAvatarButtonProps) => (
   <Grommet theme={lightTheme}>
     <ProfileAvatarButton {...args} />
   </Grommet>

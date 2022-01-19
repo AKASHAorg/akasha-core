@@ -307,7 +307,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </Box>
           <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
             {loggedEthAddress !== profileData.ethAddress && (
-              <Box>
+              <Box data-testid="profile-card-follow-button">
                 <DuplexButton
                   icon={<Icon type="following" />}
                   active={isFollowing}

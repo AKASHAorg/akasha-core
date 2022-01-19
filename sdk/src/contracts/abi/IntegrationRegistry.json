@@ -1,5 +1,7 @@
 {
+  "_format": "hh-sol-artifact-1",
   "contractName": "IntegrationRegistry",
+  "sourceName": "src/IntegrationRegistry.sol",
   "abi": [
     {
       "anonymous": false,
@@ -268,6 +270,13 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {

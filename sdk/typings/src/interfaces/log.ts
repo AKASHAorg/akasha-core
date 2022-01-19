@@ -5,6 +5,8 @@ export interface ILogger {
   setLevel(lvl: string): void;
 }
 
-export default interface ILogService {
+interface ILogService {
   create(nameSpace?: string): ILogger;
 }
+
+export default ILogService;

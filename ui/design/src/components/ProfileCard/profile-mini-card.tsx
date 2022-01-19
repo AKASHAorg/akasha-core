@@ -19,7 +19,7 @@ export interface IProfileMiniCard {
   unfollowLabel?: string;
   postsLabel?: string;
   // handlers
-  handleClick?: (arg1?: any) => void;
+  handleClick?: (arg1?: string) => void;
   handleFollow?: (profileEthAddress: string) => void;
   handleUnfollow?: (profileEthAddress: string) => void;
   disableFollowing?: boolean;

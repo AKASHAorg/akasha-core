@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 export default function useSimpleClickAway(
   wrapperRef: React.RefObject<any>,
-  handler: (e: any) => void | undefined,
+  handler: (e: Event) => void | undefined,
 ) {
   useEffect(() => {
     if (wrapperRef.current) {

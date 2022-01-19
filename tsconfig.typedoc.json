@@ -1,8 +1,8 @@
 {
-  "files": [],
   "references": [
-    { "path": "./ui/design" },
+    { "path":  "./sdk/typings"},
     { "path": "./ui/typings" },
+    { "path": "./ui/design" },
     { "path": "./ui/testing-utils"},
     { "path": "./ui/hooks" },
     { "path": "./ui/widgets/feed" },
@@ -17,6 +17,5 @@
     { "path": "./ui/plugins/profile" },
     { "path": "./ui/plugins/search" },
     { "path": "./sdk"},
-    { "path":  "./sdk/typings"}
   ]
 }
