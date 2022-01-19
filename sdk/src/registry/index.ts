@@ -7,7 +7,7 @@ import Settings from '../settings';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { normalize } from 'eth-ens-namehash';
-import { ContractFactory } from 'ethers';
+import { ContractFactory, constants as ethersConstants, utils as ethersUtils } from 'ethers';
 import AkashaRegistrarABI from '../contracts/abi/AkashaRegistrar.json';
 import ReverseRegistrarABI from '../contracts/abi/ReverseRegistrar.json';
 import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
@@ -213,22 +213,22 @@ class AWF_ENS implements AWF_IENS {
     });
   }
 
-  async getAllIntegrationsIds(offset = 0, limit = 5) {
-    const data = await this._IntegrationRegistryInstance.getAllPackageIds(offset, limit);
+  async getAllIntegrationsIds(offset = 0) {
+    const data = await this._IntegrationRegistryInstance.getAllPackageIds(offset);
     return createFormattedValue({
-      integrationIds: data.packageIds,
-      nextIndex: data.pointer,
+      integrationIds: data.packageIds.filter(x => x !== ethersConstants.HashZero),
+      nextIndex: data.next,
     });
   }
 
   async getIntegrationId(name: string) {
-    const data = await this._IntegrationRegistryInstance.generateIntegrationId(name);
-    return createFormattedValue({ id: data });
+    const data = ethersUtils.id(name);
+    return Promise.resolve(createFormattedValue({ id: data }));
   }
 
   async getIntegrationReleaseId(name: string, version: string) {
-    const data = await this._IntegrationRegistryInstance.generateReleaseId(name, version);
-    return createFormattedValue({ id: data.releaseId });
+    const data = ethersUtils.id(name + version);
+    return Promise.resolve(createFormattedValue({ id: data }));
   }
 
   public getContracts() {
