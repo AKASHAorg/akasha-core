@@ -61,9 +61,9 @@
     "prepare": "npm run tsc",
     "clean": "tsc --build --clean",
     "build": "webpack --config webpack.config.js",
-    "sc:test": "npx buidler --network development test",
     "sc:compile": "npx hardhat compile",
-    "sc:deploy:local": "npx hardhat run --network rinkeby src/contracts/scripts/deploy-integration-registry.js"
+    "sc:deploy:local": "npx hardhat run --network rinkeby src/contracts/scripts/deploy-integration-registry.js",
+    "sc:test": "npx hardhat test --network development"
   },
   "browserslist": [
     "defaults",

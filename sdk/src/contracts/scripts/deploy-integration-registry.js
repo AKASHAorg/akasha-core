@@ -1,12 +1,18 @@
+/* eslint-disable */
 const { ethers, upgrades } = require('hardhat');
 async function main() {
-  const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
+  //const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
   //const IntRegistrar = await upgrades.deployProxy(IntegrationRegistry);
   // const safe = '0x4941D523fa837A536B8bed834F6e6c807FAba24C';
   // await upgrades.admin.transferProxyAdminOwnership(safe);
   // const integrationRegistry = await IntegrationRegistry.attach(
   //   '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC',
   // );
+  // const readIntegrationRegistry = await ethers.getContractAt(
+  //   'IntegrationRegistry',
+  //   '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC',
+  // );
+  // const releases = await readIntegrationRegistry.getAllPackageIds(0, 15);
   // await integrationRegistry.release(
   //   'testPackageHehe',
   //   'v0.1.1',
@@ -21,6 +27,13 @@ async function main() {
   // console.log('releaseData', releaseData);
   //await akRegistrar.deployed();
   //console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
+
+  // const proxyAddress = '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC';
+  //
+  // const IntegrationRegV1 = await ethers.getContractFactory('IntegrationRegistry');
+  // console.log('Preparing upgrade...');
+  // const integrationRegAddr = await upgrades.prepareUpgrade(proxyAddress, IntegrationRegV1);
+  // console.log('IntegrationRegAddr at:', integrationRegAddr);
 }
 
 main()
