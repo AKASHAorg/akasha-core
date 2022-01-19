@@ -1,6 +1,5 @@
 import {
   AppOrWidgetDefinition,
-  AppRegistryInfo,
   EventTypes,
   ExtensionPointDefinition,
   IAppConfig,
@@ -10,17 +9,18 @@ import {
   LayoutConfig,
   ModalNavigationOptions,
   UIEventData,
-  WidgetRegistryInfo,
   IMenuList,
   IMenuItem,
   EventDataTypes,
+  BaseIntegrationInfo,
+  INTEGRATION_TYPES,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
 import * as rxjsOperators from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
-import { getIntegrationInfo, getIntegrationInfos } from './registry';
+import { getIntegrationInfo } from './registry';
 import { hideSplash, showSplash } from './splash-screen';
 import { NavigationFn, NavigationOptions, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
@@ -66,6 +66,7 @@ export default class AppLoader {
 
   private apps: Apps;
   private widgets: Widgets;
+  private registryOverrides: ILoaderConfig['registryOverrides'];
 
   constructor(worldConfig: ILoaderConfig & ISdkConfig, sdk: ReturnType<typeof getSDK>) {
     this.worldConfig = worldConfig;
@@ -82,6 +83,7 @@ export default class AppLoader {
     this.extensionParcels = {};
 
     this.menuItems = { nextIndex: 1, items: [] };
+    this.registryOverrides = worldConfig.registryOverrides || [];
   }
 
   private addSingleSpaEventListeners() {
@@ -140,12 +142,14 @@ export default class AppLoader {
       urlRerouteOnly: true,
     });
 
-    const integrationInfos = await this.getPackageInfos([
+    const defaultIntegrations = [
       this.worldConfig.layout,
       this.worldConfig.homepageApp,
       ...this.worldConfig.defaultApps,
       ...this.worldConfig.defaultWidgets,
-    ]);
+    ];
+
+    const integrationInfos = await this.getPackageInfos(defaultIntegrations);
     // adds a new importMaps script into the head of the document
     // with the default integrations
     await this.createImportMaps(integrationInfos, 'default-world-integrations');
@@ -177,10 +181,10 @@ export default class AppLoader {
     });
 
     integrationInfos.forEach(integration => {
-      if (integration.type === 'app') {
+      if (integration.integrationType === INTEGRATION_TYPES.APPLICATION) {
         this.apps.add(integration);
       }
-      if (integration.type === 'widget') {
+      if (integration.integrationType === INTEGRATION_TYPES.WIDGET) {
         this.widgets.add(integration);
       }
     });
@@ -222,18 +226,18 @@ export default class AppLoader {
         }
 
         for (const info of userAppsToLoad) {
-          if (info.type === 'app') {
+          if (info.integrationType === INTEGRATION_TYPES.APPLICATION) {
             this.apps.add(info);
           }
-          if (info.type === 'widget') {
+          if (info.integrationType === INTEGRATION_TYPES.WIDGET) {
             this.widgets.add(info);
           }
         }
-        if (userAppsToLoad.some(info => info.type === 'app')) {
+        if (userAppsToLoad.some(info => info.integrationType === INTEGRATION_TYPES.APPLICATION)) {
           await this.apps.import();
           await this.apps.importConfigs();
         }
-        if (userAppsToLoad.some(info => info.type === 'widget')) {
+        if (userAppsToLoad.some(info => info.integrationType === INTEGRATION_TYPES.WIDGET)) {
           await this.widgets.import();
           await this.apps.importConfigs();
         }
@@ -323,7 +327,7 @@ export default class AppLoader {
   public filterExtensionsByMountPoint(
     appAndWidgetExtensions: ExtensionPointDefinition[],
     integrationConfigs: Record<string, IAppConfig | IWidgetConfig>,
-    integrationInfos: (AppRegistryInfo | WidgetRegistryInfo)[],
+    integrationInfos: BaseIntegrationInfo[],
     extensionData: UIEventData['data'],
   ) {
     return appAndWidgetExtensions.filter(ext => {
@@ -468,9 +472,7 @@ export default class AppLoader {
   }
 
   // get registry info for package
-  public async getPackageInfo(
-    pack: AppOrWidgetDefinition,
-  ): Promise<AppRegistryInfo | WidgetRegistryInfo | null> {
+  public async getPackageInfo(pack: AppOrWidgetDefinition): Promise<BaseIntegrationInfo | null> {
     const normalized = toNormalDef(pack);
     if (!normalized) {
       this.loaderLogger.warn(`There is a misconfiguration in app ${pack} definitions!`);
@@ -481,23 +483,32 @@ export default class AppLoader {
 
   // get registry info for multiple packages
   public async getPackageInfos(packages: AppOrWidgetDefinition[]) {
-    const regInfos = packages
-      .map(def => {
-        const normalized = toNormalDef(def);
-        if (!normalized) {
-          this.loaderLogger.warn(`Error in configuration of ${def}`);
-          return null;
-        }
-        return normalized;
-      })
-      .filter(m => m !== null) as NonNullable<{ name: string; version: string }[]>;
-    return await getIntegrationInfos(regInfos);
+    const integrationInfos: BaseIntegrationInfo[] = [];
+
+    for (const pack of packages) {
+      let name = pack;
+      if (typeof pack === 'object') {
+        name = pack.name;
+      }
+      const overrideInfo = this.registryOverrides.find(integration => integration.name === name);
+      if (overrideInfo) {
+        integrationInfos.push(overrideInfo);
+        continue;
+      }
+      const info = await this.getPackageInfo(name);
+      if (info) {
+        integrationInfos.push(info);
+        continue;
+      }
+      continue;
+    }
+    return integrationInfos;
   }
 
   /**
    * Get the infos about the apps and register them into systemjs
    */
-  public async createImportMaps(infos: (AppRegistryInfo | WidgetRegistryInfo)[], scriptId: string) {
+  public async createImportMaps(infos: BaseIntegrationInfo[], scriptId: string) {
     const currentImportMap = getCurrentImportMaps();
 
     if (!currentImportMap) {
@@ -515,7 +526,7 @@ export default class AppLoader {
     ).prepareImport(true);
   }
 
-  public async importLayoutConfig(integrationInfos: (AppRegistryInfo | WidgetRegistryInfo)[]) {
+  public async importLayoutConfig(integrationInfos: BaseIntegrationInfo[]) {
     const layoutApp = getNameFromDef(this.worldConfig.layout);
     if (!layoutApp) {
       this.loaderLogger.error('Layout widget/app was not found!');
@@ -602,14 +613,14 @@ export default class AppLoader {
     call.subscribe({
       next: async () => {
         let config;
-        if (info.type === 'app') {
+        if (info.integrationType === INTEGRATION_TYPES.APPLICATION) {
           await this.apps.install(info);
           config = this.apps.configs[info.name];
           if (!config) {
             this.loaderLogger.warn(`Config not found or is not ready yet! App: ${info.name}`);
           }
         }
-        if (info.type === 'widget') {
+        if (info.integrationType === INTEGRATION_TYPES.WIDGET) {
           await this.widgets.install(info);
           config = this.widgets.configs[info.name];
           if (!config) {
@@ -623,10 +634,7 @@ export default class AppLoader {
       },
     });
   }
-  public async mountExtension(
-    config: IAppConfig | IWidgetConfig,
-    info: AppRegistryInfo | WidgetRegistryInfo,
-  ) {
+  public async mountExtension(config: IAppConfig | IWidgetConfig, info: BaseIntegrationInfo) {
     if (config.extends && config.extends.length) {
       for (const [index, extension] of config.extends.entries()) {
         if (!extension.parentApp) {
@@ -659,10 +667,10 @@ export default class AppLoader {
       return;
     }
     await this.sdk.services.appSettings.uninstall(info.name);
-    if (info.type === 'app') {
+    if (info.integrationType === INTEGRATION_TYPES.APPLICATION) {
       await this.apps.uninstall(info);
     }
-    if (info.type === 'widget') {
+    if (info.integrationType === INTEGRATION_TYPES.WIDGET) {
       this.widgets.uninstall(info);
     }
   }

@@ -1,5 +1,5 @@
 import {
-  AppRegistryInfo,
+  BaseIntegrationInfo,
   IAppConfig,
   ILoaderConfig,
   IMenuItem,
@@ -8,7 +8,6 @@ import {
   IWidgetConfig,
   LayoutConfig,
   UIEventData,
-  WidgetRegistryInfo,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 import { BehaviorSubject } from 'rxjs';
@@ -50,7 +49,7 @@ class BaseIntegration {
     return singleSpa.checkActivityFunctions(location);
   }
   public filterAppsByMountPoint(
-    appInfos: AppRegistryInfo[],
+    appInfos: BaseIntegrationInfo[],
     appConfigs: Record<string, IAppConfig>,
     extension?: UIEventData['data'],
   ) {
@@ -68,7 +67,7 @@ class BaseIntegration {
     });
   }
   public filterWidgetsByMountPoint(
-    widgetInfos: WidgetRegistryInfo[],
+    widgetInfos: BaseIntegrationInfo[],
     widgetConfigs: Record<string, IWidgetConfig>,
     widgetParcels: Record<string, singleSpa.Parcel>,
     extension?: UIEventData['data'],
