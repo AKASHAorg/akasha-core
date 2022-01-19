@@ -79,24 +79,29 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
     }
 
 
-    function getAllPackageIds(uint offset, uint limit)
+    function getAllPackageIds(uint offset)
     public
     view
     override
     returns (
-        bytes32[] memory packageIds,
-        uint pointer
+        bytes32[16] memory packageIds,
+        uint next
     )
     {
-        pointer = offset + limit;
-        if(pointer >= integrationIdsList.length){
-            pointer = integrationIdsList.length;
+        uint _pointer = offset + uint(16);
+        if(_pointer >= integrationIdsList.length){
+            _pointer = integrationIdsList.length;
+            next = 0;
+        } else {
+            next = _pointer;
         }
 
-        for(uint i=offset; i< pointer; i++){
-            packageIds[i] = integrationIdsList[i];
+        uint ii = 0;
+        for(uint i=offset; i< _pointer; i++){
+            packageIds[ii] = integrationIdsList[i];
+            ii++;
         }
-        return(packageIds, pointer);
+        return(packageIds, next);
     }
 
     function getPackageName(bytes32 integrationId)
@@ -115,24 +120,28 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
         return generateReleaseId(integrationName, version);
     }
 
-    function getAllReleaseIds(string memory integrationName, uint offset, uint limit)
+    function getAllReleaseIds(string memory integrationName, uint offset)
     public
     view
     override
     returns (
-        bytes32[] memory integrationIds,
-        uint pointer
+        bytes32[16] memory integrationIds,
+        uint next
     ){
         bytes32 integrationId = generateIntegrationId(integrationName);
-        pointer = offset + limit;
-        if(pointer >= integrationInfo[integrationId].releaseIds.length){
-            pointer = integrationInfo[integrationId].releaseIds.length;
+        uint _pointer = offset + uint(16);
+        if(_pointer >= integrationInfo[integrationId].releaseIds.length){
+            _pointer = integrationInfo[integrationId].releaseIds.length;
+            next = 0;
+        } else {
+            next = _pointer;
         }
-
-        for(uint i=offset; i< pointer; i++){
-            integrationIds[i] = integrationInfo[integrationId].releaseIds[i];
+        uint ii = 0;
+        for(uint i=offset; i< _pointer; i++){
+            integrationIds[ii] = integrationInfo[integrationId].releaseIds[i];
+            ii++;
         }
-        return(integrationIds, pointer);
+        return(integrationIds, next);
     }
 
 

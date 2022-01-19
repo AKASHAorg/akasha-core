@@ -109,23 +109,18 @@
           "internalType": "uint256",
           "name": "offset",
           "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "limit",
-          "type": "uint256"
         }
       ],
       "name": "getAllPackageIds",
       "outputs": [
         {
-          "internalType": "bytes32[]",
+          "internalType": "bytes32[16]",
           "name": "packageIds",
-          "type": "bytes32[]"
+          "type": "bytes32[16]"
         },
         {
           "internalType": "uint256",
-          "name": "pointer",
+          "name": "next",
           "type": "uint256"
         }
       ],
@@ -143,23 +138,18 @@
           "internalType": "uint256",
           "name": "offset",
           "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "limit",
-          "type": "uint256"
         }
       ],
       "name": "getAllReleaseIds",
       "outputs": [
         {
-          "internalType": "bytes32[]",
+          "internalType": "bytes32[16]",
           "name": "integrationIds",
-          "type": "bytes32[]"
+          "type": "bytes32[16]"
         },
         {
           "internalType": "uint256",
-          "name": "pointer",
+          "name": "next",
           "type": "uint256"
         }
       ],

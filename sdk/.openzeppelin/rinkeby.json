@@ -47,6 +47,11 @@
       "address": "0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC",
       "txHash": "0xeee0c9b0fd4dd828aa6118de1d33b1d66bd9e783280de7454b5e289224f18780",
       "kind": "transparent"
+    },
+    {
+      "address": "0xF2d45Cb7E73930A099Ca1f894bDBa47aB42a270B",
+      "txHash": "0xa309639b8f9318e8c5e74973b93ccd8e720bfa29d14ccfd6089f93f04c5f7de4",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -154,6 +159,444 @@
             "label": "mapping(bytes32 => struct IntegrationRegistry.IntegrationInfo)"
           },
           "t_struct(IntegrationInfo)622_storage": {
+            "label": "struct IntegrationRegistry.IntegrationInfo",
+            "members": [
+              {
+                "label": "enabled",
+                "type": "t_bool"
+              },
+              {
+                "label": "name",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "author",
+                "type": "t_address"
+              },
+              {
+                "label": "releaseIds",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "latestReleaseId",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "45d3955d34219a94728f24d8970cb3ba7c14001589f3759b9dc34616d5e94ef8": {
+      "address": "0x5CA249FEbda689A9Ec121B8B1386Edd5c102d602",
+      "txHash": "0x1a2369ef31ed5e5fde8351e884f4bfadf1ed732ed1b16033e30bca93d265cc71",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "releases",
+            "type": "t_mapping(t_bytes32,t_struct(Integration)610_storage)",
+            "src": "src/contracts/src/IntegrationRegistry.sol:29"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "integrationInfo",
+            "type": "t_mapping(t_bytes32,t_struct(IntegrationInfo)622_storage)",
+            "src": "src/contracts/src/IntegrationRegistry.sol:31"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "integrationIdsList",
+            "type": "t_array(t_bytes32)dyn_storage",
+            "src": "src/contracts/src/IntegrationRegistry.sol:33"
+          }
+        ],
+        "types": {
+          "t_mapping(t_bytes32,t_struct(Integration)610_storage)": {
+            "label": "mapping(bytes32 => struct IntegrationRegistry.Integration)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(Integration)610_storage": {
+            "label": "struct IntegrationRegistry.Integration",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "createdAt",
+                "type": "t_uint256"
+              },
+              {
+                "label": "integrationId",
+                "type": "t_bytes32"
+              },
+              {
+                "label": "integrationType",
+                "type": "t_enum(IntegrationType)586"
+              },
+              {
+                "label": "manifestHash",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_enum(IntegrationType)586": {
+            "label": "enum IntegrationRegistry.IntegrationType",
+            "members": [
+              "Application",
+              "Plugin",
+              "Widget"
+            ]
+          },
+          "t_mapping(t_bytes32,t_struct(IntegrationInfo)622_storage)": {
+            "label": "mapping(bytes32 => struct IntegrationRegistry.IntegrationInfo)"
+          },
+          "t_struct(IntegrationInfo)622_storage": {
+            "label": "struct IntegrationRegistry.IntegrationInfo",
+            "members": [
+              {
+                "label": "enabled",
+                "type": "t_bool"
+              },
+              {
+                "label": "name",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "author",
+                "type": "t_address"
+              },
+              {
+                "label": "releaseIds",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "latestReleaseId",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "bc30bab5eaf2712dece4b21c14b27775b66bdbd1f90a3d058b0bbfcf64be6548": {
+      "address": "0x37a8850354697515D0cBD61E16Cb9355Ec340E42",
+      "txHash": "0xb2f83005a1791aa47edfff489ff9a0b2a30c83dafa22ee7a879306476c890a7f",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "releases",
+            "type": "t_mapping(t_bytes32,t_struct(Integration)610_storage)",
+            "src": "src/contracts/src/IntegrationRegistry.sol:29"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "integrationInfo",
+            "type": "t_mapping(t_bytes32,t_struct(IntegrationInfo)622_storage)",
+            "src": "src/contracts/src/IntegrationRegistry.sol:31"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "integrationIdsList",
+            "type": "t_array(t_bytes32)dyn_storage",
+            "src": "src/contracts/src/IntegrationRegistry.sol:33"
+          }
+        ],
+        "types": {
+          "t_mapping(t_bytes32,t_struct(Integration)610_storage)": {
+            "label": "mapping(bytes32 => struct IntegrationRegistry.Integration)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(Integration)610_storage": {
+            "label": "struct IntegrationRegistry.Integration",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "createdAt",
+                "type": "t_uint256"
+              },
+              {
+                "label": "integrationId",
+                "type": "t_bytes32"
+              },
+              {
+                "label": "integrationType",
+                "type": "t_enum(IntegrationType)586"
+              },
+              {
+                "label": "manifestHash",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_enum(IntegrationType)586": {
+            "label": "enum IntegrationRegistry.IntegrationType",
+            "members": [
+              "Application",
+              "Plugin",
+              "Widget"
+            ]
+          },
+          "t_mapping(t_bytes32,t_struct(IntegrationInfo)622_storage)": {
+            "label": "mapping(bytes32 => struct IntegrationRegistry.IntegrationInfo)"
+          },
+          "t_struct(IntegrationInfo)622_storage": {
+            "label": "struct IntegrationRegistry.IntegrationInfo",
+            "members": [
+              {
+                "label": "enabled",
+                "type": "t_bool"
+              },
+              {
+                "label": "name",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "author",
+                "type": "t_address"
+              },
+              {
+                "label": "releaseIds",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "latestReleaseId",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "23daa531db0fd081f07ee75159634b13eddaa91613fb886de661bd850094e86b": {
+      "address": "0xbDcef56f67b0fa54E44FE579CF1d0eA1822e5b3A",
+      "txHash": "0x285b12c2635319a41ef7dcd85b621f4dd75952f00d1a2c38d4d137dc939ae810",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:39"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:44"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:22"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:82"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "releases",
+            "type": "t_mapping(t_bytes32,t_struct(Integration)608_storage)",
+            "src": "src/contracts/src/IntegrationRegistry.sol:29"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "integrationInfo",
+            "type": "t_mapping(t_bytes32,t_struct(IntegrationInfo)620_storage)",
+            "src": "src/contracts/src/IntegrationRegistry.sol:31"
+          },
+          {
+            "contract": "IntegrationRegistry",
+            "label": "integrationIdsList",
+            "type": "t_array(t_bytes32)dyn_storage",
+            "src": "src/contracts/src/IntegrationRegistry.sol:33"
+          }
+        ],
+        "types": {
+          "t_mapping(t_bytes32,t_struct(Integration)608_storage)": {
+            "label": "mapping(bytes32 => struct IntegrationRegistry.Integration)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(Integration)608_storage": {
+            "label": "struct IntegrationRegistry.Integration",
+            "members": [
+              {
+                "label": "version",
+                "type": "t_string_storage"
+              },
+              {
+                "label": "createdAt",
+                "type": "t_uint256"
+              },
+              {
+                "label": "integrationId",
+                "type": "t_bytes32"
+              },
+              {
+                "label": "integrationType",
+                "type": "t_enum(IntegrationType)584"
+              },
+              {
+                "label": "manifestHash",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_enum(IntegrationType)584": {
+            "label": "enum IntegrationRegistry.IntegrationType",
+            "members": [
+              "Application",
+              "Plugin",
+              "Widget"
+            ]
+          },
+          "t_mapping(t_bytes32,t_struct(IntegrationInfo)620_storage)": {
+            "label": "mapping(bytes32 => struct IntegrationRegistry.IntegrationInfo)"
+          },
+          "t_struct(IntegrationInfo)620_storage": {
             "label": "struct IntegrationRegistry.IntegrationInfo",
             "members": [
               {

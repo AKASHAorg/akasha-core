@@ -4,10 +4,10 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 abstract contract AbstractIntegrationRegistry is OwnableUpgradeable {
 
-    function getAllPackageIds(uint offset, uint limit) public view virtual
+    function getAllPackageIds(uint offset) public view virtual
     returns (
-        bytes32[] memory integrationIds,
-        uint pointer
+        bytes32[16] memory integrationIds,
+        uint next
     );
 
     // Retrieves the unique string `name` associated with a package's id.
@@ -18,10 +18,10 @@ abstract contract AbstractIntegrationRegistry is OwnableUpgradeable {
 
     // Retrieves a slice of the list of all release ids for an integration.
     // `offset` and `limit` enable paginated responses / retrieval of the complete set. (See note below)
-    function getAllReleaseIds(string memory integrationName, uint offset, uint limit) public view virtual
+    function getAllReleaseIds(string memory integrationName, uint offset) public view virtual
     returns (
-        bytes32[] memory integrationIds,
-        uint pointer
+        bytes32[16] memory integrationIds,
+        uint next
     );
 
     // Retrieves package name, release version and URI location data for a release id.
