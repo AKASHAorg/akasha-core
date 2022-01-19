@@ -9,7 +9,7 @@ const fs = require('fs');
 
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  entry: './src/index.dev',
+  entry: './src/index',
   output: {
     path: path.resolve(__dirname, 'dist'),
   },

@@ -2,12 +2,20 @@ import { ILoaderConfig, ISdkConfig, LogLevels } from '@akashaproject/ui-awf-typi
 
 console.time('AppLoader:firstMount');
 
+declare const __DEV__: boolean;
+
 (async function bootstrap(System) {
   const { default: Loader } = await System.import('@akashaproject/app-loader');
   const { default: getSDK } = await System.import('@akashaproject/awf-sdk');
+
   const sdkConfig: ISdkConfig = {
     logLevel: LogLevels.DEBUG,
   };
+  let registryOverrides = [];
+
+  if (__DEV__) {
+    registryOverrides = (await import('./registry-overrides')).default;
+  }
 
   const loaderConfig: ILoaderConfig = {
     title: 'Ethereum World',
@@ -34,6 +42,7 @@ console.time('AppLoader:firstMount');
       '@akashaproject/ui-widget-trending',
       // '@akashaproject/ui-widget-sidebar',
     ],
+    registryOverrides,
   };
 
   const sdk = getSDK();
