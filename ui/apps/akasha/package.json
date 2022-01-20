@@ -1,11 +1,13 @@
 {
-  "name": "@akashaproject/app-moderation-ewa",
+  "name": "@akashaproject/app-akasha-integration",
   "private": true,
   "version": "0.1.0",
-  "description": "ETHEREUM WORLD moderation app",
+  "description": "AKASHA integration package",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
-    "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)"
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
+    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)"
   ],
   "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
   "license": "AGPL-3.0",
@@ -27,7 +29,7 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/moderation",
+    "postpack": "copyfiles -f ./dist/* ../../build/apps/akasha",
     "watch": "webpack --config webpack.config.js --watch",
     "clean": "tsc --build --clean"
   },
@@ -36,10 +38,12 @@
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-awf-testing-utils": "*",
     "@akashaproject/awf-sdk": "*",
-    "moment": "^2.29.1",
+    "@akashaproject/ui-awf-hooks": "*",
+    "@akashaproject/ui-widget-feed": "*",
+    "@akashaproject/ui-widget-login-cta": "*",
+    "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaproject/ui-widget-trending": "*",
     "react-i18next": "11.12.0",
     "react-router-dom": "5.3.0",
     "single-spa-react": "4.6.0",
@@ -52,6 +56,7 @@
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/sdk-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/react-router-dom": "5.1.8",

@@ -47,7 +47,7 @@ export const integrationsData = {
     description: 'AKASHA Integration',
     type: 'app',
     versions: {
-      '0.0.1': '/apps/akasha/index.js',
+      '0.0.1': '/ui/apps/akasha/index.js',
     },
   },
   '@akashaproject/app-moderation-ewa': {
@@ -56,7 +56,7 @@ export const integrationsData = {
     description: 'Moderation app',
     versions: {
       // we can have something like //gateway.ipfs.io/ipfs/Qem123dfea1234
-      '0.0.1': '/apps/moderation/index.js',
+      '0.0.1': '/ui/apps/moderation/index.js',
     },
     type: 'app',
   },
@@ -65,7 +65,7 @@ export const integrationsData = {
     lastVersion: '0.0.1',
     description: 'Auth app',
     versions: {
-      '0.0.1': '/apps/auth-app/index.js',
+      '0.0.1': '/ui/apps/auth-app/index.js',
     },
     type: 'app',
   },
@@ -75,7 +75,7 @@ export const integrationsData = {
     description: 'Settings App',
     versions: {
       // we can have something like //gateway.ipfs.io/ipfs/Qem123dfea1234
-      '0.0.1': '/apps/settings-app/index.js',
+      '0.0.1': '/ui/apps/settings-app/index.js',
     },
     type: 'app',
   },

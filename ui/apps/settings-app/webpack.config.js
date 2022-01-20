@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const baseConfig = require('../../ui/webpack.config');
+const baseConfig = require('../../webpack.config');
 
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),

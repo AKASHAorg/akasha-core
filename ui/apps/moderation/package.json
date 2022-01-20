@@ -1,8 +1,8 @@
 {
-  "name": "@akashaproject/app-settings-ewa",
+  "name": "@akashaproject/app-moderation-ewa",
   "private": true,
   "version": "0.1.0",
-  "description": "ETHEREUM WORLD settings app",
+  "description": "ETHEREUM WORLD moderation app",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)"
@@ -27,7 +27,7 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/settings-app",
+    "postpack": "copyfiles -f ./dist/* ../../build/apps/moderation",
     "watch": "webpack --config webpack.config.js --watch",
     "clean": "tsc --build --clean"
   },

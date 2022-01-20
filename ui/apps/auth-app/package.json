@@ -31,7 +31,7 @@
     "extract:translations": "i18next --config ./i18next-parser.config.js",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../ui/build/apps/auth-app",
+    "postpack": "copyfiles -f ./dist/* ../../build/apps/auth-app",
     "watch": "webpack --config webpack.config.js --watch",
     "clean": "tsc --build --clean"
   },
