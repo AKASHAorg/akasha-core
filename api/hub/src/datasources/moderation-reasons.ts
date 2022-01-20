@@ -10,7 +10,7 @@ import { queryCache } from '../storage/cache';
  */
 class ModerationReasonAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private readonly dbID: ThreadID;
   constructor({ collection, dbID }) {
     super();

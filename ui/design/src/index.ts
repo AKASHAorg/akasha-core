@@ -12,7 +12,7 @@ import {
   Heading,
 } from 'grommet';
 
-import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
+import styled, { createGlobalStyle, css, withTheme, StyledComponent } from 'styled-components';
 
 import Autosizer from 'react-virtualized-auto-sizer';
 

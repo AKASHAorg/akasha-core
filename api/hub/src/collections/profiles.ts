@@ -1,4 +1,5 @@
 import { Client, ThreadID } from '@textile/hub';
+import { Event } from '@textile/threads-client';
 import { Profile } from './interfaces';
 
 const schema = {
@@ -73,7 +74,7 @@ const schema = {
   },
 };
 
-const writeValidator = (writer: string, event: any, instance: Profile) => {
+const writeValidator = (writer: string, event: Event, instance: Profile) => {
   if (event.patch.type === 'delete') {
     if (writer === instance.pubKey) {
       return true;

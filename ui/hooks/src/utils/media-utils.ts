@@ -12,7 +12,7 @@ export interface IConfig {
 /**
  * Utility to append an ipfs gateway to an ipfs hash
  */
-export const getMediaUrl = (hash?: string, data?: any) => {
+export const getMediaUrl = (hash?: string, data?: File) => {
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
@@ -38,12 +38,12 @@ export const getMediaUrl = (hash?: string, data?: any) => {
   return ipfsUrl;
 };
 
-export const uploadMediaToTextile = async (data: any, isUrl = false) => {
+export const uploadMediaToTextile = async (data: File, isUrl = false) => {
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const uploadData: {
     isUrl: boolean;
-    content: any;
+    content: File;
     name?: string;
     config: IConfig;
   } = {

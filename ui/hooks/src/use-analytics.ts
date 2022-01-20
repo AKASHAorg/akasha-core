@@ -23,7 +23,7 @@ export interface UseAnalyticsState {
   consentType: null | CookieConsentTypes;
 }
 
-const hookGlobal = globalThis as any;
+const hookGlobal = globalThis;
 
 const useAnalytics = (): [UseAnalyticsState, UseAnalyticsActions] => {
   const [state, setState] = React.useState<UseAnalyticsState>({

@@ -3,6 +3,7 @@ import { lastValueFrom, forkJoin, catchError, of } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
 import { logError } from './utils/error-handler';
+import { IMessage } from '@akashaproject/sdk-typings/lib/interfaces/auth';
 
 export const NOTIFICATIONS_KEY = 'Notifications';
 export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
@@ -24,7 +25,7 @@ const getNotifications = async () => {
   });
   const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls));
 
-  let completeMessages: any = [];
+  let completeMessages = [];
   profilesResp
     ?.filter(res => res?.data)
     .map(profileResp => {
@@ -78,7 +79,7 @@ export function useMarkAsRead() {
       await queryClient.cancelQueries(NOTIFICATIONS_KEY);
 
       // Snapshot the previous value
-      const previousNotifs: any = queryClient.getQueryData([NOTIFICATIONS_KEY]);
+      const previousNotifs: IMessage[] = queryClient.getQueryData([NOTIFICATIONS_KEY]);
       const updated = previousNotifs.map(notif => {
         if (notif.id === messageId) {
           return { ...notif, read: true };

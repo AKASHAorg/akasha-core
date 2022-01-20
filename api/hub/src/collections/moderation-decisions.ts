@@ -15,7 +15,7 @@ const schema = {
     explanation: { type: 'string' },
     delisted: { type: 'boolean' },
     moderated: { type: 'boolean' },
-    actions: { 
+    actions: {
       type: 'array',
       uniqueItems: true,
       items: {
@@ -32,7 +32,7 @@ const schema = {
   },
 };
 
-const writeValidator = (writer: string, event: any, instance: ModerationDecision) => {
+const writeValidator = (writer: string) => {
   return writer === 'bbaareihqdqd3me37e3pfs6pmy72cam7viai4lbcpxlqt365wicrnsi6q7e';
 };
 

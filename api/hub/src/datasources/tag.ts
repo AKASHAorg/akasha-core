@@ -7,7 +7,7 @@ import { searchIndex } from './search-indexes';
 
 class TagAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private readonly dbID: ThreadID;
   private format: RegExp;
   private allowedChars: RegExp;
@@ -28,12 +28,12 @@ class TagAPI extends DataSource {
   }
 
   async searchTags(name: string) {
-    const result = await searchIndex.search(name, {
+    const result = await searchIndex.search<{ name: string }>(name, {
       facetFilters: ['category:tag'],
       hitsPerPage: 150,
       attributesToRetrieve: ['name'],
     });
-    const tags = result.hits.map((element: any) => {
+    const tags = result.hits.map(element => {
       return element.name;
     });
     const results = [];
@@ -44,7 +44,10 @@ class TagAPI extends DataSource {
     return results.sort((x, y) => y.totalPosts - x.totalPosts);
   }
 
-  async getTag(name: string, allowFromCache = true) {
+  async getTag(
+    name: string,
+    allowFromCache = true,
+  ): Promise<Tag & { totalPosts?: number; totalComments?: number }> {
     const db: Client = await getAppDB();
     const formattedName = name.toLowerCase();
     const key = this.getTagCacheKey(formattedName);

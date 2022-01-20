@@ -19,6 +19,7 @@ import Web3Connector from '../common/web3.connector';
 import EventBus from '../common/event-bus';
 import Logging from '../logging';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { IMessage } from '@akashaproject/sdk-typings/lib/interfaces/auth';
 import Settings from '../settings';
 
 import Gql from '../gql';
@@ -579,15 +580,7 @@ class AWF_Auth implements AWF_IAuth {
    * @param args - InboxListOptions
    */
   getMessages(args: InboxListOptions) {
-    return createObservableStream<
-      {
-        body: Record<string, any>;
-        from: string;
-        readAt: number;
-        createdAt: number;
-        id: string;
-      }[]
-    >(this._getMessages(args));
+    return createObservableStream<IMessage[]>(this._getMessages(args));
   }
 
   private async _getMessages(args: InboxListOptions) {

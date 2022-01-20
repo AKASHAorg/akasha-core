@@ -2,8 +2,9 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useComment } from '@akashaproject/ui-awf-hooks';
 import routes, { POST } from '../../routes';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const ReplyPage: React.FC<any> = props => {
+const ReplyPage: React.FC<RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
   const { singleSpa } = props;
   const comment = useComment(commentId, !!commentId);
