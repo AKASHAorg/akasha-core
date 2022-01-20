@@ -23,7 +23,7 @@ export interface IWeb3Connector<T> {
 
   disconnect(): void;
 
-  signMessage(message: string): Promise<any>;
+  signMessage(message: string): Promise<string>;
 
   getCurrentAddress(): Observable<{ data: string | null }>;
 

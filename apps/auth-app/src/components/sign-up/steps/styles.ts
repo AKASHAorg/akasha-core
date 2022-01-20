@@ -1,8 +1,8 @@
-import DS from '@akashaproject/design-system';
+import DS, { BoxExtendedProps, ButtonExtendedProps } from '@akashaproject/design-system';
 
 const { Button, Box, styled } = DS;
 
-const StyledBox: any = styled(Box)`
+const StyledBox: React.FC<BoxExtendedProps> = styled(Box)`
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     position: fixed;
     width: 100%;
@@ -14,7 +14,7 @@ const StyledBox: any = styled(Box)`
   }
 `;
 
-const StyledButton: any = styled(Button)`
+const StyledButton: React.FC<ButtonExtendedProps> = styled(Button)`
   padding: ${props =>
     `${props.theme.shapes.baseSpacing / 16}rem ${(props.theme.shapes.baseSpacing * 2.5) / 16}rem`};
 
@@ -29,7 +29,7 @@ const StyledButton: any = styled(Button)`
   }
 `;
 
-const CheckBoxWrap: any = styled(Box)`
+const CheckBoxWrap: React.FC<BoxExtendedProps> = styled(Box)`
   margin: 1.15rem 0;
 
   > * {

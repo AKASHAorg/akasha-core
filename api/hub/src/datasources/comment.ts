@@ -9,7 +9,7 @@ import { getAuthorCacheKeys } from '../resolvers/constants';
 
 class CommentAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private db: Client;
   private readonly dbID: ThreadID;
   private readonly graphqlCommentsApi = 'awf.graphql.comments.api';
@@ -125,7 +125,7 @@ class CommentAPI extends DataSource {
 
     const commentCacheKey = this.getCommentCacheKey(commentId);
     if (await queryCache.has(commentCacheKey)) {
-      return queryCache.get(commentCacheKey);
+      return queryCache.get<Comment>(commentCacheKey);
     }
     const comment = await db.findByID<Comment>(this.dbID, this.collection, commentId);
     if (!comment) {

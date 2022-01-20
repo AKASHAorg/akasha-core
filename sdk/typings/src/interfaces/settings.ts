@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { ServiceCallResult } from './responses';
 
 interface ISettingsService {
@@ -14,18 +15,18 @@ export interface IAppSettings {
    * Returns an app configuration object
    * @param appName - Name of the app
    */
-  get(appName: string): any;
+  get(appName: string): Observable<unknown>;
 
   /**
    * Returns all installed apps
    */
-  getAll(): any;
+  getAll(): Observable<unknown>;
 
   /**
    * Persist installed app configuration for the current user
    * @param app - Object
    */
-  install(app: unknown): any;
+  install(app: unknown): Observable<boolean | { data: string[] }>;
 
   /**
    * Uninstall app by name

@@ -18,6 +18,7 @@ import { AbortController } from 'node-abort-controller';
 import { Worker } from 'worker_threads';
 import { create } from 'ipfs-http-client';
 import sharp from 'sharp';
+import { AuthorNotificationValue } from './collections/interfaces';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -201,7 +202,10 @@ export const verifyEd25519Sig = async (args: {
   return pub.verify(serializedData, sig);
 };
 
-export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
+export const sendNotification = async (
+  recipient: string,
+  notificationObj: Record<string, unknown>,
+) => {
   const worker = new Worker(path.resolve(__dirname, './notifications.js'), {
     workerData: {
       recipient,
@@ -222,7 +226,11 @@ export const sendNotification = async (recipient: string, notificationObj: Recor
 
 export const sendAuthorNotification = async (
   recipient: string,
-  notification: { property: string; provider: string; value: any },
+  notification: {
+    property: string;
+    provider: string;
+    value: AuthorNotificationValue;
+  },
 ) => {
   if (recipient === notification?.value?.author) {
     return Promise.resolve(null);
@@ -232,7 +240,6 @@ export const sendAuthorNotification = async (
 
 /**
  * Send an email notifications for moderation purposes.
- * @param email - Object containing the required data for sending the email
  * @returns A promise that resolves upon sending the email
  */
 export const sendEmailNotification = async () => {

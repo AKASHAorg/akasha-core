@@ -1,8 +1,8 @@
 import DS from '@akashaproject/design-system';
 import { DefaultTheme } from '@akashaproject/design-system/lib/styles/themes/interfaces';
-
 const { createGlobalStyle, css } = DS;
-export const GlobalStyle: any = createGlobalStyle<{
+
+export const GlobalStyle = createGlobalStyle<{
   theme: DefaultTheme;
 }>`
   html {

@@ -1,9 +1,9 @@
 import { ILRU } from './i-lru';
 
 export class MemLRU implements ILRU {
-  private lru: any;
+  private lru;
 
-  constructor(lru: any) {
+  constructor(lru) {
     this.lru = lru;
   }
 

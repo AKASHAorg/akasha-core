@@ -25,7 +25,7 @@ export interface IFeedWidgetProps {
   getShareUrl?: (entryId: string) => string;
   loginState: LoginState;
   singleSpaNavigate: (url: string) => void;
-  navigateToModal: (props: any) => void;
+  navigateToModal: (props: ModalNavigationOptions) => void;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';
   hasNextPage: boolean;

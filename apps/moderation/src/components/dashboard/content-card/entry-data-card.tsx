@@ -8,11 +8,13 @@ import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 import { useHandleNavigation } from '@akashaproject/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { ITEM_TYPE_CONVERTER } from '../../../services/constants';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 
 export interface IEntryDataCardProps {
-  entryData: any;
+  entryData: IEntryData | IProfileData;
   locale: ILocale;
   itemType: string;
   singleSpa: typeof SingleSpa;
@@ -45,7 +47,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
             <EntryCard
               modalSlotId={modalSlotId}
               showMore={false}
-              entryData={entryData}
+              entryData={entryData as IEntryData}
               repostsLabel={t('Reposts')}
               repliesLabel={t('Replies')}
               locale={locale}
@@ -55,7 +57,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               onContentClick={handleContentClick}
               disableReposting={true}
               isModerated={true}
-              isRemoved={entryData.isRemoved}
+              isRemoved={(entryData as IEntryData).isRemoved}
               removedByMeLabel={t('You deleted this post')}
               removedByAuthorLabel={t(`This ${itemType} was deleted by its author`)}
             />
@@ -66,7 +68,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               showMore={false}
               flaggable={true}
               canUserEdit={false}
-              profileData={entryData}
+              profileData={entryData as IProfileData}
               postsLabel={t('Posts')}
               followLabel={t('Follow')}
               unfollowLabel={t('Unfollow')}

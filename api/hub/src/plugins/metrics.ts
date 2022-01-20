@@ -88,7 +88,7 @@ export default function createMetricsPlugin(register: Registry): ApolloServerPlu
             operation: executingContext.operation.operation,
           });
           return {
-            willResolveField({ source, args, context, info }) {
+            willResolveField({ info }) {
               const capture = resolverTime.startTimer();
               return async () => {
                 capture({

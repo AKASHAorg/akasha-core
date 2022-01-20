@@ -1,5 +1,6 @@
 import { commentsStats, statsProvider } from './constants';
 import { queryCache } from '../storage/cache';
+import { ExtendedAuthor, PostOverride } from '../collections/interfaces';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
@@ -8,7 +9,7 @@ const query = {
   resolveProfile: async (_source, { pubKey }, { dataSources }) => {
     return dataSources.profileAPI.resolveProfile(pubKey);
   },
-  getPost: async (_source, { id, pubKey }, { dataSources }) => {
+  getPost: async (_source, { id, pubKey }, { dataSources }): Promise<PostOverride> => {
     const cacheKey = dataSources.postsAPI.getPostCacheKey(id);
     const hasKey = await queryCache.has(cacheKey);
     if (hasKey) {
@@ -25,16 +26,16 @@ const query = {
       Object.assign(postData, { author });
     }
     if (postData && postData?.quotedBy?.length && !postData?.quotedByAuthors?.length) {
-      const qPosts: any = await Promise.all(
+      const qPosts = await Promise.all(
         postData.quotedBy?.map(postID =>
           query.getPost(_source, { pubKey, id: postID }, { dataSources }),
         ),
       );
-      let uniqueAuthors = {};
-      qPosts.forEach(el => {
+      let uniqueAuthors: Record<string, { pubKey: string }> = {};
+      qPosts.forEach((el: ExtendedAuthor) => {
         uniqueAuthors[el.author.pubKey] = el.author;
       });
-      const quotedByAuthors: any = Object.values(uniqueAuthors);
+      const quotedByAuthors = Object.values(uniqueAuthors);
       uniqueAuthors = null;
       if (pubKey) {
         const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
@@ -88,16 +89,16 @@ const query = {
         totalCommentsIndex !== -1 ? post.metaData[totalCommentsIndex].value : '0';
 
       if (post && post?.quotedBy?.length && !post?.quotedByAuthors?.length) {
-        const qPosts: any = await Promise.all(
+        const qPosts = await Promise.all(
           post.quotedBy?.map(postID =>
             query.getPost(_source, { pubKey, id: postID }, { dataSources }),
           ),
         );
-        let uniqueAuthors = {};
-        qPosts.forEach(el => {
+        let uniqueAuthors: Record<string, { pubKey: string }> = {};
+        qPosts.forEach((el: ExtendedAuthor) => {
           uniqueAuthors[el.author.pubKey] = el.author;
         });
-        const quotedByAuthors: any = Object.values(uniqueAuthors);
+        const quotedByAuthors = Object.values(uniqueAuthors);
         uniqueAuthors = null;
         if (pubKey) {
           const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);

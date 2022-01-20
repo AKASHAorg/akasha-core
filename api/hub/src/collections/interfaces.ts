@@ -104,3 +104,24 @@ export interface ModerationReason {
   description: string;
   active: boolean;
 }
+
+export interface AuthorNotificationValue {
+  author: string;
+  postID?: string;
+  commentID?: string[];
+  moderatedID?: string;
+}
+
+export interface PostAPISearchResult {
+  category: string;
+  name: string;
+  pubKey: string;
+}
+
+export interface SimpleAuthor {
+  author: string;
+}
+export interface ExtendedAuthor {
+  author: { pubKey: string };
+}
+export type PostOverride = Omit<PostItem, 'author'> & (SimpleAuthor | ExtendedAuthor);

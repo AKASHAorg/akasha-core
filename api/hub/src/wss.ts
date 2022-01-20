@@ -85,7 +85,7 @@ const wss = route.all('/ws/userauth', ctx => {
                   value: Buffer.from(challenge).toJSON(),
                 }),
               );
-              emitter.on('challenge', async (r: any) => {
+              emitter.on('challenge', async r => {
                 if (addressChallenge) {
                   if (!r.addressChallenge) {
                     return reject(new Error('Missing ethereum address signature challenge'));

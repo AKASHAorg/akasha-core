@@ -16,7 +16,7 @@ export class RedisLRU implements ILRU {
     });
   }
 
-  public async set(key: string, value: any) {
+  public async set(key: string, value: unknown) {
     try {
       const _value = stringify(value);
       return this.cache.set(`${this.prefix}${key}`, _value, { ttl: 86400 });
@@ -30,7 +30,7 @@ export class RedisLRU implements ILRU {
     return this.redis.exists(`${this.prefix}${key}`);
   }
 
-  public async get(key: string): Promise<any> {
+  public async get<T>(key: string): Promise<T> {
     const _value = await this.redis.get(`${this.prefix}${key}`);
     if (!_value) {
       return undefined;

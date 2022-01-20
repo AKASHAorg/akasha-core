@@ -285,7 +285,7 @@ export const useEditPost = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    async (editedPost: any) => {
+    async (editedPost: IPublishData & { entryID: string }) => {
       const post = buildPublishObject(editedPost);
       const res = await lastValueFrom(
         sdk.api.entries.editEntry({ entryID: editedPost.entryID, ...post }),
