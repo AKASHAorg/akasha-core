@@ -1,9 +1,9 @@
 import {
+  BaseIntegrationInfo,
   ExtensionPointDefinition,
   IAppConfig,
   IWidgetConfig,
   UIEventData,
-  WidgetRegistryInfo,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 import { IntegrationModule } from './apps';
@@ -11,7 +11,7 @@ import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration
 import { navigateToModal, parseQueryString } from './utils';
 
 class Widgets extends BaseIntegration {
-  private readonly widgetInfos: WidgetRegistryInfo[];
+  private readonly widgetInfos: BaseIntegrationInfo[];
   private readonly widgetModules: Record<string, IntegrationModule>;
   private readonly widgetConfigs: Record<string, IWidgetConfig>;
   private readonly widgetParcels: Record<string, singleSpa.Parcel>;
@@ -30,7 +30,7 @@ class Widgets extends BaseIntegration {
     this.layoutConfig = opts.layoutConfig;
     this.getAppRoutes = opts.getAppRoutes;
   }
-  add(integration: WidgetRegistryInfo) {
+  add(integration: BaseIntegrationInfo) {
     // todo
     this.widgetInfos.push(integration);
   }
@@ -162,7 +162,7 @@ class Widgets extends BaseIntegration {
         return acc;
       }, []);
   }
-  public async install(widgetInfo: WidgetRegistryInfo) {
+  public async install(widgetInfo: BaseIntegrationInfo) {
     const module = await System.import<IntegrationModule>(widgetInfo.name);
     if (!module) {
       this.logger.warn(`cannot import module: ${widgetInfo.name}`);
@@ -190,7 +190,7 @@ class Widgets extends BaseIntegration {
       this.logger.warn(`App ${widgetInfo.name} has no exported .register() function!`);
     }
   }
-  public uninstall(info: WidgetRegistryInfo) {
+  public uninstall(info: BaseIntegrationInfo) {
     const idx = this.widgetInfos.findIndex(inf => inf.name === info.name);
     if (idx >= 0) {
       // const call = this.sdk.services.db.apps.remove({ name: info.name });

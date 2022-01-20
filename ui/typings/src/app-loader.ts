@@ -1,20 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 import { LogoSourceType } from './index';
 
-export interface IntegrationRegistryInfo {
-  name: string;
-  version?: string;
-  description: string;
-  src: string;
-}
-
-export interface WidgetRegistryInfo extends IntegrationRegistryInfo {
-  type: 'widget';
-}
-export interface AppRegistryInfo extends IntegrationRegistryInfo {
-  type: 'app';
-}
-
 export type ActivityFn = (
   location: Location,
   pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
@@ -41,7 +27,7 @@ export interface IntegrationRegistrationOptions {
   uiEvents: BehaviorSubject<UIEventData>;
   layoutConfig?: LayoutConfig;
   integrations?: {
-    infos: (AppRegistryInfo | WidgetRegistryInfo)[];
+    infos: BaseIntegrationInfo[];
     configs: Record<string, IAppConfig | IWidgetConfig>;
   };
   extensionData?: UIEventData['data'];
@@ -178,6 +164,18 @@ export enum LogLevels {
 
 export type AppOrWidgetDefinition = string | { name: string; version: string };
 
+export enum INTEGRATION_TYPES {
+  APPLICATION,
+  PLUGIN,
+  WIDGET,
+}
+
+export interface BaseIntegrationInfo {
+  name: string;
+  integrationType: INTEGRATION_TYPES;
+  sources: string[];
+}
+
 export interface ISdkConfig {
   /**
    * Define the log level
@@ -212,6 +210,8 @@ export interface ILoaderConfig {
    * Define this world's title
    */
   title: string;
+
+  registryOverrides?: BaseIntegrationInfo[];
 }
 
 export interface ISingleSpaLifecycle {
