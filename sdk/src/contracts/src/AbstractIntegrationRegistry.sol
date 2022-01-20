@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 abstract contract AbstractIntegrationRegistry is OwnableUpgradeable {
+    enum IntegrationType { Application, Plugin, Widget }
 
     function getAllPackageIds(uint offset) public view virtual
     returns (
@@ -29,7 +30,8 @@ abstract contract AbstractIntegrationRegistry is OwnableUpgradeable {
     returns (
         string memory integrationName,
         string memory version,
-        bytes32 manifestHash
+        bytes32 manifestHash,
+        IntegrationType integrationType
     );
 
     // Retrieves the release id a registry *would* generate for a package name and version pair

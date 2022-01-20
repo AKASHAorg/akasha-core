@@ -96,6 +96,29 @@ const typeDefs = gql`
     images: [String]
   }
 
+  type IntegrationInfo {
+    id: String
+    name: String
+    author: String
+    integrationType: Int
+    latestReleaseId: String
+    enabled: Boolean
+  }
+
+  type InfoLink {
+    publicRepository: String
+    documentation: String
+  }
+
+  type IntegrationReleaseInfo {
+    id: String
+    name: String
+    version: String
+    integrationType: Int
+    links: InfoLink
+    sources: [String]
+  }
+
   type Query {
     getProfile(ethAddress: String!): UserProfile!
     resolveProfile(pubKey: String!): UserProfile!
@@ -115,6 +138,8 @@ const typeDefs = gql`
     getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getCustomFeed(limit: Int, offset: Int): NewPostsResult
     getInterests(pubKey: String!): [String]
+    getLatestRelease(integrationNames: [String]): [IntegrationReleaseInfo]
+    getIntegrationInfo(integrationNames: [String]): [IntegrationInfo]
   }
 
   input DataProviderInput {

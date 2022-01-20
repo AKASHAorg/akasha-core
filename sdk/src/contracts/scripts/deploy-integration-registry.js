@@ -10,7 +10,7 @@ async function main() {
   // );
   // const readIntegrationRegistry = await ethers.getContractAt(
   //   'IntegrationRegistry',
-  //   '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC',
+  //   '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9',
   // );
   // const releases = await readIntegrationRegistry.getAllPackageIds(0, 15);
   // await integrationRegistry.release(
@@ -28,7 +28,7 @@ async function main() {
   //await akRegistrar.deployed();
   //console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
 
-  // const proxyAddress = '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC';
+  // const proxyAddress = '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9';
   //
   // const IntegrationRegV1 = await ethers.getContractFactory('IntegrationRegistry');
   // console.log('Preparing upgrade...');

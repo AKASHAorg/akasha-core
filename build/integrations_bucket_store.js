@@ -21,9 +21,9 @@ const format = require('multiformats/bases/base16');
         'Basic ' + Buffer.from(process.env.INFURA_IPFS_ID + ':' + process.env.INFURA_IPFS_SECRET).toString('base64'),
     },
   });
-  const TYPE_APP = 'app';
-  const TYPE_PLUGIN = 'plugin';
-  const TYPE_WIDGET = 'widget';
+  const TYPE_APP = 0;
+  const TYPE_PLUGIN = 1;
+  const TYPE_WIDGET = 2;
   const sources = [
     {package: { name: 'locales'}, type: '', path: path.resolve(__dirname, '..', 'locales')},
     // apps
@@ -68,7 +68,6 @@ const format = require('multiformats/bases/base16');
     const ipfsManifest = await ipfsClient.add(manifestData, {hashAlg: 'sha3-224', cidVersion: 1, pin: true});
     results.push({
       name: source.package.name,
-      ipfs: output.get('ipfs'),
       id: ethers.utils.id(source.package.name),
       ipfsManifest: ipfsManifest.cid.toString(format.base16.encoder)
     });

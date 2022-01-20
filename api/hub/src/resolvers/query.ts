@@ -226,6 +226,12 @@ const query = {
     const interests: string[] = await dataSources.profileAPI.getInterests(pubKey);
     return Array.from(interests);
   },
+  getIntegrationInfo: async (_source, { integrationNames }, { dataSources }) => {
+    //
+  },
+  getLatestRelease: async (_source, { integrationNames }, { dataSources }) => {
+    //
+  },
 };
 
 export default query;

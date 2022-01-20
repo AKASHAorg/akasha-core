@@ -7,7 +7,7 @@ import Settings from '../settings';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { normalize } from 'eth-ens-namehash';
-import { ContractFactory, constants as ethersConstants, utils as ethersUtils } from 'ethers';
+import { constants as ethersConstants, ContractFactory, utils as ethersUtils } from 'ethers';
 import AkashaRegistrarABI from '../contracts/abi/AkashaRegistrar.json';
 import ReverseRegistrarABI from '../contracts/abi/ReverseRegistrar.json';
 import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
@@ -18,6 +18,7 @@ import { createFormattedValue, createObservableStream } from '../helpers/observa
 import EventBus from '../common/event-bus';
 import { tap } from 'rxjs/operators';
 import { ENS_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import IpfsConnector from '../common/ipfs.connector';
 
 export const isEncodedLabelHash = hash => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
@@ -36,6 +37,7 @@ export const validateName = (name: string) => {
 @injectable()
 class AWF_ENS implements AWF_IENS {
   private readonly _web3: Web3Connector;
+  private readonly _ipfs: IpfsConnector;
   private _log: ILogger;
   private _gql: Gql;
   private _auth: AWF_Auth;
@@ -54,7 +56,8 @@ class AWF_ENS implements AWF_IENS {
   public readonly REVERSE_STRING =
     '0x91d1777781884d03a6757a803996e38de2a42967fb37eeaca72729271025a9e2';
 
-  public readonly INTEGRATION_REGISTRY_ADDRESS = '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC';
+  public readonly INTEGRATION_REGISTRY_ADDRESS = '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9';
+
   constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Gql) gql: Gql,
@@ -62,6 +65,7 @@ class AWF_ENS implements AWF_IENS {
     @inject(TYPES.Settings) settings: Settings,
     @inject(TYPES.EventBus) globalChannel: EventBus,
     @inject(TYPES.Web3) web3: Web3Connector,
+    @inject(TYPES.IPFS) ipfs: IpfsConnector,
   ) {
     this._log = log.create('AWF_ENS');
     this._gql = gql;
@@ -69,6 +73,7 @@ class AWF_ENS implements AWF_IENS {
     this._settings = settings;
     this._globalChannel = globalChannel;
     this._web3 = web3;
+    this._ipfs = ipfs;
   }
 
   registerName(name: string) {
@@ -187,22 +192,37 @@ class AWF_ENS implements AWF_IENS {
     ).connect(signer);
   }
 
-  async getIntegrationInfo(packageId: string) {
-    const data = await this._IntegrationRegistryInstance.getPackageInfo(packageId);
+  async getIntegrationInfo(integrationId: string) {
+    const data = await this._IntegrationRegistryInstance.getPackageInfo(integrationId);
     return createFormattedValue({
-      integrationName: data.integrationName,
+      id: integrationId,
+      name: data.integrationName,
       author: data.author,
       latestReleaseId: data.latestReleaseId,
+      integrationType: data.integrationType,
       enabled: data.latestReleaseId,
     });
   }
 
   async getIntegrationReleaseInfo(releaseId: string) {
     const data = await this._IntegrationRegistryInstance.getReleaseData(releaseId);
+    const manifestData = await lastValueFrom(
+      this._ipfs.catDocument(
+        this._ipfs.transformBase16HashToV1(
+          // replace 0x prefix with 'f' - base16 CID encoding
+          'f' + data.manifestHash.substring(2),
+        ),
+      ),
+    );
+    const { links, sources } = JSON.parse(manifestData.data);
+
     return createFormattedValue({
-      integrationName: data.integrationName,
+      id: releaseId,
+      name: data.integrationName,
       version: data.version,
-      manifestHash: data.manifestHash,
+      integrationType: data.integrationType,
+      links: links,
+      sources: this._ipfs.multiAddrToUri(sources),
     });
   }
 
@@ -216,7 +236,15 @@ class AWF_ENS implements AWF_IENS {
   async getAllIntegrationsIds(offset = 0) {
     const data = await this._IntegrationRegistryInstance.getAllPackageIds(offset);
     return createFormattedValue({
-      integrationIds: data.packageIds.filter(x => x !== ethersConstants.HashZero),
+      integrationIds: data.integrationIds.filter(x => x !== ethersConstants.HashZero),
+      nextIndex: data.next,
+    });
+  }
+
+  async getAllIntegrationReleaseIds(integrationName: string, offset = 0) {
+    const data = await this._IntegrationRegistryInstance.getAllReleaseIds(integrationName, offset);
+    return createFormattedValue({
+      releaseIds: data.releaseIds.filter(x => x !== ethersConstants.HashZero),
       nextIndex: data.next,
     });
   }
