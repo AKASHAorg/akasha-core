@@ -38,14 +38,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       loadingFn: () => import('./extensions/login-modal'),
     },
     {
-      mountsIn: 'signin',
-      loadingFn: () => import('./extensions/sign-in-modal'),
-    },
-    {
-      mountsIn: 'signup',
-      loadingFn: () => import('./extensions/sign-up-modal'),
-    },
-    {
       mountsIn: 'update-profile',
       loadingFn: () => import('./extensions/update-profile-modal'),
     },

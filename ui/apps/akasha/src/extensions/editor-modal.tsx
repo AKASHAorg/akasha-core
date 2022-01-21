@@ -195,7 +195,6 @@ const EditorModalContainer = (props: RootComponentProps) => {
 };
 
 const Wrapped = (props: RootComponentProps) => {
-  console.log('editorProps', props);
   return (
     <I18nextProvider i18n={i18next}>
       <EditorModalContainer {...props} />
