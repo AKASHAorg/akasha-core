@@ -75,8 +75,6 @@ const config = {
     }),
     new webpack.DefinePlugin({
       __DEV__: process.env.NODE_ENV !== 'production',
-      __MATOMO_TRACKER_URL__: process.env.MATOMO_TRACKER_URL,
-      __MATOMO_SITE_ID__: process.env.MATOMO_SITE_ID,
     }),
     new webpack.ProgressPlugin({
       entries: true,

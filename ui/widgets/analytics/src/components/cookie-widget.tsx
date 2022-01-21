@@ -61,7 +61,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
     );
     setCookieType(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
   };
-  console.log(cookieType, '<<<< cookieType');
+
   return (
     <I18nextProvider i18n={i18next}>
       {cookieType === null && (
