@@ -78,6 +78,10 @@ export const loginWithChallenge = (
 ): (() => Promise<UserAuth>) => {
   return () => {
     return new Promise((resolve, reject) => {
+      const timeout = setTimeout(
+        () => reject(new Error('The login request has timed out.')),
+        61000,
+      );
       const socket = new WebSocket(process.env.AUTH_ENDPOINT);
       socket.onopen = () => {
         const publicKey = identity.public.toString();
@@ -89,50 +93,60 @@ export const loginWithChallenge = (
         );
 
         socket.onmessage = async event => {
-          const data = JSON.parse(event.data);
-          switch (data.type) {
-            case 'error': {
-              reject(data.value);
-              break;
-            }
-            /** The server issued a new challenge */
-            case 'challenge': {
-              /** Convert the challenge json to a Buffer */
-              const buf = Buffer.from(data.value);
-              let addressChallenge;
-              let ethAddress;
-              let signUpToken;
-              let acceptedTermsAndPrivacy;
-              if (data.addressChallenge) {
-                addressChallenge = await signer.signMessage(data.addressChallenge);
-                ethAddress = (await lastValueFrom(signer.getCurrentAddress())).data;
-                authStatus.isNewUser = true;
-                signUpToken = localStorage.getItem('@signUpToken');
-                acceptedTermsAndPrivacy = localStorage.getItem('@acceptedTermsAndPrivacy');
-                if (!acceptedTermsAndPrivacy) {
-                  return reject(new Error('Terms of Service and Privacy Policy were not accepted'));
-                }
-                localStorage.removeItem('@signUpToken');
-                localStorage.removeItem('@acceptedTermsAndPrivacy');
+          try {
+            const data = JSON.parse(event.data);
+            switch (data.type) {
+              case 'error': {
+                clearTimeout(timeout);
+                reject(data.value);
+                break;
               }
-              /** User our identity to sign the challenge */
-              const signed = await identity.sign(buf);
-              socket.send(
-                JSON.stringify({
-                  addressChallenge,
-                  ethAddress,
-                  signUpToken,
-                  acceptedTermsAndPrivacy,
-                  type: 'challenge',
-                  sig: Buffer.from(signed).toJSON(),
-                }),
-              );
-              break;
+              /** The server issued a new challenge */
+              case 'challenge': {
+                /** Convert the challenge json to a Buffer */
+                const buf = Buffer.from(data.value);
+                let addressChallenge;
+                let ethAddress;
+                let signUpToken;
+                let acceptedTermsAndPrivacy;
+                if (data.addressChallenge) {
+                  addressChallenge = await signer.signMessage(data.addressChallenge);
+                  ethAddress = (await lastValueFrom(signer.getCurrentAddress())).data;
+                  authStatus.isNewUser = true;
+                  signUpToken = localStorage.getItem('@signUpToken');
+                  acceptedTermsAndPrivacy = localStorage.getItem('@acceptedTermsAndPrivacy');
+                  if (!acceptedTermsAndPrivacy) {
+                    clearTimeout(timeout);
+                    return reject(
+                      new Error('Terms of Service and Privacy Policy were not accepted'),
+                    );
+                  }
+                  localStorage.removeItem('@signUpToken');
+                  localStorage.removeItem('@acceptedTermsAndPrivacy');
+                }
+                /** User our identity to sign the challenge */
+                const signed = await identity.sign(buf);
+                socket.send(
+                  JSON.stringify({
+                    addressChallenge,
+                    ethAddress,
+                    signUpToken,
+                    acceptedTermsAndPrivacy,
+                    type: 'challenge',
+                    sig: Buffer.from(signed).toJSON(),
+                  }),
+                );
+                break;
+              }
+              case 'token': {
+                clearTimeout(timeout);
+                resolve(data.value);
+                break;
+              }
             }
-            case 'token': {
-              resolve(data.value);
-              break;
-            }
+          } catch (e) {
+            clearTimeout(timeout);
+            reject(e);
           }
         };
       };

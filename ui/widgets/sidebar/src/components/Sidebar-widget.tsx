@@ -15,7 +15,6 @@ const SidebarWidget: React.FC<RootComponentProps> = props => {
         <Menu
           navigateToUrl={props.singleSpa.navigateToUrl}
           getMenuItems={() => []}
-          uiEvents={props.uiEvents}
           sidebarVisible={true}
         />
       </I18nextProvider>
@@ -38,7 +37,6 @@ const AppSidebar = styled(Sidebar)`
 interface MenuProps {
   navigateToUrl: (url: string) => void;
   getMenuItems: () => IMenuItem[];
-  uiEvents: any;
   sidebarVisible: boolean;
 }
 

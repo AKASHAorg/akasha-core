@@ -1,0 +1,14 @@
+{
+  "name": "@akashaproject/tests",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "ethereum-world-local": "cypress open --project ethereum-world --env configFile=local --browser chrome",
+    "ethereum-world-prod": "cypress open --project ethereum-world --env configFile=production",
+    "cy:e2e:chrome:record": "cypress run --project ethereum-world --env configFile=staging --record --browser chrome"
+  },
+  "devDependencies": {
+    "cypress": "9.2.1",
+    "fs-extra": "10.0.0"
+  }
+}

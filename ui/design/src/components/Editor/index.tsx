@@ -1,5 +1,5 @@
 import { Box } from 'grommet';
-import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   createEditor,
   Editor,
@@ -29,6 +29,8 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import LinkPreview from './link-preview';
+import { ImageGallery, ImageObject } from './image-gallery';
+import isUrl from 'is-url';
 
 const MAX_LENGTH = 280;
 
@@ -51,6 +53,7 @@ export interface IEditorBox {
   minHeight?: string;
   withMeter?: boolean;
   linkPreview?: IEntryData['linkPreview'];
+  uploadedImages?: IEntryData['images'];
   getLinkPreview: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
@@ -64,7 +67,10 @@ export interface IEditorBox {
     coverImage?: string;
   }[];
   tags?: { name: string; totalPosts: number }[];
-  uploadRequest?: (data: string | File, isUrl?: boolean) => any;
+  uploadRequest?: (
+    data: string | File,
+    isUrl?: boolean,
+  ) => Promise<{ data?: ImageData; error?: Error }>;
   publishingApp?: string;
   editorState?: Descendant[];
   setEditorState: React.Dispatch<React.SetStateAction<Descendant[]>>;
@@ -75,6 +81,7 @@ export interface IEditorBox {
   onPlaceholderClick?: () => void;
 }
 
+/* eslint-disable complexity */
 const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const {
     avatar,
@@ -91,6 +98,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     minHeight,
     withMeter,
     linkPreview,
+    uploadedImages = [],
     getLinkPreview,
     getMentions,
     getTags,
@@ -108,6 +116,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
   const mediaIconRef: React.RefObject<HTMLDivElement> = useRef(null);
   const emojiIconRef: React.RefObject<HTMLDivElement> = useRef(null);
+  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
   const [tagTargetRange, setTagTargetRange] = useState<Range | null>(null);
@@ -124,6 +133,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
 
+  const [uploading, setUploading] = React.useState(false);
+  const [images, setImages] = React.useState<ImageObject[]>(uploadedImages);
+
   const handleGetLinkPreview = async (url: string) => {
     setLinkPreviewUploading(true);
     const linkPreview = await getLinkPreview(url);
@@ -138,12 +150,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   /**
    * display only 3 results in the tag and mention popovers
    */
-  const slicedTags = tags.slice(0, 3);
-  const slicedMentions = mentions.slice(0, 3);
+  const slicedTags = React.useMemo(() => tags.slice(0, 3), [tags]);
+  const slicedMentions = React.useMemo(() => mentions.slice(0, 3), [mentions]);
 
   /**
-   * this is needed to check if any popover is open from the parent component
-   * if there are more popovers added their state should also be exposed here
+   * this is needed to check internal state from the parent component
+   * to prevent closing the comment editor when the user has uploaded images
+   * or has an open popover
    */
   React.useImperativeHandle(
     ref,
@@ -151,27 +164,61 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       getPopoversState: () => {
         return emojiPopoverOpen;
       },
+      getImagesState: () => {
+        return images.length > 0;
+      },
+      getUploadingState: () => {
+        return uploading;
+      },
     }),
-    [emojiPopoverOpen],
+    [emojiPopoverOpen, images, uploading],
   );
 
   /**
    * initialise editor with all the required plugins
    */
-  const editor = useMemo(
-    () =>
-      withLinks(
-        withTags(withMentions(withImages(withHistory(withReact(createEditor()))))),
-        handleGetLinkPreview,
-      ),
-    [],
+  const editorRef = useRef(
+    withLinks(withTags(withMentions(withImages(withHistory(withReact(createEditor())))))),
   );
+
+  const editor = editorRef.current;
+
+  /**
+   * insert links here to be able to access the image state
+   * and prevent link preview generation when there are images
+   * already uploaded or currently uploading
+   */
+  const { insertData, insertText } = editor;
+
+  const handleInsertLink = (text: string) => {
+    CustomEditor.insertLink(editor, { url: text.trim() });
+    if (images.length === 0 && !uploading) {
+      handleGetLinkPreview(text);
+    }
+  };
+
+  editor.insertText = text => {
+    if (text && isUrl(text.trim())) {
+      handleInsertLink(text);
+    } else {
+      insertText(text);
+    }
+  };
+
+  editor.insertData = data => {
+    const text = data.getData('text/plain');
+    if (text && isUrl(text.trim())) {
+      handleInsertLink(text);
+    } else {
+      insertData(data);
+    }
+  };
 
   /**
    * set the selection at the end of the content when component is mounted
    */
   useEffect(() => {
-    Transforms.move(editor);
+    Transforms.move(editorRef.current);
   }, []);
 
   /**
@@ -209,6 +256,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       app: publishingApp,
       quote: embedEntryData,
       linkPreview: linkPreviewState,
+      images: images,
       tags: [],
       mentions: [],
       version: 1,
@@ -241,7 +289,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    *  handles selection for mentions and tags
    */
   const handleChange = (value: Descendant[]) => {
-    let imageCounter = 0;
     let textLength = 0;
 
     /**
@@ -250,7 +297,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
      */
     (function computeLength(nodeArr: Descendant[]) {
       if (nodeArr.length) {
-        nodeArr.map((node: Descendant) => {
+        nodeArr.forEach((node: Descendant) => {
           if (SlateText.isText(node)) {
             textLength += node.text.length;
           }
@@ -260,9 +307,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           if (Element.isElement(node) && node.type === 'link' && node.url?.length) {
             textLength += node.url?.length;
           }
-          if (Element.isElement(node) && node.type === 'image') {
-            imageCounter++;
-          }
           if (Element.isElement(node) && node.children) {
             computeLength(node.children);
           }
@@ -271,17 +315,10 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     })(value);
 
     /** disable publishing if no images/text or text too long */
-    if ((textLength > 0 || imageCounter !== 0) && textLength <= MAX_LENGTH) {
+    if ((textLength > 0 || images.length !== 0) && textLength <= MAX_LENGTH) {
       setPublishDisabledInternal(false);
-    } else if ((textLength === 0 && imageCounter === 0) || textLength > MAX_LENGTH) {
+    } else if ((textLength === 0 && images.length === 0) || textLength > MAX_LENGTH) {
       setPublishDisabledInternal(true);
-    }
-
-    /** limits to only 1 image*/
-    if (imageCounter === 0) {
-      setImageUploadDisabled(false);
-    } else if (imageCounter > 0) {
-      setImageUploadDisabled(true);
     }
 
     if (typeof setLetterCount === 'function') {
@@ -336,87 +373,86 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     }
   };
 
-  /**
-   * key handler for the mention popover
-   * inserts the mention on tab, enter or space keypress
-   */
-  const selectMention = (event: KeyboardEvent, mentionRange: Range) => {
-    switch (event.key) {
-      case 'ArrowDown': {
-        event.preventDefault();
-        const prevIndex = index >= slicedMentions.length - 1 ? 0 : index + 1;
-        setIndex(prevIndex);
-        break;
-      }
-      case 'ArrowUp': {
-        event.preventDefault();
-        const nextIndex = index <= 0 ? slicedMentions.length - 1 : index - 1;
-        setIndex(nextIndex);
-        break;
-      }
-      case 'Tab':
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        Transforms.select(editor, mentionRange);
-        CustomEditor.insertMention(editor, slicedMentions[index]);
-        setMentionTargetRange(null);
-        break;
-      case 'Escape':
-        event.preventDefault();
-        setMentionTargetRange(null);
-        break;
-    }
-  };
-
-  /**
-   * key handler for the tag popover
-   * inserts the tag on tab, enter keypress
-   * if the user is still on the first position of the popover, on space keypress creates a  new tag
-   * this handles new tag creation when we have tags matching the typed chars
-   */
-  const selectTag = (event: KeyboardEvent, tagRange: Range) => {
-    switch (event.key) {
-      case 'ArrowDown': {
-        event.preventDefault();
-        const prevIndex = index >= slicedTags.length - 1 ? 0 : index + 1;
-        setIndex(prevIndex);
-        break;
-      }
-      case 'ArrowUp': {
-        event.preventDefault();
-        const nextIndex = index <= 0 ? slicedTags.length - 1 : index - 1;
-        setIndex(nextIndex);
-        break;
-      }
-      case 'Tab':
-      case 'Enter':
-        event.preventDefault();
-        Transforms.select(editor, tagRange);
-        CustomEditor.insertTag(editor, slicedTags[index]);
-        setTagTargetRange(null);
-        break;
-      case ' ':
-        if (index === 0 && createTag.length > 1) {
-          event.preventDefault();
-          Transforms.select(editor, tagRange);
-          CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
-        } else {
-          event.preventDefault();
-          Transforms.select(editor, tagRange);
-          CustomEditor.insertTag(editor, slicedTags[index]);
-        }
-        setTagTargetRange(null);
-        break;
-      case 'Escape':
-        event.preventDefault();
-        setTagTargetRange(null);
-        break;
-    }
-  };
-
   const onKeyDown = useCallback(
     event => {
+      /**
+       * key handler for the mention popover
+       * inserts the mention on tab, enter or space keypress
+       */
+      const selectMention = (event: KeyboardEvent, mentionRange: Range) => {
+        switch (event.key) {
+          case 'ArrowDown': {
+            event.preventDefault();
+            const prevIndex = index >= slicedMentions.length - 1 ? 0 : index + 1;
+            setIndex(prevIndex);
+            break;
+          }
+          case 'ArrowUp': {
+            event.preventDefault();
+            const nextIndex = index <= 0 ? slicedMentions.length - 1 : index - 1;
+            setIndex(nextIndex);
+            break;
+          }
+          case 'Tab':
+          case 'Enter':
+          case ' ':
+            event.preventDefault();
+            Transforms.select(editor, mentionRange);
+            CustomEditor.insertMention(editor, slicedMentions[index]);
+            setMentionTargetRange(null);
+            break;
+          case 'Escape':
+            event.preventDefault();
+            setMentionTargetRange(null);
+            break;
+        }
+      };
+      /**
+       * key handler for the tag popover
+       * inserts the tag on tab, enter keypress
+       * if the user is still on the first position of the popover, on space keypress creates a  new tag
+       * this handles new tag creation when we have tags matching the typed chars
+       */
+      const selectTag = (event: KeyboardEvent, tagRange: Range) => {
+        switch (event.key) {
+          case 'ArrowDown': {
+            event.preventDefault();
+            const prevIndex = index >= slicedTags.length - 1 ? 0 : index + 1;
+            setIndex(prevIndex);
+            break;
+          }
+          case 'ArrowUp': {
+            event.preventDefault();
+            const nextIndex = index <= 0 ? slicedTags.length - 1 : index - 1;
+            setIndex(nextIndex);
+            break;
+          }
+          case 'Tab':
+          case 'Enter':
+            event.preventDefault();
+            Transforms.select(editor, tagRange);
+            CustomEditor.insertTag(editor, slicedTags[index]);
+            setTagTargetRange(null);
+            break;
+          case ' ':
+            if (index === 0 && createTag.length > 1) {
+              event.preventDefault();
+              Transforms.select(editor, tagRange);
+              CustomEditor.insertTag(editor, { name: createTag, totalPosts: 0 });
+            } else {
+              event.preventDefault();
+              Transforms.select(editor, tagRange);
+              CustomEditor.insertTag(editor, slicedTags[index]);
+            }
+            setTagTargetRange(null);
+            break;
+          case 'Escape':
+            event.preventDefault();
+            setTagTargetRange(null);
+            break;
+        }
+      };
+
       if (mentionTargetRange && mentions.length > 0) {
         selectMention(event, mentionTargetRange);
       }
@@ -432,7 +468,17 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         setTagTargetRange(null);
       }
     },
-    [index, mentionTargetRange, tagTargetRange, mentions, tags],
+    [
+      index,
+      mentionTargetRange,
+      tagTargetRange,
+      mentions,
+      tags,
+      editor,
+      slicedMentions,
+      slicedTags,
+      createTag,
+    ],
   );
 
   const openEmojiPicker = () => {
@@ -471,28 +517,45 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   // image insertion
 
-  const [uploading, setUploading] = React.useState(false);
-  const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-
   const handleInsertImageLink = (data: ImageData) => {
     if (!data.src || !data.size) {
       return;
     }
-    CustomEditor.insertImage(editor, data.src, data.size);
+    if (images.length > 7) {
+      setImageUploadDisabled(true);
+    }
+    // clear any existing link preview when inserting an image
+    if (linkPreviewState) {
+      setLinkPreviewState(null);
+    }
+    const imgData = { ...data, id: `${Date.now()}-${data.src}` };
+    if (images.length < 9) {
+      setImages(prev => [...prev, imgData]);
+    }
+    setPublishDisabledInternal(false);
+
+    // CustomEditor.insertImage(editor, data.src, data.size);
   };
 
   /**
-   * disable uploading media if there is a picture uploading or there is one already inserted
+   * disable uploading media if there is a picture uploading or max number of images already
    */
   const handleMediaClick = () => {
     if (uploadInputRef.current && !uploading && !imageUploadDisabled) {
       uploadInputRef.current.click();
     }
-    return;
   };
 
-  const handleDeleteImage = (element: Element) => {
-    CustomEditor.deleteImage(editor, element);
+  const handleDeleteImage = (element: ImageObject) => {
+    const newImages = images.filter(image => image.id !== element.id);
+    if (newImages.length < 9) {
+      setImageUploadDisabled(false);
+    }
+    if (newImages.length === 0) {
+      setPublishDisabledInternal(true);
+    }
+    setImages(newImages);
+    // CustomEditor.deleteImage(editor, element);
   };
 
   return (
@@ -523,7 +586,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                     () => null,
                     () => null,
                     () => null,
-                    handleDeleteImage,
                   )
                 }
                 renderLeaf={renderLeaf}
@@ -557,6 +619,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               handleInsertImage={handleInsertImageLink}
               ref={uploadInputRef}
             />
+            {images?.length > 0 && (
+              <ImageGallery images={images} handleDeleteImage={handleDeleteImage} />
+            )}
             {(linkPreviewState || linkPreviewUploading) && (
               <LinkPreview
                 uploading={linkPreviewUploading}
@@ -621,11 +686,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   );
 });
 
+/* eslint-enable complexity */
+
 EditorBox.defaultProps = {
   postLabel: 'Post',
   disablePublishLabel: 'Authenticating',
   placeholderLabel: 'Share your thoughts',
-  uploadingImageLabel: 'Uploading Image',
+  uploadingImageLabel: 'Loading',
   uploadFailedLabel: 'Upload failed.',
 };
 

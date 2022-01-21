@@ -42,12 +42,14 @@ const StyledCloseDiv = styled.div`
  * renders the full screen image modal that is triggered on image click
  */
 const ImageOverlay: React.FC<IImageOverlay> = props => {
-  const { imgUrl, closeModal } = props;
+  const { imgUrl } = props;
+
+  const closeModal = React.useRef(props.closeModal);
 
   React.useEffect(() => {
     const close = ev => {
       if (ev.key === 'Escape') {
-        closeModal();
+        closeModal.current();
       }
     };
     window.addEventListener('keydown', close);
@@ -91,7 +93,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
             <StyledCloseDiv onClick={handleZoomOut}>
               <Icon type="zoomOut" clickable={true} />
             </StyledCloseDiv>
-            <StyledCloseDiv onClick={closeModal}>
+            <StyledCloseDiv onClick={closeModal.current}>
               <Icon type="close" clickable={true} />
             </StyledCloseDiv>
           </StyledBox>
@@ -100,7 +102,7 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
                 <picture>
-                  <img src={imgUrl} />
+                  <img src={imgUrl} alt="" />
                 </picture>
               </TransformComponent>
             </TransformWrapper>

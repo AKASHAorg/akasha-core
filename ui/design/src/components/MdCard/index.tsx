@@ -29,7 +29,7 @@ const MdCard: React.FC<IMdCard> = props => {
     </>
   );
   return (
-    <MdCardWrapper>
+    <MdCardWrapper data-testid="md-card">
       {isMobileOnly ? (
         <Box pad="medium">{renderContent()}</Box>
       ) : (

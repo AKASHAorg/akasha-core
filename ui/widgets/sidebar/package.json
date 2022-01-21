@@ -34,7 +34,7 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@types/react-router-dom": "5.1.8",
-    "single-spa-react": "4.4.0",
+    "single-spa-react": "4.6.0",
     "react-i18next": "11.12.0",
     "react-router-dom": "5.3.0",
     "i18next": "20.6.1",

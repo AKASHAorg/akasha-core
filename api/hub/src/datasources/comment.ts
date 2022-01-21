@@ -5,10 +5,11 @@ import { DataProvider, Comment, PostItem } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { searchIndex } from './search-indexes';
 import { stringify } from 'flatted';
+import { getAuthorCacheKeys } from '../resolvers/constants';
 
 class CommentAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private db: Client;
   private readonly dbID: ThreadID;
   private readonly graphqlCommentsApi = 'awf.graphql.comments.api';
@@ -124,7 +125,7 @@ class CommentAPI extends DataSource {
 
     const commentCacheKey = this.getCommentCacheKey(commentId);
     if (await queryCache.has(commentCacheKey)) {
-      return queryCache.get(commentCacheKey);
+      return queryCache.get<Comment>(commentCacheKey);
     }
     const comment = await db.findByID<Comment>(this.dbID, this.collection, commentId);
     if (!comment) {
@@ -132,7 +133,7 @@ class CommentAPI extends DataSource {
       throw new Error(`Comment not found`);
     }
     await queryCache.set(commentCacheKey, comment);
-    await queryCache.sAdd(comment.author, commentCacheKey);
+    await queryCache.sAdd(getAuthorCacheKeys(comment.author), commentCacheKey);
     return comment;
   }
 

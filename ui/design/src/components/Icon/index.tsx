@@ -30,8 +30,10 @@ export type IconType =
   | 'comments'
   | 'close'
   | 'code'
+  | 'coinbase'
   | 'coins'
   | 'copy'
+  | 'dapper'
   | 'check'
   | 'checkSimple'
   | 'discord'
@@ -54,7 +56,9 @@ export type IconType =
   | 'home'
   | 'hotTopics'
   | 'image'
+  | 'imtoken'
   | 'italic'
+  | 'key'
   | 'info'
   | 'legal'
   | 'link'
@@ -67,7 +71,9 @@ export type IconType =
   | 'metamask'
   | 'moreDark'
   | 'moreGrey'
+  | 'nifty'
   | 'notifications'
+  | 'opera'
   | 'payment'
   | 'person'
   | 'pin'
@@ -79,11 +85,14 @@ export type IconType =
   | 'reload'
   | 'reply'
   | 'report'
+  | 'safe'
   | 'search'
   | 'send'
   | 'settings'
+  | 'settingsAlt'
   | 'share'
   | 'signOut'
+  | 'status'
   | 'subscribe'
   | 'stopwatch'
   | 'shareSmallBlue'
@@ -96,12 +105,14 @@ export type IconType =
   | 'transfer'
   | 'trash'
   | 'trendingApps'
+  | 'trust'
   | 'twitter'
   | 'underline'
   | 'upload'
   | 'video'
   | 'wallet'
   | 'walletconnect'
+  | 'web3'
   | 'zoomIn'
   | 'zoomOut';
 
@@ -131,7 +142,9 @@ export const iconTypes: IconType[] = [
   'comments',
   'close',
   'code',
+  'coinbase',
   'copy',
+  'dapper',
   'check',
   'checkSimple',
   'coins',
@@ -155,8 +168,10 @@ export const iconTypes: IconType[] = [
   'home',
   'hotTopics',
   'image',
+  'imtoken',
   'info',
   'italic',
+  'key',
   'legal',
   'link',
   'loading',
@@ -168,7 +183,9 @@ export const iconTypes: IconType[] = [
   'metamask',
   'moreDark',
   'moreGrey',
+  'nifty',
   'notifications',
+  'opera',
   'payment',
   'person',
   'pin',
@@ -179,10 +196,13 @@ export const iconTypes: IconType[] = [
   'reload',
   'reply',
   'report',
+  'safe',
   'search',
   'send',
   'settings',
+  'settingsAlt',
   'signOut',
+  'status',
   'share',
   'subscribe',
   'stopwatch',
@@ -196,12 +216,14 @@ export const iconTypes: IconType[] = [
   'transfer',
   'trash',
   'trendingApps',
+  'trust',
   'twitter',
   'underline',
   'upload',
   'video',
   'wallet',
   'walletconnect',
+  'web3',
   'zoomIn',
   'zoomOut',
 ];
@@ -229,6 +251,7 @@ const StyledRefDiv = styled.div`
 
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];
+  // here we destructure some props we don't want applied to DOM elements
   const { primaryColor, accentColor, clickable, testId, wrapperStyle, ...other } = props;
   if (!Component) {
     // tslint:disable-next-line no-console

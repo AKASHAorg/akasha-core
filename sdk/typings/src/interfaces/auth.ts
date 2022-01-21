@@ -1,15 +1,15 @@
 import { EthProviders } from './index';
 import { CurrentUser } from './common';
-import { Buckets, Client, InboxListOptions, PrivateKey, UserAuth, Users } from '@textile/hub';
+import { Buckets, Client, InboxListOptions, Users } from '@textile/hub';
 import { Observable } from 'rxjs';
 
-export default interface AWF_IAuth {
+interface AWF_IAuth {
   /**
    * enable key sync between opened tabs
    */
   enableSync(): void;
 
-  checkIfSignedUp(ethAddress: string): any;
+  checkIfSignedUp(ethAddress: string): Observable<unknown>;
 
   signIn(args: {
     provider?: EthProviders;
@@ -19,10 +19,8 @@ export default interface AWF_IAuth {
   getSession(): Observable<{
     data: {
       buck: Buckets;
-      identity: PrivateKey;
       client: Client;
       user: Users;
-      tokenGenerator: () => Promise<UserAuth>;
     };
   }>;
 
@@ -35,7 +33,7 @@ export default interface AWF_IAuth {
   signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format?: boolean,
-  ): Observable<{ data: { serializedData: any; signature: Uint8Array | string; pubKey: string } }>;
+  ): Observable<{ data: { serializedData: unknown; signature: Uint8Array | string; pubKey: string } }>;
 
   verifySignature(args: {
     pubKey: string;
@@ -58,13 +56,7 @@ export default interface AWF_IAuth {
   }>;
 
   getMessages(args: InboxListOptions): Observable<{
-    data: {
-      body: Record<string, any>;
-      from: string;
-      readAt: number;
-      createdAt: number;
-      id: string;
-    }[];
+    data: IMessage[];
   }>;
 
   hasNewNotifications(): Observable<{ data: boolean }>;
@@ -75,3 +67,13 @@ export default interface AWF_IAuth {
 
   validateInvite(inviteCode: string): Observable<{ data: boolean }>;
 }
+
+export interface IMessage {
+  body: Record<string, any>;
+  from: string;
+  readAt: number;
+  createdAt: number;
+  id: string;
+}
+
+export default AWF_IAuth;

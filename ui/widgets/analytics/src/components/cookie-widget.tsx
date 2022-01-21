@@ -61,7 +61,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
     );
     setCookieType(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
   };
-
+  console.log(cookieType, '<<<< cookieType');
   return (
     <I18nextProvider i18n={i18next}>
       {cookieType === null && (
@@ -69,12 +69,17 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
           <Translation>
             {t => (
               <CookieWidgetCard
-                titleLabel={`${t('But first, cookies')}! 🙈🍪`}
-                contentLabel={
+                titleLabel={`${t('The Choice is Yours')} 🤘🏼`}
+                paragraphOneLabel={
+                  <Text size="medium">
+                    {t(
+                      'We use cookies. Some are necessary to operate effectively the platform, others are to help us improve Ethereum World. ',
+                    )}
+                  </Text>
+                }
+                paragraphTwoLabel={
                   <>
-                    {`${t(
-                      'This website requires essential cookies for security and stability purposes',
-                    )}. `}
+                    <Text weight="bold">{t('By opting-in you allow us to collect data via ')}</Text>
                     <Text
                       color="accentText"
                       size="medium"
@@ -86,11 +91,23 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                       Matomo
                     </Text>
                     {t(
-                      ' cookies and tracking can be accepted for product improvement according to our',
+                      ", an open source analytics platform that will help us improve Ethereum World. As we respect your privacy, rest assured that we don't store personal identifiable information (PPI). In addition, if you change your mind, ",
                     )}
+                    <Text weight="bold">{t('you can always opt-out ')}</Text>
+                    {t('by accessing the ')}
+                    <Text
+                      color="accentText"
+                      size="medium"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => props.singleSpa.navigateToUrl('/settings-app')}
+                    >
+                      {t('settings ')}
+                    </Text>
+                    {t('menu')}.
                   </>
                 }
-                privacyUrlLabel={`${t('Privacy Policy')}.`}
+                privacyCTALabel={t('For more info, see our ')}
+                privacyUrlLabel={t('Privacy Policy.')}
                 privacyUrl={`${window.location.protocol}//${window.location.host}/legal/privacy-policy`}
                 onlyEssentialLabel={t('Only essential')}
                 acceptAllLabel={t('Accept all')}

@@ -1,10 +1,11 @@
 import { LEGAL_DOCS } from './common';
 import { Observable } from 'rxjs';
+import { ServiceCallResult } from './responses';
 
-export default interface AWF_IIpfsConnector {
+interface AWF_IIpfsConnector {
   gateway: string;
 
-  getSettings(): { gateway: any };
+  getSettings(): { gateway: string };
 
   catDocument(doc: string): Observable<{ data: string }>;
 
@@ -12,5 +13,7 @@ export default interface AWF_IIpfsConnector {
    *
    * @param doc
    */
-  getLegalDoc(doc: LEGAL_DOCS): any;
+  getLegalDoc(doc: LEGAL_DOCS): ServiceCallResult<string>;
 }
+
+export default AWF_IIpfsConnector;

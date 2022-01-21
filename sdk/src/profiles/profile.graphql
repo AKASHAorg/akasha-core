@@ -4,7 +4,7 @@ fragment DataProviderFragment on DataProvider{
   value
 }
 
-fragment UserProfileFragment on UserProfile{
+fragment UserProfileFragmentData on UserProfile{
   pubKey
   name
   userName
@@ -36,7 +36,7 @@ mutation RegisterUsername($name: String!) {
 
 query ResolveProfile($pubKey: String!) {
   resolveProfile(pubKey: $pubKey) {
-    ...UserProfileFragment
+    ...UserProfileFragmentData
     providers{
     ...DataProviderFragment
     }
@@ -48,7 +48,7 @@ query ResolveProfile($pubKey: String!) {
 
 query GetProfile($ethAddress: String!) {
   getProfile(ethAddress: $ethAddress) {
-    ...UserProfileFragment
+    ...UserProfileFragmentData
     providers{
     ...DataProviderFragment
     }
@@ -76,7 +76,7 @@ mutation SaveMetaData($data: DataProviderInput) {
 
 query SearchProfiles($name: String!) {
   searchProfiles(name: $name) {
-    ...UserProfileFragment
+    ...UserProfileFragmentData
   }
 }
 
@@ -91,7 +91,7 @@ query GlobalSearch($keyword: String!) {
 
 query GetFollowers($pubKey: String!, $limit: Int, $offset: Int){
   getFollowers(pubKey: $pubKey, limit: $limit, offset: $offset){
-    results{...UserProfileFragment}
+    results{...UserProfileFragmentData}
     nextIndex
     total
   }
@@ -99,7 +99,7 @@ query GetFollowers($pubKey: String!, $limit: Int, $offset: Int){
 
 query GetFollowing($pubKey: String!, $limit: Int, $offset: Int){
   getFollowing(pubKey: $pubKey, limit: $limit, offset: $offset){
-    results{...UserProfileFragment}
+    results{...UserProfileFragmentData}
     nextIndex
     total
   }

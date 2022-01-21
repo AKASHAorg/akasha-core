@@ -1,4 +1,14 @@
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+export { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces/web3.connector';
+export {
+  AUTH_EVENTS,
+  ENS_EVENTS,
+  ENTRY_EVENTS,
+  COMMENTS_EVENTS,
+  TAG_EVENTS,
+  PROFILE_EVENTS,
+  WEB3_EVENTS,
+} from '@akashaproject/sdk-typings/lib/interfaces/events';
 import { BehaviorSubject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
@@ -15,6 +25,23 @@ export interface LogoSourceType {
   type: LogoTypeSource;
   value: string;
 }
+export type AppNameSelector = (apps: AppLoaderTypes.IAppConfig[]) => string;
+export type PathNameSelector = (appRoutes: AppLoaderTypes.IAppConfig['routes']) => string;
+
+export interface NavigationOptions {
+  appName?: string | AppNameSelector;
+  pathName?: string | PathNameSelector;
+  queryStrings?: string | NavigationFn;
+}
+
+export type NavigationFn = (
+  stringfyFn: (obj: unknown) => string,
+  currentRedirect?: string,
+) => string;
+
+export interface QueryStringType {
+  [key: string]: string | string[] | unknown | undefined;
+}
 
 export interface RootComponentProps {
   activeWhen?: { path: string };
@@ -22,7 +49,6 @@ export interface RootComponentProps {
   uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
   i18n?: typeof i18n;
   getMenuItems?: () => AppLoaderTypes.IMenuList;
-  isMobile: boolean;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
   logger: ILogger;
   mountParcel: (parcel: unknown, config?: unknown) => unknown;
@@ -39,6 +65,8 @@ export interface RootComponentProps {
     trackerUrl: string;
     siteId: string;
   };
+  navigateTo: (options: string | NavigationOptions | NavigationFn) => void;
+  parseQueryString: (queryString: string) => QueryStringType;
 }
 
 export enum LogoTypeSource {
@@ -46,12 +74,6 @@ export enum LogoTypeSource {
   String = 'string',
   IPFS = 'ipfs',
   AVATAR = 'avatar',
-}
-export enum EthProviders {
-  None = 1,
-  Web3Injected,
-  WalletConnect,
-  FallbackProvider,
 }
 
 export enum LEGAL_DOCS {

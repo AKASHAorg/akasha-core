@@ -2,25 +2,29 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useLocation } from 'react-router-dom';
 import {
-  IMenuItem,
   EventTypes,
+  IMenuItem,
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useCheckNewNotifications } from '@akashaproject/ui-awf-hooks/lib/use-notifications.new';
-import { useGetProfile } from '@akashaproject/ui-awf-hooks/lib/use-profile.new';
+import {
+  useCheckModerator,
+  useCheckNewNotifications,
+  useGetLogin,
+  useGetProfile,
+  useLogout,
+} from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
-import { useGetLogin, useLogout } from '@akashaproject/ui-awf-hooks/lib/use-login.new';
-import { useCheckModerator } from '@akashaproject/ui-awf-hooks/lib/use-moderation';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
-  const { singleSpa, getMenuItems, uiEvents } = props;
+  const { singleSpa, getMenuItems, uiEvents, navigateTo } = props;
 
   const { navigateToUrl } = singleSpa;
+  const location = useLocation();
 
   const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
 
@@ -38,23 +42,7 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   const checkModeratorResp = checkModeratorQuery.data;
 
-  const isModerator = React.useMemo(() => {
-    if (checkModeratorResp === 200) {
-      return true;
-    } else return false;
-  }, [checkModeratorResp]);
-
-  // React.useEffect(() => {
-  //   if (loginState.ready?.ethAddress && loginState.ethAddress) {
-  //     notificationActions.hasNewNotifications();
-  //   }
-  // }, [loginState.ready?.ethAddress, loginState.ethAddress]);
-
-  // React.useEffect(() => {
-  //   if (loginState.pubKey) {
-  //     loggedProfileActions.getProfileData({ pubKey: loginState.pubKey });
-  //   }
-  // }, [loginState.pubKey]);
+  const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   React.useEffect(() => {
     const updateMenu = () => {
@@ -85,8 +73,7 @@ const TopbarComponent = (props: RootComponentProps) => {
     if (menuItemA.name && menuItemB.name) {
       const getPluginName = (pluginName: string) => {
         const splitName = pluginName.split('-');
-        const name = splitName[splitName.length - 1];
-        return name;
+        return splitName[splitName.length - 1];
       };
 
       if (getPluginName(menuItemA.name) > getPluginName(menuItemB.name)) {
@@ -108,29 +95,18 @@ const TopbarComponent = (props: RootComponentProps) => {
     menuItem => menuItem.area === MenuItemAreaType.OtherArea,
   );
 
-  React.useEffect(() => {
-    const isLoadingProfile = profileDataReq.isLoading !== undefined && profileDataReq.isLoading;
-    if (loginQuery.data?.ethAddress && !isLoadingProfile) {
-      if (loggedProfileData && !loggedProfileData.userName) {
-        return props.navigateToModal({
-          name: 'update-profile',
-        });
-      }
-    }
-  }, [
-    profileDataReq.isLoading,
-    loginQuery.data?.ethAddress,
-    loggedProfileData,
-    loginQuery.data?.pubKey,
-    props,
-  ]);
-
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
   };
 
   const handleLoginClick = () => {
-    props.navigateToModal({ name: 'signin' });
+    props.navigateTo({
+      appName: 'app-auth',
+      pathName: appRoutes => {
+        return appRoutes[appRoutes.SIGN_IN];
+      },
+      queryStrings: qsStringify => qsStringify({ redirectTo: location.pathname }),
+    });
   };
 
   const handleLogout = async () => {
@@ -140,7 +116,14 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleSignUpClick = () => {
-    props.navigateToModal({ name: 'signup' });
+    navigateTo({
+      appName: 'app-auth',
+      pathName: appRoutes => appRoutes[appRoutes.SIGN_UP],
+    });
+  };
+
+  const handleSettingsClick = () => {
+    navigateToUrl('/settings-app');
   };
 
   const handleFeedbackModalShow = () => {
@@ -179,7 +162,6 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const { t } = useTranslation();
-  const location = useLocation();
 
   const onExtMount = (name: string) => {
     uiEvents.next({
@@ -214,9 +196,13 @@ const TopbarComponent = (props: RootComponentProps) => {
         dashboardInfoLabel={t('Help moderate items!')}
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}
+        settingsLabel={t('Settings')}
         moderationLabel={t('Moderation History')}
         moderationInfoLabel={t('Help keep us accountable!')}
         legalCopyRightLabel={'© Ethereum World Association'}
+        stuckLabel={t('Stuck?')}
+        helpLabel={t('We can help')}
+        writeToUs="mailto:alpha@ethereum.world"
         versionLabel="ALPHA"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         onNavigation={handleNavigation}
@@ -227,6 +213,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         onLoginClick={handleLoginClick}
         onSignUpClick={handleSignUpClick}
         onLogout={handleLogout}
+        onSettingsClick={handleSettingsClick}
         onFeedbackClick={handleFeedbackModalShow}
         onModerationClick={handleModerationClick}
         onDashboardClick={handleDashboardClick}

@@ -1,8 +1,5 @@
 import { Editor, Node, Path, Range, Transforms } from 'slate';
 
-import isUrl from 'is-url';
-import { CustomEditor } from './helpers';
-
 const withImages = (editor: Editor) => {
   const { isVoid } = editor;
 
@@ -52,8 +49,8 @@ const withTags = (editor: Editor) => {
   return editor;
 };
 
-const withLinks = (editor: Editor, getLinkPreview?: (url: string) => any) => {
-  const { insertData, insertText, isInline, isVoid } = editor;
+const withLinks = (editor: Editor) => {
+  const { isInline, isVoid } = editor;
 
   editor.isInline = element => {
     return element.type === 'link' ? true : isInline(element);
@@ -61,34 +58,6 @@ const withLinks = (editor: Editor, getLinkPreview?: (url: string) => any) => {
 
   editor.isVoid = element => {
     return element.type === 'link' ? true : isVoid(element);
-  };
-
-  editor.insertText = async text => {
-    if (text && isUrl(text)) {
-      if (getLinkPreview && typeof getLinkPreview === 'function') {
-        CustomEditor.insertLink(editor, { url: text });
-        await getLinkPreview(text);
-      } else {
-        CustomEditor.insertLink(editor, { url: text });
-      }
-    } else {
-      insertText(text);
-    }
-  };
-
-  editor.insertData = async data => {
-    const text = data.getData('text/plain');
-
-    if (text && isUrl(text)) {
-      if (getLinkPreview && typeof getLinkPreview === 'function') {
-        CustomEditor.insertLink(editor, { url: text });
-        await getLinkPreview(text);
-      } else {
-        CustomEditor.insertLink(editor, { url: text });
-      }
-    } else {
-      insertData(data);
-    }
   };
 
   return editor;

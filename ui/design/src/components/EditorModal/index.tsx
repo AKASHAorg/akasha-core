@@ -29,6 +29,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
     onPublish,
     handleNavigateBack,
     linkPreview,
+    uploadedImages,
     getLinkPreview,
     getMentions,
     getTags,
@@ -73,6 +74,7 @@ const EditorModal: React.FC<IEditorModal> = props => {
           onPublish={onPublish}
           handleNavigateBack={handleToggleShowCancel}
           linkPreview={linkPreview}
+          uploadedImages={uploadedImages}
           getLinkPreview={getLinkPreview}
           getMentions={getMentions}
           getTags={getTags}

@@ -24,11 +24,7 @@ export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseC
 const TOPBAR_HEIGHT = 48;
 const WIDGET_AREA_MARGIN_TOP = '0.5rem';
 
-export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    display: none;
-  }
-`;
+export const WidgetContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)``;
 export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box)`
   position: sticky;
   top: ${TOPBAR_HEIGHT}px;
@@ -37,6 +33,9 @@ export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.di
   flex-grow: 1;
   margin-top: ${WIDGET_AREA_MARGIN_TOP};
   max-height: 100%;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: none;
+  }
   ${props => css`
     &::-webkit-scrollbar {
       width: 0 !important;

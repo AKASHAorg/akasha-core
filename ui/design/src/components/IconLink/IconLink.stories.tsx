@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import IconLink from '.';
+import IconLink, { ILinkIconButtonProps } from '.';
 import Icon from '../Icon';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -20,7 +20,7 @@ export default {
   },
 };
 
-const Template = (args: any) => (
+const Template = (args: ILinkIconButtonProps) => (
   <Grommet theme={lightTheme}>
     <IconLink {...args} />
   </Grommet>

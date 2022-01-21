@@ -24,7 +24,7 @@ const schema = {
   },
 };
 
-const writeValidator = (writer: string, event: any, instance: Tag) => {
+const writeValidator = (writer: string) => {
   // if (instance.name.toLowerCase() !== instance.name) {
   //   return false;
   // }

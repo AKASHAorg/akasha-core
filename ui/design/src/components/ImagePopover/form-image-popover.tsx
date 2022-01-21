@@ -17,7 +17,7 @@ export interface IFormImagePopover {
   closePopover: () => void;
   insertImage?: (src: File | string, isUrl: boolean) => void;
   currentImage?: boolean;
-  onMobile: any;
+  onMobile: boolean;
   handleDeleteImage?: () => void;
   modalSlotId: string;
 }
@@ -102,6 +102,7 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
       align={{ top: 'bottom', left: 'left' }}
       onClickOutside={closePopover}
       onEsc={closePopover}
+      style={{ zIndex: 999 }}
     >
       <Box direction="column" pad="xsmall">
         <StyledBox

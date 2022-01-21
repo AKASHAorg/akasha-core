@@ -1,20 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 import { LogoSourceType } from './index';
 
-export interface IntegrationRegistryInfo {
-  name: string;
-  version?: string;
-  description: string;
-  src: string;
-}
-
-export interface WidgetRegistryInfo extends IntegrationRegistryInfo {
-  type: 'widget';
-}
-export interface AppRegistryInfo extends IntegrationRegistryInfo {
-  type: 'app';
-}
-
 export type ActivityFn = (
   location: Location,
   pathToActiveWhen: (path: string, exact?: boolean) => (location: Location) => boolean,
@@ -40,9 +26,8 @@ export interface IntegrationRegistrationOptions {
   };
   uiEvents: BehaviorSubject<UIEventData>;
   layoutConfig?: LayoutConfig;
-  isMobile: boolean;
   integrations?: {
-    infos: (AppRegistryInfo | WidgetRegistryInfo)[];
+    infos: BaseIntegrationInfo[];
     configs: Record<string, IAppConfig | IWidgetConfig>;
   };
   extensionData?: UIEventData['data'];
@@ -80,10 +65,11 @@ export interface LayoutConfig {
   widgetSlotId: string;
 
   /**
-   * widget slot that sticks to bottom of the screen
+   * cookie widget slot
    */
-  staticWidgetSlotId: string;
+  cookieWidgetSlotId: string;
   sidebarSlotId: string;
+  focusedPluginSlotId: string;
 }
 
 export interface ExtensionPointDefinition {
@@ -183,6 +169,18 @@ export enum LogLevels {
 
 export type AppOrWidgetDefinition = string | { name: string; version: string };
 
+export enum INTEGRATION_TYPES {
+  APPLICATION,
+  PLUGIN,
+  WIDGET,
+}
+
+export interface BaseIntegrationInfo {
+  name: string;
+  integrationType: INTEGRATION_TYPES;
+  sources: string[];
+}
+
 export interface ISdkConfig {
   /**
    * Define the log level
@@ -221,6 +219,7 @@ export interface ILoaderConfig {
     siteId: string;
     trackerUrl: string;
   };
+  registryOverrides?: BaseIntegrationInfo[];
 }
 
 export interface ISingleSpaLifecycle {
@@ -237,7 +236,7 @@ export enum MenuItemType {
 }
 
 export enum MenuItemAreaType {
-  AppArea = 'app-area', // body of sideabr
+  AppArea = 'app-area', // body of sidebar
   QuickAccessArea = 'quick-access-area', // right of topbar
   BottomArea = 'bottom-area', // footer of sidebar
   SearchArea = 'search-area', // middle of topbar

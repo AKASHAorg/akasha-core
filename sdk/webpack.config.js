@@ -1,9 +1,14 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const webpack = require('webpack');
 // const HtmlWebpackPlugin = require("html-webpack-plugin");
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const name = require('./package.json').name;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const Dotenv = require('dotenv-webpack');
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { InjectManifest } = require('workbox-webpack-plugin');
 
 const config = {
@@ -51,7 +56,7 @@ const config = {
     libraryTarget: 'umd',
     publicPath: '/',
   },
-  target: ['web', 'es2017'],
+  target: ['web', 'es2020'],
   optimization: {
     moduleIds: 'deterministic',
     chunkIds: 'named',
@@ -62,7 +67,12 @@ const config = {
     },
   },
   plugins: [
-    new Dotenv({ safe: process.env.NODE_ENV === 'production', systemvars: true }),
+    new Dotenv({
+      path: path.resolve(__dirname, '../.env'),
+      safe:
+        process.env.NODE_ENV === 'production' ? path.resolve(__dirname, '../.env.example') : false,
+      systemvars: true,
+    }),
     new webpack.DefinePlugin({
       __DEV__: process.env.NODE_ENV !== 'production',
     }),

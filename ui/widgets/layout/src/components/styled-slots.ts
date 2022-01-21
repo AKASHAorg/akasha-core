@@ -44,6 +44,10 @@ export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   `}
 `;
 
+export const FocusedPluginSlot: React.FC<ExtensionPointProps> = styled(PluginSlot)`
+  align-self: center;
+`;
+
 export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   display: none;
   ${props => css`
@@ -67,11 +71,17 @@ export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   }
 `;
 
-export const StaticWidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
+export const CookieWidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   position: fixed;
   bottom: 0;
-  margin-left: 1rem;
-  max-width: 21rem;
+  margin-left: -12rem;
+  max-width: 34rem;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    margin-left: 0;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+  }
 `;
 
 export const ModalSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`

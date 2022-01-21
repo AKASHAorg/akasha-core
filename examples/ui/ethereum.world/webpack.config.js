@@ -4,6 +4,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const baseConfig = require('../../../ui/webpack.config');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fs = require('fs');
 
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
@@ -22,7 +24,16 @@ module.exports = Object.assign(baseConfig, {
   ]),
   externals: baseConfig.externals,
   devServer: {
-    https: true,
+    server: {
+      type: 'https',
+      options:
+        process.env.DEV_CERT_KEY_PATH && process.env.DEV_CERT_PATH
+          ? {
+              key: fs.readFileSync(process.env.DEV_CERT_KEY_PATH),
+              cert: fs.readFileSync(process.env.DEV_CERT_PATH),
+            }
+          : {},
+    },
     // serve development versions of libs
     // https://github.com/webpack/webpack-dev-server/issues/2540
     static: {

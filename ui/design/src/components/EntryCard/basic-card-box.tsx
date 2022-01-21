@@ -1,4 +1,5 @@
 import { Box, Anchor } from 'grommet';
+import { MarginType, PadType } from 'grommet/utils';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 
@@ -16,12 +17,13 @@ export interface IBasicCardBox {
   darkBorder?: boolean;
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
-  pad?: any;
-  margin?: any;
+  pad?: PadType;
+  margin?: MarginType;
   noBorder?: boolean;
   noBorderRadius?: boolean;
   bottomBorderOnly?: boolean;
   isSelected?: boolean;
+  onClick?: () => void;
 }
 
 const BasicCardBox: React.FC<IBasicCardBox> = ({
@@ -40,6 +42,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   noBorderRadius,
   bottomBorderOnly,
   isSelected,
+  onClick,
 }) => (
   <StyledBox
     style={style}
@@ -90,6 +93,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     }
     className={className}
     ref={rootNodeRef}
+    onClick={onClick}
   >
     {children}
   </StyledBox>

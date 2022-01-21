@@ -294,9 +294,7 @@ const mutations = {
         await dataSources.tagsAPI.indexComment('Comments', commentID[0], tag);
       }
     }
-    const postIDCache = dataSources.postsAPI.getPostCacheKey(comment.postID);
-    await queryCache.del(postIDCache);
-    await queryCache.del(dataSources.postsAPI.getInitialPostCacheKey(comment.postID));
+    await dataSources.postsAPI.removeCachedPost(comment.postID);
     return commentID[0];
   },
   editComment: async (_, { content, comment, id }, { dataSources, user, signature }) => {
@@ -378,8 +376,7 @@ const mutations = {
     const result = await dataSources.commentsAPI.deleteComment(user.pubKey, id);
     if (postData) {
       await dataSources.postsAPI.updatePosts([postData]);
-      await queryCache.del(dataSources.postsAPI.getPostCacheKey(commentData.postId));
-      await queryCache.del(dataSources.postsAPI.getInitialPostCacheKey(commentData.postId));
+      await dataSources.postsAPI.removeCachedPost(commentData.postId);
     }
 
     if (result?.removedTags?.length) {

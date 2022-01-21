@@ -1,5 +1,6 @@
 import { Box, Stack } from 'grommet';
 import * as React from 'react';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Icon from '../Icon';
 import { SearchBar } from './search-bar';
 import { MobileSearchBar } from './mobile-search-bar';
@@ -12,6 +13,8 @@ import {
   StyledSearchContainer,
   StyledDrop,
   StyledDiv,
+  StyledTextOnboarding,
+  StyledAnchor,
   StyledContentBox,
   BrandIcon,
   MenuIcon,
@@ -42,9 +45,13 @@ export interface ITopbarProps {
   legalLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
+  settingsLabel?: string;
   moderationLabel?: string;
   moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
+  stuckLabel?: string;
+  helpLabel?: string;
+  writeToUs?: string;
   // moderator tools
   isModerator?: boolean;
   dashboardLabel?: string;
@@ -53,6 +60,7 @@ export interface ITopbarProps {
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
   onSearch: (inputValue: string) => void;
+  onSettingsClick: () => void;
   onFeedbackClick: () => void;
   onModerationClick: () => void;
   onDashboardClick: () => void;
@@ -79,12 +87,16 @@ const Topbar: React.FC<ITopbarProps> = props => {
     legalLabel,
     feedbackLabel,
     feedbackInfoLabel,
+    settingsLabel,
     moderationLabel,
     moderationInfoLabel,
     legalCopyRightLabel,
     isModerator,
     dashboardLabel,
     dashboardInfoLabel,
+    stuckLabel,
+    helpLabel,
+    writeToUs,
     className,
     quickAccessItems,
     searchAreaItem,
@@ -94,6 +106,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     // onSidebarToggle,
     onLoginClick,
     onSignUpClick,
+    onSettingsClick,
     onFeedbackClick,
     onModerationClick,
     onDashboardClick,
@@ -122,7 +135,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const iconSize = isMobileOnly ? 'md' : 'sm';
 
   React.useEffect(() => {
-    const legal = otherAreaItems?.find(menuItem => menuItem.name === 'ui-plugin-legal');
+    const legal = otherAreaItems?.find(menuItem => menuItem.name === 'app-legal');
     if (legal && legal.subRoutes?.length) {
       setLegalMenu(legal);
     }
@@ -199,7 +212,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   );
 
   const renderPluginIcon = (menuItem: IMenuItem) => {
-    if (menuItem.name === 'ui-plugin-notifications') {
+    if (menuItem.name === 'app-notifications') {
       return (
         <IconDiv
           onClick={onClickPluginButton(menuItem)}
@@ -240,32 +253,31 @@ const Topbar: React.FC<ITopbarProps> = props => {
     if (menuItem.subRoutes?.length && currentLocation?.includes(menuItem?.subRoutes[0]?.route)) {
       return true;
     }
-    if (loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey)) {
-      return true;
-    }
-    return false;
+    return !!(loggedProfileData?.pubKey && currentLocation?.includes(loggedProfileData?.pubKey));
   };
 
-  const renderPluginButton = (menuItem: IMenuItem, index: number) => (
-    <StyledDiv
-      key={index}
-      ref={ref => {
-        menuItemRefs.current[menuItem.index] = ref;
-      }}
-    >
-      {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
-        <Avatar
-          active={checkActiveAvatar(menuItem)}
-          ethAddress={loggedProfileData?.ethAddress}
-          src={loggedProfileData?.avatar}
-          size="xs"
-          onClick={onClickAvatarButton(menuItem)}
-        />
-      ) : (
-        renderPluginIcon(menuItem)
-      )}
-    </StyledDiv>
-  );
+  const renderPluginButton = (menuItem: IMenuItem, index: number) => {
+    return (
+      <StyledDiv
+        key={index}
+        ref={ref => {
+          menuItemRefs.current[menuItem.index] = ref;
+        }}
+      >
+        {menuItem.logo?.type === LogoTypeSource.AVATAR ? (
+          <Avatar
+            active={checkActiveAvatar(menuItem)}
+            ethAddress={loggedProfileData?.ethAddress}
+            src={loggedProfileData?.avatar}
+            size="xs"
+            onClick={onClickAvatarButton(menuItem)}
+          />
+        ) : (
+          renderPluginIcon(menuItem)
+        )}
+      </StyledDiv>
+    );
+  };
 
   const renderSearchArea = () => {
     if (searchAreaItem) {
@@ -294,7 +306,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     return;
   };
 
-  const renderContent = () => {
+  const renderContent = (shouldRenderOnboarding?: boolean) => {
     if (isMobileOnly && mobileSearchOpen) {
       return (
         <MobileSearchBar
@@ -304,7 +316,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           inputPlaceholderLabel={searchBarLabel}
           handleCloseInput={() => {
             if (currentLocation?.includes('search')) {
-              history.back();
+              window.history.back();
             }
             setInputValue('');
             setMobileSearchOpen(false);
@@ -341,18 +353,27 @@ const Topbar: React.FC<ITopbarProps> = props => {
           fill="horizontal"
           justify="end"
         >
-          {renderSearchArea()}
+          {!shouldRenderOnboarding && renderSearchArea()}
           {props.children}
           {loggedProfileData?.ethAddress &&
+            !shouldRenderOnboarding &&
             quickAccessItems &&
             quickAccessItems.map(renderPluginButton)}
-          {!isMobileOnly && !loggedProfileData?.ethAddress && (
+          {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
             <Box direction="row" align="center" gap="small">
               <Button onClick={onLoginClick} label={signInLabel} />
               <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
             </Box>
           )}
-          {!loggedProfileData?.ethAddress && (
+          {shouldRenderOnboarding && (
+            <Box direction="row">
+              <StyledTextOnboarding margin={{ right: '0.2rem' }} alignSelf="center">
+                {stuckLabel}
+              </StyledTextOnboarding>
+              <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
+            </Box>
+          )}
+          {(!loggedProfileData?.ethAddress || shouldRenderOnboarding) && (
             <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
               <MenuIcon
                 rotate={isMobileOnly ? 90 : 0}
@@ -369,25 +390,19 @@ const Topbar: React.FC<ITopbarProps> = props => {
     );
   };
 
-  return (
-    <TopbarWrapper
-      align="center"
-      pad={{ vertical: 'small', horizontal: 'medium' }}
-      fill="horizontal"
-      className={className}
-      elevation="shadow"
-      height={mobileSignedOutView ? '6rem' : '3rem'}
-      border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
-    >
-      {renderContent()}
-      {mobileSignedOutView && (
-        <Box direction="row" align="center" gap="small" fill="horizontal">
-          <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
-          <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
-        </Box>
-      )}
-      {dropOpen && renderDrop()}
-      {avatarDropOpen && loggedProfileData?.ethAddress && (
+  const renderMobileSignedOutView = () => {
+    if (!mobileSignedOutView) return null;
+    return (
+      <Box direction="row" align="center" gap="small" fill="horizontal">
+        <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
+        <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
+      </Box>
+    );
+  };
+
+  const renderLoggedInMenu = () => {
+    if (avatarDropOpen && loggedProfileData?.ethAddress) {
+      return (
         <ProfileMenu
           target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
           closePopover={() => setAvatarDropOpen(false)}
@@ -400,6 +415,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          settingsLabel={settingsLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
@@ -407,13 +423,19 @@ const Topbar: React.FC<ITopbarProps> = props => {
           menuItems={dropItems}
           legalMenu={legalMenu}
           onLogout={onLogout}
+          onSettingsClick={onSettingsClick}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
         />
-      )}
-      {menuDropOpen && !loggedProfileData?.ethAddress && (
+      );
+    }
+  };
+
+  const renderLoggedOutMenu = () => {
+    if (menuDropOpen && !loggedProfileData?.ethAddress) {
+      return (
         <ProfileMenu
           target={feedbackMenuRef.current}
           closePopover={() => setMenuDropOpen(false)}
@@ -425,17 +447,58 @@ const Topbar: React.FC<ITopbarProps> = props => {
           dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
+          settingsLabel={settingsLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
           legalCopyRightLabel={legalCopyRightLabel}
+          onSettingsClick={onSettingsClick}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
         />
-      )}
-    </TopbarWrapper>
+      );
+    }
+  };
+
+  return (
+    <Router>
+      <Switch>
+        <Route path="/auth-app/*">
+          <TopbarWrapper
+            align="center"
+            pad={{ vertical: 'small', horizontal: 'medium' }}
+            fill="horizontal"
+            className={className}
+            elevation="shadow"
+            height="3rem"
+            border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+          >
+            {renderContent(true)}
+            {dropOpen && renderDrop()}
+            {renderLoggedOutMenu()}
+          </TopbarWrapper>
+        </Route>
+        <Route>
+          <TopbarWrapper
+            align="center"
+            pad={{ vertical: 'small', horizontal: 'medium' }}
+            fill="horizontal"
+            className={className}
+            elevation="shadow"
+            height={mobileSignedOutView ? '6rem' : '3rem'}
+            border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+          >
+            {renderContent()}
+            {renderMobileSignedOutView()}
+            {dropOpen && renderDrop()}
+            {renderLoggedInMenu()}
+            {renderLoggedOutMenu()}
+          </TopbarWrapper>
+        </Route>
+      </Switch>
+    </Router>
   );
 };
 

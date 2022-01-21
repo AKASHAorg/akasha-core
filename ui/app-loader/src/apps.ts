@@ -1,5 +1,5 @@
 import {
-  AppRegistryInfo,
+  BaseIntegrationInfo,
   EventTypes,
   ExtensionPointDefinition,
   IAppConfig,
@@ -9,7 +9,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
 import * as singleSpa from 'single-spa';
-import { getNameFromDef, navigateToModal } from './utils';
+import { getNameFromDef, navigateToModal, parseQueryString } from './utils';
 
 export interface IntegrationModule {
   register: (opts: IntegrationRegistrationOptions) => Promise<IAppConfig | IWidgetConfig>;
@@ -17,7 +17,7 @@ export interface IntegrationModule {
 }
 
 class Apps extends BaseIntegration {
-  private readonly appInfos: AppRegistryInfo[];
+  private readonly appInfos: BaseIntegrationInfo[];
   private readonly appConfigs: Record<string, IAppConfig>;
   private readonly appModules: Record<string, IntegrationModule>;
   constructor(opts: BaseIntegrationClassOptions) {
@@ -32,7 +32,7 @@ class Apps extends BaseIntegration {
     this.appConfigs = {};
     this.logger = opts.sdk.services.log.create('app-loader.apps');
   }
-  add(appInfo: AppRegistryInfo) {
+  add(appInfo: BaseIntegrationInfo) {
     // todo
     this.appInfos.push(appInfo);
   }
@@ -53,19 +53,20 @@ class Apps extends BaseIntegration {
   }
   async importConfigs() {
     for (const name in this.appModules) {
-      const appModule = this.appModules[name];
+      if (this.appModules.hasOwnProperty(name)) {
+        const appModule = this.appModules[name];
 
-      if (appModule.hasOwnProperty('register') && typeof appModule.register === 'function') {
-        this.appConfigs[name] = (await appModule.register({
-          layoutConfig: this.layoutConfig,
-          worldConfig: {
-            title: this.worldConfig.title,
-          },
-          uiEvents: this.uiEvents,
-          isMobile: this.isMobile,
-        })) as IAppConfig;
-      } else {
-        this.logger.warn(`Integration ${name} does not have a register() method exported!`);
+        if (appModule.hasOwnProperty('register') && typeof appModule.register === 'function') {
+          this.appConfigs[name] = (await appModule.register({
+            layoutConfig: this.layoutConfig,
+            worldConfig: {
+              title: this.worldConfig.title,
+            },
+            uiEvents: this.uiEvents,
+          })) as IAppConfig;
+        } else {
+          this.logger.warn(`Integration ${name} does not have a register() method exported!`);
+        }
       }
     }
     return Promise.resolve();
@@ -181,7 +182,8 @@ class Apps extends BaseIntegration {
           navigateToModal: navigateToModal,
           layoutConfig: this.layoutConfig,
           getMenuItems: this.getMenuItems,
-          isMobile: this.isMobile,
+          navigateTo: this.navigateTo,
+          parseQueryString: parseQueryString,
         },
       });
       if (appConfig.menuItems) {
@@ -192,7 +194,7 @@ class Apps extends BaseIntegration {
     }
   }
 
-  public async install(appInfo: AppRegistryInfo) {
+  public async install(appInfo: BaseIntegrationInfo) {
     const module = await System.import<IntegrationModule>(appInfo.name);
     if (!module) {
       this.logger.warn(`cannot import module: ${appInfo.name}`);
@@ -209,7 +211,6 @@ class Apps extends BaseIntegration {
           title: this.worldConfig.title,
         },
         uiEvents: this.uiEvents,
-        isMobile: this.isMobile,
       })) as IAppConfig;
       if (!appConfig) {
         return;
@@ -220,19 +221,18 @@ class Apps extends BaseIntegration {
       this.logger.warn(`App ${appInfo.name} has no exported .register() function!`);
     }
   }
-  public async uninstall(info: AppRegistryInfo) {
+  public async uninstall(info: BaseIntegrationInfo) {
     const idx = this.appInfos.findIndex(inf => inf.name === info.name);
     if (idx >= 0) {
       delete this.appModules[info.name];
       this.appInfos.splice(idx, 1);
-      if (info.type === 'app') {
-        const registered = singleSpa.getAppNames();
-        if (registered.includes(info.name)) {
-          await singleSpa.unloadApplication(info.name);
-          await singleSpa.unregisterApplication(info.name);
-        }
+
+      const registered = singleSpa.getAppNames();
+      if (registered.includes(info.name)) {
+        await singleSpa.unloadApplication(info.name);
+        await singleSpa.unregisterApplication(info.name);
       }
-      this.logger.info(`app ${name} unloaded!`);
+      this.logger.info(`app ${info.name} unloaded!`);
     }
   }
 

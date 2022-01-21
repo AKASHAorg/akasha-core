@@ -33,13 +33,6 @@ This package contains all hooks required for proper functioning of the Akasha We
 - addEntry
 - removeEntry
 
-### [useErrors](./src/use-error-state.ts)
-> handles errors logging and presentation on the user interface (where applicable). Available actions include;
-- createError
-- removeError
-- removeLoginErrors
-- getFilteredErrors
-
 ### [useFeedReducer](./src/use-feed-reducer.ts)
 > handles loading and data fetching for feed items. Available actions include;
 - setFeedItems
@@ -59,11 +52,6 @@ This package contains all hooks required for proper functioning of the Akasha We
 ### [useLegal](./src/use-legal.ts)
 > handles retrieval of legal docs from IPFS service. Available actions include;
 - getLegalDoc
-
-### [useLoginState](./src/use-login-state.ts)
-> handles user authentication state and adapts [useGlobalLogin](#useGlobalLogin). Available actions include;
-- login
-- logout
 
 ### [useMentions](./src/use-mentions.ts)
 > handles mentions and tags functionalities. Available actions include;

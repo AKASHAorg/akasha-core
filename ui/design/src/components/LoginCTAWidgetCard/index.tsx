@@ -9,10 +9,11 @@ const StyledText = styled(Text)`
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
 `;
 
-const StyledAnchor = styled(Anchor)`
+export const CTAAnchor = styled(Anchor)<{ isBold?: boolean }>`
   color: ${props => props.theme.colors.accent};
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
-  font-weight: ${props => props.theme.shapes.fontWeight.regular};
+  font-weight: ${props =>
+    props.isBold ? props.theme.shapes.fontWeight.bold : props.theme.shapes.fontWeight.regular};
   &:hover {
     text-decoration: none;
   }
@@ -25,6 +26,7 @@ export interface ILoginWidgetCardProps {
   beforeLinkLabel: string;
   afterLinkLabel: string;
   writeToUsLabel: string;
+  disclaimerLabel?: string;
   writeToUsUrl: string;
   image?: React.ReactElement;
   publicImgPath?: string;
@@ -36,12 +38,13 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
     beforeLinkLabel,
     afterLinkLabel,
     writeToUsLabel,
+    disclaimerLabel,
     writeToUsUrl,
     publicImgPath = '/images',
   } = props;
   return (
     <BasicCardBox pad="medium" callToAction={true}>
-      {props.image && props.image}
+      {props.image}
       <Box direction={isMobile ? 'column-reverse' : 'row'} align="center" justify="between">
         <Box direction="column" width={isMobile ? '100%' : '50%'}>
           <Text weight="bold" size="1rem" margin={{ top: 'xsmall' }}>
@@ -49,10 +52,11 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           </Text>
           <StyledText margin={{ top: 'xsmall' }}>{subtitle}</StyledText>
           <StyledText margin={{ top: 'xsmall' }}>
-            {beforeLinkLabel}{' '}
-            <StyledAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />{' '}
+            {beforeLinkLabel}
+            <CTAAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />
             {afterLinkLabel}
           </StyledText>
+          <StyledText margin={{ top: 'xsmall' }}>{disclaimerLabel}</StyledText>
         </Box>
         <Box
           width={isMobile ? '100%' : '43%'}

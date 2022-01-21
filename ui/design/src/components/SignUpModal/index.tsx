@@ -14,7 +14,7 @@ const SignUpModal = (props: {
   submitted?: boolean;
   submitting?: boolean;
   onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
-  validateTokenFn?: (ev: any) => void;
+  validateTokenFn?: (ev: Event) => void;
   headerLabel?: string;
   subtitleLabel?: string;
   inputPlaceholder?: string;
@@ -22,10 +22,10 @@ const SignUpModal = (props: {
   hasError?: boolean;
   errorMsg?: string;
   acceptedTerms?: boolean;
-  checkedTermsValues?: any;
+  checkedTermsValues?: string[];
   onCheckedTermsValues?: (ev: any) => void;
   waitForCheckTerms?: boolean;
-  onAcceptTerms?: (ev: any) => void;
+  onAcceptTerms?: (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }) => {
   useBodyScrollLock();
 

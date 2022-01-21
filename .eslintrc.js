@@ -23,13 +23,12 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'react-hooks', 'eslint-plugin-tsdoc'],
   rules: {
     'tsdoc/syntax': 'warn',
-    'tsdoc-html-tag-missing-greater-than': 'off',
-    'tsdoc-escape-greater-than': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'react/prop-types': 'off',
     'react/display-name': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
     'no-prototype-builtins': 'off',
+    'no-case-declarations': 'off',
   },
   ignorePatterns: ['**/lib/*.js', '*.d.ts'],
 };

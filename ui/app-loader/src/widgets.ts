@@ -1,17 +1,17 @@
 import {
+  BaseIntegrationInfo,
   ExtensionPointDefinition,
   IAppConfig,
   IWidgetConfig,
   UIEventData,
-  WidgetRegistryInfo,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 import { IntegrationModule } from './apps';
 import BaseIntegration, { BaseIntegrationClassOptions } from './base-integration';
-import { navigateToModal } from './utils';
+import { navigateToModal, parseQueryString } from './utils';
 
 class Widgets extends BaseIntegration {
-  private readonly widgetInfos: WidgetRegistryInfo[];
+  private readonly widgetInfos: BaseIntegrationInfo[];
   private readonly widgetModules: Record<string, IntegrationModule>;
   private readonly widgetConfigs: Record<string, IWidgetConfig>;
   private readonly widgetParcels: Record<string, singleSpa.Parcel>;
@@ -30,7 +30,7 @@ class Widgets extends BaseIntegration {
     this.layoutConfig = opts.layoutConfig;
     this.getAppRoutes = opts.getAppRoutes;
   }
-  add(integration: WidgetRegistryInfo) {
+  add(integration: BaseIntegrationInfo) {
     // todo
     this.widgetInfos.push(integration);
   }
@@ -58,12 +58,24 @@ class Widgets extends BaseIntegration {
       this.registerWidget(widgetInfo.name);
     });
   }
+  public async onExtensionPointUnmount(extensionData?: UIEventData['data']) {
+    const toUnload = this.filterWidgetsByMountPoint(
+      this.widgetInfos,
+      this.widgetConfigs,
+      {}, // match every widget regardless if it's loaded on not
+      extensionData,
+    );
+    for (const widgetInfo of toUnload) {
+      await this.widgetParcels[widgetInfo.name].unmount();
+      delete this.widgetParcels[widgetInfo.name];
+    }
+  }
   async registerWidget(widgetName: string) {
     const widgetConfig: IWidgetConfig = this.widgetConfigs[widgetName];
-    if (this.isMobile && widgetConfig.notOnMobile) {
-      this.logger.info(`will not display widget ** ${widgetConfig.name} ** on mobile`);
-      return;
-    }
+    // if (this.isMobile && widgetConfig.notOnMobile) {
+    //   this.logger.info(`will not display widget ** ${widgetConfig.name} ** on mobile`);
+    //   return;
+    // }
     this.logger.info(
       `[@akashaproject/sdk-ui-plugin-loader] registering widget ${widgetConfig.name}`,
     );
@@ -87,13 +99,14 @@ class Widgets extends BaseIntegration {
       domElement: wrapperNode,
       globalChannel: this.sdk.api.globalChannel,
       uiEvents: this.uiEvents,
-      isMobile: this.isMobile,
       logger: this.sdk.services.log.create(widgetName),
       // installIntegration: this.installIntegration.bind(this),
       // uninstallIntegration: this.uninstallIntegration.bind(this),
       navigateToModal: navigateToModal,
       getMenuItems: this.getMenuItems,
       getAppRoutes: this.getAppRoutes,
+      navigateTo: this.navigateTo,
+      parseQueryString: parseQueryString,
     };
 
     const widgetParcel = singleSpa.mountRootParcel(widgetConfig.loadingFn, widgetProps);
@@ -102,19 +115,23 @@ class Widgets extends BaseIntegration {
   }
   async importConfigs() {
     for (const name in this.widgetModules) {
-      const widgetModule = this.widgetModules[name];
+      if (this.widgetModules.hasOwnProperty(name)) {
+        const widgetModule = this.widgetModules[name];
 
-      if (widgetModule.hasOwnProperty('register') && typeof widgetModule.register === 'function') {
-        this.widgetConfigs[name] = (await widgetModule.register({
-          layoutConfig: this.layoutConfig,
-          uiEvents: this.uiEvents,
-          worldConfig: {
-            title: this.worldConfig.title,
-          },
-          isMobile: this.isMobile,
-        })) as IWidgetConfig;
-      } else {
-        this.logger.warn(`Widget ${name} does not have a register() method exported!`);
+        if (
+          widgetModule.hasOwnProperty('register') &&
+          typeof widgetModule.register === 'function'
+        ) {
+          this.widgetConfigs[name] = (await widgetModule.register({
+            layoutConfig: this.layoutConfig,
+            uiEvents: this.uiEvents,
+            worldConfig: {
+              title: this.worldConfig.title,
+            },
+          })) as IWidgetConfig;
+        } else {
+          this.logger.warn(`Widget ${name} does not have a register() method exported!`);
+        }
       }
     }
     return Promise.resolve();
@@ -145,7 +162,7 @@ class Widgets extends BaseIntegration {
         return acc;
       }, []);
   }
-  public async install(widgetInfo: WidgetRegistryInfo) {
+  public async install(widgetInfo: BaseIntegrationInfo) {
     const module = await System.import<IntegrationModule>(widgetInfo.name);
     if (!module) {
       this.logger.warn(`cannot import module: ${widgetInfo.name}`);
@@ -163,18 +180,17 @@ class Widgets extends BaseIntegration {
           title: this.worldConfig.title,
         },
         uiEvents: this.uiEvents,
-        isMobile: this.isMobile,
       })) as IWidgetConfig;
       if (!widgetConfig) {
         return;
       }
       this.widgetConfigs[widgetInfo.name] = widgetConfig;
-      this.registerWidget(widgetConfig.name);
+      await this.registerWidget(widgetConfig.name);
     } else {
       this.logger.warn(`App ${widgetInfo.name} has no exported .register() function!`);
     }
   }
-  public uninstall(info: WidgetRegistryInfo) {
+  public uninstall(info: BaseIntegrationInfo) {
     const idx = this.widgetInfos.findIndex(inf => inf.name === info.name);
     if (idx >= 0) {
       // const call = this.sdk.services.db.apps.remove({ name: info.name });

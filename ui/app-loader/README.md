@@ -8,7 +8,7 @@ to install/uninstall, load/unload apps, widgets and plugins.
 ## Usage
 
 ```tsx
-import AppLoader from '@akashaproject/sdk-ui-plugin-loader';
+import AppLoader from '@akashaproject/ui-plugin-loader';
 import sdk from '@akashaproject/sdk';
 
 const appLoader = new AppLoader(options, sdk);

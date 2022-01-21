@@ -19,9 +19,10 @@
     }
   ],
   "files": [
-    "./src/contracts/artifacts/ENS.json",
-    "./src/contracts/artifacts/AkashaRegistrar.json",
-    "./src/contracts/artifacts/ReverseRegistrar.json"
+    "./src/contracts/abi/ENS.json",
+    "./src/contracts/abi/AkashaRegistrar.json",
+    "./src/contracts/abi/ReverseRegistrar.json",
+    "./src/contracts/abi/IntegrationRegistry.json"
   ],
 
 

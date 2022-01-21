@@ -7,7 +7,7 @@ import {
  */
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => {
   return {
-    mountsIn: opts.layoutConfig.staticWidgetSlotId,
+    mountsIn: opts.layoutConfig.cookieWidgetSlotId,
     loadingFn: () => import('./components'),
     name: 'ui-widget-analytics',
     tags: ['analytics-widget'],

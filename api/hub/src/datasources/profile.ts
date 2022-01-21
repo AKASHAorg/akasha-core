@@ -8,7 +8,7 @@ import {
   validateName,
 } from '../helpers';
 import { ThreadID, Where, Client } from '@textile/hub';
-import { DataProvider, PostItem, Profile } from '../collections/interfaces';
+import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { clearSearchCache, searchIndex } from './search-indexes';
 import { postsStats, statsProvider } from '../resolvers/constants';
@@ -19,7 +19,7 @@ const NOT_FOUND_PROFILE = new Error('Profile not found');
 const NOT_REGISTERED = new Error('Must be registered first.');
 class ProfileAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private readonly dbID: ThreadID;
   private readonly FOLLOWING_KEY = ':getFollowing:';
   private readonly FOLLOWERS_KEY = ':getFollowers:';
@@ -218,6 +218,7 @@ class ProfileAPI extends DataSource {
     const exists1 = profile.followers.indexOf(profile1.pubKey);
 
     if (!profile || !profile1) {
+      logger.warn(`profile for ${pubKey} or ${ethAddress} was not found`);
       await t.end();
       return false;
     }
@@ -228,7 +229,8 @@ class ProfileAPI extends DataSource {
     if (exists1 === -1) {
       profile.followers.unshift(profile1.pubKey);
     }
-    await t.save([profile, profile1]);
+    await t.save([profile]);
+    await t.save([profile1]);
     await t.end();
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
     const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
@@ -260,6 +262,7 @@ class ProfileAPI extends DataSource {
     const exists = profile1.following.indexOf(profile.pubKey);
     const exists1 = profile.followers.indexOf(profile1.pubKey);
     if (!profile || !profile1) {
+      logger.warn(`profile for ${pubKey} or ${ethAddress} was not found`);
       await t.end();
       return false;
     }
@@ -271,7 +274,8 @@ class ProfileAPI extends DataSource {
       profile.followers.splice(exists1, 1);
     }
 
-    await t.save([profile, profile1]);
+    await t.save([profile]);
+    await t.save([profile1]);
     await t.end();
 
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
@@ -307,23 +311,22 @@ class ProfileAPI extends DataSource {
     await queryCache.del(this.getCacheKey(pubKey));
     return profile._id;
   }
-
   async searchProfiles(name: string) {
-    const result = await searchIndex.search(name, {
+    const result = await searchIndex.search<{ pubKey: string }>(name, {
       facetFilters: ['category:profile'],
       hitsPerPage: 20,
       restrictSearchableAttributes: ['name', 'userName', 'pubKey'],
       attributesToRetrieve: ['name', 'pubKey', 'userName'],
     });
     const results = [];
-    for (const profile of result.hits as any) {
+    for (const profile of result.hits) {
       const resolvedProfile = await this.resolveProfile(profile.pubKey);
       results.push(resolvedProfile);
     }
     return results;
   }
 
-  async updateProfile(updateProfile: any[]) {
+  async updateProfile(updateProfile: Profile[]) {
     const db: Client = await getAppDB();
     return db.save(this.dbID, this.collection, updateProfile);
   }

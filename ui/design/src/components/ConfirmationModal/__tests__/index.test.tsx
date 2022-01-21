@@ -28,7 +28,6 @@ describe('<ConfirmationModal /> Component', () => {
             onConfirm={handleModalConfirm}
             cancelLabel={CANCEL_BUTTON_LABEL}
             confirmLabel={CONFIRM_BUTTON_LABEL}
-            errors={{}}
             closeLabel={CLOSE_BUTTON_LABEL}
           />,
         ),

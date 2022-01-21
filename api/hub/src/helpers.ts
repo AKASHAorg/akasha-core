@@ -1,15 +1,15 @@
 import {
-  createAPISig,
   Client,
-  ThreadID,
+  createAPISig,
+  createUserAuth,
   PrivateKey,
   PublicKey,
-  createUserAuth,
+  ThreadID,
 } from '@textile/hub';
-import { updateCollections, initCollections } from './collections';
+import { initCollections, updateCollections } from './collections';
 import winston from 'winston';
 import { normalize } from 'eth-ens-namehash';
-import { ethers, utils, providers } from 'ethers';
+import { ethers, providers, utils } from 'ethers';
 import objHash from 'object-hash';
 import mailgun from 'mailgun-js';
 import fetch from 'node-fetch';
@@ -18,6 +18,7 @@ import { AbortController } from 'node-abort-controller';
 import { Worker } from 'worker_threads';
 import { create } from 'ipfs-http-client';
 import sharp from 'sharp';
+import { AuthorNotificationValue } from './collections/interfaces';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -148,8 +149,10 @@ export const validateName = (name: string) => {
 };
 
 const eip1271Abi = [
-  'function isValidSignature(bytes32 _message, bytes _signature) public view returns (bool)',
+  'function isValidSignature( bytes32 _hash, bytes calldata _signature ) external view returns (bytes4)',
+  //'function getMessageHash(bytes memory message) public view returns (bytes32)',
 ];
+export const magicValue = '0x1626ba7e';
 
 export const isValidSignature = async (
   message: string,
@@ -162,9 +165,13 @@ export const isValidSignature = async (
   const hashMessage = utils.hashMessage(hexArray);
   try {
     const contract = new ethers.Contract(address, eip1271Abi, provider);
+    // give some time for the state to update
+    await new Promise(res => setTimeout(res, 10000));
     const valid = await contract.isValidSignature(hashMessage, signature);
-    return Promise.resolve(valid);
+    return Promise.resolve(valid === magicValue);
   } catch (err) {
+    logger.warn('eip1271 sig validation error');
+    logger.warn(err);
     const msgSigner = utils.verifyMessage(hexArray, signature);
     return Promise.resolve(utils.getAddress(msgSigner) === utils.getAddress(address));
   }
@@ -195,7 +202,10 @@ export const verifyEd25519Sig = async (args: {
   return pub.verify(serializedData, sig);
 };
 
-export const sendNotification = async (recipient: string, notificationObj: Record<string, any>) => {
+export const sendNotification = async (
+  recipient: string,
+  notificationObj: Record<string, unknown>,
+) => {
   const worker = new Worker(path.resolve(__dirname, './notifications.js'), {
     workerData: {
       recipient,
@@ -216,7 +226,11 @@ export const sendNotification = async (recipient: string, notificationObj: Recor
 
 export const sendAuthorNotification = async (
   recipient: string,
-  notification: { property: string; provider: string; value: any },
+  notification: {
+    property: string;
+    provider: string;
+    value: AuthorNotificationValue;
+  },
 ) => {
   if (recipient === notification?.value?.author) {
     return Promise.resolve(null);
@@ -226,7 +240,6 @@ export const sendAuthorNotification = async (
 
 /**
  * Send an email notifications for moderation purposes.
- * @param email - Object containing the required data for sending the email
  * @returns A promise that resolves upon sending the email
  */
 export const sendEmailNotification = async () => {
@@ -307,4 +320,21 @@ export async function addToIpfs(link: string) {
 
 export function createIpfsGatewayLink(cid: string) {
   return `https://${cid}.${IPFS_GATEWAY}`;
+}
+
+export async function getWalletOwners(
+  scAddress: string,
+  provider: ethers.providers.Provider | ethers.Signer,
+): Promise<string[]> {
+  try {
+    const contract = new ethers.Contract(
+      scAddress,
+      ['function getOwners() public view returns (address[])'],
+      provider,
+    );
+    return contract.getOwners();
+  } catch (e) {
+    logger.warn(`${scAddress} does not support getOwners() method`);
+    return Promise.resolve([]);
+  }
 }

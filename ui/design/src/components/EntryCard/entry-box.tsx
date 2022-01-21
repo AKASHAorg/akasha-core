@@ -23,14 +23,19 @@ import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { EntryImageGallery, ImageObject } from './entry-image-gallery';
+import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
+import { editorDefaultValue } from '../Editor/initialValue';
+import isEqual from 'lodash.isequal';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
-  entryId: string;
-  replyTo: {
+  id: string;
+  replyTo?: {
     authorEthAddress?: string;
     entryId?: string;
-  } | null;
+  };
 }
 export interface IEntryBoxProps {
   // data
@@ -76,7 +81,7 @@ export interface IEntryBoxProps {
   handleUnfollowAuthor?: (profileEthAddress: string) => void;
   isFollowingAuthor?: boolean;
   // redirects
-  onContentClick?: (details: IContentClickDetails) => void;
+  onContentClick?: (details: IContentClickDetails, itemType?: ItemTypes) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
   onMentionClick?: (pubKey: string) => void;
@@ -228,11 +233,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const handleContentClick = (data?: IEntryData) => {
     if (onContentClick && typeof onContentClick === 'function' && data) {
-      onContentClick({
-        authorEthAddress: data.author.ethAddress,
-        entryId: data.entryId,
-        replyTo: null,
-      });
+      const replyTo = data.postId ? { entryId: data.postId } : null;
+      const itemType = replyTo ? ItemTypes.COMMENT : ItemTypes.ENTRY;
+      onContentClick(
+        {
+          authorEthAddress: data.author.ethAddress,
+          id: data.entryId,
+          replyTo,
+        },
+        itemType,
+      );
     }
   };
 
@@ -288,6 +298,21 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     () => !props.isRemoved && entryData.quote && entryData.quote.delisted,
     [entryData.quote, props.isRemoved],
   );
+
+  const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
+  const [currentImage, setCurrentImage] = React.useState<ImageObject | null>(null);
+
+  /**
+   * opens the fullscreen image modal and shows the clicked upon image in it
+   */
+  const handleClickImage = (image: ImageObject) => {
+    setCurrentImage(image);
+    setImageOverlayOpen(true);
+  };
+
+  const closeImageOverlay = () => {
+    setImageOverlayOpen(false);
+  };
 
   return (
     <ViewportSizeProvider>
@@ -470,15 +495,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             removedByMeLabel={removedByMeLabel}
           />
         )}
-        {!props.isRemoved && (
+        {!props.isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
           <Box
             pad={{ horizontal: 'medium' }}
             height={{ max: '50rem' }}
             overflow={scrollHiddenContent ? 'auto' : 'hidden'}
             style={{ cursor: contentClickable ? 'pointer' : 'default' }}
-            onClick={() =>
-              !disableActions && contentClickable ? handleContentClick(entryData) : false
-            }
+            onClick={() => !disableActions && contentClickable && handleContentClick(entryData)}
           >
             <ReadOnlyEditor
               content={entryData.slateContent}
@@ -495,6 +518,18 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               handleLinkClick={singleSpaNavigate}
             />
           </Box>
+        )}
+        {entryData.images && (
+          <Box pad="medium">
+            <EntryImageGallery images={entryData.images} handleClickImage={handleClickImage} />
+          </Box>
+        )}
+        {imageOverlayOpen && (
+          <MultipleImageOverlay
+            clickedImg={currentImage}
+            images={entryData.images}
+            closeModal={closeImageOverlay}
+          />
         )}
         {showQuote && (
           <Box

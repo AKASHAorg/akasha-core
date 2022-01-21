@@ -22,6 +22,7 @@ export interface IProfileMenu {
   signOutLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
+  settingsLabel?: string;
   moderationLabel?: string;
   moderationInfoLabel?: string;
   mobileSignedOutView?: boolean;
@@ -33,6 +34,7 @@ export interface IProfileMenu {
   // handlers
   closePopover: () => void;
   onNavigation: (path: string) => void;
+  onSettingsClick: () => void;
   onFeedbackClick: () => void;
   onModerationClick: () => void;
   onDashboardClick: () => void;
@@ -57,6 +59,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     signOutLabel,
     feedbackLabel,
     feedbackInfoLabel,
+    settingsLabel,
     moderationLabel,
     moderationInfoLabel,
     mobileSignedOutView,
@@ -66,6 +69,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     dashboardInfoLabel,
     closePopover,
     onNavigation,
+    onSettingsClick,
     onFeedbackClick,
     onModerationClick,
     onDashboardClick,
@@ -76,6 +80,13 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   const handleNavigation = (menuItem: IMenuItem) => () => {
     if (onNavigation) {
       onNavigation(menuItem.route);
+    }
+    closePopover();
+  };
+
+  const handleSettingsClick = () => {
+    if (onSettingsClick) {
+      onSettingsClick();
     }
     closePopover();
   };
@@ -122,6 +133,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   };
 
   const similarMenu: ISimilarMenu[] = [
+    { icon: 'settingsAlt', labels: [settingsLabel], handler: handleSettingsClick },
     { icon: 'feedback', labels: [feedbackLabel, feedbackInfoLabel], handler: handleFeedbackClick },
     {
       icon: 'trendingApps',

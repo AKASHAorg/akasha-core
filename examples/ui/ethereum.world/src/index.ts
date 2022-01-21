@@ -2,12 +2,20 @@ import { ILoaderConfig, ISdkConfig, LogLevels } from '@akashaproject/ui-awf-typi
 
 console.time('AppLoader:firstMount');
 
+declare const __DEV__: boolean;
+
 (async function bootstrap(System) {
   const { default: Loader } = await System.import('@akashaproject/app-loader');
   const { default: getSDK } = await System.import('@akashaproject/awf-sdk');
+
   const sdkConfig: ISdkConfig = {
     logLevel: LogLevels.DEBUG,
   };
+  let registryOverrides = [];
+
+  if (__DEV__) {
+    registryOverrides = (await import('./registry-overrides')).default;
+  }
 
   const loaderConfig: ILoaderConfig = {
     title: 'Ethereum World',
@@ -20,11 +28,13 @@ console.time('AppLoader:firstMount');
     defaultApps: [
       '@akashaproject/app-moderation-ewa',
       '@akashaproject/app-search',
-      '@akashaproject/ui-plugin-app-center',
-      '@akashaproject/ui-plugin-profile',
-      '@akashaproject/ui-plugin-notifications',
-      '@akashaproject/ui-plugin-legal',
-      '@akashaproject/ui-plugin-bookmarks',
+      '@akashaproject/app-auth-ewa',
+      '@akashaproject/app-settings-ewa',
+      '@akashaproject/app-integration-center',
+      '@akashaproject/app-profile',
+      '@akashaproject/app-notifications',
+      '@akashaproject/app-legal',
+      '@akashaproject/app-bookmarks',
     ],
     // pre-installed widgets;
     // layout widget is always loaded by default
@@ -38,6 +48,7 @@ console.time('AppLoader:firstMount');
       trackerUrl: 'https://hb88px.matomo.cloud',
       siteId: '1',
     },
+    registryOverrides,
   };
 
   const sdk = getSDK();

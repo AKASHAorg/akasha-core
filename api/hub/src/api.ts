@@ -153,7 +153,7 @@ api.post('/validate-token/:token', async (ctx: koa.Context, next: () => Promise<
  * Create a new moderation report.
  */
 api.post('/moderation/reports/new', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-  const report: any = ctx?.request.body;
+  const report = ctx?.request.body;
   if (!report.data || !report.contentId || !report.contentType || !report.signature) {
     ctx.status = 400;
   } else {
@@ -213,7 +213,7 @@ api.post(
  * Check moderation status (reported/moderated/delisted)for a list of content identifiers.
  */
 api.post('/moderation/status', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-  const body: any = ctx?.request.body;
+  const body = ctx?.request.body;
   const contentIDs = body.contentIds;
   if (!contentIDs) {
     ctx.status = 400;
@@ -247,7 +247,7 @@ api.get('/moderation/status/counters', async (ctx: koa.Context, next: () => Prom
 api.post(
   '/moderation/decisions/moderate',
   async (ctx: koa.Context, next: () => Promise<unknown>) => {
-    const report: any = ctx?.request.body;
+    const report = ctx?.request.body;
     if (!report.data || !report.contentId || !report.signature) {
       ctx.status = 400;
     } else {
@@ -308,7 +308,7 @@ api.get(
 api.post(
   '/moderation/decisions/pending',
   async (ctx: koa.Context, next: () => Promise<unknown>) => {
-    const req: any = ctx?.request.body;
+    const req = ctx?.request.body;
     const decisions = await dataSources.decisionsAPI.getDecisions(
       dataSources.profileAPI,
       dataSources.reportingAPI,
@@ -334,7 +334,7 @@ api.post(
 api.post(
   '/moderation/decisions/moderated',
   async (ctx: koa.Context, next: () => Promise<unknown>) => {
-    const req: any = ctx?.request.body;
+    const req = ctx?.request.body;
     if (req.delisted === undefined) {
       ctx.status = 400;
       ctx.body = 'Missing "delisted" attribute from request.';
@@ -363,7 +363,7 @@ api.post(
  * Get a public log of all content that has been moderated, for transparency purposes.
  */
 api.post('/moderation/decisions/log', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-  const req: any = ctx?.request.body;
+  const req = ctx?.request.body;
   ctx.body = await dataSources.decisionsAPI.publicLog(
     dataSources.profileAPI,
     dataSources.reportingAPI,
@@ -429,7 +429,7 @@ api.get(
  */
 api.post('/moderation/moderators/:user', async (ctx: koa.Context, next: () => Promise<unknown>) => {
   const user = ctx?.params?.user;
-  const request: any = ctx?.request.body;
+  const request = ctx?.request.body;
   if (!user || !request.data || !request.secret) {
     ctx.status = 400;
   } else {
@@ -495,7 +495,7 @@ api.get('/moderation/moderators/:user', async (ctx: koa.Context, next: () => Pro
  * Get list of moderation reasons.
  */
 api.post('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-  const request: any = ctx?.request.body;
+  const request = ctx?.request.body;
   ctx.set('Content-Type', 'application/json');
   ctx.body =
     request && !request.active
@@ -538,7 +538,7 @@ api.post('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<unk
  * Delete a moderation reason.
  */
 api.delete('/moderation/reasons', async (ctx: koa.Context, next: () => Promise<unknown>) => {
-  const request: any = ctx?.request.body;
+  const request = ctx?.request.body;
   if (!request.data.id) {
     ctx.status = 400;
     ctx.body = 'Missing "id" attribute from request.';

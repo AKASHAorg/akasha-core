@@ -1,7 +1,7 @@
 export interface ILRU {
-  set(key: string, value: any): Promise<void>;
+  set(key: string, value: unknown): Promise<void>;
 
-  get(key: string): Promise<any>;
+  get<T>(key: string): Promise<T>;
 
   has(key: string): Promise<boolean>;
 
