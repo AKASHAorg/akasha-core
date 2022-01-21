@@ -3,6 +3,8 @@ import { ILoaderConfig, ISdkConfig, LogLevels } from '@akashaproject/ui-awf-typi
 console.time('AppLoader:firstMount');
 
 declare const __DEV__: boolean;
+declare const __MATOMO_TRACKER_URL__: string;
+declare const __MATOMO_SITE_ID__: string;
 
 (async function bootstrap(System) {
   const { default: Loader } = await System.import('@akashaproject/app-loader');
@@ -45,8 +47,8 @@ declare const __DEV__: boolean;
       // '@akashaproject/ui-widget-sidebar',
     ],
     analytics: {
-      trackerUrl: 'https://ethereum.matomo.cloud/',
-      siteId: '3',
+      trackerUrl: __MATOMO_TRACKER_URL__,
+      siteId: __MATOMO_SITE_ID__,
     },
     registryOverrides,
   };
