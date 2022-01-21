@@ -4,9 +4,3 @@
 
 ## Components
 
-- [Integration Center](./app-center/README.md)
-- [Bookmarks](./bookmarks/README.md)
-- [Legal](./legal/README.md)
-- [Notifcations](./notifications/README.md)
-- [Profile](./profile/README.md)
-- [Search](./search/README.md)
