@@ -25,26 +25,29 @@ export const mergeImportMaps = (oldMap: ImportMap, newMap: ImportMap) => {
       result.imports[i] = oldMap.imports[i];
     }
   }
-  for (const i in newMap.imports) {
-    if (newMap.imports.hasOwnProperty(i)) {
+  const newMapImports = newMap.imports;
+  for (const i in newMapImports) {
+    if (newMapImports.hasOwnProperty(i)) {
       if (result.imports[i]) {
         continue;
       }
-      result.imports[i] = newMap.imports[i];
+      result.imports[i] = newMapImports[i];
     }
   }
-  for (const i in oldMap.scopes) {
-    if (oldMap.scopes.hasOwnProperty(i)) {
-      result.scopes[i] = oldMap.scopes[i];
+  const oldMapScopes = oldMap.scopes;
+  for (const i in oldMapScopes) {
+    if (oldMapScopes.hasOwnProperty(i)) {
+      result.scopes[i] = oldMapScopes[i];
     }
   }
-  for (const i in newMap.scopes) {
-    if (newMap.scopes.hasOwnProperty(i)) {
+  const newMapScopes = newMap.scopes;
+  for (const i in newMapScopes) {
+    if (newMapScopes.hasOwnProperty(i)) {
       if (result.scopes[i]) {
         continue;
       }
     }
-    result.scopes[i] = newMap.scopes[i];
+    result.scopes[i] = newMapScopes[i];
   }
   return result;
 };
