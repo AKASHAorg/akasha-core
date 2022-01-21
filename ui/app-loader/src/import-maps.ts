@@ -46,8 +46,8 @@ export const mergeImportMaps = (oldMap: ImportMap, newMap: ImportMap) => {
       if (result.scopes[i]) {
         continue;
       }
+      result.scopes[i] = newMapScopes[i];
     }
-    result.scopes[i] = newMapScopes[i];
   }
   return result;
 };
