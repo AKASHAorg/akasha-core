@@ -107,7 +107,7 @@ const indexes = [
   },
 ];
 export async function newCollection(client: Client, threadID: ThreadID) {
-  return await client.newCollection(threadID, {
+  return client.newCollection(threadID, {
     schema,
     writeValidator,
     readFilter,
@@ -117,7 +117,7 @@ export async function newCollection(client: Client, threadID: ThreadID) {
 }
 
 export async function updateCollection(client: Client, threadID: ThreadID) {
-  return await client.updateCollection(threadID, {
+  return client.updateCollection(threadID, {
     schema,
     writeValidator,
     readFilter,

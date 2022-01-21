@@ -146,4 +146,13 @@ export const integrationsData = {
     },
     type: 'app',
   },
+  '@akashaproject/ui-widget-analytics': {
+    name: '@akashaproject/ui-widget-analytics',
+    lastVersion: '0.0.1',
+    description: 'Analytics Widget',
+    versions: {
+      '0.0.1': '/widgets/analytics/index.js',
+    },
+    type: 'widget',
+  },
 };

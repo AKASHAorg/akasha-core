@@ -78,6 +78,7 @@ export interface IEditorBox {
   showCancelButton?: boolean;
   onCancelClick?: () => void;
   cancelButtonLabel?: string;
+  onPlaceholderClick?: () => void;
 }
 
 /* eslint-disable complexity */

@@ -63,6 +63,11 @@ export interface LayoutConfig {
    * load app defined widgets into this node
    */
   widgetSlotId: string;
+
+  /**
+   * cookie widget slot
+   */
+  cookieWidgetSlotId: string;
   sidebarSlotId: string;
   focusedPluginSlotId: string;
 }
@@ -123,7 +128,7 @@ export interface IWidgetConfig {
   activeWhen?: ActivityFn;
   name: string;
   notOnMobile?: boolean;
-  loadingFn: () => Promise<ISingleSpaLifecycle>;
+  loadingFn?: () => Promise<ISingleSpaLifecycle>;
   /**
    * Id of the element in which this widget is rendered
    */
@@ -210,7 +215,10 @@ export interface ILoaderConfig {
    * Define this world's title
    */
   title: string;
-
+  analytics?: {
+    siteId: string;
+    trackerUrl: string;
+  };
   registryOverrides?: BaseIntegrationInfo[];
 }
 

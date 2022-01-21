@@ -5,7 +5,7 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ModerationItemTypes, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { withProviders, useReasons, useGetLogin, useReport } from '@akashaproject/ui-awf-hooks';
+import { withProviders, useReasons, useGetLogin, useReport, useAnalytics } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
 import i18n, { setupI18next } from '../i18n';
 
@@ -13,6 +13,7 @@ const { ReportModal } = DS;
 
 const ReportModalComponent = (props: RootComponentProps) => {
   const { activeModal } = props;
+  const [analyticsActions] = useAnalytics();
 
   const loginQuery = useGetLogin();
 
@@ -39,15 +40,20 @@ const ReportModalComponent = (props: RootComponentProps) => {
   const reportMutation = useReport();
 
   const onReport = React.useCallback(
-    (dataToSign: Record<string, string>) =>
+    (dataToSign: Record<string, string>) => {
+      analyticsActions.trackEvent({
+        category: itemType,
+        action: 'Report',
+      });
       reportMutation.mutate({
         dataToSign,
         contentId: activeModal.entryId,
         contentType: itemType,
         url: `${BASE_REPORT_URL}/new`,
-      }),
+      });
+    },
 
-    [itemType, activeModal.entryId, reportMutation],
+    [itemType, activeModal.entryId, reportMutation, analyticsActions],
   );
 
   return (

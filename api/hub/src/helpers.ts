@@ -62,7 +62,7 @@ export const EMPTY_PROFILE = {
 
 export const getAPISig = async (minutes = 30) => {
   const expiration = new Date(Date.now() + 1000 * 60 * minutes);
-  return await createAPISig(process.env.USER_GROUP_API_SECRET, expiration);
+  return createAPISig(process.env.USER_GROUP_API_SECRET, expiration);
 };
 
 let userDBClient;

@@ -126,38 +126,40 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   React.useEffect(() => {
     const updatedFields = {};
     for (const key in providerData) {
-      // transform null values to empty strings
-      if (!providerData[key]) {
-        updatedFields[key] = '';
-      } else {
-        updatedFields[key] = providerData[key];
-      }
-      if (key === 'avatar') {
-        if (providerData[key] && typeof providerData[key] === 'string') {
-          updatedFields[key] = {
-            preview: providerData[key],
-            prefix: '',
-            isUrl: true,
-          };
+      if (providerData.hasOwnProperty(key)) {
+        // transform null values to empty strings
+        if (!providerData[key]) {
+          updatedFields[key] = '';
+        } else {
+          updatedFields[key] = providerData[key];
         }
-      }
-      if (key === 'coverImage') {
-        if (providerData[key] && typeof providerData[key] === 'string') {
-          updatedFields[key] = {
-            preview: providerData[key],
-            prefix: '',
-            isUrl: true,
-          };
+        if (key === 'avatar') {
+          if (providerData[key] && typeof providerData[key] === 'string') {
+            updatedFields[key] = {
+              preview: providerData[key],
+              prefix: '',
+              isUrl: true,
+            };
+          }
         }
-      }
-      if (key === 'userName') {
-        if (providerData.userName) {
-          updatedFields[key] = providerData.userName;
-        } else if (providerData.default && providerData.default.length > 0) {
-          const userNameProvider = providerData.default.find(
-            p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
-          );
-          updatedFields[key] = userNameProvider ? userNameProvider.value : '';
+        if (key === 'coverImage') {
+          if (providerData[key] && typeof providerData[key] === 'string') {
+            updatedFields[key] = {
+              preview: providerData[key],
+              prefix: '',
+              isUrl: true,
+            };
+          }
+        }
+        if (key === 'userName') {
+          if (providerData.userName) {
+            updatedFields[key] = providerData.userName;
+          } else if (providerData.default && providerData.default.length > 0) {
+            const userNameProvider = providerData.default.find(
+              p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
+            );
+            updatedFields[key] = userNameProvider ? userNameProvider.value : '';
+          }
         }
       }
     }

@@ -74,6 +74,11 @@ const overrides = [
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/layout/index.js`],
   },
+  {
+    name: '@akashaproject/ui-widget-analytics',
+    integrationType: INTEGRATION_TYPES.WIDGET,
+    sources: [`${HOST}/widgets/analytics/index.js`],
+  },
 ];
 
 export default overrides;

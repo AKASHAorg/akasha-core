@@ -15,6 +15,7 @@ import {
   mapEntry,
   useGetProfile,
   useGetLogin,
+  useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -40,6 +41,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionSearch = useMentionSearch(mentionQuery);
   const tagSearch = useTagSearch(tagQuery);
+  const [analyticsActions] = useAnalytics();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
 
@@ -98,13 +100,29 @@ const EditorModalContainer = (props: RootComponentProps) => {
         return;
       }
       if (isEditing) {
+        analyticsActions.trackEvent({
+          category: 'Post',
+          action: 'Edit',
+        });
         editPost.mutate({ entryID: props.activeModal.entryId, ...data });
       } else {
+        analyticsActions.trackEvent({
+          category: 'Post',
+          action: 'Publish',
+        });
         publishPost.mutate({ ...data, pubKey: profileDataReq.data.pubKey });
       }
       props.singleSpa.navigateToUrl(location.pathname);
     },
-    [isEditing, props.activeModal, props.singleSpa, editPost, publishPost, profileDataReq.data],
+    [
+      isEditing,
+      props.activeModal,
+      props.singleSpa,
+      editPost,
+      publishPost,
+      profileDataReq.data,
+      analyticsActions,
+    ],
   );
 
   const handleModalClose = () => {

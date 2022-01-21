@@ -22,9 +22,21 @@ const EntryFeed = (props: IFeedWidgetProps) => {
   const handleBookmark = (isBookmarked: boolean, entryId: string) => {
     if (props.loginState.isReady && props.loginState.pubKey) {
       if (!isBookmarked) {
+        if (props.trackEvent) {
+          props.trackEvent({
+            category: 'Post',
+            action: 'Bookmark',
+          });
+        }
         return saveBookmarkQuery.mutate({
           entryId,
           itemType: props.itemType,
+        });
+      }
+      if (props.trackEvent) {
+        props.trackEvent({
+          category: 'Post',
+          action: 'Remove Bookmark',
         });
       }
       return delBookmarkQuery.mutate(entryId);
@@ -68,6 +80,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           removedByMeLabel={props.removedByMeLabel}
           removedByAuthorLabel={props.removedByAuthorLabel}
           uiEvents={props.uiEvents}
+          trackEvent={props.trackEvent}
         />
       }
     />

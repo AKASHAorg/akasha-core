@@ -41,8 +41,13 @@ declare const __DEV__: boolean;
     defaultWidgets: [
       { name: '@akashaproject/ui-widget-topbar', version: '0.0.1' },
       '@akashaproject/ui-widget-trending',
+      '@akashaproject/ui-widget-analytics',
       // '@akashaproject/ui-widget-sidebar',
     ],
+    analytics: {
+      trackerUrl: process.env.MATOMO_TRACKER_URL,
+      siteId: process.env.MATOMO_SITE_ID,
+    },
     registryOverrides,
   };
 

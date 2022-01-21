@@ -2,7 +2,6 @@ import DS from '@akashaproject/design-system';
 import React from 'react';
 import { GlobalStyle } from './global-style';
 import {
-  CookieWidgetContainer,
   MainAreaContainer,
   ScrollableWidgetArea,
   SidebarWrapper,
@@ -16,8 +15,8 @@ import {
   SidebarSlot,
   WidgetSlot,
   FocusedPluginSlot,
+  CookieWidgetSlot,
 } from './styled-slots';
-import CookieWidget from './cookie-widget';
 import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from '../i18n';
@@ -165,16 +164,12 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
                                   onMount={handleExtensionMount}
                                   onUnmount={handleExtensionUnmount}
                                 />
-                                <CookieWidget
-                                  navigateToUrl={props.singleSpa.navigateToUrl}
-                                  style={{
-                                    position: 'fixed',
-                                    bottom: 0,
-                                    marginLeft: '-12rem',
-                                    maxWidth: '34rem',
-                                  }}
-                                />
                               </ScrollableWidgetArea>
+                              <CookieWidgetSlot
+                                name={props.layoutConfig.cookieWidgetSlotId}
+                                onMount={handleExtensionMount}
+                                onUnmount={handleExtensionUnmount}
+                              />
                             </WidgetAreaContainer>
                           </WidgetContainer>
                         </Box>
@@ -200,9 +195,6 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
             onUnmount={handleExtensionUnmount}
             style={{ position: 'relative', zIndex: 200 }}
           />
-          <CookieWidgetContainer>
-            <CookieWidget navigateToUrl={props.singleSpa.navigateToUrl} />
-          </CookieWidgetContainer>
         </div>
       </div>
     </I18nextProvider>
