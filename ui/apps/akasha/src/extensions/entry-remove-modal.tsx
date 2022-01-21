@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useDeletePost, useDeleteComment, withProviders } from '@akashaproject/ui-awf-hooks';
+import { useDeletePost, useDeleteComment, withProviders, useAnalytics } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import i18next, { setupI18next } from '../i18n';
 
@@ -16,6 +16,7 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
 
   const postDeleteQuery = useDeletePost(activeModal.entryId);
   const commentDeleteQuery = useDeleteComment(activeModal.entryId);
+  const [analyticsActions] = useAnalytics();
 
   const handleModalClose = React.useCallback(() => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -24,8 +25,16 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const handleDeletePost = React.useCallback(() => {
     if (activeModal && typeof activeModal.entryType === 'number') {
       if (activeModal.entryType === ItemTypes.COMMENT) {
+        analyticsActions.trackEvent({
+          category: 'Reply',
+          action: 'Delete',
+        });
         commentDeleteQuery.mutate(activeModal.entryId);
       } else if (activeModal.entryType === ItemTypes.ENTRY) {
+        analyticsActions.trackEvent({
+          category: 'Post',
+          action: 'Delete',
+        });
         postDeleteQuery.mutate(activeModal.entryId);
       } else {
         logger.error('entryType is undefined!');

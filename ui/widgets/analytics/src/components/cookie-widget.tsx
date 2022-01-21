@@ -1,25 +1,71 @@
 import DS from '@akashaproject/design-system';
-import { useAnalytics, CookieConsentTypes } from '@akashaproject/ui-awf-hooks';
+import i18next from '../i18n';
 import React from 'react';
-import { Translation } from 'react-i18next';
+import { I18nextProvider, Translation } from 'react-i18next';
+import { RootComponentProps } from '../../../../typings/lib';
+import {
+  enableTracking,
+  installPageTacking,
+  installTrackingScript,
+  registerEventBusSubscriber,
+  uninstallPageTacking,
+} from '../analytics';
 
 const { CookieWidgetCard, Text } = DS;
 
-export interface ICookieWidgetProps {
-  style?: React.CSSProperties;
-  navigateToUrl: (url: string) => void;
+export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
+
+export enum CookieConsentTypes {
+  ESSENTIAL = 'ESSENTIAL',
+  ALL = 'ALL',
 }
 
-const CookieWidget: React.FC<ICookieWidgetProps> = props => {
-  const [analytics, analyticsActions] = useAnalytics();
-  const acceptCookie = (all?: boolean) => {
-    analyticsActions.acceptConsent(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
+const CookieWidget: React.FC<RootComponentProps> = props => {
+  const [cookieType, setCookieType] = React.useState(null);
+  const eventSub = React.useRef(null);
+  const analyticsConfig = React.useRef(props.analytics);
+  const uiEvents = React.useRef(props.uiEvents);
+  React.useLayoutEffect(() => {
+    const consentType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
+    if (consentType) {
+      setCookieType(consentType);
+    } else {
+      setCookieType(null);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (cookieType && cookieType === CookieConsentTypes.ESSENTIAL) {
+      return;
+    }
+    if (cookieType && cookieType === CookieConsentTypes.ALL) {
+      if (analyticsConfig.current) {
+        installTrackingScript(analyticsConfig.current);
+        enableTracking();
+        installPageTacking();
+        eventSub.current = registerEventBusSubscriber(uiEvents.current);
+      }
+    }
+    return () => {
+      if (eventSub.current) {
+        eventSub.current.unsubscribe();
+      }
+      uninstallPageTacking();
+    };
+  }, [cookieType]);
+
+  const handleAcceptCookie = (all?: boolean) => {
+    window.localStorage.setItem(
+      COOKIE_CONSENT_NAME,
+      all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL,
+    );
+    setCookieType(all ? CookieConsentTypes.ALL : CookieConsentTypes.ESSENTIAL);
   };
 
   return (
-    <>
-      {!analytics.cookieBannerDismissed && (
-        <div style={{ ...props.style }}>
+    <I18nextProvider i18n={i18next}>
+      {cookieType === null && (
+        <div>
           <Translation>
             {t => (
               <CookieWidgetCard
@@ -53,7 +99,7 @@ const CookieWidget: React.FC<ICookieWidgetProps> = props => {
                       color="accentText"
                       size="medium"
                       style={{ cursor: 'pointer' }}
-                      onClick={() => props.navigateToUrl('/settings-app')}
+                      onClick={() => props.singleSpa.navigateToUrl('/settings-app')}
                     >
                       {t('settings ')}
                     </Text>
@@ -65,14 +111,14 @@ const CookieWidget: React.FC<ICookieWidgetProps> = props => {
                 privacyUrl={`${window.location.protocol}//${window.location.host}/legal/privacy-policy`}
                 onlyEssentialLabel={t('Only essential')}
                 acceptAllLabel={t('Accept all')}
-                onClickOnlyEssential={() => acceptCookie()}
-                onClickAcceptAll={() => acceptCookie(true)}
+                onClickOnlyEssential={() => handleAcceptCookie()}
+                onClickAcceptAll={() => handleAcceptCookie(true)}
               />
             )}
           </Translation>
         </div>
       )}
-    </>
+    </I18nextProvider>
   );
 };
 

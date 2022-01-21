@@ -16,5 +16,6 @@ export const register: (props: IntegrationRegistrationOptions) => LayoutConfig =
     modalSlotId: 'modal-slot',
     mountsIn: 'root',
     focusedPluginSlotId: 'focused-plugin-slot',
+    cookieWidgetSlotId: 'cookie-widget-slot',
   };
 };

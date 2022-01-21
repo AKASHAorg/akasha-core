@@ -1,6 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { AnalyticsProvider } from '../use-analytics';
 
 const { ThemeSelector, lightTheme, darkTheme, ViewportSizeProvider } = DS;
 
@@ -29,9 +30,11 @@ export default function withProviders<T>(WrappedComponent: React.ComponentType<T
             settings={{ activeTheme: 'Light-Theme' }}
             availableThemes={[lightTheme, darkTheme]}
           >
-            <ViewportSizeProvider>
-              <WrappedComponent {...props} />
-            </ViewportSizeProvider>
+            <AnalyticsProvider {...props}>
+              <ViewportSizeProvider>
+                <WrappedComponent {...props} />
+              </ViewportSizeProvider>
+            </AnalyticsProvider>
           </ThemeSelector>
         </QueryClientProvider>
       </>

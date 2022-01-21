@@ -14,6 +14,7 @@ import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
 
 import i18n from 'i18next';
+import { AnalyticsEventData } from './analytics';
 export interface IAkashaError {
   errorKey: string;
   error: Error;
@@ -45,7 +46,7 @@ export interface QueryStringType {
 export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
-  uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData>;
+  uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
   i18n?: typeof i18n;
   getMenuItems?: () => AppLoaderTypes.IMenuList;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
@@ -60,6 +61,10 @@ export interface RootComponentProps {
   extensionData?: AppLoaderTypes.UIEventData['data'];
   homepageApp?: string;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
+  analytics?: {
+    trackerUrl: string;
+    siteId: string;
+  };
   navigateTo: (options: string | NavigationOptions | NavigationFn) => void;
   parseQueryString: (queryString: string) => QueryStringType;
 }

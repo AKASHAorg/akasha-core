@@ -12,6 +12,7 @@ import {
   useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { useAnalytics } from '@akashaproject/ui-awf-hooks';
 
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 
@@ -20,6 +21,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
   const loginQuery = useGetLogin();
+  const [analyticsActions] = useAnalytics();
 
   const trendingTagsReq = useTrendingTags();
   const trendingTags = trendingTagsReq.data || [];
@@ -57,6 +59,23 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: 'Trending Topic',
+      action: 'Subscribe',
+      name: 'Widget',
+    });
+    toggleTagSubscriptionReq.mutate(tagName);
+  };
+  const handleTagUnSubscribe = (tagName: string) => {
+    if (!loginQuery.data?.ethAddress) {
+      showLoginModal();
+      return;
+    }
+    analyticsActions.trackEvent({
+      category: 'Trending Topic',
+      action: 'Unsubscribe',
+      name: 'Widget',
+    });
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
@@ -69,6 +88,11 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: 'Trending People',
+      action: 'Follow',
+      name: 'Widget',
+    });
     followReq.mutate(ethAddress);
   };
 
@@ -77,7 +101,28 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: 'Trending People',
+      action: 'Unfollow',
+      name: 'Widget',
+    });
     unfollowReq.mutate(ethAddress);
+  };
+
+  const handleActiveTabChange = (tab: number) => {
+    if (tab === 0) {
+      analyticsActions.trackEvent({
+        category: 'Trending Topic',
+        action: 'Selected',
+        name: 'Widget',
+      });
+    } else {
+      analyticsActions.trackEvent({
+        category: 'Trending People',
+        action: 'Selected',
+        name: 'Widget',
+      });
+    }
   };
 
   return (
@@ -113,11 +158,12 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         subscribedTags={tagSubscriptions}
         onClickTag={handleTagClick}
         handleSubscribeTag={handleTagSubscribe}
-        handleUnsubscribeTag={handleTagSubscribe}
+        handleUnsubscribeTag={handleTagUnSubscribe}
         onClickProfile={handleProfileClick}
         handleFollowProfile={handleFollowProfile}
         handleUnfollowProfile={handleUnfollowProfile}
         loggedEthAddress={loginQuery.data?.ethAddress}
+        onActiveTabChange={handleActiveTabChange}
       />
     </Box>
   );
