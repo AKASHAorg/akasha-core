@@ -62,6 +62,7 @@ class PostAPI extends DataSource {
     }
     const key = getAuthorCacheKeys(pubKey);
     let record;
+    // tslint:disable-next-line: no-conditional-assignment
     while ((record = await queryCache.sPop(key))) {
       if (!record) {
         break;
