@@ -118,7 +118,7 @@ class TagAPI extends DataSource {
     }
     tag.posts.unshift(postID);
     await queryCache.del(this.getTagCacheKey(tagName));
-    return await db.save(this.dbID, this.collection, [tag]);
+    return db.save(this.dbID, this.collection, [tag]);
   }
 
   async removePostIndex(postID: string, tagName: string) {
@@ -127,7 +127,7 @@ class TagAPI extends DataSource {
     const postIndex = tag.posts.indexOf(postID);
     tag.posts.splice(postIndex, 1);
     await queryCache.del(this.getTagCacheKey(tagName));
-    return await db.save(this.dbID, this.collection, [tag]);
+    return db.save(this.dbID, this.collection, [tag]);
   }
 
   async removeCommentIndex(commentID: string, tagName: string) {
@@ -136,7 +136,7 @@ class TagAPI extends DataSource {
     const commentIndex = tag.comments.indexOf(commentID);
     tag.posts.splice(commentIndex, 1);
     await queryCache.del(this.getTagCacheKey(tagName));
-    return await db.save(this.dbID, this.collection, [tag]);
+    return db.save(this.dbID, this.collection, [tag]);
   }
 
   async indexComment(commentsCollection: string, commentID: string, tagName: string) {
@@ -153,7 +153,7 @@ class TagAPI extends DataSource {
     }
     tag.comments.unshift(commentID);
     await queryCache.del(this.getTagCacheKey(tagName));
-    return await db.save(this.dbID, this.collection, [tag]);
+    return db.save(this.dbID, this.collection, [tag]);
   }
 
   async addTag(name: string) {

@@ -333,7 +333,7 @@ export function useProfileUpdate(pubKey: string) {
 
   return useMutation({
     mutationKey: UPDATE_PROFILE_DATA_KEY,
-    mutationFn: async () => await completeProfileUpdate(pubKey, queryClient),
+    mutationFn: async () => completeProfileUpdate(pubKey, queryClient),
     onMutate: async (formData: UpdateProfileFormData) => {
       const currentProfile = queryClient.getQueryData<IProfileData>([PROFILE_KEY, pubKey]);
       const { profileData, changedFields } = formData;
