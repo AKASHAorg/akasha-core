@@ -394,7 +394,7 @@ class PostAPI extends DataSource {
   }
   async getRealPost(postID: string) {
     const db: Client = await getAppDB();
-    return await db.findByID<PostItem>(this.dbID, this.collection, postID);
+    return db.findByID<PostItem>(this.dbID, this.collection, postID);
   }
   async removePosts(id: string[]) {
     const db: Client = await getAppDB();

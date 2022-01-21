@@ -49,7 +49,7 @@ class ProfileAPI extends DataSource {
     } else {
       pubKey = await queryCache.get(key);
     }
-    return await this.resolveProfile(pubKey);
+    return this.resolveProfile(pubKey);
   }
 
   getCacheKey(pubKey: string) {
