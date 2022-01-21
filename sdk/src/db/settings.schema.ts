@@ -1,4 +1,6 @@
-export const schema: any = {
+import { JSONSchema } from '@textile/threaddb';
+
+export const schema: JSONSchema = {
   title: 'Settings',
   type: 'object',
   properties: {

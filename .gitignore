@@ -37,6 +37,7 @@ release/
 .vscode
 *.tsbuildinfo
 lib
+!ui/lib
 dist
 *.d.ts
 docs

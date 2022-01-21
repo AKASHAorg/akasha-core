@@ -1,7 +1,7 @@
 import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
-import { DataProvider, PostItem } from '../collections/interfaces';
+import { DataProvider, PostAPISearchResult, PostItem } from '../collections/interfaces';
 import { parse, stringify } from 'flatted';
 import { queryCache } from '../storage/cache';
 import { clearSearchCache, searchIndex } from './search-indexes';
@@ -9,7 +9,7 @@ import { getAuthorCacheKeys } from '../resolvers/constants';
 
 class PostAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private readonly dbID: ThreadID;
   private readonly allPostsCache: string;
   private readonly quotedByPost = 'quoted.by.post';
@@ -174,7 +174,7 @@ class PostAPI extends DataSource {
     logger.info('saving a new post');
     const postID = await db.create(this.dbID, this.collection, [post]);
     logger.info('created a new post:', postID);
-    const currentPosts = await queryCache.get(this.allPostsCache);
+    const currentPosts = await queryCache.get<string[]>(this.allPostsCache);
     if (currentPosts.length) {
       currentPosts.unshift(postID[0]);
       await queryCache.set(this.allPostsCache, currentPosts);
@@ -388,7 +388,7 @@ class PostAPI extends DataSource {
     updatePosts.length = 0;
     return Promise.resolve();
   }
-  async updatePosts(updatePosts: any[]) {
+  async updatePosts(updatePosts: PostItem[]) {
     const db: Client = await getAppDB();
     return db.save(this.dbID, this.collection, updatePosts);
   }
@@ -429,7 +429,7 @@ class PostAPI extends DataSource {
   }
 
   async globalSearch(keyword: string) {
-    const result = await searchIndex.search(keyword, {
+    const result = await searchIndex.search<PostAPISearchResult>(keyword, {
       typoTolerance: false,
       distinct: true,
       maxValuesPerFacet: 80,
@@ -443,7 +443,7 @@ class PostAPI extends DataSource {
       profile: [],
     };
     for (const rec of result.hits) {
-      const { category, name, pubKey }: any = rec;
+      const { category, name, pubKey } = rec;
       if (acc.hasOwnProperty(category)) {
         acc[category].push({ id: pubKey || rec.objectID, name: name });
       }
@@ -463,9 +463,9 @@ class PostAPI extends DataSource {
     }
     const authorsFacet: ReadonlyArray<string> = pubKeys.map(key => `author:${key}`);
     const tagsFacet: ReadonlyArray<string> = interests.map(key => `tags:${key}`);
-    const filter = ['category:post', authorsFacet.concat(tagsFacet)];
+    const filter = ['category:post', authorsFacet.concat(tagsFacet)] as readonly string[];
     const result = await searchIndex.search(``, {
-      facetFilters: filter as any, // lib typings need to be fixed
+      facetFilters: filter,
       length: length,
       offset: offset,
       typoTolerance: false,

@@ -12,11 +12,11 @@ const schema = {
   },
 };
 
-const writeValidator = (writer: string, event: any, instance: any) => {
+const writeValidator = (writer: string) => {
   return writer === 'bbaareihqdqd3me37e3pfs6pmy72cam7viai4lbcpxlqt365wicrnsi6q7e';
 };
 
-const readFilter = (reader: string, instance: any) => {
+const readFilter = (reader: string, instance: unknown) => {
   return instance;
 };
 

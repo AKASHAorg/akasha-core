@@ -1,5 +1,5 @@
 import { DataSource } from 'apollo-datasource';
-import { getAppDB, logger } from '../helpers';
+import { getAppDB } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { Moderator } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
@@ -12,7 +12,7 @@ import ProfileAPI from './profile';
  */
 class ModerationAdminAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private readonly dbID: ThreadID;
   constructor({ collection, dbID }) {
     super();
@@ -38,10 +38,10 @@ class ModerationAdminAPI extends DataSource {
    * @param user - The moderator user for which we're getting data
    * @returns A Moderator object
    */
-  async getModerator(user: string) {
+  async getModerator(user: string): Promise<Moderator | undefined> {
     const moderatorCacheKey = this.getModeratorCacheKey(user);
     if (await queryCache.has(moderatorCacheKey)) {
-      return await queryCache.get(moderatorCacheKey);
+      return queryCache.get<Moderator>(moderatorCacheKey);
     }
     const db: Client = await getAppDB();
     try {

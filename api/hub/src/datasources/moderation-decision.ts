@@ -1,7 +1,7 @@
 import { DataSource } from 'apollo-datasource';
 import { getAppDB, logger, encodeString, decodeString, sendAuthorNotification } from '../helpers';
 import { Client, ThreadID, Where } from '@textile/hub';
-import { ModerationDecision } from '../collections/interfaces';
+import { ModerationDecision, ModerationReason, ModerationReport } from '../collections/interfaces';
 import PostsAPI from './post';
 import ProfileAPI from './profile';
 import ModerationReportAPI from './moderation-report';
@@ -15,7 +15,7 @@ import CommentAPI from './comment';
  */
 class ModerationDecisionAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private readonly dbID: ThreadID;
   constructor({ collection, dbID }) {
     super();
@@ -169,13 +169,13 @@ class ModerationDecisionAPI extends DataSource {
    * @param contentID - The content identifier
    * @returns A ModerationDecision object
    */
-  async getDecision(contentID: string) {
+  async getDecision(contentID: string): Promise<ModerationDecision | undefined> {
     const decisionCache = this.getDecisionCacheKey(contentID);
     if (!contentID) {
       throw new Error('Must provide a resource id!');
     }
     if (await queryCache.has(decisionCache)) {
-      return queryCache.get(decisionCache);
+      return queryCache.get<ModerationDecision>(decisionCache);
     }
     const db: Client = await getAppDB();
     const query = new Where('contentID').eq(contentID);
@@ -229,7 +229,7 @@ class ModerationDecisionAPI extends DataSource {
     let list: ModerationDecision[];
     const listType = moderated ? this.getModeratedListCacheKey() : this.getPendingListCacheKey();
     if (await queryCache.has(listType)) {
-      list = await queryCache.get(listType);
+      list = await queryCache.get<ModerationDecision[]>(listType);
     } else {
       const query = moderated
         ? new Where('moderated').eq(true).orderByDesc('moderatedDate')
@@ -262,10 +262,12 @@ class ModerationDecisionAPI extends DataSource {
     contentID: string,
     profileAPI: ProfileAPI,
     reportingAPI: ModerationReportAPI,
-  ) {
+  ): Promise<
+    ModerationDecision & { reasons?: ModerationReason[] } & { reports?: ModerationReport[] }
+  > {
     const decisionCache = this.getModeratedDecisionCacheKey(contentID);
     if (await queryCache.has(decisionCache)) {
-      return queryCache.get(decisionCache);
+      return queryCache.get<ModerationDecision>(decisionCache);
     }
     const finalDecision = await this.getDecision(contentID);
     // remove action log as it is not needed here
@@ -333,17 +335,17 @@ class ModerationDecisionAPI extends DataSource {
     offset?: number,
     limit?: number,
   ) {
-    let list = [];
+    let list: ModerationDecision[] = [];
     const db: Client = await getAppDB();
     const cachedList = this.getModeratedListCacheKey();
     if (await queryCache.has(cachedList)) {
-      list = await queryCache.get(cachedList);
+      list = await queryCache.get<ModerationDecision[]>(cachedList);
     } else {
       const query = new Where('moderated').eq(true).orderByDesc('moderatedDate');
       list = await db.find<ModerationDecision>(this.dbID, this.collection, query);
       await queryCache.set(cachedList, list);
     }
-    const offsetIndex = offset ? list.findIndex(item => item._id === offset) : 0;
+    const offsetIndex = offset ? list.findIndex(item => item._id === offset.toString()) : 0;
     let endIndex = (limit || 10) + offsetIndex;
     if (list.length <= endIndex) {
       endIndex = undefined;
@@ -391,7 +393,11 @@ class ModerationDecisionAPI extends DataSource {
    * @param commentsAPI
    * @returns The ModerationDecision object
    */
-  async makeDecision(report: any, postsAPI: PostsAPI, commentsAPI: CommentAPI) {
+  async makeDecision(
+    report: { contentId: string; data: ModerationDecision },
+    postsAPI: PostsAPI,
+    commentsAPI: CommentAPI,
+  ) {
     const db: Client = await getAppDB();
     if (!report.data.moderator) {
       throw new Error('Not authorized');

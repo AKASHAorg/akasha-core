@@ -33,7 +33,7 @@ const getMailSender = async () => {
   return mailSender;
 };
 
-const sendMessage = async (recipient: string, notificationObj: Record<string, any>) => {
+const sendMessage = async (recipient: string, notificationObj: Record<string, unknown>) => {
   const ms = await getMailSender();
   const textEncoder = new TextEncoder();
   const encodedNotification = textEncoder.encode(JSON.stringify(notificationObj));

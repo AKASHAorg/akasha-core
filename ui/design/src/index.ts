@@ -1,6 +1,8 @@
 /* Components */
 import {
   Box,
+  BoxExtendedProps,
+  ButtonExtendedProps,
   Grid,
   Image,
   Grommet,
@@ -163,6 +165,8 @@ import darkTheme from './styles/themes/dark';
 import lightTheme from './styles/themes/light';
 import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
+
+export { BoxExtendedProps, ButtonExtendedProps };
 
 /* Grommet utils */
 // @TODO: fix this export style...

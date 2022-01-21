@@ -24,9 +24,9 @@ describe('<TopbarComponent />', () => {
   const BaseComponent = (
     <TopbarComponent
       getMenuItems={jest.fn().mockImplementation(() => [])}
-      logger={{} as any}
+      logger={{}}
       domElement={document.body}
-      uiEvents={new BehaviorSubject({} as any)}
+      uiEvents={new BehaviorSubject({})}
       isMobile={false}
       layoutConfig={{
         modalSlotId: '',
@@ -39,7 +39,7 @@ describe('<TopbarComponent />', () => {
       mountParcel={() => {
         /*  */
       }}
-      singleSpa={{} as any}
+      singleSpa={{}}
       name=""
       navigateToModal={jest.fn()}
       activeModal={null}

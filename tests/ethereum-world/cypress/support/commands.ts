@@ -23,7 +23,7 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-Cypress.Commands.add('exposeToWindow', (key: string, value: any) => {
+Cypress.Commands.add('exposeToWindow', (key: string, value: unknown) => {
   cy.window().then(win => {
     win[key] = value;
   });

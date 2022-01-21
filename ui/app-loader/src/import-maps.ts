@@ -1,4 +1,4 @@
-import { AppRegistryInfo, WidgetRegistryInfo } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { BaseIntegrationInfo } from '@akashaproject/ui-awf-typings/lib/app-loader';
 const importMapMetaElement = document.querySelector('meta[name="importmap-type"]');
 
 export interface ImportMap {
@@ -59,10 +59,11 @@ export const writeImports = (importsMap: ImportMap, nodeId: string) => {
   }
 };
 
-export const createImportMap = (integrationInfos: (AppRegistryInfo | WidgetRegistryInfo)[]) => {
+export const createImportMap = (integrationInfos: BaseIntegrationInfo[]) => {
   return integrationInfos.reduce(
     (importmap: ImportMap, info) => {
-      importmap.imports[info.name] = info.src;
+      // @TODO: what if there are multiple sources?
+      importmap.imports[info.name] = info.sources[0];
       return importmap;
     },
     { imports: {}, scopes: {} },

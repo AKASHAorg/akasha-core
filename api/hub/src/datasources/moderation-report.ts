@@ -11,7 +11,7 @@ import { queryCache } from '../storage/cache';
  */
 class ModerationReportAPI extends DataSource {
   private readonly collection: string;
-  private context: any;
+  private context;
   private readonly dbID: ThreadID;
   constructor({ collection, dbID }) {
     super();
@@ -90,7 +90,7 @@ class ModerationReportAPI extends DataSource {
    * @param author - The author of this report
    * @returns A ModerationReport object
    */
-  async getReport(contentID: string, author: string) {
+  async getReport(contentID: string, author: string): Promise<ModerationReport | undefined> {
     const reportCache = this.getReportCacheKey(contentID, author);
     if (await queryCache.has(reportCache)) {
       return queryCache.get(reportCache);
