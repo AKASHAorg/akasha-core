@@ -135,7 +135,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const iconSize = isMobileOnly ? 'md' : 'sm';
 
   React.useEffect(() => {
-    const legal = otherAreaItems?.find(menuItem => menuItem.name === 'ui-plugin-legal');
+    const legal = otherAreaItems?.find(menuItem => menuItem.name === 'app-legal');
     if (legal && legal.subRoutes?.length) {
       setLegalMenu(legal);
     }
@@ -212,7 +212,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   );
 
   const renderPluginIcon = (menuItem: IMenuItem) => {
-    if (menuItem.name === 'ui-plugin-notifications') {
+    if (menuItem.name === 'app-notifications') {
       return (
         <IconDiv
           onClick={onClickPluginButton(menuItem)}

@@ -30,11 +30,11 @@ declare const __DEV__: boolean;
       '@akashaproject/app-search',
       '@akashaproject/app-auth-ewa',
       '@akashaproject/app-settings-ewa',
-      '@akashaproject/ui-plugin-app-center',
-      '@akashaproject/ui-plugin-profile',
-      '@akashaproject/ui-plugin-notifications',
-      '@akashaproject/ui-plugin-legal',
-      '@akashaproject/ui-plugin-bookmarks',
+      '@akashaproject/app-integration-center',
+      '@akashaproject/app-profile',
+      '@akashaproject/app-notifications',
+      '@akashaproject/app-legal',
+      '@akashaproject/app-bookmarks',
     ],
     // pre-installed widgets;
     // layout widget is always loaded by default

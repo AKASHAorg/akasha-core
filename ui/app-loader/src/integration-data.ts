@@ -23,22 +23,22 @@ export const integrationsData = {
     },
     type: 'widget',
   },
-  '@akashaproject/ui-plugin-app-center': {
-    name: '@akashaproject/ui-plugin-app-center',
+  '@akashaproject/app-integration-center': {
+    name: '@akashaproject/app-integration-center',
     lastVersion: '0.1.0',
     description: 'Integration Center App',
     type: 'app',
     versions: {
-      '0.1.0': '/plugins/app-center/index.js',
+      '0.1.0': '/ui/apps/app-center/index.js',
     },
   },
-  '@akashaproject/ui-plugin-bookmarks': {
-    name: '@akashaproject/ui-plugin-bookmarks',
+  '@akashaproject/app-bookmarks': {
+    name: '@akashaproject/app-bookmarks',
     lastVersion: '0.1.0',
     description: 'Bookmarks App',
     type: 'app',
     versions: {
-      '0.1.0': '/plugins/bookmarks/index.js',
+      '0.1.0': '/ui/apps/bookmarks/index.js',
     },
   },
   '@akashaproject/app-akasha-integration': {
@@ -47,7 +47,7 @@ export const integrationsData = {
     description: 'AKASHA Integration',
     type: 'app',
     versions: {
-      '0.0.1': '/apps/akasha/index.js',
+      '0.0.1': '/ui/apps/akasha/index.js',
     },
   },
   '@akashaproject/app-moderation-ewa': {
@@ -56,7 +56,7 @@ export const integrationsData = {
     description: 'Moderation app',
     versions: {
       // we can have something like //gateway.ipfs.io/ipfs/Qem123dfea1234
-      '0.0.1': '/apps/moderation/index.js',
+      '0.0.1': '/ui/apps/moderation/index.js',
     },
     type: 'app',
   },
@@ -65,7 +65,7 @@ export const integrationsData = {
     lastVersion: '0.0.1',
     description: 'Auth app',
     versions: {
-      '0.0.1': '/apps/auth-app/index.js',
+      '0.0.1': '/ui/apps/auth-app/index.js',
     },
     type: 'app',
   },
@@ -75,7 +75,7 @@ export const integrationsData = {
     description: 'Settings App',
     versions: {
       // we can have something like //gateway.ipfs.io/ipfs/Qem123dfea1234
-      '0.0.1': '/apps/settings-app/index.js',
+      '0.0.1': '/ui/apps/settings-app/index.js',
     },
     type: 'app',
   },
@@ -85,7 +85,7 @@ export const integrationsData = {
     description: 'Search App',
     versions: {
       // we can have something like //gateway.ipfs.io/ipfs/Qem123dfea1234
-      '0.0.1': '/plugins/search/index.js',
+      '0.0.1': '/ui/apps/search/index.js',
     },
     type: 'app',
   },
@@ -119,30 +119,30 @@ export const integrationsData = {
     },
     type: 'widget',
   },
-  '@akashaproject/ui-plugin-profile': {
-    name: '@akashaproject/ui-plugin-profile',
+  '@akashaproject/app-profile': {
+    name: '@akashaproject/app-profile',
     lastVersion: '0.0.1',
     description: 'Profile App. Powered by AKASHA',
     versions: {
-      '0.0.1': '/plugins/profile/index.js',
+      '0.0.1': '/ui/apps/profile/index.js',
     },
     type: 'app',
   },
-  '@akashaproject/ui-plugin-notifications': {
-    name: '@akashaproject/ui-plugin-notifications',
+  '@akashaproject/app-notifications': {
+    name: '@akashaproject/app-notifications',
     lastVersion: '0.0.1',
     description: 'Notifications App. Powered by AKASHA',
     versions: {
-      '0.0.1': '/plugins/notifications/index.js',
+      '0.0.1': '/ui/apps/notifications/index.js',
     },
     type: 'app',
   },
-  '@akashaproject/ui-plugin-legal': {
-    name: '@akashaproject/ui-plugin-legal',
+  '@akashaproject/app-legal': {
+    name: '@akashaproject/app-legal',
     lastVersion: '0.0.1',
     description: 'Legal App. Powered by AKASHA',
     versions: {
-      '0.0.1': '/plugins/legal/index.js',
+      '0.0.1': '/ui/apps/legal/index.js',
     },
     type: 'app',
   },

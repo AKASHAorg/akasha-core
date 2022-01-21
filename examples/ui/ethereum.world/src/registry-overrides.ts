@@ -5,14 +5,14 @@ const HOST = '//localhost:8131';
 // config for integrations config overrides
 const overrides = [
   {
-    name: '@akashaproject/ui-plugin-app-center',
+    name: '@akashaproject/app-integration-center',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`${HOST}/plugins/app-center/index.js`],
+    sources: [`${HOST}/apps/app-center/index.js`],
   },
   {
-    name: '@akashaproject/ui-plugin-bookmarks',
+    name: '@akashaproject/app-bookmarks',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`${HOST}/plugins/bookmarks/index.js`],
+    sources: [`${HOST}/apps/bookmarks/index.js`],
   },
   {
     name: '@akashaproject/app-akasha-integration',
@@ -30,24 +30,24 @@ const overrides = [
     sources: [`${HOST}/apps/auth-app/index.js`],
   },
   {
-    name: '@akashaproject/ui-plugin-profile',
+    name: '@akashaproject/app-profile',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`${HOST}/plugins/profile/index.js`],
+    sources: [`${HOST}/apps/profile/index.js`],
   },
   {
-    name: '@akashaproject/ui-plugin-notifications',
+    name: '@akashaproject/app-notifications',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`${HOST}/plugins/notifications/index.js`],
+    sources: [`${HOST}/apps/notifications/index.js`],
   },
   {
-    name: '@akashaproject/ui-plugin-legal',
+    name: '@akashaproject/app-legal',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`${HOST}/plugins/legal/index.js`],
+    sources: [`${HOST}/apps/legal/index.js`],
   },
   {
     name: '@akashaproject/app-search',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`${HOST}/plugins/search/index.js`],
+    sources: [`${HOST}/apps/search/index.js`],
   },
   {
     name: '@akashaproject/app-settings-ewa',
