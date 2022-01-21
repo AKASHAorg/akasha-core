@@ -45,8 +45,8 @@ declare const __DEV__: boolean;
       // '@akashaproject/ui-widget-sidebar',
     ],
     analytics: {
-      trackerUrl: 'https://hb88px.matomo.cloud',
-      siteId: '1',
+      trackerUrl: 'https://ethereum.matomo.cloud/',
+      siteId: '3',
     },
     registryOverrides,
   };
