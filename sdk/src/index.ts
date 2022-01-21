@@ -41,7 +41,7 @@ export interface AWF_SDK {
   };
 }
 
-let sdk: AWF_SDK = undefined;
+let sdk: AWF_SDK;
 
 export default function getSDK() {
   if (!sdk) {

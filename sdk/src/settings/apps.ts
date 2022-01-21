@@ -74,7 +74,7 @@ class AppSettings implements IAppSettings {
     const query: unknown = { name: { $eq: appName } };
     const doc = await collection.data.findOne(query);
     if (doc._id) {
-      return await collection.data.delete(doc._id);
+      return collection.data.delete(doc._id);
     }
   }
 }

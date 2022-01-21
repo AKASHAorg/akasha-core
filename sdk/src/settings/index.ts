@@ -56,7 +56,7 @@ class Settings implements ISettingsService {
     const query: unknown = { serviceName: { $eq: serviceName } };
     const doc = await collection.data.findOne(query);
     if (doc._id) {
-      return await collection.data.delete(doc._id);
+      return collection.data.delete(doc._id);
     }
   }
 }

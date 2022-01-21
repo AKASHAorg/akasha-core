@@ -518,7 +518,7 @@ export default class AppLoader {
       this.loaderLogger.warn(`There is a misconfiguration in app ${pack} definitions!`);
       return Promise.resolve(null);
     }
-    return await getIntegrationInfo(normalized);
+    return getIntegrationInfo(normalized);
   }
 
   // get registry info for multiple packages

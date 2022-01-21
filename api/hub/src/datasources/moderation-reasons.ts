@@ -83,7 +83,7 @@ class ModerationReasonAPI extends DataSource {
   async listReasons(active: boolean) {
     const reasonsCache = this.getReasonListCacheKey(active);
     if (await queryCache.has(reasonsCache)) {
-      return await queryCache.get(reasonsCache);
+      return queryCache.get(reasonsCache);
     }
     const db: Client = await getAppDB();
     const query = new Where('active').eq(active).orderByDesc('creationDate');

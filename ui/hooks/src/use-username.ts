@@ -71,7 +71,7 @@ export function useUpdateUsernameProvider(pubKey?: string) {
   const queryClient = useQueryClient();
   return useMutation(
     async (payload: { userName: string; provider: ProfileProviders }) =>
-      await updateUsernameProvider({ ...payload, pubKey }, queryClient),
+      updateUsernameProvider({ ...payload, pubKey }, queryClient),
     {
       onMutate: (payload: { userName: string; provider: ProfileProviders }) => {
         const providerData = {

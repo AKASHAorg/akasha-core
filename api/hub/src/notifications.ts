@@ -26,7 +26,7 @@ const getMailSender = async () => {
   mailSender = {
     sendMessage: async (to: string, message: Uint8Array) => {
       const toPubKey = PublicKey.fromString(to);
-      return await api.sendMessage(mailSenderID, toPubKey, message);
+      return api.sendMessage(mailSenderID, toPubKey, message);
     },
     api: api,
   };
