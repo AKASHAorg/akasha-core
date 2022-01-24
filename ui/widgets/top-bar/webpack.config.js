@@ -7,6 +7,6 @@ module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   output: Object.assign(baseConfig.output, {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/widgets/topbar/',
+    publicPath: process.env.NODE_ENV !== 'production' ? '/widgets/topbar/' : 'auto',
   }),
 });

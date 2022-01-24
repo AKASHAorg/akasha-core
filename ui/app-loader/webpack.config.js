@@ -6,6 +6,7 @@ const baseConfig = require('../webpack.config');
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   output: Object.assign(baseConfig.output, {
-    publicPath: '',
+    publicPath: process.env.NODE_ENV !== 'production' ? '/app-loader/' : 'auto',
+    path: path.resolve(__dirname, 'dist'),
   }),
 });

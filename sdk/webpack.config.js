@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable */
 const path = require('path');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const webpack = require('webpack');
@@ -7,7 +7,9 @@ const Dotenv = require('dotenv-webpack');
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { InjectManifest } = require('workbox-webpack-plugin');
-
+const { SubresourceIntegrityPlugin } = require('webpack-subresource-integrity');
+const WebpackAssetsManifest = require("webpack-assets-manifest");
+const isProduction = process.env.NODE_ENV === 'production';
 const config = {
   entry: './src/index.ts',
   context: path.resolve(__dirname),
@@ -49,16 +51,17 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'akasha.sdk.js',
-    library: 'awfSDK',
-    libraryTarget: 'umd',
-    publicPath: '/',
+    //library: 'awfSDK',
+    libraryTarget: 'system',
+    publicPath: process.env.NODE_ENV !== 'production'? '/sdk/': 'auto',
+    crossOriginLoading: 'anonymous',
   },
   target: ['web', 'es2020'],
   optimization: {
     moduleIds: 'deterministic',
     chunkIds: 'named',
     splitChunks: {
-      chunks: 'all',
+      chunks: 'async',
       minSize: 69000,
       minChunks: 2,
     },
@@ -71,7 +74,7 @@ const config = {
       systemvars: true,
     }),
     new webpack.DefinePlugin({
-      __DEV__: process.env.NODE_ENV !== 'production',
+      __DEV__: !isProduction,
     }),
     new webpack.ProgressPlugin({
       entries: true,
@@ -89,6 +92,10 @@ const config = {
       swDest: 'sw.js',
       exclude: [/.*?/],
     }),
+    new SubresourceIntegrityPlugin({
+      enabled: isProduction,
+    }),
+    new WebpackAssetsManifest({ integrity: true }),
   ],
   devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
   mode: process.env.NODE_ENV || 'development',

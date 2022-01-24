@@ -1,17 +1,16 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable */
 const webpack = require('webpack');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const commons = require('./app.pack.conf');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const Dotenv = require('dotenv-webpack');
-
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const { SubresourceIntegrityPlugin } = require("webpack-subresource-integrity");
+const WebpackAssetsManifest = require("webpack-assets-manifest");
 const isProduction = process.env.NODE_ENV === 'production';
 
-module.exports = {
+const outputMainFile = 'index.js';
+const exp = {
   entry: './src/index',
   mode: process.env.NODE_ENV || 'development',
   target: ['web', 'es2017'],
@@ -30,12 +29,24 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js'],
   },
   output: {
-    libraryTarget: 'umd',
+    libraryTarget: 'system',
     publicPath: 'auto',
-    filename: 'index.js',
+    filename: outputMainFile,
+    crossOriginLoading: 'anonymous',
   },
   plugins: [
     new CleanWebpackPlugin({ verbose: true }),
+    new WebpackManifestPlugin({
+      generate: (seed, files, entries) => {
+      const packageJson = require(path.join(process.cwd(), './package.json'));
+      return {
+        mainFile: outputMainFile,
+        license: packageJson.license,
+        description: packageJson.description,
+        keywords: packageJson.keywords || []
+      };
+      }
+    }),
     new Dotenv({
       path: path.resolve(__dirname, '../.env'),
       safe:
@@ -43,9 +54,13 @@ module.exports = {
       systemvars: true,
     }),
     new webpack.DefinePlugin({
-      __DEV__: process.env.NODE_ENV !== 'production',
+      __DEV__: !isProduction,
     }),
     new webpack.AutomaticPrefetchPlugin(),
+    new SubresourceIntegrityPlugin({
+      enabled: isProduction,
+    }),
+    new WebpackAssetsManifest({ integrity: true }),
     // new webpack.ProgressPlugin({
     //   entries: true,
     //   modules: true,
@@ -57,3 +72,5 @@ module.exports = {
   externals: commons.externals,
   optimization: commons.optimization,
 };
+
+module.exports = exp;

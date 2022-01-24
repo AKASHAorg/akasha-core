@@ -118,10 +118,7 @@ class Widgets extends BaseIntegration {
       if (this.widgetModules.hasOwnProperty(name)) {
         const widgetModule = this.widgetModules[name];
 
-        if (
-          widgetModule.hasOwnProperty('register') &&
-          typeof widgetModule.register === 'function'
-        ) {
+        if (typeof widgetModule?.register === 'function') {
           this.widgetConfigs[name] = (await widgetModule.register({
             layoutConfig: this.layoutConfig,
             uiEvents: this.uiEvents,
@@ -170,10 +167,10 @@ class Widgets extends BaseIntegration {
     }
 
     this.widgetModules[widgetInfo.name] = module;
-    if (module.hasOwnProperty('install') && typeof module.install === 'function') {
+    if (typeof module?.install === 'function') {
       await module.install();
     }
-    if (module.hasOwnProperty('register') && typeof module.register === 'function') {
+    if (typeof module?.register === 'function') {
       const widgetConfig = (await module.register({
         layoutConfig: this.layoutConfig,
         worldConfig: {

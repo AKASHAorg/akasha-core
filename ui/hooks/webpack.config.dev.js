@@ -12,7 +12,7 @@ config.devServer = {
 };
 config.output = {
   path: path.join(__dirname, 'dist'),
-  publicPath: '/',
+  publicPath: 'auto',
   filename: 'bundle.[hash].js',
 };
 
