@@ -53,7 +53,7 @@ const config = {
     filename: 'akasha.sdk.js',
     //library: 'awfSDK',
     libraryTarget: 'system',
-    publicPath: process.env.NODE_ENV !== 'production'? '/sdk/': 'auto',
+    publicPath: 'auto',
     crossOriginLoading: 'anonymous',
   },
   target: ['web', 'es2020'],

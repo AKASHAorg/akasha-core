@@ -1,3 +1,4 @@
+import 'systemjs-webpack-interop/auto-public-path';
 import routes, { rootRoute, SIGN_IN, SIGN_UP, SIGN_UP_USERNAME } from './routes';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import {

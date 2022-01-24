@@ -43,7 +43,7 @@ const overrides = [
     name: '@akashaproject/app-legal',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [
-      '${HOST}/apps/legal/index.js',
+      `${HOST}/apps/legal/index.js`,
       `https://bafybeigpnpgbi4euh4bl2d7jbaksdf7kzpmpnft3edtdve66cuypepzwuu.ipfs.infura-ipfs.io/index.js`,
     ],
   },
