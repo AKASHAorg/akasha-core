@@ -41,7 +41,6 @@
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-widget-feed": "*",
-    "@akashaproject/ui-widget-login-cta": "*",
     "@akashaproject/ui-awf-testing-utils": "*",
     "@akashaproject/ui-widget-trending": "*",
     "react-i18next": "11.12.0",
