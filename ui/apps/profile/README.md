@@ -5,20 +5,16 @@
 ## Usage
 
 ```tsx
-import AppLoader from '@akashaproject/ui-plugin-loader';
-import ProfilePlugin from '@akashaproject/ui-plugin-profile';
+import AppLoader from '@akashaproject/ui-app-loader';
+import ProfileApp from '@akashaproject/app-profile';
 
 // ...
 const app = new AppLoader(/* LoaderConfig */);
 
-app.registerPlugin(ProfilePlugin).then(() => {
+app.registerPlugin(ProfileApp).then(() => {
   app.start();
 });
 ```
-
-### State Management
-
-State management is done using `react-tracked` library.
 
 #### Folder structure:
 
@@ -160,35 +156,4 @@ const ProfileList = () => {
 ```
 
 One of the biggest advantages of this approach is that you would not end with a hard to manage mix between local and global states, and it ensures that all of the cases are covered (no more hard to maintain, 1km long `if/else` guards).
-
-### Immutability
-
-Is ensured by `Immer` library. By using a simple helper `handleActions` we wrap the whole action handlers in reducer with this library's `produce` utility. This means that in the action handler we actually receive a copy of the state (`draft`).
-
-Example:
-
-```js
-const reducer = handleActions(
-  {
-    ACTION_HANDLER_CONSTANT: (draft, payload) => {
-      // we can do what we want directly mutating
-      // the draft, without changing the actual state
-      draft = {
-        ...draft,
-        profiles: payload.profiles,
-      };
-
-      // when we are done we return the draft;
-      return draft;
-    },
-  },
-  initialState,
-);
-```
-
-Advanced Use:
-
-- we can use `Immer` for `undo` functionality
-- we can use react-tracked selectors to further improve performance (selectors are like redux-selectors)
-
 

@@ -1,6 +1,6 @@
 # Legal plugin
 
-> Legal plugin shows all legal docs related to the current world app.
+> The Legal app shows all legal docs related to the current world app.
 
 ## Usage
 
