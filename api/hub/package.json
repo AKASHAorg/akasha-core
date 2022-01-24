@@ -62,7 +62,7 @@
     "link-preview-js": "2.1.8",
     "lru-cache": "6.0.0",
     "mailgun-js": "^0.22.0",
-    "node-fetch": "2.6.6",
+    "node-fetch": "2.6.7",
     "node-abort-controller": "3.0.1",
     "object-hash": "2.2.0",
     "prom-client": "14.0.1",
