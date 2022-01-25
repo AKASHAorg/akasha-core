@@ -123,7 +123,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleSettingsClick = () => {
-    navigateToUrl('/settings-app');
+    navigateToUrl('/settings');
   };
 
   const handleFeedbackModalShow = () => {

@@ -97,19 +97,19 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
         <Checkbox
           checked={checked[TERMS]}
           label={checkboxLabelTerms}
-          setChecked={() => setChecked(prevState => ({ ...prevState, [TERMS]: !prevState[TERMS] }))}
+          onChange={() => setChecked(prevState => ({ ...prevState, [TERMS]: !prevState[TERMS] }))}
         />
         <Checkbox
           checked={checked[PRIVACY]}
           label={checkboxLabelPrivacy}
-          setChecked={() =>
+          onChange={() =>
             setChecked(prevState => ({ ...prevState, [PRIVACY]: !prevState[PRIVACY] }))
           }
         />
         <Checkbox
           checked={checked[CONDUCT]}
           label={checkboxLabelConduct}
-          setChecked={() =>
+          onChange={() =>
             setChecked(prevState => ({ ...prevState, [CONDUCT]: !prevState[CONDUCT] }))
           }
         />

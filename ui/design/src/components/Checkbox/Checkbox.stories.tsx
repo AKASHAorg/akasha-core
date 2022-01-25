@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Grommet } from 'grommet';
 import { useArgs } from '@storybook/client-api';
 
-import Checkbox, { CheckboxPropsExtended } from '.';
+import Checkbox, { CheckBoxProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -16,7 +16,7 @@ export default {
   },
 };
 
-const Template = (args: CheckboxPropsExtended) => {
+const Template = (args: CheckBoxProps) => {
   const [, updateArgs] = useArgs();
   const handle = () => updateArgs({ ...args, checked: !args.checked });
 
@@ -24,7 +24,7 @@ const Template = (args: CheckboxPropsExtended) => {
     <Grommet theme={lightTheme}>
       <Box justify="center" align="center">
         <Box width="581px" pad={{ top: 'large' }}>
-          <Checkbox {...args} setChecked={handle} />
+          <Checkbox {...args} onChange={handle} />
         </Box>
       </Box>
     </Grommet>

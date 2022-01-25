@@ -1,5 +1,5 @@
 export const HOME = 'Home';
-export const rootRoute = '/settings-app';
+export const rootRoute = '/settings';
 
 export default {
   [HOME]: `${rootRoute}`,

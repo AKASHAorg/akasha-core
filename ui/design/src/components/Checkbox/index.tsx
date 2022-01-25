@@ -1,14 +1,13 @@
-import { CheckBoxProps } from 'grommet';
+import { CheckBoxExtendedProps } from 'grommet';
 import React from 'react';
 import StyledCheckBox from './styled-checkbox';
 
-export interface CheckboxPropsExtended extends CheckBoxProps {
-  setChecked: () => void;
+export interface CheckBoxProps extends CheckBoxExtendedProps {
+  ref?: React.Ref<HTMLInputElement>;
 }
 
-const Checkbox = (props: CheckboxPropsExtended) => {
-  const { checked, setChecked, label } = props;
-  return <StyledCheckBox checked={checked} label={label} onChange={setChecked} />;
+const Checkbox: React.FC<CheckBoxProps> = props => {
+  return <StyledCheckBox {...props} />;
 };
 
 export default Checkbox;

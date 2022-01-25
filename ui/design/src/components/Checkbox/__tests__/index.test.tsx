@@ -12,7 +12,7 @@ describe('<Checkbox /> Component unchecked', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<Checkbox label={LABEL} setChecked={() => null} checked={false} />),
+        wrapWithTheme(<Checkbox label={LABEL} onChange={() => null} checked={false} />),
         {},
       );
     });
@@ -48,7 +48,7 @@ describe('<Checkbox /> Component checked', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<Checkbox label={LABEL} setChecked={() => null} checked={true} />),
+        wrapWithTheme(<Checkbox label={LABEL} onChange={() => null} checked={true} />),
         {},
       );
     });
