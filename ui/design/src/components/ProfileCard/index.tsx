@@ -10,7 +10,7 @@ import {
   ProfileCardDescription,
   ProfileCardName,
   ProfileCardEthereumId,
-} from './profile-card-fields/index';
+} from './profile-card-fields';
 import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
