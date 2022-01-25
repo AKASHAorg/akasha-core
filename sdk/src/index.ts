@@ -11,7 +11,8 @@ import Web3Connector from './common/web3.connector';
 import EventBus from './common/event-bus';
 import AWF_Auth from './auth';
 import AWF_Profile from './profiles';
-import AWF_ENS from './registry';
+import AWF_ENS from './registry/ens';
+import AWF_IC_REGISTRY from './registry/icRegistry';
 import AWF_Entry from './posts/entry';
 import AWF_Comments from './posts/comments';
 import AWF_Tags from './posts/tags';
@@ -39,6 +40,7 @@ export interface AWF_SDK {
     entries: AWF_Entry;
     comments: AWF_Comments;
     tags: AWF_Tags;
+    icRegistry: AWF_IC_REGISTRY;
   };
 }
 
@@ -68,6 +70,7 @@ export function init(): AWF_SDK {
   const tags = container.get<AWF_Tags>(TYPES.Tag);
   const ipfs = container.get<AWF_IpfsConnector>(TYPES.IPFS);
   const appSettings = container.get<AppSettings>(TYPES.AppSettings);
+  const icRegistry = container.get<AWF_IC_REGISTRY>(TYPES.ICRegistry);
   return {
     services: {
       log,
@@ -89,6 +92,7 @@ export function init(): AWF_SDK {
       entries,
       comments,
       tags,
+      icRegistry,
     },
   };
 }

@@ -117,6 +117,9 @@ const typeDefs = gql`
     integrationType: Int
     links: InfoLink
     sources: [String]
+    integrationID: String
+    author: String
+    enabled: Boolean
   }
 
   type Query {
@@ -138,8 +141,8 @@ const typeDefs = gql`
     getFollowing(pubKey: String!, limit: Int, offset: Int): ProfilesResult
     getCustomFeed(limit: Int, offset: Int): NewPostsResult
     getInterests(pubKey: String!): [String]
-    getLatestRelease(integrationNames: [String]): [IntegrationReleaseInfo]
-    getIntegrationInfo(integrationNames: [String]): [IntegrationInfo]
+    getLatestRelease(integrationIDs: [String]): [IntegrationReleaseInfo]
+    getIntegrationInfo(integrationIDs: [String]): [IntegrationInfo]
   }
 
   input DataProviderInput {

@@ -18,7 +18,9 @@ import { AbortController } from 'node-abort-controller';
 import { Worker } from 'worker_threads';
 import { create } from 'ipfs-http-client';
 import sharp from 'sharp';
+import { CID } from 'multiformats/cid';
 import { AuthorNotificationValue } from './collections/interfaces';
+import { ICRegistryAbi } from './abi';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -28,6 +30,11 @@ const INFURA_IPFS_ID = process.env.INFURA_IPFS_ID;
 const INFURA_IPFS_SECRET = process.env.INFURA_IPFS_SECRET;
 const IPFS_GATEWAY = process.env.IPFS_GATEWAY;
 export const isIpfsEnabled = INFURA_IPFS_ID && INFURA_IPFS_SECRET && IPFS_GATEWAY;
+
+export const web3Provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETWORK, {
+  projectId: process.env.AWF_FAUCET_ID,
+  projectSecret: process.env.AWF_FAUCET_SECRET,
+});
 
 let ipfsClient;
 if (isIpfsEnabled) {
@@ -318,8 +325,12 @@ export async function addToIpfs(link: string) {
   }
 }
 
-export function createIpfsGatewayLink(cid: string) {
-  return `https://${cid}.${IPFS_GATEWAY}`;
+export function createIpfsGatewayLink(hash: string | CID) {
+  const cid = typeof hash === 'string' ? CID.parse(hash) : CID.asCID(hash);
+  if (!cid) {
+    throw new Error(`Hash ${hash.toString()} is not a valid CID`);
+  }
+  return `https://${cid.toV1().toString()}.${IPFS_GATEWAY}`;
 }
 
 export async function getWalletOwners(
@@ -338,3 +349,27 @@ export async function getWalletOwners(
     return Promise.resolve([]);
   }
 }
+
+let IcRegistry: ethers.Contract;
+export const getIcRegistryContract = () => {
+  if (!IcRegistry) {
+    IcRegistry = new ethers.Contract(process.env.IC_REGISTRY_ADDRESS, ICRegistryAbi, web3Provider);
+  }
+  return IcRegistry;
+};
+
+export const multiAddrToUri = (addrList: string[]) => {
+  const results = [];
+  if (!addrList?.length) {
+    return results;
+  }
+  for (const addr of addrList) {
+    if (addr.substring(0, 6) === '/ipfs/') {
+      results.push(createIpfsGatewayLink(addr.substring(6)));
+    } //else {
+    // this package does not work on node
+    // results.push(multiaddrToUri(addr));
+    //}
+  }
+  return results;
+};

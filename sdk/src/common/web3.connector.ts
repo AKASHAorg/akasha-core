@@ -125,7 +125,8 @@ class Web3Connector
     if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
       return this.#web3Instance.getSigner();
     }
-    throw new Error('Must provider a signer!');
+    this.#log.warn('Must provider a signer!');
+    return;
   }
 
   /**

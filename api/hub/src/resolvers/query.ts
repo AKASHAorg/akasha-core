@@ -1,6 +1,15 @@
 import { commentsStats, statsProvider } from './constants';
-import { queryCache } from '../storage/cache';
+import { queryCache, registryCache } from '../storage/cache';
 import { ExtendedAuthor, PostOverride } from '../collections/interfaces';
+import { ethers } from 'ethers';
+import {
+  createIpfsGatewayLink,
+  fetchWithTimeout,
+  getIcRegistryContract,
+  multiAddrToUri,
+} from '../helpers';
+import { CID } from 'multiformats/cid';
+import { base16 } from 'multiformats/bases/base16';
 
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
@@ -227,11 +236,76 @@ const query = {
     const interests: string[] = await dataSources.profileAPI.getInterests(pubKey);
     return Array.from(interests);
   },
-  getIntegrationInfo: async (_source, { integrationNames }, { dataSources }) => {
-    //
+  getIntegrationInfo: async (_source, { integrationIDs }, { dataSources }) => {
+    const results = [];
+    const queryPrefix = '0xf-';
+    for (const integrationID of integrationIDs) {
+      const cacheKey = `${queryPrefix}${integrationID}`;
+      const hasKey = await registryCache.has(cacheKey);
+      if (hasKey) {
+        results.push(registryCache.get(cacheKey));
+        continue;
+      }
+      const data = await getIcRegistryContract().getPackageInfo(integrationID);
+      if (data.author === ethers.constants.AddressZero) {
+        results.push({
+          id: integrationID,
+        });
+        continue;
+      }
+      const integrationInfo = {
+        id: integrationID,
+        name: data.integrationName,
+        author: data.author,
+        latestReleaseId: data.latestReleaseId,
+        integrationType: data.integrationType,
+        enabled: data.enabled,
+      };
+      results.push(integrationInfo);
+      await registryCache.set(cacheKey, integrationInfo, 3600);
+    }
+    return results;
   },
-  getLatestRelease: async (_source, { integrationNames }, { dataSources }) => {
-    //
+  getLatestRelease: async (_source, { integrationIDs }, { dataSources }) => {
+    const results = [];
+    const queryPrefix = '0xfi-';
+    for (const integrationID of integrationIDs) {
+      const cacheKey = `${queryPrefix}${integrationID}`;
+      const hasKey = await registryCache.has(cacheKey);
+      if (hasKey) {
+        results.push(registryCache.get(cacheKey));
+        continue;
+      }
+      const pkgInfo = await getIcRegistryContract().getPackageInfo(integrationID);
+      if (pkgInfo.author === ethers.constants.AddressZero) {
+        results.push({
+          integrationID: integrationID,
+        });
+        continue;
+      }
+      const data = await getIcRegistryContract().getReleaseData(pkgInfo.latestReleaseId);
+      const cid = CID.parse('f' + data.manifestHash.substring(2), base16.decoder);
+      const ipfsLink = createIpfsGatewayLink(cid.toV1());
+      const d = await fetchWithTimeout(ipfsLink, {
+        timeout: 10000,
+        redirect: 'follow',
+      });
+      const { links, sources } = d.json();
+      const releaseInfo = {
+        id: pkgInfo.latestReleaseId,
+        name: data.integrationName,
+        version: data.version,
+        integrationType: data.integrationType,
+        links: links,
+        sources: multiAddrToUri(sources),
+        author: pkgInfo.author,
+        integrationID: integrationID,
+        enabled: pkgInfo.enabled,
+      };
+      results.push(releaseInfo);
+      await registryCache.set(cacheKey, releaseInfo, 3600);
+    }
+    return results;
   },
 };
 

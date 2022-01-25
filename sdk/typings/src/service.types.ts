@@ -14,6 +14,7 @@ const TYPES = {
   Comment: Symbol.for('awf-Comment'),
   Tag: Symbol.for('awf-Tag'),
   IPFS: Symbol.for('awf-IPFS'),
+  ICRegistry: Symbol.for('awf-ic-Registry'),
 };
 
 export default TYPES;

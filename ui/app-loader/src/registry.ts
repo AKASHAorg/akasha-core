@@ -7,7 +7,7 @@ import getSDK from '@akashaproject/awf-sdk';
 
 export const getReleaseInfo = async (releaseId: string) => {
   const sdk = getSDK();
-  return sdk.api.ens.getIntegrationReleaseInfo(releaseId);
+  return sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
 };
 
 export const getManifest = async manifestHash => {
@@ -22,9 +22,11 @@ export const getIntegrationInfo = async (integrationDef: {
   const sdk = getSDK();
   // if the latest version is specified in the config file
   if (integrationDef.version === 'latest') {
-    const integrationIdResp = await sdk.api.ens.getIntegrationId(integrationDef.name);
+    const integrationIdResp = await sdk.api.icRegistry.getIntegrationId(integrationDef.name);
     if (integrationIdResp.data?.id) {
-      const integrationInfo = await sdk.api.ens.getIntegrationInfo(integrationIdResp.data.id);
+      const integrationInfo = await sdk.api.icRegistry.getIntegrationInfo(
+        integrationIdResp.data.id,
+      );
       const release = await getReleaseInfo(integrationInfo.data.latestReleaseId);
       return {
         ...release.data,
@@ -32,7 +34,7 @@ export const getIntegrationInfo = async (integrationDef: {
     }
   }
   // if a specific version is specified in the config file
-  const releaseIdResp = await sdk.api.ens.getIntegrationReleaseId(
+  const releaseIdResp = await sdk.api.icRegistry.getIntegrationReleaseId(
     integrationDef.name,
     integrationDef.version,
   );

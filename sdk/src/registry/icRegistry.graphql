@@ -1,0 +1,35 @@
+fragment IntegrationInfoFragment on IntegrationInfo{
+  id
+  name
+  author
+  integrationType
+  latestReleaseId
+  enabled
+}
+
+fragment IntegrationReleaseInfoFragment on IntegrationReleaseInfo{
+  id
+  name
+  version
+  integrationType
+  sources
+  integrationID
+  author
+  enabled
+  links {
+    publicRepository
+    documentation
+  }
+}
+
+query GetLatestRelease($integrationIDs: [String]) {
+  getLatestRelease(integrationIDs: $integrationIDs){
+    ...IntegrationReleaseInfoFragment
+  }
+}
+
+query GetIntegrationInfo($integrationIDs: [String]) {
+  getIntegrationInfo(integrationIDs: $integrationIDs){
+    ...IntegrationInfoFragment
+  }
+}

@@ -1,5 +1,5 @@
 export interface ILRU {
-  set(key: string, value: unknown): Promise<void>;
+  set(key: string, value: unknown, ttl?: number): Promise<void>;
 
   get<T>(key: string): Promise<T>;
 

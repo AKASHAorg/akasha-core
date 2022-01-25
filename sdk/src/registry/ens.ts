@@ -7,10 +7,9 @@ import Settings from '../settings';
 import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { normalize } from 'eth-ens-namehash';
-import { constants as ethersConstants, ContractFactory, utils as ethersUtils } from 'ethers';
+import { ContractFactory } from 'ethers';
 import AkashaRegistrarABI from '../contracts/abi/AkashaRegistrar.json';
 import ReverseRegistrarABI from '../contracts/abi/ReverseRegistrar.json';
-import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
 import EnsABI from '../contracts/abi/ENS.json';
 import { AWF_IENS } from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { lastValueFrom } from 'rxjs';
@@ -48,15 +47,11 @@ class AWF_ENS implements AWF_IENS {
   private _ReverseRegistrarInstance;
   private _ENSinstance;
 
-  private _IntegrationRegistryInstance;
-
   public readonly REGISTRAR_ADDRESS = '0x9005a15eb865e8378e5cb9f45e8849ef1eC4F90B';
   public readonly RESOLVER_ADDRESS = '0xf6305c19e814d2a75429Fd637d01F7ee0E77d615';
   public readonly ENS_ADDRESS = '0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e';
   public readonly REVERSE_STRING =
     '0x91d1777781884d03a6757a803996e38de2a42967fb37eeaca72729271025a9e2';
-
-  public readonly INTEGRATION_REGISTRY_ADDRESS = '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9';
 
   constructor(
     @inject(TYPES.Log) log: Logging,
@@ -168,7 +163,6 @@ class AWF_ENS implements AWF_IENS {
     }
     const AkashaRegistrar = await ContractFactory.fromSolidity(AkashaRegistrarABI);
     const ReverseRegistrar = await ContractFactory.fromSolidity(ReverseRegistrarABI);
-    const IntegrationRegistry = await ContractFactory.fromSolidity(IntegrationRegistryABI);
     const ENS = await ContractFactory.fromSolidity(EnsABI);
     const signer = this._web3.getSigner();
     this._AkashaRegistrarInstance = await AkashaRegistrar.connect(signer);
@@ -186,77 +180,6 @@ class AWF_ENS implements AWF_IENS {
     this._ReverseRegistrarInstance = await ReverseRegistrar.connect(signer);
     this._ReverseRegistrarInstance = await this._ReverseRegistrarInstance.attach(reverseAddress);
     await this._ReverseRegistrarInstance.deployed();
-
-    this._IntegrationRegistryInstance = await IntegrationRegistry.attach(
-      this.INTEGRATION_REGISTRY_ADDRESS,
-    ).connect(signer);
-  }
-
-  async getIntegrationInfo(integrationId: string) {
-    const data = await this._IntegrationRegistryInstance.getPackageInfo(integrationId);
-    return createFormattedValue({
-      id: integrationId,
-      name: data.integrationName,
-      author: data.author,
-      latestReleaseId: data.latestReleaseId,
-      integrationType: data.integrationType,
-      enabled: data.latestReleaseId,
-    });
-  }
-
-  async getIntegrationReleaseInfo(releaseId: string) {
-    const data = await this._IntegrationRegistryInstance.getReleaseData(releaseId);
-    const manifestData = await lastValueFrom(
-      this._ipfs.catDocument(
-        this._ipfs.transformBase16HashToV1(
-          // replace 0x prefix with 'f' - base16 CID encoding
-          'f' + data.manifestHash.substring(2),
-        ),
-      ),
-    );
-    const { links, sources } = JSON.parse(manifestData.data);
-
-    return createFormattedValue({
-      id: releaseId,
-      name: data.integrationName,
-      version: data.version,
-      integrationType: data.integrationType,
-      links: links,
-      sources: this._ipfs.multiAddrToUri(sources),
-    });
-  }
-
-  async getIntegrationsCount() {
-    const data = await this._IntegrationRegistryInstance.numPackageIds();
-    return createFormattedValue({
-      totalCount: data.totalCount,
-    });
-  }
-
-  async getAllIntegrationsIds(offset = 0) {
-    const data = await this._IntegrationRegistryInstance.getAllPackageIds(offset);
-    return createFormattedValue({
-      integrationIds: data.integrationIds.filter(x => x !== ethersConstants.HashZero),
-      nextIndex: data.next,
-    });
-  }
-
-  async getAllIntegrationReleaseIds(integrationName: string, offset = 0) {
-    const data = await this._IntegrationRegistryInstance.getAllReleaseIds(integrationName, offset);
-    return createFormattedValue({
-      releaseIds: data.releaseIds.filter(x => x !== ethersConstants.HashZero),
-      nextIndex: data.next,
-    });
-  }
-
-  async getIntegrationId(name: string) {
-    const data = ethersUtils.id(name);
-    return Promise.resolve(createFormattedValue({ id: data }));
-  }
-
-  async getIntegrationReleaseId(name: string, version: string) {
-    const data = ethersUtils.id(name + version);
-    return Promise.resolve(createFormattedValue({ id: data }));
   }
 
   public getContracts() {
@@ -264,7 +187,6 @@ class AWF_ENS implements AWF_IENS {
       AkashaRegistrarInstance: this._AkashaRegistrarInstance,
       ENSinstance: this._ENSinstance,
       ReverseRegistrarInstance: this._ReverseRegistrarInstance,
-      IntegrationRegistryInstance: this._IntegrationRegistryInstance,
     };
   }
 }

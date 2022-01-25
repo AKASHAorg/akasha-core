@@ -16,10 +16,10 @@ export class RedisLRU implements ILRU {
     });
   }
 
-  public async set(key: string, value: unknown) {
+  public async set(key: string, value: unknown, ttl = 86400) {
     try {
       const _value = stringify(value);
-      return this.cache.set(`${this.prefix}${key}`, _value, { ttl: 86400 });
+      return this.cache.set(`${this.prefix}${key}`, _value, { ttl: ttl });
     } catch (e) {
       logger.warn(`error setting ${key}`);
       logger.error(e);

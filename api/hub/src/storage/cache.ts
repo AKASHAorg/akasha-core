@@ -17,3 +17,12 @@ export const queryCache: ILRU = redisCache
         updateAgeOnGet: true,
       }),
     );
+
+export const registryCache: ILRU = redisCache
+  ? new RedisLRU(redisCache)
+  : new MemLRU(
+      new LRU({
+        max: 12000,
+        maxAge: 1000 * 60 * 60,
+      }),
+    );

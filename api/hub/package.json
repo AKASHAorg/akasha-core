@@ -62,6 +62,7 @@
     "link-preview-js": "2.1.8",
     "lru-cache": "6.0.0",
     "mailgun-js": "^0.22.0",
+    "multiformats": "9.6.1",
     "node-fetch": "2.6.7",
     "node-abort-controller": "3.0.1",
     "object-hash": "2.2.0",
