@@ -1,3 +1,4 @@
+import 'systemjs-webpack-interop/auto-public-path';
 /* Components */
 import {
   Box,

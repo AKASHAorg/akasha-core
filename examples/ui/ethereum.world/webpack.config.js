@@ -12,12 +12,14 @@ module.exports = Object.assign(baseConfig, {
   entry: './src/index',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    filename: 'main.js',
+    crossOriginLoading: 'anonymous',
   },
   plugins: baseConfig.plugins.concat([
     new CopyPlugin({
       patterns: [
         { from: path.resolve(__dirname, '../../../ui/build') },
-        { from: path.resolve(__dirname, '../../../sdk/dist') },
+        { from: path.resolve(__dirname, '../../../sdk/dist'), to: 'sdk' },
         { from: path.resolve(__dirname, '../../../locales'), to: 'locales' },
       ],
     }),

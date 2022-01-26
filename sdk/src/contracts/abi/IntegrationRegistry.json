@@ -115,7 +115,7 @@
       "outputs": [
         {
           "internalType": "bytes32[16]",
-          "name": "packageIds",
+          "name": "integrationIds",
           "type": "bytes32[16]"
         },
         {
@@ -144,7 +144,7 @@
       "outputs": [
         {
           "internalType": "bytes32[16]",
-          "name": "integrationIds",
+          "name": "releaseIds",
           "type": "bytes32[16]"
         },
         {
@@ -185,6 +185,11 @@
           "internalType": "bytes32",
           "name": "latestReleaseId",
           "type": "bytes32"
+        },
+        {
+          "internalType": "enum AbstractIntegrationRegistry.IntegrationType",
+          "name": "integrationType",
+          "type": "uint8"
         }
       ],
       "stateMutability": "view",
@@ -233,6 +238,11 @@
           "internalType": "bytes32",
           "name": "manifestHash",
           "type": "bytes32"
+        },
+        {
+          "internalType": "enum AbstractIntegrationRegistry.IntegrationType",
+          "name": "integrationType",
+          "type": "uint8"
         }
       ],
       "stateMutability": "view",
@@ -332,7 +342,7 @@
           "type": "bytes32"
         },
         {
-          "internalType": "enum IntegrationRegistry.IntegrationType",
+          "internalType": "enum AbstractIntegrationRegistry.IntegrationType",
           "name": "_integrationType",
           "type": "uint8"
         }

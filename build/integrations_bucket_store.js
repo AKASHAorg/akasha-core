@@ -21,29 +21,28 @@ const format = require('multiformats/bases/base16');
         'Basic ' + Buffer.from(process.env.INFURA_IPFS_ID + ':' + process.env.INFURA_IPFS_SECRET).toString('base64'),
     },
   });
-  const TYPE_APP = 'app';
-  const TYPE_PLUGIN = 'plugin';
-  const TYPE_WIDGET = 'widget';
+  const TYPE_APP = 0;
+  const TYPE_PLUGIN = 1;
+  const TYPE_WIDGET = 2;
   const sources = [
     {package: { name: 'locales'}, type: '', path: path.resolve(__dirname, '..', 'locales')},
     // apps
-    {package: require('../apps/akasha/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'akasha')},
-    {package: require('../apps/auth-app/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'auth-app')},
-    {package: require('../apps/moderation/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'moderation')},
-    // plugins
-    {package: require('../ui/plugins/app-center/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/plugins', 'app-center')},
-    {package: require('../ui/plugins/bookmarks/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/plugins', 'bookmarks')},
-    {package: require('../ui/plugins/legal/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/plugins', 'legal')},
-    {package: require('../ui/plugins/notifications/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/plugins', 'notifications')},
-    {package: require('../ui/plugins/profile/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/plugins', 'profile')},
-    {package: require('../ui/plugins/search/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/plugins', 'search')},
+    {package: require('../ui/apps/akasha/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'akasha')},
+    {package: require('../ui/apps/auth-app/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'auth-app')},
+    {package: require('../ui/apps/moderation/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'moderation')},
+    {package: require('../ui/apps/app-center/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'app-center')},
+    {package: require('../ui/apps/bookmarks/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'bookmarks')},
+    {package: require('../ui/apps/legal/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'legal')},
+    {package: require('../ui/apps/notifications/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'notifications')},
+    {package: require('../ui/apps/profile/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'profile')},
+    {package: require('../ui/apps/search/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'search')},
+    {package: require('../ui/apps/settings-app/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'settings-app')},
     // widgets
-    {package: require('../ui/widgets/feed/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'feed')},
     {package: require('../ui/widgets/layout/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'layout')},
-    {package: require('../ui/widgets/login-cta/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'login-cta')},
     {package: require('../ui/widgets/sidebar/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'sidebar')},
     {package: require('../ui/widgets/top-bar/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'topbar')},
-    {package: require('../ui/widgets/trending/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'trending')}
+    {package: require('../ui/widgets/trending/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'trending')},
+    {package: require('../ui/widgets/analytics/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'analytics')}
   ]
   const results = [];
   for(const source of sources) {
@@ -52,7 +51,7 @@ const format = require('multiformats/bases/base16');
       process.env.HUB_KEY,
       process.env.HUB_SECRET,
       process.env.HUB_THREAD,
-      path.join(process.env.HUB_NAME,source.type, source.package.name),
+      path.join(process.env.HUB_NAME,source.type.toString(), source.package.name),
       'false',
       '**/*',
       source.path,
@@ -66,11 +65,12 @@ const format = require('multiformats/bases/base16');
       }, null, 2)
     }
     const ipfsManifest = await ipfsClient.add(manifestData, {hashAlg: 'sha3-224', cidVersion: 1, pin: true});
+    console.info('deployed: ', source.package.name);
     results.push({
       name: source.package.name,
-      ipfs: output.get('ipfs'),
       id: ethers.utils.id(source.package.name),
-      ipfsManifest: ipfsManifest.cid.toString(format.base16.encoder)
+      ipfsManifest: ipfsManifest.cid.toString(format.base16.encoder),
+      type: source.type
     });
   }
   fs.writeFileSync(path.resolve(__dirname, './integrations_bucket.json'), JSON.stringify(results, null, 2));

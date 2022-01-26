@@ -56,7 +56,7 @@ class Apps extends BaseIntegration {
       if (this.appModules.hasOwnProperty(name)) {
         const appModule = this.appModules[name];
 
-        if (appModule.hasOwnProperty('register') && typeof appModule.register === 'function') {
+        if (typeof appModule?.register === 'function') {
           this.appConfigs[name] = (await appModule.register({
             layoutConfig: this.layoutConfig,
             worldConfig: {
@@ -201,10 +201,10 @@ class Apps extends BaseIntegration {
       return;
     }
     this.appModules[appInfo.name] = module;
-    if (module.hasOwnProperty('install') && typeof module.install === 'function') {
+    if (typeof module?.install === 'function') {
       await module.install();
     }
-    if (module.hasOwnProperty('register') && typeof module.register === 'function') {
+    if (typeof module?.register === 'function') {
       const appConfig = (await module.register({
         layoutConfig: this.layoutConfig,
         worldConfig: {

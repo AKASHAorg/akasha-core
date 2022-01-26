@@ -1,3 +1,4 @@
+import 'systemjs-webpack-interop/auto-public-path';
 import constants from './constants';
 import { createPendingEntry, mapEntry } from './utils/entry-utils';
 import { getMediaUrl, uploadMediaToTextile, getLinkPreview } from './utils/media-utils';

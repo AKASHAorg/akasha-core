@@ -5,7 +5,7 @@ console.time('AppLoader:firstMount');
 declare const __DEV__: boolean;
 
 (async function bootstrap(System) {
-  const { default: Loader } = await System.import('@akashaproject/app-loader');
+  const { default: Loader } = await System.import('@akashaproject/ui-app-loader');
   const { default: getSDK } = await System.import('@akashaproject/awf-sdk');
 
   const sdkConfig: ISdkConfig = {

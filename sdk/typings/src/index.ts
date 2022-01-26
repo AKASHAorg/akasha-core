@@ -2,7 +2,7 @@ import TYPES from './service.types';
 import Services from './service.interfaces';
 import { Observable } from 'rxjs';
 import { AWF_IAuth } from './interfaces';
-import { AWF_IENS } from './interfaces/registry';
+import { AWF_IIC_REGISTRY, AWF_IENS } from './interfaces/registry';
 import AWF_IProfile from './interfaces/profile';
 import { AWF_IComments, AWF_IEntry, AWF_ITags } from './interfaces/posts';
 import * as events from './interfaces/events';
@@ -17,6 +17,7 @@ export interface IAwfSDK {
     entries: AWF_IEntry;
     tags: AWF_ITags;
     comments: AWF_IComments;
+    icRegistry: AWF_IIC_REGISTRY;
   };
 }
 export { Services };
