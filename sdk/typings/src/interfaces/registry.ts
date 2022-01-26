@@ -28,4 +28,8 @@ export interface AWF_IIC_REGISTRY {
   getIntegrationId(name: string): Promise<unknown>;
 
   getIntegrationReleaseId(name: string, version: string): Promise<unknown>;
+
+  getLatestReleaseInfo(opt: unknown): Observable<unknown>;
+
+  getIntegrationsInfo(opt: unknown): Observable<unknown>;
 }

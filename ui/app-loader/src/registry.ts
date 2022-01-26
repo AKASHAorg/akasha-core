@@ -17,11 +17,11 @@ export const getManifest = async manifestHash => {
 
 export const getIntegrationInfo = async (integrationDef: {
   name: string;
-  version: string;
+  version?: string;
 }): Promise<BaseIntegrationInfo> => {
   const sdk = getSDK();
   // if the latest version is specified in the config file
-  if (integrationDef.version === 'latest') {
+  if (integrationDef?.version === 'latest') {
     const integrationIdResp = await sdk.api.icRegistry.getIntegrationId(integrationDef.name);
     if (integrationIdResp.data?.id) {
       const integrationInfo = await sdk.api.icRegistry.getIntegrationInfo(

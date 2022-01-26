@@ -42,7 +42,7 @@ class Gql implements IGqlClient<unknown> {
    */
   run<T>(operation: GraphQLRequest, saveCache = true): ServiceCallResult<T> {
     const opHash = this._stash.computeKey(operation);
-    if (this._gqlStash.has(opHash) && saveCache) {
+    if (this._gqlStash?.has(opHash) && saveCache) {
       return createObservableValue<T>(this._gqlStash.get(opHash));
     }
     if (!saveCache) {

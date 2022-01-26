@@ -17,7 +17,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
 import * as rxjsOperators from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
 import { getIntegrationInfo } from './registry';
@@ -70,7 +70,7 @@ export default class AppLoader {
    */
   private readonly worldConfig: ILoaderConfig & ISdkConfig;
   private readonly loaderLogger: ILogger;
-  private readonly sdk: IAwfSDK;
+  private readonly sdk: ReturnType<typeof getSDK>;
   private readonly menuItems: IMenuList;
   public layoutConfig?: LayoutConfig;
   private extensionPoints: Record<string, UIEventData['data'][]>;
@@ -524,7 +524,7 @@ export default class AppLoader {
   // get registry info for multiple packages
   public async getPackageInfos(packages: AppOrWidgetDefinition[]) {
     const integrationInfos: BaseIntegrationInfo[] = [];
-
+    const integrationsToSolve: { name: string; version?: string }[] = [];
     for (const pack of packages) {
       let name = pack;
       if (typeof pack === 'object') {
@@ -535,12 +535,18 @@ export default class AppLoader {
         integrationInfos.push(overrideInfo);
         continue;
       }
-      const info = await this.getPackageInfo(name);
-      if (info) {
-        integrationInfos.push(info);
-        continue;
+      integrationsToSolve.push(toNormalDef(name));
+    }
+
+    const response = await lastValueFrom(
+      this.sdk.api.icRegistry.getLatestReleaseInfo(integrationsToSolve),
+    );
+
+    if (response.data.length) {
+      for (const pkg of response.data) {
+        pkg.sources = pkg.sources.map(el => `${el}/index.js`);
       }
-      continue;
+      return integrationInfos.concat(response.data);
     }
     return integrationInfos;
   }
