@@ -3,7 +3,7 @@ import constants from './constants';
 import { createPendingEntry, mapEntry } from './utils/entry-utils';
 import { getMediaUrl, uploadMediaToTextile, getLinkPreview } from './utils/media-utils';
 import useGlobalLogin from './use-global-login';
-import useAnalytics from './use-analytics';
+import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-analytics';
 import withProviders from './utils/provider-hoc';
 import useReasons from './use-reasons';
 import { useQueryListener, useMutationListener } from './use-query-listener';
@@ -96,6 +96,8 @@ export {
   useGlobalLogin,
   // use-analytics
   useAnalytics,
+  CookieConsentTypes,
+  COOKIE_CONSENT_NAME,
   withProviders,
   useReasons,
   // entry-utils
