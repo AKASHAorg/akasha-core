@@ -6,4 +6,5 @@ module.exports = {
   locales: ['en'],
   verbose: true,
   keySeparator: false,
+  nsSeparator: null,
 };

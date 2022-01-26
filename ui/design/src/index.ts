@@ -12,6 +12,7 @@ import {
   Text,
   Carousel,
   Heading,
+  RadioButtonGroup,
 } from 'grommet';
 
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
@@ -256,6 +257,7 @@ const exported = {
   Image,
   Grommet,
   grommet,
+  RadioButtonGroup,
   ResponsiveContext,
   responsiveBreakpoints,
   ThemeContext,
