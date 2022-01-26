@@ -176,7 +176,7 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
   }
   getIntegrationsInfo(opt: { name?: string; id?: string }[]) {
     const normalizedIDs = this.#_normalizeIDs(opt);
-    return this._gql.run<IntegrationInfo[]>(
+    return this._gql.run<{ getIntegrationInfo: IntegrationInfo[] }>(
       {
         query: GetIntegrationInfo,
         variables: { integrationIDs: normalizedIDs },
@@ -187,7 +187,7 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
   }
   getLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
     const normalizedIDs = this.#_normalizeIDs(opt);
-    return this._gql.run<ReleaseInfo[]>(
+    return this._gql.run<{ getLatestRelease: ReleaseInfo[] }>(
       {
         query: GetLatestRelease,
         variables: { integrationIDs: normalizedIDs },
