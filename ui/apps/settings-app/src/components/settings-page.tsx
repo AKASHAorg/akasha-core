@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useAnalytics, CookieConsentTypes } from '@akashaproject/ui-awf-hooks';
+import { COOKIE_CONSENT_NAME, CookieConsentTypes } from '@akashaproject/ui-awf-hooks';
 // import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
@@ -10,26 +10,30 @@ const { Box, BasicCardBox, Text, RadioButtonGroup, Checkbox } = DS;
 const SettingsPage: React.FC<RootComponentProps> = () => {
   const { t } = useTranslation();
 
-  const [analytics, analyticsActions] = useAnalytics();
-
   const [theme, setTheme] = React.useState<string>('Light Theme');
-  const [checked, setChecked] = React.useState(analytics.consentType === CookieConsentTypes.ALL);
+  const cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
+  const [checked, setChecked] = React.useState(cookieType === CookieConsentTypes.ALL);
   const onChange = event => {
     setChecked(event.target.checked);
-    if (event.target.checked) {
-      if (analytics.cookieBannerDismissed) {
-        analyticsActions.optUserIn();
+    if (cookieType) {
+      if (event.target.checked) {
+        if (cookieType === CookieConsentTypes.ESSENTIAL) {
+          window.localStorage.setItem(COOKIE_CONSENT_NAME, CookieConsentTypes.ALL);
+          if (window['_paq']) {
+            window['_paq'].push(['forgetUserOptOut']);
+          }
+        }
       } else {
-        analyticsActions.acceptConsent(CookieConsentTypes.ALL);
+        window.localStorage.setItem(COOKIE_CONSENT_NAME, CookieConsentTypes.ESSENTIAL);
+        if (window['_paq']) {
+          window['_paq'].push(['optUserOut']);
+        }
       }
-    } else {
-      analyticsActions.optUserOut();
     }
   };
 
   return (
     <Box direction="column" gap="small">
-      <Text weight="bold" size="large">{`${t('Settings')}`}</Text>
       <BasicCardBox>
         <Box
           pad="medium"
@@ -37,7 +41,10 @@ const SettingsPage: React.FC<RootComponentProps> = () => {
           align="start"
           border={{ side: 'bottom', color: 'border' }}
         >
-          <Text textAlign="start" weight="bold">{`${t('Privacy')}`}</Text>
+          <Text weight="bold" size="large">{`${t('Settings')}`}</Text>
+        </Box>
+        <Box pad="medium" justify="center" align="start">
+          <Text textAlign="start" weight="bold" size="large">{`${t('Privacy')}`}</Text>
         </Box>
         <Box margin="medium" justify="center" align="start" gap="xsmall">
           <Text weight="bold">{`${t('Essential Cookies')}`}</Text>
@@ -82,7 +89,12 @@ const SettingsPage: React.FC<RootComponentProps> = () => {
               )}`}</Text>
             </div>
             <Box pad={{ top: 'small' }}>
-              <Checkbox checked={checked} onChange={onChange} toggle={true} />
+              <Checkbox
+                checked={checked}
+                onChange={onChange}
+                toggle={true}
+                disabled={!cookieType}
+              />
             </Box>
           </Box>
         </Box>
