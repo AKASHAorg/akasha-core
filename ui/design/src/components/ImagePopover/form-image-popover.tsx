@@ -70,9 +70,9 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
             {
               label: uploadLabel,
               icon: 'upload',
-              handler: () => {
+              handler: (ev: React.SyntheticEvent) => {
+                ev.stopPropagation();
                 handleUploadInputClick();
-                closePopover();
               },
             },
             ...(currentImage
@@ -80,9 +80,9 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
                   {
                     label: deleteLabel,
                     icon: 'trash',
-                    handler: () => {
+                    handler: (ev: React.SyntheticEvent) => {
+                      ev.stopPropagation();
                       handleDeleteClick();
-                      closePopover();
                     },
                   },
                 ]

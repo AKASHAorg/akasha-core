@@ -13,6 +13,7 @@ import { DescriptionSection } from './sections/DescriptionSection';
 import { ActionButtonsSection } from './sections/ActionButtonsSection';
 import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
+import getCroppedImage from '../../utils/get-cropped-image';
 
 export interface IBoxFormCardProps {
   className?: string;
@@ -114,6 +115,11 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     pubKey: '',
     ethAddress: '',
   });
+  // state values to handle image cropping
+  const [crop, setCrop] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [zoom, setZoom] = React.useState<number>(1);
+  const [rotation /* setRotation */] = React.useState<number>(0);
+  const [croppedAreaPixels, setCroppedAreaPixels] = React.useState(null);
 
   // required for popovers
   const avatarRef: React.RefObject<HTMLDivElement> = React.useRef(null);
@@ -186,6 +192,26 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(true);
   };
 
+  const onCropComplete = React.useCallback((_, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleCropImage = React.useCallback(async () => {
+    try {
+      const [cropped, imgUrl] = await getCroppedImage(
+        formValues.coverImage.preview,
+        croppedAreaPixels,
+        rotation,
+      );
+
+      return [cropped, imgUrl];
+    } catch (e) {
+      console.error(e);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [croppedAreaPixels, rotation]);
+
   const handleRevert = () => {
     setFormValues({
       avatar: { src: null, prefix: null, isUrl: false },
@@ -201,9 +227,20 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     }
   };
 
-  const handleSave = () => {
-    onSave(formValues, fieldsToUpdate);
+  const handleSave = async () => {
+    const [croppedImage, imgUrl] = await handleCropImage();
+
+    const modFormValues: IFormValues = {
+      ...formValues,
+      coverImage: {
+        ...formValues.coverImage,
+        src: croppedImage as string,
+        preview: imgUrl as string,
+      },
+    };
+    onSave(modFormValues, fieldsToUpdate);
   };
+
   const handleFormFieldChange = React.useCallback(
     (newValues: Record<string, unknown>) => {
       // setFormChanged(true);
@@ -315,9 +352,14 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           <CoverImageSection
             coverImageLabel={coverImageLabel}
             formValues={formValues}
+            crop={crop}
+            zoom={zoom}
             coverImagePopoverOpen={coverImagePopoverOpen}
             coverImageRef={coverImageRef}
             coverInputRef={coverInputRef}
+            setCrop={setCrop}
+            setZoom={setZoom}
+            onCropComplete={onCropComplete}
             handleCoverImageClick={handleCoverImageClick}
             handleCoverFileUpload={handleCoverFileUpload}
           />
@@ -380,7 +422,7 @@ BoxFormCard.defaultProps = {
   usernameLabel: 'Username',
   usernameFieldPlaceholder: 'username',
   usernameFieldInfo:
-    'Your username identifies you in Ethereum World. Once you choose one, you won’t be able to change it.',
+    "Your username identifies you in Ethereum World. Once you choose one, you won't be able to change it.",
   descriptionLabel: 'About',
   titleLabel: 'Ethereum Address',
   avatarLabel: 'Avatar',
