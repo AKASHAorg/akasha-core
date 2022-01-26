@@ -58,7 +58,7 @@ const exp = {
     }),
     new webpack.AutomaticPrefetchPlugin(),
     new SubresourceIntegrityPlugin({
-      enabled: isProduction,
+      enabled: false,
     }),
     new WebpackAssetsManifest({ integrity: true }),
     // new webpack.ProgressPlugin({
