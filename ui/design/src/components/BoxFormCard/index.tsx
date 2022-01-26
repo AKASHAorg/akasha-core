@@ -228,17 +228,23 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   const handleSave = async () => {
-    const [croppedImage, imgUrl] = await handleCropImage();
+    // if cover image is updated, crop before saving
+    // @TODO: do same for avatar upload
+    if (fieldsToUpdate.includes('coverImage')) {
+      const [croppedImage, imgUrl] = await handleCropImage();
 
-    const modFormValues: IFormValues = {
-      ...formValues,
-      coverImage: {
-        ...formValues.coverImage,
-        src: croppedImage as string,
-        preview: imgUrl as string,
-      },
-    };
-    onSave(modFormValues, fieldsToUpdate);
+      const modFormValues: IFormValues = {
+        ...formValues,
+        coverImage: {
+          ...formValues.coverImage,
+          src: croppedImage as string,
+          preview: imgUrl as string,
+        },
+      };
+      onSave(modFormValues, fieldsToUpdate);
+    } else {
+      onSave(formValues, fieldsToUpdate);
+    }
   };
 
   const handleFormFieldChange = React.useCallback(
