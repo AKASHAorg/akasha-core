@@ -36,6 +36,7 @@ const format = require('multiformats/bases/base16');
     {package: require('../ui/apps/notifications/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'notifications')},
     {package: require('../ui/apps/profile/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'profile')},
     {package: require('../ui/apps/search/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'search')},
+    {package: require('../ui/apps/settings-app/package.json'), type: TYPE_PLUGIN, path: path.resolve(__dirname, '../ui/build/apps', 'settings-app')},
     // widgets
     {package: require('../ui/widgets/layout/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'layout')},
     {package: require('../ui/widgets/sidebar/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'sidebar')},
@@ -64,6 +65,7 @@ const format = require('multiformats/bases/base16');
       }, null, 2)
     }
     const ipfsManifest = await ipfsClient.add(manifestData, {hashAlg: 'sha3-224', cidVersion: 1, pin: true});
+    console.info('deployed: ', source.package.name);
     results.push({
       name: source.package.name,
       id: ethers.utils.id(source.package.name),

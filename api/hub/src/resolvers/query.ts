@@ -290,7 +290,7 @@ const query = {
         timeout: 10000,
         redirect: 'follow',
       });
-      const { links, sources } = d.json();
+      const { links, sources } = await d.json();
       const releaseInfo = {
         id: pkgInfo.latestReleaseId,
         name: data.integrationName,

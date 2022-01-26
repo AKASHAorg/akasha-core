@@ -1,13 +1,27 @@
 /* eslint-disable */
 const { ethers, upgrades } = require('hardhat');
+//const pkgInfos = require('../../../../build/integrations_bucket.json');
 async function main() {
-  //const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
+  const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
   //const IntRegistrar = await upgrades.deployProxy(IntegrationRegistry);
   // const safe = '0x4941D523fa837A536B8bed834F6e6c807FAba24C';
   // await upgrades.admin.transferProxyAdminOwnership(safe);
   // const integrationRegistry = await IntegrationRegistry.attach(
-  //   '0x5E49595D7B3593a61Ed8e947c2cC23091cAB8BfC',
-  // );
+  //    '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9',
+  //  );
+  //
+  // for(const pkg of pkgInfos){
+  //   if(typeof pkg.type !== "number"){
+  //     continue;
+  //   }
+  //   await integrationRegistry.release(
+  //     pkg.name,
+  //     'v0.1.0',
+  //     '0x'+pkg.ipfsManifest.substring(1),
+  //     pkg.type,
+  //   );
+  //   console.log('deployed: ', pkg.name)
+  // }
   // const readIntegrationRegistry = await ethers.getContractAt(
   //   'IntegrationRegistry',
   //   '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9',
