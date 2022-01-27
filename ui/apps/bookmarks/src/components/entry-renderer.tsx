@@ -133,7 +133,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return `${t('You reported this')} ${stringEnd}}`;
   }, [t, accountAwaitingModeration, itemTypeName]);
 
-  const onEditButtonMount = (name: string) => {
+  const onExtPointMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
       data: {
@@ -144,7 +144,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     });
   };
 
-  const onEditButtonUnmount = () => {
+  const onExtPointUnmount = () => {
     /* todo */
   };
 
@@ -248,13 +248,20 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onEntryRemove={handleEntryRemove}
                   onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
                   modalSlotId={modalSlotId}
+                  actionsRightExt={
+                    <ExtensionPoint
+                      name={`entry-card-actions-right_${itemId}`}
+                      onMount={onExtPointMount}
+                      onUnmount={onExtPointUnmount}
+                    />
+                  }
                   headerMenuExt={
                     showEditButton && (
                       <ExtensionPoint
                         style={{ width: '100%' }}
                         name={`entry-card-edit-button_${itemId}`}
-                        onMount={onEditButtonMount}
-                        onUnmount={onEditButtonUnmount}
+                        onMount={onExtPointMount}
+                        onUnmount={onExtPointUnmount}
                       />
                     )
                   }

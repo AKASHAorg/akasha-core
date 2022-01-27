@@ -148,10 +148,18 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleBrandClick = () => {
-    if (!props.homepageApp) {
+    if (!props.worldConfig.homepageApp) {
       return;
     }
-    const homeAppRoutes = props.getAppRoutes(props.homepageApp);
+    let homepageAppName: string;
+    if (typeof props.worldConfig.homepageApp === 'string') {
+      homepageAppName = props.worldConfig.homepageApp;
+    }
+    if (typeof props.worldConfig.homepageApp === 'object') {
+      homepageAppName = props.worldConfig.homepageApp.name;
+    }
+
+    const homeAppRoutes = props.getAppRoutes(homepageAppName);
     if (homeAppRoutes && homeAppRoutes.hasOwnProperty('defaultRoute')) {
       if (location.pathname === homeAppRoutes.defaultRoute) {
         scrollTo(0, 0);
@@ -221,14 +229,17 @@ const TopbarComponent = (props: RootComponentProps) => {
         currentLocation={location?.pathname}
         onBrandClick={handleBrandClick}
         modalSlotId={props.layoutConfig.modalSlotId}
-      >
-        <ExtensionPoint
-          name={extensionPointsMap.QuickAccess}
-          shouldMount={!!loggedProfileData?.ethAddress}
-          onMount={name => onExtMount(name)}
-          onUnmount={name => onExtUnmount(name)}
-        />
-      </Topbar>
+        quickAccessExt={
+          loggedProfileData?.ethAddress && (
+            <ExtensionPoint
+              name={extensionPointsMap.QuickAccess}
+              shouldMount={!!loggedProfileData?.ethAddress}
+              onMount={name => onExtMount(name)}
+              onUnmount={name => onExtUnmount(name)}
+            />
+          )
+        }
+      />
     </ThemeSelector>
   );
 };

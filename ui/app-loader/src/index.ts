@@ -167,6 +167,8 @@ export default class AppLoader {
     singleSpa.start({
       urlRerouteOnly: true,
     });
+    // after 5 seconds move the integration to SKIP_BECAUSE_BROKEN status
+    singleSpa.setUnmountMaxTime(5000, true);
 
     const defaultIntegrations = [
       this.worldConfig.layout,
@@ -506,7 +508,18 @@ export default class AppLoader {
       this.loaderLogger.info(`extension point is unmounting: ${extPoint}`);
       const parcelData = this.findParcel(extPoint.name);
       if (parcelData) {
-        parcelData.parcel.unmount();
+        const status = parcelData.parcel.getStatus();
+        if (status === singleSpa.MOUNTED) {
+          parcelData.parcel
+            .unmount()
+            .then(() => {
+              delete this.extensionPoints[extensionData.name];
+              console.log(this.extensionParcels, this.extensionPoints, 'parcels and points');
+            })
+            .catch(() => {
+              delete this.extensionPoints[extensionData.name];
+            });
+        }
       }
     }
   }
@@ -627,6 +640,7 @@ export default class AppLoader {
       activeModal: this.activeModal,
       navigateTo: this.navigateTo.bind(this),
       parseQueryString: parseQueryString,
+      worldConfig: this.worldConfig,
     });
     return layoutParcel.mountPromise;
   }

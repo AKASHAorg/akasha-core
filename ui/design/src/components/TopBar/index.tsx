@@ -71,6 +71,7 @@ export interface ITopbarProps {
   onLogout: () => void;
   onBrandClick?: () => void;
   modalSlotId: string;
+  quickAccessExt?: React.ReactNode;
 }
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -114,6 +115,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     hasNewNotifications,
     onBrandClick,
     modalSlotId,
+    quickAccessExt,
   } = props;
 
   const [inputValue, setInputValue] = React.useState('');
@@ -354,7 +356,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           justify="end"
         >
           {!shouldRenderOnboarding && renderSearchArea()}
-          {props.children}
+          {quickAccessExt}
           {loggedProfileData?.ethAddress &&
             !shouldRenderOnboarding &&
             quickAccessItems &&

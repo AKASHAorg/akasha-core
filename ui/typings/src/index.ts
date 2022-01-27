@@ -61,10 +61,7 @@ export interface RootComponentProps {
   extensionData?: AppLoaderTypes.UIEventData['data'];
   homepageApp?: string;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
-  analytics?: {
-    trackerUrl: string;
-    siteId: string;
-  };
+  worldConfig: AppLoaderTypes.ILoaderConfig;
   navigateTo: (options: string | NavigationOptions | NavigationFn) => void;
   parseQueryString: (queryString: string) => QueryStringType;
 }

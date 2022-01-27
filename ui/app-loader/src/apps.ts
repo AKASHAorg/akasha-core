@@ -171,6 +171,7 @@ class Apps extends BaseIntegration {
         app: appConfig.loadingFn,
         activeWhen: location => this.checkActivityFn(appConfig, location),
         customProps: {
+          worldConfig: this.worldConfig,
           domElementGetter: () => this.getDomElement(appConfig, appName, 'app'),
           uiEvents: this.uiEvents,
           logger: this.sdk.services.log.create(appName),

@@ -9,7 +9,6 @@ import {
   useComment,
   useEditComment,
   mapEntry,
-  useGetBookmarks,
   useFollow,
   useIsFollowingMultiple,
   useUnfollow,
@@ -37,9 +36,7 @@ export interface IEntryRenderer {
   sharePostUrl: string;
   loginState: LoginState;
   locale: ILocale;
-  bookmarksQuery: ReturnType<typeof useGetBookmarks>;
   style?: React.CSSProperties;
-  onBookmark: (isBookmarked: boolean, entryId: string) => void;
   onFlag?: (entryId: string, itemType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
@@ -69,11 +66,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const {
     loginState,
     locale,
-    bookmarksQuery,
     itemId,
     itemType,
     style,
-    onBookmark,
     onFlag,
     onNavigate,
     singleSpaNavigate,
@@ -102,15 +97,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const handleTagQueryChange = (query: string) => {
     setTagQuery(query);
   };
-
-  const isBookmarked = React.useMemo(() => {
-    return (
-      bookmarksQuery.status === 'success' &&
-      itemId &&
-      Array.isArray(bookmarksQuery.data) &&
-      bookmarksQuery.data.findIndex(bm => bm.entryId === itemId) >= 0
-    );
-  }, [bookmarksQuery, itemId]);
 
   const { t } = useTranslation('ui-widget-feed');
 
@@ -223,11 +209,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     );
   };
 
-  const handleEntryBookmark = (entryId: string) => {
-    onBookmark(isBookmarked, entryId);
-  };
-
-  const onEditButtonMount = (name: string) => {
+  const handleExtensionMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
       data: {
@@ -238,10 +220,16 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
-  const onEditButtonUnmount = () => {
-    /* todo */
+  const handleExtensionUnmount = (_name: string) => {
+    // props.uiEvents.next({
+    //   event: EventTypes.ExtensionPointUnmount,
+    //   data: {
+    //     name,
+    //     entryId: itemId,
+    //     entryType: itemType,
+    //   },
+    // });
   };
-
   const handleFlipCard = () => {
     setShowAnyway(true);
   };
@@ -346,13 +334,11 @@ const EntryRenderer = (props: IEntryRenderer) => {
               <EntryCard
                 className={props.className}
                 isRemoved={itemData.isRemoved}
-                isBookmarked={isBookmarked}
                 entryData={itemData}
                 sharePostUrl={sharePostUrl}
                 sharePostLabel={t('Share Post')}
                 shareTextLabel={t('Share this post with your friends')}
                 onClickAvatar={handleAvatarClick}
-                onEntryBookmark={handleEntryBookmark}
                 repliesLabel={t('Replies')}
                 repostsLabel={t('Reposts')}
                 repostLabel={t('Repost')}
@@ -368,8 +354,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   ...(commentData && commentStyleExt),
                   display: isEditingComment ? 'none' : 'block',
                 }}
-                bookmarkLabel={t('Save')}
-                bookmarkedLabel={t('Saved')}
                 showMore={true}
                 profileAnchorLink={'/profile'}
                 repliesAnchorLink={'/social-app/post'}
@@ -394,14 +378,21 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 disableReporting={loginState.waitForAuth || loginState.isSigningIn}
                 hideActionButtons={hideActionButtons}
                 modalSlotId={modalSlotId}
+                actionsRightExt={
+                  <ExtensionPoint
+                    name={`entry-card-actions-right_${itemId}`}
+                    onMount={handleExtensionMount}
+                    onUnmount={handleExtensionUnmount}
+                  />
+                }
                 headerMenuExt={
                   showEditButton && (
                     <ExtensionPoint
                       style={{ width: '100%' }}
                       onClick={handleEditClick}
                       name={`entry-card-edit-button_${itemId}`}
-                      onMount={onEditButtonMount}
-                      onUnmount={onEditButtonUnmount}
+                      onMount={handleExtensionMount}
+                      onUnmount={handleExtensionUnmount}
                     />
                   )
                 }

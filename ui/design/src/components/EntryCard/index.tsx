@@ -136,6 +136,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         removedByAuthorLabel={removedByAuthorLabel}
         modalSlotId={modalSlotId}
         headerMenuExt={props.headerMenuExt}
+        actionsRightExt={props.actionsRightExt}
       />
     </MainAreaCardBox>
   );

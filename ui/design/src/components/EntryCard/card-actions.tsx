@@ -6,7 +6,7 @@ import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import TextIcon from '../TextIcon';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import MobileListModal from '../MobileListModal';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook' | 'copy';
 
@@ -47,21 +47,22 @@ export interface CardActionProps {
   disableReposting?: boolean;
   isModerated?: boolean;
   modalSlotId: string;
+  actionsRightExt?: React.ReactNode;
 }
 
-const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
-  svg * {
-    ${props => {
-      if (props.isBookmarked) {
-        return `
-          fill: ${props.theme.colors.blue};
-          stroke: ${props.theme.colors.blue};
-        `;
-      }
-      return '';
-    }}
-  }
-`;
+// const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
+//   svg * {
+//     ${props => {
+//       if (props.isBookmarked) {
+//         return `
+//           fill: ${props.theme.colors.blue};
+//           stroke: ${props.theme.colors.blue};
+//         `;
+//       }
+//       return '';
+//     }}
+//   }
+// `;
 
 const CardActions: React.FC<CardActionProps> = props => {
   const {
@@ -84,7 +85,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     copyLinkLabel,
     repliesAnchorLink,
     // handlers
-    handleEntryBookmark,
+    // handleEntryBookmark,
     onRepost,
     handleRepliesClick,
     onRepostWithComment,
@@ -93,6 +94,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     disableActions,
     isModerated,
     modalSlotId,
+    actionsRightExt,
   } = props;
 
   const [repostDropOpen, setRepostDropOpen] = React.useState(false);
@@ -281,7 +283,7 @@ const CardActions: React.FC<CardActionProps> = props => {
   const repliesBtnText = isMobile
     ? `${entryData.replies || 0}`
     : `${entryData.replies || 0} ${repliesLabel}`;
-  const bookmarkBtnText = isMobile ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
+  // const bookmarkBtnText = isMobile ? undefined : isBookmarked ? bookmarkedLabel : bookmarkLabel;
   const shareBtnText = isMobile ? undefined : shareLabel;
 
   if (isModerated) {
@@ -359,7 +361,7 @@ const CardActions: React.FC<CardActionProps> = props => {
           />
         }
       />
-      <BookmarkButton
+      {/* <BookmarkButton
         label={bookmarkBtnText}
         iconType="bookmark"
         iconSize="sm"
@@ -375,7 +377,8 @@ const CardActions: React.FC<CardActionProps> = props => {
         }}
         isBookmarked={isBookmarked}
         disabled={disableActions}
-      />
+      /> */}
+      {actionsRightExt}
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}
       {/* disable sharing for v0.1 */}
       {false && (

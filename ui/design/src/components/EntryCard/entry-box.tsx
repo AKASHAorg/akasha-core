@@ -102,6 +102,7 @@ export interface IEntryBoxProps {
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
   modalSlotId: string;
+  actionsRightExt?: React.ReactNode;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -162,6 +163,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     removedByAuthorLabel = 'This post was deleted by its author',
     editedLabel = 'Last edited',
     modalSlotId,
+    actionsRightExt,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -594,6 +596,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             disableActions={disableActions}
             isModerated={isModerated}
             modalSlotId={modalSlotId}
+            actionsRightExt={actionsRightExt}
           />
         )}
       </Box>
