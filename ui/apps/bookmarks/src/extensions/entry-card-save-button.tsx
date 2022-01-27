@@ -12,9 +12,8 @@ import {
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import Icon from '@akashaproject/design-system/lib/components/Icon';
 
-const { styled, TextIcon, ThemeSelector, lightTheme, darkTheme } = DS;
+const { styled, TextIcon, ThemeSelector, lightTheme, darkTheme, Icon } = DS;
 
 const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
   svg * {

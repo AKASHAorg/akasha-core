@@ -59,7 +59,6 @@ export interface RootComponentProps {
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
   activeModal: AppLoaderTypes.ModalNavigationOptions;
   extensionData?: AppLoaderTypes.UIEventData['data'];
-  homepageApp?: string;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
   worldConfig: AppLoaderTypes.ILoaderConfig;
   navigateTo: (options: string | NavigationOptions | NavigationFn) => void;

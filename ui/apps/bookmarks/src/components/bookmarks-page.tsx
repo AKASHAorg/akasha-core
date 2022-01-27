@@ -9,8 +9,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 const { ErrorLoader, Spinner, EntryList } = DS;
 
