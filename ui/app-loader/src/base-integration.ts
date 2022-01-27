@@ -10,15 +10,14 @@ import {
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
-import { BehaviorSubject } from 'rxjs';
 import { createRootNode } from './utils';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { IAwfSDK } from '@akashaproject/sdk-typings';
-import { NavigationOptions } from '@akashaproject/ui-awf-typings';
+import { NavigationOptions, RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 export interface BaseIntegrationClassOptions {
   layoutConfig: LayoutConfig;
-  uiEvents: BehaviorSubject<UIEventData>;
+  uiEvents: RootComponentProps['uiEvents'];
   worldConfig: ISdkConfig & ILoaderConfig;
   sdk: IAwfSDK;
   addMenuItem: (menuItem: IMenuItem) => void;
@@ -28,7 +27,7 @@ export interface BaseIntegrationClassOptions {
 
 class BaseIntegration {
   public layoutConfig: LayoutConfig;
-  public uiEvents: BehaviorSubject<UIEventData>;
+  public uiEvents: RootComponentProps['uiEvents'];
   public worldConfig: ISdkConfig & ILoaderConfig;
   public sdk: IAwfSDK;
   public addMenuItem: (menuItem: IMenuItem) => void;

@@ -93,8 +93,7 @@ class Widgets extends BaseIntegration {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { loadingFn, title, mountsIn, ...otherLayoutProps } = this.layoutConfig;
     const widgetProps = {
-      ...this.worldConfig,
-      ...widgetConfig,
+      worldConfig: this.worldConfig,
       layoutConfig: { ...otherLayoutProps },
       domElement: wrapperNode,
       globalChannel: this.sdk.api.globalChannel,
@@ -107,6 +106,7 @@ class Widgets extends BaseIntegration {
       getAppRoutes: this.getAppRoutes,
       navigateTo: this.navigateTo,
       parseQueryString: parseQueryString,
+      ...widgetConfig,
     };
 
     const widgetParcel = singleSpa.mountRootParcel(widgetConfig.loadingFn, widgetProps);

@@ -63,14 +63,21 @@ const setTheme = (
 const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
   const [loadedTheme, setLoadedTheme] = React.useState<{ name: string; theme: DefaultTheme }>();
   React.useEffect(() => {
+    let isUnmounted = false;
     if (!loadedTheme) {
       const desiredTheme = props.availableThemes.find(
         theme => theme.name === props.settings.activeTheme,
       );
       if (!desiredTheme) {
-        setFallbackTheme(props.availableThemes, setLoadedTheme);
+        setFallbackTheme(props.availableThemes, themeData => {
+          if (!isUnmounted) {
+            setLoadedTheme(themeData);
+          }
+        });
       } else {
-        setTheme(desiredTheme, setLoadedTheme);
+        if (!isUnmounted) {
+          setTheme(desiredTheme, setLoadedTheme);
+        }
       }
     } else {
       if (props.settings.activeTheme !== loadedTheme.name) {
@@ -78,12 +85,21 @@ const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
           theme => theme.name === props.settings.activeTheme,
         );
         if (!desiredTheme) {
-          setFallbackTheme(props.availableThemes, setLoadedTheme);
+          setFallbackTheme(props.availableThemes, themeData => {
+            if (!isUnmounted) {
+              setLoadedTheme(themeData);
+            }
+          });
         } else {
-          setTheme(desiredTheme, setLoadedTheme);
+          if (!isUnmounted) {
+            setTheme(desiredTheme, setLoadedTheme);
+          }
         }
       }
     }
+    () => {
+      isUnmounted = true;
+    };
   }, [loadedTheme, props.availableThemes, props.settings.activeTheme]);
   React.useEffect(() => {
     if (props.themeReadyEvent) {

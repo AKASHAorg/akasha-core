@@ -10,9 +10,7 @@ import {
   flagAsLabel,
   repliesLabel,
   repostsLabel,
-  bookmarkLabel,
   copyLinkLabel,
-  bookmarkedLabel,
 } from '../../../utils/dummy-data';
 import userEvent from '@testing-library/user-event';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
@@ -29,16 +27,13 @@ describe('<EntryCard /> Component', () => {
           <EntryCard
             modalSlotId={''}
             style={{ height: 'auto' }}
-            isBookmarked={false}
             entryData={entryData as IEntryData}
             shareLabel={shareLabel}
             flagAsLabel={flagAsLabel}
             isFollowingAuthor={false}
             repostsLabel={repostsLabel}
             repliesLabel={repliesLabel}
-            bookmarkLabel={bookmarkLabel}
             copyLinkLabel={copyLinkLabel}
-            bookmarkedLabel={bookmarkedLabel}
             locale={'en'}
             repostLabel={'Repost'}
             sharePostLabel={'Share Post'}

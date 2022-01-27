@@ -9,7 +9,7 @@ export {
   PROFILE_EVENTS,
   WEB3_EVENTS,
 } from '@akashaproject/sdk-typings/lib/interfaces/events';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
 
@@ -46,7 +46,7 @@ export interface QueryStringType {
 export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
-  uiEvents: BehaviorSubject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
+  uiEvents: Subject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
   i18n?: typeof i18n;
   getMenuItems?: () => AppLoaderTypes.IMenuList;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
@@ -59,12 +59,8 @@ export interface RootComponentProps {
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
   activeModal: AppLoaderTypes.ModalNavigationOptions;
   extensionData?: AppLoaderTypes.UIEventData['data'];
-  homepageApp?: string;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
-  analytics?: {
-    trackerUrl: string;
-    siteId: string;
-  };
+  worldConfig: AppLoaderTypes.ILoaderConfig;
   navigateTo: (options: string | NavigationOptions | NavigationFn) => void;
   parseQueryString: (queryString: string) => QueryStringType;
 }

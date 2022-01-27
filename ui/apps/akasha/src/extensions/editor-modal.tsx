@@ -45,7 +45,6 @@ const EditorModalContainer = (props: RootComponentProps) => {
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
 
-  // const [mentionsState, mentionsActions] = useMentions({});
   const isEditing = React.useMemo(
     () => props.activeModal.hasOwnProperty('entryId') && props.activeModal.action === 'edit',
     [props.activeModal],

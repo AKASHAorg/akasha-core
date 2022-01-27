@@ -9,8 +9,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 const { ErrorLoader, Spinner, EntryList } = DS;
 
@@ -35,13 +33,6 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
   const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && loginQuery.data?.ethAddress);
   const bookmarks = bookmarksReq.data;
-  const deleteBookmark = useDeleteBookmark();
-
-  const handleBookmarkClick = (entryId: string) => {
-    if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
-      deleteBookmark.mutate(entryId);
-    }
-  };
 
   const handleMentionClick = (profileEthAddress: string) => {
     props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
@@ -101,7 +92,6 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                   singleSpa={singleSpa}
                   bookmarks={bookmarksReq.data}
                   loginState={loginQuery.data}
-                  onBookmark={handleBookmarkClick}
                   onNavigate={handleNavigation}
                   onRepost={handleRepost}
                   onAvatarClick={handleAvatarClick}
