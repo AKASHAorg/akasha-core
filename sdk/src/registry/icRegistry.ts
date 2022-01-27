@@ -48,7 +48,7 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
 
   private _IntegrationRegistryInstance;
 
-  public readonly INTEGRATION_REGISTRY_ADDRESS = '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9';
+  public readonly INTEGRATION_REGISTRY_ADDRESS = process.env.INTEGRATION_REGISTRY_ADDRESS;
   readonly graphQLDocs = {
     GetLatestRelease,
     GetIntegrationInfo,
