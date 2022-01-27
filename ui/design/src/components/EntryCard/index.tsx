@@ -36,10 +36,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     style,
     className,
     rootNodeRef,
-    onEntryBookmark,
-    isBookmarked,
-    bookmarkLabel,
-    bookmarkedLabel,
     showMore,
     profileAnchorLink,
     repliesAnchorLink,
@@ -100,10 +96,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         copyLinkLabel={copyLinkLabel}
         locale={locale}
         loggedProfileEthAddress={loggedProfileEthAddress}
-        onEntryBookmark={onEntryBookmark}
-        isBookmarked={isBookmarked}
-        bookmarkLabel={bookmarkLabel}
-        bookmarkedLabel={bookmarkedLabel}
         showMore={showMore}
         profileAnchorLink={profileAnchorLink}
         repliesAnchorLink={repliesAnchorLink}

@@ -33,13 +33,6 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
   const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && loginQuery.data?.ethAddress);
   const bookmarks = bookmarksReq.data;
-  const deleteBookmark = useDeleteBookmark();
-
-  const handleBookmarkClick = (entryId: string) => {
-    if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
-      deleteBookmark.mutate(entryId);
-    }
-  };
 
   const handleMentionClick = (profileEthAddress: string) => {
     props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
@@ -99,7 +92,6 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                   singleSpa={singleSpa}
                   bookmarks={bookmarksReq.data}
                   loginState={loginQuery.data}
-                  onBookmark={handleBookmarkClick}
                   onNavigate={handleNavigation}
                   onRepost={handleRepost}
                   onAvatarClick={handleAvatarClick}

@@ -60,7 +60,7 @@ interface SingleSpaEventDetail {
  * ```
  */
 
-/* eslint-disable complexity */
+/*eslint-disable complexity*/
 export default class AppLoader {
   public readonly uiEvents: Subject<UIEventData>;
 

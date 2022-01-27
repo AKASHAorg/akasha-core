@@ -22,10 +22,8 @@ export interface IEntryCardRendererProps {
   singleSpa: RootComponentProps['singleSpa'];
   itemId?: string;
   itemData?: IEntryData;
-  isBookmarked?: boolean;
   locale?: ILocale;
   loginState: LoginState;
-  onBookmark: (entryId: string) => void;
   onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
   onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
@@ -210,13 +208,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               {!entryAwaitingModeration && !accountAwaitingModeration && !itemData.delisted && (
                 <EntryCard
                   isRemoved={itemData.isRemoved}
-                  isBookmarked={true}
                   entryData={itemData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
                   sharePostUrl={props.sharePostUrl}
                   onClickAvatar={handleClickAvatar}
-                  onEntryBookmark={props.onBookmark}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
                   repostLabel={t('Repost')}
@@ -227,8 +223,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
                   locale={locale || 'en'}
                   style={{ height: 'auto', ...style }}
-                  bookmarkLabel={t('Save')}
-                  bookmarkedLabel={t('Saved')}
                   moderatedContentLabel={t('This content has been moderated')}
                   editedLabel={t('Last edited')}
                   showMore={true}
