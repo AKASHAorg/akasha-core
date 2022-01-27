@@ -41,7 +41,7 @@ module.exports = {
     moduleIds: 'deterministic',
     chunkIds: 'named',
     splitChunks: {
-      chunks: 'all',
+      chunks: 'async',
       minSize: 69000,
       minChunks: 2,
     },

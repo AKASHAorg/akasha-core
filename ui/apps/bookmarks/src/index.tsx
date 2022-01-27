@@ -1,10 +1,8 @@
-// import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import 'systemjs-webpack-interop/auto-public-path';
 import { rootRoute } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
-  // IWidgetConfig,
-  // MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
@@ -58,11 +56,4 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     },
   ],
   title: 'Bookmarks | Ethereum World',
-  // menuItems: {
-  //   label: 'Bookmarks',
-  //   route: rootRoute,
-  //   area: MenuItemAreaType.QuickAccessArea,
-  //   name: 'app-bookmarks',
-  //   logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
-  // },
 });

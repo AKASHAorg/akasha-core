@@ -96,3 +96,18 @@ declare module '*/comments.graphql' {
     RemoveComment,
   };
 }
+
+declare module '*/icRegistry.graphql' {
+  import { FragmentSpreadNode, TypedQueryDocumentNode } from 'graphql';
+  const IntegrationInfoFragment: FragmentSpreadNode;
+  const IntegrationReleaseInfoFragment: FragmentSpreadNode;
+  const GetLatestRelease: TypedQueryDocumentNode;
+  const GetIntegrationInfo: TypedQueryDocumentNode;
+
+  export {
+    IntegrationInfoFragment,
+    IntegrationReleaseInfoFragment,
+    GetLatestRelease,
+    GetIntegrationInfo,
+  };
+}

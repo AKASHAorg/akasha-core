@@ -18,7 +18,7 @@ export const getNameFromDef = (def: AppOrWidgetDefinition) => {
 
 export const toNormalDef = (
   def: AppOrWidgetDefinition,
-): { name: string; version: string } | null => {
+): { name: string; version?: string } | null => {
   if (typeof def === 'string') {
     return {
       name: def,

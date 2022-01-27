@@ -9,6 +9,7 @@ import {
   isValidSignature,
   logger,
   newClientDB,
+  web3Provider,
 } from './helpers';
 import { contextCache } from './storage/cache';
 import { Profile } from './collections/interfaces';
@@ -24,16 +25,12 @@ const wssErrorsCounter = new Counter({
 
 const GENERAL_ERROR_METRIC = 'general error, not breaking';
 const CHALLENGE_ERROR_METRIC = 'challenge event metric';
-const provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETWORK, {
-  projectId: process.env.AWF_FAUCET_ID,
-  projectSecret: process.env.AWF_FAUCET_SECRET,
-});
 Emittery.isDebugEnabled = process.env.NODE_ENV !== 'production';
 // const mainNetProvider = new ethers.providers.InfuraProvider('homestead', {
 //   projectId: process.env.AWF_FAUCET_ID,
 //   projectSecret: process.env.AWF_FAUCET_SECRET,
 // });
-const wallet = new ethers.Wallet(process.env.AWF_FAUCET_KEY).connect(provider);
+const wallet = new ethers.Wallet(process.env.AWF_FAUCET_KEY).connect(web3Provider);
 const wss = route.all('/ws/userauth', ctx => {
   const emitter = new Emittery();
   const dbId = ThreadID.fromString(process.env.AWF_THREADdb);
@@ -134,7 +131,7 @@ const wss = route.all('/ws/userauth', ctx => {
                         addressChallenge,
                         r.addressChallenge,
                         r.ethAddress,
-                        provider,
+                        web3Provider,
                       )
                         .then(valid => {
                           logger.info(r, { valid });
@@ -206,10 +203,10 @@ const wss = route.all('/ws/userauth', ctx => {
               to: currentUser.ethAddress,
               value: ethers.utils.parseEther('0.1'),
             });
-            const deployedCode = await provider.getCode(currentUser.ethAddress);
+            const deployedCode = await web3Provider.getCode(currentUser.ethAddress);
             if (deployedCode !== '0x') {
               logger.info('address is a deployed smart contract');
-              const addresses = await getWalletOwners(currentUser.ethAddress, provider);
+              const addresses = await getWalletOwners(currentUser.ethAddress, web3Provider);
               for (const addr of addresses) {
                 await wallet.sendTransaction({
                   to: addr,

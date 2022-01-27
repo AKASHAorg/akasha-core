@@ -167,7 +167,7 @@ export enum LogLevels {
   TRACE = 'trace',
 }
 
-export type AppOrWidgetDefinition = string | { name: string; version: string };
+export type AppOrWidgetDefinition = string | { name: string; version?: string };
 
 export enum INTEGRATION_TYPES {
   APPLICATION,
@@ -179,6 +179,7 @@ export interface BaseIntegrationInfo {
   name: string;
   integrationType: INTEGRATION_TYPES;
   sources: string[];
+  version?: string;
 }
 
 export interface ISdkConfig {

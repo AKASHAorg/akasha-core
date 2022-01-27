@@ -1,3 +1,4 @@
+import 'systemjs-webpack-interop/auto-public-path';
 import routes, { FEED, POST, rootRoute } from './routes';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import {

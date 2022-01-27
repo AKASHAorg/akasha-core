@@ -3,8 +3,6 @@ import "./AbstractIntegrationRegistry.sol";
 
 contract IntegrationRegistry is AbstractIntegrationRegistry {
 
-    enum IntegrationType { Application, Plugin, Widget }
-
     event IntegrationPublished(bytes32 integrationId, string integrationName);
     event IntegrationVersionPublished(bytes32 releaseId, bytes32 integrationId);
 
@@ -12,7 +10,6 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
         string version;
         uint createdAt;
         bytes32 integrationId;
-        IntegrationType integrationType;
         // base-16 CID hash
         bytes32 manifestHash;
     }
@@ -23,6 +20,7 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
         address author;
         bytes32[] releaseIds;
         bytes32 latestReleaseId;
+        IntegrationType integrationType;
     }
 
     // releaseId => integration
@@ -60,7 +58,6 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
         bytes32 releaseId = generateReleaseId(_name, _version);
         releases[releaseId].createdAt = block.timestamp;
         releases[releaseId].version = _version;
-        releases[releaseId].integrationType = _integrationType;
         releases[releaseId].manifestHash = _manifestHash;
 
         if(integrationInfo[integrationId].enabled){
@@ -69,6 +66,7 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
             emit IntegrationVersionPublished(releaseId, integrationId);
         } else {
             integrationInfo[integrationId].enabled = true;
+            integrationInfo[integrationId].integrationType = _integrationType;
             integrationInfo[integrationId].name = _name;
             integrationInfo[integrationId].author = msg.sender;
             releases[releaseId].integrationId = integrationId;
@@ -84,7 +82,7 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
     view
     override
     returns (
-        bytes32[16] memory packageIds,
+        bytes32[16] memory integrationIds,
         uint next
     )
     {
@@ -98,10 +96,10 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
 
         uint ii = 0;
         for(uint i=offset; i< _pointer; i++){
-            packageIds[ii] = integrationIdsList[i];
+            integrationIds[ii] = integrationIdsList[i];
             ii++;
         }
-        return(packageIds, next);
+        return(integrationIds, next);
     }
 
     function getPackageName(bytes32 integrationId)
@@ -125,7 +123,7 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
     view
     override
     returns (
-        bytes32[16] memory integrationIds,
+        bytes32[16] memory releaseIds,
         uint next
     ){
         bytes32 integrationId = generateIntegrationId(integrationName);
@@ -138,10 +136,10 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
         }
         uint ii = 0;
         for(uint i=offset; i< _pointer; i++){
-            integrationIds[ii] = integrationInfo[integrationId].releaseIds[i];
+            releaseIds[ii] = integrationInfo[integrationId].releaseIds[i];
             ii++;
         }
-        return(integrationIds, next);
+        return(releaseIds, next);
     }
 
 
@@ -152,11 +150,13 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
     returns (
         string memory integrationName,
         string memory version,
-        bytes32 manifestHash
+        bytes32 manifestHash,
+        IntegrationType integrationType
     ){
         integrationName = integrationInfo[releases[releaseId].integrationId].name;
         version = releases[releaseId].version;
         manifestHash = releases[releaseId].manifestHash;
+        integrationType = integrationInfo[releases[releaseId].integrationId].integrationType;
     }
 
     //@dev returns the total number of integrations available on the registry
@@ -188,11 +188,13 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
         string memory integrationName,
         address author,
         bool enabled,
-        bytes32 latestReleaseId
+        bytes32 latestReleaseId,
+        IntegrationType integrationType
 ){
         integrationName = integrationInfo[integrationId].name;
         author = integrationInfo[integrationId].author;
         enabled = integrationInfo[integrationId].enabled;
         latestReleaseId = integrationInfo[integrationId].latestReleaseId;
+        integrationType = integrationInfo[integrationId].integrationType;
     }
 }

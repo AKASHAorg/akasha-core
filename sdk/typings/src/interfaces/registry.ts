@@ -13,3 +13,23 @@ export interface AWF_IENS {
 
   resolveName(name: string): Promise<unknown>;
 }
+
+export interface AWF_IIC_REGISTRY {
+  getIntegrationInfo(integrationId: string): Promise<unknown>;
+
+  getIntegrationReleaseInfo(releaseId: string): Promise<unknown>;
+
+  getIntegrationsCount(): Promise<unknown>;
+
+  getAllIntegrationsIds(offset: number): Promise<unknown>;
+
+  getAllIntegrationReleaseIds(integrationName: string, offset: number): Promise<unknown>;
+
+  getIntegrationId(name: string): Promise<unknown>;
+
+  getIntegrationReleaseId(name: string, version: string): Promise<unknown>;
+
+  getLatestReleaseInfo(opt: unknown): Observable<unknown>;
+
+  getIntegrationsInfo(opt: unknown): Observable<unknown>;
+}

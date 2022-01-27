@@ -99,7 +99,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                       color="accentText"
                       size="medium"
                       style={{ cursor: 'pointer' }}
-                      onClick={() => props.singleSpa.navigateToUrl('/settings-app')}
+                      onClick={() => props.singleSpa.navigateToUrl('/settings')}
                     >
                       {t('settings ')}
                     </Text>

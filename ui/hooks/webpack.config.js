@@ -7,7 +7,7 @@ const config = {
     libraryTarget: baseConfig.output.libraryTarget,
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
-    publicPath: '/hooks/',
+    publicPath: 'auto',
   },
 };
 

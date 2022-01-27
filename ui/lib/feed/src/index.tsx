@@ -1,3 +1,4 @@
+import 'systemjs-webpack-interop/auto-public-path';
 import { IWidgetConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 /**

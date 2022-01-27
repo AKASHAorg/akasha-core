@@ -1,16 +1,17 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable */
 const path = require('path');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const baseConfig = require('../webpack.config');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageName = require('./package.json').name;
 
+
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   output: Object.assign(baseConfig.output, {
-    library: packageName.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),
+    //library: packageName.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),
     filename: 'index.js',
-    publicPath: '/design/',
+    publicPath: 'auto',
     path: path.resolve(__dirname, 'dist'),
   }),
 });

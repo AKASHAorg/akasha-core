@@ -7,6 +7,13 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
+export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
+
+export enum CookieConsentTypes {
+  ESSENTIAL = 'ESSENTIAL',
+  ALL = 'ALL',
+}
+
 const AnalyticsContext = React.createContext(null);
 
 export const AnalyticsProvider: React.FC<RootComponentProps> = props => {
