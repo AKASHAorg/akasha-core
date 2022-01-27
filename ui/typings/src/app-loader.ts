@@ -1,5 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
-import { LogoSourceType } from './index';
+import { LogoSourceType, RootComponentProps } from './index';
 
 export type ActivityFn = (
   location: Location,
@@ -24,7 +23,7 @@ export interface IntegrationRegistrationOptions {
   worldConfig: {
     title: string;
   };
-  uiEvents: BehaviorSubject<UIEventData>;
+  uiEvents: RootComponentProps['uiEvents'];
   layoutConfig?: LayoutConfig;
   integrations?: {
     infos: BaseIntegrationInfo[];

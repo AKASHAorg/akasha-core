@@ -35,9 +35,8 @@ const ErrorRenderer: React.FC<ErrorRendererProps> = props => {
 
 const ErrorCard: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
   const { details, devDetails } = props;
-  let message;
   const isDevMode = false;
-  message = details ?? devDetails;
+  const message = details ?? devDetails;
 
   return (
     <StyledErrorCard style={props.style}>

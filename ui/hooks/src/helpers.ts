@@ -27,7 +27,7 @@ export const useQueryStream = (
       });
       return () => sub.unsubscribe();
     }
-  }, [queryKey, queryResult.data]);
+  }, [logger, queryClient, queryKey, queryResult.data]);
 
   return queryResult;
 };

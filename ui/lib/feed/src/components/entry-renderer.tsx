@@ -220,7 +220,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
-  const handleExtensionUnmount = (_name: string) => {
+  const handleExtensionUnmount = () => {
     // props.uiEvents.next({
     //   event: EventTypes.ExtensionPointUnmount,
     //   data: {
