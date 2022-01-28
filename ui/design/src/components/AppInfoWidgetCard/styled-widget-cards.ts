@@ -50,4 +50,13 @@ const StyledTab = styled(Tab)<TabProps>`
   `};
 `;
 
-export { StyledText, StyledButton, StyledTab };
+const StyledIconBox = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #edf0f5;
+`;
+
+export { StyledText, StyledButton, StyledTab, StyledIconBox };

@@ -8,6 +8,7 @@ import appCenter from './app-center';
 import appEns from './app-ens';
 import appFeed from './app-feed';
 import appIpfs from './app-ipfs';
+import appIC from './app-ic';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -118,6 +119,7 @@ export {
   appEns,
   appFeed,
   appIpfs,
+  appIC,
   announcement,
   available,
   reload,

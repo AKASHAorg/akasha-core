@@ -6,6 +6,7 @@ import Icon, { IconProps, iconTypes } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import { AppIcon, IAppIcon } from './app-icon';
+import { StyledIconBox } from '../AppInfoWidgetCard/styled-widget-cards';
 
 export default {
   title: 'Icon/Icon',
@@ -55,19 +56,9 @@ const TemplateList = (args: {
   <Grommet theme={lightTheme}>
     {iconTypes.map((type, idx) => (
       <Box direction="row" align="center" key={idx}>
-        <div
-          style={{
-            backgroundColor: args.backgroundColor,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '40px',
-            height: '40px',
-            margin: '2px 0',
-          }}
-        >
+        <StyledIconBox style={{ margin: '2px 0' }}>
           <Icon type={type} color={args.accentColor} size={args.size} />
-        </div>
+        </StyledIconBox>
         <div>{type}</div>
       </Box>
     ))}

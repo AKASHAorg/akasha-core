@@ -3,7 +3,7 @@ import {
   MenuItemType,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource, IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
 
 import { IAppData } from '../components/AppsWidgetCard';
 
@@ -275,6 +275,44 @@ const trendingProfilesData = [
     providers: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
+  },
+];
+
+const ICWorldAppsData: IntegrationCenterApp[] = [
+  {
+    name: 'Theme Wizard',
+    hash: 'bbaryfskgshgirsnxnbv',
+  },
+  {
+    name: 'Moderating Tools',
+    hash: 'bbaryfskgshgirsnxnbv',
+  },
+  {
+    name: 'Quick Moderation',
+    hash: 'bbaryfskgshgirsnxnbv',
+  },
+  {
+    name: 'Confetti Replies',
+    hash: 'bbaryfskgshgirsnxnbv',
+  },
+];
+
+const ICInstalledAppsData: IntegrationCenterApp[] = [
+  {
+    name: 'Feed',
+    hash: '#bbaryfskgshgirsnxnbv',
+  },
+  {
+    name: 'Settings',
+    hash: '#bbaryfskgshgirsnxnbv',
+  },
+  {
+    name: 'Search',
+    hash: '#bbaryfskgshgirsnxnbv',
+  },
+  {
+    name: 'Bookmarks',
+    hash: '#bbaryfskgshgirsnxnbv',
   },
 ];
 
@@ -727,4 +765,6 @@ export {
   repostsLabel,
   trendingProfilesData,
   trendingTagsData,
+  ICWorldAppsData,
+  ICInstalledAppsData,
 };
