@@ -69,6 +69,7 @@ import MdCard from './components/MdCard';
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
 import AppsWidgetCard from './components/AppsWidgetCard';
 import CookieWidgetCard from './components/CookieCard';
+import ICWidgetCard from './components/ICWidgetCard';
 import LoginCTAWidgetCard, { CTAAnchor } from './components/LoginCTAWidgetCard';
 import SourcesWidgetCard from './components/SourcesWidgetCard';
 import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
@@ -290,6 +291,7 @@ const exported = {
   HorizontalDivider,
   StepIndicator,
   CookieWidgetCard,
+  ICWidgetCard,
   LoginCTAWidgetCard,
   CTAAnchor,
   TrendingWidgetCard,
