@@ -7,7 +7,7 @@ async function main() {
   // const safe = '0x4941D523fa837A536B8bed834F6e6c807FAba24C';
   // await upgrades.admin.transferProxyAdminOwnership(safe);
   // const integrationRegistry = await IntegrationRegistry.attach(
-  //    '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9',
+  //    '0xFB0b97933e5e94b0b0b8dEF09403222b5009bDED',
   //  );
   //
   // for(const pkg of pkgInfos){
@@ -24,7 +24,7 @@ async function main() {
   // }
   // const readIntegrationRegistry = await ethers.getContractAt(
   //   'IntegrationRegistry',
-  //   '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9',
+  //   '0xFB0b97933e5e94b0b0b8dEF09403222b5009bDED',
   // );
   // const releases = await readIntegrationRegistry.getAllPackageIds(0, 15);
   // await integrationRegistry.release(

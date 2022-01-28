@@ -23,7 +23,7 @@ export enum CookieConsentTypes {
 const CookieWidget: React.FC<RootComponentProps> = props => {
   const [cookieType, setCookieType] = React.useState(null);
   const eventSub = React.useRef(null);
-  const analyticsConfig = React.useRef(props.analytics);
+  const analyticsConfig = React.useRef(props.worldConfig.analytics);
   const uiEvents = React.useRef(props.uiEvents);
   React.useLayoutEffect(() => {
     const consentType = window.localStorage.getItem(COOKIE_CONSENT_NAME);

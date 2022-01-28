@@ -22,10 +22,8 @@ export interface IEntryCardRendererProps {
   singleSpa: RootComponentProps['singleSpa'];
   itemId?: string;
   itemData?: IEntryData;
-  isBookmarked?: boolean;
   locale?: ILocale;
   loginState: LoginState;
-  onBookmark: (entryId: string) => void;
   onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
   onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
@@ -133,7 +131,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return `${t('You reported this')} ${stringEnd}}`;
   }, [t, accountAwaitingModeration, itemTypeName]);
 
-  const onEditButtonMount = (name: string) => {
+  const onExtPointMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
       data: {
@@ -144,7 +142,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     });
   };
 
-  const onEditButtonUnmount = () => {
+  const onExtPointUnmount = () => {
     /* todo */
   };
 
@@ -210,13 +208,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               {!entryAwaitingModeration && !accountAwaitingModeration && !itemData.delisted && (
                 <EntryCard
                   isRemoved={itemData.isRemoved}
-                  isBookmarked={true}
                   entryData={itemData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
                   sharePostUrl={props.sharePostUrl}
                   onClickAvatar={handleClickAvatar}
-                  onEntryBookmark={props.onBookmark}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
                   repostLabel={t('Repost')}
@@ -227,8 +223,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
                   locale={locale || 'en'}
                   style={{ height: 'auto', ...style }}
-                  bookmarkLabel={t('Save')}
-                  bookmarkedLabel={t('Saved')}
                   moderatedContentLabel={t('This content has been moderated')}
                   editedLabel={t('Last edited')}
                   showMore={true}
@@ -248,13 +242,20 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onEntryRemove={handleEntryRemove}
                   onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
                   modalSlotId={modalSlotId}
+                  actionsRightExt={
+                    <ExtensionPoint
+                      name={`entry-card-actions-right_${itemId}`}
+                      onMount={onExtPointMount}
+                      onUnmount={onExtPointUnmount}
+                    />
+                  }
                   headerMenuExt={
                     showEditButton && (
                       <ExtensionPoint
                         style={{ width: '100%' }}
                         name={`entry-card-edit-button_${itemId}`}
-                        onMount={onEditButtonMount}
-                        onUnmount={onEditButtonUnmount}
+                        onMount={onExtPointMount}
+                        onUnmount={onExtPointUnmount}
                       />
                     )
                   }

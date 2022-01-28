@@ -56,8 +56,6 @@ export interface IEntryBoxProps {
   flagAsLabel?: string;
   copyLinkLabel?: string;
   comment?: boolean;
-  bookmarkLabel?: string;
-  bookmarkedLabel?: string;
   editedLabel?: string;
   headerTextLabel?: string;
   footerTextLabel?: string;
@@ -71,8 +69,6 @@ export interface IEntryBoxProps {
   profileAnchorLink?: string;
   repliesAnchorLink?: string;
   // handlers
-  isBookmarked?: boolean;
-  onEntryBookmark?: (entryId: string, isBookmarked?: boolean) => void;
   onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
   onRepost?: (withComment: boolean, entryId: string) => void;
   onEntryFlag?: (entryId?: string, itemType?: string) => void;
@@ -102,6 +98,7 @@ export interface IEntryBoxProps {
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
   modalSlotId: string;
+  actionsRightExt?: React.ReactNode;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -125,13 +122,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     flagAsLabel,
     copyLinkLabel,
     locale,
-    isBookmarked,
-    bookmarkLabel,
-    bookmarkedLabel,
     showMore,
     profileAnchorLink,
     repliesAnchorLink,
-    onEntryBookmark,
     onClickAvatar,
     onRepost,
     onEntryFlag,
@@ -162,6 +155,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     removedByAuthorLabel = 'This post was deleted by its author',
     editedLabel = 'Last edited',
     modalSlotId,
+    actionsRightExt,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -179,12 +173,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const toggleMenuDrop = (ev: React.SyntheticEvent) => {
     ev.stopPropagation();
     setMenuDropOpen(!menuDropOpen);
-  };
-
-  const handleEntryBookmark = () => {
-    if (onEntryBookmark && entryData.entryId) {
-      onEntryBookmark(entryData.entryId, isBookmarked);
-    }
   };
 
   const handleRepost = (withComment: boolean) => () => {
@@ -579,13 +567,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             repostLabel={repostLabel}
             cancelLabel={cancelLabel}
             repostWithCommentLabel={repostWithCommentLabel}
-            isBookmarked={isBookmarked}
-            bookmarkLabel={bookmarkLabel}
-            bookmarkedLabel={bookmarkedLabel}
             shareLabel={shareLabel}
             copyLinkLabel={copyLinkLabel}
             repliesAnchorLink={repliesAnchorLink}
-            handleEntryBookmark={handleEntryBookmark}
             onRepost={handleRepost(false)}
             onRepostWithComment={handleRepost(true)}
             onShare={handleEntryShare}
@@ -594,6 +578,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             disableActions={disableActions}
             isModerated={isModerated}
             modalSlotId={modalSlotId}
+            actionsRightExt={actionsRightExt}
           />
         )}
       </Box>

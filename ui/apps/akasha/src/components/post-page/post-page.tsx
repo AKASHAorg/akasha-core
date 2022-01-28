@@ -14,9 +14,6 @@ import {
   useUnfollow,
   useInfiniteComments,
   useCreateComment,
-  useGetBookmarks,
-  useSaveBookmark,
-  useDeleteBookmark,
   usePost,
   useTagSearch,
   mapEntry,
@@ -116,11 +113,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  const bookmarksReq = useGetBookmarks(loginState?.isReady && loginState?.ethAddress);
-  const bookmarks = bookmarksReq.data;
-  const addBookmark = useSaveBookmark();
-  const deleteBookmark = useDeleteBookmark();
-
   const handleFollow = () => {
     if (entryData?.author.ethAddress) {
       followReq.mutate(entryData?.author.ethAddress);
@@ -141,10 +133,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     }
   };
 
-  const bookmarked = React.useMemo(() => {
-    return !bookmarksReq.isFetching && bookmarks?.findIndex(bm => bm.entryId === postId) >= 0;
-  }, [bookmarksReq.isFetching, bookmarks, postId]);
-
   const handleMentionClick = (pubKey: string) => {
     navigateToUrl(`/profile/${pubKey}`);
   };
@@ -156,16 +144,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
     navigateToUrl(`/profile/${pubKey}`);
     ev.preventDefault();
-  };
-
-  const handleEntryBookmark = (itemType: ItemTypes) => (entryId: string) => {
-    if (!loginState?.ethAddress) {
-      return showLoginModal();
-    }
-    if (bookmarks.findIndex(bm => bm.entryId === entryId) >= 0) {
-      return deleteBookmark.mutate(entryId);
-    }
-    return addBookmark.mutate({ entryId, itemType });
   };
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
@@ -302,7 +280,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
               >
                 <EntryBox
                   isRemoved={entryData.isRemoved}
-                  isBookmarked={bookmarked}
                   entryData={entryData}
                   sharePostLabel={t('Share Post')}
                   shareTextLabel={t('Share this post with your friends')}
@@ -310,7 +287,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
                     handleAvatarClick(ev, entryData.author.pubKey)
                   }
-                  onEntryBookmark={handleEntryBookmark(ItemTypes.ENTRY)}
                   repliesLabel={t('Replies')}
                   repostsLabel={t('Reposts')}
                   repostLabel={t('Repost')}
@@ -320,8 +296,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   flagAsLabel={t('Report Post')}
                   loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
                   locale={locale}
-                  bookmarkLabel={t('Save')}
-                  bookmarkedLabel={t('Saved')}
                   showMore={true}
                   profileAnchorLink={'/profile'}
                   repliesAnchorLink={routes[POST]}
@@ -390,7 +364,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   style={{ backgroundColor: '#4e71ff0f' }}
                 >
                   <EntryBox
-                    isBookmarked={false}
                     entryData={createPendingEntry(loggedProfileData, publishComment.variables)}
                     sharePostLabel={t('Share Post')}
                     shareTextLabel={t('Share this post with your friends')}
@@ -403,8 +376,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     flagAsLabel={t('Report Comment')}
                     loggedProfileEthAddress={loggedProfileData.ethAddress}
                     locale={'en'}
-                    bookmarkLabel={t('Save')}
-                    bookmarkedLabel={t('Saved')}
                     showMore={true}
                     profileAnchorLink={'/profile'}
                     repliesAnchorLink={routes[POST]}

@@ -16,8 +16,7 @@ import {
   INTEGRATION_TYPES,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
-import * as rxjsOperators from 'rxjs/operators';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { Subject, lastValueFrom, filter, map } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
 import { getIntegrationInfo } from './registry';
@@ -34,7 +33,7 @@ import {
 import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
-import { IAwfSDK } from '@akashaproject/sdk-typings';
+// import { IAwfSDK } from '@akashaproject/sdk-typings';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 
 interface SingleSpaEventDetail {
@@ -61,9 +60,9 @@ interface SingleSpaEventDetail {
  * ```
  */
 
-/* eslint-disable complexity */
+/*eslint-disable complexity*/
 export default class AppLoader {
-  public readonly uiEvents: BehaviorSubject<UIEventData>;
+  public readonly uiEvents: Subject<UIEventData>;
 
   /**
    * World configuration object. Used to set necessary endpoints, default loaded apps and widgets.
@@ -86,7 +85,7 @@ export default class AppLoader {
     this.loaderLogger = sdk.services.log.create('app-loader');
     this.sdk = sdk;
 
-    this.uiEvents = new BehaviorSubject({ event: EventTypes.Instantiated });
+    this.uiEvents = new Subject();
 
     // register event listeners
     this.addSingleSpaEventListeners();
@@ -107,37 +106,68 @@ export default class AppLoader {
   }
 
   private watchEvents() {
-    this.uiEvents.subscribe(async eventData => {
-      if (typeof eventData === 'object' && eventData.event) {
-        switch (eventData.event) {
-          case EventTypes.ExtensionPointMount:
-            this.onExtensionPointMount(eventData.data);
-            break;
-          case EventTypes.ExtensionPointUnmount:
-            this.onExtensionPointUnmount(eventData.data);
-            break;
-          case EventTypes.ModalMount:
-            this.onModalMount(eventData.data);
-            break;
-          case EventTypes.ModalUnmount:
-            this.onModalUnmount(eventData.data);
-            break;
-          case EventTypes.InstallIntegration:
-            await this.installIntegration(eventData.data);
-            break;
-          case EventTypes.UninstallIntegration:
-            await this.uninstallIntegration(eventData.data);
-            break;
-          default:
-            break;
-        }
-      }
-    });
+    const filterEvent = (eventType: EventTypes) => {
+      return filter((eventData: UIEventData) => eventData.event === eventType);
+    };
+
+    this.uiEvents
+      .pipe(filterEvent(EventTypes.ExtensionPointMount))
+      .pipe(map(event => event.data))
+      .subscribe({
+        next: this.onExtensionPointMount.bind(this),
+        error: err =>
+          this.loaderLogger.error(`Error in extension mount subscription: ${err.message}`),
+      });
+
+    this.uiEvents
+      .pipe(filterEvent(EventTypes.ExtensionPointUnmount))
+      .pipe(map(event => event.data))
+      .subscribe({
+        next: this.onExtensionPointUnmount.bind(this),
+        error: err =>
+          this.loaderLogger.error(`Error in extension unmount subscription: ${err.message}`),
+      });
+
+    this.uiEvents
+      .pipe(filterEvent(EventTypes.ModalMount))
+      .pipe(map(event => event.data))
+      .subscribe({
+        next: this.onModalMount.bind(this),
+        error: err => this.loaderLogger.error(`Error in modal mount subscription: ${err.message}`),
+      });
+
+    this.uiEvents
+      .pipe(filterEvent(EventTypes.ModalUnmount))
+      .pipe(map(event => event.data))
+      .subscribe({
+        next: this.onModalUnmount.bind(this),
+        error: err =>
+          this.loaderLogger.error(`Error in modal unmount subscription: ${err.message}`),
+      });
+
+    this.uiEvents
+      .pipe(filterEvent(EventTypes.InstallIntegration))
+      .pipe(map(event => event.data))
+      .subscribe({
+        next: this.installIntegration.bind(this),
+        error: err =>
+          this.loaderLogger.error(`Error in install integration subscription: ${err.message}`),
+      });
+
+    this.uiEvents
+      .pipe(filterEvent(EventTypes.UninstallIntegration))
+      .pipe(map(event => event.data))
+      .subscribe({
+        next: this.uninstallIntegration.bind(this),
+        error: err =>
+          this.loaderLogger.error(`Error in uninstall integration subscription: ${err.message}`),
+      });
 
     if (this.sdk.api.globalChannel) {
       const loginEvent = this.sdk.api.globalChannel.pipe(
-        rxjsOperators.filter(ev => ev && ev.hasOwnProperty('event') && ev['event'] === 'signIn'),
+        filter(ev => ev && ev.hasOwnProperty('event') && ev['event'] === 'signIn'),
       );
+
       loginEvent.subscribe({
         next: () => {
           this.getUserIntegrations();
@@ -167,6 +197,8 @@ export default class AppLoader {
     singleSpa.start({
       urlRerouteOnly: true,
     });
+    // after 5 seconds move the integration to SKIP_BECAUSE_BROKEN status
+    singleSpa.setUnmountMaxTime(5000, true);
 
     const defaultIntegrations = [
       this.worldConfig.layout,
@@ -506,7 +538,18 @@ export default class AppLoader {
       this.loaderLogger.info(`extension point is unmounting: ${extPoint}`);
       const parcelData = this.findParcel(extPoint.name);
       if (parcelData) {
-        parcelData.parcel.unmount();
+        const status = parcelData.parcel.getStatus();
+        if (status === singleSpa.MOUNTED) {
+          parcelData.parcel
+            .unmount()
+            .then(() => {
+              delete this.extensionPoints[extensionData.name];
+              console.log(this.extensionParcels, this.extensionPoints, 'parcels and points');
+            })
+            .catch(() => {
+              delete this.extensionPoints[extensionData.name];
+            });
+        }
       }
     }
   }
@@ -633,6 +676,7 @@ export default class AppLoader {
       activeModal: this.activeModal,
       navigateTo: this.navigateTo.bind(this),
       parseQueryString: parseQueryString,
+      worldConfig: this.worldConfig,
     });
     return layoutParcel.mountPromise;
   }

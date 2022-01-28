@@ -123,8 +123,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           flagAsLabel={t('Report Post')}
           loggedProfileEthAddress={loggedProfileData.ethAddress}
           locale={locale || 'en'}
-          bookmarkLabel={t('Save')}
-          bookmarkedLabel={t('Saved')}
           showMore={true}
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[POST]}

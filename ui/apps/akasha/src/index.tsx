@@ -35,7 +35,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     },
     {
       mountsIn: opts => {
-        if (opts.extensionData && opts.extensionData.name.startsWith('entry-card-edit-button')) {
+        if (opts.extensionData && opts.extensionData.name?.startsWith('entry-card-edit-button')) {
           return opts.extensionData.name;
         }
       },

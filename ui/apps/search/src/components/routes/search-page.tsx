@@ -7,9 +7,6 @@ import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
 import { ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import { useTranslation } from 'react-i18next';
 import {
-  useGetBookmarks,
-  useSaveBookmark,
-  useDeleteBookmark,
   useTagSubscriptions,
   useToggleTagSubscription,
   useIsFollowingMultiple,
@@ -56,10 +53,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const { t, i18n } = useTranslation();
   const locale = (i18n.languages[0] || 'en') as ILocale;
-
-  const bookmarksQuery = useGetBookmarks(loginState?.isReady && loginState?.ethAddress);
-  const addBookmark = useSaveBookmark();
-  const deleteBookmark = useDeleteBookmark();
 
   const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
   const tagSubscriptionsState = tagSubscriptionsReq.data;
@@ -127,20 +120,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const handleMentionClick = (profileEthAddress: string) => {
     props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
-  };
-
-  const handleBookmark = (isBookmarked: boolean, entryId: string, itemType: ItemTypes) => {
-    if (loginState?.pubKey) {
-      if (!isBookmarked) {
-        return addBookmark.mutate({
-          entryId,
-          itemType,
-        });
-      }
-      return deleteBookmark.mutate(entryId);
-    } else {
-      showLoginModal();
-    }
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
@@ -338,12 +317,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 itemData={itemData}
                 itemType={ItemTypes.ENTRY}
                 logger={props.logger}
-                bookmarksQuery={bookmarksQuery}
                 singleSpa={singleSpa}
                 ethAddress={loginState?.ethAddress}
                 onNavigate={handleNavigation}
                 onRepost={handleRepost}
-                onBookmark={handleBookmark}
                 onAvatarClick={handleAvatarClick}
                 onMentionClick={handleMentionClick}
                 onTagClick={handleTagClick}
@@ -366,12 +343,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 itemData={itemData}
                 itemType={ItemTypes.COMMENT}
                 logger={props.logger}
-                bookmarksQuery={bookmarksQuery}
                 singleSpa={singleSpa}
                 ethAddress={loginState?.ethAddress}
                 onNavigate={handleNavigation}
                 onRepost={handleRepost}
-                onBookmark={handleBookmark}
                 onAvatarClick={handleAvatarClick}
                 onMentionClick={handleMentionClick}
                 onTagClick={handleTagClick}
