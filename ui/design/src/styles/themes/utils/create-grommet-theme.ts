@@ -97,8 +97,8 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           `border-color: ${styledComponentsTheme.colors.darkBorder};
           ${
             checked &&
-            `background-color: ${styledComponentsTheme.colors.white};
-             color: ${styledComponentsTheme.colors.accent};`
+            `background-color: ${styledComponentsTheme.colors.accent};
+             color: ${styledComponentsTheme.colors.white};`
           }
           `,
       },

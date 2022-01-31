@@ -90,6 +90,18 @@ import {
   switchToRequiredNetwork,
 } from './use-injected-provider';
 import { useIsValidToken } from './use-invite-token-validation';
+import {
+  useGetIntegrationInfo,
+  useGetAllIntegrationReleaseIds,
+  useGetAllIntegrationsIds,
+  useGetIntegrationId,
+  useGetIntegrationReleaseId,
+  useGetIntegrationReleaseInfo,
+  useGetIntegrationsCount,
+  useGetIntegrationsInfo,
+  useGetLatestReleaseInfo,
+} from './use-integration-registry';
+import { useGetAllInstalledApps, useGetAppConfig, useSaveInstalledApp } from './use-app-settings';
 
 export {
   constants,
@@ -206,4 +218,18 @@ export {
   switchToRequiredNetwork,
   // use-invite-token-validation
   useIsValidToken,
+  // use-integration-registry
+  useGetIntegrationInfo,
+  useGetAllIntegrationReleaseIds,
+  useGetAllIntegrationsIds,
+  useGetIntegrationId,
+  useGetIntegrationReleaseId,
+  useGetIntegrationReleaseInfo,
+  useGetIntegrationsCount,
+  useGetIntegrationsInfo,
+  useGetLatestReleaseInfo,
+  // use-app-settings
+  useGetAllInstalledApps,
+  useGetAppConfig,
+  useSaveInstalledApp,
 };

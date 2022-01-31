@@ -27,9 +27,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       <BasicCardBox style={{ minHeight: '80vh' }}>
         <Box>
           <Box pad="medium">
-            <Text>{t('Integration Center')}</Text>
+            <Text size="large" weight={'bold'}>
+              {t('Integration Center')}
+            </Text>
           </Box>
-          <Box direction="row" justify="between">
+          <Box direction="row" justify="between" pad="medium">
             <NavButton
               path={routes[EXPLORE]}
               label={t('Explore')}
@@ -64,7 +66,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             />
           </Box>
         </Box>
-        <Box>
+        <Box pad="medium">
           <Switch>
             <Route path={routes[EXPLORE]}>
               <ExplorePage {...props} />
