@@ -118,4 +118,7 @@ export enum ModerationItemTypes {
 export interface IntegrationCenterApp {
   name: string;
   hash: string;
+  avatar?: string;
+  coverImage?: string;
+  description?: string;
 }

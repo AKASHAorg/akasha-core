@@ -69,6 +69,7 @@ import MdCard from './components/MdCard';
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
 import AppsWidgetCard from './components/AppsWidgetCard';
 import CookieWidgetCard from './components/CookieCard';
+import ICDetailCard from './components/ICDetailCard';
 import ICWidgetCard from './components/ICWidgetCard';
 import LoginCTAWidgetCard, { CTAAnchor } from './components/LoginCTAWidgetCard';
 import SourcesWidgetCard from './components/SourcesWidgetCard';
@@ -291,6 +292,7 @@ const exported = {
   HorizontalDivider,
   StepIndicator,
   CookieWidgetCard,
+  ICDetailCard,
   ICWidgetCard,
   LoginCTAWidgetCard,
   CTAAnchor,
@@ -306,6 +308,7 @@ const exported = {
   MdCard,
   EntryPublishErrorCard,
   StyledLayer,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Helmet: Helmet as any,
   ConfirmationModal,
   StatModal,
