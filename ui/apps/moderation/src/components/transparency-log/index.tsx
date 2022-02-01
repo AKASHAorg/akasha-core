@@ -137,7 +137,9 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         }
         activeButton={activeButton}
         countLabel={
-          activeButton === ButtonValues.ALL ? t('Moderated items') : t(`${activeButton} items`)
+          activeButton === ButtonValues.ALL
+            ? t('Moderated items')
+            : t('{{activeButton}} items', { activeButton })
         }
         tabButtons={
           <>
@@ -201,7 +203,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                             1,
                           )} ${el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT}`,
                         )}
-                        content={t(`${el.explanation}`)}
+                        content={t('{{elExplanation}}', { elExplanation: el.explanation })}
                         isSelected={el.contentID === selected?.contentID}
                         isDelisted={el.delisted}
                         moderator={el.moderator.name}

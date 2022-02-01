@@ -286,8 +286,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
       {(postReq.isError || commentReq.isError) && (
         <ErrorLoader
           type="script-error"
-          title={t(`There was an error loading the ${itemTypeName}`)}
-          details={t(`We cannot show this ${itemTypeName} now`)}
+          title={t('There was an error loading the {{itemTypeName}}', { itemTypeName })}
+          details={t('We cannot show this {{itemTypeName}} now', { itemTypeName })}
           devDetails={postReq.error}
         />
       )}
@@ -296,7 +296,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
           {(accountAwaitingModeration || entryAwaitingModeration) && (
             <EntryCardHidden
               reason={entryAwaitingModeration ? itemData.reason : itemData.author?.reason}
-              headerTextLabel={t(`You reported ${reportedTypeName} for the following reason`)}
+              headerTextLabel={t('You reported {{reportedTypeName}} for the following reason', {
+                reportedTypeName,
+              })}
               footerTextLabel={t('It is awaiting moderation.')}
               ctaLabel={t('See it anyway')}
               handleFlipCard={handleFlipCard}
@@ -308,7 +310,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 avatar={itemData.author.avatar}
                 ethAddress={itemData.author.ethAddress}
                 postLabel={t('Save')}
-                placeholderLabel={`${t('Reply to')} ${itemData.author.name || ''}`}
+                placeholderLabel={t('Reply to {{itemDataAuthorName}}', {
+                  itemDataAuthorName: itemData.author.name || '',
+                })}
                 emojiPlaceholderLabel={t('Search')}
                 disablePublishLabel={t('Authenticating')}
                 disablePublish={disablePublishing}
@@ -346,7 +350,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 repostWithCommentLabel={t('Repost with comment')}
                 shareLabel={t('Share')}
                 copyLinkLabel={t('Copy Link')}
-                flagAsLabel={t(`Report ${itemTypeName}`)}
+                flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
                 loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
                 locale={locale || 'en'}
                 style={{

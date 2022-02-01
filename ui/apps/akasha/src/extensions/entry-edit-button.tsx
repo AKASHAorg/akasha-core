@@ -37,7 +37,11 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
   }, [props.extensionData.entryType, t]);
 
   return (
-    <MenuItemButton icon={'edit'} label={`${t('Edit')} ${entryTypeLabel}`} onClick={handleClick} />
+    <MenuItemButton
+      icon={'edit'}
+      label={t('Edit {{ entryTypeLabel }}', { entryTypeLabel })}
+      onClick={handleClick}
+    />
   );
 };
 
