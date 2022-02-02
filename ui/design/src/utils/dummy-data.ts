@@ -3,11 +3,7 @@ import {
   MenuItemType,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  LogoTypeSource,
-  IntegrationCenterApp,
-  IntegrationInfo,
-} from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 import { IAppData } from '../components/AppsWidgetCard';
 
@@ -282,7 +278,7 @@ const trendingProfilesData = [
   },
 ];
 
-const ICWorldAppsData: IntegrationInfo[] = [
+const ICWorldAppsData: any[] = [
   {
     name: 'Theme Wizard',
     id: 'bbaryfskgshgirsnxnbv',
@@ -314,10 +310,40 @@ const ICWorldAppsData: IntegrationInfo[] = [
     integrationType: 1,
     latestReleaseId: '0xf9427384382',
     enabled: true,
+    description: `Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again!`,
+    releases: [
+      {
+        type: 'current',
+        version: '22.8.2',
+        timestamp: new Date(),
+      },
+      {
+        type: 'bug',
+        version: '22.8.1',
+        timestamp: new Date(),
+      },
+    ],
+    authors: ['BoredApe', 'CyberPunk', 'TheDrFlynn'],
+    tags: [
+      'Image editor',
+      'Photo Filters',
+      'Filters',
+      'Photos',
+      'Pro',
+      'Color editing',
+      'Confetti',
+      'Visuals',
+    ],
+    license: 'wtfpl',
   },
 ];
 
-const ICInstalledAppsData: IntegrationInfo[] = [
+const ICInstalledAppsData: any[] = [
   {
     name: 'Feed',
     id: '#bbaryfskgshgirsnxnbv',
