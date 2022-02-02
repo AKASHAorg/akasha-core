@@ -60,11 +60,11 @@ class DB implements DBService<Database, Collection> {
    * @param name - string representing the collection name
    * @returns ServiceCallResult<Collection>
    */
-  public getCollection(
+  public getCollection<T>(
     name: typeof availableCollections[keyof typeof availableCollections],
-  ): ServiceCallResult<Collection> {
+  ): ServiceCallResult<Collection<T>> {
     this._ensureDbOpened();
-    return createObservableValue<Collection>(this._db.collection(name));
+    return createObservableValue<Collection<T>>(this._db.collection(name));
   }
 
   /**

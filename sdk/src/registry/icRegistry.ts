@@ -130,6 +130,13 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
     return createFormattedValue(response);
   }
 
+  // on chain call for latest version info
+  async getLatestVersionInfo(integration: { name?: string; id?: string }) {
+    const integrationID = integration.id || ethers.utils.id(integration.name);
+    const info = await this.getIntegrationInfo(integrationID);
+    return this.getIntegrationReleaseInfo(info.data.latestReleaseId);
+  }
+
   async getIntegrationsCount() {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.numPackageIds();

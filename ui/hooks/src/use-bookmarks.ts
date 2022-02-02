@@ -19,7 +19,9 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
     async () => {
       const sdk = getSDK();
       try {
-        const res = await lastValueFrom(sdk.services.settings.get(BOOKMARKED_ENTRIES_KEY));
+        const res = await lastValueFrom(
+          sdk.services.settings.get<string[][]>(BOOKMARKED_ENTRIES_KEY),
+        );
         if (res.data && res.data.options) {
           const bookmarkedEntries = res.data.options.findIndex(
             (e: string[]) => e[0] === entriesBookmarks,

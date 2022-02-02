@@ -16,7 +16,7 @@ import {
   INTEGRATION_TYPES,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
-import { Subject, lastValueFrom, filter, map } from 'rxjs';
+import { Subject, lastValueFrom, filter, map, from } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
 import { getIntegrationInfo } from './registry';
@@ -258,7 +258,7 @@ export default class AppLoader {
     if (!this.sdk) {
       return;
     }
-    const doc = this.sdk.services.appSettings.getAll();
+    const doc = from(this.sdk.services.appSettings.getAll());
 
     doc.subscribe({
       next: async ({ data }) => {
@@ -704,7 +704,7 @@ export default class AppLoader {
     }
 
     await this.createImportMaps([info], info.name);
-    const call = this.sdk.services.appSettings.install({ name: info.name });
+    const call = from(this.sdk.services.appSettings.install({ name: info.name }));
     call.subscribe({
       next: async () => {
         let config;
