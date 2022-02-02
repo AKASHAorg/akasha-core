@@ -282,18 +282,56 @@ const ICWorldAppsData: IntegrationCenterApp[] = [
   {
     name: 'Theme Wizard',
     hash: 'bbaryfskgshgirsnxnbv',
+    avatar: '',
+    coverImage: '',
   },
   {
     name: 'Moderating Tools',
     hash: 'bbaryfskgshgirsnxnbv',
+    avatar: '',
+    coverImage: '',
   },
   {
     name: 'Quick Moderation',
     hash: 'bbaryfskgshgirsnxnbv',
+    avatar: '',
+    coverImage: '',
   },
   {
     name: 'Confetti Replies',
     hash: 'bbaryfskgshgirsnxnbv',
+    avatar: '',
+    coverImage: '',
+    description: `Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again!`,
+    releases: [
+      {
+        type: 'current',
+        version: '22.8.2',
+        timestamp: new Date(),
+      },
+      {
+        type: 'bug',
+        version: '22.8.1',
+        timestamp: new Date(),
+      },
+    ],
+    authors: ['BoredApe', 'CyberPunk', 'TheDrFlynn'],
+    tags: [
+      'Image editor',
+      'Photo Filters',
+      'Filters',
+      'Photos',
+      'Pro',
+      'Color editing',
+      'Confetti',
+      'Visuals',
+    ],
+    license: 'wtfpl',
   },
 ];
 
@@ -301,18 +339,26 @@ const ICInstalledAppsData: IntegrationCenterApp[] = [
   {
     name: 'Feed',
     hash: '#bbaryfskgshgirsnxnbv',
+    avatar: '',
+    coverImage: '',
   },
   {
     name: 'Settings',
     hash: '#bbaryfskgshgirsnxnbv',
+    avatar: '',
+    coverImage: '',
   },
   {
     name: 'Search',
     hash: '#bbaryfskgshgirsnxnbv',
+    avatar: '',
+    coverImage: '',
   },
   {
     name: 'Bookmarks',
     hash: '#bbaryfskgshgirsnxnbv',
+    avatar: '',
+    coverImage: '',
   },
 ];
 

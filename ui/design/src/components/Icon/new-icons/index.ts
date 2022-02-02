@@ -9,6 +9,7 @@ import appEns from './app-ens';
 import appFeed from './app-feed';
 import appIpfs from './app-ipfs';
 import appIC from './app-ic';
+import appICCTA from './app-ic-cta';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -55,6 +56,7 @@ import info from './info';
 import italic from './italic';
 import key from './key';
 import legal from './legal';
+import licensewtfpl from './license-wtfpl';
 import link from './link';
 import loading from './loading';
 import login from './login';
@@ -120,6 +122,7 @@ export {
   appFeed,
   appIpfs,
   appIC,
+  appICCTA,
   announcement,
   available,
   reload,
@@ -176,6 +179,7 @@ export {
   italic,
   key,
   legal,
+  licensewtfpl,
   link,
   loading,
   login,
