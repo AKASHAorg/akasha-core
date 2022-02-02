@@ -166,8 +166,6 @@ export enum LogLevels {
   TRACE = 'trace',
 }
 
-export type AppOrWidgetDefinition = string | { name: string; version?: string };
-
 export enum INTEGRATION_TYPES {
   APPLICATION,
   PLUGIN,
@@ -197,20 +195,20 @@ export interface ILoaderConfig {
    * Apps that are installed by default on this world.
    * homePageApp is loaded by default, no need to be specified here
    */
-  defaultApps: AppOrWidgetDefinition[];
+  defaultApps: string[];
   /**
    * Widgets that are installed by default on this world.
    * layout widget is loaded by default, no need to be specified here
    */
-  defaultWidgets: AppOrWidgetDefinition[];
+  defaultWidgets: string[];
   /**
    * The layout widget of this world. This widget always mounts in the root element.
    */
-  layout: AppOrWidgetDefinition;
+  layout: string;
   /**
    * The app to load when you navigate to the home page.
    */
-  homepageApp: AppOrWidgetDefinition;
+  homepageApp: string;
   /**
    * Define this world's title
    */

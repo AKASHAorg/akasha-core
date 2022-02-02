@@ -1,34 +1,22 @@
-import {
-  AppOrWidgetDefinition,
-  ModalNavigationOptions,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
 import { QueryStringType } from '@akashaproject/ui-awf-typings';
 
-export const getNameFromDef = (def: AppOrWidgetDefinition) => {
+export const getNameFromDef = (def: string) => {
   if (typeof def === 'string') {
     return def;
-  } else if (typeof def === 'object' && def.hasOwnProperty('name')) {
-    return def.name;
   } else {
     return null;
   }
 };
 
-export const toNormalDef = (
-  def: AppOrWidgetDefinition,
-): { name: string; version?: string } | null => {
+export const toNormalDef = (def: string): { name: string; version?: string } | null => {
   if (typeof def === 'string') {
     return {
       name: def,
       version: 'latest',
     };
-  } else if (typeof def === 'object' && def.hasOwnProperty('name')) {
-    if (def.hasOwnProperty('version')) {
-      return def;
-    }
-    return { ...def, version: 'latest' };
   } else {
     return null;
   }

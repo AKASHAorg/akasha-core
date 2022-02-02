@@ -151,15 +151,8 @@ const TopbarComponent = (props: RootComponentProps) => {
     if (!props.worldConfig.homepageApp) {
       return;
     }
-    let homepageAppName: string;
-    if (typeof props.worldConfig.homepageApp === 'string') {
-      homepageAppName = props.worldConfig.homepageApp;
-    }
-    if (typeof props.worldConfig.homepageApp === 'object') {
-      homepageAppName = props.worldConfig.homepageApp.name;
-    }
 
-    const homeAppRoutes = props.getAppRoutes(homepageAppName);
+    const homeAppRoutes = props.getAppRoutes(props.worldConfig.homepageApp);
     if (homeAppRoutes && homeAppRoutes.hasOwnProperty('defaultRoute')) {
       if (location.pathname === homeAppRoutes.defaultRoute) {
         scrollTo(0, 0);

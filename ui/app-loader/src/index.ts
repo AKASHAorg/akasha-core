@@ -1,5 +1,4 @@
 import {
-  AppOrWidgetDefinition,
   EventTypes,
   ExtensionPointDefinition,
   IAppConfig,
@@ -266,7 +265,7 @@ export default class AppLoader {
         if (!data.length) {
           return;
         }
-        const infos = await this.getPackageInfos(data);
+        const infos = await this.getPackageInfos(data.map(v => v.name));
         const appInfos = this.apps.infos;
         const widgetInfos = this.widgets.infos;
         const userAppsToLoad = infos.filter(
@@ -555,7 +554,7 @@ export default class AppLoader {
   }
 
   // get registry info for package
-  public async getPackageInfo(pack: AppOrWidgetDefinition): Promise<BaseIntegrationInfo | null> {
+  public async getPackageInfo(pack: string): Promise<BaseIntegrationInfo | null> {
     const normalized = toNormalDef(pack);
     if (!normalized) {
       this.loaderLogger.warn(`There is a misconfiguration in app ${pack} definitions!`);
@@ -565,14 +564,11 @@ export default class AppLoader {
   }
 
   // get registry info for multiple packages
-  public async getPackageInfos(packages: AppOrWidgetDefinition[]) {
+  public async getPackageInfos(packages: string[]) {
     const integrationInfos: BaseIntegrationInfo[] = [];
     const integrationsToSolve: { name: string; version?: string }[] = [];
     for (const pack of packages) {
-      let name = pack;
-      if (typeof pack === 'object') {
-        name = pack.name;
-      }
+      const name = pack;
       const overrideInfo = this.registryOverrides.find(integration => integration.name === name);
       if (overrideInfo) {
         integrationInfos.push(overrideInfo);
@@ -689,7 +685,7 @@ export default class AppLoader {
       return;
     }
     const { name, version = 'latest' } = integration;
-    const definition = toNormalDef({ name, version });
+    const definition = name;
     if (!definition) {
       this.loaderLogger.warn(
         `Misconfiguration of ${name}. It should be a string or object of type: {name: string; version: string}.`,
@@ -749,7 +745,7 @@ export default class AppLoader {
     }
 
     const { name, version = 'latest' } = integration;
-    const definition = toNormalDef({ name, version });
+    const definition = name;
     if (!definition) {
       this.loaderLogger.warn(
         `Misconfiguration of ${integration}. It should be a string or object of type: {name: string, version: string}.`,

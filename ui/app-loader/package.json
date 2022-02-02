@@ -30,19 +30,19 @@
   "dependencies": {
     "ismobilejs": "1.1.1",
     "single-spa": "5.9.3",
-    "qs": "6.10.2",
+    "qs": "6.10.3",
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/sdk-typings": "*"
   },
   "devDependencies": {
-    "@types/pino": "6.3.11",
+    "@types/pino": "7.0.5",
     "@types/systemjs": "6.1.1",
     "@types/qs": "6.9.7",
     "path-to-regexp": "^6.2.0"
   },
   "peerDependencies": {
-    "rxjs": "7.3.0"
+    "rxjs": "7.5.2"
   },
   "files": [
     "lib",

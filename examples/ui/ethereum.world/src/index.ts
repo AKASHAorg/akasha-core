@@ -39,7 +39,7 @@ declare const __DEV__: boolean;
     // pre-installed widgets;
     // layout widget is always loaded by default
     defaultWidgets: [
-      { name: '@akashaproject/ui-widget-topbar', version: '0.0.1' },
+      '@akashaproject/ui-widget-topbar',
       '@akashaproject/ui-widget-trending',
       '@akashaproject/ui-widget-analytics',
       // '@akashaproject/ui-widget-sidebar',
