@@ -1,16 +1,32 @@
 import { JSONSchema } from '@textile/threaddb';
 
 export const schema: JSONSchema = {
-  title: 'Apps',
+  title: 'Integrations',
   type: 'object',
   properties: {
     name: {
       type: 'string',
     },
-    source: {
+    id: {
       type: 'string',
     },
-    info: {
+    integrationType: {
+      type: 'number',
+    },
+    version: {
+      type: 'string',
+    },
+    sources: {
+      type: 'array',
+      uniqueItems: true,
+      items: {
+        type: 'string',
+      },
+    },
+    status: {
+      type: 'boolean',
+    },
+    config: {
       type: 'array',
       uniqueItems: true,
       items: {
@@ -22,11 +38,15 @@ export const schema: JSONSchema = {
 
 export interface AppsSchema {
   name: string;
-  source?: string;
-  info?: string[][];
+  id: string;
+  integrationType: number;
+  version: string;
+  sources: string[];
+  status: boolean;
+  config?: string[][];
 }
 
 export default {
-  name: 'APPS',
+  name: 'Integrations',
   schema: schema,
 };
