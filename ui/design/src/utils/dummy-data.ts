@@ -302,8 +302,36 @@ const ICWorldAppsData: IntegrationCenterApp[] = [
     hash: 'bbaryfskgshgirsnxnbv',
     avatar: '',
     coverImage: '',
-    description:
-      'Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world. Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world. Never take a screenshot of a map again!️',
+    description: `Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again!`,
+    releases: [
+      {
+        type: 'current',
+        version: '22.8.2',
+        timestamp: new Date(),
+      },
+      {
+        type: 'bug',
+        version: '22.8.1',
+        timestamp: new Date(),
+      },
+    ],
+    authors: ['BoredApe', 'CyberPunk', 'TheDrFlynn'],
+    tags: [
+      'Image editor',
+      'Photo Filters',
+      'Filters',
+      'Photos',
+      'Pro',
+      'Color editing',
+      'Confetti',
+      'Visuals',
+    ],
+    license: 'wtfpl',
   },
 ];
 

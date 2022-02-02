@@ -115,10 +115,20 @@ export enum ModerationItemTypes {
   // @TODO: add support for tag type, when tag moderation is implemented
 }
 
+type Release = {
+  type: string;
+  version: string;
+  timestamp: Date;
+};
+
 export interface IntegrationCenterApp {
   name: string;
   hash: string;
   avatar?: string;
   coverImage?: string;
   description?: string;
+  releases?: Release[];
+  authors?: string[];
+  tags?: string[];
+  license?: string;
 }
