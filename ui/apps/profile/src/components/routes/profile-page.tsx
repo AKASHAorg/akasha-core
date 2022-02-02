@@ -131,7 +131,7 @@ const ProfilePage = (props: ProfilePageProps) => {
             <EntryCardHidden
               reportedAccount={profileState.reported}
               reason={profileState.reason}
-              headerTextLabel={t(`You reported this account for the following reason`)}
+              headerTextLabel={t('You reported this account for the following reason')}
               footerTextLabel={t('It is awaiting moderation.')}
             />
           )}

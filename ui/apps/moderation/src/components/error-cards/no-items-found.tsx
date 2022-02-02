@@ -12,7 +12,9 @@ export interface INoItemsFound {
 const NoItemsFound: React.FC<INoItemsFound> = ({ activeTab }) => {
   const { t } = useTranslation();
   return (
-    <Text textAlign="center">{t(`No ${activeTab} items found. Please check again later`)}</Text>
+    <Text textAlign="center">
+      {t('No {{activeTab}} items found. Please check again later', { activeTab })}
+    </Text>
   );
 };
 

@@ -222,7 +222,9 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
                   `network is set to ${requiredNetworkName}. We’ll now proceed to connect your wallet to Ethereum World.`,
                 )}`
           }
-          variableIconButtonLabel={t(`I have set the network to ${requiredNetworkName}`)}
+          variableIconButtonLabel={t('I have set the network to {{requiredNetworkName}}', {
+            requiredNetworkName,
+          })}
           variableIconErrorLabel={t(
             `Please set the network to ${requiredNetworkName} and try again.`,
           )}

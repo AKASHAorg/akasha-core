@@ -241,7 +241,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
         profileData.name || profileData.userName || truncateMiddle(profileData.ethAddress)
       }
       tabLabelsArr={[t('Followers'), t('Following'), t('Topics')]}
-      errorTitleLabel={t(`Sorry, we can't fetch the ${currentTabName} list.`)}
+      errorTitleLabel={t("Sorry, we can't fetch the {{currentTabName}} list.", { currentTabName })}
       errorSubtitleLabel={t("We can't display the list at the moment, please try again.")}
       placeholderTitleLabel={placeholderStrings.title}
       placeholderSubtitleLabel={placeholderStrings.subtitle}

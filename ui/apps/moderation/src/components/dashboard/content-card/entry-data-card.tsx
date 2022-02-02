@@ -59,7 +59,7 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               isModerated={true}
               isRemoved={(entryData as IEntryData).isRemoved}
               removedByMeLabel={t('You deleted this post')}
-              removedByAuthorLabel={t(`This ${itemType} was deleted by its author`)}
+              removedByAuthorLabel={t('This {{itemType}} was deleted by its author', { itemType })}
             />
           )}
           {itemType === ModerationItemTypes.ACCOUNT && (
