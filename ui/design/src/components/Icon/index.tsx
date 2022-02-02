@@ -11,6 +11,8 @@ export type IconType =
   | 'appEns'
   | 'appFeed'
   | 'appIpfs'
+  | 'appIC'
+  | 'appICCTA'
   | 'activity'
   | 'akasha'
   | 'addAppGrey'
@@ -61,6 +63,7 @@ export type IconType =
   | 'key'
   | 'info'
   | 'legal'
+  | 'licensewtfpl'
   | 'link'
   | 'loading'
   | 'login'
@@ -123,6 +126,8 @@ export const iconTypes: IconType[] = [
   'appEns',
   'appFeed',
   'appIpfs',
+  'appIC',
+  'appICCTA',
   'activity',
   'addAppGrey',
   'akasha',
@@ -173,6 +178,7 @@ export const iconTypes: IconType[] = [
   'italic',
   'key',
   'legal',
+  'licensewtfpl',
   'link',
   'loading',
   'login',

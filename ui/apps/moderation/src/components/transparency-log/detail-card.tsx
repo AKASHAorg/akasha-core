@@ -41,7 +41,7 @@ const DetailCard: React.FC<IDetailCard> = props => {
           selected.delisted ? 'delisted by' : 'kept by'
         }`,
       )}
-      content={t(`${selected.explanation}`)}
+      content={t('{{explanation}}', { explanation: selected.explanation })}
       isDelisted={selected.delisted}
       moderator={selected.moderator.name}
       moderatedTimestamp={selected.moderatedDate.toString()}
@@ -59,8 +59,10 @@ const DetailCard: React.FC<IDetailCard> = props => {
           ? `${BASE_PROFILE_URL}/${selected.contentID}`
           : `${BASE_SOCIAL_URL}/${selected.contentType}/${selected.contentID}`
       }`}
-      viewItemLabel={t(`View ${selected.contentType}`)}
-      reasonsLabel={t(`${selected.reasons.length > 1 ? 'reasons' : 'reason'}`)}
+      viewItemLabel={t('View {{contentType}}', { contentType: selected.contentType })}
+      reasonsLabel={t('{{reasons}}', {
+        reasons: selected.reasons.length > 1 ? 'reasons' : 'reason',
+      })}
       reasons={selected.reasons}
       explanationLabel={t('explanation')}
       contactModeratorsLabel={t('Contact the moderators')}
