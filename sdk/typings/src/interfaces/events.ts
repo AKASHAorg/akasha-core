@@ -51,3 +51,11 @@ export enum ENS_EVENTS {
   REGISTER = '#ens#Register',
   CLAIM = '#ens#Claim',
 }
+
+export enum APP_EVENTS {
+  INFO_READY = '#integration#ReleaseInfoReady',
+  REMOVED = '#integration#Removed',
+  TOGGLE_STATUS = '#integration#ToggleStatus',
+  UPDATE_VERSION = '#integration#UpdateVersion',
+  UPDATE_CONFIG = '#integration#UpdateConfig',
+}
