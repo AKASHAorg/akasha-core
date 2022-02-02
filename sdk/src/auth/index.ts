@@ -258,7 +258,7 @@ class AWF_Auth implements AWF_IAuth {
       // remote.config.metadata.set('x-textile-thread-name', db.dexie.name);
       // remote.config.metadata.set('x-textile-thread', db.id);
       // await remote.authorize(identity);
-      await lastValueFrom(this._db.open(2));
+      await lastValueFrom(this._db.open(3));
     }
     this._globalChannel.next({
       data: this.currentUser,

@@ -23,22 +23,22 @@
   "references": [
     { "path": "./ui/design" },
     { "path": "./ui/typings" },
-    { "path": "./ui/testing-utils"},
+    { "path": "./ui/testing-utils" },
     { "path": "./ui/hooks" },
     { "path": "./ui/lib/feed" },
     { "path": "./ui/widgets/layout" },
     { "path": "./ui/widgets/sidebar" },
     { "path": "./ui/widgets/top-bar" },
     { "path": "./ui/widgets/trending" },
-    { "path": "./ui/widgets/analytics"},
+    { "path": "./ui/widgets/analytics" },
     { "path": "./ui/apps/app-center" },
     { "path": "./ui/apps/bookmarks" },
     { "path": "./ui/apps/legal" },
     { "path": "./ui/apps/notifications" },
     { "path": "./ui/apps/profile" },
     { "path": "./ui/apps/search" },
-    { "path": "./sdk"},
-    { "path":  "./sdk/typings"}
+    { "path": "./sdk" },
+    { "path": "./sdk/typings" }
   ],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx"],
   "files": ["./sdk/src/definitions/graphql.d.ts"]

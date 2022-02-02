@@ -17,9 +17,9 @@ export const schema: JSONSchema = {
   },
 };
 
-export interface SettingsSchema {
+export interface SettingsSchema<T> {
   serviceName: string;
-  options: string[][];
+  options: T;
 }
 export default {
   name: 'SETTINGS',

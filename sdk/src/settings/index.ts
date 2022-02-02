@@ -6,7 +6,6 @@ import { exhaustMap, switchMap } from 'rxjs/operators';
 import { createObservableStream } from '../helpers/observable';
 import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
 import { lastValueFrom } from 'rxjs';
-import { Collection } from '@textile/threaddb';
 import { SettingsSchema } from '../db/settings.schema';
 
 @injectable()
@@ -17,9 +16,9 @@ class Settings implements ISettingsService {
    * Returns the settings object for a specified service name
    * @param service - The service name
    */
-  get(service: string) {
-    return this._db.getCollection(availableCollections.Settings).pipe(
-      switchMap((collection: { data: Collection<SettingsSchema> }) => {
+  get<T>(service: string) {
+    return this._db.getCollection<SettingsSchema<T>>(availableCollections.Settings).pipe(
+      switchMap(collection => {
         // this does not play well with threaddb typings
         const query: unknown = { serviceName: { $eq: service } };
         const doc = collection.data.findOne(query);
@@ -34,7 +33,10 @@ class Settings implements ISettingsService {
    * @param options - Array of option pairs [optionName, value]
    * @returns ServiceCallResult
    */
-  set(service: string, options: [[string, unknown]]): ServiceCallResult<string[]> {
+  set(
+    service: string,
+    options: [[string, string | number | boolean]],
+  ): ServiceCallResult<string[]> {
     return this.get(service).pipe(
       exhaustMap(settings => {
         const objToSave = {
@@ -42,17 +44,21 @@ class Settings implements ISettingsService {
           serviceName: service,
           options: options,
         };
-        return this._db.getCollection(availableCollections.Settings).pipe(
-          switchMap(collection => {
-            return createObservableStream(collection.data.save(objToSave));
-          }),
-        );
+        return this._db
+          .getCollection<SettingsSchema<typeof options>>(availableCollections.Settings)
+          .pipe(
+            switchMap(collection => {
+              return createObservableStream(collection.data.save(objToSave));
+            }),
+          );
       }),
     );
   }
 
   async remove(serviceName: string): Promise<void> {
-    const collection = await lastValueFrom(this._db.getCollection(availableCollections.Settings));
+    const collection = await lastValueFrom(
+      this._db.getCollection<SettingsSchema<unknown>>(availableCollections.Settings),
+    );
     const query: unknown = { serviceName: { $eq: serviceName } };
     const doc = await collection.data.findOne(query);
     if (doc._id) {

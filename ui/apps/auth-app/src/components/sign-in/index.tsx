@@ -150,11 +150,12 @@ const SignIn: React.FC<RootComponentProps> = props => {
           {networkNotSupported && (
             <RequiredNetworkStep
               setRequiredNetworkLabel={t('To use Ethereum World during the alpha period, ')}
-              setRequiredNetworkBoldLabel={`${t(`you'll need to set the`)} ${
-                selectedProvider === EthProviders.WalletConnect
-                  ? 'WalletConnect'
-                  : injectedProvider.name
-              } ${t('network to')}`}
+              setRequiredNetworkBoldLabel={t("you'll need to set the {{ provider }} network to", {
+                provider:
+                  selectedProvider === EthProviders.WalletConnect
+                    ? 'WalletConnect'
+                    : injectedProvider.name,
+              })}
               setRequiredNetworkAccentLabel={requiredNetworkName}
               injectedProvider={
                 selectedProvider === EthProviders.WalletConnect
@@ -167,9 +168,12 @@ const SignIn: React.FC<RootComponentProps> = props => {
               metamaskCTAAccentLabel={t('here')}
               metamaskCTALabel={t('to change the network.')}
               otherprovidersCTALabel={t('Please change the network manually')}
-              variableIconButtonLabel={t(`I have set the network to ${requiredNetworkName}`)}
+              variableIconButtonLabel={t('I have set the network to {{requiredNetworkName}}', {
+                requiredNetworkName,
+              })}
               variableIconErrorLabel={t(
-                `Please set the network to ${requiredNetworkName} and try again.`,
+                'Please set the network to {{requiredNetworkName}} and try again.',
+                { requiredNetworkName },
               )}
               onClickCheckNetwork={handleNetworkRecheck}
               selectedProvider={selectedProvider}

@@ -11,7 +11,11 @@ import { UsernameInputSection } from './sections/UsernameInputSection';
 import { CoverImageSection } from './sections/CoverImageSection';
 import { DescriptionSection } from './sections/DescriptionSection';
 import { ActionButtonsSection } from './sections/ActionButtonsSection';
-import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
+import {
+  ProfileProviderProperties,
+  ProfileProviders,
+  UpdateProfileStatus,
+} from '@akashaproject/ui-awf-typings/lib/profile';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 import getCroppedImage from '../../utils/get-cropped-image';
 
@@ -139,7 +143,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
         } else {
           updatedFields[key] = providerData[key];
         }
-        if (key === 'avatar') {
+        if (key === ProfileProviderProperties.AVATAR) {
           if (providerData[key] && typeof providerData[key] === 'string') {
             updatedFields[key] = {
               preview: providerData[key],
@@ -148,7 +152,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             };
           }
         }
-        if (key === 'coverImage') {
+        if (key === ProfileProviderProperties.COVER_IMAGE) {
           if (providerData[key] && typeof providerData[key] === 'string') {
             updatedFields[key] = {
               preview: providerData[key],
@@ -157,12 +161,14 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             };
           }
         }
-        if (key === 'userName') {
+        if (key === ProfileProviderProperties.USERNAME) {
           if (providerData.userName) {
             updatedFields[key] = providerData.userName;
           } else if (providerData.default && providerData.default.length > 0) {
             const userNameProvider = providerData.default.find(
-              p => p.property === 'userName' && p.provider === 'ewa.providers.basic',
+              p =>
+                p.property === ProfileProviderProperties.USERNAME &&
+                p.provider === ProfileProviders.EWA_BASIC,
             );
             updatedFields[key] = userNameProvider ? userNameProvider.value : '';
           }
@@ -228,17 +234,23 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   const handleSave = async () => {
-    const [croppedImage, imgUrl] = await handleCropImage();
+    // if cover image is updated, crop before saving
+    // @TODO: do same for avatar upload
+    if (fieldsToUpdate.includes(ProfileProviderProperties.COVER_IMAGE)) {
+      const [croppedImage, imgUrl] = await handleCropImage();
 
-    const modFormValues: IFormValues = {
-      ...formValues,
-      coverImage: {
-        ...formValues.coverImage,
-        src: croppedImage as string,
-        preview: imgUrl as string,
-      },
-    };
-    onSave(modFormValues, fieldsToUpdate);
+      const modFormValues: IFormValues = {
+        ...formValues,
+        coverImage: {
+          ...formValues.coverImage,
+          src: croppedImage as string,
+          preview: imgUrl as string,
+        },
+      };
+      onSave(modFormValues, fieldsToUpdate);
+    } else {
+      onSave(formValues, fieldsToUpdate);
+    }
   };
 
   const handleFormFieldChange = React.useCallback(
@@ -299,7 +311,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       return;
     }
     const file: File = ev.target.files[0];
-    handleImageInsert('avatar')(file, false);
+    handleImageInsert(ProfileProviderProperties.AVATAR)(file, false);
   };
 
   const handleCoverFileUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -307,7 +319,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       return;
     }
     const file: File = ev.target.files[0];
-    handleImageInsert('coverImage')(file, false);
+    handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(file, false);
   };
 
   return (
@@ -392,7 +404,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           deleteLabel={deleteLabel}
           target={avatarRef.current}
           closePopover={closeAvatarPopover}
-          insertImage={handleImageInsert('avatar')}
+          insertImage={handleImageInsert(ProfileProviderProperties.AVATAR)}
           currentImage={!!formValues.avatar}
           onMobile={isMobileOnly}
           handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
@@ -407,7 +419,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           deleteLabel={deleteLabel}
           target={coverImageRef.current}
           closePopover={closeCoverImagePopover}
-          insertImage={handleImageInsert('coverImage')}
+          insertImage={handleImageInsert(ProfileProviderProperties.COVER_IMAGE)}
           currentImage={!!formValues.coverImage}
           onMobile={isMobileOnly}
           handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
