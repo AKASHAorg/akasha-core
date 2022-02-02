@@ -9,6 +9,7 @@ export {
   PROFILE_EVENTS,
   WEB3_EVENTS,
 } from '@akashaproject/sdk-typings/lib/interfaces/events';
+export { IntegrationInfo, ReleaseInfo } from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { Subject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';

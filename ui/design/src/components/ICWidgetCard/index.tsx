@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Text, Tabs } from 'grommet';
-import { IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
+import { IntegrationInfo } from '@akashaproject/ui-awf-typings';
 
 import Icon from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
@@ -12,8 +12,8 @@ import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 export interface ICWidgetCardProps {
   className?: string;
 
-  worldApps: IntegrationCenterApp[];
-  installedApps: IntegrationCenterApp[];
+  worldApps: IntegrationInfo[];
+  installedApps: IntegrationInfo[];
   // labels
   titleLabel: string;
   worldAppsLabel: string;
@@ -65,12 +65,13 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
       <Tabs onActive={handleTabChange}>
         <StyledTab title={worldAppsLabel}>
           <Box pad="medium" gap="medium">
-            {worldApps.length === 0 && !isLoadingWorldApps && (
+            {worldApps && worldApps.length === 0 && !isLoadingWorldApps && (
               <Box pad="medium" align="center" justify="center">
                 <Text>{noWorldAppsLabel}</Text>
               </Box>
             )}
-            {worldApps.length === 0 &&
+            {worldApps &&
+              worldApps.length === 0 &&
               isLoadingWorldApps &&
               Array.from({ length: 4 }, (_el, index: number) => (
                 <Box key={index} direction="row" justify="between" align="center">
@@ -81,7 +82,8 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                   <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
                 </Box>
               ))}
-            {worldApps.length !== 0 &&
+            {worldApps &&
+              worldApps.length !== 0 &&
               worldApps.slice(0, 4).map((app, index) => (
                 <Box key={index} direction="row" justify="between">
                   <Box direction="row">
@@ -100,7 +102,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                           <SubtitleTextIcon
                             onClick={() => onClickWorldApp(app.name)}
                             label={app.name}
-                            subtitle={`@${app.hash}`}
+                            subtitle={`@${app.id}`}
                             labelSize="large"
                             gap="xxsmall"
                             maxWidth="10rem"
@@ -118,12 +120,13 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
         </StyledTab>
         <StyledTab title={installedAppsLabel}>
           <Box pad="medium" gap="medium">
-            {installedApps.length === 0 && !isLoadingInstalledApps && (
+            {installedApps && installedApps.length === 0 && !isLoadingInstalledApps && (
               <Box pad="medium" align="center" justify="center">
                 <Text>{noInstalledAppsLabel}</Text>
               </Box>
             )}
-            {installedApps.length === 0 &&
+            {installedApps &&
+              installedApps.length === 0 &&
               isLoadingInstalledApps &&
               Array.from({ length: 4 }, (_el, index: number) => (
                 <Box key={index} direction="row" justify="between" align="center">
@@ -134,7 +137,8 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                   <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
                 </Box>
               ))}
-            {installedApps.length !== 0 &&
+            {installedApps &&
+              installedApps.length !== 0 &&
               installedApps.slice(0, 4).map((app, index) => (
                 <Box key={index} direction="row" justify="between">
                   <Box direction="row">
@@ -153,7 +157,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                           <SubtitleTextIcon
                             onClick={() => onClickInstalledApp(app.name)}
                             label={app.name}
-                            subtitle={`@${app.hash}`}
+                            subtitle={`@${app.id}`}
                             labelSize="large"
                             gap="xxsmall"
                             maxWidth="10rem"

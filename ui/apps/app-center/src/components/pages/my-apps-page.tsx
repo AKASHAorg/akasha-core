@@ -11,7 +11,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const defaultAppsNamesNormalized = worldConfig.defaultApps.map(app => {
+  const defaultAppsNamesNormalized = worldConfig?.defaultApps.map(app => {
     if (typeof app === 'string') {
       return {
         name: app,
@@ -41,9 +41,10 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               direction="row"
               justify="between"
               border={{ side: 'bottom', size: '1px', color: 'border' }}
+              pad={{ bottom: 'small' }}
             >
               <SubtitleTextIcon label={app.name} subtitle={app.id} iconType="appIC" />
-              <Icon type="checkSimple" accentColor={true} size="lg" />
+              <Icon type="checkSimple" accentColor={true} size="md" />
             </Box>
           ))}
         </Box>

@@ -3,7 +3,11 @@ import {
   MenuItemType,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LogoTypeSource, IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
+import {
+  LogoTypeSource,
+  IntegrationCenterApp,
+  IntegrationInfo,
+} from '@akashaproject/ui-awf-typings';
 
 import { IAppData } from '../components/AppsWidgetCard';
 
@@ -278,41 +282,73 @@ const trendingProfilesData = [
   },
 ];
 
-const ICWorldAppsData: IntegrationCenterApp[] = [
+const ICWorldAppsData: IntegrationInfo[] = [
   {
     name: 'Theme Wizard',
-    hash: 'bbaryfskgshgirsnxnbv',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427384932',
+    enabled: true,
   },
   {
     name: 'Moderating Tools',
-    hash: 'bbaryfskgshgirsnxnbv',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf4427384982',
+    enabled: true,
   },
   {
     name: 'Quick Moderation',
-    hash: 'bbaryfskgshgirsnxnbv',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427384986',
+    enabled: true,
   },
   {
     name: 'Confetti Replies',
-    hash: 'bbaryfskgshgirsnxnbv',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427384382',
+    enabled: true,
   },
 ];
 
-const ICInstalledAppsData: IntegrationCenterApp[] = [
+const ICInstalledAppsData: IntegrationInfo[] = [
   {
     name: 'Feed',
-    hash: '#bbaryfskgshgirsnxnbv',
+    id: '#bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427381982',
+    enabled: true,
   },
   {
     name: 'Settings',
-    hash: '#bbaryfskgshgirsnxnbv',
+    id: '#bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427384882',
+    enabled: true,
   },
   {
     name: 'Search',
-    hash: '#bbaryfskgshgirsnxnbv',
+    id: '#bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427383982',
+    enabled: true,
   },
   {
     name: 'Bookmarks',
-    hash: '#bbaryfskgshgirsnxnbv',
+    id: '#bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427384582',
+    enabled: true,
   },
 ];
 

@@ -33,3 +33,24 @@ export interface AWF_IIC_REGISTRY {
 
   getIntegrationsInfo(opt: unknown): Observable<unknown>;
 }
+
+export interface ReleaseInfo {
+  integrationID: string;
+  id: string;
+  name: string;
+  version: string;
+  integrationType: number;
+  links: string;
+  sources: string[];
+  author: string;
+  enabled: boolean;
+}
+
+export interface IntegrationInfo {
+  id: string;
+  name: string;
+  author: string;
+  integrationType: number;
+  latestReleaseId: string;
+  enabled: boolean;
+}

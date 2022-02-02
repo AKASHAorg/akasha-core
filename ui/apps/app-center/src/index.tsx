@@ -31,4 +31,13 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     route: rootRoute,
   },
+  extends: [
+    {
+      mountsIn: opts.layoutConfig.widgetSlotId,
+      activeWhen: (location, pathToActiveWhen) => {
+        return pathToActiveWhen(rootRoute)(location);
+      },
+      loadingFn: () => import('./extensions/integrations-widget'),
+    },
+  ],
 });

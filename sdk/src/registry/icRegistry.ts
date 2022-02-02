@@ -8,33 +8,16 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { constants as ethersConstants, ethers, utils as ethersUtils } from 'ethers';
 import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
-import { AWF_IIC_REGISTRY } from '@akashaproject/sdk-typings/lib/interfaces/registry';
+import {
+  AWF_IIC_REGISTRY,
+  ReleaseInfo,
+  IntegrationInfo,
+} from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { lastValueFrom } from 'rxjs';
 import { createFormattedValue } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import IpfsConnector from '../common/ipfs.connector';
 import { GetLatestRelease, GetIntegrationInfo } from './icRegistry.graphql';
-
-export interface ReleaseInfo {
-  integrationID: string;
-  id: string;
-  name: string;
-  version: string;
-  integrationType: number;
-  links: string;
-  sources: string[];
-  author: string;
-  enabled: boolean;
-}
-
-export interface IntegrationInfo {
-  id: string;
-  name: string;
-  author: string;
-  integrationType: number;
-  latestReleaseId: string;
-  enabled: boolean;
-}
 
 @injectable()
 class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {

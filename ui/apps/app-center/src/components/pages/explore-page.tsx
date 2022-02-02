@@ -11,7 +11,7 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
-  const defaultAppsNamesNormalized = worldConfig.defaultApps.map(app => {
+  const defaultAppsNamesNormalized = worldConfig?.defaultApps.map(app => {
     if (typeof app === 'string') {
       return {
         name: app,

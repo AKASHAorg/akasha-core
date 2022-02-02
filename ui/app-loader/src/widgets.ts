@@ -28,6 +28,7 @@ class Widgets extends BaseIntegration {
     this.widgetConfigs = {};
     this.widgetParcels = {};
     this.layoutConfig = opts.layoutConfig;
+    this.worldConfig = opts.worldConfig;
     this.getAppRoutes = opts.getAppRoutes;
   }
   add(integration: BaseIntegrationInfo) {
