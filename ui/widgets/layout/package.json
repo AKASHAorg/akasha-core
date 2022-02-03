@@ -28,20 +28,20 @@
     "watch": "webpack --config webpack.config.js --watch",
     "pretest": "tsc -m commonjs",
     "test": "jest",
-    "clean": "tsc --build --clean"
+    "clean": "rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-hooks": "*",
     "@akashaproject/ui-awf-typings": "*",
-    "single-spa-react": "4.6.0",
-    "react-i18next": "11.12.0",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
-    "i18next-fetch-backend": "3.0.0",
     "i18next-chained-backend": "3.0.2",
+    "i18next-fetch-backend": "3.0.0",
     "i18next-localstorage-backend": "3.1.3",
-    "react-router-dom": "6.0.2"
+    "react-i18next": "11.12.0",
+    "react-router-dom": "6.0.2",
+    "single-spa-react": "4.6.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-testing-utils": "*",

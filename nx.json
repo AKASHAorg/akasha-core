@@ -1,0 +1,50 @@
+{
+  "extends": "@nrwl/workspace/presets/core.json",
+  "npmScope": "blah",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["tsc", "build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "targetDependencies": {
+    "install": [
+      {
+        "target": "tsc",
+        "projects": "dependencies"
+      }
+    ],
+    "tsc": [
+      {
+        "target": "tsc",
+        "projects": "dependencies"
+      }
+    ],
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ],
+    "pack": [
+      {
+        "target": "run pack",
+        "projects": "dependencies"
+      }
+    ],
+    "pack:watch": [
+      {
+        "target": "pack:watch",
+        "projects": "dependencies"
+      }
+    ]
+  }
+}

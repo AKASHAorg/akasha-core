@@ -31,7 +31,7 @@
     "pretest": "tsc -m commonjs",
     "test": "jest",
     "watch": "webpack --config webpack.config.js",
-    "clean": "tsc --build --clean"
+    "clean": "rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

@@ -14,18 +14,18 @@ export interface IAppSettings {
    * Returns an app configuration object
    * @param appName - Name of the app
    */
-  get(appName: string): Promise<unknown>;
+  get(appName: string): Promise<any>;
 
   /**
    * Returns all installed apps
    */
-  getAll(): Promise<unknown>;
+  getAll(): Promise<any>;
 
   /**
    * Persist installed app configuration for the current user
    * @param app - Object
    */
-  install(app: unknown): Promise<string[] | boolean>;
+  install(app: unknown): Promise<string[] | boolean | any>;
 
   /**
    * Uninstall app by name
