@@ -7,7 +7,7 @@
     "build:all": "yarn tsc:all && yarn build:sdk && yarn pack:ui && yarn build:feed-app && yarn extract:translations",
     "build:sdk": "yarn tsc:sdk && nx run @akashaproject/awf-sdk:build",
     "build:ewa": "nx run-many --target=build:staging --projects=@akashaproject/ethereum.world",
-    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
+    "clean": "tsc --build --clean && rimraf node_modules",
     "install:clean": "yarn clean && yarn build:all",
     "compile:sc": "lerna run compile:sc",
     "deploy:sc": "lerna run deploy:sc",
@@ -28,8 +28,8 @@
     "start:feed-app": "nx run @akashaproject/ethereum.world:start",
     "start:expose-feed-app": "lerna run start:expose --scope=@akashaproject/ethereum.world --stream",
     "build:feed-app": "nx run @akashaproject/ethereum.world:build",
-    "start:design-system:storybook": "lerna run storybook --scope @akashaproject/design-system --stream",
-    "build:storybook": "lerna run build-storybook --scope @akashaproject/design-system --stream",
+    "start:design-system:storybook": "nx run @akashaproject/design-system:storybook",
+    "build:storybook": "nx run @akashaproject/design-system:build-storybook",
     "start:only": "lerna run start --scope $AWF_PACKAGE --stream",
     "watch:widgets": "lerna run --parallel --scope @akashaproject/ui-widget-* watch",
     "watch:apps": "lerna run --parallel --scope @akashaproject/app-* watch",
@@ -149,7 +149,7 @@
   "engines": {
     "node": ">=16.13.0",
     "npm": ">=8.1.0",
-    "yarn": ">=1.22.17"
+    "yarn": "<=1.22.17"
   },
   "husky": {
     "hooks": {

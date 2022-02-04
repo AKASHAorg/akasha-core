@@ -183,7 +183,7 @@
         }
       }
     },
-    "@akashaproject/ui-widget-feed": {
+    "@akashaproject/ui-lib-feed": {
       "root": "ui/lib/feed",
       "sourceRoot": "ui/lib/feed/src",
       "projectType": "application",

@@ -2,31 +2,31 @@ build:	install build.all
 build.tsc: build.tsc.sdk build.tsc.ui
 build.all: build.tsc build.sdk build.translations build.ui
 build.tsc.sdk:
-	npm run tsc:sdk
+	yarn run tsc:sdk
 build.tsc.ui:
-	npm run tsc:ui
+	yarn run tsc:ui
 build.sdk:
 	export NODE_ENV='production' && \
-	npm run build:sdk
+	yarn run build:sdk
 build.ui:
 	export NODE_ENV='production' && \
-	npm run pack:ui
+	yarn run pack:ui
 build.feed-app:
-	npm run build:feed-app
+	yarn run build:feed-app
 clean:
 	rm -rf ./ui/build && \
-	npm run clean -- --y
+	yarn run clean
 install:
-	npm install && \
-	npm run bootstrap
+	yarn install --frozen-lockfile install && \
+	yarn run bootstrap
 build.staging.feed:
 	export NODE_OPTIONS='--max-old-space-size=4096' && \
   export NODE_ENV='production' && \
-	npm run build:ewa
+	yarn run build:ewa
 build.staging.feed.static: build build.staging.feed
 build.staging.storybook:
-	npm run build:storybook
+	yarn run build:storybook
 build.staging.storybook.static: install build.tsc.ui build.staging.storybook
 build.translations:
-	npm run extract:translations
+	yarn run extract:translations
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';

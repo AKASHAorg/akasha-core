@@ -40,7 +40,7 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-widget-feed": "*",
+    "@akashaproject/ui-lib-feed": "*",
     "@akashaproject/ui-awf-testing-utils": "*",
     "@akashaproject/ui-widget-trending": "*",
     "react-i18next": "11.12.0",
