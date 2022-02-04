@@ -17,7 +17,7 @@ clean:
 	rm -rf ./ui/build && \
 	yarn run clean
 install:
-	yarn install --frozen-lockfile install && \
+	yarn install --frozen-lockfile && \
 	yarn run bootstrap
 build.staging.feed:
 	export NODE_OPTIONS='--max-old-space-size=4096' && \
