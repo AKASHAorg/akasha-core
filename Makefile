@@ -1,10 +1,5 @@
 build:	install build.all
-build.tsc: build.tsc.sdk build.tsc.ui
-build.all: build.tsc build.sdk build.translations build.ui
-build.tsc.sdk:
-	yarn run tsc:sdk
-build.tsc.ui:
-	yarn run tsc:ui
+build.all: build.sdk build.translations build.ui
 build.sdk:
 	export NODE_ENV='production' && \
 	yarn run build:sdk
@@ -27,7 +22,7 @@ build.staging.feed:
 build.staging.feed.static: build build.staging.feed
 build.staging.storybook:
 	yarn run build:storybook
-build.staging.storybook.static: install build.tsc.ui build.staging.storybook
+build.staging.storybook.static: install build.staging.storybook
 build.translations:
 	yarn run extract:translations
 
