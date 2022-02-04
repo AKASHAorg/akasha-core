@@ -18,7 +18,8 @@ clean:
 	yarn run clean
 install:
 	yarn install --frozen-lockfile && \
-	yarn run bootstrap
+	yarn run bootstrap && \
+	yarn run tsc:all
 build.staging.feed:
 	export NODE_OPTIONS='--max-old-space-size=4096' && \
   export NODE_ENV='production' && \
