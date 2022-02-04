@@ -33,7 +33,7 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/apps/settings-app",
     "watch": "webpack --config webpack.config.js --watch",
-    "clean": "rimraf lib dist node_modules tsconfig.tsbuildinfo"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "bugs": {
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"

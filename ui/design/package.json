@@ -37,7 +37,7 @@
     "pack:watch": "nodemon",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "clean": "rimraf lib dist node_modules tsconfig.tsbuildinfo"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "nodemonConfig": {
     "ignore": [

@@ -7,7 +7,7 @@
     "build:all": "yarn tsc:all && yarn build:sdk && yarn pack:ui && yarn build:feed-app && yarn extract:translations",
     "build:sdk": "yarn tsc:sdk && nx run @akashaproject/awf-sdk:build",
     "build:ewa": "nx run-many --target=build:staging --projects=@akashaproject/ethereum.world",
-    "clean": "yarn workspaces run clean && rimraf node_modules",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
     "install:clean": "yarn clean && yarn build:all",
     "compile:sc": "lerna run compile:sc",
     "deploy:sc": "lerna run deploy:sc",
@@ -148,7 +148,8 @@
   ],
   "engines": {
     "node": ">=16.13.0",
-    "npm": ">=8.1.0"
+    "npm": ">=8.1.0",
+    "yarn": ">=1.22.17"
   },
   "husky": {
     "hooks": {

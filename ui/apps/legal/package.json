@@ -27,7 +27,7 @@
     "postpack": "copyfiles -f ./dist/* ../../build/apps/legal",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
     "watch": "webpack --config ./webpack.config.js --watch",
-    "clean": "rimraf lib dist node_modules tsconfig.tsbuildinfo"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "@akashaproject/design-system": "*",

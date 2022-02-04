@@ -10,6 +10,6 @@
   "scripts": {
     "tsc": "tsc --build tsconfig.json",
     "prepare": "npm run tsc",
-    "clean": "rimraf lib dist node_modules tsconfig.tsbuildinfo"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   }
 }

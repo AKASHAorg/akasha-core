@@ -24,7 +24,7 @@
     "prepare": "npm run tsc",
     "pretest": "tsc -m commonjs",
     "test": "jest",
-    "clean": "rimraf lib dist node_modules tsconfig.tsbuildinfo",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../build/hooks"
   },
