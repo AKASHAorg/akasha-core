@@ -22,7 +22,8 @@
           "outputs": ["sdk/dist"],
           "options": {
             "command": "yarn build",
-            "cwd": "sdk"
+            "cwd": "sdk",
+            "parallel": false
           }
         }
       }
@@ -44,7 +45,8 @@
           "webpackConfig": "ui/design/webpack.config.js",
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/design"
+            "cwd": "ui/design",
+            "parallel": false
           }
         }
       }
@@ -59,7 +61,8 @@
           "outputs": ["ui/build/hooks"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/hooks"
+            "cwd": "ui/hooks",
+            "parallel": false
           }
         }
       }
@@ -74,7 +77,8 @@
           "outputs": ["ui/build/app-loader"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/app-loader"
+            "cwd": "ui/app-loader",
+            "parallel": false
           }
         }
       }
@@ -88,7 +92,8 @@
           "builder": "@nrwl/workspace:run-commands",
           "options": {
             "commands": ["yarn build"],
-            "cwd": "ui/testing-utils"
+            "cwd": "ui/testing-utils",
+            "parallel": false
           }
         }
       }
@@ -103,7 +108,8 @@
           "outputs": ["ui/build/widgets/analytics"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/widgets/analytics"
+            "cwd": "ui/widgets/analytics",
+            "parallel": false
           }
         }
       }
@@ -118,7 +124,8 @@
           "outputs": ["ui/build/widgets/layout"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/widgets/layout"
+            "cwd": "ui/widgets/layout",
+            "parallel": false
           }
         }
       }
@@ -133,7 +140,8 @@
           "outputs": ["ui/build/widgets/sidebar"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/widgets/sidebar"
+            "cwd": "ui/widgets/sidebar",
+            "parallel": false
           }
         }
       }
@@ -148,7 +156,8 @@
           "outputs": ["ui/build/widgets/top-bar"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/widgets/top-bar"
+            "cwd": "ui/widgets/top-bar",
+            "parallel": false
           }
         }
       }
@@ -163,7 +172,8 @@
           "outputs": ["ui/build/widgets/trending"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/widgets/trending"
+            "cwd": "ui/widgets/trending",
+            "parallel": false
           }
         }
       }
@@ -178,7 +188,8 @@
           "outputs": ["ui/build/widgets/ic"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/widgets/ic"
+            "cwd": "ui/widgets/ic",
+            "parallel": false
           }
         }
       }
@@ -193,7 +204,8 @@
           "outputs": ["ui/build/widgets/feed"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/lib/feed"
+            "cwd": "ui/lib/feed",
+            "parallel": false
           }
         }
       }
@@ -208,7 +220,8 @@
           "outputs": ["ui/apps/akasha"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/akasha"
+            "cwd": "ui/apps/akasha",
+            "parallel": false
           }
         }
       }
@@ -223,7 +236,8 @@
           "outputs": ["ui/apps/app-center"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/app-center"
+            "cwd": "ui/apps/app-center",
+            "parallel": false
           }
         }
       }
@@ -238,7 +252,8 @@
           "outputs": ["ui/apps/auth-app"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/auth-app"
+            "cwd": "ui/apps/auth-app",
+            "parallel": false
           }
         }
       }
@@ -253,7 +268,8 @@
           "outputs": ["ui/apps/bookmarks"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/bookmarks"
+            "cwd": "ui/apps/bookmarks",
+            "parallel": false
           }
         }
       }
@@ -268,7 +284,8 @@
           "outputs": ["ui/apps/legal"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/legal"
+            "cwd": "ui/apps/legal",
+            "parallel": false
           }
         }
       }
@@ -283,7 +300,8 @@
           "outputs": ["ui/apps/moderation"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/moderation"
+            "cwd": "ui/apps/moderation",
+            "parallel": false
           }
         }
       }
@@ -298,7 +316,8 @@
           "outputs": ["ui/apps/notifications"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/notifications"
+            "cwd": "ui/apps/notifications",
+            "parallel": false
           }
         }
       }
@@ -313,7 +332,8 @@
           "outputs": ["ui/apps/profile"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/profile"
+            "cwd": "ui/apps/profile",
+            "parallel": false
           }
         }
       }
@@ -328,7 +348,8 @@
           "outputs": ["ui/apps/search"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/search"
+            "cwd": "ui/apps/search",
+            "parallel": false
           }
         }
       }
@@ -343,7 +364,8 @@
           "outputs": ["ui/apps/settings-app"],
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/apps/settings-app"
+            "cwd": "ui/apps/settings-app",
+            "parallel": false
           }
         }
       }
@@ -357,7 +379,8 @@
           "builder": "@nrwl/workspace:run-commands",
           "options": {
             "commands": ["yarn build"],
-            "cwd": "examples/ui/ethereum.world"
+            "cwd": "examples/ui/ethereum.world",
+            "parallel": false
           }
         },
         "start": {
