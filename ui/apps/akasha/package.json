@@ -31,7 +31,7 @@
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/apps/akasha",
     "watch": "webpack --config webpack.config.js --watch",
-    "clean": "tsc --build --clean"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "bugs": {
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
@@ -40,7 +40,7 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-widget-feed": "*",
+    "@akashaproject/ui-lib-feed": "*",
     "@akashaproject/ui-awf-testing-utils": "*",
     "@akashaproject/ui-widget-trending": "*",
     "react-i18next": "11.12.0",

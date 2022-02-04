@@ -24,7 +24,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { redirect } from '../../services/routing-service';

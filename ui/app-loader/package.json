@@ -25,7 +25,7 @@
     "postpack": "copyfiles -f ./dist/* ../build/app-loader",
     "prepare": "npm run tsc",
     "watch": "webpack --config webpack.config.js --watch",
-    "clean": "tsc --build --clean"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "ismobilejs": "1.1.1",

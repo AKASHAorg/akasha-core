@@ -31,7 +31,7 @@ export const bootstrap = (props: RootComponentProps) => {
   return setupI18next({
     logger: props.logger,
     // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'ui-widget-feed',
+    namespace: 'ui-lib-feed',
   });
 };
 

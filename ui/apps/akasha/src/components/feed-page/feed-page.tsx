@@ -14,7 +14,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';

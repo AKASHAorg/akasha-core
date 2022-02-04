@@ -13,7 +13,7 @@
     "start": "webpack serve --config ./webpack.config.js --port 8131",
     "start:expose": "webpack serve --config ./webpack.config.js --port 8131 --host 0.0.0.0",
     "build": "webpack --config ./webpack.config.js",
-    "clean": "rm -rf dist",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
     "build:staging": "webpack --config ./webpack.config.js",
     "postbuild:staging": "copyfiles -u 1 \"./dist/**/*\" ./public"
   },
