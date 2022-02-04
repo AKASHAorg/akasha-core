@@ -40,7 +40,7 @@
     { "path": "./ui/apps/search" },
     { "path": "./sdk" },
     { "path": "./sdk/typings" },
-    { "path": "./examples/ui/ethereum.world" }
+    { "path": "./examples/ui/ethereum.world"}
   ],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp"],
   "files": ["./sdk/src/definitions/graphql.d.ts"]
