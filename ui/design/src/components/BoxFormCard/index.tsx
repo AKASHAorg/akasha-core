@@ -5,7 +5,7 @@ import { FormImagePopover } from '../ImagePopover/form-image-popover';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
 import { TitleSection } from './sections/TitleSection';
-import { AvatarSection } from './sections/AvatarSection';
+import { AvatarSection, CropValue } from './sections/AvatarSection';
 import { NameInputSection } from './sections/NameInputSection';
 import { UsernameInputSection } from './sections/UsernameInputSection';
 import { CoverImageSection } from './sections/CoverImageSection';
@@ -54,6 +54,7 @@ export interface IBoxFormCardProps {
 
 export interface IImageSrc {
   src: string | null;
+  type?: string;
   prefix: string | null;
   preview?: string;
   isUrl: boolean;
@@ -120,10 +121,20 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     ethAddress: '',
   });
   // state values to handle image cropping
-  const [crop, setCrop] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [zoom, setZoom] = React.useState<number>(1);
-  const [rotation /* setRotation */] = React.useState<number>(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = React.useState(null);
+  const [avatarCrop, setAvatarCrop] = React.useState<CropValue>({
+    x: 0,
+    y: 0,
+  });
+  const [coverImageCrop, setCoverImageCrop] = React.useState<CropValue>({
+    x: 0,
+    y: 0,
+  });
+  const [avatarZoom, setAvatarZoom] = React.useState<number>(1);
+  const [coverImageZoom, setCoverImageZoom] = React.useState<number>(1);
+  const [avatarRotation /* setAvatarRotation */] = React.useState<number>(0);
+  const [coverImageRotation /* setCoverImageRotation */] = React.useState<number>(0);
+  const [avatarCroppedAreaPixels, setAvatarCroppedAreaPixels] = React.useState(null);
+  const [coverImageCroppedAreaPixels, setCoverImageCroppedAreaPixels] = React.useState(null);
 
   // required for popovers
   const avatarRef: React.RefObject<HTMLDivElement> = React.useRef(null);
@@ -198,17 +209,23 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(true);
   };
 
-  const onCropComplete = React.useCallback((_, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
+  const onAvatarCropComplete = React.useCallback((_, croppedAreaPixels) => {
+    setAvatarCroppedAreaPixels(croppedAreaPixels);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleCropImage = React.useCallback(async () => {
+  const onCoverImageCropComplete = React.useCallback((_, croppedAreaPixels) => {
+    setCoverImageCroppedAreaPixels(croppedAreaPixels);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleCropAvatar = React.useCallback(async () => {
     try {
       const [cropped, imgUrl] = await getCroppedImage(
-        formValues.coverImage.preview,
-        croppedAreaPixels,
-        rotation,
+        formValues.avatar.preview,
+        avatarCroppedAreaPixels,
+        avatarRotation,
+        formValues.avatar.type,
       );
 
       return [cropped, imgUrl];
@@ -216,7 +233,23 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       console.error(e);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [croppedAreaPixels, rotation]);
+  }, [avatarCroppedAreaPixels, avatarRotation]);
+
+  const handleCropCoverImage = React.useCallback(async () => {
+    try {
+      const [cropped, imgUrl] = await getCroppedImage(
+        formValues.coverImage.preview,
+        coverImageCroppedAreaPixels,
+        coverImageRotation,
+        formValues.coverImage.type,
+      );
+
+      return [cropped, imgUrl];
+    } catch (e) {
+      console.error(e);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coverImageCroppedAreaPixels, coverImageRotation]);
 
   const handleRevert = () => {
     setFormValues({
@@ -234,10 +267,27 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   const handleSave = async () => {
+    let values: IFormValues = formValues;
+
+    // if avatar is updated, crop before saving
+    if (fieldsToUpdate.includes(ProfileProviderProperties.AVATAR)) {
+      const [croppedImage, imgUrl] = await handleCropAvatar();
+
+      const modFormValues: IFormValues = {
+        ...formValues,
+        avatar: {
+          ...formValues.avatar,
+          src: croppedImage as string,
+          preview: imgUrl as string,
+        },
+      };
+      URL.revokeObjectURL(imgUrl as string);
+      values = modFormValues;
+    }
+
     // if cover image is updated, crop before saving
-    // @TODO: do same for avatar upload
     if (fieldsToUpdate.includes(ProfileProviderProperties.COVER_IMAGE)) {
-      const [croppedImage, imgUrl] = await handleCropImage();
+      const [croppedImage, imgUrl] = await handleCropCoverImage();
 
       const modFormValues: IFormValues = {
         ...formValues,
@@ -247,10 +297,11 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           preview: imgUrl as string,
         },
       };
-      onSave(modFormValues, fieldsToUpdate);
-    } else {
-      onSave(formValues, fieldsToUpdate);
+      URL.revokeObjectURL(imgUrl as string);
+      values = modFormValues;
     }
+
+    onSave(values, fieldsToUpdate);
   };
 
   const handleFormFieldChange = React.useCallback(
@@ -288,7 +339,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     if (isUrl && typeof src === 'string') {
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
     } else if (typeof src !== 'string') {
-      handleFormFieldChange({ [imageKey]: { src, isUrl, preview: URL.createObjectURL(src) } });
+      handleFormFieldChange({
+        [imageKey]: { src, isUrl, type: src.type, preview: URL.createObjectURL(src) },
+      });
     }
   };
 
@@ -334,9 +387,14 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             <AvatarSection
               avatarLabel={avatarLabel}
               formValues={formValues}
+              crop={avatarCrop}
+              zoom={avatarZoom}
               avatarPopoverOpen={avatarPopoverOpen}
               avatarRef={avatarRef}
               avatarInputRef={avatarInputRef}
+              setCrop={setAvatarCrop}
+              setZoom={setAvatarZoom}
+              onCropComplete={onAvatarCropComplete}
               handleAvatarClick={handleAvatarClick}
               handleAvatarFileUpload={handleAvatarFileUpload}
             />
@@ -364,14 +422,14 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           <CoverImageSection
             coverImageLabel={coverImageLabel}
             formValues={formValues}
-            crop={crop}
-            zoom={zoom}
+            crop={coverImageCrop}
+            zoom={coverImageZoom}
             coverImagePopoverOpen={coverImagePopoverOpen}
             coverImageRef={coverImageRef}
             coverInputRef={coverInputRef}
-            setCrop={setCrop}
-            setZoom={setZoom}
-            onCropComplete={onCropComplete}
+            setCrop={setCoverImageCrop}
+            setZoom={setCoverImageZoom}
+            onCropComplete={onCoverImageCropComplete}
             handleCoverImageClick={handleCoverImageClick}
             handleCoverFileUpload={handleCoverFileUpload}
           />
