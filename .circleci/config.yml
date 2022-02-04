@@ -22,15 +22,12 @@ jobs:
           name: update-npm
           command: 'sudo npm install -g npm@8.1.2'
       - run:
-          name: update-yarn
-          command: 'sudo npm install -g yarn@1.22.17'
-      - run:
           name: install gcc
           command: 'sudo apt-get update -y && sudo apt-get install -y build-essential libsqlite3-dev'
       - restore_cache: # special step to restore the dependency cache
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           keys:
-            - dependency-cache-v1-{{ checksum "package-lock.json" }}
+            - dependency-cache-v1-{{ checksum "yarn.lock" }}
             - dependency-cache-v1
       - run:
           name: python-setup
@@ -44,7 +41,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: dependency-cache-v1-{{ checksum "package-lock.json" }}
+          key: dependency-cache-v1-{{ checksum "yarn.lock" }}
 #      - run: # tslint check
 #          name: linter-check
 #          command: npm run linter:check
