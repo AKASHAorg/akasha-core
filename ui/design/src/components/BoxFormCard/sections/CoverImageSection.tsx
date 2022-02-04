@@ -4,6 +4,7 @@ import Cropper from 'react-easy-crop';
 import Icon from '../../Icon';
 
 import { IFormValues } from '../';
+import { CropValue } from './AvatarSection';
 import {
   StyledText,
   StyledImage,
@@ -12,8 +13,6 @@ import {
   StyledCoverImagePlaceholderDiv,
 } from '../styled-form-card';
 import { StyledImageInput } from '../../Editor/styled-editor-box';
-
-type CropValue = { x: number; y: number };
 
 export interface ICoverImageSectionProps {
   coverImageLabel?: string;
@@ -57,7 +56,12 @@ const CoverImageSection: React.FC<ICoverImageSectionProps> = props => {
           onClick={handleCoverImageClick}
           active={coverImagePopoverOpen}
         >
-          <StyledImageInput onChange={handleCoverFileUpload} type="file" ref={coverInputRef} />
+          <StyledImageInput
+            onChange={handleCoverFileUpload}
+            type="file"
+            accept="image/*"
+            ref={coverInputRef}
+          />
           <Icon type="image" ref={coverImageRef} />
         </StyledCoverImagePlaceholderDiv>
       )}
@@ -68,7 +72,7 @@ const CoverImageSection: React.FC<ICoverImageSectionProps> = props => {
             <Icon type="editSimple" ref={coverImageRef} />
           </StyledCoverImageOverlay>
           {/* if cover image is loaded from profile, show initial component, else if an uploaded file, show cropper component */}
-          {formValues.coverImage.preview.includes('https://') && formValues.coverImage.isUrl ? (
+          {formValues.coverImage.preview.startsWith('https://') && formValues.coverImage.isUrl ? (
             <StyledImage src={formValues.coverImage.preview} fit="contain" />
           ) : (
             <Cropper
@@ -76,7 +80,7 @@ const CoverImageSection: React.FC<ICoverImageSectionProps> = props => {
               crop={crop}
               zoom={zoom}
               // taking aspect ratio from dimensions of parent div
-              aspect={518.25 / 144}
+              aspect={1344 / 288}
               objectFit="horizontal-cover"
               onCropChange={setCrop}
               onCropComplete={onCropComplete}

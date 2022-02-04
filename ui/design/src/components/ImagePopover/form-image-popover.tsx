@@ -90,7 +90,12 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
           ]}
         />
 
-        <StyledImageInput onChange={handleFileUpload} type="file" ref={uploadInputRef} />
+        <StyledImageInput
+          onChange={handleFileUpload}
+          type="file"
+          accept="image/*"
+          ref={uploadInputRef}
+        />
       </>
     );
   }
@@ -114,7 +119,12 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
         >
           <Icon type="upload" />
           <Text>{uploadLabel}</Text>
-          <StyledImageInput onChange={handleFileUpload} type="file" ref={uploadInputRef} />
+          <StyledImageInput
+            onChange={handleFileUpload}
+            type="file"
+            accept="image/*"
+            ref={uploadInputRef}
+          />
         </StyledBox>
         {currentImage && (
           <StyledDeleteBox
