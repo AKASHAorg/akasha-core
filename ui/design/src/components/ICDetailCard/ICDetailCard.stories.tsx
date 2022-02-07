@@ -40,7 +40,7 @@ export const BaseICDetailCard = Template.bind({});
 BaseICDetailCard.args = {
   titleLabel: ICWorldAppsData[3].name,
   shareLabel: 'Share',
-  hash: ICWorldAppsData[3].hash,
+  id: ICWorldAppsData[3].id,
   avatar: ICWorldAppsData[3].avatar,
   coverImage: ICWorldAppsData[3].coverImage,
   installLabel: 'Install',

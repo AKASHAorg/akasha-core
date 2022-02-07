@@ -9,7 +9,7 @@ export {
   PROFILE_EVENTS,
   WEB3_EVENTS,
 } from '@akashaproject/sdk-typings/lib/interfaces/events';
-export { IntegrationInfo, ReleaseInfo } from '@akashaproject/sdk-typings/lib/interfaces/registry';
+import { IntegrationInfo, ReleaseInfo } from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { Subject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
@@ -122,9 +122,9 @@ type Release = {
   timestamp: Date;
 };
 
-export interface IntegrationCenterApp {
-  name: string;
-  hash: string;
+export { IntegrationInfo, ReleaseInfo };
+
+export interface IntegrationCenterApp extends IntegrationInfo {
   avatar?: string;
   coverImage?: string;
   description?: string;

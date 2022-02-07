@@ -1,8 +1,9 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useGetIntegrationsInfo } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
+import routes, { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, DuplexButton, Icon } = DS;
 
@@ -20,11 +21,20 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
     return app;
   });
   const integrationsInfoReq = useGetIntegrationsInfo(defaultAppsNamesNormalized);
+
+  const handleAppClick = (app: IntegrationInfo) => {
+    props.navigateTo(`${routes[INFO]}/${app.id}`);
+  };
   return (
     <Box overflow={'auto'} gap="small">
       {integrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
         <Box key={index} direction="row" justify="between">
-          <SubtitleTextIcon label={app.name} subtitle={app.id} iconType="appIC" />
+          <SubtitleTextIcon
+            label={app.name}
+            subtitle={app.id}
+            iconType="appIC"
+            onClick={() => handleAppClick(app)}
+          />
           <DuplexButton
             icon={<Icon type="arrowDown" />}
             active={true}

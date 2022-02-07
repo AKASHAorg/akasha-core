@@ -3,7 +3,7 @@ import {
   MenuItemType,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource, IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
 
 import { IAppData } from '../components/AppsWidgetCard';
 
@@ -278,7 +278,7 @@ const trendingProfilesData = [
   },
 ];
 
-const ICWorldAppsData: any[] = [
+const ICWorldAppsData: IntegrationCenterApp[] = [
   {
     name: 'Theme Wizard',
     id: 'bbaryfskgshgirsnxnbv',
@@ -343,7 +343,7 @@ const ICWorldAppsData: any[] = [
   },
 ];
 
-const ICInstalledAppsData: any[] = [
+const ICInstalledAppsData: IntegrationCenterApp[] = [
   {
     name: 'Feed',
     id: '#bbaryfskgshgirsnxnbv',

@@ -37,7 +37,7 @@ export interface ICDetailCardProps {
   authorsLabel: string;
   licenseLabel: string;
 
-  hash?: string;
+  id?: string;
   avatar?: string;
   coverImage?: string;
   ethAddress?: string;
@@ -87,7 +87,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     versionHistoryLabel,
     authorsLabel,
     licenseLabel,
-    hash,
+    id,
     avatar,
     coverImage,
     ethAddress,
@@ -142,7 +142,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               <ICDetailCardName name={titleLabel} />
               <Box direction="row" gap="xsmall">
                 <Text size="md" color="secondaryText">
-                  {hash ? `@${hash.replace('@', '')}` : null}
+                  {id ? `@${id.replace('@', '')}` : null}
                 </Text>
               </Box>
             </Box>

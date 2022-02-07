@@ -26,8 +26,8 @@ export interface ICWidgetCardProps {
   // anchor link
   icAppsAnchorLink: string;
   // handlers
-  onClickWorldApp: (hash: string) => void;
-  onClickInstalledApp: (hash: string) => void;
+  onClickWorldApp: (id: string) => void;
+  onClickInstalledApp: (id: string) => void;
   onActiveTabChange?: (tabIdx: number) => void;
 }
 

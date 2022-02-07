@@ -24,70 +24,71 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Router>
-      <BasicCardBox style={{ minHeight: '80vh' }}>
-        <Box>
+      <Route path={[routes[EXPLORE], routes[MY_APPS], routes[APPS], routes[WIDGETS]]}>
+        <BasicCardBox style={{ minHeight: '80vh' }}>
+          <Box>
+            <Box pad="medium">
+              <Text size="large" weight={'bold'}>
+                {t('Integration Center')}
+              </Text>
+            </Box>
+            <Box direction="row" justify="between" pad="medium">
+              <NavButton
+                path={routes[EXPLORE]}
+                label={t('Explore')}
+                icon={<Icon type="wallet" />}
+                onClick={() => {
+                  props.navigateTo(routes[EXPLORE]);
+                }}
+              />
+              <NavButton
+                path={routes[MY_APPS]}
+                label={t('My Apps')}
+                icon={<Icon type="wallet" />}
+                onClick={() => {
+                  props.navigateTo(routes[MY_APPS]);
+                }}
+              />
+              <NavButton
+                path={routes[APPS]}
+                label={t('Apps')}
+                icon={<Icon type="wallet" />}
+                onClick={() => {
+                  props.navigateTo(routes[APPS]);
+                }}
+              />
+              <NavButton
+                path={routes[WIDGETS]}
+                label={t('Widgets')}
+                icon={<Icon type="wallet" />}
+                onClick={() => {
+                  props.navigateTo(routes[WIDGETS]);
+                }}
+              />
+            </Box>
+          </Box>
           <Box pad="medium">
-            <Text size="large" weight={'bold'}>
-              {t('Integration Center')}
-            </Text>
+            <Switch>
+              <Route path={routes[EXPLORE]}>
+                <ExplorePage {...props} />
+              </Route>
+              <Route path={routes[MY_APPS]}>
+                <MyAppsPage {...props} />
+              </Route>
+              <Route path={routes[APPS]}>
+                <AppsPage {...props} />
+              </Route>
+              <Route path={routes[WIDGETS]}>
+                <WidgetsPage {...props} />
+              </Route>
+            </Switch>
           </Box>
-          <Box direction="row" justify="between" pad="medium">
-            <NavButton
-              path={routes[EXPLORE]}
-              label={t('Explore')}
-              icon={<Icon type="wallet" />}
-              onClick={() => {
-                props.navigateTo(routes[EXPLORE]);
-              }}
-            />
-            <NavButton
-              path={routes[MY_APPS]}
-              label={t('My Apps')}
-              icon={<Icon type="wallet" />}
-              onClick={() => {
-                props.navigateTo(routes[MY_APPS]);
-              }}
-            />
-            <NavButton
-              path={routes[APPS]}
-              label={t('Apps')}
-              icon={<Icon type="wallet" />}
-              onClick={() => {
-                props.navigateTo(routes[APPS]);
-              }}
-            />
-            <NavButton
-              path={routes[WIDGETS]}
-              label={t('Widgets')}
-              icon={<Icon type="wallet" />}
-              onClick={() => {
-                props.navigateTo(routes[WIDGETS]);
-              }}
-            />
-          </Box>
-        </Box>
-        <Box pad="medium">
-          <Switch>
-            <Route path={routes[EXPLORE]}>
-              <ExplorePage {...props} />
-            </Route>
-            <Route path={routes[MY_APPS]}>
-              <MyAppsPage {...props} />
-            </Route>
-            <Route path={routes[APPS]}>
-              <AppsPage {...props} />
-            </Route>
-            <Route path={routes[WIDGETS]}>
-              <WidgetsPage {...props} />
-            </Route>
-            <Route path={`${routes[INFO]}/:integrationId`}>
-              <InfoPage {...props} />
-            </Route>
-
-            <Redirect exact={true} from={rootRoute} to={routes[EXPLORE]} />
-          </Switch>
-        </Box>
-      </BasicCardBox>
+        </BasicCardBox>
+      </Route>
+      <Redirect exact={true} from={rootRoute} to={routes[EXPLORE]} />
+      <Route path={`${routes[INFO]}/:integrationId`}>
+        <InfoPage {...props} />
+      </Route>
     </Router>
   );
 };
