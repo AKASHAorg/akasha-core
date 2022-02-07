@@ -14,13 +14,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16.13.0
+          cache: 'yarn'
       - name: Checkout
         uses: actions/checkout@v2
       - name: Cache node modules
         uses: actions/cache@v1
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Cache Cypress binary
@@ -34,13 +35,13 @@ jobs:
         env:
           CI: 1
         run: |
-          npm ci
+          yarn install --frozen-lockfile
       - name: install dependencies and verify Cypress
         env:
           CI: 1
         working-directory: tests
         run: |
-          npm ci
+          yarn install --frozen-lockfile
           npx cypress verify
           npx cypress info
       - name: e2e tests

@@ -24,7 +24,7 @@
     "prepare": "npm run tsc",
     "pretest": "tsc -m commonjs",
     "test": "jest",
-    "clean": "tsc --build --clean",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../build/hooks"
   },
@@ -32,12 +32,12 @@
     "lib"
   ],
   "dependencies": {
-    "@akashaproject/design-system": "*",
     "@akashaproject/awf-sdk": "*",
+    "@akashaproject/design-system": "*",
     "@akashaproject/sdk-typings": "*",
     "object-hash": "2.2.0",
-    "rxjs": "7.3.0",
-    "react-query": "3.34.7"
+    "react-query": "3.34.7",
+    "rxjs": "7.3.0"
   },
   "devDependencies": {
     "@akashaproject/ui-awf-typings": "*",

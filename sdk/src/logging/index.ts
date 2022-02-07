@@ -4,7 +4,7 @@ import pino from 'pino';
 
 @injectable()
 class Logging implements ILogService {
-  private _appLogger: pino;
+  private _appLogger;
   public constructor() {
     this._appLogger = pino({ browser: { asObject: true }, level: process.env.LOG_LEVEL });
   }

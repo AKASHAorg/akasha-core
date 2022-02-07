@@ -26,7 +26,8 @@
     "test": "jest",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
-    "dev:server": "tsc --build && nodemon ./lib/index.js"
+    "dev:server": "tsc --build && nodemon ./lib/index.js",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "bugs": {
     "url": "https://github.com/AkashaProject/akasha-world-framework/issues"

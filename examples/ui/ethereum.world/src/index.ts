@@ -57,4 +57,6 @@ declare const __DEV__: boolean;
 
   // tslint:disable-next-line:no-console
   console.log('initial sdk instance', sdk);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
 })(globalThis.System);

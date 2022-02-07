@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {

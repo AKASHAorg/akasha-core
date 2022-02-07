@@ -9,6 +9,8 @@ import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { IAppSettings } from '@akashaproject/sdk-typings/lib/interfaces/settings';
 import IcRegistry from '../registry/icRegistry';
 import { ethers } from 'ethers';
+import EventBus from '../common/event-bus';
+import { APP_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
 
 export interface VersionInfo {
   name: string;
@@ -23,15 +25,18 @@ class AppSettings implements IAppSettings {
   private _db: DB;
   private _log: ILogger;
   private _icRegistry: IcRegistry;
+  private _globalChannel: EventBus;
 
   constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Db) db: DB,
     @inject(TYPES.ICRegistry) icRegistry: IcRegistry,
+    @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
     this._log = log.create('AWF_Settings_Apps');
     this._db = db;
     this._icRegistry = icRegistry;
+    this._globalChannel = globalChannel;
   }
 
   /**
@@ -75,14 +80,19 @@ class AppSettings implements IAppSettings {
     const collection = await lastValueFrom(
       this._db.getCollection<AppsSchema>(availableCollections.Apps),
     );
-    return collection.data.save({
+    const integrationInfo = {
       id: release.data.integrationID,
       name: release.data.name,
       integrationType: release.data.integrationType,
       version: release.data.version,
       sources: release.data.sources,
       status: true,
+    };
+    this._globalChannel.next({
+      data: integrationInfo,
+      event: APP_EVENTS.INFO_READY,
     });
+    return collection.data.save(integrationInfo);
   }
 
   /**
@@ -96,6 +106,10 @@ class AppSettings implements IAppSettings {
     const query: unknown = { name: { $eq: appName } };
     const doc = await collection.data.findOne(query);
     if (doc._id) {
+      this._globalChannel.next({
+        data: { name: appName },
+        event: APP_EVENTS.REMOVED,
+      });
       return collection.data.delete(doc._id);
     }
   }
@@ -109,6 +123,10 @@ class AppSettings implements IAppSettings {
     if (doc._id) {
       doc.status = !doc.status;
       await doc.save();
+      this._globalChannel.next({
+        data: { status: doc.status, name: appName },
+        event: APP_EVENTS.TOGGLE_STATUS,
+      });
       return doc.status;
     }
   }
@@ -124,7 +142,16 @@ class AppSettings implements IAppSettings {
     }
     currentInfo.data.version = release.data.version;
     currentInfo.data.sources = release.data.sources;
-
+    this._globalChannel.next({
+      data: {
+        status: currentInfo.data.status,
+        name: app.name,
+        version: currentInfo.data.version,
+        sources: currentInfo.data.sources,
+        integrationType: currentInfo.data.integrationType,
+      },
+      event: APP_EVENTS.UPDATE_VERSION,
+    });
     return currentInfo.data.save();
   }
 
@@ -135,6 +162,13 @@ class AppSettings implements IAppSettings {
       return false;
     }
     currentInfo.data.config = app.config;
+    this._globalChannel.next({
+      data: {
+        name: app.name,
+        config: app.config,
+      },
+      event: APP_EVENTS.UPDATE_CONFIG,
+    });
     return currentInfo.data.save();
   }
 }
