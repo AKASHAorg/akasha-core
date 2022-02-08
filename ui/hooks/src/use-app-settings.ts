@@ -36,9 +36,9 @@ const getAllInstalledApps = async () => {
  */
 export function useGetAllInstalledApps(enabler?: boolean) {
   return useQuery([APP_SETTINGS_KEY], (): Promise<any> => getAllInstalledApps(), {
-    enabled: enabler,
+    enabled: !!enabler,
     keepPreviousData: true,
-    onError: (err: Error) => logError('useAppSettings.getAppConfig', err),
+    onError: (err: Error) => logError('useAppSettings.getAllInstalledApps', err),
   });
 }
 

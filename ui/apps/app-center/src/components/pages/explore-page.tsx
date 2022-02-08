@@ -59,7 +59,7 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
           />
           <DuplexButton
             icon={<Icon type="arrowDown" />}
-            active={installedAppsReq.data.includes(app.id)}
+            active={installedAppsReq.data?.includes(app.id)}
             activeLabel={t('Installed')}
             inactiveLabel={t('Install')}
             activeHoverLabel={t('Uninstall')}

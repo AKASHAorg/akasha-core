@@ -17,7 +17,7 @@ import NavButton from './nav-button';
 
 import routes, { rootRoute, EXPLORE, MY_APPS, APPS, WIDGETS, INFO } from '../routes';
 
-const { Box, Text, BasicCardBox, Icon } = DS;
+const { Box, Text, BasicCardBox } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation();
@@ -32,11 +32,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 {t('Integration Center')}
               </Text>
             </Box>
-            <Box direction="row" justify="between" pad="medium">
+            <Box direction="row" justify="between">
               <NavButton
                 path={routes[EXPLORE]}
                 label={t('Explore')}
-                icon={<Icon type="explore" />}
+                icon={'explore'}
                 onClick={() => {
                   props.navigateTo(routes[EXPLORE]);
                 }}
@@ -44,7 +44,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <NavButton
                 path={routes[MY_APPS]}
                 label={t('My Apps')}
-                icon={<Icon type="integrationAppSmallFill" />}
+                icon={'integrationAppSmallFill'}
                 onClick={() => {
                   props.navigateTo(routes[MY_APPS]);
                 }}
@@ -52,7 +52,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <NavButton
                 path={routes[APPS]}
                 label={t('Apps')}
-                icon={<Icon type="IntegrationWidgetSmall" />}
+                icon={'integrationAppSmall'}
                 onClick={() => {
                   props.navigateTo(routes[APPS]);
                 }}
@@ -60,7 +60,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <NavButton
                 path={routes[WIDGETS]}
                 label={t('Widgets')}
-                icon={<Icon type="IntegrationAppSmall" />}
+                icon={'integrationWidgetSmall'}
                 onClick={() => {
                   props.navigateTo(routes[WIDGETS]);
                 }}

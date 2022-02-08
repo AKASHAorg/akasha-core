@@ -380,7 +380,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
               <MenuIcon
                 rotate={isMobileOnly ? 90 : 0}
                 ref={feedbackMenuRef}
-                type={isMobileOnly ? 'moreDark' : 'arrowDown'}
+                type={isMobileOnly ? 'moreDark' : 'dropdown'}
                 clickable={true}
                 accentColor={menuDropOpen}
                 size={iconSize}

@@ -10,6 +10,7 @@ import {
   useGetAllInstalledApps,
   useGetIntegrationsInfo,
   withProviders,
+  useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import routes, { INFO, rootRoute } from '../routes';
 
@@ -18,6 +19,12 @@ const { Box, ICWidgetCard, ErrorLoader } = DS;
 const ICWidget: React.FC<RootComponentProps> = props => {
   // const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation();
+
+  const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data.pubKey;
+  }, [loginQuery.data]);
 
   const defaultAppsNamesNormalized = props.worldConfig?.defaultApps.map(app => {
     if (typeof app === 'string') {
@@ -30,7 +37,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 
   const defaultIntegrationsInfoReq = useGetIntegrationsInfo(defaultAppsNamesNormalized);
 
-  const installedAppsReq = useGetAllInstalledApps();
+  const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
   const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
 
   const handleAppClick = (integrationId: string) => {

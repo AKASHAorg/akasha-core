@@ -32,6 +32,7 @@ import copy from './copy';
 import dapper from './dapper';
 import discord from './discord';
 import document from './document';
+import dropdown from './dropdown';
 import edit from './edit';
 import editSimple from './edit-simple';
 import email from './email';
@@ -72,6 +73,7 @@ import notifications from './notifications';
 import integrationAppLarge from './integration-app-large';
 import integrationAppCTA from './integration-app-cta';
 import integrationAppSmall from './integration-app-small';
+import integrationAppSmallFill from './integration-app-small-fill';
 import integrationWidgetSmall from './integration-widget-small';
 import opera from './opera';
 import payment from './payment';
@@ -142,6 +144,7 @@ export {
   check,
   checkSimple,
   discord,
+  dropdown,
   payment,
   eye,
   explore,
@@ -197,6 +200,7 @@ export {
   notifications,
   integrationAppLarge,
   integrationAppSmall,
+  integrationAppSmallFill,
   integrationAppCTA,
   integrationWidgetSmall,
   opera,

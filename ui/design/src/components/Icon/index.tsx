@@ -34,11 +34,12 @@ export type IconType =
   | 'coinbase'
   | 'coins'
   | 'copy'
-  | 'dapper'
   | 'check'
   | 'checkSimple'
+  | 'dapper'
   | 'discord'
   | 'document'
+  | 'dropdown'
   | 'editSimple'
   | 'edit'
   | 'email'
@@ -78,6 +79,7 @@ export type IconType =
   | 'notifications'
   | 'integrationAppLarge'
   | 'integrationAppSmall'
+  | 'integrationAppSmallFill'
   | 'integrationWidgetSmall'
   | 'integrationAppCTA'
   | 'opera'
@@ -151,12 +153,13 @@ export const iconTypes: IconType[] = [
   'code',
   'coinbase',
   'copy',
-  'dapper',
   'check',
   'checkSimple',
   'coins',
+  'dapper',
   'discord',
   'document',
+  'dropdown',
   'editSimple',
   'edit',
   'email',
@@ -196,6 +199,7 @@ export const iconTypes: IconType[] = [
   'notifications',
   'integrationAppLarge',
   'integrationAppSmall',
+  'integrationAppSmallFill',
   'integrationWidgetSmall',
   'integrationAppCTA',
   'opera',

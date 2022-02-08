@@ -85,7 +85,13 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
             {worldApps &&
               worldApps.length !== 0 &&
               worldApps.slice(0, 4).map((app, index) => (
-                <Box key={index} direction="row" justify="between">
+                <Box
+                  key={index}
+                  direction="row"
+                  justify="between"
+                  border={{ side: 'bottom' }}
+                  pad={{ horizontal: 'medium', vertical: 'small' }}
+                >
                   <Box direction="row">
                     <StyledIconBox style={{ marginRight: '0.5rem' }}>
                       <Icon type="integrationAppLarge" size="md" />
@@ -140,7 +146,13 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
             {installedApps &&
               installedApps.length !== 0 &&
               installedApps.slice(0, 4).map((app, index) => (
-                <Box key={index} direction="row" justify="between">
+                <Box
+                  key={index}
+                  direction="row"
+                  justify="between"
+                  border={{ side: 'bottom' }}
+                  pad={{ horizontal: 'medium', vertical: 'small' }}
+                >
                   <Box direction="row">
                     <StyledIconBox style={{ marginRight: '0.5rem' }}>
                       <Icon type="integrationAppLarge" size="md" />
