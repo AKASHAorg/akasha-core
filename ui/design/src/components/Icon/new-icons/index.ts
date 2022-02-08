@@ -25,6 +25,7 @@ import calendar from './calendar';
 import check from './check';
 import checkSimple from './checkSimple';
 import chevronRight from './chevron-right';
+import chevronLeft from './chevron-left';
 import close from './close';
 import code from './code';
 import coinbase from './coinbase';
@@ -141,6 +142,7 @@ export {
   check,
   checkSimple,
   chevronRight,
+  chevronLeft,
   discord,
   payment,
   eye,
