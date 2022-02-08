@@ -3,7 +3,11 @@ import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetAllInstalledApps, useGetIntegrationInfo } from '@akashaproject/ui-awf-hooks';
+import {
+  useGetAllInstalledApps,
+  useGetIntegrationInfo,
+  useGetLogin,
+} from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { Box, ICDetailCard, ErrorLoader } = DS;
@@ -13,11 +17,17 @@ const InfoPage: React.FC<RootComponentProps> = () => {
 
   const { t } = useTranslation();
 
+  const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data.pubKey;
+  }, [loginQuery.data]);
+
   const integrationInfoReq = useGetIntegrationInfo(integrationId);
 
   const integrationInfo = integrationInfoReq.data;
 
-  const installedAppsReq = useGetAllInstalledApps();
+  const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   const isInstalled = React.useMemo(() => {
     if (installedAppsReq.data && integrationInfo) {

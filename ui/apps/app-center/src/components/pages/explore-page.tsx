@@ -1,6 +1,10 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useGetIntegrationsInfo } from '@akashaproject/ui-awf-hooks';
+import {
+  useGetIntegrationsInfo,
+  useGetLogin,
+  useGetAllInstalledApps,
+} from '@akashaproject/ui-awf-hooks';
 import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import routes, { INFO } from '../../routes';
@@ -12,6 +16,12 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation();
 
+  const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data.pubKey;
+  }, [loginQuery.data]);
+
   const defaultAppsNamesNormalized = worldConfig?.defaultApps.map(app => {
     if (typeof app === 'string') {
       return {
@@ -20,11 +30,23 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
     }
     return app;
   });
+
   const integrationsInfoReq = useGetIntegrationsInfo(defaultAppsNamesNormalized);
+
+  const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   const handleAppClick = (app: IntegrationInfo) => {
     props.navigateTo(`${routes[INFO]}/${app.id}`);
   };
+
+  const handleAppInstall = () => {
+    return;
+  };
+
+  const handleAppUninstall = () => {
+    return;
+  };
+
   return (
     <Box overflow={'auto'} gap="small">
       {integrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
@@ -32,15 +54,17 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
           <SubtitleTextIcon
             label={app.name}
             subtitle={app.id}
-            iconType="appIC"
+            iconType="integrationAppLarge"
             onClick={() => handleAppClick(app)}
           />
           <DuplexButton
             icon={<Icon type="arrowDown" />}
-            active={true}
+            active={installedAppsReq.data.includes(app.id)}
             activeLabel={t('Installed')}
             inactiveLabel={t('Install')}
             activeHoverLabel={t('Uninstall')}
+            onClickActive={handleAppUninstall}
+            onClickInactive={handleAppInstall}
           />
         </Box>
       ))}

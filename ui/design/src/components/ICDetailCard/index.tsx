@@ -155,7 +155,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               border={{ color: 'accent', size: 'xsmall', style: 'solid', side: 'all' }}
               onClick={onClickCTA}
             >
-              <Icon size="md" type="appICCTA" />
+              <Icon size="md" type="settings" />
             </Box>
             <DuplexButton
               icon={isInstalled ? <Icon type="checkSimple" size="xs" /> : null}

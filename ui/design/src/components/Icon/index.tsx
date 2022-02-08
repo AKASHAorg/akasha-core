@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import CommonInterface from '../../interfaces/common.interface';
 import * as icons from './new-icons';
 
+// maintain alphabetical order for icon names
 export type IconType =
   | 'app3Box'
   | 'appCenter'
@@ -11,8 +12,6 @@ export type IconType =
   | 'appEns'
   | 'appFeed'
   | 'appIpfs'
-  | 'appIC'
-  | 'appICCTA'
   | 'activity'
   | 'akasha'
   | 'addAppGrey'
@@ -44,6 +43,7 @@ export type IconType =
   | 'edit'
   | 'email'
   | 'emoji'
+  | 'explore'
   | 'eye'
   | 'ethereum'
   | 'ethereumWorldLogo'
@@ -76,6 +76,10 @@ export type IconType =
   | 'moreGrey'
   | 'nifty'
   | 'notifications'
+  | 'integrationAppLarge'
+  | 'integrationAppSmall'
+  | 'integrationWidgetSmall'
+  | 'integrationAppCTA'
   | 'opera'
   | 'payment'
   | 'person'
@@ -126,8 +130,6 @@ export const iconTypes: IconType[] = [
   'appEns',
   'appFeed',
   'appIpfs',
-  'appIC',
-  'appICCTA',
   'activity',
   'addAppGrey',
   'akasha',
@@ -159,6 +161,7 @@ export const iconTypes: IconType[] = [
   'edit',
   'email',
   'emoji',
+  'explore',
   'eye',
   'ethereum',
   'ethereumWorldLogo',
@@ -191,6 +194,10 @@ export const iconTypes: IconType[] = [
   'moreGrey',
   'nifty',
   'notifications',
+  'integrationAppLarge',
+  'integrationAppSmall',
+  'integrationWidgetSmall',
+  'integrationAppCTA',
   'opera',
   'payment',
   'person',

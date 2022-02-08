@@ -36,7 +36,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <NavButton
                 path={routes[EXPLORE]}
                 label={t('Explore')}
-                icon={<Icon type="wallet" />}
+                icon={<Icon type="explore" />}
                 onClick={() => {
                   props.navigateTo(routes[EXPLORE]);
                 }}
@@ -44,7 +44,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <NavButton
                 path={routes[MY_APPS]}
                 label={t('My Apps')}
-                icon={<Icon type="wallet" />}
+                icon={<Icon type="integrationAppSmallFill" />}
                 onClick={() => {
                   props.navigateTo(routes[MY_APPS]);
                 }}
@@ -52,7 +52,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <NavButton
                 path={routes[APPS]}
                 label={t('Apps')}
-                icon={<Icon type="wallet" />}
+                icon={<Icon type="IntegrationWidgetSmall" />}
                 onClick={() => {
                   props.navigateTo(routes[APPS]);
                 }}
@@ -60,7 +60,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <NavButton
                 path={routes[WIDGETS]}
                 label={t('Widgets')}
-                icon={<Icon type="wallet" />}
+                icon={<Icon type="IntegrationAppSmall" />}
                 onClick={() => {
                   props.navigateTo(routes[WIDGETS]);
                 }}

@@ -88,7 +88,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                 <Box key={index} direction="row" justify="between">
                   <Box direction="row">
                     <StyledIconBox style={{ marginRight: '0.5rem' }}>
-                      <Icon type="appIC" size="md" />
+                      <Icon type="integrationAppLarge" size="md" />
                     </StyledIconBox>
                     <StyledAnchor
                       onClick={e => {
@@ -143,7 +143,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                 <Box key={index} direction="row" justify="between">
                   <Box direction="row">
                     <StyledIconBox style={{ marginRight: '0.5rem' }}>
-                      <Icon type="appIC" size="md" />
+                      <Icon type="integrationAppLarge" size="md" />
                     </StyledIconBox>
                     <StyledAnchor
                       onClick={e => {

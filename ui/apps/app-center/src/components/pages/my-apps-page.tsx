@@ -43,7 +43,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               border={{ side: 'bottom', size: '1px', color: 'border' }}
               pad={{ bottom: 'small' }}
             >
-              <SubtitleTextIcon label={app.name} subtitle={app.id} iconType="appIC" />
+              <SubtitleTextIcon label={app.name} subtitle={app.id} iconType="integrationAppLarge" />
               <Icon type="checkSimple" accentColor={true} size="md" />
             </Box>
           ))}
@@ -59,7 +59,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
         <Box gap="small">
           {installedIntegrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
             <Box key={index} direction="row" justify="between">
-              <SubtitleTextIcon label={app.name} subtitle={app.id} iconType="appIC" />
+              <SubtitleTextIcon label={app.name} subtitle={app.id} iconType="integrationAppLarge" />
               <Icon type="moreDark" />
             </Box>
           ))}

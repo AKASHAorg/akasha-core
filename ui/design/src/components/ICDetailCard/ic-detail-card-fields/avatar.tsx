@@ -49,7 +49,7 @@ const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
             top: '-0.5rem',
           }}
         >
-          <Icon type="appIC" size="xl" />
+          <Icon type="integrationAppLarge" size="xl" />
         </StyledIconBox>
       )}
       {imageOverlayOpen && avatar && (

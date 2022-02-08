@@ -1,3 +1,4 @@
+// maintain alphabetical order for icon names
 import activity from './activity';
 import akasha from './akasha';
 import addAppGrey from './add-app-grey';
@@ -8,8 +9,6 @@ import appCenter from './app-center';
 import appEns from './app-ens';
 import appFeed from './app-feed';
 import appIpfs from './app-ipfs';
-import appIC from './app-ic';
-import appICCTA from './app-ic-cta';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -37,6 +36,7 @@ import edit from './edit';
 import editSimple from './edit-simple';
 import email from './email';
 import emoji from './emoji';
+import explore from './explore';
 import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
 import ethereum from './ethereum';
@@ -69,6 +69,10 @@ import moreDark from './more-dark';
 import moreGrey from './more-grey';
 import nifty from './nifty';
 import notifications from './notifications';
+import integrationAppLarge from './integration-app-large';
+import integrationAppCTA from './integration-app-cta';
+import integrationAppSmall from './integration-app-small';
+import integrationWidgetSmall from './integration-widget-small';
 import opera from './opera';
 import payment from './payment';
 import person from './person';
@@ -121,8 +125,6 @@ export {
   appEns,
   appFeed,
   appIpfs,
-  appIC,
-  appICCTA,
   announcement,
   available,
   reload,
@@ -142,6 +144,7 @@ export {
   discord,
   payment,
   eye,
+  explore,
   error,
   facebook,
   feedback,
@@ -192,6 +195,10 @@ export {
   moreGrey,
   nifty,
   notifications,
+  integrationAppLarge,
+  integrationAppSmall,
+  integrationAppCTA,
+  integrationWidgetSmall,
   opera,
   person,
   plusDark,

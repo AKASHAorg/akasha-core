@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "yarn",
     "build:staging": "yarn && yarn tsc:all && yarn build:sdk && yarn pack:ui && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
-    "build:all": "yarn tsc:all && yarn build:sdk && yarn pack:ui && && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
+    "build:all": "yarn tsc:all && yarn build:sdk && yarn pack:ui && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
     "build:sdk": "yarn tsc:sdk && nx run @akashaproject/awf-sdk:build",
     "build:ewa": "nx run-many --target=build:staging --projects=@akashaproject/ethereum.world",
     "clean": "tsc --build --clean && rimraf node_modules",
@@ -15,7 +15,7 @@
     "linter:check": "eslint . --ext .ts,.tsx --fix-dry-run",
     "linter:fix": "eslint . --ext .ts,.tsx --fix",
     "pack:ui-design": "nx run @akashaproject/design-system:build",
-    "pack:ui-widgets": "nx run-many --target=build --projects=@akashaproject/ui-widget-analytics,@akashaproject/ui-widget-layout,@akashaproject/ui-widget-ic,@akashaproject/ui-widget-sidebar,@akashaproject/ui-widget-topbar,@akashaproject/ui-widget-trending",
+    "pack:ui-widgets": "nx run-many --target=build --projects=@akashaproject/ui-widget-analytics,@akashaproject/ui-widget-layout,@akashaproject/ui-widget-sidebar,@akashaproject/ui-widget-topbar,@akashaproject/ui-widget-trending",
     "pack:ui-libs": "nx run-many --target=build --projects=@akashaproject/ui-lib-feed",
     "pack:ui-apps": "nx run-many --target=build --projects=@akashaproject/app-akasha-integration,@akashaproject/app-integration-center,@akashaproject/app-auth-ewa,@akashaproject/app-bookmarks,@akashaproject/app-legal,@akashaproject/app-moderation-ewa,@akashaproject/app-notifications,@akashaproject/app-profile,@akashaproject/app-search,@akashaproject/app-settings-ewa",
     "pack:app-loader": "nx run @akashaproject/ui-app-loader:build",
