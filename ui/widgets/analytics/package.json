@@ -22,7 +22,6 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
-    "extract:translations": "i18next --config ./i18next-parser.config.js",
     "pretest": "tsc -m commonjs",
     "test": "jest",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",

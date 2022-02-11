@@ -31,8 +31,8 @@ export interface FeedPageProps {
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
 
-  const { t, i18n } = useTranslation();
-  const locale = (i18n.languages[0] || 'en') as ILocale;
+  const { t } = useTranslation();
+  const locale = (props.i18next.languages[0] || 'en') as ILocale;
 
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
@@ -154,7 +154,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
         itemSpacing={8}
-        i18n={i18n}
+        i18next={props.i18next}
       />
     </Box>
   );

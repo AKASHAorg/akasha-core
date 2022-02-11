@@ -13,7 +13,6 @@ import {
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
-import i18n, { setupI18next } from '../i18n';
 
 const { ReportModal } = DS;
 
@@ -101,7 +100,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
 const Wrapped = (props: RootComponentProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
-      <I18nextProvider i18n={i18n}>
+      <I18nextProvider i18n={props.i18next}>
         <ReportModalComponent {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -120,12 +119,9 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-moderation-ewa',
-  });
+export const bootstrap = async (props: RootComponentProps) => {
+  await props.i18next.loadNamespaces(['app-moderation-ewa']);
+  return Promise.resolve();
 };
 
 export const mount = reactLifecycles.mount;

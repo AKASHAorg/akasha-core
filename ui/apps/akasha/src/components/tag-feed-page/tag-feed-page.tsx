@@ -28,7 +28,7 @@ const TagInfoCard = styled(TagProfileCard)`
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { tagName } = useParams<{ tagName: string }>();
   const getTagQuery = useGetTag(tagName);
 
@@ -118,7 +118,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             removedByAuthorLabel={t('This post was deleted by its author')}
             uiEvents={props.uiEvents}
             itemSpacing={8}
-            i18n={i18n}
+            i18next={props.i18next}
           />
         </>
       )}

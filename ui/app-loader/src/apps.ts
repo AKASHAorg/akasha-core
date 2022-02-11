@@ -185,6 +185,7 @@ class Apps extends BaseIntegration {
           getMenuItems: this.getMenuItems,
           navigateTo: this.navigateTo,
           parseQueryString: parseQueryString,
+          i18next: this.i18next,
         },
       });
       if (appConfig.menuItems) {

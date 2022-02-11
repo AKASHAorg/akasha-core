@@ -2,7 +2,6 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import { setupI18next } from '../i18n';
 import App from './App';
 import DS from '@akashaproject/design-system';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
@@ -32,12 +31,9 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-integration-center',
-  });
+export const bootstrap = async (props: RootComponentProps) => {
+  await props.i18next.loadNamespaces(['app-integration-center']);
+  return Promise.resolve();
 };
 
 export const mount = reactLifecycles.mount;

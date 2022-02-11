@@ -21,7 +21,13 @@ import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
 import { getIntegrationInfo } from './registry';
 import { hideSplash, showSplash } from './splash-screen';
-import { NavigationFn, NavigationOptions, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import {
+  Middleware,
+  MiddlewareConfig,
+  NavigationFn,
+  NavigationOptions,
+  RootComponentProps,
+} from '@akashaproject/ui-awf-typings';
 import {
   createRootNode,
   findKey,
@@ -33,8 +39,9 @@ import {
 import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
-// import { IAwfSDK } from '@akashaproject/sdk-typings';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { setupI18next } from './i18n';
+import { TRANSLATION_MIDDLEWARE } from '@akashaproject/ui-lib-translation';
 
 interface SingleSpaEventDetail {
   originalEvent: Event;
@@ -72,6 +79,7 @@ export default class AppLoader {
   private readonly sdk: ReturnType<typeof getSDK>;
   private readonly menuItems: IMenuList;
   public layoutConfig?: LayoutConfig;
+  public middlewareConfigs: Array<MiddlewareConfig>;
   private extensionPoints: Record<string, UIEventData['data'][]>;
   private readonly extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
   private activeModal?: ModalNavigationOptions;
@@ -86,6 +94,7 @@ export default class AppLoader {
     this.sdk = sdk;
 
     this.uiEvents = new Subject();
+    this.middlewareConfigs = [];
 
     // register event listeners
     this.addSingleSpaEventListeners();
@@ -178,6 +187,14 @@ export default class AppLoader {
   }
 
   /**
+   * The method used to load middleware into the app-loader
+   * @param middleware
+   */
+  public async use(middleware: Middleware) {
+    await middleware.run(this.middlewareConfigs);
+  }
+
+  /**
    * The main method to start the app-loader.
    * @remarks
    * When the `.start()` method is called, the app-loader will do the following:
@@ -208,6 +225,7 @@ export default class AppLoader {
     ];
 
     const integrationInfos = await this.getPackageInfos(defaultIntegrations);
+
     // adds a new importMaps script into the head of the document
     // with the default integrations
     await this.createImportMaps(integrationInfos, 'default-world-integrations');
@@ -217,6 +235,19 @@ export default class AppLoader {
       return;
     }
 
+    const translationConfig = this.middlewareConfigs.find(
+      middleware => middleware.middlewareName === TRANSLATION_MIDDLEWARE,
+    );
+
+    if (!translationConfig) {
+      this.loaderLogger.warn('Cannot get translation resource path!');
+    }
+
+    const i18next = await setupI18next({
+      logger: this.loaderLogger,
+      translationPath: translationConfig.translationPath || '/locales/{{lng}}/{{ns}}.json',
+    });
+
     this.apps = new Apps({
       layoutConfig: layoutConfig,
       worldConfig: this.worldConfig,
@@ -225,6 +256,7 @@ export default class AppLoader {
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
       navigateTo: this.navigateTo.bind(this),
+      i18next,
     });
 
     this.widgets = new Widgets({
@@ -236,6 +268,7 @@ export default class AppLoader {
       getMenuItems: this.getMenuItems.bind(this),
       getAppRoutes: appId => this.apps.getAppRoutes(appId),
       navigateTo: this.navigateTo.bind(this),
+      i18next,
     });
 
     integrationInfos.forEach(integration => {

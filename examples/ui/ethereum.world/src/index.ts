@@ -1,4 +1,5 @@
 import { ILoaderConfig, ISdkConfig, LogLevels } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { TranslationConfig } from '@akashaproject/ui-lib-translation';
 
 console.time('AppLoader:firstMount');
 
@@ -53,6 +54,7 @@ declare const __DEV__: boolean;
 
   const sdk = getSDK();
   const loader = new Loader({ ...loaderConfig, ...sdkConfig }, sdk);
+  await loader.use(TranslationConfig);
   await loader.start();
 
   // tslint:disable-next-line:no-console

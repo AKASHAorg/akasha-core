@@ -106,6 +106,7 @@ class Widgets extends BaseIntegration {
       getAppRoutes: this.getAppRoutes,
       navigateTo: this.navigateTo,
       parseQueryString: parseQueryString,
+      i18next: this.i18next,
       ...widgetConfig,
     };
 

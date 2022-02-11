@@ -6,7 +6,6 @@ import DS from '@akashaproject/design-system';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import i18next, { setupI18next } from '../i18n';
 
 const { MenuItemButton } = DS;
 
@@ -48,7 +47,7 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
 const ModalWrapper: React.FC<RootComponentProps> = props => {
   return (
     <React.Suspense fallback={'...'}>
-      <I18nextProvider i18n={i18next}>
+      <I18nextProvider i18n={props.i18next}>
         <EntryEditButton {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -67,12 +66,9 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-akasha-integration',
-  });
+export const bootstrap = async (props: RootComponentProps) => {
+  await props.i18next.loadNamespaces(['app-akasha-integration']);
+  return Promise.resolve();
 };
 export const mount = reactLifecycles.mount;
 export const unmount = reactLifecycles.unmount;

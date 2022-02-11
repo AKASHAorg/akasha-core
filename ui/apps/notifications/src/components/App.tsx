@@ -3,7 +3,6 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider } from 'react-i18next';
 import NotificationsPage from './notifications-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import i18next from '../i18n';
 
 const { Box } = DS;
 
@@ -33,7 +32,7 @@ class App extends PureComponent<RootComponentProps> {
 
     return (
       <Box width="100vw">
-        <I18nextProvider i18n={i18next}>
+        <I18nextProvider i18n={this.props.i18next}>
           <NotificationsPage {...this.props} />
         </I18nextProvider>
       </Box>

@@ -13,7 +13,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import i18next, { setupI18next } from '../i18n';
 
 const { styled, TextIcon, ThemeSelector, lightTheme, darkTheme, Icon } = DS;
 
@@ -80,7 +79,7 @@ const EntryCardSaveButton = (props: RootComponentProps) => {
 };
 
 const BookmarkButtonWrapper = (props: RootComponentProps) => (
-  <I18nextProvider i18n={i18next}>
+  <I18nextProvider i18n={props.i18next}>
     <EntryCardSaveButton {...props} />
   </I18nextProvider>
 );
@@ -105,12 +104,9 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-bookmarks',
-  });
+export const bootstrap = async (props: RootComponentProps) => {
+  await props.i18next.loadNamespaces(['app-bookmarks']);
+  return Promise.resolve();
 };
 
 export const mount = reactLifecycles.mount;

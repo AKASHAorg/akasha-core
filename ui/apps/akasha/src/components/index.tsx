@@ -4,7 +4,6 @@ import singleSpaReact from 'single-spa-react';
 import App from './app';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { setupI18next } from '../i18n';
 import DS from '@akashaproject/design-system';
 
 const { ErrorLoader, ThemeSelector, lightTheme, darkTheme } = DS;
@@ -28,12 +27,9 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-akasha-integration',
-  });
+export const bootstrap = async (props: RootComponentProps) => {
+  await props.i18next.loadNamespaces(['app-akasha-integration', 'ui-lib-feed']);
+  return Promise.resolve();
 };
 
 export const mount = reactLifecycles.mount;

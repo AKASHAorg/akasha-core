@@ -2,11 +2,12 @@
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "private": true,
   "scripts": {
-    "bootstrap": "yarn",
+    "bootstrap": "yarn && yarn build:executors",
     "build:staging": "yarn && yarn tsc:all && yarn build:sdk && yarn pack:ui && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
-    "build:all": "yarn tsc:all && yarn build:sdk && yarn pack:ui && && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
+    "build:all": "yarn tsc:all && yarn build:sdk && yarn pack:ui && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
     "build:sdk": "yarn tsc:sdk && nx run @akashaproject/awf-sdk:build",
     "build:ewa": "nx run-many --target=build:staging --projects=@akashaproject/ethereum.world",
+    "build:executors": "nx run @akashaproject/nx-executors:build",
     "clean": "tsc --build --clean && rimraf node_modules",
     "install:clean": "yarn clean && yarn build:all",
     "compile:sc": "lerna run compile:sc",
@@ -17,7 +18,7 @@
     "pack:ui-design": "nx run @akashaproject/design-system:build",
     "pack:ui-widgets": "nx run-many --target=build --projects=@akashaproject/ui-widget-analytics,@akashaproject/ui-widget-layout,@akashaproject/ui-widget-ic,@akashaproject/ui-widget-sidebar,@akashaproject/ui-widget-topbar,@akashaproject/ui-widget-trending",
     "pack:ui-libs": "nx run-many --target=build --projects=@akashaproject/ui-lib-feed",
-    "pack:ui-apps": "nx run-many --target=build --projects=@akashaproject/app-akasha-integration,@akashaproject/app-integration-center,@akashaproject/app-auth-ewa,@akashaproject/app-bookmarks,@akashaproject/app-legal,@akashaproject/app-moderation-ewa,@akashaproject/app-notifications,@akashaproject/app-profile,@akashaproject/app-search,@akashaproject/app-settings-ewa",
+    "pack:ui-apps": "nx run-many --target=build --projects=@akashaproject/app-akasha-integration,@akashaproject/ui-lib-translation,@akashaproject/app-integration-center,@akashaproject/app-auth-ewa,@akashaproject/app-bookmarks,@akashaproject/app-legal,@akashaproject/app-moderation-ewa,@akashaproject/app-notifications,@akashaproject/app-profile,@akashaproject/app-search,@akashaproject/app-settings-ewa",
     "pack:app-loader": "nx run @akashaproject/ui-app-loader:build",
     "pack:ui": "yarn tsc:ui && yarn pack:ui-design && yarn pack:ui-widgets && yarn pack:ui-apps && yarn pack:app-loader",
     "pack:ui-apps:stats": "lerna run pack:stats --parallel --scope @akashaproject/* --stream",
@@ -59,6 +60,7 @@
     "@babel/preset-typescript": "7.15.0",
     "@multiformats/multiaddr-to-uri": "9.0.1",
     "@nrwl/cli": "13.7.1",
+    "@nrwl/devkit": "13.7.1",
     "@nrwl/js": "13.7.1",
     "@nrwl/tao": "13.7.1",
     "@nrwl/web": "13.7.1",
@@ -145,7 +147,9 @@
     "ui/apps/notifications",
     "ui/apps/profile",
     "ui/apps/search",
-    "examples/ui/ethereum.world"
+    "ui/lib/translation",
+    "examples/ui/ethereum.world",
+    "tools/executors"
   ],
   "engines": {
     "node": ">=16.13.0",
