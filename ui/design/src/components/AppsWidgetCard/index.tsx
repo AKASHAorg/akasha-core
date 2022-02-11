@@ -52,7 +52,6 @@ const AppsWidgetCard: React.FC<IAppsWidgetCardProps> = props => {
               labelSize="large"
               key={index}
               iconType={appData.appIconType}
-              iconSize={appData.iconSize}
               gap="xxsmall"
             />
           ))}

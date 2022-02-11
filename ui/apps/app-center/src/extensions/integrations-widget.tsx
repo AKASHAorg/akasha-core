@@ -54,7 +54,6 @@ const ICWidget: React.FC<RootComponentProps> = props => {
         installedAppsLabel={t('Installed')}
         noWorldAppsLabel={t('No World Apps. Please check later')}
         noInstalledAppsLabel={t('No Installed Apps. Please install an app')}
-        icAppsAnchorLink={routes[INFO]}
         onClickWorldApp={handleAppClick}
         onClickInstalledApp={handleAppClick}
       />

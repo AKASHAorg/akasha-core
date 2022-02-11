@@ -23,7 +23,6 @@ describe('<ICWidgetCard /> Component', () => {
             installedAppsLabel="Installed"
             noWorldAppsLabel="No World Apps. Please check later"
             noInstalledAppsLabel="No Installed Apps. Please install an app"
-            icAppsAnchorLink=""
             onClickWorldApp={handleClickWorldApp}
             onClickInstalledApp={handleClickInstalledApp}
             onActiveTabChange={handleTabClick}

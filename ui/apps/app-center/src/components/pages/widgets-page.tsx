@@ -7,7 +7,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 const { Box } = DS;
 
 const WidgetsPage: React.FC<RootComponentProps> = () => {
-  return <Box>widgets</Box>;
+  return <Box margin="medium">widgets</Box>;
 };
 
 export default WidgetsPage;

@@ -48,7 +48,7 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Box overflow={'auto'} gap="small">
+    <Box gap="small" margin="medium">
       {integrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
         <Box key={index} direction="row" justify="between">
           <SubtitleTextIcon
@@ -56,6 +56,7 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
             subtitle={app.id}
             iconType="integrationAppLarge"
             onClick={() => handleAppClick(app)}
+            backgroundColor={true}
           />
           <DuplexButton
             icon={<Icon type="arrowDown" />}

@@ -5,20 +5,18 @@ import { IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
 
 import ICDetailCardCoverImage from './ic-detail-card-fields/cover-image';
 import ICDetailCardAvatar from './ic-detail-card-fields/avatar';
-import ICDetailCardName from './ic-detail-card-fields/name';
-import SectionWrapper from './ic-detail-card-fields/section-wrapper';
 
 import Icon from '../Icon';
 import DuplexButton from '../DuplexButton';
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 
 import { formatRelativeTime } from '../../utils/time';
+import SubtitleTextIcon from '../SubtitleTextIcon';
 
 export interface ICDetailCardProps {
   className?: string;
-
   // labels
-  titleLabel: string;
+
   shareLabel: string;
   installLabel: string;
   uninstallLabel: string;
@@ -27,8 +25,6 @@ export interface ICDetailCardProps {
   descriptionContent: string;
   showMoreLabel: string;
   linksLabel: string;
-  nextReleaseLabel: string;
-  ghRepoLabel: string;
   curVersionLabel: string;
   versionLabel: string;
   currentLabel: string;
@@ -37,15 +33,17 @@ export interface ICDetailCardProps {
   authorsLabel: string;
   licenseLabel: string;
 
+  integrationName?: string;
   id?: string;
   avatar?: string;
   coverImage?: string;
   ethAddress?: string;
   isInstalled: boolean;
+  links?: string[];
   releases: IntegrationCenterApp['releases'];
-  authors: IntegrationCenterApp['authors'];
-  tags: IntegrationCenterApp['tags'];
-  license: string;
+  authors?: IntegrationCenterApp['authors'];
+  tags?: IntegrationCenterApp['tags'];
+  license?: string;
 
   onClickShare: () => void;
   onClickCTA: () => void;
@@ -69,7 +67,6 @@ const StyledText = styled(Text)<{ marginBottom?: boolean; bold?: boolean }>`
 const ICDetailCard: React.FC<ICDetailCardProps> = props => {
   const {
     className,
-    titleLabel,
     shareLabel,
     installLabel,
     uninstallLabel,
@@ -77,9 +74,6 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     descriptionLabel,
     descriptionContent,
     showMoreLabel,
-    linksLabel,
-    nextReleaseLabel,
-    ghRepoLabel,
     curVersionLabel,
     versionLabel,
     currentLabel,
@@ -87,11 +81,13 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     versionHistoryLabel,
     authorsLabel,
     licenseLabel,
+    integrationName,
     id,
     avatar,
     coverImage,
     ethAddress,
     isInstalled,
+    links,
     releases,
     authors,
     tags,
@@ -139,12 +135,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           <Box direction="row">
             <ICDetailCardAvatar ethAddress={ethAddress} avatar={avatar} />
             <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
-              <ICDetailCardName name={titleLabel} />
-              <Box direction="row" gap="xsmall">
-                <Text size="md" color="secondaryText">
-                  {id ? `@${id.replace('@', '')}` : null}
-                </Text>
-              </Box>
+              <SubtitleTextIcon label={integrationName} subtitle={id} />
             </Box>
           </Box>
           <Box direction="row" data-testid="ic-detail-card-install-button">
@@ -168,7 +159,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             />
           </Box>
         </Box>
-        <SectionWrapper>
+        <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
           <StyledText size="md" bold marginBottom>
             {descriptionLabel}
           </StyledText>
@@ -184,19 +175,15 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           >
             {showMoreLabel}
           </Text>
-        </SectionWrapper>
-        <SectionWrapper>
-          <StyledText size="md" bold marginBottom>
-            {linksLabel}
-          </StyledText>
-          <StyledText size="md" marginBottom style={{ lineHeight: '1.375rem' }}>
-            {nextReleaseLabel}
-          </StyledText>
-          <StyledText size="md" marginBottom>
-            {ghRepoLabel}
-          </StyledText>
-        </SectionWrapper>
-        <SectionWrapper>
+        </Box>
+        {links && (
+          <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
+            {links.map((url, index) => (
+              <StyledAnchor key={index} label={url} href={url} />
+            ))}
+          </Box>
+        )}
+        <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
           <StyledText size="md" weight="bold" marginBottom>
             {curVersionLabel}
           </StyledText>
@@ -223,8 +210,8 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           >
             {versionHistoryLabel}
           </StyledText>
-        </SectionWrapper>
-        <SectionWrapper>
+        </Box>
+        <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
           <StyledText size="md" weight="bold" marginBottom>
             {authorsLabel}
           </StyledText>
@@ -239,7 +226,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
                     marginBottom
                     onClick={handleAuthorClick}
                   >
-                    {'@' + author}
+                    {`@${author.replace('@', '')}`}
                   </StyledText>
                   <Text margin={{ horizontal: '0.5rem' }}>
                     {authors.length > 1 && idx !== authors.length - 1 && '-'}
@@ -248,9 +235,9 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               ))}
             </Box>
           )}
-        </SectionWrapper>
+        </Box>
         {tags && tags.length > 0 && (
-          <SectionWrapper margin={{ top: '1rem' }}>
+          <Box margin={{ top: 'medium' }} border={{ side: 'bottom' }}>
             <Box direction="row" margin={{ bottom: '1.5rem' }} wrap={true}>
               {tags.map((tag, idx) => (
                 <Box
@@ -266,9 +253,9 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
                 </Box>
               ))}
             </Box>
-          </SectionWrapper>
+          </Box>
         )}
-        <SectionWrapper noBorder>
+        <Box margin={{ top: 'large' }}>
           <StyledText size="md" weight="bold" marginBottom>
             {licenseLabel}:
           </StyledText>
@@ -279,14 +266,13 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               {license}
             </Text>
           </Box>
-        </SectionWrapper>
+        </Box>
       </Box>
     </MainAreaCardBox>
   );
 };
 
 ICDetailCard.defaultProps = {
-  titleLabel: 'Integration App Name',
   shareLabel: 'Share',
   installLabel: 'Install',
   uninstallLabel: 'Uninstall',
@@ -294,8 +280,6 @@ ICDetailCard.defaultProps = {
   descriptionLabel: 'Description',
   showMoreLabel: 'Show More',
   linksLabel: 'Links',
-  nextReleaseLabel: 'Support next release',
-  ghRepoLabel: 'Github Repo',
   curVersionLabel: 'Current Version',
   versionLabel: 'Version',
   currentLabel: 'Current',

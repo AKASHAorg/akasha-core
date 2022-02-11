@@ -26,7 +26,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
   const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
 
   return (
-    <Box gap="medium">
+    <Box gap="medium" margin="medium" flex={{ shrink: 0 }}>
       <>
         <Box gap="small" pad={{ bottom: 'small' }}>
           <Text size="large" color="secondaryText">
@@ -39,11 +39,21 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
             <Box
               key={index}
               direction="row"
+              align="center"
               justify="between"
-              border={{ side: 'bottom', size: '1px', color: 'border' }}
-              pad={{ bottom: 'small' }}
+              border={
+                index !== defaultIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                  ? { side: 'bottom', size: '1px', color: 'border' }
+                  : null
+              }
+              pad={{ bottom: 'small', right: 'medium' }}
             >
-              <SubtitleTextIcon label={app.name} subtitle={app.id} iconType="integrationAppLarge" />
+              <SubtitleTextIcon
+                label={app.name}
+                subtitle={app.id}
+                iconType="integrationAppLarge"
+                backgroundColor={true}
+              />
               <Icon type="checkSimple" accentColor={true} size="md" />
             </Box>
           ))}
@@ -61,11 +71,21 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
             <Box
               key={index}
               direction="row"
+              align="center"
               justify="between"
-              border={{ side: 'bottom', size: '1px', color: 'border' }}
-              pad={{ bottom: 'small' }}
+              border={
+                index !== defaultIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                  ? { side: 'bottom', size: '1px', color: 'border' }
+                  : null
+              }
+              pad={{ bottom: 'small', right: 'medium' }}
             >
-              <SubtitleTextIcon label={app.name} subtitle={app.id} iconType="integrationAppLarge" />
+              <SubtitleTextIcon
+                label={app.name}
+                subtitle={app.id}
+                iconType="integrationAppLarge"
+                backgroundColor={true}
+              />
               <Icon type="moreDark" />
             </Box>
           ))}

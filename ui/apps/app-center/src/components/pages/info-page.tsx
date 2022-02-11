@@ -54,10 +54,10 @@ const InfoPage: React.FC<RootComponentProps> = () => {
     ],
     authors: ['@akasha'],
     tags: ['test'],
-    license: 'MIT',
+    license: 'wtfpl',
   };
   return (
-    <Box>
+    <Box margin="medium">
       {integrationInfoReq.error && (
         <ErrorLoader
           type="script-error"
@@ -68,7 +68,7 @@ const InfoPage: React.FC<RootComponentProps> = () => {
       )}
       {integrationInfoReq.isSuccess && integrationInfo && (
         <ICDetailCard
-          titleLabel={integrationInfo.name}
+          integrationName={integrationInfo.name}
           shareLabel={t('Share')}
           id={integrationInfo.id}
           avatar={metadata.avatar}
@@ -80,8 +80,6 @@ const InfoPage: React.FC<RootComponentProps> = () => {
           descriptionContent={metadata.description}
           showMoreLabel={t('Show More')}
           linksLabel={t('Links')}
-          nextReleaseLabel={t('Support next release')}
-          ghRepoLabel={t('Github')}
           curVersionLabel={t('Current Version')}
           versionLabel={t('Version')}
           currentLabel={t('Current')}

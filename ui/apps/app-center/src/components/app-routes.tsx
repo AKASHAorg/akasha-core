@@ -67,7 +67,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             </Box>
           </Box>
-          <Box pad="medium">
+          <Box overflow={'auto'} height={{ max: '80vh' }}>
             <Switch>
               <Route path={routes[EXPLORE]}>
                 <ExplorePage {...props} />

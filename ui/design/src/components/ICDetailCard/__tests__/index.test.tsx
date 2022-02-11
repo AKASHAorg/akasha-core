@@ -18,7 +18,6 @@ describe('<ICDetailCard /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <ICDetailCard
-            titleLabel={ICWorldAppsData[3].name}
             shareLabel="Share"
             installLabel="Install"
             uninstallLabel="Uninstall"
@@ -26,8 +25,6 @@ describe('<ICDetailCard /> Component', () => {
             descriptionLabel="Description"
             showMoreLabel="Show More"
             linksLabel="Links"
-            nextReleaseLabel="Support next release"
-            ghRepoLabel="Github Repo"
             curVersionLabel="Current Version"
             versionLabel="Version"
             currentLabel="Current"
@@ -37,6 +34,7 @@ describe('<ICDetailCard /> Component', () => {
             licenseLabel="License"
             descriptionContent={ICWorldAppsData[3].description}
             isInstalled={false}
+            links={[]}
             releases={ICWorldAppsData[3].releases}
             authors={ICWorldAppsData[3].authors}
             tags={ICWorldAppsData[3].tags}

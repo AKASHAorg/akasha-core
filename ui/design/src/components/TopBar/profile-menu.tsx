@@ -177,7 +177,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
                 subtitle={menu.labels[1]}
                 subtitleColor={'secondaryText'}
                 iconType={menu.icon}
-                iconSize={'1.250rem'}
+                iconSize={'sm'}
               />
             </StyledPopoverBox>
           </Box>

@@ -7,7 +7,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 const { Box } = DS;
 
 const AppsPage: React.FC<RootComponentProps> = () => {
-  return <Box>apps</Box>;
+  return <Box margin="medium">apps</Box>;
 };
 
 export default AppsPage;
