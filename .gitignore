@@ -42,5 +42,5 @@ dist
 *.d.ts
 docs
 .env
-tool/executors/*/*.js
-tool/executors/*/*.map
+impl.js
+impl.js.map

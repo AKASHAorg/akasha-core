@@ -124,7 +124,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     ButtonValues.DELISTED,
     ButtonValues.STATS,
   ];
-  const buttonLabels = buttonValues.map(value => t(value));
+  const buttonLabels = buttonValues.map(value => t('{{ buttonValues }}', { buttonValues: value }));
 
   return (
     <VerticalFillBox fill="vertical">
@@ -144,21 +144,21 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         tabButtons={
           <>
             <StyledSwitchCardButton
-              label={t(ButtonValues.ALL)}
+              label={t('{{ buttonValueAll }}', { buttonValueAll: ButtonValues.ALL })}
               size="large"
               removeBorder={false}
               primary={ButtonValues.ALL === activeButton}
               onClick={onTabClick(ButtonValues.ALL)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.KEPT)}
+              label={t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.KEPT === activeButton}
               onClick={onTabClick(ButtonValues.KEPT)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.DELISTED)}
+              label={t('{{ buttonValueDelisted }}', { buttonValueDelisted: ButtonValues.DELISTED })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.DELISTED === activeButton}
@@ -198,11 +198,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                       <TransparencyLogMiniCard
                         key={index}
                         locale="en"
-                        title={t(
-                          `${el.contentType.charAt(0).toUpperCase()}${el.contentType.substring(
-                            1,
-                          )} ${el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT}`,
-                        )}
+                        title={t('{{ elContentType }} {{ elContentStatus }}', {
+                          elContentType: el.contentType,
+                          elContentStatus: el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT,
+                        })}
                         content={t('{{elExplanation}}', { elExplanation: el.explanation })}
                         isSelected={el.contentID === selected?.contentID}
                         isDelisted={el.delisted}

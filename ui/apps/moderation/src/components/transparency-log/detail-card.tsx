@@ -36,11 +36,10 @@ const DetailCard: React.FC<IDetailCard> = props => {
   return (
     <TransparencyLogDetailCard
       locale="en"
-      title={t(
-        `${selected.contentType.charAt(0).toUpperCase()}${selected.contentType.substring(1)} ${
-          selected.delisted ? 'delisted by' : 'kept by'
-        }`,
-      )}
+      title={t('{{ selectedContentType }} {{ selectedDelisted }}', {
+        selectedContentType: selected.contentType,
+        selectedDelisted: selected.delisted ? 'delisted by' : 'kept by',
+      })}
       content={t('{{explanation}}', { explanation: selected.explanation })}
       isDelisted={selected.delisted}
       moderator={selected.moderator.name}
@@ -51,9 +50,9 @@ const DetailCard: React.FC<IDetailCard> = props => {
           : selected.moderator.avatar
       }
       moderatorEthAddress={selected.moderator.ethAddress}
-      reportedTimesLabel={t(
-        `Reported ${selected.reports > 1 ? `${selected.reports} times` : 'once'}`,
-      )}
+      reportedTimesLabel={t('Reported {{ reportedTimes }}', {
+        reportedTimes: selected.reports > 1 ? `${selected.reports} times` : 'once',
+      })}
       viewItemLink={`${window.location.origin}${
         selected.contentType === ModerationItemTypes.ACCOUNT
           ? `${BASE_PROFILE_URL}/${selected.contentID}`

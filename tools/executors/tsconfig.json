@@ -18,7 +18,7 @@
     "target": "es2020",
     "sourceMap": true,
     "pretty": true,
-    "skipLibCheck": true,
+    "skipLibCheck": true
   },
-  "include": ["*/impl.ts"]
+  "include": ["./**/impl.ts"],
 }

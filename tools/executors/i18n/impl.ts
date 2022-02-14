@@ -37,5 +37,5 @@ export default async function i18nExecutor(options: i18nExecutorOptions, context
     console.error(stderr);
   }
   console.log(stdout);
-  return { success: true };
+  return { success: !stderr };
 }

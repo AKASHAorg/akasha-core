@@ -159,7 +159,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     ButtonValues.POSTS,
     ButtonValues.REPLIES,
   ];
-  const buttonLabels = buttonValues.map(value => t(value));
+  const buttonLabels = buttonValues.map(value =>
+    t('{{ buttonLabelValues }}', { buttonLabelValues: value }),
+  );
 
   const onTabClick = (value: string) => () => {
     setActiveButton(value);
@@ -214,35 +216,35 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         tabButtons={
           <>
             <StyledSwitchCardButton
-              label={t(ButtonValues.ALL)}
+              label={t('{{ buttonValuesAll }}', { buttonValuesAll: ButtonValues.ALL })}
               size="large"
               removeBorder={false}
               primary={ButtonValues.ALL === activeButton}
               onClick={onTabClick(ButtonValues.ALL)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.PEOPLE)}
+              label={t('{{ buttonValuesPeople }}', { buttonValuesPeople: ButtonValues.PEOPLE })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.PEOPLE === activeButton}
               onClick={onTabClick(ButtonValues.PEOPLE)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.TOPICS)}
+              label={t('{{ buttonValuesTopics }}', { buttonValuesTopics: ButtonValues.TOPICS })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.TOPICS === activeButton}
               onClick={onTabClick(ButtonValues.TOPICS)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.POSTS)}
+              label={t('{{ buttonValuesPosts }}', { buttonValuesPosts: ButtonValues.POSTS })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.POSTS === activeButton}
               onClick={onTabClick(ButtonValues.POSTS)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.REPLIES)}
+              label={t('{{ buttonValuesReplies }}', { buttonValuesReplies: ButtonValues.REPLIES })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.REPLIES === activeButton}

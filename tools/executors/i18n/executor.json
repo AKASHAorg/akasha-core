@@ -3,7 +3,7 @@
     "extract": {
       "implementation": "./impl",
       "schema": "./schema.json",
-      "description": "Extract the u18n translations from a package"
+      "description": "Extract the i18n translations from a package"
     }
   }
 }

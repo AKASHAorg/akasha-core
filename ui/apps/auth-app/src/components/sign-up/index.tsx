@@ -175,7 +175,8 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             "As part of signing up, you'll get a free Ethereum wallet that you can use to send or receive crypto and sign in to other Ethereum sites.",
           )}
           paragraphThreeLabel={t(
-            `While you're free to conect any wallet that works with the ${requiredNetworkName} Network,`,
+            "While you're free to connect any wallet that works with the {{requiredNetworkName}} Network,",
+            { requiredNetworkName },
           )}
           paragraphThreeBoldLabel={t('we recommend MetaMask.')}
           paragraphFourLabel={t(
@@ -185,48 +186,58 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           injectedProvider={injectedProvider.name}
           providerDetails={{
             ...injectedProvider.details,
-            subtitleLabel: t(injectedProvider.details.subtitleLabel),
+            subtitleLabel: t('{{ injectedProviderSubtitleLabel }}', {
+              injectedProviderSubtitleLabel: injectedProvider.details.subtitleLabel,
+            }),
           }}
           tagLabel={t('auto-detected')}
           walletConnectTitleLabel="WalletConnect"
-          walletConnectDescription={`${t(
+          walletConnectDescription={t(
             'The wallet you are using must allow switching the Ethereum network to Rinkeby',
-          )}.`}
+          )}
           socialLoginTitleLabel={t('Email or Social Login')}
-          socialLoginDescription={`${t(
+          socialLoginDescription={t(
             'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
-          )}.`}
+          )}
           providerConnected={
             connectProviderQuery.isSuccess && selectedProvider !== EthProviders.None
           }
           changeProviderLabel={t('Change')}
           setRequiredNetworkLabel={t('To use Ethereum World during the alpha period, ')}
-          setRequiredNetworkBoldLabel={`${t('you’ll need to set the')} ${
-            selectedProvider === EthProviders.WalletConnect
-              ? 'WalletConnect'
-              : injectedProvider.name
-          } ${t('network to')}`}
+          setRequiredNetworkBoldLabel={t(
+            'you’ll need to set the {{ selectedProvider }} network to',
+            {
+              selectedProvider:
+                selectedProvider === EthProviders.WalletConnect
+                  ? 'WalletConnect'
+                  : injectedProvider.name,
+            },
+          )}
           setRequiredNetworkAccentLabel={requiredNetworkName}
           metamaskCTAIntroLabel={t('Click')}
           metamaskCTAAccentLabel={t('here')}
-          metamaskCTALabel={`${t('to change the network')}.`}
+          metamaskCTALabel={t('to change the network')}
           otherprovidersCTALabel={t('Please change the network manually')}
           isOnRequiredNetworkLabel={
             selectedProvider === EthProviders.Torus
               ? t('You have connected using Email or Social login. Click the button to continue')
-              : `${t('We have detected that the')} ${
-                  selectedProvider === EthProviders.WalletConnect
-                    ? 'WalletConnect'
-                    : injectedProvider.name
-                } ${t(
-                  `network is set to ${requiredNetworkName}. We’ll now proceed to connect your wallet to Ethereum World.`,
-                )}`
+              : t(
+                  'We have detected that the {{ selectedProvider }} network is set to {{ requiredNetworkName }}. We’ll now proceed to connect your wallet to Ethereum World.',
+                  {
+                    selectedProvider:
+                      selectedProvider === EthProviders.WalletConnect
+                        ? 'WalletConnect'
+                        : injectedProvider.name,
+                    requiredNetworkName,
+                  },
+                )
           }
-          variableIconButtonLabel={t('I have set the network to {{requiredNetworkName}}', {
+          variableIconButtonLabel={t('I have set the network to {{ requiredNetworkName }}', {
             requiredNetworkName,
           })}
           variableIconErrorLabel={t(
-            `Please set the network to ${requiredNetworkName} and try again.`,
+            'Please set the network to {{ requiredNetworkName }} and try again.',
+            { requiredNetworkName },
           )}
           buttonLabel={t('Continue to Step 4 ')}
           selectedProvider={selectedProvider}

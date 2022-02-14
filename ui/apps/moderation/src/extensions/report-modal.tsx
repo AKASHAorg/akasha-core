@@ -71,7 +71,9 @@ const ReportModalComponent = (props: RootComponentProps) => {
         itemType,
       })}
       optionsTitleLabel={t('Please select a reason')}
-      optionLabels={reasons.map((el: string) => t(el))}
+      optionLabels={reasons.map((el: string) =>
+        t('{{ reportModalReason }}', { reportModalReason: el }),
+      )}
       optionValues={reasons}
       descriptionLabel={t('Explanation')}
       descriptionPlaceholder={t('Please explain your reason(s)')}
