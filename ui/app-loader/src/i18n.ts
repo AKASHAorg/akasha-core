@@ -18,7 +18,7 @@ export const setupI18next = async ({ logger, translationPath }): Promise<typeof 
     })
     .init({
       fallbackLng: 'en',
-      ns: [],
+      ns: ['app-akasha-integration'],
       saveMissing: false,
       saveMissingTo: 'all',
       load: 'languageOnly',

@@ -42,6 +42,7 @@ import Widgets from './widgets';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { setupI18next } from './i18n';
 import { TRANSLATION_MIDDLEWARE } from '@akashaproject/ui-lib-translation';
+import i18next from 'i18next';
 
 interface SingleSpaEventDetail {
   originalEvent: Event;
@@ -80,6 +81,7 @@ export default class AppLoader {
   private readonly menuItems: IMenuList;
   public layoutConfig?: LayoutConfig;
   public middlewareConfigs: Array<MiddlewareConfig>;
+  public i18next?: typeof i18next;
   private extensionPoints: Record<string, UIEventData['data'][]>;
   private readonly extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
   private activeModal?: ModalNavigationOptions;
@@ -95,6 +97,7 @@ export default class AppLoader {
 
     this.uiEvents = new Subject();
     this.middlewareConfigs = [];
+    this.i18next = null;
 
     // register event listeners
     this.addSingleSpaEventListeners();
@@ -243,7 +246,7 @@ export default class AppLoader {
       this.loaderLogger.warn('Cannot get translation resource path!');
     }
 
-    const i18next = await setupI18next({
+    this.i18next = await setupI18next({
       logger: this.loaderLogger,
       translationPath: translationConfig.translationPath || '/locales/{{lng}}/{{ns}}.json',
     });
@@ -256,7 +259,7 @@ export default class AppLoader {
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
       navigateTo: this.navigateTo.bind(this),
-      i18next,
+      i18next: this.i18next,
     });
 
     this.widgets = new Widgets({
@@ -268,7 +271,7 @@ export default class AppLoader {
       getMenuItems: this.getMenuItems.bind(this),
       getAppRoutes: appId => this.apps.getAppRoutes(appId),
       navigateTo: this.navigateTo.bind(this),
-      i18next,
+      i18next: this.i18next,
     });
 
     integrationInfos.forEach(integration => {
@@ -868,6 +871,7 @@ export default class AppLoader {
       extensionData,
       navigateTo: this.navigateTo.bind(this),
       parseQueryString: parseQueryString,
+      i18next: this.i18next,
     };
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);

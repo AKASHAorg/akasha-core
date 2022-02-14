@@ -28,7 +28,7 @@ const reactLifecycles = singleSpaReact({
 });
 
 export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['ui-widget-topbar']);
+  await props.i18next.loadNamespaces(['ui-widget-trending']);
   return Promise.resolve();
 };
 
