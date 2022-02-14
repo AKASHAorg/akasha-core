@@ -10,7 +10,6 @@ import Icon from '../Icon';
 import DuplexButton from '../DuplexButton';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 
-import { formatRelativeTime } from '../../utils/time';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 
 export interface ICDetailCardProps {
@@ -25,10 +24,9 @@ export interface ICDetailCardProps {
   descriptionContent: string;
   showMoreLabel: string;
   linksLabel: string;
-  curVersionLabel: string;
-  versionLabel: string;
-  currentLabel: string;
-  bugFixingLabel: string;
+  releasesLabel: string;
+  releaseTypeLabel: string;
+  releaseIdLabel: string;
   versionHistoryLabel: string;
   authorsLabel: string;
   licenseLabel: string;
@@ -40,7 +38,7 @@ export interface ICDetailCardProps {
   ethAddress?: string;
   isInstalled: boolean;
   links?: string[];
-  releases: IntegrationCenterApp['releases'];
+  releases: any;
   authors?: IntegrationCenterApp['authors'];
   tags?: IntegrationCenterApp['tags'];
   license?: string;
@@ -74,10 +72,9 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     descriptionLabel,
     descriptionContent,
     showMoreLabel,
-    curVersionLabel,
-    versionLabel,
-    currentLabel,
-    bugFixingLabel,
+    releasesLabel,
+    releaseTypeLabel,
+    releaseIdLabel,
     versionHistoryLabel,
     authorsLabel,
     licenseLabel,
@@ -97,9 +94,6 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     onClickInstall,
     onClickUninstall,
   } = props;
-
-  const currentRelease = releases.find(r => r.type === 'current');
-  const latestBugFixRelease = releases.filter(r => r.type !== 'current')[0];
 
   const handleShowMore = () => {
     /* @TODO */
@@ -126,13 +120,13 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
       />
       <Box direction="column" pad={{ bottom: 'medium' }} margin={{ horizontal: 'medium' }}>
         <Box
-          height="70px"
+          height="78px"
           direction="row"
           justify="between"
           align="center"
           border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
         >
-          <Box direction="row">
+          <Box direction="row" align="center" style={{ position: 'relative', top: '-0.5rem' }}>
             <ICDetailCardAvatar ethAddress={ethAddress} avatar={avatar} />
             <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
               <SubtitleTextIcon label={integrationName} subtitle={id} />
@@ -146,7 +140,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               border={{ color: 'accent', size: 'xsmall', style: 'solid', side: 'all' }}
               onClick={onClickCTA}
             >
-              <Icon size="md" type="settings" />
+              <Icon size="md" type="settings" accentColor={true} />
             </Box>
             <DuplexButton
               icon={isInstalled ? <Icon type="checkSimple" size="xs" /> : null}
@@ -185,22 +179,20 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
         )}
         <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
           <StyledText size="md" weight="bold" marginBottom>
-            {curVersionLabel}
+            {releasesLabel}
           </StyledText>
-          {currentRelease && (
-            <StyledText size="md" color="secondaryText" marginBottom>
-              {versionLabel} {currentRelease.version} - {currentLabel}
-            </StyledText>
-          )}
-          <StyledText size="md" marginBottom>
-            {bugFixingLabel}
-          </StyledText>
-          {latestBugFixRelease && (
-            <StyledText size="md" color="secondaryText" marginBottom>
-              {versionLabel} {latestBugFixRelease.version} -{' '}
-              {formatRelativeTime(latestBugFixRelease.timestamp)}
-            </StyledText>
-          )}
+          {releases &&
+            releases.map(release => (
+              <>
+                <StyledText size="md" color="secondaryText" marginBottom>
+                  {releaseTypeLabel} {release?.type}
+                </StyledText>{' '}
+                <StyledText size="md" marginBottom>
+                  {releaseIdLabel} {release?.id}
+                </StyledText>
+              </>
+            ))()}
+
           <StyledText
             size="md"
             color="accent"
@@ -280,10 +272,9 @@ ICDetailCard.defaultProps = {
   descriptionLabel: 'Description',
   showMoreLabel: 'Show More',
   linksLabel: 'Links',
-  curVersionLabel: 'Current Version',
-  versionLabel: 'Version',
-  currentLabel: 'Current',
-  bugFixingLabel: 'Bug Fixing',
+  releasesLabel: 'Releases',
+  releaseTypeLabel: 'Release Type',
+  releaseIdLabel: 'ReleaseId',
   versionHistoryLabel: 'Version History',
   authorsLabel: 'Authors & Contributors',
   licenseLabel: 'License',

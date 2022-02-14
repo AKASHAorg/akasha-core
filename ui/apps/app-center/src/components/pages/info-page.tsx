@@ -5,7 +5,9 @@ import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   useGetAllInstalledApps,
+  useGetAllIntegrationReleaseIds,
   useGetIntegrationInfo,
+  useGetIntegrationsReleaseInfo,
   useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
@@ -36,22 +38,14 @@ const InfoPage: React.FC<RootComponentProps> = () => {
     }
   }, [installedAppsReq.data, integrationInfo]);
 
+  const releaseIds = useGetAllIntegrationReleaseIds(integrationInfo?.name)?.data?.releaseIds;
+
+  const releasesInfo = useGetIntegrationsReleaseInfo(releaseIds)?.data;
+
   const metadata = {
     avatar: '',
     coverImage: 'blue',
     description: 'Testing description',
-    releases: [
-      {
-        type: 'current',
-        version: '22.8.2',
-        timestamp: new Date(),
-      },
-      {
-        type: 'bug',
-        version: '22.8.1',
-        timestamp: new Date(),
-      },
-    ],
     authors: ['@akasha'],
     tags: ['test'],
     license: 'wtfpl',
@@ -80,11 +74,10 @@ const InfoPage: React.FC<RootComponentProps> = () => {
           descriptionContent={metadata.description}
           showMoreLabel={t('Show More')}
           linksLabel={t('Links')}
-          curVersionLabel={t('Current Version')}
-          versionLabel={t('Version')}
-          currentLabel={t('Current')}
-          releases={metadata.releases}
-          bugFixingLabel={t('Bug Fixing')}
+          releasesLabel={t('Releases')}
+          releaseTypeLabel={t('Release Type')}
+          releaseIdLabel={t('Release Id')}
+          releases={releasesInfo}
           versionHistoryLabel={t('Version History')}
           authorsLabel={t('Authors & Contributors')}
           authors={metadata.authors}

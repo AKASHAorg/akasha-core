@@ -4,7 +4,7 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const { Box, SubtitleTextIcon, Icon, Text } = DS;
+const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader } = DS;
 
 const MyAppsPage: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
@@ -23,7 +23,13 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
   const defaultIntegrationsInfoReq = useGetIntegrationsInfo(defaultAppsNamesNormalized);
 
   const installedAppsReq = useGetAllInstalledApps();
-  const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
+  // remove default apps from list of installed apps
+  const filteredInstalledApps = installedAppsReq.data?.filter(app => {
+    if (!defaultAppsNamesNormalized.includes(app.name)) {
+      return app;
+    }
+  });
+  const installedIntegrationsInfoReq = useGetIntegrationsInfo(filteredInstalledApps);
 
   return (
     <Box gap="medium" margin="medium" flex={{ shrink: 0 }}>
@@ -67,28 +73,36 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
           <Text>{t('These are the apps you installed in your world')}</Text>
         </Box>
         <Box gap="small">
-          {installedIntegrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
-            <Box
-              key={index}
-              direction="row"
-              align="center"
-              justify="between"
-              border={
-                index !== defaultIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
-                  ? { side: 'bottom', size: '1px', color: 'border' }
-                  : null
-              }
-              pad={{ bottom: 'small', right: 'medium' }}
-            >
-              <SubtitleTextIcon
-                label={app.name}
-                subtitle={app.id}
-                iconType="integrationAppLarge"
-                backgroundColor={true}
-              />
-              <Icon type="moreDark" />
-            </Box>
-          ))}
+          {installedIntegrationsInfoReq.data?.getIntegrationInfo?.length &&
+            installedIntegrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
+              <Box
+                key={index}
+                direction="row"
+                align="center"
+                justify="between"
+                border={
+                  index !== defaultIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                    ? { side: 'bottom', size: '1px', color: 'border' }
+                    : null
+                }
+                pad={{ bottom: 'small', right: 'medium' }}
+              >
+                <SubtitleTextIcon
+                  label={app.name}
+                  subtitle={app.id}
+                  iconType="integrationAppLarge"
+                  backgroundColor={true}
+                />
+                <Icon type="moreDark" />
+              </Box>
+            ))}
+          {!installedIntegrationsInfoReq.data?.getIntegrationInfo?.length && (
+            <ErrorLoader
+              type="missing-notifications"
+              title={t('You have no installed apps')}
+              details={t('Try some out for extra functionality!')}
+            />
+          )}
         </Box>
       </>
     </Box>

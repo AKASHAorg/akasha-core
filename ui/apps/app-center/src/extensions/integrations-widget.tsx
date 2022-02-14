@@ -17,7 +17,6 @@ import routes, { INFO, rootRoute } from '../routes';
 const { Box, ICWidgetCard, ErrorLoader } = DS;
 
 const ICWidget: React.FC<RootComponentProps> = props => {
-  // const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation();
 
   const loginQuery = useGetLogin();
@@ -38,7 +37,13 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   const defaultIntegrationsInfoReq = useGetIntegrationsInfo(defaultAppsNamesNormalized);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
-  const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
+  // remove default apps from list of installed apps
+  const filteredInstalledApps = installedAppsReq.data?.filter(app => {
+    if (!defaultAppsNamesNormalized.includes(app.name)) {
+      return app;
+    }
+  });
+  const installedIntegrationsInfoReq = useGetIntegrationsInfo(filteredInstalledApps);
 
   const handleAppClick = (integrationId: string) => {
     props.singleSpa.navigateToUrl(`${routes[INFO]}/${integrationId}`);
@@ -53,7 +58,8 @@ const ICWidget: React.FC<RootComponentProps> = props => {
         worldAppsLabel={t('World Apps')}
         installedAppsLabel={t('Installed')}
         noWorldAppsLabel={t('No World Apps. Please check later')}
-        noInstalledAppsLabel={t('No Installed Apps. Please install an app')}
+        noInstalledAppsLabel={t('You have no installed apps')}
+        noInstalledAppsSubLabel={t('Try some out for extra functionality!')}
         onClickWorldApp={handleAppClick}
         onClickInstalledApp={handleAppClick}
       />

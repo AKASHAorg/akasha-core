@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Icon from '../../Icon';
 import Avatar from '../../Avatar';
 import ImageOverlay from '../../ImageOverlay';
-import { AvatarDiv } from '../../ProfileCard/styled-profile-card';
 
 export interface ICDetailCardAvatarProps {
   avatar?: string;
@@ -37,15 +36,13 @@ const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
     <>
       {/* if avatar is passed */}
       {avatar && (
-        <AvatarDiv>
-          <Avatar
-            size="xxl"
-            border="lg"
-            ethAddress={ethAddress}
-            src={avatar}
-            onClick={handleClickImage}
-          />
-        </AvatarDiv>
+        <Avatar
+          size="xxl"
+          border="lg"
+          ethAddress={ethAddress}
+          src={avatar}
+          onClick={handleClickImage}
+        />
       )}
       {/* fallback, if no avatar */}
       {!avatar && (

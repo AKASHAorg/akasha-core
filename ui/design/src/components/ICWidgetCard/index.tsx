@@ -6,6 +6,7 @@ import SubtitleTextIcon from '../SubtitleTextIcon';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
+import ErrorLoader from '../ErrorLoader';
 
 export interface ICWidgetCardProps {
   className?: string;
@@ -18,6 +19,7 @@ export interface ICWidgetCardProps {
   installedAppsLabel: string;
   noWorldAppsLabel: string;
   noInstalledAppsLabel: string;
+  noInstalledAppsSubLabel: string;
   // loading status
   isLoadingWorldApps?: boolean;
   isLoadingInstalledApps?: boolean;
@@ -37,6 +39,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
     installedApps,
     noWorldAppsLabel,
     noInstalledAppsLabel,
+    noInstalledAppsSubLabel,
     isLoadingWorldApps,
     isLoadingInstalledApps,
     onClickWorldApp,
@@ -112,7 +115,11 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
           <Box>
             {installedApps && installedApps.length === 0 && !isLoadingInstalledApps && (
               <Box pad="medium" align="center" justify="center">
-                <Text>{noInstalledAppsLabel}</Text>
+                <ErrorLoader
+                  type="missing-notifications"
+                  title={noInstalledAppsLabel}
+                  details={noInstalledAppsSubLabel}
+                />
               </Box>
             )}
             {installedApps &&
