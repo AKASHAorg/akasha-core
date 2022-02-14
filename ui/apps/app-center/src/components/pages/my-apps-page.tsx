@@ -2,7 +2,8 @@ import * as React from 'react';
 import { useGetAllInstalledApps, useGetIntegrationsInfo } from '@akashaproject/ui-awf-hooks';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import routes, { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader } = DS;
 
@@ -31,6 +32,10 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
   });
   const installedIntegrationsInfoReq = useGetIntegrationsInfo(filteredInstalledApps);
 
+  const handleAppClick = (app: IntegrationInfo) => {
+    props.navigateTo(`${routes[INFO]}/${app.id}`);
+  };
+
   return (
     <Box gap="medium" margin="medium" flex={{ shrink: 0 }}>
       <>
@@ -53,6 +58,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
                   : null
               }
               pad={{ bottom: 'small', right: 'medium' }}
+              onClick={() => handleAppClick(app)}
             >
               <SubtitleTextIcon
                 label={app.name}
@@ -86,6 +92,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
                     : null
                 }
                 pad={{ bottom: 'small', right: 'medium' }}
+                onClick={() => handleAppClick(app)}
               >
                 <SubtitleTextIcon
                   label={app.name}
