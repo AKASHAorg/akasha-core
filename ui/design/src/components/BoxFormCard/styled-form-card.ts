@@ -89,7 +89,8 @@ const StyledCoverImageDiv = styled(BaseImageDiv)`
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: 9rem;
+  /* height: 9rem; */
+  max-height: 9rem;
   border-radius: ${props => props.theme.shapes.borderRadius};
 `;
 
@@ -135,6 +136,14 @@ const StyledCoverImageOverlay = styled.div`
   border-radius: ${props => props.theme.shapes.borderRadius};
 `;
 
+const StyledCropperImageWrapper = styled(BaseImageDiv)`
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 15rem;
+  border-radius: ${props => props.theme.shapes.borderRadius};
+`;
+
 export {
   StyledText,
   StyledAvatarPlaceholderDiv,
@@ -143,6 +152,7 @@ export {
   StyledCoverImageDiv,
   StyledAvatarOverlay,
   StyledCoverImageOverlay,
+  StyledCropperImageWrapper,
   StyledImage,
   StyledTextInput,
   HiddenSpan,
