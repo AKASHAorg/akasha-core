@@ -34,16 +34,32 @@ export interface AWF_IIC_REGISTRY {
   getIntegrationsInfo(opt: unknown): Observable<unknown>;
 }
 
+export interface AWF_APP_BUILD_MANIFEST {
+  links?: {
+    publicRepository?: string;
+    documentation?: string;
+  };
+  sources: string[];
+}
+
+export interface AWF_APP_SOURCE_MANIFEST {
+  mainFile: string;
+  license?: string;
+  description?: string;
+  keywords?: string[];
+}
+
 export interface ReleaseInfo {
   integrationID: string;
   id: string;
   name: string;
   version: string;
   integrationType: number;
-  links: string;
-  sources: string[];
+  links?: AWF_APP_BUILD_MANIFEST['links'];
+  sources: AWF_APP_BUILD_MANIFEST['sources'];
   author: string;
   enabled: boolean;
+  manifestData?: AWF_APP_SOURCE_MANIFEST;
 }
 
 export interface IntegrationInfo {
