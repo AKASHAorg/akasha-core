@@ -4,7 +4,7 @@ import DS from '@akashaproject/design-system';
 import { StyledIcon, StyledText } from '../styles';
 import { IPrivacyOption } from '../interfaces';
 
-const { Box, Checkbox } = DS;
+const { Box, BasicCardBox, Checkbox } = DS;
 
 const PrivacyOption: React.FC<IPrivacyOption> = props => {
   const {
@@ -21,89 +21,91 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
     OnChevronLeftClick,
   } = props;
   return (
-    <>
-      <Box
-        direction="row"
-        pad="medium"
-        align="center"
-        border={{ side: 'bottom', color: 'lightBorder' }}
-      >
-        <StyledIcon type="chevronLeft" onClick={OnChevronLeftClick} />
-        <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
-          {titleLabel}
-        </StyledText>
-      </Box>
-      <Box
-        direction="row"
-        pad="medium"
-        justify="between"
-        align="center"
-        border={{ side: 'bottom', color: 'lightBorder' }}
-      >
-        <StyledText weight="bold">{essentialCookiesLabel}</StyledText>
-      </Box>
-      <Box
-        pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
-        justify="center"
-        align="start"
-        border={{ side: 'bottom', color: 'lightBorder' }}
-      >
-        <StyledText>
-          {essentialCookiesInfo}
-          <StyledText
-            color="accentText"
-            style={{ cursor: 'pointer' }}
-            onClick={() =>
-              window.open(
-                `${window.location.protocol}//${window.location.host}/legal/privacy-policy`,
-                'Privacy Policy',
-                '_blank noopener noreferrer',
-              )
-            }
-          >
-            {privacyPolicyLabel}
+    <Box direction="column" gap="small">
+      <BasicCardBox>
+        <Box
+          direction="row"
+          pad="medium"
+          align="center"
+          border={{ side: 'bottom', color: 'lightBorder' }}
+        >
+          <StyledIcon type="chevronLeft" onClick={OnChevronLeftClick} />
+          <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
+            {titleLabel}
           </StyledText>
-          .
-        </StyledText>
-      </Box>
-      <Box
-        direction="row"
-        pad="medium"
-        justify="between"
-        align="center"
-        border={{ side: 'bottom', color: 'lightBorder' }}
-      >
-        <StyledText weight="bold">{trackingAnalyticsLabel}</StyledText>
-        <Box pad={{ top: 'small' }}>
-          <Checkbox
-            checked={checkedTracking}
-            onChange={onTrackingOptionChange}
-            toggle={true}
-            disabled={!cookieType}
-          />
         </Box>
-      </Box>
-      <Box
-        pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
-        justify="center"
-        align="start"
-        border={{ side: 'bottom', color: 'lightBorder' }}
-      >
-        <StyledText>
-          {trackingAnalyticsInfoIntro}
-          <StyledText
-            color="accentText"
-            style={{ cursor: 'pointer' }}
-            onClick={() =>
-              window.open('https://matomo.org', 'Matomo', '_blank noopener noreferrer')
-            }
-          >
-            Matomo,
+        <Box
+          direction="row"
+          pad="medium"
+          justify="between"
+          align="center"
+          border={{ side: 'bottom', color: 'lightBorder' }}
+        >
+          <StyledText weight="bold">{essentialCookiesLabel}</StyledText>
+        </Box>
+        <Box
+          pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
+          justify="center"
+          align="start"
+          border={{ side: 'bottom', color: 'lightBorder' }}
+        >
+          <StyledText>
+            {essentialCookiesInfo}
+            <StyledText
+              color="accentText"
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                window.open(
+                  `${window.location.protocol}//${window.location.host}/legal/privacy-policy`,
+                  'Privacy Policy',
+                  '_blank noopener noreferrer',
+                )
+              }
+            >
+              {privacyPolicyLabel}
+            </StyledText>
+            .
           </StyledText>
-          {trackingAnalyticsInfo}
-        </StyledText>
-      </Box>
-    </>
+        </Box>
+        <Box
+          direction="row"
+          pad="medium"
+          justify="between"
+          align="center"
+          border={{ side: 'bottom', color: 'lightBorder' }}
+        >
+          <StyledText weight="bold">{trackingAnalyticsLabel}</StyledText>
+          <Box pad={{ top: 'small' }}>
+            <Checkbox
+              checked={checkedTracking}
+              onChange={onTrackingOptionChange}
+              toggle={true}
+              disabled={!cookieType}
+            />
+          </Box>
+        </Box>
+        <Box
+          pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
+          justify="center"
+          align="start"
+          border={{ side: 'bottom', color: 'lightBorder' }}
+        >
+          <StyledText>
+            {trackingAnalyticsInfoIntro}
+            <StyledText
+              color="accentText"
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                window.open('https://matomo.org', 'Matomo', '_blank noopener noreferrer')
+              }
+            >
+              Matomo,
+            </StyledText>
+            {trackingAnalyticsInfo}
+          </StyledText>
+        </Box>
+      </BasicCardBox>
+    </Box>
   );
 };
 
