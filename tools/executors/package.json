@@ -27,7 +27,8 @@
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "tsc": "tsc --build",
-    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
+    "test": "jest --config jest.config.js"
   },
   "bugs": {
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"

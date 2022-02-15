@@ -482,12 +482,6 @@
             "cwd": "ui/lib/translation",
             "parallel": false
           }
-        },
-        "extract:translations": {
-          "builder": "./tools/executors/i18n:extract",
-          "options": {
-            "cwd": "ui/apps/translation"
-          }
         }
       }
     },

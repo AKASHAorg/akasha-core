@@ -2,5 +2,10 @@
   "$schema": "http://json-schema.org/schema",
   "type": "object",
   "cli": "nx",
-  "properties": {}
+  "properties": {
+    "cwd": {
+      "type": "string",
+      "description": "Path to the project running the executor"
+    }
+  }
 }

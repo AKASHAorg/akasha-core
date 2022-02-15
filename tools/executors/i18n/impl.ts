@@ -7,7 +7,7 @@ import { promisify } from 'util';
 const outputRoot = path.resolve('locales');
 const executorRoot = path.resolve('tools', 'executors');
 
-const getParserConfig = (ns: string, pkgRootPath: string) => ({
+export const getParserConfig = (ns: string, pkgRootPath: string) => ({
   useKeysAsDefaultValue: true,
   locales: ['en'],
   verbose: true,
