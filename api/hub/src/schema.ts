@@ -109,6 +109,12 @@ const typeDefs = gql`
     publicRepository: String
     documentation: String
   }
+  type ManifestInfo {
+    mainFile: String
+    license: String
+    description: String
+    keywords: [String]
+  }
 
   type IntegrationReleaseInfo {
     id: String
@@ -120,6 +126,7 @@ const typeDefs = gql`
     integrationID: String
     author: String
     enabled: Boolean
+    manifestData: ManifestInfo
   }
 
   type Query {
