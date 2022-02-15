@@ -20,6 +20,12 @@ fragment IntegrationReleaseInfoFragment on IntegrationReleaseInfo{
     publicRepository
     documentation
   }
+  manifestData{
+    mainFile
+    license
+    keywords
+    description
+  }
 }
 
 query GetLatestRelease($integrationIDs: [String]) {
