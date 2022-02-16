@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import styled, { css } from 'styled-components';
-import { IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
+// import { IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
 
 import ICDetailCardCoverImage from './ic-detail-card-fields/cover-image';
 import ICDetailCardAvatar from './ic-detail-card-fields/avatar';
@@ -21,7 +21,6 @@ export interface ICDetailCardProps {
   uninstallLabel: string;
   installedLabel: string;
   descriptionLabel: string;
-  descriptionContent: string;
   showMoreLabel: string;
   linksLabel: string;
   releasesLabel: string;
@@ -33,15 +32,10 @@ export interface ICDetailCardProps {
 
   integrationName?: string;
   id?: string;
-  avatar?: string;
-  coverImage?: string;
-  ethAddress?: string;
   isInstalled: boolean;
   links?: string[];
   releases: any;
-  authors?: IntegrationCenterApp['authors'];
-  tags?: IntegrationCenterApp['tags'];
-  license?: string;
+  latestRelease: any;
 
   onClickShare: () => void;
   onClickCTA: () => void;
@@ -70,7 +64,6 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     uninstallLabel,
     installedLabel,
     descriptionLabel,
-    descriptionContent,
     showMoreLabel,
     releasesLabel,
     releaseTypeLabel,
@@ -80,15 +73,10 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     licenseLabel,
     integrationName,
     id,
-    avatar,
-    coverImage,
-    ethAddress,
     isInstalled,
     links,
     releases,
-    authors,
-    tags,
-    license,
+    latestRelease,
     onClickShare,
     onClickCTA,
     onClickInstall,
@@ -115,7 +103,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     <MainAreaCardBox className={className}>
       <ICDetailCardCoverImage
         shareLabel={shareLabel}
-        coverImage={coverImage}
+        coverImage={latestRelease.manifestData?.coverImage}
         handleShareClick={onClickShare}
       />
       <Box direction="column" pad={{ bottom: 'medium' }} margin={{ horizontal: 'medium' }}>
@@ -127,7 +115,10 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
         >
           <Box direction="row" align="center" style={{ position: 'relative', top: '-0.5rem' }}>
-            <ICDetailCardAvatar ethAddress={ethAddress} avatar={avatar} />
+            <ICDetailCardAvatar
+              ethAddress={latestRelease.manifestData?.id}
+              avatar={latestRelease.manifestData?.avatar}
+            />
             <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
               <SubtitleTextIcon label={integrationName} subtitle={id} />
             </Box>
@@ -158,7 +149,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             {descriptionLabel}
           </StyledText>
           <Text size="md" style={{ lineHeight: '1.375rem' }}>
-            {descriptionContent}
+            {latestRelease.manifestData?.description}
           </Text>
           <Text
             size="md"
@@ -207,9 +198,9 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           <StyledText size="md" weight="bold" marginBottom>
             {authorsLabel}
           </StyledText>
-          {authors && authors.length > 0 && (
+          {latestRelease.manifestData?.authors && latestRelease.manifestData?.authors?.length > 0 && (
             <Box direction="row">
-              {authors.map((author, idx) => (
+              {latestRelease.manifestData?.authors.map((author, idx) => (
                 <React.Fragment key={idx + author}>
                   <StyledText
                     size="md"
@@ -221,23 +212,28 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
                     {`@${author.replace('@', '')}`}
                   </StyledText>
                   <Text margin={{ horizontal: '0.5rem' }}>
-                    {authors.length > 1 && idx !== authors.length - 1 && '-'}
+                    {latestRelease.manifestData?.authors?.length > 1 &&
+                      idx !== latestRelease.manifestData?.authors?.length - 1 &&
+                      '-'}
                   </Text>
                 </React.Fragment>
               ))}
             </Box>
           )}
         </Box>
-        {tags && tags.length > 0 && (
+        {latestRelease.manifestData?.keywords && latestRelease.manifestData?.keywords?.length > 0 && (
           <Box margin={{ top: 'medium' }} border={{ side: 'bottom' }}>
             <Box direction="row" margin={{ bottom: '1.5rem' }} wrap={true}>
-              {tags.map((tag, idx) => (
+              {latestRelease.manifestData?.keywords.map((tag, idx) => (
                 <Box
                   key={idx + tag}
                   round="0.25rem"
                   pad="0.5rem 0.75rem"
                   style={{ cursor: 'pointer' }}
-                  margin={{ top: '0.5rem', right: idx < tags.length - 1 ? '0.5rem' : '' }}
+                  margin={{
+                    top: '0.5rem',
+                    right: idx < latestRelease.manifestData?.keywords?.length - 1 ? '0.5rem' : '',
+                  }}
                   border={{ color: 'darkBorder', size: 'xsmall', style: 'solid', side: 'all' }}
                   onClick={handleTagClick(tag)}
                 >
@@ -253,9 +249,9 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           </StyledText>
           <Box direction="row" align="center" margin={{ bottom: '1rem' }}>
             {/* license icons are created accordingly with 'license' starting their names, all in lowercase */}
-            <Icon type={'license' + license} />
+            <Icon type={'license' + latestRelease.manifestData?.license} />
             <Text size="md" margin={{ left: '0.5rem' }}>
-              {license}
+              {latestRelease.manifestData?.license}
             </Text>
           </Box>
         </Box>

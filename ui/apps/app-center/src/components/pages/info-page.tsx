@@ -8,6 +8,7 @@ import {
   useGetAllIntegrationReleaseIds,
   useGetIntegrationInfo,
   useGetIntegrationsReleaseInfo,
+  useGetLatestReleaseInfo,
   useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
@@ -42,14 +43,9 @@ const InfoPage: React.FC<RootComponentProps> = () => {
 
   const releasesInfo = useGetIntegrationsReleaseInfo(releaseIds)?.data;
 
-  const metadata = {
-    avatar: '',
-    coverImage: 'blue',
-    description: 'Testing description',
-    authors: ['@akasha'],
-    tags: ['test'],
-    license: 'wtfpl',
-  };
+  const latestReleaseInfo = useGetLatestReleaseInfo([{ name: integrationInfo?.name }]).data
+    ?.getLatestRelease[0];
+
   return (
     <Box margin="medium">
       {integrationInfoReq.error && (
@@ -65,25 +61,20 @@ const InfoPage: React.FC<RootComponentProps> = () => {
           integrationName={integrationInfo.name}
           shareLabel={t('Share')}
           id={integrationInfo.id}
-          avatar={metadata.avatar}
-          coverImage={metadata.coverImage}
           installLabel={t('Install')}
           uninstallLabel={t('Uninstall')}
           installedLabel={t('Installed')}
           descriptionLabel={t('Description')}
-          descriptionContent={metadata.description}
           showMoreLabel={t('Show More')}
           linksLabel={t('Links')}
           releasesLabel={t('Releases')}
           releaseTypeLabel={t('Release Type')}
           releaseIdLabel={t('Release Id')}
           releases={releasesInfo}
+          latestRelease={latestReleaseInfo}
           versionHistoryLabel={t('Version History')}
           authorsLabel={t('Authors & Contributors')}
-          authors={metadata.authors}
-          tags={metadata.tags}
           licenseLabel={t('License')}
-          license={metadata.license}
           isInstalled={isInstalled}
           onClickCTA={() => null}
           onClickShare={() => null}
