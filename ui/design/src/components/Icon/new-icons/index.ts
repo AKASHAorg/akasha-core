@@ -111,6 +111,8 @@ import walletconnect from './walletconnect';
 import web3 from './web3';
 import zoomIn from './zoom-in';
 import zoomOut from './zoom-out';
+import zoomInAlt from './zoom-in-alt';
+import zoomOutAlt from './zoom-out-alt';
 
 export {
   activity,
@@ -226,4 +228,6 @@ export {
   web3,
   zoomIn,
   zoomOut,
+  zoomInAlt,
+  zoomOutAlt,
 };
