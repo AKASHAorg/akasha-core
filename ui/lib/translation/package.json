@@ -24,7 +24,7 @@
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../build/apps/ui-lib-translation",
+    "postpack": "copyfiles -f ./dist/* ../../build/ui/lib/translation",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
     "watch": "webpack --config ./webpack.config.js --watch",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"

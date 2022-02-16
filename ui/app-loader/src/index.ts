@@ -1,33 +1,27 @@
 import {
   AppOrWidgetDefinition,
+  BaseIntegrationInfo,
+  EventDataTypes,
   EventTypes,
   ExtensionPointDefinition,
   IAppConfig,
   ILoaderConfig,
+  IMenuItem,
+  IMenuList,
+  INTEGRATION_TYPES,
   ISdkConfig,
   IWidgetConfig,
   LayoutConfig,
   ModalNavigationOptions,
   UIEventData,
-  IMenuList,
-  IMenuItem,
-  EventDataTypes,
-  BaseIntegrationInfo,
-  INTEGRATION_TYPES,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
-import { Subject, lastValueFrom, filter, map, from } from 'rxjs';
+import { filter, from, map, Subject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
 import { getIntegrationInfo } from './registry';
 import { hideSplash, showSplash } from './splash-screen';
-import {
-  Middleware,
-  MiddlewareConfig,
-  NavigationFn,
-  NavigationOptions,
-  RootComponentProps,
-} from '@akashaproject/ui-awf-typings';
+import { NavigationFn, NavigationOptions, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   createRootNode,
   findKey,
@@ -41,7 +35,6 @@ import Apps from './apps';
 import Widgets from './widgets';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { setupI18next } from './i18n';
-import { TRANSLATION_MIDDLEWARE } from '@akashaproject/ui-lib-translation';
 import i18next from 'i18next';
 
 interface SingleSpaEventDetail {
@@ -80,7 +73,6 @@ export default class AppLoader {
   private readonly sdk: ReturnType<typeof getSDK>;
   private readonly menuItems: IMenuList;
   public layoutConfig?: LayoutConfig;
-  public middlewareConfigs: Array<MiddlewareConfig>;
   public i18next?: typeof i18next;
   private extensionPoints: Record<string, UIEventData['data'][]>;
   private readonly extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
@@ -96,7 +88,6 @@ export default class AppLoader {
     this.sdk = sdk;
 
     this.uiEvents = new Subject();
-    this.middlewareConfigs = [];
     this.i18next = null;
 
     // register event listeners
@@ -190,14 +181,6 @@ export default class AppLoader {
   }
 
   /**
-   * The method used to load middleware into the app-loader
-   * @param middleware
-   */
-  public async use(middleware: Middleware) {
-    await middleware.run(this.middlewareConfigs);
-  }
-
-  /**
    * The main method to start the app-loader.
    * @remarks
    * When the `.start()` method is called, the app-loader will do the following:
@@ -223,6 +206,7 @@ export default class AppLoader {
     const defaultIntegrations = [
       this.worldConfig.layout,
       this.worldConfig.homepageApp,
+      this.worldConfig.translationApp,
       ...this.worldConfig.defaultApps,
       ...this.worldConfig.defaultWidgets,
     ];
@@ -237,14 +221,7 @@ export default class AppLoader {
       this.loaderLogger.warn('Cannot get layoutConfig!');
       return;
     }
-
-    const translationConfig = this.middlewareConfigs.find(
-      middleware => middleware.middlewareName === TRANSLATION_MIDDLEWARE,
-    );
-
-    if (!translationConfig) {
-      this.loaderLogger.warn('Cannot get translation resource path!');
-    }
+    const translationConfig = await this.importTranslationConfig(integrationInfos);
 
     this.i18next = await setupI18next({
       logger: this.loaderLogger,
@@ -649,6 +626,28 @@ export default class AppLoader {
         prepareImport: (doProcessScripts?: boolean) => Promise<void>;
       }
     ).prepareImport(true);
+  }
+
+  public async importTranslationConfig(integrationInfos: BaseIntegrationInfo[]) {
+    const translationApp = getNameFromDef(this.worldConfig.translationApp);
+    if (!translationApp) {
+      this.loaderLogger.error('Translation app was not found!');
+      return null;
+    }
+    try {
+      const translationInfo = integrationInfos.find(int => int.name === translationApp);
+      if (!translationInfo) {
+        this.loaderLogger.error(`Cannot fetch translation info`);
+        return null;
+      }
+
+      const mod = await System.import(translationInfo.name);
+
+      return await mod.register();
+    } catch (err) {
+      this.loaderLogger.error(`Error importing translation! ${err}`);
+      return null;
+    }
   }
 
   public async importLayoutConfig(integrationInfos: BaseIntegrationInfo[]) {

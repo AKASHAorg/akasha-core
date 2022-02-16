@@ -208,6 +208,10 @@ export interface ILoaderConfig {
    */
   layout: AppOrWidgetDefinition;
   /**
+   * The app for translation handling
+   */
+  translationApp: AppOrWidgetDefinition;
+  /**
    * The app to load when you navigate to the home page.
    */
   homepageApp: AppOrWidgetDefinition;

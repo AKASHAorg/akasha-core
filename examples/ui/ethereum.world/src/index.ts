@@ -1,5 +1,4 @@
 import { ILoaderConfig, ISdkConfig, LogLevels } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { TranslationConfig } from '@akashaproject/ui-lib-translation';
 
 console.time('AppLoader:firstMount');
 
@@ -24,6 +23,8 @@ declare const __DEV__: boolean;
     layout: '@akashaproject/ui-widget-layout',
     // define an app that will load at root '/' path
     homepageApp: '@akashaproject/app-akasha-integration',
+    // define translation app
+    translationApp: '@akashaproject/ui-lib-translation',
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
@@ -54,7 +55,6 @@ declare const __DEV__: boolean;
 
   const sdk = getSDK();
   const loader = new Loader({ ...loaderConfig, ...sdkConfig }, sdk);
-  await loader.use(TranslationConfig);
   await loader.start();
 
   // tslint:disable-next-line:no-console
