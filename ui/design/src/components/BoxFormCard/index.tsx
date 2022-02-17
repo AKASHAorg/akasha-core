@@ -16,13 +16,14 @@ import { DescriptionSection } from './sections/DescriptionSection';
 import { ActionButtonsSection } from './sections/ActionButtonsSection';
 import { UsernameInputSection } from './sections/UsernameInputSection';
 
+import Icon from '../Icon';
 import { FormImagePopover } from '../ImagePopover/form-image-popover';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 import getCroppedImage from '../../utils/get-cropped-image';
 
-import { StyledCropperImageWrapper } from './styled-form-card';
+import { StyledCropperImageWrapper, StyledZoomControlBox } from './styled-form-card';
 
 export interface IBoxFormCardProps {
   className?: string;
@@ -154,6 +155,13 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const [coverImageCroppedAreaPixels, setCoverImageCroppedAreaPixels] = React.useState(null);
   const [avatarSrc, setAvatarSrc] = React.useState<string>(null);
   const [coverImageSrc, setCoverImageSrc] = React.useState<string>(null);
+
+  const isEditingAvatar = showCropper === ProfileProviderProperties.AVATAR;
+
+  // predefined zoom values
+  const minZoom = 1;
+  const maxZoom = 3;
+  const zoomStep = 0.01;
 
   // required for popovers
   const avatarRef: React.RefObject<HTMLDivElement> = React.useRef(null);
@@ -393,7 +401,27 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(file, false);
   };
 
-  const isEditingAvatar = showCropper === ProfileProviderProperties.AVATAR;
+  const handleZoomInClick = () => {
+    // if value of the respective field's zoom is equal to or exceeds the predefined maxZoom value, return
+    if (isEditingAvatar) {
+      if (avatarZoom >= maxZoom) return;
+      setAvatarZoom(prev => prev + zoomStep);
+    } else {
+      if (coverImageZoom >= maxZoom) return;
+      setCoverImageZoom(prev => prev + zoomStep);
+    }
+  };
+
+  const handleZoomOutClick = () => {
+    // if value of the respective field's zoom is equal to or less than the predefined minZoom value, return
+    if (isEditingAvatar) {
+      if (avatarZoom <= minZoom) return;
+      setAvatarZoom(prev => prev - zoomStep);
+    } else {
+      if (coverImageZoom <= minZoom) return;
+      setCoverImageZoom(prev => prev - zoomStep);
+    }
+  };
 
   return (
     <MainAreaCardBox
@@ -438,6 +466,24 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           <Text size="medium" textAlign="center" margin={{ bottom: 'large' }}>
             {editImageSubtitle}
           </Text>
+          <StyledZoomControlBox margin={{ bottom: 'xlarge' }}>
+            <Icon type="zoomOutAlt" onClick={handleZoomOutClick} />
+            <input
+              type="range"
+              value={isEditingAvatar ? avatarZoom : coverImageZoom}
+              min={minZoom}
+              max={maxZoom}
+              step={zoomStep}
+              aria-labelledby="Zoom"
+              onChange={e =>
+                isEditingAvatar
+                  ? setAvatarZoom(Number(e.target.value))
+                  : setCoverImageZoom(Number(e.target.value))
+              }
+              style={{ flex: 'auto', cursor: 'pointer' }}
+            />
+            <Icon type="zoomInAlt" onClick={handleZoomInClick} />
+          </StyledZoomControlBox>
           <ActionButtonsSection
             cancelLabel={cancelLabel}
             saveLabel={saveLabel}
