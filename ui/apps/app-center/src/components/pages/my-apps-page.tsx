@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import routes, { INFO } from '../../routes';
 
-const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader } = DS;
+const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader, Spinner } = DS;
 
 const MyAppsPage: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
@@ -26,11 +26,11 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
   const installedAppsReq = useGetAllInstalledApps();
   // remove default apps from list of installed apps
   const filteredInstalledApps = installedAppsReq.data?.filter(app => {
-    if (!defaultAppsNamesNormalized.includes(app.name)) {
+    if (!defaultAppsNamesNormalized.some(defaultApp => defaultApp.name === app.name)) {
       return app;
     }
   });
-  const installedIntegrationsInfoReq = useGetIntegrationsInfo(filteredInstalledApps);
+  const installedIntegrationsInfoReq = useGetIntegrationsInfo(filteredInstalledApps || []);
 
   const handleAppClick = (app: IntegrationInfo) => {
     props.navigateTo(`${routes[INFO]}/${app.id}`);
@@ -46,6 +46,11 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
           <Text>{t('These are the default apps that come in the world')}</Text>
         </Box>
         <Box gap="small">
+          {defaultIntegrationsInfoReq.isFetching && (
+            <Box>
+              <Spinner />
+            </Box>
+          )}
           {defaultIntegrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
             <Box
               key={index}
@@ -79,6 +84,11 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
           <Text>{t('These are the apps you installed in your world')}</Text>
         </Box>
         <Box gap="small">
+          {installedIntegrationsInfoReq.isFetching && (
+            <Box>
+              <Spinner />
+            </Box>
+          )}
           {installedIntegrationsInfoReq.data?.getIntegrationInfo?.length &&
             installedIntegrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
               <Box

@@ -9,7 +9,7 @@ import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typin
 import { useTranslation } from 'react-i18next';
 import routes, { INFO } from '../../routes';
 
-const { Box, SubtitleTextIcon, DuplexButton, Icon } = DS;
+const { Box, SubtitleTextIcon, DuplexButton, Icon, ErrorLoader, Spinner } = DS;
 
 const ExplorePage: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
@@ -49,6 +49,19 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
 
   return (
     <Box gap="small" margin="medium">
+      {integrationsInfoReq.error && (
+        <ErrorLoader
+          type="script-error"
+          title={t('There was an error loading the integrations')}
+          details={t('We cannot show this page right now')}
+          devDetails={integrationsInfoReq.error}
+        />
+      )}
+      {integrationsInfoReq.isFetching && (
+        <Box>
+          <Spinner />
+        </Box>
+      )}
       {integrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
         <Box key={index} direction="row" justify="between">
           <SubtitleTextIcon

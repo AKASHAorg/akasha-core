@@ -6,61 +6,64 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   useGetAllInstalledApps,
   useGetAllIntegrationReleaseIds,
-  useGetIntegrationInfo,
   useGetIntegrationsReleaseInfo,
   useGetLatestReleaseInfo,
   useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
-const { Box, ICDetailCard, ErrorLoader } = DS;
+const { Box, ICDetailCard, ErrorLoader, Spinner, BasicCardBox } = DS;
 
 const InfoPage: React.FC<RootComponentProps> = () => {
   const { integrationId } = useParams<{ integrationId: string }>();
 
   const { t } = useTranslation();
 
-  const loginQuery = useGetLogin();
+  const loginQueryReq = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.pubKey;
-  }, [loginQuery.data]);
+    return !!loginQueryReq.data.pubKey;
+  }, [loginQueryReq.data]);
 
-  const integrationInfoReq = useGetIntegrationInfo(integrationId);
+  const latestReleaseInfoReq = useGetLatestReleaseInfo([{ id: integrationId }]);
 
-  const integrationInfo = integrationInfoReq.data;
+  const latestReleaseInfo = latestReleaseInfoReq.data?.getLatestRelease[0];
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   const isInstalled = React.useMemo(() => {
-    if (installedAppsReq.data && integrationInfo) {
+    if (installedAppsReq.data) {
       const installedAppsIds = installedAppsReq.data.map(app => app.id);
-      return installedAppsIds.includes(integrationInfo.id);
+      return installedAppsIds.includes(integrationId);
     }
-  }, [installedAppsReq.data, integrationInfo]);
+  }, [installedAppsReq.data, integrationId]);
 
-  const releaseIds = useGetAllIntegrationReleaseIds(integrationInfo?.name)?.data?.releaseIds;
+  const releaseIdsReq = useGetAllIntegrationReleaseIds(latestReleaseInfo?.name);
+  const releaseIds = releaseIdsReq.data?.releaseIds;
 
-  const releasesInfo = useGetIntegrationsReleaseInfo(releaseIds)?.data;
-
-  const latestReleaseInfo = useGetLatestReleaseInfo([{ name: integrationInfo?.name }]).data
-    ?.getLatestRelease[0];
+  const releasesInfoReq = useGetIntegrationsReleaseInfo(releaseIds);
+  const releasesInfo = releasesInfoReq?.data;
 
   return (
-    <Box margin="medium">
-      {integrationInfoReq.error && (
+    <Box>
+      {latestReleaseInfoReq.error && (
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading the integration info')}
           details={t('We cannot show this integration right now')}
-          devDetails={integrationInfoReq.error}
+          devDetails={latestReleaseInfoReq.error}
         />
       )}
-      {integrationInfoReq.isSuccess && integrationInfo && (
+      {latestReleaseInfoReq.isFetching && (
+        <BasicCardBox>
+          <Spinner />
+        </BasicCardBox>
+      )}
+      {latestReleaseInfoReq.isSuccess && latestReleaseInfo && (
         <ICDetailCard
-          integrationName={integrationInfo.name}
+          integrationName={latestReleaseInfo.name}
           shareLabel={t('Share')}
-          id={integrationInfo.id}
+          id={integrationId}
           installLabel={t('Install')}
           uninstallLabel={t('Uninstall')}
           installedLabel={t('Installed')}
@@ -68,12 +71,14 @@ const InfoPage: React.FC<RootComponentProps> = () => {
           showMoreLabel={t('Show More')}
           linksLabel={t('Links')}
           releasesLabel={t('Releases')}
-          releaseTypeLabel={t('Release Type')}
+          latestReleaseLabel={t('Latest Release')}
+          noPreviousReleasesLabel={t('No previous releases')}
+          releaseVersionLabel={t('Version')}
           releaseIdLabel={t('Release Id')}
           releases={releasesInfo}
           latestRelease={latestReleaseInfo}
           versionHistoryLabel={t('Version History')}
-          authorsLabel={t('Authors & Contributors')}
+          authorLabel={t('Author')}
           licenseLabel={t('License')}
           isInstalled={isInstalled}
           onClickCTA={() => null}

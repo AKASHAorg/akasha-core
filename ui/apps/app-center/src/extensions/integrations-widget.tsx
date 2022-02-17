@@ -39,7 +39,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
   // remove default apps from list of installed apps
   const filteredInstalledApps = installedAppsReq.data?.filter(app => {
-    if (!defaultAppsNamesNormalized.includes(app.name)) {
+    if (!defaultAppsNamesNormalized.some(defaultApp => defaultApp.name === app.name)) {
       return app;
     }
   });

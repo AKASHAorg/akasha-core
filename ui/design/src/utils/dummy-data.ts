@@ -318,28 +318,31 @@ const ICWorldAppsData: IntegrationCenterApp[] = [
       Never take a screenshot of a map again!`,
     releases: [
       {
-        type: 'current',
-        version: '22.8.2',
-        timestamp: new Date(),
-      },
-      {
-        type: 'bug',
-        version: '22.8.1',
-        timestamp: new Date(),
+        integrationID: 'bbaryfskgshgirsnxnbv',
+        id: '0x428974897274',
+        version: '0.1.0',
+        author: '0x0402384032858094',
+        enabled: true,
+        name: 'Confetti Replies',
+        integrationType: 1,
+        sources: ['bdabsdbasb'],
+        manifestData: {
+          mainFile: 'index.js',
+
+          keywords: [
+            'Image editor',
+            'Photo Filters',
+            'Filters',
+            'Photos',
+            'Pro',
+            'Color editing',
+            'Confetti',
+            'Visuals',
+          ],
+          license: 'wtfpl',
+        },
       },
     ],
-    authors: ['BoredApe', 'CyberPunk', 'TheDrFlynn'],
-    tags: [
-      'Image editor',
-      'Photo Filters',
-      'Filters',
-      'Photos',
-      'Pro',
-      'Color editing',
-      'Confetti',
-      'Visuals',
-    ],
-    license: 'wtfpl',
   },
 ];
 

@@ -104,6 +104,9 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         knob: {
           extend: ({ checked }) =>
             `border-color: ${styledComponentsTheme.colors.border};
+            display: inline-flex;
+            width: 1rem;
+            height: 1rem;
             ${checked && `background-color: ${styledComponentsTheme.colors.white} !important;`}`,
         },
       },

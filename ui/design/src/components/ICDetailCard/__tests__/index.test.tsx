@@ -12,6 +12,8 @@ describe('<ICDetailCard /> Component', () => {
   const handleClickCTA = jest.fn();
   const handleClickInstall = jest.fn();
   const handleClickUninstall = jest.fn();
+  const handleAuthorClick = jest.fn();
+  const handleTagClick = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -26,19 +28,22 @@ describe('<ICDetailCard /> Component', () => {
             showMoreLabel="Show More"
             linksLabel="Links"
             releasesLabel={'Releases'}
-            releaseTypeLabel={'Release Type'}
+            releaseVersionLabel={'Version'}
+            latestReleaseLabel={'Latest release'}
+            noPreviousReleasesLabel={'No previous releases'}
             releaseIdLabel={'Release Id'}
             versionHistoryLabel="Version History"
-            authorsLabel="Authors & Contributors"
+            authorLabel="Authors & Contributors"
             licenseLabel="License"
             isInstalled={false}
-            links={[]}
             releases={ICWorldAppsData[3].releases}
-            latestRelease={{}}
+            latestRelease={ICWorldAppsData[3].releases[0]}
             onClickShare={handleClickShare}
             onClickCTA={handleClickCTA}
             onClickInstall={handleClickInstall}
             onClickUninstall={handleClickUninstall}
+            handleAuthorClick={handleAuthorClick}
+            handleTagClick={handleTagClick}
           />,
         ),
         {},

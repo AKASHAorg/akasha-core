@@ -36,7 +36,7 @@ const getIntegrationsInfo = async (opt: { name?: string; id?: string }[]) => {
  * @param integrationId - id of the integration
  */
 export function useGetIntegrationsInfo(opt: { name?: string; id?: string }[]) {
-  return useQuery([INTEGRATIONS_KEY], () => getIntegrationsInfo(opt), {
+  return useQuery([INTEGRATIONS_KEY, 'info'], () => getIntegrationsInfo(opt), {
     enabled: !!opt?.length,
     keepPreviousData: true,
     onError: (err: Error) => logError('useIntegrationRegistry.getIntegrationsInfo', err),
@@ -193,6 +193,7 @@ const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
  */
 export function useGetLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
   return useQuery([RELEASES_KEY, 'latest'], () => getLatestReleaseInfo(opt), {
+    enabled: opt.length > 0,
     keepPreviousData: true,
     onError: (err: Error) => logError('useIntegrationRegistry.getLatestReleaseInfo', err),
   });
