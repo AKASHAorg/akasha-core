@@ -586,9 +586,6 @@ export default class AppLoader {
     );
 
     if (response?.data?.getLatestRelease?.length) {
-      for (const pkg of response.data.getLatestRelease) {
-        pkg.sources = pkg.sources.map(el => `${el}/index.js`);
-      }
       return integrationInfos.concat(response.data.getLatestRelease);
     }
     return integrationInfos;
