@@ -18,12 +18,12 @@
     "npm": ">=5"
   },
   "scripts": {
-    "build": "tsc --build && npm run pack",
+    "build": "tsc --build && yarn run pack",
     "test": "jest",
     "tsc": "tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../build/app-loader",
-    "prepare": "npm run tsc",
+    "prepare": "yarn run tsc",
     "watch": "webpack --config webpack.config.js --watch",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },

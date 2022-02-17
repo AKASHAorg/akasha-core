@@ -25,7 +25,7 @@
     "pack:watch": "nx run-many --target=pack:watch --projects=$AWF_PACKAGE",
     "tsc:sdk": "nx run @akashaproject/awf-sdk:tsc",
     "tsc:ui": "nx run @akashaproject/ui-awf-hooks:tsc",
-    "tsc:all": "nx run-many --target=tsc --all",
+    "tsc:all": "nx run-many --target=tsc --all --skip-nx-cache",
     "start:feed-app": "nx run @akashaproject/ethereum.world:start",
     "start:expose-feed-app": "lerna run start:expose --scope=@akashaproject/ethereum.world --stream",
     "build:feed-app": "nx run @akashaproject/ethereum.world:build",
