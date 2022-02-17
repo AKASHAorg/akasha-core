@@ -123,7 +123,9 @@ export type IconType =
   | 'walletconnect'
   | 'web3'
   | 'zoomIn'
-  | 'zoomOut';
+  | 'zoomOut'
+  | 'zoomInAlt'
+  | 'zoomOutAlt';
 
 export const iconTypes: IconType[] = [
   'app3Box',
@@ -243,6 +245,8 @@ export const iconTypes: IconType[] = [
   'web3',
   'zoomIn',
   'zoomOut',
+  'zoomInAlt',
+  'zoomOutAlt',
 ];
 
 export interface IconProps extends CommonInterface<any> {
