@@ -1,23 +1,30 @@
-import { Box, Text } from 'grommet';
 import * as React from 'react';
+import { Box, Text } from 'grommet';
+
 import {
   StyledBox,
   StyledDeleteBox,
   StyledDrop,
   StyledImageInput,
 } from './styled-form-image-popover';
+
 import Icon from '../Icon';
 import MobileListModal from '../MobileListModal';
+import { CroppableFields } from '../BoxFormCard';
 
 export interface IFormImagePopover {
   uploadLabel?: string;
   urlLabel?: string;
+  editLabel?: string;
+  fieldToEdit?: CroppableFields;
   deleteLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
   insertImage?: (src: File | string, isUrl: boolean) => void;
   currentImage?: boolean;
   onMobile: boolean;
+  editable?: boolean;
+  handleEdit?: (field: CroppableFields) => void;
   handleDeleteImage?: () => void;
   modalSlotId: string;
 }
@@ -25,17 +32,26 @@ export interface IFormImagePopover {
 const FormImagePopover: React.FC<IFormImagePopover> = props => {
   const {
     uploadLabel,
+    editLabel,
+    fieldToEdit,
     deleteLabel,
     target,
     closePopover,
     insertImage,
     currentImage,
     onMobile,
+    editable,
+    handleEdit,
     handleDeleteImage,
     modalSlotId,
   } = props;
 
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
+
+  const handleEditClick = () => {
+    if (handleEdit) handleEdit(fieldToEdit);
+    closePopover();
+  };
 
   const handleDeleteClick = () => {
     if (handleDeleteImage) handleDeleteImage();
@@ -75,6 +91,18 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
                 handleUploadInputClick();
               },
             },
+            ...(editable
+              ? [
+                  {
+                    label: editLabel,
+                    icon: 'image',
+                    handler: (ev: React.SyntheticEvent) => {
+                      ev.stopPropagation();
+                      handleEditClick();
+                    },
+                  },
+                ]
+              : []),
             ...(currentImage
               ? [
                   {
@@ -126,6 +154,18 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
             ref={uploadInputRef}
           />
         </StyledBox>
+        {editable && (
+          <StyledBox
+            pad={{ left: 'xxsmall' }}
+            align="center"
+            direction="row"
+            gap="xsmall"
+            onClick={handleEditClick}
+          >
+            <Icon type="image" />
+            <Text>{editLabel}</Text>
+          </StyledBox>
+        )}
         {currentImage && (
           <StyledDeleteBox
             pad={{ left: 'xxsmall' }}
