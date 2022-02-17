@@ -12,7 +12,6 @@ clean:
 	rm -rf ./ui/build && \
 	yarn run clean
 install:
-	yarn install --frozen-lockfile && \
 	yarn run bootstrap && \
 	yarn run tsc:all
 build.staging.feed:
