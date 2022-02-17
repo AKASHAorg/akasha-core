@@ -37,6 +37,8 @@ export type IconType =
   | 'check'
   | 'checkSimple'
   | 'dapper'
+  | 'chevronRight'
+  | 'chevronLeft'
   | 'discord'
   | 'document'
   | 'dropdown'
@@ -157,6 +159,8 @@ export const iconTypes: IconType[] = [
   'copy',
   'check',
   'checkSimple',
+  'chevronRight',
+  'chevronLeft',
   'coins',
   'dapper',
   'discord',
