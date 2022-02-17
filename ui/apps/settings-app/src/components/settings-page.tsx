@@ -4,10 +4,18 @@ import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 import routes from '../routes';
-import { ISettingsItem, SettingsOption } from '../interfaces';
-import { settingsItems } from '../utils/settings-items';
+import { ISettingsItem, settingsItems } from '../utils/settings-items';
 
 const { Box, BasicCardBox, Icon, Text } = DS;
+
+export type SettingsOption =
+  | 'Settings'
+  | 'Privacy'
+  | 'Appearance'
+  | 'General'
+  | 'Apps'
+  | 'Plugins'
+  | 'Widgets';
 
 const SettingsPage: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation();

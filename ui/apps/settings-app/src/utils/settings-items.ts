@@ -1,4 +1,8 @@
-import { ISettingsItem } from '../interfaces';
+export interface ISettingsItem {
+  label: string;
+  clickable: boolean;
+  isSubheading?: boolean;
+}
 
 export const settingsItems: ISettingsItem[] = [
   {

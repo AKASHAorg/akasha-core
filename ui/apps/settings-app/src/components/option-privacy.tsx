@@ -2,9 +2,25 @@ import React from 'react';
 import DS from '@akashaproject/design-system';
 
 import { StyledIcon, StyledText } from '../styles';
-import { IPrivacyOption } from '../interfaces';
 
 const { Box, BasicCardBox, Checkbox } = DS;
+
+export interface BaseOption {
+  titleLabel: string;
+  OnChevronLeftClick: () => void;
+}
+
+export interface IPrivacyOption extends BaseOption {
+  essentialCookiesLabel: string;
+  essentialCookiesInfo: string;
+  trackingAnalyticsLabel: string;
+  trackingAnalyticsInfoIntro: string;
+  trackingAnalyticsInfo: string;
+  privacyPolicyLabel: string;
+  checkedTracking: boolean;
+  cookieType: string;
+  onTrackingOptionChange: (ev: React.SyntheticEvent) => void;
+}
 
 const PrivacyOption: React.FC<IPrivacyOption> = props => {
   const {

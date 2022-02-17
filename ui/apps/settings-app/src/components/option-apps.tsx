@@ -1,9 +1,20 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { StyledIcon, StyledText } from '../styles';
-import { IAppsOption } from '../interfaces';
+import { BaseOption } from './option-privacy';
 
 const { Box, BasicCardBox, Checkbox } = DS;
+
+export interface IAppsOption extends BaseOption {
+  autoUpdatesLabel: string;
+  autoUpdatesInfo: string;
+  dataAnalyticsLabel: string;
+  dataAnalyticsinfo: string;
+  checkedAutoUpdates: boolean;
+  checkedDataAnalytics: boolean;
+  onAutoUpdatesChange: (ev: React.SyntheticEvent) => void;
+  onDataAnalyticsChange: (ev: React.SyntheticEvent) => void;
+}
 
 const AppsOption: React.FC<IAppsOption> = props => {
   const {

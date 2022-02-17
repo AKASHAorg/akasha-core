@@ -1,9 +1,16 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { StyledIcon, StyledText } from '../styles';
-import { IAppearanceOption } from '../interfaces';
+import { BaseOption } from './option-privacy';
 
 const { Box, BasicCardBox, RadioButtonGroup } = DS;
+
+export interface IAppearanceOption extends BaseOption {
+  appThemeLabel: string;
+  appThemeInfo: string;
+  theme: string;
+  onThemeSelect: (ev: React.SyntheticEvent) => void;
+}
 
 const AppearanceOption: React.FC<IAppearanceOption> = props => {
   const { titleLabel, appThemeLabel, appThemeInfo, theme, onThemeSelect, OnChevronLeftClick } =
