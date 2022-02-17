@@ -43,6 +43,7 @@ const colors: IColorsDark = {
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
   accentLight: '#E9EDFD', // lightBlue
   border: '#EDF0F5', // lightGrey
+  lightBorder: '#F5F6F7', // lighterGrey
   darkBorder: '#B6BFD1', // deepGrey
   darkerBorder: '#87909E', // deeperGrey
   secondary: '#000C20', // darkGrey

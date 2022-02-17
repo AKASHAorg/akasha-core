@@ -46,6 +46,7 @@ export interface ITopbarProps {
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
   settingsLabel?: string;
+  settingsInfoLabel?: string;
   moderationLabel?: string;
   moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
@@ -89,6 +90,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     feedbackLabel,
     feedbackInfoLabel,
     settingsLabel,
+    settingsInfoLabel,
     moderationLabel,
     moderationInfoLabel,
     legalCopyRightLabel,
@@ -418,6 +420,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
           settingsLabel={settingsLabel}
+          settingsInfoLabel={settingsInfoLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
@@ -450,6 +453,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
           settingsLabel={settingsLabel}
+          settingsInfoLabel={settingsInfoLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
