@@ -8,6 +8,7 @@ import AWF_IIpfsConnector from '@akashaproject/sdk-typings/lib/interfaces/ipfs.c
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
 import { multiaddrToUri } from '@multiformats/multiaddr-to-uri';
+import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 @injectable()
 class AWF_IpfsConnector implements AWF_IIpfsConnector {
@@ -32,13 +33,18 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     };
   }
 
-  catDocument(docHash: string | CID) {
+  catDocument<T>(docHash: string | CID, jsonResponse = false): ServiceCallResult<T> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
     return createObservableStream(
       fetch(this.buildOriginLink(docHash), { signal: controller.signal }).then(res => {
         clearTimeout(timeout);
-        if (res.ok) return res.text();
+        if (res.ok) {
+          if (!jsonResponse) {
+            return res.text();
+          }
+          return res.json();
+        }
         this._log.warn(res.statusText);
         throw Error('An error occurred!');
       }),
@@ -51,10 +57,13 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
    */
   getLegalDoc(doc: LEGAL_DOCS) {
     const selectedDoc = this.LEGAL_DOCS_SOURCE[doc];
-    return this.catDocument(selectedDoc);
+    return this.catDocument<never>(selectedDoc);
   }
 
   buildOriginLink(hash: string | CID) {
+    if (typeof hash === 'string' && hash.startsWith('https://')) {
+      return hash;
+    }
     const cid = typeof hash === 'string' ? CID.parse(hash) : CID.asCID(hash);
     if (!cid) {
       throw new Error(`Hash ${hash.toString()} is not a valid CID`);

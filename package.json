@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "yarn",
     "build:staging": "yarn && yarn tsc:all && yarn build:sdk && yarn pack:ui && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
-    "build:all": "yarn tsc:all && yarn build:sdk && yarn pack:ui && && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
+    "build:all": "yarn tsc:all && yarn build:sdk && yarn pack:ui && yarn pack:ui-libs && yarn build:feed-app && yarn extract:translations",
     "build:sdk": "yarn tsc:sdk && nx run @akashaproject/awf-sdk:build",
     "build:ewa": "nx run-many --target=build:staging --projects=@akashaproject/ethereum.world",
     "clean": "tsc --build --clean && rimraf node_modules",
