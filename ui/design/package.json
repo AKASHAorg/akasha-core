@@ -31,7 +31,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "tsc": "tsc --build tsconfig.json",
-    "prepare": "npm run tsc",
+    "prepare": "yarn run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./src/static/img/* ../build/images && copyfiles -f ./dist/* ../build/design/",
     "pack:watch": "nodemon",
@@ -45,7 +45,7 @@
       "dist/*",
       "build/*"
     ],
-    "exec": "npm run pack || exit 1",
+    "exec": "yarn run pack || exit 1",
     "ext": "ts,tsx"
   },
   "eslintConfig": {

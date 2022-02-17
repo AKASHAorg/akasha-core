@@ -19,7 +19,7 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc",
+    "prepare": "yarn run tsc",
     "pretest": "tsc -m commonjs",
     "test": "jest",
     "clean": "tsc --build --clean"
