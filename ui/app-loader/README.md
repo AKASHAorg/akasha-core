@@ -32,7 +32,7 @@ The following steps are a high level view of the execution flow after the start(
 
 ## Development
  - clone the repository
- - execute `npm run pack:app-loader` from the root of the repository to build the package
+ - execute `yarn run pack:app-loader` from the root of the repository to build the package
 
 ## `License`
 
