@@ -71,15 +71,19 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
             onClick={() => handleAppClick(app)}
             backgroundColor={true}
           />
-          <DuplexButton
-            icon={<Icon type="arrowDown" />}
-            active={installedAppsReq.data?.includes(app.id)}
-            activeLabel={t('Installed')}
-            inactiveLabel={t('Install')}
-            activeHoverLabel={t('Uninstall')}
-            onClickActive={handleAppUninstall}
-            onClickInactive={handleAppInstall}
-          />
+          {app.enabled ? (
+            <Icon type="checkSimple" accentColor={true} size="md" />
+          ) : (
+            <DuplexButton
+              icon={<Icon type="arrowDown" />}
+              active={installedAppsReq.data?.includes(app.id)}
+              activeLabel={t('Installed')}
+              inactiveLabel={t('Install')}
+              activeHoverLabel={t('Uninstall')}
+              onClickActive={handleAppUninstall}
+              onClickInactive={handleAppInstall}
+            />
+          )}
         </Box>
       ))}
     </Box>

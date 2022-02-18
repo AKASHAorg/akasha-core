@@ -116,7 +116,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
             {installedApps && installedApps.length === 0 && !isLoadingInstalledApps && (
               <Box pad="medium" align="center" justify="center">
                 <ErrorLoader
-                  type="missing-notifications"
+                  type="no-login"
                   title={noInstalledAppsLabel}
                   details={noInstalledAppsSubLabel}
                 />

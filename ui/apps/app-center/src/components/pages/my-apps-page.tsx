@@ -21,16 +21,23 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
     return app;
   });
 
-  const defaultIntegrationsInfoReq = useGetIntegrationsInfo(defaultAppsNamesNormalized);
-
   const installedAppsReq = useGetAllInstalledApps();
-  // remove default apps from list of installed apps
-  const filteredInstalledApps = installedAppsReq.data?.filter(app => {
-    if (!defaultAppsNamesNormalized.some(defaultApp => defaultApp.name === app.name)) {
+  const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
+
+  // select default apps from list of installed apps
+  const filteredDefaultApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(app => {
+    if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
       return app;
     }
   });
-  const installedIntegrationsInfoReq = useGetIntegrationsInfo(filteredInstalledApps || []);
+  // select user installed apps from list of installed apps
+  const filteredInstalledApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(
+    app => {
+      if (!defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
+        return app;
+      }
+    },
+  );
 
   const handleAppClick = (app: IntegrationInfo) => {
     props.navigateTo(`${routes[INFO]}/${app.id}`);
@@ -46,19 +53,19 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
           <Text>{t('These are the default apps that come in the world')}</Text>
         </Box>
         <Box gap="small">
-          {defaultIntegrationsInfoReq.isFetching && (
+          {installedIntegrationsInfoReq.isFetching && (
             <Box>
               <Spinner />
             </Box>
           )}
-          {defaultIntegrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
+          {filteredDefaultApps?.map((app, index) => (
             <Box
               key={index}
               direction="row"
               align="center"
               justify="between"
               border={
-                index !== defaultIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                index !== installedIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
                   ? { side: 'bottom', size: '1px', color: 'border' }
                   : null
               }
@@ -89,15 +96,15 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               <Spinner />
             </Box>
           )}
-          {installedIntegrationsInfoReq.data?.getIntegrationInfo?.length &&
-            installedIntegrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
+          {filteredInstalledApps?.length !== 0 &&
+            filteredInstalledApps?.map((app, index) => (
               <Box
                 key={index}
                 direction="row"
                 align="center"
                 justify="between"
                 border={
-                  index !== defaultIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                  index !== installedIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
                     ? { side: 'bottom', size: '1px', color: 'border' }
                     : null
                 }
@@ -113,9 +120,9 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
                 <Icon type="moreDark" />
               </Box>
             ))}
-          {!installedIntegrationsInfoReq.data?.getIntegrationInfo?.length && (
+          {filteredInstalledApps?.length === 0 && (
             <ErrorLoader
-              type="missing-notifications"
+              type="no-login"
               title={t('You have no installed apps')}
               details={t('Try some out for extra functionality!')}
             />

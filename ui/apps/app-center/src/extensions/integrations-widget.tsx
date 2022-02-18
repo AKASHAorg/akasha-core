@@ -34,16 +34,23 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     return app;
   });
 
-  const defaultIntegrationsInfoReq = useGetIntegrationsInfo(defaultAppsNamesNormalized);
-
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
-  // remove default apps from list of installed apps
-  const filteredInstalledApps = installedAppsReq.data?.filter(app => {
-    if (!defaultAppsNamesNormalized.some(defaultApp => defaultApp.name === app.name)) {
+  const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
+
+  // select default apps from list of installed apps
+  const filteredDefaultApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(app => {
+    if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
       return app;
     }
   });
-  const installedIntegrationsInfoReq = useGetIntegrationsInfo(filteredInstalledApps);
+  // select user installed apps from list of installed apps
+  const filteredInstalledApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(
+    app => {
+      if (!defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
+        return app;
+      }
+    },
+  );
 
   const handleAppClick = (integrationId: string) => {
     props.singleSpa.navigateToUrl(`${routes[INFO]}/${integrationId}`);
@@ -52,8 +59,8 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   return (
     <Box pad={{ bottom: 'small' }}>
       <ICWidgetCard
-        worldApps={defaultIntegrationsInfoReq.data?.getIntegrationInfo}
-        installedApps={installedIntegrationsInfoReq.data?.getIntegrationInfo}
+        worldApps={filteredDefaultApps}
+        installedApps={filteredInstalledApps}
         titleLabel={t('My Apps')}
         worldAppsLabel={t('World Apps')}
         installedAppsLabel={t('Installed')}
