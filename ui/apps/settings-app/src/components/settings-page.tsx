@@ -52,7 +52,7 @@ const SettingsPage: React.FC<RootComponentProps> = props => {
               size="large"
               margin={item.isSubheading && { vertical: 'medium' }}
             >
-              {`${t(item.label)}`}
+              {t('{{itemLabel}}', { itemLabel: item.label })}
             </Text>
             {!item.isSubheading && <Icon type="chevronRight" />}
           </Box>

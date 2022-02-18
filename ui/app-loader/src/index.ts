@@ -16,7 +16,7 @@ import {
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
-import { filter, from, map, Subject } from 'rxjs';
+import { filter, from, lastValueFrom, map, Subject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
 import { getIntegrationInfo } from './registry';
