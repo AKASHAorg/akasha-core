@@ -9,6 +9,7 @@ export {
   PROFILE_EVENTS,
   WEB3_EVENTS,
 } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import { IntegrationInfo, ReleaseInfo } from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { Subject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
@@ -115,19 +116,13 @@ export enum ModerationItemTypes {
   // @TODO: add support for tag type, when tag moderation is implemented
 }
 
-type Release = {
-  type: string;
-  version: string;
-  timestamp: Date;
-};
+export { IntegrationInfo, ReleaseInfo };
 
-export interface IntegrationCenterApp {
-  name: string;
-  hash: string;
+export interface IntegrationCenterApp extends IntegrationInfo {
   avatar?: string;
   coverImage?: string;
   description?: string;
-  releases?: Release[];
+  releases?: ReleaseInfo[];
   authors?: string[];
   tags?: string[];
   license?: string;

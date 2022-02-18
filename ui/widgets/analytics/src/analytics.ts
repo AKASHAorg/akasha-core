@@ -87,7 +87,7 @@ export const installTrackingScript = ({ trackerUrl, siteId }) => {
 };
 
 export const installMatomo = ({ trackerUrl, siteId }) => {
-  if (window.hasOwnProperty('Matomo')) {
+  if (window.hasOwnProperty('Matomo') || !trackerUrl || !siteId) {
     return;
   }
 

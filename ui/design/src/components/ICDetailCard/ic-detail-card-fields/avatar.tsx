@@ -1,15 +1,23 @@
 import * as React from 'react';
-import { StyledIconBox } from '../../AppInfoWidgetCard/styled-widget-cards';
-
+import styled from 'styled-components';
 import Icon from '../../Icon';
 import Avatar from '../../Avatar';
 import ImageOverlay from '../../ImageOverlay';
-import { AvatarDiv } from '../../ProfileCard/styled-profile-card';
 
 export interface ICDetailCardAvatarProps {
   avatar?: string;
   ethAddress?: string;
 }
+
+const StyledBackgroundDiv = styled.div`
+  border-radius: 4px;
+  width: 4.5rem;
+  height: 4.5rem;
+  background: ${props => props.theme.colors.beigeBackground};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
   const { avatar, ethAddress } = props;
@@ -28,29 +36,19 @@ const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
     <>
       {/* if avatar is passed */}
       {avatar && (
-        <AvatarDiv>
-          <Avatar
-            size="xxl"
-            border="lg"
-            ethAddress={ethAddress}
-            src={avatar}
-            onClick={handleClickImage}
-          />
-        </AvatarDiv>
+        <Avatar
+          size="xxl"
+          border="lg"
+          ethAddress={ethAddress}
+          src={avatar}
+          onClick={handleClickImage}
+        />
       )}
       {/* fallback, if no avatar */}
       {!avatar && (
-        <StyledIconBox
-          style={{
-            width: '4rem',
-            height: '4rem',
-            marginRight: '0.5rem',
-            position: 'relative',
-            top: '-0.5rem',
-          }}
-        >
-          <Icon type="appIC" size="xl" />
-        </StyledIconBox>
+        <StyledBackgroundDiv>
+          <Icon type="integrationAppLarge" size="xl" />
+        </StyledBackgroundDiv>
       )}
       {imageOverlayOpen && avatar && (
         <ImageOverlay imgUrl={avatar} closeModal={closeImageOverlay} />

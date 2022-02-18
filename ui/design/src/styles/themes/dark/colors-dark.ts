@@ -8,6 +8,7 @@ export interface IColorsDark extends IColors {
   lightGrey: string;
   deepGrey: string;
   deeperGrey: string;
+  lightBeige: string;
   white: string;
   red: string;
   green: string;
@@ -23,6 +24,7 @@ const colors: IColorsDark = {
   deepGrey: '#7F7F7F',
   deeperGrey: '#87909E',
   disabled: '#9ea0a5',
+  lightBeige: '#F8F4F4',
   white: '#FFF',
   red: '#FF4040',
   green: '#36B37E',
@@ -32,6 +34,7 @@ const colors: IColorsDark = {
   disabledText: '#9ea0a5', // disabled
   errorText: '#FF4040', // red
   background: '#FFF', // white
+  beigeBackground: '#F8F4F4', // lightBeige
   ultraLightBackground: '#FBFCFD', // ultralightGrey
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',

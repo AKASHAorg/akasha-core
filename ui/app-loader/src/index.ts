@@ -827,6 +827,7 @@ export default class AppLoader {
       extension: extensionPoint,
       navigateToModal: navigateToModal,
       layoutConfig: this.layoutConfig,
+      worldConfig: this.worldConfig,
       activeModal: this.activeModal,
       logger: this.sdk.services.log.create(extensionId),
       extensionData,
