@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AppIC = (props: React.SVGProps<SVGSVGElement>) => (
+const IntegrationAppLarge = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="34"
     height="33"
@@ -23,4 +23,4 @@ const AppIC = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default AppIC;
+export default IntegrationAppLarge;

@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc",
+    "prepare": "yarn run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../../build/apps/profile",
     "start": "webpack-dev-server --config ./webpack.config.js --port 8332",

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AppICCTA = (props: React.SVGProps<SVGSVGElement>) => (
+const IntegrationAppCTA = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="16"
     height="16"
@@ -20,4 +20,4 @@ const AppICCTA = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default AppICCTA;
+export default IntegrationAppCTA;

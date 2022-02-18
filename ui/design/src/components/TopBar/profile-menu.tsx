@@ -23,6 +23,7 @@ export interface IProfileMenu {
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
   settingsLabel?: string;
+  settingsInfoLabel?: string;
   moderationLabel?: string;
   moderationInfoLabel?: string;
   mobileSignedOutView?: boolean;
@@ -60,6 +61,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     feedbackLabel,
     feedbackInfoLabel,
     settingsLabel,
+    settingsInfoLabel,
     moderationLabel,
     moderationInfoLabel,
     mobileSignedOutView,
@@ -133,7 +135,11 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   };
 
   const similarMenu: ISimilarMenu[] = [
-    { icon: 'settingsAlt', labels: [settingsLabel], handler: handleSettingsClick },
+    {
+      icon: 'settingsAlt',
+      labels: [settingsLabel, settingsInfoLabel],
+      handler: handleSettingsClick,
+    },
     { icon: 'feedback', labels: [feedbackLabel, feedbackInfoLabel], handler: handleFeedbackClick },
     {
       icon: 'trendingApps',
@@ -177,7 +183,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
                 subtitle={menu.labels[1]}
                 subtitleColor={'secondaryText'}
                 iconType={menu.icon}
-                iconSize={'1.250rem'}
+                iconSize={'sm'}
               />
             </StyledPopoverBox>
           </Box>

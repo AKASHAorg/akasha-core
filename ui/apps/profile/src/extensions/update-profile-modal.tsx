@@ -147,6 +147,8 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
           descriptionLabel={t('About me')}
           uploadLabel={t('Upload')}
           urlLabel={t('By url')}
+          editLabel={t('Edit')}
+          editImageSubtitle={t('Drag the image to reposition')}
           cancelLabel={t('Cancel')}
           saveLabel={t('Save')}
           deleteLabel={t('Delete')}

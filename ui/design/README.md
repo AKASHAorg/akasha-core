@@ -5,25 +5,25 @@
 > Run test
 
 ``` shell script
-$ npm run test
+$ yarn run test
 ```
 
 > Start the storybook dev
 
 ``` shell script
-$ npm run storybook
+$ yarn run storybook
 ```
 
 > Package the storybook
 
 ``` shell script
-$ npm run build-storybook
+$ yarn run build-storybook
 ```
 
 > Package the library
 
 ``` shell script
-npm run build
+yarn run build
 ```
 
 <small><em>This library is based on create-react-app and storybook</em></small>

@@ -1,13 +1,14 @@
 import { Box, Text } from 'grommet';
 import React from 'react';
 import Icon, { IconType } from '../Icon';
-import { IconDiv, StyledBox } from './styled-subtitle-text-icon';
+import { BackgroundDiv, StyledBox } from './styled-subtitle-text-icon';
 
 export interface ISubtitleTextIcon {
   className?: string;
   iconType?: IconType;
-  iconSize?: string;
-  iconBackground?: boolean;
+  iconSize?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  backgroundSize?: string;
+  backgroundColor?: boolean;
   label?: string | number;
   labelColor?: string;
   labelSize?: 'small' | 'large';
@@ -23,7 +24,8 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     className,
     iconType,
     iconSize,
-    iconBackground,
+    backgroundColor,
+    backgroundSize,
     label,
     labelColor,
     labelSize,
@@ -37,14 +39,15 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     <StyledBox
       data-testid={`${props['data-testid']}`}
       direction="row"
+      align="center"
       justify="center"
       onClick={onClick}
       className={className}
     >
       {iconType ? (
-        <IconDiv iconSize={iconSize} iconBackground={iconBackground}>
-          <Icon type={iconType} />
-        </IconDiv>
+        <BackgroundDiv backgroundSize={backgroundSize} backgroundColor={backgroundColor}>
+          <Icon type={iconType} size={iconSize} />
+        </BackgroundDiv>
       ) : null}
       <Box pad="none" gap={gap} width={{ max: maxWidth }}>
         <Text color={labelColor} size={labelSize} truncate={true}>

@@ -38,9 +38,8 @@ const Template = (args: ICDetailCardProps) => {
 export const BaseICDetailCard = Template.bind({});
 
 BaseICDetailCard.args = {
-  titleLabel: ICWorldAppsData[3].name,
   shareLabel: 'Share',
-  hash: ICWorldAppsData[3].hash,
+  id: ICWorldAppsData[3].id,
   avatar: ICWorldAppsData[3].avatar,
   coverImage: ICWorldAppsData[3].coverImage,
   installLabel: 'Install',
@@ -50,13 +49,10 @@ BaseICDetailCard.args = {
   descriptionContent: ICWorldAppsData[3].description,
   showMoreLabel: 'Show More',
   linksLabel: 'Links',
-  nextReleaseLabel: 'Support next release',
-  ghRepoLabel: 'Github Repo',
-  curVersionLabel: 'Current Version',
-  versionLabel: 'Version',
-  currentLabel: 'Current',
+  releasesLabel: 'Releases',
+  releaseTypeLabel: 'Release Type',
+  releaseIdLabel: 'Release Id',
   releases: ICWorldAppsData[3].releases,
-  bugFixingLabel: 'Bug Fixing',
   versionHistoryLabel: 'Version History',
   authorsLabel: 'Authors & Contributors',
   authors: ICWorldAppsData[3].authors,

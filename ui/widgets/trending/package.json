@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc",
+    "prepare": "yarn run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/trending-widget.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/trending",

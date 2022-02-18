@@ -15,7 +15,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import routes, { POST } from '../routes';
 
-const { Box, ProfileMiniCard } = DS;
+const { Box, ProfileMiniCard, ErrorLoader } = DS;
 
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { params } = useRouteMatch<{ postId: string }>();
@@ -95,9 +95,17 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(Wrapped),
   errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
-      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
+      props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
-    return <div>!</div>;
+    return (
+      <Box>
+        <ErrorLoader
+          type="script-error"
+          title="Error in profile card widget"
+          details={err.message}
+        />
+      </Box>
+    );
   },
 });
 
