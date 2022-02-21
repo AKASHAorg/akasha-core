@@ -49,6 +49,7 @@ export interface RootComponentProps {
   domElement: HTMLElement;
   uiEvents: Subject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
   i18next?: typeof i18n;
+  plugins?: Record<string, any>;
   getMenuItems?: () => AppLoaderTypes.IMenuList;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
   logger: ILogger;

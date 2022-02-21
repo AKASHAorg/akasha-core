@@ -13,13 +13,14 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import { I18N_NAMESPACE } from '../services/constants';
 
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const { singleSpa } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
   const loginQuery = useGetLogin();
   const [analyticsActions] = useAnalytics();
 

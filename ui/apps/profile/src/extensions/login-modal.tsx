@@ -7,11 +7,12 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
+import { I18N_NAMESPACE } from '../services/constants';
 
 const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon } = DS;
 
 const LoginModal = (props: RootComponentProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
   const location = useLocation();
 
   const handleModalClose = () => {
@@ -82,7 +83,7 @@ const LoginModal = (props: RootComponentProps) => {
 const Wrapped = (props: RootComponentProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <LoginModal {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -101,10 +102,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['app-profile']);
-  return Promise.resolve();
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

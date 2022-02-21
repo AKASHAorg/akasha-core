@@ -3,13 +3,14 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { I18N_NAMESPACE } from '../services/constants';
 
 const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard } = DS;
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
   const { singleSpa } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const loginQuery = useGetLogin();
 

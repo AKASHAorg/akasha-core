@@ -5,6 +5,7 @@ import {
   IAppConfig,
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { I18N_NAMESPACE } from './services/constants';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   activeWhen: (location, pathToActiveWhen) => {
@@ -18,6 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   title: 'Moderator Dashboard | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
   widgets: {},
+  i18nNamespace: [I18N_NAMESPACE],
   routes: {
     rootRoute,
   },

@@ -9,6 +9,7 @@ import { useGetCount, useInfiniteLog, ILogItem } from '@akashaproject/ui-awf-hoo
 import Banner from './banner';
 import DetailCard from './detail-card';
 import { NoItemsFound } from '../error-cards';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const {
   styled,
@@ -72,7 +73,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;

@@ -3,11 +3,12 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useLegalDoc } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps, LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const { ErrorInfoCard, ErrorLoader, MdCard } = DS;
 
 const DeveloperGuidelinesPage = (_props: RootComponentProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const legalDocReq = useLegalDoc(LEGAL_DOCS.APP_GUIDE);
   const legalDoc = legalDocReq.data;

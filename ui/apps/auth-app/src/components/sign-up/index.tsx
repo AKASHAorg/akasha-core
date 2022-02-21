@@ -20,6 +20,7 @@ import { StepFour } from './steps/StepFour';
 import { StepFive } from './steps/StepFive';
 
 import routes, { SIGN_UP_USERNAME } from '../../routes';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const { SignUpCard } = DS;
 
@@ -35,7 +36,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
 
   const DEFAULT_TOKEN_LENGTH = 24;
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const inviteTokenQuery = useIsValidToken({
     inviteToken,

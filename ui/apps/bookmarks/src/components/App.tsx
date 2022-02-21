@@ -9,7 +9,7 @@ const { Box } = DS;
 const App: React.FC<RootComponentProps> = props => {
   return (
     <Box width="100vw">
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <Routes {...props} />
       </I18nextProvider>
     </Box>

@@ -7,6 +7,7 @@ import {
   MenuItemType,
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { I18N_NAMESPACE } from './services/constants';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   // This is the root route in which the plugin will render.
@@ -22,6 +23,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   name: 'app-legal',
   sdkModules: [],
   title: 'Legal | Ethereum World',
+  i18nNamespace: [I18N_NAMESPACE],
   menuItems: {
     route: rootRoute,
     label: 'Legal',

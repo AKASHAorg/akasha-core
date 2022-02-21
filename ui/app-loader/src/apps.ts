@@ -20,6 +20,7 @@ class Apps extends BaseIntegration {
   private readonly appInfos: BaseIntegrationInfo[];
   private readonly appConfigs: Record<string, IAppConfig>;
   private readonly appModules: Record<string, IntegrationModule>;
+  private appNamespaces: Record<string, string[]> = {};
   constructor(opts: BaseIntegrationClassOptions) {
     super(opts);
     // registry infos
@@ -64,11 +65,31 @@ class Apps extends BaseIntegration {
             },
             uiEvents: this.uiEvents,
           })) as IAppConfig;
+
+          const appNamespace = this.appConfigs[name]?.i18nNamespace;
+
+          if (appNamespace) {
+            this.appNamespaces[name] = appNamespace;
+          }
         } else {
           this.logger.warn(`Integration ${name} does not have a register() method exported!`);
         }
       }
     }
+
+    window.addEventListener('single-spa:before-app-change', (e: CustomEvent) => {
+      const freshMountedApps = e.detail.appsByNewStatus['MOUNTED'];
+      freshMountedApps?.forEach(app => {
+        const namespaces = this.appNamespaces[app];
+
+        namespaces.forEach(namespace => {
+          if (!this.plugins.translation?.i18n?.options?.ns?.includes(namespace)) {
+            this.plugins.translation?.i18n?.loadNamespaces(namespace);
+          }
+        });
+      });
+    });
+
     return Promise.resolve();
   }
   onFirstMount(location: Location) {
@@ -127,6 +148,7 @@ class Apps extends BaseIntegration {
               return {
                 ...ext,
                 parentApp: appInfo.name,
+                i18nNamespace: appConfig.i18nNamespace,
               };
             }
             return ext;
@@ -185,7 +207,7 @@ class Apps extends BaseIntegration {
           getMenuItems: this.getMenuItems,
           navigateTo: this.navigateTo,
           parseQueryString: parseQueryString,
-          i18next: this.i18next,
+          plugins: this.plugins,
         },
       });
       if (appConfig.menuItems) {

@@ -7,7 +7,7 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
 import { useHandleNavigation } from '@akashaproject/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ITEM_TYPE_CONVERTER } from '../../../services/constants';
+import { I18N_NAMESPACE, ITEM_TYPE_CONVERTER } from '../../../services/constants';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
@@ -24,7 +24,7 @@ export interface IEntryDataCardProps {
 const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
   const { entryData, itemType, locale, modalSlotId } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const handleNavigate = useHandleNavigation(props.singleSpa.navigateToUrl);
 

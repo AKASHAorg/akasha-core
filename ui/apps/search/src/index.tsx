@@ -7,6 +7,7 @@ import {
   MenuItemAreaType,
   MenuItemType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { I18N_NAMESPACE } from './services/constants';
 
 /**
  * All the plugins must export an object like this:
@@ -21,6 +22,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   mountsIn: opts.layoutConfig?.pluginSlotId,
   name: 'app-search',
   title: 'Search | Ethereum World',
+  i18nNamespace: [I18N_NAMESPACE],
   menuItems: {
     label: 'Search',
     name: 'app-search',

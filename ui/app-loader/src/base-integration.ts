@@ -7,10 +7,10 @@ import {
   ISdkConfig,
   IWidgetConfig,
   LayoutConfig,
+  PluginConf,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
-import i18n from 'i18next';
 import { createRootNode } from './utils';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { IAwfSDK } from '@akashaproject/sdk-typings';
@@ -24,7 +24,7 @@ export interface BaseIntegrationClassOptions {
   addMenuItem: (menuItem: IMenuItem) => void;
   getMenuItems: () => IMenuList;
   navigateTo: (options: NavigationOptions) => void;
-  i18next: typeof i18n;
+  plugins: PluginConf;
 }
 
 class BaseIntegration {
@@ -36,7 +36,7 @@ class BaseIntegration {
   public getMenuItems: () => IMenuList;
   public logger: ILogger;
   public navigateTo: BaseIntegrationClassOptions['navigateTo'];
-  public i18next;
+  public plugins;
   constructor(opts: BaseIntegrationClassOptions) {
     this.layoutConfig = opts.layoutConfig;
     this.uiEvents = opts.uiEvents;
@@ -46,7 +46,7 @@ class BaseIntegration {
     this.getMenuItems = opts.getMenuItems;
     this.logger = this.sdk.services.log.create('app-loader.base-integration');
     this.navigateTo = opts.navigateTo;
-    this.i18next = opts.i18next;
+    this.plugins = opts.plugins;
   }
   public getAppsForLocation(location: Location) {
     return singleSpa.checkActivityFunctions(location);

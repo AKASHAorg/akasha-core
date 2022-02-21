@@ -6,11 +6,12 @@ import DS from '@akashaproject/design-system';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { I18N_NAMESPACE } from '../services/translation-service';
 
 const { MenuItemButton } = DS;
 
 const EntryEditButton: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const handleClick = () => {
     if (
@@ -47,7 +48,7 @@ const EntryEditButton: React.FC<RootComponentProps> = props => {
 const ModalWrapper: React.FC<RootComponentProps> = props => {
   return (
     <React.Suspense fallback={'...'}>
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <EntryEditButton {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -66,9 +67,6 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['app-akasha-integration']);
-  return Promise.resolve();
-};
+export const bootstrap = reactLifecycles.bootstrap;
 export const mount = reactLifecycles.mount;
 export const unmount = reactLifecycles.unmount;

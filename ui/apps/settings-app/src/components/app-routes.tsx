@@ -12,6 +12,7 @@ import PrivacyOption from './option-privacy';
 import AppearanceOption from './option-appearance';
 
 import routes, { APPEARANCE, APPS, HOME, PRIVACY, rootRoute } from '../routes';
+import { I18N_NAMESPACE } from '../services/constants';
 
 const { Box } = DS;
 
@@ -24,7 +25,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const [checkedAutoUpdates, setCheckedAutoUpdates] = React.useState<boolean>(false);
   const [checkedDataAnalytics, setCheckedDataAnalytics] = React.useState<boolean>(false);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const handleChevronLeftClick = () => props.singleSpa.navigateToUrl(routes[HOME]);
 

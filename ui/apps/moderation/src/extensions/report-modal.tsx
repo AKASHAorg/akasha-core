@@ -12,7 +12,7 @@ import {
   useReport,
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
-import { BASE_REPORT_URL } from '../services/constants';
+import { BASE_REPORT_URL, I18N_NAMESPACE } from '../services/constants';
 
 const { ReportModal } = DS;
 
@@ -24,7 +24,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
 
   const [reasons, reasonsActions] = useReasons();
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   React.useEffect(() => {
     reasonsActions.fetchReasons({ active: true });
@@ -102,7 +102,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
 const Wrapped = (props: RootComponentProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <ReportModalComponent {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -121,10 +121,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['app-moderation-ewa']);
-  return Promise.resolve();
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

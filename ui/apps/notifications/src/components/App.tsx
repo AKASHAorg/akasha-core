@@ -32,7 +32,7 @@ class App extends PureComponent<RootComponentProps> {
 
     return (
       <Box width="100vw">
-        <I18nextProvider i18n={this.props.i18next}>
+        <I18nextProvider i18n={this.props.plugins?.translation?.i18n}>
           <NotificationsPage {...this.props} />
         </I18nextProvider>
       </Box>

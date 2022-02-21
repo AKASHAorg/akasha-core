@@ -11,12 +11,13 @@ import {
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { I18N_NAMESPACE } from '../services/translation-service';
 
 const { ConfirmationModal, ThemeSelector, lightTheme, darkTheme, ModalContainer, ErrorLoader } = DS;
 
 const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const { activeModal, logger } = props;
-  const { t } = useTranslation('app-akasha-integration');
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const postDeleteQuery = useDeletePost(activeModal.entryId);
   const commentDeleteQuery = useDeleteComment(activeModal.entryId);
@@ -81,7 +82,7 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
 
 const ModalWrapper: React.FC<RootComponentProps> = props => {
   return (
-    <I18nextProvider i18n={props.i18next}>
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <EntryRemoveModal {...props} />
     </I18nextProvider>
   );
@@ -108,10 +109,6 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['app-akasha-integration']);
-  return Promise.resolve();
-};
-
+export const bootstrap = reactLifecycles.bootstrap;
 export const mount = reactLifecycles.mount;
 export const unmount = reactLifecycles.unmount;

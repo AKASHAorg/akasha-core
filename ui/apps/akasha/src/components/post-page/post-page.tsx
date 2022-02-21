@@ -30,6 +30,7 @@ import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-lo
 import { redirect } from '../../services/routing-service';
 import routes, { POST } from '../../routes';
 import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import { I18N_NAMESPACE } from '../../services/translation-service';
 
 const {
   Box,
@@ -60,7 +61,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
   const { postId } = useParams<{ userId: string; postId: string }>();
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const postReq = usePost({
     postId,
@@ -101,7 +102,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     return [];
   }, [reqComments.data]);
 
-  const locale = (props.i18next.languages[0] || 'en') as ILocale;
+  const locale = (props.plugins?.translation?.i18n?.languages?.[0] || 'en') as ILocale;
 
   const profileDataReq = useGetProfile(loginState?.pubKey);
   const loggedProfileData = profileDataReq.data;
@@ -414,7 +415,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 removedByAuthorLabel={t('This reply was deleted by its author')}
                 uiEvents={props.uiEvents}
                 itemSpacing={8}
-                i18next={props.i18next}
+                i18next={props.plugins?.translation?.i18n}
                 trackEvent={analyticsActions.trackEvent}
               />
             </>

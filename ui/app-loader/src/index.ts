@@ -13,6 +13,7 @@ import {
   IWidgetConfig,
   LayoutConfig,
   ModalNavigationOptions,
+  PluginConf,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
@@ -34,8 +35,6 @@ import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { setupI18next } from './i18n';
-import i18next from 'i18next';
 
 interface SingleSpaEventDetail {
   originalEvent: Event;
@@ -73,7 +72,7 @@ export default class AppLoader {
   private readonly sdk: ReturnType<typeof getSDK>;
   private readonly menuItems: IMenuList;
   public layoutConfig?: LayoutConfig;
-  public i18next?: typeof i18next;
+  public plugins?: PluginConf | Record<string, never>;
   private extensionPoints: Record<string, UIEventData['data'][]>;
   private readonly extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
   private activeModal?: ModalNavigationOptions;
@@ -88,7 +87,7 @@ export default class AppLoader {
     this.sdk = sdk;
 
     this.uiEvents = new Subject();
-    this.i18next = null;
+    this.plugins = {};
 
     // register event listeners
     this.addSingleSpaEventListeners();
@@ -206,9 +205,9 @@ export default class AppLoader {
     const defaultIntegrations = [
       this.worldConfig.layout,
       this.worldConfig.homepageApp,
-      this.worldConfig.translationApp,
       ...this.worldConfig.defaultApps,
       ...this.worldConfig.defaultWidgets,
+      ...this.worldConfig.defaultPlugins,
     ];
 
     const integrationInfos = await this.getPackageInfos(defaultIntegrations);
@@ -221,12 +220,8 @@ export default class AppLoader {
       this.loaderLogger.warn('Cannot get layoutConfig!');
       return;
     }
-    const translationConfig = await this.importTranslationConfig(integrationInfos);
 
-    this.i18next = await setupI18next({
-      logger: this.loaderLogger,
-      translationPath: translationConfig.translationPath || '/locales/{{lng}}/{{ns}}.json',
-    });
+    this.plugins = (await this.loadPlugins(integrationInfos)) as PluginConf;
 
     this.apps = new Apps({
       layoutConfig: layoutConfig,
@@ -236,7 +231,7 @@ export default class AppLoader {
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
       navigateTo: this.navigateTo.bind(this),
-      i18next: this.i18next,
+      plugins: this.plugins,
     });
 
     this.widgets = new Widgets({
@@ -248,7 +243,7 @@ export default class AppLoader {
       getMenuItems: this.getMenuItems.bind(this),
       getAppRoutes: appId => this.apps.getAppRoutes(appId),
       navigateTo: this.navigateTo.bind(this),
-      i18next: this.i18next,
+      plugins: this.plugins,
     });
 
     integrationInfos.forEach(integration => {
@@ -625,26 +620,15 @@ export default class AppLoader {
     ).prepareImport(true);
   }
 
-  public async importTranslationConfig(integrationInfos: BaseIntegrationInfo[]) {
-    const translationApp = getNameFromDef(this.worldConfig.translationApp);
-    if (!translationApp) {
-      this.loaderLogger.error('Translation app was not found!');
-      return null;
-    }
-    try {
-      const translationInfo = integrationInfos.find(int => int.name === translationApp);
-      if (!translationInfo) {
-        this.loaderLogger.error(`Cannot fetch translation info`);
-        return null;
-      }
-
-      const mod = await System.import(translationInfo.name);
-
-      return await mod.register();
-    } catch (err) {
-      this.loaderLogger.error(`Error importing translation! ${err}`);
-      return null;
-    }
+  public async loadPlugins(integrationInfos: BaseIntegrationInfo[]) {
+    const availablePlugins = integrationInfos.filter(integrationInfo =>
+      this.worldConfig.defaultPlugins.includes(integrationInfo.name),
+    );
+    const pluginImports = await Promise.all(
+      availablePlugins.map(plugin => System.import(plugin.name)),
+    );
+    const registeredPlugins = await Promise.all(pluginImports.map(plugin => plugin.getPlugin()));
+    return registeredPlugins.reduce((acc, curr) => ({ ...acc, ...curr }), {});
   }
 
   public async importLayoutConfig(integrationInfos: BaseIntegrationInfo[]) {
@@ -693,7 +677,7 @@ export default class AppLoader {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { loadingFn, mountsIn, title, name, ...layoutParams } = this.layoutConfig;
-
+    // namespace check
     const layoutParcel = singleSpa.mountRootParcel<
       RootComponentProps & { domElement: HTMLElement }
     >(this.layoutConfig.loadingFn, {
@@ -868,8 +852,17 @@ export default class AppLoader {
       extensionData,
       navigateTo: this.navigateTo.bind(this),
       parseQueryString: parseQueryString,
-      i18next: this.i18next,
+      plugins: this.plugins,
     };
+
+    const extensionNamespace = extensionPoint.i18nNamespace;
+    if (extensionNamespace) {
+      extensionNamespace.forEach(namespace => {
+        if (!this.plugins.translation?.i18n?.options?.ns?.includes(namespace)) {
+          this.plugins.translation?.i18n?.loadNamespaces(extensionNamespace);
+        }
+      });
+    }
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);
 

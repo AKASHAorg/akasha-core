@@ -23,8 +23,6 @@ declare const __DEV__: boolean;
     layout: '@akashaproject/ui-widget-layout',
     // define an app that will load at root '/' path
     homepageApp: '@akashaproject/app-akasha-integration',
-    // define translation app
-    translationApp: '@akashaproject/ui-lib-translation',
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
@@ -46,6 +44,7 @@ declare const __DEV__: boolean;
       '@akashaproject/ui-widget-analytics',
       // '@akashaproject/ui-widget-sidebar',
     ],
+    defaultPlugins: ['@akashaproject/ui-lib-translation'],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,
       siteId: process.env.MATOMO_SITE_ID,

@@ -20,13 +20,14 @@ import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/co
 import { useGetLogin, useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
 import SuggestSignup from './suggest-signup';
 import routes, { SIGN_UP_USERNAME } from '../../routes';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const { MainAreaCardBox, Box, Heading, HorizontalDivider } = DS;
 
 const SignIn: React.FC<RootComponentProps> = props => {
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [signInComplete, setSignInComplete] = React.useState(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const navigateTo = React.useRef(props.navigateTo);
 

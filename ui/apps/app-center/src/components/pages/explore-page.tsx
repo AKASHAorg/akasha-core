@@ -8,13 +8,14 @@ import {
 import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import routes, { INFO } from '../../routes';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const { Box, SubtitleTextIcon, DuplexButton, Icon, ErrorLoader, Spinner } = DS;
 
 const ExplorePage: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const loginQuery = useGetLogin();
 

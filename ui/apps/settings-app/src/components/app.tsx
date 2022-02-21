@@ -11,7 +11,7 @@ const Application: React.FC<RootComponentProps> = props => {
   return (
     <Box width="100vw">
       <React.Suspense fallback={<>Loading</>}>
-        <I18nextProvider i18n={props.i18next}>
+        <I18nextProvider i18n={props.plugins?.translation?.i18n}>
           <AppRoutes {...props} />
         </I18nextProvider>
       </React.Suspense>

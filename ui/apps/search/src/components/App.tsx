@@ -9,7 +9,7 @@ const { Box, Helmet } = DS;
 const App: React.FC<RootComponentProps> = props => {
   return (
     <Box width="100vw">
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <Helmet>
           <title>Search | Ethereum World</title>
         </Helmet>

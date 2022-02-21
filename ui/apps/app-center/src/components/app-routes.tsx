@@ -16,11 +16,12 @@ import WidgetsPage from './pages/widgets-page';
 import NavButton from './nav-button';
 
 import routes, { rootRoute, EXPLORE, MY_APPS, APPS, WIDGETS, INFO } from '../routes';
+import { I18N_NAMESPACE } from '../services/constants';
 
 const { Box, Text, BasicCardBox } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   return (
     <Router>

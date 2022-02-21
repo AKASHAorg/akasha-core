@@ -14,12 +14,13 @@ import {
   withProviders,
 } from '@akashaproject/ui-awf-hooks';
 import routes, { POST } from '../routes';
+import { I18N_NAMESPACE } from '../services/translation-service';
 
 const { Box, ProfileMiniCard, ErrorLoader } = DS;
 
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { params } = useRouteMatch<{ postId: string }>();
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const loginQuery = useGetLogin();
 
@@ -82,7 +83,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
 const Wrapped = (props: RootComponentProps) => (
   <Router>
     <Route path={`${routes[POST]}/:postId`}>
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <ProfileCardWidget {...props} />
       </I18nextProvider>
     </Route>
@@ -109,10 +110,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['app-akasha-integration']);
-  return Promise.resolve();
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

@@ -13,6 +13,7 @@ import {
 
 import StatModalWrapper from './stat-modal-wrapper';
 import { getUsernameTypes } from '../../utils/username-utils';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const { ModalRenderer, ProfileCard, styled } = DS;
 
@@ -49,7 +50,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const isFollowingReq = useIsFollowingMultiple(loginState.ethAddress, [profileData.ethAddress]);
   const followedProfiles = isFollowingReq.data;

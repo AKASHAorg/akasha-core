@@ -12,11 +12,12 @@ import {
   useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import routes, { INFO, rootRoute } from '../routes';
+import { I18N_NAMESPACE } from '../services/constants';
 
 const { Box, ICWidgetCard, ErrorLoader } = DS;
 
 const ICWidget: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const loginQuery = useGetLogin();
 
@@ -104,7 +105,7 @@ const reactLifecycles = singleSpaReact({
 });
 
 export const bootstrap = (props: RootComponentProps) => {
-  props.i18next.loadNamespaces('app-integration-center');
+  props.i18next.loadNamespaces(I18N_NAMESPACE);
   return Promise.resolve();
 };
 

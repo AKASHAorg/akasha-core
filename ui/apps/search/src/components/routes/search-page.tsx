@@ -21,6 +21,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const {
   Box,
@@ -51,7 +52,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const { singleSpa, loginState, showLoginModal } = props;
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(I18N_NAMESPACE);
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);

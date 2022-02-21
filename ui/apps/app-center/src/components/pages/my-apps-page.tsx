@@ -4,13 +4,14 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import routes, { INFO } from '../../routes';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader, Spinner } = DS;
 
 const MyAppsPage: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const defaultAppsNamesNormalized = worldConfig?.defaultApps.map(app => {
     if (typeof app === 'string') {

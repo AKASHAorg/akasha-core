@@ -13,6 +13,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { I18N_NAMESPACE } from '../../services/translation-service';
 
 const { Box, TagProfileCard, Helmet, styled, ErrorLoader, Spinner } = DS;
 
@@ -28,7 +29,7 @@ const TagInfoCard = styled(TagProfileCard)`
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
   const { tagName } = useParams<{ tagName: string }>();
   const getTagQuery = useGetTag(tagName);
 
@@ -118,7 +119,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             removedByAuthorLabel={t('This post was deleted by its author')}
             uiEvents={props.uiEvents}
             itemSpacing={8}
-            i18next={props.i18next}
+            i18next={props.plugins?.translation?.i18n}
           />
         </>
       )}

@@ -10,7 +10,7 @@ const { responsiveBreakpoints, styled, Sidebar, useViewportSize } = DS;
 const SidebarWidget: React.FC<RootComponentProps> = props => {
   return (
     <Router>
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <Menu
           navigateToUrl={props.singleSpa.navigateToUrl}
           getMenuItems={() => []}

@@ -6,7 +6,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useModeration, withProviders, useGetLogin } from '@akashaproject/ui-awf-hooks';
-import { BASE_DECISION_URL } from '../services/constants';
+import { BASE_DECISION_URL, I18N_NAMESPACE } from '../services/constants';
 
 const { ModerateModal } = DS;
 
@@ -15,7 +15,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
 
   const loginQuery = useGetLogin();
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -77,7 +77,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
 const Wrapped = (props: RootComponentProps) => {
   return (
     <Router>
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <ModerateModalComponent {...props} />
       </I18nextProvider>
     </Router>
@@ -96,10 +96,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['app-moderation-ewa']);
-  return Promise.resolve();
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

@@ -6,6 +6,7 @@ import {
   IntegrationRegistrationOptions,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { I18N_NAMESPACE } from './services/constants';
 
 /**
  * All plugins must export an object like this:
@@ -20,6 +21,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   name: 'app-profile',
   title: 'Profile | Ethereum World',
+  i18nNamespace: [I18N_NAMESPACE, 'ui-lib-feed'],
   menuItems: {
     label: 'Profile',
     name: 'app-profile',

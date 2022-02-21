@@ -18,6 +18,7 @@ import {
 import ContentTab from './content-tab';
 import ContentCard from './content-card';
 import { NoItemsFound, PromptAuthorization } from '../error-cards';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const { Box, Spinner, TabsToolbar, StyledSwitchCardButton, useIntersectionObserver } = DS;
 
@@ -35,7 +36,7 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
 
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(I18N_NAMESPACE);
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const getCountQuery = useGetCount();

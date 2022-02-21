@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 const TopbarWidget = (props: RootComponentProps) => {
   return (
-    <I18nextProvider i18n={props.i18next}>
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <Router>
         <TopbarComponent {...props} />
       </Router>

@@ -27,10 +27,7 @@ const reactLifecycles = singleSpaReact<RootComponentProps>({
   },
 });
 
-export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['ui-widget-topbar']);
-  return Promise.resolve();
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

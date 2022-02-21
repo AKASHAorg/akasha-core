@@ -5,11 +5,12 @@ import DS from '@akashaproject/design-system';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import routes, { rootAKASHARoute, rootProfileRoute, SIGN_IN } from '../../routes';
+import { I18N_NAMESPACE } from '../../services/constants';
 
 const { WelcomeCard } = DS;
 
 const Welcome: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const loginQuery = useGetLogin();
 

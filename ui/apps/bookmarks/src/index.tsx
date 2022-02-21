@@ -4,6 +4,7 @@ import {
   IAppConfig,
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { I18N_NAMESPACE } from './services/constants';
 
 const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
   if (!integrations) {
@@ -37,6 +38,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
   name: 'app-bookmarks',
+  i18nNamespace: [I18N_NAMESPACE],
   routes: {
     rootRoute,
   },

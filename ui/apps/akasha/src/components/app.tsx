@@ -9,7 +9,7 @@ const { Box } = DS;
 const SocialApp = (props: RootComponentProps) => {
   return (
     <Box width="100vw">
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <AppRoutes {...props} />
       </I18nextProvider>
     </Box>

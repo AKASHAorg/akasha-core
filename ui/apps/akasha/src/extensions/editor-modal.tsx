@@ -20,6 +20,7 @@ import {
 
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { I18N_NAMESPACE } from '../services/translation-service';
 
 const {
   EditorModal,
@@ -33,7 +34,7 @@ const {
 } = DS;
 
 const EditorModalContainer = (props: RootComponentProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(I18N_NAMESPACE);
 
   const loginQuery = useGetLogin();
   const [mentionQuery, setMentionQuery] = React.useState(null);
@@ -194,7 +195,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
 
 const Wrapped = (props: RootComponentProps) => {
   return (
-    <I18nextProvider i18n={props.i18next}>
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <EditorModalContainer {...props} />
     </I18nextProvider>
   );
@@ -222,10 +223,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = async (props: RootComponentProps) => {
-  await props.i18next.loadNamespaces(['app-akasha-integration']);
-  return Promise.resolve();
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 
