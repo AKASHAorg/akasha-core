@@ -328,12 +328,12 @@
             "cwd": "ui/apps/bookmarks",
             "parallel": false
           }
-        }
-      },
-      "extract:translations": {
-        "builder": "./tools/executors/i18n:extract",
-        "options": {
-          "cwd": "ui/apps/bookmarks"
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/bookmarks"
+          }
         }
       }
     },
