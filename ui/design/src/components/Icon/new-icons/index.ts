@@ -76,7 +76,7 @@ import integrationAppLarge from './integration-app-large';
 import integrationAppCTA from './integration-app-cta';
 import integrationAppSmall from './integration-app-small';
 import integrationAppSmallFill from './integration-app-small-fill';
-import integrationWidgetLarge from './integratin-widget-large';
+import integrationWidgetLarge from './integration-widget-large';
 import integrationWidgetSmall from './integration-widget-small';
 import opera from './opera';
 import payment from './payment';
