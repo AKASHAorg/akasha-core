@@ -10,14 +10,13 @@ import routes, { HOME, HISTORY, UNAUTHENTICATED, rootRoute } from '../routes';
 import Dashboard from './dashboard';
 import TransparencyLog from './transparency-log';
 import { PromptAuthentication } from './error-cards';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { layoutConfig } = props;
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-moderation-ewa');
   const loginQuery = useGetLogin();
 
   return (

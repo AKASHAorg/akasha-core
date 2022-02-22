@@ -20,7 +20,6 @@ import {
 
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { I18N_NAMESPACE } from '../services/translation-service';
 
 const {
   EditorModal,
@@ -34,7 +33,7 @@ const {
 } = DS;
 
 const EditorModalContainer = (props: RootComponentProps) => {
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-akasha-integration');
 
   const loginQuery = useGetLogin();
   const [mentionQuery, setMentionQuery] = React.useState(null);

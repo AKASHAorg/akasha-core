@@ -21,7 +21,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 const {
   Box,
@@ -52,7 +51,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const { singleSpa, loginState, showLoginModal } = props;
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
-  const { t, i18n } = useTranslation(I18N_NAMESPACE);
+  const { t, i18n } = useTranslation('app-search');
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
@@ -154,15 +153,27 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
 
   const buttonValues = [
-    ButtonValues.ALL,
-    ButtonValues.PEOPLE,
-    ButtonValues.TOPICS,
-    ButtonValues.POSTS,
-    ButtonValues.REPLIES,
+    {
+      value: ButtonValues.ALL,
+      label: t('{{ buttonValueAll }}', { buttonValueAll: ButtonValues.ALL }),
+    },
+    {
+      value: ButtonValues.PEOPLE,
+      label: t('{{ buttonValuePeople }}', { buttonValuePeople: ButtonValues.PEOPLE }),
+    },
+    {
+      value: ButtonValues.TOPICS,
+      label: t('{{ buttonValueTopics }}', { buttonValueTopics: ButtonValues.TOPICS }),
+    },
+    {
+      value: ButtonValues.POSTS,
+      label: t('{{ buttonValuePosts }}', { buttonValuePosts: ButtonValues.POSTS }),
+    },
+    {
+      value: ButtonValues.REPLIES,
+      label: t('{{ buttonValueReplies }}', { buttonValueReplies: ButtonValues.REPLIES }),
+    },
   ];
-  const buttonLabels = buttonValues.map(value =>
-    t('{{ buttonLabelValues }}', { buttonLabelValues: value }),
-  );
 
   const onTabClick = (value: string) => () => {
     setActiveButton(value);
@@ -257,7 +268,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         onIconClick={onNavBack}
         hasIcon={true}
         hasMobileDesign={true}
-        buttonLabels={buttonLabels}
         buttonValues={buttonValues}
         loggedUser={loginState?.pubKey}
       />

@@ -15,7 +15,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const {
   ThemeSelector,
@@ -53,7 +52,7 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
   const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
   const profileUpdateMutation = useProfileUpdate(loginQuery.data?.pubKey);
   const usernameValidationQuery = useUsernameValidation(partialUsername);
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-profile');
   const updateStatusKey = React.useMemo(
     () => [UPDATE_PROFILE_STATUS, loginQuery.data?.pubKey],
     [loginQuery.data?.pubKey],

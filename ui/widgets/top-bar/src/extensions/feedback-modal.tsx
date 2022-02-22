@@ -7,12 +7,11 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { FeedbackModal } = DS;
 
 const FeedbackModalContainer = (props: RootComponentProps) => {
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('ui-widget-topbar');
   const location = useLocation();
 
   const handleFeedbackModalClose = () => {

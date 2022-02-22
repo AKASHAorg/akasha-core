@@ -5,7 +5,6 @@ import {
   IAppConfig,
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { I18N_NAMESPACE } from './services/translation-service';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   activeWhen: (location, pathToActiveWhen) => {
@@ -25,7 +24,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   title: 'Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
-  i18nNamespace: [I18N_NAMESPACE, 'ui-lib-feed'],
+  i18nNamespace: ['app-akasha-integration', 'ui-lib-feed'],
   extends: [
     {
       mountsIn: 'entry-remove-confirmation',

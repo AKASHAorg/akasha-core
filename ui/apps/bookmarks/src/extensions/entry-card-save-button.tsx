@@ -13,7 +13,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { styled, TextIcon, ThemeSelector, lightTheme, darkTheme, Icon } = DS;
 
@@ -39,7 +38,7 @@ const EntryCardSaveButton = (props: RootComponentProps) => {
   const bookmarkDelete = useDeleteBookmark();
   const [analyticsActions] = useAnalytics();
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-bookmarks');
 
   const isBookmarked = React.useMemo(() => {
     return bookmarkReq.data?.some(

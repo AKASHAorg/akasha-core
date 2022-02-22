@@ -30,7 +30,6 @@ import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-lo
 import { redirect } from '../../services/routing-service';
 import routes, { POST } from '../../routes';
 import { useAnalytics } from '@akashaproject/ui-awf-hooks';
-import { I18N_NAMESPACE } from '../../services/translation-service';
 
 const {
   Box,
@@ -61,7 +60,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
   const { postId } = useParams<{ userId: string; postId: string }>();
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-akasha-integration');
 
   const postReq = usePost({
     postId,

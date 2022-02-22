@@ -11,5 +11,3 @@ export const ITEM_TYPE_CONVERTER = {
   [ModerationItemTypes.REPLY]: ItemTypes.COMMENT,
   [ModerationItemTypes.ACCOUNT]: ItemTypes.PROFILE,
 };
-
-export const I18N_NAMESPACE = "app-moderation-ewa"

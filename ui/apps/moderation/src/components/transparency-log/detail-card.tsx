@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { ILogItem } from '@akashaproject/ui-awf-hooks';
 import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 export interface IDetailCard {
   selected: ILogItem;
@@ -22,7 +21,7 @@ const { TransparencyLogDetailCard } = DS;
 const DetailCard: React.FC<IDetailCard> = props => {
   const { selected, ipfsGateway, handleClickAvatar, handleClickArrowLeft, navigateToUrl } = props;
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-moderation-ewa');
 
   const handleClickViewItem = (itemType: string, contentID: string) => () => {
     if (itemType === ModerationItemTypes.POST) {

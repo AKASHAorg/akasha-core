@@ -5,7 +5,6 @@ import {
   IAppConfig,
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { I18N_NAMESPACE } from './services/constants';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => {
   return {
@@ -16,7 +15,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     mountsIn: opts.layoutConfig?.focusedPluginSlotId,
     name: 'app-auth',
     title: 'Auth',
-    i18nNamespace: [I18N_NAMESPACE],
+    i18nNamespace: ['app-auth-ewa'],
     logo: { type: LogoTypeSource.ICON, value: 'appAuth' },
     widgets: {},
     // allow other apps to navigate to this app

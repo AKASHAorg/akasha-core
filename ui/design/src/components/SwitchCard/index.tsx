@@ -15,8 +15,7 @@ export interface ISwitchCard {
   countLabel?: string;
   activeButton: string;
   tabButtons: React.ReactElement;
-  buttonLabels: string[];
-  buttonValues: string[];
+  buttonValues: { value: string; label: string }[];
   hasMobileDesign?: boolean;
   onIconClick?: () => void;
   buttonsWrapperWidth?: string;
@@ -57,7 +56,6 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     hasIcon = false,
     countLabel,
     tabButtons,
-    buttonLabels,
     buttonValues,
     hasMobileDesign,
     onIconClick,
@@ -67,7 +65,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     className,
   } = props;
 
-  const length = buttonLabels.length;
+  const length = buttonValues.length;
 
   return (
     <>
@@ -114,13 +112,13 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
           style={style}
           margin={{ bottom: 'medium' }}
         >
-          {buttonLabels.map((el, idx) => (
+          {buttonValues.map((el, idx) => (
             <Box
               key={idx}
               basis="full"
               pad={{ vertical: '0.5rem', horizontal: '0.6rem' }}
-              border={{
-                ...(buttonValues[buttonLabels.indexOf(el)] === activeButton
+              border={
+                el.value === activeButton
                   ? {
                       color: 'accent',
                       side: 'bottom',
@@ -128,9 +126,9 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                   : {
                       color: 'border',
                       side: 'bottom',
-                    }),
-              }}
-              onClick={onTabClick(buttonValues[buttonLabels.indexOf(el)])}
+                    }
+              }
+              onClick={onTabClick(buttonValues[idx].value)}
             >
               <Text color="secondaryText" textAlign="center">
                 {el}

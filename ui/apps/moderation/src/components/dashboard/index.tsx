@@ -18,7 +18,6 @@ import {
 import ContentTab from './content-tab';
 import ContentCard from './content-card';
 import { NoItemsFound, PromptAuthorization } from '../error-cards';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 const { Box, Spinner, TabsToolbar, StyledSwitchCardButton, useIntersectionObserver } = DS;
 
@@ -36,8 +35,8 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
 
-  const { t, i18n } = useTranslation(I18N_NAMESPACE);
-  const locale = (i18n.languages[0] || 'en') as ILocale;
+  const { t } = useTranslation('app-moderation-ewa');
+  const locale = (props.plugins?.i18n?.languages?.[0] || 'en') as ILocale;
 
   const getCountQuery = useGetCount();
   const count = getCountQuery.data;
@@ -133,9 +132,16 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
     });
   };
 
-  const buttonValues = [ButtonValues.KEPT, ButtonValues.DELISTED];
-
-  const buttonLabels = buttonValues.map(value => t('{{ buttonValues }}', { buttonValues: value }));
+  const buttonValues = [
+    {
+      value: ButtonValues.KEPT,
+      label: t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT }),
+    },
+    {
+      value: ButtonValues.DELISTED,
+      label: t('{{ buttonValueDelisted }}', { buttonValueKept: ButtonValues.DELISTED }),
+    },
+  ];
 
   const onTabClick = (value: string) => () => {
     // toggle list accordingly
@@ -186,7 +192,7 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
         <TabsToolbar
           count={isDelisted ? count.delisted : count.kept}
           activeButton={isDelisted ? ButtonValues.DELISTED : ButtonValues.KEPT}
-          countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
+          countLabel={!isDelisted ? buttonValues[0].label : buttonValues[1].label}
           tabButtons={
             <>
               <StyledSwitchCardButton
@@ -207,7 +213,6 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
               />
             </>
           }
-          buttonLabels={buttonLabels}
           buttonValues={buttonValues}
           onTabClick={onTabClick}
           buttonsWrapperWidth={'40%'}

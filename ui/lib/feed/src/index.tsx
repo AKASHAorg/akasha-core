@@ -1,6 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { IWidgetConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { I18N_NAMESPACE } from './services/constants';
 
 /**
  * All widgets must export an object like this:
@@ -8,5 +7,5 @@ import { I18N_NAMESPACE } from './services/constants';
 export const register: () => IWidgetConfig = () => ({
   loadingFn: () => import('./components'),
   name: 'ui-lib-feed',
-  i18nNamespace: [I18N_NAMESPACE],
+  i18nNamespace: ['ui-lib-feed'],
 });

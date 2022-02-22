@@ -11,14 +11,13 @@ import {
   useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 const { Box, ICDetailCard, ErrorLoader, Spinner, BasicCardBox } = DS;
 
 const InfoPage: React.FC<RootComponentProps> = () => {
   const { integrationId } = useParams<{ integrationId: string }>();
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-integration-center');
 
   const loginQueryReq = useGetLogin();
 

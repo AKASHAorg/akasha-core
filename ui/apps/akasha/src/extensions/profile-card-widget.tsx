@@ -14,13 +14,12 @@ import {
   withProviders,
 } from '@akashaproject/ui-awf-hooks';
 import routes, { POST } from '../routes';
-import { I18N_NAMESPACE } from '../services/translation-service';
 
 const { Box, ProfileMiniCard, ErrorLoader } = DS;
 
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { params } = useRouteMatch<{ postId: string }>();
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-akasha-integration');
 
   const loginQuery = useGetLogin();
 

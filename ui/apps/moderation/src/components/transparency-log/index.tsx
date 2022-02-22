@@ -9,7 +9,6 @@ import { useGetCount, useInfiniteLog, ILogItem } from '@akashaproject/ui-awf-hoo
 import Banner from './banner';
 import DetailCard from './detail-card';
 import { NoItemsFound } from '../error-cards';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 const {
   styled,
@@ -73,7 +72,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-moderation-ewa');
 
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
@@ -120,12 +119,23 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const buttonValues = [
-    ButtonValues.ALL,
-    ButtonValues.KEPT,
-    ButtonValues.DELISTED,
-    ButtonValues.STATS,
+    {
+      value: ButtonValues.ALL,
+      label: t('{{ buttonValueAll }}', { buttonValueAll: ButtonValues.ALL }),
+    },
+    {
+      value: ButtonValues.KEPT,
+      label: t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT }),
+    },
+    {
+      value: ButtonValues.DELISTED,
+      label: t('{{ buttonValueDelisted }}', { buttonValueDelisted: ButtonValues.DELISTED }),
+    },
+    {
+      value: ButtonValues.STATS,
+      label: t('{{ buttonValueStats }}', { buttonValueStats: ButtonValues.STATS }),
+    },
   ];
-  const buttonLabels = buttonValues.map(value => t('{{ buttonValues }}', { buttonValues: value }));
 
   return (
     <VerticalFillBox fill="vertical">
@@ -145,21 +155,21 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         tabButtons={
           <>
             <StyledSwitchCardButton
-              label={t('{{ buttonValueAll }}', { buttonValueAll: ButtonValues.ALL })}
+              label={buttonValues[0].label}
               size="large"
               removeBorder={false}
               primary={ButtonValues.ALL === activeButton}
               onClick={onTabClick(ButtonValues.ALL)}
             />
             <StyledSwitchCardButton
-              label={t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT })}
+              label={buttonValues[1].label}
               size="large"
               removeBorder={true}
               primary={ButtonValues.KEPT === activeButton}
               onClick={onTabClick(ButtonValues.KEPT)}
             />
             <StyledSwitchCardButton
-              label={t('{{ buttonValueDelisted }}', { buttonValueDelisted: ButtonValues.DELISTED })}
+              label={buttonValues[2].label}
               size="large"
               removeBorder={true}
               primary={ButtonValues.DELISTED === activeButton}
@@ -167,7 +177,6 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
             />
           </>
         }
-        buttonLabels={buttonLabels}
         buttonValues={buttonValues}
         onTabClick={onTabClick}
         buttonsWrapperWidth={'40%'}

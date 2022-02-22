@@ -7,12 +7,11 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon } = DS;
 
 const LoginModal = (props: RootComponentProps) => {
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-profile');
   const location = useLocation();
 
   const handleModalClose = () => {

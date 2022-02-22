@@ -6,7 +6,6 @@ import {
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { rootRoute } from './routes';
-import { I18N_NAMESPACE } from './services/constants';
 
 /**
  * All the plugins must export an object like this:
@@ -21,7 +20,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     rootRoute,
   },
-  i18nNamespace: [I18N_NAMESPACE],
+  i18nNamespace: ['app-integration-center'],
   loadingFn: () => import('./components'),
   name: 'app-integration-center',
   sdkModules: [],

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
 import { ICount } from '@akashaproject/ui-awf-hooks';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 export interface IBanner {
   count: ICount;
@@ -14,7 +13,7 @@ const { TransparencyLogBanner } = DS;
 const Banner: React.FC<IBanner> = props => {
   const { count } = props;
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-moderation-ewa');
 
   return (
     <TransparencyLogBanner

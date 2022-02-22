@@ -20,7 +20,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const {
   Box,
@@ -99,7 +98,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     setTagQuery(query);
   };
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('ui-lib-feed');
 
   const postReq = usePost({ postId: itemId, enabler: itemType === ItemTypes.ENTRY });
   const commentReq = useComment(itemId, itemType === ItemTypes.COMMENT);

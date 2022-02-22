@@ -5,7 +5,6 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 import routes from '../routes';
 import { ISettingsItem, settingsItems } from '../utils/settings-items';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { Box, BasicCardBox, Icon, Text } = DS;
 
@@ -19,7 +18,7 @@ export type SettingsOption =
   | 'Widgets';
 
 const SettingsPage: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-settings-ewa');
 
   const handleSettingsOptionClick = (option: SettingsOption) => () => {
     return props.singleSpa.navigateToUrl(routes[option]);

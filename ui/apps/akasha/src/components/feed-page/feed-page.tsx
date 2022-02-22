@@ -19,7 +19,6 @@ import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { I18N_NAMESPACE } from '../../services/translation-service';
 
 const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
 
@@ -32,7 +31,7 @@ export interface FeedPageProps {
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-akasha-integration');
   const locale = (props.plugins?.translation?.i18n?.languages?.[0] || 'en') as ILocale;
 
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);

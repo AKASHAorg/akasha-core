@@ -12,7 +12,7 @@ import {
   useReport,
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
-import { BASE_REPORT_URL, I18N_NAMESPACE } from '../services/constants';
+import { BASE_REPORT_URL } from '../services/constants';
 
 const { ReportModal } = DS;
 
@@ -24,7 +24,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
 
   const [reasons, reasonsActions] = useReasons();
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-moderation-ewa');
 
   React.useEffect(() => {
     reasonsActions.fetchReasons({ active: true });

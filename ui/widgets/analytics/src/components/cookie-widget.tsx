@@ -9,7 +9,6 @@ import {
   registerEventBusSubscriber,
   uninstallPageTacking,
 } from '../analytics';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { CookieWidgetCard, Text } = DS;
 
@@ -66,7 +65,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
     <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       {cookieType === null && (
         <div>
-          <Translation ns={I18N_NAMESPACE}>
+          <Translation ns="ui-widget-analytics">
             {t => (
               <CookieWidgetCard
                 titleLabel={`${t('The Choice is Yours')} 🤘🏼`}

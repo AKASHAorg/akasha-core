@@ -11,13 +11,12 @@ import {
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { I18N_NAMESPACE } from '../services/translation-service';
 
 const { ConfirmationModal, ThemeSelector, lightTheme, darkTheme, ModalContainer, ErrorLoader } = DS;
 
 const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const { activeModal, logger } = props;
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-akasha-integration');
 
   const postDeleteQuery = useDeletePost(activeModal.entryId);
   const commentDeleteQuery = useDeleteComment(activeModal.entryId);

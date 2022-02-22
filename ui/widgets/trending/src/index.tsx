@@ -3,7 +3,6 @@ import {
   IntegrationRegistrationOptions,
   IWidgetConfig,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { I18N_NAMESPACE } from './services/constants';
 
 /**
  * All widgets must export a register function:
@@ -11,6 +10,6 @@ import { I18N_NAMESPACE } from './services/constants';
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
   loadingFn: () => import('./components'),
   name: 'ui-widget-trending',
-  i18nNamespace: [I18N_NAMESPACE],
+  i18nNamespace: ['ui-widget-trending'],
   mountsIn: opts.layoutConfig?.rootWidgetSlotId,
 });

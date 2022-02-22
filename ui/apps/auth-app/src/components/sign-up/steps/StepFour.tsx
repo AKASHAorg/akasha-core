@@ -7,7 +7,6 @@ import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 import { StyledButton, StyledBox } from './styles';
 import { useTranslation } from 'react-i18next';
 import routes, { SIGN_IN } from '../../../routes';
-import { I18N_NAMESPACE } from '../../../services/constants';
 
 const { Box, Text, WalletRequestStep, Icon, CTAAnchor } = DS;
 
@@ -136,7 +135,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
   const checkSignupQuery = useCheckSignup(ethAddress);
   const [suggestSignIn, setSuggestSignIn] = React.useState(false);
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-auth-ewa');
   const tRef = React.useRef(t);
   const fireRemainingMessagesRef = React.useRef(fireRemainingMessages);
 

@@ -24,7 +24,6 @@ import {
   EnsFormOption,
 } from '@akashaproject/design-system/lib/components/EnsFormCard';
 import { DataProviderInput } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const {
   ErrorLoader,
@@ -151,7 +150,7 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
   const ensByAddress = useEnsByAddress(loginQuery.data.ethAddress);
   const updateUsernameProviderQuery = useUpdateUsernameProvider(loginQuery.data.pubKey);
   const registerEnsQuery = useEnsRegistration();
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-profile');
 
   const userNameTypes = React.useMemo(() => {
     if (profileDataQuery.status === 'success') {

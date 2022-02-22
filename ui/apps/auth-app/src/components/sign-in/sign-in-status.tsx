@@ -3,7 +3,6 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { EthProviders } from '@akashaproject/ui-awf-typings';
 import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 const { WalletRequestStep, Spinner } = DS;
 
@@ -29,7 +28,7 @@ const errorMapping = {
 };
 
 const SignInStatus: React.FC<SignInStatusProps> = props => {
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-auth-ewa');
   const {
     status,
     isActive,

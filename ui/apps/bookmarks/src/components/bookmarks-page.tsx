@@ -9,7 +9,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import EntryCardRenderer from './entry-renderer';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { ErrorLoader, Spinner, EntryList } = DS;
 
@@ -27,7 +26,7 @@ type BookmarksPageProps = Omit<
 
 const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const { singleSpa, logger } = props;
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-bookmarks');
 
   const loginQuery = useGetLogin();
 

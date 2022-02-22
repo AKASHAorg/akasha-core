@@ -16,7 +16,6 @@ import {
   useUnfollow,
 } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 interface IStatModalWrapper {
   loginState: LoginState;
@@ -40,7 +39,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const [activeIndex, setActiveIndex] = React.useState<SelectedTab>(SelectedTab.FOLLOWERS);
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-profile');
 
   const sdk = getSDK();
 

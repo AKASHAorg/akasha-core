@@ -13,7 +13,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { I18N_NAMESPACE } from '../../services/translation-service';
 
 const { Box, TagProfileCard, Helmet, styled, ErrorLoader, Spinner } = DS;
 
@@ -29,7 +28,7 @@ const TagInfoCard = styled(TagProfileCard)`
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-akasha-integration');
   const { tagName } = useParams<{ tagName: string }>();
   const getTagQuery = useGetTag(tagName);
 

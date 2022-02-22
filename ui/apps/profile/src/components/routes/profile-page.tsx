@@ -15,7 +15,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 
@@ -26,7 +25,7 @@ export interface ProfilePageProps extends RootComponentProps {
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-profile');
   const { loggedProfileData, showLoginModal } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 

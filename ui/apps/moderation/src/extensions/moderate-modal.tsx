@@ -6,7 +6,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useModeration, withProviders, useGetLogin } from '@akashaproject/ui-awf-hooks';
-import { BASE_DECISION_URL, I18N_NAMESPACE } from '../services/constants';
+import { BASE_DECISION_URL } from '../services/constants';
 
 const { ModerateModal } = DS;
 
@@ -15,7 +15,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
 
   const loginQuery = useGetLogin();
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-moderation-ewa');
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);

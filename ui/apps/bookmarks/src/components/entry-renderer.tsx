@@ -14,7 +14,6 @@ import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
@@ -57,7 +56,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-bookmarks');
   const type = React.useMemo(() => {
     if (bookmarks) {
       return bookmarks.find(b => b.entryId === itemId).type;

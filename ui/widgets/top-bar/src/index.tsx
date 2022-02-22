@@ -4,7 +4,6 @@ import {
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { extensionPointsMap } from './extension-points';
-import { I18N_NAMESPACE } from './services/constants';
 /**
  * All widgets must export an object like this:
  */
@@ -15,7 +14,7 @@ export const register: (
     mountsIn: registrationOpts.layoutConfig?.topbarSlotId,
     loadingFn: () => import('./components'),
     name: 'ui-widget-topbar',
-    i18nNamespace: [I18N_NAMESPACE],
+    i18nNamespace: ['ui-widget-topbar'],
     tags: ['topbar'],
     extensions: extensionPointsMap,
     extends: [

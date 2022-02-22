@@ -7,7 +7,6 @@ import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useGetLogin, useGetProfile } from '@akashaproject/ui-awf-hooks';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 const { Box } = DS;
 
@@ -15,7 +14,7 @@ const Routes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-profile');
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });

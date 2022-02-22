@@ -8,7 +8,6 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks';
-import { I18N_NAMESPACE } from '../../services/constants';
 
 const { EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
@@ -42,7 +41,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const { entryId } = itemData || {};
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('app-search');
 
   const handleFlipCard = () => {
     setShowAnyway(true);

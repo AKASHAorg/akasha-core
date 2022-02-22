@@ -17,7 +17,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
-import { I18N_NAMESPACE } from '../services/constants';
 
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
@@ -170,7 +169,7 @@ const TopbarComponent = (props: RootComponentProps) => {
     }
   };
 
-  const { t } = useTranslation(I18N_NAMESPACE);
+  const { t } = useTranslation('ui-widget-topbar');
 
   const onExtMount = (name: string) => {
     uiEvents.next({
