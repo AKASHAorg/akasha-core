@@ -340,7 +340,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           <Box direction="row" gap="small" align="center">
             <BrandIcon type="ethereumWorldLogo" clickable={true} />
             {!isMobileOnly && (
-              <StyledText style={{ userSelect: 'none' }} size="large">
+              <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">
                 {brandLabel}
               </StyledText>
             )}

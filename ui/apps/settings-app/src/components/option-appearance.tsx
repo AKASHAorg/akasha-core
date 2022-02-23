@@ -50,7 +50,7 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
             gap="xsmall"
             pad={{ top: 'medium' }}
             name="reasons"
-            options={['Dark Theme', 'Light Theme']}
+            options={['Dark-Theme', 'Light-Theme']}
             value={theme}
             onChange={onThemeSelect}
           />

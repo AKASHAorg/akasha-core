@@ -5,14 +5,15 @@ import singleSpaReact from 'single-spa-react';
 import { setupI18next } from '../i18n';
 import App from './App';
 import DS from '@akashaproject/design-system';
+import { withProviders } from '@akashaproject/ui-awf-hooks';
 
 const { ErrorLoader, ThemeSelector, darkTheme, lightTheme } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: App,
-  errorBoundary: (error, errorInfo, props) => {
+  rootComponent: withProviders(App),
+  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }

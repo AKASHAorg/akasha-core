@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 
 const StyledBox = styled(Box)<{ isSelected?: boolean }>`
   background-color: ${props =>
-    props.isSelected ? props.theme.colors.activeCardBackground : props.theme.colors.background};
+    props.isSelected ? props.theme.colors.activeCardBackground : props.theme.colors.cardBackground};
 `;
 
 export interface IBasicCardBox {
@@ -48,7 +48,6 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     style={style}
     direction="column"
     elevation={elevation || 'shadow'}
-    background="background"
     fill="horizontal"
     pad={pad || 'none'}
     margin={margin || 'none'}

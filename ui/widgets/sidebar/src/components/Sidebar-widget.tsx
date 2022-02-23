@@ -6,7 +6,7 @@ import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import i18next from '../i18n';
 
-const { responsiveBreakpoints, styled, Sidebar, useViewportSize } = DS;
+const { styled, Sidebar, useViewportSize } = DS;
 
 const SidebarWidget: React.FC<RootComponentProps> = props => {
   return (
@@ -22,14 +22,12 @@ const SidebarWidget: React.FC<RootComponentProps> = props => {
   );
 };
 
-const { breakpoints } = responsiveBreakpoints.global;
-
 const AppSidebar = styled(Sidebar)`
   min-width: 15em;
-  @media screen and (min-width: ${breakpoints.medium.value}px) {
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     min-width: 13em;
   }
-  @media screen and (min-width: ${breakpoints.large.value}px) {
+  @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
     max-width: 13em;
   }
 `;

@@ -44,6 +44,7 @@ const colors: IColorsLight = {
   beigeBackground: '#F8F4F4', // lightBeige
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',
+  cardBackground: '#FFF',
   modalBackground: '#7F7F7F', // deepGrey
   modalBackgroundAlt: '#87909E', // deeperGrey
   modalBackgroundTransparent: 'rgba(0, 0, 0, 0.6)', // transparentBlack

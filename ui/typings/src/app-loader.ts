@@ -273,6 +273,7 @@ export enum EventTypes {
   ModalUnmount = 'modal-unmount',
   ShowSidebar = 'show-sidebar',
   HideSidebar = 'hide-sidebar',
+  ThemeChange = 'theme-change',
 }
 
 export type EventDataTypes = {

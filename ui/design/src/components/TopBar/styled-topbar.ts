@@ -42,6 +42,7 @@ const StyledDiv = styled.div`
 
 const StyledContentBox = styled(Box)`
   ${props => css`
+    background-color: ${props.theme.colors.background};
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30rem;
     }

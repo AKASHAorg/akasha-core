@@ -19,6 +19,7 @@ export interface IColors {
   ultraLightBackground: string;
   lightBackground: string;
   darkBackground: string;
+  cardBackground: string;
   modalBackground: string;
   modalBackgroundAlt: string;
   modalBackgroundTransparent: string;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { COOKIE_CONSENT_NAME, CookieConsentTypes } from '@akashaproject/ui-awf-hooks';
-
+import { EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
@@ -16,7 +16,8 @@ import routes, { APPEARANCE, APPS, HOME, PRIVACY, rootRoute } from '../routes';
 const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const [theme, setTheme] = React.useState<string>('Light Theme');
+  const currentTheme = window.localStorage.getItem('Theme');
+  const [theme, setTheme] = React.useState<string>(currentTheme || 'Light-Theme');
   const cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
   const [checkedTracking, setCheckedTracking] = React.useState(
     cookieType === CookieConsentTypes.ALL,
@@ -59,7 +60,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const handleThemeSelect = event => {
     setTheme(event.target.value);
-    // @TODO: handle theme select
+    window.localStorage.setItem('Theme', event.target.value);
+    props.uiEvents.next({
+      event: EventTypes.ThemeChange,
+      data: {
+        name: event.target.value,
+      },
+    });
   };
 
   return (

@@ -2,8 +2,9 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AnalyticsProvider } from '../use-analytics';
+import ThemeWrapper from './theme-wrapper';
 
-const { ThemeSelector, lightTheme, darkTheme, ViewportSizeProvider } = DS;
+const { ViewportSizeProvider } = DS;
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,16 +27,13 @@ export default function withProviders<T>(WrappedComponent: React.ComponentType<T
     return (
       <>
         <QueryClientProvider contextSharing={true} client={queryClient}>
-          <ThemeSelector
-            settings={{ activeTheme: 'Light-Theme' }}
-            availableThemes={[lightTheme, darkTheme]}
-          >
+          <ThemeWrapper {...props}>
             <AnalyticsProvider {...props}>
               <ViewportSizeProvider>
                 <WrappedComponent {...props} />
               </ViewportSizeProvider>
             </AnalyticsProvider>
-          </ThemeSelector>
+          </ThemeWrapper>
         </QueryClientProvider>
       </>
     );

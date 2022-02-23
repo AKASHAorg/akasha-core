@@ -25,6 +25,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
       drop: {
         shadowSize: 'shadow',
+        background: styledComponentsTheme.colors.cardBackground,
       },
 
       input: {
@@ -52,9 +53,11 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         brand: styledComponentsTheme.colors.accent,
         darkBorder: styledComponentsTheme.colors.darkBorder,
         background: styledComponentsTheme.colors.background,
+        darkBackground: styledComponentsTheme.colors.darkBackground,
         modalBackground: styledComponentsTheme.colors.modalBackground,
         modalBackgroundAlt: styledComponentsTheme.colors.modalBackgroundAlt,
         modalBackgroundTransparent: styledComponentsTheme.colors.modalBackgroundTransparent,
+        cardBackground: styledComponentsTheme.colors.cardBackground,
         activeCardBackground: styledComponentsTheme.colors.activeCardBackground,
         lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,

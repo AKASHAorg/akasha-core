@@ -24,7 +24,7 @@ import { I18nextProvider } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-const { Box, responsiveBreakpoints } = DS;
+const { Box } = DS;
 
 const LayoutWidget: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
@@ -109,7 +109,7 @@ const LayoutWidget: React.FC<RootComponentProps> = props => {
     <I18nextProvider i18n={i18next}>
       <ScrollRestorer />
       <div>
-        <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
+        <GlobalStyle />
         <div>
           {/* ^ topbar sticky container */}
           <TopbarSlot
