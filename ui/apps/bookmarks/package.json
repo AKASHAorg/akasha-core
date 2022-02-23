@@ -35,6 +35,7 @@
     "@akashaproject/design-system": "*",
     "@akashaproject/sdk-typings": "*",
     "@akashaproject/ui-awf-hooks": "*",
+    "@akashaproject/ui-lib-feed": "*",
     "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/ui-widget-trending": "*",
     "@types/react-router": "5.1.16",
