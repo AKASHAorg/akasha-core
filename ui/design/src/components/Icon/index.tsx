@@ -82,6 +82,7 @@ export type IconType =
   | 'integrationAppLarge'
   | 'integrationAppSmall'
   | 'integrationAppSmallFill'
+  | 'integrationWidgetLarge'
   | 'integrationWidgetSmall'
   | 'integrationAppCTA'
   | 'opera'
@@ -206,6 +207,7 @@ export const iconTypes: IconType[] = [
   'integrationAppLarge',
   'integrationAppSmall',
   'integrationAppSmallFill',
+  'integrationWidgetLarge',
   'integrationWidgetSmall',
   'integrationAppCTA',
   'opera',
