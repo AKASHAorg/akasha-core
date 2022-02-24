@@ -22,7 +22,7 @@ type BookmarksPageProps = Omit<
 >;
 
 const BookmarksPage: React.FC<BookmarksPageProps> = props => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
