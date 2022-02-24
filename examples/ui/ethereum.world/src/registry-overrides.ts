@@ -74,11 +74,11 @@ const overrides = [
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/trending/index.js`],
   },
-  // {
-  //   name: '@akashaproject/ui-widget-layout',
-  //   integrationType: INTEGRATION_TYPES.WIDGET,
-  //   sources: [`${HOST}/widgets/layout/index.js`],
-  // },
+  {
+    name: '@akashaproject/ui-widget-layout',
+    integrationType: INTEGRATION_TYPES.WIDGET,
+    sources: [`${HOST}/widgets/layout/index.js`],
+  },
   {
     name: '@akashaproject/ui-widget-analytics',
     integrationType: INTEGRATION_TYPES.WIDGET,
