@@ -469,17 +469,17 @@
         }
       }
     },
-    "@akashaproject/ui-lib-translation": {
-      "root": "ui/lib/translation",
-      "sourceRoot": "ui/lib/translation/src",
+    "@akashaproject/app-translation": {
+      "root": "ui/apps/translation",
+      "sourceRoot": "ui/apps/translation/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": ["ui/lib/translation"],
+          "outputs": ["ui/apps/translation"],
           "options": {
             "commands": ["yarn run pack"],
-            "cwd": "ui/lib/translation",
+            "cwd": "ui/apps/translation",
             "parallel": false
           }
         }

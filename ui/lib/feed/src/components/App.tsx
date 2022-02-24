@@ -39,7 +39,7 @@ export interface IFeedWidgetProps {
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
   itemSpacing?: number;
-  i18next: RootComponentProps['i18next'];
+  i18n: RootComponentProps['i18next'];
   modalSlotId: string;
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 }
@@ -47,7 +47,7 @@ export interface IFeedWidgetProps {
 const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
   return (
     <BrowserRouter>
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.i18n}>
         <ThemeSelector
           settings={{ activeTheme: 'Light-Theme' }}
           availableThemes={[lightTheme, darkTheme]}
