@@ -28,7 +28,7 @@ export class TranslationPlugin {
 export const register = async () => {
   TranslationPlugin.i18n = await TranslationPlugin.initTranslation();
   return {
-    loadingFn: () => {},
+    loadingFn: () => Promise.resolve(),
     name: 'app-translation',
   };
 };
