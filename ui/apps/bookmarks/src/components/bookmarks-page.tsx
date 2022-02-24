@@ -22,7 +22,7 @@ type BookmarksPageProps = Omit<
 >;
 
 const BookmarksPage: React.FC<BookmarksPageProps> = props => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
@@ -97,7 +97,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               removedByAuthorLabel={t('This post was deleted by its author')}
               uiEvents={props.uiEvents}
               itemSpacing={8}
-              i18next={i18n}
+              i18n={props.plugins?.translation?.i18n}
             />
           )}
         </>

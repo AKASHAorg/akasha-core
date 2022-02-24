@@ -184,7 +184,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   parentIsProfilePage={true}
                   uiEvents={props.uiEvents}
                   itemSpacing={8}
-                  i18next={props.plugins?.translation?.i18n}
+                  i18n={props.plugins?.translation?.i18n}
                 />
               )}
             </>

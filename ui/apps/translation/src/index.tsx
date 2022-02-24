@@ -11,7 +11,7 @@ export class TranslationPlugin {
     }
     const translationPath = await this.resolvePath();
     const sdk = getSDK();
-    const logger = sdk.services.log.create('ui-lib-translation');
+    const logger = sdk.services.log.create('app-translation');
     TranslationPlugin.i18n = await setupI18next({
       logger,
       translationPath: translationPath || '/locales/{{lng}}/{{ns}}.json',
@@ -28,7 +28,8 @@ export class TranslationPlugin {
 export const register = async () => {
   TranslationPlugin.i18n = await TranslationPlugin.initTranslation();
   return {
-    name: 'ui-lib-translation',
+    loadingFn: () => Promise.resolve(),
+    name: 'app-translation',
   };
 };
 

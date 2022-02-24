@@ -118,7 +118,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             removedByAuthorLabel={t('This post was deleted by its author')}
             uiEvents={props.uiEvents}
             itemSpacing={8}
-            i18next={props.plugins?.translation?.i18n}
+            i18n={props.plugins?.translation?.i18n}
           />
         </>
       )}

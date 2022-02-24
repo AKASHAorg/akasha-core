@@ -414,7 +414,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 removedByAuthorLabel={t('This reply was deleted by its author')}
                 uiEvents={props.uiEvents}
                 itemSpacing={8}
-                i18next={props.plugins?.translation?.i18n}
+                i18n={props.plugins?.translation?.i18n}
                 trackEvent={analyticsActions.trackEvent}
               />
             </>
