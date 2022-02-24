@@ -97,7 +97,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               removedByAuthorLabel={t('This post was deleted by its author')}
               uiEvents={props.uiEvents}
               itemSpacing={8}
-              i18n={i18n}
+              i18next={i18n}
             />
           )}
         </>
