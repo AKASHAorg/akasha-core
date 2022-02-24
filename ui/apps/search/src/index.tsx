@@ -21,6 +21,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   mountsIn: opts.layoutConfig?.pluginSlotId,
   name: 'app-search',
   title: 'Search | Ethereum World',
+  i18nNamespace: ['app-search'],
   menuItems: {
     label: 'Search',
     name: 'app-search',

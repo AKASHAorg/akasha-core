@@ -24,6 +24,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   title: 'Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
+  i18nNamespace: ['app-akasha-integration', 'ui-lib-feed'],
   extends: [
     {
       mountsIn: 'entry-remove-confirmation',

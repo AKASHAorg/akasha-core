@@ -17,7 +17,7 @@ const { Box, ICDetailCard, ErrorLoader, Spinner, BasicCardBox } = DS;
 const InfoPage: React.FC<RootComponentProps> = () => {
   const { integrationId } = useParams<{ integrationId: string }>();
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-integration-center');
 
   const loginQueryReq = useGetLogin();
 

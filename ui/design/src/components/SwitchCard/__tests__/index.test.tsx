@@ -36,8 +36,10 @@ describe('<SwitchCard /> Component', () => {
                 />
               </>
             }
-            buttonLabels={['Kept', 'Delisted']}
-            buttonValues={['Kept', 'Delisted']}
+            buttonValues={[
+              { value: 'Kept', label: 'Kept' },
+              { value: 'Delisted', label: 'Delisted' },
+            ]}
             hasIcon={true}
             activeButton={'Kept'}
             hasMobileDesign={true}

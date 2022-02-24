@@ -169,7 +169,7 @@ const TopbarComponent = (props: RootComponentProps) => {
     }
   };
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('ui-widget-topbar');
 
   const onExtMount = (name: string) => {
     uiEvents.next({

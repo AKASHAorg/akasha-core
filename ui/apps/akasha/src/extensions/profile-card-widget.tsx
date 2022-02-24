@@ -1,7 +1,6 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import i18next, { setupI18next } from '../i18n';
 import singleSpaReact from 'single-spa-react';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, useRouteMatch, Route } from 'react-router-dom';
@@ -20,7 +19,7 @@ const { Box, ProfileMiniCard, ErrorLoader } = DS;
 
 const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   const { params } = useRouteMatch<{ postId: string }>();
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-akasha-integration');
 
   const loginQuery = useGetLogin();
 
@@ -83,7 +82,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
 const Wrapped = (props: RootComponentProps) => (
   <Router>
     <Route path={`${routes[POST]}/:postId`}>
-      <I18nextProvider i18n={i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <ProfileCardWidget {...props} />
       </I18nextProvider>
     </Route>
@@ -110,13 +109,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-akasha-integration',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

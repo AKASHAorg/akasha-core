@@ -51,7 +51,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const { singleSpa, loginState, showLoginModal } = props;
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('app-search');
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
   const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
@@ -153,13 +153,27 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
 
   const buttonValues = [
-    ButtonValues.ALL,
-    ButtonValues.PEOPLE,
-    ButtonValues.TOPICS,
-    ButtonValues.POSTS,
-    ButtonValues.REPLIES,
+    {
+      value: ButtonValues.ALL,
+      label: t('{{ buttonValueAll }}', { buttonValueAll: ButtonValues.ALL }),
+    },
+    {
+      value: ButtonValues.PEOPLE,
+      label: t('{{ buttonValuePeople }}', { buttonValuePeople: ButtonValues.PEOPLE }),
+    },
+    {
+      value: ButtonValues.TOPICS,
+      label: t('{{ buttonValueTopics }}', { buttonValueTopics: ButtonValues.TOPICS }),
+    },
+    {
+      value: ButtonValues.POSTS,
+      label: t('{{ buttonValuePosts }}', { buttonValuePosts: ButtonValues.POSTS }),
+    },
+    {
+      value: ButtonValues.REPLIES,
+      label: t('{{ buttonValueReplies }}', { buttonValueReplies: ButtonValues.REPLIES }),
+    },
   ];
-  const buttonLabels = buttonValues.map(value => t(value));
 
   const onTabClick = (value: string) => () => {
     setActiveButton(value);
@@ -214,35 +228,35 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         tabButtons={
           <>
             <StyledSwitchCardButton
-              label={t(ButtonValues.ALL)}
+              label={t('{{ buttonValuesAll }}', { buttonValuesAll: ButtonValues.ALL })}
               size="large"
               removeBorder={false}
               primary={ButtonValues.ALL === activeButton}
               onClick={onTabClick(ButtonValues.ALL)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.PEOPLE)}
+              label={t('{{ buttonValuesPeople }}', { buttonValuesPeople: ButtonValues.PEOPLE })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.PEOPLE === activeButton}
               onClick={onTabClick(ButtonValues.PEOPLE)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.TOPICS)}
+              label={t('{{ buttonValuesTopics }}', { buttonValuesTopics: ButtonValues.TOPICS })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.TOPICS === activeButton}
               onClick={onTabClick(ButtonValues.TOPICS)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.POSTS)}
+              label={t('{{ buttonValuesPosts }}', { buttonValuesPosts: ButtonValues.POSTS })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.POSTS === activeButton}
               onClick={onTabClick(ButtonValues.POSTS)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.REPLIES)}
+              label={t('{{ buttonValuesReplies }}', { buttonValuesReplies: ButtonValues.REPLIES })}
               size="large"
               removeBorder={true}
               primary={ButtonValues.REPLIES === activeButton}
@@ -254,7 +268,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         onIconClick={onNavBack}
         hasIcon={true}
         hasMobileDesign={true}
-        buttonLabels={buttonLabels}
         buttonValues={buttonValues}
         loggedUser={loginState?.pubKey}
       />

@@ -56,7 +56,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-bookmarks');
   const type = React.useMemo(() => {
     if (bookmarks) {
       return bookmarks.find(b => b.entryId === itemId).type;

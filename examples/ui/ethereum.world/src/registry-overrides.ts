@@ -55,6 +55,11 @@ const overrides = [
     sources: [`${HOST}/apps/settings-app/index.js`],
   },
   {
+    name: '@akashaproject/ui-lib-translation',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: [`${HOST}/ui/lib/translation/index.js`],
+  },
+  {
     name: '@akashaproject/ui-widget-sidebar',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/sidebar/index.js`],

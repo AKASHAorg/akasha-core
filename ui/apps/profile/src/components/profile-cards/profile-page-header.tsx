@@ -49,7 +49,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-profile');
 
   const isFollowingReq = useIsFollowingMultiple(loginState.ethAddress, [profileData.ethAddress]);
   const followedProfiles = isFollowingReq.data;

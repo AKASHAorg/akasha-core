@@ -61,7 +61,7 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
               round="50%"
               background={isDelisted ? 'red' : 'green'}
             />
-            <Text size="large" weight="bold">
+            <Text size="large" weight="bold" style={{ textTransform: 'capitalize' }}>
               {title}
             </Text>
           </Box>
