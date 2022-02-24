@@ -26,7 +26,7 @@ type BookmarksPageProps = Omit<
 
 const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const { singleSpa, logger } = props;
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-bookmarks');
 
   const loginQuery = useGetLogin();
 

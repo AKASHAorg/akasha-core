@@ -10,7 +10,7 @@ export interface INoItemsFound {
 }
 
 const NoItemsFound: React.FC<INoItemsFound> = ({ activeTab }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-moderation-ewa');
   return (
     <Text textAlign="center">
       {t('No {{activeTab}} items found. Please check again later', { activeTab })}

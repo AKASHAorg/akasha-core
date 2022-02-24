@@ -9,13 +9,12 @@ import lightTheme from '../../styles/themes/light/light-theme';
 export interface ISwitchCardComponent {
   count: number;
   countLabel: string;
-  buttonLabels: string[];
-  buttonValues: string[];
+  buttonValues: { value: string; label: string }[];
   onIconClick: () => void;
 }
 
 const SwitchCardComponent: React.FC<ISwitchCardComponent> = props => {
-  const { count, countLabel, buttonLabels, buttonValues, onIconClick } = props;
+  const { count, countLabel, buttonValues, onIconClick } = props;
   const [activeButton, setActiveButton] = React.useState<string>('Kept');
 
   const onTabClick = (value: string) => () => {
@@ -46,7 +45,6 @@ const SwitchCardComponent: React.FC<ISwitchCardComponent> = props => {
           />
         </>
       }
-      buttonLabels={buttonLabels}
       buttonValues={buttonValues}
       hasMobileDesign={true}
       onIconClick={onIconClick}
@@ -79,6 +77,8 @@ export const BaseSwitchCard = Template.bind({});
 BaseSwitchCard.args = {
   count: 1276,
   countLabel: 'results',
-  buttonLabels: ['Kept', 'Delisted'],
-  buttonValues: ['Kept', 'Delisted'],
+  buttonValues: [
+    { value: 'Kept', label: 'Kept' },
+    { value: 'Delisted', label: 'Delisted' },
+  ],
 };

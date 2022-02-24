@@ -10,7 +10,7 @@ const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader, Spinner } = DS;
 const MyAppsPage: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-integration-center');
 
   const defaultAppsNamesNormalized = worldConfig?.defaultApps.map(app => {
     if (typeof app === 'string') {

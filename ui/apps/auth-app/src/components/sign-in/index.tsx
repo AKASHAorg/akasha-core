@@ -26,7 +26,7 @@ const { MainAreaCardBox, Box, Heading, HorizontalDivider } = DS;
 const SignIn: React.FC<RootComponentProps> = props => {
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [signInComplete, setSignInComplete] = React.useState(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-auth-ewa');
 
   const navigateTo = React.useRef(props.navigateTo);
 

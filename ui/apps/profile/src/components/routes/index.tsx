@@ -14,7 +14,7 @@ const Routes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-profile');
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });

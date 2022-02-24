@@ -15,6 +15,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     mountsIn: opts.layoutConfig?.focusedPluginSlotId,
     name: 'app-auth',
     title: 'Auth',
+    i18nNamespace: ['app-auth-ewa'],
     logo: { type: LogoTypeSource.ICON, value: 'appAuth' },
     widgets: {},
     // allow other apps to navigate to this app

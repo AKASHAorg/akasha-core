@@ -20,6 +20,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   loadingFn: () => import('./components'),
   name: 'app-profile',
   title: 'Profile | Ethereum World',
+  i18nNamespace: ['app-profile', 'ui-lib-feed'],
   menuItems: {
     label: 'Profile',
     name: 'app-profile',

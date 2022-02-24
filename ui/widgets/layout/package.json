@@ -21,7 +21,6 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "extract:translations": "i18next --config ./i18next-parser.config.js",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/layout.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/layout",

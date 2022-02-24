@@ -7,6 +7,7 @@ import {
   ISdkConfig,
   IWidgetConfig,
   LayoutConfig,
+  PluginConf,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
@@ -23,6 +24,7 @@ export interface BaseIntegrationClassOptions {
   addMenuItem: (menuItem: IMenuItem) => void;
   getMenuItems: () => IMenuList;
   navigateTo: (options: NavigationOptions) => void;
+  plugins: PluginConf;
 }
 
 class BaseIntegration {
@@ -34,6 +36,7 @@ class BaseIntegration {
   public getMenuItems: () => IMenuList;
   public logger: ILogger;
   public navigateTo: BaseIntegrationClassOptions['navigateTo'];
+  public plugins;
   constructor(opts: BaseIntegrationClassOptions) {
     this.layoutConfig = opts.layoutConfig;
     this.uiEvents = opts.uiEvents;
@@ -43,6 +46,7 @@ class BaseIntegration {
     this.getMenuItems = opts.getMenuItems;
     this.logger = this.sdk.services.log.create('app-loader.base-integration');
     this.navigateTo = opts.navigateTo;
+    this.plugins = opts.plugins;
   }
   public getAppsForLocation(location: Location) {
     return singleSpa.checkActivityFunctions(location);

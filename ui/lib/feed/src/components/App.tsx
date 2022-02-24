@@ -5,7 +5,6 @@ import ProfileFeed from './profile-feed';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../i18n';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { BrowserRouter } from 'react-router-dom';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
@@ -40,7 +39,7 @@ export interface IFeedWidgetProps {
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
   itemSpacing?: number;
-  i18n: typeof i18n;
+  i18next: RootComponentProps['i18next'];
   modalSlotId: string;
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 }
@@ -48,7 +47,7 @@ export interface IFeedWidgetProps {
 const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
   return (
     <BrowserRouter>
-      <I18nextProvider i18n={props.i18n}>
+      <I18nextProvider i18n={props.i18next}>
         <ThemeSelector
           settings={{ activeTheme: 'Light-Theme' }}
           availableThemes={[lightTheme, darkTheme]}

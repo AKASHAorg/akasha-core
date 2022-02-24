@@ -7,7 +7,7 @@ import { RootComponentProps, LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
 const { ErrorInfoCard, ErrorLoader, MdCard } = DS;
 
 const PrivacyPolicyPage = (_props: RootComponentProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-legal');
 
   const legalDocReq = useLegalDoc(LEGAL_DOCS.PRIVACY_POLICY);
   const legalDoc = legalDocReq.data;

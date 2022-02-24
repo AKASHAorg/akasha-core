@@ -20,6 +20,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   mountsIn: opts.layoutConfig?.pluginSlotId,
   name: 'app-notifications',
   title: 'Notifications | Ethereum World',
+  i18nNamespace: ['app-notifications'],
   routes: {
     rootRoute,
   },
