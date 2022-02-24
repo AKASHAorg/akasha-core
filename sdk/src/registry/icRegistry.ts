@@ -113,9 +113,9 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
     }
     const response: ReleaseInfo = {
       id: releaseId,
-      name: data.integrationName,
+      name: integrationInfo.integrationName,
       version: data.version,
-      integrationType: data.integrationType,
+      integrationType: integrationInfo.integrationType,
       links: links,
       sources: ipfsSources,
       integrationID: integrationID,

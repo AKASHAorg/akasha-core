@@ -52,7 +52,7 @@ async function main() {
   //await akRegistrar.deployed();
   //console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
 
-  // const proxyAddress = '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9';
+  // const proxyAddress = '0xFB0b97933e5e94b0b0b8dEF09403222b5009bDED';
   //
   // const IntegrationRegV1 = await ethers.getContractFactory('IntegrationRegistry');
   // console.log('Preparing upgrade...');

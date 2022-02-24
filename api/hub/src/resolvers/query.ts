@@ -309,9 +309,9 @@ const query = {
       }
       const releaseInfo = {
         id: pkgInfo.latestReleaseId,
-        name: data.integrationName,
+        name: pkgInfo.integrationName,
         version: data.version,
-        integrationType: data.integrationType,
+        integrationType: pkgInfo.integrationType,
         links: links,
         sources: ipfsSources,
         author: pkgInfo.author,

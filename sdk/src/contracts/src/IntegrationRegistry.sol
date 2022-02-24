@@ -153,10 +153,11 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
         bytes32 manifestHash,
         IntegrationType integrationType
     ){
-        integrationName = integrationInfo[releases[releaseId].integrationId].name;
+        bytes32 id = releases[releaseId].integrationId;
+        integrationName = integrationInfo[id].name;
         version = releases[releaseId].version;
         manifestHash = releases[releaseId].manifestHash;
-        integrationType = integrationInfo[releases[releaseId].integrationId].integrationType;
+        integrationType = integrationInfo[id].integrationType;
     }
 
     //@dev returns the total number of integrations available on the registry
