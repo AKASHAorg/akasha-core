@@ -273,7 +273,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
             }}
           >
             <Box direction="row" justify="end" align="center">
-              <Icon type="close" onClick={closePopover} primaryColor={true} />
+              <Icon type="close" onClick={closePopover} />
             </Box>
 
             {renderProfileMenu()}

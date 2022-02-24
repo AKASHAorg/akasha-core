@@ -11,6 +11,7 @@ import {
   useGetIntegrationsInfo,
   withProviders,
   useGetLogin,
+  ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import routes, { INFO, rootRoute } from '../routes';
 
@@ -93,13 +94,13 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
     return (
-      <Box>
+      <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
           title="Error in integration center widget"
           details={err.message}
         />
-      </Box>
+      </ThemeWrapper>
     );
   },
 });

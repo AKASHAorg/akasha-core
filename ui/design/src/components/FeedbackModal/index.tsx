@@ -58,13 +58,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
         <Box direction="column" pad={{ horizontal: 'medium' }}>
           <Box direction="row" margin={{ top: 'xsmall' }} align="start">
             {isMobileOnly && (
-              <Icon
-                type="arrowLeft"
-                color="secondaryText"
-                primaryColor={true}
-                clickable={true}
-                onClick={closeModal}
-              />
+              <Icon type="arrowLeft" color="secondaryText" clickable={true} onClick={closeModal} />
             )}
           </Box>
           <Box height="10rem" width="10rem" margin={{ bottom: 'small' }} alignSelf="center">

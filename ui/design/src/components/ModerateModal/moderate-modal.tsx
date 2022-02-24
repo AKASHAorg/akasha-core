@@ -115,7 +115,6 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 <Icon
                   type="arrowLeft"
                   color="secondaryText"
-                  primaryColor={true}
                   clickable={true}
                   onClick={closeModal}
                 />
@@ -124,13 +123,7 @@ const ModerateModal: React.FC<IModerateModalProps> = props => {
                 {isReview ? altTitleLabel : titleLabel}
               </Text>
               {!isMobileOnly && (
-                <Icon
-                  type="close"
-                  color="secondaryText"
-                  primaryColor={true}
-                  clickable={true}
-                  onClick={closeModal}
-                />
+                <Icon type="close" color="secondaryText" clickable={true} onClick={closeModal} />
               )}
             </Box>
             <StyledText

@@ -72,7 +72,6 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
             <Icon
               type="arrowLeft"
               color="secondaryText"
-              primaryColor={true}
               clickable={true}
               onClick={onClickArrowLeft}
             />

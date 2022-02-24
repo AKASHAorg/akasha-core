@@ -3,12 +3,12 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import i18next, { setupI18next } from '../i18n';
 
-const { MenuItemButton } = DS;
+const { MenuItemButton, ErrorLoader, ModalContainer } = DS;
 
 const EntryEditButton: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation();
@@ -63,7 +63,13 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
-    return <div>Error {err.message}</div>;
+    return (
+      <ThemeWrapper {...props}>
+        <ModalContainer>
+          <ErrorLoader type="script-error" title="Error in edit button" details={err.message} />
+        </ModalContainer>
+      </ThemeWrapper>
+    );
   },
 });
 

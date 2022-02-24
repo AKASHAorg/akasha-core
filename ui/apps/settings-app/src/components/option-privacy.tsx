@@ -104,7 +104,6 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
           pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
           justify="center"
           align="start"
-          border={{ side: 'bottom', color: 'lightBorder' }}
         >
           <StyledText>
             {trackingAnalyticsInfoIntro}

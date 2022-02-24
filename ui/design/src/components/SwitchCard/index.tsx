@@ -81,7 +81,6 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
                     size="sm"
                     type="arrowLeft"
                     color="secondaryText"
-                    primaryColor={true}
                     clickable={true}
                     onClick={onIconClick}
                   />

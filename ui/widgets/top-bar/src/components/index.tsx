@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import Widget from './topbar-widget';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { ThemeWrapper, withProviders } from '@akashaproject/ui-awf-hooks';
 import { setupI18next } from '../i18n';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 
-const { Icon, ThemeSelector, lightTheme, darkTheme } = DS;
+const { Icon } = DS;
 
 const reactLifecycles = singleSpaReact<RootComponentProps>({
   React,
@@ -18,12 +18,9 @@ const reactLifecycles = singleSpaReact<RootComponentProps>({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <Icon type="error" size="lg" />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

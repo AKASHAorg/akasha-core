@@ -5,11 +5,16 @@ import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { useModeration, withProviders, useGetLogin } from '@akashaproject/ui-awf-hooks';
+import {
+  useModeration,
+  withProviders,
+  useGetLogin,
+  ThemeWrapper,
+} from '@akashaproject/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
 import i18n, { setupI18next } from '../i18n';
 
-const { ModerateModal } = DS;
+const { ModerateModal, ErrorLoader } = DS;
 
 const ModerateModalComponent = (props: RootComponentProps) => {
   const { activeModal } = props;
@@ -93,7 +98,11 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
-    return <div>!</div>;
+    return (
+      <ThemeWrapper {...props}>
+        <ErrorLoader type="script-error" title="Error in moderate modal" details={err.message} />
+      </ThemeWrapper>
+    );
   },
 });
 

@@ -13,6 +13,7 @@ import {
   useUnfollow,
   useGetLogin,
   withProviders,
+  ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import routes, { POST } from '../routes';
 
@@ -99,13 +100,13 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
     return (
-      <Box>
+      <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
           title="Error in profile card widget"
           details={err.message}
         />
-      </Box>
+      </ThemeWrapper>
     );
   },
 });

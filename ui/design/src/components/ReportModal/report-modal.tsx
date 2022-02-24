@@ -143,7 +143,6 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 <Icon
                   type="arrowLeft"
                   color="secondaryText"
-                  primaryColor={true}
                   clickable={true}
                   onClick={closeModal}
                 />
@@ -152,13 +151,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 {titleLabel}
               </Text>
               {!isMobileOnly && (
-                <Icon
-                  type="close"
-                  color="secondaryText"
-                  primaryColor={true}
-                  clickable={true}
-                  onClick={closeModal}
-                />
+                <Icon type="close" color="secondaryText" clickable={true} onClick={closeModal} />
               )}
             </Box>
             <StyledText

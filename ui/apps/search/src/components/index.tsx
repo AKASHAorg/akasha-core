@@ -2,12 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import App from './App';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
 import { setupI18next } from '../i18n';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 
-const { ErrorLoader, ThemeSelector, darkTheme, lightTheme } = DS;
+const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -18,12 +18,9 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <ErrorLoader type="script-error" title="Error in search plugin" details={error.message} />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

@@ -16,22 +16,14 @@ import {
   useGetProfile,
   useGetLogin,
   useAnalytics,
+  ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import i18next, { setupI18next } from '../i18n';
 
-const {
-  EditorModal,
-  ModalContainer,
-  ModalCard,
-  Spinner,
-  ThemeSelector,
-  ErrorLoader,
-  lightTheme,
-  darkTheme,
-} = DS;
+const { EditorModal, ModalContainer, ModalCard, Spinner, ErrorLoader } = DS;
 
 const EditorModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation();
@@ -211,14 +203,11 @@ const reactLifecycles = singleSpaReact({
     }
 
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <ModalContainer>
           <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />
         </ModalContainer>
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

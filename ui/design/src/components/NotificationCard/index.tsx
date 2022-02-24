@@ -193,7 +193,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
 
   const renderHeader = () => (
     <Box direction="row" justify="between" align="center" pad={{ left: 'small', bottom: 'medium' }}>
-      {isMobileOnly && <Icon type="arrowLeft" primaryColor={true} onClick={handleNavBack} />}
+      {isMobileOnly && <Icon type="arrowLeft" onClick={handleNavBack} />}
       <Text size="xlarge" weight="bold">
         {notificationsLabel}
       </Text>
@@ -204,13 +204,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         caretPosition={'right'}
       >
         <IconDiv>
-          <Icon
-            size="xs"
-            type="checkSimple"
-            primaryColor={true}
-            clickable={true}
-            onClick={handleMarkAllAsRead}
-          />
+          <Icon size="xs" type="checkSimple" clickable={true} onClick={handleMarkAllAsRead} />
         </IconDiv>
       </Tooltip>
     </Box>

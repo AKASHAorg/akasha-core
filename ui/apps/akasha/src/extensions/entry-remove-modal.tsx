@@ -4,11 +4,17 @@ import ReactDOM from 'react-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useDeletePost, useDeleteComment, withProviders, useAnalytics } from '@akashaproject/ui-awf-hooks';
+import {
+  useDeletePost,
+  useDeleteComment,
+  withProviders,
+  useAnalytics,
+  ThemeWrapper,
+} from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import i18next, { setupI18next } from '../i18n';
 
-const { ConfirmationModal, ThemeSelector, lightTheme, darkTheme, ModalContainer, ErrorLoader } = DS;
+const { ConfirmationModal, ModalContainer, ErrorLoader } = DS;
 
 const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   const { activeModal, logger } = props;
@@ -92,14 +98,11 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <ModalContainer>
           <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />
         </ModalContainer>
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

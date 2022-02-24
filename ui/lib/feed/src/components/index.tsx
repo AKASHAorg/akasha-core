@@ -5,9 +5,9 @@ import singleSpaReact from 'single-spa-react';
 import { setupI18next } from '../i18n';
 import App from './App';
 import DS from '@akashaproject/design-system';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { ThemeWrapper, withProviders } from '@akashaproject/ui-awf-hooks';
 
-const { ErrorLoader, ThemeSelector, darkTheme, lightTheme } = DS;
+const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -18,12 +18,9 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <ErrorLoader type="script-error" title="Error in feed widget" details={error.message} />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

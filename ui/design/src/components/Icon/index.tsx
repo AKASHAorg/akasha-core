@@ -260,8 +260,8 @@ export interface IconProps extends CommonInterface<any> {
   type: IconType | string;
   clickable?: boolean;
   clickableRed?: boolean;
-  primaryColor?: boolean;
   accentColor?: boolean;
+  plain?: boolean;
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   disabled?: boolean;
   wrapperStyle?: React.CSSProperties;
@@ -277,7 +277,7 @@ const StyledRefDiv = styled.div`
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];
   // here we destructure some props we don't want applied to DOM elements
-  const { primaryColor, accentColor, clickable, testId, wrapperStyle, ...other } = props;
+  const { plain, accentColor, clickable, testId, wrapperStyle, ...other } = props;
   if (!Component) {
     // tslint:disable-next-line no-console
     console.error('There is no such icon', props.type);
@@ -305,7 +305,7 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
         fill: ${props.fill};
       }`};
   ${props =>
-    props.primaryColor &&
+    !props.plain &&
     `
       & * {
         stroke: ${props.theme.colors.primaryText};

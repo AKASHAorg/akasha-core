@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
 
-const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
+const { Topbar, ExtensionPoint } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
   const { singleSpa, getMenuItems, uiEvents, navigateTo } = props;

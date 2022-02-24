@@ -31,7 +31,7 @@ const MobileSearchBar: React.FC<ISearchBar> = props => {
       fill="horizontal"
       height="3rem"
     >
-      <Icon type="arrowLeft" primaryColor={true} size="xs" onClick={handleCloseInput} />
+      <Icon type="arrowLeft" size="xs" onClick={handleCloseInput} />
       <TextInput
         autoFocus={true}
         size="xsmall"
@@ -59,7 +59,6 @@ const MobileSearchBar: React.FC<ISearchBar> = props => {
             setShowSearch(false);
           }
         }}
-        primaryColor={true}
       />
     </Box>
   );

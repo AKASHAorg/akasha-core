@@ -84,7 +84,6 @@ const AppsOption: React.FC<IAppsOption> = props => {
           pad={{ top: 'medium', horizontal: 'medium', bottom: 'large' }}
           justify="center"
           align="start"
-          border={{ side: 'bottom', color: 'lightBorder' }}
         >
           <StyledText>{dataAnalyticsinfo}</StyledText>
         </Box>
