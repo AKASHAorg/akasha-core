@@ -26,6 +26,9 @@ export const setupI18next = async ({ logger, translationPath }): Promise<typeof 
       cleanCode: true,
       keySeparator: false,
       defaultNS: 'app-akasha-integration',
+      interpolation: {
+        escapeValue: false,
+      },
       backend: {
         backends: [LocalStorageBackend, Fetch],
         backendOptions: [
