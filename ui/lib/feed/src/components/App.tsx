@@ -3,7 +3,6 @@ import EntryFeed from './entry-feed';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../i18n';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { BrowserRouter } from 'react-router-dom';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
@@ -36,7 +35,7 @@ export interface IFeedWidgetProps {
   removedByAuthorLabel?: string;
   uiEvents: RootComponentProps['uiEvents'];
   itemSpacing?: number;
-  i18n: typeof i18n;
+  i18n: RootComponentProps['i18next'];
   modalSlotId: string;
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 }

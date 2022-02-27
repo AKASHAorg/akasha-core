@@ -72,7 +72,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-moderation-ewa');
 
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
@@ -119,12 +119,23 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const buttonValues = [
-    ButtonValues.ALL,
-    ButtonValues.KEPT,
-    ButtonValues.DELISTED,
-    ButtonValues.STATS,
+    {
+      value: ButtonValues.ALL,
+      label: t('{{ buttonValueAll }}', { buttonValueAll: ButtonValues.ALL }),
+    },
+    {
+      value: ButtonValues.KEPT,
+      label: t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT }),
+    },
+    {
+      value: ButtonValues.DELISTED,
+      label: t('{{ buttonValueDelisted }}', { buttonValueDelisted: ButtonValues.DELISTED }),
+    },
+    {
+      value: ButtonValues.STATS,
+      label: t('{{ buttonValueStats }}', { buttonValueStats: ButtonValues.STATS }),
+    },
   ];
-  const buttonLabels = buttonValues.map(value => t(value));
 
   return (
     <VerticalFillBox fill="vertical">
@@ -144,21 +155,21 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         tabButtons={
           <>
             <StyledSwitchCardButton
-              label={t(ButtonValues.ALL)}
+              label={buttonValues[0].label}
               size="large"
               removeBorder={false}
               primary={ButtonValues.ALL === activeButton}
               onClick={onTabClick(ButtonValues.ALL)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.KEPT)}
+              label={buttonValues[1].label}
               size="large"
               removeBorder={true}
               primary={ButtonValues.KEPT === activeButton}
               onClick={onTabClick(ButtonValues.KEPT)}
             />
             <StyledSwitchCardButton
-              label={t(ButtonValues.DELISTED)}
+              label={buttonValues[2].label}
               size="large"
               removeBorder={true}
               primary={ButtonValues.DELISTED === activeButton}
@@ -166,7 +177,6 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
             />
           </>
         }
-        buttonLabels={buttonLabels}
         buttonValues={buttonValues}
         onTabClick={onTabClick}
         buttonsWrapperWidth={'40%'}
@@ -198,11 +208,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                       <TransparencyLogMiniCard
                         key={index}
                         locale="en"
-                        title={t(
-                          `${el.contentType.charAt(0).toUpperCase()}${el.contentType.substring(
-                            1,
-                          )} ${el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT}`,
-                        )}
+                        title={t('{{ elContentType }} {{ elContentStatus }}', {
+                          elContentType: el.contentType,
+                          elContentStatus: el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT,
+                        })}
                         content={t('{{elExplanation}}', { elExplanation: el.explanation })}
                         isSelected={el.contentID === selected?.contentID}
                         isDelisted={el.delisted}

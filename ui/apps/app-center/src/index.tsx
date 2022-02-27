@@ -20,6 +20,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     rootRoute,
   },
+  i18nNamespace: ['app-integration-center'],
   loadingFn: () => import('./components'),
   name: 'app-integration-center',
   sdkModules: [],

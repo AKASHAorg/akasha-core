@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import App from './App';
 import { ThemeWrapper, withProviders } from '@akashaproject/ui-awf-hooks';
-import { setupI18next } from '../i18n';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 
@@ -29,13 +28,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-notifications',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

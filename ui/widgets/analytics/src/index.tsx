@@ -11,6 +11,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
     mountsIn: opts.layoutConfig.cookieWidgetSlotId,
     loadingFn: () => import('./components'),
     name: 'ui-widget-analytics',
+    i18nNamespace: ['ui-widget-analytics'],
     tags: ['analytics-widget'],
   };
 };

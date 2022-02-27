@@ -4,6 +4,9 @@
     "defaultCollection": "@nrwl/workspace"
   },
   "projects": {
+    "@akashaproject/nx-executors": {
+      "root": "tools/executors"
+    },
     "@akashaproject/ui-awf-typings": {
       "root": "ui/typings",
       "sourceRoot": "ui/typings/src",
@@ -44,7 +47,7 @@
           "tsConfig": "ui/design/tsconfig.json",
           "webpackConfig": "ui/design/webpack.config.js",
           "options": {
-            "commands": ["yarn run pack", "yarn postpack"],
+            "commands": ["yarn run pack"],
             "cwd": "ui/design",
             "parallel": false
           }
@@ -111,6 +114,12 @@
             "cwd": "ui/widgets/analytics",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/analytics"
+          }
         }
       }
     },
@@ -143,6 +152,12 @@
             "cwd": "ui/widgets/sidebar",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/sidebar"
+          }
         }
       }
     },
@@ -158,6 +173,12 @@
             "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/top-bar",
             "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/top-bar"
           }
         }
       }
@@ -175,6 +196,12 @@
             "cwd": "ui/widgets/trending",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/trending"
+          }
         }
       }
     },
@@ -190,6 +217,12 @@
             "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/ic",
             "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/ic"
           }
         }
       }
@@ -207,6 +240,12 @@
             "cwd": "ui/lib/feed",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/lib/feed"
+          }
         }
       }
     },
@@ -222,6 +261,12 @@
             "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/akasha",
             "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/akasha"
           }
         }
       }
@@ -239,6 +284,12 @@
             "cwd": "ui/apps/app-center",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/app-center"
+          }
         }
       }
     },
@@ -254,6 +305,12 @@
             "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/auth-app",
             "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/auth-app"
           }
         }
       }
@@ -271,6 +328,12 @@
             "cwd": "ui/apps/bookmarks",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/bookmarks"
+          }
         }
       }
     },
@@ -286,6 +349,12 @@
             "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/legal",
             "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/legal"
           }
         }
       }
@@ -303,6 +372,12 @@
             "cwd": "ui/apps/moderation",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/moderation"
+          }
         }
       }
     },
@@ -318,6 +393,12 @@
             "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/notifications",
             "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/notifications"
           }
         }
       }
@@ -335,6 +416,12 @@
             "cwd": "ui/apps/profile",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/profile"
+          }
         }
       }
     },
@@ -351,6 +438,12 @@
             "cwd": "ui/apps/search",
             "parallel": false
           }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/search"
+          }
         }
       }
     },
@@ -365,6 +458,28 @@
           "options": {
             "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/settings-app",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/settings-app"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-translation": {
+      "root": "ui/apps/translation",
+      "sourceRoot": "ui/apps/translation/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/translation"],
+          "options": {
+            "commands": ["yarn run pack"],
+            "cwd": "ui/apps/translation",
             "parallel": false
           }
         }

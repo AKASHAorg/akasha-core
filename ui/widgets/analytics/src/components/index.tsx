@@ -4,7 +4,6 @@ import * as ReactDOM from 'react-dom';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import CookieWidget from './cookie-widget';
-import { setupI18next } from '../i18n';
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -18,13 +17,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'ui-widget-analytics',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

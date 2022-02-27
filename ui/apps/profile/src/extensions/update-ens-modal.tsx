@@ -25,7 +25,6 @@ import {
   EnsFormOption,
 } from '@akashaproject/design-system/lib/components/EnsFormCard';
 import { DataProviderInput } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
-import i18n, { setupI18next } from '../i18n';
 
 const {
   ErrorLoader,
@@ -74,7 +73,7 @@ const getEnsFormOptions = (
   usernameTypes: { default?: DataProviderInput; available: UsernameTypes[] },
   ens: string,
   profileData: IProfileData,
-  t: TFunction,
+  t: TFunction<string>,
 ) => {
   const options: EnsFormOption[] = [];
   const hasEnsSubdomainAvail = usernameTypes.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN);
@@ -149,7 +148,7 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
   const ensByAddress = useEnsByAddress(loginQuery.data.ethAddress);
   const updateUsernameProviderQuery = useUpdateUsernameProvider(loginQuery.data.pubKey);
   const registerEnsQuery = useEnsRegistration();
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-profile');
 
   const userNameTypes = React.useMemo(() => {
     if (profileDataQuery.status === 'success') {
@@ -330,7 +329,7 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
 
 const EnsModal: React.FC<RootComponentProps> = props => (
   <React.Suspense fallback={<></>}>
-    <I18nextProvider i18n={i18n}>
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <UpdateENSModal {...props} />
     </I18nextProvider>
   </React.Suspense>
@@ -356,13 +355,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-profile',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

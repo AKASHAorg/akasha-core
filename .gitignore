@@ -42,3 +42,5 @@ dist
 *.d.ts
 docs
 .env
+impl.js
+impl.js.map

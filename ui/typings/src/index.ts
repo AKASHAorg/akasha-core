@@ -48,7 +48,8 @@ export interface RootComponentProps {
   activeWhen?: { path: string };
   domElement: HTMLElement;
   uiEvents: Subject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
-  i18n?: typeof i18n;
+  i18next?: typeof i18n;
+  plugins?: Record<string, any>;
   getMenuItems?: () => AppLoaderTypes.IMenuList;
   layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
   logger: ILogger;
@@ -126,4 +127,13 @@ export interface IntegrationCenterApp extends IntegrationInfo {
   authors?: string[];
   tags?: string[];
   license?: string;
+}
+
+export interface Middleware {
+  run: (middlewareConfigs?: Array<Record<string, unknown>>, callback?: () => void) => void;
+}
+
+export interface MiddlewareConfig {
+  middlewareName: string;
+  [key: string]: unknown;
 }

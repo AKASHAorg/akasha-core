@@ -60,7 +60,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
   const { postId } = useParams<{ userId: string; postId: string }>();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation('app-akasha-integration');
 
   const postReq = usePost({
     postId,
@@ -101,7 +101,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     return [];
   }, [reqComments.data]);
 
-  const locale = (i18n.languages[0] || 'en') as ILocale;
+  const locale = (props.plugins?.translation?.i18n?.languages?.[0] || 'en') as ILocale;
 
   const profileDataReq = useGetProfile(loginState?.pubKey);
   const loggedProfileData = profileDataReq.data;
@@ -414,7 +414,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 removedByAuthorLabel={t('This reply was deleted by its author')}
                 uiEvents={props.uiEvents}
                 itemSpacing={8}
-                i18n={i18n}
+                i18n={props.plugins?.translation?.i18n}
                 trackEvent={analyticsActions.trackEvent}
               />
             </>

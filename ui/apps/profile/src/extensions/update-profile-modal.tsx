@@ -16,7 +16,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
-import i18n, { setupI18next } from '../i18n';
 
 const { ErrorLoader, ModalContainer, styled, BoxFormCard, Box, Spinner, ModalCard, Text } = DS;
 
@@ -42,7 +41,7 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
   const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
   const profileUpdateMutation = useProfileUpdate(loginQuery.data?.pubKey);
   const usernameValidationQuery = useUsernameValidation(partialUsername);
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-profile');
   const updateStatusKey = React.useMemo(
     () => [UPDATE_PROFILE_STATUS, loginQuery.data?.pubKey],
     [loginQuery.data?.pubKey],
@@ -163,7 +162,7 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
 
 const ProfileModal: React.FC<RootComponentProps> = props => (
   <React.Suspense fallback={<></>}>
-    <I18nextProvider i18n={i18n}>
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <UpdateProfileModal {...props} />
     </I18nextProvider>
   </React.Suspense>
@@ -189,13 +188,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-profile',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

@@ -1,22 +1,23 @@
 import {
   AppOrWidgetDefinition,
+  BaseIntegrationInfo,
+  EventDataTypes,
   EventTypes,
   ExtensionPointDefinition,
   IAppConfig,
   ILoaderConfig,
+  IMenuItem,
+  IMenuList,
+  INTEGRATION_TYPES,
   ISdkConfig,
   IWidgetConfig,
   LayoutConfig,
   ModalNavigationOptions,
+  PluginConf,
   UIEventData,
-  IMenuList,
-  IMenuItem,
-  EventDataTypes,
-  BaseIntegrationInfo,
-  INTEGRATION_TYPES,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import getSDK from '@akashaproject/awf-sdk';
-import { Subject, lastValueFrom, filter, map, from } from 'rxjs';
+import { filter, from, lastValueFrom, map, Subject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { createImportMap, getCurrentImportMaps, writeImports } from './import-maps';
 import { getIntegrationInfo } from './registry';
@@ -33,7 +34,6 @@ import {
 import qs from 'qs';
 import Apps from './apps';
 import Widgets from './widgets';
-// import { IAwfSDK } from '@akashaproject/sdk-typings';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 
 interface SingleSpaEventDetail {
@@ -72,6 +72,7 @@ export default class AppLoader {
   private readonly sdk: ReturnType<typeof getSDK>;
   private readonly menuItems: IMenuList;
   public layoutConfig?: LayoutConfig;
+  public plugins?: PluginConf | Record<string, never>;
   private extensionPoints: Record<string, UIEventData['data'][]>;
   private readonly extensionParcels: Record<string, { id: string; parcel: singleSpa.Parcel }[]>;
   private activeModal?: ModalNavigationOptions;
@@ -86,6 +87,7 @@ export default class AppLoader {
     this.sdk = sdk;
 
     this.uiEvents = new Subject();
+    this.plugins = {};
 
     // register event listeners
     this.addSingleSpaEventListeners();
@@ -205,9 +207,11 @@ export default class AppLoader {
       this.worldConfig.homepageApp,
       ...this.worldConfig.defaultApps,
       ...this.worldConfig.defaultWidgets,
+      ...this.worldConfig.defaultPlugins,
     ];
 
     const integrationInfos = await this.getPackageInfos(defaultIntegrations);
+
     // adds a new importMaps script into the head of the document
     // with the default integrations
     await this.createImportMaps(integrationInfos, 'default-world-integrations');
@@ -217,6 +221,8 @@ export default class AppLoader {
       return;
     }
 
+    this.plugins = (await this.loadPlugins(integrationInfos)) as PluginConf;
+
     this.apps = new Apps({
       layoutConfig: layoutConfig,
       worldConfig: this.worldConfig,
@@ -225,6 +231,7 @@ export default class AppLoader {
       addMenuItem: this.addMenuItem.bind(this),
       getMenuItems: this.getMenuItems.bind(this),
       navigateTo: this.navigateTo.bind(this),
+      plugins: this.plugins,
     });
 
     this.widgets = new Widgets({
@@ -236,6 +243,7 @@ export default class AppLoader {
       getMenuItems: this.getMenuItems.bind(this),
       getAppRoutes: appId => this.apps.getAppRoutes(appId),
       navigateTo: this.navigateTo.bind(this),
+      plugins: this.plugins,
     });
 
     integrationInfos.forEach(integration => {
@@ -612,6 +620,17 @@ export default class AppLoader {
     ).prepareImport(true);
   }
 
+  public async loadPlugins(integrationInfos: BaseIntegrationInfo[]) {
+    const availablePlugins = integrationInfos.filter(integrationInfo =>
+      this.worldConfig.defaultPlugins.includes(integrationInfo.name),
+    );
+    const pluginImports = await Promise.all(
+      availablePlugins.map(plugin => System.import(plugin.name)),
+    );
+    const registeredPlugins = await Promise.all(pluginImports.map(plugin => plugin.getPlugin()));
+    return registeredPlugins.reduce((acc, curr) => ({ ...acc, ...curr }), {});
+  }
+
   public async importLayoutConfig(integrationInfos: BaseIntegrationInfo[]) {
     const layoutApp = getNameFromDef(this.worldConfig.layout);
     if (!layoutApp) {
@@ -658,7 +677,7 @@ export default class AppLoader {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { loadingFn, mountsIn, title, name, ...layoutParams } = this.layoutConfig;
-
+    // namespace check
     const layoutParcel = singleSpa.mountRootParcel<
       RootComponentProps & { domElement: HTMLElement }
     >(this.layoutConfig.loadingFn, {
@@ -833,7 +852,17 @@ export default class AppLoader {
       extensionData,
       navigateTo: this.navigateTo.bind(this),
       parseQueryString: parseQueryString,
+      plugins: this.plugins,
     };
+
+    const extensionNamespace = extensionPoint.i18nNamespace;
+    if (extensionNamespace) {
+      extensionNamespace.forEach(namespace => {
+        if (!this.plugins.translation?.i18n?.options?.ns?.includes(namespace)) {
+          this.plugins.translation?.i18n?.loadNamespaces(extensionNamespace);
+        }
+      });
+    }
 
     const extensionParcel = singleSpa.mountRootParcel(extensionPoint.loadingFn, extensionProps);
 

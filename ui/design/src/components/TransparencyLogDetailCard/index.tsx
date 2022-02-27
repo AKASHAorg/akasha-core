@@ -83,13 +83,9 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
                 round="50%"
                 background={isDelisted ? 'red' : 'green'}
               />
-              <Text weight={600} size="large">
+              <Text weight={600} size="large" style={{ textTransform: 'capitalize' }}>
                 {/* condition: title must always be three-word phrase for this component, pick the first two to show as heading on mobile */}
-                {title
-                  .split(' ')
-                  .slice(0, 2)
-                  .map(el => `${el.charAt(0).toUpperCase()}${el.substring(1)}`)
-                  .join(' ')}
+                {title.split(' ').slice(0, 2).join(' ')}
               </Text>
             </Box>
           </Box>

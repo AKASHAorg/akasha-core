@@ -6,10 +6,10 @@
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square)](https://lerna.js.org/)
 
 
-| App        | Staging           | Production           |
-| ------------- |-------------|-------------|
-| [ethereum.world](https://akasha.ethereum.world/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/f2a5bca3-3853-406e-8cb0-105719cabb00/deploy-status)](https://app.netlify.com/sites/ethereum-world/deploys) | [![Netlify Status](https://api.netlify.com/api/v1/badges/27d14e03-9955-480b-b3dd-0d281ad2d9e2/deploy-status)](https://app.netlify.com/sites/brave-prod-ewa-uwu/deploys) |
-| [Storybook](https://storybook-awf.netlify.app/)      | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)      | NA |
+| App                                              | Staging                                                                                                                                                                                          | Production                                                       |
+|--------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
+| [Ethereum World](https://akasha.ethereum.world/) | [https://next.akasha-world-framework.pages.dev/](https://next.akasha-world-framework.pages.dev/)                                                                                                 | [https://akasha.ethereum.world/](https://akasha.ethereum.world/) |
+| [Storybook](https://storybook-awf.netlify.app/)  | [![Netlify Status](https://api.netlify.com/api/v1/badges/04915c36-eff6-4bbe-945b-e9255cae6fb1/deploy-status)](https://app.netlify.com/sites/storybook-awf/deploys)                               | NA                                                               |
 
 
 
@@ -36,13 +36,13 @@ AWF is one of the results of [initiative](https://ethereum.world/manifesto) to a
 
 ## Install
 
-This project uses [node](http://nodejs.org) and [npm](https://npmjs.com).
+This project uses [node](http://nodejs.org) and [yarn](https://classic.yarnpkg.com).
 
 From the root of this project:
 
 ```shell script
-$ npm install
-$ npm run bootstrap
+$ yarn bootstrap
+$ yarn build:all
 ```
 
 
@@ -52,16 +52,13 @@ For a definitive guide on all available scripts, check out [Scripts-Guide](./SCR
 ### Run
 For development purposes, from the root of this project:
 ```shell script
-$ npm run start:feed-app
+$ yarn start:feed-app
 ```
 To watch for changes in dependent packages
 ```shell script
-$ AWF_PACKAGE=<package-name> npm run pack:watch
+$ AWF_PACKAGE=<package-name> yarn pack:watch
 ```
-To list all available package names for the above command
-```shell script
-$ npx lerna list
-```
+You can check which packages are available in the workspaces.json file in the root of the project.
 #
 This repository is split into four [lerna](https://github.com/lerna/lerna) workspaces:
 
@@ -72,7 +69,7 @@ This repository is split into four [lerna](https://github.com/lerna/lerna) works
 From the root of the project:
 
 ```shell script
-$ npm run build:sdk
+$ yarn build:sdk
 ```
 
 This will create under the [akasha](./sdk-packages/akasha/README.md) package repo a folder `dist` that contains the built files.
@@ -82,8 +79,8 @@ This will create under the [akasha](./sdk-packages/akasha/README.md) package rep
 From the root of the project:
 
 ```shell script
-$ npm run build:test
-$ npm run test:<package-group>
+$ yarn build:test
+$ yarn test:<package-group>
 ```
 where `<package-group>` can be one of `apps`, `widgets`, `plugins`, `design-system`, `hooks`
 

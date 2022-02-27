@@ -39,7 +39,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const [activeIndex, setActiveIndex] = React.useState<SelectedTab>(SelectedTab.FOLLOWERS);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-profile');
 
   const sdk = getSDK();
 

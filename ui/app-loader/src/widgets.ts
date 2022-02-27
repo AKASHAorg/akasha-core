@@ -107,11 +107,21 @@ class Widgets extends BaseIntegration {
       getAppRoutes: this.getAppRoutes,
       navigateTo: this.navigateTo,
       parseQueryString: parseQueryString,
+      plugins: this.plugins,
       ...widgetConfig,
     };
 
     const widgetParcel = singleSpa.mountRootParcel(widgetConfig.loadingFn, widgetProps);
     this.widgetParcels[widgetName] = widgetParcel;
+
+    const widgetNamespace = this.widgetConfigs[widgetName]?.i18nNamespace;
+    if (widgetNamespace) {
+      widgetNamespace.forEach(namespace => {
+        if (!this.plugins.translation?.i18n?.options?.ns?.includes(namespace)) {
+          this.plugins.translation?.i18n?.loadNamespaces(namespace);
+        }
+      });
+    }
     return widgetParcel.mountPromise;
   }
   async importConfigs() {
@@ -151,6 +161,7 @@ class Widgets extends BaseIntegration {
               return {
                 ...ext,
                 parentApp: appInfo.name,
+                i18nNamespace: widgetConfig.i18nNamespace,
               };
             }
             return ext;

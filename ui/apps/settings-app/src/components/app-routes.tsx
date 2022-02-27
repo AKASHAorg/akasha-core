@@ -25,7 +25,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const [checkedAutoUpdates, setCheckedAutoUpdates] = React.useState<boolean>(false);
   const [checkedDataAnalytics, setCheckedDataAnalytics] = React.useState<boolean>(false);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-settings-ewa');
 
   const handleChevronLeftClick = () => props.singleSpa.navigateToUrl(routes[HOME]);
 

@@ -76,6 +76,7 @@ export interface ExtensionPointDefinition {
   loadingFn: () => Promise<ISingleSpaLifecycle>;
   parentApp?: string;
   activeWhen?: ActivityFn;
+  i18nNamespace?: string[];
 }
 
 export interface IAppConfig {
@@ -111,7 +112,10 @@ export interface IAppConfig {
    * Useful for filtering through integrations
    */
   tags?: string[];
-
+  /**
+   * Namespace used by the app for i18next
+   */
+  i18nNamespace?: string[];
   /**
    * Used for page title
    */
@@ -136,6 +140,10 @@ export interface IWidgetConfig {
    * A simple mapping of the extension points exposed by this widget
    */
   extensions?: Record<string, string>;
+  /**
+   * Namespace used by the widget for i18next
+   */
+  i18nNamespace?: string[];
   extends?: ExtensionPointDefinition[];
 
   /**
@@ -203,6 +211,10 @@ export interface ILoaderConfig {
    * layout widget is loaded by default, no need to be specified here
    */
   defaultWidgets: AppOrWidgetDefinition[];
+  /**
+   * Plugins that are installed by default on this world.
+   */
+  defaultPlugins: AppOrWidgetDefinition[];
   /**
    * The layout widget of this world. This widget always mounts in the root element.
    */
@@ -288,4 +300,10 @@ export const enum ItemTypes {
   PROFILE,
   COMMENT,
   TAG,
+}
+
+export interface PluginConf {
+  translation: {
+    i18n: RootComponentProps['i18next'];
+  };
 }

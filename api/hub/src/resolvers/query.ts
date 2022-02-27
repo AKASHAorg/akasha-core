@@ -288,7 +288,7 @@ const query = {
       const cid = CID.parse('f' + data.manifestHash.substring(2), base16.decoder);
       const ipfsLink = createIpfsGatewayLink(cid.toV1());
       const d = await fetchWithTimeout(ipfsLink, {
-        timeout: 10000,
+        timeout: 30000,
         redirect: 'follow',
       });
       const { links, sources } = await d.json();
@@ -309,9 +309,9 @@ const query = {
       }
       const releaseInfo = {
         id: pkgInfo.latestReleaseId,
-        name: data.integrationName,
+        name: pkgInfo.integrationName,
         version: data.version,
-        integrationType: data.integrationType,
+        integrationType: pkgInfo.integrationType,
         links: links,
         sources: ipfsSources,
         author: pkgInfo.author,

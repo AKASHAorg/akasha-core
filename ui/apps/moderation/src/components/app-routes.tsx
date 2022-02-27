@@ -16,7 +16,7 @@ const { Box } = DS;
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { layoutConfig } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-moderation-ewa');
   const loginQuery = useGetLogin();
 
   return (

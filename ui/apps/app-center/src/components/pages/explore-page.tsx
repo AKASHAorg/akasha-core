@@ -14,7 +14,7 @@ const { Box, SubtitleTextIcon, DuplexButton, Icon, ErrorLoader, Spinner } = DS;
 const ExplorePage: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-integration-center');
 
   const loginQuery = useGetLogin();
 

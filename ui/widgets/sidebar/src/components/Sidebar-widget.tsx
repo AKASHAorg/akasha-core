@@ -4,14 +4,13 @@ import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import i18next from '../i18n';
 
 const { styled, Sidebar, useViewportSize } = DS;
 
 const SidebarWidget: React.FC<RootComponentProps> = props => {
   return (
     <Router>
-      <I18nextProvider i18n={i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <Menu
           navigateToUrl={props.singleSpa.navigateToUrl}
           getMenuItems={() => []}

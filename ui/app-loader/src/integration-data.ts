@@ -12,6 +12,7 @@
 // "@akashaproject/app-akasha-integration": "/apps/akasha/index.js",
 // "@akashaproject/app-moderation-ewa": "/apps/moderation/index.js"
 // "@akashaproject/app-auth-ewa": "/apps/auth-app/index.js"
+// "@akashaproject/app-translation": "/ui/apps/translation/index.js"
 
 export const integrationsData = {
   '@akashaproject/ui-widget-layout': {
@@ -22,6 +23,15 @@ export const integrationsData = {
       '0.0.1': '/widgets/layout/index.js',
     },
     type: 'widget',
+  },
+  '@akashaproject/app-translation': {
+    name: '@akashaproject/app-translation',
+    lastVersion: '0.0.1',
+    description: 'Translation Lib.',
+    versions: {
+      '0.0.1': '/ui/apps/translation/index.js',
+    },
+    type: 'app',
   },
   '@akashaproject/app-integration-center': {
     name: '@akashaproject/app-integration-center',

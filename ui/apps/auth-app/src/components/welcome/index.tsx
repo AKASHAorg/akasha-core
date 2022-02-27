@@ -9,7 +9,7 @@ import routes, { rootAKASHARoute, rootProfileRoute, SIGN_IN } from '../../routes
 const { WelcomeCard } = DS;
 
 const Welcome: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-auth-ewa');
 
   const loginQuery = useGetLogin();
 

@@ -12,7 +12,6 @@ import {
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
-import i18n, { setupI18next } from '../i18n';
 
 const { ModerateModal, ErrorLoader } = DS;
 
@@ -21,7 +20,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
 
   const loginQuery = useGetLogin();
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-moderation-ewa');
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -83,7 +82,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
 const Wrapped = (props: RootComponentProps) => {
   return (
     <Router>
-      <I18nextProvider i18n={i18n}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <ModerateModalComponent {...props} />
       </I18nextProvider>
     </Router>
@@ -106,13 +105,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-moderation-ewa',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

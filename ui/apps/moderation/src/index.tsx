@@ -18,6 +18,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   title: 'Moderator Dashboard | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
   widgets: {},
+  i18nNamespace: ['app-moderation-ewa'],
   routes: {
     rootRoute,
   },

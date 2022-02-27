@@ -1,6 +1,7 @@
 /* eslint-disable */
 const { ethers, upgrades } = require('hardhat');
-//const pkgInfos = require('../../../../build/integrations_bucket.json');
+// const semver = require('semver');
+// const pkgInfos = require('../../../../build/integrations_bucket.json');
 async function main() {
   const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
   //const IntRegistrar = await upgrades.deployProxy(IntegrationRegistry);
@@ -14,9 +15,18 @@ async function main() {
   //   if(typeof pkg.type !== "number"){
   //     continue;
   //   }
+  //   const packageInfo = await integrationRegistry.getPackageInfo(pkg.id);
+  //   let version;
+  //   if(!packageInfo || !packageInfo.integrationName){
+  //     version = 'v0.1.0';
+  //   } else {
+  //     const currentRelease = await integrationRegistry.getReleaseData(packageInfo.latestReleaseId);
+  //     version = 'v' + semver.inc(currentRelease.version, 'minor');
+  //   }
+  //   console.log('deploying: ', pkg.name, ' version: ',version )
   //   await integrationRegistry.release(
   //     pkg.name,
-  //     'v0.1.0',
+  //     version,
   //     '0x'+pkg.ipfsManifest.substring(1),
   //     pkg.type,
   //   );
@@ -42,7 +52,7 @@ async function main() {
   //await akRegistrar.deployed();
   //console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
 
-  // const proxyAddress = '0xFB6a190732f54d50bE96AaAb57Eb97e824319eB9';
+  // const proxyAddress = '0xFB0b97933e5e94b0b0b8dEF09403222b5009bDED';
   //
   // const IntegrationRegV1 = await ethers.getContractFactory('IntegrationRegistry');
   // console.log('Preparing upgrade...');

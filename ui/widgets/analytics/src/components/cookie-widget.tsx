@@ -1,5 +1,4 @@
 import DS from '@akashaproject/design-system';
-import i18next from '../i18n';
 import React from 'react';
 import { I18nextProvider, Translation } from 'react-i18next';
 import { RootComponentProps } from '../../../../typings/lib';
@@ -63,10 +62,10 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <I18nextProvider i18n={i18next}>
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       {cookieType === null && (
         <div>
-          <Translation>
+          <Translation ns="ui-widget-analytics">
             {t => (
               <CookieWidgetCard
                 titleLabel={`${t('The Choice is Yours')} 🤘🏼`}

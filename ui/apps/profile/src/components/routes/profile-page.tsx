@@ -25,7 +25,7 @@ export interface ProfilePageProps extends RootComponentProps {
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation('app-profile');
   const { loggedProfileData, showLoginModal } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
@@ -184,7 +184,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   parentIsProfilePage={true}
                   uiEvents={props.uiEvents}
                   itemSpacing={8}
-                  i18n={i18n}
+                  i18n={props.plugins?.translation?.i18n}
                 />
               )}
             </>

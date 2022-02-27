@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import Widget from './topbar-widget';
 import { ThemeWrapper, withProviders } from '@akashaproject/ui-awf-hooks';
-import { setupI18next } from '../i18n';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 
-const { Icon } = DS;
+const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact<RootComponentProps>({
   React,
@@ -19,19 +18,13 @@ const reactLifecycles = singleSpaReact<RootComponentProps>({
     }
     return (
       <ThemeWrapper {...props}>
-        <Icon type="error" size="lg" />
+        <ErrorLoader type="script-error" title="Error in topbar widget" details={error.message} />
       </ThemeWrapper>
     );
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'ui-widget-topbar',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

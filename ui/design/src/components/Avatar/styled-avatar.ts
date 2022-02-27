@@ -13,12 +13,14 @@ const sizes = {
 };
 export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
+export type AvatarBorderSize = 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+
 export interface AvatarProps {
   size: AvatarSize;
   isClickable: boolean;
   margin?: MarginInterface;
   backgroundColor?: string;
-  border?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  border?: AvatarBorderSize;
 }
 
 const StyledAvatar = styled.div<AvatarProps>`

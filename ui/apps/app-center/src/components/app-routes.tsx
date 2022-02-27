@@ -20,7 +20,7 @@ import routes, { rootRoute, EXPLORE, MY_APPS, APPS, WIDGETS, INFO } from '../rou
 const { Box, Text, BasicCardBox } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-integration-center');
 
   return (
     <Router>

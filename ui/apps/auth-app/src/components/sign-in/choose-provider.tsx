@@ -22,7 +22,7 @@ interface ChooseProviderProps {
 
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   const { selectedProvider, injectedProvider, onProviderSelect, providerIsConnected } = props;
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-auth-ewa');
 
   const handleProviderClick = (provider: EthProviders) => () => {
     onProviderSelect(provider);
@@ -39,7 +39,9 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
           <Web3ConnectButton
             leftIconType={injectedProvider.details.iconType}
             titleLabel={injectedProvider.details.titleLabel}
-            subtitleLabel={t(injectedProvider.details.subtitleLabel)}
+            subtitleLabel={t('{{ injectedProviderSubtitleLabel }}', {
+              injectedProviderSubtitleLabel: injectedProvider.details.subtitleLabel,
+            })}
             handleClick={handleProviderClick(EthProviders.Web3Injected)}
             tagLabel={t('auto-detected')}
           />
@@ -48,9 +50,9 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
       <Box margin={{ vertical: 'xsmall' }}>
         <Web3ConnectButton
           leftIconType="walletconnect"
-          subtitleLabel={`${t(
+          subtitleLabel={t(
             'The wallet you are using must allow switching the Ethereum network to Rinkeby',
-          )}.`}
+          )}
           titleLabel={`${t('Scan with')} WalletConnect`}
           handleClick={handleProviderClick(EthProviders.WalletConnect)}
         />
@@ -58,9 +60,9 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
       <Box margin={{ vertical: 'xsmall' }}>
         <Web3ConnectButton
           titleLabel={t('Email or Social Login')}
-          subtitleLabel={`${t(
+          subtitleLabel={t(
             'Use this option to sign up using email, Google, Twitter, Discord, Github, Apple, or one of many other social networks',
-          )}.`}
+          )}
           handleClick={handleProviderClick(EthProviders.Torus)}
           leftIconType="key"
         />

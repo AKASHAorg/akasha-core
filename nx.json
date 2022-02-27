@@ -1,6 +1,6 @@
 {
   "extends": "@nrwl/workspace/presets/core.json",
-  "npmScope": "blah",
+  "npmScope": "default",
   "affected": {
     "defaultBase": "main"
   },

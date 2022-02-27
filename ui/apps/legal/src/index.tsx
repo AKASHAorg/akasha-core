@@ -22,6 +22,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   name: 'app-legal',
   sdkModules: [],
   title: 'Legal | Ethereum World',
+  i18nNamespace: ['app-legal'],
   menuItems: {
     route: rootRoute,
     label: 'Legal',

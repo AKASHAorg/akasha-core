@@ -14,7 +14,6 @@ import {
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
-import i18n, { setupI18next } from '../i18n';
 
 const { ReportModal, ErrorLoader } = DS;
 
@@ -26,7 +25,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
 
   const [reasons, reasonsActions] = useReasons();
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-moderation-ewa');
 
   React.useEffect(() => {
     reasonsActions.fetchReasons({ active: true });
@@ -73,7 +72,9 @@ const ReportModalComponent = (props: RootComponentProps) => {
         itemType,
       })}
       optionsTitleLabel={t('Please select a reason')}
-      optionLabels={reasons.map((el: string) => t(el))}
+      optionLabels={reasons.map((el: string) =>
+        t('{{ reportModalReason }}', { reportModalReason: el }),
+      )}
       optionValues={reasons}
       descriptionLabel={t('Explanation')}
       descriptionPlaceholder={t('Please explain your reason(s)')}
@@ -102,7 +103,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
 const Wrapped = (props: RootComponentProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
-      <I18nextProvider i18n={i18n}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <ReportModalComponent {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -125,13 +126,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-moderation-ewa',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 
