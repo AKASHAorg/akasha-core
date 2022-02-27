@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import App from './App';
 import DS from '@akashaproject/design-system';
 import { ThemeWrapper, withProviders } from '@akashaproject/ui-awf-hooks';
