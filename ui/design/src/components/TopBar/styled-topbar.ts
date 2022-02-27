@@ -84,7 +84,7 @@ const StyledPopoverBox = styled(Box)`
   width: 100%;
   &:hover {
     cursor: pointer;
-    background-color: ${props => props.theme.colors.ultraLightBackground};
+    background-color: ${props => props.theme.colors.hoverBackground};
   }
 `;
 
@@ -107,7 +107,7 @@ const StyledAccordionPanel = styled(AccordionPanel)<{ isMobile?: boolean }>`
         }
       }
       &:hover {
-        background-color: ${props.theme.colors.ultraLightBackground};
+        background-color: ${props.theme.colors.hoverBackground};
       }
     `;
   }}

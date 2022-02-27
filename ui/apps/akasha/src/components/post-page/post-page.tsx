@@ -33,7 +33,7 @@ import { useAnalytics } from '@akashaproject/ui-awf-hooks';
 
 const {
   Box,
-  MainAreaCardBox,
+  BasicCardBox,
   EntryBox,
   Helmet,
   CommentEditor,
@@ -242,7 +242,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   );
 
   return (
-    <MainAreaCardBox style={{ height: 'auto' }}>
+    <BasicCardBox style={{ height: 'auto' }}>
       <Helmet>
         <title>Post | Ethereum World</title>
       </Helmet>
@@ -421,7 +421,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
           )}
         </>
       )}
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

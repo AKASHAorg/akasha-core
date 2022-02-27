@@ -293,6 +293,12 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
 
 const Icon: React.FC<IconProps> = styled(IconBase)`
   ${props =>
+    !props.plain &&
+    `
+    & * {
+      stroke: ${props.theme.colors.primaryText};
+    }`};
+  ${props =>
     props.color &&
     `
       & * {
@@ -303,12 +309,6 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
     `
       & * {
         fill: ${props.fill};
-      }`};
-  ${props =>
-    !props.plain &&
-    `
-      & * {
-        stroke: ${props.theme.colors.primaryText};
       }`};
   ${props =>
     props.accentColor &&

@@ -30,7 +30,7 @@ const colors: IColorsLight = {
   deepGrey: '#7F7F7F',
   deeperGrey: '#87909E',
   lightBeige: '#F8F4F4',
-  white: '#FFF',
+  white: '#FBFCFD', // lotion white
   red: '#FF4040',
   green: '#36B37E',
   disabled: '#9ea0a5',
@@ -39,6 +39,7 @@ const colors: IColorsLight = {
   secondaryText: '#949EB3', // grey
   disabledText: '#9ea0a5', // disabled
   errorText: '#FF4040', // red
+  darkText: '#132540',
   background: '#FFFFFF', // white
   ultraLightBackground: '#FBFCFD', // ultralightGrey
   beigeBackground: '#F8F4F4', // lightBeige
@@ -49,6 +50,9 @@ const colors: IColorsLight = {
   modalBackgroundAlt: '#87909E', // deeperGrey
   modalBackgroundTransparent: 'rgba(0, 0, 0, 0.6)', // transparentBlack
   activeCardBackground: '#F6F8FF', // aquamarine
+  hoverBackground: '#FBFCFD',
+  inputBackground: '#FFF',
+  btnAccentColor: '#4E71FF', // blue
   accent: '#4E71FF', // blue
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
   accentLight: '#E9EDFD', // lightBlue

@@ -55,7 +55,7 @@ const TooltipContent = ({
       <Box direction="row" align="center">
         {caretPosition === 'left' && <Caret position={caretPosition} />}
         <ContentWrapper
-          background="darkGrey"
+          background="hoverBackground"
           direction="row"
           pad={isMobile ? 'small' : 'xxsmall'}
           round="xxsmall"

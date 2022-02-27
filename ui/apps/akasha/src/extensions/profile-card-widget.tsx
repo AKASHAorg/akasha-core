@@ -63,7 +63,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   }
 
   return (
-    <Box pad={{ bottom: 'small' }}>
+    <Box pad={{ bottom: 'small' }} height={{ max: '30rem' }}>
       <ProfileMiniCard
         handleClick={handleProfileClick}
         handleFollow={handleFollow}

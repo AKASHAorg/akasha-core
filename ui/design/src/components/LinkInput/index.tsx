@@ -26,6 +26,7 @@ const LinkInput: React.FC<ILinkInput> = props => {
       }}
       className={className}
       justify="between"
+      background="inputBackground"
     >
       <Box direction="row" gap="xsmall" align="center" flex={{ grow: 1 }} pad={{ right: 'xsmall' }}>
         <StyledLinkIconDiv>

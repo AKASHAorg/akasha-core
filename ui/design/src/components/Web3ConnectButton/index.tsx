@@ -36,6 +36,7 @@ const Web3ConnectButton: React.FC<IWeb3ConnectButtonProps> = props => {
                 type={leftIconType}
                 color={largerIcon ? 'initial' : 'white'}
                 size={largerIcon ? 'md' : 'xs'}
+                plain={true}
               />
             </Box>
           )}

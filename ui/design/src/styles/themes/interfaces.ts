@@ -14,6 +14,7 @@ export interface IColors {
   primaryText: string;
   secondaryText: string;
   errorText: string;
+  darkText: string;
   background: string;
   beigeBackground: string;
   ultraLightBackground: string;
@@ -23,6 +24,9 @@ export interface IColors {
   modalBackground: string;
   modalBackgroundAlt: string;
   modalBackgroundTransparent: string;
+  hoverBackground: string;
+  inputBackground: string;
+  btnAccentColor: string;
   accent: string;
   accentOpacity: string;
   accentLight: string;

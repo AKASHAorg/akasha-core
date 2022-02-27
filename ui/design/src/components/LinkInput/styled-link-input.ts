@@ -26,7 +26,7 @@ const StyledTextInput = styled(TextInput)`
   font-family: ${props => props.theme.shapes.fontFamily};
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
   line-height: ${props => props.theme.shapes.fontSizes.large.height};
-  color: ${props => props.theme.colors.primaryText};
+  color: ${props => props.theme.colors.darkText};
 `;
 const StyledInputWrapper = styled.div`
   width 77%;
