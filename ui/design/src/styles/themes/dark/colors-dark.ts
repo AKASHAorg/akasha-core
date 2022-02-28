@@ -4,6 +4,7 @@ export interface IColorsDark extends IColors {
   blue: string;
   darkBlue: string;
   grey: string;
+  darkGrey: string;
   mediumGrey: string;
   lightGrey: string;
   deepGrey: string;
@@ -19,6 +20,7 @@ const colors: IColorsDark = {
   blue: '#4E71FF',
   darkBlue: '#0046CB',
   grey: '#949EB3',
+  darkGrey: '#000C20',
   mediumGrey: '#B6BFD1',
   lightGrey: '#EDF0F5',
   deepGrey: '#7F7F7F',
