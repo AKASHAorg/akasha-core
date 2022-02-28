@@ -55,9 +55,6 @@ export interface IEntryRenderer {
 }
 
 const commentStyleExt = {
-  borderRadius: 0,
-  border: 0,
-  borderBottom: '1px solid #EDF0F5',
   padding: '0 1rem',
   boxShadow: 'none',
 };
@@ -278,7 +275,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
   );
 
-  const hideActionButtons = React.useMemo(() => itemType === ItemTypes.COMMENT, [itemType]);
+  const isComment = React.useMemo(() => itemType === ItemTypes.COMMENT, [itemType]);
 
   return (
     <>
@@ -380,8 +377,10 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 removedByAuthorLabel={props.removedByAuthorLabel}
                 disableReposting={itemData.isRemoved}
                 disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-                hideActionButtons={hideActionButtons}
+                hideActionButtons={isComment}
                 modalSlotId={modalSlotId}
+                bottomBorderOnly={isComment}
+                noBorderRadius={isComment}
                 actionsRightExt={
                   <ExtensionPoint
                     name={`entry-card-actions-right_${itemId}`}

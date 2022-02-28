@@ -42,6 +42,7 @@ const StyledDiv = styled.div`
 
 const StyledContentBox = styled(Box)`
   ${props => css`
+    background-color: ${props.theme.colors.background};
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30rem;
     }
@@ -83,7 +84,7 @@ const StyledPopoverBox = styled(Box)`
   width: 100%;
   &:hover {
     cursor: pointer;
-    background-color: ${props => props.theme.colors.ultraLightBackground};
+    background-color: ${props => props.theme.colors.hoverBackground};
   }
 `;
 
@@ -106,7 +107,7 @@ const StyledAccordionPanel = styled(AccordionPanel)<{ isMobile?: boolean }>`
         }
       }
       &:hover {
-        background-color: ${props.theme.colors.ultraLightBackground};
+        background-color: ${props.theme.colors.hoverBackground};
       }
     `;
   }}

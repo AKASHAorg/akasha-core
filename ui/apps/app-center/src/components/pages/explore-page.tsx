@@ -68,6 +68,7 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
             label={app.name}
             subtitle={app.id}
             iconType="integrationAppLarge"
+            plainIcon={true}
             onClick={() => handleAppClick(app)}
             backgroundColor={true}
           />

@@ -386,7 +386,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 plain={true}
                 caretPosition={'top'}
               >
-                <Icon size="sm" type="editSimple" primaryColor={true} clickable={false} />
+                <Icon size="sm" type="editSimple" clickable={false} />
               </Tooltip>
             )}
             <Icon

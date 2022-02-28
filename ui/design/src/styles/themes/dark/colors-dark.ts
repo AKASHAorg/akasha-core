@@ -4,6 +4,7 @@ export interface IColorsDark extends IColors {
   blue: string;
   darkBlue: string;
   grey: string;
+  darkGrey: string;
   mediumGrey: string;
   lightGrey: string;
   deepGrey: string;
@@ -17,35 +18,41 @@ export interface IColorsDark extends IColors {
 
 const colors: IColorsDark = {
   blue: '#4E71FF',
-  darkBlue: '#132540',
+  darkBlue: '#0046CB',
   grey: '#949EB3',
+  darkGrey: '#000C20',
   mediumGrey: '#B6BFD1',
   lightGrey: '#EDF0F5',
   deepGrey: '#7F7F7F',
   deeperGrey: '#87909E',
   disabled: '#9ea0a5',
   lightBeige: '#F8F4F4',
-  white: '#FFF',
-  red: '#FF4040',
+  white: '#FBFCFD', // lotion white
+  red: '#FF5050',
   green: '#36B37E',
   // define use cases for colors
-  primaryText: '#132540', // darkBlue
-  secondaryText: '#949EB3', // grey
+  primaryText: '#FBFCFD', // lotion white
+  secondaryText: '#B6BFD1', // grey
   disabledText: '#9ea0a5', // disabled
-  errorText: '#FF4040', // red
-  background: '#FFF', // white
+  errorText: '#FF5050', // red
+  darkText: '#47484A', // system/off white/dark
+  background: '#0D1A2D', // white
   beigeBackground: '#F8F4F4', // lightBeige
-  ultraLightBackground: '#FBFCFD', // ultralightGrey
-  lightBackground: '#EDF0F5', // lightGrey
-  darkBackground: '#000C20',
-  modalBackground: '#7F7F7F', // deepGrey
+  ultraLightBackground: '#E7E9EC', // ultralightGrey
+  lightBackground: '#B8BEC6', // lightGrey
+  darkBackground: '#0D1A2D',
+  cardBackground: '#132540',
+  modalBackground: '#132540', // deepGrey
   modalBackgroundAlt: '#87909E', // deeperGrey
   modalBackgroundTransparent: 'rgba(0, 0, 0, 0.6)', // transparentBlack
   activeCardBackground: '#F6F8FF', // aquamarine
+  inputBackground: '#CCD2DF',
+  hoverBackground: '#595F6B',
+  btnAccentColor: '#FBFCFD', // lotion
   accent: '#4E71FF', // blue
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
   accentLight: '#E9EDFD', // lightBlue
-  border: '#EDF0F5', // lightGrey
+  border: 'rgba(255, 255, 255, 0.2)', // lightGrey
   lightBorder: '#F5F6F7', // lighterGrey
   darkBorder: '#B6BFD1', // deepGrey
   darkerBorder: '#87909E', // deeperGrey

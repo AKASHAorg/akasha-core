@@ -6,9 +6,9 @@ import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
 
-const { FeedbackModal } = DS;
+const { FeedbackModal, ErrorLoader } = DS;
 
 const FeedbackModalContainer = (props: RootComponentProps) => {
   const { t } = useTranslation('ui-widget-topbar');
@@ -51,7 +51,11 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
-    return <div>!</div>;
+    return (
+      <ThemeWrapper {...props}>
+        <ErrorLoader type="script-error" title="Error in feedback modal" details={err.message} />
+      </ThemeWrapper>
+    );
   },
 });
 

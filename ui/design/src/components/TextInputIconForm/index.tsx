@@ -63,6 +63,7 @@ const LinkInput: React.FC<ILinkInput> = props => {
       className={className}
       justify="between"
       elevation={elevation || 'xsmall'}
+      background="inputBackground"
     >
       <Box direction="row" gap="small" align="center" flex={{ grow: 1 }} pad={{ right: 'small' }}>
         <form onSubmit={validateTokenFn} style={{ width: '100%' }}>

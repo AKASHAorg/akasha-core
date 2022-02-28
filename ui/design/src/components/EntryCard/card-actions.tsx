@@ -212,7 +212,6 @@ const CardActions: React.FC<CardActionProps> = props => {
               label={copyLinkLabel}
               onClick={handleShare('copy')}
               clickable={true}
-              primaryColor={true}
               iconSize="xs"
               fontSize="small"
             />
@@ -223,7 +222,6 @@ const CardActions: React.FC<CardActionProps> = props => {
               label={`${shareLabel} Twitter`}
               onClick={handleShare('twitter')}
               clickable={true}
-              primaryColor={true}
               iconSize="xs"
               fontSize="small"
             />
@@ -234,7 +232,6 @@ const CardActions: React.FC<CardActionProps> = props => {
               label={`${shareLabel} Reddit`}
               onClick={handleShare('reddit')}
               clickable={true}
-              primaryColor={true}
               iconSize="xs"
               fontSize="small"
             />
@@ -245,7 +242,6 @@ const CardActions: React.FC<CardActionProps> = props => {
               label={`${shareLabel} Facebook`}
               onClick={handleShare('facebook')}
               clickable={true}
-              primaryColor={true}
               iconSize="xs"
               fontSize="small"
             />

@@ -9,6 +9,7 @@ const SearchContainer = styled(Box)`
   &:focus-within {
     width: 100%;
   }
+  background-color: ${props => props.theme.colors.inputBackground};
 `;
 
 export interface ISearchBar {
@@ -43,8 +44,15 @@ const SearchBar: React.FC<ISearchBar> = props => {
         placeholder={inputPlaceholderLabel}
         plain={true}
         onKeyDown={handleSearch}
+        color="darkBorder"
       />
-      <Icon type="search" size="xs" onClick={() => onSearch(inputValue)} clickable={true} />
+      <Icon
+        type="search"
+        size="xs"
+        onClick={() => onSearch(inputValue)}
+        clickable={true}
+        color={'#47484A'}
+      />
     </SearchContainer>
   );
 };

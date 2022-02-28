@@ -76,6 +76,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
                 label={app.name}
                 subtitle={app.id}
                 iconType="integrationAppLarge"
+                plainIcon={true}
                 backgroundColor={true}
               />
               <Icon type="checkSimple" accentColor={true} size="md" />

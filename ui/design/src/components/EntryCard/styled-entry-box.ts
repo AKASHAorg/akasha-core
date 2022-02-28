@@ -31,17 +31,17 @@ const StyledSelectBox = styled(Box)`
   padding: ${props => `${props.theme.shapes.baseSpacing}px`};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   &:hover {
-    background-color: ${props => props.theme.colors.lightBackground};
+    background-color: ${props => props.theme.colors.hoverBackground};
     cursor: pointer;
   }
 `;
 
 const StyledIcon = styled(Icon)`
-  &:hover {
-    & * {
-      stroke: none;
-    }
-  }
+  // &:hover {
+  //   & * {
+  //     stroke: none;
+  //   }
+  // }
 `;
 
 export {

@@ -10,11 +10,12 @@ import {
   useSaveBookmark,
   withProviders,
   useAnalytics,
+  ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
-const { styled, TextIcon, ThemeSelector, lightTheme, darkTheme, Icon } = DS;
+const { styled, TextIcon, Icon } = DS;
 
 const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
   svg * {
@@ -94,12 +95,9 @@ const reactLifecycles = singleSpaReact({
     }
 
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <Icon type="error" size="sm" />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

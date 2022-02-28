@@ -11,6 +11,7 @@ import {
   useEnsByAddress,
   useGetLogin,
   withProviders,
+  ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import {
   UsernameTypes,
@@ -27,9 +28,6 @@ import { DataProviderInput } from '@akashaproject/awf-sdk/typings/lib/interfaces
 
 const {
   ErrorLoader,
-  ThemeSelector,
-  lightTheme,
-  darkTheme,
   // styled,
   EnsFormCard,
   ModalContainer,
@@ -346,16 +344,13 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
           title="Error in update ens modal"
           details={error.message}
         />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

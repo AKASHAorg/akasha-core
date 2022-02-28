@@ -31,7 +31,7 @@ const MiniInfoWidgetCard: React.FC<IMiniInfoCardProps> = props => {
     <WidgetAreaCardBox className={className} callToAction={true}>
       {handleDismiss && (
         <Box justify="end" pad={{ top: 'xxsmall', right: 'xxsmall' }} direction="row">
-          <Icon type="close" onClick={handleDismiss} primaryColor={true} />
+          <Icon type="close" onClick={handleDismiss} />
         </Box>
       )}
       <Box pad={{ horizontal: 'medium' }} gap="xsmall">

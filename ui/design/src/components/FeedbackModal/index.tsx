@@ -58,13 +58,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
         <Box direction="column" pad={{ horizontal: 'medium' }}>
           <Box direction="row" margin={{ top: 'xsmall' }} align="start">
             {isMobileOnly && (
-              <Icon
-                type="arrowLeft"
-                color="secondaryText"
-                primaryColor={true}
-                clickable={true}
-                onClick={closeModal}
-              />
+              <Icon type="arrowLeft" color="secondaryText" clickable={true} onClick={closeModal} />
             )}
           </Box>
           <Box height="10rem" width="10rem" margin={{ bottom: 'small' }} alignSelf="center">
@@ -92,7 +86,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
               isMobile={isMobileOnly}
               isOnFeedback={true}
               margin={{ right: '0.5rem' }}
-              icon={<Icon type="github" clickable={false} />}
+              icon={<Icon type="github" clickable={false} plain={true} />}
               label={openAnIssueLabel}
               href={openIssueLink}
               target="_blank"
@@ -128,7 +122,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
               <Text color="accentText" margin={{ right: '0.25rem', bottom: '0.2rem' }}>
                 {footerLinkText1Label}
               </Text>
-              <Icon type="discord" clickable={true} />
+              <Icon type="discord" clickable={true} plain={true} />
               <Text color="accentText" margin={{ horizontal: '0.25rem', bottom: '0.2rem' }}>
                 {footerLinkText2Label}
               </Text>

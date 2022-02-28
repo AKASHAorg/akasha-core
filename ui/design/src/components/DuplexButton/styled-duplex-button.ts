@@ -6,9 +6,9 @@ const StyledButton = styled(Button)<{ active: boolean; allowMinimization: boolea
   padding: 0.25rem 0.5rem;
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   border: 1px solid ${props => props.theme.colors.accent};
-  color: ${props => props.theme.colors.accent};
+  color: ${props => props.theme.colors.btnAccentColor};
   & * {
-    stroke: ${props => props.theme.colors.accent};
+    stroke: ${props => props.theme.colors.btnAAccentColor};
   }
   &:hover {
     box-shadow: none;

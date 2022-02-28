@@ -48,7 +48,7 @@ const TutorialWidgetCard: React.FC<ITutorialWidgetCardProps> = props => {
     <WidgetAreaCardBox className={className} callToAction={true}>
       {handleDismiss && (
         <Box justify="end" pad={{ top: 'small', horizontal: 'small' }} direction="row">
-          <Icon type="close" onClick={handleDismiss} primaryColor={true} clickable={true} />
+          <Icon type="close" onClick={handleDismiss} clickable={true} />
         </Box>
       )}
       <Box align="center">

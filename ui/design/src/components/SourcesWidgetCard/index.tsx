@@ -23,19 +23,19 @@ const SourcesWidgetCard: React.FC<ISourceWidgetCardProps> = props => {
 
         <Box justify="between" align="center" direction="row" gap="small">
           <Box gap="xxsmall" direction="row">
-            <Icon type="hashtag" primaryColor={true} size="xs" />
+            <Icon type="hashtag" size="xs" />
             <Text color="accentText" size="medium">
               {tagsNumber}
             </Text>
           </Box>
           <Box gap="xxsmall" direction="row">
-            <Icon type="following" primaryColor={true} size="xs" />
+            <Icon type="following" size="xs" />
             <Text color="accentText" size="medium">
               {profilesNumber}
             </Text>
           </Box>
           <Box gap="xxsmall" direction="row">
-            <Icon type="ethereum" primaryColor={true} size="xs" />
+            <Icon type="ethereum" size="xs" />
             <Text color="accentText" size="medium">
               {appsNumber}
             </Text>

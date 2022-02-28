@@ -21,7 +21,6 @@ export interface ITextIconProps {
   iconSize?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   fontSize?: 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' | string;
   fontWeight?: 'normal' | 'bold' | number;
-  primaryColor?: boolean;
   accentColor?: boolean;
   reverse?: boolean;
   fadedText?: boolean;
@@ -53,7 +52,6 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
     iconSize,
     fontSize,
     fontWeight,
-    primaryColor,
     accentColor,
     reverse,
     fadedText,
@@ -70,7 +68,6 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
             color={color}
             size={iconSize}
             style={iconStyle}
-            primaryColor={primaryColor}
             accentColor={accentColor}
             disabled={disabled}
           />
@@ -83,7 +80,6 @@ const TextIcon: React.FC<ITextIconProps> = React.forwardRef((props, ref) => {
         color={color}
         size={iconSize}
         style={iconStyle}
-        primaryColor={primaryColor}
         accentColor={accentColor}
         disabled={disabled}
       />

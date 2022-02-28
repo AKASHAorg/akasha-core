@@ -109,7 +109,6 @@ const StatModal: React.FC<IStatModal> = props => {
                 <Icon
                   type="arrowLeft"
                   color="secondaryText"
-                  primaryColor={true}
                   clickable={true}
                   onClick={closeModal}
                 />
@@ -123,13 +122,7 @@ const StatModal: React.FC<IStatModal> = props => {
                 {titleLabel}
               </Text>
               {!isMobileOnly && (
-                <Icon
-                  type="close"
-                  color="secondaryText"
-                  primaryColor={true}
-                  clickable={true}
-                  onClick={closeModal}
-                />
+                <Icon type="close" color="secondaryText" clickable={true} onClick={closeModal} />
               )}
             </Box>
           </Box>

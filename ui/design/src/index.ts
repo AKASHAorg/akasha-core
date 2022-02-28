@@ -159,7 +159,6 @@ import WalletRequestStep from './components/WalletRequestStep';
 import WelcomeCard from './components/WelcomeCard';
 
 /* Utilities (these are not components) */
-import responsiveBreakpoints from './styles/responsive-breakpoints';
 import { formatImageSrc } from './utils/image-utils';
 import { isBase64, truncateMiddle } from './utils/string-utils';
 import { formatRelativeTime } from './utils/time';
@@ -264,7 +263,6 @@ const exported = {
   grommet,
   RadioButtonGroup,
   ResponsiveContext,
-  responsiveBreakpoints,
   ThemeContext,
   ThemeSelector,
   css,

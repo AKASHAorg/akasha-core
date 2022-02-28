@@ -11,7 +11,7 @@ import ExplanationsBox from './explanations-box';
 const { Box, Button, Text, Avatar, styled, useViewportSize } = DS;
 
 const StyledBox = styled(Box)`
-  background-color: ${props => props.theme.colors.accentLight};
+  background-color: ${props => props.theme.colors.hoverBackground};
 `;
 
 const ContentCardButton = styled(Button)`
