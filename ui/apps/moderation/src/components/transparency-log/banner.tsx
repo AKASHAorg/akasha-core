@@ -13,7 +13,7 @@ const { TransparencyLogBanner } = DS;
 const Banner: React.FC<IBanner> = props => {
   const { count } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-moderation-ewa');
 
   return (
     <TransparencyLogBanner

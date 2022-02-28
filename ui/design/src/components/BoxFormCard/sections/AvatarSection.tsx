@@ -33,6 +33,7 @@ const AvatarSection: React.FC<IAvatarSectionProps> = props => {
     handleAvatarClick,
     handleAvatarFileUpload,
   } = props;
+
   return (
     <Box direction="column" flex={{ shrink: 0, grow: 1 }}>
       <StyledText
@@ -46,16 +47,21 @@ const AvatarSection: React.FC<IAvatarSectionProps> = props => {
 
       {(!formValues.avatar || !formValues.avatar.preview) && (
         <StyledAvatarPlaceholderDiv onClick={handleAvatarClick} active={avatarPopoverOpen}>
-          <StyledImageInput onChange={handleAvatarFileUpload} type="file" ref={avatarInputRef} />
+          <StyledImageInput
+            onChange={handleAvatarFileUpload}
+            type="file"
+            accept="image/*"
+            ref={avatarInputRef}
+          />
           <Icon type="image" ref={avatarRef} />
         </StyledAvatarPlaceholderDiv>
       )}
       {formValues.avatar && formValues.avatar.preview && (
         <StyledAvatarDiv onClick={handleAvatarClick}>
-          <StyledImage src={formValues.avatar.preview} fit="contain" />
           <StyledAvatarOverlay>
             <Icon type="editSimple" ref={avatarRef} />
           </StyledAvatarOverlay>
+          <StyledImage src={formValues.avatar.preview} fit="contain" />
         </StyledAvatarDiv>
       )}
     </Box>

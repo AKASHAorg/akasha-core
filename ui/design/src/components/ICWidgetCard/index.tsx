@@ -1,33 +1,31 @@
 import * as React from 'react';
 import { Box, Text, Tabs } from 'grommet';
-import { IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
-
+import { IntegrationInfo } from '@akashaproject/ui-awf-typings';
 import Icon from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
-
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
-import { StyledIconBox, StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
-import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
+import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
+import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
+import ErrorLoader from '../ErrorLoader';
 
 export interface ICWidgetCardProps {
   className?: string;
 
-  worldApps: IntegrationCenterApp[];
-  installedApps: IntegrationCenterApp[];
+  worldApps: IntegrationInfo[];
+  installedApps: IntegrationInfo[];
   // labels
   titleLabel: string;
   worldAppsLabel: string;
   installedAppsLabel: string;
   noWorldAppsLabel: string;
   noInstalledAppsLabel: string;
+  noInstalledAppsSubLabel: string;
   // loading status
   isLoadingWorldApps?: boolean;
   isLoadingInstalledApps?: boolean;
-  // anchor link
-  icAppsAnchorLink: string;
   // handlers
-  onClickWorldApp: (hash: string) => void;
-  onClickInstalledApp: (hash: string) => void;
+  onClickWorldApp: (id: string) => void;
+  onClickInstalledApp: (id: string) => void;
   onActiveTabChange?: (tabIdx: number) => void;
 }
 
@@ -41,9 +39,9 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
     installedApps,
     noWorldAppsLabel,
     noInstalledAppsLabel,
+    noInstalledAppsSubLabel,
     isLoadingWorldApps,
     isLoadingInstalledApps,
-    icAppsAnchorLink,
     onClickWorldApp,
     onClickInstalledApp,
     onActiveTabChange,
@@ -64,13 +62,14 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
       </Box>
       <Tabs onActive={handleTabChange}>
         <StyledTab title={worldAppsLabel}>
-          <Box pad="medium" gap="medium">
-            {worldApps.length === 0 && !isLoadingWorldApps && (
+          <Box>
+            {worldApps && worldApps.length === 0 && !isLoadingWorldApps && (
               <Box pad="medium" align="center" justify="center">
                 <Text>{noWorldAppsLabel}</Text>
               </Box>
             )}
-            {worldApps.length === 0 &&
+            {worldApps &&
+              worldApps.length === 0 &&
               isLoadingWorldApps &&
               Array.from({ length: 4 }, (_el, index: number) => (
                 <Box key={index} direction="row" justify="between" align="center">
@@ -81,35 +80,31 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                   <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
                 </Box>
               ))}
-            {worldApps.length !== 0 &&
+            {worldApps &&
+              worldApps.length !== 0 &&
               worldApps.slice(0, 4).map((app, index) => (
-                <Box key={index} direction="row" justify="between">
+                <Box
+                  key={index}
+                  direction="row"
+                  justify="between"
+                  border={index !== 3 ? { side: 'bottom' } : null}
+                  pad={{ horizontal: 'medium', vertical: 'small' }}
+                >
                   <Box direction="row">
-                    <StyledIconBox style={{ marginRight: '0.5rem' }}>
-                      <Icon type="appIC" size="md" />
-                    </StyledIconBox>
-                    <StyledAnchor
-                      onClick={e => {
-                        e.preventDefault();
-                        return false;
-                      }}
-                      weight="normal"
-                      href={`${icAppsAnchorLink}/${app.name}`}
-                      label={
-                        <Box width="100%" pad="none" align="start">
-                          <SubtitleTextIcon
-                            onClick={() => onClickWorldApp(app.name)}
-                            label={app.name}
-                            subtitle={`@${app.hash}`}
-                            labelSize="large"
-                            gap="xxsmall"
-                            maxWidth="10rem"
-                          />
-                        </Box>
-                      }
-                    />
+                    <Box width="100%" pad="none" align="start">
+                      <SubtitleTextIcon
+                        onClick={() => onClickWorldApp(app.id)}
+                        label={app.name}
+                        subtitle={`@${app.id}`}
+                        labelSize="large"
+                        gap="xxsmall"
+                        maxWidth="10rem"
+                        iconType="integrationAppLarge"
+                        backgroundColor={true}
+                      />
+                    </Box>
                   </Box>
-                  <Box>
+                  <Box justify="center">
                     <Icon type="checkSimple" size="sm" accentColor />
                   </Box>
                 </Box>
@@ -117,13 +112,18 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
           </Box>
         </StyledTab>
         <StyledTab title={installedAppsLabel}>
-          <Box pad="medium" gap="medium">
-            {installedApps.length === 0 && !isLoadingInstalledApps && (
+          <Box>
+            {installedApps && installedApps.length === 0 && !isLoadingInstalledApps && (
               <Box pad="medium" align="center" justify="center">
-                <Text>{noInstalledAppsLabel}</Text>
+                <ErrorLoader
+                  type="no-login"
+                  title={noInstalledAppsLabel}
+                  details={noInstalledAppsSubLabel}
+                />
               </Box>
             )}
-            {installedApps.length === 0 &&
+            {installedApps &&
+              installedApps.length === 0 &&
               isLoadingInstalledApps &&
               Array.from({ length: 4 }, (_el, index: number) => (
                 <Box key={index} direction="row" justify="between" align="center">
@@ -134,35 +134,31 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                   <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
                 </Box>
               ))}
-            {installedApps.length !== 0 &&
+            {installedApps &&
+              installedApps.length !== 0 &&
               installedApps.slice(0, 4).map((app, index) => (
-                <Box key={index} direction="row" justify="between">
+                <Box
+                  key={index}
+                  direction="row"
+                  justify="between"
+                  border={index !== 3 ? { side: 'bottom' } : null}
+                  pad={{ horizontal: 'medium', vertical: 'small' }}
+                >
                   <Box direction="row">
-                    <StyledIconBox style={{ marginRight: '0.5rem' }}>
-                      <Icon type="appIC" size="md" />
-                    </StyledIconBox>
-                    <StyledAnchor
-                      onClick={e => {
-                        e.preventDefault();
-                        return false;
-                      }}
-                      weight="normal"
-                      href={`${icAppsAnchorLink}/${app.name}`}
-                      label={
-                        <Box width="100%" pad="none" align="start">
-                          <SubtitleTextIcon
-                            onClick={() => onClickInstalledApp(app.name)}
-                            label={app.name}
-                            subtitle={`@${app.hash}`}
-                            labelSize="large"
-                            gap="xxsmall"
-                            maxWidth="10rem"
-                          />
-                        </Box>
-                      }
-                    />
+                    <Box width="100%" pad="none" align="start">
+                      <SubtitleTextIcon
+                        onClick={() => onClickInstalledApp(app.id)}
+                        label={app.name}
+                        subtitle={`@${app.id}`}
+                        labelSize="large"
+                        gap="xxsmall"
+                        maxWidth="10rem"
+                        iconType="integrationAppLarge"
+                        backgroundColor={true}
+                      />
+                    </Box>
                   </Box>
-                  <Box>
+                  <Box justify="center">
                     <Icon type="checkSimple" size="sm" accentColor />
                   </Box>
                 </Box>

@@ -98,7 +98,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     setTagQuery(query);
   };
 
-  const { t } = useTranslation('ui-widget-feed');
+  const { t } = useTranslation('ui-lib-feed');
 
   const postReq = usePost({ postId: itemId, enabler: itemType === ItemTypes.ENTRY });
   const commentReq = useComment(itemId, itemType === ItemTypes.COMMENT);

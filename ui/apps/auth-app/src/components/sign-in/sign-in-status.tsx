@@ -28,7 +28,7 @@ const errorMapping = {
 };
 
 const SignInStatus: React.FC<SignInStatusProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-auth-ewa');
   const {
     status,
     isActive,
@@ -45,7 +45,7 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
 
   const errorMessage = React.useMemo(() => {
     if (signInError && signInError.code && errorMapping[signInError.code]) {
-      return t(errorMapping[signInError.code], { requiredNetworkName });
+      return t('{{ signInErrorCode }}', { signInErrorCode: errorMapping[signInError.code] });
     }
 
     if (signInError) {

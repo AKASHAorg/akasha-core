@@ -24,7 +24,7 @@ export interface IEntryDataCardProps {
 const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
   const { entryData, itemType, locale, modalSlotId } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-moderation-ewa');
 
   const handleNavigate = useHandleNavigation(props.singleSpa.navigateToUrl);
 

@@ -135,7 +135,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
   const checkSignupQuery = useCheckSignup(ethAddress);
   const [suggestSignIn, setSuggestSignIn] = React.useState(false);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-auth-ewa');
   const tRef = React.useRef(t);
   const fireRemainingMessagesRef = React.useRef(fireRemainingMessages);
 

@@ -6,12 +6,11 @@ import DS from '@akashaproject/design-system';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import i18next, { setupI18next } from '../i18n';
 
 const { MenuItemButton } = DS;
 
 const EntryEditButton: React.FC<RootExtensionProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-akasha-integration');
 
   const handleClick = () => {
     if (
@@ -48,7 +47,7 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
 const ModalWrapper: React.FC<RootExtensionProps> = props => {
   return (
     <React.Suspense fallback={'...'}>
-      <I18nextProvider i18n={i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <EntryEditButton {...props} />
       </I18nextProvider>
     </React.Suspense>
@@ -67,12 +66,6 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootExtensionProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-akasha-integration',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 export const mount = reactLifecycles.mount;
 export const unmount = reactLifecycles.unmount;

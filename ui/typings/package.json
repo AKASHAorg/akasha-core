@@ -19,19 +19,19 @@
   "scripts": {
     "build": "tsc --build",
     "tsc": "tsc --build",
-    "prepare": "npm run tsc",
+    "prepare": "yarn run tsc",
     "pretest": "tsc -m commonjs",
     "test": "jest",
-    "clean": "tsc --build --clean"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "devDependencies": {
     "@akashaproject/sdk-typings": "*",
-    "rxjs": "7.3.0",
-    "slate": "0.72.3",
-    "slate-react": "0.72.1",
-    "slate-history": "0.66.0",
     "i18next": "20.6.1",
-    "single-spa": "5.9.3"
+    "rxjs": "7.3.0",
+    "single-spa": "5.9.3",
+    "slate": "0.72.3",
+    "slate-history": "0.66.0",
+    "slate-react": "0.72.1"
   },
   "files": [
     "lib"

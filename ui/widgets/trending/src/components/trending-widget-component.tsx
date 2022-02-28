@@ -19,7 +19,7 @@ const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const { singleSpa } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('ui-widget-trending');
   const loginQuery = useGetLogin();
   const [analyticsActions] = useAnalytics();
 

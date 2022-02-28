@@ -36,6 +36,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
+  i18nNamespace: ['app-bookmarks'],
   routes: {
     rootRoute,
   },

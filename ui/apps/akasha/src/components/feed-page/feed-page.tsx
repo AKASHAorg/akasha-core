@@ -14,7 +14,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
@@ -31,8 +31,8 @@ export interface FeedPageProps {
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
 
-  const { t, i18n } = useTranslation();
-  const locale = (i18n.languages[0] || 'en') as ILocale;
+  const { t } = useTranslation('app-akasha-integration');
+  const locale = (props.plugins?.translation?.i18n?.languages?.[0] || 'en') as ILocale;
 
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
@@ -154,7 +154,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
         itemSpacing={8}
-        i18n={i18n}
+        i18n={props.plugins?.translation?.i18n}
       />
     </Box>
   );

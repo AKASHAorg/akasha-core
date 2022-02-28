@@ -1,0 +1,511 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  },
+  "projects": {
+    "@akashaproject/nx-executors": {
+      "root": "tools/executors"
+    },
+    "@akashaproject/ui-awf-typings": {
+      "root": "ui/typings",
+      "sourceRoot": "ui/typings/src",
+      "projectType": "library"
+    },
+    "@akashaproject/hub-api": {
+      "root": "api/hub"
+    },
+    "@akashaproject/awf-sdk": {
+      "root": "sdk",
+      "sourceRoot": "sdk/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["sdk/dist"],
+          "options": {
+            "command": "yarn build",
+            "cwd": "sdk",
+            "parallel": false
+          }
+        }
+      }
+    },
+    "@akashaproject/sdk-typings": {
+      "root": "sdk/typings",
+      "sourceRoot": "sdk/typings/src",
+      "projectType": "library"
+    },
+    "@akashaproject/design-system": {
+      "root": "ui/design",
+      "sourceRoot": "ui/design/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputPath": "ui/build/design",
+          "tsConfig": "ui/design/tsconfig.json",
+          "webpackConfig": "ui/design/webpack.config.js",
+          "options": {
+            "commands": ["yarn run pack"],
+            "cwd": "ui/design",
+            "parallel": false
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-awf-hooks": {
+      "root": "ui/hooks",
+      "sourceRoot": "ui/hooks/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/hooks"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/hooks",
+            "parallel": false
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-app-loader": {
+      "root": "ui/app-loader",
+      "sourceRoot": "ui/app-loader/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/app-loader"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/app-loader",
+            "parallel": false
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-awf-testing-utils": {
+      "root": "ui/testing-utils",
+      "sourceRoot": "ui/testing-utils/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": ["yarn build"],
+            "cwd": "ui/testing-utils",
+            "parallel": false
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-widget-analytics": {
+      "root": "ui/widgets/analytics",
+      "sourceRoot": "ui/widgets/analytics/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/widgets/analytics"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/widgets/analytics",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/analytics"
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-widget-layout": {
+      "root": "ui/widgets/layout",
+      "sourceRoot": "ui/widgets/layout/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/widgets/layout"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/widgets/layout",
+            "parallel": false
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-widget-sidebar": {
+      "root": "ui/widgets/sidebar",
+      "sourceRoot": "ui/widgets/sidebar/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/widgets/sidebar"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/widgets/sidebar",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/sidebar"
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-widget-topbar": {
+      "root": "ui/widgets/top-bar",
+      "sourceRoot": "ui/widgets/top-bar/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/widgets/top-bar"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/widgets/top-bar",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/top-bar"
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-widget-trending": {
+      "root": "ui/widgets/trending",
+      "sourceRoot": "ui/widgets/trending/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/widgets/trending"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/widgets/trending",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/trending"
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-widget-ic": {
+      "root": "ui/widgets/ic",
+      "sourceRoot": "ui/widgets/ic/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/widgets/ic"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/widgets/ic",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/ic"
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-lib-feed": {
+      "root": "ui/lib/feed",
+      "sourceRoot": "ui/lib/feed/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/build/widgets/feed"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/lib/feed",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/lib/feed"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-akasha-integration": {
+      "root": "ui/apps/akasha",
+      "sourceRoot": "ui/apps/akasha/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/akasha"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/akasha",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/akasha"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-integration-center": {
+      "root": "ui/apps/app-center",
+      "sourceRoot": "ui/apps/app-center/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/app-center"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/app-center",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/app-center"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-auth-ewa": {
+      "root": "ui/apps/auth-app",
+      "sourceRoot": "ui/apps/auth-app/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/auth-app"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/auth-app",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/auth-app"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-bookmarks": {
+      "root": "ui/apps/bookmarks",
+      "sourceRoot": "ui/apps/bookmarks/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/bookmarks"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/bookmarks",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/bookmarks"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-legal": {
+      "root": "ui/apps/legal",
+      "sourceRoot": "ui/apps/legal/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/legal"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/legal",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/legal"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-moderation-ewa": {
+      "root": "ui/apps/moderation",
+      "sourceRoot": "ui/apps/moderation/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/moderation"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/moderation",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/moderation"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-notifications": {
+      "root": "ui/apps/notifications",
+      "sourceRoot": "ui/apps/notifications/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/notifications"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/notifications",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/notifications"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-profile": {
+      "root": "ui/apps/profile",
+      "sourceRoot": "ui/apps/profile/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/profile"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/profile",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/profile"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-search": {
+      "root": "ui/apps/search",
+      "sourceRoot": "ui/apps/search/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/search"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/search",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/search"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-settings-ewa": {
+      "root": "ui/apps/settings-app",
+      "sourceRoot": "ui/apps/settings-app/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/settings-app"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/settings-app",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/settings-app"
+          }
+        }
+      }
+    },
+    "@akashaproject/app-translation": {
+      "root": "ui/apps/translation",
+      "sourceRoot": "ui/apps/translation/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/translation"],
+          "options": {
+            "commands": ["yarn run pack"],
+            "cwd": "ui/apps/translation",
+            "parallel": false
+          }
+        }
+      }
+    },
+    "@akashaproject/ethereum.world": {
+      "root": "examples/ui/ethereum.world",
+      "sourceRoot": "examples/ui/ethereum.world/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": ["yarn build"],
+            "cwd": "examples/ui/ethereum.world",
+            "parallel": false
+          }
+        },
+        "start": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": ["yarn start"],
+            "cwd": "examples/ui/ethereum.world"
+          }
+        }
+      }
+    }
+  }
+}

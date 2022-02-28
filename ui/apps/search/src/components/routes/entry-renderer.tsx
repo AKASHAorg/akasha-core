@@ -41,7 +41,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const { entryId } = itemData || {};
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-search');
 
   const handleFlipCard = () => {
     setShowAnyway(true);

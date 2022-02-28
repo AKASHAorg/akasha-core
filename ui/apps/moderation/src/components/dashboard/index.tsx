@@ -35,8 +35,8 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
 
-  const { t, i18n } = useTranslation();
-  const locale = (i18n.languages[0] || 'en') as ILocale;
+  const { t } = useTranslation('app-moderation-ewa');
+  const locale = (props.plugins?.i18n?.languages?.[0] || 'en') as ILocale;
 
   const getCountQuery = useGetCount();
   const count = getCountQuery.data;
@@ -132,9 +132,16 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
     });
   };
 
-  const buttonValues = [ButtonValues.KEPT, ButtonValues.DELISTED];
-
-  const buttonLabels = buttonValues.map(value => t(value));
+  const buttonValues = [
+    {
+      value: ButtonValues.KEPT,
+      label: t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT }),
+    },
+    {
+      value: ButtonValues.DELISTED,
+      label: t('{{ buttonValueDelisted }}', { buttonValueKept: ButtonValues.DELISTED }),
+    },
+  ];
 
   const onTabClick = (value: string) => () => {
     // toggle list accordingly
@@ -185,18 +192,20 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
         <TabsToolbar
           count={isDelisted ? count.delisted : count.kept}
           activeButton={isDelisted ? ButtonValues.DELISTED : ButtonValues.KEPT}
-          countLabel={!isDelisted ? buttonLabels[0] : buttonLabels[1]}
+          countLabel={!isDelisted ? buttonValues[0].label : buttonValues[1].label}
           tabButtons={
             <>
               <StyledSwitchCardButton
-                label={t(ButtonValues.KEPT)}
+                label={t('{{ buttonValuesKept }}', { buttonValuesKept: ButtonValues.KEPT })}
                 size="large"
                 removeBorder={false}
                 primary={!isDelisted}
                 onClick={onTabClick(ButtonValues.KEPT)}
               />
               <StyledSwitchCardButton
-                label={t(ButtonValues.DELISTED)}
+                label={t('{{ buttonValuesDelisted }}', {
+                  buttonValuesDelisted: ButtonValues.DELISTED,
+                })}
                 size="large"
                 removeBorder={true}
                 primary={isDelisted}
@@ -204,7 +213,6 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
               />
             </>
           }
-          buttonLabels={buttonLabels}
           buttonValues={buttonValues}
           onTabClick={onTabClick}
           buttonsWrapperWidth={'40%'}
@@ -231,7 +239,9 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
                     entryId={pendingItem.contentID}
-                    reasons={pendingItem.reasons.map((el: string) => t(el))}
+                    reasons={pendingItem.reasons.map((el: string) =>
+                      t('{{ pendingItemReasons }}', { pendingItemReasons: el }),
+                    )}
                     reporter={pendingItem.reportedBy}
                     reporterAvatar={pendingItem.reportedByProfile?.avatar}
                     reporterName={pendingItem.reportedByProfile?.name}
@@ -239,9 +249,10 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
                     andLabel={t('and')}
                     otherReporters={
                       pendingItem.count
-                        ? `${pendingItem.count} ${
-                            pendingItem.count === 1 ? `${t('other')}` : `${t('others')}`
-                          }`
+                        ? t('{{ pendingItemCount }} {{ itemCountWord }}', {
+                            pendingItemCount: pendingItem.count,
+                            itemCountWord: pendingItem.count === 1 ? 'other' : 'others',
+                          })
                         : ''
                     }
                     reportedOnLabel={t('On')}
@@ -285,7 +296,9 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
                     entryId={moderatedItem.contentID}
-                    reasons={moderatedItem.reasons.map(el => t(el))}
+                    reasons={moderatedItem.reasons.map(el =>
+                      t('{{ moderatedItemReasons }}', { moderatedItemReasons: el }),
+                    )}
                     reporter={moderatedItem.reportedBy}
                     reporterAvatar={moderatedItem.reportedByProfile?.avatar}
                     reporterName={moderatedItem.reportedByProfile?.name}
@@ -293,9 +306,10 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
                     andLabel={t('and')}
                     otherReporters={
                       moderatedItem.count
-                        ? `${moderatedItem.count} ${
-                            moderatedItem.count === 1 ? `${t('other')}` : `${t('others')}`
-                          }`
+                        ? t('{{ moderatedItemCount }} {{ itemCountWord }}', {
+                            moderatedItemCount: moderatedItem.count,
+                            itemCountWord: moderatedItem.count === 1 ? 'other' : 'others',
+                          })
                         : ''
                     }
                     reportedOnLabel={t('On')}
@@ -336,7 +350,9 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
                     entryId={moderatedItem.contentID}
-                    reasons={moderatedItem.reasons.map(el => t(el))}
+                    reasons={moderatedItem.reasons.map(el =>
+                      t('{{ moderatedItemReasons }}', { moderatedItemReasons: el }),
+                    )}
                     reporter={moderatedItem.reportedBy}
                     reporterAvatar={moderatedItem.reportedByProfile?.avatar}
                     reporterName={moderatedItem.reportedByProfile?.name}
@@ -344,9 +360,10 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
                     andLabel={t('and')}
                     otherReporters={
                       moderatedItem.count
-                        ? `${moderatedItem.count} ${
-                            moderatedItem.count === 1 ? `${t('other')}` : `${t('others')}`
-                          }`
+                        ? t('{{ moderatedItemCount }} {{ itemCountWord }}', {
+                            moderatedItemCount: moderatedItem.count,
+                            itemCountWord: moderatedItem.count === 1 ? 'other' : 'others',
+                          })
                         : ''
                     }
                     reportedOnLabel={t('On')}

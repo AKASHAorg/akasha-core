@@ -8,9 +8,6 @@ describe('Tag Page', () => {
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
-    it('should open report popup on click', () => {
-      cy.get('svg[type="moreDark"]', { timeout: 20000 }).first().click();
-    });
 
     it('should redirect to post page', () => {
       cy.get('svg[type="comments"]', { timeout: 20000 }).first().click();

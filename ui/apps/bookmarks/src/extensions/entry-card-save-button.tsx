@@ -13,7 +13,6 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import i18next, { setupI18next } from '../i18n';
 
 const { styled, TextIcon, ThemeSelector, lightTheme, darkTheme, Icon } = DS;
 
@@ -39,7 +38,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
   const bookmarkDelete = useDeleteBookmark();
   const [analyticsActions] = useAnalytics();
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-bookmarks');
 
   const isBookmarked = React.useMemo(() => {
     return bookmarkReq.data?.some(
@@ -80,7 +79,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
 };
 
 const BookmarkButtonWrapper = (props: RootExtensionProps) => (
-  <I18nextProvider i18n={i18next}>
+  <I18nextProvider i18n={props.plugins?.translation?.i18n}>
     <EntryCardSaveButton {...props} />
   </I18nextProvider>
 );
@@ -104,25 +103,8 @@ const reactLifecycles = singleSpaReact({
     );
   },
 });
-let i18nInitCalled = false;
-export const bootstrap = (props: RootExtensionProps) => {
-  if (i18nInitCalled) {
-    if (i18next.isInitialized) {
-      return Promise.resolve();
-    }
-    return new Promise<void>(resolve => {
-      i18next.on('initialized', () => {
-        resolve();
-      });
-    });
-  }
-  i18nInitCalled = true;
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-bookmarks',
-  });
-};
+
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 

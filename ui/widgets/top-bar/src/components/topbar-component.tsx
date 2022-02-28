@@ -166,7 +166,7 @@ const TopbarComponent = (props: RootComponentProps) => {
     }
   };
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('ui-widget-topbar');
 
   const onExtMount = (name: string) => {
     uiEvents.next({
@@ -202,6 +202,7 @@ const TopbarComponent = (props: RootComponentProps) => {
         feedbackLabel={t('Send Us Feedback')}
         feedbackInfoLabel={t('Help us improve the experience!')}
         settingsLabel={t('Settings')}
+        settingsInfoLabel={t('Adjustment for your world and Dapps')}
         moderationLabel={t('Moderation History')}
         moderationInfoLabel={t('Help keep us accountable!')}
         legalCopyRightLabel={'© Ethereum World Association'}

@@ -6,7 +6,8 @@ const path = require('path');
 const baseConfig = require('../../../ui/webpack.config');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const fs = require('fs');
-
+// remove manifest plugin
+baseConfig.plugins.splice(1, 1);
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   entry: './src/index',

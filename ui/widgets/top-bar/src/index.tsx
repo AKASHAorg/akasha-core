@@ -13,6 +13,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
       mountsIn: registrationOpts.layoutConfig?.topbarSlotId,
       loadingFn: () => import('./components'),
       activeWhen: () => true,
+      i18nNamespace: ['ui-widget-topbar'],
+      tags: ['topbar'],
       extensions: extensionPointsMap,
       extends: [
         {

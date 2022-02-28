@@ -48,10 +48,14 @@ app.use(logger());
 app.use(bodyParser());
 
 const enabledDomains = JSON.parse(process.env.ALLOWED_ORIGINS);
+const regExpCors = new RegExp(process.env.ALLOWED_ORIGIN_REGEXP);
 app.use(
   cors({
     origin: ctx => {
-      if (enabledDomains.indexOf(ctx.request.header.origin) !== -1) {
+      if (
+        enabledDomains.indexOf(ctx.request.header.origin) !== -1 ||
+        regExpCors.test(ctx.request.header.origin)
+      ) {
         return ctx.request.header.origin;
       }
       return enabledDomains[0];

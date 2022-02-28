@@ -41,6 +41,7 @@ declare const __DEV__: boolean;
       '@akashaproject/ui-widget-analytics',
       // '@akashaproject/ui-widget-sidebar',
     ],
+    defaultPlugins: ['@akashaproject/app-translation'],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,
       siteId: process.env.MATOMO_SITE_ID,
@@ -53,4 +54,6 @@ declare const __DEV__: boolean;
 
   // tslint:disable-next-line:no-console
   console.log('initial sdk instance', sdk);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
 })(globalThis.System);

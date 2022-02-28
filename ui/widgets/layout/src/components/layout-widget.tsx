@@ -19,8 +19,6 @@ import {
 } from './styled-slots';
 import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import i18next from '../i18n';
-import { I18nextProvider } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
 import { BrowserRouter as Router, Route, Routes, useMatch } from 'react-router-dom';
 
@@ -109,7 +107,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   }, [activeModal]);
 
   return (
-    <I18nextProvider i18n={i18next}>
+    <>
       <ScrollRestorer />
       <div>
         <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
@@ -186,7 +184,7 @@ const Layout: React.FC<RootComponentProps> = props => {
           />
         </div>
       </div>
-    </I18nextProvider>
+    </>
   );
 };
 

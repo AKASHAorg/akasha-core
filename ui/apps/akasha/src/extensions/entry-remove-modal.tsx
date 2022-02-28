@@ -11,7 +11,6 @@ import {
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import i18next, { setupI18next } from '../i18n';
 
 const { ConfirmationModal, ThemeSelector, lightTheme, darkTheme, ModalContainer, ErrorLoader } = DS;
 
@@ -82,7 +81,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
 
 const ModalWrapper: React.FC<RootExtensionProps> = props => {
   return (
-    <I18nextProvider i18n={i18next}>
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <EntryRemoveModal {...props} />
     </I18nextProvider>
   );
@@ -109,13 +108,6 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootExtensionProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'app-akasha-integration',
-  });
-};
-
+export const bootstrap = reactLifecycles.bootstrap;
 export const mount = reactLifecycles.mount;
 export const unmount = reactLifecycles.unmount;

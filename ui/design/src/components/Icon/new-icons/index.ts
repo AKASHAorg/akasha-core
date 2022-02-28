@@ -1,3 +1,4 @@
+// maintain alphabetical order for icon names
 import activity from './activity';
 import akasha from './akasha';
 import addAppGrey from './add-app-grey';
@@ -8,8 +9,6 @@ import appCenter from './app-center';
 import appEns from './app-ens';
 import appFeed from './app-feed';
 import appIpfs from './app-ipfs';
-import appIC from './app-ic';
-import appICCTA from './app-ic-cta';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -24,6 +23,8 @@ import bookmark from './bookmark';
 import calendar from './calendar';
 import check from './check';
 import checkSimple from './checkSimple';
+import chevronRight from './chevron-right';
+import chevronLeft from './chevron-left';
 import close from './close';
 import code from './code';
 import coinbase from './coinbase';
@@ -33,10 +34,12 @@ import copy from './copy';
 import dapper from './dapper';
 import discord from './discord';
 import document from './document';
+import dropdown from './dropdown';
 import edit from './edit';
 import editSimple from './edit-simple';
 import email from './email';
 import emoji from './emoji';
+import explore from './explore';
 import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
 import ethereum from './ethereum';
@@ -69,6 +72,12 @@ import moreDark from './more-dark';
 import moreGrey from './more-grey';
 import nifty from './nifty';
 import notifications from './notifications';
+import integrationAppLarge from './integration-app-large';
+import integrationAppCTA from './integration-app-cta';
+import integrationAppSmall from './integration-app-small';
+import integrationAppSmallFill from './integration-app-small-fill';
+import integrationWidgetLarge from './integration-widget-large';
+import integrationWidgetSmall from './integration-widget-small';
 import opera from './opera';
 import payment from './payment';
 import person from './person';
@@ -111,6 +120,8 @@ import walletconnect from './walletconnect';
 import web3 from './web3';
 import zoomIn from './zoom-in';
 import zoomOut from './zoom-out';
+import zoomInAlt from './zoom-in-alt';
+import zoomOutAlt from './zoom-out-alt';
 
 export {
   activity,
@@ -121,8 +132,6 @@ export {
   appEns,
   appFeed,
   appIpfs,
-  appIC,
-  appICCTA,
   announcement,
   available,
   reload,
@@ -139,9 +148,13 @@ export {
   dapper,
   check,
   checkSimple,
+  chevronRight,
+  chevronLeft,
   discord,
+  dropdown,
   payment,
   eye,
+  explore,
   error,
   facebook,
   feedback,
@@ -192,6 +205,12 @@ export {
   moreGrey,
   nifty,
   notifications,
+  integrationAppLarge,
+  integrationAppSmall,
+  integrationAppSmallFill,
+  integrationAppCTA,
+  integrationWidgetLarge,
+  integrationWidgetSmall,
   opera,
   person,
   plusDark,
@@ -226,4 +245,6 @@ export {
   web3,
   zoomIn,
   zoomOut,
+  zoomInAlt,
+  zoomOutAlt,
 };

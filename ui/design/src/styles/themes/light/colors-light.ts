@@ -11,6 +11,7 @@ export interface IColorsLight extends IColors {
   ultraLightGrey: string;
   deepGrey: string;
   deeperGrey: string;
+  lightBeige: string;
   white: string;
   red: string;
   green: string;
@@ -28,6 +29,7 @@ const colors: IColorsLight = {
   ultraLightGrey: '#FBFCFD',
   deepGrey: '#7F7F7F',
   deeperGrey: '#87909E',
+  lightBeige: '#F8F4F4',
   white: '#FFF',
   red: '#FF4040',
   green: '#36B37E',
@@ -39,6 +41,7 @@ const colors: IColorsLight = {
   errorText: '#FF4040', // red
   background: '#FFFFFF', // white
   ultraLightBackground: '#FBFCFD', // ultralightGrey
+  beigeBackground: '#F8F4F4', // lightBeige
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',
   modalBackground: '#7F7F7F', // deepGrey
@@ -49,6 +52,7 @@ const colors: IColorsLight = {
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
   accentLight: '#E9EDFD', // lightBlue
   border: '#EDF0F5', // lightGrey
+  lightBorder: '#F5F6F7', // lighterGrey
   darkBorder: '#B6BFD1', // deepGrey
   darkerBorder: '#87909E', // deeperGrey
   secondary: '#000C20', // darkgrey

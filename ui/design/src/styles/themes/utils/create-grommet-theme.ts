@@ -43,6 +43,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           dark: styledComponentsTheme.colors.border,
           light: styledComponentsTheme.colors.border,
         },
+        lightBorder: styledComponentsTheme.colors.lightBorder,
         text: {
           light: styledComponentsTheme.colors.primaryText,
           dark: styledComponentsTheme.colors.primaryText,
@@ -97,10 +98,18 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           `border-color: ${styledComponentsTheme.colors.darkBorder};
           ${
             checked &&
-            `background-color: ${styledComponentsTheme.colors.white};
-             color: ${styledComponentsTheme.colors.accent};`
+            `background-color: ${styledComponentsTheme.colors.accent};
+             `
           }
           `,
+        knob: {
+          extend: ({ checked }) =>
+            `border-color: ${styledComponentsTheme.colors.border};
+            display: inline-flex;
+            width: 1rem;
+            height: 1rem;
+            ${checked && `background-color: ${styledComponentsTheme.colors.white} !important;`}`,
+        },
       },
       border: {
         color: styledComponentsTheme.colors.accent,

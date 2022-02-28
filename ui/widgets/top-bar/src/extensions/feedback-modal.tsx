@@ -10,8 +10,8 @@ import { withProviders } from '@akashaproject/ui-awf-hooks';
 
 const { FeedbackModal } = DS;
 
-const FeedbackModalContainer = (props: RootExtensionProps) => {
-  const { t } = useTranslation();
+const FeedbackModalContainer = (props: RootComponentProps) => {
+  const { t } = useTranslation('ui-widget-topbar');
   const location = useLocation();
 
   const handleFeedbackModalClose = () => {

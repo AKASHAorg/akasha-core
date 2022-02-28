@@ -1,23 +1,29 @@
-import { Box } from 'grommet';
 import * as React from 'react';
+import { Box, Text } from 'grommet';
+import Cropper from 'react-easy-crop';
 import { isMobile, isMobileOnly } from 'react-device-detect';
-import { FormImagePopover } from '../ImagePopover/form-image-popover';
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-
-import { TitleSection } from './sections/TitleSection';
-import { AvatarSection } from './sections/AvatarSection';
-import { NameInputSection } from './sections/NameInputSection';
-import { UsernameInputSection } from './sections/UsernameInputSection';
-import { CoverImageSection } from './sections/CoverImageSection';
-import { DescriptionSection } from './sections/DescriptionSection';
-import { ActionButtonsSection } from './sections/ActionButtonsSection';
 import {
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
 } from '@akashaproject/ui-awf-typings/lib/profile';
+
+import { TitleSection } from './sections/TitleSection';
+import { AvatarSection } from './sections/AvatarSection';
+import { NameInputSection } from './sections/NameInputSection';
+import { CoverImageSection } from './sections/CoverImageSection';
+import { DescriptionSection } from './sections/DescriptionSection';
+import { ActionButtonsSection } from './sections/ActionButtonsSection';
+import { UsernameInputSection } from './sections/UsernameInputSection';
+
+import Icon from '../Icon';
+import { FormImagePopover } from '../ImagePopover/form-image-popover';
+import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 import getCroppedImage from '../../utils/get-cropped-image';
+
+import { StyledCropperImageWrapper, StyledZoomControlBox } from './styled-form-card';
 
 export interface IBoxFormCardProps {
   className?: string;
@@ -32,6 +38,8 @@ export interface IBoxFormCardProps {
   // popover labels
   uploadLabel?: string;
   urlLabel?: string;
+  editLabel?: string;
+  editImageSubtitle?: string;
   deleteLabel?: string;
   // props
   nameFieldPlaceholder: string;
@@ -54,6 +62,7 @@ export interface IBoxFormCardProps {
 
 export interface IImageSrc {
   src: string | null;
+  type?: string;
   prefix: string | null;
   preview?: string;
   isUrl: boolean;
@@ -78,6 +87,12 @@ export interface IFormValues {
   ethAddress: string;
 }
 
+export type CroppableFields =
+  | ProfileProviderProperties.AVATAR
+  | ProfileProviderProperties.COVER_IMAGE;
+
+export type CropValue = { x: number; y: number };
+
 const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const {
     className,
@@ -91,6 +106,8 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     saveLabel,
     uploadLabel,
     urlLabel,
+    editLabel,
+    editImageSubtitle,
     deleteLabel,
     nameFieldPlaceholder,
     usernameFieldPlaceholder,
@@ -119,11 +136,32 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     pubKey: '',
     ethAddress: '',
   });
+
   // state values to handle image cropping
-  const [crop, setCrop] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [zoom, setZoom] = React.useState<number>(1);
-  const [rotation /* setRotation */] = React.useState<number>(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = React.useState(null);
+  const [avatarCrop, setAvatarCrop] = React.useState<CropValue>({
+    x: 0,
+    y: 0,
+  });
+  const [coverImageCrop, setCoverImageCrop] = React.useState<CropValue>({
+    x: 0,
+    y: 0,
+  });
+  const [avatarZoom, setAvatarZoom] = React.useState<number>(1);
+  const [coverImageZoom, setCoverImageZoom] = React.useState<number>(1);
+  const [showCropper, setShowCropper] = React.useState<CroppableFields>(null);
+  const [avatarRotation /* setAvatarRotation */] = React.useState<number>(0);
+  const [coverImageRotation /* setCoverImageRotation */] = React.useState<number>(0);
+  const [avatarCroppedAreaPixels, setAvatarCroppedAreaPixels] = React.useState(null);
+  const [coverImageCroppedAreaPixels, setCoverImageCroppedAreaPixels] = React.useState(null);
+  const [avatarSrc, setAvatarSrc] = React.useState<string>(null);
+  const [coverImageSrc, setCoverImageSrc] = React.useState<string>(null);
+
+  const isEditingAvatar = showCropper === ProfileProviderProperties.AVATAR;
+
+  // predefined zoom values
+  const minZoom = 1;
+  const maxZoom = 3;
+  const zoomStep = 0.01;
 
   // required for popovers
   const avatarRef: React.RefObject<HTMLDivElement> = React.useRef(null);
@@ -198,25 +236,69 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(true);
   };
 
-  const onCropComplete = React.useCallback((_, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
+  const handleEdit = (field: CroppableFields) => setShowCropper(field);
+
+  /* resets all state values required for cropping */
+  const resetCropperFields = () => {
+    // reset crop values
+    setAvatarCrop({ x: 0, y: 0 });
+    setCoverImageCrop({ x: 0, y: 0 });
+    // reset zoom values
+    setAvatarZoom(1);
+    setCoverImageZoom(1);
+    // reset cropped area values
+    setAvatarCroppedAreaPixels(null);
+    setCoverImageCroppedAreaPixels(null);
+
+    // close modal
+    setShowCropper(null);
+  };
+
+  const onAvatarCropComplete = React.useCallback((_, croppedAreaPixels) => {
+    setAvatarCroppedAreaPixels(croppedAreaPixels);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleCropImage = React.useCallback(async () => {
+  const onCoverImageCropComplete = React.useCallback((_, croppedAreaPixels) => {
+    setCoverImageCroppedAreaPixels(croppedAreaPixels);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleCropAvatar = React.useCallback(async () => {
     try {
-      const [cropped, imgUrl] = await getCroppedImage(
-        formValues.coverImage.preview,
-        croppedAreaPixels,
-        rotation,
+      const [cropped] = await getCroppedImage(
+        avatarSrc,
+        avatarCroppedAreaPixels,
+        avatarRotation,
+        formValues.avatar.type,
       );
 
-      return [cropped, imgUrl];
+      handleImageInsert(ProfileProviderProperties.AVATAR)(cropped as string | File, false);
+
+      resetCropperFields();
     } catch (e) {
       console.error(e);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [croppedAreaPixels, rotation]);
+  }, [avatarCroppedAreaPixels, avatarRotation]);
+
+  const handleCropCoverImage = React.useCallback(async () => {
+    try {
+      const [cropped] = await getCroppedImage(
+        coverImageSrc,
+        coverImageCroppedAreaPixels,
+        coverImageRotation,
+        formValues.coverImage.type,
+      );
+
+      handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(cropped as string | File, false);
+
+      resetCropperFields();
+    } catch (e) {
+      console.error(e);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [coverImageCroppedAreaPixels, coverImageRotation]);
 
   const handleRevert = () => {
     setFormValues({
@@ -234,23 +316,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   };
 
   const handleSave = async () => {
-    // if cover image is updated, crop before saving
-    // @TODO: do same for avatar upload
-    if (fieldsToUpdate.includes(ProfileProviderProperties.COVER_IMAGE)) {
-      const [croppedImage, imgUrl] = await handleCropImage();
-
-      const modFormValues: IFormValues = {
-        ...formValues,
-        coverImage: {
-          ...formValues.coverImage,
-          src: croppedImage as string,
-          preview: imgUrl as string,
-        },
-      };
-      onSave(modFormValues, fieldsToUpdate);
-    } else {
-      onSave(formValues, fieldsToUpdate);
-    }
+    onSave(formValues, fieldsToUpdate);
   };
 
   const handleFormFieldChange = React.useCallback(
@@ -286,9 +352,22 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   // @Todo: update this after ts-jest migration to ESM
   const handleImageInsert = (imageKey: string) => (src: File | string, isUrl: boolean) => {
     if (isUrl && typeof src === 'string') {
+      // set blob sources to state if not already defined
+      if (imageKey === ProfileProviderProperties.AVATAR && !avatarSrc) setAvatarSrc(src);
+      if (imageKey === ProfileProviderProperties.COVER_IMAGE && !coverImageSrc)
+        setCoverImageSrc(src);
+
       handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
     } else if (typeof src !== 'string') {
-      handleFormFieldChange({ [imageKey]: { src, isUrl, preview: URL.createObjectURL(src) } });
+      // set blob sources to state if not already defined
+      if (imageKey === ProfileProviderProperties.AVATAR && !avatarSrc)
+        setAvatarSrc(URL.createObjectURL(src));
+      if (imageKey === ProfileProviderProperties.COVER_IMAGE && !coverImageSrc)
+        setCoverImageSrc(URL.createObjectURL(src));
+
+      handleFormFieldChange({
+        [imageKey]: { src, isUrl, type: src.type, preview: URL.createObjectURL(src) },
+      });
     }
   };
 
@@ -322,65 +401,89 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(file, false);
   };
 
+  const handleZoomInClick = () => {
+    // if value of the respective field's zoom is equal to or exceeds the predefined maxZoom value, return
+    if (isEditingAvatar) {
+      if (avatarZoom >= maxZoom) return;
+      setAvatarZoom(prev => prev + zoomStep);
+    } else {
+      if (coverImageZoom >= maxZoom) return;
+      setCoverImageZoom(prev => prev + zoomStep);
+    }
+  };
+
+  const handleZoomOutClick = () => {
+    // if value of the respective field's zoom is equal to or less than the predefined minZoom value, return
+    if (isEditingAvatar) {
+      if (avatarZoom <= minZoom) return;
+      setAvatarZoom(prev => prev - zoomStep);
+    } else {
+      if (coverImageZoom <= minZoom) return;
+      setCoverImageZoom(prev => prev - zoomStep);
+    }
+  };
+
   return (
     <MainAreaCardBox
       style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}
       className={className}
     >
-      <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
-        <TitleSection titleLabel={titleLabel} />
-        <Box direction="column" pad="xsmall">
-          <Box direction="row" justify="start">
-            <AvatarSection
-              avatarLabel={avatarLabel}
-              formValues={formValues}
-              avatarPopoverOpen={avatarPopoverOpen}
-              avatarRef={avatarRef}
-              avatarInputRef={avatarInputRef}
-              handleAvatarClick={handleAvatarClick}
-              handleAvatarFileUpload={handleAvatarFileUpload}
-            />
-            <NameInputSection
-              nameLabel={nameLabel}
-              nameFieldPlaceholder={nameFieldPlaceholder}
-              formValues={formValues}
-              handleFormFieldChange={handleFormFieldChange}
-            />
-          </Box>
-          {showUsername && (
-            <UsernameInputSection
-              usernameLabel={usernameLabel}
-              usernameFieldInfo={usernameFieldInfo}
-              usernameFieldPlaceholder={usernameFieldPlaceholder}
-              isValidatingUsername={isValidatingUsername}
-              usernameError={usernameError}
-              usernameSuccess={usernameSuccess}
-              formValues={formValues}
-              handleUsernameChange={handleUsernameChange}
-              handleUsernameBlur={handleUsernameBlur}
-            />
+      {showCropper && (
+        <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
+          <TitleSection
+            titleLabel={`${editLabel} ${isEditingAvatar ? avatarLabel : coverImageLabel}`}
+            iconType="arrowLeft"
+            onIconClick={resetCropperFields}
+          />
+          {showCropper === ProfileProviderProperties.AVATAR ? (
+            <StyledCropperImageWrapper>
+              <Cropper
+                image={avatarSrc}
+                crop={avatarCrop}
+                zoom={avatarZoom}
+                aspect={76 / 76}
+                cropShape={'round'}
+                objectFit={'contain'}
+                onCropChange={setAvatarCrop}
+                onCropComplete={onAvatarCropComplete}
+                onZoomChange={setAvatarZoom}
+              />
+            </StyledCropperImageWrapper>
+          ) : (
+            <StyledCropperImageWrapper>
+              <Cropper
+                image={coverImageSrc}
+                crop={coverImageCrop}
+                zoom={coverImageZoom}
+                aspect={1344 / 288}
+                objectFit={'horizontal-cover'}
+                onCropChange={setCoverImageCrop}
+                onCropComplete={onCoverImageCropComplete}
+                onZoomChange={setCoverImageZoom}
+              />
+            </StyledCropperImageWrapper>
           )}
-
-          <CoverImageSection
-            coverImageLabel={coverImageLabel}
-            formValues={formValues}
-            crop={crop}
-            zoom={zoom}
-            coverImagePopoverOpen={coverImagePopoverOpen}
-            coverImageRef={coverImageRef}
-            coverInputRef={coverInputRef}
-            setCrop={setCrop}
-            setZoom={setZoom}
-            onCropComplete={onCropComplete}
-            handleCoverImageClick={handleCoverImageClick}
-            handleCoverFileUpload={handleCoverFileUpload}
-          />
-          <DescriptionSection
-            descriptionLabel={descriptionLabel}
-            descriptionFieldPlaceholder={descriptionFieldPlaceholder}
-            formValues={formValues}
-            handleFormFieldChange={handleFormFieldChange}
-          />
+          <Text size="medium" textAlign="center" margin={{ bottom: 'large' }}>
+            {editImageSubtitle}
+          </Text>
+          <StyledZoomControlBox margin={{ bottom: 'xlarge' }}>
+            <Icon type="zoomOutAlt" onClick={handleZoomOutClick} />
+            <input
+              type="range"
+              value={isEditingAvatar ? avatarZoom : coverImageZoom}
+              min={minZoom}
+              max={maxZoom}
+              step={zoomStep}
+              aria-labelledby="Zoom"
+              onChange={e =>
+                isEditingAvatar
+                  ? setAvatarZoom(Number(e.target.value))
+                  : setCoverImageZoom(Number(e.target.value))
+              }
+              style={{ flex: 'auto', cursor: 'pointer' }}
+            />
+            <Icon type="zoomInAlt" onClick={handleZoomInClick} />
+          </StyledZoomControlBox>
           <ActionButtonsSection
             cancelLabel={cancelLabel}
             saveLabel={saveLabel}
@@ -390,40 +493,115 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
             usernameError={usernameError}
             formValues={formValues}
             updateStatus={updateStatus}
-            handleRevert={handleRevert}
-            handleSave={handleSave}
+            handleRevert={resetCropperFields}
+            handleSave={isEditingAvatar ? handleCropAvatar : handleCropCoverImage}
           />
         </Box>
-      </Box>
-
-      {avatarPopoverOpen && avatarRef.current && formValues.avatar && (
-        <FormImagePopover
-          modalSlotId={modalSlotId}
-          uploadLabel={uploadLabel}
-          urlLabel={urlLabel}
-          deleteLabel={deleteLabel}
-          target={avatarRef.current}
-          closePopover={closeAvatarPopover}
-          insertImage={handleImageInsert(ProfileProviderProperties.AVATAR)}
-          currentImage={!!formValues.avatar}
-          onMobile={isMobileOnly}
-          handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
-        />
       )}
+      {!showCropper && (
+        <>
+          <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
+            <TitleSection titleLabel={titleLabel} />
+            <Box direction="column" pad="xsmall">
+              <Box direction="row" justify="start">
+                <AvatarSection
+                  avatarLabel={avatarLabel}
+                  formValues={formValues}
+                  avatarPopoverOpen={avatarPopoverOpen}
+                  avatarRef={avatarRef}
+                  avatarInputRef={avatarInputRef}
+                  handleAvatarClick={handleAvatarClick}
+                  handleAvatarFileUpload={handleAvatarFileUpload}
+                />
+                <NameInputSection
+                  nameLabel={nameLabel}
+                  nameFieldPlaceholder={nameFieldPlaceholder}
+                  formValues={formValues}
+                  handleFormFieldChange={handleFormFieldChange}
+                />
+              </Box>
+              {showUsername && (
+                <UsernameInputSection
+                  usernameLabel={usernameLabel}
+                  usernameFieldInfo={usernameFieldInfo}
+                  usernameFieldPlaceholder={usernameFieldPlaceholder}
+                  isValidatingUsername={isValidatingUsername}
+                  usernameError={usernameError}
+                  usernameSuccess={usernameSuccess}
+                  formValues={formValues}
+                  handleUsernameChange={handleUsernameChange}
+                  handleUsernameBlur={handleUsernameBlur}
+                />
+              )}
 
-      {coverImagePopoverOpen && coverImageRef.current && formValues.coverImage && (
-        <FormImagePopover
-          modalSlotId={modalSlotId}
-          uploadLabel={uploadLabel}
-          urlLabel={urlLabel}
-          deleteLabel={deleteLabel}
-          target={coverImageRef.current}
-          closePopover={closeCoverImagePopover}
-          insertImage={handleImageInsert(ProfileProviderProperties.COVER_IMAGE)}
-          currentImage={!!formValues.coverImage}
-          onMobile={isMobileOnly}
-          handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
-        />
+              <CoverImageSection
+                coverImageLabel={coverImageLabel}
+                formValues={formValues}
+                coverImagePopoverOpen={coverImagePopoverOpen}
+                coverImageRef={coverImageRef}
+                coverInputRef={coverInputRef}
+                handleCoverImageClick={handleCoverImageClick}
+                handleCoverFileUpload={handleCoverFileUpload}
+              />
+              <DescriptionSection
+                descriptionLabel={descriptionLabel}
+                descriptionFieldPlaceholder={descriptionFieldPlaceholder}
+                formValues={formValues}
+                handleFormFieldChange={handleFormFieldChange}
+              />
+              <ActionButtonsSection
+                cancelLabel={cancelLabel}
+                saveLabel={saveLabel}
+                showUsername={showUsername}
+                formChanged={fieldsToUpdate.length > 0}
+                isValidatingUsername={isValidatingUsername}
+                usernameError={usernameError}
+                formValues={formValues}
+                updateStatus={updateStatus}
+                handleRevert={handleRevert}
+                handleSave={handleSave}
+              />
+            </Box>
+          </Box>
+
+          {avatarPopoverOpen && avatarRef.current && formValues.avatar && (
+            <FormImagePopover
+              modalSlotId={modalSlotId}
+              uploadLabel={uploadLabel}
+              urlLabel={urlLabel}
+              editLabel={editLabel}
+              fieldToEdit={ProfileProviderProperties.AVATAR}
+              deleteLabel={deleteLabel}
+              target={avatarRef.current}
+              closePopover={closeAvatarPopover}
+              insertImage={handleImageInsert(ProfileProviderProperties.AVATAR)}
+              currentImage={!!formValues.avatar}
+              onMobile={isMobileOnly}
+              editable={fieldsToUpdate.includes(ProfileProviderProperties.AVATAR)}
+              handleEdit={handleEdit}
+              handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
+            />
+          )}
+
+          {coverImagePopoverOpen && coverImageRef.current && formValues.coverImage && (
+            <FormImagePopover
+              modalSlotId={modalSlotId}
+              uploadLabel={uploadLabel}
+              urlLabel={urlLabel}
+              editLabel={editLabel}
+              fieldToEdit={ProfileProviderProperties.COVER_IMAGE}
+              deleteLabel={deleteLabel}
+              target={coverImageRef.current}
+              closePopover={closeCoverImagePopover}
+              insertImage={handleImageInsert(ProfileProviderProperties.COVER_IMAGE)}
+              currentImage={!!formValues.coverImage}
+              onMobile={isMobileOnly}
+              editable={fieldsToUpdate.includes(ProfileProviderProperties.COVER_IMAGE)}
+              handleEdit={handleEdit}
+              handleDeleteImage={() => handleFormFieldChange({ coverImage: null })}
+            />
+          )}
+        </>
       )}
     </MainAreaCardBox>
   );

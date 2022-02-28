@@ -12,8 +12,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
     loadingFn: () => import('./components'),
     activeWhen: () => true,
     // does not have routes
-    routes: {
-      rootRoute: null,
-    },
+    i18nNamespace: ['ui-widget-analytics'],
+    tags: ['analytics-widget'],
   };
 };

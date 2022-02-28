@@ -11,6 +11,7 @@ import {
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
 
+export const MANIFEST_FILE = 'manifest.json';
 const query = {
   getProfile: async (_source, { ethAddress }, { dataSources }) => {
     return dataSources.profileAPI.getProfile(ethAddress);
@@ -287,20 +288,36 @@ const query = {
       const cid = CID.parse('f' + data.manifestHash.substring(2), base16.decoder);
       const ipfsLink = createIpfsGatewayLink(cid.toV1());
       const d = await fetchWithTimeout(ipfsLink, {
-        timeout: 10000,
+        timeout: 30000,
         redirect: 'follow',
       });
       const { links, sources } = await d.json();
+      const ipfsSources = multiAddrToUri(sources);
+      let manifest: {
+        mainFile: string;
+        license?: string;
+        description?: string;
+        keywords?: string[];
+      };
+      if (ipfsSources.length) {
+        const manifestReq = await fetchWithTimeout(`${ipfsSources[0]}/${MANIFEST_FILE}`, {
+          timeout: 10000,
+          redirect: 'follow',
+        });
+        manifest = await manifestReq.json();
+        ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
+      }
       const releaseInfo = {
         id: pkgInfo.latestReleaseId,
-        name: data.integrationName,
+        name: pkgInfo.integrationName,
         version: data.version,
-        integrationType: data.integrationType,
+        integrationType: pkgInfo.integrationType,
         links: links,
-        sources: multiAddrToUri(sources),
+        sources: ipfsSources,
         author: pkgInfo.author,
         integrationID: integrationID,
         enabled: pkgInfo.enabled,
+        manifestData: manifest,
       };
       results.push(releaseInfo);
       await registryCache.set(cacheKey, releaseInfo, 3600);

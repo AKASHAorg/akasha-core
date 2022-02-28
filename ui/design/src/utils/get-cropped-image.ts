@@ -38,12 +38,14 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
  * @param imageSrc - string
  * @param pixelCrop - object
  * @param rotation - number
+ * @param ImageSrcType - string
  * @param flip - object
  */
 export default async function getCroppedImage(
   imageSrc: string,
   pixelCrop: Record<string, number>,
   rotation = 0,
+  imageSrcType = 'image/jpeg', // defaults to image/jpeg if undefined
   flip = { horizontal: false, vertical: false },
 ): Promise<[Blob, string]> {
   const image = await createImage(imageSrc);
@@ -89,7 +91,7 @@ export default async function getCroppedImage(
       file => {
         resolve([file, URL.createObjectURL(file)]);
       },
-      'image/jpeg',
+      imageSrcType,
       1,
     );
   });

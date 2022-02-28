@@ -19,6 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     rootRoute,
   },
   loadingFn: () => import('./components'),
+  i18nNamespace: ['app-legal'],
   menuItems: {
     route: rootRoute,
     label: 'Legal',

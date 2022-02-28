@@ -8,33 +8,18 @@ import { TYPES } from '@akashaproject/sdk-typings';
 import Logging from '../logging';
 import { constants as ethersConstants, ethers, utils as ethersUtils } from 'ethers';
 import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
-import { AWF_IIC_REGISTRY } from '@akashaproject/sdk-typings/lib/interfaces/registry';
+import {
+  AWF_IIC_REGISTRY,
+  AWF_APP_BUILD_MANIFEST,
+  AWF_APP_SOURCE_MANIFEST,
+  IntegrationInfo,
+  ReleaseInfo,
+} from '@akashaproject/sdk-typings/lib/interfaces/registry';
 import { lastValueFrom } from 'rxjs';
 import { createFormattedValue } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import IpfsConnector from '../common/ipfs.connector';
 import { GetLatestRelease, GetIntegrationInfo } from './icRegistry.graphql';
-
-export interface ReleaseInfo {
-  integrationID: string;
-  id: string;
-  name: string;
-  version: string;
-  integrationType: number;
-  links: string;
-  sources: string[];
-  author: string;
-  enabled: boolean;
-}
-
-export interface IntegrationInfo {
-  id: string;
-  name: string;
-  author: string;
-  integrationType: number;
-  latestReleaseId: string;
-  enabled: boolean;
-}
 
 @injectable()
 class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
@@ -49,6 +34,7 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
   private _IntegrationRegistryInstance;
 
   public readonly INTEGRATION_REGISTRY_ADDRESS = process.env.INTEGRATION_REGISTRY_ADDRESS;
+  public readonly MANIFEST_FILE = 'manifest.json';
   readonly graphQLDocs = {
     GetLatestRelease,
     GetIntegrationInfo,
@@ -104,28 +90,38 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getReleaseData(releaseId);
     const manifestData = await lastValueFrom(
-      this._ipfs.catDocument(
+      this._ipfs.catDocument<AWF_APP_BUILD_MANIFEST>(
         this._ipfs.transformBase16HashToV1(
           // replace 0x prefix with 'f' - base16 CID encoding
           'f' + data.manifestHash.substring(2),
         ),
+        true,
       ),
     );
-    const { links, sources } = JSON.parse(manifestData.data);
+    const { links, sources } = manifestData.data;
     const integrationID = ethersUtils.id(data.integrationName);
     const integrationInfo = await this._IntegrationRegistryInstance.getPackageInfo(
       ethersUtils.id(integrationID),
     );
+    const ipfsSources = this._ipfs.multiAddrToUri(sources);
+    let manifest: { data?: AWF_APP_SOURCE_MANIFEST };
+    if (ipfsSources.length) {
+      manifest = await lastValueFrom(
+        this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(`${ipfsSources[0]}/${this.MANIFEST_FILE}`),
+      );
+      ipfsSources[0] = `${ipfsSources[0]}/${manifest.data.mainFile}`;
+    }
     const response: ReleaseInfo = {
       id: releaseId,
-      name: data.integrationName,
+      name: integrationInfo.integrationName,
       version: data.version,
-      integrationType: data.integrationType,
+      integrationType: integrationInfo.integrationType,
       links: links,
-      sources: this._ipfs.multiAddrToUri(sources),
+      sources: ipfsSources,
       integrationID: integrationID,
       author: integrationInfo.author,
       enabled: integrationInfo.enabled,
+      manifestData: manifest.data,
     };
     return createFormattedValue(response);
   }

@@ -41,6 +41,7 @@ export interface ExtensionPointDefinition {
    */
   parent?: string;
   activeWhen?: ActivityFn;
+  i18nNamespace?: string[];
 }
 
 export interface IAppConfig {
@@ -114,6 +115,14 @@ export interface IAppConfig {
    */
   tags?: string[];
   /**
+   * Namespace used by the app for i18next
+   */
+  i18nNamespace?: string[];
+  /**
+   * Used for page title
+   */
+  title: string;
+  /**
    * Only used for topbar.
    * @deprecated - use extension points
    */
@@ -167,6 +176,10 @@ export interface ILoaderConfig {
    * layout widget is loaded by default, no need to be specified here
    */
   defaultWidgets: string[];
+  /**
+   * Plugins that are installed by default on this world.
+   */
+  defaultPlugins: string[];
   /**
    * The layout widget of this world. This widget always mounts in the root element.
    */
@@ -258,4 +271,10 @@ export const enum ItemTypes {
   PROFILE,
   COMMENT,
   TAG,
+}
+
+export interface PluginConf {
+  translation: {
+    i18n: RootComponentProps['i18next'];
+  };
 }

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -25,7 +25,7 @@ export interface ProfilePageProps extends RootComponentProps {
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation('app-profile');
   const { loggedProfileData, showLoginModal } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
@@ -184,7 +184,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   parentIsProfilePage={true}
                   uiEvents={props.uiEvents}
                   itemSpacing={8}
-                  i18n={i18n}
+                  i18n={props.plugins?.translation?.i18n}
                 />
               )}
             </>

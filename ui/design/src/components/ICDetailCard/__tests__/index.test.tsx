@@ -12,13 +12,14 @@ describe('<ICDetailCard /> Component', () => {
   const handleClickCTA = jest.fn();
   const handleClickInstall = jest.fn();
   const handleClickUninstall = jest.fn();
+  const handleAuthorClick = jest.fn();
+  const handleTagClick = jest.fn();
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
           <ICDetailCard
-            titleLabel={ICWorldAppsData[3].name}
             shareLabel="Share"
             installLabel="Install"
             uninstallLabel="Uninstall"
@@ -26,25 +27,23 @@ describe('<ICDetailCard /> Component', () => {
             descriptionLabel="Description"
             showMoreLabel="Show More"
             linksLabel="Links"
-            nextReleaseLabel="Support next release"
-            ghRepoLabel="Github Repo"
-            curVersionLabel="Current Version"
-            versionLabel="Version"
-            currentLabel="Current"
-            bugFixingLabel="Bug Fixing"
+            releasesLabel={'Releases'}
+            releaseVersionLabel={'Version'}
+            latestReleaseLabel={'Latest release'}
+            noPreviousReleasesLabel={'No previous releases'}
+            releaseIdLabel={'Release Id'}
             versionHistoryLabel="Version History"
-            authorsLabel="Authors & Contributors"
+            authorLabel="Authors & Contributors"
             licenseLabel="License"
-            descriptionContent={ICWorldAppsData[3].description}
             isInstalled={false}
             releases={ICWorldAppsData[3].releases}
-            authors={ICWorldAppsData[3].authors}
-            tags={ICWorldAppsData[3].tags}
-            license={ICWorldAppsData[3].license}
+            latestRelease={ICWorldAppsData[3].releases[0]}
             onClickShare={handleClickShare}
             onClickCTA={handleClickCTA}
             onClickInstall={handleClickInstall}
             onClickUninstall={handleClickUninstall}
+            handleAuthorClick={handleAuthorClick}
+            handleTagClick={handleTagClick}
           />,
         ),
         {},

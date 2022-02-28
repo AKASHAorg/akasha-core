@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import CommonInterface from '../../interfaces/common.interface';
 import * as icons from './new-icons';
 
+// maintain alphabetical order for icon names
 export type IconType =
   | 'app3Box'
   | 'appCenter'
@@ -11,8 +12,6 @@ export type IconType =
   | 'appEns'
   | 'appFeed'
   | 'appIpfs'
-  | 'appIC'
-  | 'appICCTA'
   | 'activity'
   | 'akasha'
   | 'addAppGrey'
@@ -35,15 +34,19 @@ export type IconType =
   | 'coinbase'
   | 'coins'
   | 'copy'
-  | 'dapper'
   | 'check'
   | 'checkSimple'
+  | 'dapper'
+  | 'chevronRight'
+  | 'chevronLeft'
   | 'discord'
   | 'document'
+  | 'dropdown'
   | 'editSimple'
   | 'edit'
   | 'email'
   | 'emoji'
+  | 'explore'
   | 'eye'
   | 'ethereum'
   | 'ethereumWorldLogo'
@@ -76,6 +79,12 @@ export type IconType =
   | 'moreGrey'
   | 'nifty'
   | 'notifications'
+  | 'integrationAppLarge'
+  | 'integrationAppSmall'
+  | 'integrationAppSmallFill'
+  | 'integrationWidgetLarge'
+  | 'integrationWidgetSmall'
+  | 'integrationAppCTA'
   | 'opera'
   | 'payment'
   | 'person'
@@ -117,7 +126,9 @@ export type IconType =
   | 'walletconnect'
   | 'web3'
   | 'zoomIn'
-  | 'zoomOut';
+  | 'zoomOut'
+  | 'zoomInAlt'
+  | 'zoomOutAlt';
 
 export const iconTypes: IconType[] = [
   'app3Box',
@@ -126,8 +137,6 @@ export const iconTypes: IconType[] = [
   'appEns',
   'appFeed',
   'appIpfs',
-  'appIC',
-  'appICCTA',
   'activity',
   'addAppGrey',
   'akasha',
@@ -149,16 +158,20 @@ export const iconTypes: IconType[] = [
   'code',
   'coinbase',
   'copy',
-  'dapper',
   'check',
   'checkSimple',
+  'chevronRight',
+  'chevronLeft',
   'coins',
+  'dapper',
   'discord',
   'document',
+  'dropdown',
   'editSimple',
   'edit',
   'email',
   'emoji',
+  'explore',
   'eye',
   'ethereum',
   'ethereumWorldLogo',
@@ -191,6 +204,12 @@ export const iconTypes: IconType[] = [
   'moreGrey',
   'nifty',
   'notifications',
+  'integrationAppLarge',
+  'integrationAppSmall',
+  'integrationAppSmallFill',
+  'integrationWidgetLarge',
+  'integrationWidgetSmall',
+  'integrationAppCTA',
   'opera',
   'payment',
   'person',
@@ -232,6 +251,8 @@ export const iconTypes: IconType[] = [
   'web3',
   'zoomIn',
   'zoomOut',
+  'zoomInAlt',
+  'zoomOutAlt',
 ];
 
 export interface IconProps extends CommonInterface<any> {

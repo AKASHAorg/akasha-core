@@ -9,7 +9,7 @@ const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard } = DS;
 const NotificationsPage: React.FC<RootComponentProps> = props => {
   const { singleSpa } = props;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('app-notifications');
 
   const loginQuery = useGetLogin();
 

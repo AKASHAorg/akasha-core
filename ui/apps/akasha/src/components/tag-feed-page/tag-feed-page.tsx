@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
-import FeedWidget from '@akashaproject/ui-widget-feed/lib/components/App';
+import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
@@ -28,7 +28,7 @@ const TagInfoCard = styled(TagProfileCard)`
 
 const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation('app-akasha-integration');
   const { tagName } = useParams<{ tagName: string }>();
   const getTagQuery = useGetTag(tagName);
 
@@ -118,7 +118,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             removedByAuthorLabel={t('This post was deleted by its author')}
             uiEvents={props.uiEvents}
             itemSpacing={8}
-            i18n={i18n}
+            i18n={props.plugins?.translation?.i18n}
           />
         </>
       )}

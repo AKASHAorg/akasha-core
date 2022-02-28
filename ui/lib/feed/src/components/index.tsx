@@ -1,8 +1,6 @@
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import { setupI18next } from '../i18n';
 import App from './App';
 import DS from '@akashaproject/design-system';
 
@@ -27,13 +25,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
-  return setupI18next({
-    logger: props.logger,
-    // must be the same as the one in ../../i18next.parser.config.js
-    namespace: 'ui-widget-feed',
-  });
-};
+export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 
