@@ -220,15 +220,15 @@ const EntryRenderer = (props: IEntryRenderer) => {
     });
   };
 
-  const handleExtensionUnmount = (/* name: string */) => {
-    // props.uiEvents.next({
-    //   event: EventTypes.ExtensionPointUnmount,
-    //   data: {
-    //     name,
-    //     entryId: itemId,
-    //     entryType: itemType,
-    //   },
-    // });
+  const handleExtensionUnmount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointUnmount,
+      data: {
+        name,
+        entryId: itemId,
+        entryType: itemType,
+      },
+    });
   };
   const handleFlipCard = () => {
     setShowAnyway(true);

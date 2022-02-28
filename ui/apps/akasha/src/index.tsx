@@ -12,7 +12,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  name: 'app-akasha-integration',
 
   /**
    * routes that are defined here can be used by

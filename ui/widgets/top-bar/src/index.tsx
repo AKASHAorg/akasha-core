@@ -1,7 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import {
-  IWidgetConfig,
   IntegrationRegistrationOptions,
+  IWidgetConfig,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { extensionPointsMap } from './extension-points';
 /**
@@ -12,8 +12,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
     return {
       mountsIn: registrationOpts.layoutConfig?.topbarSlotId,
       loadingFn: () => import('./components'),
-      name: 'ui-widget-topbar',
-      tags: ['topbar'],
+      activeWhen: () => true,
       extensions: extensionPointsMap,
       extends: [
         {

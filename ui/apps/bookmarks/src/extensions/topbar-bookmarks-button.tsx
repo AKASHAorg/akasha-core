@@ -2,7 +2,7 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import { rootRoute } from '../routes';
 import { withProviders } from '@akashaproject/ui-awf-hooks';
 import { useRouteMatch } from 'react-router';
@@ -31,7 +31,7 @@ const BookmarkIcon = styled(Icon)`
   }
 `;
 
-const BookmarksTopbarButton = (props: RootComponentProps) => {
+const BookmarksTopbarButton = (props: RootExtensionProps) => {
   const match = useRouteMatch(rootRoute);
 
   return (
@@ -44,7 +44,7 @@ const BookmarksTopbarButton = (props: RootComponentProps) => {
   );
 };
 
-const ButtonWrapper = (props: RootComponentProps) => (
+const ButtonWrapper = (props: RootExtensionProps) => (
   <Router>
     <BookmarksTopbarButton {...props} />
   </Router>
@@ -54,7 +54,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(ButtonWrapper),
-  errorBoundary: (_err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (_err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

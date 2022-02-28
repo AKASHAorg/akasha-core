@@ -18,8 +18,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   mountsIn: opts.layoutConfig?.pluginSlotId,
   loadingFn: () => import('./components'),
-  name: 'app-profile',
-  title: 'Profile | Ethereum World',
   menuItems: {
     label: 'Profile',
     name: 'app-profile',

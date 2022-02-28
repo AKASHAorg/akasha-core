@@ -9,11 +9,11 @@ const overrides = [
   //   integrationType: INTEGRATION_TYPES.APPLICATION,
   //   sources: [`${HOST}/apps/app-center/index.js`],
   // },
-  {
-    name: '@akashaproject/app-bookmarks',
-    integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`${HOST}/apps/bookmarks/index.js`],
-  },
+  // {
+  //   name: '@akashaproject/app-bookmarks',
+  //   integrationType: INTEGRATION_TYPES.APPLICATION,
+  //   sources: [`${HOST}/apps/bookmarks/index.js`],
+  // },
   {
     name: '@akashaproject/app-akasha-integration',
     integrationType: INTEGRATION_TYPES.APPLICATION,

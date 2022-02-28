@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import {
   uploadMediaToTextile,
@@ -33,7 +33,7 @@ const {
   darkTheme,
 } = DS;
 
-const EditorModalContainer = (props: RootComponentProps) => {
+const EditorModalContainer = (props: RootExtensionProps) => {
   const { t } = useTranslation();
 
   const loginQuery = useGetLogin();
@@ -193,7 +193,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => {
+const Wrapped = (props: RootExtensionProps) => {
   return (
     <I18nextProvider i18n={i18next}>
       <EditorModalContainer {...props} />
@@ -205,7 +205,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
@@ -223,7 +223,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
+export const bootstrap = (props: RootExtensionProps) => {
   return setupI18next({
     logger: props.logger,
     // must be the same as the one in ../../i18next.parser.config.js

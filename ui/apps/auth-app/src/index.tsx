@@ -13,10 +13,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     },
     loadingFn: () => import('./components'),
     mountsIn: opts.layoutConfig?.focusedPluginSlotId,
-    name: 'app-auth',
-    title: 'Auth',
     logo: { type: LogoTypeSource.ICON, value: 'appAuth' },
-    widgets: {},
     // allow other apps to navigate to this app
     routes: {
       SIGN_IN,
@@ -27,6 +24,5 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     },
     // allow other apps to find this app
     tags: ['auth', 'signin', 'signup'],
-    extends: [],
   };
 };

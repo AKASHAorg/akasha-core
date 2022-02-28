@@ -1,16 +1,21 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { useDeletePost, useDeleteComment, withProviders, useAnalytics } from '@akashaproject/ui-awf-hooks';
+import {
+  useDeletePost,
+  useDeleteComment,
+  withProviders,
+  useAnalytics,
+} from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import i18next, { setupI18next } from '../i18n';
 
 const { ConfirmationModal, ThemeSelector, lightTheme, darkTheme, ModalContainer, ErrorLoader } = DS;
 
-const EntryRemoveModal: React.FC<RootComponentProps> = props => {
+const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   const { activeModal, logger } = props;
   const { t } = useTranslation('app-akasha-integration');
 
@@ -75,7 +80,7 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   );
 };
 
-const ModalWrapper: React.FC<RootComponentProps> = props => {
+const ModalWrapper: React.FC<RootExtensionProps> = props => {
   return (
     <I18nextProvider i18n={i18next}>
       <EntryRemoveModal {...props} />
@@ -87,7 +92,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(ModalWrapper),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
@@ -104,7 +109,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
+export const bootstrap = (props: RootExtensionProps) => {
   return setupI18next({
     logger: props.logger,
     // must be the same as the one in ../../i18next.parser.config.js

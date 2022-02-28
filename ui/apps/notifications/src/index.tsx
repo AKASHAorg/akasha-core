@@ -18,8 +18,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  name: 'app-notifications',
-  title: 'Notifications | Ethereum World',
   routes: {
     rootRoute,
   },

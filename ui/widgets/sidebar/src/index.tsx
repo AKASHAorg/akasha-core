@@ -9,8 +9,6 @@ import {
  */
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
   loadingFn: () => import('./components'),
-  name: 'ui-widget-sidebar',
-  sdkModules: [],
-  title: 'Ethereum World',
   mountsIn: opts.layoutConfig?.sidebarSlotId,
+  activeWhen: () => true,
 });

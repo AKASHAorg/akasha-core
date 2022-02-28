@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
 import {
@@ -143,7 +143,7 @@ const getEnsFormOptions = (
   return options;
 };
 
-const UpdateENSModal: React.FC<RootComponentProps> = props => {
+const UpdateENSModal: React.FC<RootExtensionProps> = props => {
   const { navigateToModal, activeModal } = props;
   const loginQuery = useGetLogin();
   const checkNetworkReq = useNetworkState(loginQuery.data.isReady);
@@ -330,7 +330,7 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
   );
 };
 
-const EnsModal: React.FC<RootComponentProps> = props => (
+const EnsModal: React.FC<RootExtensionProps> = props => (
   <React.Suspense fallback={<></>}>
     <I18nextProvider i18n={i18n}>
       <UpdateENSModal {...props} />
@@ -342,7 +342,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(EnsModal),
-  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
@@ -361,7 +361,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
+export const bootstrap = (props: RootExtensionProps) => {
   return setupI18next({
     logger: props.logger,
     // must be the same as the one in ../../i18next.parser.config.js

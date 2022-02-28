@@ -12,12 +12,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  name: 'app-settings',
-  sdkModules: [],
-  // menuItems: routes,
-  title: 'Settings | Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appSettings' },
-  widgets: {},
   routes: {
     rootRoute,
   },

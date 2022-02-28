@@ -33,6 +33,11 @@ export const GlobalStyle = createGlobalStyle<{
     overflow: hidden;
   }
 
+  #akashaproject-ui-widget-layout {
+    display: flex;
+    flex: 1 1 0%;
+  }
+
   ${props => css`
     // 1920 and lower
     @media only screen and (min-width: ${props.theme.breakpoints.xlarge.value}px) {

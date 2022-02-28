@@ -1,7 +1,7 @@
 /**
  * Show the splash screen
  */
-export const showSplash = (): void => {
+export const showPageSplash = (): void => {
   const template: HTMLTemplateElement | null = document.querySelector('#splash-screen-tpl');
   if (template) {
     const content = template.content;
@@ -11,7 +11,7 @@ export const showSplash = (): void => {
 /**
  * Hide the splash screen
  */
-export const hideSplash = (): void => {
+export const hidePageSplash = (): void => {
   const template: HTMLTemplateElement | null = document.querySelector('#splash-screen-tpl');
   if (template) {
     const splashNode = template.content.firstElementChild;

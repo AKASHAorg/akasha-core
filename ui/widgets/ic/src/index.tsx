@@ -9,6 +9,6 @@ import {
  */
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
   loadingFn: () => import('./components'),
-  name: 'ui-widget-ic',
   mountsIn: opts.layoutConfig?.rootWidgetSlotId,
+  activeWhen: () => true,
 });

@@ -75,7 +75,7 @@ class AppSettings implements IAppSettings {
     }
     if (!release?.data?.enabled) {
       this._log.warn(`${app.name} cannot be installed.`);
-      return false;
+      // return false;
     }
     const collection = await lastValueFrom(
       this._db.getCollection<AppsSchema>(availableCollections.Apps),
@@ -103,15 +103,16 @@ class AppSettings implements IAppSettings {
     const collection = await lastValueFrom(
       this._db.getCollection<AppsSchema>(availableCollections.Settings),
     );
-    const query: unknown = { name: { $eq: appName } };
+    const query = { name: { $eq: appName } };
     const doc = await collection.data.findOne(query);
-    if (doc._id) {
-      this._globalChannel.next({
-        data: { name: appName },
-        event: APP_EVENTS.REMOVED,
-      });
-      return collection.data.delete(doc._id);
-    }
+    console.log(doc, collection);
+    this._globalChannel.next({
+      data: { name: appName },
+      event: APP_EVENTS.REMOVED,
+    });
+    // if (doc._id) {
+    //   return collection.data.delete(doc._id);
+    // }
   }
 
   async toggleAppStatus(appName: string): Promise<boolean> {

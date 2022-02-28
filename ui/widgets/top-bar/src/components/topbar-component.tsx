@@ -100,8 +100,12 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleLoginClick = () => {
+    /*
+     * TODO: This handler along with the buttons
+     * in the topbar should be moved to extension points
+     */
     props.navigateTo({
-      appName: 'app-auth',
+      appName: '@akashaproject/app-auth-ewa',
       pathName: appRoutes => {
         return appRoutes[appRoutes.SIGN_IN];
       },

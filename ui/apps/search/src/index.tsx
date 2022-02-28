@@ -19,8 +19,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  name: 'app-search',
-  title: 'Search | Ethereum World',
   menuItems: {
     label: 'Search',
     name: 'app-search',

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
@@ -11,7 +11,7 @@ import i18n, { setupI18next } from '../i18n';
 
 const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon } = DS;
 
-const LoginModal = (props: RootComponentProps) => {
+const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation();
   const location = useLocation();
 
@@ -80,7 +80,7 @@ const LoginModal = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => (
+const Wrapped = (props: RootExtensionProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
       <I18nextProvider i18n={i18n}>
@@ -94,7 +94,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
@@ -102,7 +102,7 @@ const reactLifecycles = singleSpaReact({
   },
 });
 
-export const bootstrap = (props: RootComponentProps) => {
+export const bootstrap = (props: RootExtensionProps) => {
   return setupI18next({
     logger: props.logger,
     // must be the same as the one in ../../i18next.parser.config.js
