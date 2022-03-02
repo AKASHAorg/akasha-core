@@ -1,6 +1,6 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
+import DS from '@akashaproject/design-system';
 import { EthProviders } from '@akashaproject/ui-awf-typings';
 import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
@@ -28,7 +28,6 @@ const errorMapping = {
 };
 
 const SignInStatus: React.FC<SignInStatusProps> = props => {
-  const { t } = useTranslation('app-auth-ewa');
   const {
     status,
     isActive,
@@ -40,8 +39,11 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
     onSignInComplete,
     signInError,
   } = props;
+
   const signInCall = React.useRef(onSignIn);
   const signInCompleteCall = React.useRef(onSignInComplete);
+
+  const { t } = useTranslation('app-auth-ewa');
 
   const errorMessage = React.useMemo(() => {
     if (signInError && signInError.code && errorMapping[signInError.code]) {
@@ -54,6 +56,7 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
         : t('An unknown error has occurred. Please refresh the page and try again.');
     }
     return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signInError, requiredNetworkName]);
 
   React.useEffect(() => {
