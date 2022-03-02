@@ -14,8 +14,13 @@ describe('<Sidebar /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <Sidebar
+            worldAppsTitleLabel="World Apps"
+            userInstalledAppsTitleLabel="Apps"
+            userInstalledApps={[]}
+            userInstalledWidgetsTitleLabel="Widgets"
+            userInstalledWidgets={[]}
+            exploreButtonLabel="Explore"
             bodyMenuItems={[]}
-            footerMenuItems={[]}
             allMenuItems={[]}
             onClickMenuItem={handleClickMenuItem}
           />,

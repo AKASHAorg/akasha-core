@@ -56,12 +56,6 @@ const StyledAppOptionBox = styled(Box)<{ active: boolean }>`
   }}
 `;
 
-const StyledMobileFooterBox = styled(Box)``;
-
-const StyledText = styled(Text)`
-  cursor: pointer;
-`;
-
 const StyledAccordionPanel = styled(AccordionPanel)<{ size?: string }>`
   ${props => {
     if (props.size === 'small') {
@@ -89,8 +83,6 @@ export {
   StyledFooter,
   StyledAppIconWrapper,
   StyledAppOptionBox,
-  StyledMobileFooterBox,
   StyledMobileHRDiv,
-  StyledText,
   StyledAccordionPanel,
 };

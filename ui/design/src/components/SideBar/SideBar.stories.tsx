@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grommet } from 'grommet';
+import { Box, Grommet } from 'grommet';
 
 import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
@@ -9,8 +9,15 @@ import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dim
 import lightTheme from '../../styles/themes/light/light-theme';
 import { installedAppsData } from '../../utils/dummy-data';
 
-const body = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
-const footer = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.BottomArea);
+const worldApps = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
+
+const userInstalledApps = installedAppsData?.filter(
+  menuItem => menuItem.area === MenuItemAreaType.UserAppArea,
+);
+
+const userInstalledWidgets = installedAppsData?.filter(
+  menuItem => menuItem.area === MenuItemAreaType.UserWidgetArea,
+);
 
 const SidebarComponent = (props: ISidebarProps) => {
   const { size } = useViewportSize();
@@ -29,14 +36,21 @@ export default {
 const Template = (args: ISidebarProps) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
-      <SidebarComponent {...args} />
+      <Box width="25%">
+        <SidebarComponent {...args} />
+      </Box>
     </ViewportSizeProvider>
   </Grommet>
 );
 
 export const BaseSidebar = Template.bind({});
 BaseSidebar.args = {
+  worldAppsTitleLabel: 'World Apps',
+  userInstalledAppsTitleLabel: 'Apps',
+  userInstalledApps: userInstalledApps,
+  userInstalledWidgetsTitleLabel: 'Widgets',
+  userInstalledWidgets: userInstalledWidgets,
+  exploreButtonLabel: 'Explore',
   allMenuItems: installedAppsData,
-  bodyMenuItems: body,
-  footerMenuItems: footer,
+  bodyMenuItems: worldApps,
 };
