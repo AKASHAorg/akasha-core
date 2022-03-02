@@ -8,10 +8,9 @@ import {
  * All widgets must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
+  mountsIn: opts.layoutConfig?.sidebarSlotId,
   loadingFn: () => import('./components'),
   name: 'ui-widget-sidebar',
-  sdkModules: [],
-  title: 'Ethereum World',
   i18nNamespace: ['ui-widget-sidebar'],
-  mountsIn: opts.layoutConfig?.sidebarSlotId,
+  tags: ['sidebar'],
 });
