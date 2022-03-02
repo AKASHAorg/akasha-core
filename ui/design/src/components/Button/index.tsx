@@ -8,6 +8,7 @@ export interface IButtonProps extends ButtonProps {
   primary?: boolean;
   secondary?: boolean;
   justify?: string;
+  height?: number;
 }
 
 const Button = (props: IButtonProps) => {
