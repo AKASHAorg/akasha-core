@@ -249,6 +249,8 @@ export enum MenuItemType {
 
 export enum MenuItemAreaType {
   AppArea = 'app-area', // body of sidebar
+  UserAppArea = 'user-app-area', // user installed app area of sidebar
+  UserWidgetArea = 'user-widget-area', // user installed widget area of sidebar
   QuickAccessArea = 'quick-access-area', // right of topbar
   BottomArea = 'bottom-area', // footer of sidebar
   SearchArea = 'search-area', // middle of topbar
