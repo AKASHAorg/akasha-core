@@ -6,6 +6,7 @@ const ethers = require('ethers');
 const path = require('path');
 const ipfs = require('ipfs-http-client');
 const format = require('multiformats/bases/base16');
+const { Web3Storage, getFilesFromPath } = require('web3.storage');
 
 (async () => {
   dotenv.config({
@@ -21,6 +22,7 @@ const format = require('multiformats/bases/base16');
         'Basic ' + Buffer.from(process.env.INFURA_IPFS_ID + ':' + process.env.INFURA_IPFS_SECRET).toString('base64'),
     },
   });
+  const web3Storage = new Web3Storage({ token: process.env.WEB3_STORAGE_KEY });
   const TYPE_APP = 0;
   const TYPE_PLUGIN = 1;
   const TYPE_WIDGET = 2;
@@ -58,6 +60,9 @@ const format = require('multiformats/bases/base16');
       source.path,
       '',
     );
+    const files = await getFilesFromPath(source.path);
+    const web3StorageCID = await web3Storage.put(files);
+    console.info(`${source.package.name} - web3.storage CID: ${web3StorageCID}`)
     const manifestData = {
       path: 'manifest.json',
       content: JSON.stringify({

@@ -86,7 +86,7 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
     return createFormattedValue(response);
   }
 
-  async getIntegrationReleaseInfo(releaseId: string) {
+  async getIntegrationReleaseInfo(releaseId: string, integrationId?: string) {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getReleaseData(releaseId);
     const manifestData = await lastValueFrom(
@@ -99,15 +99,16 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
       ),
     );
     const { links, sources } = manifestData.data;
-    const integrationID = ethersUtils.id(data.integrationName);
-    const integrationInfo = await this._IntegrationRegistryInstance.getPackageInfo(
-      ethersUtils.id(integrationID),
-    );
+    const integrationID = integrationId || ethersUtils.id(data.integrationName);
+    const integrationInfo = await this._IntegrationRegistryInstance.getPackageInfo(integrationID);
     const ipfsSources = this._ipfs.multiAddrToUri(sources);
     let manifest: { data?: AWF_APP_SOURCE_MANIFEST };
     if (ipfsSources.length) {
       manifest = await lastValueFrom(
-        this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(`${ipfsSources[0]}/${this.MANIFEST_FILE}`),
+        this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(
+          `${ipfsSources[0]}/${this.MANIFEST_FILE}`,
+          true,
+        ),
       );
       ipfsSources[0] = `${ipfsSources[0]}/${manifest.data.mainFile}`;
     }
@@ -130,7 +131,7 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
   async getLatestVersionInfo(integration: { name?: string; id?: string }) {
     const integrationID = integration.id || ethers.utils.id(integration.name);
     const info = await this.getIntegrationInfo(integrationID);
-    return this.getIntegrationReleaseInfo(info.data.latestReleaseId);
+    return this.getIntegrationReleaseInfo(info.data.latestReleaseId, integrationID);
   }
 
   async getIntegrationsCount() {
