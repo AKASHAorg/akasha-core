@@ -5,10 +5,10 @@ import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
 import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 
-const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon } = DS;
+const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon, ErrorLoader } = DS;
 
 const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
@@ -97,7 +97,11 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
-    return <div>!</div>;
+    return (
+      <ThemeWrapper {...props}>
+        <ErrorLoader type="script-error" title="Error in login modal" details={err.message} />
+      </ThemeWrapper>
+    );
   },
 });
 

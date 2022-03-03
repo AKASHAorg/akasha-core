@@ -11,10 +11,11 @@ import {
   useGetLogin,
   useReport,
   useAnalytics,
+  ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
 
-const { ReportModal } = DS;
+const { ReportModal, ErrorLoader } = DS;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
   const { activeModal } = props;
@@ -117,7 +118,11 @@ const reactLifecycles = singleSpaReact({
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }
-    return <div>!</div>;
+    return (
+      <ThemeWrapper {...props}>
+        <ErrorLoader type="script-error" title="Error in report modal" details={err.message} />
+      </ThemeWrapper>
+    );
   },
 });
 

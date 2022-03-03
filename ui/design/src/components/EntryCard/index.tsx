@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MainAreaCardBox } from './basic-card-box';
+import { BasicCardBox } from './basic-card-box';
 import { SocialBox } from './social-box';
 import { IEntryBoxProps, EntryBox } from './entry-box';
 
@@ -13,6 +13,9 @@ export interface IEntryCardProps extends IEntryBoxProps {
   style?: React.CSSProperties;
   rootNodeRef?: React.Ref<HTMLDivElement>;
   contentClickable?: boolean;
+  noBorder?: boolean;
+  noBorderRadius?: boolean;
+  bottomBorderOnly?: boolean;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -68,10 +71,20 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     removedByMeLabel,
     removedByAuthorLabel,
     modalSlotId,
+    noBorder,
+    noBorderRadius,
+    bottomBorderOnly,
   } = props;
 
   return (
-    <MainAreaCardBox className={className} style={style} rootNodeRef={rootNodeRef}>
+    <BasicCardBox
+      className={className}
+      style={style}
+      rootNodeRef={rootNodeRef}
+      noBorder={noBorder}
+      noBorderRadius={noBorderRadius}
+      bottomBorderOnly={bottomBorderOnly}
+    >
       {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
         <SocialBox
           socialData={entryData.quotedByAuthors}
@@ -130,7 +143,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         headerMenuExt={props.headerMenuExt}
         actionsRightExt={props.actionsRightExt}
       />
-    </MainAreaCardBox>
+    </BasicCardBox>
   );
 };
 

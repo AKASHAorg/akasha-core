@@ -265,6 +265,7 @@ export enum EventTypes {
   LayoutShowLoadingUser = 'layout:show-loading-user',
   LayoutShowAppLoading = 'layout:show-app-loading',
   LayoutShowAppNotFound = 'layout:show-app-not-found',
+  ThemeChange = 'theme-change',
 }
 
 export type EventDataTypes = {

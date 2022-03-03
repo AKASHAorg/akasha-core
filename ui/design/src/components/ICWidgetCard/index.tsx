@@ -100,6 +100,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                         gap="xxsmall"
                         maxWidth="10rem"
                         iconType="integrationAppLarge"
+                        plainIcon={true}
                         backgroundColor={true}
                       />
                     </Box>
@@ -154,6 +155,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                         gap="xxsmall"
                         maxWidth="10rem"
                         iconType="integrationAppLarge"
+                        plainIcon={true}
                         backgroundColor={true}
                       />
                     </Box>

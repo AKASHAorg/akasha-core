@@ -22,7 +22,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import ScrollRestorer from './scroll-restorer';
 import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 
-const { Box, responsiveBreakpoints } = DS;
+const { Box } = DS;
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
@@ -111,7 +111,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     <>
       <ScrollRestorer />
       <div>
-        <GlobalStyle theme={{ breakpoints: responsiveBreakpoints.global.breakpoints }} />
+        <GlobalStyle />
         <div>
           {/* ^ topbar sticky container */}
           <TopbarSlot

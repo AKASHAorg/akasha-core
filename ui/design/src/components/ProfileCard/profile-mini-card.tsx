@@ -124,7 +124,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
       </Box>
 
       <Box direction="column" pad="medium" gap="medium">
-        <Text wordBreak="break-word" color="primaryText">
+        <Text wordBreak="break-word" color="primaryText" truncate={true}>
           {profileData.description}
         </Text>
 

@@ -6,6 +6,7 @@ import { BackgroundDiv, StyledBox } from './styled-subtitle-text-icon';
 export interface ISubtitleTextIcon {
   className?: string;
   iconType?: IconType;
+  plainIcon?: boolean;
   iconSize?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   backgroundSize?: string;
   backgroundColor?: boolean;
@@ -24,6 +25,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     className,
     iconType,
     iconSize,
+    plainIcon,
     backgroundColor,
     backgroundSize,
     label,
@@ -46,7 +48,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     >
       {iconType ? (
         <BackgroundDiv backgroundSize={backgroundSize} backgroundColor={backgroundColor}>
-          <Icon type={iconType} size={iconSize} />
+          <Icon type={iconType} size={iconSize} plain={plainIcon} />
         </BackgroundDiv>
       ) : null}
       <Box pad="none" gap={gap} width={{ max: maxWidth }}>

@@ -43,13 +43,7 @@ const EditorCard: React.FC<IEditorCard> = props => {
   return (
     <MainAreaCardBox className={className} style={wrapperStyle}>
       <Box direction="row" justify="between" pad="medium" align="center" flex={false}>
-        <Icon
-          type="arrowLeft"
-          onClick={handleNavigateBack}
-          clickable={true}
-          primaryColor={true}
-          size="xs"
-        />
+        <Icon type="arrowLeft" onClick={handleNavigateBack} clickable={true} size="xs" />
         <Text size="large">{titleLabel}</Text>
         <Icon type="akasha" clickable={true} style={{ marginLeft: '2rem' }} />
       </Box>

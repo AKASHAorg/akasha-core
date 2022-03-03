@@ -4,11 +4,11 @@ import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import { rootRoute } from '../routes';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
 import { useRouteMatch } from 'react-router';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const { ThemeSelector, lightTheme, darkTheme, Icon, styled, css } = DS;
+const { Icon, styled, css } = DS;
 
 const BookmarkIcon = styled(Icon)`
   border-radius: 50%;
@@ -60,12 +60,9 @@ const reactLifecycles = singleSpaReact({
     }
 
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <Icon type="error" size="sm" />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

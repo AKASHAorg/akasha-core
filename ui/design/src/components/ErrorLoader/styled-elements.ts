@@ -20,7 +20,7 @@ const StyledImage = styled.img`
 `;
 
 const PageWrapper = styled(Box)`
-  background: white;
+  background: ${props => props.theme.colors.background};
 `;
 
 const ContentWrapper = styled(Box)`

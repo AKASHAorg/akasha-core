@@ -2,11 +2,11 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
 import DS from '@akashaproject/design-system';
 import { rootRoute } from '../routes';
 
-const { ThemeSelector, lightTheme, darkTheme, ErrorLoader, ModalContainer, ShareModal } = DS;
+const { ErrorLoader, ModalContainer, ShareModal } = DS;
 
 const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
   const { profileId } = props.activeModal;
@@ -55,16 +55,13 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
           title="Error in update profile modal"
           details={error.message}
         />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

@@ -23,7 +23,7 @@ interface IProfileEditMenuProps {
 const MenuOption = styled(StyledSelectBox)`
   padding: 0.5em;
   &:hover {
-    background: ${props => props.theme.colors.ultraLightBackground};
+    background: ${props => props.theme.colors.hoverBackground};
   }
 `;
 

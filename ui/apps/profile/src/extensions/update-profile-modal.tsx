@@ -12,23 +12,12 @@ import {
   useGetLogin,
   useQueryListener,
   withProviders,
+  ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
 
-const {
-  ThemeSelector,
-  lightTheme,
-  darkTheme,
-  ErrorLoader,
-  ModalContainer,
-  styled,
-  BoxFormCard,
-  Box,
-  Spinner,
-  ModalCard,
-  Text,
-} = DS;
+const { ErrorLoader, ModalContainer, styled, BoxFormCard, Box, Spinner, ModalCard, Text } = DS;
 
 const ProfileForm = styled(BoxFormCard)`
   width: 100vw;
@@ -188,16 +177,13 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
           title="Error in update profile modal"
           details={error.message}
         />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

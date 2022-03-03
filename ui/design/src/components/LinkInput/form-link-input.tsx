@@ -26,6 +26,7 @@ const LinkInput: React.FC<ILinkInput> = props => {
       }}
       className={className}
       flex={'shrink'}
+      background="inputBackground"
     >
       <Icon type="link" />
       <StyledInputWrapper>

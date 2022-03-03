@@ -338,9 +338,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
       >
         <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small" onClick={onBrandClick}>
           <Box direction="row" gap="small" align="center">
-            <BrandIcon type="ethereumWorldLogo" clickable={true} />
+            <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
             {!isMobileOnly && (
-              <StyledText style={{ userSelect: 'none' }} size="large">
+              <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">
                 {brandLabel}
               </StyledText>
             )}

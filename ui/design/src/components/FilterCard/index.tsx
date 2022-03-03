@@ -47,7 +47,6 @@ const FilterCard: React.FC<IFilterCard> = props => {
         <TextIcon
           label={expanded ? closeLabel : filtersLabel}
           iconType={expanded ? 'close' : 'menuPyramid'}
-          primaryColor={true}
           onClick={toggleExpand}
           reverse={true}
           clickable={true}

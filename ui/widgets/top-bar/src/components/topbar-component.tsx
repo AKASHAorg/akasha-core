@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { extensionPointsMap } from '../extension-points';
 
-const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
+const { Topbar, ExtensionPoint } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
   const { singleSpa, uiEvents, navigateTo } = props;
@@ -182,58 +182,56 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   return (
-    <ThemeSelector availableThemes={[lightTheme]} settings={{ activeTheme: 'Light-Theme' }}>
-      <Topbar
-        loggedProfileData={loggedProfileData}
-        brandLabel="Ethereum World"
-        signInLabel={t('Sign In')}
-        signUpLabel={t('Sign Up')}
-        signOutLabel={t('Sign Out')}
-        searchBarLabel={t('Search profiles or topics')}
-        legalLabel={t('Legal')}
-        isModerator={isModerator}
-        dashboardLabel={t('Moderator Dashboard')}
-        dashboardInfoLabel={t('Help moderate items!')}
-        feedbackLabel={t('Send Us Feedback')}
-        feedbackInfoLabel={t('Help us improve the experience!')}
-        settingsLabel={t('Settings')}
-        settingsInfoLabel={t('Adjustment for your world and Dapps')}
-        moderationLabel={t('Moderation History')}
-        moderationInfoLabel={t('Help keep us accountable!')}
-        legalCopyRightLabel={'© Ethereum World Association'}
-        stuckLabel={t('Stuck?')}
-        helpLabel={t('We can help')}
-        writeToUs="mailto:alpha@ethereum.world"
-        versionLabel="ALPHA"
-        versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
-        onNavigation={handleNavigation}
-        onSearch={handleSearch}
-        quickAccessItems={sortedQuickAccessItems}
-        searchAreaItem={searchAreaItem}
-        otherAreaItems={otherAreaItems}
-        onLoginClick={handleLoginClick}
-        onSignUpClick={handleSignUpClick}
-        onLogout={handleLogout}
-        onSettingsClick={handleSettingsClick}
-        onFeedbackClick={handleFeedbackModalShow}
-        onModerationClick={handleModerationClick}
-        onDashboardClick={handleDashboardClick}
-        hasNewNotifications={checkNotifsReq.data}
-        currentLocation={location?.pathname}
-        onBrandClick={handleBrandClick}
-        modalSlotId={props.layoutConfig.modalSlotId}
-        quickAccessExt={
-          loggedProfileData?.ethAddress && (
-            <ExtensionPoint
-              name={extensionPointsMap.QuickAccess}
-              shouldMount={!!loggedProfileData?.ethAddress}
-              onMount={name => onExtMount(name)}
-              onUnmount={name => onExtUnmount(name)}
-            />
-          )
-        }
-      />
-    </ThemeSelector>
+    <Topbar
+      loggedProfileData={loggedProfileData}
+      brandLabel="Ethereum World"
+      signInLabel={t('Sign In')}
+      signUpLabel={t('Sign Up')}
+      signOutLabel={t('Sign Out')}
+      searchBarLabel={t('Search profiles or topics')}
+      legalLabel={t('Legal')}
+      isModerator={isModerator}
+      dashboardLabel={t('Moderator Dashboard')}
+      dashboardInfoLabel={t('Help moderate items!')}
+      feedbackLabel={t('Send Us Feedback')}
+      feedbackInfoLabel={t('Help us improve the experience!')}
+      settingsLabel={t('Settings')}
+      settingsInfoLabel={t('Adjustment for your world and Dapps')}
+      moderationLabel={t('Moderation History')}
+      moderationInfoLabel={t('Help keep us accountable!')}
+      legalCopyRightLabel={'© Ethereum World Association'}
+      stuckLabel={t('Stuck?')}
+      helpLabel={t('We can help')}
+      writeToUs="mailto:alpha@ethereum.world"
+      versionLabel="ALPHA"
+      versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
+      onNavigation={handleNavigation}
+      onSearch={handleSearch}
+      quickAccessItems={sortedQuickAccessItems}
+      searchAreaItem={searchAreaItem}
+      otherAreaItems={otherAreaItems}
+      onLoginClick={handleLoginClick}
+      onSignUpClick={handleSignUpClick}
+      onLogout={handleLogout}
+      onSettingsClick={handleSettingsClick}
+      onFeedbackClick={handleFeedbackModalShow}
+      onModerationClick={handleModerationClick}
+      onDashboardClick={handleDashboardClick}
+      hasNewNotifications={checkNotifsReq.data}
+      currentLocation={location?.pathname}
+      onBrandClick={handleBrandClick}
+      modalSlotId={props.layoutConfig.modalSlotId}
+      quickAccessExt={
+        loggedProfileData?.ethAddress && (
+          <ExtensionPoint
+            name={extensionPointsMap.QuickAccess}
+            shouldMount={!!loggedProfileData?.ethAddress}
+            onMount={name => onExtMount(name)}
+            onUnmount={name => onExtUnmount(name)}
+          />
+        )
+      }
+    />
   );
 };
 

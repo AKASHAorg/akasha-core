@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import App from './App';
 import DS from '@akashaproject/design-system';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { ThemeWrapper, withProviders } from '@akashaproject/ui-awf-hooks';
 
-const { ErrorLoader, ThemeSelector, lightTheme, darkTheme } = DS;
+const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,
@@ -17,16 +17,13 @@ const reactLifecycles = singleSpaReact({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
+      <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
           title="Error in app-center plugin"
           details={error.message}
         />
-      </ThemeSelector>
+      </ThemeWrapper>
     );
   },
 });

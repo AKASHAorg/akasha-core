@@ -92,13 +92,7 @@ const EnsFormCard: React.FC<IEnsFormCardProps> = props => {
           <Text weight="bold" margin="0 auto 1.5rem" size="large">
             {titleLabel}
           </Text>
-          <Icon
-            type="close"
-            color="secondaryText"
-            primaryColor={true}
-            clickable={true}
-            onClick={handleCancel}
-          />
+          <Icon type="close" color="secondaryText" clickable={true} onClick={handleCancel} />
         </Box>
         <Box direction="row" align="center">
           <StyledText color="secondaryText" size="small" margin={{ bottom: 'xsmall' }}>

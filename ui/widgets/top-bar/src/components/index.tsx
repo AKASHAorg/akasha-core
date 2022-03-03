@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import Widget from './topbar-widget';
-import { withProviders } from '@akashaproject/ui-awf-hooks';
+import { ThemeWrapper, withProviders } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 
-const { Icon, ThemeSelector, lightTheme, darkTheme } = DS;
+const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact<RootComponentProps>({
   React,
@@ -17,12 +17,9 @@ const reactLifecycles = singleSpaReact<RootComponentProps>({
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
-      <ThemeSelector
-        availableThemes={[lightTheme, darkTheme]}
-        settings={{ activeTheme: 'LightTheme' }}
-      >
-        <Icon type="error" size="lg" />
-      </ThemeSelector>
+      <ThemeWrapper {...props}>
+        <ErrorLoader type="script-error" title="Error in topbar widget" details={error.message} />
+      </ThemeWrapper>
     );
   },
 });
