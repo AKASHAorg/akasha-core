@@ -20,7 +20,7 @@ import {
 import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import ScrollRestorer from './scroll-restorer';
-import { BrowserRouter as Router, Route, Routes, useMatch } from 'react-router-dom';
+import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 
 const { Box, responsiveBreakpoints } = DS;
 
@@ -80,9 +80,6 @@ const Layout: React.FC<RootComponentProps> = props => {
     const eventsSub = uiEvents.current.subscribe({
       next: (eventInfo: UIEventData) => {
         if (eventInfo.event === EventTypes.ModalMountRequest && eventInfo.data) {
-          // if (activeModal && activeModal.name !== eventInfo.data.name) {
-          //   handleModalNodeUnmount(activeModal.name);
-          // }
           if (typeof eventInfo.data.entryType === 'string') {
             eventInfo.data.entryType = parseInt(eventInfo.data.entryType, 10) || ItemTypes.ENTRY;
           }
@@ -99,12 +96,16 @@ const Layout: React.FC<RootComponentProps> = props => {
         }
       },
     });
+
+    uiEvents.current.next({
+      event: EventTypes.LayoutReady,
+    });
     return () => {
       if (eventsSub) {
         eventsSub.unsubscribe();
       }
     };
-  }, [activeModal]);
+  }, []);
 
   return (
     <>
@@ -169,7 +170,6 @@ const Layout: React.FC<RootComponentProps> = props => {
           </Box>
           {activeModal && (
             <ModalSlot
-              key={activeModal.name}
               name={activeModal.name}
               onMount={handleModalNodeMount}
               onUnmount={handleModalNodeUnmount}

@@ -8,23 +8,23 @@ import {
   UIEventData,
   ExtensionPointDefinition,
   EventTypes,
+  IntegrationModule,
+  PluginConf,
+  IMenuList,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   Observable,
   distinctUntilChanged,
-  from,
-  filter,
   mergeScan,
   shareReplay,
   ReplaySubject,
   pluck,
   of,
-  map,
-  mergeAll,
 } from 'rxjs';
 import { getEvents, ObservedEventNames } from './events';
 import * as singleSpa from 'single-spa';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import { handleExtensionPointUnmount } from './extensions';
 
 export interface LoaderState {
   activeModal: ModalNavigationOptions;
@@ -48,7 +48,7 @@ export interface LoaderState {
    * @param key - name of the application
    * @param value - SystemJS Module - all exported functions of an app.
    */
-  modules: Map<string, { register?: (opts: IntegrationRegistrationOptions) => IAppConfig }>;
+  modules: Map<string, IntegrationModule>;
 
   /**
    * When an extension point mounts, it will fire an event with the name of the
@@ -84,7 +84,8 @@ export interface LoaderState {
 
   /**
    * Parcel store for extensions
-   * @param extensionParcel - key: string - extensionID (unique), value: {@link Parcel}
+   * @param extensionParcel - key: string - extensionID (unique),
+   *    value: `{ parcel: {@link Parcel}, id: string, parent: string }`;
    */
   extensionParcels: Map<
     string,
@@ -103,6 +104,12 @@ export interface LoaderState {
    *
    */
   spaEvents: { eventName: ObservedEventNames; detail: singleSpa.SingleSpaCustomEventDetail };
+
+  // plugins that are provided by apps
+  plugins: PluginConf;
+
+  menuItems: IMenuList;
+  layoutReady: boolean;
 }
 
 const initialState: LoaderState = {
@@ -123,6 +130,9 @@ const initialState: LoaderState = {
   uninstallAppRequest: null,
   appNotInstalled: false,
   spaEvents: null,
+  plugins: {},
+  menuItems: { nextIndex: 1, items: [] },
+  layoutReady: false,
 };
 
 type GetStateSlice = <K extends keyof LoaderState>(
@@ -152,7 +162,7 @@ export const initState = (worldConfig: ILoaderConfig, globalChannel: ReplaySubje
             mountedExtPoints: extPoints,
           });
         case EventTypes.ExtensionPointUnmount:
-          return handleExtensionPointUnmount(state, newData);
+          return handleExtensionPointUnmount(state, newData.data);
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
           manifests.push(newData.data);
@@ -174,54 +184,3 @@ export const initState = (worldConfig: ILoaderConfig, globalChannel: ReplaySubje
     }, initialState),
     shareReplay(1),
   );
-
-/*
- * Handle extension point unmount event
- */
-const handleExtensionPointUnmount = (
-  state: LoaderState,
-  eventData: Partial<LoaderState> & EventDataTypes,
-) => {
-  return from(state.mountedExtPoints)
-    .pipe(filter(([name]) => name === eventData.data.name))
-    .pipe(
-      map(([, data]) => {
-        const parcels = state.extensionParcels.get(data.name);
-        if (parcels && parcels.length) {
-          return of(state.extensionParcels.get(data.name)).pipe(
-            filter(parcels => !!parcels && parcels.length > 0),
-            map(parcels =>
-              from(
-                parcels.map(parcelData => {
-                  if (parcelData.parcel.getStatus() === singleSpa.MOUNTED) {
-                    return parcelData.parcel.unmount();
-                  }
-                  return Promise.resolve();
-                }),
-              ),
-            ),
-            map(() => {
-              const remainingParcels = new Map(state.extensionParcels);
-              remainingParcels.delete(eventData.data.name);
-              return {
-                extData: data,
-                extensionParcels: remainingParcels,
-              };
-            }),
-          );
-        }
-        return of({ extData: data, extensionParcels: new Map() });
-      }),
-      mergeAll(),
-      map(res => {
-        const { extData, extensionParcels } = res;
-        const mountedExtPoints = new Map(state.mountedExtPoints);
-        mountedExtPoints.delete(extData.name);
-        return {
-          ...state,
-          extensionParcels,
-          mountedExtPoints,
-        };
-      }),
-    );
-};

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import {
   EventTypes,
   IMenuItem,
+  IMenuList,
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -21,7 +22,7 @@ import { extensionPointsMap } from '../extension-points';
 const { lightTheme, Topbar, ThemeSelector, ExtensionPoint } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
-  const { singleSpa, getMenuItems, uiEvents, navigateTo } = props;
+  const { singleSpa, uiEvents, navigateTo } = props;
 
   const { navigateToUrl } = singleSpa;
   const location = useLocation();
@@ -45,22 +46,16 @@ const TopbarComponent = (props: RootComponentProps) => {
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   React.useEffect(() => {
-    const updateMenu = () => {
-      const menuItems = getMenuItems ? getMenuItems() : { items: [] };
-      setCurrentMenu(menuItems.items);
-    };
-    updateMenu();
-    const sub = uiEvents.subscribe({
-      next: (eventData: UIEventData) => {
-        if (
-          eventData.event === EventTypes.InstallIntegration ||
-          eventData.event === EventTypes.UninstallIntegration
-        ) {
-          updateMenu();
-        }
+    const menuItemsSubscription = props.getMenuItems().subscribe({
+      next: menuItems => {
+        setCurrentMenu(menuItems.items);
       },
     });
-    return () => sub.unsubscribe();
+    return () => {
+      if (menuItemsSubscription) {
+        menuItemsSubscription.unsubscribe();
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

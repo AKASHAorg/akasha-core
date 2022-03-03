@@ -80,6 +80,7 @@ class AppSettings implements IAppSettings {
     const collection = await lastValueFrom(
       this._db.getCollection<AppsSchema>(availableCollections.Apps),
     );
+    console.log(release.data, 'installed release data');
     const integrationInfo = {
       id: release.data.integrationID,
       name: release.data.name,
@@ -103,16 +104,15 @@ class AppSettings implements IAppSettings {
     const collection = await lastValueFrom(
       this._db.getCollection<AppsSchema>(availableCollections.Settings),
     );
-    const query = { name: { $eq: appName } };
+    const query: unknown = { name: { $eq: appName } };
     const doc = await collection.data.findOne(query);
-    console.log(doc, collection);
-    this._globalChannel.next({
-      data: { name: appName },
-      event: APP_EVENTS.REMOVED,
-    });
-    // if (doc._id) {
-    //   return collection.data.delete(doc._id);
-    // }
+    if (doc._id) {
+      this._globalChannel.next({
+        data: { name: appName },
+        event: APP_EVENTS.REMOVED,
+      });
+      return collection.data.delete(doc._id);
+    }
   }
 
   async toggleAppStatus(appName: string): Promise<boolean> {

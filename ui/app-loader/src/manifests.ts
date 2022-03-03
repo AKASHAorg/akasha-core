@@ -35,7 +35,7 @@ export const getLatestReleaseInfo = (
   );
 };
 
-export const getIntegrationsData = (integrationNames: string[], worldConfig) => {
+export const getIntegrationsData = (integrationNames: string[], worldConfig: ILoaderConfig) => {
   const [local$, remote$] = partition(
     from(integrationNames),
     integrationName => !!worldConfig.registryOverrides.find(int => int.name === integrationName),
@@ -100,6 +100,7 @@ export const getUserIntegrationManifests = (
       }),
       withLatestFrom(state$.pipe(getStateSlice('manifests'))),
       tap(([userManifests, manifests]) => {
+        console.log(userManifests, manifests, 'user and manif');
         pipelineEvents.next({
           manifests: [...manifests, ...userManifests],
         });

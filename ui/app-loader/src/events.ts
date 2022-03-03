@@ -66,7 +66,9 @@ export const getEvents = (
      * It is guaranteed to fire after all single-spa applications
      * have been unmounted, but before any new applications have been mounted.
      *
-     * Use this event to show an app area loader.
+     * Use this event to:
+     *    - show an app area loader
+     *    - load translation files for the mounting app
      */
     fromEvent(window, 'single-spa:before-mount-routing-event').pipe(
       map((spaEvent: CustomEvent<{ detail: singleSpa.SingleSpaCustomEventDetail }>) => ({
@@ -76,6 +78,7 @@ export const getEvents = (
         },
       })),
     ),
+
     /*
      * A single-spa:routing-event event is fired every time that a routing
      * event has occurred, which is after each hashchange, popstate, or
@@ -114,6 +117,7 @@ export const getEvents = (
     fromEvent(window, 'single-spa:before-routing-event').pipe(
       mergeMap(getModalFromParams(location)),
       distinctUntilKeyChanged('name'),
+      tap(res => console.log('single-spa:before-routing-event', res)),
       map(result => ({ modalRequest: result })),
     ),
     /*
@@ -132,6 +136,8 @@ export const getEvents = (
     uiEvents
       .pipe(filterEvent(EventTypes.ExtensionPointUnmount))
       .pipe(map(eventData => ({ ...eventData }))),
+
+    uiEvents.pipe(filterEvent(EventTypes.LayoutReady)).pipe(mapTo({ layoutReady: true })),
 
     uiEvents.pipe(filterEvent(EventTypes.ModalMount)).pipe(map(evt => ({ activeModal: evt.data }))),
 
@@ -158,7 +164,6 @@ export const getEvents = (
         },
       }),
     ),
-    globalChannel.pipe(tap(ev => console.log('globalChannel Event', ev))),
 
     pipelineEvents.asObservable(),
   );

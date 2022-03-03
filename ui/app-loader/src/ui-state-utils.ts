@@ -12,7 +12,7 @@ import { uiEvents } from './events';
 export const handleAppLoadingScreens = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  logger: ILogger,
+  _logger: ILogger,
 ) => {
   return state$
     .pipe(getStateSlice('spaEvents'))

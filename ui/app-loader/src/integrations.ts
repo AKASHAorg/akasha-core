@@ -4,6 +4,7 @@ import {
   BaseIntegrationInfo,
   IAppConfig,
   ILoaderConfig,
+  PluginConf,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   Observable,
@@ -34,6 +35,7 @@ import {
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaproject/awf-sdk';
 import { getIntegrationsData } from './manifests';
+import { loadI18nNamespaces } from './i18n-utils';
 
 export const getMountPoint = (appConfig: IAppConfig) => {
   let mountPoint: string;
@@ -135,7 +137,30 @@ const extractExtensionsFromApps = (
     );
 };
 
-export const registerSystemModules = (
+const extractMenuItemsFromApps = (
+  config: IAppConfig & { name: string },
+  state$: Observable<LoaderState>,
+) => {
+  return of(config)
+    .pipe(
+      filter(conf => !!conf.menuItems),
+      withLatestFrom(state$.pipe(getStateSlice('menuItems'))),
+    )
+    .pipe(
+      tap(([appConfig, menuItems]) => {
+        const currentIdx = menuItems.nextIndex;
+        const items = menuItems.items.concat({ ...appConfig.menuItems, index: currentIdx });
+        return pipelineEvents.next({
+          menuItems: {
+            items,
+            nextIndex: currentIdx + 1,
+          },
+        });
+      }),
+    );
+};
+
+export const processSystemModules = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
   logger: ILogger,
@@ -145,6 +170,7 @@ export const registerSystemModules = (
   const integrationConfigs$ = state$.pipe(getStateSlice('integrationConfigs'));
   const integrationsByMountPoint$ = state$.pipe(getStateSlice('integrationsByMountPoint'));
   const manifests$ = state$.pipe(getStateSlice('manifests'));
+  const plugins$ = state$.pipe(getStateSlice('plugins'));
 
   return combineLatest({
     layoutConfig: layoutConfig$,
@@ -152,12 +178,14 @@ export const registerSystemModules = (
     integrationConfigs: integrationConfigs$,
     integrationsByMountPoint: integrationsByMountPoint$,
     manifests: manifests$,
+    plugins: plugins$,
   })
     .pipe(
       filter(({ layoutConfig }) => !!layoutConfig),
       distinct(res => res.modules.size),
     )
     .pipe(
+      // @TODO: load plugins exported from modules
       mergeMap(results => {
         const { modules, layoutConfig, integrationConfigs, integrationsByMountPoint } = results;
 
@@ -170,25 +198,38 @@ export const registerSystemModules = (
         return from(modules)
           .pipe(filter(([name]) => !integrationConfigs.has(name)))
           .pipe(
-            map(([moduleName, mod]) =>
-              Promise.resolve(mod.register(registrationProps)).then(appConf => ({
+            map(async ([moduleName, mod]) => {
+              let plugin: PluginConf;
+              let appConf: IAppConfig;
+
+              if (mod?.getPlugin && typeof mod.getPlugin === 'function') {
+                plugin = await Promise.resolve(mod.getPlugin(registrationProps));
+              }
+
+              if (mod?.register && typeof mod.register === 'function') {
+                appConf = await Promise.resolve(mod.register(registrationProps));
+              }
+              return {
+                plugin,
                 ...appConf,
                 name: moduleName,
-              })),
-            ),
+              };
+            }),
           )
           .pipe(
             combineLatestAll(),
             map(configs => ({
               configs,
+              plugins: results.plugins,
               integrationConfigs,
-              integrationsByMountPoint: integrationsByMountPoint,
+              integrationsByMountPoint,
             })),
           );
       }),
       tap(({ configs }) => {
         from(configs)
           .pipe(
+            tap(config => extractMenuItemsFromApps(config, state$).subscribe()),
             filter(conf => conf.extends && Array.isArray(conf.extends)),
             tap(config => extractExtensionsFromApps(config, state$).subscribe()),
           )
@@ -197,13 +238,19 @@ export const registerSystemModules = (
     )
     .pipe(
       tap(result => {
-        const { configs, integrationConfigs, integrationsByMountPoint } = result;
+        const { configs, integrationConfigs, integrationsByMountPoint, plugins } = result;
         const byMount = new Map(integrationsByMountPoint);
         const intConfigs = new Map(integrationConfigs);
+        let appPlugins = Object.assign({}, plugins);
         configs.forEach(config => {
           if (intConfigs.has(config.name)) {
             return;
           }
+
+          if (config.plugin) {
+            appPlugins = Object.assign(appPlugins, config.plugin);
+          }
+
           intConfigs.set(config.name, config);
           if (byMount.has(config.mountsIn)) {
             byMount.set(config.mountsIn, byMount.get(config.mountsIn).concat(config));
@@ -215,6 +262,7 @@ export const registerSystemModules = (
           pipelineEvents.next({
             integrationConfigs: intConfigs,
             integrationsByMountPoint: byMount,
+            plugins: appPlugins,
           });
         }
       }),
@@ -283,12 +331,15 @@ export const handleExtPointMountOfApps = (
         activeModal: state$.pipe(getStateSlice('activeModal')),
         layoutConfig: state$.pipe(getStateSlice('layoutConfig')),
         integrationConfigs: state$.pipe(getStateSlice('integrationConfigs')),
+        plugins: state$.pipe(getStateSlice('plugins')),
       }),
     ),
-    tap(([data, props]) => {
+    tap(async ([data, props]) => {
       const { config } = data;
-      const { manifests } = props;
-      const manifest = manifests.find(m => m.name === config.name);
+      const { manifests, plugins } = props;
+      const manifest = manifests.find((m: BaseIntegrationInfo) => m.name === config.name);
+
+      await loadI18nNamespaces(plugins, config.i18nNamespace);
 
       logger.info(`Registering app ${config.name}`);
       singleSpa.registerApplication<
@@ -300,6 +351,7 @@ export const handleExtPointMountOfApps = (
         app: config.loadingFn,
         activeWhen: location => checkActivityFn(config, manifest, location),
         customProps: {
+          plugins,
           name: manifest.name,
           parseQueryString: parseQueryString,
           activeModal: props.activeModal,
@@ -311,6 +363,7 @@ export const handleExtPointMountOfApps = (
           navigateTo: navigateTo(props.integrationConfigs, logger),
           navigateToModal: navigateToModal,
           getAppRoutes: appName => props.integrationConfigs.get(appName).routes,
+          getMenuItems: () => state$.pipe(getStateSlice('menuItems')),
         },
       });
     }),
@@ -430,7 +483,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
 export const handleDisableIntegration = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  logger: ILogger,
+  _logger: ILogger,
 ) => {
   return state$
     .pipe(getStateSlice('disableIntegrationRequest'))
@@ -461,7 +514,7 @@ export const handleDisableIntegration = (
 /**
  * Enable integration (by user)
  */
-export const handleEnableIntegration = (state$: Observable<LoaderState>, logger: ILogger) => {
+export const handleEnableIntegration = (state$: Observable<LoaderState>, _logger: ILogger) => {
   return state$.pipe(getStateSlice('enableIntegrationRequest')).pipe(filter(Boolean));
 };
 

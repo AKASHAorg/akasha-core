@@ -1,51 +1,134 @@
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { EventTypes, ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   catchError,
   combineLatest,
+  combineLatestWith,
+  distinctUntilChanged,
   filter,
+  from,
+  map,
+  mergeMap,
   Observable,
   of,
-  pairwise,
-  switchMap,
   tap,
+  toArray,
   withLatestFrom,
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { getStateSlice, LoaderState } from './state';
 
-export const handleModalRequest = (state$: Observable<LoaderState>, logger: ILogger) => {
-  const modalRequest$ = state$.pipe(getStateSlice('modalRequest'));
-  const layoutLoaded$ = state$.pipe(
-    getStateSlice('layoutConfig'),
-    filter(conf => !!conf),
-  );
+const umountActiveModalParcel = (state$: Observable<LoaderState>, logger: ILogger) => {
+  const mountedExtPoints$ = state$.pipe(getStateSlice('mountedExtPoints'));
+  const extensionParcels$ = state$.pipe(getStateSlice('extensionParcels'));
+  const extensionsByMountPoint$ = state$.pipe(getStateSlice('extensionsByMountPoint'));
+  const activeModal$ = state$.pipe(getStateSlice('activeModal'));
 
-  return modalRequest$
-    .pipe(pairwise())
+  return activeModal$.pipe(
+    combineLatestWith(mountedExtPoints$, extensionParcels$, extensionsByMountPoint$),
+    filter(([activeModal]) => !!activeModal.name),
+    distinctUntilChanged((prev, current) => prev[0].name === current[0].name),
+    mergeMap(([activeModal, mountedExtPoints, extensionParcels, extensionsByMountPoint]) => {
+      const modalExtensions = extensionsByMountPoint.get(activeModal.name);
+      return from(modalExtensions).pipe(
+        filter(Boolean),
+        map(extension => {
+          for (const [, parcels] of Array.from(extensionParcels)) {
+            return parcels.filter(p => p.parent === extension.parent);
+          }
+        }),
+        filter(Boolean),
+        mergeMap(parcels => {
+          for (const parcelData of parcels) {
+            const p = parcelData.parcel.unmount();
+
+            return from(p).pipe(map(() => parcelData));
+          }
+          return of(null);
+        }),
+        toArray(),
+        map(res => {
+          const extParcels = new Map(extensionParcels);
+          extParcels.delete(activeModal.name);
+          return {
+            unmounted: res,
+            mountedExtPoints,
+            activeModal,
+            extensionParcels: extParcels,
+          };
+        }),
+      );
+    }),
+    tap(res => {
+      const mountedExtPoints = new Map(res.mountedExtPoints);
+      mountedExtPoints.delete(res.activeModal.name);
+      pipelineEvents.next({
+        extensionParcels: res.extensionParcels,
+        mountedExtPoints: mountedExtPoints,
+      });
+    }),
+    catchError(err => {
+      logger.error(err);
+      throw err;
+    }),
+  );
+};
+
+export const handleModalRequest = (
+  worldConfig: ILoaderConfig,
+  state$: Observable<LoaderState>,
+  logger: ILogger,
+) => {
+  const modalRequest$ = state$.pipe(getStateSlice('modalRequest'));
+  const activeModal$ = state$.pipe(getStateSlice('activeModal'));
+  const layoutReady$ = state$.pipe(getStateSlice('layoutReady'));
+
+  return combineLatest([modalRequest$, layoutReady$], (modalRequest, layoutReady) => ({
+    modalRequest,
+    layoutReady,
+  }))
     .pipe(
-      switchMap(([prev, next]) => {
-        return combineLatest({
-          prev: of(prev),
-          next: of(next),
-          layoutLoaded: layoutLoaded$,
-        });
-      }),
+      filter(({ layoutReady }) => layoutReady),
+      distinctUntilChanged((prev, current) => prev.modalRequest.name === current.modalRequest.name),
+      combineLatestWith(activeModal$),
     )
     .pipe(
-      tap(({ prev, next }) => {
-        if (prev.name && prev.name !== next.name) {
-          logger.info(`[app-loader]: unmounting modal ${prev.name}`);
-          uiEvents.next({
-            event: EventTypes.ModalUnmountRequest,
-            data: prev,
-          });
-        }
-        if (next.name && next.name !== prev.name) {
-          logger.info(`[app-loader]: mounting modal ${next.name}`);
+      map(([{ modalRequest }, activeModal]) => ({
+        modalRequest,
+        activeModal,
+      })),
+    )
+    .pipe(
+      filter(({ modalRequest, activeModal }) => modalRequest.name !== activeModal.name),
+      tap(results => {
+        const { modalRequest, activeModal } = results;
+        if (modalRequest.name && modalRequest.name !== activeModal.name) {
+          // unmount the modal parcel
+          if (activeModal.name) {
+            umountActiveModalParcel(state$, logger).subscribe({
+              next: () => {
+                uiEvents.next({
+                  event: EventTypes.ModalUnmountRequest,
+                  data: activeModal,
+                });
+              },
+            });
+          }
+          // mount modal
           uiEvents.next({
             event: EventTypes.ModalMountRequest,
-            data: next,
+            data: modalRequest,
+          });
+        }
+        if (activeModal.name && !modalRequest.name) {
+          // only unmount the active modal;
+          umountActiveModalParcel(state$, logger).subscribe({
+            next: () => {
+              uiEvents.next({
+                event: EventTypes.ModalUnmountRequest,
+                data: activeModal,
+              });
+            },
           });
         }
       }),
@@ -68,12 +151,11 @@ export const handleModalMount = (state$: Observable<LoaderState>, logger: ILogge
     .pipe(
       tap(([activeModal, mountedExtPoints]) => {
         logger.info(`[handleModalMount]: Mounting modal ${activeModal.name}`);
+        const mounted = new Map(mountedExtPoints);
+
         pipelineEvents.next({
-          mountedExtPoints: new Map(mountedExtPoints).set(activeModal.name, activeModal),
+          mountedExtPoints: mounted.set(activeModal.name, activeModal),
         });
       }),
     );
-};
-export const handleModalUnmount = (state$: Observable<LoaderState> /*, logger: ILogger */) => {
-  return state$;
 };

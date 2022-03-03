@@ -13,9 +13,9 @@ import {
   handleExtPointMountOfApps,
   handleIntegrationUninstall,
   importIntegrations,
-  registerSystemModules,
+  processSystemModules,
 } from './integrations';
-import { handleModalMount, handleModalRequest, handleModalUnmount } from './modals';
+import { handleModalMount, handleModalRequest } from './modals';
 import { handleExtPointMountOfExtensions } from './extensions';
 import { handleAppLoadingScreens } from './ui-state-utils';
 
@@ -60,7 +60,7 @@ const startLoader = (worldConfig: ILoaderConfig) => {
 
     // call the exported `register` method on all integrations
     // extract extensions
-    registerSystemModules(worldConfig, state$, logger),
+    processSystemModules(worldConfig, state$, logger),
 
     // register apps to single-spa
     // based on mountedExtensionPoints from state
@@ -70,9 +70,8 @@ const startLoader = (worldConfig: ILoaderConfig) => {
     // based on mountedExtensionPoints from state
     handleExtPointMountOfExtensions(worldConfig, state$, logger),
 
-    handleModalRequest(state$, logger),
+    handleModalRequest(worldConfig, state$, logger),
     handleModalMount(state$, logger),
-    handleModalUnmount(state$ /* logger */),
 
     handleIntegrationUninstall(state$, logger),
 
@@ -82,8 +81,8 @@ const startLoader = (worldConfig: ILoaderConfig) => {
     handleAppLoadingScreens(worldConfig, state$, logger),
   ).subscribe({
     error: err => {
-      logger.error(err.message ?? err.toString());
-      logger.error(err.stack);
+      console.error(err.message ?? err.toString());
+      console.error(err.stack);
       hidePageSplash();
     },
   });

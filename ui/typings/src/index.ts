@@ -10,7 +10,7 @@ export {
   WEB3_EVENTS,
 } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import { IntegrationInfo, ReleaseInfo } from '@akashaproject/sdk-typings/lib/interfaces/registry';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
 import i18n from 'i18next';
@@ -50,7 +50,7 @@ export interface RootComponentProps {
   uiEvents: Subject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
-  getMenuItems?: () => AppLoaderTypes.IMenuList;
+  getMenuItems?: () => Observable<AppLoaderTypes.IMenuList>;
   layoutConfig: AppLoaderTypes.IAppConfig['extensions'];
   logger: ILogger;
   name?: string;
@@ -72,7 +72,7 @@ export interface RootComponentProps {
 }
 
 export interface IPluginsMap {
-  [namespace: string]: unknown;
+  [namespace: string]: any;
 }
 
 export interface RootExtensionProps extends RootComponentProps {

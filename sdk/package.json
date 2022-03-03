@@ -1,7 +1,6 @@
 {
   "name": "@akashaproject/awf-sdk",
   "version": "0.1.0",
-  "private": false,
   "main": "src/index.js",
   "dependencies": {
     "@akashaproject/sdk-typings": "*",

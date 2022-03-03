@@ -119,10 +119,6 @@ export interface IAppConfig {
    */
   i18nNamespace?: string[];
   /**
-   * Used for page title
-   */
-  title: string;
-  /**
    * Only used for topbar.
    * @deprecated - use extension points
    */
@@ -154,6 +150,11 @@ export interface BaseIntegrationInfo {
   enabled?: boolean;
 }
 
+export interface IntegrationModule {
+  register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
+  getPlugin?: (opts: IntegrationRegistrationOptions) => PluginConf;
+}
+
 export interface ISdkConfig {
   /**
    * Define the log level
@@ -179,7 +180,7 @@ export interface ILoaderConfig {
   /**
    * Plugins that are installed by default on this world.
    */
-  defaultPlugins: string[];
+  defaultPlugins?: string[];
   /**
    * The layout widget of this world. This widget always mounts in the root element.
    */
@@ -254,6 +255,13 @@ export enum EventTypes {
   /*
    * Events that are handled by the layout widget
    */
+
+  /**
+   * `layout:ready` event is fired after first render, when the layout is
+   * already subscribed to the event bus. We need this event for the initial load
+   * of the world app, when we might have a modal to load.
+   */
+  LayoutReady = 'layout:ready',
   LayoutShowLoadingUser = 'layout:show-loading-user',
   LayoutShowAppLoading = 'layout:show-app-loading',
   LayoutShowAppNotFound = 'layout:show-app-not-found',
@@ -274,7 +282,7 @@ export const enum ItemTypes {
 }
 
 export interface PluginConf {
-  translation: {
-    i18n: RootComponentProps['i18next'];
+  [namespace: string]: {
+    [key: string]: unknown;
   };
 }

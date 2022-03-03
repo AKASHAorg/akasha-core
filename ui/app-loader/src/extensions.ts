@@ -4,8 +4,10 @@ import {
   filter,
   from,
   map,
+  mergeAll,
   mergeMap,
   Observable,
+  of,
   pairwise,
   switchMap,
   tap,
@@ -23,7 +25,12 @@ import {
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaproject/awf-sdk';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import { EventDataTypes, ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  EventDataTypes,
+  ILoaderConfig,
+  UIEventData,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { loadI18nNamespaces } from './i18n-utils';
 
 const getMatchingExtensionConfigs =
   (opts: {
@@ -124,11 +131,12 @@ export const handleExtPointMountOfExtensions = (
         layoutConfig: layoutConfig$,
         activeModal: activeModal$,
         integrationConfigs: state$.pipe(getStateSlice('integrationConfigs')),
+        plugins: state$.pipe(getStateSlice('plugins')),
       }),
     ),
     switchMap(([result, props]) => {
       const { mountedExtPoints, extensionsByMountPoint } = result;
-      const { layoutConfig, integrationConfigs, activeModal } = props;
+      const { layoutConfig, integrationConfigs, activeModal, plugins } = props;
       return from(mountedExtPoints)
         .pipe(
           mergeMap(
@@ -144,12 +152,27 @@ export const handleExtPointMountOfExtensions = (
             integrationConfigs,
             activeModal,
             layoutConfig,
+            plugins,
           })),
         )
         .pipe(
           mergeMap(
-            async ({ matchingExtensionData, integrationConfigs, layoutConfig, activeModal }) => {
+            async ({
+              matchingExtensionData,
+              integrationConfigs,
+              layoutConfig,
+              activeModal,
+              plugins,
+            }) => {
               const extLogger = sdk.services.log.create(matchingExtensionData.extID);
+
+              const parentConfig = integrationConfigs.get(matchingExtensionData.extension.parent);
+
+              if (parentConfig) {
+                // ensure that the i18n namespaces are loaded
+                await loadI18nNamespaces(plugins, parentConfig.i18nNamespace);
+              }
+
               const extensionProps: RootExtensionProps = {
                 domElement: matchingExtensionData.wrapperNode,
                 worldConfig: worldConfig,
@@ -162,7 +185,9 @@ export const handleExtPointMountOfExtensions = (
                 extensionData: matchingExtensionData.extData,
                 navigateTo: navigateTo(integrationConfigs, extLogger),
                 parseQueryString: parseQueryString,
+                plugins,
               };
+
               let parcel: singleSpa.Parcel;
               if (processed.get(matchingExtensionData.extID)) {
                 parcel = processed.get(matchingExtensionData.extID);
@@ -210,4 +235,52 @@ export const handleExtPointMountOfExtensions = (
         );
     }),
   );
+};
+
+/*
+ * Handle extension point unmount event
+ */
+export const handleExtensionPointUnmount = (state: LoaderState, eventData: EventDataTypes) => {
+  return from(state.mountedExtPoints)
+    .pipe(filter(([name]) => name === eventData.name))
+    .pipe(
+      map(([, data]) => {
+        const parcels = state.extensionParcels.get(data.name);
+        if (parcels && parcels.length) {
+          return of(state.extensionParcels.get(data.name)).pipe(
+            filter(parcels => !!parcels && parcels.length > 0),
+            map(parcels =>
+              from(
+                parcels.map(parcelData => {
+                  if (parcelData.parcel.getStatus() === singleSpa.MOUNTED) {
+                    return parcelData.parcel.unmount();
+                  }
+                  return Promise.resolve();
+                }),
+              ),
+            ),
+            map(() => {
+              const remainingParcels = new Map(state.extensionParcels);
+              remainingParcels.delete(eventData.name);
+              return {
+                extData: data,
+                extensionParcels: remainingParcels,
+              };
+            }),
+          );
+        }
+        return of({ extData: data, extensionParcels: new Map() });
+      }),
+      mergeAll(),
+      map(res => {
+        const { extData, extensionParcels } = res;
+        const mountedExtPoints = new Map(state.mountedExtPoints);
+        mountedExtPoints.delete(extData.name);
+        return {
+          ...state,
+          extensionParcels,
+          mountedExtPoints,
+        };
+      }),
+    );
 };

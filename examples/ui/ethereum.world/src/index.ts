@@ -31,6 +31,7 @@ declare const __DEV__: boolean;
       '@akashaproject/app-profile',
       '@akashaproject/app-notifications',
       '@akashaproject/app-legal',
+      '@akashaproject/app-translation',
       // '@akashaproject/app-bookmarks',
     ],
     // pre-installed widgets;
@@ -41,7 +42,6 @@ declare const __DEV__: boolean;
       '@akashaproject/ui-widget-analytics',
       // '@akashaproject/ui-widget-sidebar',
     ],
-    defaultPlugins: ['@akashaproject/app-translation'],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,
       siteId: process.env.MATOMO_SITE_ID,
