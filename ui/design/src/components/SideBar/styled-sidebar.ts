@@ -42,7 +42,13 @@ const StyledAppIconWrapper = styled.div<{ active: boolean; hovered?: boolean }>`
   }}
 `;
 
-const StyledAccordionPanel = styled(AccordionPanel)<{ size?: string; hasChevron?: boolean }>`
+const StyledAccordionPanel = styled(AccordionPanel)<{
+  size?: string;
+  hasChevron?: boolean;
+}>`
+  &:hover {
+    background-color: ${props => props.theme.colors.lightBackground};
+  }
   ${props => {
     if (props.size === 'small') {
       return;
@@ -58,7 +64,9 @@ const StyledAccordionPanel = styled(AccordionPanel)<{ size?: string; hasChevron?
       &:hover {
         div:nth-child(2) {
           svg {
-            stroke: ${props.hasChevron ? props.theme.colors.accent : props.theme.colors.background};
+            stroke: ${props.hasChevron
+              ? props.theme.colors.accent
+              : props.theme.colors.lightBackground};
           }
         }
       }

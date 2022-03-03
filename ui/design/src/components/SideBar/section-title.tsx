@@ -9,7 +9,7 @@ interface ISectionTitleProps {
 
 const SectionTitle: React.FC<ISectionTitleProps> = props => {
   return (
-    <Box direction="row" justify="start">
+    <Box direction="row" justify="start" align="center">
       <Icon type="app" plain={true} />
       <Text
         margin={{ left: 'medium' }}

@@ -96,14 +96,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         label={
           <Box margin={{ vertical: 'small' }} direction="row" align="center">
             <MenuAppButton menuItem={menuItem} active={active} plain={true} />
-            <Text
-              size="large"
-              // add margin only for user-app and user-widget area
-              margin={{
-                ...((menuItem.area === MenuItemAreaType.UserAppArea ||
-                  menuItem.area === MenuItemAreaType.UserWidgetArea) && { left: 'small' }),
-              }}
-            >
+            <Text size="large" margin={{ left: 'small' }}>
               {menuItem.label}
             </Text>
           </Box>
