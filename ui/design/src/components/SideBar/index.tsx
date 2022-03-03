@@ -7,10 +7,8 @@ import { MenuAppButton } from './menu-app-button';
 
 import Icon from '../Icon';
 import Button from '../Button';
-import IconLink from '../IconLink';
 
 import {
-  StyledAppOptionBox,
   StyledHiddenScrollContainer,
   StyledMobileHRDiv,
   StyledAccordionPanel,
@@ -93,6 +91,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       <StyledAccordionPanel
         size={size}
         key={index}
+        hasChevron={menuItem.subRoutes?.length > 0}
         onClick={handleAppIconClick(menuItem)}
         label={
           <Box margin={{ vertical: 'small' }} direction="row" align="center">
@@ -112,18 +111,22 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       >
         {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
           <Box pad={{ horizontal: '1.125rem' }}>
-            <StyledAppOptionBox direction="column" margin="small" justify="evenly" active={active}>
+            <Box direction="column" justify="evenly">
               {menuItem.subRoutes.map((subRouteMenuItem, idx) => (
-                <IconLink
-                  label={subRouteMenuItem.label}
-                  key={idx}
+                <Box
+                  key={idx + subRouteMenuItem.label}
+                  pad={{ vertical: 'large', left: 'large' }}
+                  border={{
+                    size: 'medium',
+                    color: subRouteMenuItem.route === activeOption?.route ? 'accent' : 'border',
+                    side: 'left',
+                  }}
                   onClick={handleOptionClick(menuItem, subRouteMenuItem)}
-                  size="medium"
-                  margin={{ horizontal: 'xsmall', top: idx === 0 ? 'none' : 'xxsmall' }}
-                  active={subRouteMenuItem.route === activeOption?.route}
-                />
+                >
+                  <Text size="large">{subRouteMenuItem.label}</Text>
+                </Box>
               ))}
-            </StyledAppOptionBox>
+            </Box>
           </Box>
         )}
       </StyledAccordionPanel>
@@ -138,39 +141,40 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       border={{ size: '1px', style: 'solid', color: 'border', side: 'right' }}
       className={className}
     >
-      <Box
-        pad={{ top: 'medium', horizontal: 'medium' }}
-        align="start"
-        fill={true}
-        border={{ size: '1px', style: 'solid', color: 'border', side: 'bottom' }}
-      >
-        <SectionTitle titleLabel={worldAppsTitleLabel} />
-        <StyledHiddenScrollContainer>
-          <Accordion multiple={true}>{bodyMenuItems?.map(renderMenuItem)}</Accordion>
-        </StyledHiddenScrollContainer>
-      </Box>
-      <Box
-        pad={{ top: 'medium', horizontal: 'medium' }}
-        align="start"
-        fill={true}
-        border={{ size: '1px', color: 'border', side: 'bottom' }}
-      >
-        <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
-        <StyledHiddenScrollContainer>
-          <Accordion multiple={true}>{userInstalledApps?.map(renderMenuItem)}</Accordion>
-        </StyledHiddenScrollContainer>
-      </Box>
-      <Box
-        pad={{ top: 'medium', horizontal: 'medium' }}
-        align="start"
-        fill={true}
-        border={{ size: '1px', color: 'border', side: 'bottom' }}
-      >
-        <SectionTitle titleLabel={userInstalledWidgetsTitleLabel} />
-        <StyledHiddenScrollContainer>
-          <Accordion multiple={true}>{userInstalledWidgets?.map(renderMenuItem)}</Accordion>
-        </StyledHiddenScrollContainer>
-      </Box>
+      {bodyMenuItems.length > 0 && (
+        <Box pad={{ top: 'medium', horizontal: 'medium' }} align="start" fill={true}>
+          <SectionTitle titleLabel={worldAppsTitleLabel} />
+          <StyledHiddenScrollContainer>
+            <Accordion multiple={true}>{bodyMenuItems?.map(renderMenuItem)}</Accordion>
+          </StyledHiddenScrollContainer>
+        </Box>
+      )}
+      {userInstalledApps.length > 0 && (
+        <Box
+          pad={{ top: 'medium', horizontal: 'medium' }}
+          align="start"
+          fill={true}
+          border={{ size: '1px', color: 'border', side: 'top' }}
+        >
+          <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
+          <StyledHiddenScrollContainer>
+            <Accordion multiple={true}>{userInstalledApps?.map(renderMenuItem)}</Accordion>
+          </StyledHiddenScrollContainer>
+        </Box>
+      )}
+      {userInstalledWidgets.length > 0 && (
+        <Box
+          pad={{ top: 'medium', horizontal: 'medium' }}
+          align="start"
+          fill={true}
+          border={{ size: '1px', color: 'border', side: 'top' }}
+        >
+          <SectionTitle titleLabel={userInstalledWidgetsTitleLabel} />
+          <StyledHiddenScrollContainer>
+            <Accordion multiple={true}>{userInstalledWidgets?.map(renderMenuItem)}</Accordion>
+          </StyledHiddenScrollContainer>
+        </Box>
+      )}
 
       <StyledMobileHRDiv />
 
