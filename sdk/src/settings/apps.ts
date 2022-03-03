@@ -101,10 +101,11 @@ class AppSettings implements IAppSettings {
    */
   async uninstall(appName: string): Promise<void> {
     const collection = await lastValueFrom(
-      this._db.getCollection<AppsSchema>(availableCollections.Settings),
+      this._db.getCollection<AppsSchema>(availableCollections.Apps),
     );
-    const query: unknown = { name: { $eq: appName } };
-    const doc = await collection.data.findOne(query);
+    const query: unknown = { id: { $eq: ethers.utils.id(appName) } };
+    const records = await collection.data.find(query);
+    const doc = await records.first();
     if (doc._id) {
       this._globalChannel.next({
         data: { name: appName },
