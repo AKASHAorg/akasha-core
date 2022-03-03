@@ -100,7 +100,6 @@ export const getUserIntegrationManifests = (
       }),
       withLatestFrom(state$.pipe(getStateSlice('manifests'))),
       tap(([userManifests, manifests]) => {
-        console.log(userManifests, manifests, 'user and manif');
         pipelineEvents.next({
           manifests: [...manifests, ...userManifests],
         });

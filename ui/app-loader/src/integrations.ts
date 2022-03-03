@@ -413,7 +413,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
             extensionParcels.filter(ext => ext.parent === config.name),
           );
           if (parcels.length) {
-            return unmountParcels(parcels.flat()).pipe(
+            return unmountParcels(parcels.flat(), logger).pipe(
               map(unmountedExtensions => ({
                 uninstalledApp,
                 unmountedExtensions,
@@ -513,6 +513,7 @@ export const handleDisableIntegration = (
 };
 /**
  * Enable integration (by user)
+ * @TODO:
  */
 export const handleEnableIntegration = (state$: Observable<LoaderState>, _logger: ILogger) => {
   return state$.pipe(getStateSlice('enableIntegrationRequest')).pipe(filter(Boolean));
@@ -520,6 +521,7 @@ export const handleEnableIntegration = (state$: Observable<LoaderState>, _logger
 
 const unmountParcels = (
   parcels: { parcel: singleSpa.Parcel<RootComponentProps>; id: string; parent: string }[],
+  logger: ILogger,
 ) => {
   return from(parcels).pipe(
     concatMap(async parcelData => {
@@ -528,7 +530,7 @@ const unmountParcels = (
         return parcelData;
       } catch (err) {
         // show a warn but don't throw an error
-        console.warn(err);
+        logger.warn(err);
         return parcelData;
       }
     }),

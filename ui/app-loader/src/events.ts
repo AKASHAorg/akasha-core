@@ -112,12 +112,10 @@ export const getEvents = (
      * every routing event occurs, which is after each
      * hashchange, popstate, or triggerAppChange, even if no
      * changes to registered applications were necessary.
-     *
      */
     fromEvent(window, 'single-spa:before-routing-event').pipe(
       mergeMap(getModalFromParams(location)),
       distinctUntilKeyChanged('name'),
-      tap(res => console.log('single-spa:before-routing-event', res)),
       map(result => ({ modalRequest: result })),
     ),
     /*

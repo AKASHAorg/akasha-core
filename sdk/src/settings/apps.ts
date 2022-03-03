@@ -80,7 +80,6 @@ class AppSettings implements IAppSettings {
     const collection = await lastValueFrom(
       this._db.getCollection<AppsSchema>(availableCollections.Apps),
     );
-    console.log(release.data, 'installed release data');
     const integrationInfo = {
       id: release.data.integrationID,
       name: release.data.name,
