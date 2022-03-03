@@ -75,7 +75,7 @@ class AppSettings implements IAppSettings {
     }
     if (!release?.data?.enabled) {
       this._log.warn(`${app.name} cannot be installed.`);
-      // return false;
+      return false;
     }
     const collection = await lastValueFrom(
       this._db.getCollection<AppsSchema>(availableCollections.Apps),
