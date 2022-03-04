@@ -4,16 +4,16 @@ const HOST = '//localhost:8131';
 
 // config for integrations config overrides
 const overrides = [
-  // {
-  //   name: '@akashaproject/app-integration-center',
-  //   integrationType: INTEGRATION_TYPES.APPLICATION,
-  //   sources: [`${HOST}/apps/app-center/index.js`],
-  // },
-  // {
-  //   name: '@akashaproject/app-bookmarks',
-  //   integrationType: INTEGRATION_TYPES.APPLICATION,
-  //   sources: [`${HOST}/apps/bookmarks/index.js`],
-  // },
+  {
+    name: '@akashaproject/app-integration-center',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: [`${HOST}/apps/app-center/index.js`],
+  },
+  {
+    name: '@akashaproject/app-bookmarks',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: [`${HOST}/apps/bookmarks/index.js`],
+  },
   {
     name: '@akashaproject/app-translation',
     integrationType: INTEGRATION_TYPES.APPLICATION,
