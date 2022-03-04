@@ -4,10 +4,11 @@ import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import {
-  RenderResult,
   renderWithAllProviders,
   act,
   genUser,
+  genLoggedInState,
+  getWorldConfig,
 } from '@akashaproject/ui-awf-testing-utils';
 
 const mockLocationValue = {
@@ -23,16 +24,22 @@ jest.mock('react-router', () => ({
   }),
 }));
 
+jest.mock('@akashaproject/awf-sdk', () => jest.fn());
+
 describe('<ProfilePageHeader />', () => {
-  let renderResult: RenderResult;
+  let renderResult;
   const mockUser = genUser();
   const BaseComponent = (
     <Router>
       <ProfilePageHeader
         profileId={mockUser.pubKey}
-        profileState={mockUser}
-        loggedUserEthAddress="asdqwe"
+        profileData={mockUser}
+        modalSlotId="modal-slot"
+        loginState={genLoggedInState()}
         activeModal={null}
+        worldConfig={getWorldConfig()}
+        navigateTo={jest.fn()}
+        parseQueryString={jest.fn()}
         navigateToModal={jest.fn()}
         uiEvents={null}
         layoutConfig={null}

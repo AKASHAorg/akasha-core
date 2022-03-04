@@ -46,7 +46,7 @@ describe('<WelcomeCard /> Component', () => {
   it('has correct title', () => {
     const { getByText } = componentWrapper;
 
-    const titleLabel = getByText('Welcome to the alpha!');
+    const titleLabel = getByText(new RegExp('Welcome to the alpha!'));
 
     expect(titleLabel).toBeDefined();
   });

@@ -34,6 +34,7 @@ describe('<ICDetailCard /> Component', () => {
             releaseIdLabel={'Release Id'}
             versionHistoryLabel="Version History"
             authorLabel="Authors & Contributors"
+            integrationName={ICWorldAppsData[3].name}
             licenseLabel="License"
             isInstalled={false}
             releases={ICWorldAppsData[3].releases}

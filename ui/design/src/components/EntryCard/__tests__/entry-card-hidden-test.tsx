@@ -34,7 +34,7 @@ describe('<EntryCardHidden /> Component', () => {
 
   it('has correct labels', () => {
     const { getByText } = componentWrapper;
-    const pendingLabel = getByText(/You have reported/i);
+    const pendingLabel = getByText(/You (have )?reported/i);
     const ctaLabel = getByText(/See it/i);
 
     expect(pendingLabel).toBeDefined();

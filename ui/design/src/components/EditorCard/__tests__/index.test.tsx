@@ -43,6 +43,7 @@ const EditorComponent = ({ ...args }) => {
       setEditorState={setEditorState}
       onPublish={args.handlePublish}
       handleNavigateBack={() => null}
+      style={{}}
     />
   );
 };
@@ -61,6 +62,7 @@ describe('<EditorCard /> component', () => {
             ethAddress={'0x003410499401674320006570047391024572000'}
             withMeter={true}
             handlePublish={handlePublish}
+            style={{}}
           />,
         ),
         {},
