@@ -15,10 +15,6 @@ const userInstalledApps = installedAppsData?.filter(
   menuItem => menuItem.area === MenuItemAreaType.UserAppArea,
 );
 
-const userInstalledWidgets = installedAppsData?.filter(
-  menuItem => menuItem.area === MenuItemAreaType.UserWidgetArea,
-);
-
 const SidebarComponent = (props: ISidebarProps) => {
   const { size } = useViewportSize();
 
@@ -36,7 +32,7 @@ export default {
 const Template = (args: ISidebarProps) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
-      <Box width="25%">
+      <Box width="25%" style={{ maxHeight: '690px' }}>
         <SidebarComponent {...args} />
       </Box>
     </ViewportSizeProvider>
@@ -48,8 +44,6 @@ BaseSidebar.args = {
   worldAppsTitleLabel: 'World Apps',
   userInstalledAppsTitleLabel: 'Apps',
   userInstalledApps: userInstalledApps,
-  userInstalledWidgetsTitleLabel: 'Widgets',
-  userInstalledWidgets: userInstalledWidgets,
   exploreButtonLabel: 'Explore',
   allMenuItems: installedAppsData,
   bodyMenuItems: worldApps,

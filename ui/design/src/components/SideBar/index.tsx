@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
-import { IMenuItem, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 import SectionTitle from './section-title';
 import { MenuAppButton } from './menu-app-button';
@@ -18,8 +18,6 @@ export interface ISidebarProps {
   worldAppsTitleLabel: string;
   userInstalledAppsTitleLabel: string;
   userInstalledApps: IMenuItem[];
-  userInstalledWidgetsTitleLabel: string;
-  userInstalledWidgets: IMenuItem[];
   exploreButtonLabel: string;
   bodyMenuItems: IMenuItem[];
   allMenuItems: IMenuItem[];
@@ -35,8 +33,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     worldAppsTitleLabel,
     userInstalledAppsTitleLabel,
     userInstalledApps,
-    userInstalledWidgetsTitleLabel,
-    userInstalledWidgets,
     exploreButtonLabel,
     allMenuItems,
     bodyMenuItems,
@@ -134,40 +130,29 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       border={{ size: '1px', style: 'solid', color: 'border', side: 'right' }}
       className={className}
     >
-      {bodyMenuItems.length > 0 && (
-        <Box pad={{ top: 'medium', horizontal: 'medium' }} align="start" fill={true}>
-          <SectionTitle titleLabel={worldAppsTitleLabel} />
-          <StyledHiddenScrollContainer>
-            <Accordion multiple={true}>{bodyMenuItems?.map(renderMenuItem)}</Accordion>
-          </StyledHiddenScrollContainer>
-        </Box>
-      )}
-      {userInstalledApps.length > 0 && (
-        <Box
-          pad={{ top: 'medium', horizontal: 'medium' }}
-          align="start"
-          fill={true}
-          border={{ size: '1px', color: 'border', side: 'top' }}
-        >
-          <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
-          <StyledHiddenScrollContainer>
-            <Accordion multiple={true}>{userInstalledApps?.map(renderMenuItem)}</Accordion>
-          </StyledHiddenScrollContainer>
-        </Box>
-      )}
-      {userInstalledWidgets.length > 0 && (
-        <Box
-          pad={{ top: 'medium', horizontal: 'medium' }}
-          align="start"
-          fill={true}
-          border={{ size: '1px', color: 'border', side: 'top' }}
-        >
-          <SectionTitle titleLabel={userInstalledWidgetsTitleLabel} />
-          <StyledHiddenScrollContainer>
-            <Accordion multiple={true}>{userInstalledWidgets?.map(renderMenuItem)}</Accordion>
-          </StyledHiddenScrollContainer>
-        </Box>
-      )}
+      <StyledHiddenScrollContainer>
+        {bodyMenuItems.length > 0 && (
+          <Box pad={{ top: 'medium', horizontal: 'medium' }} align="start" fill={true}>
+            <SectionTitle titleLabel={worldAppsTitleLabel} />
+            <Accordion multiple={true} fill={true}>
+              {bodyMenuItems?.map(renderMenuItem)}
+            </Accordion>
+          </Box>
+        )}
+        {userInstalledApps.length > 0 && (
+          <Box
+            pad={{ top: 'medium', horizontal: 'medium' }}
+            align="start"
+            fill={true}
+            border={{ size: '1px', color: 'border', side: 'top' }}
+          >
+            <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
+            <Accordion multiple={true} fill={true}>
+              {userInstalledApps?.map(renderMenuItem)}
+            </Accordion>
+          </Box>
+        )}
+      </StyledHiddenScrollContainer>
 
       <StyledMobileHRDiv />
 

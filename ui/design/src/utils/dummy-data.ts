@@ -28,19 +28,19 @@ const userData: { ethAddress: string; avatar?: string }[] = [
 
 const installedAppsData: IMenuItem[] = [
   {
-    label: 'Social',
+    label: 'Feed',
     index: 1,
     route: '/social-app/feed',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'appSocial' },
     subRoutes: [
-      { index: 0, label: 'Feed', route: '/social-app/feed', type: MenuItemType.Internal },
-      { index: 1, label: 'Profile', route: '/profile-app', type: MenuItemType.Internal },
+      { index: 0, label: 'My Feed', route: '/social-app/feed', type: MenuItemType.Internal },
+      { index: 1, label: 'General', route: '/social-app/feed', type: MenuItemType.Internal },
     ],
     area: MenuItemAreaType.AppArea,
   },
   {
-    label: 'Moderation',
+    label: 'Moderating',
     index: 3,
     route: '/moderation-app',
     type: MenuItemType.App,
@@ -85,6 +85,12 @@ const installedAppsData: IMenuItem[] = [
     route: '/social-app/feed',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.String, value: undefined },
+    subRoutes: [
+      { index: 0, label: 'Trade', route: '/social-app/feed', type: MenuItemType.Internal },
+      { index: 1, label: 'Market Place', route: '/profile-app', type: MenuItemType.Internal },
+      { index: 2, label: 'Featured Artist', route: '/profile-app', type: MenuItemType.Internal },
+      { index: 3, label: 'Assets', route: '/profile-app', type: MenuItemType.Internal },
+    ],
     area: MenuItemAreaType.UserAppArea,
   },
   {

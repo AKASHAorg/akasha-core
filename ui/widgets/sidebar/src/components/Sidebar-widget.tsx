@@ -55,8 +55,6 @@ const Menu = (props: MenuProps) => {
       worldAppsTitleLabel={t('World Apps')}
       userInstalledAppsTitleLabel={t('Apps')}
       userInstalledApps={[]}
-      userInstalledWidgetsTitleLabel={t('Widgets')}
-      userInstalledWidgets={[]}
       exploreButtonLabel={t('Explore')}
       onClickMenuItem={handleNavigation}
       allMenuItems={[]}
