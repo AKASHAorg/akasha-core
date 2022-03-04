@@ -1,5 +1,5 @@
 import { BaseIntegrationInfo, ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { Observable, mergeMap, from, filter, zip, of, tap, catchError, switchMap } from 'rxjs';
+import { Observable, mergeMap, from, filter, zip, of, tap, catchError, switchMap, map } from 'rxjs';
 import { uiEvents, pipelineEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
 import { getDomElement, parseQueryString } from './utils';
@@ -26,11 +26,13 @@ export const loadLayout = (
     mergeMap((result: { layoutManifest: BaseIntegrationInfo; mod: System.Module }) => {
       const { mod, layoutManifest } = result;
       if (mod?.register && typeof mod.register === 'function') {
-        return zip(from(Promise.resolve(mod.register(worldConfig, uiEvents))), config => ({
-          config,
-          mod,
-          layoutManifest,
-        }));
+        return from(Promise.resolve(mod.register({ worldConfig, uiEvents }))).pipe(
+          map(config => ({
+            config,
+            mod,
+            layoutManifest,
+          })),
+        );
       } else {
         throw new Error('Layout module does not export a register function');
       }

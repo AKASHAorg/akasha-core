@@ -43,7 +43,6 @@ const startLoader = (worldConfig: ILoaderConfig) => {
   const globalChannel = sdk.api.globalChannel;
 
   const state$ = initState(worldConfig, globalChannel);
-
   merge(
     // get integration info from registry
     getDefaultIntegrationManifests(worldConfig, logger),

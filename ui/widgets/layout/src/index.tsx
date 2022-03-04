@@ -4,10 +4,11 @@ import {
   IWidgetConfig,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig = () => {
+export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig = props => {
   return {
     loadingFn: () => import('./components'),
     activeWhen: () => true,
+    title: props.worldConfig.title,
     mountsIn: 'root',
     extensions: {
       pluginSlotId: 'plugin-slot',
