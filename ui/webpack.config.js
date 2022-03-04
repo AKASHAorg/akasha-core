@@ -1,6 +1,6 @@
 /* eslint-disable */
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const commons = require('./app.pack.conf');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
@@ -35,7 +35,7 @@ const exp = {
     crossOriginLoading: 'anonymous',
   },
   plugins: [
-    new CleanWebpackPlugin({ verbose: true, dangerouslyAllowCleanPatternsOutsideProject: true }),
+    // new CleanWebpackPlugin({ verbose: true, dangerouslyAllowCleanPatternsOutsideProject: true }),
     new WebpackManifestPlugin({
       generate: (seed, files, entries) => {
       const packageJson = require(path.join(process.cwd(), './package.json'));
