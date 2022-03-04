@@ -11,14 +11,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     return pathToActiveWhen(rootRoute)(location);
   },
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.pluginSlotId,
-  name: 'app-settings',
   i18nNamespace: ['app-settings-ewa'],
-  sdkModules: [],
-  // menuItems: routes,
-  title: 'Settings | Ethereum World',
+  mountsIn: opts.layoutConfig?.pluginSlotId,
   logo: { type: LogoTypeSource.ICON, value: 'appSettings' },
-  widgets: {},
   routes: {
     rootRoute,
   },

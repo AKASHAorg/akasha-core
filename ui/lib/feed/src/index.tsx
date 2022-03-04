@@ -6,6 +6,8 @@ import { IWidgetConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
  */
 export const register: () => IWidgetConfig = () => ({
   loadingFn: () => import('./components'),
-  name: 'ui-lib-feed',
+  activeWhen: () => true,
   i18nNamespace: ['ui-lib-feed'],
+  /* It does not have a mountsIn property because it's a library */
+  mountsIn: null,
 });

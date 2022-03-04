@@ -15,6 +15,11 @@ const overrides = [
     sources: [`${HOST}/apps/bookmarks/index.js`],
   },
   {
+    name: '@akashaproject/app-translation',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: [`${HOST}/apps/translation/index.js`],
+  },
+  {
     name: '@akashaproject/app-akasha-integration',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/akasha/index.js`],

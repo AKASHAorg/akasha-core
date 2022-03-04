@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {
   useModeration,
@@ -15,7 +15,7 @@ import { BASE_DECISION_URL } from '../services/constants';
 
 const { ModerateModal, ErrorLoader } = DS;
 
-const ModerateModalComponent = (props: RootComponentProps) => {
+const ModerateModalComponent = (props: RootExtensionProps) => {
   const { activeModal } = props;
 
   const loginQuery = useGetLogin();
@@ -79,7 +79,7 @@ const ModerateModalComponent = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => {
+const Wrapped = (props: RootExtensionProps) => {
   return (
     <Router>
       <I18nextProvider i18n={props.plugins?.translation?.i18n}>
@@ -93,7 +93,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

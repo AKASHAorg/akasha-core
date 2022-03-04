@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import {
   EventTypes,
   IMenuItem,
+  IMenuList,
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -21,7 +22,7 @@ import { extensionPointsMap } from '../extension-points';
 const { Topbar, ExtensionPoint } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
-  const { singleSpa, getMenuItems, uiEvents, navigateTo } = props;
+  const { singleSpa, uiEvents, navigateTo } = props;
 
   const { navigateToUrl } = singleSpa;
   const location = useLocation();
@@ -45,22 +46,16 @@ const TopbarComponent = (props: RootComponentProps) => {
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   React.useEffect(() => {
-    const updateMenu = () => {
-      const menuItems = getMenuItems ? getMenuItems() : { items: [] };
-      setCurrentMenu(menuItems.items);
-    };
-    updateMenu();
-    const sub = uiEvents.subscribe({
-      next: (eventData: UIEventData) => {
-        if (
-          eventData.event === EventTypes.InstallIntegration ||
-          eventData.event === EventTypes.UninstallIntegration
-        ) {
-          updateMenu();
-        }
+    const menuItemsSubscription = props.getMenuItems().subscribe({
+      next: menuItems => {
+        setCurrentMenu(menuItems.items);
       },
     });
-    return () => sub.unsubscribe();
+    return () => {
+      if (menuItemsSubscription) {
+        menuItemsSubscription.unsubscribe();
+      }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -100,8 +95,12 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleLoginClick = () => {
+    /*
+     * TODO: This handler along with the buttons
+     * in the topbar should be moved to extension points
+     */
     props.navigateTo({
-      appName: 'app-auth',
+      appName: '@akashaproject/app-auth-ewa',
       pathName: appRoutes => {
         return appRoutes[appRoutes.SIGN_IN];
       },
@@ -151,15 +150,8 @@ const TopbarComponent = (props: RootComponentProps) => {
     if (!props.worldConfig.homepageApp) {
       return;
     }
-    let homepageAppName: string;
-    if (typeof props.worldConfig.homepageApp === 'string') {
-      homepageAppName = props.worldConfig.homepageApp;
-    }
-    if (typeof props.worldConfig.homepageApp === 'object') {
-      homepageAppName = props.worldConfig.homepageApp.name;
-    }
 
-    const homeAppRoutes = props.getAppRoutes(homepageAppName);
+    const homeAppRoutes = props.getAppRoutes(props.worldConfig.homepageApp);
     if (homeAppRoutes && homeAppRoutes.hasOwnProperty('defaultRoute')) {
       if (location.pathname === homeAppRoutes.defaultRoute) {
         scrollTo(0, 0);

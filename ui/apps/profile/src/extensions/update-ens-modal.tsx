@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
 import {
@@ -73,7 +73,7 @@ const getEnsFormOptions = (
   usernameTypes: { default?: DataProviderInput; available: UsernameTypes[] },
   ens: string,
   profileData: IProfileData,
-  t: TFunction<string>,
+  t: TFunction<'app-profile'>,
 ) => {
   const options: EnsFormOption[] = [];
   const hasEnsSubdomainAvail = usernameTypes.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN);
@@ -140,7 +140,7 @@ const getEnsFormOptions = (
   return options;
 };
 
-const UpdateENSModal: React.FC<RootComponentProps> = props => {
+const UpdateENSModal: React.FC<RootExtensionProps> = props => {
   const { navigateToModal, activeModal } = props;
   const loginQuery = useGetLogin();
   const checkNetworkReq = useNetworkState(loginQuery.data.isReady);
@@ -327,7 +327,7 @@ const UpdateENSModal: React.FC<RootComponentProps> = props => {
   );
 };
 
-const EnsModal: React.FC<RootComponentProps> = props => (
+const EnsModal: React.FC<RootExtensionProps> = props => (
   <React.Suspense fallback={<></>}>
     <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <UpdateENSModal {...props} />
@@ -339,7 +339,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(EnsModal),
-  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }

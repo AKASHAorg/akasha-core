@@ -1,7 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import {
-  IWidgetConfig,
   IntegrationRegistrationOptions,
+  IWidgetConfig,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 /**
  * All widgets must export an object like this:
@@ -10,7 +10,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
   return {
     mountsIn: opts.layoutConfig.cookieWidgetSlotId,
     loadingFn: () => import('./components'),
-    name: 'ui-widget-analytics',
+    activeWhen: () => true,
+    // does not have routes
     i18nNamespace: ['ui-widget-analytics'],
     tags: ['analytics-widget'],
   };

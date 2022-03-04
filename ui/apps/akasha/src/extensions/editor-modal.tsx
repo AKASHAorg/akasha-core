@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import {
   uploadMediaToTextile,
@@ -24,7 +24,7 @@ import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const { EditorModal, ModalContainer, ModalCard, Spinner, ErrorLoader } = DS;
 
-const EditorModalContainer = (props: RootComponentProps) => {
+const EditorModalContainer = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-akasha-integration');
 
   const loginQuery = useGetLogin();
@@ -184,7 +184,7 @@ const EditorModalContainer = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => {
+const Wrapped = (props: RootExtensionProps) => {
   return (
     <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <EditorModalContainer {...props} />
@@ -196,7 +196,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
