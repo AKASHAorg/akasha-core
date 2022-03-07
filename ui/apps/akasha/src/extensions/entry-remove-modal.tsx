@@ -1,7 +1,7 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
@@ -15,7 +15,7 @@ import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { ConfirmationModal, ModalContainer, ErrorLoader } = DS;
 
-const EntryRemoveModal: React.FC<RootComponentProps> = props => {
+const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   const { activeModal, logger } = props;
   const { t } = useTranslation('app-akasha-integration');
 
@@ -80,7 +80,7 @@ const EntryRemoveModal: React.FC<RootComponentProps> = props => {
   );
 };
 
-const ModalWrapper: React.FC<RootComponentProps> = props => {
+const ModalWrapper: React.FC<RootExtensionProps> = props => {
   return (
     <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <EntryRemoveModal {...props} />
@@ -92,7 +92,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(ModalWrapper),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

@@ -11,15 +11,11 @@ import {
  * All plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  // This is the root route in which the plugin will render.
-  // Make sure to change it as it fits.
   activeWhen: (location, pathToActiveWhen) => {
     return pathToActiveWhen(rootRoute)(location);
   },
   mountsIn: opts.layoutConfig?.pluginSlotId,
   loadingFn: () => import('./components'),
-  name: 'app-profile',
-  title: 'Profile | Ethereum World',
   i18nNamespace: ['app-profile', 'ui-lib-feed'],
   menuItems: {
     label: 'Profile',

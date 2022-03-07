@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
@@ -10,7 +10,7 @@ import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon, ErrorLoader } = DS;
 
-const LoginModal = (props: RootComponentProps) => {
+const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');
   const location = useLocation();
 
@@ -79,7 +79,7 @@ const LoginModal = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => (
+const Wrapped = (props: RootExtensionProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
       <I18nextProvider i18n={props.plugins?.translation?.i18n}>
@@ -93,7 +93,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

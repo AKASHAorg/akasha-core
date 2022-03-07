@@ -22,8 +22,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   i18nNamespace: ['app-integration-center'],
   loadingFn: () => import('./components'),
-  name: 'app-integration-center',
-  sdkModules: [],
   title: 'App center',
   menuItems: {
     label: 'Integration Center',

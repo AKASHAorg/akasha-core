@@ -1,49 +1,52 @@
 import {
-  AppOrWidgetDefinition,
+  BaseIntegrationInfo,
+  ExtensionPointDefinition,
+  IAppConfig,
   ModalNavigationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
-import { QueryStringType } from '@akashaproject/ui-awf-typings';
+import { NavigationFn, NavigationOptions, QueryStringType } from '@akashaproject/ui-awf-typings';
+import { of } from 'rxjs';
+import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 
-export const getNameFromDef = (def: AppOrWidgetDefinition) => {
-  if (typeof def === 'string') {
-    return def;
-  } else if (typeof def === 'object' && def.hasOwnProperty('name')) {
-    return def.name;
-  } else {
-    return null;
+export const checkActivityFn = (
+  config: IAppConfig | ExtensionPointDefinition,
+  manifest?: BaseIntegrationInfo,
+  location?: Location,
+) => {
+  if (!location) {
+    location = window.location;
   }
+  if (manifest && manifest.hasOwnProperty('enabled') && manifest.enabled === false) {
+    return false;
+  }
+  if (config.hasOwnProperty('activeWhen') && typeof config.activeWhen === 'function') {
+    return config.activeWhen(location, singleSpa.pathToActiveWhen);
+  }
+  return true;
 };
 
-export const toNormalDef = (
-  def: AppOrWidgetDefinition,
-): { name: string; version?: string } | null => {
-  if (typeof def === 'string') {
-    return {
-      name: def,
-      version: 'latest',
-    };
-  } else if (typeof def === 'object' && def.hasOwnProperty('name')) {
-    if (def.hasOwnProperty('version')) {
-      return def;
-    }
-    return { ...def, version: 'latest' };
-  } else {
-    return null;
+export const getModalFromParams = (location: Location) => () => {
+  const { search } = location;
+  const searchObj = qs.parse(search, {
+    ignoreQueryPrefix: true,
+  }) as { modal: ModalNavigationOptions } | undefined;
+
+  if (searchObj.modal) {
+    return of({
+      ...searchObj.modal,
+    });
   }
+  return of({ name: null });
 };
 
 /* Create a new html div element and append it to a parent */
-export const createRootNode = (
-  parent: HTMLElement,
-  nodeName: string,
-  integrationType: 'app' | 'widget' | 'extension',
-) => {
+export const createRootNode = (parent: HTMLElement, nodeName: string) => {
   if (!parent) {
     return null;
   }
-  const nodeID = `${integrationType}-${nodeName.replace('@', '').replace('/', '-')}`;
+  const nodeID = `${nodeName.replace('@', '').replace('/', '-')}`;
   const node = document.querySelector(`#${parent.id} > #${nodeID}`);
 
   if (node) {
@@ -53,6 +56,62 @@ export const createRootNode = (
   wrapNode.id = `${nodeID}`;
   parent.append(wrapNode);
   return wrapNode;
+};
+
+export const navigateTo = (
+  appConfigs: Map<string, IAppConfig & { name: string }>,
+  logger: ILogger,
+) => {
+  return (options: string | NavigationOptions | NavigationFn) => {
+    if (typeof options === 'string') {
+      singleSpa.navigateToUrl(options);
+    }
+    let redirectQueryString = findKey('redirectTo', parseQueryString(location.search));
+
+    if (typeof options === 'function') {
+      singleSpa.navigateToUrl(options(qs.stringify, redirectQueryString));
+    }
+    if (typeof options === 'object') {
+      const { queryStrings } = options;
+      let appName = options.appName;
+      if (typeof appName === 'function') {
+        appName = appName(appConfigs);
+      }
+
+      const app = appConfigs.get(appName);
+      if (!app) {
+        logger.error(`Cannot find app name ${appName}. Make sure to specify the exact name!`);
+        return;
+      }
+
+      let { pathName } = options;
+
+      if (typeof pathName === 'function') {
+        try {
+          pathName = pathName(app.routes);
+        } catch (err) {
+          logger.error(
+            `Path not found! Tried to find a path for application: ${appName}. Defaulting to rootRoute!`,
+          );
+        }
+      }
+      if (!pathName) {
+        pathName = app.routes.rootRoute;
+      }
+
+      if (typeof queryStrings === 'function') {
+        // allow to modify the redirect params
+        redirectQueryString = queryStrings(qs.stringify, redirectQueryString);
+      }
+      const currentPath = location.pathname;
+      const currentSearch = location.search;
+
+      if (pathName === currentPath && redirectQueryString === currentSearch) {
+        return;
+      }
+      singleSpa.navigateToUrl(`${pathName}${redirectQueryString ? `?${redirectQueryString}` : ''}`);
+    }
+  };
 };
 
 export const navigateToModal = (opts: ModalNavigationOptions) => {
@@ -101,4 +160,19 @@ export const findKey = (key: string, obj: unknown): string | null => {
     }
   }
   return null;
+};
+
+export const getDomElement = (integrationConfig: IAppConfig, name: string, logger: ILogger) => {
+  const domNode = document.getElementById(integrationConfig.mountsIn || '');
+  if (!domNode) {
+    logger.warn(`Node ${domNode} is undefined! App: ${name}`);
+
+    return null;
+  }
+  const rootNode = createRootNode(domNode, name);
+  if (!rootNode) {
+    logger.warn(`Node ${rootNode} cannot be created! App: ${name}`);
+    return null;
+  }
+  return rootNode;
 };

@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ModerationItemTypes, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ModerationItemTypes, RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import {
   withProviders,
   useReasons,
@@ -17,7 +17,7 @@ import { BASE_REPORT_URL } from '../services/constants';
 
 const { ReportModal, ErrorLoader } = DS;
 
-const ReportModalComponent = (props: RootComponentProps) => {
+const ReportModalComponent = (props: RootExtensionProps) => {
   const { activeModal } = props;
   const [analyticsActions] = useAnalytics();
 
@@ -100,7 +100,7 @@ const ReportModalComponent = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => (
+const Wrapped = (props: RootExtensionProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
       <I18nextProvider i18n={props.plugins?.translation?.i18n}>
@@ -114,7 +114,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

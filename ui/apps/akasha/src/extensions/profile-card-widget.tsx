@@ -2,7 +2,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import { BrowserRouter as Router, useRouteMatch, Route } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import {
@@ -18,7 +18,7 @@ import routes, { POST } from '../routes';
 
 const { Box, ProfileMiniCard, ErrorLoader } = DS;
 
-const ProfileCardWidget: React.FC<RootComponentProps> = props => {
+const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const { params } = useRouteMatch<{ postId: string }>();
   const { t } = useTranslation('app-akasha-integration');
 
@@ -80,7 +80,7 @@ const ProfileCardWidget: React.FC<RootComponentProps> = props => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => (
+const Wrapped = (props: RootExtensionProps) => (
   <Router>
     <Route path={`${routes[POST]}/:postId`}>
       <I18nextProvider i18n={props.plugins?.translation?.i18n}>
@@ -94,7 +94,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }

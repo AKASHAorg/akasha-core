@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -10,7 +10,7 @@ import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
 
 const { FeedbackModal, ErrorLoader } = DS;
 
-const FeedbackModalContainer = (props: RootComponentProps) => {
+const FeedbackModalContainer = (props: RootExtensionProps) => {
   const { t } = useTranslation('ui-widget-topbar');
   const location = useLocation();
 
@@ -37,7 +37,7 @@ const FeedbackModalContainer = (props: RootComponentProps) => {
   );
 };
 
-const Wrapped = (props: RootComponentProps) => (
+const Wrapped = (props: RootExtensionProps) => (
   <Router>
     <FeedbackModalContainer {...props} />
   </Router>
@@ -47,7 +47,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
     }

@@ -14,6 +14,8 @@ export interface ExtensionPointProps {
 const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
   const { mountOnRequest = false, shouldMount = true } = props;
 
+  const isMounted = React.useRef(false);
+
   const onMount = React.useRef(props.onMount);
   const onUnmount = React.useRef(props.onUnmount);
 
@@ -28,7 +30,10 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
   });
   React.useEffect(() => {
     if (!mountOnRequest || (mountOnRequest && shouldMount)) {
-      onMount.current(`${props.name}`);
+      if (!isMounted.current) {
+        onMount.current(`${props.name}`);
+        isMounted.current = true;
+      }
       const node = document.querySelector(`#${props.name}`);
       if (node) {
         nodeRef.current = node;

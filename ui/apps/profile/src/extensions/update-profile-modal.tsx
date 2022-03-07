@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaproject/design-system';
 import {
@@ -35,7 +35,7 @@ const ProfileForm = styled(BoxFormCard)`
   }
 `;
 
-const UpdateProfileModal: React.FC<RootComponentProps> = props => {
+const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
   const loginQuery = useGetLogin();
   const [partialUsername, setPartialUsername] = React.useState<string>();
   const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
@@ -160,7 +160,7 @@ const UpdateProfileModal: React.FC<RootComponentProps> = props => {
   );
 };
 
-const ProfileModal: React.FC<RootComponentProps> = props => (
+const ProfileModal: React.FC<RootExtensionProps> = props => (
   <React.Suspense fallback={<></>}>
     <I18nextProvider i18n={props.plugins?.translation?.i18n}>
       <UpdateProfileModal {...props} />
@@ -172,7 +172,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(ProfileModal),
-  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }

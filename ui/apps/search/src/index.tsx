@@ -12,16 +12,12 @@ import {
  * All the plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  // This is the root route in which the plugin will render.
-  // Make sure to change it as it fits.
   activeWhen: (location, pathToActiveWhen) => {
     return pathToActiveWhen(rootRoute)(location);
   },
   loadingFn: () => import('./components'),
-  mountsIn: opts.layoutConfig?.pluginSlotId,
-  name: 'app-search',
-  title: 'Search | Ethereum World',
   i18nNamespace: ['app-search'],
+  mountsIn: opts.layoutConfig?.pluginSlotId,
   menuItems: {
     label: 'Search',
     name: 'app-search',
