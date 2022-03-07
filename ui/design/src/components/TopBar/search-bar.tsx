@@ -12,6 +12,10 @@ const SearchContainer = styled(Box)`
   background-color: ${props => props.theme.colors.inputBackground};
 `;
 
+const StyledSearchInput = styled(TextInput)`
+  color: ${props => props.theme.colors.inputText};
+`;
+
 export interface ISearchBar {
   inputValue: string;
   onInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
@@ -37,14 +41,14 @@ const SearchBar: React.FC<ISearchBar> = props => {
       pad={{ vertical: 'xsmall', horizontal: 'small' }}
       height="2rem"
     >
-      <TextInput
+      <StyledSearchInput
         size="xsmall"
         value={inputValue}
         onChange={onInputChange}
         placeholder={inputPlaceholderLabel}
         plain={true}
         onKeyDown={handleSearch}
-        color="darkBorder"
+        color="inputText"
       />
       <Icon
         type="search"

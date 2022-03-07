@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
-
+import { withDesign } from 'storybook-addon-designs';
 import Icon, { IconProps, iconTypes } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -28,6 +28,7 @@ export default {
       },
     },
   },
+  decorators: [withDesign],
 };
 
 const Template = (args: IconProps) => (
@@ -72,10 +73,24 @@ IconList.args = {
   size: 'md',
 };
 
+IconList.parameters = {
+  design: {
+    type: 'figma',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=24%3A866',
+  },
+};
+
 export const IconSizes = Template.bind({});
 
 IconSizes.args = {
   type: 'akasha',
+};
+
+IconSizes.parameters = {
+  design: {
+    type: 'figma',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=24%3A866',
+  },
 };
 
 export const BaseAppIcon = TemplateAppIcon.bind({});

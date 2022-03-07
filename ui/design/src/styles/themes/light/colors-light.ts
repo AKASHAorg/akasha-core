@@ -37,9 +37,11 @@ const colors: IColorsLight = {
   // define use cases for colors
   primaryText: '#132540', // darkBlue
   secondaryText: '#949EB3', // grey
+  textBackground: '#E9EDFD', // light blue
   disabledText: '#9ea0a5', // disabled
   errorText: '#FF4040', // red
   darkText: '#132540',
+  inputText: '#949EB3', // grey
   background: '#FFFFFF', // white
   ultraLightBackground: '#FBFCFD', // ultralightGrey
   beigeBackground: '#F8F4F4', // lightBeige
@@ -52,6 +54,8 @@ const colors: IColorsLight = {
   activeCardBackground: '#F6F8FF', // aquamarine
   hoverBackground: '#FBFCFD',
   inputBackground: '#FFF',
+  coverImageBackground: '#DDD',
+  embedBackground: '#FBFCFD',
   btnAccentColor: '#4E71FF', // blue
   accent: '#4E71FF', // blue
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
@@ -62,7 +66,9 @@ const colors: IColorsLight = {
   darkerBorder: '#87909E', // deeperGrey
   secondary: '#000C20', // darkgrey
   secondaryOpacity: 'rgba(0, 12, 32, 0.5)', // darkgrey with 0.5 opacity
-  shadow: '0 8px 24px 0 rgba(83,98,124,0.06)',
+  elevationLow: '0px 4px 16px rgba(83, 98, 124, 0.06)',
+  elevationMedium: '0px 4px 10px rgba(19, 37, 64, 0.1)',
+  elevationHigh: '0px 3px 14px rgba(83, 99, 124, 0.16)',
 };
 
 export default colors;

@@ -152,7 +152,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
               // color defined in grommet config
               color="secondaryText"
             />
-            <StyledText size="medium" color="primaryText">
+            <StyledText size="medium" color="darkText">
               {uploadingImageLabel}
             </StyledText>
           </Box>

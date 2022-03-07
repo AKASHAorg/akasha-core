@@ -31,7 +31,7 @@ export const TagPopover: React.FC<IMentionPopover> = React.forwardRef((props, re
               setIndex(i);
             }}
           >
-            <Text size="medium">{`#${value.name}`}</Text>
+            <Text size="medium" color="primaryText">{`#${value.name}`}</Text>
             <Text size="small" color="secondaryText">
               {`${value.totalPosts} ${postsLabel}`}
             </Text>

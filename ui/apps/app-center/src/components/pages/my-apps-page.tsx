@@ -126,6 +126,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               type="no-login"
               title={t('You have no installed apps')}
               details={t('Try some out for extra functionality!')}
+              noBorder={true}
             />
           )}
         </Box>
