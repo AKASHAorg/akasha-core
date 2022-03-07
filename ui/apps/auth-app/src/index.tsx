@@ -14,7 +14,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     loadingFn: () => import('./components'),
     mountsIn: opts.layoutConfig?.focusedPluginSlotId,
     i18nNamespace: ['app-auth-ewa'],
-    logo: { type: LogoTypeSource.ICON, value: 'appAuth' },
+    logo: { type: LogoTypeSource.ICON, value: 'app' },
     // allow other apps to navigate to this app
     routes: {
       SIGN_IN,
@@ -22,6 +22,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       SIGN_UP_USERNAME,
       rootRoute,
       ...routes,
+    },
+    menuItems: {
+      label: 'Authentication App',
+      name: 'app-auth',
+      area: [],
+      logo: { type: LogoTypeSource.ICON, value: 'app' },
+      route: rootRoute,
+      subRoutes: [],
     },
     // allow other apps to find this app
     tags: ['auth', 'signin', 'signup'],

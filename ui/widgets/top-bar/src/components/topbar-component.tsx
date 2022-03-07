@@ -1,13 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useLocation } from 'react-router-dom';
-import {
-  EventTypes,
-  IMenuItem,
-  IMenuList,
-  MenuItemAreaType,
-  UIEventData,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { EventTypes, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useCheckModerator,
   useCheckNewNotifications,
@@ -27,7 +21,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   const { navigateToUrl } = singleSpa;
   const location = useLocation();
 
-  const [currentMenu, setCurrentMenu] = React.useState<IMenuItem[]>([]);
+  const [routeData, setRouteData] = React.useState({});
 
   const loginQuery = useGetLogin();
   const logoutMutation = useLogout();
@@ -46,25 +40,22 @@ const TopbarComponent = (props: RootComponentProps) => {
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   React.useEffect(() => {
-    const menuItemsSubscription = props.getMenuItems().subscribe({
-      next: menuItems => {
-        setCurrentMenu(menuItems.items);
+    const sub = props.plugins?.routing?.routeObserver?.subscribe({
+      next: routeData => {
+        setRouteData(routeData?.byArea);
       },
     });
-    return () => {
-      if (menuItemsSubscription) {
-        menuItemsSubscription.unsubscribe();
-      }
-    };
+
+    return () => sub.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // *how to obtain different topbar menu sections
-  const quickAccessItems = currentMenu?.filter(
-    menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
-  );
+  const quickAccessItems = routeData?.[MenuItemAreaType.QuickAccessArea];
+  const searchAreaItem = routeData?.[MenuItemAreaType.SearchArea];
+  const otherAreaItems = routeData?.[MenuItemAreaType.OtherArea];
+
   // sort them so that avatar is last on the topbar menu
-  const sortedQuickAccessItems = quickAccessItems.sort((menuItemA, menuItemB) => {
+  const sortedQuickAccessItems = quickAccessItems?.sort((menuItemA, menuItemB) => {
     if (menuItemA.name && menuItemB.name) {
       const getPluginName = (pluginName: string) => {
         const splitName = pluginName.split('-');
@@ -81,14 +72,6 @@ const TopbarComponent = (props: RootComponentProps) => {
 
     return 0;
   });
-
-  const searchAreaItem = currentMenu?.filter(
-    menuItem => menuItem.area === MenuItemAreaType.SearchArea,
-  )[0];
-
-  const otherAreaItems = currentMenu?.filter(
-    menuItem => menuItem.area === MenuItemAreaType.OtherArea,
-  );
 
   const handleNavigation = (path: string) => {
     navigateToUrl(path);
@@ -116,13 +99,16 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   const handleSignUpClick = () => {
     navigateTo({
-      appName: 'app-auth',
+      appName: '@akashaproject/app-auth-ewa',
       pathName: appRoutes => appRoutes[appRoutes.SIGN_UP],
     });
   };
 
   const handleSettingsClick = () => {
-    navigateToUrl('/settings');
+    navigateTo({
+      appName: '@akashaproject/app-settings-ewa',
+      pathName: appRoutes => appRoutes.rootRoute,
+    });
   };
 
   const handleFeedbackModalShow = () => {
@@ -130,11 +116,17 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleModerationClick = () => {
-    navigateToUrl('/moderation-app/history');
+    navigateTo({
+      appName: '@akashaproject/app-moderation-ewa',
+      pathName: appRoutes => appRoutes.History,
+    });
   };
 
   const handleDashboardClick = () => {
-    navigateToUrl('/moderation-app/home');
+    navigateTo({
+      appName: '@akashaproject/app-moderation-ewa',
+      pathName: appRoutes => appRoutes.Home,
+    });
   };
 
   const handleSearch = (inputValue: string) => {

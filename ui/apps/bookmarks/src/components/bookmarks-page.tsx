@@ -12,7 +12,6 @@ const { ErrorLoader, Spinner } = DS;
 type BookmarksPageProps = Omit<
   RootComponentProps,
   | 'layout'
-  | 'getMenuItems'
   | 'events'
   | 'domElement'
   | 'name'

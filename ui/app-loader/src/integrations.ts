@@ -137,29 +137,6 @@ const extractExtensionsFromApps = (
     );
 };
 
-const extractMenuItemsFromApps = (
-  config: IAppConfig & { name: string },
-  state$: Observable<LoaderState>,
-) => {
-  return of(config)
-    .pipe(
-      filter(conf => !!conf.menuItems),
-      withLatestFrom(state$.pipe(getStateSlice('menuItems'))),
-    )
-    .pipe(
-      tap(([appConfig, menuItems]) => {
-        const currentIdx = menuItems.nextIndex;
-        const items = menuItems.items.concat({ ...appConfig.menuItems, index: currentIdx });
-        return pipelineEvents.next({
-          menuItems: {
-            items,
-            nextIndex: currentIdx + 1,
-          },
-        });
-      }),
-    );
-};
-
 export const processSystemModules = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
@@ -229,7 +206,6 @@ export const processSystemModules = (
       tap(({ configs }) => {
         from(configs)
           .pipe(
-            tap(config => extractMenuItemsFromApps(config, state$).subscribe()),
             filter(conf => conf.extends && Array.isArray(conf.extends)),
             tap(config => extractExtensionsFromApps(config, state$).subscribe()),
           )
@@ -363,9 +339,20 @@ export const handleExtPointMountOfApps = (
           navigateTo: navigateTo(props.integrationConfigs, logger),
           navigateToModal: navigateToModal,
           getAppRoutes: appName => props.integrationConfigs.get(appName).routes,
-          getMenuItems: () => state$.pipe(getStateSlice('menuItems')),
         },
       });
+
+      // each app must have menuItems exposed in config, widgets do not
+      if (config.menuItems) {
+        dispatchEvent(
+          new CustomEvent('single-spa:app-registered', {
+            detail: {
+              app: config.name,
+              menuItems: config.menuItems,
+            },
+          }),
+        );
+      }
     }),
   );
 };

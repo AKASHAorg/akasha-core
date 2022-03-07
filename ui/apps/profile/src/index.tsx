@@ -20,7 +20,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Profile',
     name: 'app-profile',
-    area: MenuItemAreaType.QuickAccessArea,
+    area: [MenuItemAreaType.AppArea, MenuItemAreaType.QuickAccessArea],
     // routes,
     logo: { type: LogoTypeSource.AVATAR, value: '' },
     route: rootRoute,

@@ -3,7 +3,10 @@ import { rootRoute } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
+  MenuItemAreaType,
+  MenuItemType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
   if (!integrations) {
@@ -55,4 +58,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       loadingFn: () => import('./extensions/topbar-bookmarks-button'),
     },
   ],
+  title: 'Bookmarks | Ethereum World',
+  menuItems: {
+    route: rootRoute,
+    label: 'Bookmarks',
+    name: 'app-bookmarks',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
+    area: [MenuItemAreaType.AppArea],
+    subRoutes: [],
+  },
 });

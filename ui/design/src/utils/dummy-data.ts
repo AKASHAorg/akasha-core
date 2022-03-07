@@ -33,7 +33,7 @@ const installedAppsData: IMenuItem[] = [
     route: '/',
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
-    area: MenuItemAreaType.AppArea,
+    area: [MenuItemAreaType.AppArea],
   },
   {
     label: 'ENS',
@@ -45,7 +45,7 @@ const installedAppsData: IMenuItem[] = [
       { index: 0, label: 'Edit', route: '/ens-app/edit', type: MenuItemType.Internal },
       { index: 1, label: 'Settings', route: '/ens-app/settings', type: MenuItemType.Internal },
     ],
-    area: MenuItemAreaType.AppArea,
+    area: [MenuItemAreaType.AppArea],
   },
   {
     label: '3box integration',
@@ -57,7 +57,7 @@ const installedAppsData: IMenuItem[] = [
       { index: 0, label: 'Edit', route: '/3box-app/edit', type: MenuItemType.Internal },
       { index: 1, label: 'Settings', route: '/3box-app/settings', type: MenuItemType.Internal },
     ],
-    area: MenuItemAreaType.AppArea,
+    area: [MenuItemAreaType.AppArea],
   },
   {
     label: 'AKASHA Profile',
@@ -69,7 +69,7 @@ const installedAppsData: IMenuItem[] = [
       { index: 0, label: 'Profile list', route: '/profile/list', type: MenuItemType.Internal },
       { index: 1, label: 'My profile', route: '/profile/my-profile', type: MenuItemType.Internal },
     ],
-    area: MenuItemAreaType.QuickAccessArea,
+    area: [MenuItemAreaType.QuickAccessArea],
   },
   {
     label: 'Search',
@@ -77,7 +77,8 @@ const installedAppsData: IMenuItem[] = [
     route: '/search',
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'searchApp' },
-    area: MenuItemAreaType.SearchArea,
+    area: [MenuItemAreaType.SearchArea],
+    subRoutes: []
   },
   {
     label: 'Notifications',
@@ -85,7 +86,8 @@ const installedAppsData: IMenuItem[] = [
     route: '/notifications',
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'notifications' },
-    area: MenuItemAreaType.QuickAccessArea,
+    area: [MenuItemAreaType.QuickAccessArea],
+    subRoutes: []
   },
   {
     label: 'App Center',
@@ -93,7 +95,8 @@ const installedAppsData: IMenuItem[] = [
     route: '/appcenter',
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
-    area: MenuItemAreaType.BottomArea,
+    area: [MenuItemAreaType.BottomArea],
+    subRoutes: []
   },
 ];
 

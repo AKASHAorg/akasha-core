@@ -9,8 +9,8 @@ import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dim
 import lightTheme from '../../styles/themes/light/light-theme';
 import { installedAppsData } from '../../utils/dummy-data';
 
-const body = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
-const footer = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.BottomArea);
+const body = installedAppsData?.map(menuItem => menuItem.area[MenuItemAreaType.AppArea]);
+const footer = installedAppsData?.map(menuItem => menuItem.area[MenuItemAreaType.BottomArea]);
 
 const SidebarComponent = (props: ISidebarProps) => {
   const { size } = useViewportSize();

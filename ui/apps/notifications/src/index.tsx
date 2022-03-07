@@ -25,9 +25,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Notifications',
     name: 'app-notifications',
-    area: MenuItemAreaType.QuickAccessArea,
+    area: [MenuItemAreaType.AppArea, MenuItemAreaType.QuickAccessArea],
     // routes,
     logo: { type: LogoTypeSource.ICON, value: 'notifications' },
     route: rootRoute,
+    subRoutes: [],
   },
 });

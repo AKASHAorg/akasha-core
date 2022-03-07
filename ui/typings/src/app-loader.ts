@@ -1,4 +1,4 @@
-import { LogoSourceType, RootComponentProps } from './index';
+import { LogoSourceType, RootComponentProps, ValueOf } from './index';
 
 export type ActivityFn = (
   location: Location,
@@ -122,10 +122,10 @@ export interface IAppConfig {
    * Only used for topbar.
    * @deprecated - use extension points
    */
-  menuItems?: IMenuItem;
+  menuItems: IMenuItem;
 }
 
-export type IWidgetConfig = Omit<IAppConfig, 'routes'>;
+export type IWidgetConfig = Omit<IAppConfig, 'routes' | 'menuItems'>;
 
 export enum LogLevels {
   FATAL = 'fatal',
@@ -178,10 +178,6 @@ export interface ILoaderConfig {
    */
   defaultWidgets: string[];
   /**
-   * Plugins that are installed by default on this world.
-   */
-  defaultPlugins?: string[];
-  /**
    * The layout widget of this world. This widget always mounts in the root element.
    */
   layout: string;
@@ -226,7 +222,7 @@ export interface IMenuItem {
   label: string;
   route: string;
   type?: MenuItemType;
-  area?: MenuItemAreaType; // area is optional because subroutes dont have an area to be mounted
+  area?: ValueOf<MenuItemAreaType>[]; // area is optional because subroutes dont have an area to be mounted
   logo?: LogoSourceType;
   name?: string;
   subRoutes?: IMenuItem[];

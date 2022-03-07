@@ -50,7 +50,6 @@ export interface RootComponentProps {
   uiEvents: Subject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
-  getMenuItems?: () => Observable<AppLoaderTypes.IMenuList>;
   layoutConfig: AppLoaderTypes.IAppConfig['extensions'];
   logger: ILogger;
   name?: string;
@@ -141,11 +140,4 @@ export interface IntegrationCenterApp extends IntegrationInfo {
   license?: string;
 }
 
-export interface Middleware {
-  run: (middlewareConfigs?: Array<Record<string, unknown>>, callback?: () => void) => void;
-}
-
-export interface MiddlewareConfig {
-  middlewareName: string;
-  [key: string]: unknown;
-}
+export type ValueOf<T> = T[keyof T];
