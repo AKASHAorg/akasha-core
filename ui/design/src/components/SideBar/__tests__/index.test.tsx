@@ -8,6 +8,7 @@ describe('<Sidebar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleClickMenuItem = jest.fn();
+  const handleExploreClick = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -15,12 +16,15 @@ describe('<Sidebar /> Component', () => {
         wrapWithTheme(
           <Sidebar
             worldAppsTitleLabel="World Apps"
+            poweredByLabel="Powered by AKASHA"
             userInstalledAppsTitleLabel="Apps"
             userInstalledApps={[]}
             exploreButtonLabel="Explore"
+            isLoggedIn={false}
             bodyMenuItems={[]}
             allMenuItems={[]}
             onClickMenuItem={handleClickMenuItem}
+            onClickExplore={handleExploreClick}
           />,
         ),
         {},

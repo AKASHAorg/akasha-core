@@ -6,7 +6,6 @@ import SectionTitle from './section-title';
 import { MenuAppButton } from './menu-app-button';
 
 import Icon from '../Icon';
-import Button from '../Button';
 
 import {
   StyledHiddenScrollContainer,
@@ -16,13 +15,16 @@ import {
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
+  poweredByLabel: string;
   userInstalledAppsTitleLabel: string;
   userInstalledApps: IMenuItem[];
   exploreButtonLabel: string;
   bodyMenuItems: IMenuItem[];
   allMenuItems: IMenuItem[];
   currentRoute?: string;
+  isLoggedIn: boolean;
   onClickMenuItem: (route: string) => void;
+  onClickExplore: () => void;
   // viewport size
   size?: string;
   className?: string;
@@ -31,15 +33,18 @@ export interface ISidebarProps {
 const Sidebar: React.FC<ISidebarProps> = props => {
   const {
     worldAppsTitleLabel,
+    poweredByLabel,
     userInstalledAppsTitleLabel,
     userInstalledApps,
     exploreButtonLabel,
     allMenuItems,
     bodyMenuItems,
-    onClickMenuItem,
     currentRoute,
+    isLoggedIn,
     size,
     className,
+    onClickMenuItem,
+    onClickExplore,
   } = props;
 
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
@@ -79,6 +84,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     setCurrentAppData(menuItem);
     setActiveOption(subrouteMenuItem);
     onClickMenuItem(subrouteMenuItem.route);
+  };
+
+  const handleExploreClick = () => {
+    onClickExplore();
   };
 
   const renderMenuItem = (menuItem: IMenuItem, index: number) => {
@@ -131,15 +140,15 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       className={className}
     >
       <StyledHiddenScrollContainer>
-        {bodyMenuItems.length > 0 && (
+        {bodyMenuItems?.length > 0 && (
           <Box pad={{ top: 'medium', horizontal: 'medium' }} align="start" fill={true}>
-            <SectionTitle titleLabel={worldAppsTitleLabel} />
+            <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
             <Accordion multiple={true} fill={true}>
               {bodyMenuItems?.map(renderMenuItem)}
             </Accordion>
           </Box>
         )}
-        {userInstalledApps.length > 0 && (
+        {isLoggedIn && userInstalledApps?.length > 0 && (
           <Box
             pad={{ top: 'medium', horizontal: 'medium' }}
             align="start"
@@ -156,22 +165,14 @@ const Sidebar: React.FC<ISidebarProps> = props => {
 
       <StyledMobileHRDiv />
 
-      <Box pad="small">
-        <Button
-          primary={true}
-          size="large"
-          height={2.5}
-          label={
-            <Box direction="row" justify="center">
-              <Icon type="explore" plain={true} style={{ marginRight: '0.5rem' }} />
-              {exploreButtonLabel}
-            </Box>
-          }
-          onClick={() => {
-            /* handle click */
-          }}
-        />
-      </Box>
+      {isLoggedIn && (
+        <Box direction="row" pad="small" align="center" onClick={handleExploreClick}>
+          <Icon type="explore" size="md" plain={true} style={{ marginRight: '0.75rem' }} />
+          <Text color="accentText" size="large">
+            {exploreButtonLabel}
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };

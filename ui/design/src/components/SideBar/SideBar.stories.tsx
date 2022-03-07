@@ -42,9 +42,11 @@ const Template = (args: ISidebarProps) => (
 export const BaseSidebar = Template.bind({});
 BaseSidebar.args = {
   worldAppsTitleLabel: 'World Apps',
+  poweredByLabel: 'Powered by AKASHA',
   userInstalledAppsTitleLabel: 'Apps',
   userInstalledApps: userInstalledApps,
   exploreButtonLabel: 'Explore',
   allMenuItems: installedAppsData,
   bodyMenuItems: worldApps,
+  isLoggedIn: true,
 };
