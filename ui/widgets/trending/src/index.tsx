@@ -9,7 +9,7 @@ import {
  */
 export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig = opts => ({
   loadingFn: () => import('./components'),
-  name: 'ui-widget-trending',
   i18nNamespace: ['ui-widget-trending'],
   mountsIn: opts.layoutConfig?.rootWidgetSlotId,
+  activeWhen: () => true,
 });

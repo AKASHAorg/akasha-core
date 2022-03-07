@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
 import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
 import DS from '@akashaproject/design-system';
@@ -8,7 +8,7 @@ import { rootRoute } from '../routes';
 
 const { ErrorLoader, ModalContainer, ShareModal } = DS;
 
-const UpdateProfileModal: React.FC<RootComponentProps> = props => {
+const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
   const { profileId } = props.activeModal;
   const url = `${window.location.origin}${rootRoute}/${profileId}`;
 
@@ -50,7 +50,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(UpdateProfileModal),
-  errorBoundary: (error, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }

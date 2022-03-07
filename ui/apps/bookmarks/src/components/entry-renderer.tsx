@@ -204,7 +204,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   handleFlipCard={handleFlipCard}
                 />
               )}
-
               {!entryAwaitingModeration && !accountAwaitingModeration && !itemData.delisted && (
                 <EntryCard
                   isRemoved={itemData.isRemoved}

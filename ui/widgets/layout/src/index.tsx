@@ -1,22 +1,24 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import {
-  LayoutConfig,
   IntegrationRegistrationOptions,
+  IWidgetConfig,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-export const register: (props: IntegrationRegistrationOptions) => LayoutConfig = props => {
+export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig = props => {
   return {
     loadingFn: () => import('./components'),
+    activeWhen: () => true,
     title: props.worldConfig.title,
-    name: 'ui-widget-layout',
-    pluginSlotId: 'plugin-slot',
-    topbarSlotId: 'topbar-slot',
-    sidebarSlotId: 'sidebar-slot',
-    rootWidgetSlotId: 'root-widget-slot',
-    widgetSlotId: 'widget-slot',
-    modalSlotId: 'modal-slot',
     mountsIn: 'root',
-    focusedPluginSlotId: 'focused-plugin-slot',
-    cookieWidgetSlotId: 'cookie-widget-slot',
+    extensions: {
+      pluginSlotId: 'plugin-slot',
+      topbarSlotId: 'topbar-slot',
+      sidebarSlotId: 'sidebar-slot',
+      rootWidgetSlotId: 'root-widget-slot',
+      widgetSlotId: 'widget-slot',
+      modalSlotId: 'modal-slot',
+      focusedPluginSlotId: 'focused-plugin-slot',
+      cookieWidgetSlotId: 'cookie-widget-slot',
+    },
   };
 };

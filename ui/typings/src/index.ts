@@ -10,12 +10,12 @@ export {
   WEB3_EVENTS,
 } from '@akashaproject/sdk-typings/lib/interfaces/events';
 import { IntegrationInfo, ReleaseInfo } from '@akashaproject/sdk-typings/lib/interfaces/registry';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';
-
 import i18n from 'i18next';
 import { AnalyticsEventData } from './analytics';
+
 export interface IAkashaError {
   errorKey: string;
   error: Error;
@@ -26,7 +26,7 @@ export interface LogoSourceType {
   type: LogoTypeSource;
   value: string;
 }
-export type AppNameSelector = (apps: AppLoaderTypes.IAppConfig[]) => string;
+export type AppNameSelector = (apps: Map<string, AppLoaderTypes.IAppConfig>) => string;
 export type PathNameSelector = (appRoutes: AppLoaderTypes.IAppConfig['routes']) => string;
 
 export interface NavigationOptions {
@@ -49,22 +49,34 @@ export interface RootComponentProps {
   domElement: HTMLElement;
   uiEvents: Subject<AppLoaderTypes.UIEventData | AnalyticsEventData>;
   i18next?: typeof i18n;
-  plugins?: Record<string, any>;
-  getMenuItems?: () => AppLoaderTypes.IMenuList;
-  layoutConfig: Omit<AppLoaderTypes.LayoutConfig, 'loadingFn' | 'mountsIn' | 'name' | 'title'>;
+  plugins?: Record<string, IPluginsMap>;
+  getMenuItems?: () => Observable<AppLoaderTypes.IMenuList>;
+  layoutConfig: AppLoaderTypes.IAppConfig['extensions'];
   logger: ILogger;
-  mountParcel: (parcel: unknown, config?: unknown) => unknown;
-  name: string;
+  name?: string;
   singleSpa: typeof singleSpa;
+  /*
+   * @deprecated
+   */
   installIntegration?: (name: string) => void;
+  /*
+   * @deprecated
+   */
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
   activeModal: AppLoaderTypes.ModalNavigationOptions;
-  extensionData?: AppLoaderTypes.UIEventData['data'];
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
   worldConfig: AppLoaderTypes.ILoaderConfig;
   navigateTo: (options: string | NavigationOptions | NavigationFn) => void;
   parseQueryString: (queryString: string) => QueryStringType;
+}
+
+export interface IPluginsMap {
+  [namespace: string]: any;
+}
+
+export interface RootExtensionProps extends RootComponentProps {
+  extensionData: AppLoaderTypes.UIEventData['data'];
 }
 
 export enum LogoTypeSource {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import {
   useDeleteBookmark,
   useGetBookmarks,
@@ -31,7 +31,7 @@ const BookmarkButton = styled(TextIcon)<{ isBookmarked?: boolean }>`
   }
 `;
 
-const EntryCardSaveButton = (props: RootComponentProps) => {
+const EntryCardSaveButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
   const loggedUserReq = useGetLogin();
   const bookmarkReq = useGetBookmarks(loggedUserReq.data.ethAddress, loggedUserReq.data.isReady);
@@ -79,7 +79,7 @@ const EntryCardSaveButton = (props: RootComponentProps) => {
   );
 };
 
-const BookmarkButtonWrapper = (props: RootComponentProps) => (
+const BookmarkButtonWrapper = (props: RootExtensionProps) => (
   <I18nextProvider i18n={props.plugins?.translation?.i18n}>
     <EntryCardSaveButton {...props} />
   </I18nextProvider>
@@ -89,7 +89,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(BookmarkButtonWrapper),
-  errorBoundary: (err, errorInfo, props: RootComponentProps) => {
+  errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);
     }
@@ -106,4 +106,4 @@ export const bootstrap = reactLifecycles.bootstrap;
 
 export const mount = reactLifecycles.mount;
 
-export const unmount = reactLifecycles.unmount;
+export const unmount = () => Promise.resolve();

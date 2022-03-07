@@ -36,7 +36,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  name: 'app-bookmarks',
   i18nNamespace: ['app-bookmarks'],
   routes: {
     rootRoute,
@@ -56,5 +55,4 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       loadingFn: () => import('./extensions/topbar-bookmarks-button'),
     },
   ],
-  title: 'Bookmarks | Ethereum World',
 });

@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "@akashaproject/ui-awf-typings": "*",
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/ui-app-loader": "*",
+    "@akashaproject/ui-awf-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9"
   },
@@ -17,7 +17,6 @@
     "build:staging": "webpack --config ./webpack.config.js",
     "postbuild:staging": "copyfiles -u 1 \"./dist/**/*\" ./public"
   },
-  "dependencies": {},
   "browserslist": [
     ">0.2%",
     "not dead",

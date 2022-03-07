@@ -75,9 +75,11 @@ const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
           }
         });
       } else {
-        if (!isUnmounted) {
-          setTheme(desiredTheme, setLoadedTheme);
-        }
+        setTheme(desiredTheme, themeData => {
+          if (!isUnmounted) {
+            setLoadedTheme(themeData);
+          }
+        });
       }
     } else {
       if (props.settings.activeTheme !== loadedTheme.name) {
@@ -92,7 +94,11 @@ const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
           });
         } else {
           if (!isUnmounted) {
-            setTheme(desiredTheme, setLoadedTheme);
+            setTheme(desiredTheme, themeData => {
+              if (!isUnmounted) {
+                setLoadedTheme(themeData);
+              }
+            });
           }
         }
       }
