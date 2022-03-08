@@ -50,17 +50,25 @@ const Menu = (props: MenuProps) => {
     navigateToUrl(path);
   };
 
+  const handleClickExplore = () => {
+    /* */
+  };
+
   return (
     <AppSidebar
       worldAppsTitleLabel={t('World Apps')}
+      poweredByLabel="Powered by AKASHA"
       userInstalledAppsTitleLabel={t('Apps')}
       userInstalledApps={[]}
       exploreButtonLabel={t('Explore')}
-      onClickMenuItem={handleNavigation}
       allMenuItems={[]}
       bodyMenuItems={[]}
       currentRoute={currentLocation.pathname}
       size={size}
+      isLoggedIn={false}
+      loadingUserInstalledApps={false}
+      onClickMenuItem={handleNavigation}
+      onClickExplore={handleClickExplore}
     />
   );
 };
