@@ -22,7 +22,7 @@ const BookmarkPill: React.FC<IBookmarkPill> = props => {
       align="center"
       justify="center"
     >
-      <Icon type="bookmark" color="white" size="sm" fill="white" />
+      <Icon type="bookmark" color="white" size="sm" />
       <Text color="white">{infoLabel}</Text>
       <Icon type="close" onClick={handleDismiss} clickable={true} />
     </Box>

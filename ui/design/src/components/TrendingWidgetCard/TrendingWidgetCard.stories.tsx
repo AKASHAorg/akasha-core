@@ -45,6 +45,6 @@ BaseTrendingWidgetCard.args = {
 BaseTrendingWidgetCard.parameters = {
   design: {
     type: 'figma',
-    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=44%3A2265',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=752%3A6562',
   },
 };

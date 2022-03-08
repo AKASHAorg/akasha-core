@@ -5,8 +5,7 @@ import DS from '@akashaproject/design-system';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import { rootRoute } from '../routes';
 import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
-import { useRouteMatch } from 'react-router';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useRouteMatch } from 'react-router-dom';
 
 const { Icon, styled, css } = DS;
 

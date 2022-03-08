@@ -74,7 +74,6 @@ import ICWidgetCard from './components/ICWidgetCard';
 import LoginCTAWidgetCard, { CTAAnchor } from './components/LoginCTAWidgetCard';
 import SourcesWidgetCard from './components/SourcesWidgetCard';
 import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
-import TopicsWidgetCard from './components/TopicsWidgetCard';
 import TrendingWidgetCard from './components/TrendingWidgetCard';
 import TutorialWidgetCard from './components/TutorialWidgetCard';
 import SignUpCard from './components/SignUpCard';
@@ -137,7 +136,6 @@ import StatModal from './components/StatModal';
 
 import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';
-import { Notification, notify } from './components/NotificationToast';
 
 import NotificationsPopover from './components/NotificationsPopover';
 import SelectPopover from './components/SelectPopover';
@@ -217,7 +215,6 @@ const exported = {
   ProfileWidgetCard,
   ProfileMiniCard,
   TextInputField,
-  TopicsWidgetCard,
   TagCard,
   TagDetailCard,
   TagProfileCard,
@@ -286,9 +283,7 @@ const exported = {
   ModalContainer,
   ModalRenderer,
   MenuItemButton,
-  Notification,
   NotificationsCard,
-  notify,
   HorizontalDivider,
   StepIndicator,
   CookieWidgetCard,
