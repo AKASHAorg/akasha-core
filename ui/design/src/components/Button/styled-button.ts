@@ -1,8 +1,8 @@
 import { Button } from 'grommet';
 import styled, { css } from 'styled-components';
 
-const StyledButton = styled(Button)`
-  height: 2rem;
+const StyledButton = styled(Button)<{ height?: number }>`
+  height: ${props => (props.height ? `${props.height}rem` : '2rem')};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   color: ${props => props.theme.colors.btnAAccentColor};
   white-space: nowrap;

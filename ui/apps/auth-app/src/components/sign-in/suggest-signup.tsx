@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
+
 import routes, { SIGN_UP } from '../../routes';
+
 const { ErrorLoader, Button } = DS;
 
 interface SuggestSignupProps {
@@ -8,6 +11,8 @@ interface SuggestSignupProps {
 }
 
 const SuggestSignup: React.FC<SuggestSignupProps> = props => {
+  const { t } = useTranslation('app-auth-ewa');
+
   const handleSignUpClick = () => {
     props.onNavigate(routes[SIGN_UP]);
   };
@@ -15,11 +20,11 @@ const SuggestSignup: React.FC<SuggestSignupProps> = props => {
   return (
     <ErrorLoader
       type="not-registered"
-      title={'No account associated with this Ethereum address'}
-      details={'Please sign up to create an Ethereum World account'}
+      title={t('No account associated with this Ethereum address')}
+      details={t('Please sign up to create an Ethereum World account')}
       style={{ padding: '1em 3em' }}
     >
-      <Button primary={true} label={'Sign Up'} onClick={handleSignUpClick} />
+      <Button primary={true} label={t('Sign Up')} onClick={handleSignUpClick} />
     </ErrorLoader>
   );
 };

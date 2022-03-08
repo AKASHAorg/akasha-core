@@ -1,16 +1,20 @@
 import React from 'react';
 
 const Bookmark = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" {...props}>
-    <g fill={props.fill ? '' : 'none'} fillRule="evenodd" transform="translate(-330 -2710)">
-      <polygon
-        stroke="#2E3747"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        points="0 0 0 11 3.781 7.857 7.563 10.993 7.563 0"
-        transform="translate(334.2 2712.6)"
-      />
-    </g>
+  <svg
+    width="15"
+    height="21"
+    viewBox="0 0 15 21"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M1 1V20.2L7.6 14.7143L14.2 20.1876V1L1 1Z"
+      stroke="#132540"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
