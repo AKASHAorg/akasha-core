@@ -49,4 +49,5 @@ BaseSidebar.args = {
   allMenuItems: installedAppsData,
   bodyMenuItems: worldApps,
   isLoggedIn: true,
+  loadingUserInstalledApps: false,
 };

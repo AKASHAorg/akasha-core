@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-import SectionTitle from './section-title';
 import { MenuAppButton } from './menu-app-button';
+import SectionTitle from './section-title';
+import Skeleton from './skeleton';
 
 import Icon from '../Icon';
 
@@ -23,6 +24,7 @@ export interface ISidebarProps {
   allMenuItems: IMenuItem[];
   currentRoute?: string;
   isLoggedIn: boolean;
+  loadingUserInstalledApps: boolean;
   onClickMenuItem: (route: string) => void;
   onClickExplore: () => void;
   // viewport size
@@ -41,6 +43,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     bodyMenuItems,
     currentRoute,
     isLoggedIn,
+    loadingUserInstalledApps,
     size,
     className,
     onClickMenuItem,
@@ -141,16 +144,31 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     >
       <StyledHiddenScrollContainer>
         {bodyMenuItems?.length > 0 && (
-          <Box pad={{ top: 'medium', horizontal: 'medium' }} align="start" fill={true}>
+          <Box
+            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
+            align="start"
+            fill={true}
+          >
             <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
             <Accordion multiple={true} fill={true}>
               {bodyMenuItems?.map(renderMenuItem)}
             </Accordion>
           </Box>
         )}
+        {isLoggedIn && loadingUserInstalledApps && (
+          <Box
+            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
+            align="start"
+            fill={true}
+            border={{ size: '1px', color: 'border', side: 'top' }}
+          >
+            <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
+            <Skeleton count={5} />
+          </Box>
+        )}
         {isLoggedIn && userInstalledApps?.length > 0 && (
           <Box
-            pad={{ top: 'medium', horizontal: 'medium' }}
+            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
             align="start"
             fill={true}
             border={{ size: '1px', color: 'border', side: 'top' }}

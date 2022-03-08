@@ -21,6 +21,7 @@ describe('<Sidebar /> Component', () => {
             userInstalledApps={[]}
             exploreButtonLabel="Explore"
             isLoggedIn={false}
+            loadingUserInstalledApps={true}
             bodyMenuItems={[]}
             allMenuItems={[]}
             onClickMenuItem={handleClickMenuItem}
