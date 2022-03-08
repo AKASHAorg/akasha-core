@@ -4,9 +4,7 @@ import { useLocation } from 'react-router-dom';
 import {
   EventTypes,
   IMenuItem,
-  IMenuList,
   MenuItemAreaType,
-  UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useCheckModerator,
@@ -116,7 +114,7 @@ const TopbarComponent = (props: RootComponentProps) => {
 
   const handleSignUpClick = () => {
     navigateTo({
-      appName: 'app-auth',
+      appName: '@akashaproject/app-auth-ewa',
       pathName: appRoutes => appRoutes[appRoutes.SIGN_UP],
     });
   };
