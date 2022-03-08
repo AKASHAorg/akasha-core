@@ -21,6 +21,7 @@ import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 import Autosizer from 'react-virtualized-auto-sizer';
 
 import Avatar from './components/Avatar';
+import AppAvatar from './components/AppAvatar';
 import EditableAvatar from './components/EditableAvatar';
 
 import Sidebar from './components/SideBar';
@@ -177,6 +178,7 @@ export { BoxExtendedProps, ButtonExtendedProps };
 const exported = {
   Autosizer,
   Avatar,
+  AppAvatar,
   AppIcon,
   AreaChart,
   LineChart,
