@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grommet } from 'grommet';
+import { AppTypes } from '@akashaproject/ui-awf-typings';
 
 import AppAvatar, { AppAvatarProps } from '.';
 
@@ -30,10 +31,10 @@ BaseAvatar.args = {
 
 export const AvatarWithAppPlaceholder = Template.bind({});
 AvatarWithAppPlaceholder.args = {
-  sidebarApp: true,
+  appType: AppTypes.APP,
 };
 
 export const AvatarWithWidgetPlaceholder = Template.bind({});
 AvatarWithWidgetPlaceholder.args = {
-  sidebarWidget: true,
+  appType: AppTypes.WIDGET,
 };

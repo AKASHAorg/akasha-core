@@ -1,12 +1,12 @@
 import * as React from 'react';
+import { AppTypes } from '@akashaproject/ui-awf-typings';
 
 import { AvatarProps } from '../Avatar';
 import AvatarImage from '../Avatar/avatar-image';
 import StyledAvatar, { ActiveOverlay } from '../Avatar/styled-avatar';
 
 export interface AppAvatarProps extends AvatarProps {
-  sidebarApp?: boolean;
-  sidebarWidget?: boolean;
+  appType: AppTypes;
 }
 
 const AppAvatar: React.FC<AppAvatarProps> = props => {
@@ -20,8 +20,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     faded,
     active,
     publicImgPath = '/images',
-    sidebarApp,
-    sidebarWidget,
+    appType,
   } = props;
 
   const isClickable = typeof onClick === 'function';
@@ -31,14 +30,14 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     avatarImage = src;
   }
 
-  if (!src && sidebarApp) {
+  if (!src && appType === AppTypes.APP) {
     // currently there are 3 placeholders for sidebar apps
     avatarImage = `${publicImgPath}/sidebar-app-placeholder-${
       Math.floor(Math.random() * 3) + 1
     }.png`;
   }
 
-  if (!src && sidebarWidget) {
+  if (!src && appType === AppTypes.WIDGET) {
     // currently there are 2 placeholders for sidebar apps
     avatarImage = `${publicImgPath}/sidebar-widget-placeholder-${
       Math.floor(Math.random() * 2) + 1

@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { StyledAppIconWrapper } from './styled-sidebar';
-import { AppIcon } from '../Icon/app-icon';
+import { AppTypes } from '@akashaproject/ui-awf-typings';
 import { IMenuItem, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+
+import { AppIcon } from '../Icon/app-icon';
 import AppAvatar from '../AppAvatar';
+
+import { StyledAppIconWrapper } from './styled-sidebar';
 
 export interface IMenuAppButton {
   active: boolean;
@@ -18,7 +21,9 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
       return (
         <AppAvatar
           src={menuItem.logo.value}
-          sidebarApp={!menuItem.logo.value || menuItem.logo.value.length < 1}
+          appType={
+            !menuItem.logo.value || menuItem.logo.value.length < 1 ? AppTypes.APP : AppTypes.NONE
+          }
         />
       );
     }
@@ -26,7 +31,9 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
       return (
         <AppAvatar
           src={menuItem.logo.value}
-          sidebarWidget={!menuItem.logo.value || menuItem.logo.value.length < 1}
+          appType={
+            !menuItem.logo.value || menuItem.logo.value.length < 1 ? AppTypes.WIDGET : AppTypes.NONE
+          }
         />
       );
     }
