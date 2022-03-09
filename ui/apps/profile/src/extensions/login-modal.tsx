@@ -20,7 +20,7 @@ const LoginModal = (props: RootExtensionProps) => {
 
   const handleSignInClick = () => {
     props.navigateTo({
-      appName: 'app-auth',
+      appName: '@akashaproject/app-auth-ewa',
       pathName: appRoutes => appRoutes[appRoutes.SIGN_IN],
       queryStrings: (qsStringify, currentRedirect) => {
         if (!currentRedirect) {

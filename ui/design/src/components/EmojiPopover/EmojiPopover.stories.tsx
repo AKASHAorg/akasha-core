@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-
+import { withDesign } from 'storybook-addon-designs';
 import EmojiPopover, { IEmojiPopover } from '.';
 
 import Icon from '../Icon';
@@ -13,6 +13,7 @@ export default {
   argTypes: {
     onClickEmoji: { action: 'clicked emoji' },
   },
+  decorators: [withDesign],
 };
 
 const Template = (args: IEmojiPopover) => {
@@ -41,4 +42,11 @@ const Template = (args: IEmojiPopover) => {
 export const BaseEmojiPopover = Template.bind({});
 BaseEmojiPopover.args = {
   emojiPlaceholderLabel: 'Search',
+};
+
+BaseEmojiPopover.parameters = {
+  design: {
+    type: 'figma',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=256%3A6871',
+  },
 };

@@ -55,8 +55,8 @@ const StyledUploadingDiv = styled.div<{ width?: number; height?: number }>`
   position: relative;
   height: ${props => (props.height ? `${props.height}px` : '8.125rem')};
   width: ${props => (props.width ? `${props.width}px` : '100%')};
-  background-color: ${props => props.theme.colors.ultraLightBackground};
-  border: 1px solid ${props => props.theme.colors.mediumGrey};
+  background-color: ${props => props.theme.colors.lightBackground};
+  border: 1px solid ${props => props.theme.colors.border};
   border-radius: ${props => props.theme.shapes.borderRadius};
   display: flex;
   align-items: center;
@@ -101,7 +101,7 @@ const StyledPopoverDiv = styled.div`
   position: absolute;
   z-index: 99999;
   padding: ${props => `${props.theme.shapes.baseSpacing}px`};
-  background: ${props => props.theme.colors.white};
+  background: ${props => props.theme.colors.cardBackground};
   border-radius: ${props => props.theme.shapes.borderRadius};
   border: 1px solid ${props => props.theme.colors.border};
   box-shadow: ${props => props.theme.colors.shadow};
@@ -112,7 +112,7 @@ const StyledPopoverValueBox = styled(Box)<{ selectedBackground: boolean }>`
   padding: ${props => `${props.theme.shapes.baseSpacing}px`};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
   background: ${props =>
-    props.selectedBackground ? props.theme.colors.lightestGrey : 'transparent'};
+    props.selectedBackground ? props.theme.colors.hoverBackground : 'transparent'};
   max-width: 20rem;
   min-width: 12rem;
   white-space: nowrap;
