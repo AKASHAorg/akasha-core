@@ -44,5 +44,6 @@ export interface IColors {
   elevationMedium: string;
   elevationHigh: string;
   disabledText: string;
+  subtitleText: string;
   activeCardBackground: string;
 }

@@ -12,6 +12,8 @@ export type IconType =
   | 'appEns'
   | 'appFeed'
   | 'appIpfs'
+  | 'appModeration'
+  | 'appSocial'
   | 'activity'
   | 'akasha'
   | 'addAppGrey'
@@ -137,6 +139,8 @@ export const iconTypes: IconType[] = [
   'appEns',
   'appFeed',
   'appIpfs',
+  'appModeration',
+  'appSocial',
   'activity',
   'addAppGrey',
   'akasha',

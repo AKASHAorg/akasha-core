@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grommet } from 'grommet';
+import { Box, Grommet } from 'grommet';
 
 import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
@@ -9,8 +9,11 @@ import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dim
 import lightTheme from '../../styles/themes/light/light-theme';
 import { installedAppsData } from '../../utils/dummy-data';
 
-const body = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
-const footer = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.BottomArea);
+const worldApps = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
+
+const userInstalledApps = installedAppsData?.filter(
+  menuItem => menuItem.area === MenuItemAreaType.UserAppArea,
+);
 
 const SidebarComponent = (props: ISidebarProps) => {
   const { size } = useViewportSize();
@@ -29,14 +32,22 @@ export default {
 const Template = (args: ISidebarProps) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
-      <SidebarComponent {...args} />
+      <Box width="25%" style={{ maxHeight: '690px' }}>
+        <SidebarComponent {...args} />
+      </Box>
     </ViewportSizeProvider>
   </Grommet>
 );
 
 export const BaseSidebar = Template.bind({});
 BaseSidebar.args = {
+  worldAppsTitleLabel: 'World Apps',
+  poweredByLabel: 'Powered by AKASHA',
+  userInstalledAppsTitleLabel: 'Apps',
+  userInstalledApps: userInstalledApps,
+  exploreButtonLabel: 'Explore',
   allMenuItems: installedAppsData,
-  bodyMenuItems: body,
-  footerMenuItems: footer,
+  bodyMenuItems: worldApps,
+  isLoggedIn: true,
+  loadingUserInstalledApps: false,
 };
