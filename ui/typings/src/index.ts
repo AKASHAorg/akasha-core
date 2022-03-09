@@ -149,3 +149,10 @@ export interface MiddlewareConfig {
   middlewareName: string;
   [key: string]: unknown;
 }
+
+export enum AppTypes {
+  APP = 'App',
+  WIDGET = 'Widget',
+  PLUGIN = 'Plugin',
+  NONE = 'None',
+}

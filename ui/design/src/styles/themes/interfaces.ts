@@ -38,5 +38,6 @@ export interface IColors {
   secondaryOpacity: string;
   shadow: string;
   disabledText: string;
+  subtitleText: string;
   activeCardBackground: string;
 }

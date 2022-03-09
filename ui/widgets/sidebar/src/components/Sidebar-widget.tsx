@@ -1,6 +1,6 @@
 import DS from '@akashaproject/design-system';
 import * as React from 'react';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
@@ -9,15 +9,15 @@ const { styled, Sidebar, useViewportSize } = DS;
 
 const SidebarWidget: React.FC<RootComponentProps> = props => {
   return (
-    <Router>
-      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+      <Router>
         <Menu
           navigateToUrl={props.singleSpa.navigateToUrl}
           getMenuItems={() => []}
           sidebarVisible={true}
         />
-      </I18nextProvider>
-    </Router>
+      </Router>
+    </I18nextProvider>
   );
 };
 
@@ -40,6 +40,8 @@ interface MenuProps {
 const Menu = (props: MenuProps) => {
   const { navigateToUrl } = props;
 
+  const { t } = useTranslation('ui-widget-sidebar');
+
   const currentLocation = useLocation();
 
   const { size } = useViewportSize();
@@ -48,22 +50,25 @@ const Menu = (props: MenuProps) => {
     navigateToUrl(path);
   };
 
+  const handleClickExplore = () => {
+    /* */
+  };
+
   return (
     <AppSidebar
-      onClickMenuItem={handleNavigation}
+      worldAppsTitleLabel={t('World Apps')}
+      poweredByLabel="Powered by AKASHA"
+      userInstalledAppsTitleLabel={t('Apps')}
+      userInstalledApps={[]}
+      exploreButtonLabel={t('Explore')}
       allMenuItems={[]}
       bodyMenuItems={[]}
-      footerMenuItems={[
-        {
-          name: 'App center',
-          index: 0,
-          label: 'Integration Center',
-          route: '/app-center',
-          subRoutes: [],
-        },
-      ]}
       currentRoute={currentLocation.pathname}
       size={size}
+      isLoggedIn={false}
+      loadingUserInstalledApps={false}
+      onClickMenuItem={handleNavigation}
+      onClickExplore={handleClickExplore}
     />
   );
 };
