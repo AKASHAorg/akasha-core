@@ -141,3 +141,10 @@ export interface IntegrationCenterApp extends IntegrationInfo {
 }
 
 export type ValueOf<T> = T[keyof T];
+
+export enum AppTypes {
+  APP = 'App',
+  WIDGET = 'Widget',
+  PLUGIN = 'Plugin',
+  NONE = 'None',
+}
