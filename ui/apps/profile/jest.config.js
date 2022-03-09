@@ -2,10 +2,16 @@ const baseConfig = require('../../../jest.config.base');
 
 module.exports = Object.assign(baseConfig, {
   automock: false,
+  preset: 'ts-jest/presets/js-with-babel-esm',
   transform: {
-    "^.(tsx?|ts?)$": "ts-jest",
+    '\\.[jt]sx?$': 'ts-jest',
   },
-  testRegex: "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?|ts?)$",
-  preset: "ts-jest",
-  testEnvironment: "jsdom"
+  testEnvironment: 'jsdom',
+  globals: {
+    'ts-jest': {
+      useESM: true,
+      babelConfig: '../../../babel.config.js',
+      tsconfig: '../../../tsconfig.json',
+    },
+  },
 });
