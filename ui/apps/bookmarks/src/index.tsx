@@ -62,7 +62,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     route: rootRoute,
     label: 'Bookmarks',
-    name: 'app-bookmarks',
+    name: '@akashaproject/app-bookmarks',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
     area: [MenuItemAreaType.AppArea],

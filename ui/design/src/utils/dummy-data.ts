@@ -58,7 +58,7 @@ const installedAppsData: IMenuItem[] = [
     route: '/integration-app',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
-    area: MenuItemAreaType.AppArea,
+    area: [MenuItemAreaType.AppArea],
   },
   {
     label: 'Search',
@@ -66,7 +66,7 @@ const installedAppsData: IMenuItem[] = [
     route: '/social-app/search',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'search' },
-    area: MenuItemAreaType.AppArea,
+    area: [MenuItemAreaType.AppArea],
   },
   {
     label: 'Notification',
@@ -74,7 +74,7 @@ const installedAppsData: IMenuItem[] = [
     route: '/social-app/notifications',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'notifications' },
-    area: MenuItemAreaType.AppArea,
+    area: [MenuItemAreaType.AppArea],
   },
   {
     label: 'Bookmarks',
@@ -106,7 +106,7 @@ const installedAppsData: IMenuItem[] = [
       },
       { index: 3, label: 'Assets', route: '/apps/baker-swap/assets', type: MenuItemType.Internal },
     ],
-    area: MenuItemAreaType.UserAppArea,
+    area: [MenuItemAreaType.UserAppArea],
   },
   {
     label: 'Image Editor',
@@ -114,7 +114,7 @@ const installedAppsData: IMenuItem[] = [
     route: '/apps/image-editor',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.String, value: undefined },
-    area: MenuItemAreaType.UserAppArea,
+    area: [MenuItemAreaType.UserAppArea],
   },
   {
     label: 'Appreciation',
@@ -122,7 +122,7 @@ const installedAppsData: IMenuItem[] = [
     route: '/apps/appreciation',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.String, value: 'https://placebeard.it/360x360' },
-    area: MenuItemAreaType.UserAppArea,
+    area: [MenuItemAreaType.UserAppArea],
   },
   {
     label: 'AKASHA Profile',
@@ -143,7 +143,7 @@ const installedAppsData: IMenuItem[] = [
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'searchApp' },
     area: [MenuItemAreaType.SearchArea],
-    subRoutes: []
+    subRoutes: [],
   },
   {
     label: 'Notifications',
@@ -152,7 +152,7 @@ const installedAppsData: IMenuItem[] = [
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'notifications' },
     area: [MenuItemAreaType.QuickAccessArea],
-    subRoutes: []
+    subRoutes: [],
   },
   {
     label: 'App Center',
@@ -161,7 +161,7 @@ const installedAppsData: IMenuItem[] = [
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     area: [MenuItemAreaType.BottomArea],
-    subRoutes: []
+    subRoutes: [],
   },
 ];
 

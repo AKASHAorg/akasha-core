@@ -24,7 +24,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     route: rootRoute,
     label: 'Moderation',
-    name: 'app-moderation',
+    name: '@akashaproject/app-moderation-ewa',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],

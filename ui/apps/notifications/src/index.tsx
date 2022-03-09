@@ -24,7 +24,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   menuItems: {
     label: 'Notifications',
-    name: 'app-notifications',
+    name: '@akashaproject/app-notifications',
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.QuickAccessArea],
     // routes,
     logo: { type: LogoTypeSource.ICON, value: 'notifications' },

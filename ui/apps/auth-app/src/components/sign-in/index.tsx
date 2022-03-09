@@ -28,7 +28,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const [signInComplete, setSignInComplete] = React.useState(false);
   const { t } = useTranslation('app-auth-ewa');
 
-  const navigateTo = React.useRef(props.navigateTo);
+  const navigateTo = React.useRef(props.plugins.routing?.navigateTo);
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
@@ -62,15 +62,21 @@ const SignIn: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
-      return navigateTo.current((qsStringify, currentRedirect) => {
-        if (!currentRedirect) {
-          return '/';
-        }
-        return currentRedirect;
+      return navigateTo.current?.({
+        getNavigationUrl: () => {
+          const redirectTo = new URLSearchParams(location.search).get('redirectTo');
+          if (!redirectTo) {
+            return '/';
+          }
+          return redirectTo;
+        },
       });
     }
     if (signInComplete && profileDataReq.isSuccess && !profileDataReq.data?.userName) {
-      navigateTo.current(routes[SIGN_UP_USERNAME]);
+      navigateTo.current?.({
+        appName: '@akashaproject/app-auth-ewa',
+        getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
+      });
     }
   }, [signInComplete, profileDataReq]);
 

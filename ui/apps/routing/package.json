@@ -31,7 +31,8 @@
   },
   "dependencies": {
     "@akashaproject/ui-awf-typings": "*",
-    "rxjs": "7.3.0"
+    "rxjs": "7.3.0",
+    "single-spa": "5.9.3"
   },
   "devDependencies": {},
   "files": [

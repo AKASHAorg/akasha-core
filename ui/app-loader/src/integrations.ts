@@ -2,6 +2,7 @@ import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   BaseIntegrationInfo,
+  EventTypes,
   IAppConfig,
   ILoaderConfig,
   PluginConf,
@@ -25,13 +26,7 @@ import {
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
-import {
-  checkActivityFn,
-  getDomElement,
-  navigateTo,
-  navigateToModal,
-  parseQueryString,
-} from './utils';
+import { checkActivityFn, getDomElement, navigateToModal, parseQueryString } from './utils';
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaproject/awf-sdk';
 import { getIntegrationsData } from './manifests';
@@ -185,6 +180,17 @@ export const processSystemModules = (
 
               if (mod?.register && typeof mod.register === 'function') {
                 appConf = await Promise.resolve(mod.register(registrationProps));
+                // each app must have menuItems exposed in config, widgets do not
+                if (appConf.menuItems) {
+                  uiEvents.next({
+                    event: EventTypes.RegisterIntegration,
+                    data: {
+                      name: moduleName,
+                      menuItems: appConf.menuItems,
+                      navRoutes: appConf.routes,
+                    },
+                  });
+                }
               }
               return {
                 plugin,
@@ -336,23 +342,10 @@ export const handleExtPointMountOfApps = (
           layoutConfig: props.layoutConfig.extensions,
           logger: sdk.services.log.create(manifest.name),
           domElementGetter: () => getDomElement(config, manifest.name, logger),
-          navigateTo: navigateTo(props.integrationConfigs, logger),
           navigateToModal: navigateToModal,
           getAppRoutes: appName => props.integrationConfigs.get(appName).routes,
         },
       });
-
-      // each app must have menuItems exposed in config, widgets do not
-      if (config.menuItems) {
-        dispatchEvent(
-          new CustomEvent('single-spa:app-registered', {
-            detail: {
-              app: config.name,
-              menuItems: config.menuItems,
-            },
-          }),
-        );
-      }
     }),
   );
 };

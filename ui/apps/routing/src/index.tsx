@@ -1,73 +1,96 @@
 import { BehaviorSubject } from 'rxjs';
-import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
-
-interface RouteRepository {
-  all?: {
-    [key: string]: Record<string, string | string[]>;
-  };
-  active?: {
-    [key: string]: Record<string, unknown>;
-  };
-  byArea?: { [key in MenuItemAreaType]?: Array<Record<string, unknown>> };
-}
+import * as singleSpa from 'single-spa';
+import {
+  EventTypes,
+  MenuItemAreaType,
+  UIEventData,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { RootComponentProps, RequireAtLeastOne } from '@akashaproject/ui-awf-typings';
+import { NavigationOptions, RouteRepository } from './types';
 
 export class RoutingPlugin {
   static readonly routeRepository: RouteRepository = {
     all: {},
-    active: {},
+    activeIntegrationNames: {},
     byArea: Object.values(MenuItemAreaType).reduce((acc, curr) => ({ ...acc, [curr]: [] }), {}),
   };
   static subject = new BehaviorSubject(RoutingPlugin.routeRepository);
-  static observationActive = false;
+  static logger;
 
-  static initRouteObservation() {
-    if (RoutingPlugin.observationActive) return;
-    RoutingPlugin.observationActive = true;
-
-    window.addEventListener('single-spa:app-registered', (evt: CustomEvent) => {
-      if (evt.detail) {
-        RoutingPlugin.routeRepository.all[evt.detail.app] = evt.detail.menuItems;
-        if (evt.detail.menuItems?.area?.length) {
-          evt.detail.menuItems.area.forEach(area =>
-            RoutingPlugin.routeRepository.byArea[area].push(evt.detail.menuItems),
+  static initRouteObservation(uiEvents: RootComponentProps['uiEvents']) {
+    uiEvents.subscribe({
+      next: (eventData: UIEventData) => {
+        if (eventData.event === EventTypes.RegisterIntegration) {
+          const appData = { ...eventData.data.menuItems, navRoutes: eventData.data.navRoutes };
+          RoutingPlugin.routeRepository.all[eventData.data.name] = appData;
+          eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
+            RoutingPlugin.routeRepository.byArea[area].push(appData),
           );
+          RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
         }
-        RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
-      }
+      },
     });
+
     window.addEventListener('single-spa:before-app-change', (e: CustomEvent) => {
       if (e.detail?.appsByNewStatus?.MOUNTED?.length) {
-        RoutingPlugin.routeRepository.active = e.detail?.appsByNewStatus?.MOUNTED.reduce(
-          (acc, appName) => {
-            if (RoutingPlugin.routeRepository.all[appName]) {
-              acc.apps = [...acc.apps, appName];
-            } else {
-              acc.widgets = [...acc.widgets, appName];
-            }
-            return acc;
-          },
-          { apps: [], widgets: [] },
-        );
+        RoutingPlugin.routeRepository.activeIntegrationNames =
+          e.detail?.appsByNewStatus?.MOUNTED.reduce(
+            (acc, appName) => {
+              if (RoutingPlugin.routeRepository.all[appName]) {
+                acc.apps = [...acc.apps, appName];
+              } else {
+                acc.widgets = [...acc.widgets, appName];
+              }
+              return acc;
+            },
+            { apps: [], widgets: [] },
+          );
         RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
       }
     });
   }
+
+  static navigateTo = ({
+    appName,
+    getNavigationUrl,
+  }: RequireAtLeastOne<NavigationOptions, 'appName' | 'getNavigationUrl'>) => {
+    const app = RoutingPlugin.routeRepository.all[appName];
+    let url;
+
+    if (getNavigationUrl) {
+      try {
+        url = getNavigationUrl(app?.navRoutes);
+      } catch (err) {
+        RoutingPlugin.logger.error(
+          `Path not found! Tried to find a path for application: ${appName}. Defaulting to rootRoute!`,
+        );
+      }
+    }
+    if (!url) {
+      url = app?.route;
+    }
+
+    if (url) return singleSpa.navigateToUrl(url);
+    RoutingPlugin.logger.error(
+      `Path not found! Tried to find a path for application: ${appName}. Aborting.`,
+    );
+  };
 }
 
 export const register = async () => {
-  RoutingPlugin.initRouteObservation();
   return {
     loadingFn: () => Promise.resolve(),
-    name: 'app-routing',
   };
 };
 
-export const getPlugin = async () => {
-  RoutingPlugin.initRouteObservation();
+export const getPlugin = async (props: RootComponentProps) => {
+  RoutingPlugin.logger = props.logger;
+  RoutingPlugin.initRouteObservation(props.uiEvents);
 
   return {
     routing: {
       routeObserver: RoutingPlugin.subject,
+      navigateTo: RoutingPlugin.navigateTo,
     },
   };
 };

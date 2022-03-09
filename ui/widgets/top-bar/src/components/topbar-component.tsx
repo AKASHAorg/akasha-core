@@ -16,7 +16,8 @@ import { extensionPointsMap } from '../extension-points';
 const { Topbar, ExtensionPoint } = DS;
 
 const TopbarComponent = (props: RootComponentProps) => {
-  const { singleSpa, uiEvents, navigateTo } = props;
+  const { singleSpa, uiEvents } = props;
+  const navigateTo = props.plugins.routing?.navigateTo;
 
   const { navigateToUrl } = singleSpa;
   const location = useLocation();
@@ -82,12 +83,13 @@ const TopbarComponent = (props: RootComponentProps) => {
      * TODO: This handler along with the buttons
      * in the topbar should be moved to extension points
      */
-    props.navigateTo({
+    navigateTo?.({
       appName: '@akashaproject/app-auth-ewa',
-      pathName: appRoutes => {
-        return appRoutes[appRoutes.SIGN_IN];
+      getNavigationUrl: appRoutes => {
+        return `${appRoutes.SignIn}?${new URLSearchParams({
+          redirectTo: location.pathname,
+        }).toString()}`;
       },
-      queryStrings: qsStringify => qsStringify({ redirectTo: location.pathname }),
     });
   };
 
@@ -98,16 +100,16 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleSignUpClick = () => {
-    navigateTo({
+    navigateTo?.({
       appName: '@akashaproject/app-auth-ewa',
-      pathName: appRoutes => appRoutes[appRoutes.SIGN_UP],
+      getNavigationUrl: appRoutes => appRoutes.SignUp,
     });
   };
 
   const handleSettingsClick = () => {
-    navigateTo({
+    navigateTo?.({
       appName: '@akashaproject/app-settings-ewa',
-      pathName: appRoutes => appRoutes.rootRoute,
+      getNavigationUrl: appRoutes => appRoutes.rootRoute,
     });
   };
 
@@ -116,16 +118,16 @@ const TopbarComponent = (props: RootComponentProps) => {
   };
 
   const handleModerationClick = () => {
-    navigateTo({
+    navigateTo?.({
       appName: '@akashaproject/app-moderation-ewa',
-      pathName: appRoutes => appRoutes.History,
+      getNavigationUrl: appRoutes => appRoutes.History,
     });
   };
 
   const handleDashboardClick = () => {
-    navigateTo({
+    navigateTo?.({
       appName: '@akashaproject/app-moderation-ewa',
-      pathName: appRoutes => appRoutes.Home,
+      getNavigationUrl: appRoutes => appRoutes.Home,
     });
   };
 

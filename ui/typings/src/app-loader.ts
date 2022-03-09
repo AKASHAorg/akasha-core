@@ -238,6 +238,7 @@ export interface IMenuList {
 export enum EventTypes {
   Instantiated = 'instantiated',
   InstallIntegration = 'install-integration',
+  RegisterIntegration = 'register-integration',
   UninstallIntegration = 'uninstall-integration',
   ExtensionPointMount = 'extension-point-mount',
   ExtensionPointMountRequest = 'extension-point-mount-request',
@@ -271,6 +272,8 @@ export type EventDataTypes = {
   version?: string;
   entryId?: string;
   entryType?: ItemTypes;
+  menuItems?: IMenuItem;
+  navRoutes?: Record<string, string>;
 };
 
 export const enum ItemTypes {

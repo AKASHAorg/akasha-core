@@ -29,7 +29,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     route: rootRoute,
     label: 'Social',
-    name: 'app-akasha-integration',
+    name: '@akashaproject/app-akasha-integration',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
     area: [MenuItemAreaType.AppArea],
