@@ -1,12 +1,10 @@
 // const path = require('path');
-// const mainTsConfig = require('./tsconfig.json');
 
 module.exports = {
   automock: false,
   verbose: true,
   bail: true,
   testEnvironment: 'node',
-  preset: 'ts-jest/presets/js-with-babel-esm',
   collectCoverage: true,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testPathIgnorePatterns: [
@@ -15,6 +13,10 @@ module.exports = {
     '<rootDir>/lib',
     '<rootDir>/dist',
   ],
+  transform: {
+    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+  },
+  transformIgnorePatterns: ['<rootDir>/sdk/'],
   coverageReporters: ['text-summary'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   unmockedModulePathPatterns: ['lodash', 'core-js'],

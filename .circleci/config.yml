@@ -57,6 +57,9 @@ jobs:
       - run: # extract-translations
           name: extract-translations
           command: yarn run extract:translations
+      - run: # unit-tests
+          name: unit-tests
+          command: yarn run test:all
 #      - run: # build-storybook
 #          name: build-storybook
 #          command: make build.staging.storybook
