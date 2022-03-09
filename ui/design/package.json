@@ -27,7 +27,7 @@
     "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "build": "tsc --build tsconfig.json",
-    "test": "BABEL_ENV=test jest",
+    "test": "BABEL_ENV=test jest --runInBand",
     "test:watch": "jest --watch",
     "tsc": "tsc --build tsconfig.json",
     "prepare": "yarn run tsc",
