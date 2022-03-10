@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grommet } from 'grommet';
-
+import { withDesign } from 'storybook-addon-designs';
 import Avatar, { AvatarProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -12,6 +12,7 @@ export default {
     backgroundColor: { control: 'color' },
     onClick: { action: 'clicked' },
   },
+  decorators: [withDesign],
 };
 
 const ethAddress = '0x003410490050000320006570034567114572000';
@@ -29,6 +30,12 @@ BaseAvatar.args = {
   ethAddress: ethAddress,
   src: 'https://placebeard.it/360x360',
 };
+BaseAvatar.parameters = {
+  design: {
+    type: 'figma',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=24%3A1216',
+  },
+};
 
 export const AvatarWithMarginAndBackgroundColor = Template.bind({});
 AvatarWithMarginAndBackgroundColor.args = {
@@ -37,6 +44,12 @@ AvatarWithMarginAndBackgroundColor.args = {
   margin: { margin: '0px' },
   backgroundColor: '#ffa3e4',
   border: 'sm',
+};
+AvatarWithMarginAndBackgroundColor.parameters = {
+  design: {
+    type: 'figma',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=24%3A1216',
+  },
 };
 
 export const AvatarWithSpecifiedSize = Template.bind({});
@@ -48,6 +61,12 @@ AvatarWithSpecifiedSize.args = {
   border: 'sm',
   size: 'xl',
 };
+AvatarWithSpecifiedSize.parameters = {
+  design: {
+    type: 'figma',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=24%3A1216',
+  },
+};
 
 export const GuestModeAvatar = Template.bind({});
 GuestModeAvatar.args = {
@@ -55,10 +74,22 @@ GuestModeAvatar.args = {
   border: 'sm',
   size: 'lg',
 };
+GuestModeAvatar.parameters = {
+  design: {
+    type: 'figma',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=24%3A1217',
+  },
+};
 
 export const AvatarNotSet = Template.bind({});
 AvatarNotSet.args = {
   ethAddress: ethAddress,
   border: 'sm',
   size: 'sm',
+};
+AvatarNotSet.parameters = {
+  design: {
+    type: 'figma',
+    url: 'https://www.figma.com/file/eI5afUtDh3y2Fg8SLYCR2X/%F0%9F%9F%A1-Updated-Design-System?node-id=24%3A1217',
+  },
 };

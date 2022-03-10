@@ -120,6 +120,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                   type="no-login"
                   title={noInstalledAppsLabel}
                   details={noInstalledAppsSubLabel}
+                  noBorder={true}
                 />
               </Box>
             )}
