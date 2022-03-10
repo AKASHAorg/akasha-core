@@ -25,7 +25,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     },
     menuItems: {
       label: 'Authentication App',
-      name: '@akashaproject/app-auth-ewa',
       area: [],
       logo: { type: LogoTypeSource.ICON, value: 'app' },
       route: rootRoute,

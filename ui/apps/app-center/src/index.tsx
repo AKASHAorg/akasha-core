@@ -26,7 +26,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   title: 'App center',
   menuItems: {
     label: 'Integration Center',
-    name: '@akashaproject/app-integration-center',
     area: [MenuItemAreaType.QuickAccessArea, MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     route: rootRoute,

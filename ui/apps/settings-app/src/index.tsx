@@ -18,7 +18,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   logo: { type: LogoTypeSource.ICON, value: 'appSettings' },
   menuItems: {
     label: 'Settings',
-    name: 'app-settings',
     type: MenuItemType.App,
     area: [MenuItemAreaType.OtherArea],
     logo: { type: LogoTypeSource.ICON, value: 'appSettings' },
