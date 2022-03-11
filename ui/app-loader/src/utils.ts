@@ -6,7 +6,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
-import { NavigationFn, NavigationOptions, QueryStringType } from '@akashaproject/ui-awf-typings';
+import { QueryStringType } from '@akashaproject/ui-awf-typings';
 import { of } from 'rxjs';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 
@@ -56,62 +56,6 @@ export const createRootNode = (parent: HTMLElement, nodeName: string) => {
   wrapNode.id = `${nodeID}`;
   parent.append(wrapNode);
   return wrapNode;
-};
-
-export const navigateTo = (
-  appConfigs: Map<string, IAppConfig & { name: string }>,
-  logger: ILogger,
-) => {
-  return (options: string | NavigationOptions | NavigationFn) => {
-    if (typeof options === 'string') {
-      singleSpa.navigateToUrl(options);
-    }
-    let redirectQueryString = findKey('redirectTo', parseQueryString(location.search));
-
-    if (typeof options === 'function') {
-      singleSpa.navigateToUrl(options(qs.stringify, redirectQueryString));
-    }
-    if (typeof options === 'object') {
-      const { queryStrings } = options;
-      let appName = options.appName;
-      if (typeof appName === 'function') {
-        appName = appName(appConfigs);
-      }
-
-      const app = appConfigs.get(appName);
-      if (!app) {
-        logger.error(`Cannot find app name ${appName}. Make sure to specify the exact name!`);
-        return;
-      }
-
-      let { pathName } = options;
-
-      if (typeof pathName === 'function') {
-        try {
-          pathName = pathName(app.routes);
-        } catch (err) {
-          logger.error(
-            `Path not found! Tried to find a path for application: ${appName}. Defaulting to rootRoute!`,
-          );
-        }
-      }
-      if (!pathName) {
-        pathName = app.routes.rootRoute;
-      }
-
-      if (typeof queryStrings === 'function') {
-        // allow to modify the redirect params
-        redirectQueryString = queryStrings(qs.stringify, redirectQueryString);
-      }
-      const currentPath = location.pathname;
-      const currentSearch = location.search;
-
-      if (pathName === currentPath && redirectQueryString === currentSearch) {
-        return;
-      }
-      singleSpa.navigateToUrl(`${pathName}${redirectQueryString ? `?${redirectQueryString}` : ''}`);
-    }
-  };
 };
 
 export const navigateToModal = (opts: ModalNavigationOptions) => {

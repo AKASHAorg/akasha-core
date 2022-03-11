@@ -10,10 +10,10 @@ import lightTheme from '../../styles/themes/light/light-theme';
 import { installedAppsData, profileData } from '../../utils/dummy-data';
 
 const quickAccessItems = installedAppsData?.filter(
-  menuItem => menuItem.area === MenuItemAreaType.QuickAccessArea,
+  menuItem => menuItem.area[MenuItemAreaType.QuickAccessArea],
 );
-const searchAreaItem = installedAppsData?.filter(
-  menuItem => menuItem.area === MenuItemAreaType.SearchArea,
+const searchAreaItem = installedAppsData?.map(
+  menuItem => menuItem.area[MenuItemAreaType.SearchArea],
 )[0];
 
 export default {

@@ -23,7 +23,6 @@ describe('<TopbarComponent />', () => {
   let renderResult: RenderResult;
   const BaseComponent = (
     <TopbarComponent
-      getMenuItems={jest.fn().mockImplementation(() => [])}
       logger={{}}
       domElement={document.body}
       uiEvents={new BehaviorSubject({})}

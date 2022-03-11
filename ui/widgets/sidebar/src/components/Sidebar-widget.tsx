@@ -13,7 +13,6 @@ const SidebarWidget: React.FC<RootComponentProps> = props => {
       <Router>
         <Menu
           navigateToUrl={props.singleSpa.navigateToUrl}
-          getMenuItems={() => []}
           sidebarVisible={true}
         />
       </Router>
@@ -33,7 +32,6 @@ const AppSidebar = styled(Sidebar)`
 
 interface MenuProps {
   navigateToUrl: (url: string) => void;
-  getMenuItems: () => IMenuItem[];
   sidebarVisible: boolean;
 }
 

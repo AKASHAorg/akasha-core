@@ -32,6 +32,7 @@ declare const __DEV__: boolean;
       '@akashaproject/app-notifications',
       '@akashaproject/app-legal',
       '@akashaproject/app-translation',
+      '@akashaproject/app-routing',
       // '@akashaproject/app-bookmarks',
     ],
     // pre-installed widgets;

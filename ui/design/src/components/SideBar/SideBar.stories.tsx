@@ -9,10 +9,10 @@ import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dim
 import lightTheme from '../../styles/themes/light/light-theme';
 import { installedAppsData } from '../../utils/dummy-data';
 
-const worldApps = installedAppsData?.filter(menuItem => menuItem.area === MenuItemAreaType.AppArea);
+const worldApps = installedAppsData?.filter(menuItem => menuItem.area.includes(MenuItemAreaType.AppArea));
 
 const userInstalledApps = installedAppsData?.filter(
-  menuItem => menuItem.area === MenuItemAreaType.UserAppArea,
+  menuItem => menuItem.area.includes(MenuItemAreaType.UserAppArea)
 );
 
 const SidebarComponent = (props: ISidebarProps) => {

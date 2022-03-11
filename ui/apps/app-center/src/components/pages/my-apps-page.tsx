@@ -40,7 +40,10 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
   );
 
   const handleAppClick = (app: IntegrationInfo) => {
-    props.navigateTo(`${routes[INFO]}/${app.id}`);
+    props.plugins.routing?.navigateTo?.({
+      appName: '@akashaproject/app-integration-center',
+      getNavigationUrl: routes => `${routes[INFO]}/${app.id}`,
+    });
   };
 
   return (

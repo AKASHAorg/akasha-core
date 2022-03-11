@@ -21,6 +21,7 @@ const { Box, Text, BasicCardBox } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-integration-center');
+  const navigateTo = props.plugins.routing?.navigateTo;
 
   return (
     <Router>
@@ -43,7 +44,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   label={t('Explore')}
                   icon={'explore'}
                   onClick={() => {
-                    props.navigateTo(routes[EXPLORE]);
+                    navigateTo?.({
+                      appName: '@akashaproject/app-integration-center',
+                      getNavigationUrl: routes => routes[EXPLORE],
+                    });
                   }}
                 />
                 <NavButton
@@ -51,7 +55,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   label={t('My Apps')}
                   icon={'integrationAppSmallFill'}
                   onClick={() => {
-                    props.navigateTo(routes[MY_APPS]);
+                    navigateTo?.({
+                      appName: '@akashaproject/app-integration-center',
+                      getNavigationUrl: routes => routes[MY_APPS],
+                    });
                   }}
                 />
                 <NavButton
@@ -59,7 +66,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   label={t('Apps')}
                   icon={'integrationAppSmall'}
                   onClick={() => {
-                    props.navigateTo(routes[APPS]);
+                    navigateTo?.({
+                      appName: '@akashaproject/app-integration-center',
+                      getNavigationUrl: routes => routes[APPS],
+                    });
                   }}
                 />
                 <NavButton
@@ -67,7 +77,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   label={t('Widgets')}
                   icon={'integrationWidgetSmall'}
                   onClick={() => {
-                    props.navigateTo(routes[WIDGETS]);
+                    navigateTo?.({
+                      appName: '@akashaproject/app-integration-center',
+                      getNavigationUrl: routes => routes[WIDGETS],
+                    });
                   }}
                 />
               </Box>

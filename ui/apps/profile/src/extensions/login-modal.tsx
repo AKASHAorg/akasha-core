@@ -19,16 +19,13 @@ const LoginModal = (props: RootExtensionProps) => {
   };
 
   const handleSignInClick = () => {
-    props.navigateTo({
+    props.plugins.routing?.navigateTo?.({
       appName: '@akashaproject/app-auth-ewa',
-      pathName: appRoutes => appRoutes[appRoutes.SIGN_IN],
-      queryStrings: (qsStringify, currentRedirect) => {
-        if (!currentRedirect) {
-          return qsStringify({ redirectTo: location.pathname });
-        }
-        return `${qsStringify({
-          redirectTo: `${location.pathname}?${qsStringify(currentRedirect)}`,
-        })}`;
+      getNavigationUrl: appRoutes => {
+        const redirectTo = new URLSearchParams(location.search).get('redirectTo');
+        return `${appRoutes[appRoutes.SIGN_IN]}?${new URLSearchParams({
+          redirectTo: redirectTo || location.pathname,
+        }).toString()}`;
       },
     });
   };

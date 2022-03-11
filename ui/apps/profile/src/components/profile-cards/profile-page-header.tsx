@@ -32,7 +32,6 @@ type ProfilePageCardProps = IProfileHeaderProps &
     RootComponentProps,
     | 'domElement'
     | 'events'
-    | 'getMenuItems'
     | 'i18n'
     | 'isMobile'
     | 'activeWhen'

@@ -7,7 +7,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
-import routes, { INFO } from '../../routes';
+import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, DuplexButton, Icon, ErrorLoader, Spinner } = DS;
 
@@ -36,7 +36,10 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   const handleAppClick = (app: IntegrationInfo) => {
-    props.navigateTo(`${routes[INFO]}/${app.id}`);
+    props.plugins.routing?.navigateTo?.({
+      appName: '@akashaproject/app-integration-center',
+      getNavigationUrl: routes => `${routes[INFO]}/${app.id}`,
+    });
   };
 
   const handleAppInstall = () => {

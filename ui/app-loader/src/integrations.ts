@@ -2,6 +2,7 @@ import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   BaseIntegrationInfo,
+  EventTypes,
   IAppConfig,
   ILoaderConfig,
   PluginConf,
@@ -25,13 +26,7 @@ import {
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
-import {
-  checkActivityFn,
-  getDomElement,
-  navigateTo,
-  navigateToModal,
-  parseQueryString,
-} from './utils';
+import { checkActivityFn, getDomElement, navigateToModal, parseQueryString } from './utils';
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaproject/awf-sdk';
 import { getIntegrationsData } from './manifests';
@@ -137,29 +132,6 @@ const extractExtensionsFromApps = (
     );
 };
 
-const extractMenuItemsFromApps = (
-  config: IAppConfig & { name: string },
-  state$: Observable<LoaderState>,
-) => {
-  return of(config)
-    .pipe(
-      filter(conf => !!conf.menuItems),
-      withLatestFrom(state$.pipe(getStateSlice('menuItems'))),
-    )
-    .pipe(
-      tap(([appConfig, menuItems]) => {
-        const currentIdx = menuItems.nextIndex;
-        const items = menuItems.items.concat({ ...appConfig.menuItems, index: currentIdx });
-        return pipelineEvents.next({
-          menuItems: {
-            items,
-            nextIndex: currentIdx + 1,
-          },
-        });
-      }),
-    );
-};
-
 export const processSystemModules = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
@@ -208,6 +180,17 @@ export const processSystemModules = (
 
               if (mod?.register && typeof mod.register === 'function') {
                 appConf = await Promise.resolve(mod.register(registrationProps));
+                // each app must have menuItems exposed in config, widgets do not
+                if (appConf.menuItems) {
+                  uiEvents.next({
+                    event: EventTypes.RegisterIntegration,
+                    data: {
+                      name: moduleName,
+                      menuItems: appConf.menuItems,
+                      navRoutes: appConf.routes,
+                    },
+                  });
+                }
               }
               return {
                 plugin,
@@ -229,7 +212,6 @@ export const processSystemModules = (
       tap(({ configs }) => {
         from(configs)
           .pipe(
-            tap(config => extractMenuItemsFromApps(config, state$).subscribe()),
             filter(conf => conf.extends && Array.isArray(conf.extends)),
             tap(config => extractExtensionsFromApps(config, state$).subscribe()),
           )
@@ -360,10 +342,8 @@ export const handleExtPointMountOfApps = (
           layoutConfig: props.layoutConfig.extensions,
           logger: sdk.services.log.create(manifest.name),
           domElementGetter: () => getDomElement(config, manifest.name, logger),
-          navigateTo: navigateTo(props.integrationConfigs, logger),
           navigateToModal: navigateToModal,
           getAppRoutes: appName => props.integrationConfigs.get(appName).routes,
-          getMenuItems: () => state$.pipe(getStateSlice('menuItems')),
         },
       });
     }),

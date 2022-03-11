@@ -18,7 +18,6 @@ import { getStateSlice, LoaderState } from './state';
 import {
   checkActivityFn,
   createRootNode,
-  navigateTo,
   navigateToModal,
   parseQueryString,
 } from './utils';
@@ -28,7 +27,6 @@ import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import {
   EventDataTypes,
   ILoaderConfig,
-  UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { loadI18nNamespaces } from './i18n-utils';
 
@@ -183,7 +181,6 @@ export const handleExtPointMountOfExtensions = (
                 activeModal: activeModal,
                 logger: extLogger,
                 extensionData: matchingExtensionData.extData,
-                navigateTo: navigateTo(integrationConfigs, extLogger),
                 parseQueryString: parseQueryString,
                 plugins,
               };
