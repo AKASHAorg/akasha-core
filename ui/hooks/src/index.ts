@@ -36,6 +36,7 @@ import {
 } from './use-profile';
 import {
   useInfinitePosts,
+  useInfiniteCustomPosts,
   useInfinitePostsByTag,
   useInfinitePostsByAuthor,
   usePost,
@@ -158,6 +159,7 @@ export {
   UPDATE_PROFILE_STATUS,
   // use-posts
   useInfinitePosts,
+  useInfiniteCustomPosts,
   useInfinitePostsByTag,
   useInfinitePostsByAuthor,
   usePost,
