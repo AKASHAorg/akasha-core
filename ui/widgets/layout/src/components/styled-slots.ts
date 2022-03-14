@@ -10,10 +10,12 @@ const BaseStyledSlot = styled(ExtensionPoint)`
   padding: 0px;
 `;
 
-// eslint-disable-next-line prettier/prettier
-export const SidebarSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)<{
+export const SidebarSlot: React.FC<ExtensionPointProps & { visible: boolean }> = styled(
+  BaseStyledSlot,
+)<{
   visible: boolean;
 }>`
+  display: ${props => (props.visible ? 'initial' : 'none')};
   flex-grow: 1;
   position: sticky;
   top: 0;

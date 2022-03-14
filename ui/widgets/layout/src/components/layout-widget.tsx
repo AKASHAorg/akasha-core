@@ -120,8 +120,9 @@ const Layout: React.FC<RootComponentProps> = props => {
             onUnmount={handleExtensionUnmount}
           />
           <Box direction="row" flex={true}>
-            <SidebarWrapper visible={isFocusedMode ? false : showSidebar}>
+            <SidebarWrapper>
               <SidebarSlot
+                visible={isFocusedMode ? false : showSidebar}
                 name={props.layoutConfig.sidebarSlotId}
                 onMount={handleExtensionMount}
                 onUnmount={handleExtensionUnmount}
