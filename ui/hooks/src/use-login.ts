@@ -2,11 +2,17 @@ import * as React from 'react';
 import getSDK from '@akashaproject/awf-sdk';
 import { events } from '@akashaproject/sdk-typings';
 import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
-import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import {
+  CurrentUser,
+  PROVIDER_ERROR_CODES,
+} from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { filter, lastValueFrom } from 'rxjs';
 import { useGlobalLogin } from '.';
 import { logError } from './utils/error-handler';
+import { UseAnalyticsActions } from './use-analytics';
+import { WalletTransactionError } from '@akashaproject/ui-awf-typings';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
 const CHECK_SIGNUP_KEY = 'CHECK_SIGNUP_KEY';
@@ -142,7 +148,11 @@ const SIGNUP_STATES = {
 };
 type ErrorTypes = { code?: number; message?: string; extensions?: { code?: string } };
 
-export function useSignUp(provider: EthProviders, checkRegistered = false) {
+export function useSignUp(
+  provider: EthProviders,
+  checkRegistered = false,
+  analyticsActions?: UseAnalyticsActions,
+) {
   const sdk = getSDK();
   const globalChannel = React.useRef(sdk.api.globalChannel);
   const [signUpState, setSignUpState] = React.useState(
@@ -151,7 +161,7 @@ export function useSignUp(provider: EthProviders, checkRegistered = false) {
   const [ethAddress, setEthAddress] = React.useState<string>('');
   const [error, setError] = React.useState<ErrorTypes>(null);
 
-  const onError = (error: Error) => {
+  const onError = (error: WalletTransactionError) => {
     setError(error);
   };
 
@@ -187,18 +197,60 @@ export function useSignUp(provider: EthProviders, checkRegistered = false) {
   const connectWallet = useMutation(
     async () => lastValueFrom(sdk.api.auth.connectAddress(provider)),
     {
-      onError,
+      onError: (err: WalletTransactionError) => {
+        if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
+          analyticsActions.trackEvent({
+            category: AnalyticsCategories.SIGN_UP_WALLET,
+            action: 'Step 1 Declined',
+          });
+        }
+        onError(err);
+      },
+      onSuccess: () => {
+        analyticsActions.trackEvent({
+          category: AnalyticsCategories.SIGN_UP_WALLET,
+          action: 'Step 1 Completed',
+        });
+      },
     },
   );
 
   const signAuthMessage = useMutation(async () => lastValueFrom(sdk.api.auth.signAuthMessage()), {
-    onError,
+    onError: (err: WalletTransactionError) => {
+      if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
+        analyticsActions.trackEvent({
+          category: AnalyticsCategories.SIGN_UP_WALLET,
+          action: 'Step 2 Declined',
+        });
+      }
+      onError(err);
+    },
+    onSuccess: () => {
+      analyticsActions.trackEvent({
+        category: AnalyticsCategories.SIGN_UP_WALLET,
+        action: 'Step 2 Completed',
+      });
+    },
   });
 
   const signComposedMessage = useMutation(
     async () => lastValueFrom(sdk.api.auth.signComposedMessage()),
     {
-      onError,
+      onError: (err: WalletTransactionError) => {
+        if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
+          analyticsActions.trackEvent({
+            category: AnalyticsCategories.SIGN_UP_WALLET,
+            action: 'Step 3 Declined',
+          });
+        }
+        onError(err);
+      },
+      onSuccess: () => {
+        analyticsActions.trackEvent({
+          category: AnalyticsCategories.SIGN_UP_WALLET,
+          action: 'Step 3 Completed',
+        });
+      },
     },
   );
 

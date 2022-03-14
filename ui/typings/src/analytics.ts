@@ -10,10 +10,28 @@ export interface EnableTrackingEvent {
 
 export interface TrackEventData {
   eventType: AnalyticsEventTypes.TRACK_EVENT;
-  category: string;
+  category: AnalyticsCategories;
   action?: string;
   name?: string;
   value?: string;
 }
 
 export type AnalyticsEventData = TrackEventData | EnableTrackingEvent;
+
+export enum AnalyticsCategories {
+  APPS = 'Apps',
+  BROWSE = 'Browse',
+  EXPLORE = 'Explore',
+  FILTER_SEARCH = 'Filter Search',
+  MY_APPS = 'My Apps',
+  PEOPLE = 'People',
+  POST = 'Post',
+  REPLY = 'Reply',
+  REPOST = 'Repost',
+  SIGN_IN = 'Sign In',
+  SIGN_UP = 'Sign Up',
+  SIGN_UP_WALLET = 'Sign Up Wallet',
+  TRENDING_PEOPLE = 'Trending People',
+  TRENDING_TOPIC = 'Trending Topic',
+  WIDGETS = 'Widgets',
+}

@@ -52,7 +52,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   }, []);
 
   const quickAccessItems = routeData?.[MenuItemAreaType.QuickAccessArea];
-  const searchAreaItem = routeData?.[MenuItemAreaType.SearchArea];
+  const searchAreaItem = routeData?.[MenuItemAreaType.SearchArea]?.[0];
   const otherAreaItems = routeData?.[MenuItemAreaType.OtherArea];
 
   // sort them so that avatar is last on the topbar menu
