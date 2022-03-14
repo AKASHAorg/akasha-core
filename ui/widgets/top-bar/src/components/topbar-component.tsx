@@ -1,7 +1,11 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { useLocation } from 'react-router-dom';
-import { EventTypes, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  EventTypes,
+  MenuItemAreaType,
+  UIEventData,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useCheckModerator,
   useCheckNewNotifications,
@@ -15,7 +19,7 @@ import { extensionPointsMap } from '../extension-points';
 
 const { Topbar, ExtensionPoint } = DS;
 
-const TopbarComponent = (props: RootComponentProps) => {
+const TopbarComponent: React.FC<RootComponentProps> = props => {
   const { singleSpa, uiEvents } = props;
   const navigateTo = props.plugins.routing?.navigateTo;
 
@@ -23,6 +27,7 @@ const TopbarComponent = (props: RootComponentProps) => {
   const location = useLocation();
 
   const [routeData, setRouteData] = React.useState({});
+  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(false);
 
   const loginQuery = useGetLogin();
   const logoutMutation = useLogout();
@@ -39,6 +44,27 @@ const TopbarComponent = (props: RootComponentProps) => {
   const checkModeratorResp = checkModeratorQuery.data;
 
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
+
+  const uiEventsRef = React.useRef(uiEvents);
+
+  React.useEffect(() => {
+    const eventsSub = uiEventsRef.current.subscribe({
+      next: (eventInfo: UIEventData) => {
+        if (eventInfo.event === EventTypes.HideSidebar) {
+          setSidebarVisible(false);
+        }
+        if (eventInfo.event === EventTypes.ShowSidebar) {
+          setSidebarVisible(true);
+        }
+      },
+    });
+
+    return () => {
+      if (eventsSub) {
+        eventsSub.unsubscribe();
+      }
+    };
+  }, []);
 
   React.useEffect(() => {
     const sub = props.plugins?.routing?.routeObserver?.subscribe({
@@ -175,6 +201,12 @@ const TopbarComponent = (props: RootComponentProps) => {
     });
   };
 
+  const handleSidebarToggle = () => {
+    uiEvents.next({
+      event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
+    });
+  };
+
   return (
     <Topbar
       loggedProfileData={loggedProfileData}
@@ -199,7 +231,9 @@ const TopbarComponent = (props: RootComponentProps) => {
       writeToUs="mailto:alpha@ethereum.world"
       versionLabel="ALPHA"
       versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
+      sidebarVisible={sidebarVisible}
       onNavigation={handleNavigation}
+      onSidebarToggle={handleSidebarToggle}
       onSearch={handleSearch}
       quickAccessItems={sortedQuickAccessItems}
       searchAreaItem={searchAreaItem}
