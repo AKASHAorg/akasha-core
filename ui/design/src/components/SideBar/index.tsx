@@ -20,7 +20,7 @@ export interface ISidebarProps {
   userInstalledAppsTitleLabel: string;
   userInstalledApps: IMenuItem[];
   exploreButtonLabel: string;
-  bodyMenuItems: IMenuItem[];
+  worldApps: IMenuItem[];
   allMenuItems: IMenuItem[];
   currentRoute?: string;
   isLoggedIn: boolean;
@@ -40,7 +40,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     userInstalledApps,
     exploreButtonLabel,
     allMenuItems,
-    bodyMenuItems,
+    worldApps,
     currentRoute,
     isLoggedIn,
     loadingUserInstalledApps,
@@ -102,9 +102,18 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         hasChevron={menuItem.subRoutes?.length > 0}
         onClick={handleAppIconClick(menuItem)}
         label={
-          <Box margin={{ vertical: 'small' }} direction="row" align="center">
+          <Box margin={{ vertical: 'small', left: 'medium' }} direction="row" align="center">
             <MenuAppButton menuItem={menuItem} active={active} plain={true} />
-            <Text size="large" margin={{ left: 'small' }}>
+            <Text
+              size="large"
+              margin={{ left: 'small' }}
+              style={{
+                width: '200px',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
               {menuItem.label}
             </Text>
           </Box>
@@ -135,29 +144,19 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   };
 
   return (
-    <Box
-      fill={true}
-      direction="column"
-      elevation="shadow"
-      border={{ size: '1px', style: 'solid', color: 'border', side: 'right' }}
-      className={className}
-    >
+    <Box fill={true} direction="column" elevation="shadow" className={className}>
       <StyledHiddenScrollContainer>
-        {bodyMenuItems?.length > 0 && (
-          <Box
-            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
-            align="start"
-            fill={true}
-          >
+        {worldApps?.length > 0 && (
+          <Box pad={{ top: 'medium', bottom: 'small' }} align="start" fill={true}>
             <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
             <Accordion multiple={true} fill={true}>
-              {bodyMenuItems?.map(renderMenuItem)}
+              {worldApps?.map(renderMenuItem)}
             </Accordion>
           </Box>
         )}
         {isLoggedIn && loadingUserInstalledApps && (
           <Box
-            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
+            pad={{ top: 'medium', bottom: 'small' }}
             align="start"
             fill={true}
             border={{ size: '1px', color: 'border', side: 'top' }}
@@ -168,7 +167,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         )}
         {isLoggedIn && userInstalledApps?.length > 0 && (
           <Box
-            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
+            pad={{ top: 'medium', bottom: 'small' }}
             align="start"
             fill={true}
             border={{ size: '1px', color: 'border', side: 'top' }}
