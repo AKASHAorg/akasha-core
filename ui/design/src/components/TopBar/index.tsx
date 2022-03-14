@@ -57,9 +57,11 @@ export interface ITopbarProps {
   isModerator?: boolean;
   dashboardLabel?: string;
   dashboardInfoLabel?: string;
+  // sidebar
+  sidebarVisible: boolean;
   // handlers
   onNavigation: (path: string) => void;
-  onSidebarToggle?: (visibility: boolean) => void;
+  onSidebarToggle?: () => void;
   onSearch: (inputValue: string) => void;
   onSettingsClick: () => void;
   onFeedbackClick: () => void;
@@ -104,9 +106,10 @@ const Topbar: React.FC<ITopbarProps> = props => {
     quickAccessItems,
     searchAreaItem,
     otherAreaItems,
+    sidebarVisible,
     onSearch,
     onNavigation,
-    // onSidebarToggle,
+    onSidebarToggle,
     onLoginClick,
     onSignUpClick,
     onSettingsClick,
@@ -338,6 +341,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
       >
         <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small" onClick={onBrandClick}>
           <Box direction="row" gap="small" align="center">
+            <IconDiv isActive={sidebarVisible} onClick={onSidebarToggle} isMobile={isMobileOnly}>
+              <Icon type="menu" clickable={true} plain={true} />
+            </IconDiv>
             <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
             {!isMobileOnly && (
               <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">

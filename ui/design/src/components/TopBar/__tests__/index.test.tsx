@@ -23,6 +23,7 @@ describe('<Topbar /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <Topbar
+            sidebarVisible={true}
             onNavigation={handleNavigation}
             onSearch={handleSearch}
             brandLabel="test"
@@ -61,6 +62,7 @@ describe.skip('<TopBar /> component on /auth-app* route', () => {
         wrapWithTheme(
           <MemoryRouter initialEntries={['/auth-app/sign-in']}>
             <Topbar
+              sidebarVisible={true}
               onNavigation={handleNavigation}
               onSearch={handleSearch}
               brandLabel="test"
