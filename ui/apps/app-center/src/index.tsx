@@ -5,7 +5,7 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import routes, { rootRoute } from './routes';
+import routes, { EXPLORE, rootRoute } from './routes';
 
 /**
  * All the plugins must export an object like this:
@@ -28,7 +28,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Integration Center',
     area: [MenuItemAreaType.QuickAccessArea, MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
-    route: rootRoute,
+    route: routes[EXPLORE],
     subRoutes: [],
   },
   extends: [

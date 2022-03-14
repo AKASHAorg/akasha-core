@@ -3,7 +3,7 @@ import { useGetAllInstalledApps, useGetIntegrationsInfo } from '@akashaproject/u
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import routes, { INFO } from '../../routes';
+import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader, Spinner } = DS;
 
