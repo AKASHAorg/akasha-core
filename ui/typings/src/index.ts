@@ -22,6 +22,12 @@ export interface IAkashaError {
   critical: boolean;
 }
 
+export interface WalletTransactionError extends Error {
+  code: number;
+  message: string;
+  stack: string;
+}
+
 export interface LogoSourceType {
   type: LogoTypeSource;
   value: string;

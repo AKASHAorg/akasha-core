@@ -1,6 +1,8 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { ILinkInput } from '@akashaproject/design-system/lib/components/TextInputIconForm';
+import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 import { StyledButton, StyledBox } from './styles';
 
@@ -33,6 +35,16 @@ const StepOne: React.FC<IStepOneProps> = props => {
     onChange,
     onButtonClick,
   } = props;
+  const [analyticsActions] = useAnalytics();
+
+  const handleClick = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP,
+      action: 'Invitation Code',
+    });
+    onButtonClick();
+  };
+
   return (
     <Box>
       <Text size="large" margin={{ bottom: 'large' }}>
@@ -84,7 +96,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
               icon={<Icon type="arrowRight" color="white" />}
               reverse={true}
               label={buttonLabel}
-              onClick={onButtonClick}
+              onClick={handleClick}
             />
           </StyledBox>
         </>

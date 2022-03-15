@@ -14,6 +14,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { styled, TextIcon, Icon } = DS;
 
@@ -52,11 +53,15 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
     const { entryId, entryType } = extensionData;
     if (loggedUserReq.isSuccess && loggedUserReq.data.ethAddress) {
       if (isBookmarked) {
+        analyticsActions.trackEvent({
+          category: AnalyticsCategories.POST,
+          action: 'Remove Bookmark',
+        });
         bookmarkDelete.mutate(entryId);
       }
       if (!isBookmarked) {
         analyticsActions.trackEvent({
-          category: 'Post',
+          category: AnalyticsCategories.POST,
           action: 'Bookmark',
         });
         bookmarkCreate.mutate({ entryId, itemType: entryType });

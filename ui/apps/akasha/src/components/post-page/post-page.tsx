@@ -30,6 +30,7 @@ import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-lo
 import { redirect } from '../../services/routing-service';
 import routes, { POST } from '../../routes';
 import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -157,7 +158,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const handlePublishComment = async (data: IPublishData) => {
     analyticsActions.trackEvent({
-      category: 'Reply',
+      category: AnalyticsCategories.REPLY,
       action: 'Publish',
     });
     publishComment.mutate({ ...data, postID: postId });
@@ -226,8 +227,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const handleEditorPlaceholderClick = () => {
     analyticsActions.trackEvent({
-      category: 'Reply',
-      action: 'EditorPlaceholderClick',
+      category: AnalyticsCategories.REPLY,
+      action: 'Placeholder Click',
     });
   };
 

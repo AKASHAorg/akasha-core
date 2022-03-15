@@ -14,6 +14,7 @@ import {
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { ReportModal, ErrorLoader } = DS;
 
@@ -48,7 +49,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
   const onReport = React.useCallback(
     (dataToSign: Record<string, string>) => {
       analyticsActions.trackEvent({
-        category: itemType,
+        category: itemType as AnalyticsCategories,
         action: 'Report',
       });
       reportMutation.mutate({
