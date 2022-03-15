@@ -16,8 +16,9 @@ export interface IMenuAppButton {
 
 const MenuAppButton: React.FC<IMenuAppButton> = props => {
   const { active, plain, menuItem, onClick } = props;
+
   const renderItem = () => {
-    if (menuItem.area.includes(MenuItemAreaType.UserAppArea)) {
+    if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
       return (
         <AppAvatar
           src={menuItem.logo.value}
@@ -27,7 +28,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
         />
       );
     }
-    if (menuItem.area.includes(MenuItemAreaType.UserWidgetArea)) {
+    if (menuItem.area?.includes(MenuItemAreaType.UserWidgetArea)) {
       return (
         <AppAvatar
           src={menuItem.logo.value}
