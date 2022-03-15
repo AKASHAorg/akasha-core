@@ -199,7 +199,7 @@ export function useSignUp(
     {
       onError: (err: WalletTransactionError) => {
         if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
-          analyticsActions.trackEvent({
+          analyticsActions?.trackEvent({
             category: AnalyticsCategories.SIGN_UP_WALLET,
             action: 'Step 1 Declined',
           });
@@ -207,7 +207,7 @@ export function useSignUp(
         onError(err);
       },
       onSuccess: () => {
-        analyticsActions.trackEvent({
+        analyticsActions?.trackEvent({
           category: AnalyticsCategories.SIGN_UP_WALLET,
           action: 'Step 1 Completed',
         });
@@ -218,7 +218,7 @@ export function useSignUp(
   const signAuthMessage = useMutation(async () => lastValueFrom(sdk.api.auth.signAuthMessage()), {
     onError: (err: WalletTransactionError) => {
       if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
-        analyticsActions.trackEvent({
+        analyticsActions?.trackEvent({
           category: AnalyticsCategories.SIGN_UP_WALLET,
           action: 'Step 2 Declined',
         });
@@ -226,7 +226,7 @@ export function useSignUp(
       onError(err);
     },
     onSuccess: () => {
-      analyticsActions.trackEvent({
+      analyticsActions?.trackEvent({
         category: AnalyticsCategories.SIGN_UP_WALLET,
         action: 'Step 2 Completed',
       });
@@ -238,7 +238,7 @@ export function useSignUp(
     {
       onError: (err: WalletTransactionError) => {
         if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
-          analyticsActions.trackEvent({
+          analyticsActions?.trackEvent({
             category: AnalyticsCategories.SIGN_UP_WALLET,
             action: 'Step 3 Declined',
           });
@@ -246,7 +246,7 @@ export function useSignUp(
         onError(err);
       },
       onSuccess: () => {
-        analyticsActions.trackEvent({
+        analyticsActions?.trackEvent({
           category: AnalyticsCategories.SIGN_UP_WALLET,
           action: 'Step 3 Completed',
         });
