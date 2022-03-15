@@ -13,6 +13,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 
@@ -60,9 +61,9 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: 'Trending Topic',
+      category: AnalyticsCategories.TRENDING_TOPIC,
       action: 'Subscribe',
-      name: 'Widget',
+      name: 'Subscribed Topic From Widget',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
@@ -72,9 +73,9 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: 'Trending Topic',
+      category: AnalyticsCategories.TRENDING_TOPIC,
       action: 'Unsubscribe',
-      name: 'Widget',
+      name: 'Unsubscribed Topic From Widget',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
@@ -89,7 +90,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: 'Trending People',
+      category: AnalyticsCategories.TRENDING_PEOPLE,
       action: 'Follow',
       name: 'Widget',
     });
@@ -102,7 +103,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: 'Trending People',
+      category: AnalyticsCategories.TRENDING_PEOPLE,
       action: 'Unfollow',
       name: 'Widget',
     });
@@ -112,13 +113,13 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const handleActiveTabChange = (tab: number) => {
     if (tab === 0) {
       analyticsActions.trackEvent({
-        category: 'Trending Topic',
+        category: AnalyticsCategories.TRENDING_TOPIC,
         action: 'Selected',
-        name: 'Widget',
+        name: 'Trending Topic Widget Tab Selected',
       });
     } else {
       analyticsActions.trackEvent({
-        category: 'Trending People',
+        category: AnalyticsCategories.TRENDING_PEOPLE,
         action: 'Selected',
         name: 'Widget',
       });

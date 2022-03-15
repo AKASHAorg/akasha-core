@@ -1,9 +1,15 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import { useGetLogin, useProfileUpdate, useUsernameValidation } from '@akashaproject/ui-awf-hooks';
+import {
+  useAnalytics,
+  useGetLogin,
+  useProfileUpdate,
+  useUsernameValidation,
+} from '@akashaproject/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 import { StyledButton, StyledBox } from './styles';
-import routes, { rootRoute, WELCOME } from '../../../routes';
+import routes, { WELCOME } from '../../../routes';
 
 const { Box, Text, styled, Icon, LinkInput } = DS;
 
@@ -111,6 +117,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
   );
 
   const loginQuery = useGetLogin();
+  const [analyticsActions] = useAnalytics();
   const profileUpdateMutation = useProfileUpdate(loginQuery.data?.pubKey);
   const usernameValidationQuery = useUsernameValidation(username, allowUsernameCheckRequest);
   const userNameValidationError = React.useMemo(() => {
@@ -134,6 +141,10 @@ const StepFive: React.FC<IStepFiveProps> = props => {
         userName: username,
       },
       changedFields: ['userName'],
+    });
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP,
+      action: 'Username Setup',
     });
     navigateToUrl(routes[WELCOME]);
   };

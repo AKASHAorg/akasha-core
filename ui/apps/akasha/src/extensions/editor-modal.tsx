@@ -21,6 +21,7 @@ import {
 
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { EditorModal, ModalContainer, ModalCard, Spinner, ErrorLoader } = DS;
 
@@ -91,13 +92,13 @@ const EditorModalContainer = (props: RootExtensionProps) => {
       }
       if (isEditing) {
         analyticsActions.trackEvent({
-          category: 'Post',
+          category: AnalyticsCategories.POST,
           action: 'Edit',
         });
         editPost.mutate({ entryID: props.activeModal.entryId, ...data });
       } else {
         analyticsActions.trackEvent({
-          category: 'Post',
+          category: AnalyticsCategories.POST,
           action: 'Publish',
         });
         publishPost.mutate({ ...data, pubKey: profileDataReq.data.pubKey });
