@@ -12,7 +12,7 @@ describe('Search Page', () => {
 
   describe('Search Bar', () => {
     it('should work typing in the search input', () => {
-      cy.get('#widget-akashaproject-ui-widget-topbar input')
+      cy.get('#akashaproject-ui-widget-topbar input')
         .type('test')
         .should('have.value', 'test');
     });
