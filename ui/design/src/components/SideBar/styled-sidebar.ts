@@ -24,14 +24,18 @@ const StyledFooter = styled.div`
   height: 4rem;
 `;
 
-const StyledAppIconWrapper = styled.div<{ active: boolean; hovered?: boolean }>`
-  width: 2.25rem;
-  height: 2.25rem;
+const StyledAppIconWrapper = styled.div<{
+  active: boolean;
+  hovered?: boolean;
+  backgroundColor?: string;
+}>`
+  width: auto;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => props.backgroundColor || props.theme.colors.background};
   ${props => {
     if (props.active) {
       return css`

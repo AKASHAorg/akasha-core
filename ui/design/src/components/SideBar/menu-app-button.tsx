@@ -21,7 +21,9 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
     if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
       return (
         <AppAvatar
+          size="md"
           src={menuItem.logo.value}
+          backgroundColor="transparent"
           appType={
             !menuItem.logo.value || menuItem.logo.value.length < 1 ? AppTypes.APP : AppTypes.NONE
           }
@@ -31,7 +33,9 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
     if (menuItem.area?.includes(MenuItemAreaType.UserWidgetArea)) {
       return (
         <AppAvatar
+          size="md"
           src={menuItem.logo.value}
+          backgroundColor="transparent"
           appType={
             !menuItem.logo.value || menuItem.logo.value.length < 1 ? AppTypes.WIDGET : AppTypes.NONE
           }
@@ -40,15 +44,20 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
     }
     return (
       <AppIcon
-        placeholderIconType="app"
-        plain={plain}
-        appImg={menuItem.logo}
-        onClick={onClick}
         size="md"
+        plain={plain}
+        onClick={onClick}
+        appImg={menuItem.logo}
+        placeholderIconType="app"
+        backgroundColor="transparent"
       />
     );
   };
-  return <StyledAppIconWrapper active={active}>{renderItem()}</StyledAppIconWrapper>;
+  return (
+    <StyledAppIconWrapper active={active} backgroundColor="transparent">
+      {renderItem()}
+    </StyledAppIconWrapper>
+  );
 };
 
 export { MenuAppButton };

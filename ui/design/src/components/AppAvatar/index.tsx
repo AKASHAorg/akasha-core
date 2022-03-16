@@ -21,6 +21,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     active,
     publicImgPath = '/images',
     appType,
+    backgroundColor,
   } = props;
 
   const isClickable = typeof onClick === 'function';
@@ -47,12 +48,12 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   return (
     <StyledAvatar
       onClick={onClick}
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      size={size!}
+      size={size}
       className={className}
       isClickable={isClickable}
       margin={margin}
       border={border}
+      backgroundColor={backgroundColor}
     >
       <React.Suspense fallback={<></>}>
         <AvatarImage image={avatarImage} faded={faded} />

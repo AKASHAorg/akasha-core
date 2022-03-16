@@ -120,8 +120,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         }
       >
         {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
-          <Box pad={{ horizontal: '1.125rem' }}>
-            <Box direction="column" justify="evenly">
+          <Box pad={{ horizontal: 'medium' }}>
+            <Box direction="column" justify="evenly" margin={{ left: 'medium' }}>
               {menuItem.subRoutes.map((subRouteMenuItem, idx) => (
                 <Box
                   key={idx + subRouteMenuItem.label}
@@ -133,7 +133,14 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                   }}
                   onClick={handleOptionClick(menuItem, subRouteMenuItem)}
                 >
-                  <Text size="large">{subRouteMenuItem.label}</Text>
+                  <Text
+                    size="large"
+                    color={
+                      subRouteMenuItem.route === activeOption?.route ? 'accent' : 'primaryText'
+                    }
+                  >
+                    {subRouteMenuItem.label}
+                  </Text>
                 </Box>
               ))}
             </Box>
