@@ -21,7 +21,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Profile',
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.QuickAccessArea],
     // routes,
-    logo: { type: LogoTypeSource.AVATAR, value: '' },
+    logo: { type: LogoTypeSource.AVATAR, value: 'person' },
     route: rootRoute,
     subRoutes: Object.keys(routes).map((routeName, idx) => ({
       index: idx,
