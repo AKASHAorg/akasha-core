@@ -1,14 +1,21 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+import { isMobileOnly } from 'react-device-detect';
+
 import DS from '@akashaproject/design-system';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  EventTypes,
+  MenuItemAreaType,
+  UIEventData,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { styled, Sidebar, useViewportSize } = DS;
 
 const AppSidebar = styled(Sidebar)`
+  height: calc(100vh - 3rem);
   margin-right: 0.8rem;
   min-width: 15em;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
@@ -22,9 +29,12 @@ const AppSidebar = styled(Sidebar)`
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
     singleSpa: { navigateToUrl },
+    uiEvents,
   } = props;
 
   const [routeData, setRouteData] = React.useState({});
+  // sidebar is open by default on larger screens
+  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(!isMobileOnly ? true : false);
 
   const { t } = useTranslation('ui-widget-sidebar');
 
@@ -33,6 +43,27 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const { size } = useViewportSize();
 
   const loginQuery = useGetLogin();
+
+  const uiEventsRef = React.useRef(uiEvents);
+
+  React.useEffect(() => {
+    const eventsSub = uiEventsRef.current.subscribe({
+      next: (eventInfo: UIEventData) => {
+        if (eventInfo.event === EventTypes.HideSidebar) {
+          setSidebarVisible(false);
+        }
+        if (eventInfo.event === EventTypes.ShowSidebar) {
+          setSidebarVisible(true);
+        }
+      },
+    });
+
+    return () => {
+      if (eventsSub) {
+        eventsSub.unsubscribe();
+      }
+    };
+  }, []);
 
   React.useEffect(() => {
     const sub = props.plugins?.routing?.routeObserver?.subscribe({
@@ -62,6 +93,13 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
+  const closeModal = () => {
+    // emit HideSidebar event to trigger corresponding action in associated widgets
+    uiEvents.next({
+      event: EventTypes.HideSidebar,
+    });
+  };
+
   return (
     <AppSidebar
       worldAppsTitleLabel={t('World Apps')}
@@ -75,6 +113,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       size={size}
       isLoggedIn={!!loginQuery.data.ethAddress}
       loadingUserInstalledApps={false}
+      sidebarVisible={sidebarVisible}
+      modalSlotId={props.layoutConfig.modalSlotId}
+      closeModal={closeModal}
       onClickMenuItem={handleNavigation}
       onClickExplore={handleClickExplore}
     />

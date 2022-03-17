@@ -52,4 +52,6 @@ BaseSidebar.args = {
   worldApps: worldApps,
   isLoggedIn: true,
   loadingUserInstalledApps: false,
+  modalSlotId: 'sidebar-slot',
+  sidebarVisible: true,
 };

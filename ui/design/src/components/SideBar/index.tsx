@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
+import { isMobileOnly } from 'react-device-detect';
+
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 import { MenuAppButton } from './menu-app-button';
@@ -7,12 +9,15 @@ import SectionTitle from './section-title';
 import Skeleton from './skeleton';
 
 import Icon from '../Icon';
+import { ModalRenderer } from '../SignInModal/modal-renderer';
+import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 
 import {
   StyledHiddenScrollContainer,
   StyledMobileHRDiv,
   StyledAccordionPanel,
 } from './styled-sidebar';
+import { StyledOverlay } from '../TopBar/styled-topbar';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -25,11 +30,14 @@ export interface ISidebarProps {
   currentRoute?: string;
   isLoggedIn: boolean;
   loadingUserInstalledApps: boolean;
+  sidebarVisible: boolean;
+  closeModal: () => void;
   onClickMenuItem: (route: string) => void;
   onClickExplore: () => void;
   // viewport size
   size?: string;
   className?: string;
+  modalSlotId: string;
 }
 
 const Sidebar: React.FC<ISidebarProps> = props => {
@@ -46,6 +54,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     loadingUserInstalledApps,
     size,
     className,
+    modalSlotId,
+    sidebarVisible,
+    closeModal,
     onClickMenuItem,
     onClickExplore,
   } = props;
@@ -81,12 +92,19 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       setCurrentAppData(menuItem);
       setActiveOption(null);
       onClickMenuItem(menuItem.route);
+      if (isMobileOnly) {
+        // close modal after click on mobile
+        closeModal();
+      }
     }
   };
   const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => () => {
     setCurrentAppData(menuItem);
     setActiveOption(subrouteMenuItem);
     onClickMenuItem(subrouteMenuItem.route);
+    if (isMobileOnly) {
+      closeModal();
+    }
   };
 
   const handleExploreClick = () => {
@@ -103,7 +121,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         onClick={handleAppIconClick(menuItem)}
         label={
           <Box margin={{ vertical: 'small', left: 'medium' }} direction="row" align="center">
-            <MenuAppButton menuItem={menuItem} active={active} plain={true} />
+            <MenuAppButton menuItem={menuItem} active={active} />
             <Text
               size="large"
               margin={{ left: 'small' }}
@@ -150,22 +168,49 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     );
   };
 
-  return (
-    <Box fill={true} direction="column" elevation="shadow" className={className}>
+  const renderSidebarOverlay = () => (
+    <ModalRenderer slotId={modalSlotId}>
+      <ModalContainer
+        onModalClose={closeModal}
+        style={{ alignItems: 'flex-start' }}
+        animation={{
+          type: 'slideRight',
+          duration: 250,
+          delay: 0,
+        }}
+      >
+        <StyledOverlay border={{ style: 'solid', size: '1px', color: 'border', side: 'left' }}>
+          <Box
+            pad={{
+              horizontal: 'small',
+              bottom: 'small',
+              top: 'large',
+            }}
+          >
+            <Box direction="row" justify="end" align="center">
+              <Icon type="close" onClick={closeModal} />
+            </Box>
+
+            {renderSidebarContents()}
+          </Box>
+        </StyledOverlay>
+      </ModalContainer>
+    </ModalRenderer>
+  );
+
+  const renderSidebarContents = () => (
+    <Box direction="column" elevation="shadow" className={className}>
       <StyledHiddenScrollContainer>
         {worldApps?.length > 0 && (
-          <Box pad={{ top: 'medium', bottom: 'small' }} align="start" fill={true}>
+          <Box pad={{ top: 'medium', bottom: 'small' }} align="start">
             <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
-            <Accordion multiple={true} fill={true}>
-              {worldApps?.map(renderMenuItem)}
-            </Accordion>
+            <Accordion multiple={true}>{worldApps?.map(renderMenuItem)}</Accordion>
           </Box>
         )}
         {isLoggedIn && loadingUserInstalledApps && (
           <Box
             pad={{ top: 'medium', bottom: 'small' }}
             align="start"
-            fill={true}
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
@@ -176,13 +221,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Box
             pad={{ top: 'medium', bottom: 'small' }}
             align="start"
-            fill={true}
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
-            <Accordion multiple={true} fill={true}>
-              {userInstalledApps?.map(renderMenuItem)}
-            </Accordion>
+            <Accordion multiple={true}>{userInstalledApps?.map(renderMenuItem)}</Accordion>
           </Box>
         )}
       </StyledHiddenScrollContainer>
@@ -199,6 +241,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       )}
     </Box>
   );
+
+  return <>{isMobileOnly && sidebarVisible ? renderSidebarOverlay() : renderSidebarContents()}</>;
 };
 
 export default Sidebar;

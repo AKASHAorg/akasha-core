@@ -342,7 +342,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small" onClick={onBrandClick}>
           <Box direction="row" gap="small" align="center">
             <IconDiv isActive={sidebarVisible} onClick={onSidebarToggle} isMobile={isMobileOnly}>
-              <Icon type="menu" clickable={true} plain={true} />
+              <Icon type="menu" clickable={true} accentColor={sidebarVisible} />
             </IconDiv>
             <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
             {!isMobileOnly && (

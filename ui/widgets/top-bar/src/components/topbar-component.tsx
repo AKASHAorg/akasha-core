@@ -1,6 +1,9 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { isMobileOnly } from 'react-device-detect';
+
+import DS from '@akashaproject/design-system';
 import {
   EventTypes,
   MenuItemAreaType,
@@ -13,8 +16,8 @@ import {
   useGetProfile,
   useLogout,
 } from '@akashaproject/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+
 import { extensionPointsMap } from '../extension-points';
 
 const { Topbar, ExtensionPoint } = DS;
@@ -27,7 +30,8 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const location = useLocation();
 
   const [routeData, setRouteData] = React.useState({});
-  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(false);
+  // sidebar is open by default on larger screens
+  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(!isMobileOnly ? true : false);
 
   const loginQuery = useGetLogin();
   const logoutMutation = useLogout();

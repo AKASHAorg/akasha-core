@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 
 const StyledHiddenScrollContainer = styled.div`
   overflow: auto;
-  height: 100%;
   width: 100%;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
@@ -54,9 +53,6 @@ const StyledAccordionPanel = styled(AccordionPanel)<{
     background-color: ${props => props.theme.colors.lightBackground};
   }
   ${props => {
-    if (props.size === 'small') {
-      return;
-    }
     return css`
       div:nth-child(2) {
         svg {
