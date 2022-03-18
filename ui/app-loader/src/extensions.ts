@@ -15,19 +15,11 @@ import {
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { getStateSlice, LoaderState } from './state';
-import {
-  checkActivityFn,
-  createRootNode,
-  navigateToModal,
-  parseQueryString,
-} from './utils';
+import { checkActivityFn, createRootNode, navigateToModal, parseQueryString } from './utils';
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaproject/awf-sdk';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import {
-  EventDataTypes,
-  ILoaderConfig,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { EventDataTypes, ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { loadI18nNamespaces } from './i18n-utils';
 
 const getMatchingExtensionConfigs =

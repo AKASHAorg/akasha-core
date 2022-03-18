@@ -99,7 +99,11 @@ const reactLifecycles = singleSpaReact({
     return (
       <ThemeWrapper {...props}>
         <ModalContainer>
-          <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />
+          <ErrorLoader
+            type="script-error"
+            title="Error in entry remove modal"
+            details={err.message}
+          />
         </ModalContainer>
       </ThemeWrapper>
     );

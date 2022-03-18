@@ -16,15 +16,15 @@ export const TextLine = styled(Box)<{ animated?: boolean }>`
       return css`
         background: linear-gradient(
           90deg,
-          ${props.theme.colors.lightBackground},
+          ${props.theme.colors.skeletonBackground},
           #fff,
-          ${props.theme.colors.lightBackground}
+          ${props.theme.colors.skeletonBackground}
         );
         animation: bgRotate 1s ease infinite;
       `;
     }
     return css`
-      background-color: ${props.theme.colors.lightBackground}a6;
+      background-color: ${props.theme.colors.skeletonBackground}a6;
     `;
   }}
 `;

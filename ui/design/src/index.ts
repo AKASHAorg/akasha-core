@@ -134,6 +134,7 @@ import ProfileCompletedModal from './components/ProfileCompletedModal';
 import FeedbackModal from './components/FeedbackModal';
 import ConfirmationModal from './components/ConfirmationModal';
 import StatModal from './components/StatModal';
+import InstallModal from './components/InstallModal';
 
 import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';
@@ -314,6 +315,7 @@ const exported = {
   Checkbox,
   WalletRequestStep,
   WelcomeCard,
+  InstallModal,
 };
 
 export default exported;

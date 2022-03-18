@@ -103,7 +103,12 @@ import {
   useGetIntegrationsInfo,
   useGetLatestReleaseInfo,
 } from './use-integration-registry';
-import { useGetAllInstalledApps, useGetAppConfig, useSaveInstalledApp } from './use-app-settings';
+import {
+  useGetAllInstalledApps,
+  useGetAppConfig,
+  useInstallApp,
+  useUninstallApp,
+} from './use-app-settings';
 
 export {
   constants,
@@ -235,5 +240,6 @@ export {
   // use-app-settings
   useGetAllInstalledApps,
   useGetAppConfig,
-  useSaveInstalledApp,
+  useInstallApp,
+  useUninstallApp,
 };
