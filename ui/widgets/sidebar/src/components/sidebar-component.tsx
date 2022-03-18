@@ -28,8 +28,8 @@ const AppSidebar = styled(Sidebar)`
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
-    singleSpa: { navigateToUrl },
     uiEvents,
+    plugins: { routing },
   } = props;
 
   const [routeData, setRouteData] = React.useState({});
@@ -78,8 +78,16 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const worldApps = routeData?.[MenuItemAreaType.AppArea];
 
-  const handleNavigation = (path: string) => {
-    navigateToUrl(path);
+  // filter out profile menu for guests
+  const filteredWorldApps = !loginQuery.data.ethAddress
+    ? worldApps?.filter(app => app.name !== '@akashaproject/app-profile')
+    : worldApps;
+
+  const handleNavigation = (appName: string, route: string) => {
+    routing.navigateTo({
+      appName,
+      getNavigationUrl: () => route,
+    });
   };
 
   const handleClickExplore = () => {
@@ -89,7 +97,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
     // if found, navigate to route
     if (icApp) {
-      navigateToUrl(icApp.route);
+      routing.navigateTo({
+        appName: icApp.name,
+        getNavigationUrl: () => icApp.route,
+      });
     }
   };
 
@@ -108,7 +119,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       userInstalledApps={[]}
       exploreButtonLabel={t('Explore')}
       allMenuItems={[]}
-      worldApps={worldApps}
+      worldApps={filteredWorldApps}
       currentRoute={currentLocation.pathname}
       size={size}
       isLoggedIn={!!loginQuery.data.ethAddress}

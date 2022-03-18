@@ -33,7 +33,7 @@ export interface ISidebarProps {
   loadingUserInstalledApps: boolean;
   sidebarVisible: boolean;
   closeModal: () => void;
-  onClickMenuItem: (route: string) => void;
+  onClickMenuItem: (appName: string, route: string) => void;
   onClickExplore: () => void;
   // viewport size
   size?: string;
@@ -92,7 +92,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       // if the current app has no subroutes, set as active and redirect to its route
       setCurrentAppData(menuItem);
       setActiveOption(null);
-      onClickMenuItem(menuItem.route);
+      onClickMenuItem(menuItem.name, menuItem.route);
       if (isMobileOnly) {
         // close modal after click on mobile
         closeModal();
@@ -102,7 +102,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => () => {
     setCurrentAppData(menuItem);
     setActiveOption(subrouteMenuItem);
-    onClickMenuItem(subrouteMenuItem.route);
+    onClickMenuItem(menuItem.name, subrouteMenuItem.route);
     if (isMobileOnly) {
       closeModal();
     }
