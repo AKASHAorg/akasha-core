@@ -1,0 +1,27 @@
+{
+  "name": "@test/hello-ethereum-world",
+  "version": "1.0.0",
+  "description": "A simple hello world app",
+  "main": "index.js",
+  "repository": "Etherean",
+  "author": "Etherean",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "postpack": "copyfiles -f ./dist/* ../../build/apps/auth-app"
+  },
+  "dependencies": {
+    "single-spa-react": "4.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "17.0.20",
+    "@types/react-dom": "17.0.9",
+    "copyfiles": "^2.4.1"
+  },
+  "peerDependencies": {
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  }
+}

@@ -112,7 +112,8 @@ export interface LoaderState {
   layoutReady: boolean;
 }
 
-const initialState: LoaderState = {
+// export to be used in tests
+export const initialState: LoaderState = {
   activeModal: { name: null },
   modalRequest: { name: null },
   enableIntegrationRequest: null,
@@ -150,7 +151,10 @@ interface EventDataTypes {
   data?: { name: string } & BaseIntegrationInfo;
 }
 
-export const initState = (worldConfig: ILoaderConfig, globalChannel: ReplaySubject<unknown>) =>
+export const initState = (
+  worldConfig: ILoaderConfig,
+  globalChannel: ReplaySubject<unknown>,
+): Observable<LoaderState> =>
   getEvents(globalChannel /* , worldConfig */).pipe(
     mergeScan<Partial<LoaderState> & EventDataTypes, LoaderState>((state, newData) => {
       switch (newData.event) {

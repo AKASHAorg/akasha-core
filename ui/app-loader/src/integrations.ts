@@ -22,6 +22,7 @@ import {
   pairwise,
   toArray,
   concatMap,
+  share,
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
@@ -52,7 +53,8 @@ export const getMountPoint = (appConfig: IAppConfig) => {
   return mountPoint;
 };
 
-const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo[]) => {
+// exported for testing purposes
+export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo[]) => {
   return from(manifests).pipe(
     filter(manifest => (manifest.hasOwnProperty('enabled') ? manifest.enabled : true)),
     mergeMap(manifest => {
@@ -66,6 +68,7 @@ const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo[]) => 
       }
       return from(System.import(source)).pipe(map(module => ({ manifest, module })));
     }),
+    share(),
   );
 };
 
@@ -95,6 +98,7 @@ const extractExtensionsFromApps = (
 ) => {
   return from(config.extends)
     .pipe(
+      tap(ext => console.log('extracting', ext)),
       withLatestFrom(
         combineLatest({
           extensionsByParent: state$.pipe(getStateSlice('extensionsByParent')),

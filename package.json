@@ -45,7 +45,7 @@
     "test:hooks": "lerna run test --scope @akashaproject/ui-awf-hooks --stream",
     "test:widgets": "lerna run test --scope @akashaproject/ui-widget-* --stream",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
-    "test:app-loader": "lerna run test --scope @akashaproject/ui-app-loader --stream",
+    "test:app-loader": "nx run @akashaproject/ui-app-loader:test",
     "dev:server": "nx run-many --target=dev:server --projects=@akashaproject/hub-api",
     "update:deps": "lerna exec -- npx --package npm-check-updates ncu -u",
     "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --entryPointStrategy packages 'sdk/typings' 'sdk' 'ui/*' 'ui/widgets/*'",

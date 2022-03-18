@@ -29,16 +29,21 @@ export const checkActivityFn = (
 
 export const getModalFromParams = (location: Location) => () => {
   const { search } = location;
-  const searchObj = qs.parse(search, {
-    ignoreQueryPrefix: true,
-  }) as { modal: ModalNavigationOptions } | undefined;
+  try {
+    const searchObj = qs.parse(search, {
+      ignoreQueryPrefix: true,
+    }) as { modal: ModalNavigationOptions } | undefined;
 
-  if (searchObj.modal) {
-    return of({
-      ...searchObj.modal,
-    });
+    if (searchObj.modal) {
+      return of({
+        ...searchObj.modal,
+      });
+    }
+    return of({ name: null });
+  } catch (err) {
+    console.error(`[getModalFromParams]:`, err);
+    return of({ name: null });
   }
-  return of({ name: null });
 };
 
 /* Create a new html div element and append it to a parent */

@@ -24,8 +24,13 @@ export const getLatestReleaseInfo = (
   const sdk = getSDK();
   return sdk.api.icRegistry.getLatestReleaseInfo(integrations).pipe(
     map(resp => {
+      if (!resp) {
+        throw new Error('[getLatestReleaseInfo] Response is missing');
+      }
       if (!resp.data) {
-        throw new Error(`Error loading integrations from registry ${resp}`);
+        throw new Error(
+          `[getLatestReleaseInfo] data property is missing in response: ${JSON.stringify(resp)}`,
+        );
       }
       return resp.data.getLatestRelease;
     }),
@@ -42,20 +47,19 @@ export const getIntegrationsData = (integrationNames: string[], worldConfig: ILo
   );
 
   //get package info from remote registry
-  const remoteInterations = remote$
+  const remoteIntegrations = remote$
     .pipe(
       map(name => ({ name })),
       toArray(),
     )
-    .pipe(mergeMap(getLatestReleaseInfo))
-    .pipe(mergeMap(from), toArray());
+    .pipe(mergeMap(getLatestReleaseInfo));
 
   //get package info from local registry (overrides)
   const localIntegrations = local$
     .pipe(map(name => worldConfig.registryOverrides.find(int => int.name === name)))
     .pipe(toArray());
 
-  return forkJoin([remoteInterations, localIntegrations]).pipe(
+  return forkJoin([remoteIntegrations, localIntegrations]).pipe(
     map(([remote, local]) => [...remote, ...local]),
   );
 };
@@ -100,8 +104,11 @@ export const getUserIntegrationManifests = (
       }),
       withLatestFrom(state$.pipe(getStateSlice('manifests'))),
       tap(([userManifests, manifests]) => {
+        // additional filtering.
+        // use case: worldConfig update includes an app that was previously not defined as default
+        const newManifests = userManifests.filter(man => !manifests.some(m => m.name === man.name));
         pipelineEvents.next({
-          manifests: [...manifests, ...userManifests],
+          manifests: [...manifests, ...newManifests],
         });
       }),
     )

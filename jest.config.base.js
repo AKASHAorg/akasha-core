@@ -15,6 +15,10 @@ module.exports = {
     '<rootDir>/lib',
     '<rootDir>/dist',
   ],
+  transform: {
+    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+  },
+  transformIgnorePatterns: ['<rootDir>/sdk/'],
   coverageReporters: ['text-summary'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   unmockedModulePathPatterns: ['lodash', 'core-js'],
