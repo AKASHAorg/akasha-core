@@ -3,6 +3,8 @@ import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/co
 import DS from '@akashaproject/design-system';
 import { StyledButton } from './styles';
 import { EthProviders } from '@akashaproject/ui-awf-typings';
+import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { Text, Icon, Box, VariableIconButton } = DS;
 
@@ -50,6 +52,15 @@ const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
     onClickCheckNetwork,
     onButtonClick,
   } = props;
+  const [analyticsActions] = useAnalytics();
+
+  const handleButtonClick = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP,
+      action: 'Rinkeby Successful Setup',
+    });
+    onButtonClick();
+  };
 
   if (isOnRequiredNetwork) {
     return (
@@ -69,7 +80,7 @@ const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
             icon={<Icon type="arrowRight" color="white" />}
             reverse={true}
             label={buttonLabel}
-            onClick={onButtonClick}
+            onClick={handleButtonClick}
           />
         </Box>
       </>

@@ -4,6 +4,8 @@ import DS from '@akashaproject/design-system';
 import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
 import { IInjectedProviderDetails } from '@akashaproject/ui-awf-hooks/lib/utils/getProviderDetails';
 import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
+import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 import RequiredNetworkStep, { IRequiredNetworkStepProps } from './required-network';
 
@@ -50,16 +52,29 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     isOnRequiredNetwork,
     onProviderSelect,
   } = props;
+  const [analyticsActions] = useAnalytics();
 
   const handleWeb3Injected = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP,
+      action: `${providerDetails.titleLabel} Selection`,
+    });
     onProviderSelect(EthProviders.Web3Injected);
   };
 
   const handleWalletConnect = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP,
+      action: 'Wallet Connect Selection',
+    });
     onProviderSelect(EthProviders.WalletConnect);
   };
 
   const handleSocialLogin = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP,
+      action: 'Social Login',
+    });
     onProviderSelect(EthProviders.Torus);
   };
 
