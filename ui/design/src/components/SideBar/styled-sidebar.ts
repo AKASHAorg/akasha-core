@@ -19,8 +19,7 @@ const StyledMobileHRDiv = styled.div`
 const StyledFooter = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 4rem;
+  padding: '0.75rem';
 `;
 
 const StyledAppIconWrapper = styled.div<{

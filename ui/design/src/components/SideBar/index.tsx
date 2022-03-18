@@ -16,6 +16,7 @@ import {
   StyledHiddenScrollContainer,
   StyledMobileHRDiv,
   StyledAccordionPanel,
+  StyledFooter,
 } from './styled-sidebar';
 import { StyledOverlay } from '../TopBar/styled-topbar';
 
@@ -232,12 +233,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       <StyledMobileHRDiv />
 
       {isLoggedIn && (
-        <Box direction="row" pad="small" align="center" onClick={handleExploreClick}>
+        <StyledFooter onClick={handleExploreClick}>
           <Icon type="explore" size="md" plain={true} style={{ marginRight: '0.75rem' }} />
           <Text color="accentText" size="large">
             {exploreButtonLabel}
           </Text>
-        </Box>
+        </StyledFooter>
       )}
     </Box>
   );
