@@ -14,8 +14,8 @@ import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 
 import {
   StyledHiddenScrollContainer,
-  StyledMobileHRDiv,
   StyledAccordionPanel,
+  StyledButton,
   StyledFooter,
 } from './styled-sidebar';
 import { StyledOverlay } from '../TopBar/styled-topbar';
@@ -200,7 +200,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   );
 
   const renderSidebarContents = () => (
-    <Box direction="column" elevation="shadow" className={className}>
+    <Box
+      direction="column"
+      elevation="shadow"
+      className={className}
+      style={{ position: 'relative' }}
+    >
       <StyledHiddenScrollContainer>
         {worldApps?.length > 0 && (
           <Box pad={{ top: 'medium', bottom: 'small' }} align="start">
@@ -230,14 +235,20 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         )}
       </StyledHiddenScrollContainer>
 
-      <StyledMobileHRDiv />
-
       {isLoggedIn && (
-        <StyledFooter onClick={handleExploreClick}>
-          <Icon type="explore" size="md" plain={true} style={{ marginRight: '0.75rem' }} />
-          <Text color="accentText" size="large">
-            {exploreButtonLabel}
-          </Text>
+        <StyledFooter>
+          <StyledButton
+            margin="small"
+            label={
+              <Box direction="row" align="center" justify="center" margin={{ vertical: ' xlarge' }}>
+                <Icon type="explore" size="md" plain={true} style={{ marginRight: '0.75rem' }} />
+                <Text color="accentText" size="large">
+                  {exploreButtonLabel}
+                </Text>
+              </Box>
+            }
+            onClick={handleExploreClick}
+          />
         </StyledFooter>
       )}
     </Box>

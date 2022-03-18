@@ -1,9 +1,12 @@
 import { AccordionPanel } from 'grommet';
 import styled, { css } from 'styled-components';
 
+import Button from '../Button';
+
 const StyledHiddenScrollContainer = styled.div`
   overflow: auto;
   width: 100%;
+  margin-bottom: 3.5rem;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
   ::-webkit-scrollbar {
@@ -18,8 +21,11 @@ const StyledMobileHRDiv = styled.div`
 
 const StyledFooter = styled.div`
   display: flex;
-  align-items: center;
-  padding: '0.75rem';
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid ${props => props.theme.colors.border};
+  background-color: ${props => props.theme.colors.background};
 `;
 
 const StyledAppIconWrapper = styled.div<{
@@ -73,10 +79,16 @@ const StyledAccordionPanel = styled(AccordionPanel)<{
   }}
 `;
 
+const StyledButton = styled(Button)`
+  width: 100%;
+  height: auto;
+`;
+
 export {
   StyledHiddenScrollContainer,
   StyledFooter,
   StyledAppIconWrapper,
   StyledMobileHRDiv,
   StyledAccordionPanel,
+  StyledButton,
 };
