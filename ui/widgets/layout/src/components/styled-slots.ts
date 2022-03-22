@@ -17,11 +17,8 @@ export const SidebarSlot: React.FC<ExtensionPointProps & { visible: boolean }> =
 }>`
   display: ${props => (props.visible ? 'initial' : 'none')};
   flex-grow: 1;
-  position: sticky;
-  top: 0;
   ${props => css`
     @media screen and (max-width: ${props.theme.breakpoints.small.value}px) {
-      ${props.visible && 'height: calc(100vh - 3rem)'}
       ${!props.visible && 'display: none'}
     }
   `}

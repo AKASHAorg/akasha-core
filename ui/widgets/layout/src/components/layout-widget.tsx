@@ -11,6 +11,7 @@ import ScrollRestorer from './scroll-restorer';
 import {
   MainAreaContainer,
   ScrollableWidgetArea,
+  SidebarAreaContainer,
   SidebarWrapper,
   WidgetAreaContainer,
   WidgetContainer,
@@ -125,12 +126,15 @@ const Layout: React.FC<RootComponentProps> = props => {
           />
           <Box direction="row" flex={true}>
             <SidebarWrapper>
-              <SidebarSlot
-                visible={isFocusedMode ? false : showSidebar}
-                name={props.layoutConfig.sidebarSlotId}
-                onMount={handleExtensionMount}
-                onUnmount={handleExtensionUnmount}
-              />
+              <SidebarAreaContainer>
+                {/* container enforces sticky position on scroll */}
+                <SidebarSlot
+                  visible={isFocusedMode ? false : showSidebar}
+                  name={props.layoutConfig.sidebarSlotId}
+                  onMount={handleExtensionMount}
+                  onUnmount={handleExtensionUnmount}
+                />
+              </SidebarAreaContainer>
             </SidebarWrapper>
             <MainAreaContainer sidebarVisible={isFocusedMode ? false : showSidebar}>
               <Box direction="row">

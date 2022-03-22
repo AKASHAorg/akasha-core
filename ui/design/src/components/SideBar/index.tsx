@@ -1,24 +1,23 @@
 import * as React from 'react';
-import { Accordion, Box, Text } from 'grommet';
-import { isMobileOnly } from 'react-device-detect';
+import { Box, Text } from 'grommet';
 
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-import { MenuAppButton } from './menu-app-button';
+import MenuItemLabel from './menu-item-label';
+import MenuSubItems from './menu-sub-items';
 import SectionTitle from './section-title';
 import Skeleton from './skeleton';
 
 import Icon from '../Icon';
-import { ModalRenderer } from '../SignInModal/modal-renderer';
-import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 
 import {
   StyledHiddenScrollContainer,
-  StyledAccordionPanel,
   StyledButton,
   StyledFooter,
+  StyledAccordion,
+  MobileAccordionPanel,
+  DesktopAccordionPanel,
 } from './styled-sidebar';
-import { StyledOverlay } from '../TopBar/styled-topbar';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -31,14 +30,12 @@ export interface ISidebarProps {
   currentRoute?: string;
   isLoggedIn: boolean;
   loadingUserInstalledApps: boolean;
-  sidebarVisible: boolean;
-  closeModal: () => void;
+  onSidebarClose: () => void;
   onClickMenuItem: (appName: string, route: string) => void;
   onClickExplore: () => void;
   // viewport size
   size?: string;
   className?: string;
-  modalSlotId: string;
 }
 
 const Sidebar: React.FC<ISidebarProps> = props => {
@@ -55,9 +52,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     loadingUserInstalledApps,
     size,
     className,
-    modalSlotId,
-    sidebarVisible,
-    closeModal,
+    onSidebarClose,
     onClickMenuItem,
     onClickExplore,
   } = props;
@@ -87,24 +82,27 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     }
   }, [currentRoute, allMenuItems, currentAppData, activeOption]);
 
-  const handleAppIconClick = (menuItem: IMenuItem) => () => {
+  const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => () => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       // if the current app has no subroutes, set as active and redirect to its route
       setCurrentAppData(menuItem);
       setActiveOption(null);
       onClickMenuItem(menuItem.name, menuItem.route);
-      if (isMobileOnly) {
-        // close modal after click on mobile
-        closeModal();
+      if (isMobile) {
+        onSidebarClose();
       }
     }
   };
-  const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => () => {
+  const handleOptionClick = (
+    menuItem: IMenuItem,
+    subrouteMenuItem: IMenuItem,
+    isMobile?: boolean,
+  ) => {
     setCurrentAppData(menuItem);
     setActiveOption(subrouteMenuItem);
     onClickMenuItem(menuItem.name, subrouteMenuItem.route);
-    if (isMobileOnly) {
-      closeModal();
+    if (isMobile) {
+      onSidebarClose();
     }
   };
 
@@ -112,94 +110,47 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     onClickExplore();
   };
 
-  const renderMenuItem = (menuItem: IMenuItem, index: number) => {
+  const renderMenuItem = (menuItem: IMenuItem) => {
     const active = menuItem.label === currentAppData?.label;
     return (
-      <StyledAccordionPanel
-        size={size}
-        key={index}
-        hasChevron={menuItem.subRoutes?.length > 0}
-        onClick={handleAppIconClick(menuItem)}
-        label={
-          <Box margin={{ vertical: 'small', left: 'medium' }} direction="row" align="center">
-            <MenuAppButton menuItem={menuItem} active={active} />
-            <Text
-              size="large"
-              margin={{ left: 'small' }}
-              style={{
-                width: '200px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
-              {menuItem.label}
-            </Text>
-          </Box>
-        }
-      >
-        {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
-          <Box pad={{ horizontal: 'medium' }}>
-            <Box direction="column" justify="evenly" margin={{ left: 'medium' }}>
-              {menuItem.subRoutes.map((subRouteMenuItem, idx) => (
-                <Box
-                  key={idx + subRouteMenuItem.label}
-                  pad={{ vertical: 'large', left: 'large' }}
-                  border={{
-                    size: 'medium',
-                    color: subRouteMenuItem.route === activeOption?.route ? 'accent' : 'border',
-                    side: 'left',
-                  }}
-                  onClick={handleOptionClick(menuItem, subRouteMenuItem)}
-                >
-                  <Text
-                    size="large"
-                    color={
-                      subRouteMenuItem.route === activeOption?.route ? 'accent' : 'primaryText'
-                    }
-                  >
-                    {subRouteMenuItem.label}
-                  </Text>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
-      </StyledAccordionPanel>
+      <>
+        <DesktopAccordionPanel
+          size={size}
+          key={menuItem.index}
+          hasChevron={menuItem.subRoutes?.length > 0}
+          onClick={handleAppIconClick(menuItem)}
+          label={<MenuItemLabel menuItem={menuItem} active={active} />}
+        >
+          {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
+            <MenuSubItems
+              isMobile={false}
+              menuItem={menuItem}
+              activeOption={activeOption}
+              onOptionClick={handleOptionClick}
+            />
+          )}
+        </DesktopAccordionPanel>
+        <MobileAccordionPanel
+          size={size}
+          key={menuItem.index}
+          hasChevron={menuItem.subRoutes?.length > 0}
+          onClick={handleAppIconClick(menuItem, true)}
+          label={<MenuItemLabel menuItem={menuItem} active={active} />}
+        >
+          {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
+            <MenuSubItems
+              isMobile={true}
+              menuItem={menuItem}
+              activeOption={activeOption}
+              onOptionClick={(menu, subMenu) => handleOptionClick(menu, subMenu, true)}
+            />
+          )}
+        </MobileAccordionPanel>
+      </>
     );
   };
 
-  const renderSidebarOverlay = () => (
-    <ModalRenderer slotId={modalSlotId}>
-      <ModalContainer
-        onModalClose={closeModal}
-        style={{ alignItems: 'flex-start' }}
-        animation={{
-          type: 'slideRight',
-          duration: 250,
-          delay: 0,
-        }}
-      >
-        <StyledOverlay border={{ style: 'solid', size: '1px', color: 'border', side: 'left' }}>
-          <Box
-            pad={{
-              horizontal: 'small',
-              bottom: 'small',
-              top: 'large',
-            }}
-          >
-            <Box direction="row" justify="end" align="center">
-              <Icon type="close" onClick={closeModal} />
-            </Box>
-
-            {renderSidebarContents()}
-          </Box>
-        </StyledOverlay>
-      </ModalContainer>
-    </ModalRenderer>
-  );
-
-  const renderSidebarContents = () => (
+  return (
     <Box
       direction="column"
       elevation="shadow"
@@ -210,7 +161,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         {worldApps?.length > 0 && (
           <Box pad={{ top: 'medium', bottom: 'small' }} align="start">
             <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
-            <Accordion multiple={true}>{worldApps?.map(renderMenuItem)}</Accordion>
+            <StyledAccordion>{worldApps?.map(renderMenuItem)}</StyledAccordion>
           </Box>
         )}
         {isLoggedIn && loadingUserInstalledApps && (
@@ -230,7 +181,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
-            <Accordion multiple={true}>{userInstalledApps?.map(renderMenuItem)}</Accordion>
+            <StyledAccordion>{userInstalledApps?.map(renderMenuItem)}</StyledAccordion>
           </Box>
         )}
       </StyledHiddenScrollContainer>
@@ -253,8 +204,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       )}
     </Box>
   );
-
-  return <>{isMobileOnly && sidebarVisible ? renderSidebarOverlay() : renderSidebarContents()}</>;
 };
 
 export default Sidebar;

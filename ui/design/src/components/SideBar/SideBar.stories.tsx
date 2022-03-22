@@ -34,7 +34,7 @@ export default {
 const Template = (args: ISidebarProps) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
-      <Box width="25%" style={{ maxHeight: '690px' }}>
+      <Box style={{ maxHeight: '690px' }}>
         <SidebarComponent {...args} />
       </Box>
     </ViewportSizeProvider>
@@ -52,6 +52,4 @@ BaseSidebar.args = {
   worldApps: worldApps,
   isLoggedIn: true,
   loadingUserInstalledApps: false,
-  modalSlotId: 'sidebar-slot',
-  sidebarVisible: true,
 };

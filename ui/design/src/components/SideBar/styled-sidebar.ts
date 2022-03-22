@@ -1,4 +1,4 @@
-import { AccordionPanel } from 'grommet';
+import { Accordion, AccordionPanel } from 'grommet';
 import styled, { css } from 'styled-components';
 
 import Button from '../Button';
@@ -50,6 +50,10 @@ const StyledAppIconWrapper = styled.div<{
   }}
 `;
 
+const StyledAccordion = styled(Accordion)`
+  width: 100%;
+`;
+
 const StyledAccordionPanel = styled(AccordionPanel)<{
   size?: string;
   hasChevron?: boolean;
@@ -79,6 +83,20 @@ const StyledAccordionPanel = styled(AccordionPanel)<{
   }}
 `;
 
+const MobileAccordionPanel = styled(StyledAccordionPanel)`
+  display: none;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: flex;
+    margin: 0.5rem 0;
+  }
+`;
+
+const DesktopAccordionPanel = styled(StyledAccordionPanel)`
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: none;
+  }
+`;
+
 const StyledButton = styled(Button)`
   width: 100%;
   height: auto;
@@ -89,6 +107,9 @@ export {
   StyledFooter,
   StyledAppIconWrapper,
   StyledMobileHRDiv,
+  StyledAccordion,
   StyledAccordionPanel,
+  MobileAccordionPanel,
+  DesktopAccordionPanel,
   StyledButton,
 };
