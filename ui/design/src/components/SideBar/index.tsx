@@ -110,13 +110,13 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     onClickExplore();
   };
 
-  const renderMenuItem = (menuItem: IMenuItem) => {
+  const renderMenuItem = (menuItem: IMenuItem, index?: number) => {
     const active = menuItem.label === currentAppData?.label;
     return (
       <>
         <DesktopAccordionPanel
           size={size}
-          key={menuItem.index}
+          key={index + menuItem.label}
           hasChevron={menuItem.subRoutes?.length > 0}
           onClick={handleAppIconClick(menuItem)}
           label={<MenuItemLabel menuItem={menuItem} active={active} />}
@@ -161,7 +161,11 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         {worldApps?.length > 0 && (
           <Box pad={{ top: 'medium', bottom: 'small' }} align="start">
             <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
-            <StyledAccordion>{worldApps?.map(renderMenuItem)}</StyledAccordion>
+            <StyledAccordion>
+              {worldApps?.map((app: IMenuItem, index: number) => (
+                <React.Fragment key={index}>{renderMenuItem(app, index)}</React.Fragment>
+              ))}
+            </StyledAccordion>
           </Box>
         )}
         {isLoggedIn && loadingUserInstalledApps && (
@@ -181,7 +185,11 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
-            <StyledAccordion>{userInstalledApps?.map(renderMenuItem)}</StyledAccordion>
+            <StyledAccordion>
+              {userInstalledApps?.map((app: IMenuItem, index: number) => (
+                <React.Fragment key={index}>{renderMenuItem(app, index)}</React.Fragment>
+              ))}
+            </StyledAccordion>
           </Box>
         )}
       </StyledHiddenScrollContainer>
