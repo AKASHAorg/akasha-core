@@ -42,7 +42,7 @@ export function useGetAllInstalledApps(enabler?: boolean) {
   });
 }
 
-const installApp = async (app: { name?: string; id?: string }) => {
+const appInstall = async (app: { name?: string; id?: string }) => {
   const sdk = getSDK();
   const res = await sdk.services.appSettings.install(app);
   if (!res) {
@@ -56,9 +56,9 @@ const installApp = async (app: { name?: string; id?: string }) => {
  * Hook to persist an installed app config to a user's profile
  * @param app - Object
  */
-export function useSaveInstalledApp() {
+export function useInstallApp() {
   const queryClient = useQueryClient();
-  return useMutation((app: { name?: string; id?: string }) => installApp(app), {
+  return useMutation((app: { name?: string; id?: string }) => appInstall(app), {
     onError: err => {
       logError('useAppSettings.saveInstalledApp', err as Error);
     },
@@ -66,6 +66,30 @@ export function useSaveInstalledApp() {
       await queryClient.fetchQuery([APP_SETTINGS_KEY, variables.name], () =>
         getAppConfig(variables.name),
       );
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries(APP_SETTINGS_KEY);
+    },
+  });
+}
+
+const appUninstall = async (appName?: string) => {
+  const sdk = getSDK();
+  await sdk.services.appSettings.uninstall(appName);
+};
+
+/**
+ * Hook to uninstall an app
+ * @param appName - application name
+ */
+export function useUninstallApp() {
+  const queryClient = useQueryClient();
+  return useMutation((appName: string) => appUninstall(appName), {
+    onError: err => {
+      logError('useAppSettings.uninstallApp', err as Error);
+    },
+    onSuccess: async (_res, variables) => {
+      await queryClient.fetchQuery([APP_SETTINGS_KEY, variables], () => getAppConfig(variables));
     },
     onSettled: async () => {
       await queryClient.invalidateQueries(APP_SETTINGS_KEY);

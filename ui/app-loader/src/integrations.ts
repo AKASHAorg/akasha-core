@@ -413,6 +413,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
           integrationsByMountPoint: state$.pipe(getStateSlice('integrationsByMountPoint')),
           extensionsByMountPoint: state$.pipe(getStateSlice('extensionsByMountPoint')),
           extensionsByParent: state$.pipe(getStateSlice('extensionsByParent')),
+          modules: state$.pipe(getStateSlice('modules')),
         }),
       ),
       tap(([results, props]) => {
@@ -423,6 +424,9 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
             const _integrations = integrations.filter(i => i.name !== uninstalledApp.name);
             return [name, _integrations];
           }),
+        );
+        const modules = new Map(
+          Array.from(props.modules).filter(([name]) => name !== uninstalledApp.name),
         );
         const extByMountPoint = new Map(
           Array.from(extensionsByMountPoint).map(([name, extensions]) => {
@@ -448,6 +452,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
 
         pipelineEvents.next({
           integrationsByMountPoint: intByMountPoint,
+          modules: modules,
           extensionsByMountPoint: extByMountPoint,
           extensionsByParent: extByParent,
           integrationConfigs: intConfigs,

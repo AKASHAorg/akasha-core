@@ -53,6 +53,7 @@ const colors: IColorsDark = {
   activeCardBackground: '#F6F8FF', // aquamarine
   inputBackground: '#CCD2DF',
   hoverBackground: '#595F6B',
+  skeletonBackground: '#595F6B',
   coverImageBackground: '#425166',
   embedBackground: '#253142',
   btnAccentColor: '#FBFCFD', // lotion
