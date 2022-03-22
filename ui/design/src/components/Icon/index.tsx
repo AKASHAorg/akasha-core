@@ -12,6 +12,8 @@ export type IconType =
   | 'appEns'
   | 'appFeed'
   | 'appIpfs'
+  | 'appModeration'
+  | 'appSocial'
   | 'activity'
   | 'akasha'
   | 'addAppGrey'
@@ -137,6 +139,8 @@ export const iconTypes: IconType[] = [
   'appEns',
   'appFeed',
   'appIpfs',
+  'appModeration',
+  'appSocial',
   'activity',
   'addAppGrey',
   'akasha',
@@ -270,30 +274,10 @@ export interface IconProps extends CommonInterface<any> {
   testId?: string;
 }
 
-const StyledRefDiv = styled.div`
+const StyledRefDiv = styled.div<Partial<IconProps>>`
   display: flex;
   align-items: center;
   user-select: none;
-`;
-
-const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
-  const Component = (icons as any)[props.type];
-  // here we destructure some props we don't want applied to DOM elements
-  const { plain, accentColor, clickable, testId, wrapperStyle, ...other } = props;
-  if (!Component) {
-    // tslint:disable-next-line no-console
-    console.error('There is no such icon', props.type);
-    return null;
-  }
-  const iconClass = classNames('icon', props.className);
-  return (
-    <StyledRefDiv ref={ref} style={wrapperStyle}>
-      <Component className={iconClass} data-testid={testId} {...other} />
-    </StyledRefDiv>
-  );
-});
-
-const Icon: React.FC<IconProps> = styled(IconBase)`
   ${props =>
     !props.plain &&
     `
@@ -305,12 +289,6 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
     `
       & * {
         stroke: ${props.color};
-      }`};
-  ${props =>
-    props.fill &&
-    `
-      & * {
-        fill: ${props.fill};
       }`};
   ${props =>
     props.accentColor &&
@@ -339,6 +317,112 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
           }
         }
       `};
+`;
+
+const StyledFillRefDiv = styled.div<Partial<IconProps>>`
+  display: flex;
+  align-items: center;
+  user-select: none;
+  ${props =>
+    !props.plain &&
+    `
+    & * {
+      fill: ${props.theme.colors.primaryText};
+    }`};
+  ${props =>
+    props.color &&
+    `
+      & * {
+        fill: ${props.color};
+      }`};
+  ${props =>
+    props.accentColor &&
+    `
+      & * {
+        fill: ${props.theme.colors.accent};
+      }`};
+  ${props =>
+    props.clickable &&
+    !props.disabled &&
+    `
+      cursor: pointer;
+      &: hover {
+        & * {
+          fill: ${props.theme.colors.accent};
+        }
+      }
+    `};
+  ${props =>
+    props.clickableRed &&
+    `
+        cursor: pointer;
+        &: hover {
+          & * {
+            fill: ${props.theme.colors.red};
+          }
+        }
+      `};
+`;
+
+const fillIcons: IconType[] = [
+  'akasha',
+  'integrationAppSmall',
+  'integrationAppSmallFill',
+  'integrationWidgetSmall',
+];
+const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
+  const Component = (icons as any)[props.type];
+  // here we destructure some props we don't want applied to DOM elements
+  const {
+    plain,
+    accentColor,
+    clickable,
+    clickableRed,
+    color,
+    disabled,
+    testId,
+    wrapperStyle,
+    ...other
+  } = props;
+  if (!Component) {
+    // tslint:disable-next-line no-console
+    console.error('There is no such icon', props.type);
+    return null;
+  }
+  const iconClass = classNames('icon', props.className);
+  if (fillIcons.includes(props.type as IconType)) {
+    return (
+      <StyledFillRefDiv
+        ref={ref}
+        style={wrapperStyle}
+        plain={plain}
+        accentColor={accentColor}
+        clickable={clickable}
+        clickableRed={clickableRed}
+        color={color}
+        disabled={disabled}
+      >
+        <Component className={iconClass} data-testid={testId} {...other} />
+      </StyledFillRefDiv>
+    );
+  }
+  return (
+    <StyledRefDiv
+      ref={ref}
+      style={wrapperStyle}
+      plain={plain}
+      accentColor={accentColor}
+      clickable={clickable}
+      clickableRed={clickableRed}
+      color={color}
+      disabled={disabled}
+    >
+      <Component className={iconClass} data-testid={testId} {...other} />
+    </StyledRefDiv>
+  );
+});
+
+const Icon: React.FC<IconProps> = styled(IconBase)`
   ${props => {
     if (props.size) {
       switch (props.size) {

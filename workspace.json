@@ -485,6 +485,22 @@
         }
       }
     },
+    "@akashaproject/app-routing": {
+      "root": "ui/apps/routing",
+      "sourceRoot": "ui/apps/routing/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/routing"],
+          "options": {
+            "commands": ["yarn run pack"],
+            "cwd": "ui/apps/routing",
+            "parallel": false
+          }
+        }
+      }
+    },
     "@akashaproject/ethereum.world": {
       "root": "examples/ui/ethereum.world",
       "sourceRoot": "examples/ui/ethereum.world/src",

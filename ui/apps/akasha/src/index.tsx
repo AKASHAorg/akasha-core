@@ -4,6 +4,8 @@ import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
+  MenuItemAreaType,
+  MenuItemType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
@@ -24,6 +26,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   title: 'Ethereum World',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
   i18nNamespace: ['app-akasha-integration', 'ui-lib-feed'],
+  menuItems: {
+    route: rootRoute,
+    label: 'Social',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
+    area: [MenuItemAreaType.AppArea],
+    subRoutes: [],
+  },
   extends: [
     {
       mountsIn: 'entry-remove-confirmation',

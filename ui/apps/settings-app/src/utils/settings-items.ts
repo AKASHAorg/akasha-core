@@ -18,25 +18,26 @@ export const settingsItems: ISettingsItem[] = [
     label: 'Appearance',
     clickable: true,
   },
-  {
-    label: 'Integrations',
-    clickable: false,
-    isSubheading: true,
-  },
-  {
-    label: 'General',
-    clickable: false,
-  },
-  {
-    label: 'Apps',
-    clickable: true,
-  },
-  {
-    label: 'Plugins',
-    clickable: false,
-  },
-  {
-    label: 'Widgets',
-    clickable: false,
-  },
+  // disable these untill they are used
+  // {
+  //   label: 'Integrations',
+  //   clickable: false,
+  //   isSubheading: true,
+  // },
+  // {
+  //   label: 'General',
+  //   clickable: false,
+  // },
+  // {
+  //   label: 'Apps',
+  //   clickable: true,
+  // },
+  // {
+  //   label: 'Plugins',
+  //   clickable: false,
+  // },
+  // {
+  //   label: 'Widgets',
+  //   clickable: false,
+  // },
 ];

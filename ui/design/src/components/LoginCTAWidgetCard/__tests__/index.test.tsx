@@ -38,7 +38,7 @@ describe('<LoginCTAWidgetCard /> Component', () => {
 
   it('has correct title and subtitle', () => {
     const { getByText } = componentWrapper;
-    const title = getByText(/Welcome to /);
+    const title = getByText(/Welcome, fellow Ethereans/);
     const subtitle = getByText(/We are in private /);
 
     expect(title).toBeDefined();
@@ -48,7 +48,7 @@ describe('<LoginCTAWidgetCard /> Component', () => {
   it('has correct mailto link', () => {
     const { getByRole } = componentWrapper;
 
-    const cta = getByRole('link', { name: 'write to us' });
+    const cta = getByRole('link');
     userEvent.click(cta);
 
     expect(cta).toHaveAttribute('href', 'mailto:alpha@ethereum.world');

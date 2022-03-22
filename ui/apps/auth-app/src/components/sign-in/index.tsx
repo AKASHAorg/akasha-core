@@ -5,6 +5,7 @@ import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
 
 import {
   switchToRequiredNetwork,
+  useAnalytics,
   useConnectProvider,
   useGetProfile,
   useInjectedProvider,
@@ -19,7 +20,8 @@ import RequiredNetworkStep from '../sign-up/steps/required-network';
 import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { useGetLogin, useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
 import SuggestSignup from './suggest-signup';
-import routes, { SIGN_UP_USERNAME } from '../../routes';
+import { SIGN_UP_USERNAME } from '../../routes';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { MainAreaCardBox, Box, Heading, HorizontalDivider } = DS;
 
@@ -27,8 +29,9 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [signInComplete, setSignInComplete] = React.useState(false);
   const { t } = useTranslation('app-auth-ewa');
+  const [analyticsActions] = useAnalytics();
 
-  const navigateTo = React.useRef(props.navigateTo);
+  const navigateTo = React.useRef(props.plugins.routing?.navigateTo);
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
@@ -62,15 +65,21 @@ const SignIn: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
-      return navigateTo.current((qsStringify, currentRedirect) => {
-        if (!currentRedirect) {
-          return '/';
-        }
-        return currentRedirect;
+      return navigateTo.current?.({
+        getNavigationUrl: () => {
+          const redirectTo = new URLSearchParams(location.search).get('redirectTo');
+          if (!redirectTo) {
+            return '/';
+          }
+          return redirectTo;
+        },
       });
     }
     if (signInComplete && profileDataReq.isSuccess && !profileDataReq.data?.userName) {
-      navigateTo.current(routes[SIGN_UP_USERNAME]);
+      navigateTo.current?.({
+        appName: '@akashaproject/app-auth-ewa',
+        getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
+      });
     }
   }, [signInComplete, profileDataReq]);
 
@@ -92,6 +101,10 @@ const SignIn: React.FC<RootComponentProps> = props => {
   };
 
   const handleSignInComplete = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_IN,
+      action: 'Success',
+    });
     setSignInComplete(true);
   };
 

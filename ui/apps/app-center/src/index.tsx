@@ -5,7 +5,7 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { rootRoute } from './routes';
+import routes, { rootRoute } from './routes';
 
 /**
  * All the plugins must export an object like this:
@@ -19,16 +19,17 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   mountsIn: opts.layoutConfig?.pluginSlotId,
   routes: {
     rootRoute,
+    ...routes,
   },
   i18nNamespace: ['app-integration-center'],
   loadingFn: () => import('./components'),
   title: 'App center',
   menuItems: {
     label: 'Integration Center',
-    name: 'app-integration-center',
-    area: MenuItemAreaType.QuickAccessArea,
+    area: [MenuItemAreaType.QuickAccessArea, MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     route: rootRoute,
+    subRoutes: [],
   },
   extends: [
     {
@@ -37,6 +38,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
         return pathToActiveWhen(rootRoute)(location);
       },
       loadingFn: () => import('./extensions/integrations-widget'),
+    },
+    {
+      mountsIn: 'install-modal',
+      loadingFn: () => import('./extensions/install-modal'),
     },
   ],
 });

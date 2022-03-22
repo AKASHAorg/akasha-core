@@ -40,6 +40,7 @@ const { Web3Storage, getFilesFromPath } = require('web3.storage');
     {package: require('../ui/apps/search/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'search')},
     {package: require('../ui/apps/settings-app/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'settings-app')},
     {package: require('../ui/apps/translation/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'translation')},
+    {package: require('../ui/apps/routing/package.json'), type: TYPE_APP, path: path.resolve(__dirname, '../ui/build/apps', 'routing')},
     // widgets
     {package: require('../ui/widgets/layout/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'layout')},
     {package: require('../ui/widgets/sidebar/package.json'), type: TYPE_WIDGET, path: path.resolve(__dirname, '../ui/build/widgets', 'sidebar')},

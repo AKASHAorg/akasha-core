@@ -17,14 +17,14 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       },
       elevation: {
         light: {
-          shadow: styledComponentsTheme.colors.shadow,
+          shadow: styledComponentsTheme.colors.elevationLow,
         },
         dark: {
-          shadow: styledComponentsTheme.colors.shadow,
+          shadow: styledComponentsTheme.colors.elevationLow,
         },
       },
       drop: {
-        shadowSize: 'shadow',
+        shadowSize: styledComponentsTheme.colors.elevationHigh,
         background: styledComponentsTheme.colors.cardBackground,
       },
 
@@ -38,9 +38,12 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
       colors: {
         primaryText: styledComponentsTheme.colors.primaryText,
         secondaryText: styledComponentsTheme.colors.secondaryText,
+        textBackground: styledComponentsTheme.colors.textBackground,
+        subtitleText: styledComponentsTheme.colors.subtitleText,
         errorText: styledComponentsTheme.colors.errorText,
         accentText: styledComponentsTheme.colors.accent,
         darkText: styledComponentsTheme.colors.darkText,
+        inputText: styledComponentsTheme.colors.inputText,
         border: {
           dark: styledComponentsTheme.colors.border,
           light: styledComponentsTheme.colors.border,
@@ -61,6 +64,8 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         cardBackground: styledComponentsTheme.colors.cardBackground,
         hoverBackground: styledComponentsTheme.colors.hoverBackground,
         inputBackground: styledComponentsTheme.colors.inputBackground,
+        coverImageBackground: styledComponentsTheme.colors.coverImageBackground,
+        embedBackground: styledComponentsTheme.colors.embedBackground,
         activeCardBackground: styledComponentsTheme.colors.activeCardBackground,
         lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,

@@ -19,7 +19,7 @@ import {
   useMentionSearch,
 } from '@akashaproject/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { AnalyticsCategories, TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -262,7 +262,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const handleEditComment = commentData => {
     if (trackEvent) {
       trackEvent({
-        category: 'Reply',
+        category: AnalyticsCategories.REPLY,
         action: 'Edit',
       });
     }

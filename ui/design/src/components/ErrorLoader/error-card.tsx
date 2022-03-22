@@ -39,7 +39,7 @@ const ErrorCard: React.FC<ErrorLoaderProps & { imageSrc: string }> = props => {
   const message = details ?? devDetails;
 
   return (
-    <StyledErrorCard style={props.style}>
+    <StyledErrorCard style={props.style} noBorder={props.noBorder}>
       <Box>
         <StyledImage src={props.imageSrc} />
       </Box>

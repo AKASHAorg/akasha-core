@@ -2,67 +2,67 @@
   {
     "name": "locales",
     "id": "0xc914c9efa3dec03f54e57a7f5956218306e3c1e620da9bbb91372dfea24eecdd",
-    "ipfsManifest": "f0155171c38c8213901276d6c66dd60befd9cfab715d2c64e02984f687ae385ba",
+    "ipfsManifest": "f0155171c24340fe9cb6824ab0b64e129729c1dcb07e7f9a931449bbe6b73694e",
     "type": ""
   },
   {
     "name": "@akashaproject/app-akasha-integration",
     "id": "0x8699cb72f66608f779b90294ec6a20b251558568aad35bd2ee72603ffe7b6b83",
-    "ipfsManifest": "f0155171cf8ea27f6d11725e3ca7e9b84bfc3f6ef9b9429b0851d233c9f3872f9",
+    "ipfsManifest": "f0155171c7024106df4e6c1fa96c41576ad2c70424357a130c3a3d5420bf44d07",
     "type": 0
   },
   {
     "name": "@akashaproject/app-auth-ewa",
     "id": "0xdf3bffeba75126c5886d1a2e7a372970bfb9379b2bc9816477b108321d7016df",
-    "ipfsManifest": "f0155171c89c4dfbc1062def4c87e3d815177584675378b50c89221d44c5fe79f",
+    "ipfsManifest": "f0155171c8d9529048151249c0f3fb989222bbe86907c99a79832c227c9bb21f9",
     "type": 0
   },
   {
     "name": "@akashaproject/app-moderation-ewa",
     "id": "0xa3a248cf60b34be9286c7a3b72ba90e98bd40baac6e18d30219fd6cccb439cf6",
-    "ipfsManifest": "f0155171c3cd2025fc0e79e3ca86c0a3fd9ad262657dd8f1a2a56258cfb0fff8b",
+    "ipfsManifest": "f0155171c14755e1282d5887c9e2513e06f0949b91d6ee70df75642a0c9a7e353",
     "type": 0
   },
   {
     "name": "@akashaproject/app-integration-center",
     "id": "0xc043185f76b0f9dbe17fe1e7501732960a1b2f4b2580ea163c55c8c882f6f9bd",
-    "ipfsManifest": "f0155171c5606acc11463e1ad66097224d07f2868942c2e97ce4c6474dc26b200",
+    "ipfsManifest": "f0155171c6459862077a8285e270d99373ad7e99c1f6c5e46026bad76a312498e",
     "type": 0
   },
   {
     "name": "@akashaproject/app-bookmarks",
     "id": "0x7c358962114872262bb341384016ad0bd30ef84ee0729f4b6e901f13a29799ca",
-    "ipfsManifest": "f0155171c8548fe9a6c335ffadc40941d7fe625543c1a312e99389ac562b28415",
+    "ipfsManifest": "f0155171cb3dd39aa993bc02ea18ef5590e4d8e47fef1d7765918e532954f3548",
     "type": 0
   },
   {
     "name": "@akashaproject/app-legal",
     "id": "0x85c848f515bc7d0e1c2b585314df40928c3bd17a7016d07c49423f4a429287fb",
-    "ipfsManifest": "f0155171cdcd96bc9cabb4dd97b865fc8eb168d2a0fe322fff6aaa44ac8faa4dd",
+    "ipfsManifest": "f0155171c8e2687fcd413b94fa2c1ab39427cd6689236f98289239d8e1a57b9cb",
     "type": 0
   },
   {
     "name": "@akashaproject/app-notifications",
     "id": "0xafd49f21aa8f6cc0278036cc6d69643c6b8aa1fec2e497d44902cc13a27c1ea4",
-    "ipfsManifest": "f0155171c86ce07091d8a42ad342d29c377057ff294da04770697138879830417",
+    "ipfsManifest": "f0155171cff6a946044379c09a090968b2885f18ca93559716ad02d557e184134",
     "type": 0
   },
   {
     "name": "@akashaproject/app-profile",
     "id": "0x086878e2e9a9340b2ba93c1bb79699e54fbab20f669cda35e36ec91221a4fbb6",
-    "ipfsManifest": "f0155171ce597c3080136198709bcb5421d5385f5dc554800c19eace3cdbd2a51",
+    "ipfsManifest": "f0155171cdc8514dc632e7778994e7016c49bf93a0c0fe77ae1d8350805696220",
     "type": 0
   },
   {
     "name": "@akashaproject/app-search",
     "id": "0xded636163ee57d4fb1f1a5761b9baaae52b4b85fb7f6827c28a0fdaf5dbb2f7f",
-    "ipfsManifest": "f0155171c4335b8633e49ddbec35f32c0de8b15946ad913fe15e0a75d3ac16571",
+    "ipfsManifest": "f0155171cebd693be075e3f795d30927bc5e5f169938cc76aebbb37aeb25f0a56",
     "type": 0
   },
   {
     "name": "@akashaproject/app-settings-ewa",
     "id": "0xa164ea08eca5aff06c24e88807ea347431a4634b994c66c808f19b11cd5a43fa",
-    "ipfsManifest": "f0155171c41b6c73020f0bab08c17059ed611b67fbbc7c2f56468a02b92756eba",
+    "ipfsManifest": "f0155171c867a79bf2f013728cefb883d8a3944021815494c986546b6744514b9",
     "type": 0
   },
   {
@@ -72,21 +72,27 @@
     "type": 0
   },
   {
+    "name": "@akashaproject/app-routing",
+    "id": "0x6d296af6c8a30849bc018dd1301b84ec04ebf5dbaf7e90940b5be01d14d60fcb",
+    "ipfsManifest": "f0155171c4990d38f0862d12bbe1320f76b108c823e21d50d321693519382d6fa",
+    "type": 0
+  },
+  {
     "name": "@akashaproject/ui-widget-layout",
     "id": "0xab1b9d6f87dcaa5c3f1899e446c1d47cdf0463fb38d38f9824e48a9e04837748",
-    "ipfsManifest": "f0155171c938b17e18438d50e69576f403b298903735448603f75acd925d2f85b",
+    "ipfsManifest": "f0155171c9f9ce1c6f27e5caa4609f9ee31d64ec6210590f8d9bf23af4fe37712",
     "type": 2
   },
   {
     "name": "@akashaproject/ui-widget-sidebar",
     "id": "0xfba190b3ed6c4b51548ee6d7b3584b5a21d8cc33698b484ce4755d7b17c26efa",
-    "ipfsManifest": "f0155171c4d17741fa07081c985e2390c26dc0dcbc10417d8171473dd0a0faa16",
+    "ipfsManifest": "f0155171cb933374d53f8bb271afefd8d43c2bf270341fb88434446e1afc6b253",
     "type": 2
   },
   {
     "name": "@akashaproject/ui-widget-topbar",
     "id": "0x9208e9c4eb9945ff7b7c00ad2f63d3230755a1cb1cf87336eb18f3f9b5338c40",
-    "ipfsManifest": "f0155171cd19d8500cf7e023ce287774e29f2692d2ad883f557d4b8fac8407adc",
+    "ipfsManifest": "f0155171c7b537c3d02b52d5a909e9f737a6e27be5ba1149b77eb29798f90f4ff",
     "type": 2
   },
   {

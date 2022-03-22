@@ -3,7 +3,7 @@ import { useGetAllInstalledApps, useGetIntegrationsInfo } from '@akashaproject/u
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
 import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import routes, { INFO } from '../../routes';
+import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader, Spinner } = DS;
 
@@ -40,7 +40,10 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
   );
 
   const handleAppClick = (app: IntegrationInfo) => {
-    props.navigateTo(`${routes[INFO]}/${app.id}`);
+    props.plugins.routing?.navigateTo?.({
+      appName: '@akashaproject/app-integration-center',
+      getNavigationUrl: routes => `${routes[INFO]}/${app.id}`,
+    });
   };
 
   return (
@@ -126,6 +129,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               type="no-login"
               title={t('You have no installed apps')}
               details={t('Try some out for extra functionality!')}
+              noBorder={true}
             />
           )}
         </Box>

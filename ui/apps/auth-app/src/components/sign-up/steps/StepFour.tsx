@@ -1,12 +1,14 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { useCheckSignup, useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
 import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
+import { useAnalytics } from '@akashaproject/ui-awf-hooks';
 
 import { StyledButton, StyledBox } from './styles';
-import { useTranslation } from 'react-i18next';
 import routes, { SIGN_IN } from '../../../routes';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { Box, Text, WalletRequestStep, Icon, CTAAnchor } = DS;
 
@@ -130,8 +132,12 @@ const StepFour: React.FC<IStepFourProps> = props => {
     provider,
     requiredNetworkName,
   } = props;
-  const { ethAddress, connectWallet, signUpState, error, fireRemainingMessages } =
-    useSignUp(provider);
+  const [analyticsActions] = useAnalytics();
+  const { ethAddress, connectWallet, signUpState, error, fireRemainingMessages } = useSignUp(
+    provider,
+    false,
+    analyticsActions,
+  );
   const checkSignupQuery = useCheckSignup(ethAddress);
   const [suggestSignIn, setSuggestSignIn] = React.useState(false);
 
@@ -158,6 +164,14 @@ const StepFour: React.FC<IStepFourProps> = props => {
         : tRef.current('An unknown error has occurred. Please refresh the page and try again.');
     }
   }, [error, requiredNetworkName]);
+
+  const handleButtonClick = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP_WALLET,
+      action: 'Step 4 Completed',
+    });
+    onButtonClick();
+  };
 
   if (suggestSignIn) {
     return (
@@ -249,7 +263,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
             <StyledButton
               icon={<Icon type="arrowRight" color="white" />}
               label={buttonLabel}
-              onClick={onButtonClick}
+              onClick={handleButtonClick}
               primary
               reverse
             />

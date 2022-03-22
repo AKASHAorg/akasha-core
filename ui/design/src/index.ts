@@ -21,6 +21,7 @@ import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
 import Autosizer from 'react-virtualized-auto-sizer';
 
 import Avatar from './components/Avatar';
+import AppAvatar from './components/AppAvatar';
 import EditableAvatar from './components/EditableAvatar';
 
 import Sidebar from './components/SideBar';
@@ -74,7 +75,6 @@ import ICWidgetCard from './components/ICWidgetCard';
 import LoginCTAWidgetCard, { CTAAnchor } from './components/LoginCTAWidgetCard';
 import SourcesWidgetCard from './components/SourcesWidgetCard';
 import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
-import TopicsWidgetCard from './components/TopicsWidgetCard';
 import TrendingWidgetCard from './components/TrendingWidgetCard';
 import TutorialWidgetCard from './components/TutorialWidgetCard';
 import SignUpCard from './components/SignUpCard';
@@ -134,10 +134,10 @@ import ProfileCompletedModal from './components/ProfileCompletedModal';
 import FeedbackModal from './components/FeedbackModal';
 import ConfirmationModal from './components/ConfirmationModal';
 import StatModal from './components/StatModal';
+import InstallModal from './components/InstallModal';
 
 import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';
-import { Notification, notify } from './components/NotificationToast';
 
 import NotificationsPopover from './components/NotificationsPopover';
 import SelectPopover from './components/SelectPopover';
@@ -177,6 +177,7 @@ export { BoxExtendedProps, ButtonExtendedProps };
 const exported = {
   Autosizer,
   Avatar,
+  AppAvatar,
   AppIcon,
   AreaChart,
   LineChart,
@@ -217,7 +218,6 @@ const exported = {
   ProfileWidgetCard,
   ProfileMiniCard,
   TextInputField,
-  TopicsWidgetCard,
   TagCard,
   TagDetailCard,
   TagProfileCard,
@@ -286,9 +286,7 @@ const exported = {
   ModalContainer,
   ModalRenderer,
   MenuItemButton,
-  Notification,
   NotificationsCard,
-  notify,
   HorizontalDivider,
   StepIndicator,
   CookieWidgetCard,
@@ -317,6 +315,7 @@ const exported = {
   Checkbox,
   WalletRequestStep,
   WelcomeCard,
+  InstallModal,
 };
 
 export default exported;

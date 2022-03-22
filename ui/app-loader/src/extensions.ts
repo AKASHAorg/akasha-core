@@ -1,6 +1,5 @@
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import {
-  combineLatest,
   filter,
   from,
   map,
@@ -8,21 +7,13 @@ import {
   mergeMap,
   Observable,
   of,
-  pairwise,
-  switchMap,
   tap,
   toArray,
   withLatestFrom,
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { getStateSlice, LoaderState } from './state';
-import {
-  checkActivityFn,
-  createRootNode,
-  navigateTo,
-  navigateToModal,
-  parseQueryString,
-} from './utils';
+import { checkActivityFn, createRootNode, navigateToModal, parseQueryString } from './utils';
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaproject/awf-sdk';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
@@ -178,7 +169,6 @@ export const mountMatchingExtensionParcels = (opts: {
         activeModal: state.activeModal,
         logger: extLogger,
         extensionData: extInfo.extData,
-        navigateTo: navigateTo(state.integrationConfigs, extLogger),
         parseQueryString: parseQueryString,
         plugins: state.plugins,
       };

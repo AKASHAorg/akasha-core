@@ -1,9 +1,9 @@
+import { LogoTypeSource, IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
 import {
   IMenuItem,
   MenuItemType,
   MenuItemAreaType,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LogoTypeSource, IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
 
 import { IAppData } from '../components/AppsWidgetCard';
 
@@ -28,36 +28,101 @@ const userData: { ethAddress: string; avatar?: string }[] = [
 
 const installedAppsData: IMenuItem[] = [
   {
-    label: 'AKASHA Feed',
+    label: 'Feed',
     index: 1,
-    route: '/',
-    type: MenuItemType.Plugin,
-    logo: { type: LogoTypeSource.ICON, value: 'appFeed' },
-    area: MenuItemAreaType.AppArea,
+    route: '/social-app/feed',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.ICON, value: 'appSocial' },
+    subRoutes: [
+      {
+        index: 0,
+        label: 'My Feed',
+        route: '/social-app/feed/?filter=personal',
+        type: MenuItemType.Internal,
+      },
+      { index: 1, label: 'General', route: '/social-app/feed', type: MenuItemType.Internal },
+    ],
+    area: [MenuItemAreaType.AppArea],
   },
   {
-    label: 'ENS',
+    label: 'Moderating',
     index: 3,
-    route: '/ens-app',
+    route: '/moderation-app',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'appEns' },
-    subRoutes: [
-      { index: 0, label: 'Edit', route: '/ens-app/edit', type: MenuItemType.Internal },
-      { index: 1, label: 'Settings', route: '/ens-app/settings', type: MenuItemType.Internal },
-    ],
-    area: MenuItemAreaType.AppArea,
+    logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
+    area: [MenuItemAreaType.AppArea],
   },
   {
-    label: '3box integration',
+    label: 'Integration Center',
     index: 4,
-    route: '/3box-app',
+    route: '/integration-app',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'app3Box' },
+    logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
+    area: [MenuItemAreaType.AppArea],
+  },
+  {
+    label: 'Search',
+    index: 8,
+    route: '/social-app/search',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.ICON, value: 'search' },
+    area: [MenuItemAreaType.AppArea],
+  },
+  {
+    label: 'Notification',
+    index: 9,
+    route: '/social-app/notifications',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.ICON, value: 'notifications' },
+    area: [MenuItemAreaType.AppArea],
+  },
+  {
+    label: 'Bookmarks',
+    index: 10,
+    route: '/social-app/bookmarks',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.ICON, value: 'bookmark' },
+    area: [MenuItemAreaType.AppArea],
+  },
+  {
+    label: 'Baker Swap',
+    index: 11,
+    route: '/apps/baker-swap',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.String, value: undefined },
     subRoutes: [
-      { index: 0, label: 'Edit', route: '/3box-app/edit', type: MenuItemType.Internal },
-      { index: 1, label: 'Settings', route: '/3box-app/settings', type: MenuItemType.Internal },
+      { index: 0, label: 'Trade', route: '/apps/baker-swap/trade', type: MenuItemType.Internal },
+      {
+        index: 1,
+        label: 'Market Place',
+        route: '/apps/baker-swap/home',
+        type: MenuItemType.Internal,
+      },
+      {
+        index: 2,
+        label: 'Featured Artist',
+        route: '/apps/baker-swap/featured?filter=artists',
+        type: MenuItemType.Internal,
+      },
+      { index: 3, label: 'Assets', route: '/apps/baker-swap/assets', type: MenuItemType.Internal },
     ],
-    area: MenuItemAreaType.AppArea,
+    area: [MenuItemAreaType.UserAppArea],
+  },
+  {
+    label: 'Image Editor',
+    index: 12,
+    route: '/apps/image-editor',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.String, value: undefined },
+    area: [MenuItemAreaType.UserAppArea],
+  },
+  {
+    label: 'Appreciation',
+    index: 13,
+    route: '/apps/appreciation',
+    type: MenuItemType.App,
+    logo: { type: LogoTypeSource.String, value: 'https://placebeard.it/360x360' },
+    area: [MenuItemAreaType.UserAppArea],
   },
   {
     label: 'AKASHA Profile',
@@ -69,7 +134,7 @@ const installedAppsData: IMenuItem[] = [
       { index: 0, label: 'Profile list', route: '/profile/list', type: MenuItemType.Internal },
       { index: 1, label: 'My profile', route: '/profile/my-profile', type: MenuItemType.Internal },
     ],
-    area: MenuItemAreaType.QuickAccessArea,
+    area: [MenuItemAreaType.QuickAccessArea],
   },
   {
     label: 'Search',
@@ -77,7 +142,8 @@ const installedAppsData: IMenuItem[] = [
     route: '/search',
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'searchApp' },
-    area: MenuItemAreaType.SearchArea,
+    area: [MenuItemAreaType.SearchArea],
+    subRoutes: [],
   },
   {
     label: 'Notifications',
@@ -85,7 +151,8 @@ const installedAppsData: IMenuItem[] = [
     route: '/notifications',
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'notifications' },
-    area: MenuItemAreaType.QuickAccessArea,
+    area: [MenuItemAreaType.QuickAccessArea],
+    subRoutes: [],
   },
   {
     label: 'App Center',
@@ -93,7 +160,8 @@ const installedAppsData: IMenuItem[] = [
     route: '/appcenter',
     type: MenuItemType.Plugin,
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
-    area: MenuItemAreaType.BottomArea,
+    area: [MenuItemAreaType.BottomArea],
+    subRoutes: [],
   },
 ];
 

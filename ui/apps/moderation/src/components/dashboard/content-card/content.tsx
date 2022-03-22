@@ -136,7 +136,7 @@ const Content: React.FC<IContentProps> = props => {
             {props.reporterENSName && (
               <Text
                 margin={{ right: '0.2rem' }}
-                color={!props.isPending ? 'secondaryText' : 'initial'}
+                color={!props.isPending ? 'secondaryText' : 'primaryText'}
               >
                 {`(@${props.reporterENSName})`}
               </Text>

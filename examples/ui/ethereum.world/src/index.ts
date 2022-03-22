@@ -32,6 +32,7 @@ declare const __DEV__: boolean;
       '@akashaproject/app-notifications',
       '@akashaproject/app-legal',
       '@akashaproject/app-translation',
+      '@akashaproject/app-routing',
       // '@akashaproject/app-bookmarks',
     ],
     // pre-installed widgets;
@@ -40,7 +41,7 @@ declare const __DEV__: boolean;
       '@akashaproject/ui-widget-topbar',
       '@akashaproject/ui-widget-trending',
       '@akashaproject/ui-widget-analytics',
-      // '@akashaproject/ui-widget-sidebar',
+      '@akashaproject/ui-widget-sidebar',
     ],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,

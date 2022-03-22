@@ -1,4 +1,4 @@
-import { AccordionPanel, Box, Text } from 'grommet';
+import { AccordionPanel } from 'grommet';
 import styled, { css } from 'styled-components';
 
 const StyledHiddenScrollContainer = styled.div`
@@ -42,27 +42,13 @@ const StyledAppIconWrapper = styled.div<{ active: boolean; hovered?: boolean }>`
   }}
 `;
 
-const StyledAppOptionBox = styled(Box)<{ active: boolean }>`
-  background-color: ${props => props.theme.colors.background};
-  ${props => {
-    if (props.active) {
-      return css`
-        border-left: 2px solid ${props.theme.colors.accent};
-      `;
-    }
-    return css`
-      border-left: 1px solid ${props.theme.colors.border};
-    `;
-  }}
-`;
-
-const StyledMobileFooterBox = styled(Box)``;
-
-const StyledText = styled(Text)`
-  cursor: pointer;
-`;
-
-const StyledAccordionPanel = styled(AccordionPanel)<{ size?: string }>`
+const StyledAccordionPanel = styled(AccordionPanel)<{
+  size?: string;
+  hasChevron?: boolean;
+}>`
+  &:hover {
+    background-color: ${props => props.theme.colors.lightBackground};
+  }
   ${props => {
     if (props.size === 'small') {
       return;
@@ -70,13 +56,17 @@ const StyledAccordionPanel = styled(AccordionPanel)<{ size?: string }>`
     return css`
       div:nth-child(2) {
         svg {
-          stroke: ${props.theme.colors.background};
+          stroke: ${props.hasChevron
+            ? props.theme.colors.primaryText
+            : props.theme.colors.background};
         }
       }
       &:hover {
         div:nth-child(2) {
           svg {
-            stroke: ${props.theme.colors.border};
+            stroke: ${props.hasChevron
+              ? props.theme.colors.accent
+              : props.theme.colors.lightBackground};
           }
         }
       }
@@ -88,9 +78,6 @@ export {
   StyledHiddenScrollContainer,
   StyledFooter,
   StyledAppIconWrapper,
-  StyledAppOptionBox,
-  StyledMobileFooterBox,
   StyledMobileHRDiv,
-  StyledText,
   StyledAccordionPanel,
 };

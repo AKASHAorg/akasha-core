@@ -15,6 +15,7 @@ export interface IColors {
   secondaryText: string;
   errorText: string;
   darkText: string;
+  inputText: string;
   background: string;
   beigeBackground: string;
   ultraLightBackground: string;
@@ -25,7 +26,11 @@ export interface IColors {
   modalBackgroundAlt: string;
   modalBackgroundTransparent: string;
   hoverBackground: string;
+  skeletonBackground: string;
   inputBackground: string;
+  coverImageBackground: string;
+  embedBackground: string;
+  textBackground: string;
   btnAccentColor: string;
   accent: string;
   accentOpacity: string;
@@ -36,7 +41,10 @@ export interface IColors {
   darkerBorder: string;
   secondary: string;
   secondaryOpacity: string;
-  shadow: string;
+  elevationLow: string;
+  elevationMedium: string;
+  elevationHigh: string;
   disabledText: string;
+  subtitleText: string;
   activeCardBackground: string;
 }

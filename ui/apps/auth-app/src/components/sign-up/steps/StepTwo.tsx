@@ -1,5 +1,8 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
+import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+
 import { StyledBox, StyledButton, CheckBoxWrap } from './styles';
 
 const { Text, Icon, CTAAnchor, Checkbox } = DS;
@@ -44,6 +47,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
     buttonLabel,
     onButtonClick,
   } = props;
+  const [analyticsActions] = useAnalytics();
 
   const [checked, setChecked] = React.useState({
     [TERMS]: false,
@@ -55,6 +59,10 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
 
   const handleClick = () => {
     localStorage.setItem('@acceptedTermsAndPrivacy', new Date().toISOString());
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP,
+      action: 'Terms Accepted',
+    });
     onButtonClick();
   };
 

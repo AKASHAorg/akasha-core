@@ -12,6 +12,7 @@ import {
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { ConfirmationModal, ModalContainer, ErrorLoader } = DS;
 
@@ -31,13 +32,13 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
     if (activeModal && typeof activeModal.entryType === 'number') {
       if (activeModal.entryType === ItemTypes.COMMENT) {
         analyticsActions.trackEvent({
-          category: 'Reply',
+          category: AnalyticsCategories.REPLY,
           action: 'Delete',
         });
         commentDeleteQuery.mutate(activeModal.entryId);
       } else if (activeModal.entryType === ItemTypes.ENTRY) {
         analyticsActions.trackEvent({
-          category: 'Post',
+          category: AnalyticsCategories.POST,
           action: 'Delete',
         });
         postDeleteQuery.mutate(activeModal.entryId);
@@ -99,7 +100,11 @@ const reactLifecycles = singleSpaReact({
     return (
       <ThemeWrapper {...props}>
         <ModalContainer>
-          <ErrorLoader type="script-error" title="Error in editor modal" details={err.message} />
+          <ErrorLoader
+            type="script-error"
+            title="Error in entry remove modal"
+            details={err.message}
+          />
         </ModalContainer>
       </ThemeWrapper>
     );

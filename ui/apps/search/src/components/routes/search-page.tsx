@@ -18,9 +18,11 @@ import {
   useSearchTags,
   LoginState,
   useHandleNavigation,
+  useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -51,6 +53,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const { singleSpa, loginState, showLoginModal } = props;
   const { searchKeyword } = useParams<{ searchKeyword: string }>();
 
+  const [analyticsActions] = useAnalytics();
   const { t, i18n } = useTranslation('app-search');
   const locale = (i18n.languages[0] || 'en') as ILocale;
 
@@ -94,11 +97,16 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
-  const handleTagSubscribe = (tagName: string) => {
+  const handleTagSubscribe = (subscribe: boolean) => (tagName: string) => {
     if (!loginState?.ethAddress) {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.TRENDING_TOPIC,
+      action: subscribe ? 'Subscribe' : 'Unsubscribe',
+      name: subscribe ? 'Subscribed Topic From Feed' : 'Unsubscribed Topic From Feed',
+    });
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
@@ -110,6 +118,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.PEOPLE,
+      action: 'Subscribe',
+      name: 'Feed',
+    });
     followReq.mutate(ethAddress);
   };
 
@@ -127,6 +140,11 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       showLoginModal();
       return;
     }
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.PEOPLE,
+      action: 'Unsubscribe',
+      name: 'Feed',
+    });
     unfollowReq.mutate(ethAddress);
   };
 
@@ -150,7 +168,16 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     searchCommentsState?.length === 0 &&
     searchTagsState?.length === 0;
 
-  const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
+  const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.ALL);
+
+  React.useEffect(() => {
+    if (activeButton !== ButtonValues.ALL) {
+      analyticsActions.trackEvent({
+        category: AnalyticsCategories.FILTER_SEARCH,
+        action: `By ${activeButton}`,
+      });
+    }
+  }, [activeButton]);
 
   const buttonValues = [
     {
@@ -175,7 +202,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     },
   ];
 
-  const onTabClick = (value: string) => () => {
+  const onTabClick = (value: ButtonValues) => () => {
     setActiveButton(value);
   };
 
@@ -316,8 +343,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 unsubscribeLabel={t('Unsubscribe')}
                 tagAnchorLink={'/social-app/tags'}
                 onClickTag={() => handleTagClick(tag.name)}
-                handleSubscribeTag={handleTagSubscribe}
-                handleUnsubscribeTag={handleTagSubscribe}
+                handleSubscribeTag={handleTagSubscribe(true)}
+                handleUnsubscribeTag={handleTagSubscribe(false)}
               />
             </Box>
           ))}

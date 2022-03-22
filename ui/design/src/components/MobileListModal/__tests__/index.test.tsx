@@ -6,6 +6,20 @@ import MobileListModal from '../';
 
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
+const modalSlot = 'modal-slot';
+
+const prepPortalMock = () => {
+  const modalRoot = global.document.createElement('div');
+  modalRoot.setAttribute('id', modalSlot);
+  const body = global.document.querySelector('body');
+  body.appendChild(modalRoot);
+};
+
+const teardownPortalMock = () => {
+  const body = global.document.querySelector('body');
+  body.removeChild(global.document.getElementById(modalSlot));
+};
+
 describe('<MobileListModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
@@ -28,9 +42,17 @@ describe('<MobileListModal /> Component', () => {
 
   beforeEach(() => {
     act(() => {
+      prepPortalMock();
       componentWrapper = customRender(
         wrapWithTheme(
-          <MobileListModal menuItems={menuItems} closeModal={handleCloseModal} modalSlotId={''} />,
+          <>
+            <MobileListModal
+              menuItems={menuItems}
+              closeModal={handleCloseModal}
+              modalSlotId={modalSlot}
+              cancelLabel={'test'}
+            />
+          </>,
         ),
         {},
       );
@@ -38,7 +60,10 @@ describe('<MobileListModal /> Component', () => {
   });
 
   afterEach(() => {
-    act(() => componentWrapper.unmount());
+    act(() => {
+      teardownPortalMock();
+      componentWrapper.unmount();
+    });
     cleanup();
   });
 

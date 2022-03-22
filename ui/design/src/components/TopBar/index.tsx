@@ -139,7 +139,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const iconSize = isMobileOnly ? 'md' : 'sm';
 
   React.useEffect(() => {
-    const legal = otherAreaItems?.find(menuItem => menuItem.name === 'app-legal');
+    const legal = otherAreaItems?.find(menuItem => menuItem.name === '@akashaproject/app-legal');
     if (legal && legal.subRoutes?.length) {
       setLegalMenu(legal);
     }
@@ -216,7 +216,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   );
 
   const renderPluginIcon = (menuItem: IMenuItem) => {
-    if (menuItem.name === 'app-notifications') {
+    if (menuItem.name === '@akashaproject/app-notifications') {
       return (
         <IconDiv
           onClick={onClickPluginButton(menuItem)}

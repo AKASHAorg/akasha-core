@@ -47,7 +47,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   <StyledBox
     style={style}
     direction="column"
-    elevation={elevation || 'shadow'}
+    elevation={noBorder ? 'none' : elevation || 'shadow'}
     fill="horizontal"
     pad={pad || 'none'}
     margin={margin || 'none'}

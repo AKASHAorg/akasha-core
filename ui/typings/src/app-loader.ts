@@ -1,4 +1,4 @@
-import { LogoSourceType, RootComponentProps } from './index';
+import { LogoSourceType, RootComponentProps, ValueOf } from './index';
 
 export type ActivityFn = (
   location: Location,
@@ -122,10 +122,10 @@ export interface IAppConfig {
    * Only used for topbar.
    * @deprecated - use extension points
    */
-  menuItems?: IMenuItem;
+  menuItems: IMenuItem;
 }
 
-export type IWidgetConfig = Omit<IAppConfig, 'routes'>;
+export type IWidgetConfig = Omit<IAppConfig, 'routes' | 'menuItems'>;
 
 export enum LogLevels {
   FATAL = 'fatal',
@@ -178,10 +178,6 @@ export interface ILoaderConfig {
    */
   defaultWidgets: string[];
   /**
-   * Plugins that are installed by default on this world.
-   */
-  defaultPlugins?: string[];
-  /**
    * The layout widget of this world. This widget always mounts in the root element.
    */
   layout: string;
@@ -215,6 +211,8 @@ export enum MenuItemType {
 
 export enum MenuItemAreaType {
   AppArea = 'app-area', // body of sidebar
+  UserAppArea = 'user-app-area', // user installed app area of sidebar
+  UserWidgetArea = 'user-widget-area', // user installed widget area of sidebar
   QuickAccessArea = 'quick-access-area', // right of topbar
   BottomArea = 'bottom-area', // footer of sidebar
   SearchArea = 'search-area', // middle of topbar
@@ -226,7 +224,7 @@ export interface IMenuItem {
   label: string;
   route: string;
   type?: MenuItemType;
-  area?: MenuItemAreaType; // area is optional because subroutes dont have an area to be mounted
+  area?: ValueOf<MenuItemAreaType>[]; // area is optional because subroutes dont have an area to be mounted
   logo?: LogoSourceType;
   name?: string;
   subRoutes?: IMenuItem[];
@@ -240,6 +238,7 @@ export interface IMenuList {
 export enum EventTypes {
   Instantiated = 'instantiated',
   InstallIntegration = 'install-integration',
+  RegisterIntegration = 'register-integration',
   UninstallIntegration = 'uninstall-integration',
   ExtensionPointMount = 'extension-point-mount',
   ExtensionPointMountRequest = 'extension-point-mount-request',
@@ -273,6 +272,8 @@ export type EventDataTypes = {
   version?: string;
   entryId?: string;
   entryType?: ItemTypes;
+  menuItems?: IMenuItem;
+  navRoutes?: Record<string, string>;
 };
 
 export const enum ItemTypes {
