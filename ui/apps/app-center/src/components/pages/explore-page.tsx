@@ -4,6 +4,8 @@ import {
   useGetIntegrationsInfo,
   useGetLogin,
   useGetAllInstalledApps,
+  useGetAllIntegrationsIds,
+  useUninstallApp,
 } from '@akashaproject/ui-awf-hooks';
 import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
@@ -22,16 +24,31 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
     return !!loginQuery.data.pubKey;
   }, [loginQuery.data]);
 
-  const defaultAppsNamesNormalized = worldConfig?.defaultApps.map(app => {
-    if (typeof app === 'string') {
-      return {
-        name: app,
-      };
-    }
-    return app;
-  });
+  const uninstallAppReq = useUninstallApp();
 
-  const integrationsInfoReq = useGetIntegrationsInfo(defaultAppsNamesNormalized);
+  const availableIntegrationsReq = useGetAllIntegrationsIds();
+
+  const defaultIntegrations = [].concat(
+    worldConfig.defaultApps,
+    worldConfig.defaultWidgets,
+    [worldConfig.homepageApp],
+    [worldConfig.layout],
+  );
+
+  const integrationIdsNormalized = availableIntegrationsReq?.data?.integrationIds.map(
+    integrationId => {
+      return { id: integrationId };
+    },
+  );
+
+  const integrationsInfoReq = useGetIntegrationsInfo(integrationIdsNormalized);
+
+  const installableApps = integrationsInfoReq.data?.getIntegrationInfo?.filter(appInfo => {
+    if (defaultIntegrations?.includes(appInfo.name)) {
+      return null;
+    }
+    return appInfo;
+  });
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
@@ -42,12 +59,15 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleAppInstall = () => {
-    return;
+  const handleAppInstall = (integrationName: string) => {
+    props.navigateToModal({
+      name: 'install-modal',
+      integrationName: integrationName,
+    });
   };
 
-  const handleAppUninstall = () => {
-    return;
+  const handleAppUninstall = (integrationName: string) => {
+    uninstallAppReq.mutate(integrationName);
   };
 
   return (
@@ -65,8 +85,8 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
           <Spinner />
         </Box>
       )}
-      {integrationsInfoReq.data?.getIntegrationInfo?.map((app, index) => (
-        <Box key={index} direction="row" justify="between">
+      {installableApps?.map((app, index) => (
+        <Box key={index} direction="row" justify="between" align="center">
           <SubtitleTextIcon
             label={app.name}
             subtitle={app.id}
@@ -75,19 +95,15 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
             onClick={() => handleAppClick(app)}
             backgroundColor={true}
           />
-          {app.enabled ? (
-            <Icon type="checkSimple" accentColor={true} size="md" />
-          ) : (
-            <DuplexButton
-              icon={<Icon type="arrowDown" />}
-              active={installedAppsReq.data?.includes(app.id)}
-              activeLabel={t('Installed')}
-              inactiveLabel={t('Install')}
-              activeHoverLabel={t('Uninstall')}
-              onClickActive={handleAppUninstall}
-              onClickInactive={handleAppInstall}
-            />
-          )}
+          <DuplexButton
+            icon={<Icon type="arrowDown" />}
+            active={installedAppsReq.data?.some(installedApp => installedApp.id === app.id)}
+            activeLabel={t('Installed')}
+            inactiveLabel={t('Install')}
+            activeHoverLabel={t('Uninstall')}
+            onClickActive={() => handleAppUninstall(app.name)}
+            onClickInactive={() => handleAppInstall(app.name)}
+          />
         </Box>
       ))}
     </Box>

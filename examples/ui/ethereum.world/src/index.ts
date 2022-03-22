@@ -41,7 +41,7 @@ declare const __DEV__: boolean;
       '@akashaproject/ui-widget-topbar',
       '@akashaproject/ui-widget-trending',
       '@akashaproject/ui-widget-analytics',
-      // '@akashaproject/ui-widget-sidebar',
+      '@akashaproject/ui-widget-sidebar',
     ],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,

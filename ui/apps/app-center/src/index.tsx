@@ -39,5 +39,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
       loadingFn: () => import('./extensions/integrations-widget'),
     },
+    {
+      mountsIn: 'install-modal',
+      loadingFn: () => import('./extensions/install-modal'),
+    },
   ],
 });
