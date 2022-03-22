@@ -52,6 +52,7 @@
     "push:integations": "node build/integrations_bucket_store.js"
   },
   "devDependencies": {
+    "@angular-devkit/schematics": "13.3.0",
     "@babel/core": "7.15.5",
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
     "@babel/plugin-transform-runtime": "7.15.0",

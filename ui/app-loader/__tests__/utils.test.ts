@@ -1,5 +1,5 @@
 import { IAppConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { from, mergeMap } from 'rxjs';
+import { mergeMap } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { getModalFromParams, checkActivityFn } from '../src/utils';
 import * as singleSpa from 'single-spa';
@@ -12,12 +12,17 @@ describe('[AppLoader] utils/getModalFromParams', () => {
     });
   });
   it('should return name and params if available', () => {
-    const searches = ['', '?modal[name]=login', '?modal[name]=login&modal[param1]=value1'];
-    scheduler.run(({ expectObservable }) => {
-      const input$ = from(searches).pipe(
+    const marbles = 'a-b-c|';
+    const searches = {
+      a: '',
+      b: '?modal[name]=login',
+      c: '?modal[name]=login&modal[param1]=value1',
+    };
+    scheduler.run(({ expectObservable, cold }) => {
+      const input$ = cold(marbles, searches).pipe(
         mergeMap(search => getModalFromParams({ search } as Location)()),
       );
-      const expectedMarble = '(abc|)';
+      const expectedMarble = 'a-b-c|';
       const expectedValues = {
         a: { name: null },
         b: { name: 'login' },

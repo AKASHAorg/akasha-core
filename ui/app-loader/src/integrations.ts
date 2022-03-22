@@ -23,6 +23,8 @@ import {
   toArray,
   concatMap,
   share,
+  combineLatestWith,
+  exhaustAll,
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
@@ -98,7 +100,6 @@ const extractExtensionsFromApps = (
 ) => {
   return from(config.extends)
     .pipe(
-      tap(ext => console.log('extracting', ext)),
       withLatestFrom(
         combineLatest({
           extensionsByParent: state$.pipe(getStateSlice('extensionsByParent')),
@@ -394,25 +395,21 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
         return null;
       }),
       filter(Boolean),
-      withLatestFrom(state$.pipe(getStateSlice('manifests'))),
-      tap(([uninstalled, manifests]) => {
-        pipelineEvents.next({
-          manifests: manifests.filter(man => man.name === uninstalled.name),
-        });
-      }),
-      map(([uninstalled]) => uninstalled),
-      withLatestFrom(
-        combineLatest({
-          integrationConfigs: state$.pipe(getStateSlice('integrationConfigs')),
-          extensionParcels: state$.pipe(getStateSlice('extensionParcels')),
-        }),
+      combineLatestWith(
+        state$.pipe(getStateSlice('integrationConfigs')),
+        state$.pipe(getStateSlice('extensionParcels')),
       ),
+      map(([uninstalledApp, integrationConfigs, extensionParcels]) => ({
+        uninstalledApp,
+        integrationConfigs,
+        extensionParcels,
+      })),
     )
     .pipe(
-      mergeMap(([uninstalledApp, props]) => {
-        const { integrationConfigs, extensionParcels } = props;
+      mergeMap(props => {
+        const { integrationConfigs, extensionParcels, uninstalledApp } = props;
         const config = integrationConfigs.get(uninstalledApp.name);
-        if (config.extends) {
+        if (config?.extends) {
           const parcels = Array.from(extensionParcels).map(([, extensionParcels]) =>
             extensionParcels.filter(ext => ext.parent === config.name),
           );
@@ -427,26 +424,55 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
             );
           }
         }
-        return of(null);
+        return of({
+          uninstalledApp,
+          integrationConfigs,
+          extensionParcels,
+        });
       }),
     )
     .pipe(
-      filter(Boolean),
-      withLatestFrom(
-        combineLatest({
-          integrationsByMountPoint: state$.pipe(getStateSlice('integrationsByMountPoint')),
-          extensionsByMountPoint: state$.pipe(getStateSlice('extensionsByMountPoint')),
-          extensionsByParent: state$.pipe(getStateSlice('extensionsByParent')),
+      combineLatestWith(
+        state$.pipe(getStateSlice('integrationsByMountPoint')),
+        state$.pipe(getStateSlice('extensionsByMountPoint')),
+        state$.pipe(getStateSlice('extensionsByParent')),
+        state$.pipe(getStateSlice('modules')),
+        state$.pipe(getStateSlice('manifests')),
+      ),
+      map(
+        ([
+          res,
+          integrationsByMountPoint,
+          extensionsByMountPoint,
+          extensionsByParent,
+          modules,
+          manifests,
+        ]) => ({
+          ...res,
+          integrationsByMountPoint,
+          extensionsByMountPoint,
+          extensionsByParent,
+          modules,
+          manifests,
         }),
       ),
-      tap(([results, props]) => {
-        const { uninstalledApp, integrationConfigs, extensionParcels } = results;
-        const { integrationsByMountPoint, extensionsByMountPoint, extensionsByParent } = props;
+      map(results => {
+        const {
+          uninstalledApp,
+          integrationConfigs,
+          extensionParcels,
+          integrationsByMountPoint,
+          extensionsByMountPoint,
+          extensionsByParent,
+        } = results;
         const intByMountPoint = new Map(
           Array.from(integrationsByMountPoint).map(([name, integrations]) => {
             const _integrations = integrations.filter(i => i.name !== uninstalledApp.name);
             return [name, _integrations];
           }),
+        );
+        const modules = new Map(
+          Array.from(results.modules).filter(([name]) => name !== uninstalledApp.name),
         );
         const extByMountPoint = new Map(
           Array.from(extensionsByMountPoint).map(([name, extensions]) => {
@@ -469,13 +495,26 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
             return [extPointName, _parcels];
           }),
         );
-
-        pipelineEvents.next({
+        const manifests = results.manifests.filter(manifest => {
+          return manifest.name !== uninstalledApp.name;
+        });
+        return {
+          uninstalledApp,
           integrationsByMountPoint: intByMountPoint,
           extensionsByMountPoint: extByMountPoint,
           extensionsByParent: extByParent,
           integrationConfigs: intConfigs,
           extensionParcels: parcels,
+          modules,
+          manifests,
+        };
+      }),
+      tap(results => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { uninstalledApp, ...rest } = results;
+        pipelineEvents.next({
+          ...rest,
+          uninstallAppRequest: null,
         });
       }),
     );

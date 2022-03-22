@@ -5,8 +5,8 @@ import { TestScheduler } from 'rxjs/testing';
 import { getGlobalChannelEvents, getUiEvents, spaEvents$, uiEvents } from '../src/events';
 
 describe('[AppLoader]: events', () => {
-  let globalChannel;
-  let uiEvents$;
+  let globalChannel: ReplaySubject<any>;
+  let uiEvents$: ReturnType<typeof getUiEvents>;
   let singleSpaEvents$;
   let globalChannelEvents$;
   beforeAll(() => {

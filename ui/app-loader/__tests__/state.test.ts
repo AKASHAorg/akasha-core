@@ -2,15 +2,15 @@ import { mockSDK } from '@akashaproject/ui-awf-testing-utils';
 import { map, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { pipelineEvents } from '../src/events';
-import { initialState, initState } from '../src/state';
+import { defaultInitialState, initState, LoaderState } from '../src/state';
 
 jest.mock('@akashaproject/awf-sdk', () => {
   return () => mockSDK();
 });
 
 describe('[AppLoader] state.ts', () => {
-  let state;
-  let globalChannel;
+  let state: Observable<LoaderState>;
+  let globalChannel: ReplaySubject<any>;
   const worldConfig = {
     defaultPlugins: [],
     defaultApps: [],
@@ -44,11 +44,15 @@ describe('[AppLoader] state.ts', () => {
     };
 
     const expectedValues = {
-      a: initialState,
-      b: { ...initialState, manifests: [{ name: 'TestExtension1' }] },
-      c: { ...initialState, manifests: [{ name: 'TestExtension1' }], user: { ethAddress: '0x00' } },
+      a: defaultInitialState,
+      b: { ...defaultInitialState, manifests: [{ name: 'TestExtension1' }] },
+      c: {
+        ...defaultInitialState,
+        manifests: [{ name: 'TestExtension1' }],
+        user: { ethAddress: '0x00' },
+      },
       d: {
-        ...initialState,
+        ...defaultInitialState,
         manifests: [{ name: 'TestExtension1' }],
         user: { ethAddress: '0x00' },
         uninstallAppRequest: { name: 'installed-app-name' },
