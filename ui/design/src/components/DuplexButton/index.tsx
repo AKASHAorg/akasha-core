@@ -1,6 +1,8 @@
 import { ButtonProps } from 'grommet';
 import * as React from 'react';
 import { StyledButton } from './styled-duplex-button';
+import Button from '../Button';
+import Icon from '../Icon';
 
 export interface IDuplexButtonProps extends ButtonProps {
   onClickInactive?: React.EventHandler<React.SyntheticEvent>;
@@ -9,6 +11,9 @@ export interface IDuplexButtonProps extends ButtonProps {
   activeLabel?: string;
   activeHoverLabel?: string;
   active: boolean;
+  activeIcon?: JSX.Element;
+  activeHoverIcon?: JSX.Element;
+  loading?: boolean;
   // external css
   className?: string;
   allowMinimization?: boolean;
@@ -26,10 +31,20 @@ const DuplexButton = (props: IDuplexButtonProps) => {
     className,
     style,
     icon,
+    activeIcon,
+    activeHoverIcon,
     allowMinimization,
+    loading,
   } = props;
 
   const [hovered, setHovered] = React.useState(false);
+
+  const activeHoverIconElem = activeHoverIcon || icon;
+  const activeIconElem = activeIcon || icon;
+
+  if (loading) {
+    return <Button icon={<Icon type="loading" accentColor={true} />} />;
+  }
 
   return (
     <StyledButton
@@ -41,7 +56,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
       onClick={active ? onClickActive : onClickInactive}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      icon={icon}
+      icon={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
       allowMinimization={allowMinimization}
     />
   );
