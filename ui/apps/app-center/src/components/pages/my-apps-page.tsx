@@ -12,32 +12,45 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-integration-center');
 
-  const defaultAppsNamesNormalized = worldConfig?.defaultApps.map(app => {
-    if (typeof app === 'string') {
-      return {
-        name: app,
-      };
-    }
-    return app;
-  });
+  const defaultAppsNamesNormalized = React.useMemo(() => {
+    return worldConfig?.defaultApps.map(app => {
+      if (typeof app === 'string') {
+        return {
+          name: app,
+        };
+      }
+      return app;
+    });
+  }, [worldConfig.defaultApps]);
+
+  const defaultIntegrations = [].concat(
+    worldConfig.defaultApps,
+    worldConfig.defaultWidgets,
+    [worldConfig.homepageApp],
+    [worldConfig.layout],
+  );
 
   const installedAppsReq = useGetAllInstalledApps();
-  const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
+  const allAppNames = defaultAppsNamesNormalized.concat(installedAppsReq.data || []);
+  const integrationsInfoReq = useGetIntegrationsInfo(allAppNames);
 
   // select default apps from list of installed apps
-  const filteredDefaultApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(app => {
+  const filteredDefaultApps = integrationsInfoReq.data?.getIntegrationInfo?.filter(app => {
     if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
       return app;
     }
   });
   // select user installed apps from list of installed apps
-  const filteredInstalledApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(
-    app => {
-      if (!defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
+  const filteredInstalledApps = integrationsInfoReq.data?.getIntegrationInfo
+    ?.filter(app => {
+      if (installedAppsReq?.data?.length === 0) {
+        return null;
+      }
+      if (!defaultIntegrations?.some(defaultApp => defaultApp === app.name)) {
         return app;
       }
-    },
-  );
+    })
+    .filter(Boolean);
 
   const handleAppClick = (app: IntegrationInfo) => {
     props.plugins.routing?.navigateTo?.({
@@ -56,7 +69,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
           <Text>{t('These are the default apps that come in the world')}</Text>
         </Box>
         <Box gap="small">
-          {installedIntegrationsInfoReq.isFetching && (
+          {integrationsInfoReq.isFetching && (
             <Box>
               <Spinner />
             </Box>
@@ -68,7 +81,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               align="center"
               justify="between"
               border={
-                index !== installedIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                index !== filteredDefaultApps.length - 1
                   ? { side: 'bottom', size: '1px', color: 'border' }
                   : null
               }
@@ -95,7 +108,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
           <Text>{t('These are the apps you installed in your world')}</Text>
         </Box>
         <Box gap="small">
-          {installedIntegrationsInfoReq.isFetching && (
+          {integrationsInfoReq.isFetching && (
             <Box>
               <Spinner />
             </Box>
@@ -108,7 +121,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
                 align="center"
                 justify="between"
                 border={
-                  index !== installedIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                  index !== filteredInstalledApps.length - 1
                     ? { side: 'bottom', size: '1px', color: 'border' }
                     : null
                 }

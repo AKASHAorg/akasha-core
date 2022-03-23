@@ -21,6 +21,9 @@ export class RoutingPlugin {
     uiEvents.subscribe({
       next: (eventData: UIEventData) => {
         if (eventData.event === EventTypes.RegisterIntegration) {
+          if (!eventData.data.menuItems) {
+            return;
+          }
           const appData = {
             ...eventData.data.menuItems,
             navRoutes: eventData.data.navRoutes,

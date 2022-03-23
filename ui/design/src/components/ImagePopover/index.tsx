@@ -241,7 +241,7 @@ const ImagePopover: React.FC<IImagePopover> = props => {
               {uploading && (
                 <StyledUploadingDiv>
                   <Box direction="column" gap="medium" align="center" justify="center">
-                    <Icon type="loading" />
+                    <Icon type="loading" accentColor={true} />
                     <StyledText size="medium" color="accentText">
                       {uploadingImageLabel}
                     </StyledText>
