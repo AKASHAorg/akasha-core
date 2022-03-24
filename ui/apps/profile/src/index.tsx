@@ -19,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   i18nNamespace: ['app-profile', 'ui-lib-feed'],
   menuItems: {
     label: 'Profile',
-    area: [MenuItemAreaType.AppArea, MenuItemAreaType.QuickAccessArea],
+    area: [MenuItemAreaType.QuickAccessArea],
     // routes,
     logo: { type: LogoTypeSource.AVATAR, value: 'person' },
     route: rootRoute,

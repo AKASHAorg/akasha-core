@@ -19,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Settings',
     type: MenuItemType.App,
-    area: [MenuItemAreaType.OtherArea, MenuItemAreaType.AppArea],
+    area: [MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'settingsAlt' },
     route: rootRoute,
     subRoutes: [],
