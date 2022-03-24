@@ -9,8 +9,16 @@ import {
   verifyEd25519Sig,
 } from '../helpers';
 import { getPreviewFromContent } from 'link-preview-js';
+import { Counter } from 'prom-client';
+import { promRegistry } from '../api';
 
 const dataSigError = new Error('Data signature was not validated!');
+const mutationsCounter = new Counter({
+  name: 'graphql_mutations_counter',
+  help: 'The number of mutations.',
+  labelNames: ['mutationType'],
+  registers: [promRegistry],
+});
 const mutations = {
   addProfileProvider: async (_, { data }, { dataSources, user, signature }) => {
     if (!user) {
@@ -57,7 +65,12 @@ const mutations = {
       logger.warn(`bad registerUserName sig`);
       return Promise.reject(dataSigError);
     }
-    return dataSources.profileAPI.registerUserName(user.pubKey, name);
+
+    const response = await dataSources.profileAPI.registerUserName(user.pubKey, name);
+    mutationsCounter.inc({
+      mutationType: 'signUp',
+    });
+    return response;
   },
   createTag: async (_, { name }, { dataSources, user, signature }) => {
     if (!user) {
@@ -119,6 +132,9 @@ const mutations = {
     }
     const userIDCache = dataSources.profileAPI.getCacheKey(user.pubKey);
     await queryCache.del(userIDCache);
+    mutationsCounter.inc({
+      mutationType: 'createPost',
+    });
     return postID[0];
   },
   editPost: async (_, { content, post, id }, { dataSources, user, signature }) => {
@@ -217,7 +233,11 @@ const mutations = {
       logger.warn(`bad follow sig`);
       return Promise.reject(dataSigError);
     }
-    return dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
+    const response = await dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
+    mutationsCounter.inc({
+      mutationType: 'follow',
+    });
+    return response;
   },
   unFollow: async (_, { ethAddress }, { dataSources, user, signature }) => {
     if (!user) {
@@ -295,6 +315,9 @@ const mutations = {
       }
     }
     await dataSources.postsAPI.removeCachedPost(comment.postID);
+    mutationsCounter.inc({
+      mutationType: 'addComment',
+    });
     return commentID[0];
   },
   editComment: async (_, { content, comment, id }, { dataSources, user, signature }) => {
@@ -402,6 +425,9 @@ const mutations = {
       logger.warn(`bad toggleInterestSub sig`);
       return Promise.reject(dataSigError);
     }
+    mutationsCounter.inc({
+      mutationType: 'toggleInterestSub',
+    });
     return dataSources.profileAPI.toggleInterestSub(user.pubKey, sub);
   },
   getLinkPreview: async (_source, { link }, { user, signature }) => {

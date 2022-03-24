@@ -39,7 +39,12 @@ const exp = {
     new WebpackManifestPlugin({
       generate: (seed, files, entries) => {
       const packageJson = require(path.join(process.cwd(), './package.json'));
+      let displayName;
+      if(packageJson.hasOwnProperty('akasha') && packageJson.akasha.displayName){
+        displayName = packageJson.akasha.displayName;
+      }
       return {
+        displayName,
         mainFile: outputMainFile,
         license: packageJson.license,
         description: packageJson.description,

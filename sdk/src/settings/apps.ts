@@ -102,14 +102,14 @@ class AppSettings implements IAppSettings {
   async uninstall(appName: string): Promise<void> {
     const currentInfo = await this.get(appName);
     if (currentInfo?.data?._id) {
+      const collection = await lastValueFrom(
+        this._db.getCollection<AppsSchema>(availableCollections.Apps),
+      );
+      await collection.data.delete(currentInfo.data._id);
       this._globalChannel.next({
         data: { name: appName },
         event: APP_EVENTS.REMOVED,
       });
-      const collection = await lastValueFrom(
-        this._db.getCollection<AppsSchema>(availableCollections.Apps),
-      );
-      return collection.data.delete(currentInfo.data._id);
     }
   }
 

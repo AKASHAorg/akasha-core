@@ -114,6 +114,7 @@ const typeDefs = gql`
     license: String
     description: String
     keywords: [String]
+    displayName: String
   }
 
   type IntegrationReleaseInfo {
