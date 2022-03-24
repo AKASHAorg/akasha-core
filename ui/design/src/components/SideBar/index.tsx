@@ -111,7 +111,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   };
 
   const renderMenuItem = (menuItem: IMenuItem, index?: number) => {
-    const active = menuItem.label === currentAppData?.label;
+    const activePanel = !!currentRoute?.match(menuItem?.route);
     return (
       <>
         <DesktopAccordionPanel
@@ -119,7 +119,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           key={index + menuItem.label}
           hasChevron={menuItem.subRoutes?.length > 0}
           onClick={handleAppIconClick(menuItem)}
-          label={<MenuItemLabel menuItem={menuItem} active={active} />}
+          isActive={activePanel}
+          label={<MenuItemLabel menuItem={menuItem} />}
         >
           {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
             <MenuSubItems
@@ -135,7 +136,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           key={menuItem.index}
           hasChevron={menuItem.subRoutes?.length > 0}
           onClick={handleAppIconClick(menuItem, true)}
-          label={<MenuItemLabel menuItem={menuItem} active={active} />}
+          isActive={activePanel}
+          label={<MenuItemLabel menuItem={menuItem} />}
         >
           {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
             <MenuSubItems

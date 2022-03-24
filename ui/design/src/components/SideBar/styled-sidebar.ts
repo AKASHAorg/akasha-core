@@ -29,7 +29,6 @@ const StyledFooter = styled.div`
 `;
 
 const StyledAppIconWrapper = styled.div<{
-  active: boolean;
   hovered?: boolean;
   backgroundColor?: string;
 }>`
@@ -40,14 +39,6 @@ const StyledAppIconWrapper = styled.div<{
   justify-content: center;
   border-radius: 50%;
   background-color: ${props => props.backgroundColor || props.theme.colors.background};
-  ${props => {
-    if (props.active) {
-      return css`
-        box-shadow: 0 0 4px 0 rgba(83, 98, 124, 0.2);
-      `;
-    }
-    return;
-  }}
 `;
 
 const StyledAccordion = styled(Accordion)`
@@ -57,25 +48,25 @@ const StyledAccordion = styled(Accordion)`
 const StyledAccordionPanel = styled(AccordionPanel)<{
   size?: string;
   hasChevron?: boolean;
+  isActive?: boolean;
 }>`
+  background-color: ${props =>
+    props.isActive ? props.theme.colors.activePanelBackground : 'initial'};
   &:hover {
-    background-color: ${props => props.theme.colors.lightBackground};
+    background-color: ${props => props.theme.colors.hoverPanelBackground};
   }
   ${props => {
     return css`
       div:nth-child(2) {
         svg {
-          stroke: ${props.hasChevron
-            ? props.theme.colors.primaryText
-            : props.theme.colors.background};
+          display: ${props.hasChevron ? 'initial' : 'none'};
+          stroke: ${props => props.theme.colors.primaryText};
         }
       }
       &:hover {
         div:nth-child(2) {
           svg {
-            stroke: ${props.hasChevron
-              ? props.theme.colors.accent
-              : props.theme.colors.lightBackground};
+            stroke: ${props => props.theme.colors.accent};
           }
         }
       }
@@ -100,6 +91,7 @@ const DesktopAccordionPanel = styled(StyledAccordionPanel)`
 const StyledButton = styled(Button)`
   width: 100%;
   height: auto;
+  border-width: 1px;
 `;
 
 export {

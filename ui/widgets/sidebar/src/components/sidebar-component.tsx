@@ -12,7 +12,7 @@ const { Box, styled, Sidebar, useViewportSize } = DS;
 const AppSidebar = styled(Sidebar)`
   height: calc(100vh - 3rem);
   min-width: 15em;
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.cardBackground};
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     min-width: 13em;
     margin-right: 0.8rem;

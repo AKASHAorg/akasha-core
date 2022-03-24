@@ -6,16 +6,15 @@ import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { MenuAppButton } from './menu-app-button';
 
 export interface IMenuItemLabelProps {
-  active: boolean;
   menuItem: IMenuItem;
 }
 
 const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
-  const { active, menuItem } = props;
+  const { menuItem } = props;
 
   return (
     <Box margin={{ vertical: 'small', left: 'medium' }} direction="row" align="center">
-      <MenuAppButton menuItem={menuItem} active={active} />
+      <MenuAppButton menuItem={menuItem} />
       <Text
         size="large"
         margin={{ left: 'small' }}

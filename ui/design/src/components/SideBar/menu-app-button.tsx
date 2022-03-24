@@ -8,14 +8,13 @@ import AppAvatar from '../AppAvatar';
 import { StyledAppIconWrapper } from './styled-sidebar';
 
 export interface IMenuAppButton {
-  active: boolean;
   plain?: boolean;
   menuItem: IMenuItem;
   onClick?: React.EventHandler<React.SyntheticEvent>;
 }
 
 const MenuAppButton: React.FC<IMenuAppButton> = props => {
-  const { active, plain, menuItem, onClick } = props;
+  const { plain, menuItem, onClick } = props;
 
   const renderItem = () => {
     if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
@@ -53,11 +52,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
       />
     );
   };
-  return (
-    <StyledAppIconWrapper active={active} backgroundColor="transparent">
-      {renderItem()}
-    </StyledAppIconWrapper>
-  );
+  return <StyledAppIconWrapper backgroundColor="transparent">{renderItem()}</StyledAppIconWrapper>;
 };
 
 export { MenuAppButton };
