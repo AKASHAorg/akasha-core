@@ -20,6 +20,7 @@ import {
   MenuIcon,
   VersionButton,
   IconDiv,
+  StyledSubWrapper,
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
@@ -326,71 +327,79 @@ const Topbar: React.FC<ITopbarProps> = props => {
       );
     }
     return (
-      <StyledContentBox
-        direction="row"
-        align="center"
-        justify="between"
-        fill="horizontal"
-        height="3rem"
-      >
-        <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small" onClick={onBrandClick}>
-          <Box direction="row" gap="small" align="center">
-            <IconDiv isActive={sidebarVisible} onClick={onSidebarToggle} isMobile={isMobileOnly}>
-              <Icon type="menu" clickable={true} accentColor={sidebarVisible} />
-            </IconDiv>
-            <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
-            {!isMobileOnly && (
-              <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">
-                {brandLabel}
-              </StyledText>
-            )}
-          </Box>
-          {versionURL && (
-            <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
-          )}
-        </Box>
-        <Box
+      <StyledSubWrapper direction="row" align="center" height="3rem">
+        <IconDiv margin={{ right: 'small' }} isActive={sidebarVisible} onClick={onSidebarToggle}>
+          <Icon type="menu" clickable={true} accentColor={sidebarVisible} />
+        </IconDiv>
+        <StyledContentBox
           direction="row"
           align="center"
-          gap="small"
-          pad={isMobileOnly ? 'none' : { left: 'medium' }}
+          justify="between"
           fill="horizontal"
-          justify="end"
+          height="3rem"
         >
-          {!shouldRenderOnboarding && renderSearchArea()}
-          {quickAccessExt}
-          {loggedProfileData?.ethAddress &&
-            !shouldRenderOnboarding &&
-            quickAccessItems &&
-            quickAccessItems.map(renderPluginButton)}
-          {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
-            <Box direction="row" align="center" gap="small">
-              <Button onClick={onLoginClick} label={signInLabel} />
-              <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
+          <Box
+            direction="row"
+            align="center"
+            flex={{ shrink: 0 }}
+            gap="small"
+            onClick={onBrandClick}
+          >
+            <Box direction="row" gap="small" align="center">
+              <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
+              {!isMobileOnly && (
+                <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">
+                  {brandLabel}
+                </StyledText>
+              )}
             </Box>
-          )}
-          {shouldRenderOnboarding && (
-            <Box direction="row">
-              <StyledTextOnboarding margin={{ right: '0.2rem' }} alignSelf="center">
-                {stuckLabel}
-              </StyledTextOnboarding>
-              <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
-            </Box>
-          )}
-          {(!loggedProfileData?.ethAddress || shouldRenderOnboarding) && (
-            <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
-              <MenuIcon
-                rotate={isMobileOnly ? 90 : 0}
-                ref={feedbackMenuRef}
-                type={isMobileOnly ? 'moreDark' : 'dropdown'}
-                clickable={true}
-                accentColor={menuDropOpen}
-                size={iconSize}
-              />
-            </IconDiv>
-          )}
-        </Box>
-      </StyledContentBox>
+            {versionURL && (
+              <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
+            )}
+          </Box>
+          <Box
+            direction="row"
+            align="center"
+            gap="small"
+            pad={isMobileOnly ? 'none' : { left: 'medium' }}
+            fill="horizontal"
+            justify="end"
+          >
+            {!shouldRenderOnboarding && renderSearchArea()}
+            {quickAccessExt}
+            {loggedProfileData?.ethAddress &&
+              !shouldRenderOnboarding &&
+              quickAccessItems &&
+              quickAccessItems.map(renderPluginButton)}
+            {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
+              <Box direction="row" align="center" gap="small">
+                <Button onClick={onLoginClick} label={signInLabel} />
+                <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
+              </Box>
+            )}
+            {shouldRenderOnboarding && (
+              <Box direction="row">
+                <StyledTextOnboarding margin={{ right: '0.2rem' }} alignSelf="center">
+                  {stuckLabel}
+                </StyledTextOnboarding>
+                <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
+              </Box>
+            )}
+            {(!loggedProfileData?.ethAddress || shouldRenderOnboarding) && (
+              <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
+                <MenuIcon
+                  rotate={isMobileOnly ? 90 : 0}
+                  ref={feedbackMenuRef}
+                  type={isMobileOnly ? 'moreDark' : 'dropdown'}
+                  clickable={true}
+                  accentColor={menuDropOpen}
+                  size={iconSize}
+                />
+              </IconDiv>
+            )}
+          </Box>
+        </StyledContentBox>
+      </StyledSubWrapper>
     );
   };
 
