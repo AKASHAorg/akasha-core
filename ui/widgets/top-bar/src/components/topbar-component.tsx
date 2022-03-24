@@ -136,13 +136,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleSettingsClick = () => {
-    navigateTo?.({
-      appName: '@akashaproject/app-settings-ewa',
-      getNavigationUrl: appRoutes => appRoutes.rootRoute,
-    });
-  };
-
   const handleFeedbackModalShow = () => {
     props.navigateToModal({ name: 'feedback' });
   };
@@ -225,8 +218,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       dashboardInfoLabel={t('Help moderate items!')}
       feedbackLabel={t('Send Us Feedback')}
       feedbackInfoLabel={t('Help us improve the experience!')}
-      settingsLabel={t('Settings')}
-      settingsInfoLabel={t('Adjustment for your world and Dapps')}
       moderationLabel={t('Moderation History')}
       moderationInfoLabel={t('Help keep us accountable!')}
       legalCopyRightLabel={'© Ethereum World Association'}
@@ -245,7 +236,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       onLoginClick={handleLoginClick}
       onSignUpClick={handleSignUpClick}
       onLogout={handleLogout}
-      onSettingsClick={handleSettingsClick}
       onFeedbackClick={handleFeedbackModalShow}
       onModerationClick={handleModerationClick}
       onDashboardClick={handleDashboardClick}
