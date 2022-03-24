@@ -15,10 +15,10 @@ const AppSidebar = styled(Sidebar)`
   background-color: ${props => props.theme.colors.cardBackground};
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     min-width: 13em;
-    margin-right: 0.8rem;
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
     max-width: 17em;
+    margin-right: 0.8rem;
   }
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     height: 100vh;
