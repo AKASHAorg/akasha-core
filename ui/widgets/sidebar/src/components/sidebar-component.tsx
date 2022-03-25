@@ -66,11 +66,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   }, []);
 
   const worldApps = routeData?.[MenuItemAreaType.AppArea];
-
-  // filter out profile menu for guests
-  const filteredWorldApps = !loginQuery.data.ethAddress
-    ? worldApps?.filter(app => app.name !== '@akashaproject/app-profile')
-    : worldApps;
+  const userInstalledApps = routeData?.[MenuItemAreaType.UserAppArea];
 
   const handleNavigation = (appName: string, route: string) => {
     routing.navigateTo({
@@ -107,10 +103,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         worldAppsTitleLabel={t('World Apps')}
         poweredByLabel="Powered by AKASHA"
         userInstalledAppsTitleLabel={t('Apps')}
-        userInstalledApps={[]}
+        userInstalledApps={userInstalledApps}
         exploreButtonLabel={t('Explore')}
         allMenuItems={[]}
-        worldApps={filteredWorldApps}
+        worldApps={worldApps}
         currentRoute={currentLocation.pathname}
         size={size}
         isLoggedIn={!!loginQuery.data.ethAddress}
