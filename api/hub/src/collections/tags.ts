@@ -42,7 +42,7 @@ const indexes = [
   },
   {
     path: 'creationDate',
-    unique: false,
+    unique: true,
   },
 ];
 export async function newCollection(client: Client, threadID: ThreadID) {

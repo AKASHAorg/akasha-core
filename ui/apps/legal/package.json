@@ -54,5 +54,8 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "akasha": {
+    "displayName": "Legal"
+  }
 }

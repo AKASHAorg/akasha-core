@@ -25,6 +25,7 @@ fragment IntegrationReleaseInfoFragment on IntegrationReleaseInfo{
     license
     keywords
     description
+    displayName
   }
 }
 

@@ -298,6 +298,7 @@ const query = {
         license?: string;
         description?: string;
         keywords?: string[];
+        displayName?: string;
       };
       if (ipfsSources.length) {
         const manifestReq = await fetchWithTimeout(`${ipfsSources[0]}/${MANIFEST_FILE}`, {
