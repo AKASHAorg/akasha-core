@@ -8,7 +8,6 @@ import { MemoryRouter } from 'react-router-dom';
 let componentWrapper = customRender(<></>, {});
 
 const handleNavigation = jest.fn();
-const handleSearch = jest.fn();
 const handleLogin = jest.fn();
 const handleSignup = jest.fn();
 const handleLogout = jest.fn();
@@ -24,9 +23,7 @@ describe('<Topbar /> Component', () => {
         wrapWithTheme(
           <Topbar
             onNavigation={handleNavigation}
-            onSearch={handleSearch}
             brandLabel="test"
-            searchAreaItem={undefined}
             quickAccessItems={[]}
             onLoginClick={handleLogin}
             onSignUpClick={handleSignup}
@@ -62,9 +59,7 @@ describe.skip('<TopBar /> component on /auth-app* route', () => {
           <MemoryRouter initialEntries={['/auth-app/sign-in']}>
             <Topbar
               onNavigation={handleNavigation}
-              onSearch={handleSearch}
               brandLabel="test"
-              searchAreaItem={undefined}
               quickAccessItems={[]}
               onLoginClick={handleLogin}
               onSignUpClick={handleSignup}

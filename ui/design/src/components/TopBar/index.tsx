@@ -2,15 +2,12 @@ import { Box, Stack } from 'grommet';
 import * as React from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Icon from '../Icon';
-import { SearchBar } from './search-bar';
-import { MobileSearchBar } from './mobile-search-bar';
 import Avatar from '../Avatar';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/';
 import {
   TopbarWrapper,
   StyledText,
-  StyledSearchContainer,
   StyledDrop,
   StyledDiv,
   StyledTextOnboarding,
@@ -32,7 +29,6 @@ export interface ITopbarProps {
   versionURL?: string;
   hasNewNotifications?: boolean;
   quickAccessItems?: IMenuItem[];
-  searchAreaItem?: IMenuItem;
   otherAreaItems?: IMenuItem[];
   currentLocation?: string;
   // labels
@@ -41,7 +37,6 @@ export interface ITopbarProps {
   signInLabel?: string;
   signUpLabel?: string;
   signOutLabel?: string;
-  searchBarLabel?: string;
   legalLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
@@ -60,7 +55,6 @@ export interface ITopbarProps {
   // handlers
   onNavigation: (path: string) => void;
   onSidebarToggle?: (visibility: boolean) => void;
-  onSearch: (inputValue: string) => void;
   onSettingsClick: () => void;
   onFeedbackClick: () => void;
   onModerationClick: () => void;
@@ -85,7 +79,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     signInLabel,
     signUpLabel,
     signOutLabel,
-    searchBarLabel,
     legalLabel,
     feedbackLabel,
     feedbackInfoLabel,
@@ -102,9 +95,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     writeToUs,
     className,
     quickAccessItems,
-    searchAreaItem,
     otherAreaItems,
-    onSearch,
     onNavigation,
     // onSidebarToggle,
     onLoginClick,
@@ -120,13 +111,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
     quickAccessExt,
   } = props;
 
-  const [inputValue, setInputValue] = React.useState('');
   // const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const [dropOpen, setDropOpen] = React.useState(false);
   const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
-  const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [legalMenu, setLegalMenu] = React.useState<IMenuItem | null>(null);
 
@@ -283,51 +272,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     );
   };
 
-  const renderSearchArea = () => {
-    if (searchAreaItem) {
-      if (isMobileOnly) {
-        return (
-          <Icon
-            type="search"
-            size={iconSize}
-            onClick={() => {
-              setMobileSearchOpen(true);
-            }}
-          />
-        );
-      }
-      return (
-        <StyledSearchContainer>
-          <SearchBar
-            inputValue={inputValue}
-            onInputChange={ev => setInputValue(ev.target.value)}
-            onSearch={onSearch}
-            inputPlaceholderLabel={searchBarLabel}
-          />
-        </StyledSearchContainer>
-      );
-    }
-    return;
-  };
-
   const renderContent = (shouldRenderOnboarding?: boolean) => {
-    if (isMobileOnly && mobileSearchOpen) {
-      return (
-        <MobileSearchBar
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-          onSearch={onSearch}
-          inputPlaceholderLabel={searchBarLabel}
-          handleCloseInput={() => {
-            if (currentLocation?.includes('search')) {
-              window.history.back();
-            }
-            setInputValue('');
-            setMobileSearchOpen(false);
-          }}
-        />
-      );
-    }
     return (
       <StyledContentBox
         direction="row"
@@ -357,7 +302,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           fill="horizontal"
           justify="end"
         >
-          {!shouldRenderOnboarding && renderSearchArea()}
           {quickAccessExt}
           {loggedProfileData?.ethAddress &&
             !shouldRenderOnboarding &&

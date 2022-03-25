@@ -24,6 +24,7 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
     postsLabel,
     profileAnchorLink,
     onClickProfile,
+    showPostCount = true,
   } = props;
 
   const postsTitle = `${profileData.totalPosts || 0} ${postsLabel}`;
@@ -57,8 +58,8 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
                   </StyledInlineBox>
                   <Box direction="row" gap="xsmall">
                     <Text size="medium" color="secondaryText">
-                      {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}・
-                      {postsTitle}
+                      {profileData.userName ? `@${profileData.userName.replace('@', '')}` : null}
+                      {showPostCount && ` ・ ${postsTitle}`}
                     </Text>
                   </Box>
                 </Box>

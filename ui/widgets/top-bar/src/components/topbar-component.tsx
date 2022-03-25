@@ -52,7 +52,6 @@ const TopbarComponent = (props: RootComponentProps) => {
   }, []);
 
   const quickAccessItems = routeData?.[MenuItemAreaType.QuickAccessArea];
-  const searchAreaItem = routeData?.[MenuItemAreaType.SearchArea]?.[0];
   const otherAreaItems = routeData?.[MenuItemAreaType.OtherArea];
 
   // sort them so that avatar is last on the topbar menu
@@ -131,15 +130,6 @@ const TopbarComponent = (props: RootComponentProps) => {
     });
   };
 
-  const handleSearch = (inputValue: string) => {
-    const trimmedValue = inputValue.trim();
-    if (!trimmedValue) return;
-    const encodedSearchKey = encodeURIComponent(trimmedValue);
-    if (searchAreaItem) {
-      handleNavigation(`${searchAreaItem.route}/${encodedSearchKey}`);
-    }
-  };
-
   const handleBrandClick = () => {
     if (!props.worldConfig.homepageApp) {
       return;
@@ -182,7 +172,6 @@ const TopbarComponent = (props: RootComponentProps) => {
       signInLabel={t('Sign In')}
       signUpLabel={t('Sign Up')}
       signOutLabel={t('Sign Out')}
-      searchBarLabel={t('Search profiles or topics')}
       legalLabel={t('Legal')}
       isModerator={isModerator}
       dashboardLabel={t('Moderator Dashboard')}
@@ -200,9 +189,7 @@ const TopbarComponent = (props: RootComponentProps) => {
       versionLabel="ALPHA"
       versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
       onNavigation={handleNavigation}
-      onSearch={handleSearch}
       quickAccessItems={sortedQuickAccessItems}
-      searchAreaItem={searchAreaItem}
       otherAreaItems={otherAreaItems}
       onLoginClick={handleLoginClick}
       onSignUpClick={handleSignUpClick}
