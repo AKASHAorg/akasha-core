@@ -25,7 +25,7 @@ const StyledFooter = styled.div`
   position: absolute;
   bottom: 0;
   border-top: 1px solid ${props => props.theme.colors.border};
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.cardBackground};
 `;
 
 const StyledAppIconWrapper = styled.div<{
