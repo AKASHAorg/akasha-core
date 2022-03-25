@@ -53,5 +53,8 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "akasha": {
+    "displayName": "Layout"
+  }
 }

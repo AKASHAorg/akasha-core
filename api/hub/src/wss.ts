@@ -55,6 +55,7 @@ const wss = route.all('/ws/userauth', ctx => {
           logger.info(`wss:checkingUserFound`);
           // check if the key is already registered
           const userFound = await db.find(dbId, 'Profiles', query);
+          let timeout;
           const token = await client.getTokenChallenge(data.pubkey, (challenge: Uint8Array) => {
             if (!userFound.length) {
               addressChallenge = `Register my public key ${
@@ -166,7 +167,7 @@ const wss = route.all('/ws/userauth', ctx => {
                 }
                 resolve(Buffer.from(r.sig));
               });
-              setTimeout(() => {
+              timeout = setTimeout(() => {
                 //must always resolve or it will trigger UncaughtError
                 //resolve(Buffer.from('0x0'));
                 reject(new Error('signature checking timed out'));
@@ -174,6 +175,9 @@ const wss = route.all('/ws/userauth', ctx => {
               }, 60000);
             });
           });
+          if (timeout) {
+            clearTimeout(timeout);
+          }
           const auth = await getAPISig();
 
           const payload: UserAuth = {

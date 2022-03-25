@@ -57,5 +57,8 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "akasha": {
+    "displayName": "Top Bar"
+  }
 }
