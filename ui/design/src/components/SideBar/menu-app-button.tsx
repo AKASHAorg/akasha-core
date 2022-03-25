@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppTypes } from '@akashaproject/ui-awf-typings';
+import { AppTypes, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 import { IMenuItem, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 import { AppIcon } from '../Icon/app-icon';
@@ -21,11 +21,10 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
       return (
         <AppAvatar
           size="md"
-          src={menuItem.logo.value}
+          // edge-case for test app: ignore icons, even if specified, use only avatars
+          src={menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null}
           backgroundColor="transparent"
-          appType={
-            !menuItem.logo.value || menuItem.logo.value.length < 1 ? AppTypes.APP : AppTypes.NONE
-          }
+          appType={AppTypes.APP}
         />
       );
     }
@@ -33,11 +32,9 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
       return (
         <AppAvatar
           size="md"
-          src={menuItem.logo.value}
+          src={menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null}
           backgroundColor="transparent"
-          appType={
-            !menuItem.logo.value || menuItem.logo.value.length < 1 ? AppTypes.WIDGET : AppTypes.NONE
-          }
+          appType={AppTypes.WIDGET}
         />
       );
     }
