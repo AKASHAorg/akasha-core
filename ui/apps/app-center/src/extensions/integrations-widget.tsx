@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import {
   useGetAllInstalledApps,
+  useGetAllIntegrationsIds,
   useGetIntegrationsInfo,
   withProviders,
   useGetLogin,
@@ -19,38 +20,44 @@ const { Box, ICWidgetCard, ErrorLoader } = DS;
 const ICWidget: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-integration-center');
 
+  const { worldConfig } = props;
+
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
     return !!loginQuery.data.pubKey;
   }, [loginQuery.data]);
 
-  const defaultAppsNamesNormalized = props.worldConfig?.defaultApps.map(app => {
-    if (typeof app === 'string') {
-      return {
-        name: app,
-      };
-    }
-    return app;
-  });
+  const availableIntegrationsReq = useGetAllIntegrationsIds();
+
+  const defaultIntegrations = [].concat(
+    worldConfig.defaultApps,
+    worldConfig.defaultWidgets,
+    [worldConfig.homepageApp],
+    [worldConfig.layout],
+  );
+
+  const integrationIdsNormalized = availableIntegrationsReq?.data?.integrationIds.map(
+    integrationId => {
+      return { id: integrationId };
+    },
+  );
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
-  const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
+  const integrationsInfoReq = useGetIntegrationsInfo(integrationIdsNormalized);
 
-  // select default apps from list of installed apps
-  const filteredDefaultApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(app => {
-    if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
+  // select default apps from list of apps
+  const filteredDefaultApps = integrationsInfoReq.data?.getIntegrationInfo.filter(app => {
+    if (worldConfig.defaultApps?.some(defaultApp => defaultApp === app.name)) {
       return app;
     }
   });
   // select user installed apps from list of installed apps
-  const filteredInstalledApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(
-    app => {
-      if (!defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
-        return app;
-      }
-    },
-  );
+  const filteredInstalledApps = integrationsInfoReq.data?.getIntegrationInfo.filter(app => {
+    if (defaultIntegrations?.some(defaultApp => defaultApp !== app.name)) {
+      if (installedAppsReq.data?.some(installedApp => installedApp.id === app.id)) return app;
+    }
+  });
 
   const handleAppClick = (integrationId: string) => {
     props.singleSpa.navigateToUrl(`${routes[INFO]}/${integrationId}`);

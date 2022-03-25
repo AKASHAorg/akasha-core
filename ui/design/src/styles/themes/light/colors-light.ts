@@ -1,8 +1,6 @@
 import { IColors } from '../interfaces';
 
 export interface IColorsLight extends IColors {
-  blue: string;
-  darkBlue: string;
   darkGrey: string;
   grey: string;
   mediumGrey: string;
@@ -21,6 +19,7 @@ export interface IColorsLight extends IColors {
 
 const colors: IColorsLight = {
   blue: '#4E71FF',
+  lightBlue: '#D3DAFA',
   darkBlue: '#132540',
   darkGrey: '#000C20',
   grey: '#949EB3',
@@ -64,6 +63,7 @@ const colors: IColorsLight = {
   accent: '#4E71FF', // blue
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
   accentLight: '#E9EDFD', // lightBlue
+  accentLightHover: '#D3DAFA', //light blue
   border: '#EDF0F5', // lightGrey
   lightBorder: '#F5F6F7', // lighterGrey
   darkBorder: '#B6BFD1', // deepGrey
