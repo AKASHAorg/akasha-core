@@ -239,7 +239,7 @@ const InstallModal: React.FC<InstallModalProps> = props => {
                 </Box>
                 <Box gap="medium">
                   <Text textAlign="center" weight="bold">
-                    {successSubtitleLabel}
+                    {integrationName} {successSubtitleLabel}
                   </Text>
                   <Text textAlign="center">{successInfoLabel}</Text>
                   <Text textAlign="center">{successSubInfoLabel}</Text>

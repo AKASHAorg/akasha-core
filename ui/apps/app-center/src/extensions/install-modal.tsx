@@ -94,9 +94,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
         'To check out your new app visit the Integration centre and look under Your Apps. You can also open the side bar menu.',
       )}
       successSubInfoLabel={t('Enjoy!')}
-      successSubtitleLabel={t(
-        'Moderating Tools App is now installed in Ethereum World and is currently active.',
-      )}
+      successSubtitleLabel={t('is now installed in Ethereum World and is currently active.')}
       errorInfoLabel={t('Please check your network connection and try again.')}
       errorSubInfoLabel={t('Thank you!')}
       errorSubtitleLabel={t('could not be installed in Ethereum World.')}
