@@ -42,6 +42,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
     uiEvents,
     plugins: { routing },
+    worldConfig: { defaultApps },
   } = props;
 
   const [routeData, setRouteData] = React.useState({});
@@ -65,7 +66,17 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const worldApps = routeData?.[MenuItemAreaType.AppArea];
+  // sort according to worldConfig index
+  const worldApps = routeData?.[MenuItemAreaType.AppArea]?.sort(
+    (a: { name: string }, b: { name: string }) => {
+      if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
+        return -1;
+      } else if (defaultApps.indexOf(a.name) > defaultApps.indexOf(b.name)) {
+        return 1;
+      }
+      return 0;
+    },
+  );
   const userInstalledApps = routeData?.[MenuItemAreaType.UserAppArea];
 
   const handleNavigation = (appName: string, route: string) => {
@@ -78,7 +89,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const handleClickExplore = () => {
     // find IC app from world apps
     // @TODO: replace string with a constant
-    const icApp = worldApps.find(app => app.label === 'Integration Center');
+    const icApp = worldApps.find((app: { label: string }) => app.label === 'Integration Center');
 
     // if found, navigate to route
     if (icApp) {
