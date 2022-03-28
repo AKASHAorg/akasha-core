@@ -63,7 +63,11 @@ import { TagProfileCard } from './components/TagCard/tag-profile-card';
 import { TagSearchCard } from './components/TagCard/tag-search-card';
 
 import FilterCard from './components/FilterCard';
-import SwitchCard, { StyledSwitchCardButton, TabsToolbar } from './components/SwitchCard';
+import SwitchCard, {
+  StyledSwitchCardButton,
+  TAB_TOOLBAR_TYPE,
+  TabsToolbar,
+} from './components/SwitchCard';
 import Tag from './components/Tag';
 import MdCard from './components/MdCard';
 
@@ -148,6 +152,9 @@ import TextIcon from './components/TextIcon';
 import LinkInput from './components/TextInputIconForm';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
 import Checkbox from './components/Checkbox';
+import { SearchStartCard } from './components/SearchStartCard';
+import InfoCard from './components/InfoCard';
+import { SearchBar } from './components/SearchBar';
 // import VirtualList from './components/VirtualList';
 import Helmet from 'react-helmet';
 import Spinner from './components/Spinner';
@@ -318,6 +325,10 @@ const exported = {
   WalletRequestStep,
   WelcomeCard,
   InstallModal,
+  SearchStartCard,
+  InfoCard,
+  SearchBar,
+  TAB_TOOLBAR_TYPE,
 };
 
 export default exported;

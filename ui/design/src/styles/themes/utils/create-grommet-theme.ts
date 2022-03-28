@@ -63,6 +63,8 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         modalBackgroundTransparent: styledComponentsTheme.colors.modalBackgroundTransparent,
         cardBackground: styledComponentsTheme.colors.cardBackground,
         hoverBackground: styledComponentsTheme.colors.hoverBackground,
+        hoverPanelBackground: styledComponentsTheme.colors.hoverPanelBackground,
+        activePanelBackground: styledComponentsTheme.colors.activePanelBackground,
         inputBackground: styledComponentsTheme.colors.inputBackground,
         coverImageBackground: styledComponentsTheme.colors.coverImageBackground,
         embedBackground: styledComponentsTheme.colors.embedBackground,

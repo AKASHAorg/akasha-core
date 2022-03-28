@@ -19,7 +19,7 @@ import { StepThree } from './steps/StepThree';
 import { StepFour } from './steps/StepFour';
 import { StepFive } from './steps/StepFive';
 
-import routes, { SIGN_UP_USERNAME } from '../../routes';
+import { SIGN_UP_USERNAME } from '../../routes';
 
 const { SignUpCard } = DS;
 

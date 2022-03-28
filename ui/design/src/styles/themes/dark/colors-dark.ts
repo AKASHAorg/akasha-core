@@ -52,6 +52,8 @@ const colors: IColorsDark = {
   activeCardBackground: '#F6F8FF', // aquamarine
   inputBackground: '#CCD2DF',
   hoverBackground: '#595F6B',
+  hoverPanelBackground: '#26374f',
+  activePanelBackground: '#63718c',
   skeletonBackground: '#595F6B',
   coverImageBackground: '#425166',
   embedBackground: '#253142',

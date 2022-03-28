@@ -2,7 +2,7 @@ import { Image } from 'grommet';
 import styled, { css } from 'styled-components';
 import { IconSize } from './app-icon';
 
-const StyledIconDiv = styled.div<IconSize>`
+const StyledIconDiv = styled.div<IconSize & { backgroundColor?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,7 +43,7 @@ const StyledIconDiv = styled.div<IconSize>`
   }}
   border-radius: 50%;
   cursor: pointer;
-  background-color: ${props => props.theme.colors.white};
+  background-color: ${props => props.backgroundColor || props.theme.colors.white};
 `;
 
 const StyledImage = styled(Image)<IconSize>`

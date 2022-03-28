@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { Accordion, Box, Text } from 'grommet';
+import { Box, Text } from 'grommet';
+
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-import { MenuAppButton } from './menu-app-button';
+import MenuItemLabel from './menu-item-label';
+import MenuSubItems from './menu-sub-items';
 import SectionTitle from './section-title';
 import Skeleton from './skeleton';
 
@@ -10,8 +12,11 @@ import Icon from '../Icon';
 
 import {
   StyledHiddenScrollContainer,
-  StyledMobileHRDiv,
-  StyledAccordionPanel,
+  StyledButton,
+  StyledFooter,
+  StyledAccordion,
+  MobileAccordionPanel,
+  DesktopAccordionPanel,
 } from './styled-sidebar';
 
 export interface ISidebarProps {
@@ -20,12 +25,13 @@ export interface ISidebarProps {
   userInstalledAppsTitleLabel: string;
   userInstalledApps: IMenuItem[];
   exploreButtonLabel: string;
-  bodyMenuItems: IMenuItem[];
+  worldApps: IMenuItem[];
   allMenuItems: IMenuItem[];
   currentRoute?: string;
   isLoggedIn: boolean;
   loadingUserInstalledApps: boolean;
-  onClickMenuItem: (route: string) => void;
+  onSidebarClose: () => void;
+  onClickMenuItem: (appName: string, route: string) => void;
   onClickExplore: () => void;
   // viewport size
   size?: string;
@@ -40,12 +46,13 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     userInstalledApps,
     exploreButtonLabel,
     allMenuItems,
-    bodyMenuItems,
+    worldApps,
     currentRoute,
     isLoggedIn,
     loadingUserInstalledApps,
     size,
     className,
+    onSidebarClose,
     onClickMenuItem,
     onClickExplore,
   } = props;
@@ -75,91 +82,98 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     }
   }, [currentRoute, allMenuItems, currentAppData, activeOption]);
 
-  const handleAppIconClick = (menuItem: IMenuItem) => () => {
+  const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => () => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       // if the current app has no subroutes, set as active and redirect to its route
       setCurrentAppData(menuItem);
       setActiveOption(null);
-      onClickMenuItem(menuItem.route);
+      onClickMenuItem(menuItem.name, menuItem.route);
+      if (isMobile) {
+        onSidebarClose();
+      }
     }
   };
-  const handleOptionClick = (menuItem: IMenuItem, subrouteMenuItem: IMenuItem) => () => {
+  const handleOptionClick = (
+    menuItem: IMenuItem,
+    subrouteMenuItem: IMenuItem,
+    isMobile?: boolean,
+  ) => {
     setCurrentAppData(menuItem);
     setActiveOption(subrouteMenuItem);
-    onClickMenuItem(subrouteMenuItem.route);
+    onClickMenuItem(menuItem.name, subrouteMenuItem.route);
+    if (isMobile) {
+      onSidebarClose();
+    }
   };
 
   const handleExploreClick = () => {
     onClickExplore();
   };
 
-  const renderMenuItem = (menuItem: IMenuItem, index: number) => {
-    const active = menuItem.label === currentAppData?.label;
+  const renderMenuItem = (menuItem: IMenuItem, index?: number) => {
+    const activePanel = !!currentRoute?.match(menuItem?.route);
     return (
-      <StyledAccordionPanel
-        size={size}
-        key={index}
-        hasChevron={menuItem.subRoutes?.length > 0}
-        onClick={handleAppIconClick(menuItem)}
-        label={
-          <Box margin={{ vertical: 'small' }} direction="row" align="center">
-            <MenuAppButton menuItem={menuItem} active={active} plain={true} />
-            <Text size="large" margin={{ left: 'small' }}>
-              {menuItem.label}
-            </Text>
-          </Box>
-        }
-      >
-        {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
-          <Box pad={{ horizontal: '1.125rem' }}>
-            <Box direction="column" justify="evenly">
-              {menuItem.subRoutes.map((subRouteMenuItem, idx) => (
-                <Box
-                  key={idx + subRouteMenuItem.label}
-                  pad={{ vertical: 'large', left: 'large' }}
-                  border={{
-                    size: 'medium',
-                    color: subRouteMenuItem.route === activeOption?.route ? 'accent' : 'border',
-                    side: 'left',
-                  }}
-                  onClick={handleOptionClick(menuItem, subRouteMenuItem)}
-                >
-                  <Text size="large">{subRouteMenuItem.label}</Text>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
-      </StyledAccordionPanel>
+      <>
+        <DesktopAccordionPanel
+          size={size}
+          key={index + menuItem.label}
+          hasChevron={menuItem.subRoutes?.length > 0}
+          onClick={handleAppIconClick(menuItem)}
+          isActive={activePanel}
+          label={<MenuItemLabel menuItem={menuItem} />}
+        >
+          {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
+            <MenuSubItems
+              isMobile={false}
+              menuItem={menuItem}
+              activeOption={activeOption}
+              onOptionClick={handleOptionClick}
+            />
+          )}
+        </DesktopAccordionPanel>
+        <MobileAccordionPanel
+          size={size}
+          key={menuItem.index}
+          hasChevron={menuItem.subRoutes?.length > 0}
+          onClick={handleAppIconClick(menuItem, true)}
+          isActive={activePanel}
+          label={<MenuItemLabel menuItem={menuItem} />}
+        >
+          {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
+            <MenuSubItems
+              isMobile={true}
+              menuItem={menuItem}
+              activeOption={activeOption}
+              onOptionClick={(menu, subMenu) => handleOptionClick(menu, subMenu, true)}
+            />
+          )}
+        </MobileAccordionPanel>
+      </>
     );
   };
 
   return (
     <Box
-      fill={true}
       direction="column"
       elevation="shadow"
-      border={{ size: '1px', style: 'solid', color: 'border', side: 'right' }}
       className={className}
+      style={{ position: 'relative' }}
     >
       <StyledHiddenScrollContainer>
-        {bodyMenuItems?.length > 0 && (
-          <Box
-            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
-            align="start"
-            fill={true}
-          >
+        {worldApps?.length > 0 && (
+          <Box pad={{ top: 'medium', bottom: 'small' }} align="start">
             <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
-            <Accordion multiple={true} fill={true}>
-              {bodyMenuItems?.map(renderMenuItem)}
-            </Accordion>
+            <StyledAccordion>
+              {worldApps?.map((app: IMenuItem, index: number) => (
+                <React.Fragment key={index}>{renderMenuItem(app, index)}</React.Fragment>
+              ))}
+            </StyledAccordion>
           </Box>
         )}
         {isLoggedIn && loadingUserInstalledApps && (
           <Box
-            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
+            pad={{ top: 'medium', bottom: 'small' }}
             align="start"
-            fill={true}
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
@@ -168,28 +182,35 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         )}
         {isLoggedIn && userInstalledApps?.length > 0 && (
           <Box
-            pad={{ top: 'medium', bottom: 'small', horizontal: 'medium' }}
+            pad={{ top: 'medium', bottom: 'small' }}
             align="start"
-            fill={true}
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
-            <Accordion multiple={true} fill={true}>
-              {userInstalledApps?.map(renderMenuItem)}
-            </Accordion>
+            <StyledAccordion>
+              {userInstalledApps?.map((app: IMenuItem, index: number) => (
+                <React.Fragment key={index}>{renderMenuItem(app, index)}</React.Fragment>
+              ))}
+            </StyledAccordion>
           </Box>
         )}
       </StyledHiddenScrollContainer>
 
-      <StyledMobileHRDiv />
-
       {isLoggedIn && (
-        <Box direction="row" pad="small" align="center" onClick={handleExploreClick}>
-          <Icon type="explore" size="md" plain={true} style={{ marginRight: '0.75rem' }} />
-          <Text color="accentText" size="large">
-            {exploreButtonLabel}
-          </Text>
-        </Box>
+        <StyledFooter>
+          <StyledButton
+            margin="small"
+            label={
+              <Box direction="row" align="center" justify="center" margin={{ vertical: ' xlarge' }}>
+                <Icon type="explore" size="md" plain={true} style={{ marginRight: '0.75rem' }} />
+                <Text color="accentText" size="large">
+                  {exploreButtonLabel}
+                </Text>
+              </Box>
+            }
+            onClick={handleExploreClick}
+          />
+        </StyledFooter>
       )}
     </Box>
   );

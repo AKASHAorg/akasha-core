@@ -5,11 +5,11 @@ import styled from 'styled-components';
 
 const SearchContainer = styled(Box)`
   transition: width 0.3s ease;
-  width: 15rem;
-  &:focus-within {
-    width: 100%;
-  }
+  width: 100%;
   background-color: ${props => props.theme.colors.inputBackground};
+  @media only screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
+    width: 55%;
+  }
 `;
 
 const StyledSearchInput = styled(TextInput)`

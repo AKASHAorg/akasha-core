@@ -1,10 +1,12 @@
-import { AccordionPanel } from 'grommet';
+import { Accordion, AccordionPanel } from 'grommet';
 import styled, { css } from 'styled-components';
+
+import Button from '../Button';
 
 const StyledHiddenScrollContainer = styled.div`
   overflow: auto;
-  height: 100%;
   width: 100%;
+  margin-bottom: 3.5rem;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
   ::-webkit-scrollbar {
@@ -19,54 +21,52 @@ const StyledMobileHRDiv = styled.div`
 
 const StyledFooter = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 4rem;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid ${props => props.theme.colors.border};
+  background-color: ${props => props.theme.colors.cardBackground};
 `;
 
-const StyledAppIconWrapper = styled.div<{ active: boolean; hovered?: boolean }>`
-  width: 2.25rem;
-  height: 2.25rem;
+const StyledAppIconWrapper = styled.div<{
+  hovered?: boolean;
+  backgroundColor?: string;
+}>`
+  width: auto;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background-color: ${props => props.theme.colors.background};
-  ${props => {
-    if (props.active) {
-      return css`
-        box-shadow: 0 0 4px 0 rgba(83, 98, 124, 0.2);
-      `;
-    }
-    return;
-  }}
+  background-color: ${props => props.backgroundColor || props.theme.colors.background};
+`;
+
+const StyledAccordion = styled(Accordion)`
+  width: 100%;
 `;
 
 const StyledAccordionPanel = styled(AccordionPanel)<{
   size?: string;
   hasChevron?: boolean;
+  isActive?: boolean;
 }>`
+  background-color: ${props =>
+    props.isActive ? props.theme.colors.activePanelBackground : 'initial'};
   &:hover {
-    background-color: ${props => props.theme.colors.lightBackground};
+    background-color: ${props => props.theme.colors.hoverPanelBackground};
   }
   ${props => {
-    if (props.size === 'small') {
-      return;
-    }
     return css`
       div:nth-child(2) {
         svg {
-          stroke: ${props.hasChevron
-            ? props.theme.colors.primaryText
-            : props.theme.colors.background};
+          display: ${props.hasChevron ? 'initial' : 'none'};
+          stroke: ${props => props.theme.colors.primaryText};
         }
       }
       &:hover {
         div:nth-child(2) {
           svg {
-            stroke: ${props.hasChevron
-              ? props.theme.colors.accent
-              : props.theme.colors.lightBackground};
+            stroke: ${props => props.theme.colors.accent};
           }
         }
       }
@@ -74,10 +74,34 @@ const StyledAccordionPanel = styled(AccordionPanel)<{
   }}
 `;
 
+const MobileAccordionPanel = styled(StyledAccordionPanel)`
+  display: none;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: flex;
+    margin: 0.5rem 0;
+  }
+`;
+
+const DesktopAccordionPanel = styled(StyledAccordionPanel)`
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: none;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  width: 100%;
+  height: auto;
+  border-width: 1px;
+`;
+
 export {
   StyledHiddenScrollContainer,
   StyledFooter,
   StyledAppIconWrapper,
   StyledMobileHRDiv,
+  StyledAccordion,
   StyledAccordionPanel,
+  MobileAccordionPanel,
+  DesktopAccordionPanel,
+  StyledButton,
 };

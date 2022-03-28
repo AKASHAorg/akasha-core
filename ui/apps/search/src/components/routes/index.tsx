@@ -19,7 +19,7 @@ const Routes: React.FC<RootComponentProps> = props => {
     <Router>
       <Box>
         <Switch>
-          <Route path={`${rootRoute}/:searchKeyword`}>
+          <Route path={`${rootRoute}/:searchKeyword?`}>
             <SearchPage {...props} showLoginModal={showLoginModal} loginState={loginQuery.data} />
           </Route>
         </Switch>

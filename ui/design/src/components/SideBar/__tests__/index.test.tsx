@@ -7,6 +7,7 @@ import { customRender, wrapWithTheme } from '../../../test-utils';
 describe('<Sidebar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const handleSidebarClose = jest.fn();
   const handleClickMenuItem = jest.fn();
   const handleExploreClick = jest.fn();
 
@@ -22,8 +23,9 @@ describe('<Sidebar /> Component', () => {
             exploreButtonLabel="Explore"
             isLoggedIn={false}
             loadingUserInstalledApps={true}
-            bodyMenuItems={[]}
+            worldApps={[]}
             allMenuItems={[]}
+            onSidebarClose={handleSidebarClose}
             onClickMenuItem={handleClickMenuItem}
             onClickExplore={handleExploreClick}
           />,

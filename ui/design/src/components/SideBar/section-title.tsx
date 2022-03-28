@@ -11,7 +11,14 @@ interface ISectionTitleProps {
 const SectionTitle: React.FC<ISectionTitleProps> = props => {
   const { titleLabel, subtitleLabel } = props;
   return (
-    <Box direction="row" justify="start" align="start" fill={true} margin={{ bottom: 'xsmall' }}>
+    <Box
+      direction="row"
+      justify="start"
+      align="start"
+      fill={true}
+      margin={{ bottom: 'xsmall' }}
+      pad={{ horizontal: 'medium' }}
+    >
       <Icon type="app" plain={true} />
       <Box margin={{ left: 'medium' }}>
         <Text

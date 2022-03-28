@@ -29,6 +29,8 @@ export interface IColors {
   modalBackgroundAlt: string;
   modalBackgroundTransparent: string;
   hoverBackground: string;
+  hoverPanelBackground: string;
+  activePanelBackground: string;
   skeletonBackground: string;
   inputBackground: string;
   coverImageBackground: string;

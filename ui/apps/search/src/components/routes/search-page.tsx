@@ -26,14 +26,23 @@ import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics
 
 const {
   Box,
-  BasicCardBox,
-  ErrorLoader,
+  Text,
+  styled,
   Spinner,
   ProfileSearchCard,
   TagSearchCard,
   TabsToolbar,
   StyledSwitchCardButton,
+  SearchStartCard,
+  InfoCard,
+  TAB_TOOLBAR_TYPE,
+  useIntersectionObserver,
 } = DS;
+
+const StyledProfileBox = styled(Box)`
+  border: ${props => `1px solid ${props.theme.colors.lightBackground}`};
+  border-radius: 0.35rem;
+`;
 
 export enum ButtonValues {
   ALL = 'All',
@@ -49,9 +58,19 @@ interface SearchPageProps extends RootComponentProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
+const initSearchState = {
+  keyword: '',
+  [ButtonValues.TOPICS]: { page: 1, results: [], done: false, isLoading: false },
+  [ButtonValues.POSTS]: { page: 1, results: [], done: false, isLoading: false },
+  [ButtonValues.PEOPLE]: { page: 1, results: [], done: false, isLoading: false },
+  [ButtonValues.REPLIES]: { page: 1, results: [], done: false, isLoading: false },
+};
+
 const SearchPage: React.FC<SearchPageProps> = props => {
   const { singleSpa, loginState, showLoginModal } = props;
-  const { searchKeyword } = useParams<{ searchKeyword: string }>();
+  const { searchKeyword = '' } = useParams<{ searchKeyword: string }>();
+  const [searchState, setSearchState] = React.useState(initSearchState);
+  const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.ALL);
 
   const [analyticsActions] = useAnalytics();
   const { t, i18n } = useTranslation('app-search');
@@ -64,31 +83,99 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
 
+  const updateSearchState = (type: Exclude<ButtonValues, ButtonValues.ALL>, data: unknown[]) => {
+    if (!data || !data.length) {
+      setSearchState(prevState => ({
+        ...prevState,
+        [type]: { ...prevState[type], done: true, isLoading: false },
+      }));
+    }
+    setSearchState(prevState => ({
+      ...prevState,
+      [type]: {
+        ...prevState[type],
+        results: [...prevState[type].results, ...data],
+        isLoading: false,
+      },
+    }));
+  };
+
+  const handleLoadMore = () => {
+    if (activeButton === ButtonValues.ALL) return;
+    const { done, isLoading } = searchState[activeButton];
+    if (done || isLoading) return;
+
+    setSearchState(prevState => ({
+      ...prevState,
+      [activeButton]: {
+        ...prevState[activeButton],
+        page: prevState[activeButton].page + 1,
+        isLoading: true,
+      },
+    }));
+  };
+  const loadmoreRef = React.createRef<HTMLDivElement>();
+
+  useIntersectionObserver({
+    target: loadmoreRef,
+    onIntersect: handleLoadMore,
+    threshold: 0,
+  });
+
+  React.useEffect(() => {
+    if (activeButton === ButtonValues.ALL) {
+      return setSearchState({ ...initSearchState, keyword: searchKeyword });
+    }
+    setSearchState({
+      ...initSearchState,
+      keyword: searchKeyword,
+      [activeButton]: { ...initSearchState[activeButton], isLoading: true },
+    });
+  }, [searchKeyword]);
+
   const searchProfilesReq = useSearchProfiles(
-    decodeURIComponent(searchKeyword),
+    decodeURIComponent(searchState.keyword),
+    searchState[ButtonValues.PEOPLE].page,
     loginState?.pubKey,
     loginState?.fromCache,
   );
-  const searchProfilesState = searchProfilesReq.data;
+  const searchProfilesState = searchState[ButtonValues.PEOPLE].results;
 
   const searchPostsReq = useSearchPosts(
-    decodeURIComponent(searchKeyword),
+    decodeURIComponent(searchState.keyword),
+    searchState[ButtonValues.POSTS].page,
     loginState?.pubKey,
     loginState?.fromCache,
   );
-  const searchPostsState = searchPostsReq.data;
+  const searchPostsState = searchState[ButtonValues.POSTS].results;
 
   const searchCommentsReq = useSearchComments(
-    decodeURIComponent(searchKeyword),
+    decodeURIComponent(searchState.keyword),
+    searchState[ButtonValues.REPLIES].page,
     loginState?.pubKey,
     loginState?.fromCache,
   );
-  const searchCommentsState = searchCommentsReq.data;
+  const searchCommentsState = searchState[ButtonValues.REPLIES].results;
 
-  const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
+  const searchTagsReq = useSearchTags(decodeURIComponent(searchState.keyword));
   const searchTagsState = searchTagsReq.data;
 
-  const followEthAddressArr = searchProfilesState?.slice(0, 4).map(profile => profile.ethAddress);
+  React.useEffect(() => {
+    if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data);
+  }, [searchPostsReq.data, searchPostsReq.isFetched]);
+
+  React.useEffect(() => {
+    if (searchCommentsReq.isFetched)
+      updateSearchState(ButtonValues.REPLIES, searchCommentsReq.data);
+  }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
+
+  React.useEffect(() => {
+    if (searchProfilesReq.isFetched) {
+      updateSearchState(ButtonValues.PEOPLE, searchProfilesReq.data);
+    }
+  }, [searchProfilesReq.data, searchProfilesReq.isFetched]);
+
+  const followEthAddressArr = searchProfilesState?.map(profile => profile.ethAddress);
   const isFollowingMultipleReq = useIsFollowingMultiple(
     loginState?.ethAddress,
     followEthAddressArr,
@@ -124,6 +211,16 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       name: 'Feed',
     });
     followReq.mutate(ethAddress);
+  };
+
+  const handleSearch = (inputValue: string) => {
+    const trimmedValue = inputValue.trim();
+    if (!trimmedValue) return;
+    const encodedSearchKey = encodeURIComponent(trimmedValue);
+    props.plugins?.routing?.navigateTo?.({
+      appName: '@akashaproject/app-search',
+      getNavigationUrl: routes => `${routes.rootRoute}/${encodedSearchKey}`,
+    });
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
@@ -167,8 +264,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     searchPostsState?.length === 0 &&
     searchCommentsState?.length === 0 &&
     searchTagsState?.length === 0;
-
-  const [activeButton, setActiveButton] = React.useState<ButtonValues>(ButtonValues.ALL);
 
   React.useEffect(() => {
     if (activeButton !== ButtonValues.ALL) {
@@ -218,18 +313,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     0;
 
   const isFetchingSearch = React.useMemo(() => {
-    return (
-      searchProfilesReq.isFetching ||
-      searchPostsReq.isFetching ||
-      searchCommentsReq.isFetching ||
-      searchTagsReq.isFetching
-    );
-  }, [
-    searchCommentsReq.isFetching,
-    searchPostsReq.isFetching,
-    searchProfilesReq.isFetching,
-    searchTagsReq.isFetching,
-  ]);
+    if (activeButton === ButtonValues.ALL || activeButton === ButtonValues.TOPICS) return false;
+    return searchState.keyword && !searchState[activeButton].done;
+  }, [searchState, activeButton]);
 
   const allQueriesFinished = React.useMemo(() => {
     return (
@@ -247,72 +333,85 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   return (
     <Box fill="horizontal">
-      <TabsToolbar
-        noMarginBottom
-        count={searchCount}
-        countLabel={t('Results')}
-        activeButton={activeButton}
-        tabButtons={
-          <>
-            <StyledSwitchCardButton
-              label={t('{{ buttonValuesAll }}', { buttonValuesAll: ButtonValues.ALL })}
-              size="large"
-              removeBorder={false}
-              primary={ButtonValues.ALL === activeButton}
-              onClick={onTabClick(ButtonValues.ALL)}
-            />
-            <StyledSwitchCardButton
-              label={t('{{ buttonValuesPeople }}', { buttonValuesPeople: ButtonValues.PEOPLE })}
-              size="large"
-              removeBorder={true}
-              primary={ButtonValues.PEOPLE === activeButton}
-              onClick={onTabClick(ButtonValues.PEOPLE)}
-            />
-            <StyledSwitchCardButton
-              label={t('{{ buttonValuesTopics }}', { buttonValuesTopics: ButtonValues.TOPICS })}
-              size="large"
-              removeBorder={true}
-              primary={ButtonValues.TOPICS === activeButton}
-              onClick={onTabClick(ButtonValues.TOPICS)}
-            />
-            <StyledSwitchCardButton
-              label={t('{{ buttonValuesPosts }}', { buttonValuesPosts: ButtonValues.POSTS })}
-              size="large"
-              removeBorder={true}
-              primary={ButtonValues.POSTS === activeButton}
-              onClick={onTabClick(ButtonValues.POSTS)}
-            />
-            <StyledSwitchCardButton
-              label={t('{{ buttonValuesReplies }}', { buttonValuesReplies: ButtonValues.REPLIES })}
-              size="large"
-              removeBorder={true}
-              primary={ButtonValues.REPLIES === activeButton}
-              onClick={onTabClick(ButtonValues.REPLIES)}
-            />
-          </>
-        }
-        onTabClick={onTabClick}
-        onIconClick={onNavBack}
-        hasIcon={true}
-        hasMobileDesign={true}
-        buttonValues={buttonValues}
-        loggedUser={loginState?.pubKey}
-      />
-      {allQueriesFinished && emptySearchState && (
-        <BasicCardBox>
-          <ErrorLoader
-            type="no-login"
-            title={`${t('No matching results found')} 😞`}
-            details={t(
-              'Make sure you spelled everything correctly or try searching for something else',
-            )}
-          />
-        </BasicCardBox>
+      <SearchStartCard
+        searchKeywordParam={searchKeyword}
+        handleSearch={handleSearch}
+        inputPlaceholderLabel={t('Search')}
+        title={t('✨ Find what you are looking for ✨')}
+        description={t(
+          'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community.',
+        )}
+      >
+        <TabsToolbar
+          noMarginBottom
+          count={searchCount}
+          countLabel={t('Results')}
+          activeButton={activeButton}
+          tabForm={TAB_TOOLBAR_TYPE.WIDE}
+          tabButtons={
+            <>
+              <StyledSwitchCardButton
+                label={t('{{ buttonValuesAll }}', { buttonValuesAll: ButtonValues.ALL })}
+                size="large"
+                removeBorder={false}
+                primary={ButtonValues.ALL === activeButton}
+                onClick={onTabClick(ButtonValues.ALL)}
+              />
+              <StyledSwitchCardButton
+                label={t('{{ buttonValuesPeople }}', { buttonValuesPeople: ButtonValues.PEOPLE })}
+                size="large"
+                removeBorder={true}
+                primary={ButtonValues.PEOPLE === activeButton}
+                onClick={onTabClick(ButtonValues.PEOPLE)}
+              />
+              <StyledSwitchCardButton
+                label={t('{{ buttonValuesTopics }}', { buttonValuesTopics: ButtonValues.TOPICS })}
+                size="large"
+                removeBorder={true}
+                primary={ButtonValues.TOPICS === activeButton}
+                onClick={onTabClick(ButtonValues.TOPICS)}
+              />
+              <StyledSwitchCardButton
+                label={t('{{ buttonValuesPosts }}', { buttonValuesPosts: ButtonValues.POSTS })}
+                size="large"
+                removeBorder={true}
+                primary={ButtonValues.POSTS === activeButton}
+                onClick={onTabClick(ButtonValues.POSTS)}
+              />
+              <StyledSwitchCardButton
+                label={t('{{ buttonValuesReplies }}', {
+                  buttonValuesReplies: ButtonValues.REPLIES,
+                })}
+                size="large"
+                removeBorder={true}
+                primary={ButtonValues.REPLIES === activeButton}
+                onClick={onTabClick(ButtonValues.REPLIES)}
+              />
+            </>
+          }
+          onTabClick={onTabClick}
+          onIconClick={onNavBack}
+          hasIcon={true}
+          hasMobileDesign={true}
+          buttonValues={buttonValues}
+          loggedUser={loginState?.pubKey}
+        />
+      </SearchStartCard>
+
+      {allQueriesFinished && searchState.keyword && emptySearchState && (
+        <InfoCard
+          icon="search"
+          title={t('No matching results found 👀')}
+          explanation={t('We could not find any results for your search in Ethereum World.')}
+          suggestion={t(
+            'Make sure you spelled everything correctly or try searching for something else.',
+          )}
+        />
       )}
 
-      <Box>
-        {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.PEOPLE) &&
-          searchProfilesState?.slice(0, 4).map((profileData: IProfileData, index: number) => (
+      <Box margin={{ horizontal: 'small' }}>
+        {activeButton === ButtonValues.ALL &&
+          searchProfilesState?.map((profileData: IProfileData, index: number) => (
             <Box key={index} pad={{ bottom: 'medium' }}>
               <ProfileSearchCard
                 handleFollow={() => handleFollowProfile(profileData.ethAddress)}
@@ -332,6 +431,39 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               />
             </Box>
           ))}
+        {activeButton === ButtonValues.PEOPLE && !!searchProfilesState?.length && (
+          <StyledProfileBox pad="medium">
+            <Text
+              weight="bold"
+              size="xlarge"
+              margin={{ horizontal: 'medium', bottom: 'medium', top: 'xxsmall' }}
+            >
+              PEOPLE
+            </Text>
+            {searchProfilesState?.map((profileData: IProfileData, index: number) => (
+              <Box key={index}>
+                <ProfileSearchCard
+                  className="people-only"
+                  handleFollow={() => handleFollowProfile(profileData.ethAddress)}
+                  handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
+                  isFollowing={followedProfiles.includes(profileData?.ethAddress)}
+                  loggedEthAddress={loginState?.ethAddress}
+                  profileData={profileData}
+                  followLabel={t('Follow')}
+                  unfollowLabel={t('Unfollow')}
+                  descriptionLabel={t('About me')}
+                  followingLabel={t('Following')}
+                  followersLabel={t('Followers')}
+                  postsLabel={t('Posts')}
+                  shareProfileLabel={t('Share')}
+                  profileAnchorLink={'/profile'}
+                  onClickProfile={() => handleProfileClick(profileData.pubKey)}
+                  showPostCount={false}
+                />
+              </Box>
+            ))}
+          </StyledProfileBox>
+        )}
 
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.TOPICS) &&
           searchTagsState?.map((tag: ITag, index: number) => (
@@ -349,67 +481,63 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             </Box>
           ))}
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.POSTS) &&
-          searchPostsState
-            ?.slice(0, 4)
-            .map(itemData => (
-              <EntryCardRenderer
-                key={itemData.entryId}
-                itemData={itemData}
-                itemType={ItemTypes.ENTRY}
-                logger={props.logger}
-                singleSpa={singleSpa}
-                ethAddress={loginState?.ethAddress}
-                onNavigate={handleNavigation}
-                onRepost={handleRepost}
-                onAvatarClick={handleAvatarClick}
-                onMentionClick={handleMentionClick}
-                onTagClick={handleTagClick}
-                contentClickable={true}
-                locale={locale}
-                sharePostUrl={`${window.location.origin}/social-app/post/`}
-                moderatedContentLabel={t('This content has been moderated')}
-                ctaLabel={t('See it anyway')}
-                uiEvents={props.uiEvents}
-                navigateToModal={props.navigateToModal}
-                modalSlotId={props.layoutConfig.modalSlotId}
-              />
-            ))}
+          searchPostsState?.map(itemData => (
+            <EntryCardRenderer
+              key={itemData.entryId}
+              itemData={itemData}
+              itemType={ItemTypes.ENTRY}
+              logger={props.logger}
+              singleSpa={singleSpa}
+              ethAddress={loginState?.ethAddress}
+              onNavigate={handleNavigation}
+              onRepost={handleRepost}
+              onAvatarClick={handleAvatarClick}
+              onMentionClick={handleMentionClick}
+              onTagClick={handleTagClick}
+              contentClickable={true}
+              locale={locale}
+              sharePostUrl={`${window.location.origin}/social-app/post/`}
+              moderatedContentLabel={t('This content has been moderated')}
+              ctaLabel={t('See it anyway')}
+              uiEvents={props.uiEvents}
+              navigateToModal={props.navigateToModal}
+              modalSlotId={props.layoutConfig.modalSlotId}
+            />
+          ))}
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
-          searchCommentsState
-            ?.slice(0, 4)
-            .map(itemData => (
-              <EntryCardRenderer
-                key={itemData.entryId}
-                itemData={itemData}
-                itemType={ItemTypes.COMMENT}
-                logger={props.logger}
-                singleSpa={singleSpa}
-                ethAddress={loginState?.ethAddress}
-                onNavigate={handleNavigation}
-                onRepost={handleRepost}
-                onAvatarClick={handleAvatarClick}
-                onMentionClick={handleMentionClick}
-                onTagClick={handleTagClick}
-                contentClickable={true}
-                locale={locale}
-                sharePostUrl={`${window.location.origin}/social-app/post/`}
-                moderatedContentLabel={t('This content has been moderated')}
-                ctaLabel={t('See it anyway')}
-                uiEvents={props.uiEvents}
-                navigateToModal={props.navigateToModal}
-                modalSlotId={props.layoutConfig.modalSlotId}
-              />
-            ))}
+          searchCommentsState?.map(itemData => (
+            <EntryCardRenderer
+              key={itemData.entryId}
+              itemData={itemData}
+              itemType={ItemTypes.COMMENT}
+              logger={props.logger}
+              singleSpa={singleSpa}
+              ethAddress={loginState?.ethAddress}
+              onNavigate={handleNavigation}
+              onRepost={handleRepost}
+              onAvatarClick={handleAvatarClick}
+              onMentionClick={handleMentionClick}
+              onTagClick={handleTagClick}
+              contentClickable={true}
+              locale={locale}
+              sharePostUrl={`${window.location.origin}/social-app/post/`}
+              moderatedContentLabel={t('This content has been moderated')}
+              ctaLabel={t('See it anyway')}
+              uiEvents={props.uiEvents}
+              navigateToModal={props.navigateToModal}
+              modalSlotId={props.layoutConfig.modalSlotId}
+            />
+          ))}
       </Box>
       {isFetchingSearch && (
-        <BasicCardBox>
-          <Box pad="large">
-            <Spinner />
-          </Box>
-        </BasicCardBox>
+        <Box pad="large">
+          <Spinner />
+        </Box>
       )}
+      {/* triggers intersection observer */}
+      <Box pad="xxsmall" ref={loadmoreRef} />
     </Box>
   );
 };
 
-export default SearchPage;
+export default React.memo(SearchPage);
