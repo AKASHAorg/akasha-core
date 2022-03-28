@@ -11,7 +11,6 @@ const handleNavigation = jest.fn();
 const handleLogin = jest.fn();
 const handleSignup = jest.fn();
 const handleLogout = jest.fn();
-const handleSettings = jest.fn();
 const handleFeedback = jest.fn();
 const handleModerationClick = jest.fn();
 const handleDashboardClick = jest.fn();
@@ -22,13 +21,13 @@ describe('<Topbar /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <Topbar
+            sidebarVisible={true}
             onNavigation={handleNavigation}
             brandLabel="test"
             quickAccessItems={[]}
             onLoginClick={handleLogin}
             onSignUpClick={handleSignup}
             onLogout={handleLogout}
-            onSettingsClick={handleSettings}
             onFeedbackClick={handleFeedback}
             onModerationClick={handleModerationClick}
             onDashboardClick={handleDashboardClick}
@@ -58,13 +57,13 @@ describe.skip('<TopBar /> component on /auth-app* route', () => {
         wrapWithTheme(
           <MemoryRouter initialEntries={['/auth-app/sign-in']}>
             <Topbar
+              sidebarVisible={true}
               onNavigation={handleNavigation}
               brandLabel="test"
               quickAccessItems={[]}
               onLoginClick={handleLogin}
               onSignUpClick={handleSignup}
               onLogout={handleLogout}
-              onSettingsClick={handleSettings}
               onFeedbackClick={handleFeedback}
               onModerationClick={handleModerationClick}
               onDashboardClick={handleDashboardClick}

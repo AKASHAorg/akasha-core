@@ -121,7 +121,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
           style={style}
           margin={{ bottom: 'medium' }}
         >
-          {buttonValues.map((el, idx) => (
+          {buttonValues.map((el: { value: string; label: string }, idx: number) => (
             <Box
               key={idx}
               basis="full"

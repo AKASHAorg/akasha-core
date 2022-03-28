@@ -9,10 +9,12 @@ import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dim
 import lightTheme from '../../styles/themes/light/light-theme';
 import { installedAppsData } from '../../utils/dummy-data';
 
-const worldApps = installedAppsData?.filter(menuItem => menuItem.area.includes(MenuItemAreaType.AppArea));
+const worldApps = installedAppsData?.filter(menuItem =>
+  menuItem.area.includes(MenuItemAreaType.AppArea),
+);
 
-const userInstalledApps = installedAppsData?.filter(
-  menuItem => menuItem.area.includes(MenuItemAreaType.UserAppArea)
+const userInstalledApps = installedAppsData?.filter(menuItem =>
+  menuItem.area.includes(MenuItemAreaType.UserAppArea),
 );
 
 const SidebarComponent = (props: ISidebarProps) => {
@@ -32,7 +34,7 @@ export default {
 const Template = (args: ISidebarProps) => (
   <Grommet theme={lightTheme}>
     <ViewportSizeProvider>
-      <Box width="25%" style={{ maxHeight: '690px' }}>
+      <Box style={{ maxHeight: '690px' }}>
         <SidebarComponent {...args} />
       </Box>
     </ViewportSizeProvider>
@@ -47,7 +49,7 @@ BaseSidebar.args = {
   userInstalledApps: userInstalledApps,
   exploreButtonLabel: 'Explore',
   allMenuItems: installedAppsData,
-  bodyMenuItems: worldApps,
+  worldApps: worldApps,
   isLoggedIn: true,
   loadingUserInstalledApps: false,
 };
