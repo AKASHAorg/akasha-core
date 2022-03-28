@@ -262,13 +262,14 @@ export const iconTypes: IconType[] = [
 export interface IconProps extends CommonInterface<any> {
   color?: string;
   fill?: string;
+  strokeWidth?: number;
   ref?: React.Ref<HTMLDivElement>;
   type: IconType | string;
   clickable?: boolean;
   clickableRed?: boolean;
   accentColor?: boolean;
   plain?: boolean;
-  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   disabled?: boolean;
   wrapperStyle?: React.CSSProperties;
   testId?: string;
@@ -456,6 +457,11 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
           return css`
             width: 2.5rem;
             height: 2.5rem;
+          `;
+        case 'xxl':
+          return css`
+            width: 6.5rem;
+            height: 6.5rem;
           `;
         default:
           return css`

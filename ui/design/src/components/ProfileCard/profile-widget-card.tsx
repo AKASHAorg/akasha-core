@@ -56,6 +56,7 @@ export interface IProfileWidgetCard {
   shareProfileLabel: string;
   // anchor link
   profileAnchorLink?: string;
+  showPostCount?: boolean;
 }
 
 const ProfileWidgetCard: React.FC<IProfileWidgetCard> = props => {

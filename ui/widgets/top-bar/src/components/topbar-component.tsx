@@ -82,7 +82,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   }, []);
 
   const quickAccessItems = routeData?.[MenuItemAreaType.QuickAccessArea];
-  const searchAreaItem = routeData?.[MenuItemAreaType.SearchArea]?.[0];
   const otherAreaItems = routeData?.[MenuItemAreaType.OtherArea];
 
   // sort them so that avatar is last on the topbar menu
@@ -154,15 +153,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleSearch = (inputValue: string) => {
-    const trimmedValue = inputValue.trim();
-    if (!trimmedValue) return;
-    const encodedSearchKey = encodeURIComponent(trimmedValue);
-    if (searchAreaItem) {
-      handleNavigation(`${searchAreaItem.route}/${encodedSearchKey}`);
-    }
-  };
-
   const handleBrandClick = () => {
     if (!props.worldConfig.homepageApp) {
       return;
@@ -211,7 +201,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       signInLabel={t('Sign In')}
       signUpLabel={t('Sign Up')}
       signOutLabel={t('Sign Out')}
-      searchBarLabel={t('Search profiles or topics')}
       legalLabel={t('Legal')}
       isModerator={isModerator}
       dashboardLabel={t('Moderator Dashboard')}
@@ -229,9 +218,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       sidebarVisible={sidebarVisible}
       onNavigation={handleNavigation}
       onSidebarToggle={handleSidebarToggle}
-      onSearch={handleSearch}
       quickAccessItems={sortedQuickAccessItems}
-      searchAreaItem={searchAreaItem}
       otherAreaItems={otherAreaItems}
       onLoginClick={handleLoginClick}
       onSignUpClick={handleSignUpClick}
