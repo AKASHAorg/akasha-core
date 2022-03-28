@@ -40,7 +40,20 @@ const StyledDiv = styled.div`
   cursor: pointer!;
 `;
 
+const StyledSubWrapper = styled(Box)`
+  width: 100%;
+  ${props => css`
+    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
+      max-width: 85%;
+    }
+    @media screen and (min-width: ${props.theme.breakpoints.large.value}px) {
+      width: 70%;
+    }
+  `}
+`;
+
 const StyledContentBox = styled(Box)`
+  margin: 0 auto;
   ${props => css`
     background-color: ${props.theme.colors.background};
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
@@ -139,6 +152,7 @@ export {
   StyledDrop,
   StyledDiv,
   StyledAnchor,
+  StyledSubWrapper,
   StyledContentBox,
   IconDiv,
   BrandIcon,

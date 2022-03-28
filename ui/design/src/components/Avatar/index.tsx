@@ -55,6 +55,7 @@ const Avatar: React.FC<AvatarProps> = props => {
     active,
     ethAddress = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
+    backgroundColor
   } = props;
   const isClickable = typeof onClick === 'function';
   let avatarImage;
@@ -74,6 +75,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       isClickable={isClickable}
       margin={margin}
       border={border}
+      backgroundColor={backgroundColor}
     >
       <React.Suspense fallback={<></>}>
         <AvatarImage image={avatarImage} faded={faded} />

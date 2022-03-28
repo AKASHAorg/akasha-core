@@ -1,7 +1,14 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
 import { useLocation } from 'react-router-dom';
-import { EventTypes, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { useTranslation } from 'react-i18next';
+import { isMobileOnly } from 'react-device-detect';
+
+import DS from '@akashaproject/design-system';
+import {
+  EventTypes,
+  MenuItemAreaType,
+  UIEventData,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   useCheckModerator,
   useCheckNewNotifications,
@@ -9,13 +16,13 @@ import {
   useGetProfile,
   useLogout,
 } from '@akashaproject/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+
 import { extensionPointsMap } from '../extension-points';
 
 const { Topbar, ExtensionPoint } = DS;
 
-const TopbarComponent = (props: RootComponentProps) => {
+const TopbarComponent: React.FC<RootComponentProps> = props => {
   const { singleSpa, uiEvents } = props;
   const navigateTo = props.plugins.routing?.navigateTo;
 
@@ -23,6 +30,8 @@ const TopbarComponent = (props: RootComponentProps) => {
   const location = useLocation();
 
   const [routeData, setRouteData] = React.useState({});
+  // sidebar is open by default on larger screens
+  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(!isMobileOnly ? true : false);
 
   const loginQuery = useGetLogin();
   const logoutMutation = useLogout();
@@ -39,6 +48,27 @@ const TopbarComponent = (props: RootComponentProps) => {
   const checkModeratorResp = checkModeratorQuery.data;
 
   const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
+
+  const uiEventsRef = React.useRef(uiEvents);
+
+  React.useEffect(() => {
+    const eventsSub = uiEventsRef.current.subscribe({
+      next: (eventInfo: UIEventData) => {
+        if (eventInfo.event === EventTypes.HideSidebar) {
+          setSidebarVisible(false);
+        }
+        if (eventInfo.event === EventTypes.ShowSidebar) {
+          setSidebarVisible(true);
+        }
+      },
+    });
+
+    return () => {
+      if (eventsSub) {
+        eventsSub.unsubscribe();
+      }
+    };
+  }, []);
 
   React.useEffect(() => {
     const sub = props.plugins?.routing?.routeObserver?.subscribe({
@@ -106,13 +136,6 @@ const TopbarComponent = (props: RootComponentProps) => {
     });
   };
 
-  const handleSettingsClick = () => {
-    navigateTo?.({
-      appName: '@akashaproject/app-settings-ewa',
-      getNavigationUrl: appRoutes => appRoutes.rootRoute,
-    });
-  };
-
   const handleFeedbackModalShow = () => {
     props.navigateToModal({ name: 'feedback' });
   };
@@ -175,6 +198,12 @@ const TopbarComponent = (props: RootComponentProps) => {
     });
   };
 
+  const handleSidebarToggle = () => {
+    uiEvents.next({
+      event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
+    });
+  };
+
   return (
     <Topbar
       loggedProfileData={loggedProfileData}
@@ -189,8 +218,6 @@ const TopbarComponent = (props: RootComponentProps) => {
       dashboardInfoLabel={t('Help moderate items!')}
       feedbackLabel={t('Send Us Feedback')}
       feedbackInfoLabel={t('Help us improve the experience!')}
-      settingsLabel={t('Settings')}
-      settingsInfoLabel={t('Adjustment for your world and Dapps')}
       moderationLabel={t('Moderation History')}
       moderationInfoLabel={t('Help keep us accountable!')}
       legalCopyRightLabel={'© Ethereum World Association'}
@@ -199,7 +226,9 @@ const TopbarComponent = (props: RootComponentProps) => {
       writeToUs="mailto:alpha@ethereum.world"
       versionLabel="ALPHA"
       versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
+      sidebarVisible={sidebarVisible}
       onNavigation={handleNavigation}
+      onSidebarToggle={handleSidebarToggle}
       onSearch={handleSearch}
       quickAccessItems={sortedQuickAccessItems}
       searchAreaItem={searchAreaItem}
@@ -207,7 +236,6 @@ const TopbarComponent = (props: RootComponentProps) => {
       onLoginClick={handleLoginClick}
       onSignUpClick={handleSignUpClick}
       onLogout={handleLogout}
-      onSettingsClick={handleSettingsClick}
       onFeedbackClick={handleFeedbackModalShow}
       onModerationClick={handleModerationClick}
       onDashboardClick={handleDashboardClick}

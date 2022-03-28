@@ -1,9 +1,17 @@
-import DS from '@akashaproject/design-system';
 import React from 'react';
+import { isMobileOnly } from 'react-device-detect';
+import { BrowserRouter as Router, useMatch } from 'react-router-dom';
+
+import DS from '@akashaproject/design-system';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
+
 import { GlobalStyle } from './global-style';
+import ScrollRestorer from './scroll-restorer';
 import {
   MainAreaContainer,
   ScrollableWidgetArea,
+  SidebarAreaContainer,
   SidebarWrapper,
   WidgetAreaContainer,
   WidgetContainer,
@@ -17,16 +25,13 @@ import {
   FocusedPluginSlot,
   CookieWidgetSlot,
 } from './styled-slots';
-import { EventTypes, ItemTypes, UIEventData } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import ScrollRestorer from './scroll-restorer';
-import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 
 const { Box } = DS;
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
-  const [showSidebar, setShowSidebar] = React.useState(false);
+  // sidebar is open by default on larger screens
+  const [showSidebar, setShowSidebar] = React.useState(!isMobileOnly ? true : false);
 
   const isMatchingFocusedMode = useMatch('/auth-app/*');
   const isFocusedMode = !!isMatchingFocusedMode;
@@ -120,12 +125,16 @@ const Layout: React.FC<RootComponentProps> = props => {
             onUnmount={handleExtensionUnmount}
           />
           <Box direction="row" flex={true}>
-            <SidebarWrapper visible={isFocusedMode ? false : showSidebar}>
-              <SidebarSlot
-                name={props.layoutConfig.sidebarSlotId}
-                onMount={handleExtensionMount}
-                onUnmount={handleExtensionUnmount}
-              />
+            <SidebarWrapper>
+              <SidebarAreaContainer>
+                {/* container enforces sticky position on scroll */}
+                <SidebarSlot
+                  visible={isFocusedMode ? false : showSidebar}
+                  name={props.layoutConfig.sidebarSlotId}
+                  onMount={handleExtensionMount}
+                  onUnmount={handleExtensionUnmount}
+                />
+              </SidebarAreaContainer>
             </SidebarWrapper>
             <MainAreaContainer sidebarVisible={isFocusedMode ? false : showSidebar}>
               <Box direction="row">

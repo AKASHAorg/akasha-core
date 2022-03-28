@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { LogoSourceType, LogoTypeSource } from '@akashaproject/ui-awf-typings';
+
 import Icon, { IconType, iconTypes } from '.';
 import { StyledIconDiv, StyledImage } from './styled-icon';
-import { LogoSourceType, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 export interface IAppIcon extends IconSize {
   ref?: React.Ref<HTMLDivElement>;
@@ -9,6 +10,7 @@ export interface IAppIcon extends IconSize {
   onClick?: React.EventHandler<React.SyntheticEvent>;
   placeholderIconType: IconType;
   plain?: boolean;
+  backgroundColor?: string;
 }
 
 export interface IconSize {
@@ -16,7 +18,8 @@ export interface IconSize {
 }
 
 const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
-  const { appImg, onClick, placeholderIconType, size, plain } = props;
+  const { appImg, onClick, placeholderIconType, size, plain, backgroundColor } = props;
+
   const renderAppImg = () => {
     if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
       return <Icon type={appImg?.value} plain={plain} size={size} />;
@@ -27,7 +30,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     return <Icon type={placeholderIconType} plain={plain} />;
   };
   return (
-    <StyledIconDiv onClick={onClick} ref={ref} size={size}>
+    <StyledIconDiv onClick={onClick} ref={ref} size={size} backgroundColor={backgroundColor}>
       {renderAppImg()}
     </StyledIconDiv>
   );

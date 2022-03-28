@@ -111,7 +111,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
           style={style}
           margin={{ bottom: 'medium' }}
         >
-          {buttonValues.map((el, idx) => (
+          {buttonValues.map((el: { value: string; label: string }, idx: number) => (
             <Box
               key={idx}
               basis="full"
@@ -130,7 +130,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
               onClick={onTabClick(buttonValues[idx].value)}
             >
               <Text color="secondaryText" textAlign="center">
-                {el}
+                {el.label}
               </Text>
             </Box>
           ))}
