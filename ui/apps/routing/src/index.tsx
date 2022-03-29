@@ -29,7 +29,9 @@ export class RoutingPlugin {
           delete all[removed.name];
           delete activeIntegrationNames[removed.name];
           for (const area in byArea) {
-            byArea[area] = byArea[area].filter(route => route.name !== removed.name);
+            if (byArea.hasOwnProperty(area)) {
+              byArea[area] = byArea[area].filter(menuItem => menuItem.name !== removed.name);
+            }
           }
           RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
         }
