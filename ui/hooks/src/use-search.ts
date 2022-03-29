@@ -14,12 +14,19 @@ export const SEARCH_COMMENTS_KEY = 'SEARCH_COMMENTS';
 export const SEARCH_TAGS_KEY = 'SEARCH_TAGS';
 export const SEARCH_KEY = 'SEARCH';
 
-const getSearchProfiles = async (searchQuery: string, loggedUser?: string) => {
+const getSearchProfiles = async (
+  searchQuery: string,
+  page: number,
+  loggedUser?: string,
+  pageSize?: number,
+) => {
   const sdk = getSDK();
   const searchResp = await lastValueFrom(sdk.api.profile.searchProfiles(searchQuery));
 
-  const profilesResp = searchResp.data.searchProfiles;
-
+  const profilesResp = searchResp.data.searchProfiles?.slice(
+    (page - 1) * pageSize,
+    page * pageSize,
+  );
   // get profiles moderation status
   const getProfilesModStatus = profilesResp.map(profile =>
     checkStatus({
@@ -53,14 +60,22 @@ const getSearchProfiles = async (searchQuery: string, loggedUser?: string) => {
 /**
  * Hook to search for profiles
  * @param searchQuery - query for the search
+ * @param page - page number
  * @param loggedUser - pubKey of the logged in user
  * @param enabler - flag to allow the query
+ * @param pageSize - number of results per page
  * @returns search results for profiles, containing full profile data
  */
-export function useSearchProfiles(searchQuery: string, loggedUser?: string, enabler = true) {
+export function useSearchProfiles(
+  searchQuery: string,
+  page: number,
+  loggedUser?: string,
+  enabler = true,
+  pageSize = 5,
+) {
   return useQuery(
-    [SEARCH_PROFILES_KEY, searchQuery],
-    () => getSearchProfiles(searchQuery, loggedUser),
+    [SEARCH_PROFILES_KEY, searchQuery, page],
+    () => getSearchProfiles(searchQuery, page, loggedUser, pageSize),
     {
       initialData: [],
       enabled: !!(searchQuery && enabler),
@@ -70,14 +85,19 @@ export function useSearchProfiles(searchQuery: string, loggedUser?: string, enab
   );
 }
 
-const getSearchPosts = async (searchQuery: string, loggedUser?: string) => {
+const getSearchPosts = async (
+  searchQuery: string,
+  page: number,
+  loggedUser?: string,
+  pageSize = 5,
+) => {
   const sdk = getSDK();
   const searchResp = await lastValueFrom(sdk.api.profile.globalSearch(searchQuery));
 
   // get posts data
-  const getEntriesCalls = searchResp.data?.globalSearch?.posts?.map((entry: { id: string }) =>
-    sdk.api.entries.getEntry(entry.id),
-  );
+  const getEntriesCalls = searchResp.data?.globalSearch?.posts
+    ?.slice((page - 1) * pageSize, page * pageSize)
+    ?.map((entry: { id: string }) => sdk.api.entries.getEntry(entry.id));
 
   // get posts moderation status
   const getEntriesModStatus = searchResp.data?.globalSearch?.posts?.map((entry: { id: string }) =>
@@ -101,27 +121,44 @@ const getSearchPosts = async (searchQuery: string, loggedUser?: string) => {
 /**
  * Hook to search for posts
  * @param searchQuery - query for the search
+ * @param page - page number
  * @param loggedUser - pubKey of the logged in user
  * @param enabler - flag to allow the query
+ * @param pageSize - number of results per page
  * @returns search results for posts
  */
-export function useSearchPosts(searchQuery: string, loggedUser?: string, enabler = true) {
-  return useQuery([SEARCH_POSTS_KEY, searchQuery], () => getSearchPosts(searchQuery, loggedUser), {
-    initialData: [],
-    enabled: !!(searchQuery && enabler),
-    keepPreviousData: true,
-    onError: (err: Error) => logError('useSearch.searchPosts', err),
-  });
+export function useSearchPosts(
+  searchQuery: string,
+  page: number,
+  loggedUser?: string,
+  enabler = true,
+  pageSize = 5,
+) {
+  return useQuery(
+    [SEARCH_POSTS_KEY, searchQuery, page],
+    () => getSearchPosts(searchQuery, page, loggedUser, pageSize),
+    {
+      initialData: [],
+      enabled: !!(searchQuery && enabler),
+      keepPreviousData: true,
+      onError: (err: Error) => logError('useSearch.searchPosts', err),
+    },
+  );
 }
 
-const getSearchComments = async (searchQuery: string, loggedUser?: string) => {
+const getSearchComments = async (
+  searchQuery: string,
+  page: number,
+  loggedUser?: string,
+  pageSize = 5,
+) => {
   const sdk = getSDK();
   const searchResp = await lastValueFrom(sdk.api.profile.globalSearch(searchQuery));
 
   // get comments data
-  const getCommentsCalls = searchResp.data?.globalSearch?.comments?.map((comment: { id: string }) =>
-    sdk.api.comments.getComment(comment.id),
-  );
+  const getCommentsCalls = searchResp.data?.globalSearch?.comments
+    ?.slice((page - 1) * pageSize, page * pageSize)
+    ?.map((comment: { id: string }) => sdk.api.comments.getComment(comment.id));
 
   // get comments moderation status
   const getCommentsModStatus = searchResp.data?.globalSearch?.comments?.map(
@@ -148,14 +185,22 @@ const getSearchComments = async (searchQuery: string, loggedUser?: string) => {
 /**
  * Hook to search for comments
  * @param searchQuery - query for the search
+ * @param page - page number
  * @param loggedUser - pubKey of the logged in user
  * @param enabler - flag to allow the query
+ * @param pageSize - number of results per page
  * @returns search results for comments
  */
-export function useSearchComments(searchQuery: string, loggedUser?: string, enabler = true) {
+export function useSearchComments(
+  searchQuery: string,
+  page: number,
+  loggedUser?: string,
+  enabler = true,
+  pageSize = 5,
+) {
   return useQuery(
-    [SEARCH_COMMENTS_KEY, searchQuery],
-    () => getSearchComments(searchQuery, loggedUser),
+    [SEARCH_COMMENTS_KEY, searchQuery, page],
+    () => getSearchComments(searchQuery, page, loggedUser, pageSize),
     {
       initialData: [],
       enabled: !!(searchQuery && enabler),
@@ -177,7 +222,6 @@ const getSearchTags = async (searchQuery: string) => {
 /**
  * Hook to search for tags
  * @param searchQuery - query for the search
- * @param loggedUser - pubKey of the logged in user
  * @param enabler - flag to allow the query
  * @returns search results for posts, comments, tags and profiles
  */

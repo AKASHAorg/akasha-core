@@ -20,7 +20,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   mountsIn: opts.layoutConfig?.pluginSlotId,
   menuItems: {
     label: 'Search',
-    area: [MenuItemAreaType.SearchArea],
+    area: [MenuItemAreaType.SearchArea, MenuItemAreaType.AppArea],
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'search' },
     subRoutes: [],

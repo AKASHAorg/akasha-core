@@ -47,6 +47,7 @@ export interface AWF_APP_SOURCE_MANIFEST {
   license?: string;
   description?: string;
   keywords?: string[];
+  displayName?: string;
 }
 
 export interface ReleaseInfo {

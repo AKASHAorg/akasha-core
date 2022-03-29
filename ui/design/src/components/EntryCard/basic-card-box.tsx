@@ -100,6 +100,15 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
 
 const MainAreaCardBox = styled(BasicCardBox)<{ verticalFill?: boolean; borderedShadow?: boolean }>`
   /* max-width: 36.313rem; */
+  &.people-only {
+    border: 0;
+    padding: 0;
+    box-shadow: none;
+
+    > div {
+      margin: 0.35rem;
+    }
+  }
   ${props => {
     if (props.verticalFill) {
       return css`

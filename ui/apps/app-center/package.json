@@ -58,5 +58,8 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "akasha": {
+    "displayName": "Integration Center"
+  }
 }

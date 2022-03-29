@@ -29,6 +29,9 @@ export default {
       xlarge: {
         value: 1200,
       },
+      xxlarge: {
+        value: 1326,
+      },
     },
   },
 };

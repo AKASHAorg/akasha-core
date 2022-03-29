@@ -30,7 +30,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     route: rootRoute,
     label: 'Social',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
+    logo: { type: LogoTypeSource.ICON, value: 'akasha' },
     area: [MenuItemAreaType.AppArea],
     subRoutes: [],
   },

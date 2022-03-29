@@ -2,15 +2,12 @@ import { Box, Stack } from 'grommet';
 import * as React from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Icon from '../Icon';
-import { SearchBar } from './search-bar';
-import { MobileSearchBar } from './mobile-search-bar';
 import Avatar from '../Avatar';
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/';
 import {
   TopbarWrapper,
   StyledText,
-  StyledSearchContainer,
   StyledDrop,
   StyledDiv,
   StyledTextOnboarding,
@@ -20,6 +17,7 @@ import {
   MenuIcon,
   VersionButton,
   IconDiv,
+  StyledSubWrapper,
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
@@ -41,12 +39,9 @@ export interface ITopbarProps {
   signInLabel?: string;
   signUpLabel?: string;
   signOutLabel?: string;
-  searchBarLabel?: string;
   legalLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
-  settingsLabel?: string;
-  settingsInfoLabel?: string;
   moderationLabel?: string;
   moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
@@ -57,11 +52,11 @@ export interface ITopbarProps {
   isModerator?: boolean;
   dashboardLabel?: string;
   dashboardInfoLabel?: string;
+  // sidebar
+  sidebarVisible: boolean;
   // handlers
   onNavigation: (path: string) => void;
-  onSidebarToggle?: (visibility: boolean) => void;
-  onSearch: (inputValue: string) => void;
-  onSettingsClick: () => void;
+  onSidebarToggle?: () => void;
   onFeedbackClick: () => void;
   onModerationClick: () => void;
   onDashboardClick: () => void;
@@ -85,12 +80,9 @@ const Topbar: React.FC<ITopbarProps> = props => {
     signInLabel,
     signUpLabel,
     signOutLabel,
-    searchBarLabel,
     legalLabel,
     feedbackLabel,
     feedbackInfoLabel,
-    settingsLabel,
-    settingsInfoLabel,
     moderationLabel,
     moderationInfoLabel,
     legalCopyRightLabel,
@@ -102,14 +94,12 @@ const Topbar: React.FC<ITopbarProps> = props => {
     writeToUs,
     className,
     quickAccessItems,
-    searchAreaItem,
     otherAreaItems,
-    onSearch,
+    sidebarVisible,
     onNavigation,
-    // onSidebarToggle,
+    onSidebarToggle,
     onLoginClick,
     onSignUpClick,
-    onSettingsClick,
     onFeedbackClick,
     onModerationClick,
     onDashboardClick,
@@ -120,13 +110,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
     quickAccessExt,
   } = props;
 
-  const [inputValue, setInputValue] = React.useState('');
   // const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const [dropOpen, setDropOpen] = React.useState(false);
   const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
-  const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
   const [legalMenu, setLegalMenu] = React.useState<IMenuItem | null>(null);
 
@@ -283,114 +271,80 @@ const Topbar: React.FC<ITopbarProps> = props => {
     );
   };
 
-  const renderSearchArea = () => {
-    if (searchAreaItem) {
-      if (isMobileOnly) {
-        return (
-          <Icon
-            type="search"
-            size={iconSize}
-            onClick={() => {
-              setMobileSearchOpen(true);
-            }}
-          />
-        );
-      }
-      return (
-        <StyledSearchContainer>
-          <SearchBar
-            inputValue={inputValue}
-            onInputChange={ev => setInputValue(ev.target.value)}
-            onSearch={onSearch}
-            inputPlaceholderLabel={searchBarLabel}
-          />
-        </StyledSearchContainer>
-      );
-    }
-    return;
-  };
-
   const renderContent = (shouldRenderOnboarding?: boolean) => {
-    if (isMobileOnly && mobileSearchOpen) {
-      return (
-        <MobileSearchBar
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-          onSearch={onSearch}
-          inputPlaceholderLabel={searchBarLabel}
-          handleCloseInput={() => {
-            if (currentLocation?.includes('search')) {
-              window.history.back();
-            }
-            setInputValue('');
-            setMobileSearchOpen(false);
-          }}
-        />
-      );
-    }
     return (
-      <StyledContentBox
-        direction="row"
-        align="center"
-        justify="between"
-        fill="horizontal"
-        height="3rem"
-      >
-        <Box direction="row" align="center" flex={{ shrink: 0 }} gap="small" onClick={onBrandClick}>
-          <Box direction="row" gap="small" align="center">
-            <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
-            {!isMobileOnly && (
-              <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">
-                {brandLabel}
-              </StyledText>
-            )}
-          </Box>
-          {versionURL && (
-            <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
-          )}
-        </Box>
-        <Box
+      <StyledSubWrapper direction="row" align="center" height="3rem">
+        <IconDiv margin={{ right: 'small' }} isActive={sidebarVisible} onClick={onSidebarToggle}>
+          <Icon type="menu" clickable={true} accentColor={sidebarVisible} />
+        </IconDiv>
+        <StyledContentBox
           direction="row"
           align="center"
-          gap="small"
-          pad={isMobileOnly ? 'none' : { left: 'medium' }}
+          justify="between"
           fill="horizontal"
-          justify="end"
+          height="3rem"
         >
-          {!shouldRenderOnboarding && renderSearchArea()}
-          {quickAccessExt}
-          {loggedProfileData?.ethAddress &&
-            !shouldRenderOnboarding &&
-            quickAccessItems &&
-            quickAccessItems.map(renderPluginButton)}
-          {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
-            <Box direction="row" align="center" gap="small">
-              <Button onClick={onLoginClick} label={signInLabel} />
-              <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
+          <Box
+            direction="row"
+            align="center"
+            flex={{ shrink: 0 }}
+            gap="small"
+            onClick={onBrandClick}
+          >
+            <Box direction="row" gap="small" align="center">
+              <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
+              {!isMobileOnly && (
+                <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">
+                  {brandLabel}
+                </StyledText>
+              )}
             </Box>
-          )}
-          {shouldRenderOnboarding && (
-            <Box direction="row">
-              <StyledTextOnboarding margin={{ right: '0.2rem' }} alignSelf="center">
-                {stuckLabel}
-              </StyledTextOnboarding>
-              <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
-            </Box>
-          )}
-          {(!loggedProfileData?.ethAddress || shouldRenderOnboarding) && (
-            <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
-              <MenuIcon
-                rotate={isMobileOnly ? 90 : 0}
-                ref={feedbackMenuRef}
-                type={isMobileOnly ? 'moreDark' : 'dropdown'}
-                clickable={true}
-                accentColor={menuDropOpen}
-                size={iconSize}
-              />
-            </IconDiv>
-          )}
-        </Box>
-      </StyledContentBox>
+            {versionURL && (
+              <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
+            )}
+          </Box>
+          <Box
+            direction="row"
+            align="center"
+            gap="small"
+            pad={isMobileOnly ? 'none' : { left: 'medium' }}
+            fill="horizontal"
+            justify="end"
+          >
+            {quickAccessExt}
+            {loggedProfileData?.ethAddress &&
+              !shouldRenderOnboarding &&
+              quickAccessItems &&
+              quickAccessItems.map(renderPluginButton)}
+            {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
+              <Box direction="row" align="center" gap="small">
+                <Button onClick={onLoginClick} label={signInLabel} />
+                <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
+              </Box>
+            )}
+            {shouldRenderOnboarding && (
+              <Box direction="row">
+                <StyledTextOnboarding margin={{ right: '0.2rem' }} alignSelf="center">
+                  {stuckLabel}
+                </StyledTextOnboarding>
+                <StyledAnchor href={writeToUs} label={helpLabel} target="_blank" />
+              </Box>
+            )}
+            {(!loggedProfileData?.ethAddress || shouldRenderOnboarding) && (
+              <IconDiv isActive={menuDropOpen} onClick={handleMenuClick} isMobile={isMobileOnly}>
+                <MenuIcon
+                  rotate={isMobileOnly ? 90 : 0}
+                  ref={feedbackMenuRef}
+                  type={isMobileOnly ? 'moreDark' : 'dropdown'}
+                  clickable={true}
+                  accentColor={menuDropOpen}
+                  size={iconSize}
+                />
+              </IconDiv>
+            )}
+          </Box>
+        </StyledContentBox>
+      </StyledSubWrapper>
     );
   };
 
@@ -419,8 +373,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
-          settingsLabel={settingsLabel}
-          settingsInfoLabel={settingsInfoLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
@@ -428,7 +380,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           menuItems={dropItems}
           legalMenu={legalMenu}
           onLogout={onLogout}
-          onSettingsClick={onSettingsClick}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}
@@ -452,13 +403,10 @@ const Topbar: React.FC<ITopbarProps> = props => {
           dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
-          settingsLabel={settingsLabel}
-          settingsInfoLabel={settingsInfoLabel}
           moderationLabel={moderationLabel}
           moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
           legalCopyRightLabel={legalCopyRightLabel}
-          onSettingsClick={onSettingsClick}
           onFeedbackClick={onFeedbackClick}
           onModerationClick={onModerationClick}
           onDashboardClick={onDashboardClick}

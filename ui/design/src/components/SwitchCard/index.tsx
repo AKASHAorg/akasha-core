@@ -23,6 +23,7 @@ export interface ISwitchCard {
   onTabClick: (value: string) => () => void;
   style?: React.CSSProperties;
   className?: string;
+  tabForm?: TAB_TOOLBAR_TYPE;
 }
 
 export interface ISwitchCardButtonProps {
@@ -48,6 +49,11 @@ const StickyBox = styled(Box)<{ userSignedIn: boolean }>`
   z-index: 999;
 `;
 
+export enum TAB_TOOLBAR_TYPE {
+  SLIM,
+  WIDE,
+}
+
 const SwitchCard: React.FC<ISwitchCard> = props => {
   const {
     count,
@@ -63,13 +69,17 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
     buttonsWrapperWidth,
     style,
     className,
+    tabForm = TAB_TOOLBAR_TYPE.SLIM,
   } = props;
 
   const length = buttonValues.length;
 
+  const shouldRenderSlimToolbar =
+    !(isMobileOnly && hasMobileDesign) && tabForm !== TAB_TOOLBAR_TYPE.WIDE;
+
   return (
     <>
-      {!(isMobileOnly && hasMobileDesign) && (
+      {shouldRenderSlimToolbar && (
         <BasicCardBox margin={{ bottom: 'medium' }} style={style} className={className}>
           <Box direction="row" pad="1rem" justify="between" align="center">
             <Box direction="row">
@@ -103,7 +113,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
           </Box>
         </BasicCardBox>
       )}
-      {isMobileOnly && hasMobileDesign && (
+      {!shouldRenderSlimToolbar && (
         <StickyBox
           userSignedIn={!!loggedUser}
           direction="row"
@@ -111,7 +121,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
           style={style}
           margin={{ bottom: 'medium' }}
         >
-          {buttonValues.map((el, idx) => (
+          {buttonValues.map((el: { value: string; label: string }, idx: number) => (
             <Box
               key={idx}
               basis="full"
@@ -130,7 +140,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
               onClick={onTabClick(buttonValues[idx].value)}
             >
               <Text color="secondaryText" textAlign="center">
-                {el}
+                {el.label}
               </Text>
             </Box>
           ))}
@@ -145,9 +155,7 @@ export const TabsToolbar = styled(SwitchCard)<{ noMarginBottom?: boolean }>`
   ${props =>
     props.noMarginBottom &&
     css`
-      @media only screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-        margin-bottom: 0;
-      }
+      margin-bottom: 0;
     `}
   ${StyledSwitchCardButton}:first-child {
     border-radius: 0.25rem 0rem 0rem 0.25rem;
