@@ -64,7 +64,9 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   }, []);
 
   const handleModalClose = React.useCallback(() => {
-    props.singleSpa.navigateToUrl(location.pathname);
+    if (props.singleSpa) {
+      props.singleSpa.navigateToUrl(location.pathname);
+    }
   }, [props.singleSpa]);
 
   return (
@@ -119,7 +121,7 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(ModalWrapper),
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
-      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
+      props.logger.error(`Error in InstallModal: ${JSON.stringify(err)}, ${errorInfo}`);
     }
     return (
       <ThemeWrapper {...props}>

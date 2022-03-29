@@ -18,14 +18,12 @@ import {
   map,
   withLatestFrom,
   combineLatestAll,
-  distinct,
   mergeAll,
   pairwise,
   toArray,
   concatMap,
-  share,
   combineLatestWith,
-  exhaustAll,
+  catchError,
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
@@ -65,7 +63,10 @@ export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo
       }
       return from(System.import(source)).pipe(map(module => ({ manifest, module })));
     }),
-    share(),
+    catchError((err, obs) => {
+      console.log(err, '<<< error in processSystemModules');
+      return obs;
+    }),
   );
 };
 
@@ -81,29 +82,36 @@ export const importIntegrations = (state$: Observable<LoaderState>, logger: ILog
       const importedModules = new Map();
       if (!modules.has(imported.manifest.name)) {
         importedModules.set(imported.manifest.name, imported.module);
+        pipelineEvents.next({
+          modules: new Map([...importedModules, ...modules]),
+        });
       }
-      pipelineEvents.next({
-        modules: new Map([...importedModules, ...modules]),
-      });
+    }),
+    catchError((err, obs) => {
+      console.log(err, '<<< error in processSystemModules');
+      return obs;
     }),
   );
 };
 
-const extractExtensionsFromApps = (
+export const extractExtensionsFromApps = (
   config: IAppConfig & { name: string },
   state$: Observable<LoaderState>,
 ) => {
   return from(config.extends)
     .pipe(
       withLatestFrom(
-        combineLatest({
-          extensionsByParent: state$.pipe(getStateSlice('extensionsByParent')),
-          extensionsByMountPoint: state$.pipe(getStateSlice('extensionsByMountPoint')),
-        }),
+        state$.pipe(getStateSlice('extensionsByParent')),
+        state$.pipe(getStateSlice('extensionsByMountPoint')),
       ),
+      map(([extConfig, extensionsByParent, extensionsByMountPoint]) => ({
+        extConfig,
+        extensionsByParent,
+        extensionsByMountPoint,
+      })),
     )
     .pipe(
-      tap(([extConfig, { extensionsByMountPoint, extensionsByParent }]) => {
+      mergeMap(({ extConfig, extensionsByMountPoint, extensionsByParent }) => {
         const extension = { extConfig, parent: config.name };
         const byMount = new Map(extensionsByMountPoint);
         const byParent = new Map(extensionsByParent);
@@ -120,7 +128,7 @@ const extractExtensionsFromApps = (
           ]);
         }
         if (byParent.has(extension.parent)) {
-          return pipelineEvents.next({
+          return of({
             extensionsByParent: byParent.set(
               extension.parent,
               byParent.get(extension.parent).concat(extension.extConfig),
@@ -128,11 +136,16 @@ const extractExtensionsFromApps = (
             extensionsByMountPoint: byMount,
           });
         } else {
-          return pipelineEvents.next({
+          return of({
             extensionsByParent: byParent.set(extension.parent, [extension.extConfig]),
             extensionsByMountPoint: byMount,
           });
         }
+      }),
+    )
+    .pipe(
+      tap(values => {
+        pipelineEvents.next(values);
       }),
     );
 };
@@ -149,18 +162,28 @@ export const processSystemModules = (
   const manifests$ = state$.pipe(getStateSlice('manifests'));
   const plugins$ = state$.pipe(getStateSlice('plugins'));
 
-  return combineLatest({
-    layoutConfig: layoutConfig$,
-    modules: modules$,
-    integrationConfigs: integrationConfigs$,
-    integrationsByMountPoint: integrationsByMountPoint$,
-    manifests: manifests$,
-    plugins: plugins$,
-  })
+  return modules$
     .pipe(
-      filter(({ layoutConfig }) => !!layoutConfig),
-      distinct(res => res.modules.size),
+      combineLatestWith(layoutConfig$),
+      withLatestFrom(integrationConfigs$, integrationsByMountPoint$, manifests$, plugins$),
+      map(
+        ([
+          [modules, layoutConfig],
+          integrationConfigs,
+          integrationsByMountPoint,
+          manifests,
+          plugins,
+        ]) => ({
+          modules,
+          layoutConfig,
+          integrationConfigs,
+          integrationsByMountPoint,
+          manifests,
+          plugins,
+        }),
+      ),
     )
+    .pipe(filter(({ layoutConfig }) => !!layoutConfig))
     .pipe(
       // @TODO: load plugins exported from modules
       mergeMap(results => {
@@ -253,6 +276,10 @@ export const processSystemModules = (
           });
         }
       }),
+      catchError((err, obs) => {
+        console.log(err, '<<< error in processSystemModules');
+        return obs;
+      }),
     );
 };
 
@@ -313,17 +340,27 @@ export const handleExtPointMountOfApps = (
     mergeAll(),
     filter(({ config }) => !singleSpa.getAppNames().includes(config.name)),
     withLatestFrom(
-      combineLatest({
-        manifests: state$.pipe(getStateSlice('manifests')),
-        activeModal: state$.pipe(getStateSlice('activeModal')),
-        layoutConfig: state$.pipe(getStateSlice('layoutConfig')),
-        integrationConfigs: state$.pipe(getStateSlice('integrationConfigs')),
-        plugins: state$.pipe(getStateSlice('plugins')),
-      }),
+      state$.pipe(getStateSlice('manifests')),
+      state$.pipe(getStateSlice('activeModal')),
+      state$.pipe(getStateSlice('layoutConfig')),
+      state$.pipe(getStateSlice('integrationConfigs')),
+      state$.pipe(getStateSlice('plugins')),
     ),
-    tap(async ([data, props]) => {
-      const { config } = data;
-      const { manifests, plugins } = props;
+    map(([data, manifests, activeModal, layoutConfig, integrationConfigs, plugins]) => ({
+      data,
+      manifests,
+      activeModal,
+      layoutConfig,
+      integrationConfigs,
+      plugins,
+    })),
+    catchError((err, obs) => {
+      logger.error(`Error mounting app: ${err.message}`);
+      return obs;
+    }),
+    tap(async results => {
+      const { config } = results.data;
+      const { manifests, plugins } = results;
       const manifest = manifests.find((m: BaseIntegrationInfo) => m.name === config.name);
 
       await loadI18nNamespaces(plugins, config.i18nNamespace);
@@ -341,14 +378,14 @@ export const handleExtPointMountOfApps = (
           plugins,
           name: manifest.name,
           parseQueryString: parseQueryString,
-          activeModal: props.activeModal,
+          activeModal: results.activeModal,
           worldConfig: worldConfig,
           uiEvents: uiEvents,
-          layoutConfig: props.layoutConfig.extensions,
+          layoutConfig: results.layoutConfig.extensions,
           logger: sdk.services.log.create(manifest.name),
           domElementGetter: () => getDomElement(config, manifest.name, logger),
           navigateToModal: navigateToModal,
-          getAppRoutes: appName => props.integrationConfigs.get(appName).routes,
+          getAppRoutes: appName => results.integrationConfigs.get(appName).routes,
         },
       });
     }),
@@ -375,7 +412,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
         return null;
       }),
       filter(Boolean),
-      combineLatestWith(
+      withLatestFrom(
         state$.pipe(getStateSlice('integrationConfigs')),
         state$.pipe(getStateSlice('extensionParcels')),
       ),
@@ -412,7 +449,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
       }),
     )
     .pipe(
-      combineLatestWith(
+      withLatestFrom(
         state$.pipe(getStateSlice('integrationsByMountPoint')),
         state$.pipe(getStateSlice('extensionsByMountPoint')),
         state$.pipe(getStateSlice('extensionsByParent')),
@@ -549,7 +586,9 @@ const unmountParcels = (
   return from(parcels).pipe(
     concatMap(async parcelData => {
       try {
-        await parcelData.parcel.unmount();
+        if (parcelData.parcel.getStatus() === singleSpa.MOUNTED) {
+          await parcelData.parcel.unmount();
+        }
         return parcelData;
       } catch (err) {
         // show a warn but don't throw an error

@@ -20,11 +20,13 @@ import {
   ReplaySubject,
   pluck,
   of,
+  mergeMap,
 } from 'rxjs';
 import { getEvents, ObservedEventNames } from './events';
 import * as singleSpa from 'single-spa';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import { handleExtensionPointUnmount } from './extensions';
+import { getIntegrationsData } from './manifests';
 
 export interface LoaderState {
   activeModal: ModalNavigationOptions;
@@ -84,8 +86,8 @@ export interface LoaderState {
 
   /**
    * Parcel store for extensions
-   * @param extensionParcel - key: string - extensionID (unique),
-   *    value: `{ parcel: {@link Parcel}, id: string, parent: string }`;
+   * @param extensionParcel - key: string - mount point of the extension,
+   *    value: `{ parcel: {@link Parcel}, id: string, parent: string }[]`;
    */
   extensionParcels: Map<
     string,
@@ -107,8 +109,6 @@ export interface LoaderState {
 
   // plugins that are provided by apps
   plugins: PluginConf;
-
-  menuItems: IMenuList;
   layoutReady: boolean;
 }
 
@@ -132,7 +132,6 @@ export const defaultInitialState: LoaderState = {
   appNotInstalled: false,
   spaEvents: null,
   plugins: {},
-  menuItems: { nextIndex: 1, items: [] },
   layoutReady: false,
 };
 
@@ -170,6 +169,19 @@ export const initState = (
           return handleExtensionPointUnmount(state, newData.data);
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
+          if (worldConfig.registryOverrides.find(override => override.name === newData.data.name)) {
+            return getIntegrationsData([newData.data.name], worldConfig).pipe(
+              mergeMap(results => {
+                const [manifest] = results;
+                if (manifest) {
+                  return of({
+                    ...state,
+                    manifests: [...manifests, manifest],
+                  });
+                }
+              }),
+            );
+          }
           manifests.push(newData.data);
           return of({
             ...state,

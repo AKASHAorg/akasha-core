@@ -17,7 +17,9 @@ jest.mock('@akashaproject/awf-sdk', () => {
 
 jest.mock('single-spa', () => {
   const orig = jest.requireActual('single-spa');
-  const mountRootParcelMock = jest.requireActual('./mocks/single-spa').mountRootParcelMock;
+  const mountRootParcelMock = jest.requireMock(
+    '@akashaproject/ui-awf-testing-utils',
+  ).mountRootParcelMock;
   return {
     ...orig,
     mountRootParcel: mountRootParcelMock,

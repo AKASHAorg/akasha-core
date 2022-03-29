@@ -1,35 +1,28 @@
-import { genWorldConfig, mockSDK } from '@akashaproject/ui-awf-testing-utils';
+import { genWorldConfig, mockSDK, genAppConfig } from '@akashaproject/ui-awf-testing-utils';
 import { TestScheduler } from 'rxjs/testing';
-import { handleIntegrationUninstall, systemImport } from '../src/integrations';
+import {
+  extractExtensionsFromApps,
+  handleExtPointMountOfApps,
+  handleIntegrationUninstall,
+  systemImport,
+} from '../src/integrations';
 import getSDK from '@akashaproject/awf-sdk';
-import { concatMap, map, mergeMap, Observable, of, ReplaySubject, withLatestFrom } from 'rxjs';
+import { concatMap, map, mergeMap, Observable, of, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { initState, LoaderState } from '../src/state';
 import { pipelineEvents } from '../src/events';
 import * as singleSpa from 'single-spa';
-
-jest.mock('single-spa', () => {
-  let appNames = [];
-  return {
-    appNames: [],
-    registerApplication: jest.fn(),
-    getAppNames: jest.fn(() => appNames),
-    setAppNames: names => {
-      appNames = names;
-    },
-    unregisterApplication: jest.fn(() => Promise.resolve()),
-    mountRootParcel: jest.fn((loadingFn, props) => {
-      return {
-        mountPromise: Promise.resolve({ ...props }),
-        unmount: () => {
-          //TODO:
-        },
-      };
-    }),
-  };
-});
+import { IAppConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 jest.mock('@akashaproject/awf-sdk', () => {
   return () => mockSDK();
+});
+
+jest.mock('single-spa', () => {
+  const getSingleSpaInstanceMock = jest.requireActual(
+    '@akashaproject/ui-awf-testing-utils',
+  ).getSingleSpaInstanceMock;
+
+  return getSingleSpaInstanceMock();
 });
 
 describe('[AppLoader] integrations', () => {
@@ -39,6 +32,10 @@ describe('[AppLoader] integrations', () => {
   const globalChannel = new ReplaySubject();
   const worldConfig = genWorldConfig();
   let state$: Observable<LoaderState>;
+  afterAll(() => {
+    jest.unmock('single-spa');
+    jest.unmock('@akashaproject/awf-sdk');
+  });
   beforeEach(() => {
     scheduler = new TestScheduler((actual, expected) => {
       expect(actual).toStrictEqual(expected);
@@ -109,6 +106,63 @@ describe('[AppLoader] integrations', () => {
             done();
           },
         });
+    });
+  });
+  test('extract extensions from apps', () => {
+    const marbles = 'ab-b-ba';
+
+    const values: { [key: string]: IAppConfig & { name: string } } = {
+      a: genAppConfig({ name: '@test/test-app-1' }),
+      b: genAppConfig({ name: '@test/test-app-2' }),
+    };
+
+    const stateVal = {
+      extensionsByParent: new Map(),
+      extensionsByMountPoint: new Map(),
+    };
+
+    scheduler.run(({ cold, expectObservable }) => {
+      const source$ = cold(marbles, values);
+      const input$ = source$.pipe(
+        tap(() => pipelineEvents.next(stateVal)),
+        withLatestFrom(state$),
+        mergeMap(([conf, newState]) => extractExtensionsFromApps(conf, of(newState))),
+      );
+      expectObservable(input$).toBe('ab-b-ba', {
+        a: {
+          extensionsByMountPoint: new Map().set(
+            values.a.extends[0].mountsIn,
+            values.a.extends.map(ext => ({ ...ext, parent: values.a.name })),
+          ),
+          extensionsByParent: new Map().set(values.a.name, values.a.extends),
+        },
+        b: {
+          extensionsByMountPoint: new Map().set(
+            values.b.extends[0].mountsIn,
+            values.b.extends.map(ext => ({ ...ext, parent: values.b.name })),
+          ),
+          extensionsByParent: new Map().set(values.b.name, values.b.extends),
+        },
+      });
+    });
+  });
+  test('handleExtPointMountOfApps', () => {
+    const marbles = 'a';
+    const values = {
+      a: {},
+    };
+    scheduler.run(({ cold, expectObservable }) => {
+      const source$ = cold(marbles, values);
+      const input$ = source$.pipe(
+        withLatestFrom(state$),
+        mergeMap(([, state]) => handleExtPointMountOfApps(worldConfig, of(state), logger)),
+      );
+      expectObservable(input$).toBe('a', {
+        a: {
+          extensionsByMountPoint: new Map(),
+          extensionsByParent: new Map(),
+        },
+      });
     });
   });
 });
