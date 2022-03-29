@@ -19,6 +19,7 @@ import {
   LoginState,
   useHandleNavigation,
   useAnalytics,
+  useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
@@ -26,8 +27,6 @@ import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics
 
 const {
   Box,
-  Text,
-  styled,
   Spinner,
   ProfileSearchCard,
   TagSearchCard,
@@ -38,11 +37,6 @@ const {
   TAB_TOOLBAR_TYPE,
   useIntersectionObserver,
 } = DS;
-
-const StyledProfileBox = styled(Box)`
-  border: ${props => `1px solid ${props.theme.colors.lightBackground}`};
-  border-radius: 0.35rem;
-`;
 
 export enum ButtonValues {
   ALL = 'All',
@@ -82,6 +76,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
   const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
+  const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.ALL, [activeButton]);
 
   const updateSearchState = (type: Exclude<ButtonValues, ButtonValues.ALL>, data: unknown[]) => {
     if (!data || !data.length) {
@@ -95,13 +90,15 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       [type]: {
         ...prevState[type],
         results: [...prevState[type].results, ...data],
+        // topics edge case because it only fetches once
+        done: type === ButtonValues.TOPICS || prevState[type].done,
         isLoading: false,
       },
     }));
   };
 
   const handleLoadMore = () => {
-    if (activeButton === ButtonValues.ALL) return;
+    if (isAllTabActive) return;
     const { done, isLoading } = searchState[activeButton];
     if (done || isLoading) return;
 
@@ -122,8 +119,15 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     threshold: 0,
   });
 
-  React.useEffect(() => {
+  const getSearchStateForTab = (tab: Exclude<ButtonValues, ButtonValues.ALL>) => {
     if (activeButton === ButtonValues.ALL) {
+      return searchState[tab].results.slice(0, 4);
+    }
+    return searchState[tab].results;
+  };
+
+  React.useEffect(() => {
+    if (isAllTabActive) {
       return setSearchState({ ...initSearchState, keyword: searchKeyword });
     }
     setSearchState({
@@ -139,7 +143,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     loginState?.pubKey,
     loginState?.fromCache,
   );
-  const searchProfilesState = searchState[ButtonValues.PEOPLE].results;
+  const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
   const searchPostsReq = useSearchPosts(
     decodeURIComponent(searchState.keyword),
@@ -147,7 +151,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     loginState?.pubKey,
     loginState?.fromCache,
   );
-  const searchPostsState = searchState[ButtonValues.POSTS].results;
+  const searchPostsState = getSearchStateForTab(ButtonValues.POSTS);
 
   const searchCommentsReq = useSearchComments(
     decodeURIComponent(searchState.keyword),
@@ -158,7 +162,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchCommentsState = searchState[ButtonValues.REPLIES].results;
 
   const searchTagsReq = useSearchTags(decodeURIComponent(searchState.keyword));
-  const searchTagsState = searchTagsReq.data;
+  const searchTagsState = getSearchStateForTab(ButtonValues.TOPICS);
 
   React.useEffect(() => {
     if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data);
@@ -174,6 +178,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       updateSearchState(ButtonValues.PEOPLE, searchProfilesReq.data);
     }
   }, [searchProfilesReq.data, searchProfilesReq.isFetched]);
+
+  React.useEffect(() => {
+    if (searchTagsReq.isFetched) updateSearchState(ButtonValues.TOPICS, searchTagsReq.data);
+  }, [searchTagsReq.data, searchTagsReq.isFetched]);
 
   const followEthAddressArr = searchProfilesState?.map(profile => profile.ethAddress);
   const isFollowingMultipleReq = useIsFollowingMultiple(
@@ -312,11 +320,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     0 + searchTagsState?.length ||
     0;
 
-  const isFetchingSearch = React.useMemo(() => {
-    if (activeButton === ButtonValues.ALL || activeButton === ButtonValues.TOPICS) return false;
-    return searchState.keyword && !searchState[activeButton].done;
-  }, [searchState, activeButton]);
-
   const allQueriesFinished = React.useMemo(() => {
     return (
       !searchProfilesReq.isFetching &&
@@ -330,6 +333,13 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     searchProfilesReq.isFetching,
     searchTagsReq.isFetching,
   ]);
+
+  const isFetchingSearch = React.useMemo(() => {
+    if (activeButton === ButtonValues.ALL) {
+      return !allQueriesFinished;
+    }
+    return searchState.keyword && !searchState[activeButton].done;
+  }, [searchState, activeButton, allQueriesFinished]);
 
   return (
     <Box fill="horizontal">
@@ -398,19 +408,21 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         />
       </SearchStartCard>
 
-      {allQueriesFinished && searchState.keyword && emptySearchState && (
-        <InfoCard
-          icon="search"
-          title={t('No matching results found 👀')}
-          explanation={t('We could not find any results for your search in Ethereum World.')}
-          suggestion={t(
-            'Make sure you spelled everything correctly or try searching for something else.',
-          )}
-        />
-      )}
+      {allQueriesFinished &&
+        searchState.keyword &&
+        (isAllTabActive ? emptySearchState : !searchState[activeButton]?.results?.length) && (
+          <InfoCard
+            icon="search"
+            title={t('No matching results found 👀')}
+            explanation={t('We could not find any results for your search in Ethereum World.')}
+            suggestion={t(
+              'Make sure you spelled everything correctly or try searching for something else.',
+            )}
+          />
+        )}
 
       <Box margin={{ horizontal: 'small' }}>
-        {activeButton === ButtonValues.ALL &&
+        {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.PEOPLE) &&
           searchProfilesState?.map((profileData: IProfileData, index: number) => (
             <Box key={index} pad={{ bottom: 'medium' }}>
               <ProfileSearchCard
@@ -431,39 +443,6 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               />
             </Box>
           ))}
-        {activeButton === ButtonValues.PEOPLE && !!searchProfilesState?.length && (
-          <StyledProfileBox pad="medium">
-            <Text
-              weight="bold"
-              size="xlarge"
-              margin={{ horizontal: 'medium', bottom: 'medium', top: 'xxsmall' }}
-            >
-              PEOPLE
-            </Text>
-            {searchProfilesState?.map((profileData: IProfileData, index: number) => (
-              <Box key={index}>
-                <ProfileSearchCard
-                  className="people-only"
-                  handleFollow={() => handleFollowProfile(profileData.ethAddress)}
-                  handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
-                  isFollowing={followedProfiles.includes(profileData?.ethAddress)}
-                  loggedEthAddress={loginState?.ethAddress}
-                  profileData={profileData}
-                  followLabel={t('Follow')}
-                  unfollowLabel={t('Unfollow')}
-                  descriptionLabel={t('About me')}
-                  followingLabel={t('Following')}
-                  followersLabel={t('Followers')}
-                  postsLabel={t('Posts')}
-                  shareProfileLabel={t('Share')}
-                  profileAnchorLink={'/profile'}
-                  onClickProfile={() => handleProfileClick(profileData.pubKey)}
-                  showPostCount={false}
-                />
-              </Box>
-            ))}
-          </StyledProfileBox>
-        )}
 
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.TOPICS) &&
           searchTagsState?.map((tag: ITag, index: number) => (

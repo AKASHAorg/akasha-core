@@ -1,3 +1,5 @@
 {
-  "baseUrl": "https://next.akasha-world-framework.pages.dev/"
+  "baseUrl": "https://next.akasha-world-framework.pages.dev/",
+  "viewportWidth": 1920,
+  "viewportHeight": 1080
 }
