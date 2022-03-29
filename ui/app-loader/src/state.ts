@@ -10,7 +10,6 @@ import {
   EventTypes,
   IntegrationModule,
   PluginConf,
-  IMenuList,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   Observable,
@@ -20,13 +19,11 @@ import {
   ReplaySubject,
   pluck,
   of,
-  mergeMap,
 } from 'rxjs';
 import { getEvents, ObservedEventNames } from './events';
 import * as singleSpa from 'single-spa';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
 import { handleExtensionPointUnmount } from './extensions';
-import { getIntegrationsData } from './manifests';
 
 export interface LoaderState {
   activeModal: ModalNavigationOptions;
@@ -170,17 +167,13 @@ export const initState = (
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
           if (worldConfig.registryOverrides.find(override => override.name === newData.data.name)) {
-            return getIntegrationsData([newData.data.name], worldConfig).pipe(
-              mergeMap(results => {
-                const [manifest] = results;
-                if (manifest) {
-                  return of({
-                    ...state,
-                    manifests: [...manifests, manifest],
-                  });
-                }
-              }),
-            );
+            return of({
+              ...state,
+              manifests: [
+                ...manifests,
+                worldConfig.registryOverrides.find(override => override.name === newData.data.name),
+              ],
+            });
           }
           manifests.push(newData.data);
           return of({

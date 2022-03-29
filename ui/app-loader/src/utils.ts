@@ -41,7 +41,6 @@ export const getModalFromParams = (location: Location) => () => {
     }
     return of({ name: null });
   } catch (err) {
-    console.error(`[getModalFromParams]:`, err);
     return of({ name: null });
   }
 };

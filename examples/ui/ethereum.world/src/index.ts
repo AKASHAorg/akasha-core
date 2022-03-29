@@ -33,7 +33,7 @@ declare const __DEV__: boolean;
       '@akashaproject/app-legal',
       '@akashaproject/app-translation',
       '@akashaproject/app-routing',
-      '@akashaproject/app-bookmarks',
+      // '@akashaproject/app-bookmarks',
     ],
     // pre-installed widgets;
     // layout widget is always loaded by default

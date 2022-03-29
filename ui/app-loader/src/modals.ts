@@ -18,50 +18,86 @@ import { pipelineEvents, uiEvents } from './events';
 import { getStateSlice, LoaderState } from './state';
 import * as singleSpa from 'single-spa';
 
-const unmountActiveModalParcel = (state$: Observable<LoaderState>, logger: ILogger) => {
+const unmountActiveModalParcel = (
+  worldConfig: ILoaderConfig,
+  state$: Observable<LoaderState>,
+  logger: ILogger,
+) => {
   const mountedExtPoints$ = state$.pipe(getStateSlice('mountedExtPoints'));
   const extensionParcels$ = state$.pipe(getStateSlice('extensionParcels'));
   const extensionsByMountPoint$ = state$.pipe(getStateSlice('extensionsByMountPoint'));
   const activeModal$ = state$.pipe(getStateSlice('activeModal'));
+  const layoutConfig$ = state$.pipe(getStateSlice('layoutConfig'));
+  const integrationConfigs$ = state$.pipe(getStateSlice('integrationConfigs'));
+  const manifests$ = state$.pipe(getStateSlice('manifests'));
 
   return activeModal$.pipe(
-    withLatestFrom(mountedExtPoints$, extensionParcels$, extensionsByMountPoint$),
+    withLatestFrom(
+      mountedExtPoints$,
+      extensionParcels$,
+      extensionsByMountPoint$,
+      layoutConfig$,
+      integrationConfigs$,
+      manifests$,
+    ),
     filter(([activeModal]) => !!activeModal.name),
     distinctUntilChanged((prev, current) => prev[0].name === current[0].name),
-    mergeMap(([activeModal, mountedExtPoints, extensionParcels, extensionsByMountPoint]) => {
-      const modalExtensions = extensionsByMountPoint.get(activeModal.name);
-      return from(modalExtensions).pipe(
-        filter(Boolean),
-        map(extension => {
-          for (const [, parcels] of Array.from(extensionParcels)) {
-            return parcels.filter(p => p.parent === extension.parent);
-          }
-        }),
-        filter(Boolean),
-        mergeMap(parcels => {
-          for (const parcelData of parcels) {
-            console.log('unmounting parcel', parcelData);
-            if (parcelData.parcel.getStatus() === singleSpa.NOT_MOUNTED) {
-              return of(parcelData);
+    mergeMap(
+      ([
+        activeModal,
+        mountedExtPoints,
+        extensionParcels,
+        extensionsByMountPoint,
+        layoutConfig,
+        integrationConfigs,
+        manifests,
+      ]) => {
+        const modalExtensions = extensionsByMountPoint.get(activeModal.name);
+        return from(modalExtensions).pipe(
+          filter(Boolean),
+          map(extension => {
+            let extensionMountPoint = extension.mountsIn;
+            if (typeof extensionMountPoint === 'function') {
+              extensionMountPoint = extensionMountPoint({
+                uiEvents,
+                worldConfig: worldConfig,
+                layoutConfig: layoutConfig.extensions,
+                extensionData: activeModal,
+                integrations: {
+                  configs: Object.fromEntries(integrationConfigs),
+                  manifests: manifests,
+                },
+              });
             }
-            const p = parcelData.parcel.unmount();
-            return from(p).pipe(map(() => parcelData));
-          }
-          return of(null);
-        }),
-        toArray(),
-        map(res => {
-          const extParcels = new Map(extensionParcels);
-          extParcels.delete(activeModal.name);
-          return {
-            unmounted: res,
-            mountedExtPoints,
-            activeModal,
-            extensionParcels: extParcels,
-          };
-        }),
-      );
-    }),
+            return extensionParcels
+              .get(extensionMountPoint)
+              .filter(parcel => parcel.parent === extension.parent);
+          }),
+          filter(Boolean),
+          mergeMap(parcels => {
+            for (const parcelData of parcels) {
+              if (parcelData.parcel.getStatus() === singleSpa.NOT_MOUNTED) {
+                return of(parcelData);
+              }
+              const p = parcelData.parcel.unmount();
+              return from(p).pipe(map(() => parcelData));
+            }
+            return of(null);
+          }),
+          toArray(),
+          map(res => {
+            const extParcels = new Map(extensionParcels);
+            extParcels.delete(activeModal.name);
+            return {
+              unmounted: res,
+              mountedExtPoints,
+              activeModal,
+              extensionParcels: extParcels,
+            };
+          }),
+        );
+      },
+    ),
     tap(res => {
       const mountedExtPoints = new Map(res.mountedExtPoints);
       mountedExtPoints.delete(res.activeModal.name);
@@ -108,7 +144,7 @@ export const handleModalRequest = (
         if (modalRequest.name && modalRequest.name !== activeModal.name) {
           // unmount the modal parcel
           if (activeModal.name) {
-            unmountActiveModalParcel(state$, logger).subscribe({
+            unmountActiveModalParcel(worldConfig, state$, logger).subscribe({
               next: () => {
                 uiEvents.next({
                   event: EventTypes.ModalUnmountRequest,
@@ -125,7 +161,7 @@ export const handleModalRequest = (
         }
         if (activeModal.name && !modalRequest.name) {
           // only unmount the active modal;
-          unmountActiveModalParcel(state$, logger).subscribe({
+          unmountActiveModalParcel(worldConfig, state$, logger).subscribe({
             next: () => {
               uiEvents.next({
                 event: EventTypes.ModalUnmountRequest,

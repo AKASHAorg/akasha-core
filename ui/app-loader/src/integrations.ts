@@ -63,9 +63,11 @@ export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo
       }
       return from(System.import(source)).pipe(map(module => ({ manifest, module })));
     }),
-    catchError((err, obs) => {
-      console.log(err, '<<< error in processSystemModules');
-      return obs;
+    catchError(err => {
+      logger.error(
+        `[integrations]: processSystemModules: ${err.message ?? JSON.stringify(err)} ${err.stack}`,
+      );
+      throw err;
     }),
   );
 };
@@ -87,9 +89,11 @@ export const importIntegrations = (state$: Observable<LoaderState>, logger: ILog
         });
       }
     }),
-    catchError((err, obs) => {
-      console.log(err, '<<< error in processSystemModules');
-      return obs;
+    catchError(err => {
+      logger.error(
+        `[integrations]: importIntegrations: ${err.message ?? JSON.stringify(err)} ${err.stack}`,
+      );
+      throw err;
     }),
   );
 };
@@ -97,6 +101,7 @@ export const importIntegrations = (state$: Observable<LoaderState>, logger: ILog
 export const extractExtensionsFromApps = (
   config: IAppConfig & { name: string },
   state$: Observable<LoaderState>,
+  logger: ILogger,
 ) => {
   return from(config.extends)
     .pipe(
@@ -146,6 +151,14 @@ export const extractExtensionsFromApps = (
     .pipe(
       tap(values => {
         pipelineEvents.next(values);
+      }),
+      catchError(err => {
+        logger.error(
+          `[integrations]: extractExtensionsFromApps: ${err.message ?? JSON.stringify(err)} ${
+            err.stack
+          }`,
+        );
+        throw err;
       }),
     );
 };
@@ -241,7 +254,7 @@ export const processSystemModules = (
         from(configs)
           .pipe(
             filter(conf => conf.extends && Array.isArray(conf.extends)),
-            tap(config => extractExtensionsFromApps(config, state$).subscribe()),
+            tap(config => extractExtensionsFromApps(config, state$, logger).subscribe()),
           )
           .subscribe();
       }),
@@ -276,9 +289,13 @@ export const processSystemModules = (
           });
         }
       }),
-      catchError((err, obs) => {
-        console.log(err, '<<< error in processSystemModules');
-        return obs;
+      catchError(err => {
+        logger.error(
+          `[integrations]: processSystemModules: ${err.message ?? JSON.stringify(err)} ${
+            err.stack
+          }`,
+        );
+        throw err;
       }),
     );
 };
@@ -354,10 +371,6 @@ export const handleExtPointMountOfApps = (
       integrationConfigs,
       plugins,
     })),
-    catchError((err, obs) => {
-      logger.error(`Error mounting app: ${err.message}`);
-      return obs;
-    }),
     tap(async results => {
       const { config } = results.data;
       const { manifests, plugins } = results;
@@ -388,6 +401,12 @@ export const handleExtPointMountOfApps = (
           getAppRoutes: appName => results.integrationConfigs.get(appName).routes,
         },
       });
+    }),
+    catchError(err => {
+      logger.error(
+        `[integrations]: Error mounting app: ${err.message ?? JSON.stringify(err)}, ${err.stack}`,
+      );
+      throw err;
     }),
   );
 };
@@ -533,6 +552,14 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
           ...rest,
           uninstallAppRequest: null,
         });
+      }),
+      catchError(err => {
+        logger.error(
+          `[integrations]: handleIntegrationUninstall: ${err.message ?? JSON.stringify(err)}, ${
+            err.stack
+          }`,
+        );
+        throw err;
       }),
     );
 };
