@@ -9,12 +9,4 @@ describe('Search Page', () => {
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
   });
-
-  describe('Search Bar', () => {
-    it('should work typing in the search input', () => {
-      cy.get('#akashaproject-ui-widget-topbar input')
-        .type('test')
-        .should('have.value', 'test');
-    });
-  });
 });
