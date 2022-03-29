@@ -19,7 +19,6 @@ import {
   LoginState,
   useHandleNavigation,
   useAnalytics,
-  useGetLogin,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
