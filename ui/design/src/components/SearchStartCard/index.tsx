@@ -53,7 +53,7 @@ export const SearchStartCard = ({
           onSearch={handleSearch}
         />
       </Box>
-      <Box fill="horizontal">{children}</Box>
+      {shouldMinimize && !!searchKeywordParam.length && <Box fill="horizontal">{children}</Box>}
     </WrapperBox>
   );
 };
