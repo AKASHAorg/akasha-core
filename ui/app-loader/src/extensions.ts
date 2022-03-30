@@ -1,5 +1,6 @@
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import {
+  catchError,
   filter,
   from,
   map,
@@ -8,7 +9,6 @@ import {
   Observable,
   of,
   tap,
-  toArray,
   withLatestFrom,
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
@@ -76,56 +76,16 @@ const getMatchingExtensionConfigs =
         };
       }),
       filter(Boolean),
+      catchError(err => {
+        opts.logger.error(
+          `[extensions]: getMatchingExtensionConfigs ${err.message ?? JSON.stringify(err)}, ${
+            err.stack
+          }`,
+        );
+        throw err;
+      }),
     );
   };
-
-export const handleExtPointMountOfExtensions = (
-  worldConfig: ILoaderConfig,
-  state$: Observable<LoaderState>,
-  logger: ILogger,
-) => {
-  return state$.pipe(
-    getStateSlice('mountedExtPoints'),
-    filter(mounted => mounted.size > 0),
-    withLatestFrom(state$),
-    map(([mountedExtPoints, state]) => ({
-      state,
-      worldConfig,
-      logger,
-      mountedExtPoints,
-    })),
-    mergeMap(props => {
-      return mountMatchingExtensionParcels(props);
-    }),
-    toArray(),
-    withLatestFrom(state$),
-    tap(([parcelsData, state]) => {
-      const parcels = new Map(state.extensionParcels);
-      parcelsData.forEach(parcelData => {
-        if (parcels.has(parcelData.mountPoint)) {
-          const parcelList = parcels.get(parcelData.mountPoint);
-          if (!parcelList.some(parcel => parcel.id === parcelData.extID)) {
-            parcels.set(
-              parcelData.mountPoint,
-              parcels.get(parcelData.mountPoint).concat({
-                parcel: parcelData.parcel,
-                id: parcelData.extID,
-                parent: parcelData.parent,
-              }),
-            );
-          }
-        } else {
-          parcels.set(parcelData.mountPoint, [
-            { parcel: parcelData.parcel, id: parcelData.extID, parent: parcelData.parent },
-          ]);
-        }
-      });
-      pipelineEvents.next({
-        extensionParcels: parcels,
-      });
-    }),
-  );
-};
 
 // exported for testing purposes
 export const mountMatchingExtensionParcels = (opts: {
@@ -172,13 +132,31 @@ export const mountMatchingExtensionParcels = (opts: {
         parseQueryString: parseQueryString,
         plugins: state.plugins,
       };
+      let parcel;
 
-      const parcel = singleSpa.mountRootParcel<RootExtensionProps>(
-        extInfo.extension.loadingFn,
-        extensionProps,
-      );
+      // check if the extension is already loaded
+      if (state.extensionParcels.has(extInfo.mountPoint)) {
+        const parcels = state.extensionParcels.get(extInfo.mountPoint) || [];
+        if (parcels.some(parcel => parcel.id === extInfo.extID)) {
+          parcel = parcels.find(parcel => parcel.id === extInfo.extID);
+        }
+      }
 
-      await parcel.mountPromise;
+      if (!parcel && parentConfig) {
+        try {
+          parcel = singleSpa.mountRootParcel<RootExtensionProps>(
+            extInfo.extension.loadingFn,
+            extensionProps,
+          );
+          await parcel.mountPromise;
+        } catch (err) {
+          logger.error(
+            `[extensions]: mountMatchExtensionParcels:mountRootParcel: cannot mount ${
+              extInfo.extID
+            } into ${extInfo.mountPoint}: ${err.message ?? JSON.stringify(err)}, ${err.stack}`,
+          );
+        }
+      }
 
       return {
         parcel,
@@ -187,7 +165,69 @@ export const mountMatchingExtensionParcels = (opts: {
         parent: extInfo.extension.parent,
       };
     }),
-    filter(parcelData => !!parcelData),
+    filter(({ parcel }) => !!parcel),
+    catchError(err => {
+      logger.error(
+        `[extensions]: mountMatchingExtensionParcels ${err.message ?? JSON.stringify(err)}, ${
+          err.stack
+        }`,
+      );
+      throw err;
+    }),
+  );
+};
+
+export const handleExtPointMountOfExtensions = (
+  worldConfig: ILoaderConfig,
+  state$: Observable<LoaderState>,
+  logger: ILogger,
+) => {
+  return state$.pipe(
+    getStateSlice('mountedExtPoints'),
+    filter(mounted => mounted.size > 0),
+    withLatestFrom(state$),
+    map(([mountedExtPoints, state]) => ({
+      state,
+      worldConfig,
+      logger,
+      mountedExtPoints,
+    })),
+    mergeMap(props => {
+      return mountMatchingExtensionParcels(props);
+    }),
+    withLatestFrom(state$),
+    tap(([parcelData, state]) => {
+      const parcels = new Map(state.extensionParcels);
+
+      if (parcels.has(parcelData.mountPoint)) {
+        const parcelList = parcels.get(parcelData.mountPoint);
+        if (!parcelList.some(parcel => parcel.id === parcelData.extID)) {
+          parcels.set(
+            parcelData.mountPoint,
+            parcels.get(parcelData.mountPoint).concat({
+              parcel: parcelData.parcel,
+              id: parcelData.extID,
+              parent: parcelData.parent,
+            }),
+          );
+        }
+      } else {
+        parcels.set(parcelData.mountPoint, [
+          { parcel: parcelData.parcel, id: parcelData.extID, parent: parcelData.parent },
+        ]);
+      }
+      pipelineEvents.next({
+        extensionParcels: parcels,
+      });
+    }),
+    catchError(err => {
+      logger.error(
+        `[extensions]: handleExtPointMountOfExtensions ${err.message ?? JSON.stringify(err)}, ${
+          err.stack
+        }`,
+      );
+      throw err;
+    }),
   );
 };
 
@@ -195,6 +235,7 @@ export const mountMatchingExtensionParcels = (opts: {
  * Handle extension point unmount event
  */
 export const handleExtensionPointUnmount = (state: LoaderState, eventData: EventDataTypes) => {
+  const logger = getSDK().services.log.create('app-loader');
   return from(state.mountedExtPoints)
     .pipe(filter(([name]) => name === eventData.name))
     .pipe(
@@ -235,6 +276,14 @@ export const handleExtensionPointUnmount = (state: LoaderState, eventData: Event
           extensionParcels,
           mountedExtPoints,
         };
+      }),
+      catchError(err => {
+        logger.error(
+          `[extensions]: handleExtensionPointUnmount ${err.message ?? JSON.stringify(err)}, ${
+            err.stack
+          }`,
+        );
+        throw err;
       }),
     );
 };

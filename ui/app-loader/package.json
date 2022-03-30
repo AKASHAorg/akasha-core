@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc --build && yarn run pack",
-    "test": "jest",
+    "test": "BABEL_ENV=test jest",
     "tsc": "tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../build/app-loader",
@@ -31,6 +31,7 @@
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/sdk-typings": "*",
     "@akashaproject/ui-awf-typings": "*",
+    "@akashaproject/ui-awf-testing-utils": "*",
     "qs": "6.10.2",
     "single-spa": "5.9.3"
   },
@@ -38,7 +39,8 @@
     "i18next": "20.6.1",
     "@types/pino": "7.0.5",
     "@types/qs": "6.9.7",
-    "@types/systemjs": "6.1.1"
+    "@types/systemjs": "6.1.1",
+    "systemjs": "6.12.1"
   },
   "peerDependencies": {
     "rxjs": "7.3.0"
