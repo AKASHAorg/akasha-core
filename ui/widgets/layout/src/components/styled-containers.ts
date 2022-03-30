@@ -63,7 +63,7 @@ export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseCont
   z-index: 10;
   flex-grow: 1;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   @media screen and (max-width: ${props => props.theme.breakpoints.xxlarge.value}px) {
     position: fixed;
     max-width: 100%;
