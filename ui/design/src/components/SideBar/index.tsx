@@ -120,7 +120,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           hasChevron={menuItem.subRoutes?.length > 0}
           onClick={handleAppIconClick(menuItem)}
           isActive={activePanel}
-          label={<MenuItemLabel menuItem={menuItem} />}
+          label={<MenuItemLabel menuItem={menuItem} isActive={activePanel} />}
         >
           {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
             <MenuSubItems
@@ -137,7 +137,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           hasChevron={menuItem.subRoutes?.length > 0}
           onClick={handleAppIconClick(menuItem, true)}
           isActive={activePanel}
-          label={<MenuItemLabel menuItem={menuItem} />}
+          label={<MenuItemLabel menuItem={menuItem} isActive={activePanel} />}
         >
           {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
             <MenuSubItems

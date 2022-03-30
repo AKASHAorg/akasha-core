@@ -11,6 +11,7 @@ export interface IAppIcon extends IconSize {
   placeholderIconType: IconType;
   plain?: boolean;
   backgroundColor?: string;
+  accentColor?: boolean;
 }
 
 export interface IconSize {
@@ -18,16 +19,16 @@ export interface IconSize {
 }
 
 const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
-  const { appImg, onClick, placeholderIconType, size, plain, backgroundColor } = props;
+  const { appImg, onClick, placeholderIconType, size, plain, backgroundColor, accentColor } = props;
 
   const renderAppImg = () => {
     if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
-      return <Icon type={appImg?.value} plain={plain} size={size} />;
+      return <Icon type={appImg?.value} plain={plain} size={size} accentColor={accentColor} />;
     }
     if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
       return <StyledImage src={appImg?.value} fit="contain" size={size} />;
     }
-    return <Icon type={placeholderIconType} plain={plain} />;
+    return <Icon type={placeholderIconType} plain={plain} accentColor={accentColor} />;
   };
   return (
     <StyledIconDiv onClick={onClick} ref={ref} size={size} backgroundColor={backgroundColor}>

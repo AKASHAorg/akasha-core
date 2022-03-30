@@ -10,11 +10,12 @@ import { StyledAppIconWrapper } from './styled-sidebar';
 export interface IMenuAppButton {
   plain?: boolean;
   menuItem: IMenuItem;
+  accentColor?: boolean;
   onClick?: React.EventHandler<React.SyntheticEvent>;
 }
 
 const MenuAppButton: React.FC<IMenuAppButton> = props => {
-  const { plain, menuItem, onClick } = props;
+  const { plain, menuItem, accentColor, onClick } = props;
 
   const renderItem = () => {
     if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
@@ -44,6 +45,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
         plain={plain}
         onClick={onClick}
         appImg={menuItem.logo}
+        accentColor={accentColor}
         placeholderIconType="app"
         backgroundColor="transparent"
       />
