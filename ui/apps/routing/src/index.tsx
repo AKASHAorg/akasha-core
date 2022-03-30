@@ -40,14 +40,14 @@ export class RoutingPlugin {
     uiEvents.subscribe({
       next: (eventData: UIEventData) => {
         if (eventData.event === EventTypes.RegisterIntegration) {
-          const appData = {
+          const appMenuItemData = {
             ...eventData.data.menuItems,
             navRoutes: eventData.data.navRoutes,
             name: eventData.data.name,
           };
-          RoutingPlugin.routeRepository.all[eventData.data.name] = appData;
+          RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
           eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
-            RoutingPlugin.routeRepository.byArea[area].push(appData),
+            RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
           );
           RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
         }
