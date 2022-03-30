@@ -3,8 +3,6 @@ import { Box, Text } from 'grommet';
 
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-import MenuItemLabel from './menu-item-label';
-import MenuSubItems from './menu-sub-items';
 import SectionTitle from './section-title';
 import Skeleton from './skeleton';
 
@@ -15,9 +13,8 @@ import {
   StyledButton,
   StyledFooter,
   StyledAccordion,
-  MobileAccordionPanel,
-  DesktopAccordionPanel,
 } from './styled-sidebar';
+import SidebarMenuItem from './sidebar-menu-item';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -82,7 +79,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     }
   }, [currentRoute, allMenuItems, currentAppData, activeOption]);
 
-  const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => () => {
+  const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
       // if the current app has no subroutes, set as active and redirect to its route
       setCurrentAppData(menuItem);
@@ -110,48 +107,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     onClickExplore();
   };
 
-  const renderMenuItem = (menuItem: IMenuItem, index?: number) => {
-    const activePanel = !!currentRoute?.match(menuItem?.route);
-    return (
-      <>
-        <DesktopAccordionPanel
-          size={size}
-          key={index + menuItem.label}
-          hasChevron={menuItem.subRoutes?.length > 0}
-          onClick={handleAppIconClick(menuItem)}
-          isActive={activePanel}
-          label={<MenuItemLabel menuItem={menuItem} />}
-        >
-          {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
-            <MenuSubItems
-              isMobile={false}
-              menuItem={menuItem}
-              activeOption={activeOption}
-              onOptionClick={handleOptionClick}
-            />
-          )}
-        </DesktopAccordionPanel>
-        <MobileAccordionPanel
-          size={size}
-          key={menuItem.index}
-          hasChevron={menuItem.subRoutes?.length > 0}
-          onClick={handleAppIconClick(menuItem, true)}
-          isActive={activePanel}
-          label={<MenuItemLabel menuItem={menuItem} />}
-        >
-          {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
-            <MenuSubItems
-              isMobile={true}
-              menuItem={menuItem}
-              activeOption={activeOption}
-              onOptionClick={(menu, subMenu) => handleOptionClick(menu, subMenu, true)}
-            />
-          )}
-        </MobileAccordionPanel>
-      </>
-    );
-  };
-
   return (
     <Box
       direction="column"
@@ -160,16 +115,24 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       style={{ position: 'relative' }}
     >
       <StyledHiddenScrollContainer>
-        {worldApps?.length > 0 && (
-          <Box pad={{ top: 'medium', bottom: 'small' }} align="start">
-            <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
-            <StyledAccordion>
-              {worldApps?.map((app: IMenuItem, index: number) => (
-                <React.Fragment key={index}>{renderMenuItem(app, index)}</React.Fragment>
+        <Box pad={{ top: 'medium', bottom: 'small' }} align="start">
+          <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
+          <StyledAccordion>
+            {worldApps &&
+              worldApps.map((menuItem: IMenuItem, index: number) => (
+                <SidebarMenuItem
+                  key={`${menuItem.name}-${index}`}
+                  menuItem={menuItem}
+                  index={index}
+                  currentRoute={currentRoute}
+                  onMenuItemClick={handleAppIconClick}
+                  onSubMenuItemClick={handleOptionClick}
+                  size={size}
+                  activeOption={activeOption}
+                />
               ))}
-            </StyledAccordion>
-          </Box>
-        )}
+          </StyledAccordion>
+        </Box>
         {isLoggedIn && loadingUserInstalledApps && (
           <Box
             pad={{ top: 'medium', bottom: 'small' }}
@@ -188,8 +151,17 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
             <StyledAccordion>
-              {userInstalledApps?.map((app: IMenuItem, index: number) => (
-                <React.Fragment key={index}>{renderMenuItem(app, index)}</React.Fragment>
+              {userInstalledApps?.map((menuItem: IMenuItem, index: number) => (
+                <SidebarMenuItem
+                  key={`${menuItem.name}-${index}`}
+                  menuItem={menuItem}
+                  index={index}
+                  currentRoute={currentRoute}
+                  onMenuItemClick={handleAppIconClick}
+                  onSubMenuItemClick={handleOptionClick}
+                  size={size}
+                  activeOption={activeOption}
+                />
               ))}
             </StyledAccordion>
           </Box>
