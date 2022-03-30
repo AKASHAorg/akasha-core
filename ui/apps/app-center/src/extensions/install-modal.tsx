@@ -64,7 +64,9 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   }, []);
 
   const handleModalClose = React.useCallback(() => {
-    props.singleSpa.navigateToUrl(location.pathname);
+    if (props.singleSpa) {
+      props.singleSpa.navigateToUrl(location.pathname);
+    }
   }, [props.singleSpa]);
 
   return (
@@ -91,15 +93,19 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
       downloadingResourcesLabel={t('Downloading resources')}
       successTitleLabel={t('Done!')}
       successInfoLabel={t(
-        'To check out your new app visit the Integration centre and look under Your Apps. You can also open the side bar menu.',
+        'To check out your new app visit the {{integrationCentreName}} and look under Your Apps. You can also open the side bar menu.',
+        { integrationCentreName: 'Integration Centre' },
       )}
       successSubInfoLabel={t('Enjoy!')}
       successSubtitleLabel={t(
-        'Moderating Tools App is now installed in Ethereum World and is currently active.',
+        '{{integrationName}} App is now installed in {{worldName}} and is currently active.',
+        { integrationName, worldName: props.worldConfig.title },
       )}
       errorInfoLabel={t('Please check your network connection and try again.')}
       errorSubInfoLabel={t('Thank you!')}
-      errorSubtitleLabel={t('could not be installed in Ethereum World.')}
+      errorSubtitleLabel={t('could not be installed in {{worldName}}.', {
+        worldName: props.worldConfig.title,
+      })}
       errorTitleLabel={t('Oops!')}
     />
   );
@@ -119,7 +125,7 @@ const reactLifecycles = singleSpaReact({
   rootComponent: withProviders(ModalWrapper),
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
-      props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);
+      props.logger.error(`Error in InstallModal: ${JSON.stringify(err)}, ${errorInfo}`);
     }
     return (
       <ThemeWrapper {...props}>

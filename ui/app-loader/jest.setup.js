@@ -5,5 +5,10 @@ const mockImport = importName => {
 
 global.fetch = jest.fn(() => Promise.resolve({ json: () => '' }));
 global.System = {
-  import: jest.fn(mockImport),
+  import: jest.fn(() =>
+    Promise.resolve({
+      register: jest.fn(),
+      getPlugin: jest.fn(),
+    }),
+  ),
 };

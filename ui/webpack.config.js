@@ -26,7 +26,7 @@ const exp = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   output: {
     libraryTarget: 'system',
@@ -35,7 +35,10 @@ const exp = {
     crossOriginLoading: 'anonymous',
   },
   plugins: [
-    new CleanWebpackPlugin({ verbose: true }),
+    new CleanWebpackPlugin({
+      verbose: true,
+      dangerouslyAllowCleanPatternsOutsideProject: process.env.NODE_ENV !== 'production'
+    }),
     new WebpackManifestPlugin({
       generate: (seed, files, entries) => {
       const packageJson = require(path.join(process.cwd(), './package.json'));
