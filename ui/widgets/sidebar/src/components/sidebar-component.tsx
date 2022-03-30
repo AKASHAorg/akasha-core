@@ -83,7 +83,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const handleClickExplore = () => {
     // find IC app from world apps
     // @TODO: replace string with a constant
-    const icApp = worldApps.find(app => app.name === '@akashaproject/app-integration-center');
+    const icApp = worldApps.find(
+      menuItem => menuItem.name === '@akashaproject/app-integration-center',
+    );
 
     // if found, navigate to route
     if (icApp) {
