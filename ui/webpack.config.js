@@ -35,7 +35,10 @@ const exp = {
     crossOriginLoading: 'anonymous',
   },
   plugins: [
-    new CleanWebpackPlugin({ verbose: true, dangerouslyAllowCleanPatternsOutsideProject: true }),
+    new CleanWebpackPlugin({
+      verbose: true,
+      dangerouslyAllowCleanPatternsOutsideProject: process.env.NODE_ENV !== 'production'
+    }),
     new WebpackManifestPlugin({
       generate: (seed, files, entries) => {
       const packageJson = require(path.join(process.cwd(), './package.json'));
