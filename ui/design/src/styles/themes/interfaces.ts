@@ -20,6 +20,7 @@ export interface IColors {
   darkText: string;
   inputText: string;
   background: string;
+  overlay: string;
   beigeBackground: string;
   ultraLightBackground: string;
   lightBackground: string;

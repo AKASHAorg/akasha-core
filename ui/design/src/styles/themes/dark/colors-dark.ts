@@ -41,6 +41,7 @@ const colors: IColorsDark = {
   darkText: '#47484A', // system/off white/dark
   inputText: '#47484A', // system/off white/dark
   background: '#0D1A2D', // dark blue
+  overlay: 'rgba(0, 0, 0, 0.6)', // black, 60% opacity
   beigeBackground: '#F8F4F4', // lightBeige
   ultraLightBackground: '#E7E9EC', // ultralightGrey
   lightBackground: '#132540', // dark blue

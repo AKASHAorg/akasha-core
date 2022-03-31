@@ -45,6 +45,7 @@ const colors: IColorsLight = {
   darkText: '#132540',
   inputText: '#949EB3', // grey
   background: '#FFFFFF', // white
+  overlay: 'rgba(0, 0, 0, 0.6)', // black, 60% opacity
   ultraLightBackground: '#FBFCFD', // ultralightGrey
   beigeBackground: '#F8F4F4', // lightBeige
   lightBackground: '#EDF0F5', // lightGrey
