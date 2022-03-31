@@ -84,7 +84,7 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     for (const addr of addrList) {
       if (addr.substring(0, 6) === '/ipfs/') {
         results.push(this.buildOriginLink(addr.substring(6)));
-      } else {
+      } else if (addr.substring(0, 1) === '/') {
         results.push(multiaddrToUri(addr));
       }
     }

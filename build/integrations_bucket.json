@@ -2,7 +2,7 @@
   {
     "name": "locales",
     "id": "0xc914c9efa3dec03f54e57a7f5956218306e3c1e620da9bbb91372dfea24eecdd",
-    "ipfsManifest": "f0155171c08b78fcc29e30993892775a4191ac67bf6f6f1bac3b73f3bd529cf88",
+    "ipfsManifest": "f0155171cfe4104ed8eeaaf3fd098d5be3583f22b53ab5f6a18a3bd565c1aa589",
     "type": ""
   },
   {
@@ -32,7 +32,7 @@
   {
     "name": "@akashaproject/app-bookmarks",
     "id": "0x7c358962114872262bb341384016ad0bd30ef84ee0729f4b6e901f13a29799ca",
-    "ipfsManifest": "f0155171c7e0d5d110b662c1ef6e67890de4df2367875408126595b875d6cbbe1",
+    "ipfsManifest": "f0155171cc76a10a593a6d485c9374d2d8d2543d24d4625e13427e421445b266e",
     "type": 0
   },
   {
@@ -44,7 +44,7 @@
   {
     "name": "@akashaproject/app-notifications",
     "id": "0xafd49f21aa8f6cc0278036cc6d69643c6b8aa1fec2e497d44902cc13a27c1ea4",
-    "ipfsManifest": "f0155171c1e1f90391f68a5faaa3a3fcb2f4b6f87e724f21b9ad74bc48039affd",
+    "ipfsManifest": "f0155171c8e76a773e6e477b22b92b790a5cbe2f7d6a35358cd06b8caa1eefca7",
     "type": 0
   },
   {
