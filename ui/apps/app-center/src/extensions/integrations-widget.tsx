@@ -8,7 +8,7 @@ import DS from '@akashaproject/design-system';
 import {
   useGetAllInstalledApps,
   useGetAllIntegrationsIds,
-  useGetIntegrationsInfo,
+  useGetLatestReleaseInfo,
   withProviders,
   useGetLogin,
   ThemeWrapper,
@@ -49,20 +49,24 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   }, [availableIntegrationsReq.data, worldConfig.defaultApps]);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
-  const integrationsInfoReq = useGetIntegrationsInfo(integrationIdsNormalized);
+  const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
 
-  // select default apps from list of apps
-  const filteredDefaultApps = integrationsInfoReq.data?.getIntegrationInfo.filter(app => {
-    if (worldConfig.defaultApps?.some(defaultApp => defaultApp === app.name)) {
-      return app;
-    }
-  });
-  // select user installed apps from list of installed apps
-  const filteredInstalledApps = integrationsInfoReq.data?.getIntegrationInfo.filter(app => {
-    if (defaultIntegrations?.some(defaultApp => defaultApp !== app.name)) {
-      if (installedAppsReq.data?.some(installedApp => installedApp.id === app.id)) return app;
-    }
-  });
+  const { filteredDefaultApps, filteredInstalledApps } =
+    integrationsInfoReq.data?.getLatestRelease.reduce(
+      (acc, app) => {
+        // select default apps from list of apps
+        if (defaultIntegrations.includes(app.name)) {
+          acc.filteredDefaultApps.push(app);
+        } else {
+          // select user installed apps from list of installed apps
+          if (installedAppsReq.data?.some(installedApp => installedApp.id === app.id)) {
+            acc.filteredInstalledApps.push(app);
+          }
+        }
+        return acc;
+      },
+      { filteredDefaultApps: [], filteredInstalledApps: [] },
+    );
 
   const handleAppClick = (integrationId: string) => {
     props.singleSpa.navigateToUrl(`${routes[INFO]}/${integrationId}`);

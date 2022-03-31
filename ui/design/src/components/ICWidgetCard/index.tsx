@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Text, Tabs } from 'grommet';
-import { IntegrationInfo } from '@akashaproject/ui-awf-typings';
+import { ReleaseInfo } from '@akashaproject/ui-awf-typings';
 import Icon from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
@@ -11,8 +11,8 @@ import ErrorLoader from '../ErrorLoader';
 export interface ICWidgetCardProps {
   className?: string;
 
-  worldApps: IntegrationInfo[];
-  installedApps: IntegrationInfo[];
+  worldApps: ReleaseInfo[];
+  installedApps: ReleaseInfo[];
   // labels
   titleLabel: string;
   worldAppsLabel: string;
@@ -95,8 +95,8 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                       <Box width="100%" pad="none" align="start">
                         <SubtitleTextIcon
                           onClick={() => onClickWorldApp(app.id)}
-                          label={app.name}
-                          subtitle={`@${app.id}`}
+                          label={app.manifestData?.displayName}
+                          subtitle={app.name}
                           labelSize="large"
                           gap="xxsmall"
                           maxWidth="10rem"
@@ -153,8 +153,8 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                       <Box width="100%" pad="none" align="start">
                         <SubtitleTextIcon
                           onClick={() => onClickInstalledApp(app.id)}
-                          label={app.name}
-                          subtitle={`@${app.id}`}
+                          label={app.manifestData?.displayName}
+                          subtitle={app.name}
                           labelSize="large"
                           gap="xxsmall"
                           maxWidth="10rem"
