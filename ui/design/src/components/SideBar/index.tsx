@@ -115,6 +115,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       elevation="shadow"
       className={className}
       style={{ position: 'relative' }}
+      border={{ side: 'right', size: 'xsmall', color: 'border' }}
     >
       <StyledHiddenScrollContainer>
         <Box pad={{ top: 'medium', bottom: 'small' }} align="start">

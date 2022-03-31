@@ -32,7 +32,7 @@ export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box
 `;
 
 export const SidebarAreaContainer: React.FC<Record<string, unknown>> = styled(Box)`
-  position: sticky;
+  position: fixed;
   top: ${TOPBAR_HEIGHT}px;
 `;
 
