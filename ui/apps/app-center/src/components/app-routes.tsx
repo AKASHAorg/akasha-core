@@ -2,10 +2,15 @@ import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
 import DS from '@akashaproject/design-system';
-// import { useGetLogin, useGetProfile } from '@akashaproject/ui-awf-hooks';
+import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { useTranslation } from 'react-i18next';
+import {
+  useGetAllInstalledApps,
+  useGetLatestReleaseInfo,
+  useGetAllIntegrationsIds,
+} from '@akashaproject/ui-awf-hooks';
 
 import ExplorePage from './pages/explore-page';
 import InfoPage from './pages/info-page';
@@ -20,8 +25,44 @@ import routes, { rootRoute, EXPLORE, MY_APPS, APPS, WIDGETS, INFO } from '../rou
 const { Box, Text, BasicCardBox } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
+  const { worldConfig } = props;
   const { t } = useTranslation('app-integration-center');
   const navigateTo = props.plugins.routing?.navigateTo;
+
+  const loginQuery = useGetLogin();
+
+  const isLoggedIn = React.useMemo(() => {
+    return !!loginQuery.data.pubKey;
+  }, [loginQuery.data]);
+
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    props.navigateToModal({ name: 'login', redirectTo });
+  };
+
+  const handleSignedOutUser = () => {
+    if (!isLoggedIn) {
+      showLoginModal();
+    }
+  };
+
+  const defaultIntegrations = [].concat(
+    worldConfig.defaultApps,
+    worldConfig.defaultWidgets,
+    [worldConfig.homepageApp],
+    [worldConfig.layout],
+  );
+
+  const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
+
+  const integrationIdsNormalized = availableIntegrationsReq?.data?.integrationIds.map(
+    integrationId => {
+      return { id: integrationId };
+    },
+  );
+
+  const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
+
+  const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   return (
     <Router>
@@ -31,7 +72,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
         </Route>
         <Route path="*">
           <Redirect exact={true} from={rootRoute} to={routes[EXPLORE]} />
-          <BasicCardBox style={{ minHeight: '80vh' }}>
+          <BasicCardBox style={{ minHeight: '80vh' }} onClick={handleSignedOutUser}>
             <Box>
               <Box pad="medium">
                 <Text size="large" weight={'bold'}>
@@ -44,10 +85,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   label={t('Explore')}
                   icon={'explore'}
                   onClick={() => {
-                    navigateTo?.({
-                      appName: '@akashaproject/app-integration-center',
-                      getNavigationUrl: routes => routes[EXPLORE],
-                    });
+                    if (isLoggedIn) {
+                      navigateTo?.({
+                        appName: '@akashaproject/app-integration-center',
+                        getNavigationUrl: routes => routes[EXPLORE],
+                      });
+                    }
                   }}
                 />
                 <NavButton
@@ -55,21 +98,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   label={t('My Apps')}
                   icon={'integrationAppSmallFill'}
                   onClick={() => {
-                    navigateTo?.({
-                      appName: '@akashaproject/app-integration-center',
-                      getNavigationUrl: routes => routes[MY_APPS],
-                    });
-                  }}
-                />
-                <NavButton
-                  path={routes[APPS]}
-                  label={t('Apps')}
-                  icon={'integrationAppSmall'}
-                  onClick={() => {
-                    navigateTo?.({
-                      appName: '@akashaproject/app-integration-center',
-                      getNavigationUrl: routes => routes[APPS],
-                    });
+                    if (isLoggedIn) {
+                      navigateTo?.({
+                        appName: '@akashaproject/app-integration-center',
+                        getNavigationUrl: routes => routes[MY_APPS],
+                      });
+                    }
                   }}
                 />
                 <NavButton
@@ -77,10 +111,25 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   label={t('Widgets')}
                   icon={'integrationWidgetSmall'}
                   onClick={() => {
-                    navigateTo?.({
-                      appName: '@akashaproject/app-integration-center',
-                      getNavigationUrl: routes => routes[WIDGETS],
-                    });
+                    if (isLoggedIn) {
+                      navigateTo?.({
+                        appName: '@akashaproject/app-integration-center',
+                        getNavigationUrl: routes => routes[WIDGETS],
+                      });
+                    }
+                  }}
+                />
+                <NavButton
+                  path={routes[APPS]}
+                  label={t('Apps')}
+                  icon={'integrationAppSmall'}
+                  onClick={() => {
+                    if (isLoggedIn) {
+                      navigateTo?.({
+                        appName: '@akashaproject/app-integration-center',
+                        getNavigationUrl: routes => routes[APPS],
+                      });
+                    }
                   }}
                 />
               </Box>
@@ -89,16 +138,34 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <Box overflow={'auto'} height={{ max: '80vh' }}>
               <Switch>
                 <Route path={routes[EXPLORE]}>
-                  <ExplorePage {...props} />
+                  <ExplorePage
+                    latestReleasesInfo={integrationsInfoReq.data?.getLatestRelease}
+                    defaultIntegrations={defaultIntegrations}
+                    installedAppsInfo={installedAppsReq.data}
+                    isFetching={integrationsInfoReq.isFetching}
+                    reqError={integrationsInfoReq.error}
+                    isUserLoggedIn={isLoggedIn}
+                    {...props}
+                  />
                 </Route>
                 <Route path={routes[MY_APPS]}>
-                  <MyAppsPage {...props} />
+                  <MyAppsPage
+                    latestReleasesInfo={integrationsInfoReq.data?.getLatestRelease}
+                    defaultIntegrations={defaultIntegrations}
+                    installedAppsInfo={installedAppsReq.data}
+                    isFetching={integrationsInfoReq.isFetching}
+                    {...props}
+                  />
                 </Route>
                 <Route path={routes[APPS]}>
                   <AppsPage {...props} />
                 </Route>
                 <Route path={routes[WIDGETS]}>
-                  <WidgetsPage {...props} />
+                  <WidgetsPage
+                    latestReleasesInfo={integrationsInfoReq.data?.getLatestRelease}
+                    isFetching={integrationsInfoReq.isFetching}
+                    {...props}
+                  />
                 </Route>
               </Switch>
             </Box>

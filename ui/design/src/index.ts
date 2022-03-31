@@ -142,6 +142,7 @@ import InstallModal from './components/InstallModal';
 
 import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';
+import NotificationPill from './components/NotificationPill';
 
 import NotificationsPopover from './components/NotificationsPopover';
 import SelectPopover from './components/SelectPopover';
@@ -201,6 +202,7 @@ const exported = {
   BasicCardBox,
   BookmarkPill,
   NewPostsPill,
+  NotificationPill,
   CustomizeFeedCard,
   DropSearchInput,
   EditorBox,

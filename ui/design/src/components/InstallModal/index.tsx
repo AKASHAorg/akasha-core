@@ -19,8 +19,7 @@ export interface InstallModalProps {
   doneLabel: string;
   dismissLabel: string;
   modalTitleLabel: string;
-  installTitleLabel1: string;
-  installTitleLabel2: string;
+  installTitleLabel: string;
   savingInfoLabel: string;
   downloadingResourcesLabel: string;
   successTitleLabel: string;
@@ -49,7 +48,6 @@ const InstallModal: React.FC<InstallModalProps> = props => {
   const {
     onCloseModal,
     onCancel,
-    integrationName,
     cancelLabel,
     continueLabel,
     cancelTitleLabel,
@@ -57,8 +55,7 @@ const InstallModal: React.FC<InstallModalProps> = props => {
     doneLabel,
     dismissLabel,
     modalTitleLabel,
-    installTitleLabel1,
-    installTitleLabel2,
+    installTitleLabel,
     installStep,
     savingInfoLabel,
     downloadingResourcesLabel,
@@ -142,9 +139,7 @@ const InstallModal: React.FC<InstallModalProps> = props => {
                 gap="medium"
                 border={{ side: 'bottom', color: 'border' }}
               >
-                <Text weight="bold">
-                  {installTitleLabel1} {integrationName} {installTitleLabel2}{' '}
-                </Text>
+                <Text weight="bold">{installTitleLabel}</Text>
 
                 <Box direction="row" gap="small">
                   <InstallStepIcon loading={installStep === 1} success={installStep > 1} />
@@ -194,7 +189,7 @@ const InstallModal: React.FC<InstallModalProps> = props => {
                 </Box>
                 <Box gap="medium">
                   <Text weight="bold" textAlign="center">
-                    {integrationName} {errorSubtitleLabel}
+                    {errorSubtitleLabel}
                   </Text>
                   <Text textAlign="center">{errorInfoLabel}</Text>
                   <Text textAlign="center">{errorSubInfoLabel}</Text>

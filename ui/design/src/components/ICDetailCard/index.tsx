@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
-import styled, { css } from 'styled-components';
 
 import ICDetailCardCoverImage from './ic-detail-card-fields/cover-image';
 import ICDetailCardAvatar from './ic-detail-card-fields/avatar';
 
 import Icon from '../Icon';
 import DuplexButton from '../DuplexButton';
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { ReleaseInfo } from '@akashaproject/ui-awf-typings';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface ICDetailCardProps {
   className?: string;
@@ -33,33 +33,18 @@ export interface ICDetailCardProps {
 
   integrationName?: string;
   id?: string;
+  authorProfile?: IProfileData;
   isInstalled: boolean;
-  releases: ReleaseInfo[];
+  releases: any[];
   latestRelease: ReleaseInfo;
 
   onClickShare: () => void;
   onClickCTA: () => void;
   onClickInstall: () => void;
   onClickUninstall: () => void;
-  handleAuthorClick?: () => void;
+  handleAuthorClick?: (any) => void;
   handleTagClick?: (tag: string) => void;
 }
-
-const StyledText = styled(Text)<{ marginBottom?: boolean; bold?: boolean }>`
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  ${props =>
-    props.marginBottom &&
-    css`
-      margin-bottom: 1rem;
-    `}
-  ${props =>
-    props.bold &&
-    css`
-      font-weight: bold;
-    `}
-`;
 
 const ICDetailCard: React.FC<ICDetailCardProps> = props => {
   const {
@@ -80,6 +65,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     licenseLabel,
     integrationName,
     id,
+    authorProfile,
     isInstalled,
     releases = [],
     latestRelease,
@@ -112,7 +98,14 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
         >
           <Box direction="row" align="center" style={{ position: 'relative', top: '-0.5rem' }}>
-            <ICDetailCardAvatar ethAddress={latestRelease?.id} />
+            <ICDetailCardAvatar
+              ethAddress={latestRelease?.id}
+              iconType={
+                latestRelease.integrationType === 2
+                  ? 'integrationWidgetLarge'
+                  : 'integrationAppLarge'
+              }
+            />
             <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
               <SubtitleTextIcon label={integrationName} subtitle={id} />
             </Box>
@@ -127,11 +120,11 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             >
               <Icon size="md" type="settings" accentColor={true} />
             </Box>
-            {latestRelease?.integrationType === 0 ? (
-              <Icon type="checkSimple" accentColor={true} size="md" />
-            ) : (
+            {latestRelease?.integrationType === 1 ? (
               <DuplexButton
                 icon={isInstalled ? <Icon type="checkSimple" size="xs" /> : null}
+                activeIcon={<Icon type="checkSimple" accentColor={true} />}
+                activeHoverIcon={<Icon type="close" />}
                 active={isInstalled}
                 activeLabel={installedLabel}
                 inactiveLabel={installLabel}
@@ -139,102 +132,85 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
                 onClickActive={onClickUninstall}
                 onClickInactive={onClickInstall}
               />
+            ) : (
+              <Icon type="checkSimple" accentColor={true} size="md" />
             )}
           </Box>
         </Box>
-        <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
-          <StyledText size="md" bold marginBottom>
-            {descriptionLabel}
-          </StyledText>
+        <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
+          <Text weight={'bold'}>{descriptionLabel}</Text>
           <Text size="md" style={{ lineHeight: '1.375rem' }}>
             {latestRelease?.manifestData?.description}
           </Text>
         </Box>
         {(latestRelease?.links?.documentation || latestRelease?.links?.publicRepository) && (
-          <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
-            <StyledText size="md" bold marginBottom>
-              {linksLabel}
-            </StyledText>
+          <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }}>
+            <Text weight={'bold'}>{linksLabel}</Text>
             {latestRelease?.links?.documentation && (
-              <Text size="md">{latestRelease?.links?.documentation}</Text>
+              <StyledAnchor
+                label={latestRelease?.links?.documentation}
+                href={latestRelease?.links?.documentation}
+              />
             )}
             {latestRelease?.links?.publicRepository && (
-              <Text size="md">{latestRelease?.links?.publicRepository}</Text>
+              <StyledAnchor
+                label={latestRelease?.links?.publicRepository}
+                href={latestRelease?.links?.publicRepository}
+                target="_blank"
+              />
             )}
           </Box>
         )}
-        <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
-          <StyledText size="md" weight="bold" marginBottom>
-            {latestReleaseLabel}
-          </StyledText>
-          <StyledText size="md" marginBottom>
-            {releaseIdLabel}
-          </StyledText>
-          <StyledText size="sm" color="secondaryText" marginBottom>
+        <Box margin={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
+          <Text weight={'bold'}>{latestReleaseLabel}</Text>
+          <Text>{releaseIdLabel}</Text>
+          <Text size="sm" color="secondaryText">
             {latestRelease?.id}
-          </StyledText>
-          <StyledText size="md" marginBottom>
-            {releaseVersionLabel}
-          </StyledText>
-          <StyledText size="sm" color="secondaryText" marginBottom>
+          </Text>
+          <Text>{releaseVersionLabel}</Text>
+          <Text size="sm" color="secondaryText">
             {latestRelease?.version}
-          </StyledText>
+          </Text>
 
           {!showReleases && (
-            <StyledText
+            <Text
               size="md"
               color="accent"
               style={{ cursor: 'pointer' }}
-              marginBottom
               onClick={handleShowVersionHistory}
             >
               {versionHistoryLabel}
-            </StyledText>
+            </Text>
           )}
         </Box>
         {showReleases && (
-          <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
-            <StyledText size="md" weight="bold" marginBottom>
-              {releasesLabel}
-            </StyledText>
-            {releases?.length === 0 && (
-              <StyledText size="md" marginBottom>
-                {noPreviousReleasesLabel}
-              </StyledText>
-            )}
+          <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
+            <Text weight={'bold'}>{releasesLabel}</Text>
+            {releases?.length === 0 && <Text>{noPreviousReleasesLabel}</Text>}
             {releases?.length !== 0 &&
-              releases?.map(release => (
-                <>
-                  <StyledText size="md" marginBottom>
-                    {releaseIdLabel} {release?.id}
-                  </StyledText>
-                </>
-              ))}
+              releases?.map(release => <Text key={release.id}>{release.id}</Text>)}
           </Box>
         )}
-        {latestRelease?.author && (
-          <Box margin={{ top: 'large' }} border={{ side: 'bottom' }}>
-            <StyledText size="md" weight="bold" marginBottom>
-              {authorLabel}
-            </StyledText>
-            {latestRelease?.author && (
+        {authorProfile && (
+          <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
+            <Text weight={'bold'}>{authorLabel}</Text>
+            {authorProfile && (
               <Box direction="row">
-                <StyledText
+                <Text
                   size="md"
                   color="accent"
                   style={{ cursor: 'pointer' }}
-                  marginBottom
-                  onClick={handleAuthorClick}
+                  onClick={() => handleAuthorClick(authorProfile)}
                 >
-                  {latestRelease?.author}
-                </StyledText>
+                  {authorProfile.ethAddress}
+                </Text>
               </Box>
             )}
           </Box>
         )}
         {latestRelease?.manifestData?.keywords &&
           latestRelease?.manifestData?.keywords?.length > 0 && (
-            <Box margin={{ top: 'medium' }} border={{ side: 'bottom' }}>
+            <Box margin={{ top: 'medium' }} border={{ side: 'bottom' }} gap="small">
               <Box direction="row" margin={{ bottom: '1.5rem' }} wrap={true}>
                 {latestRelease?.manifestData?.keywords.map((tag, idx) => (
                   <Box
@@ -257,10 +233,8 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             </Box>
           )}
         {latestRelease?.manifestData?.license && (
-          <Box margin={{ top: 'large' }}>
-            <StyledText size="md" weight="bold" marginBottom>
-              {licenseLabel}:
-            </StyledText>
+          <Box pad={{ top: 'large' }} gap="small">
+            <Text weight={'bold'}>{licenseLabel}:</Text>
             <Box direction="row" align="center" margin={{ bottom: '1rem' }}>
               {/* license icons are created accordingly with 'license' starting their names, all in lowercase */}
               {/* <Icon type={'license' + latestRelease?.manifestData?.license} /> */}
