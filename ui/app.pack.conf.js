@@ -34,6 +34,11 @@ module.exports = {
       if (/^react-query$/.test(request)) {
         return callback(null, 'ReactQuery', 'root');
       }
+
+      if (/^systemjs$/.test(request)) {
+        return callback(null, 'System', 'root');
+      }
+
       callback();
     },
   ],

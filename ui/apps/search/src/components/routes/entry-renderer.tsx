@@ -1,7 +1,11 @@
 import React from 'react';
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import {
+  EventTypes,
+  ItemTypes,
+  ModalNavigationOptions,
+} from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
@@ -117,7 +121,15 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       });
   };
 
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    props.navigateToModal({ name: 'login', redirectTo });
+  };
+
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
+    if (!ethAddress) {
+      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+    }
+
     if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 

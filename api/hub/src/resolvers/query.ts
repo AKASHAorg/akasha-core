@@ -288,7 +288,7 @@ const query = {
       const cid = CID.parse('f' + data.manifestHash.substring(2), base16.decoder);
       const ipfsLink = createIpfsGatewayLink(cid.toV1());
       const d = await fetchWithTimeout(ipfsLink, {
-        timeout: 30000,
+        timeout: 60000,
         redirect: 'follow',
       });
       const { links, sources } = await d.json();
@@ -321,7 +321,7 @@ const query = {
         manifestData: manifest,
       };
       results.push(releaseInfo);
-      await registryCache.set(cacheKey, releaseInfo, 3600);
+      await registryCache.set(cacheKey, releaseInfo, 7200);
     }
     return results;
   },

@@ -1,27 +1,38 @@
 import { gql } from 'apollo-server-koa';
 
 const typeDefs = gql`
-  type TagsResult {
+  enum CacheControlScope {
+    PUBLIC
+    PRIVATE
+  }
+
+  directive @cacheControl(
+    maxAge: Int
+    scope: CacheControlScope
+    inheritMaxAge: Boolean
+  ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
+
+  type TagsResult @cacheControl(maxAge: 600) {
     results: [Tag!]
     nextIndex: String
     total: Int
   }
-  type PostsResult {
+  type PostsResult @cacheControl(maxAge: 600) {
     results: [Post!]
     nextIndex: String
     total: Int
   }
-  type ProfilesResult {
+  type ProfilesResult @cacheControl(maxAge: 600) {
     results: [UserProfile!]
     nextIndex: Int
     total: Int
   }
-  type NewPostsResult {
+  type NewPostsResult @cacheControl(maxAge: 600) {
     results: [Post!]
     nextIndex: Int
     total: Int
   }
-  type CommentsResult {
+  type CommentsResult @cacheControl(maxAge: 600) {
     results: [Comment!]
     nextIndex: String
     total: Int
@@ -47,7 +58,7 @@ const typeDefs = gql`
     profiles: [GlobalSearchResultItem]
   }
 
-  type Moderator {
+  type Moderator @cacheControl(maxAge: 3600) {
     _id: ID!
     creationDate: String!
     ethAddress: String!
@@ -55,7 +66,7 @@ const typeDefs = gql`
     active: Boolean
   }
 
-  type Decision {
+  type Decision @cacheControl(maxAge: 3600) {
     _id: ID!
     creationDate: String!
     contentType: String!
@@ -71,20 +82,20 @@ const typeDefs = gql`
     moderated: Boolean
   }
 
-  type DecisionsCount {
+  type DecisionsCount @cacheControl(maxAge: 3600) {
     pending: Int
     delisted: Int
     kept: Int
   }
 
-  type VideoPreview {
+  type VideoPreview @cacheControl(maxAge: 10800) {
     url: String
     secureUrl: String
     type: String
     width: String
     height: String
   }
-  type LinkPreview {
+  type LinkPreview @cacheControl(maxAge: 10800) {
     url: String
     mediaType: String
     contentType: String
@@ -96,7 +107,7 @@ const typeDefs = gql`
     images: [String]
   }
 
-  type IntegrationInfo {
+  type IntegrationInfo @cacheControl(maxAge: 3600) {
     id: String
     name: String
     author: String
@@ -105,11 +116,11 @@ const typeDefs = gql`
     enabled: Boolean
   }
 
-  type InfoLink {
+  type InfoLink @cacheControl(maxAge: 3600) {
     publicRepository: String
     documentation: String
   }
-  type ManifestInfo {
+  type ManifestInfo @cacheControl(maxAge: 3600) {
     mainFile: String
     license: String
     description: String
@@ -117,7 +128,7 @@ const typeDefs = gql`
     displayName: String
   }
 
-  type IntegrationReleaseInfo {
+  type IntegrationReleaseInfo @cacheControl(maxAge: 3600) {
     id: String
     name: String
     version: String

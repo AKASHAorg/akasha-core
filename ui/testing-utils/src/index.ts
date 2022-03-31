@@ -36,5 +36,6 @@ export * from '@testing-library/react';
 export { renderWithWrapper, renderWithAllProviders };
 
 export * from './data-generator';
-export * from './mocks/channels';
+export * from './mocks/sdk';
 export * from './mocks/operator';
+export * from './mocks/single-spa';

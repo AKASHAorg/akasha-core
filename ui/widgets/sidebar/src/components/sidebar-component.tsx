@@ -55,15 +55,20 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   React.useEffect(() => {
-    const sub = props.plugins?.routing?.routeObserver?.subscribe({
-      next: routeData => {
-        setRouteData(routeData?.byArea);
-      },
-    });
-
-    return () => sub.unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    let sub;
+    if (props.plugins.routing) {
+      sub = props.plugins.routing.routeObserver.subscribe({
+        next: routeData => {
+          setRouteData({ ...routeData.byArea });
+        },
+      });
+    }
+    return () => {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    };
+  }, [props.plugins.routing]);
 
   const worldApps = routeData?.[MenuItemAreaType.AppArea];
   const userInstalledApps = routeData?.[MenuItemAreaType.UserAppArea];
@@ -78,7 +83,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const handleClickExplore = () => {
     // find IC app from world apps
     // @TODO: replace string with a constant
-    const icApp = worldApps.find(app => app.label === 'Integration Center');
+    const icApp = worldApps.find(
+      menuItem => menuItem.name === '@akashaproject/app-integration-center',
+    );
 
     // if found, navigate to route
     if (icApp) {
