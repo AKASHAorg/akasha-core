@@ -165,6 +165,7 @@ import TransparencyLogBanner from './components/TransparencyLogBanner';
 import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
 import WalletRequestStep from './components/WalletRequestStep';
 import WelcomeCard from './components/WelcomeCard';
+import { StartCard } from './components/StartCard';
 
 /* Utilities (these are not components) */
 import { formatImageSrc } from './utils/image-utils';
@@ -329,6 +330,7 @@ const exported = {
   InfoCard,
   SearchBar,
   TAB_TOOLBAR_TYPE,
+  StartCard,
 };
 
 export default exported;

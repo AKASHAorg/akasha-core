@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard } = DS;
+const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard } = DS;
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
   const { singleSpa } = props;
@@ -35,6 +35,13 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       <ErrorInfoCard error={notifReq?.error as Error}>
         {message => (
           <>
+            <StartCard
+              title={t('Notifications')}
+              subtitle={t('Check latest followers & mentions')}
+              heading={t('You won’t miss a thing 🔔')}
+              description={t('Here you’ll receive alerts from your apps.')}
+              image="images/notification.png"
+            />
             {message && (
               <ErrorLoader
                 type="script-error"
@@ -46,7 +53,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
             {!message && (
               <NotificationsCard
                 notifications={notificationsState || []}
-                notificationsLabel={t('Notifications')}
                 followingLabel={t('is now following you')}
                 mentionedPostLabel={t('mentioned you in a post')}
                 mentionedCommentLabel={t('mentioned you in a comment')}
@@ -56,14 +62,14 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 moderatedReplyLabel={t('moderated your reply')}
                 moderatedAccountLabel={t('suspended your account')}
                 markAsReadLabel={t('Mark as read')}
-                emptyTitle={t('All clear')}
-                emptySubtitle={t("You don't have any new notifications!")}
+                emptyTitle={t('No alerts for you right now 🔔')}
+                emptySubtitle={t(
+                  'You don’t have any new alerts at the moment, we’ll let you know when you have new followers and mentions.',
+                )}
                 handleMessageRead={markAsRead.mutate}
                 handleEntryClick={handlePostClick}
                 handleProfileClick={handleAvatarClick}
-                handleNavBack={() => {
-                  history.back();
-                }}
+                loggedIn={!!loginQuery.data?.ethAddress}
                 isFetching={notifReq.isFetching}
               />
             )}
