@@ -17,9 +17,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-import { extensionPointsMap } from '../extension-points';
-
-const { Topbar, ExtensionPoint } = DS;
+const { Topbar } = DS;
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
   const { singleSpa, uiEvents } = props;
@@ -149,24 +147,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('ui-widget-topbar');
 
-  const onExtMount = (name: string) => {
-    uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-      },
-    });
-  };
-
-  const onExtUnmount = (name: string) => {
-    uiEvents.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
-      },
-    });
-  };
-
   const handleSidebarToggle = () => {
     uiEvents.next({
       event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
@@ -202,16 +182,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       currentLocation={location?.pathname}
       onBrandClick={handleBrandClick}
       modalSlotId={props.layoutConfig.modalSlotId}
-      quickAccessExt={
-        loggedProfileData?.ethAddress && (
-          <ExtensionPoint
-            name={extensionPointsMap.QuickAccess}
-            shouldMount={!!loggedProfileData?.ethAddress}
-            onMount={name => onExtMount(name)}
-            onUnmount={name => onExtUnmount(name)}
-          />
-        )
-      }
     />
   );
 };
