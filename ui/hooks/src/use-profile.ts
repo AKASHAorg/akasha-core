@@ -63,6 +63,51 @@ export function useGetProfile(pubKey: string, loggedUser?: string, enabler = tru
   });
 }
 
+const getProfileDataByEthAddress = async (payload: {
+  ethAddress: string;
+  loggedUser?: string;
+}): Promise<IProfileData> => {
+  const sdk = getSDK();
+
+  // check entry's moderation status
+  const modStatus = await checkStatus({
+    user: payload.loggedUser,
+    contentIds: [payload.ethAddress],
+  });
+
+  const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
+  const { avatar, coverImage, ...other } = res.data.getProfile || res.data.resolveProfile;
+  const images: { avatar: string; coverImage: string } = {
+    avatar: '',
+    coverImage: '',
+  };
+  if (avatar) {
+    images.avatar = getMediaUrl(avatar);
+  }
+  if (coverImage) {
+    images.coverImage = getMediaUrl(coverImage);
+  }
+  return { ...images, ...other, ...modStatus[0] };
+};
+
+/**
+ * Hook to get a user's profile data
+ * @param ethAddress - the ethereum public key of the user
+ * @param loggedUser - the textile generated public key of the currently logged in user
+ * @param enabler - flag to allow the query
+ */
+export function useGetProfileByEthAddress(ethAddress: string, loggedUser?: string, enabler = true) {
+  return useQuery(
+    [PROFILE_KEY, ethAddress],
+    () => getProfileDataByEthAddress({ ethAddress, loggedUser }),
+    {
+      enabled: !!ethAddress && enabler,
+      keepPreviousData: true,
+      onError: (err: Error) => logError('useProfile.getProfileData', err),
+    },
+  );
+}
+
 const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClient) => {
   const sdk = getSDK();
   const res = await lastValueFrom(sdk.api.entries.getEntry(entryId));

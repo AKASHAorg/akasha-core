@@ -1,4 +1,4 @@
-import { LogoTypeSource, IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource, IntegrationCenterApp, ReleaseInfo } from '@akashaproject/ui-awf-typings';
 import {
   IMenuItem,
   MenuItemType,
@@ -346,7 +346,7 @@ const trendingProfilesData = [
   },
 ];
 
-const ICWorldAppsData: IntegrationCenterApp[] = [
+const ICDetailAppsData: IntegrationCenterApp[] = [
   {
     name: 'Theme Wizard',
     id: 'bbaryfskgshgirsnxnbv',
@@ -414,13 +414,58 @@ const ICWorldAppsData: IntegrationCenterApp[] = [
   },
 ];
 
-const ICInstalledAppsData: IntegrationCenterApp[] = [
+const ICWorldAppsData: ReleaseInfo[] = [
+  {
+    name: 'Theme Wizard',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
+    enabled: true,
+  },
+  {
+    name: 'Moderating Tools',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
+    enabled: true,
+  },
+  {
+    name: 'Quick Moderation',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
+    enabled: true,
+  },
+  {
+    name: 'Confetti Replies',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
+    enabled: true,
+  },
+];
+
+const ICInstalledAppsData: ReleaseInfo[] = [
   {
     name: 'Feed',
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427381982',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -428,7 +473,9 @@ const ICInstalledAppsData: IntegrationCenterApp[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427384882',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -436,7 +483,9 @@ const ICInstalledAppsData: IntegrationCenterApp[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427383982',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -444,7 +493,9 @@ const ICInstalledAppsData: IntegrationCenterApp[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427384582',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
 ];
@@ -900,4 +951,5 @@ export {
   trendingTagsData,
   ICWorldAppsData,
   ICInstalledAppsData,
+  ICDetailAppsData,
 };

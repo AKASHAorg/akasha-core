@@ -71,7 +71,7 @@ const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
       {/* fallback, if no avatar */}
       {!avatar && (
         <StyledBackgroundDiv boxSize={iconSize}>
-          <Icon type={iconType} size={iconSize} />
+          <Icon type={iconType} size={iconSize} plain={true} />
         </StyledBackgroundDiv>
       )}
       {imageOverlayOpen && avatar && (

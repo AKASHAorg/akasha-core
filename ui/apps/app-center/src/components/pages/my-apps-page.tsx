@@ -1,48 +1,58 @@
 import * as React from 'react';
-import { useGetAllInstalledApps, useGetIntegrationsInfo } from '@akashaproject/ui-awf-hooks';
+
 import DS from '@akashaproject/design-system';
 import { useTranslation } from 'react-i18next';
-import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader, Spinner } = DS;
 
-const MyAppsPage: React.FC<RootComponentProps> = props => {
-  const { worldConfig } = props;
+export interface IMyAppsPage extends RootComponentProps {
+  latestReleasesInfo?: ReleaseInfo[];
+  installedAppsInfo?: IntegrationInfo[];
+  defaultIntegrations?: string[];
+  isFetching?: boolean;
+}
+
+const MyAppsPage: React.FC<IMyAppsPage> = props => {
+  const { worldConfig, latestReleasesInfo, installedAppsInfo, defaultIntegrations, isFetching } =
+    props;
 
   const { t } = useTranslation('app-integration-center');
 
-  const defaultAppsNamesNormalized = worldConfig?.defaultApps.map(app => {
-    if (typeof app === 'string') {
-      return {
-        name: app,
-      };
-    }
-    return app;
-  });
-
-  const installedAppsReq = useGetAllInstalledApps();
-  const installedIntegrationsInfoReq = useGetIntegrationsInfo(installedAppsReq.data);
+  const defaultAppsNamesNormalized = React.useMemo(() => {
+    return worldConfig?.defaultApps.map(app => {
+      if (typeof app === 'string') {
+        return {
+          name: app,
+        };
+      }
+      return app;
+    });
+  }, [worldConfig.defaultApps]);
 
   // select default apps from list of installed apps
-  const filteredDefaultApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(app => {
+  const filteredDefaultApps = latestReleasesInfo?.filter(app => {
     if (defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
       return app;
     }
   });
   // select user installed apps from list of installed apps
-  const filteredInstalledApps = installedIntegrationsInfoReq.data?.getIntegrationInfo.filter(
-    app => {
-      if (!defaultAppsNamesNormalized?.some(defaultApp => defaultApp.name === app.name)) {
+  const filteredInstalledApps = latestReleasesInfo
+    ?.filter(app => {
+      if (installedAppsInfo?.length === 0) {
+        return null;
+      }
+      if (defaultIntegrations?.some(defaultApp => defaultApp !== app.name)) {
         return app;
       }
-    },
-  );
+    })
+    .filter(Boolean);
 
-  const handleAppClick = (app: IntegrationInfo) => {
+  const handleAppClick = (app: ReleaseInfo) => {
     props.plugins.routing?.navigateTo?.({
       appName: '@akashaproject/app-integration-center',
-      getNavigationUrl: routes => `${routes[INFO]}/${app.id}`,
+      getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });
   };
 
@@ -56,11 +66,6 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
           <Text>{t('These are the default apps that come in the world')}</Text>
         </Box>
         <Box gap="small">
-          {installedIntegrationsInfoReq.isFetching && (
-            <Box>
-              <Spinner />
-            </Box>
-          )}
           {filteredDefaultApps?.map((app, index) => (
             <Box
               key={index}
@@ -68,7 +73,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               align="center"
               justify="between"
               border={
-                index !== installedIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                index !== filteredDefaultApps.length - 1
                   ? { side: 'bottom', size: '1px', color: 'border' }
                   : null
               }
@@ -76,8 +81,8 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               onClick={() => handleAppClick(app)}
             >
               <SubtitleTextIcon
-                label={app.name}
-                subtitle={app.id}
+                label={app.manifestData.displayName}
+                subtitle={app.name}
                 iconType="integrationAppLarge"
                 plainIcon={true}
                 backgroundColor={true}
@@ -85,6 +90,11 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               <Icon type="checkSimple" accentColor={true} size="md" />
             </Box>
           ))}
+          {isFetching && (
+            <Box>
+              <Spinner />
+            </Box>
+          )}
         </Box>
       </>
       <>
@@ -95,11 +105,6 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
           <Text>{t('These are the apps you installed in your world')}</Text>
         </Box>
         <Box gap="small">
-          {installedIntegrationsInfoReq.isFetching && (
-            <Box>
-              <Spinner />
-            </Box>
-          )}
           {filteredInstalledApps?.length !== 0 &&
             filteredInstalledApps?.map((app, index) => (
               <Box
@@ -108,7 +113,7 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
                 align="center"
                 justify="between"
                 border={
-                  index !== installedIntegrationsInfoReq.data?.getIntegrationInfo.length - 1
+                  index !== filteredInstalledApps?.length - 1
                     ? { side: 'bottom', size: '1px', color: 'border' }
                     : null
                 }
@@ -116,8 +121,8 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
                 onClick={() => handleAppClick(app)}
               >
                 <SubtitleTextIcon
-                  label={app.name}
-                  subtitle={app.id}
+                  label={app.manifestData.displayName}
+                  subtitle={app.name}
                   iconType="integrationAppLarge"
                   backgroundColor={true}
                 />
@@ -131,6 +136,11 @@ const MyAppsPage: React.FC<RootComponentProps> = props => {
               details={t('Try some out for extra functionality!')}
               noBorder={true}
             />
+          )}
+          {isFetching && (
+            <Box>
+              <Spinner />
+            </Box>
           )}
         </Box>
       </>

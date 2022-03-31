@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Text, Tabs } from 'grommet';
-import { IntegrationInfo } from '@akashaproject/ui-awf-typings';
+import { ReleaseInfo } from '@akashaproject/ui-awf-typings';
 import Icon from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
@@ -11,8 +11,8 @@ import ErrorLoader from '../ErrorLoader';
 export interface ICWidgetCardProps {
   className?: string;
 
-  worldApps: IntegrationInfo[];
-  installedApps: IntegrationInfo[];
+  worldApps: ReleaseInfo[];
+  installedApps: ReleaseInfo[];
   // labels
   titleLabel: string;
   worldAppsLabel: string;
@@ -55,120 +55,124 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
 
   return (
     <WidgetAreaCardBox className={className}>
-      <Box pad="medium" gap="medium">
-        <Text weight="bold" size="large">
-          {titleLabel}
-        </Text>
+      <Box height={{ min: '21rem' }}>
+        <Box pad="medium" gap="medium">
+          <Text weight="bold" size="large">
+            {titleLabel}
+          </Text>
+        </Box>
+        <Tabs onActive={handleTabChange}>
+          <StyledTab title={worldAppsLabel}>
+            <Box>
+              {worldApps && worldApps.length === 0 && !isLoadingWorldApps && (
+                <Box pad="medium" align="center" justify="center">
+                  <Text>{noWorldAppsLabel}</Text>
+                </Box>
+              )}
+              {worldApps &&
+                worldApps.length === 0 &&
+                isLoadingWorldApps &&
+                Array.from({ length: 4 }, (_el, index: number) => (
+                  <Box key={index} direction="row" justify="between" align="center">
+                    <Box gap="xxsmall">
+                      <TextLine title="tagName" animated={false} width="140px" />
+                      <TextLine title="tagName" animated={false} width="80px" />
+                    </Box>
+                    <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
+                  </Box>
+                ))}
+              {worldApps &&
+                worldApps.length !== 0 &&
+                worldApps.slice(0, 4).map((app, index) => (
+                  <Box
+                    key={index}
+                    direction="row"
+                    justify="between"
+                    border={index !== worldApps.slice(0, 4).length - 1 ? { side: 'bottom' } : null}
+                    pad={{ horizontal: 'medium', vertical: 'small' }}
+                  >
+                    <Box direction="row">
+                      <Box width="100%" pad="none" align="start">
+                        <SubtitleTextIcon
+                          onClick={() => onClickWorldApp(app.id)}
+                          label={app.manifestData?.displayName}
+                          subtitle={app.name}
+                          labelSize="large"
+                          gap="xxsmall"
+                          maxWidth="10rem"
+                          iconType="integrationAppLarge"
+                          plainIcon={true}
+                          backgroundColor={true}
+                        />
+                      </Box>
+                    </Box>
+                    <Box justify="center">
+                      <Icon type="checkSimple" size="sm" accentColor />
+                    </Box>
+                  </Box>
+                ))}
+            </Box>
+          </StyledTab>
+          <StyledTab title={installedAppsLabel}>
+            <Box>
+              {installedApps && installedApps.length === 0 && !isLoadingInstalledApps && (
+                <Box pad="medium" align="center" justify="center">
+                  <ErrorLoader
+                    type="no-login"
+                    title={noInstalledAppsLabel}
+                    details={noInstalledAppsSubLabel}
+                    noBorder={true}
+                  />
+                </Box>
+              )}
+              {installedApps &&
+                installedApps.length === 0 &&
+                isLoadingInstalledApps &&
+                Array.from({ length: 4 }, (_el, index: number) => (
+                  <Box key={index} direction="row" justify="between" align="center">
+                    <Box gap="xxsmall">
+                      <TextLine title="tagName" animated={false} width="140px" />
+                      <TextLine title="tagName" animated={false} width="80px" />
+                    </Box>
+                    <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
+                  </Box>
+                ))}
+              {installedApps &&
+                installedApps.length !== 0 &&
+                installedApps.slice(0, 4).map((app, index) => (
+                  <Box
+                    key={index}
+                    direction="row"
+                    justify="between"
+                    border={
+                      index !== installedApps.slice(0, 4).length - 1 ? { side: 'bottom' } : null
+                    }
+                    pad={{ horizontal: 'medium', vertical: 'small' }}
+                  >
+                    <Box direction="row">
+                      <Box width="100%" pad="none" align="start">
+                        <SubtitleTextIcon
+                          onClick={() => onClickInstalledApp(app.id)}
+                          label={app.manifestData?.displayName}
+                          subtitle={app.name}
+                          labelSize="large"
+                          gap="xxsmall"
+                          maxWidth="10rem"
+                          iconType="integrationAppLarge"
+                          plainIcon={true}
+                          backgroundColor={true}
+                        />
+                      </Box>
+                    </Box>
+                    <Box justify="center">
+                      <Icon type="checkSimple" size="sm" accentColor />
+                    </Box>
+                  </Box>
+                ))}
+            </Box>
+          </StyledTab>
+        </Tabs>
       </Box>
-      <Tabs onActive={handleTabChange}>
-        <StyledTab title={worldAppsLabel}>
-          <Box>
-            {worldApps && worldApps.length === 0 && !isLoadingWorldApps && (
-              <Box pad="medium" align="center" justify="center">
-                <Text>{noWorldAppsLabel}</Text>
-              </Box>
-            )}
-            {worldApps &&
-              worldApps.length === 0 &&
-              isLoadingWorldApps &&
-              Array.from({ length: 4 }, (_el, index: number) => (
-                <Box key={index} direction="row" justify="between" align="center">
-                  <Box gap="xxsmall">
-                    <TextLine title="tagName" animated={false} width="140px" />
-                    <TextLine title="tagName" animated={false} width="80px" />
-                  </Box>
-                  <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
-                </Box>
-              ))}
-            {worldApps &&
-              worldApps.length !== 0 &&
-              worldApps.slice(0, 4).map((app, index) => (
-                <Box
-                  key={index}
-                  direction="row"
-                  justify="between"
-                  border={index !== 3 ? { side: 'bottom' } : null}
-                  pad={{ horizontal: 'medium', vertical: 'small' }}
-                >
-                  <Box direction="row">
-                    <Box width="100%" pad="none" align="start">
-                      <SubtitleTextIcon
-                        onClick={() => onClickWorldApp(app.id)}
-                        label={app.name}
-                        subtitle={`@${app.id}`}
-                        labelSize="large"
-                        gap="xxsmall"
-                        maxWidth="10rem"
-                        iconType="integrationAppLarge"
-                        plainIcon={true}
-                        backgroundColor={true}
-                      />
-                    </Box>
-                  </Box>
-                  <Box justify="center">
-                    <Icon type="checkSimple" size="sm" accentColor />
-                  </Box>
-                </Box>
-              ))}
-          </Box>
-        </StyledTab>
-        <StyledTab title={installedAppsLabel}>
-          <Box>
-            {installedApps && installedApps.length === 0 && !isLoadingInstalledApps && (
-              <Box pad="medium" align="center" justify="center">
-                <ErrorLoader
-                  type="no-login"
-                  title={noInstalledAppsLabel}
-                  details={noInstalledAppsSubLabel}
-                  noBorder={true}
-                />
-              </Box>
-            )}
-            {installedApps &&
-              installedApps.length === 0 &&
-              isLoadingInstalledApps &&
-              Array.from({ length: 4 }, (_el, index: number) => (
-                <Box key={index} direction="row" justify="between" align="center">
-                  <Box gap="xxsmall">
-                    <TextLine title="tagName" animated={false} width="140px" />
-                    <TextLine title="tagName" animated={false} width="80px" />
-                  </Box>
-                  <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
-                </Box>
-              ))}
-            {installedApps &&
-              installedApps.length !== 0 &&
-              installedApps.slice(0, 4).map((app, index) => (
-                <Box
-                  key={index}
-                  direction="row"
-                  justify="between"
-                  border={index !== 3 ? { side: 'bottom' } : null}
-                  pad={{ horizontal: 'medium', vertical: 'small' }}
-                >
-                  <Box direction="row">
-                    <Box width="100%" pad="none" align="start">
-                      <SubtitleTextIcon
-                        onClick={() => onClickInstalledApp(app.id)}
-                        label={app.name}
-                        subtitle={`@${app.id}`}
-                        labelSize="large"
-                        gap="xxsmall"
-                        maxWidth="10rem"
-                        iconType="integrationAppLarge"
-                        plainIcon={true}
-                        backgroundColor={true}
-                      />
-                    </Box>
-                  </Box>
-                  <Box justify="center">
-                    <Icon type="checkSimple" size="sm" accentColor />
-                  </Box>
-                </Box>
-              ))}
-          </Box>
-        </StyledTab>
-      </Tabs>
     </WidgetAreaCardBox>
   );
 };

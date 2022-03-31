@@ -7,6 +7,11 @@ export interface IIconDiv {
 }
 
 const BackgroundDiv = styled.div<IIconDiv>`
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  margin-right: ${props => `${props.theme.shapes.baseSpacing * 2}px`};
   ${props => {
     const size = props.backgroundSize ? props.backgroundSize : '3.5rem';
     const background = props.backgroundColor ? props.theme.colors.beigeBackground : 'none';
@@ -16,17 +21,6 @@ const BackgroundDiv = styled.div<IIconDiv>`
         width: ${size};
         height: ${size};
         background: ${background};
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: ${`${props.theme.shapes.baseSpacing * 2}px`};
-      `;
-    } else {
-      return css`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-right: ${`${props.theme.shapes.baseSpacing * 2}px`};
       `;
     }
   }}

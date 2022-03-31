@@ -80,7 +80,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
       {uploading && (
         <StyledUploadingDiv>
           <Box direction="column" gap="medium" align="center" justify="center">
-            <Icon type="loading" />
+            <Icon type="loading" accentColor={true} />
             <StyledText size="medium" color="accentText">
               {uploadingLinkPreviewLabel}
             </StyledText>

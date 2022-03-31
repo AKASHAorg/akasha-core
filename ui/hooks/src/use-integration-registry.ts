@@ -112,8 +112,9 @@ const getAllIntegrationsIds = async (offset?: number) => {
 /**
  * Hook to get all the published integrations ids
  */
-export function useGetAllIntegrationsIds(offset?: number) {
+export function useGetAllIntegrationsIds(enabler = true, offset?: number) {
   return useQuery([INTEGRATIONS_KEY, 'ids'], () => getAllIntegrationsIds(offset), {
+    enabled: !!enabler,
     keepPreviousData: true,
     onError: (err: Error) => logError('useIntegrationRegistry.getAllIntegrationsIds', err),
   });
@@ -155,16 +156,18 @@ const getIntegrationReleaseInfo = async releaseId => {
 export function useGetIntegrationReleaseInfo(releaseId: string) {
   return useQuery([RELEASES_KEY, releaseId], () => getIntegrationReleaseInfo(releaseId), {
     enabled: !!releaseId,
-    keepPreviousData: true,
+    keepPreviousData: false,
     onError: (err: Error) => logError('useIntegrationRegistry.getIntegrationReleaseInfo', err),
   });
 }
 
 const getIntegrationsReleaseInfo = async releaseIds => {
   const sdk = getSDK();
-  const result = releaseIds.map(async releaseId => {
-    return (await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId)).data;
-  });
+  const result = await Promise.all(
+    releaseIds.map(async releaseId => {
+      return (await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId)).data;
+    }),
+  );
 
   return result;
 };
@@ -193,8 +196,8 @@ const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
  */
 export function useGetLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
   return useQuery([RELEASES_KEY, 'latest'], () => getLatestReleaseInfo(opt), {
-    enabled: opt.length > 0,
-    keepPreviousData: true,
+    enabled: opt?.length > 0,
+    keepPreviousData: false,
     onError: (err: Error) => logError('useIntegrationRegistry.getLatestReleaseInfo', err),
   });
 }
