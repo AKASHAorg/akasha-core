@@ -65,13 +65,6 @@ const StyledAccordionPanel = styled(AccordionPanel)<{
           stroke: ${props.isActive ? props.theme.colors.accent : props.theme.colors.primaryText};
         }
       }
-      &:hover {
-        div:nth-child(2) {
-          svg {
-            stroke: ${props => props.theme.colors.accent};
-          }
-        }
-      }
     `;
   }}
 `;
