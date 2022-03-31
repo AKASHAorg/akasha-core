@@ -9,12 +9,7 @@ import {
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  useCheckNewNotifications,
-  useGetLogin,
-  useGetProfile,
-  useLogout,
-} from '@akashaproject/ui-awf-hooks';
+import { useGetLogin, useGetProfile, useLogout } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const { Topbar } = DS;
@@ -35,10 +30,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
   const loggedProfileData = profileDataReq.data;
-
-  const checkNotifsReq = useCheckNewNotifications(
-    loginQuery.data.isReady && loginQuery.data.ethAddress,
-  );
 
   const uiEventsRef = React.useRef(uiEvents);
 
@@ -178,7 +169,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       onSignUpClick={handleSignUpClick}
       onLogout={handleLogout}
       onFeedbackClick={handleFeedbackModalShow}
-      hasNewNotifications={checkNotifsReq.data}
       currentLocation={location?.pathname}
       onBrandClick={handleBrandClick}
       modalSlotId={props.layoutConfig.modalSlotId}
