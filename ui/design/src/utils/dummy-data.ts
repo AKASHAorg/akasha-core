@@ -1,4 +1,4 @@
-import { LogoTypeSource, IntegrationCenterApp } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource, IntegrationCenterApp, ReleaseInfo } from '@akashaproject/ui-awf-typings';
 import {
   IMenuItem,
   MenuItemType,
@@ -346,13 +346,15 @@ const trendingProfilesData = [
   },
 ];
 
-const ICWorldAppsData: IntegrationCenterApp[] = [
+const ICWorldAppsData: ReleaseInfo[] = [
   {
     name: 'Theme Wizard',
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427384932',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -360,7 +362,9 @@ const ICWorldAppsData: IntegrationCenterApp[] = [
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf4427384982',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -368,7 +372,9 @@ const ICWorldAppsData: IntegrationCenterApp[] = [
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427384986',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -376,51 +382,22 @@ const ICWorldAppsData: IntegrationCenterApp[] = [
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427384382',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
-    description: `Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
-      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
-      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
-      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.
-      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
-      Never take a screenshot of a map again!`,
-    releases: [
-      {
-        integrationID: 'bbaryfskgshgirsnxnbv',
-        id: '0x428974897274',
-        version: '0.1.0',
-        author: '0x0402384032858094',
-        enabled: true,
-        name: 'Confetti Replies',
-        integrationType: 1,
-        sources: ['bdabsdbasb'],
-        manifestData: {
-          mainFile: 'index.js',
-
-          keywords: [
-            'Image editor',
-            'Photo Filters',
-            'Filters',
-            'Photos',
-            'Pro',
-            'Color editing',
-            'Confetti',
-            'Visuals',
-          ],
-          license: 'wtfpl',
-        },
-      },
-    ],
   },
 ];
 
-const ICInstalledAppsData: IntegrationCenterApp[] = [
+const ICInstalledAppsData: ReleaseInfo[] = [
   {
     name: 'Feed',
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427381982',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -428,7 +405,9 @@ const ICInstalledAppsData: IntegrationCenterApp[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427384882',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -436,7 +415,9 @@ const ICInstalledAppsData: IntegrationCenterApp[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427383982',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
   {
@@ -444,7 +425,9 @@ const ICInstalledAppsData: IntegrationCenterApp[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    latestReleaseId: '0xf9427384582',
+    integrationID: '0xkasfkjas',
+    version: '0.2.1',
+    sources: [],
     enabled: true,
   },
 ];
