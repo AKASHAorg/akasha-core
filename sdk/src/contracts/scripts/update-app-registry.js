@@ -21,13 +21,14 @@ async function main() {
       version = 'v' + semver.inc(currentRelease.version, 'minor');
     }
     console.log('deploying: ', pkg.name, ' version: ',version )
-    await integrationRegistry.release(
+    const tx = await integrationRegistry.release(
       pkg.name,
       version,
       '0x'+pkg.ipfsManifest.substring(1),
       pkg.type,
     );
-    console.log('deployed: ', pkg.name)
+    await tx.wait(1);
+    console.log('deployed: ', pkg.name);
   }
 }
 
