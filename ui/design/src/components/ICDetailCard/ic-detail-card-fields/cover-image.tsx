@@ -29,7 +29,7 @@ const ICDetailCardCoverImage: React.FC<ICDetailCardCoverImageProps> = props => {
     <Box
       height="9rem"
       background={{
-        color: '#DDD',
+        color: 'coverImageBackground',
         image: `url(${coverImage})`,
         repeat: 'no-repeat',
         size: 'cover',
@@ -42,8 +42,8 @@ const ICDetailCardCoverImage: React.FC<ICDetailCardCoverImageProps> = props => {
       {imageOverlayOpen && coverImage && (
         <ImageOverlay imgUrl={coverImage} closeModal={closeImageOverlay} />
       )}
-
-      <Box align="end" pad="none">
+      {/* disable share button temporary */}
+      {/* <Box align="end" pad="none">
         <ShareButtonContainer gap="xsmall" direction="row">
           <IconButton
             secondary={true}
@@ -52,7 +52,7 @@ const ICDetailCardCoverImage: React.FC<ICDetailCardCoverImageProps> = props => {
             onClick={handleShareClick}
           />
         </ShareButtonContainer>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

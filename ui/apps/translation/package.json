@@ -46,5 +46,8 @@
   },
   "files": [
     "lib"
-  ]
+  ],
+  "akasha": {
+    "displayName": "Translation"
+  }
 }

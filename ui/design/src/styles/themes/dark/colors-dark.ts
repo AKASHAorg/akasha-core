@@ -51,9 +51,8 @@ const colors: IColorsDark = {
   modalBackgroundTransparent: 'rgba(0, 0, 0, 0.6)', // transparentBlack
   activeCardBackground: '#F6F8FF', // aquamarine
   inputBackground: '#CCD2DF',
-  hoverBackground: '#595F6B',
-  hoverPanelBackground: '#26374f',
-  activePanelBackground: '#63718c',
+  hoverBackground: '#26374F',
+  activePanelBackground: '#63718C',
   skeletonBackground: '#595F6B',
   coverImageBackground: '#425166',
   embedBackground: '#253142',

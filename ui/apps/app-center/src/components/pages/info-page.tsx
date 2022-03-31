@@ -6,16 +6,20 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import {
   useGetAllInstalledApps,
   useGetAllIntegrationReleaseIds,
+  useGetIntegrationInfo,
   useGetIntegrationsReleaseInfo,
-  useGetLatestReleaseInfo,
+  useGetIntegrationReleaseInfo,
   useGetLogin,
+  useGetProfileByEthAddress,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { Box, ICDetailCard, ErrorLoader, Spinner, BasicCardBox } = DS;
 
-const InfoPage: React.FC<RootComponentProps> = () => {
+const InfoPage: React.FC<RootComponentProps> = props => {
   const { integrationId } = useParams<{ integrationId: string }>();
+
+  const navigateTo = props.plugins.routing?.navigateTo;
 
   const { t } = useTranslation('app-integration-center');
 
@@ -25,9 +29,23 @@ const InfoPage: React.FC<RootComponentProps> = () => {
     return !!loginQueryReq.data.pubKey;
   }, [loginQueryReq.data]);
 
-  const latestReleaseInfoReq = useGetLatestReleaseInfo([{ id: integrationId }]);
+  const integrationInfoReq = useGetIntegrationInfo(integrationId);
 
-  const latestReleaseInfo = latestReleaseInfoReq.data?.getLatestRelease[0];
+  const latestReleaseId = integrationInfoReq.data?.latestReleaseId;
+
+  const latestReleaseInfoReq = useGetIntegrationReleaseInfo(latestReleaseId);
+
+  const latestReleaseInfo = latestReleaseInfoReq.data;
+
+  const profileDataReq = useGetProfileByEthAddress(latestReleaseInfo?.author);
+  const authorProfileData = profileDataReq.data;
+
+  const handleAuthorClick = (author: { pubKey: string }) => {
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: routes => `${routes.rootRoute}/${author.pubKey}`,
+    });
+  };
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
@@ -61,9 +79,10 @@ const InfoPage: React.FC<RootComponentProps> = () => {
       )}
       {latestReleaseInfoReq.isSuccess && latestReleaseInfo && (
         <ICDetailCard
-          integrationName={latestReleaseInfo.name}
+          integrationName={latestReleaseInfo?.manifestData?.displayName}
           shareLabel={t('Share')}
-          id={integrationId}
+          id={integrationInfoReq.data?.name}
+          authorProfile={authorProfileData}
           installLabel={t('Install')}
           uninstallLabel={t('Uninstall')}
           installedLabel={t('Installed')}
@@ -85,6 +104,7 @@ const InfoPage: React.FC<RootComponentProps> = () => {
           onClickShare={() => null}
           onClickInstall={() => null}
           onClickUninstall={() => null}
+          handleAuthorClick={handleAuthorClick}
         />
       )}
     </Box>

@@ -1,22 +1,32 @@
 import * as React from 'react';
 import DS from '@akashaproject/design-system';
-import {
-  useGetIntegrationsInfo,
-  useGetLogin,
-  useGetAllInstalledApps,
-  useGetAllIntegrationsIds,
-  useUninstallApp,
-} from '@akashaproject/ui-awf-hooks';
+import { useUninstallApp } from '@akashaproject/ui-awf-hooks';
 import getSDK from '@akashaproject/awf-sdk';
 import { APP_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
-import { IntegrationInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, DuplexButton, Icon, ErrorLoader, Spinner, NotificationPill } = DS;
 
-const ExplorePage: React.FC<RootComponentProps> = props => {
-  const { worldConfig } = props;
+export interface IExplorePage extends RootComponentProps {
+  latestReleasesInfo?: ReleaseInfo[];
+  installedAppsInfo?: IntegrationInfo[];
+  defaultIntegrations?: string[];
+  isFetching?: boolean;
+  reqError?: Error;
+  isUserLoggedIn?: boolean;
+}
+
+const ExplorePage: React.FC<IExplorePage> = props => {
+  const {
+    latestReleasesInfo,
+    isFetching,
+    defaultIntegrations,
+    reqError,
+    installedAppsInfo,
+    isUserLoggedIn,
+  } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-integration-center');
 
@@ -41,41 +51,16 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const loginQuery = useGetLogin();
-
-  const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.pubKey;
-  }, [loginQuery.data]);
-
   const uninstallAppReq = useUninstallApp();
 
-  const availableIntegrationsReq = useGetAllIntegrationsIds();
-
-  const defaultIntegrations = [].concat(
-    worldConfig.defaultApps,
-    worldConfig.defaultWidgets,
-    [worldConfig.homepageApp],
-    [worldConfig.layout],
-  );
-
-  const integrationIdsNormalized = availableIntegrationsReq?.data?.integrationIds.map(
-    integrationId => {
-      return { id: integrationId };
-    },
-  );
-
-  const integrationsInfoReq = useGetIntegrationsInfo(integrationIdsNormalized);
-
-  const installableApps = integrationsInfoReq.data?.getIntegrationInfo?.filter(appInfo => {
-    if (defaultIntegrations?.includes(appInfo.name)) {
+  const installableApps = latestReleasesInfo?.filter(releaseInfo => {
+    if (defaultIntegrations?.includes(releaseInfo.name)) {
       return null;
     }
-    return appInfo;
+    return releaseInfo;
   });
 
-  const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
-
-  const handleAppClick = (app: IntegrationInfo) => {
+  const handleAppClick = (app: ReleaseInfo) => {
     props.plugins.routing?.navigateTo?.({
       appName: '@akashaproject/app-integration-center',
       getNavigationUrl: routes => `${routes[INFO]}/${app.id}`,
@@ -97,24 +82,29 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
   return (
     <>
       <Box gap="small" margin="medium">
-        {integrationsInfoReq.error && (
+        {reqError && (
           <ErrorLoader
             type="script-error"
             title={t('There was an error loading the integrations')}
             details={t('We cannot show this page right now')}
-            devDetails={integrationsInfoReq.error}
+            devDetails={reqError}
           />
         )}
-        {integrationsInfoReq.isFetching && (
-          <Box>
-            <Spinner />
-          </Box>
+        {(installableApps?.length === 0 || !isUserLoggedIn) && (
+          <ErrorLoader
+            type="no-apps"
+            title={t('Welcome to the Integration Centre!')}
+            details={t(
+              'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to Ethereum World.',
+            )}
+            noBorder={true}
+          />
         )}
         {installableApps?.map((app, index) => (
           <Box key={index} direction="row" justify="between" align="center" gap="xsmall">
             <SubtitleTextIcon
-              label={app.name}
-              subtitle={app.id}
+              label={app.manifestData?.displayName}
+              subtitle={app.name}
               iconType="integrationAppLarge"
               plainIcon={true}
               onClick={() => handleAppClick(app)}
@@ -125,7 +115,7 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
               icon={<Icon type="arrowDown" />}
               activeIcon={<Icon type="checkSimple" accentColor={true} />}
               activeHoverIcon={<Icon type="close" />}
-              active={installedAppsReq.data?.some(installedApp => installedApp.id === app.id)}
+              active={installedAppsInfo?.some(installedApp => installedApp.id === app.id)}
               activeLabel={t('Installed')}
               inactiveLabel={t('Install')}
               activeHoverLabel={t('Uninstall')}
@@ -135,6 +125,11 @@ const ExplorePage: React.FC<RootComponentProps> = props => {
           </Box>
         ))}
       </Box>
+      {isFetching && (
+        <Box>
+          <Spinner />
+        </Box>
+      )}
       {!!showNotifPill && (
         <NotificationPill
           icon={<Icon type="check" />}
