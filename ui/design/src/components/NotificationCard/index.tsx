@@ -5,17 +5,16 @@ import { BasicCardBox } from '../EntryCard/basic-card-box';
 import Icon from '../Icon';
 import { formatRelativeTime } from '../../utils/time';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';
+import { BlueDot, IconDiv, StyledBox, StyledNotifBox } from './styled-notifications';
 import Spinner from '../Spinner';
 import Tooltip from '../Tooltip';
 import ErrorLoader from '../ErrorLoader';
+import InfoCard from '../InfoCard';
 
 export interface INotificationsCard {
   // data
   notifications: Record<string, unknown>[];
   isFetching?: boolean;
-  // labels
-  notificationsLabel?: string;
   followingLabel?: string;
   mentionedPostLabel?: string;
   mentionedCommentLabel?: string;
@@ -31,14 +30,13 @@ export interface INotificationsCard {
   handleMessageRead: (notifId: string) => void;
   handleEntryClick: (entryId: string) => void;
   handleProfileClick: (pubKey: string) => void;
-  handleNavBack: () => void;
+  loggedIn?: boolean;
 }
 
 const NotificationsCard: React.FC<INotificationsCard> = props => {
   const {
     notifications,
     isFetching,
-    notificationsLabel,
     followingLabel,
     mentionedPostLabel,
     mentionedCommentLabel,
@@ -53,7 +51,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     handleMessageRead,
     handleEntryClick,
     handleProfileClick,
-    handleNavBack,
+    loggedIn,
   } = props;
 
   const handleMarkAllAsRead = () => {
@@ -192,51 +190,38 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
   };
 
   const renderHeader = () => (
-    <Box direction="row" justify="between" align="center" pad={{ left: 'small', bottom: 'medium' }}>
-      {isMobileOnly && <Icon type="arrowLeft" onClick={handleNavBack} />}
-      <Text size="xlarge" weight="bold">
-        {notificationsLabel}
-      </Text>
+    <Box
+      fill="horizontal"
+      direction="row"
+      justify="end"
+      align="center"
+      pad={{ left: 'small', bottom: 'xsmall' }}
+    >
       <Tooltip
         dropProps={{ align: { right: 'left' } }}
         message={`${markAsReadLabel}`}
         plain={true}
         caretPosition={'right'}
       >
-        <IconDiv>
-          <Icon size="xs" type="checkSimple" clickable={true} onClick={handleMarkAllAsRead} />
+        <IconDiv margin={{ top: '0.3rem', right: '0.3rem' }}>
+          <Icon size="md" type="checkSimple" clickable={true} onClick={handleMarkAllAsRead} />
         </IconDiv>
       </Tooltip>
     </Box>
   );
 
-  const renderContent = () => (
-    <>
+  return (
+    <Box>
       {isFetching && notifications.length === 0 && (
         <Box pad="large">
           <Spinner />
         </Box>
       )}
-      {!isFetching && notifications.length === 0 && (
-        <Box>
-          {isMobileOnly && renderHeader()}
-          <ErrorLoader
-            type="missing-notifications"
-            title={emptyTitle}
-            details={emptySubtitle}
-            style={
-              isMobileOnly
-                ? {
-                    border: 'none',
-                    boxShadow: 'none',
-                  }
-                : {}
-            }
-          />
-        </Box>
+      {loggedIn && !isFetching && notifications.length === 0 && (
+        <InfoCard icon="notifications" title={emptyTitle} suggestion={emptySubtitle} />
       )}
-      {notifications.length !== 0 && (
-        <Box pad={isMobileOnly ? 'xsmall' : 'small'}>
+      {loggedIn && notifications.length !== 0 && (
+        <StyledBox>
           {renderHeader()}
           {notifications?.map((notif: any, index: number) => renderNotificationCard(notif, index))}
           {isFetching && (
@@ -244,18 +229,12 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
               <Spinner />
             </Box>
           )}
-        </Box>
+        </StyledBox>
       )}
-    </>
-  );
-  return (
-    <>
-      {isMobileOnly ? <Box>{renderContent()}</Box> : <BasicCardBox>{renderContent()}</BasicCardBox>}
-    </>
+    </Box>
   );
 };
 NotificationsCard.defaultProps = {
-  notificationsLabel: 'Notifications',
   mentionedPostLabel: 'mentioned you in a post',
   mentionedCommentLabel: 'mentioned you in a comment',
   replyLabel: 'replied to your post',

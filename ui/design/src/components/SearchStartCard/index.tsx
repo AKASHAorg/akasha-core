@@ -24,7 +24,7 @@ export const SearchStartCard = ({
   const [shouldMinimize, setShouldMinimize] = React.useState(!!searchKeywordParam?.length);
 
   return (
-    <WrapperBox align="center" margin={{ horizontal: 'small', bottom: 'small' }}>
+    <WrapperBox align="center">
       <Box align="start" fill="horizontal" pad={{ top: 'medium', horizontal: 'medium' }}>
         <Text size="xlarge" weight="bold">
           Search

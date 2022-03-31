@@ -33,4 +33,10 @@ const IconDiv = styled(Box)`
   }
 `;
 
-export { BlueDot, IconDiv, StyledNotifBox };
+const StyledBox = styled(Box)`
+  border: ${props => `1px solid ${props.theme.colors.lightBackground}`};
+  border-radius: 0.25rem;
+  margin: 0 0.5rem;
+`;
+
+export { BlueDot, IconDiv, StyledNotifBox, StyledBox };
