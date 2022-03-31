@@ -86,6 +86,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
       integrationName={integrationName}
       installTitleLabel={t(
         'To add {{integrationName}} to your World we have to do a few things first. This will take less than a minute.',
+        { integrationName },
       )}
       installStep={modalState}
       savingInfoLabel={t('Saving install information')}
@@ -103,6 +104,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
       errorInfoLabel={t('Please check your network connection and try again.')}
       errorSubInfoLabel={t('Thank you!')}
       errorSubtitleLabel={t('{{integrationName}} could not be installed in {{worldName}}.', {
+        integrationName,
         worldName: props.worldConfig.title,
       })}
       errorTitleLabel={t('Oops!')}

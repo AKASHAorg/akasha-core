@@ -28,7 +28,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     return !!loginQuery.data.pubKey;
   }, [loginQuery.data]);
 
-  const availableIntegrationsReq = useGetAllIntegrationsIds();
+  const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
 
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,
@@ -37,11 +37,16 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     [worldConfig.layout],
   );
 
-  const integrationIdsNormalized = availableIntegrationsReq?.data?.integrationIds.map(
-    integrationId => {
-      return { id: integrationId };
-    },
-  );
+  const integrationIdsNormalized = React.useMemo(() => {
+    if (availableIntegrationsReq.data?.integrationIds) {
+      return availableIntegrationsReq.data?.integrationIds.map(integrationId => {
+        return { id: integrationId };
+      });
+    }
+    return worldConfig.defaultApps.map(integrationName => {
+      return { name: integrationName };
+    });
+  }, [availableIntegrationsReq.data, worldConfig.defaultApps]);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
   const integrationsInfoReq = useGetIntegrationsInfo(integrationIdsNormalized);
