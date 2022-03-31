@@ -8,7 +8,7 @@ import {
   act,
   genUser,
   genLoggedInState,
-  getWorldConfig,
+  genWorldConfig,
 } from '@akashaproject/ui-awf-testing-utils';
 
 const mockLocationValue = {
@@ -37,8 +37,7 @@ describe('<ProfilePageHeader />', () => {
         modalSlotId="modal-slot"
         loginState={genLoggedInState()}
         activeModal={null}
-        worldConfig={getWorldConfig()}
-        navigateTo={jest.fn()}
+        worldConfig={genWorldConfig()}
         parseQueryString={jest.fn()}
         navigateToModal={jest.fn()}
         uiEvents={null}

@@ -10,7 +10,6 @@ import {
   EventTypes,
   IntegrationModule,
   PluginConf,
-  IMenuList,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   Observable,
@@ -84,8 +83,8 @@ export interface LoaderState {
 
   /**
    * Parcel store for extensions
-   * @param extensionParcel - key: string - extensionID (unique),
-   *    value: `{ parcel: {@link Parcel}, id: string, parent: string }`;
+   * @param extensionParcel - key: string - mount point of the extension,
+   *    value: `{ parcel: {@link Parcel}, id: string, parent: string }[]`;
    */
   extensionParcels: Map<
     string,
@@ -107,12 +106,11 @@ export interface LoaderState {
 
   // plugins that are provided by apps
   plugins: PluginConf;
-
-  menuItems: IMenuList;
   layoutReady: boolean;
 }
 
-const initialState: LoaderState = {
+// export to be used in tests
+export const defaultInitialState: LoaderState = {
   activeModal: { name: null },
   modalRequest: { name: null },
   enableIntegrationRequest: null,
@@ -131,7 +129,6 @@ const initialState: LoaderState = {
   appNotInstalled: false,
   spaEvents: null,
   plugins: {},
-  menuItems: { nextIndex: 1, items: [] },
   layoutReady: false,
 };
 
@@ -150,7 +147,11 @@ interface EventDataTypes {
   data?: { name: string } & BaseIntegrationInfo;
 }
 
-export const initState = (worldConfig: ILoaderConfig, globalChannel: ReplaySubject<unknown>) =>
+export const initState = (
+  worldConfig: ILoaderConfig,
+  globalChannel: ReplaySubject<unknown>,
+  initialState?: LoaderState,
+): Observable<LoaderState> =>
   getEvents(globalChannel /* , worldConfig */).pipe(
     mergeScan<Partial<LoaderState> & EventDataTypes, LoaderState>((state, newData) => {
       switch (newData.event) {
@@ -165,6 +166,15 @@ export const initState = (worldConfig: ILoaderConfig, globalChannel: ReplaySubje
           return handleExtensionPointUnmount(state, newData.data);
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
+          if (worldConfig.registryOverrides.find(override => override.name === newData.data.name)) {
+            return of({
+              ...state,
+              manifests: [
+                ...manifests,
+                worldConfig.registryOverrides.find(override => override.name === newData.data.name),
+              ],
+            });
+          }
           manifests.push(newData.data);
           return of({
             ...state,
@@ -181,6 +191,6 @@ export const initState = (worldConfig: ILoaderConfig, globalChannel: ReplaySubje
             ...newData,
           });
       }
-    }, initialState),
+    }, initialState ?? defaultInitialState),
     shareReplay(1),
   );

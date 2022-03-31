@@ -7,6 +7,8 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps, RequireAtLeastOne } from '@akashaproject/ui-awf-typings';
 import { NavigationOptions, RouteRepository } from './types';
+import getSDK from '@akashaproject/awf-sdk';
+import { events } from '@akashaproject/sdk-typings';
 
 export class RoutingPlugin {
   static readonly routeRepository: RouteRepository = {
@@ -18,17 +20,34 @@ export class RoutingPlugin {
   static logger;
 
   static initRouteObservation(uiEvents: RootComponentProps['uiEvents']) {
+    const globalChannel = getSDK().api.globalChannel;
+    globalChannel.subscribe({
+      next(evData) {
+        if (evData.event === events.APP_EVENTS.REMOVED) {
+          const removed = evData.data as { name: string };
+          const { all, activeIntegrationNames, byArea } = RoutingPlugin.routeRepository;
+          delete all[removed.name];
+          delete activeIntegrationNames[removed.name];
+          for (const area in byArea) {
+            if (byArea.hasOwnProperty(area)) {
+              byArea[area] = byArea[area].filter(menuItem => menuItem.name !== removed.name);
+            }
+          }
+          RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
+        }
+      },
+    });
     uiEvents.subscribe({
       next: (eventData: UIEventData) => {
         if (eventData.event === EventTypes.RegisterIntegration) {
-          const appData = {
+          const appMenuItemData = {
             ...eventData.data.menuItems,
             navRoutes: eventData.data.navRoutes,
             name: eventData.data.name,
           };
-          RoutingPlugin.routeRepository.all[eventData.data.name] = appData;
+          RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
           eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
-            RoutingPlugin.routeRepository.byArea[area].push(appData),
+            RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
           );
           RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
         }

@@ -77,7 +77,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 const Wrapped = (props: RootComponentProps) => (
   <Router>
     <Route path={rootRoute}>
-      <I18nextProvider i18n={props.i18next}>
+      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <ICWidget {...props} />
       </I18nextProvider>
     </Route>

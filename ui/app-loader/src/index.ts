@@ -1,7 +1,7 @@
 import getSDK from '@akashaproject/awf-sdk';
 import { ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { hidePageSplash, showPageSplash } from './splash-screen';
-import { merge } from 'rxjs';
+import { catchError, merge } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { initState } from './state';
 
@@ -80,8 +80,7 @@ const startLoader = (worldConfig: ILoaderConfig) => {
     handleAppLoadingScreens(worldConfig, state$, logger),
   ).subscribe({
     error: err => {
-      console.error(err.message ?? err.toString());
-      console.error(err.stack);
+      logger.error(`[index] error: ${err.message}, ${err.stack}`);
       hidePageSplash();
     },
   });
