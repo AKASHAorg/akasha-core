@@ -4327,16 +4327,16 @@
     native-abort-controller "^1.0.3"
     paramap-it "^0.1.1"
 
-"@textile/buckr@1.3.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@textile/buckr/-/buckr-1.3.2.tgz#a897e5a97f2ef8c8ecc9ecc33070fe60b19b9046"
-  integrity sha512-6cbST0mWTI3AMwAgkEUWt44BmYa2Z8MjZ5BKfp45uWYjM6F7O5d2YblPL6VK4EHwBcoyZtFsDMl+8MeuKcwRyw==
+"@textile/buckr@1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@textile/buckr/-/buckr-1.3.3.tgz#41120f94980aadd9f54c5e5e6f1ba1c55629cac4"
+  integrity sha512-/MkRhVO3MpSeWYRk//cxGl/pzvVCT5sPl/NFNTl8FDbTEH/O87E5cp4HbLfnSABkxcYjaoP2cyDGFKj3spUlKg==
   dependencies:
     "@actions/core" "^1.2.0"
     "@improbable-eng/grpc-web" "^0.13.0"
-    "@textile/buckets" "^6.2.2"
-    "@textile/context" "^0.12.1"
-    "@textile/grpc-connection" "^2.5.2"
+    "@textile/buckets" "^6.2.3"
+    "@textile/context" "^0.12.2"
+    "@textile/grpc-connection" "^2.5.3"
     dotenv "8.2.0"
     glob "^7.1.6"
     ws "^7.3.0"

@@ -12,7 +12,7 @@ module.exports = {
     },
     rinkeby: {
       url: 'https://rinkeby.infura.io/v3/' + process.env.INFURA_ID,
-      accounts: [],
+      accounts: [process.env.ETH_DEPLOY_KEY],
     },
   },
   solidity: {
