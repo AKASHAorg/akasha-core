@@ -346,6 +346,74 @@ const trendingProfilesData = [
   },
 ];
 
+const ICDetailAppsData: IntegrationCenterApp[] = [
+  {
+    name: 'Theme Wizard',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427384932',
+    enabled: true,
+  },
+  {
+    name: 'Moderating Tools',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf4427384982',
+    enabled: true,
+  },
+  {
+    name: 'Quick Moderation',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427384986',
+    enabled: true,
+  },
+  {
+    name: 'Confetti Replies',
+    id: 'bbaryfskgshgirsnxnbv',
+    author: '@akasha',
+    integrationType: 1,
+    latestReleaseId: '0xf9427384382',
+    enabled: true,
+    description: `Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.
+      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
+      Never take a screenshot of a map again!`,
+    releases: [
+      {
+        integrationID: 'bbaryfskgshgirsnxnbv',
+        id: '0x428974897274',
+        version: '0.1.0',
+        author: '0x0402384032858094',
+        enabled: true,
+        name: 'Confetti Replies',
+        integrationType: 1,
+        sources: ['bdabsdbasb'],
+        manifestData: {
+          mainFile: 'index.js',
+
+          keywords: [
+            'Image editor',
+            'Photo Filters',
+            'Filters',
+            'Photos',
+            'Pro',
+            'Color editing',
+            'Confetti',
+            'Visuals',
+          ],
+          license: 'wtfpl',
+        },
+      },
+    ],
+  },
+];
+
 const ICWorldAppsData: ReleaseInfo[] = [
   {
     name: 'Theme Wizard',
@@ -883,4 +951,5 @@ export {
   trendingTagsData,
   ICWorldAppsData,
   ICInstalledAppsData,
+  ICDetailAppsData,
 };

@@ -112,7 +112,7 @@ const getAllIntegrationsIds = async (offset?: number) => {
 /**
  * Hook to get all the published integrations ids
  */
-export function useGetAllIntegrationsIds(enabler?: boolean, offset?: number) {
+export function useGetAllIntegrationsIds(enabler = true, offset?: number) {
   return useQuery([INTEGRATIONS_KEY, 'ids'], () => getAllIntegrationsIds(offset), {
     enabled: !!enabler,
     keepPreviousData: true,
