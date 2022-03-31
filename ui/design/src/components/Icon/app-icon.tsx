@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Stack, Box } from 'grommet';
 import { LogoSourceType, LogoTypeSource } from '@akashaproject/ui-awf-typings';
 
 import Icon, { IconType, iconTypes } from '.';
@@ -12,6 +13,9 @@ export interface IAppIcon extends IconSize {
   plain?: boolean;
   backgroundColor?: string;
   accentColor?: boolean;
+  // props for notifications icon
+  stackedIcon?: boolean;
+  hasNewNotifs?: boolean;
 }
 
 export interface IconSize {
@@ -19,7 +23,17 @@ export interface IconSize {
 }
 
 const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
-  const { appImg, onClick, placeholderIconType, size, plain, backgroundColor, accentColor } = props;
+  const {
+    appImg,
+    onClick,
+    placeholderIconType,
+    size,
+    plain,
+    backgroundColor,
+    accentColor,
+    stackedIcon,
+    hasNewNotifs,
+  } = props;
 
   const renderAppImg = () => {
     if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
@@ -30,6 +44,17 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     }
     return <Icon type={placeholderIconType} plain={plain} accentColor={accentColor} />;
   };
+
+  if (stackedIcon)
+    return (
+      <StyledIconDiv onClick={onClick} ref={ref} size={size} backgroundColor={backgroundColor}>
+        <Stack anchor="top-right">
+          {renderAppImg()}
+          {hasNewNotifs && <Box background="errorText" width="9px" height="9px" round={true} />}
+        </Stack>
+      </StyledIconDiv>
+    );
+
   return (
     <StyledIconDiv onClick={onClick} ref={ref} size={size} backgroundColor={backgroundColor}>
       {renderAppImg()}

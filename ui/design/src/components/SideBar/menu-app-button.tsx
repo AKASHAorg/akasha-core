@@ -11,11 +11,12 @@ export interface IMenuAppButton {
   plain?: boolean;
   menuItem: IMenuItem;
   accentColor?: boolean;
+  hasNewNotifs?: boolean;
   onClick?: React.EventHandler<React.SyntheticEvent>;
 }
 
 const MenuAppButton: React.FC<IMenuAppButton> = props => {
-  const { plain, menuItem, accentColor, onClick } = props;
+  const { plain, menuItem, accentColor, hasNewNotifs, onClick } = props;
 
   const renderItem = () => {
     if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
@@ -46,6 +47,8 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
         onClick={onClick}
         appImg={menuItem.logo}
         accentColor={accentColor}
+        stackedIcon={menuItem.name === '@akashaproject/app-notifications'}
+        hasNewNotifs={hasNewNotifs}
         placeholderIconType="app"
         backgroundColor="transparent"
       />

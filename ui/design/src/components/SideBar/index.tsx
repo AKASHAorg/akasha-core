@@ -29,6 +29,7 @@ export interface ISidebarProps {
   allMenuItems: IMenuItem[];
   currentRoute?: string;
   isLoggedIn: boolean;
+  hasNewNotifs?: boolean;
   loadingUserInstalledApps: boolean;
   onSidebarClose: () => void;
   onClickMenuItem: (appName: string, route: string) => void;
@@ -49,6 +50,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     worldApps,
     currentRoute,
     isLoggedIn,
+    hasNewNotifs,
     loadingUserInstalledApps,
     size,
     className,
@@ -120,7 +122,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           hasChevron={menuItem.subRoutes?.length > 0}
           onClick={handleAppIconClick(menuItem)}
           isActive={activePanel}
-          label={<MenuItemLabel menuItem={menuItem} isActive={activePanel} />}
+          label={
+            <MenuItemLabel menuItem={menuItem} isActive={activePanel} hasNewNotifs={hasNewNotifs} />
+          }
         >
           {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
             <MenuSubItems
@@ -137,7 +141,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           hasChevron={menuItem.subRoutes?.length > 0}
           onClick={handleAppIconClick(menuItem, true)}
           isActive={activePanel}
-          label={<MenuItemLabel menuItem={menuItem} isActive={activePanel} />}
+          label={
+            <MenuItemLabel menuItem={menuItem} isActive={activePanel} hasNewNotifs={hasNewNotifs} />
+          }
         >
           {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
             <MenuSubItems

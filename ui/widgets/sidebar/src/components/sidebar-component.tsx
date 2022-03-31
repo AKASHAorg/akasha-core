@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import DS from '@akashaproject/design-system';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks';
+import { useCheckNewNotifications, useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { EventTypes, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
@@ -54,6 +54,11 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const { size } = useViewportSize();
 
   const loginQuery = useGetLogin();
+
+  // check for new notifcations
+  const checkNotifsReq = useCheckNewNotifications(
+    loginQuery.data.isReady && loginQuery.data.ethAddress,
+  );
 
   React.useEffect(() => {
     const sub = props.plugins?.routing?.routeObserver?.subscribe({
@@ -121,6 +126,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         currentRoute={currentLocation.pathname}
         size={size}
         isLoggedIn={!!loginQuery.data.ethAddress}
+        hasNewNotifs={checkNotifsReq.data}
         loadingUserInstalledApps={false}
         onSidebarClose={handleSidebarClose}
         onClickMenuItem={handleNavigation}

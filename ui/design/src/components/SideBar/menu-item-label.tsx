@@ -8,14 +8,15 @@ import { MenuAppButton } from './menu-app-button';
 export interface IMenuItemLabelProps {
   menuItem: IMenuItem;
   isActive: boolean;
+  hasNewNotifs?: boolean;
 }
 
 const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
-  const { menuItem, isActive } = props;
+  const { menuItem, isActive, hasNewNotifs } = props;
 
   return (
     <Box margin={{ vertical: 'small', left: 'medium' }} direction="row" align="center">
-      <MenuAppButton menuItem={menuItem} accentColor={isActive} />
+      <MenuAppButton menuItem={menuItem} accentColor={isActive} hasNewNotifs={hasNewNotifs} />
       <Text
         size="large"
         margin={{ left: 'small' }}

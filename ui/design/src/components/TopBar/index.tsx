@@ -128,16 +128,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     setMenuDropOpen(true);
   };
 
-  // const handleSidebarVisibility = () => {
-  //   if (!sidebarOpen && onSidebarToggle) {
-  //     onSidebarToggle(true);
-  //     setSidebarOpen(true);
-  //   } else if (sidebarOpen && onSidebarToggle) {
-  //     onSidebarToggle(false);
-  //     setSidebarOpen(false);
-  //   }
-  // };
-
   const onClickPluginButton = (menuItem: IMenuItem) => () => {
     setCurrentDropItem(menuItem);
     if (menuItem.subRoutes && menuItem.subRoutes.length > 0) {
