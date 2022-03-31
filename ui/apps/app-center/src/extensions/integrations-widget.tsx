@@ -51,22 +51,26 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
 
-  const { filteredDefaultApps, filteredInstalledApps } =
-    integrationsInfoReq.data?.getLatestRelease.reduce(
-      (acc, app) => {
-        // select default apps from list of apps
-        if (defaultIntegrations.includes(app.name)) {
-          acc.filteredDefaultApps.push(app);
-        } else {
-          // select user installed apps from list of installed apps
-          if (installedAppsReq.data?.some(installedApp => installedApp.id === app.id)) {
-            acc.filteredInstalledApps.push(app);
+  const { filteredDefaultApps, filteredInstalledApps } = React.useMemo(() => {
+    if (integrationsInfoReq.data?.getLatestRelease) {
+      return integrationsInfoReq.data?.getLatestRelease.reduce(
+        (acc, app) => {
+          // select default apps from list of apps
+          if (defaultIntegrations.includes(app.name)) {
+            acc.filteredDefaultApps.push(app);
+          } else {
+            // select user installed apps from list of installed apps
+            if (installedAppsReq.data?.some(installedApp => installedApp.id === app.id)) {
+              acc.filteredInstalledApps.push(app);
+            }
           }
-        }
-        return acc;
-      },
-      { filteredDefaultApps: [], filteredInstalledApps: [] },
-    );
+          return acc;
+        },
+        { filteredDefaultApps: [], filteredInstalledApps: [] },
+      );
+    }
+    return { filteredDefaultApps: [], filteredInstalledApps: [] };
+  }, [defaultIntegrations, installedAppsReq.data, integrationsInfoReq.data?.getLatestRelease]);
 
   const handleAppClick = (integrationId: string) => {
     props.singleSpa.navigateToUrl(`${routes[INFO]}/${integrationId}`);
