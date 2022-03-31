@@ -40,11 +40,11 @@ const StyledButton = styled(Button)<{ active: boolean; allowMinimization: boolea
           stroke: ${props.theme.colors.white};
         }
         &:hover {
-          background-color: ${props.theme.colors.background};
-          border: 1px solid red;
-          color: red;
+          background-color: ${props.theme.colors.accentLightHover};
+          border: 1px solid ${props.theme.colors.accent};
+          color: ${props.theme.colors.accent};
           & * {
-            stroke: red;
+            stroke: ${props.theme.colors.accent};
           }
         }
       `;

@@ -54,7 +54,7 @@ const StyledAccordionPanel = styled(AccordionPanel)<{
     props.isActive ? props.theme.colors.activePanelBackground : 'initial'};
 
   &:hover {
-    background-color: ${props => props.theme.colors.hoverPanelBackground};
+    background-color: ${props => props.theme.colors.hoverBackground};
   }
 
   ${props => {

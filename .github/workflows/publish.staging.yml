@@ -1,0 +1,46 @@
+name: publish apps on registry for staging
+
+on:
+  push:
+    branches:
+      - next
+    paths:
+      - 'build/**'
+jobs:
+  publish:
+    name: Update registry apps
+    runs-on: ubuntu-latest
+    environment: Staging
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.13.0
+          cache: 'yarn'
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: install root dependencies
+        env:
+          CI: 1
+        run: |
+          yarn install --frozen-lockfile
+      - name: Publish new versions
+        env:
+          INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}
+          ETH_DEPLOY_KEY: ${{ secrets.ETH_DEPLOY_KEY_STAGING }}
+          INTEGRATION_REGISTRY_ADDRESS:  ${{ secrets.INTEGRATION_REGISTRY_ADDRESS_STAGING }}
+        run: |
+          yarn run compile:sc
+          yarn run deploy:sc

@@ -29,4 +29,5 @@ export const StyledBox = styled(Box)<{ shouldMinimize?: boolean }>`
 export const WrapperBox = styled(Box)`
   border: ${props => `1px solid ${props.theme.colors.lightBackground}`};
   border-radius: 0.25rem;
+  margin: 0.5rem;
 `;

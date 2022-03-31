@@ -222,16 +222,14 @@ export const processSystemModules = (
               if (mod?.register && typeof mod.register === 'function') {
                 appConf = await Promise.resolve(mod.register(registrationProps));
                 // each app must have menuItems exposed in config, widgets do not
-                if (appConf.menuItems) {
-                  uiEvents.next({
-                    event: EventTypes.RegisterIntegration,
-                    data: {
-                      name: moduleName,
-                      menuItems: appConf.menuItems,
-                      navRoutes: appConf.routes,
-                    },
-                  });
-                }
+                uiEvents.next({
+                  event: EventTypes.RegisterIntegration,
+                  data: {
+                    name: moduleName,
+                    menuItems: appConf?.menuItems,
+                    navRoutes: appConf?.routes,
+                  },
+                });
               }
               return {
                 plugin,

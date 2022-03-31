@@ -23,7 +23,7 @@ const getNotifications = async () => {
       );
     }
   });
-  const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls));
+  const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls), { defaultValue: [] });
 
   let completeMessages = [];
   profilesResp

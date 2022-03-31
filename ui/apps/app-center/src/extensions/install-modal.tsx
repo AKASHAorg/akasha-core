@@ -61,6 +61,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
 
   React.useEffect(() => {
     installApp.mutate({ name: integrationName });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleModalClose = React.useCallback(() => {
@@ -84,9 +85,9 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
       dismissLabel={t('Dismiss')}
       modalTitleLabel={t('App Install')}
       integrationName={integrationName}
-      installTitleLabel1={t('To add')}
-      installTitleLabel2={t(
-        'to your World we have to do a few things first. This will take less than a minute.',
+      installTitleLabel={t(
+        'To add {{integrationName}} to your World we have to do a few things first. This will take less than a minute.',
+        { integrationName },
       )}
       installStep={modalState}
       savingInfoLabel={t('Saving install information')}
@@ -103,7 +104,8 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
       )}
       errorInfoLabel={t('Please check your network connection and try again.')}
       errorSubInfoLabel={t('Thank you!')}
-      errorSubtitleLabel={t('could not be installed in {{worldName}}.', {
+      errorSubtitleLabel={t('{{integrationName}} could not be installed in {{worldName}}.', {
+        integrationName,
         worldName: props.worldConfig.title,
       })}
       errorTitleLabel={t('Oops!')}

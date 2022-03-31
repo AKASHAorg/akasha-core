@@ -3,7 +3,7 @@ import { act, cleanup } from '@testing-library/react';
 
 import ICDetailCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
-import { ICWorldAppsData } from '../../../utils/dummy-data';
+import { ICDetailAppsData } from '../../../utils/dummy-data';
 
 describe('<ICDetailCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -34,11 +34,11 @@ describe('<ICDetailCard /> Component', () => {
             releaseIdLabel={'Release Id'}
             versionHistoryLabel="Version History"
             authorLabel="Authors & Contributors"
-            integrationName={ICWorldAppsData[3].name}
+            integrationName={ICDetailAppsData[3].name}
             licenseLabel="License"
             isInstalled={false}
-            releases={ICWorldAppsData[3].releases}
-            latestRelease={ICWorldAppsData[3].releases[0]}
+            releases={ICDetailAppsData[3].releases}
+            latestRelease={ICDetailAppsData[3].releases[0]}
             onClickShare={handleClickShare}
             onClickCTA={handleClickCTA}
             onClickInstall={handleClickInstall}
@@ -63,7 +63,7 @@ describe('<ICDetailCard /> Component', () => {
 
   it('has correct integration name', () => {
     const { getByText } = componentWrapper;
-    const title = getByText(ICWorldAppsData[3].name);
+    const title = getByText(ICDetailAppsData[3].name);
     expect(title).toBeDefined();
   });
 });

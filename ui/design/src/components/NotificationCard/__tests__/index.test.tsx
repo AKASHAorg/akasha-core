@@ -10,7 +10,6 @@ describe('<NotificationsCard /> Component', () => {
   const handleMessageRead = jest.fn();
   const handleEntryClick = jest.fn();
   const handleProfileClick = jest.fn();
-  const handleNavBack = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -44,7 +43,6 @@ describe('<NotificationsCard /> Component', () => {
             markAsReadLabel={'Mark as read'}
             repostLabel={'reposted your post'}
             replyLabel={'replied to your post'}
-            notificationsLabel={'Notifications'}
             followingLabel={'is now following you'}
             mentionedPostLabel={'mentioned you in a post'}
             mentionedCommentLabel={'mentioned you in a comment'}
@@ -52,7 +50,7 @@ describe('<NotificationsCard /> Component', () => {
             handleMessageRead={handleMessageRead}
             handleEntryClick={handleEntryClick}
             handleProfileClick={handleProfileClick}
-            handleNavBack={handleNavBack}
+            loggedIn
           />,
         ),
         {},
@@ -67,13 +65,6 @@ describe('<NotificationsCard /> Component', () => {
 
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
-  });
-
-  it('has correct title', () => {
-    const { getByText } = componentWrapper;
-    const title = getByText('Notifications');
-
-    expect(title).toBeDefined();
   });
 
   it('renders correct profile avatar', () => {

@@ -7,6 +7,7 @@ export interface ErrorLoaderProps {
     | 'missing-saved-items'
     | 'missing-notifications'
     | 'no-connection'
+    | 'no-apps'
     | 'network-not-supported'
     | 'no-login'
     | 'script-error'

@@ -24,6 +24,7 @@ import {
 } from './use-tag';
 import {
   useGetProfile,
+  useGetProfileByEthAddress,
   useFollowers,
   useFollowing,
   useGetEntryAuthor,
@@ -146,6 +147,7 @@ export {
   useToggleTagSubscription,
   // use-profile
   useGetProfile,
+  useGetProfileByEthAddress,
   useFollowers,
   useFollowing,
   useGetEntryAuthor,

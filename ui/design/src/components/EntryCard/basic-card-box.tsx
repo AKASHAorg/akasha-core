@@ -1,4 +1,4 @@
-import { Box, Anchor } from 'grommet';
+import { Box, Anchor, BoxProps } from 'grommet';
 import { MarginType, PadType } from 'grommet/utils';
 import * as React from 'react';
 import styled, { css } from 'styled-components';
@@ -23,7 +23,7 @@ export interface IBasicCardBox {
   noBorderRadius?: boolean;
   bottomBorderOnly?: boolean;
   isSelected?: boolean;
-  onClick?: () => void;
+  onClick?: BoxProps['onClick'];
 }
 
 const BasicCardBox: React.FC<IBasicCardBox> = ({

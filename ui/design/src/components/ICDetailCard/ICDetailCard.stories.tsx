@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import ICDetailCard, { ICDetailCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
-import { ICWorldAppsData } from '../../utils/dummy-data';
+import { ICDetailAppsData } from '../../utils/dummy-data';
 
 export default {
   title: 'Cards/ICDetailCard',
@@ -39,24 +39,24 @@ export const BaseICDetailCard = Template.bind({});
 
 BaseICDetailCard.args = {
   shareLabel: 'Share',
-  id: ICWorldAppsData[3].id,
-  avatar: ICWorldAppsData[3].avatar,
-  coverImage: ICWorldAppsData[3].coverImage,
+  id: ICDetailAppsData[3].id,
+  avatar: ICDetailAppsData[3].avatar,
+  coverImage: ICDetailAppsData[3].coverImage,
   installLabel: 'Install',
   uninstallLabel: 'Uninstall',
   installedLabel: 'Installed',
   descriptionLabel: 'Description',
-  descriptionContent: ICWorldAppsData[3].description,
+  descriptionContent: ICDetailAppsData[3].description,
   showMoreLabel: 'Show More',
   linksLabel: 'Links',
   releasesLabel: 'Releases',
   releaseTypeLabel: 'Release Type',
   releaseIdLabel: 'Release Id',
-  releases: ICWorldAppsData[3].releases,
+  releases: ICDetailAppsData[3].releases,
   versionHistoryLabel: 'Version History',
   authorsLabel: 'Authors & Contributors',
-  authors: ICWorldAppsData[3].authors,
-  tags: ICWorldAppsData[3].tags,
+  authors: ICDetailAppsData[3].authors,
+  tags: ICDetailAppsData[3].tags,
   licenseLabel: 'License',
-  license: ICWorldAppsData[3].license,
+  license: ICDetailAppsData[3].license,
 };

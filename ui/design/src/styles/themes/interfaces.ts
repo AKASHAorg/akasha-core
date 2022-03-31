@@ -10,6 +10,9 @@ export interface DefaultTheme extends ThemeType {
 }
 
 export interface IColors {
+  blue: string;
+  lightBlue: string;
+  darkBlue: string;
   white: string;
   primaryText: string;
   secondaryText: string;
@@ -26,7 +29,6 @@ export interface IColors {
   modalBackgroundAlt: string;
   modalBackgroundTransparent: string;
   hoverBackground: string;
-  hoverPanelBackground: string;
   activePanelBackground: string;
   skeletonBackground: string;
   inputBackground: string;
@@ -37,6 +39,7 @@ export interface IColors {
   accent: string;
   accentOpacity: string;
   accentLight: string;
+  accentLightHover: string;
   border: string;
   lightBorder: string;
   darkBorder: string;

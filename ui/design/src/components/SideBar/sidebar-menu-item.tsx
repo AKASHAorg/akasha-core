@@ -37,7 +37,6 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
   ) => {
     props.onSubMenuItemClick(menuItem, subMenuItem, shouldCloseSidebar);
   };
-
   return (
     <>
       <DesktopAccordionPanel
