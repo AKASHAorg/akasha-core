@@ -36,12 +36,7 @@ const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
             }}
             onClick={() => onOptionClick(menuItem, subRouteMenuItem)}
           >
-            <Text
-              size="large"
-              color={subRouteMenuItem.route === activeOption?.route ? 'accent' : 'primaryText'}
-            >
-              {subRouteMenuItem.label}
-            </Text>
+            <Text size="large">{subRouteMenuItem.label}</Text>
           </Box>
         ))}
       </Box>

@@ -17,7 +17,7 @@ const SectionTitle: React.FC<ISectionTitleProps> = props => {
       align="start"
       fill={true}
       margin={{ bottom: 'xsmall' }}
-      pad={{ horizontal: 'medium' }}
+      pad={{ top: 'medium', horizontal: 'medium' }}
     >
       <Icon type="app" plain={true} />
       <Box margin={{ left: 'medium' }}>

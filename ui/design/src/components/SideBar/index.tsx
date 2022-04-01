@@ -3,18 +3,20 @@ import { Box, Text } from 'grommet';
 
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
-import SectionTitle from './section-title';
 import Skeleton from './skeleton';
+import SectionTitle from './section-title';
+import SidebarMenuItem from './sidebar-menu-item';
 
 import Icon from '../Icon';
 
 import {
   StyledHiddenScrollContainer,
+  StyledSubWrapper,
   StyledButton,
   StyledFooter,
   StyledAccordion,
 } from './styled-sidebar';
-import SidebarMenuItem from './sidebar-menu-item';
+import { IconDiv, BrandIcon, VersionButton } from '../TopBar/styled-topbar';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -26,7 +28,12 @@ export interface ISidebarProps {
   allMenuItems: IMenuItem[];
   currentRoute?: string;
   isLoggedIn: boolean;
+  hasNewNotifs?: boolean;
   loadingUserInstalledApps: boolean;
+  versionURL?: string;
+  versionLabel?: string;
+  // handlers
+  onBrandClick?: () => void;
   onSidebarClose: () => void;
   onClickMenuItem: (appName: string, route: string) => void;
   onClickExplore: () => void;
@@ -46,9 +53,13 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     worldApps,
     currentRoute,
     isLoggedIn,
+    hasNewNotifs,
     loadingUserInstalledApps,
+    versionURL,
+    versionLabel,
     size,
     className,
+    onBrandClick,
     onSidebarClose,
     onClickMenuItem,
     onClickExplore,
@@ -113,9 +124,33 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       elevation="shadow"
       className={className}
       style={{ position: 'relative' }}
+      border={{ side: 'right', size: 'xsmall', color: 'border' }}
     >
       <StyledHiddenScrollContainer>
-        <Box pad={{ top: 'medium', bottom: 'small' }} align="start">
+        <Box pad={{ bottom: 'small' }} align="start">
+          <StyledSubWrapper
+            // dynamically setting margin to match topbar border visible under overlay
+            margin={{ ...(!isLoggedIn && { top: 'small' }) }}
+            pad={{ horizontal: 'medium' }}
+          >
+            <IconDiv margin={{ right: 'medium' }} isActive={true} onClick={onSidebarClose}>
+              <Icon type="menu" clickable={true} accentColor={true} />
+            </IconDiv>
+            <Box
+              direction="row"
+              align="center"
+              flex={{ shrink: 0 }}
+              gap="small"
+              onClick={onBrandClick}
+            >
+              <Box direction="row" gap="small" align="center">
+                <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
+              </Box>
+              {versionURL && (
+                <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
+              )}
+            </Box>
+          </StyledSubWrapper>
           <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
           <StyledAccordion>
             {worldApps &&
@@ -135,7 +170,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         </Box>
         {isLoggedIn && loadingUserInstalledApps && (
           <Box
-            pad={{ top: 'medium', bottom: 'small' }}
+            pad={{ bottom: 'small' }}
             align="start"
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
@@ -145,7 +180,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         )}
         {isLoggedIn && userInstalledApps?.length > 0 && (
           <Box
-            pad={{ top: 'medium', bottom: 'small' }}
+            pad={{ bottom: 'small' }}
             align="start"
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
@@ -161,6 +196,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                   onSubMenuItemClick={handleOptionClick}
                   size={size}
                   activeOption={activeOption}
+                  hasNewNotifs={hasNewNotifs}
                 />
               ))}
             </StyledAccordion>

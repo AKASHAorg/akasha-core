@@ -12,8 +12,6 @@ const handleLogin = jest.fn();
 const handleSignup = jest.fn();
 const handleLogout = jest.fn();
 const handleFeedback = jest.fn();
-const handleModerationClick = jest.fn();
-const handleDashboardClick = jest.fn();
 
 describe('<Topbar /> Component', () => {
   beforeEach(() => {
@@ -29,8 +27,6 @@ describe('<Topbar /> Component', () => {
             onSignUpClick={handleSignup}
             onLogout={handleLogout}
             onFeedbackClick={handleFeedback}
-            onModerationClick={handleModerationClick}
-            onDashboardClick={handleDashboardClick}
             currentLocation=""
             modalSlotId="modal-slot"
           />,
@@ -65,8 +61,6 @@ describe.skip('<TopBar /> component on /auth-app* route', () => {
               onSignUpClick={handleSignup}
               onLogout={handleLogout}
               onFeedbackClick={handleFeedback}
-              onModerationClick={handleModerationClick}
-              onDashboardClick={handleDashboardClick}
               currentLocation=""
               modalSlotId="modal-slot"
             />

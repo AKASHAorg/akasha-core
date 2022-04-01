@@ -43,28 +43,18 @@ const StyledDiv = styled.div`
 const StyledSubWrapper = styled(Box)`
   width: 100%;
   ${props => css`
-    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
-      max-width: 85%;
-    }
-    @media screen and (min-width: ${props.theme.breakpoints.large.value}px) {
-      width: 70%;
+    @media screen and (min-width: ${props.theme.breakpoints.largeDesktop.value}px) {
+      max-width: 82rem;
     }
   `}
 `;
 
 const StyledContentBox = styled(Box)`
   margin: 0 auto;
+  width: 100%;
+  border-bottom: 0.8px solid ${props => props.theme.colors.border};
   ${props => css`
     background-color: ${props.theme.colors.background};
-    @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
-      max-width: 30rem;
-    }
-    @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
-      max-width: 51rem;
-    }
-    @media screen and (min-width: ${props.theme.breakpoints.large.value}px) {
-      max-width: 64rem;
-    }
   `}
 `;
 

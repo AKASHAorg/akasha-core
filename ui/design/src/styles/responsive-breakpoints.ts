@@ -26,8 +26,14 @@ export default {
       large: {
         value: 992,
       },
+      smallDesktop: {
+        value: 1024,
+      },
       xlarge: {
         value: 1200,
+      },
+      largeDesktop: {
+        value: 1440,
       },
       xxlarge: {
         value: 1326,

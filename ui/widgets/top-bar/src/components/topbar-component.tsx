@@ -9,18 +9,10 @@ import {
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import {
-  useCheckModerator,
-  useCheckNewNotifications,
-  useGetLogin,
-  useGetProfile,
-  useLogout,
-} from '@akashaproject/ui-awf-hooks';
+import { useGetLogin, useGetProfile, useLogout } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-import { extensionPointsMap } from '../extension-points';
-
-const { Topbar, ExtensionPoint } = DS;
+const { Topbar } = DS;
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
   const { singleSpa, uiEvents } = props;
@@ -38,16 +30,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
   const loggedProfileData = profileDataReq.data;
-
-  const checkNotifsReq = useCheckNewNotifications(
-    loginQuery.data.isReady && loginQuery.data.ethAddress,
-  );
-
-  const checkModeratorQuery = useCheckModerator(loginQuery.data?.pubKey);
-
-  const checkModeratorResp = checkModeratorQuery.data;
-
-  const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   const uiEventsRef = React.useRef(uiEvents);
 
@@ -139,20 +121,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     props.navigateToModal({ name: 'feedback' });
   };
 
-  const handleModerationClick = () => {
-    navigateTo?.({
-      appName: '@akashaproject/app-moderation-ewa',
-      getNavigationUrl: appRoutes => appRoutes.History,
-    });
-  };
-
-  const handleDashboardClick = () => {
-    navigateTo?.({
-      appName: '@akashaproject/app-moderation-ewa',
-      getNavigationUrl: appRoutes => appRoutes.Home,
-    });
-  };
-
   const handleBrandClick = () => {
     if (!props.worldConfig.homepageApp) {
       return;
@@ -170,24 +138,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('ui-widget-topbar');
 
-  const onExtMount = (name: string) => {
-    uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-      },
-    });
-  };
-
-  const onExtUnmount = (name: string) => {
-    uiEvents.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
-      },
-    });
-  };
-
   const handleSidebarToggle = () => {
     uiEvents.next({
       event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
@@ -202,13 +152,8 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       signUpLabel={t('Sign Up')}
       signOutLabel={t('Sign Out')}
       legalLabel={t('Legal')}
-      isModerator={isModerator}
-      dashboardLabel={t('Moderator Dashboard')}
-      dashboardInfoLabel={t('Help moderate items!')}
       feedbackLabel={t('Send Us Feedback')}
       feedbackInfoLabel={t('Help us improve the experience!')}
-      moderationLabel={t('Moderation History')}
-      moderationInfoLabel={t('Help keep us accountable!')}
       legalCopyRightLabel={'© Ethereum World Association'}
       stuckLabel={t('Stuck?')}
       helpLabel={t('We can help')}
@@ -224,22 +169,9 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       onSignUpClick={handleSignUpClick}
       onLogout={handleLogout}
       onFeedbackClick={handleFeedbackModalShow}
-      onModerationClick={handleModerationClick}
-      onDashboardClick={handleDashboardClick}
-      hasNewNotifications={checkNotifsReq.data}
       currentLocation={location?.pathname}
       onBrandClick={handleBrandClick}
       modalSlotId={props.layoutConfig.modalSlotId}
-      quickAccessExt={
-        loggedProfileData?.ethAddress && (
-          <ExtensionPoint
-            name={extensionPointsMap.QuickAccess}
-            shouldMount={!!loggedProfileData?.ethAddress}
-            onMount={name => onExtMount(name)}
-            onUnmount={name => onExtUnmount(name)}
-          />
-        )
-      }
     />
   );
 };

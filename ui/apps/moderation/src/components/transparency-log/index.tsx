@@ -39,6 +39,7 @@ const SidebarWrapper: React.FC<{ isSelected: boolean }> = styled(Box)<{ isSelect
   height: 100%;
   flex: 1;
   overflow-y: scroll;
+  border-radius: 0.5rem 0 0 0.5rem;
   ${props => {
     if (props.isSelected) {
       return `
@@ -183,7 +184,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         loggedUser={user}
         hasMobileDesign={true} // adjusts to new design on mobile screens
       />
-      <ListWrapper>
+      <ListWrapper margin={{ top: 'xsmall' }}>
         {/* setting height and overflow behaviour to make y-scrollable container */}
         <SidebarWrapper isSelected={!!selected}>
           {!logItemsQuery.isLoading && !logItemPages.length && (

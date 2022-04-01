@@ -61,6 +61,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
 
   React.useEffect(() => {
     installApp.mutate({ name: integrationName });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleModalClose = React.useCallback(() => {

@@ -45,6 +45,7 @@ const colors: IColorsLight = {
   darkText: '#132540',
   inputText: '#949EB3', // grey
   background: '#FFFFFF', // white
+  overlay: 'rgba(0, 0, 0, 0.6)', // black, 60% opacity
   ultraLightBackground: '#FBFCFD', // ultralightGrey
   beigeBackground: '#F8F4F4', // lightBeige
   lightBackground: '#EDF0F5', // lightGrey
@@ -54,8 +55,8 @@ const colors: IColorsLight = {
   modalBackgroundAlt: '#87909E', // deeperGrey
   modalBackgroundTransparent: 'rgba(0, 0, 0, 0.6)', // transparentBlack
   activeCardBackground: '#F6F8FF', // aquamarine
-  hoverBackground: '#F1F4FF',
-  activePanelBackground: '#f1f4ff',
+  hoverBackground: '#FBFCFD',
+  activePanelBackground: '#DCE3FF',
   skeletonBackground: '#EDF0F5',
   inputBackground: '#FFF',
   coverImageBackground: '#ECF1FE',

@@ -26,7 +26,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   title: 'App center',
   menuItems: {
     label: 'Integration Center',
-    area: [MenuItemAreaType.QuickAccessArea, MenuItemAreaType.AppArea],
+    area: [MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     route: rootRoute,
     subRoutes: [],

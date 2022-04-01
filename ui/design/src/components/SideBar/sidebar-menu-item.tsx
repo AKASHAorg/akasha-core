@@ -1,7 +1,9 @@
-import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as React from 'react';
+import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
+
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';
+
 import { DesktopAccordionPanel, MobileAccordionPanel } from './styled-sidebar';
 
 interface SidebarMenuItemProps {
@@ -9,7 +11,6 @@ interface SidebarMenuItemProps {
   size: string;
   index: number;
   menuItem: IMenuItem;
-
   onMenuItemClick: (menuItem: IMenuItem, shouldCloseSidebar: boolean) => void;
   onSubMenuItemClick: (
     menuItem: IMenuItem,
@@ -17,14 +18,18 @@ interface SidebarMenuItemProps {
     shouldCloseSidebar?: boolean,
   ) => void;
   activeOption: IMenuItem;
+  hasNewNotifs?: boolean;
 }
 
 const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
-  const { currentRoute, menuItem, size, index, activeOption } = props;
+  const { currentRoute, menuItem, size, index, activeOption, hasNewNotifs } = props;
+
   const activePanel = !!currentRoute?.match(menuItem?.route);
+
   const handleAppIconClick = (shouldCloseSidebar?: boolean) => () => {
     props.onMenuItemClick(menuItem, shouldCloseSidebar);
   };
+
   const handleSubrouteClick = (
     menuItem: IMenuItem,
     subMenuItem: IMenuItem,
@@ -40,7 +45,9 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
         hasChevron={menuItem.subRoutes?.length > 0}
         onClick={handleAppIconClick()}
         isActive={activePanel}
-        label={<MenuItemLabel menuItem={menuItem} />}
+        label={
+          <MenuItemLabel menuItem={menuItem} isActive={activePanel} hasNewNotifs={hasNewNotifs} />
+        }
       >
         {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
           <MenuSubItems
@@ -57,7 +64,9 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
         hasChevron={menuItem.subRoutes?.length > 0}
         onClick={handleAppIconClick(true)}
         isActive={activePanel}
-        label={<MenuItemLabel menuItem={menuItem} />}
+        label={
+          <MenuItemLabel menuItem={menuItem} isActive={activePanel} hasNewNotifs={hasNewNotifs} />
+        }
       >
         {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
           <MenuSubItems
