@@ -9,22 +9,22 @@ export interface InfoProps {
   title: string;
   explanation?: string;
   suggestion: string;
+  noBorder?: boolean;
+  noPadding?: boolean;
 }
 
-export const StyledBox = styled(Box)`
-  background-color: ${props => props.theme.colors.background};
-  border: ${props => `1px solid ${props.theme.colors.lightBackground}`};
-  padding: 1.5rem 7rem;
-  box-shadow: 0 4px 16px rgba(83, 98, 124, 0.06);
-  margin: 0.5rem;
+export const StyledBox = styled(Box)<{ noBorder?: boolean; noPadding?: boolean }>`
+  background-color: ${props => props.theme.colors.cardBackground};
+  border: ${props => !props.noBorder && `1px solid ${props.theme.colors.border}`};
+  padding: ${props => !props.noPadding && '1.5rem 7rem'};
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     padding: 2rem 2.5rem;
   }
 `;
 
-const InfoCard = ({ icon, title, explanation, suggestion }: InfoProps) => {
+const InfoCard = ({ icon, title, explanation, suggestion, noBorder, noPadding }: InfoProps) => {
   return (
-    <StyledBox align="center">
+    <StyledBox align="center" round="xsmall" noBorder={noBorder} noPadding={noPadding}>
       <Icon
         type={icon}
         size={isMobile ? 'xl' : 'xxl'}

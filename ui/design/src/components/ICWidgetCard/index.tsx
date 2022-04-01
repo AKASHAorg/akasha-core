@@ -6,7 +6,7 @@ import SubtitleTextIcon from '../SubtitleTextIcon';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
-import ErrorLoader from '../ErrorLoader';
+import InfoCard from '../InfoCard';
 
 export interface ICWidgetCardProps {
   className?: string;
@@ -94,7 +94,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                     <Box direction="row">
                       <Box width="100%" pad="none" align="start">
                         <SubtitleTextIcon
-                          onClick={() => onClickWorldApp(app.id)}
+                          onClick={() => onClickWorldApp(app.integrationID)}
                           label={app.manifestData?.displayName}
                           subtitle={app.name}
                           labelSize="large"
@@ -117,11 +117,12 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
             <Box>
               {installedApps && installedApps.length === 0 && !isLoadingInstalledApps && (
                 <Box pad="medium" align="center" justify="center">
-                  <ErrorLoader
-                    type="no-login"
+                  <InfoCard
+                    icon="appCenter"
                     title={noInstalledAppsLabel}
-                    details={noInstalledAppsSubLabel}
+                    suggestion={noInstalledAppsSubLabel}
                     noBorder={true}
+                    noPadding={true}
                   />
                 </Box>
               )}
@@ -152,7 +153,7 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                     <Box direction="row">
                       <Box width="100%" pad="none" align="start">
                         <SubtitleTextIcon
-                          onClick={() => onClickInstalledApp(app.id)}
+                          onClick={() => onClickInstalledApp(app.integrationID)}
                           label={app.manifestData?.displayName}
                           subtitle={app.name}
                           labelSize="large"

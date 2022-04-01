@@ -1,14 +1,18 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
-import { StyledBox, StyledImage, StyledSubtitle, StyledText, WrapperBox } from './styled';
+import { StyledBox, StyledImage, StyledSubtitle, StyledText } from './styled';
+import { BasicCardBox } from '../EntryCard/basic-card-box';
 
 export interface StartProps {
-  title: string;
+  title?: string;
   subtitle?: string;
   heading: string;
   description: string;
-  image: string;
+  image?: string;
+  icon?: JSX.Element;
   loggedIn?: boolean;
+  noBorder?: boolean;
+  noBorderRadius?: boolean;
 }
 
 export const StartCard = ({
@@ -17,18 +21,24 @@ export const StartCard = ({
   heading,
   description,
   image,
+  icon,
   loggedIn,
+  noBorder,
+  noBorderRadius,
 }: StartProps) => {
   return (
-    <WrapperBox align="center" loggedIn={loggedIn}>
+    <BasicCardBox noBorder={noBorder} noBorderRadius={noBorderRadius} pad="medium">
       <Box align="start" fill="horizontal">
-        <Text size="xlarge" weight="bold">
-          {title}
-        </Text>
-        <StyledSubtitle size="medium">{subtitle}</StyledSubtitle>
+        {!!title && (
+          <Text size="xlarge" weight="bold">
+            {title}
+          </Text>
+        )}
+        {!!subtitle && <StyledSubtitle size="medium">{subtitle}</StyledSubtitle>}
       </Box>
       <StyledBox fill="horizontal" pad={{ horizontal: 'medium' }} loggedIn={loggedIn}>
-        <StyledImage src={image} />
+        {!!image && <StyledImage src={image} />}
+        {!!icon && icon}
         <Text size="large" weight={600} margin={{ top: 'small' }} textAlign="center">
           {heading}
         </Text>
@@ -36,6 +46,6 @@ export const StartCard = ({
           {description}
         </StyledText>
       </StyledBox>
-    </WrapperBox>
+    </BasicCardBox>
   );
 };

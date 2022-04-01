@@ -11,6 +11,7 @@ import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { ReleaseInfo } from '@akashaproject/ui-awf-typings';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import ProfileAvatarButton from '../ProfileAvatarButton';
 
 export interface ICDetailCardProps {
   className?: string;
@@ -31,8 +32,9 @@ export interface ICDetailCardProps {
   authorLabel: string;
   licenseLabel: string;
 
-  integrationName?: string;
   id?: string;
+  integrationName?: string;
+  authorEthAddress?: string;
   authorProfile?: IProfileData;
   isInstalled: boolean;
   releases: any[];
@@ -42,7 +44,8 @@ export interface ICDetailCardProps {
   onClickCTA: () => void;
   onClickInstall: () => void;
   onClickUninstall: () => void;
-  handleAuthorClick?: (any) => void;
+  handleAuthorClick?: (IProfileData) => void;
+  handleAuthorEthAddressClick?: (string) => void;
   handleTagClick?: (tag: string) => void;
 }
 
@@ -63,23 +66,30 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     versionHistoryLabel,
     authorLabel,
     licenseLabel,
-    integrationName,
     id,
+    integrationName,
+    authorEthAddress,
     authorProfile,
     isInstalled,
     releases = [],
     latestRelease,
     onClickShare,
-    onClickCTA,
+    // onClickCTA,
     onClickInstall,
     onClickUninstall,
     handleAuthorClick,
+    handleAuthorEthAddressClick,
     handleTagClick,
   } = props;
 
   const [showReleases, setShowReleases] = React.useState(false);
   const handleShowVersionHistory = () => {
     setShowReleases(true);
+  };
+
+  const [showReleaseId, setShowReleaseId] = React.useState(false);
+  const handleShowReleaseId = () => {
+    setShowReleaseId(!showReleaseId);
   };
 
   return (
@@ -107,11 +117,16 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               }
             />
             <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
-              <SubtitleTextIcon label={integrationName} subtitle={id} />
+              <SubtitleTextIcon
+                label={latestRelease?.manifestData?.displayName}
+                subtitle={integrationName}
+                subtitleIcon="info"
+                subtitleIconTooltip={id}
+              />
             </Box>
           </Box>
           <Box direction="row" data-testid="ic-detail-card-install-button">
-            <Box
+            {/* <Box
               pad="0.2rem 0.3rem"
               round="0.2rem"
               margin={{ right: '0.5rem' }}
@@ -119,7 +134,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               onClick={onClickCTA}
             >
               <Icon size="md" type="settings" accentColor={true} />
-            </Box>
+            </Box> */}
             {latestRelease?.integrationType === 1 ? (
               <DuplexButton
                 icon={isInstalled ? <Icon type="checkSimple" size="xs" /> : null}
@@ -161,17 +176,30 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             )}
           </Box>
         )}
-        <Box margin={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
+        <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
           <Text weight={'bold'}>{latestReleaseLabel}</Text>
-          <Text>{releaseIdLabel}</Text>
-          <Text size="sm" color="secondaryText">
-            {latestRelease?.id}
-          </Text>
-          <Text>{releaseVersionLabel}</Text>
+
+          <Box direction="row" gap="xsmall">
+            <Text>{releaseVersionLabel}</Text>
+            <Icon
+              size="xs"
+              type={showReleaseId ? 'closedEye' : 'eye'}
+              accentColor={true}
+              onClick={handleShowReleaseId}
+            />
+          </Box>
+
           <Text size="sm" color="secondaryText">
             {latestRelease?.version}
           </Text>
-
+          {showReleaseId && (
+            <Box>
+              <Text>{releaseIdLabel}</Text>
+              <Text size="sm" color="secondaryText">
+                {latestRelease?.id}
+              </Text>
+            </Box>
+          )}
           {!showReleases && (
             <Text
               size="md"
@@ -191,21 +219,29 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
               releases?.map(release => <Text key={release.id}>{release.id}</Text>)}
           </Box>
         )}
-        {authorProfile && (
+        {authorEthAddress && (
           <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
-            <Text weight={'bold'}>{authorLabel}</Text>
             {authorProfile && (
-              <Box direction="row">
-                <Text
-                  size="md"
-                  color="accent"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => handleAuthorClick(authorProfile)}
-                >
-                  {authorProfile.ethAddress}
-                </Text>
-              </Box>
+              <ProfileAvatarButton
+                avatarImage={authorProfile.avatar}
+                ethAddress={authorProfile.ethAddress}
+                label={authorProfile.name}
+                info={authorProfile.userName && `@${authorProfile.userName}`}
+                onClick={() => handleAuthorClick(authorProfile)}
+              />
             )}
+            <Text weight={'bold'}>{authorLabel}</Text>
+
+            <Box direction="row">
+              <Text
+                size="md"
+                color="accent"
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleAuthorEthAddressClick(authorProfile)}
+              >
+                {authorEthAddress}
+              </Text>
+            </Box>
           </Box>
         )}
         {latestRelease?.manifestData?.keywords &&

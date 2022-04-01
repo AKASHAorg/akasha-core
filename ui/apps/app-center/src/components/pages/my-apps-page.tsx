@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { INFO } from '../../routes';
 
-const { Box, SubtitleTextIcon, Icon, Text, ErrorLoader, Spinner } = DS;
+const { Box, SubtitleTextIcon, Icon, Text, InfoCard, Spinner } = DS;
 
 export interface IMyAppsPage extends RootComponentProps {
   latestReleasesInfo?: ReleaseInfo[];
@@ -130,10 +130,10 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
               </Box>
             ))}
           {filteredInstalledApps?.length === 0 && (
-            <ErrorLoader
-              type="no-login"
+            <InfoCard
+              icon="appCenter"
               title={t('You have no installed apps')}
-              details={t('Try some out for extra functionality!')}
+              suggestion={t('Try some out for extra functionality!')}
               noBorder={true}
             />
           )}

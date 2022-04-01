@@ -199,7 +199,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.TRENDING_TOPIC,
       action: subscribe ? 'Subscribe' : 'Unsubscribe',
-      name: subscribe ? 'Subscribed Topic From Feed' : 'Unsubscribed Topic From Feed',
+      name: subscribe ? 'Subscribed Topic From Search' : 'Unsubscribed Topic From Search',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
@@ -215,7 +215,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.PEOPLE,
       action: 'Subscribe',
-      name: 'Feed',
+      name: 'Search',
     });
     followReq.mutate(ethAddress);
   };
@@ -247,7 +247,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.PEOPLE,
       action: 'Unsubscribe',
-      name: 'Feed',
+      name: 'Search',
     });
     unfollowReq.mutate(ethAddress);
   };

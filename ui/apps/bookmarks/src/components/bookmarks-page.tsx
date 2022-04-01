@@ -20,7 +20,11 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
-  const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && loginQuery.data?.ethAddress);
+  const isLoggedIn = React.useMemo(() => {
+    return loginQuery.data?.ethAddress;
+  }, [loginQuery.data?.ethAddress]);
+
+  const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && isLoggedIn);
   const bookmarks = bookmarksReq.data;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -45,7 +49,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const description = t('Mark your favourite posts, you can find them here anytime.');
 
   const getSubtitleText = () => {
-    if (loginQuery.data?.ethAddress && bookmarks?.length) {
+    if (isLoggedIn && bookmarks?.length) {
       return t(
         'There {{ verb }} {{ bookmarkCount }} {{ grammaticalPost }} saved in your bookmarks.',
         {
@@ -55,7 +59,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
         },
       );
     }
-    if (loginQuery.data?.ethAddress && !bookmarks?.length) {
+    if (isLoggedIn && !bookmarks?.length) {
       return description;
     }
     return t('Check out the posts saved in your bookmarks');
@@ -71,16 +75,16 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
         />
       )}
       {bookmarksReq.status !== 'error' && (
-        <>
+        <Box gap="medium">
           <StartCard
             title={t('Bookmarks')}
             subtitle={getSubtitleText()}
             heading={t('✨ Save what inspires you ✨')}
             description={description}
             image={'/images/no-bookmarks.png'}
-            loggedIn={loginQuery.isFetched && !!loginQuery.data?.ethAddress}
+            loggedIn={!!isLoggedIn}
           />
-          {!bookmarksReq.isFetched && loginQuery.data?.ethAddress && <Spinner />}
+          {!bookmarksReq.isFetched && isLoggedIn && <Spinner />}
           {bookmarksReq.isFetched && (!bookmarks || !bookmarks.length) && (
             <InfoCard
               icon="bookmark"
@@ -91,40 +95,36 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
             />
           )}
           {bookmarksReq.status === 'success' && bookmarks && (
-            <Box margin={{ horizontal: '0.5rem' }}>
-              <FeedWidget
-                modalSlotId={props.layoutConfig.modalSlotId}
-                itemType={ItemTypes.ENTRY}
-                logger={props.logger}
-                onLoadMore={() => {
-                  /* if next page, load more */
-                }}
-                getShareUrl={(itemId: string) =>
-                  `${window.location.origin}/social-app/post/${itemId}`
-                }
-                pages={[
-                  { results: [...bookmarks.map((bm: Record<string, unknown>) => bm.entryId)] },
-                ]}
-                requestStatus={bookmarksReq.status}
-                loginState={loginQuery.data}
-                loggedProfile={loggedProfileQuery.data}
-                singleSpaNavigate={props.singleSpa.navigateToUrl}
-                navigateToModal={props.navigateToModal}
-                onLoginModalOpen={showLoginModal}
-                hasNextPage={false}
-                contentClickable={true}
-                onEntryFlag={handleEntryFlag}
-                onEntryRemove={handleEntryRemove}
-                removeEntryLabel={t('Delete Post')}
-                removedByMeLabel={t('You deleted this post')}
-                removedByAuthorLabel={t('This post was deleted by its author')}
-                uiEvents={props.uiEvents}
-                itemSpacing={8}
-                i18n={props.plugins?.translation?.i18n}
-              />
-            </Box>
+            <FeedWidget
+              modalSlotId={props.layoutConfig.modalSlotId}
+              itemType={ItemTypes.ENTRY}
+              logger={props.logger}
+              onLoadMore={() => {
+                /* if next page, load more */
+              }}
+              getShareUrl={(itemId: string) =>
+                `${window.location.origin}/social-app/post/${itemId}`
+              }
+              pages={[{ results: [...bookmarks.map((bm: Record<string, unknown>) => bm.entryId)] }]}
+              requestStatus={bookmarksReq.status}
+              loginState={loginQuery.data}
+              loggedProfile={loggedProfileQuery.data}
+              singleSpaNavigate={props.singleSpa.navigateToUrl}
+              navigateToModal={props.navigateToModal}
+              onLoginModalOpen={showLoginModal}
+              hasNextPage={false}
+              contentClickable={true}
+              onEntryFlag={handleEntryFlag}
+              onEntryRemove={handleEntryRemove}
+              removeEntryLabel={t('Delete Post')}
+              removedByMeLabel={t('You deleted this post')}
+              removedByAuthorLabel={t('This post was deleted by its author')}
+              uiEvents={props.uiEvents}
+              itemSpacing={8}
+              i18n={props.plugins?.translation?.i18n}
+            />
           )}
-        </>
+        </Box>
       )}
     </>
   );

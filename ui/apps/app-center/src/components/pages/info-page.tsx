@@ -31,7 +31,9 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const integrationInfoReq = useGetIntegrationInfo(integrationId);
 
-  const latestReleaseId = integrationInfoReq.data?.latestReleaseId;
+  const integrationInfo = integrationInfoReq.data;
+
+  const latestReleaseId = integrationInfo?.latestReleaseId;
 
   const latestReleaseInfoReq = useGetIntegrationReleaseInfo(latestReleaseId);
 
@@ -39,6 +41,10 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const profileDataReq = useGetProfileByEthAddress(latestReleaseInfo?.author);
   const authorProfileData = profileDataReq.data;
+
+  const handleAuthorEthAddressClick = (ethAddress: string) => {
+    window.open(`https://etherscan.io/address/${ethAddress}`, '_blank', 'noreferrer noopener');
+  };
 
   const handleAuthorClick = (author: { pubKey: string }) => {
     navigateTo?.({
@@ -56,7 +62,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
     }
   }, [installedAppsReq.data, integrationId]);
 
-  const releaseIdsReq = useGetAllIntegrationReleaseIds(latestReleaseInfo?.name);
+  const releaseIdsReq = useGetAllIntegrationReleaseIds(integrationInfo?.name);
   const releaseIds = releaseIdsReq.data?.releaseIds;
 
   const releasesInfoReq = useGetIntegrationsReleaseInfo(releaseIds);
@@ -79,9 +85,10 @@ const InfoPage: React.FC<RootComponentProps> = props => {
       )}
       {latestReleaseInfoReq.isSuccess && latestReleaseInfo && (
         <ICDetailCard
-          integrationName={latestReleaseInfo?.manifestData?.displayName}
           shareLabel={t('Share')}
-          id={integrationInfoReq.data?.name}
+          id={integrationId}
+          integrationName={integrationInfo?.name}
+          authorEthAddress={integrationInfo?.author}
           authorProfile={authorProfileData}
           installLabel={t('Install')}
           uninstallLabel={t('Uninstall')}
@@ -105,6 +112,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           onClickInstall={() => null}
           onClickUninstall={() => null}
           handleAuthorClick={handleAuthorClick}
+          handleAuthorEthAddressClick={handleAuthorEthAddressClick}
         />
       )}
     </Box>
