@@ -18,7 +18,8 @@ export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
 `;
 
 export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  flex-grow: 1;
+  /* keep at center, since sidebar is now fixed */
+  margin: 0 auto;
 `;
 
 const TOPBAR_HEIGHT = 48;
@@ -34,6 +35,9 @@ export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box
 export const SidebarAreaContainer: React.FC<Record<string, unknown>> = styled(Box)`
   position: fixed;
   top: ${TOPBAR_HEIGHT}px;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    top: 0;
+  }
 `;
 
 export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.div`
@@ -61,7 +65,6 @@ export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.di
 
 export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   z-index: 10;
-  flex-grow: 1;
   flex-direction: column;
   align-items: flex-start;
   @media screen and (max-width: ${props => props.theme.breakpoints.xxlarge.value}px) {
