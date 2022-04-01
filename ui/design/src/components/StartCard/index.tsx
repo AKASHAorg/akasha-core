@@ -25,11 +25,11 @@ export const StartCard = ({
         <Text size="xlarge" weight="bold">
           {title}
         </Text>
-        <StyledSubtitle size="large">{subtitle}</StyledSubtitle>
+        <StyledSubtitle size="medium">{subtitle}</StyledSubtitle>
       </Box>
       <StyledBox fill="horizontal" pad={{ horizontal: 'medium' }} loggedIn={loggedIn}>
         <StyledImage src={image} />
-        <Text size="large" weight={600} margin={{ top: 'medium' }} textAlign="center">
+        <Text size="large" weight={600} margin={{ top: 'small' }} textAlign="center">
           {heading}
         </Text>
         <StyledText size="large" textAlign="center">
