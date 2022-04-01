@@ -24,6 +24,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
   const { content, handleMentionClick, handleTagClick, handleLinkClick } = props;
 
   const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
+  const [value, setValue] = React.useState(content);
   const [imgUrl, setImgUrl] = React.useState<string | null>(null);
 
   /**
@@ -46,11 +47,16 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
     [],
   );
 
+  React.useEffect(() => {
+    editor.children = content;
+    setValue(content);
+  }, [editor, content]);
+
   return (
     <>
       <Slate
         editor={editor}
-        value={content}
+        value={value}
         onChange={() => {
           /**
            * it is a read only editor
