@@ -42,9 +42,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     });
   };
 
-  const description = t(
-    'Mark your favourite posts, you can find them here anytime. You can filter them by feed.',
-  );
+  const description = t('Mark your favourite posts, you can find them here anytime.');
 
   const getSubtitleText = () => {
     if (loginQuery.data?.ethAddress && bookmarks?.length) {
