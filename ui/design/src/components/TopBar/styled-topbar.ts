@@ -42,6 +42,11 @@ const StyledDiv = styled.div`
 
 const StyledSubWrapper = styled(Box)`
   width: 100%;
+  ${props => css`
+    @media screen and (min-width: ${props.theme.breakpoints.largeDesktop.value}px) {
+      max-width: 82rem;
+    }
+  `}
 `;
 
 const StyledContentBox = styled(Box)`

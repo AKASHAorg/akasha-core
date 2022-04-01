@@ -26,15 +26,14 @@ const AppSidebar = styled(Sidebar)`
 `;
 
 const SidebarOverlay = styled(Box)`
-  display: none;
-  /* display overlay from small desktop breakpoint */
-  @media screen and (max-width: ${props => props.theme.breakpoints.smallDesktop.value}px) {
-    display: initial;
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    background-color: ${props => props.theme.colors.overlay};
-    opacity: 0.8;
+  width: 100%;
+  opacity: 0.8;
+  height: 100vh;
+  position: fixed;
+  background-color: ${props => props.theme.colors.overlay};
+  /* hide overlay from large desktop breakpoint */
+  @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
+    display: none;
   }
 `;
 
