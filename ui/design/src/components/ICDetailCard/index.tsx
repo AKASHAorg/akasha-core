@@ -237,7 +237,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
                 size="md"
                 color="accent"
                 style={{ cursor: 'pointer' }}
-                onClick={() => handleAuthorEthAddressClick(authorProfile)}
+                onClick={() => handleAuthorEthAddressClick(authorEthAddress)}
               >
                 {authorEthAddress}
               </Text>
