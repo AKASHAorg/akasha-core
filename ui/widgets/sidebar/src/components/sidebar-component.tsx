@@ -18,7 +18,6 @@ const AppSidebar = styled(Sidebar)`
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
     max-width: 17em;
-    margin-right: 0.8rem;
   }
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     height: 100vh;
@@ -28,12 +27,13 @@ const AppSidebar = styled(Sidebar)`
 
 const SidebarOverlay = styled(Box)`
   display: none;
-  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+  /* display overlay from small desktop breakpoint */
+  @media screen and (max-width: ${props => props.theme.breakpoints.smallDesktop.value}px) {
     display: initial;
     width: 100%;
     height: 100vh;
     position: fixed;
-    background-color: ${props => props.theme.colors.background};
+    background-color: ${props => props.theme.colors.overlay};
     opacity: 0.8;
   }
 `;
@@ -42,7 +42,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
     uiEvents,
     plugins: { routing },
-    worldConfig: { defaultApps },
+    worldConfig: { defaultApps, homepageApp },
   } = props;
 
   const [routeData, setRouteData] = React.useState({});
@@ -112,6 +112,27 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     }
   };
 
+  const handleBrandClick = () => {
+    if (!homepageApp) {
+      return;
+    }
+
+    const homeAppRoutes = props.getAppRoutes(homepageApp);
+
+    if (homeAppRoutes && homeAppRoutes.hasOwnProperty('defaultRoute')) {
+      if (location.pathname === homeAppRoutes.defaultRoute) {
+        scrollTo(0, 0);
+      } else {
+        routing.navigateTo({
+          appName: 'Ethereum World',
+          getNavigationUrl: () => homeAppRoutes.defaultRoute,
+        });
+      }
+    }
+    // close sidebar after navigation
+    handleSidebarClose();
+  };
+
   const handleSidebarClose = () => {
     // emit HideSidebar event to trigger corresponding action in associated widgets
     uiEvents.next({
@@ -123,6 +144,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     <>
       <SidebarOverlay onClick={handleSidebarClose} />
       <AppSidebar
+        versionLabel="ALPHA"
+        versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         worldAppsTitleLabel={t('World Apps')}
         poweredByLabel="Powered by AKASHA"
         userInstalledAppsTitleLabel={t('Apps')}
@@ -135,6 +158,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         isLoggedIn={!!loginQuery.data.ethAddress}
         hasNewNotifs={checkNotifsReq.data}
         loadingUserInstalledApps={false}
+        onBrandClick={handleBrandClick}
         onSidebarClose={handleSidebarClose}
         onClickMenuItem={handleNavigation}
         onClickExplore={handleClickExplore}

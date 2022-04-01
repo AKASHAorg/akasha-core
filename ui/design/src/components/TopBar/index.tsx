@@ -247,7 +247,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const renderContent = (shouldRenderOnboarding?: boolean) => {
     return (
       <StyledSubWrapper direction="row" align="center" height="3rem">
-        <IconDiv margin={{ right: 'small' }} isActive={sidebarVisible} onClick={onSidebarToggle}>
+        <IconDiv margin={{ right: 'medium' }} isActive={sidebarVisible} onClick={onSidebarToggle}>
           <Icon type="menu" clickable={true} accentColor={sidebarVisible} />
         </IconDiv>
         <StyledContentBox

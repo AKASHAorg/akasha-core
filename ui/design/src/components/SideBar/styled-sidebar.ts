@@ -1,7 +1,9 @@
-import { Accordion, AccordionPanel } from 'grommet';
+import { Box, Accordion, AccordionPanel } from 'grommet';
 import styled, { css } from 'styled-components';
 
 import Button from '../Button';
+
+const TOPBAR_HEIGHT = 48;
 
 const StyledHiddenScrollContainer = styled.div`
   overflow: auto;
@@ -11,6 +13,18 @@ const StyledHiddenScrollContainer = styled.div`
   scrollbar-width: none; /* Firefox */
   ::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
+  }
+`;
+
+const StyledSubWrapper = styled(Box)`
+  display: none;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: ${TOPBAR_HEIGHT}px;
+    border-bottom: 1px solid ${props => props.theme.colors.border};
   }
 `;
 
@@ -91,6 +105,7 @@ const StyledButton = styled(Button)`
 
 export {
   StyledHiddenScrollContainer,
+  StyledSubWrapper,
   StyledFooter,
   StyledAppIconWrapper,
   StyledMobileHRDiv,
