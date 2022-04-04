@@ -60,5 +60,5 @@ BaseNotificationCard.args = {
   moderatedReplyLabel: 'moderated your reply',
   moderatedAccountLabel: 'suspended your account',
   emptySubtitle: "You don't have any new notifications!",
-  loggedIn: true
+  loggedIn: true,
 };

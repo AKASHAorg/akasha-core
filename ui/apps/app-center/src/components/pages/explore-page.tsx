@@ -7,7 +7,16 @@ import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaproject
 import { useTranslation } from 'react-i18next';
 import { INFO } from '../../routes';
 
-const { Box, SubtitleTextIcon, DuplexButton, Icon, ErrorLoader, Spinner, NotificationPill } = DS;
+const {
+  Box,
+  SubtitleTextIcon,
+  DuplexButton,
+  Icon,
+  ErrorLoader,
+  Spinner,
+  NotificationPill,
+  InfoCard,
+} = DS;
 
 export interface IExplorePage extends RootComponentProps {
   latestReleasesInfo?: ReleaseInfo[];
@@ -91,10 +100,10 @@ const ExplorePage: React.FC<IExplorePage> = props => {
           />
         )}
         {(installableApps?.length === 0 || !isUserLoggedIn) && (
-          <ErrorLoader
-            type="no-apps"
+          <InfoCard
+            icon="appCenter"
             title={t('Welcome to the Integration Centre!')}
-            details={t(
+            suggestion={t(
               'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to Ethereum World.',
             )}
             noBorder={true}

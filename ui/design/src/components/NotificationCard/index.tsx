@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Text } from 'grommet';
-import { isMobileOnly } from 'react-device-detect';
+import { Box } from 'grommet';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import Icon from '../Icon';
 import { formatRelativeTime } from '../../utils/time';
@@ -8,7 +7,6 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { BlueDot, IconDiv, StyledBox, StyledNotifBox } from './styled-notifications';
 import Spinner from '../Spinner';
 import Tooltip from '../Tooltip';
-import ErrorLoader from '../ErrorLoader';
 import InfoCard from '../InfoCard';
 
 export interface INotificationsCard {
@@ -211,7 +209,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
   );
 
   return (
-    <Box>
+    <BasicCardBox>
       {isFetching && notifications.length === 0 && (
         <Box pad="large">
           <Spinner />
@@ -231,7 +229,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
           )}
         </StyledBox>
       )}
-    </Box>
+    </BasicCardBox>
   );
 };
 NotificationsCard.defaultProps = {

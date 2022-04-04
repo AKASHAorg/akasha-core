@@ -32,6 +32,7 @@ export type IconType =
   | 'calendar'
   | 'comments'
   | 'close'
+  | 'closedEye'
   | 'code'
   | 'coinbase'
   | 'coins'
@@ -159,6 +160,7 @@ export const iconTypes: IconType[] = [
   'calendar',
   'comments',
   'close',
+  'closedEye',
   'code',
   'coinbase',
   'copy',

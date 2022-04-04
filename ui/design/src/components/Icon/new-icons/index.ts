@@ -28,6 +28,7 @@ import checkSimple from './checkSimple';
 import chevronRight from './chevron-right';
 import chevronLeft from './chevron-left';
 import close from './close';
+import closedEye from './closed-eye';
 import code from './code';
 import coinbase from './coinbase';
 import coins from './coins';
@@ -154,6 +155,7 @@ export {
   checkSimple,
   chevronRight,
   chevronLeft,
+  closedEye,
   discord,
   dropdown,
   payment,

@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Box, Text } from 'grommet';
-import { StyledBox, StyledImage, StyledText, WrapperBox } from './styled';
+import { StyledBox, StyledImage, StyledText } from './styled';
 import { SearchBar } from '../SearchBar';
+import { BasicCardBox } from '../EntryCard/basic-card-box';
 
 export interface SearchStartProps {
   inputPlaceholderLabel: string;
@@ -24,7 +25,7 @@ export const SearchStartCard = ({
   const [shouldMinimize, setShouldMinimize] = React.useState(!!searchKeywordParam?.length);
 
   return (
-    <WrapperBox align="center">
+    <BasicCardBox>
       <Box align="start" fill="horizontal" pad={{ top: 'medium', horizontal: 'medium' }}>
         <Text size="xlarge" weight="bold">
           Search
@@ -54,6 +55,6 @@ export const SearchStartCard = ({
         />
       </Box>
       {shouldMinimize && !!searchKeywordParam.length && <Box fill="horizontal">{children}</Box>}
-    </WrapperBox>
+    </BasicCardBox>
   );
 };

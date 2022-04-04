@@ -13,7 +13,11 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const loginQuery = useGetLogin();
 
-  const notifReq = useFetchNotifications(loginQuery.data?.ethAddress);
+  const isLoggedIn = React.useMemo(() => {
+    return loginQuery.data?.ethAddress;
+  }, [loginQuery.data?.ethAddress]);
+
+  const notifReq = useFetchNotifications(loginQuery.data?.isReady && isLoggedIn);
   const notificationsState = notifReq.data;
 
   const markAsRead = useMarkAsRead();
@@ -34,13 +38,14 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       </Helmet>
       <ErrorInfoCard error={notifReq?.error as Error}>
         {message => (
-          <>
+          <Box gap="medium">
             <StartCard
               title={t('Notifications')}
               subtitle={t('Check latest followers & mentions')}
               heading={t('You won’t miss a thing 🔔')}
               description={t('Here you’ll receive alerts from your apps.')}
               image="images/notification.png"
+              loggedIn={!!isLoggedIn}
             />
             {message && (
               <ErrorLoader
@@ -73,7 +78,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 isFetching={notifReq.isFetching}
               />
             )}
-          </>
+          </Box>
         )}
       </ErrorInfoCard>
     </Box>
