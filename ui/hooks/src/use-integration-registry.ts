@@ -106,12 +106,12 @@ export function useGetIntegrationReleaseId(
 const getAllIntegrationsIds = async (offset?: number) => {
   const sdk = getSDK();
   const res = await sdk.api.icRegistry.getAllIntegrationsIds(offset);
-  let nextIndex = res.data?.nextIndex?._hex;
+  let nextIndex = res.data?.nextIndex?.toNumber();
   const integrationIds = res.data?.integrationIds;
-  while (nextIndex && nextIndex !== '0x00') {
-    const nextRes = await sdk.api.icRegistry.getAllIntegrationsIds(res.data.nextIndex);
+  while (nextIndex) {
+    const nextRes = await sdk.api.icRegistry.getAllIntegrationsIds(nextIndex);
     integrationIds.concat(nextRes.data?.integrationIds);
-    nextIndex = nextRes.data?.nextIndex?._hex;
+    nextIndex = nextRes.data?.nextIndex?.toNumber();
   }
   return integrationIds;
 };
@@ -163,7 +163,7 @@ const getIntegrationReleaseInfo = async releaseId => {
 export function useGetIntegrationReleaseInfo(releaseId: string) {
   return useQuery([RELEASES_KEY, releaseId], () => getIntegrationReleaseInfo(releaseId), {
     enabled: !!releaseId,
-    keepPreviousData: false,
+    keepPreviousData: true,
     onError: (err: Error) => logError('useIntegrationRegistry.getIntegrationReleaseInfo', err),
   });
 }
@@ -204,7 +204,7 @@ const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
 export function useGetLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
   return useQuery([RELEASES_KEY, 'latest'], () => getLatestReleaseInfo(opt), {
     enabled: opt?.length > 0,
-    keepPreviousData: false,
+    keepPreviousData: true,
     onError: (err: Error) => logError('useIntegrationRegistry.getLatestReleaseInfo', err),
   });
 }
