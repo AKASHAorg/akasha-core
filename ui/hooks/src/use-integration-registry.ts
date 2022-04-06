@@ -106,7 +106,14 @@ export function useGetIntegrationReleaseId(
 const getAllIntegrationsIds = async (offset?: number) => {
   const sdk = getSDK();
   const res = await sdk.api.icRegistry.getAllIntegrationsIds(offset);
-  return res.data;
+  let nextIndex = res.data?.nextIndex?._hex;
+  const integrationIds = res.data?.integrationIds;
+  while (nextIndex && nextIndex !== '0x00') {
+    const nextRes = await sdk.api.icRegistry.getAllIntegrationsIds(res.data.nextIndex);
+    integrationIds.concat(nextRes.data?.integrationIds);
+    nextIndex = nextRes.data?.nextIndex?._hex;
+  }
+  return integrationIds;
 };
 
 /**
@@ -115,7 +122,7 @@ const getAllIntegrationsIds = async (offset?: number) => {
 export function useGetAllIntegrationsIds(enabler = true, offset?: number) {
   return useQuery([INTEGRATIONS_KEY, 'ids'], () => getAllIntegrationsIds(offset), {
     enabled: !!enabler,
-    keepPreviousData: true,
+    keepPreviousData: false,
     onError: (err: Error) => logError('useIntegrationRegistry.getAllIntegrationsIds', err),
   });
 }

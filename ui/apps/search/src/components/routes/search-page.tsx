@@ -420,7 +420,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           />
         )}
 
-      <Box margin={{ horizontal: 'small' }}>
+      <Box margin={{ top: 'medium' }}>
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.PEOPLE) &&
           searchProfilesState?.map((profileData: IProfileData, index: number) => (
             <Box key={index} pad={{ bottom: 'medium' }}>

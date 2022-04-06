@@ -45,7 +45,7 @@ export const StyledSwitchCardButton = styled(SwitchCardButton)<ISwitchCardButton
 const StickyBox = styled(Box)<{ userSignedIn: boolean }>`
   position: sticky;
   top: ${props => (props.userSignedIn ? '3rem' : '6rem')};
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.cardBackground};
   z-index: 999;
 `;
 

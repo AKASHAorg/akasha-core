@@ -55,7 +55,7 @@ const colors: IColorsLight = {
   modalBackgroundAlt: '#87909E', // deeperGrey
   modalBackgroundTransparent: 'rgba(0, 0, 0, 0.6)', // transparentBlack
   activeCardBackground: '#F6F8FF', // aquamarine
-  hoverBackground: '#FBFCFD',
+  hoverBackground: '#F1F4FF',
   activePanelBackground: '#DCE3FF',
   skeletonBackground: '#EDF0F5',
   inputBackground: '#FFF',

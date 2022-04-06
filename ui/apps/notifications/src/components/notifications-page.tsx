@@ -55,7 +55,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 devDetails={message}
               />
             )}
-            {!message && (
+            {!message && notificationsState?.length && (
               <NotificationsCard
                 notifications={notificationsState || []}
                 followingLabel={t('is now following you')}

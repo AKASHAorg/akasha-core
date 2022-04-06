@@ -39,7 +39,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const latestReleaseInfo = latestReleaseInfoReq.data;
 
-  const profileDataReq = useGetProfileByEthAddress(latestReleaseInfo?.author);
+  const profileDataReq = useGetProfileByEthAddress(integrationInfo?.author);
   const authorProfileData = profileDataReq.data;
 
   const handleAuthorEthAddressClick = (ethAddress: string) => {
@@ -90,6 +90,8 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           integrationName={integrationInfo?.name}
           authorEthAddress={integrationInfo?.author}
           authorProfile={authorProfileData}
+          repoLinkLabel={t('Public Repository')}
+          docsLinkLabel={t('Documentation')}
           installLabel={t('Install')}
           uninstallLabel={t('Uninstall')}
           installedLabel={t('Installed')}
@@ -104,6 +106,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           releases={releasesInfo}
           latestRelease={latestReleaseInfo}
           versionHistoryLabel={t('Version History')}
+          ethereumAddressLabel={t('Ethereum Address')}
           authorLabel={t('Author')}
           licenseLabel={t('License')}
           isInstalled={isInstalled}

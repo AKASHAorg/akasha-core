@@ -5,6 +5,7 @@ import ICDetailCardCoverImage from './ic-detail-card-fields/cover-image';
 import ICDetailCardAvatar from './ic-detail-card-fields/avatar';
 
 import Icon from '../Icon';
+import Tooltip from '../Tooltip';
 import DuplexButton from '../DuplexButton';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 
@@ -23,6 +24,8 @@ export interface ICDetailCardProps {
   descriptionLabel: string;
   showMoreLabel: string;
   linksLabel: string;
+  repoLinkLabel: string;
+  docsLinkLabel: string;
   releasesLabel: string;
   releaseVersionLabel: string;
   latestReleaseLabel: string;
@@ -30,6 +33,7 @@ export interface ICDetailCardProps {
   releaseIdLabel: string;
   versionHistoryLabel: string;
   authorLabel: string;
+  ethereumAddressLabel: string;
   licenseLabel: string;
 
   id?: string;
@@ -58,6 +62,8 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     installedLabel,
     descriptionLabel,
     linksLabel,
+    repoLinkLabel,
+    docsLinkLabel,
     releasesLabel,
     releaseVersionLabel,
     latestReleaseLabel,
@@ -65,6 +71,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     releaseIdLabel,
     versionHistoryLabel,
     authorLabel,
+    ethereumAddressLabel,
     licenseLabel,
     id,
     integrationName,
@@ -85,11 +92,6 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
   const [showReleases, setShowReleases] = React.useState(false);
   const handleShowVersionHistory = () => {
     setShowReleases(true);
-  };
-
-  const [showReleaseId, setShowReleaseId] = React.useState(false);
-  const handleShowReleaseId = () => {
-    setShowReleaseId(!showReleaseId);
   };
 
   return (
@@ -159,47 +161,46 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
           </Text>
         </Box>
         {(latestRelease?.links?.documentation || latestRelease?.links?.publicRepository) && (
-          <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }}>
+          <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
             <Text weight={'bold'}>{linksLabel}</Text>
             {latestRelease?.links?.documentation && (
-              <StyledAnchor
-                label={latestRelease?.links?.documentation}
-                href={latestRelease?.links?.documentation}
-              />
+              <Box>
+                <Text>{docsLinkLabel}</Text>
+                <StyledAnchor
+                  label={latestRelease?.links?.documentation}
+                  href={latestRelease?.links?.documentation}
+                />
+              </Box>
             )}
             {latestRelease?.links?.publicRepository && (
-              <StyledAnchor
-                label={latestRelease?.links?.publicRepository}
-                href={latestRelease?.links?.publicRepository}
-                target="_blank"
-              />
+              <Box>
+                <Text>{repoLinkLabel}</Text>
+                <StyledAnchor
+                  label={latestRelease?.links?.publicRepository}
+                  href={latestRelease?.links?.publicRepository}
+                  target="_blank"
+                />
+              </Box>
             )}
           </Box>
         )}
         <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
           <Text weight={'bold'}>{latestReleaseLabel}</Text>
-
+          <Text>{releaseVersionLabel}</Text>
           <Box direction="row" gap="xsmall">
-            <Text>{releaseVersionLabel}</Text>
-            <Icon
-              size="xs"
-              type={showReleaseId ? 'closedEye' : 'eye'}
-              accentColor={true}
-              onClick={handleShowReleaseId}
-            />
+            <Text size="sm" color="secondaryText">
+              {latestRelease?.version}
+            </Text>
+            <Tooltip
+              dropProps={{ align: { left: 'right' } }}
+              message={latestRelease?.id}
+              plain={true}
+              caretPosition={'left'}
+            >
+              <Icon size="xs" type="info" accentColor={true} clickable={true} />
+            </Tooltip>
           </Box>
 
-          <Text size="sm" color="secondaryText">
-            {latestRelease?.version}
-          </Text>
-          {showReleaseId && (
-            <Box>
-              <Text>{releaseIdLabel}</Text>
-              <Text size="sm" color="secondaryText">
-                {latestRelease?.id}
-              </Text>
-            </Box>
-          )}
           {!showReleases && (
             <Text
               size="md"
@@ -216,11 +217,24 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             <Text weight={'bold'}>{releasesLabel}</Text>
             {releases?.length === 0 && <Text>{noPreviousReleasesLabel}</Text>}
             {releases?.length !== 0 &&
-              releases?.map(release => <Text key={release.id}>{release.id}</Text>)}
+              releases?.map(release => (
+                <Box direction="row" gap="small" key={release.id}>
+                  <Text>{release.version}</Text>
+                  <Tooltip
+                    dropProps={{ align: { left: 'right' } }}
+                    message={release.id}
+                    plain={true}
+                    caretPosition={'left'}
+                  >
+                    <Icon size="xs" type={'info'} accentColor={true} clickable={true} />
+                  </Tooltip>
+                </Box>
+              ))}
           </Box>
         )}
         {authorEthAddress && (
           <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
+            <Text weight={'bold'}>{authorLabel}</Text>
             {authorProfile && (
               <ProfileAvatarButton
                 avatarImage={authorProfile.avatar}
@@ -230,18 +244,15 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
                 onClick={() => handleAuthorClick(authorProfile)}
               />
             )}
-            <Text weight={'bold'}>{authorLabel}</Text>
-
-            <Box direction="row">
-              <Text
-                size="md"
-                color="accent"
-                style={{ cursor: 'pointer' }}
-                onClick={() => handleAuthorEthAddressClick(authorEthAddress)}
-              >
-                {authorEthAddress}
-              </Text>
-            </Box>
+            <Text>{ethereumAddressLabel}</Text>
+            <Text
+              size="md"
+              color="accent"
+              style={{ cursor: 'pointer' }}
+              onClick={() => handleAuthorEthAddressClick(authorEthAddress)}
+            >
+              {authorEthAddress}
+            </Text>
           </Box>
         )}
         {latestRelease?.manifestData?.keywords &&
