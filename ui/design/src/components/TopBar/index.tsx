@@ -289,7 +289,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
               quickAccessItems &&
               quickAccessItems.map(renderPluginButton)}
             {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
-              <Box direction="row" align="center" gap="small">
+              <Box direction="row" align="center" gap="xsmall">
                 <Button onClick={onLoginClick} label={signInLabel} />
                 <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
               </Box>
@@ -323,7 +323,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const renderMobileSignedOutView = () => {
     if (!mobileSignedOutView) return null;
     return (
-      <Box direction="row" align="center" gap="small" fill="horizontal">
+      <Box direction="row" align="center" gap="xsmall" fill="horizontal">
         <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
         <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
       </Box>

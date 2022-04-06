@@ -109,6 +109,7 @@ const StyledAccordionPanel = styled(AccordionPanel)<{ isMobile?: boolean }>`
           stroke: ${props.theme.colors.primaryText};
         }
       }
+      border-radius: ${props => props.theme.shapes.smallBorderRadius};
       &:hover {
         background-color: ${props.theme.colors.hoverBackground};
       }

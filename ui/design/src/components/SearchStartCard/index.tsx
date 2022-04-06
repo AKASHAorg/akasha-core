@@ -25,7 +25,11 @@ export const SearchStartCard = ({
   const [shouldMinimize, setShouldMinimize] = React.useState(!!searchKeywordParam?.length);
 
   return (
-    <BasicCardBox>
+    <BasicCardBox
+      round={
+        shouldMinimize && !!searchKeywordParam.length ? { size: 'xsmall', corner: 'top' } : 'xsmall'
+      }
+    >
       <Box align="start" fill="horizontal" pad={{ top: 'medium', horizontal: 'medium' }}>
         <Text size="xlarge" weight="bold">
           Search

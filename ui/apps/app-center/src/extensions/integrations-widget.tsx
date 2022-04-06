@@ -13,6 +13,7 @@ import {
   useGetLogin,
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
+import { hiddenIntegrations } from '../hidden-integrations';
 import routes, { INFO, rootRoute } from '../routes';
 
 const { Box, ICWidgetCard, ErrorLoader } = DS;
@@ -30,6 +31,10 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 
   const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
 
+  const filteredIntegrations = availableIntegrationsReq?.data?.filter(
+    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+  );
+
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,
     worldConfig.defaultWidgets,
@@ -38,15 +43,18 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   );
 
   const integrationIdsNormalized = React.useMemo(() => {
-    if (availableIntegrationsReq.data?.integrationIds) {
-      return availableIntegrationsReq.data?.integrationIds.map(integrationId => {
+    if (filteredIntegrations) {
+      return filteredIntegrations.map(integrationId => {
         return { id: integrationId };
       });
     }
-    return worldConfig.defaultApps.map(integrationName => {
-      return { name: integrationName };
-    });
-  }, [availableIntegrationsReq.data, worldConfig.defaultApps]);
+    return worldConfig.defaultApps
+      .map(integrationName => {
+        if (!hiddenIntegrations.some(hiddenInt => hiddenInt.name === integrationName))
+          return { name: integrationName };
+      })
+      .filter(Boolean);
+  }, [filteredIntegrations, worldConfig.defaultApps]);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);

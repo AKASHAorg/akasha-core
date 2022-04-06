@@ -8,7 +8,7 @@ const StyledBox = styled(Box)<{ isSelected?: boolean }>`
     props.isSelected ? props.theme.colors.activeCardBackground : props.theme.colors.cardBackground};
 `;
 
-export interface IBasicCardBox {
+export interface IBasicCardBox extends BoxProps {
   className?: string;
   elevation?: string;
   callToAction?: boolean;
@@ -43,6 +43,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   bottomBorderOnly,
   isSelected,
   onClick,
+  ...props
 }) => (
   <StyledBox
     style={style}
@@ -93,6 +94,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     className={className}
     ref={rootNodeRef}
     onClick={onClick}
+    {...props}
   >
     {children}
   </StyledBox>

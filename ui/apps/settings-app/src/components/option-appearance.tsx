@@ -37,7 +37,9 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
           align="center"
           border={{ side: 'bottom', color: 'lightBorder' }}
         >
-          <StyledText weight="bold">{appThemeLabel}</StyledText>
+          <StyledText weight="bold" size="large">
+            {appThemeLabel}
+          </StyledText>
         </Box>
         <Box
           pad={{ top: 'medium', horizontal: 'medium', bottom: 'large' }}
@@ -49,7 +51,10 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
             gap="xsmall"
             pad={{ top: 'medium' }}
             name="reasons"
-            options={['Dark-Theme', 'Light-Theme']}
+            options={[
+              { value: 'Dark-Theme', label: 'Dark Theme' },
+              { value: 'Light-Theme', label: 'Light Theme' },
+            ]}
             value={theme}
             onChange={onThemeSelect}
           />
