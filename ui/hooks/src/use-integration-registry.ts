@@ -122,7 +122,7 @@ const getAllIntegrationsIds = async (offset?: number) => {
 export function useGetAllIntegrationsIds(enabler = true, offset?: number) {
   return useQuery([INTEGRATIONS_KEY, 'ids'], () => getAllIntegrationsIds(offset), {
     enabled: !!enabler,
-    keepPreviousData: false,
+    keepPreviousData: true,
     onError: (err: Error) => logError('useIntegrationRegistry.getAllIntegrationsIds', err),
   });
 }
