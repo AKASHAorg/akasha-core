@@ -39,8 +39,9 @@ export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box
 export const SidebarAreaContainer: React.FC<Record<string, unknown>> = styled(Box)`
   position: fixed;
   top: ${TOPBAR_HEIGHT}px;
+  margin-top: -${TOPBAR_HEIGHT}px;
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-    top: 0;
+    margin-top: 0;
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
     position: sticky;
