@@ -42,7 +42,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
     }
     return (
       <AppIcon
-        size="md"
+        size="sm"
         plain={plain}
         onClick={onClick}
         appImg={menuItem.logo}
