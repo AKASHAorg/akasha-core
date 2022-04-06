@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0
 pragma solidity ^0.8.0;
 import "./AbstractIntegrationRegistry.sol";
 
@@ -32,7 +33,7 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
 
     function generateReleaseId(string memory _integrationName, string memory _version)
     public
-    view
+    pure
     override
     returns (bytes32 releaseId)
     {
@@ -112,7 +113,7 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
 
     function getReleaseId(string memory integrationName, string memory version)
     public
-    view
+    pure
     override
     returns (bytes32 releaseId){
         return generateReleaseId(integrationName, version);
@@ -151,13 +152,16 @@ contract IntegrationRegistry is AbstractIntegrationRegistry {
         string memory integrationName,
         string memory version,
         bytes32 manifestHash,
-        IntegrationType integrationType
+        IntegrationType integrationType,
+        uint createdAt
+
     ){
         bytes32 id = releases[releaseId].integrationId;
         integrationName = integrationInfo[id].name;
         version = releases[releaseId].version;
         manifestHash = releases[releaseId].manifestHash;
         integrationType = integrationInfo[id].integrationType;
+        createdAt = releases[releaseId].createdAt;
     }
 
     //@dev returns the total number of integrations available on the registry

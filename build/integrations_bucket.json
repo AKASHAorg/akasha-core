@@ -2,7 +2,7 @@
   {
     "name": "locales",
     "id": "0xc914c9efa3dec03f54e57a7f5956218306e3c1e620da9bbb91372dfea24eecdd",
-    "ipfsManifest": "f0155171ceae5ead2c8cdd41110d0aec622293bbde7bc0e03199612dbad7ee44b",
+    "ipfsManifest": "f0155171cdbba43e19fc6aff0c036628dccc81c8327f7bcee6f48fddc7a2b507e",
     "type": ""
   },
   {
@@ -26,7 +26,7 @@
   {
     "name": "@akashaproject/app-integration-center",
     "id": "0xc043185f76b0f9dbe17fe1e7501732960a1b2f4b2580ea163c55c8c882f6f9bd",
-    "ipfsManifest": "f0155171cfb7ece0d9c6ed3a5bf3c4913fe33730920d526adf985f5242f6bdb94",
+    "ipfsManifest": "f0155171c877f85cb6422b87780e8f69cfaa4012244f10076ca06f2a710ec142a",
     "type": 0
   },
   {
@@ -44,25 +44,25 @@
   {
     "name": "@akashaproject/app-notifications",
     "id": "0xafd49f21aa8f6cc0278036cc6d69643c6b8aa1fec2e497d44902cc13a27c1ea4",
-    "ipfsManifest": "f0155171c72c81d8d51a66464b97855745235b1ed103c7c74a77eb311e689c89c",
+    "ipfsManifest": "f0155171ce019e0a456d3406da8214f9ae9d27fadda55f3642b24e540efa529e0",
     "type": 0
   },
   {
     "name": "@akashaproject/app-profile",
     "id": "0x086878e2e9a9340b2ba93c1bb79699e54fbab20f669cda35e36ec91221a4fbb6",
-    "ipfsManifest": "f0155171c665d81966366d4466980bab717f20d948aeca8a377b9ad1250b7a62c",
+    "ipfsManifest": "f0155171c7d138a17c34d11adac040ec4c345fd42388cde790b2460b69a0efbd2",
     "type": 0
   },
   {
     "name": "@akashaproject/app-search",
     "id": "0xded636163ee57d4fb1f1a5761b9baaae52b4b85fb7f6827c28a0fdaf5dbb2f7f",
-    "ipfsManifest": "f0155171cf363179fdc34a9667372080139dd3cf73010b74d94a13e9bcc3595d2",
+    "ipfsManifest": "f0155171c6038d22542b24f6401ef7c62ba4fe7a5a1387dabc2409619d2ac5d07",
     "type": 0
   },
   {
     "name": "@akashaproject/app-settings-ewa",
     "id": "0xa164ea08eca5aff06c24e88807ea347431a4634b994c66c808f19b11cd5a43fa",
-    "ipfsManifest": "f0155171c553622c0bda6cbfc7ff1308c41173369ae18062fe81884a1010d80e5",
+    "ipfsManifest": "f0155171c3180843b339f3697723be62ff62f3585280294ce00ca08ec742d5ce1",
     "type": 0
   },
   {
@@ -80,7 +80,7 @@
   {
     "name": "@akashaproject/ui-widget-layout",
     "id": "0xab1b9d6f87dcaa5c3f1899e446c1d47cdf0463fb38d38f9824e48a9e04837748",
-    "ipfsManifest": "f0155171cb93dc52b18f7947537497c3aa8f429145d6ce8d64940f5b8193f6ec5",
+    "ipfsManifest": "f0155171c4dd32b52b0cdd4a2aaa54d3d677abf4d6d5b23277a2f0f12c0845b0e",
     "type": 2
   },
   {

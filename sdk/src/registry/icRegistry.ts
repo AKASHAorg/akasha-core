@@ -123,6 +123,7 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
       author: integrationInfo.author,
       enabled: integrationInfo.enabled,
       manifestData: manifest.data,
+      createdAt: data.createdAt?.toNumber(),
     };
     return createFormattedValue(response);
   }

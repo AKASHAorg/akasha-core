@@ -31,7 +31,8 @@ abstract contract AbstractIntegrationRegistry is OwnableUpgradeable {
         string memory integrationName,
         string memory version,
         bytes32 manifestHash,
-        IntegrationType integrationType
+        IntegrationType integrationType,
+        uint createdAt
     );
 
     // Retrieves the release id a registry *would* generate for a package name and version pair
