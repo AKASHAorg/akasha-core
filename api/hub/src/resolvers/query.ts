@@ -319,6 +319,7 @@ const query = {
         integrationID: integrationID,
         enabled: pkgInfo.enabled,
         manifestData: manifest,
+        createdAt: data.createdAt?.toNumber(),
       };
       results.push(releaseInfo);
       await registryCache.set(cacheKey, releaseInfo, 7200);

@@ -61,6 +61,7 @@ export interface ReleaseInfo {
   author: string;
   enabled: boolean;
   manifestData?: AWF_APP_SOURCE_MANIFEST;
+  createdAt?: number;
 }
 
 export interface IntegrationInfo {

@@ -100,7 +100,7 @@
           "type": "bytes32"
         }
       ],
-      "stateMutability": "view",
+      "stateMutability": "pure",
       "type": "function"
     },
     {
@@ -243,6 +243,11 @@
           "internalType": "enum AbstractIntegrationRegistry.IntegrationType",
           "name": "integrationType",
           "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "createdAt",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -269,7 +274,7 @@
           "type": "bytes32"
         }
       ],
-      "stateMutability": "view",
+      "stateMutability": "pure",
       "type": "function"
     },
     {
