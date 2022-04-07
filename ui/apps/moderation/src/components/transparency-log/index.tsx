@@ -8,6 +8,8 @@ import { useGetCount, useInfiniteLog, ILogItem } from '@akashaproject/ui-awf-hoo
 
 import Banner from './banner';
 import DetailCard from './detail-card';
+import MiniCardRenderer from './mini-card-renderer';
+
 import { NoItemsFound } from '../error-cards';
 
 const {
@@ -18,7 +20,6 @@ const {
   Spinner,
   TabsToolbar,
   StyledSwitchCardButton,
-  TransparencyLogMiniCard,
   useIntersectionObserver,
   BasicCardBox,
 } = DS;
@@ -148,7 +149,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     if (pubKey) navigateToUrl(`/profile/${pubKey}`);
   };
 
-  const handleClickCard = (el: ILogItem) => () => {
+  const handleCardClick = (el: ILogItem) => () => {
     selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
   };
 
@@ -244,36 +245,14 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               // map through pages, for each page, filter results according to activeButton, then map through to render the mini card
               logItemPages.map((page, index) => (
                 <Box key={index} flex={false}>
-                  {page.results
-                    .filter((el: { delisted: boolean }) =>
-                      activeButton === ButtonValues.KEPT
-                        ? !el.delisted
-                        : activeButton === ButtonValues.DELISTED
-                        ? el.delisted
-                        : el,
-                    )
-                    .map((el: ILogItem, index: number) => (
-                      <TransparencyLogMiniCard
-                        key={index}
-                        locale="en"
-                        title={t('{{ elContentType }} {{ elContentStatus }}', {
-                          elContentType: el.contentType,
-                          elContentStatus: el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT,
-                        })}
-                        content={t('{{elExplanation}}', { elExplanation: el.explanation })}
-                        isSelected={el.contentID === selected?.contentID}
-                        isDelisted={el.delisted}
-                        moderator={el.moderator.name}
-                        moderatedTimestamp={el.moderatedDate.toString()}
-                        moderatorAvatarUrl={
-                          el.moderator.avatar
-                            ? `${ipfsGateway}/${el.moderator.avatar}`
-                            : el.moderator.avatar
-                        }
-                        moderatorEthAddress={el.moderator.ethAddress}
-                        onClickCard={handleClickCard(el)}
-                      />
-                    ))}
+                  {
+                    <MiniCardRenderer
+                      results={page.results}
+                      activeButton={activeButton}
+                      selected={selected}
+                      onCardClick={handleCardClick}
+                    />
+                  }
                 </Box>
               ))
             ))}
