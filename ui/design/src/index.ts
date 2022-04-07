@@ -111,6 +111,7 @@ import ErrorLoader from './components/ErrorLoader';
 import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
 import EntryPublishErrorCard from './components/EntryPublishErrorCard';
 import ModerationAppErrorCard from './components/ModerationAppErrorCard';
+import ModerationIntroCard from './components/ModerationIntroCard';
 
 import TextInputField from './components/TextInputField';
 
@@ -198,6 +199,7 @@ const exported = {
   ErrorInfoCard,
   ErrorLoader,
   ModerationAppErrorCard,
+  ModerationIntroCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
