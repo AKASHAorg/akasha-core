@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import styled from 'styled-components';
-import { isMobileOnly } from 'react-device-detect';
+
+import MobileHeading from './mobile-heading';
 
 import Icon from '../Icon';
 import Avatar from '../Avatar';
@@ -25,6 +26,12 @@ export interface ITransparencyLogDetailCardProps
   onClickViewItem: () => void;
   onClickAvatar: () => void;
 }
+
+const StyledWrapper = styled(Box)`
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    height: '100vh'; // fills the available height in absolute positioning for mobile
+  }
+`;
 
 const StyledBox = styled(Box)`
   background-color: ${props => props.theme.colors.accentLight};
@@ -59,37 +66,12 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
   };
 
   return (
-    <Box
-      pad={{ vertical: 'medium', left: 'medium' }}
-      style={{ ...(isMobileOnly && { height: '100vh' }) }} // fills the available height in absolute positioning for mobile
-    >
+    <StyledWrapper pad={{ vertical: 'medium', left: 'medium' }}>
       <Box
         pad={{ bottom: 'large', right: 'medium' }}
         border={{ color: 'border', side: 'bottom', style: 'solid' }}
       >
-        {isMobileOnly && (
-          <Box direction="row" margin={{ top: 'small', bottom: 'medium' }} align="start">
-            <Icon
-              type="arrowLeft"
-              color="secondaryText"
-              clickable={true}
-              onClick={onClickArrowLeft}
-            />
-            <Box direction="row" align="center" margin="0 auto" pad={{ right: 'small' }}>
-              <Box
-                width="8px"
-                height="8px"
-                margin={{ right: 'small' }}
-                round="50%"
-                background={isDelisted ? 'red' : 'green'}
-              />
-              <Text weight={600} size="large" style={{ textTransform: 'capitalize' }}>
-                {/* condition: title must always be three-word phrase for this component, pick the first two to show as heading on mobile */}
-                {title.split(' ').slice(0, 2).join(' ')}
-              </Text>
-            </Box>
-          </Box>
-        )}
+        <MobileHeading title={title} isDelisted={isDelisted} onClickArrowLeft={onClickArrowLeft} />
         <Box direction="row" margin={{ top: 'small' }} justify="between">
           <Text size="large" weight="bold">
             {reportedTimesLabel}
@@ -184,7 +166,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
           </Box>
         }
       />
-    </Box>
+    </StyledWrapper>
   );
 };
 
