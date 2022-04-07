@@ -1,7 +1,7 @@
 import React from 'react';
-import { isMobileOnly } from 'react-device-detect';
 import { Box, Text } from 'grommet';
 import styled, { css } from 'styled-components';
+import { isMobileOnly } from 'react-device-detect';
 
 import Button from '../Button';
 import Icon from '../Icon';

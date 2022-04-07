@@ -407,6 +407,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           hasMobileDesign={true}
           buttonValues={buttonValues}
           loggedUser={loginState?.pubKey}
+          style={{ marginBottom: '-1px' }} // overlaps border with parent's bottom border
         />
       </SearchStartCard>
 
