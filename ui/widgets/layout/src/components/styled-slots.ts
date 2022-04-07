@@ -25,7 +25,7 @@ export const SidebarSlot: React.FC<ExtensionPointProps & { visible: boolean }> =
 `;
 
 export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
-  z-index: 100;
+  z-index: 1001;
   position: sticky;
   top: 0;
 `;
