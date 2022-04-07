@@ -134,6 +134,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       keyword: searchKeyword,
       [activeButton]: { ...initSearchState[activeButton], isLoading: true },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword]);
 
   const searchProfilesReq = useSearchProfiles(
@@ -279,6 +280,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         action: `By ${activeButton}`,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeButton]);
 
   const buttonValues = [
@@ -346,7 +348,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         searchKeywordParam={searchKeyword}
         handleSearch={handleSearch}
         inputPlaceholderLabel={t('Search')}
-        title={t('✨ Find what you are looking for ✨')}
+        titleLabel={t('Search')}
+        introLabel={t('✨ Find what you are looking for ✨')}
         description={t(
           'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community.',
         )}

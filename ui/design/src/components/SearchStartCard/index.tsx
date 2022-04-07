@@ -6,7 +6,8 @@ import { BasicCardBox } from '../EntryCard/basic-card-box';
 
 export interface SearchStartProps {
   inputPlaceholderLabel: string;
-  title: string;
+  titleLabel: string;
+  introLabel: string;
   description: string;
   handleSearch: (val: string) => void;
   searchKeywordParam: string;
@@ -15,7 +16,8 @@ export interface SearchStartProps {
 
 export const SearchStartCard = ({
   inputPlaceholderLabel,
-  title,
+  titleLabel,
+  introLabel,
   description,
   handleSearch,
   searchKeywordParam,
@@ -32,13 +34,13 @@ export const SearchStartCard = ({
     >
       <Box align="start" fill="horizontal" pad={{ top: 'medium', horizontal: 'medium' }}>
         <Text size="xlarge" weight="bold">
-          Search
+          {titleLabel}
         </Text>
       </Box>
       <StyledBox shouldMinimize={shouldMinimize} pad={{ horizontal: 'medium' }}>
         <StyledImage src="/images/search-page-start.png" />
         <Text size="large" weight={600} margin={{ top: 'medium' }} textAlign="center">
-          {title}
+          {introLabel}
         </Text>
         <StyledText size="large" textAlign="center">
           {description}

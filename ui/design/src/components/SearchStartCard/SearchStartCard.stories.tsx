@@ -31,7 +31,8 @@ export const BaseSearchStartCard = Template.bind({});
 BaseSearchStartCard.args = {
   searchKeywordParam: '',
   inputPlaceholderLabel: 'Search',
-  title: '✨ Find what you are looking for ✨',
+  titleLabel: 'Search',
+  subtitleLabel: '✨ Find what you are looking for ✨',
   description:
     'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community.',
 };

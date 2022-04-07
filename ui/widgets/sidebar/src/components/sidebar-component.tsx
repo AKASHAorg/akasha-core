@@ -61,8 +61,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     let sub;
-    if (props.plugins.routing) {
-      sub = props.plugins.routing.routeObserver.subscribe({
+    if (routing) {
+      sub = routing.routeObserver.subscribe({
         next: routeData => {
           setRouteData({ ...routeData.byArea });
         },
@@ -73,7 +73,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         sub.unsubscribe();
       }
     };
-  }, [props.plugins.routing]);
+  }, [routing]);
 
   // sort according to worldConfig index
   const worldApps = routeData?.[MenuItemAreaType.AppArea]?.sort(
