@@ -1,6 +1,10 @@
 import { clientsClaim, setCacheNameDetails } from 'workbox-core';
 import { precacheAndRoute } from 'workbox-precaching';
-import { pageCache, imageCache, staticResourceCache } from 'workbox-recipes';
+import {
+  //pageCache,
+  imageCache,
+  staticResourceCache,
+} from 'workbox-recipes';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const idb = require('idb-keyval');
@@ -10,7 +14,7 @@ const idb = require('idb-keyval');
 // @ts-ignore
 precacheAndRoute(self.__WB_MANIFEST || []);
 
-pageCache({ networkTimeoutSeconds: 6 });
+// pageCache({ networkTimeoutSeconds: 6 });
 staticResourceCache();
 imageCache({ maxEntries: 300 });
 
