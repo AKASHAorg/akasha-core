@@ -36,7 +36,7 @@ const IntroPage: React.FC<ISharedModerationProps & RootComponentProps> = props =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isAuthorised]);
 
-  const handleCTAClick = () => {
+  const handleCodeOfConductClick = () => {
     routing.navigateTo({
       appName: 'Legal',
       getNavigationUrl: () => '/legal/code-of-conduct',
@@ -55,7 +55,7 @@ const IntroPage: React.FC<ISharedModerationProps & RootComponentProps> = props =
       descriptionLine2IntroLabel={t('Visit our')}
       codeOfConductLabel={t('Code of Conduct')}
       descriptionLine2Label={t('to learn more about our moderation criteria')}
-      onCodeOfConductClick={handleCTAClick}
+      onCodeOfConductClick={handleCodeOfConductClick}
     />
   );
 };

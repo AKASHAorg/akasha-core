@@ -7,7 +7,7 @@ import { customRender, wrapWithTheme } from '../../../test-utils';
 describe('<ModerationIntroCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const handleCTAClick = jest.fn();
+  const handleCodeOfConductClick = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -22,7 +22,7 @@ describe('<ModerationIntroCard /> Component', () => {
             descriptionLine2IntroLabel="Visit our"
             codeOfConductLabel="Code of Conduct"
             descriptionLine2Label="to learn more about our moderation criteria"
-            onCodeOfConductClick={handleCTAClick}
+            onCodeOfConductClick={handleCodeOfConductClick}
           />,
         ),
         {},
