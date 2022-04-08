@@ -69,11 +69,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Router>
       <Switch>
+        <Redirect exact={true} from={rootRoute} to={routes[EXPLORE]} />
         <Route path={`${routes[INFO]}/:integrationId`}>
           <InfoPage {...props} />
         </Route>
         <Route path="*">
-          <Redirect exact={true} from={rootRoute} to={routes[EXPLORE]} />
           <BasicCardBox style={{ maxHeight: '92vh' }} onClick={handleSignedOutUser}>
             <Box height="6rem" alignContent="stretch" flex={{ shrink: 0 }}>
               <Box pad="medium">
