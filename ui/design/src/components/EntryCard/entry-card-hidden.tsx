@@ -18,6 +18,7 @@ export interface IEntryCardHiddenProps {
   reason?: string;
   headerTextLabel?: string;
   footerTextLabel?: string;
+  onCTAClick?: () => void;
 }
 
 const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
@@ -32,6 +33,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
     reason,
     headerTextLabel,
     footerTextLabel,
+    onCTAClick,
   } = props;
 
   return (
@@ -87,9 +89,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
                 onClick={e => {
                   e.stopPropagation();
                   // open call to action url if specified
-                  ctaUrl
-                    ? window.open(ctaUrl, ctaLabel, '_blank noopener noreferrer')
-                    : handleFlipCard();
+                  ctaUrl ? onCTAClick() : handleFlipCard();
                 }}
               >
                 {ctaLabel}
