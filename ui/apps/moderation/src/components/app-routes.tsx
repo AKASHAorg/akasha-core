@@ -21,11 +21,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const checkModeratorQuery = useCheckModerator(loginQuery.data?.pubKey);
   const checkModeratorResp = checkModeratorQuery.data;
 
-  const isAuthorised = React.useMemo(() => {
-    if (checkModeratorResp === 200) {
-      return true;
-    } else return false;
-  }, [checkModeratorResp]);
+  const isAuthorised = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   return (
     <Box>
