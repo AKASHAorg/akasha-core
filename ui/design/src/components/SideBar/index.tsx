@@ -152,7 +152,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             </Box>
           </StyledSubWrapper>
           <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
-          <StyledAccordion>
+          <StyledAccordion forwardedAs="nav">
             {worldApps &&
               worldApps.map((menuItem: IMenuItem, index: number) => (
                 <SidebarMenuItem
@@ -185,7 +185,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             border={{ size: '1px', color: 'border', side: 'top' }}
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
-            <StyledAccordion>
+            <StyledAccordion forwardedAs="nav">
               {userInstalledApps?.map((menuItem: IMenuItem, index: number) => (
                 <SidebarMenuItem
                   key={`${menuItem.name}-${index}`}
