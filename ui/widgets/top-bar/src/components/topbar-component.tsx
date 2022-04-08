@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { isMobileOnly } from 'react-device-detect';
 
 import DS from '@akashaproject/design-system';
 import {
@@ -22,8 +21,10 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const location = useLocation();
 
   const [routeData, setRouteData] = React.useState({});
-  // sidebar is open by default on larger screens
-  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(!isMobileOnly ? true : false);
+  // sidebar is open by default on larger screens >=1440px
+  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
+    window.matchMedia('(min-width: 1440px)').matches ? true : false,
+  );
 
   const loginQuery = useGetLogin();
   const logoutMutation = useLogout();
