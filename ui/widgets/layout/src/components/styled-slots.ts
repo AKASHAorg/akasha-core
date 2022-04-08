@@ -56,6 +56,7 @@ export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30em;
       display: flex;
+      flex-direction: column;
     }
 
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {
