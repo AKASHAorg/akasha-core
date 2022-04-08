@@ -172,6 +172,14 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     },
   ];
 
+  const hasKeptItems = activeButton === ButtonValues.KEPT && count.kept > 0;
+
+  const hasDelistedItems = activeButton === ButtonValues.DELISTED && count.delisted > 0;
+
+  const hasLoadMoreRef = hasKeptItems || hasDelistedItems || activeButton === ButtonValues.ALL;
+
+  const shouldLoadMore = hasLoadMoreRef && logItemsQuery.isFetching && logItemPages.length > 0;
+
   return (
     <VerticalFillBox fill="vertical">
       <StyledIntroWrapper>
@@ -241,6 +249,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           {!!logItemPages.length &&
             (activeButton === ButtonValues.STATS ? (
               <Banner count={count} />
+            ) : activeButton === ButtonValues.KEPT && count.kept === 0 ? (
+              <NoItemsFound activeTab={'kept'} />
+            ) : activeButton === ButtonValues.DELISTED && count.delisted === 0 ? (
+              <NoItemsFound activeTab={'delisted'} />
             ) : (
               // map through pages, for each page, filter results according to activeButton, then map through to render the mini card
               logItemPages.map((page, index) => (
@@ -263,16 +275,14 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
             </Box>
           )}
           {/* fetch indicator for load more on scroll, excluded on stats page */}
-          {activeButton !== ButtonValues.STATS &&
-            logItemsQuery.isFetching &&
-            logItemPages.length > 0 && (
-              <Box pad="large" align="center">
-                <Icon type="loading" accentColor={true} clickable={false} />
-                <Text color="accentText">{t('Loading more ...')}</Text>
-              </Box>
-            )}
+          {shouldLoadMore && (
+            <Box pad="large" align="center">
+              <Icon type="loading" accentColor={true} clickable={false} />
+              <Text color="accentText">{t('Loading more ...')}</Text>
+            </Box>
+          )}
           {/* triggers intersection observer */}
-          <Box pad="xxsmall" ref={loadmoreRef} />
+          {hasLoadMoreRef && <Box pad="xxsmall" ref={loadmoreRef} />}
         </SidebarWrapper>
         <DetailCardWrapper isVisible={!!selected}>
           {selected && (
