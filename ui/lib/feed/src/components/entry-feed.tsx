@@ -34,7 +34,6 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           itemType={props.itemType}
           sharePostUrl={`${window.location.origin}/social-app/post/`}
           locale={props.i18n?.languages[0] as ILocale}
-          // onBookmark={handleBookmark}
           onNavigate={handleNavigation}
           singleSpaNavigate={props.singleSpaNavigate}
           onFlag={props.onEntryFlag}

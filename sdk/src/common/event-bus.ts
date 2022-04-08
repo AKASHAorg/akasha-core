@@ -1,14 +1,11 @@
+import { GlobalEventBusData } from '@akashaproject/sdk-typings/src/interfaces/common';
 import { injectable, decorate } from 'inversify';
 import { ReplaySubject, TimestampProvider } from 'rxjs';
 
 decorate(injectable(), ReplaySubject);
 
 @injectable()
-class EventBus extends ReplaySubject<{
-  data: unknown;
-  event: string;
-  args?: unknown;
-}> {
+class EventBus extends ReplaySubject<GlobalEventBusData> {
   constructor(size?: number, time?: number, timeStampProvider?: TimestampProvider) {
     const _size = size || 42;
     const _time = time || 15000;

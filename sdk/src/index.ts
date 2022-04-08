@@ -19,6 +19,9 @@ import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
 
+/**
+ * @internal
+ */
 export interface AWF_SDK {
   services: {
     log: Logging;
@@ -46,12 +49,32 @@ export interface AWF_SDK {
 
 let sdk: AWF_SDK;
 
-export default function getSDK() {
+/**
+ * Creates a new SDK instance or returns a previusly created one.
+ * @public
+ * @example
+ * ```ts
+ * import getSDK from '@akashaproject/awf-sdk';
+ * const sdk = getSDK();
+ * ```
+ */
+
+export default function getSDK(): AWF_SDK {
   if (!sdk) {
     sdk = init();
   }
   return sdk;
 }
+
+/**
+ * Creates a new SDK instance.
+ * @public
+ * @example
+ * ```ts
+ * import {init} from '@akashaproject/awf-sdk';
+ * const sdk = init();
+ * ```
+ */
 
 export function init(): AWF_SDK {
   const { TYPES } = typings;

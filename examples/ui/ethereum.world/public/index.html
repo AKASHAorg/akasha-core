@@ -92,6 +92,17 @@
     });
   }
 </script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    let theme = 'Light-Theme';
+    if (window.localStorage) {
+      if (window.localStorage.getItem('Theme') === 'Dark-Theme') {
+        theme = 'Dark-Theme';
+      }
+    }
+    document.body.classList.add(theme);
+  });
+</script>
 <script type="module" src="/main.js"></script>
 </body>
 

@@ -19,6 +19,7 @@ export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
 
 export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   flex-grow: 1;
+  padding-right: 16px;
 `;
 
 const TOPBAR_HEIGHT = 48;
