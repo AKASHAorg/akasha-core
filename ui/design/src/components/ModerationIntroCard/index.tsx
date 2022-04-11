@@ -1,7 +1,6 @@
 import React from 'react';
 import { Anchor, Box, Text, Image } from 'grommet';
 
-import Icon from '../Icon';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 
 export interface IModerationIntroCardProps {
@@ -44,7 +43,6 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
           <Text size="xlarge" weight="bold">
             {titleLabel}
           </Text>
-          <Icon type="integrationAppCTA" />
         </Box>
         <Text color="secondaryText">{subtitleLabel}</Text>
         {isIntro && (
