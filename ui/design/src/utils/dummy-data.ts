@@ -396,7 +396,7 @@ const ICDetailAppsData: IntegrationCenterApp[] = [
         sources: ['bdabsdbasb'],
         manifestData: {
           mainFile: 'index.js',
-
+          displayName: 'Confetti',
           keywords: [
             'Image editor',
             'Photo Filters',
