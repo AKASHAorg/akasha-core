@@ -52,7 +52,6 @@ interface SearchPageProps extends RootComponentProps {
 }
 
 const initSearchState = {
-  keyword: '',
   [ButtonValues.TOPICS]: { page: 1, results: [], done: false, isLoading: false },
   [ButtonValues.POSTS]: { page: 1, results: [], done: false, isLoading: false },
   [ButtonValues.PEOPLE]: { page: 1, results: [], done: false, isLoading: false },
@@ -127,18 +126,17 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   React.useEffect(() => {
     if (isAllTabActive) {
-      return setSearchState({ ...initSearchState, keyword: searchKeyword });
+      return setSearchState(initSearchState);
     }
     setSearchState({
       ...initSearchState,
-      keyword: searchKeyword,
       [activeButton]: { ...initSearchState[activeButton], isLoading: true },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword]);
 
   const searchProfilesReq = useSearchProfiles(
-    decodeURIComponent(searchState.keyword),
+    decodeURIComponent(searchKeyword),
     searchState[ButtonValues.PEOPLE].page,
     loginState?.pubKey,
     loginState?.fromCache,
@@ -146,7 +144,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
   const searchPostsReq = useSearchPosts(
-    decodeURIComponent(searchState.keyword),
+    decodeURIComponent(searchKeyword),
     searchState[ButtonValues.POSTS].page,
     loginState?.pubKey,
     loginState?.fromCache,
@@ -154,14 +152,14 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchPostsState = getSearchStateForTab(ButtonValues.POSTS);
 
   const searchCommentsReq = useSearchComments(
-    decodeURIComponent(searchState.keyword),
+    decodeURIComponent(searchKeyword),
     searchState[ButtonValues.REPLIES].page,
     loginState?.pubKey,
     loginState?.fromCache,
   );
   const searchCommentsState = searchState[ButtonValues.REPLIES].results;
 
-  const searchTagsReq = useSearchTags(decodeURIComponent(searchState.keyword));
+  const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TOPICS);
 
   React.useEffect(() => {
@@ -339,13 +337,13 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (activeButton === ButtonValues.ALL) {
       return !allQueriesFinished;
     }
-    return searchState.keyword && !searchState[activeButton].done;
+    return searchKeyword && !searchState[activeButton].done;
   }, [searchState, activeButton, allQueriesFinished]);
 
   return (
     <Box fill="horizontal">
       <SearchStartCard
-        searchKeywordParam={searchKeyword}
+        searchKeyword={searchKeyword}
         handleSearch={handleSearch}
         inputPlaceholderLabel={t('Search')}
         titleLabel={t('Search')}
@@ -412,16 +410,18 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       </SearchStartCard>
 
       {allQueriesFinished &&
-        searchState.keyword &&
+        searchKeyword &&
         (isAllTabActive ? emptySearchState : !searchState[activeButton]?.results?.length) && (
-          <InfoCard
-            icon="search"
-            title={t('No matching results found 👀')}
-            explanation={t('We could not find any results for your search in Ethereum World.')}
-            suggestion={t(
-              'Make sure you spelled everything correctly or try searching for something else.',
-            )}
-          />
+          <Box margin={{ top: '1rem' }}>
+            <InfoCard
+              icon="search"
+              title={t('No matching results found 👀')}
+              explanation={t('We could not find any results for your search in Ethereum World.')}
+              suggestion={t(
+                'Make sure you spelled everything correctly or try searching for something else.',
+              )}
+            />
+          </Box>
         )}
 
       <Box margin={{ top: 'medium' }}>

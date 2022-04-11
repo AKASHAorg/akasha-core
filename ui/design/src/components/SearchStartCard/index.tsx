@@ -10,7 +10,7 @@ export interface SearchStartProps {
   introLabel: string;
   description: string;
   handleSearch: (val: string) => void;
-  searchKeywordParam: string;
+  searchKeyword: string;
   children?: ReactNode;
 }
 
@@ -20,16 +20,20 @@ export const SearchStartCard = ({
   introLabel,
   description,
   handleSearch,
-  searchKeywordParam,
+  searchKeyword,
   children,
 }: SearchStartProps) => {
-  const [inputValue, setInputValue] = React.useState<string>('');
-  const [shouldMinimize, setShouldMinimize] = React.useState(!!searchKeywordParam?.length);
+  const [inputValue, setInputValue] = React.useState<string>(searchKeyword);
+  const [shouldMinimize, setShouldMinimize] = React.useState(!!searchKeyword?.length);
+
+  React.useEffect(() => {
+    setInputValue(searchKeyword);
+  }, [searchKeyword]);
 
   return (
     <BasicCardBox
       round={
-        shouldMinimize && !!searchKeywordParam.length ? { size: 'xsmall', corner: 'top' } : 'xsmall'
+        shouldMinimize && !!searchKeyword.length ? { size: 'xsmall', corner: 'top' } : 'xsmall'
       }
     >
       <Box align="start" fill="horizontal" pad={{ top: 'medium', horizontal: 'medium' }}>
@@ -60,7 +64,7 @@ export const SearchStartCard = ({
           onSearch={handleSearch}
         />
       </Box>
-      {shouldMinimize && !!searchKeywordParam.length && <Box fill="horizontal">{children}</Box>}
+      {shouldMinimize && !!searchKeyword.length && <Box fill="horizontal">{children}</Box>}
     </BasicCardBox>
   );
 };

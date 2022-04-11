@@ -8,7 +8,7 @@ export default {
   title: 'Cards/SearchStartCard',
   component: SearchStartCard,
   argTypes: {
-    searchKeywordParam: { control: 'text' },
+    searchKeyword: { control: 'text' },
     inputPlaceholderLabel: { control: 'text' },
     title: { control: 'text' },
     description: { control: 'text' },
@@ -29,7 +29,7 @@ const Template = (args: SearchStartProps) => {
 export const BaseSearchStartCard = Template.bind({});
 
 BaseSearchStartCard.args = {
-  searchKeywordParam: '',
+  searchKeyword: '',
   inputPlaceholderLabel: 'Search',
   titleLabel: 'Search',
   subtitleLabel: '✨ Find what you are looking for ✨',
