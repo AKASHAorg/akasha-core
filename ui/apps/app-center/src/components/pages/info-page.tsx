@@ -14,7 +14,7 @@ import {
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
-const { Box, ICDetailCard, ErrorLoader, Spinner, BasicCardBox } = DS;
+const { Box, ICDetailCard, ErrorLoader } = DS;
 
 const InfoPage: React.FC<RootComponentProps> = props => {
   const { integrationId } = useParams<{ integrationId: string }>();
@@ -78,12 +78,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           devDetails={latestReleaseInfoReq.error}
         />
       )}
-      {latestReleaseInfoReq.isFetching && (
-        <BasicCardBox>
-          <Spinner />
-        </BasicCardBox>
-      )}
-      {latestReleaseInfoReq.isSuccess && latestReleaseInfo && (
+      {!latestReleaseInfoReq.error && (
         <ICDetailCard
           shareLabel={t('Share')}
           id={integrationId}
@@ -102,7 +97,6 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           latestReleaseLabel={t('Latest Release')}
           noPreviousReleasesLabel={t('No previous releases')}
           releaseVersionLabel={t('Version')}
-          releaseIdLabel={t('Release Id')}
           releases={releasesInfo}
           latestRelease={latestReleaseInfo}
           versionHistoryLabel={t('Version History')}
@@ -116,6 +110,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           onClickUninstall={() => null}
           handleAuthorClick={handleAuthorClick}
           handleAuthorEthAddressClick={handleAuthorEthAddressClick}
+          isFetching={latestReleaseInfoReq.isFetching}
         />
       )}
     </Box>

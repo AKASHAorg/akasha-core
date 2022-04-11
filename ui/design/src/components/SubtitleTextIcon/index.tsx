@@ -1,4 +1,4 @@
-import { Box, Text } from 'grommet';
+import { Box, Text, Drop } from 'grommet';
 import React from 'react';
 import Icon, { IconType } from '../Icon';
 import { BackgroundDiv, StyledBox } from './styled-subtitle-text-icon';
@@ -42,6 +42,10 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     gap,
     maxWidth,
   } = props;
+
+  const [showTooltip, setShowTooltip] = React.useState(false);
+  const targetRef = React.useRef();
+
   return (
     <StyledBox
       data-testid={`${props['data-testid']}`}
@@ -64,19 +68,27 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
           <Text size="small" color={subtitleColor} truncate={true}>
             {subtitle}
           </Text>
-          {subtitleIcon && subtitleIconTooltip && (
-            <Tooltip
-              dropProps={{ align: { top: 'bottom' } }}
-              message={subtitleIconTooltip}
-              plain={true}
-              caretPosition={'top'}
-            >
-              <Icon size="xs" type={subtitleIcon} accentColor={true} clickable={true} />
-            </Tooltip>
+          {subtitleIcon && (
+            <Icon
+              size="xs"
+              type={subtitleIcon}
+              accentColor={true}
+              clickable={false}
+              ref={targetRef}
+              onClick={() => setShowTooltip(!showTooltip)}
+            />
           )}
-
-          {subtitleIcon && !subtitleIconTooltip && (
-            <Icon size="xs" type={subtitleIcon} accentColor={true} clickable={false} />
+          {subtitleIconTooltip && showTooltip && targetRef.current && (
+            <Drop
+              margin={{ left: 'xsmall' }}
+              align={{ left: 'right' }}
+              target={targetRef.current}
+              onClickOutside={() => setShowTooltip(false)}
+            >
+              <Box background="activePanelBackground" round="xsmall" pad="xsmall">
+                <Text>{subtitleIconTooltip}</Text>
+              </Box>
+            </Drop>
           )}
         </Box>
       </Box>

@@ -34,7 +34,6 @@ describe('<ICDetailCard /> Component', () => {
             releaseVersionLabel={'Version'}
             latestReleaseLabel={'Latest release'}
             noPreviousReleasesLabel={'No previous releases'}
-            releaseIdLabel={'Release Id'}
             versionHistoryLabel="Version History"
             authorLabel="Authors & Contributors"
             ethereumAddressLabel="Ethereum Address"

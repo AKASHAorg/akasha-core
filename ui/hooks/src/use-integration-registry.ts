@@ -107,10 +107,10 @@ const getAllIntegrationsIds = async (offset?: number) => {
   const sdk = getSDK();
   const res = await sdk.api.icRegistry.getAllIntegrationsIds(offset);
   let nextIndex = res.data?.nextIndex?.toNumber();
-  const integrationIds = res.data?.integrationIds;
+  let integrationIds = res.data?.integrationIds;
   while (nextIndex) {
     const nextRes = await sdk.api.icRegistry.getAllIntegrationsIds(nextIndex);
-    integrationIds.concat(nextRes.data?.integrationIds);
+    integrationIds = integrationIds.concat(nextRes.data?.integrationIds);
     nextIndex = nextRes.data?.nextIndex?.toNumber();
   }
   return integrationIds;
