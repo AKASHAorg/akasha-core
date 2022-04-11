@@ -20,7 +20,7 @@ export const SearchStartCard = ({
   introLabel,
   description,
   handleSearch,
-  searchKeyword,
+  searchKeyword = '',
   children,
 }: SearchStartProps) => {
   const [inputValue, setInputValue] = React.useState<string>(searchKeyword);

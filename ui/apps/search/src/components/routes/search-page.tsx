@@ -412,7 +412,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       {allQueriesFinished &&
         searchKeyword &&
         (isAllTabActive ? emptySearchState : !searchState[activeButton]?.results?.length) && (
-          <Box margin={{ top: '1rem' }}>
+          <Box margin={{ top: 'medium' }}>
             <InfoCard
               icon="search"
               title={t('No matching results found 👀')}
