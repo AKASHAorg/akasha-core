@@ -1,5 +1,4 @@
 import React from 'react';
-import { isMobileOnly } from 'react-device-detect';
 import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 
 import DS from '@akashaproject/design-system';
@@ -30,8 +29,10 @@ const { Box } = DS;
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
-  // sidebar is open by default on larger screens
-  const [showSidebar, setShowSidebar] = React.useState(!isMobileOnly ? true : false);
+  // sidebar is open by default on larger screens >=1440px
+  const [showSidebar, setShowSidebar] = React.useState(
+    window.matchMedia('(min-width: 1440px)').matches ? true : false,
+  );
 
   const isMatchingFocusedMode = useMatch('/auth-app/*');
   const isFocusedMode = !!isMatchingFocusedMode;

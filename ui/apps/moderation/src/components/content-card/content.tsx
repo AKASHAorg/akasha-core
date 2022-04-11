@@ -3,7 +3,7 @@ import moment from 'moment';
 import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
 
-import { IContentProps } from '../../../interfaces';
+import { IContentProps } from '../../interfaces';
 
 import EntryDataCard from './entry-data-card';
 import ExplanationsBox from './explanations-box';

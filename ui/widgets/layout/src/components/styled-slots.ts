@@ -28,6 +28,9 @@ export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
   z-index: 1001;
   position: sticky;
   top: 0;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    z-index: 100;
+  }
 `;
 
 export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`

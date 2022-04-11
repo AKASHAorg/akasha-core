@@ -23,21 +23,21 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   menuItems: {
     route: rootRoute,
-    label: 'Moderation',
+    label: 'Moderating',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],
     subRoutes: [
       {
-        label: HOME,
-        index: 0,
-        route: routes[HOME],
-        type: MenuItemType.Internal,
-      },
-      {
         label: HISTORY,
         index: 1,
         route: routes[HISTORY],
+        type: MenuItemType.Internal,
+      },
+      {
+        label: HOME,
+        index: 0,
+        route: routes[HOME],
         type: MenuItemType.Internal,
       },
     ],

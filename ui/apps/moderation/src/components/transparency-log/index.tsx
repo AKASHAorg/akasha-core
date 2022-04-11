@@ -8,6 +8,8 @@ import { useGetCount, useInfiniteLog, ILogItem } from '@akashaproject/ui-awf-hoo
 
 import Banner from './banner';
 import DetailCard from './detail-card';
+import MiniCardRenderer from './mini-card-renderer';
+
 import { NoItemsFound } from '../error-cards';
 
 const {
@@ -18,7 +20,6 @@ const {
   Spinner,
   TabsToolbar,
   StyledSwitchCardButton,
-  TransparencyLogMiniCard,
   useIntersectionObserver,
   BasicCardBox,
 } = DS;
@@ -30,41 +31,74 @@ export interface ITransparencyLogProps {
 
 const DEFAULT_LIMIT = 10;
 
-const DetailCardWrapper = styled(Box)`
-  width: 100%;
+const DetailCardWrapper = styled(BasicCardBox)<{
+  isVisible: boolean;
+}>`
+  width: 63.5%;
+  border-radius: 0.5rem;
+  background: ${props => props.theme.colors.cardBackground};
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    width: 100%;
+    ${props => {
+      if (!props.isVisible) {
+        return `
+        display: none;
+      `;
+      }
+    }}
+  }
 `;
 
-const SidebarWrapper: React.FC<{ isSelected: boolean }> = styled(Box)<{ isSelected: boolean }>`
-  min-width: 100%;
+const SidebarWrapper = styled(BasicCardBox)<{
+  isVisible: boolean;
+}>`
+  width: 100%;
   height: 100%;
-  flex: 1;
   overflow-y: scroll;
-  border-radius: 0.5rem 0 0 0.5rem;
+  border-radius: 0.5rem;
+  background: ${props => props.theme.colors.cardBackground};
   ${props => {
-    if (props.isSelected) {
+    if (props.isVisible) {
       return `
         display: none;
       `;
     }
   }}
   @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-    min-width: 40%;
-    display: flex;
-  }
-
-  @media only screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
-    min-width: 33%;
+    width: 35%;
     display: flex;
   }
 `;
 
-const ListWrapper = styled(BasicCardBox)`
-  flex-direction: row;
+const ListWrapper = styled(Box)`
   flex: 1;
+  margin-top: 0.5rem;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const StyledBox = styled(Box)`
+  display: none;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    display: flex;
+  }
+`;
+
+const StyledIntroWrapper = styled(Box)`
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.75rem 0;
+    border: 0.1rem solid ${props => props.theme.colors.border};
+    background: ${props => props.theme.colors.cardBackground};
+  }
 `;
 
 const VerticalFillBox = styled(Box)`
   height: calc(100vh - 48px /* topbar height */ - 2rem /* offset bottom */);
+  /* add padding for mobile screens */
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    padding: 0 0.5rem;
+  }
 `;
 
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
@@ -115,7 +149,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     if (pubKey) navigateToUrl(`/profile/${pubKey}`);
   };
 
-  const handleClickCard = (el: ILogItem) => () => {
+  const handleCardClick = (el: ILogItem) => () => {
     selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
   };
 
@@ -138,95 +172,99 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     },
   ];
 
+  const hasKeptItems = activeButton === ButtonValues.KEPT && count.kept > 0;
+
+  const hasDelistedItems = activeButton === ButtonValues.DELISTED && count.delisted > 0;
+
+  const hasLoadMoreRef = hasKeptItems || hasDelistedItems || activeButton === ButtonValues.ALL;
+
+  const shouldLoadMore = hasLoadMoreRef && logItemsQuery.isFetching && logItemPages.length > 0;
+
   return (
     <VerticalFillBox fill="vertical">
-      <TabsToolbar
-        noMarginBottom
-        count={
-          activeButton === ButtonValues.ALL
-            ? count.kept + count.delisted
-            : count[activeButton.toLowerCase()]
-        }
-        activeButton={activeButton}
-        countLabel={
-          activeButton === ButtonValues.ALL
-            ? t('Moderated items')
-            : t('{{activeButton}} items', { activeButton })
-        }
-        tabButtons={
-          <>
-            <StyledSwitchCardButton
-              label={buttonValues[0].label}
-              size="large"
-              removeBorder={false}
-              primary={ButtonValues.ALL === activeButton}
-              onClick={onTabClick(ButtonValues.ALL)}
-            />
-            <StyledSwitchCardButton
-              label={buttonValues[1].label}
-              size="large"
-              removeBorder={true}
-              primary={ButtonValues.KEPT === activeButton}
-              onClick={onTabClick(ButtonValues.KEPT)}
-            />
-            <StyledSwitchCardButton
-              label={buttonValues[2].label}
-              size="large"
-              removeBorder={true}
-              primary={ButtonValues.DELISTED === activeButton}
-              onClick={onTabClick(ButtonValues.DELISTED)}
-            />
-          </>
-        }
-        buttonValues={buttonValues}
-        onTabClick={onTabClick}
-        buttonsWrapperWidth={'40%'}
-        loggedUser={user}
-        hasMobileDesign={true} // adjusts to new design on mobile screens
-      />
-      <ListWrapper margin={{ top: 'xsmall' }}>
+      <StyledIntroWrapper>
+        <StyledBox fill="horizontal" margin={{ bottom: 'xlarge' }}>
+          <Text size="xlarge" weight="bold" margin={{ bottom: 'xsmall' }}>
+            {t('Moderating')}
+          </Text>
+          <Text color="secondaryText">
+            {t('Find all the moderated posts, replies and accounts')}
+          </Text>
+        </StyledBox>
+        <Box>
+          <TabsToolbar
+            noMarginBottom
+            count={
+              activeButton === ButtonValues.ALL
+                ? count.kept + count.delisted
+                : count[activeButton.toLowerCase()]
+            }
+            activeButton={activeButton}
+            countLabel={
+              activeButton === ButtonValues.ALL
+                ? t('Moderated items')
+                : t('{{activeButton}} items', { activeButton })
+            }
+            tabButtons={
+              <>
+                <StyledSwitchCardButton
+                  label={buttonValues[0].label}
+                  size="large"
+                  removeBorder={false}
+                  primary={ButtonValues.ALL === activeButton}
+                  onClick={onTabClick(ButtonValues.ALL)}
+                />
+                <StyledSwitchCardButton
+                  label={buttonValues[1].label}
+                  size="large"
+                  removeBorder={true}
+                  primary={ButtonValues.KEPT === activeButton}
+                  onClick={onTabClick(ButtonValues.KEPT)}
+                />
+                <StyledSwitchCardButton
+                  label={buttonValues[2].label}
+                  size="large"
+                  removeBorder={true}
+                  primary={ButtonValues.DELISTED === activeButton}
+                  onClick={onTabClick(ButtonValues.DELISTED)}
+                />
+              </>
+            }
+            buttonValues={buttonValues}
+            onTabClick={onTabClick}
+            buttonsWrapperWidth={'40%'}
+            loggedUser={user}
+            hasMobileDesign={true} // adjusts to new design on mobile screens
+            style={{ marginBottom: '-1px' }} // overlaps border with parent's bottom border
+          />
+        </Box>
+      </StyledIntroWrapper>
+
+      <ListWrapper>
         {/* setting height and overflow behaviour to make y-scrollable container */}
-        <SidebarWrapper isSelected={!!selected}>
+        <SidebarWrapper isVisible={!!selected}>
           {!logItemsQuery.isLoading && !logItemPages.length && (
             <NoItemsFound activeTab={'moderated'} />
           )}
           {!!logItemPages.length &&
             (activeButton === ButtonValues.STATS ? (
               <Banner count={count} />
+            ) : activeButton === ButtonValues.KEPT && count.kept === 0 ? (
+              <NoItemsFound activeTab={'kept'} />
+            ) : activeButton === ButtonValues.DELISTED && count.delisted === 0 ? (
+              <NoItemsFound activeTab={'delisted'} />
             ) : (
               // map through pages, for each page, filter results according to activeButton, then map through to render the mini card
               logItemPages.map((page, index) => (
                 <Box key={index} flex={false}>
-                  {page.results
-                    .filter((el: { delisted: boolean }) =>
-                      activeButton === ButtonValues.KEPT
-                        ? !el.delisted
-                        : activeButton === ButtonValues.DELISTED
-                        ? el.delisted
-                        : el,
-                    )
-                    .map((el: ILogItem, index: number) => (
-                      <TransparencyLogMiniCard
-                        key={index}
-                        locale="en"
-                        title={t('{{ elContentType }} {{ elContentStatus }}', {
-                          elContentType: el.contentType,
-                          elContentStatus: el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT,
-                        })}
-                        content={t('{{elExplanation}}', { elExplanation: el.explanation })}
-                        isSelected={el.contentID === selected?.contentID}
-                        isDelisted={el.delisted}
-                        moderator={el.moderator.name}
-                        moderatedTimestamp={el.moderatedDate.toString()}
-                        moderatorAvatarUrl={
-                          el.moderator.avatar
-                            ? `${ipfsGateway}/${el.moderator.avatar}`
-                            : el.moderator.avatar
-                        }
-                        moderatorEthAddress={el.moderator.ethAddress}
-                        onClickCard={handleClickCard(el)}
-                      />
-                    ))}
+                  {
+                    <MiniCardRenderer
+                      results={page.results}
+                      activeButton={activeButton}
+                      selected={selected}
+                      onCardClick={handleCardClick}
+                    />
+                  }
                 </Box>
               ))
             ))}
@@ -236,17 +274,17 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               <Spinner />
             </Box>
           )}
-          {/* fetch indicator for load more on scroll */}
-          {logItemsQuery.isFetching && logItemPages.length > 0 && (
+          {/* fetch indicator for load more on scroll, excluded on stats page */}
+          {shouldLoadMore && (
             <Box pad="large" align="center">
               <Icon type="loading" accentColor={true} clickable={false} />
               <Text color="accentText">{t('Loading more ...')}</Text>
             </Box>
           )}
           {/* triggers intersection observer */}
-          <Box pad="xxsmall" ref={loadmoreRef} />
+          {hasLoadMoreRef && <Box pad="xxsmall" ref={loadmoreRef} />}
         </SidebarWrapper>
-        <DetailCardWrapper>
+        <DetailCardWrapper isVisible={!!selected}>
           {selected && (
             <DetailCard
               selected={selected}
