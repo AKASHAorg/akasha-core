@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
+import { Box, Drop, Text } from 'grommet';
 
 import ICDetailCardCoverImage from './ic-detail-card-fields/cover-image';
 import ICDetailCardAvatar from './ic-detail-card-fields/avatar';
@@ -8,11 +8,12 @@ import Icon from '../Icon';
 import Tooltip from '../Tooltip';
 import DuplexButton from '../DuplexButton';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
-
+import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { ReleaseInfo } from '@akashaproject/ui-awf-typings';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import ProfileAvatarButton from '../ProfileAvatarButton';
+import Version from './version';
 
 export interface ICDetailCardProps {
   className?: string;
@@ -30,7 +31,6 @@ export interface ICDetailCardProps {
   releaseVersionLabel: string;
   latestReleaseLabel: string;
   noPreviousReleasesLabel: string;
-  releaseIdLabel: string;
   versionHistoryLabel: string;
   authorLabel: string;
   ethereumAddressLabel: string;
@@ -43,6 +43,7 @@ export interface ICDetailCardProps {
   isInstalled: boolean;
   releases: any[];
   latestRelease: ReleaseInfo;
+  isFetching?: boolean;
 
   onClickShare: () => void;
   onClickCTA: () => void;
@@ -68,7 +69,6 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     releaseVersionLabel,
     latestReleaseLabel,
     noPreviousReleasesLabel,
-    releaseIdLabel,
     versionHistoryLabel,
     authorLabel,
     ethereumAddressLabel,
@@ -80,6 +80,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     isInstalled,
     releases = [],
     latestRelease,
+    isFetching,
     onClickShare,
     // onClickCTA,
     onClickInstall,
@@ -93,6 +94,9 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
   const handleShowVersionHistory = () => {
     setShowReleases(true);
   };
+
+  const [showLatestReleaseDrop, setShowLatestReleaseDrop] = React.useState(false);
+  const latestReleaseIconRef = React.useRef();
 
   return (
     <MainAreaCardBox className={className}>
@@ -113,18 +117,26 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             <ICDetailCardAvatar
               ethAddress={latestRelease?.id}
               iconType={
-                latestRelease.integrationType === 2
+                latestRelease?.integrationType === 2
                   ? 'integrationWidgetLarge'
                   : 'integrationAppLarge'
               }
             />
             <Box pad={{ vertical: 'xxsmall', left: 'xsmall', right: 'small' }}>
-              <SubtitleTextIcon
-                label={latestRelease?.manifestData?.displayName}
-                subtitle={integrationName}
-                subtitleIcon="info"
-                subtitleIconTooltip={id}
-              />
+              {latestRelease?.manifestData?.displayName && integrationName && (
+                <SubtitleTextIcon
+                  label={latestRelease?.manifestData?.displayName}
+                  subtitle={integrationName}
+                  subtitleIcon="info"
+                  subtitleIconTooltip={id}
+                />
+              )}
+              {isFetching && !latestRelease?.manifestData?.displayName && (
+                <Box gap="xxsmall">
+                  <TextLine title="integrationName" animated={false} width="140px" />
+                  <TextLine title="integrationName" animated={false} width="80px" />
+                </Box>
+              )}
             </Box>
           </Box>
           <Box direction="row" data-testid="ic-detail-card-install-button">
@@ -156,9 +168,14 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
         </Box>
         <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
           <Text weight={'bold'}>{descriptionLabel}</Text>
-          <Text size="md" style={{ lineHeight: '1.375rem' }}>
-            {latestRelease?.manifestData?.description}
-          </Text>
+          {latestRelease?.manifestData?.description && (
+            <Text size="md" style={{ lineHeight: '1.375rem' }}>
+              {latestRelease?.manifestData?.description}
+            </Text>
+          )}
+          {isFetching && !latestRelease?.manifestData?.description && (
+            <TextLine title="integrationDescription" animated={false} width="250px" />
+          )}
         </Box>
         {(latestRelease?.links?.documentation || latestRelease?.links?.publicRepository) && (
           <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
@@ -187,19 +204,36 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
         <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
           <Text weight={'bold'}>{latestReleaseLabel}</Text>
           <Text>{releaseVersionLabel}</Text>
-          <Box direction="row" gap="xsmall">
-            <Text size="sm" color="secondaryText">
-              {latestRelease?.version}
-            </Text>
-            <Tooltip
-              dropProps={{ align: { left: 'right' } }}
-              message={latestRelease?.id}
-              plain={true}
-              caretPosition={'left'}
-            >
-              <Icon size="xs" type="info" accentColor={true} clickable={true} />
-            </Tooltip>
-          </Box>
+          {latestRelease?.version && (
+            <Box direction="row" gap="xsmall">
+              <Text size="sm" color="secondaryText">
+                {latestRelease?.version}
+              </Text>
+              <Icon
+                ref={latestReleaseIconRef}
+                size="xs"
+                type="info"
+                accentColor={true}
+                clickable={true}
+                onClick={() => setShowLatestReleaseDrop(!showLatestReleaseDrop)}
+              />
+              {showLatestReleaseDrop && latestReleaseIconRef.current && (
+                <Drop
+                  margin={{ left: 'xsmall' }}
+                  align={{ left: 'right' }}
+                  target={latestReleaseIconRef.current}
+                  onClickOutside={() => setShowLatestReleaseDrop(false)}
+                >
+                  <Box background="activePanelBackground" round="xsmall" pad="xsmall">
+                    <Text>{latestRelease?.id}</Text>
+                  </Box>
+                </Drop>
+              )}
+            </Box>
+          )}
+          {isFetching && !latestRelease?.version && (
+            <TextLine title="integrationVersion" animated={false} width="70px" />
+          )}
 
           {!showReleases && (
             <Text
@@ -218,33 +252,50 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             {releases?.length === 0 && <Text>{noPreviousReleasesLabel}</Text>}
             {releases?.length !== 0 &&
               releases?.map(release => (
-                <Box direction="row" gap="small" key={release.id}>
-                  <Text>{release.version}</Text>
-                  <Tooltip
-                    dropProps={{ align: { left: 'right' } }}
-                    message={release.id}
-                    plain={true}
-                    caretPosition={'left'}
-                  >
-                    <Icon size="xs" type={'info'} accentColor={true} clickable={true} />
-                  </Tooltip>
-                </Box>
+                <Version key={release.id} releaseId={release.id} version={release.version} />
               ))}
           </Box>
         )}
-        {authorEthAddress && (
-          <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
-            <Text weight={'bold'}>{authorLabel}</Text>
-            {authorProfile && (
-              <ProfileAvatarButton
-                avatarImage={authorProfile.avatar}
-                ethAddress={authorProfile.ethAddress}
-                label={authorProfile.name}
-                info={authorProfile.userName && `@${authorProfile.userName}`}
-                onClick={() => handleAuthorClick(authorProfile)}
-              />
-            )}
-            <Text>{ethereumAddressLabel}</Text>
+
+        <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
+          <Text weight={'bold'}>{authorLabel}</Text>
+          {isFetching && !authorProfile && (
+            <Box direction="row">
+              <Box direction="row" align="center">
+                <Box>
+                  <TextLine title="avatar" width="40px" height="40px" round={{ size: '50%' }} />
+                </Box>
+                <Box direction="column" margin={{ left: '8px' }}>
+                  <TextLine
+                    title="author name"
+                    width="220px"
+                    height={{ min: '18px' }}
+                    animated={false}
+                  />
+                  <TextLine
+                    title="entry-publish-date"
+                    width="160px"
+                    margin={{ top: '4px' }}
+                    animated={false}
+                  />
+                </Box>
+              </Box>
+            </Box>
+          )}
+          {authorProfile && (
+            <ProfileAvatarButton
+              avatarImage={authorProfile.avatar}
+              ethAddress={authorProfile.ethAddress}
+              label={authorProfile.name}
+              info={authorProfile.userName && `@${authorProfile.userName}`}
+              onClick={() => handleAuthorClick(authorProfile)}
+            />
+          )}
+          <Text>{ethereumAddressLabel}</Text>
+          {isFetching && !authorEthAddress && (
+            <TextLine title="integrationAuthorEthAddress" animated={false} width="150px" />
+          )}
+          {authorEthAddress && (
             <Text
               size="md"
               color="accent"
@@ -253,8 +304,9 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             >
               {authorEthAddress}
             </Text>
-          </Box>
-        )}
+          )}
+        </Box>
+
         {latestRelease?.manifestData?.keywords &&
           latestRelease?.manifestData?.keywords?.length > 0 && (
             <Box margin={{ top: 'medium' }} border={{ side: 'bottom' }} gap="small">
@@ -282,13 +334,18 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
         {latestRelease?.manifestData?.license && (
           <Box pad={{ top: 'large' }} gap="small">
             <Text weight={'bold'}>{licenseLabel}:</Text>
-            <Box direction="row" align="center" margin={{ bottom: '1rem' }}>
-              {/* license icons are created accordingly with 'license' starting their names, all in lowercase */}
-              {/* <Icon type={'license' + latestRelease?.manifestData?.license} /> */}
-              <Text size="md" margin={{ left: '0.5rem' }}>
-                {latestRelease?.manifestData?.license}
-              </Text>
-            </Box>
+            {isFetching && !latestRelease?.manifestData?.license && (
+              <TextLine title="integrationLicense" animated={false} width="70px" />
+            )}
+            {latestRelease?.manifestData?.license && (
+              <Box direction="row" align="center" margin={{ bottom: '1rem' }}>
+                {/* license icons are created accordingly with 'license' starting their names, all in lowercase */}
+                {/* <Icon type={'license' + latestRelease?.manifestData?.license} /> */}
+                <Text size="md" margin={{ left: '0.5rem' }}>
+                  {latestRelease?.manifestData?.license}
+                </Text>
+              </Box>
+            )}
           </Box>
         )}
       </Box>
@@ -305,7 +362,6 @@ ICDetailCard.defaultProps = {
   showMoreLabel: 'Show More',
   linksLabel: 'Links',
   releasesLabel: 'Releases',
-  releaseIdLabel: 'ReleaseId',
   versionHistoryLabel: 'Version History',
   authorLabel: 'Authors & Contributors',
   licenseLabel: 'License',
