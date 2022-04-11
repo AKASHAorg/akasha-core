@@ -15,19 +15,31 @@ import AWF_ENS from './registry/ens';
 import AWF_IC_REGISTRY from './registry/icRegistry';
 import AWF_Entry from './posts/entry';
 import AWF_Comments from './posts/comments';
+/**
+ * AKASHA SDK is a modular set of utilities and apis that can be used to build
+ * your own app.
+ * @packageDocumentation
+ */
+
 import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
 
 /**
- * @internal
+ * {@inheritdoc typings.IAwfSDK}
  */
 export interface AWF_SDK {
+  /**
+   * {@inheritdoc typings.Services}
+   */
   services: {
     log: Logging;
     gql: Gql;
     stash: Stash;
     settings: Settings;
+    /**
+     * {@inheritdoc typings.IAppSettings}
+     */
     appSettings: AppSettings;
     db: DB;
     common: {
@@ -35,8 +47,14 @@ export interface AWF_SDK {
       ipfs: AWF_IpfsConnector;
     };
   };
+  /**
+   * Main apis to interact with the supported services.
+   */
   api: {
     globalChannel: EventBus;
+    /**
+     * {@link @akashaproject/sdk-typings/lib/interfaces#AWF_IAuth}
+     */
     auth: AWF_Auth;
     profile: AWF_Profile;
     ens: AWF_ENS;
