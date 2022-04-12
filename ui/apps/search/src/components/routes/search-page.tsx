@@ -213,8 +213,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
     analyticsActions.trackEvent({
       category: AnalyticsCategories.PEOPLE,
-      action: 'Subscribe',
-      name: 'Search',
+      action: 'Follow',
+      name: 'Following User From Search',
     });
     followReq.mutate(ethAddress);
   };
@@ -245,8 +245,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
     analyticsActions.trackEvent({
       category: AnalyticsCategories.PEOPLE,
-      action: 'Unsubscribe',
-      name: 'Search',
+      action: 'Unfollow',
+      name: 'Unfollowing User From Search',
     });
     unfollowReq.mutate(ethAddress);
   };

@@ -4,7 +4,11 @@ import DS from '@akashaproject/design-system';
 import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
 import { IInjectedProviderDetails } from '@akashaproject/ui-awf-hooks/lib/utils/getProviderDetails';
 import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
-import { useAnalytics } from '@akashaproject/ui-awf-hooks';
+import {
+  switchToRequiredNetwork,
+  useAnalytics,
+  useNetworkState,
+} from '@akashaproject/ui-awf-hooks';
 import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 import RequiredNetworkStep, { IRequiredNetworkStepProps } from './required-network';
@@ -26,6 +30,7 @@ export interface IStepThreeProps extends IRequiredNetworkStepProps {
   socialLoginTitleLabel: string;
   socialLoginDescription: string;
   providerConnected: boolean;
+  connectProviderQuerySuccess?: boolean;
   changeProviderLabel: string;
   onProviderSelect: (provider: EthProviders) => void;
 }
@@ -47,12 +52,26 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     socialLoginTitleLabel,
     socialLoginDescription,
     providerConnected,
+    connectProviderQuerySuccess,
     changeProviderLabel,
     selectedProvider,
-    isOnRequiredNetwork,
     onProviderSelect,
   } = props;
   const [analyticsActions] = useAnalytics();
+
+  // check network if connection is successfully established
+  const networkStateQuery = useNetworkState(connectProviderQuerySuccess);
+
+  const isOnRequiredNetwork = React.useMemo(() => {
+    if (networkStateQuery.data?.networkNotSupported) {
+      analyticsActions.trackEvent({
+        category: AnalyticsCategories.SIGN_UP,
+        action: 'Rinkeby Not Setup',
+      });
+    }
+    return !networkStateQuery.data?.networkNotSupported;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [networkStateQuery.data]);
 
   const handleWeb3Injected = () => {
     analyticsActions.trackEvent({
@@ -82,6 +101,27 @@ const StepThree: React.FC<IStepThreeProps> = props => {
     onProviderSelect(EthProviders.None);
   };
 
+  const handleNetworkCheck = () => {
+    return networkStateQuery?.refetch();
+  };
+
+  const handleSwitchNetworkMetamask = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.SIGN_UP,
+      action: 'Rinkeby Setup Prompt',
+    });
+    switchToRequiredNetwork();
+  };
+
+  const requiredNetworkProps = {
+    ...props,
+    isOnRequiredNetwork: isOnRequiredNetwork,
+    isNetworkCheckLoading: networkStateQuery.isFetching,
+    isNetworkCheckError: networkStateQuery.isError,
+    onClickCheckNetwork: handleNetworkCheck,
+    onClickSwitchMetamaskNetwork: handleSwitchNetworkMetamask,
+  };
+
   return (
     <Box>
       {/* show this, if selected provider is Email or Social Login */}
@@ -92,7 +132,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
               {socialLoginTitleLabel}
             </Text>
           </Box>
-          {isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
+          {isOnRequiredNetwork && <RequiredNetworkStep {...requiredNetworkProps} />}
         </>
       )}
       {/* show this, if selected provider is WalletConnect */}
@@ -111,8 +151,8 @@ const StepThree: React.FC<IStepThreeProps> = props => {
               {changeProviderLabel}
             </Text>
           </Box>
-          {!isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
-          {isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
+          {!isOnRequiredNetwork && <RequiredNetworkStep {...requiredNetworkProps} />}
+          {isOnRequiredNetwork && <RequiredNetworkStep {...requiredNetworkProps} />}
         </>
       )}
       {/* show this, if selected provider is web3 injected */}
@@ -131,8 +171,8 @@ const StepThree: React.FC<IStepThreeProps> = props => {
               {changeProviderLabel}
             </Text>
           </Box>
-          {!isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
-          {isOnRequiredNetwork && <RequiredNetworkStep {...props} />}
+          {!isOnRequiredNetwork && <RequiredNetworkStep {...requiredNetworkProps} />}
+          {isOnRequiredNetwork && <RequiredNetworkStep {...requiredNetworkProps} />}
         </>
       )}
       {/* show this, if no selected provider */}

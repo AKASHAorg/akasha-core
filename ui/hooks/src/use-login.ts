@@ -201,7 +201,7 @@ export function useSignUp(
         if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
           analyticsActions?.trackEvent({
             category: AnalyticsCategories.SIGN_UP_WALLET,
-            action: 'Step 1 Declined',
+            action: 'Step 4-1 Aborted',
           });
         }
         onError(err);
@@ -209,7 +209,7 @@ export function useSignUp(
       onSuccess: () => {
         analyticsActions?.trackEvent({
           category: AnalyticsCategories.SIGN_UP_WALLET,
-          action: 'Step 1 Completed',
+          action: 'Step 4-1 Completed',
         });
       },
     },
@@ -220,7 +220,7 @@ export function useSignUp(
       if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
         analyticsActions?.trackEvent({
           category: AnalyticsCategories.SIGN_UP_WALLET,
-          action: 'Step 2 Declined',
+          action: 'Step 4-2 Declined',
         });
       }
       onError(err);
@@ -228,7 +228,7 @@ export function useSignUp(
     onSuccess: () => {
       analyticsActions?.trackEvent({
         category: AnalyticsCategories.SIGN_UP_WALLET,
-        action: 'Step 2 Completed',
+        action: 'Step 4-2 Completed',
       });
     },
   });
@@ -240,7 +240,7 @@ export function useSignUp(
         if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
           analyticsActions?.trackEvent({
             category: AnalyticsCategories.SIGN_UP_WALLET,
-            action: 'Step 3 Declined',
+            action: 'Step 4-3 Declined',
           });
         }
         onError(err);
@@ -248,7 +248,7 @@ export function useSignUp(
       onSuccess: () => {
         analyticsActions?.trackEvent({
           category: AnalyticsCategories.SIGN_UP_WALLET,
-          action: 'Step 3 Completed',
+          action: 'Step 4-3 Completed',
         });
       },
     },
@@ -266,7 +266,21 @@ export function useSignUp(
       );
     },
     {
-      onError,
+      onError: (err: WalletTransactionError) => {
+        if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
+          analyticsActions?.trackEvent({
+            category: AnalyticsCategories.SIGN_UP_WALLET,
+            action: 'Step 4-4 Declined',
+          });
+        }
+        onError(err);
+      },
+      onSuccess: () => {
+        analyticsActions?.trackEvent({
+          category: AnalyticsCategories.SIGN_UP_WALLET,
+          action: 'Step 4-4 Completed',
+        });
+      },
     },
   );
 

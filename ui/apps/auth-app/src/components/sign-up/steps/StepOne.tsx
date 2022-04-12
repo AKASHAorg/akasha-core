@@ -35,6 +35,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
     onChange,
     onButtonClick,
   } = props;
+
   const [analyticsActions] = useAnalytics();
 
   const handleClick = () => {

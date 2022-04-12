@@ -147,11 +147,20 @@ const StepFour: React.FC<IStepFourProps> = props => {
 
   React.useEffect(() => {
     connectWallet.mutate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
     if (checkSignupQuery.data === false) fireRemainingMessagesRef.current();
-    if (checkSignupQuery.data === true) setSuggestSignIn(true);
+    if (checkSignupQuery.data === true) {
+      // profile already exists
+      analyticsActions.trackEvent({
+        category: AnalyticsCategories.SIGN_UP,
+        action: 'Existing Profile',
+      });
+      setSuggestSignIn(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkSignupQuery.data]);
 
   const isOpenLogin = providerConnected && provider === EthProviders.Torus;
