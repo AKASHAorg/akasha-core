@@ -84,7 +84,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                       label={entry.name || entry.userName}
                       info={`@${entry.userName ? entry.userName : 'username'}`}
                       size="md"
-                      avatarImage={entry.avatar ? getMediaUrl(entry.avatar) : entry.avatar}
+                      avatarImage={getMediaUrl(entry.avatar)}
                     />
                   </Box>
                 }

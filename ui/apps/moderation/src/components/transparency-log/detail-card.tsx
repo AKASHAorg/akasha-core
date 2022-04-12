@@ -43,11 +43,7 @@ const DetailCard: React.FC<IDetailCard> = props => {
       isDelisted={selected.delisted}
       moderator={selected.moderator.name}
       moderatedTimestamp={selected.moderatedDate.toString()}
-      moderatorAvatarUrl={
-        selected.moderator.avatar
-          ? getMediaUrl(selected.moderator.avatar)
-          : selected.moderator.avatar
-      }
+      moderatorAvatarUrl={getMediaUrl(selected.moderator.avatar)}
       moderatorEthAddress={selected.moderator.ethAddress}
       reportedTimesLabel={t('Reported {{ reportedTimes }}', {
         reportedTimes: selected.reports > 1 ? `${selected.reports} times` : 'once',
