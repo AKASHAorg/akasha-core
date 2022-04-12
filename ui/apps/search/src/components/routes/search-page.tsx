@@ -17,7 +17,7 @@ import {
   useSearchComments,
   useSearchTags,
   LoginState,
-  useHandleNavigation,
+  useEntryNavigation,
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -73,7 +73,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
+  const navigateTo = props.plugins?.routing?.navigateTo;
+  const handleEntryNavigation = useEntryNavigation(navigateTo);
+
   const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.ALL, [activeButton]);
 
   const updateSearchState = (type: Exclude<ButtonValues, ButtonValues.ALL>, data: unknown[]) => {
@@ -204,7 +206,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleProfileClick = (pubKey: string) => {
-    singleSpa.navigateToUrl(`/profile/${pubKey}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+    });
   };
   const handleFollowProfile = (ethAddress: string) => {
     if (!loginState?.ethAddress) {
@@ -230,12 +235,18 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorEth}`,
+    });
   };
 
   const handleMentionClick = (profileEthAddress: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileEthAddress}`,
+    });
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
@@ -252,7 +263,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleTagClick = (name: string) => {
-    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
+    });
   };
 
   // repost related
@@ -471,7 +485,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}
-              onNavigate={handleNavigation}
+              onContentClick={handleEntryNavigation}
+              navigateTo={navigateTo}
               onRepost={handleRepost}
               onAvatarClick={handleAvatarClick}
               onMentionClick={handleMentionClick}
@@ -495,7 +510,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}
-              onNavigate={handleNavigation}
+              onContentClick={handleEntryNavigation}
+              navigateTo={navigateTo}
               onRepost={handleRepost}
               onAvatarClick={handleAvatarClick}
               onMentionClick={handleMentionClick}

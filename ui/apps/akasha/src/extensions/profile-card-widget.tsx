@@ -47,7 +47,10 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   const handleProfileClick = (pubKey: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${pubKey}`);
+    props.plugins?.routing?.navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+    });
   };
 
   const isFollowing = React.useMemo(() => {

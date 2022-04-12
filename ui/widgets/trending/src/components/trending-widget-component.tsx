@@ -18,7 +18,7 @@ import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
-  const { singleSpa } = props;
+  const navigateTo = props.plugins?.routing?.navigateTo;
 
   const { t } = useTranslation('ui-widget-trending');
   const loginQuery = useGetLogin();
@@ -52,7 +52,10 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleTagClick = (tagName: string) => {
-    singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${tagName}`,
+    });
   };
 
   const handleTagSubscribe = (tagName: string) => {
@@ -81,7 +84,10 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleProfileClick = (pubKey: string) => {
-    singleSpa.navigateToUrl(`/profile/${pubKey}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+    });
   };
 
   const handleFollowProfile = (ethAddress: string) => {

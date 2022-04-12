@@ -44,7 +44,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path={routes[HISTORY]}>
             <TransparencyLog
               user={loginQuery.data?.pubKey}
-              navigateToUrl={props.singleSpa.navigateToUrl}
+              navigateTo={props.plugins?.routing?.navigateTo}
             />
           </Route>
           <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
