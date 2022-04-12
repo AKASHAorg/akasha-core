@@ -7,7 +7,7 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard } = DS;
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
-  const { singleSpa } = props;
+  const navigateTo = props.plugins?.routing?.navigateTo;
 
   const { t } = useTranslation('app-notifications');
 
@@ -22,13 +22,18 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const markAsRead = useMarkAsRead();
 
-  // @todo: extract routes from config
   const handleAvatarClick = (profilePubKey: string) => {
-    singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profilePubKey}`,
+    });
   };
 
   const handlePostClick = (entryId: string) => {
-    singleSpa.navigateToUrl(`/social-app/post/${entryId}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}`,
+    });
   };
 
   return (

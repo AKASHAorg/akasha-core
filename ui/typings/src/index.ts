@@ -145,3 +145,10 @@ export enum AppTypes {
   PLUGIN = 'Plugin',
   NONE = 'None',
 }
+
+export interface NavigationOptions {
+  appName: string;
+  getNavigationUrl: (navRoute: Record<string, string>) => string;
+}
+
+export type NavigateToParams = RequireAtLeastOne<NavigationOptions, 'appName' | 'getNavigationUrl'>;

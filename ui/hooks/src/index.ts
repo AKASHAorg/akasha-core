@@ -72,7 +72,7 @@ import {
   useSearchProfiles,
   useSearchTags,
 } from './use-search';
-import { useHandleNavigation } from './use-navigation';
+import { useEntryNavigation } from './use-navigation';
 import {
   useCheckModerator,
   useGetCount,
@@ -175,7 +175,7 @@ export {
   // use-mentions
   useMentionSearch,
   // use-navigation
-  useHandleNavigation,
+  useEntryNavigation,
   // use-login
   LoginState,
   useGetLogin,

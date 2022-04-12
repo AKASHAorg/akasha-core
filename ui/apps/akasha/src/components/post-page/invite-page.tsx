@@ -4,11 +4,10 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
 const InvitePage: React.FC<RootComponentProps> = props => {
   const { inviteCode } = useParams<{ inviteCode: string }>();
-  const { singleSpa } = props;
   if (inviteCode) {
     localStorage.setItem('@signUpToken', inviteCode);
   }
-  singleSpa.navigateToUrl('/');
+  props.plugins?.routing?.navigateTo?.({ getNavigationUrl: () => '/' });
   return <div />;
 };
 

@@ -8,7 +8,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks';
@@ -22,7 +22,8 @@ export interface IEntryCardRendererProps {
   itemType?: ItemTypes;
   locale?: ILocale;
   ethAddress?: string | null;
-  onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
+  navigateTo?: (args: NavigateToParams) => void;
+  onContentClick: (details: IContentClickDetails, itemType: ItemTypes) => void;
   onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
@@ -40,8 +41,17 @@ export interface IEntryCardRendererProps {
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const { ethAddress, locale, itemData, itemType, style, contentClickable, onRepost, modalSlotId } =
-    props;
+  const {
+    ethAddress,
+    locale,
+    itemData,
+    itemType,
+    style,
+    contentClickable,
+    onRepost,
+    modalSlotId,
+    navigateTo,
+  } = props;
 
   const { entryId } = itemData || {};
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -52,17 +62,14 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const handleClickAvatar = () => {
-    props.onNavigate(
-      {
-        id: itemData?.author.pubKey,
-        authorEthAddress: itemData?.author.ethAddress,
-      },
-      ItemTypes.PROFILE,
-    );
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.pubKey}`,
+    });
   };
 
   const handleContentClick = () => {
-    props.onNavigate(
+    props.onContentClick(
       {
         id: itemData.entryId,
         authorEthAddress: itemData.author.ethAddress,
@@ -203,7 +210,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 onContentClick={handleContentClick}
                 onMentionClick={props.onMentionClick}
                 onTagClick={props.onTagClick}
-                singleSpaNavigate={props.singleSpa.navigateToUrl}
+                navigateTo={props.navigateTo}
                 contentClickable={contentClickable}
                 disableReposting={itemData.isRemoved}
                 removeEntryLabel={t('Delete Post')}

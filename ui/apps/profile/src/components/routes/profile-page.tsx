@@ -162,6 +162,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                 profileData={profileState}
                 profileId={pubKey}
                 loginState={loginQuery.data}
+                navigateTo={props.plugins?.routing?.navigateTo}
               />
               {reqPosts.isError && reqPosts.error && (
                 <ErrorLoader
@@ -184,7 +185,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   requestStatus={reqPosts.status}
                   loginState={loginQuery.data}
                   loggedProfile={loggedProfileData}
-                  singleSpaNavigate={props.singleSpa.navigateToUrl}
+                  navigateTo={props.plugins?.routing?.navigateTo}
                   navigateToModal={props.navigateToModal}
                   onLoginModalOpen={showLoginModal}
                   hasNextPage={reqPosts.hasNextPage}

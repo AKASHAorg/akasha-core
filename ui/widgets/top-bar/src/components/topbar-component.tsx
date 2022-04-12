@@ -14,10 +14,9 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 const { Topbar } = DS;
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
-  const { singleSpa, uiEvents } = props;
+  const { uiEvents } = props;
   const navigateTo = props.plugins.routing?.navigateTo;
 
-  const { navigateToUrl } = singleSpa;
   const location = useLocation();
 
   const [routeData, setRouteData] = React.useState({});
@@ -87,7 +86,9 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   });
 
   const handleNavigation = (path: string) => {
-    navigateToUrl(path);
+    navigateTo?.({
+      getNavigationUrl: () => path,
+    });
   };
 
   const handleLoginClick = () => {
@@ -107,7 +108,9 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   const handleLogout = async () => {
     await logoutMutation.mutateAsync();
-    navigateToUrl('/');
+    navigateTo?.({
+      getNavigationUrl: () => '/',
+    });
     setTimeout(() => window.location.reload(), 50);
   };
 
