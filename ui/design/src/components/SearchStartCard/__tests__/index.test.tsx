@@ -15,7 +15,7 @@ describe('<SearchStartCard /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <SearchStartCard
-            searchKeywordParam="Blah"
+            searchKeyword="Blah"
             inputPlaceholderLabel="Search"
             titleLabel="Search"
             introLabel="✨ Find what you are looking for ✨"
