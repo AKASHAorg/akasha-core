@@ -12,35 +12,38 @@ export interface IConfig {
 /**
  * Utility to append an ipfs gateway to an ipfs hash
  */
-export const getMediaUrl = (hash?: string, data?: File) => {
+export const getMediaUrl = (hash?: string, _data?: File) => {
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-
-  let ipfsUrl = '';
-
-  if (hash && !data) {
-    ipfsUrl = `${ipfsGateway}/${hash}`;
+  // const ipfsGateway = sdk.services.common.ipfs.gateway;
+  let ipfsUrl;
+  if (hash) {
+    ipfsUrl = sdk.services.common.ipfs.buildOriginLink(hash);
   }
 
-  if (data) {
-    let imageSize = '';
-    for (const size in data) {
-      if (data.hasOwnProperty(size)) {
-        imageSize = size;
-        break;
-      }
-    }
-    if (imageSize) {
-      ipfsUrl = `${ipfsGateway}/${hash}/${imageSize}/src`;
-    }
-  }
+  // let ipfsUrl = '';
+
+  // if (hash && !data) {
+  //   ipfsUrl = `${ipfsGateway}/${hash}`;
+  // }
+
+  // if (data) {
+  //   let imageSize = '';
+  //   for (const size in data) {
+  //     if (data.hasOwnProperty(size)) {
+  //       imageSize = size;
+  //       break;
+  //     }
+  //   }
+  //   if (imageSize) {
+  //     ipfsUrl = `${ipfsGateway}/${hash}/${imageSize}/src`;
+  //   }
+  // }
 
   return ipfsUrl;
 };
 
 export const uploadMediaToTextile = async (data: File, isUrl = false) => {
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const uploadData: {
     isUrl: boolean;
     content: File;
@@ -68,7 +71,7 @@ export const uploadMediaToTextile = async (data: File, isUrl = false) => {
   try {
     const res = await sdk.api.profile.saveMediaFile(uploadData);
     return {
-      data: { src: `${ipfsGateway}/${res?.CID}`, size: res?.size },
+      data: { src: getMediaUrl(res?.CID), size: res?.size },
     };
   } catch (error) {
     return {

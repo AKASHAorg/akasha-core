@@ -83,6 +83,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
               <SubtitleTextIcon
                 label={app.manifestData.displayName}
                 subtitle={app.name}
+                gap="xxsmall"
                 iconType="integrationAppLarge"
                 plainIcon={true}
                 backgroundColor={true}
@@ -123,6 +124,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
                 <SubtitleTextIcon
                   label={app.manifestData.displayName}
                   subtitle={app.name}
+                  gap="xxsmall"
                   iconType="integrationAppLarge"
                   backgroundColor={true}
                 />

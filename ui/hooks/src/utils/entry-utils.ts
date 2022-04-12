@@ -9,6 +9,7 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import getSDK from '@akashaproject/awf-sdk';
+import { URL } from 'url';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const PROVIDER_AKASHA = 'AkashaApp';
@@ -217,9 +218,15 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const cleanedContent = data.slateContent.map(node => {
     const nodeClone = Object.assign({}, node);
-    if (node.type === 'image' && node.url.startsWith(ipfsGateway)) {
-      const hashIndex = node.url.lastIndexOf('/');
-      const hash = node.url.substr(hashIndex + 1);
+    if (node.type === 'image') {
+      let hash;
+      if (node.url.startsWith(ipfsGateway)) {
+        const hashIndex = node.url.lastIndexOf('/');
+        hash = node.url.substr(hashIndex + 1);
+      } else {
+        const url = new URL(node.url);
+        hash = url.hostname.split('.')[0];
+      }
       nodeClone.url = `${MEDIA_URL_PREFIX}${hash}`;
     }
     return nodeClone;

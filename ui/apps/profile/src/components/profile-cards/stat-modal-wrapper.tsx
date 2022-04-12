@@ -14,8 +14,8 @@ import {
   useFollow,
   useIsFollowingMultiple,
   useUnfollow,
+  getMediaUrl,
 } from '@akashaproject/ui-awf-hooks';
-import getSDK from '@akashaproject/awf-sdk';
 
 interface IStatModalWrapper {
   loginState: LoginState;
@@ -40,8 +40,6 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const [activeIndex, setActiveIndex] = React.useState<SelectedTab>(SelectedTab.FOLLOWERS);
 
   const { t } = useTranslation('app-profile');
-
-  const sdk = getSDK();
 
   // get followers for this profile
   const followersReq = useFollowers(profileData.pubKey, 10);
@@ -75,10 +73,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   }, [followers, following]);
 
   // get followed profiles for logged user
-  const isFollowingMultipleReq = useIsFollowingMultiple(
-    loginState.ethAddress,
-    profileEthAddresses,
-  );
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState.ethAddress, profileEthAddresses);
 
   const followedProfiles = isFollowingMultipleReq.data;
 
@@ -92,8 +87,6 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   // hooks to follow/unfollow profiles
   const followProfileReq = useFollow();
   const unfollowProfileReq = useUnfollow();
-
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
   const followersPages = React.useMemo(() => {
     if (followersReq.data) {
@@ -234,7 +227,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     <StatModal
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
-      ipfsGateway={ipfsGateway}
+      getMediaUrl={getMediaUrl}
       loggedUser={loginState.pubKey}
       stats={[profileData.totalFollowers, profileData.totalFollowing, profileData.totalInterests]}
       titleLabel={

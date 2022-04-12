@@ -50,7 +50,7 @@ import {
   useFetchNotifications,
   useMarkAsRead,
 } from './use-notifications';
-import { useNetworkState } from './use-network-state';
+import { useNetworkState, useCurrentNetwork } from './use-network-state';
 import { useMentionSearch } from './use-mentions';
 import { useGetLogin, useLogin, useLogout, LoginState } from './use-login';
 import { useLegalDoc } from './use-legal';
@@ -172,6 +172,7 @@ export {
   useMarkAsRead,
   // use-network
   useNetworkState,
+  useCurrentNetwork,
   // use-mentions
   useMentionSearch,
   // use-navigation

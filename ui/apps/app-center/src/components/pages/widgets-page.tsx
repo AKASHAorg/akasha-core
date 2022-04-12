@@ -70,6 +70,7 @@ const WidgetsPage: React.FC<IWidgetsPage> = props => {
               <SubtitleTextIcon
                 label={app.manifestData.displayName}
                 subtitle={app.name}
+                gap="xxsmall"
                 iconType="integrationWidgetLarge"
                 plainIcon={true}
                 backgroundColor={true}
