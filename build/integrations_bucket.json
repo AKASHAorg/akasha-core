@@ -7,116 +7,116 @@
   },
   {
     "name": "@akashaorg/app-akasha-integration",
-    "id": "0x8699cb72f66608f779b90294ec6a20b251558568aad35bd2ee72603ffe7b6b83",
-    "ipfsManifest": "f0155171c93c6725d9eb9e61d46ebaf0c3625518fc00c441676015517ca484622",
+    "id": "0x0f7b806cb610e298f4108f77c5454edafdd48a213ac6df2466816442b2814060",
+    "ipfsManifest": "f0155171c745a2cf1c8c4335891ab5a54bfa50ee6f2c5b5f56895534acd9b766e",
     "type": 0
   },
   {
     "name": "@akashaorg/app-auth-ewa",
-    "id": "0xdf3bffeba75126c5886d1a2e7a372970bfb9379b2bc9816477b108321d7016df",
-    "ipfsManifest": "f0155171cf775684378b7c3e79ba640827ded500a22531f3a13ba3b5f82d9e815",
+    "id": "0x6f8326aa8c1116feff879fa16af65849148e8fae5a79326de17a0cfa78b699b6",
+    "ipfsManifest": "f0155171cbe21f2375292a7c9c50587b8bb7cb072d5eb84ee909dad1387d10af5",
     "type": 0
   },
   {
     "name": "@akashaorg/app-moderation-ewa",
-    "id": "0xa3a248cf60b34be9286c7a3b72ba90e98bd40baac6e18d30219fd6cccb439cf6",
-    "ipfsManifest": "f0155171cced64af2ef8b1047797f070fac01151e5f3fcbe3481f279d6c937c0c",
+    "id": "0xb5353ae20a4ece1b430333820c5303ff86b3ef3b9662aa8c46f3c74adccf3c44",
+    "ipfsManifest": "f0155171c4f98f487b7e64c10a6b67329782b83bbb5c1691d56bf1d19dd1b2aef",
     "type": 0
   },
   {
     "name": "@akashaorg/app-integration-center",
-    "id": "0xc043185f76b0f9dbe17fe1e7501732960a1b2f4b2580ea163c55c8c882f6f9bd",
-    "ipfsManifest": "f0155171cc73f3afe35d7580c9b013b4e2ff03ed2e44f04903fe7c592077d3d4c",
+    "id": "0xb205644246860965047578d591cecced40ade1a782c6c84fa599173af6a22d9c",
+    "ipfsManifest": "f0155171c1a016e435640b3fe66d7a44da84534b49e72aa4929926eff584d5309",
     "type": 0
   },
   {
     "name": "@akashaorg/app-bookmarks",
-    "id": "0x7c358962114872262bb341384016ad0bd30ef84ee0729f4b6e901f13a29799ca",
-    "ipfsManifest": "f0155171ca4228b8f294a3245fc0f727a94919c47fef0e45d1e67d1674c80695e",
+    "id": "0x20dd2505b29183c28a411f6d70eed327214ce02efec798b3c56509d1d7ac829c",
+    "ipfsManifest": "f0155171cdf9447094d5957311bbb0ecde489a6252d625a0063839983b023d1de",
     "type": 0
   },
   {
     "name": "@akashaorg/app-legal",
-    "id": "0x85c848f515bc7d0e1c2b585314df40928c3bd17a7016d07c49423f4a429287fb",
-    "ipfsManifest": "f0155171c796c8048f5cc09028b82a07d1294e5d6f1c96600b3dbc540959d13c1",
+    "id": "0xa13c7e5453255ff802b2d8e4d30bd308cd431e6bd6f4d7ab521e794eb445eb20",
+    "ipfsManifest": "f0155171cfb74d985d0a654150d1b01b61861467adb8ca1b3fa870c67ee84a736",
     "type": 0
   },
   {
     "name": "@akashaorg/app-notifications",
-    "id": "0xafd49f21aa8f6cc0278036cc6d69643c6b8aa1fec2e497d44902cc13a27c1ea4",
-    "ipfsManifest": "f0155171c53b16a0b71ac8d8454d7621058ba4d2cdc5c0698cc7da8ee50506f07",
+    "id": "0xa97de836ff423f85cd82a60e3dd78b3213d6254e23e2a71a53c933df9527882d",
+    "ipfsManifest": "f0155171c6fec3c483f29ddc864d08b5c4b235d67241cadca25ee6636848366e7",
     "type": 0
   },
   {
     "name": "@akashaorg/app-profile",
-    "id": "0x086878e2e9a9340b2ba93c1bb79699e54fbab20f669cda35e36ec91221a4fbb6",
-    "ipfsManifest": "f0155171c7d7e06c59af7123dca3c841177948e6e101a6d194b60ffdf7255dcf7",
+    "id": "0x0c4ac6db8b99d1fbc682d27a80258d849b02ecb785ceaf082a0e4f6f4151b297",
+    "ipfsManifest": "f0155171c8d90f16c30db8c3bd9ef708fb08653d3a3f4946bd661041adfaaf5cf",
     "type": 0
   },
   {
     "name": "@akashaorg/app-search",
-    "id": "0xded636163ee57d4fb1f1a5761b9baaae52b4b85fb7f6827c28a0fdaf5dbb2f7f",
-    "ipfsManifest": "f0155171c69e648fcca611381b69dc7341cc7183fc3a72008eb49cf24c0f86f41",
+    "id": "0x9e8d1f1e86a3e25a0e5e13a3fef2758442135a6c4dc1dc3d2dce7fa24bf9a7f2",
+    "ipfsManifest": "f0155171cc4ff1829f9ffa45e655e08cb1c58dc62c825dacc157c1ad8c73d1a83",
     "type": 0
   },
   {
     "name": "@akashaorg/app-settings-ewa",
-    "id": "0xa164ea08eca5aff06c24e88807ea347431a4634b994c66c808f19b11cd5a43fa",
-    "ipfsManifest": "f0155171c7c4067dd3de8fd1ff61f55b8a0058cc576fd1edd98d7f366b169e6ad",
+    "id": "0x7f17d11d3f3cf063de963a764d2ac4133d64a2ed56b8929272b116e202f0e876",
+    "ipfsManifest": "f0155171c82caf83acc68ea85ca26a7bc57ca52cfce4242963c9204a464ba9b92",
     "type": 0
   },
   {
     "name": "@akashaorg/app-translation",
-    "id": "0x74fc28efda192a4f811917bd27009b63bcf724a30a373b3bf5fbc3af58488322",
-    "ipfsManifest": "f0155171c8b1988173a8211ab0117be51e62211ffa975142c44b0519a4cdc7a0b",
+    "id": "0x694ff1a407cb48aaf43ace2eb570ef17d0403182870f99a617b74cb36af4e366",
+    "ipfsManifest": "f0155171c36b607d8b19280fdfb4bc362674716bdcbab5167ef264509f05937c9",
     "type": 0
   },
   {
     "name": "@akashaorg/app-routing",
-    "id": "0x6d296af6c8a30849bc018dd1301b84ec04ebf5dbaf7e90940b5be01d14d60fcb",
-    "ipfsManifest": "f0155171cb6a7965dc8fbe6dd575783cfeed5c14f948d2ea33c7475d81dc6618e",
+    "id": "0xc7dbd964618fa46a51ec3633a23d10c77b458d218ba061755ca7452f627d6504",
+    "ipfsManifest": "f0155171c22423eced0cc584cc2075a5c3f7826b17e4ede9e4dea763f28677483",
     "type": 0
   },
   {
     "name": "@akashaorg/ui-widget-layout",
-    "id": "0xab1b9d6f87dcaa5c3f1899e446c1d47cdf0463fb38d38f9824e48a9e04837748",
-    "ipfsManifest": "f0155171ce79d53de60dcd052489c8de69f898aa0c3925523610e426e9dd41022",
+    "id": "0x7babda8c4fdba6cf5a2b439ee0318041e164073b25e0e757f5e98db2d889263f",
+    "ipfsManifest": "f0155171c3423a4810679ab0846abd613a19d4d844127879f88c3e1fd2beb9394",
     "type": 2
   },
   {
     "name": "@akashaorg/ui-widget-sidebar",
-    "id": "0xfba190b3ed6c4b51548ee6d7b3584b5a21d8cc33698b484ce4755d7b17c26efa",
-    "ipfsManifest": "f0155171cf24fb533cf35260e2ea3ab76a78609960ebeb6ea1db13ef5a8a5cb5f",
+    "id": "0x532b1092c1c4e587ec5356534000dc10bfc3935ce190712367e2815487e5924e",
+    "ipfsManifest": "f0155171c802d379e99f8a88acd8b0be671129fd438399c40a9a853454a462e9b",
     "type": 2
   },
   {
     "name": "@akashaorg/ui-widget-topbar",
-    "id": "0x9208e9c4eb9945ff7b7c00ad2f63d3230755a1cb1cf87336eb18f3f9b5338c40",
-    "ipfsManifest": "f0155171c2b6754ac59321d414cd4712929ba88e8ef043a23fad493b6e4b4a9a5",
+    "id": "0xdaa1a853c9e7ce4b075a9c36a0b44b14bcea7d16641bbb9be33eb14e2e867dd5",
+    "ipfsManifest": "f0155171c5a35b6cf253e68ef8c9d9c0ce72218b9cb61d716aed06abb225dc942",
     "type": 2
   },
   {
     "name": "@akashaorg/ui-widget-trending",
-    "id": "0xe28a0c9120a6725409ebb8dfee353abae6b5eba8aa887621fdf5aca31ddd1e28",
-    "ipfsManifest": "f0155171c5ba85f309a131975c183a0ff5e583b6b3079dc8b0775bd7f7707239c",
+    "id": "0xce1cab3c9a2a34d9ded2d01631cbeb0acb5a82d0334d053c84c92c225dc99709",
+    "ipfsManifest": "f0155171cb8451d6676f0098df8ad2bd8fe36edd4adc9be629c69bb8237acfb05",
     "type": 2
   },
   {
     "name": "@akashaorg/ui-widget-analytics",
-    "id": "0x6ba0e656c18f421bf7e8969b6f0d85b67ba7f0f855ad0900e4c7f67dd98fa6d7",
-    "ipfsManifest": "f0155171cf66124ee5237760049748d077a3596e21da582534bc6577241e8a061",
+    "id": "0x2c4d5cd69c3a53dcf5477b3a43ddb6e71ddd21addecc4cdfee1020a21aa8927f",
+    "ipfsManifest": "f0155171ce39aabadedae8b02a1eb1fa0d962628ca4dc7fbda8a3e509fa0b0703",
     "type": 2
   },
   {
     "name": "@akashaorg/ui-widget-mini-profile",
-    "id": "0x3313c68e244625e47ea0d1d185131882c3dc78c608cc41d30307e129400b8d98",
-    "ipfsManifest": "f0155171c249f3b5d24fdf504eda5114a59fa45f449028634304af8a112df73fd",
+    "id": "0x3d179e60d19a1c167a0ea774d5a354b5fbfe4007d0f818498bb08e53d6d9618d",
+    "ipfsManifest": "f0155171cd3c2c5007d828cf6a45a706581319e94bc227311b10ccabc3c1900d0",
     "type": 2
   },
   {
     "name": "@akashaorg/ui-widget-my-apps",
-    "id": "0xef11f3540f3bf52363bbb2593e716204f00528499dbbe0c05c520fb431933404",
-    "ipfsManifest": "f0155171ca6abf27c8f2ba3044b1d0fad7ac620c9691957de16a1af7a6d519fa1",
+    "id": "0xc902513577d3192e8018931dd03ab480ea2f2a6e003835b949942e7be828665c",
+    "ipfsManifest": "f0155171c09422fa6df221be7135cb95f449e8c59aa6ba4865272585014a876fd",
     "type": 2
   }
 ]
