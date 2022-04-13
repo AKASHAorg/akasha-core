@@ -46,7 +46,7 @@ const WidgetsPage: React.FC<IWidgetsPage> = props => {
   return (
     <Box gap="medium" margin="medium" flex={{ shrink: 0 }}>
       <>
-        <Box gap="small" pad={{ bottom: 'small' }}>
+        <Box gap="small" pad={{ bottom: 'medium' }}>
           <Text size="large" color="secondaryText">
             {t('World Widgets')}
           </Text>
