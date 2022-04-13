@@ -3,6 +3,7 @@ import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 
 export const NETWORK_STATE_KEY = 'Network_State';
+export const CURRENT_NETWORK_KEY = 'Current Network';
 
 const checkNetworkState = async () => {
   const sdk = getSDK();
@@ -23,6 +24,19 @@ export function useNetworkState(enabler?: boolean) {
   return useQuery([NETWORK_STATE_KEY], () => checkNetworkState(), {
     initialData: { networkNotSupported: true },
     enabled: !!enabler,
+    keepPreviousData: true,
+  });
+}
+
+const getCurrentNetwork = () => {
+  const sdk = getSDK();
+  const res = sdk.services.common.web3.network;
+  return res;
+};
+
+export function useCurrentNetwork(enabler?: boolean) {
+  return useQuery([CURRENT_NETWORK_KEY], () => getCurrentNetwork(), {
+    enabled: enabler,
     keepPreviousData: true,
   });
 }

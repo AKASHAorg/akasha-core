@@ -27,7 +27,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-settings-ewa');
 
-  const handleChevronLeftClick = () => props.singleSpa.navigateToUrl(routes[HOME]);
+  const handleChevronLeftClick = () =>
+    props.plugins?.routing?.navigateTo?.({
+      appName: '@akashaproject/app-settings-ewa',
+      getNavigationUrl: navRoutes => navRoutes.Home,
+    });
 
   const handleTrackingOptionChange = event => {
     setCheckedTracking(event.target.checked);

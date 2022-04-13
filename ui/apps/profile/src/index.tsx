@@ -49,5 +49,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   ],
   routes: {
     rootRoute,
+    ...routes,
   },
 });

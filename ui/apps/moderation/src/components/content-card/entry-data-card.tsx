@@ -1,13 +1,12 @@
 import React from 'react';
-import SingleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
-import { useHandleNavigation } from '@akashaproject/ui-awf-hooks';
+import { ModerationItemTypes, NavigateToParams } from '@akashaproject/ui-awf-typings';
+import { useEntryNavigation } from '@akashaproject/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { ITEM_TYPE_CONVERTER } from '../../../services/constants';
+import { ITEM_TYPE_CONVERTER } from '../../services/constants';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
@@ -17,8 +16,8 @@ export interface IEntryDataCardProps {
   entryData: IEntryData | IProfileData;
   locale: ILocale;
   itemType: string;
-  singleSpa: typeof SingleSpa;
   modalSlotId: string;
+  navigateTo?: (args: NavigateToParams) => void;
 }
 
 const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
@@ -26,16 +25,16 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const handleNavigate = useHandleNavigation(props.singleSpa.navigateToUrl);
+  const handleEntryNavigate = useEntryNavigation(props.navigateTo);
 
   const handleContentClick = React.useCallback(
     (details: IContentClickDetails) => {
       const translatedItemType = ITEM_TYPE_CONVERTER[itemType];
       if (translatedItemType >= 0) {
-        handleNavigate(details, translatedItemType);
+        handleEntryNavigate(details, translatedItemType);
       }
     },
-    [handleNavigate, itemType],
+    [handleEntryNavigate, itemType],
   );
 
   return (

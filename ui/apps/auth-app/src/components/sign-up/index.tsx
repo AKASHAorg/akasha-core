@@ -4,12 +4,10 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
 import {
+  useIsValidToken,
   useConnectProvider,
   useInjectedProvider,
-  useIsValidToken,
-  useNetworkState,
   useRequiredNetworkName,
-  switchToRequiredNetwork,
 } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
@@ -35,6 +33,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
 
   const DEFAULT_TOKEN_LENGTH = 24;
+
   const { t } = useTranslation('app-auth-ewa');
 
   const inviteTokenQuery = useIsValidToken({
@@ -46,9 +45,6 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const injectedProvider = getInjectedProviderQuery.data;
 
   const connectProviderQuery = useConnectProvider(selectedProvider);
-
-  // check network if connection is successfully established
-  const networkStateQuery = useNetworkState(connectProviderQuery.isSuccess);
 
   const requiredNetworkQuery = useRequiredNetworkName();
 
@@ -96,14 +92,6 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
 
   const handleProviderSelect = (provider: EthProviders) => {
     setSelectedProvider(provider);
-  };
-
-  const handleNetworkCheck = () => {
-    return networkStateQuery?.refetch();
-  };
-
-  const handleSwitchNetworkMetamask = () => {
-    switchToRequiredNetwork();
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,10 +196,11 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           providerConnected={
             connectProviderQuery.isSuccess && selectedProvider !== EthProviders.None
           }
+          connectProviderQuerySuccess={connectProviderQuery.isSuccess}
           changeProviderLabel={t('Change')}
           setRequiredNetworkLabel={t('To use Ethereum World during the alpha period, ')}
           setRequiredNetworkBoldLabel={t(
-            'you’ll need to set the {{ selectedProvider }} network to',
+            "you'll need to set the {{ selectedProvider }} network to",
             {
               selectedProvider:
                 selectedProvider === EthProviders.WalletConnect
@@ -228,7 +217,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
             selectedProvider === EthProviders.Torus
               ? t('You have connected using Email or Social login. Click the button to continue')
               : t(
-                  'We have detected that the {{ selectedProvider }} network is set to {{ requiredNetworkName }}. We’ll now proceed to connect your wallet to Ethereum World.',
+                  "We have detected that the {{ selectedProvider }} network is set to {{ requiredNetworkName }}. We'll now proceed to connect your wallet to Ethereum World.",
                   {
                     selectedProvider:
                       selectedProvider === EthProviders.WalletConnect
@@ -247,11 +236,6 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           )}
           buttonLabel={t('Continue to Step 4 ')}
           selectedProvider={selectedProvider}
-          isOnRequiredNetwork={!networkStateQuery.data?.networkNotSupported}
-          isNetworkCheckLoading={networkStateQuery?.isFetching}
-          isNetworkCheckError={networkStateQuery?.isError}
-          onClickSwitchMetamaskNetwork={handleSwitchNetworkMetamask}
-          onClickCheckNetwork={handleNetworkCheck}
           onProviderSelect={handleProviderSelect}
           onButtonClick={handleNextStep}
         />
@@ -328,7 +312,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           )}
           textUsernameAvailable={t('This username is available, hooray!')}
           buttonLabel={t('Complete Sign-Up')}
-          navigateToUrl={props.singleSpa.navigateToUrl}
+          navigateTo={props.plugins?.routing?.navigateTo}
         />
       )}
     </SignUpCard>

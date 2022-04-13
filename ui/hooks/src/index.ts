@@ -50,7 +50,7 @@ import {
   useFetchNotifications,
   useMarkAsRead,
 } from './use-notifications';
-import { useNetworkState } from './use-network-state';
+import { useNetworkState, useCurrentNetwork } from './use-network-state';
 import { useMentionSearch } from './use-mentions';
 import { useGetLogin, useLogin, useLogout, LoginState } from './use-login';
 import { useLegalDoc } from './use-legal';
@@ -72,7 +72,7 @@ import {
   useSearchProfiles,
   useSearchTags,
 } from './use-search';
-import { useHandleNavigation } from './use-navigation';
+import { useEntryNavigation } from './use-navigation';
 import {
   useCheckModerator,
   useGetCount,
@@ -172,10 +172,11 @@ export {
   useMarkAsRead,
   // use-network
   useNetworkState,
+  useCurrentNetwork,
   // use-mentions
   useMentionSearch,
   // use-navigation
-  useHandleNavigation,
+  useEntryNavigation,
   // use-login
   LoginState,
   useGetLogin,

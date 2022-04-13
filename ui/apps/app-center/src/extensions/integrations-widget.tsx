@@ -89,7 +89,10 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
-    props.singleSpa.navigateToUrl(`${routes[INFO]}/${integrationId}`);
+    props.plugins?.routing?.navigateTo?.({
+      appName: '@akashaproject/app-integration-center',
+      getNavigationUrl: navRoutes => `${navRoutes[INFO]}/${integrationId}`,
+    });
   };
 
   return (

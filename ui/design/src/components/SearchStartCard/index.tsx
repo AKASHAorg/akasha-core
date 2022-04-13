@@ -6,39 +6,45 @@ import { BasicCardBox } from '../EntryCard/basic-card-box';
 
 export interface SearchStartProps {
   inputPlaceholderLabel: string;
-  title: string;
+  titleLabel: string;
+  introLabel: string;
   description: string;
   handleSearch: (val: string) => void;
-  searchKeywordParam: string;
+  searchKeyword: string;
   children?: ReactNode;
 }
 
 export const SearchStartCard = ({
   inputPlaceholderLabel,
-  title,
+  titleLabel,
+  introLabel,
   description,
   handleSearch,
-  searchKeywordParam,
+  searchKeyword = '',
   children,
 }: SearchStartProps) => {
-  const [inputValue, setInputValue] = React.useState<string>('');
-  const [shouldMinimize, setShouldMinimize] = React.useState(!!searchKeywordParam?.length);
+  const [inputValue, setInputValue] = React.useState<string>(searchKeyword);
+  const [shouldMinimize, setShouldMinimize] = React.useState(!!searchKeyword?.length);
+
+  React.useEffect(() => {
+    setInputValue(searchKeyword);
+  }, [searchKeyword]);
 
   return (
     <BasicCardBox
       round={
-        shouldMinimize && !!searchKeywordParam.length ? { size: 'xsmall', corner: 'top' } : 'xsmall'
+        shouldMinimize && !!searchKeyword.length ? { size: 'xsmall', corner: 'top' } : 'xsmall'
       }
     >
       <Box align="start" fill="horizontal" pad={{ top: 'medium', horizontal: 'medium' }}>
         <Text size="xlarge" weight="bold">
-          Search
+          {titleLabel}
         </Text>
       </Box>
       <StyledBox shouldMinimize={shouldMinimize} pad={{ horizontal: 'medium' }}>
         <StyledImage src="/images/search-page-start.png" />
         <Text size="large" weight={600} margin={{ top: 'medium' }} textAlign="center">
-          {title}
+          {introLabel}
         </Text>
         <StyledText size="large" textAlign="center">
           {description}
@@ -58,7 +64,7 @@ export const SearchStartCard = ({
           onSearch={handleSearch}
         />
       </Box>
-      {shouldMinimize && !!searchKeywordParam.length && <Box fill="horizontal">{children}</Box>}
+      {shouldMinimize && !!searchKeyword.length && <Box fill="horizontal">{children}</Box>}
     </BasicCardBox>
   );
 };

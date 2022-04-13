@@ -109,7 +109,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               requestStatus={bookmarksReq.status}
               loginState={loginQuery.data}
               loggedProfile={loggedProfileQuery.data}
-              singleSpaNavigate={props.singleSpa.navigateToUrl}
+              navigateTo={props.plugins?.routing?.navigateTo}
               navigateToModal={props.navigateToModal}
               onLoginModalOpen={showLoginModal}
               hasNextPage={false}

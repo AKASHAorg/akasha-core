@@ -2,6 +2,7 @@ import * as React from 'react';
 import { BasicCardBox } from './basic-card-box';
 import { SocialBox } from './social-box';
 import { IEntryBoxProps, EntryBox } from './entry-box';
+import { NavigateToParams } from '@akashaproject/ui-awf-typings';
 
 export interface IEntryCardProps extends IEntryBoxProps {
   // labels
@@ -16,6 +17,7 @@ export interface IEntryCardProps extends IEntryBoxProps {
   noBorder?: boolean;
   noBorderRadius?: boolean;
   bottomBorderOnly?: boolean;
+  navigateTo?: (args: NavigateToParams) => void;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -46,7 +48,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     onEntryFlag,
     onMentionClick,
     onTagClick,
-    singleSpaNavigate,
+    navigateTo,
     onContentClick,
     handleFollowAuthor,
     handleUnfollowAuthor,
@@ -120,7 +122,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         onContentClick={onContentClick}
         onMentionClick={onMentionClick}
         onTagClick={onTagClick}
-        singleSpaNavigate={singleSpaNavigate}
+        navigateTo={navigateTo}
         contentClickable={contentClickable}
         disableReposting={disableReposting}
         disableReporting={disableReporting}

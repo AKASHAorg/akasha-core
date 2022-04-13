@@ -60,16 +60,16 @@ declare const __DEV__: boolean;
     // homepageApp is always loaded by default
     defaultApps: [
       '@akashaproject/app-moderation-ewa',
-      '@akashaproject/app-search',
       '@akashaproject/app-auth-ewa',
-      '@akashaproject/app-settings-ewa',
       '@akashaproject/app-integration-center',
+      '@akashaproject/app-search',
       '@akashaproject/app-profile',
       '@akashaproject/app-notifications',
       '@akashaproject/app-legal',
       '@akashaproject/app-translation',
       '@akashaproject/app-routing',
       '@akashaproject/app-bookmarks',
+      '@akashaproject/app-settings-ewa',
     ],
     // pre-installed widgets;
     // layout widget is always loaded by default

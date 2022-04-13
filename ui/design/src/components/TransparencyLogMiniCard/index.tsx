@@ -47,7 +47,8 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
   } = props;
   return (
     <MainAreaCardBox
-      noBorderRadius={true}
+      noBorderRadius
+      bottomBorderOnly
       isSelected={isSelected}
       style={{ minHeight: 'min-content' }} // allows cards to adjust in a y-scrollable container
     >

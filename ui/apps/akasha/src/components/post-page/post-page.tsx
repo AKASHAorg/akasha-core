@@ -19,7 +19,7 @@ import {
   mapEntry,
   useGetProfile,
   useMentionSearch,
-  useHandleNavigation,
+  useEntryNavigation,
   createPendingEntry,
 } from '@akashaproject/ui-awf-hooks';
 
@@ -27,7 +27,6 @@ import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
 import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { redirect } from '../../services/routing-service';
 import routes, { POST } from '../../routes';
 import { useAnalytics } from '@akashaproject/ui-awf-hooks';
 import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
@@ -51,12 +50,8 @@ interface IPostPageProps {
 }
 
 const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
-  const {
-    showLoginModal,
-    logger,
-    singleSpa: { navigateToUrl },
-    loginState,
-  } = props;
+  const { showLoginModal, logger, loginState } = props;
+  const navigateTo = props.plugins?.routing?.navigateTo;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
@@ -135,16 +130,25 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   };
 
   const handleMentionClick = (pubKey: string) => {
-    navigateToUrl(`/profile/${pubKey}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+    });
   };
 
   const handleTagClick = (name: string) => {
-    navigateToUrl(`/social-app/tags/${name}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
+    });
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
-    navigateToUrl(`/profile/${pubKey}`);
     ev.preventDefault();
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: routes => `${routes.rootRoute}/${pubKey}`,
+    });
   };
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
@@ -173,9 +177,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     }
   };
 
-  const handleNavigate = useHandleNavigation(navigateToUrl, postId);
-
-  const handleSingleSpaNavigate = redirect(navigateToUrl);
+  const handleEntryNavigate = useEntryNavigation(navigateTo, postId);
 
   const handleFlipCard = () => {
     setShowAnyway(true);
@@ -327,8 +329,9 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}
                   isFollowingAuthor={isFollowing}
-                  onContentClick={handleNavigate}
-                  singleSpaNavigate={handleSingleSpaNavigate}
+                  onContentClick={handleEntryNavigate}
+                  navigateTo={navigateTo}
+                  contentClickable={true}
                   onMentionClick={handleMentionClick}
                   onTagClick={handleTagClick}
                   moderatedContentLabel={t('This content has been moderated')}
@@ -430,7 +433,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                   `${window.location.origin}/social-app/post/${itemId}`
                 }
                 loginState={loginState}
-                singleSpaNavigate={navigateToUrl}
+                navigateTo={navigateTo}
                 navigateToModal={props.navigateToModal}
                 onLoginModalOpen={showLoginModal}
                 requestStatus={reqComments.status}

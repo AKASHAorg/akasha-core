@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IProfileData, UsernameTypes } from '@akashaproject/ui-awf-typings/lib/profile';
 import {
   useIsFollowingMultiple,
@@ -25,6 +25,7 @@ export interface IProfileHeaderProps {
   profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
+  navigateTo: (args: NavigateToParams) => void;
 }
 
 type ProfilePageCardProps = IProfileHeaderProps &
@@ -43,7 +44,7 @@ type ProfilePageCardProps = IProfileHeaderProps &
   >;
 
 export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
-  const { profileData, loginState, profileId, modalSlotId } = props;
+  const { profileData, loginState, profileId, modalSlotId, navigateTo } = props;
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
@@ -120,7 +121,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
             loginState={loginState}
             selectedStat={selectedStat}
             profileData={profileData}
-            singleSpa={props.singleSpa}
+            navigateTo={navigateTo}
             showLoginModal={showLoginModal}
             handleClose={handleClose}
           />

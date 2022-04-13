@@ -3,13 +3,13 @@ import DS from '@akashaproject/design-system';
 import { IFeedWidgetProps } from './App';
 import EntryRenderer from './entry-renderer';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { useHandleNavigation } from '@akashaproject/ui-awf-hooks';
+import { useEntryNavigation } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 const { EntryList } = DS;
 
 const EntryFeed = (props: IFeedWidgetProps) => {
-  const handleNavigation = useHandleNavigation(props.singleSpaNavigate);
+  const handleEntryNavigate = useEntryNavigation(props.navigateTo);
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
     if (!props.loginState.pubKey) {
@@ -34,9 +34,8 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           itemType={props.itemType}
           sharePostUrl={`${window.location.origin}/social-app/post/`}
           locale={props.i18n?.languages[0] as ILocale}
-          // onBookmark={handleBookmark}
-          onNavigate={handleNavigation}
-          singleSpaNavigate={props.singleSpaNavigate}
+          onEntryNavigate={handleEntryNavigate}
+          navigateTo={props.navigateTo}
           onFlag={props.onEntryFlag}
           onRepost={handleRepost}
           parentIsProfilePage={props.parentIsProfilePage}
