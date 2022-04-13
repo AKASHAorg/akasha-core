@@ -13,7 +13,7 @@ import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces/res
 @injectable()
 class AWF_IpfsConnector implements AWF_IIpfsConnector {
   private _log: ILogger;
-  readonly gateway = 'https://hub.textile.io/ipfs';
+  readonly gateway = 'https://hub.textile.io/ipfs/';
   readonly originGateway = 'ipfs.infura-ipfs.io';
   private readonly LEGAL_DOCS_SOURCE = {
     [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',
@@ -69,6 +69,17 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
       throw new Error(`Hash ${hash.toString()} is not a valid CID`);
     }
     return `https://${cid.toV1().toString()}.${this.originGateway}`;
+  }
+
+  buildPathLink(hash: string | CID) {
+    if (typeof hash === 'string' && hash.startsWith('https://')) {
+      return hash;
+    }
+    const cid = typeof hash === 'string' ? CID.parse(hash) : CID.asCID(hash);
+    if (!cid) {
+      throw new Error(`Hash ${hash.toString()} is not a valid CID`);
+    }
+    return `${this.gateway}${cid.toV1().toString()}`;
   }
 
   transformBase16HashToV1(hash: string) {
