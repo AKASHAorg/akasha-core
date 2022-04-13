@@ -234,6 +234,28 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     });
   };
 
+  const handleExtPointMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        entryId: entryData.entryId,
+        entryType: ItemTypes.ENTRY,
+      },
+    });
+  };
+
+  const handleExtPointUnmount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointUnmount,
+      data: {
+        name,
+        entryId: entryData.entryId,
+        entryType: ItemTypes.ENTRY,
+      },
+    });
+  };
+
   const showEditButton = React.useMemo(
     () => loginState.isReady && loginState.ethAddress === entryData?.author?.ethAddress,
     [entryData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
@@ -332,6 +354,13 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                         onUnmount={onEditPostButtonUnmount}
                       />
                     )
+                  }
+                  actionsRightExt={
+                    <ExtensionPoint
+                      name={`entry-card-actions-right_${entryData.entryId}`}
+                      onMount={handleExtPointMount}
+                      onUnmount={handleExtPointUnmount}
+                    />
                   }
                 />
               </Box>

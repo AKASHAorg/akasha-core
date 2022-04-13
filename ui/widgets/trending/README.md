@@ -5,6 +5,12 @@
 ## Usage
 
 ```tsx
-import TrendingWidget from '@akashaproject/ui-widget-trending/lib/bootstrap';
+const { default: startLoader } = await System.import('@akashaproject/ui-app-loader');
+
+startLoader({
+  defaultWidgets: [
+    '@akashaproject/ui-widget-trending',
+  ]
+});
 
 ```

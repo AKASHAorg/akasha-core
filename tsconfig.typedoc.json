@@ -7,6 +7,12 @@
     { "path": "./ui/hooks" },
     { "path": "./ui/widgets/feed" },
     { "path": "./ui/widgets/layout" },
+    {
+      "path": "./ui/widgets/mini-profile"
+    },
+    {
+      "path": "./ui/widgets/my-apps"
+    },
     { "path": "./ui/widgets/sidebar" },
     { "path": "./ui/widgets/top-bar" },
     { "path": "./ui/widgets/trending" },

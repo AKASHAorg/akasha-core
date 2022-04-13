@@ -54,12 +54,5 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
       loadingFn: () => import('./extensions/entry-edit-button'),
     },
-    {
-      mountsIn: opts.layoutConfig.widgetSlotId,
-      activeWhen: (location, pathToActiveWhen) => {
-        return pathToActiveWhen(routes[POST])(location);
-      },
-      loadingFn: () => import('./extensions/profile-card-widget'),
-    },
   ],
 });

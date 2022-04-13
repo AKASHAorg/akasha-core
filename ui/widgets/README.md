@@ -10,3 +10,4 @@
 - [Sidebar](./sidebar/README.md)
 - [Top Bar](./top-bar/README.md)
 - [Trending](./trending/README.md)
+- [Mini Profile](./mini-profile/README.md)

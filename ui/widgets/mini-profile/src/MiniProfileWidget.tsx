@@ -14,7 +14,6 @@ import {
   withProviders,
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
-import routes, { POST } from '../routes';
 
 const { Box, ProfileMiniCard, ErrorLoader } = DS;
 
@@ -83,9 +82,10 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   );
 };
 
+// Router is required for the useRouteMatch hook to extract the postId from the url
 const Wrapped = (props: RootExtensionProps) => (
   <Router>
-    <Route path={`${routes[POST]}/:postId`}>
+    <Route path="/social-app/post/:postId">
       <I18nextProvider i18n={props.plugins?.translation?.i18n}>
         <ProfileCardWidget {...props} />
       </I18nextProvider>

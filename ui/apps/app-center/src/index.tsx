@@ -33,13 +33,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   extends: [
     {
-      mountsIn: opts.layoutConfig.widgetSlotId,
-      activeWhen: (location, pathToActiveWhen) => {
-        return pathToActiveWhen(rootRoute)(location);
-      },
-      loadingFn: () => import('./extensions/integrations-widget'),
-    },
-    {
       mountsIn: 'install-modal',
       loadingFn: () => import('./extensions/install-modal'),
     },
