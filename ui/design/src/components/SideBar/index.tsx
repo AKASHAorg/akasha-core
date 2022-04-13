@@ -210,7 +210,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             margin="small"
             label={
               <Box direction="row" align="center" justify="center" margin={{ vertical: ' xlarge' }}>
-                <Icon type="explore" size="xs" plain={true} style={{ marginRight: '0.75rem' }} />
+                <Icon
+                  type="explore"
+                  size="xs"
+                  accentColor={true}
+                  style={{ marginRight: '0.75rem' }}
+                />
                 <Text color="accentText" size="large">
                   {exploreButtonLabel}
                 </Text>

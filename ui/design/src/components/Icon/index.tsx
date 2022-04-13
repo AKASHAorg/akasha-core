@@ -373,6 +373,7 @@ const fillIcons: IconType[] = [
   'integrationAppSmallFill',
   'integrationWidgetSmall',
   'appModeration',
+  'explore',
 ];
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];

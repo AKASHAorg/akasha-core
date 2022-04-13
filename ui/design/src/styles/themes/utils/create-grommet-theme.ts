@@ -71,6 +71,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         activeCardBackground: styledComponentsTheme.colors.activeCardBackground,
         lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
+        skeletonBackground: styledComponentsTheme.colors.skeletonBackground,
         focus: styledComponentsTheme.colors.accent,
       },
       focus: {

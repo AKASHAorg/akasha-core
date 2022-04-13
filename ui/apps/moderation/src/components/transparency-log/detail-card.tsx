@@ -2,12 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import { ILogItem } from '@akashaproject/ui-awf-hooks';
+import { getMediaUrl, ILogItem } from '@akashaproject/ui-awf-hooks';
 import { ModerationItemTypes, NavigateToParams } from '@akashaproject/ui-awf-typings';
 
 export interface IDetailCard {
   selected: ILogItem;
-  ipfsGateway: string;
   handleClickAvatar: () => void;
   handleClickArrowLeft: () => void;
   navigateTo: (args: NavigateToParams) => void;
@@ -19,7 +18,8 @@ export const BASE_PROFILE_URL = '/profile';
 const { TransparencyLogDetailCard } = DS;
 
 const DetailCard: React.FC<IDetailCard> = props => {
-  const { selected, ipfsGateway, handleClickAvatar, handleClickArrowLeft, navigateTo } = props;
+
+  const { selected, handleClickAvatar, handleClickArrowLeft, navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -53,11 +53,7 @@ const DetailCard: React.FC<IDetailCard> = props => {
       isDelisted={selected.delisted}
       moderator={selected.moderator.name}
       moderatedTimestamp={selected.moderatedDate.toString()}
-      moderatorAvatarUrl={
-        selected.moderator.avatar
-          ? `${ipfsGateway}/${selected.moderator.avatar}`
-          : selected.moderator.avatar
-      }
+      moderatorAvatarUrl={getMediaUrl(selected.moderator.avatar)}
       moderatorEthAddress={selected.moderator.ethAddress}
       reportedTimesLabel={t('Reported {{ reportedTimes }}', {
         reportedTimes: selected.reports > 1 ? `${selected.reports} times` : 'once',

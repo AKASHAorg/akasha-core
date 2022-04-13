@@ -114,6 +114,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             <SubtitleTextIcon
               label={app.manifestData?.displayName}
               subtitle={app.name}
+              gap="xxsmall"
               iconType="integrationAppLarge"
               plainIcon={true}
               onClick={() => handleAppClick(app)}

@@ -9,7 +9,7 @@ import useIntersectionObserver from '../../utils/intersection-observer';
 import { UserFollowers_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 export interface IProfileEntry {
-  ipfsGateway?: string;
+  getMediaUrl?: (hash: string) => string;
 
   // hides follow button it matches with entry's pubKey
   loggedUser?: string;
@@ -38,7 +38,7 @@ export interface IProfileEntry {
 
 const ProfileEntry: React.FC<IProfileEntry> = props => {
   const {
-    ipfsGateway,
+    getMediaUrl,
     loggedUser,
     followedProfiles,
     followLabel,
@@ -84,7 +84,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                       label={entry.name || entry.userName}
                       info={`@${entry.userName ? entry.userName : 'username'}`}
                       size="md"
-                      avatarImage={entry.avatar ? `${ipfsGateway}/${entry.avatar}` : entry.avatar}
+                      avatarImage={getMediaUrl(entry.avatar)}
                     />
                   </Box>
                 }

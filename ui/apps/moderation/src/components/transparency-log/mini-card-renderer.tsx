@@ -1,9 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import getSDK from '@akashaproject/awf-sdk';
 import DS from '@akashaproject/design-system';
-import { ILogItem } from '@akashaproject/ui-awf-hooks';
+import { getMediaUrl, ILogItem } from '@akashaproject/ui-awf-hooks';
 import { ButtonValues } from '@akashaproject/ui-awf-typings';
 
 const { TransparencyLogMiniCard } = DS;
@@ -20,9 +19,6 @@ const MiniCardRenderer: React.FC<IMiniCardRenderer> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-
   const renderCard = (el: ILogItem, index: number) => (
     <TransparencyLogMiniCard
       key={index}
@@ -36,9 +32,7 @@ const MiniCardRenderer: React.FC<IMiniCardRenderer> = props => {
       isDelisted={el.delisted}
       moderator={el.moderator.name}
       moderatedTimestamp={el.moderatedDate.toString()}
-      moderatorAvatarUrl={
-        el.moderator.avatar ? `${ipfsGateway}/${el.moderator.avatar}` : el.moderator.avatar
-      }
+      moderatorAvatarUrl={getMediaUrl(el.moderator.avatar)}
       moderatorEthAddress={el.moderator.ethAddress}
       onClickCard={onCardClick(el)}
     />

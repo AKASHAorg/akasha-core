@@ -11,6 +11,7 @@ import {
   useGetIntegrationReleaseInfo,
   useGetLogin,
   useGetProfileByEthAddress,
+  useCurrentNetwork,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
@@ -29,6 +30,8 @@ const InfoPage: React.FC<RootComponentProps> = props => {
     return !!loginQueryReq.data.pubKey;
   }, [loginQueryReq.data]);
 
+  const network = useCurrentNetwork(isLoggedIn).data;
+
   const integrationInfoReq = useGetIntegrationInfo(integrationId);
 
   const integrationInfo = integrationInfoReq.data;
@@ -43,7 +46,15 @@ const InfoPage: React.FC<RootComponentProps> = props => {
   const authorProfileData = profileDataReq.data;
 
   const handleAuthorEthAddressClick = (ethAddress: string) => {
-    window.open(`https://etherscan.io/address/${ethAddress}`, '_blank', 'noreferrer noopener');
+    if (network) {
+      window.open(
+        `https://${network}.etherscan.io/address/${ethAddress}`,
+        '_blank',
+        'noreferrer noopener',
+      );
+    } else {
+      window.open(`https://etherscan.io/address/${ethAddress}`, '_blank', 'noreferrer noopener');
+    }
   };
 
   const handleAuthorClick = (author: { pubKey: string }) => {

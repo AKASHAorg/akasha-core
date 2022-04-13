@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import getSDK from '@akashaproject/awf-sdk';
 import DS from '@akashaproject/design-system';
 import { ButtonValues, NavigateToParams } from '@akashaproject/ui-awf-typings';
 import { useGetCount, useInfiniteLog, ILogItem } from '@akashaproject/ui-awf-hooks';
@@ -108,9 +107,6 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
 
   const { t } = useTranslation('app-moderation-ewa');
-
-  const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
 
   const getCountQuery = useGetCount();
   const count = getCountQuery.data || { delisted: 0, kept: 0, pending: 0 };
@@ -292,7 +288,6 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           {selected && (
             <DetailCard
               selected={selected}
-              ipfsGateway={ipfsGateway}
               handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
               handleClickArrowLeft={handleClickArrowLeft}
               navigateTo={navigateTo}

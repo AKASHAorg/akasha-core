@@ -59,7 +59,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
   return (
     <Box gap="medium" margin="medium" flex={{ shrink: 0 }}>
       <>
-        <Box gap="small" pad={{ bottom: 'small' }}>
+        <Box gap="small" pad={{ bottom: 'medium' }}>
           <Text size="large" color="secondaryText">
             {t('World Apps')}
           </Text>
@@ -83,6 +83,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
               <SubtitleTextIcon
                 label={app.manifestData.displayName}
                 subtitle={app.name}
+                gap="xxsmall"
                 iconType="integrationAppLarge"
                 plainIcon={true}
                 backgroundColor={true}
@@ -98,7 +99,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
         </Box>
       </>
       <>
-        <Box gap="small" pad={{ bottom: 'small' }}>
+        <Box gap="small" pad={{ bottom: 'medium' }}>
           <Text size="large" color="secondaryText">
             {t('Installed Apps')}
           </Text>
@@ -123,6 +124,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
                 <SubtitleTextIcon
                   label={app.manifestData.displayName}
                   subtitle={app.name}
+                  gap="xxsmall"
                   iconType="integrationAppLarge"
                   backgroundColor={true}
                 />
