@@ -14,7 +14,6 @@ import {
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
 import { hiddenIntegrations } from './hidden-integrations';
-import routes, { INFO } from './routes';
 
 const { Box, ICWidgetCard, ErrorLoader } = DS;
 
@@ -88,7 +87,10 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
-    props.singleSpa.navigateToUrl(`${routes[INFO]}/${integrationId}`);
+    props.plugins?.routing?.navigateTo?.({
+      appName: '@akashaproject/app-integration-center',
+      getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
+    });
   };
 
   return (
