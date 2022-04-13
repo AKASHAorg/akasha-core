@@ -56,6 +56,7 @@ export type IconType =
   | 'error'
   | 'facebook'
   | 'feedback'
+  | 'follower'
   | 'following'
   | 'github'
   | 'hashtag'
@@ -184,6 +185,7 @@ export const iconTypes: IconType[] = [
   'error',
   'facebook',
   'feedback',
+  'follower',
   'following',
   'github',
   'hashtag',
