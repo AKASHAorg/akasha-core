@@ -12,7 +12,7 @@ import {
 import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 import Avatar from '../Avatar';
-import { IEntryData, IMetadata, IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IEntryData, IMetadata, IPublishData } from '@akashaorg/ui-awf-typings/lib/entry';
 import Icon from '../Icon';
 import EmojiPopover from '../EmojiPopover';
 import EmbedBox from '../EmbedBox';

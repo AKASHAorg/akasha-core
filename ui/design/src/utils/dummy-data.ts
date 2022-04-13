@@ -1,9 +1,9 @@
-import { LogoTypeSource, IntegrationCenterApp, ReleaseInfo } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource, IntegrationCenterApp, ReleaseInfo } from '@akashaorg/ui-awf-typings';
 import {
   IMenuItem,
   MenuItemType,
   MenuItemAreaType,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import { IAppData } from '../components/AppsWidgetCard';
 

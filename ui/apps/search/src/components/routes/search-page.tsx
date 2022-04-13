@@ -1,10 +1,10 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import DS from '@akashaorg/design-system';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
-import { ITag } from '@akashaproject/ui-awf-typings/src/entry';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { IProfileData } from '@akashaorg/ui-awf-typings/src/profile';
+import { ITag } from '@akashaorg/ui-awf-typings/src/entry';
 import { useTranslation } from 'react-i18next';
 import {
   useTagSubscriptions,
@@ -19,10 +19,10 @@ import {
   LoginState,
   useEntryNavigation,
   useAnalytics,
-} from '@akashaproject/ui-awf-hooks';
-import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-hooks';
+import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import EntryCardRenderer from './entry-renderer';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -207,7 +207,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const handleProfileClick = (pubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };
@@ -229,7 +229,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
     props.plugins?.routing?.navigateTo?.({
-      appName: '@akashaproject/app-search',
+      appName: '@akashaorg/app-search',
       getNavigationUrl: routes => `${routes.rootRoute}/${encodedSearchKey}`,
     });
   };
@@ -237,14 +237,14 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
     ev.preventDefault();
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorEth}`,
     });
   };
 
   const handleMentionClick = (profileEthAddress: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileEthAddress}`,
     });
   };
@@ -264,7 +264,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const handleTagClick = (name: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
     });
   };

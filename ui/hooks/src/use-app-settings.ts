@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
-// import { AppsSchema } from '@akashaproject/awf-sdk/src/db/app.schema';
+// import { AppsSchema } from '@akashaorg/awf-sdk/src/db/app.schema';
 
 // @TODO - fix typings
 

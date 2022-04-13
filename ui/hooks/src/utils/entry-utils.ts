@@ -1,14 +1,14 @@
 import { getMediaUrl } from './media-utils';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import {
   IEntryData,
   PostResponse,
   CommentResponse,
   IPublishData,
   PendingEntry,
-} from '@akashaproject/ui-awf-typings/lib/entry';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import getSDK from '@akashaproject/awf-sdk';
+} from '@akashaorg/ui-awf-typings/lib/entry';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import getSDK from '@akashaorg/awf-sdk';
 import { URL } from 'url';
 
 export const MEDIA_URL_PREFIX = 'CID:';

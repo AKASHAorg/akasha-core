@@ -20,7 +20,7 @@ export interface IThemeSelector {
  * Themes must be passed as props:
  *
  *```ts
- * import lightTheme from '@akashaproject/design-system'
+ * import lightTheme from '@akashaorg/design-system'
  *
  * availableThemes={[
  *  lightTheme, // <- this is one of default themes so there is no need to import() it

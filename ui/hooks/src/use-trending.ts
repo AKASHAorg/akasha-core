@@ -1,9 +1,9 @@
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import { getMediaUrl } from './utils/media-utils';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { PROFILE_KEY } from './use-profile';
 
 export const TRENDING_TAGS_KEY = 'Trending_Tags';

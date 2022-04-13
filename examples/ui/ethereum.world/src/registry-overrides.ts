@@ -1,101 +1,101 @@
-import { INTEGRATION_TYPES } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { INTEGRATION_TYPES } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const HOST = '//localhost:8131';
 
 // config for integrations config overrides
 const overrides = [
   {
-    name: '@akashaproject/app-integration-center',
+    name: '@akashaorg/app-integration-center',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/app-center/index.js`],
   },
   {
-    name: '@akashaproject/app-bookmarks',
+    name: '@akashaorg/app-bookmarks',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/bookmarks/index.js`],
   },
   {
-    name: '@akashaproject/app-akasha-integration',
+    name: '@akashaorg/app-akasha-integration',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/akasha/index.js`],
   },
   {
-    name: '@akashaproject/app-moderation-ewa',
+    name: '@akashaorg/app-moderation-ewa',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/moderation/index.js`],
   },
   {
-    name: '@akashaproject/app-auth-ewa',
+    name: '@akashaorg/app-auth-ewa',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/auth-app/index.js`],
   },
   {
-    name: '@akashaproject/app-profile',
+    name: '@akashaorg/app-profile',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/profile/index.js`],
   },
   {
-    name: '@akashaproject/app-notifications',
+    name: '@akashaorg/app-notifications',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/notifications/index.js`],
   },
   {
-    name: '@akashaproject/app-legal',
+    name: '@akashaorg/app-legal',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/legal/index.js`],
   },
   {
-    name: '@akashaproject/app-search',
+    name: '@akashaorg/app-search',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/search/index.js`],
   },
   {
-    name: '@akashaproject/app-settings-ewa',
+    name: '@akashaorg/app-settings-ewa',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/settings-app/index.js`],
   },
   {
-    name: '@akashaproject/app-translation',
+    name: '@akashaorg/app-translation',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/translation/index.js`],
   },
   {
-    name: '@akashaproject/app-routing',
+    name: '@akashaorg/app-routing',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/routing/index.js`],
   },
   {
-    name: '@akashaproject/ui-widget-sidebar',
+    name: '@akashaorg/ui-widget-sidebar',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/sidebar/index.js`],
   },
   {
-    name: '@akashaproject/ui-widget-topbar',
+    name: '@akashaorg/ui-widget-topbar',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/topbar/index.js`],
   },
   {
-    name: '@akashaproject/ui-widget-trending',
+    name: '@akashaorg/ui-widget-trending',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/trending/index.js`],
   },
   {
-    name: '@akashaproject/ui-widget-layout',
+    name: '@akashaorg/ui-widget-layout',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/layout/index.js`],
   },
   {
-    name: '@akashaproject/ui-widget-analytics',
+    name: '@akashaorg/ui-widget-analytics',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/analytics/index.js`],
   },
   {
-    name: '@akashaproject/ui-widget-mini-profile',
+    name: '@akashaorg/ui-widget-mini-profile',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: ['/widgets/mini-profile/index.js'],
   },
   {
-    name: '@akashaproject/ui-widget-my-apps',
+    name: '@akashaorg/ui-widget-my-apps',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: ['/widgets/my-apps/index.js'],
   },

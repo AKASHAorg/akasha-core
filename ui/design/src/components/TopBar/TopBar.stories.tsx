@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 import { withDesign } from 'storybook-addon-designs';
-import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { MenuItemAreaType } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import Topbar, { ITopbarProps } from '.';
 import ViewportSizeProvider from '../Providers/viewport-dimension';

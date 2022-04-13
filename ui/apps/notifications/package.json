@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/app-notifications",
+  "name": "@akashaorg/app-notifications",
   "version": "0.1.0",
   "description": "Plugin for / url handler",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-sdk-js.git"
   },
   "main": "lib/index.js",
   "engines": {
@@ -31,9 +31,9 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-widget-trending": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/ui-awf-hooks": "*",
+    "@akashaorg/ui-widget-trending": "*",
     "@types/react-router": "5.1.16",
     "@types/react-router-dom": "5.1.8",
     "i18next": "20.6.1",
@@ -46,8 +46,8 @@
     "single-spa-react": "4.6.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-testing-utils": "*",
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/ui-awf-testing-utils": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/react-test-renderer": "17.0.1"

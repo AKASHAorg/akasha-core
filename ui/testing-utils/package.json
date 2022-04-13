@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/ui-awf-testing-utils",
+  "name": "@akashaorg/ui-awf-testing-utils",
   "version": "0.1.0",
   "description": "AWF testing utilities",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "engines": {
     "node": ">=10",
@@ -25,8 +25,8 @@
     "clean": "tsc --build --clean"
   },
   "devDependencies": {
-    "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/faker": "5.5.8",
     "@types/react-router-dom": "5.1.8",
     "faker": "5.5.3",

@@ -4,11 +4,11 @@ import {
   EventTypes,
   MenuItemAreaType,
   UIEventData,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
 import { RouteRepository } from './types';
-import getSDK from '@akashaproject/awf-sdk';
-import { events } from '@akashaproject/sdk-typings';
+import getSDK from '@akashaorg/awf-sdk';
+import { events } from '@akashaorg/sdk-typings';
 
 export class RoutingPlugin {
   static readonly routeRepository: RouteRepository = {

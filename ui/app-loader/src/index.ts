@@ -1,5 +1,5 @@
-import getSDK from '@akashaproject/awf-sdk';
-import { ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import getSDK from '@akashaorg/awf-sdk';
+import { ILoaderConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { hidePageSplash, showPageSplash } from './splash-screen';
 import { merge } from 'rxjs';
 import * as singleSpa from 'single-spa';
@@ -25,7 +25,7 @@ import { handleAppLoadingScreens } from './ui-state-utils';
  * to install/uninstall, load/unload apps, widgets and plugins.
  * @example
  * ```
- * import startLoader from '@akashaproject/ui-app-loader';
+ * import startLoader from '@akashaorg/ui-app-loader';
  * startLoader(worldConfig);
  * ```
  * @param worldConfig - {@link ILoaderConfig}

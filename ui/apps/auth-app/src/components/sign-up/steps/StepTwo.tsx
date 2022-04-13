@@ -1,7 +1,7 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { useAnalytics } from '@akashaproject/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import DS from '@akashaorg/design-system';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 import { StyledBox, StyledButton, CheckBoxWrap } from './styles';
 

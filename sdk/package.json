@@ -1,9 +1,9 @@
 {
-  "name": "@akashaproject/awf-sdk",
+  "name": "@akashaorg/awf-sdk",
   "version": "0.1.0",
   "main": "src/index.js",
   "dependencies": {
-    "@akashaproject/sdk-typings": "*",
+    "@akashaorg/sdk-typings": "*",
     "@apollo/client": "3.5.5",
     "@ensdomains/ens-contracts": "0.0.8",
     "@metamask/detect-provider": "1.2.0",

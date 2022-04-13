@@ -1,4 +1,4 @@
-import DS, { BoxExtendedProps, ButtonExtendedProps } from '@akashaproject/design-system';
+import DS, { BoxExtendedProps, ButtonExtendedProps } from '@akashaorg/design-system';
 
 const { Button, Box, styled } = DS;
 

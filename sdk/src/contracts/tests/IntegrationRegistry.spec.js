@@ -14,7 +14,7 @@ describe('IntegrationRegistry', function () {
   });
 
   it('creates a new release', async function () {
-    const pkgName = "@akashaproject/ui-plugin";
+    const pkgName = "@akashaorg/ui-plugin";
     await ir.release(pkgName, "v0.1.0", "0x0155171c399a82fe5cc1ea7a7f0dbdb715066aac26060828f96593e098cc3ef4", 1);
     const f = await ir.getAllPackageIds(0);
     expect(f.next.toString()).to.equal('0');

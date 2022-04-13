@@ -1,9 +1,9 @@
 import { lastValueFrom } from 'rxjs';
 import { useQuery } from 'react-query';
 
-import getSDK from '@akashaproject/awf-sdk';
-import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
-import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import getSDK from '@akashaorg/awf-sdk';
+import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
+import { INJECTED_PROVIDERS } from '@akashaorg/sdk-typings/lib/interfaces/common';
 
 import constants from './constants';
 import { logError } from './utils/error-handler';

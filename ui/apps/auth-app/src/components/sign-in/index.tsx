@@ -1,7 +1,7 @@
 import React from 'react';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
-import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
 
 import {
   switchToRequiredNetwork,
@@ -11,17 +11,17 @@ import {
   useInjectedProvider,
   useNetworkState,
   useRequiredNetworkName,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 
 import SignInStatus from './sign-in-status';
 import { useTranslation } from 'react-i18next';
 import ChooseProvider from './choose-provider';
 import RequiredNetworkStep from '../sign-up/steps/required-network';
-import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import { useGetLogin, useSignUp } from '@akashaproject/ui-awf-hooks/lib/use-login';
+import { INJECTED_PROVIDERS } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import { useGetLogin, useSignUp } from '@akashaorg/ui-awf-hooks/lib/use-login';
 import SuggestSignup from './suggest-signup';
 import { SIGN_UP_USERNAME } from '../../routes';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { MainAreaCardBox, Box, Heading, HorizontalDivider } = DS;
 
@@ -77,7 +77,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
     }
     if (signInComplete && profileDataReq.isSuccess && !profileDataReq.data?.userName) {
       navigateTo.current?.({
-        appName: '@akashaproject/app-auth-ewa',
+        appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
       });
     }

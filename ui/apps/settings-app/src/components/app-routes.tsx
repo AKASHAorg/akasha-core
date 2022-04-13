@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { COOKIE_CONSENT_NAME, CookieConsentTypes } from '@akashaproject/ui-awf-hooks';
-import { EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { COOKIE_CONSENT_NAME, CookieConsentTypes } from '@akashaorg/ui-awf-hooks';
+import { EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 import AppsOption from './option-apps';
 import SettingsPage from './settings-page';
@@ -29,7 +29,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const handleChevronLeftClick = () =>
     props.plugins?.routing?.navigateTo?.({
-      appName: '@akashaproject/app-settings-ewa',
+      appName: '@akashaorg/app-settings-ewa',
       getNavigationUrl: navRoutes => navRoutes.Home,
     });
 

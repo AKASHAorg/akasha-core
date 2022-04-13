@@ -1,13 +1,13 @@
-import getSDK from '@akashaproject/awf-sdk';
-import { mockSDK, genWorldConfig } from '@akashaproject/ui-awf-testing-utils';
+import getSDK from '@akashaorg/awf-sdk';
+import { mockSDK, genWorldConfig } from '@akashaorg/ui-awf-testing-utils';
 import { map, mergeMap, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { getStateSlice, initState, LoaderState } from '../src/state';
 import { getDefaultIntegrationManifests, getUserIntegrationManifests } from '../src/manifests';
-import { ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ILoaderConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { pipelineEvents } from '../src/events';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { of } = require('rxjs');
   return () =>
@@ -26,11 +26,11 @@ jest.mock('@akashaproject/awf-sdk', () => {
           of({
             data: [
               {
-                name: '@akashaproject/user-installed-test-app',
+                name: '@akashaorg/user-installed-test-app',
                 version: '1.0.0',
               },
               {
-                name: '@akashaproject/user-installed-test-widget',
+                name: '@akashaorg/user-installed-test-widget',
                 version: '1.0.0',
               },
             ],
@@ -53,10 +53,10 @@ describe('[AppLoader]: manifests.ts', () => {
     const marbles = 'ab';
     const values = {
       a: genWorldConfig({
-        defaultApps: ['@akashaproject/test-app'],
+        defaultApps: ['@akashaorg/test-app'],
       }),
       b: genWorldConfig({
-        defaultWidgets: ['@akashaproject/test-widget'],
+        defaultWidgets: ['@akashaorg/test-widget'],
       }),
     };
     scheduler.run(({ expectObservable, cold }) => {
@@ -77,7 +77,7 @@ describe('[AppLoader]: manifests.ts', () => {
             { name: values.a.layout, version: '1.0.0' },
             { name: values.a.homepageApp, version: '1.0.0' },
             {
-              name: '@akashaproject/test-app',
+              name: '@akashaorg/test-app',
               version: '1.0.0',
             },
           ],
@@ -87,7 +87,7 @@ describe('[AppLoader]: manifests.ts', () => {
             { name: values.a.layout, version: '1.0.0' },
             { name: values.a.homepageApp, version: '1.0.0' },
             {
-              name: '@akashaproject/test-widget',
+              name: '@akashaorg/test-widget',
               version: '1.0.0',
             },
           ],
@@ -122,11 +122,11 @@ describe('[AppLoader]: manifests.ts', () => {
         a: {
           manifests: [
             {
-              name: '@akashaproject/user-installed-test-app',
+              name: '@akashaorg/user-installed-test-app',
               version: '1.0.0',
             },
             {
-              name: '@akashaproject/user-installed-test-widget',
+              name: '@akashaorg/user-installed-test-widget',
               version: '1.0.0',
             },
           ],

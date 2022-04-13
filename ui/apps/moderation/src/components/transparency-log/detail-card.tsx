@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { getMediaUrl, ILogItem } from '@akashaproject/ui-awf-hooks';
-import { ModerationItemTypes, NavigateToParams } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { getMediaUrl, ILogItem } from '@akashaorg/ui-awf-hooks';
+import { ModerationItemTypes, NavigateToParams } from '@akashaorg/ui-awf-typings';
 
 export interface IDetailCard {
   selected: ILogItem;
@@ -18,7 +18,6 @@ export const BASE_PROFILE_URL = '/profile';
 const { TransparencyLogDetailCard } = DS;
 
 const DetailCard: React.FC<IDetailCard> = props => {
-
   const { selected, handleClickAvatar, handleClickArrowLeft, navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');
@@ -26,17 +25,17 @@ const DetailCard: React.FC<IDetailCard> = props => {
   const handleClickViewItem = (itemType: string, contentID: string) => () => {
     if (itemType === ModerationItemTypes.POST) {
       navigateTo?.({
-        appName: '@akashaproject/app-akasha-integration',
+        appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Post}/${contentID}`,
       });
     } else if (itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT) {
       navigateTo?.({
-        appName: '@akashaproject/app-akasha-integration',
+        appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Reply}/${contentID}`,
       });
     } else if (itemType === ModerationItemTypes.ACCOUNT) {
       navigateTo?.({
-        appName: '@akashaproject/app-profile',
+        appName: '@akashaorg/app-profile',
         getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${contentID}`,
       });
     }

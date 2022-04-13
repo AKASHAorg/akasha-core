@@ -1,11 +1,11 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
-import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
-import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { Post_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
+import { IPublishData, PostResponse } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { checkStatus } from './use-moderation';
 import { SEARCH_KEY } from './use-search';
 import { TRENDING_TAGS_KEY } from './use-trending';

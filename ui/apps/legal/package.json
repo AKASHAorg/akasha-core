@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/app-legal",
+  "name": "@akashaorg/app-legal",
   "version": "0.1.0",
   "description": "Plugin to show legal content",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AKASHAorg/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "main": "lib/index.js",
   "engines": {
@@ -29,9 +29,9 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/ui-awf-hooks": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/react-router": "5.1.16",
     "@types/react-router-dom": "5.1.8",
     "i18next": "20.6.1",

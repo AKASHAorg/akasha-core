@@ -1,4 +1,4 @@
-import { APP_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 import {
   ModalNavigationOptions,
   ILoaderConfig,
@@ -10,7 +10,7 @@ import {
   EventTypes,
   IntegrationModule,
   PluginConf,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   Observable,
   distinctUntilChanged,
@@ -23,9 +23,9 @@ import {
 } from 'rxjs';
 import { getEvents, ObservedEventNames } from './events';
 import * as singleSpa from 'single-spa';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import { logger } from 'ethers';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 // import { handleExtensionPointUnmount } from './extensions';
 
 export interface LoaderState {

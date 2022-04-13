@@ -1,18 +1,15 @@
 import * as React from 'react';
-import getSDK from '@akashaproject/awf-sdk';
-import { events } from '@akashaproject/sdk-typings';
-import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
-import {
-  CurrentUser,
-  PROVIDER_ERROR_CODES,
-} from '@akashaproject/sdk-typings/lib/interfaces/common';
+import getSDK from '@akashaorg/awf-sdk';
+import { events } from '@akashaorg/sdk-typings';
+import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
+import { CurrentUser, PROVIDER_ERROR_CODES } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { filter, lastValueFrom } from 'rxjs';
 import { useGlobalLogin } from '.';
 import { logError } from './utils/error-handler';
 import { UseAnalyticsActions } from './use-analytics';
-import { WalletTransactionError } from '@akashaproject/ui-awf-typings';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { WalletTransactionError } from '@akashaorg/ui-awf-typings';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
 const CHECK_SIGNUP_KEY = 'CHECK_SIGNUP_KEY';

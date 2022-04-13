@@ -1,4 +1,4 @@
-import { UIEventData, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { UIEventData, EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   Subject,
   merge,
@@ -16,7 +16,7 @@ import {
 import { hidePageSplash } from './splash-screen';
 import { LoaderState } from './state';
 import { getModalFromParams } from './utils';
-import { events } from '@akashaproject/sdk-typings';
+import { events } from '@akashaorg/sdk-typings';
 import * as singleSpa from 'single-spa';
 
 export const pipelineEvents = new Subject<Partial<LoaderState>>();

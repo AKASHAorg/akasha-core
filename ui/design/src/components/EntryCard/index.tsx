@@ -2,7 +2,7 @@ import * as React from 'react';
 import { BasicCardBox } from './basic-card-box';
 import { SocialBox } from './social-box';
 import { IEntryBoxProps, EntryBox } from './entry-box';
-import { NavigateToParams } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams } from '@akashaorg/ui-awf-typings';
 
 export interface IEntryCardProps extends IEntryBoxProps {
   // labels

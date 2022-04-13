@@ -1,4 +1,4 @@
-import { PluginConf } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { PluginConf } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { i18n } from 'i18next';
 
 export const loadI18nNamespaces = async (plugins: PluginConf, namespaces: string | string[]) => {

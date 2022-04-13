@@ -5,6 +5,6 @@
 ## Usage
 
 ```tsx
-import LoginWidget from '@akashaproject/ui-widget-login/lib/bootstrap';
+import LoginWidget from '@akashaorg/ui-widget-login/lib/bootstrap';
 
 ```

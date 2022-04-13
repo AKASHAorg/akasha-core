@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/nx-executors",
+  "name": "@akashaorg/nx-executors",
   "private": true,
   "version": "0.0.1",
   "description": "ETHEREUM WORLD NX monorepo executors",
@@ -11,7 +11,7 @@
     "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)",
     "Damir Sabolic <damir.sabolic@akasha.world> (https://github.com/PrimarchAlpharius)"
   ],
-  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
+  "homepage": "https://github.com/AKASHAorg/akasha-framework#readme",
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
@@ -22,7 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AKASHAorg/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "scripts": {
     "build": "tsc --build tsconfig.json",
@@ -31,6 +31,6 @@
     "test": "jest --config jest.config.js"
   },
   "bugs": {
-    "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
+    "url": "https://github.com/AKASHAorg/akasha-framework/issues"
   }
 }

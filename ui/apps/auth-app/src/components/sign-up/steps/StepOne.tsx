@@ -1,8 +1,8 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { ILinkInput } from '@akashaproject/design-system/lib/components/TextInputIconForm';
-import { useAnalytics } from '@akashaproject/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import DS from '@akashaorg/design-system';
+import { ILinkInput } from '@akashaorg/design-system/lib/components/TextInputIconForm';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 import { StyledButton, StyledBox } from './styles';
 

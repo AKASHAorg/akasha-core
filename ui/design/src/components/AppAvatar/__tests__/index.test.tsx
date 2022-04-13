@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
-import { AppTypes } from '@akashaproject/ui-awf-typings';
+import { AppTypes } from '@akashaorg/ui-awf-typings';
 
 import AppAvatar from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';

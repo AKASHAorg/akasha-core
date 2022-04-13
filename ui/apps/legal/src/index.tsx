@@ -1,12 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import routes, { rootRoute } from './routes';
 import {
   IAppConfig,
   MenuItemAreaType,
   MenuItemType,
   IntegrationRegistrationOptions,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   // This is the root route in which the plugin will render.

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
 const { FeedbackModal, ErrorLoader } = DS;
 
@@ -29,7 +29,7 @@ const FeedbackModalContainer = (props: RootExtensionProps) => {
       )}
       footerLinkText1Label={t('Join in')}
       footerLinkText2Label={t('Discord')}
-      openIssueLink={'https://github.com/AKASHAorg/akasha-world-framework/issues/new/choose'}
+      openIssueLink={'https://github.com/AKASHAorg/akasha-framework/issues/new/choose'}
       emailUsLink={'mailto:feedback@ethereum.world'}
       joinDiscordLink={'https://discord.gg/A5wfg6ZCRt'}
       closeModal={handleFeedbackModalClose}

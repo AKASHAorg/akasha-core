@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaorg/ui-awf-typings';
 import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, Icon, Text, InfoCard, Spinner } = DS;
@@ -51,7 +51,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
 
   const handleAppClick = (app: ReleaseInfo) => {
     props.plugins.routing?.navigateTo?.({
-      appName: '@akashaproject/app-integration-center',
+      appName: '@akashaorg/app-integration-center',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });
   };

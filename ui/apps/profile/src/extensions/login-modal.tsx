@@ -1,12 +1,12 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
-import { StorageKeys } from '@akashaproject/ui-awf-typings/lib/profile';
+import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import { StorageKeys } from '@akashaorg/ui-awf-typings/lib/profile';
 
 const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon, ErrorLoader } = DS;
 
@@ -20,7 +20,7 @@ const LoginModal = (props: RootExtensionProps) => {
 
   const handleSignInClick = () => {
     props.plugins.routing?.navigateTo?.({
-      appName: '@akashaproject/app-auth-ewa',
+      appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => {
         const redirectTo = new URLSearchParams(location.search).get('redirectTo');
         return `${appRoutes[appRoutes.SIGN_IN]}?${new URLSearchParams({
@@ -33,7 +33,7 @@ const LoginModal = (props: RootExtensionProps) => {
   const handleSignUpClick = () => {
     sessionStorage.setItem(StorageKeys.LAST_URL, location.pathname);
     props.plugins.routing?.navigateTo?.({
-      appName: '@akashaproject/app-auth-ewa',
+      appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: navRoutes => navRoutes.SignUp,
     });
   };

@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/ui-widget-layout",
+  "name": "@akashaorg/ui-widget-layout",
   "version": "0.1.0",
   "description": "AKASHA specific page-layout widget",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "main": "lib/index.js",
   "engines": {
@@ -30,9 +30,9 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/ui-awf-hooks": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
     "i18next-chained-backend": "3.0.2",
@@ -43,7 +43,7 @@
     "single-spa-react": "4.6.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaorg/ui-awf-testing-utils": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9"
   },

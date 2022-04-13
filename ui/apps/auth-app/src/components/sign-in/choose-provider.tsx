@@ -1,8 +1,8 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
+import DS from '@akashaorg/design-system';
+import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
 import { useTranslation } from 'react-i18next';
-import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { INJECTED_PROVIDERS } from '@akashaorg/sdk-typings/lib/interfaces/common';
 
 const { Box, Web3ConnectButton } = DS;
 

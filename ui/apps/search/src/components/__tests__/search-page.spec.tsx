@@ -9,7 +9,7 @@ import {
   act,
   genUser,
   genMockOp,
-} from '@akashaproject/ui-awf-testing-utils';
+} from '@akashaorg/ui-awf-testing-utils';
 
 const mockLocationValue = {
   pathname: '/search/grhfsdfk',

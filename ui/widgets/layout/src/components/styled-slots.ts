@@ -1,5 +1,5 @@
-import DS from '@akashaproject/design-system';
-import { ExtensionPointProps } from '@akashaproject/design-system/lib/utils/extension-point';
+import DS from '@akashaorg/design-system';
+import { ExtensionPointProps } from '@akashaorg/design-system/lib/utils/extension-point';
 
 const { css, styled, ExtensionPoint } = DS;
 

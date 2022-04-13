@@ -1,4 +1,4 @@
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 
 const { Icon, Text, styled } = DS;
 

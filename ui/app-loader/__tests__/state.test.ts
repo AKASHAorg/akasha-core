@@ -1,10 +1,10 @@
-import { mockSDK } from '@akashaproject/ui-awf-testing-utils';
+import { mockSDK } from '@akashaorg/ui-awf-testing-utils';
 import { map, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { pipelineEvents } from '../src/events';
 import { defaultInitialState, initState, LoaderState } from '../src/state';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK();
 });
 

@@ -1,4 +1,4 @@
-import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
+import { INJECTED_PROVIDERS } from '@akashaorg/awf-sdk/typings/lib/interfaces/common';
 
 const definedIconTypes = [
   'safe',

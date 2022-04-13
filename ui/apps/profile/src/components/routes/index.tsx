@@ -1,12 +1,12 @@
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import ProfilePage from './profile-page';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetLogin, useGetProfile } from '@akashaproject/ui-awf-hooks';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { Box } = DS;
 

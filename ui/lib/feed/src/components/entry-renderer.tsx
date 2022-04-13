@@ -1,9 +1,9 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import DS from '@akashaorg/design-system';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { EventTypes, ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   usePost,
   useComment,
@@ -18,10 +18,10 @@ import {
   useTagSearch,
   useMentionSearch,
   COMMENT_KEY,
-} from '@akashaproject/ui-awf-hooks';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { AnalyticsCategories, TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+} from '@akashaorg/ui-awf-hooks';
+import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
+import { AnalyticsCategories, TrackEventData } from '@akashaorg/ui-awf-typings/lib/analytics';
+import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
 
 const {
   Box,
@@ -176,7 +176,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const handleAvatarClick = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.pubKey}`,
     });
   };
@@ -187,14 +187,14 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const handleMentionClick = (pubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };
 
   const handleTagClick = (name: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
     });
   };

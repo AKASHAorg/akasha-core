@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { ButtonValues } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { ButtonValues } from '@akashaorg/ui-awf-typings';
 import {
   useGetCount,
   useInfiniteKept,
@@ -11,7 +11,7 @@ import {
   useInfiniteDelisted,
   IModeratedItem,
   IPendingItem,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 
 import ContentTab from '../components/content-tab';
 import ContentCard from '../components/content-card';

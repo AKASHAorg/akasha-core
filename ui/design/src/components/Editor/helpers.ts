@@ -7,7 +7,7 @@ import {
   LinkElement,
   MentionElement,
   TagElement,
-} from '@akashaproject/ui-awf-typings/lib/editor';
+} from '@akashaorg/ui-awf-typings/lib/editor';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {

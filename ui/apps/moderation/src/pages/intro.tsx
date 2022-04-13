@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 import { ISharedModerationProps } from '../interfaces';
 

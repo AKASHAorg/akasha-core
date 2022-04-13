@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ContentCard from '../content-card/content-card';
 
-import { RenderResult, renderWithAllProviders, act } from '@akashaproject/ui-awf-testing-utils';
+import { RenderResult, renderWithAllProviders, act } from '@akashaorg/ui-awf-testing-utils';
 import { from } from 'rxjs';
 
 describe('<ContentCard /> component', () => {

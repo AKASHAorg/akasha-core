@@ -3,9 +3,9 @@ import {
   AnalyticsEventData,
   AnalyticsEventTypes,
   TrackEventData,
-} from '@akashaproject/ui-awf-typings/lib/analytics';
+} from '@akashaorg/ui-awf-typings/lib/analytics';
 import { BehaviorSubject } from 'rxjs';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
 

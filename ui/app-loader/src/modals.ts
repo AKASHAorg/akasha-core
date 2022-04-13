@@ -1,5 +1,5 @@
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { EventTypes, ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { EventTypes, ILoaderConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   catchError,
   combineLatest,

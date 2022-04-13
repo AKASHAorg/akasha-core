@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
-import getSDK from '@akashaproject/awf-sdk';
-import { events } from '@akashaproject/sdk-typings';
-import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import getSDK from '@akashaorg/awf-sdk';
+import { events } from '@akashaorg/sdk-typings';
+import { CurrentUser } from '@akashaorg/sdk-typings/lib/interfaces/common';
 
 /**
  * a hook that will fire an action when the signIn is called

@@ -6,7 +6,7 @@
 // renderWithAllProviders,
 // globalChannelMock,
 // act,
-// } from '@akashaproject/ui-awf-testing-utils';
+// } from '@akashaorg/ui-awf-testing-utils';
 // import i18next from 'i18next';
 
 describe('<SidebarWidget />', () => {

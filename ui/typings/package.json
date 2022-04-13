@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/ui-awf-typings",
+  "name": "@akashaorg/ui-awf-typings",
   "version": "0.1.0",
   "description": "AWF typings for development purpose",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "engines": {
     "node": ">=10",
@@ -25,7 +25,7 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "devDependencies": {
-    "@akashaproject/sdk-typings": "*",
+    "@akashaorg/sdk-typings": "*",
     "i18next": "20.6.1",
     "rxjs": "7.3.0",
     "single-spa": "5.9.3",

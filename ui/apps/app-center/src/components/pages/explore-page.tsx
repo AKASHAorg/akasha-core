@@ -1,9 +1,9 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { useUninstallApp } from '@akashaproject/ui-awf-hooks';
-import getSDK from '@akashaproject/awf-sdk';
-import { APP_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
-import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
+import getSDK from '@akashaorg/awf-sdk';
+import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
+import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaorg/ui-awf-typings';
 import { useTranslation } from 'react-i18next';
 import { INFO } from '../../routes';
 
@@ -71,7 +71,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
 
   const handleAppClick = (app: ReleaseInfo) => {
     props.plugins.routing?.navigateTo?.({
-      appName: '@akashaproject/app-integration-center',
+      appName: '@akashaorg/app-integration-center',
       getNavigationUrl: routes => `${routes[INFO]}/${app.id}`,
     });
   };

@@ -1,12 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import routes, { FEED, POST, REPLY, rootRoute, TAGS } from './routes';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   MenuItemType,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   activeWhen: (location, pathToActiveWhen) => {

@@ -1,7 +1,7 @@
 import { lastValueFrom } from 'rxjs';
 import { useQuery } from 'react-query';
 
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 
 import constants from './constants';
 import { logError } from './utils/error-handler';

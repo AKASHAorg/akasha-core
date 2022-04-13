@@ -7,7 +7,7 @@ import {
   genPostData,
   renderWithAllProviders,
   act,
-} from '@akashaproject/ui-awf-testing-utils';
+} from '@akashaorg/ui-awf-testing-utils';
 import { ItemTypes } from '../App';
 
 describe('<EntryCardRenderer /> component', () => {

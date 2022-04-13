@@ -6,7 +6,7 @@ import {
   renderWithAllProviders,
   getSDKMocks,
   act,
-} from '@akashaproject/ui-awf-testing-utils';
+} from '@akashaorg/ui-awf-testing-utils';
 
 describe('<App /> component', () => {
   let renderResult: RenderResult;

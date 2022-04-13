@@ -1,8 +1,8 @@
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import route, { TOS, TOU, PP, COC, DG } from '../../routes';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import TermsOfService from './terms-of-service';
 import TermsOfUse from './terms-of-use';
 import CodeOfConduct from './code-of-conduct';

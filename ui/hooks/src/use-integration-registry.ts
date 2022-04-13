@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 import { lastValueFrom } from 'rxjs';
 

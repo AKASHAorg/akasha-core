@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 import routes from '../routes';
 import { ISettingsItem, settingsItems } from '../utils/settings-items';
@@ -22,7 +22,7 @@ const SettingsPage: React.FC<RootComponentProps> = props => {
 
   const handleSettingsOptionClick = (option: SettingsOption) => () => {
     return props.plugins?.routing?.navigateTo?.({
-      appName: '@akashaproject/app-settings-ewa',
+      appName: '@akashaorg/app-settings-ewa',
       getNavigationUrl: navRoutes => navRoutes[option],
     });
   };

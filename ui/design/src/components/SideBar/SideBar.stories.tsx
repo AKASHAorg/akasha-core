@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import { MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { MenuItemAreaType } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import Sidebar, { ISidebarProps } from '.';
 import ViewportSizeProvider, { useViewportSize } from '../Providers/viewport-dimension';

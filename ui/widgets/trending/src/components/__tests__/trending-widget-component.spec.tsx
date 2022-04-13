@@ -8,7 +8,7 @@ import {
   getSDKMocks,
   act,
   genMockOp,
-} from '@akashaproject/ui-awf-testing-utils';
+} from '@akashaorg/ui-awf-testing-utils';
 
 describe('<TrendingWidgetComponent /> component', () => {
   let renderResult: RenderResult;

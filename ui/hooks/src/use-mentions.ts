@@ -1,8 +1,8 @@
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { getMediaUrl } from './utils/media-utils';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { PROFILE_KEY } from './use-profile';
 import { logError } from './utils/error-handler';
 

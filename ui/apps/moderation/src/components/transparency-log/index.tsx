@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { ButtonValues, NavigateToParams } from '@akashaproject/ui-awf-typings';
-import { useGetCount, useInfiniteLog, ILogItem } from '@akashaproject/ui-awf-hooks';
+import DS from '@akashaorg/design-system';
+import { ButtonValues, NavigateToParams } from '@akashaorg/ui-awf-typings';
+import { useGetCount, useInfiniteLog, ILogItem } from '@akashaorg/ui-awf-hooks';
 
 import Banner from './banner';
 import DetailCard from './detail-card';
@@ -144,7 +144,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const handleClickAvatar = (pubKey: string) => () => {
     if (pubKey)
       navigateTo?.({
-        appName: '@akashaproject/app-profile',
+        appName: '@akashaorg/app-profile',
         getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
       });
   };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import CookieWidget from '../cookie-widget';
 
-import { RenderResult, renderWithAllProviders } from '@akashaproject/ui-awf-testing-utils';
+import { RenderResult, renderWithAllProviders } from '@akashaorg/ui-awf-testing-utils';
 
 describe('<CookieWidget />', () => {
   let renderResult: RenderResult;

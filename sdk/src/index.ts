@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import 'systemjs-webpack-interop/auto-public-path';
-import * as typings from '@akashaproject/sdk-typings';
+import * as typings from '@akashaorg/sdk-typings';
 import container from './container';
 import Logging from './logging';
 import Settings from './settings';

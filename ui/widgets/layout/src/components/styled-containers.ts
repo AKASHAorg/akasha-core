@@ -1,4 +1,4 @@
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import React from 'react';
 
 const { css, styled, Box } = DS;

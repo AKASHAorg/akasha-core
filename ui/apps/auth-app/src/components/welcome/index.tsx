@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import routes, { rootAKASHARoute, rootProfileRoute, SIGN_IN } from '../../routes';
 
 const { WelcomeCard } = DS;
@@ -18,7 +18,7 @@ const Welcome: React.FC<RootComponentProps> = props => {
     // redirect to sign in page if not logged in
     if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
       navigateTo?.({
-        appName: '@akashaproject/app-auth-ewa',
+        appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: navRoutes => navRoutes.SignIn,
       });
     }
@@ -27,14 +27,14 @@ const Welcome: React.FC<RootComponentProps> = props => {
 
   const handlePrimaryButtonClick = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => navRoutes.defaultRoute,
     });
   };
 
   const handleSecondaryButtonClick = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.MyProfile}?modal[name]=update-profile`,
     });
   };
