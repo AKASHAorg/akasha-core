@@ -23,7 +23,7 @@ export const getSingleSpaInstanceMock = () => {
     setAppNames: names => {
       appNames = names;
     },
-    registerApplication: jest.fn((loadingFn, props) => {
+    registerApplication: jest.fn(props => {
       appNames = appNames.concat(props.name);
     }),
     unregisterApplication: jest.fn(() => Promise.resolve()),

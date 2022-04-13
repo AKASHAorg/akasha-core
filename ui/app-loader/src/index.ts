@@ -1,7 +1,7 @@
 import getSDK from '@akashaproject/awf-sdk';
 import { ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { hidePageSplash, showPageSplash } from './splash-screen';
-import { catchError, merge } from 'rxjs';
+import { merge } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import { initState } from './state';
 
@@ -16,7 +16,7 @@ import {
   processSystemModules,
 } from './integrations';
 import { handleModalMount, handleModalRequest } from './modals';
-import { handleExtPointMountOfExtensions } from './extensions';
+import { handleExtensionPointUnmount, handleExtPointMountOfExtensions } from './extensions';
 import { handleAppLoadingScreens } from './ui-state-utils';
 
 /**
@@ -44,30 +44,52 @@ const startLoader = (worldConfig: ILoaderConfig) => {
 
   const state$ = initState(worldConfig, globalChannel);
   merge(
-    // get integration info from registry
+    /**
+     * get integration info from registry
+     * @internal
+     */
     getDefaultIntegrationManifests(worldConfig, logger),
 
-    // get user installed integrations after login
+    /**
+     * get user installed integrations after login
+     * @internal
+     */
     getUserIntegrationManifests(worldConfig, state$, logger),
 
-    // import+register+singleSpaRegister layout
+    /**
+     * import, register and singleSpaRegister the layout
+     * @internal
+     */
     loadLayout(worldConfig, state$, logger),
 
-    // import integrations just after we have the layout config
-    // aka. after calling the register on layout
+    /**
+     * import integrations just after we have the layout config
+     * aka. after calling the register on layout
+     * @internal
+     */
     importIntegrations(state$, logger),
 
-    // call the exported `register` method on all integrations
-    // extract extensions
+    /**
+     * call the exported `register` method on all integrations
+     * extract extensions
+     * @internal
+     */
     processSystemModules(worldConfig, state$, logger),
 
-    // register apps to single-spa
-    // based on mountedExtensionPoints from state
+    /**
+     * register apps to single-spa
+     * based on mountedExtensionPoints from state
+     * @internal
+     */
     handleExtPointMountOfApps(worldConfig, state$, logger),
 
-    // register extensions to single-spa
-    // based on mountedExtensionPoints from state
+    /**
+     * register extensions to single-spa
+     * based on mountedExtensionPoints from state
+     * @internal
+     */
     handleExtPointMountOfExtensions(worldConfig, state$, logger),
+    handleExtensionPointUnmount(state$, logger),
 
     handleModalRequest(worldConfig, state$, logger),
     handleModalMount(state$, logger),

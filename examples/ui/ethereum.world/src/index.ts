@@ -34,6 +34,16 @@ declare const __DEV__: boolean;
       integrationType: INTEGRATION_TYPES.WIDGET,
       sources: ['/widgets/topbar/index.js'],
     },
+    {
+      name: '@akashaproject/ui-widget-mini-profile',
+      integrationType: INTEGRATION_TYPES.WIDGET,
+      sources: ['/widgets/mini-profile/index.js'],
+    },
+    {
+      name: '@akashaproject/ui-widget-my-apps',
+      integrationType: INTEGRATION_TYPES.WIDGET,
+      sources: ['/widgets/my-apps/index.js'],
+    },
   ];
 
   if (__DEV__) {
@@ -68,6 +78,8 @@ declare const __DEV__: boolean;
       '@akashaproject/ui-widget-trending',
       '@akashaproject/ui-widget-analytics',
       '@akashaproject/ui-widget-sidebar',
+      '@akashaproject/ui-widget-mini-profile',
+      '@akashaproject/ui-widget-my-apps',
     ],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,

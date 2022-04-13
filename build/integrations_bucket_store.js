@@ -120,6 +120,16 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       type: TYPE_WIDGET,
       path: path.resolve(__dirname, "../ui/build/widgets", "analytics")
     };
+    yield {
+      package: require("../ui/widgets/mini-profile/package.json"),
+      type: TYPE_WIDGET,
+      path: path.resolve(__dirname, "../ui/build/widgets", "mini-profile")
+    };
+    yield {
+      package: require("../ui/widgets/my-apps/package.json"),
+      type: TYPE_WIDGET,
+      path: path.resolve(__dirname, "../ui/build/widgets", "my-apps")
+    };
   }
 
   const sources = generateSources();

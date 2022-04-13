@@ -1,6 +1,6 @@
-# Top Bar widget
+# My Apps widget
 
-> Presents the app title, search bar and other related plugin icons.
+> Shows world apps and installed apps in the integration center.
 
 ## Usage
 
@@ -9,7 +9,7 @@ const { default: startLoader } = await System.import('@akashaproject/ui-app-load
 
 startLoader({
   defaultWidgets: [
-    '@akashaproject/ui-widget-topbar',
+    '@akashaproject/ui-widget-my-apps',
   ]
 });
 
