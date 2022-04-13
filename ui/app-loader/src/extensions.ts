@@ -1,6 +1,7 @@
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import {
   catchError,
+  exhaustMap,
   filter,
   from,
   map,
@@ -141,7 +142,6 @@ export const mountMatchingExtensionParcels = (opts: {
           parcel = parcels.find(parcel => parcel.id === extInfo.extID);
         }
       }
-
       if (!parcel && parentConfig) {
         try {
           parcel = singleSpa.mountRootParcel<RootExtensionProps>(
@@ -156,6 +156,8 @@ export const mountMatchingExtensionParcels = (opts: {
             } into ${extInfo.mountPoint}: ${err.message ?? JSON.stringify(err)}, ${err.stack}`,
           );
         }
+      } else {
+        // logger.info(`parcel already mounted: ${extInfo.extID}. skipping`);
       }
 
       return {
@@ -192,7 +194,7 @@ export const handleExtPointMountOfExtensions = (
       logger,
       mountedExtPoints,
     })),
-    mergeMap(props => {
+    exhaustMap(props => {
       return mountMatchingExtensionParcels(props);
     }),
     withLatestFrom(state$),
@@ -234,20 +236,32 @@ export const handleExtPointMountOfExtensions = (
 /*
  * Handle extension point unmount event
  */
-export const handleExtensionPointUnmount = (state: LoaderState, eventData: EventDataTypes) => {
-  const logger = getSDK().services.log.create('app-loader');
-  return from(state.mountedExtPoints)
-    .pipe(filter(([name]) => name === eventData.name))
+export const handleExtensionPointUnmount = (state$: Observable<LoaderState>, logger: ILogger) => {
+  return state$
+    .pipe(getStateSlice('unmountingExtensionPoints'))
     .pipe(
-      map(([, data]) => {
-        const parcels = state.extensionParcels.get(data.name);
+      filter(unmount => unmount.length > 0),
+      mergeMap(unmountingExtensionPoints => {
+        return from(unmountingExtensionPoints);
+      }),
+      withLatestFrom(state$.pipe(getStateSlice('mountedExtPoints'))),
+      map(([unmounting, mounted]) => mounted.get(unmounting.name)),
+      filter(Boolean),
+    )
+    .pipe(
+      withLatestFrom(
+        state$.pipe(getStateSlice('extensionParcels')),
+        state$.pipe(getStateSlice('unmountingExtensionPoints')),
+      ),
+      map(([data, extensionParcels, unmountingExtensionPoints]) => {
+        const parcels = extensionParcels.get(data.name);
         if (parcels && parcels.length) {
-          return of(state.extensionParcels.get(data.name)).pipe(
+          return of(extensionParcels.get(data.name)).pipe(
             filter(parcels => !!parcels && parcels.length > 0),
             map(parcels =>
               from(
                 parcels.map(parcelData => {
-                  if (parcelData.parcel.getStatus() === singleSpa.MOUNTED) {
+                  if (parcelData.parcel?.getStatus() === singleSpa.MOUNTED) {
                     return parcelData.parcel.unmount();
                   }
                   return Promise.resolve();
@@ -255,27 +269,38 @@ export const handleExtensionPointUnmount = (state: LoaderState, eventData: Event
               ),
             ),
             map(() => {
-              const remainingParcels = new Map(state.extensionParcels);
-              remainingParcels.delete(eventData.name);
+              const remainingParcels = new Map(extensionParcels);
+              const unmounting = unmountingExtensionPoints.filter(ext => ext.name !== data.name);
+
+              remainingParcels.delete(data.name);
               return {
                 extData: data,
                 extensionParcels: remainingParcels,
+                unmountingExtensionPoints: unmounting,
               };
             }),
           );
         }
-        return of({ extData: data, extensionParcels: new Map() });
+        return of({ extData: data, extensionParcels: new Map(), unmountingExtensionPoints });
       }),
       mergeAll(),
-      map(res => {
-        const { extData, extensionParcels } = res;
-        const mountedExtPoints = new Map(state.mountedExtPoints);
+      withLatestFrom(state$.pipe(getStateSlice('mountedExtPoints'))),
+      map(([res, mountedExtPoints]) => {
+        const { extData, extensionParcels, unmountingExtensionPoints } = res;
+        const mountedExts = new Map(mountedExtPoints);
         mountedExtPoints.delete(extData.name);
         return {
-          ...state,
+          extensionParcels,
+          mountedExtPoints: mountedExts,
+          unmountingExtensionPoints,
+        };
+      }),
+      tap(({ extensionParcels, mountedExtPoints, unmountingExtensionPoints }) => {
+        pipelineEvents.next({
           extensionParcels,
           mountedExtPoints,
-        };
+          unmountingExtensionPoints,
+        });
       }),
       catchError(err => {
         logger.error(
