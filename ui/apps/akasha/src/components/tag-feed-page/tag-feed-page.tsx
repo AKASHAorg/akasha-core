@@ -106,7 +106,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             requestStatus={reqPosts.status}
             loginState={loginState}
             loggedProfile={loggedProfileData}
-            singleSpaNavigate={props.singleSpa.navigateToUrl}
+            navigateTo={props.plugins?.routing?.navigateTo}
             navigateToModal={props.navigateToModal}
             onLoginModalOpen={showLoginModal}
             hasNextPage={reqPosts.hasNextPage}

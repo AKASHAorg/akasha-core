@@ -10,6 +10,7 @@ import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics
 
 import { StyledButton, StyledBox } from './styles';
 import routes, { WELCOME } from '../../../routes';
+import { NavigateToParams } from '@akashaproject/ui-awf-typings';
 
 const { Box, Text, styled, Icon, LinkInput } = DS;
 
@@ -26,7 +27,7 @@ interface IStepFiveProps {
   textUsernameUnknownError: string;
   textUsernameAvailable: string;
   buttonLabel: string;
-  navigateToUrl: (url: string) => void;
+  navigateTo: (args: NavigateToParams) => void;
 }
 
 const StyledIcon = styled(Box)`
@@ -90,7 +91,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
     textUsernameUnknownError,
     textUsernameAvailable,
     buttonLabel,
-    navigateToUrl,
+    navigateTo,
   } = props;
   const [username, setUsername] = React.useState('');
   const conditions = React.useMemo(
@@ -146,7 +147,10 @@ const StepFive: React.FC<IStepFiveProps> = props => {
       category: AnalyticsCategories.SIGN_UP,
       action: 'Username Setup',
     });
-    navigateToUrl(routes[WELCOME]);
+    navigateTo?.({
+      appName: '@akashaproject/app-auth-ewa',
+      getNavigationUrl: navRoutes => navRoutes[WELCOME],
+    });
   };
 
   return (

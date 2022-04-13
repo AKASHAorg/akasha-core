@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import { ButtonValues } from '@akashaproject/ui-awf-typings';
+import { ButtonValues, NavigateToParams } from '@akashaproject/ui-awf-typings';
 import { useGetCount, useInfiniteLog, ILogItem } from '@akashaproject/ui-awf-hooks';
 
 import Banner from './banner';
@@ -25,7 +25,7 @@ const {
 
 export interface ITransparencyLogProps {
   user: string | null;
-  navigateToUrl: (url: string) => void;
+  navigateTo: (args: NavigateToParams) => void;
 }
 
 const DEFAULT_LIMIT = 10;
@@ -101,7 +101,7 @@ const VerticalFillBox = styled(Box)`
 `;
 
 const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
-  const { user, navigateToUrl } = props;
+  const { user, navigateTo } = props;
 
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<ILogItem | null>(null);
@@ -142,7 +142,11 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const handleClickAvatar = (pubKey: string) => () => {
-    if (pubKey) navigateToUrl(`/profile/${pubKey}`);
+    if (pubKey)
+      navigateTo?.({
+        appName: '@akashaproject/app-profile',
+        getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+      });
   };
 
   const handleCardClick = (el: ILogItem) => () => {
@@ -286,7 +290,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
               selected={selected}
               handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
               handleClickArrowLeft={handleClickArrowLeft}
-              navigateToUrl={navigateToUrl}
+              navigateTo={navigateTo}
             />
           )}
           {!selected && <Banner count={count} />}

@@ -43,7 +43,7 @@ const Content: React.FC<IContentProps> = props => {
           entryData={props.entryData}
           itemType={props.itemType}
           locale={props.locale}
-          singleSpa={props.singleSpa}
+          navigateTo={props.plugins?.routing?.navigateTo}
         />
       )}
       <Box

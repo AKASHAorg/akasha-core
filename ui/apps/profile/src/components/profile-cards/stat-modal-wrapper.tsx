@@ -16,12 +16,13 @@ import {
   useUnfollow,
   getMediaUrl,
 } from '@akashaproject/ui-awf-hooks';
+import { NavigateToParams } from '@akashaproject/ui-awf-typings';
 
 interface IStatModalWrapper {
   loginState: LoginState;
   selectedStat: number;
   profileData: IProfileData;
-  singleSpa: typeof singleSpa;
+  navigateTo?: (args: NavigateToParams) => void;
   showLoginModal: () => void;
   handleClose: () => void;
 }
@@ -35,7 +36,7 @@ export const enum SelectedTab {
 const { StatModal, truncateMiddle } = DS;
 
 const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
-  const { loginState, selectedStat, profileData, singleSpa, handleClose } = props;
+  const { loginState, selectedStat, profileData, handleClose, navigateTo } = props;
 
   const [activeIndex, setActiveIndex] = React.useState<SelectedTab>(SelectedTab.FOLLOWERS);
 
@@ -120,7 +121,10 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const handleTagClick = (tagName: string) => {
     // close current modal before navigation
     handleClose();
-    singleSpa.navigateToUrl(`/social-app/tags/${tagName}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${tagName}`,
+    });
   };
 
   const handleTagSubscribe = (tagName: string) => {
@@ -134,7 +138,10 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   const handleProfileClick = (pubKey: string) => {
     handleClose();
-    singleSpa.navigateToUrl(`/profile/${pubKey}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+    });
   };
 
   const handleFollowProfile = (ethAddress: string) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import EntryFeed from './entry-feed';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
@@ -20,7 +20,7 @@ export interface IFeedWidgetProps {
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
   loginState: LoginState;
-  singleSpaNavigate: (url: string) => void;
+  navigateTo?: (args: NavigateToParams) => void;
   navigateToModal: (props: ModalNavigationOptions) => void;
   onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   requestStatus: 'success' | 'loading' | 'error' | 'idle';

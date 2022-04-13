@@ -140,7 +140,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
         loginState={loginState}
-        singleSpaNavigate={props.singleSpa.navigateToUrl}
+        navigateTo={props.plugins?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}

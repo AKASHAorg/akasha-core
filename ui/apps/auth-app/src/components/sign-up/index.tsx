@@ -312,7 +312,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           )}
           textUsernameAvailable={t('This username is available, hooray!')}
           buttonLabel={t('Complete Sign-Up')}
-          navigateToUrl={props.singleSpa.navigateToUrl}
+          navigateTo={props.plugins?.routing?.navigateTo}
         />
       )}
     </SignUpCard>

@@ -10,23 +10,33 @@ const { WelcomeCard } = DS;
 
 const Welcome: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-auth-ewa');
+  const navigateTo = props.plugins?.routing?.navigateTo;
 
   const loginQuery = useGetLogin();
 
   React.useEffect(() => {
     // redirect to sign in page if not logged in
     if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
-      props.singleSpa.navigateToUrl(routes[SIGN_IN]);
+      navigateTo?.({
+        appName: '@akashaproject/app-auth-ewa',
+        getNavigationUrl: navRoutes => navRoutes.SignIn,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePrimaryButtonClick = () => {
-    props.singleSpa.navigateToUrl(`${rootAKASHARoute}/feed`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => navRoutes.defaultRoute,
+    });
   };
 
   const handleSecondaryButtonClick = () => {
-    props.singleSpa.navigateToUrl(`${rootProfileRoute}/my-profile?modal[name]=update-profile`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.MyProfile}?modal[name]=update-profile`,
+    });
   };
 
   return (

@@ -1,5 +1,5 @@
-export const PROFILE_LIST = 'Profile list';
-export const MY_PROFILE = 'My Profile';
+export const PROFILE_LIST = 'ProfileList';
+export const MY_PROFILE = 'MyProfile';
 export const rootRoute = '/profile';
 
 export default {

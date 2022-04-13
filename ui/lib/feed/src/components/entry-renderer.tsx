@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   usePost,
@@ -17,9 +17,11 @@ import {
   LoginState,
   useTagSearch,
   useMentionSearch,
+  COMMENT_KEY,
 } from '@akashaproject/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { AnalyticsCategories, TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const {
   Box,
@@ -39,8 +41,8 @@ export interface IEntryRenderer {
   style?: React.CSSProperties;
   onFlag?: (entryId: string, itemType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
-  onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
-  singleSpaNavigate: (url: string) => void;
+  onEntryNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
+  navigateTo: (args: NavigateToParams) => void;
   contentClickable?: boolean;
   itemType: ItemTypes;
   onEntryRemove?: (entryId: string) => void;
@@ -67,8 +69,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
     itemType,
     style,
     onFlag,
-    onNavigate,
-    singleSpaNavigate,
+    onEntryNavigate,
+    navigateTo,
     sharePostUrl,
     onRepost,
     contentClickable,
@@ -173,37 +175,28 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [itemType]);
 
   const handleAvatarClick = () => {
-    onNavigate(
-      {
-        id: itemData?.author.pubKey,
-        authorEthAddress: itemData?.author.ethAddress,
-      },
-      ItemTypes.PROFILE,
-    );
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.pubKey}`,
+    });
   };
 
   const handleContentClick = (details: IContentClickDetails) => {
-    onNavigate(details, itemType);
+    onEntryNavigate(details, itemType);
   };
 
   const handleMentionClick = (pubKey: string) => {
-    onNavigate(
-      {
-        id: pubKey,
-        authorEthAddress: pubKey,
-      },
-      ItemTypes.PROFILE,
-    );
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+    });
   };
 
   const handleTagClick = (name: string) => {
-    onNavigate(
-      {
-        id: name,
-        authorEthAddress: name,
-      },
-      ItemTypes.TAG,
-    );
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
+    });
   };
 
   const handleExtensionMount = (name: string) => {
@@ -366,7 +359,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 onContentClick={handleContentClick}
                 onMentionClick={handleMentionClick}
                 onTagClick={handleTagClick}
-                singleSpaNavigate={singleSpaNavigate}
+                navigateTo={navigateTo}
                 contentClickable={contentClickable}
                 moderatedContentLabel={t('This content has been moderated')}
                 ctaLabel={t('See it anyway')}
