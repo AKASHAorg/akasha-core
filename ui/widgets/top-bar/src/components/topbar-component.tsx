@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { isMobileOnly } from 'react-device-detect';
 
 import DS from '@akashaproject/design-system';
 import {
@@ -15,15 +14,16 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 const { Topbar } = DS;
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
-  const { singleSpa, uiEvents } = props;
+  const { uiEvents } = props;
   const navigateTo = props.plugins.routing?.navigateTo;
 
-  const { navigateToUrl } = singleSpa;
   const location = useLocation();
 
   const [routeData, setRouteData] = React.useState({});
-  // sidebar is open by default on larger screens
-  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(!isMobileOnly ? true : false);
+  // sidebar is open by default on larger screens >=1440px
+  const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
+    window.matchMedia('(min-width: 1440px)').matches ? true : false,
+  );
 
   const loginQuery = useGetLogin();
   const logoutMutation = useLogout();
@@ -86,7 +86,9 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   });
 
   const handleNavigation = (path: string) => {
-    navigateToUrl(path);
+    navigateTo?.({
+      getNavigationUrl: () => path,
+    });
   };
 
   const handleLoginClick = () => {
@@ -106,7 +108,9 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   const handleLogout = async () => {
     await logoutMutation.mutateAsync();
-    navigateToUrl('/');
+    navigateTo?.({
+      getNavigationUrl: () => '/',
+    });
     setTimeout(() => window.location.reload(), 50);
   };
 

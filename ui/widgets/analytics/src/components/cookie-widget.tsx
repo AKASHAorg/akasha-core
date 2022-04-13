@@ -98,7 +98,12 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                       color="accentText"
                       size="medium"
                       style={{ cursor: 'pointer' }}
-                      onClick={() => props.singleSpa.navigateToUrl('/settings')}
+                      onClick={() =>
+                        props.plugins?.routing?.navigateTo?.({
+                          appName: '@akashaproject/app-settings-ewa',
+                          getNavigationUrl: navRoutes => navRoutes.Home,
+                        })
+                      }
                     >
                       {t('settings ')}
                     </Text>

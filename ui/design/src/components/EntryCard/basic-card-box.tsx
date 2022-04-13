@@ -4,8 +4,11 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 
 const StyledBox = styled(Box)<{ isSelected?: boolean }>`
+  /* background color for selected card in moderation history */
   background-color: ${props =>
-    props.isSelected ? props.theme.colors.activeCardBackground : props.theme.colors.cardBackground};
+    props.isSelected
+      ? props.theme.colors.activePanelBackground
+      : props.theme.colors.cardBackground};
 `;
 
 export interface IBasicCardBox extends BoxProps {

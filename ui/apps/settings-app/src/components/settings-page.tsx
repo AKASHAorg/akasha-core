@@ -21,7 +21,10 @@ const SettingsPage: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-settings-ewa');
 
   const handleSettingsOptionClick = (option: SettingsOption) => () => {
-    return props.singleSpa.navigateToUrl(routes[option]);
+    return props.plugins?.routing?.navigateTo?.({
+      appName: '@akashaproject/app-settings-ewa',
+      getNavigationUrl: navRoutes => navRoutes[option],
+    });
   };
 
   return (

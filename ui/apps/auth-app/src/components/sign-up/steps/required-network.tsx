@@ -11,7 +11,7 @@ const { Text, Icon, Box, VariableIconButton } = DS;
 export interface IRequiredNetworkStepProps {
   injectedProvider: INJECTED_PROVIDERS;
   selectedProvider: EthProviders;
-  isOnRequiredNetwork: boolean;
+  isOnRequiredNetwork?: boolean;
   setRequiredNetworkLabel?: string;
   setRequiredNetworkBoldLabel?: string;
   setRequiredNetworkAccentLabel?: string;
@@ -25,7 +25,7 @@ export interface IRequiredNetworkStepProps {
   isNetworkCheckError?: boolean;
   isOnRequiredNetworkLabel?: string;
   buttonLabel?: string;
-  onClickSwitchMetamaskNetwork: () => void;
+  onClickSwitchMetamaskNetwork?: () => void;
   onClickCheckNetwork?: () => void;
   onButtonClick?: () => void;
 }
@@ -52,6 +52,7 @@ const RequiredNetworkStep: React.FC<IRequiredNetworkStepProps> = props => {
     onClickCheckNetwork,
     onButtonClick,
   } = props;
+
   const [analyticsActions] = useAnalytics();
 
   const handleButtonClick = () => {

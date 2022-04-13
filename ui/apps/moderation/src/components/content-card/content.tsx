@@ -3,7 +3,7 @@ import moment from 'moment';
 import DS from '@akashaproject/design-system';
 import getSDK from '@akashaproject/awf-sdk';
 
-import { IContentProps } from '../../../interfaces';
+import { IContentProps } from '../../interfaces';
 
 import EntryDataCard from './entry-data-card';
 import ExplanationsBox from './explanations-box';
@@ -46,7 +46,7 @@ const Content: React.FC<IContentProps> = props => {
           entryData={props.entryData}
           itemType={props.itemType}
           locale={props.locale}
-          singleSpa={props.singleSpa}
+          navigateTo={props.plugins?.routing?.navigateTo}
         />
       )}
       <Box

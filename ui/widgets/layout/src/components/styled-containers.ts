@@ -40,7 +40,7 @@ export const SidebarAreaContainer: React.FC<Record<string, unknown>> = styled(Bo
   position: fixed;
   top: ${TOPBAR_HEIGHT}px;
   margin-top: -${TOPBAR_HEIGHT}px;
-  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value + 1}px) {
     margin-top: 0;
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {

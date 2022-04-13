@@ -10,8 +10,3 @@ export interface RouteRepository {
   };
   byArea: { [key in MenuItemAreaType]?: Array<RouteMenuItem> };
 }
-
-export interface NavigationOptions {
-  appName: string;
-  getNavigationUrl: (navRoute: Record<string, string>) => string;
-}

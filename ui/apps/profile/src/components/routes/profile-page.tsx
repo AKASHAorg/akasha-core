@@ -25,10 +25,14 @@ export interface ProfilePageProps extends RootComponentProps {
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { t } = useTranslation('app-profile');
-  const { loggedProfileData, showLoginModal } = props;
+  const {
+    plugins: { routing },
+    loggedProfileData,
+    showLoginModal,
+  } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
+  const { t } = useTranslation('app-profile');
   const location = useLocation();
   const { pubKey } = useParams<{ pubKey: string }>();
 
@@ -98,6 +102,13 @@ const ProfilePage = (props: ProfilePageProps) => {
     });
   };
 
+  const handleCTAClick = () => {
+    routing.navigateTo({
+      appName: 'Legal',
+      getNavigationUrl: () => '/legal/code-of-conduct',
+    });
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -124,7 +135,9 @@ const ProfilePage = (props: ProfilePageProps) => {
               delistedAccount={profileState.delisted}
               moderatedContentLabel={t('This account was suspended for violating the')}
               ctaLabel={t('Code of Conduct')}
+              // @TODO: fix navigation for cta: check moderation intro card
               ctaUrl="/legal/code-of-conduct"
+              onCTAClick={handleCTAClick}
             />
           )}
           {!profileState.moderated && profileState.reported && (
@@ -149,6 +162,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                 profileData={profileState}
                 profileId={pubKey}
                 loginState={loginQuery.data}
+                navigateTo={props.plugins?.routing?.navigateTo}
               />
               {reqPosts.isError && reqPosts.error && (
                 <ErrorLoader
@@ -171,7 +185,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   requestStatus={reqPosts.status}
                   loginState={loginQuery.data}
                   loggedProfile={loggedProfileData}
-                  singleSpaNavigate={props.singleSpa.navigateToUrl}
+                  navigateTo={props.plugins?.routing?.navigateTo}
                   navigateToModal={props.navigateToModal}
                   onLoginModalOpen={showLoginModal}
                   hasNextPage={reqPosts.hasNextPage}
