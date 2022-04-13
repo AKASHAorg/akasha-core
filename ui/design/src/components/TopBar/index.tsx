@@ -290,7 +290,12 @@ const Topbar: React.FC<ITopbarProps> = props => {
               quickAccessItems.map(renderPluginButton)}
             {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
               <Box direction="row" align="center" gap="xsmall">
-                <Button onClick={onLoginClick} label={signInLabel} />
+                <Button
+                  onClick={onLoginClick}
+                  label={signInLabel}
+                  slimBorder={true}
+                  hoverIndicator="accentText"
+                />
                 <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
               </Box>
             )}
