@@ -25,7 +25,7 @@ export const SidebarSlot: React.FC<ExtensionPointProps & { visible: boolean }> =
 `;
 
 export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
-  z-index: 1001;
+  z-index: 102;
   position: sticky;
   top: 0;
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
