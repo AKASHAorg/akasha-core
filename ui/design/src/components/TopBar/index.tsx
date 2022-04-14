@@ -93,8 +93,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     modalSlotId,
   } = props;
 
-  // const [sidebarOpen, setSidebarOpen] = React.useState(false);
-
   const [dropOpen, setDropOpen] = React.useState(false);
   const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
