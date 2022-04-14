@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard } = DS;
+const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard, Spinner } = DS;
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins?.routing?.navigateTo;
@@ -52,6 +52,11 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
               image="images/notification.png"
               loggedIn={!!isLoggedIn}
             />
+            {notifReq.isFetching && !notificationsState?.length && (
+              <Box pad="large">
+                <Spinner />
+              </Box>
+            )}
             {message && (
               <ErrorLoader
                 type="script-error"
