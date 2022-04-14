@@ -73,7 +73,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
   };
 
   const renderAvatarMenuItem = (menuItem: IMenuItem) => {
-    if (menuItem.label === 'My Profile') {
+    if (menuItem.label.replace(/\s*/g, '').match(/myprofile/i)) {
       return (
         <>
           <Box
