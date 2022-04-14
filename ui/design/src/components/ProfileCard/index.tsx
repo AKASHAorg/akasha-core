@@ -225,7 +225,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   };
 
   const handleStatHover = (id?: number) => () => {
-    if (typeof id === undefined) {
+    if (typeof id === 'undefined') {
       return setHoveredStatId(null);
     }
     return setHoveredStatId(id);
