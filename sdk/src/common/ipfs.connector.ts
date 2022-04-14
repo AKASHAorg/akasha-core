@@ -14,7 +14,8 @@ import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces/res
 class AWF_IpfsConnector implements AWF_IIpfsConnector {
   private _log: ILogger;
   readonly gateway = 'https://hub.textile.io/ipfs/';
-  readonly originGateway = 'ipfs.infura-ipfs.io';
+  readonly originGateway = 'ipfs.hub.textile.io';
+  readonly fallbackGateway = 'ipfs.infura-ipfs.io';
   private readonly LEGAL_DOCS_SOURCE = {
     [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',
     [LEGAL_DOCS.TERMS_OF_SERVICE]: 'bafkreib5jg73c6bmbzkrokpusraiwwycnkypol3xh3uadsu7hhzefp6g2e',
@@ -37,7 +38,7 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
     return createObservableStream(
-      fetch(this.buildOriginLink(docHash), { signal: controller.signal }).then(res => {
+      fetch(this.buildFallBackLink(docHash), { signal: controller.signal }).then(res => {
         clearTimeout(timeout);
         if (res.ok) {
           if (!jsonResponse) {
@@ -60,26 +61,51 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     return this.catDocument<never>(selectedDoc);
   }
 
-  buildOriginLink(hash: string | CID) {
+  validateCid(hash: string | CID) {
     if (typeof hash === 'string' && hash.startsWith('https://')) {
-      return hash;
+      return { link: hash };
     }
     const cid = typeof hash === 'string' ? CID.parse(hash) : CID.asCID(hash);
     if (!cid) {
       throw new Error(`Hash ${hash.toString()} is not a valid CID`);
+    }
+    return { cid };
+  }
+
+  buildOriginLink(hash: string | CID) {
+    const { link, cid } = this.validateCid(hash);
+    if (link) {
+      return link;
     }
     return `https://${cid.toV1().toString()}.${this.originGateway}`;
   }
 
-  buildPathLink(hash: string | CID) {
-    if (typeof hash === 'string' && hash.startsWith('https://')) {
-      return hash;
+  buildFallBackLink(hash: string | CID) {
+    const { link, cid } = this.validateCid(hash);
+    if (link) {
+      return link;
     }
-    const cid = typeof hash === 'string' ? CID.parse(hash) : CID.asCID(hash);
-    if (!cid) {
-      throw new Error(`Hash ${hash.toString()} is not a valid CID`);
+    return `https://${cid.toV1().toString()}.${this.fallbackGateway}`;
+  }
+
+  buildPathLink(hash: string | CID) {
+    const { link, cid } = this.validateCid(hash);
+    if (link) {
+      return link;
     }
     return `${this.gateway}${cid.toV1().toString()}`;
+  }
+
+  buildIpfsLinks(hash: string | CID) {
+    const originLink = this.buildOriginLink(hash);
+    const fallbackLink = this.buildFallBackLink(hash);
+    const pathLink = this.buildPathLink(hash);
+
+    return {
+      originLink,
+      fallbackLink,
+      pathLink,
+    };
   }
 
   transformBase16HashToV1(hash: string) {
@@ -95,6 +121,8 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     for (const addr of addrList) {
       if (addr.substring(0, 6) === '/ipfs/') {
         results.push(this.buildOriginLink(addr.substring(6)));
+      } else if (addr.substring(0, 7) === 'ipfs://') {
+        results.push(this.buildOriginLink(addr.substring(7)));
       } else if (addr.substring(0, 1) === '/') {
         results.push(multiaddrToUri(addr));
       }

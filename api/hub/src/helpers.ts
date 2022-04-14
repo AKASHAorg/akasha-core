@@ -366,6 +366,8 @@ export const multiAddrToUri = (addrList: string[]) => {
   for (const addr of addrList) {
     if (addr.substring(0, 6) === '/ipfs/') {
       results.push(createIpfsGatewayLink(addr.substring(6)));
+    } else if (addr.substring(0, 7) === 'ipfs://') {
+      results.push(createIpfsGatewayLink(addr.substring(7)));
     } //else {
     // this package does not work on node
     // results.push(multiaddrToUri(addr));
