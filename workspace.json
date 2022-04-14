@@ -139,6 +139,60 @@
         }
       }
     },
+    "@akashaproject/ui-widget-mini-profile": {
+      "root": "ui/widgets/mini-profile",
+      "sourceRoot": "ui/widgets/mini-profile/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "ui/build/widgets/mini-profile"
+          ],
+          "options": {
+            "commands": [
+              "yarn run pack",
+              "yarn postpack"
+            ],
+            "cwd": "ui/widgets/mini-profile",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/mini-profile"
+          }
+        }
+      }
+    },
+    "@akashaproject/ui-widget-my-apps": {
+      "root": "ui/widgets/my-apps",
+      "sourceRoot": "ui/widgets/my-apps/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [
+            "ui/build/widgets/my-apps"
+          ],
+          "options": {
+            "commands": [
+              "yarn run pack",
+              "yarn postpack"
+            ],
+            "cwd": "ui/widgets/my-apps",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/widgets/my-apps"
+          }
+        }
+      }
+    },
     "@akashaproject/ui-widget-sidebar": {
       "root": "ui/widgets/sidebar",
       "sourceRoot": "ui/widgets/sidebar/src",
@@ -201,28 +255,6 @@
           "builder": "./tools/executors/i18n:extract",
           "options": {
             "cwd": "ui/widgets/trending"
-          }
-        }
-      }
-    },
-    "@akashaproject/ui-widget-ic": {
-      "root": "ui/widgets/ic",
-      "sourceRoot": "ui/widgets/ic/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "builder": "@nrwl/workspace:run-commands",
-          "outputs": ["ui/build/widgets/ic"],
-          "options": {
-            "commands": ["yarn run pack", "yarn postpack"],
-            "cwd": "ui/widgets/ic",
-            "parallel": false
-          }
-        },
-        "extract:translations": {
-          "builder": "./tools/executors/i18n:extract",
-          "options": {
-            "cwd": "ui/widgets/ic"
           }
         }
       }

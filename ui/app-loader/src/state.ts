@@ -19,11 +19,14 @@ import {
   ReplaySubject,
   pluck,
   of,
+  catchError,
 } from 'rxjs';
 import { getEvents, ObservedEventNames } from './events';
 import * as singleSpa from 'single-spa';
 import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import { handleExtensionPointUnmount } from './extensions';
+import { logger } from 'ethers';
+import getSDK from '@akashaproject/awf-sdk';
+// import { handleExtensionPointUnmount } from './extensions';
 
 export interface LoaderState {
   activeModal: ModalNavigationOptions;
@@ -107,6 +110,9 @@ export interface LoaderState {
   // plugins that are provided by apps
   plugins: PluginConf;
   layoutReady: boolean;
+
+  // extension points that must be unmounted
+  unmountingExtensionPoints: ({ name: string } & BaseIntegrationInfo)[];
 }
 
 // export to be used in tests
@@ -130,6 +136,7 @@ export const defaultInitialState: LoaderState = {
   spaEvents: null,
   plugins: {},
   layoutReady: false,
+  unmountingExtensionPoints: [],
 };
 
 type GetStateSlice = <K extends keyof LoaderState>(
@@ -151,8 +158,9 @@ export const initState = (
   worldConfig: ILoaderConfig,
   globalChannel: ReplaySubject<unknown>,
   initialState?: LoaderState,
-): Observable<LoaderState> =>
-  getEvents(globalChannel /* , worldConfig */).pipe(
+): Observable<LoaderState> => {
+  const logger = getSDK().services.log.create('AppLoader-State');
+  return getEvents(globalChannel /* , worldConfig */).pipe(
     mergeScan<Partial<LoaderState> & EventDataTypes, LoaderState>((state, newData) => {
       switch (newData.event) {
         case EventTypes.ExtensionPointMount:
@@ -163,7 +171,10 @@ export const initState = (
             mountedExtPoints: extPoints,
           });
         case EventTypes.ExtensionPointUnmount:
-          return handleExtensionPointUnmount(state, newData.data);
+          return of({
+            ...state,
+            unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
+          });
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
           if (worldConfig.registryOverrides.find(override => override.name === newData.data.name)) {
@@ -192,5 +203,10 @@ export const initState = (
           });
       }
     }, initialState ?? defaultInitialState),
+    catchError(err => {
+      logger.error(`[state]: ${err.message ?? JSON.stringify(err)}`);
+      return of(defaultInitialState);
+    }),
     shareReplay(1),
   );
+};

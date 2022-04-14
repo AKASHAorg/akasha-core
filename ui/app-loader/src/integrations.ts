@@ -373,8 +373,11 @@ export const handleExtPointMountOfApps = (
       const { config } = results.data;
       const { manifests, plugins } = results;
       const manifest = manifests.find((m: BaseIntegrationInfo) => m.name === config.name);
-
-      await loadI18nNamespaces(plugins, config.i18nNamespace);
+      try {
+        await loadI18nNamespaces(plugins, config.i18nNamespace);
+      } catch (err) {
+        logger.error(`[integrations]: loadI18nNamespaces: ${err.message ?? JSON.stringify(err)}`);
+      }
 
       logger.info(`Registering app ${config.name}`);
       singleSpa.registerApplication<

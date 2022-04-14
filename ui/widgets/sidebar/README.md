@@ -5,16 +5,12 @@
 ## Usage
 
 ```tsx
-import AppLoader from '@akashaproject/ui-plugin-loader';
-import LayoutWidget from '@akashaproject/ui-widget-layout';
-import SidebarWidget from '@akashaproject/ui-widget-sidebar';
+const { default: startLoader } = await System.import('@akashaproject/ui-app-loader');
 
-// ...
-const app = new AppLoader({
-  layout: LayoutWidget,
+startLoader({
+  defaultWidgets: [
+    '@akashaproject/ui-widget-sidebar',
+  ]
 });
-// layout should expose a sidebarSlotId: string param
-app.registerWidget(SidebarWidget, { slot: LayoutWidget.sidebarSlotId });
 
-app.start();
 ```

@@ -4,7 +4,6 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import {
   useGetAllInstalledApps,
@@ -14,8 +13,7 @@ import {
   useGetLogin,
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
-import { hiddenIntegrations } from '../hidden-integrations';
-import routes, { INFO, rootRoute } from '../routes';
+import { hiddenIntegrations } from './hidden-integrations';
 
 const { Box, ICWidgetCard, ErrorLoader } = DS;
 
@@ -91,7 +89,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     }
     props.plugins?.routing?.navigateTo?.({
       appName: '@akashaproject/app-integration-center',
-      getNavigationUrl: navRoutes => `${navRoutes[INFO]}/${integrationId}`,
+      getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
     });
   };
 
@@ -114,13 +112,9 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <Router>
-    <Route path={rootRoute}>
-      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
-        <ICWidget {...props} />
-      </I18nextProvider>
-    </Route>
-  </Router>
+  <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <ICWidget {...props} />
+  </I18nextProvider>
 );
 
 const reactLifecycles = singleSpaReact({

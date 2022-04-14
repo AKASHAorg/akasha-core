@@ -1,6 +1,6 @@
-# Top Bar widget
+# Mini profile widget
 
-> Presents the app title, search bar and other related plugin icons.
+> Shows profile information of the author of an entry.
 
 ## Usage
 
@@ -9,7 +9,7 @@ const { default: startLoader } = await System.import('@akashaproject/ui-app-load
 
 startLoader({
   defaultWidgets: [
-    '@akashaproject/ui-widget-topbar',
+    '@akashaproject/ui-widget-mini-profile',
   ]
 });
 
