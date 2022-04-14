@@ -38,7 +38,7 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000);
     return createObservableStream(
-      fetch(this.buildOriginLink(docHash), { signal: controller.signal }).then(res => {
+      fetch(this.buildFallBackLink(docHash), { signal: controller.signal }).then(res => {
         clearTimeout(timeout);
         if (res.ok) {
           if (!jsonResponse) {
@@ -121,6 +121,8 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     for (const addr of addrList) {
       if (addr.substring(0, 6) === '/ipfs/') {
         results.push(this.buildOriginLink(addr.substring(6)));
+      } else if (addr.substring(0, 7) === 'ipfs://') {
+        results.push(this.buildOriginLink(addr.substring(7)));
       } else if (addr.substring(0, 1) === '/') {
         results.push(multiaddrToUri(addr));
       }
