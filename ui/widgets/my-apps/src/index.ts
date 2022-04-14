@@ -13,6 +13,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
   activeWhen: (location, pathToActiveWhen) =>
     pathToActiveWhen('/integration-center/', false)(location),
   name: 'ui-widget-my-apps',
-  i18nNamespace: ['ui-widget-my-apps'],
+  i18nNamespace: [],
   tags: ['my-apps', 'integration-center'],
 });

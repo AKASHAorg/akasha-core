@@ -13,6 +13,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IWidgetConfig =
   activeWhen: (location, pathToActiveWhen) =>
     pathToActiveWhen('/social-app/post/', false)(location),
   name: 'ui-widget-mini-profile',
-  i18nNamespace: ['ui-widget-mini-profile'],
+  i18nNamespace: [],
   tags: ['mini-profile'],
 });
