@@ -232,7 +232,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       dataTestId: 'posts-button',
     },
     {
-      iconType: 'following',
+      iconType: 'follower',
       count: `${profileData.totalFollowers || 0}`,
       label: followersLabel,
       clickHandler: onClickFollowers,
