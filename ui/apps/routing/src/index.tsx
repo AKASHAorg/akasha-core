@@ -40,6 +40,10 @@ export class RoutingPlugin {
     uiEvents.subscribe({
       next: (eventData: UIEventData) => {
         if (eventData.event === EventTypes.RegisterIntegration) {
+          // allow only one entry per app
+          if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
+            return;
+          }
           const appMenuItemData = {
             ...eventData.data.menuItems,
             navRoutes: eventData.data.navRoutes,
