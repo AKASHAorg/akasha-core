@@ -11,7 +11,7 @@ describe('<FilterCard /> Component', () => {
 
   const titleElement = (
     <ProfileAvatarButton
-      avatarImage="https://placebeard.it/360x360"
+      avatarImage={{ url: 'https://placebeard.it/360x360', fallbackUrl: '' }}
       onClick={() => null}
       label="@ivacarter"
       info="ivacarter.akasha.eth"

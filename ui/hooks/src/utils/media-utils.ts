@@ -1,4 +1,6 @@
 import getSDK from '@akashaproject/awf-sdk';
+import { UserProfile_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { lastValueFrom } from 'rxjs';
 
 export interface IConfig {
@@ -14,11 +16,41 @@ export interface IConfig {
  */
 export const getMediaUrl = (hash?: string) => {
   const sdk = getSDK();
-  let ipfsUrl;
+  let ipfsLinks:
+    | {
+        originLink: string;
+        fallbackLink: string;
+        pathLink: string;
+      }
+    | undefined;
   if (hash) {
-    ipfsUrl = sdk.services.common.ipfs.buildOriginLink(hash);
+    ipfsLinks = sdk.services.common.ipfs.buildIpfsLinks(hash);
   }
-  return ipfsUrl;
+  return ipfsLinks;
+};
+
+export const buildProfileMediaLinks = (profile: UserProfile_Response) => {
+  const { avatar, coverImage, ...other } = profile;
+  const images: {
+    avatar: { url: string; fallbackUrl: string };
+    coverImage: { url: string; fallbackUrl: string };
+  } = {
+    avatar: { url: '', fallbackUrl: '' },
+    coverImage: { url: '', fallbackUrl: '' },
+  };
+  if (avatar) {
+    images.avatar = {
+      url: getMediaUrl(avatar)?.originLink,
+      fallbackUrl: getMediaUrl(avatar)?.fallbackLink,
+    };
+  }
+  if (coverImage) {
+    images.coverImage = {
+      url: getMediaUrl(coverImage)?.originLink,
+      fallbackUrl: getMediaUrl(coverImage)?.fallbackLink,
+    };
+  }
+  return { ...images, ...other };
 };
 
 export const uploadMediaToTextile = async (data: File, isUrl = false) => {
@@ -50,7 +82,7 @@ export const uploadMediaToTextile = async (data: File, isUrl = false) => {
   try {
     const res = await sdk.api.profile.saveMediaFile(uploadData);
     return {
-      data: { src: getMediaUrl(res?.CID), size: res?.size },
+      data: { src: getMediaUrl(res?.CID).originLink, size: res?.size },
     };
   } catch (error) {
     return {

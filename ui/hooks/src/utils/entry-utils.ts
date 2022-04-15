@@ -93,7 +93,12 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
       const decodedContent = decodeb64SlateContent(slateContent.value, logger, true);
       content = decodedContent.map(node => {
         if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
-          node.url = getMediaUrl(node.url.replace(MEDIA_URL_PREFIX, ''));
+          node.url = getMediaUrl(node.url.replace(MEDIA_URL_PREFIX, '')).originLink;
+        }
+        if (node.type === 'image' && node.fallbackUrl.startsWith(MEDIA_URL_PREFIX)) {
+          node.fallbackUrl = getMediaUrl(
+            node.fallbackUrl.replace(MEDIA_URL_PREFIX, ''),
+          ).fallbackLink;
         }
         return node;
       });
@@ -117,7 +122,14 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
       }
     }
     try {
-      images = decodeb64SlateContent(imagesData.value, logger);
+      const decodedImages = decodeb64SlateContent(imagesData.value, logger);
+      images = decodedImages.map(img => {
+        if (img.src.startsWith(MEDIA_URL_PREFIX)) {
+          const ipfsLinks = getMediaUrl(img.src.replace(MEDIA_URL_PREFIX, ''));
+          img.src = { url: ipfsLinks?.originLink, fallbackUrl: ipfsLinks?.fallbackLink };
+        }
+        return img;
+      });
     } catch (error) {
       if (logger) {
         logger.error(`Error serializing base64 to images: ${error.message}`);
@@ -134,14 +146,14 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     entry['quotedByAuthors'] &&
     entry['quotedByAuthors'].length > 0
   ) {
-    quotedByAuthors = entry['quotedByAuthors'].map((author: IEntryData['author']) => {
-      let avatarWithGateway;
-      if (author.avatar) {
-        avatarWithGateway = getMediaUrl(author.avatar);
-      }
+    quotedByAuthors = entry['quotedByAuthors'].map((author: PostResponse['author']) => {
+      const avatarWithGateway = getMediaUrl(author.avatar);
       return {
         ...author,
-        avatar: avatarWithGateway,
+        avatar: {
+          url: avatarWithGateway?.originLink,
+          fallbackUrl: avatarWithGateway?.fallbackLink,
+        },
       };
     });
   }
@@ -152,8 +164,14 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     ...entry,
     author: {
       ...entry.author,
-      avatar: getMediaUrl(entry.author.avatar),
-      coverImage: getMediaUrl(entry.author.coverImage),
+      avatar: {
+        url: getMediaUrl(entry.author.avatar)?.originLink,
+        fallbackUrl: getMediaUrl(entry.author.avatar)?.fallbackLink,
+      },
+      coverImage: {
+        url: getMediaUrl(entry.author.coverImage)?.originLink,
+        fallbackUrl: getMediaUrl(entry.author.coverImage)?.fallbackLink,
+      },
     },
     isRemoved,
     slateContent: content,
@@ -228,6 +246,7 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
         hash = url.hostname.split('.')[0];
       }
       nodeClone.url = `${MEDIA_URL_PREFIX}${hash}`;
+      nodeClone.fallbackUrl = `${MEDIA_URL_PREFIX}${hash}`;
     }
     return nodeClone;
   });
@@ -262,10 +281,23 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
     });
   }
   if (data.metadata.images) {
+    // save only the ipfs hash prepended with CID: when publishing
+    const cleanedImages = data.metadata.images.map(img => {
+      const imgClone = Object.assign({}, img);
+      let hash;
+      if (img.src.startsWith(ipfsGateway)) {
+        const hashIndex = img.src.lastIndexOf('/');
+        hash = img.src.substr(hashIndex + 1);
+      } else {
+        const url = new URL(img.src);
+        hash = url.hostname.split('.')[0];
+      }
+      imgClone.src = `${MEDIA_URL_PREFIX}${hash}`;
+    });
     postObj.data.push({
       provider: PROVIDER_AKASHA,
       property: PROPERTY_IMAGES,
-      value: serializeSlateToBase64(data.metadata.images),
+      value: serializeSlateToBase64(cleanedImages),
     });
   }
   // logic specific to comments

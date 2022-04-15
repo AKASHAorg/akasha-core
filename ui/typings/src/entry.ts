@@ -69,7 +69,7 @@ export interface PendingEntry {
 
 export interface IPublishData {
   metadata: IMetadata;
-  slateContent: (Descendant & { url?: string; type?: string })[];
+  slateContent: (Descendant & { url?: string; type?: string; fallbackUrl?: string })[];
   textContent: string;
   author: string | null;
   pubKey?: string;

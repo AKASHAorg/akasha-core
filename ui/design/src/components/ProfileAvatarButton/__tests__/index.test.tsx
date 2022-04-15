@@ -19,7 +19,7 @@ describe('<ProfileAvatarButton /> Component', () => {
         wrapWithTheme(
           <ProfileAvatarButton
             ethAddress="0x000000"
-            avatarImage="https://placebeard.it/360x360"
+            avatarImage={{ url: 'https://placebeard.it/360x360' }}
             label="AKASHA World"
             info="20 April 2021 | 15h30"
             size="lg"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 
-import { IProfileWidgetCard } from './profile-widget-card';
+import { IProfileCardProps } from './';
 import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
 
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
@@ -9,8 +9,28 @@ import Avatar from '../Avatar';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import { truncateMiddle } from '../../utils/string-utils';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
-const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
+export interface IProfileSearchCard {
+  className?: string;
+  loggedEthAddress: string;
+  handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
+  handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
+  isFollowing: boolean;
+  profileData: IProfileData;
+  followingLabel: string;
+  followersLabel?: string;
+  shareProfileLabel?: string;
+  followLabel: string;
+  unfollowLabel: string;
+  postsLabel: string;
+  descriptionLabel?: string;
+  profileAnchorLink?: string;
+  onClickProfile?: () => void;
+  showPostCount?: boolean;
+}
+
+const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
   const {
     className,
     loggedEthAddress,

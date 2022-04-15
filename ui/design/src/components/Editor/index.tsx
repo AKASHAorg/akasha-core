@@ -31,6 +31,7 @@ import { isMobile } from 'react-device-detect';
 import LinkPreview from './link-preview';
 import { ImageGallery, ImageObject } from './image-gallery';
 import isUrl from 'is-url';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const MAX_LENGTH = 280;
 
@@ -39,7 +40,7 @@ const MAX_LENGTH = 280;
  * @param editorState - the state of the editor is controlled from the parent component
  */
 export interface IEditorBox {
-  avatar?: string;
+  avatar?: IProfileData['avatar'];
   ethAddress: string | null;
   postLabel?: string;
   placeholderLabel?: string;
@@ -61,10 +62,10 @@ export interface IEditorBox {
     name?: string;
     userName?: string;
     pubKey: string;
-    avatar?: string;
+    avatar?: IProfileData['avatar'];
     ethAddress: string;
     description?: string;
-    coverImage?: string;
+    coverImage?: IProfileData['coverImage'];
   }[];
   tags?: { name: string; totalPosts: number }[];
   uploadRequest?: (

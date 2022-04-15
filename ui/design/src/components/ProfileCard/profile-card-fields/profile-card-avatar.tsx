@@ -6,10 +6,11 @@ import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ImageOverlay from '../../ImageOverlay';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface IProfileCardAvatarProps {
   editable: boolean;
-  avatar?: string;
+  avatar?: IProfileData['avatar'];
   avatarIcon?: LogoSourceType;
   avatarPopoverOpen: boolean;
   setAvatarPopoverOpen: (value: boolean) => void;
@@ -67,16 +68,14 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
             </StyledAvatarEditDiv>
           )}
       </AvatarDiv>
-      {imageOverlayOpen && avatar && (
-        <ImageOverlay imgUrl={avatar} closeModal={closeImageOverlay} />
-      )}
+      {imageOverlayOpen && avatar && <ImageOverlay src={avatar} closeModal={closeImageOverlay} />}
       {editAvatarRef.current &&
         avatarPopoverOpen &&
         profileProvidersData &&
         profileProvidersData.avatarProviders &&
         profileProvidersData.avatarProviders.length !== 0 && (
           <SelectPopover
-            currentValue={avatar}
+            currentValue={avatar.fallbackUrl}
             target={editAvatarRef.current}
             dataSource={profileProvidersData.avatarProviders}
             onClickElem={handleChangeAvatar}

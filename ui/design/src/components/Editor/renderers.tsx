@@ -68,7 +68,8 @@ const ImgElement = ({
           </StyledCloseDiv>
         )}
         <picture>
-          <StyledImg src={element.url} />
+          <source srcSet={element.url} />
+          <StyledImg src={element.fallbackUrl} />
         </picture>
       </div>
       {children}

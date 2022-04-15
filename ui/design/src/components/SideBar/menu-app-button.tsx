@@ -24,7 +24,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
         <AppAvatar
           size="md"
           // edge-case for test app: ignore icons, even if specified, use only avatars
-          src={menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null}
+          src={{ url: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null }}
           backgroundColor="transparent"
           appType={AppTypes.APP}
         />
@@ -34,7 +34,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
       return (
         <AppAvatar
           size="md"
-          src={menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null}
+          src={{ url: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null }}
           backgroundColor="transparent"
           appType={AppTypes.WIDGET}
         />

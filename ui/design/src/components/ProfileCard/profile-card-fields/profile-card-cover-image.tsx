@@ -8,13 +8,14 @@ import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ImageOverlay from '../../ImageOverlay';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface IProfileCardCoverImageProps {
   shareProfileLabel: string;
   changeCoverImageLabel?: string;
   editable: boolean;
   canUserEdit?: boolean;
-  coverImage?: string;
+  coverImage?: IProfileData['coverImage'];
   coverImageIcon?: LogoSourceType;
   handleChangeCoverImage: (provider: IProfileDataProvider) => void;
   coverImagePopoverOpen: boolean;
@@ -64,7 +65,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
       data-testid="profile-card-cover-image"
     >
       {imageOverlayOpen && coverImage && (
-        <ImageOverlay imgUrl={coverImage} closeModal={closeImageOverlay} />
+        <ImageOverlay src={coverImage} closeModal={closeImageOverlay} />
       )}
       {/* disable sharing for v.01 */}
       {false && !editable && (
@@ -110,7 +111,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
         profileProvidersData.coverImageProviders &&
         profileProvidersData.coverImageProviders.length !== 0 && (
           <SelectPopover
-            currentValue={coverImage}
+            currentValue={coverImage.url}
             target={editCoverImageRef.current}
             dataSource={profileProvidersData.coverImageProviders}
             onClickElem={handleChangeCoverImage}

@@ -1,10 +1,11 @@
 /* eslint-disable */
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import * as React from 'react';
 import Avatar from '../Avatar';
 import { StyledStackBox, StyledContainer } from './styled-stacked-avatar';
 
 export interface IStackedAvatarProps {
-  userData: { ethAddress: string; avatar?: string }[];
+  userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[];
   maxAvatars?: number;
 }
 

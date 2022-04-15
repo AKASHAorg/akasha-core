@@ -4,7 +4,7 @@ import { forkJoin, lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
 
 import { checkStatus } from './use-moderation';
-import { getMediaUrl } from './utils/media-utils';
+import { buildProfileMediaLinks } from './utils/media-utils';
 import { mapEntry } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 
@@ -40,18 +40,10 @@ const getSearchProfiles = async (
   });
 
   const completeProfiles = profilesResp?.map((profileResp, idx) => {
-    const { avatar, coverImage, ...other } = profileResp;
-    const images: { avatar: string | null; coverImage: string | null } = {
-      avatar: null,
-      coverImage: null,
+    return {
+      ...buildProfileMediaLinks(profileResp),
+      ...profilesModResp[idx][0],
     };
-    if (avatar) {
-      images.avatar = getMediaUrl(avatar);
-    }
-    if (coverImage) {
-      images.coverImage = getMediaUrl(coverImage);
-    }
-    return { ...images, ...other, ...profilesModResp[idx][0] };
   });
 
   return completeProfiles || [];
@@ -261,18 +253,10 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
   });
 
   const completeProfiles = profilesResp?.map((profileResp, idx) => {
-    const { avatar, coverImage, ...other } = profileResp.data.resolveProfile;
-    const images: { avatar: string | null; coverImage: string | null } = {
-      avatar: null,
-      coverImage: null,
+    return {
+      ...buildProfileMediaLinks(profileResp.data.resolveProfile),
+      ...profilesModResp[idx][0],
     };
-    if (avatar) {
-      images.avatar = getMediaUrl(avatar);
-    }
-    if (coverImage) {
-      images.coverImage = getMediaUrl(coverImage);
-    }
-    return { ...images, ...other, ...profilesModResp[idx][0] };
   });
 
   // get posts data

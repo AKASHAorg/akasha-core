@@ -3,6 +3,7 @@ import { Box, Text } from 'grommet';
 import Cropper from 'react-easy-crop';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import {
+  IProfileData,
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
@@ -68,8 +69,8 @@ export interface IImageSrc {
   isUrl: boolean;
 }
 export interface IBoxData {
-  avatar?: string | IImageSrc;
-  coverImage?: string | IImageSrc;
+  avatar?: IProfileData['avatar'] | IImageSrc;
+  coverImage?: IProfileData['coverImage'] | IImageSrc;
   name?: string;
   description?: string;
   default?: { provider: string; property: string; value: string }[];
