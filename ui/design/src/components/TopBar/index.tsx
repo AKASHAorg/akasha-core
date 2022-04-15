@@ -93,8 +93,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     modalSlotId,
   } = props;
 
-  // const [sidebarOpen, setSidebarOpen] = React.useState(false);
-
   const [dropOpen, setDropOpen] = React.useState(false);
   const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
   const [dropItems, setDropItems] = React.useState<IMenuItem[]>([]);
@@ -290,7 +288,12 @@ const Topbar: React.FC<ITopbarProps> = props => {
               quickAccessItems.map(renderPluginButton)}
             {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
               <Box direction="row" align="center" gap="xsmall">
-                <Button onClick={onLoginClick} label={signInLabel} />
+                <Button
+                  onClick={onLoginClick}
+                  label={signInLabel}
+                  slimBorder={true}
+                  hoverIndicator="accentText"
+                />
                 <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
               </Box>
             )}

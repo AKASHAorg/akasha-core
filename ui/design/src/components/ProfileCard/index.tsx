@@ -177,11 +177,12 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   } = props;
 
   const [editable /* , setEditable */] = useState(false);
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
+  const [hoveredStatId, setHoveredStatId] = useState<number | null>(null);
 
   const menuRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
@@ -242,6 +243,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setNamePopoverOpen(false);
   };
 
+  const handleStatHover = (id?: number) => () => {
+    if (typeof id === 'undefined') {
+      return setHoveredStatId(null);
+    }
+    return setHoveredStatId(id);
+  };
+
   const stats: IStat[] = [
     {
       iconType: 'quote',
@@ -251,7 +259,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       dataTestId: 'posts-button',
     },
     {
-      iconType: 'following',
+      iconType: 'follower',
       count: `${profileData.totalFollowers || 0}`,
       label: followersLabel,
       clickHandler: onClickFollowers,
@@ -364,6 +372,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               key={stat.label + id}
               isMobile={isMobileOnly}
               onClick={stat.clickHandler}
+              onMouseEnter={handleStatHover(id)}
+              onMouseLeave={handleStatHover()}
             >
               <TextIcon
                 iconType={stat.iconType}
@@ -372,6 +382,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 label={stat.count}
                 datatestid={stat.dataTestId}
                 clickable={true}
+                accentColor={hoveredStatId === id}
               />
               <Text
                 margin={{

@@ -142,16 +142,20 @@ const ModalCardLogin = styled(BasicCardBox)`
   }
 `;
 
-const StyledAnchor = styled(Anchor)`
+const StyledAnchor = styled(Anchor)<{ reducedWidth?: boolean }>`
   max-width: 100%;
   user-select: none;
   text-decoration: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
+  width: ${props => (props.reducedWidth ? '70%' : 'initial')};
   :hover {
     text-decoration: none;
   }
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    width: ${props => (props.reducedWidth ? '80%' : 'initial')};
+  } ;
 `;
 
 export {

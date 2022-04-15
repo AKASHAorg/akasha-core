@@ -1,5 +1,4 @@
 import React from 'react';
-import singleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';

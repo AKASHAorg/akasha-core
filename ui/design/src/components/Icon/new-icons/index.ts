@@ -49,6 +49,7 @@ import ethereum from './ethereum';
 import eye from './eye';
 import facebook from './facebook';
 import feedback from './feedback';
+import follower from './follower';
 import following from './following';
 import github from './github';
 import hashtag from './hashtag';
@@ -164,6 +165,7 @@ export {
   error,
   facebook,
   feedback,
+  follower,
   following,
   github,
   document,

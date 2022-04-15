@@ -52,7 +52,7 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
   return (
     <MainAreaCardBox className={className}>
       <Box direction="column" margin="small">
-        <Box height="70px" direction="row" justify="between">
+        <Box height="70px" direction="row" justify="between" align="center">
           <StyledAnchor
             onClick={e => {
               e.preventDefault();
@@ -60,6 +60,7 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
             }}
             weight="normal"
             href={`${profileAnchorLink}/${profileData.pubKey}`}
+            reducedWidth={true}
             label={
               <Box direction="row" align="center" onClick={onClickProfile}>
                 <SearchProfileAvatarDiv>
@@ -86,21 +87,20 @@ const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
               </Box>
             }
           />
-          <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
-            {loggedEthAddress !== profileData.ethAddress && (
-              <Box width="7rem" margin={{ right: 'xxsmall' }}>
-                <DuplexButton
-                  icon={<Icon type="following" />}
-                  active={isFollowing}
-                  activeLabel={followingLabel}
-                  inactiveLabel={followLabel}
-                  activeHoverLabel={unfollowLabel}
-                  onClickActive={handleUnfollow}
-                  onClickInactive={handleFollow}
-                />
-              </Box>
-            )}
-          </Box>
+          {loggedEthAddress !== profileData.ethAddress && (
+            <Box>
+              <DuplexButton
+                inactiveLabel={followLabel}
+                activeLabel={followingLabel}
+                activeHoverLabel={unfollowLabel}
+                onClickActive={handleUnfollow}
+                onClickInactive={handleFollow}
+                active={isFollowing}
+                icon={<Icon type="following" />}
+                allowMinimization
+              />
+            </Box>
+          )}
         </Box>
       </Box>
     </MainAreaCardBox>

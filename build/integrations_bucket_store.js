@@ -160,7 +160,7 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       path: "manifest.json",
       content: JSON.stringify({
         links: { publicRepository: source.package.homepage || "", documentation: "" },
-        sources: [`/ipfs/${ web3StorageCID }`, `ipfs://${ output.get("ipfs") }`]
+        sources: [`ipfs://${ web3StorageCID }`, `ipfs://${ output.get("ipfs") }`]
       }, null, 2)
     };
     console.time(`[infura.storage]${ source.package.name }`);

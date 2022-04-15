@@ -45,7 +45,7 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
   return (
     <MainAreaCardBox>
       <Box direction="column" margin="small">
-        <Box height="70px" direction="row" justify="between" margin="xxsmall">
+        <Box height="70px" direction="row" justify="between" align="center" margin="xxsmall">
           <StyledAnchor
             onClick={e => {
               e.preventDefault();
@@ -53,6 +53,7 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
             }}
             weight="normal"
             href={`${tagAnchorLink}/${tag?.name}`}
+            reducedWidth={true}
             label={
               <Box direction="row" align="center" onClick={onClickTag}>
                 <TagIconDiv searchCard={true}>
@@ -82,8 +83,8 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
               </Box>
             }
           />
-          <Box width="7rem" flex={{ shrink: 0 }} justify="center">
-            {tag && (
+          {tag && (
+            <Box>
               <DuplexButton
                 inactiveLabel={subscribeLabel}
                 activeLabel={subscribedLabel}
@@ -92,9 +93,10 @@ const TagSearchCard: React.FC<ITagSearchCard> = props => {
                 onClickActive={() => handleUnsubscribeTag(tag.name)}
                 active={subscribedTags?.includes(tag.name)}
                 icon={<Icon type="subscribe" />}
+                allowMinimization
               />
-            )}
-          </Box>
+            </Box>
+          )}
         </Box>
       </Box>
     </MainAreaCardBox>

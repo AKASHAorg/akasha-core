@@ -76,6 +76,7 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                 }}
                 weight="normal"
                 href={`${profileAnchorLink}/${entry.pubKey}`}
+                reducedWidth={true}
                 label={
                   <Box width="100%" pad="none">
                     <ProfileAvatarButton

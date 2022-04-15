@@ -352,6 +352,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return !allQueriesFinished;
     }
     return searchKeyword && !searchState[activeButton].done;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchState, activeButton, allQueriesFinished]);
 
   return (

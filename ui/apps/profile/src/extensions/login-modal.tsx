@@ -65,7 +65,12 @@ const LoginModal = (props: RootExtensionProps) => {
             pad={{ vertical: 'medium' }}
             style={{ maxWidth: '12rem' }}
           >
-            <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
+            <Button
+              onClick={handleSignInClick}
+              label={t('Sign In')}
+              fill="horizontal"
+              hoverIndicator="accentText"
+            />
             <Button
               primary={true}
               onClick={handleSignUpClick}
