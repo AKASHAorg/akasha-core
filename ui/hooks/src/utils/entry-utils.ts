@@ -9,7 +9,6 @@ import {
 } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import getSDK from '@akashaproject/awf-sdk';
-import { URL } from 'url';
 
 export const MEDIA_URL_PREFIX = 'CID:';
 export const PROVIDER_AKASHA = 'AkashaApp';
@@ -123,12 +122,20 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     }
     try {
       const decodedImages = decodeb64SlateContent(imagesData.value, logger);
+      const sdk = getSDK();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
       images = decodedImages.map(img => {
-        if (img.src.startsWith(MEDIA_URL_PREFIX)) {
-          const ipfsLinks = getMediaUrl(img.src.replace(MEDIA_URL_PREFIX, ''));
-          img.src = { url: ipfsLinks?.originLink, fallbackUrl: ipfsLinks?.fallbackLink };
+        const imgClone = { id: img.id, size: img.size, src: { url: '', fallbackUrl: '' } };
+        if (typeof img.src === 'string' && img.src?.startsWith(ipfsGateway)) {
+          const ipfsLinks = getMediaUrl(img.src.replace(ipfsGateway, ''));
+          imgClone.src.url = ipfsLinks?.originLink;
+          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+        } else if (typeof img.src === 'object' && img.src?.url?.startsWith(MEDIA_URL_PREFIX)) {
+          const ipfsLinks = getMediaUrl(img.src?.url?.replace(MEDIA_URL_PREFIX, ''));
+          imgClone.src.url = ipfsLinks?.originLink;
+          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
         }
-        return img;
+        return imgClone;
       });
     } catch (error) {
       if (logger) {
@@ -241,12 +248,14 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
       if (node.url.startsWith(ipfsGateway)) {
         const hashIndex = node.url.lastIndexOf('/');
         hash = node.url.substr(hashIndex + 1);
-      } else {
+      } else if (!node.url.startsWith(MEDIA_URL_PREFIX)) {
         const url = new URL(node.url);
         hash = url.hostname.split('.')[0];
       }
-      nodeClone.url = `${MEDIA_URL_PREFIX}${hash}`;
-      nodeClone.fallbackUrl = `${MEDIA_URL_PREFIX}${hash}`;
+      if (hash) {
+        nodeClone.url = `${MEDIA_URL_PREFIX}${hash}`;
+        nodeClone.fallbackUrl = `${MEDIA_URL_PREFIX}${hash}`;
+      }
     }
     return nodeClone;
   });
@@ -285,14 +294,18 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
     const cleanedImages = data.metadata.images.map(img => {
       const imgClone = Object.assign({}, img);
       let hash;
-      if (img.src.startsWith(ipfsGateway)) {
-        const hashIndex = img.src.lastIndexOf('/');
-        hash = img.src.substr(hashIndex + 1);
-      } else {
-        const url = new URL(img.src);
+      if (img.src.url.startsWith(ipfsGateway)) {
+        const hashIndex = img.src.url.lastIndexOf('/');
+        hash = img.src.url.substr(hashIndex + 1);
+      } else if (!img.src.url.startsWith(MEDIA_URL_PREFIX)) {
+        const url = new URL(img.src.url);
         hash = url.hostname.split('.')[0];
       }
-      imgClone.src = `${MEDIA_URL_PREFIX}${hash}`;
+      if (hash) {
+        imgClone.src.url = `${MEDIA_URL_PREFIX}${hash}`;
+        imgClone.src.fallbackUrl = `${MEDIA_URL_PREFIX}${hash}`;
+      }
+      return imgClone;
     });
     postObj.data.push({
       provider: PROVIDER_AKASHA,

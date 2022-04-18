@@ -55,7 +55,7 @@ const ProfileCardCoverImage: React.FC<IProfileCardCoverImageProps> = props => {
       height="9rem"
       background={{
         color: 'coverImageBackground',
-        image: `url(${coverImage})`,
+        image: `url(${coverImage.url || coverImage.fallbackUrl})`,
         repeat: 'no-repeat',
         size: 'cover',
       }}

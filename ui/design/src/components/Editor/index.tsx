@@ -529,7 +529,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     if (linkPreviewState) {
       setLinkPreviewState(null);
     }
-    const imgData = { ...data, id: `${Date.now()}-${data.src}` };
+    const imgData = { ...data, id: `${Date.now()}-${data.src?.url}` };
     if (images.length < 9) {
       setImages(prev => [...prev, imgData]);
     }

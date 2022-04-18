@@ -1,6 +1,5 @@
 import getSDK from '@akashaproject/awf-sdk';
 import { UserProfile_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { lastValueFrom } from 'rxjs';
 
 export interface IConfig {
@@ -12,7 +11,10 @@ export interface IConfig {
 }
 
 /**
- * Utility to append an ipfs gateway to an ipfs hash
+ * Utility to build gateway links to ipfs content
+ * @returns originLink: textile subdomain gateway
+ * fallbackLink: infura subdomain gateway
+ * pathLink: textile path gateway
  */
 export const getMediaUrl = (hash?: string) => {
   const sdk = getSDK();
@@ -81,8 +83,12 @@ export const uploadMediaToTextile = async (data: File, isUrl = false) => {
 
   try {
     const res = await sdk.api.profile.saveMediaFile(uploadData);
+    const ipfsLinks = getMediaUrl(res?.CID);
     return {
-      data: { src: getMediaUrl(res?.CID).originLink, size: res?.size },
+      data: {
+        src: { url: ipfsLinks?.originLink, fallbackUrl: ipfsLinks?.fallbackLink },
+        size: res?.size,
+      },
     };
   } catch (error) {
     return {

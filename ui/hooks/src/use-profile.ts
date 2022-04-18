@@ -230,8 +230,8 @@ export interface FormProfileData {
   name?: string;
   userName?: string;
   description?: string;
-  avatar?: { src: string; isUrl: boolean } | null;
-  coverImage?: { src: string; isUrl: boolean } | null;
+  avatar?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
+  coverImage?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
   pubKey: string;
   ethAddress: string;
 }
@@ -259,12 +259,15 @@ const makeDefaultProvider = async (providers: DataProviderInput[]) => {
   }
 };
 
-const saveAvatar = async (avatar: { isUrl: boolean; src: string }, isRemoved: boolean) => {
+const saveAvatar = async (
+  avatar: { isUrl: boolean; src: { url?: string; fallbackUrl?: string } },
+  isRemoved: boolean,
+) => {
   try {
     if (avatar && avatar.src) {
       const res = await saveMediaFile({
         isUrl: avatar.isUrl,
-        content: avatar.src,
+        content: avatar.src.url || avatar.src.fallbackUrl,
         name: ProfileProviderProperties.AVATAR,
       });
       return {
@@ -285,12 +288,15 @@ const saveAvatar = async (avatar: { isUrl: boolean; src: string }, isRemoved: bo
   }
 };
 
-const saveCoverImage = async (coverImage: { isUrl: boolean; src: string }, isRemoved: boolean) => {
+const saveCoverImage = async (
+  coverImage: { isUrl: boolean; src: { url?: string; fallbackUrl?: string } },
+  isRemoved: boolean,
+) => {
   try {
     if (coverImage && coverImage.src) {
       const res = await saveMediaFile({
         isUrl: coverImage.isUrl,
-        content: coverImage.src,
+        content: coverImage.src.url || coverImage.src.fallbackUrl,
         name: ProfileProviderProperties.COVER_IMAGE,
       });
       return {
