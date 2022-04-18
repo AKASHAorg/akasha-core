@@ -24,13 +24,19 @@ describe('<NotificationsCard /> Component', () => {
                       name: 'Dr. Flynn',
                       userName: 'thedrflynn',
                       ethAddress: '0x003410490050000320006570034567114572000',
-                      avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+                      avatar: {
+                        url: 'https://placebeard.it/360x360',
+                        fallbackUrl: 'https://placebeard.it/360x360',
+                      },
                     },
                     follower: {
                       name: 'Dr. Flynn',
                       userName: 'thedrflynn',
                       ethAddress: '0x003410490050000320006570034567114572000',
-                      avatar: { url: 'https://placebeard.it/360x360', fallbackUrl: '' },
+                      avatar: {
+                        url: 'https://placebeard.it/360x360',
+                        fallbackUrl: 'https://placebeard.it/360x360',
+                      },
                     },
                     postID: '01f3st44m5g3tc6419b92zyd21',
                   },
