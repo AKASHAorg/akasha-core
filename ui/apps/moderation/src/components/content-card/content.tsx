@@ -35,6 +35,8 @@ const Content: React.FC<IContentProps> = props => {
 
   const textStyle = { fontSize: '1rem', fontWeight: 600 };
 
+  const avatarIpfsLinks = getMediaUrl(props.reporterAvatar);
+
   return (
     <Box pad="1rem">
       {props.entryData && (
@@ -109,8 +111,8 @@ const Content: React.FC<IContentProps> = props => {
             <Avatar
               ethAddress={props.reporter || ''}
               src={{
-                url: getMediaUrl(props.reporterAvatar).originLink,
-                fallbackUrl: getMediaUrl(props.reporterAvatar).fallbackLink,
+                url: avatarIpfsLinks?.originLink,
+                fallbackUrl: avatarIpfsLinks?.fallbackLink,
               }}
               size="xs"
               margin={{ right: '0.2rem' }}
