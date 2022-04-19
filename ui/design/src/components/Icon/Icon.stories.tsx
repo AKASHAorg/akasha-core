@@ -58,7 +58,12 @@ const TemplateList = (args: {
     {iconTypes.map((type, idx) => (
       <Box direction="row" align="center" key={idx}>
         <StyledIconBox style={{ margin: '2px 0' }}>
-          <Icon type={type} color={args.accentColor} size={args.size} />
+          <Icon
+            type={type}
+            color={args.accentColor}
+            size={args.size}
+            wrapperStyle={{ width: '50%', height: 'inherit' }}
+          />
         </StyledIconBox>
         <div>{type}</div>
       </Box>
