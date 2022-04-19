@@ -91,13 +91,13 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     try {
       const decodedContent = decodeb64SlateContent(slateContent.value, logger, true);
       content = decodedContent.map(node => {
-        if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
-          node.url = getMediaUrl(node.url.replace(MEDIA_URL_PREFIX, '')).originLink;
+        if (node.type === 'image' && node.url?.startsWith(MEDIA_URL_PREFIX)) {
+          node.url = getMediaUrl(node.url?.replace(MEDIA_URL_PREFIX, ''))?.originLink;
         }
         if (node.type === 'image' && node.fallbackUrl.startsWith(MEDIA_URL_PREFIX)) {
           node.fallbackUrl = getMediaUrl(
-            node.fallbackUrl.replace(MEDIA_URL_PREFIX, ''),
-          ).fallbackLink;
+            node.fallbackUrl?.replace(MEDIA_URL_PREFIX, ''),
+          )?.fallbackLink;
         }
         return node;
       });

@@ -19,27 +19,30 @@ const MiniCardRenderer: React.FC<IMiniCardRenderer> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const renderCard = (el: ILogItem, index: number) => (
-    <TransparencyLogMiniCard
-      key={index}
-      locale="en"
-      title={t('{{ elContentType }} {{ elContentStatus }}', {
-        elContentType: el.contentType,
-        elContentStatus: el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT,
-      })}
-      content={t('{{elExplanation}}', { elExplanation: el.explanation })}
-      isSelected={el.contentID === selected?.contentID}
-      isDelisted={el.delisted}
-      moderator={el.moderator.name}
-      moderatedTimestamp={el.moderatedDate.toString()}
-      moderatorAvatar={{
-        url: getMediaUrl(el.moderator.avatar).originLink,
-        fallbackUrl: getMediaUrl(el.moderator.avatar).fallbackLink,
-      }}
-      moderatorEthAddress={el.moderator.ethAddress}
-      onClickCard={onCardClick(el)}
-    />
-  );
+  const renderCard = (el: ILogItem, index: number) => {
+    const avatarIpfsLinks = getMediaUrl(el.moderator.avatar);
+    return (
+      <TransparencyLogMiniCard
+        key={index}
+        locale="en"
+        title={t('{{ elContentType }} {{ elContentStatus }}', {
+          elContentType: el.contentType,
+          elContentStatus: el.delisted ? ButtonValues.DELISTED : ButtonValues.KEPT,
+        })}
+        content={t('{{elExplanation}}', { elExplanation: el.explanation })}
+        isSelected={el.contentID === selected?.contentID}
+        isDelisted={el.delisted}
+        moderator={el.moderator.name}
+        moderatedTimestamp={el.moderatedDate.toString()}
+        moderatorAvatar={{
+          url: avatarIpfsLinks?.originLink,
+          fallbackUrl: avatarIpfsLinks?.fallbackLink,
+        }}
+        moderatorEthAddress={el.moderator.ethAddress}
+        onClickCard={onCardClick(el)}
+      />
+    );
+  };
 
   return (
     <>

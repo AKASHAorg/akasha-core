@@ -41,6 +41,8 @@ const DetailCard: React.FC<IDetailCard> = props => {
     }
   };
 
+  const avatarIpfsLinks = getMediaUrl(selected.moderator.avatar);
+
   return (
     <TransparencyLogDetailCard
       locale="en"
@@ -53,8 +55,8 @@ const DetailCard: React.FC<IDetailCard> = props => {
       moderator={selected.moderator.name}
       moderatedTimestamp={selected.moderatedDate.toString()}
       moderatorAvatar={{
-        url: getMediaUrl(selected.moderator.avatar).originLink,
-        fallbackUrl: getMediaUrl(selected.moderator.avatar).fallbackLink,
+        url: avatarIpfsLinks?.originLink,
+        fallbackUrl: avatarIpfsLinks?.fallbackLink,
       }}
       moderatorEthAddress={selected.moderator.ethAddress}
       reportedTimesLabel={t('Reported {{ reportedTimes }}', {
