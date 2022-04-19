@@ -1,3 +1,4 @@
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { Box } from 'grommet';
 import * as React from 'react';
 import { truncateMiddle } from '../../utils/string-utils';
@@ -7,7 +8,7 @@ import { ButtonInfo, StyledText, StyledWrapperBox } from './styled-profile-avata
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
-  avatarImage?: string;
+  avatarImage?: IProfileData['avatar'];
   label?: string;
   size?: AvatarSize;
   className?: string;

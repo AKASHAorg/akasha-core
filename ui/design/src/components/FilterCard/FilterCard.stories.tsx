@@ -31,7 +31,7 @@ const Template = (args: IFilterCard) => (
 
 const titleElement = (
   <ProfileAvatarButton
-    avatarImage="https://placebeard.it/360x360"
+    avatarImage={{ url: 'https://placebeard.it/360x360' }}
     onClick={() => null}
     label="@ivacarter"
     info="ivacarter.akasha.eth"

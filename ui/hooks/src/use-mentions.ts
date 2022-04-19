@@ -1,7 +1,7 @@
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
-import { getMediaUrl } from './utils/media-utils';
+import { buildProfileMediaLinks } from './utils/media-utils';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { PROFILE_KEY } from './use-profile';
 import { logError } from './utils/error-handler';
@@ -16,18 +16,7 @@ const getMentions = async (mention: string, queryClient: QueryClient) => {
     if (authorCache) {
       return authorCache;
     }
-    const { avatar, coverImage, ...other } = profileResp;
-    const images: { avatar: string | null; coverImage: string | null } = {
-      avatar: null,
-      coverImage: null,
-    };
-    if (avatar) {
-      images.avatar = getMediaUrl(avatar);
-    }
-    if (coverImage) {
-      images.coverImage = getMediaUrl(coverImage);
-    }
-    return { ...images, ...other };
+    return buildProfileMediaLinks(profileResp);
   });
 };
 

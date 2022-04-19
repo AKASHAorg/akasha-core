@@ -2,8 +2,7 @@ import React from 'react';
 import { Box, Grommet } from 'grommet';
 
 import ProfileCard, { IProfileCardProps } from '.';
-import { ProfileSearchCard } from './profile-search-card';
-import { ProfileWidgetCard, IProfileWidgetCard } from './profile-widget-card';
+import { ProfileSearchCard, IProfileSearchCard } from './profile-search-card';
 import { ProfileMiniCard, IProfileMiniCard } from './profile-mini-card';
 import { ProfileDelistedCard, IProfileDelistedCard } from './profile-delisted-card';
 
@@ -50,18 +49,10 @@ const TemplateDelisted = (args: IProfileDelistedCard) => (
   </Grommet>
 );
 
-const TemplateSearch = (args: IProfileWidgetCard) => (
+const TemplateSearch = (args: IProfileSearchCard) => (
   <Grommet theme={lightTheme}>
     <Box align="center" width="50%" pad={{ top: '40px' }}>
       <ProfileSearchCard {...args} />
-    </Box>
-  </Grommet>
-);
-
-const TemplateWidget = (args: IProfileWidgetCard) => (
-  <Grommet theme={lightTheme}>
-    <Box align="center" width="30%" pad={{ top: '40px' }}>
-      <ProfileWidgetCard {...args} />
     </Box>
   </Grommet>
 );
@@ -103,17 +94,6 @@ BaseProfileSearchCard.args = {
   postsLabel: postsLabel,
   profileAnchorLink: '/profile',
   profileData: profileData,
-};
-
-export const BaseProfileWidgetCard = TemplateWidget.bind({});
-
-BaseProfileWidgetCard.args = {
-  profileData: profileData,
-  descriptionLabel: aboutMeLabel,
-  followingLabel: followingLabel,
-  followersLabel: followersLabel,
-  postsLabel: postsLabel,
-  shareProfileLabel: shareProfileLabel,
 };
 
 export const BaseProfileMiniCard = TemplateMini.bind({});

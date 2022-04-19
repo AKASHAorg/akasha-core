@@ -20,7 +20,7 @@ export interface IFormImagePopover {
   deleteLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
-  insertImage?: (src: File | string, isUrl: boolean) => void;
+  insertImage?: (src: Blob | { url?: string; fallbackUrl?: string }, isUrl: boolean) => void;
   currentImage?: boolean;
   onMobile: boolean;
   editable?: boolean;

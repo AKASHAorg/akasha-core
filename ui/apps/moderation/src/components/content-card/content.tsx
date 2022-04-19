@@ -108,7 +108,10 @@ const Content: React.FC<IContentProps> = props => {
             <Text margin={{ right: '0.2rem' }}>{props.originallyReportedByLabel}</Text>
             <Avatar
               ethAddress={props.reporter || ''}
-              src={getMediaUrl(props.reporterAvatar)}
+              src={{
+                url: getMediaUrl(props.reporterAvatar).originLink,
+                fallbackUrl: getMediaUrl(props.reporterAvatar).fallbackLink,
+              }}
               size="xs"
               margin={{ right: '0.2rem' }}
               backgroundColor={'lightBackground'}

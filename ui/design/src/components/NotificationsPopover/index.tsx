@@ -1,3 +1,4 @@
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import Avatar from '../Avatar';
@@ -15,7 +16,7 @@ export interface INotificationsPopover {
 export interface INotification {
   ethAddress: string;
   user: string;
-  userAvatar: string;
+  userAvatar: IProfileData['avatar'];
   time: string;
   action: string;
 }

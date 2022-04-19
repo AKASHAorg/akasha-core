@@ -5,11 +5,12 @@ import Icon from '../../Icon';
 import Avatar from '../../Avatar';
 import ImageOverlay from '../../ImageOverlay';
 import { AvatarBorderSize, AvatarSize } from '../../Avatar/styled-avatar';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 type Size = 'xl' | 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
 
 export interface ICDetailCardAvatarProps {
-  avatar?: string;
+  avatar?: IProfileData['avatar'];
   avatarSize?: AvatarSize;
   avatarBorder?: AvatarBorderSize;
   ethAddress?: string;
@@ -74,9 +75,7 @@ const ICDetailCardAvatar: React.FC<ICDetailCardAvatarProps> = props => {
           <Icon type={iconType} size={iconSize} plain={true} />
         </StyledBackgroundDiv>
       )}
-      {imageOverlayOpen && avatar && (
-        <ImageOverlay imgUrl={avatar} closeModal={closeImageOverlay} />
-      )}
+      {imageOverlayOpen && avatar && <ImageOverlay src={avatar} closeModal={closeImageOverlay} />}
     </>
   );
 };

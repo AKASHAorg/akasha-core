@@ -3,6 +3,7 @@ import { StyledCloseDiv } from '../Editor/styled-editor-box';
 import styled, { css } from 'styled-components';
 import Icon from '../Icon';
 import { Box, Text } from 'grommet';
+import { ImageObject } from '../Editor/image-gallery';
 
 const StyledImg = styled.img<{ singleImage?: boolean }>`
   ${props => {
@@ -44,12 +45,6 @@ const StyledPill = styled(Box)`
 const SingleImageContainer = styled.div`
   display: flex;
 `;
-
-export interface ImageObject {
-  src: string;
-  size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
-  id: string;
-}
 
 export interface IImageGallery {
   imagesLabel?: string;
@@ -97,7 +92,10 @@ const EntryImageGallery: React.FC<IImageGallery> = props => {
         )}
         {/* when we have a single image we need to keep the original aspect ratio,
         otherwise give images a 1:1 ratio */}
-        <StyledImg src={image.src} singleImage={images.length === 1} />
+        <picture>
+          <source srcSet={image.src.url} />
+          <StyledImg src={image.src.fallbackUrl} singleImage={images.length === 1} />
+        </picture>
       </StyledImgContainer>
     );
   };

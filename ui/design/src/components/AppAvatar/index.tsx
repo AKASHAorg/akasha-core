@@ -25,22 +25,22 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
   } = props;
 
   const isClickable = typeof onClick === 'function';
-  let avatarImage: string;
+  let avatarImageFallback: string;
 
-  if (src) {
-    avatarImage = src;
+  if (src?.fallbackUrl) {
+    avatarImageFallback = src.fallbackUrl;
   }
 
-  if (!src && appType === AppTypes.APP) {
+  if (!src?.fallbackUrl && appType === AppTypes.APP) {
     // currently there are 3 placeholders for sidebar apps
-    avatarImage = `${publicImgPath}/sidebar-app-placeholder-${
+    avatarImageFallback = `${publicImgPath}/sidebar-app-placeholder-${
       Math.floor(Math.random() * 3) + 1
     }.png`;
   }
 
-  if (!src && appType === AppTypes.WIDGET) {
+  if (!src?.fallbackUrl && appType === AppTypes.WIDGET) {
     // currently there are 2 placeholders for sidebar apps
-    avatarImage = `${publicImgPath}/sidebar-widget-placeholder-${
+    avatarImageFallback = `${publicImgPath}/sidebar-widget-placeholder-${
       Math.floor(Math.random() * 2) + 1
     }.png`;
   }
@@ -56,7 +56,7 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
       backgroundColor={backgroundColor}
     >
       <React.Suspense fallback={<></>}>
-        <AvatarImage image={avatarImage} faded={faded} />
+        <AvatarImage url={src?.url} fallbackUrl={avatarImageFallback} faded={faded} />
       </React.Suspense>
       {active && <ActiveOverlay />}
     </StyledAvatar>

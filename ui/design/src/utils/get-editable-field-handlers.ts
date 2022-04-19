@@ -27,8 +27,8 @@ export const getEditableTextFieldHandlers = (
 export const getEditableImageFieldHandlers = (
   editable: boolean,
   imageRef: React.MutableRefObject<any>,
-  setNewValue: React.Dispatch<React.SetStateAction<string>>,
-  onChange: (newValue: string) => void,
+  setNewValue: React.Dispatch<React.SetStateAction<{ url?: string; fallbackUrl?: string }>>,
+  onChange: (newValue: { url: string }) => void,
 ) => {
   const handleClick = () => {
     if (editable && imageRef.current) {
@@ -42,8 +42,8 @@ export const getEditableImageFieldHandlers = (
     }
 
     if (!(e.target.files && e.target.files[0])) {
-      setNewValue('');
-      onChange('');
+      setNewValue({ url: '' });
+      onChange({ url: '' });
 
       return;
     }
@@ -53,8 +53,8 @@ export const getEditableImageFieldHandlers = (
     fileReader.addEventListener('load', () => {
       const result = fileReader.result as string;
 
-      setNewValue(result);
-      onChange(result);
+      setNewValue({ url: result });
+      onChange({ url: result });
     });
     fileReader.readAsDataURL(file);
   };

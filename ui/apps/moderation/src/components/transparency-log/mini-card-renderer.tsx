@@ -32,7 +32,10 @@ const MiniCardRenderer: React.FC<IMiniCardRenderer> = props => {
       isDelisted={el.delisted}
       moderator={el.moderator.name}
       moderatedTimestamp={el.moderatedDate.toString()}
-      moderatorAvatarUrl={getMediaUrl(el.moderator.avatar)}
+      moderatorAvatar={{
+        url: getMediaUrl(el.moderator.avatar).originLink,
+        fallbackUrl: getMediaUrl(el.moderator.avatar).fallbackLink,
+      }}
       moderatorEthAddress={el.moderator.ethAddress}
       onClickCard={onCardClick(el)}
     />
