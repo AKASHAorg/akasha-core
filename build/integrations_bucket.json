@@ -20,7 +20,7 @@
   {
     "name": "@akashaproject/app-moderation-ewa",
     "id": "0xa3a248cf60b34be9286c7a3b72ba90e98bd40baac6e18d30219fd6cccb439cf6",
-    "ipfsManifest": "f0155171c3cb9d10c24bacea63ddd499dbc1b6900ee4fba9e406fc8b0a7df2288",
+    "ipfsManifest": "f0155171c9a2e2444d5650ec776c59a752192ce9e77a50ee6e88d092fa4a0a796",
     "type": 0
   },
   {
@@ -50,7 +50,7 @@
   {
     "name": "@akashaproject/app-profile",
     "id": "0x086878e2e9a9340b2ba93c1bb79699e54fbab20f669cda35e36ec91221a4fbb6",
-    "ipfsManifest": "f0155171cb228c3cb5e952d87140d908fa94ebb47dbda3bfb9211a38d6d2b9d98",
+    "ipfsManifest": "f0155171ced942aadabbd7a70fc3029ee1856cf03e350ee356f78972400c56369",
     "type": 0
   },
   {
