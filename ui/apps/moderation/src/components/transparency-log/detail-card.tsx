@@ -18,7 +18,6 @@ export const BASE_PROFILE_URL = '/profile';
 const { TransparencyLogDetailCard } = DS;
 
 const DetailCard: React.FC<IDetailCard> = props => {
-
   const { selected, handleClickAvatar, handleClickArrowLeft, navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');
@@ -53,7 +52,10 @@ const DetailCard: React.FC<IDetailCard> = props => {
       isDelisted={selected.delisted}
       moderator={selected.moderator.name}
       moderatedTimestamp={selected.moderatedDate.toString()}
-      moderatorAvatarUrl={getMediaUrl(selected.moderator.avatar)}
+      moderatorAvatar={{
+        url: getMediaUrl(selected.moderator.avatar).originLink,
+        fallbackUrl: getMediaUrl(selected.moderator.avatar).fallbackLink,
+      }}
       moderatorEthAddress={selected.moderator.ethAddress}
       reportedTimesLabel={t('Reported {{ reportedTimes }}', {
         reportedTimes: selected.reports > 1 ? `${selected.reports} times` : 'once',

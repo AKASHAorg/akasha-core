@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin, catchError, of } from 'rxjs';
 import getSDK from '@akashaproject/awf-sdk';
-import { getMediaUrl } from './utils/media-utils';
+import { buildProfileMediaLinks } from './utils/media-utils';
 import { logError } from './utils/error-handler';
 import { IMessage } from '@akashaproject/sdk-typings/lib/interfaces/auth';
 
@@ -29,18 +29,7 @@ const getNotifications = async () => {
   profilesResp
     ?.filter(res => res?.data)
     .map(profileResp => {
-      const { avatar, coverImage, ...other } = profileResp.data?.resolveProfile;
-      const images: { avatar: string | null; coverImage: string | null } = {
-        avatar: null,
-        coverImage: null,
-      };
-      if (avatar) {
-        images.avatar = getMediaUrl(avatar);
-      }
-      if (coverImage) {
-        images.coverImage = getMediaUrl(coverImage);
-      }
-      const profileData = { ...images, ...other };
+      const profileData = buildProfileMediaLinks(profileResp.data?.resolveProfile);
       completeMessages = getMessagesResp.data?.map(message => {
         if (message.body.value.author === profileData.pubKey) {
           message.body.value.author = profileData;

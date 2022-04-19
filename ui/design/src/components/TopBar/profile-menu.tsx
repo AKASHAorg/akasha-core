@@ -1,5 +1,5 @@
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IProfileData } from '../ProfileCard/profile-widget-card';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';

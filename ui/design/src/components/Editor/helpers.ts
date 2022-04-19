@@ -8,6 +8,7 @@ import {
   MentionElement,
   TagElement,
 } from '@akashaproject/ui-awf-typings/lib/editor';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {
@@ -38,6 +39,7 @@ const CustomEditor = {
   insertImage(
     editor: Editor,
     url: string,
+    fallbackUrl: string,
     size: {
       width: string;
       height: string;
@@ -46,7 +48,7 @@ const CustomEditor = {
     },
   ) {
     const text = { text: '' };
-    const image: ImageElement = { url, size, type: 'image', children: [text] };
+    const image: ImageElement = { url, fallbackUrl, size, type: 'image', children: [text] };
     // move selection to the end before inserting to make sure image is last element
     Transforms.select(editor, Editor.end(editor, []));
     Transforms.insertNodes(editor, image);
@@ -71,7 +73,7 @@ const CustomEditor = {
       name?: string;
       userName?: string;
       pubKey: string;
-      avatar?: string;
+      avatar?: IProfileData['avatar'];
       ethAddress: string;
     },
   ) {

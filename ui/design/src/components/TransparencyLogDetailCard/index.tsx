@@ -51,7 +51,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     explanationLabel,
     contactModeratorsLabel,
     contactModeratorsLink,
-    moderatorAvatarUrl,
+    moderatorAvatar,
     reportedTimesLabel,
     moderatedTimestamp,
     moderatorEthAddress,
@@ -121,7 +121,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
         <Box margin={{ top: 'large' }} direction="row" justify="between" align="start">
           <Box direction="row">
             <Avatar
-              src={moderatorAvatarUrl}
+              src={moderatorAvatar}
               ethAddress={moderatorEthAddress}
               onClick={onClickAvatar}
             />

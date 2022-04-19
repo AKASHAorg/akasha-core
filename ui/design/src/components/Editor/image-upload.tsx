@@ -35,7 +35,7 @@ export interface IImageUpload {
 }
 
 export interface ImageData {
-  src: string;
+  src: { url?: string; fallbackUrl?: string };
   size: {
     width: number;
     height: number;

@@ -8,7 +8,7 @@ import StyledAvatar, { AvatarSize, ActiveOverlay } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   ethAddress?: string | null;
-  src?: string;
+  src?: { url?: string; fallbackUrl?: string };
   active?: boolean;
   onClick?: React.MouseEventHandler<any>;
   alt?: string;
@@ -55,16 +55,16 @@ const Avatar: React.FC<AvatarProps> = props => {
     active,
     ethAddress = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
-    backgroundColor
+    backgroundColor,
   } = props;
   const isClickable = typeof onClick === 'function';
-  let avatarImage;
-  if (src) {
-    avatarImage = src;
+  let avatarImageFallback;
+  if (src?.fallbackUrl) {
+    avatarImageFallback = src.fallbackUrl;
   }
-  if (!avatarImage) {
+  if (!avatarImageFallback) {
     const seed = getAvatarFromSeed(ethAddress);
-    avatarImage = `${publicImgPath}/avatar-placeholder-${seed}.png`;
+    avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.png`;
   }
 
   return (
@@ -78,7 +78,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       backgroundColor={backgroundColor}
     >
       <React.Suspense fallback={<></>}>
-        <AvatarImage image={avatarImage} faded={faded} />
+        <AvatarImage url={src?.url} fallbackUrl={avatarImageFallback} faded={faded} />
       </React.Suspense>
       {active && <ActiveOverlay />}
     </StyledAvatar>

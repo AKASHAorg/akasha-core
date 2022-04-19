@@ -21,7 +21,7 @@ import {
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
-import { IProfileData } from '../ProfileCard/profile-widget-card';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {

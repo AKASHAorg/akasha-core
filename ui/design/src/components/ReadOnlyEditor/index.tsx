@@ -25,13 +25,13 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
 
   const [imageOverlayOpen, setImageOverlayOpen] = React.useState(false);
   const [value, setValue] = React.useState(content);
-  const [imgUrl, setImgUrl] = React.useState<string | null>(null);
+  const [imgUrl, setImgUrl] = React.useState<{ url: string; fallbackUrl?: string } | null>(null);
 
   /**
    * opens the fullscreen image modal and shows the clicked upon image in it
    */
   const handleClickImage = (element: ImageElement) => {
-    setImgUrl(element.url);
+    setImgUrl(element);
     setImageOverlayOpen(true);
   };
 
@@ -83,7 +83,7 @@ const ReadOnlyEditor: React.FC<IReadOnlyEditor> = props => {
           renderLeaf={renderLeaf}
         />
       </Slate>
-      {imageOverlayOpen && <ImageOverlay imgUrl={imgUrl} closeModal={closeImageOverlay} />}
+      {imageOverlayOpen && <ImageOverlay src={imgUrl} closeModal={closeImageOverlay} />}
     </>
   );
 };

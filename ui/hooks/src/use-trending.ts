@@ -1,6 +1,6 @@
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import { getMediaUrl } from './utils/media-utils';
+import { buildProfileMediaLinks } from './utils/media-utils';
 import getSDK from '@akashaproject/awf-sdk';
 import { logError } from './utils/error-handler';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
@@ -34,18 +34,7 @@ const getTrendingProfiles = async (queryClient: QueryClient) => {
     if (profileCache) {
       return profileCache;
     }
-    const { avatar, coverImage, ...other } = profile;
-    const images: { avatar: string | null; coverImage: string | null } = {
-      avatar: null,
-      coverImage: null,
-    };
-    if (avatar) {
-      images.avatar = getMediaUrl(avatar);
-    }
-    if (coverImage) {
-      images.coverImage = getMediaUrl(coverImage);
-    }
-    return { ...images, ...other };
+    return buildProfileMediaLinks(profile);
   });
   return profiles || [];
 };
