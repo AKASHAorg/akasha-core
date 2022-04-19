@@ -86,8 +86,8 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                       info={`@${entry.userName ? entry.userName : 'username'}`}
                       size="md"
                       avatarImage={{
-                        url: getMediaUrl(entry.avatar).originLink,
-                        fallbackUrl: getMediaUrl(entry.avatar).fallbackLink,
+                        url: getMediaUrl(entry.avatar)?.originLink,
+                        fallbackUrl: getMediaUrl(entry.avatar)?.fallbackLink,
                       }}
                     />
                   </Box>
