@@ -4,7 +4,7 @@ import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
-import { ITag } from '@akashaproject/ui-awf-typings/src/entry';
+import { IEntryData, ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import { useTranslation } from 'react-i18next';
 import {
   useTagSubscriptions,
@@ -21,8 +21,9 @@ import {
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import EntryCardRenderer from './entry-renderer';
 import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { SearchTagsResult_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import EntryCardRenderer from './entry-renderer';
 
 const {
   Box,
@@ -51,6 +52,8 @@ interface SearchPageProps extends RootComponentProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
+type DataResponse = SearchTagsResult_Response | IEntryData;
+
 const initSearchState = {
   [ButtonValues.TOPICS]: { page: 1, results: [], done: false, isLoading: false },
   [ButtonValues.POSTS]: { page: 1, results: [], done: false, isLoading: false },
@@ -78,7 +81,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.ALL, [activeButton]);
 
-  const updateSearchState = (type: Exclude<ButtonValues, ButtonValues.ALL>, data: unknown[]) => {
+  const updateSearchState = (
+    type: Exclude<ButtonValues, ButtonValues.ALL>,
+    data: Array<DataResponse & { delisted?: boolean }>,
+  ) => {
     if (!data || !data.length) {
       setSearchState(prevState => ({
         ...prevState,
@@ -89,7 +95,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       ...prevState,
       [type]: {
         ...prevState[type],
-        results: [...prevState[type].results, ...data],
+        results: [...prevState[type].results, ...data.filter(_ => !_.delisted)],
         // topics edge case because it only fetches once
         done: type === ButtonValues.TOPICS || prevState[type].done,
         isLoading: false,
