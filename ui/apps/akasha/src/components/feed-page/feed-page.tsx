@@ -11,6 +11,7 @@ import {
   useMutationListener,
   createPendingEntry,
   LoginState,
+  useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
@@ -19,6 +20,7 @@ import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
 
@@ -33,6 +35,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const { t } = useTranslation('app-akasha-integration');
   const locale = (props.plugins?.translation?.i18n?.languages?.[0] || 'en') as ILocale;
+
+  const [analyticsActions] = useAnalytics();
 
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
@@ -76,6 +80,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     });
   }, []);
 
+  const handleWriteToUsLabelClick = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.INVITATION_CODE,
+      action: 'Request',
+      name: 'Feed',
+    });
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -95,13 +107,14 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             subtitle={t('We are in private alpha at this time. ')}
             beforeLinkLabel={t("If you'd like to participate, just ")}
             afterLinkLabel={t(
-              ' and we’ll send you a ticket for the next shuttle going to Ethereum World.',
+              " and we'll send you a ticket for the next shuttle going to Ethereum World.",
             )}
             disclaimerLabel={t(
-              'Please bear in mind we’re onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀',
+              "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
             )}
             writeToUsLabel={t('drop us a message')}
             writeToUsUrl={'mailto:alpha@ethereum.world'}
+            onWriteToUsLabelClick={handleWriteToUsLabelClick}
           />
         </Box>
       )}

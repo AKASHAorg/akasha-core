@@ -34,4 +34,5 @@ export enum AnalyticsCategories {
   TRENDING_PEOPLE = 'Trending People',
   TRENDING_TOPIC = 'Trending Topic',
   WIDGETS = 'Widgets',
+  INVITATION_CODE = 'Invitation Code',
 }

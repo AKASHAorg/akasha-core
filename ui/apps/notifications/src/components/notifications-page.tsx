@@ -47,8 +47,8 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
             <StartCard
               title={t('Notifications')}
               subtitle={t('Check latest followers & mentions')}
-              heading={t('You won’t miss a thing 🔔')}
-              description={t('Here you’ll receive alerts from your apps.')}
+              heading={t("You won't miss a thing 🔔")}
+              description={t("Here you'll receive alerts from your apps.")}
               image="images/notification.png"
               loggedIn={!!isLoggedIn}
             />
@@ -79,7 +79,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 markAsReadLabel={t('Mark as read')}
                 emptyTitle={t('No alerts for you right now 🔔')}
                 emptySubtitle={t(
-                  'You don’t have any new alerts at the moment, we’ll let you know when you have new followers and mentions.',
+                  "You don't have any new alerts at the moment, we'll let you know when you have new followers and mentions.",
                 )}
                 handleMessageRead={markAsRead.mutate}
                 handleEntryClick={handlePostClick}

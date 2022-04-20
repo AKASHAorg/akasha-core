@@ -428,7 +428,10 @@ export const emojis = {
     { n: ['central african republic flag', 'flag-cf'], u: '1f1e8-1f1eb' },
     { n: ['congo - brazzaville flag', 'flag-cg'], u: '1f1e8-1f1ec' },
     { n: ['switzerland flag', 'flag-ch'], u: '1f1e8-1f1ed' },
-    { n: ['côte d’ivoire flag', 'flag-ci'], u: '1f1e8-1f1ee' },
+    {
+      n: ["côte d'ivoire flag", 'flag-ci'],
+      u: '1f1e8-f1ee',
+    },
     { n: ['cook islands flag', 'flag-ck'], u: '1f1e8-1f1f0' },
     { n: ['chile flag', 'flag-cl'], u: '1f1e8-1f1f1' },
     { n: ['cameroon flag', 'flag-cm'], u: '1f1e8-1f1f2' },
