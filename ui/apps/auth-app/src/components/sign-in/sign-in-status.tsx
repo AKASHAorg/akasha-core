@@ -80,10 +80,10 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
         heading={t('Choose the Ethereum address to connect')}
         explanation=""
         problem={t(
-          'Not seeing the wallet request? Please make sure to open your wallet extension. If you’re still not seeing it, we can resend it.',
+          "Not seeing the wallet request? Please make sure to open your wallet extension. If you're still not seeing it, we can resend it.",
         )}
         resend={t('Resend request')}
-        complete={t('You’ve connected an Ethereum address')}
+        complete={t("You've connected an Ethereum address")}
         buttonLabel={''}
         walletRequest={onSignRequest}
         ethAddress={ethAddress}
@@ -96,7 +96,7 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
         heading={t('Verify that you own this address')}
         explanation=""
         problem={t(
-          'Not seeing the wallet request? Please make sure to open your wallet extension. If you’re still not seeing it, we can resend it.',
+          "Not seeing the wallet request? Please make sure to open your wallet extension. If you're still not seeing it, we can resend it.",
         )}
         resend={t('Resend request')}
         complete={t('You have verified that you own this address')}
@@ -111,7 +111,7 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
         heading={t('Sign the message to get access to Ethereum World services')}
         explanation=""
         problem={t(
-          'Not seeing the wallet request? Please make sure to open your wallet extension. If you’re still not seeing it, we can resend it.',
+          "Not seeing the wallet request? Please make sure to open your wallet extension. If you're still not seeing it, we can resend it.",
         )}
         resend={t('Resend request')}
         complete={t('Message is signed and you are now connected')}

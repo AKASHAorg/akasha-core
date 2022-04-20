@@ -273,7 +273,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           textGetAccessComplete={t('Message is signed and you are now connected')}
           textProfileComplete={t('You have registered your public profile on Ethereum World')}
           textCompleted={
-            "That's it! The hardest part is complete. Now you only need to choose a username and you’ll be done!"
+            "That's it! The hardest part is complete. Now you only need to choose a username and you'll be done!"
           }
           textButtonSignInWallet={t('Sign in Wallet')}
           textRequestProblem={t(
