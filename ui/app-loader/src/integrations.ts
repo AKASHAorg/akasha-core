@@ -59,7 +59,7 @@ export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo
       }
       const source = manifest.sources[0];
       if (manifest.sources.length > 1) {
-        logger.warn(`Multiple sources found for integration ${manifest.name}. Using ${source}`);
+        logger.info(`Multiple sources found for integration ${manifest.name}. Using ${source}`);
       }
       return from(System.import(source)).pipe(map(module => ({ manifest, module })));
     }),
@@ -216,7 +216,7 @@ export const processSystemModules = (
               let appConf: IAppConfig;
 
               if (mod?.getPlugin && typeof mod.getPlugin === 'function') {
-                plugin = await Promise.resolve(mod.getPlugin(registrationProps));
+                plugin = await mod.getPlugin(registrationProps);
               }
 
               if (mod?.register && typeof mod.register === 'function') {
@@ -329,10 +329,9 @@ export const handleExtPointMountOfApps = (
         const _prevIntegrationsCount = prevIntegrations.get(name)?.length || 0;
         const _nextIntegrationsCount = integrationsByMountPoint.get(name)?.length || 0;
 
-        if (prevMountedExtPoints.has(name) && _prevIntegrationsCount === _nextIntegrationsCount) {
-          return false;
-        }
-        return true;
+        return !(
+          prevMountedExtPoints.has(name) && _prevIntegrationsCount === _nextIntegrationsCount
+        );
       });
       return {
         mountedExtPoints: new Map(unique),
