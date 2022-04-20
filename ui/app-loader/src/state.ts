@@ -186,7 +186,9 @@ export const initState = (
               ],
             });
           }
-          manifests.push(newData.data);
+          if (!manifests.find(el => el.name === newData.data.name)) {
+            manifests.push(newData.data);
+          }
           return of({
             ...state,
             manifests,

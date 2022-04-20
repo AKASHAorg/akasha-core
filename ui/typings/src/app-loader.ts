@@ -152,7 +152,7 @@ export interface BaseIntegrationInfo {
 
 export interface IntegrationModule {
   register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
-  getPlugin?: (opts: IntegrationRegistrationOptions) => PluginConf;
+  getPlugin?: (opts: IntegrationRegistrationOptions) => Promise<PluginConf>;
 }
 
 export interface ISdkConfig {
