@@ -46,6 +46,14 @@ const StepOne: React.FC<IStepOneProps> = props => {
     onButtonClick();
   };
 
+  const handleWriteToUsLabelClick = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.INVITATION_CODE,
+      action: 'Request',
+      name: 'Sign Up',
+    });
+  };
+
   return (
     <Box>
       <Text size="large" margin={{ bottom: 'large' }}>
@@ -61,6 +69,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
           color="accentText"
           href={writeToUsUrl}
           label={paragraphTwoAccentLabel}
+          onClick={handleWriteToUsLabelClick}
         />
         . {paragraphTwoLabel}.
       </Text>

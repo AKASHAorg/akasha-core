@@ -1,11 +1,13 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
-import { ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import { useTranslation } from 'react-i18next';
+
+import DS from '@akashaproject/design-system';
+import { ITag } from '@akashaproject/ui-awf-typings/src/entry';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
@@ -21,8 +23,8 @@ import {
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+
 import EntryCardRenderer from './entry-renderer';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -219,7 +221,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.PEOPLE,
       action: 'Follow',
-      name: 'Following User From Search',
+      name: 'Search',
     });
     followReq.mutate(ethAddress);
   };
@@ -257,7 +259,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.PEOPLE,
       action: 'Unfollow',
-      name: 'Unfollowing User From Search',
+      name: 'Search',
     });
     unfollowReq.mutate(ethAddress);
   };

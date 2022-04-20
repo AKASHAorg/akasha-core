@@ -697,7 +697,7 @@ const entryData = {
       type: 'paragraph',
       children: [
         {
-          text: 'We’re back in action, energized after an epic retreat in ',
+          text: "We're back in action, energized after an epic retreat in ",
         },
         { value: 'verbier', type: 'tag', children: [{ text: '' }] },
         { text: ' 🇨🇭 🤜💥🤛' },
@@ -707,7 +707,7 @@ const entryData = {
       type: 'paragraph',
       children: [
         {
-          text: 'Here’s to everyone keeping us in their ',
+          text: "Here's to everyone keeping us in their ",
         },
         { text: 'minds', bold: true },
         { text: ' and ' },
@@ -719,7 +719,7 @@ const entryData = {
       type: 'paragraph',
       children: [
         {
-          text: 'You’ve been in our hearts and minds as well! 🤗',
+          text: "You've been in our hearts and minds as well! 🤗",
         },
       ],
     },

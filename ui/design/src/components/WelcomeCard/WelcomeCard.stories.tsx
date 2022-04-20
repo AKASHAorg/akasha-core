@@ -34,11 +34,11 @@ BaseWelcomeCard.args = {
   subtitleLabel: 'Congratulations, you are the newest member of Ethereum World!',
   paragraphOneLabel:
     'You can now browse the feed, subscribe to topics, write your own posts, and reply to other Ethereans.',
-  paragraphTwoIntroLabel: 'While you don’t have to do it now,',
+  paragraphTwoIntroLabel: "While you don't have to do it now,",
   paragraphTwoBoldLabel: 'we do recommend you take the time to customize your profile',
   paragraphTwoNextLabel:
     'You can change your display name and avatar, add a cover image and description, as well as claim your own AKASHA ENS name.',
-  paragraphThreeLabel: 'We are very happy you’ve joined us!',
+  paragraphThreeLabel: "We are very happy you've joined us!",
   primaryButtonLabel: 'Browse Ethereum World',
   secondaryButtonLabel: 'Customize My Profile',
 };

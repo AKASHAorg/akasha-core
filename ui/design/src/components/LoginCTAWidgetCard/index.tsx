@@ -20,7 +20,7 @@ export const CTAAnchor = styled(Anchor)<{ isBold?: boolean }>`
 `;
 
 export interface ILoginWidgetCardProps {
-  onLearnMoreClick?: () => void;
+  onWriteToUsLabelClick?: () => void;
   title: string;
   subtitle: string;
   beforeLinkLabel: string;
@@ -41,6 +41,7 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
     disclaimerLabel,
     writeToUsUrl,
     publicImgPath = '/images',
+    onWriteToUsLabelClick,
   } = props;
   return (
     <BasicCardBox pad="medium" callToAction={true}>
@@ -53,7 +54,12 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
           <StyledText margin={{ top: 'xsmall' }}>{subtitle}</StyledText>
           <StyledText margin={{ top: 'xsmall' }}>
             {beforeLinkLabel}
-            <CTAAnchor size="medium" href={writeToUsUrl} label={writeToUsLabel} />
+            <CTAAnchor
+              size="medium"
+              href={writeToUsUrl}
+              label={writeToUsLabel}
+              onClick={onWriteToUsLabelClick}
+            />
             {afterLinkLabel}
           </StyledText>
           <StyledText margin={{ top: 'xsmall' }}>{disclaimerLabel}</StyledText>

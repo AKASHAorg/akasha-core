@@ -46,12 +46,12 @@ const Welcome: React.FC<RootComponentProps> = props => {
       paragraphOneLabel={t(
         'You can now browse the feed, subscribe to topics, write your own posts, and reply to other Ethereans.',
       )}
-      paragraphTwoIntroLabel={t('While you don’t have to do it now,')}
+      paragraphTwoIntroLabel={t("While you don't have to do it now,")}
       paragraphTwoBoldLabel={t('we do recommend you take the time to customize your profile')}
       paragraphTwoNextLabel={t(
         'You can change your display name and avatar, add a cover image and description, as well as claim your own AKASHA ENS name.',
       )}
-      paragraphThreeLabel={t('We are very happy you’ve joined us!')}
+      paragraphThreeLabel={t("We are very happy you've joined us!")}
       primaryButtonLabel={t('Browse Ethereum World')}
       secondaryButtonLabel={t('Customize My Profile')}
       handlePrimaryButtonClick={handlePrimaryButtonClick}
