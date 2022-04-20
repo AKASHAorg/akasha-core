@@ -277,6 +277,7 @@ export interface IconProps extends CommonInterface<any> {
   disabled?: boolean;
   wrapperStyle?: React.CSSProperties;
   testId?: string;
+  themeColor?: string;
 }
 
 const StyledRefDiv = styled.div<Partial<IconProps>>`
@@ -300,6 +301,12 @@ const StyledRefDiv = styled.div<Partial<IconProps>>`
     `
       & * {
         stroke: ${props.theme.colors.accent};
+      }`};
+  ${props =>
+    props.themeColor &&
+    `
+      & * {
+        stroke: ${props.theme.colors[props.themeColor]};
       }`};
   ${props =>
     props.clickable &&
@@ -347,6 +354,12 @@ const StyledFillRefDiv = styled.div<Partial<IconProps>>`
         fill: ${props.theme.colors.accent};
       }`};
   ${props =>
+    props.themeColor &&
+    `
+      & * {
+        fill: ${props.theme.colors[props.themeColor]};
+      }`};
+  ${props =>
     props.clickable &&
     !props.disabled &&
     `
@@ -390,6 +403,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
     disabled,
     testId,
     wrapperStyle,
+    themeColor,
     ...other
   } = props;
   if (!Component) {
@@ -409,6 +423,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
         clickableRed={clickableRed}
         color={color}
         disabled={disabled}
+        themeColor={themeColor}
       >
         <Component className={iconClass} data-testid={testId} {...other} />
       </StyledFillRefDiv>
@@ -424,6 +439,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
       clickableRed={clickableRed}
       color={color}
       disabled={disabled}
+      themeColor={themeColor}
     >
       <Component className={iconClass} data-testid={testId} {...other} />
     </StyledRefDiv>

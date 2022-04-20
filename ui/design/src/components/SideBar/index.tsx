@@ -215,11 +215,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                 <Icon
                   type="explore"
                   size="xs"
-                  accentColor={!hovered}
-                  color={hovered && 'white'}
+                  themeColor={hovered ? 'white' : 'accent'}
                   style={{ marginRight: '0.75rem' }}
                 />
-                <Text color={hovered ? 'background' : 'accentText'} size="large">
+                <Text color={hovered ? 'white' : 'accentText'} size="large">
                   {exploreButtonLabel}
                 </Text>
               </Box>
