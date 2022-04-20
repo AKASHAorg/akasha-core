@@ -67,6 +67,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
 
   const [currentAppData, setCurrentAppData] = React.useState<IMenuItem | null>(null);
   const [activeOption, setActiveOption] = React.useState<IMenuItem | null>(null);
+  const [hovered, setHovered] = React.useState(false);
 
   React.useEffect(() => {
     if (allMenuItems && currentRoute) {
@@ -208,20 +209,24 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         <StyledFooter>
           <StyledButton
             margin="small"
+            background={hovered ? 'accent' : 'background'}
             label={
               <Box direction="row" align="center" justify="center" margin={{ vertical: ' xlarge' }}>
                 <Icon
                   type="explore"
                   size="xs"
-                  accentColor={true}
+                  accentColor={!hovered}
+                  color={hovered && 'white'}
                   style={{ marginRight: '0.75rem' }}
                 />
-                <Text color="accentText" size="large">
+                <Text color={hovered ? 'background' : 'accentText'} size="large">
                   {exploreButtonLabel}
                 </Text>
               </Box>
             }
             onClick={handleExploreClick}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
           />
         </StyledFooter>
       )}
