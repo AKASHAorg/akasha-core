@@ -3,13 +3,10 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import { ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
 import { IEntryData, ITag } from '@akashaproject/ui-awf-typings/src/entry';
-import { useTranslation } from 'react-i18next';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
