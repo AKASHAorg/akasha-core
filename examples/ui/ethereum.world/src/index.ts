@@ -59,6 +59,8 @@ declare const __DEV__: boolean;
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
+      '@akashaproject/app-routing',
+      '@akashaproject/app-translation',
       '@akashaproject/app-moderation-ewa',
       '@akashaproject/app-auth-ewa',
       '@akashaproject/app-integration-center',
@@ -66,8 +68,6 @@ declare const __DEV__: boolean;
       '@akashaproject/app-profile',
       '@akashaproject/app-notifications',
       '@akashaproject/app-legal',
-      '@akashaproject/app-translation',
-      '@akashaproject/app-routing',
       '@akashaproject/app-bookmarks',
       '@akashaproject/app-settings-ewa',
     ],
