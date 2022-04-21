@@ -8,7 +8,7 @@
     "build:sdk": "yarn tsc:sdk && nx run @akashaproject/awf-sdk:build",
     "build:ewa": "nx run-many --target=build:staging --projects=@akashaproject/ethereum.world",
     "build:executors": "nx run @akashaproject/nx-executors:build",
-    "clean": "nx run-many --target=clean --all && tsc --build --clean && nx reset",
+    "clean": "nx reset && nx run-many --target=clean --all && tsc --build --clean",
     "install:clean": "yarn clean && yarn bootstrap && yarn build:all",
     "compile:sc": "nx run-many --target=sc:compile --projects=@akashaproject/awf-sdk",
     "deploy:sc": "nx run-many --target=sc:deploy:rinkeby --projects=@akashaproject/awf-sdk",
