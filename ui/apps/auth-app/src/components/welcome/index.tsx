@@ -10,23 +10,33 @@ const { WelcomeCard } = DS;
 
 const Welcome: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-auth-ewa');
+  const navigateTo = props.plugins?.routing?.navigateTo;
 
   const loginQuery = useGetLogin();
 
   React.useEffect(() => {
     // redirect to sign in page if not logged in
     if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
-      props.singleSpa.navigateToUrl(routes[SIGN_IN]);
+      navigateTo?.({
+        appName: '@akashaproject/app-auth-ewa',
+        getNavigationUrl: navRoutes => navRoutes.SignIn,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePrimaryButtonClick = () => {
-    props.singleSpa.navigateToUrl(`${rootAKASHARoute}/feed`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => navRoutes.defaultRoute,
+    });
   };
 
   const handleSecondaryButtonClick = () => {
-    props.singleSpa.navigateToUrl(`${rootProfileRoute}/my-profile?modal[name]=update-profile`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.MyProfile}?modal[name]=update-profile`,
+    });
   };
 
   return (
@@ -36,12 +46,12 @@ const Welcome: React.FC<RootComponentProps> = props => {
       paragraphOneLabel={t(
         'You can now browse the feed, subscribe to topics, write your own posts, and reply to other Ethereans.',
       )}
-      paragraphTwoIntroLabel={t('While you don’t have to do it now,')}
+      paragraphTwoIntroLabel={t("While you don't have to do it now,")}
       paragraphTwoBoldLabel={t('we do recommend you take the time to customize your profile')}
       paragraphTwoNextLabel={t(
         'You can change your display name and avatar, add a cover image and description, as well as claim your own AKASHA ENS name.',
       )}
-      paragraphThreeLabel={t('We are very happy you’ve joined us!')}
+      paragraphThreeLabel={t("We are very happy you've joined us!")}
       primaryButtonLabel={t('Browse Ethereum World')}
       secondaryButtonLabel={t('Customize My Profile')}
       handlePrimaryButtonClick={handlePrimaryButtonClick}

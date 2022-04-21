@@ -314,11 +314,12 @@ const query = {
         version: data.version,
         integrationType: pkgInfo.integrationType,
         links: links,
-        sources: ipfsSources,
+        sources: ipfsSources.slice(0, 1),
         author: pkgInfo.author,
         integrationID: integrationID,
         enabled: pkgInfo.enabled,
         manifestData: manifest,
+        createdAt: data.createdAt?.toNumber(),
       };
       results.push(releaseInfo);
       await registryCache.set(cacheKey, releaseInfo, 7200);

@@ -1,14 +1,12 @@
 import React from 'react';
-import { Box, Text } from 'grommet';
-import { isMobileOnly } from 'react-device-detect';
+import { Box } from 'grommet';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import Icon from '../Icon';
 import { formatRelativeTime } from '../../utils/time';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { BlueDot, IconDiv, StyledBox, StyledNotifBox } from './styled-notifications';
+import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';
 import Spinner from '../Spinner';
 import Tooltip from '../Tooltip';
-import ErrorLoader from '../ErrorLoader';
 import InfoCard from '../InfoCard';
 
 export interface INotificationsCard {
@@ -211,17 +209,12 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
   );
 
   return (
-    <Box>
-      {isFetching && notifications.length === 0 && (
-        <Box pad="large">
-          <Spinner />
-        </Box>
-      )}
+    <BasicCardBox>
       {loggedIn && !isFetching && notifications.length === 0 && (
         <InfoCard icon="notifications" title={emptyTitle} suggestion={emptySubtitle} />
       )}
       {loggedIn && notifications.length !== 0 && (
-        <StyledBox>
+        <Box margin={{ horizontal: 'xsmall' }}>
           {renderHeader()}
           {notifications?.map((notif: any, index: number) => renderNotificationCard(notif, index))}
           {isFetching && (
@@ -229,9 +222,9 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
               <Spinner />
             </Box>
           )}
-        </StyledBox>
+        </Box>
       )}
-    </Box>
+    </BasicCardBox>
   );
 };
 NotificationsCard.defaultProps = {

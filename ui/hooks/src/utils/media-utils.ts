@@ -1,4 +1,5 @@
 import getSDK from '@akashaproject/awf-sdk';
+import { UserProfile_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 import { lastValueFrom } from 'rxjs';
 
 export interface IConfig {
@@ -10,37 +11,52 @@ export interface IConfig {
 }
 
 /**
- * Utility to append an ipfs gateway to an ipfs hash
+ * Utility to build gateway links to ipfs content
+ * @returns originLink: textile subdomain gateway
+ * fallbackLink: infura subdomain gateway
+ * pathLink: textile path gateway
  */
-export const getMediaUrl = (hash?: string, data?: File) => {
+export const getMediaUrl = (hash?: string) => {
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-
-  let ipfsUrl = '';
-
-  if (hash && !data) {
-    ipfsUrl = `${ipfsGateway}/${hash}`;
-  }
-
-  if (data) {
-    let imageSize = '';
-    for (const size in data) {
-      if (data.hasOwnProperty(size)) {
-        imageSize = size;
-        break;
+  let ipfsLinks:
+    | {
+        originLink: string;
+        fallbackLink: string;
+        pathLink: string;
       }
-    }
-    if (imageSize) {
-      ipfsUrl = `${ipfsGateway}/${hash}/${imageSize}/src`;
-    }
+    | undefined;
+  if (hash) {
+    ipfsLinks = sdk.services.common.ipfs.buildIpfsLinks(hash);
   }
+  return ipfsLinks;
+};
 
-  return ipfsUrl;
+export const buildProfileMediaLinks = (profile: UserProfile_Response) => {
+  const { avatar, coverImage, ...other } = profile;
+  const images: {
+    avatar: { url: string; fallbackUrl: string };
+    coverImage: { url: string; fallbackUrl: string };
+  } = {
+    avatar: { url: '', fallbackUrl: '' },
+    coverImage: { url: '', fallbackUrl: '' },
+  };
+  if (avatar) {
+    images.avatar = {
+      url: getMediaUrl(avatar)?.originLink,
+      fallbackUrl: getMediaUrl(avatar)?.fallbackLink,
+    };
+  }
+  if (coverImage) {
+    images.coverImage = {
+      url: getMediaUrl(coverImage)?.originLink,
+      fallbackUrl: getMediaUrl(coverImage)?.fallbackLink,
+    };
+  }
+  return { ...images, ...other };
 };
 
 export const uploadMediaToTextile = async (data: File, isUrl = false) => {
   const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const uploadData: {
     isUrl: boolean;
     content: File;
@@ -67,8 +83,12 @@ export const uploadMediaToTextile = async (data: File, isUrl = false) => {
 
   try {
     const res = await sdk.api.profile.saveMediaFile(uploadData);
+    const ipfsLinks = getMediaUrl(res?.CID);
     return {
-      data: { src: `${ipfsGateway}/${res?.CID}`, size: res?.size },
+      data: {
+        src: { url: ipfsLinks?.originLink, fallbackUrl: ipfsLinks?.fallbackLink },
+        size: res?.size,
+      },
     };
   } catch (error) {
     return {

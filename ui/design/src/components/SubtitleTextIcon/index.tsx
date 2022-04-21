@@ -1,7 +1,8 @@
-import { Box, Text } from 'grommet';
+import { Box, Text, Drop } from 'grommet';
 import React from 'react';
 import Icon, { IconType } from '../Icon';
 import { BackgroundDiv, StyledBox } from './styled-subtitle-text-icon';
+import Tooltip from '../Tooltip';
 
 export interface ISubtitleTextIcon {
   className?: string;
@@ -15,6 +16,8 @@ export interface ISubtitleTextIcon {
   labelSize?: 'small' | 'large';
   subtitle?: string;
   subtitleColor?: string;
+  subtitleIcon?: IconType;
+  subtitleIconTooltip?: string;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
   maxWidth?: string;
@@ -33,10 +36,16 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     labelSize,
     subtitle,
     subtitleColor,
+    subtitleIcon,
+    subtitleIconTooltip,
     onClick,
     gap,
     maxWidth,
   } = props;
+
+  const [showTooltip, setShowTooltip] = React.useState(false);
+  const targetRef = React.useRef();
+
   return (
     <StyledBox
       data-testid={`${props['data-testid']}`}
@@ -55,9 +64,33 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
         <Text color={labelColor} size={labelSize} truncate={true}>
           {label}
         </Text>
-        <Text size="small" color={subtitleColor} truncate={true}>
-          {subtitle}
-        </Text>
+        <Box direction="row" gap="xsmall">
+          <Text size="small" color={subtitleColor} truncate={true}>
+            {subtitle}
+          </Text>
+          {subtitleIcon && (
+            <Icon
+              size="xs"
+              type={subtitleIcon}
+              accentColor={true}
+              clickable={false}
+              ref={targetRef}
+              onClick={() => setShowTooltip(!showTooltip)}
+            />
+          )}
+          {subtitleIconTooltip && showTooltip && targetRef.current && (
+            <Drop
+              margin={{ left: 'xsmall' }}
+              align={{ left: 'right' }}
+              target={targetRef.current}
+              onClickOutside={() => setShowTooltip(false)}
+            >
+              <Box background="activePanelBackground" round="xsmall" pad="xsmall">
+                <Text>{subtitleIconTooltip}</Text>
+              </Box>
+            </Drop>
+          )}
+        </Box>
       </Box>
     </StyledBox>
   );

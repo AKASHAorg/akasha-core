@@ -27,6 +27,7 @@ fragment IntegrationReleaseInfoFragment on IntegrationReleaseInfo{
     description
     displayName
   }
+  createdAt
 }
 
 query GetLatestRelease($integrationIDs: [String]) {

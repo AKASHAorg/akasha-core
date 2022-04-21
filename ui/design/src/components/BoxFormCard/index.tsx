@@ -3,6 +3,7 @@ import { Box, Text } from 'grommet';
 import Cropper from 'react-easy-crop';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import {
+  IProfileData,
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
@@ -61,15 +62,15 @@ export interface IBoxFormCardProps {
 }
 
 export interface IImageSrc {
-  src: string | null;
+  src: { url?: string; fallbackUrl?: string } | null;
   type?: string;
   prefix: string | null;
   preview?: string;
   isUrl: boolean;
 }
 export interface IBoxData {
-  avatar?: string | IImageSrc;
-  coverImage?: string | IImageSrc;
+  avatar?: IProfileData['avatar'];
+  coverImage?: IProfileData['coverImage'];
   name?: string;
   description?: string;
   default?: { provider: string; property: string; value: string }[];
@@ -128,8 +129,8 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const [coverImagePopoverOpen, setCoverImagePopoverOpen] = React.useState(false);
   const [fieldsToUpdate, setFieldsToUpdate] = React.useState<string[]>([]);
   const [formValues, setFormValues] = React.useState<IFormValues>({
-    avatar: { src: '', prefix: null, isUrl: false },
-    coverImage: { src: '', prefix: null, isUrl: false },
+    avatar: { src: { url: '', fallbackUrl: '' }, prefix: null, isUrl: false },
+    coverImage: { src: { url: '', fallbackUrl: '' }, prefix: null, isUrl: false },
     userName: '',
     description: '',
     name: '',
@@ -153,8 +154,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const [coverImageRotation /* setCoverImageRotation */] = React.useState<number>(0);
   const [avatarCroppedAreaPixels, setAvatarCroppedAreaPixels] = React.useState(null);
   const [coverImageCroppedAreaPixels, setCoverImageCroppedAreaPixels] = React.useState(null);
-  const [avatarSrc, setAvatarSrc] = React.useState<string>(null);
-  const [coverImageSrc, setCoverImageSrc] = React.useState<string>(null);
+  const [avatarSrc, setAvatarSrc] = React.useState<{ url?: string; fallbackUrl?: string }>(null);
+  const [coverImageSrc, setCoverImageSrc] =
+    React.useState<{ url?: string; fallbackUrl?: string }>(null);
 
   const isEditingAvatar = showCropper === ProfileProviderProperties.AVATAR;
 
@@ -182,18 +184,18 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           updatedFields[key] = providerData[key];
         }
         if (key === ProfileProviderProperties.AVATAR) {
-          if (providerData[key] && typeof providerData[key] === 'string') {
+          if (providerData[key] && typeof providerData[key] === 'object') {
             updatedFields[key] = {
-              preview: providerData[key],
+              preview: providerData[key].url,
               prefix: '',
               isUrl: true,
             };
           }
         }
         if (key === ProfileProviderProperties.COVER_IMAGE) {
-          if (providerData[key] && typeof providerData[key] === 'string') {
+          if (providerData[key] && typeof providerData[key] === 'object') {
             updatedFields[key] = {
-              preview: providerData[key],
+              preview: providerData[key].url,
               prefix: '',
               isUrl: true,
             };
@@ -267,13 +269,13 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const handleCropAvatar = React.useCallback(async () => {
     try {
       const [cropped] = await getCroppedImage(
-        avatarSrc,
+        avatarSrc.url || avatarSrc.fallbackUrl,
         avatarCroppedAreaPixels,
         avatarRotation,
         formValues.avatar.type,
       );
 
-      handleImageInsert(ProfileProviderProperties.AVATAR)(cropped as string | File, false);
+      handleImageInsert(ProfileProviderProperties.AVATAR)(cropped, false);
 
       resetCropperFields();
     } catch (e) {
@@ -285,13 +287,13 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const handleCropCoverImage = React.useCallback(async () => {
     try {
       const [cropped] = await getCroppedImage(
-        coverImageSrc,
+        coverImageSrc.url || coverImageSrc.fallbackUrl,
         coverImageCroppedAreaPixels,
         coverImageRotation,
         formValues.coverImage.type,
       );
 
-      handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(cropped as string | File, false);
+      handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(cropped, false);
 
       resetCropperFields();
     } catch (e) {
@@ -350,26 +352,33 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(false);
   };
   // @Todo: update this after ts-jest migration to ESM
-  const handleImageInsert = (imageKey: string) => (src: File | string, isUrl: boolean) => {
-    if (isUrl && typeof src === 'string') {
-      // set blob sources to state if not already defined
-      if (imageKey === ProfileProviderProperties.AVATAR && !avatarSrc) setAvatarSrc(src);
-      if (imageKey === ProfileProviderProperties.COVER_IMAGE && !coverImageSrc)
-        setCoverImageSrc(src);
+  const handleImageInsert =
+    (imageKey: string) => (src: Blob | { url?: string; fallbackUrl?: string }, isUrl: boolean) => {
+      if (isUrl && src.hasOwnProperty('url')) {
+        // set blob sources to state if not already defined
+        if (imageKey === ProfileProviderProperties.AVATAR && !avatarSrc)
+          setAvatarSrc(src as { url?: string; fallbackUrl?: string });
+        if (imageKey === ProfileProviderProperties.COVER_IMAGE && !coverImageSrc)
+          setCoverImageSrc(src as { url?: string; fallbackUrl?: string });
 
-      handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
-    } else if (typeof src !== 'string') {
-      // set blob sources to state if not already defined
-      if (imageKey === ProfileProviderProperties.AVATAR && !avatarSrc)
-        setAvatarSrc(URL.createObjectURL(src));
-      if (imageKey === ProfileProviderProperties.COVER_IMAGE && !coverImageSrc)
-        setCoverImageSrc(URL.createObjectURL(src));
+        handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
+      } else if (src instanceof Blob) {
+        // set blob sources to state if not already defined
+        if (imageKey === ProfileProviderProperties.AVATAR && !avatarSrc)
+          setAvatarSrc({ url: URL.createObjectURL(src) });
+        if (imageKey === ProfileProviderProperties.COVER_IMAGE && !coverImageSrc)
+          setCoverImageSrc({ url: URL.createObjectURL(src) });
 
-      handleFormFieldChange({
-        [imageKey]: { src, isUrl, type: src.type, preview: URL.createObjectURL(src) },
-      });
-    }
-  };
+        handleFormFieldChange({
+          [imageKey]: {
+            src: { url: src },
+            isUrl,
+            type: src.type,
+            preview: URL.createObjectURL(src),
+          },
+        });
+      }
+    };
 
   const handleUsernameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     handleFormFieldChange({ userName: ev.target.value });
@@ -438,7 +447,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           {showCropper === ProfileProviderProperties.AVATAR ? (
             <StyledCropperImageWrapper>
               <Cropper
-                image={avatarSrc}
+                image={avatarSrc.url || avatarSrc.fallbackUrl}
                 crop={avatarCrop}
                 zoom={avatarZoom}
                 aspect={76 / 76}
@@ -452,7 +461,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
           ) : (
             <StyledCropperImageWrapper>
               <Cropper
-                image={coverImageSrc}
+                image={coverImageSrc.url || coverImageSrc.fallbackUrl}
                 crop={coverImageCrop}
                 zoom={coverImageZoom}
                 aspect={1344 / 288}

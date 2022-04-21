@@ -19,7 +19,7 @@ import AppsPage from './pages/apps-page';
 import WidgetsPage from './pages/widgets-page';
 
 import NavButton from './nav-button';
-
+import { hiddenIntegrations } from '../hidden-integrations';
 import routes, { rootRoute, EXPLORE, MY_APPS, APPS, WIDGETS, INFO } from '../routes';
 
 const { Box, Text, BasicCardBox } = DS;
@@ -54,11 +54,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
 
-  const integrationIdsNormalized = availableIntegrationsReq?.data?.integrationIds.map(
-    integrationId => {
-      return { id: integrationId };
-    },
+  const filteredIntegrations = availableIntegrationsReq?.data?.filter(
+    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
   );
+
+  const integrationIdsNormalized = filteredIntegrations?.map(integrationId => {
+    return { id: integrationId };
+  });
 
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
 
@@ -67,19 +69,19 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Router>
       <Switch>
+        <Redirect exact={true} from={rootRoute} to={routes[EXPLORE]} />
         <Route path={`${routes[INFO]}/:integrationId`}>
           <InfoPage {...props} />
         </Route>
         <Route path="*">
-          <Redirect exact={true} from={rootRoute} to={routes[EXPLORE]} />
-          <BasicCardBox style={{ minHeight: '80vh' }} onClick={handleSignedOutUser}>
-            <Box>
+          <BasicCardBox style={{ maxHeight: '92vh' }} onClick={handleSignedOutUser}>
+            <Box height="6rem" alignContent="stretch" flex={{ shrink: 0 }}>
               <Box pad="medium">
-                <Text size="large" weight={'bold'}>
+                <Text size="xlarge" weight={'bold'}>
                   {t('Integration Center')}
                 </Text>
               </Box>
-              <Box direction="row" justify="between">
+              <Box direction="row" justify="between" pad={{ top: 'small' }}>
                 <NavButton
                   path={routes[EXPLORE]}
                   label={t('Explore')}
@@ -135,7 +137,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               </Box>
             </Box>
 
-            <Box overflow={'auto'} height={{ max: '80vh' }}>
+            <Box overflow={'auto'}>
               <Switch>
                 <Route path={routes[EXPLORE]}>
                   <ExplorePage

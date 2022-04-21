@@ -32,6 +32,7 @@ export type IconType =
   | 'calendar'
   | 'comments'
   | 'close'
+  | 'closedEye'
   | 'code'
   | 'coinbase'
   | 'coins'
@@ -55,6 +56,7 @@ export type IconType =
   | 'error'
   | 'facebook'
   | 'feedback'
+  | 'follower'
   | 'following'
   | 'github'
   | 'hashtag'
@@ -159,6 +161,7 @@ export const iconTypes: IconType[] = [
   'calendar',
   'comments',
   'close',
+  'closedEye',
   'code',
   'coinbase',
   'copy',
@@ -182,6 +185,7 @@ export const iconTypes: IconType[] = [
   'error',
   'facebook',
   'feedback',
+  'follower',
   'following',
   'github',
   'hashtag',
@@ -273,6 +277,7 @@ export interface IconProps extends CommonInterface<any> {
   disabled?: boolean;
   wrapperStyle?: React.CSSProperties;
   testId?: string;
+  themeColor?: string;
 }
 
 const StyledRefDiv = styled.div<Partial<IconProps>>`
@@ -296,6 +301,12 @@ const StyledRefDiv = styled.div<Partial<IconProps>>`
     `
       & * {
         stroke: ${props.theme.colors.accent};
+      }`};
+  ${props =>
+    props.themeColor &&
+    `
+      & * {
+        stroke: ${props.theme.colors[props.themeColor]};
       }`};
   ${props =>
     props.clickable &&
@@ -343,6 +354,12 @@ const StyledFillRefDiv = styled.div<Partial<IconProps>>`
         fill: ${props.theme.colors.accent};
       }`};
   ${props =>
+    props.themeColor &&
+    `
+      & * {
+        fill: ${props.theme.colors[props.themeColor]};
+      }`};
+  ${props =>
     props.clickable &&
     !props.disabled &&
     `
@@ -371,6 +388,8 @@ const fillIcons: IconType[] = [
   'integrationAppSmallFill',
   'integrationWidgetSmall',
   'appModeration',
+  'explore',
+  'legal',
 ];
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];
@@ -384,6 +403,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
     disabled,
     testId,
     wrapperStyle,
+    themeColor,
     ...other
   } = props;
   if (!Component) {
@@ -403,6 +423,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
         clickableRed={clickableRed}
         color={color}
         disabled={disabled}
+        themeColor={themeColor}
       >
         <Component className={iconClass} data-testid={testId} {...other} />
       </StyledFillRefDiv>
@@ -418,6 +439,7 @@ const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
       clickableRed={clickableRed}
       color={color}
       disabled={disabled}
+      themeColor={themeColor}
     >
       <Component className={iconClass} data-testid={testId} {...other} />
     </StyledRefDiv>

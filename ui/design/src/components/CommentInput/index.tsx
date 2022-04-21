@@ -1,3 +1,4 @@
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { Box, Text, TextArea } from 'grommet';
 import React, { useRef, useState } from 'react';
 import useSimpleClickAway from '../../utils/simpleClickAway';
@@ -7,7 +8,7 @@ import { StyledDiv, StyledCommentWrapper } from './styled-comment-input';
 
 export interface ICommentInput {
   className?: string;
-  avatarImg?: string;
+  avatarImg?: IProfileData['avatar'];
   ethAddress: string;
   placeholderLabel: string;
   publishLabel: string;

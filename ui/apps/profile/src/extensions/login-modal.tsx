@@ -32,7 +32,10 @@ const LoginModal = (props: RootExtensionProps) => {
 
   const handleSignUpClick = () => {
     sessionStorage.setItem(StorageKeys.LAST_URL, location.pathname);
-    props.singleSpa.navigateToUrl('/auth-app/sign-up');
+    props.plugins.routing?.navigateTo?.({
+      appName: '@akashaproject/app-auth-ewa',
+      getNavigationUrl: navRoutes => navRoutes.SignUp,
+    });
   };
 
   return (
@@ -62,7 +65,12 @@ const LoginModal = (props: RootExtensionProps) => {
             pad={{ vertical: 'medium' }}
             style={{ maxWidth: '12rem' }}
           >
-            <Button onClick={handleSignInClick} label={t('Sign In')} fill="horizontal" />
+            <Button
+              onClick={handleSignInClick}
+              label={t('Sign In')}
+              fill="horizontal"
+              hoverIndicator="accentText"
+            />
             <Button
               primary={true}
               onClick={handleSignUpClick}

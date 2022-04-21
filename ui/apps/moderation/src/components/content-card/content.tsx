@@ -1,12 +1,12 @@
 import React from 'react';
 import moment from 'moment';
 import DS from '@akashaproject/design-system';
-import getSDK from '@akashaproject/awf-sdk';
 
-import { IContentProps } from '../../../interfaces';
+import { IContentProps } from '../../interfaces';
 
 import EntryDataCard from './entry-data-card';
 import ExplanationsBox from './explanations-box';
+import { getMediaUrl } from '@akashaproject/ui-awf-hooks';
 
 const { Box, Button, Text, Avatar, styled, useViewportSize } = DS;
 
@@ -25,9 +25,6 @@ const Content: React.FC<IContentProps> = props => {
 
   const { size } = useViewportSize();
 
-  const sdk = getSDK();
-  const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
-
   const isMobile = size === 'small';
 
   const handleClick = () => {
@@ -38,6 +35,8 @@ const Content: React.FC<IContentProps> = props => {
 
   const textStyle = { fontSize: '1rem', fontWeight: 600 };
 
+  const avatarIpfsLinks = getMediaUrl(props.reporterAvatar);
+
   return (
     <Box pad="1rem">
       {props.entryData && (
@@ -46,7 +45,7 @@ const Content: React.FC<IContentProps> = props => {
           entryData={props.entryData}
           itemType={props.itemType}
           locale={props.locale}
-          singleSpa={props.singleSpa}
+          navigateTo={props.plugins?.routing?.navigateTo}
         />
       )}
       <Box
@@ -111,11 +110,10 @@ const Content: React.FC<IContentProps> = props => {
             <Text margin={{ right: '0.2rem' }}>{props.originallyReportedByLabel}</Text>
             <Avatar
               ethAddress={props.reporter || ''}
-              src={
-                props.reporterAvatar
-                  ? `${ipfsGateway}/${props.reporterAvatar}`
-                  : props.reporterAvatar
-              }
+              src={{
+                url: avatarIpfsLinks?.originLink,
+                fallbackUrl: avatarIpfsLinks?.fallbackLink,
+              }}
               size="xs"
               margin={{ right: '0.2rem' }}
               backgroundColor={'lightBackground'}

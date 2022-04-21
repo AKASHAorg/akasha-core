@@ -25,9 +25,12 @@ export const SidebarSlot: React.FC<ExtensionPointProps & { visible: boolean }> =
 `;
 
 export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
-  z-index: 100;
+  z-index: 102;
   position: sticky;
   top: 0;
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    z-index: 100;
+  }
 `;
 
 export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
@@ -53,6 +56,7 @@ export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
     @media screen and (min-width: ${props.theme.breakpoints.small.value}px) {
       max-width: 30em;
       display: flex;
+      flex-direction: column;
     }
 
     @media screen and (min-width: ${props.theme.breakpoints.medium.value}px) {

@@ -1,7 +1,9 @@
-import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import * as React from 'react';
+import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
+
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';
+
 import { DesktopAccordionPanel, MobileAccordionPanel } from './styled-sidebar';
 
 interface SidebarMenuItemProps {
@@ -9,7 +11,6 @@ interface SidebarMenuItemProps {
   size: string;
   index: number;
   menuItem: IMenuItem;
-
   onMenuItemClick: (menuItem: IMenuItem, shouldCloseSidebar: boolean) => void;
   onSubMenuItemClick: (
     menuItem: IMenuItem,
@@ -17,14 +18,21 @@ interface SidebarMenuItemProps {
     shouldCloseSidebar?: boolean,
   ) => void;
   activeOption: IMenuItem;
+  hasNewNotifs?: boolean;
 }
 
 const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
-  const { currentRoute, menuItem, size, index, activeOption } = props;
+  const { currentRoute, menuItem, size, index, activeOption, hasNewNotifs } = props;
+
   const activePanel = !!currentRoute?.match(menuItem?.route);
-  const handleAppIconClick = (shouldCloseSidebar?: boolean) => () => {
+
+  const handleAppIconClick = (shouldCloseSidebar?: boolean) => e => {
+    e.preventDefault();
     props.onMenuItemClick(menuItem, shouldCloseSidebar);
   };
+
+  const hasSubRoutes = menuItem.subRoutes?.length > 0;
+
   const handleSubrouteClick = (
     menuItem: IMenuItem,
     subMenuItem: IMenuItem,
@@ -37,36 +45,40 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
       <DesktopAccordionPanel
         size={size}
         key={`${index}-${menuItem.label}`}
-        hasChevron={menuItem.subRoutes?.length > 0}
+        hasChevron={hasSubRoutes}
+        forwardedAs={hasSubRoutes ? 'div' : 'a'}
         onClick={handleAppIconClick()}
         isActive={activePanel}
-        label={<MenuItemLabel menuItem={menuItem} />}
+        label={
+          <MenuItemLabel menuItem={menuItem} isActive={activePanel} hasNewNotifs={hasNewNotifs} />
+        }
+        {...(!hasSubRoutes && { href: `${location.origin}${menuItem.route}` })}
       >
-        {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
-          <MenuSubItems
-            isMobile={false}
-            menuItem={menuItem}
-            activeOption={activeOption}
-            onOptionClick={handleSubrouteClick}
-          />
-        )}
+        <MenuSubItems
+          isMobile={false}
+          menuItem={menuItem}
+          activeOption={activeOption}
+          onOptionClick={handleSubrouteClick}
+        />
       </DesktopAccordionPanel>
       <MobileAccordionPanel
         size={size}
         key={`${index}-mobile-${menuItem.label}`}
-        hasChevron={menuItem.subRoutes?.length > 0}
+        hasChevron={hasSubRoutes}
+        forwardedAs={hasSubRoutes ? 'div' : 'a'}
         onClick={handleAppIconClick(true)}
         isActive={activePanel}
-        label={<MenuItemLabel menuItem={menuItem} />}
+        label={
+          <MenuItemLabel menuItem={menuItem} isActive={activePanel} hasNewNotifs={hasNewNotifs} />
+        }
+        {...(!hasSubRoutes && { href: `${location.origin}${menuItem.route}` })}
       >
-        {menuItem.subRoutes && menuItem.subRoutes.length > 0 && (
-          <MenuSubItems
-            isMobile={true}
-            menuItem={menuItem}
-            activeOption={activeOption}
-            onOptionClick={(menu, subMenu) => handleSubrouteClick(menu, subMenu, true)}
-          />
-        )}
+        <MenuSubItems
+          isMobile={true}
+          menuItem={menuItem}
+          activeOption={activeOption}
+          onOptionClick={(menu, subMenu) => handleSubrouteClick(menu, subMenu, true)}
+        />
       </MobileAccordionPanel>
     </>
   );

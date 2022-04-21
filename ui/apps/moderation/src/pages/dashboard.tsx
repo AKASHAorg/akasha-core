@@ -1,37 +1,45 @@
 import React from 'react';
-import SingleSpa from 'single-spa';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { ButtonValues, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ButtonValues } from '@akashaproject/ui-awf-typings';
 import {
   useGetCount,
   useInfiniteKept,
-  useCheckModerator,
   useInfinitePending,
   useInfiniteDelisted,
   IModeratedItem,
   IPendingItem,
 } from '@akashaproject/ui-awf-hooks';
 
-import ContentTab from './content-tab';
-import ContentCard from './content-card';
-import { NoItemsFound, PromptAuthorization } from '../error-cards';
+import ContentTab from '../components/content-tab';
+import ContentCard from '../components/content-card';
+import { NoItemsFound } from '../components/error-cards';
 
-const { Box, Spinner, TabsToolbar, StyledSwitchCardButton, useIntersectionObserver } = DS;
+import { ISharedModerationProps } from '../interfaces';
 
-interface IDashboardProps {
-  slotId: string;
-  user: string | null;
-  singleSpa: typeof SingleSpa;
-}
+import routes, { GUEST, UNAUTHENTICATED, APP_NAME } from '../routes';
+
+const {
+  Box,
+  ModerationIntroCard,
+  Spinner,
+  TabsToolbar,
+  StyledSwitchCardButton,
+  useIntersectionObserver,
+} = DS;
 
 const DEFAULT_LIMIT = 10;
 
-const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
-  const { user } = props;
+const Dashboard: React.FC<ISharedModerationProps> = props => {
+  const {
+    user,
+    isAuthorised,
+    plugins: { routing },
+  } = props;
 
+  // const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
 
@@ -40,14 +48,6 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
 
   const getCountQuery = useGetCount();
   const count = getCountQuery.data;
-
-  const checkModeratorQuery = useCheckModerator(user);
-  const checkModeratorResp = checkModeratorQuery.data;
-  const isAuthorised = React.useMemo(() => {
-    if (checkModeratorResp === 200) {
-      return true;
-    } else return false;
-  }, [checkModeratorResp]);
 
   const pendingItemsQuery = useInfinitePending(DEFAULT_LIMIT);
   const pendingItemPages = React.useMemo(() => {
@@ -76,10 +76,20 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
   React.useEffect(() => {
     if (!user) {
       // if not authenticated, prompt to authenticate
-      props.singleSpa.navigateToUrl('/moderation-app/unauthenticated');
+      routing.navigateTo({
+        appName: APP_NAME,
+        getNavigationUrl: () => routes[UNAUTHENTICATED],
+      });
+    }
+    if (user && !isAuthorised) {
+      // if authenticated and not authorised, restrict access
+      routing.navigateTo({
+        appName: APP_NAME,
+        getNavigationUrl: () => routes[GUEST],
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, isAuthorised]);
 
   const handleLoadMorePending = React.useCallback(() => {
     if (!pendingItemsQuery.isLoading && pendingItemsQuery.hasNextPage) {
@@ -135,11 +145,11 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
   const buttonValues = [
     {
       value: ButtonValues.KEPT,
-      label: t('{{ buttonValueKept }}', { buttonValueKept: ButtonValues.KEPT }),
+      label: t('{{ buttonValueKept }} items', { buttonValueKept: ButtonValues.KEPT }),
     },
     {
       value: ButtonValues.DELISTED,
-      label: t('{{ buttonValueDelisted }}', { buttonValueKept: ButtonValues.DELISTED }),
+      label: t('{{ buttonValueDelisted }} items', { buttonValueDelisted: ButtonValues.DELISTED }),
     },
   ];
 
@@ -166,19 +176,12 @@ const Dashboard: React.FC<IDashboardProps & RootComponentProps> = props => {
     return false;
   }, [isDelisted, keptItemPages, keptItemsQuery.isLoading]);
 
-  if (!isAuthorised) {
-    return (
-      <PromptAuthorization
-        titleLabel={t('You must be an Ethereum World Moderator to access this page')}
-        subtitleLabel={t(
-          'The wallet you connected does not match a moderator account in our system. Please try again with the correct wallet.',
-        )}
-      />
-    );
-  }
-
   return (
     <Box>
+      <ModerationIntroCard
+        titleLabel="Moderating"
+        subtitleLabel="Find all the moderated posts, replies and accounts"
+      />
       <ContentTab
         isPending={isPending}
         pendingLabel={t('Pending')}

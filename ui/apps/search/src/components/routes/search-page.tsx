@@ -1,11 +1,12 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { useParams } from 'react-router-dom';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
-import { ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import { useTranslation } from 'react-i18next';
+
+import DS from '@akashaproject/design-system';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
+import { IEntryData, ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
@@ -17,12 +18,14 @@ import {
   useSearchComments,
   useSearchTags,
   LoginState,
-  useHandleNavigation,
+  useEntryNavigation,
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import EntryCardRenderer from './entry-renderer';
 import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { SearchTagsResult_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+
+import EntryCardRenderer from './entry-renderer';
 
 const {
   Box,
@@ -51,8 +54,9 @@ interface SearchPageProps extends RootComponentProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
+type DataResponse = SearchTagsResult_Response | IEntryData;
+
 const initSearchState = {
-  keyword: '',
   [ButtonValues.TOPICS]: { page: 1, results: [], done: false, isLoading: false },
   [ButtonValues.POSTS]: { page: 1, results: [], done: false, isLoading: false },
   [ButtonValues.PEOPLE]: { page: 1, results: [], done: false, isLoading: false },
@@ -74,10 +78,15 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const handleNavigation = useHandleNavigation(singleSpa.navigateToUrl);
+  const navigateTo = props.plugins?.routing?.navigateTo;
+  const handleEntryNavigation = useEntryNavigation(navigateTo);
+
   const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.ALL, [activeButton]);
 
-  const updateSearchState = (type: Exclude<ButtonValues, ButtonValues.ALL>, data: unknown[]) => {
+  const updateSearchState = (
+    type: Exclude<ButtonValues, ButtonValues.ALL>,
+    data: Array<DataResponse & { delisted?: boolean }>,
+  ) => {
     if (!data || !data.length) {
       setSearchState(prevState => ({
         ...prevState,
@@ -88,7 +97,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       ...prevState,
       [type]: {
         ...prevState[type],
-        results: [...prevState[type].results, ...data],
+        results: [...prevState[type].results, ...data.filter(_ => !_.delisted)],
         // topics edge case because it only fetches once
         done: type === ButtonValues.TOPICS || prevState[type].done,
         isLoading: false,
@@ -127,17 +136,17 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   React.useEffect(() => {
     if (isAllTabActive) {
-      return setSearchState({ ...initSearchState, keyword: searchKeyword });
+      return setSearchState(initSearchState);
     }
     setSearchState({
       ...initSearchState,
-      keyword: searchKeyword,
       [activeButton]: { ...initSearchState[activeButton], isLoading: true },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKeyword]);
 
   const searchProfilesReq = useSearchProfiles(
-    decodeURIComponent(searchState.keyword),
+    decodeURIComponent(searchKeyword),
     searchState[ButtonValues.PEOPLE].page,
     loginState?.pubKey,
     loginState?.fromCache,
@@ -145,7 +154,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchProfilesState = getSearchStateForTab(ButtonValues.PEOPLE);
 
   const searchPostsReq = useSearchPosts(
-    decodeURIComponent(searchState.keyword),
+    decodeURIComponent(searchKeyword),
     searchState[ButtonValues.POSTS].page,
     loginState?.pubKey,
     loginState?.fromCache,
@@ -153,14 +162,14 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchPostsState = getSearchStateForTab(ButtonValues.POSTS);
 
   const searchCommentsReq = useSearchComments(
-    decodeURIComponent(searchState.keyword),
+    decodeURIComponent(searchKeyword),
     searchState[ButtonValues.REPLIES].page,
     loginState?.pubKey,
     loginState?.fromCache,
   );
   const searchCommentsState = searchState[ButtonValues.REPLIES].results;
 
-  const searchTagsReq = useSearchTags(decodeURIComponent(searchState.keyword));
+  const searchTagsReq = useSearchTags(decodeURIComponent(searchKeyword));
   const searchTagsState = getSearchStateForTab(ButtonValues.TOPICS);
 
   React.useEffect(() => {
@@ -199,13 +208,16 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.TRENDING_TOPIC,
       action: subscribe ? 'Subscribe' : 'Unsubscribe',
-      name: subscribe ? 'Subscribed Topic From Feed' : 'Unsubscribed Topic From Feed',
+      name: subscribe ? 'Subscribed Topic From Search' : 'Unsubscribed Topic From Search',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
   const handleProfileClick = (pubKey: string) => {
-    singleSpa.navigateToUrl(`/profile/${pubKey}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
+    });
   };
   const handleFollowProfile = (ethAddress: string) => {
     if (!loginState?.ethAddress) {
@@ -214,8 +226,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
     analyticsActions.trackEvent({
       category: AnalyticsCategories.PEOPLE,
-      action: 'Subscribe',
-      name: 'Feed',
+      action: 'Follow',
+      name: 'Search',
     });
     followReq.mutate(ethAddress);
   };
@@ -231,12 +243,18 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${authorEth}`);
     ev.preventDefault();
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorEth}`,
+    });
   };
 
   const handleMentionClick = (profileEthAddress: string) => {
-    props.singleSpa.navigateToUrl(`/profile/${profileEthAddress}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileEthAddress}`,
+    });
   };
 
   const handleUnfollowProfile = (ethAddress: string) => {
@@ -246,14 +264,17 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     }
     analyticsActions.trackEvent({
       category: AnalyticsCategories.PEOPLE,
-      action: 'Unsubscribe',
-      name: 'Feed',
+      action: 'Unfollow',
+      name: 'Search',
     });
     unfollowReq.mutate(ethAddress);
   };
 
   const handleTagClick = (name: string) => {
-    props.singleSpa.navigateToUrl(`/social-app/tags/${name}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
+    });
   };
 
   // repost related
@@ -279,6 +300,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         action: `By ${activeButton}`,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeButton]);
 
   const buttonValues = [
@@ -337,19 +359,19 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (activeButton === ButtonValues.ALL) {
       return !allQueriesFinished;
     }
-    return searchState.keyword && !searchState[activeButton].done;
+    return searchKeyword && !searchState[activeButton].done;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchState, activeButton, allQueriesFinished]);
 
   return (
     <Box fill="horizontal">
       <SearchStartCard
-        searchKeywordParam={searchKeyword}
+        searchKeyword={searchKeyword}
         handleSearch={handleSearch}
         inputPlaceholderLabel={t('Search')}
-        title={t('✨ Find what you are looking for ✨')}
-        description={t(
-          'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community.',
-        )}
+        titleLabel={t('Search')}
+        introLabel={t('✨ Find what you are looking for ✨')}
+        description={t('Search for your favourite topics, people, posts and replies.')}
       >
         <TabsToolbar
           noMarginBottom
@@ -404,23 +426,26 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           hasMobileDesign={true}
           buttonValues={buttonValues}
           loggedUser={loginState?.pubKey}
+          style={{ marginBottom: '-1px' }} // overlaps border with parent's bottom border
         />
       </SearchStartCard>
 
       {allQueriesFinished &&
-        searchState.keyword &&
+        searchKeyword &&
         (isAllTabActive ? emptySearchState : !searchState[activeButton]?.results?.length) && (
-          <InfoCard
-            icon="search"
-            title={t('No matching results found 👀')}
-            explanation={t('We could not find any results for your search in Ethereum World.')}
-            suggestion={t(
-              'Make sure you spelled everything correctly or try searching for something else.',
-            )}
-          />
+          <Box margin={{ top: 'medium' }}>
+            <InfoCard
+              icon="search"
+              title={t('No matching results found 👀')}
+              explanation={t('We could not find any results for your search in Ethereum World.')}
+              suggestion={t(
+                'Make sure you spelled everything correctly or try searching for something else.',
+              )}
+            />
+          </Box>
         )}
 
-      <Box margin={{ horizontal: 'small' }}>
+      <Box margin={{ top: 'medium' }}>
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.PEOPLE) &&
           searchProfilesState?.map((profileData: IProfileData, index: number) => (
             <Box key={index} pad={{ bottom: 'medium' }}>
@@ -467,7 +492,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}
-              onNavigate={handleNavigation}
+              onContentClick={handleEntryNavigation}
+              navigateTo={navigateTo}
               onRepost={handleRepost}
               onAvatarClick={handleAvatarClick}
               onMentionClick={handleMentionClick}
@@ -491,7 +517,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}
-              onNavigate={handleNavigation}
+              onContentClick={handleEntryNavigation}
+              navigateTo={navigateTo}
               onRepost={handleRepost}
               onAvatarClick={handleAvatarClick}
               onMentionClick={handleMentionClick}

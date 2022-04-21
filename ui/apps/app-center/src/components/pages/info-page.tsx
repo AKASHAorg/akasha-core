@@ -11,10 +11,11 @@ import {
   useGetIntegrationReleaseInfo,
   useGetLogin,
   useGetProfileByEthAddress,
+  useCurrentNetwork,
 } from '@akashaproject/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
-const { Box, ICDetailCard, ErrorLoader, Spinner, BasicCardBox } = DS;
+const { Box, ICDetailCard, ErrorLoader } = DS;
 
 const InfoPage: React.FC<RootComponentProps> = props => {
   const { integrationId } = useParams<{ integrationId: string }>();
@@ -29,16 +30,32 @@ const InfoPage: React.FC<RootComponentProps> = props => {
     return !!loginQueryReq.data.pubKey;
   }, [loginQueryReq.data]);
 
+  const network = useCurrentNetwork(isLoggedIn).data;
+
   const integrationInfoReq = useGetIntegrationInfo(integrationId);
 
-  const latestReleaseId = integrationInfoReq.data?.latestReleaseId;
+  const integrationInfo = integrationInfoReq.data;
+
+  const latestReleaseId = integrationInfo?.latestReleaseId;
 
   const latestReleaseInfoReq = useGetIntegrationReleaseInfo(latestReleaseId);
 
   const latestReleaseInfo = latestReleaseInfoReq.data;
 
-  const profileDataReq = useGetProfileByEthAddress(latestReleaseInfo?.author);
+  const profileDataReq = useGetProfileByEthAddress(integrationInfo?.author);
   const authorProfileData = profileDataReq.data;
+
+  const handleAuthorEthAddressClick = (ethAddress: string) => {
+    if (network) {
+      window.open(
+        `https://${network}.etherscan.io/address/${ethAddress}`,
+        '_blank',
+        'noreferrer noopener',
+      );
+    } else {
+      window.open(`https://etherscan.io/address/${ethAddress}`, '_blank', 'noreferrer noopener');
+    }
+  };
 
   const handleAuthorClick = (author: { pubKey: string }) => {
     navigateTo?.({
@@ -56,7 +73,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
     }
   }, [installedAppsReq.data, integrationId]);
 
-  const releaseIdsReq = useGetAllIntegrationReleaseIds(latestReleaseInfo?.name);
+  const releaseIdsReq = useGetAllIntegrationReleaseIds(integrationInfo?.name);
   const releaseIds = releaseIdsReq.data?.releaseIds;
 
   const releasesInfoReq = useGetIntegrationsReleaseInfo(releaseIds);
@@ -72,17 +89,15 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           devDetails={latestReleaseInfoReq.error}
         />
       )}
-      {latestReleaseInfoReq.isFetching && (
-        <BasicCardBox>
-          <Spinner />
-        </BasicCardBox>
-      )}
-      {latestReleaseInfoReq.isSuccess && latestReleaseInfo && (
+      {!latestReleaseInfoReq.error && (
         <ICDetailCard
-          integrationName={latestReleaseInfo?.manifestData?.displayName}
           shareLabel={t('Share')}
-          id={integrationInfoReq.data?.name}
+          id={integrationId}
+          integrationName={integrationInfo?.name}
+          authorEthAddress={integrationInfo?.author}
           authorProfile={authorProfileData}
+          repoLinkLabel={t('Public Repository')}
+          docsLinkLabel={t('Documentation')}
           installLabel={t('Install')}
           uninstallLabel={t('Uninstall')}
           installedLabel={t('Installed')}
@@ -93,10 +108,10 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           latestReleaseLabel={t('Latest Release')}
           noPreviousReleasesLabel={t('No previous releases')}
           releaseVersionLabel={t('Version')}
-          releaseIdLabel={t('Release Id')}
           releases={releasesInfo}
           latestRelease={latestReleaseInfo}
           versionHistoryLabel={t('Version History')}
+          ethereumAddressLabel={t('Ethereum Address')}
           authorLabel={t('Author')}
           licenseLabel={t('License')}
           isInstalled={isInstalled}
@@ -105,6 +120,8 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           onClickInstall={() => null}
           onClickUninstall={() => null}
           handleAuthorClick={handleAuthorClick}
+          handleAuthorEthAddressClick={handleAuthorEthAddressClick}
+          isFetching={latestReleaseInfoReq.isFetching}
         />
       )}
     </Box>

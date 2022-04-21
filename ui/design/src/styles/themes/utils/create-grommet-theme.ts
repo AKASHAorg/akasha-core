@@ -57,6 +57,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         brand: styledComponentsTheme.colors.accent,
         darkBorder: styledComponentsTheme.colors.darkBorder,
         background: styledComponentsTheme.colors.background,
+        overlay: styledComponentsTheme.colors.overlay,
         darkBackground: styledComponentsTheme.colors.darkBackground,
         modalBackground: styledComponentsTheme.colors.modalBackground,
         modalBackgroundAlt: styledComponentsTheme.colors.modalBackgroundAlt,
@@ -70,6 +71,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         activeCardBackground: styledComponentsTheme.colors.activeCardBackground,
         lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
+        skeletonBackground: styledComponentsTheme.colors.skeletonBackground,
         focus: styledComponentsTheme.colors.accent,
       },
       focus: {

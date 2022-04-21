@@ -59,7 +59,7 @@ export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo
       }
       const source = manifest.sources[0];
       if (manifest.sources.length > 1) {
-        logger.warn(`Multiple sources found for integration ${manifest.name}. Using ${source}`);
+        logger.info(`Multiple sources found for integration ${manifest.name}. Using ${source}`);
       }
       return from(System.import(source)).pipe(map(module => ({ manifest, module })));
     }),
@@ -216,7 +216,7 @@ export const processSystemModules = (
               let appConf: IAppConfig;
 
               if (mod?.getPlugin && typeof mod.getPlugin === 'function') {
-                plugin = await Promise.resolve(mod.getPlugin(registrationProps));
+                plugin = await mod.getPlugin(registrationProps);
               }
 
               if (mod?.register && typeof mod.register === 'function') {
@@ -329,10 +329,9 @@ export const handleExtPointMountOfApps = (
         const _prevIntegrationsCount = prevIntegrations.get(name)?.length || 0;
         const _nextIntegrationsCount = integrationsByMountPoint.get(name)?.length || 0;
 
-        if (prevMountedExtPoints.has(name) && _prevIntegrationsCount === _nextIntegrationsCount) {
-          return false;
-        }
-        return true;
+        return !(
+          prevMountedExtPoints.has(name) && _prevIntegrationsCount === _nextIntegrationsCount
+        );
       });
       return {
         mountedExtPoints: new Map(unique),
@@ -373,8 +372,11 @@ export const handleExtPointMountOfApps = (
       const { config } = results.data;
       const { manifests, plugins } = results;
       const manifest = manifests.find((m: BaseIntegrationInfo) => m.name === config.name);
-
-      await loadI18nNamespaces(plugins, config.i18nNamespace);
+      try {
+        await loadI18nNamespaces(plugins, config.i18nNamespace);
+      } catch (err) {
+        logger.error(`[integrations]: loadI18nNamespaces: ${err.message ?? JSON.stringify(err)}`);
+      }
 
       logger.info(`Registering app ${config.name}`);
       singleSpa.registerApplication<

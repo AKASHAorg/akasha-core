@@ -24,10 +24,12 @@ import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
 import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { EntryImageGallery, ImageObject } from './entry-image-gallery';
+import { EntryImageGallery } from './entry-image-gallery';
+import { ImageObject } from '../Editor/image-gallery';
 import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
 import { editorDefaultValue } from '../Editor/initialValue';
 import isEqual from 'lodash.isequal';
+import { NavigateToParams } from '@akashaproject/ui-awf-typings';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -82,7 +84,7 @@ export interface IEntryBoxProps {
   contentClickable?: boolean;
   onMentionClick?: (pubKey: string) => void;
   onTagClick?: (name: string) => void;
-  singleSpaNavigate?: (url: string) => void;
+  navigateTo?: (args: NavigateToParams) => void;
   // style
   style?: React.CSSProperties;
   disableReposting?: boolean;
@@ -134,7 +136,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     onContentClick,
     onMentionClick,
     onTagClick,
-    singleSpaNavigate,
+    navigateTo,
     style,
     contentClickable,
     disableReposting,
@@ -220,7 +222,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const handleRepliesClick = () => handleContentClick(entryData);
 
   const handleContentClick = (data?: IEntryData) => {
-    if (onContentClick && typeof onContentClick === 'function' && data) {
+    if (typeof onContentClick === 'function' && !disableActions && contentClickable && data) {
       const replyTo = data.postId ? { entryId: data.postId } : null;
       const itemType = replyTo ? ItemTypes.COMMENT : ItemTypes.ENTRY;
       onContentClick(
@@ -232,6 +234,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         itemType,
       );
     }
+  };
+
+  const handleLinkClick = (url: string) => {
+    navigateTo?.({ getNavigationUrl: () => url });
   };
 
   const toggleDisplayCID = () => {
@@ -489,13 +495,13 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             height={{ max: '50rem' }}
             overflow={scrollHiddenContent ? 'auto' : 'hidden'}
             style={{ cursor: contentClickable ? 'pointer' : 'default' }}
-            onClick={() => !disableActions && contentClickable && handleContentClick(entryData)}
+            onClick={() => handleContentClick(entryData)}
           >
             <ReadOnlyEditor
               content={entryData.slateContent}
               handleMentionClick={onMentionClick}
               handleTagClick={onTagClick}
-              handleLinkClick={singleSpaNavigate}
+              handleLinkClick={handleLinkClick}
             />
           </Box>
         )}
@@ -503,7 +509,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           <Box pad="medium">
             <LinkPreview
               linkPreviewData={entryData.linkPreview}
-              handleLinkClick={singleSpaNavigate}
+              handleLinkClick={handleLinkClick}
             />
           </Box>
         )}
@@ -520,15 +526,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {showQuote && (
-          <Box
-            pad="medium"
-            onClick={() => {
-              if (disableActions) {
-                return;
-              }
-              handleContentClick(entryData.quote);
-            }}
-          >
+          <Box pad="medium" onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
           </Box>
         )}

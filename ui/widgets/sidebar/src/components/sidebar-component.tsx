@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import DS from '@akashaproject/design-system';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks';
+import { useCheckNewNotifications, useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { EventTypes, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
@@ -18,7 +18,6 @@ const AppSidebar = styled(Sidebar)`
   }
   @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
     max-width: 17em;
-    margin-right: 0.8rem;
   }
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     height: 100vh;
@@ -27,14 +26,14 @@ const AppSidebar = styled(Sidebar)`
 `;
 
 const SidebarOverlay = styled(Box)`
-  display: none;
-  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    display: initial;
-    width: 100%;
-    height: 100vh;
-    position: fixed;
-    background-color: ${props => props.theme.colors.background};
-    opacity: 0.8;
+  width: 100%;
+  opacity: 0.8;
+  height: 100vh;
+  position: fixed;
+  background-color: ${props => props.theme.colors.overlay};
+  /* hide overlay from large desktop breakpoint */
+  @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
+    display: none;
   }
 `;
 
@@ -42,6 +41,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
     uiEvents,
     plugins: { routing },
+    worldConfig: { defaultApps, homepageApp },
   } = props;
 
   const [routeData, setRouteData] = React.useState({});
@@ -54,10 +54,15 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const loginQuery = useGetLogin();
 
+  // check for new notifcations
+  const checkNotifsReq = useCheckNewNotifications(
+    loginQuery.data.isReady && loginQuery.data.ethAddress,
+  );
+
   React.useEffect(() => {
     let sub;
-    if (props.plugins.routing) {
-      sub = props.plugins.routing.routeObserver.subscribe({
+    if (routing) {
+      sub = routing.routeObserver.subscribe({
         next: routeData => {
           setRouteData({ ...routeData.byArea });
         },
@@ -68,9 +73,19 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         sub.unsubscribe();
       }
     };
-  }, [props.plugins.routing]);
+  }, [routing]);
 
-  const worldApps = routeData?.[MenuItemAreaType.AppArea];
+  // sort according to worldConfig index
+  const worldApps = routeData?.[MenuItemAreaType.AppArea]?.sort(
+    (a: { name: string }, b: { name: string }) => {
+      if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
+        return -1;
+      } else if (defaultApps.indexOf(a.name) > defaultApps.indexOf(b.name)) {
+        return 1;
+      }
+      return 0;
+    },
+  );
   const userInstalledApps = routeData?.[MenuItemAreaType.UserAppArea];
 
   const handleNavigation = (appName: string, route: string) => {
@@ -84,7 +99,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     // find IC app from world apps
     // @TODO: replace string with a constant
     const icApp = worldApps.find(
-      menuItem => menuItem.name === '@akashaproject/app-integration-center',
+      (menuItem: { name: string }) => menuItem.name === '@akashaproject/app-integration-center',
     );
 
     // if found, navigate to route
@@ -94,6 +109,27 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         getNavigationUrl: () => icApp.route,
       });
     }
+  };
+
+  const handleBrandClick = () => {
+    if (!homepageApp) {
+      return;
+    }
+
+    const homeAppRoutes = props.getAppRoutes(homepageApp);
+
+    if (homeAppRoutes && homeAppRoutes.hasOwnProperty('defaultRoute')) {
+      if (location.pathname === homeAppRoutes.defaultRoute) {
+        scrollTo(0, 0);
+      } else {
+        routing.navigateTo({
+          appName: 'Ethereum World',
+          getNavigationUrl: () => homeAppRoutes.defaultRoute,
+        });
+      }
+    }
+    // close sidebar after navigation
+    handleSidebarClose();
   };
 
   const handleSidebarClose = () => {
@@ -107,6 +143,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     <>
       <SidebarOverlay onClick={handleSidebarClose} />
       <AppSidebar
+        versionLabel="ALPHA"
+        versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         worldAppsTitleLabel={t('World Apps')}
         poweredByLabel="Powered by AKASHA"
         userInstalledAppsTitleLabel={t('Apps')}
@@ -117,7 +155,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         currentRoute={currentLocation.pathname}
         size={size}
         isLoggedIn={!!loginQuery.data.ethAddress}
+        hasNewNotifs={checkNotifsReq.data}
         loadingUserInstalledApps={false}
+        onBrandClick={handleBrandClick}
         onSidebarClose={handleSidebarClose}
         onClickMenuItem={handleNavigation}
         onClickExplore={handleClickExplore}

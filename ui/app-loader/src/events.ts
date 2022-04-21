@@ -22,9 +22,10 @@ import * as singleSpa from 'single-spa';
 export const pipelineEvents = new Subject<Partial<LoaderState>>();
 export const uiEvents = new Subject<UIEventData>();
 
-/*
+/**
  * A helper operator to filter events,
  * @usage: <SubjectLike>.pipe(filterEvent(EventTypes.ExtensionPointMount)).subscribe(...)
+ * @internal
  * @param eventType: EventTypes
  */
 export function filterEvent(eventType: EventTypes): MonoTypeOperatorFunction<UIEventData>;
@@ -47,17 +48,18 @@ export type ObservedEventNames =
   | 'single-spa:routing-event';
 
 export const spaEvents$ = merge(
-  /*
+  /**
    * Before the first of any single-spa applications is mounted,
    * single-spa fires a single-spa:before-first-mount event;
    * therefore it will only be fired once ever.
    * More specifically, it fires after the application is already
    * loaded but before mounting.
+   * @internal
    */
   fromEvent(window, 'single-spa:before-first-mount')
     .pipe(tap(() => hidePageSplash()))
     .pipe(mapTo({})),
-  /*
+  /**
    * A single-spa:before-mount-routing-event event is fired after
    * `before-routing-event` and before `routing-event`.
    * It is guaranteed to fire after all single-spa applications
@@ -66,6 +68,7 @@ export const spaEvents$ = merge(
    * Use this event to:
    *    - show an app area loader
    *    - load translation files for the mounting app
+   * @internal
    */
   fromEvent(window, 'single-spa:before-mount-routing-event').pipe(
     map((spaEvent: CustomEvent<{ detail: singleSpa.SingleSpaCustomEventDetail }>) => ({
@@ -76,7 +79,7 @@ export const spaEvents$ = merge(
     })),
   ),
 
-  /*
+  /**
    * A single-spa:routing-event event is fired every time that a routing
    * event has occurred, which is after each hashchange, popstate, or
    * triggerAppChange, even if no changes to registered applications were necessary;
@@ -86,6 +89,7 @@ export const spaEvents$ = merge(
    * Using this event for:
    *   - hiding app loader;
    *   - decide it it's 404;
+   * @internal
    */
   fromEvent(window, 'single-spa:routing-event').pipe(
     map((spaEvent: CustomEvent<{ detail: singleSpa.SingleSpaCustomEventDetail }>) => ({
@@ -95,20 +99,22 @@ export const spaEvents$ = merge(
       },
     })),
   ),
-  /*
+  /**
    * After the first of any single-spa applications is mounted, single-spa
    * fires a single-spa:first-mount event; therefore it will only be fired once ever.
    *
    * At this point, the layout is mounted.
+   * @internal
    */
   fromEvent(window, 'single-spa:first-mount')
     .pipe(tap(() => console.timeEnd('AppLoader:firstMount')))
     .pipe(mapTo({})),
-  /*
+  /**
    * A single-spa:before-routing-event event is fired before
    * every routing event occurs, which is after each
    * hashchange, popstate, or triggerAppChange, even if no
    * changes to registered applications were necessary.
+   * @internal
    */
   fromEvent(window, 'single-spa:before-routing-event').pipe(
     mergeMap(getModalFromParams(location)),
@@ -119,7 +125,7 @@ export const spaEvents$ = merge(
 
 export const getUiEvents = () => {
   return merge(
-    /*
+    /**
      * when an extension point mounts:
      * Register the apps and widgets into single-spa.
      * Match the mountsIn property defined by the extension point with the `event.data.name`
@@ -127,6 +133,7 @@ export const getUiEvents = () => {
      *    Load the extension points that match as single-spa parcel (mountRootParcel).
      * Note that the extensions are not conditioned by their parent integration status (mounted or not).
      *  However if the parent integration is disabled in the user prefs, they should not load.
+     * @internal
      */
     uiEvents
       .pipe(filterEvent(EventTypes.ExtensionPointMount))

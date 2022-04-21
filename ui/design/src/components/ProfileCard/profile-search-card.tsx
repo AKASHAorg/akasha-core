@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 
-import { IProfileWidgetCard } from './profile-widget-card';
+import { IProfileCardProps } from './';
 import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
 
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
@@ -9,8 +9,28 @@ import Avatar from '../Avatar';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import { truncateMiddle } from '../../utils/string-utils';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
-const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
+export interface IProfileSearchCard {
+  className?: string;
+  loggedEthAddress: string;
+  handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
+  handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
+  isFollowing: boolean;
+  profileData: IProfileData;
+  followingLabel: string;
+  followersLabel?: string;
+  shareProfileLabel?: string;
+  followLabel: string;
+  unfollowLabel: string;
+  postsLabel: string;
+  descriptionLabel?: string;
+  profileAnchorLink?: string;
+  onClickProfile?: () => void;
+  showPostCount?: boolean;
+}
+
+const ProfileSearchCard: React.FC<IProfileSearchCard> = props => {
   const {
     className,
     loggedEthAddress,
@@ -32,7 +52,7 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
   return (
     <MainAreaCardBox className={className}>
       <Box direction="column" margin="small">
-        <Box height="70px" direction="row" justify="between">
+        <Box height="70px" direction="row" justify="between" align="center">
           <StyledAnchor
             onClick={e => {
               e.preventDefault();
@@ -40,6 +60,7 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
             }}
             weight="normal"
             href={`${profileAnchorLink}/${profileData.pubKey}`}
+            reducedWidth={true}
             label={
               <Box direction="row" align="center" onClick={onClickProfile}>
                 <SearchProfileAvatarDiv>
@@ -66,21 +87,20 @@ const ProfileSearchCard: React.FC<IProfileWidgetCard> = props => {
               </Box>
             }
           />
-          <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
-            {loggedEthAddress !== profileData.ethAddress && (
-              <Box width="7rem" margin={{ right: 'xxsmall' }}>
-                <DuplexButton
-                  icon={<Icon type="following" />}
-                  active={isFollowing}
-                  activeLabel={followingLabel}
-                  inactiveLabel={followLabel}
-                  activeHoverLabel={unfollowLabel}
-                  onClickActive={handleUnfollow}
-                  onClickInactive={handleFollow}
-                />
-              </Box>
-            )}
-          </Box>
+          {loggedEthAddress !== profileData.ethAddress && (
+            <Box>
+              <DuplexButton
+                inactiveLabel={followLabel}
+                activeLabel={followingLabel}
+                activeHoverLabel={unfollowLabel}
+                onClickActive={handleUnfollow}
+                onClickInactive={handleFollow}
+                active={isFollowing}
+                icon={<Icon type="following" />}
+                allowMinimization
+              />
+            </Box>
+          )}
         </Box>
       </Box>
     </MainAreaCardBox>

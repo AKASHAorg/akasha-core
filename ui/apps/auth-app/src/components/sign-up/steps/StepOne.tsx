@@ -35,6 +35,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
     onChange,
     onButtonClick,
   } = props;
+
   const [analyticsActions] = useAnalytics();
 
   const handleClick = () => {
@@ -43,6 +44,14 @@ const StepOne: React.FC<IStepOneProps> = props => {
       action: 'Invitation Code',
     });
     onButtonClick();
+  };
+
+  const handleWriteToUsLabelClick = () => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.INVITATION_CODE,
+      action: 'Request',
+      name: 'Sign Up',
+    });
   };
 
   return (
@@ -60,6 +69,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
           color="accentText"
           href={writeToUsUrl}
           label={paragraphTwoAccentLabel}
+          onClick={handleWriteToUsLabelClick}
         />
         . {paragraphTwoLabel}.
       </Text>

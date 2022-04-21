@@ -139,6 +139,7 @@ const typeDefs = gql`
     author: String
     enabled: Boolean
     manifestData: ManifestInfo
+    createdAt: Int
   }
 
   type Query {

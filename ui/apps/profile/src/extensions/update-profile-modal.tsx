@@ -82,7 +82,7 @@ const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
   const userNameValidationErrors = React.useMemo(() => {
     if (usernameValidationQuery.status === 'success' && !usernameValidationQuery.data) {
       return `${t(
-        'Sorry, this username has already beed claimed by another Etherean. Please try a different one',
+        'Sorry, this username has already been claimed by another Etherean. Please try a different one',
       )}.`;
     }
     if (usernameValidationQuery.status === 'error') {

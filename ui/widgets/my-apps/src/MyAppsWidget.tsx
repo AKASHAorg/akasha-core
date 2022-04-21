@@ -2,8 +2,8 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
+import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
 import DS from '@akashaproject/design-system';
 import {
   useGetAllInstalledApps,
@@ -13,7 +13,7 @@ import {
   useGetLogin,
   ThemeWrapper,
 } from '@akashaproject/ui-awf-hooks';
-import routes, { INFO, rootRoute } from '../routes';
+import { hiddenIntegrations } from './hidden-integrations';
 
 const { Box, ICWidgetCard, ErrorLoader } = DS;
 
@@ -28,7 +28,15 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     return !!loginQuery.data.pubKey;
   }, [loginQuery.data]);
 
+  const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
+    props.navigateToModal({ name: 'login', redirectTo });
+  };
+
   const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
+
+  const filteredIntegrations = availableIntegrationsReq?.data?.filter(
+    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+  );
 
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,
@@ -38,15 +46,18 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   );
 
   const integrationIdsNormalized = React.useMemo(() => {
-    if (availableIntegrationsReq.data?.integrationIds) {
-      return availableIntegrationsReq.data?.integrationIds.map(integrationId => {
+    if (filteredIntegrations) {
+      return filteredIntegrations.map(integrationId => {
         return { id: integrationId };
       });
     }
-    return worldConfig.defaultApps.map(integrationName => {
-      return { name: integrationName };
-    });
-  }, [availableIntegrationsReq.data, worldConfig.defaultApps]);
+    return worldConfig.defaultApps
+      .map(integrationName => {
+        if (!hiddenIntegrations.some(hiddenInt => hiddenInt.name === integrationName))
+          return { name: integrationName };
+      })
+      .filter(Boolean);
+  }, [filteredIntegrations, worldConfig.defaultApps]);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
@@ -73,7 +84,13 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   }, [defaultIntegrations, installedAppsReq.data, integrationsInfoReq.data?.getLatestRelease]);
 
   const handleAppClick = (integrationId: string) => {
-    props.singleSpa.navigateToUrl(`${routes[INFO]}/${integrationId}`);
+    if (!isLoggedIn) {
+      return showLoginModal();
+    }
+    props.plugins?.routing?.navigateTo?.({
+      appName: '@akashaproject/app-integration-center',
+      getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
+    });
   };
 
   return (
@@ -95,13 +112,9 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <Router>
-    <Route path={rootRoute}>
-      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
-        <ICWidget {...props} />
-      </I18nextProvider>
-    </Route>
-  </Router>
+  <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <ICWidget {...props} />
+  </I18nextProvider>
 );
 
 const reactLifecycles = singleSpaReact({

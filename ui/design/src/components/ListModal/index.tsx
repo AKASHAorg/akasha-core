@@ -6,6 +6,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { IconType } from '../Icon';
 import TextIcon from '../TextIcon';
 import { StyledLayer } from './styled-modal';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface IlistModal {
   className?: string;
@@ -23,7 +24,7 @@ interface IListElem {
   name?: string;
   time: string;
   ethAddress: string;
-  avatar?: string;
+  avatar?: IProfileData['avatar'];
 }
 
 const StyledLayerElemDiv = styled.div`

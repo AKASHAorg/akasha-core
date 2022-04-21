@@ -3,11 +3,12 @@ import { Box, Text } from 'grommet';
 
 import Icon from '../Icon';
 import StackedAvatar from '../StackedAvatar';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface INewPostsPill {
   infoLabel?: string;
   handleDismiss?: () => void;
-  userData: { ethAddress: string; avatar?: string }[];
+  userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[];
 }
 
 const NewPostsPill: React.FC<INewPostsPill> = props => {

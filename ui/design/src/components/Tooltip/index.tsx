@@ -27,17 +27,21 @@ const Caret = styled.div<{ position: ITooltipProps['caretPosition'] }>`
       `;
   }};
   border-bottom: 0.3em solid
-    ${props => (props.position === 'top' ? props.theme.colors.darkGrey : 'transparent')};
+    ${props =>
+      props.position === 'top' ? props.theme.colors.activePanelBackground : 'transparent'};
   border-top: 0.3em solid
-    ${props => (props.position === 'bottom' ? props.theme.colors.darkGrey : 'transparent')};
+    ${props =>
+      props.position === 'bottom' ? props.theme.colors.activePanelBackground : 'transparent'};
   border-left: 0.3em solid
-    ${props => (props.position === 'right' ? props.theme.colors.darkGrey : 'transparent')};
+    ${props =>
+      props.position === 'right' ? props.theme.colors.activePanelBackground : 'transparent'};
   border-right: 0.3em solid
-    ${props => (props.position === 'left' ? props.theme.colors.darkGrey : 'transparent')};
+    ${props =>
+      props.position === 'left' ? props.theme.colors.activePanelBackground : 'transparent'};
 `;
 
 const ContentWrapper = styled(Box)`
-  background: ${props => props.theme.colors.darkGrey};
+  background: ${props => props.theme.colors.activePanelBackground};
 `;
 
 const TooltipContent = ({
@@ -54,14 +58,9 @@ const TooltipContent = ({
       {caretPosition === 'top' && <Caret position={caretPosition} />}
       <Box direction="row" align="center">
         {caretPosition === 'left' && <Caret position={caretPosition} />}
-        <ContentWrapper
-          background="hoverBackground"
-          direction="row"
-          pad={isMobile ? 'small' : 'xxsmall'}
-          round="xxsmall"
-        >
+        <ContentWrapper direction="row" pad={isMobile ? 'small' : 'xxsmall'} round="xxsmall">
           {icon && <Icon type={icon} style={{ marginRight: '0.3em' }} color="green" />}
-          <Text size="small" color="white" style={{ whiteSpace: 'nowrap' }}>
+          <Text size="small" style={{ whiteSpace: 'nowrap' }}>
             {message}
           </Text>
         </ContentWrapper>

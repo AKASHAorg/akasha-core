@@ -57,7 +57,9 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
           align="center"
           border={{ side: 'bottom', color: 'lightBorder' }}
         >
-          <StyledText weight="bold">{essentialCookiesLabel}</StyledText>
+          <StyledText weight="bold" size="large">
+            {essentialCookiesLabel}
+          </StyledText>
         </Box>
         <Box
           pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
@@ -90,15 +92,15 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
           align="center"
           border={{ side: 'bottom', color: 'lightBorder' }}
         >
-          <StyledText weight="bold">{trackingAnalyticsLabel}</StyledText>
-          <Box pad={{ top: 'small' }}>
-            <Checkbox
-              checked={checkedTracking}
-              onChange={onTrackingOptionChange}
-              toggle={true}
-              disabled={!cookieType}
-            />
-          </Box>
+          <StyledText weight="bold" size="large">
+            {trackingAnalyticsLabel}
+          </StyledText>
+          <Checkbox
+            checked={checkedTracking}
+            onChange={onTrackingOptionChange}
+            toggle={true}
+            disabled={!cookieType}
+          />
         </Box>
         <Box
           pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}

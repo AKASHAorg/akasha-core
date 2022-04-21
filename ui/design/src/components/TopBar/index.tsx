@@ -21,7 +21,7 @@ import {
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
-import { IProfileData } from '../ProfileCard/profile-widget-card';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {
@@ -42,24 +42,16 @@ export interface ITopbarProps {
   legalLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
-  moderationLabel?: string;
-  moderationInfoLabel?: string;
   legalCopyRightLabel?: string;
   stuckLabel?: string;
   helpLabel?: string;
   writeToUs?: string;
-  // moderator tools
-  isModerator?: boolean;
-  dashboardLabel?: string;
-  dashboardInfoLabel?: string;
   // sidebar
   sidebarVisible: boolean;
   // handlers
   onNavigation: (path: string) => void;
   onSidebarToggle?: () => void;
   onFeedbackClick: () => void;
-  onModerationClick: () => void;
-  onDashboardClick: () => void;
   // external css
   className?: string;
   onLoginClick: () => void;
@@ -67,7 +59,6 @@ export interface ITopbarProps {
   onLogout: () => void;
   onBrandClick?: () => void;
   modalSlotId: string;
-  quickAccessExt?: React.ReactNode;
 }
 
 const Topbar: React.FC<ITopbarProps> = props => {
@@ -83,12 +74,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     legalLabel,
     feedbackLabel,
     feedbackInfoLabel,
-    moderationLabel,
-    moderationInfoLabel,
     legalCopyRightLabel,
-    isModerator,
-    dashboardLabel,
-    dashboardInfoLabel,
     stuckLabel,
     helpLabel,
     writeToUs,
@@ -101,16 +87,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onLoginClick,
     onSignUpClick,
     onFeedbackClick,
-    onModerationClick,
-    onDashboardClick,
     onLogout,
     hasNewNotifications,
     onBrandClick,
     modalSlotId,
-    quickAccessExt,
   } = props;
-
-  // const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   const [dropOpen, setDropOpen] = React.useState(false);
   const [avatarDropOpen, setAvatarDropOpen] = React.useState(false);
@@ -144,16 +125,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const handleMenuClick = () => {
     setMenuDropOpen(true);
   };
-
-  // const handleSidebarVisibility = () => {
-  //   if (!sidebarOpen && onSidebarToggle) {
-  //     onSidebarToggle(true);
-  //     setSidebarOpen(true);
-  //   } else if (sidebarOpen && onSidebarToggle) {
-  //     onSidebarToggle(false);
-  //     setSidebarOpen(false);
-  //   }
-  // };
 
   const onClickPluginButton = (menuItem: IMenuItem) => () => {
     setCurrentDropItem(menuItem);
@@ -274,7 +245,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const renderContent = (shouldRenderOnboarding?: boolean) => {
     return (
       <StyledSubWrapper direction="row" align="center" height="3rem">
-        <IconDiv margin={{ right: 'small' }} isActive={sidebarVisible} onClick={onSidebarToggle}>
+        <IconDiv margin={{ right: 'medium' }} isActive={sidebarVisible} onClick={onSidebarToggle}>
           <Icon type="menu" clickable={true} accentColor={sidebarVisible} />
         </IconDiv>
         <StyledContentBox
@@ -311,14 +282,18 @@ const Topbar: React.FC<ITopbarProps> = props => {
             fill="horizontal"
             justify="end"
           >
-            {quickAccessExt}
             {loggedProfileData?.ethAddress &&
               !shouldRenderOnboarding &&
               quickAccessItems &&
               quickAccessItems.map(renderPluginButton)}
             {!isMobileOnly && !loggedProfileData?.ethAddress && !shouldRenderOnboarding && (
-              <Box direction="row" align="center" gap="small">
-                <Button onClick={onLoginClick} label={signInLabel} />
+              <Box direction="row" align="center" gap="xsmall">
+                <Button
+                  onClick={onLoginClick}
+                  label={signInLabel}
+                  slimBorder={true}
+                  hoverIndicator="accentText"
+                />
                 <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
               </Box>
             )}
@@ -351,7 +326,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const renderMobileSignedOutView = () => {
     if (!mobileSignedOutView) return null;
     return (
-      <Box direction="row" align="center" gap="small" fill="horizontal">
+      <Box direction="row" align="center" gap="xsmall" fill="horizontal">
         <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
         <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
       </Box>
@@ -368,21 +343,14 @@ const Topbar: React.FC<ITopbarProps> = props => {
           loggedProfileData={loggedProfileData}
           legalLabel={legalLabel}
           signOutLabel={signOutLabel}
-          isModerator={isModerator}
-          dashboardLabel={dashboardLabel}
-          dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
-          moderationLabel={moderationLabel}
-          moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
           legalCopyRightLabel={legalCopyRightLabel}
           menuItems={dropItems}
           legalMenu={legalMenu}
           onLogout={onLogout}
           onFeedbackClick={onFeedbackClick}
-          onModerationClick={onModerationClick}
-          onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
         />
       );
@@ -398,18 +366,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
           onNavigation={onNavigation}
           legalLabel={legalLabel}
           legalMenu={legalMenu}
-          isModerator={isModerator}
-          dashboardLabel={dashboardLabel}
-          dashboardInfoLabel={dashboardInfoLabel}
           feedbackLabel={feedbackLabel}
           feedbackInfoLabel={feedbackInfoLabel}
-          moderationLabel={moderationLabel}
-          moderationInfoLabel={moderationInfoLabel}
           mobileSignedOutView={mobileSignedOutView}
           legalCopyRightLabel={legalCopyRightLabel}
           onFeedbackClick={onFeedbackClick}
-          onModerationClick={onModerationClick}
-          onDashboardClick={onDashboardClick}
           modalSlotId={modalSlotId}
         />
       );
@@ -469,8 +430,6 @@ Topbar.defaultProps = {
   legalLabel: 'Legal',
   feedbackLabel: 'Send Us Feedback',
   feedbackInfoLabel: 'Help us improve the experience!',
-  moderationLabel: 'Moderation History',
-  moderationInfoLabel: 'Help keep us accountable!',
 };
 
 export default Topbar;

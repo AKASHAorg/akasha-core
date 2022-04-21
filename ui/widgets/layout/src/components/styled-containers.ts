@@ -18,8 +18,14 @@ export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
 `;
 
 export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  flex-grow: 1;
+  /* keep at center, since sidebar is now fixed */
+  margin: 0 auto;
+  /* reserve some space for the scollbar */
   padding-right: 16px;
+  @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
+    margin: 0;
+    flex-grow: 1;
+  }
 `;
 
 const TOPBAR_HEIGHT = 48;
@@ -33,8 +39,15 @@ export const WidgetAreaContainer: React.FC<Record<string, unknown>> = styled(Box
 `;
 
 export const SidebarAreaContainer: React.FC<Record<string, unknown>> = styled(Box)`
-  position: sticky;
+  position: fixed;
   top: ${TOPBAR_HEIGHT}px;
+  margin-top: -${TOPBAR_HEIGHT}px;
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value + 1}px) {
+    margin-top: 0;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
+    position: sticky;
+  }
 `;
 
 export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.div`
@@ -61,22 +74,22 @@ export const ScrollableWidgetArea: React.FC<Record<string, unknown>> = styled.di
 `;
 
 export const SidebarWrapper: React.FC<Record<string, unknown>> = styled(BaseContainer)`
-  z-index: 10;
-  flex-grow: 1;
+  z-index: 100;
   flex-direction: column;
-  align-items: flex-end;
-  @media screen and (max-width: ${props => props.theme.breakpoints.xxlarge.value}px) {
+  align-items: flex-start;
+  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
     position: fixed;
     max-width: 100%;
-    z-index: 100;
-    left: 0;
-    top: 3rem;
-  }
-  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    position: fixed;
-    max-width: 100%;
-    z-index: 100;
     left: 0;
     top: 0;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.xlarge.value}px) {
+    top: 3rem;
+  }
+  @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
+    align-items: flex-end;
+    margin-right: 1rem;
+    position: sticky;
+    flex-grow: 1;
   }
 `;

@@ -26,19 +26,12 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   title: 'App center',
   menuItems: {
     label: 'Integration Center',
-    area: [MenuItemAreaType.QuickAccessArea, MenuItemAreaType.AppArea],
+    area: [MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
     route: rootRoute,
     subRoutes: [],
   },
   extends: [
-    {
-      mountsIn: opts.layoutConfig.widgetSlotId,
-      activeWhen: (location, pathToActiveWhen) => {
-        return pathToActiveWhen(rootRoute)(location);
-      },
-      loadingFn: () => import('./extensions/integrations-widget'),
-    },
     {
       mountsIn: 'install-modal',
       loadingFn: () => import('./extensions/install-modal'),

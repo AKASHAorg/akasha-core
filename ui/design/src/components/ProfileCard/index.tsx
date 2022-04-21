@@ -11,7 +11,6 @@ import {
   ProfileCardName,
   ProfileCardEthereumId,
 } from './profile-card-fields';
-import { IProfileWidgetCard } from './profile-widget-card';
 import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import styled from 'styled-components';
@@ -44,12 +43,21 @@ export interface IProfileDataProvider {
   value: string;
 }
 
-export interface IProfileCardProps extends IProfileWidgetCard {
+export interface IProfileCardProps {
   // edit profile related
   profileProvidersData?: IProfileProvidersData;
   canUserEdit?: boolean;
   // @TODO fix this
   onChangeProfileData?: (newProfileData: IProfileData) => void;
+  // determines when to render the 'show more' icon
+  className?: string;
+  loggedEthAddress?: string | null;
+  isFollowing?: boolean;
+  showMore: boolean;
+  flaggable: boolean;
+  hideENSButton?: boolean;
+  profileData: IProfileData;
+  // labels
   editProfileLabel?: string;
   changeCoverImageLabel?: string;
   cancelLabel?: string;
@@ -57,19 +65,30 @@ export interface IProfileCardProps extends IProfileWidgetCard {
   // reporting and moderation related labels
   flagAsLabel?: string;
   blockLabel?: string;
-  // determines when to render the 'show more' icon
-  showMore: boolean;
-  flaggable: boolean;
+  descriptionLabel: string;
+  postsLabel: string;
+  interestsLabel?: string;
+  followingLabel: string;
+  followersLabel: string;
+  followLabel?: string;
+  unfollowLabel?: string;
+  shareProfileLabel: string;
+  updateProfileLabel?: string;
+  changeENSLabel?: string;
+  copyLabel?: string;
+  copiedLabel?: string;
   onEntryFlag: () => void;
   getProfileProvidersData?: () => void;
   onUpdateClick: () => void;
   onENSChangeClick: () => void;
   handleShareClick: () => void;
-  updateProfileLabel?: string;
-  changeENSLabel?: string;
-  hideENSButton?: boolean;
-  copyLabel?: string;
-  copiedLabel?: string;
+  onClickProfile?: React.EventHandler<React.SyntheticEvent>;
+  onClickFollowers?: React.EventHandler<React.SyntheticEvent>;
+  onClickFollowing?: React.EventHandler<React.SyntheticEvent>;
+  onClickPosts?: React.EventHandler<React.SyntheticEvent>;
+  onClickInterests?: React.EventHandler<React.SyntheticEvent>;
+  handleUnfollow?: React.EventHandler<React.SyntheticEvent>;
+  handleFollow?: React.EventHandler<React.SyntheticEvent>;
   userNameType?: {
     default?: { provider: string; property: string; value: string };
     available: UsernameTypes[];
@@ -158,11 +177,12 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   } = props;
 
   const [editable /* , setEditable */] = useState(false);
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [avatar, setAvatar] = useState(profileData.avatar);
   const [coverImage, setCoverImage] = useState(profileData.coverImage);
   const [description, setDescription] = useState(profileData.description);
   const [name, setName] = useState(profileData.name);
+  const [hoveredStatId, setHoveredStatId] = useState<number | null>(null);
 
   const menuRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
@@ -200,13 +220,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   };
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
-    setAvatar(provider.value);
+    setAvatar({ url: provider.value });
     setAvatarIcon(provider.providerIcon);
     setAvatarPopoverOpen(false);
   };
 
   const handleChangeCoverImage = (provider: IProfileDataProvider) => {
-    setCoverImage(provider.value);
+    setCoverImage({ url: provider.value });
     setCoverImageIcon(provider.providerIcon);
     setCoverImagePopoverOpen(false);
   };
@@ -223,6 +243,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setNamePopoverOpen(false);
   };
 
+  const handleStatHover = (id?: number) => () => {
+    if (typeof id === 'undefined') {
+      return setHoveredStatId(null);
+    }
+    return setHoveredStatId(id);
+  };
+
   const stats: IStat[] = [
     {
       iconType: 'quote',
@@ -232,7 +259,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       dataTestId: 'posts-button',
     },
     {
-      iconType: 'following',
+      iconType: 'follower',
       count: `${profileData.totalFollowers || 0}`,
       label: followersLabel,
       clickHandler: onClickFollowers,
@@ -345,6 +372,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               key={stat.label + id}
               isMobile={isMobileOnly}
               onClick={stat.clickHandler}
+              onMouseEnter={handleStatHover(id)}
+              onMouseLeave={handleStatHover()}
             >
               <TextIcon
                 iconType={stat.iconType}
@@ -353,6 +382,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 label={stat.count}
                 datatestid={stat.dataTestId}
                 clickable={true}
+                accentColor={hoveredStatId === id}
               />
               <Text
                 margin={{

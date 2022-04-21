@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IProfileData } from '../profile-widget-card';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import Icon from '../../Icon';
 import { isMobile } from 'react-device-detect';
 import Tooltip from '../../Tooltip';
@@ -17,14 +17,8 @@ export interface IProfileCardEthereumIdProps {
 }
 
 const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
-  const {
-    ethereumAddressLabel,
-    ethereumNameLabel,
-    copyLabel,
-    copiedLabel,
-    profileData,
-    ensName,
-  } = props;
+  const { ethereumAddressLabel, ethereumNameLabel, copyLabel, copiedLabel, profileData, ensName } =
+    props;
   const [isCopied, setIsCopied] = React.useState(false);
   const popoverRef: React.Ref<any> = React.useRef(null);
 

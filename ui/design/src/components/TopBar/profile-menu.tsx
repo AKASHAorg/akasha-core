@@ -1,5 +1,5 @@
 import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IProfileData } from '../ProfileCard/profile-widget-card';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
@@ -22,20 +22,12 @@ export interface IProfileMenu {
   signOutLabel?: string;
   feedbackLabel?: string;
   feedbackInfoLabel?: string;
-  moderationLabel?: string;
-  moderationInfoLabel?: string;
   mobileSignedOutView?: boolean;
   legalCopyRightLabel?: string;
-  // moderator tools
-  isModerator?: boolean;
-  dashboardLabel?: string;
-  dashboardInfoLabel?: string;
   // handlers
   closePopover: () => void;
   onNavigation: (path: string) => void;
   onFeedbackClick: () => void;
-  onModerationClick: () => void;
-  onDashboardClick: () => void;
   onLogout?: () => void;
   modalSlotId: string;
 }
@@ -57,18 +49,11 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     signOutLabel,
     feedbackLabel,
     feedbackInfoLabel,
-    moderationLabel,
-    moderationInfoLabel,
     mobileSignedOutView,
     legalCopyRightLabel,
-    isModerator,
-    dashboardLabel,
-    dashboardInfoLabel,
     closePopover,
     onNavigation,
     onFeedbackClick,
-    onModerationClick,
-    onDashboardClick,
     onLogout,
     modalSlotId,
   } = props;
@@ -87,15 +72,8 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     closePopover();
   };
 
-  const handleModerationClick = () => {
-    if (onModerationClick) {
-      onModerationClick();
-    }
-    closePopover();
-  };
-
   const renderAvatarMenuItem = (menuItem: IMenuItem) => {
-    if (menuItem.label === 'My Profile') {
+    if (menuItem.label.replace(/\s*/g, '').match(/myprofile/i)) {
       return (
         <>
           <Box
@@ -123,17 +101,6 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
 
   const similarMenu: ISimilarMenu[] = [
     { icon: 'feedback', labels: [feedbackLabel, feedbackInfoLabel], handler: handleFeedbackClick },
-    {
-      icon: 'trendingApps',
-      labels: [dashboardLabel, dashboardInfoLabel],
-      handler: onDashboardClick,
-      preventRender: !isModerator,
-    },
-    {
-      icon: 'book',
-      labels: [moderationLabel, moderationInfoLabel],
-      handler: handleModerationClick,
-    },
   ];
 
   const renderProfileMenu = () => (

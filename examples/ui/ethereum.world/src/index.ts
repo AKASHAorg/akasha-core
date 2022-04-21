@@ -1,4 +1,4 @@
-import { ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 console.time('AppLoader:firstMount');
 
@@ -8,7 +8,43 @@ declare const __DEV__: boolean;
   const { default: startLoader } = await System.import('@akashaproject/ui-app-loader');
   const { default: getSDK } = await System.import('@akashaproject/awf-sdk');
 
-  let registryOverrides = [];
+  let registryOverrides = [
+    {
+      name: '@akashaproject/app-translation',
+      integrationType: INTEGRATION_TYPES.APPLICATION,
+      sources: ['/apps/translation/index.js'],
+    },
+    {
+      name: '@akashaproject/app-routing',
+      integrationType: INTEGRATION_TYPES.APPLICATION,
+      sources: ['/apps/routing/index.js'],
+    },
+    {
+      name: '@akashaproject/ui-widget-layout',
+      integrationType: INTEGRATION_TYPES.WIDGET,
+      sources: ['/widgets/layout/index.js'],
+    },
+    {
+      name: '@akashaproject/ui-widget-sidebar',
+      integrationType: INTEGRATION_TYPES.WIDGET,
+      sources: ['/widgets/sidebar/index.js'],
+    },
+    {
+      name: '@akashaproject/ui-widget-topbar',
+      integrationType: INTEGRATION_TYPES.WIDGET,
+      sources: ['/widgets/topbar/index.js'],
+    },
+    {
+      name: '@akashaproject/ui-widget-mini-profile',
+      integrationType: INTEGRATION_TYPES.WIDGET,
+      sources: ['/widgets/mini-profile/index.js'],
+    },
+    {
+      name: '@akashaproject/ui-widget-my-apps',
+      integrationType: INTEGRATION_TYPES.WIDGET,
+      sources: ['/widgets/my-apps/index.js'],
+    },
+  ];
 
   if (__DEV__) {
     registryOverrides = (await import('./registry-overrides')).default;
@@ -23,17 +59,17 @@ declare const __DEV__: boolean;
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [
+      '@akashaproject/app-routing',
       '@akashaproject/app-moderation-ewa',
-      '@akashaproject/app-search',
       '@akashaproject/app-auth-ewa',
-      '@akashaproject/app-settings-ewa',
       '@akashaproject/app-integration-center',
+      '@akashaproject/app-search',
       '@akashaproject/app-profile',
       '@akashaproject/app-notifications',
       '@akashaproject/app-legal',
       '@akashaproject/app-translation',
-      '@akashaproject/app-routing',
       '@akashaproject/app-bookmarks',
+      '@akashaproject/app-settings-ewa',
     ],
     // pre-installed widgets;
     // layout widget is always loaded by default
@@ -42,6 +78,8 @@ declare const __DEV__: boolean;
       '@akashaproject/ui-widget-trending',
       '@akashaproject/ui-widget-analytics',
       '@akashaproject/ui-widget-sidebar',
+      '@akashaproject/ui-widget-mini-profile',
+      '@akashaproject/ui-widget-my-apps',
     ],
     analytics: {
       trackerUrl: process.env.MATOMO_TRACKER_URL,

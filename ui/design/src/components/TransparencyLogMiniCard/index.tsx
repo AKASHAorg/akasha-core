@@ -6,6 +6,7 @@ import Avatar from '../Avatar';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import Tooltip from '../Tooltip';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 
 export interface ITransparencyLogMiniCardProps {
   locale: ILocale;
@@ -14,7 +15,7 @@ export interface ITransparencyLogMiniCardProps {
   isSelected: boolean;
   isDelisted: boolean;
   moderatedTimestamp: string;
-  moderatorAvatarUrl: string;
+  moderatorAvatar: IProfileData['avatar'];
   moderatorEthAddress: string;
   moderator: string;
   onClickAvatar?: () => void;
@@ -39,7 +40,7 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
     isSelected,
     isDelisted,
     moderatedTimestamp,
-    moderatorAvatarUrl,
+    moderatorAvatar,
     moderatorEthAddress,
     moderator,
     onClickAvatar,
@@ -47,7 +48,8 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
   } = props;
   return (
     <MainAreaCardBox
-      noBorderRadius={true}
+      noBorderRadius
+      bottomBorderOnly
       isSelected={isSelected}
       style={{ minHeight: 'min-content' }} // allows cards to adjust in a y-scrollable container
     >
@@ -75,7 +77,7 @@ const TransparencyLogMiniCard: React.FC<ITransparencyLogMiniCardProps> = props =
               <span>
                 <Avatar
                   size="xs"
-                  src={moderatorAvatarUrl}
+                  src={moderatorAvatar}
                   ethAddress={moderatorEthAddress}
                   onClick={onClickAvatar}
                 />

@@ -54,7 +54,6 @@ import CustomizeFeedCard from './components/OnboardingCard';
 import ProfileCard from './components/ProfileCard';
 import { ProfileDelistedCard } from './components/ProfileCard/profile-delisted-card';
 import { ProfileSearchCard } from './components/ProfileCard/profile-search-card';
-import { ProfileWidgetCard } from './components/ProfileCard/profile-widget-card';
 import { ProfileMiniCard } from './components/ProfileCard/profile-mini-card';
 
 import TagCard from './components/TagCard';
@@ -111,6 +110,7 @@ import ErrorLoader from './components/ErrorLoader';
 import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
 import EntryPublishErrorCard from './components/EntryPublishErrorCard';
 import ModerationAppErrorCard from './components/ModerationAppErrorCard';
+import ModerationIntroCard from './components/ModerationIntroCard';
 
 import TextInputField from './components/TextInputField';
 
@@ -198,6 +198,7 @@ const exported = {
   ErrorInfoCard,
   ErrorLoader,
   ModerationAppErrorCard,
+  ModerationIntroCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
@@ -225,7 +226,6 @@ const exported = {
   ProfileCard,
   ProfileDelistedCard,
   ProfileSearchCard,
-  ProfileWidgetCard,
   ProfileMiniCard,
   TextInputField,
   TagCard,

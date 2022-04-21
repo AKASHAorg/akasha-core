@@ -4,27 +4,36 @@ import { useTranslation } from 'react-i18next';
 import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 
-const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard } = DS;
+const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard, Spinner } = DS;
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
-  const { singleSpa } = props;
+  const navigateTo = props.plugins?.routing?.navigateTo;
 
   const { t } = useTranslation('app-notifications');
 
   const loginQuery = useGetLogin();
 
-  const notifReq = useFetchNotifications(loginQuery.data?.ethAddress);
+  const isLoggedIn = React.useMemo(() => {
+    return loginQuery.data?.ethAddress;
+  }, [loginQuery.data?.ethAddress]);
+
+  const notifReq = useFetchNotifications(loginQuery.data?.isReady && isLoggedIn);
   const notificationsState = notifReq.data;
 
   const markAsRead = useMarkAsRead();
 
-  // @todo: extract routes from config
   const handleAvatarClick = (profilePubKey: string) => {
-    singleSpa.navigateToUrl(`/profile/${profilePubKey}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profilePubKey}`,
+    });
   };
 
   const handlePostClick = (entryId: string) => {
-    singleSpa.navigateToUrl(`/social-app/post/${entryId}`);
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}`,
+    });
   };
 
   return (
@@ -34,14 +43,20 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       </Helmet>
       <ErrorInfoCard error={notifReq?.error as Error}>
         {message => (
-          <>
+          <Box gap="medium">
             <StartCard
               title={t('Notifications')}
               subtitle={t('Check latest followers & mentions')}
-              heading={t('You won’t miss a thing 🔔')}
-              description={t('Here you’ll receive alerts from your apps.')}
+              heading={t("You won't miss a thing 🔔")}
+              description={t("Here you'll receive alerts from your apps.")}
               image="images/notification.png"
+              loggedIn={!!isLoggedIn}
             />
+            {notifReq.isFetching && !notificationsState?.length && (
+              <Box pad="large">
+                <Spinner />
+              </Box>
+            )}
             {message && (
               <ErrorLoader
                 type="script-error"
@@ -50,7 +65,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 devDetails={message}
               />
             )}
-            {!message && (
+            {!message && notificationsState?.length && (
               <NotificationsCard
                 notifications={notificationsState || []}
                 followingLabel={t('is now following you')}
@@ -64,7 +79,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 markAsReadLabel={t('Mark as read')}
                 emptyTitle={t('No alerts for you right now 🔔')}
                 emptySubtitle={t(
-                  'You don’t have any new alerts at the moment, we’ll let you know when you have new followers and mentions.',
+                  "You don't have any new alerts at the moment, we'll let you know when you have new followers and mentions.",
                 )}
                 handleMessageRead={markAsRead.mutate}
                 handleEntryClick={handlePostClick}
@@ -73,7 +88,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 isFetching={notifReq.isFetching}
               />
             )}
-          </>
+          </Box>
         )}
       </ErrorInfoCard>
     </Box>

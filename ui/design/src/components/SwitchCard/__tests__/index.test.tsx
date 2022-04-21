@@ -2,7 +2,7 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import SwitchCard, { StyledSwitchCardButton } from '../';
+import SwitchCard, { StyledSwitchCardButton } from '..';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
 describe('<SwitchCard /> Component', () => {

@@ -4,7 +4,7 @@ import { forkJoin, lastValueFrom } from 'rxjs';
 import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
 
 import { checkStatus } from './use-moderation';
-import { getMediaUrl } from './utils/media-utils';
+import { buildProfileMediaLinks } from './utils/media-utils';
 import { logError } from './utils/error-handler';
 import {
   IProfileData,
@@ -35,18 +35,10 @@ const getProfileData = async (payload: {
   });
 
   const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
-  const { avatar, coverImage, ...other } = res.data.getProfile || res.data.resolveProfile;
-  const images: { avatar: string; coverImage: string } = {
-    avatar: '',
-    coverImage: '',
+  return {
+    ...buildProfileMediaLinks(res.data.getProfile || res.data.resolveProfile),
+    ...modStatus[0],
   };
-  if (avatar) {
-    images.avatar = getMediaUrl(avatar);
-  }
-  if (coverImage) {
-    images.coverImage = getMediaUrl(coverImage);
-  }
-  return { ...images, ...other, ...modStatus[0] };
 };
 
 /**
@@ -76,18 +68,10 @@ const getProfileDataByEthAddress = async (payload: {
   });
 
   const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
-  const { avatar, coverImage, ...other } = res.data.getProfile || res.data.resolveProfile;
-  const images: { avatar: string; coverImage: string } = {
-    avatar: '',
-    coverImage: '',
+  return {
+    ...buildProfileMediaLinks(res.data.getProfile || res.data.resolveProfile),
+    ...modStatus[0],
   };
-  if (avatar) {
-    images.avatar = getMediaUrl(avatar);
-  }
-  if (coverImage) {
-    images.coverImage = getMediaUrl(coverImage);
-  }
-  return { ...images, ...other, ...modStatus[0] };
 };
 
 /**
@@ -118,15 +102,7 @@ const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClie
   if (authorCache) {
     return authorCache;
   }
-  const { avatar, coverImage, ...other } = res.data.getPost.author;
-  const images: { avatar?: string; coverImage?: string } = {};
-  if (avatar) {
-    images.avatar = getMediaUrl(avatar);
-  }
-  if (coverImage) {
-    images.coverImage = getMediaUrl(coverImage);
-  }
-  return { ...images, ...other };
+  return buildProfileMediaLinks(res.data.getPost.author);
 };
 
 /**
@@ -254,8 +230,8 @@ export interface FormProfileData {
   name?: string;
   userName?: string;
   description?: string;
-  avatar?: { src: string; isUrl: boolean } | null;
-  coverImage?: { src: string; isUrl: boolean } | null;
+  avatar?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
+  coverImage?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
   pubKey: string;
   ethAddress: string;
 }
@@ -283,12 +259,15 @@ const makeDefaultProvider = async (providers: DataProviderInput[]) => {
   }
 };
 
-const saveAvatar = async (avatar: { isUrl: boolean; src: string }, isRemoved: boolean) => {
+const saveAvatar = async (
+  avatar: { isUrl: boolean; src: { url?: string; fallbackUrl?: string } },
+  isRemoved: boolean,
+) => {
   try {
     if (avatar && avatar.src) {
       const res = await saveMediaFile({
         isUrl: avatar.isUrl,
-        content: avatar.src,
+        content: avatar.src.url || avatar.src.fallbackUrl,
         name: ProfileProviderProperties.AVATAR,
       });
       return {
@@ -309,12 +288,15 @@ const saveAvatar = async (avatar: { isUrl: boolean; src: string }, isRemoved: bo
   }
 };
 
-const saveCoverImage = async (coverImage: { isUrl: boolean; src: string }, isRemoved: boolean) => {
+const saveCoverImage = async (
+  coverImage: { isUrl: boolean; src: { url?: string; fallbackUrl?: string } },
+  isRemoved: boolean,
+) => {
   try {
     if (coverImage && coverImage.src) {
       const res = await saveMediaFile({
         isUrl: coverImage.isUrl,
-        content: coverImage.src,
+        content: coverImage.src.url || coverImage.src.fallbackUrl,
         name: ProfileProviderProperties.COVER_IMAGE,
       });
       return {

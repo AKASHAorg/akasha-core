@@ -4,7 +4,7 @@ import Avatar from '../Avatar';
 import { MiniProfileAvatarDiv } from './styled-profile-card';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
-import { IProfileData } from './profile-widget-card';
+import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
 import { truncateMiddle } from '../../utils/string-utils';
 
 export interface IProfileMiniCard {
@@ -66,6 +66,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
 
   return (
     <Box
+      background="cardBackground"
       round="xsmall"
       direction="column"
       border={{ side: 'all', color: 'border', size: 'xsmall', style: 'solid' }}

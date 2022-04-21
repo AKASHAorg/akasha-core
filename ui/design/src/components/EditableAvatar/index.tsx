@@ -4,7 +4,7 @@ import Avatar, { AvatarProps } from '../Avatar';
 import { AvatarSize, StyleFileInput } from '../Avatar/styled-avatar';
 
 export interface EditableAvatarProps extends Omit<AvatarProps, 'onClick'> {
-  onChange: (newSrc: string) => void;
+  onChange: (newSrc: { url?: string }) => void;
 }
 
 const EditableAvatar: React.FC<EditableAvatarProps & Partial<typeof defaultProps>> = props => {

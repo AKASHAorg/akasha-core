@@ -91,8 +91,13 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     try {
       const decodedContent = decodeb64SlateContent(slateContent.value, logger, true);
       content = decodedContent.map(node => {
-        if (node.type === 'image' && node.url.startsWith(MEDIA_URL_PREFIX)) {
-          node.url = getMediaUrl(node.url.replace(MEDIA_URL_PREFIX, ''));
+        if (node.type === 'image' && node.url?.startsWith(MEDIA_URL_PREFIX)) {
+          node.url = getMediaUrl(node.url?.replace(MEDIA_URL_PREFIX, ''))?.originLink;
+        }
+        if (node.type === 'image' && node.fallbackUrl.startsWith(MEDIA_URL_PREFIX)) {
+          node.fallbackUrl = getMediaUrl(
+            node.fallbackUrl?.replace(MEDIA_URL_PREFIX, ''),
+          )?.fallbackLink;
         }
         return node;
       });
@@ -116,7 +121,22 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
       }
     }
     try {
-      images = decodeb64SlateContent(imagesData.value, logger);
+      const decodedImages = decodeb64SlateContent(imagesData.value, logger);
+      const sdk = getSDK();
+      const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
+      images = decodedImages.map(img => {
+        const imgClone = { id: img.id, size: img.size, src: { url: '', fallbackUrl: '' } };
+        if (typeof img.src === 'string' && img.src?.startsWith(ipfsGateway)) {
+          const ipfsLinks = getMediaUrl(img.src.replace(ipfsGateway, ''));
+          imgClone.src.url = ipfsLinks?.originLink;
+          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+        } else if (typeof img.src === 'object' && img.src?.url?.startsWith(MEDIA_URL_PREFIX)) {
+          const ipfsLinks = getMediaUrl(img.src?.url?.replace(MEDIA_URL_PREFIX, ''));
+          imgClone.src.url = ipfsLinks?.originLink;
+          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+        }
+        return imgClone;
+      });
     } catch (error) {
       if (logger) {
         logger.error(`Error serializing base64 to images: ${error.message}`);
@@ -133,14 +153,14 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     entry['quotedByAuthors'] &&
     entry['quotedByAuthors'].length > 0
   ) {
-    quotedByAuthors = entry['quotedByAuthors'].map((author: IEntryData['author']) => {
-      let avatarWithGateway;
-      if (author.avatar) {
-        avatarWithGateway = getMediaUrl(author.avatar);
-      }
+    quotedByAuthors = entry['quotedByAuthors'].map((author: PostResponse['author']) => {
+      const avatarWithGateway = getMediaUrl(author.avatar);
       return {
         ...author,
-        avatar: avatarWithGateway,
+        avatar: {
+          url: avatarWithGateway?.originLink,
+          fallbackUrl: avatarWithGateway?.fallbackLink,
+        },
       };
     });
   }
@@ -151,8 +171,14 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     ...entry,
     author: {
       ...entry.author,
-      avatar: getMediaUrl(entry.author.avatar),
-      coverImage: getMediaUrl(entry.author.coverImage),
+      avatar: {
+        url: getMediaUrl(entry.author.avatar)?.originLink,
+        fallbackUrl: getMediaUrl(entry.author.avatar)?.fallbackLink,
+      },
+      coverImage: {
+        url: getMediaUrl(entry.author.coverImage)?.originLink,
+        fallbackUrl: getMediaUrl(entry.author.coverImage)?.fallbackLink,
+      },
     },
     isRemoved,
     slateContent: content,
@@ -217,10 +243,19 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
   const cleanedContent = data.slateContent.map(node => {
     const nodeClone = Object.assign({}, node);
-    if (node.type === 'image' && node.url.startsWith(ipfsGateway)) {
-      const hashIndex = node.url.lastIndexOf('/');
-      const hash = node.url.substr(hashIndex + 1);
-      nodeClone.url = `${MEDIA_URL_PREFIX}${hash}`;
+    if (node.type === 'image') {
+      let hash;
+      if (node.url.startsWith(ipfsGateway)) {
+        const hashIndex = node.url.lastIndexOf('/');
+        hash = node.url.substr(hashIndex + 1);
+      } else if (!node.url.startsWith(MEDIA_URL_PREFIX)) {
+        const url = new URL(node.url);
+        hash = url.hostname.split('.')[0];
+      }
+      if (hash) {
+        nodeClone.url = `${MEDIA_URL_PREFIX}${hash}`;
+        nodeClone.fallbackUrl = `${MEDIA_URL_PREFIX}${hash}`;
+      }
     }
     return nodeClone;
   });
@@ -255,10 +290,27 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
     });
   }
   if (data.metadata.images) {
+    // save only the ipfs hash prepended with CID: when publishing
+    const cleanedImages = data.metadata.images.map(img => {
+      const imgClone = Object.assign({}, img);
+      let hash;
+      if (img.src.url.startsWith(ipfsGateway)) {
+        const hashIndex = img.src.url.lastIndexOf('/');
+        hash = img.src.url.substr(hashIndex + 1);
+      } else if (!img.src.url.startsWith(MEDIA_URL_PREFIX)) {
+        const url = new URL(img.src.url);
+        hash = url.hostname.split('.')[0];
+      }
+      if (hash) {
+        imgClone.src.url = `${MEDIA_URL_PREFIX}${hash}`;
+        imgClone.src.fallbackUrl = `${MEDIA_URL_PREFIX}${hash}`;
+      }
+      return imgClone;
+    });
     postObj.data.push({
       provider: PROVIDER_AKASHA,
       property: PROPERTY_IMAGES,
-      value: serializeSlateToBase64(data.metadata.images),
+      value: serializeSlateToBase64(cleanedImages),
     });
   }
   // logic specific to comments

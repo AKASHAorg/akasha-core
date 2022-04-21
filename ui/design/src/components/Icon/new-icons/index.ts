@@ -28,6 +28,7 @@ import checkSimple from './checkSimple';
 import chevronRight from './chevron-right';
 import chevronLeft from './chevron-left';
 import close from './close';
+import closedEye from './closed-eye';
 import code from './code';
 import coinbase from './coinbase';
 import coins from './coins';
@@ -48,6 +49,7 @@ import ethereum from './ethereum';
 import eye from './eye';
 import facebook from './facebook';
 import feedback from './feedback';
+import follower from './follower';
 import following from './following';
 import github from './github';
 import hashtag from './hashtag';
@@ -154,6 +156,7 @@ export {
   checkSimple,
   chevronRight,
   chevronLeft,
+  closedEye,
   discord,
   dropdown,
   payment,
@@ -162,6 +165,7 @@ export {
   error,
   facebook,
   feedback,
+  follower,
   following,
   github,
   document,

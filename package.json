@@ -8,7 +8,7 @@
     "build:sdk": "yarn tsc:sdk && nx run @akashaproject/awf-sdk:build",
     "build:ewa": "nx run-many --target=build:staging --projects=@akashaproject/ethereum.world",
     "build:executors": "nx run @akashaproject/nx-executors:build",
-    "clean": "nx run-many --target=clean --all && tsc --build --clean && nx reset",
+    "clean": "nx reset && nx run-many --target=clean --all && tsc --build --clean",
     "install:clean": "yarn clean && yarn bootstrap && yarn build:all",
     "compile:sc": "nx run-many --target=sc:compile --projects=@akashaproject/awf-sdk",
     "deploy:sc": "nx run-many --target=sc:deploy:rinkeby --projects=@akashaproject/awf-sdk",
@@ -16,7 +16,7 @@
     "linter:check": "eslint . --ext .ts,.tsx --fix-dry-run",
     "linter:fix": "eslint . --ext .ts,.tsx --fix",
     "pack:ui-design": "nx run @akashaproject/design-system:build",
-    "pack:ui-widgets": "nx run-many --target=build --projects=@akashaproject/ui-widget-analytics,@akashaproject/ui-widget-layout,@akashaproject/ui-widget-sidebar,@akashaproject/ui-widget-topbar,@akashaproject/ui-widget-trending",
+    "pack:ui-widgets": "nx run-many --target=build --projects=@akashaproject/ui-widget-analytics,@akashaproject/ui-widget-layout,@akashaproject/ui-widget-mini-profile,@akashaproject/ui-widget-my-apps,@akashaproject/ui-widget-sidebar,@akashaproject/ui-widget-topbar,@akashaproject/ui-widget-trending",
     "pack:ui-libs": "nx run-many --target=build --projects=@akashaproject/ui-lib-feed",
     "pack:ui-apps": "nx run-many --target=build --projects=@akashaproject/app-akasha-integration,@akashaproject/app-translation,@akashaproject/app-routing,@akashaproject/app-integration-center,@akashaproject/app-auth-ewa,@akashaproject/app-bookmarks,@akashaproject/app-legal,@akashaproject/app-moderation-ewa,@akashaproject/app-notifications,@akashaproject/app-profile,@akashaproject/app-search,@akashaproject/app-settings-ewa",
     "pack:app-loader": "nx run @akashaproject/ui-app-loader:build",
@@ -43,10 +43,10 @@
     "test:design-system": "nx run @akashaproject/design-system:test",
     "test:design-system:watch": "lerna run test:watch --scope @akashaproject/design-system --stream",
     "test:hooks": "nx run @akashaproject/ui-awf-hooks:test",
-    "test:widgets": "nx run-many --target=test --projects=@akashaproject/ui-widget-analytics,@akashaproject/ui-widget-layout,@akashaproject/ui-widget-sidebar,@akashaproject/ui-widget-topbar,@akashaproject/ui-widget-trending",
+    "test:widgets": "nx run-many --target=test --projects=@akashaproject/ui-widget-analytics,@akashaproject/ui-widget-layout,@akashaproject/ui-widget-mini-profile,@akashaproject/ui-widget-my-apps,@akashaproject/ui-widget-sidebar,@akashaproject/ui-widget-topbar,@akashaproject/ui-widget-trending",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
     "test:app-loader": "nx run @akashaproject/ui-app-loader:test",
-    "test:all": "yarn test:design-system",
+    "test:all": "yarn test:design-system && yarn test:app-loader",
     "dev:server": "nx run-many --target=dev:server --projects=@akashaproject/hub-api",
     "update:deps": "lerna exec -- npx --package npm-check-updates ncu -u",
     "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --hideInPageTOC true --entryPointStrategy packages 'sdk/typings' 'sdk' 'ui/*' 'ui/widgets/*'",
@@ -62,12 +62,12 @@
     "@babel/preset-react": "7.14.5",
     "@babel/preset-typescript": "7.15.0",
     "@multiformats/multiaddr-to-uri": "9.0.1",
-    "@nrwl/cli": "13.7.1",
-    "@nrwl/devkit": "13.7.1",
-    "@nrwl/js": "13.7.1",
-    "@nrwl/tao": "13.7.1",
-    "@nrwl/web": "13.7.1",
-    "@nrwl/workspace": "13.7.1",
+    "@nrwl/cli": "13.10.3",
+    "@nrwl/devkit": "13.10.3",
+    "@nrwl/js": "13.10.3",
+    "@nrwl/tao": "13.10.3",
+    "@nrwl/web": "13.10.3",
+    "@nrwl/workspace": "13.10.3",
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "12.1.0",
     "@testing-library/react-hooks": "7.0.2",
@@ -136,8 +136,9 @@
     "ui/hooks",
     "ui/lib/feed",
     "ui/widgets/analytics",
-    "ui/widgets/ic",
     "ui/widgets/layout",
+    "ui/widgets/mini-profile",
+    "ui/widgets/my-apps",
     "ui/widgets/sidebar",
     "ui/widgets/top-bar",
     "ui/widgets/trending",
@@ -160,7 +161,7 @@
   "engines": {
     "node": ">=16.13.0",
     "npm": ">=8.1.0",
-    "yarn": "<=1.22.17"
+    "yarn": "<=1.22.18"
   },
   "husky": {
     "hooks": {
@@ -175,3 +176,4 @@
     ]
   }
 }
+

@@ -13,18 +13,23 @@ async function main() {
       continue;
     }
     const packageInfo = await integrationRegistry.getPackageInfo(pkg.id);
+    const manifestHash = '0x'+pkg.ipfsManifest.substring(1);
     let version;
     if(!packageInfo || !packageInfo.integrationName){
       version = 'v0.1.0';
     } else {
       const currentRelease = await integrationRegistry.getReleaseData(packageInfo.latestReleaseId);
       version = 'v' + semver.inc(currentRelease.version, 'minor');
+      if(currentRelease.manifestHash === manifestHash){
+        console.info('skipping new release for ', pkg.name);
+        continue;
+      }
     }
     console.log('deploying: ', pkg.name, ' version: ',version )
     const tx = await integrationRegistry.release(
       pkg.name,
       version,
-      '0x'+pkg.ipfsManifest.substring(1),
+      manifestHash,
       pkg.type,
     );
     await tx.wait(1);

@@ -58,7 +58,7 @@ const SingleImageContainer = styled.div`
 `;
 
 export interface ImageObject {
-  src: string;
+  src: { url?: string; fallbackUrl?: string };
   size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
   id: string;
 }
@@ -107,7 +107,14 @@ const ImageGallery: React.FC<IImageGallery> = props => {
         )}
         {/* when we have a single image we need to keep the original aspect ratio,
         otherwise give images a 1:1 ratio */}
-        <StyledImg src={image.src} singleImage={images.length === 1} isMobile={isMobile} />
+        <picture>
+          <source srcSet={image.src.url} />
+          <StyledImg
+            src={image.src.fallbackUrl}
+            singleImage={images.length === 1}
+            isMobile={isMobile}
+          />
+        </picture>
       </StyledImgContainer>
     );
   };

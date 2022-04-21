@@ -11,9 +11,8 @@ import {
 import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
@@ -24,7 +23,7 @@ export interface IEntryCardRendererProps {
   itemData?: IEntryData;
   locale?: ILocale;
   loginState: LoginState;
-  onNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
+  navigateTo?: (args: NavigateToParams) => void;
   onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
@@ -53,6 +52,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     contentClickable,
     disableReposting,
     modalSlotId,
+    navigateTo,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -72,23 +72,17 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const handleClickAvatar = () => {
-    props.onNavigate(
-      {
-        id: itemData?.author.pubKey,
-        authorEthAddress: itemData?.author.ethAddress,
-      },
-      ItemTypes.PROFILE,
-    );
+    navigateTo?.({
+      appName: '@akashaproject/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemData?.author.pubKey}`,
+    });
   };
 
   const handleContentClick = () => {
-    props.onNavigate(
-      {
-        id: itemData.entryId,
-        authorEthAddress: itemData.author.ethAddress,
-      },
-      type,
-    );
+    navigateTo?.({
+      appName: '@akashaproject/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemData.entryId}`,
+    });
   };
 
   const itemData = React.useMemo(() => {
@@ -234,7 +228,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   onContentClick={handleContentClick}
                   onMentionClick={props.onMentionClick}
                   onTagClick={props.onTagClick}
-                  singleSpaNavigate={props.singleSpa.navigateToUrl}
+                  navigateTo={navigateTo}
                   contentClickable={contentClickable}
                   disableReposting={disableReposting}
                   removeEntryLabel={t('Delete Post')}

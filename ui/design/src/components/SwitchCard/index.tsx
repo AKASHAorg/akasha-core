@@ -1,7 +1,7 @@
 import React from 'react';
-import { isMobileOnly } from 'react-device-detect';
 import { Box, Text } from 'grommet';
 import styled, { css } from 'styled-components';
+import { isMobileOnly } from 'react-device-detect';
 
 import Button from '../Button';
 import Icon from '../Icon';
@@ -45,7 +45,7 @@ export const StyledSwitchCardButton = styled(SwitchCardButton)<ISwitchCardButton
 const StickyBox = styled(Box)<{ userSignedIn: boolean }>`
   position: sticky;
   top: ${props => (props.userSignedIn ? '3rem' : '6rem')};
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${props => props.theme.colors.cardBackground};
   z-index: 999;
 `;
 
@@ -139,7 +139,10 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
               }
               onClick={onTabClick(buttonValues[idx].value)}
             >
-              <Text color="secondaryText" textAlign="center">
+              <Text
+                color={el.value === activeButton ? 'accent' : 'secondaryText'}
+                textAlign="center"
+              >
                 {el.label}
               </Text>
             </Box>

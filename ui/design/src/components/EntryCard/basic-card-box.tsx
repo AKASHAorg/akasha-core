@@ -4,11 +4,14 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 
 const StyledBox = styled(Box)<{ isSelected?: boolean }>`
+  /* background color for selected card in moderation history */
   background-color: ${props =>
-    props.isSelected ? props.theme.colors.activeCardBackground : props.theme.colors.cardBackground};
+    props.isSelected
+      ? props.theme.colors.activePanelBackground
+      : props.theme.colors.cardBackground};
 `;
 
-export interface IBasicCardBox {
+export interface IBasicCardBox extends BoxProps {
   className?: string;
   elevation?: string;
   callToAction?: boolean;
@@ -43,6 +46,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   bottomBorderOnly,
   isSelected,
   onClick,
+  ...props
 }) => (
   <StyledBox
     style={style}
@@ -93,6 +97,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
     className={className}
     ref={rootNodeRef}
     onClick={onClick}
+    {...props}
   >
     {children}
   </StyledBox>
@@ -137,16 +142,20 @@ const ModalCardLogin = styled(BasicCardBox)`
   }
 `;
 
-const StyledAnchor = styled(Anchor)`
+const StyledAnchor = styled(Anchor)<{ reducedWidth?: boolean }>`
   max-width: 100%;
   user-select: none;
   text-decoration: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
+  width: ${props => (props.reducedWidth ? '70%' : 'initial')};
   :hover {
     text-decoration: none;
   }
+  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
+    width: ${props => (props.reducedWidth ? '80%' : 'initial')};
+  } ;
 `;
 
 export {

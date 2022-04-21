@@ -252,6 +252,9 @@ const mutations = {
       logger.warn(`bad unFollow sig`);
       return Promise.reject(dataSigError);
     }
+    mutationsCounter.inc({
+      mutationType: 'unFollow',
+    });
     return dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
   },
   saveMetaData: async (_, { data }, { dataSources, user, signature }) => {

@@ -7,8 +7,8 @@ export interface IProfileProvider {
 
 export interface IProfileData {
   CID?: string;
-  avatar?: string;
-  coverImage?: string;
+  avatar?: { url?: string; fallbackUrl?: string };
+  coverImage?: { url?: string; fallbackUrl?: string };
   userName?: string;
   description?: string;
   name?: string;

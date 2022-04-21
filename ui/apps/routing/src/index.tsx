@@ -5,8 +5,8 @@ import {
   MenuItemAreaType,
   UIEventData,
 } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { RootComponentProps, RequireAtLeastOne } from '@akashaproject/ui-awf-typings';
-import { NavigationOptions, RouteRepository } from './types';
+import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RouteRepository } from './types';
 import getSDK from '@akashaproject/awf-sdk';
 import { events } from '@akashaproject/sdk-typings';
 
@@ -40,6 +40,10 @@ export class RoutingPlugin {
     uiEvents.subscribe({
       next: (eventData: UIEventData) => {
         if (eventData.event === EventTypes.RegisterIntegration) {
+          // allow only one entry per app
+          if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
+            return;
+          }
           const appMenuItemData = {
             ...eventData.data.menuItems,
             navRoutes: eventData.data.navRoutes,
@@ -73,10 +77,7 @@ export class RoutingPlugin {
     });
   }
 
-  static navigateTo = ({
-    appName,
-    getNavigationUrl,
-  }: RequireAtLeastOne<NavigationOptions, 'appName' | 'getNavigationUrl'>) => {
+  static navigateTo = ({ appName, getNavigationUrl }: NavigateToParams) => {
     const app = RoutingPlugin.routeRepository.all[appName];
     let url;
 

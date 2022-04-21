@@ -8,7 +8,7 @@ import { ShareButtonContainer } from '../../ProfileCard/styled-profile-card';
 
 export interface ICDetailCardCoverImageProps {
   shareLabel: string;
-  coverImage?: string;
+  coverImage?: { url?: string };
   handleShareClick: () => void;
 }
 
@@ -40,7 +40,7 @@ const ICDetailCardCoverImage: React.FC<ICDetailCardCoverImageProps> = props => {
       data-testid="profile-card-cover-image"
     >
       {imageOverlayOpen && coverImage && (
-        <ImageOverlay imgUrl={coverImage} closeModal={closeImageOverlay} />
+        <ImageOverlay src={coverImage} closeModal={closeImageOverlay} />
       )}
       {/* disable share button temporary */}
       {/* <Box align="end" pad="none">

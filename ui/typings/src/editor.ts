@@ -1,6 +1,7 @@
 import { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { HistoryEditor } from 'slate-history';
+import { IProfileData } from './profile';
 
 export type EmptyText = {
   text: string;
@@ -9,6 +10,7 @@ export type EmptyText = {
 export type ImageElement = {
   type: 'image';
   url: string;
+  fallbackUrl?: string;
   size: {
     width: string;
     height: string;
@@ -25,7 +27,7 @@ export type MentionElement = {
   name?: string;
   userName?: string;
   pubKey: string;
-  avatar?: string;
+  avatar?: IProfileData['avatar'];
   ethAddress: string;
   children?: EmptyText[];
 };
