@@ -72,7 +72,7 @@
     "extract:docs": "yarn extract:sdk:docs",
     "extract:sdk:docs": "api-extractor run -v -l -c api-extractor.json",
     "extract:typings:docs": "api-extractor run -v -l -c typings/api-extractor.json",
-    "build:docs": "api-documenter markdown -i ../docs/temp -o ../docs/main"
+    "build:docs": "api-documenter markdown -i ./doc-temp/temp -o ../docs/sdk"
   },
   "browserslist": [
     "defaults",

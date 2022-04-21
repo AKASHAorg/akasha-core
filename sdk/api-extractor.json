@@ -56,9 +56,7 @@
    * This would direct API Extractor to embed those types directly in the .d.ts rollup, as if they had been
    * local files for library1.
    */
-  "bundledPackages": [
-    "@akashaproject/sdk-typings"
-  ],
+  "bundledPackages": [],
   /**
    * Determines how the TypeScript compiler engine will be invoked by API Extractor.
    */
@@ -129,7 +127,7 @@
      * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
      * DEFAULT VALUE: "<projectFolder>/etc/"
      */
-    "reportFolder": "<projectFolder>../docs/etc/",
+    "reportFolder": "<projectFolder>/doc-temp/etc/",
     /**
      * Specifies the folder where the temporary report file is written.  The file name portion is determined by
      * the "reportFileName" setting.
@@ -143,7 +141,7 @@
      * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
      * DEFAULT VALUE: "<projectFolder>/temp/"
      */
-    "reportTempFolder": "<projectFolder>../docs/temp/"
+    "reportTempFolder": "<projectFolder>/doc-temp/temp/"
   },
   /**
    * Configures how the doc model file (*.api.json) will be generated.
@@ -162,7 +160,7 @@
      * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
      * DEFAULT VALUE: "<projectFolder>/temp/<unscopedPackageName>.api.json"
      */
-    "apiJsonFilePath": "<projectFolder>../docs/temp/<unscopedPackageName>.api.json"
+    "apiJsonFilePath": "<projectFolder>/doc-temp/temp/<unscopedPackageName>.api.json"
   },
   /**
    * Configures how the .d.ts rollup file will be generated.
@@ -184,7 +182,7 @@
      * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
      * DEFAULT VALUE: "<projectFolder>/dist/<unscopedPackageName>.d.ts"
      */
-    "untrimmedFilePath": "<projectFolder>../docs/dist/<unscopedPackageName>.d.ts"
+    "untrimmedFilePath": "<projectFolder>/doc-temp/dist/<unscopedPackageName>.d.ts"
     /**
      * Specifies the output path for a .d.ts rollup file to be generated with trimming for a "beta" release.
      * This file will include only declarations that are marked as "@public" or "@beta".
@@ -241,7 +239,7 @@
      * SUPPORTED TOKENS: <projectFolder>, <packageName>, <unscopedPackageName>
      * DEFAULT VALUE: "<lookup>"
      */
-    "tsdocMetadataFilePath": "<projectFolder>../docs/metadata/<unscopedPackageName>-tsdoc-metadata.json"
+    "tsdocMetadataFilePath": "<projectFolder>/doc-temp/metadata/<unscopedPackageName>-tsdoc-metadata.json"
   },
   /**
    * Specifies what type of newlines API Extractor should use when writing output files.  By default, the output files

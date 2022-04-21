@@ -25,44 +25,36 @@ import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
 
-/**
- * {@inheritdoc typings.IAwfSDK}
- */
-export interface AWF_SDK {
-  /**
-   * {@inheritdoc typings.Services}
-   */
-  services: {
-    log: Logging;
-    gql: Gql;
-    stash: Stash;
-    settings: Settings;
-    /**
-     * {@inheritdoc typings.IAppSettings}
-     */
-    appSettings: AppSettings;
-    db: DB;
-    common: {
-      web3: Web3Connector;
-      ipfs: AWF_IpfsConnector;
-    };
+export interface SDK_API {
+  globalChannel: EventBus;
+  auth: AWF_Auth;
+  profile: AWF_Profile;
+  ens: AWF_ENS;
+  entries: AWF_Entry;
+  comments: AWF_Comments;
+  tags: AWF_Tags;
+  icRegistry: AWF_IC_REGISTRY;
+}
+
+export interface SDK_Services {
+  log: Logging;
+  gql: Gql;
+  stash: Stash;
+  settings: Settings;
+  appSettings: AppSettings;
+  db: DB;
+  common: {
+    web3: Web3Connector;
+    ipfs: AWF_IpfsConnector;
   };
+}
+
+export interface AWF_SDK {
+  services: SDK_Services;
   /**
    * Main apis to interact with the supported services.
    */
-  api: {
-    globalChannel: EventBus;
-    /**
-     * {@link @akashaproject/sdk-typings/lib/interfaces#AWF_IAuth}
-     */
-    auth: AWF_Auth;
-    profile: AWF_Profile;
-    ens: AWF_ENS;
-    entries: AWF_Entry;
-    comments: AWF_Comments;
-    tags: AWF_Tags;
-    icRegistry: AWF_IC_REGISTRY;
-  };
+  api: SDK_API;
 }
 
 let sdk: AWF_SDK;
@@ -138,4 +130,4 @@ export function init(): AWF_SDK {
   };
 }
 
-export { typings };
+export { typings, AWF_Auth, AppSettings };
