@@ -5,6 +5,9 @@ import StyledButton from './styled-button';
 export interface IButtonProps extends ButtonProps {
   className?: string;
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  background?: string;
   primary?: boolean;
   secondary?: boolean;
   justify?: string;

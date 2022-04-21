@@ -77,7 +77,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <BasicCardBox style={{ maxHeight: '92vh' }} onClick={handleSignedOutUser}>
             <Box height="6rem" alignContent="stretch" flex={{ shrink: 0 }}>
               <Box pad="medium">
-                <Text size="large" weight={'bold'}>
+                <Text size="xlarge" weight={'bold'}>
                   {t('Integration Center')}
                 </Text>
               </Box>

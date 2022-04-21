@@ -3,11 +3,10 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaproject/design-system';
-import { ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { IEntryData, ITag } from '@akashaproject/ui-awf-typings/src/entry';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
@@ -23,6 +22,8 @@ import {
   useAnalytics,
 } from '@akashaproject/ui-awf-hooks';
 import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { SearchTagsResult_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
 
 import EntryCardRenderer from './entry-renderer';
 
@@ -53,6 +54,8 @@ interface SearchPageProps extends RootComponentProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
+type DataResponse = SearchTagsResult_Response | IEntryData;
+
 const initSearchState = {
   [ButtonValues.TOPICS]: { page: 1, results: [], done: false, isLoading: false },
   [ButtonValues.POSTS]: { page: 1, results: [], done: false, isLoading: false },
@@ -80,7 +83,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.ALL, [activeButton]);
 
-  const updateSearchState = (type: Exclude<ButtonValues, ButtonValues.ALL>, data: unknown[]) => {
+  const updateSearchState = (
+    type: Exclude<ButtonValues, ButtonValues.ALL>,
+    data: Array<DataResponse & { delisted?: boolean }>,
+  ) => {
     if (!data || !data.length) {
       setSearchState(prevState => ({
         ...prevState,
@@ -91,7 +97,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       ...prevState,
       [type]: {
         ...prevState[type],
-        results: [...prevState[type].results, ...data],
+        results: [...prevState[type].results, ...data.filter(_ => !_.delisted)],
         // topics edge case because it only fetches once
         done: type === ButtonValues.TOPICS || prevState[type].done,
         isLoading: false,
@@ -365,9 +371,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         inputPlaceholderLabel={t('Search')}
         titleLabel={t('Search')}
         introLabel={t('✨ Find what you are looking for ✨')}
-        description={t(
-          'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community.',
-        )}
+        description={t('Search for your favourite topics, people, posts and replies.')}
       >
         <TabsToolbar
           noMarginBottom

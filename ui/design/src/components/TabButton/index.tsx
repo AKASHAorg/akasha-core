@@ -24,7 +24,7 @@ const TabButton = (props: ITabButtonProps) => {
       gap="xsmall"
       pad={{ bottom: 'small' }}
     >
-      <Icon type={iconType} accentColor={active} />
+      <Icon type={iconType} themeColor={active ? 'accent' : 'secondaryText'} />
       <Text color={active ? 'accentText' : 'secondaryText'}>{label}</Text>
     </Box>
   );

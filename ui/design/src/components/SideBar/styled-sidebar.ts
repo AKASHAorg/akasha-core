@@ -102,6 +102,7 @@ const StyledButton = styled(Button)`
   width: 100%;
   height: auto;
   border-width: 1px;
+  background: ${props => props.theme.colors[props.background]};
 `;
 
 export {

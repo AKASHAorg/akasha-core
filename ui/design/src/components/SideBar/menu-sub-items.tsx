@@ -34,10 +34,14 @@ const StyledAnchor = styled(Anchor)<{ borderColor: string }>`
 const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
   const { isMobile, menuItem, activeOption, onOptionClick } = props;
 
+  const subRoutes = menuItem.subRoutes.sort((a: IMenuItem, b: IMenuItem) => {
+    return a.index - b.index;
+  });
+
   return (
     <StyledWrapper pad={{ horizontal: 'medium' }} isMobile={isMobile}>
       <Box direction="column" justify="evenly" margin={{ left: 'medium' }}>
-        {menuItem.subRoutes.map((subRouteMenuItem, idx) => (
+        {subRoutes.map((subRouteMenuItem, idx) => (
           <StyledAnchor
             href={`${location.origin}${subRouteMenuItem.route}`}
             key={idx + subRouteMenuItem.label}
