@@ -12,6 +12,7 @@ export interface DefaultTheme extends ThemeType {
 export interface IColors {
   blue: string;
   lightBlue: string;
+  darkerBlue: string;
   darkBlue: string;
   white: string;
   primaryText: string;
@@ -51,6 +52,7 @@ export interface IColors {
   elevationMedium: string;
   elevationHigh: string;
   disabledText: string;
+  titleText: string;
   subtitleText: string;
   activeCardBackground: string;
 }

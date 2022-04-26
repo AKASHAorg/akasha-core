@@ -18,7 +18,8 @@ export interface IColorsDark extends IColors {
 const colors: IColorsDark = {
   blue: '#4E71FF',
   lightBlue: '#D3DAFA',
-  darkBlue: '#0046CB',
+  darkerBlue: '#0046CB',
+  darkBlue: '#425166',
   grey: '#949EB3',
   darkGrey: '#000C20',
   mediumGrey: '#B6BFD1',
@@ -36,7 +37,8 @@ const colors: IColorsDark = {
   secondaryText: '#B6BFD1', // grey
   textBackground: '#425166',
   disabledText: '#9ea0a5', // disabled
-  subtitleText: '#595F6B', // cadetGrey
+  titleText: '#CACFD9',
+  subtitleText: '#F4F5F7', // cadetGrey
   errorText: '#FF5050', // red
   darkText: '#47484A', // system/off white/dark
   inputText: '#47484A', // system/off white/dark
