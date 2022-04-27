@@ -7,7 +7,7 @@ import { IWeb3Connector } from './interfaces';
 import AWF_IIpfsConnector from './interfaces/ipfs.connector';
 
 /**
- * Services that are available in the SDK!.
+ * Services that are available in the SDK.
  * @public
  */
 

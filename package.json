@@ -50,9 +50,7 @@
     "dev:server": "nx run-many --target=dev:server --projects=@akashaproject/hub-api",
     "update:deps": "lerna exec -- npx --package npm-check-updates ncu -u",
     "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --hideInPageTOC true --entryPointStrategy packages 'sdk/typings' 'sdk' 'ui/*' 'ui/widgets/*'",
-    "push:integations": "node build/integrations_bucket_store.js",
-    "docs:sdk:extract": "nx run-many --target=extract:docs --projects=@akashaproject/awf-sdk",
-    "docs:sdk:build": "nx run-many --target=build:docs --projects=@akashaproject/awf-sdk"
+    "push:integations": "node build/integrations_bucket_store.js"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
@@ -176,4 +174,3 @@
     ]
   }
 }
-

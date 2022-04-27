@@ -20,7 +20,6 @@ export interface IAwfSDK {
   services: Services;
   api: {
     globalChannel: ReplaySubject<GlobalEventBusData>;
-    /** {@link (AWF_IAuth:interface) | Auth APIs} */
     auth: AWF_IAuth;
     ens: AWF_IENS;
     profile: AWF_IProfile;

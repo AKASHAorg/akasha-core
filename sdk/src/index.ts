@@ -130,4 +130,4 @@ export function init(): AWF_SDK {
   };
 }
 
-export { typings, AWF_Auth, AppSettings };
+export { typings };
