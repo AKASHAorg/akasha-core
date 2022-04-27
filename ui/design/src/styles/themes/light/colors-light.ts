@@ -35,8 +35,10 @@ const colors: IColorsLight = {
   white: '#FBFCFD', // lotion white
   red: '#FF4040',
   green: '#36B37E',
-  disabled: '#9ea0a5',
+  ultraMarine: '#4e71ff',
+  lightUltraMarine: '#8b9FFF',
   // define use cases for colors
+  disabled: '#9ea0a5',
   primaryText: '#132540', // darkerBlue
   secondaryText: '#425166', // darkBlue
   textBackground: '#E9EDFD', // light blue

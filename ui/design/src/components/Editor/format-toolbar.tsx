@@ -39,7 +39,7 @@ const FormatButton: React.FC<IFormatButton> = ({ format, icon }) => {
   const isActive = CustomEditor.isFormatActive(editor, format);
   let color = '#132540';
   if (isActive) {
-    color = '#4E71FF';
+    color = '#8b9FFF';
   }
 
   return (

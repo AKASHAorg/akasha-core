@@ -15,6 +15,8 @@ export interface IColors {
   darkerBlue: string;
   darkBlue: string;
   white: string;
+  ultraMarine: string;
+  lightUltraMarine: string;
   primaryText: string;
   secondaryText: string;
   errorText: string;

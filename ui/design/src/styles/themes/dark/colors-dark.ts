@@ -27,12 +27,14 @@ const colors: IColorsDark = {
   deepGrey: '#7F7F7F',
   deeperGrey: '#87909E',
   cadetGrey: '#595F6B',
-  disabled: '#9ea0a5',
   lightBeige: '#F8F4F4',
   white: '#FBFCFD', // lotion white
   red: '#FF5050',
   green: '#36B37E',
+  ultraMarine: '#4e71ff',
+  lightUltraMarine: '#8b9FFF',
   // define use cases for colors
+  disabled: '#9ea0a5',
   primaryText: '#FBFCFD', // lotion white
   secondaryText: '#B6BFD1', // grey
   textBackground: '#425166',
@@ -60,7 +62,7 @@ const colors: IColorsDark = {
   coverImageBackground: '#425166',
   embedBackground: '#253142',
   btnAccentColor: '#FBFCFD', // lotion
-  accent: '#4E71FF', // blue
+  accent: '#8b9FFF', // light ultramarine
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
   accentLight: '#E9EDFD', // lightBlue
   accentLightHover: '#D3DAFA', // lightBlue
