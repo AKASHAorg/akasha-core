@@ -6,6 +6,11 @@ import IDBService from './interfaces/db';
 import { IWeb3Connector } from './interfaces';
 import AWF_IIpfsConnector from './interfaces/ipfs.connector';
 
+/**
+ * Services that are available in the SDK.
+ * @public
+ */
+
 export default interface IServices {
   gql: IGqlClient<unknown>;
   log: ILog;
