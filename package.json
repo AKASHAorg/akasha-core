@@ -50,7 +50,10 @@
     "dev:server": "nx run-many --target=dev:server --projects=@akashaproject/hub-api",
     "update:deps": "lerna exec -- npx --package npm-check-updates ncu -u",
     "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --entryPointStrategy packages 'sdk/typings' 'sdk' 'ui/*' 'ui/widgets/*'",
-    "push:integations": "node build/integrations_bucket_store.js"
+    "push:integations": "node build/integrations_bucket_store.js",
+    "docs:generate": "nx run @akashaproject/docs-website:build",
+    "docs:watch": "nx run @akashaproject/docs-website:watch",
+    "docs:start": "nx run @akashaproject/docs-website:start"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
@@ -111,9 +114,6 @@
     "systemjs-webpack-interop": "2.3.7",
     "ts-jest": "27.1.3",
     "ts-loader": "9.2.5",
-    "typedoc": "0.22.10",
-    "typedoc-plugin-markdown": "3.11.11",
-    "typedoc-plugin-missing-exports": "0.22.6",
     "typescript": "4.4.3",
     "web3.storage": "3.5.6",
     "webpack": "5.65.0",
@@ -154,7 +154,8 @@
     "ui/apps/translation",
     "ui/apps/routing",
     "examples/ui/ethereum.world",
-    "tools/executors"
+    "tools/executors",
+    "docusaurus"
   ],
   "engines": {
     "node": ">=16.13.0",
@@ -174,4 +175,3 @@
     ]
   }
 }
-

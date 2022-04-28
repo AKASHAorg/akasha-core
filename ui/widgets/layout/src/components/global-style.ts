@@ -30,6 +30,10 @@ export const GlobalStyle = createGlobalStyle<{
     background-color: ${props => props.theme.colors.background};
   }
 
+  body {
+    width: 100%;
+  }
+
   body.noscroll {
     overflow: hidden;
   }

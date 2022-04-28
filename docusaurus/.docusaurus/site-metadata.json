@@ -1,0 +1,11 @@
+{
+  "docusaurusVersion": "2.0.0-beta.18",
+  "siteVersion": "0.1.0",
+  "pluginVersions": {
+    "docusaurus-plugin-typedoc": {
+      "type": "package",
+      "name": "docusaurus-plugin-typedoc",
+      "version": "0.17.4"
+    }
+  }
+}
