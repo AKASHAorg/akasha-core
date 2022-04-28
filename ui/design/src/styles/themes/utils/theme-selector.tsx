@@ -62,21 +62,22 @@ const setTheme = (
 
 const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
   const [loadedTheme, setLoadedTheme] = React.useState<{ name: string; theme: DefaultTheme }>();
+  const componentIsUnmounted = React.useRef(false);
+
   React.useEffect(() => {
-    let isUnmounted = false;
     if (!loadedTheme) {
       const desiredTheme = props.availableThemes.find(
         theme => theme.name === props.settings.activeTheme,
       );
       if (!desiredTheme) {
         setFallbackTheme(props.availableThemes, themeData => {
-          if (!isUnmounted) {
+          if (!componentIsUnmounted.current) {
             setLoadedTheme(themeData);
           }
         });
       } else {
         setTheme(desiredTheme, themeData => {
-          if (!isUnmounted) {
+          if (!componentIsUnmounted.current) {
             setLoadedTheme(themeData);
           }
         });
@@ -88,25 +89,24 @@ const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
         );
         if (!desiredTheme) {
           setFallbackTheme(props.availableThemes, themeData => {
-            if (!isUnmounted) {
+            if (!componentIsUnmounted.current) {
               setLoadedTheme(themeData);
             }
           });
         } else {
-          if (!isUnmounted) {
-            setTheme(desiredTheme, themeData => {
-              if (!isUnmounted) {
-                setLoadedTheme(themeData);
-              }
-            });
-          }
+          setTheme(desiredTheme, themeData => {
+            if (!componentIsUnmounted.current) {
+              setLoadedTheme(themeData);
+            }
+          });
         }
       }
     }
     () => {
-      isUnmounted = true;
+      componentIsUnmounted.current = true;
     };
   }, [loadedTheme, props.availableThemes, props.settings.activeTheme]);
+
   React.useEffect(() => {
     if (props.themeReadyEvent) {
       props.themeReadyEvent();

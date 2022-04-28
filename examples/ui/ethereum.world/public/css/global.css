@@ -1,0 +1,16 @@
+#splash-screen-root {
+  color: #808080;
+}
+
+html.Dark-Theme {
+  background-color: #0D1A2D;
+}
+
+#splash-screen-root>img {
+  max-height: 21rem;
+}
+
+body.Dark-Theme>#splash-screen-root {
+  background-color: #0D1A2D;
+  color: #fff;
+}
