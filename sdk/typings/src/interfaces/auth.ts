@@ -3,6 +3,10 @@ import { CurrentUser } from './common';
 import { Buckets, Client, InboxListOptions, Users } from '@textile/hub';
 import { Observable } from 'rxjs';
 
+/**
+ * Auth API
+ */
+
 interface AWF_IAuth {
   /**
    * enable key sync between opened tabs
@@ -33,7 +37,9 @@ interface AWF_IAuth {
   signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format?: boolean,
-  ): Observable<{ data: { serializedData: unknown; signature: Uint8Array | string; pubKey: string } }>;
+  ): Observable<{
+    data: { serializedData: unknown; signature: Uint8Array | string; pubKey: string };
+  }>;
 
   verifySignature(args: {
     pubKey: string;
