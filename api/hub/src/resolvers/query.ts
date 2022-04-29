@@ -136,7 +136,7 @@ const query = {
     return data;
   },
   isFollowing: async (_source, { follower, following }, { dataSources }) => {
-    return await dataSources.followerAPI.isFollowing(follower, following);
+    return dataSources.followerAPI.isFollowing(follower, following);
   },
   getComments: async (_source, { postID, limit, offset }, { dataSources }) => {
     const data = await dataSources.commentsAPI.getComments(postID, limit, offset || 0);
