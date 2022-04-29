@@ -2,6 +2,9 @@ import { injectable } from 'inversify';
 import ILogService, { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
 import pino from 'pino';
 
+/**
+ * @module Logger
+ */
 @injectable()
 class Logging implements ILogService {
   private _appLogger;

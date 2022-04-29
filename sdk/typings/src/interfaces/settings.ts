@@ -9,6 +9,9 @@ interface ISettingsService {
   remove(moduleName: string): void;
 }
 
+/**
+ * User Application management APIs
+ */
 export interface IAppSettings {
   /**
    * Returns an app configuration object
