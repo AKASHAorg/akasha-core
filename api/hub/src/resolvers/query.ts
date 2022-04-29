@@ -47,12 +47,13 @@ const query = {
       });
       const quotedByAuthors = Object.values(uniqueAuthors);
       uniqueAuthors = null;
-      if (pubKey) {
-        const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
-        quotedByAuthors?.sort((a, b) => {
-          return pProfile.following.indexOf(b.pubKey) - pProfile.following.indexOf(a.pubKey);
-        });
-      }
+      // @Todo: replace the sorting algo
+      // if (pubKey) {
+      //   const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
+      //   quotedByAuthors?.sort((a, b) => {
+      //     return pProfile.following.indexOf(b.pubKey) - pProfile.following.indexOf(a.pubKey);
+      //   });
+      // }
 
       Object.assign(postData, { quotedByAuthors });
     }
@@ -110,12 +111,13 @@ const query = {
         });
         const quotedByAuthors = Object.values(uniqueAuthors);
         uniqueAuthors = null;
-        if (pubKey) {
-          const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
-          quotedByAuthors?.sort((a, b) => {
-            return pProfile.following.indexOf(b.pubKey) - pProfile.following.indexOf(a.pubKey);
-          });
-        }
+        // @Todo: replace sorting algo
+        // if (pubKey) {
+        //   const pProfile = await dataSources.profileAPI.resolveProfile(pubKey);
+        //   quotedByAuthors?.sort((a, b) => {
+        //     return pProfile.following.indexOf(b.pubKey) - pProfile.following.indexOf(a.pubKey);
+        //   });
+        // }
         Object.assign(post, { quotedByAuthors });
       }
       if (post.quotes && post.quotes.length) {
@@ -134,9 +136,7 @@ const query = {
     return data;
   },
   isFollowing: async (_source, { follower, following }, { dataSources }) => {
-    const profile = await dataSources.profileAPI.getProfile(follower);
-    const followingProfile = await dataSources.profileAPI.getProfile(following);
-    return profile.following.indexOf(followingProfile.pubKey) !== -1;
+    return await dataSources.followerAPI.isFollowing(follower, following);
   },
   getComments: async (_source, { postID, limit, offset }, { dataSources }) => {
     const data = await dataSources.commentsAPI.getComments(postID, limit, offset || 0);
@@ -185,7 +185,7 @@ const query = {
     return results;
   },
   getFollowers: async (_source, { limit, offset, pubKey }, { dataSources }) => {
-    const returned = await dataSources.profileAPI.getFollowers(pubKey, limit, offset);
+    const returned = await dataSources.followerAPI.getFollowers(pubKey, limit, offset);
     returned.results = await Promise.all(
       returned.results.map(_pubKey => {
         return query.resolveProfile(_source, { pubKey: _pubKey }, { dataSources });
@@ -195,7 +195,7 @@ const query = {
   },
 
   getFollowing: async (_source, { limit, offset, pubKey }, { dataSources }) => {
-    const returned = await dataSources.profileAPI.getFollowing(pubKey, limit, offset);
+    const returned = await dataSources.followerAPI.getFollowing(pubKey, limit, offset);
     returned.results = await Promise.all(
       returned.results.map(_pubKey => {
         return query.resolveProfile(_source, { pubKey: _pubKey }, { dataSources });
@@ -216,7 +216,7 @@ const query = {
     if (!user?.pubKey) {
       return Promise.reject('Must be authenticated!');
     }
-    const res = await dataSources.profileAPI.getFollowing(user.pubKey, 1000, 0);
+    const res = await dataSources.followerAPI.getFollowing(user.pubKey, 1000, 0);
     const profile = await dataSources.profileAPI.resolveProfile(user.pubKey);
     const followingList: string[] = res.results;
     const postsIDs = await dataSources.postsAPI.getPostsByAuthorsAndTags(

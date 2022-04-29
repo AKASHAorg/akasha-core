@@ -53,6 +53,15 @@ export interface Comment {
   replyTo: string;
 }
 
+export interface Follower {
+  _id: string;
+  creationDate: number;
+  follower: string;
+  following: string;
+  active: boolean;
+  metaData: DataProvider[];
+}
+
 export interface Invite {
   _id: string;
   name: string;
