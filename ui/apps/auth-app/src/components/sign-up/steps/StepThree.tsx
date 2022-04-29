@@ -92,7 +92,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
   const handleSocialLogin = () => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.SIGN_UP,
-      action: 'Social Login',
+      action: 'Social Login Selection',
     });
     onProviderSelect(EthProviders.Torus);
   };
