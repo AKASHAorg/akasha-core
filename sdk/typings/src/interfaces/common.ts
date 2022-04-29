@@ -1,8 +1,33 @@
+import {
+  APP_EVENTS,
+  AUTH_EVENTS,
+  COMMENTS_EVENTS,
+  ENS_EVENTS,
+  ENTRY_EVENTS,
+  PROFILE_EVENTS,
+  TAG_EVENTS,
+  WEB3_EVENTS,
+} from './events';
+
 export interface DataProviderInput {
   provider: string;
   property: string;
   value: string;
 }
+
+export type GlobalEventBusData = {
+  data: unknown;
+  event:
+    | AUTH_EVENTS
+    | APP_EVENTS
+    | COMMENTS_EVENTS
+    | ENS_EVENTS
+    | ENTRY_EVENTS
+    | PROFILE_EVENTS
+    | TAG_EVENTS
+    | WEB3_EVENTS;
+  args?: unknown;
+};
 
 export interface CurrentUser {
   pubKey: string;

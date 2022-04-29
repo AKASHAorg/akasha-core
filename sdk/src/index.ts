@@ -15,43 +15,76 @@ import AWF_ENS from './registry/ens';
 import AWF_IC_REGISTRY from './registry/icRegistry';
 import AWF_Entry from './posts/entry';
 import AWF_Comments from './posts/comments';
+/**
+ * AKASHA SDK is a modular set of utilities and apis that can be used to build
+ * your own app.
+ * @packageDocumentation
+ */
+
 import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
 
+export interface SDK_API {
+  globalChannel: EventBus;
+  auth: AWF_Auth;
+  profile: AWF_Profile;
+  ens: AWF_ENS;
+  entries: AWF_Entry;
+  comments: AWF_Comments;
+  tags: AWF_Tags;
+  icRegistry: AWF_IC_REGISTRY;
+}
+
+export interface SDK_Services {
+  log: Logging;
+  gql: Gql;
+  stash: Stash;
+  settings: Settings;
+  appSettings: AppSettings;
+  db: DB;
+  common: {
+    web3: Web3Connector;
+    ipfs: AWF_IpfsConnector;
+  };
+}
+
 export interface AWF_SDK {
-  services: {
-    log: Logging;
-    gql: Gql;
-    stash: Stash;
-    settings: Settings;
-    appSettings: AppSettings;
-    db: DB;
-    common: {
-      web3: Web3Connector;
-      ipfs: AWF_IpfsConnector;
-    };
-  };
-  api: {
-    globalChannel: EventBus;
-    auth: AWF_Auth;
-    profile: AWF_Profile;
-    ens: AWF_ENS;
-    entries: AWF_Entry;
-    comments: AWF_Comments;
-    tags: AWF_Tags;
-    icRegistry: AWF_IC_REGISTRY;
-  };
+  services: SDK_Services;
+  /**
+   * Main apis to interact with the supported services.
+   */
+  api: SDK_API;
 }
 
 let sdk: AWF_SDK;
 
-export default function getSDK() {
+/**
+ * Creates a new SDK instance or returns a previusly created one.
+ * @public
+ * @example
+ * ```ts
+ * import getSDK from '@akashaproject/awf-sdk';
+ * const sdk = getSDK();
+ * ```
+ */
+
+export default function getSDK(): AWF_SDK {
   if (!sdk) {
     sdk = init();
   }
   return sdk;
 }
+
+/**
+ * Creates a new SDK instance.
+ * @public
+ * @example
+ * ```ts
+ * import {init} from '@akashaproject/awf-sdk';
+ * const sdk = init();
+ * ```
+ */
 
 export function init(): AWF_SDK {
   const { TYPES } = typings;
