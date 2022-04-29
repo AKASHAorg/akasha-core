@@ -33,6 +33,11 @@ import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
 
+/**
+ * Authentication module
+ * @decorator injectable
+ */
+
 @injectable()
 class AWF_Auth implements AWF_IAuth {
   #identity: PrivateKey;

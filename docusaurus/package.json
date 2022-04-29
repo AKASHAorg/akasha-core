@@ -4,14 +4,15 @@
   "version": "0.1.0",
   "description": "Documentation website",
   "scripts": {
+    "docusaurus": "docusaurus",
     "watch": "TYPEDOC_WATCH=true docusaurus start",
     "build": "docusaurus build",
     "start": "docusaurus start",
     "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.18",
-    "@docusaurus/preset-classic": "2.0.0-beta.18",
+    "@docusaurus/core": "2.0.0-beta.17",
+    "@docusaurus/preset-classic": "2.0.0-beta.17",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.1.1",
     "prism-react-renderer": "^1.3.1",

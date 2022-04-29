@@ -14,14 +14,32 @@ const config = {
   baseUrl: '/',
   organizationName: 'AKASHAorg', // Usually your GitHub org/user name.
   projectName: 'akasha-docs', // Usually your repo name.
+  presets: [
+    [
+      'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
+        blog: false,
+        // docs: {
+        //   sidebarPath: require.resolve('./sidebars.js'),
+        //   // Please change this to your repo.
+        //   editUrl: 'https://github.com/AKASHAorg/akasha-docs',
+        // },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css'),
+        },
+      }),
+    ],
+  ],
   plugins: [
     [
       'docusaurus-plugin-typedoc',
       {
         id: 'akasha-sdk-main',
-        entryPoints: ['../sdk/src/index.ts'],
-        entryPointStrategy: 'resolve',
+        entryPoints: ['../sdk'],
+        entryPointStrategy: 'packages',
         tsconfig: '../sdk/tsconfig.json',
+        readme: 'none',
         out: './sdk',
         watch: process.env.TYPEDOC_WATCH,
         frontmatter: {
@@ -47,11 +65,10 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'introduction',
+            docId: 'sdk/index',
             position: 'left',
             label: 'Docs',
           },
-          { to: '/blog', label: 'Tutorials', position: 'left' },
           {
             href: 'https://github.com/AKASHAorg/akasha-docs',
             label: 'GitHub',
@@ -65,18 +82,18 @@ const config = {
           {
             title: 'Docs',
             items: [
-              {
-                label: 'Introduction',
-                to: '/docs/introduction',
-              },
-              {
-                label: 'Quick start',
-                to: '/docs/dev-quickstart',
-              },
-              {
-                label: 'Integrations',
-                to: '/docs/integrations',
-              },
+              // {
+              //   label: 'Introduction',
+              //   to: '/docs/introduction',
+              // },
+              // {
+              //   label: 'Quick start',
+              //   to: '/docs/dev-quickstart',
+              // },
+              // {
+              //   label: 'Integrations',
+              //   to: '/docs/integrations',
+              // },
               {
                 label: 'SDK',
                 to: '/docs/sdk',
