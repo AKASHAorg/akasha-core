@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, CheckBoxGroup, Text } from 'grommet';
+import { Box, Button, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 
 import { ModalContainer } from '../SignInModal/fullscreen-modal-container';
 
@@ -7,6 +7,11 @@ import LinkInput from '../TextInputIconForm';
 import { ModalCard } from '../EntryCard/basic-card-box';
 import { StyledDivider, StyledAnchor } from '../TextInputIconForm/styles';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
+
+export interface OnChangeEvent {
+  value: string;
+  option: string | CheckBoxProps;
+}
 
 const SignUpModal = (props: {
   onModalClose: () => void;
@@ -23,7 +28,7 @@ const SignUpModal = (props: {
   errorMsg?: string;
   acceptedTerms?: boolean;
   checkedTermsValues?: string[];
-  onCheckedTermsValues?: (ev: any) => void;
+  onCheckedTermsValues?: (ev: OnChangeEvent) => void;
   waitForCheckTerms?: boolean;
   onAcceptTerms?: (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }) => {
