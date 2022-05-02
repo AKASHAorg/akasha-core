@@ -110,7 +110,11 @@ export interface ModeratedItemsReponse extends PaginatedResponse {
 
 /**
  * Creates moderation entry
- * @returns - status of the response
+ * @returns response HTTP status code
+ * @example Creating a moderation entry
+ * ```typescript
+ * const status = await createModeration('https://someendpoint', {contentId: 'jdiupjkhfjh', contentType: 'post', data: object, signature: 'sig'}, 12000);
+ * ```
  */
 export const createModeration = async (
   url: string,
@@ -158,6 +162,10 @@ export const createModeration = async (
 /**
  * Checks the moderation status (reported, delisted, kept) of entries
  * @returns serialized response
+ * @example Getting entry's moderation status
+ * ```typescript
+ * const response = await getEntryModerationStatus({user: 'bbaryeghr', contentIds: ['jdiupj', 'uethyf', 'vod5rh']}, 12000);
+ * ```
  */
 export const getEntryModerationStatus = async (
   data: {
@@ -203,9 +211,13 @@ export const getEntryModerationStatus = async (
 /**
  * Gets predefined moderation reasons
  * @returns serialized response
+ * @example Getting the moderation reasons
+ * ```typescript
+ * const response = await getModerationReasons({active: true}, 12000);
+ * ```
  */
 export const getModerationReasons = async (
-  data: Record<string, unknown>,
+  data: { active: boolean },
   timeout = DEFAULT_FETCH_TIMEOUT,
 ): Promise<Reason[]> => {
   const rheaders = new Headers();
@@ -245,6 +257,10 @@ export const getModerationReasons = async (
 /**
  * Determines if a logged in user is a moderator or not
  * @returns response HTTP status code
+ * @example Checking moderator status
+ * ```typescript
+ * const status = await getModeratorStatus('bbaryfskgshgirsnxnbv', 12000);
+ * ```
  */
 export const getModeratorStatus = async (
   loggedUser: string,
@@ -282,6 +298,10 @@ export const getModeratorStatus = async (
 /**
  * Gets a detailed breakdown of moderation items
  * @returns serialized response
+ * @example Getting moderation counters
+ * ```typescript
+ * const response = await getModerationCounters(12000);
+ * ```
  */
 export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<ICount> => {
   const rheaders = new Headers();
@@ -317,6 +337,10 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Pr
 /**
  * Gets the reports for a specific entry
  * @returns serialized response
+ * @example Getting entry reports
+ * ```typescript
+ * const response = await getEntryReports('jhhtytdrsy', 12000);
+ * ```
  */
 export const getEntryReports = async (
   entryId: string,
@@ -355,6 +379,10 @@ export const getEntryReports = async (
 /**
  * Gets log of moderated items
  * @returns serialized response
+ * @example Getting moderation log items
+ * ```typescript
+ * const response = await getLogItems({limit: 10, offset: 'jhhtytdrsy'}, 12000);
+ * ```
  */
 export const getLogItems = async (
   data: {
@@ -397,6 +425,10 @@ export const getLogItems = async (
 /**
  * Gets pending moderation items
  * @returns serialized response
+ * @example Getting pending moderation items
+ * ```typescript
+ * const response = await getPendingItems({limit: 10, offset: 'jhhtytdrsy'}, 12000);
+ * ```
  */
 export const getPendingItems = async (
   data: {
@@ -450,6 +482,10 @@ export const getPendingItems = async (
 /**
  * Gets moderated items
  * @returns serialized response
+ * @example Getting moderated items
+ * ```typescript
+ * const response = await getModeratedItems({limit: 10, offset: 'jhhtytdrsy'}, 12000);
+ * ```
  */
 export const getModeratedItems = async (
   data: {

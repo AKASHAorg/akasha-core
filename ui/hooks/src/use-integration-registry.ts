@@ -14,6 +14,12 @@ const getIntegrationInfo = async integrationId => {
 
 /**
  * Hook to get integration package info
+ * @example useGetIntegrationInfo hook
+ * ```typescript
+ * const integrationInfoQuery = useGetIntegrationInfo('adfgrdtorfd');
+ *
+ * const integrationInfo = integrationInfoQuery.data;
+ * ```
  */
 export function useGetIntegrationInfo(integrationId: string) {
   return useQuery([INTEGRATIONS_KEY, integrationId], () => getIntegrationInfo(integrationId), {
@@ -31,6 +37,12 @@ const getIntegrationsInfo = async (opt: { name?: string; id?: string }[]) => {
 
 /**
  * Hook to get package info for multiple integrations by name or id
+ * @example useGetIntegrationsInfo hook
+ * ```typescript
+ * const integrationsInfoQuery = useGetIntegrationsInfo([{ name: 'dgowrguwbkt' }, { name: 'asjgdiuwkrjbwr' }]);
+ *
+ * const integrationsInfo = integrationsInfoQuery.data;
+ * ```
  */
 export function useGetIntegrationsInfo(opt: { name?: string; id?: string }[]) {
   return useQuery([INTEGRATIONS_KEY, 'info'], () => getIntegrationsInfo(opt), {
@@ -48,6 +60,12 @@ const getIntegrationsCount = async () => {
 
 /**
  * Hook to get the number of published integrations
+ * @example useGetIntegrationsCount hook
+ * ```typescript
+ * const integrationsCountQuery = useGetIntegrationsCount();
+ *
+ * const integrationCount = integrationsCountQuery.data;
+ * ```
  */
 export function useGetIntegrationsCount() {
   return useQuery([INTEGRATIONS_KEY, 'total'], () => getIntegrationsCount(), {
@@ -64,6 +82,12 @@ const getIntegrationId = async (integrationName: string) => {
 
 /**
  * Hook to get integration id by its name
+ * @example useGetIntegrationId hook
+ * ```typescript
+ * const integrationIdQuery = useGetIntegrationId('awesome integration');
+ *
+ * const integrationId = integrationIdQuery.data;
+ * ```
  */
 export function useGetIntegrationId(integrationName: string) {
   return useQuery([INTEGRATIONS_KEY, integrationName], () => getIntegrationId(integrationName), {
@@ -80,6 +104,12 @@ const getIntegrationReleaseId = async (integrationName: string, version: string)
 
 /**
  * Hook to get integration release id by its name and version
+ * @example useGetIntegrationReleaseId hook
+ * ```typescript
+ * const integrationReleaseIdQuery = useGetIntegrationReleaseId('awesome integration', '0.1.1', true);
+ *
+ * const integrationReleaseId = integrationReleaseIdQuery.data;
+ * ```
  */
 export function useGetIntegrationReleaseId(
   integrationName: string,
@@ -112,6 +142,12 @@ const getAllIntegrationsIds = async (offset?: number) => {
 
 /**
  * Hook to get all the published integrations ids
+ * @example useGetAllIntegrationsIds hook
+ * ```typescript
+ * const availableIntegrationsQuery = useGetAllIntegrationsIds(true);
+ *
+ * const availableIntegrations = availableIntegrationsQuery.data
+ * ```
  */
 export function useGetAllIntegrationsIds(enabler = true, offset?: number) {
   return useQuery([INTEGRATIONS_KEY, 'ids'], () => getAllIntegrationsIds(offset), {
@@ -132,6 +168,12 @@ const getAllIntegrationReleaseIds = async (integrationName: string, offset?: num
 
 /**
  * Hook to get all the release ids for an integration
+ * @example useGetAllIntegrationReleaseIds hook
+ * ```typescript
+ * const releaseIdsQuery = useGetAllIntegrationReleaseIds('awesome integration');
+ *
+ * const releaseIds = releaseIdsQuery.data?.releaseIds
+ * ```
  */
 export function useGetAllIntegrationReleaseIds(integrationName: string, offset?: number) {
   return useQuery(
@@ -153,6 +195,12 @@ const getIntegrationReleaseInfo = async releaseId => {
 
 /**
  * Hook to get integration release info
+ * @example useGetIntegrationReleaseInfo hook
+ * ```typescript
+ * const latestReleaseInfoQuery = useGetIntegrationReleaseInfo('sjkdlhgskjdkfgjdf');
+ *
+ * const latestReleaseInfo = latestReleaseInfoQuery.data
+ * ```
  */
 export function useGetIntegrationReleaseInfo(releaseId: string) {
   return useQuery([RELEASES_KEY, releaseId], () => getIntegrationReleaseInfo(releaseId), {
@@ -175,6 +223,12 @@ const getIntegrationsReleaseInfo = async releaseIds => {
 
 /**
  * Hook to get multiple integrations release info
+ * @example useGetIntegrationsReleaseInfo hook
+ * ```typescript
+ * const releaseInfoQuery = useGetIntegrationsReleaseInfo(['lsdhlrgsruhes', 'dfjhkmndfbdmm', 'sjkdlhgskjdkfgjdf']);
+ *
+ * const releasesInfo = releaseInfoQuery.data
+ * ```
  */
 export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
   return useQuery([RELEASES_KEY, 'info'], () => getIntegrationsReleaseInfo(releaseIds), {
@@ -192,6 +246,14 @@ const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
 
 /**
  * Hook to get latest release info for integrations
+ * @example useGetLatestReleaseInfo hook
+ * ```typescript
+ * const latestReleaseInfoQuery = useGetLatestReleaseInfo([{ id: 'lsdhlrgsruhes' }, { id: 'dfjhkmndfbdmm' }, { id: 'sjkdlhgskjdkfgjdf' }]);
+ *
+ * const latestReleasesInfo = React.useMemo(() => {
+    return latestReleaseInfoQuery.data?.getLatestRelease;
+  }, [latestReleaseInfoQuery.data?.getLatestRelease]);
+ * ```
  */
 export function useGetLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
   return useQuery([RELEASES_KEY, 'latest'], () => getLatestReleaseInfo(opt), {

@@ -31,6 +31,15 @@ export interface UseAnalyticsActions {
 
 /**
  * Hook to handle analytics
+ * @example useAnalytics hook
+ * ```typescript
+ * const [analyticsActions] = useAnalytics();
+ *
+ * analyticsActions.trackEvent({
+      category: 'category',
+      action: 'action',
+    });
+ * ```
  */
 const useAnalytics = (): [UseAnalyticsActions] => {
   const analyticsBus = React.useContext<BehaviorSubject<AnalyticsEventData>>(AnalyticsContext);
