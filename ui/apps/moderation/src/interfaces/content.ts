@@ -1,5 +1,5 @@
 import singleSpa from 'single-spa';
-import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 import { ILocale } from '@akashaproject/design-system/lib/utils/time';
 import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';

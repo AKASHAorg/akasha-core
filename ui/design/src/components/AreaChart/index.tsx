@@ -86,7 +86,7 @@ const AreaChart: React.FC<IAreaChart> = props => {
           data={data}
           x={d => xScale(getX(d)) || 0}
           y={d => yScale(getY(d)) || 0}
-          stroke={'#4E71FF'}
+          stroke={'#8b9FFF'}
           strokeWidth={1}
           shapeRendering="geometricPrecision"
           pointerEvents="none"
@@ -100,7 +100,7 @@ const AreaChart: React.FC<IAreaChart> = props => {
             cy={yScale(getY(d))}
             strokeWidth={1}
             stroke={'#FFF'}
-            fill={'#4E71FF'}
+            fill={'#8b9FFF'}
             onClick={ev => handleTooltip(ev, d)}
             onTouchStart={ev => handleTooltip(ev, d)}
             cursor="pointer"

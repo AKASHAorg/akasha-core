@@ -11,7 +11,7 @@ const CheckSimple = (props: React.SVGProps<SVGSVGElement>) => (
   >
     <path
       d="M20.0844 6L8.0964 18L4.5 14.4036"
-      stroke="#4E71FF"
+      stroke="#8b9FFF"
       strokeLinecap="round"
       strokeLinejoin="round"
     />

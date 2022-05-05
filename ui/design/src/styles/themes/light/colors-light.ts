@@ -20,7 +20,8 @@ export interface IColorsLight extends IColors {
 const colors: IColorsLight = {
   blue: '#4E71FF',
   lightBlue: '#D3DAFA',
-  darkBlue: '#132540',
+  darkerBlue: '#132540',
+  darkBlue: '#425166',
   darkGrey: '#000C20',
   grey: '#949EB3',
   mediumGrey: '#B6BFD1',
@@ -34,16 +35,19 @@ const colors: IColorsLight = {
   white: '#FBFCFD', // lotion white
   red: '#FF4040',
   green: '#36B37E',
-  disabled: '#9ea0a5',
+  ultraMarine: '#4e71ff',
+  lightUltraMarine: '#8b9FFF',
   // define use cases for colors
-  primaryText: '#132540', // darkBlue
-  secondaryText: '#949EB3', // grey
+  disabled: '#9ea0a5',
+  primaryText: '#132540', // darkerBlue
+  secondaryText: '#425166', // darkBlue
   textBackground: '#E9EDFD', // light blue
   disabledText: '#9ea0a5', // disabled
+  titleText: '#47484A',
   subtitleText: '#595F6B', // cadetGrey
   errorText: '#FF4040', // red
   darkText: '#132540',
-  inputText: '#949EB3', // grey
+  inputText: '#425166', // darkBlue
   background: '#FFFFFF', // white
   overlay: 'rgba(0, 0, 0, 0.6)', // black, 60% opacity
   ultraLightBackground: '#FBFCFD', // ultralightGrey
