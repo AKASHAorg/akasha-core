@@ -1,5 +1,5 @@
 import getSDK from '@akashaproject/awf-sdk';
-import { mockSDK, genWorldConfig } from '@akashaproject/tests';
+import { mockSDK, genWorldConfig } from '@akashaproject/af-testing';
 import { map, mergeMap, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { getStateSlice, initState, LoaderState } from '../src/state';

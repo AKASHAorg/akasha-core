@@ -1,4 +1,4 @@
-import { genWorldConfig, mockSDK, genAppConfig } from '@akashaproject/tests';
+import { genWorldConfig, mockSDK, genAppConfig } from '@akashaproject/af-testing';
 import { TestScheduler } from 'rxjs/testing';
 import {
   extractExtensionsFromApps,
@@ -19,7 +19,7 @@ jest.mock('@akashaproject/awf-sdk', () => {
 
 jest.mock('single-spa', () => {
   const getSingleSpaInstanceMock =
-    jest.requireActual('@akashaproject/tests').getSingleSpaInstanceMock;
+    jest.requireActual('@akashaproject/af-testing').getSingleSpaInstanceMock;
 
   return getSingleSpaInstanceMock();
 });

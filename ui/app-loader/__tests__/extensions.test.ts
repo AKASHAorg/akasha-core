@@ -8,7 +8,7 @@ import {
   genMountPoints,
   genWorldConfig,
   mockSDK,
-} from '@akashaproject/tests';
+} from '@akashaproject/af-testing';
 
 import { pipelineEvents } from '../src/events';
 import { initState, LoaderState } from '../src/state';
@@ -20,7 +20,7 @@ jest.mock('@akashaproject/awf-sdk', () => {
 
 jest.mock('single-spa', () => {
   const orig = jest.requireActual('single-spa');
-  const mountRootParcelMock = jest.requireMock('@akashaproject/tests').mountRootParcelMock;
+  const mountRootParcelMock = jest.requireMock('@akashaproject/af-testing').mountRootParcelMock;
   return {
     ...orig,
     mountRootParcel: mountRootParcelMock,

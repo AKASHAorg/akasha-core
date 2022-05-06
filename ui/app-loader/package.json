@@ -31,7 +31,7 @@
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/sdk-typings": "*",
     "@akashaproject/ui-awf-typings": "*",
-    "@akashaproject/tests": "*",
+    "@akashaproject/af-testing": "*",
     "qs": "6.10.2",
     "single-spa": "5.9.3"
   },

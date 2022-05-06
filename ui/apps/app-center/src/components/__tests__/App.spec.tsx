@@ -1,7 +1,7 @@
 import * as React from 'react';
 import App from '../App';
 
-import { RenderResult, renderWithAllProviders, mockSDK, act } from '@akashaproject/tests';
+import { RenderResult, renderWithAllProviders, mockSDK, act } from '@akashaproject/af-testing';
 
 describe('<App /> component', () => {
   let renderResult: RenderResult;

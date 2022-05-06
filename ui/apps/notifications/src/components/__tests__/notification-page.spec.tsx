@@ -6,7 +6,7 @@ import {
   renderWithAllProviders,
   globalChannelMock,
   getSDKMocks,
-} from '@akashaproject/tests';
+} from '@akashaproject/af-testing';
 import { act } from 'react-dom/test-utils';
 
 describe('< NotificationsPage /> component', () => {

@@ -6,7 +6,7 @@ import {
   genPostData,
   renderWithAllProviders,
   act,
-} from '@akashaproject/tests';
+} from '@akashaproject/af-testing';
 
 import EntryCardRenderer from '../entry-renderer';
 

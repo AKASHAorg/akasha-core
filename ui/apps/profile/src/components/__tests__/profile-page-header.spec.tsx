@@ -9,7 +9,7 @@ import {
   genUser,
   genLoggedInState,
   genWorldConfig,
-} from '@akashaproject/tests';
+} from '@akashaproject/af-testing';
 
 const mockLocationValue = {
   pathname: '/profile',

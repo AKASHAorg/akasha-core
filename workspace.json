@@ -86,7 +86,7 @@
         }
       }
     },
-    "@akashaproject/tests": {
+    "@akashaproject/af-testing": {
       "root": "tests",
       "sourceRoot": "tests/src",
       "projectType": "application",
@@ -146,14 +146,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/mini-profile"
-          ],
+          "outputs": ["ui/build/widgets/mini-profile"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/mini-profile",
             "parallel": false
           }
@@ -173,14 +168,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/my-apps"
-          ],
+          "outputs": ["ui/build/widgets/my-apps"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/my-apps",
             "parallel": false
           }

@@ -7,7 +7,7 @@ import {
   globalChannelMock,
   mockSDK,
   act,
-} from '@akashaproject/tests';
+} from '@akashaproject/af-testing';
 
 describe('<TrendingWidgetComponent /> component', () => {
   let renderResult: RenderResult;
