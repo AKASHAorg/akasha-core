@@ -5,14 +5,13 @@ import {
   RenderResult,
   renderWithAllProviders,
   globalChannelMock,
-  getSDKMocks,
+  mockSDK,
   act,
-  genMockOp,
-} from '@akashaproject/ui-awf-testing-utils';
+} from '@akashaproject/tests';
 
 describe('<TrendingWidgetComponent /> component', () => {
   let renderResult: RenderResult;
-  const sdkMocks = getSDKMocks({});
+  const sdkMocks = mockSDK({});
   const BaseComponent = (
     <TrendingWidgetComponent
       logger={{}}

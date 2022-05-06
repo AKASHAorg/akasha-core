@@ -5,11 +5,10 @@ import {
   RenderResult,
   renderWithAllProviders,
   globalChannelMock,
-  getSDKMocks,
+  mockSDK,
   act,
   genUser,
-  genMockOp,
-} from '@akashaproject/ui-awf-testing-utils';
+} from '@akashaproject/tests';
 
 const mockLocationValue = {
   pathname: '/search/grhfsdfk',
@@ -34,7 +33,7 @@ jest.mock('react-router', () => ({
 
 describe('<SearchPage />', () => {
   let renderResult: RenderResult;
-  const sdkMocks = getSDKMocks({});
+  const sdkMocks = mockSDK({});
   const mockUser = genUser();
   const BaseComponent = (
     <SearchPage

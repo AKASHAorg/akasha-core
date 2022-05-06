@@ -1,4 +1,4 @@
-import { mockSDK } from '@akashaproject/ui-awf-testing-utils';
+import { mockSDK } from '@akashaproject/tests';
 import { map, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { pipelineEvents } from '../src/events';

@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@akashaproject/sdk-typings": "*",
-    "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaproject/tests": "*",
     "@akashaproject/ui-awf-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
