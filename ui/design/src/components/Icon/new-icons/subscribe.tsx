@@ -5,7 +5,7 @@ const Subscribe = (props: React.SVGProps<SVGSVGElement>) => (
     <g
       fill="none"
       fillRule="evenodd"
-      stroke="#949EB3"
+      stroke="#425166"
       strokeLinecap="round"
       strokeLinejoin="round"
       transform="translate(1 1)"

@@ -5,7 +5,7 @@ const Available = (props: React.SVGProps<SVGSVGElement>) => (
     <g
       fill="none"
       fillRule="evenodd"
-      stroke="#4E71FF"
+      stroke="#8b9FFF"
       strokeLinecap="round"
       strokeLinejoin="round"
       transform="translate(1 .6)"

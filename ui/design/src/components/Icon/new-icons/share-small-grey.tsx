@@ -3,7 +3,7 @@ import React from 'react';
 const ShareSmallGrey = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" {...props}>
     <g fill="none" fillRule="evenodd" transform="translate(-546 -2758)">
-      <g stroke="#949EB3" transform="translate(547.5 2760)">
+      <g stroke="#425166" transform="translate(547.5 2760)">
         <circle cx="10.5" cy="2" r="2" />
         <circle cx="10.5" cy="10" r="2" />
         <circle cx="2.5" cy="6" r="2" />

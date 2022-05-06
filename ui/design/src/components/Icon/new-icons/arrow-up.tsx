@@ -9,8 +9,8 @@ const ArrowUp = (props: React.SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <path d="M8 14V2.98175" stroke="#4E71FF" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M4 6L8 2L12 6" stroke="#4E71FF" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 14V2.98175" stroke="#8b9FFF" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M4 6L8 2L12 6" stroke="#8b9FFF" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 

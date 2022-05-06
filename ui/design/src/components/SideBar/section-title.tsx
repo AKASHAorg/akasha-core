@@ -19,11 +19,11 @@ const SectionTitle: React.FC<ISectionTitleProps> = props => {
       margin={{ bottom: 'xsmall' }}
       pad={{ top: 'medium', horizontal: 'medium' }}
     >
-      <Icon type="app" plain={true} />
+      <Icon type="app" />
       <Box margin={{ left: 'medium' }}>
         <Text
           weight={700}
-          color="secondaryText"
+          color="titleText"
           size="large"
           style={{ padding: '0rem', textTransform: 'uppercase' }}
         >
