@@ -130,7 +130,7 @@
     "sdk",
     "ui/hooks",
     "ui/design",
-    "ui/testing-utils",
+    "tests",
     "ui/hooks",
     "ui/lib/feed",
     "ui/widgets/analytics",

@@ -1,14 +1,45 @@
 {
   "name": "@akashaproject/tests",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.1.0",
+  "description": "AF testing suite",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "main": "lib/index.js",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
+    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
+    "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)",
+    "Damir Sabolic <damir.sabolic@akasha.world> (https://github.com/PrimarchAlpharius)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=5"
+  },
   "scripts": {
     "ethereum-world-local": "cypress open --project ethereum-world --env configFile=local --browser chrome",
     "ethereum-world-prod": "cypress open --project ethereum-world --env configFile=production",
-    "cy:e2e:chrome:record": "cypress run --project ethereum-world --env configFile=staging --record --browser chrome"
+    "cy:e2e:chrome:record": "cypress run --project ethereum-world --env configFile=staging --record --browser chrome",
+    "build": "tsc --build",
+    "tsc": "tsc --build",
+    "prepare": "yarn run tsc",
+    "pretest": "tsc -m commonjs",
+    "test": "jest",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "devDependencies": {
     "cypress": "9.2.1",
-    "fs-extra": "10.0.0"
+    "fs-extra": "10.0.0",
+    "@akashaproject/design-system": "*",
+    "@akashaproject/ui-awf-typings": "*",
+    "@types/faker": "5.5.8",
+    "@types/react-router-dom": "5.1.8",
+    "faker": "5.5.3",
+    "react-i18next": "11.12.0",
+    "react-router-dom": "5.3.0"
   }
 }

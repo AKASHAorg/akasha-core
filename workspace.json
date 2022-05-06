@@ -86,16 +86,16 @@
         }
       }
     },
-    "@akashaproject/ui-awf-testing-utils": {
-      "root": "ui/testing-utils",
-      "sourceRoot": "ui/testing-utils/src",
+    "@akashaproject/tests": {
+      "root": "tests",
+      "sourceRoot": "tests/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
             "commands": ["yarn build"],
-            "cwd": "ui/testing-utils",
+            "cwd": "tests",
             "parallel": false
           }
         }
