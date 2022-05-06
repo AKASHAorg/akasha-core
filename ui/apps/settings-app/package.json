@@ -41,7 +41,7 @@
     "@akashaproject/awf-sdk": "*",
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaproject/af-testing": "*",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
     "i18next-chained-backend": "3.0.2",

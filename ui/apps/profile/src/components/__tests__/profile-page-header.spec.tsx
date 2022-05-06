@@ -9,7 +9,7 @@ import {
   genUser,
   genLoggedInState,
   genWorldConfig,
-} from '@akashaproject/ui-awf-testing-utils';
+} from '@akashaproject/af-testing';
 
 const mockLocationValue = {
   pathname: '/profile',

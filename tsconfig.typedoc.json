@@ -3,7 +3,7 @@
     { "path":  "./sdk/typings"},
     { "path": "./ui/typings" },
     { "path": "./ui/design" },
-    { "path": "./ui/testing-utils"},
+    { "path": "./tests"},
     { "path": "./ui/hooks" },
     { "path": "./ui/widgets/feed" },
     { "path": "./ui/widgets/layout" },

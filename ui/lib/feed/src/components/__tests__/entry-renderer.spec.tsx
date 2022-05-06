@@ -1,14 +1,14 @@
 import * as React from 'react';
-import EntryCardRenderer from '../entry-renderer';
-
+import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
 import {
   RenderResult,
   genEthAddress,
   genPostData,
   renderWithAllProviders,
   act,
-} from '@akashaproject/ui-awf-testing-utils';
-import { ItemTypes } from '../App';
+} from '@akashaproject/af-testing';
+
+import EntryCardRenderer from '../entry-renderer';
 
 describe('<EntryCardRenderer /> component', () => {
   let renderResult: RenderResult;
