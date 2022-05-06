@@ -46,7 +46,7 @@
     "test:widgets": "nx run-many --target=test --projects=@akashaproject/ui-widget-analytics,@akashaproject/ui-widget-layout,@akashaproject/ui-widget-mini-profile,@akashaproject/ui-widget-my-apps,@akashaproject/ui-widget-sidebar,@akashaproject/ui-widget-topbar,@akashaproject/ui-widget-trending",
     "test:ui": "lerna run test --scope @akashaproject/ui-* --scope @akashaproject/design-* --scope @akashaproject/app-* --stream",
     "test:app-loader": "nx run @akashaproject/ui-app-loader:test",
-    "test:all": "yarn test:design-system && yarn test:app-loader",
+    "test:all": "yarn test:design-system",
     "dev:server": "nx run-many --target=dev:server --projects=@akashaproject/hub-api",
     "update:deps": "lerna exec -- npx --package npm-check-updates ncu -u",
     "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --hideInPageTOC true --entryPointStrategy packages 'sdk/typings' 'sdk' 'ui/*' 'ui/widgets/*'",
