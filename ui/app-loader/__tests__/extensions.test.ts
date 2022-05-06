@@ -1,15 +1,18 @@
-import { genWorldConfig, mockSDK } from '@akashaproject/ui-awf-testing-utils';
-import { initState, LoaderState } from '../src/state';
 import { map, mergeMap, Observable, ReplaySubject, of, toArray, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
-import { mountMatchingExtensionParcels } from '../src/extensions';
+
+import getSDK from '@akashaproject/awf-sdk';
 import {
   genExtConfigs,
   genExtConfigsByMountPoint,
   genMountPoints,
-} from '@akashaproject/ui-awf-testing-utils';
-import getSDK from '@akashaproject/awf-sdk';
+  genWorldConfig,
+  mockSDK,
+} from '@akashaproject/af-testing';
+
 import { pipelineEvents } from '../src/events';
+import { initState, LoaderState } from '../src/state';
+import { mountMatchingExtensionParcels } from '../src/extensions';
 
 jest.mock('@akashaproject/awf-sdk', () => {
   return () => mockSDK();
@@ -17,9 +20,7 @@ jest.mock('@akashaproject/awf-sdk', () => {
 
 jest.mock('single-spa', () => {
   const orig = jest.requireActual('single-spa');
-  const mountRootParcelMock = jest.requireMock(
-    '@akashaproject/ui-awf-testing-utils',
-  ).mountRootParcelMock;
+  const mountRootParcelMock = jest.requireMock('@akashaproject/af-testing').mountRootParcelMock;
   return {
     ...orig,
     mountRootParcel: mountRootParcelMock,

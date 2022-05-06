@@ -40,7 +40,7 @@
   "dependencies": {
     "@akashaproject/design-system": "*",
     "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaproject/af-testing": "*",
     "@akashaproject/awf-sdk": "*",
     "moment": "^2.29.1",
     "react-i18next": "11.12.0",
