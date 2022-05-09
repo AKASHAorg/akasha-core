@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_akashaproject_docs_website=self.webpackChunk_akashaproject_docs_website||[]).push([[826],{5745:e=>{e.exports=JSON.parse('{"plugin":{"name":"docusaurus-plugin-content-pages","id":"default"}}')}}]);
