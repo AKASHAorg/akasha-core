@@ -39,3 +39,4 @@ export * from './data-generator';
 export * from './mocks/sdk';
 export * from './mocks/operator';
 export * from './mocks/single-spa';
+export * from './mocks/uiEvents';
