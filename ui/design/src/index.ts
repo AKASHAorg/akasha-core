@@ -70,6 +70,8 @@ import SwitchCard, {
 import Tag from './components/Tag';
 import MdCard from './components/MdCard';
 
+import { MyFeedCard } from './components/MyFeedCard';
+
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
 import AppsWidgetCard from './components/AppsWidgetCard';
 import CookieWidgetCard from './components/CookieCard';
@@ -166,6 +168,8 @@ import { StyledSelectBox } from './components/EntryCard/styled-entry-box';
 import WalletRequestStep from './components/WalletRequestStep';
 import WelcomeCard from './components/WelcomeCard';
 import { StartCard } from './components/StartCard';
+import { OnboardingStartCard } from './components/OnboardingStartCard';
+import { OnboardingSuggestionsCard } from './components/OnboardingSuggestionsCard';
 
 /* Utilities (these are not components) */
 import { formatImageSrc } from './utils/image-utils';
@@ -331,6 +335,9 @@ const exported = {
   SearchBar,
   TAB_TOOLBAR_TYPE,
   StartCard,
+  OnboardingStartCard,
+  OnboardingSuggestionsCard,
+  MyFeedCard,
 };
 
 export default exported;

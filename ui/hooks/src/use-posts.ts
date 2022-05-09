@@ -13,6 +13,7 @@ import { PROFILE_KEY } from './use-profile';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
+export const ENTRIES_CUSTOM_KEY = 'EntriesCustomFeed';
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
 export const CREATE_POST_MUTATION_KEY = 'CreatePost';
@@ -81,7 +82,7 @@ const getCustomFeedPosts = async (limit: number, offset?: number) => {
  */
 export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?: string) {
   return useInfiniteQuery(
-    ENTRIES_KEY,
+    ENTRIES_CUSTOM_KEY,
     async ({ pageParam = offset }) => getCustomFeedPosts(limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */

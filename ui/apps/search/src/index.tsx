@@ -1,6 +1,6 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
-import { rootRoute } from './routes';
+import routes, { ONBOARDING, RESULTS, rootRoute } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -28,5 +28,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   routes: {
     rootRoute,
+    defaultRoute: routes[RESULTS],
+    [RESULTS]: routes[RESULTS],
+    [ONBOARDING]: routes[ONBOARDING],
   },
 });

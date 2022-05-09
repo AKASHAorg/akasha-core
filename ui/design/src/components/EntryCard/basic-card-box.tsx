@@ -25,6 +25,7 @@ export interface IBasicCardBox extends BoxProps {
   noBorder?: boolean;
   noBorderRadius?: boolean;
   bottomBorderOnly?: boolean;
+  accentBorderTop?: boolean;
   isSelected?: boolean;
   onClick?: BoxProps['onClick'];
 }
@@ -44,6 +45,7 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
   noBorder,
   noBorderRadius,
   bottomBorderOnly,
+  accentBorderTop,
   isSelected,
   onClick,
   ...props
@@ -87,6 +89,8 @@ const BasicCardBox: React.FC<IBasicCardBox> = ({
         ? false
         : bottomBorderOnly
         ? { color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }
+        : accentBorderTop
+        ? { color: 'accent', size: 'xsmall', style: 'solid', side: 'top' }
         : {
             color: 'border',
             size: 'xsmall',

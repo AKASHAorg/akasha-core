@@ -7,12 +7,12 @@ import { RootComponentProps } from '@akashaproject/ui-awf-typings';
 import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
 
 import FeedPage from './feed-page/feed-page';
-import CustomFeedPage from './custom-feed-page/custom-feed-page';
+import MyFeedPage from './my-feed-page/my-feed-page';
 import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 
-import routes, { FEED, CUSTOM_FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
+import routes, { FEED, MY_FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
 import ReplyPage from './post-page/reply-page';
 
 const { Box } = DS;
@@ -39,8 +39,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               showLoginModal={showLoginModal}
             />
           </Route>
-          <Route path={routes[CUSTOM_FEED]}>
-            <CustomFeedPage
+          <Route path={routes[MY_FEED]}>
+            <MyFeedPage
               {...props}
               loggedProfileData={loggedProfileData}
               loginState={loginQuery.data}
