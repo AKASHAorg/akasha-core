@@ -13,6 +13,7 @@ import { PROFILE_KEY } from './use-profile';
 
 export const ENTRY_KEY = 'Entry';
 export const ENTRIES_KEY = 'Entries';
+export const ENTRIES_CUSTOM_KEY = 'EntriesCustomFeed';
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
 export const CREATE_POST_MUTATION_KEY = 'CreatePost';
@@ -53,6 +54,41 @@ export function useInfinitePosts(limit: number, offset?: string) {
       getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
+      keepPreviousData: true,
+      onError: (err: Error) => logError('usePosts.getPosts', err),
+    },
+  );
+}
+
+const getCustomFeedPosts = async (limit: number, offset?: number) => {
+  const sdk = getSDK();
+  const res = await lastValueFrom(
+    sdk.api.entries.getFeedEntries({
+      limit: limit,
+      offset: offset,
+    }),
+  );
+  return {
+    ...res.data.getCustomFeed,
+    results: res.data.getCustomFeed.results.map(post => {
+      return post._id;
+    }),
+  };
+};
+
+/**
+ * Hook to get posts for personalised user feed from followed profiles and subscribed tags,
+ * sorted chronologically
+ */
+export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?: string) {
+  return useInfiniteQuery(
+    ENTRIES_CUSTOM_KEY,
+    async ({ pageParam = offset }) => getCustomFeedPosts(limit, pageParam),
+    {
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
+      //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
+      enabled: !!(offset || limit) && enabler,
       keepPreviousData: true,
       onError: (err: Error) => logError('usePosts.getPosts', err),
     },

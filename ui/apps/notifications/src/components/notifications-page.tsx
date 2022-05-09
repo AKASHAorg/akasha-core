@@ -50,7 +50,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
               heading={t("You won't miss a thing 🔔")}
               description={t("Here you'll receive alerts from your apps.")}
               image="images/notification.png"
-              loggedIn={!!isLoggedIn}
+              showMainArea={!isLoggedIn}
             />
             {notifReq.isFetching && !notificationsState?.length && (
               <Box pad="large">

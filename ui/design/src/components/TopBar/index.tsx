@@ -388,6 +388,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         <Route path="/auth-app/*">
           <TopbarWrapper
             align="center"
+            justify="center"
             pad={{ vertical: 'small', horizontal: 'medium' }}
             fill="horizontal"
             className={className}
@@ -403,6 +404,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         <Route>
           <TopbarWrapper
             align="center"
+            justify="center"
             pad={{ vertical: 'small', horizontal: 'medium' }}
             fill="horizontal"
             className={className}
