@@ -15,7 +15,7 @@ export interface IUseIsValidTokenProps {
 
 const checkIsValidToken = async (inviteToken: string) => {
   const sdk = getSDK();
-  await lastValueFrom(sdk.api.auth.validateInvite(inviteToken));
+  return lastValueFrom(sdk.api.auth.validateInvite(inviteToken));
 };
 
 /* A hook to validate invitation token */
