@@ -1,16 +1,16 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import {
   useAnalytics,
   useGetLogin,
   useProfileUpdate,
   useUsernameValidation,
-} from '@akashaproject/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+} from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 import { StyledButton, StyledBox } from './styles';
 import routes, { WELCOME } from '../../../routes';
-import { NavigateToParams } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams } from '@akashaorg/ui-awf-typings';
 
 const { Box, Text, styled, Icon, LinkInput } = DS;
 
@@ -148,7 +148,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
       action: 'Username Setup',
     });
     navigateTo?.({
-      appName: '@akashaproject/app-auth-ewa',
+      appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: navRoutes => navRoutes[WELCOME],
     });
   };

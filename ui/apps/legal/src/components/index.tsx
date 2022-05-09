@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import App from './App';
-import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '../../../../typings/lib';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 
 const { ErrorLoader } = DS;
 

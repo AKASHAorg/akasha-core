@@ -1,15 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
+import DS from '@akashaorg/design-system';
+import { EthProviders } from '@akashaorg/awf-sdk/typings/lib/interfaces';
 import {
   useIsValidToken,
   useConnectProvider,
   useInjectedProvider,
   useRequiredNetworkName,
-} from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+} from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 import { StepOne } from './steps/StepOne';
 import { StepTwo } from './steps/StepTwo';
@@ -83,7 +83,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   const handleNextStep = () => {
     if (activeIndex === 3) {
       navigateTo?.({
-        appName: '@akashaproject/app-auth-ewa',
+        appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
       });
     }

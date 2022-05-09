@@ -1,26 +1,26 @@
 import { map, mergeMap, Observable, ReplaySubject, of, toArray, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import {
   genExtConfigs,
   genExtConfigsByMountPoint,
   genMountPoints,
   genWorldConfig,
   mockSDK,
-} from '@akashaproject/af-testing';
+} from '@akashaorg/af-testing';
 
 import { pipelineEvents } from '../src/events';
 import { initState, LoaderState } from '../src/state';
 import { mountMatchingExtensionParcels } from '../src/extensions';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK();
 });
 
 jest.mock('single-spa', () => {
   const orig = jest.requireActual('single-spa');
-  const mountRootParcelMock = jest.requireMock('@akashaproject/af-testing').mountRootParcelMock;
+  const mountRootParcelMock = jest.requireMock('@akashaorg/af-testing').mountRootParcelMock;
   return {
     ...orig,
     mountRootParcel: mountRootParcelMock,

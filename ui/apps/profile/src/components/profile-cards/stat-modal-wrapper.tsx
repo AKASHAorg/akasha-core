@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
+import DS from '@akashaorg/design-system';
+import { IProfileData } from '@akashaorg/ui-awf-typings/src/profile';
 import {
   useFollowers,
   useFollowing,
@@ -14,8 +14,8 @@ import {
   useIsFollowingMultiple,
   useUnfollow,
   getMediaUrl,
-} from '@akashaproject/ui-awf-hooks';
-import { NavigateToParams } from '@akashaproject/ui-awf-typings';
+} from '@akashaorg/ui-awf-hooks';
+import { NavigateToParams } from '@akashaorg/ui-awf-typings';
 
 interface IStatModalWrapper {
   loginState: LoginState;
@@ -121,7 +121,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     // close current modal before navigation
     handleClose();
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${tagName}`,
     });
   };
@@ -138,7 +138,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const handleProfileClick = (pubKey: string) => {
     handleClose();
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };

@@ -1,17 +1,17 @@
 import React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
   EventTypes,
   ItemTypes,
   ModalNavigationOptions,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { useIsFollowingMultiple } from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
+import { useIsFollowingMultiple } from '@akashaorg/ui-awf-hooks';
 
 const { EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
@@ -63,7 +63,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const handleClickAvatar = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.pubKey}`,
     });
   };

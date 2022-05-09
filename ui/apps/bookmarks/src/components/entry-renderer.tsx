@@ -1,5 +1,5 @@
 import React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
   useIsFollowingMultiple,
@@ -7,12 +7,12 @@ import {
   useComment,
   mapEntry,
   LoginState,
-} from '@akashaproject/ui-awf-hooks';
-import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+} from '@akashaorg/ui-awf-hooks';
+import { EventTypes, ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
 
@@ -73,14 +73,14 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const handleClickAvatar = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemData?.author.pubKey}`,
     });
   };
 
   const handleContentClick = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemData.entryId}`,
     });
   };

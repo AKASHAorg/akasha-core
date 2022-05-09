@@ -1,4 +1,4 @@
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import React from 'react';
 import { I18nextProvider, Translation } from 'react-i18next';
 import { RootComponentProps } from '../../../../typings/lib';
@@ -100,7 +100,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                       style={{ cursor: 'pointer' }}
                       onClick={() =>
                         props.plugins?.routing?.navigateTo?.({
-                          appName: '@akashaproject/app-settings-ewa',
+                          appName: '@akashaorg/app-settings-ewa',
                           getNavigationUrl: navRoutes => navRoutes.Home,
                         })
                       }

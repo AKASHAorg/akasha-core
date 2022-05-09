@@ -4,6 +4,7 @@ import {
   //pageCache,
   imageCache,
   staticResourceCache,
+  offlineFallback,
 } from 'workbox-recipes';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -17,7 +18,7 @@ precacheAndRoute(self.__WB_MANIFEST || []);
 // pageCache({ networkTimeoutSeconds: 6 });
 staticResourceCache();
 imageCache({ maxEntries: 300 });
-
+offlineFallback({ pageFallback: '/img/offline-page.png', imageFallback: '/img/offline-img.png' });
 setCacheNameDetails({
   prefix: 'ewa',
   suffix: 'v0.1.2',

@@ -10,8 +10,8 @@ import DuplexButton from '../DuplexButton';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
 import SubtitleTextIcon from '../SubtitleTextIcon';
-import { ReleaseInfo } from '@akashaproject/ui-awf-typings';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ReleaseInfo } from '@akashaorg/ui-awf-typings';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import Version from './version';
 

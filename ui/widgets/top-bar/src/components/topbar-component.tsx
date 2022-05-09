@@ -2,14 +2,14 @@ import * as React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import {
   EventTypes,
   MenuItemAreaType,
   UIEventData,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useGetLogin, useGetProfile, useLogout } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { useGetLogin, useGetProfile, useLogout } from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 const { Topbar } = DS;
 
@@ -97,7 +97,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
      * in the topbar should be moved to extension points
      */
     navigateTo?.({
-      appName: '@akashaproject/app-auth-ewa',
+      appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => {
         return `${appRoutes.SignIn}?${new URLSearchParams({
           redirectTo: location.pathname,
@@ -116,7 +116,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   const handleSignUpClick = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-auth-ewa',
+      appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => appRoutes.SignUp,
     });
   };

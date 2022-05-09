@@ -5,11 +5,11 @@
 ## Usage
 
 ```tsx
-const { default: startLoader } = await System.import('@akashaproject/ui-app-loader');
+const { default: startLoader } = await System.import('@akashaorg/ui-app-loader');
 
 startLoader({
   defaultWidgets: [
-    '@akashaproject/ui-widget-my-apps',
+    '@akashaorg/ui-widget-my-apps',
   ]
 });
 

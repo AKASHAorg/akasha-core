@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import Icon from '../Icon';
 import IconLink from '../IconLink';

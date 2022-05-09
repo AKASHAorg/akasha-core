@@ -1,9 +1,9 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
-import { TYPES } from '@akashaproject/sdk-typings';
+import { TYPES } from '@akashaorg/sdk-typings';
 import Logging from '../logging';
 import {
   AddComment,
@@ -12,15 +12,15 @@ import {
   EditComment,
   RemoveComment,
 } from './comments.graphql';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { concatAll, map, tap } from 'rxjs/operators';
-import { AWF_IComments } from '@akashaproject/sdk-typings/lib/interfaces/posts';
-import { COMMENTS_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import { AWF_IComments } from '@akashaorg/sdk-typings/lib/interfaces/posts';
+import { COMMENTS_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 import EventBus from '../common/event-bus';
 import {
   Comment_Response,
   Comments_Response,
-} from '@akashaproject/sdk-typings/lib/interfaces/responses';
+} from '@akashaorg/sdk-typings/lib/interfaces/responses';
 
 @injectable()
 class AWF_Comments implements AWF_IComments {

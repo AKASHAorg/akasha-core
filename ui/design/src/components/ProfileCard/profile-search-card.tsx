@@ -9,7 +9,7 @@ import Avatar from '../Avatar';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import { truncateMiddle } from '../../utils/string-utils';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface IProfileSearchCard {
   className?: string;

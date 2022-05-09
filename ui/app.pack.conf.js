@@ -1,13 +1,13 @@
 module.exports = {
   externals: [
     {
-      '@akashaproject/design-system': '@akashaproject/design-system',
+      '@akashaorg/design-system': '@akashaorg/design-system',
     },
     {
-      '@akashaproject/awf-sdk': '@akashaproject/awf-sdk',
+      '@akashaorg/awf-sdk': '@akashaorg/awf-sdk',
     },
     {
-      '@akashaproject/ui-awf-hooks': '@akashaproject/ui-awf-hooks',
+      '@akashaorg/ui-awf-hooks': '@akashaorg/ui-awf-hooks',
     },
     function ({ request }, callback) {
       if (/^rxjs\/operators$/.test(request)) {

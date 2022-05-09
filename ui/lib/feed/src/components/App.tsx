@@ -1,13 +1,13 @@
 import React from 'react';
 import EntryFeed from './entry-feed';
-import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 import { BrowserRouter } from 'react-router-dom';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { LoginState } from '@akashaproject/ui-awf-hooks/lib/use-login';
-import { TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
+import { TrackEventData } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 export interface EntryListPage {
   results: string[];

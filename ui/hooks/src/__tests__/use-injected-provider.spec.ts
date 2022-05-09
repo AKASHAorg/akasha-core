@@ -1,10 +1,10 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
 import { useInjectedProvider, useRequiredNetworkName } from '../use-injected-provider';
 import { of as mockOf } from 'rxjs';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       common: {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppTypes } from '@akashaproject/ui-awf-typings';
+import { AppTypes } from '@akashaorg/ui-awf-typings';
 
 import { AvatarProps } from '../Avatar';
 import AvatarImage from '../Avatar/avatar-image';

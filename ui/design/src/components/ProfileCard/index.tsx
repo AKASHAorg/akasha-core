@@ -11,7 +11,7 @@ import {
   ProfileCardName,
   ProfileCardEthereumId,
 } from './profile-card-fields';
-import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
+import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import styled from 'styled-components';
 import { truncateMiddle } from '../../utils/string-utils';
@@ -21,7 +21,7 @@ import {
   IProfileData,
   ProfileProviders,
   UsernameTypes,
-} from '@akashaproject/ui-awf-typings/lib/profile';
+} from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface IProfileProvidersData {
   currentProviders: {

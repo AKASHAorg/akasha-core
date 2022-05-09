@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { AppTypes, LogoTypeSource } from '@akashaproject/ui-awf-typings';
-import { IMenuItem, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { AppTypes, LogoTypeSource } from '@akashaorg/ui-awf-typings';
+import { IMenuItem, MenuItemAreaType } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import { AppIcon } from '../Icon/app-icon';
 import AppAvatar from '../AppAvatar';
@@ -47,7 +47,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
         onClick={onClick}
         appImg={menuItem.logo}
         accentColor={accentColor}
-        stackedIcon={menuItem.name === '@akashaproject/app-notifications'}
+        stackedIcon={menuItem.name === '@akashaorg/app-notifications'}
         hasNewNotifs={hasNewNotifs}
         placeholderIconType="app"
         backgroundColor="transparent"

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import BookmarksPage from '../bookmarks-page';
-import { RenderResult, renderWithAllProviders, act } from '@akashaproject/af-testing';
+import { RenderResult, renderWithAllProviders, act } from '@akashaorg/af-testing';
 
 describe('<BookmarksPage /> component', () => {
   let renderResult: RenderResult;

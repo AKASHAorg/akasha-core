@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/af-testing",
+  "name": "@akashaorg/af-testing",
   "version": "0.1.0",
   "description": "AF testing suite",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "engines": {
     "node": ">=10",
@@ -34,8 +34,8 @@
   "devDependencies": {
     "cypress": "9.2.1",
     "fs-extra": "10.0.0",
-    "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/faker": "5.5.8",
     "@types/react-router-dom": "5.1.8",
     "faker": "5.5.3",

@@ -6,7 +6,7 @@
 // renderWithAllProviders,
 // globalChannelMock,
 // act,
-// } from '@akashaproject/af-testing';
+// } from '@akashaorg/af-testing';
 // import i18next from 'i18next';
 
 describe('<SidebarWidget />', () => {

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import DS from '@akashaproject/design-system';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import { rootRoute } from '../routes';
-import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { BrowserRouter as Router, useRouteMatch } from 'react-router-dom';
 
 const { Icon, styled, css } = DS;

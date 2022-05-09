@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { of as mockOf } from 'rxjs';
 import {
   mockCreateCommentInput,
@@ -15,7 +15,7 @@ import { mockCheckModerationStatus } from '../__mocks__/moderation';
 import { ENTRY_KEY } from '../use-posts';
 import { createWrapper } from './utils';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       comments: {

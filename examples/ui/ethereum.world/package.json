@@ -1,11 +1,11 @@
 {
-  "name": "@akashaproject/ethereum.world",
+  "name": "@akashaorg/ethereum.world",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "@akashaproject/awf-sdk": "*",
-    "@akashaproject/ui-app-loader": "*",
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/awf-sdk": "*",
+    "@akashaorg/ui-app-loader": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9"
   },

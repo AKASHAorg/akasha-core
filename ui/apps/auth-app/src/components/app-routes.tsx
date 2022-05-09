@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 
 import routes, { rootRoute, SIGN_IN, SIGN_UP, SIGN_UP_USERNAME, WELCOME } from '../routes';
 import SignUp from './sign-up';

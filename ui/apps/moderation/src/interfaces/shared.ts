@@ -1,4 +1,4 @@
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 export interface ISharedModerationProps extends RootComponentProps {
   slotId?: string;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import TopbarComponent from '../topbar-component';
 
-import { RenderResult, renderWithAllProviders, act } from '@akashaproject/af-testing';
+import { RenderResult, renderWithAllProviders, act } from '@akashaorg/af-testing';
 import { BehaviorSubject } from 'rxjs';
 
 const mockLocationValue = {

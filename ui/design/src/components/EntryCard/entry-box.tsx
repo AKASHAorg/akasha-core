@@ -19,17 +19,17 @@ import ReadOnlyEditor from '../ReadOnlyEditor';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { EntryImageGallery } from './entry-image-gallery';
 import { ImageObject } from '../Editor/image-gallery';
 import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
 import { editorDefaultValue } from '../Editor/initialValue';
 import isEqual from 'lodash.isequal';
-import { NavigateToParams } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams } from '@akashaorg/ui-awf-typings';
 
 export interface IContentClickDetails {
   authorEthAddress: string;

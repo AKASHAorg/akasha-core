@@ -3,7 +3,7 @@ import {
   Comment_Response,
   Post_Response,
   LinkPreview_Response,
-} from '@akashaproject/sdk-typings/lib/interfaces/responses';
+} from '@akashaorg/sdk-typings/lib/interfaces/responses';
 import { IProfileData } from './profile';
 
 export interface PostResponse extends Post_Response {

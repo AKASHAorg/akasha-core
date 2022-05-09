@@ -5,12 +5,12 @@ import {
   useGetBookmarks,
   useSaveBookmark,
 } from '../use-bookmarks';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { mockGetBookmarksObservable, mockQueryData } from '../__mocks__/bookmarks';
 import { of as mockOf } from 'rxjs';
 import { createWrapper } from './utils';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       settings: { get: () => mockGetBookmarksObservable, set: () => mockOf({ data: 3 }) },

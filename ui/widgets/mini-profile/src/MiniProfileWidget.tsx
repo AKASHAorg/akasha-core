@@ -2,9 +2,9 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import { BrowserRouter as Router, useRouteMatch, Route } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import {
   useGetEntryAuthor,
   useIsFollowingMultiple,
@@ -13,7 +13,7 @@ import {
   useGetLogin,
   withProviders,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 
 const { Box, ProfileMiniCard, ErrorLoader } = DS;
 
@@ -47,7 +47,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
 
   const handleProfileClick = (pubKey: string) => {
     props.plugins?.routing?.navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };

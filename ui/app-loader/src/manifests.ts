@@ -1,6 +1,6 @@
-import getSDK from '@akashaproject/awf-sdk';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { BaseIntegrationInfo, ILoaderConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import getSDK from '@akashaorg/awf-sdk';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { BaseIntegrationInfo, ILoaderConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   Observable,
   mergeMap,

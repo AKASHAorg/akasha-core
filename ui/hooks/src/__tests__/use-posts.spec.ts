@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { of as mockOf } from 'rxjs';
 import * as moderation from '../use-moderation';
 import { mockCheckModerationStatus } from '../__mocks__/moderation';
@@ -8,7 +8,7 @@ import { useInfinitePosts, useInfinitePostsByAuthor, usePost } from '../use-post
 import { mockUser } from '../__mocks__/user';
 import { mockEntriesByAuthor, mockEntry, mockGetEntries } from '../__mocks__/posts';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       auth: {

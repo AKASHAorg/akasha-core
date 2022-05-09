@@ -1,8 +1,8 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard, Spinner } = DS;
 
@@ -24,14 +24,14 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
 
   const handleAvatarClick = (profilePubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profilePubKey}`,
     });
   };
 
   const handlePostClick = (entryId: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}`,
     });
   };

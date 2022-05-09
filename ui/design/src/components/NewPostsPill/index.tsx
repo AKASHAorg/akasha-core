@@ -3,7 +3,7 @@ import { Box, Text } from 'grommet';
 
 import Icon from '../Icon';
 import StackedAvatar from '../StackedAvatar';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface INewPostsPill {
   infoLabel?: string;

@@ -1,5 +1,5 @@
-import DS from '@akashaproject/design-system';
-import { DefaultTheme } from '@akashaproject/design-system/lib/styles/themes/interfaces';
+import DS from '@akashaorg/design-system';
+import { DefaultTheme } from '@akashaorg/design-system/lib/styles/themes/interfaces';
 const { createGlobalStyle, css } = DS;
 
 export const GlobalStyle = createGlobalStyle<{
