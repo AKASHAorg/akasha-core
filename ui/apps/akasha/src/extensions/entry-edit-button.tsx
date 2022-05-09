@@ -1,11 +1,11 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
-import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { MenuItemButton, ErrorLoader, ModalContainer } = DS;
 

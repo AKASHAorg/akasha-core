@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/ui-app-loader",
+  "name": "@akashaorg/ui-app-loader",
   "version": "0.1.0",
   "description": "App loader for AKASHA web",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-sdk-js.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "main": "lib/index.js",
   "engines": {
@@ -28,10 +28,10 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaproject/awf-sdk": "*",
-    "@akashaproject/sdk-typings": "*",
-    "@akashaproject/ui-awf-typings": "*",
-    "@akashaproject/af-testing": "*",
+    "@akashaorg/awf-sdk": "*",
+    "@akashaorg/sdk-typings": "*",
+    "@akashaorg/ui-awf-typings": "*",
+    "@akashaorg/af-testing": "*",
     "qs": "6.10.2",
     "single-spa": "5.9.3"
   },

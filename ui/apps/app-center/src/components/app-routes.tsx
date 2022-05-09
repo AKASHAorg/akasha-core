@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
-import DS from '@akashaproject/design-system';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import DS from '@akashaorg/design-system';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { useTranslation } from 'react-i18next';
 import {
   useGetAllInstalledApps,
   useGetLatestReleaseInfo,
   useGetAllIntegrationsIds,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 
 import ExplorePage from './pages/explore-page';
 import InfoPage from './pages/info-page';
@@ -89,7 +89,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   onClick={() => {
                     if (isLoggedIn) {
                       navigateTo?.({
-                        appName: '@akashaproject/app-integration-center',
+                        appName: '@akashaorg/app-integration-center',
                         getNavigationUrl: routes => routes[EXPLORE],
                       });
                     }
@@ -102,7 +102,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   onClick={() => {
                     if (isLoggedIn) {
                       navigateTo?.({
-                        appName: '@akashaproject/app-integration-center',
+                        appName: '@akashaorg/app-integration-center',
                         getNavigationUrl: routes => routes[MY_APPS],
                       });
                     }
@@ -115,7 +115,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   onClick={() => {
                     if (isLoggedIn) {
                       navigateTo?.({
-                        appName: '@akashaproject/app-integration-center',
+                        appName: '@akashaorg/app-integration-center',
                         getNavigationUrl: routes => routes[WIDGETS],
                       });
                     }
@@ -128,7 +128,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   onClick={() => {
                     if (isLoggedIn) {
                       navigateTo?.({
-                        appName: '@akashaproject/app-integration-center',
+                        appName: '@akashaorg/app-integration-center',
                         getNavigationUrl: routes => routes[APPS],
                       });
                     }

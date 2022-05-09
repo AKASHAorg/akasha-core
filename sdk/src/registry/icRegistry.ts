@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
-import { TYPES } from '@akashaproject/sdk-typings';
+import { TYPES } from '@akashaorg/sdk-typings';
 import Logging from '../logging';
 import { constants as ethersConstants, ethers, utils as ethersUtils } from 'ethers';
 import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
@@ -14,7 +14,7 @@ import {
   AWF_APP_SOURCE_MANIFEST,
   IntegrationInfo,
   ReleaseInfo,
-} from '@akashaproject/sdk-typings/lib/interfaces/registry';
+} from '@akashaorg/sdk-typings/lib/interfaces/registry';
 import { lastValueFrom } from 'rxjs';
 import { createFormattedValue } from '../helpers/observable';
 import EventBus from '../common/event-bus';

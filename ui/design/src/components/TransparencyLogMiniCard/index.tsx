@@ -6,7 +6,7 @@ import Avatar from '../Avatar';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import Tooltip from '../Tooltip';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface ITransparencyLogMiniCardProps {
   locale: ILocale;

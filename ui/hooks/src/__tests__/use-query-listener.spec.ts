@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
 import { useMutationListener, useQueryListener } from '../use-query-listener';
 import { useMutation, useQuery } from 'react-query';
 import { act } from 'react-test-renderer';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK({});
 });
 

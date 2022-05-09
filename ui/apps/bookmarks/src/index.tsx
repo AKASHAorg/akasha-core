@@ -5,8 +5,8 @@ import {
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   MenuItemType,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 
 const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
   if (!integrations) {

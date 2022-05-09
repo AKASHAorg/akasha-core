@@ -1,11 +1,11 @@
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import routes, { rootRoute, ONBOARDING, RESULTS } from '../../routes';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 const { Box } = DS;
 

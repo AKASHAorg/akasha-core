@@ -1,5 +1,5 @@
 import React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { StyledIcon, StyledText } from '../styles';
 import { BaseOption } from './option-privacy';
 

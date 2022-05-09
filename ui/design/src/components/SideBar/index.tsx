@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 
-import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import Skeleton from './skeleton';
 import SectionTitle from './section-title';

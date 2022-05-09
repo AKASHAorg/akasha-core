@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 
 const { Box, Icon, Text } = DS;
 

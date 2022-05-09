@@ -2,10 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import DS from '@akashaproject/design-system';
-import { useCheckNewNotifications, useGetLogin } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { EventTypes, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import DS from '@akashaorg/design-system';
+import { useCheckNewNotifications, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { EventTypes, MenuItemAreaType } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { Box, styled, Sidebar, useViewportSize } = DS;
 
@@ -99,7 +99,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     // find IC app from world apps
     // @TODO: replace string with a constant
     const icApp = worldApps.find(
-      (menuItem: { name: string }) => menuItem.name === '@akashaproject/app-integration-center',
+      (menuItem: { name: string }) => menuItem.name === '@akashaorg/app-integration-center',
     );
 
     // if found, navigate to route

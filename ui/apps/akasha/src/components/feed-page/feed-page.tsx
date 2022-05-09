@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import DS from '@akashaorg/design-system';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { IPublishData } from '@akashaorg/ui-awf-typings/lib/entry';
 import {
   useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
@@ -12,15 +12,15 @@ import {
   createPendingEntry,
   LoginState,
   useAnalytics,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 
 import routes, { POST } from '../../routes';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
 

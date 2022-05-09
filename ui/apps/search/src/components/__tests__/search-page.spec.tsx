@@ -8,7 +8,7 @@ import {
   mockSDK,
   act,
   genUser,
-} from '@akashaproject/af-testing';
+} from '@akashaorg/af-testing';
 
 const mockLocationValue = {
   pathname: '/search/grhfsdfk',

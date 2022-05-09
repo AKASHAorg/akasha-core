@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
-import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import DS from '@akashaorg/design-system';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
   useGetTag,
   LoginState,
   useInfinitePostsByTag,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 const { Box, TagProfileCard, Helmet, styled, ErrorLoader, Spinner } = DS;
 

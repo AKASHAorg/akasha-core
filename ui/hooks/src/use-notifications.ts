@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin, catchError, of } from 'rxjs';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { buildProfileMediaLinks } from './utils/media-utils';
 import { logError } from './utils/error-handler';
-import { IMessage } from '@akashaproject/sdk-typings/lib/interfaces/auth';
+import { IMessage } from '@akashaorg/sdk-typings/lib/interfaces/auth';
 
 export const NOTIFICATIONS_KEY = 'Notifications';
 export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';

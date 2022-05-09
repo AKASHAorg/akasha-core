@@ -105,7 +105,7 @@ $ npm run pack:ui-apps
 > Executes the pack script in package.json file(s) within the specified scope using the stream flags. You need to specify [the name on the package's package.json file - click for sample](./ui/plugins/profile/package.json)  using AWF_PACKAGE variable passed to the scope flag
 
 ``` shell script
-$ AWF_PACKAGE=@akashaproject/ui-plugin-profile npm run pack:only
+$ AWF_PACKAGE=@akashaorg/ui-plugin-profile npm run pack:only
 ```
 
 ## `pack-watch`
@@ -114,13 +114,13 @@ $ AWF_PACKAGE=@akashaproject/ui-plugin-profile npm run pack:only
 > This is similar to the command above except that this time the watch flag is used to enable hot re-building of file changes using nodemon
 
 ``` shell script
-$ AWF_PACKAGE=@akashaproject/ui-plugin-profile npm run pack:watch
+$ AWF_PACKAGE=@akashaorg/ui-plugin-profile npm run pack:watch
 ```
 
 > You can as well use * to watch all packages, in a single command
 
 ``` shell script
-$ AWF_PACKAGE=@akashaproject/* npm run pack:watch
+$ AWF_PACKAGE=@akashaorg/* npm run pack:watch
 ```
 
 ## `script:dev-db`
@@ -162,7 +162,7 @@ $ npm run start:design-system:storybook
 > Executes the start script within the specified scope and using the stream flags. You need to specify [the name on the package's package.json file - click for sample](./ui/plugins/profile/package.json)  using AWF_PACKAGE variable passed to the scope flag
 
 ``` shell script
-$ AWF_PACKAGE=@akashaproject/ui-plugin-profile npm run start:only
+$ AWF_PACKAGE=@akashaorg/ui-plugin-profile npm run start:only
 ```
 
 ## `start:api`

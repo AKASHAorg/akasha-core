@@ -1,4 +1,4 @@
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 import {
   catchError,
   exhaustMap,
@@ -16,13 +16,13 @@ import { pipelineEvents, uiEvents } from './events';
 import { getStateSlice, LoaderState } from './state';
 import { checkActivityFn, createRootNode, navigateToModal, parseQueryString } from './utils';
 import * as singleSpa from 'single-spa';
-import getSDK from '@akashaproject/awf-sdk';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaorg/awf-sdk';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import {
   EventDataTypes,
   IAppConfig,
   ILoaderConfig,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { loadI18nNamespaces } from './i18n-utils';
 
 const getMatchingExtensionConfigs =

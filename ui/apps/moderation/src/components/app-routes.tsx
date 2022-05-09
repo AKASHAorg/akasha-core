@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
-import DS from '@akashaproject/design-system';
-import { useCheckModerator, useGetLogin } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 import TransparencyLog from './transparency-log';
 

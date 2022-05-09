@@ -2,7 +2,7 @@ import { QueryFunction, QueryKey, useQuery, useQueryClient } from 'react-query';
 import { Observable } from 'rxjs';
 import { useEffect } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 
 export const useQueryStream = (
   queryKey: QueryKey,

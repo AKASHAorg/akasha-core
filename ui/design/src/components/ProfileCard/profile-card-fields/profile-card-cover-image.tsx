@@ -6,9 +6,9 @@ import { AppIcon } from '../../Icon/app-icon';
 import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { ShareButtonContainer, StyledEditCoverImageBox } from '../styled-profile-card';
-import { LogoSourceType } from '@akashaproject/ui-awf-typings/lib/index';
+import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
 import ImageOverlay from '../../ImageOverlay';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface IProfileCardCoverImageProps {
   shareProfileLabel: string;

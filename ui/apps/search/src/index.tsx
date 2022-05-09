@@ -1,12 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import routes, { ONBOARDING, RESULTS, rootRoute } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   MenuItemType,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 /**
  * All the plugins must export an object like this:

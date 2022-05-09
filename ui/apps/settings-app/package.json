@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/app-settings-ewa",
+  "name": "@akashaorg/app-settings-ewa",
   "private": true,
   "version": "0.1.0",
   "description": "ETHEREUM WORLD settings app",
@@ -11,7 +11,7 @@
     "Josemaria Nriagu <josemaria.nriagu@akasha.world> (https://github.com/josenriagu)",
     "Damir Sabolic <damir.sabolic@akasha.world> (https://github.com/PrimarchAlpharius)"
   ],
-  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
+  "homepage": "https://github.com/AKASHAorg/akasha-framework#readme",
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
@@ -38,10 +38,10 @@
     "url": "https://github.com/AKASHAorg/akasha-world-framework/issues"
   },
   "dependencies": {
-    "@akashaproject/awf-sdk": "*",
-    "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/af-testing": "*",
+    "@akashaorg/awf-sdk": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/ui-awf-hooks": "*",
+    "@akashaorg/af-testing": "*",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
     "i18next-chained-backend": "3.0.2",
@@ -53,7 +53,7 @@
     "single-spa-react": "4.6.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/react-router-dom": "5.1.8",

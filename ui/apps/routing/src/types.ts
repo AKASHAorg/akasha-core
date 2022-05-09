@@ -1,4 +1,4 @@
-import { IMenuItem, MenuItemAreaType } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IMenuItem, MenuItemAreaType } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 type RouteMenuItem = IMenuItem & { navRoutes: Record<string, string> };
 

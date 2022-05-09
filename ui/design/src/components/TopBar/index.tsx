@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Icon from '../Icon';
 import Avatar from '../Avatar';
-import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings/lib/';
+import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { LogoTypeSource } from '@akashaorg/ui-awf-typings/lib/';
 import {
   TopbarWrapper,
   StyledText,
@@ -21,7 +21,7 @@ import {
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {
@@ -108,7 +108,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const iconSize = isMobileOnly ? 'md' : 'sm';
 
   React.useEffect(() => {
-    const legal = otherAreaItems?.find(menuItem => menuItem.name === '@akashaproject/app-legal');
+    const legal = otherAreaItems?.find(menuItem => menuItem.name === '@akashaorg/app-legal');
     if (legal && legal.subRoutes?.length) {
       setLegalMenu(legal);
     }
@@ -175,7 +175,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   );
 
   const renderPluginIcon = (menuItem: IMenuItem) => {
-    if (menuItem.name === '@akashaproject/app-notifications') {
+    if (menuItem.name === '@akashaorg/app-notifications') {
       return (
         <IconDiv
           onClick={onClickPluginButton(menuItem)}

@@ -1,5 +1,5 @@
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-export { EthProviders } from '@akashaproject/sdk-typings/lib/interfaces/web3.connector';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+export { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces/web3.connector';
 export {
   AUTH_EVENTS,
   ENS_EVENTS,
@@ -8,8 +8,8 @@ export {
   TAG_EVENTS,
   PROFILE_EVENTS,
   WEB3_EVENTS,
-} from '@akashaproject/sdk-typings/lib/interfaces/events';
-import { IntegrationInfo, ReleaseInfo } from '@akashaproject/sdk-typings/lib/interfaces/registry';
+} from '@akashaorg/sdk-typings/lib/interfaces/events';
+import { IntegrationInfo, ReleaseInfo } from '@akashaorg/sdk-typings/lib/interfaces/registry';
 import { Subject } from 'rxjs';
 import singleSpa from 'single-spa';
 import * as AppLoaderTypes from './app-loader';

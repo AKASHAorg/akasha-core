@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   RenderResult,
   genEthAddress,
   genPostData,
   renderWithAllProviders,
   act,
-} from '@akashaproject/af-testing';
+} from '@akashaorg/af-testing';
 
 import EntryCardRenderer from '../entry-renderer';
 

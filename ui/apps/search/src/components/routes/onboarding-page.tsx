@@ -1,5 +1,5 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
   useGetLogin,
@@ -11,9 +11,9 @@ import {
   useUnfollow,
   useTagSubscriptions,
   useToggleTagSubscription,
-} from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { Helmet, Box, OnboardingStartCard, OnboardingSuggestionsCard } = DS;
 
@@ -61,7 +61,7 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   const handleAvatarClick = (profilePubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profilePubKey}`,
     });
   };
@@ -92,14 +92,14 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
 
   const handleShowMyFeed = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes['My Feed']}`,
     });
   };
 
   const handleSearch = (value: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-search',
+      appName: '@akashaorg/app-search',
       getNavigationUrl: navRoutes => `${navRoutes.Results}/${value}`,
     });
   };

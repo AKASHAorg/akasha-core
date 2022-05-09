@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { createWrapper } from './utils';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { of as mockOf } from 'rxjs';
 import {
   HAS_NEW_NOTIFICATIONS_KEY,
@@ -12,7 +12,7 @@ import {
 import { mockNotifications, mockNotificationsProfiles } from '../__mocks__/notifications';
 
 jest.mock(
-  '@akashaproject/awf-sdk',
+  '@akashaorg/awf-sdk',
   () => () =>
     mockSDK({
       auth: {

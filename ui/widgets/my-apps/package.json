@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/ui-widget-my-apps",
+  "name": "@akashaorg/ui-widget-my-apps",
   "version": "0.1.0",
   "description": "My Apps widget for integration center",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "main": "lib/index.js",
   "engines": {
@@ -30,8 +30,8 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-hooks": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/ui-awf-hooks": "*",
     "@types/react-router-dom": "5.1.8",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
@@ -43,8 +43,8 @@
     "single-spa-react": "4.6.0"
   },
   "devDependencies": {
-    "@akashaproject/af-testing": "*",
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/af-testing": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/styled-components": "5.1.14"

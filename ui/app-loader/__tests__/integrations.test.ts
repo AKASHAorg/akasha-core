@@ -1,4 +1,4 @@
-import { genWorldConfig, mockSDK, genAppConfig } from '@akashaproject/af-testing';
+import { genWorldConfig, mockSDK, genAppConfig } from '@akashaorg/af-testing';
 import { TestScheduler } from 'rxjs/testing';
 import {
   extractExtensionsFromApps,
@@ -6,20 +6,20 @@ import {
   handleIntegrationUninstall,
   systemImport,
 } from '../src/integrations';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { concatMap, map, mergeMap, Observable, of, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { initState, LoaderState } from '../src/state';
 import { pipelineEvents } from '../src/events';
 import * as singleSpa from 'single-spa';
-import { IAppConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IAppConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK();
 });
 
 jest.mock('single-spa', () => {
   const getSingleSpaInstanceMock =
-    jest.requireActual('@akashaproject/af-testing').getSingleSpaInstanceMock;
+    jest.requireActual('@akashaorg/af-testing').getSingleSpaInstanceMock;
 
   return getSingleSpaInstanceMock();
 });
@@ -33,7 +33,7 @@ describe('[AppLoader] integrations', () => {
   let state$: Observable<LoaderState>;
   afterAll(() => {
     jest.unmock('single-spa');
-    jest.unmock('@akashaproject/awf-sdk');
+    jest.unmock('@akashaorg/awf-sdk');
   });
   beforeEach(() => {
     scheduler = new TestScheduler((actual, expected) => {
@@ -43,7 +43,7 @@ describe('[AppLoader] integrations', () => {
   });
   test('systemImport call', done => {
     const dummyManifest = {
-      name: '@akashaproject/test-app',
+      name: '@akashaorg/test-app',
       version: '1.0.0',
       sources: ['/test/source/path'],
       enabled: true,

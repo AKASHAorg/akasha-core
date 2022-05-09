@@ -1,9 +1,9 @@
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { useQueryClient } from 'react-query';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import React from 'react';
 import { COMMENT_KEY } from './index';
-import { NavigateToParams } from '@akashaproject/ui-awf-typings';
+import { NavigateToParams } from '@akashaorg/ui-awf-typings';
 
 export const useEntryNavigation = (
   navigateFn?: (args: NavigateToParams) => void,
@@ -26,7 +26,7 @@ export const useEntryNavigation = (
           : id;
 
       navigateFn({
-        appName: '@akashaproject/app-akasha-integration',
+        appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Post}/${dynamicUrlSegment}`,
       });
     },

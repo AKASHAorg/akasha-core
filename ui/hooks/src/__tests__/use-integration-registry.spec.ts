@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
 import { of as mockOf } from 'rxjs';
 import {
@@ -10,7 +10,7 @@ import {
 } from '../use-integration-registry';
 import { mockIntegrationInfo } from '../__mocks__/integration-registry';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       icRegistry: {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
   useTrendingTags,
@@ -10,10 +10,10 @@ import {
   useFollow,
   useUnfollow,
   useGetLogin,
-} from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useAnalytics } from '@akashaproject/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+} from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 
@@ -53,7 +53,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const handleTagClick = (tagName: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${tagName}`,
     });
   };
@@ -85,7 +85,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const handleProfileClick = (pubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };

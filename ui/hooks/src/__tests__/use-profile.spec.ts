@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { of as mockOf } from 'rxjs';
 import { createWrapper } from './utils';
 import { useGetProfile, useGetProfileByEthAddress } from '../use-profile';
@@ -7,7 +7,7 @@ import { mockProfile } from '../__mocks__/profiles';
 import * as moderation from '../use-moderation';
 import { mockCheckModerationStatus } from '../__mocks__/moderation';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       profile: {

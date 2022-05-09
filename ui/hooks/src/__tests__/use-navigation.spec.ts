@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { useEntryNavigation } from '../use-navigation';
 import { createWrapper } from './utils';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 
 const navigateTo = jest.fn();
-jest.mock('@akashaproject/awf-sdk', () => () => mockSDK());
-jest.mock('@akashaproject/ui-awf-typings/lib/app-loader', () => ({
+jest.mock('@akashaorg/awf-sdk', () => () => mockSDK());
+jest.mock('@akashaorg/ui-awf-typings/lib/app-loader', () => ({
   ItemTypes: {
     ENTRY: 0,
   },
@@ -24,7 +24,7 @@ describe('useNavigation', () => {
       0,
     );
     expect(navigateTo).toHaveBeenCalledWith({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: expect.any(Function),
     });
   });

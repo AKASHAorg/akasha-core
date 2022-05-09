@@ -1,14 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { ModerationItemTypes, NavigateToParams } from '@akashaproject/ui-awf-typings';
-import { useEntryNavigation } from '@akashaproject/ui-awf-hooks';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
+import DS from '@akashaorg/design-system';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { ModerationItemTypes, NavigateToParams } from '@akashaorg/ui-awf-typings';
+import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import { ITEM_TYPE_CONVERTER } from '../../services/constants';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 

@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react-hooks';
-import { mockSDK } from '@akashaproject/af-testing';
+import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
 import { of as mockOf } from 'rxjs';
 import { mockSearchProfiles } from '../__mocks__/profiles';
 import { useMentionSearch } from '../use-mentions';
 
-jest.mock('@akashaproject/awf-sdk', () => {
+jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       profile: {

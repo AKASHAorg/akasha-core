@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/design-system",
+  "name": "@akashaorg/design-system",
   "version": "0.1.0",
   "author": "AKASHA <hello@akasha.world> (https://akasha.org/)",
   "contributors": [
@@ -16,13 +16,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "license": "MPL-2.0",
   "bugs": {
-    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
+    "url": "https://github.com/AKASHAorg/akasha-framework/issues"
   },
-  "homepage": "https://github.com/AkashaProject/akasha-world-framework/ui/design#readme",
+  "homepage": "https://github.com/AKASHAorg/akasha-framework/ui/design#readme",
   "scripts": {
     "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
@@ -72,8 +72,8 @@
     "styled-components": "5.3.1"
   },
   "devDependencies": {
-    "@akashaproject/sdk-typings": "*",
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/sdk-typings": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@nrwl/cli": "13.7.1",
     "@nrwl/js": "13.7.1",
     "@nrwl/tao": "13.7.1",
