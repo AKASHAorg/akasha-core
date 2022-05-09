@@ -20,8 +20,10 @@ export const BaseContainer: React.FC<Record<string, unknown>> = styled.div`
 export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseContainer)`
   /* keep at center, since sidebar is now fixed */
   margin: 0 auto;
-  /* reserve some space for the scollbar */
-  padding-right: 16px;
+  @media screen and (min-width: ${props => props.theme.breakpoints.smallDesktop.value + 24}px) {
+    /* reserve some space for the scollbar */
+    padding-right: 16px;
+  }
   @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
     margin: 0;
     flex-grow: 1;
