@@ -46,6 +46,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           removedByAuthorLabel={props.removedByAuthorLabel}
           uiEvents={props.uiEvents}
           trackEvent={props.trackEvent}
+          accentBorderTop={props.accentBorderTop}
         />
       }
     />

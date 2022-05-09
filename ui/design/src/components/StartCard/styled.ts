@@ -17,16 +17,14 @@ export const StyledText = styled(Text)`
   }
 `;
 
-export const StyledBox = styled(Box)<{ loggedIn?: boolean }>`
+export const StyledBox = styled(Box)<{ hideOnMobile?: boolean }>`
   height: auto;
-  @media screen and (max-width: ${props => props.theme.breakpoints.large.value}px) {
-    display: none;
-  }
-
   ${props =>
-    props.loggedIn &&
+    props.hideOnMobile &&
     css`
-      display: none;
+      @media screen and (max-width: ${props => props.theme.breakpoints.large.value}px) {
+        display: none;
+      }
     `};
 `;
 

@@ -25,4 +25,11 @@ describe('<AppAvatar /> Component', () => {
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
   });
+
+  it('matches snapshot', () => {
+    const { getByRole } = componentWrapper;
+
+    const avatar = getByRole('img');
+    expect(avatar).toHaveAttribute('src', expect.stringMatching(/app-placeholder/i));
+  });
 });

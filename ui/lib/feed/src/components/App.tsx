@@ -37,6 +37,7 @@ export interface IFeedWidgetProps {
   itemSpacing?: number;
   i18n: RootComponentProps['i18next'];
   modalSlotId: string;
+  accentBorderTop?: boolean;
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 }
 

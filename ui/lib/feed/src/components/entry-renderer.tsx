@@ -17,11 +17,9 @@ import {
   LoginState,
   useTagSearch,
   useMentionSearch,
-  COMMENT_KEY,
 } from '@akashaproject/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
 import { AnalyticsCategories, TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
 
 const {
   Box,
@@ -53,6 +51,7 @@ export interface IEntryRenderer {
   uiEvents: RootComponentProps['uiEvents'];
   className?: string;
   modalSlotId: string;
+  accentBorderTop?: boolean;
   trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
 }
 
@@ -76,6 +75,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     contentClickable,
     parentIsProfilePage,
     modalSlotId,
+    accentBorderTop,
     trackEvent,
   } = props;
 
@@ -374,6 +374,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 modalSlotId={modalSlotId}
                 bottomBorderOnly={isComment}
                 noBorderRadius={isComment}
+                accentBorderTop={accentBorderTop}
                 actionsRightExt={
                   <ExtensionPoint
                     name={`entry-card-actions-right_${itemId}`}
