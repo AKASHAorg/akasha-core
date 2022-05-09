@@ -40,7 +40,7 @@ const EntryPublishErrorCard: React.FC<PublishErrorCardProps> = props => {
       }}
     >
       <MessageWrapper>
-        <ErrorIcon type="quote" color="#4e71ff" />
+        <ErrorIcon type="quote" color="#8b9FFF" />
         {props.message}
         <div>{props.children}</div>
       </MessageWrapper>

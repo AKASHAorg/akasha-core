@@ -46,7 +46,7 @@
     "single-spa-react": "4.6.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaproject/af-testing": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/react-test-renderer": "17.0.1",
