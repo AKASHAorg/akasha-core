@@ -1,0 +1,24 @@
+{
+  "unversionedId": "sdk/interfaces/SDK_Services",
+  "id": "sdk/interfaces/SDK_Services",
+  "title": "Interface: SDK_Services",
+  "description": "Properties",
+  "source": "@site/docs/sdk/interfaces/SDK_Services.md",
+  "sourceDirName": "sdk/interfaces",
+  "slug": "/sdk/interfaces/SDK_Services",
+  "permalink": "/docs/sdk/interfaces/SDK_Services",
+  "editUrl": null,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "id": "SDK_Services",
+    "title": "Interface: SDK_Services",
+    "sidebar_label": "SDK_Services",
+    "sidebar_position": 0,
+    "custom_edit_url": null,
+    "pagination_prev": null,
+    "pagination_next": null
+  },
+  "sidebar": "defaultSidebar"
+}

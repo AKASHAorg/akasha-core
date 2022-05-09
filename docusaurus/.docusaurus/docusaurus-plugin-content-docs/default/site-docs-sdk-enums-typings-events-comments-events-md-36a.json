@@ -1,0 +1,22 @@
+{
+  "unversionedId": "sdk/enums/typings.events.COMMENTS_EVENTS",
+  "id": "sdk/enums/typings.events.COMMENTS_EVENTS",
+  "title": "Enumeration: COMMENTS_EVENTS",
+  "description": "typings.events.COMMENTS_EVENTS",
+  "source": "@site/docs/sdk/enums/typings.events.COMMENTS_EVENTS.md",
+  "sourceDirName": "sdk/enums",
+  "slug": "/sdk/enums/typings.events.COMMENTS_EVENTS",
+  "permalink": "/docs/sdk/enums/typings.events.COMMENTS_EVENTS",
+  "editUrl": null,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "typings.events.COMMENTS_EVENTS",
+    "title": "Enumeration: COMMENTS_EVENTS",
+    "sidebar_label": "COMMENTS_EVENTS",
+    "custom_edit_url": null,
+    "pagination_prev": null,
+    "pagination_next": null
+  },
+  "sidebar": "defaultSidebar"
+}

@@ -1,0 +1,22 @@
+{
+  "unversionedId": "sdk/enums/typings.events.PROFILE_EVENTS",
+  "id": "sdk/enums/typings.events.PROFILE_EVENTS",
+  "title": "Enumeration: PROFILE_EVENTS",
+  "description": "typings.events.PROFILE_EVENTS",
+  "source": "@site/docs/sdk/enums/typings.events.PROFILE_EVENTS.md",
+  "sourceDirName": "sdk/enums",
+  "slug": "/sdk/enums/typings.events.PROFILE_EVENTS",
+  "permalink": "/docs/sdk/enums/typings.events.PROFILE_EVENTS",
+  "editUrl": null,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "typings.events.PROFILE_EVENTS",
+    "title": "Enumeration: PROFILE_EVENTS",
+    "sidebar_label": "PROFILE_EVENTS",
+    "custom_edit_url": null,
+    "pagination_prev": null,
+    "pagination_next": null
+  },
+  "sidebar": "defaultSidebar"
+}

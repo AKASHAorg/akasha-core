@@ -29,7 +29,9 @@ export const GlobalStyle = createGlobalStyle<{
     padding: 0;
     background-color: ${props => props.theme.colors.background};
   }
-
+  body {
+    width: 100%;
+  }
   body.noscroll {
     overflow: hidden;
   }

@@ -1,0 +1,24 @@
+{
+  "unversionedId": "sdk/namespaces/typings",
+  "id": "sdk/namespaces/typings",
+  "title": "Namespace: typings",
+  "description": "Namespaces",
+  "source": "@site/docs/sdk/namespaces/typings.md",
+  "sourceDirName": "sdk/namespaces",
+  "slug": "/sdk/namespaces/typings",
+  "permalink": "/docs/sdk/namespaces/typings",
+  "editUrl": null,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0,
+  "frontMatter": {
+    "id": "typings",
+    "title": "Namespace: typings",
+    "sidebar_label": "typings",
+    "sidebar_position": 0,
+    "custom_edit_url": null,
+    "pagination_prev": null,
+    "pagination_next": null
+  },
+  "sidebar": "defaultSidebar"
+}

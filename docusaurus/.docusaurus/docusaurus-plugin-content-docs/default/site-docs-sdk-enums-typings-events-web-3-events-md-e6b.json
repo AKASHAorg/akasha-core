@@ -1,0 +1,22 @@
+{
+  "unversionedId": "sdk/enums/typings.events.WEB3_EVENTS",
+  "id": "sdk/enums/typings.events.WEB3_EVENTS",
+  "title": "Enumeration: WEB3_EVENTS",
+  "description": "typings.events.WEB3_EVENTS",
+  "source": "@site/docs/sdk/enums/typings.events.WEB3_EVENTS.md",
+  "sourceDirName": "sdk/enums",
+  "slug": "/sdk/enums/typings.events.WEB3_EVENTS",
+  "permalink": "/docs/sdk/enums/typings.events.WEB3_EVENTS",
+  "editUrl": null,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "id": "typings.events.WEB3_EVENTS",
+    "title": "Enumeration: WEB3_EVENTS",
+    "sidebar_label": "WEB3_EVENTS",
+    "custom_edit_url": null,
+    "pagination_prev": null,
+    "pagination_next": null
+  },
+  "sidebar": "defaultSidebar"
+}

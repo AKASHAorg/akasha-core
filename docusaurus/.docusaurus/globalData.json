@@ -1,0 +1,112 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "sdk/index",
+          "docs": [
+            {
+              "id": "sdk/enums/typings.events.APP_EVENTS",
+              "path": "/docs/sdk/enums/typings.events.APP_EVENTS",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/enums/typings.events.AUTH_EVENTS",
+              "path": "/docs/sdk/enums/typings.events.AUTH_EVENTS",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/enums/typings.events.COMMENTS_EVENTS",
+              "path": "/docs/sdk/enums/typings.events.COMMENTS_EVENTS",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/enums/typings.events.ENS_EVENTS",
+              "path": "/docs/sdk/enums/typings.events.ENS_EVENTS",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/enums/typings.events.ENTRY_EVENTS",
+              "path": "/docs/sdk/enums/typings.events.ENTRY_EVENTS",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/enums/typings.events.PROFILE_EVENTS",
+              "path": "/docs/sdk/enums/typings.events.PROFILE_EVENTS",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/enums/typings.events.TAG_EVENTS",
+              "path": "/docs/sdk/enums/typings.events.TAG_EVENTS",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/enums/typings.events.WEB3_EVENTS",
+              "path": "/docs/sdk/enums/typings.events.WEB3_EVENTS",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/index",
+              "path": "/docs/docs/",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/interfaces/AWF_SDK",
+              "path": "/docs/sdk/interfaces/AWF_SDK",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/interfaces/SDK_API",
+              "path": "/docs/sdk/interfaces/SDK_API",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/interfaces/SDK_Services",
+              "path": "/docs/sdk/interfaces/SDK_Services",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/interfaces/typings.IAwfSDK",
+              "path": "/docs/sdk/interfaces/typings.IAwfSDK",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/interfaces/typings.Services",
+              "path": "/docs/sdk/interfaces/typings.Services",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/modules",
+              "path": "/docs/sdk/modules",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/namespaces/typings",
+              "path": "/docs/sdk/namespaces/typings",
+              "sidebar": "defaultSidebar"
+            },
+            {
+              "id": "sdk/namespaces/typings.events",
+              "path": "/docs/sdk/namespaces/typings.events",
+              "sidebar": "defaultSidebar"
+            }
+          ],
+          "sidebars": {
+            "defaultSidebar": {
+              "link": {
+                "path": "/docs/docs/",
+                "label": "API"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "unversionedId": "sdk/index",
+  "id": "sdk/index",
+  "title": "AWF",
+  "description": "AKASHA SDK is a modular set of utilities and apis that can be used to build",
+  "source": "@site/docs/sdk/index.md",
+  "sourceDirName": "sdk",
+  "slug": "/docs/",
+  "permalink": "/docs/docs/",
+  "editUrl": null,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 0.5,
+  "frontMatter": {
+    "id": "index",
+    "title": "AWF",
+    "slug": "/docs/",
+    "sidebar_label": "Exports",
+    "sidebar_position": 0.5,
+    "custom_edit_url": null,
+    "pagination_prev": null,
+    "pagination_next": null
+  },
+  "sidebar": "defaultSidebar"
+}
