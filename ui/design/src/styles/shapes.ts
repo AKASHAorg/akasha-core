@@ -61,7 +61,7 @@ const shapes: IShapes = {
     },
     large: {
       size: '0.938rem', // ~15px @16px base
-      height: '1.3',
+      height: '1.5',
     },
     xlarge: {
       size: '1.125rem', // ~18px @16px base

@@ -82,7 +82,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
             heading={t('✨ Save what inspires you ✨')}
             description={description}
             image={'/images/no-bookmarks.png'}
-            loggedIn={!!isLoggedIn}
+            showMainArea={!isLoggedIn}
           />
           {!bookmarksReq.isFetched && isLoggedIn && <Spinner />}
           {bookmarksReq.isFetched && (!bookmarks || !bookmarks.length) && (

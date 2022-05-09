@@ -17,6 +17,7 @@ export interface IEntryCardProps extends IEntryBoxProps {
   noBorder?: boolean;
   noBorderRadius?: boolean;
   bottomBorderOnly?: boolean;
+  accentBorderTop?: boolean;
   navigateTo?: (args: NavigateToParams) => void;
 }
 
@@ -76,6 +77,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     noBorder,
     noBorderRadius,
     bottomBorderOnly,
+    accentBorderTop,
   } = props;
 
   return (
@@ -86,6 +88,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
       noBorder={noBorder}
       noBorderRadius={noBorderRadius}
       bottomBorderOnly={bottomBorderOnly}
+      accentBorderTop={accentBorderTop}
     >
       {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
         <SocialBox

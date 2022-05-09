@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaproject/design-system';
 import { useGetLogin } from '@akashaproject/ui-awf-hooks';
 import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import routes, { rootAKASHARoute, rootProfileRoute, SIGN_IN } from '../../routes';
 
 const { WelcomeCard } = DS;
 

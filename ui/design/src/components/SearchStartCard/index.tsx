@@ -62,6 +62,7 @@ export const SearchStartCard = ({
           inputPlaceholderLabel={inputPlaceholderLabel}
           onInputChange={ev => setInputValue(ev.target.value)}
           onSearch={handleSearch}
+          responsive={true}
         />
       </Box>
       {shouldMinimize && !!searchKeyword.length && <Box fill="horizontal">{children}</Box>}
