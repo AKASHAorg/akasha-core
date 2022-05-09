@@ -1,17 +1,21 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
-import { AppTypes } from '@akashaproject/ui-awf-typings';
 
-import AppAvatar from '../';
+import Tooltip from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
+import Icon from '../../Icon';
 
-describe('<AppAvatar /> Component', () => {
+describe('<Tooltip /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<AppAvatar ethAddress={'0x01230123450012312'} appType={AppTypes.APP} />),
+        wrapWithTheme(
+          <Tooltip data-testId="tooltip" message="tooltip message" caretPosition="top">
+            <Icon size="sm" type="editSimple" clickable={false} />
+          </Tooltip>,
+        ),
         {},
       );
     });
@@ -24,12 +28,5 @@ describe('<AppAvatar /> Component', () => {
 
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
-  });
-
-  it('matches snapshot', () => {
-    const { getByRole } = componentWrapper;
-
-    const avatar = getByRole('img');
-    expect(avatar).toHaveAttribute('src', expect.stringMatching(/app-placeholder/i));
   });
 });

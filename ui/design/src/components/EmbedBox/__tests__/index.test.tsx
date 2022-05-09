@@ -1,17 +1,27 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
-import { AppTypes } from '@akashaproject/ui-awf-typings';
 
-import AppAvatar from '../';
+import EmbedBox from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
+import { entryData } from '../../../utils/dummy-data';
 
-describe('<AppAvatar /> Component', () => {
+describe('<EmbedBox /> Component', () => {
   let componentWrapper = customRender(<></>, {});
+
+  const targetNode = document.createElement('div');
+  document.body.appendChild(targetNode);
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<AppAvatar ethAddress={'0x01230123450012312'} appType={AppTypes.APP} />),
+        wrapWithTheme(
+          <EmbedBox
+            embedEntryData={{
+              ...entryData,
+              slateContent: [],
+            }}
+          />,
+        ),
         {},
       );
     });
@@ -24,12 +34,5 @@ describe('<AppAvatar /> Component', () => {
 
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
-  });
-
-  it('matches snapshot', () => {
-    const { getByRole } = componentWrapper;
-
-    const avatar = getByRole('img');
-    expect(avatar).toHaveAttribute('src', expect.stringMatching(/app-placeholder/i));
   });
 });

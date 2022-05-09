@@ -1,17 +1,20 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
-import { AppTypes } from '@akashaproject/ui-awf-typings';
 
-import AppAvatar from '../';
+import LinkInput from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<AppAvatar /> Component', () => {
+describe('<LinkInput /> Component', () => {
   let componentWrapper = customRender(<></>, {});
+
+  const handleLinkInputChange = jest.fn();
 
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<AppAvatar ethAddress={'0x01230123450012312'} appType={AppTypes.APP} />),
+        wrapWithTheme(
+          <LinkInput inputValue={'some input value'} onChange={handleLinkInputChange} />,
+        ),
         {},
       );
     });
@@ -24,12 +27,5 @@ describe('<AppAvatar /> Component', () => {
 
   it('renders correctly', () => {
     expect(componentWrapper).toBeDefined();
-  });
-
-  it('matches snapshot', () => {
-    const { getByRole } = componentWrapper;
-
-    const avatar = getByRole('img');
-    expect(avatar).toHaveAttribute('src', expect.stringMatching(/app-placeholder/i));
   });
 });
