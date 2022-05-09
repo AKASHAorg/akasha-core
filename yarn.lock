@@ -4627,6 +4627,15 @@
   dependencies:
     "@babel/runtime" "^7.12.5"
 
+"@textile/buckets-grpc@2.6.18":
+  version "2.6.18"
+  resolved "https://registry.yarnpkg.com/@textile/buckets-grpc/-/buckets-grpc-2.6.18.tgz#d5c6a1e277a412734a15e38a33936bda4ef3d13d"
+  integrity sha512-oc1J5M9q+UPPWnf/RoMfaeITOjsgP1FzDg1iO+oZb8Mjol4VpChB+C/yePKISImjYupMgmFdlzf37chKBjZVQw==
+  dependencies:
+    "@improbable-eng/grpc-web" "^0.14.1"
+    "@types/google-protobuf" "^3.15.5"
+    google-protobuf "^3.19.4"
+
 "@textile/buckets-grpc@2.6.6":
   version "2.6.6"
   resolved "https://registry.yarnpkg.com/@textile/buckets-grpc/-/buckets-grpc-2.6.6.tgz#304bdef37c81f0bdf2aa98f52d3b437bf4ab9d14"
@@ -4675,6 +4684,30 @@
     "@textile/grpc-transport" "^0.5.2"
     "@textile/hub-grpc" "2.6.6"
     "@textile/hub-threads-client" "^5.5.3"
+    "@textile/security" "^0.9.1"
+    "@textile/threads-id" "^0.6.1"
+    abort-controller "^3.0.0"
+    cids "^1.1.4"
+    it-drain "^1.0.3"
+    loglevel "^1.6.8"
+    native-abort-controller "^1.0.3"
+    paramap-it "^0.1.1"
+
+"@textile/buckets@^6.2.4":
+  version "6.2.4"
+  resolved "https://registry.yarnpkg.com/@textile/buckets/-/buckets-6.2.4.tgz#7763186257f7f38d4b8d9e23b0ef026b39de679f"
+  integrity sha512-wyu2PMXUUs4YvDM/dEJiy8+CVM+3dTuqCVm1fBvwyYLTdjislegJjFxpHZMpZQMWK/aQfCdeZ4i3x/UJ8fCq5g==
+  dependencies:
+    "@improbable-eng/grpc-web" "^0.13.0"
+    "@repeaterjs/repeater" "^3.0.4"
+    "@textile/buckets-grpc" "2.6.18"
+    "@textile/context" "^0.12.2"
+    "@textile/crypto" "^4.2.1"
+    "@textile/grpc-authentication" "^3.4.5"
+    "@textile/grpc-connection" "^2.5.4"
+    "@textile/grpc-transport" "^0.5.2"
+    "@textile/hub-grpc" "2.6.18"
+    "@textile/hub-threads-client" "^5.5.4"
     "@textile/security" "^0.9.1"
     "@textile/threads-id" "^0.6.1"
     abort-controller "^3.0.0"
@@ -4748,6 +4781,17 @@
     "@textile/hub-threads-client" "^5.5.3"
     "@textile/security" "^0.9.1"
 
+"@textile/grpc-authentication@^3.4.5":
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/@textile/grpc-authentication/-/grpc-authentication-3.4.5.tgz#eee0624ff4d1d3582aadd55d2d1843055b3bad41"
+  integrity sha512-6K2SIJxhFUuNeq11pfRKPP70FXHuG6qBdx2jJgKqi0QPnKbyzQQrpS0cVGSPqHf66lq3dmqTTeefmlBGw9l6+w==
+  dependencies:
+    "@textile/context" "^0.12.2"
+    "@textile/crypto" "^4.2.1"
+    "@textile/grpc-connection" "^2.5.4"
+    "@textile/hub-threads-client" "^5.5.4"
+    "@textile/security" "^0.9.1"
+
 "@textile/grpc-connection@^2.5.2":
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@textile/grpc-connection/-/grpc-connection-2.5.2.tgz#666b2d083322660539571bc95bbbb048f0c8c922"
@@ -4761,6 +4805,15 @@
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/@textile/grpc-connection/-/grpc-connection-2.5.3.tgz#144b44e26172fde04ff5ca76115bc65b83e05a43"
   integrity sha512-xtJgohjLjUsI2uEehqhN1MoziaAobUO5pziHUWv/ACQX5k9NdrLkKBwYorU1XJqHHoWLVWSbtDenTGsCRGIrig==
+  dependencies:
+    "@improbable-eng/grpc-web" "^0.12.0"
+    "@textile/context" "^0.12.2"
+    "@textile/grpc-transport" "^0.5.2"
+
+"@textile/grpc-connection@^2.5.4":
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/@textile/grpc-connection/-/grpc-connection-2.5.4.tgz#796110e92b9b276ece3fa65365e92a913ad66b1b"
+  integrity sha512-EIIJkO1PA7nRBw3b4NSFp2JV+FcHvvk2uyRs50hE1GVcIZ1GrXS8iEqw3uuJH3le7RoKvh3hsURhNqUd+81vNg==
   dependencies:
     "@improbable-eng/grpc-web" "^0.12.0"
     "@textile/context" "^0.12.2"
@@ -4797,26 +4850,35 @@
     "@textile/grpc-authentication" "^3.4.3"
     "@textile/grpc-connection" "^2.5.2"
     "@textile/grpc-powergate-client" "^2.6.2"
-    "@textile/hub-grpc" "2.6.6"
+    "@textile/hub-grpc" "2.6.18"
     "@textile/security" "^0.9.1"
     event-iterator "^2.0.0"
     loglevel "^1.6.8"
 
-"@textile/hub-filecoin@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/@textile/hub-filecoin/-/hub-filecoin-2.2.3.tgz#f83a0e3be2225aa3180e6b87abebc3559b2f6030"
-  integrity sha512-egFQbHb28/wAsG7RmmowA8Kz5+X3H8rxSu5eKJitPza14/CI1oANO+ikX4tfNGqbFwi5WvQUz0Bsdo3DtuoOmA==
+"@textile/hub-filecoin@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@textile/hub-filecoin/-/hub-filecoin-2.2.4.tgz#1b6044046ce6f11cac513dbd863d04d6891844d1"
+  integrity sha512-h3N6jcRkqJemAO5Bcl9c6gTFN9q2vNOdrc/256pTOM6BsPGMMVn8QU97rZ7YSP7XusyxiRu1+NLDzbPxmP2xdA==
   dependencies:
     "@improbable-eng/grpc-web" "^0.12.0"
     "@textile/context" "^0.12.2"
     "@textile/crypto" "^4.2.1"
-    "@textile/grpc-authentication" "^3.4.4"
-    "@textile/grpc-connection" "^2.5.3"
+    "@textile/grpc-authentication" "^3.4.5"
+    "@textile/grpc-connection" "^2.5.4"
     "@textile/grpc-powergate-client" "^2.6.2"
     "@textile/hub-grpc" "2.6.6"
     "@textile/security" "^0.9.1"
     event-iterator "^2.0.0"
     loglevel "^1.6.8"
+
+"@textile/hub-grpc@2.6.18":
+  version "2.6.18"
+  resolved "https://registry.yarnpkg.com/@textile/hub-grpc/-/hub-grpc-2.6.18.tgz#5c15146682586b136949e454d2f567588f4169c6"
+  integrity sha512-Gne0CpqBywfOeTd3OW0OQUxnJfxK/K1NYQqwl8vMEPncp4uk68YnKNHsvWK2077Ar2VfGsWJayFtyBKbQ6cOcQ==
+  dependencies:
+    "@improbable-eng/grpc-web" "^0.14.1"
+    "@types/google-protobuf" "^3.15.5"
+    google-protobuf "^3.19.4"
 
 "@textile/hub-grpc@2.6.6":
   version "2.6.6"
@@ -4855,6 +4917,20 @@
     "@textile/users-grpc" "2.6.6"
     loglevel "^1.7.0"
 
+"@textile/hub-threads-client@^5.5.4":
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/@textile/hub-threads-client/-/hub-threads-client-5.5.4.tgz#9424f404c0456a62b42d2ebca3b59d9d30f54849"
+  integrity sha512-dHgRd4Wsu1ywId2Q88FZWtkbG4iuZms6co0X7/Lld7eDL0YlrVmb8/lHEhhJqCmJq3vTUxVwviHM8kLrEHwvIw==
+  dependencies:
+    "@improbable-eng/grpc-web" "^0.13.0"
+    "@textile/context" "^0.12.2"
+    "@textile/hub-grpc" "2.6.18"
+    "@textile/security" "^0.9.1"
+    "@textile/threads-client" "^2.3.4"
+    "@textile/threads-id" "^0.6.1"
+    "@textile/users-grpc" "2.6.18"
+    loglevel "^1.7.0"
+
 "@textile/hub@6.3.2":
   version "6.3.2"
   resolved "https://registry.yarnpkg.com/@textile/hub/-/hub-6.3.2.tgz#30409a579c70364ff38200ab3531a3e869ab1c10"
@@ -4872,20 +4948,20 @@
     loglevel "^1.6.8"
     multihashes "3.1.2"
 
-"@textile/hub@6.3.3":
-  version "6.3.3"
-  resolved "https://registry.yarnpkg.com/@textile/hub/-/hub-6.3.3.tgz#0eb17ddc9cf2d76e078c7b433316121cd878fb54"
-  integrity sha512-PMLIIiB6D9Pp24pcc1HPEz0CmZmS6l2Wk2j3ny9v1TEX1p2ynbnDfHHuKwyj4juhy+yG7f2G7skZrrMn3AxgaQ==
+"@textile/hub@6.3.4":
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/@textile/hub/-/hub-6.3.4.tgz#3c1b7e56ba2e48f2c73358a3eeea0d63460f54f0"
+  integrity sha512-/F+rfE+zPg3cLwX7/KuHAZrm9Tt0S++wgc1jiipb7NViGeZhRz1p6JHcEy3+g+MDvyMTSITO6phKmtUMHKItKg==
   dependencies:
-    "@textile/buckets" "^6.2.3"
+    "@textile/buckets" "^6.2.4"
     "@textile/crypto" "^4.2.1"
-    "@textile/grpc-authentication" "^3.4.4"
-    "@textile/hub-filecoin" "^2.2.3"
-    "@textile/hub-grpc" "2.6.6"
-    "@textile/hub-threads-client" "^5.5.3"
+    "@textile/grpc-authentication" "^3.4.5"
+    "@textile/hub-filecoin" "^2.2.4"
+    "@textile/hub-grpc" "2.6.18"
+    "@textile/hub-threads-client" "^5.5.4"
     "@textile/security" "^0.9.1"
     "@textile/threads-id" "^0.6.1"
-    "@textile/users" "^6.2.3"
+    "@textile/users" "^6.2.4"
     loglevel "^1.6.8"
     multihashes "3.1.2"
 
@@ -4944,7 +5020,7 @@
     "@types/google-protobuf" "^3.15.5"
     google-protobuf "^3.17.3"
 
-"@textile/threads-client-grpc@^1.1.2":
+"@textile/threads-client-grpc@^1.1.2", "@textile/threads-client-grpc@^1.1.5":
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/@textile/threads-client-grpc/-/threads-client-grpc-1.1.5.tgz#566efb645d9d46d97a0dfcfdd5319113e6df8aac"
   integrity sha512-gJw3Eso9hdwAB+LbCDAWnzp3/uS6ahs9a+gYmA+xBxeYL4PfTP/3X01G6dJz8oZ9/pHcw1cxodH16dXn4INT5g==
@@ -4987,6 +5063,23 @@
     fastestsmallesttextencoderdecoder "^1.0.22"
     to-json-schema "^0.2.5"
 
+"@textile/threads-client@^2.3.4":
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/@textile/threads-client/-/threads-client-2.3.4.tgz#094da8e929cbc9dd4b6afec9b34cbdaf6dbcf1f9"
+  integrity sha512-y89bpIuGDzkPqNpwGBu9Ky20g/IAEj0H62RDx7k4q66FsKJ2aSV+Jp7a4l0J+nxnqOpwUwennndlynmKzmTnnw==
+  dependencies:
+    "@improbable-eng/grpc-web" "^0.13.0"
+    "@textile/context" "^0.12.2"
+    "@textile/crypto" "^4.2.1"
+    "@textile/grpc-transport" "^0.5.2"
+    "@textile/multiaddr" "^0.6.1"
+    "@textile/security" "^0.9.1"
+    "@textile/threads-client-grpc" "^1.1.5"
+    "@textile/threads-id" "^0.6.1"
+    "@types/to-json-schema" "^0.2.0"
+    fastestsmallesttextencoderdecoder "^1.0.22"
+    to-json-schema "^0.2.5"
+
 "@textile/threads-id@^0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@textile/threads-id/-/threads-id-0.6.1.tgz#ac6b5c93c9bd669f6c8f75ab2044b47a0f09627c"
@@ -4995,6 +5088,15 @@
     "@consento/sync-randombytes" "^1.0.4"
     multibase "^3.1.0"
     varint "^6.0.0"
+
+"@textile/users-grpc@2.6.18":
+  version "2.6.18"
+  resolved "https://registry.yarnpkg.com/@textile/users-grpc/-/users-grpc-2.6.18.tgz#3fa14c749ab74a1ce1e23ea27ed1d7ace33717ea"
+  integrity sha512-n/0Vki1RzJZvJ66M6HwAaw/giygoenPH/gElGcZeqPePtnRWC4ZrhOcGo+Nx3LjjejTu8TjvjW9cwA0/0P8IQw==
+  dependencies:
+    "@improbable-eng/grpc-web" "^0.14.1"
+    "@types/google-protobuf" "^3.15.5"
+    google-protobuf "^3.19.4"
 
 "@textile/users-grpc@2.6.6":
   version "2.6.6"
@@ -5021,24 +5123,24 @@
     "@textile/hub-threads-client" "^5.5.2"
     "@textile/security" "^0.9.1"
     "@textile/threads-id" "^0.6.1"
-    "@textile/users-grpc" "2.6.6"
+    "@textile/users-grpc" "2.6.18"
     event-iterator "^2.0.0"
     loglevel "^1.7.0"
 
-"@textile/users@^6.2.3":
-  version "6.2.3"
-  resolved "https://registry.yarnpkg.com/@textile/users/-/users-6.2.3.tgz#31d5384800714513d76d50ff4a911869b2d368cd"
-  integrity sha512-PJHal0gEV3J4plVk1rmtP0XZaTs7Rsc6l3yLJd+NHCJQ6mJGfp3lAwV1W2mPC3Lis4S1NlUvpMD6FgwuHtjLHg==
+"@textile/users@^6.2.4":
+  version "6.2.4"
+  resolved "https://registry.yarnpkg.com/@textile/users/-/users-6.2.4.tgz#52401645e85e350c3d1c6f792e01acb0b9f6edfd"
+  integrity sha512-NnCoRgVlQV14JatsSWe1k3ffPzLWSzkSwGJQjKwYJy8Cs1WRkwGDMddYJmg2B1P5rrZj/Zbu4krlEGVvFELncg==
   dependencies:
     "@improbable-eng/grpc-web" "^0.13.0"
-    "@textile/buckets-grpc" "2.6.6"
+    "@textile/buckets-grpc" "2.6.18"
     "@textile/context" "^0.12.2"
     "@textile/crypto" "^4.2.1"
-    "@textile/grpc-authentication" "^3.4.4"
-    "@textile/grpc-connection" "^2.5.3"
+    "@textile/grpc-authentication" "^3.4.5"
+    "@textile/grpc-connection" "^2.5.4"
     "@textile/grpc-transport" "^0.5.2"
-    "@textile/hub-grpc" "2.6.6"
-    "@textile/hub-threads-client" "^5.5.3"
+    "@textile/hub-grpc" "2.6.18"
+    "@textile/hub-threads-client" "^5.5.4"
     "@textile/security" "^0.9.1"
     "@textile/threads-id" "^0.6.1"
     "@textile/users-grpc" "2.6.6"
