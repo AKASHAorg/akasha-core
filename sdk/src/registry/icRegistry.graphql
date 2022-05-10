@@ -19,6 +19,7 @@ fragment IntegrationReleaseInfoFragment on IntegrationReleaseInfo{
   links {
     publicRepository
     documentation
+    detailedDescription
   }
   manifestData{
     mainFile
