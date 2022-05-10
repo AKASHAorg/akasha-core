@@ -1,5 +1,5 @@
 export const TopbarTest = () => {
   it('test topbar component', () => {
-    cy.get('#akashaproject-ui-widget-topbar').should('exist');
+    cy.get('#akashaorg-ui-widget-topbar').should('exist');
   });
 };
