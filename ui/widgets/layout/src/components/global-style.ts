@@ -33,7 +33,7 @@ export const GlobalStyle = createGlobalStyle<{
     overflow: hidden;
   }
 
-  #akashaproject-ui-widget-layout {
+  #root > div:first-child {
     display: flex;
     flex: 1 1 0%;
   }
