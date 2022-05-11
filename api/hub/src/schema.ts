@@ -119,6 +119,7 @@ const typeDefs = gql`
   type InfoLink @cacheControl(maxAge: 3600) {
     publicRepository: String
     documentation: String
+    detailedDescription: String
   }
   type ManifestInfo @cacheControl(maxAge: 3600) {
     mainFile: String

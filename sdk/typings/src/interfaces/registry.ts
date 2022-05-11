@@ -38,6 +38,7 @@ export interface AWF_APP_BUILD_MANIFEST {
   links?: {
     publicRepository?: string;
     documentation?: string;
+    detailedDescription?: string;
   };
   sources: string[];
 }

@@ -26,6 +26,7 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
   const TYPE_APP = 0;
   const TYPE_PLUGIN = 1;
   const TYPE_WIDGET = 2;
+  const DESCRIPTION_MD_FILE = 'Description.md'
 
   function* generateSources () {
     yield {
@@ -156,10 +157,21 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
     });
     console.timeEnd(`[web3.storage]${ source.package.name }`);
     console.info(`${ source.package.name } - web3.storage CID: ${ web3StorageCID }`);
+    const descriptionFile = path.resolve(source.path, DESCRIPTION_MD_FILE);
+    let descriptionFileHash = "";
+    if(fs.existsSync(descriptionFile)){
+      descriptionFileHash = await web3Storage.put(getFilesFromPath(descriptionFile), {
+        wrapWithDirectory: false,
+      });
+    }
     const manifestData = {
       path: "manifest.json",
       content: JSON.stringify({
-        links: { publicRepository: source.package.homepage || "", documentation: "" },
+        links: {
+          publicRepository: source.package.homepage || "",
+          documentation: "",
+          detailedDescription: descriptionFileHash? `ipfs://${descriptionFileHash.cid.toString()}`: ""
+        },
         sources: [`ipfs://${ web3StorageCID }`, `ipfs://${ output.get("ipfs") }`]
       }, null, 2)
     };
