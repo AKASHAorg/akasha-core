@@ -45,19 +45,25 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     [worldConfig.layout],
   );
 
+  const filteredDefaultIntegrations = defaultIntegrations?.filter(
+    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+  );
+
+  const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
+
   const integrationIdsNormalized = React.useMemo(() => {
     if (filteredIntegrations) {
       return filteredIntegrations.map(integrationId => {
         return { id: integrationId };
       });
     }
-    return worldConfig.defaultApps
+    return filteredDefaultIntegrations
       .map(integrationName => {
         if (!hiddenIntegrations.some(hiddenInt => hiddenInt.name === integrationName))
           return { name: integrationName };
       })
       .filter(Boolean);
-  }, [filteredIntegrations, worldConfig.defaultApps]);
+  }, [filteredIntegrations, filteredDefaultIntegrations]);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
@@ -67,7 +73,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       return integrationsInfoReq.data?.getLatestRelease.reduce(
         (acc, app) => {
           // select default apps from list of apps
-          if (defaultIntegrations.includes(app.name)) {
+          if (defaultApps.includes(app.name)) {
             acc.filteredDefaultApps.push(app);
           } else {
             // select user installed apps from list of installed apps
@@ -81,7 +87,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       );
     }
     return { filteredDefaultApps: [], filteredInstalledApps: [] };
-  }, [defaultIntegrations, installedAppsReq.data, integrationsInfoReq.data?.getLatestRelease]);
+  }, [defaultApps, installedAppsReq.data, integrationsInfoReq.data?.getLatestRelease]);
 
   const handleAppClick = (integrationId: string) => {
     if (!isLoggedIn) {

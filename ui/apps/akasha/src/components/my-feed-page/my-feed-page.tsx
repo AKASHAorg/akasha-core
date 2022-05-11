@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import {
-  useInfiniteCustomPosts,
-  LoginState,
-  useTagSubscriptions,
-} from '@akashaorg/ui-awf-hooks';
+import { useInfiniteCustomPosts, LoginState, useTagSubscriptions } from '@akashaorg/ui-awf-hooks';
 
 import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -15,7 +11,7 @@ import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
-const { Box, Helmet, StartCard, MyFeedCard } = DS;
+const { Box, Helmet, StartCard, MyFeedCard, Spinner } = DS;
 
 export interface MyFeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -109,6 +105,12 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           onClickCTA={handleCTAClick}
         />
       </Box>
+
+      {postsReq.isFetching && (
+        <Box>
+          <Spinner />
+        </Box>
+      )}
 
       <FeedWidget
         modalSlotId={props.layoutConfig.modalSlotId}
