@@ -90,7 +90,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
 
   return (
     <>
-      <Box gap="small" margin="medium">
+      <Box gap="small" margin="medium" flex={{ shrink: 0 }}>
         {reqError && (
           <ErrorLoader
             type="script-error"

@@ -9,7 +9,7 @@ const { Box, InfoCard } = DS;
 const AppsPage: React.FC<RootComponentProps> = () => {
   const { t } = useTranslation('app-integration-center');
   return (
-    <Box margin="medium">
+    <Box margin="medium" flex={{ shrink: 0 }}>
       <InfoCard
         icon="appCenter"
         title={t('Welcome to the Integration Centre!')}
