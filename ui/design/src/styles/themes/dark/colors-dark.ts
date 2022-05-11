@@ -43,6 +43,7 @@ const colors: IColorsDark = {
   subtitleText: '#F4F5F7', // cadetGrey
   errorText: '#FF5050', // red
   darkText: '#47484A', // system/off white/dark
+  accentText: '#4666E6', // blue
   inputText: '#47484A', // system/off white/dark
   background: '#0D1A2D', // dark blue
   overlay: 'rgba(0, 0, 0, 0.6)', // black, 60% opacity

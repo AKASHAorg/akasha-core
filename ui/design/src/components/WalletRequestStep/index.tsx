@@ -90,7 +90,7 @@ const WalletRequestStep = (props: WalletRequestStepProps) => {
         {pending && !error && (
           <Text margin={{ top: 'medium', bottom: 'xxsmall' }}>
             <Text color="gray">{problem}</Text>{' '}
-            <Text color="accent" style={{ cursor: 'pointer' }} onClick={walletRequest}>
+            <Text color="accentText" style={{ cursor: 'pointer' }} onClick={walletRequest}>
               {resend}
             </Text>
           </Text>

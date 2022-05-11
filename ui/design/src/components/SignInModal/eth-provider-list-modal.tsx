@@ -56,7 +56,7 @@ const ProvidersListModal = (props: {
                 >
                   <Box>{provider.logo}</Box>
                   <Box>
-                    <Text color="accentColor">{provider.description}</Text>
+                    <Text color="accentText">{provider.description}</Text>
                   </Box>
                   <Icon type="arrowRight" size="xs" />
                 </WalletProviderButton>

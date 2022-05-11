@@ -26,7 +26,7 @@ const NewPostsPill: React.FC<INewPostsPill> = props => {
       border={{ side: 'all', color: 'border' }}
     >
       <StackedAvatar userData={userData} maxAvatars={3} />
-      <Text color="accent">{infoLabel}</Text>
+      <Text color="accentText">{infoLabel}</Text>
       <Icon type="arrowUp" onClick={handleDismiss} clickable={true} accentColor={true} />
     </Box>
   );
