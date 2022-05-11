@@ -1,12 +1,12 @@
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import {
   BaseIntegrationInfo,
   EventTypes,
   IAppConfig,
   ILoaderConfig,
   PluginConf,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   Observable,
   mergeMap,
@@ -29,7 +29,7 @@ import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
 import { checkActivityFn, getDomElement, navigateToModal, parseQueryString } from './utils';
 import * as singleSpa from 'single-spa';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { getIntegrationsData } from './manifests';
 import { loadI18nNamespaces } from './i18n-utils';
 

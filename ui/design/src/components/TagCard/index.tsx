@@ -7,7 +7,7 @@ import { IMentionData } from '../AreaChart';
 import ResponsiveChart from '../ResponsiveChart';
 import Icon from '../Icon';
 import { useViewportSize } from '../Providers/viewport-dimension';
-import { ITag } from '@akashaproject/ui-awf-typings/lib/entry';
+import { ITag } from '@akashaorg/ui-awf-typings/lib/entry';
 
 const WrapperBox = styled(Box)`
   border-radius: ${props => props.theme.shapes.borderRadius};

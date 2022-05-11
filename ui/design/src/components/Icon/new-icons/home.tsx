@@ -4,7 +4,7 @@ const Home = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" {...props}>
     <g fill="none" fillRule="evenodd" transform="translate(-730 -2710)">
       <g
-        stroke="#4E71FF"
+        stroke="#8b9FFF"
         strokeLinecap="round"
         strokeLinejoin="round"
         transform="translate(731 2712)"

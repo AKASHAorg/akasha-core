@@ -8,6 +8,9 @@ import { appsDataSource } from '../../../utils/dummy-data';
 describe('<AppsWidgetCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const handleClick = jest.fn();
+  const handleAppClick = jest.fn();
+
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
@@ -18,8 +21,8 @@ describe('<AppsWidgetCard /> Component', () => {
             iconType={'trendingApps'}
             label={'Trending Apps'}
             labelColor={'#132540'}
-            onClick={() => null}
-            onAppClick={() => null}
+            onClick={handleClick}
+            onAppClick={handleAppClick}
           />,
         ),
         {},

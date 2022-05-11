@@ -5,10 +5,10 @@
 ## Usage
 
 ```tsx
-const { default: startLoader } = await System.import('@akashaproject/ui-app-loader');
+const { default: startLoader } = await System.import('@akashaorg/ui-app-loader');
 
 startLoader({
-  layout: '@akashaproject/ui-widget-layout',
+  layout: '@akashaorg/ui-widget-layout',
 });
 
 ```

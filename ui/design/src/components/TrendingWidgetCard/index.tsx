@@ -7,8 +7,8 @@ import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import DuplexButton from '../DuplexButton';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
-import { ITag } from '@akashaproject/ui-awf-typings/lib/entry';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { ITag } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface ITrendingWidgetCardProps {
   // data

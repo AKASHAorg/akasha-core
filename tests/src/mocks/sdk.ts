@@ -1,7 +1,7 @@
-import { IAwfSDK } from '@akashaproject/sdk-typings';
+import { IAwfSDK } from '@akashaorg/sdk-typings';
 import { noop, of, ReplaySubject } from 'rxjs';
 
-interface SdkOverrides {
+export interface SdkOverrides {
   auth?: Partial<IAwfSDK['api']['auth']>;
   comments?: Partial<IAwfSDK['api']['comments']>;
   globalChannel?: ReplaySubject<any>;
@@ -11,6 +11,8 @@ interface SdkOverrides {
   icRegistry?: Partial<IAwfSDK['api']['icRegistry']>;
   tags?: Partial<IAwfSDK['api']['tags']>;
   appSettings?: Partial<IAwfSDK['services']['appSettings']>;
+  settings?: Partial<IAwfSDK['services']['settings']>;
+  common?: Partial<IAwfSDK['services']['common']>;
 }
 
 const mockSDK = (overrides?: SdkOverrides) => {
@@ -124,8 +126,13 @@ const mockSDK = (overrides?: SdkOverrides) => {
         ...(overrides?.appSettings || {}),
       },
       common: {
-        web3: {} as any,
-        ipfs: {} as any,
+        web3: {
+          detectInjectedProvider: () => null,
+        },
+        ipfs: {
+          getSettings: () => null,
+        },
+        ...(overrides?.common || {}),
       },
       db: {
         open: () => of(),
@@ -151,6 +158,7 @@ const mockSDK = (overrides?: SdkOverrides) => {
         get: () => of(),
         set: () => of(),
         remove: () => of(),
+        ...(overrides?.settings || {}),
       },
     },
   };

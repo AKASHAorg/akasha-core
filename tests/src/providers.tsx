@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { TestThemeProvider } from '@akashaproject/design-system/src/test-utils/providers';
+import { TestThemeProvider } from '@akashaorg/design-system/src/test-utils/providers';
 import i18n from 'i18next';
 
 const getI18nInstance = () => {

@@ -35,13 +35,12 @@ jobs:
         env:
           CI: 1
         run: |
-          yarn install --frozen-lockfile
-      - name: install dependencies and verify Cypress
+          yarn bootstrap
+      - name: verify Cypress
         env:
           CI: 1
         working-directory: tests
         run: |
-          yarn install --frozen-lockfile
           npx cypress verify
           npx cypress info
       - name: e2e tests

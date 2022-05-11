@@ -5,7 +5,7 @@
  */
 import 'reflect-metadata';
 import 'systemjs-webpack-interop/auto-public-path';
-import * as typings from '@akashaproject/sdk-typings';
+import * as typings from '@akashaorg/sdk-typings';
 import container from './container';
 import Logging from './logging';
 import Settings from './settings';
@@ -63,7 +63,7 @@ let sdk: AWF_SDK;
  * @public
  * @example
  * ```ts
- * import getSDK from '@akashaproject/awf-sdk';
+ * import getSDK from '@akashaorg/awf-sdk';
  * const sdk = getSDK();
  * ```
  */
@@ -80,7 +80,7 @@ export default function getSDK(): AWF_SDK {
  * @public
  * @example
  * ```ts
- * import {init} from '@akashaproject/awf-sdk';
+ * import {init} from '@akashaorg/awf-sdk';
  * const sdk = init();
  * ```
  */

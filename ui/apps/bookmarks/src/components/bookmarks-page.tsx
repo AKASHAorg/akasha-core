@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import DS from '@akashaproject/design-system';
-import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { useGetBookmarks, useGetLogin, useGetProfile } from '@akashaproject/ui-awf-hooks';
+import DS from '@akashaorg/design-system';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { useGetBookmarks, useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { ErrorLoader, Spinner, StartCard, InfoCard, Box } = DS;
@@ -82,7 +82,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
             heading={t('✨ Save what inspires you ✨')}
             description={description}
             image={'/images/no-bookmarks.png'}
-            loggedIn={!!isLoggedIn}
+            showMainArea={!isLoggedIn}
           />
           {!bookmarksReq.isFetched && isLoggedIn && <Spinner />}
           {bookmarksReq.isFetched && (!bookmarks || !bookmarks.length) && (

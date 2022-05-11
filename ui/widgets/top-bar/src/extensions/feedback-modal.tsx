@@ -1,12 +1,12 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { withProviders, ThemeWrapper } from '@akashaproject/ui-awf-hooks';
+import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
 const { FeedbackModal, ErrorLoader } = DS;
 

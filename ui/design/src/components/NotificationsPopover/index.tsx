@@ -1,4 +1,4 @@
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { Box, Text } from 'grommet';
 import * as React from 'react';
 import Avatar from '../Avatar';

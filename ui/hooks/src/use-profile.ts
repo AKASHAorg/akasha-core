@@ -1,7 +1,7 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { forkJoin, lastValueFrom } from 'rxjs';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
 
 import { checkStatus } from './use-moderation';
 import { buildProfileMediaLinks } from './utils/media-utils';
@@ -11,7 +11,7 @@ import {
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
-} from '@akashaproject/ui-awf-typings/lib/profile';
+} from '@akashaorg/ui-awf-typings/lib/profile';
 
 export const FOLLOWERS_KEY = 'FOLLOWERS';
 export const FOLLOWING_KEY = 'FOLLOWING';

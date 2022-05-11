@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/ui-widget-analytics",
+  "name": "@akashaorg/ui-widget-analytics",
   "version": "0.1.0",
   "description": "Analytics for Ethereum.world",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "engines": {
     "node": ">=10",
@@ -32,8 +32,8 @@
     "lib"
   ],
   "dependencies": {
-    "@akashaproject/design-system": "*",
-    "@akashaproject/ui-awf-hooks": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/ui-awf-hooks": "*",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
     "i18next-chained-backend": "3.0.2",
@@ -43,7 +43,7 @@
     "single-spa-react": "4.6.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/styled-components": "5.1.14",

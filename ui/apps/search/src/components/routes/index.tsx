@@ -1,10 +1,11 @@
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { rootRoute } from '../../routes';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import routes, { rootRoute, ONBOARDING, RESULTS } from '../../routes';
 import SearchPage from './search-page';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useGetLogin } from '@akashaproject/ui-awf-hooks';
+import OnboardingPage from './onboarding-page';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 const { Box } = DS;
 
@@ -19,8 +20,16 @@ const Routes: React.FC<RootComponentProps> = props => {
     <Router>
       <Box>
         <Switch>
-          <Route path={`${rootRoute}/:searchKeyword?`}>
+          <Redirect exact={true} from={rootRoute} to={routes[RESULTS]} />
+          <Route path={`${routes[RESULTS]}/:searchKeyword?`}>
             <SearchPage {...props} showLoginModal={showLoginModal} loginState={loginQuery.data} />
+          </Route>
+          <Route path={`${routes[ONBOARDING]}`}>
+            <OnboardingPage
+              {...props}
+              showLoginModal={showLoginModal}
+              loginState={loginQuery.data}
+            />
           </Route>
         </Switch>
       </Box>

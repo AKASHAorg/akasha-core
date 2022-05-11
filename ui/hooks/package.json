@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/ui-awf-hooks",
+  "name": "@akashaorg/ui-awf-hooks",
   "version": "0.1.0",
   "description": "Reusable hooks for AWF",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "engines": {
     "node": ">=10",
@@ -22,8 +22,7 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pretest": "tsc -m commonjs",
-    "test": "jest",
+    "test": "BABEL_ENV=test jest --runInBand",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
     "postpack": "copyfiles -f ./dist/* ../build/hooks"
@@ -32,15 +31,15 @@
     "lib"
   ],
   "dependencies": {
-    "@akashaproject/awf-sdk": "*",
-    "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-typings": "*",
+    "@akashaorg/awf-sdk": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/sdk-typings": "*",
     "object-hash": "2.2.0",
     "react-query": "3.34.7",
     "rxjs": "7.3.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-typings": "*",
+    "@akashaorg/ui-awf-typings": "*",
     "@types/react": "17.0.20"
   },
   "peerDependencies": {

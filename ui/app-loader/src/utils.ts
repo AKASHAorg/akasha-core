@@ -3,12 +3,12 @@ import {
   ExtensionPointDefinition,
   IAppConfig,
   ModalNavigationOptions,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
-import { QueryStringType } from '@akashaproject/ui-awf-typings';
+import { QueryStringType } from '@akashaorg/ui-awf-typings';
 import { of } from 'rxjs';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 
 export const checkActivityFn = (
   config: IAppConfig | ExtensionPointDefinition,

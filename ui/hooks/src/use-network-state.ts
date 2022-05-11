@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 
 export const NETWORK_STATE_KEY = 'Network_State';
 export const CURRENT_NETWORK_KEY = 'Current Network';

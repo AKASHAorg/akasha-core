@@ -1,10 +1,10 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import {
   IAppConfig,
   MenuItemAreaType,
   IntegrationRegistrationOptions,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 import routes, { rootRoute } from './routes';
 
 /**

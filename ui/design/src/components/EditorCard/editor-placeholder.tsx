@@ -2,7 +2,7 @@ import * as React from 'react';
 import Avatar from '../Avatar';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
 import { Box, Text } from 'grommet';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface IEditorPlaceholder {
   avatar?: IProfileData['avatar'];

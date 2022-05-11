@@ -4,7 +4,7 @@ import { act, cleanup, fireEvent } from '@testing-library/react';
 import BoxFormCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import { boxProviderData } from '../../../utils/dummy-data';
-import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
+import { UpdateProfileStatus } from '@akashaorg/ui-awf-typings/lib/profile';
 
 describe('<BoxFormCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});

@@ -1,17 +1,18 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 
-import DS from '@akashaproject/design-system';
-import { useGetLogin, useGetProfile } from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import DS from '@akashaorg/design-system';
+import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import FeedPage from './feed-page/feed-page';
+import MyFeedPage from './my-feed-page/my-feed-page';
 import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 
-import routes, { FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
+import routes, { FEED, MY_FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
 import ReplyPage from './post-page/reply-page';
 
 const { Box } = DS;
@@ -32,6 +33,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
         <Switch>
           <Route path={routes[FEED]}>
             <FeedPage
+              {...props}
+              loggedProfileData={loggedProfileData}
+              loginState={loginQuery.data}
+              showLoginModal={showLoginModal}
+            />
+          </Route>
+          <Route path={routes[MY_FEED]}>
+            <MyFeedPage
               {...props}
               loggedProfileData={loggedProfileData}
               loginState={loginQuery.data}

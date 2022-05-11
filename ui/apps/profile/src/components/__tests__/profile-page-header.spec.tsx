@@ -9,7 +9,7 @@ import {
   genUser,
   genLoggedInState,
   genWorldConfig,
-} from '@akashaproject/ui-awf-testing-utils';
+} from '@akashaorg/af-testing';
 
 const mockLocationValue = {
   pathname: '/profile',
@@ -24,7 +24,7 @@ jest.mock('react-router', () => ({
   }),
 }));
 
-jest.mock('@akashaproject/awf-sdk', () => jest.fn());
+jest.mock('@akashaorg/awf-sdk', () => jest.fn());
 
 describe('<ProfilePageHeader />', () => {
   let renderResult;

@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
-const BOOKMARKED_ENTRIES_KEY = 'AKASHA_APP_BOOKMARK_ENTRIES';
-const BOOKMARK_SAVE_KEY = 'BOOKMARK_SAVE';
+export const BOOKMARKED_ENTRIES_KEY = 'AKASHA_APP_BOOKMARK_ENTRIES';
+export const BOOKMARK_SAVE_KEY = 'BOOKMARK_SAVE';
 const entriesBookmarks = 'entries-bookmarks';
 
 /**

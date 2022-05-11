@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import DS from '@akashaproject/design-system';
-import { EthProviders } from '@akashaproject/ui-awf-typings';
-import { PROVIDER_ERROR_CODES } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import DS from '@akashaorg/design-system';
+import { EthProviders } from '@akashaorg/ui-awf-typings';
+import { PROVIDER_ERROR_CODES } from '@akashaorg/sdk-typings/lib/interfaces/common';
 
 const { WalletRequestStep, Spinner } = DS;
 

@@ -1,4 +1,4 @@
-import { IAppConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IAppConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { mergeMap } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { getModalFromParams, checkActivityFn } from '../src/utils';

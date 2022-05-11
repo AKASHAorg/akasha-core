@@ -2,9 +2,9 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
 import {
   useGetAllInstalledApps,
   useGetAllIntegrationsIds,
@@ -12,7 +12,7 @@ import {
   withProviders,
   useGetLogin,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 import { hiddenIntegrations } from './hidden-integrations';
 
 const { Box, ICWidgetCard, ErrorLoader } = DS;
@@ -88,7 +88,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       return showLoginModal();
     }
     props.plugins?.routing?.navigateTo?.({
-      appName: '@akashaproject/app-integration-center',
+      appName: '@akashaorg/app-integration-center',
       getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
     });
   };

@@ -1,6 +1,6 @@
-import { IAkashaError } from '@akashaproject/ui-awf-typings';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import getSDK from '@akashaproject/awf-sdk';
+import { IAkashaError } from '@akashaorg/ui-awf-typings';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import getSDK from '@akashaorg/awf-sdk';
 
 const logger = new Map<string, ILogger>();
 

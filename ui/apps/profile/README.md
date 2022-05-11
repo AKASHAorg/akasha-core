@@ -5,8 +5,8 @@
 ## Usage
 
 ```tsx
-import AppLoader from '@akashaproject/ui-app-loader';
-import ProfileApp from '@akashaproject/app-profile';
+import AppLoader from '@akashaorg/ui-app-loader';
+import ProfileApp from '@akashaorg/app-profile';
 
 // ...
 const app = new AppLoader(/* LoaderConfig */);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Stack, Box } from 'grommet';
-import { LogoSourceType, LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import { LogoSourceType, LogoTypeSource } from '@akashaorg/ui-awf-typings';
 
 import Icon, { IconType, iconTypes } from '.';
 import { StyledIconDiv, StyledImage } from './styled-icon';

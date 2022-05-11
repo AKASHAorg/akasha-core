@@ -1,5 +1,5 @@
-import getSDK from '@akashaproject/awf-sdk';
-import { UserProfile_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import getSDK from '@akashaorg/awf-sdk';
+import { UserProfile_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
 import { lastValueFrom } from 'rxjs';
 
 export interface IConfig {

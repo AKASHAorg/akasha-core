@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import {
   useGetAllInstalledApps,
   useGetAllIntegrationReleaseIds,
@@ -12,7 +12,7 @@ import {
   useGetLogin,
   useGetProfileByEthAddress,
   useCurrentNetwork,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { Box, ICDetailCard, ErrorLoader } = DS;
@@ -59,7 +59,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const handleAuthorClick = (author: { pubKey: string }) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => `${routes.rootRoute}/${author.pubKey}`,
     });
   };

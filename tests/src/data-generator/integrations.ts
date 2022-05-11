@@ -1,4 +1,4 @@
-import { IAppConfig } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IAppConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { genLifecycles } from '../mocks/single-spa';
 
 export const genAppConfig = (

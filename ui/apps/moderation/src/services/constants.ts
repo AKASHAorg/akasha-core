@@ -1,5 +1,5 @@
-import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ModerationItemTypes } from '@akashaorg/ui-awf-typings';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const BASE_URL = process.env.MODERATION_API;
 

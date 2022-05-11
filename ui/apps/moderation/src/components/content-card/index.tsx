@@ -1,8 +1,8 @@
 import React from 'react';
 
-import DS from '@akashaproject/design-system';
-import { usePost, useComment, useGetProfile, mapEntry } from '@akashaproject/ui-awf-hooks';
-import { ModerationItemTypes } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { usePost, useComment, useGetProfile, mapEntry } from '@akashaorg/ui-awf-hooks';
+import { ModerationItemTypes } from '@akashaorg/ui-awf-typings';
 
 import Content from './content';
 import { IContentProps } from '../../interfaces';

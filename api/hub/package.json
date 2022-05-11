@@ -1,5 +1,5 @@
 {
-  "name": "@akashaproject/hub-api",
+  "name": "@akashaorg/hub-api",
   "version": "0.1.0",
   "private": true,
   "description": "> TODO: description",
@@ -8,7 +8,7 @@
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
     "Andrei Sambra <andrei.sambra@akasha.world> (https://github.com/deiu)"
   ],
-  "homepage": "https://github.com/AkashaProject/akasha-world-framework#readme",
+  "homepage": "https://github.com/AKASHAorg/akasha-framework#readme",
   "license": "AGPL-3.0",
   "main": "lib/index.js",
   "directories": {
@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkashaProject/akasha-world-framework.git"
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
   },
   "scripts": {
     "test": "jest",
@@ -30,7 +30,7 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "bugs": {
-    "url": "https://github.com/AkashaProject/akasha-world-framework/issues"
+    "url": "https://github.com/AKASHAorg/akasha-framework/issues"
   },
   "dependencies": {
     "@algolia/cache-common": "4.11.0",
@@ -39,7 +39,7 @@
     "@algolia/logger-common": "4.11.0",
     "@algolia/logger-console": "4.11.0",
     "@koa/cors": "3.1.0",
-    "@textile/hub": "6.3.3",
+    "@textile/hub": "6.3.4",
     "algoliasearch": "4.11.0",
     "apollo-server-cache-redis": "3.3.1",
     "apollo-server-koa": "3.6.6",

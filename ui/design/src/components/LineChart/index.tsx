@@ -101,7 +101,7 @@ const LineChart: React.FC<ILineChart> = props => {
           data={data}
           x={d => xScale(getX(d)) || 0}
           y={d => yScale(getY(d)) || 0}
-          stroke={'#4E71FF'}
+          stroke={'#8b9FFF'}
           strokeWidth={1}
           pointerEvents="none"
         />
@@ -132,8 +132,8 @@ const LineChart: React.FC<ILineChart> = props => {
               cy={tooltipTop}
               r={3}
               strokeWidth={1}
-              stroke={'#4E71FF'}
-              fill={'#4E71FF'}
+              stroke={'#8b9FFF'}
+              fill={'#8b9FFF'}
               pointerEvents="none"
             />
           </g>

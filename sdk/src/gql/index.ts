@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
-import IGqlClient from '@akashaproject/sdk-typings/lib/interfaces/gql';
-import { ServiceCallResult } from '@akashaproject/sdk-typings/lib/interfaces';
+import IGqlClient from '@akashaorg/sdk-typings/lib/interfaces/gql';
+import { ServiceCallResult } from '@akashaorg/sdk-typings/lib/interfaces';
 import { gql, GraphQLRequest, HttpLink } from '@apollo/client';
 
-import { TYPES } from '@akashaproject/sdk-typings';
+import { TYPES } from '@akashaorg/sdk-typings';
 import Stash, { IQuickLRU } from '../stash';
 import { createObservableStreamGql, createObservableValue } from '../helpers/observable';
 

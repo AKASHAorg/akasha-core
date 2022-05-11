@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Text, Tabs } from 'grommet';
-import { ReleaseInfo } from '@akashaproject/ui-awf-typings';
+import { ReleaseInfo } from '@akashaorg/ui-awf-typings';
 import Icon from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';

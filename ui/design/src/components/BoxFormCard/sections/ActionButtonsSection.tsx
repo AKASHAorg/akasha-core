@@ -4,7 +4,7 @@ import { Box } from 'grommet';
 import { IFormValues } from '../';
 import Button from '../../Button';
 import Spinner from '../../Spinner';
-import { UpdateProfileStatus } from '@akashaproject/ui-awf-typings/lib/profile';
+import { UpdateProfileStatus } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface IActionButtonsSectionProps {
   cancelLabel?: string;

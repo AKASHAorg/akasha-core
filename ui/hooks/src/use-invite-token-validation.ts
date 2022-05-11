@@ -1,7 +1,7 @@
 import { lastValueFrom } from 'rxjs';
 import { useQuery } from 'react-query';
 
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 
 import constants from './constants';
 import { logError } from './utils/error-handler';
@@ -15,7 +15,7 @@ export interface IUseIsValidTokenProps {
 
 const checkIsValidToken = async (inviteToken: string) => {
   const sdk = getSDK();
-  await lastValueFrom(sdk.api.auth.validateInvite(inviteToken));
+  return lastValueFrom(sdk.api.auth.validateInvite(inviteToken));
 };
 
 /* A hook to validate invitation token */

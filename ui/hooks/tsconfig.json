@@ -3,8 +3,9 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "./src"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["./src/__mocks__/*", "./src/__tests__/*"]
 }

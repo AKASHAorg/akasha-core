@@ -1,5 +1,5 @@
-import { events } from '@akashaproject/sdk-typings';
-import { EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { events } from '@akashaorg/sdk-typings';
+import { EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { map, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { getGlobalChannelEvents, getUiEvents, spaEvents$, uiEvents } from '../src/events';
