@@ -29,7 +29,7 @@ const StyledArrowIcon = styled(Icon)`
 `;
 
 const StyledAnchor = styled(Anchor)`
-  color: ${props => props.theme.colors.accent};
+  color: ${props => props.theme.colors.accentText};
   font-weight: ${props => props.theme.shapes.fontWeight.regular};
   &:hover {
     text-decoration: none;

@@ -29,7 +29,7 @@ const StyledPlainButton = styled(Box)<{ disabled?: boolean; color?: string }>`
 const StyledText = styled(Text)`
   cursor: pointer;
   &:hover {
-    color: ${props => props.theme.colors.accent};
+    color: ${props => props.theme.colors.accentText};
   }
 `;
 
