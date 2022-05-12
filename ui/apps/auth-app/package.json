@@ -2,7 +2,7 @@
   "name": "@akashaorg/app-auth-ewa",
   "private": true,
   "version": "0.0.1",
-  "description": "ETHEREUM WORLD Auth app",
+  "description": "The Authentication App handles how you login to Ethereum World",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
