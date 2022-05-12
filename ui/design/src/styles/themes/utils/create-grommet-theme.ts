@@ -41,7 +41,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         textBackground: styledComponentsTheme.colors.textBackground,
         subtitleText: styledComponentsTheme.colors.subtitleText,
         errorText: styledComponentsTheme.colors.errorText,
-        accentText: styledComponentsTheme.colors.accent,
+        accentText: styledComponentsTheme.colors.accentText,
         darkText: styledComponentsTheme.colors.darkText,
         inputText: styledComponentsTheme.colors.inputText,
         border: {

@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import {
-  useInfiniteCustomPosts,
-  LoginState,
-  useTagSubscriptions,
-} from '@akashaorg/ui-awf-hooks';
+import { useInfiniteCustomPosts, LoginState, useTagSubscriptions } from '@akashaorg/ui-awf-hooks';
 
 import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';

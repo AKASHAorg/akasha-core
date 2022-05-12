@@ -175,7 +175,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
               size: '1px',
             }}
           >
-            <Text color="accent">{dropZoneActiveLabel}</Text>
+            <Text color="accentText">{dropZoneActiveLabel}</Text>
           </Box>
         ) : (
           <Box fill="vertical" height={{ min: '3rem' }} />
