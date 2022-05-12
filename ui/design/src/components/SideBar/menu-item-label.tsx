@@ -20,7 +20,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
       <Text
         size="large"
         margin={{ left: 'small' }}
-        color={isActive ? 'accent' : 'primaryText'}
+        color={isActive ? 'accentText' : 'primaryText'}
         style={{
           width: '200px',
           whiteSpace: 'nowrap',

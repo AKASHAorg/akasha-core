@@ -13,7 +13,7 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
   ${props => {
     if (props.active) {
       return css`
-        color: ${props.theme.colors.accent};
+        color: ${props.theme.colors.accentText};
       `;
     }
     if (props.primaryColor) {
@@ -43,10 +43,10 @@ const StyledIconLink = styled(Anchor)<ILinkIconButtonProps>`
   }}
   &:hover {
     text-decoration: none;
-    color: ${props => props.theme.colors.accent};
+    color: ${props => props.theme.colors.accentText};
     svg {
       & * {
-        stroke: ${props => props.theme.colors.accent};
+        stroke: ${props => props.theme.colors.accentText};
       }
     }
   }

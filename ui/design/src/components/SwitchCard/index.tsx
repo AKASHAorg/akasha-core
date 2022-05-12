@@ -140,7 +140,7 @@ const SwitchCard: React.FC<ISwitchCard> = props => {
               onClick={onTabClick(buttonValues[idx].value)}
             >
               <Text
-                color={el.value === activeButton ? 'accent' : 'secondaryText'}
+                color={el.value === activeButton ? 'accentText' : 'secondaryText'}
                 textAlign="center"
               >
                 {el.label}
