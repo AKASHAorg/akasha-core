@@ -174,7 +174,7 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
         links: {
           publicRepository: source.package.homepage || "",
           documentation: "",
-          detailedDescription: descriptionFileHash ? `ipfs://${ descriptionFileHash.cid.toString() }` : ""
+          detailedDescription: descriptionFileHash ? `ipfs://${descriptionFileHash.cid.toString()}` : ""
         },
         sources: [`ipfs://${ web3StorageCID }`, `ipfs://${ output.get("ipfs") }`]
       }, null, 2)
