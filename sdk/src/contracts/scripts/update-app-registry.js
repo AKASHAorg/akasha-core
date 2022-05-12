@@ -25,13 +25,14 @@ async function main() {
         continue;
       }
     }
-    console.log('deploying: ', pkg.name, ' version: ',version )
+    console.log('deploying: ', pkg.name, ' version: ',version );
     const tx = await integrationRegistry.release(
       pkg.name,
       version,
       manifestHash,
       pkg.type,
     );
+    console.info('tx.hash:', tx.hash);
     await tx.wait(1);
     console.log('deployed: ', pkg.name);
   }
