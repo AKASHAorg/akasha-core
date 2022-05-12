@@ -38,10 +38,7 @@
     "test:all": "yarn test:design-system && yarn test:hooks",
     "dev:server": "nx run-many --target=dev:server --projects=@akashaorg/hub-api",
     "docs:build": "typedoc --tsconfig tsconfig.typedoc.json --hideInPageTOC true --entryPointStrategy packages 'sdk/typings' 'sdk' 'ui/*' 'ui/widgets/*'",
-    "push:integations": "node build/integrations_bucket_store.js",
-    "docs:generate": "nx run @akashaproject/docs-website:build",
-    "docs:watch": "nx run @akashaproject/docs-website:watch",
-    "docs:start": "nx run @akashaproject/docs-website:start"
+    "push:integations": "node build/integrations_bucket_store.js"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",

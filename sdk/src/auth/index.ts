@@ -34,8 +34,10 @@ import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
 
 /**
+ * # sdk.api.auth
+ *
  * Authentication module
- * @decorator injectable
+ *
  */
 
 @injectable()

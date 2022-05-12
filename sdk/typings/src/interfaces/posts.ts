@@ -52,9 +52,13 @@ export interface AWF_IEntry {
   getFeedEntries(opt: { offset?: number; limit: number }): unknown;
 }
 
+/**
+ * Comments API
+ * @notExported
+ */
 export interface AWF_IComments {
   /**
-   *
+   * Get comment data for a givent commentID
    * @param commentID
    */
   getComment(commentID: string): unknown;

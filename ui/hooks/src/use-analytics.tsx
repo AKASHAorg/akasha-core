@@ -7,6 +7,9 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
+/**
+ * @internal
+ */
 export const COOKIE_CONSENT_NAME = 'ewa-cookie-consent';
 
 export enum CookieConsentTypes {

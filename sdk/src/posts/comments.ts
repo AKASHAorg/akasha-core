@@ -22,6 +22,10 @@ import {
   Comments_Response,
 } from '@akashaorg/sdk-typings/lib/interfaces/responses';
 
+/**
+ * @category sdk.api
+ *
+ */
 @injectable()
 class AWF_Comments implements AWF_IComments {
   private _log: ILogger;
@@ -49,8 +53,7 @@ class AWF_Comments implements AWF_IComments {
   }
 
   /**
-   *
-   * @param commentID
+   * Get comment data
    */
   getComment(commentID: string) {
     return this._gql.run<{ getComment: Comment_Response }>(
@@ -64,8 +67,7 @@ class AWF_Comments implements AWF_IComments {
   }
 
   /**
-   *
-   * @param opt
+   * Get a list of comments for a post
    */
   getComments(opt: { offset?: string; limit: number; postID: string }) {
     return this._gql.run<{ getComments: Comments_Response }>(
@@ -79,8 +81,7 @@ class AWF_Comments implements AWF_IComments {
   }
 
   /**
-   *
-   * @param opt
+   * Create a new comment
    */
   addComment(opt: {
     data: DataProviderInput[];
@@ -125,7 +126,6 @@ class AWF_Comments implements AWF_IComments {
 
   /**
    * Update an existing comment
-   * @param opt
    */
   editComment(opt: {
     commentID: string;
@@ -168,7 +168,6 @@ class AWF_Comments implements AWF_IComments {
 
   /**
    * Remove a comment's data by ID
-   * @param commentID
    */
   removeComment(commentID: string) {
     return this._auth.authenticateMutationData(commentID).pipe(

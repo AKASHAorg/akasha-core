@@ -11,11 +11,29 @@ import { SEARCH_KEY } from './use-search';
 import { TRENDING_TAGS_KEY } from './use-trending';
 import { PROFILE_KEY } from './use-profile';
 
+/**
+ * @internal
+ */
 export const ENTRY_KEY = 'Entry';
+/**
+ * @internal
+ */
 export const ENTRIES_KEY = 'Entries';
+/**
+ * @internal
+ */
 export const ENTRIES_CUSTOM_KEY = 'EntriesCustomFeed';
+/**
+ * @internal
+ */
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
+/**
+ * @internal
+ */
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
+/**
+ * @internal
+ */
 export const CREATE_POST_MUTATION_KEY = 'CreatePost';
 
 export type usePostParam = {

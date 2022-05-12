@@ -8,6 +8,9 @@ import { logError } from './utils/error-handler';
 import { TRENDING_PROFILES_KEY } from './use-trending';
 import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile';
 
+/**
+ * @internal
+ */
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
 
 const getIsFollowingMultiple = async (
