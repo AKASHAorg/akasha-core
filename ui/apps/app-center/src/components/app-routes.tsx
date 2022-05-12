@@ -58,9 +58,23 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
   );
 
-  const integrationIdsNormalized = filteredIntegrations?.map(integrationId => {
-    return { id: integrationId };
-  });
+  const filteredDefaultIntegrations = defaultIntegrations?.filter(
+    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+  );
+
+  const integrationIdsNormalized = React.useMemo(() => {
+    if (filteredIntegrations) {
+      return filteredIntegrations.map(integrationId => {
+        return { id: integrationId };
+      });
+    }
+    return filteredDefaultIntegrations
+      .map(integrationName => {
+        if (!hiddenIntegrations.some(hiddenInt => hiddenInt.name === integrationName))
+          return { name: integrationName };
+      })
+      .filter(Boolean);
+  }, [filteredIntegrations, filteredDefaultIntegrations]);
 
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
 

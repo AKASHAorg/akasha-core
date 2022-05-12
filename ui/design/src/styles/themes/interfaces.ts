@@ -21,6 +21,7 @@ export interface IColors {
   secondaryText: string;
   errorText: string;
   darkText: string;
+  accentText: string;
   inputText: string;
   background: string;
   overlay: string;

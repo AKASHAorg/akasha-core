@@ -25,7 +25,7 @@ const NameInputSection: React.FC<INameInputSectionProps> = props => {
             color="secondaryText"
             style={{ verticalAlign: 'text-top', userSelect: 'none' }}
           >
-            {nameLabel} <Text color="accent">*</Text>
+            {nameLabel} <Text color="accentText">*</Text>
           </StyledText>
         }
       >

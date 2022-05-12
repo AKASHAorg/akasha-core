@@ -30,7 +30,12 @@ export const OnboardingStartCard = ({
           <Text size="xlarge" weight="bold">
             {titleLabel}
           </Text>
-          <Button disabled={!isButtonEnabled} onClick={handleButtonClick} label={buttonLabel} />
+          <Button
+            disabled={!isButtonEnabled}
+            onClick={handleButtonClick}
+            label={buttonLabel}
+            slimBorder={true}
+          />
         </Box>
 
         <SearchBar
