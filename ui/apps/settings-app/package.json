@@ -2,7 +2,7 @@
   "name": "@akashaorg/app-settings-ewa",
   "private": true,
   "version": "0.1.0",
-  "description": "ETHEREUM WORLD settings app",
+  "description": "The Settings app allows you to customize your settings for Ethereum World.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",

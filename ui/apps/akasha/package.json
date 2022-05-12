@@ -2,7 +2,7 @@
   "name": "@akashaorg/app-akasha-integration",
   "private": true,
   "version": "0.1.0",
-  "description": "AKASHA integration package",
+  "description": "The AKASHA team builds this application so you can engage with the Ethereum World community.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",

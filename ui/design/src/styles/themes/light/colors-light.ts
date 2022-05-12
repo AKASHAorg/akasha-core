@@ -47,6 +47,7 @@ const colors: IColorsLight = {
   subtitleText: '#595F6B', // cadetGrey
   errorText: '#FF4040', // red
   darkText: '#132540',
+  accentText: '#4666E6', // blue
   inputText: '#425166', // darkBlue
   background: '#FFFFFF', // white
   overlay: 'rgba(0, 0, 0, 0.6)', // black, 60% opacity

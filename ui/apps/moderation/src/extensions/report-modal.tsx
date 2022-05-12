@@ -20,6 +20,7 @@ const { ReportModal, ErrorLoader } = DS;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
   const { activeModal } = props;
+
   const [analyticsActions] = useAnalytics();
 
   const loginQuery = useGetLogin();
@@ -49,8 +50,9 @@ const ReportModalComponent = (props: RootExtensionProps) => {
   const onReport = React.useCallback(
     (dataToSign: Record<string, string>) => {
       analyticsActions.trackEvent({
-        category: itemType as AnalyticsCategories,
-        action: 'Report',
+        category: AnalyticsCategories.POST,
+        action: `${itemType[0].toLocaleUpperCase()}${itemType.substring(1)}
+        } Reported`,
       });
       reportMutation.mutate({
         dataToSign,

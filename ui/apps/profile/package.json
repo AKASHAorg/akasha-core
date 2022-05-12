@@ -1,7 +1,7 @@
 {
   "name": "@akashaorg/app-profile",
   "version": "0.1.0",
-  "description": "Plugin for /profile url handler",
+  "description": "The Profile app displays the information in your profile and makes it easy to customize it any time.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",

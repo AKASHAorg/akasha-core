@@ -12,12 +12,8 @@ export interface IDescriptionSectionProps {
 }
 
 const DescriptionSection: React.FC<IDescriptionSectionProps> = props => {
-  const {
-    descriptionLabel,
-    descriptionFieldPlaceholder,
-    formValues,
-    handleFormFieldChange,
-  } = props;
+  const { descriptionLabel, descriptionFieldPlaceholder, formValues, handleFormFieldChange } =
+    props;
   return (
     <Box direction="column" margin={{ top: 'small' }}>
       <StyledText

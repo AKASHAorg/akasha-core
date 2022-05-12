@@ -53,7 +53,7 @@ const UsernameInputSection: React.FC<IUsernameInputSectionProps> = props => {
           color="secondaryText"
           style={{ userSelect: 'none' }}
         >
-          {usernameLabel} <Text color="accent">*</Text>
+          {usernameLabel} <Text color="accentText">*</Text>
         </StyledText>
       </Box>
       <FormField

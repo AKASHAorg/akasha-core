@@ -20,8 +20,10 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
 
   const { t } = useTranslation('app-integration-center');
 
+  const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
+
   const defaultAppsNamesNormalized = React.useMemo(() => {
-    return worldConfig?.defaultApps.map(app => {
+    return defaultApps.map(app => {
       if (typeof app === 'string') {
         return {
           name: app,
@@ -29,7 +31,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
       }
       return app;
     });
-  }, [worldConfig.defaultApps]);
+  }, [defaultApps]);
 
   // select default apps from list of installed apps
   const filteredDefaultApps = latestReleasesInfo?.filter(app => {
@@ -40,7 +42,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
   // select user installed apps from list of installed apps
   const filteredInstalledApps = latestReleasesInfo
     ?.filter(app => {
-      if (installedAppsInfo?.length === 0) {
+      if (!installedAppsInfo?.length) {
         return null;
       }
       if (defaultIntegrations?.some(defaultApp => defaultApp !== app.name)) {
@@ -126,6 +128,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
                   subtitle={app.name}
                   gap="xxsmall"
                   iconType="integrationAppLarge"
+                  plainIcon={true}
                   backgroundColor={true}
                 />
                 <Icon type="moreDark" />
