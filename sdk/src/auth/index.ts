@@ -33,6 +33,13 @@ import { CurrentUser } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
 
+/**
+ * # sdk.api.auth
+ *
+ * Authentication module
+ *
+ */
+
 @injectable()
 class AWF_Auth implements AWF_IAuth {
   #identity: PrivateKey;

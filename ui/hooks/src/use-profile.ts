@@ -13,13 +13,37 @@ import {
   UpdateProfileStatus,
 } from '@akashaorg/ui-awf-typings/lib/profile';
 
+/**
+ * @internal
+ */
 export const FOLLOWERS_KEY = 'FOLLOWERS';
+/**
+ * @internal
+ */
 export const FOLLOWING_KEY = 'FOLLOWING';
+/**
+ * @internal
+ */
 export const PROFILE_KEY = 'PROFILE';
+/**
+ * @internal
+ */
 export const ENTRY_AUTHOR_KEY = 'ENTRY_AUTHOR_KEY';
+/**
+ * @internal
+ */
 export const INTERESTS_KEY = 'INTERESTS';
+/**
+ * @internal
+ */
 export const UPDATE_PROFILE_DATA_KEY = 'UPDATE_PROFILE_DATA';
+/**
+ * @internal
+ */
 export const ADD_PROFILE_PROVIDER_KEY = 'ADD_PROFILE_PROVIDER';
+/**
+ * @internal
+ */
 export const UPDATE_PROFILE_STATUS = 'UPDATE_PROFILE_STATUS';
 
 const getProfileData = async (payload: {

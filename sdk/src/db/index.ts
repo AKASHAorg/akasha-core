@@ -21,7 +21,6 @@ class DB implements DBService<Database, Collection> {
   /**
    * Create a new DB instance
    * @param name - database name
-   * @returns Database
    */
   public create(name: string) {
     this._dbName = name;
@@ -32,7 +31,6 @@ class DB implements DBService<Database, Collection> {
   /**
    *
    * @param version - number representing the db version
-   * @returns ServiceCallResult<Database>
    */
   public open(version = 1): ServiceCallResult<Database> {
     if (!this._db) {
@@ -48,7 +46,6 @@ class DB implements DBService<Database, Collection> {
 
   /**
    * Get access to the local db
-   * @returns ServiceCallResult<Database>
    */
   public getDb(): ServiceCallResult<Database> {
     this._ensureDbOpened();
@@ -58,7 +55,6 @@ class DB implements DBService<Database, Collection> {
   /**
    * Get access to the db collection by name
    * @param name - string representing the collection name
-   * @returns ServiceCallResult<Collection>
    */
   public getCollection<T>(
     name: typeof availableCollections[keyof typeof availableCollections],

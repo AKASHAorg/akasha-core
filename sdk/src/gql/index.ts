@@ -15,6 +15,7 @@ export interface GqlOperation {
   extensions?: Record<string, unknown>;
 }
 
+/** @internal  */
 @injectable()
 class Gql implements IGqlClient<unknown> {
   private _stash: Stash;

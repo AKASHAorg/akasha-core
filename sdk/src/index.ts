@@ -1,3 +1,8 @@
+/**
+ * AKASHA SDK is a modular set of utilities and apis that can be used to build
+ * your own app.
+ * @packageDocumentation
+ */
 import 'reflect-metadata';
 import 'systemjs-webpack-interop/auto-public-path';
 import * as typings from '@akashaorg/sdk-typings';
@@ -9,18 +14,12 @@ import DB from './db';
 import Stash from './stash';
 import Web3Connector from './common/web3.connector';
 import EventBus from './common/event-bus';
-import AWF_Auth from './auth';
+import type AWF_Auth from './auth';
 import AWF_Profile from './profiles';
 import AWF_ENS from './registry/ens';
 import AWF_IC_REGISTRY from './registry/icRegistry';
 import AWF_Entry from './posts/entry';
-import AWF_Comments from './posts/comments';
-/**
- * AKASHA SDK is a modular set of utilities and apis that can be used to build
- * your own app.
- * @packageDocumentation
- */
-
+import type AWF_Comments from './posts/comments';
 import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
@@ -51,9 +50,6 @@ export interface SDK_Services {
 
 export interface AWF_SDK {
   services: SDK_Services;
-  /**
-   * Main apis to interact with the supported services.
-   */
   api: SDK_API;
 }
 

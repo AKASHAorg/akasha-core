@@ -4,6 +4,10 @@ import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loade
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
+/**
+ * React component that fetches the user selected theme name from the localstorage
+ * and passes it to the ThemeSelector component along with all available themes.
+ */
 const ThemeWrapper: React.FC<RootComponentProps> = ({ children, ...props }) => {
   const [currentTheme, setCurrentTheme] = React.useState(window.localStorage.getItem('Theme'));
 
