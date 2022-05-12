@@ -88,7 +88,7 @@ const StyledText = styled(Text)<IStyledTextProps>`
   ${props => {
     if (props.accentColor) {
       return `
-        color: ${props.theme.colors.accent};
+        color: ${props.theme.colors.accentText};
       `;
     }
     if (props.disabled) {

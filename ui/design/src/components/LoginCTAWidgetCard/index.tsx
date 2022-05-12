@@ -10,7 +10,7 @@ const StyledText = styled(Text)`
 `;
 
 export const CTAAnchor = styled(Anchor)<{ isBold?: boolean }>`
-  color: ${props => props.theme.colors.accent};
+  color: ${props => props.theme.colors.accentText};
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
   font-weight: ${props =>
     props.isBold ? props.theme.shapes.fontWeight.bold : props.theme.shapes.fontWeight.regular};

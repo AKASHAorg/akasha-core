@@ -33,10 +33,10 @@ const StepIndicator: React.FC<IStepIndicatorProps> = props => {
             justify="center"
             align="center"
             border={{
-              color: idx <= activeIndex ? 'accentText' : 'secondaryText',
+              color: idx <= activeIndex ? 'accent' : 'secondaryText',
               size: 'xsmall',
             }}
-            background={idx < activeIndex ? 'accentText' : 'none'}
+            background={idx < activeIndex ? 'accent' : 'none'}
           >
             {idx < activeIndex ? (
               <Icon type="checkSimple" size="xxs" color="white" />

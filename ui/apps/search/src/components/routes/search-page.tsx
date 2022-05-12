@@ -236,7 +236,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const encodedSearchKey = encodeURIComponent(trimmedValue);
     props.plugins?.routing?.navigateTo?.({
       appName: '@akashaorg/app-search',
-      getNavigationUrl: routes => `${routes.rootRoute}/${encodedSearchKey}`,
+      getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });
   };
 

@@ -13,7 +13,7 @@ const StyledImg = styled.img`
 `;
 
 const StyledMention = styled.span`
-  color: ${props => props.theme.colors.accent};
+  color: ${props => props.theme.colors.accentText};
   cursor: pointer;
 `;
 

@@ -43,7 +43,7 @@ const StyledTab = styled(Tab)<TabProps>`
         border-bottom-color: ${props.theme.colors.accent};
 
         > span {
-          color: ${props.theme.colors.accent};
+          color: ${props.theme.colors.accentText};
         }
       }
     }
