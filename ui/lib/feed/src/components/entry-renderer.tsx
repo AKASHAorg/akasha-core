@@ -255,8 +255,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const handleEditComment = commentData => {
     if (trackEvent) {
       trackEvent({
-        category: AnalyticsCategories.REPLY,
-        action: 'Edit',
+        category: AnalyticsCategories.POST,
+        action: 'Reply Edited',
       });
     }
     commentEditReq.mutate({ ...commentData, postID: itemData.postId });

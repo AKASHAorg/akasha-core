@@ -55,14 +55,14 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
       if (isBookmarked) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Remove Bookmark',
+          action: 'Post Bookmark Removed',
         });
         bookmarkDelete.mutate(entryId);
       }
       if (!isBookmarked) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Bookmark',
+          action: 'Post Bookmarked',
         });
         bookmarkCreate.mutate({ entryId, itemType: entryType });
       }
