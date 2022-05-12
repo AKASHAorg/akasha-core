@@ -206,9 +206,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_TOPIC,
-      action: subscribe ? 'Subscribe' : 'Unsubscribe',
-      name: subscribe ? 'Subscribed Topic From Search' : 'Unsubscribed Topic From Search',
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: subscribe ? 'Trending Topic Subscribed' : 'Trending Topic Unsubscribed',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
@@ -225,9 +224,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.PEOPLE,
-      action: 'Follow',
-      name: 'Search',
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: 'Trending People Followed',
     });
     followReq.mutate(ethAddress);
   };
@@ -263,9 +261,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.PEOPLE,
-      action: 'Unfollow',
-      name: 'Search',
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: 'Trending People Unfollowed',
     });
     unfollowReq.mutate(ethAddress);
   };
@@ -279,6 +276,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   // repost related
   const handleRepost = (_withComment: boolean, entryId: string) => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.POST,
+      action: 'Repost Clicked',
+    });
     if (!loginState?.ethAddress) {
       showLoginModal();
       return;
@@ -297,7 +298,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (activeButton !== ButtonValues.ALL) {
       analyticsActions.trackEvent({
         category: AnalyticsCategories.FILTER_SEARCH,
-        action: `By ${activeButton}`,
+        action: `Filter Search By ${activeButton}`,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -64,9 +64,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_TOPIC,
-      action: 'Subscribe',
-      name: 'Subscribed Topic From Widget',
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending Topic Subscribed',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
@@ -76,9 +75,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_TOPIC,
-      action: 'Unsubscribe',
-      name: 'Unsubscribed Topic From Widget',
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending Topic Unsubscribed',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
@@ -96,9 +94,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_PEOPLE,
-      action: 'Follow',
-      name: 'Widget',
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending People Followed',
     });
     followReq.mutate(ethAddress);
   };
@@ -109,9 +106,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_PEOPLE,
-      action: 'Unfollow',
-      name: 'Widget',
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending People Unfollowed',
     });
     unfollowReq.mutate(ethAddress);
   };
@@ -119,15 +115,13 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const handleActiveTabChange = (tab: number) => {
     if (tab === 0) {
       analyticsActions.trackEvent({
-        category: AnalyticsCategories.TRENDING_TOPIC,
-        action: 'Selected',
-        name: 'Trending Topic Widget Tab Selected',
+        category: AnalyticsCategories.TRENDING_WIDGET,
+        action: 'Trending Topic Tab Selected',
       });
     } else {
       analyticsActions.trackEvent({
-        category: AnalyticsCategories.TRENDING_PEOPLE,
-        action: 'Selected',
-        name: 'Widget',
+        category: AnalyticsCategories.TRENDING_WIDGET,
+        action: 'Trending People Tab Selected',
       });
     }
   };

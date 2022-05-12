@@ -162,13 +162,17 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const handlePublishComment = async (data: IPublishData) => {
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.REPLY,
-      action: 'Publish',
+      category: AnalyticsCategories.POST,
+      action: 'Reply Published',
     });
     publishComment.mutate({ ...data, postID: postId });
   };
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.POST,
+      action: 'Repost Clicked',
+    });
     if (!loginState?.ethAddress) {
       showLoginModal();
       return;
@@ -229,8 +233,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const handleEditorPlaceholderClick = () => {
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.REPLY,
-      action: 'Placeholder Click',
+      category: AnalyticsCategories.POST,
+      action: 'Reply Placeholder Clicked',
     });
   };
 

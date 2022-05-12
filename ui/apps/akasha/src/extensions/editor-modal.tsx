@@ -46,6 +46,7 @@ const EditorModalContainer = (props: RootExtensionProps) => {
     () => props.activeModal.hasOwnProperty('embedEntry'),
     [props.activeModal],
   );
+
   const embedEntryId = React.useMemo(() => {
     if (
       props.activeModal.hasOwnProperty('embedEntry') &&
@@ -93,18 +94,19 @@ const EditorModalContainer = (props: RootExtensionProps) => {
       if (isEditing) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Edit',
+          action: 'Post Edited',
         });
         editPost.mutate({ entryID: props.activeModal.entryId, ...data });
       } else {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Publish',
+          action: `${hasEmbed ? 'Repost' : 'New Post'} Published`,
         });
         publishPost.mutate({ ...data, pubKey: profileDataReq.data.pubKey });
       }
       props.singleSpa.navigateToUrl(location.pathname);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       isEditing,
       props.activeModal,
