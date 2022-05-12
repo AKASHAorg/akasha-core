@@ -21,10 +21,10 @@ import {
   Comment_Response,
   Comments_Response,
 } from '@akashaorg/sdk-typings/lib/interfaces/responses';
-
 /**
- * @category sdk.api
+ * # sdk.api.comments
  *
+ * Comments Module
  */
 @injectable()
 class AWF_Comments implements AWF_IComments {

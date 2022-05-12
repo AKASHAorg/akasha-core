@@ -2,7 +2,6 @@
   "name": "@akashaorg/awf-sdk",
   "version": "0.1.0",
   "main": "src/index.js",
-  "typedocMain": "src/index.ts",
   "dependencies": {
     "@akashaorg/sdk-typings": "*",
     "@apollo/client": "3.5.5",
