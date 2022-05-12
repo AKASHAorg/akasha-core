@@ -544,11 +544,6 @@
           }
         }
       }
-    },
-    "@akashaproject/docs-website": {
-      "root": "docusaurus",
-      "sourceRoot": "docusaurus",
-      "projectType": "application"
     }
   }
 }
