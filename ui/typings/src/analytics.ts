@@ -33,6 +33,7 @@ export enum AnalyticsCategories {
   SIGN_UP_WALLET = 'Sign Up Wallet',
   TRENDING_PEOPLE = 'Trending People',
   TRENDING_TOPIC = 'Trending Topic',
+  TRENDING_WIDGET = 'Trending Widget',
   WIDGETS = 'Widgets',
   INVITATION_CODE = 'Invitation Code',
 }
