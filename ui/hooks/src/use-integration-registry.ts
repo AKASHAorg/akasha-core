@@ -93,7 +93,7 @@ export function useGetIntegrationReleaseId(
   enabler?: boolean,
 ) {
   return useQuery(
-    [RELEASES_KEY, integrationName],
+    [RELEASES_KEY, `${integrationName}-${version}`],
     () => getIntegrationReleaseId(integrationName, version),
     {
       enabled: !!enabler,
@@ -130,6 +130,9 @@ export function useGetAllIntegrationsIds(enabler = true, offset?: number) {
 const getAllIntegrationReleaseIds = async (integrationName: string, offset?: number) => {
   const sdk = getSDK();
   const res = await sdk.api.icRegistry.getAllIntegrationReleaseIds(integrationName, offset);
+  if (res.data.releaseIds) {
+    res.data.releaseIds = [...new Set(res.data.releaseIds)];
+  }
   return res.data;
 };
 
@@ -140,7 +143,7 @@ const getAllIntegrationReleaseIds = async (integrationName: string, offset?: num
  */
 export function useGetAllIntegrationReleaseIds(integrationName: string, offset?: number) {
   return useQuery(
-    [RELEASES_KEY, 'ids'],
+    [RELEASES_KEY, integrationName],
     () => getAllIntegrationReleaseIds(integrationName, offset),
     {
       enabled: !!integrationName,
