@@ -61,6 +61,14 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     return this.catDocument<never>(selectedDoc);
   }
 
+  /**
+   *
+   * @param ipfsLink - string
+   */
+  getAppDescription(ipfsLink: string) {
+    return this.catDocument<never>(ipfsLink);
+  }
+
   validateCid(hash: string | CID) {
     if (typeof hash === 'string' && hash.startsWith('https://')) {
       return { link: hash };

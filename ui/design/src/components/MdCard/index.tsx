@@ -9,6 +9,7 @@ import { isMobileOnly } from 'react-device-detect';
 
 export interface IMdCard {
   mdText: string | null;
+  hasWrapper?: boolean;
 }
 
 const MdCardWrapper = styled.div`
@@ -21,22 +22,24 @@ const MdCardWrapper = styled.div`
 `;
 
 const MdCard: React.FC<IMdCard> = props => {
-  const { mdText } = props;
+  const { mdText, hasWrapper = true } = props;
   const renderContent = () => (
     <>
       {!mdText && <Spinner />}
       {mdText && <ReactMarkdown plugins={[gfm]}>{mdText}</ReactMarkdown>}
     </>
   );
-  return (
-    <MdCardWrapper data-testid="md-card">
-      {isMobileOnly ? (
-        <Box pad="medium">{renderContent()}</Box>
-      ) : (
-        <BasicCardBox pad="medium">{renderContent()}</BasicCardBox>
-      )}
-    </MdCardWrapper>
-  );
+
+  const renderWrapper = () => {
+    if (!hasWrapper) {
+      return <Box>{renderContent()}</Box>;
+    }
+    if (isMobileOnly) {
+      return <Box pad="medium">{renderContent()}</Box>;
+    }
+    return <BasicCardBox pad="medium">{renderContent()}</BasicCardBox>;
+  };
+  return <MdCardWrapper data-testid="md-card">{renderWrapper()}</MdCardWrapper>;
 };
 
 export default MdCard;

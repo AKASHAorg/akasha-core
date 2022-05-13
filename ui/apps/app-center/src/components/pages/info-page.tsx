@@ -12,6 +12,7 @@ import {
   useGetLogin,
   useGetProfileByEthAddress,
   useCurrentNetwork,
+  useAppDescription,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
@@ -44,6 +45,11 @@ const InfoPage: React.FC<RootComponentProps> = props => {
 
   const profileDataReq = useGetProfileByEthAddress(integrationInfo?.author);
   const authorProfileData = profileDataReq.data;
+
+  const descriptionLink = latestReleaseInfo?.links?.detailedDescription;
+
+  const detailedDescriptionReq = useAppDescription(descriptionLink);
+  const detailedDescription = detailedDescriptionReq.data;
 
   const handleAuthorEthAddressClick = (ethAddress: string) => {
     if (network) {
@@ -122,6 +128,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           handleAuthorClick={handleAuthorClick}
           handleAuthorEthAddressClick={handleAuthorEthAddressClick}
           isFetching={latestReleaseInfoReq.isFetching}
+          description={detailedDescription}
         />
       )}
     </Box>

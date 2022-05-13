@@ -11,9 +11,15 @@ interface AWF_IIpfsConnector {
 
   /**
    *
-   * @param doc
+   * @param doc - legal docs
    */
   getLegalDoc(doc: LEGAL_DOCS): ServiceCallResult<string>;
+
+  /**
+   *
+   * @param ipfsHash - string
+   */
+  getAppDescription(ipfsHash: string): ServiceCallResult<string>;
 }
 
 export default AWF_IIpfsConnector;
