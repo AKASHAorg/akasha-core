@@ -3,6 +3,7 @@ import { Box, Drop, Text } from 'grommet';
 
 import ICDetailCardCoverImage from './ic-detail-card-fields/cover-image';
 import ICDetailCardAvatar from './ic-detail-card-fields/avatar';
+import ICDetailCardDescription from './ic-detail-card-fields/description';
 
 import Icon from '../Icon';
 import Tooltip from '../Tooltip';
@@ -52,6 +53,7 @@ export interface ICDetailCardProps {
   handleAuthorClick?: (IProfileData) => void;
   handleAuthorEthAddressClick?: (string) => void;
   handleTagClick?: (tag: string) => void;
+  description?: string;
 }
 
 const ICDetailCard: React.FC<ICDetailCardProps> = props => {
@@ -88,6 +90,7 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
     handleAuthorClick,
     handleAuthorEthAddressClick,
     handleTagClick,
+    description,
   } = props;
 
   const [showReleases, setShowReleases] = React.useState(false);
@@ -166,13 +169,11 @@ const ICDetailCard: React.FC<ICDetailCardProps> = props => {
             )}
           </Box>
         </Box>
-        <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }} gap="small">
-          <Text weight={'bold'}>{descriptionLabel}</Text>
-          {latestRelease?.manifestData?.description && (
-            <Text size="md" style={{ lineHeight: '1.375rem' }}>
-              {latestRelease?.manifestData?.description}
-            </Text>
-          )}
+        <Box pad={{ vertical: 'large' }} border={{ side: 'bottom' }}>
+          <Text weight={'bold'} size="large">
+            {descriptionLabel}
+          </Text>
+          {description && <ICDetailCardDescription description={description} />}
           {isFetching && !latestRelease?.manifestData?.description && (
             <TextLine title="integrationDescription" animated={false} width="250px" />
           )}

@@ -131,6 +131,7 @@ const mockSDK = (overrides?: SdkOverrides) => {
         },
         ipfs: {
           getSettings: () => null,
+          catDocument: () => null,
         },
         ...(overrides?.common || {}),
       },

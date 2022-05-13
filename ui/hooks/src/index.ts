@@ -111,6 +111,7 @@ import {
   useInstallApp,
   useUninstallApp,
 } from './use-app-settings';
+import { useAppDescription } from './use-app-description';
 
 export {
   constants,
@@ -247,4 +248,5 @@ export {
   useGetAppConfig,
   useInstallApp,
   useUninstallApp,
+  useAppDescription,
 };

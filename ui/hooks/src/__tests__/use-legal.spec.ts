@@ -15,8 +15,8 @@ jest.mock('@akashaorg/awf-sdk', () => {
       },
     });
 });
-describe('useInviteTokenValidation', () => {
-  it('should check if token is valid', async () => {
+describe('useLegal', () => {
+  it('should check if legal docs are returned', async () => {
     const [wrapper] = createWrapper();
     const { result, waitFor } = renderHook(() => useLegalDoc(LEGAL_DOCS.TERMS_OF_USE), {
       wrapper,
