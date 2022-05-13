@@ -9,7 +9,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
     mockSDK({
       common: {
         ipfs: {
-          getAppDescription: () => mockOf({ data: 'This is app description.' }),
+          catDocument: () => mockOf({ data: 'This is app description.' }),
         },
       },
     });
