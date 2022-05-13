@@ -34,7 +34,7 @@ async function main() {
     );
     console.info('tx.hash:', tx.hash);
     await tx.wait(1);
-    console.log('deployed: ', pkg.name);
+    console.log('deployed: ', pkg.name, "\n");
   }
 }
 

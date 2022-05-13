@@ -14,7 +14,7 @@
   {
     "name": "@akashaorg/app-auth-ewa",
     "id": "0x6f8326aa8c1116feff879fa16af65849148e8fae5a79326de17a0cfa78b699b6",
-    "ipfsManifest": "f0155171c35d73d8b5b00c4c902079844d95e1a63f4531d6cb821c85c0b42fde6",
+    "ipfsManifest": "f0155171c071a2689209e37521ff1bdf3410f6fa2156baf8e3a349161bb3732d0",
     "type": 0
   },
   {
@@ -26,7 +26,7 @@
   {
     "name": "@akashaorg/app-integration-center",
     "id": "0xb205644246860965047578d591cecced40ade1a782c6c84fa599173af6a22d9c",
-    "ipfsManifest": "f0155171c26fc803f1208dbc6cb54792971d2c95e461adbe162e96de5005660b0",
+    "ipfsManifest": "f0155171cea875881233bd38d517f2b82a2fe49eec955ca8dcd0af02930fa5dda",
     "type": 0
   },
   {
