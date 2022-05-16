@@ -51,8 +51,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
     (dataToSign: Record<string, string>) => {
       analyticsActions.trackEvent({
         category: AnalyticsCategories.POST,
-        action: `${itemType[0].toLocaleUpperCase()}${itemType.substring(1)}
-        } Reported`,
+        action: `${itemType[0].toLocaleUpperCase()}${itemType.substring(1)} Reported`,
       });
       reportMutation.mutate({
         dataToSign,
