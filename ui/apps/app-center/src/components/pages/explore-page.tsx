@@ -62,12 +62,14 @@ const ExplorePage: React.FC<IExplorePage> = props => {
 
   const uninstallAppReq = useUninstallApp();
 
-  const installableApps = latestReleasesInfo?.filter(releaseInfo => {
-    if (defaultIntegrations?.includes(releaseInfo.name)) {
-      return null;
-    }
-    return releaseInfo;
-  });
+  const installableApps = React.useMemo(() => {
+    return latestReleasesInfo?.filter(releaseInfo => {
+      if (defaultIntegrations?.includes(releaseInfo.name)) {
+        return null;
+      }
+      return releaseInfo;
+    });
+  }, [defaultIntegrations, latestReleasesInfo]);
 
   const handleAppClick = (app: ReleaseInfo) => {
     props.plugins.routing?.navigateTo?.({
@@ -134,12 +136,13 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             />
           </Box>
         ))}
+        {isFetching && (
+          <Box>
+            <Spinner />
+          </Box>
+        )}
       </Box>
-      {isFetching && (
-        <Box>
-          <Spinner />
-        </Box>
-      )}
+
       {!!showNotifPill && (
         <NotificationPill
           icon={<Icon type="check" />}

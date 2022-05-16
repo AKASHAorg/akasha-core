@@ -54,9 +54,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
 
-  const filteredIntegrations = availableIntegrationsReq?.data?.filter(
-    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
-  );
+  const filteredIntegrations = React.useMemo(() => {
+    return availableIntegrationsReq?.data?.filter(
+      id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+    );
+  }, [availableIntegrationsReq?.data]);
 
   const filteredDefaultIntegrations = defaultIntegrations?.filter(
     id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
