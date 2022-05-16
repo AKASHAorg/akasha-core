@@ -103,7 +103,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const handleSignInComplete = () => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.SIGN_IN,
-      action: 'Success',
+      action: 'Successful Sign In',
     });
     setSignInComplete(true);
   };
