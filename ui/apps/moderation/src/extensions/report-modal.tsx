@@ -1,10 +1,10 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ModerationItemTypes, RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import { ModerationItemTypes, RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import {
   withProviders,
   useReasons,
@@ -12,14 +12,15 @@ import {
   useReport,
   useAnalytics,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { ReportModal, ErrorLoader } = DS;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
   const { activeModal } = props;
+
   const [analyticsActions] = useAnalytics();
 
   const loginQuery = useGetLogin();
@@ -49,8 +50,8 @@ const ReportModalComponent = (props: RootExtensionProps) => {
   const onReport = React.useCallback(
     (dataToSign: Record<string, string>) => {
       analyticsActions.trackEvent({
-        category: itemType as AnalyticsCategories,
-        action: 'Report',
+        category: AnalyticsCategories.POST,
+        action: `${itemType[0].toLocaleUpperCase()}${itemType.substring(1)} Reported`,
       });
       reportMutation.mutate({
         dataToSign,

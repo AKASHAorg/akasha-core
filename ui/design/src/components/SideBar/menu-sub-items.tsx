@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text, Anchor } from 'grommet';
 import styled from 'styled-components';
 
-import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 export interface IMenuSubItemsProps {
   isMobile: boolean;

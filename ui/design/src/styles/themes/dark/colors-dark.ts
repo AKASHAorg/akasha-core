@@ -18,7 +18,8 @@ export interface IColorsDark extends IColors {
 const colors: IColorsDark = {
   blue: '#4E71FF',
   lightBlue: '#D3DAFA',
-  darkBlue: '#0046CB',
+  darkerBlue: '#0046CB',
+  darkBlue: '#425166',
   grey: '#949EB3',
   darkGrey: '#000C20',
   mediumGrey: '#B6BFD1',
@@ -26,19 +27,23 @@ const colors: IColorsDark = {
   deepGrey: '#7F7F7F',
   deeperGrey: '#87909E',
   cadetGrey: '#595F6B',
-  disabled: '#9ea0a5',
   lightBeige: '#F8F4F4',
   white: '#FBFCFD', // lotion white
   red: '#FF5050',
   green: '#36B37E',
+  ultraMarine: '#4e71ff',
+  lightUltraMarine: '#8b9FFF',
   // define use cases for colors
+  disabled: '#9ea0a5',
   primaryText: '#FBFCFD', // lotion white
   secondaryText: '#B6BFD1', // grey
   textBackground: '#425166',
   disabledText: '#9ea0a5', // disabled
-  subtitleText: '#595F6B', // cadetGrey
+  titleText: '#CACFD9',
+  subtitleText: '#F4F5F7', // cadetGrey
   errorText: '#FF5050', // red
   darkText: '#47484A', // system/off white/dark
+  accentText: '#4E71FF', // blue
   inputText: '#47484A', // system/off white/dark
   background: '#0D1A2D', // dark blue
   overlay: 'rgba(0, 0, 0, 0.6)', // black, 60% opacity
@@ -58,7 +63,7 @@ const colors: IColorsDark = {
   coverImageBackground: '#425166',
   embedBackground: '#253142',
   btnAccentColor: '#FBFCFD', // lotion
-  accent: '#4E71FF', // blue
+  accent: '#8b9FFF', // light ultramarine
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity
   accentLight: '#E9EDFD', // lightBlue
   accentLightHover: '#D3DAFA', // lightBlue

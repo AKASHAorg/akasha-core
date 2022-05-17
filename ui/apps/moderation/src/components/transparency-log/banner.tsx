@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { ICount } from '@akashaproject/ui-awf-hooks';
+import DS from '@akashaorg/design-system';
+import { ICount } from '@akashaorg/ui-awf-hooks';
 
 export interface IBanner {
   count: ICount;

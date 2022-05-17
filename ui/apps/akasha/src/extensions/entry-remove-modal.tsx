@@ -1,8 +1,8 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
   useDeletePost,
@@ -10,9 +10,9 @@ import {
   withProviders,
   useAnalytics,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+} from '@akashaorg/ui-awf-hooks';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { ConfirmationModal, ModalContainer, ErrorLoader } = DS;
 
@@ -32,14 +32,14 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
     if (activeModal && typeof activeModal.entryType === 'number') {
       if (activeModal.entryType === ItemTypes.COMMENT) {
         analyticsActions.trackEvent({
-          category: AnalyticsCategories.REPLY,
-          action: 'Delete',
+          category: AnalyticsCategories.POST,
+          action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(activeModal.entryId);
       } else if (activeModal.entryType === ItemTypes.ENTRY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Delete',
+          action: 'Post Deleted',
         });
         postDeleteQuery.mutate(activeModal.entryId);
       } else {
@@ -49,6 +49,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
       logger.error('property entryType is undefined!');
     }
     handleModalClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeModal, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = React.useMemo(() => {

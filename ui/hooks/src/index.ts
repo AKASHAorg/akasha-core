@@ -36,6 +36,7 @@ import {
 } from './use-profile';
 import {
   useInfinitePosts,
+  useInfiniteCustomPosts,
   useInfinitePostsByTag,
   useInfinitePostsByAuthor,
   usePost,
@@ -110,6 +111,7 @@ import {
   useInstallApp,
   useUninstallApp,
 } from './use-app-settings';
+import { useAppDescription } from './use-app-description';
 
 export {
   constants,
@@ -158,6 +160,7 @@ export {
   UPDATE_PROFILE_STATUS,
   // use-posts
   useInfinitePosts,
+  useInfiniteCustomPosts,
   useInfinitePostsByTag,
   useInfinitePostsByAuthor,
   usePost,
@@ -245,4 +248,5 @@ export {
   useGetAppConfig,
   useInstallApp,
   useUninstallApp,
+  useAppDescription,
 };

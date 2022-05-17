@@ -1,4 +1,4 @@
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { setupI18next } from './i18n';
 
 export class TranslationPlugin {

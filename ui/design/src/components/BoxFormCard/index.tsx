@@ -7,7 +7,7 @@ import {
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
-} from '@akashaproject/ui-awf-typings/lib/profile';
+} from '@akashaorg/ui-awf-typings/lib/profile';
 
 import { TitleSection } from './sections/TitleSection';
 import { AvatarSection } from './sections/AvatarSection';

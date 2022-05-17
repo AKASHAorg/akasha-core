@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
+import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   useGetProfile,
   useInfinitePostsByAuthor,
   LoginState,
   useGetLogin,
-} from '@akashaproject/ui-awf-hooks';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-hooks';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 

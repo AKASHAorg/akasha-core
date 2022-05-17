@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { forkJoin, lastValueFrom } from 'rxjs';
 
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 
 import { checkStatus } from './use-moderation';
 import { buildProfileMediaLinks } from './utils/media-utils';

@@ -1,12 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { FEED, POST, REPLY, rootRoute, TAGS } from './routes';
-import { LogoTypeSource } from '@akashaproject/ui-awf-typings';
+import routes, { FEED, MY_FEED, POST, REPLY, rootRoute, TAGS } from './routes';
+import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   MenuItemType,
-} from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   activeWhen: (location, pathToActiveWhen) => {
@@ -22,6 +22,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     rootRoute,
     defaultRoute: routes[FEED],
+    [MY_FEED]: routes[MY_FEED],
     [POST]: routes[POST],
     [TAGS]: routes[TAGS],
     [REPLY]: routes[REPLY],
@@ -35,7 +36,20 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'akasha' },
     area: [MenuItemAreaType.AppArea],
-    subRoutes: [],
+    subRoutes: [
+      {
+        label: 'General',
+        index: 0,
+        route: routes[FEED],
+        type: MenuItemType.Internal,
+      },
+      {
+        label: MY_FEED,
+        index: 1,
+        route: routes[MY_FEED],
+        type: MenuItemType.Internal,
+      },
+    ],
   },
   extends: [
     {

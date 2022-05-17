@@ -1,19 +1,19 @@
 import { inject, injectable } from 'inversify';
 import { ethers } from 'ethers';
-import { EthProviders, IWeb3Connector } from '@akashaproject/sdk-typings/lib/interfaces';
+import { EthProviders, IWeb3Connector } from '@akashaorg/sdk-typings/lib/interfaces';
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { TYPES } from '@akashaproject/sdk-typings';
+import { TYPES } from '@akashaorg/sdk-typings';
 import Logging from '../logging';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 import OpenLogin from '@toruslabs/openlogin';
 import { createObservableStream, createObservableValue } from '../helpers/observable';
 import EventBus from './event-bus';
-import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import { AUTH_EVENTS, WEB3_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 import {
   INJECTED_PROVIDERS,
   PROVIDER_ERROR_CODES,
-} from '@akashaproject/sdk-typings/lib/interfaces/common';
+} from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { throwError } from 'rxjs';
 
 @injectable()

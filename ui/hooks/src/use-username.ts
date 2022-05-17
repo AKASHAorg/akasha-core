@@ -1,10 +1,10 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import {
   IProfileData,
   ProfileProviderProperties,
   ProfileProviders,
-} from '@akashaproject/ui-awf-typings/lib/profile';
+} from '@akashaorg/ui-awf-typings/lib/profile';
 import { logError } from './utils/error-handler';
 import { PROFILE_KEY } from './use-profile';
 import { lastValueFrom } from 'rxjs';

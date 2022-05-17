@@ -12,7 +12,7 @@ import {
 import { withHistory } from 'slate-history';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 import Avatar from '../Avatar';
-import { IEntryData, IMetadata, IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
+import { IEntryData, IMetadata, IPublishData } from '@akashaorg/ui-awf-typings/lib/entry';
 import Icon from '../Icon';
 import EmojiPopover from '../EmojiPopover';
 import EmbedBox from '../EmbedBox';
@@ -31,7 +31,7 @@ import { isMobile } from 'react-device-detect';
 import LinkPreview from './link-preview';
 import { ImageGallery, ImageObject } from './image-gallery';
 import isUrl from 'is-url';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 const MAX_LENGTH = 280;
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { I18nextProvider } from 'react-i18next';
 import Routes from './app-routes';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 const { Box } = DS;
 

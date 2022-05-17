@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { IProfileData } from '@akashaproject/ui-awf-typings/src/profile';
-import { IEntryData, ITag } from '@akashaproject/ui-awf-typings/src/entry';
+import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { IProfileData } from '@akashaorg/ui-awf-typings/src/profile';
+import { IEntryData, ITag } from '@akashaorg/ui-awf-typings/src/entry';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
@@ -20,10 +20,10 @@ import {
   LoginState,
   useEntryNavigation,
   useAnalytics,
-} from '@akashaproject/ui-awf-hooks';
-import { ItemTypes, ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
-import { SearchTagsResult_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+} from '@akashaorg/ui-awf-hooks';
+import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
+import { SearchTagsResult_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
 
 import EntryCardRenderer from './entry-renderer';
 
@@ -206,16 +206,15 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_TOPIC,
-      action: subscribe ? 'Subscribe' : 'Unsubscribe',
-      name: subscribe ? 'Subscribed Topic From Search' : 'Unsubscribed Topic From Search',
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: subscribe ? 'Trending Topic Subscribed' : 'Trending Topic Unsubscribed',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
   const handleProfileClick = (pubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };
@@ -225,9 +224,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.PEOPLE,
-      action: 'Follow',
-      name: 'Search',
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: 'Trending People Followed',
     });
     followReq.mutate(ethAddress);
   };
@@ -237,22 +235,22 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
     props.plugins?.routing?.navigateTo?.({
-      appName: '@akashaproject/app-search',
-      getNavigationUrl: routes => `${routes.rootRoute}/${encodedSearchKey}`,
+      appName: '@akashaorg/app-search',
+      getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });
   };
 
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => {
     ev.preventDefault();
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${authorEth}`,
     });
   };
 
   const handleMentionClick = (profileEthAddress: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${profileEthAddress}`,
     });
   };
@@ -263,22 +261,25 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.PEOPLE,
-      action: 'Unfollow',
-      name: 'Search',
+      category: AnalyticsCategories.FILTER_SEARCH,
+      action: 'Trending People Unfollowed',
     });
     unfollowReq.mutate(ethAddress);
   };
 
   const handleTagClick = (name: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
     });
   };
 
   // repost related
   const handleRepost = (_withComment: boolean, entryId: string) => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.POST,
+      action: 'Repost Clicked',
+    });
     if (!loginState?.ethAddress) {
       showLoginModal();
       return;
@@ -297,7 +298,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (activeButton !== ButtonValues.ALL) {
       analyticsActions.trackEvent({
         category: AnalyticsCategories.FILTER_SEARCH,
-        action: `By ${activeButton}`,
+        action: `Filter Search By ${activeButton}`,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

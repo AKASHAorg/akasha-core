@@ -7,6 +7,7 @@ const Dotenv = require('dotenv-webpack');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { SubresourceIntegrityPlugin } = require("webpack-subresource-integrity");
 const WebpackAssetsManifest = require("webpack-assets-manifest");
+const CopyPlugin = require('copy-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const outputMainFile = 'index.js';
@@ -54,6 +55,14 @@ const exp = {
         keywords: packageJson.keywords || []
       };
       }
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: "*.md",
+          context: process.cwd()
+        },
+      ],
     }),
     new Dotenv({
       path: path.resolve(__dirname, '../.env'),

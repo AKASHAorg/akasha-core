@@ -3,7 +3,7 @@ import { Box, Text } from 'grommet';
 
 import Icon from '../Icon';
 import StackedAvatar from '../StackedAvatar';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface INewPostsPill {
   infoLabel?: string;
@@ -26,7 +26,7 @@ const NewPostsPill: React.FC<INewPostsPill> = props => {
       border={{ side: 'all', color: 'border' }}
     >
       <StackedAvatar userData={userData} maxAvatars={3} />
-      <Text color="accent">{infoLabel}</Text>
+      <Text color="accentText">{infoLabel}</Text>
       <Icon type="arrowUp" onClick={handleDismiss} clickable={true} accentColor={true} />
     </Box>
   );

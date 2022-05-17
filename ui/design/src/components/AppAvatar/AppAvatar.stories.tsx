@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grommet } from 'grommet';
-import { AppTypes } from '@akashaproject/ui-awf-typings';
+import { AppTypes } from '@akashaorg/ui-awf-typings';
 
 import AppAvatar, { AppAvatarProps } from '.';
 

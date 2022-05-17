@@ -12,26 +12,33 @@ import {
 import { GetProfile } from '../profiles/profile.graphql';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaproject/sdk-typings';
+import { TYPES } from '@akashaorg/sdk-typings';
 import DB from '../db';
-import { AWF_IAuth, EthProviders } from '@akashaproject/sdk-typings/lib/interfaces';
+import { AWF_IAuth, EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
 import Web3Connector from '../common/web3.connector';
 import EventBus from '../common/event-bus';
 import Logging from '../logging';
-import { ILogger } from '@akashaproject/sdk-typings/lib/interfaces/log';
-import { IMessage } from '@akashaproject/sdk-typings/lib/interfaces/auth';
+import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { IMessage } from '@akashaorg/sdk-typings/lib/interfaces/auth';
 import Settings from '../settings';
 
 import Gql from '../gql';
 import { map, tap } from 'rxjs/operators';
 import { forkJoin, from, lastValueFrom } from 'rxjs';
-import { AUTH_EVENTS } from '@akashaproject/sdk-typings/lib/interfaces/events';
+import { AUTH_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 import hash from 'object-hash';
 import { Buffer } from 'buffer';
 import { PublicKey } from '@textile/threaddb';
-import { CurrentUser } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { CurrentUser } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
+
+/**
+ * # sdk.api.auth
+ *
+ * Authentication module
+ *
+ */
 
 @injectable()
 class AWF_Auth implements AWF_IAuth {

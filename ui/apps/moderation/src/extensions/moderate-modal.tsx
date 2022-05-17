@@ -1,16 +1,16 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {
   useModeration,
   withProviders,
   useGetLogin,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { ModerateModal, ErrorLoader } = DS;

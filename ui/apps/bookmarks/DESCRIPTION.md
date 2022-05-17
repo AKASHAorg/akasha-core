@@ -1,0 +1,1 @@
+The AKASHA Foundation built this app so you can keep up with the posts and don’t miss any conversations you love. Bookmarks application lets you save posts in one place for a quick and easy access at any point of time later. Bookmarks are private and are only viewable to you within your Ethereum World account.

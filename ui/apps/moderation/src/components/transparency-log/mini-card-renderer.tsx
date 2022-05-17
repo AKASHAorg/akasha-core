@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { getMediaUrl, ILogItem } from '@akashaproject/ui-awf-hooks';
-import { ButtonValues } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { getMediaUrl, ILogItem } from '@akashaorg/ui-awf-hooks';
+import { ButtonValues } from '@akashaorg/ui-awf-typings';
 
 const { TransparencyLogMiniCard } = DS;
 

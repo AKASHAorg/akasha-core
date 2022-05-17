@@ -1,5 +1,5 @@
-import DS from '@akashaproject/design-system';
-import { DefaultTheme } from '@akashaproject/design-system/lib/styles/themes/interfaces';
+import DS from '@akashaorg/design-system';
+import { DefaultTheme } from '@akashaorg/design-system/lib/styles/themes/interfaces';
 const { createGlobalStyle, css } = DS;
 
 export const GlobalStyle = createGlobalStyle<{
@@ -29,12 +29,11 @@ export const GlobalStyle = createGlobalStyle<{
     padding: 0;
     background-color: ${props => props.theme.colors.background};
   }
-
   body.noscroll {
     overflow: hidden;
   }
 
-  #akashaproject-ui-widget-layout {
+  #root > div:first-child {
     display: flex;
     flex: 1 1 0%;
   }

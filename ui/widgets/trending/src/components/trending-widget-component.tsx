@@ -1,5 +1,5 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
   useTrendingTags,
@@ -10,10 +10,10 @@ import {
   useFollow,
   useUnfollow,
   useGetLogin,
-} from '@akashaproject/ui-awf-hooks';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { useAnalytics } from '@akashaproject/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+} from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 
@@ -53,7 +53,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   const handleTagClick = (tagName: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${tagName}`,
     });
   };
@@ -64,9 +64,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_TOPIC,
-      action: 'Subscribe',
-      name: 'Subscribed Topic From Widget',
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending Topic Subscribed',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
@@ -76,16 +75,15 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_TOPIC,
-      action: 'Unsubscribe',
-      name: 'Unsubscribed Topic From Widget',
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending Topic Unsubscribed',
     });
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
   const handleProfileClick = (pubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };
@@ -96,9 +94,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_PEOPLE,
-      action: 'Follow',
-      name: 'Widget',
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending People Followed',
     });
     followReq.mutate(ethAddress);
   };
@@ -109,9 +106,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       return;
     }
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.TRENDING_PEOPLE,
-      action: 'Unfollow',
-      name: 'Widget',
+      category: AnalyticsCategories.TRENDING_WIDGET,
+      action: 'Trending People Unfollowed',
     });
     unfollowReq.mutate(ethAddress);
   };
@@ -119,15 +115,13 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const handleActiveTabChange = (tab: number) => {
     if (tab === 0) {
       analyticsActions.trackEvent({
-        category: AnalyticsCategories.TRENDING_TOPIC,
-        action: 'Selected',
-        name: 'Trending Topic Widget Tab Selected',
+        category: AnalyticsCategories.TRENDING_WIDGET,
+        action: 'Trending Topic Tab Selected',
       });
     } else {
       analyticsActions.trackEvent({
-        category: AnalyticsCategories.TRENDING_PEOPLE,
-        action: 'Selected',
-        name: 'Widget',
+        category: AnalyticsCategories.TRENDING_WIDGET,
+        action: 'Trending People Tab Selected',
       });
     }
   };

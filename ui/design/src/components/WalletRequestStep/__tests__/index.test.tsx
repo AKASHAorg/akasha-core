@@ -15,7 +15,7 @@ describe.skip('<WalletRequestStep /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <WalletRequestStep
-            walletRequest={async () => {}}
+            walletRequest={async () => null}
             pending={false}
             completed={false}
             buttonLabel={'Select address in Wallet'}
@@ -53,7 +53,7 @@ describe.skip('<WalletRequestStep /> Component', () => {
     expect(button).toBeDefined();
   });
 
-  it('render button correctly', () => {
+  it('renders button correctly', () => {
     const { getByText } = componentWrapper;
     const button = getByText('Select address in Wallet');
     expect(button).toBeDefined();

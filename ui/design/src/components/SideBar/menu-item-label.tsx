@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 
-import { IMenuItem } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import { MenuAppButton } from './menu-app-button';
 
@@ -20,7 +20,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
       <Text
         size="large"
         margin={{ left: 'small' }}
-        color={isActive ? 'accent' : 'primaryText'}
+        color={isActive ? 'accentText' : 'primaryText'}
         style={{
           width: '200px',
           whiteSpace: 'nowrap',

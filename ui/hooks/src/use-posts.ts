@@ -1,20 +1,39 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
-import { Post_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
-import { IPublishData, PostResponse } from '@akashaproject/ui-awf-typings/lib/entry';
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { Post_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
+import { IPublishData, PostResponse } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { checkStatus } from './use-moderation';
 import { SEARCH_KEY } from './use-search';
 import { TRENDING_TAGS_KEY } from './use-trending';
 import { PROFILE_KEY } from './use-profile';
 
+/**
+ * @internal
+ */
 export const ENTRY_KEY = 'Entry';
+/**
+ * @internal
+ */
 export const ENTRIES_KEY = 'Entries';
+/**
+ * @internal
+ */
+export const ENTRIES_CUSTOM_KEY = 'EntriesCustomFeed';
+/**
+ * @internal
+ */
 export const ENTRIES_BY_TAG_KEY = 'EntriesByTag';
+/**
+ * @internal
+ */
 export const ENTRIES_BY_AUTHOR_KEY = 'EntriesByAuthor';
+/**
+ * @internal
+ */
 export const CREATE_POST_MUTATION_KEY = 'CreatePost';
 
 export type usePostParam = {
@@ -53,6 +72,41 @@ export function useInfinitePosts(limit: number, offset?: string) {
       getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
+      keepPreviousData: true,
+      onError: (err: Error) => logError('usePosts.getPosts', err),
+    },
+  );
+}
+
+const getCustomFeedPosts = async (limit: number, offset?: number) => {
+  const sdk = getSDK();
+  const res = await lastValueFrom(
+    sdk.api.entries.getFeedEntries({
+      limit: limit,
+      offset: offset,
+    }),
+  );
+  return {
+    ...res.data.getCustomFeed,
+    results: res.data.getCustomFeed.results.map(post => {
+      return post._id;
+    }),
+  };
+};
+
+/**
+ * Hook to get posts for personalised user feed from followed profiles and subscribed tags,
+ * sorted chronologically
+ */
+export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?: string) {
+  return useInfiniteQuery(
+    ENTRIES_CUSTOM_KEY,
+    async ({ pageParam = offset }) => getCustomFeedPosts(limit, pageParam),
+    {
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
+      //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
+      enabled: !!(offset || limit) && enabler,
       keepPreviousData: true,
       onError: (err: Error) => logError('usePosts.getPosts', err),
     },

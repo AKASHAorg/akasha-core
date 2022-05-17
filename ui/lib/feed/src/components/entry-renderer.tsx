@@ -1,9 +1,9 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import DS from '@akashaorg/design-system';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { EventTypes, ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { EventTypes, ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   usePost,
   useComment,
@@ -17,11 +17,9 @@ import {
   LoginState,
   useTagSearch,
   useMentionSearch,
-  COMMENT_KEY,
-} from '@akashaproject/ui-awf-hooks';
-import { IContentClickDetails } from '@akashaproject/design-system/lib/components/EntryCard/entry-box';
-import { AnalyticsCategories, TrackEventData } from '@akashaproject/ui-awf-typings/lib/analytics';
-import { IEntryData } from '@akashaproject/ui-awf-typings/lib/entry';
+} from '@akashaorg/ui-awf-hooks';
+import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
+import { AnalyticsCategories, TrackEventData } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -53,6 +51,7 @@ export interface IEntryRenderer {
   uiEvents: RootComponentProps['uiEvents'];
   className?: string;
   modalSlotId: string;
+  accentBorderTop?: boolean;
   trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
 }
 
@@ -76,6 +75,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     contentClickable,
     parentIsProfilePage,
     modalSlotId,
+    accentBorderTop,
     trackEvent,
   } = props;
 
@@ -176,7 +176,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const handleAvatarClick = () => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${itemData?.author.pubKey}`,
     });
   };
@@ -187,14 +187,14 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const handleMentionClick = (pubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };
 
   const handleTagClick = (name: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
     });
   };
@@ -255,8 +255,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const handleEditComment = commentData => {
     if (trackEvent) {
       trackEvent({
-        category: AnalyticsCategories.REPLY,
-        action: 'Edit',
+        category: AnalyticsCategories.POST,
+        action: 'Reply Edited',
       });
     }
     commentEditReq.mutate({ ...commentData, postID: itemData.postId });
@@ -374,6 +374,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 modalSlotId={modalSlotId}
                 bottomBorderOnly={isComment}
                 noBorderRadius={isComment}
+                accentBorderTop={accentBorderTop}
                 actionsRightExt={
                   <ExtensionPoint
                     name={`entry-card-actions-right_${itemId}`}

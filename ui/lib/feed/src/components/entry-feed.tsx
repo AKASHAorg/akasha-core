@@ -1,10 +1,10 @@
 import * as React from 'react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import { IFeedWidgetProps } from './App';
 import EntryRenderer from './entry-renderer';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
-import { useEntryNavigation } from '@akashaproject/ui-awf-hooks';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { EntryList } = DS;
 
@@ -46,6 +46,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           removedByAuthorLabel={props.removedByAuthorLabel}
           uiEvents={props.uiEvents}
           trackEvent={props.trackEvent}
+          accentBorderTop={props.accentBorderTop}
         />
       }
     />

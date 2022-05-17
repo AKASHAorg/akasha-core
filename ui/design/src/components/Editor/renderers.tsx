@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Icon from '../Icon';
 import { StyledAnchor } from '../TextInputIconForm/styles';
 import { StyledCloseDiv } from './styled-editor-box';
-import { ImageElement } from '@akashaproject/ui-awf-typings/lib/editor';
+import { ImageElement } from '@akashaorg/ui-awf-typings/lib/editor';
 
 const StyledImg = styled.img`
   display: block;
@@ -13,7 +13,7 @@ const StyledImg = styled.img`
 `;
 
 const StyledMention = styled.span`
-  color: ${props => props.theme.colors.accent};
+  color: ${props => props.theme.colors.accentText};
   cursor: pointer;
 `;
 

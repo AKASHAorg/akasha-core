@@ -11,7 +11,7 @@ interface AWF_IIpfsConnector {
 
   /**
    *
-   * @param doc
+   * @param doc - legal docs
    */
   getLegalDoc(doc: LEGAL_DOCS): ServiceCallResult<string>;
 }

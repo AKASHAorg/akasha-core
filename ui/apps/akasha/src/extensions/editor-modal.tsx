@@ -1,8 +1,8 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
 import {
   uploadMediaToTextile,
   getLinkPreview,
@@ -17,11 +17,11 @@ import {
   useGetLogin,
   useAnalytics,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { IPublishData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { EditorModal, ModalContainer, ModalCard, Spinner, ErrorLoader } = DS;
 
@@ -46,6 +46,7 @@ const EditorModalContainer = (props: RootExtensionProps) => {
     () => props.activeModal.hasOwnProperty('embedEntry'),
     [props.activeModal],
   );
+
   const embedEntryId = React.useMemo(() => {
     if (
       props.activeModal.hasOwnProperty('embedEntry') &&
@@ -93,18 +94,19 @@ const EditorModalContainer = (props: RootExtensionProps) => {
       if (isEditing) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Edit',
+          action: 'Post Edited',
         });
         editPost.mutate({ entryID: props.activeModal.entryId, ...data });
       } else {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Publish',
+          action: `${hasEmbed ? 'Repost' : 'New Post'} Published`,
         });
         publishPost.mutate({ ...data, pubKey: profileDataReq.data.pubKey });
       }
       props.singleSpa.navigateToUrl(location.pathname);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       isEditing,
       props.activeModal,

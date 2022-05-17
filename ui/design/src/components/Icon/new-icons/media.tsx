@@ -4,7 +4,7 @@ const Media = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" {...props}>
     <g fill="none" fillRule="evenodd" transform="translate(-793 -2710)">
       <g
-        stroke="#949EB3"
+        stroke="#425166"
         strokeLinecap="round"
         strokeLinejoin="round"
         transform="translate(795.25 2711.25)"

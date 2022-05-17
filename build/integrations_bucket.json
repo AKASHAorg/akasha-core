@@ -2,121 +2,121 @@
   {
     "name": "locales",
     "id": "0xc914c9efa3dec03f54e57a7f5956218306e3c1e620da9bbb91372dfea24eecdd",
-    "ipfsManifest": "f0155171c3a790d23fe992a8daa4b4a195c884351d5ec15b63669c5eca9fb1587",
+    "ipfsManifest": "f0155171c4a4f46ece0aa75354adc501271a8738f0048cf5a4a189913751a83f1",
     "type": ""
   },
   {
-    "name": "@akashaproject/app-akasha-integration",
-    "id": "0x8699cb72f66608f779b90294ec6a20b251558568aad35bd2ee72603ffe7b6b83",
-    "ipfsManifest": "f0155171c8a380c11b2269553d901648dcc75204277c6f7246bbcecdad5cfb5c1",
+    "name": "@akashaorg/app-akasha-integration",
+    "id": "0x0f7b806cb610e298f4108f77c5454edafdd48a213ac6df2466816442b2814060",
+    "ipfsManifest": "f0155171c18ed8a41abf97b71a99daf1030ff0811b319c9ee3fe802a2ba9c655b",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-auth-ewa",
-    "id": "0xdf3bffeba75126c5886d1a2e7a372970bfb9379b2bc9816477b108321d7016df",
-    "ipfsManifest": "f0155171cc9dd38d43dc7bc194c0298ccd7673cae69c3ea8c9f9c404eb5e5d117",
+    "name": "@akashaorg/app-auth-ewa",
+    "id": "0x6f8326aa8c1116feff879fa16af65849148e8fae5a79326de17a0cfa78b699b6",
+    "ipfsManifest": "f0155171c071a2689209e37521ff1bdf3410f6fa2156baf8e3a349161bb3732d0",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-moderation-ewa",
-    "id": "0xa3a248cf60b34be9286c7a3b72ba90e98bd40baac6e18d30219fd6cccb439cf6",
-    "ipfsManifest": "f0155171c9a2e2444d5650ec776c59a752192ce9e77a50ee6e88d092fa4a0a796",
+    "name": "@akashaorg/app-moderation-ewa",
+    "id": "0xb5353ae20a4ece1b430333820c5303ff86b3ef3b9662aa8c46f3c74adccf3c44",
+    "ipfsManifest": "f0155171c8e274599082ac4a0fce972b599eefc933bb07c20f293a09e790550f3",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-integration-center",
-    "id": "0xc043185f76b0f9dbe17fe1e7501732960a1b2f4b2580ea163c55c8c882f6f9bd",
-    "ipfsManifest": "f0155171c3ad5ed6cf2af8390763aaf85a99e8f7e00df0dd85e6f7fa095c50b19",
+    "name": "@akashaorg/app-integration-center",
+    "id": "0xb205644246860965047578d591cecced40ade1a782c6c84fa599173af6a22d9c",
+    "ipfsManifest": "f0155171cea875881233bd38d517f2b82a2fe49eec955ca8dcd0af02930fa5dda",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-bookmarks",
-    "id": "0x7c358962114872262bb341384016ad0bd30ef84ee0729f4b6e901f13a29799ca",
-    "ipfsManifest": "f0155171cae0e5ec6d40861cc91f1a164e18893bbc1c478a02d957e3d187c47de",
+    "name": "@akashaorg/app-bookmarks",
+    "id": "0x20dd2505b29183c28a411f6d70eed327214ce02efec798b3c56509d1d7ac829c",
+    "ipfsManifest": "f0155171ccf0b503d09fe3808b99e18f84e36bb04cc84a4e4bf1e37e47d002a76",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-legal",
-    "id": "0x85c848f515bc7d0e1c2b585314df40928c3bd17a7016d07c49423f4a429287fb",
-    "ipfsManifest": "f0155171c66638c229b643e03c8e2a3268d3e0ae0f3cc00ef1bd0da2e07775ef0",
+    "name": "@akashaorg/app-legal",
+    "id": "0xa13c7e5453255ff802b2d8e4d30bd308cd431e6bd6f4d7ab521e794eb445eb20",
+    "ipfsManifest": "f0155171ccb149191d8bb671b44ddae71b6fb9a51e73085d39a1495f596f2fca7",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-notifications",
-    "id": "0xafd49f21aa8f6cc0278036cc6d69643c6b8aa1fec2e497d44902cc13a27c1ea4",
-    "ipfsManifest": "f0155171cb040de0712457f22039e632799278eed3a040982af65ba6d8887da96",
+    "name": "@akashaorg/app-notifications",
+    "id": "0xa97de836ff423f85cd82a60e3dd78b3213d6254e23e2a71a53c933df9527882d",
+    "ipfsManifest": "f0155171cc5f1d5b2429dc0d263a345cab5e63a4817f9c2193820b59ec44b5104",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-profile",
-    "id": "0x086878e2e9a9340b2ba93c1bb79699e54fbab20f669cda35e36ec91221a4fbb6",
-    "ipfsManifest": "f0155171c56e7045fe2fc0304a1534f9c7252ddf45ce2b20b67ad1326fe8d225c",
+    "name": "@akashaorg/app-profile",
+    "id": "0x0c4ac6db8b99d1fbc682d27a80258d849b02ecb785ceaf082a0e4f6f4151b297",
+    "ipfsManifest": "f0155171c3941f8efa5db00e721c5282081e73278d3fefa38073c9f3f22c1ae32",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-search",
-    "id": "0xded636163ee57d4fb1f1a5761b9baaae52b4b85fb7f6827c28a0fdaf5dbb2f7f",
-    "ipfsManifest": "f0155171c6c26d3e770d23e94743f441a0672e387df98864bd57d20c27e1f26c0",
+    "name": "@akashaorg/app-search",
+    "id": "0x9e8d1f1e86a3e25a0e5e13a3fef2758442135a6c4dc1dc3d2dce7fa24bf9a7f2",
+    "ipfsManifest": "f0155171c68a53460849fab4e46fe3efcb2698ee138ac194a8269645eea89b284",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-settings-ewa",
-    "id": "0xa164ea08eca5aff06c24e88807ea347431a4634b994c66c808f19b11cd5a43fa",
-    "ipfsManifest": "f0155171cdc9acea447f458a85bafa8b2ec8d88112e3bd1fb98abc77fea6b0e6f",
+    "name": "@akashaorg/app-settings-ewa",
+    "id": "0x7f17d11d3f3cf063de963a764d2ac4133d64a2ed56b8929272b116e202f0e876",
+    "ipfsManifest": "f0155171cc35a887fa9fb3b572702fda53c7580dd128ede0122c8e8a5c66e4105",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-translation",
-    "id": "0x74fc28efda192a4f811917bd27009b63bcf724a30a373b3bf5fbc3af58488322",
-    "ipfsManifest": "f0155171c390a2028ab2092f8b3689a9bdafeb7493788079f1206936daea2e0c4",
+    "name": "@akashaorg/app-translation",
+    "id": "0x694ff1a407cb48aaf43ace2eb570ef17d0403182870f99a617b74cb36af4e366",
+    "ipfsManifest": "f0155171ca9c9236598c845c9d1358cdeb06a6f523903702578b777e79383c0be",
     "type": 0
   },
   {
-    "name": "@akashaproject/app-routing",
-    "id": "0x6d296af6c8a30849bc018dd1301b84ec04ebf5dbaf7e90940b5be01d14d60fcb",
-    "ipfsManifest": "f0155171cb33019117825a4eb4d0b01baaa1d0db8c91f7df5e1de8be7e1c6a2a1",
+    "name": "@akashaorg/app-routing",
+    "id": "0xc7dbd964618fa46a51ec3633a23d10c77b458d218ba061755ca7452f627d6504",
+    "ipfsManifest": "f0155171c5b69f1e99a6ee2727eeb0661327106475142b122cfeb2c4099e8338b",
     "type": 0
   },
   {
-    "name": "@akashaproject/ui-widget-layout",
-    "id": "0xab1b9d6f87dcaa5c3f1899e446c1d47cdf0463fb38d38f9824e48a9e04837748",
-    "ipfsManifest": "f0155171c6712d175686180e434966161dbf6c7ba5855366cc9eab2b9e29ecafb",
+    "name": "@akashaorg/ui-widget-layout",
+    "id": "0x7babda8c4fdba6cf5a2b439ee0318041e164073b25e0e757f5e98db2d889263f",
+    "ipfsManifest": "f0155171c88c289d5aed5e82227e2961b07beaaae44dd309694eab962ceee4cac",
     "type": 2
   },
   {
-    "name": "@akashaproject/ui-widget-sidebar",
-    "id": "0xfba190b3ed6c4b51548ee6d7b3584b5a21d8cc33698b484ce4755d7b17c26efa",
-    "ipfsManifest": "f0155171cffe0ef7bd490fc78941c8f09faa2be8d1b212f55790b7ab05d2b9e11",
+    "name": "@akashaorg/ui-widget-sidebar",
+    "id": "0x532b1092c1c4e587ec5356534000dc10bfc3935ce190712367e2815487e5924e",
+    "ipfsManifest": "f0155171cd8f75a388465760952d0992fac9052a51aed0f71bb9e47e99373ce93",
     "type": 2
   },
   {
-    "name": "@akashaproject/ui-widget-topbar",
-    "id": "0x9208e9c4eb9945ff7b7c00ad2f63d3230755a1cb1cf87336eb18f3f9b5338c40",
-    "ipfsManifest": "f0155171c1ae12ab788d271aeb95d2c90f6f741e08edc6fe991e49218377447b5",
+    "name": "@akashaorg/ui-widget-topbar",
+    "id": "0xdaa1a853c9e7ce4b075a9c36a0b44b14bcea7d16641bbb9be33eb14e2e867dd5",
+    "ipfsManifest": "f0155171c9e452e74cd439f9b1a1a713685186b98efd5c37ea3a4d883afd85c2b",
     "type": 2
   },
   {
-    "name": "@akashaproject/ui-widget-trending",
-    "id": "0xe28a0c9120a6725409ebb8dfee353abae6b5eba8aa887621fdf5aca31ddd1e28",
-    "ipfsManifest": "f0155171c27192812c2839491378112cdd28f723b76e1658e1f619758ffe5c133",
+    "name": "@akashaorg/ui-widget-trending",
+    "id": "0xce1cab3c9a2a34d9ded2d01631cbeb0acb5a82d0334d053c84c92c225dc99709",
+    "ipfsManifest": "f0155171c633614a9e74cc716517f25dd0b6eb49f894726f0a658621ff1d9583a",
     "type": 2
   },
   {
-    "name": "@akashaproject/ui-widget-analytics",
-    "id": "0x6ba0e656c18f421bf7e8969b6f0d85b67ba7f0f855ad0900e4c7f67dd98fa6d7",
-    "ipfsManifest": "f0155171c1499072f0200f926974fb55408501b616b5d0f403bed5a954ae958ab",
+    "name": "@akashaorg/ui-widget-analytics",
+    "id": "0x2c4d5cd69c3a53dcf5477b3a43ddb6e71ddd21addecc4cdfee1020a21aa8927f",
+    "ipfsManifest": "f0155171ce2dedc55a37e17cd6f4cc52fda87c3a249fe8daaa919cba1d1bef73a",
     "type": 2
   },
   {
-    "name": "@akashaproject/ui-widget-mini-profile",
-    "id": "0x3313c68e244625e47ea0d1d185131882c3dc78c608cc41d30307e129400b8d98",
-    "ipfsManifest": "f0155171c96093e59fb85f59185e5f11dff76e60d6c711b3cb247514e61cb3244",
+    "name": "@akashaorg/ui-widget-mini-profile",
+    "id": "0x3d179e60d19a1c167a0ea774d5a354b5fbfe4007d0f818498bb08e53d6d9618d",
+    "ipfsManifest": "f0155171c7f531bdd404cd42f46db4a87438b119e2fde2360cf973cf72d1897d2",
     "type": 2
   },
   {
-    "name": "@akashaproject/ui-widget-my-apps",
-    "id": "0xef11f3540f3bf52363bbb2593e716204f00528499dbbe0c05c520fb431933404",
-    "ipfsManifest": "f0155171c88c8cb7235d4eb2df665a32b117c90644889892bbb026446c2431ff5",
+    "name": "@akashaorg/ui-widget-my-apps",
+    "id": "0xc902513577d3192e8018931dd03ab480ea2f2a6e003835b949942e7be828665c",
+    "ipfsManifest": "f0155171c8421be63806aaa2a92d92a13a990ce633b1cd0fe0a2a711447eb433f",
     "type": 2
   }
 ]

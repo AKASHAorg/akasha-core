@@ -1,22 +1,22 @@
 export const hiddenIntegrations = [
   {
-    name: '@akashaproject/app-translation',
-    id: '0x74fc28efda192a4f811917bd27009b63bcf724a30a373b3bf5fbc3af58488322',
+    name: '@akashaorg/app-translation',
+    id: '0x694ff1a407cb48aaf43ace2eb570ef17d0403182870f99a617b74cb36af4e366',
   },
   {
-    name: '@akashaproject/app-routing',
-    id: '0x6d296af6c8a30849bc018dd1301b84ec04ebf5dbaf7e90940b5be01d14d60fcb',
+    name: '@akashaorg/app-routing',
+    id: '0xc7dbd964618fa46a51ec3633a23d10c77b458d218ba061755ca7452f627d6504',
   },
   {
-    name: '@akashaproject/ui-widget-layout',
-    id: '0xab1b9d6f87dcaa5c3f1899e446c1d47cdf0463fb38d38f9824e48a9e04837748',
+    name: '@akashaorg/ui-widget-layout',
+    id: '0x7babda8c4fdba6cf5a2b439ee0318041e164073b25e0e757f5e98db2d889263f',
   },
   {
-    name: '@akashaproject/ui-widget-sidebar',
-    id: '0xfba190b3ed6c4b51548ee6d7b3584b5a21d8cc33698b484ce4755d7b17c26efa',
+    name: '@akashaorg/ui-widget-sidebar',
+    id: '0x532b1092c1c4e587ec5356534000dc10bfc3935ce190712367e2815487e5924e',
   },
   {
-    name: '@akashaproject/ui-widget-topbar',
-    id: '0x9208e9c4eb9945ff7b7c00ad2f63d3230755a1cb1cf87336eb18f3f9b5338c40',
+    name: '@akashaorg/ui-widget-topbar',
+    id: '0xdaa1a853c9e7ce4b075a9c36a0b44b14bcea7d16641bbb9be33eb14e2e867dd5',
   },
 ];

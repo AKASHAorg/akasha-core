@@ -1,8 +1,8 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import DS from '@akashaproject/design-system';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import DS from '@akashaorg/design-system';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import {
   useDeleteBookmark,
   useGetBookmarks,
@@ -11,10 +11,10 @@ import {
   withProviders,
   useAnalytics,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
-import { ItemTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/ui-awf-hooks';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { styled, TextIcon, Icon } = DS;
 
@@ -55,14 +55,14 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
       if (isBookmarked) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Remove Bookmark',
+          action: 'Post Bookmark Removed',
         });
         bookmarkDelete.mutate(entryId);
       }
       if (!isBookmarked) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
-          action: 'Bookmark',
+          action: 'Post Bookmarked',
         });
         bookmarkCreate.mutate({ entryId, itemType: entryType });
       }

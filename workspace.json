@@ -4,18 +4,18 @@
     "defaultCollection": "@nrwl/workspace"
   },
   "projects": {
-    "@akashaproject/nx-executors": {
+    "@akashaorg/nx-executors": {
       "root": "tools/executors"
     },
-    "@akashaproject/ui-awf-typings": {
+    "@akashaorg/ui-awf-typings": {
       "root": "ui/typings",
       "sourceRoot": "ui/typings/src",
       "projectType": "library"
     },
-    "@akashaproject/hub-api": {
+    "@akashaorg/hub-api": {
       "root": "api/hub"
     },
-    "@akashaproject/awf-sdk": {
+    "@akashaorg/awf-sdk": {
       "root": "sdk",
       "sourceRoot": "sdk/src",
       "projectType": "application",
@@ -31,12 +31,12 @@
         }
       }
     },
-    "@akashaproject/sdk-typings": {
+    "@akashaorg/sdk-typings": {
       "root": "sdk/typings",
       "sourceRoot": "sdk/typings/src",
       "projectType": "library"
     },
-    "@akashaproject/design-system": {
+    "@akashaorg/design-system": {
       "root": "ui/design",
       "sourceRoot": "ui/design/src",
       "projectType": "application",
@@ -54,7 +54,7 @@
         }
       }
     },
-    "@akashaproject/ui-awf-hooks": {
+    "@akashaorg/ui-awf-hooks": {
       "root": "ui/hooks",
       "sourceRoot": "ui/hooks/src",
       "projectType": "application",
@@ -70,7 +70,7 @@
         }
       }
     },
-    "@akashaproject/ui-app-loader": {
+    "@akashaorg/ui-app-loader": {
       "root": "ui/app-loader",
       "sourceRoot": "ui/app-loader/src",
       "projectType": "application",
@@ -86,22 +86,22 @@
         }
       }
     },
-    "@akashaproject/ui-awf-testing-utils": {
-      "root": "ui/testing-utils",
-      "sourceRoot": "ui/testing-utils/src",
+    "@akashaorg/af-testing": {
+      "root": "tests",
+      "sourceRoot": "tests/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
             "commands": ["yarn build"],
-            "cwd": "ui/testing-utils",
+            "cwd": "tests",
             "parallel": false
           }
         }
       }
     },
-    "@akashaproject/ui-widget-analytics": {
+    "@akashaorg/ui-widget-analytics": {
       "root": "ui/widgets/analytics",
       "sourceRoot": "ui/widgets/analytics/src",
       "projectType": "application",
@@ -123,7 +123,7 @@
         }
       }
     },
-    "@akashaproject/ui-widget-layout": {
+    "@akashaorg/ui-widget-layout": {
       "root": "ui/widgets/layout",
       "sourceRoot": "ui/widgets/layout/src",
       "projectType": "application",
@@ -139,21 +139,16 @@
         }
       }
     },
-    "@akashaproject/ui-widget-mini-profile": {
+    "@akashaorg/ui-widget-mini-profile": {
       "root": "ui/widgets/mini-profile",
       "sourceRoot": "ui/widgets/mini-profile/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/mini-profile"
-          ],
+          "outputs": ["ui/build/widgets/mini-profile"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/mini-profile",
             "parallel": false
           }
@@ -166,21 +161,16 @@
         }
       }
     },
-    "@akashaproject/ui-widget-my-apps": {
+    "@akashaorg/ui-widget-my-apps": {
       "root": "ui/widgets/my-apps",
       "sourceRoot": "ui/widgets/my-apps/src",
       "projectType": "application",
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/build/widgets/my-apps"
-          ],
+          "outputs": ["ui/build/widgets/my-apps"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/widgets/my-apps",
             "parallel": false
           }
@@ -193,7 +183,7 @@
         }
       }
     },
-    "@akashaproject/ui-widget-sidebar": {
+    "@akashaorg/ui-widget-sidebar": {
       "root": "ui/widgets/sidebar",
       "sourceRoot": "ui/widgets/sidebar/src",
       "projectType": "application",
@@ -215,7 +205,7 @@
         }
       }
     },
-    "@akashaproject/ui-widget-topbar": {
+    "@akashaorg/ui-widget-topbar": {
       "root": "ui/widgets/top-bar",
       "sourceRoot": "ui/widgets/top-bar/src",
       "projectType": "application",
@@ -237,7 +227,7 @@
         }
       }
     },
-    "@akashaproject/ui-widget-trending": {
+    "@akashaorg/ui-widget-trending": {
       "root": "ui/widgets/trending",
       "sourceRoot": "ui/widgets/trending/src",
       "projectType": "application",
@@ -259,7 +249,7 @@
         }
       }
     },
-    "@akashaproject/ui-lib-feed": {
+    "@akashaorg/ui-lib-feed": {
       "root": "ui/lib/feed",
       "sourceRoot": "ui/lib/feed/src",
       "projectType": "application",
@@ -281,7 +271,7 @@
         }
       }
     },
-    "@akashaproject/app-akasha-integration": {
+    "@akashaorg/app-akasha-integration": {
       "root": "ui/apps/akasha",
       "sourceRoot": "ui/apps/akasha/src",
       "projectType": "application",
@@ -303,7 +293,7 @@
         }
       }
     },
-    "@akashaproject/app-integration-center": {
+    "@akashaorg/app-integration-center": {
       "root": "ui/apps/app-center",
       "sourceRoot": "ui/apps/app-center/src",
       "projectType": "application",
@@ -325,7 +315,7 @@
         }
       }
     },
-    "@akashaproject/app-auth-ewa": {
+    "@akashaorg/app-auth-ewa": {
       "root": "ui/apps/auth-app",
       "sourceRoot": "ui/apps/auth-app/src",
       "projectType": "application",
@@ -347,7 +337,7 @@
         }
       }
     },
-    "@akashaproject/app-bookmarks": {
+    "@akashaorg/app-bookmarks": {
       "root": "ui/apps/bookmarks",
       "sourceRoot": "ui/apps/bookmarks/src",
       "projectType": "application",
@@ -369,7 +359,7 @@
         }
       }
     },
-    "@akashaproject/app-legal": {
+    "@akashaorg/app-legal": {
       "root": "ui/apps/legal",
       "sourceRoot": "ui/apps/legal/src",
       "projectType": "application",
@@ -391,7 +381,7 @@
         }
       }
     },
-    "@akashaproject/app-moderation-ewa": {
+    "@akashaorg/app-moderation-ewa": {
       "root": "ui/apps/moderation",
       "sourceRoot": "ui/apps/moderation/src",
       "projectType": "application",
@@ -413,7 +403,7 @@
         }
       }
     },
-    "@akashaproject/app-notifications": {
+    "@akashaorg/app-notifications": {
       "root": "ui/apps/notifications",
       "sourceRoot": "ui/apps/notifications/src",
       "projectType": "application",
@@ -435,7 +425,7 @@
         }
       }
     },
-    "@akashaproject/app-profile": {
+    "@akashaorg/app-profile": {
       "root": "ui/apps/profile",
       "sourceRoot": "ui/apps/profile/src",
       "projectType": "application",
@@ -457,7 +447,7 @@
         }
       }
     },
-    "@akashaproject/app-search": {
+    "@akashaorg/app-search": {
       "root": "ui/apps/search",
       "sourceRoot": "ui/apps/search/src",
       "projectType": "application",
@@ -479,7 +469,7 @@
         }
       }
     },
-    "@akashaproject/app-settings-ewa": {
+    "@akashaorg/app-settings-ewa": {
       "root": "ui/apps/settings-app",
       "sourceRoot": "ui/apps/settings-app/src",
       "projectType": "application",
@@ -501,7 +491,7 @@
         }
       }
     },
-    "@akashaproject/app-translation": {
+    "@akashaorg/app-translation": {
       "root": "ui/apps/translation",
       "sourceRoot": "ui/apps/translation/src",
       "projectType": "application",
@@ -517,7 +507,7 @@
         }
       }
     },
-    "@akashaproject/app-routing": {
+    "@akashaorg/app-routing": {
       "root": "ui/apps/routing",
       "sourceRoot": "ui/apps/routing/src",
       "projectType": "application",
@@ -533,7 +523,7 @@
         }
       }
     },
-    "@akashaproject/ethereum.world": {
+    "@akashaorg/ethereum.world": {
       "root": "examples/ui/ethereum.world",
       "sourceRoot": "examples/ui/ethereum.world/src",
       "projectType": "application",

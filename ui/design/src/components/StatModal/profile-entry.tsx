@@ -6,7 +6,7 @@ import DuplexButton from '../DuplexButton';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
 import useIntersectionObserver from '../../utils/intersection-observer';
-import { UserFollowers_Response } from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import { UserFollowers_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
 
 export interface IProfileEntry {
   getMediaUrl?: (hash?: string) => { originLink: string; fallbackLink: string; pathLink: string };

@@ -1,16 +1,11 @@
 import * as React from 'react';
 import App from '../App';
 
-import {
-  RenderResult,
-  renderWithAllProviders,
-  getSDKMocks,
-  act,
-} from '@akashaproject/ui-awf-testing-utils';
+import { RenderResult, renderWithAllProviders, mockSDK, act } from '@akashaorg/af-testing';
 
 describe('<App /> component', () => {
   let renderResult: RenderResult;
-  const sdkMocks = getSDKMocks({});
+  const sdkMocks = mockSDK({});
   const BaseComponent = (
     <App
       singleSpa={{}}

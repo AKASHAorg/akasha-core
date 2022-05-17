@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { INJECTED_PROVIDERS } from '@akashaproject/sdk-typings/lib/interfaces/common';
-import DS from '@akashaproject/design-system';
+import { INJECTED_PROVIDERS } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import DS from '@akashaorg/design-system';
 import { StyledButton } from './styles';
-import { EthProviders } from '@akashaproject/ui-awf-typings';
-import { useAnalytics } from '@akashaproject/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { EthProviders } from '@akashaorg/ui-awf-typings';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { Text, Icon, Box, VariableIconButton } = DS;
 

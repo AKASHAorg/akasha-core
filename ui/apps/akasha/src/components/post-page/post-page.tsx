@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { ILocale } from '@akashaproject/design-system/lib/utils/time';
+import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import {
   getLinkPreview,
   uploadMediaToTextile,
@@ -21,15 +21,15 @@ import {
   useMentionSearch,
   useEntryNavigation,
   createPendingEntry,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 
-import { IPublishData } from '@akashaproject/ui-awf-typings/lib/entry';
-import FeedWidget from '@akashaproject/ui-lib-feed/lib/components/App';
-import { ItemTypes, EventTypes } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
+import { IPublishData } from '@akashaorg/ui-awf-typings/lib/entry';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import { ItemTypes, EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import routes, { POST } from '../../routes';
-import { useAnalytics } from '@akashaproject/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -131,14 +131,14 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const handleMentionClick = (pubKey: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };
 
   const handleTagClick = (name: string) => {
     navigateTo?.({
-      appName: '@akashaproject/app-akasha-integration',
+      appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
     });
   };
@@ -146,7 +146,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
     ev.preventDefault();
     navigateTo?.({
-      appName: '@akashaproject/app-profile',
+      appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => `${routes.rootRoute}/${pubKey}`,
     });
   };
@@ -162,13 +162,17 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const handlePublishComment = async (data: IPublishData) => {
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.REPLY,
-      action: 'Publish',
+      category: AnalyticsCategories.POST,
+      action: 'Reply Published',
     });
     publishComment.mutate({ ...data, postID: postId });
   };
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.POST,
+      action: 'Repost Clicked',
+    });
     if (!loginState?.ethAddress) {
       showLoginModal();
       return;
@@ -229,8 +233,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const handleEditorPlaceholderClick = () => {
     analyticsActions.trackEvent({
-      category: AnalyticsCategories.REPLY,
-      action: 'Placeholder Click',
+      category: AnalyticsCategories.POST,
+      action: 'Reply Placeholder Clicked',
     });
   };
 

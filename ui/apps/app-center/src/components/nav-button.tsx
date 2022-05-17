@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRouteMatch } from 'react-router-dom';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 
 const { TabButton } = DS;
 

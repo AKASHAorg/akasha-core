@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaproject/design-system';
-import { NavigateToParams, RootComponentProps } from '@akashaproject/ui-awf-typings';
-import { IProfileData, UsernameTypes } from '@akashaproject/ui-awf-typings/lib/profile';
+import DS from '@akashaorg/design-system';
+import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { IProfileData, UsernameTypes } from '@akashaorg/ui-awf-typings/lib/profile';
 import {
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
   LoginState,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
 import { getUsernameTypes } from '../../utils/username-utils';

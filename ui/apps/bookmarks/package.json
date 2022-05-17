@@ -1,7 +1,7 @@
 {
-  "name": "@akashaproject/app-bookmarks",
+  "name": "@akashaorg/app-bookmarks",
   "version": "0.1.0",
-  "description": "Plugin to show bookmarked content",
+  "description": "The AKASHA Foundation built this app so you can keep up with the posts and don't miss any conversations you love.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)",
@@ -31,12 +31,12 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaproject/design-system": "*",
-    "@akashaproject/sdk-typings": "*",
-    "@akashaproject/ui-awf-hooks": "*",
-    "@akashaproject/ui-awf-typings": "*",
-    "@akashaproject/ui-lib-feed": "*",
-    "@akashaproject/ui-widget-trending": "*",
+    "@akashaorg/design-system": "*",
+    "@akashaorg/sdk-typings": "*",
+    "@akashaorg/ui-awf-hooks": "*",
+    "@akashaorg/ui-awf-typings": "*",
+    "@akashaorg/ui-lib-feed": "*",
+    "@akashaorg/ui-widget-trending": "*",
     "@types/react-router": "5.1.16",
     "@types/react-router-dom": "5.1.8",
     "i18next": "20.6.1",
@@ -49,7 +49,7 @@
     "single-spa-react": "4.6.0"
   },
   "devDependencies": {
-    "@akashaproject/ui-awf-testing-utils": "*",
+    "@akashaorg/af-testing": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/react-test-renderer": "17.0.1",

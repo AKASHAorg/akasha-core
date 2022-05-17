@@ -4,7 +4,7 @@ import {
   AnalyticsEventData,
   AnalyticsEventTypes,
   TrackEventData,
-} from '@akashaproject/ui-awf-typings/lib/analytics';
+} from '@akashaorg/ui-awf-typings/lib/analytics';
 import { RootComponentProps } from '../../../typings/lib';
 
 export interface CustomSingleSpaEvent extends Event {

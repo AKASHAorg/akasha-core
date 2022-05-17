@@ -1,24 +1,25 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import getSDK from '@akashaproject/awf-sdk';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import getSDK from '@akashaorg/awf-sdk';
+import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
-import {
-  IPublishData,
-  CommentResponse,
-  PostResponse,
-} from '@akashaproject/ui-awf-typings/lib/entry';
-import {
-  Comment_Response,
-  Post_Response,
-} from '@akashaproject/sdk-typings/lib/interfaces/responses';
+import { IPublishData, CommentResponse, PostResponse } from '@akashaorg/ui-awf-typings/lib/entry';
+import { Comment_Response, Post_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
 import { ENTRY_KEY } from './use-posts';
 
+/**
+ * @internal
+ */
 export const COMMENT_KEY = 'Comment';
+/**
+ * @internal
+ */
 export const COMMENTS_KEY = 'Comments';
-
+/**
+ * @internal
+ */
 export const PUBLISH_PENDING_KEY = 'PendingPublish_Comments';
 
 const getComments = async (limit: number, postID: string, offset?: string) => {

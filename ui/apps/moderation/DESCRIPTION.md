@@ -1,0 +1,1 @@
+The AKASHA Foundation developed this app to ensure safe, healthy and active Community experience on Ethereum World. This app plays key role in enabling the creation and development of vibrant “Worlds” where people want to get together, enjoy their experience and feel they belong.

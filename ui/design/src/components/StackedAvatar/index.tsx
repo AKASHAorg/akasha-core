@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IProfileData } from '@akashaproject/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import * as React from 'react';
 import Avatar from '../Avatar';
 import { StyledStackBox, StyledContainer } from './styled-stacked-avatar';

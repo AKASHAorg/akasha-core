@@ -1,4 +1,4 @@
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { BehaviorSubject, concatMap, EMPTY, lastValueFrom, share } from 'rxjs';
 
 class FollowUnfollowQueue {

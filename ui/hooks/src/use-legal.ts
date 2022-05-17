@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { lastValueFrom } from 'rxjs';
-import getSDK from '@akashaproject/awf-sdk';
-import { LEGAL_DOCS } from '@akashaproject/ui-awf-typings';
+import getSDK from '@akashaorg/awf-sdk';
+import { LEGAL_DOCS } from '@akashaorg/ui-awf-typings';
 import { logError } from './utils/error-handler';
 
 export const LEGAL_KEY = 'Legal';

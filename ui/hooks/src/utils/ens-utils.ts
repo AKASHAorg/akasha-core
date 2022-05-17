@@ -1,4 +1,4 @@
-import { UsernameTypes } from '@akashaproject/ui-awf-typings/lib/profile';
+import { UsernameTypes } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export const getEnsNameType = (name: string) => {
   let nameType = UsernameTypes.TEXTILE;

@@ -9,8 +9,8 @@ const ArrowLeft = (props: React.SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <path d="M17.5002 10H3.72743" stroke="#4E71FF" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M7.5 5L2.5 10L7.5 15" stroke="#4E71FF" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M17.5002 10H3.72743" stroke="#8b9FFF" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M7.5 5L2.5 10L7.5 15" stroke="#8b9FFF" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 

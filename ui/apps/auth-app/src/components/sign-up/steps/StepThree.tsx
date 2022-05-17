@@ -1,15 +1,15 @@
 import * as React from 'react';
 
-import DS from '@akashaproject/design-system';
-import { INJECTED_PROVIDERS } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
-import { IInjectedProviderDetails } from '@akashaproject/ui-awf-hooks/lib/utils/getProviderDetails';
-import { EthProviders } from '@akashaproject/awf-sdk/typings/lib/interfaces';
+import DS from '@akashaorg/design-system';
+import { INJECTED_PROVIDERS } from '@akashaorg/awf-sdk/typings/lib/interfaces/common';
+import { IInjectedProviderDetails } from '@akashaorg/ui-awf-hooks/lib/utils/getProviderDetails';
+import { EthProviders } from '@akashaorg/awf-sdk/typings/lib/interfaces';
 import {
   switchToRequiredNetwork,
   useAnalytics,
   useNetworkState,
-} from '@akashaproject/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaproject/ui-awf-typings/lib/analytics';
+} from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 import RequiredNetworkStep, { IRequiredNetworkStepProps } from './required-network';
 
@@ -92,7 +92,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
   const handleSocialLogin = () => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.SIGN_UP,
-      action: 'Social Login',
+      action: 'Social Login Selection',
     });
     onProviderSelect(EthProviders.Torus);
   };

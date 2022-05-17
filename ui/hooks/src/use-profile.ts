@@ -1,7 +1,7 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-import getSDK from '@akashaproject/awf-sdk';
+import getSDK from '@akashaorg/awf-sdk';
 import { forkJoin, lastValueFrom } from 'rxjs';
-import { DataProviderInput } from '@akashaproject/sdk-typings/lib/interfaces/common';
+import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
 
 import { checkStatus } from './use-moderation';
 import { buildProfileMediaLinks } from './utils/media-utils';
@@ -11,15 +11,39 @@ import {
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
-} from '@akashaproject/ui-awf-typings/lib/profile';
+} from '@akashaorg/ui-awf-typings/lib/profile';
 
+/**
+ * @internal
+ */
 export const FOLLOWERS_KEY = 'FOLLOWERS';
+/**
+ * @internal
+ */
 export const FOLLOWING_KEY = 'FOLLOWING';
+/**
+ * @internal
+ */
 export const PROFILE_KEY = 'PROFILE';
+/**
+ * @internal
+ */
 export const ENTRY_AUTHOR_KEY = 'ENTRY_AUTHOR_KEY';
+/**
+ * @internal
+ */
 export const INTERESTS_KEY = 'INTERESTS';
+/**
+ * @internal
+ */
 export const UPDATE_PROFILE_DATA_KEY = 'UPDATE_PROFILE_DATA';
+/**
+ * @internal
+ */
 export const ADD_PROFILE_PROVIDER_KEY = 'ADD_PROFILE_PROVIDER';
+/**
+ * @internal
+ */
 export const UPDATE_PROFILE_STATUS = 'UPDATE_PROFILE_STATUS';
 
 const getProfileData = async (payload: {

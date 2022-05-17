@@ -24,7 +24,7 @@ const ButtonInfo = styled.div<{ active?: boolean }>`
   ${props => {
     if (props.active) {
       return css`
-        color: ${props.theme.colors.accent};
+        color: ${props.theme.colors.accentText};
       `;
     }
     return css`

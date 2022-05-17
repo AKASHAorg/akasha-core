@@ -2,9 +2,9 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
-import { ModalNavigationOptions } from '@akashaproject/ui-awf-typings/lib/app-loader';
-import { RootComponentProps } from '@akashaproject/ui-awf-typings';
-import DS from '@akashaproject/design-system';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import DS from '@akashaorg/design-system';
 import {
   useGetAllInstalledApps,
   useGetAllIntegrationsIds,
@@ -12,7 +12,7 @@ import {
   withProviders,
   useGetLogin,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 import { hiddenIntegrations } from './hidden-integrations';
 
 const { Box, ICWidgetCard, ErrorLoader } = DS;
@@ -34,9 +34,11 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 
   const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
 
-  const filteredIntegrations = availableIntegrationsReq?.data?.filter(
-    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
-  );
+  const filteredIntegrations = React.useMemo(() => {
+    return availableIntegrationsReq?.data?.filter(
+      id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+    );
+  }, [availableIntegrationsReq?.data]);
 
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,
@@ -45,19 +47,27 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     [worldConfig.layout],
   );
 
+  const filteredDefaultIntegrations = React.useMemo(() => {
+    return defaultIntegrations?.filter(
+      id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+    );
+  }, [defaultIntegrations]);
+
+  const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
+
   const integrationIdsNormalized = React.useMemo(() => {
     if (filteredIntegrations) {
       return filteredIntegrations.map(integrationId => {
         return { id: integrationId };
       });
     }
-    return worldConfig.defaultApps
+    return filteredDefaultIntegrations
       .map(integrationName => {
         if (!hiddenIntegrations.some(hiddenInt => hiddenInt.name === integrationName))
           return { name: integrationName };
       })
       .filter(Boolean);
-  }, [filteredIntegrations, worldConfig.defaultApps]);
+  }, [filteredIntegrations, filteredDefaultIntegrations]);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
@@ -67,7 +77,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       return integrationsInfoReq.data?.getLatestRelease.reduce(
         (acc, app) => {
           // select default apps from list of apps
-          if (defaultIntegrations.includes(app.name)) {
+          if (defaultApps.includes(app.name)) {
             acc.filteredDefaultApps.push(app);
           } else {
             // select user installed apps from list of installed apps
@@ -81,14 +91,14 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       );
     }
     return { filteredDefaultApps: [], filteredInstalledApps: [] };
-  }, [defaultIntegrations, installedAppsReq.data, integrationsInfoReq.data?.getLatestRelease]);
+  }, [defaultApps, installedAppsReq.data, integrationsInfoReq.data?.getLatestRelease]);
 
   const handleAppClick = (integrationId: string) => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
     props.plugins?.routing?.navigateTo?.({
-      appName: '@akashaproject/app-integration-center',
+      appName: '@akashaorg/app-integration-center',
       getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
     });
   };

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaproject/ui-awf-typings';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
-import DS from '@akashaproject/design-system';
+import DS from '@akashaorg/design-system';
 import {
   useNetworkState,
   useGetProfile,
@@ -12,19 +12,19 @@ import {
   useGetLogin,
   withProviders,
   ThemeWrapper,
-} from '@akashaproject/ui-awf-hooks';
+} from '@akashaorg/ui-awf-hooks';
 import {
   UsernameTypes,
   ProfileProviders,
   IProfileData,
   ProfileProviderProperties,
-} from '@akashaproject/ui-awf-typings/lib/profile';
+} from '@akashaorg/ui-awf-typings/lib/profile';
 import { I18nextProvider, TFunction, useTranslation } from 'react-i18next';
 import {
   ENSOptionTypes,
   EnsFormOption,
-} from '@akashaproject/design-system/lib/components/EnsFormCard';
-import { DataProviderInput } from '@akashaproject/awf-sdk/typings/lib/interfaces/common';
+} from '@akashaorg/design-system/lib/components/EnsFormCard';
+import { DataProviderInput } from '@akashaorg/awf-sdk/typings/lib/interfaces/common';
 
 const {
   ErrorLoader,

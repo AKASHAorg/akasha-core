@@ -1,4 +1,4 @@
-import { CustomEditor, CustomElement, CustomText } from '@akashaproject/ui-awf-typings/lib/editor';
+import { CustomEditor, CustomElement, CustomText } from '@akashaorg/ui-awf-typings/lib/editor';
 
 declare module 'slate' {
   interface CustomTypes {
