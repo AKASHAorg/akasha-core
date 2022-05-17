@@ -21,6 +21,12 @@ import sharp from 'sharp';
 import { CID } from 'multiformats/cid';
 import { AuthorNotificationValue } from './collections/interfaces';
 import { ICRegistryAbi } from './abi';
+import ProfileAPI from './datasources/profile';
+import TagAPI from './datasources/tag';
+import PostAPI from './datasources/post';
+import CommentAPI from './datasources/comment';
+import FollowerAPI from './datasources/follower';
+import { DataSource } from 'apollo-datasource';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -375,3 +381,25 @@ export const multiAddrToUri = (addrList: string[]) => {
   }
   return results;
 };
+
+interface ApiProvider {
+  [key: string]: DataSource;
+  profileAPI: ProfileAPI;
+  tagsAPI: TagAPI;
+  postsAPI: PostAPI;
+  commentsAPI: CommentAPI;
+  followerAPI: FollowerAPI;
+}
+let currentApiProvider: ApiProvider;
+export const createApiProvider = (dbID: ThreadID) => {
+  currentApiProvider = {
+    profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
+    tagsAPI: new TagAPI({ dbID, collection: 'Tags' }),
+    postsAPI: new PostAPI({ dbID, collection: 'Posts' }),
+    commentsAPI: new CommentAPI({ dbID, collection: 'Comments' }),
+    followerAPI: new FollowerAPI({ dbID, collection: 'Followers' }),
+  };
+  return currentApiProvider;
+};
+
+export const getCurrentApiProvider = () => currentApiProvider;

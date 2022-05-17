@@ -233,7 +233,7 @@ const mutations = {
       logger.warn(`bad follow sig`);
       return Promise.reject(dataSigError);
     }
-    const response = await dataSources.profileAPI.followProfile(user.pubKey, ethAddress);
+    const response = await dataSources.followerAPI.followProfile(user.pubKey, ethAddress);
     mutationsCounter.inc({
       mutationType: 'follow',
     });
@@ -255,7 +255,7 @@ const mutations = {
     mutationsCounter.inc({
       mutationType: 'unFollow',
     });
-    return dataSources.profileAPI.unFollowProfile(user.pubKey, ethAddress);
+    return dataSources.followerAPI.unFollowProfile(user.pubKey, ethAddress);
   },
   saveMetaData: async (_, { data }, { dataSources, user, signature }) => {
     if (!user) {

@@ -7,6 +7,7 @@ import * as ModerationReports from './moderation-reports';
 import * as ModerationDecisions from './moderation-decisions';
 import * as ModerationReasons from './moderation-reasons';
 import * as Moderators from './moderators';
+import * as Followers from './followers';
 import { Client, ThreadID } from '@textile/hub';
 import { logger } from '../helpers';
 
@@ -57,6 +58,11 @@ export const initCollections = async (client: Client, threadID: ThreadID) => {
     const moderatorsDeployed = collections.find(d => d.name === 'Moderators');
     if (!moderatorsDeployed) {
       await Moderators.newCollection(client, threadID);
+    }
+
+    const followersDeployed = collections.find(d => d.name === 'Followers');
+    if (!followersDeployed) {
+      await Followers.newCollection(client, threadID);
     }
   } catch (e) {
     logger.error(e);

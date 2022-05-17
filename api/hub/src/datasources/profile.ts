@@ -3,6 +3,7 @@ import {
   EMPTY_KEY,
   EMPTY_PROFILE,
   getAppDB,
+  getCurrentApiProvider,
   logger,
   sendNotification,
   validateName,
@@ -18,7 +19,7 @@ import objHash from 'object-hash';
 const NOT_FOUND_PROFILE = new Error('Profile not found');
 const NOT_REGISTERED = new Error('Must be registered first.');
 class ProfileAPI extends DataSource {
-  private readonly collection: string;
+  readonly collection: string;
   private context;
   private readonly dbID: ThreadID;
   private readonly FOLLOWING_KEY = ':getFollowing:';
@@ -93,10 +94,13 @@ class ProfileAPI extends DataSource {
       );
       const totalPosts =
         totalPostsIndex !== -1 ? profilesFound[0].metaData[totalPostsIndex].value : '0';
+      const apiProvider = getCurrentApiProvider();
+      const followers = await apiProvider.followerAPI.getFollowers(pubKey);
+      const following = await apiProvider.followerAPI.getFollowing(pubKey);
       Object.assign(returnedObj, {
         totalPosts,
-        totalFollowers: profilesFound[0]?.followers?.length || 0,
-        totalFollowing: profilesFound[0]?.following?.length || 0,
+        totalFollowers: followers.total,
+        totalFollowing: following.total,
         totalInterests: profilesFound[0]?.interests?.length || 0,
       });
       await queryCache.set(cacheKey, returnedObj);
@@ -205,88 +209,6 @@ class ProfileAPI extends DataSource {
       .catch(e => console.error(e));
     return profile._id;
   }
-  async followProfile(pubKey: string, ethAddress: string) {
-    const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
-    const query = new Where('ethAddress').eq(ethAddress);
-    const [profile] = await t.find<Profile>(query);
-
-    const query1 = new Where('pubKey').eq(pubKey);
-    const [profile1] = await t.find<Profile>(query1);
-    const exists = profile1.following.indexOf(profile.pubKey);
-    const exists1 = profile.followers.indexOf(profile1.pubKey);
-
-    if (!profile || !profile1) {
-      logger.warn(`profile for ${pubKey} or ${ethAddress} was not found`);
-      await t.end();
-      return false;
-    }
-
-    if (exists === -1) {
-      profile1.following.unshift(profile.pubKey);
-    }
-    if (exists1 === -1) {
-      profile.followers.unshift(profile1.pubKey);
-    }
-    await t.save([profile]);
-    await t.save([profile1]);
-    await t.end();
-    const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
-    const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
-
-    await queryCache.del(followingKey);
-    await queryCache.del(followersKey);
-    await queryCache.del(this.getCacheKey(profile.pubKey));
-    await queryCache.del(this.getCacheKey(profile1.pubKey));
-    const notification = {
-      property: 'NEW_FOLLOWER',
-      provider: 'awf.graphql.profile.api',
-      value: {
-        follower: pubKey,
-      },
-    };
-    await sendNotification(profile.pubKey, notification);
-    return true;
-  }
-
-  async unFollowProfile(pubKey: string, ethAddress: string) {
-    const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
-    const query = new Where('ethAddress').eq(ethAddress);
-    const [profile] = await t.find<Profile>(query);
-
-    const query1 = new Where('pubKey').eq(pubKey);
-    const [profile1] = await t.find<Profile>(query1);
-    const exists = profile1.following.indexOf(profile.pubKey);
-    const exists1 = profile.followers.indexOf(profile1.pubKey);
-    if (!profile || !profile1) {
-      logger.warn(`profile for ${pubKey} or ${ethAddress} was not found`);
-      await t.end();
-      return false;
-    }
-    if (exists !== -1) {
-      profile1.following.splice(exists, 1);
-    }
-
-    if (exists1 !== -1) {
-      profile.followers.splice(exists1, 1);
-    }
-
-    await t.save([profile]);
-    await t.save([profile1]);
-    await t.end();
-
-    const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${profile1.pubKey}`);
-    const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${profile.pubKey}`);
-
-    await queryCache.del(followingKey);
-    await queryCache.del(followersKey);
-    await queryCache.del(this.getCacheKey(profile.pubKey));
-    await queryCache.del(this.getCacheKey(profile1.pubKey));
-    return true;
-  }
 
   async saveMetadata(pubKey: string, data: DataProvider) {
     const db: Client = await getAppDB();
@@ -329,74 +251,6 @@ class ProfileAPI extends DataSource {
   async updateProfile(updateProfile: Profile[]) {
     const db: Client = await getAppDB();
     return db.save(this.dbID, this.collection, updateProfile);
-  }
-
-  /**
-   * @param pubKey
-   * @param limit
-   * @param offset
-   */
-  async getFollowers(pubKey: string, limit = 5, offset = 0) {
-    const db: Client = await getAppDB();
-    const key = this.getCacheKey(`${this.FOLLOWERS_KEY}${pubKey}`);
-    const hasAllPostsCache = await queryCache.has(key);
-    let followers: string[];
-    if (!hasAllPostsCache) {
-      const query = new Where('pubKey').eq(pubKey);
-      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
-      if (!profilesFound?.length) {
-        logger.warn(`${pubKey} not registered`);
-        throw NOT_REGISTERED;
-      }
-      await queryCache.set(key, profilesFound[0].followers);
-      followers = profilesFound[0].followers;
-    } else {
-      followers = await queryCache.get(key);
-    }
-    if (!followers?.length) {
-      return { results: [], nextIndex: undefined, total: 0 };
-    }
-    let nextIndex = limit + offset;
-    if (followers.length <= nextIndex) {
-      nextIndex = undefined;
-    }
-    const results = followers.slice(offset, nextIndex);
-    return { results: results, nextIndex: nextIndex, total: followers.length };
-  }
-
-  /**
-   *
-   * @param pubKey
-   * @param limit
-   * @param offset
-   */
-  async getFollowing(pubKey: string, limit = 5, offset = 0) {
-    const db: Client = await getAppDB();
-    const key = this.getCacheKey(`${this.FOLLOWING_KEY}${pubKey}`);
-    const hasAllPostsCache = await queryCache.has(key);
-    let following: string[];
-    if (!hasAllPostsCache) {
-      const query = new Where('pubKey').eq(pubKey);
-      const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
-      if (!profilesFound?.length) {
-        logger.warn(`${pubKey} not registered`);
-        throw NOT_REGISTERED;
-      }
-      await queryCache.set(key, profilesFound[0].following);
-      following = profilesFound[0].following;
-    } else {
-      following = await queryCache.get(key);
-    }
-    if (!following?.length) {
-      return { results: [], nextIndex: undefined, total: 0 };
-    }
-    let nextIndex = limit + offset;
-    if (following.length <= nextIndex) {
-      nextIndex = undefined;
-    }
-
-    const results = following.slice(offset, nextIndex);
-    return { results: results, nextIndex: nextIndex, total: following.length };
   }
 
   /**
@@ -453,6 +307,13 @@ class ProfileAPI extends DataSource {
       return [];
     }
     return profile.interests;
+  }
+
+  async getProfiles() {
+    const db: Client = await getAppDB();
+    return db.find<Profile>(this.dbID, this.collection, {
+      sort: { desc: true, fieldPath: 'creationDate' },
+    });
   }
 }
 

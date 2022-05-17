@@ -18,17 +18,14 @@ dotenv.config();
 
 import wss from './wss';
 import api, { promRegistry } from './api';
-import ProfileAPI from './datasources/profile';
 import { contextCache, redisCache } from './storage/cache';
-import TagAPI from './datasources/tag';
-import PostAPI from './datasources/post';
-import CommentAPI from './datasources/comment';
 import { ThreadID } from '@textile/hub';
 import query from './resolvers/query';
 import mutations from './resolvers/mutations';
-import { setupDBCollections } from './helpers';
+import { createApiProvider, getCurrentApiProvider, setupDBCollections } from './helpers';
 import { utils } from 'ethers';
 import createMetricsPlugin from './plugins/metrics';
+import runFollowersMigration from './migrations/followers';
 
 if (!process.env.USER_GROUP_API_KEY || !process.env.USER_GROUP_API_SECRET) {
   // tslint:disable-next-line:no-console
@@ -85,12 +82,7 @@ const server = new ApolloServer({
     Mutation: mutations,
   },
   cache: redisCache,
-  dataSources: () => ({
-    profileAPI: new ProfileAPI({ dbID, collection: 'Profiles' }),
-    tagsAPI: new TagAPI({ dbID, collection: 'Tags' }),
-    postsAPI: new PostAPI({ dbID, collection: 'Posts' }),
-    commentsAPI: new CommentAPI({ dbID, collection: 'Comments' }),
-  }),
+  dataSources: () => createApiProvider(dbID),
   // access Koa context
   context: ({ ctx }) => {
     const header = ctx.headers.authorization || '';
@@ -113,6 +105,12 @@ const server = new ApolloServer({
 });
 
 (async () => {
+  if (process.env.RUN_MIGRATIONS) {
+    setTimeout(async () => {
+      console.info('running migrations');
+      await runFollowersMigration(dbID);
+    }, 60000);
+  }
   await server.start();
   server.applyMiddleware({ app });
   await new Promise(resolve => app.listen({ port: PORT }, resolve));
