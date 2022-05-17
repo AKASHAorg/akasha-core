@@ -60,25 +60,20 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     );
   }, [availableIntegrationsReq?.data]);
 
-  const filteredDefaultIntegrations = defaultIntegrations?.filter(
-    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
-  );
-
   const integrationIdsNormalized = React.useMemo(() => {
     if (filteredIntegrations) {
       return filteredIntegrations.map(integrationId => {
         return { id: integrationId };
       });
     }
-    return filteredDefaultIntegrations
-      .map(integrationName => {
-        if (!hiddenIntegrations.some(hiddenInt => hiddenInt.name === integrationName))
-          return { name: integrationName };
-      })
-      .filter(Boolean);
-  }, [filteredIntegrations, filteredDefaultIntegrations]);
+    return [];
+  }, [filteredIntegrations]);
 
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
+
+  const latestReleasesInfo = React.useMemo(() => {
+    return integrationsInfoReq.data?.getLatestRelease;
+  }, [integrationsInfoReq.data?.getLatestRelease]);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
@@ -157,7 +152,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <Switch>
                 <Route path={routes[EXPLORE]}>
                   <ExplorePage
-                    latestReleasesInfo={integrationsInfoReq.data?.getLatestRelease}
+                    latestReleasesInfo={latestReleasesInfo}
                     defaultIntegrations={defaultIntegrations}
                     installedAppsInfo={installedAppsReq.data}
                     isFetching={integrationsInfoReq.isFetching}
@@ -168,7 +163,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 </Route>
                 <Route path={routes[MY_APPS]}>
                   <MyAppsPage
-                    latestReleasesInfo={integrationsInfoReq.data?.getLatestRelease}
+                    latestReleasesInfo={latestReleasesInfo}
                     defaultIntegrations={defaultIntegrations}
                     installedAppsInfo={installedAppsReq.data}
                     isFetching={integrationsInfoReq.isFetching}
@@ -180,7 +175,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 </Route>
                 <Route path={routes[WIDGETS]}>
                   <WidgetsPage
-                    latestReleasesInfo={integrationsInfoReq.data?.getLatestRelease}
+                    latestReleasesInfo={latestReleasesInfo}
                     isFetching={integrationsInfoReq.isFetching}
                     {...props}
                   />
