@@ -8,25 +8,25 @@
   {
     "name": "@akashaorg/app-akasha-integration",
     "id": "0x0f7b806cb610e298f4108f77c5454edafdd48a213ac6df2466816442b2814060",
-    "ipfsManifest": "f0155171c18ed8a41abf97b71a99daf1030ff0811b319c9ee3fe802a2ba9c655b",
+    "ipfsManifest": "f0155171cb15cd5f6f64355dce27ad7a8a55db333292161a9ea40b9b5dd014ef8",
     "type": 0
   },
   {
     "name": "@akashaorg/app-auth-ewa",
     "id": "0x6f8326aa8c1116feff879fa16af65849148e8fae5a79326de17a0cfa78b699b6",
-    "ipfsManifest": "f0155171c071a2689209e37521ff1bdf3410f6fa2156baf8e3a349161bb3732d0",
+    "ipfsManifest": "f0155171cad91a1674fe212db1a4d8a90687fbd4c4271d853df37aa07e8986d26",
     "type": 0
   },
   {
     "name": "@akashaorg/app-moderation-ewa",
     "id": "0xb5353ae20a4ece1b430333820c5303ff86b3ef3b9662aa8c46f3c74adccf3c44",
-    "ipfsManifest": "f0155171c8e274599082ac4a0fce972b599eefc933bb07c20f293a09e790550f3",
+    "ipfsManifest": "f0155171cee7e70b9b439616eeed78f5dce78450c0f8b81469d02f8bbafc0b1b8",
     "type": 0
   },
   {
     "name": "@akashaorg/app-integration-center",
     "id": "0xb205644246860965047578d591cecced40ade1a782c6c84fa599173af6a22d9c",
-    "ipfsManifest": "f0155171cea875881233bd38d517f2b82a2fe49eec955ca8dcd0af02930fa5dda",
+    "ipfsManifest": "f0155171cd171f6198743fa4cc640748cc701bb15a5ed760b96283ebf8529b429",
     "type": 0
   },
   {
@@ -104,7 +104,7 @@
   {
     "name": "@akashaorg/ui-widget-analytics",
     "id": "0x2c4d5cd69c3a53dcf5477b3a43ddb6e71ddd21addecc4cdfee1020a21aa8927f",
-    "ipfsManifest": "f0155171ce2dedc55a37e17cd6f4cc52fda87c3a249fe8daaa919cba1d1bef73a",
+    "ipfsManifest": "f0155171ca7c9269585e0af0bca30ecf5e4aff558b0d893348ce3bc2059cb1fd8",
     "type": 2
   },
   {
@@ -116,7 +116,7 @@
   {
     "name": "@akashaorg/ui-widget-my-apps",
     "id": "0xc902513577d3192e8018931dd03ab480ea2f2a6e003835b949942e7be828665c",
-    "ipfsManifest": "f0155171c8421be63806aaa2a92d92a13a990ce633b1cd0fe0a2a711447eb433f",
+    "ipfsManifest": "f0155171cf24ee416a97be54abec57009fdae5d6404e1953b8c7ac3def8074941",
     "type": 2
   }
 ]
