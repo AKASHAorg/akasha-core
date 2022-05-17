@@ -232,17 +232,17 @@ class AWF_Profile implements AWF_IProfile {
 
   /**
    *
-   * @param ethAddress
+   * @param pubKey
    */
-  follow(ethAddress: string) {
-    return this._auth.authenticateMutationData(ethAddress).pipe(
+  follow(pubKey: string) {
+    return this._auth.authenticateMutationData(pubKey).pipe(
       map(res => {
         this._gql.clearCache();
         return this._gql
           .run<{ follow: boolean }>(
             {
               query: Follow,
-              variables: { ethAddress: ethAddress },
+              variables: { pubKey: pubKey },
               operationName: 'Follow',
               context: {
                 headers: {
@@ -259,7 +259,7 @@ class AWF_Profile implements AWF_IProfile {
               this._globalChannel.next({
                 data: ev.data,
                 event: PROFILE_EVENTS.FOLLOW,
-                args: { ethAddress },
+                args: { pubKey },
               });
             }),
           );
@@ -270,17 +270,17 @@ class AWF_Profile implements AWF_IProfile {
 
   /**
    *
-   * @param ethAddress
+   * @param pubKey
    */
-  unFollow(ethAddress: string) {
-    return this._auth.authenticateMutationData(ethAddress).pipe(
+  unFollow(pubKey: string) {
+    return this._auth.authenticateMutationData(pubKey).pipe(
       map(res => {
         this._gql.clearCache();
         return this._gql
           .run<{ unFollow: boolean }>(
             {
               query: UnFollow,
-              variables: { ethAddress: ethAddress },
+              variables: { pubKey: pubKey },
               operationName: 'UnFollow',
               context: {
                 headers: {
@@ -297,7 +297,7 @@ class AWF_Profile implements AWF_IProfile {
               this._globalChannel.next({
                 data: ev.data,
                 event: PROFILE_EVENTS.UNFOLLOW,
-                args: { ethAddress },
+                args: { pubKey },
               });
             }),
           );

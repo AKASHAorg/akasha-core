@@ -58,12 +58,12 @@ query GetProfile($ethAddress: String!) {
   }
 }
 
-mutation Follow($ethAddress: String!) {
-  follow(ethAddress: $ethAddress)
+mutation Follow($pubKey: String!) {
+  follow(pubKey: $pubKey)
 }
 
-mutation UnFollow($ethAddress: String!) {
-  unFollow(ethAddress: $ethAddress)
+mutation UnFollow($pubKey: String!) {
+  unFollow(pubKey: $pubKey)
 }
 
 query IsFollowing($follower: String!, $following: String!) {

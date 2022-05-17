@@ -224,8 +224,8 @@ const typeDefs = gql`
     registerUserName(name: String!): String!
     createTag(name: String!): String
     createPost(content: [DataProviderInput!], post: PostData): String
-    follow(ethAddress: String!): Boolean
-    unFollow(ethAddress: String!): Boolean
+    follow(pubKey: String!): Boolean
+    unFollow(pubKey: String!): Boolean
     addComment(content: [DataProviderInput!], comment: CommentData): String
     reportContent(report: ReportData, meta: ReportMeta): String
     moderateContent(decision: DecisionData, meta: DecisionMeta): Boolean

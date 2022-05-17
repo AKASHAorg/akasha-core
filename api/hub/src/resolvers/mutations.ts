@@ -220,32 +220,32 @@ const mutations = {
     }
     return true;
   },
-  follow: async (_, { ethAddress }, { dataSources, user, signature }) => {
+  follow: async (_, { pubKey }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
     const verified = await verifyEd25519Sig({
       pubKey: user?.pubKey,
-      data: ethAddress,
+      data: pubKey,
       signature: signature,
     });
     if (!verified) {
       logger.warn(`bad follow sig`);
       return Promise.reject(dataSigError);
     }
-    const response = await dataSources.followerAPI.followProfile(user.pubKey, ethAddress);
+    const response = await dataSources.followerAPI.followProfile(user.pubKey, pubKey);
     mutationsCounter.inc({
       mutationType: 'follow',
     });
     return response;
   },
-  unFollow: async (_, { ethAddress }, { dataSources, user, signature }) => {
+  unFollow: async (_, { pubKey }, { dataSources, user, signature }) => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
     const verified = await verifyEd25519Sig({
       pubKey: user?.pubKey,
-      data: ethAddress,
+      data: pubKey,
       signature: signature,
     });
     if (!verified) {
@@ -255,7 +255,7 @@ const mutations = {
     mutationsCounter.inc({
       mutationType: 'unFollow',
     });
-    return dataSources.followerAPI.unFollowProfile(user.pubKey, ethAddress);
+    return dataSources.followerAPI.unFollowProfile(user.pubKey, pubKey);
   },
   saveMetaData: async (_, { data }, { dataSources, user, signature }) => {
     if (!user) {
