@@ -34,9 +34,11 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 
   const availableIntegrationsReq = useGetAllIntegrationsIds(isLoggedIn);
 
-  const filteredIntegrations = availableIntegrationsReq?.data?.filter(
-    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
-  );
+  const filteredIntegrations = React.useMemo(() => {
+    return availableIntegrationsReq?.data?.filter(
+      id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+    );
+  }, [availableIntegrationsReq?.data]);
 
   const defaultIntegrations = [].concat(
     worldConfig.defaultApps,
@@ -45,9 +47,11 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     [worldConfig.layout],
   );
 
-  const filteredDefaultIntegrations = defaultIntegrations?.filter(
-    id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
-  );
+  const filteredDefaultIntegrations = React.useMemo(() => {
+    return defaultIntegrations?.filter(
+      id => !hiddenIntegrations.some(hiddenInt => hiddenInt.id === id),
+    );
+  }, [defaultIntegrations]);
 
   const defaultApps = [].concat(worldConfig.defaultApps, [worldConfig.homepageApp]);
 

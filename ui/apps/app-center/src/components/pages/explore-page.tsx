@@ -74,7 +74,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
   const handleAppClick = (app: ReleaseInfo) => {
     props.plugins.routing?.navigateTo?.({
       appName: '@akashaorg/app-integration-center',
-      getNavigationUrl: routes => `${routes[INFO]}/${app.id}`,
+      getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });
   };
 
