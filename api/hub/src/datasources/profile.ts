@@ -19,7 +19,7 @@ import objHash from 'object-hash';
 const NOT_FOUND_PROFILE = new Error('Profile not found');
 const NOT_REGISTERED = new Error('Must be registered first.');
 class ProfileAPI extends DataSource {
-  private readonly collection: string;
+  readonly collection: string;
   private context;
   private readonly dbID: ThreadID;
   private readonly FOLLOWING_KEY = ':getFollowing:';
@@ -307,6 +307,13 @@ class ProfileAPI extends DataSource {
       return [];
     }
     return profile.interests;
+  }
+
+  async getProfiles() {
+    const db: Client = await getAppDB();
+    return db.find<Profile>(this.dbID, this.collection, {
+      sort: { desc: true, fieldPath: 'creationDate' },
+    });
   }
 }
 

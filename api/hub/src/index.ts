@@ -25,6 +25,7 @@ import mutations from './resolvers/mutations';
 import { createApiProvider, getCurrentApiProvider, setupDBCollections } from './helpers';
 import { utils } from 'ethers';
 import createMetricsPlugin from './plugins/metrics';
+import runFollowersMigration from './migrations/followers';
 
 if (!process.env.USER_GROUP_API_KEY || !process.env.USER_GROUP_API_SECRET) {
   // tslint:disable-next-line:no-console
@@ -104,6 +105,12 @@ const server = new ApolloServer({
 });
 
 (async () => {
+  if (process.env.RUN_MIGRATIONS) {
+    setTimeout(async () => {
+      console.info('running migrations');
+      await runFollowersMigration(dbID);
+    }, 60000);
+  }
   await server.start();
   server.applyMiddleware({ app });
   await new Promise(resolve => app.listen({ port: PORT }, resolve));
