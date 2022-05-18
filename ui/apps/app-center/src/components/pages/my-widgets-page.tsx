@@ -13,7 +13,7 @@ export interface IWidgetsPage extends RootComponentProps {
   isFetching?: boolean;
 }
 
-const WidgetsPage: React.FC<IWidgetsPage> = props => {
+const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
   const { worldConfig, latestReleasesInfo, isFetching } = props;
 
   const { t } = useTranslation('app-integration-center');
@@ -89,4 +89,4 @@ const WidgetsPage: React.FC<IWidgetsPage> = props => {
   );
 };
 
-export default WidgetsPage;
+export default MyWidgetsPage;
