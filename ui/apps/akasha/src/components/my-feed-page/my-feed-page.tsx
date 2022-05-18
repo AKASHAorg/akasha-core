@@ -92,11 +92,11 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       <Box margin={{ bottom: 'medium' }} gap="medium">
         <StartCard
           title={t('My Feed')}
-          heading={t('✨ Add a little magic to your feed ✨')}
+          heading={t('Add some magic to your feed 🪄')}
           description={t(
             'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
           )}
-          secondaryDescription={t('Here’s your unique view to Ethereum World')}
+          secondaryDescription={t('Your customized view of Ethereum World')}
           image="/images/news-feed.png"
           showMainArea={!userHasSubscriptions}
           hideMainAreaOnMobile={false}
@@ -135,12 +135,14 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       {userHasSubscriptions && !postsReq.isFetching && (
         <MyFeedCard
           title={t('✨ Add a little magic to your feed ✨')}
-          description={t('You can follow more topics and people to make your feed more “You”. ')}
+          description={t(
+            'Follow topics and wonderful people you care about most to feel at home every time you visit Ethereum World. ',
+          )}
           noPostsTitle={t('No Posts Yet')}
           noPostsDescription={t(
             'Once you start following people or topics with published posts, they will be found here.',
           )}
-          CTALabel={t('Find topics & people')}
+          CTALabel={t('Find topics and people')}
           onClickCTA={handleCTAClick}
           hasPosts={hasPosts}
         />

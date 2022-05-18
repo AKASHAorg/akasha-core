@@ -106,7 +106,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             icon="appCenter"
             title={t('Welcome to the Integration Centre!')}
             suggestion={t(
-              'Here you will be able to find your installed Apps, you will be able to explore new apps & widgets to add to Ethereum World.',
+              'The Integration Center is the trusted go-to place to explore, discover and experience apps, widgets, and plug-ins straight from the Ethereum World interface. If these haven’t been scrutinized by our avid scrutinizers and found to be fine specimens of dsocial networking, you won’t find them here.',
             )}
             noBorder={true}
           />

@@ -65,7 +65,11 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
           <Text size="large" color="secondaryText">
             {t('World Apps')}
           </Text>
-          <Text>{t('These are the default apps that come in the world')}</Text>
+          <Text>
+            {t(
+              'The World needs love. These are a handful of essential apps to get this World spinning',
+            )}
+          </Text>
         </Box>
         <Box gap="small">
           {filteredDefaultApps?.map((app, index) => (

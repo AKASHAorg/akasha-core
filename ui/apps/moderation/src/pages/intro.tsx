@@ -48,10 +48,12 @@ const IntroPage: React.FC<ISharedModerationProps & RootComponentProps> = props =
       titleLabel={t('Moderating')}
       subtitleLabel={t('Welcome to the Dashboard')}
       isIntro={true}
-      introLabel={t('Welcome to the Moderation App')}
+      introLabel={t('Are you interested in Moderating?')}
       descriptionLine1Label={t(
-        'Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy.',
+        "We are currently creating new Moderating Systems for Ethereum World, If you'd like to join us click",
       )}
+      ctaLabel="here"
+      ctaUrl="https://www.notion.so/akasha-foundation/The-AKASHA-Moderating-Open-Design-Challenge-15cb49cf57e740be92534958828ca210"
       descriptionLine2IntroLabel={t('Visit our')}
       codeOfConductLabel={t('Code of Conduct')}
       descriptionLine2Label={t('to learn more about our moderation criteria')}

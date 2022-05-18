@@ -83,16 +83,23 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path={routes[PRIVACY]}>
             <PrivacyOption
               titleLabel={t('Privacy')}
-              essentialCookiesLabel={t('Essential Cookies')}
-              essentialCookiesInfo={t(
-                'The collection and processing of these data are carried out for the purpose of enabling the use of our App (establishing a connection), ensuring system security and stability over the long term and optimising our internet presence as well as for internal statistical purposes. It is within our legitimate interest to process such data to offer you a well-functioning App. You can find out more by going to our ',
+              essentialCookiesLabel={t('Essential cookies')}
+              essentialCookiesInfo1={t(
+                "We've gotta have essential cookies. The clue's in the name. They're essential to initiating your experience of Ethereum World, and keeping it secure, stable, and optimized so you'll feel like this is your kind of thing — to use, celebrate, and help grow. If you're a privacy geek like us, you'll find ",
               )}
-              trackingAnalyticsLabel={t('Tracking and Analytics')}
-              trackingAnalyticsInfoIntro={t('We use ')}
-              trackingAnalyticsInfo={t(
-                " an open source analytics platform that will help us improve Ethereum World. As we respect your privacy, rest assured that we don't store personal identifiable information (PPI).",
+              essentialCookiesInfo2={t(' makes for perfect bedtime reading.')}
+              essentialCookiesInfo3={t(
+                'And the best thing about Ethereum World is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we’re doing this thing together.',
               )}
-              privacyPolicyLabel={t('Privacy Policy')}
+              privacyPolicyLabel={t('our privacy policy')}
+              trackingAnalyticsLabel={t('Tracking and analytics')}
+              trackingAnalyticsInfo1={t(
+                'As we’ve said ☝🏽, we’re doing this together. If you want to contribute some insight into how Ethereum World is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
+              )}
+              trackingAnalyticsInfo2={t(
+                " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time.",
+              )}
+              trackingAnalyticsLinkLabel={t('Click here to learn more.')}
               checkedTracking={checkedTracking}
               cookieType={cookieType}
               onTrackingOptionChange={handleTrackingOptionChange}
@@ -121,7 +128,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <AppearanceOption
               titleLabel="Appearance"
               appThemeLabel={t('App Theme')}
-              appThemeInfo={t("Choose your preference for the Ethereum World's theme")}
+              appThemeInfo={t(
+                'Choose your preferred Ethereum World’s theme. So what will it be today?',
+              )}
               theme={theme}
               onThemeSelect={handleThemeSelect}
               OnChevronLeftClick={handleChevronLeftClick}

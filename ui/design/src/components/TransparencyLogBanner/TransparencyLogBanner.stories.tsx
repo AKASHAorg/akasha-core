@@ -18,7 +18,8 @@ export default {
     keptCountLabel: { control: 'text' },
     totalCountLabel: { control: 'text' },
     delistedCountLabel: { control: 'text' },
-    footerLabel: { control: 'text' },
+    footerLabel1: { control: 'text' },
+    footerLabel2: { control: 'text' },
     footerLinkLabel: { control: 'text' },
     footerLink: { control: 'text' },
   },
@@ -40,7 +41,7 @@ export const BaseTransparencyLogBanner = Template.bind({});
 BaseTransparencyLogBanner.args = {
   size: '18.75rem',
   assetName: 'moderation-history-illustration',
-  title: 'Moderation History',
+  title: 'Moderation history',
   content:
     'Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy.',
   keptCount: keptCount,
@@ -48,7 +49,8 @@ BaseTransparencyLogBanner.args = {
   totalCountLabel: 'total',
   delistedCount: delistedCount,
   delistedCountLabel: 'delisted',
-  footerLabel: 'Visit our Code of Conduct to learn more about our moderation criteria',
+  footerLabel1: 'Check out the Ethereum World ',
+  footerLabel2: ' here.',
   footerLinkLabel: 'Code of Conduct',
   footerLink: 'https://akasha.ethereum.world/legal/code-of-conduct',
 };

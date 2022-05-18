@@ -46,18 +46,15 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     });
   };
 
-  const description = t('Mark your favourite posts, you can find them here anytime.');
+  const description = t(
+    'Bookmarks help you save your favorite posts for quick access at any time.',
+  );
 
   const getSubtitleText = () => {
     if (isLoggedIn && bookmarks?.length) {
-      return t(
-        'There {{ verb }} {{ bookmarkCount }} {{ grammaticalPost }} saved in your bookmarks.',
-        {
-          verb: bookmarks.length === 1 ? 'is' : 'are',
-          bookmarkCount: bookmarks.length,
-          grammaticalPost: bookmarks.length === 1 ? 'post' : 'posts',
-        },
-      );
+      return t('You have {{ bookmarkCount }} bookmarks.', {
+        bookmarkCount: bookmarks.length,
+      });
     }
     if (isLoggedIn && !bookmarks?.length) {
       return description;
@@ -88,9 +85,9 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
           {bookmarksReq.isFetched && (!bookmarks || !bookmarks.length) && (
             <InfoCard
               icon="bookmark"
-              title={t('No bookmarks saved 🔖')}
+              title={t('No bookmarks yet 🔖')}
               suggestion={t(
-                'You have not saved any posts yet. Once you start doing so, they will be found here.',
+                'When you bookmark things, you’ll find them waiting patiently for you here.',
               )}
             />
           )}

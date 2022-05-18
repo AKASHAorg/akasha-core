@@ -19,16 +19,17 @@ const Banner: React.FC<IBanner> = props => {
     <TransparencyLogBanner
       size="12.75rem"
       assetName="moderation-history-illustration"
-      title={t('Moderation History')}
+      title={t('Moderation history')}
       content={t(
-        'Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy.',
+        'Ethereum World moderating currently involves the delisting of posts, replies, and accounts in breach of the Code of Conduct. Anyone can view the history of moderating actions here. Personal information is not disclosed for reasons of personal privacy.',
       )}
       keptCount={count.kept}
       keptCountLabel={t('kept')}
       totalCountLabel={t('total')}
       delistedCount={count.delisted}
       delistedCountLabel={t('delisted')}
-      footerLabel={t('Visit our Code of Conduct to learn more about our moderation criteria')}
+      footerLabel1={t('Check out the Ethereum World ')}
+      footerLabel2={t(' here')}
       footerLinkLabel={t('Code of Conduct')}
       footerLink="https://akasha.ethereum.world/legal/code-of-conduct"
     />
