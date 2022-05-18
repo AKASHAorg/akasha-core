@@ -46,7 +46,9 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
           <Box gap="medium">
             <StartCard
               title={t('Notifications')}
-              subtitle={t('Check latest followers & mentions')}
+              subtitle={t(
+                'Check out the latest development about the topics you are most interested in and people you care about.',
+              )}
               heading={t("You won't miss a thing 🔔")}
               description={t("Here you'll receive alerts from your apps.")}
               image="images/notification.png"

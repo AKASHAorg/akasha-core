@@ -46,14 +46,14 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
           justify="center"
           align="start"
         >
-          <StyledText>{appThemeInfo}:</StyledText>
+          <StyledText>{appThemeInfo}</StyledText>
           <RadioButtonGroup
             gap="xsmall"
             pad={{ top: 'medium' }}
             name="reasons"
             options={[
-              { value: 'Dark-Theme', label: 'Dark Theme' },
-              { value: 'Light-Theme', label: 'Light Theme' },
+              { value: 'Dark-Theme', label: 'Dark theme' },
+              { value: 'Light-Theme', label: 'Light theme' },
             ]}
             value={theme}
             onChange={onThemeSelect}

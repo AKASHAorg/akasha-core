@@ -18,7 +18,7 @@ describe('<SearchStartCard /> Component', () => {
             searchKeyword="Blah"
             inputPlaceholderLabel="Search"
             titleLabel="Search"
-            introLabel="✨ Find what you are looking for ✨"
+            introLabel="✨ Find what you’re looking for quickly ✨"
             description="To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community."
             handleSearch={handleSearch}
           />,

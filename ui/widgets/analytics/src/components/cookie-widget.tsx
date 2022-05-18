@@ -68,17 +68,14 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
           <Translation ns="ui-widget-analytics">
             {t => (
               <CookieWidgetCard
-                titleLabel={`${t('The Choice is Yours')} 🤘🏼`}
+                titleLabel={`${t('But first, cookies!')} 🙈🍪`}
                 paragraphOneLabel={
-                  <Text size="medium">
-                    {t(
-                      'We use cookies. Some are necessary to operate effectively the platform, others are to help us improve Ethereum World. ',
-                    )}
-                  </Text>
-                }
-                paragraphTwoLabel={
                   <>
-                    <Text weight="bold">{t('By opting-in you allow us to collect data via ')}</Text>
+                    <Text size="medium">
+                      {t(
+                        'Ethereum World uses cookies. Some are essential for the technology to work, and others help us all improve things around here. You can contribute use data via ',
+                      )}
+                    </Text>
                     <Text
                       color="accentText"
                       size="medium"
@@ -89,11 +86,20 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                     >
                       Matomo
                     </Text>
-                    {t(
-                      ", an open source analytics platform that will help us improve Ethereum World. As we respect your privacy, rest assured that we don't store personal identifiable information (PPI). In addition, if you change your mind, ",
-                    )}
-                    <Text weight="bold">{t('you can always opt-out ')}</Text>
-                    {t('by accessing the ')}
+                    <Text size="medium">
+                      {t(', an open source analytics platform, by choosing "Accept all".')}
+                    </Text>
+                  </>
+                }
+                paragraphTwoLabel={
+                  <>
+                    <Text>
+                      {t(
+                        'No personal identifiable information (PPI) will be stored. And if you change your mind at any time, you can always ',
+                      )}
+                    </Text>
+                    <Text weight="bold">{t(' opt-out ')}</Text>
+                    <Text>{t('via the ')}</Text>
                     <Text
                       color="accentText"
                       size="medium"
@@ -107,7 +113,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                     >
                       {t('settings ')}
                     </Text>
-                    {t('menu')}.
+                    {t('app.')}
                   </>
                 }
                 privacyCTALabel={t('For more info, see our ')}

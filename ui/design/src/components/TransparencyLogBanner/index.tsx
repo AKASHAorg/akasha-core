@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Box, Text, Image, Meter } from 'grommet';
-import Icon from '../Icon';
 
 export interface ITransparencyLogBannerProps {
   size: string;
@@ -13,7 +12,8 @@ export interface ITransparencyLogBannerProps {
   keptCountLabel: string;
   delistedCount: number;
   delistedCountLabel: string;
-  footerLabel: string;
+  footerLabel1: string;
+  footerLabel2: string;
   footerLinkLabel: string;
   footerLink: string;
   /* Path to public folder */
@@ -35,6 +35,10 @@ const StyledText = styled(Text)`
   color: ${props => props.theme.colors.secondaryText};
 `;
 
+const StyledLinkText = styled(Text)`
+  cursor: pointer;
+`;
+
 const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
   const {
     size,
@@ -46,7 +50,8 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
     keptCountLabel,
     totalCountLabel,
     delistedCountLabel,
-    footerLabel,
+    footerLabel1,
+    footerLabel2,
     footerLinkLabel,
     footerLink,
     publicImgPath = '/images',
@@ -111,21 +116,14 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
         </StyledBox>
       </StyledBox>
       <Box border={{ color: 'border', side: 'bottom', style: 'solid' }} />
-      <Box margin={{ top: 'large' }}>
-        <StyledText>{footerLabel}</StyledText>
-        <Box
-          direction="row"
-          wrap={true}
-          align="center"
-          justify="center"
-          margin={{ top: 'medium', bottom: 'xlarge' }}
-          onClick={handleClickCodeOfConduct}
-        >
-          <Text color="accentText" margin={{ right: '0.25rem', bottom: '0.2rem' }}>
+      <Box margin={{ top: 'large' }} direction="row">
+        <StyledText>
+          {footerLabel1}
+          <StyledLinkText color="accentText" onClick={handleClickCodeOfConduct}>
             {footerLinkLabel}
-          </Text>
-          <Icon type="arrowRight" accentColor={true} clickable={true} />
-        </Box>
+          </StyledLinkText>
+          {footerLabel2}
+        </StyledText>
       </Box>
     </Box>
   );

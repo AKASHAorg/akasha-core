@@ -15,12 +15,12 @@ import {
 import ExplorePage from './pages/explore-page';
 import InfoPage from './pages/info-page';
 import MyAppsPage from './pages/my-apps-page';
-import AppsPage from './pages/apps-page';
-import WidgetsPage from './pages/widgets-page';
+// import AppsPage from './pages/apps-page';
+import MyWidgetsPage from './pages/my-widgets-page';
 
 import NavButton from './nav-button';
 import { hiddenIntegrations } from '../hidden-integrations';
-import routes, { rootRoute, EXPLORE, MY_APPS, APPS, WIDGETS, INFO } from '../routes';
+import routes, { rootRoute, EXPLORE, MY_APPS, MY_WIDGETS, INFO } from '../routes';
 
 const { Box, Text, BasicCardBox } = DS;
 
@@ -120,19 +120,19 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   }}
                 />
                 <NavButton
-                  path={routes[WIDGETS]}
-                  label={t('Widgets')}
+                  path={routes[MY_WIDGETS]}
+                  label={t('My Widgets')}
                   icon={'integrationWidgetSmall'}
                   onClick={() => {
                     if (isLoggedIn) {
                       navigateTo?.({
                         appName: '@akashaorg/app-integration-center',
-                        getNavigationUrl: routes => routes[WIDGETS],
+                        getNavigationUrl: routes => routes[MY_WIDGETS],
                       });
                     }
                   }}
                 />
-                <NavButton
+                {/* <NavButton
                   path={routes[APPS]}
                   label={t('Apps')}
                   icon={'integrationAppSmall'}
@@ -144,7 +144,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                       });
                     }
                   }}
-                />
+                /> */}
               </Box>
             </Box>
 
@@ -170,11 +170,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                     {...props}
                   />
                 </Route>
-                <Route path={routes[APPS]}>
+                {/* <Route path={routes[APPS]}>
                   <AppsPage {...props} />
-                </Route>
-                <Route path={routes[WIDGETS]}>
-                  <WidgetsPage
+                </Route> */}
+                <Route path={routes[MY_WIDGETS]}>
+                  <MyWidgetsPage
                     latestReleasesInfo={latestReleasesInfo}
                     isFetching={integrationsInfoReq.isFetching}
                     {...props}

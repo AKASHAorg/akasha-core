@@ -119,8 +119,8 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
           handleButtonClick={handleShowMyFeed}
         />
         <OnboardingSuggestionsCard
-          topicsLabel={t('TOPICS TO FOLLOW')}
-          peopleLabel={t('PEOPLE TO FOLLOW')}
+          topicsLabel={t('Topics to follow')}
+          peopleLabel={t('People to follow')}
           followLabel={t('Follow')}
           unfollowLabel={t('Unfollow')}
           followingLabel={t('Following')}

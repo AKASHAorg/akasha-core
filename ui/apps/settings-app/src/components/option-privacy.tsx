@@ -12,10 +12,13 @@ export interface BaseOption {
 
 export interface IPrivacyOption extends BaseOption {
   essentialCookiesLabel: string;
-  essentialCookiesInfo: string;
+  essentialCookiesInfo1: string;
+  essentialCookiesInfo2: string;
+  essentialCookiesInfo3: string;
   trackingAnalyticsLabel: string;
-  trackingAnalyticsInfoIntro: string;
-  trackingAnalyticsInfo: string;
+  trackingAnalyticsInfo1: string;
+  trackingAnalyticsInfo2: string;
+  trackingAnalyticsLinkLabel: string;
   privacyPolicyLabel: string;
   checkedTracking: boolean;
   cookieType: string;
@@ -26,10 +29,13 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
   const {
     titleLabel,
     essentialCookiesLabel,
-    essentialCookiesInfo,
+    essentialCookiesInfo1,
+    essentialCookiesInfo2,
+    essentialCookiesInfo3,
     trackingAnalyticsLabel,
-    trackingAnalyticsInfoIntro,
-    trackingAnalyticsInfo,
+    trackingAnalyticsInfo1,
+    trackingAnalyticsInfo2,
+    trackingAnalyticsLinkLabel,
     privacyPolicyLabel,
     checkedTracking,
     cookieType,
@@ -68,7 +74,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
           border={{ side: 'bottom', color: 'lightBorder' }}
         >
           <StyledText>
-            {essentialCookiesInfo}
+            {essentialCookiesInfo1}
             <StyledText
               color="accentText"
               style={{ cursor: 'pointer' }}
@@ -82,8 +88,9 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
             >
               {privacyPolicyLabel}
             </StyledText>
-            .
+            {essentialCookiesInfo2}
           </StyledText>
+          <StyledText>{essentialCookiesInfo3}</StyledText>
         </Box>
         <Box
           direction="row"
@@ -108,7 +115,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
           align="start"
         >
           <StyledText>
-            {trackingAnalyticsInfoIntro}
+            {trackingAnalyticsInfo1}
             <StyledText
               color="accentText"
               style={{ cursor: 'pointer' }}
@@ -116,9 +123,22 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
                 window.open('https://matomo.org', 'Matomo', '_blank noopener noreferrer')
               }
             >
-              Matomo,
+              Matomo
             </StyledText>
-            {trackingAnalyticsInfo}
+            {trackingAnalyticsInfo2}
+            <StyledText
+              color="accentText"
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                window.open(
+                  'https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100',
+                  'Akasha Forum',
+                  '_blank noopener noreferrer',
+                )
+              }
+            >
+              {trackingAnalyticsLinkLabel}
+            </StyledText>
           </StyledText>
         </Box>
       </BasicCardBox>
