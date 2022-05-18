@@ -65,6 +65,20 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const handleThemeSelect = event => {
     setTheme(event.target.value);
     window.localStorage.setItem('Theme', event.target.value);
+
+    /*
+     * Custom event used in main html file
+     * to update the theme in the <body> tag
+     */
+    const ev = new CustomEvent(EventTypes.ThemeChange, {
+      detail: {
+        theme: event.target.value,
+      },
+    });
+    window.dispatchEvent(ev);
+    /*
+     * Propagate the change to all apps and widgets
+     */
     props.uiEvents.next({
       event: EventTypes.ThemeChange,
       data: {
