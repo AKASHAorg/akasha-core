@@ -102,26 +102,26 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const profileDataReq = useGetProfile(loginState?.pubKey);
   const loggedProfileData = profileDataReq.data;
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.ethAddress, [
-    entryData?.author?.ethAddress,
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, [
+    entryData?.author?.pubKey,
   ]);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
   const handleFollow = () => {
-    if (entryData?.author.ethAddress) {
-      followReq.mutate(entryData?.author.ethAddress);
+    if (entryData?.author.pubKey) {
+      followReq.mutate(entryData?.author.pubKey);
     }
   };
 
   const handleUnfollow = () => {
-    if (entryData.author.ethAddress) {
-      unfollowReq.mutate(entryData?.author.ethAddress);
+    if (entryData.author.pubKey) {
+      unfollowReq.mutate(entryData?.author.pubKey);
     }
   };
 
-  const isFollowing = followedProfiles.includes(entryData?.author?.ethAddress);
+  const isFollowing = followedProfiles.includes(entryData?.author?.pubKey);
 
   const handleLoadMore = () => {
     if (reqComments.isSuccess && reqComments.hasNextPage && loginState?.fromCache) {

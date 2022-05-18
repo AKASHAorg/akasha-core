@@ -26,22 +26,20 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const profileDataReq = useGetEntryAuthor(params.postId);
   const profileData = profileDataReq.data;
 
-  const isFollowingReq = useIsFollowingMultiple(loginQuery.data?.ethAddress, [
-    profileData?.ethAddress,
-  ]);
+  const isFollowingReq = useIsFollowingMultiple(loginQuery.data?.pubKey, [profileData?.pubKey]);
   const followedProfiles = isFollowingReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
   const handleFollow = () => {
-    if (profileData?.ethAddress) {
-      followReq.mutate(profileData?.ethAddress);
+    if (profileData?.pubKey) {
+      followReq.mutate(profileData?.pubKey);
     }
   };
 
   const handleUnfollow = () => {
-    if (profileData?.ethAddress) {
-      unfollowReq.mutate(profileData?.ethAddress);
+    if (profileData?.pubKey) {
+      unfollowReq.mutate(profileData?.pubKey);
     }
   };
 
@@ -53,11 +51,8 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   const isFollowing = React.useMemo(() => {
-    if (followedProfiles.includes(profileData?.ethAddress)) {
-      return true;
-    }
-    return false;
-  }, [followedProfiles, profileData?.ethAddress]);
+    return !!followedProfiles.includes(profileData?.pubKey);
+  }, [followedProfiles, profileData?.pubKey]);
 
   if (!profileData?.ethAddress) {
     return null;

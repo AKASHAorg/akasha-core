@@ -21,8 +21,8 @@ export interface OnboardingSuggestionsCardProps {
   followedProfiles?: string[];
   onClickTag?: (tagName: string) => void;
   onClickProfile?: (pubKey: string) => void;
-  onClickFollow?: (ethAddress: string) => void;
-  onClickUnfollow?: (ethAddress: string) => void;
+  onClickFollow?: (pubKey: string) => void;
+  onClickUnfollow?: (pubKey: string) => void;
 }
 
 export const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = props => {
@@ -83,9 +83,9 @@ export const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps>
                     inactiveLabel={followLabel}
                     activeLabel={followingLabel}
                     activeHoverLabel={unfollowLabel}
-                    onClickInactive={() => onClickFollow(profile.ethAddress)}
-                    onClickActive={() => onClickUnfollow(profile.ethAddress)}
-                    active={followedProfiles?.includes(profile.ethAddress)}
+                    onClickInactive={() => onClickFollow(profile.pubKey)}
+                    onClickActive={() => onClickUnfollow(profile.pubKey)}
+                    active={followedProfiles?.includes(profile.pubKey)}
                     icon={<Icon type="following" />}
                     allowMinimization
                   />

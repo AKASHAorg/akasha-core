@@ -99,9 +99,9 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
                     inactiveLabel={followLabel}
                     activeLabel={followingLabel}
                     activeHoverLabel={unfollowLabel}
-                    onClickInactive={() => handleFollowProfile(entry.ethAddress)}
-                    onClickActive={() => handleUnfollowProfile(entry.ethAddress)}
-                    active={followedProfiles?.includes(entry.ethAddress)}
+                    onClickInactive={() => handleFollowProfile(entry.pubKey)}
+                    onClickActive={() => handleUnfollowProfile(entry.pubKey)}
+                    active={followedProfiles?.includes(entry.pubKey)}
                     icon={<Icon type="following" />}
                     allowMinimization
                   />
