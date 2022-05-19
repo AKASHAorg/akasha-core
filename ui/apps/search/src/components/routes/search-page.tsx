@@ -191,11 +191,8 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     if (searchTagsReq.isFetched) updateSearchState(ButtonValues.TOPICS, searchTagsReq.data);
   }, [searchTagsReq.data, searchTagsReq.isFetched]);
 
-  const followEthAddressArr = searchProfilesState?.map(profile => profile.ethAddress);
-  const isFollowingMultipleReq = useIsFollowingMultiple(
-    loginState?.ethAddress,
-    followEthAddressArr,
-  );
+  const followPubKeyArr = searchProfilesState?.map(profile => profile.pubKey);
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, followPubKeyArr);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
@@ -218,7 +215,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
   };
-  const handleFollowProfile = (ethAddress: string) => {
+  const handleFollowProfile = (pubKey: string) => {
     if (!loginState?.ethAddress) {
       showLoginModal();
       return;
@@ -227,7 +224,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.FILTER_SEARCH,
       action: 'Trending People Followed',
     });
-    followReq.mutate(ethAddress);
+    followReq.mutate(pubKey);
   };
 
   const handleSearch = (inputValue: string) => {
@@ -255,7 +252,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     });
   };
 
-  const handleUnfollowProfile = (ethAddress: string) => {
+  const handleUnfollowProfile = (pubKey: string) => {
     if (!loginState?.ethAddress) {
       showLoginModal();
       return;
@@ -264,7 +261,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       category: AnalyticsCategories.FILTER_SEARCH,
       action: 'Trending People Unfollowed',
     });
-    unfollowReq.mutate(ethAddress);
+    unfollowReq.mutate(pubKey);
   };
 
   const handleTagClick = (name: string) => {
@@ -453,9 +450,9 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           searchProfilesState?.map((profileData: IProfileData, index: number) => (
             <Box key={index} pad={{ bottom: 'medium' }}>
               <ProfileSearchCard
-                handleFollow={() => handleFollowProfile(profileData.ethAddress)}
-                handleUnfollow={() => handleUnfollowProfile(profileData.ethAddress)}
-                isFollowing={followedProfiles.includes(profileData?.ethAddress)}
+                handleFollow={() => handleFollowProfile(profileData.pubKey)}
+                handleUnfollow={() => handleUnfollowProfile(profileData.pubKey)}
+                isFollowing={followedProfiles.includes(profileData?.pubKey)}
                 loggedEthAddress={loginState?.ethAddress}
                 profileData={profileData}
                 followLabel={t('Follow')}
@@ -520,6 +517,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}
+              pubKey={loginState?.pubKey}
               onContentClick={handleEntryNavigation}
               navigateTo={navigateTo}
               onRepost={handleRepost}

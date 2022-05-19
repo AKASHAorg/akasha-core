@@ -59,7 +59,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const interestsReq = useInterests(profileData.pubKey);
   const interests = interestsReq.data;
 
-  const profileEthAddresses: string[] = React.useMemo(() => {
+  const profilePubKeys: string[] = React.useMemo(() => {
     let profiles: IProfileData[] = [];
 
     // wait for followers and following queries to finish
@@ -69,11 +69,11 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     if (Array.isArray(following)) {
       profiles = [...profiles, ...following];
     }
-    return profiles.map((profile: { ethAddress: string }) => profile.ethAddress);
+    return profiles.map((profile: { pubKey: string }) => profile.pubKey);
   }, [followers, following]);
 
   // get followed profiles for logged user
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState.ethAddress, profileEthAddresses);
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginState.pubKey, profilePubKeys);
 
   const followedProfiles = isFollowingMultipleReq.data;
 
@@ -143,22 +143,22 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     });
   };
 
-  const handleFollowProfile = (ethAddress: string) => {
+  const handleFollowProfile = (pubKey: string) => {
     if (!loginState.ethAddress) {
       handleClose();
       props.showLoginModal();
       return;
     }
-    followProfileReq.mutate(ethAddress);
+    followProfileReq.mutate(pubKey);
   };
 
-  const handleUnfollowProfile = (ethAddress: string) => {
+  const handleUnfollowProfile = (pubKey: string) => {
     if (!loginState.ethAddress) {
       handleClose();
       props.showLoginModal();
       return;
     }
-    unfollowProfileReq.mutate(ethAddress);
+    unfollowProfileReq.mutate(pubKey);
   };
 
   const handleButtonClick = () => {

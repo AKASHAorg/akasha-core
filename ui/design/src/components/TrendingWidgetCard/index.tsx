@@ -202,9 +202,9 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                         inactiveLabel={followLabel}
                         activeLabel={followingLabel}
                         activeHoverLabel={unfollowLabel}
-                        onClickInactive={() => handleFollowProfile(profile.ethAddress)}
-                        onClickActive={() => handleUnfollowProfile(profile.ethAddress)}
-                        active={followedProfiles?.includes(profile.ethAddress)}
+                        onClickInactive={() => handleFollowProfile(profile.pubKey)}
+                        onClickActive={() => handleUnfollowProfile(profile.pubKey)}
+                        active={followedProfiles?.includes(profile.pubKey)}
                         icon={<Icon type="following" />}
                         allowMinimization
                       />

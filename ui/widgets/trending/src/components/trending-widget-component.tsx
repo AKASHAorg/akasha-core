@@ -29,14 +29,11 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const trendingProfilesReq = useTrendingProfiles();
   const trendingProfiles = trendingProfilesReq.data || [];
 
-  const followEthAddressArr = trendingProfiles
+  const followPubKeyArr = trendingProfiles
     .slice(0, 4)
-    .map((profile: { ethAddress: string }) => profile.ethAddress);
+    .map((profile: { pubKey: string }) => profile.pubKey);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(
-    loginQuery.data?.ethAddress,
-    followEthAddressArr,
-  );
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.pubKey, followPubKeyArr);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
@@ -88,7 +85,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleFollowProfile = (ethAddress: string) => {
+  const handleFollowProfile = (pubKey: string) => {
     if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
@@ -97,10 +94,10 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending People Followed',
     });
-    followReq.mutate(ethAddress);
+    followReq.mutate(pubKey);
   };
 
-  const handleUnfollowProfile = (ethAddress: string) => {
+  const handleUnfollowProfile = (pubKey: string) => {
     if (!loginQuery.data?.ethAddress) {
       showLoginModal();
       return;
@@ -109,7 +106,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       category: AnalyticsCategories.TRENDING_WIDGET,
       action: 'Trending People Unfollowed',
     });
-    unfollowReq.mutate(ethAddress);
+    unfollowReq.mutate(pubKey);
   };
 
   const handleActiveTabChange = (tab: number) => {

@@ -43,14 +43,14 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
 
   const onFollow = (ev: React.SyntheticEvent) => {
     if (handleFollow) {
-      handleFollow(profileData.ethAddress);
+      handleFollow(profileData.pubKey);
     }
     ev.stopPropagation();
   };
 
   const onUnfollow = (ev: React.SyntheticEvent) => {
     if (handleUnfollow) {
-      handleUnfollow(profileData.ethAddress);
+      handleUnfollow(profileData.pubKey);
     }
     ev.stopPropagation();
   };

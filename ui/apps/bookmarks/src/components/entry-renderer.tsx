@@ -147,7 +147,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
-  const isFollowing = useIsFollowingMultiple(loginState.ethAddress, [itemData?.author?.ethAddress]);
+  const isFollowing = useIsFollowingMultiple(loginState.pubKey, [itemData?.author?.pubKey]);
 
   const handleFollow = () => {
     /* todo */

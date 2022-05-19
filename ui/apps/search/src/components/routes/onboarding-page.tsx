@@ -37,14 +37,9 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   const trendingProfilesReq = useTrendingProfiles();
   const trendingProfiles = trendingProfilesReq.data?.slice(0, 7) || [];
 
-  const followEthAddressArr = trendingProfiles.map(
-    (profile: { ethAddress: string }) => profile.ethAddress,
-  );
+  const followPubKeyArr = trendingProfiles.map((profile: { pubKey: string }) => profile.pubKey);
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(
-    loginQuery.data?.ethAddress,
-    followEthAddressArr,
-  );
+  const isFollowingMultipleReq = useIsFollowingMultiple(loginQuery.data?.pubKey, followPubKeyArr);
   const followedProfiles = isFollowingMultipleReq.data;
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
@@ -74,20 +69,20 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
     toggleTagSubscriptionReq.mutate(tagName);
   };
 
-  const handleFollow = (ethAddress: string) => {
+  const handleFollow = (pubKey: string) => {
     if (!isLoggedIn) {
       showLoginModal();
       return;
     }
-    followReq.mutate(ethAddress);
+    followReq.mutate(pubKey);
   };
 
-  const handleUnfollow = (ethAddress: string) => {
+  const handleUnfollow = (pubKey: string) => {
     if (!isLoggedIn) {
       showLoginModal();
       return;
     }
-    unfollowReq.mutate(ethAddress);
+    unfollowReq.mutate(pubKey);
   };
 
   const handleShowMyFeed = () => {

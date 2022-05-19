@@ -22,6 +22,7 @@ export interface IEntryCardRendererProps {
   itemType?: ItemTypes;
   locale?: ILocale;
   ethAddress?: string | null;
+  pubKey?: string;
   navigateTo?: (args: NavigateToParams) => void;
   onContentClick: (details: IContentClickDetails, itemType: ItemTypes) => void;
   onLinkCopy?: () => void;
@@ -43,6 +44,7 @@ export interface IEntryCardRendererProps {
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   const {
     ethAddress,
+    pubKey,
     locale,
     itemData,
     itemType,
@@ -140,7 +142,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
-  const isFollowing = useIsFollowingMultiple(ethAddress, [itemData?.author?.ethAddress]);
+  const isFollowing = useIsFollowingMultiple(pubKey, [itemData?.author?.pubKey]);
 
   const handleFollow = () => {
     /* todo */

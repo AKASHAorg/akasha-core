@@ -51,7 +51,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   const { t } = useTranslation('app-profile');
 
-  const isFollowingReq = useIsFollowingMultiple(loginState.ethAddress, [profileData.ethAddress]);
+  const isFollowingReq = useIsFollowingMultiple(loginState.pubKey, [profileData.pubKey]);
   const followedProfiles = isFollowingReq.data;
 
   const followReq = useFollow();
@@ -67,14 +67,15 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({ name: 'login', profileId });
     }
-    if (profileData?.ethAddress) {
-      followReq.mutate(profileData.ethAddress);
+
+    if (profileData?.pubKey) {
+      followReq.mutate(profileData.pubKey);
     }
   };
 
   const handleUnfollow = () => {
-    if (profileData?.ethAddress) {
-      unfollowReq.mutate(profileData.ethAddress);
+    if (profileData?.pubKey) {
+      unfollowReq.mutate(profileData.pubKey);
     }
   };
 
@@ -135,7 +136,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
-        isFollowing={followedProfiles?.includes(profileData.ethAddress)}
+        isFollowing={followedProfiles?.includes(profileData.pubKey)}
         loggedEthAddress={loginState.ethAddress}
         profileData={profileData}
         followLabel={t('Follow')}

@@ -101,16 +101,16 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const postReq = usePost({ postId: itemId, enabler: itemType === ItemTypes.ENTRY });
   const commentReq = useComment(itemId, itemType === ItemTypes.COMMENT);
-  const authorEthAddress = React.useMemo(() => {
+  const authorPubKey = React.useMemo(() => {
     if (itemType === ItemTypes.COMMENT && commentReq.status === 'success') {
-      return commentReq.data.author.ethAddress;
+      return commentReq.data.author.pubKey;
     }
     if (itemType === ItemTypes.ENTRY && postReq.status === 'success') {
-      return postReq.data.author.ethAddress;
+      return postReq.data.author.pubKey;
     }
   }, [itemType, commentReq, postReq]);
 
-  const followedProfilesReq = useIsFollowingMultiple(loginState.ethAddress, [authorEthAddress]);
+  const followedProfilesReq = useIsFollowingMultiple(loginState.pubKey, [authorPubKey]);
 
   const postData = React.useMemo(() => {
     if (postReq.data && itemType === ItemTypes.ENTRY) {
@@ -128,10 +128,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const isFollowing = React.useMemo(() => {
     return (
-      followedProfilesReq.status === 'success' &&
-      followedProfilesReq.data.includes(authorEthAddress)
+      followedProfilesReq.status === 'success' && followedProfilesReq.data.includes(authorPubKey)
     );
-  }, [authorEthAddress, followedProfilesReq.data, followedProfilesReq.status]);
+  }, [authorPubKey, followedProfilesReq.data, followedProfilesReq.status]);
 
   const itemData = React.useMemo(() => {
     if (itemType === ItemTypes.ENTRY) {
@@ -157,16 +156,16 @@ const EntryRenderer = (props: IEntryRenderer) => {
   );
 
   const handleFollow = React.useCallback(() => {
-    if (authorEthAddress) {
-      followProfileQuery.mutate(authorEthAddress);
+    if (authorPubKey) {
+      followProfileQuery.mutate(authorPubKey);
     }
-  }, [followProfileQuery, authorEthAddress]);
+  }, [followProfileQuery, authorPubKey]);
 
   const handleUnfollow = React.useCallback(() => {
-    if (authorEthAddress) {
-      unfollowProfileQuery.mutate(authorEthAddress);
+    if (authorPubKey) {
+      unfollowProfileQuery.mutate(authorPubKey);
     }
-  }, [unfollowProfileQuery, authorEthAddress]);
+  }, [unfollowProfileQuery, authorPubKey]);
 
   const handleEditClick = React.useCallback(() => {
     if (itemType === ItemTypes.COMMENT) {
