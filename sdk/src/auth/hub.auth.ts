@@ -49,9 +49,12 @@ export const generatePrivateKey = async (
   if (process.env.NODE_ENV === 'development') {
     message += '==DEV Key==';
   }
-  const signedText = await signer.signMessage(message);
+  let signedText = await signer.signMessage(message);
+  if (!signedText || signedText === '0x') {
+    signedText = localStorage.getItem('signedText');
+  }
   const hash = ethers.utils.keccak256(signedText);
-  if (hash === null) {
+  if (hash === null || !signedText) {
     throw new Error('No account is provided. Please provide an account to this application.');
   }
   const array = hash
