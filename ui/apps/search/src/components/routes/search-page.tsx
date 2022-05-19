@@ -368,8 +368,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         handleSearch={handleSearch}
         inputPlaceholderLabel={t('Search')}
         titleLabel={t('Search')}
-        introLabel={t('✨ Find what you are looking for ✨')}
-        description={t('Search for your favourite topics, people, posts and replies.')}
+        introLabel={t('✨ Find what you’re looking for quickly ✨')}
+        description={t(
+          'Search everything. Follow wonderful people. And subscribe to any and all topics that get your synapses firing.',
+        )}
       >
         <TabsToolbar
           noMarginBottom

@@ -13,7 +13,7 @@ export interface IWidgetsPage extends RootComponentProps {
   isFetching?: boolean;
 }
 
-const WidgetsPage: React.FC<IWidgetsPage> = props => {
+const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
   const { worldConfig, latestReleasesInfo, isFetching } = props;
 
   const { t } = useTranslation('app-integration-center');
@@ -50,7 +50,11 @@ const WidgetsPage: React.FC<IWidgetsPage> = props => {
           <Text size="large" color="secondaryText">
             {t('World Widgets')}
           </Text>
-          <Text>{t('These are the default widgets that come in the world')}</Text>
+          <Text>
+            {t(
+              'Who’d want to arrive in the World widgetless? We wouldn’t do that to you. Here are the essential widgets.',
+            )}
+          </Text>
         </Box>
         <Box gap="small">
           {filteredDefaultWidgets?.map((app, index) => (
@@ -89,4 +93,4 @@ const WidgetsPage: React.FC<IWidgetsPage> = props => {
   );
 };
 
-export default WidgetsPage;
+export default MyWidgetsPage;

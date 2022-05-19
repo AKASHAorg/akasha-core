@@ -233,6 +233,8 @@ const mutations = {
       logger.warn(`bad follow sig`);
       return Promise.reject(dataSigError);
     }
+    // throw if there is no profile
+    await dataSources.profileAPI.resolveProfile(pubKey);
     const response = await dataSources.followerAPI.followProfile(user.pubKey, pubKey);
     mutationsCounter.inc({
       mutationType: 'follow',

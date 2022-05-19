@@ -35,6 +35,7 @@ export class RedisLRU implements ILRU {
     if (!_value) {
       return undefined;
     }
+    logger.info(`cache hit for ${key}`);
     return parse(_value);
   }
 

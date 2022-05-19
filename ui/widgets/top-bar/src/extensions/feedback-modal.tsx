@@ -20,8 +20,8 @@ const FeedbackModalContainer = (props: RootExtensionProps) => {
 
   return (
     <FeedbackModal
-      titleLabel={t("We'd love to hear your feedback!")}
-      subtitleLabel={t('If you find any bugs or problems, please let us know')}
+      titleLabel={t('We’d love to hear from you!')}
+      subtitleLabel={t('If you find any bugs or experience problems, please get in touch!')}
       openAnIssueLabel={t('Open an Issue')}
       emailUsLabel={t('Email Us')}
       footerTextLabel={t(

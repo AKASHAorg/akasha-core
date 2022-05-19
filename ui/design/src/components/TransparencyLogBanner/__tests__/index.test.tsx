@@ -16,14 +16,15 @@ describe('<TransparencyLogBanner /> Component', () => {
           <TransparencyLogBanner
             size="12.75rem"
             assetName="moderation-history-illustration"
-            title="Moderation History"
+            title="Moderation history"
             content="Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy."
             keptCount={count.kept}
             keptCountLabel="kept"
             totalCountLabel="total"
             delistedCount={count.delisted}
             delistedCountLabel="delisted"
-            footerLabel="Visit our Code of Conduct to learn more about our moderation criteria"
+            footerLabel1="Check out the Ethereum World "
+            footerLabel2=" here."
             footerLinkLabel="Code of Conduct"
             footerLink="https://akasha.ethereum.world/legal/code-of-conduct"
           />,
@@ -44,7 +45,7 @@ describe('<TransparencyLogBanner /> Component', () => {
 
   it('has correct title', () => {
     const { getByText } = componentWrapper;
-    const title = getByText('Moderation History');
+    const title = getByText('Moderation history');
 
     expect(title).toBeDefined();
   });
