@@ -157,6 +157,9 @@ class FollowerAPI extends DataSource {
 
   async isFollowing(follower: string, following: string) {
     const db: Client = await getAppDB();
+    //force refresh
+    await this.getFollowers(following);
+    await this.getFollowing(follower);
     const key = this.getCacheKey(`${this.FOLLOWERS_KEY}${following}`);
     const hasAllFollowersCache = await queryCache.has(key);
     if (hasAllFollowersCache) {
