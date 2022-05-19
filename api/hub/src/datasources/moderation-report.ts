@@ -100,8 +100,10 @@ class ModerationReportAPI extends DataSource {
     const reports = await db.find<ModerationReport>(this.dbID, this.collection, query);
     if (reports.length) {
       reports[0].explanation = decodeString(reports[0].explanation);
+      await queryCache.set(reportCache, reports[0]);
       return reports[0];
     }
+    await queryCache.set(reportCache, undefined);
     return;
   }
 

@@ -185,6 +185,7 @@ class ModerationDecisionAPI extends DataSource {
       await queryCache.set(decisionCache, decisions[0]);
       return decisions[0];
     }
+    await queryCache.set(decisionCache, undefined);
     logger.warn(`[moderation-decision]: Could not find decision for ${contentID}!`);
     return undefined;
   }
