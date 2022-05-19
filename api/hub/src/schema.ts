@@ -12,27 +12,27 @@ const typeDefs = gql`
     inheritMaxAge: Boolean
   ) on FIELD_DEFINITION | OBJECT | INTERFACE | UNION
 
-  type TagsResult @cacheControl(maxAge: 600) {
+  type TagsResult @cacheControl(maxAge: 60) {
     results: [Tag!]
     nextIndex: String
     total: Int
   }
-  type PostsResult @cacheControl(maxAge: 600) {
+  type PostsResult @cacheControl(maxAge: 60) {
     results: [Post!]
     nextIndex: String
     total: Int
   }
-  type ProfilesResult @cacheControl(maxAge: 600) {
+  type ProfilesResult @cacheControl(maxAge: 60) {
     results: [UserProfile!]
     nextIndex: Int
     total: Int
   }
-  type NewPostsResult @cacheControl(maxAge: 600) {
+  type NewPostsResult @cacheControl(maxAge: 60) {
     results: [Post!]
     nextIndex: Int
     total: Int
   }
-  type CommentsResult @cacheControl(maxAge: 600) {
+  type CommentsResult @cacheControl(maxAge: 60) {
     results: [Comment!]
     nextIndex: String
     total: Int
