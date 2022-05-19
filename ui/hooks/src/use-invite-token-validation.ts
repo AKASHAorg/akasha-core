@@ -18,7 +18,10 @@ const checkIsValidToken = async (inviteToken: string) => {
   return lastValueFrom(sdk.api.auth.validateInvite(inviteToken));
 };
 
-/* A hook to validate invitation token */
+/**
+ * Hook to validate invitation token
+ * @param props - payload containing the token and enabler value that determines when the query is allowed to run
+ */
 export function useIsValidToken(props: IUseIsValidTokenProps) {
   return useQuery([TOKEN_VALIDATION_KEY], () => checkIsValidToken(props.inviteToken), {
     onError: (err: Error) => logError('[use-injected-provider.ts]: useInjectedProvider err', err),

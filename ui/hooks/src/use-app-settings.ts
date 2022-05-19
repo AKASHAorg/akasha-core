@@ -1,13 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
-// import { AppsSchema } from '@akashaorg/awf-sdk/src/db/app.schema';
 
 // @TODO - fix typings
 
 export const APP_SETTINGS_KEY = 'App_Settings';
 
-const getAppConfig = async appName => {
+const getAppConfig = async (appName: string) => {
   const sdk = getSDK();
   const res = await sdk.services.appSettings.get(appName);
   return res.data;
@@ -16,6 +15,7 @@ const getAppConfig = async appName => {
 /**
  * Hook to get configuration object for an installed app
  * @param appName - name of the app
+ * @param enabler - flag for allowing the query
  */
 export function useGetAppConfig(appName: string, enabler?: boolean) {
   return useQuery([APP_SETTINGS_KEY, appName], (): Promise<any> => getAppConfig(appName), {
@@ -33,6 +33,7 @@ const getAllInstalledApps = async () => {
 
 /**
  * Hook to get all the user's installed apps
+ * @param enabler - flag for allowing the query
  */
 export function useGetAllInstalledApps(enabler?: boolean) {
   return useQuery([APP_SETTINGS_KEY], (): Promise<any> => getAllInstalledApps(), {
@@ -54,7 +55,6 @@ const appInstall = async (app: { name?: string; id?: string }) => {
 
 /**
  * Hook to persist an installed app config to a user's profile
- * @param app - Object
  */
 export function useInstallApp() {
   const queryClient = useQueryClient();
@@ -80,7 +80,6 @@ const appUninstall = async (appName?: string) => {
 
 /**
  * Hook to uninstall an app
- * @param appName - application name
  */
 export function useUninstallApp() {
   const queryClient = useQueryClient();

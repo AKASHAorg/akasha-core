@@ -64,7 +64,8 @@ const updateUsernameProvider = async (
 };
 
 /**
- * Hook to register a username for the user
+ * Hook to register a username for the user.
+ * Pass as payload, the username and provider details to the onMutate function
  * @param pubKey - textile public key of the user
  */
 export function useUpdateUsernameProvider(pubKey?: string) {
@@ -138,7 +139,8 @@ const registerENS = async ({ userName }: { userName: string }) => {
 };
 
 /**
- * Hook to register a new ENS name
+ * Hook to register a new ENS name.
+ * Pass as payload, the username to the onMutate function
  * @param pubKey - textile public key of the user
  */
 export function useEnsRegistration(pubKey?: string) {
@@ -196,8 +198,8 @@ const validateUsername = async (username: string) => {
 
 /**
  * Hook to check if a username is available
- * @param username - name to check for
- * @param enabler - prevent hook from running in passed falsy
+ * @param username - username to check for
+ * @param enabler - flag for allowing the query
  */
 export function useUsernameValidation(username: string, enabler = true) {
   return useQuery([VALIDATE_USERNAME_KEY, username], async () => validateUsername(username), {
@@ -206,7 +208,7 @@ export function useUsernameValidation(username: string, enabler = true) {
 }
 
 /**
- * Hook to resolve an ethAddress to an ENS name
+ * Hook to resolve an ethereum address to an ENS name
  * @param ethAddress - ethereum address to resolve
  */
 export function useEnsByAddress(ethAddress: string) {

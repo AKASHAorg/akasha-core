@@ -6,7 +6,7 @@ import { getModerationReasons, Reason } from './moderation-requests';
 
 export interface UseReasonsActions {
   /**
-   *  fetch reasons, pass active as true to get only active reasons
+   * fetch reasons, pass active as true to get only active reasons
    */
   fetchReasons: (data: { active: boolean }) => void;
 }

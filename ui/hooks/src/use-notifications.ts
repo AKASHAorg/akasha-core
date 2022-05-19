@@ -1,9 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin, catchError, of } from 'rxjs';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 import getSDK from '@akashaorg/awf-sdk';
-import { buildProfileMediaLinks } from './utils/media-utils';
-import { logError } from './utils/error-handler';
 import { IMessage } from '@akashaorg/sdk-typings/lib/interfaces/auth';
+
+import { logError } from './utils/error-handler';
+import { buildProfileMediaLinks } from './utils/media-utils';
 
 export const NOTIFICATIONS_KEY = 'Notifications';
 export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
@@ -45,7 +47,7 @@ const getNotifications = async () => {
 
 /**
  * Hook to get a user's notifications
- * @param loggedEthAddress - currently logged in user's eth address
+ * @param loggedEthAddress - ethereum address of the currently logged in user
  */
 export function useFetchNotifications(loggedEthAddress: string) {
   return useQuery([NOTIFICATIONS_KEY], () => getNotifications(), {
@@ -57,7 +59,7 @@ export function useFetchNotifications(loggedEthAddress: string) {
 
 /**
  * Hook to mark a notification as read
- * pass the messageId to the mutate function
+ * pass the messageId to the onMutate function
  */
 export function useMarkAsRead() {
   const sdk = getSDK();
@@ -104,7 +106,7 @@ const checkNewNotifications = async () => {
 
 /**
  * Hook to check for new notifications
- * @param loggedEthAddress - currently logged in user's eth address
+ * @param loggedEthAddress - ethereum address of the currently logged in user
  */
 export function useCheckNewNotifications(loggedEthAddress: string) {
   return useQuery([HAS_NEW_NOTIFICATIONS_KEY], () => checkNewNotifications(), {

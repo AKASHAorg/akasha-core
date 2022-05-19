@@ -1,17 +1,18 @@
-import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-import getSDK from '@akashaorg/awf-sdk';
 import { forkJoin, lastValueFrom } from 'rxjs';
-import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 
-import { checkStatus } from './use-moderation';
-import { buildProfileMediaLinks } from './utils/media-utils';
-import { logError } from './utils/error-handler';
+import getSDK from '@akashaorg/awf-sdk';
+import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import {
   IProfileData,
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
 } from '@akashaorg/ui-awf-typings/lib/profile';
+
+import { checkStatus } from './use-moderation';
+import { logError } from './utils/error-handler';
+import { buildProfileMediaLinks } from './utils/media-utils';
 
 /**
  * @internal
@@ -46,6 +47,25 @@ export const ADD_PROFILE_PROVIDER_KEY = 'ADD_PROFILE_PROVIDER';
  */
 export const UPDATE_PROFILE_STATUS = 'UPDATE_PROFILE_STATUS';
 
+export interface FormProfileData {
+  name?: string;
+  userName?: string;
+  description?: string;
+  avatar?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
+  coverImage?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
+  pubKey: string;
+  ethAddress: string;
+}
+interface UpdateProfileFormData {
+  profileData: FormProfileData;
+  changedFields: string[];
+}
+
+interface ProfileUpdateStatus {
+  status: UpdateProfileStatus;
+  remainingFields: string[];
+}
+
 const getProfileData = async (payload: {
   pubKey: string;
   loggedUser?: string;
@@ -69,7 +89,7 @@ const getProfileData = async (payload: {
  * Hook to get a user's profile data
  * @param pubKey - the textile generated public key of the user
  * @param loggedUser - the textile generated public key of the currently logged in user
- * @param enabler - flag to allow the query
+ * @param enabler - flag for allowing the query
  */
 export function useGetProfile(pubKey: string, loggedUser?: string, enabler = true) {
   return useQuery([PROFILE_KEY, pubKey], () => getProfileData({ pubKey, loggedUser }), {
@@ -85,7 +105,7 @@ const getProfileDataByEthAddress = async (payload: {
 }): Promise<IProfileData> => {
   const sdk = getSDK();
 
-  // check entry's moderation status
+  // check profile's moderation status
   const modStatus = await checkStatus({
     user: payload.loggedUser,
     contentIds: [payload.ethAddress],
@@ -102,7 +122,7 @@ const getProfileDataByEthAddress = async (payload: {
  * Hook to get a user's profile data
  * @param ethAddress - the ethereum public key of the user
  * @param loggedUser - the textile generated public key of the currently logged in user
- * @param enabler - flag to allow the query
+ * @param enabler - flag for allowing the query
  */
 export function useGetProfileByEthAddress(ethAddress: string, loggedUser?: string, enabler = true) {
   return useQuery(
@@ -156,7 +176,7 @@ const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
  * Hook to get followers for a user
  * @param pubKey - textile generated public key of the user
  * @param limit - number of followers to return per page
- * @param offset - offset for query
+ * @param offset - id of where to start from
  */
 export function useFollowers(pubKey: string, limit: number, offset?: number) {
   return useInfiniteQuery(
@@ -185,7 +205,7 @@ const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
  * Hook to get a list of profiles following the user
  * @param pubKey - textile generated public key of the user
  * @param limit - number of profiles following the user to return per page
- * @param offset - offset for query
+ * @param offset - id of where to start from
  */
 export function useFollowing(pubKey: string, limit: number, offset?: number) {
   return useInfiniteQuery(
@@ -224,7 +244,7 @@ const getInterests = async (pubKey: string) => {
  * Fetch the list of subscribed tags for a specific pub key
  * @param pubKey - the textile generated public key of the user
  */
-export function useInterests(pubKey) {
+export function useInterests(pubKey: string) {
   return useQuery([INTERESTS_KEY, pubKey], () => getInterests(pubKey), {
     enabled: !!pubKey,
     keepPreviousData: true,
@@ -249,25 +269,6 @@ const saveMediaFile = async ({
     throw error;
   }
 };
-
-export interface FormProfileData {
-  name?: string;
-  userName?: string;
-  description?: string;
-  avatar?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
-  coverImage?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
-  pubKey: string;
-  ethAddress: string;
-}
-interface UpdateProfileFormData {
-  profileData: FormProfileData;
-  changedFields: string[];
-}
-
-interface ProfileUpdateStatus {
-  status: UpdateProfileStatus;
-  remainingFields: string[];
-}
 
 const makeDefaultProvider = async (providers: DataProviderInput[]) => {
   const sdk = getSDK();
@@ -376,7 +377,8 @@ const completeProfileUpdate = async (pubKey: string, queryClient: QueryClient) =
 };
 
 /**
- * Hook to update a user's profile data
+ * Hook to update a user's profile data.
+ * Pass updated profile form data to the onMutate function
  * @param pubKey - the textile generated public key of the user
  */
 export function useProfileUpdate(pubKey: string) {

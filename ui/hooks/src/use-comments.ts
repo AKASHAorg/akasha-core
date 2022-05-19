@@ -22,6 +22,11 @@ export const COMMENTS_KEY = 'Comments';
  */
 export const PUBLISH_PENDING_KEY = 'PendingPublish_Comments';
 
+export interface Publish_Options {
+  data: DataProviderInput[];
+  comment: { title?: string; tags?: string[]; postID: string };
+}
+
 const getComments = async (limit: number, postID: string, offset?: string) => {
   const sdk = getSDK();
 
@@ -44,7 +49,7 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
  * Hook to get the comments for a specific post
  * @param limit - number of comments to fetch on a page
  * @param postID - id of the parent post
- * @param offset - id of where to start
+ * @param offset - id of where to start from
  */
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
   return useInfiniteQuery(
@@ -61,6 +66,10 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
   );
 }
 
+/**
+ * Gets a comment
+ * @param commentID - id of comment to fetch
+ */
 const getComment = async (commentID): Promise<CommentResponse> => {
   const sdk = getSDK();
 
@@ -96,11 +105,6 @@ export function useComment(commentID: string, enabler = true) {
     initialData: () => queryClient.getQueryData([COMMENT_KEY, commentID]),
     onError: (err: Error) => logError('useComments.getComment', err),
   });
-}
-
-export interface Publish_Options {
-  data: DataProviderInput[];
-  comment: { title?: string; tags?: string[]; postID: string };
 }
 
 const deleteComment = async (commentId: string) => {

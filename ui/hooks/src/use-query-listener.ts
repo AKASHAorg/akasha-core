@@ -30,6 +30,10 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
   return mutation;
 };
 
+/**
+ * Hook to detect changes to a query
+ * @param queryKey - the key of the query to listen to
+ */
 export const useQueryListener = <TData>(queryKey: QueryKey) => {
   const [query, setQuery] = React.useState<QueryObserverResult<TData, unknown>>();
   const queryClient = useQueryClient();

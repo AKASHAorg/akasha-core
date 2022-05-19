@@ -43,8 +43,8 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
 }
 
 /**
- * Hook used to save bookmarks
- * can be used to bookmark replies and posts (itemType is passed to mutate()).
+ * Hook used to bookmark replies and posts.
+ * Pass as payload, entryData containing the id and itemType to the onMutate function.
  */
 
 export function useSaveBookmark() {

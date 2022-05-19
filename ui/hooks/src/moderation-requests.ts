@@ -108,6 +108,13 @@ export interface ModeratedItemsReponse extends PaginatedResponse {
   results: IModeratedItem[];
 }
 
+/**
+ * Creates moderation entry
+ * @param url - the request url
+ * @param data - moderation data specifying content id, type, signed data and signature
+ * @param timeout - duration after which request times out
+ * @returns - status of the response
+ */
 export const createModeration = async (
   url: string,
   data: {
@@ -151,6 +158,12 @@ export const createModeration = async (
   return response.status;
 };
 
+/**
+ * Checks the moderation status (reported, delisted, kept) of entries
+ * @param data - specifies user pubkey and a list of entries' contentIds
+ * @param timeout - duration after which request times out
+ * @returns serialized response
+ */
 export const getEntryModerationStatus = async (
   data: {
     user: string;
@@ -192,6 +205,12 @@ export const getEntryModerationStatus = async (
   });
 };
 
+/**
+ * Gets predefined moderation reasons
+ * @param data - specifies the status of reasons to be returned
+ * @param timeout - duration after which request times out
+ * @returns serialized response
+ */
 export const getModerationReasons = async (
   data: Record<string, unknown>,
   timeout = DEFAULT_FETCH_TIMEOUT,
@@ -230,6 +249,12 @@ export const getModerationReasons = async (
   });
 };
 
+/**
+ * Determines if a logged in user is a moderator or not
+ * @param loggedUser - pubkey of logged in user
+ * @param timeout - duration after which request times out
+ * @returns response status
+ */
 export const getModeratorStatus = async (
   loggedUser: string,
   timeout = DEFAULT_FETCH_TIMEOUT,
@@ -263,6 +288,11 @@ export const getModeratorStatus = async (
   return response.status;
 };
 
+/**
+ * Gets a detailed breakdown of moderation items
+ * @param timeout - duration after which request times out
+ * @returns serialized response
+ */
 export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<ICount> => {
   const rheaders = new Headers();
   const sdk = getSDK();
@@ -294,6 +324,12 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Pr
   });
 };
 
+/**
+ * Gets the reports for a specific entry
+ * @param entryId - id of the entry
+ * @param timeout - duration after which request times out
+ * @returns serialized response
+ */
 export const getEntryReports = async (
   entryId: string,
   timeout = DEFAULT_FETCH_TIMEOUT,
@@ -328,6 +364,12 @@ export const getEntryReports = async (
   });
 };
 
+/**
+ * Gets log of moderated items
+ * @param data - limit and offset for the request
+ * @param timeout - duration after which request times out
+ * @returns serialized response
+ */
 export const getLogItems = async (
   data: {
     limit?: number;
@@ -366,6 +408,12 @@ export const getLogItems = async (
   });
 };
 
+/**
+ * Gets pending moderation items
+ * @param data - limit and offset for the request
+ * @param timeout - duration after which request times out
+ * @returns serialized response
+ */
 export const getPendingItems = async (
   data: {
     limit?: number;
@@ -415,6 +463,12 @@ export const getPendingItems = async (
   });
 };
 
+/**
+ * Gets moderated items
+ * @param data - limit and offset for the request, specify delisted flag as true to return delisted items, otherwise kept items
+ * @param timeout - duration after which request times out
+ * @returns serialized response
+ */
 export const getModeratedItems = async (
   data: {
     delisted: boolean;

@@ -5,9 +5,6 @@ import getSDK from '@akashaorg/awf-sdk';
 import { events } from '@akashaorg/sdk-typings';
 import { CurrentUser } from '@akashaorg/sdk-typings/lib/interfaces/common';
 
-/**
- * a hook that will fire an action when the signIn is called
- */
 export type OnLoginSuccessHandler = (data: CurrentUser) => void;
 export type OnLogoutSuccessHandler = () => void;
 export type OnErrorHandler = (payload: { error: Error }) => void;
@@ -21,6 +18,10 @@ export interface UseGlobalLoginProps {
   onLoadFromCache?: (data: CurrentUser) => void;
 }
 
+/**
+ * Hook that will fire an action when the sign in is called
+ * @param props - set of functions required in each stage of the call
+ */
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   const { onError, onLogin, waitForAuth, onReady, onLogout, onLoadFromCache } = props;
   const onErrorHandler = React.useRef(onError);

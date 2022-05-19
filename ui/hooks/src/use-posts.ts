@@ -211,8 +211,7 @@ const getPost = async (postID: string, loggedUser?: string) => {
 
 /**
  * Hook to get data for a specific post
- * @param postId - id of the post
- * @param loggedUser - pubKey of the currently logged in user
+ * @param param0 - payload containg the id of the post and textile public key of the logged in user
  */
 export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
   return useQuery([ENTRY_KEY, postId], () => getPost(postId, loggedUser), {
@@ -332,7 +331,7 @@ const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
 
 /**
  * Hook to edit a post
- * pass the edited post data to the mutation function
+ * pass the edited post data to the onMutate function
  */
 export const useEditPost = () => {
   const sdk = getSDK();
