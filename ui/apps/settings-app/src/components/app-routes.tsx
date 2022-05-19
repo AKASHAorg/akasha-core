@@ -125,7 +125,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               titleLabel={t('Apps')}
               autoUpdatesLabel={t('Automatic Updates')}
               autoUpdatesInfo={t(
-                'Ensure you have all the latest version of your dapps, widgets & plugins. ',
+                'Ensure you have all the latest version of your apps, widgets & plugins. ',
               )}
               dataAnalyticsLabel={t('Data & Analytics')}
               dataAnalyticsinfo={t(
