@@ -145,7 +145,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       <AppSidebar
         versionLabel="ALPHA"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
-        worldAppsTitleLabel={t('Built-in World Apps')}
+        worldAppsTitleLabel={t('World Apps')}
         poweredByLabel="Powered by AKASHA"
         userInstalledAppsTitleLabel={t('Apps')}
         userInstalledApps={userInstalledApps}
