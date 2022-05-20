@@ -1,21 +1,32 @@
 import * as React from 'react';
+import { filter, lastValueFrom } from 'rxjs';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 import getSDK from '@akashaorg/awf-sdk';
 import { events } from '@akashaorg/sdk-typings';
-import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
-import {
-  CurrentUser,
-  PROVIDER_ERROR_CODES,
-} from '@akashaorg/sdk-typings/lib/interfaces/common';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { filter, lastValueFrom } from 'rxjs';
-import { useGlobalLogin } from '.';
-import { logError } from './utils/error-handler';
 import { UseAnalyticsActions } from './use-analytics';
 import { WalletTransactionError } from '@akashaorg/ui-awf-typings';
 import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
+import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
+import { CurrentUser, PROVIDER_ERROR_CODES } from '@akashaorg/sdk-typings/lib/interfaces/common';
+
+import { useGlobalLogin } from '.';
+import { logError } from './utils/error-handler';
 
 const LOGIN_STATE_KEY = 'LOGIN_STATE';
 const CHECK_SIGNUP_KEY = 'CHECK_SIGNUP_KEY';
+
+const SIGNUP_STATES = {
+  [events.AUTH_EVENTS.CONNECT_ADDRESS]: 0,
+  [events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 1,
+  [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE]: 3,
+  [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS]: 4,
+  [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE]: 5,
+  [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS]: 6,
+  [events.AUTH_EVENTS.SIGN_TOKEN_MESSAGE]: 7,
+  [events.AUTH_EVENTS.READY]: 8,
+};
+type ErrorTypes = { code?: number; message?: string; extensions?: { code?: string } };
 
 export interface LoginState extends CurrentUser {
   isReady?: boolean;
@@ -43,7 +54,6 @@ const initialData = {
 
 /**
  * Hook for retrieving the current authentication state of the user
- * @param onError - outside error handler
  */
 export function useGetLogin(onError?: (error: Error) => void) {
   const queryClient = useQueryClient();
@@ -105,7 +115,6 @@ export function useGetLogin(onError?: (error: Error) => void) {
 
 /**
  * Hook to sign in a user
- * @param onError - outside error handler
  */
 export function useLogin(onError?: (err: Error) => void) {
   const sdk = getSDK();
@@ -136,18 +145,9 @@ export function useLogin(onError?: (err: Error) => void) {
   );
 }
 
-const SIGNUP_STATES = {
-  [events.AUTH_EVENTS.CONNECT_ADDRESS]: 0,
-  [events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 1,
-  [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE]: 3,
-  [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS]: 4,
-  [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE]: 5,
-  [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS]: 6,
-  [events.AUTH_EVENTS.SIGN_TOKEN_MESSAGE]: 7,
-  [events.AUTH_EVENTS.READY]: 8,
-};
-type ErrorTypes = { code?: number; message?: string; extensions?: { code?: string } };
-
+/**
+ * Hook to sign up a user
+ */
 export function useSignUp(
   provider: EthProviders,
   checkRegistered = false,
@@ -338,9 +338,8 @@ export function useLogout() {
 
 /**
  * Hook to check if a user is already registered
- * @param ethAddress - ethereum address to check for
  */
-export function useCheckSignup(ethAddress) {
+export function useCheckSignup(ethAddress: string) {
   const sdk = getSDK();
   return useQuery(
     CHECK_SIGNUP_KEY,

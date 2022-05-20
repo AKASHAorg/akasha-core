@@ -108,6 +108,10 @@ export interface ModeratedItemsReponse extends PaginatedResponse {
   results: IModeratedItem[];
 }
 
+/**
+ * Creates moderation entry
+ * @returns - status of the response
+ */
 export const createModeration = async (
   url: string,
   data: {
@@ -151,6 +155,10 @@ export const createModeration = async (
   return response.status;
 };
 
+/**
+ * Checks the moderation status (reported, delisted, kept) of entries
+ * @returns serialized response
+ */
 export const getEntryModerationStatus = async (
   data: {
     user: string;
@@ -192,6 +200,10 @@ export const getEntryModerationStatus = async (
   });
 };
 
+/**
+ * Gets predefined moderation reasons
+ * @returns serialized response
+ */
 export const getModerationReasons = async (
   data: Record<string, unknown>,
   timeout = DEFAULT_FETCH_TIMEOUT,
@@ -230,6 +242,10 @@ export const getModerationReasons = async (
   });
 };
 
+/**
+ * Determines if a logged in user is a moderator or not
+ * @returns response HTTP status code
+ */
 export const getModeratorStatus = async (
   loggedUser: string,
   timeout = DEFAULT_FETCH_TIMEOUT,
@@ -263,6 +279,10 @@ export const getModeratorStatus = async (
   return response.status;
 };
 
+/**
+ * Gets a detailed breakdown of moderation items
+ * @returns serialized response
+ */
 export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<ICount> => {
   const rheaders = new Headers();
   const sdk = getSDK();
@@ -294,6 +314,10 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Pr
   });
 };
 
+/**
+ * Gets the reports for a specific entry
+ * @returns serialized response
+ */
 export const getEntryReports = async (
   entryId: string,
   timeout = DEFAULT_FETCH_TIMEOUT,
@@ -328,6 +352,10 @@ export const getEntryReports = async (
   });
 };
 
+/**
+ * Gets log of moderated items
+ * @returns serialized response
+ */
 export const getLogItems = async (
   data: {
     limit?: number;
@@ -366,6 +394,10 @@ export const getLogItems = async (
   });
 };
 
+/**
+ * Gets pending moderation items
+ * @returns serialized response
+ */
 export const getPendingItems = async (
   data: {
     limit?: number;
@@ -415,6 +447,10 @@ export const getPendingItems = async (
   });
 };
 
+/**
+ * Gets moderated items
+ * @returns serialized response
+ */
 export const getModeratedItems = async (
   data: {
     delisted: boolean;

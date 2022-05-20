@@ -49,10 +49,9 @@ class GetFollowingBuffer {
     this.buffer = deduplicateArray([...this.buffer, ...arr]);
   }
 }
+
 /**
  * Hook to check if a user is following other users
- * @param followerPubKey - ethereum address of user to check for
- * @param followingPubKeyArray - array of ethereum addresses to check if followed
  */
 export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyArray: string[]) {
   const queryClient = useQueryClient();
@@ -86,6 +85,7 @@ export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyAr
       GetFollowingBuffer.addToBuffer(filteredFollowingEthArray);
       setRefetchPending(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldRefetch]);
 
   React.useEffect(() => {
@@ -93,6 +93,7 @@ export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyAr
       setRefetchPending(false);
       query.refetch();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetchPending, query.isFetching, followerPubKey]);
 
   return query;

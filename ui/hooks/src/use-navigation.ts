@@ -1,10 +1,15 @@
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { useQueryClient } from 'react-query';
-import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import React from 'react';
-import { COMMENT_KEY } from './index';
-import { NavigateToParams } from '@akashaorg/ui-awf-typings';
+import { useQueryClient } from 'react-query';
 
+import { NavigateToParams } from '@akashaorg/ui-awf-typings';
+import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
+
+import { COMMENT_KEY } from './index';
+
+/**
+ * Hook to navigation to entry's page
+ */
 export const useEntryNavigation = (
   navigateFn?: (args: NavigateToParams) => void,
   currentPostId?: string,

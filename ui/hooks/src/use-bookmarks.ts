@@ -10,8 +10,6 @@ const entriesBookmarks = 'entries-bookmarks';
 
 /**
  * Hook for gettting a user's saved posts and comments
- * @param loggedEthAddress - currently logged in user's ethereum address
- * @param enabler - flag for allowing the query
  */
 export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
   return useQuery(
@@ -43,8 +41,8 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
 }
 
 /**
- * Hook used to save bookmarks
- * can be used to bookmark replies and posts (itemType is passed to mutate()).
+ * Hook used to bookmark resources.
+ * Pass as payload, entryData containing the resource id and itemType to the mutate function.
  */
 
 export function useSaveBookmark() {

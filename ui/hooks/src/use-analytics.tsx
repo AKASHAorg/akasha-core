@@ -29,6 +29,9 @@ export interface UseAnalyticsActions {
   trackEvent: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 }
 
+/**
+ * Hook to handle analytics
+ */
 const useAnalytics = (): [UseAnalyticsActions] => {
   const analyticsBus = React.useContext<BehaviorSubject<AnalyticsEventData>>(AnalyticsContext);
 
