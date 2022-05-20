@@ -64,6 +64,7 @@ class ProfileAPI extends DataSource {
       const respData = queryCache.get(cacheKey);
       const followers = await apiProvider.followerAPI.getFollowers(pubKey);
       const following = await apiProvider.followerAPI.getFollowing(pubKey);
+      logger.info(`[follow] ${pubKey} ${followers.total} ${following.total}`);
       return Object.assign(respData, {
         totalFollowers: followers.total,
         totalFollowing: following.total,
