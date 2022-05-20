@@ -68,7 +68,6 @@ class ProfileAPI extends DataSource {
         totalFollowers: followers.total,
         totalFollowing: following.total,
       });
-      logger.info(JSON.stringify(respData));
       return respData;
     }
     const db: Client = await getAppDB();
