@@ -31,29 +31,23 @@ class FollowerAPI extends DataSource {
     const query = new Where('follower').eq(pubKey).and('following').eq(following);
     const [followRecord] = await t.find<Follower>(query);
 
-    if (followRecord) {
-      if (!followRecord.active) {
-        followRecord.active = true;
-        await t.save([followRecord]);
-        await t.end();
-      }
-      return true;
+    if (!followRecord) {
+      const record = {
+        creationDate: new Date().getTime(),
+        follower: pubKey,
+        following: following,
+        active: true,
+        metaData: [],
+      };
+      await t.create([record]);
+    } else if (!followRecord?.active) {
+      followRecord.active = true;
+      await t.save([followRecord]);
     }
-
-    const record = {
-      creationDate: new Date().getTime(),
-      follower: pubKey,
-      following: following,
-      active: true,
-      metaData: [],
-    };
-
-    await t.create([record]);
     await t.end();
 
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${pubKey}`);
     const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${following}`);
-
     const followersList = await queryCache.get(followersKey);
     const followingList = await queryCache.get(followingKey);
 
@@ -95,6 +89,7 @@ class FollowerAPI extends DataSource {
     const [followRecord] = await t.find<Follower>(query);
 
     if (!followRecord || !followRecord.active) {
+      logger.info(`[unFollow] not found ${pubKey} - ${unFollowing}`);
       await t.end();
       return true;
     }
@@ -157,6 +152,9 @@ class FollowerAPI extends DataSource {
 
   async isFollowing(follower: string, following: string) {
     const db: Client = await getAppDB();
+    //force refresh
+    await this.getFollowers(following);
+    await this.getFollowing(follower);
     const key = this.getCacheKey(`${this.FOLLOWERS_KEY}${following}`);
     const hasAllFollowersCache = await queryCache.has(key);
     if (hasAllFollowersCache) {

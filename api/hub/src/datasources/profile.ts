@@ -59,8 +59,15 @@ class ProfileAPI extends DataSource {
   async resolveProfile(pubKey: string, noCache = false) {
     const cacheKey = this.getCacheKey(pubKey);
     const hasKey = await queryCache.has(cacheKey);
+    const apiProvider = getCurrentApiProvider();
     if (hasKey && !noCache) {
-      return queryCache.get(cacheKey);
+      const respData = queryCache.get(cacheKey);
+      const followers = await apiProvider.followerAPI.getFollowers(pubKey);
+      const following = await apiProvider.followerAPI.getFollowing(pubKey);
+      return Object.assign(respData, {
+        totalFollowers: followers.total,
+        totalFollowing: following.total,
+      });
     }
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
@@ -94,7 +101,6 @@ class ProfileAPI extends DataSource {
       );
       const totalPosts =
         totalPostsIndex !== -1 ? profilesFound[0].metaData[totalPostsIndex].value : '0';
-      const apiProvider = getCurrentApiProvider();
       const followers = await apiProvider.followerAPI.getFollowers(pubKey);
       const following = await apiProvider.followerAPI.getFollowing(pubKey);
       Object.assign(returnedObj, {
