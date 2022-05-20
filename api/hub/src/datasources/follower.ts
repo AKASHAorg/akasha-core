@@ -30,31 +30,24 @@ class FollowerAPI extends DataSource {
     await t.start();
     const query = new Where('follower').eq(pubKey).and('following').eq(following);
     const [followRecord] = await t.find<Follower>(query);
-    const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${pubKey}`);
-    const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${following}`);
 
-    if (followRecord) {
-      if (!followRecord.active) {
-        followRecord.active = true;
-        await t.save([followRecord]);
-        await t.end();
-        await queryCache.del(followersKey);
-        await queryCache.del(followingKey);
-      }
-      return true;
+    if (!followRecord) {
+      const record = {
+        creationDate: new Date().getTime(),
+        follower: pubKey,
+        following: following,
+        active: true,
+        metaData: [],
+      };
+      await t.create([record]);
+    } else if (!followRecord?.active) {
+      followRecord.active = true;
+      await t.save([followRecord]);
     }
-
-    const record = {
-      creationDate: new Date().getTime(),
-      follower: pubKey,
-      following: following,
-      active: true,
-      metaData: [],
-    };
-
-    await t.create([record]);
     await t.end();
 
+    const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${pubKey}`);
+    const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${following}`);
     const followersList = await queryCache.get(followersKey);
     const followingList = await queryCache.get(followingKey);
 
