@@ -13,7 +13,6 @@ const getAppDescription = async ipfsHash => {
 
 /**
  * Hook to get detailed description for app
- * @param ipfsLink - string
  */
 export function useAppDescription(ipfsLink: string) {
   const ipfsHash = ipfsLink?.match(/\/\/(.*)/)?.[1];

@@ -1,9 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom, forkJoin, catchError, of } from 'rxjs';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+
 import getSDK from '@akashaorg/awf-sdk';
-import { buildProfileMediaLinks } from './utils/media-utils';
-import { logError } from './utils/error-handler';
 import { IMessage } from '@akashaorg/sdk-typings/lib/interfaces/auth';
+
+import { logError } from './utils/error-handler';
+import { buildProfileMediaLinks } from './utils/media-utils';
 
 export const NOTIFICATIONS_KEY = 'Notifications';
 export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
@@ -45,7 +47,6 @@ const getNotifications = async () => {
 
 /**
  * Hook to get a user's notifications
- * @param loggedEthAddress - currently logged in user's eth address
  */
 export function useFetchNotifications(loggedEthAddress: string) {
   return useQuery([NOTIFICATIONS_KEY], () => getNotifications(), {
@@ -104,7 +105,6 @@ const checkNewNotifications = async () => {
 
 /**
  * Hook to check for new notifications
- * @param loggedEthAddress - currently logged in user's eth address
  */
 export function useCheckNewNotifications(loggedEthAddress: string) {
   return useQuery([HAS_NEW_NOTIFICATIONS_KEY], () => checkNewNotifications(), {

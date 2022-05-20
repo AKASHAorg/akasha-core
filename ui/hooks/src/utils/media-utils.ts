@@ -11,10 +11,7 @@ export interface IConfig {
 }
 
 /**
- * Utility to build gateway links to ipfs content
- * @returns originLink: textile subdomain gateway
- * fallbackLink: infura subdomain gateway
- * pathLink: textile path gateway
+ *  Utility to build gateway links to ipfs content
  */
 export const getMediaUrl = (hash?: string) => {
   const sdk = getSDK();
@@ -31,6 +28,9 @@ export const getMediaUrl = (hash?: string) => {
   return ipfsLinks;
 };
 
+/**
+ * Utility to build media links attached to a given profile
+ */
 export const buildProfileMediaLinks = (profile: UserProfile_Response) => {
   const { avatar, coverImage, ...other } = profile;
   const images: {
@@ -55,6 +55,9 @@ export const buildProfileMediaLinks = (profile: UserProfile_Response) => {
   return { ...images, ...other };
 };
 
+/**
+ * Utility to upload media to textile bucket
+ */
 export const uploadMediaToTextile = async (data: File, isUrl = false) => {
   const sdk = getSDK();
   const uploadData: {
@@ -97,6 +100,9 @@ export const uploadMediaToTextile = async (data: File, isUrl = false) => {
   }
 };
 
+/**
+ * Utility to get preview of a specified url
+ */
 export const getLinkPreview = async (url: string) => {
   const sdk = getSDK();
   const linkPreview = await lastValueFrom(sdk.api.entries.getLinkPreview(url));

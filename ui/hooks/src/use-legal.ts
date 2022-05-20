@@ -6,7 +6,7 @@ import { logError } from './utils/error-handler';
 
 export const LEGAL_KEY = 'Legal';
 
-const getLegalDoc = async docName => {
+const getLegalDoc = async (docName: LEGAL_DOCS) => {
   const sdk = getSDK();
   const res = await lastValueFrom(sdk.services.common.ipfs.getLegalDoc(docName));
   return res.data;
@@ -14,7 +14,6 @@ const getLegalDoc = async docName => {
 
 /**
  * Hook to get legal docs stored on ipfs
- * @param docName - type of document to retrieve
  */
 export function useLegalDoc(docName: LEGAL_DOCS) {
   return useQuery([LEGAL_KEY, docName], () => getLegalDoc(docName), {

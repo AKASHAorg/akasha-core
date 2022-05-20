@@ -169,7 +169,9 @@ export function useReport() {
   });
 }
 
-// check entry moderation status
+/**
+ * Utility to check entry's moderation status
+ */
 export const checkStatus = async (data: { user: string; contentIds: string[] }) => {
   try {
     const response = await getEntryModerationStatus(data);
@@ -183,7 +185,6 @@ export const checkStatus = async (data: { user: string; contentIds: string[] }) 
 
 /**
  * Hook to check if a user is a moderator
- * @param loggedUser - textile public key of the user
  */
 export function useCheckModerator(loggedUser: string) {
   return useQuery([CHECK_MODERATOR_KEY, loggedUser], () => getModeratorStatus(loggedUser), {
@@ -205,7 +206,6 @@ export function useGetCount() {
 
 /**
  * Hook to get report flags for a specific entry
- * @param entryId - id of the entry
  */
 export function useGetFlags(entryId: string) {
   return useQuery([MODERATION_ITEM_FLAGS_KEY, entryId], () => getEntryReports(entryId), {
@@ -217,8 +217,6 @@ export function useGetFlags(entryId: string) {
 
 /**
  * Hook to get log of moderated items
- * @param limit - number of items per page
- * @param offset - index of query offset
  */
 export function useInfiniteLog(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -240,8 +238,6 @@ export function useInfiniteLog(limit: number, offset?: string) {
 
 /**
  * Hook to get pending moderation items
- * @param limit - number of items per page
- * @param offset - index of query offset
  */
 export function useInfinitePending(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -259,8 +255,6 @@ export function useInfinitePending(limit: number, offset?: string) {
 
 /**
  * Hook to get kept moderated items
- * @param limit - number of items per page
- * @param offset - index of query offset
  */
 export function useInfiniteKept(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -283,8 +277,6 @@ export function useInfiniteKept(limit: number, offset?: string) {
 
 /**
  * Hook to get delisted moderated items
- * @param limit - number of items per page
- * @param offset - index of query offset
  */
 export function useInfiniteDelisted(limit: number, offset?: string) {
   return useInfiniteQuery(

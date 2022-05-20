@@ -51,11 +51,6 @@ const getSearchProfiles = async (
 
 /**
  * Hook to search for profiles
- * @param searchQuery - query for the search
- * @param page - page number
- * @param loggedUser - pubKey of the logged in user
- * @param enabler - flag to allow the query
- * @param pageSize - number of results per page
  * @returns search results for profiles, containing full profile data
  */
 export function useSearchProfiles(
@@ -112,11 +107,6 @@ const getSearchPosts = async (
 
 /**
  * Hook to search for posts
- * @param searchQuery - query for the search
- * @param page - page number
- * @param loggedUser - pubKey of the logged in user
- * @param enabler - flag to allow the query
- * @param pageSize - number of results per page
  * @returns search results for posts
  */
 export function useSearchPosts(
@@ -176,11 +166,6 @@ const getSearchComments = async (
 
 /**
  * Hook to search for comments
- * @param searchQuery - query for the search
- * @param page - page number
- * @param loggedUser - pubKey of the logged in user
- * @param enabler - flag to allow the query
- * @param pageSize - number of results per page
  * @returns search results for comments
  */
 export function useSearchComments(
@@ -213,8 +198,6 @@ const getSearchTags = async (searchQuery: string) => {
 
 /**
  * Hook to search for tags
- * @param searchQuery - query for the search
- * @param enabler - flag to allow the query
  * @returns search results for posts, comments, tags and profiles
  */
 export function useSearchTags(searchQuery: string, enabler = true) {
@@ -316,9 +299,6 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
 
 /**
  * Hook for fetching search results for a specific query
- * @param searchQuery - query for the search
- * @param loggedUser - pubKey of the logged in user
- * @param enabler - flag to allow the query
  * @returns search results for posts, comments, tags and profiles
  */
 export function useSearch(searchQuery: string, loggedUser?: string, enabler = true) {

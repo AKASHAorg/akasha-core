@@ -1,5 +1,8 @@
 import { UsernameTypes } from '@akashaorg/ui-awf-typings/lib/profile';
 
+/**
+ * Utility to determine domain type of ENS names
+ */
 export const getEnsNameType = (name: string) => {
   let nameType = UsernameTypes.TEXTILE;
   if (name.includes('.eth')) {

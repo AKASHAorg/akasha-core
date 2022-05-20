@@ -132,7 +132,6 @@ const getPostsByTag = async (name: string, limit: number, offset?: string) => {
 
 /**
  * Hook to get posts that contain a specific tag
- * @param name - tag name
  */
 export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -168,7 +167,6 @@ const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) 
 
 /**
  * Hook to get an author's posts
- * @param pubKey - textile public key of the user
  */
 export function useInfinitePostsByAuthor(
   pubKey: string,
@@ -211,8 +209,6 @@ const getPost = async (postID: string, loggedUser?: string) => {
 
 /**
  * Hook to get data for a specific post
- * @param postId - id of the post
- * @param loggedUser - pubKey of the currently logged in user
  */
 export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
   return useQuery([ENTRY_KEY, postId], () => getPost(postId, loggedUser), {
@@ -224,7 +220,6 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
 
 /**
  * Hook to delete a post
- * @param postID - id of the post to be deleted
  */
 export function useDeletePost(postID: string) {
   const sdk = getSDK();
@@ -332,7 +327,7 @@ const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
 
 /**
  * Hook to edit a post
- * pass the edited post data to the mutation function
+ * pass the edited post data to the onMutate function
  */
 export const useEditPost = () => {
   const sdk = getSDK();

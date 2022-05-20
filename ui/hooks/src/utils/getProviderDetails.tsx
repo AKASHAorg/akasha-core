@@ -18,6 +18,9 @@ export interface IInjectedProviderDetails {
   subtitleLabel: string;
 }
 
+/**
+ * Utility to get the details of an injected provider
+ */
 const getProviderDetails = (provider: INJECTED_PROVIDERS): IInjectedProviderDetails => {
   switch (provider) {
     // metamask

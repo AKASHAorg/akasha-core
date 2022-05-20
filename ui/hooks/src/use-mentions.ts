@@ -22,7 +22,6 @@ const getMentions = async (mention: string, queryClient: QueryClient) => {
 
 /**
  * Hook to search for profiles
- * @param mention - profile name to search for
  */
 export function useMentionSearch(mention: string) {
   const queryClient = useQueryClient();
