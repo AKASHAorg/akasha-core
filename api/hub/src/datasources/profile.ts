@@ -65,10 +65,12 @@ class ProfileAPI extends DataSource {
       const followers = await apiProvider.followerAPI.getFollowers(pubKey);
       const following = await apiProvider.followerAPI.getFollowing(pubKey);
       logger.info(`[follow] ${pubKey} ${followers.total} ${following.total}`);
-      return Object.assign(respData, {
+      Object.assign(respData, {
         totalFollowers: followers.total,
         totalFollowing: following.total,
       });
+      logger.info(JSON.stringify(respData));
+      return respData;
     }
     const db: Client = await getAppDB();
     const query = new Where('pubKey').eq(pubKey);
