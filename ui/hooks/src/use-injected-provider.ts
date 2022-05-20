@@ -58,8 +58,7 @@ export function useInjectedProvider() {
 }
 
 /**
- * A hook to connect to injected provider
- * @param provider - any of the predefined ethereum provider types
+ * Hook to connect with one of the supported providers
  * */
 export function useConnectProvider(provider: EthProviders) {
   return useQuery([CONNECT_PROVIDER_KEY], () => connectProvider(provider), {

@@ -176,7 +176,7 @@ const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
  * Hook to get followers for a user
  * @param pubKey - textile generated public key of the user
  * @param limit - number of followers to return per page
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useFollowers(pubKey: string, limit: number, offset?: number) {
   return useInfiniteQuery(
@@ -205,7 +205,7 @@ const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
  * Hook to get a list of profiles following the user
  * @param pubKey - textile generated public key of the user
  * @param limit - number of profiles following the user to return per page
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useFollowing(pubKey: string, limit: number, offset?: number) {
   return useInfiniteQuery(
@@ -378,7 +378,7 @@ const completeProfileUpdate = async (pubKey: string, queryClient: QueryClient) =
 
 /**
  * Hook to update a user's profile data.
- * Pass updated profile form data to the onMutate function
+ * Pass updated profile form data to the mutate function
  * @param pubKey - the textile generated public key of the user
  */
 export function useProfileUpdate(pubKey: string) {

@@ -35,7 +35,7 @@ const getIsSubscribedToTag = async (tagName: string) => {
 };
 
 /**
- * Hook to check if a user subscribes to a tag
+ * Hook to check if a user is subscribed to a tag
  * @param tagName - name of the tag
  * @param loggedEthAddress - ethereum address of the logged in user
  */
@@ -49,7 +49,7 @@ export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string |
 
 /**
  * Hook to toggle a user's tag subscription.
- * Pass the tagName to the onMutate function
+ * Pass the tagName to the mutate function
  */
 export function useToggleTagSubscription() {
   const sdk = getSDK();

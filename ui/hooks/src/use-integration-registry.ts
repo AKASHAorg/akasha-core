@@ -32,7 +32,7 @@ const getIntegrationsInfo = async (opt: { name?: string; id?: string }[]) => {
 
 /**
  * Hook to get package info for multiple integrations by name or id
- * @param opt - array of objects each containing the name and id of required integrations
+ * @param opt - array of objects each containing the name or id of required integrations
  */
 export function useGetIntegrationsInfo(opt: { name?: string; id?: string }[]) {
   return useQuery([INTEGRATIONS_KEY, 'info'], () => getIntegrationsInfo(opt), {
@@ -119,7 +119,7 @@ const getAllIntegrationsIds = async (offset?: number) => {
 /**
  * Hook to get all the published integrations ids
  * @param enabler - flag for allowing the query
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useGetAllIntegrationsIds(enabler = true, offset?: number) {
   return useQuery([INTEGRATIONS_KEY, 'ids'], () => getAllIntegrationsIds(offset), {
@@ -141,7 +141,7 @@ const getAllIntegrationReleaseIds = async (integrationName: string, offset?: num
 /**
  * Hook to get all the release ids for an integration
  * @param integrationName - name of the integration
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useGetAllIntegrationReleaseIds(integrationName: string, offset?: number) {
   return useQuery(

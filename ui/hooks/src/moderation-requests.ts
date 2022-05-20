@@ -253,7 +253,7 @@ export const getModerationReasons = async (
  * Determines if a logged in user is a moderator or not
  * @param loggedUser - pubkey of logged in user
  * @param timeout - duration after which request times out
- * @returns response status
+ * @returns response HTTP status code
  */
 export const getModeratorStatus = async (
   loggedUser: string,

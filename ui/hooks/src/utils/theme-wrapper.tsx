@@ -7,7 +7,6 @@ const { ThemeSelector, lightTheme, darkTheme } = DS;
 /**
  * React component that fetches the user selected theme name from the localstorage
  * and passes it to the ThemeSelector component along with all available themes.
- * @param param0 - object containing the children along with other props
  */
 const ThemeWrapper: React.FC<RootComponentProps> = ({ children, ...props }) => {
   const [currentTheme, setCurrentTheme] = React.useState(window.localStorage.getItem('Theme'));

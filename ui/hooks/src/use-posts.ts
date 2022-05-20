@@ -211,7 +211,6 @@ const getPost = async (postID: string, loggedUser?: string) => {
 
 /**
  * Hook to get data for a specific post
- * @param param0 - payload containg the id of the post and textile public key of the logged in user
  */
 export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
   return useQuery([ENTRY_KEY, postId], () => getPost(postId, loggedUser), {

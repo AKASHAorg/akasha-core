@@ -59,7 +59,7 @@ export function useFetchNotifications(loggedEthAddress: string) {
 
 /**
  * Hook to mark a notification as read
- * pass the messageId to the onMutate function
+ * pass the messageId to the mutate function
  */
 export function useMarkAsRead() {
   const sdk = getSDK();

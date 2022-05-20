@@ -221,7 +221,7 @@ export function useGetFlags(entryId: string) {
 /**
  * Hook to get log of moderated items
  * @param limit - number of items per page
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useInfiniteLog(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -244,7 +244,7 @@ export function useInfiniteLog(limit: number, offset?: string) {
 /**
  * Hook to get pending moderation items
  * @param limit - number of items per page
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useInfinitePending(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -263,7 +263,7 @@ export function useInfinitePending(limit: number, offset?: string) {
 /**
  * Hook to get kept moderated items
  * @param limit - number of items per page
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useInfiniteKept(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -287,7 +287,7 @@ export function useInfiniteKept(limit: number, offset?: string) {
 /**
  * Hook to get delisted moderated items
  * @param limit - number of items per page
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useInfiniteDelisted(limit: number, offset?: string) {
   return useInfiniteQuery(

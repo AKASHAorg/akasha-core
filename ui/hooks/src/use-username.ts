@@ -65,7 +65,7 @@ const updateUsernameProvider = async (
 
 /**
  * Hook to register a username for the user.
- * Pass as payload, the username and provider details to the onMutate function
+ * Pass as payload, the username and provider details to the mutate function
  * @param pubKey - textile public key of the user
  */
 export function useUpdateUsernameProvider(pubKey?: string) {
@@ -140,7 +140,7 @@ const registerENS = async ({ userName }: { userName: string }) => {
 
 /**
  * Hook to register a new ENS name.
- * Pass as payload, the username to the onMutate function
+ * Pass as payload, the username to the mutate function
  * @param pubKey - textile public key of the user
  */
 export function useEnsRegistration(pubKey?: string) {

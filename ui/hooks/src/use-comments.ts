@@ -49,7 +49,7 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
  * Hook to get the comments for a specific post
  * @param limit - number of comments to fetch on a page
  * @param postID - id of the parent post
- * @param offset - id of where to start from
+ * @param offset - index number of where to start from
  */
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
   return useInfiniteQuery(
