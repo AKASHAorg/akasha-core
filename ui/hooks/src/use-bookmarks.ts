@@ -43,8 +43,8 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
 }
 
 /**
- * Hook used to bookmark replies and posts.
- * Pass as payload, entryData containing the id and itemType to the onMutate function.
+ * Hook used to bookmark resources.
+ * Pass as payload, entryData containing the resource id and itemType to the onMutate function.
  */
 
 export function useSaveBookmark() {
