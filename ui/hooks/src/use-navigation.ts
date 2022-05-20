@@ -9,8 +9,6 @@ import { COMMENT_KEY } from './index';
 
 /**
  * Hook to navigation to entry's page
- * @param navigateFn - function to handle navigation
- * @param currentPostId - id of the current post
  */
 export const useEntryNavigation = (
   navigateFn?: (args: NavigateToParams) => void,

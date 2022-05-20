@@ -14,7 +14,6 @@ const getIntegrationInfo = async integrationId => {
 
 /**
  * Hook to get integration package info
- * @param integrationId - id of the integration
  */
 export function useGetIntegrationInfo(integrationId: string) {
   return useQuery([INTEGRATIONS_KEY, integrationId], () => getIntegrationInfo(integrationId), {
@@ -32,7 +31,6 @@ const getIntegrationsInfo = async (opt: { name?: string; id?: string }[]) => {
 
 /**
  * Hook to get package info for multiple integrations by name or id
- * @param opt - array of objects each containing the name or id of required integrations
  */
 export function useGetIntegrationsInfo(opt: { name?: string; id?: string }[]) {
   return useQuery([INTEGRATIONS_KEY, 'info'], () => getIntegrationsInfo(opt), {
@@ -66,7 +64,6 @@ const getIntegrationId = async (integrationName: string) => {
 
 /**
  * Hook to get integration id by its name
- * @param integrationName - name of the integration
  */
 export function useGetIntegrationId(integrationName: string) {
   return useQuery([INTEGRATIONS_KEY, integrationName], () => getIntegrationId(integrationName), {
@@ -83,9 +80,6 @@ const getIntegrationReleaseId = async (integrationName: string, version: string)
 
 /**
  * Hook to get integration release id by its name and version
- * @param integrationName - name of the integration
- * @param version - release version
- * @param enabler - flag for allowing the query
  */
 export function useGetIntegrationReleaseId(
   integrationName: string,
@@ -118,8 +112,6 @@ const getAllIntegrationsIds = async (offset?: number) => {
 
 /**
  * Hook to get all the published integrations ids
- * @param enabler - flag for allowing the query
- * @param offset - index number of where to start from
  */
 export function useGetAllIntegrationsIds(enabler = true, offset?: number) {
   return useQuery([INTEGRATIONS_KEY, 'ids'], () => getAllIntegrationsIds(offset), {
@@ -140,8 +132,6 @@ const getAllIntegrationReleaseIds = async (integrationName: string, offset?: num
 
 /**
  * Hook to get all the release ids for an integration
- * @param integrationName - name of the integration
- * @param offset - index number of where to start from
  */
 export function useGetAllIntegrationReleaseIds(integrationName: string, offset?: number) {
   return useQuery(
@@ -163,7 +153,6 @@ const getIntegrationReleaseInfo = async releaseId => {
 
 /**
  * Hook to get integration release info
- * @param releaseId - id of the integration
  */
 export function useGetIntegrationReleaseInfo(releaseId: string) {
   return useQuery([RELEASES_KEY, releaseId], () => getIntegrationReleaseInfo(releaseId), {
@@ -186,7 +175,6 @@ const getIntegrationsReleaseInfo = async releaseIds => {
 
 /**
  * Hook to get multiple integrations release info
- * @param releaseIds - array of ids of the integrations
  */
 export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
   return useQuery([RELEASES_KEY, 'info'], () => getIntegrationsReleaseInfo(releaseIds), {
@@ -204,7 +192,6 @@ const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
 
 /**
  * Hook to get latest release info for integrations
- * @param opt - array of integration names or ids
  */
 export function useGetLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
   return useQuery([RELEASES_KEY, 'latest'], () => getLatestReleaseInfo(opt), {

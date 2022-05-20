@@ -14,8 +14,6 @@ const getAppConfig = async (appName: string) => {
 
 /**
  * Hook to get configuration object for an installed app
- * @param appName - name of the app
- * @param enabler - flag for allowing the query
  */
 export function useGetAppConfig(appName: string, enabler?: boolean) {
   return useQuery([APP_SETTINGS_KEY, appName], (): Promise<any> => getAppConfig(appName), {
@@ -33,7 +31,6 @@ const getAllInstalledApps = async () => {
 
 /**
  * Hook to get all the user's installed apps
- * @param enabler - flag for allowing the query
  */
 export function useGetAllInstalledApps(enabler?: boolean) {
   return useQuery([APP_SETTINGS_KEY], (): Promise<any> => getAllInstalledApps(), {

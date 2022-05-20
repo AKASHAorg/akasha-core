@@ -132,7 +132,6 @@ const getPostsByTag = async (name: string, limit: number, offset?: string) => {
 
 /**
  * Hook to get posts that contain a specific tag
- * @param name - tag name
  */
 export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -168,7 +167,6 @@ const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) 
 
 /**
  * Hook to get an author's posts
- * @param pubKey - textile public key of the user
  */
 export function useInfinitePostsByAuthor(
   pubKey: string,
@@ -222,7 +220,6 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
 
 /**
  * Hook to delete a post
- * @param postID - id of the post to be deleted
  */
 export function useDeletePost(postID: string) {
   const sdk = getSDK();

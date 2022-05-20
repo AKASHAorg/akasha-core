@@ -54,7 +54,6 @@ const initialData = {
 
 /**
  * Hook for retrieving the current authentication state of the user
- * @param onError - outside error handler
  */
 export function useGetLogin(onError?: (error: Error) => void) {
   const queryClient = useQueryClient();
@@ -116,7 +115,6 @@ export function useGetLogin(onError?: (error: Error) => void) {
 
 /**
  * Hook to sign in a user
- * @param onError - outside error handler
  */
 export function useLogin(onError?: (err: Error) => void) {
   const sdk = getSDK();
@@ -149,9 +147,6 @@ export function useLogin(onError?: (err: Error) => void) {
 
 /**
  * Hook to sign up a user
- * @param provider - any of the predefined ethereum provider types
- * @param checkRegistered - checks if user has previously registered
- * @param analyticsActions - analytics actions
  */
 export function useSignUp(
   provider: EthProviders,
@@ -343,7 +338,6 @@ export function useLogout() {
 
 /**
  * Hook to check if a user is already registered
- * @param ethAddress - ethereum address to check for
  */
 export function useCheckSignup(ethAddress: string) {
   const sdk = getSDK();

@@ -10,7 +10,6 @@ import { Mutation } from 'react-query/types/core/mutation';
 
 /**
  * Hook to detect changes to a mutation
- * @param mutationKey - the key of the mutation to listen to
  * @returns Mutation | undefined
  */
 export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
@@ -32,7 +31,6 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
 
 /**
  * Hook to detect changes to a query
- * @param queryKey - the key of the query to listen to
  */
 export const useQueryListener = <TData>(queryKey: QueryKey) => {
   const [query, setQuery] = React.useState<QueryObserverResult<TData, unknown>>();

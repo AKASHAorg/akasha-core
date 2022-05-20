@@ -10,8 +10,6 @@ const entriesBookmarks = 'entries-bookmarks';
 
 /**
  * Hook for gettting a user's saved posts and comments
- * @param loggedEthAddress - currently logged in user's ethereum address
- * @param enabler - flag for allowing the query
  */
 export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
   return useQuery(

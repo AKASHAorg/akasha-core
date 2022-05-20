@@ -47,7 +47,6 @@ const getNotifications = async () => {
 
 /**
  * Hook to get a user's notifications
- * @param loggedEthAddress - ethereum address of the currently logged in user
  */
 export function useFetchNotifications(loggedEthAddress: string) {
   return useQuery([NOTIFICATIONS_KEY], () => getNotifications(), {
@@ -106,7 +105,6 @@ const checkNewNotifications = async () => {
 
 /**
  * Hook to check for new notifications
- * @param loggedEthAddress - ethereum address of the currently logged in user
  */
 export function useCheckNewNotifications(loggedEthAddress: string) {
   return useQuery([HAS_NEW_NOTIFICATIONS_KEY], () => checkNewNotifications(), {

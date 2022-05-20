@@ -12,7 +12,6 @@ export interface IConfig {
 
 /**
  *  Utility to build gateway links to ipfs content
- * @param hash - ipfs hash of the item
  */
 export const getMediaUrl = (hash?: string) => {
   const sdk = getSDK();
@@ -31,7 +30,6 @@ export const getMediaUrl = (hash?: string) => {
 
 /**
  * Utility to build media links attached to a given profile
- * @param profile - user's profile object
  */
 export const buildProfileMediaLinks = (profile: UserProfile_Response) => {
   const { avatar, coverImage, ...other } = profile;
@@ -59,8 +57,6 @@ export const buildProfileMediaLinks = (profile: UserProfile_Response) => {
 
 /**
  * Utility to upload media to textile bucket
- * @param data - file to be uploaded
- * @param isUrl - specifies whether the item is a url or not
  */
 export const uploadMediaToTextile = async (data: File, isUrl = false) => {
   const sdk = getSDK();
@@ -106,7 +102,6 @@ export const uploadMediaToTextile = async (data: File, isUrl = false) => {
 
 /**
  * Utility to get preview of a specified url
- * @param url - specified url
  */
 export const getLinkPreview = async (url: string) => {
   const sdk = getSDK();

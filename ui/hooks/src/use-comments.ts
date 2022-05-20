@@ -47,9 +47,6 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
 
 /**
  * Hook to get the comments for a specific post
- * @param limit - number of comments to fetch on a page
- * @param postID - id of the parent post
- * @param offset - index number of where to start from
  */
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
   return useInfiniteQuery(
@@ -68,7 +65,6 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 
 /**
  * Gets a comment
- * @param commentID - id of comment to fetch
  */
 const getComment = async (commentID): Promise<CommentResponse> => {
   const sdk = getSDK();
@@ -94,8 +90,6 @@ const getComment = async (commentID): Promise<CommentResponse> => {
 
 /**
  * Hook for fetching data for a specific comment
- * @param commentID - id of comment to fetch data for
- * @param enabler - flag for allowing the query
  */
 export function useComment(commentID: string, enabler = true) {
   const queryClient = useQueryClient();
@@ -121,7 +115,6 @@ const deleteComment = async (commentId: string) => {
 
 /**
  * Hook for deleting a specific comment
- * @param commentID - id of the comment to be deleted
  */
 export function useDeleteComment(commentID: string) {
   const queryClient = useQueryClient();

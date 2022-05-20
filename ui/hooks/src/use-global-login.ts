@@ -20,7 +20,6 @@ export interface UseGlobalLoginProps {
 
 /**
  * Hook that will fire an action when the sign in is called
- * @param props - set of functions required in each stage of the call
  */
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   const { onError, onLogin, waitForAuth, onReady, onLogout, onLoadFromCache } = props;

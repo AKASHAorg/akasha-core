@@ -22,7 +22,6 @@ const queryClient = new QueryClient({
 
 /**
  * Higher order component that wraps a component with all necessary providers
- * @param WrappedComponent - component to be wrapped
  */
 export default function withProviders<T>(WrappedComponent: React.ComponentType<T>) {
   const displayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';

@@ -17,7 +17,6 @@ const getTagSubscriptions = async () => {
 
 /**
  * Hook to get a user's subscribed tags
- * @param loggedEthAddress - ethereum address of the logged in user
  */
 export function useTagSubscriptions(loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY], () => getTagSubscriptions(), {
@@ -36,8 +35,6 @@ const getIsSubscribedToTag = async (tagName: string) => {
 
 /**
  * Hook to check if a user is subscribed to a tag
- * @param tagName - name of the tag
- * @param loggedEthAddress - ethereum address of the logged in user
  */
 export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY, tagName], () => getIsSubscribedToTag(tagName), {
@@ -114,8 +111,6 @@ const getTag = async (tagName: string) => {
 
 /**
  * Hook to get a specific tag by name
- * @param tagName - name of the tag
- * @param enabler - flag for allowing the query
  */
 export function useGetTag(tagName: string, enabler = true) {
   return useQuery([GET_TAG_KEY, tagName], () => getTag(tagName), {
@@ -135,7 +130,6 @@ const getTags = async tagName => {
 
 /**
  * Hook to search for tags
- * @param tagName - name of the tag
  */
 export function useTagSearch(tagName: string) {
   return useQuery([SEARCH_TAGS_KEY, tagName], () => getTags(tagName), {

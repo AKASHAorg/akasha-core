@@ -60,9 +60,6 @@ function fromBinary(binary: string) {
 
 /**
  * Utility to decode base64 slate content
- * @param base64Content - base64 content to be decoded
- * @param logger - logs information
- * @param handleOldSlateFormat - determines whether old slate data format should be taken into consideration
  */
 export const decodeb64SlateContent = (
   base64Content: string,
@@ -87,7 +84,6 @@ export const decodeb64SlateContent = (
 
 /**
  * Utility to serialize slate content to base64
- * @param slateContent - slate content to be serialized
  */
 export const serializeSlateToBase64 = (slateContent: unknown) => {
   return window.btoa(toBinary(JSON.stringify(slateContent)));
@@ -98,8 +94,6 @@ export const serializeSlateToBase64 = (slateContent: unknown) => {
  * content - from b64 to slate format
  * profile images - append ipfs gateway
  * entry images - append ipfs gateway
- * @param entry - entry to be remapped
- * @param logger - logs information
  */
 export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger): IEntryData => {
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
@@ -231,8 +225,6 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
 
 /**
  * Utility to create an entry yet to be published
- * @param author - profile data of the entry's author
- * @param entryPublishData - data of entry to be published
  */
 export const createPendingEntry = (
   author: IProfileData,

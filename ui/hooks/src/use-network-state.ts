@@ -36,7 +36,6 @@ const getCurrentNetwork = () => {
 
 /**
  * Hook to check the user's current web3 network
- * @param enabler - flag for allowing the query
  */
 export function useCurrentNetwork(enabler?: boolean) {
   return useQuery([CURRENT_NETWORK_KEY], () => getCurrentNetwork(), {

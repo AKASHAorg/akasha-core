@@ -52,8 +52,6 @@ class GetFollowingBuffer {
 
 /**
  * Hook to check if a user is following other users
- * @param followerPubKey - ethereum address of user to check for
- * @param followingPubKeyArray - array of ethereum addresses to check if followed
  */
 export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyArray: string[]) {
   const queryClient = useQueryClient();

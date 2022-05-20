@@ -20,7 +20,6 @@ export interface IInjectedProviderDetails {
 
 /**
  * Utility to get the details of an injected provider
- * @param provider - any of the predefined injected providers
  */
 const getProviderDetails = (provider: INJECTED_PROVIDERS): IInjectedProviderDetails => {
   switch (provider) {
