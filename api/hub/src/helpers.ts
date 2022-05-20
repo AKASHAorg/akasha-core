@@ -88,8 +88,13 @@ export const newClientDB = async () => {
     return Promise.resolve(userDBClient);
   }
   const API = process.env.API || undefined;
+  const expiration = new Date(Date.now() + 1000 * 60 * 120);
   const client = Client.withUserAuth(
-    await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
+    await createUserAuth(
+      process.env.USER_GROUP_API_KEY,
+      process.env.USER_GROUP_API_SECRET,
+      expiration,
+    ),
     API,
     process.env.NODE_ENV !== 'production',
   );
@@ -402,4 +407,6 @@ export const createApiProvider = (dbID: ThreadID) => {
   return currentApiProvider;
 };
 
-export const getCurrentApiProvider = () => currentApiProvider;
+export const getCurrentApiProvider = function () {
+  return currentApiProvider;
+};

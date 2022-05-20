@@ -2,10 +2,6 @@ import { getAppDB, getCurrentApiProvider } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
 import { Profile } from '../collections/interfaces';
 
-const cleanup = () => {
-  const provider = getCurrentApiProvider();
-};
-
 export default async function runMigration(dbID: ThreadID) {
   const db: Client = await getAppDB();
   const provider = getCurrentApiProvider();
@@ -19,8 +15,9 @@ export default async function runMigration(dbID: ThreadID) {
     for (const follow of profile.following) {
       console.info(profile.pubKey, '-->', follow, '\n');
       await provider.followerAPI.followProfile(profile.pubKey, follow);
-      await new Promise(res => setTimeout(res, 300));
+      await new Promise(res => setTimeout(res, 200));
     }
+    //console.info(`--------finished ${x}/${profiles.length}----------`);
   }
   console.info('running cleanup');
   for (const profile of profiles) {
@@ -28,6 +25,6 @@ export default async function runMigration(dbID: ThreadID) {
     profile.followers = [];
     await db.save(dbID, provider.profileAPI.collection, [profile]);
     console.info('cleaned', profile.pubKey);
-    await new Promise(res => setTimeout(res, 300));
+    await new Promise(res => setTimeout(res, 200));
   }
 }
