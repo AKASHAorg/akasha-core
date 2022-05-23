@@ -4,11 +4,12 @@
 // const pkgInfos = require('../../../../build/integrations_bucket.json');
 async function main() {
   // const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
-  //const IntRegistrar = await upgrades.deployProxy(IntegrationRegistry);
+  // const IntRegistrar = await upgrades.deployProxy(IntegrationRegistry);
+  // console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
   // const safe = '0x4941D523fa837A536B8bed834F6e6c807FAba24C';
   // await upgrades.admin.transferProxyAdminOwnership(safe);
   // const integrationRegistry = await IntegrationRegistry.attach(
-  //    '0xFB0b97933e5e94b0b0b8dEF09403222b5009bDED',
+  //    '0x80A254518169f9443BC79F14a9800c438b467df9',
   //  );
   //
   // for(const pkg of pkgInfos){
@@ -50,9 +51,8 @@ async function main() {
   // const releaseData = await integrationRegistry.getReleaseData(packageInfo.latestReleaseId);
   // console.log('releaseData', releaseData);
   //await akRegistrar.deployed();
-  //console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
 
-  // const proxyAddress = '0xFB0b97933e5e94b0b0b8dEF09403222b5009bDED';
+  // const proxyAddress = '0x80A254518169f9443BC79F14a9800c438b467df9';
   //
   // const IntegrationRegV1 = await ethers.getContractFactory('IntegrationRegistry');
   // console.log('Preparing upgrade...');
