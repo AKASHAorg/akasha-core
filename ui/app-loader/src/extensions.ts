@@ -133,13 +133,22 @@ export const mountMatchingExtensionParcels = (opts: {
         parseQueryString: parseQueryString,
         plugins: state.plugins,
       };
-      let parcel;
-
+      let parcel: singleSpa.Parcel;
       // check if the extension is already loaded
       if (state.extensionParcels.has(extInfo.mountPoint)) {
         const parcels = state.extensionParcels.get(extInfo.mountPoint) || [];
         if (parcels.some(parcel => parcel.id === extInfo.extID)) {
-          parcel = parcels.find(parcel => parcel.id === extInfo.extID);
+          const spaParcel = parcels.find(parcel => parcel.id === extInfo.extID);
+          if (spaParcel) {
+            // force a remount of the already existing parcels
+            // this is because they share the same element id but
+            // the component is not always the same
+            // (eg. a card has same extension ID in the feed and in the full post page)
+            // @todo: we should find a way to fix this
+            if (spaParcel.parcel.getStatus() === singleSpa.MOUNTED) {
+              await spaParcel.parcel.unmount();
+            }
+          }
         }
       }
       if (!parcel && parentConfig) {
@@ -156,8 +165,6 @@ export const mountMatchingExtensionParcels = (opts: {
             } into ${extInfo.mountPoint}: ${err.message ?? JSON.stringify(err)}, ${err.stack}`,
           );
         }
-      } else {
-        // logger.info(`parcel already mounted: ${extInfo.extID}. skipping`);
       }
 
       return {
