@@ -76,7 +76,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       const splitUrl = currentRoute.split('/');
 
       const activeApp = allMenuItems.find(menuItem => activeApps?.includes?.(menuItem.name));
-      if (activeApps?.includes?.(activeApp?.name)) {
+      if (activeApp && activeApp.index !== currentAppData?.index) {
         setCurrentAppData(activeApp);
       }
 
