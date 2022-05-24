@@ -32,7 +32,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.pubKey;
+    return !!loginQuery.data.pubKey && loginQuery.data.isReady;
   }, [loginQuery.data]);
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {

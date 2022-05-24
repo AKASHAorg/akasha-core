@@ -109,7 +109,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
           <Text size="large" color="secondaryText">
             {t('Installed Apps')}
           </Text>
-          <Text>{t('These are the apps you installed in your world')}</Text>
+          <Text>{t('These are the apps you installed in your World')}</Text>
         </Box>
         <Box gap="small">
           {filteredInstalledApps?.length !== 0 &&
