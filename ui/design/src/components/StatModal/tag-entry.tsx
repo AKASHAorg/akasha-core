@@ -40,7 +40,7 @@ const TagEntry: React.FC<ITagEntry> = props => {
   return (
     <Box flex={false} pad={{ top: 'large' }} gap="medium">
       {tags &&
-        tags.slice(0, 4).map((tag, index) => (
+        tags.map((tag, index) => (
           <Box key={index} direction="row" justify="between">
             <StyledAnchor
               onClick={e => {
