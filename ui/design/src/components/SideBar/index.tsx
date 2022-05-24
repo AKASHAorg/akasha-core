@@ -26,6 +26,7 @@ export interface ISidebarProps {
   exploreButtonLabel: string;
   worldApps: IMenuItem[];
   allMenuItems: IMenuItem[];
+  activeApps?: string[];
   currentRoute?: string;
   isLoggedIn: boolean;
   hasNewNotifs?: boolean;
@@ -50,6 +51,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     userInstalledApps,
     exploreButtonLabel,
     allMenuItems,
+    activeApps,
     worldApps,
     currentRoute,
     isLoggedIn,
@@ -72,9 +74,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   React.useEffect(() => {
     if (allMenuItems && currentRoute) {
       const splitUrl = currentRoute.split('/');
-      const route = splitUrl[1] ? `/${splitUrl[1]}` : '/';
 
-      const activeApp = allMenuItems.find(menuItem => menuItem.route === route);
+      const activeApp = allMenuItems.find(menuItem => activeApps?.includes?.(menuItem.name));
       if (activeApp && activeApp.index !== currentAppData?.index) {
         setCurrentAppData(activeApp);
       }
@@ -89,7 +90,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         }
       }
     }
-  }, [currentRoute, allMenuItems, currentAppData, activeOption]);
+  }, [currentRoute, allMenuItems, currentAppData, activeOption, activeApps]);
 
   const handleAppIconClick = (menuItem: IMenuItem, isMobile?: boolean) => {
     if (menuItem.subRoutes && menuItem.subRoutes.length === 0) {
