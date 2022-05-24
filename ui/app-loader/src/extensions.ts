@@ -165,8 +165,6 @@ export const mountMatchingExtensionParcels = (opts: {
             } into ${extInfo.mountPoint}: ${err.message ?? JSON.stringify(err)}, ${err.stack}`,
           );
         }
-      } else {
-        // logger.info(`parcel already mounted: ${extInfo.extID}. skipping`);
       }
 
       return {
