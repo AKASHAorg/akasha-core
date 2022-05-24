@@ -56,10 +56,9 @@ class GetFollowingBuffer {
 export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyArray: string[]) {
   const queryClient = useQueryClient();
   const [refetchPending, setRefetchPending] = React.useState(false);
-  const filteredFollowingEthArray = followingPubKeyArray.filter(_ => _); // often we end up with [undefined] as arg
-  const allAddresses: string[] = queryClient.getQueryData([FOLLOWED_PROFILES_KEY, 'all']) || [];
-  const newAllAddressess = deduplicateArray([...allAddresses, ...filteredFollowingEthArray]);
-  const shouldRefetch = objHash(newAllAddressess) !== objHash(allAddresses);
+  const filteredFollowingPubKeyArray = followingPubKeyArray.filter(_ => _); // often we end up with [undefined] as arg
+  const allPubKeys: string[] = queryClient.getQueryData([FOLLOWED_PROFILES_KEY, 'all']) || [];
+  const newAllPubKeys = deduplicateArray([...allPubKeys, ...filteredFollowingPubKeyArray]);
 
   const query = useQuery(
     [FOLLOWED_PROFILES_KEY],
@@ -76,21 +75,24 @@ export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyAr
       keepPreviousData: false,
       initialData: [],
       onError: (err: Error) => logError('useFollow.useIsFollowingMultiple', err),
+      onSuccess: () => {
+        setRefetchPending(false);
+      },
     },
   );
 
   React.useEffect(() => {
-    if (shouldRefetch) {
-      queryClient.setQueryData([FOLLOWED_PROFILES_KEY, 'all'], newAllAddressess);
-      GetFollowingBuffer.addToBuffer(filteredFollowingEthArray);
+    const shouldRefetch = objHash(newAllPubKeys) !== objHash(allPubKeys);
+    if (shouldRefetch && !refetchPending) {
+      queryClient.setQueryData([FOLLOWED_PROFILES_KEY, 'all'], newAllPubKeys);
+      GetFollowingBuffer.addToBuffer(filteredFollowingPubKeyArray);
       setRefetchPending(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldRefetch]);
+  }, [newAllPubKeys, allPubKeys, filteredFollowingPubKeyArray, refetchPending]);
 
   React.useEffect(() => {
     if (!query.isFetching && refetchPending && followerPubKey && GetFollowingBuffer.buffer.length) {
-      setRefetchPending(false);
       query.refetch();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
