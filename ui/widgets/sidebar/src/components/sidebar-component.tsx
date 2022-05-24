@@ -44,7 +44,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     worldConfig: { defaultApps, homepageApp },
   } = props;
 
-  const [routeData, setRouteData] = React.useState({});
+  const [routeData, setRouteData] = React.useState(null);
+  const [activeIntegrations, setActiveIntegrations] = React.useState(null);
 
   const { t } = useTranslation('ui-widget-sidebar');
 
@@ -65,6 +66,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       sub = routing.routeObserver.subscribe({
         next: routeData => {
           setRouteData({ ...routeData.byArea });
+          setActiveIntegrations({ ...routeData.activeIntegrationNames });
         },
       });
     }
@@ -87,6 +89,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     },
   );
   const userInstalledApps = routeData?.[MenuItemAreaType.UserAppArea];
+
+  const allApps = [...(worldApps || []), ...(userInstalledApps || [])];
 
   const handleNavigation = (appName: string, route: string) => {
     routing.navigateTo({
@@ -150,7 +154,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         userInstalledAppsTitleLabel={t('Apps')}
         userInstalledApps={userInstalledApps}
         exploreButtonLabel={t('Explore')}
-        allMenuItems={[]}
+        allMenuItems={allApps}
+        activeApps={activeIntegrations?.apps}
         worldApps={worldApps}
         currentRoute={currentLocation.pathname}
         size={size}
