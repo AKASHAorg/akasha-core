@@ -14,13 +14,13 @@
   {
     "name": "@akashaorg/app-auth-ewa",
     "id": "0x6f8326aa8c1116feff879fa16af65849148e8fae5a79326de17a0cfa78b699b6",
-    "ipfsManifest": "f0155171c462f4ab6bd1bd66e6cd492f3e6cd896f9d94f3d9cbdcad601b119121",
+    "ipfsManifest": "f0155171c84c74dd65f4031203d63aedb8a4033288a4598a2b55a62dc8329c4b6",
     "type": 0
   },
   {
     "name": "@akashaorg/app-moderation-ewa",
     "id": "0xb5353ae20a4ece1b430333820c5303ff86b3ef3b9662aa8c46f3c74adccf3c44",
-    "ipfsManifest": "f0155171c44aa4cb3adb7255b4d667a8c988658bd938f861a63027d1e9c59b4b1",
+    "ipfsManifest": "f0155171cca0fac22f88582d0fdaa4dca829d1baf6ccf06c5afeddb10c6ade904",
     "type": 0
   },
   {

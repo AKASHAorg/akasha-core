@@ -37,7 +37,7 @@
     "test:app-loader": "nx run @akashaorg/ui-app-loader:test",
     "test:all": "yarn test:design-system && yarn test:hooks",
     "dev:server": "nx run-many --target=dev:server --projects=@akashaorg/hub-api",
-    "push:integations": "node build/integrations_bucket_store.js"
+    "push:integrations": "node build/integrations_bucket_store.js"
   },
   "devDependencies": {
     "@babel/core": "7.15.5",

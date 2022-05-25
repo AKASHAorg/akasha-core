@@ -194,5 +194,11 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       type: source.type
     });
   }
-  fs.writeFileSync(path.resolve(__dirname, "./integrations_bucket.json"), JSON.stringify(results, null, 2));
+  let outputFile;
+  if(process.env.NODE_ENV === 'production'){
+    outputFile = "./integrations_bucket_prod.json";
+  } else {
+    outputFile = "./integrations_bucket.json";
+  }
+  fs.writeFileSync(path.resolve(__dirname, outputFile), JSON.stringify(results, null, 2));
 })();
