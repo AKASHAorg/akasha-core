@@ -272,11 +272,11 @@ class ModerationDecisionAPI extends DataSource {
     }
     const finalDecision = await this.getDecision(contentID);
     // remove action log as it is not needed here
-    if (finalDecision.actions) {
+    if (finalDecision?.actions) {
       delete finalDecision.actions;
     }
     // add moderator data
-    if (finalDecision.moderator) {
+    if (finalDecision?.moderator) {
       const moderator = finalDecision.moderator.startsWith('0x')
         ? await profileAPI.getProfile(finalDecision.moderator)
         : await profileAPI.resolveProfile(finalDecision.moderator);
@@ -356,7 +356,7 @@ class ModerationDecisionAPI extends DataSource {
     const moderated = [];
     for (const result of results) {
       const decision = await this.getFinalDecision(result.contentID, profileAPI, reportingAPI);
-      if (!decision.moderator) {
+      if (!decision?.moderator) {
         logger.warn(`${result.contentID} should not be in the moderated list!`);
         logger.warn(decision);
         continue;
