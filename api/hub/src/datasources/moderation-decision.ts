@@ -210,7 +210,6 @@ class ModerationDecisionAPI extends DataSource {
   ) {
     const decisions = await this.listDecisions(delisted, moderated, offset, limit);
     const list = [];
-    console.info('decisions', decisions);
     for (const decision of decisions.results) {
       // get the full data for each decision
       const decisionContent = await this.getFinalDecision(

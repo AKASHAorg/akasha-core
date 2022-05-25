@@ -225,7 +225,11 @@ class ModerationReportAPI extends DataSource {
       collection: 'ModerationDecisions',
     });
     // clear cache
+
+    await queryCache.del(decisionsAPI.getDecisionCacheKey(contentID));
+    await queryCache.del(decisionsAPI.getModeratedDecisionCacheKey(contentID));
     await queryCache.del(decisionsAPI.getCountersCacheKey());
+    await queryCache.del(decisionsAPI.getModeratedListCacheKey());
     await queryCache.del(decisionsAPI.getPendingListCacheKey());
   }
 }
