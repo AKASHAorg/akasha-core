@@ -57,6 +57,8 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         brand: styledComponentsTheme.colors.accent,
         darkBorder: styledComponentsTheme.colors.darkBorder,
         background: styledComponentsTheme.colors.background,
+        altRed: styledComponentsTheme.colors.altRed,
+        altGreen: styledComponentsTheme.colors.altGreen,
         overlay: styledComponentsTheme.colors.overlay,
         darkBackground: styledComponentsTheme.colors.darkBackground,
         modalBackground: styledComponentsTheme.colors.modalBackground,

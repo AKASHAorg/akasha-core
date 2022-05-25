@@ -58,4 +58,6 @@ export interface IColors {
   titleText: string;
   subtitleText: string;
   activeCardBackground: string;
+  altRed: string;
+  altGreen: string;
 }
