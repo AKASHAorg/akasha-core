@@ -59,8 +59,8 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
 
   const stats = [
     { count: keptCount + delistedCount, label: totalCountLabel, color: 'grey' },
-    { count: keptCount, label: keptCountLabel, color: 'green' },
-    { count: delistedCount, label: delistedCountLabel, color: 'red' },
+    { count: keptCount, label: keptCountLabel, color: 'altGreen' },
+    { count: delistedCount, label: delistedCountLabel, color: 'altRed' },
   ];
 
   const handleClickCodeOfConduct = () => {
@@ -93,12 +93,12 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
             values={[
               {
                 value: delistedCount,
-                color: 'red',
+                color: 'altRed',
                 label: delistedCountLabel,
               },
               {
                 value: keptCount,
-                color: 'green',
+                color: 'altGreen',
                 label: keptCountLabel,
               },
             ]}
