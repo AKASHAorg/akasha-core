@@ -1,6 +1,6 @@
 import DS from '@akashaorg/design-system';
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import route, { TOS, TOU, PP, COC, DG } from '../../routes';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import TermsOfService from './terms-of-service';
@@ -11,30 +11,20 @@ import DeveloperGuidelines from './developer-guidelines';
 
 const { Box } = DS;
 
-const Routes: React.FC<RootComponentProps> = props => {
+const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Router>
       <Box>
-        <Switch>
-          <Route path={route[TOS]}>
-            <TermsOfService {...props} />
-          </Route>
-          <Route path={route[TOU]}>
-            <TermsOfUse {...props} />
-          </Route>
-          <Route path={route[PP]}>
-            <PrivacyPolicy {...props} />
-          </Route>
-          <Route path={route[COC]}>
-            <CodeOfConduct {...props} />
-          </Route>
-          <Route path={route[DG]}>
-            <DeveloperGuidelines {...props} />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path={route[TOS]} element={<TermsOfService {...props} />} />
+          <Route path={route[TOU]} element={<TermsOfUse {...props} />} />
+          <Route path={route[PP]} element={<PrivacyPolicy {...props} />} />
+          <Route path={route[COC]} element={<CodeOfConduct {...props} />} />
+          <Route path={route[DG]} element={<DeveloperGuidelines {...props} />} />
+        </Routes>
       </Box>
     </Router>
   );
 };
 
-export default Routes;
+export default AppRoutes;

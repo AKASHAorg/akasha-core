@@ -1,7 +1,7 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider } from 'react-i18next';
-import Routes from './routes';
+import AppRoutes from './routes';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 const { Box, Helmet } = DS;
@@ -13,7 +13,7 @@ const App: React.FC<RootComponentProps> = props => {
         <Helmet>
           <title>Search | Ethereum World</title>
         </Helmet>
-        <Routes {...props} />
+        <AppRoutes {...props} />
       </I18nextProvider>
     </Box>
   );
