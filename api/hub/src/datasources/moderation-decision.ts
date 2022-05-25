@@ -311,7 +311,7 @@ class ModerationDecisionAPI extends DataSource {
     const reports = await reportingAPI.countReports(contentID);
     // add reasons
     const reasons = await reportingAPI.getReasons(contentID);
-    Object.assign(finalDecision, {
+    Object.assign(finalDecision || {}, {
       reports,
       reportedBy,
       reportedDate,
