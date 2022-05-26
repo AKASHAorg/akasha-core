@@ -6,6 +6,10 @@ import { StyledAnchor } from '../TextInputIconForm/styles';
 import { StyledCloseDiv } from './styled-editor-box';
 import { ImageElement } from '@akashaorg/ui-awf-typings/lib/editor';
 
+const StyledPicture = styled.picture`
+  display: flex;
+`;
+
 const StyledImg = styled.img`
   display: block;
   max-width: 100%;
@@ -67,10 +71,10 @@ const ImgElement = ({
             <Icon type="close" clickable={true} />
           </StyledCloseDiv>
         )}
-        <picture>
+        <StyledPicture>
           <source srcSet={element.url} />
           <StyledImg src={element.fallbackUrl} />
-        </picture>
+        </StyledPicture>
       </div>
       {children}
     </div>

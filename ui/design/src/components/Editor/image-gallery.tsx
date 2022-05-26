@@ -4,6 +4,10 @@ import styled, { css } from 'styled-components';
 import Icon from '../Icon';
 import { isMobile } from 'react-device-detect';
 
+const StyledPicture = styled.picture`
+  display: flex;
+`;
+
 const StyledImg = styled.img<{ singleImage?: boolean; isMobile?: boolean }>`
   ${props => {
     if (props.isMobile) {
@@ -107,14 +111,14 @@ const ImageGallery: React.FC<IImageGallery> = props => {
         )}
         {/* when we have a single image we need to keep the original aspect ratio,
         otherwise give images a 1:1 ratio */}
-        <picture>
+        <StyledPicture>
           <source srcSet={image.src.url} />
           <StyledImg
             src={image.src.fallbackUrl}
             singleImage={images.length === 1}
             isMobile={isMobile}
           />
-        </picture>
+        </StyledPicture>
       </StyledImgContainer>
     );
   };

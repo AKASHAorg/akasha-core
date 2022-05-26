@@ -20,6 +20,8 @@ const StyledCoverImg = styled.img`
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 `;
 
 const StyledBox = styled(Box)`
@@ -32,6 +34,8 @@ const StyledCoverBox = styled(Box)<{ showCover: boolean }>`
 
 const StyledWrapperBox = styled(Box)`
   position: relative;
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
 `;
 
 function htmlDecode(input) {
