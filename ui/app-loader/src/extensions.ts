@@ -140,13 +140,11 @@ export const mountMatchingExtensionParcels = (opts: {
         if (parcels.some(parcel => parcel.id === extInfo.extID)) {
           const spaParcel = parcels.find(parcel => parcel.id === extInfo.extID);
           if (spaParcel) {
-            // force a remount of the already existing parcels
-            // this is because they share the same element id but
-            // the component is not always the same
-            // (eg. a card has same extension ID in the feed and in the full post page)
-            // @todo: we should find a way to fix this
-            if (spaParcel.parcel.getStatus() === singleSpa.MOUNTED) {
-              await spaParcel.parcel.unmount();
+            parcel = spaParcel.parcel;
+            // if the parcel is not mounted don't asign it to parcel var.
+            // Forcing a remount will break the modals
+            if (parcel.getStatus() === singleSpa.NOT_MOUNTED) {
+              parcel = undefined;
             }
           }
         }
