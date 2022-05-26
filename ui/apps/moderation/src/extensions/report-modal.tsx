@@ -42,8 +42,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
     if (activeModal.hasOwnProperty('itemType') && typeof activeModal.itemType === 'string') {
       return activeModal.itemType;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [activeModal]);
 
   const reportMutation = useReport();
 
