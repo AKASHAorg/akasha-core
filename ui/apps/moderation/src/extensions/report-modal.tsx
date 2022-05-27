@@ -29,9 +29,10 @@ const ReportModalComponent = (props: RootExtensionProps) => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
+  const fetchReasons = React.useRef(reasonsActions.fetchReasons);
+
   React.useEffect(() => {
-    reasonsActions.fetchReasons({ active: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchReasons.current({ active: true });
   }, []);
 
   const handleModalClose = () => {
