@@ -144,9 +144,6 @@ export const mountMatchingExtensionParcels = (opts: {
             // if the parcel is not mounted don't asign it to parcel var.
             // Forcing a remount will break the modals
             if (parcel.getStatus() === singleSpa.NOT_MOUNTED) {
-              console.log('NOT_MOUNTED');
-              console.log(extInfo.extID);
-              console.log('---------');
               parcel = undefined;
             }
           }
