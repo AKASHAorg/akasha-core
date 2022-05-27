@@ -151,7 +151,7 @@ export const mountMatchingExtensionParcels = (opts: {
       }
       if (!parcel && parentConfig) {
         try {
-          console.log(`[extensions]: Mounting parcel: ${extInfo.extID}, ${state.extensionParcels}`);
+          console.log(`[extensions]: Mounting parcel: ${extInfo.extID}`, state.extensionParcels);
           parcel = singleSpa.mountRootParcel<RootExtensionProps>(
             extInfo.extension.loadingFn,
             extensionProps,

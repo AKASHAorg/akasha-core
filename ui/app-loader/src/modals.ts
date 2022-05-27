@@ -86,6 +86,7 @@ const unmountActiveModalParcel = (
           }),
           toArray(),
           map(res => {
+            console.log('unmountActiveModalParcel', res, activeModal);
             const extParcels = new Map(extensionParcels);
             extParcels.delete(activeModal.name);
             return {
