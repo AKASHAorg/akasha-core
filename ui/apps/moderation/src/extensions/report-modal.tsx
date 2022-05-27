@@ -63,17 +63,6 @@ const ReportModalComponent = (props: RootExtensionProps) => {
     [itemType, activeModal.entryId, reportMutation, analyticsActions],
   );
 
-  React.useEffect(() => {
-    console.log('report modal mounted');
-    return () => {
-      console.log('report modal unmounted');
-    };
-  }, []);
-
-  React.useEffect(() => {
-    console.log(reportMutation.status);
-  }, [reportMutation.status]);
-
   return (
     <ReportModal
       titleLabel={t('Report {{itemType}}', {
