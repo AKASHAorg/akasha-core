@@ -11,6 +11,10 @@ export interface IImageOverlay {
   closeModal: () => void;
 }
 
+const StyledPicture = styled.picture`
+  display: flex;
+`;
+
 const StyledOverlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -101,10 +105,10 @@ const ImageOverlay: React.FC<IImageOverlay> = props => {
           {src && (
             <TransformWrapper ref={transformRef} centerOnInit={true} centerZoomedOut={true}>
               <TransformComponent wrapperStyle={{ width: '100%', height: '100%' }}>
-                <picture>
+                <StyledPicture>
                   <source srcSet={src.url} />
                   <img src={src.fallbackUrl} alt="" />
-                </picture>
+                </StyledPicture>
               </TransformComponent>
             </TransformWrapper>
           )}

@@ -5,6 +5,10 @@ import Icon from '../Icon';
 import { Box, Text } from 'grommet';
 import { ImageObject } from '../Editor/image-gallery';
 
+const StyledPicture = styled.picture`
+  display: flex;
+`;
+
 const StyledImg = styled.img<{ singleImage?: boolean }>`
   ${props => {
     if (props.singleImage) {
@@ -92,10 +96,10 @@ const EntryImageGallery: React.FC<IImageGallery> = props => {
         )}
         {/* when we have a single image we need to keep the original aspect ratio,
         otherwise give images a 1:1 ratio */}
-        <picture>
+        <StyledPicture>
           <source srcSet={image.src.url} />
           <StyledImg src={image.src.fallbackUrl} singleImage={images.length === 1} />
-        </picture>
+        </StyledPicture>
       </StyledImgContainer>
     );
   };
