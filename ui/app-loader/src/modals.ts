@@ -183,14 +183,14 @@ export const handleModalMount = (state$: Observable<LoaderState>, logger: ILogge
     .pipe(filter(activeModal => !!activeModal.name))
     .pipe(
       tap(activeModal => {
-        logger.info(`[modals] Modal mount request received for ${activeModal.name}`);
+        console.log(`[modals] Modal mount request received for ${activeModal.name}`);
       }),
       withLatestFrom(state$.pipe(getStateSlice('mountedExtPoints'))),
       filter(([activeModal, mountedExtPoints]) => !mountedExtPoints.has(activeModal.name)),
     )
     .pipe(
       tap(([activeModal, mountedExtPoints]) => {
-        logger.info(`[handleModalMount]: Mounting modal ${activeModal.name}`);
+        console.log(`[handleModalMount]: Mounting modal ${activeModal.name}`);
         const mounted = new Map(mountedExtPoints);
 
         pipelineEvents.next({
