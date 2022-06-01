@@ -10,18 +10,14 @@ import {
   useReasons,
   useGetLogin,
   useReport,
-  useAnalytics,
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { ReportModal, ErrorLoader } = DS;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
   const { activeModal } = props;
-
-  const [analyticsActions] = useAnalytics();
 
   const loginQuery = useGetLogin();
 
@@ -49,10 +45,6 @@ const ReportModalComponent = (props: RootExtensionProps) => {
 
   const onReport = React.useCallback(
     (dataToSign: Record<string, string>) => {
-      analyticsActions.trackEvent({
-        category: AnalyticsCategories.POST,
-        action: `${itemType[0].toLocaleUpperCase()}${itemType.substring(1)} Reported`,
-      });
       reportMutation.mutate({
         dataToSign,
         contentId: activeModal.entryId,
@@ -61,7 +53,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       });
     },
 
-    [itemType, activeModal.entryId, reportMutation, analyticsActions],
+    [itemType, activeModal.entryId, reportMutation],
   );
 
   return (

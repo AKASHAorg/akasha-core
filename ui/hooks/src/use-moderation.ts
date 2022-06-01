@@ -5,6 +5,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import { Post_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
 
 import constants from './constants';
+import useAnalytics from './use-analytics';
 import { ENTRY_KEY } from './use-posts';
 import { PROFILE_KEY } from './use-profile';
 import { COMMENT_KEY } from './use-comments';
@@ -19,6 +20,7 @@ import {
   getModeratorStatus,
   getPendingItems,
 } from './moderation-requests';
+import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const {
   PENDING_CACHE_KEY_PREFIX,
@@ -128,8 +130,16 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
  */
 export function useReport() {
   const queryClient = useQueryClient();
+  const [analyticsActions] = useAnalytics();
+
   return useMutation((param: UseModerationParam) => createReportMutation(param), {
     onSuccess: async (resp, variables) => {
+      analyticsActions.trackEvent({
+        category: AnalyticsCategories.POST,
+        action: `${variables.contentType[0].toLocaleUpperCase()}${variables.contentType.substring(
+          1,
+        )} Reported`,
+      });
       switch (variables.contentType) {
         case 'post':
           queryClient.setQueryData<unknown>([ENTRY_KEY, variables.contentId], prev => ({
