@@ -105,7 +105,7 @@ const getComment = async (commentID): Promise<CommentResponse> => {
  * ```typescript
  * const itemType = 'COMMENT';
  * const commentQuery = useComment('hkjgrwiugks', true);
- * 
+ *
  * const itemData = React.useMemo(() => {
     if (itemType === 'COMMENT' && commentQuery.isSuccess) {
       // mayEntry is a utility function that transforms the comment/post data into required format.
