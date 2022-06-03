@@ -23,7 +23,7 @@
     "url": "git+https://github.com/AKASHAorg/akasha-world-framework.git"
   },
   "scripts": {
-    "test": "jest",
+    "test": "BABEL_ENV=test jest --runInBand",
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
