@@ -3,8 +3,9 @@
   "compilerOptions": {
     "outDir": "./lib",
     "rootDir": "./src",
-    "jsx": "react"
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["./src"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "**/*.spec.*"]
 }

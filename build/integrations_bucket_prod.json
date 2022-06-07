@@ -44,7 +44,7 @@
   {
     "name": "@akashaorg/app-notifications",
     "id": "0xa97de836ff423f85cd82a60e3dd78b3213d6254e23e2a71a53c933df9527882d",
-    "ipfsManifest": "f0155171c89552e1c6d8bac6d4bac45a8346cfc96701715246c068551d6a3c085",
+    "ipfsManifest": "f0155171c5cab5e532fc7496951971a92fddfb08339030f721b95c49bdd91e7a4",
     "type": 0
   },
   {
@@ -68,13 +68,13 @@
   {
     "name": "@akashaorg/app-translation",
     "id": "0x694ff1a407cb48aaf43ace2eb570ef17d0403182870f99a617b74cb36af4e366",
-    "ipfsManifest": "f0155171ca9c9236598c845c9d1358cdeb06a6f523903702578b777e79383c0be",
+    "ipfsManifest": "f0155171c5d73ed24af155572579085c9bb6cc48425c278042fb5aaf269a12972",
     "type": 0
   },
   {
     "name": "@akashaorg/app-routing",
     "id": "0xc7dbd964618fa46a51ec3633a23d10c77b458d218ba061755ca7452f627d6504",
-    "ipfsManifest": "f0155171c5b69f1e99a6ee2727eeb0661327106475142b122cfeb2c4099e8338b",
+    "ipfsManifest": "f0155171cef114201695113f43cce4b8882c12cef372a0693cf8decf289503e05",
     "type": 0
   },
   {
