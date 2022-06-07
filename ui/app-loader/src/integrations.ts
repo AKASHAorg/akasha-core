@@ -1,5 +1,5 @@
 import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps, RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import {
   BaseIntegrationInfo,
   EventTypes,
@@ -24,6 +24,7 @@ import {
   concatMap,
   combineLatestWith,
   catchError,
+  lastValueFrom,
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
@@ -32,6 +33,8 @@ import * as singleSpa from 'single-spa';
 import getSDK from '@akashaorg/awf-sdk';
 import { getIntegrationsData } from './manifests';
 import { loadI18nNamespaces } from './i18n-utils';
+import { extensionMatcher } from './extension-matcher';
+import { extensionLoader } from './extension-loader';
 
 export const getMountPoint = (appConfig: IAppConfig) => {
   let mountPoint: string;
@@ -98,70 +101,70 @@ export const importIntegrations = (state$: Observable<LoaderState>, logger: ILog
   );
 };
 
-export const extractExtensionsFromApps = (
-  config: IAppConfig & { name: string },
-  state$: Observable<LoaderState>,
-  logger: ILogger,
-) => {
-  return from(config.extends)
-    .pipe(
-      withLatestFrom(
-        state$.pipe(getStateSlice('extensionsByParent')),
-        state$.pipe(getStateSlice('extensionsByMountPoint')),
-      ),
-      map(([extConfig, extensionsByParent, extensionsByMountPoint]) => ({
-        extConfig,
-        extensionsByParent,
-        extensionsByMountPoint,
-      })),
-    )
-    .pipe(
-      mergeMap(({ extConfig, extensionsByMountPoint, extensionsByParent }) => {
-        const extension = { extConfig, parent: config.name };
-        const byMount = new Map(extensionsByMountPoint);
-        const byParent = new Map(extensionsByParent);
-        if (byMount.has(extension.extConfig.mountsIn)) {
-          byMount.set(
-            extension.extConfig.mountsIn,
-            byMount
-              .get(extension.extConfig.mountsIn)
-              .concat({ ...extension.extConfig, parent: extension.parent }),
-          );
-        } else {
-          byMount.set(extension.extConfig.mountsIn, [
-            { ...extension.extConfig, parent: extension.parent },
-          ]);
-        }
-        if (byParent.has(extension.parent)) {
-          return of({
-            extensionsByParent: byParent.set(
-              extension.parent,
-              byParent.get(extension.parent).concat(extension.extConfig),
-            ),
-            extensionsByMountPoint: byMount,
-          });
-        } else {
-          return of({
-            extensionsByParent: byParent.set(extension.parent, [extension.extConfig]),
-            extensionsByMountPoint: byMount,
-          });
-        }
-      }),
-    )
-    .pipe(
-      tap(values => {
-        pipelineEvents.next(values);
-      }),
-      catchError(err => {
-        logger.error(
-          `[integrations]: extractExtensionsFromApps: ${err.message ?? JSON.stringify(err)} ${
-            err.stack
-          }`,
-        );
-        throw err;
-      }),
-    );
-};
+// export const extractExtensionsFromApps = (
+//   config: IAppConfig & { name: string },
+//   state$: Observable<LoaderState>,
+//   logger: ILogger,
+// ) => {
+//   return from(config.extends)
+//     .pipe(
+//       withLatestFrom(
+//         state$.pipe(getStateSlice('extensionsByParent')),
+//         state$.pipe(getStateSlice('extensionsByMountPoint')),
+//       ),
+//       map(([extConfig, extensionsByParent, extensionsByMountPoint]) => ({
+//         extConfig,
+//         extensionsByParent,
+//         extensionsByMountPoint,
+//       })),
+//     )
+//     .pipe(
+//       mergeMap(({ extConfig, extensionsByMountPoint, extensionsByParent }) => {
+//         const extension = { extConfig, parent: config.name };
+//         const byMount = new Map(extensionsByMountPoint);
+//         const byParent = new Map(extensionsByParent);
+//         if (byMount.has(extension.extConfig.mountsIn)) {
+//           byMount.set(
+//             extension.extConfig.mountsIn,
+//             byMount
+//               .get(extension.extConfig.mountsIn)
+//               .concat({ ...extension.extConfig, parent: extension.parent }),
+//           );
+//         } else {
+//           byMount.set(extension.extConfig.mountsIn, [
+//             { ...extension.extConfig, parent: extension.parent },
+//           ]);
+//         }
+//         if (byParent.has(extension.parent)) {
+//           return of({
+//             extensionsByParent: byParent.set(
+//               extension.parent,
+//               byParent.get(extension.parent).concat(extension.extConfig),
+//             ),
+//             extensionsByMountPoint: byMount,
+//           });
+//         } else {
+//           return of({
+//             extensionsByParent: byParent.set(extension.parent, [extension.extConfig]),
+//             extensionsByMountPoint: byMount,
+//           });
+//         }
+//       }),
+//     )
+//     .pipe(
+//       tap(values => {
+//         pipelineEvents.next(values);
+//       }),
+//       catchError(err => {
+//         logger.error(
+//           `[integrations]: extractExtensionsFromApps: ${err.message ?? JSON.stringify(err)} ${
+//             err.stack
+//           }`,
+//         );
+//         throw err;
+//       }),
+//     );
+// };
 
 export const processSystemModules = (
   worldConfig: ILoaderConfig,
@@ -245,16 +248,39 @@ export const processSystemModules = (
               plugins: results.plugins,
               integrationConfigs,
               integrationsByMountPoint,
+              layoutConfig: results.layoutConfig,
             })),
           );
       }),
       tap(({ configs }) => {
-        from(configs)
-          .pipe(
-            filter(conf => conf.extends && Array.isArray(conf.extends)),
-            tap(config => extractExtensionsFromApps(config, state$, logger).subscribe()),
-          )
-          .subscribe();
+        console.log('configs', configs);
+        // from(configs)
+        //   .pipe(
+        //     filter(conf => conf.extends && Array.isArray(conf.extends)),
+        //     tap(config => extractExtensionsFromApps(config, state$, logger).subscribe()),
+        //   )
+        //   .subscribe();
+      }),
+    )
+    .pipe(
+      mergeMap(results => {
+        const { configs, layoutConfig } = results;
+
+        for (const config of configs) {
+          if (!config.extends) {
+            continue;
+          }
+          const extProps: Omit<RootExtensionProps, 'uiEvents' | 'extensionData' | 'domElement'> = {
+            layoutConfig: layoutConfig.extensions,
+            logger,
+            singleSpa,
+            navigateToModal,
+            worldConfig,
+            parseQueryString,
+          };
+          config.extends(extensionMatcher(uiEvents, extProps), extensionLoader);
+        }
+        return of(results);
       }),
     )
     .pipe(

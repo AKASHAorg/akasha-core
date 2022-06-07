@@ -33,8 +33,8 @@ export interface IntegrationRegistrationOptions {
 }
 
 export interface ExtensionPointDefinition {
-  mountsIn: string | ((opts: IntegrationRegistrationOptions) => string | null) | null;
-  loadingFn: () => Promise<ISingleSpaLifecycle>;
+  mountsIn?: string | ((opts: IntegrationRegistrationOptions) => string | null) | null;
+  loadingFn?: () => Promise<ISingleSpaLifecycle>;
   /*
    * Name of the parent app.
    * This is optional.
@@ -42,6 +42,7 @@ export interface ExtensionPointDefinition {
   parent?: string;
   activeWhen?: ActivityFn;
   i18nNamespace?: string[];
+  register?: (uiEvents: any, loadingHandler: any) => void;
 }
 
 export interface IAppConfig {
@@ -106,7 +107,7 @@ export interface IAppConfig {
   /**
    * Defines the component that will be mounted into an extension point
    */
-  extends?: ExtensionPointDefinition[];
+  extends?: (matchExtPoint: any, extLoader: any) => void;
 
   /**
    * Keywords that defines this widget.

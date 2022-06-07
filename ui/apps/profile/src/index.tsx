@@ -29,24 +29,24 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       route: routes[routeName],
     })),
   },
-  extends: [
-    {
-      mountsIn: 'login',
-      loadingFn: () => import('./extensions/login-modal'),
-    },
-    {
-      mountsIn: 'update-profile',
-      loadingFn: () => import('./extensions/update-profile-modal'),
-    },
-    {
-      mountsIn: 'update-ens',
-      loadingFn: () => import('./extensions/update-ens-modal'),
-    },
-    {
-      mountsIn: 'profile-share',
-      loadingFn: () => import('./extensions/share-profile-modal'),
-    },
-  ],
+  // extends: [
+  //   {
+  //     mountsIn: 'login',
+  //     loadingFn: () => import('./extensions/login-modal'),
+  //   },
+  //   {
+  //     mountsIn: 'update-profile',
+  //     loadingFn: () => import('./extensions/update-profile-modal'),
+  //   },
+  //   {
+  //     mountsIn: 'update-ens',
+  //     loadingFn: () => import('./extensions/update-ens-modal'),
+  //   },
+  //   {
+  //     mountsIn: 'profile-share',
+  //     loadingFn: () => import('./extensions/share-profile-modal'),
+  //   },
+  // ],
   routes: {
     rootRoute,
     ...routes,

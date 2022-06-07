@@ -20,7 +20,7 @@ import { events } from '@akashaorg/sdk-typings';
 import * as singleSpa from 'single-spa';
 
 export const pipelineEvents = new Subject<Partial<LoaderState>>();
-export const uiEvents = new Subject<UIEventData>();
+export const uiEvents = new ReplaySubject<UIEventData>();
 
 /**
  * A helper operator to filter events,

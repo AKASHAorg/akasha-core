@@ -31,10 +31,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     route: rootRoute,
     subRoutes: [],
   },
-  extends: [
-    {
-      mountsIn: 'install-modal',
-      loadingFn: () => import('./extensions/install-modal'),
-    },
-  ],
+  // extends: [
+  //   {
+  //     mountsIn: 'install-modal',
+  //     loadingFn: () => import('./extensions/install-modal'),
+  //   },
+  // ],
 });

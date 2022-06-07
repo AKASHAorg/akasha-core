@@ -42,14 +42,14 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     ],
   },
-  extends: [
-    {
-      mountsIn: 'report-modal',
-      loadingFn: () => import('./extensions/report-modal'),
-    },
-    {
-      mountsIn: 'moderate-modal',
-      loadingFn: () => import('./extensions/moderate-modal'),
-    },
-  ],
+  // extends: [
+  //   {
+  //     mountsIn: 'report-modal',
+  //     loadingFn: () => import('./extensions/report-modal'),
+  //   },
+  //   {
+  //     mountsIn: 'moderate-modal',
+  //     loadingFn: () => import('./extensions/moderate-modal'),
+  //   },
+  // ],
 });
