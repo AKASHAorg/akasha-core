@@ -4,7 +4,6 @@ import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings'
 import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
 import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { BrowserRouter } from 'react-router-dom';
 import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
 import { TrackEventData } from '@akashaorg/ui-awf-typings/lib/analytics';
@@ -43,13 +42,11 @@ export interface IFeedWidgetProps {
 
 const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
   return (
-    <BrowserRouter>
-      <I18nextProvider i18n={props.i18n}>
-        {props.itemType === ItemTypes.ENTRY && <EntryFeed {...props} />}
-        {props.itemType === ItemTypes.COMMENT && <EntryFeed {...props} itemSpacing={0} />}
-        {/* {props.itemType === ItemTypes.PROFILE && <ProfileFeed {...props} />} */}
-      </I18nextProvider>
-    </BrowserRouter>
+    <I18nextProvider i18n={props.i18n}>
+      {props.itemType === ItemTypes.ENTRY && <EntryFeed {...props} />}
+      {props.itemType === ItemTypes.COMMENT && <EntryFeed {...props} itemSpacing={0} />}
+      {/* {props.itemType === ItemTypes.PROFILE && <ProfileFeed {...props} />} */}
+    </I18nextProvider>
   );
 };
 

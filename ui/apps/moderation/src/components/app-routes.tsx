@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
@@ -26,29 +26,41 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Box>
       <Router>
-        <Switch>
-          <Route path={routes[UNAUTHENTICATED]}>
-            <IntroPage {...props} user={loginQuery.data?.pubKey} isAuthorised={isAuthorised} />
-          </Route>
-          <Route path={routes[GUEST]}>
-            <GuestPage {...props} user={loginQuery.data?.pubKey} isAuthorised={isAuthorised} />
-          </Route>
-          <Route path={routes[HOME]}>
-            <Dashboard
-              {...props}
-              user={loginQuery.data?.pubKey}
-              isAuthorised={isAuthorised}
-              slotId={layoutConfig.modalSlotId}
-            />
-          </Route>
-          <Route path={routes[HISTORY]}>
-            <TransparencyLog
-              user={loginQuery.data?.pubKey}
-              navigateTo={props.plugins?.routing?.navigateTo}
-            />
-          </Route>
-          <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
-        </Switch>
+        <Routes>
+          <Route
+            path={routes[UNAUTHENTICATED]}
+            element={
+              <IntroPage {...props} user={loginQuery.data?.pubKey} isAuthorised={isAuthorised} />
+            }
+          />
+          <Route
+            path={routes[GUEST]}
+            element={
+              <GuestPage {...props} user={loginQuery.data?.pubKey} isAuthorised={isAuthorised} />
+            }
+          />
+          <Route
+            path={routes[HOME]}
+            element={
+              <Dashboard
+                {...props}
+                user={loginQuery.data?.pubKey}
+                isAuthorised={isAuthorised}
+                slotId={layoutConfig.modalSlotId}
+              />
+            }
+          />
+          <Route
+            path={routes[HISTORY]}
+            element={
+              <TransparencyLog
+                user={loginQuery.data?.pubKey}
+                navigateTo={props.plugins?.routing?.navigateTo}
+              />
+            }
+          />
+          <Route path={rootRoute} element={<Navigate to={routes[HOME]} replace />} />
+        </Routes>
       </Router>
     </Box>
   );
