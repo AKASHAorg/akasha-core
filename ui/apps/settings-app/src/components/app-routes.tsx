@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { COOKIE_CONSENT_NAME, CookieConsentTypes } from '@akashaorg/ui-awf-hooks';
 import { EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import DS from '@akashaorg/design-system';
@@ -90,55 +90,61 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Box>
       <Router>
-        <Switch>
-          <Route exact path={routes[HOME]}>
-            <SettingsPage {...props} />
-          </Route>
-          <Route path={routes[PRIVACY]}>
-            <PrivacyOption
-              titleLabel={t('Privacy')}
-              essentialCookiesLabel={t('Essential cookies')}
-              essentialCookiesInfo1={t(
-                "We've gotta have essential cookies. The clue's in the name. They're essential to initiating your experience of Ethereum World, and keeping it secure, stable, and optimized so you'll feel like this is your kind of thing — to use, celebrate, and help grow. If you're a privacy geek like us, you'll find ",
+        <Routes>
+          <Route path={routes[HOME]} element={<SettingsPage {...props} />} />
+          <Route
+            path={routes[PRIVACY]}
+            element={
+              <PrivacyOption
+                titleLabel={t('Privacy')}
+                essentialCookiesLabel={t('Essential cookies')}
+                essentialCookiesInfo1={t(
+                  "We've gotta have essential cookies. The clue's in the name. They're essential to initiating your experience of Ethereum World, and keeping it secure, stable, and optimized so you'll feel like this is your kind of thing — to use, celebrate, and help grow. If you're a privacy geek like us, you'll find ",
               )}
               essentialCookiesInfo2={t(' makes for perfect bedtime reading.')}
               essentialCookiesInfo3={t(
                 'And the best thing about Ethereum World is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we’re doing this thing together.',
               )}
-              privacyPolicyLabel={t('our privacy policy')}
-              trackingAnalyticsLabel={t('Tracking and analytics')}
-              trackingAnalyticsInfo1={t(
+                privacyPolicyLabel={t('our privacy policy')}
+                trackingAnalyticsLabel={t('Tracking and analytics')}
+                trackingAnalyticsInfo1={t(
                 'As we’ve said ☝🏽, we’re doing this together. If you want to contribute some insight into how Ethereum World is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
               )}
               trackingAnalyticsInfo2={t(
-                " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time.",
-              )}
-              trackingAnalyticsLinkLabel={t('Click here to learn more.')}
-              checkedTracking={checkedTracking}
-              cookieType={cookieType}
-              onTrackingOptionChange={handleTrackingOptionChange}
-              OnChevronLeftClick={handleChevronLeftClick}
-            />
-          </Route>
-          <Route path={routes[APPS]}>
-            <AppsOption
-              titleLabel={t('Apps')}
-              autoUpdatesLabel={t('Automatic Updates')}
-              autoUpdatesInfo={t(
-                'Ensure you have all the latest version of your apps, widgets & plugins. ',
-              )}
-              dataAnalyticsLabel={t('Data & Analytics')}
-              dataAnalyticsinfo={t(
-                'We track usage data and report any bugs or issues, by activting data will be able to report any issues one app usage.',
-              )}
-              checkedAutoUpdates={checkedAutoUpdates}
-              checkedDataAnalytics={checkedDataAnalytics}
-              onAutoUpdatesChange={handleAutoUpdatesChange}
-              onDataAnalyticsChange={handleDataAnalyticsChange}
-              OnChevronLeftClick={handleChevronLeftClick}
-            />
-          </Route>
-          <Route path={routes[APPEARANCE]}>
+                  " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time.",
+                )}
+                trackingAnalyticsLinkLabel={t('Click here to learn more.')}
+                checkedTracking={checkedTracking}
+                cookieType={cookieType}
+                onTrackingOptionChange={handleTrackingOptionChange}
+                OnChevronLeftClick={handleChevronLeftClick}
+              />
+            }
+          />
+          <Route
+            path={routes[APPS]}
+            element={
+              <AppsOption
+                titleLabel={t('Apps')}
+                autoUpdatesLabel={t('Automatic Updates')}
+                autoUpdatesInfo={t(
+                  'Ensure you have all the latest version of your apps, widgets & plugins. ',
+                )}
+                dataAnalyticsLabel={t('Data & Analytics')}
+                dataAnalyticsinfo={t(
+                  'We track usage data and report any bugs or issues, by activting data will be able to report any issues one app usage.',
+                )}
+                checkedAutoUpdates={checkedAutoUpdates}
+                checkedDataAnalytics={checkedDataAnalytics}
+                onAutoUpdatesChange={handleAutoUpdatesChange}
+                onDataAnalyticsChange={handleDataAnalyticsChange}
+                OnChevronLeftClick={handleChevronLeftClick}
+              />
+            }
+          />
+          <Route
+            path={routes[APPEARANCE]}
+            element={
             <AppearanceOption
               titleLabel="Appearance"
               appThemeLabel={t('App Theme')}
@@ -149,9 +155,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               onThemeSelect={handleThemeSelect}
               OnChevronLeftClick={handleChevronLeftClick}
             />
-          </Route>
-          <Redirect exact={true} from={rootRoute} to={routes[HOME]} />
-        </Switch>
+          }
+          />
+          <Route path={rootRoute} element={<Navigate to={routes[HOME]} replace />} />
+        </Routes>
       </Router>
     </Box>
   );

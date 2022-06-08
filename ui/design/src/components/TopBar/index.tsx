@@ -1,6 +1,6 @@
 import { Box, Stack } from 'grommet';
 import * as React from 'react';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Icon from '../Icon';
 import Avatar from '../Avatar';
 import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
@@ -384,42 +384,48 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   return (
     <Router>
-      <Switch>
-        <Route path="/auth-app/*">
-          <TopbarWrapper
-            align="center"
-            justify="center"
-            pad={{ vertical: 'small', horizontal: 'medium' }}
-            fill="horizontal"
-            className={className}
-            elevation="shadow"
-            height="3rem"
-            border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
-          >
-            {renderContent(true)}
-            {dropOpen && renderDrop()}
-            {renderLoggedOutMenu()}
-          </TopbarWrapper>
-        </Route>
-        <Route>
-          <TopbarWrapper
-            align="center"
-            justify="center"
-            pad={{ vertical: 'small', horizontal: 'medium' }}
-            fill="horizontal"
-            className={className}
-            elevation="shadow"
-            height={mobileSignedOutView ? '6rem' : '3rem'}
-            border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
-          >
-            {renderContent()}
-            {renderMobileSignedOutView()}
-            {dropOpen && renderDrop()}
-            {renderLoggedInMenu()}
-            {renderLoggedOutMenu()}
-          </TopbarWrapper>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route
+          path="/auth-app/*"
+          element={
+            <TopbarWrapper
+              align="center"
+              justify="center"
+              pad={{ vertical: 'small', horizontal: 'medium' }}
+              fill="horizontal"
+              className={className}
+              elevation="shadow"
+              height="3rem"
+              border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+            >
+              {renderContent(true)}
+              {dropOpen && renderDrop()}
+              {renderLoggedOutMenu()}
+            </TopbarWrapper>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <TopbarWrapper
+              align="center"
+              justify="center"
+              pad={{ vertical: 'small', horizontal: 'medium' }}
+              fill="horizontal"
+              className={className}
+              elevation="shadow"
+              height={mobileSignedOutView ? '6rem' : '3rem'}
+              border={{ side: 'bottom', size: '1px', style: 'solid', color: 'border' }}
+            >
+              {renderContent()}
+              {renderMobileSignedOutView()}
+              {dropOpen && renderDrop()}
+              {renderLoggedInMenu()}
+              {renderLoggedOutMenu()}
+            </TopbarWrapper>
+          }
+        />
+      </Routes>
     </Router>
   );
 };

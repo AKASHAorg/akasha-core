@@ -69,15 +69,18 @@ class FollowerAPI extends DataSource {
       await queryCache.set(followingKey, [following]);
     }
 
-    // @Todo: turn back on after migration
-    // const notification = {
-    //   property: 'NEW_FOLLOWER',
-    //   provider: 'awf.graphql.profile.api',
-    //   value: {
-    //     follower: pubKey,
-    //   },
-    // };
-    //await sendNotification(following, notification);
+    // if a new record was created
+    if (!followRecord) {
+      const notification = {
+        property: 'NEW_FOLLOWER',
+        provider: 'awf.graphql.profile.api',
+        value: {
+          follower: pubKey,
+        },
+      };
+      await sendNotification(following, notification);
+    }
+
     return true;
   }
 

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import routes, { BOOKMARKS } from '../routes';
@@ -7,17 +7,17 @@ import BookmarksPage from './bookmarks-page';
 
 const { Helmet } = DS;
 
-const Routes = (props: RootComponentProps) => {
+const AppRoutes = (props: RootComponentProps) => {
   return (
     <Router>
       <Helmet>
         <title>My Bookmarks | Ethereum World</title>
       </Helmet>
-      <Route path={`${routes[BOOKMARKS]}`}>
-        <BookmarksPage {...props} />
-      </Route>
+      <Routes>
+        <Route path={routes[BOOKMARKS]} element={<BookmarksPage {...props} />} />
+      </Routes>
     </Router>
   );
 };
 
-export default Routes;
+export default AppRoutes;

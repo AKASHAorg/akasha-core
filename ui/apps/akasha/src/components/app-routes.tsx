@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
@@ -30,42 +30,50 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
     <Router>
       <Box>
-        <Switch>
-          <Route path={routes[FEED]}>
-            <FeedPage
-              {...props}
-              loggedProfileData={loggedProfileData}
-              loginState={loginQuery.data}
-              showLoginModal={showLoginModal}
-            />
-          </Route>
-          <Route path={routes[MY_FEED]}>
-            <MyFeedPage
-              {...props}
-              loggedProfileData={loggedProfileData}
-              loginState={loginQuery.data}
-              showLoginModal={showLoginModal}
-            />
-          </Route>
-          <Route path={`${routes[POST]}/:postId`}>
-            <PostPage {...props} loginState={loginQuery.data} showLoginModal={showLoginModal} />
-          </Route>
-          <Route path={`${routes[TAGS]}/:tagName`}>
-            <TagFeedPage
-              {...props}
-              loggedProfileData={loggedProfileData}
-              loginState={loginQuery.data}
-              showLoginModal={showLoginModal}
-            />
-          </Route>
-          <Route path={`${routes[REPLY]}/:commentId`}>
-            <ReplyPage {...props} />
-          </Route>
-          <Route path={`${routes[INVITE]}/:inviteCode`}>
-            <InvitePage {...props} />
-          </Route>
-          <Redirect exact={true} from={rootRoute} to={routes[FEED]} />
-        </Switch>
+        <Routes>
+          <Route
+            path={routes[FEED]}
+            element={
+              <FeedPage
+                {...props}
+                loggedProfileData={loggedProfileData}
+                loginState={loginQuery.data}
+                showLoginModal={showLoginModal}
+              />
+            }
+          />
+          <Route
+            path={routes[MY_FEED]}
+            element={
+              <MyFeedPage
+                {...props}
+                loggedProfileData={loggedProfileData}
+                loginState={loginQuery.data}
+                showLoginModal={showLoginModal}
+              />
+            }
+          />
+          <Route
+            path={`${routes[POST]}/:postId`}
+            element={
+              <PostPage {...props} loginState={loginQuery.data} showLoginModal={showLoginModal} />
+            }
+          />
+          <Route
+            path={`${routes[TAGS]}/:tagName`}
+            element={
+              <TagFeedPage
+                {...props}
+                loggedProfileData={loggedProfileData}
+                loginState={loginQuery.data}
+                showLoginModal={showLoginModal}
+              />
+            }
+          />
+          <Route path={`${routes[REPLY]}/:commentId`} element={<ReplyPage {...props} />} />
+          <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage {...props} />} />
+          <Route path={rootRoute} element={<Navigate to={routes[FEED]} replace />} />
+        </Routes>
       </Box>
     </Router>
   );
