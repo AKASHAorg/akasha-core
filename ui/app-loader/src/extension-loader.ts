@@ -1,8 +1,8 @@
 import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
-import { UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { UIEventData, ExtensionLoaderFn } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import * as singleSpa from 'single-spa';
 
-export const extensionLoader = (loadingFn: singleSpa.ParcelConfig) => {
+export const extensionLoader: ExtensionLoaderFn = loadingFn => {
   const parcels: Record<string, singleSpa.Parcel> = {};
   return {
     load(props: RootExtensionProps) {

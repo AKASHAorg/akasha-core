@@ -1,4 +1,6 @@
-import { LogoSourceType, RootComponentProps, ValueOf } from './index';
+import { ReplaySubject } from 'rxjs';
+import { LifeCycleFn, ParcelConfigObject } from 'single-spa';
+import { LogoSourceType, RootComponentProps, RootExtensionProps, ValueOf } from './index';
 
 export type ActivityFn = (
   location: Location,
@@ -42,8 +44,25 @@ export interface ExtensionPointDefinition {
   parent?: string;
   activeWhen?: ActivityFn;
   i18nNamespace?: string[];
-  register?: (uiEvents: any, loadingHandler: any) => void;
 }
+
+export interface ExtensionMatcherFn {
+  (
+    uiEvents: ReplaySubject<UIEventData>,
+    extProps: Omit<RootExtensionProps, 'uiEvents' | 'extensionData' | 'domElement'>,
+  ): (extConfig: Record<string, ReturnType<ExtensionLoaderFn>>) => void;
+}
+
+/**
+ * Extension loader function
+ * must return a promise with a singleSpaLifecycle object
+ */
+export type ExtensionLoaderFn = (
+  loadingFn: () => Promise<ParcelConfigObject<RootExtensionProps>>,
+) => {
+  load: (props: RootExtensionProps) => void;
+  unload: (event: UIEventData) => void;
+};
 
 export interface IAppConfig {
   activeWhen: ActivityFn;
@@ -107,7 +126,7 @@ export interface IAppConfig {
   /**
    * Defines the component that will be mounted into an extension point
    */
-  extends?: (matchExtPoint: any, extLoader: any) => void;
+  extends?: (matcher: ReturnType<ExtensionMatcherFn>, extLoader: ExtensionLoaderFn) => void;
 
   /**
    * Keywords that defines this widget.
