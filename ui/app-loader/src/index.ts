@@ -15,7 +15,7 @@ import {
   importIntegrations,
   processSystemModules,
 } from './integrations';
-import { handleModalMount, handleModalRequest } from './modals';
+// import { handleModalRequest } from './modals';
 import { handleAppLoadingScreens } from './ui-state-utils';
 
 /**
@@ -81,9 +81,6 @@ const startLoader = (worldConfig: ILoaderConfig) => {
      * @internal
      */
     handleExtPointMountOfApps(worldConfig, state$, logger),
-
-    handleModalRequest(worldConfig, state$, logger),
-    handleModalMount(state$, logger),
 
     handleIntegrationUninstall(state$, logger),
 

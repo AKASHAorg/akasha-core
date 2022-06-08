@@ -5,18 +5,13 @@ import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
-import {
-  useModeration,
-  withProviders,
-  useGetLogin,
-  ThemeWrapper,
-} from '@akashaorg/ui-awf-hooks';
+import { useModeration, withProviders, useGetLogin, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { ModerateModal, ErrorLoader } = DS;
 
 const ModerateModalComponent = (props: RootExtensionProps) => {
-  const { activeModal } = props;
+  const { extensionData } = props;
 
   const loginQuery = useGetLogin();
 
@@ -27,11 +22,10 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
   };
 
   const itemType = React.useMemo(() => {
-    if (activeModal.hasOwnProperty('itemType') && typeof activeModal.itemType === 'string') {
-      return activeModal.itemType;
+    if (extensionData.hasOwnProperty('itemType') && typeof extensionData.itemType === 'string') {
+      return extensionData.itemType;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [extensionData]);
 
   const moderateMutation = useModeration();
 
@@ -39,14 +33,14 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
     (dataToSign: Record<string, string>) => {
       moderateMutation.mutate({
         dataToSign,
-        contentId: activeModal.entryId,
+        contentId: extensionData.entryId,
         contentType: itemType,
         url: `${BASE_DECISION_URL}/moderate`,
-        isPending: activeModal.status === 'pending',
+        isPending: extensionData.status === 'pending',
       });
     },
 
-    [itemType, activeModal.entryId, activeModal.status, moderateMutation],
+    [itemType, extensionData, moderateMutation],
   );
 
   React.useEffect(() => {
@@ -72,7 +66,7 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
       errorText={moderateMutation.error ? `${moderateMutation.error}` : ''}
       user={loginQuery.data?.pubKey || ''}
       requesting={moderateMutation.status === 'loading'}
-      isReview={activeModal.status !== 'pending'}
+      isReview={extensionData.status !== 'pending'}
       closeModal={handleModalClose}
       onModerate={onModerate}
     />

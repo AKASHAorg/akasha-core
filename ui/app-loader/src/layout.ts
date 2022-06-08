@@ -48,7 +48,6 @@ export const loadLayout = (
         customProps: {
           domElementGetter: () => getDomElement(config, layoutManifest.name, logger),
           parseQueryString: parseQueryString,
-          activeModal: null,
           worldConfig: worldConfig,
           layoutConfig: config.extensions,
           uiEvents,

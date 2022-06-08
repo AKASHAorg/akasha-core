@@ -24,7 +24,6 @@ import {
   concatMap,
   combineLatestWith,
   catchError,
-  lastValueFrom,
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
@@ -245,27 +244,17 @@ export const processSystemModules = (
             combineLatestAll(),
             map(configs => ({
               configs,
-              plugins: results.plugins,
+              plugins: configs.reduce((acc, conf) => ({ ...acc, ...conf.plugin }), {}),
               integrationConfigs,
               integrationsByMountPoint,
               layoutConfig: results.layoutConfig,
             })),
           );
       }),
-      tap(({ configs }) => {
-        console.log('configs', configs);
-        // from(configs)
-        //   .pipe(
-        //     filter(conf => conf.extends && Array.isArray(conf.extends)),
-        //     tap(config => extractExtensionsFromApps(config, state$, logger).subscribe()),
-        //   )
-        //   .subscribe();
-      }),
     )
     .pipe(
       mergeMap(results => {
         const { configs, layoutConfig } = results;
-
         for (const config of configs) {
           if (!config.extends) {
             continue;
@@ -277,6 +266,7 @@ export const processSystemModules = (
             navigateToModal,
             worldConfig,
             parseQueryString,
+            plugins: results.plugins,
           };
           config.extends(extensionMatcher(uiEvents, extProps), extensionLoader);
         }
@@ -459,74 +449,40 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
       filter(Boolean),
       withLatestFrom(
         state$.pipe(getStateSlice('integrationConfigs')),
-        state$.pipe(getStateSlice('extensionParcels')),
+        // state$.pipe(getStateSlice('extensionParcels')),
       ),
-      map(([uninstalledApp, integrationConfigs, extensionParcels]) => ({
+      map(([uninstalledApp, integrationConfigs]) => ({
         uninstalledApp,
         integrationConfigs,
-        extensionParcels,
       })),
     )
     .pipe(
       mergeMap(props => {
-        const { integrationConfigs, extensionParcels, uninstalledApp } = props;
+        const { integrationConfigs, uninstalledApp } = props;
         const config = integrationConfigs.get(uninstalledApp.name);
         if (config?.extends) {
-          const parcels = Array.from(extensionParcels).map(([, extensionParcels]) =>
-            extensionParcels.filter(ext => ext.parent === config.name),
-          );
-          if (parcels.length) {
-            return unmountParcels(parcels.flat(), logger).pipe(
-              map(unmountedExtensions => ({
-                uninstalledApp,
-                unmountedExtensions,
-                integrationConfigs,
-                extensionParcels,
-              })),
-            );
-          }
+          // @todo: call unload for extensions
         }
         return of({
           uninstalledApp,
           integrationConfigs,
-          extensionParcels,
         });
       }),
     )
     .pipe(
       withLatestFrom(
         state$.pipe(getStateSlice('integrationsByMountPoint')),
-        state$.pipe(getStateSlice('extensionsByMountPoint')),
-        state$.pipe(getStateSlice('extensionsByParent')),
         state$.pipe(getStateSlice('modules')),
         state$.pipe(getStateSlice('manifests')),
       ),
-      map(
-        ([
-          res,
-          integrationsByMountPoint,
-          extensionsByMountPoint,
-          extensionsByParent,
-          modules,
-          manifests,
-        ]) => ({
-          ...res,
-          integrationsByMountPoint,
-          extensionsByMountPoint,
-          extensionsByParent,
-          modules,
-          manifests,
-        }),
-      ),
+      map(([res, integrationsByMountPoint, modules, manifests]) => ({
+        ...res,
+        integrationsByMountPoint,
+        modules,
+        manifests,
+      })),
       map(results => {
-        const {
-          uninstalledApp,
-          integrationConfigs,
-          extensionParcels,
-          integrationsByMountPoint,
-          extensionsByMountPoint,
-          extensionsByParent,
-        } = results;
+        const { uninstalledApp, integrationConfigs, integrationsByMountPoint } = results;
         const intByMountPoint = new Map(
           Array.from(integrationsByMountPoint).map(([name, integrations]) => {
             const _integrations = integrations.filter(i => i.name !== uninstalledApp.name);
@@ -536,37 +492,17 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
         const modules = new Map(
           Array.from(results.modules).filter(([name]) => name !== uninstalledApp.name),
         );
-        const extByMountPoint = new Map(
-          Array.from(extensionsByMountPoint).map(([name, extensions]) => {
-            const exts = extensions.filter(i => i.parent !== uninstalledApp.name);
-            return [name, exts];
-          }),
-        );
-        const extByParent = new Map(
-          Array.from(extensionsByParent).filter(([parent]) => {
-            return parent !== uninstalledApp.name;
-          }),
-        );
 
         const intConfigs = new Map(integrationConfigs);
         intConfigs.delete(uninstalledApp.name);
 
-        const parcels = new Map(
-          Array.from(extensionParcels).map(([extPointName, parcels]) => {
-            const _parcels = parcels.filter(parcel => parcel.parent !== uninstalledApp.name);
-            return [extPointName, _parcels];
-          }),
-        );
         const manifests = results.manifests.filter(manifest => {
           return manifest.name !== uninstalledApp.name;
         });
         return {
           uninstalledApp,
           integrationsByMountPoint: intByMountPoint,
-          extensionsByMountPoint: extByMountPoint,
-          extensionsByParent: extByParent,
           integrationConfigs: intConfigs,
-          extensionParcels: parcels,
           modules,
           manifests,
         };
@@ -630,25 +566,4 @@ export const handleDisableIntegration = (
  */
 export const handleEnableIntegration = (state$: Observable<LoaderState>, _logger: ILogger) => {
   return state$.pipe(getStateSlice('enableIntegrationRequest')).pipe(filter(Boolean));
-};
-
-const unmountParcels = (
-  parcels: { parcel: singleSpa.Parcel<RootComponentProps>; id: string; parent: string }[],
-  logger: ILogger,
-) => {
-  return from(parcels).pipe(
-    concatMap(async parcelData => {
-      try {
-        if (parcelData.parcel.getStatus() === singleSpa.MOUNTED) {
-          await parcelData.parcel.unmount();
-        }
-        return parcelData;
-      } catch (err) {
-        // show a warn but don't throw an error
-        logger.warn(err);
-        return parcelData;
-      }
-    }),
-    toArray(),
-  );
 };

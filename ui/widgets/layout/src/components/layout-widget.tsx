@@ -63,14 +63,17 @@ const Layout: React.FC<RootComponentProps> = props => {
    */
   const handleModalNodeMount = React.useCallback(() => {
     uiEvents.current.next({
-      event: EventTypes.ModalMount,
+      event: EventTypes.ExtensionPointMount,
       data: activeModal,
     });
   }, [activeModal]);
 
   const handleModalNodeUnmount = (name: string) => {
+    if (!name) {
+      return;
+    }
     uiEvents.current.next({
-      event: EventTypes.ModalUnmount,
+      event: EventTypes.ExtensionPointUnmount,
       data: { name },
     });
   };
@@ -81,24 +84,36 @@ const Layout: React.FC<RootComponentProps> = props => {
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
+  const handleModal = (data: UIEventData['data']) => {
+    setActiveModal(active => {
+      if (!active) {
+        return data;
+      }
+      if (!data.name) {
+        return null;
+      }
+      if (activeModal && activeModal.name !== data.name) {
+        return data;
+      }
+      return active;
+    });
+  };
 
   React.useEffect(() => {
     const eventsSub = uiEvents.current.subscribe({
       next: (eventInfo: UIEventData) => {
-        if (eventInfo.event === EventTypes.ModalMountRequest && eventInfo.data) {
-          if (typeof eventInfo.data.entryType === 'string') {
-            eventInfo.data.entryType = parseInt(eventInfo.data.entryType, 10) || ItemTypes.ENTRY;
-          }
-          setActiveModal(eventInfo.data);
-        }
-        if (eventInfo.event === EventTypes.ModalUnmountRequest && eventInfo.data?.name) {
-          setActiveModal(null);
-        }
-        if (eventInfo.event === EventTypes.ShowSidebar) {
-          handleSidebarShow();
-        }
-        if (eventInfo.event === EventTypes.HideSidebar) {
-          handleSidebarHide();
+        switch (eventInfo.event) {
+          case EventTypes.ModalRequest:
+            handleModal(eventInfo.data);
+            break;
+          case EventTypes.ShowSidebar:
+            handleSidebarShow();
+            break;
+          case EventTypes.HideSidebar:
+            handleSidebarHide();
+            break;
+          default:
+            break;
         }
       },
     });

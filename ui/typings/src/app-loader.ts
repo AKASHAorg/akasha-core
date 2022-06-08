@@ -245,8 +245,7 @@ export enum EventTypes {
   ExtensionPointMountRequest = 'extension-point-mount-request',
   ExtensionPointUnmount = 'extension-point-unmount',
   ExtensionPointUnmountRequest = 'extension-point-unmount-request',
-  ModalMountRequest = 'modal-mount-request',
-  ModalUnmountRequest = 'modal-unmount-request',
+  ModalRequest = 'modal-mount-request',
   ModalMount = 'modal-mount',
   ModalUnmount = 'modal-unmount',
   ShowSidebar = 'show-sidebar',
@@ -275,6 +274,7 @@ export type EventDataTypes = {
   entryType?: ItemTypes;
   menuItems?: IMenuItem;
   navRoutes?: Record<string, string>;
+  [key: string]: unknown;
 };
 
 export const enum ItemTypes {

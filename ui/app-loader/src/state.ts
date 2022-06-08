@@ -70,10 +70,10 @@ export interface LoaderState {
    * @param key - the mount point required by the extension
    * @param value - {@link ExtensionPointDefinition}[]
    */
-  extensionsByMountPoint: Map<
-    string | ((opts: IntegrationRegistrationOptions) => string),
-    ExtensionPointDefinition[]
-  >;
+  // extensionsByMountPoint: Map<
+  //   string | ((opts: IntegrationRegistrationOptions) => string),
+  //   ExtensionPointDefinition[]
+  // >;
 
   /**
    * Extension configs provided by an app
@@ -82,17 +82,17 @@ export interface LoaderState {
    * @param value - {@link ExtensionPointDefinition}[]
    */
 
-  extensionsByParent: Map<string, ExtensionPointDefinition[]>;
+  // extensionsByParent: Map<string, ExtensionPointDefinition[]>;
 
   /**
    * Parcel store for extensions
    * @param extensionParcel - key: string - mount point of the extension,
    *    value: `{ parcel: {@link Parcel}, id: string, parent: string }[]`;
    */
-  extensionParcels: Map<
-    string,
-    { parcel: singleSpa.Parcel<RootExtensionProps>; id: string; parent: string }[]
-  >;
+  // extensionParcels: Map<
+  //   string,
+  //   { parcel: singleSpa.Parcel<RootExtensionProps>; id: string; parent: string }[]
+  // >;
   /**
    * Identifier of the app that will be uninstalled
    */
@@ -128,9 +128,9 @@ export const defaultInitialState: LoaderState = {
   layoutConfig: null,
   modules: new Map(),
   mountedExtPoints: new Map(),
-  extensionsByMountPoint: new Map(),
-  extensionsByParent: new Map(),
-  extensionParcels: new Map(),
+  // extensionsByMountPoint: new Map(),
+  // extensionsByParent: new Map(),
+  // extensionParcels: new Map(),
   uninstallAppRequest: null,
   appNotInstalled: false,
   spaEvents: null,
@@ -151,7 +151,7 @@ export const getStateSlice: GetStateSlice = key => obs$ =>
  */
 interface EventDataTypes {
   event?: EventTypes & APP_EVENTS.REMOVED & APP_EVENTS.INFO_READY;
-  data?: { name: string } & BaseIntegrationInfo;
+  data?: UIEventData['data'] & ({ name: string } & BaseIntegrationInfo);
 }
 
 export const initState = (
@@ -170,11 +170,11 @@ export const initState = (
             ...state,
             mountedExtPoints: extPoints,
           });
-        case EventTypes.ExtensionPointUnmount:
-          return of({
-            ...state,
-            unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
-          });
+        // case EventTypes.ExtensionPointUnmount:
+        //   return of({
+        //     ...state,
+        //     unmountingExtensionPoints: state.unmountingExtensionPoints.concat(newData.data),
+        //   });
         case APP_EVENTS.INFO_READY:
           const manifests = state.manifests.slice();
           if (worldConfig.registryOverrides.find(override => override.name === newData.data.name)) {

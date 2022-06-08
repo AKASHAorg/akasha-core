@@ -51,22 +51,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     ],
   },
-  // extends: [
-  //   {
-  //     mountsIn: 'entry-remove-confirmation',
-  //     loadingFn: () => import('./extensions/entry-remove-modal'),
-  //   },
-  //   {
-  //     mountsIn: 'editor',
-  //     loadingFn: () => import('./extensions/editor-modal'),
-  //   },
-  //   {
-  //     mountsIn: opts => {
-  //       if (opts.extensionData && opts.extensionData.name?.startsWith('entry-card-edit-button')) {
-  //         return opts.extensionData.name;
-  //       }
-  //     },
-  //     loadingFn: () => import('./extensions/entry-edit-button'),
-  //   },
-  // ],
+  extends: (matcher, loader) => {
+    matcher({
+      'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
+      'editor-modal': loader(() => import('./extensions/editor-modal')),
+      'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
+    });
+  },
 });

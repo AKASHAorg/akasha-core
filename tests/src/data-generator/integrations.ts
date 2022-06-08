@@ -13,11 +13,10 @@ export const genAppConfig = (
     route: '/test-app/root',
   },
   loadingFn: () => genLifecycles(),
-  extends: [
-    {
-      mountsIn: 'extension-mountsin-node-id',
-      loadingFn: () => genLifecycles(),
-    },
-  ],
+  extends: (matcher, loader) => {
+    matcher({
+      'extension-mountsin-node-id': loader(() => genLifecycles),
+    });
+  },
   ...overrides,
 });

@@ -20,10 +20,7 @@ import {
   ProfileProviderProperties,
 } from '@akashaorg/ui-awf-typings/lib/profile';
 import { I18nextProvider, TFunction, useTranslation } from 'react-i18next';
-import {
-  ENSOptionTypes,
-  EnsFormOption,
-} from '@akashaorg/design-system/lib/components/EnsFormCard';
+import { ENSOptionTypes, EnsFormOption } from '@akashaorg/design-system/lib/components/EnsFormCard';
 import { DataProviderInput } from '@akashaorg/awf-sdk/typings/lib/interfaces/common';
 
 const {
@@ -141,7 +138,7 @@ const getEnsFormOptions = (
 };
 
 const UpdateENSModal: React.FC<RootExtensionProps> = props => {
-  const { navigateToModal, activeModal } = props;
+  const { navigateToModal, extensionData } = props;
   const loginQuery = useGetLogin();
   const checkNetworkReq = useNetworkState(loginQuery.data.isReady);
   const profileDataQuery = useGetProfile(loginQuery.data.pubKey);
@@ -180,10 +177,10 @@ const UpdateENSModal: React.FC<RootExtensionProps> = props => {
       /* User is not logged in. */
       navigateToModal({
         name: 'signin',
-        redirectTo: { modal: activeModal },
+        redirectTo: { modal: extensionData },
       });
     }
-  }, [loginQuery.data, navigateToModal, activeModal]);
+  }, [loginQuery.data, navigateToModal, extensionData]);
 
   const handleModalClose = React.useCallback(() => {
     props.singleSpa.navigateToUrl(location.pathname);

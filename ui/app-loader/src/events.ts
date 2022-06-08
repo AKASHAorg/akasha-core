@@ -12,6 +12,7 @@ import {
   mergeMap,
   distinctUntilKeyChanged,
   mergeWith,
+  switchMap,
 } from 'rxjs';
 import { hidePageSplash } from './splash-screen';
 import { LoaderState } from './state';
@@ -24,9 +25,8 @@ export const uiEvents = new ReplaySubject<UIEventData>();
 
 /**
  * A helper operator to filter events,
- * @usage: <SubjectLike>.pipe(filterEvent(EventTypes.ExtensionPointMount)).subscribe(...)
+ * @example <SubjectLike>.pipe(filterEvent(EventTypes.ExtensionPointMount)).subscribe(...)
  * @internal
- * @param eventType: EventTypes
  */
 export function filterEvent(eventType: EventTypes): MonoTypeOperatorFunction<UIEventData>;
 export function filterEvent(
@@ -119,7 +119,7 @@ export const spaEvents$ = merge(
   fromEvent(window, 'single-spa:before-routing-event').pipe(
     mergeMap(getModalFromParams(location)),
     distinctUntilKeyChanged('name'),
-    map(result => ({ modalRequest: result })),
+    tap(result => uiEvents.next({ event: EventTypes.ModalRequest, data: result })),
   ),
 );
 
@@ -144,12 +144,6 @@ export const getUiEvents = () => {
       .pipe(map(eventData => ({ ...eventData }))),
 
     uiEvents.pipe(filterEvent(EventTypes.LayoutReady)).pipe(mapTo({ layoutReady: true })),
-
-    uiEvents.pipe(filterEvent(EventTypes.ModalMount)).pipe(map(evt => ({ activeModal: evt.data }))),
-
-    uiEvents
-      .pipe(filterEvent(EventTypes.ModalUnmount))
-      .pipe(mapTo({ activeModal: { name: null } })),
   );
 };
 
