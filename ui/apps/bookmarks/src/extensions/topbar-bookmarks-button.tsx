@@ -5,7 +5,7 @@ import DS from '@akashaorg/design-system';
 import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import { rootRoute } from '../routes';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
-import { BrowserRouter as Router, useRouteMatch } from 'react-router-dom';
+import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 
 const { Icon, styled, css } = DS;
 
@@ -31,7 +31,7 @@ const BookmarkIcon = styled(Icon)`
 `;
 
 const BookmarksTopbarButton = (props: RootExtensionProps) => {
-  const match = useRouteMatch(rootRoute);
+  const match = useMatch(rootRoute);
 
   return (
     <BookmarkIcon

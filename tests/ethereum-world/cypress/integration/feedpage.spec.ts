@@ -3,7 +3,7 @@ import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 
 describe('Feed Page', () => {
   context('Feed Page', () => {
-    before(() => {
+    beforeEach(() => {
       cy.visit('/social-app/feed');
     });
     describe('Should test top bar', () => TopbarTest());

@@ -15,9 +15,10 @@ const getMailSender = async () => {
     }
     return Promise.resolve(mailSender);
   }
+  const host = process.env.API || undefined;
   const api = Users.withUserAuth(
     await createUserAuth(process.env.USER_GROUP_API_KEY, process.env.USER_GROUP_API_SECRET),
-    { debug: process.env.NODE_ENV !== 'production' },
+    { debug: process.env.NODE_ENV !== 'production', host: host },
   );
   const mailSenderID = mailSenderIdentity();
   await api.getToken(mailSenderID);

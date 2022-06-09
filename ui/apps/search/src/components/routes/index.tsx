@@ -1,6 +1,6 @@
 import DS from '@akashaorg/design-system';
 import * as React from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import routes, { rootRoute, ONBOARDING, RESULTS } from '../../routes';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
@@ -9,7 +9,7 @@ import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 const { Box } = DS;
 
-const Routes: React.FC<RootComponentProps> = props => {
+const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const showLoginModal = () => {
@@ -19,22 +19,44 @@ const Routes: React.FC<RootComponentProps> = props => {
   return (
     <Router>
       <Box>
-        <Switch>
-          <Redirect exact={true} from={rootRoute} to={routes[RESULTS]} />
-          <Route path={`${routes[RESULTS]}/:searchKeyword?`}>
-            <SearchPage {...props} showLoginModal={showLoginModal} loginState={loginQuery.data} />
-          </Route>
-          <Route path={`${routes[ONBOARDING]}`}>
-            <OnboardingPage
-              {...props}
-              showLoginModal={showLoginModal}
-              loginState={loginQuery.data}
+        <Routes>
+          <Route path={rootRoute} element={<Navigate to={routes[RESULTS]} replace />} />
+          <Route path={routes[RESULTS]}>
+            <Route
+              path=":searchKeyword"
+              element={
+                <SearchPage
+                  {...props}
+                  showLoginModal={showLoginModal}
+                  loginState={loginQuery.data}
+                />
+              }
+            />
+            <Route
+              path=""
+              element={
+                <SearchPage
+                  {...props}
+                  showLoginModal={showLoginModal}
+                  loginState={loginQuery.data}
+                />
+              }
             />
           </Route>
-        </Switch>
+          <Route
+            path={routes[ONBOARDING]}
+            element={
+              <OnboardingPage
+                {...props}
+                showLoginModal={showLoginModal}
+                loginState={loginQuery.data}
+              />
+            }
+          />
+        </Routes>
       </Box>
     </Router>
   );
 };
 
-export default Routes;
+export default AppRoutes;
