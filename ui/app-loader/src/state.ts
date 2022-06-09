@@ -4,9 +4,7 @@ import {
   ILoaderConfig,
   IAppConfig,
   BaseIntegrationInfo,
-  IntegrationRegistrationOptions,
   UIEventData,
-  ExtensionPointDefinition,
   EventTypes,
   IntegrationModule,
   PluginConf,
@@ -23,10 +21,7 @@ import {
 } from 'rxjs';
 import { getEvents, ObservedEventNames } from './events';
 import * as singleSpa from 'single-spa';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
-import { logger } from 'ethers';
 import getSDK from '@akashaorg/awf-sdk';
-// import { handleExtensionPointUnmount } from './extensions';
 
 export interface LoaderState {
   activeModal: ModalNavigationOptions;
@@ -62,38 +57,6 @@ export interface LoaderState {
   mountedExtPoints: Map<string, UIEventData['data']>;
 
   /**
-   * Extension configs provided by an app (appConfig.extends)
-   * grouped by it's mount point.
-   *
-   * Used for matching with an extensionPoint name.
-   *
-   * @param key - the mount point required by the extension
-   * @param value - {@link ExtensionPointDefinition}[]
-   */
-  // extensionsByMountPoint: Map<
-  //   string | ((opts: IntegrationRegistrationOptions) => string),
-  //   ExtensionPointDefinition[]
-  // >;
-
-  /**
-   * Extension configs provided by an app
-   * grouped by parent app's `name` (from registry)
-   * @param key - parent app's name,
-   * @param value - {@link ExtensionPointDefinition}[]
-   */
-
-  // extensionsByParent: Map<string, ExtensionPointDefinition[]>;
-
-  /**
-   * Parcel store for extensions
-   * @param extensionParcel - key: string - mount point of the extension,
-   *    value: `{ parcel: {@link Parcel}, id: string, parent: string }[]`;
-   */
-  // extensionParcels: Map<
-  //   string,
-  //   { parcel: singleSpa.Parcel<RootExtensionProps>; id: string; parent: string }[]
-  // >;
-  /**
    * Identifier of the app that will be uninstalled
    */
   uninstallAppRequest: { name: string };
@@ -128,9 +91,6 @@ export const defaultInitialState: LoaderState = {
   layoutConfig: null,
   modules: new Map(),
   mountedExtPoints: new Map(),
-  // extensionsByMountPoint: new Map(),
-  // extensionsByParent: new Map(),
-  // extensionParcels: new Map(),
   uninstallAppRequest: null,
   appNotInstalled: false,
   spaEvents: null,

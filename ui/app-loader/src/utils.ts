@@ -1,6 +1,5 @@
 import {
   BaseIntegrationInfo,
-  ExtensionPointDefinition,
   IAppConfig,
   ModalNavigationOptions,
 } from '@akashaorg/ui-awf-typings/lib/app-loader';
@@ -11,7 +10,7 @@ import { of } from 'rxjs';
 import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 
 export const checkActivityFn = (
-  config: IAppConfig | ExtensionPointDefinition,
+  config: IAppConfig,
   manifest?: BaseIntegrationInfo,
   location?: Location,
 ) => {

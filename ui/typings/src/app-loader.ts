@@ -1,5 +1,5 @@
 import { BehaviorSubject, ReplaySubject } from 'rxjs';
-import { LifeCycleFn, ParcelConfigObject } from 'single-spa';
+import { ParcelConfigObject } from 'single-spa';
 import { LogoSourceType, RootComponentProps, RootExtensionProps, ValueOf } from './index';
 
 export type ActivityFn = (
@@ -34,19 +34,7 @@ export interface IntegrationRegistrationOptions {
   extensionData?: UIEventData['data'];
 }
 
-export interface ExtensionPointDefinition {
-  mountsIn?: string | ((opts: IntegrationRegistrationOptions) => string | null) | null;
-  loadingFn?: () => Promise<ISingleSpaLifecycle>;
-  /*
-   * Name of the parent app.
-   * This is optional.
-   */
-  parent?: string;
-  activeWhen?: ActivityFn;
-  i18nNamespace?: string[];
-}
-
-export interface ExtensionMatcherFn<G = BehaviorSubject<any>> {
+export interface ExtensionMatcherFn<G = BehaviorSubject<unknown>> {
   (
     uiEvents: ReplaySubject<UIEventData>,
     globalChannel: G,
@@ -250,11 +238,6 @@ export interface IMenuItem {
   logo?: LogoSourceType;
   name?: string;
   subRoutes?: IMenuItem[];
-}
-
-export interface IMenuList {
-  nextIndex: number;
-  items: IMenuItem[];
 }
 
 export enum EventTypes {

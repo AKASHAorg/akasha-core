@@ -15,7 +15,6 @@ import {
   importIntegrations,
   processSystemModules,
 } from './integrations';
-// import { handleModalRequest } from './modals';
 import { handleAppLoadingScreens } from './ui-state-utils';
 
 /**

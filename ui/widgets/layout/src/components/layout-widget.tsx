@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, useMatch } from 'react-router-dom';
-
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { EventTypes, ItemTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import { GlobalStyle } from './global-style';
 import ScrollRestorer from './scroll-restorer';
