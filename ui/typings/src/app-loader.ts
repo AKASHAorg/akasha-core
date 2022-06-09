@@ -1,4 +1,4 @@
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { LifeCycleFn, ParcelConfigObject } from 'single-spa';
 import { LogoSourceType, RootComponentProps, RootExtensionProps, ValueOf } from './index';
 
@@ -46,10 +46,12 @@ export interface ExtensionPointDefinition {
   i18nNamespace?: string[];
 }
 
-export interface ExtensionMatcherFn {
+export interface ExtensionMatcherFn<G = BehaviorSubject<any>> {
   (
     uiEvents: ReplaySubject<UIEventData>,
+    globalChannel: G,
     extProps: Omit<RootExtensionProps, 'uiEvents' | 'extensionData' | 'domElement'>,
+    parentConfig: IAppConfig & { name: string },
   ): (extConfig: Record<string, ReturnType<ExtensionLoaderFn>>) => void;
 }
 

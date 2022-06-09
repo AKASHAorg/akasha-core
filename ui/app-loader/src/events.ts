@@ -12,13 +12,13 @@ import {
   mergeMap,
   distinctUntilKeyChanged,
   mergeWith,
-  switchMap,
 } from 'rxjs';
 import { hidePageSplash } from './splash-screen';
 import { LoaderState } from './state';
 import { getModalFromParams } from './utils';
 import { events } from '@akashaorg/sdk-typings';
 import * as singleSpa from 'single-spa';
+import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 
 export const pipelineEvents = new Subject<Partial<LoaderState>>();
 export const uiEvents = new ReplaySubject<UIEventData>();

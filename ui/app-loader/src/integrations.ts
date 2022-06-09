@@ -20,8 +20,6 @@ import {
   combineLatestAll,
   mergeAll,
   pairwise,
-  toArray,
-  concatMap,
   combineLatestWith,
   catchError,
 } from 'rxjs';
@@ -100,76 +98,12 @@ export const importIntegrations = (state$: Observable<LoaderState>, logger: ILog
   );
 };
 
-// export const extractExtensionsFromApps = (
-//   config: IAppConfig & { name: string },
-//   state$: Observable<LoaderState>,
-//   logger: ILogger,
-// ) => {
-//   return from(config.extends)
-//     .pipe(
-//       withLatestFrom(
-//         state$.pipe(getStateSlice('extensionsByParent')),
-//         state$.pipe(getStateSlice('extensionsByMountPoint')),
-//       ),
-//       map(([extConfig, extensionsByParent, extensionsByMountPoint]) => ({
-//         extConfig,
-//         extensionsByParent,
-//         extensionsByMountPoint,
-//       })),
-//     )
-//     .pipe(
-//       mergeMap(({ extConfig, extensionsByMountPoint, extensionsByParent }) => {
-//         const extension = { extConfig, parent: config.name };
-//         const byMount = new Map(extensionsByMountPoint);
-//         const byParent = new Map(extensionsByParent);
-//         if (byMount.has(extension.extConfig.mountsIn)) {
-//           byMount.set(
-//             extension.extConfig.mountsIn,
-//             byMount
-//               .get(extension.extConfig.mountsIn)
-//               .concat({ ...extension.extConfig, parent: extension.parent }),
-//           );
-//         } else {
-//           byMount.set(extension.extConfig.mountsIn, [
-//             { ...extension.extConfig, parent: extension.parent },
-//           ]);
-//         }
-//         if (byParent.has(extension.parent)) {
-//           return of({
-//             extensionsByParent: byParent.set(
-//               extension.parent,
-//               byParent.get(extension.parent).concat(extension.extConfig),
-//             ),
-//             extensionsByMountPoint: byMount,
-//           });
-//         } else {
-//           return of({
-//             extensionsByParent: byParent.set(extension.parent, [extension.extConfig]),
-//             extensionsByMountPoint: byMount,
-//           });
-//         }
-//       }),
-//     )
-//     .pipe(
-//       tap(values => {
-//         pipelineEvents.next(values);
-//       }),
-//       catchError(err => {
-//         logger.error(
-//           `[integrations]: extractExtensionsFromApps: ${err.message ?? JSON.stringify(err)} ${
-//             err.stack
-//           }`,
-//         );
-//         throw err;
-//       }),
-//     );
-// };
-
 export const processSystemModules = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
   logger: ILogger,
 ) => {
+  const globalChannel = getSDK().api.globalChannel;
   const layoutConfig$ = state$.pipe(getStateSlice('layoutConfig'));
   const modules$ = state$.pipe(getStateSlice('modules'));
   const integrationConfigs$ = state$.pipe(getStateSlice('integrationConfigs'));
@@ -268,7 +202,10 @@ export const processSystemModules = (
             parseQueryString,
             plugins: results.plugins,
           };
-          config.extends(extensionMatcher(uiEvents, extProps), extensionLoader);
+          config.extends(
+            extensionMatcher(uiEvents, globalChannel, extProps, config),
+            extensionLoader,
+          );
         }
         return of(results);
       }),
@@ -459,10 +396,6 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
     .pipe(
       mergeMap(props => {
         const { integrationConfigs, uninstalledApp } = props;
-        const config = integrationConfigs.get(uninstalledApp.name);
-        if (config?.extends) {
-          // @todo: call unload for extensions
-        }
         return of({
           uninstalledApp,
           integrationConfigs,

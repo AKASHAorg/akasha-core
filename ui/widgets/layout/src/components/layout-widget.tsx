@@ -84,20 +84,23 @@ const Layout: React.FC<RootComponentProps> = props => {
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
-  const handleModal = (data: UIEventData['data']) => {
-    setActiveModal(active => {
-      if (!active) {
-        return data;
-      }
-      if (!data.name) {
-        return null;
-      }
-      if (activeModal && activeModal.name !== data.name) {
-        return data;
-      }
-      return active;
-    });
-  };
+  const handleModal = React.useCallback(
+    (data: UIEventData['data']) => {
+      setActiveModal(active => {
+        if ((!active || !active.name) && data.name) {
+          return data;
+        }
+        if (!data.name) {
+          return null;
+        }
+        if (activeModal && activeModal.name !== data.name) {
+          return data;
+        }
+        return active;
+      });
+    },
+    [activeModal],
+  );
 
   React.useEffect(() => {
     const eventsSub = uiEvents.current.subscribe({
