@@ -44,14 +44,14 @@ describe('<TagProfileCard /> Component', () => {
     expect(akashaTag).toBeDefined();
   });
 
-  it('calls handler when clicked', () => {
+  it('calls handler when clicked', async () => {
     const { getByRole } = componentWrapper;
     const notsubscribedButton = getByRole('button', { name: 'Subscribe' });
 
     // Button is not subscribed, we test for subscribe handler
     expect(handleSubscribeTag).toBeCalledTimes(0);
 
-    userEvent.click(notsubscribedButton);
+    await userEvent.click(notsubscribedButton);
     expect(handleSubscribeTag).toBeCalledTimes(1);
   });
 });

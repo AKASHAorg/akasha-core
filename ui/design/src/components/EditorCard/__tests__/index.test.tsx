@@ -85,10 +85,10 @@ describe('<EditorCard /> component', () => {
     expect(title).toBeDefined();
   });
 
-  it('has post button initially disabled', () => {
+  it('has post button initially disabled', async () => {
     const { getByRole } = componentWrapper;
     const postButton = getByRole('button', { name: 'Post' });
-    userEvent.click(postButton);
+    await userEvent.click(postButton);
     expect(postButton).toHaveProperty('disabled', true);
   });
 });

@@ -33,7 +33,7 @@ describe('<ImageOverlay /> Component', () => {
     expect(componentWrapper).toBeDefined();
   });
 
-  it('closes overlay when close icon is clicked', () => {
+  it('closes overlay when close icon is clicked', async () => {
     const { getByTestId } = componentWrapper;
 
     const closeIcon = getByTestId('close-icon');
@@ -41,7 +41,7 @@ describe('<ImageOverlay /> Component', () => {
     expect(closeIcon).toBeDefined();
     expect(handleCloseModal).toBeCalledTimes(0);
 
-    userEvent.click(closeIcon);
+    await userEvent.click(closeIcon);
 
     expect(handleCloseModal).toBeCalledTimes(1);
   });

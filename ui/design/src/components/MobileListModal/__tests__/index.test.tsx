@@ -81,7 +81,7 @@ describe('<MobileListModal /> Component', () => {
     expect(repostWithCommentButton).toBeDefined();
   });
 
-  it('can call handlers on the list items', () => {
+  it('can call handlers on the list items', async () => {
     const { getByText } = componentWrapper;
 
     const repostButton = getByText('Repost');
@@ -90,8 +90,8 @@ describe('<MobileListModal /> Component', () => {
     expect(handleRepost).toBeCalledTimes(0);
     expect(handleRepostWithComment).toBeCalledTimes(0);
 
-    userEvent.click(repostButton);
-    userEvent.click(repostWithCommentButton);
+    await userEvent.click(repostButton);
+    await userEvent.click(repostWithCommentButton);
 
     expect(handleRepost).toBeCalledTimes(1);
     expect(handleRepostWithComment).toBeCalledTimes(1);
