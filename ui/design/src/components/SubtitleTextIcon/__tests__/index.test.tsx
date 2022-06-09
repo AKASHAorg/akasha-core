@@ -48,13 +48,13 @@ describe('<SubtitleTextIcon /> Component', () => {
     expect(subtitle).toBeDefined();
   });
 
-  it('calls handler when clicked', () => {
+  it('calls handler when clicked', async () => {
     const { getByText } = componentWrapper;
 
     const clickable = getByText('Icon label');
     expect(handleClick).toBeCalledTimes(0);
 
-    userEvent.click(clickable);
+    await userEvent.click(clickable);
     expect(handleClick).toBeCalledTimes(1);
   });
 });

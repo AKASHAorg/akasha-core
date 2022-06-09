@@ -56,7 +56,7 @@ describe('<CommentInput /> Component', () => {
     // target and click fakeInput
     const fakeInput = getByTestId('fake-input-wrapper');
     expect(fakeInput).toBeDefined();
-    userEvent.click(fakeInput);
+    await userEvent.click(fakeInput);
 
     const commentTextarea = getByTestId('comment-textarea');
     const publishButton = getByTestId('comment-publish-button');
@@ -70,7 +70,7 @@ describe('<CommentInput /> Component', () => {
 
     // target and click fakeInput
     const fakeInput = getByTestId('fake-input-wrapper');
-    userEvent.click(fakeInput);
+    await userEvent.click(fakeInput);
 
     const commentTextarea = getByTestId('comment-textarea');
     const publishButton = getByTestId('comment-publish-button');
@@ -87,7 +87,7 @@ describe('<CommentInput /> Component', () => {
 
     // target and click fakeInput
     const fakeInput = getByTestId('fake-input-wrapper');
-    userEvent.click(fakeInput);
+    await userEvent.click(fakeInput);
 
     // target and change input in comment area
     const commentTextarea = await waitFor(() => findByTestId('comment-textarea'));

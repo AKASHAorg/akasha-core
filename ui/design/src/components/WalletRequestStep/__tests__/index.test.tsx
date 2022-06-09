@@ -59,12 +59,12 @@ describe.skip('<WalletRequestStep /> Component', () => {
     expect(button).toBeDefined();
   });
 
-  it('responds to click', () => {
+  it('responds to click', async () => {
     const { getByText } = componentWrapper;
     expect(handleClick).toHaveBeenCalledTimes(0);
 
     const button = getByText('Select address in Wallet');
-    userEvent.click(button);
+    await userEvent.click(button);
 
     expect(handleClick).toHaveBeenCalledTimes(1);
   });

@@ -63,7 +63,7 @@ describe('<InstallModal /> Component', () => {
     expect(modalTitle).toBeDefined();
   });
 
-  it('calls correct handlers when clicked', () => {
+  it('calls correct handlers when clicked', async () => {
     const { getByText } = componentWrapper;
 
     // initial modal state: installing
@@ -71,7 +71,7 @@ describe('<InstallModal /> Component', () => {
 
     expect(cancelButton).toBeDefined();
 
-    userEvent.click(cancelButton);
+    await userEvent.click(cancelButton);
 
     // current modal state: cancel
     const cancelButton2 = getByText('Cancel Label');
@@ -80,7 +80,7 @@ describe('<InstallModal /> Component', () => {
     expect(handleCancel).toBeCalledTimes(0);
     expect(handleCloseModal).toBeCalledTimes(0);
 
-    userEvent.click(cancelButton2);
+    await userEvent.click(cancelButton2);
 
     expect(handleCancel).toBeCalledTimes(1);
     expect(handleCloseModal).toBeCalledTimes(1);

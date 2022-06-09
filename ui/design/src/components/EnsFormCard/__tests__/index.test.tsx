@@ -52,11 +52,11 @@ describe('<EnsFormCard /> Component', () => {
     expect(title).toBeDefined();
   });
 
-  it('has radio options', () => {
+  it('has radio options', async () => {
     const { getAllByRole } = componentWrapper;
     const options = getAllByRole('radio', { name: 'Display my AKASHA Ethereum name' });
 
-    userEvent.click(options[0]);
+    await userEvent.click(options[0]);
 
     expect(options[0]).toBeDefined();
   });

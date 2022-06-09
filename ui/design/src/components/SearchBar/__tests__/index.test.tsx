@@ -52,18 +52,18 @@ describe('<SearchBar /> Component', () => {
     expect(handleInputChange).toBeCalledTimes(0);
 
     // perform type action
-    userEvent.type(input, 'g');
+    await userEvent.type(input, 'g');
 
     expect(handleInputChange).toBeCalledTimes(1);
   });
 
-  it('calls handler when search is performed', () => {
+  it('calls handler when search is performed', async () => {
     const { getByRole } = componentWrapper;
 
     const search = getByRole('textbox');
 
-    userEvent.type(search, 'eth');
-    userEvent.keyboard('{Enter}');
+    await userEvent.type(search, 'eth');
+    await userEvent.keyboard('{Enter}');
 
     expect(handleSearch).toBeCalledTimes(1);
   });

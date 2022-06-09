@@ -73,7 +73,7 @@ describe('<DropSearchInput /> Component', () => {
     const input = getByRole('textbox');
 
     // perform type action to reveal dropdown
-    userEvent.type(input, 'gil');
+    await userEvent.type(input, 'gil');
 
     const suggested = await findByText('Gilbert Carter');
     expect(suggested).toBeDefined();
@@ -84,7 +84,7 @@ describe('<DropSearchInput /> Component', () => {
     const input = getByRole('textbox');
 
     // perform type action to reveal dropdown
-    userEvent.type(input, 'gil');
+    await userEvent.type(input, 'gil');
 
     // target tabs
     const tagsTab = getByText('Tags');

@@ -45,11 +45,11 @@ describe('<LoginCTAWidgetCard /> Component', () => {
     expect(subtitle).toBeDefined();
   });
 
-  it('has correct mailto link', () => {
+  it('has correct mailto link', async () => {
     const { getByRole } = componentWrapper;
 
     const cta = getByRole('link');
-    userEvent.click(cta);
+    await userEvent.click(cta);
 
     expect(cta).toHaveAttribute('href', 'mailto:alpha@ethereum.world');
   });
