@@ -5,7 +5,7 @@
   <!-- PROD HTML FILE -->
   <meta charset="utf-8" />
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' 'unsafe-inline' 'unsafe-eval' cloudflare.com *.cloudflare.com unpkg.com *.akasha.network *.ethereum.world *.walletconnect.org *.infura.io https://* wss://* ; img-src https: data: blob:" />
+        content="default-src 'self' 'unsafe-inline' 'unsafe-eval' cloudflare.com *.cloudflare.com unpkg.com *.akasha.network *.ethereum.world *.walletconnect.org *.infura.io *.ipfs.infura-ipfs.io *.ipfs.hub.textile.io *.textile.io https://* wss://* ; img-src https: data: blob:" />
   <meta name="viewport"
         content="width=device-width,viewport-fit=cover,initial-scale=1,user-scalable=0,maximum-scale=1" />
   <meta name="robots" content="noindex, nofollow">
@@ -23,11 +23,11 @@
   <link rel="stylesheet" href="/fonts/inter.css" />
   <link rel="stylesheet" href="/css/global.css" />
   <title>Ethereum World</title>
-  <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"
-          integrity="sha256-Ipu/TQ50iCCVZBUsZyNJfxrDk0E2yhaEIz0vqI+kFG8="
+  <script src="https://cdn.jsdelivr.net/npm/react@18.1.0/umd/react.production.min.js"
+          integrity="sha256-jZ7REICtj3fBbBmJnVaiC5WfYBLqh2yHrcRGG33uaQg="
           crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"
-          integrity="sha256-nbMykgB6tsOFJ7OdVmPpdqMFVk4ZsqWocT6issAPUF0="
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.1.0/umd/react-dom.production.min.js"
+          integrity="sha256-BeltXRd9g0ocrTTHTHk1Lw34g/Wy8yrKM0QyGcNUflg="
           crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/rxjs@7.3.0/dist/bundles/rxjs.umd.min.js"
           integrity="sha256-+LajWfl9lUQH5nq7ZlXg9PPXKELAHI+XplMxfyHswhU="
@@ -58,6 +58,7 @@
           "@akashaorg/ui-awf-hooks": "/hooks/index.js"
           }
         }
+
   </script>
 </head>
 
@@ -92,29 +93,29 @@
   }
 </script>
 <script>
-    let theme = 'Light-Theme';
+  let theme = "Light-Theme";
 
-  window.addEventListener('theme-change', (ev) => {
-    if (ev.detail.theme === 'Dark-Theme') {
-      if (document.body.classList.contains('Light-Theme')) {
-        return document.body.classList.replace('Light-Theme', 'Dark-Theme');
+  window.addEventListener("theme-change", (ev) => {
+    if (ev.detail.theme === "Dark-Theme") {
+      if (document.body.classList.contains("Light-Theme")) {
+        return document.body.classList.replace("Light-Theme", "Dark-Theme");
       }
-      return document.body.classList.add('Dark-Theme');
+      return document.body.classList.add("Dark-Theme");
     } else {
-      if (document.body.classList.contains('Dark-Theme')) {
-        return document.body.classList.replace('Dark-Theme', 'Light-Theme');
+      if (document.body.classList.contains("Dark-Theme")) {
+        return document.body.classList.replace("Dark-Theme", "Light-Theme");
       }
-      return document.body.classList.add('Light-Theme');
+      return document.body.classList.add("Light-Theme");
     }
   });
 
-    if (window.localStorage) {
-      if (window.localStorage.getItem('Theme') === 'Dark-Theme') {
-        theme = 'Dark-Theme';
-      }
+  if (window.localStorage) {
+    if (window.localStorage.getItem("Theme") === "Dark-Theme") {
+      theme = "Dark-Theme";
     }
+  }
 
-      document.body.classList.add(theme);
+  document.body.classList.add(theme);
 </script>
 <script type="module" src="/main.js"></script>
 </body>

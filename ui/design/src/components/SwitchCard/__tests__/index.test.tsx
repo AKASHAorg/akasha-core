@@ -72,13 +72,13 @@ describe('<SwitchCard /> Component', () => {
     expect(delistedItemsTab).toBeDefined();
   });
 
-  it('calls handler when clicked', () => {
+  it('calls handler when clicked', async () => {
     const { getByText } = componentWrapper;
 
     const delistedItemsTab = getByText('Delisted');
     expect(handleTabClick).toBeCalledTimes(0);
 
-    userEvent.click(delistedItemsTab);
+    await userEvent.click(delistedItemsTab);
 
     expect(handleTabClick).toBeCalledTimes(1);
   });

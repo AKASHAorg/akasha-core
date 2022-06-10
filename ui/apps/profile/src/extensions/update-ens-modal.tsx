@@ -336,6 +336,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(EnsModal),
+  renderType: 'createRoot',
   errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);

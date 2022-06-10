@@ -37,13 +37,13 @@ describe('<VoteIconButton /> Component', () => {
     expect(icon).toBeDefined();
   });
 
-  it('responds to click', () => {
+  it('responds to click', async () => {
     const { getByText } = componentWrapper;
     // should never been clicked yet
     expect(handleClick).toHaveBeenCalledTimes(0);
 
     const icon = getByText(voteCount);
-    userEvent.click(icon);
+    await userEvent.click(icon);
 
     // should be clicked by now
     expect(handleClick).toHaveBeenCalledTimes(1);

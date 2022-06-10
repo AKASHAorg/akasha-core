@@ -9,6 +9,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(CookieWidget),
+  renderType: 'createRoot',
   errorBoundary: (err, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);

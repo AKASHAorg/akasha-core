@@ -68,14 +68,14 @@ describe('<EntryCard /> Component', () => {
     expect(authorName).toBeDefined();
   });
 
-  it('triggers the handlers on the action buttons', () => {
+  it('triggers the handlers on the action buttons', async () => {
     const { getByText } = componentWrapper;
     const repostButton = getByText(/11 Reposts/i);
     expect(repostButton).toBeDefined();
 
     expect(handleRepost).toBeCalledTimes(0);
 
-    userEvent.click(repostButton);
+    await userEvent.click(repostButton);
     expect(handleRepost).toBeCalledTimes(1);
   });
 });

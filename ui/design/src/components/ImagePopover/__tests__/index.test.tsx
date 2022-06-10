@@ -56,11 +56,11 @@ describe('<ImagePopover /> Component', () => {
     expect(uploadImageLabel).toBeDefined();
   });
 
-  it('can switch between upload types in the popover', () => {
+  it('can switch between upload types in the popover', async () => {
     const { getByRole } = componentWrapper;
 
     const uploadByUrlTab = getByRole('tab', { name: 'By Url' });
-    userEvent.click(uploadByUrlTab);
+    await userEvent.click(uploadByUrlTab);
 
     const insertButton = getByRole('button', { name: 'Insert' });
 
@@ -68,7 +68,7 @@ describe('<ImagePopover /> Component', () => {
     expect(insertButton).toBeDefined();
   });
 
-  it.skip('can upload file', () => {
+  it.skip('can upload file', async () => {
     const { getByTestId } = componentWrapper;
 
     // create a file
@@ -79,7 +79,7 @@ describe('<ImagePopover /> Component', () => {
 
     // wrapping into act since it will trigger state updates
     // act(() => {
-    userEvent.upload(dropzone, file);
+    await userEvent.upload(dropzone, file);
     // });
 
     expect(dropzone.files[0]).toStrictEqual(file);

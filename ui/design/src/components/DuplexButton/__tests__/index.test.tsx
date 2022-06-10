@@ -52,13 +52,13 @@ describe('<DuplexButton /> Component', () => {
     const activeButton = getByRole('button', { name: 'Active' });
 
     // when user hovers over the button, should change text to 'Hover'
-    userEvent.hover(activeButton);
+    await userEvent.hover(activeButton);
 
     const hoverButton = getByRole('button', { name: 'Hover' });
     expect(hoverButton).toBeDefined();
 
     // when hover is reversed, should change text back to 'Active'
-    userEvent.unhover(hoverButton);
+    await userEvent.unhover(hoverButton);
 
     const unhoverButton = getByRole('button', { name: 'Active' });
     expect(unhoverButton).toBeDefined();
@@ -69,7 +69,7 @@ describe('<DuplexButton /> Component', () => {
     const activeButton = getByRole('button', { name: 'Active' });
 
     // when user clicks the button, should change text to 'Inactive'
-    userEvent.click(activeButton);
+    await userEvent.click(activeButton);
 
     const inactiveButton = getByRole('button', { name: 'Inactive' });
     expect(inactiveButton).toBeDefined();

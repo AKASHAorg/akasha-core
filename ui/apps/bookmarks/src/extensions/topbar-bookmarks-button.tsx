@@ -53,6 +53,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(ButtonWrapper),
+  renderType: 'createRoot',
   errorBoundary: (_err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);

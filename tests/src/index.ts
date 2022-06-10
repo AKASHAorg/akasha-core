@@ -24,6 +24,8 @@ const renderWithWrapper = (
   wrapper: React.ComponentType,
   options: RenderOptions,
 ) => {
+  // @Todo: fix typings
+  // @ts-ignore
   return render(component, { wrapper, ...options });
 };
 

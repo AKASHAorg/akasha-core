@@ -53,17 +53,17 @@ describe('<CustomizeFeedCard /> Component', () => {
     expect(notSubscribedButtons).toHaveLength(3);
   });
 
-  it('goes to next step when clicked and calls handler', () => {
+  it('goes to next step when clicked and calls handler', async () => {
     const { getByText } = componentWrapper;
 
     const nextStep = getByText('Next Step');
-    userEvent.click(nextStep);
+    await userEvent.click(nextStep);
 
     const createMyFeed = getByText('Create My Feed');
     expect(createMyFeed).toBeDefined();
 
     expect(handleCreateFeed).toBeCalledTimes(0);
-    userEvent.click(createMyFeed);
+    await userEvent.click(createMyFeed);
 
     expect(handleCreateFeed).toBeCalledTimes(1);
   });

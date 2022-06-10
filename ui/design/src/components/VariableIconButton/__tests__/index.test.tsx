@@ -44,13 +44,13 @@ describe('<VariableIconButton /> Component', () => {
     expect(titleLabel).toBeDefined();
   });
 
-  it('calls handler when clicked', () => {
+  it('calls handler when clicked', async () => {
     const { getByText } = componentWrapper;
 
     const titleLabel = getByText('Select Address in Wallet');
     expect(handleClick).toBeCalledTimes(0);
 
-    userEvent.click(titleLabel);
+    await userEvent.click(titleLabel);
 
     expect(handleClick).toBeCalledTimes(1);
   });

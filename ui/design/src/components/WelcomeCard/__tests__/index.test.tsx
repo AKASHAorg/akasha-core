@@ -51,7 +51,7 @@ describe('<WelcomeCard /> Component', () => {
     expect(titleLabel).toBeDefined();
   });
 
-  it('calls button handlers when clicked', () => {
+  it('calls button handlers when clicked', async () => {
     const { getByText } = componentWrapper;
 
     const primaryButtonLabel = getByText('Browse Ethereum World');
@@ -60,8 +60,8 @@ describe('<WelcomeCard /> Component', () => {
     expect(handlePrimaryButtonClick).toBeCalledTimes(0);
     expect(handleSecondaryButtonClick).toBeCalledTimes(0);
 
-    userEvent.click(primaryButtonLabel);
-    userEvent.click(secondaryButtonLabel);
+    await userEvent.click(primaryButtonLabel);
+    await userEvent.click(secondaryButtonLabel);
 
     expect(handlePrimaryButtonClick).toBeCalledTimes(1);
     expect(handleSecondaryButtonClick).toBeCalledTimes(1);

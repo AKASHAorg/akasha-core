@@ -39,13 +39,13 @@ describe('<PlainButton /> Component', () => {
     expect(label).toBeDefined();
   });
 
-  it('calls handler when clicked', () => {
+  it('calls handler when clicked', async () => {
     const { getByText } = componentWrapper;
 
     const button = getByText('Plain button');
 
     expect(handleClick).toHaveBeenCalledTimes(0);
-    userEvent.click(button);
+    await userEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });

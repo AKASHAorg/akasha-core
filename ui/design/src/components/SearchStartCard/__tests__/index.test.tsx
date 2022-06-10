@@ -44,13 +44,13 @@ describe('<SearchStartCard /> Component', () => {
     expect(title).toBeDefined();
   });
 
-  it('calls handler when search is performed', () => {
+  it('calls handler when search is performed', async () => {
     const { getByRole } = componentWrapper;
 
     const search = getByRole('textbox');
 
-    userEvent.type(search, 'eth');
-    userEvent.keyboard('{Enter}');
+    await userEvent.type(search, 'eth');
+    await userEvent.keyboard('{Enter}');
 
     expect(handleSearch).toBeCalledTimes(1);
   });
