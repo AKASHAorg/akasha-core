@@ -54,7 +54,7 @@ describe('<BasicPopover /> Component', () => {
 
     expect(handleClosePopover).toBeCalledTimes(0);
 
-    userEvent.click(line1);
+    await userEvent.click(line1);
 
     expect(handleClosePopover).toBeCalledTimes(1);
   });

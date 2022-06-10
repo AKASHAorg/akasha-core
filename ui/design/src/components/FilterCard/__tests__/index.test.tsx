@@ -71,14 +71,14 @@ describe('<FilterCard /> Component', () => {
     expect(profileUsername).toBeDefined();
   });
 
-  it('renders filters when clicked', () => {
+  it('renders filters when clicked', async () => {
     const { getByText } = componentWrapper;
 
     // Filter button is present at this stage
     const filterButton = getByText('Filters');
     expect(filterButton).toBeDefined();
 
-    userEvent.click(filterButton);
+    await userEvent.click(filterButton);
 
     // after clicking, Close button replaces Filter button
     const closeButton = getByText('Close');

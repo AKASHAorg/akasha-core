@@ -83,7 +83,7 @@ describe('<ReportModal /> Component', () => {
     expect(options).toHaveLength(6);
   });
 
-  it('can select radio option', () => {
+  it('can select radio option', async () => {
     const { getByRole } = componentWrapper;
 
     // target an option
@@ -92,13 +92,13 @@ describe('<ReportModal /> Component', () => {
     expect(illegalOption).not.toBeChecked();
 
     // select illegalOption
-    userEvent.click(illegalOption);
+    await userEvent.click(illegalOption);
 
     // illegalOption is now checked
     expect(illegalOption).toBeChecked();
   });
 
-  it('enables action button when an option is selected', () => {
+  it('enables action button when an option is selected', async () => {
     const { getByRole } = componentWrapper;
 
     // target an option
@@ -110,7 +110,7 @@ describe('<ReportModal /> Component', () => {
     expect(actionButton).toHaveAttribute('disabled');
 
     // select illegalOption
-    userEvent.click(illegalOption);
+    await userEvent.click(illegalOption);
 
     // illegalOption is now checked
     expect(illegalOption).toBeChecked();
@@ -118,14 +118,14 @@ describe('<ReportModal /> Component', () => {
     expect(actionButton.hasAttribute('disabled')).not.toBeTruthy();
   });
 
-  it('can type into the input field', () => {
+  it('can type into the input field', async () => {
     const { getByRole } = componentWrapper;
 
     const input = getByRole('textbox');
     expect(input).toBeDefined();
 
     // type into the input field
-    userEvent.type(input, 'optional explanation supporting the report action');
+    await userEvent.type(input, 'optional explanation supporting the report action');
 
     // input value should match typed in value
     expect(input).toHaveValue('optional explanation supporting the report action');

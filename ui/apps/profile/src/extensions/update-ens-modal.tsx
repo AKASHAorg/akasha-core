@@ -20,10 +20,7 @@ import {
   ProfileProviderProperties,
 } from '@akashaorg/ui-awf-typings/lib/profile';
 import { I18nextProvider, TFunction, useTranslation } from 'react-i18next';
-import {
-  ENSOptionTypes,
-  EnsFormOption,
-} from '@akashaorg/design-system/lib/components/EnsFormCard';
+import { ENSOptionTypes, EnsFormOption } from '@akashaorg/design-system/lib/components/EnsFormCard';
 import { DataProviderInput } from '@akashaorg/awf-sdk/typings/lib/interfaces/common';
 
 const {
@@ -339,6 +336,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(EnsModal),
+  renderType: 'createRoot',
   errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);

@@ -51,14 +51,14 @@ describe('<TagDetailCard /> Component', () => {
     expect(chart).toBeDefined();
   });
 
-  it('calls handler when clicked', () => {
+  it('calls handler when clicked', async () => {
     const { getByRole } = componentWrapper;
     const subscribedButton = getByRole('button', { name: 'Subscribed' });
 
     // Button is subscribed, we test for unsubscribe handler
     expect(handleSubscribe).toBeCalledTimes(0);
 
-    userEvent.click(subscribedButton);
+    await userEvent.click(subscribedButton);
     expect(handleSubscribe).toBeCalledTimes(1);
   });
 });

@@ -44,12 +44,12 @@ describe('<TextInputField /> Component', () => {
     expect(placeholder).toBeDefined();
   });
 
-  it('calls handler when input is changed', () => {
+  it('calls handler when input is changed', async () => {
     const { getByRole } = componentWrapper;
 
     const textInput = getByRole('textbox');
 
-    userEvent.type(textInput, 'Hello World');
+    await userEvent.type(textInput, 'Hello World');
     expect(handleChange).toBeCalled();
   });
 });

@@ -63,7 +63,7 @@ describe('<ModerateModal /> Component', () => {
     expect(options).toHaveLength(2);
   });
 
-  it('can select radio option', () => {
+  it('can select radio option', async () => {
     const { getByRole } = componentWrapper;
 
     // target the radio options
@@ -75,14 +75,14 @@ describe('<ModerateModal /> Component', () => {
     expect(keepOption).not.toBeChecked();
 
     // select keepOption
-    userEvent.click(keepOption);
+    await userEvent.click(keepOption);
 
     // keepOption is now checked
     expect(delistOption).not.toBeChecked();
     expect(keepOption).toBeChecked();
   });
 
-  it('can type into the input field', () => {
+  it('can type into the input field', async () => {
     const { getByRole } = componentWrapper;
 
     const input = getByRole('textbox');
@@ -95,7 +95,7 @@ describe('<ModerateModal /> Component', () => {
     expect(actionButton).toHaveAttribute('disabled');
 
     // type into the input field
-    userEvent.type(input, 'some reason(s) supporting the moderation decision');
+    await userEvent.type(input, 'some reason(s) supporting the moderation decision');
 
     // input value should match typed in value
     expect(input).toHaveValue('some reason(s) supporting the moderation decision');

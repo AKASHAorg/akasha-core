@@ -56,14 +56,14 @@ describe('<SelectPopover /> Component', () => {
     expect(options).toHaveLength(2);
   });
 
-  it('can select an option and call handler', () => {
+  it('can select an option and call handler', async () => {
     const { getByRole } = componentWrapper;
 
     const threeBoxOption = getByRole('radio', { name: '3box:' });
     expect(threeBoxOption).not.toBeChecked();
     expect(handleClickElement).toBeCalledTimes(0);
 
-    userEvent.click(threeBoxOption);
+    await userEvent.click(threeBoxOption);
     expect(threeBoxOption).toBeChecked();
     expect(handleClickElement).toBeCalledTimes(1);
   });

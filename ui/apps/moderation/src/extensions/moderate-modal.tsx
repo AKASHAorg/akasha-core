@@ -5,12 +5,7 @@ import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import { BrowserRouter as Router } from 'react-router-dom';
-import {
-  useModeration,
-  withProviders,
-  useGetLogin,
-  ThemeWrapper,
-} from '@akashaorg/ui-awf-hooks';
+import { useModeration, withProviders, useGetLogin, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { ModerateModal, ErrorLoader } = DS;
@@ -93,6 +88,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
+  renderType: 'createRoot',
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(err)}, ${errorInfo}`);

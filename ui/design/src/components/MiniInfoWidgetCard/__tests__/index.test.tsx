@@ -54,7 +54,7 @@ describe('<MiniInfoWidgetCard /> Component', () => {
     expect(buttons).toHaveLength(2);
   });
 
-  it('can call handlers attached to the buttons', () => {
+  it('can call handlers attached to the buttons', async () => {
     const { getByRole } = componentWrapper;
 
     const learnMoreButton = getByRole('button', { name: 'Learn more' });
@@ -66,8 +66,8 @@ describe('<MiniInfoWidgetCard /> Component', () => {
     expect(handleLearnMore).toHaveBeenCalledTimes(0);
     expect(handleCallToAction).toHaveBeenCalledTimes(0);
 
-    userEvent.click(learnMoreButton);
-    userEvent.click(doSomethingButton);
+    await userEvent.click(learnMoreButton);
+    await userEvent.click(doSomethingButton);
 
     expect(handleLearnMore).toHaveBeenCalledTimes(1);
     expect(handleCallToAction).toHaveBeenCalledTimes(1);
