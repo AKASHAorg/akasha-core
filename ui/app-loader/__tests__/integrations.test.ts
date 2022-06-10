@@ -1,7 +1,6 @@
-import { genWorldConfig, mockSDK, genAppConfig } from '@akashaorg/af-testing';
+import { genAppConfig, genWorldConfig, mockSDK } from '@akashaorg/af-testing';
 import { TestScheduler } from 'rxjs/testing';
 import {
-  extractExtensionsFromApps,
   handleExtPointMountOfApps,
   handleIntegrationUninstall,
   systemImport,
@@ -11,17 +10,20 @@ import { concatMap, map, mergeMap, Observable, of, ReplaySubject, tap, withLates
 import { initState, LoaderState } from '../src/state';
 import { pipelineEvents } from '../src/events';
 import * as singleSpa from 'single-spa';
-import { IAppConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK();
 });
 
 jest.mock('single-spa', () => {
+  const orig = jest.requireActual('single-spa');
   const getSingleSpaInstanceMock =
     jest.requireActual('@akashaorg/af-testing').getSingleSpaInstanceMock;
 
-  return getSingleSpaInstanceMock();
+  return {
+    ...orig,
+    ...getSingleSpaInstanceMock(),
+  };
 });
 
 describe('[AppLoader] integrations', () => {
@@ -107,44 +109,7 @@ describe('[AppLoader] integrations', () => {
         });
     });
   });
-  test('extract extensions from apps', () => {
-    const marbles = 'ab-b-ba';
-
-    const values: { [key: string]: IAppConfig & { name: string } } = {
-      a: genAppConfig({ name: '@test/test-app-1' }),
-      b: genAppConfig({ name: '@test/test-app-2' }),
-    };
-
-    const stateVal = {
-      extensionsByParent: new Map(),
-      extensionsByMountPoint: new Map(),
-    };
-
-    scheduler.run(({ cold, expectObservable }) => {
-      const source$ = cold(marbles, values);
-      const input$ = source$.pipe(
-        tap(() => pipelineEvents.next(stateVal)),
-        withLatestFrom(state$),
-        mergeMap(([conf, newState]) => extractExtensionsFromApps(conf, of(newState), logger)),
-      );
-      expectObservable(input$).toBe('ab-b-ba', {
-        a: {
-          extensionsByMountPoint: new Map().set(
-            values.a.extends[0].mountsIn,
-            values.a.extends.map(ext => ({ ...ext, parent: values.a.name })),
-          ),
-          extensionsByParent: new Map().set(values.a.name, values.a.extends),
-        },
-        b: {
-          extensionsByMountPoint: new Map().set(
-            values.b.extends[0].mountsIn,
-            values.b.extends.map(ext => ({ ...ext, parent: values.b.name })),
-          ),
-          extensionsByParent: new Map().set(values.b.name, values.b.extends),
-        },
-      });
-    });
-  });
+  // @Todo: rewrite this because it's obsolete
   test.skip('handleExtPointMountOfApps', () => {
     const marbles = 'a';
     const testAppConf = genAppConfig({ name: '@test/test-app-handleExtPointMountOfApps' });
