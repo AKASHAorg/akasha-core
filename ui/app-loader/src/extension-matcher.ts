@@ -26,13 +26,25 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
             ),
         ),
       )
-      .subscribe(({ event, loader }) => {
-        loader.load({
-          uiEvents,
-          extensionData: event.data,
-          domElement: document.getElementById(event.data.name),
-          ...props,
-        });
+      .subscribe({
+        next: ({ event, loader }) => {
+          loader.load(
+            {
+              uiEvents,
+              extensionData: event.data,
+              domElement: document.getElementById(event.data.name),
+              ...props,
+            },
+            parentConfig.name,
+          );
+        },
+        error: err => {
+          props.logger.error(
+            `Error loading extension from app ${parentConfig.name}: ${
+              err.message ?? err.toString()
+            }`,
+          );
+        },
       });
 
     uiEvents
@@ -49,9 +61,18 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
           ),
         ),
       )
-      .subscribe(({ loader, event }) => {
-        // do not wait for unmount
-        loader.unload(event);
+      .subscribe({
+        next: ({ loader, event }) => {
+          // do not wait for unmount
+          loader.unload(event, parentConfig.name);
+        },
+        error: err => {
+          props.logger.error(
+            `Error unloading extension from app ${parentConfig.name}: ${
+              err.message ?? err.toString()
+            }`,
+          );
+        },
       });
 
     globalChannel
@@ -74,7 +95,14 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
       )
       .subscribe({
         next: ({ loader, event }) => {
-          loader.unload(event);
+          loader.unload(event, parentConfig.name);
+        },
+        error: err => {
+          props.logger.error(
+            `Error unloading extension from app ${parentConfig.name}: ${
+              err.message ?? err.toString()
+            }`,
+          );
         },
       });
   };
