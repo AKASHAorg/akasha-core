@@ -59,7 +59,7 @@ const initialData = {
  * const loginQuery = useGetLogin();
  * // can be used with useGetProfile hook to get the logged profile data
  * const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
- * 
+ *
   const loggedProfileData = profileDataQuery.data;
  * ```
  */
@@ -327,7 +327,7 @@ export function useSignUp(
  * @example useLogout hook
  * ```typescript
  * const logoutMutation = useLogout();
- * 
+ *
  * // sample logout handler
  * const handleLogout = async () => {
     await logoutMutation.mutateAsync();
