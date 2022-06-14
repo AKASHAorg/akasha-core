@@ -190,7 +190,7 @@ export const processSystemModules = (
       mergeMap(results => {
         const { configs, layoutConfig } = results;
         for (const config of configs) {
-          if (!config.extends) {
+          if (!config.extends || typeof config.extends !== 'function') {
             continue;
           }
           const extProps: Omit<RootExtensionProps, 'uiEvents' | 'extensionData' | 'domElement'> = {
