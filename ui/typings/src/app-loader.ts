@@ -48,10 +48,10 @@ export interface ExtensionMatcherFn<G = BehaviorSubject<unknown>> {
  * must return a promise with a singleSpaLifecycle object
  */
 export type ExtensionLoaderFn = (
-  loadingFn: () => Promise<ParcelConfigObject<RootExtensionProps>>,
+  loadingFunction: () => Promise<ParcelConfigObject<RootExtensionProps>>,
 ) => {
   load: (props: RootExtensionProps, parentAppName: string) => void;
-  unload: (event: UIEventData) => void;
+  unload: (event: UIEventData, parentAppName: string) => void;
 };
 
 export interface IAppConfig {
