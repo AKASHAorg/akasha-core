@@ -50,7 +50,7 @@ export interface ExtensionMatcherFn<G = BehaviorSubject<unknown>> {
 export type ExtensionLoaderFn = (
   loadingFn: () => Promise<ParcelConfigObject<RootExtensionProps>>,
 ) => {
-  load: (props: RootExtensionProps) => void;
+  load: (props: RootExtensionProps, parentAppName: string) => void;
   unload: (event: UIEventData) => void;
 };
 
