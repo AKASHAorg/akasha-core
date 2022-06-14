@@ -68,6 +68,12 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
 
 /**
  * Hook for creating a moderation decision
+ * @example useModeration hook
+ * ```typescript
+ * const moderateMutation = useModeration();
+ *
+ * moderateMutation.mutate({ dataToSign: { explanation: 'no violations detected', ... }, contentId: 'bascfsdghkjh', contentType: 'item type', url: 'https://apiendpoint', isPending: true });
+ * ```
  */
 export function useModeration() {
   const queryClient = useQueryClient();
@@ -125,6 +131,12 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
 
 /**
  * Hook for reporting a post, reply or account
+ * @example useReport hook
+ * ```typescript
+ * const reportMutation = useReport();
+ *
+ * reportMutation.mutate({ dataToSign: { explanation: 'no violations detected', ... }, contentId: 'bascfsdghkjh', contentType: 'item type', url: 'https://apiendpoint' });
+ * ```
  */
 export function useReport() {
   const queryClient = useQueryClient();
@@ -185,6 +197,12 @@ export const checkStatus = async (data: { user: string; contentIds: string[] }) 
 
 /**
  * Hook to check if a user is a moderator
+ * @example useCheckModerator hook
+ * ```typescript
+ * const checkModeratorQuery = useCheckModerator('0x003410490050000320006570034567114572000');
+ *
+ * const isModerator = checkModeratorQuery.data === 200;
+ * ```
  */
 export function useCheckModerator(loggedUser: string) {
   return useQuery([CHECK_MODERATOR_KEY, loggedUser], () => getModeratorStatus(loggedUser), {
@@ -196,6 +214,12 @@ export function useCheckModerator(loggedUser: string) {
 
 /**
  * Hook to get moderation counters
+ * @example useGetCount hook
+ * ```typescript
+ * const getCountQuery = useGetCount();
+ *
+ * const count = getCountQuery.data || { delisted: 0, kept: 0, pending: 0 };
+ * ```
  */
 export function useGetCount() {
   return useQuery([MODERATION_ITEMS_COUNT_KEY], () => getModerationCounters(), {
@@ -206,6 +230,12 @@ export function useGetCount() {
 
 /**
  * Hook to get report flags for a specific entry
+ * @example useGetFlags hook
+ * ```typescript
+ * const getFlagsQuery = useGetFlags('hfhgdhtdfxteteuyr');
+ *
+ * const flagEntries = getFlagsQuery.data;
+ * ```
  */
 export function useGetFlags(entryId: string) {
   return useQuery([MODERATION_ITEM_FLAGS_KEY, entryId], () => getEntryReports(entryId), {
@@ -217,6 +247,24 @@ export function useGetFlags(entryId: string) {
 
 /**
  * Hook to get log of moderated items
+ * @example useInfiniteLog hook
+ * ```typescript
+ * const infiniteLogQuery = useInfiniteLog(10);
+ *
+ * const logItemPages = React.useMemo(() => {
+    if (infiniteLogQuery.data) {
+      return infiniteLogQuery.data.pages;
+    }
+    return [];
+  }, [infiniteLogQuery.data]);
+ *
+ * // load more items
+ * const handleLoadMore = React.useCallback(() => {
+    if (!infiniteLogQuery.isLoading && infiniteLogQuery.hasNextPage) {
+      infiniteLogQuery.fetchNextPage();
+    }
+  }, [infiniteLogQuery]);
+ * ```
  */
 export function useInfiniteLog(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -238,6 +286,24 @@ export function useInfiniteLog(limit: number, offset?: string) {
 
 /**
  * Hook to get pending moderation items
+ * @example useInfinitePending hook
+ * ```typescript
+ * const infinitePendingQuery = useInfinitePending(10);
+ *
+ * const pendingItemPages = React.useMemo(() => {
+    if (infinitePendingQuery.data) {
+      return infinitePendingQuery.data.pages;
+    }
+    return [];
+  }, [infinitePendingQuery.data]);
+ *
+ * // load more items
+ * const handleLoadMore = React.useCallback(() => {
+    if (!infinitePendingQuery.isLoading && infinitePendingQuery.hasNextPage) {
+      infinitePendingQuery.fetchNextPage();
+    }
+  }, [infinitePendingQuery]);
+ * ```
  */
 export function useInfinitePending(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -255,6 +321,24 @@ export function useInfinitePending(limit: number, offset?: string) {
 
 /**
  * Hook to get kept moderated items
+ * @example useInfiniteKept hook
+ * ```typescript
+ * const infiniteKeptQuery = useInfiniteKept(10);
+ *
+ * const keptItemPages = React.useMemo(() => {
+    if (infiniteKeptQuery.data) {
+      return infiniteKeptQuery.data.pages;
+    }
+    return [];
+  }, [infiniteKeptQuery.data]);
+ *
+ * // load more items
+ * const handleLoadMore = React.useCallback(() => {
+    if (!infiniteKeptQuery.isLoading && infiniteKeptQuery.hasNextPage) {
+      infiniteKeptQuery.fetchNextPage();
+    }
+  }, [infiniteKeptQuery]);
+ * ```
  */
 export function useInfiniteKept(limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -277,6 +361,24 @@ export function useInfiniteKept(limit: number, offset?: string) {
 
 /**
  * Hook to get delisted moderated items
+ * @example useInfiniteDelisted hook
+ * ```typescript
+ * const infiniteDelistedQuery = useInfiniteDelisted(10);
+ *
+ * const delistedItemPages = React.useMemo(() => {
+    if (infiniteDelistedQuery.data) {
+      return infiniteDelistedQuery.data.pages;
+    }
+    return [];
+  }, [infiniteDelistedQuery.data]);
+ *
+ * // load more items
+ * const handleLoadMore = React.useCallback(() => {
+    if (!infiniteDelistedQuery.isLoading && infiniteDelistedQuery.hasNextPage) {
+      infiniteDelistedQuery.fetchNextPage();
+    }
+  }, [infiniteDelistedQuery]);
+ * ```
  */
 export function useInfiniteDelisted(limit: number, offset?: string) {
   return useInfiniteQuery(

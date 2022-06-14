@@ -47,6 +47,12 @@ const getNotifications = async () => {
 
 /**
  * Hook to get a user's notifications
+ * @example useFetchNotifications hook
+ * ```typescript
+ * const fetchNotificationsQuery = useFetchNotifications('0x003410490050000320006570034567114572000');
+ *
+ * const notifications = fetchNotificationsQuery.data;
+ * ```
  */
 export function useFetchNotifications(loggedEthAddress: string) {
   return useQuery([NOTIFICATIONS_KEY], () => getNotifications(), {
@@ -59,6 +65,12 @@ export function useFetchNotifications(loggedEthAddress: string) {
 /**
  * Hook to mark a notification as read
  * pass the messageId to the mutate function
+ * @example useMarkAsRead hook
+ * ```typescript
+ * const markAsReadQuery = useMarkAsRead();
+ *
+ * markAsReadQuery.mutate('message id');
+ * ```
  */
 export function useMarkAsRead() {
   const sdk = getSDK();
@@ -105,6 +117,12 @@ const checkNewNotifications = async () => {
 
 /**
  * Hook to check for new notifications
+ * @example useCheckNewNotifications hook
+ * ```typescript
+ * const checkNewNotificationsQuery = useCheckNewNotifications('0x003410490050000320006570034567114572000');
+ *
+ * const hasNewNotifications = checkNewNotificationsQuery.data;
+ * ```
  */
 export function useCheckNewNotifications(loggedEthAddress: string) {
   return useQuery([HAS_NEW_NOTIFICATIONS_KEY], () => checkNewNotifications(), {

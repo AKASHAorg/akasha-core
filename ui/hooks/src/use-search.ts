@@ -52,6 +52,12 @@ const getSearchProfiles = async (
 /**
  * Hook to search for profiles
  * @returns search results for profiles, containing full profile data
+ * @example useSearchProfiles hook
+ * ```typescript
+ * const searchProfilesQuery = useSearchProfiles('search keyword', 1, 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ *
+ * const result = searchProfilesQuery.data;
+ * ```
  */
 export function useSearchProfiles(
   searchQuery: string,
@@ -108,6 +114,12 @@ const getSearchPosts = async (
 /**
  * Hook to search for posts
  * @returns search results for posts
+ * @example useSearchPosts hook
+ * ```typescript
+ * const searchPostsQuery = useSearchPosts('search keyword', 1, 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ *
+ * const result = searchPostsQuery.data;
+ * ```
  */
 export function useSearchPosts(
   searchQuery: string,
@@ -167,6 +179,12 @@ const getSearchComments = async (
 /**
  * Hook to search for comments
  * @returns search results for comments
+ * @example useSearchComments hook
+ * ```typescript
+ * const searchCommentsQuery = useSearchComments('search keyword', 1, 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ *
+ * const result = searchCommentsQuery.data;
+ * ```
  */
 export function useSearchComments(
   searchQuery: string,
@@ -199,6 +217,12 @@ const getSearchTags = async (searchQuery: string) => {
 /**
  * Hook to search for tags
  * @returns search results for posts, comments, tags and profiles
+ * @example useSearchTags hook
+ * ```typescript
+ * const searchTagsQuery = useSearchTags('search keyword');
+ *
+ * const result = searchTagsQuery.data;
+ * ```
  */
 export function useSearchTags(searchQuery: string, enabler = true) {
   return useQuery([SEARCH_TAGS_KEY, searchQuery], () => getSearchTags(searchQuery), {
@@ -300,6 +324,12 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
 /**
  * Hook for fetching search results for a specific query
  * @returns search results for posts, comments, tags and profiles
+ * @example useSearch hook
+ * ```typescript
+ * const searchQuery = useSearch('search keyword', 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ *
+ * const result = searchQuery.data;
+ * ```
  */
 export function useSearch(searchQuery: string, loggedUser?: string, enabler = true) {
   return useQuery([SEARCH_KEY, searchQuery], () => getSearch(searchQuery, loggedUser), {

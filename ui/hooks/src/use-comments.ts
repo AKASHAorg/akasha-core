@@ -108,7 +108,7 @@ const getComment = async (commentID): Promise<CommentResponse> => {
  *
  * const itemData = React.useMemo(() => {
     if (itemType === 'COMMENT' && commentQuery.isSuccess) {
-      // mayEntry is a utility function that transforms the comment/post data into required format.
+      // mapEntry is a utility function that transforms the comment/post data into required format.
       return mapEntry(commentQuery.data);
     }
   }, [itemType, commentQuery.data, commentQuery.isSuccess]);

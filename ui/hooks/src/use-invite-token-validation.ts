@@ -20,6 +20,12 @@ const checkIsValidToken = async (inviteToken: string) => {
 
 /**
  * Hook to validate invitation token
+ * @example useIsValidToken hook
+ * ```typescript
+ * const inviteTokenQuery = useIsValidToken({ inviteToken: '5b71c9dd7bdea84c9ff2564a', enabler: true });
+ *
+ * const isValidToken = inviteTokenQuery.isSuccess;
+ * ```
  */
 export function useIsValidToken(props: IUseIsValidTokenProps) {
   return useQuery([TOKEN_VALIDATION_KEY], () => checkIsValidToken(props.inviteToken), {

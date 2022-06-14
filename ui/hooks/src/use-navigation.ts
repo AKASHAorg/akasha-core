@@ -9,6 +9,11 @@ import { COMMENT_KEY } from './index';
 
 /**
  * Hook to navigation to entry's page
+ * @example useEntryNavigation hook
+ * ```typescript
+ * // navigateFn handles the actual navigation
+ * const handleEntryNavigate = useEntryNavigation(navigateTo, 'ajgdkjglsrriete');
+ * ```
  */
 export const useEntryNavigation = (
   navigateFn?: (args: NavigateToParams) => void,

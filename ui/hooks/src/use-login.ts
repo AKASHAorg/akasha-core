@@ -54,6 +54,14 @@ const initialData = {
 
 /**
  * Hook for retrieving the current authentication state of the user
+ * @example useGetLogin hook
+ * ```typescript
+ * const loginQuery = useGetLogin();
+ * // can be used with useGetProfile hook to get the logged profile data
+ * const profileDataQuery = useGetProfile(loginQuery.data?.pubKey);
+ * 
+  const loggedProfileData = profileDataQuery.data;
+ * ```
  */
 export function useGetLogin(onError?: (error: Error) => void) {
   const queryClient = useQueryClient();
@@ -147,6 +155,10 @@ export function useLogin(onError?: (err: Error) => void) {
 
 /**
  * Hook to sign up a user
+ * @example useSignUp hook
+ * ```typescript
+ * const { signUpState, ethAddress, fireRemainingMessages, error, fullSignUp, resetState } = useSignUp('selected provider', true);
+ * ```
  */
 export function useSignUp(
   provider: EthProviders,
@@ -312,6 +324,16 @@ export function useSignUp(
 
 /**
  * Hook to sign out the current user
+ * @example useLogout hook
+ * ```typescript
+ * const logoutMutation = useLogout();
+ * 
+ * // sample logout handler
+ * const handleLogout = async () => {
+    await logoutMutation.mutateAsync();
+    // add other logic after logout
+  };
+ * ```
  */
 export function useLogout() {
   const queryClient = useQueryClient();
@@ -338,6 +360,11 @@ export function useLogout() {
 
 /**
  * Hook to check if a user is already registered
+ * @example useCheckSignup hook
+ * ```typescript
+ * const checkSignupQuery = useCheckSignup('0x42b35jk53ifq');
+ * // checkSignupQuery.data returns a boolean value which determines if one should proceed with signup process or not
+ * ```
  */
 export function useCheckSignup(ethAddress: string) {
   const sdk = getSDK();

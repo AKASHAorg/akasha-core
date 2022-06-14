@@ -18,7 +18,13 @@ const checkNetworkState = async () => {
 
 /**
  * Hook to check if the web3 provider is set to function on the Rinkeby test network
- * @returns networkNotSupported: true if web3 provider on another network
+ * @returns networkNotSupported: true if web3 provider is not on the specified network
+ * @example useNetworkState hook
+ * ```typescript
+ * const networkStateQuery = useNetworkState(true);
+ *
+ * const networkNotSupported = networkStateQuery.data.networkNotSupported;
+ * ```
  */
 export function useNetworkState(enabler?: boolean) {
   return useQuery([NETWORK_STATE_KEY], () => checkNetworkState(), {
@@ -36,6 +42,13 @@ const getCurrentNetwork = () => {
 
 /**
  * Hook to check the user's current web3 network
+ * @returns network name
+ * @example useCurrentNetwork hook
+ * ```typescript
+ * const currentNetworkQuery = useCurrentNetwork(true);
+ *
+ * const network = currentNetworkQuery.data;
+ * ```
  */
 export function useCurrentNetwork(enabler?: boolean) {
   return useQuery([CURRENT_NETWORK_KEY], () => getCurrentNetwork(), {
