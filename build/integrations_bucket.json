@@ -74,13 +74,13 @@
   {
     "name": "@akashaorg/app-routing",
     "id": "0xc7dbd964618fa46a51ec3633a23d10c77b458d218ba061755ca7452f627d6504",
-    "ipfsManifest": "f0155171cd5c7d6cb5b36efb05b1d5e89bee5e24b5ec76e629da97c9aed5ed567",
+    "ipfsManifest": "f0155171cd77c1d71de88a6ca13b4b180bb73c714d26bd8fd5798476f2421e422",
     "type": 0
   },
   {
     "name": "@akashaorg/ui-widget-layout",
     "id": "0x7babda8c4fdba6cf5a2b439ee0318041e164073b25e0e757f5e98db2d889263f",
-    "ipfsManifest": "f0155171c669125b9f75ee9f84f92a2ded42de64d10cfba82698086b1bd636e08",
+    "ipfsManifest": "f0155171cf19e6bedfe0fad79095406c395d3c47eb3faab6a6103a80c9daee8f8",
     "type": 2
   },
   {
@@ -92,7 +92,7 @@
   {
     "name": "@akashaorg/ui-widget-topbar",
     "id": "0xdaa1a853c9e7ce4b075a9c36a0b44b14bcea7d16641bbb9be33eb14e2e867dd5",
-    "ipfsManifest": "f0155171c2b1a69b344e944660dc1f7511f0529f8a756c135ee1ee30323f66461",
+    "ipfsManifest": "f0155171c9a218851cec8a111d90347161c46f9a4c60ee0b888e8af7f6a4990f8",
     "type": 2
   },
   {
