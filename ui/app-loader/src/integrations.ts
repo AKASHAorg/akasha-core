@@ -379,6 +379,18 @@ export const handleExtPointMountOfApps = (
       }
 
       logger.info(`Registering app ${config.name}`);
+
+      const domElement = getDomElement(config, manifest.name, logger);
+
+      if (!domElement) {
+        console.log(
+          'app:',
+          config.name,
+          'does not have a domElement to mount to... skipping registration',
+        );
+        return;
+      }
+
       singleSpa.registerApplication<
         Omit<RootComponentProps, 'singleSpa' | 'mountParcel' | 'domElement'> & {
           domElementGetter: () => HTMLElement;
@@ -396,7 +408,7 @@ export const handleExtPointMountOfApps = (
           uiEvents: uiEvents,
           layoutConfig: results.layoutConfig.extensions,
           logger: sdk.services.log.create(manifest.name),
-          domElementGetter: () => getDomElement(config, manifest.name, logger),
+          domElementGetter: () => domElement,
           navigateToModal: navigateToModal,
           getAppRoutes: appName => results.integrationConfigs.get(appName).routes,
         },

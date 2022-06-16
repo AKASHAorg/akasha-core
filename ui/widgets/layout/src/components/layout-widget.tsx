@@ -139,20 +139,18 @@ const Layout: React.FC<RootComponentProps> = props => {
             </SidebarWrapper>
             <MainAreaContainer sidebarVisible={isFocusedMode ? false : showSidebar}>
               <Box direction="row">
-                {isFocusedMode && (
-                  <FocusedPluginSlot
-                    name={props.layoutConfig.focusedPluginSlotId}
-                    onMount={handleExtensionMount}
-                    onUnmount={handleExtensionUnmount}
-                  />
-                )}
-                {!isFocusedMode && (
-                  <PluginSlot
-                    name={props.layoutConfig.pluginSlotId}
-                    onMount={handleExtensionMount}
-                    onUnmount={handleExtensionUnmount}
-                  />
-                )}
+                <FocusedPluginSlot
+                  name={props.layoutConfig.focusedPluginSlotId}
+                  onMount={handleExtensionMount}
+                  onUnmount={handleExtensionUnmount}
+                  style={!isFocusedMode ? { display: 'none' } : {}}
+                />
+                <PluginSlot
+                  name={props.layoutConfig.pluginSlotId}
+                  onMount={handleExtensionMount}
+                  onUnmount={handleExtensionUnmount}
+                  style={isFocusedMode ? { display: 'none' } : {}}
+                />
                 <WidgetContainer>
                   {/* ^ sticky container for widgets */}
                   <WidgetAreaContainer>
