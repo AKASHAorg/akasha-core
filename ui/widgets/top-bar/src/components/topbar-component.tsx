@@ -130,14 +130,19 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       return;
     }
 
-    const homeAppRoutes = props.getAppRoutes(props.worldConfig.homepageApp);
-    if (homeAppRoutes && homeAppRoutes.hasOwnProperty('defaultRoute')) {
-      if (location.pathname === homeAppRoutes.defaultRoute) {
-        scrollTo(0, 0);
-      } else {
-        handleNavigation(homeAppRoutes.defaultRoute);
-      }
-    }
+    props.plugins.routing.navigateTo({
+      appName: props.worldConfig.homepageApp,
+      getNavigationUrl: appRoutes => {
+        if (appRoutes.hasOwnProperty('defaultRoute')) {
+          // if the current pathname is the same as the one we want to navigate to,
+          // it means that we want to scroll to the top of the page
+          if (location.pathname === appRoutes.defaultRoute) {
+            scrollTo(0, 0);
+          }
+          return appRoutes.defaultRoute;
+        }
+      },
+    });
   };
 
   const { t } = useTranslation('ui-widget-topbar');

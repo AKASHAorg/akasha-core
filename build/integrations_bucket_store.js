@@ -137,17 +137,17 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
   const results = [];
   for (const source of sources) {
     console.time(`[textile.bucket]${ source.package.name }`);
-    const output = await buckr.execute(
-      "",
-      process.env.HUB_KEY,
-      process.env.HUB_SECRET,
-      process.env.HUB_THREAD,
-      path.join(process.env.HUB_NAME, source.type.toString(), source.package.name),
-      "false",
-      "**/*",
-      source.path,
-      ""
-    );
+    // const output = await buckr.execute(
+    //   "",
+    //   process.env.HUB_KEY,
+    //   process.env.HUB_SECRET,
+    //   process.env.HUB_THREAD,
+    //   path.join(process.env.HUB_NAME, source.type.toString(), source.package.name),
+    //   "false",
+    //   "**/*",
+    //   source.path,
+    //   ""
+    // );
     console.timeEnd(`[textile.bucket]${ source.package.name }`);
     console.time(`[web3.storage]${ source.package.name }`);
     const files = await getFilesFromPath(source.path);
@@ -176,7 +176,10 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
           documentation: "",
           detailedDescription: descriptionFileHash ? `ipfs://${descriptionFileHash.cid.toString()}` : ""
         },
-        sources: [`ipfs://${ web3StorageCID }`, `ipfs://${ output.get("ipfs") }`]
+        sources: [
+          `ipfs://${ web3StorageCID }`,
+          //`ipfs://${ output.get("ipfs") }`
+        ]
       }, null, 2)
     };
     console.time(`[infura.storage]${ source.package.name }`);

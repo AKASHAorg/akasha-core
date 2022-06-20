@@ -111,11 +111,12 @@ export const findKey = (key: string, obj: unknown): string | null => {
 
 export const getDomElement = (integrationConfig: IAppConfig, name: string, logger: ILogger) => {
   const domNode = document.getElementById(integrationConfig.mountsIn || '');
+
   if (!domNode) {
     logger.warn(`Node ${domNode} is undefined! App: ${name}`);
-
     return null;
   }
+
   const rootNode = createRootNode(domNode, name);
   if (!rootNode) {
     logger.warn(`Node ${rootNode} cannot be created! App: ${name}`);
