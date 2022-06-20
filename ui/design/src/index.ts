@@ -133,6 +133,8 @@ import EthProviderModal from './components/SignInModal/eth-provider-modal';
 import EthProviderListModal from './components/SignInModal/eth-provider-list-modal';
 import { ModalContainer } from './components/SignInModal/fullscreen-modal-container';
 import { ModalRenderer } from './components/SignInModal/modal-renderer';
+import MessageAppMiniCard from './components/MessageMiniCard';
+import MessageAppBubbleCard from './components/MessageAppBubbleCard';
 import MobileListModal from './components/MobileListModal';
 import ModerateModal from './components/ModerateModal';
 import ReportModal from './components/ReportModal';
@@ -296,6 +298,8 @@ const exported = {
   ModalCardLogin,
   EthProviderListModal,
   EthProviderModal,
+  MessageAppMiniCard,
+  MessageAppBubbleCard,
   MobileListModal,
   ModalContainer,
   ModalRenderer,

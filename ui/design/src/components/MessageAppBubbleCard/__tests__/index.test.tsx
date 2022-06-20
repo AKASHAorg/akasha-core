@@ -1,0 +1,44 @@
+import * as React from 'react';
+import { act, cleanup } from '@testing-library/react';
+
+import MessageApppBubbleCard from '../';
+import { customRender, wrapWithTheme } from '../../../test-utils';
+
+describe('<MessageApppBubbleCard /> Component', () => {
+  let componentWrapper = customRender(<></>, {});
+  beforeEach(() => {
+    act(() => {
+      componentWrapper = customRender(
+        wrapWithTheme(
+          <MessageApppBubbleCard
+            locale="en"
+            sender="Jerry Mil"
+            youLabel="You"
+            content="Hello Estelle, how are you? I really like the article you shared about NFTs, do you have any experience in NFTs?"
+            isLoggedUser={false}
+            status="sent"
+            chatTimestamp="2022-06-16T10:07:15.000Z"
+          />,
+        ),
+        {},
+      );
+    });
+  });
+
+  afterEach(() => {
+    act(() => componentWrapper.unmount());
+    cleanup();
+  });
+
+  it('renders correctly', () => {
+    expect(componentWrapper).toBeDefined();
+  });
+
+  it('has correct sender name', () => {
+    const { getByText } = componentWrapper;
+    const title = getByText('Jerry Mil');
+
+    // will be defined, since the message is not sent by the logged user
+    expect(title).toBeDefined();
+  });
+});
