@@ -33,6 +33,7 @@ const colors: IColorsLight = {
   cadetGrey: '#595F6B',
   lightBeige: '#F8F4F4',
   white: '#FBFCFD', // lotion white
+  warning: '#eed09e',
   red: '#FF4040',
   green: '#36B37E',
   ultraMarine: '#4e71ff',
