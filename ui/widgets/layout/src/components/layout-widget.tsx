@@ -27,13 +27,22 @@ import {
 } from './styled-slots';
 import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
 
-const { Box, BasicCardBox, Icon, styled } = DS;
+const { Box, BasicCardBox, Icon, styled, Text } = DS;
 
 const WarningCard = styled(BasicCardBox)`
   background-color: ${props => props.theme.colors.warning};
-  color: ${props => props.theme.colors.darkText};
+  color: ${props => props.theme.colors.secondary};
   user-select: none;
-  max-height: min-content;
+  border-width: 1px;
+  border-color: ${props => props.theme.colors.warningBorder};
+  border-style: solid;
+  display: inline-flex;
+  align-items: flex-start;
+`;
+
+const WarningIcon = styled(Icon)`
+  margin-right: 0.5rem;
+  margin-top: 0.2rem;
 `;
 
 const Layout: React.FC<RootComponentProps> = props => {
@@ -47,8 +56,8 @@ const Layout: React.FC<RootComponentProps> = props => {
     if (maintenanceReq.status === 'success') {
       return maintenanceReq.data.success;
     }
-    // defaults to not being in maintenance.
-    return false;
+    // defaults to healty.
+    return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
 
   const isMatchingFocusedMode = useMatch('/auth-app/*');
@@ -157,19 +166,16 @@ const Layout: React.FC<RootComponentProps> = props => {
               <Box direction="row">
                 <PluginContainer>
                   {!isPlatformHealty && (
-                    <WarningCard
-                      width="100%"
-                      margin={{ bottom: 'small' }}
-                      pad="small"
-                      flex={true}
-                      direction="row"
-                      align="center"
-                      justify="center"
-                    >
-                      <Icon type="error" color="red" style={{ marginRight: '0.5rem' }} />
-                      <h4>
-                        {t('We are currently performing maintenance. Some apps might not work')}.
-                      </h4>
+                    <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
+                      <WarningIcon type="error" themeColor="secondary" />
+                      <Box width="100%">
+                        <Text style={{ maxWidth: 'fit-content' }} size="medium">
+                          {`${t(
+                            'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
+                          )}. ${t('Please check back soon')}.`}
+                        </Text>
+                        <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
+                      </Box>
                     </WarningCard>
                   )}
                   <FocusedPluginSlot

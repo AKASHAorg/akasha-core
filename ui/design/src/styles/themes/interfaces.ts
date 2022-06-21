@@ -61,4 +61,5 @@ export interface IColors {
   altRed: string;
   altGreen: string;
   warning: string;
+  warningBorder: string;
 }
