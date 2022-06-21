@@ -23,6 +23,7 @@ import type AWF_Comments from './posts/comments';
 import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
+import AWF_Misc from './common/misc';
 
 export interface SDK_API {
   globalChannel: EventBus;
@@ -45,6 +46,7 @@ export interface SDK_Services {
   common: {
     web3: Web3Connector;
     ipfs: AWF_IpfsConnector;
+    misc: AWF_Misc;
   };
 }
 
@@ -100,6 +102,7 @@ export function init(): AWF_SDK {
   const ipfs = container.get<AWF_IpfsConnector>(TYPES.IPFS);
   const appSettings = container.get<AppSettings>(TYPES.AppSettings);
   const icRegistry = container.get<AWF_IC_REGISTRY>(TYPES.ICRegistry);
+  const misc = container.get<AWF_Misc>(TYPES.Misc);
   return {
     services: {
       log,
@@ -111,6 +114,7 @@ export function init(): AWF_SDK {
       common: {
         web3,
         ipfs,
+        misc,
       },
     },
     api: {

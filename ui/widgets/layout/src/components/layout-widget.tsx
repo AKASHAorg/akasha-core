@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
-
+import { EventTypes, ItemTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { GlobalStyle } from './global-style';
 import ScrollRestorer from './scroll-restorer';
 import {
@@ -13,6 +13,7 @@ import {
   SidebarWrapper,
   WidgetAreaContainer,
   WidgetContainer,
+  PluginContainer,
 } from './styled-containers';
 import {
   ModalSlot,
@@ -23,8 +24,25 @@ import {
   FocusedPluginSlot,
   CookieWidgetSlot,
 } from './styled-slots';
+import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
 
-const { Box } = DS;
+const { Box, BasicCardBox, Icon, styled, Text } = DS;
+
+const WarningCard = styled(BasicCardBox)`
+  background-color: ${props => props.theme.colors.warning};
+  color: ${props => props.theme.colors.secondary};
+  user-select: none;
+  border-width: 1px;
+  border-color: ${props => props.theme.colors.warningBorder};
+  border-style: solid;
+  display: inline-flex;
+  align-items: flex-start;
+`;
+
+const WarningIcon = styled(Icon)`
+  margin-right: 0.5rem;
+  margin-top: 0.2rem;
+`;
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
@@ -32,12 +50,20 @@ const Layout: React.FC<RootComponentProps> = props => {
   const [showSidebar, setShowSidebar] = React.useState(
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
+  const maintenanceReq = usePlaformHealthCheck();
+  const isPlatformHealty = React.useMemo(() => {
+    if (maintenanceReq.status === 'success') {
+      return maintenanceReq.data.success;
+    }
+    // defaults to healty.
+    return true;
+  }, [maintenanceReq.status, maintenanceReq.data]);
 
   const isMatchingFocusedMode = useMatch('/auth-app/*');
   const isFocusedMode = !!isMatchingFocusedMode;
 
   const uiEvents = React.useRef(props.uiEvents);
-
+  const { t } = useTranslation();
   const handleExtensionMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -119,7 +145,6 @@ const Layout: React.FC<RootComponentProps> = props => {
         }
       },
     });
-
     uiEvents.current.next({
       event: EventTypes.LayoutReady,
     });
@@ -156,18 +181,33 @@ const Layout: React.FC<RootComponentProps> = props => {
             </SidebarWrapper>
             <MainAreaContainer sidebarVisible={isFocusedMode ? false : showSidebar}>
               <Box direction="row">
-                <FocusedPluginSlot
-                  name={props.layoutConfig.focusedPluginSlotId}
-                  onMount={handleExtensionMount}
-                  onUnmount={handleExtensionUnmount}
-                  style={!isFocusedMode ? { display: 'none' } : {}}
-                />
-                <PluginSlot
-                  name={props.layoutConfig.pluginSlotId}
-                  onMount={handleExtensionMount}
-                  onUnmount={handleExtensionUnmount}
-                  style={isFocusedMode ? { display: 'none' } : {}}
-                />
+                <PluginContainer>
+                  {!isPlatformHealty && (
+                    <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
+                      <WarningIcon type="error" themeColor="secondary" />
+                      <Box width="100%">
+                        <Text style={{ maxWidth: 'fit-content' }} size="medium">
+                          {`${t(
+                            'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
+                          )}. ${t('Please check back soon')}.`}
+                        </Text>
+                        <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
+                      </Box>
+                    </WarningCard>
+                  )}
+                  <FocusedPluginSlot
+                    name={props.layoutConfig.focusedPluginSlotId}
+                    onMount={handleExtensionMount}
+                    onUnmount={handleExtensionUnmount}
+                    style={!isFocusedMode ? { display: 'none' } : {}}
+                  />
+                  <PluginSlot
+                    name={props.layoutConfig.pluginSlotId}
+                    onMount={handleExtensionMount}
+                    onUnmount={handleExtensionUnmount}
+                    style={isFocusedMode ? { display: 'none' } : {}}
+                  />
+                </PluginContainer>
                 <WidgetContainer>
                   {/* ^ sticky container for widgets */}
                   <WidgetAreaContainer>
@@ -215,7 +255,9 @@ const Layout: React.FC<RootComponentProps> = props => {
 
 const LayoutWidget: React.FC<RootComponentProps> = props => (
   <Router>
-    <Layout {...props} />
+    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+      <Layout {...props} />
+    </I18nextProvider>
   </Router>
 );
 

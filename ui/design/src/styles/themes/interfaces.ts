@@ -60,4 +60,6 @@ export interface IColors {
   activeCardBackground: string;
   altRed: string;
   altGreen: string;
+  warning: string;
+  warningBorder: string;
 }
