@@ -15,13 +15,13 @@ export interface IMessageAppBubbleCardProps {
   sender: string;
   youLabel: string;
   content: string;
-  status: chatStatus;
+  status?: chatStatus;
   isLoggedUser: boolean;
   chatTimestamp: string;
 }
 
 const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
-  const { locale, sender, youLabel, content, status = 'sent', isLoggedUser, chatTimestamp } = props;
+  const { locale, sender, youLabel, content, status, isLoggedUser, chatTimestamp } = props;
 
   const chatStatusIcon = {
     sent: 'checkSimple',
@@ -62,10 +62,12 @@ const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
             {chatTimestamp && (
               <Text
                 color="secondaryText"
-                margin={{ right: 'xsmall' }}
+                margin={{ ...(status && { right: 'xsmall' }) }}
               >{`${time[0]}:${time[1]}`}</Text>
             )}
-            <Icon size="sm" accentColor={status === 'read'} type={chatStatusIcon[status]} />
+            {status && (
+              <Icon size="sm" accentColor={status === 'read'} type={chatStatusIcon[status]} />
+            )}
           </Box>
         </Box>
       </MainAreaCardBox>
