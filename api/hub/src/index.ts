@@ -105,12 +105,6 @@ const server = new ApolloServer({
 });
 
 (async () => {
-  if (process.env.RUN_MIGRATIONS) {
-    setTimeout(async () => {
-      console.info('running migrations');
-      await runFollowersMigration(dbID);
-    }, 60000);
-  }
   await server.start();
   server.applyMiddleware({ app });
   await new Promise(resolve => app.listen({ port: PORT }, resolve));
