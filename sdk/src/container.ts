@@ -16,10 +16,11 @@ import AWF_Comments from './posts/comments';
 import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
+import AWF_Misc from './common/misc';
 const diContainer = new Container({
   defaultScope: 'Singleton',
 });
-
+diContainer.bind<AWF_Misc>(TYPES.Misc).to(AWF_Misc);
 diContainer.bind<Logging>(TYPES.Log).to(Logging);
 diContainer.bind<Gql>(TYPES.Gql).to(Gql);
 diContainer.bind<Settings>(TYPES.Settings).to(Settings);
