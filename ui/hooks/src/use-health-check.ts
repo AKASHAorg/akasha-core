@@ -7,7 +7,7 @@ const MAINTENANCE_KEY = 'platform-maintenance';
 const checkHealth = async () => {
   const sdk = getSDK();
   const res = await sdk.services.common.misc.getApiStatus();
-  return { ...res, success: false };
+  return res;
 };
 
 export const usePlaformHealthCheck = () => {
