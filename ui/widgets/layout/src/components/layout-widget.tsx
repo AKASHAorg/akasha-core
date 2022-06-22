@@ -36,7 +36,8 @@ const WarningCard = styled(BasicCardBox)`
   border-color: ${props => props.theme.colors.warningBorder};
   border-style: solid;
   display: inline-flex;
-  align-items: flex-start;
+  align-items: start;
+  width: 100vw;
 `;
 
 const WarningIcon = styled(Icon)`
@@ -186,7 +187,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                     <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
                       <WarningIcon type="error" themeColor="secondary" />
                       <Box width="100%">
-                        <Text style={{ maxWidth: 'fit-content' }} size="medium">
+                        <Text size="medium">
                           {`${t(
                             'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
                           )}. ${t('Please check back soon')}.`}
