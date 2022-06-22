@@ -49,7 +49,7 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
  * Hook to get the comments for a specific post
  * @example useInfiniteComments hook
  * ```typescript
- * const commentsQuery = useInfiniteComments(10, 'hkjgrwiugksjc', 'sgdhfjvjgjgfe');
+ * const commentsQuery = useInfiniteComments(10, 'some-post-id', 'optional-comment-id-to-start-from');
  *
  * const commentPages = React.useMemo(() => {
     if (commentsQuery.data) {
@@ -104,7 +104,7 @@ const getComment = async (commentID): Promise<CommentResponse> => {
  * @example useComment hook
  * ```typescript
  * const itemType = 'COMMENT';
- * const commentQuery = useComment('hkjgrwiugks', true);
+ * const commentQuery = useComment('some-comment-id', true);
  *
  * const itemData = React.useMemo(() => {
     if (itemType === 'COMMENT' && commentQuery.isSuccess) {
@@ -140,9 +140,9 @@ const deleteComment = async (commentId: string) => {
  * Hook for deleting a specific comment
  * @example useDeleteComment hook
  * ```typescript
- * const deleteCommentQuery = useDeleteComment('hkjgrwiugks');
+ * const deleteCommentQuery = useDeleteComment('some-comment-id');
  *
- * deleteCommentQuery.mutate('hkjgrwiugks');
+ * deleteCommentQuery.mutate('some-comment-id');
  * ```
  */
 export function useDeleteComment(commentID: string) {
@@ -199,10 +199,10 @@ export function useDeleteComment(commentID: string) {
  * Hook for creating a new comment
  * @example useCreateComment hook
  * ```typescript
- * const createCommentQuery = useCreateComment('hkjgrwiugks');
- * const newCommentData = { textContent: 'some text content', author: 'comment author', pubKey: 'bbaryugjfgkl' }
+ * const createCommentQuery = useCreateComment('some-comment-id');
+ * const newCommentData = { textContent: 'some text content', author: 'comment author', pubKey: 'comment-author-pubkey' }
  *
- * createCommentQuery.mutate({ ...newCommentData , postID: 'dgtjhgdajajdp' });
+ * createCommentQuery.mutate({ ...newCommentData , postID: 'some-post-id' });
  * ```
  */
 export function useCreateComment() {
@@ -251,10 +251,10 @@ export function useCreateComment() {
  * Hook for editing a comment
  * @example useEditComment hook
  * ```typescript
- * const editCommentQuery = useEditComment('hkjgrwiugks', true);
- * const editedCommentData = { textContent: 'some text content', author: 'comment author', pubKey: 'bbaryugjfgkl' }
+ * const editCommentQuery = useEditComment('some-comment-id', true);
+ * const editedCommentData = { textContent: 'some text content', author: 'comment author', pubKey: 'comment-author-pubkey' }
  *
- * editCommentQuery.mutate({ ...editedCommentData, postID: 'dgtjhgdajajdp' });
+ * editCommentQuery.mutate({ ...editedCommentData, postID: 'some-post-id' });
  * ```
  */
 export function useEditComment(commentID: string, hasCommentData: boolean) {

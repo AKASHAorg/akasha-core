@@ -49,7 +49,7 @@ const getNotifications = async () => {
  * Hook to get a user's notifications
  * @example useFetchNotifications hook
  * ```typescript
- * const fetchNotificationsQuery = useFetchNotifications('0x003410490050000320006570034567114572000');
+ * const fetchNotificationsQuery = useFetchNotifications('logged-in-user-eth-address');
  *
  * const notifications = fetchNotificationsQuery.data;
  * ```
@@ -119,7 +119,7 @@ const checkNewNotifications = async () => {
  * Hook to check for new notifications
  * @example useCheckNewNotifications hook
  * ```typescript
- * const checkNewNotificationsQuery = useCheckNewNotifications('0x003410490050000320006570034567114572000');
+ * const checkNewNotificationsQuery = useCheckNewNotifications('logged-in-user-eth-address');
  *
  * const hasNewNotifications = checkNewNotificationsQuery.data;
  * ```

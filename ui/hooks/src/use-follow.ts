@@ -54,7 +54,7 @@ class GetFollowingBuffer {
  * Hook to check if a user is following other users
  * @example useIsFollowingMultiple hook
  * ```typescript
- * const isFollowingMultipleQuery = useIsFollowingMultiple('hkjgrwiugks', ['jgjfdhjfgsos', 'fdgjsgkjgrds']);
+ * const isFollowingMultipleQuery = useIsFollowingMultiple('user-pubkey', ['some-pubkey-1', 'some-pubkey-2']);
  *
  * const followedProfiles = isFollowingMultipleQuery.data;
  * ```
@@ -154,7 +154,7 @@ export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyAr
  * ```typescript
  * const followQuery = useFollow();
  *
- * followQuery.mutate('bbarykdadjgksjr');
+ * followQuery.mutate('pubkey-of-user-to-follow');
  * ```
  */
 export function useFollow() {
@@ -233,7 +233,7 @@ export function useFollow() {
  * ```typescript
  * const unfollowQuery = useUnfollow();
  *
- * unfollowQuery.mutate('bbarykdadjgksjr');
+ * unfollowQuery.mutate('pubkey-of-user-to-unfollow');
  * ```
  */
 export function useUnfollow() {

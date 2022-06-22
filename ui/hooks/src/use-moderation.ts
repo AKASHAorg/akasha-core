@@ -72,7 +72,7 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
  * ```typescript
  * const moderateMutation = useModeration();
  *
- * moderateMutation.mutate({ dataToSign: { explanation: 'no violations detected', ... }, contentId: 'bascfsdghkjh', contentType: 'item type', url: 'https://apiendpoint', isPending: true });
+ * moderateMutation.mutate({ dataToSign: { explanation: 'no violations detected', ... }, contentId: 'some-content-id', contentType: 'item type', url: 'https://apiendpoint', isPending: true });
  * ```
  */
 export function useModeration() {
@@ -135,7 +135,7 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
  * ```typescript
  * const reportMutation = useReport();
  *
- * reportMutation.mutate({ dataToSign: { explanation: 'no violations detected', ... }, contentId: 'bascfsdghkjh', contentType: 'item type', url: 'https://apiendpoint' });
+ * reportMutation.mutate({ dataToSign: { explanation: 'no violations detected', ... }, contentId: 'some-content-id', contentType: 'item type', url: 'https://apiendpoint' });
  * ```
  */
 export function useReport() {
@@ -199,7 +199,7 @@ export const checkStatus = async (data: { user: string; contentIds: string[] }) 
  * Hook to check if a user is a moderator
  * @example useCheckModerator hook
  * ```typescript
- * const checkModeratorQuery = useCheckModerator('0x003410490050000320006570034567114572000');
+ * const checkModeratorQuery = useCheckModerator('logged-in-user-eth-address');
  *
  * const isModerator = checkModeratorQuery.data === 200;
  * ```
@@ -232,7 +232,7 @@ export function useGetCount() {
  * Hook to get report flags for a specific entry
  * @example useGetFlags hook
  * ```typescript
- * const getFlagsQuery = useGetFlags('hfhgdhtdfxteteuyr');
+ * const getFlagsQuery = useGetFlags('some-entry-id');
  *
  * const flagEntries = getFlagsQuery.data;
  * ```

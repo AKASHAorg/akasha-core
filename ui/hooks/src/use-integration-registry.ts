@@ -16,7 +16,7 @@ const getIntegrationInfo = async integrationId => {
  * Hook to get integration package info
  * @example useGetIntegrationInfo hook
  * ```typescript
- * const integrationInfoQuery = useGetIntegrationInfo('adfgrdtorfd');
+ * const integrationInfoQuery = useGetIntegrationInfo('some-integration-id');
  *
  * const integrationInfo = integrationInfoQuery.data;
  * ```
@@ -39,7 +39,7 @@ const getIntegrationsInfo = async (opt: { name?: string; id?: string }[]) => {
  * Hook to get package info for multiple integrations by name or id
  * @example useGetIntegrationsInfo hook
  * ```typescript
- * const integrationsInfoQuery = useGetIntegrationsInfo([{ name: 'dgowrguwbkt' }, { name: 'asjgdiuwkrjbwr' }]);
+ * const integrationsInfoQuery = useGetIntegrationsInfo([{ name: 'some-integration-name-1' }, { name: 'some-integration-name-2' }]);
  *
  * const integrationsInfo = integrationsInfoQuery.data;
  * ```
@@ -197,7 +197,7 @@ const getIntegrationReleaseInfo = async releaseId => {
  * Hook to get integration release info
  * @example useGetIntegrationReleaseInfo hook
  * ```typescript
- * const latestReleaseInfoQuery = useGetIntegrationReleaseInfo('sjkdlhgskjdkfgjdf');
+ * const latestReleaseInfoQuery = useGetIntegrationReleaseInfo('some-release-id');
  *
  * const latestReleaseInfo = latestReleaseInfoQuery.data
  * ```
@@ -225,7 +225,7 @@ const getIntegrationsReleaseInfo = async releaseIds => {
  * Hook to get multiple integrations release info
  * @example useGetIntegrationsReleaseInfo hook
  * ```typescript
- * const releaseInfoQuery = useGetIntegrationsReleaseInfo(['lsdhlrgsruhes', 'dfjhkmndfbdmm', 'sjkdlhgskjdkfgjdf']);
+ * const releaseInfoQuery = useGetIntegrationsReleaseInfo(['some-release-id-1', 'some-release-id-2', 'some-release-id-3']);
  *
  * const releasesInfo = releaseInfoQuery.data
  * ```
@@ -248,7 +248,7 @@ const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
  * Hook to get latest release info for integrations
  * @example useGetLatestReleaseInfo hook
  * ```typescript
- * const latestReleaseInfoQuery = useGetLatestReleaseInfo([{ id: 'lsdhlrgsruhes' }, { id: 'dfjhkmndfbdmm' }, { id: 'sjkdlhgskjdkfgjdf' }]);
+ * const latestReleaseInfoQuery = useGetLatestReleaseInfo([{ id: 'some-release-id-1' }, { id: 'some-release-id-2' }, { id: 'some-release-id-3' }]);
  *
  * const latestReleasesInfo = React.useMemo(() => {
     return latestReleaseInfoQuery.data?.getLatestRelease;

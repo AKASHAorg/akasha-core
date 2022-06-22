@@ -89,7 +89,7 @@ const getProfileData = async (payload: {
  * Hook to get a user's profile data
  * @example useGetProfile hook
  * ```typescript
- * const getProfileQuery = useGetProfile('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const getProfileQuery = useGetProfile('some-pubkey');
  *
  * const profile = getProfileQuery.data;
  * ```
@@ -125,7 +125,7 @@ const getProfileDataByEthAddress = async (payload: {
  * Hook to get a user's profile data
  * @example useGetProfileByEthAddress hook
  * ```typescript
- * const getProfileByEthAddressQuery = useGetProfileByEthAddress( '0x003410490050000320006570034567114572000');
+ * const getProfileByEthAddressQuery = useGetProfileByEthAddress( 'some-eth-address');
  *
  * const profile = getProfileByEthAddressQuery.data;
  * ```
@@ -159,7 +159,7 @@ const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClie
  * Hook to get an entry author's profile data
  * @example useGetEntryAuthor hook
  * ```typescript
- * const getEntryAuthorQuery = useGetEntryAuthor( 'dfhskjhrifbc');
+ * const getEntryAuthorQuery = useGetEntryAuthor( 'some-entry-id');
  *
  * const profile = getEntryAuthorQuery.data;
  * ```
@@ -187,7 +187,7 @@ const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
  * Hook to get followers for a user
  * @example useFollowers hook
  * ```typescript
- * const followersQuery = useFollowers('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', 10);
+ * const followersQuery = useFollowers('some-pubkey', 10);
  *
  * const followers = React.useMemo(
     () => followersQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
@@ -222,7 +222,7 @@ const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
  * Hook to get a list of profiles following the user
  * @example useFollowing hook
  * ```typescript
- * const followingQuery = useFollowing('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', 10);
+ * const followingQuery = useFollowing('some-pubkey', 10);
  *
  * const following = React.useMemo(
     () => followingQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
@@ -267,7 +267,7 @@ const getInterests = async (pubKey: string) => {
  * Fetch the list of subscribed tags for a specific pub key
  * @example useInterests hook
  * ```typescript
- * const interestsQuery = useInterests('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const interestsQuery = useInterests('some-pubkey');
  *
  * const interests = interestsQuery.data;
  * ```
@@ -409,10 +409,10 @@ const completeProfileUpdate = async (pubKey: string, queryClient: QueryClient) =
  * Pass updated profile form data to the mutate function
  * @example useProfileUpdate hook
  * ```typescript
- * const profileUpdateMutation = useProfileUpdate('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const profileUpdateMutation = useProfileUpdate('logged-in-user-pubkey');
  *
  * // call mutate on form submit
- * profileUpdateMutation.mutate({ profileData: { username: 'awesomeusername', ethAddress: '0x003410490050000320006570034567114572000', ... }, changedFields: ['username', 'ethAddress'] });
+ * profileUpdateMutation.mutate({ profileData: { username: 'awesomeusername', ethAddress: 'logged-in-user-eth-address', ... }, changedFields: ['username', 'ethAddress'] });
  *
  * // reset mutation, if needed, for example on modal close;
  * profileUpdateMutation.reset();

@@ -68,7 +68,7 @@ const updateUsernameProvider = async (
  * Pass as payload, the username and provider details to the mutate function
  * @example useUpdateUsernameProvider hook
  * ```typescript
- * const updateUsernameProviderQuery = useUpdateUsernameProvider('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const updateUsernameProviderQuery = useUpdateUsernameProvider('logged-in-user-pubkey');
  *
  * // do something with the returned status of the query
  * React.useEffect(()=> {
@@ -153,7 +153,7 @@ const registerENS = async ({ userName }: { userName: string }) => {
  * Pass as payload, the username to the mutate function
  * @example useEnsRegistration hook
  * ```typescript
- * const registerEnsQuery = useEnsRegistration('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const registerEnsQuery = useEnsRegistration('logged-in-user-pubkey');
  *
  * // do something with the returned status of the query
  * React.useEffect(()=> {
@@ -236,7 +236,7 @@ export function useUsernameValidation(username: string, enabler = true) {
  * Hook to resolve an ethereum address to an ENS name
  * @example useEnsByAddress hook
  * ```typescript
- * const ensByAddressQuery = useEnsByAddress('0x003410490050000320006570034567114572000');
+ * const ensByAddressQuery = useEnsByAddress('logged-in-user-eth-address');
  *
  * // do something with the returned status of the query
  * const querySuccess =  ensByAddressQuery.isSuccess

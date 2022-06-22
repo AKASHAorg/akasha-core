@@ -19,7 +19,7 @@ const getTagSubscriptions = async () => {
  * Hook to get a user's subscribed tags
  * @example useTagSubscriptions hook
  * ```typescript
- * const subscribedTagsQuery = useTagSubscriptions('0x003410490050000320006570034567114572000');
+ * const subscribedTagsQuery = useTagSubscriptions('logged-in-user-eth-address');
  *
  * const subscribedTags = subscribedTagsQuery.data;
  * ```
@@ -43,7 +43,7 @@ const getIsSubscribedToTag = async (tagName: string) => {
  * Hook to check if a user is subscribed to a tag
  * @example useIsSubscribedToTag hook
  * ```typescript
- * const isSubscribedToTagQuery = useIsSubscribedToTag('awesome tag', '0x003410490050000320006570034567114572000');
+ * const isSubscribedToTagQuery = useIsSubscribedToTag('awesome tag', 'logged-in-user-eth-address');
  *
  * const isSubscribedToTag = isSubscribedToTagQuery.data;
  * ```

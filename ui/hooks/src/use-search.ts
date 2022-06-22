@@ -54,7 +54,7 @@ const getSearchProfiles = async (
  * @returns search results for profiles, containing full profile data
  * @example useSearchProfiles hook
  * ```typescript
- * const searchProfilesQuery = useSearchProfiles('search keyword', 1, 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const searchProfilesQuery = useSearchProfiles('search keyword', 1, 'logged-in-user-pubkey');
  *
  * const result = searchProfilesQuery.data;
  * ```
@@ -116,7 +116,7 @@ const getSearchPosts = async (
  * @returns search results for posts
  * @example useSearchPosts hook
  * ```typescript
- * const searchPostsQuery = useSearchPosts('search keyword', 1, 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const searchPostsQuery = useSearchPosts('search keyword', 1, 'logged-in-user-pubkey');
  *
  * const result = searchPostsQuery.data;
  * ```
@@ -181,7 +181,7 @@ const getSearchComments = async (
  * @returns search results for comments
  * @example useSearchComments hook
  * ```typescript
- * const searchCommentsQuery = useSearchComments('search keyword', 1, 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const searchCommentsQuery = useSearchComments('search keyword', 1, 'logged-in-user-pubkey');
  *
  * const result = searchCommentsQuery.data;
  * ```
@@ -326,7 +326,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
  * @returns search results for posts, comments, tags and profiles
  * @example useSearch hook
  * ```typescript
- * const searchQuery = useSearch('search keyword', 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba');
+ * const searchQuery = useSearch('search keyword', 'logged-in-user-pubkey');
  *
  * const result = searchQuery.data;
  * ```

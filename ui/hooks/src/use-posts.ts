@@ -223,7 +223,7 @@ const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) 
  * Hook to get an author's posts
  * @example useInfinitePostsByAuthor hook
  * ```typescript
- * const authorPostsQuery = useInfinitePostsByAuthor('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', 15);
+ * const authorPostsQuery = useInfinitePostsByAuthor('author-public-key', 15);
  *
  * const postPages = React.useMemo(() => {
     if (authorPostsQuery.data) {
@@ -283,7 +283,7 @@ const getPost = async (postID: string, loggedUser?: string) => {
  * Hook to get data for a specific post
  * @example usePost hook
  * ```typescript
- * const postQuery = usePost('jsgkhrutikgkgdjkkre', 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', true);
+ * const postQuery = usePost('some-post-id', 'logged-user-pubkey', true);
  *
  * const entryData = React.useMemo(() => {
     if (postQuery.data) {
@@ -306,9 +306,9 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
  * Hook to delete a post
  * @example useDeletePost hook
  * ```typescript
- * const deletePostQuery = useDeletePost('jsgkhrutikgkgdjkkre');
+ * const deletePostQuery = useDeletePost('some-post-id');
  *
- * deletePostQuery.mutate('jsgkhrutikgkgdjkkre');
+ * deletePostQuery.mutate('some-post-id');
  * ```
  */
 export function useDeletePost(postID: string) {
@@ -374,7 +374,7 @@ export function useDeletePost(postID: string) {
  * ```typescript
  * const publishPostQuery = useCreatePost();
  *
- * publishPostQuery.mutate({ pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', ...});
+ * publishPostQuery.mutate({ pubKey: 'author-public-key', ...});
  * ```
  */
 export function useCreatePost() {
@@ -428,7 +428,7 @@ const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
  * ```typescript
  * const editPostQuery = useEditPost();
  *
- * editPostQuery.mutate({ entryID: 'kgdshjagfhjsegkjdfns', ...});
+ * editPostQuery.mutate({ entryID: 'some-entry-id', ...});
  * ```
  */
 export const useEditPost = () => {

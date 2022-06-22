@@ -12,7 +12,7 @@ import { COMMENT_KEY } from './index';
  * @example useEntryNavigation hook
  * ```typescript
  * // navigateFn handles the actual navigation
- * const handleEntryNavigate = useEntryNavigation(navigateTo, 'ajgdkjglsrriete');
+ * const handleEntryNavigate = useEntryNavigation(navigateTo, 'current-post-id');
  * ```
  */
 export const useEntryNavigation = (

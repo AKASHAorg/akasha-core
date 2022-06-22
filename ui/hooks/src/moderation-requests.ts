@@ -113,7 +113,7 @@ export interface ModeratedItemsReponse extends PaginatedResponse {
  * @returns response HTTP status code
  * @example Creating a moderation entry
  * ```typescript
- * const status = await createModeration('https://someendpoint', {contentId: 'jdiupjkhfjh', contentType: 'post', data: object, signature: 'sig'}, 12000);
+ * const status = await createModeration('https://someendpoint', {contentId: 'some-content-id', contentType: 'post', data: object, signature: 'sig'}, 12000);
  * ```
  */
 export const createModeration = async (
@@ -164,7 +164,7 @@ export const createModeration = async (
  * @returns serialized response
  * @example Getting entry's moderation status
  * ```typescript
- * const response = await getEntryModerationStatus({user: 'bbaryeghr', contentIds: ['jdiupj', 'uethyf', 'vod5rh']}, 12000);
+ * const response = await getEntryModerationStatus({user: 'logged-user-pubkey', contentIds: ['some-content-id-1', 'some-content-id-2', 'some-content-id-3']}, 12000);
  * ```
  */
 export const getEntryModerationStatus = async (
@@ -213,6 +213,7 @@ export const getEntryModerationStatus = async (
  * @returns serialized response
  * @example Getting the moderation reasons
  * ```typescript
+ * // set active as true to fetch only active reasons
  * const response = await getModerationReasons({active: true}, 12000);
  * ```
  */
@@ -259,7 +260,7 @@ export const getModerationReasons = async (
  * @returns response HTTP status code
  * @example Checking moderator status
  * ```typescript
- * const status = await getModeratorStatus('bbaryfskgshgirsnxnbv', 12000);
+ * const status = await getModeratorStatus('logged-user-pubkey', 12000);
  * ```
  */
 export const getModeratorStatus = async (
@@ -339,7 +340,7 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Pr
  * @returns serialized response
  * @example Getting entry reports
  * ```typescript
- * const response = await getEntryReports('jhhtytdrsy', 12000);
+ * const response = await getEntryReports('some-entry-id', 12000);
  * ```
  */
 export const getEntryReports = async (
@@ -381,7 +382,7 @@ export const getEntryReports = async (
  * @returns serialized response
  * @example Getting moderation log items
  * ```typescript
- * const response = await getLogItems({limit: 10, offset: 'jhhtytdrsy'}, 12000);
+ * const response = await getLogItems({limit: 10, offset: 'optional-entry-id-to-start-from'}, 12000);
  * ```
  */
 export const getLogItems = async (
@@ -427,7 +428,7 @@ export const getLogItems = async (
  * @returns serialized response
  * @example Getting pending moderation items
  * ```typescript
- * const response = await getPendingItems({limit: 10, offset: 'jhhtytdrsy'}, 12000);
+ * const response = await getPendingItems({limit: 10, offset: 'optional-entry-id-to-start-from'}, 12000);
  * ```
  */
 export const getPendingItems = async (
@@ -484,7 +485,7 @@ export const getPendingItems = async (
  * @returns serialized response
  * @example Getting moderated items
  * ```typescript
- * const response = await getModeratedItems({limit: 10, offset: 'jhhtytdrsy'}, 12000);
+ * const response = await getModeratedItems({limit: 10, offset: 'optional-entry-id-to-start-from'}, 12000);
  * ```
  */
 export const getModeratedItems = async (

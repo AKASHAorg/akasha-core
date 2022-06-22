@@ -36,8 +36,8 @@ export interface UseAnalyticsActions {
  * const [analyticsActions] = useAnalytics();
  *
  * analyticsActions.trackEvent({
-      category: 'category',
-      action: 'action',
+      category: 'some-category',
+      action: 'some-action',
     });
  * ```
  */
