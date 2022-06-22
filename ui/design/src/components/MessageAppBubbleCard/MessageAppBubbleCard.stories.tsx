@@ -2,8 +2,10 @@ import React from 'react';
 import { Box, Grommet } from 'grommet';
 
 import MessageAppBubbleCard, { IMessageAppBubbleCardProps } from '.';
+import ReadOnlyEditor from '../ReadOnlyEditor';
 
 import lightTheme from '../../styles/themes/light/light-theme';
+import { entryData } from '../../utils/dummy-data';
 
 export default {
   title: 'Cards/MessageAppBubbleCard',
@@ -31,8 +33,14 @@ BaseMessageAppBubbleCard.args = {
   locale: 'en',
   sender: 'Jerry Mil',
   youLabel: 'You',
-  content:
-    'Hello Estelle, how are you? I really like the article you shared about NFTs, do you have any experience in NFTs?',
+  content: (
+    <ReadOnlyEditor
+      content={entryData.slateContent}
+      handleMentionClick={() => null}
+      handleTagClick={() => null}
+      handleLinkClick={() => null}
+    />
+  ),
   isLoggedUser: true,
   chatTimestamp: '2022-06-16T10:07:15.000Z',
 };

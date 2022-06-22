@@ -14,7 +14,7 @@ export interface IMessageAppBubbleCardProps {
   locale: ILocale;
   sender: string;
   youLabel: string;
-  content: string;
+  content: React.ReactElement;
   status?: chatStatus;
   isLoggedUser: boolean;
   chatTimestamp: string;
@@ -49,7 +49,7 @@ const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
           <Box direction="row" justify="between">
             <Box direction="row" align="start">
               <Box align="start" margin={{ left: 'small' }}>
-                <Text size="large">{content}</Text>
+                {content}
               </Box>
             </Box>
             <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">

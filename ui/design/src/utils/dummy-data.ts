@@ -1,3 +1,4 @@
+import { Descendant } from 'slate';
 import { LogoTypeSource, IntegrationCenterApp, ReleaseInfo } from '@akashaorg/ui-awf-typings';
 import {
   IMenuItem,
@@ -736,7 +737,7 @@ const entryData = {
   ipfsLink: 'ipfs.io/placeholder',
   permalink: 'ethereum.world/akasha/johngilbert/412412',
   author: profileData,
-  slateContent: slateContent,
+  slateContent: slateContent as Descendant[],
   time: '2011-10-05T14:48:00.000Z',
   replies: 2,
   repliesContent: [
