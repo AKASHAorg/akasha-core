@@ -15,6 +15,7 @@ const TYPES = {
   Tag: Symbol.for('awf-Tag'),
   IPFS: Symbol.for('awf-IPFS'),
   ICRegistry: Symbol.for('awf-ic-Registry'),
+  Misc: Symbol.for('awf-Misc'),
 };
 
 export default TYPES;

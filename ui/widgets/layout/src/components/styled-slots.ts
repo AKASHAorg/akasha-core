@@ -1,5 +1,6 @@
 import DS from '@akashaorg/design-system';
 import { ExtensionPointProps } from '@akashaorg/design-system/lib/utils/extension-point';
+import React from 'react';
 
 const { css, styled, ExtensionPoint } = DS;
 
@@ -33,22 +34,9 @@ export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
   }
 `;
 
-export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
-  margin-top: 0.5em;
-  width: 100%;
-  ${props => css`
-    @media screen and (min-width: ${props.theme.breakpoints.medium.value + 1}px) {
-      width: 32rem;
-    }
-    @media screen and (min-width: ${props.theme.breakpoints.large.value}px) {
-      width: 42rem;
-    }
-  `}
-`;
+export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)``;
 
-export const FocusedPluginSlot: React.FC<ExtensionPointProps> = styled(PluginSlot)`
-  align-self: center;
-`;
+export const FocusedPluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)``;
 
 export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   display: none;

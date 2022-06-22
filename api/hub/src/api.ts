@@ -109,6 +109,16 @@ api.get('/metrics', async (ctx: koa.Context, next: () => Promise<unknown>) => {
   await next();
 });
 
+api.get('/service-status', async (ctx: koa.Context, next: () => Promise<unknown>) => {
+  ctx.set('Content-Type', 'application/json');
+  if (process.env?.MAINTENANCE_MODE_ENABLED === 'True') {
+    ctx.status = 503; // service unavailable
+  } else {
+    ctx.status = 200;
+  }
+
+  await next();
+});
 /**
  * Validate an invitation token.
  */

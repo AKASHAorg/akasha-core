@@ -1,7 +1,7 @@
 import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
 import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
@@ -10,7 +10,7 @@ import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader
 
 const { Box } = DS;
 
-const Routes: React.FC<RootComponentProps> = props => {
+const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
@@ -23,21 +23,27 @@ const Routes: React.FC<RootComponentProps> = props => {
   return (
     <Router>
       <Box>
-        <Switch>
-          <Route path={`${rootRoute}/list`} render={() => <>A list of profiles</>} />
-          <Route path={[`${rootRoute}/:pubKey`, menuRoute[MY_PROFILE]]}>
-            <ProfilePage
-              {...props}
-              loggedProfileData={loggedProfileQuery.data}
-              showLoginModal={showLoginModal}
-              loginState={loginQuery.data}
+        <Routes>
+          <Route path={`${rootRoute}/list`} element={<>A list of profiles</>} />
+          {[`${rootRoute}/:pubKey`, menuRoute[MY_PROFILE]].map(path => (
+            <Route
+              key={path}
+              path={path}
+              element={
+                <ProfilePage
+                  {...props}
+                  loggedProfileData={loggedProfileQuery.data}
+                  showLoginModal={showLoginModal}
+                  loginState={loginQuery.data}
+                />
+              }
             />
-          </Route>
-          <Route render={() => <div>{t('Oops, Profile not found!')}</div>} />
-        </Switch>
+          ))}
+          <Route element={<div>{t('Oops, Profile not found!')}</div>} />
+        </Routes>
       </Box>
     </Router>
   );
 };
 
-export default Routes;
+export default AppRoutes;

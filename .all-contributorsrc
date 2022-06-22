@@ -107,12 +107,13 @@
       "profile": "https://github.com/PrimarchAlpharius",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "test"
       ]
     }
   ],
   "contributorsPerLine": 7,
-  "projectName": "akasha-world-framework",
+  "projectName": "akasha-framework",
   "projectOwner": "AKASHAorg",
   "repoType": "github",
   "repoHost": "https://github.com",

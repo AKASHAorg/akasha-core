@@ -1,3 +1,4 @@
+import { ReactPortal } from 'react';
 import { Editor, Text, Transforms, Element, Node, Path } from 'slate';
 import { ReactEditor } from 'slate-react';
 import ReactDOM from 'react-dom';
@@ -140,7 +141,7 @@ interface IPortal {
   children: React.ReactNode;
 }
 
-export const Portal = ({ children }: IPortal) => {
+export const Portal = ({ children }: IPortal): ReactPortal => {
   return ReactDOM.createPortal(children, document.body);
 };
 

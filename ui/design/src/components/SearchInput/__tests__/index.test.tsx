@@ -53,17 +53,17 @@ describe('<SearchInput /> Component', () => {
     expect(handleInputChange).toBeCalledTimes(0);
 
     // perform type action
-    userEvent.type(input, 'g');
+    await userEvent.type(input, 'g');
 
     expect(handleInputChange).toBeCalledTimes(1);
   });
 
-  it('calls handler when action is canceled', () => {
+  it('calls handler when action is canceled', async () => {
     const { getByText } = componentWrapper;
 
     const cancelLabel = getByText('x');
 
-    userEvent.click(cancelLabel);
+    await userEvent.click(cancelLabel);
 
     expect(handleCancel).toBeCalledTimes(1);
   });

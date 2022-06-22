@@ -61,34 +61,34 @@ describe('<ProfileAvatarButton /> Component', () => {
     expect(avatar).toHaveAttribute('src', 'https://placebeard.it/360x360');
   });
 
-  it('calls handler when clicked', () => {
+  it('calls handler when clicked', async () => {
     const { getByText } = componentWrapper;
 
     const button = getByText('AKASHA World');
 
     expect(handleClick).toHaveBeenCalledTimes(0);
-    userEvent.click(button);
+    await userEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('calls handler when avatar is clicked', () => {
+  it('calls handler when avatar is clicked', async () => {
     const { getByRole } = componentWrapper;
 
     const avatar = getByRole('img');
 
     expect(handleClickAvatar).toHaveBeenCalledTimes(0);
-    userEvent.click(avatar);
+    await userEvent.click(avatar);
     expect(handleClickAvatar).toHaveBeenCalledTimes(1);
   });
 
-  it('calls hover/unhover handlers', () => {
+  it('calls hover/unhover handlers', async () => {
     const { getByText } = componentWrapper;
 
     const button = getByText('AKASHA World');
 
-    userEvent.hover(button);
+    await userEvent.hover(button);
     expect(handleMouseEnter).toHaveBeenCalledTimes(2);
-    userEvent.unhover(button);
+    await userEvent.unhover(button);
     expect(handleMouseLeave).toHaveBeenCalledTimes(1);
   });
 });

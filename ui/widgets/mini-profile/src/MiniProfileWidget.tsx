@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
 import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
-import { BrowserRouter as Router, useRouteMatch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import {
   useGetEntryAuthor,
@@ -18,7 +18,7 @@ import {
 const { Box, ProfileMiniCard, ErrorLoader } = DS;
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
-  const { params } = useRouteMatch<{ postId: string }>();
+  const params: { postId?: string } = useParams();
   const { t } = useTranslation('app-akasha-integration');
 
   const loginQuery = useGetLogin();
@@ -80,11 +80,16 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
 // Router is required for the useRouteMatch hook to extract the postId from the url
 const Wrapped = (props: RootExtensionProps) => (
   <Router>
-    <Route path="/social-app/post/:postId">
-      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
-        <ProfileCardWidget {...props} />
-      </I18nextProvider>
-    </Route>
+    <Routes>
+      <Route
+        path="/social-app/post/:postId"
+        element={
+          <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+            <ProfileCardWidget {...props} />
+          </I18nextProvider>
+        }
+      />
+    </Routes>
   </Router>
 );
 
@@ -92,6 +97,7 @@ const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: withProviders(Wrapped),
+  renderType: 'createRoot',
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);

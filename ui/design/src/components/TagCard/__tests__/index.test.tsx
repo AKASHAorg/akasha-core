@@ -44,13 +44,13 @@ describe('<TagCard /> Component', () => {
     expect(akashaTag).toBeDefined();
   });
 
-  it('calls handler when clicked', () => {
+  it('calls handler when clicked', async () => {
     const { getByRole } = componentWrapper;
     const subscribedButton = getByRole('button', { name: 'Subscribed' });
 
     expect(handleSubscribe).toBeCalledTimes(0);
 
-    userEvent.click(subscribedButton);
+    await userEvent.click(subscribedButton);
     expect(handleSubscribe).toBeCalledTimes(1);
   });
 });

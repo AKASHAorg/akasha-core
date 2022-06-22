@@ -13,8 +13,8 @@ import { ServiceCallResult } from '@akashaorg/sdk-typings/lib/interfaces/respons
 @injectable()
 class AWF_IpfsConnector implements AWF_IIpfsConnector {
   private _log: ILogger;
-  readonly gateway = 'https://hub.textile.io/ipfs/';
-  readonly originGateway = 'ipfs.hub.textile.io';
+  readonly gateway = 'https://cloudflare-ipfs.com/ipfs/';
+  readonly originGateway = 'ipfs.cf-ipfs.com';
   readonly fallbackGateway = 'ipfs.infura-ipfs.io';
   private readonly LEGAL_DOCS_SOURCE = {
     [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',

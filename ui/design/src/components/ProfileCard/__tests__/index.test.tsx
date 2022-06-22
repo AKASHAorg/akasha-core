@@ -109,16 +109,16 @@ describe('<ProfileCard /> Component', () => {
     expect(postsButton).toBeDefined();
   });
 
-  it('calls handlers on followings, followers, posts buttons', () => {
+  it('calls handlers on followings, followers, posts buttons', async () => {
     const { getByTestId } = componentWrapper;
     const followersButton = getByTestId('followers-button');
     const followingButton = getByTestId('following-button');
     const postsButton = getByTestId('posts-button');
 
     // test click actions
-    userEvent.click(followersButton);
-    userEvent.click(followingButton);
-    userEvent.click(postsButton);
+    await userEvent.click(followersButton);
+    await userEvent.click(followingButton);
+    await userEvent.click(postsButton);
 
     expect(handleClickFollowers).toBeCalledTimes(1);
     expect(handleClickFollowing).toBeCalledTimes(1);
