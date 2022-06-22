@@ -35,6 +35,7 @@ export interface IImageUpload {
 }
 
 export interface ImageData {
+  originalSrc?: string;
   src: { url?: string; fallbackUrl?: string };
   size: {
     width: number;
@@ -103,7 +104,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
         if (resp.error) {
           setUploadErrorState(resp.error.message);
         } else if (resp.data) {
-          handleInsertImage(resp.data);
+          handleInsertImage({ ...resp.data, originalSrc: img.src });
         }
         setUploading(false);
         setLoadingProgress(0);
