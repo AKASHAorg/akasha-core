@@ -274,6 +274,7 @@ export type EventDataTypes = {
   entryType?: ItemTypes;
   menuItems?: IMenuItem;
   navRoutes?: Record<string, string>;
+  pubKey?: string;
 };
 
 export const enum ItemTypes {
