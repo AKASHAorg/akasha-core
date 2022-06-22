@@ -94,6 +94,10 @@ export class RoutingPlugin {
       url = app?.route;
     }
 
+    // no need to navigate because the paths are the same
+    if (url === location.pathname && !location.search) {
+      return;
+    }
     if (url) return singleSpa.navigateToUrl(url);
     RoutingPlugin.logger.error(
       `Path not found! Tried to find a path for application: ${appName}. Aborting.`,

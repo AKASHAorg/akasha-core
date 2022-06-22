@@ -1,25 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import Widget from './topbar-widget';
+import App from './App';
 import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import DS from '@akashaorg/design-system';
 
 const { ErrorLoader } = DS;
 
-const reactLifecycles = singleSpaReact<RootComponentProps>({
+const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: withProviders(Widget),
-  renderType: 'createRoot',
+  rootComponent: withProviders(App),
   errorBoundary: (error, errorInfo, props: RootComponentProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(error)}, ${errorInfo}`);
     }
     return (
       <ThemeWrapper {...props}>
-        <ErrorLoader type="script-error" title="Error in topbar widget" details={error.message} />
+        <ErrorLoader type="script-error" title="Error in messaging app" details={error.message} />
       </ThemeWrapper>
     );
   },

@@ -30,6 +30,19 @@ export const MainAreaContainer: React.FC<Record<string, unknown>> = styled(BaseC
   }
 `;
 
+export const PluginContainer = styled(BaseContainer)`
+  margin-top: 0.5em;
+  width: 100%;
+  ${props => css`
+    @media screen and (min-width: ${props.theme.breakpoints.medium.value + 1}px) {
+      width: 32rem;
+    }
+    @media screen and (min-width: ${props.theme.breakpoints.large.value}px) {
+      width: 42rem;
+    }
+  `}
+`;
+
 const TOPBAR_HEIGHT = 48;
 const WIDGET_AREA_MARGIN_TOP = '0.5rem';
 

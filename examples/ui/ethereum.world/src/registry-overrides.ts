@@ -65,6 +65,11 @@ const overrides = [
     sources: [`${HOST}/apps/routing/index.js`],
   },
   {
+    name: '@akashaorg/app-messaging',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: [`${HOST}/apps/messaging/index.js`],
+  },
+  {
     name: '@akashaorg/ui-widget-sidebar',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/sidebar/index.js`],
