@@ -36,6 +36,9 @@ import EntryList from './components/EntryList';
 import { EntryBox } from './components/EntryCard/entry-box';
 import { MenuItemButton } from './components/EntryCard/menu-item-button';
 import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
+
+import ReadOnlyEditor from './components/ReadOnlyEditor';
+
 import {
   BasicCardBox,
   MainAreaCardBox,
@@ -225,6 +228,7 @@ const exported = {
   EntryCard,
   EntryCardHidden,
   EntryCardLoading,
+  ReadOnlyEditor,
   BoxFormCard,
   EnsFormCard,
   Heading,
