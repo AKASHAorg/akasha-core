@@ -53,7 +53,11 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
   }, [props.name]);
 
   if (!mountOnRequest || (mountOnRequest && shouldMount)) {
-    return <div id={props.name} className={props.className} style={props.style} />;
+    return (
+      <div id={props.name} className={props.className} style={props.style}>
+        {props.children}
+      </div>
+    );
   }
   return null;
 };
