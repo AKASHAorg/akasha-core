@@ -19,7 +19,7 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
       props.extensionData?.entryType === ItemTypes.ENTRY
     ) {
       props.navigateToModal({
-        name: 'editor',
+        name: 'editor-modal',
         entryId: props.extensionData.entryId,
         action: 'edit',
       });

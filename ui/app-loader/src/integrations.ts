@@ -1,5 +1,5 @@
 import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps, RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import {
   BaseIntegrationInfo,
   EventTypes,
@@ -20,8 +20,6 @@ import {
   combineLatestAll,
   mergeAll,
   pairwise,
-  toArray,
-  concatMap,
   combineLatestWith,
   catchError,
 } from 'rxjs';
@@ -32,6 +30,8 @@ import * as singleSpa from 'single-spa';
 import getSDK from '@akashaorg/awf-sdk';
 import { getIntegrationsData } from './manifests';
 import { loadI18nNamespaces } from './i18n-utils';
+import { extensionMatcher } from './extension-matcher';
+import { extensionLoader } from './extension-loader';
 
 export const getMountPoint = (appConfig: IAppConfig) => {
   let mountPoint: string;
@@ -98,76 +98,12 @@ export const importIntegrations = (state$: Observable<LoaderState>, logger: ILog
   );
 };
 
-export const extractExtensionsFromApps = (
-  config: IAppConfig & { name: string },
-  state$: Observable<LoaderState>,
-  logger: ILogger,
-) => {
-  return from(config.extends)
-    .pipe(
-      withLatestFrom(
-        state$.pipe(getStateSlice('extensionsByParent')),
-        state$.pipe(getStateSlice('extensionsByMountPoint')),
-      ),
-      map(([extConfig, extensionsByParent, extensionsByMountPoint]) => ({
-        extConfig,
-        extensionsByParent,
-        extensionsByMountPoint,
-      })),
-    )
-    .pipe(
-      mergeMap(({ extConfig, extensionsByMountPoint, extensionsByParent }) => {
-        const extension = { extConfig, parent: config.name };
-        const byMount = new Map(extensionsByMountPoint);
-        const byParent = new Map(extensionsByParent);
-        if (byMount.has(extension.extConfig.mountsIn)) {
-          byMount.set(
-            extension.extConfig.mountsIn,
-            byMount
-              .get(extension.extConfig.mountsIn)
-              .concat({ ...extension.extConfig, parent: extension.parent }),
-          );
-        } else {
-          byMount.set(extension.extConfig.mountsIn, [
-            { ...extension.extConfig, parent: extension.parent },
-          ]);
-        }
-        if (byParent.has(extension.parent)) {
-          return of({
-            extensionsByParent: byParent.set(
-              extension.parent,
-              byParent.get(extension.parent).concat(extension.extConfig),
-            ),
-            extensionsByMountPoint: byMount,
-          });
-        } else {
-          return of({
-            extensionsByParent: byParent.set(extension.parent, [extension.extConfig]),
-            extensionsByMountPoint: byMount,
-          });
-        }
-      }),
-    )
-    .pipe(
-      tap(values => {
-        pipelineEvents.next(values);
-      }),
-      catchError(err => {
-        logger.error(
-          `[integrations]: extractExtensionsFromApps: ${err.message ?? JSON.stringify(err)} ${
-            err.stack
-          }`,
-        );
-        throw err;
-      }),
-    );
-};
-
 export const processSystemModules = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
   logger: ILogger,
 ) => {
+  const globalChannel = getSDK().api.globalChannel;
   const layoutConfig$ = state$.pipe(getStateSlice('layoutConfig'));
   const modules$ = state$.pipe(getStateSlice('modules'));
   const integrationConfigs$ = state$.pipe(getStateSlice('integrationConfigs'));
@@ -242,19 +178,36 @@ export const processSystemModules = (
             combineLatestAll(),
             map(configs => ({
               configs,
-              plugins: results.plugins,
+              plugins: configs.reduce((acc, conf) => ({ ...acc, ...conf.plugin }), {}),
               integrationConfigs,
               integrationsByMountPoint,
+              layoutConfig: results.layoutConfig,
             })),
           );
       }),
-      tap(({ configs }) => {
-        from(configs)
-          .pipe(
-            filter(conf => conf.extends && Array.isArray(conf.extends)),
-            tap(config => extractExtensionsFromApps(config, state$, logger).subscribe()),
-          )
-          .subscribe();
+    )
+    .pipe(
+      mergeMap(results => {
+        const { configs, layoutConfig } = results;
+        for (const config of configs) {
+          if (!config.extends || typeof config.extends !== 'function') {
+            continue;
+          }
+          const extProps: Omit<RootExtensionProps, 'uiEvents' | 'extensionData' | 'domElement'> = {
+            layoutConfig: layoutConfig.extensions,
+            logger,
+            singleSpa,
+            navigateToModal,
+            worldConfig,
+            parseQueryString,
+            plugins: results.plugins,
+          };
+          config.extends(
+            extensionMatcher(uiEvents, globalChannel, extProps, config),
+            extensionLoader,
+          );
+        }
+        return of(results);
       }),
     )
     .pipe(
@@ -445,74 +398,36 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
       filter(Boolean),
       withLatestFrom(
         state$.pipe(getStateSlice('integrationConfigs')),
-        state$.pipe(getStateSlice('extensionParcels')),
+        // state$.pipe(getStateSlice('extensionParcels')),
       ),
-      map(([uninstalledApp, integrationConfigs, extensionParcels]) => ({
+      map(([uninstalledApp, integrationConfigs]) => ({
         uninstalledApp,
         integrationConfigs,
-        extensionParcels,
       })),
     )
     .pipe(
       mergeMap(props => {
-        const { integrationConfigs, extensionParcels, uninstalledApp } = props;
-        const config = integrationConfigs.get(uninstalledApp.name);
-        if (config?.extends) {
-          const parcels = Array.from(extensionParcels).map(([, extensionParcels]) =>
-            extensionParcels.filter(ext => ext.parent === config.name),
-          );
-          if (parcels.length) {
-            return unmountParcels(parcels.flat(), logger).pipe(
-              map(unmountedExtensions => ({
-                uninstalledApp,
-                unmountedExtensions,
-                integrationConfigs,
-                extensionParcels,
-              })),
-            );
-          }
-        }
+        const { integrationConfigs, uninstalledApp } = props;
         return of({
           uninstalledApp,
           integrationConfigs,
-          extensionParcels,
         });
       }),
     )
     .pipe(
       withLatestFrom(
         state$.pipe(getStateSlice('integrationsByMountPoint')),
-        state$.pipe(getStateSlice('extensionsByMountPoint')),
-        state$.pipe(getStateSlice('extensionsByParent')),
         state$.pipe(getStateSlice('modules')),
         state$.pipe(getStateSlice('manifests')),
       ),
-      map(
-        ([
-          res,
-          integrationsByMountPoint,
-          extensionsByMountPoint,
-          extensionsByParent,
-          modules,
-          manifests,
-        ]) => ({
-          ...res,
-          integrationsByMountPoint,
-          extensionsByMountPoint,
-          extensionsByParent,
-          modules,
-          manifests,
-        }),
-      ),
+      map(([res, integrationsByMountPoint, modules, manifests]) => ({
+        ...res,
+        integrationsByMountPoint,
+        modules,
+        manifests,
+      })),
       map(results => {
-        const {
-          uninstalledApp,
-          integrationConfigs,
-          extensionParcels,
-          integrationsByMountPoint,
-          extensionsByMountPoint,
-          extensionsByParent,
-        } = results;
+        const { uninstalledApp, integrationConfigs, integrationsByMountPoint } = results;
         const intByMountPoint = new Map(
           Array.from(integrationsByMountPoint).map(([name, integrations]) => {
             const _integrations = integrations.filter(i => i.name !== uninstalledApp.name);
@@ -522,37 +437,17 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
         const modules = new Map(
           Array.from(results.modules).filter(([name]) => name !== uninstalledApp.name),
         );
-        const extByMountPoint = new Map(
-          Array.from(extensionsByMountPoint).map(([name, extensions]) => {
-            const exts = extensions.filter(i => i.parent !== uninstalledApp.name);
-            return [name, exts];
-          }),
-        );
-        const extByParent = new Map(
-          Array.from(extensionsByParent).filter(([parent]) => {
-            return parent !== uninstalledApp.name;
-          }),
-        );
 
         const intConfigs = new Map(integrationConfigs);
         intConfigs.delete(uninstalledApp.name);
 
-        const parcels = new Map(
-          Array.from(extensionParcels).map(([extPointName, parcels]) => {
-            const _parcels = parcels.filter(parcel => parcel.parent !== uninstalledApp.name);
-            return [extPointName, _parcels];
-          }),
-        );
         const manifests = results.manifests.filter(manifest => {
           return manifest.name !== uninstalledApp.name;
         });
         return {
           uninstalledApp,
           integrationsByMountPoint: intByMountPoint,
-          extensionsByMountPoint: extByMountPoint,
-          extensionsByParent: extByParent,
           integrationConfigs: intConfigs,
-          extensionParcels: parcels,
           modules,
           manifests,
         };
@@ -616,25 +511,4 @@ export const handleDisableIntegration = (
  */
 export const handleEnableIntegration = (state$: Observable<LoaderState>, _logger: ILogger) => {
   return state$.pipe(getStateSlice('enableIntegrationRequest')).pipe(filter(Boolean));
-};
-
-const unmountParcels = (
-  parcels: { parcel: singleSpa.Parcel<RootComponentProps>; id: string; parent: string }[],
-  logger: ILogger,
-) => {
-  return from(parcels).pipe(
-    concatMap(async parcelData => {
-      try {
-        if (parcelData.parcel.getStatus() === singleSpa.MOUNTED) {
-          await parcelData.parcel.unmount();
-        }
-        return parcelData;
-      } catch (err) {
-        // show a warn but don't throw an error
-        logger.warn(err);
-        return parcelData;
-      }
-    }),
-    toArray(),
-  );
 };

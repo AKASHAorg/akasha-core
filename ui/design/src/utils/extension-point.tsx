@@ -45,7 +45,9 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
     const onClick = clickHandler.current;
     const unmount = onUnmount.current;
     return () => {
-      nodeRef.current.removeEventListener('click', onClick);
+      if (nodeRef.current) {
+        nodeRef.current.removeEventListener('click', onClick);
+      }
       unmount(`${props.name}`);
     };
   }, [props.name]);

@@ -59,7 +59,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   }, [postsReq.data]);
 
   const handleShowEditor = React.useCallback(() => {
-    navigateToModal.current({ name: 'editor' });
+    navigateToModal.current({ name: 'editor-modal' });
   }, []);
 
   const handleEntryFlag = React.useCallback(

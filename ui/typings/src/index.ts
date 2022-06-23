@@ -56,7 +56,11 @@ export interface RootComponentProps {
    */
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
-  activeModal: AppLoaderTypes.ModalNavigationOptions;
+  /*
+   * @deprecated
+   * Use extensionData instead
+   */
+  activeModal?: AppLoaderTypes.ModalNavigationOptions;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
   worldConfig: AppLoaderTypes.ILoaderConfig;
   parseQueryString: (queryString: string) => QueryStringType;

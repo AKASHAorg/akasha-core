@@ -1,18 +1,10 @@
-import { map, mergeMap, Observable, ReplaySubject, of, toArray, withLatestFrom } from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
-
+import { from, mergeMap, of, ReplaySubject } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
-import {
-  genExtConfigs,
-  genExtConfigsByMountPoint,
-  genMountPoints,
-  genWorldConfig,
-  mockSDK,
-} from '@akashaorg/af-testing';
-
-import { pipelineEvents } from '../src/events';
-import { initState, LoaderState } from '../src/state';
-import { mountMatchingExtensionParcels } from '../src/extensions';
+import { genAppConfig, genWorldConfig, mockSDK } from '@akashaorg/af-testing';
+import { extensionMatcher } from '../src/extension-matcher';
+import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import * as singleSpa from 'single-spa';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK();
@@ -27,66 +19,76 @@ jest.mock('single-spa', () => {
   };
 });
 
-describe('[AppLoader]: extensions.ts', () => {
-  let scheduler: TestScheduler;
-  let state$: Observable<LoaderState>;
-
+describe('[AppLoader]: extension-matcher.ts', () => {
+  const sdk = getSDK();
+  const logger = sdk.services.log.create();
+  const uiEvents = new ReplaySubject<UIEventData>();
   const globalChannel = new ReplaySubject();
 
-  const worldConfig = genWorldConfig();
-  beforeEach(() => {
-    scheduler = new TestScheduler((actual, expected) => {
-      expect(actual).toStrictEqual(expected);
-    });
-    state$ = initState(worldConfig, globalChannel);
-  });
+  test('should call load', done => {
+    const spies = [jest.fn(), jest.fn(), jest.fn()];
 
-  // currently failing because there is no dom element to mount to
-  // TODO: use jsdom to create a dom element
-  test('extension parcels are not mounted because there is no dom element to mount to', done => {
-    const extConfigs = genExtConfigs();
-    const marble = 'a|';
-    const values = {
-      a: {
-        mountedExtPoints: genMountPoints(),
-        extensionsByMountPoint: genExtConfigsByMountPoint(extConfigs),
-        layoutConfig: {} as any,
-      },
-    };
+    const event1Name = 'ext-mount-point_bafrydfea124';
+    const event2Name = 'ext-mount-point-1-topbar';
+    const event3Name = 'ext-mount-point';
 
-    scheduler.run(({ cold }) => {
-      const source$ = cold(marble, values).pipe(
-        mergeMap(val => {
-          pipelineEvents.next(val);
-          return of(val);
+    const vals = [
+      { event: EventTypes.ExtensionPointMount, data: { name: event1Name } },
+      { event: EventTypes.ExtensionPointMount, data: { name: event2Name } },
+      { event: EventTypes.ExtensionPointMount, data: { name: event3Name } },
+    ];
+
+    const apps = [
+      genAppConfig({ name: 'app1' }, ['ext-mount-point*', jest.fn()]),
+      genAppConfig({ name: 'app2' }, ['ext-mount-point-1*', jest.fn()]),
+      genAppConfig({ name: 'app3' }, ['ext-mount-point', jest.fn()]),
+    ];
+
+    const mockExtLoaders = spies.map(spy =>
+      jest.fn().mockImplementation(() => ({
+        load: spy,
+        unload: jest.fn(),
+      })),
+    );
+
+    for (const [idx, app] of apps.entries()) {
+      const extProps: Omit<RootExtensionProps, 'extensionData' | 'domElement' | 'uiEvents'> = {
+        layoutConfig: genAppConfig({ extensions: {} }).extensions,
+        logger,
+        singleSpa,
+        navigateToModal: jest.fn(),
+        parseQueryString: jest.fn(),
+        worldConfig: genWorldConfig(),
+      };
+
+      app.extends(extensionMatcher(uiEvents, globalChannel, extProps, app), mockExtLoaders[idx]);
+    }
+    const source$ = from(vals);
+    source$
+      .pipe(
+        mergeMap(eventData => {
+          uiEvents.next(eventData);
+          return of(eventData);
         }),
-        withLatestFrom(state$),
-        map(([, state]) => state),
-        mergeMap((newState: LoaderState) => {
-          return mountMatchingExtensionParcels({
-            worldConfig,
-            state: newState,
-            logger: getSDK().services.log.create(),
-          });
-        }),
-        toArray(),
-        map(vals => ({ parcels: vals })),
-      );
-      source$.subscribe({
-        next(v) {
-          expect(Array.isArray(v.parcels)).toBe(true);
-          expect(v.parcels.length).toBe(0);
-          // v.parcels.forEach(pData => {
-          //   expect(pData).toHaveProperty('mountPoint');
-          //   expect(pData).toHaveProperty('extID');
-          //   expect(pData).toHaveProperty('parent');
-          //   expect(pData).toHaveProperty('parcel');
-          // });
-        },
+      )
+      .subscribe({
         complete() {
+          for (const extLoader of mockExtLoaders) {
+            expect(extLoader).toHaveBeenCalledTimes(1);
+          }
+          for (const [idx, ev] of vals.entries()) {
+            if (ev.data.name === event1Name) {
+              expect(spies[idx]).toHaveBeenCalledTimes(3);
+            }
+            if (ev.data.name === event2Name) {
+              expect(spies[idx]).toHaveBeenCalledTimes(1);
+            }
+            if (ev.data.name === event3Name) {
+              expect(spies[idx]).toHaveBeenCalledTimes(1);
+            }
+          }
           done();
         },
       });
-    });
   });
 });

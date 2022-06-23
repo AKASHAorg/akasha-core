@@ -2,7 +2,7 @@ import * as React from 'react';
 import TopbarComponent from '../topbar-component';
 
 import { RenderResult, renderWithAllProviders, act } from '@akashaorg/af-testing';
-import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 const mockLocationValue = {
   pathname: '/profile',
@@ -23,10 +23,9 @@ describe('<TopbarComponent />', () => {
   let renderResult: RenderResult;
   const BaseComponent = (
     <TopbarComponent
-      logger={{}}
+      logger={console as any}
       domElement={document.body}
-      uiEvents={new BehaviorSubject({})}
-      isMobile={false}
+      uiEvents={new ReplaySubject()}
       layoutConfig={{
         modalSlotId: '',
         pluginSlotId: '',
@@ -35,13 +34,11 @@ describe('<TopbarComponent />', () => {
         widgetSlotId: '',
         sidebarSlotId: '',
       }}
-      mountParcel={() => {
-        /*  */
-      }}
-      singleSpa={{}}
+      singleSpa={{} as any}
       name=""
       navigateToModal={jest.fn()}
-      activeModal={null}
+      worldConfig={{} as any}
+      parseQueryString={jest.fn as any}
     />
   );
   beforeEach(() => {

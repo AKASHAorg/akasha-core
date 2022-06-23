@@ -38,23 +38,23 @@ const EditorModalContainer = (props: RootExtensionProps) => {
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
 
   const isEditing = React.useMemo(
-    () => props.activeModal.hasOwnProperty('entryId') && props.activeModal.action === 'edit',
-    [props.activeModal],
+    () => props.extensionData.hasOwnProperty('entryId') && props.extensionData.action === 'edit',
+    [props.extensionData],
   );
 
   const hasEmbed = React.useMemo(
-    () => props.activeModal.hasOwnProperty('embedEntry'),
-    [props.activeModal],
+    () => props.extensionData.hasOwnProperty('embedEntry'),
+    [props.extensionData],
   );
 
   const embedEntryId = React.useMemo(() => {
     if (
-      props.activeModal.hasOwnProperty('embedEntry') &&
-      typeof props.activeModal.embedEntry === 'string'
+      props.extensionData.hasOwnProperty('embedEntry') &&
+      typeof props.extensionData.embedEntry === 'string'
     ) {
-      return props.activeModal.embedEntry;
+      return props.extensionData.embedEntry;
     }
-  }, [props.activeModal]);
+  }, [props.extensionData]);
 
   const disablePublishing = React.useMemo(
     () => loginQuery.data.waitForAuth || !loginQuery.data.isReady,
@@ -63,7 +63,7 @@ const EditorModalContainer = (props: RootExtensionProps) => {
 
   const embeddedPost = usePost({ postId: embedEntryId, enabler: hasEmbed });
 
-  const editingPost = usePost({ postId: props.activeModal.entryId, enabler: isEditing });
+  const editingPost = usePost({ postId: props.extensionData.entryId, enabler: isEditing });
 
   const editPost = useEditPost();
 
@@ -96,7 +96,7 @@ const EditorModalContainer = (props: RootExtensionProps) => {
           category: AnalyticsCategories.POST,
           action: 'Post Edited',
         });
-        editPost.mutate({ entryID: props.activeModal.entryId, ...data });
+        editPost.mutate({ entryID: props.extensionData.entryId, ...data });
       } else {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
@@ -109,7 +109,7 @@ const EditorModalContainer = (props: RootExtensionProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       isEditing,
-      props.activeModal,
+      props.extensionData,
       props.singleSpa,
       editPost,
       publishPost,
@@ -132,7 +132,7 @@ const EditorModalContainer = (props: RootExtensionProps) => {
 
   if (
     (isEditing && editingPost.isLoading) ||
-    (props.activeModal.embedEntry && embeddedPost.isLoading)
+    (props.extensionData.embedEntry && embeddedPost.isLoading)
   ) {
     return <>{t('Loading Editor')}</>;
   }

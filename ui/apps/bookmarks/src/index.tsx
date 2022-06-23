@@ -8,26 +8,6 @@ import {
 } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 
-const findTopbarQuickAccess = (integrations: IntegrationRegistrationOptions['integrations']) => {
-  if (!integrations) {
-    return null;
-  }
-  const topbarConf = Object.entries(integrations.configs).find(intConf => {
-    const [, config] = intConf;
-    if (config.tags && config.tags.includes('topbar')) {
-      return true;
-    }
-    return false;
-  });
-  if (topbarConf) {
-    const [, config] = topbarConf;
-    if (config.extensions) {
-      return config.extensions.QuickAccess;
-    }
-    return null;
-  }
-  return null;
-};
 /**
  * All apps must export an object like this:
  */
@@ -43,21 +23,13 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     rootRoute,
   },
-  extends: [
-    {
-      mountsIn: options => {
-        if (options.extensionData.name.startsWith('entry-card-actions-right_')) {
-          return options.extensionData.name;
-        }
-        return null;
-      },
-      loadingFn: () => import('./extensions/entry-card-save-button'),
-    },
-    {
-      mountsIn: mountOptions => findTopbarQuickAccess(mountOptions.integrations),
-      loadingFn: () => import('./extensions/topbar-bookmarks-button'),
-    },
-  ],
+  extends: (matchExtensionPoint, loadingHandler) => {
+    matchExtensionPoint({
+      'entry-card-actions-right_*': loadingHandler(
+        () => import('./extensions/entry-card-save-button'),
+      ),
+    });
+  },
   title: 'Bookmarks | Ethereum World',
   menuItems: {
     route: rootRoute,
