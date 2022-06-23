@@ -1,4 +1,6 @@
-import { LogoSourceType, RootComponentProps, ValueOf } from './index';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { ParcelConfigObject } from 'single-spa';
+import { LogoSourceType, RootComponentProps, RootExtensionProps, ValueOf } from './index';
 
 export type ActivityFn = (
   location: Location,
@@ -32,17 +34,25 @@ export interface IntegrationRegistrationOptions {
   extensionData?: UIEventData['data'];
 }
 
-export interface ExtensionPointDefinition {
-  mountsIn: string | ((opts: IntegrationRegistrationOptions) => string | null) | null;
-  loadingFn: () => Promise<ISingleSpaLifecycle>;
-  /*
-   * Name of the parent app.
-   * This is optional.
-   */
-  parent?: string;
-  activeWhen?: ActivityFn;
-  i18nNamespace?: string[];
+export interface ExtensionMatcherFn<G = BehaviorSubject<unknown>> {
+  (
+    uiEvents: ReplaySubject<UIEventData>,
+    globalChannel: G,
+    extProps: Omit<RootExtensionProps, 'uiEvents' | 'extensionData' | 'domElement'>,
+    parentConfig: IAppConfig & { name: string },
+  ): (extConfig: Record<string, ReturnType<ExtensionLoaderFn>>) => void;
 }
+
+/**
+ * Extension loader function
+ * must return a promise with a singleSpaLifecycle object
+ */
+export type ExtensionLoaderFn = (
+  loadingFunction: () => Promise<ParcelConfigObject<RootExtensionProps>>,
+) => {
+  load: (props: RootExtensionProps, parentAppName: string) => void;
+  unload: (event: UIEventData, parentAppName: string) => void;
+};
 
 export interface IAppConfig {
   activeWhen: ActivityFn;
@@ -106,7 +116,7 @@ export interface IAppConfig {
   /**
    * Defines the component that will be mounted into an extension point
    */
-  extends?: ExtensionPointDefinition[];
+  extends?: (matcher: ReturnType<ExtensionMatcherFn>, extLoader: ExtensionLoaderFn) => void;
 
   /**
    * Keywords that defines this widget.
@@ -230,11 +240,6 @@ export interface IMenuItem {
   subRoutes?: IMenuItem[];
 }
 
-export interface IMenuList {
-  nextIndex: number;
-  items: IMenuItem[];
-}
-
 export enum EventTypes {
   Instantiated = 'instantiated',
   InstallIntegration = 'install-integration',
@@ -244,8 +249,7 @@ export enum EventTypes {
   ExtensionPointMountRequest = 'extension-point-mount-request',
   ExtensionPointUnmount = 'extension-point-unmount',
   ExtensionPointUnmountRequest = 'extension-point-unmount-request',
-  ModalMountRequest = 'modal-mount-request',
-  ModalUnmountRequest = 'modal-unmount-request',
+  ModalRequest = 'modal-mount-request',
   ModalMount = 'modal-mount',
   ModalUnmount = 'modal-unmount',
   ShowSidebar = 'show-sidebar',
@@ -274,7 +278,7 @@ export type EventDataTypes = {
   entryType?: ItemTypes;
   menuItems?: IMenuItem;
   navRoutes?: Record<string, string>;
-  pubKey?: string;
+  [key: string]: unknown;
 };
 
 export const enum ItemTypes {

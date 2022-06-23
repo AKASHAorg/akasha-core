@@ -177,7 +177,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       showLoginModal();
       return;
     } else {
-      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+      props.navigateToModal({ name: 'editor-modal', embedEntry: entryId });
     }
   };
 
@@ -197,8 +197,13 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       },
     });
   };
-  const onEditPostButtonUnmount = () => {
-    /* todo */
+  const onEditPostButtonUnmount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointUnmount,
+      data: {
+        name,
+      },
+    });
   };
 
   const entryAuthorName =
