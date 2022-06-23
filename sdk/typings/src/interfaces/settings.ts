@@ -28,7 +28,7 @@ export interface IAppSettings {
    * Persist installed app configuration for the current user
    * @param app - Object
    */
-  install(app: unknown): Promise<string[] | boolean>;
+  install(app: unknown, isLocal?: boolean): Promise<string[] | boolean>;
 
   /**
    * Uninstall app by name

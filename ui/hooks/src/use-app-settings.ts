@@ -42,7 +42,7 @@ export function useGetAllInstalledApps(enabler?: boolean) {
 
 const appInstall = async (app: { name?: string; id?: string }) => {
   const sdk = getSDK();
-  const res = await sdk.services.appSettings.install(app);
+  const res = await sdk.services.appSettings.install(app, true);
   if (!res) {
     throw new Error('App already installed!');
   } else if (res) {

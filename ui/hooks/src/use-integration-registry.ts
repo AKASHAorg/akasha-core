@@ -187,6 +187,33 @@ export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
 const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
   const sdk = getSDK();
   const res = await lastValueFrom(sdk.api.icRegistry.getLatestReleaseInfo(opt));
+  // add messaging app mock to response
+  if (!res.data.getLatestRelease.some(rel => rel.name === '@akashaorg/app-messaging')) {
+    res.data.getLatestRelease.push({
+      id: '0x82d31f280645cb2f74a47115a36f1e1b4370eda1812cf4d38d9107996bb60560',
+      name: '@akashaorg/app-messaging',
+      version: 'v0.1.0',
+      integrationType: 0,
+      sources: [],
+      integrationID: '0x0f7b806cb610e298f4108f77c5454edafdd48a213ac6df2466816442b2814061',
+      author: '0xADE0510E72f60789DD17aAFc28629Ee4D9C0Ba72',
+      enabled: true,
+      links: {
+        publicRepository: 'https://github.com/AKASHAorg/akasha-framework#readme',
+        documentation: '',
+        detailedDescription: '',
+      },
+      manifestData: {
+        mainFile: 'index.js',
+        license: 'AGPL-3.0',
+        keywords: [],
+        description:
+          'The AKASHA team builds this application so you can privately message friends.',
+        displayName: 'Messages',
+      },
+      createdAt: null,
+    });
+  }
   return res.data;
 };
 

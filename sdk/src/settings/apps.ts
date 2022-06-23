@@ -66,7 +66,18 @@ class AppSettings implements IAppSettings {
    * Persist installed app configuration for the current user
    * @param app - Object
    */
-  async install(app: { name?: string; id?: string }) {
+  async install(app: { name?: string; id?: string }, isLocal = false) {
+    if (isLocal) {
+      const collection = await lastValueFrom(
+        this._db.getCollection<any>(availableCollections.Apps),
+      );
+      this._globalChannel.next({
+        data: { name: app.name, id: app.id },
+        event: APP_EVENTS.INFO_READY,
+      });
+
+      return collection.data.save({ name: app.name, id: app.id });
+    }
     const release = await this._icRegistry.getLatestVersionInfo(app);
     const currentInfo = await this.get(release.data.name);
     if (currentInfo?.data?._id) {

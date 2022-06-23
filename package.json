@@ -129,6 +129,7 @@
     "ui/apps/profile",
     "ui/apps/auth-app",
     "ui/apps/settings-app",
+    "ui/apps/messaging",
     "ui/apps/app-center",
     "ui/apps/bookmarks",
     "ui/apps/legal",
