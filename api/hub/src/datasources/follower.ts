@@ -26,11 +26,8 @@ class FollowerAPI extends DataSource {
 
   async followProfile(pubKey: string, following: string) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const query = new Where('follower').eq(pubKey).and('following').eq(following);
-    const [followRecord] = await t.find<Follower>(query);
-
+    const [followRecord] = await db.find<Follower>(this.dbID, this.collection, query);
     if (!followRecord) {
       const record = {
         creationDate: new Date().getTime(),
@@ -39,12 +36,11 @@ class FollowerAPI extends DataSource {
         active: true,
         metaData: [],
       };
-      await t.create([record]);
+      await db.create(this.dbID, this.collection, [record]);
     } else if (!followRecord?.active) {
       followRecord.active = true;
-      await t.save([followRecord]);
+      await db.save(this.dbID, this.collection, [followRecord]);
     }
-    await t.end();
 
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${pubKey}`);
     const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${following}`);
@@ -86,20 +82,16 @@ class FollowerAPI extends DataSource {
 
   async unFollowProfile(pubKey: string, unFollowing: string) {
     const db: Client = await getAppDB();
-    const t = db.writeTransaction(this.dbID, this.collection);
-    await t.start();
     const query = new Where('follower').eq(pubKey).and('following').eq(unFollowing);
-    const [followRecord] = await t.find<Follower>(query);
+    const [followRecord] = await db.find<Follower>(this.dbID, this.collection, query);
 
     if (!followRecord || !followRecord.active) {
       logger.info(`[unFollow] not found ${pubKey} - ${unFollowing}`);
-      await t.end();
       return true;
     }
 
     followRecord.active = false;
-    await t.save([followRecord]);
-    await t.end();
+    await db.save(this.dbID, this.collection, [followRecord]);
 
     const followingKey = this.getCacheKey(`${this.FOLLOWING_KEY}${pubKey}`);
     const followersKey = this.getCacheKey(`${this.FOLLOWERS_KEY}${unFollowing}`);
