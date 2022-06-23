@@ -281,7 +281,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       showLoginModal();
       return;
     } else {
-      props.navigateToModal({ name: 'editor', embedEntry: entryId });
+      props.navigateToModal({ name: 'editor-modal', embedEntry: entryId });
     }
   };
 

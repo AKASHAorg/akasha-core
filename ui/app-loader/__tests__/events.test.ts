@@ -91,7 +91,7 @@ describe('[AppLoader]: events', () => {
         b: { spaEvents: { eventName: eventValues.b.event, detail: eventValues.b.detail } },
         c: { spaEvents: { eventName: eventValues.c.event, detail: eventValues.c.detail } },
         d: {},
-        e: { modalRequest: { name: null } },
+        e: { name: null },
       });
     });
   });

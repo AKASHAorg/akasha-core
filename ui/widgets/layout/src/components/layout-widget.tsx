@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, useMatch } from 'react-router-dom';
-
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { EventTypes, ItemTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { GlobalStyle } from './global-style';
 import ScrollRestorer from './scroll-restorer';
@@ -90,14 +89,17 @@ const Layout: React.FC<RootComponentProps> = props => {
    */
   const handleModalNodeMount = React.useCallback(() => {
     uiEvents.current.next({
-      event: EventTypes.ModalMount,
+      event: EventTypes.ExtensionPointMount,
       data: activeModal,
     });
   }, [activeModal]);
 
   const handleModalNodeUnmount = (name: string) => {
+    if (!name) {
+      return;
+    }
     uiEvents.current.next({
-      event: EventTypes.ModalUnmount,
+      event: EventTypes.ExtensionPointUnmount,
       data: { name },
     });
   };
@@ -108,24 +110,39 @@ const Layout: React.FC<RootComponentProps> = props => {
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
+  const handleModal = React.useCallback(
+    (data: UIEventData['data']) => {
+      setActiveModal(active => {
+        if ((!active || !active.name) && data.name) {
+          return data;
+        }
+        if (!data.name) {
+          return null;
+        }
+        if (activeModal && activeModal.name !== data.name) {
+          return data;
+        }
+        return active;
+      });
+    },
+    [activeModal],
+  );
 
   React.useEffect(() => {
     const eventsSub = uiEvents.current.subscribe({
       next: (eventInfo: UIEventData) => {
-        if (eventInfo.event === EventTypes.ModalMountRequest && eventInfo.data) {
-          if (typeof eventInfo.data.entryType === 'string') {
-            eventInfo.data.entryType = parseInt(eventInfo.data.entryType, 10) || ItemTypes.ENTRY;
-          }
-          setActiveModal(eventInfo.data);
-        }
-        if (eventInfo.event === EventTypes.ModalUnmountRequest && eventInfo.data?.name) {
-          setActiveModal(null);
-        }
-        if (eventInfo.event === EventTypes.ShowSidebar) {
-          handleSidebarShow();
-        }
-        if (eventInfo.event === EventTypes.HideSidebar) {
-          handleSidebarHide();
+        switch (eventInfo.event) {
+          case EventTypes.ModalRequest:
+            handleModal(eventInfo.data);
+            break;
+          case EventTypes.ShowSidebar:
+            handleSidebarShow();
+            break;
+          case EventTypes.HideSidebar:
+            handleSidebarHide();
+            break;
+          default:
+            break;
         }
       },
     });

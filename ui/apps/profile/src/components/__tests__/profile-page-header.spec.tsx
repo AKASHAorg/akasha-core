@@ -10,6 +10,7 @@ import {
   genLoggedInState,
   genWorldConfig,
 } from '@akashaorg/af-testing';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 const mockLocationValue = {
   pathname: '/profile',
@@ -33,14 +34,14 @@ describe('<ProfilePageHeader />', () => {
     <Router>
       <ProfilePageHeader
         profileId={mockUser.pubKey}
-        profileData={mockUser}
+        profileData={mockUser as IProfileData}
         modalSlotId="modal-slot"
         loginState={genLoggedInState()}
-        activeModal={null}
         worldConfig={genWorldConfig()}
         parseQueryString={jest.fn()}
         navigateToModal={jest.fn()}
         uiEvents={null}
+        navigateTo={jest.fn()}
         layoutConfig={null}
         logger={{
           info: () => {

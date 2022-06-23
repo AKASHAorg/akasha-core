@@ -17,11 +17,11 @@ import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 const { ConfirmationModal, ModalContainer, ErrorLoader } = DS;
 
 const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
-  const { activeModal, logger } = props;
+  const { extensionData, logger } = props;
   const { t } = useTranslation('app-akasha-integration');
 
-  const postDeleteQuery = useDeletePost(activeModal.entryId);
-  const commentDeleteQuery = useDeleteComment(activeModal.entryId);
+  const postDeleteQuery = useDeletePost(extensionData.entryId);
+  const commentDeleteQuery = useDeleteComment(extensionData.entryId);
   const [analyticsActions] = useAnalytics();
 
   const handleModalClose = React.useCallback(() => {
@@ -29,19 +29,19 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [props.singleSpa]);
 
   const handleDeletePost = React.useCallback(() => {
-    if (activeModal && typeof activeModal.entryType === 'number') {
-      if (activeModal.entryType === ItemTypes.COMMENT) {
+    if (extensionData && typeof extensionData.entryType === 'number') {
+      if (extensionData.entryType === ItemTypes.COMMENT) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
-        commentDeleteQuery.mutate(activeModal.entryId);
-      } else if (activeModal.entryType === ItemTypes.ENTRY) {
+        commentDeleteQuery.mutate(extensionData.entryId);
+      } else if (extensionData.entryType === ItemTypes.ENTRY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
         });
-        postDeleteQuery.mutate(activeModal.entryId);
+        postDeleteQuery.mutate(extensionData.entryId);
       } else {
         logger.error('entryType is undefined!');
       }
@@ -50,15 +50,15 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
     }
     handleModalClose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeModal, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
+  }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = React.useMemo(() => {
-    if (activeModal.entryType === ItemTypes.ENTRY) {
+    if (extensionData.entryType === ItemTypes.ENTRY) {
       return t('post');
     }
     return t('reply');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeModal.entryType]);
+  }, [extensionData.entryType]);
 
   return (
     <ConfirmationModal

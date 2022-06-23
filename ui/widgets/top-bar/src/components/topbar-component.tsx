@@ -122,7 +122,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   };
 
   const handleFeedbackModalShow = () => {
-    props.navigateToModal({ name: 'feedback' });
+    props.navigateToModal({ name: 'feedback-modal' });
   };
 
   const handleBrandClick = () => {
