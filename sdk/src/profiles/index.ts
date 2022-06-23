@@ -421,7 +421,7 @@ class AWF_Profile implements AWF_IProfile {
       ),
     );
 
-    return { CID: cid, size: resized.size };
+    return { CID: cid, size: resized.size, blob: resized.image };
   }
 
   /**
