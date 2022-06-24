@@ -138,6 +138,10 @@ import { ModalContainer } from './components/SignInModal/fullscreen-modal-contai
 import { ModalRenderer } from './components/SignInModal/modal-renderer';
 import MessageAppMiniCard from './components/MessageMiniCard';
 import MessageAppBubbleCard from './components/MessageAppBubbleCard';
+import MessageAppConvoHeader from './components/MessageAppConvoHeader';
+import MessageAppConvoBody from './components/MessageAppConvoBody';
+import MessageAppConvoArea from './components/MessageAppConvoArea';
+
 import MobileListModal from './components/MobileListModal';
 import ModerateModal from './components/ModerateModal';
 import ReportModal from './components/ReportModal';
@@ -304,6 +308,9 @@ const exported = {
   EthProviderModal,
   MessageAppMiniCard,
   MessageAppBubbleCard,
+  MessageAppConvoHeader,
+  MessageAppConvoBody,
+  MessageAppConvoArea,
   MobileListModal,
   ModalContainer,
   ModalRenderer,
