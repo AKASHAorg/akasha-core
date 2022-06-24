@@ -316,6 +316,8 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
         imgClone.src.url = `${MEDIA_URL_PREFIX}${hash}`;
         imgClone.src.fallbackUrl = `${MEDIA_URL_PREFIX}${hash}`;
       }
+      // strip the original source before publishing
+      delete imgClone.originalSrc;
       return imgClone;
     });
     postObj.data.push({

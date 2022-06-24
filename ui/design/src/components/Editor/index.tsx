@@ -253,15 +253,12 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    */
   const handlePublish = () => {
     const slateContent = editorState;
-    const cleanImages = images.map(image => {
-      delete image.originalSrc;
-      return image;
-    });
+
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData,
       linkPreview: linkPreviewState,
-      images: cleanImages,
+      images: images,
       tags: [],
       mentions: [],
       version: 1,
