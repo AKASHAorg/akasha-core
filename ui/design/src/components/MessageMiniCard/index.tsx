@@ -13,8 +13,8 @@ import CardHeaderMenuDropdown from '../EntryCard/card-header-menu';
 
 export interface IMessageAppMiniCardProps {
   locale: ILocale;
-  sender: string;
-  senderUsername: string;
+  sender: IProfileData['name'];
+  senderUsername: IProfileData['userName'];
   content: string;
   isRead: boolean;
   isPinned: boolean;
@@ -22,7 +22,7 @@ export interface IMessageAppMiniCardProps {
   unpinConvoLabel: string;
   latestChatTimestamp: string;
   senderAvatar: IProfileData['avatar'];
-  senderEthAddress: string;
+  senderEthAddress: IProfileData['ethAddress'];
   onClickAvatar?: () => void;
   onClickCard?: () => void;
   onConvoPin: () => void;

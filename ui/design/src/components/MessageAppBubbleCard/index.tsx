@@ -12,12 +12,12 @@ type chatStatus = 'sent' | 'delivered' | 'read';
 
 export interface IMessageAppBubbleCardProps {
   locale: ILocale;
-  sender: string;
+  sender?: string;
   youLabel: string;
-  content: React.ReactElement;
+  content?: React.ReactElement;
   status?: chatStatus;
-  isLoggedUser: boolean;
-  chatTimestamp: string;
+  isLoggedUser?: boolean;
+  chatTimestamp?: string;
 }
 
 const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
@@ -38,7 +38,7 @@ const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
   return (
     <Box>
       <Box direction="row" justify="between" margin={{ bottom: 'xsmall' }}>
-        <Text color="secondaryText">{isLoggedUser ? youLabel : sender}</Text>
+        <Text>{isLoggedUser ? youLabel : sender}</Text>
         <Text color="secondaryText">{formatRelativeTime(chatTimestamp, locale)}</Text>
       </Box>
       <MainAreaCardBox
@@ -52,11 +52,13 @@ const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
                 {content}
               </Box>
             </Box>
-            <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
-              <IconDiv onClick={handleIconClick} isActive={isActive} isMobile={isMobileOnly}>
-                <Icon size="xs" plain={true} accentColor={isActive} type="moreDark" />
-              </IconDiv>
-            </Box>
+            {isLoggedUser && (
+              <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
+                <IconDiv onClick={handleIconClick} isActive={isActive} isMobile={isMobileOnly}>
+                  <Icon size="xs" plain={true} accentColor={isActive} type="moreDark" />
+                </IconDiv>
+              </Box>
+            )}
           </Box>
           <Box direction="row" height="fit-content" flex={{ shrink: 0 }} justify="end">
             {chatTimestamp && (
@@ -65,7 +67,7 @@ const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
                 margin={{ ...(status && { right: 'xsmall' }) }}
               >{`${time[0]}:${time[1]}`}</Text>
             )}
-            {status && (
+            {isLoggedUser && status && (
               <Icon size="sm" accentColor={status === 'read'} type={chatStatusIcon[status]} />
             )}
           </Box>

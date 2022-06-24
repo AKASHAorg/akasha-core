@@ -907,6 +907,137 @@ const bookmarkedLabel = 'Saved';
 const repliesLabel = 'Replies';
 const repostsLabel = 'Reposts';
 
+export interface IChat {
+  name: string;
+  username: string;
+  ethAddress: string;
+  status?: 'sent' | 'read' | 'delivered';
+  content: Descendant[];
+  timestamp: string;
+}
+
+const dummyChatArr: IChat[] = [
+  {
+    name: 'Jerry Mil',
+    username: 'jerrbear',
+    ethAddress: '0x003410490050000320006570034567114572000',
+    status: 'read',
+    content: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: 'Hello ',
+          },
+          {
+            name: 'Estelle Collier',
+            userName: '@estellecollier',
+            pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba',
+            avatar: '',
+            ethAddress: '0x003410490050000320006570034567114572021',
+            type: 'mention',
+            children: [{ text: '' }],
+          },
+          {
+            text: ' how are you? I really like the article you shared about NFTs, do you have any experience in NFTs?',
+          },
+        ],
+      },
+    ] as Descendant[],
+    timestamp: '2022-06-22T10:07:15.000Z',
+  },
+  {
+    name: 'Estelle Collier',
+    username: 'estellecollier',
+    ethAddress: '0x003410490050000320006570034567114572021',
+    status: 'read',
+    content: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: 'You mean this one: ',
+          },
+          {
+            value: 'https://www.bankless.community/get-in-on-nfts-decentralized-arts-8',
+            type: 'tag',
+            children: [{ text: '' }],
+          },
+        ],
+      },
+    ] as Descendant[],
+    timestamp: '2022-06-22T10:08:03.000Z',
+  },
+  {
+    name: 'Jerry Mil',
+    username: 'jerrbear',
+    ethAddress: '0x003410490050000320006570034567114572000',
+    status: 'read',
+    content: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: 'Yeap, that one. I will check it out',
+          },
+        ],
+      },
+    ],
+    timestamp: '2022-06-22T10:08:19.000Z',
+  },
+  {
+    name: 'Jerry Mil',
+    username: 'jerrbear',
+    ethAddress: '0x003410490050000320006570034567114572000',
+    status: 'read',
+    content: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: 'Thanks a lot 🙌',
+          },
+        ],
+      },
+    ],
+    timestamp: '2022-06-22T10:08:26.000Z',
+  },
+  {
+    name: 'Estelle Collier',
+    username: 'estellecollier',
+    ethAddress: '0x003410490050000320006570034567114572021',
+    status: 'delivered',
+    content: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: 'Awesome. No worries',
+          },
+        ],
+      },
+    ],
+    timestamp: '2022-06-22T10:09:26.000Z',
+  },
+  {
+    name: 'Jerry Mil',
+    username: 'jerrbear',
+    ethAddress: '0x003410490050000320006570034567114572000',
+    status: 'sent',
+    content: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text: '🍻',
+          },
+        ],
+      },
+    ],
+    timestamp: '2022-06-22T10:10:06.000Z',
+  },
+];
+
 export {
   userData,
   installedAppsData,
@@ -955,4 +1086,5 @@ export {
   ICWorldAppsData,
   ICInstalledAppsData,
   ICDetailAppsData,
+  dummyChatArr,
 };
