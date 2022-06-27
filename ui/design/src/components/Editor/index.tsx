@@ -253,6 +253,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    */
   const handlePublish = () => {
     const slateContent = editorState;
+
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData,
