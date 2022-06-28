@@ -3,7 +3,7 @@ import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 
 import Icon from '../Icon';
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import { BasicCardBox } from '../EntryCard/basic-card-box';
 import { IconDiv } from '../TopBar/styled-topbar';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
@@ -41,7 +41,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
         <Text>{isLoggedUser ? youLabel : sender}</Text>
         <Text color="secondaryText">{formatRelativeTime(chatTimestamp, locale)}</Text>
       </Box>
-      <MainAreaCardBox
+      <BasicCardBox
         noBorderRadius
         style={{ minHeight: 'min-content' }} // allows cards to adjust in a y-scrollable container
       >
@@ -72,7 +72,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
             )}
           </Box>
         </Box>
-      </MainAreaCardBox>
+      </BasicCardBox>
     </Box>
   );
 };
