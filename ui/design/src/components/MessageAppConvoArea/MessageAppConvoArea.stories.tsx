@@ -57,6 +57,7 @@ BaseMessageAppConvoArea.args = {
       background="cardBackground"
     >
       <EditorBox
+        showAvatar={false}
         ethAddress={ethAddress}
         placeholderLabel="Type a message"
         emojiPlaceholderLabel="Search"
