@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import MessageAppConvoBody from '../';
+import ChatList from '..';
 import BubbleCard from '../../BubbleCard';
 
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<MessageAppConvoBody /> Component', () => {
+describe('<ChatList /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const ethAddress = '0x003410490050000320006570034567114572000';
@@ -16,7 +16,7 @@ describe('<MessageAppConvoBody /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <MessageAppConvoBody
+          <ChatList
             emptyChatLabel={emptyChatLabel}
             loggedUserEthAddress={ethAddress}
             itemCard={<BubbleCard locale="en" youLabel="You" />}

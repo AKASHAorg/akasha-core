@@ -3,14 +3,14 @@ import { Box, Text } from 'grommet';
 
 import { IChat } from '../../utils/dummy-data';
 
-export interface IMessageAppConvoBodyProps {
+export interface IChatListProps {
   emptyChatLabel: string;
   loggedUserEthAddress: string;
   itemCard: React.ReactElement;
   chatArr: IChat[]; // @TODO: update with correct typing from sdk
 }
 
-const MessageAppConvoBody: React.FC<IMessageAppConvoBodyProps> = props => {
+const ChatList: React.FC<IChatListProps> = props => {
   const { emptyChatLabel, loggedUserEthAddress, itemCard, chatArr } = props;
 
   return (
@@ -45,4 +45,4 @@ const MessageAppConvoBody: React.FC<IMessageAppConvoBodyProps> = props => {
   );
 };
 
-export default MessageAppConvoBody;
+export default ChatList;

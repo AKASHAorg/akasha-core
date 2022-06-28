@@ -139,8 +139,8 @@ import { ModalRenderer } from './components/SignInModal/modal-renderer';
 import MessageAppMiniCard from './components/MessageMiniCard';
 import BubbleCard from './components/BubbleCard';
 import MessageAppConvoHeader from './components/MessageAppConvoHeader';
-import MessageAppConvoBody from './components/MessageAppConvoBody';
-import MessageAppConvoArea from './components/MessageAppConvoArea';
+import ChatList from './components/ChatList';
+import ChatArea from './components/ChatArea';
 
 import MobileListModal from './components/MobileListModal';
 import ModerateModal from './components/ModerateModal';
@@ -309,8 +309,8 @@ const exported = {
   MessageAppMiniCard,
   BubbleCard,
   MessageAppConvoHeader,
-  MessageAppConvoBody,
-  MessageAppConvoArea,
+  ChatList,
+  ChatArea,
   MobileListModal,
   ModalContainer,
   ModalRenderer,

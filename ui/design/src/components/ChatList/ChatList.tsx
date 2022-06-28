@@ -1,15 +1,15 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import MessageAppConvoBody, { IMessageAppConvoBodyProps } from '.';
+import ChatList, { IChatListProps } from '.';
 import BubbleCard from '../BubbleCard';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import { dummyChatArr } from '../../utils/dummy-data';
 
 export default {
-  title: 'Cards/MessageAppConvoBody',
-  component: MessageAppConvoBody,
+  title: 'Cards/ChatList',
+  component: ChatList,
   argType: {
     emptyChatLabel: { control: 'text' },
     loggedUserEthAddress: { control: 'text' },
@@ -19,19 +19,19 @@ export default {
   },
 };
 
-const Template = (args: IMessageAppConvoBodyProps) => (
+const Template = (args: IChatListProps) => (
   <Grommet theme={lightTheme}>
     <Box width="42.5%" pad="none" align="center">
-      <MessageAppConvoBody {...args} />
+      <ChatList {...args} />
     </Box>
   </Grommet>
 );
 
 const ethAddress = '0x003410490050000320006570034567114572000';
 
-export const BaseMessageAppConvoBody = Template.bind({});
+export const BaseChatList = Template.bind({});
 
-BaseMessageAppConvoBody.args = {
+BaseChatList.args = {
   emptyChatLabel: 'Start by saying hello! 👋🏼',
   loggedUserEthAddress: ethAddress,
   itemCard: <BubbleCard locale="en" youLabel="You" />,

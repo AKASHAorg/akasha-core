@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Box } from 'grommet';
 
-export interface IMessageAppConvoAreaProps {
+export interface IChatAreaProps {
   headerElement: React.ReactElement;
   bodyElement: React.ReactElement;
   editorElement: React.ReactElement;
 }
 
-const MessageAppConvoArea: React.FC<IMessageAppConvoAreaProps> = props => {
+const ChatArea: React.FC<IChatAreaProps> = props => {
   const { headerElement, bodyElement, editorElement } = props;
 
   return (
@@ -19,4 +19,4 @@ const MessageAppConvoArea: React.FC<IMessageAppConvoAreaProps> = props => {
   );
 };
 
-export default MessageAppConvoArea;
+export default ChatArea;

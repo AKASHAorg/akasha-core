@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import MessageAppConvoArea, { IMessageAppConvoAreaProps } from '.';
+import ChatArea, { IChatAreaProps } from '.';
 
 import EditorBox from '../Editor';
 import MessageAppConvoHeader from '../MessageAppConvoHeader';
-import MessageAppConvoBody from '../MessageAppConvoBody';
+import ChatList from '../ChatList';
 import BubbleCard from '../BubbleCard';
 import { editorDefaultValue } from '../Editor/initialValue';
 
@@ -13,23 +13,23 @@ import lightTheme from '../../styles/themes/light/light-theme';
 import { dummyChatArr } from '../../utils/dummy-data';
 
 export default {
-  title: 'Cards/MessageAppConvoArea',
-  component: MessageAppConvoArea,
+  title: 'Cards/ChatArea',
+  component: ChatArea,
   argType: {},
 };
 
-const Template = (args: IMessageAppConvoAreaProps) => (
+const Template = (args: IChatAreaProps) => (
   <Grommet theme={lightTheme}>
     <Box width="42.5%" pad="none" align="center">
-      <MessageAppConvoArea {...args} />
+      <ChatArea {...args} />
     </Box>
   </Grommet>
 );
 const ethAddress = '0x003410490050000320006570034567114572000';
 
-export const BaseMessageAppConvoArea = Template.bind({});
+export const BaseChatArea = Template.bind({});
 
-BaseMessageAppConvoArea.args = {
+BaseChatArea.args = {
   headerElement: (
     <MessageAppConvoHeader
       chatOwner="Estelle Collier"
@@ -40,14 +40,11 @@ BaseMessageAppConvoArea.args = {
     />
   ),
   bodyElement: (
-    <MessageAppConvoBody
+    <ChatList
       emptyChatLabel="Start by saying hello! 👋🏼"
       loggedUserEthAddress={ethAddress}
       itemCard={<BubbleCard locale="en" youLabel="You" />}
       chatArr={dummyChatArr}
-      onMentionClick={() => null}
-      onTagClick={() => null}
-      onLinkClick={() => null}
     />
   ),
   editorElement: (
