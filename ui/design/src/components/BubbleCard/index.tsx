@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Descendant } from 'slate';
 import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 
@@ -7,6 +8,7 @@ import { BasicCardBox } from '../EntryCard/basic-card-box';
 import { IconDiv } from '../TopBar/styled-topbar';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
+import ReadOnlyEditor from '../ReadOnlyEditor';
 
 type chatStatus = 'sent' | 'delivered' | 'read';
 
@@ -14,14 +16,28 @@ export interface IBubbleCardProps {
   locale: ILocale;
   sender?: string;
   youLabel: string;
-  content?: React.ReactElement;
+  content?: Descendant[];
   status?: chatStatus;
   isLoggedUser?: boolean;
   chatTimestamp?: string;
+  onMentionClick?: () => void;
+  onTagClick?: () => void;
+  onLinkClick?: () => void;
 }
 
 const BubbleCard: React.FC<IBubbleCardProps> = props => {
-  const { locale, sender, youLabel, content, status, isLoggedUser, chatTimestamp } = props;
+  const {
+    locale,
+    sender,
+    youLabel,
+    content,
+    status,
+    isLoggedUser,
+    chatTimestamp,
+    onMentionClick,
+    onTagClick,
+    onLinkClick,
+  } = props;
 
   const chatStatusIcon = {
     sent: 'checkSimple',
@@ -32,6 +48,22 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
   const [isActive, setIsActive] = React.useState(false);
 
   const handleIconClick = () => setIsActive(!isActive);
+
+  const handleMentionClick = () => {
+    if (onMentionClick) {
+      onMentionClick();
+    }
+  };
+  const handleTagClick = () => {
+    if (onTagClick) {
+      onTagClick();
+    }
+  };
+  const handleLinkClick = () => {
+    if (onLinkClick) {
+      onLinkClick();
+    }
+  };
 
   const time = chatTimestamp?.split('T')[1].split(':');
 
@@ -49,7 +81,12 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
           <Box direction="row" justify="between">
             <Box direction="row" align="start">
               <Box align="start" margin={{ left: 'small' }}>
-                {content}
+                <ReadOnlyEditor
+                  content={content}
+                  handleMentionClick={handleMentionClick}
+                  handleTagClick={handleTagClick}
+                  handleLinkClick={handleLinkClick}
+                />
               </Box>
             </Box>
             {isLoggedUser && (

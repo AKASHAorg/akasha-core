@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 
-import ReadOnlyEditor from '../ReadOnlyEditor';
-
 import { IChat } from '../../utils/dummy-data';
 
 export interface IMessageAppConvoBodyProps {
@@ -10,37 +8,10 @@ export interface IMessageAppConvoBodyProps {
   loggedUserEthAddress: string;
   itemCard: React.ReactElement;
   chatArr: IChat[]; // @TODO: update with correct typing from sdk
-  onMentionClick: () => void;
-  onTagClick: () => void;
-  onLinkClick: () => void;
 }
 
 const MessageAppConvoBody: React.FC<IMessageAppConvoBodyProps> = props => {
-  const {
-    emptyChatLabel,
-    loggedUserEthAddress,
-    itemCard,
-    chatArr,
-    onMentionClick,
-    onTagClick,
-    onLinkClick,
-  } = props;
-
-  const handleMentionClick = () => {
-    if (onMentionClick) {
-      onMentionClick();
-    }
-  };
-  const handleTagClick = () => {
-    if (onTagClick) {
-      onTagClick();
-    }
-  };
-  const handleLinkClick = () => {
-    if (onLinkClick) {
-      onLinkClick();
-    }
-  };
+  const { emptyChatLabel, loggedUserEthAddress, itemCard, chatArr } = props;
 
   return (
     <Box
@@ -66,14 +37,7 @@ const MessageAppConvoBody: React.FC<IMessageAppConvoBodyProps> = props => {
               status: chat.status,
               isLoggedUser: chat.ethAddress === loggedUserEthAddress,
               chatTimeStamp: chat.timestamp,
-              content: (
-                <ReadOnlyEditor
-                  content={chat.content}
-                  handleMentionClick={handleMentionClick}
-                  handleTagClick={handleTagClick}
-                  handleLinkClick={handleLinkClick}
-                />
-              ),
+              content: chat.content,
             })}
           </Box>
         ))}

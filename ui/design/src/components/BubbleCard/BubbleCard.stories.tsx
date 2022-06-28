@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Grommet } from 'grommet';
 
 import BubbleCard, { IBubbleCardProps } from '.';
-import ReadOnlyEditor from '../ReadOnlyEditor';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import { entryData } from '../../utils/dummy-data';
@@ -33,14 +32,7 @@ BaseBubbleCard.args = {
   locale: 'en',
   sender: 'Jerry Mil',
   youLabel: 'You',
-  content: (
-    <ReadOnlyEditor
-      content={entryData.slateContent}
-      handleMentionClick={() => null}
-      handleTagClick={() => null}
-      handleLinkClick={() => null}
-    />
-  ),
+  content: entryData.slateContent,
   isLoggedUser: true,
   chatTimestamp: '2022-06-16T10:07:15.000Z',
 };

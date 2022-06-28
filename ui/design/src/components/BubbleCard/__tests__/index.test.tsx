@@ -2,17 +2,12 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
 import BubbleCard from '..';
-import ReadOnlyEditor from '../../ReadOnlyEditor';
 
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import { entryData } from '../../../utils/dummy-data';
 
 describe('<BubbleCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
-
-  const handleMentionClick = jest.fn();
-  const handleTagClick = jest.fn();
-  const handleLinkClick = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -22,14 +17,7 @@ describe('<BubbleCard /> Component', () => {
             locale="en"
             sender="Jerry Mil"
             youLabel="You"
-            content={
-              <ReadOnlyEditor
-                content={entryData.slateContent}
-                handleMentionClick={handleMentionClick}
-                handleTagClick={handleTagClick}
-                handleLinkClick={handleLinkClick}
-              />
-            }
+            content={entryData.slateContent}
             isLoggedUser={false}
             status="sent"
             chatTimestamp="2022-06-16T10:07:15.000Z"

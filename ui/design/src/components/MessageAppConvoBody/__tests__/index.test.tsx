@@ -12,10 +12,6 @@ describe('<MessageAppConvoBody /> Component', () => {
   const ethAddress = '0x003410490050000320006570034567114572000';
   const emptyChatLabel = 'Start by saying hello! 👋🏼';
 
-  const handleMentionClick = jest.fn();
-  const handleTagClick = jest.fn();
-  const handleLinkClick = jest.fn();
-
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
@@ -25,9 +21,6 @@ describe('<MessageAppConvoBody /> Component', () => {
             loggedUserEthAddress={ethAddress}
             itemCard={<BubbleCard locale="en" youLabel="You" />}
             chatArr={[]}
-            onMentionClick={handleMentionClick}
-            onTagClick={handleTagClick}
-            onLinkClick={handleLinkClick}
           />,
         ),
         {},
