@@ -122,12 +122,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   <NavButton
                     path={routes[MY_WIDGETS]}
                     label={t('My Widgets')}
-                  icon={'integrationWidgetSmall'}
-                  onClick={() => {
-                    if (isLoggedIn) {
-                      navigateTo?.({
-                        appName: '@akashaorg/app-integration-center',
-                        getNavigationUrl: routes => routes[MY_WIDGETS],
+                    icon={'integrationWidgetSmall'}
+                    onClick={() => {
+                      if (isLoggedIn) {
+                        navigateTo?.({
+                          appName: '@akashaorg/app-integration-center',
+                          getNavigationUrl: routes => routes[MY_WIDGETS],
                         });
                       }
                     }}

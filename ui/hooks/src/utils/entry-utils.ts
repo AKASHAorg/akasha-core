@@ -301,7 +301,8 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
   }
   if (data.metadata.images) {
     // save only the ipfs hash prepended with CID: when publishing
-    const cleanedImages = data.metadata.images.map(img => {
+    const clonedImages = JSON.parse(JSON.stringify(data.metadata.images));
+    const cleanedImages = clonedImages.map(img => {
       const imgClone = Object.assign({}, img);
       let hash;
       if (img.src.url.startsWith(ipfsGateway)) {
@@ -315,6 +316,8 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
         imgClone.src.url = `${MEDIA_URL_PREFIX}${hash}`;
         imgClone.src.fallbackUrl = `${MEDIA_URL_PREFIX}${hash}`;
       }
+      // strip the original source before publishing
+      delete imgClone.originalSrc;
       return imgClone;
     });
     postObj.data.push({

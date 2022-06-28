@@ -89,6 +89,7 @@ export const uploadMediaToTextile = async (data: File, isUrl = false) => {
     const ipfsLinks = getMediaUrl(res?.CID);
     return {
       data: {
+        originalSrc: URL.createObjectURL(res?.blob),
         src: { url: ipfsLinks?.originLink, fallbackUrl: ipfsLinks?.fallbackLink },
         size: res?.size,
       },
