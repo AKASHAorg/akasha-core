@@ -1,15 +1,15 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import MessageAppBubbleCard, { IMessageAppBubbleCardProps } from '.';
+import BubbleCard, { IBubbleCardProps } from '.';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import { entryData } from '../../utils/dummy-data';
 
 export default {
-  title: 'Cards/MessageAppBubbleCard',
-  component: MessageAppBubbleCard,
+  title: 'Cards/BubbleCard',
+  component: BubbleCard,
   argType: {
     sender: { control: 'text' },
     youLabel: { control: 'text' },
@@ -19,17 +19,17 @@ export default {
   },
 };
 
-const Template = (args: IMessageAppBubbleCardProps) => (
+const Template = (args: IBubbleCardProps) => (
   <Grommet theme={lightTheme}>
     <Box width="42.5%" pad="none" align="center">
-      <MessageAppBubbleCard {...args} />
+      <BubbleCard {...args} />
     </Box>
   </Grommet>
 );
 
-export const BaseMessageAppBubbleCard = Template.bind({});
+export const BaseBubbleCard = Template.bind({});
 
-BaseMessageAppBubbleCard.args = {
+BaseBubbleCard.args = {
   locale: 'en',
   sender: 'Jerry Mil',
   youLabel: 'You',

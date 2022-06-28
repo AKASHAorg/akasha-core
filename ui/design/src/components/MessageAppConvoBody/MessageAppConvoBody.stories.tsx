@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Grommet } from 'grommet';
 
 import MessageAppConvoBody, { IMessageAppConvoBodyProps } from '.';
-import MessageAppBubbleCard from '../MessageAppBubbleCard';
+import BubbleCard from '../BubbleCard';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 import { dummyChatArr } from '../../utils/dummy-data';
@@ -34,6 +34,6 @@ export const BaseMessageAppConvoBody = Template.bind({});
 BaseMessageAppConvoBody.args = {
   emptyChatLabel: 'Start by saying hello! 👋🏼',
   loggedUserEthAddress: ethAddress,
-  itemCard: <MessageAppBubbleCard locale="en" youLabel="You" />,
+  itemCard: <BubbleCard locale="en" youLabel="You" />,
   chatArr: dummyChatArr,
 };

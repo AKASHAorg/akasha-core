@@ -2,7 +2,7 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
 import MessageAppConvoBody from '../';
-import MessageAppBubbleCard from '../../MessageAppBubbleCard';
+import BubbleCard from '../../BubbleCard';
 
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
@@ -23,7 +23,7 @@ describe('<MessageAppConvoBody /> Component', () => {
           <MessageAppConvoBody
             emptyChatLabel={emptyChatLabel}
             loggedUserEthAddress={ethAddress}
-            itemCard={<MessageAppBubbleCard locale="en" youLabel="You" />}
+            itemCard={<BubbleCard locale="en" youLabel="You" />}
             chatArr={[]}
             onMentionClick={handleMentionClick}
             onTagClick={handleTagClick}

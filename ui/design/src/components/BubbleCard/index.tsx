@@ -10,7 +10,7 @@ import { formatRelativeTime, ILocale } from '../../utils/time';
 
 type chatStatus = 'sent' | 'delivered' | 'read';
 
-export interface IMessageAppBubbleCardProps {
+export interface IBubbleCardProps {
   locale: ILocale;
   sender?: string;
   youLabel: string;
@@ -20,7 +20,7 @@ export interface IMessageAppBubbleCardProps {
   chatTimestamp?: string;
 }
 
-const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
+const BubbleCard: React.FC<IBubbleCardProps> = props => {
   const { locale, sender, youLabel, content, status, isLoggedUser, chatTimestamp } = props;
 
   const chatStatusIcon = {
@@ -77,4 +77,4 @@ const MessageAppBubbleCard: React.FC<IMessageAppBubbleCardProps> = props => {
   );
 };
 
-export default MessageAppBubbleCard;
+export default BubbleCard;

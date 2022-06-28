@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import MessageAppBubbleCard from '../';
+import BubbleCard from '..';
 import ReadOnlyEditor from '../../ReadOnlyEditor';
 
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import { entryData } from '../../../utils/dummy-data';
 
-describe('<MessageAppBubbleCard /> Component', () => {
+describe('<BubbleCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleMentionClick = jest.fn();
@@ -18,7 +18,7 @@ describe('<MessageAppBubbleCard /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <MessageAppBubbleCard
+          <BubbleCard
             locale="en"
             sender="Jerry Mil"
             youLabel="You"

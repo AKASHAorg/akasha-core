@@ -6,7 +6,7 @@ import MessageAppConvoArea, { IMessageAppConvoAreaProps } from '.';
 import EditorBox from '../Editor';
 import MessageAppConvoHeader from '../MessageAppConvoHeader';
 import MessageAppConvoBody from '../MessageAppConvoBody';
-import MessageAppBubbleCard from '../MessageAppBubbleCard';
+import BubbleCard from '../BubbleCard';
 import { editorDefaultValue } from '../Editor/initialValue';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -43,7 +43,7 @@ BaseMessageAppConvoArea.args = {
     <MessageAppConvoBody
       emptyChatLabel="Start by saying hello! 👋🏼"
       loggedUserEthAddress={ethAddress}
-      itemCard={<MessageAppBubbleCard locale="en" youLabel="You" />}
+      itemCard={<BubbleCard locale="en" youLabel="You" />}
       chatArr={dummyChatArr}
       onMentionClick={() => null}
       onTagClick={() => null}

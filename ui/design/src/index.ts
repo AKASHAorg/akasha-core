@@ -137,7 +137,7 @@ import EthProviderListModal from './components/SignInModal/eth-provider-list-mod
 import { ModalContainer } from './components/SignInModal/fullscreen-modal-container';
 import { ModalRenderer } from './components/SignInModal/modal-renderer';
 import MessageAppMiniCard from './components/MessageMiniCard';
-import MessageAppBubbleCard from './components/MessageAppBubbleCard';
+import BubbleCard from './components/BubbleCard';
 import MessageAppConvoHeader from './components/MessageAppConvoHeader';
 import MessageAppConvoBody from './components/MessageAppConvoBody';
 import MessageAppConvoArea from './components/MessageAppConvoArea';
@@ -307,7 +307,7 @@ const exported = {
   EthProviderListModal,
   EthProviderModal,
   MessageAppMiniCard,
-  MessageAppBubbleCard,
+  BubbleCard,
   MessageAppConvoHeader,
   MessageAppConvoBody,
   MessageAppConvoArea,
