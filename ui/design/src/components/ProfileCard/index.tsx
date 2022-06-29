@@ -94,6 +94,7 @@ export interface IProfileCardProps {
     available: UsernameTypes[];
   };
   modalSlotId: string;
+  actionButtonExt?: React.ReactNode;
 }
 
 interface IStat {
@@ -174,6 +175,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     profileProvidersData,
     canUserEdit,
     modalSlotId,
+    actionButtonExt,
   } = props;
 
   const [editable /* , setEditable */] = useState(false);
@@ -333,6 +335,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             </Box>
           </Box>
           <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
+            {loggedEthAddress !== profileData.ethAddress && actionButtonExt}
             {loggedEthAddress !== profileData.ethAddress && (
               <Box data-testid="profile-card-follow-button">
                 <DuplexButton

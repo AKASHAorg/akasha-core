@@ -100,24 +100,24 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 essentialCookiesLabel={t('Essential cookies')}
                 essentialCookiesInfo1={t(
                   "We've gotta have essential cookies. The clue's in the name. They're essential to initiating your experience of Ethereum World, and keeping it secure, stable, and optimized so you'll feel like this is your kind of thing — to use, celebrate, and help grow. If you're a privacy geek like us, you'll find ",
-              )}
-              essentialCookiesInfo2={t(' makes for perfect bedtime reading.')}
-              essentialCookiesInfo3={t(
-                'And the best thing about Ethereum World is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we’re doing this thing together.',
-              )}
+                )}
+                essentialCookiesInfo2={t(' makes for perfect bedtime reading.')}
+                essentialCookiesInfo3={t(
+                  'And the best thing about Ethereum World is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we’re doing this thing together.',
+                )}
                 privacyPolicyLabel={t('our privacy policy')}
                 trackingAnalyticsLabel={t('Tracking and analytics')}
                 trackingAnalyticsInfo1={t(
-                'As we’ve said ☝🏽, we’re doing this together. If you want to contribute some insight into how Ethereum World is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
-              )}
-              trackingAnalyticsInfo2={t(
+                  'As we’ve said ☝🏽, we’re doing this together. If you want to contribute some insight into how Ethereum World is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
+                )}
+                trackingAnalyticsInfo2={t(
                   " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time.",
                 )}
                 trackingAnalyticsLinkLabel={t('Click here to learn more.')}
                 checkedTracking={checkedTracking}
                 cookieType={cookieType}
                 onTrackingOptionChange={handleTrackingOptionChange}
-                OnChevronLeftClick={handleChevronLeftClick}
+                onChevronLeftClick={handleChevronLeftClick}
               />
             }
           />
@@ -138,24 +138,24 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 checkedDataAnalytics={checkedDataAnalytics}
                 onAutoUpdatesChange={handleAutoUpdatesChange}
                 onDataAnalyticsChange={handleDataAnalyticsChange}
-                OnChevronLeftClick={handleChevronLeftClick}
+                onChevronLeftClick={handleChevronLeftClick}
               />
             }
           />
           <Route
             path={routes[APPEARANCE]}
             element={
-            <AppearanceOption
-              titleLabel="Appearance"
-              appThemeLabel={t('App Theme')}
-              appThemeInfo={t(
-                'Choose your preferred Ethereum World’s theme. So what will it be today?',
-              )}
-              theme={theme}
-              onThemeSelect={handleThemeSelect}
-              OnChevronLeftClick={handleChevronLeftClick}
-            />
-          }
+              <AppearanceOption
+                titleLabel="Appearance"
+                appThemeLabel={t('App Theme')}
+                appThemeInfo={t(
+                  'Choose your preferred Ethereum World’s theme. So what will it be today?',
+                )}
+                theme={theme}
+                onThemeSelect={handleThemeSelect}
+                onChevronLeftClick={handleChevronLeftClick}
+              />
+            }
           />
           <Route path={rootRoute} element={<Navigate to={routes[HOME]} replace />} />
         </Routes>

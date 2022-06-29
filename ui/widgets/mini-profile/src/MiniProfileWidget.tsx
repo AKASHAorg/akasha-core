@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
 import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import {
@@ -15,7 +16,7 @@ import {
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 
-const { Box, ProfileMiniCard, ErrorLoader } = DS;
+const { Box, ProfileMiniCard, ErrorLoader, ExtensionPoint } = DS;
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const params: { postId?: string } = useParams();
@@ -58,6 +59,24 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
     return null;
   }
 
+  const handleExtPointMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+      },
+    });
+  };
+
+  const handleExtPointUnmount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointUnmount,
+      data: {
+        name,
+      },
+    });
+  };
+
   return (
     <Box pad={{ bottom: 'small' }} height={{ max: '30rem' }}>
       <ProfileMiniCard
@@ -72,6 +91,13 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         followingLabel={t('Following')}
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
+        footerExt={
+          <ExtensionPoint
+            name={`profile-mini-card-footer-extension`}
+            onMount={handleExtPointMount}
+            onUnmount={handleExtPointUnmount}
+          />
+        }
       />
     </Box>
   );

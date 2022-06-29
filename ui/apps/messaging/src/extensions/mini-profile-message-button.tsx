@@ -9,7 +9,7 @@ import { ThemeWrapper, useAnalytics, withProviders } from '@akashaorg/ui-awf-hoo
 
 const { Icon, Button } = DS;
 
-const MessageIconButton = (props: RootExtensionProps) => {
+const MessageButton = (props: RootExtensionProps) => {
   // const { extensionData } = props;
   const [analyticsActions] = useAnalytics();
 
@@ -31,25 +31,25 @@ const MessageIconButton = (props: RootExtensionProps) => {
 
   return (
     <Button
-      primary={true}
-      label={'test'}
       icon={<Icon type="email" />}
+      label={t('Message')}
       onClick={handleClick}
       slimBorder={true}
+      fill={true}
     />
   );
 };
 
-const MessageIconButtonWrapper = (props: RootExtensionProps) => (
+const MessageButtonWrapper = (props: RootExtensionProps) => (
   <I18nextProvider i18n={props.plugins?.translation?.i18n}>
-    <MessageIconButton {...props} />
+    <MessageButton {...props} />
   </I18nextProvider>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: withProviders(MessageIconButtonWrapper),
+  rootComponent: withProviders(MessageButtonWrapper),
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);

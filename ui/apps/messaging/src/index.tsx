@@ -21,7 +21,10 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   extends: (match, loader) => {
     match({
-      'profile-card-actions-extension': loader(() => import('./extensions/profile-message-button')),
+      'profile-mini-card-footer-extension': loader(
+        () => import('./extensions/mini-profile-message-button'),
+      ),
+      'profile-card-action-extension': loader(() => import('./extensions/profile-message-button')),
     });
   },
   title: 'Messaging | Ethereum World',

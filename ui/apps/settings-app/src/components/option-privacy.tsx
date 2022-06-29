@@ -7,7 +7,7 @@ const { Box, BasicCardBox, Checkbox } = DS;
 
 export interface BaseOption {
   titleLabel: string;
-  OnChevronLeftClick: () => void;
+  onChevronLeftClick: () => void;
 }
 
 export interface IPrivacyOption extends BaseOption {
@@ -40,7 +40,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
     checkedTracking,
     cookieType,
     onTrackingOptionChange,
-    OnChevronLeftClick,
+    onChevronLeftClick,
   } = props;
   return (
     <Box direction="column" gap="small">
@@ -51,7 +51,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
           align="center"
           border={{ side: 'bottom', color: 'lightBorder' }}
         >
-          <StyledIcon type="chevronLeft" onClick={OnChevronLeftClick} />
+          <StyledIcon type="chevronLeft" onClick={onChevronLeftClick} />
           <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
             {titleLabel}
           </StyledText>
