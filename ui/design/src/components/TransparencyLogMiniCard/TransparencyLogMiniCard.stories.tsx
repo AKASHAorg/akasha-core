@@ -14,7 +14,7 @@ export default {
     isSelected: { control: 'boolean' },
     isDelisted: { control: 'boolean' },
     moderatedTimestamp: { control: 'text' },
-    moderatorAvatarUrl: { control: 'text' },
+    moderatorAvatar: { control: 'text' },
     moderatorEthAddress: { control: 'text' },
     onClickAvatar: { action: 'avatar clicked' },
     onClickCard: { action: 'card clicked' },
@@ -41,6 +41,6 @@ BaseTransparencyLogMiniCard.args = {
   isSelected: true,
   isDelisted: true,
   moderatedTimestamp: '2021-06-14T16:48:00.000Z',
-  moderatorAvatarUrl: 'https://placebeard.it/360x360',
+  moderatorAvatar: { url: 'https://placebeard.it/360x360' },
   moderatorEthAddress: ethAddress,
 };

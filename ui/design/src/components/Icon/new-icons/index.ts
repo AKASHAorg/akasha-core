@@ -25,6 +25,7 @@ import bookmark from './bookmark';
 import calendar from './calendar';
 import check from './check';
 import checkSimple from './checkSimple';
+import checkDouble from './checkDouble';
 import chevronRight from './chevron-right';
 import chevronLeft from './chevron-left';
 import close from './close';
@@ -86,6 +87,7 @@ import opera from './opera';
 import payment from './payment';
 import person from './person';
 import pin from './pin';
+import pinAlt from './pinAlt';
 import plusDark from './plus-dark';
 import plusGrey from './plus-grey';
 import questionMark from './question-mark';
@@ -117,6 +119,7 @@ import trendingApps from './trending-apps';
 import trust from './trust';
 import twitter from './twitter';
 import underline from './underline';
+import unpinAlt from './unpinAlt';
 import upload from './upload';
 import video from './video';
 import wallet from './wallet';
@@ -142,6 +145,7 @@ export {
   available,
   reload,
   pin,
+  pinAlt,
   settings,
   settingsAlt,
   stopwatch,
@@ -154,6 +158,7 @@ export {
   dapper,
   check,
   checkSimple,
+  checkDouble,
   chevronRight,
   chevronLeft,
   closedEye,
@@ -246,6 +251,7 @@ export {
   trust,
   twitter,
   underline,
+  unpinAlt,
   upload,
   video,
   wallet,

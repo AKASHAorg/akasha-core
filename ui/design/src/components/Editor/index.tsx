@@ -41,6 +41,7 @@ const MAX_LENGTH = 280;
  */
 export interface IEditorBox {
   avatar?: IProfileData['avatar'];
+  showAvatar?: boolean;
   ethAddress: string | null;
   postLabel?: string;
   placeholderLabel?: string;
@@ -86,6 +87,7 @@ export interface IEditorBox {
 const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const {
     avatar,
+    showAvatar = true,
     ethAddress,
     postLabel,
     placeholderLabel,
@@ -253,6 +255,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    */
   const handlePublish = () => {
     const slateContent = editorState;
+
     const metadata: IMetadata = {
       app: publishingApp,
       quote: embedEntryData,
@@ -569,9 +572,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         className="scrollBox"
         height={minHeight ? { min: minHeight } : undefined}
       >
-        <Box flex={{ shrink: 0 }}>
-          <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
-        </Box>
+        {showAvatar && (
+          <Box flex={{ shrink: 0 }}>
+            <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
+          </Box>
+        )}
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">
           <Box fill={true}>
             <Slate editor={editor} value={editorState} onChange={handleChange}>
