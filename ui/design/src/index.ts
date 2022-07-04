@@ -138,9 +138,10 @@ import { ModalContainer } from './components/SignInModal/fullscreen-modal-contai
 import { ModalRenderer } from './components/SignInModal/modal-renderer';
 import MessageAppMiniCard from './components/MessageMiniCard';
 import BubbleCard from './components/BubbleCard';
-import MessageAppConvoHeader from './components/MessageAppConvoHeader';
+import ChatAreaHeader from './components/ChatAreaHeader';
 import ChatList from './components/ChatList';
 import ChatArea from './components/ChatArea';
+import { ChatEditor } from './components/ChatEditor/Index';
 
 import MobileListModal from './components/MobileListModal';
 import ModerateModal from './components/ModerateModal';
@@ -308,9 +309,10 @@ const exported = {
   EthProviderModal,
   MessageAppMiniCard,
   BubbleCard,
-  MessageAppConvoHeader,
+  ChatAreaHeader,
   ChatList,
   ChatArea,
+  ChatEditor,
   MobileListModal,
   ModalContainer,
   ModalRenderer,

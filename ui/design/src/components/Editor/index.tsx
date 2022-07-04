@@ -56,7 +56,7 @@ export interface IEditorBox {
   withMeter?: boolean;
   linkPreview?: IEntryData['linkPreview'];
   uploadedImages?: IEntryData['images'];
-  getLinkPreview: (url: string) => Promise<IEntryData['linkPreview']>;
+  getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
   mentions?: {
@@ -195,7 +195,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const handleInsertLink = (text: string) => {
     CustomEditor.insertLink(editor, { url: text.trim() });
-    if (images.length === 0 && !uploading) {
+    if (images.length === 0 && !uploading && typeof getLinkPreview === 'function') {
       handleGetLinkPreview(text);
     }
   };

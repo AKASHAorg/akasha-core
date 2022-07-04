@@ -104,7 +104,7 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const handleCTAClick = () => {
     routing.navigateTo({
-      appName: 'Legal',
+      appName: '@akashaorg/app-legal',
       getNavigationUrl: () => '/legal/code-of-conduct',
     });
   };

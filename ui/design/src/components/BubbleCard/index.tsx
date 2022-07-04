@@ -20,9 +20,9 @@ export interface IBubbleCardProps {
   status?: chatStatus;
   isLoggedUser?: boolean;
   chatTimestamp?: string;
-  onMentionClick?: () => void;
-  onTagClick?: () => void;
-  onLinkClick?: () => void;
+  handleMentionClick?: (pubKey: string) => void;
+  handleTagClick?: (name: string) => void;
+  handleLinkClick?: (url: string) => void;
 }
 
 const BubbleCard: React.FC<IBubbleCardProps> = props => {
@@ -34,9 +34,9 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
     status,
     isLoggedUser,
     chatTimestamp,
-    onMentionClick,
-    onTagClick,
-    onLinkClick,
+    handleMentionClick,
+    handleTagClick,
+    handleLinkClick,
   } = props;
 
   const chatStatusIcon = {
@@ -48,22 +48,6 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
   const [isActive, setIsActive] = React.useState(false);
 
   const handleIconClick = () => setIsActive(!isActive);
-
-  const handleMentionClick = () => {
-    if (onMentionClick) {
-      onMentionClick();
-    }
-  };
-  const handleTagClick = () => {
-    if (onTagClick) {
-      onTagClick();
-    }
-  };
-  const handleLinkClick = () => {
-    if (onLinkClick) {
-      onLinkClick();
-    }
-  };
 
   const time = chatTimestamp?.split('T')[1].split(':');
 

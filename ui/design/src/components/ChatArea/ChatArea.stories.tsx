@@ -4,7 +4,7 @@ import { Box, Grommet } from 'grommet';
 import ChatArea, { IChatAreaProps } from '.';
 
 import EditorBox from '../Editor';
-import MessageAppConvoHeader from '../MessageAppConvoHeader';
+import ChatAreaHeader from '../ChatAreaHeader';
 import ChatList from '../ChatList';
 import BubbleCard from '../BubbleCard';
 import { editorDefaultValue } from '../Editor/initialValue';
@@ -31,11 +31,11 @@ export const BaseChatArea = Template.bind({});
 
 BaseChatArea.args = {
   headerElement: (
-    <MessageAppConvoHeader
-      chatOwner="Estelle Collier"
-      chatOwnerUsername="estellecollier"
-      chatOwnerAvatar={{ url: 'https://placebeard.it/360x360' }}
-      chatOwnerEthAddress="0x003410490050000320006570034567114572021"
+    <ChatAreaHeader
+      name="Estelle Collier"
+      userName="estellecollier"
+      avatar={{ url: 'https://placebeard.it/360x360' }}
+      ethAddress="0x003410490050000320006570034567114572021"
       onClickAvatar={() => null}
     />
   ),

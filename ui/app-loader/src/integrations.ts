@@ -187,7 +187,8 @@ export const processSystemModules = (
       }),
     )
     .pipe(
-      mergeMap(results => {
+      withLatestFrom(plugins$),
+      mergeMap(([results, plugins]) => {
         const { configs, layoutConfig } = results;
         for (const config of configs) {
           if (!config.extends || typeof config.extends !== 'function') {
@@ -200,14 +201,14 @@ export const processSystemModules = (
             navigateToModal,
             worldConfig,
             parseQueryString,
-            plugins: results.plugins,
+            plugins: plugins,
           };
           config.extends(
             extensionMatcher(uiEvents, globalChannel, extProps, config),
             extensionLoader,
           );
         }
-        return of(results);
+        return of({ ...results, plugins });
       }),
     )
     .pipe(
