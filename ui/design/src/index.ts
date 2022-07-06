@@ -58,6 +58,7 @@ import ProfileCard from './components/ProfileCard';
 import { ProfileDelistedCard } from './components/ProfileCard/profile-delisted-card';
 import { ProfileSearchCard } from './components/ProfileCard/profile-search-card';
 import { ProfileMiniCard } from './components/ProfileCard/profile-mini-card';
+import ProfileSubCard from './components/ProfileSubCard';
 
 import TagCard from './components/TagCard';
 import { TagDetailCard } from './components/TagCard/tag-detail-card';
@@ -241,6 +242,7 @@ const exported = {
   ProfileDelistedCard,
   ProfileSearchCard,
   ProfileMiniCard,
+  ProfileSubCard,
   TextInputField,
   TagCard,
   TagDetailCard,
