@@ -15,12 +15,15 @@ export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export type AvatarBorderSize = 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
+export type AvatarBorderColor = 'dev' | 'publisher';
+
 export interface AvatarProps {
   size: AvatarSize;
   isClickable: boolean;
   margin?: MarginInterface;
   backgroundColor?: string;
   border?: AvatarBorderSize;
+  borderColor?: AvatarBorderColor;
 }
 
 const StyledAvatar = styled.div<AvatarProps>`
@@ -64,6 +67,21 @@ const StyledAvatar = styled.div<AvatarProps>`
         return;
     }
   }}
+  ${props => {
+    const { borderColor } = props;
+    switch (borderColor) {
+      case 'dev':
+        return css`
+          border: 2px solid ${props.theme.colors.devAvatarBorder};
+        `;
+      case 'publisher':
+        return css`
+          border: 2px solid ${props.theme.colors.publisherAvatarBorder};
+        `;
+      default:
+        return;
+    }
+  }};
   box-sizing: border-box;
   cursor: ${props => (props.isClickable ? 'pointer' : 'default')};
   user-select: none;
