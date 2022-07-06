@@ -34,7 +34,7 @@ const getRequiredNetwork = async () => {
 
 /**
  * An utility function to switch to required network - Metamask
- * */
+ */
 export const switchToRequiredNetwork = async () => {
   const sdk = getSDK();
   await lastValueFrom(sdk.services.common.web3.switchToRequiredNetwork());
@@ -42,7 +42,16 @@ export const switchToRequiredNetwork = async () => {
 
 /**
  * A hook to get injected provider from the SDK
- * */
+ * @example useInjectedProvider hook
+ * ```typescript
+ * const injectedProviderQuery = useInjectedProvider('selectedProvider');
+ *
+ * const injectedProvider = React.useMemo(
+    () => injectedProviderQuery.data,
+    [injectedProviderQuery.data],
+  );
+ * ```
+ */
 export function useInjectedProvider() {
   return useQuery([INJECTED_PROVIDER_KEY], () => getInjectedProvider(), {
     initialData: {
@@ -59,7 +68,14 @@ export function useInjectedProvider() {
 
 /**
  * Hook to connect with one of the supported providers
- * */
+ * @example useConnectProvider hook
+ * ```typescript
+ * const connectProviderQuery = useConnectProvider('selectedProvider');
+ *
+ * // can be used as enabler for useNetworkState hook; so this check works only if provider has been connected.
+ * const networkStateQuery = useNetworkState(connectProviderQuery.data);
+ * ```
+ */
 export function useConnectProvider(provider: EthProviders) {
   return useQuery([CONNECT_PROVIDER_KEY], () => connectProvider(provider), {
     enabled: provider !== EthProviders.None,
@@ -70,7 +86,13 @@ export function useConnectProvider(provider: EthProviders) {
 
 /**
  * A hook to get required network name from the SDK
- * */
+ * @example useRequiredNetworkName hook
+ * ```typescript
+ * const requiredNetworkQuery = useRequiredNetworkName();
+ *
+ * const requiredNetworkName = requiredNetworkQuery.data;
+ * ```
+ */
 export function useRequiredNetworkName() {
   return useQuery([REQUIRED_NETWORK_KEY], () => getRequiredNetwork(), {
     initialData: 'required',

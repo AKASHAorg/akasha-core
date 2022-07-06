@@ -22,6 +22,12 @@ const getMentions = async (mention: string, queryClient: QueryClient) => {
 
 /**
  * Hook to search for profiles
+ * @example useMentionSearch hook
+ * ```typescript
+ * const mentionQuery = useMentionSearch('awesomemention');
+ *
+ * const mentions = mentionQuery.data;
+ * ```
  */
 export function useMentionSearch(mention: string) {
   const queryClient = useQueryClient();

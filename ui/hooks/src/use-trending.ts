@@ -17,6 +17,12 @@ const getTrendingTags = async () => {
 
 /**
  * Hook to fetch trending tags
+ * @example useTrendingTags hook
+ * ```typescript
+ * const trendingTagsQuery = useTrendingTags();
+ *
+ * const trendingTags = trendingTagsQuery.data;
+ * ```
  */
 export function useTrendingTags() {
   return useQuery([TRENDING_TAGS_KEY], () => getTrendingTags(), {
@@ -41,6 +47,12 @@ const getTrendingProfiles = async (queryClient: QueryClient) => {
 
 /**
  * Hook to fetch trending profiles
+ * @example useTrendingProfiles hook
+ * ```typescript
+ * const trendingProfilesQuery = useTrendingProfiles();
+ *
+ * const trendingProfiles = trendingProfilesQuery.data;
+ * ```
  */
 export function useTrendingProfiles() {
   const queryClient = useQueryClient();

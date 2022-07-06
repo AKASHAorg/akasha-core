@@ -20,6 +20,17 @@ export interface UseGlobalLoginProps {
 
 /**
  * Hook that will fire an action when the sign in is called
+ * @example useGlobalLogin hook
+ * ```typescript
+ * useGlobalLogin({
+ * onLogin: payload => {},
+ * onLogout: () => {},
+ * waitForAuth: payload => {}.
+ * onReady: payload => {},
+ * onLoadFromCache: payload => {},
+ * onError: payload => {},
+ * })
+ * ```
  */
 const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   const { onError, onLogin, waitForAuth, onReady, onLogout, onLoadFromCache } = props;
