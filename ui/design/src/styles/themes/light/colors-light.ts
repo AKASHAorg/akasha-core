@@ -80,6 +80,8 @@ const colors: IColorsLight = {
   lightBorder: '#F5F6F7', // lighterGrey
   darkBorder: '#B6BFD1', // deepGrey
   darkerBorder: '#87909E', // deeperGrey
+  devAvatarBorder: '#0046CB', // darkerBlue
+  publisherAvatarBorder: '#6E6EFA', // accent-like
   secondary: '#000C20', // darkgrey
   secondaryOpacity: 'rgba(0, 12, 32, 0.5)', // darkgrey with 0.5 opacity
   elevationLow: '0px 4px 16px rgba(83, 98, 124, 0.06)',

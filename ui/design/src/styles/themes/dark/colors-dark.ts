@@ -76,6 +76,8 @@ const colors: IColorsDark = {
   lightBorder: '#425166', // lighterGrey
   darkBorder: '#B6BFD1', // deepGrey
   darkerBorder: '#87909E', // deeperGrey
+  devAvatarBorder: '#0046CB', // darkerBlue
+  publisherAvatarBorder: '#6E6EFA', // accent-like
   secondary: '#000C20', // darkGrey
   secondaryOpacity: 'rgba(0, 12, 32, 0.5)', // darkgrey with 0.5 opacity
   elevationLow: '0px 0px 1px rgba(40, 41, 61, 0.08), 0px 1px 2px rgba(0, 0, 0, 0.32)',

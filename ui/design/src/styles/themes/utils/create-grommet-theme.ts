@@ -56,6 +56,8 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         accent: styledComponentsTheme.colors.accent,
         brand: styledComponentsTheme.colors.accent,
         darkBorder: styledComponentsTheme.colors.darkBorder,
+        devAvatarBorder: styledComponentsTheme.colors.devAvatarBorder,
+        publisherAvatarBorder: styledComponentsTheme.colors.publisherAvatarBorder,
         background: styledComponentsTheme.colors.background,
         altRed: styledComponentsTheme.colors.altRed,
         altGreen: styledComponentsTheme.colors.altGreen,
