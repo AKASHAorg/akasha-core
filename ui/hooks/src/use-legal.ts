@@ -14,6 +14,12 @@ const getLegalDoc = async (docName: LEGAL_DOCS) => {
 
 /**
  * Hook to get legal docs stored on ipfs
+ * @example useLegalDoc hook
+ * ```typescript
+ * const termsOfUseDocQuery = useLegalDoc('TermsOfUse');
+ *
+ * const termsOfUseDoc = termsOfUseDocQuery.data;
+ * ```
  */
 export function useLegalDoc(docName: LEGAL_DOCS) {
   return useQuery([LEGAL_KEY, docName], () => getLegalDoc(docName), {
