@@ -20,6 +20,7 @@ import {
   editProfileLabel,
   shareProfileLabel,
   changeCoverImageLabel,
+  badgesLabel,
 } from '../../utils/dummy-data';
 
 export default {
@@ -70,6 +71,7 @@ export const BaseProfileCard = Template.bind({});
 BaseProfileCard.args = {
   profileData: profileData,
   descriptionLabel: aboutMeLabel,
+  badgesLabel: badgesLabel,
   followingLabel: followingLabel,
   followersLabel: followersLabel,
   postsLabel: postsLabel,

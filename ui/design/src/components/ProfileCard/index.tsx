@@ -10,6 +10,7 @@ import {
   ProfileCardDescription,
   ProfileCardName,
   ProfileCardEthereumId,
+  ProfileCardBadges,
 } from './profile-card-fields';
 import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
@@ -66,6 +67,7 @@ export interface IProfileCardProps {
   flagAsLabel?: string;
   blockLabel?: string;
   descriptionLabel: string;
+  badgesLabel: string;
   postsLabel: string;
   interestsLabel?: string;
   followingLabel: string;
@@ -145,6 +147,13 @@ const StatIconWrapper = styled(Box)<{ isMobile?: boolean }>`
   }}
 `;
 
+const SectionDivider = () => (
+  <Box
+    margin={{ horizontal: 'medium', vertical: 'xsmall' }}
+    border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
+  />
+);
+
 // tslint:disable:cyclomatic-complexity
 /* eslint-disable complexity */
 const ProfileCard: React.FC<IProfileCardProps> = props => {
@@ -162,6 +171,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     isFollowing,
     profileData,
     descriptionLabel,
+    badgesLabel,
     followingLabel,
     followersLabel,
     followLabel,
@@ -309,6 +319,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               editable={editable}
               avatar={avatar}
               avatarIcon={avatarIcon}
+              avatarBorderColor="dev" // TODO: determine this from the profile data
               handleChangeAvatar={handleChangeAvatar}
               avatarPopoverOpen={avatarPopoverOpen}
               setAvatarPopoverOpen={setAvatarPopoverOpen}
@@ -485,18 +496,27 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           }
         />
         {description && (
-          <ProfileCardDescription
-            editable={editable}
-            description={description}
-            descriptionIcon={descriptionIcon}
-            handleChangeDescription={handleChangeDescription}
-            descriptionPopoverOpen={descriptionPopoverOpen}
-            setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-            profileProvidersData={profileProvidersData}
-            descriptionLabel={descriptionLabel}
-          />
+          <>
+            <SectionDivider />
+            <ProfileCardDescription
+              editable={editable}
+              description={description}
+              descriptionIcon={descriptionIcon}
+              handleChangeDescription={handleChangeDescription}
+              descriptionPopoverOpen={descriptionPopoverOpen}
+              setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+              profileProvidersData={profileProvidersData}
+              descriptionLabel={descriptionLabel}
+            />
+          </>
         )}
       </Box>
+      {profileData.badges.length > 0 && (
+        <>
+          <SectionDivider />
+          <ProfileCardBadges badgesLabel={badgesLabel} badges={profileData.badges} />
+        </>
+      )}
     </MainAreaCardBox>
   );
 };
