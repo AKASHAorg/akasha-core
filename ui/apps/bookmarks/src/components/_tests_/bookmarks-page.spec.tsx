@@ -6,17 +6,13 @@ describe('<BookmarksPage /> component', () => {
   let renderResult: RenderResult;
   const Base = (
     <BookmarksPage
-      i18n={null}
       logger={null}
-      isMobile={false}
-      activeModal={null}
       navigateToModal={jest.fn()}
       uiEvents={null}
       layoutConfig={null}
-      mountParcel={() => {
-        /*  */
-      }}
       singleSpa={null}
+      worldConfig={null}
+      parseQueryString={jest.fn as any}
     />
   );
   beforeEach(() => {

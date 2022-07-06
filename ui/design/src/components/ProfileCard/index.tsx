@@ -356,7 +356,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
             )}
             {showMore &&
             (isMobile || (!isMobile && loggedEthAddress !== profileData.ethAddress)) ? (
-              <Icon type="moreDark" onClick={toggleMenu} clickable={true} ref={menuRef} />
+              <Icon
+                type="moreDark"
+                plain={true}
+                onClick={toggleMenu}
+                clickable={true}
+                ref={menuRef}
+              />
             ) : null}
           </Box>
         </Box>

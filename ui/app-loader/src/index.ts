@@ -15,8 +15,6 @@ import {
   importIntegrations,
   processSystemModules,
 } from './integrations';
-import { handleModalMount, handleModalRequest } from './modals';
-import { handleExtensionPointUnmount, handleExtPointMountOfExtensions } from './extensions';
 import { handleAppLoadingScreens } from './ui-state-utils';
 
 /**
@@ -82,17 +80,6 @@ const startLoader = (worldConfig: ILoaderConfig) => {
      * @internal
      */
     handleExtPointMountOfApps(worldConfig, state$, logger),
-
-    /**
-     * register extensions to single-spa
-     * based on mountedExtensionPoints from state
-     * @internal
-     */
-    handleExtPointMountOfExtensions(worldConfig, state$, logger),
-    handleExtensionPointUnmount(state$, logger),
-
-    handleModalRequest(worldConfig, state$, logger),
-    handleModalMount(state$, logger),
 
     handleIntegrationUninstall(state$, logger),
 

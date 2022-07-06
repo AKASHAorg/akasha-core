@@ -80,6 +80,7 @@ export interface IMetadata {
   version: number;
   linkPreview?: LinkPreview_Response;
   images?: {
+    originalSrc?: string;
     src: { url?: string; fallbackUrl?: string };
     size: { width: number; height: number; naturalWidth: number; naturalHeight: number };
     id: string;

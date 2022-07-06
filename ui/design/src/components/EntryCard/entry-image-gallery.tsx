@@ -97,6 +97,7 @@ const EntryImageGallery: React.FC<IImageGallery> = props => {
         {/* when we have a single image we need to keep the original aspect ratio,
         otherwise give images a 1:1 ratio */}
         <StyledPicture>
+          <source srcSet={image.originalSrc} />
           <source srcSet={image.src.url} />
           <StyledImg src={image.src.fallbackUrl} singleImage={images.length === 1} />
         </StyledPicture>

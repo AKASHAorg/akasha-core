@@ -39,6 +39,7 @@ export interface IColors {
   inputBackground: string;
   coverImageBackground: string;
   embedBackground: string;
+  convoAreaBackground: string;
   textBackground: string;
   btnAccentColor: string;
   accent: string;

@@ -135,7 +135,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
                   plainIcon={true}
                   backgroundColor={true}
                 />
-                <Icon type="moreDark" />
+                <Icon type="moreDark" plain={true} />
               </Box>
             ))}
           {filteredInstalledApps?.length === 0 && (

@@ -1,6 +1,5 @@
 import {
   BaseIntegrationInfo,
-  ExtensionPointDefinition,
   IAppConfig,
   ModalNavigationOptions,
 } from '@akashaorg/ui-awf-typings/lib/app-loader';
@@ -11,7 +10,7 @@ import { of } from 'rxjs';
 import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
 
 export const checkActivityFn = (
-  config: IAppConfig | ExtensionPointDefinition,
+  config: IAppConfig,
   manifest?: BaseIntegrationInfo,
   location?: Location,
 ) => {
@@ -124,4 +123,12 @@ export const getDomElement = (integrationConfig: IAppConfig, name: string, logge
     return null;
   }
   return rootNode;
+};
+export const escapeRegExp = (str: string) => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+};
+
+export const stringToRegExp = (str: string) => {
+  const wildcard = str.split(/\*+/).map(escapeRegExp).join('.*');
+  return new RegExp(`^${wildcard}$`);
 };

@@ -39,6 +39,7 @@ export type IconType =
   | 'copy'
   | 'check'
   | 'checkSimple'
+  | 'checkDouble'
   | 'dapper'
   | 'chevronRight'
   | 'chevronLeft'
@@ -93,6 +94,7 @@ export type IconType =
   | 'payment'
   | 'person'
   | 'pin'
+  | 'pinAlt'
   | 'plusDark'
   | 'plusGrey'
   | 'questionMark'
@@ -124,6 +126,7 @@ export type IconType =
   | 'trust'
   | 'twitter'
   | 'underline'
+  | 'unpinAlt'
   | 'upload'
   | 'video'
   | 'wallet'
@@ -167,6 +170,7 @@ export const iconTypes: IconType[] = [
   'copy',
   'check',
   'checkSimple',
+  'checkDouble',
   'chevronRight',
   'chevronLeft',
   'coins',
@@ -222,6 +226,7 @@ export const iconTypes: IconType[] = [
   'payment',
   'person',
   'pin',
+  'pinAlt',
   'plusDark',
   'questionMark',
   'quote',
@@ -252,6 +257,7 @@ export const iconTypes: IconType[] = [
   'trust',
   'twitter',
   'underline',
+  'unpinAlt',
   'upload',
   'video',
   'wallet',

@@ -19,17 +19,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     rootRoute,
     inbox: inboxRoute,
   },
-  extends: [
-    {
-      mountsIn: options => {
-        if (options.extensionData.name === 'proile-card-actions-extension') {
-          return options.extensionData.name;
-        }
-        return null;
-      },
-      loadingFn: () => import('./extensions/profile-message-button'),
-    },
-  ],
+  extends: (match, loader) => {
+    match({
+      'profile-card-actions-extension': loader(() => import('./extensions/profile-message-button')),
+    });
+  },
   title: 'Messaging | Ethereum World',
   menuItems: {
     route: rootRoute,

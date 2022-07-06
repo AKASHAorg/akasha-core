@@ -1,7 +1,7 @@
 import { IAppConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { mergeMap } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
-import { getModalFromParams, checkActivityFn } from '../src/utils';
+import { getModalFromParams, checkActivityFn, stringToRegExp } from '../src/utils';
 import * as singleSpa from 'single-spa';
 
 describe('[AppLoader] utils/getModalFromParams', () => {
@@ -46,5 +46,20 @@ describe('[AppLoader] utils/checkActivityFn', () => {
     } as IAppConfig);
     expect(pathToActiveWhenSpy).toHaveBeenCalledWith(mockRootRoute);
     expect(active).toBe(false);
+  });
+});
+
+describe('[AppLoader] utils/stringToRegxp', () => {
+  test('should match `some-ext-point`', () => {
+    const matcher = stringToRegExp('some-ext-point');
+    expect(matcher.test('some-ext-point')).toBe(true);
+  });
+  test('should not match `some-ext-point`', () => {
+    const matcher = stringToRegExp('some-ext-point');
+    expect(matcher.test('some-ext-point-2')).toBe(false);
+  });
+  test('should match `some-ext-point*`', () => {
+    const matcher = stringToRegExp('some-ext-point*');
+    expect(matcher.test('some-ext-point_bafrydiaeojf')).toBe(true);
   });
 });

@@ -17,11 +17,10 @@ export const register: (
     i18nNamespace: ['ui-widget-topbar'],
     tags: ['topbar'],
     extensions: extensionPointsMap,
-    extends: [
-      {
-        mountsIn: 'feedback',
-        loadingFn: () => import('./extensions/feedback-modal'),
-      },
-    ],
+    extends: (matcher, loader) => {
+      matcher({
+        'feedback-modal': loader(() => import('./extensions/feedback-modal')),
+      });
+    },
   };
 };

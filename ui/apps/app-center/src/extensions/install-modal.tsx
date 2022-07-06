@@ -17,16 +17,16 @@ import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 const { InstallModal, ModalContainer, ErrorLoader } = DS;
 
 const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
-  const { activeModal } = props;
+  const { extensionData } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-akasha-integration');
 
   const integrationName: string = React.useMemo(() => {
-    if (activeModal && activeModal.integrationName) {
-      return activeModal.integrationName as string;
+    if (extensionData && extensionData.integrationName) {
+      return extensionData.integrationName as string;
     }
     return '';
-  }, [activeModal]);
+  }, [extensionData]);
 
   const [modalState, setModalState] = React.useState(1);
 

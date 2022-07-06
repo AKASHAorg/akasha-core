@@ -19,7 +19,7 @@ import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 const { ReportModal, ErrorLoader } = DS;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
-  const { activeModal } = props;
+  const { extensionData } = props;
 
   const [analyticsActions] = useAnalytics();
 
@@ -39,11 +39,13 @@ const ReportModalComponent = (props: RootExtensionProps) => {
   };
 
   const itemType = React.useMemo(() => {
-    if (activeModal.hasOwnProperty('itemType') && typeof activeModal.itemType === 'string') {
-      return activeModal.itemType;
+    if (
+      props.extensionData.hasOwnProperty('itemType') &&
+      typeof props.extensionData.itemType === 'string'
+    ) {
+      return props.extensionData.itemType;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.extensionData]);
 
   const reportMutation = useReport();
 
@@ -55,19 +57,19 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       });
       reportMutation.mutate({
         dataToSign,
-        contentId: activeModal.entryId,
+        contentId: extensionData.entryId,
         contentType: itemType,
         url: `${BASE_REPORT_URL}/new`,
       });
     },
 
-    [itemType, activeModal.entryId, reportMutation, analyticsActions],
+    [itemType, extensionData.entryId, reportMutation, analyticsActions],
   );
 
   return (
     <ReportModal
-      titleLabel={t('Report {{itemType}}', {
-        itemType: itemType === ModerationItemTypes.ACCOUNT ? activeModal.user : itemType,
+      titleLabel={t('Report {{ itemType }}', {
+        itemType: itemType === ModerationItemTypes.ACCOUNT ? extensionData.user : itemType,
       })}
       successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
       successMessageLabel={t('We will investigate this {{itemType}} and take appropriate action.', {
@@ -92,7 +94,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       closeLabel={t('Close')}
       errorText={reportMutation.error ? `${reportMutation.error}` : ''}
       user={loginQuery.data?.pubKey || ''}
-      contentId={activeModal.entryId}
+      contentId={extensionData.entryId}
       itemType={itemType}
       requesting={reportMutation.status === 'loading'}
       success={reportMutation.status === 'success'}

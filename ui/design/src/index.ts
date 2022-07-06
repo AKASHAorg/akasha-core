@@ -36,6 +36,9 @@ import EntryList from './components/EntryList';
 import { EntryBox } from './components/EntryCard/entry-box';
 import { MenuItemButton } from './components/EntryCard/menu-item-button';
 import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
+
+import ReadOnlyEditor from './components/ReadOnlyEditor';
+
 import {
   BasicCardBox,
   MainAreaCardBox,
@@ -133,6 +136,12 @@ import EthProviderModal from './components/SignInModal/eth-provider-modal';
 import EthProviderListModal from './components/SignInModal/eth-provider-list-modal';
 import { ModalContainer } from './components/SignInModal/fullscreen-modal-container';
 import { ModalRenderer } from './components/SignInModal/modal-renderer';
+import MessageAppMiniCard from './components/MessageMiniCard';
+import BubbleCard from './components/BubbleCard';
+import MessageAppConvoHeader from './components/MessageAppConvoHeader';
+import ChatList from './components/ChatList';
+import ChatArea from './components/ChatArea';
+
 import MobileListModal from './components/MobileListModal';
 import ModerateModal from './components/ModerateModal';
 import ReportModal from './components/ReportModal';
@@ -223,6 +232,7 @@ const exported = {
   EntryCard,
   EntryCardHidden,
   EntryCardLoading,
+  ReadOnlyEditor,
   BoxFormCard,
   EnsFormCard,
   Heading,
@@ -296,6 +306,11 @@ const exported = {
   ModalCardLogin,
   EthProviderListModal,
   EthProviderModal,
+  MessageAppMiniCard,
+  BubbleCard,
+  MessageAppConvoHeader,
+  ChatList,
+  ChatArea,
   MobileListModal,
   ModalContainer,
   ModalRenderer,

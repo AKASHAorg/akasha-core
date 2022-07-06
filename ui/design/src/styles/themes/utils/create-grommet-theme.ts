@@ -70,6 +70,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         inputBackground: styledComponentsTheme.colors.inputBackground,
         coverImageBackground: styledComponentsTheme.colors.coverImageBackground,
         embedBackground: styledComponentsTheme.colors.embedBackground,
+        convoAreaBackground: styledComponentsTheme.colors.convoAreaBackground,
         activeCardBackground: styledComponentsTheme.colors.activeCardBackground,
         lightBackground: styledComponentsTheme.colors.lightBackground,
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,

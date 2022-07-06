@@ -7,6 +7,7 @@ import { customRender, wrapWithTheme } from '../../../test-utils';
 describe('<TransparencyLogMiniCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const handleClickCard = jest.fn();
   const handleClickAvatar = jest.fn();
 
   beforeEach(() => {
@@ -23,6 +24,7 @@ describe('<TransparencyLogMiniCard /> Component', () => {
             moderator="somebody"
             moderatorAvatar={{ url: 'https://placebeard.it/360x360' }}
             moderatorEthAddress="0x003410490050000320006570034567114572000"
+            onClickCard={handleClickCard}
             onClickAvatar={handleClickAvatar}
           />,
         ),

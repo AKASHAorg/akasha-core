@@ -44,7 +44,8 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
                 iconType={menuItem.icon as IconType}
                 label={menuItem.label}
                 onClick={handleClick(menuItem.handler)}
-                color={theme.colors.errorText}
+                color={menuItem.iconColor ? menuItem.iconColor : theme.colors.errorText}
+                plain={menuItem.plain}
                 iconSize="xs"
                 fontSize="medium"
                 disabled={menuItem.disabled}

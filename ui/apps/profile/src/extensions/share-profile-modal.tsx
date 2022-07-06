@@ -9,7 +9,7 @@ import { rootRoute } from '../routes';
 const { ErrorLoader, ModalContainer, ShareModal } = DS;
 
 const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
-  const { profileId } = props.activeModal;
+  const { profileId } = props.extensionData;
   const url = `${window.location.origin}${rootRoute}/${profileId}`;
 
   const handleProfileShare = (service: 'twitter' | 'facebook' | 'reddit' | 'copy', url: string) => {
