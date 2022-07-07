@@ -15,7 +15,7 @@ export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
 export type AvatarBorderSize = 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
-export type AvatarBorderColor = 'dev' | 'publisher';
+export type AvatarBorderColor = 'darkerBlue' | 'accent';
 
 export interface AvatarProps {
   size: AvatarSize;
@@ -68,19 +68,10 @@ const StyledAvatar = styled.div<AvatarProps>`
     }
   }}
   ${props => {
-    const { borderColor } = props;
-    switch (borderColor) {
-      case 'dev':
-        return css`
-          border: 2px solid ${props.theme.colors.devAvatarBorder};
-        `;
-      case 'publisher':
-        return css`
-          border: 2px solid ${props.theme.colors.publisherAvatarBorder};
-        `;
-      default:
-        return;
-    }
+    return css`
+      border: 2px solid
+        ${props.borderColor ? props.theme.colors[props.borderColor] : props.theme.colors.white};
+    `;
   }};
   box-sizing: border-box;
   cursor: ${props => (props.isClickable ? 'pointer' : 'default')};

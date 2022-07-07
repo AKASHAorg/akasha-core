@@ -1,9 +1,16 @@
-import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
-import DuplexButton from '../DuplexButton';
-import Icon, { IconType } from '../Icon';
-import TextIcon from '../TextIcon';
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import { Box, Text } from 'grommet';
+import styled from 'styled-components';
+import { isMobile, isMobileOnly } from 'react-device-detect';
+
+import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
+import {
+  IProfileData,
+  ProfileProviders,
+  UsernameTypes,
+} from '@akashaorg/ui-awf-typings/lib/profile';
+
+import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import {
   ProfileCardAvatar,
   ProfileCardCoverImage,
@@ -12,17 +19,15 @@ import {
   ProfileCardEthereumId,
   ProfileCardBadges,
 } from './profile-card-fields';
-import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
-import ProfileMenuDropdown from './profile-card-menu-dropdown';
-import styled from 'styled-components';
-import { truncateMiddle } from '../../utils/string-utils';
-import { isMobile, isMobileOnly } from 'react-device-detect';
+
+import TextIcon from '../TextIcon';
+import Icon, { IconType } from '../Icon';
+import DuplexButton from '../DuplexButton';
 import MobileListModal from '../MobileListModal';
-import {
-  IProfileData,
-  ProfileProviders,
-  UsernameTypes,
-} from '@akashaorg/ui-awf-typings/lib/profile';
+import HorizontalDivider from '../HorizontalDivider';
+import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+
+import { truncateMiddle } from '../../utils/string-utils';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -146,13 +151,6 @@ const StatIconWrapper = styled(Box)<{ isMobile?: boolean }>`
     `;
   }}
 `;
-
-const SectionDivider = () => (
-  <Box
-    margin={{ horizontal: 'medium', vertical: 'xsmall' }}
-    border={{ color: 'border', size: 'xsmall', style: 'solid', side: 'bottom' }}
-  />
-);
 
 // tslint:disable:cyclomatic-complexity
 /* eslint-disable complexity */
@@ -319,7 +317,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               editable={editable}
               avatar={avatar}
               avatarIcon={avatarIcon}
-              avatarBorderColor="dev" // TODO: determine this from the profile data
+              avatarBorderColor="darkerBlue" // TODO: determine this from the profile data
               handleChangeAvatar={handleChangeAvatar}
               avatarPopoverOpen={avatarPopoverOpen}
               setAvatarPopoverOpen={setAvatarPopoverOpen}
@@ -497,7 +495,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         />
         {description && (
           <>
-            <SectionDivider />
+            <Box pad={{ horizontal: 'medium' }}>
+              <HorizontalDivider />
+            </Box>
             <ProfileCardDescription
               editable={editable}
               description={description}
@@ -513,7 +513,9 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
       </Box>
       {profileData.badges.length > 0 && (
         <>
-          <SectionDivider />
+          <Box pad={{ horizontal: 'medium' }}>
+            <HorizontalDivider />
+          </Box>
           <ProfileCardBadges badgesLabel={badgesLabel} badges={profileData.badges} />
         </>
       )}
