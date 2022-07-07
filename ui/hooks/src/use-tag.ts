@@ -17,6 +17,12 @@ const getTagSubscriptions = async () => {
 
 /**
  * Hook to get a user's subscribed tags
+ * @example useTagSubscriptions hook
+ * ```typescript
+ * const subscribedTagsQuery = useTagSubscriptions('logged-in-user-eth-address');
+ *
+ * const subscribedTags = subscribedTagsQuery.data;
+ * ```
  */
 export function useTagSubscriptions(loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY], () => getTagSubscriptions(), {
@@ -35,6 +41,12 @@ const getIsSubscribedToTag = async (tagName: string) => {
 
 /**
  * Hook to check if a user is subscribed to a tag
+ * @example useIsSubscribedToTag hook
+ * ```typescript
+ * const isSubscribedToTagQuery = useIsSubscribedToTag('awesome tag', 'logged-in-user-eth-address');
+ *
+ * const isSubscribedToTag = isSubscribedToTagQuery.data;
+ * ```
  */
 export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string | null) {
   return useQuery([TAG_SUBSCRIPTIONS_KEY, tagName], () => getIsSubscribedToTag(tagName), {
@@ -47,6 +59,12 @@ export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string |
 /**
  * Hook to toggle a user's tag subscription.
  * Pass the tagName to the mutate function
+ * @example useToggleTagSubscription hook
+ * ```typescript
+ * const toggleTagSubscriptionQuery = useToggleTagSubscription();
+ *
+ * toggleTagSubscriptionQuery.mutate('awesome tag');
+ * ```
  */
 export function useToggleTagSubscription() {
   const sdk = getSDK();
@@ -111,6 +129,12 @@ const getTag = async (tagName: string) => {
 
 /**
  * Hook to get a specific tag by name
+ * @example useGetTag hook
+ * ```typescript
+ * const getTagQuery = useGetTag('awesometag', true);
+ *
+ * const tag =  getTagQuery.data
+ * ```
  */
 export function useGetTag(tagName: string, enabler = true) {
   return useQuery([GET_TAG_KEY, tagName], () => getTag(tagName), {
@@ -130,6 +154,12 @@ const getTags = async tagName => {
 
 /**
  * Hook to search for tags
+ * @example useTagSearch hook
+ * ```typescript
+ * const tagSearchQuery = useTagSearch('awesometag');
+ *
+ * const result =  tagSearchQuery.data
+ * ```
  */
 export function useTagSearch(tagName: string) {
   return useQuery([SEARCH_TAGS_KEY, tagName], () => getTags(tagName), {

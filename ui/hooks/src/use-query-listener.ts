@@ -11,6 +11,12 @@ import { Mutation } from 'react-query/types/core/mutation';
 /**
  * Hook to detect changes to a mutation
  * @returns Mutation | undefined
+ * @example useMutationListener hook
+ * ```typescript
+ * const sampleMutation = useMutationListener('mutation key');
+ *
+ * const variables = sampleMutation.state.variables;
+ * ```
  */
 export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
   const [mutation, setMutation] = React.useState<Mutation<unknown, unknown, TVars>>();
@@ -31,6 +37,12 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
 
 /**
  * Hook to detect changes to a query
+ * @example useQueryListener hook
+ * ```typescript
+ * const sampleQuery = useQueryListener('query key');
+ *
+ * const result = sampleQuery.data;
+ * ```
  */
 export const useQueryListener = <TData>(queryKey: QueryKey) => {
   const [query, setQuery] = React.useState<QueryObserverResult<TData, unknown>>();
