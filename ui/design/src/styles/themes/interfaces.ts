@@ -63,6 +63,4 @@ export interface IColors {
   altGreen: string;
   warning: string;
   warningBorder: string;
-  devAvatarBorder: string;
-  publisherAvatarBorder: string;
 }
