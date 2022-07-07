@@ -73,17 +73,16 @@ const Sidebar: React.FC<ISidebarProps> = props => {
 
   React.useEffect(() => {
     if (allMenuItems && currentRoute) {
-      const splitUrl = currentRoute.split('/');
+      const [, orgName, appName, ...path] = currentRoute.split('/');
 
       const activeApp = allMenuItems.find(menuItem => activeApps?.includes?.(menuItem.name));
       if (activeApp && activeApp.index !== currentAppData?.index) {
         setCurrentAppData(activeApp);
       }
-
       // set the subroute
-      if (splitUrl[2] && currentRoute !== activeOption?.route) {
+      if (path.length && currentRoute !== activeOption?.route) {
         const currentOption = activeApp?.subRoutes?.find(
-          menuItem => menuItem.route === currentRoute,
+          menuItem => menuItem.route === `/${path.join('/')}`,
         );
         if (currentOption && currentOption.index !== activeOption?.index) {
           setActiveOption(currentOption);

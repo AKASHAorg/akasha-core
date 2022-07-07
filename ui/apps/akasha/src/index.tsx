@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { FEED, MY_FEED, POST, REPLY, rootRoute, TAGS } from './routes';
+import routes, { FEED, MY_FEED, POST, REPLY, TAGS } from './routes';
 import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import {
   IAppConfig,
@@ -9,9 +9,6 @@ import {
 } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen(rootRoute)(location);
-  },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
 
@@ -20,7 +17,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
    * other apps to navigate
    */
   routes: {
-    rootRoute,
     defaultRoute: routes[FEED],
     [MY_FEED]: routes[MY_FEED],
     [POST]: routes[POST],
@@ -31,7 +27,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
   i18nNamespace: ['app-akasha-integration', 'ui-lib-feed'],
   menuItems: {
-    route: rootRoute,
     label: 'Social',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'akasha' },

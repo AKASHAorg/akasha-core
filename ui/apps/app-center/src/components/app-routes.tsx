@@ -20,7 +20,7 @@ import MyWidgetsPage from './pages/my-widgets-page';
 
 import NavButton from './nav-button';
 import { hiddenIntegrations } from '../hidden-integrations';
-import routes, { rootRoute, EXPLORE, MY_APPS, MY_WIDGETS, INFO } from '../routes';
+import routes, { EXPLORE, MY_APPS, MY_WIDGETS, INFO } from '../routes';
 
 const { Box, Text, BasicCardBox } = DS;
 
@@ -78,9 +78,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   return (
-    <Router>
+    <Router basename={props.baseRouteName}>
       <Routes>
-        <Route path={rootRoute} element={<Navigate to={routes[EXPLORE]} replace />} />
+        <Route path="/" element={<Navigate to={routes[EXPLORE]} replace />} />
         <Route path={`${routes[INFO]}/:integrationId`} element={<InfoPage {...props} />} />
         <Route
           path="*"

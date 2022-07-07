@@ -33,7 +33,8 @@
     "@akashaorg/ui-awf-typings": "*",
     "@akashaorg/af-testing": "*",
     "qs": "6.10.2",
-    "single-spa": "5.9.3"
+    "single-spa": "5.9.3",
+    "path-to-regexp": "6.2.1"
   },
   "devDependencies": {
     "i18next": "20.6.1",

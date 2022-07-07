@@ -60,7 +60,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
 
-  const isMatchingFocusedMode = useMatch('/auth-app/*');
+  const isMatchingFocusedMode = useMatch('/@akashaorg/app-auth-ewa/*');
   const isFocusedMode = !!isMatchingFocusedMode;
 
   const uiEvents = React.useRef(props.uiEvents);
@@ -154,7 +154,7 @@ const Layout: React.FC<RootComponentProps> = props => {
         eventsSub.unsubscribe();
       }
     };
-  }, []);
+  }, [handleModal]);
 
   return (
     <>

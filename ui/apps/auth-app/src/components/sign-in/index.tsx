@@ -31,7 +31,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-auth-ewa');
   const [analyticsActions] = useAnalytics();
 
-  const navigateTo = React.useRef(props.plugins.routing?.navigateTo);
+  const routingPlugin = React.useRef(props.plugins.routing);
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
@@ -65,23 +65,21 @@ const SignIn: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
-      return navigateTo.current?.({
-        getNavigationUrl: () => {
-          const redirectTo = new URLSearchParams(location.search).get('redirectTo');
-          if (!redirectTo) {
-            return '/';
-          }
-          return redirectTo;
+      const searchParam = new URLSearchParams(location.search);
+      routingPlugin.current?.handleRedirect({
+        search: searchParam,
+        fallback: {
+          appName: props.worldConfig.homepageApp,
         },
       });
     }
     if (signInComplete && profileDataReq.isSuccess && !profileDataReq.data?.userName) {
-      navigateTo.current?.({
+      routingPlugin.current?.navigateTo({
         appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
       });
     }
-  }, [signInComplete, profileDataReq]);
+  }, [signInComplete, profileDataReq, props.worldConfig.homepageApp]);
 
   const requiredNetworkName = `${requiredNetworkQuery.data
     .charAt(0)

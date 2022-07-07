@@ -58,6 +58,8 @@ export interface ITopbarProps {
   onSignUpClick: () => void;
   onLogout: () => void;
   onBrandClick?: () => void;
+  onMyProfileClick: () => void;
+  onLegalClick: (menuItem: IMenuItem) => void;
   modalSlotId: string;
 }
 
@@ -337,6 +339,14 @@ const Topbar: React.FC<ITopbarProps> = props => {
       </Box>
     );
   };
+  const handleMyProfileClick = () => {
+    setDropOpen(false);
+    props.onMyProfileClick();
+  };
+  const handleLegalClick = menuItem => () => {
+    setDropOpen(false);
+    props.onLegalClick(menuItem);
+  };
 
   const renderLoggedInMenu = () => {
     if (avatarDropOpen && loggedProfileData?.ethAddress) {
@@ -344,7 +354,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
         <ProfileMenu
           target={currentDropItem && menuItemRefs.current[currentDropItem?.index]}
           closePopover={() => setAvatarDropOpen(false)}
-          onNavigation={onNavigation}
+          onMyProfileButtonClick={handleMyProfileClick}
+          onLegalClick={handleLegalClick}
           loggedProfileData={loggedProfileData}
           legalLabel={legalLabel}
           signOutLabel={signOutLabel}
@@ -368,7 +379,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         <ProfileMenu
           target={feedbackMenuRef.current}
           closePopover={() => setMenuDropOpen(false)}
-          onNavigation={onNavigation}
+          onLegalClick={handleLegalClick}
           legalLabel={legalLabel}
           legalMenu={legalMenu}
           feedbackLabel={feedbackLabel}

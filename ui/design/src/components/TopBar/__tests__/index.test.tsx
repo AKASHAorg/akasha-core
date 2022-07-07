@@ -24,6 +24,12 @@ describe('<Topbar /> Component', () => {
             brandLabel="test"
             quickAccessItems={[]}
             onLoginClick={handleLogin}
+            onMyProfileClick={() => {
+              return;
+            }}
+            onLegalClick={() => {
+              return;
+            }}
             onSignUpClick={handleSignup}
             onLogout={handleLogout}
             onFeedbackClick={handleFeedback}
@@ -61,6 +67,12 @@ describe.skip('<TopBar /> component on /auth-app* route', () => {
               onSignUpClick={handleSignup}
               onLogout={handleLogout}
               onFeedbackClick={handleFeedback}
+              onMyProfileClick={() => {
+                return;
+              }}
+              onLegalClick={() => {
+                return;
+              }}
               currentLocation=""
               modalSlotId="modal-slot"
             />

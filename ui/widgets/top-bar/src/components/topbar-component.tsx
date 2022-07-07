@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
 import {
   EventTypes,
+  IMenuItem,
   MenuItemAreaType,
   UIEventData,
 } from '@akashaorg/ui-awf-typings/lib/app-loader';
@@ -109,7 +110,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const handleLogout = async () => {
     await logoutMutation.mutateAsync();
     navigateTo?.({
-      getNavigationUrl: () => '/',
+      appName: props.worldConfig.homepageApp,
     });
     setTimeout(() => window.location.reload(), 50);
   };
@@ -136,7 +137,10 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
         if (appRoutes.hasOwnProperty('defaultRoute')) {
           // if the current pathname is the same as the one we want to navigate to,
           // it means that we want to scroll to the top of the page
-          if (location.pathname === appRoutes.defaultRoute) {
+          if (
+            location.pathname ===
+            `/${props.encodeAppName(props.worldConfig.homepageApp)}${appRoutes.defaultRoute}`
+          ) {
             scrollTo(0, 0);
           }
           return appRoutes.defaultRoute;
@@ -150,6 +154,20 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const handleSidebarToggle = () => {
     uiEvents.next({
       event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
+    });
+  };
+  const handleMyProfileClick = () => {
+    props.plugins.routing.navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: routes => {
+        return routes.myProfile;
+      },
+    });
+  };
+  const handleLegalClick = (menuItem: IMenuItem) => {
+    return props.plugins.routing.navigateTo({
+      appName: '@akashaorg/app-legal',
+      getNavigationUrl: () => menuItem.route || '/',
     });
   };
 
@@ -171,6 +189,8 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
       sidebarVisible={sidebarVisible}
       onNavigation={handleNavigation}
+      onMyProfileClick={handleMyProfileClick}
+      onLegalClick={handleLegalClick}
       onSidebarToggle={handleSidebarToggle}
       quickAccessItems={sortedQuickAccessItems}
       otherAreaItems={otherAreaItems}

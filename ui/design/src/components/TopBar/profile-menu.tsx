@@ -26,8 +26,10 @@ export interface IProfileMenu {
   legalCopyRightLabel?: string;
   // handlers
   closePopover: () => void;
-  onNavigation: (path: string) => void;
+  // onNavigation: (path: string) => void;
   onFeedbackClick: () => void;
+  onMyProfileButtonClick?: () => void;
+  onLegalClick: (menuItem: IMenuItem) => () => void;
   onLogout?: () => void;
   modalSlotId: string;
 }
@@ -52,18 +54,22 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     mobileSignedOutView,
     legalCopyRightLabel,
     closePopover,
-    onNavigation,
+    // onNavigation,
     onFeedbackClick,
     onLogout,
     modalSlotId,
+    onMyProfileButtonClick = () => {
+      return;
+    },
+    onLegalClick,
   } = props;
 
-  const handleNavigation = (menuItem: IMenuItem) => () => {
-    if (onNavigation) {
-      onNavigation(menuItem.route);
-    }
-    closePopover();
-  };
+  // const handleNavigation = (menuItem: IMenuItem) => () => {
+  //   if (onNavigation) {
+  //     onNavigation(menuItem.route);
+  //   }
+  //   closePopover();
+  // };
 
   const handleFeedbackClick = () => {
     if (onFeedbackClick) {
@@ -107,7 +113,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
     <Box pad="xsmall" direction="column" align="center">
       {loggedProfileData?.ethAddress &&
         menuItems?.map((menuItem: IMenuItem, index: number) => (
-          <Box fill="horizontal" onClick={handleNavigation(menuItem)} key={index}>
+          <Box fill="horizontal" onClick={onMyProfileButtonClick} key={index}>
             {renderAvatarMenuItem(menuItem)}
           </Box>
         ))}
@@ -157,7 +163,7 @@ const ProfileMenu: React.FC<IProfileMenu> = props => {
             {legalMenu?.subRoutes?.map((menuItem: IMenuItem, index: number) => (
               <StyledPopoverBox
                 key={index}
-                onClick={handleNavigation(menuItem)}
+                onClick={onLegalClick(menuItem)}
                 pad={{ left: 'medium', vertical: 'small' }}
                 responsive={false}
               >

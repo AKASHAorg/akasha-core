@@ -16,13 +16,14 @@ export const handleAppLoadingScreens = (
 ) => {
   return state$
     .pipe(getStateSlice('spaEvents'))
-    .pipe(filter(data => data?.eventName === 'single-spa:before-mount-routing-event'))
+    .pipe(filter(data => data?.eventName === 'single-spa:routing-event'))
     .pipe(
       withLatestFrom(
         combineLatest({
           manifests: state$.pipe(getStateSlice('manifests')),
           user: state$.pipe(getStateSlice('user')),
           integrationConfigs: state$.pipe(getStateSlice('integrationConfigs')),
+          plugins: state$.pipe(getStateSlice('plugins')),
         }),
       ),
       tap(([, combined]) => {
@@ -47,7 +48,12 @@ export const handleAppLoadingScreens = (
             const homeApp = worldConfig.homepageApp;
             const config = combined.integrationConfigs.get(homeApp);
             if (config) {
-              singleSpa.navigateToUrl(config.routes.defaultRoute);
+              const { navigateTo } = combined.plugins.routing as {
+                navigateTo: (opts: unknown) => void;
+              };
+              navigateTo({
+                appName: homeApp,
+              });
             }
             return;
           }

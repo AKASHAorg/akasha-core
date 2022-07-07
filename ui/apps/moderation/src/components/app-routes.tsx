@@ -9,7 +9,7 @@ import TransparencyLog from './transparency-log';
 
 import { Dashboard, GuestPage, IntroPage } from '../pages';
 
-import routes, { GUEST, HISTORY, HOME, UNAUTHENTICATED, rootRoute } from '../routes';
+import routes, { GUEST, HISTORY, HOME, UNAUTHENTICATED } from '../routes';
 
 const { Box } = DS;
 
@@ -25,7 +25,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Box>
-      <Router>
+      <Router basename={props.baseRouteName}>
         <Routes>
           <Route
             path={routes[UNAUTHENTICATED]}
@@ -59,7 +59,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
-          <Route path={rootRoute} element={<Navigate to={routes[HOME]} replace />} />
+          <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>
     </Box>

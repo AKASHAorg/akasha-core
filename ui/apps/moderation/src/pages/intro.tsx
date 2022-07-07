@@ -6,7 +6,7 @@ import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 import { ISharedModerationProps } from '../interfaces';
 
-import routes, { GUEST, HOME, APP_NAME } from '../routes';
+import routes, { GUEST, HOME } from '../routes';
 
 const { ModerationIntroCard } = DS;
 
@@ -22,14 +22,14 @@ const IntroPage: React.FC<ISharedModerationProps & RootComponentProps> = props =
     if (user && isAuthorised) {
       // if authenticated and authorised, navigate to dashboard
       routing.navigateTo({
-        appName: APP_NAME,
+        appName: '@akashaorg/app-moderation-ewa',
         getNavigationUrl: () => routes[HOME],
       });
     }
     if (user && !isAuthorised) {
       // if authenticated and !authorised, navigate to guest page
       routing.navigateTo({
-        appName: APP_NAME,
+        appName: '@akashaorg/app-moderation-ewa',
         getNavigationUrl: () => routes[GUEST],
       });
     }

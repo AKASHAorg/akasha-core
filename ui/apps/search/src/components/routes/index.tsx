@@ -1,7 +1,7 @@
 import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import routes, { rootRoute, ONBOARDING, RESULTS } from '../../routes';
+import routes, { ONBOARDING, RESULTS } from '../../routes';
 import SearchPage from './search-page';
 import OnboardingPage from './onboarding-page';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
@@ -17,10 +17,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Router>
+    <Router basename={props.baseRouteName}>
       <Box>
         <Routes>
-          <Route path={rootRoute} element={<Navigate to={routes[RESULTS]} replace />} />
+          <Route path="/" element={<Navigate to={routes[RESULTS]} replace />} />
           <Route path={routes[RESULTS]}>
             <Route
               path=":searchKeyword"
