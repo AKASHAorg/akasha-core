@@ -151,7 +151,7 @@ export interface IAppConfig {
    * Only used for topbar.
    * @deprecated - use extension points
    */
-  menuItems: IMenuItem;
+  menuItems: IMenuItem | IMenuItem[];
 }
 
 export type IWidgetConfig = Omit<IAppConfig, 'routes' | 'menuItems'>;
@@ -300,7 +300,7 @@ export type EventDataTypes = {
   version?: string;
   entryId?: string;
   entryType?: ItemTypes;
-  menuItems?: IMenuItem;
+  menuItems?: IMenuItem | IMenuItem[];
   navRoutes?: Record<string, string>;
   [key: string]: unknown;
 };

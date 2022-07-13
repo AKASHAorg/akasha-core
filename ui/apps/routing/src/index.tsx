@@ -46,16 +46,32 @@ export class RoutingPlugin {
           if (RoutingPlugin.routeRepository.all[eventData.data.name]) {
             return;
           }
-          const appMenuItemData = {
-            ...eventData.data.menuItems,
-            navRoutes: eventData.data.navRoutes,
-            name: eventData.data.name,
-          };
-          RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
-          eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
-            RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
-          );
-          RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
+
+          if (Array.isArray(eventData.data.menuItems)) {
+            eventData.data.menuItems.forEach(item => {
+              const appMenuItemData = {
+                ...item,
+                navRoutes: eventData.data.navRoutes,
+                name: eventData.data.name,
+              };
+              RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
+              item?.area?.forEach((area: MenuItemAreaType) =>
+                RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
+              );
+              RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
+            });
+          } else {
+            const appMenuItemData = {
+              ...eventData.data.menuItems,
+              navRoutes: eventData.data.navRoutes,
+              name: eventData.data.name,
+            };
+            RoutingPlugin.routeRepository.all[eventData.data.name] = appMenuItemData;
+            eventData.data.menuItems?.area?.forEach((area: MenuItemAreaType) =>
+              RoutingPlugin.routeRepository.byArea[area].push(appMenuItemData),
+            );
+            RoutingPlugin.subject.next(RoutingPlugin.routeRepository);
+          }
         }
       },
     });
@@ -81,7 +97,7 @@ export class RoutingPlugin {
 
   static navigateTo = ({ appName, getNavigationUrl }: NavigateToParams) => {
     const app = RoutingPlugin.routeRepository.all[appName];
-    let url;
+    let url: string;
 
     if (getNavigationUrl) {
       try {
