@@ -49,7 +49,6 @@ export const checkActivityFn = (opts: CheckActivityOptions) => {
           return singleSpa.pathToActiveWhen(path, exact);
         }
         if (matching.params?.publisherName && matching.params?.appName) {
-          console.log(matching.params, '>>> params');
           const encodedAppName = encodeName(
             `${matching.params.publisherName}/${matching.params.appName}`,
           );
