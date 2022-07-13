@@ -6,7 +6,7 @@ import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 import { ISharedModerationProps } from '../interfaces';
 
-import routes, { UNAUTHENTICATED, HOME, APP_NAME } from '../routes';
+import routes, { UNAUTHENTICATED, HOME } from '../routes';
 
 const { ModerationIntroCard } = DS;
 
@@ -22,14 +22,14 @@ const GuestPage: React.FC<ISharedModerationProps & RootComponentProps> = props =
     if (!user) {
       // if not authenticated, prompt to authenticate
       routing.navigateTo({
-        appName: APP_NAME,
+        appName: '@akashaorg/app-moderation-ewa',
         getNavigationUrl: () => routes[UNAUTHENTICATED],
       });
     }
     if (user && isAuthorised) {
       // if authenticated and authorised, navigate to home
       routing.navigateTo({
-        appName: APP_NAME,
+        appName: '@akashaorg/app-moderation-ewa',
         getNavigationUrl: () => routes[HOME],
       });
     }
@@ -38,8 +38,8 @@ const GuestPage: React.FC<ISharedModerationProps & RootComponentProps> = props =
 
   const handleCodeOfConductClick = () => {
     routing.navigateTo({
-      appName: 'Legal',
-      getNavigationUrl: () => '/legal/code-of-conduct',
+      appName: '@akashaorg/app-legal',
+      getNavigationUrl: routes => routes.codeOfConduct,
     });
   };
 

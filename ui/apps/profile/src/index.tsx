@@ -1,6 +1,6 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
-import routes, { rootRoute } from './routes';
+import routes, { MY_PROFILE } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -11,9 +11,6 @@ import {
  * All plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen(rootRoute)(location);
-  },
   mountsIn: opts.layoutConfig?.pluginSlotId,
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-profile', 'ui-lib-feed'],
@@ -22,7 +19,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     area: [MenuItemAreaType.QuickAccessArea],
     // routes,
     logo: { type: LogoTypeSource.AVATAR, value: '' },
-    route: rootRoute,
     subRoutes: Object.keys(routes).map((routeName, idx) => ({
       index: idx,
       label: routeName,
@@ -38,7 +34,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     });
   },
   routes: {
-    rootRoute,
-    ...routes,
+    myProfile: routes[MY_PROFILE],
   },
 });

@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { HISTORY, HOME, rootRoute } from './routes';
+import routes, { HISTORY, HOME } from './routes';
 import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import {
   IAppConfig,
@@ -9,20 +9,14 @@ import {
 } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen(rootRoute)(location);
-  },
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
   logo: { type: LogoTypeSource.ICON, value: 'appModeration' },
   i18nNamespace: ['app-moderation-ewa'],
   routes: {
-    rootRoute,
-    [HOME]: routes[HOME],
-    [HISTORY]: routes[HISTORY],
+    ...routes,
   },
   menuItems: {
-    route: rootRoute,
     label: 'Moderating',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'appModeration' },

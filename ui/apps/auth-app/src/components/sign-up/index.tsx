@@ -26,7 +26,7 @@ export interface SignUpProps {
 }
 
 const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const routingPlugin = props.plugins.routing;
 
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [inviteToken, setInviteToken] = React.useState<string>('');
@@ -69,20 +69,18 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   }, [connectProviderQuery.isError]);
 
   const handleIconClick = () => {
-    navigateTo?.({
-      getNavigationUrl: () => {
-        const redirectTo = new URLSearchParams(location.search).get('redirectTo');
-        if (!redirectTo) {
-          return '/';
-        }
-        return redirectTo;
+    const searchParam = new URLSearchParams(location.search);
+    routingPlugin?.handleRedirect({
+      search: searchParam,
+      fallback: {
+        appName: props.worldConfig.homepageApp,
       },
     });
   };
 
   const handleNextStep = () => {
     if (activeIndex === 3) {
-      navigateTo?.({
+      routingPlugin?.navigateTo({
         appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
       });

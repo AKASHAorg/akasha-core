@@ -6,9 +6,9 @@ import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 const { Helmet } = DS;
 
-const AppRoutes: React.FC<RootComponentProps> = () => {
+const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
-    <Router>
+    <Router basename={props.baseRouteName}>
       <Helmet>
         <title>My Bookmarks | Ethereum World</title>
       </Helmet>

@@ -5,20 +5,14 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
 } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import routes, { rootRoute } from './routes';
+import routes from './routes';
 
 /**
  * All the plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  // This is the root route in which the plugin will render.
-  // Make sure to change it as it fits.
-  activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen(rootRoute)(location);
-  },
   mountsIn: opts.layoutConfig?.pluginSlotId,
   routes: {
-    rootRoute,
     ...routes,
   },
   i18nNamespace: ['app-integration-center'],
@@ -28,7 +22,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     label: 'Integration Center',
     area: [MenuItemAreaType.AppArea],
     logo: { type: LogoTypeSource.ICON, value: 'appCenter' },
-    route: rootRoute,
     subRoutes: [],
   },
   extends: (matcher, loader) => {

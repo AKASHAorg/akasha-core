@@ -24,7 +24,7 @@ interface SidebarMenuItemProps {
 const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
   const { currentRoute, menuItem, size, index, activeOption, hasNewNotifs } = props;
 
-  const activePanel = !!currentRoute?.match(menuItem?.route);
+  const activePanel = !!currentRoute?.match(`/${menuItem.name}${menuItem?.route || ''}`);
 
   const handleAppIconClick = (shouldCloseSidebar?: boolean) => e => {
     e.preventDefault();
@@ -52,7 +52,7 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
         label={
           <MenuItemLabel menuItem={menuItem} isActive={activePanel} hasNewNotifs={hasNewNotifs} />
         }
-        {...(!hasSubRoutes && { href: `${location.origin}${menuItem.route}` })}
+        {...(!hasSubRoutes && { href: `${location.origin}/${menuItem.name}${menuItem.route}` })}
       >
         <MenuSubItems
           isMobile={false}
@@ -71,7 +71,7 @@ const SidebarMenuItem: React.FC<SidebarMenuItemProps> = props => {
         label={
           <MenuItemLabel menuItem={menuItem} isActive={activePanel} hasNewNotifs={hasNewNotifs} />
         }
-        {...(!hasSubRoutes && { href: `${location.origin}${menuItem.route}` })}
+        {...(!hasSubRoutes && { href: `${location.origin}/${menuItem.name}${menuItem.route}` })}
       >
         <MenuSubItems
           isMobile={true}

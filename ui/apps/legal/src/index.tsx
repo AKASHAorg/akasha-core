@@ -1,6 +1,6 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
-import routes, { rootRoute } from './routes';
+import routes, { COC, DG, PP, TOS, TOU } from './routes';
 import {
   IAppConfig,
   MenuItemAreaType,
@@ -9,19 +9,17 @@ import {
 } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  // This is the root route in which the plugin will render.
-  // Make sure to change it as it fits.
-  activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen(rootRoute)(location);
-  },
   mountsIn: opts.layoutConfig?.pluginSlotId,
   routes: {
-    rootRoute,
+    devGuidelines: routes[DG],
+    codeOfConduct: routes[COC],
+    privacyPolicy: routes[PP],
+    termsOfService: routes[TOS],
+    termsOfUse: routes[TOU],
   },
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-legal'],
   menuItems: {
-    route: rootRoute,
     label: 'Legal',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'legal' },

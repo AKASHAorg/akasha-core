@@ -4,13 +4,12 @@ import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import DS from '@akashaorg/design-system';
-import { rootRoute } from '../routes';
 
 const { ErrorLoader, ModalContainer, ShareModal } = DS;
 
 const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
   const { profileId } = props.extensionData;
-  const url = `${window.location.origin}${rootRoute}/${profileId}`;
+  const url = `${window.location.origin}/@akashaorg/app-profile/${profileId}`;
 
   const handleProfileShare = (service: 'twitter' | 'facebook' | 'reddit' | 'copy', url: string) => {
     let shareUrl;

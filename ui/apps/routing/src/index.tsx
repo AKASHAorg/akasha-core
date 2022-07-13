@@ -18,6 +18,8 @@ export class RoutingPlugin {
   };
   static subject = new BehaviorSubject(RoutingPlugin.routeRepository);
   static logger;
+  static decodeAppName;
+  static encodeAppName;
 
   static initRouteObservation(uiEvents: RootComponentProps['uiEvents']) {
     const globalChannel = getSDK().api.globalChannel;
@@ -91,17 +93,46 @@ export class RoutingPlugin {
       }
     }
     if (!url) {
-      url = app?.route;
+      url = '/';
     }
 
+    const targetUrl = `/${RoutingPlugin.encodeAppName(appName)}${url}`;
     // no need to navigate because the paths are the same
-    if (url === location.pathname && !location.search) {
+    if (targetUrl === location.pathname && !location.search) {
       return;
     }
-    if (url) return singleSpa.navigateToUrl(url);
-    RoutingPlugin.logger.error(
-      `Path not found! Tried to find a path for application: ${appName}. Aborting.`,
-    );
+    return singleSpa.navigateToUrl(targetUrl);
+  };
+  /**
+   * handle redirections from search params
+   * if redirectTo is found in the search param then it will redirect to that path
+   * otherwise will use the fallback object {@link NavigateToParams}
+   * @example
+   * ```
+   *  handleRedirect({
+   *     search: new URLSearchParam(location.search),
+   *     fallBack: {
+   *       appName: '@akashaorg/app-bookmarks',
+   *       getNavigationUrl: (routes) => routes.someRoute
+   *     }
+   *  });
+   * ```
+   */
+
+  static handleRedirect = (options: { search: URLSearchParams; fallback: NavigateToParams }) => {
+    const redirectTo = options.search.get('redirectTo');
+    if (redirectTo) {
+      // appName is at index 1 in "/@akashaorg/app-name/some-path"
+      const [, appName, ...path] = redirectTo.split('/');
+      const decodedAppName = RoutingPlugin.decodeAppName(appName);
+      return RoutingPlugin.navigateTo({
+        appName: decodedAppName,
+        getNavigationUrl: () => {
+          return `/${path.join('/')}`;
+        },
+      });
+    }
+    return RoutingPlugin.navigateTo(options.fallback);
   };
 }
 
@@ -111,14 +142,22 @@ export const register = async () => {
   };
 };
 
-export const getPlugin = async (props: RootComponentProps) => {
+export const getPlugin = async (
+  props: RootComponentProps & {
+    encodeAppName: (name: string) => string;
+    decodeAppName: (name: string) => string;
+  },
+) => {
   RoutingPlugin.logger = props.logger;
   RoutingPlugin.initRouteObservation(props.uiEvents);
+  RoutingPlugin.decodeAppName = props.decodeAppName;
+  RoutingPlugin.encodeAppName = props.encodeAppName;
 
   return {
     routing: {
       routeObserver: RoutingPlugin.subject,
       navigateTo: RoutingPlugin.navigateTo,
+      handleRedirect: RoutingPlugin.handleRedirect,
     },
   };
 };

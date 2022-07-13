@@ -47,6 +47,7 @@ export interface RootComponentProps {
   logger: ILogger;
   name?: string;
   singleSpa: typeof singleSpa;
+  baseRouteName: string;
   /*
    * @deprecated
    */
@@ -56,14 +57,11 @@ export interface RootComponentProps {
    */
   uninstallIntegration?: (name: string) => void;
   navigateToModal: (opts: AppLoaderTypes.ModalNavigationOptions) => void;
-  /*
-   * @deprecated
-   * Use extensionData instead
-   */
-  activeModal?: AppLoaderTypes.ModalNavigationOptions;
   getAppRoutes?: (appId: string) => AppLoaderTypes.IAppConfig['routes'];
   worldConfig: AppLoaderTypes.ILoaderConfig;
   parseQueryString: (queryString: string) => QueryStringType;
+  encodeAppName: (name: string) => string;
+  decodeAppName: (name: string) => string;
 }
 
 export interface IPluginsMap {
