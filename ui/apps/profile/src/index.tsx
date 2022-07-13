@@ -14,17 +14,26 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   mountsIn: opts.layoutConfig?.pluginSlotId,
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-profile', 'ui-lib-feed'],
-  menuItems: {
-    label: 'Profile',
-    area: [MenuItemAreaType.QuickAccessArea],
-    // routes,
-    logo: { type: LogoTypeSource.AVATAR, value: '' },
-    subRoutes: Object.keys(routes).map((routeName, idx) => ({
-      index: idx,
-      label: routeName,
-      route: routes[routeName],
-    })),
-  },
+  menuItems: [
+    {
+      label: 'Profile',
+      area: [MenuItemAreaType.QuickAccessArea],
+      // routes,
+      logo: { type: LogoTypeSource.AVATAR, value: '' },
+      subRoutes: Object.keys(routes).map((routeName, idx) => ({
+        index: idx,
+        label: routeName,
+        route: routes[routeName],
+      })),
+    },
+    {
+      label: 'Dev Dashboard',
+      area: [MenuItemAreaType.AppArea],
+      route: '/my-profile/developer',
+      logo: { type: LogoTypeSource.ICON, value: 'dashboard' },
+      subRoutes: [],
+    },
+  ],
   extends: (matcher, loader) => {
     matcher({
       login: loader(() => import('./extensions/login-modal')),

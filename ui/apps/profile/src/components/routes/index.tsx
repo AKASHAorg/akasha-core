@@ -39,7 +39,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               }
             />
           ))}
-          <Route element={<div>{t('Oops, Profile not found!')}</div>} />
+          <Route path="/" element={<div>{t('Oops, Profile not found!')}</div>} />
         </Routes>
       </Box>
     </Router>
