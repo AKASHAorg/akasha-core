@@ -1,17 +1,22 @@
 import * as React from 'react';
+import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+
+import { IProfileDataProvider, IProfileProvidersData } from '../';
+
 import Avatar from '../../Avatar';
 import { AppIcon } from '../../Icon/app-icon';
-import SelectPopover from '../../SelectPopover';
-import { IProfileDataProvider, IProfileProvidersData } from '../';
-import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
-import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
 import ImageOverlay from '../../ImageOverlay';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import SelectPopover from '../../SelectPopover';
+
+import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
+import { AvatarBorderColor } from '../../Avatar/styled-avatar';
 
 export interface IProfileCardAvatarProps {
   editable: boolean;
   avatar?: IProfileData['avatar'];
   avatarIcon?: LogoSourceType;
+  avatarBorderColor?: AvatarBorderColor;
   avatarPopoverOpen: boolean;
   setAvatarPopoverOpen: (value: boolean) => void;
   handleChangeAvatar: (provider: IProfileDataProvider) => void;
@@ -24,6 +29,7 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
     editable,
     avatar,
     avatarIcon,
+    avatarBorderColor,
     avatarPopoverOpen,
     setAvatarPopoverOpen,
     profileProvidersData,
@@ -52,6 +58,7 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
           ethAddress={ethAddress}
           src={avatar}
           onClick={handleClickImage}
+          borderColor={avatarBorderColor}
         />
         {editable &&
           profileProvidersData &&

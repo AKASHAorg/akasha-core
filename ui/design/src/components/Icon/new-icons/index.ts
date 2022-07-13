@@ -36,6 +36,7 @@ import coins from './coins';
 import comments from './comments';
 import copy from './copy';
 import dapper from './dapper';
+import dev from './dev';
 import discord from './discord';
 import document from './document';
 import dropdown from './dropdown';
@@ -90,6 +91,7 @@ import pin from './pin';
 import pinAlt from './pinAlt';
 import plusDark from './plus-dark';
 import plusGrey from './plus-grey';
+import publisher from './publisher';
 import questionMark from './question-mark';
 import quote from './quote';
 import reddit from './reddit';
@@ -162,6 +164,7 @@ export {
   chevronRight,
   chevronLeft,
   closedEye,
+  dev,
   discord,
   dropdown,
   payment,
@@ -228,6 +231,7 @@ export {
   person,
   plusDark,
   plusGrey,
+  publisher,
   questionMark,
   quote,
   reddit,

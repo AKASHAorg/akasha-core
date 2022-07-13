@@ -1,27 +1,33 @@
-import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
-import DuplexButton from '../DuplexButton';
-import Icon, { IconType } from '../Icon';
-import TextIcon from '../TextIcon';
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+import { Box, Text } from 'grommet';
+import styled from 'styled-components';
+import { isMobile, isMobileOnly } from 'react-device-detect';
+
+import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
+import {
+  IProfileData,
+  ProfileProviders,
+  UsernameTypes,
+} from '@akashaorg/ui-awf-typings/lib/profile';
+
+import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import {
   ProfileCardAvatar,
   ProfileCardCoverImage,
   ProfileCardDescription,
   ProfileCardName,
   ProfileCardEthereumId,
+  ProfileCardBadges,
 } from './profile-card-fields';
-import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
-import ProfileMenuDropdown from './profile-card-menu-dropdown';
-import styled from 'styled-components';
-import { truncateMiddle } from '../../utils/string-utils';
-import { isMobile, isMobileOnly } from 'react-device-detect';
+
+import TextIcon from '../TextIcon';
+import Icon, { IconType } from '../Icon';
+import DuplexButton from '../DuplexButton';
 import MobileListModal from '../MobileListModal';
-import {
-  IProfileData,
-  ProfileProviders,
-  UsernameTypes,
-} from '@akashaorg/ui-awf-typings/lib/profile';
+import HorizontalDivider from '../HorizontalDivider';
+import { MainAreaCardBox } from '../EntryCard/basic-card-box';
+
+import { truncateMiddle } from '../../utils/string-utils';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -66,6 +72,7 @@ export interface IProfileCardProps {
   flagAsLabel?: string;
   blockLabel?: string;
   descriptionLabel: string;
+  badgesLabel: string;
   postsLabel: string;
   interestsLabel?: string;
   followingLabel: string;
@@ -162,6 +169,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     isFollowing,
     profileData,
     descriptionLabel,
+    badgesLabel,
     followingLabel,
     followersLabel,
     followLabel,
@@ -309,6 +317,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               editable={editable}
               avatar={avatar}
               avatarIcon={avatarIcon}
+              avatarBorderColor="darkerBlue" // TODO: determine this from the profile data
               handleChangeAvatar={handleChangeAvatar}
               avatarPopoverOpen={avatarPopoverOpen}
               setAvatarPopoverOpen={setAvatarPopoverOpen}
@@ -485,18 +494,31 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           }
         />
         {description && (
-          <ProfileCardDescription
-            editable={editable}
-            description={description}
-            descriptionIcon={descriptionIcon}
-            handleChangeDescription={handleChangeDescription}
-            descriptionPopoverOpen={descriptionPopoverOpen}
-            setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-            profileProvidersData={profileProvidersData}
-            descriptionLabel={descriptionLabel}
-          />
+          <>
+            <Box pad={{ horizontal: 'medium' }}>
+              <HorizontalDivider />
+            </Box>
+            <ProfileCardDescription
+              editable={editable}
+              description={description}
+              descriptionIcon={descriptionIcon}
+              handleChangeDescription={handleChangeDescription}
+              descriptionPopoverOpen={descriptionPopoverOpen}
+              setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+              profileProvidersData={profileProvidersData}
+              descriptionLabel={descriptionLabel}
+            />
+          </>
         )}
       </Box>
+      {profileData.badges.length > 0 && (
+        <>
+          <Box pad={{ horizontal: 'medium' }}>
+            <HorizontalDivider />
+          </Box>
+          <ProfileCardBadges badgesLabel={badgesLabel} badges={profileData.badges} />
+        </>
+      )}
     </MainAreaCardBox>
   );
 };

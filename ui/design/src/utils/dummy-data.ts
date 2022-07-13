@@ -176,7 +176,7 @@ const profileData = {
   userName: 'gilbert',
   ensName: 'gilbert.akasha.eth',
   description:
-    'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
+    'Product design @companyname. Main interests: User experience, Design processes, Project Management. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   totalFollowers: '15',
   totalFollowing: '1876',
   isFollowed: true,
@@ -186,6 +186,7 @@ const profileData = {
   vnd: {},
   default: [],
   providers: [],
+  badges: ['dev', 'publisher'],
 };
 
 const TAGS = [
@@ -422,7 +423,7 @@ const ICWorldAppsData: ReleaseInfo[] = [
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xkasfkjas',
+    integrationID: '0xfD8c38044489fe74b2eC548E9e02d573Aa1EC9a7',
     version: '0.2.1',
     sources: [],
     enabled: true,
@@ -432,7 +433,7 @@ const ICWorldAppsData: ReleaseInfo[] = [
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xkasfkjas',
+    integrationID: '0xd4cd165bc286160d7d51a5c21079fbcb9f22afa5',
     version: '0.2.1',
     sources: [],
     enabled: true,
@@ -887,6 +888,7 @@ const followingLabel = 'Following';
 const followersLabel = 'Followers';
 const postsLabel = 'Posts';
 const aboutMeLabel = 'About';
+const badgesLabel = 'Badges';
 const commentsLabel = 'Comments';
 const quotesLabel = 'Quotes';
 const shareLabel = 'Share';
@@ -1046,6 +1048,7 @@ export {
   USERNAMES,
   appInfo,
   aboutMeLabel,
+  badgesLabel,
   appData,
   chartData,
   appsDataSource,

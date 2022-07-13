@@ -142,6 +142,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         descriptionLabel={t('About me')}
+        badgesLabel={t('Badges')}
         followingLabel={t('Following')}
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
