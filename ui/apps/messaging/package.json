@@ -23,7 +23,7 @@
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
     "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "postpack": "copyfiles -f ./dist/* ../../build/apps/bookmarks",
+    "postpack": "copyfiles -f ./dist/* ../../build/apps/messaging",
     "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
     "watch": "webpack --config webpack.config.js --watch",
     "pretest": "tsc -m commonjs",
