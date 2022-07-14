@@ -511,7 +511,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           </>
         )}
       </Box>
-      {profileData.badges.length > 0 && (
+      {profileData.badges?.length > 0 && (
         <>
           <Box pad={{ horizontal: 'medium' }}>
             <HorizontalDivider />
