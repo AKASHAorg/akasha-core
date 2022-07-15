@@ -1,6 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
 /* Components */
 import {
+  Anchor,
   Box,
   BoxExtendedProps,
   ButtonExtendedProps,
@@ -280,6 +281,7 @@ const exported = {
   createTheme,
   darkTheme,
   lightTheme,
+  Anchor,
   Box,
   Grid,
   Image,
