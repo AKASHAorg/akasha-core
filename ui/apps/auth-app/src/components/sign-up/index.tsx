@@ -19,7 +19,7 @@ import { StepFive } from './steps/StepFive';
 
 import { SIGN_UP_USERNAME } from '../../routes';
 
-const { SignUpCard } = DS;
+const { SteppedActionCard } = DS;
 
 export interface SignUpProps {
   activeIndex?: number;
@@ -97,7 +97,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   };
 
   return (
-    <SignUpCard
+    <SteppedActionCard
       titleLabel={t('Sign Up')}
       activeIndex={activeIndex}
       stepLabels={[
@@ -313,7 +313,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           navigateTo={props.plugins?.routing?.navigateTo}
         />
       )}
-    </SignUpCard>
+    </SteppedActionCard>
   );
 };
 

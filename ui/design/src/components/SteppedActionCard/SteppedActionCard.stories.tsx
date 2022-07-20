@@ -1,13 +1,13 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import SignUpCard, { ISignUpCardProps } from '.';
+import SteppedActionCard, { ISteppedActionCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
 export default {
-  title: 'Cards/SignUpCard',
-  component: SignUpCard,
+  title: 'Cards/SteppedActionCard',
+  component: SteppedActionCard,
   argTypes: {
     titleLabel: { control: 'text' },
     activeIndex: { control: 'number' },
@@ -15,17 +15,17 @@ export default {
   },
 };
 
-const Template = (args: ISignUpCardProps) => (
+const Template = (args: ISteppedActionCardProps) => (
   <Grommet theme={lightTheme}>
     {/* <Box width="40%" pad="none" align="center"> */}
-    <SignUpCard {...args} />
+    <SteppedActionCard {...args} />
     {/* </Box> */}
   </Grommet>
 );
 
-export const BaseSignUpCard = Template.bind({});
+export const BaseSteppedActionCard = Template.bind({});
 
-BaseSignUpCard.args = {
+BaseSteppedActionCard.args = {
   titleLabel: 'Sign Up',
   activeIndex: 2,
   stepLabels: [

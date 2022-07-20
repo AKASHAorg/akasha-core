@@ -86,7 +86,7 @@ import SourcesWidgetCard from './components/SourcesWidgetCard';
 import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
 import TrendingWidgetCard from './components/TrendingWidgetCard';
 import TutorialWidgetCard from './components/TutorialWidgetCard';
-import SignUpCard from './components/SignUpCard';
+import SteppedActionCard from './components/SteppedActionCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
@@ -328,7 +328,7 @@ const exported = {
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
-  SignUpCard,
+  SteppedActionCard,
   FilterCard,
   SwitchCard,
   StyledSwitchCardButton,
