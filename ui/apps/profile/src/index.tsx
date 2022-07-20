@@ -1,6 +1,6 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
-import routes, { MY_PROFILE } from './routes';
+import routes, { DEV_DASHBOARD, MY_PROFILE } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -29,7 +29,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     {
       label: 'Dev Dashboard',
       area: [MenuItemAreaType.AppArea],
-      route: '/my-profile/developer',
+      route: routes[DEV_DASHBOARD],
       logo: { type: LogoTypeSource.ICON, value: 'dashboard' },
       subRoutes: [],
     },

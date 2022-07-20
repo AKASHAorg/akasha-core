@@ -8,8 +8,18 @@ import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader
 
 import ProfilePage from './profile-page';
 import NoProfileFound from './no-profile-found';
+import DevDashOnboardingIntro from '../dev-dashboard/onboarding/intro-card';
+import DevDashOnboardingSteps from '../dev-dashboard/onboarding/onboarding-steps';
 
-import menuRoute, { MY_PROFILE } from '../../routes';
+import menuRoute, {
+  MY_PROFILE,
+  ONBOARDING,
+  DEV_DASHBOARD,
+  ONBOARDING_STEP_ONE,
+  ONBOARDING_STEP_TWO,
+  ONBOARDING_STEP_THREE,
+  ONBOARDING_STEP_FOUR,
+} from '../../routes';
 
 const { Box } = DS;
 
@@ -48,12 +58,31 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     });
   };
 
+  const handleOnboardingCTAClick = () => {
+    // if logged in, navigate to step 1
+    if (loggedProfileQuery.data?.pubKey) {
+      return routing.navigateTo({
+        appName: '@akashaorg/app-profile',
+        getNavigationUrl: () => menuRoute[ONBOARDING_STEP_ONE],
+      });
+    }
+    // if guest, redirect to onboarding step 1 after authentication
+    routing.navigateTo?.({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: (routes: Record<string, string>) => {
+        return `${routes.SignIn}?${new URLSearchParams({
+          redirectTo: `${props.baseRouteName}${menuRoute[ONBOARDING_STEP_ONE]}`,
+        }).toString()}`;
+      },
+    });
+  };
+
   return (
     <Router basename={props.baseRouteName}>
       <Box>
         <Routes>
           {/* <Route path="/list" element={<>A list of profiles</>} /> */}
-          {['/:pubKey', menuRoute[MY_PROFILE]].map(path => (
+          {['/:pubKey', menuRoute[MY_PROFILE], menuRoute[DEV_DASHBOARD]].map(path => (
             <Route
               key={path}
               path={path}
@@ -81,6 +110,32 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
+          <Route
+            path={menuRoute[ONBOARDING]}
+            element={
+              <DevDashOnboardingIntro
+                titleLabel={t('Developer Dashboard')}
+                introLabel={t('✨ Your journey as a developer begins here ✨')}
+                descriptionLabel={t(
+                  'Join our community of developers, start creating and publishing amazing applications that will make Ethereum World better!',
+                )}
+                ctaLabel={t('I want to be a developer')}
+                onCTAClick={handleOnboardingCTAClick}
+              />
+            }
+          />
+          {[
+            menuRoute[ONBOARDING_STEP_ONE],
+            menuRoute[ONBOARDING_STEP_TWO],
+            menuRoute[ONBOARDING_STEP_THREE],
+            menuRoute[ONBOARDING_STEP_FOUR],
+          ].map((path, idx) => (
+            <Route
+              key={path}
+              path={path}
+              element={<DevDashOnboardingSteps {...props} activeIndex={idx} />}
+            />
+          ))}
         </Routes>
       </Box>
     </Router>
