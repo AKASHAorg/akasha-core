@@ -25,6 +25,7 @@ export interface IProfileData {
   delisted?: boolean;
   moderated?: boolean;
   reason?: string;
+  isDev?: boolean;
   badges?: string[];
 }
 

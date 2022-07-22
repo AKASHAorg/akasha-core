@@ -1,22 +1,26 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
+
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { ProfilePageHeader } from '../profile-cards/profile-page-header';
-import menuRoute, { MY_PROFILE } from '../../routes';
 import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   useGetProfile,
   useInfinitePostsByAuthor,
   LoginState,
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
-const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
+import menuRoute, { baseDeveloperRoute, MY_PROFILE } from '../../routes';
+
+import DevProfileCard from '../dev-dashboard/profile/dev-profile-card';
+import { ProfilePageHeader } from '../profile-cards/profile-page-header';
+
+const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
@@ -45,6 +49,11 @@ const ProfilePage = (props: ProfilePageProps) => {
     }
     return pubKey;
   }, [pubKey, loggedProfileData, location.pathname]);
+
+  const isOnDevDashboard = React.useMemo(
+    () => location.pathname === baseDeveloperRoute,
+    [location.pathname],
+  );
 
   const loginQuery = useGetLogin();
 
@@ -117,7 +126,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      {profileDataQuery.status === 'loading' && <></>}
+      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') && <Spinner />}
       {(profileDataQuery.status === 'error' ||
         (profileDataQuery.status === 'success' && !profileState)) && (
         <ErrorLoader
@@ -164,42 +173,77 @@ const ProfilePage = (props: ProfilePageProps) => {
                 loginState={loginQuery.data}
                 navigateTo={props.plugins?.routing?.navigateTo}
               />
-              {reqPosts.isError && reqPosts.error && (
-                <ErrorLoader
-                  type="script-error"
-                  title="Cannot get posts for this profile"
-                  details={(reqPosts.error as Error).message}
+              {isOnDevDashboard && (
+                <DevProfileCard
+                  titleLabel={t('Welcome to your developer Dashboard')}
+                  subtitleLabels={[
+                    t('Not sure where to start? Check our'),
+                    t('developer documentation'),
+                    '✨',
+                  ]}
+                  cardMenuItems={[
+                    {
+                      label: t('Authorization Tokens'),
+                      value: [
+                        {
+                          name: 'My First Token',
+                          token: '3fLBxdVgUkWj8UjVvUXcIdak5qe5xRRowUDkIuVRRQ',
+                        },
+                      ],
+                    },
+                    { label: t('Sign a Message') },
+                    {
+                      label: t('Published Apps'),
+                      value: [
+                        {
+                          name: 'An awesome app',
+                        },
+                      ],
+                    },
+                  ]}
+                  ctaUrl="https://akasha-docs.pages.dev"
                 />
               )}
-              {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
-              {reqPosts.isSuccess && postPages && (
-                <FeedWidget
-                  modalSlotId={props.layoutConfig.modalSlotId}
-                  itemType={ItemTypes.ENTRY}
-                  logger={props.logger}
-                  onLoadMore={handleLoadMore}
-                  getShareUrl={(itemId: string) =>
-                    `${window.location.origin}/social-app/post/${itemId}`
-                  }
-                  pages={postPages}
-                  requestStatus={reqPosts.status}
-                  loginState={loginQuery.data}
-                  loggedProfile={loggedProfileData}
-                  navigateTo={props.plugins?.routing?.navigateTo}
-                  navigateToModal={props.navigateToModal}
-                  onLoginModalOpen={showLoginModal}
-                  hasNextPage={reqPosts.hasNextPage}
-                  contentClickable={true}
-                  onEntryFlag={handleEntryFlag}
-                  onEntryRemove={handleEntryRemove}
-                  removeEntryLabel={t('Delete Post')}
-                  removedByMeLabel={t('You deleted this post')}
-                  removedByAuthorLabel={t('This post was deleted by its author')}
-                  parentIsProfilePage={true}
-                  uiEvents={props.uiEvents}
-                  itemSpacing={8}
-                  i18n={props.plugins?.translation?.i18n}
-                />
+              {!isOnDevDashboard && (
+                <>
+                  {reqPosts.isError && reqPosts.error && (
+                    <ErrorLoader
+                      type="script-error"
+                      title="Cannot get posts for this profile"
+                      details={(reqPosts.error as Error).message}
+                    />
+                  )}
+                  {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
+                  {reqPosts.isSuccess && postPages && (
+                    <FeedWidget
+                      modalSlotId={props.layoutConfig.modalSlotId}
+                      itemType={ItemTypes.ENTRY}
+                      logger={props.logger}
+                      onLoadMore={handleLoadMore}
+                      getShareUrl={(itemId: string) =>
+                        `${window.location.origin}/social-app/post/${itemId}`
+                      }
+                      pages={postPages}
+                      requestStatus={reqPosts.status}
+                      loginState={loginQuery.data}
+                      loggedProfile={loggedProfileData}
+                      navigateTo={props.plugins?.routing?.navigateTo}
+                      navigateToModal={props.navigateToModal}
+                      onLoginModalOpen={showLoginModal}
+                      hasNextPage={reqPosts.hasNextPage}
+                      contentClickable={true}
+                      onEntryFlag={handleEntryFlag}
+                      onEntryRemove={handleEntryRemove}
+                      removeEntryLabel={t('Delete Post')}
+                      removedByMeLabel={t('You deleted this post')}
+                      removedByAuthorLabel={t('This post was deleted by its author')}
+                      parentIsProfilePage={true}
+                      uiEvents={props.uiEvents}
+                      itemSpacing={8}
+                      i18n={props.plugins?.translation?.i18n}
+                    />
+                  )}
+                </>
               )}
             </>
           )}
