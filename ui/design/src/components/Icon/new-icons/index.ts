@@ -17,6 +17,7 @@ import arrowDown from './arrow-down';
 import arrowUp from './arrow-up';
 import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
+import article from './article';
 import available from './available';
 import block from './block';
 import bold from './bold';
@@ -144,6 +145,7 @@ export {
   appModeration,
   appSocial,
   announcement,
+  article,
   available,
   reload,
   pin,

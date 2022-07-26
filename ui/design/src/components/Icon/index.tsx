@@ -24,6 +24,7 @@ export type IconType =
   | 'arrowUp'
   | 'arrowLeft'
   | 'arrowRight'
+  | 'article'
   | 'available'
   | 'bold'
   | 'block'
@@ -158,6 +159,7 @@ export const iconTypes: IconType[] = [
   'arrowUp',
   'arrowLeft',
   'arrowRight',
+  'article',
   'available',
   'bold',
   'block',
