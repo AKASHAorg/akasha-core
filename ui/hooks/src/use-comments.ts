@@ -47,6 +47,17 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
 
 /**
  * Hook to get the comments for a specific post
+ * @example useInfiniteComments hook
+ * ```typescript
+ * const commentsQuery = useInfiniteComments(10, 'some-post-id', 'optional-comment-id-to-start-from');
+ *
+ * const commentPages = React.useMemo(() => {
+    if (commentsQuery.data) {
+      return commentsQuery.data.pages;
+    }
+    return [];
+  }, [commentsQuery.data]);
+ * ```
  */
 export function useInfiniteComments(limit: number, postID: string, offset?: string) {
   return useInfiniteQuery(
@@ -90,6 +101,18 @@ const getComment = async (commentID): Promise<CommentResponse> => {
 
 /**
  * Hook for fetching data for a specific comment
+ * @example useComment hook
+ * ```typescript
+ * const itemType = 'COMMENT';
+ * const commentQuery = useComment('some-comment-id', true);
+ *
+ * const itemData = React.useMemo(() => {
+    if (itemType === 'COMMENT' && commentQuery.isSuccess) {
+      // mapEntry is a utility function that transforms the comment/post data into required format.
+      return mapEntry(commentQuery.data);
+    }
+  }, [itemType, commentQuery.data, commentQuery.isSuccess]);
+ * ```
  */
 export function useComment(commentID: string, enabler = true) {
   const queryClient = useQueryClient();
@@ -115,6 +138,12 @@ const deleteComment = async (commentId: string) => {
 
 /**
  * Hook for deleting a specific comment
+ * @example useDeleteComment hook
+ * ```typescript
+ * const deleteCommentQuery = useDeleteComment('some-comment-id');
+ *
+ * deleteCommentQuery.mutate('some-comment-id');
+ * ```
  */
 export function useDeleteComment(commentID: string) {
   const queryClient = useQueryClient();
@@ -168,6 +197,13 @@ export function useDeleteComment(commentID: string) {
 
 /**
  * Hook for creating a new comment
+ * @example useCreateComment hook
+ * ```typescript
+ * const createCommentQuery = useCreateComment('some-comment-id');
+ * const newCommentData = { textContent: 'some text content', author: 'comment author', pubKey: 'comment-author-pubkey' }
+ *
+ * createCommentQuery.mutate({ ...newCommentData , postID: 'some-post-id' });
+ * ```
  */
 export function useCreateComment() {
   const sdk = getSDK();
@@ -213,6 +249,13 @@ export function useCreateComment() {
 
 /**
  * Hook for editing a comment
+ * @example useEditComment hook
+ * ```typescript
+ * const editCommentQuery = useEditComment('some-comment-id', true);
+ * const editedCommentData = { textContent: 'some text content', author: 'comment author', pubKey: 'comment-author-pubkey' }
+ *
+ * editCommentQuery.mutate({ ...editedCommentData, postID: 'some-post-id' });
+ * ```
  */
 export function useEditComment(commentID: string, hasCommentData: boolean) {
   const sdk = getSDK();

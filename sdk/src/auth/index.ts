@@ -582,6 +582,25 @@ class AWF_Auth implements AWF_IAuth {
     return { body, from, readAt, createdAt, id };
   }
 
+  static serializeMessage(content) {
+    try {
+      const stringifyContent = JSON.stringify(content);
+      const encoder = new TextEncoder();
+      return encoder.encode(stringifyContent);
+    } catch (e) {
+      return undefined;
+    }
+  }
+
+  async sendMessage(to: string, content: unknown) {
+    const toPubKey = PublicKey.fromString(to);
+    const serializedMessage = AWF_Auth.serializeMessage(content);
+    if (!serializedMessage) {
+      throw new Error('Content is not serializable');
+    }
+    return this.hubUser.sendMessage(this.#identity, toPubKey, serializedMessage);
+  }
+
   /**
    * Returns all the inbox messages from Textile Users
    * @param args - InboxListOptions
@@ -618,6 +637,26 @@ class AWF_Auth implements AWF_IAuth {
       inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
     }
     uniqueMessages.clear();
+    return inbox.slice();
+  }
+  // pubKey seek does not work
+  // @Todo: workaround pubKey filtering
+  async getConversation(pubKey: string) {
+    const limit = 10000;
+    const messagesReceived = await this.hubUser.listInboxMessages(
+      Object.assign({}, { limit: limit }),
+    );
+    const messagesSent = await this.hubUser.listSentboxMessages(
+      Object.assign({}, { limit: limit }),
+    );
+    const combinedMessages = messagesReceived
+      .concat(messagesSent)
+      .sort((a, b) => a.createdAt - b.createdAt);
+    const inbox = [];
+    for (const message of combinedMessages) {
+      const decryptedObj = await this._decryptMessage(message);
+      inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
+    }
     return inbox.slice();
   }
 

@@ -2,7 +2,7 @@ import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import menuRoute, { MY_PROFILE, rootRoute } from '../../routes';
+import menuRoute, { MY_PROFILE } from '../../routes';
 import ProfilePage from './profile-page';
 import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
@@ -21,11 +21,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Router>
+    <Router basename={props.baseRouteName}>
       <Box>
         <Routes>
-          <Route path={`${rootRoute}/list`} element={<>A list of profiles</>} />
-          {[`${rootRoute}/:pubKey`, menuRoute[MY_PROFILE]].map(path => (
+          {/* <Route path="/list" element={<>A list of profiles</>} /> */}
+          {['/:pubKey', menuRoute[MY_PROFILE]].map(path => (
             <Route
               key={path}
               path={path}

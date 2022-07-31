@@ -24,7 +24,6 @@ import * as singleSpa from 'single-spa';
 import getSDK from '@akashaorg/awf-sdk';
 
 export interface LoaderState {
-  activeModal: ModalNavigationOptions;
   modalRequest: ModalNavigationOptions | null;
   enableIntegrationRequest: string;
   disableIntegrationRequest: string;
@@ -80,7 +79,7 @@ export interface LoaderState {
 
 // export to be used in tests
 export const defaultInitialState: LoaderState = {
-  activeModal: { name: null },
+  // activeModal: { name: null },
   modalRequest: { name: null },
   enableIntegrationRequest: null,
   disableIntegrationRequest: null,

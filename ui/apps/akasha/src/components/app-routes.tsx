@@ -12,7 +12,7 @@ import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 
-import routes, { FEED, MY_FEED, rootRoute, POST, REPLY, TAGS, INVITE } from '../routes';
+import routes, { FEED, MY_FEED, POST, REPLY, TAGS, INVITE } from '../routes';
 import ReplyPage from './post-page/reply-page';
 
 const { Box } = DS;
@@ -28,7 +28,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Router>
+    <Router basename={props.baseRouteName}>
       <Box>
         <Routes>
           <Route
@@ -72,7 +72,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           />
           <Route path={`${routes[REPLY]}/:commentId`} element={<ReplyPage {...props} />} />
           <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage {...props} />} />
-          <Route path={rootRoute} element={<Navigate to={routes[FEED]} replace />} />
+          <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
         </Routes>
       </Box>
     </Router>

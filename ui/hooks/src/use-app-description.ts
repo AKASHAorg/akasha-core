@@ -5,7 +5,7 @@ import { logError } from './utils/error-handler';
 
 export const APP_DESCRIPTION_KEY = 'App_Description';
 
-const getAppDescription = async ipfsHash => {
+const getAppDescription = async (ipfsHash: string) => {
   const sdk = getSDK();
   const res = await lastValueFrom(sdk.services.common.ipfs.catDocument<string>(ipfsHash));
   return res.data;
@@ -13,6 +13,12 @@ const getAppDescription = async ipfsHash => {
 
 /**
  * Hook to get detailed description for app
+ * @example useAppDescription hook
+ * ```typescript
+ * const detailedDescriptionQuery = useAppDescription('ipfslinktodescription');
+ *
+ * const description = detailedDescriptionQuery.data
+ * ```
  */
 export function useAppDescription(ipfsLink: string) {
   const ipfsHash = ipfsLink?.match(/\/\/(.*)/)?.[1];

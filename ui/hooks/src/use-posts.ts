@@ -60,6 +60,24 @@ const getPosts = async (queryClient: QueryClient, limit: number, offset?: string
 
 /**
  * Hook to get posts for feed, sorted chronologically
+ * @example useInfinitePosts hook
+ * ```typescript
+ * const postsQuery = useInfinitePosts(15);
+ *
+ * const postPages = React.useMemo(() => {
+    if (postsQuery.data) {
+      return postsQuery.data.pages;
+    }
+    return [];
+  }, [postsQuery.data]);
+ *
+ * // load more posts
+ * const handleLoadMore = React.useCallback(() => {
+    if (!postsQuery.isLoading && postsQuery.hasNextPage && loginState?.fromCache) {
+      postsQuery.fetchNextPage();
+    }
+  }, [postsQuery, loginState?.fromCache]);
+ * ```
  */
 export function useInfinitePosts(limit: number, offset?: string) {
   const queryClient = useQueryClient();
@@ -97,6 +115,24 @@ const getCustomFeedPosts = async (limit: number, offset?: number) => {
 /**
  * Hook to get posts for personalised user feed from followed profiles and subscribed tags,
  * sorted chronologically
+ * @example useInfiniteCustomPosts hook
+ * ```typescript
+ * const customPostsQuery = useInfiniteCustomPosts(true, 15);
+ *
+ * const postPages = React.useMemo(() => {
+    if (customPostsQuery.data) {
+      return customPostsQuery.data.pages;
+    }
+    return [];
+  }, [customPostsQuery.data]);
+ *
+ * // load more posts
+ * const handleLoadMore = React.useCallback(() => {
+    if (!customPostsQuery.isLoading && customPostsQuery.hasNextPage && loginState?.fromCache) {
+      customPostsQuery.fetchNextPage();
+    }
+  }, [customPostsQuery, loginState?.fromCache]);
+ * ```
  */
 export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?: string) {
   return useInfiniteQuery(
@@ -113,11 +149,11 @@ export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?:
   );
 }
 
-const getPostsByTag = async (name: string, limit: number, offset?: string) => {
+const getPostsByTag = async (tagName: string, limit: number, offset?: string) => {
   const sdk = getSDK();
   const res = await lastValueFrom(
     sdk.api.entries.entriesByTag({
-      name: name,
+      name: tagName,
       limit: limit,
       offset: offset,
     }),
@@ -132,11 +168,29 @@ const getPostsByTag = async (name: string, limit: number, offset?: string) => {
 
 /**
  * Hook to get posts that contain a specific tag
+ * @example useInfinitePostsByTag hook
+ * ```typescript
+ * const tagPostsQuery = useInfinitePostsByTag('awesometag', 15);
+ *
+ * const postPages = React.useMemo(() => {
+    if (tagPostsQuery.data) {
+      return tagPostsQuery.data.pages;
+    }
+    return [];
+  }, [tagPostsQuery.data]);
+ *
+ * // load more posts
+ * const handleLoadMore = React.useCallback(() => {
+    if (!tagPostsQuery.isLoading && tagPostsQuery.hasNextPage && loginState?.fromCache) {
+      tagPostsQuery.fetchNextPage();
+    }
+  }, [tagPostsQuery, loginState?.fromCache]);
+ * ```
  */
-export function useInfinitePostsByTag(name: string, limit: number, offset?: string) {
+export function useInfinitePostsByTag(tagName: string, limit: number, offset?: string) {
   return useInfiniteQuery(
-    [ENTRIES_BY_TAG_KEY, name],
-    async ({ pageParam = offset }) => getPostsByTag(name, limit, pageParam),
+    [ENTRIES_BY_TAG_KEY, tagName],
+    async ({ pageParam = offset }) => getPostsByTag(tagName, limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
@@ -167,6 +221,24 @@ const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) 
 
 /**
  * Hook to get an author's posts
+ * @example useInfinitePostsByAuthor hook
+ * ```typescript
+ * const authorPostsQuery = useInfinitePostsByAuthor('author-public-key', 15);
+ *
+ * const postPages = React.useMemo(() => {
+    if (authorPostsQuery.data) {
+      return authorPostsQuery.data.pages;
+    }
+    return [];
+  }, [authorPostsQuery.data]);
+ *
+ * // load more posts
+ * const handleLoadMore = React.useCallback(() => {
+    if (!authorPostsQuery.isLoading && authorPostsQuery.hasNextPage && loginState?.fromCache) {
+      authorPostsQuery.fetchNextPage();
+    }
+  }, [authorPostsQuery, loginState?.fromCache]);
+ * ```
  */
 export function useInfinitePostsByAuthor(
   pubKey: string,
@@ -209,6 +281,18 @@ const getPost = async (postID: string, loggedUser?: string) => {
 
 /**
  * Hook to get data for a specific post
+ * @example usePost hook
+ * ```typescript
+ * const postQuery = usePost('some-post-id', 'logged-user-pubkey', true);
+ *
+ * const entryData = React.useMemo(() => {
+    if (postQuery.data) {
+      // mapEntry is a utility function that transforms the comment/post data into required format.
+      return mapEntry(postQuery.data);
+    }
+    return undefined;
+  }, [postQuery.data]);
+ * ```
  */
 export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
   return useQuery([ENTRY_KEY, postId], () => getPost(postId, loggedUser), {
@@ -220,6 +304,12 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
 
 /**
  * Hook to delete a post
+ * @example useDeletePost hook
+ * ```typescript
+ * const deletePostQuery = useDeletePost('some-post-id');
+ *
+ * deletePostQuery.mutate('some-post-id');
+ * ```
  */
 export function useDeletePost(postID: string) {
   const sdk = getSDK();
@@ -280,6 +370,12 @@ export function useDeletePost(postID: string) {
 /**
  * Hook to create a new post
  * pass the publish data from the editor to the mutate function
+ * @example useCreatePost hook
+ * ```typescript
+ * const publishPostQuery = useCreatePost();
+ *
+ * publishPostQuery.mutate({ pubKey: 'author-public-key', ...});
+ * ```
  */
 export function useCreatePost() {
   const sdk = getSDK();
@@ -327,7 +423,13 @@ const updateSearchEntry = (postIndex, slateContent) => (entry, index) => {
 
 /**
  * Hook to edit a post
- * pass the edited post data to the onMutate function
+ * pass the edited post data to the mutate function
+ * @example useEditPost hook
+ * ```typescript
+ * const editPostQuery = useEditPost();
+ *
+ * editPostQuery.mutate({ entryID: 'some-entry-id', ...});
+ * ```
  */
 export const useEditPost = () => {
   const sdk = getSDK();

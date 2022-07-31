@@ -1,4 +1,5 @@
 import { injectable } from 'inversify';
+import { PublicKey } from '@textile/hub';
 
 @injectable()
 class AWF_Misc {
@@ -13,6 +14,10 @@ class AWF_Misc {
     return fetch(this.endPoint, { method: 'GET' }).then(response => {
       return { statusCode: response.status, success: response.ok };
     });
+  }
+
+  public publicKeyFromString(pubKey: string): PublicKey {
+    return PublicKey.fromString(pubKey);
   }
 }
 

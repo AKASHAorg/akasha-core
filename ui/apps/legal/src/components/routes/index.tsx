@@ -13,7 +13,7 @@ const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   return (
-    <Router>
+    <Router basename={props.baseRouteName}>
       <Box>
         <Routes>
           <Route path={route[TOS]} element={<TermsOfService {...props} />} />

@@ -19,7 +19,7 @@ import { NoItemsFound } from '../components/error-cards';
 
 import { ISharedModerationProps } from '../interfaces';
 
-import routes, { GUEST, UNAUTHENTICATED, APP_NAME } from '../routes';
+import routes, { GUEST, UNAUTHENTICATED } from '../routes';
 
 const {
   Box,
@@ -77,14 +77,14 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
     if (!user) {
       // if not authenticated, prompt to authenticate
       routing.navigateTo({
-        appName: APP_NAME,
+        appName: '@akashaorg/app-moderation-ewa',
         getNavigationUrl: () => routes[UNAUTHENTICATED],
       });
     }
     if (user && !isAuthorised) {
       // if authenticated and not authorised, restrict access
       routing.navigateTo({
-        appName: APP_NAME,
+        appName: '@akashaorg/app-moderation-ewa',
         getNavigationUrl: () => routes[GUEST],
       });
     }

@@ -10,6 +10,12 @@ const entriesBookmarks = 'entries-bookmarks';
 
 /**
  * Hook for gettting a user's saved posts and comments
+ * @example useGetBookmarks hook
+ * ```typescript
+ * const getBookmarksQuery = useGetBookmarks('0x243kb4bret');
+ *
+  const bookmarks = getBookmarksQuery.data;
+ * ```
  */
 export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
   return useQuery(
@@ -43,6 +49,12 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
 /**
  * Hook used to bookmark resources.
  * Pass as payload, entryData containing the resource id and itemType to the mutate function.
+ * @example useSaveBookmark hook
+ * ```typescript
+ * const saveBookmarkQuery = useSaveBookmark();
+ *
+  saveBookmarkQuery.mutate({entryId: 'dbkjjouyahljfe', itemType: 'item type'});
+ * ```
  */
 
 export function useSaveBookmark() {
@@ -89,6 +101,12 @@ export function useSaveBookmark() {
 
 /**
  * Hook used to delete a bookmark
+ * @example useDeleteBookmark hook
+ * ```typescript
+ * const deleteBookmarkQuery = useDeleteBookmark();
+ *
+  deleteBookmarkQuery.mutate('dbkjjouyahljfe');
+ * ```
  */
 export function useDeleteBookmark() {
   const sdk = getSDK();

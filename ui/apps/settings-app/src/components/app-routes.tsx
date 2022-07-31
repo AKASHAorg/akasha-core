@@ -11,7 +11,7 @@ import SettingsPage from './settings-page';
 import PrivacyOption from './option-privacy';
 import AppearanceOption from './option-appearance';
 
-import routes, { APPEARANCE, APPS, HOME, PRIVACY, rootRoute } from '../routes';
+import routes, { APPEARANCE, APPS, HOME, PRIVACY } from '../routes';
 
 const { Box } = DS;
 
@@ -89,7 +89,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   return (
     <Box>
-      <Router>
+      <Router basename={props.baseRouteName}>
         <Routes>
           <Route path={routes[HOME]} element={<SettingsPage {...props} />} />
           <Route
@@ -157,7 +157,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
-          <Route path={rootRoute} element={<Navigate to={routes[HOME]} replace />} />
+          <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>
     </Box>

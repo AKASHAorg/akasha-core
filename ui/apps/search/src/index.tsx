@@ -1,6 +1,6 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
-import routes, { ONBOARDING, RESULTS, rootRoute } from './routes';
+import routes, { ONBOARDING, RESULTS } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -12,9 +12,6 @@ import {
  * All the plugins must export an object like this:
  */
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
-  activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen(rootRoute)(location);
-  },
   loadingFn: () => import('./components'),
   i18nNamespace: ['app-search'],
   mountsIn: opts.layoutConfig?.pluginSlotId,
@@ -24,10 +21,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'search' },
     subRoutes: [],
-    route: rootRoute,
   },
   routes: {
-    rootRoute,
     defaultRoute: routes[RESULTS],
     [RESULTS]: routes[RESULTS],
     [ONBOARDING]: routes[ONBOARDING],

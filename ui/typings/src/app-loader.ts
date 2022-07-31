@@ -38,7 +38,10 @@ export interface ExtensionMatcherFn<G = BehaviorSubject<unknown>> {
   (
     uiEvents: ReplaySubject<UIEventData>,
     globalChannel: G,
-    extProps: Omit<RootExtensionProps, 'uiEvents' | 'extensionData' | 'domElement'>,
+    extProps: Omit<
+      RootExtensionProps,
+      'uiEvents' | 'extensionData' | 'domElement' | 'baseRouteName'
+    >,
     parentConfig: IAppConfig & { name: string },
   ): (extConfig: Record<string, ReturnType<ExtensionLoaderFn>>) => void;
 }
@@ -48,14 +51,31 @@ export interface ExtensionMatcherFn<G = BehaviorSubject<unknown>> {
  * must return a promise with a singleSpaLifecycle object
  */
 export type ExtensionLoaderFn = (
-  loadingFunction: () => Promise<ParcelConfigObject<RootExtensionProps>>,
+  loadingFunction: () => Promise<ParcelConfigObject<Omit<RootExtensionProps, 'baseRouteName'>>>,
 ) => {
-  load: (props: RootExtensionProps, parentAppName: string) => void;
+  load: (props: Omit<RootExtensionProps, 'baseRouteName'>, parentAppName: string) => void;
   unload: (event: UIEventData, parentAppName: string) => void;
 };
 
 export interface IAppConfig {
-  activeWhen: ActivityFn;
+  /**
+   * Optional property.
+   * When defined, it overrides the default functionality
+   * of loading based on application name
+   * @example
+   * Given the appName = `@akashaorg/some-app-name`
+   * The default functionality is to match against a route which starts with `/@akashaorg/some-app-name`
+   * By specifying the activeWhen property we can specify other pathname on which this app/widget will load
+   *
+   * ```
+   * activeWhen: (location, singleSpaPathToActiveWhen) => {
+   *         return singleSpaPathToActiveWhen('/@akashaorg/other-app-name')(location)
+   * }
+   * ```
+   *
+   * This functionality is most useful for widgets.
+   */
+  activeWhen?: ActivityFn;
   /**
    * The id of the html element
    * that this app will mount in
@@ -66,8 +86,7 @@ export interface IAppConfig {
    * routes that are defined here can be used
    * by other apps for navigation
    */
-  routes: {
-    rootRoute: string;
+  routes?: {
     [key: string]: string;
   };
   loadingFn: () => Promise<ISingleSpaLifecycle>;
@@ -162,7 +181,12 @@ export interface BaseIntegrationInfo {
 
 export interface IntegrationModule {
   register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
-  getPlugin?: (opts: IntegrationRegistrationOptions) => Promise<PluginConf>;
+  getPlugin?: (
+    opts: IntegrationRegistrationOptions & {
+      encodeAppName: (name: string) => string;
+      decodeAppName: (name: string) => string;
+    },
+  ) => Promise<PluginConf>;
 }
 
 export interface ISdkConfig {
@@ -232,7 +256,7 @@ export enum MenuItemAreaType {
 export interface IMenuItem {
   index?: number;
   label: string;
-  route: string;
+  route?: string;
   type?: MenuItemType;
   area?: ValueOf<MenuItemAreaType>[]; // area is optional because subroutes dont have an area to be mounted
   logo?: LogoSourceType;

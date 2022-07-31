@@ -25,7 +25,14 @@ import {
 } from 'rxjs';
 import { pipelineEvents, uiEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
-import { checkActivityFn, getDomElement, navigateToModal, parseQueryString } from './utils';
+import {
+  checkActivityFn,
+  encodeName,
+  decodeName,
+  getDomElement,
+  navigateToModal,
+  parseQueryString,
+} from './utils';
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaorg/awf-sdk';
 import { getIntegrationsData } from './manifests';
@@ -134,7 +141,6 @@ export const processSystemModules = (
     )
     .pipe(filter(({ layoutConfig }) => !!layoutConfig))
     .pipe(
-      // @TODO: load plugins exported from modules
       mergeMap(results => {
         const { modules, layoutConfig, integrationConfigs, integrationsByMountPoint } = results;
 
@@ -152,7 +158,11 @@ export const processSystemModules = (
               let appConf: IAppConfig;
 
               if (mod?.getPlugin && typeof mod.getPlugin === 'function') {
-                plugin = await mod.getPlugin(registrationProps);
+                plugin = await mod.getPlugin({
+                  ...registrationProps,
+                  encodeAppName: encodeName,
+                  decodeAppName: decodeName,
+                });
               }
 
               if (mod?.register && typeof mod.register === 'function') {
@@ -194,14 +204,19 @@ export const processSystemModules = (
           if (!config.extends || typeof config.extends !== 'function') {
             continue;
           }
-          const extProps: Omit<RootExtensionProps, 'uiEvents' | 'extensionData' | 'domElement'> = {
+          const extProps: Omit<
+            RootExtensionProps,
+            'uiEvents' | 'extensionData' | 'domElement' | 'baseRouteName'
+          > = {
             layoutConfig: layoutConfig.extensions,
             logger,
             singleSpa,
             navigateToModal,
             worldConfig,
             parseQueryString,
-            plugins: plugins,
+            plugins: results.plugins,
+            encodeAppName: encodeName,
+            decodeAppName: decodeName,
           };
           config.extends(
             extensionMatcher(uiEvents, globalChannel, extProps, config),
@@ -309,15 +324,13 @@ export const handleExtPointMountOfApps = (
     filter(({ config }) => !singleSpa.getAppNames().includes(config.name)),
     withLatestFrom(
       state$.pipe(getStateSlice('manifests')),
-      state$.pipe(getStateSlice('activeModal')),
       state$.pipe(getStateSlice('layoutConfig')),
       state$.pipe(getStateSlice('integrationConfigs')),
       state$.pipe(getStateSlice('plugins')),
     ),
-    map(([data, manifests, activeModal, layoutConfig, integrationConfigs, plugins]) => ({
+    map(([data, manifests, layoutConfig, integrationConfigs, plugins]) => ({
       data,
       manifests,
-      activeModal,
       layoutConfig,
       integrationConfigs,
       plugins,
@@ -344,7 +357,6 @@ export const handleExtPointMountOfApps = (
         );
         return;
       }
-
       singleSpa.registerApplication<
         Omit<RootComponentProps, 'singleSpa' | 'mountParcel' | 'domElement'> & {
           domElementGetter: () => HTMLElement;
@@ -352,12 +364,18 @@ export const handleExtPointMountOfApps = (
       >({
         name: manifest.name,
         app: config.loadingFn,
-        activeWhen: location => checkActivityFn(config, manifest, location),
+        activeWhen: location =>
+          checkActivityFn({
+            config,
+            encodedAppName: encodeName(manifest.name),
+            manifest,
+            location,
+          }),
         customProps: {
           plugins,
           name: manifest.name,
+          baseRouteName: `/${encodeName(manifest.name)}`,
           parseQueryString: parseQueryString,
-          activeModal: results.activeModal,
           worldConfig: worldConfig,
           uiEvents: uiEvents,
           layoutConfig: results.layoutConfig.extensions,
@@ -365,6 +383,8 @@ export const handleExtPointMountOfApps = (
           domElementGetter: () => domElement,
           navigateToModal: navigateToModal,
           getAppRoutes: appName => results.integrationConfigs.get(appName).routes,
+          encodeAppName: encodeName,
+          decodeAppName: decodeName,
         },
       });
     }),
@@ -397,10 +417,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
         return null;
       }),
       filter(Boolean),
-      withLatestFrom(
-        state$.pipe(getStateSlice('integrationConfigs')),
-        // state$.pipe(getStateSlice('extensionParcels')),
-      ),
+      withLatestFrom(state$.pipe(getStateSlice('integrationConfigs'))),
       map(([uninstalledApp, integrationConfigs]) => ({
         uninstalledApp,
         integrationConfigs,

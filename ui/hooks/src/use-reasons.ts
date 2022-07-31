@@ -43,6 +43,17 @@ const ReasonStateReducer = (state: IReasonsState, action: IReasonsAction) => {
 
 /**
  * A hook to get predefined reasons from moderation API
+ * @example useReasons hook
+ * ```typescript
+ * const [reasons, reasonsActions] = useReasons();
+ *
+ * // fetch reasons on mount
+ * React.useEffect(() => {
+    reasonsActions.fetchReasons({ active: true });
+  }, []);
+ *
+ * console.log(reasons);
+ * ```
  */
 export const useReasons = (): [string[], UseReasonsActions] => {
   const [reasonsState, dispatch] = React.useReducer(ReasonStateReducer, initialReasonstate);

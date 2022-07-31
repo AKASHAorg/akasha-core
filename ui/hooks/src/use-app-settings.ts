@@ -14,6 +14,12 @@ const getAppConfig = async (appName: string) => {
 
 /**
  * Hook to get configuration object for an installed app
+ * @example useGetAppConfig hook
+ * ```typescript
+ * const appConfigQuery = useGetAppConfig('app name', true);
+ *
+ * const appConfig = appConfigQuery.data
+ * ```
  */
 export function useGetAppConfig(appName: string, enabler?: boolean) {
   return useQuery([APP_SETTINGS_KEY, appName], (): Promise<any> => getAppConfig(appName), {
@@ -31,6 +37,12 @@ const getAllInstalledApps = async () => {
 
 /**
  * Hook to get all the user's installed apps
+ * @example useGetAllInstalledApps hook
+ * ```typescript
+ * const installedAppsQuery = useGetAllInstalledApps(true);
+ *
+ * const installedApps = installedAppsQuery.data
+ * ```
  */
 export function useGetAllInstalledApps(enabler?: boolean) {
   return useQuery([APP_SETTINGS_KEY], (): Promise<any> => getAllInstalledApps(), {
@@ -52,6 +64,12 @@ const appInstall = async (app: { name?: string; id?: string }) => {
 
 /**
  * Hook to persist an installed app config to a user's profile
+ * @example useInstallApp hook
+ * ```typescript
+ * const installAppQuery = useInstallApp();
+ *
+ * installAppQuery.mutate({ name: 'awesome integration', id: 'fhyuhjfhyrtl' });
+ * ```
  */
 export function useInstallApp() {
   const queryClient = useQueryClient();
@@ -77,6 +95,12 @@ const appUninstall = async (appName?: string) => {
 
 /**
  * Hook to uninstall an app
+ * @example useUninstallApp hook
+ * ```typescript
+ * const uninstallAppQuery = useUninstallApp();
+ *
+ * uninstallAppQuery.mutate('awesome integration');
+ * ```
  */
 export function useUninstallApp() {
   const queryClient = useQueryClient();

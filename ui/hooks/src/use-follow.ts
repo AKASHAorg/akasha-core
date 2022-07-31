@@ -52,6 +52,12 @@ class GetFollowingBuffer {
 
 /**
  * Hook to check if a user is following other users
+ * @example useIsFollowingMultiple hook
+ * ```typescript
+ * const isFollowingMultipleQuery = useIsFollowingMultiple('user-pubkey', ['some-pubkey-1', 'some-pubkey-2']);
+ *
+ * const followedProfiles = isFollowingMultipleQuery.data;
+ * ```
  */
 export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyArray: string[]) {
   const queryClient = useQueryClient();
@@ -144,6 +150,12 @@ export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyAr
 
 /**
  * Hook to follow another user
+ * @example useFollow hook
+ * ```typescript
+ * const followQuery = useFollow();
+ *
+ * followQuery.mutate('pubkey-of-user-to-follow');
+ * ```
  */
 export function useFollow() {
   const sdk = getSDK();
@@ -217,6 +229,12 @@ export function useFollow() {
 
 /**
  * Hook to unfollow another user
+ * @example useUnfollow hook
+ * ```typescript
+ * const unfollowQuery = useUnfollow();
+ *
+ * unfollowQuery.mutate('pubkey-of-user-to-unfollow');
+ * ```
  */
 export function useUnfollow() {
   const sdk = getSDK();

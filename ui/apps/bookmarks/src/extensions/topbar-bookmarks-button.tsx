@@ -3,7 +3,6 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
 import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
-import { rootRoute } from '../routes';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 
@@ -31,13 +30,17 @@ const BookmarkIcon = styled(Icon)`
 `;
 
 const BookmarksTopbarButton = (props: RootExtensionProps) => {
-  const match = useMatch(rootRoute);
-
+  const match = useMatch(`${encodeURIComponent('@akashaorg/app-bookmarks')}/*`);
+  const handleNavigation = () => {
+    props.plugins.routing.navigateTo({
+      appName: '@akashaorg/app-bookmarks',
+    });
+  };
   return (
     <BookmarkIcon
       type="bookmark"
       clickable={true}
-      onClick={() => props.singleSpa.navigateToUrl(rootRoute)}
+      onClick={handleNavigation}
       accentColor={!!match}
     />
   );
