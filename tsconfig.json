@@ -44,7 +44,12 @@
     { "path": "./ui/apps/profile" },
     { "path": "./ui/apps/search" },
     { "path": "./sdk" },
-    { "path": "./sdk/typings" }
+    {
+      "path": "./sdk/typings"
+    },
+    {
+      "path": "./typings"
+    }
   ],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp"],
   "files": ["./sdk/src/definitions/graphql.d.ts"]

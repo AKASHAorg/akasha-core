@@ -1,0 +1,34 @@
+{
+  "name": "@akashaorg/typings",
+  "version": "0.1.0",
+  "description": "AWF typings for development purpose",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "main": "lib",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git",
+    "directory": "./typings"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "tsc": "tsc --build",
+    "prepare": "yarn run tsc"
+  },
+  "devDependencies": {
+    "typescript": "4.4.3",
+    "i18next": "20.6.1",
+    "rxjs": "7.3.0",
+    "single-spa": "5.9.3",
+    "slate": "0.72.3",
+    "slate-history": "0.66.0",
+    "slate-react": "0.72.1"
+  }
+}

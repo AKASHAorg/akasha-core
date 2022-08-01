@@ -6,7 +6,7 @@ import {
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   MenuItemType,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/typings';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),

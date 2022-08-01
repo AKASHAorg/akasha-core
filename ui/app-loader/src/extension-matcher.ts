@@ -1,10 +1,10 @@
-import { events } from '@akashaorg/sdk-typings';
+import { events } from '@akashaorg/typings/lib/sdk';
 import {
   EventTypes,
   UIEventData,
   ExtensionMatcherFn,
   BaseIntegrationInfo,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/typings/lib/ui';
 import { filter, from, map, mergeMap, ReplaySubject } from 'rxjs';
 import { filterEvent } from './events';
 import { stringToRegExp } from './utils';

@@ -1,4 +1,4 @@
-import { UIEventData, EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { UIEventData, EventTypes } from '@akashaorg/typings/ui';
 import {
   Subject,
   merge,
@@ -18,7 +18,7 @@ import { LoaderState } from './state';
 import { getModalFromParams } from './utils';
 import { events } from '@akashaorg/sdk-typings';
 import * as singleSpa from 'single-spa';
-import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
+import { APP_EVENTS } from '@akashaorg/typings/';
 
 export const pipelineEvents = new Subject<Partial<LoaderState>>();
 export const uiEvents = new ReplaySubject<UIEventData>();

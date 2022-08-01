@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@akashaorg/sdk-typings": "*",
+    "@akashaorg/typings": "*",
     "@akashaorg/af-testing": "*",
     "@akashaorg/ui-awf-typings": "*",
     "@types/react": "17.0.20",
