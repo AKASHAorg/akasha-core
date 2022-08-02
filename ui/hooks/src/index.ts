@@ -53,7 +53,14 @@ import {
 } from './use-notifications';
 import { useNetworkState, useCurrentNetwork } from './use-network-state';
 import { useMentionSearch } from './use-mentions';
-import { useGetLogin, useLogin, useLogout, LoginState } from './use-login';
+import {
+  useGetLogin,
+  useLogin,
+  useLogout,
+  LoginState,
+  useCheckSignup,
+  useSignUp,
+} from './use-login';
 import { useLegalDoc } from './use-legal';
 import { useIsFollowingMultiple, useFollow, useUnfollow } from './use-follow';
 import {
@@ -186,6 +193,8 @@ export {
   useGetLogin,
   useLogin,
   useLogout,
+  useCheckSignup,
+  useSignUp,
   // use-legal
   useLegalDoc,
   // use-follow

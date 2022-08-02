@@ -31,11 +31,6 @@
         }
       }
     },
-    "@akashaorg/sdk-typings": {
-      "root": "sdk/typings",
-      "sourceRoot": "sdk/typings/src",
-      "projectType": "library"
-    },
     "@akashaorg/design-system": {
       "root": "ui/design",
       "sourceRoot": "ui/design/src",

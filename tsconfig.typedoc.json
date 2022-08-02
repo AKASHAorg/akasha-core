@@ -1,9 +1,6 @@
 {
   "references": [
     {
-      "path": "./sdk/typings"
-    },
-    {
       "path": "./typings"
     },
     { "path": "./ui/design" },

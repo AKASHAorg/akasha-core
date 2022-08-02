@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "AWF typings for development purpose",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
-  "main": "lib",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)"
   ],

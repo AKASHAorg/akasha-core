@@ -15,7 +15,7 @@ import {
   NavigateToParams,
   RootComponentProps,
 } from '@akashaorg/typings/ui';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/typings/sdk';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;

@@ -1,8 +1,9 @@
 import * as React from 'react';
 
 import DS from '@akashaorg/design-system';
-import { IInjectedProviderDetails, EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
 import { switchToRequiredNetwork, useAnalytics, useNetworkState } from '@akashaorg/ui-awf-hooks';
+import { IInjectedProviderDetails } from '@akashaorg/ui-awf-hooks/lib/utils/getProviderDetails';
 import { AnalyticsCategories } from '@akashaorg/typings/ui';
 
 import RequiredNetworkStep, { IRequiredNetworkStepProps } from './required-network';
