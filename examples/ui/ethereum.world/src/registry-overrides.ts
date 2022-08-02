@@ -55,6 +55,11 @@ const overrides = [
     sources: [`${HOST}/apps/settings-app/index.js`],
   },
   {
+    name: '@akashaorg/app-articles',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: [`${HOST}/apps/articles/index.js`],
+  },
+  {
     name: '@akashaorg/app-translation',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/translation/index.js`],
