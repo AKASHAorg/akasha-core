@@ -12,11 +12,6 @@
       "sourceRoot": "typings/src",
       "projectType": "library"
     },
-    "@akashaorg/ui-awf-typings": {
-      "root": "ui/typings",
-      "sourceRoot": "ui/typings/src",
-      "projectType": "library"
-    },
     "@akashaorg/hub-api": {
       "root": "api/hub"
     },

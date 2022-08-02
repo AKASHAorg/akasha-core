@@ -32,15 +32,12 @@
   ],
   "dependencies": {
     "@akashaorg/awf-sdk": "*",
-    "@akashaorg/design-system": "*",
     "object-hash": "2.2.0",
     "react-query": "3.34.7",
     "rxjs": "7.3.0"
   },
   "devDependencies": {
-    "@akashaorg/ui-awf-typings": "*",
     "@akashaorg/typings": "*",
-    "@akashaorg/sdk-typings": "*",
     "@types/react": "17.0.20"
   },
   "peerDependencies": {

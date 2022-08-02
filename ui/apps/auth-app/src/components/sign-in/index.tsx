@@ -1,7 +1,8 @@
 import React from 'react';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
+
 import DS from '@akashaorg/design-system';
-import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
 
 import {
   switchToRequiredNetwork,
@@ -11,17 +12,16 @@ import {
   useInjectedProvider,
   useNetworkState,
   useRequiredNetworkName,
+  useGetLogin,
+  useSignUp,
 } from '@akashaorg/ui-awf-hooks';
 
 import SignInStatus from './sign-in-status';
 import { useTranslation } from 'react-i18next';
 import ChooseProvider from './choose-provider';
 import RequiredNetworkStep from '../sign-up/steps/required-network';
-import { INJECTED_PROVIDERS } from '@akashaorg/sdk-typings/lib/interfaces/common';
-import { useGetLogin, useSignUp } from '@akashaorg/ui-awf-hooks/lib/use-login';
 import SuggestSignup from './suggest-signup';
 import { SIGN_UP_USERNAME } from '../../routes';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { MainAreaCardBox, Box, Heading, HorizontalDivider } = DS;
 

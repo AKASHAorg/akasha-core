@@ -1,15 +1,12 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
-
-import { IProfileCardProps } from './';
+import { IProfileData } from '@akashaorg/typings/ui';
 import { SearchProfileAvatarDiv, StyledInlineBox } from './styled-profile-card';
-
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import Avatar from '../Avatar';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import { truncateMiddle } from '../../utils/string-utils';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface IProfileSearchCard {
   className?: string;

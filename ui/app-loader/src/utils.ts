@@ -2,12 +2,12 @@ import {
   BaseIntegrationInfo,
   IAppConfig,
   ModalNavigationOptions,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+  QueryStringType,
+} from '@akashaorg/typings/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
-import { QueryStringType } from '@akashaorg/ui-awf-typings';
 import { of } from 'rxjs';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/typings/sdk';
 import { match } from 'path-to-regexp';
 
 export const encodeName = (appName: string) => {

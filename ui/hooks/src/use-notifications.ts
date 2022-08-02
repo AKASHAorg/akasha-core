@@ -2,7 +2,7 @@ import { lastValueFrom, forkJoin, catchError, of } from 'rxjs';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { IMessage } from '@akashaorg/sdk-typings/lib/interfaces/auth';
+import { IMessage } from '@akashaorg/typings/sdk';
 
 import { logError } from './utils/error-handler';
 import { buildProfileMediaLinks } from './utils/media-utils';

@@ -1,10 +1,10 @@
-import { events } from '@akashaorg/typings/lib/sdk';
+import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import {
   EventTypes,
   UIEventData,
   ExtensionMatcherFn,
   BaseIntegrationInfo,
-} from '@akashaorg/typings/lib/ui';
+} from '@akashaorg/typings/ui';
 import { filter, from, map, mergeMap, ReplaySubject } from 'rxjs';
 import { filterEvent } from './events';
 import { stringToRegExp } from './utils';
@@ -77,12 +77,12 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
 
     globalChannel
       .pipe(
-        filterEvent(events.APP_EVENTS.REMOVED),
+        filterEvent(APP_EVENTS.REMOVED),
         filter(res => {
           const { data } = res as { data: BaseIntegrationInfo };
           return data.name === parentConfig.name;
         }),
-        mergeMap(({ event, data }: { event: events.APP_EVENTS; data: BaseIntegrationInfo }) =>
+        mergeMap(({ event, data }: { event: APP_EVENTS; data: BaseIntegrationInfo }) =>
           from(Object.entries(extConfig)).pipe(
             filter(([mountPoint]) => stringToRegExp(mountPoint).test(data.name)),
             map(([mountPoint, loader]) => ({

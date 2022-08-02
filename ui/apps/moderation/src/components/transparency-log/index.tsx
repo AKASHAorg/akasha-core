@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { ButtonValues, NavigateToParams } from '@akashaorg/ui-awf-typings';
+import { ButtonValues, NavigateToParams } from '@akashaorg/typings/ui';
 import { useGetCount, useInfiniteLog, ILogItem } from '@akashaorg/ui-awf-hooks';
 
 import Banner from './banner';

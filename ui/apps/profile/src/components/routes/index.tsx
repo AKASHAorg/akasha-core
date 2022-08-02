@@ -2,11 +2,10 @@ import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import ProfilePage from './profile-page';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { Box } = DS;
 

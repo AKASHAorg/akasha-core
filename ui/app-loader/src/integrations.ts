@@ -1,12 +1,13 @@
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { RootComponentProps, RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { ILogger } from '@akashaorg/typings/sdk';
 import {
+  RootComponentProps,
+  RootExtensionProps,
   BaseIntegrationInfo,
   EventTypes,
   IAppConfig,
   ILoaderConfig,
   PluginConf,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/typings/ui';
 import {
   Observable,
   mergeMap,

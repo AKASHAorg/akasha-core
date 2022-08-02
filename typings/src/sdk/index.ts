@@ -9,7 +9,7 @@ import type { IWeb3Connector } from './web3.connector';
 import { EthProviders } from './web3.connector';
 import type AWF_IAuth from './auth';
 import type AWF_IIpfsConnector from './ipfs.connector';
-import ILog from './log';
+import ILog, { ILogger } from './log';
 import { ReplaySubject } from 'rxjs';
 import { GlobalEventBusData } from './common';
 import { AWF_IENS, AWF_IIC_REGISTRY } from './registry';
@@ -27,6 +27,13 @@ export { IWeb3Connector };
 export { AWF_IAuth };
 export { AWF_IIpfsConnector };
 export { IAppSettings };
+export * from './events';
+export { ILog, ILogger };
+
+export { ReleaseInfo } from './registry';
+export * from './responses';
+export * from './common';
+export * from './auth';
 
 export const ServiceTypes = {
   Gql: Symbol.for('awf-Gql'),

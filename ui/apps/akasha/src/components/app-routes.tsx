@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
 import FeedPage from './feed-page/feed-page';
 import MyFeedPage from './my-feed-page/my-feed-page';

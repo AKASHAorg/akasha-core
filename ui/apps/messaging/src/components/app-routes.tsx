@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import routes, { MESSAGING } from '../routes';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 const { Helmet } = DS;
 

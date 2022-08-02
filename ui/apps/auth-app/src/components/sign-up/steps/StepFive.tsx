@@ -6,11 +6,9 @@ import {
   useProfileUpdate,
   useUsernameValidation,
 } from '@akashaorg/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
-
+import { AnalyticsCategories, NavigateToParams } from '@akashaorg/typings/ui';
 import { StyledButton, StyledBox } from './styles';
-import routes, { WELCOME } from '../../../routes';
-import { NavigateToParams } from '@akashaorg/ui-awf-typings';
+import { WELCOME } from '../../../routes';
 
 const { Box, Text, styled, Icon, LinkInput } = DS;
 

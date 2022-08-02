@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { ButtonValues } from '@akashaorg/ui-awf-typings';
+import { ButtonValues } from '@akashaorg/typings/ui';
 import {
   useGetCount,
   useInfiniteKept,

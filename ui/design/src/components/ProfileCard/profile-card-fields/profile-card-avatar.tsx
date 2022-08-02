@@ -1,12 +1,11 @@
 import * as React from 'react';
+import { LogoSourceType, IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '../../Avatar';
 import { AppIcon } from '../../Icon/app-icon';
 import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
-import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
 import ImageOverlay from '../../ImageOverlay';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface IProfileCardAvatarProps {
   editable: boolean;

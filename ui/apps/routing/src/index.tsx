@@ -4,11 +4,12 @@ import {
   EventTypes,
   MenuItemAreaType,
   UIEventData,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { RouteRepository } from './types';
+  NavigateToParams,
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import getSDK from '@akashaorg/awf-sdk';
-import { events } from '@akashaorg/sdk-typings';
+import { APP_EVENTS } from '@akashaorg/typings/sdk';
+import { RouteRepository } from './types';
 
 export class RoutingPlugin {
   static readonly routeRepository: RouteRepository = {
@@ -25,7 +26,7 @@ export class RoutingPlugin {
     const globalChannel = getSDK().api.globalChannel;
     globalChannel.subscribe({
       next(evData) {
-        if (evData.event === events.APP_EVENTS.REMOVED) {
+        if (evData.event === APP_EVENTS.REMOVED) {
           const removed = evData.data as { name: string };
           const { all, activeIntegrationNames, byArea } = RoutingPlugin.routeRepository;
           delete all[removed.name];

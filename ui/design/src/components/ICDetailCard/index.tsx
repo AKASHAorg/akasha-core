@@ -6,13 +6,12 @@ import ICDetailCardAvatar from './ic-detail-card-fields/avatar';
 import ICDetailCardDescription from './ic-detail-card-fields/description';
 
 import Icon from '../Icon';
-import Tooltip from '../Tooltip';
 import DuplexButton from '../DuplexButton';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
 import SubtitleTextIcon from '../SubtitleTextIcon';
-import { ReleaseInfo } from '@akashaorg/ui-awf-typings';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
+import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import Version from './version';
 

@@ -1,5 +1,14 @@
 import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
+import { isMobile, isMobileOnly } from 'react-device-detect';
+import {
+  IProfileData,
+  ProfileProviders,
+  UsernameTypes,
+  LogoSourceType,
+} from '@akashaorg/typings/ui';
+import styled from 'styled-components';
+
 import DuplexButton from '../DuplexButton';
 import Icon, { IconType } from '../Icon';
 import TextIcon from '../TextIcon';
@@ -11,17 +20,9 @@ import {
   ProfileCardName,
   ProfileCardEthereumId,
 } from './profile-card-fields';
-import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
-import styled from 'styled-components';
 import { truncateMiddle } from '../../utils/string-utils';
-import { isMobile, isMobileOnly } from 'react-device-detect';
 import MobileListModal from '../MobileListModal';
-import {
-  IProfileData,
-  ProfileProviders,
-  UsernameTypes,
-} from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface IProfileProvidersData {
   currentProviders: {

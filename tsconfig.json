@@ -21,8 +21,9 @@
     "lib": ["es2020", "dom"]
   },
   "references": [
-    { "path": "./ui/design" },
-    { "path": "./ui/typings" },
+    {
+      "path": "./ui/design"
+    },
     { "path": "./tests" },
     { "path": "./ui/hooks" },
     { "path": "./ui/lib/feed" },

@@ -1,4 +1,4 @@
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 import { Box, Text, TextArea } from 'grommet';
 import React, { useRef, useState } from 'react';
 import useSimpleClickAway from '../../utils/simpleClickAway';

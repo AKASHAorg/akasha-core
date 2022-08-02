@@ -14,12 +14,33 @@ export * from './type-utils';
 export * from './ui-events';
 export * from './widgets';
 
+import { IntegrationInfo, ReleaseInfo } from '../sdk/registry';
+
 export enum IntegrationTypes {
   APP = 'App',
   WIDGET = 'Widget',
   PLUGIN = 'Plugin',
   NONE = 'None',
 }
+
+/* @TODO: replace with react-query's query status */
+export type QueryStatus = {
+  status?: 'idle' | 'loading' | 'success' | 'error';
+  error?: null | unknown;
+  hasNextPage?: boolean;
+  isError?: boolean;
+  isFetched?: boolean;
+  isFetchedAfterMount?: boolean;
+  isFetching?: boolean;
+  isIdle?: boolean;
+  isLoading?: boolean;
+  isLoadingError?: boolean;
+  isPlaceholderData?: boolean;
+  isPreviousData?: boolean;
+  isRefetchError?: boolean;
+  isStale?: boolean;
+  isSuccess?: boolean;
+};
 
 export interface IAkashaError {
   errorKey: string;
@@ -32,8 +53,6 @@ export interface WalletTransactionError extends Error {
   message: string;
   stack: string;
 }
-
-import { IntegrationInfo, ReleaseInfo } from '@akashaorg/sdk-typings/lib/interfaces/registry';
 
 /* @TODO: this doesn't belong here */
 export interface IntegrationCenterApp extends IntegrationInfo {

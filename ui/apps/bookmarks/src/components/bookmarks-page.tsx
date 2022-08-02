@@ -1,9 +1,7 @@
 import * as React from 'react';
-
 import DS from '@akashaorg/design-system';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useGetBookmarks, useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
@@ -42,7 +40,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       entryId,
-      entryType: ItemTypes.ENTRY,
+      entryType: EntityTypes.ENTRY,
     });
   };
 
@@ -94,7 +92,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
           {bookmarksReq.status === 'success' && bookmarks && (
             <FeedWidget
               modalSlotId={props.layoutConfig.modalSlotId}
-              itemType={ItemTypes.ENTRY}
+              itemType={EntityTypes.ENTRY}
               logger={props.logger}
               onLoadMore={() => {
                 /* if next page, load more */

@@ -8,10 +8,14 @@ import {
   mapEntry,
   LoginState,
 } from '@akashaorg/ui-awf-hooks';
-import { EventTypes, ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import {
+  EventTypes,
+  EntityTypes,
+  IEntryData,
+  NavigateToParams,
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 
 const { ErrorLoader, EntryCard, EntryCardHidden, EntryCardLoading, ExtensionPoint } = DS;
@@ -30,7 +34,7 @@ export interface IEntryCardRendererProps {
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   onTagClick: (name: string) => void;
-  bookmarks?: { entryId: string; type: ItemTypes }[];
+  bookmarks?: { entryId: string; type: EntityTypes }[];
   style?: React.CSSProperties;
   contentClickable?: boolean;
   disableReposting?: boolean;
@@ -64,8 +68,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     return undefined;
   }, [bookmarks, itemId]);
 
-  const postReq = usePost({ postId: itemId, enabler: type === ItemTypes.ENTRY });
-  const commentReq = useComment(itemId, type === ItemTypes.COMMENT);
+  const postReq = usePost({ postId: itemId, enabler: type === EntityTypes.ENTRY });
+  const commentReq = useComment(itemId, type === EntityTypes.COMMENT);
 
   const handleFlipCard = () => {
     setShowAnyway(true);
@@ -86,9 +90,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   const itemData = React.useMemo(() => {
-    if (type === ItemTypes.COMMENT && commentReq.isSuccess) {
+    if (type === EntityTypes.COMMENT && commentReq.isSuccess) {
       return mapEntry(commentReq.data);
-    } else if (type === ItemTypes.ENTRY && postReq.isSuccess) {
+    } else if (type === EntityTypes.ENTRY && postReq.isSuccess) {
       return mapEntry(postReq.data);
     }
   }, [type, postReq.data, postReq.isSuccess, commentReq.data, commentReq.isSuccess]);
@@ -106,13 +110,13 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const itemTypeName = React.useMemo(() => {
     switch (type) {
-      case ItemTypes.ENTRY:
+      case EntityTypes.ENTRY:
         return t('post');
-      case ItemTypes.PROFILE:
+      case EntityTypes.PROFILE:
         return t('account');
-      case ItemTypes.COMMENT:
+      case EntityTypes.COMMENT:
         return t('reply');
-      case ItemTypes.TAG:
+      case EntityTypes.TAG:
         return t('tag');
       default:
         return t('unknown');
@@ -138,7 +142,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (entryId)
       props.navigateToModal({
         name: 'entry-remove-confirmation',
-        entryType: ItemTypes.ENTRY,
+        entryType: EntityTypes.ENTRY,
         entryId,
       });
   };

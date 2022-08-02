@@ -1,4 +1,4 @@
-import { PluginConf } from '@akashaorg/typings';
+import { PluginConf } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
 
 export const loadI18nNamespaces = async (plugins: PluginConf, namespaces: string | string[]) => {

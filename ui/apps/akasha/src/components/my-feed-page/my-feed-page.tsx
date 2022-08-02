@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import {
+  EntityTypes,
+  IProfileData,
+  ModalNavigationOptions,
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import { useInfiniteCustomPosts, LoginState, useTagSubscriptions } from '@akashaorg/ui-awf-hooks';
-
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { Box, Helmet, StartCard, MyFeedCard } = DS;
 
@@ -68,7 +67,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   const handleEntryRemove = React.useCallback((entryId: string) => {
     navigateToModal.current({
       name: 'entry-remove-confirmation',
-      entryType: ItemTypes.ENTRY,
+      entryType: EntityTypes.ENTRY,
       entryId,
     });
   }, []);
@@ -109,7 +108,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       <FeedWidget
         modalSlotId={props.layoutConfig.modalSlotId}
         logger={logger}
-        itemType={ItemTypes.ENTRY}
+        itemType={EntityTypes.ENTRY}
         pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}

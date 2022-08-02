@@ -1,6 +1,6 @@
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
-import { Box } from 'grommet';
 import * as React from 'react';
+import { Box } from 'grommet';
+import { IProfileData } from '@akashaorg/typings/ui';
 import { truncateMiddle } from '../../utils/string-utils';
 import Avatar from '../Avatar';
 import { AvatarSize } from '../Avatar/styled-avatar';

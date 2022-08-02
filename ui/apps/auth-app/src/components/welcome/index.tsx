@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 
 const { WelcomeCard } = DS;
 

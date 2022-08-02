@@ -1,4 +1,4 @@
-import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import { DataProviderInput } from '../sdk/common';
 export interface IProfileProvider {
   property: ProfileProviderProperties;
   provider: ProfileProviders;

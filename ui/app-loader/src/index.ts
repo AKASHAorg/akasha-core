@@ -1,5 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { ILoaderConfig } from '@akashaorg/typings';
+import { ILoaderConfig } from '@akashaorg/typings/ui';
 import { hidePageSplash, showPageSplash } from './splash-screen';
 import { merge } from 'rxjs';
 import * as singleSpa from 'single-spa';

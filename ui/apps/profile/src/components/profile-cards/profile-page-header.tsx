@@ -2,8 +2,12 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { IProfileData, UsernameTypes } from '@akashaorg/ui-awf-typings/lib/profile';
+import {
+  IProfileData,
+  UsernameTypes,
+  NavigateToParams,
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
   useFollow,

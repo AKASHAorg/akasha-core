@@ -35,8 +35,7 @@
     "single-spa": "5.9.3"
   },
   "devDependencies": {
-    "@akashaorg/typings": "*",
-    "@akashaorg/ui-awf-typings": "*"
+    "@akashaorg/typings": "*"
   },
   "files": [
     "lib"

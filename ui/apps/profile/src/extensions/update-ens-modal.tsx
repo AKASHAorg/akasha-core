@@ -1,6 +1,5 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaorg/design-system';
 import {
@@ -18,10 +17,11 @@ import {
   ProfileProviders,
   IProfileData,
   ProfileProviderProperties,
-} from '@akashaorg/ui-awf-typings/lib/profile';
+  RootExtensionProps,
+} from '@akashaorg/typings/ui';
 import { I18nextProvider, TFunction, useTranslation } from 'react-i18next';
 import { ENSOptionTypes, EnsFormOption } from '@akashaorg/design-system/lib/components/EnsFormCard';
-import { DataProviderInput } from '@akashaorg/awf-sdk/typings/lib/interfaces/common';
+import { DataProviderInput } from '@akashaorg/typings/sdk';
 
 const {
   ErrorLoader,

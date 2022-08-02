@@ -2,7 +2,7 @@ import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { withProviders } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import CookieWidget from './cookie-widget';
 
 const reactLifecycles = singleSpaReact({

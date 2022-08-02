@@ -1,4 +1,4 @@
-import { BaseIntegrationInfo, ILoaderConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { BaseIntegrationInfo, ILoaderConfig } from '@akashaorg/typings/ui';
 import { Observable, mergeMap, from, filter, zip, of, tap, catchError, switchMap, map } from 'rxjs';
 import { uiEvents, pipelineEvents } from './events';
 import { LoaderState, getStateSlice } from './state';

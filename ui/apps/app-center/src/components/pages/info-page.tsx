@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useGetAllInstalledApps,
   useGetAllIntegrationReleaseIds,
