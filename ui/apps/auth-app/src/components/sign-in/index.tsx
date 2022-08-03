@@ -79,7 +79,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
         getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
       });
     }
-  }, [signInComplete, profileDataReq, props.worldConfig.homepageApp]);
+  }, [signInComplete, profileDataReq, props.baseRouteName, props.worldConfig.homepageApp]);
 
   const requiredNetworkName = `${requiredNetworkQuery.data
     .charAt(0)
@@ -117,9 +117,16 @@ const SignIn: React.FC<RootComponentProps> = props => {
     return false;
   }, [networkStateQuery, selectedProvider, connectProviderQuery.data]);
 
+  const handleNavigateToSignup = (path: string) => {
+    routingPlugin.current.navigateTo({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: () => path,
+    });
+  };
+
   return (
     <>
-      {isNotRegistered && <SuggestSignup onNavigate={props.singleSpa.navigateToUrl} />}
+      {isNotRegistered && <SuggestSignup onNavigate={handleNavigateToSignup} />}
       {!isNotRegistered && (
         <MainAreaCardBox pad="large">
           <Box margin={{ bottom: 'xlarge' }}>

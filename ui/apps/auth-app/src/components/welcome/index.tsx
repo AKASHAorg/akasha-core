@@ -34,7 +34,7 @@ const Welcome: React.FC<RootComponentProps> = props => {
   const handleSecondaryButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.MyProfile}?modal[name]=update-profile`,
+      getNavigationUrl: navRoutes => `${navRoutes.myProfile}?modal[name]=update-profile`,
     });
   };
 
