@@ -6,10 +6,6 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import TransparencyLog from './transparency-log';
 import { Dashboard, GuestPage, IntroPage } from '../pages';
-<<<<<<< HEAD
-=======
-
->>>>>>> next
 import routes, { GUEST, HISTORY, HOME, UNAUTHENTICATED } from '../routes';
 
 const { Box } = DS;
