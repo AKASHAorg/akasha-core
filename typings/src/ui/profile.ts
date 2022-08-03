@@ -25,6 +25,7 @@ export interface IProfileData {
   delisted?: boolean;
   moderated?: boolean;
   reason?: string;
+  badges?: string[];
 }
 
 export enum UsernameTypes {

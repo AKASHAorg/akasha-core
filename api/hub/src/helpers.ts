@@ -131,7 +131,7 @@ export const setupDBCollections = async () => {
     ? ThreadID.fromString(process.env.AWF_THREADdb)
     : ThreadID.fromRandom();
   if (!process.env.AWF_THREADdb) {
-    await appDB.newDB(threadID, process.env.AWF_DBname || 'defaultDB');
+    await appDB.newDB(threadID, process.env.AWF_DBname);
   }
 
   await initCollections(appDB, threadID);

@@ -1,13 +1,14 @@
-import { Box, Text } from 'grommet';
 import React, { useState } from 'react';
+import { Box, Text } from 'grommet';
+import styled from 'styled-components';
 import { isMobile, isMobileOnly } from 'react-device-detect';
+
 import {
   IProfileData,
   ProfileProviders,
   UsernameTypes,
   LogoSourceType,
 } from '@akashaorg/typings/ui';
-import styled from 'styled-components';
 
 import DuplexButton from '../DuplexButton';
 import Icon, { IconType } from '../Icon';
@@ -19,10 +20,14 @@ import {
   ProfileCardDescription,
   ProfileCardName,
   ProfileCardEthereumId,
+  ProfileCardBadges,
 } from './profile-card-fields';
+
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
-import { truncateMiddle } from '../../utils/string-utils';
 import MobileListModal from '../MobileListModal';
+import HorizontalDivider from '../HorizontalDivider';
+
+import { truncateMiddle } from '../../utils/string-utils';
 
 export interface IProfileProvidersData {
   currentProviders: {
@@ -67,6 +72,7 @@ export interface IProfileCardProps {
   flagAsLabel?: string;
   blockLabel?: string;
   descriptionLabel: string;
+  badgesLabel: string;
   postsLabel: string;
   interestsLabel?: string;
   followingLabel: string;
@@ -163,6 +169,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     isFollowing,
     profileData,
     descriptionLabel,
+    badgesLabel,
     followingLabel,
     followersLabel,
     followLabel,
@@ -310,6 +317,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               editable={editable}
               avatar={avatar}
               avatarIcon={avatarIcon}
+              avatarBorderColor="darkerBlue" // TODO: determine this from the profile data
               handleChangeAvatar={handleChangeAvatar}
               avatarPopoverOpen={avatarPopoverOpen}
               setAvatarPopoverOpen={setAvatarPopoverOpen}
@@ -486,18 +494,31 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           }
         />
         {description && (
-          <ProfileCardDescription
-            editable={editable}
-            description={description}
-            descriptionIcon={descriptionIcon}
-            handleChangeDescription={handleChangeDescription}
-            descriptionPopoverOpen={descriptionPopoverOpen}
-            setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-            profileProvidersData={profileProvidersData}
-            descriptionLabel={descriptionLabel}
-          />
+          <>
+            <Box pad={{ horizontal: 'medium' }}>
+              <HorizontalDivider />
+            </Box>
+            <ProfileCardDescription
+              editable={editable}
+              description={description}
+              descriptionIcon={descriptionIcon}
+              handleChangeDescription={handleChangeDescription}
+              descriptionPopoverOpen={descriptionPopoverOpen}
+              setDescriptionPopoverOpen={setDescriptionPopoverOpen}
+              profileProvidersData={profileProvidersData}
+              descriptionLabel={descriptionLabel}
+            />
+          </>
         )}
       </Box>
+      {profileData.badges?.length > 0 && (
+        <>
+          <Box pad={{ horizontal: 'medium' }}>
+            <HorizontalDivider />
+          </Box>
+          <ProfileCardBadges badgesLabel={badgesLabel} badges={profileData.badges} />
+        </>
+      )}
     </MainAreaCardBox>
   );
 };

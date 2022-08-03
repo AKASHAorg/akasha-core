@@ -20,7 +20,7 @@ export interface IColorsLight extends IColors {
 const colors: IColorsLight = {
   blue: '#4E71FF',
   lightBlue: '#D3DAFA',
-  darkerBlue: '#132540',
+  darkerBlue: '#0046CB',
   darkBlue: '#425166',
   darkGrey: '#000C20',
   grey: '#949EB3',
@@ -41,7 +41,7 @@ const colors: IColorsLight = {
   lightUltraMarine: '#8b9FFF',
   // define use cases for colors
   disabled: '#9ea0a5',
-  primaryText: '#132540', // darkerBlue
+  primaryText: '#132540', // grayish blue
   secondaryText: '#425166', // darkBlue
   textBackground: '#E9EDFD', // light blue
   disabledText: '#9ea0a5', // disabled

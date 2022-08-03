@@ -2,15 +2,17 @@ import * as React from 'react';
 import { LogoSourceType, IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '../../Avatar';
 import { AppIcon } from '../../Icon/app-icon';
+import ImageOverlay from '../../ImageOverlay';
 import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
-import ImageOverlay from '../../ImageOverlay';
+import { AvatarBorderColor } from '../../Avatar/styled-avatar';
 
 export interface IProfileCardAvatarProps {
   editable: boolean;
   avatar?: IProfileData['avatar'];
   avatarIcon?: LogoSourceType;
+  avatarBorderColor?: AvatarBorderColor;
   avatarPopoverOpen: boolean;
   setAvatarPopoverOpen: (value: boolean) => void;
   handleChangeAvatar: (provider: IProfileDataProvider) => void;
@@ -23,6 +25,7 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
     editable,
     avatar,
     avatarIcon,
+    avatarBorderColor,
     avatarPopoverOpen,
     setAvatarPopoverOpen,
     profileProvidersData,
@@ -51,6 +54,7 @@ const ProfileCardAvatar: React.FC<IProfileCardAvatarProps> = props => {
           ethAddress={ethAddress}
           src={avatar}
           onClick={handleClickImage}
+          borderColor={avatarBorderColor}
         />
         {editable &&
           profileProvidersData &&

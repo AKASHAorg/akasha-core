@@ -43,6 +43,7 @@ export type IconType =
   | 'dapper'
   | 'chevronRight'
   | 'chevronLeft'
+  | 'dev'
   | 'discord'
   | 'document'
   | 'dropdown'
@@ -97,6 +98,7 @@ export type IconType =
   | 'pinAlt'
   | 'plusDark'
   | 'plusGrey'
+  | 'publisher'
   | 'questionMark'
   | 'quote'
   | 'reddit'
@@ -175,6 +177,7 @@ export const iconTypes: IconType[] = [
   'chevronLeft',
   'coins',
   'dapper',
+  'dev',
   'discord',
   'document',
   'dropdown',
@@ -228,6 +231,7 @@ export const iconTypes: IconType[] = [
   'pin',
   'pinAlt',
   'plusDark',
+  'publisher',
   'questionMark',
   'quote',
   'reddit',

@@ -4,7 +4,7 @@ import CommonInterface from '../../interfaces/common.interface';
 import MarginInterface from '../../interfaces/margin.interface';
 import AvatarImage from './avatar-image';
 // import { loadPlaceholder } from './placeholders';
-import StyledAvatar, { AvatarSize, ActiveOverlay } from './styled-avatar';
+import StyledAvatar, { AvatarSize, ActiveOverlay, AvatarBorderColor } from './styled-avatar';
 
 export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   ethAddress?: string | null;
@@ -18,6 +18,7 @@ export interface AvatarProps extends CommonInterface<HTMLDivElement> {
   faded?: boolean;
   size?: AvatarSize;
   publicImgPath?: string;
+  borderColor?: AvatarBorderColor;
 }
 
 export const getAvatarFromSeed = (seed: string | null) => {
@@ -56,6 +57,7 @@ const Avatar: React.FC<AvatarProps> = props => {
     ethAddress = '0x0000000000000000000000000000000',
     publicImgPath = '/images',
     backgroundColor,
+    borderColor,
   } = props;
   const isClickable = typeof onClick === 'function';
   let avatarImageFallback;
@@ -76,6 +78,7 @@ const Avatar: React.FC<AvatarProps> = props => {
       margin={margin}
       border={border}
       backgroundColor={backgroundColor}
+      borderColor={borderColor}
     >
       <React.Suspense fallback={<></>}>
         <AvatarImage url={src?.url} fallbackUrl={avatarImageFallback} faded={faded} />

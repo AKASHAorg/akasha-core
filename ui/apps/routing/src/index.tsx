@@ -124,7 +124,10 @@ export class RoutingPlugin {
     const redirectTo = options.search.get('redirectTo');
     if (redirectTo) {
       // appName is at index 1 in "/@akashaorg/app-name/some-path"
+<<<<<<< HEAD
       console.log(redirectTo, 'the redirect param');
+=======
+>>>>>>> next
       const [, appName, ...path] = redirectTo.split('/');
       const decodedAppName = RoutingPlugin.decodeAppName(appName);
       return RoutingPlugin.navigateTo({

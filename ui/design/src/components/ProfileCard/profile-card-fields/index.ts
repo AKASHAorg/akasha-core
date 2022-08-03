@@ -3,6 +3,7 @@ import ProfileCardCoverImage from './profile-card-cover-image';
 import ProfileCardDescription from './profile-card-description';
 import ProfileCardName from './profile-card-name';
 import ProfileCardEthereumId from './profile-card-ethereum-id';
+import ProfileCardBadges from './profile-card-badges';
 
 export {
   ProfileCardCoverImage,
@@ -10,4 +11,5 @@ export {
   ProfileCardName,
   ProfileCardDescription,
   ProfileCardEthereumId,
+  ProfileCardBadges,
 };
