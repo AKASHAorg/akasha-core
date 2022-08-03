@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@akashaorg/typings": "*",
+    "@akashaorg/design-system": "*",
     "@types/react": "17.0.20"
   },
   "peerDependencies": {
