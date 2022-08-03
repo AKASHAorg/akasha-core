@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';

@@ -1,5 +1,4 @@
-import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
 import * as React from 'react';
 import { Accordion, Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';

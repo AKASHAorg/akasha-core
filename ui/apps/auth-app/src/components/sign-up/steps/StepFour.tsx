@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
-import { useCheckSignup, useSignUp } from '@akashaorg/ui-awf-hooks/lib/use-login';
-import { PROVIDER_ERROR_CODES } from '@akashaorg/sdk-typings/lib/interfaces/common';
-import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
-import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { PROVIDER_ERROR_CODES, EthProviders } from '@akashaorg/typings/sdk';
+import { useAnalytics, useCheckSignup, useSignUp } from '@akashaorg/ui-awf-hooks';
+import { AnalyticsCategories } from '@akashaorg/typings/ui';
 
 import { StyledButton, StyledBox } from './styles';
 import routes, { SIGN_IN } from '../../../routes';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { Box, Text, WalletRequestStep, Icon, CTAAnchor } = DS;
 

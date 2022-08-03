@@ -30,12 +30,13 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaorg/ui-awf-typings": "*",
     "@akashaorg/awf-sdk": "*",
     "rxjs": "7.3.0",
     "single-spa": "5.9.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@akashaorg/typings": "*"
+  },
   "files": [
     "lib"
   ],

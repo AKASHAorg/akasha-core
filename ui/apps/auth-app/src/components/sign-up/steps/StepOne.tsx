@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { ILinkInput } from '@akashaorg/design-system/lib/components/TextInputIconForm';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
+import { AnalyticsCategories } from '@akashaorg/typings/ui';
 
 import { StyledButton, StyledBox } from './styles';
 

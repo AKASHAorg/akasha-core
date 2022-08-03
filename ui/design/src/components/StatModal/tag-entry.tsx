@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box } from 'grommet';
+import { ITag } from '@akashaorg/typings/ui';
 
 import Icon from '../Icon';
 import DuplexButton from '../DuplexButton';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
-import { ITag } from '@akashaorg/ui-awf-typings/lib/entry';
 
 export interface ITagEntry {
   tags?: ITag[];

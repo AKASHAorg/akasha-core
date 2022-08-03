@@ -1,4 +1,4 @@
-import { IAwfSDK } from '@akashaorg/sdk-typings';
+import { IAwfSDK } from '@akashaorg/typings/sdk';
 import { noop, of, ReplaySubject } from 'rxjs';
 
 export interface SdkOverrides {

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Box, Text } from 'grommet';
+import { IProfileData } from '@akashaorg/typings/ui';
 
 import Avatar from '../Avatar';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import Tooltip from '../Tooltip';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface ITransparencyLogMiniCardProps {
   locale: ILocale;

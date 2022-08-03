@@ -1,6 +1,6 @@
 import { asapScheduler, defer, from, of, scheduled, ObservableInput } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ServiceCallResult } from '@akashaorg/sdk-typings/lib/interfaces';
+import { ServiceCallResult } from '@akashaorg/typings/sdk';
 import { ApolloLink, GraphQLRequest } from '@apollo/client';
 
 /**

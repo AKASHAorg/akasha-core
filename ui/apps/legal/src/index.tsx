@@ -1,12 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import routes, { COC, DG, PP, TOS, TOU } from './routes';
 import {
   IAppConfig,
   MenuItemAreaType,
   MenuItemType,
   IntegrationRegistrationOptions,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+  LogoTypeSource,
+} from '@akashaorg/typings/ui';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   mountsIn: opts.layoutConfig?.pluginSlotId,

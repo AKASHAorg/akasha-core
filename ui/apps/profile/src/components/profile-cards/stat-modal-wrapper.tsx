@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { IProfileData } from '@akashaorg/ui-awf-typings/src/profile';
+import { IProfileData, NavigateToParams } from '@akashaorg/typings/ui';
 import {
   useFollowers,
   useFollowing,
@@ -15,7 +15,6 @@ import {
   useUnfollow,
   getMediaUrl,
 } from '@akashaorg/ui-awf-hooks';
-import { NavigateToParams } from '@akashaorg/ui-awf-typings';
 
 interface IStatModalWrapper {
   loginState: LoginState;

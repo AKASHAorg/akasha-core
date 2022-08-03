@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { createEditor, Descendant } from 'slate';
 import { Slate, withReact, Editable, RenderElementProps } from 'slate-react';
+import { ImageElement } from '@akashaorg/typings/ui';
 import { withMentions, withImages, withTags, withLinks } from '../Editor/plugins';
 import { renderElement, renderLeaf } from '../Editor/renderers';
-import { ImageElement } from '@akashaorg/ui-awf-typings/lib/editor';
 import ImageOverlay from '../ImageOverlay';
 
 export interface IReadOnlyEditor {

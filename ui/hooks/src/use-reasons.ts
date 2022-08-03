@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IAkashaError } from '@akashaorg/ui-awf-typings';
+import { IAkashaError } from '@akashaorg/typings/ui';
 
 import { logError } from './utils/error-handler';
 import { getModerationReasons, Reason } from './moderation-requests';

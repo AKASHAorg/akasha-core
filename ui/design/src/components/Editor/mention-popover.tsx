@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Portal } from './helpers';
 import { StyledPopoverDiv, StyledPopoverValueBox } from './styled-editor-box';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 
 export interface IMentionPopover {
   values: Partial<IProfileData>[];

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "dependencies": {
-    "@akashaorg/sdk-typings": "*",
+    "@akashaorg/typings": "*",
     "@apollo/client": "3.5.5",
     "@ensdomains/ens-contracts": "0.0.11",
     "@metamask/detect-provider": "1.2.0",

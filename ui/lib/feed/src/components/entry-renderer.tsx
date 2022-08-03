@@ -2,8 +2,14 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useTranslation } from 'react-i18next';
-import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { EventTypes, ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import {
+  AnalyticsCategories,
+  TrackEventData,
+  EventTypes,
+  EntityTypes,
+  NavigateToParams,
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import {
   usePost,
   useComment,
@@ -19,7 +25,6 @@ import {
   useMentionSearch,
 } from '@akashaorg/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
-import { AnalyticsCategories, TrackEventData } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -39,10 +44,10 @@ export interface IEntryRenderer {
   style?: React.CSSProperties;
   onFlag?: (entryId: string, itemType: string, reporterEthAddress?: string | null) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
-  onEntryNavigate: (details: IContentClickDetails, itemType: ItemTypes) => void;
+  onEntryNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
   navigateTo: (args: NavigateToParams) => void;
   contentClickable?: boolean;
-  itemType: ItemTypes;
+  itemType: EntityTypes;
   onEntryRemove?: (entryId: string) => void;
   parentIsProfilePage?: boolean;
   removeEntryLabel?: string;
@@ -99,13 +104,13 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const { t } = useTranslation('ui-lib-feed');
 
-  const postReq = usePost({ postId: itemId, enabler: itemType === ItemTypes.ENTRY });
-  const commentReq = useComment(itemId, itemType === ItemTypes.COMMENT);
+  const postReq = usePost({ postId: itemId, enabler: itemType === EntityTypes.ENTRY });
+  const commentReq = useComment(itemId, itemType === EntityTypes.COMMENT);
   const authorPubKey = React.useMemo(() => {
-    if (itemType === ItemTypes.COMMENT && commentReq.status === 'success') {
+    if (itemType === EntityTypes.COMMENT && commentReq.status === 'success') {
       return commentReq.data.author.pubKey;
     }
-    if (itemType === ItemTypes.ENTRY && postReq.status === 'success') {
+    if (itemType === EntityTypes.ENTRY && postReq.status === 'success') {
       return postReq.data.author.pubKey;
     }
   }, [itemType, commentReq, postReq]);
@@ -113,14 +118,14 @@ const EntryRenderer = (props: IEntryRenderer) => {
   const followedProfilesReq = useIsFollowingMultiple(loginState.pubKey, [authorPubKey]);
 
   const postData = React.useMemo(() => {
-    if (postReq.data && itemType === ItemTypes.ENTRY) {
+    if (postReq.data && itemType === EntityTypes.ENTRY) {
       return mapEntry(postReq.data);
     }
     return undefined;
   }, [postReq.data, itemType]);
 
   const commentData = React.useMemo(() => {
-    if (commentReq.data && itemType === ItemTypes.COMMENT) {
+    if (commentReq.data && itemType === EntityTypes.COMMENT) {
       return mapEntry(commentReq.data);
     }
     return undefined;
@@ -133,9 +138,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [authorPubKey, followedProfilesReq.data, followedProfilesReq.status]);
 
   const itemData = React.useMemo(() => {
-    if (itemType === ItemTypes.ENTRY) {
+    if (itemType === EntityTypes.ENTRY) {
       return postData;
-    } else if (itemType === ItemTypes.COMMENT) {
+    } else if (itemType === EntityTypes.COMMENT) {
       return commentData;
     }
   }, [postData, commentData, itemType]);
@@ -168,7 +173,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
   }, [unfollowProfileQuery, authorPubKey]);
 
   const handleEditClick = React.useCallback(() => {
-    if (itemType === ItemTypes.COMMENT) {
+    if (itemType === EntityTypes.COMMENT) {
       setIsEditingComment(true);
     }
   }, [itemType]);
@@ -225,13 +230,13 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const itemTypeName = React.useMemo(() => {
     switch (itemType) {
-      case ItemTypes.ENTRY:
+      case EntityTypes.ENTRY:
         return t('post');
-      case ItemTypes.PROFILE:
+      case EntityTypes.PROFILE:
         return t('account');
-      case ItemTypes.COMMENT:
+      case EntityTypes.COMMENT:
         return t('reply');
-      case ItemTypes.TAG:
+      case EntityTypes.TAG:
         return t('tag');
       default:
         return t('unknown');
@@ -267,7 +272,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
     [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
   );
 
-  const isComment = React.useMemo(() => itemType === ItemTypes.COMMENT, [itemType]);
+  const isComment = React.useMemo(() => itemType === EntityTypes.COMMENT, [itemType]);
 
   return (
     <>

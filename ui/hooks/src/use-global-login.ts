@@ -2,8 +2,7 @@ import * as React from 'react';
 import { createErrorHandler } from './utils/error-handler';
 import { filter } from 'rxjs/operators';
 import getSDK from '@akashaorg/awf-sdk';
-import { events } from '@akashaorg/sdk-typings';
-import { CurrentUser } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import { AUTH_EVENTS, CurrentUser } from '@akashaorg/typings/sdk';
 
 export type OnLoginSuccessHandler = (data: CurrentUser) => void;
 export type OnLogoutSuccessHandler = () => void;
@@ -46,7 +45,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   React.useEffect(() => {
     const call = sdk.current.api.globalChannel.pipe(
       filter(payload => {
-        return payload.event === events.AUTH_EVENTS.SIGN_IN;
+        return payload.event === AUTH_EVENTS.SIGN_IN;
       }),
     );
     const sub = call.subscribe({
@@ -62,7 +61,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   React.useEffect(() => {
     const waitForAuthCall = sdk.current.api.globalChannel.pipe(
       filter(payload => {
-        return payload.event === events.AUTH_EVENTS.WAIT_FOR_AUTH;
+        return payload.event === AUTH_EVENTS.WAIT_FOR_AUTH;
       }),
     );
 
@@ -78,7 +77,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   React.useEffect(() => {
     const readyCall = sdk.current.api.globalChannel.pipe(
       filter(payload => {
-        return payload.event === events.AUTH_EVENTS.READY;
+        return payload.event === AUTH_EVENTS.READY;
       }),
     );
 
@@ -94,7 +93,7 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   React.useEffect(() => {
     const logoutCall = sdk.current.api.globalChannel.pipe(
       filter(payload => {
-        return payload.event === events.AUTH_EVENTS.SIGN_OUT;
+        return payload.event === AUTH_EVENTS.SIGN_OUT;
       }),
     );
     const sub = logoutCall.subscribe({

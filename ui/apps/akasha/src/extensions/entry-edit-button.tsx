@@ -1,11 +1,10 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { MenuItemButton, ErrorLoader, ModalContainer } = DS;
 
@@ -16,7 +15,7 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
     if (
       props.extensionData &&
       props.extensionData.hasOwnProperty('entryId') &&
-      props.extensionData?.entryType === ItemTypes.ENTRY
+      props.extensionData?.entryType === EntityTypes.ENTRY
     ) {
       props.navigateToModal({
         name: 'editor-modal',
@@ -27,10 +26,10 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
   };
 
   const entryTypeLabel = React.useMemo(() => {
-    if (props.extensionData.entryType === ItemTypes.COMMENT) {
+    if (props.extensionData.entryType === EntityTypes.COMMENT) {
       return t('reply');
     }
-    if (props.extensionData.entryType === ItemTypes.ENTRY) {
+    if (props.extensionData.entryType === EntityTypes.ENTRY) {
       return t('post');
     }
   }, [props.extensionData.entryType, t]);

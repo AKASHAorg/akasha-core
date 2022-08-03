@@ -1,7 +1,8 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
+import { IntegrationInfo, ReleaseInfo } from '@akashaorg/typings/sdk';
 import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, Icon, Text, Spinner } = DS;

@@ -4,9 +4,8 @@ import { isMobile } from 'react-device-detect';
 
 import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 import TextIcon from '../TextIcon';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IEntryData } from '@akashaorg/typings/ui';
 import MobileListModal from '../MobileListModal';
-// import styled from 'styled-components';
 
 export type ServiceNames = 'twitter' | 'reddit' | 'facebook' | 'copy';
 

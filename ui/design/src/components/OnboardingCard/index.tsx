@@ -5,7 +5,7 @@ import IconLink from '../IconLink';
 import TextIcon from '../TextIcon';
 import SearchInput from '../SearchInput';
 import TagCard from '../TagCard';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 import { ITagData } from '../TagCard';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
 import Icon from '../Icon';

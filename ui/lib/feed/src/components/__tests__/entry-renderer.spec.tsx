@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { EntityTypes } from '@akashaorg/typings/ui';
 import {
   RenderResult,
   genEthAddress,
@@ -30,7 +30,7 @@ describe('<EntryCardRenderer /> component', () => {
         isFetching: false,
       }}
       checkIsFollowing={jest.fn()}
-      itemType={ItemTypes.ENTRY}
+      itemType={EntityTypes.ENTRY}
       followedProfiles={[]}
       onFollow={jest.fn()}
       onUnfollow={jest.fn()}

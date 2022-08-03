@@ -3,8 +3,17 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import {
+  RootComponentProps,
+  IPublishData,
+  EntityTypes,
+  EventTypes,
+  ModalNavigationOptions,
+  AnalyticsCategories,
+} from '@akashaorg/typings/ui';
+
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+
 import {
   getLinkPreview,
   uploadMediaToTextile,
@@ -23,13 +32,9 @@ import {
   createPendingEntry,
 } from '@akashaorg/ui-awf-hooks';
 
-import { IPublishData } from '@akashaorg/ui-awf-typings/lib/entry';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { ItemTypes, EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import routes, { POST } from '../../routes';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const {
   Box,
@@ -193,7 +198,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       data: {
         name,
         entryId: entryData.entryId,
-        entryType: ItemTypes.ENTRY,
+        entryType: EntityTypes.ENTRY,
       },
     });
   };
@@ -212,7 +217,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const handleCommentRemove = (commentId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryType: ItemTypes.COMMENT,
+      entryType: EntityTypes.COMMENT,
       entryId: commentId,
     });
   };
@@ -220,7 +225,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const handlePostRemove = (commentId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryType: ItemTypes.ENTRY,
+      entryType: EntityTypes.ENTRY,
       entryId: commentId,
     });
   };
@@ -249,7 +254,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       data: {
         name,
         entryId: entryData.entryId,
-        entryType: ItemTypes.ENTRY,
+        entryType: EntityTypes.ENTRY,
       },
     });
   };
@@ -260,7 +265,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       data: {
         name,
         entryId: entryData.entryId,
-        entryType: ItemTypes.ENTRY,
+        entryType: EntityTypes.ENTRY,
       },
     });
   };
@@ -436,7 +441,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 modalSlotId={props.layoutConfig.modalSlotId}
                 logger={logger}
                 pages={commentPages}
-                itemType={ItemTypes.COMMENT}
+                itemType={EntityTypes.COMMENT}
                 onLoadMore={handleLoadMore}
                 getShareUrl={(itemId: string) =>
                   `${window.location.origin}/social-app/post/${itemId}`

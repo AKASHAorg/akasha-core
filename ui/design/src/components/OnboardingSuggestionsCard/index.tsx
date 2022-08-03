@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
+import { IProfileData, ITag } from '@akashaorg/typings/ui';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { TagButton } from './TagButton';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
-import { ITag } from '@akashaorg/ui-awf-typings/lib/entry';
 
 export interface OnboardingSuggestionsCardProps {
   topicsLabel?: string;

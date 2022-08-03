@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useComment } from '@akashaorg/ui-awf-hooks';
 import { POST } from '../../routes';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 
 const ReplyPage: React.FC<RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();

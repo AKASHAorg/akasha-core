@@ -2,13 +2,13 @@ import { forkJoin, lastValueFrom } from 'rxjs';
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import { DataProviderInput } from '@akashaorg/typings/sdk';
 import {
   IProfileData,
   ProfileProviderProperties,
   ProfileProviders,
   UpdateProfileStatus,
-} from '@akashaorg/ui-awf-typings/lib/profile';
+} from '@akashaorg/typings/ui';
 
 import { checkStatus } from './use-moderation';
 import { logError } from './utils/error-handler';

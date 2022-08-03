@@ -1,10 +1,10 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
+import { IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '../Avatar';
 import { MiniProfileAvatarDiv } from './styled-profile-card';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { truncateMiddle } from '../../utils/string-utils';
 
 export interface IProfileMiniCard {

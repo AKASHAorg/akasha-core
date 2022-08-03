@@ -1,16 +1,13 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/sdk-typings';
+import { APP_EVENTS, IAppSettings, ILogger, TYPES } from '@akashaorg/typings/sdk';
 import DB, { availableCollections } from '../db';
 import { createFormattedValue } from '../helpers/observable';
 import { lastValueFrom } from 'rxjs';
 import { AppsSchema } from '../db/app.schema';
 import Logging from '../logging/index';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { IAppSettings } from '@akashaorg/sdk-typings/lib/interfaces/settings';
 import IcRegistry from '../registry/icRegistry';
 import { ethers } from 'ethers';
 import EventBus from '../common/event-bus';
-import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 
 export interface VersionInfo {
   name: string;

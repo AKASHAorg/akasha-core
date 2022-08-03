@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { IMenuItem } from '@akashaorg/typings/ui';
 
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';

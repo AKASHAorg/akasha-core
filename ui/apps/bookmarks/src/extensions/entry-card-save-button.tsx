@@ -2,7 +2,7 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { RootExtensionProps, EntityTypes, AnalyticsCategories } from '@akashaorg/typings/ui';
 import {
   useDeleteBookmark,
   useGetBookmarks,
@@ -12,9 +12,7 @@ import {
   useAnalytics,
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { styled, TextIcon, Icon } = DS;
 
@@ -44,7 +42,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
 
   const isBookmarked = React.useMemo(() => {
     return bookmarkReq.data?.some(
-      (bookmark: { entryId: string; entryType: ItemTypes }) =>
+      (bookmark: { entryId: string; entryType: EntityTypes }) =>
         bookmark.entryId === extensionData.entryId,
     );
   }, [bookmarkReq.data, extensionData]);

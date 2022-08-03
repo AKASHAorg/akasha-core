@@ -3,9 +3,9 @@ import {
   AnalyticsEventData,
   AnalyticsEventTypes,
   TrackEventData,
-} from '@akashaorg/ui-awf-typings/lib/analytics';
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import { BehaviorSubject } from 'rxjs';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 /**
  * @internal

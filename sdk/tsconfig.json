@@ -13,11 +13,6 @@
   "exclude": [
     "./lib"
   ],
-  "references": [
-    {
-      "path": "./typings"
-    }
-  ],
   "files": [
     "./src/contracts/abi/ENS.json",
     "./src/contracts/abi/AkashaRegistrar.json",

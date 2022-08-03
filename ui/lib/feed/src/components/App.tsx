@@ -1,12 +1,16 @@
 import React from 'react';
-import EntryFeed from './entry-feed';
-import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { I18nextProvider } from 'react-i18next';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import {
+  TrackEventData,
+  IProfileData,
+  NavigateToParams,
+  RootComponentProps,
+  EntityTypes,
+  ModalNavigationOptions,
+} from '@akashaorg/typings/ui';
+import { ILogger } from '@akashaorg/typings/sdk';
 import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
-import { TrackEventData } from '@akashaorg/ui-awf-typings/lib/analytics';
+import EntryFeed from './entry-feed';
 
 export interface EntryListPage {
   results: string[];
@@ -15,7 +19,7 @@ export interface EntryListPage {
 export interface IFeedWidgetProps {
   logger: ILogger;
   pages: EntryListPage[];
-  itemType: ItemTypes;
+  itemType: EntityTypes;
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;
   loginState: LoginState;
@@ -43,9 +47,9 @@ export interface IFeedWidgetProps {
 const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
   return (
     <I18nextProvider i18n={props.i18n}>
-      {props.itemType === ItemTypes.ENTRY && <EntryFeed {...props} />}
-      {props.itemType === ItemTypes.COMMENT && <EntryFeed {...props} itemSpacing={0} />}
-      {/* {props.itemType === ItemTypes.PROFILE && <ProfileFeed {...props} />} */}
+      {props.itemType === EntityTypes.ENTRY && <EntryFeed {...props} />}
+      {props.itemType === EntityTypes.COMMENT && <EntryFeed {...props} itemSpacing={0} />}
+      {/* {props.itemType === EntityTypes.PROFILE && <ProfileFeed {...props} />} */}
     </I18nextProvider>
   );
 };

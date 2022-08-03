@@ -12,8 +12,7 @@ import {
   useTagSubscriptions,
   useToggleTagSubscription,
 } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 
 const { Helmet, Box, OnboardingStartCard, OnboardingSuggestionsCard } = DS;
 

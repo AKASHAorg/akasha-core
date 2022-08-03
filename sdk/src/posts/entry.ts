@@ -1,9 +1,18 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import {
+  LinkPreview_Response,
+  Post_Response,
+  PostsResult_Response,
+  ENTRY_EVENTS,
+  AWF_IEntry,
+  DataProviderInput,
+  ILogger,
+  TYPES,
+} from '@akashaorg/typings/sdk';
+import { concatAll, map, tap } from 'rxjs/operators';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
-import { TYPES } from '@akashaorg/sdk-typings';
 import Logging from '../logging';
 import {
   CreateEntry,
@@ -16,16 +25,7 @@ import {
   GetLinkPreview,
   GetCustomFeed,
 } from './entry.graphql';
-import { concatAll, map, tap } from 'rxjs/operators';
-import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
-import { AWF_IEntry } from '@akashaorg/sdk-typings/lib/interfaces/posts';
-import { ENTRY_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 import EventBus from '../common/event-bus';
-import {
-  LinkPreview_Response,
-  Post_Response,
-  PostsResult_Response,
-} from '@akashaorg/sdk-typings/lib/interfaces/responses';
 
 @injectable()
 class AWF_Entry implements AWF_IEntry {

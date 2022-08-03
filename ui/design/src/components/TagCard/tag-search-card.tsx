@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
+import { ITag } from '@akashaorg/typings/ui';
 
 import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
-
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
-import { ITag } from '@akashaorg/ui-awf-typings/lib/entry';
-
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';

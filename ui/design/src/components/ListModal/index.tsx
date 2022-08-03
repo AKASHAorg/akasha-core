@@ -6,7 +6,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { IconType } from '../Icon';
 import TextIcon from '../TextIcon';
 import { StyledLayer } from './styled-modal';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 
 export interface IlistModal {
   className?: string;

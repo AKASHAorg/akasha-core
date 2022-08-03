@@ -12,24 +12,27 @@ import {
 import { GetProfile } from '../profiles/profile.graphql';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/sdk-typings';
+import {
+  CurrentUser,
+  AUTH_EVENTS,
+  IMessage,
+  ILogger,
+  TYPES,
+  AWF_IAuth,
+  EthProviders,
+} from '@akashaorg/typings/sdk';
 import DB from '../db';
-import { AWF_IAuth, EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
 import Web3Connector from '../common/web3.connector';
 import EventBus from '../common/event-bus';
 import Logging from '../logging';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { IMessage } from '@akashaorg/sdk-typings/lib/interfaces/auth';
 import Settings from '../settings';
 
 import Gql from '../gql';
 import { map, tap } from 'rxjs/operators';
 import { forkJoin, from, lastValueFrom } from 'rxjs';
-import { AUTH_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 import hash from 'object-hash';
 import { Buffer } from 'buffer';
 import { PublicKey } from '@textile/threaddb';
-import { CurrentUser } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
 

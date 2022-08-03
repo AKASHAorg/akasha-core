@@ -8,8 +8,8 @@ import {
   LinkElement,
   MentionElement,
   TagElement,
-} from '@akashaorg/ui-awf-typings/lib/editor';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+  IProfileData,
+} from '@akashaorg/typings/ui';
 
 const CustomEditor = {
   isBlockActive(editor: Editor, format: string) {

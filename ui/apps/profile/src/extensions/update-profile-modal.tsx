@@ -1,6 +1,5 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaorg/design-system';
 import {
@@ -15,7 +14,7 @@ import {
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { UpdateProfileStatus } from '@akashaorg/ui-awf-typings/lib/profile';
+import { UpdateProfileStatus, RootExtensionProps } from '@akashaorg/typings/ui';
 
 const { ErrorLoader, ModalContainer, styled, BoxFormCard, Box, Spinner, ModalCard, Text } = DS;
 

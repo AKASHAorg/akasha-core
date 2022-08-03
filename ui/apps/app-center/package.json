@@ -32,7 +32,6 @@
   "dependencies": {
     "@akashaorg/design-system": "*",
     "@akashaorg/ui-awf-hooks": "*",
-    "@akashaorg/ui-awf-typings": "*",
     "@akashaorg/awf-sdk": "*",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",
@@ -44,6 +43,7 @@
     "single-spa-react": "4.6.0"
   },
   "devDependencies": {
+    "@akashaorg/typings": "*",
     "@akashaorg/af-testing": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
