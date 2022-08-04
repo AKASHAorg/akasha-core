@@ -2,8 +2,7 @@ import { lastValueFrom } from 'rxjs';
 import { useQuery } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
-import { INJECTED_PROVIDERS } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import { INJECTED_PROVIDERS, EthProviders } from '@akashaorg/typings/sdk';
 
 import constants from './constants';
 import { logError } from './utils/error-handler';

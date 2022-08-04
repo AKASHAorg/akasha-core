@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grommet } from 'grommet';
-import { AppTypes } from '@akashaorg/ui-awf-typings';
+import { IntegrationTypes } from '@akashaorg/typings/ui';
 
 import AppAvatar, { AppAvatarProps } from '.';
 
@@ -31,10 +31,10 @@ BaseAvatar.args = {
 
 export const AvatarWithAppPlaceholder = Template.bind({});
 AvatarWithAppPlaceholder.args = {
-  appType: AppTypes.APP,
+  appType: IntegrationTypes.APP,
 };
 
 export const AvatarWithWidgetPlaceholder = Template.bind({});
 AvatarWithWidgetPlaceholder.args = {
-  appType: AppTypes.WIDGET,
+  appType: IntegrationTypes.WIDGET,
 };

@@ -7,9 +7,9 @@
     "@akashaorg/nx-executors": {
       "root": "tools/executors"
     },
-    "@akashaorg/ui-awf-typings": {
-      "root": "ui/typings",
-      "sourceRoot": "ui/typings/src",
+    "@akashaorg/typings": {
+      "root": "typings",
+      "sourceRoot": "typings/src",
       "projectType": "library"
     },
     "@akashaorg/hub-api": {
@@ -30,11 +30,6 @@
           }
         }
       }
-    },
-    "@akashaorg/sdk-typings": {
-      "root": "sdk/typings",
-      "sourceRoot": "sdk/typings/src",
-      "projectType": "library"
     },
     "@akashaorg/design-system": {
       "root": "ui/design",

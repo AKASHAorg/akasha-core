@@ -5,7 +5,7 @@
   "devDependencies": {
     "@akashaorg/awf-sdk": "*",
     "@akashaorg/ui-app-loader": "*",
-    "@akashaorg/ui-awf-typings": "*",
+    "@akashaorg/typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9"
   },

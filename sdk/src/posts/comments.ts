@@ -1,9 +1,16 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import {
+  Comment_Response,
+  Comments_Response,
+  COMMENTS_EVENTS,
+  AWF_IComments,
+  DataProviderInput,
+  TYPES,
+  ILogger,
+} from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
-import { TYPES } from '@akashaorg/sdk-typings';
 import Logging from '../logging';
 import {
   AddComment,
@@ -12,15 +19,8 @@ import {
   EditComment,
   RemoveComment,
 } from './comments.graphql';
-import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { concatAll, map, tap } from 'rxjs/operators';
-import { AWF_IComments } from '@akashaorg/sdk-typings/lib/interfaces/posts';
-import { COMMENTS_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 import EventBus from '../common/event-bus';
-import {
-  Comment_Response,
-  Comments_Response,
-} from '@akashaorg/sdk-typings/lib/interfaces/responses';
 /**
  * # sdk.api.comments
  *

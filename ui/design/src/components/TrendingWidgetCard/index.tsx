@@ -1,5 +1,6 @@
 import { Box, Text, Tabs } from 'grommet';
 import * as React from 'react';
+import { ITag, IProfileData } from '@akashaorg/typings/ui';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import Icon from '../Icon';
 import ProfileAvatarButton from '../ProfileAvatarButton';
@@ -7,8 +8,6 @@ import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import DuplexButton from '../DuplexButton';
 import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
-import { ITag } from '@akashaorg/ui-awf-typings/lib/entry';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export interface ITrendingWidgetCardProps {
   // data

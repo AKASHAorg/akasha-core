@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import SidebarComponent from './sidebar-component';
 
 const SidebarWidget: React.FC<RootComponentProps> = props => {

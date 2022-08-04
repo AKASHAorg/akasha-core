@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
-import { AppTypes } from '@akashaorg/ui-awf-typings';
+import { IntegrationTypes } from '@akashaorg/typings/ui';
 
 import AppAvatar from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
@@ -11,7 +11,9 @@ describe('<AppAvatar /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        wrapWithTheme(<AppAvatar ethAddress={'0x01230123450012312'} appType={AppTypes.APP} />),
+        wrapWithTheme(
+          <AppAvatar ethAddress={'0x01230123450012312'} appType={IntegrationTypes.APP} />,
+        ),
         {},
       );
     });

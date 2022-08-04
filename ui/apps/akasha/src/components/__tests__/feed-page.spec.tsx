@@ -12,8 +12,8 @@ import { act } from 'react-dom/test-utils';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-jest.mock('@akashaorg/ui-awf-typings/lib/app-loader', () => ({
-  ItemTypes: {
+jest.mock('@akashaorg/typings/ui', () => ({
+  EntityTypes: {
     ENTRY: 0,
     PROFILE: 1,
     COMMENT: 2,

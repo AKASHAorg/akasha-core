@@ -2,9 +2,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { COOKIE_CONSENT_NAME, CookieConsentTypes } from '@akashaorg/ui-awf-hooks';
-import { EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { EventTypes, RootComponentProps } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 import AppsOption from './option-apps';
 import SettingsPage from './settings-page';

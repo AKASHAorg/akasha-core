@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
-import { EthProviders } from '@akashaorg/ui-awf-typings';
-import { PROVIDER_ERROR_CODES } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
 
 const { WalletRequestStep, Spinner } = DS;
 

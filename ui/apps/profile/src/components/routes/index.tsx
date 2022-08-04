@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+
+import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 import ProfilePage from './profile-page';
 import NoProfileFound from './no-profile-found';

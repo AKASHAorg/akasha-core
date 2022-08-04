@@ -3,7 +3,7 @@ import objHash from 'object-hash';
 import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
 import { catchError, forkJoin, lastValueFrom, of } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
 import { TRENDING_PROFILES_KEY } from './use-trending';
 import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile';

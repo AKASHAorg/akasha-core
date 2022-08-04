@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import routes, { MESSAGING } from '../routes';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import { sendMessage } from '../api/message';
 
-const { Helmet, CommentEditor } = DS;
+const { /* Helmet, */ CommentEditor } = DS;
 
 const MessageForm = () => {
   const [to, setTo] = React.useState('');

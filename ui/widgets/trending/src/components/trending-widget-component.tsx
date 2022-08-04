@@ -10,10 +10,9 @@ import {
   useFollow,
   useUnfollow,
   useGetLogin,
+  useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
+import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 

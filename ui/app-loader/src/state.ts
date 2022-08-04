@@ -1,4 +1,4 @@
-import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
+import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import {
   ModalNavigationOptions,
   ILoaderConfig,
@@ -8,7 +8,7 @@ import {
   EventTypes,
   IntegrationModule,
   PluginConf,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+} from '@akashaorg/typings/ui';
 import {
   Observable,
   distinctUntilChanged,

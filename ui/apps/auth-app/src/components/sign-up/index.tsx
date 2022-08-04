@@ -2,14 +2,14 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { EthProviders } from '@akashaorg/awf-sdk/typings/lib/interfaces';
+import { EthProviders } from '@akashaorg/typings/sdk';
 import {
   useIsValidToken,
   useConnectProvider,
   useInjectedProvider,
   useRequiredNetworkName,
 } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import { StepOne } from './steps/StepOne';
 import { StepTwo } from './steps/StepTwo';

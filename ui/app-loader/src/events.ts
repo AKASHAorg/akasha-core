@@ -1,4 +1,4 @@
-import { UIEventData, EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { UIEventData, EventTypes } from '@akashaorg/typings/ui';
 import {
   Subject,
   merge,
@@ -16,9 +16,8 @@ import {
 import { hidePageSplash } from './splash-screen';
 import { LoaderState } from './state';
 import { getModalFromParams } from './utils';
-import { events } from '@akashaorg/sdk-typings';
+import { AUTH_EVENTS, APP_EVENTS } from '@akashaorg/typings/sdk';
 import * as singleSpa from 'single-spa';
-import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 
 export const pipelineEvents = new Subject<Partial<LoaderState>>();
 export const uiEvents = new ReplaySubject<UIEventData>();
@@ -30,11 +29,11 @@ export const uiEvents = new ReplaySubject<UIEventData>();
  */
 export function filterEvent(eventType: EventTypes): MonoTypeOperatorFunction<UIEventData>;
 export function filterEvent(
-  eventType: events.AUTH_EVENTS,
-): MonoTypeOperatorFunction<{ event: events.AUTH_EVENTS; data?: { ethAddress: string } }>;
+  eventType: AUTH_EVENTS,
+): MonoTypeOperatorFunction<{ event: AUTH_EVENTS; data?: { ethAddress: string } }>;
 export function filterEvent(
-  eventType: events.APP_EVENTS,
-): MonoTypeOperatorFunction<{ event: events.APP_EVENTS; data?: unknown }>;
+  eventType: APP_EVENTS,
+): MonoTypeOperatorFunction<{ event: APP_EVENTS; data?: unknown }>;
 
 export function filterEvent(eventType: never) {
   return filter(
@@ -149,12 +148,12 @@ export const getUiEvents = () => {
 
 export const getGlobalChannelEvents = (globalChannel: ReplaySubject<unknown>) => {
   return merge(
-    globalChannel.pipe(filterEvent(events.APP_EVENTS.INFO_READY)).pipe(map(evt => evt)),
-    globalChannel.pipe(filterEvent(events.APP_EVENTS.REMOVED)).pipe(map(evt => evt)),
+    globalChannel.pipe(filterEvent(APP_EVENTS.INFO_READY)).pipe(map(evt => evt)),
+    globalChannel.pipe(filterEvent(APP_EVENTS.REMOVED)).pipe(map(evt => evt)),
     globalChannel
-      .pipe(filterEvent(events.AUTH_EVENTS.READY))
+      .pipe(filterEvent(AUTH_EVENTS.READY))
       .pipe(map(evt => ({ user: { ...evt.data, waitForAuth: false } }))),
-    globalChannel.pipe(filterEvent(events.AUTH_EVENTS.WAIT_FOR_AUTH)).pipe(
+    globalChannel.pipe(filterEvent(AUTH_EVENTS.WAIT_FOR_AUTH)).pipe(
       mapTo({
         user: {
           waitForAuth: true,

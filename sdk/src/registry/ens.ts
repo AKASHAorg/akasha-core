@@ -1,22 +1,19 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { ENS_EVENTS, AWF_IENS, TYPES, ILogger } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
-import { TYPES } from '@akashaorg/sdk-typings';
 import Logging from '../logging';
 import { normalize } from 'eth-ens-namehash';
 import { ContractFactory } from 'ethers';
 import AkashaRegistrarABI from '../contracts/abi/AkashaRegistrar.json';
 import ReverseRegistrarABI from '../contracts/abi/ReverseRegistrar.json';
 import EnsABI from '../contracts/abi/ENS.json';
-import { AWF_IENS } from '@akashaorg/sdk-typings/lib/interfaces/registry';
 import { lastValueFrom } from 'rxjs';
 import { createFormattedValue, createObservableStream } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import { tap } from 'rxjs/operators';
-import { ENS_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
 import IpfsConnector from '../common/ipfs.connector';
 
 export const isEncodedLabelHash = hash => {

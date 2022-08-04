@@ -1,10 +1,10 @@
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import App from './App';
-import DS from '@akashaorg/design-system';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+import DS from '@akashaorg/design-system';
+import App from './App';
 
 const { ErrorLoader } = DS;
 

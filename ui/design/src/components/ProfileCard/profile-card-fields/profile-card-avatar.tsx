@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
-
-import { IProfileDataProvider, IProfileProvidersData } from '../';
-
+import { LogoSourceType, IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '../../Avatar';
 import { AppIcon } from '../../Icon/app-icon';
 import ImageOverlay from '../../ImageOverlay';
 import SelectPopover from '../../SelectPopover';
-
+import { IProfileDataProvider, IProfileProvidersData } from '../';
 import { AvatarDiv, StyledAvatarEditDiv } from '../styled-profile-card';
 import { AvatarBorderColor } from '../../Avatar/styled-avatar';
 

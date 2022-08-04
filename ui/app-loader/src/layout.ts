@@ -1,10 +1,10 @@
-import { BaseIntegrationInfo, ILoaderConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { BaseIntegrationInfo, ILoaderConfig } from '@akashaorg/typings/ui';
 import { Observable, mergeMap, from, filter, zip, of, tap, catchError, switchMap, map } from 'rxjs';
 import { uiEvents, pipelineEvents } from './events';
 import { LoaderState, getStateSlice } from './state';
 import { getDomElement, parseQueryString } from './utils';
 import * as singleSpa from 'single-spa';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/typings/sdk';
 
 export const loadLayout = (
   worldConfig: ILoaderConfig,

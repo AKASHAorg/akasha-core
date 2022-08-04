@@ -2,7 +2,7 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 

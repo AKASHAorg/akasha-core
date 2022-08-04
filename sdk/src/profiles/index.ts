@@ -1,7 +1,17 @@
 import { BUCKET_THREAD_NAME, PROFILE_MEDIA_FILES } from './constants';
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import {
+  TYPES,
+  DataProviderInput,
+  ILogger,
+  PROFILE_EVENTS,
+  AWF_IProfile,
+  GlobalSearchResult,
+  UserFollowers_Response,
+  UserProfile_Response,
+} from '@akashaorg/typings/sdk';
+import { concatAll, map, tap } from 'rxjs/operators';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import {
@@ -21,21 +31,11 @@ import {
   ToggleInterestSub,
   GetInterests,
 } from './profile.graphql';
-import { TYPES } from '@akashaorg/sdk-typings';
 import Logging from '../logging';
-import { DataProviderInput } from '@akashaorg/sdk-typings/lib/interfaces/common';
-import { concatAll, map, tap } from 'rxjs/operators';
 import { lastValueFrom, throwError } from 'rxjs';
 import { resizeImage } from '../helpers/img';
 import Settings from '../settings';
-import AWF_IProfile from '@akashaorg/sdk-typings/lib/interfaces/profile';
 import EventBus from '../common/event-bus';
-import { PROFILE_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
-import {
-  GlobalSearchResult,
-  UserFollowers_Response,
-  UserProfile_Response,
-} from '@akashaorg/sdk-typings/lib/interfaces/responses';
 import { createFormattedValue } from '../helpers/observable';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires

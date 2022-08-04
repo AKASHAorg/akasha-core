@@ -1,15 +1,10 @@
 import * as React from 'react';
 
 import DS from '@akashaorg/design-system';
-import { INJECTED_PROVIDERS } from '@akashaorg/awf-sdk/typings/lib/interfaces/common';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
+import { switchToRequiredNetwork, useAnalytics, useNetworkState } from '@akashaorg/ui-awf-hooks';
 import { IInjectedProviderDetails } from '@akashaorg/ui-awf-hooks/lib/utils/getProviderDetails';
-import { EthProviders } from '@akashaorg/awf-sdk/typings/lib/interfaces';
-import {
-  switchToRequiredNetwork,
-  useAnalytics,
-  useNetworkState,
-} from '@akashaorg/ui-awf-hooks';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
+import { AnalyticsCategories } from '@akashaorg/typings/ui';
 
 import RequiredNetworkStep, { IRequiredNetworkStepProps } from './required-network';
 

@@ -2,8 +2,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import {
   useGetAllInstalledApps,

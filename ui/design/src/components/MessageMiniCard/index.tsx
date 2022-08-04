@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 
 import Icon, { IconType } from '../Icon';
 import Avatar from '../Avatar';

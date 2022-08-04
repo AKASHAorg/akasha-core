@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 
