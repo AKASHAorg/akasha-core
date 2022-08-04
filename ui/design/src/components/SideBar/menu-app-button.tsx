@@ -19,17 +19,20 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
   const { plain, menuItem, accentColor, hasNewNotifs, onClick } = props;
 
   const renderItem = () => {
-    if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
-      return (
-        <AppAvatar
-          size="md"
-          // edge-case for test app: ignore icons, even if specified, use only avatars
-          src={{ url: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null }}
-          backgroundColor="transparent"
-          appType={AppTypes.APP}
-        />
-      );
-    }
+    // uncomment this to enable app avatars for user installed apps
+
+    // if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
+    //   return (
+    //     <AppAvatar
+    //       size="md"
+    //       // edge-case for test app: ignore icons, even if specified, use only avatars
+    //       src={{ url: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null }}
+    //       backgroundColor="transparent"
+    //       appType={AppTypes.APP}
+    //     />
+    //   );
+    // }
+
     if (menuItem.area?.includes(MenuItemAreaType.UserWidgetArea)) {
       return (
         <AppAvatar
