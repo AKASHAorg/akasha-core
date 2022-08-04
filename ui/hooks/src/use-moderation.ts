@@ -2,7 +2,7 @@ import { lastValueFrom } from 'rxjs';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { Post_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
+import { Post_Response } from '@akashaorg/typings/sdk';
 
 import constants from './constants';
 import { ENTRY_KEY } from './use-posts';

@@ -1,20 +1,20 @@
 import { inject, injectable } from 'inversify';
-import { TYPES } from '@akashaorg/sdk-typings';
-import Web3Connector from '../common/web3.connector';
-import Logging from '../logging';
-import Gql from '../gql';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { CreateTag, GetTag, GetTags, SearchTags } from './tag.graphql';
-import AWF_Auth from '../auth';
-import { concatAll, map, tap } from 'rxjs/operators';
-import { AWF_ITags } from '@akashaorg/sdk-typings/lib/interfaces/posts';
-import { TAG_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
-import EventBus from '../common/event-bus';
 import {
+  TYPES,
+  ILogger,
+  AWF_ITags,
+  TAG_EVENTS,
   SearchTagsResult_Response,
   Tag_Response,
   TagsResult_Response,
-} from '@akashaorg/sdk-typings/lib/interfaces/responses';
+} from '@akashaorg/typings/sdk';
+import { concatAll, map, tap } from 'rxjs/operators';
+import Web3Connector from '../common/web3.connector';
+import Logging from '../logging';
+import Gql from '../gql';
+import { CreateTag, GetTag, GetTags, SearchTags } from './tag.graphql';
+import AWF_Auth from '../auth';
+import EventBus from '../common/event-bus';
 
 @injectable()
 class AWF_Tags implements AWF_ITags {

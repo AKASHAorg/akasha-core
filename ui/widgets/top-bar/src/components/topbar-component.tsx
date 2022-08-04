@@ -8,9 +8,9 @@ import {
   IMenuItem,
   MenuItemAreaType,
   UIEventData,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import { useGetLogin, useGetProfile, useLogout } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 const { Topbar } = DS;
 

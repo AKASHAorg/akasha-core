@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { GlobalStyle } from './global-style';
 import ScrollRestorer from './scroll-restorer';

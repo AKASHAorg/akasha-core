@@ -1,7 +1,7 @@
 import DS from '@akashaorg/design-system';
 import React from 'react';
 import { I18nextProvider, Translation } from 'react-i18next';
-import { RootComponentProps } from '../../../../typings/lib';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   enableTracking,
   installPageTacking,

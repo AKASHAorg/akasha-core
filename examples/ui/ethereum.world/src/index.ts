@@ -1,4 +1,4 @@
-import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 
 console.time('AppLoader:firstMount');
 

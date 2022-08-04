@@ -2,7 +2,7 @@ import DS from '@akashaorg/design-system';
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import route, { TOS, TOU, PP, COC, DG } from '../../routes';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import TermsOfService from './terms-of-service';
 import TermsOfUse from './terms-of-use';
 import CodeOfConduct from './code-of-conduct';

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { getMediaUrl, ILogItem } from '@akashaorg/ui-awf-hooks';
-import { ModerationItemTypes, NavigateToParams } from '@akashaorg/ui-awf-typings';
+import { ModerationItemTypes, NavigateToParams } from '@akashaorg/typings/ui';
 
 export interface IDetailCard {
   selected: ILogItem;

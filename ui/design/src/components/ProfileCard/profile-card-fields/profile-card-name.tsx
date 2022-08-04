@@ -1,9 +1,9 @@
 import { Text } from 'grommet';
 import * as React from 'react';
+import { LogoSourceType } from '@akashaorg/typings/ui';
 import { AppIcon } from '../../Icon/app-icon';
 import SelectPopover from '../../SelectPopover';
 import { IProfileDataProvider, IProfileProvidersData } from '../';
-import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
 import { StyledInlineBox } from '../styled-profile-card';
 
 export interface IProfileCardNameProps {

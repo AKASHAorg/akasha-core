@@ -5,7 +5,7 @@ import Icon from '../../Icon';
 import Avatar from '../../Avatar';
 import ImageOverlay from '../../ImageOverlay';
 import { AvatarBorderSize, AvatarSize } from '../../Avatar/styled-avatar';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 
 type Size = 'xl' | 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
 

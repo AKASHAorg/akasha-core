@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-
-import routes from '../routes';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import { ISettingsItem, settingsItems } from '../utils/settings-items';
 
 const { Box, BasicCardBox, Icon, Text } = DS;

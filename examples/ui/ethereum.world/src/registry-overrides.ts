@@ -1,4 +1,4 @@
-import { INTEGRATION_TYPES } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 
 const HOST = '//localhost:8131';
 

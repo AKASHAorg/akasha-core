@@ -2,8 +2,12 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import {
+  RootComponentProps,
+  EntityTypes,
+  ModalNavigationOptions,
+  IProfileData,
+} from '@akashaorg/typings/ui';
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
@@ -12,7 +16,6 @@ import {
   useInfinitePostsByTag,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 const { Box, TagProfileCard, Helmet, styled, ErrorLoader, Spinner } = DS;
 
@@ -63,7 +66,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       entryId,
-      entryType: ItemTypes.ENTRY,
+      entryType: EntityTypes.ENTRY,
     });
   };
 
@@ -98,7 +101,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
           />
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
-            itemType={ItemTypes.ENTRY}
+            itemType={EntityTypes.ENTRY}
             logger={props.logger}
             onLoadMore={handleLoadMore}
             pages={postPages}

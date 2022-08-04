@@ -1,9 +1,5 @@
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import {
-  EventTypes,
-  ILoaderConfig,
-  INTEGRATION_TYPES,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { ILogger } from '@akashaorg/typings/sdk';
+import { EventTypes, ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 import { combineLatest, filter, Observable, tap, withLatestFrom } from 'rxjs';
 import { getStateSlice, LoaderState } from './state';
 import * as singleSpa from 'single-spa';

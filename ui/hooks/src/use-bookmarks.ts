@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
+import { EntityTypes } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 export const BOOKMARKED_ENTRIES_KEY = 'AKASHA_APP_BOOKMARK_ENTRIES';
 export const BOOKMARK_SAVE_KEY = 'BOOKMARK_SAVE';
@@ -62,7 +62,7 @@ export function useSaveBookmark() {
   const sdk = getSDK();
   return useMutation(
     async () => {
-      const bookmarks: { entryId: string; type: ItemTypes }[] =
+      const bookmarks: { entryId: string; type: EntityTypes }[] =
         queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
       const resp = await lastValueFrom(
         sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
@@ -75,10 +75,10 @@ export function useSaveBookmark() {
       throw new Error('Cannot save bookmark.');
     },
     {
-      onMutate: async (entryData: { entryId: string; itemType: ItemTypes }) => {
+      onMutate: async (entryData: { entryId: string; itemType: EntityTypes }) => {
         const { entryId, itemType } = entryData;
         await queryClient.cancelQueries(BOOKMARKED_ENTRIES_KEY);
-        const prevBmks: { entryId: string; type: ItemTypes }[] =
+        const prevBmks: { entryId: string; type: EntityTypes }[] =
           queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
         const newBmks = prevBmks.slice();
         newBmks.unshift({ entryId, type: itemType });
@@ -113,7 +113,7 @@ export function useDeleteBookmark() {
   const queryClient = useQueryClient();
   return useMutation(
     () => {
-      const bookmarks: { entryId: string; type: ItemTypes }[] =
+      const bookmarks: { entryId: string; type: EntityTypes }[] =
         queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
 
       return lastValueFrom(
@@ -126,11 +126,11 @@ export function useDeleteBookmark() {
       onMutate: async (itemId: string) => {
         await queryClient.cancelQueries(BOOKMARKED_ENTRIES_KEY);
 
-        const prevBmks: { entryId: string; type: ItemTypes }[] =
+        const prevBmks: { entryId: string; type: EntityTypes }[] =
           queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
         const newBmks = prevBmks.slice();
         const bmIndex = newBmks.findIndex(
-          (bm: { entryId: string; type: ItemTypes }) => bm.entryId === itemId,
+          (bm: { entryId: string; type: EntityTypes }) => bm.entryId === itemId,
         );
         if (bmIndex >= 0) {
           newBmks.splice(bmIndex, 1);

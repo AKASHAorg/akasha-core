@@ -1,11 +1,7 @@
 import { Descendant } from 'slate';
-import { LogoTypeSource, IntegrationCenterApp, ReleaseInfo } from '@akashaorg/ui-awf-typings';
-import {
-  IMenuItem,
-  MenuItemType,
-  MenuItemAreaType,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { LogoTypeSource, IntegrationCenterApp } from '@akashaorg/typings/ui';
+import { ReleaseInfo } from '@akashaorg/typings/sdk';
+import { IMenuItem, MenuItemType, MenuItemAreaType, IProfileData } from '@akashaorg/typings/ui';
 
 import { IAppData } from '../components/AppsWidgetCard';
 

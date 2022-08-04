@@ -110,6 +110,7 @@
   "workspaces": [
     "sdk/typings",
     "ui/typings",
+    "typings",
     "api/hub",
     "sdk",
     "ui/hooks",

@@ -4,8 +4,7 @@ import { useLocation } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import { useCheckNewNotifications, useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { EventTypes, MenuItemAreaType } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { RootComponentProps, EventTypes, MenuItemAreaType } from '@akashaorg/typings/ui';
 
 const { Box, styled, Sidebar, useViewportSize } = DS;
 

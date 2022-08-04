@@ -3,12 +3,13 @@ import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import {
   EventTypes,
-  ItemTypes,
+  EntityTypes,
   ModalNavigationOptions,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { NavigateToParams, RootComponentProps } from '@akashaorg/ui-awf-typings';
+  IEntryData,
+  NavigateToParams,
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
+import { ILogger } from '@akashaorg/typings/sdk';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import { useIsFollowingMultiple } from '@akashaorg/ui-awf-hooks';
@@ -19,12 +20,12 @@ export interface IEntryCardRendererProps {
   logger: ILogger;
   singleSpa: RootComponentProps['singleSpa'];
   itemData?: IEntryData;
-  itemType?: ItemTypes;
+  itemType?: EntityTypes;
   locale?: ILocale;
   ethAddress?: string | null;
   pubKey?: string;
   navigateTo?: (args: NavigateToParams) => void;
-  onContentClick: (details: IContentClickDetails, itemType: ItemTypes) => void;
+  onContentClick: (details: IContentClickDetails, itemType: EntityTypes) => void;
   onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   sharePostUrl: string;
@@ -93,13 +94,13 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const itemTypeName = React.useMemo(() => {
     switch (itemType) {
-      case ItemTypes.ENTRY:
+      case EntityTypes.ENTRY:
         return t('post');
-      case ItemTypes.PROFILE:
+      case EntityTypes.PROFILE:
         return t('account');
-      case ItemTypes.COMMENT:
+      case EntityTypes.COMMENT:
         return t('reply');
-      case ItemTypes.TAG:
+      case EntityTypes.TAG:
         return t('tag');
       default:
         return t('unknown');
@@ -125,7 +126,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (entryId)
       props.navigateToModal({
         name: 'entry-remove-confirmation',
-        entryType: ItemTypes.ENTRY,
+        entryType: EntityTypes.ENTRY,
         entryId,
       });
   };
@@ -158,7 +159,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   };
 
-  const hideActionButtons = React.useMemo(() => itemType === ItemTypes.COMMENT, [itemType]);
+  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.COMMENT, [itemType]);
 
   return (
     <>

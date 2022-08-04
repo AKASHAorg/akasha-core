@@ -1,8 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import {
-  IntegrationRegistrationOptions,
-  IWidgetConfig,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { IntegrationRegistrationOptions, IWidgetConfig } from '@akashaorg/typings/ui';
 
 export const register: (props: IntegrationRegistrationOptions) => IWidgetConfig = props => {
   return {

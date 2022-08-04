@@ -3,12 +3,15 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { ModerationItemTypes, NavigateToParams } from '@akashaorg/ui-awf-typings';
+import {
+  ModerationItemTypes,
+  NavigateToParams,
+  IEntryData,
+  IProfileData,
+} from '@akashaorg/typings/ui';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import { ITEM_TYPE_CONVERTER } from '../../services/constants';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
+import { LogoTypeSource } from '@akashaorg/typings/ui';
 import { withDesign } from 'storybook-addon-designs';
 import Icon, { IconProps, iconTypes } from '.';
 

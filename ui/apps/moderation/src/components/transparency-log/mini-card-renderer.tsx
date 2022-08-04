@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { getMediaUrl, ILogItem } from '@akashaorg/ui-awf-hooks';
-import { ButtonValues } from '@akashaorg/ui-awf-typings';
+import { ButtonValues } from '@akashaorg/typings/ui';
 
 const { TransparencyLogMiniCard } = DS;
 

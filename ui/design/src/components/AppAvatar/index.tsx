@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { AppTypes } from '@akashaorg/ui-awf-typings';
+import { IntegrationTypes } from '@akashaorg/typings/ui';
 
 import { AvatarProps } from '../Avatar';
 import AvatarImage from '../Avatar/avatar-image';
 import StyledAvatar, { ActiveOverlay } from '../Avatar/styled-avatar';
 
 export interface AppAvatarProps extends AvatarProps {
-  appType: AppTypes;
+  appType: IntegrationTypes;
 }
 
 const AppAvatar: React.FC<AppAvatarProps> = props => {
@@ -31,14 +31,14 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     avatarImageFallback = src.fallbackUrl;
   }
 
-  if (!src?.fallbackUrl && appType === AppTypes.APP) {
+  if (!src?.fallbackUrl && appType === IntegrationTypes.APP) {
     // currently there are 3 placeholders for sidebar apps
     avatarImageFallback = `${publicImgPath}/sidebar-app-placeholder-${
       Math.floor(Math.random() * 3) + 1
     }.png`;
   }
 
-  if (!src?.fallbackUrl && appType === AppTypes.WIDGET) {
+  if (!src?.fallbackUrl && appType === IntegrationTypes.WIDGET) {
     // currently there are 2 placeholders for sidebar apps
     avatarImageFallback = `${publicImgPath}/sidebar-widget-placeholder-${
       Math.floor(Math.random() * 2) + 1

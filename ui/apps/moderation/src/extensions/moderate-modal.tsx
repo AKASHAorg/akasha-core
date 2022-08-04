@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useModeration, withProviders, useGetLogin, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';

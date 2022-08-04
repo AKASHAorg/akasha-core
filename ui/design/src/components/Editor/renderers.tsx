@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Icon from '../Icon';
 import { StyledAnchor } from '../TextInputIconForm/styles';
 import { StyledCloseDiv } from './styled-editor-box';
-import { ImageElement } from '@akashaorg/ui-awf-typings/lib/editor';
+import { ImageElement } from '@akashaorg/typings/ui';
 
 const StyledPicture = styled.picture`
   display: flex;

@@ -1,8 +1,8 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider } from 'react-i18next';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import AppRoutes from './routes';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 
 const { Box } = DS;
 

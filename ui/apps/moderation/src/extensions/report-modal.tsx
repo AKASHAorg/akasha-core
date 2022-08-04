@@ -4,7 +4,11 @@ import singleSpaReact from 'single-spa-react';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ModerationItemTypes, RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import {
+  ModerationItemTypes,
+  RootExtensionProps,
+  AnalyticsCategories,
+} from '@akashaorg/typings/ui';
 import {
   withProviders,
   useReasons,
@@ -14,7 +18,6 @@ import {
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 import { BASE_REPORT_URL } from '../services/constants';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { ReportModal, ErrorLoader } = DS;
 

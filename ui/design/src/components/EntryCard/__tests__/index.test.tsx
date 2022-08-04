@@ -13,7 +13,7 @@ import {
   copyLinkLabel,
 } from '../../../utils/dummy-data';
 import userEvent from '@testing-library/user-event';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IEntryData } from '@akashaorg/typings/ui';
 
 describe('<EntryCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});

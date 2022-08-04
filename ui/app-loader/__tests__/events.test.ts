@@ -1,5 +1,5 @@
-import { events } from '@akashaorg/sdk-typings';
-import { EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { APP_EVENTS, AUTH_EVENTS } from '@akashaorg/typings/sdk';
+import { EventTypes } from '@akashaorg/typings/ui';
 import { map, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { getGlobalChannelEvents, getUiEvents, spaEvents$, uiEvents } from '../src/events';
@@ -101,8 +101,8 @@ describe('[AppLoader]: events', () => {
     });
     scheduler.run(({ expectObservable, cold }) => {
       const eventValues = {
-        a: { event: events.APP_EVENTS.INFO_READY, data: {} },
-        b: { event: events.AUTH_EVENTS.READY, data: { ethAddress: '0x0123' } },
+        a: { event: APP_EVENTS.INFO_READY, data: {} },
+        b: { event: AUTH_EVENTS.READY, data: { ethAddress: '0x0123' } },
       };
       const globalChannelInput$ = cold('ab', eventValues).pipe(
         tap(ev => globalChannel.next(ev)),

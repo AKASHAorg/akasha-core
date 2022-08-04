@@ -5,8 +5,8 @@ import { mockSDK } from '@akashaorg/af-testing';
 
 const navigateTo = jest.fn();
 jest.mock('@akashaorg/awf-sdk', () => () => mockSDK());
-jest.mock('@akashaorg/ui-awf-typings/lib/app-loader', () => ({
-  ItemTypes: {
+jest.mock('@akashaorg/typings/ui', () => ({
+  EntityTypes: {
     ENTRY: 0,
   },
 }));

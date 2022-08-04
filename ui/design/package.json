@@ -72,8 +72,7 @@
     "styled-components": "5.3.1"
   },
   "devDependencies": {
-    "@akashaorg/sdk-typings": "*",
-    "@akashaorg/ui-awf-typings": "*",
+    "@akashaorg/typings": "*",
     "@nrwl/cli": "13.7.1",
     "@nrwl/js": "13.7.1",
     "@nrwl/tao": "13.7.1",

@@ -1,13 +1,13 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { ILogger } from '@akashaorg/typings/sdk';
 import {
   IEntryData,
   PostResponse,
   CommentResponse,
   IPublishData,
   PendingEntry,
-} from '@akashaorg/ui-awf-typings/lib/entry';
+  IProfileData,
+} from '@akashaorg/typings/ui';
 
 import { getMediaUrl } from './media-utils';
 

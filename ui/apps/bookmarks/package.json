@@ -32,9 +32,7 @@
   },
   "dependencies": {
     "@akashaorg/design-system": "*",
-    "@akashaorg/sdk-typings": "*",
     "@akashaorg/ui-awf-hooks": "*",
-    "@akashaorg/ui-awf-typings": "*",
     "@akashaorg/ui-lib-feed": "*",
     "@akashaorg/ui-widget-trending": "*",
     "i18next": "20.6.1",
@@ -48,6 +46,7 @@
   },
   "devDependencies": {
     "@akashaorg/af-testing": "*",
+    "@akashaorg/typings": "*",
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/react-router": "5.1.18",

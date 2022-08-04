@@ -1,10 +1,9 @@
-import { Box, Stack } from 'grommet';
 import * as React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Box, Stack } from 'grommet';
+import { IMenuItem, LogoTypeSource, IProfileData } from '@akashaorg/typings/ui';
 import Icon from '../Icon';
 import Avatar from '../Avatar';
-import { IMenuItem } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { LogoTypeSource } from '@akashaorg/ui-awf-typings/lib/';
 import {
   TopbarWrapper,
   StyledText,
@@ -21,7 +20,6 @@ import {
 } from './styled-topbar';
 import { isMobileOnly } from 'react-device-detect';
 import Button from '../Button';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 import { ProfileMenu } from './profile-menu';
 
 export interface ITopbarProps {

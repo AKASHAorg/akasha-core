@@ -1,6 +1,6 @@
 import { Box, Text } from 'grommet';
 import * as React from 'react';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 import Icon from '../../Icon';
 import { isMobile } from 'react-device-detect';
 import Tooltip from '../../Tooltip';

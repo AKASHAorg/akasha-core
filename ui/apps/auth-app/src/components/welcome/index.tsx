@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 
 const { WelcomeCard } = DS;
 
@@ -34,7 +34,7 @@ const Welcome: React.FC<RootComponentProps> = props => {
   const handleSecondaryButtonClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: navRoutes => `${navRoutes.MyProfile}?modal[name]=update-profile`,
+      getNavigationUrl: navRoutes => `${navRoutes.myProfile}?modal[name]=update-profile`,
     });
   };
 

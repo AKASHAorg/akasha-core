@@ -4,7 +4,7 @@ import { Box, Text } from 'grommet';
 import isUrl from 'is-url';
 import Icon from '../Icon';
 import { StyledCloseDiv, StyledUploadingDiv, StyledText } from './styled-editor-box';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IEntryData } from '@akashaorg/typings/ui';
 
 const Favicon = styled.img`
   width: 1rem;

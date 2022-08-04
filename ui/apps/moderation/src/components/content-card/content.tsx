@@ -1,12 +1,11 @@
 import React from 'react';
 import moment from 'moment';
 import DS from '@akashaorg/design-system';
+import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 import { IContentProps } from '../../interfaces';
-
 import EntryDataCard from './entry-data-card';
 import ExplanationsBox from './explanations-box';
-import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
 
 const { Box, Button, Text, Avatar, styled, useViewportSize } = DS;
 

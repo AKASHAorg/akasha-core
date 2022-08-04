@@ -1,7 +1,7 @@
 import { Box } from 'grommet';
 import * as React from 'react';
 import ProfileAvatarButton from '../ProfileAvatarButton';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IEntryData } from '@akashaorg/typings/ui';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 
 export interface IEmbedEntryBox {
