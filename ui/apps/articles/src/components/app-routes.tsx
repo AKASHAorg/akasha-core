@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import ArticleOnboardingIntro from './onboarding/intro';
 import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
