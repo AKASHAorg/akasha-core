@@ -10,7 +10,6 @@ import {
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-
 import {
   useGetProfile,
   useInfinitePostsByAuthor,
