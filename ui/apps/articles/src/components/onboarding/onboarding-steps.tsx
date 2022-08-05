@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import StepOne from './step-one';
+import StepTwo from './step-two';
+import StepThree from './step-three';
 
 import menuRoute, {
   ONBOARDING_STEP_ONE,
@@ -11,7 +13,6 @@ import menuRoute, {
   ONBOARDING_STEP_THREE,
   HOME,
 } from '../../routes';
-import StepTwo from './step-two';
 
 interface IOnboardingStepsProps {
   activeIndex?: number;
@@ -22,6 +23,7 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
     plugins: { routing },
   } = props;
 
+  const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
 
   const { t } = useTranslation('app-articles');
@@ -44,6 +46,14 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => menuRoute[step],
     });
+  };
+
+  const handleClickTopic = (topic: string) => () => {
+    if (selectedTopics.includes(topic)) {
+      const filtered = selectedTopics.filter(_topic => _topic !== topic);
+      return setSelectedTopics(filtered);
+    }
+    setSelectedTopics(prev => [...prev, topic]);
   };
 
   return (
@@ -76,6 +86,21 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
           onClickIcon={handleClick(ONBOARDING_STEP_ONE)}
           onClickSkip={handleClick(ONBOARDING_STEP_THREE)}
           onClickNext={handleClick(ONBOARDING_STEP_THREE)}
+        />
+      )}
+      {activeIndex === 2 && (
+        <StepThree
+          titleLabel={t('Lastly, select some topics')}
+          textLine1Label={t(
+            'Choose the topics of your interests to curate your article feed better',
+          )}
+          readArticleLabel={t('Read Articles')}
+          writeFirstArticleLabel={t('Write my first article')}
+          selectedTopics={selectedTopics}
+          onClickIcon={handleClick(ONBOARDING_STEP_TWO)}
+          onClickTopic={handleClickTopic}
+          onClickReadArticle={handleClick(HOME)}
+          onClickWriteArticle={handleClick(HOME)}
         />
       )}
     </>

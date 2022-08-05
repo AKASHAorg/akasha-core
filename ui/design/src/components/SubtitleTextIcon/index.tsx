@@ -2,7 +2,6 @@ import { Box, Text, Drop } from 'grommet';
 import React from 'react';
 import Icon, { IconType } from '../Icon';
 import { BackgroundDiv, StyledBox } from './styled-subtitle-text-icon';
-import Tooltip from '../Tooltip';
 
 export interface ISubtitleTextIcon {
   className?: string;

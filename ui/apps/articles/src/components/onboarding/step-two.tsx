@@ -1,6 +1,8 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
 
+import { apps } from './dummy-data';
+
 const { Box, Button, Text, MainAreaCardBox, Icon } = DS;
 
 export interface IStepTwoProps {
@@ -36,6 +38,23 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
         <Text size="large" margin={{ bottom: 'xsmall' }}>
           {textLine1Label}
         </Text>
+        <Box margin={{ vertical: 'medium' }} gap="medium">
+          {apps.map((app, idx) => (
+            <Box key={idx} gap="xsmall" direction="row" align="center">
+              <Box pad="small" background="border" round="xxsmall">
+                <Icon size="xl" type="integrationAppLarge" plain={true} />
+              </Box>
+              <Box gap="xxsmall">
+                <Text size="large" weight="bold">
+                  {app.title}
+                </Text>
+                <Text color="secondaryText">
+                  @{app.author} · {app.type}
+                </Text>
+              </Box>
+            </Box>
+          ))}
+        </Box>
         <Box direction="row" fill="horizontal" justify="end" align="center" gap="small">
           <Button size="large" height={2.5} label={skipLabel} onClick={onClickSkip} />
           <Button
