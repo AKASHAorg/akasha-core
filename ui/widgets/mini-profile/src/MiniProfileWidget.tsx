@@ -82,7 +82,7 @@ const Wrapped = (props: RootExtensionProps) => (
   <Router>
     <Routes>
       <Route
-        path="/social-app/post/:postId"
+        path="@akashaorg/app-akasha-integration/post/:postId"
         element={
           <I18nextProvider i18n={props.plugins?.translation?.i18n}>
             <ProfileCardWidget {...props} />

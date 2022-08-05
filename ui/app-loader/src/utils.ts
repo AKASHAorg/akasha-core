@@ -8,7 +8,6 @@ import * as singleSpa from 'single-spa';
 import qs from 'qs';
 import { of } from 'rxjs';
 import { ILogger } from '@akashaorg/typings/sdk';
-import { match } from 'path-to-regexp';
 
 export const encodeName = (appName: string) => {
   return appName;
@@ -39,25 +38,7 @@ export const checkActivityFn = (opts: CheckActivityOptions) => {
   if (config.hasOwnProperty('activeWhen') && typeof config.activeWhen === 'function') {
     return config.activeWhen(location, (path, exact?: boolean) => {
       // path can contain the app name;
-      const pathWithAppName = path.indexOf('@');
-      if (pathWithAppName) {
-        const appNameRegex = '/{@:publisherName}/:appName/:pathName';
-        const matcherFn =
-          match<{ publisherName: string; appName: string; pathName: string }>(appNameRegex);
-        const matching = matcherFn(path);
-        if (!matching) {
-          return singleSpa.pathToActiveWhen(path, exact);
-        }
-        if (matching.params?.publisherName && matching.params?.appName) {
-          const encodedAppName = encodeName(
-            `${matching.params.publisherName}/${matching.params.appName}`,
-          );
-          return singleSpa.pathToActiveWhen(
-            `/${encodedAppName}/${matching.params.pathName}`,
-            exact,
-          );
-        }
-      }
+      return singleSpa.pathToActiveWhen(path, exact);
     });
   }
   return singleSpa.pathToActiveWhen(`/${encodedAppName}`)(location);
