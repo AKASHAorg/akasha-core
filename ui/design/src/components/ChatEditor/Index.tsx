@@ -31,7 +31,8 @@ const ChatEditor: React.FC<Omit<IEditorBox, 'setEditorState'>> = props => {
     <Box
       border={{ side: 'all', size: '1px', color: 'border' }}
       margin="xsmall"
-      background="cardBackground"
+      background="chatBackground"
+      round="small"
     >
       <EditorBox
         avatar={avatar}

@@ -11,7 +11,12 @@ const ChatArea: React.FC<IChatAreaProps> = props => {
   const { headerElement, bodyElement, editorElement } = props;
 
   return (
-    <Box width="100%" background="convoAreaBackground" round={{ size: 'small' }}>
+    <Box
+      width="100%"
+      background="convoAreaBackground"
+      round={{ size: 'small' }}
+      border={{ side: 'all', size: '1px', color: 'border' }}
+    >
       {headerElement}
       {bodyElement}
       {editorElement}

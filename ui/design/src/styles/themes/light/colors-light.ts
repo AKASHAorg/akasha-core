@@ -44,6 +44,7 @@ const colors: IColorsLight = {
   primaryText: '#132540', // grayish blue
   secondaryText: '#425166', // darkBlue
   textBackground: '#E9EDFD', // light blue
+  chatBackground: '#FFFFFF',
   disabledText: '#9ea0a5', // disabled
   titleText: '#47484A',
   subtitleText: '#595F6B', // cadetGrey

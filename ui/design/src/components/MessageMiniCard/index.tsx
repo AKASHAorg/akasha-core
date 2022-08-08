@@ -13,25 +13,25 @@ import CardHeaderMenuDropdown from '../EntryCard/card-header-menu';
 
 export interface IMessageAppMiniCardProps {
   locale: ILocale;
-  sender: IProfileData['name'];
+  senderName: IProfileData['name'];
   senderUsername: IProfileData['userName'];
-  content: string;
-  isRead: boolean;
+  content?: string;
+  isRead?: boolean;
   isPinned: boolean;
   pinConvoLabel: string;
   unpinConvoLabel: string;
-  latestChatTimestamp: string;
+  latestChatTimestamp?: string;
   senderAvatar: IProfileData['avatar'];
   senderEthAddress: IProfileData['ethAddress'];
   onClickAvatar?: () => void;
   onClickCard?: () => void;
-  onConvoPin: () => void;
+  onConvoPin?: () => void;
 }
 
 const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
   const {
     locale,
-    sender,
+    senderName,
     senderUsername,
     content,
     isRead,
@@ -63,9 +63,17 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
     setMenuDropOpen(!menuDropOpen);
   };
 
-  const handlePinConvo = () => {
+  const handlePinConvo = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
     if (onConvoPin) {
       onConvoPin();
+    }
+  };
+
+  const handleAvatarClick = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    if (onClickAvatar) {
+      onClickAvatar();
     }
   };
 
@@ -81,11 +89,11 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
               size="lg"
               src={senderAvatar}
               ethAddress={senderEthAddress}
-              onClick={onClickAvatar}
+              onClick={handleAvatarClick}
             />
             <Box align="start" margin={{ left: 'small' }}>
               <Text size="xlarge" style={{ textTransform: 'capitalize' }}>
-                {sender}
+                {senderName}
               </Text>
               <Text size="medium" color="secondaryText">
                 {`@${senderUsername}`}

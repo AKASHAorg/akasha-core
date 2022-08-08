@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { Descendant } from 'slate';
 import { Box, Text } from 'grommet';
-import { isMobileOnly } from 'react-device-detect';
 
 import Icon from '../Icon';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
-import { IconDiv } from '../TopBar/styled-topbar';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import ReadOnlyEditor from '../ReadOnlyEditor';
+import dayjs from 'dayjs';
 
 type chatStatus = 'sent' | 'delivered' | 'read';
 
@@ -45,11 +44,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
     read: 'checkDouble',
   };
 
-  const [isActive, setIsActive] = React.useState(false);
-
-  const handleIconClick = () => setIsActive(!isActive);
-
-  const time = chatTimestamp?.split('T')[1].split(':');
+  const time = dayjs(chatTimestamp, 'HH:mm');
 
   return (
     <Box>
@@ -61,7 +56,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
         noBorderRadius
         style={{ minHeight: 'min-content' }} // allows cards to adjust in a y-scrollable container
       >
-        <Box pad="small" style={{ cursor: 'pointer' }}>
+        <Box pad="small" style={{ cursor: 'pointer' }} background="chatBackground">
           <Box direction="row" justify="between">
             <Box direction="row" align="start">
               <Box align="start" margin={{ left: 'small' }}>
@@ -75,18 +70,15 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
             </Box>
             {isLoggedUser && (
               <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
-                <IconDiv onClick={handleIconClick} isActive={isActive} isMobile={isMobileOnly}>
-                  <Icon size="xs" plain={true} accentColor={isActive} type="moreDark" />
-                </IconDiv>
+                <Icon size="xs" plain={true} type="moreDark" />
               </Box>
             )}
           </Box>
           <Box direction="row" height="fit-content" flex={{ shrink: 0 }} justify="end">
             {chatTimestamp && (
-              <Text
-                color="secondaryText"
-                margin={{ ...(status && { right: 'xsmall' }) }}
-              >{`${time[0]}:${time[1]}`}</Text>
+              <Text color="secondaryText" margin={{ ...(status && { right: 'xsmall' }) }}>
+                {time}
+              </Text>
             )}
             {isLoggedUser && status && (
               <Icon size="sm" accentColor={status === 'read'} type={chatStatusIcon[status]} />

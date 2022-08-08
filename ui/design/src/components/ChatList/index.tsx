@@ -17,6 +17,7 @@ const ChatList: React.FC<IChatListProps> = props => {
     <Box
       pad={{ horizontal: 'xsmall' }}
       style={{ height: '25rem', maxHeight: '25rem', overflow: 'auto' }}
+      direction="column"
     >
       {chatArr.length < 1 && (
         <Text textAlign="center" margin={{ top: 'medium' }}>

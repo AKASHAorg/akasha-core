@@ -1,4 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
+import { lastValueFrom } from 'rxjs';
 
 export const appId = '0xa9441406239791b073bea64df44bb32b2f15e6bae637847274b052e9b0bbdbbc';
 export const serializeMessage = content => {
@@ -10,6 +11,7 @@ export const serializeMessage = content => {
     return undefined;
   }
 };
+
 export const sendMessage = async (to: string, body: unknown) => {
   const sdk = getSDK();
   const serializedContent = {
@@ -26,4 +28,10 @@ export const sendMessage = async (to: string, body: unknown) => {
     createdAt: message.createdAt,
     body: body,
   };
+};
+
+export const getMessages = async () => {
+  const sdk = getSDK();
+  const messages = await sdk.api.auth.getConversation(null);
+  return messages;
 };

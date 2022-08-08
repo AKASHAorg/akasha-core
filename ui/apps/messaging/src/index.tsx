@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { inboxRoute } from './routes';
+import { chatRoute, inboxRoute } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -14,6 +14,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   i18nNamespace: ['app-messaging'],
   routes: {
     inbox: inboxRoute,
+    chat: chatRoute,
   },
   extends: (match, loader) => {
     match({

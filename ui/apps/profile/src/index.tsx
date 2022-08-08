@@ -1,6 +1,6 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
-import routes, { MY_PROFILE } from './routes';
+import routes, { MY_PROFILE, rootRoute } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -35,5 +35,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   routes: {
     myProfile: routes[MY_PROFILE],
+    rootRoute: rootRoute,
   },
 });

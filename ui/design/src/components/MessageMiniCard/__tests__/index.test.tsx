@@ -17,7 +17,7 @@ describe('<MessageAppMiniCard /> Component', () => {
         wrapWithTheme(
           <MessageAppMiniCard
             locale="en"
-            sender="Jerry Mil"
+            senderName="Jerry Mil"
             senderUsername="jerrbear"
             content="Hello Jerry I hope you're good and having a great day?"
             isRead={true}
