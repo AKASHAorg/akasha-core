@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import routes, { CHAT, MESSAGING, SETTINGS } from '../routes';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import InboxPage from './inbox/inbox-page';
 import SettingsPage from './settings-page';
 import ChatPage from './chat-page';

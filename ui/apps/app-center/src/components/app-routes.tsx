@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-d
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import {
   useGetAllInstalledApps,

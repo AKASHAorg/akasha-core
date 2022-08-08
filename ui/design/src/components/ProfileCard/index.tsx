@@ -3,14 +3,17 @@ import { Box, Text } from 'grommet';
 import styled from 'styled-components';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 
-import { LogoSourceType } from '@akashaorg/ui-awf-typings/lib/index';
 import {
   IProfileData,
   ProfileProviders,
   UsernameTypes,
-} from '@akashaorg/ui-awf-typings/lib/profile';
+  LogoSourceType,
+} from '@akashaorg/typings/ui';
 
-import ProfileMenuDropdown from './profile-card-menu-dropdown';
+import DuplexButton from '../DuplexButton';
+import Icon, { IconType } from '../Icon';
+import TextIcon from '../TextIcon';
+import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import {
   ProfileCardAvatar,
   ProfileCardCoverImage,
@@ -20,12 +23,9 @@ import {
   ProfileCardBadges,
 } from './profile-card-fields';
 
-import TextIcon from '../TextIcon';
-import Icon, { IconType } from '../Icon';
-import DuplexButton from '../DuplexButton';
+import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import MobileListModal from '../MobileListModal';
 import HorizontalDivider from '../HorizontalDivider';
-import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
 import { truncateMiddle } from '../../utils/string-utils';
 

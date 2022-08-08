@@ -1,5 +1,4 @@
 import { Subject } from 'rxjs';
-import { UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { AnalyticsEventData } from '@akashaorg/ui-awf-typings/lib/analytics';
+import { UIEventData, AnalyticsEventData } from '@akashaorg/typings/ui';
 
 export const uiEventsMock = new Subject<UIEventData | AnalyticsEventData>();

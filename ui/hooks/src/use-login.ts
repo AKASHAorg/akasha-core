@@ -3,12 +3,15 @@ import { filter, lastValueFrom } from 'rxjs';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { events } from '@akashaorg/sdk-typings';
 import { UseAnalyticsActions } from './use-analytics';
-import { WalletTransactionError } from '@akashaorg/ui-awf-typings';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
-import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
-import { CurrentUser, PROVIDER_ERROR_CODES } from '@akashaorg/sdk-typings/lib/interfaces/common';
+import { AnalyticsCategories, WalletTransactionError } from '@akashaorg/typings/ui';
+
+import {
+  EthProviders,
+  CurrentUser,
+  PROVIDER_ERROR_CODES,
+  AUTH_EVENTS,
+} from '@akashaorg/typings/sdk';
 
 import { useGlobalLogin } from '.';
 import { logError } from './utils/error-handler';
@@ -17,14 +20,14 @@ const LOGIN_STATE_KEY = 'LOGIN_STATE';
 const CHECK_SIGNUP_KEY = 'CHECK_SIGNUP_KEY';
 
 const SIGNUP_STATES = {
-  [events.AUTH_EVENTS.CONNECT_ADDRESS]: 0,
-  [events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 1,
-  [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE]: 3,
-  [events.AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS]: 4,
-  [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE]: 5,
-  [events.AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS]: 6,
-  [events.AUTH_EVENTS.SIGN_TOKEN_MESSAGE]: 7,
-  [events.AUTH_EVENTS.READY]: 8,
+  [AUTH_EVENTS.CONNECT_ADDRESS]: 0,
+  [AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]: 1,
+  [AUTH_EVENTS.SIGN_AUTH_MESSAGE]: 3,
+  [AUTH_EVENTS.SIGN_AUTH_MESSAGE_SUCCESS]: 4,
+  [AUTH_EVENTS.SIGN_COMPOSED_MESSAGE]: 5,
+  [AUTH_EVENTS.SIGN_COMPOSED_MESSAGE_SUCCESS]: 6,
+  [AUTH_EVENTS.SIGN_TOKEN_MESSAGE]: 7,
+  [AUTH_EVENTS.READY]: 8,
 };
 type ErrorTypes = { code?: number; message?: string; extensions?: { code?: string } };
 
@@ -168,7 +171,7 @@ export function useSignUp(
   const sdk = getSDK();
   const globalChannel = React.useRef(sdk.api.globalChannel);
   const [signUpState, setSignUpState] = React.useState(
-    SIGNUP_STATES[events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS],
+    SIGNUP_STATES[AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS],
   );
   const [ethAddress, setEthAddress] = React.useState<string>('');
   const [error, setError] = React.useState<ErrorTypes>(null);
@@ -185,7 +188,7 @@ export function useSignUp(
     const sub = waitForAuth.subscribe((payload: SignUpPayload) => {
       setError(null);
       setSignUpState(SIGNUP_STATES[payload.event]);
-      if (payload.event === events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS) {
+      if (payload.event === AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS) {
         setEthAddress(payload.data.address);
       }
     });
@@ -306,7 +309,7 @@ export function useSignUp(
   }, [signUpState, connectWallet, signAuthMessage, signComposedMessage, finishSignUp]);
 
   const resetState = () => {
-    setSignUpState(SIGNUP_STATES[events.AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]);
+    setSignUpState(SIGNUP_STATES[AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]);
     setError(null);
     setEthAddress('');
   };

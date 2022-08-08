@@ -1,9 +1,5 @@
 import { Descendant } from 'slate';
-import {
-  Comment_Response,
-  Post_Response,
-  LinkPreview_Response,
-} from '@akashaorg/sdk-typings/lib/interfaces/responses';
+import { Comment_Response, Post_Response, LinkPreview_Response } from '../sdk/responses';
 import { IProfileData } from './profile';
 
 export interface PostResponse extends Post_Response {

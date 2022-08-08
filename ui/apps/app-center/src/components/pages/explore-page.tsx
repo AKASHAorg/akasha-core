@@ -2,8 +2,9 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
-import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
-import { IntegrationInfo, ReleaseInfo, RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { APP_EVENTS } from '@akashaorg/typings/sdk';
+import { RootComponentProps } from '@akashaorg/typings/ui';
+import { ReleaseInfo, IntegrationInfo } from '@akashaorg/typings/sdk';
 import { useTranslation } from 'react-i18next';
 import { INFO } from '../../routes';
 

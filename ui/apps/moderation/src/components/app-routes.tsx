@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
 import DS from '@akashaorg/design-system';
 import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import TransparencyLog from './transparency-log';
-
 import { Dashboard, GuestPage, IntroPage } from '../pages';
-
 import routes, { GUEST, HISTORY, HOME, UNAUTHENTICATED } from '../routes';
 
 const { Box } = DS;

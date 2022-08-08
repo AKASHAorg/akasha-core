@@ -1,14 +1,16 @@
 import { inject, injectable } from 'inversify';
-import { ILogger } from '@akashaorg/sdk-typings/lib/interfaces/log';
+import {
+  ServiceCallResult,
+  TYPES,
+  ILogger,
+  LEGAL_DOCS,
+  AWF_IIpfsConnector,
+} from '@akashaorg/typings/sdk';
 import Logging from '../logging/index';
-import { TYPES } from '@akashaorg/sdk-typings';
-import { LEGAL_DOCS } from '@akashaorg/sdk-typings/lib/interfaces/common';
 import { createObservableStream } from '../helpers/observable';
-import AWF_IIpfsConnector from '@akashaorg/sdk-typings/lib/interfaces/ipfs.connector';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
 import { multiaddrToUri } from '@multiformats/multiaddr-to-uri';
-import { ServiceCallResult } from '@akashaorg/sdk-typings/lib/interfaces/responses';
 
 @injectable()
 class AWF_IpfsConnector implements AWF_IIpfsConnector {

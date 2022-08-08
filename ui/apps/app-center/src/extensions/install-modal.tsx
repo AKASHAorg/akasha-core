@@ -1,18 +1,13 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
 import DS from '@akashaorg/design-system';
-import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/ui';
+import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import {
-  useInstallApp,
-  withProviders,
-  //   useAnalytics,
-  ThemeWrapper,
-} from '@akashaorg/ui-awf-hooks';
+import { useInstallApp, withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
-import { APP_EVENTS } from '@akashaorg/sdk-typings/lib/interfaces/events';
+;
 
 const { InstallModal, ModalContainer, ErrorLoader } = DS;
 

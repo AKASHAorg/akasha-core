@@ -1,4 +1,4 @@
-import { UsernameTypes } from '@akashaorg/ui-awf-typings/lib/profile';
+import { UsernameTypes } from '@akashaorg/typings/ui';
 
 /**
  * Utility to determine domain type of ENS names

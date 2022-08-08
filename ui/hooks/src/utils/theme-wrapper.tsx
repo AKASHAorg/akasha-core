@@ -1,7 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
 const { ThemeSelector, lightTheme, darkTheme } = DS;
 
 /**

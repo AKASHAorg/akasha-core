@@ -1,8 +1,8 @@
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import TrendingWidgetComponent from './trending-widget-component';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import TrendingWidgetComponent from './trending-widget-component';
 
 const TrendingWidgetRoot: React.FC<RootComponentProps> = props => {
   return (

@@ -1,6 +1,10 @@
 import * as React from 'react';
-import { AppTypes, LogoTypeSource } from '@akashaorg/ui-awf-typings';
-import { IMenuItem, MenuItemAreaType } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import {
+  IntegrationTypes,
+  LogoTypeSource,
+  IMenuItem,
+  MenuItemAreaType,
+} from '@akashaorg/typings/ui';
 
 import { AppIcon } from '../Icon/app-icon';
 import AppAvatar from '../AppAvatar';
@@ -26,7 +30,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
           // edge-case for test app: ignore icons, even if specified, use only avatars
           src={{ url: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null }}
           backgroundColor="transparent"
-          appType={AppTypes.APP}
+          appType={IntegrationTypes.APP}
         />
       );
     }
@@ -36,7 +40,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
           size="md"
           src={{ url: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null }}
           backgroundColor="transparent"
-          appType={AppTypes.WIDGET}
+          appType={IntegrationTypes.WIDGET}
         />
       );
     }

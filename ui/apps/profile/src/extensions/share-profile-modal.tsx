@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 import singleSpaReact from 'single-spa-react';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import DS from '@akashaorg/design-system';

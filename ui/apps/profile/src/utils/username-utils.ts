@@ -3,7 +3,7 @@ import {
   ProfileProviderProperties,
   ProfileProviders,
   UsernameTypes,
-} from '@akashaorg/ui-awf-typings/lib/profile';
+} from '@akashaorg/typings/ui';
 
 export const getUsernameTypes = (profile: IProfileData) => {
   const type: UsernameTypes[] = [];

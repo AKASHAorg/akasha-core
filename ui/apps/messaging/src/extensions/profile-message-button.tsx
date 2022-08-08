@@ -2,8 +2,7 @@ import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
+import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { ThemeWrapper, useAnalytics, withProviders } from '@akashaorg/ui-awf-hooks';
 

@@ -10,7 +10,7 @@ import {
   genLoggedInState,
   genWorldConfig,
 } from '@akashaorg/af-testing';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 
 const mockLocationValue = {
   pathname: '/profile',

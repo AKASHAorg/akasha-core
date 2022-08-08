@@ -1,12 +1,12 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes from './routes';
-import { LogoTypeSource } from '@akashaorg/ui-awf-typings';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   MenuItemType,
-} from '@akashaorg/ui-awf-typings/lib/app-loader';
+  LogoTypeSource,
+} from '@akashaorg/typings/ui';
+import routes from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),

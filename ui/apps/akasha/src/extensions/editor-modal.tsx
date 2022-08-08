@@ -1,7 +1,7 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import {
   uploadMediaToTextile,
@@ -18,10 +18,7 @@ import {
   useAnalytics,
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
-
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { IPublishData } from '@akashaorg/ui-awf-typings/lib/entry';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { EditorModal, ModalContainer, ModalCard, Spinner, ErrorLoader } = DS;
 

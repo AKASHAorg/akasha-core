@@ -1,9 +1,7 @@
 import singleSpa from 'single-spa';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { RootComponentProps, IEntryData, IProfileData } from '@akashaorg/typings/ui';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
-import { ILogger } from '@akashaorg/awf-sdk/typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/typings/sdk';
 
 export interface IContentProps extends RootComponentProps {
   user?: string;

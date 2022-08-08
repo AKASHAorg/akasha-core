@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
+import { IProfileData } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
 import { PROFILE_KEY } from './use-profile';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
 
 export const TAG_SUBSCRIPTIONS_KEY = 'TAG_SUBSCRIPTIONS';
 export const GET_TAG_KEY = 'GET_TAG';

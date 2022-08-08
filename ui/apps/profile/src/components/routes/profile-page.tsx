@@ -2,19 +2,21 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import {
+  RootComponentProps,
+  EntityTypes,
+  IProfileData,
+  ModalNavigationOptions,
+} from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import {
   useGetProfile,
   useInfinitePostsByAuthor,
   LoginState,
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
-import { ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
 
@@ -98,7 +100,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       entryId,
-      entryType: ItemTypes.ENTRY,
+      entryType: EntityTypes.ENTRY,
     });
   };
 
@@ -175,7 +177,7 @@ const ProfilePage = (props: ProfilePageProps) => {
               {reqPosts.isSuccess && postPages && (
                 <FeedWidget
                   modalSlotId={props.layoutConfig.modalSlotId}
-                  itemType={ItemTypes.ENTRY}
+                  itemType={EntityTypes.ENTRY}
                   logger={props.logger}
                   onLoadMore={handleLoadMore}
                   getShareUrl={(itemId: string) =>

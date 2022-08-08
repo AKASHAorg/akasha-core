@@ -19,17 +19,15 @@ import ReadOnlyEditor from '../ReadOnlyEditor';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
-import { IEntryData } from '@akashaorg/ui-awf-typings/lib/entry';
+import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { EntryImageGallery } from './entry-image-gallery';
 import { ImageObject } from '../Editor/image-gallery';
 import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
 import { editorDefaultValue } from '../Editor/initialValue';
 import isEqual from 'lodash.isequal';
-import { NavigateToParams } from '@akashaorg/ui-awf-typings';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -79,7 +77,7 @@ export interface IEntryBoxProps {
   handleUnfollowAuthor?: (profileEthAddress: string) => void;
   isFollowingAuthor?: boolean;
   // redirects
-  onContentClick?: (details: IContentClickDetails, itemType?: ItemTypes) => void;
+  onContentClick?: (details: IContentClickDetails, itemType?: EntityTypes) => void;
   /* Can click the content (not embed!) to navigate */
   contentClickable?: boolean;
   onMentionClick?: (pubKey: string) => void;
@@ -224,7 +222,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   const handleContentClick = (data?: IEntryData) => {
     if (typeof onContentClick === 'function' && !disableActions && contentClickable && data) {
       const replyTo = data.postId ? { entryId: data.postId } : null;
-      const itemType = replyTo ? ItemTypes.COMMENT : ItemTypes.ENTRY;
+      const itemType = replyTo ? EntityTypes.COMMENT : EntityTypes.ENTRY;
       onContentClick(
         {
           authorEthAddress: data.author.ethAddress,

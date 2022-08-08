@@ -1,11 +1,11 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
+import { ITag } from '@akashaorg/typings/ui';
 
 import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
 
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { ITag } from '@akashaorg/ui-awf-typings/lib/entry';
 
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';

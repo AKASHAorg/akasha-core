@@ -1,5 +1,4 @@
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
-import { UIEventData, ExtensionLoaderFn } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { UIEventData, ExtensionLoaderFn, RootExtensionProps } from '@akashaorg/typings/ui';
 import * as singleSpa from 'single-spa';
 
 export const extensionLoader: ExtensionLoaderFn = loadingFn => {

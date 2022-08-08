@@ -21,8 +21,9 @@
     "lib": ["es2020", "dom"]
   },
   "references": [
-    { "path": "./ui/design" },
-    { "path": "./ui/typings" },
+    {
+      "path": "./ui/design"
+    },
     { "path": "./tests" },
     { "path": "./ui/hooks" },
     { "path": "./ui/lib/feed" },
@@ -45,7 +46,9 @@
     { "path": "./ui/apps/search" },
     { "path": "./ui/apps/messaging" },
     { "path": "./sdk" },
-    { "path": "./sdk/typings" }
+    {
+      "path": "./typings"
+    }
   ],
   "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp"],
   "files": ["./sdk/src/definitions/graphql.d.ts"]

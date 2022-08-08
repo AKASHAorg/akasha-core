@@ -2,7 +2,7 @@ import React from 'react';
 
 import DS from '@akashaorg/design-system';
 import { usePost, useComment, useGetProfile, mapEntry } from '@akashaorg/ui-awf-hooks';
-import { ModerationItemTypes } from '@akashaorg/ui-awf-typings';
+import { ModerationItemTypes } from '@akashaorg/typings/ui';
 
 import Content from './content';
 import { IContentProps } from '../../interfaces';

@@ -1,8 +1,8 @@
-import { IAppConfig } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import { mergeMap } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
-import { getModalFromParams, checkActivityFn, stringToRegExp } from '../src/utils';
+import { IAppConfig } from '@akashaorg/typings/ui';
 import * as singleSpa from 'single-spa';
+import { getModalFromParams, checkActivityFn, stringToRegExp } from '../src/utils';
 
 describe('[AppLoader] utils/getModalFromParams', () => {
   let scheduler: TestScheduler;

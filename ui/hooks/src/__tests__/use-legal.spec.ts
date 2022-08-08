@@ -3,7 +3,7 @@ import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
 import { of as mockOf } from 'rxjs';
 import { useLegalDoc } from '../use-legal';
-import { LEGAL_DOCS } from '@akashaorg/ui-awf-typings';
+import { LEGAL_DOCS } from '@akashaorg/typings/ui';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () =>

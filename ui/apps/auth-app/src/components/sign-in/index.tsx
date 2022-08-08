@@ -1,7 +1,8 @@
 import React from 'react';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
+import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
+
 import DS from '@akashaorg/design-system';
-import { EthProviders } from '@akashaorg/sdk-typings/lib/interfaces';
 
 import {
   switchToRequiredNetwork,
@@ -11,17 +12,16 @@ import {
   useInjectedProvider,
   useNetworkState,
   useRequiredNetworkName,
+  useGetLogin,
+  useSignUp,
 } from '@akashaorg/ui-awf-hooks';
 
 import SignInStatus from './sign-in-status';
 import { useTranslation } from 'react-i18next';
 import ChooseProvider from './choose-provider';
 import RequiredNetworkStep from '../sign-up/steps/required-network';
-import { INJECTED_PROVIDERS } from '@akashaorg/sdk-typings/lib/interfaces/common';
-import { useGetLogin, useSignUp } from '@akashaorg/ui-awf-hooks/lib/use-login';
 import SuggestSignup from './suggest-signup';
 import { SIGN_UP_USERNAME } from '../../routes';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { MainAreaCardBox, Box, Heading, HorizontalDivider } = DS;
 
@@ -79,7 +79,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
         getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
       });
     }
-  }, [signInComplete, profileDataReq, props.worldConfig.homepageApp]);
+  }, [signInComplete, profileDataReq, props.baseRouteName, props.worldConfig.homepageApp]);
 
   const requiredNetworkName = `${requiredNetworkQuery.data
     .charAt(0)
@@ -117,9 +117,16 @@ const SignIn: React.FC<RootComponentProps> = props => {
     return false;
   }, [networkStateQuery, selectedProvider, connectProviderQuery.data]);
 
+  const handleNavigateToSignup = (path: string) => {
+    routingPlugin.current.navigateTo({
+      appName: '@akashaorg/app-auth-ewa',
+      getNavigationUrl: () => path,
+    });
+  };
+
   return (
     <>
-      {isNotRegistered && <SuggestSignup onNavigate={props.singleSpa.navigateToUrl} />}
+      {isNotRegistered && <SuggestSignup onNavigate={handleNavigateToSignup} />}
       {!isNotRegistered && (
         <MainAreaCardBox pad="large">
           <Box margin={{ bottom: 'xlarge' }}>

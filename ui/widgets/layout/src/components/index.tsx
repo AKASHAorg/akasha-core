@@ -1,10 +1,10 @@
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import LayoutWidget from './layout-widget';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+import LayoutWidget from './layout-widget';
 
 // import whyDidYouRender from '@welldone-software/why-did-you-render';
 

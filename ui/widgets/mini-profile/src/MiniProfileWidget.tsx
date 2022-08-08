@@ -2,8 +2,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
-import { EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import {
@@ -108,7 +107,7 @@ const Wrapped = (props: RootExtensionProps) => (
   <Router>
     <Routes>
       <Route
-        path="/social-app/post/:postId"
+        path="@akashaorg/app-akasha-integration/post/:postId"
         element={
           <I18nextProvider i18n={props.plugins?.translation?.i18n}>
             <ProfileCardWidget {...props} />

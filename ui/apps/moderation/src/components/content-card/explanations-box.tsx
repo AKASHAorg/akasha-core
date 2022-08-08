@@ -1,9 +1,7 @@
 import React from 'react';
-
 import DS from '@akashaorg/design-system';
-import { ILogger } from '@akashaorg/awf-sdk/typings/lib/interfaces/log';
+import { ILogger } from '@akashaorg/typings/sdk';
 import { useGetFlags, EntryReport } from '@akashaorg/ui-awf-hooks';
-
 import ExplanationsBoxEntry, { IExplanationsBoxEntryProps } from './explanations-box-entry';
 
 const { Box, Text } = DS;

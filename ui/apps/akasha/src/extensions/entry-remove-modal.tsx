@@ -1,7 +1,7 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { RootExtensionProps, AnalyticsCategories, EntityTypes } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
@@ -11,8 +11,6 @@ import {
   useAnalytics,
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
-import { ItemTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
 
 const { ConfirmationModal, ModalContainer, ErrorLoader } = DS;
 
@@ -30,13 +28,13 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
 
   const handleDeletePost = React.useCallback(() => {
     if (extensionData && typeof extensionData.entryType === 'number') {
-      if (extensionData.entryType === ItemTypes.COMMENT) {
+      if (extensionData.entryType === EntityTypes.COMMENT) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.entryId);
-      } else if (extensionData.entryType === ItemTypes.ENTRY) {
+      } else if (extensionData.entryType === EntityTypes.ENTRY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
@@ -53,7 +51,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = React.useMemo(() => {
-    if (extensionData.entryType === ItemTypes.ENTRY) {
+    if (extensionData.entryType === EntityTypes.ENTRY) {
       return t('post');
     }
     return t('reply');

@@ -28,15 +28,13 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "@akashaorg/awf-sdk": "*",
-    "@akashaorg/sdk-typings": "*",
-    "@akashaorg/ui-awf-typings": "*",
-    "@akashaorg/af-testing": "*",
     "qs": "6.10.2",
     "single-spa": "5.9.3",
     "path-to-regexp": "6.2.1"
   },
   "devDependencies": {
+    "@akashaorg/typings": "*",
+    "@akashaorg/af-testing": "*",
     "i18next": "20.6.1",
     "@types/pino": "7.0.5",
     "@types/qs": "6.9.7",

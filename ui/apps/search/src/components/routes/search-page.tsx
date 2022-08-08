@@ -1,12 +1,20 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+
+import {
+  RootComponentProps,
+  IProfileData,
+  IEntryData,
+  ITag,
+  EntityTypes,
+  ModalNavigationOptions,
+  AnalyticsCategories,
+} from '@akashaorg/typings/ui';
+
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { IProfileData } from '@akashaorg/ui-awf-typings/src/profile';
-import { IEntryData, ITag } from '@akashaorg/ui-awf-typings/src/entry';
+
 import {
   useTagSubscriptions,
   useToggleTagSubscription,
@@ -21,9 +29,8 @@ import {
   useEntryNavigation,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
-import { ItemTypes, ModalNavigationOptions } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { AnalyticsCategories } from '@akashaorg/ui-awf-typings/lib/analytics';
-import { SearchTagsResult_Response } from '@akashaorg/sdk-typings/lib/interfaces/responses';
+
+import { SearchTagsResult_Response } from '@akashaorg/typings/sdk';
 
 import EntryCardRenderer from './entry-renderer';
 
@@ -488,7 +495,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             <EntryCardRenderer
               key={itemData.entryId}
               itemData={itemData}
-              itemType={ItemTypes.ENTRY}
+              itemType={EntityTypes.ENTRY}
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}
@@ -513,7 +520,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             <EntryCardRenderer
               key={itemData.entryId}
               itemData={itemData}
-              itemType={ItemTypes.COMMENT}
+              itemType={EntityTypes.COMMENT}
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}

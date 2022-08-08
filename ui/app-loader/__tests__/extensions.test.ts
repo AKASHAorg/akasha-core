@@ -2,8 +2,7 @@ import { from, mergeMap, of, ReplaySubject } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { genAppConfig, genWorldConfig, mockSDK } from '@akashaorg/af-testing';
 import { extensionMatcher } from '../src/extension-matcher';
-import { EventTypes, UIEventData } from '@akashaorg/ui-awf-typings/lib/app-loader';
-import { RootExtensionProps } from '@akashaorg/ui-awf-typings';
+import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/ui';
 import * as singleSpa from 'single-spa';
 
 jest.mock('@akashaorg/awf-sdk', () => {
