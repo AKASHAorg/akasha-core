@@ -1,3 +1,5 @@
+import { IArticleData } from '@akashaorg/typings/ui';
+
 export const apps = [
   {
     title: 'Image Editor',
@@ -59,4 +61,38 @@ export const topics = [
   'Figma',
   'Desktop',
   'Figma',
+];
+
+export const articles: IArticleData[] = [
+  {
+    authorAvatar: { url: '' },
+    authorName: 'Estelle Collier',
+    authorEthAddress: '0x',
+    authorPubkey: 'bbary',
+    publishDate: '14 Dec 2022',
+    readTime: 6,
+    isCopyrighted: true,
+    title: 'How does Ethereum work, anyway?',
+    subtitle:
+      "Odds are you've heard about the Ethereum blockchain, whether or not you know what it is.",
+    placeholderImage: '0',
+    topics: topics.slice(0, 10),
+    mentions: 11,
+    replies: 8,
+  },
+  {
+    authorAvatar: { url: '' },
+    authorName: 'Estelle Collier',
+    authorEthAddress: '0x',
+    authorPubkey: 'bbary',
+    publishDate: '14 Dec 2022',
+    readTime: 6,
+    isCopyrighted: true,
+    title: 'Why I think cats are weird',
+    subtitle: 'Have you ever watched the famous youtube video when the cats smells the cucumber?',
+    placeholderImage: '1',
+    topics: topics.slice(0, 10),
+    mentions: 11,
+    replies: 8,
+  },
 ];
