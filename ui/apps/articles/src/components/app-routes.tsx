@@ -14,6 +14,7 @@ import routes, {
   ONBOARDING_STEP_THREE,
   ONBOARDING_STEP_TWO,
 } from '../routes';
+import Dashboard from './dashboard';
 
 const { Box } = DS;
 
@@ -23,6 +24,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   } = props;
 
   const { t } = useTranslation('app-articles');
+
+  const isOnboarded = true; // check if user has been onboarded and return appropriately
 
   const handleClickStart = () => {
     routing.navigateTo({
@@ -38,15 +41,19 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route
             path={routes[HOME]}
             element={
-              <ArticleOnboardingIntro
-                titleLabel={t('Welcome to the Article App')}
-                introLabel={t("✨ When a post isn't enough ✨")}
-                descriptionLabel={t(
-                  'Join our community of writers, start writing and sharing your knowledge with ethereans',
-                )}
-                buttonLabel={t('Start Tutorial')}
-                onStart={handleClickStart}
-              />
+              isOnboarded ? (
+                <Dashboard {...props} />
+              ) : (
+                <ArticleOnboardingIntro
+                  titleLabel={t('Welcome to the Article App')}
+                  introLabel={t("✨ When a post isn't enough ✨")}
+                  descriptionLabel={t(
+                    'Join our community of writers, start writing and sharing your knowledge with ethereans',
+                  )}
+                  buttonLabel={t('Start Tutorial')}
+                  onStart={handleClickStart}
+                />
+              )
             }
           />
           {[
