@@ -2,8 +2,9 @@ import React from 'react';
 import DS from '@akashaorg/design-system';
 
 import { topics } from './dummy-data';
+import { StyledButton } from '../styled';
 
-const { Box, Button, Text, MainAreaCardBox, Icon } = DS;
+const { Box, Text, MainAreaCardBox, Icon } = DS;
 
 export interface IStepThreeProps {
   titleLabel: string;
@@ -71,8 +72,13 @@ const StepThree: React.FC<IStepThreeProps> = props => {
           ))}
         </Box>
         <Box direction="row" fill="horizontal" justify="end" align="center" gap="small">
-          <Button size="large" height={2.5} label={readArticleLabel} onClick={onClickReadArticle} />
-          <Button
+          <StyledButton
+            size="large"
+            height={2.5}
+            label={readArticleLabel}
+            onClick={onClickReadArticle}
+          />
+          <StyledButton
             size="large"
             height={2.5}
             primary={true}

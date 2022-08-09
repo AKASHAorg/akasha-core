@@ -2,8 +2,9 @@ import React from 'react';
 import DS from '@akashaorg/design-system';
 
 import { apps } from './dummy-data';
+import { StyledButton } from '../styled';
 
-const { Box, Button, Text, MainAreaCardBox, Icon } = DS;
+const { Box, Text, MainAreaCardBox, Icon } = DS;
 
 export interface IStepTwoProps {
   titleLabel: string;
@@ -56,8 +57,8 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
           ))}
         </Box>
         <Box direction="row" fill="horizontal" justify="end" align="center" gap="small">
-          <Button size="large" height={2.5} label={skipLabel} onClick={onClickSkip} />
-          <Button
+          <StyledButton size="large" height={2.5} label={skipLabel} onClick={onClickSkip} />
+          <StyledButton
             size="large"
             height={2.5}
             primary={true}
