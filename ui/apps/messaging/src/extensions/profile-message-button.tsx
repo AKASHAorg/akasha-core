@@ -29,13 +29,7 @@ const MessageIconButton = (props: RootExtensionProps) => {
   };
 
   return (
-    <Button
-      primary={true}
-      label={'test'}
-      icon={<Icon type="email" />}
-      onClick={handleClick}
-      slimBorder={true}
-    />
+    <Button primary={true} icon={<Icon type="email" />} onClick={handleClick} slimBorder={true} />
   );
 };
 

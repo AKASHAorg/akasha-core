@@ -13,6 +13,16 @@ export interface IChatListProps {
 const ChatList: React.FC<IChatListProps> = props => {
   const { emptyChatLabel, loggedUserEthAddress, itemCard, chatArr } = props;
 
+  const chatBottomRef = React.useRef(null);
+
+  const scrollToBottom = () => {
+    chatBottomRef.current?.scrollIntoView();
+  };
+
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [chatArr]);
+
   return (
     <Box
       pad={{ horizontal: 'xsmall' }}
@@ -34,14 +44,15 @@ const ChatList: React.FC<IChatListProps> = props => {
             style={{ minHeight: 'min-content', flexShrink: 0 }}
           >
             {React.cloneElement(itemCard, {
-              sender: chat.name,
+              senderName: chat.name,
               status: chat.status,
               isLoggedUser: chat.ethAddress === loggedUserEthAddress,
-              chatTimeStamp: chat.timestamp,
+              chatTimestamp: chat.timestamp,
               content: chat.content,
             })}
           </Box>
         ))}
+      <div ref={chatBottomRef} />
     </Box>
   );
 };

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
-import { SETTINGS } from '../../routes';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import { LoginState, useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
 
 const { BasicCardBox, Box, Icon, Text, MessageAppMiniCard } = DS;
@@ -23,7 +22,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   const handleSettingsClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-messaging',
-      getNavigationUrl: routes => routes[SETTINGS],
+      getNavigationUrl: routes => routes.settings,
     });
   };
 
@@ -41,17 +40,15 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   const contactList = followers?.filter(followerProfile =>
     following?.some(followingProfile => followerProfile.pubKey === followingProfile.pubKey),
   );
-  const pinnedContacts = React.useMemo(() => [], []);
-  const unpinnedContacts = React.useMemo(() => {
-    return contactList?.filter(contact => {
-      if (pinnedConvos?.includes(contact.pubKey)) {
-        pinnedContacts.push(contact);
-        return false;
-      } else {
-        return true;
-      }
-    });
-  }, [contactList, pinnedContacts, pinnedConvos]);
+  const pinnedContacts = [];
+  const unpinnedContacts = contactList?.filter(contact => {
+    if (pinnedConvos?.includes(contact.pubKey)) {
+      pinnedContacts.push(contact);
+      return false;
+    } else {
+      return true;
+    }
+  });
 
   React.useEffect(() => {
     if (localStorage.getItem('Pinned Conversations')) {
@@ -98,7 +95,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
           <Text size="large" weight={'bold'}>
             {t('Messaging App')}
           </Text>
-          <Icon type="settings" onClick={handleSettingsClick} />
+          <Icon type="settings" onClick={handleSettingsClick} clickable={true} />
         </Box>
         <Text>{t('An encrypted end to end messaging app 🔒.')}</Text>
         <Box border={{ color: 'border', side: 'all' }} round="small">
@@ -111,14 +108,18 @@ const InboxPage: React.FC<InboxPageProps> = props => {
             <Box>
               {!!pinnedContacts.length && (
                 <>
-                  <Text weight={'bold'}>{t('PINNED')}</Text>
+                  <Box pad="medium">
+                    <Text weight={'bold'}>{t('PINNED')}</Text>
+                  </Box>
+
                   {pinnedContacts.map((contact, idx) => (
                     <MessageAppMiniCard
                       key={idx}
                       locale="en"
                       pinConvoLabel={t('Pin Conversation')}
                       unpinConvoLabel={t('Unpin Conversation')}
-                      isPinned={false}
+                      hideBottomBorder={idx !== 0 && idx === pinnedContacts.length - 1}
+                      isPinned={true}
                       isRead={false}
                       senderName={contact?.name}
                       senderUsername={contact?.userName}
@@ -133,13 +134,19 @@ const InboxPage: React.FC<InboxPageProps> = props => {
               )}
             </Box>
             <Box>
-              {!!pinnedContacts.length && <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>}
+              {!!pinnedContacts.length && (
+                <Box pad="medium">
+                  <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>
+                </Box>
+              )}
+
               {unpinnedContacts?.map((contact, idx) => (
                 <MessageAppMiniCard
                   key={idx}
                   locale="en"
                   pinConvoLabel={t('Pin Conversation')}
                   unpinConvoLabel={t('Unpin Conversation')}
+                  hideBottomBorder={idx !== 0 && idx === unpinnedContacts.length - 1}
                   isPinned={false}
                   isRead={false}
                   senderName={contact?.name}

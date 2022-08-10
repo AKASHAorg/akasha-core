@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { EventTypes } from '@akashaorg/ui-awf-typings/lib/app-loader';
 import DS from '@akashaorg/design-system';
 import {
   IProfileData,
   UsernameTypes,
   NavigateToParams,
   RootComponentProps,
+  EventTypes,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,

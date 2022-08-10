@@ -2,7 +2,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { RootExtensionProps, EventTypes } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import {

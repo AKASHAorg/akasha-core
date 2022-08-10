@@ -13,7 +13,7 @@ type chatStatus = 'sent' | 'delivered' | 'read';
 
 export interface IBubbleCardProps {
   locale: ILocale;
-  sender?: string;
+  senderName?: string;
   youLabel: string;
   content?: Descendant[];
   status?: chatStatus;
@@ -27,7 +27,7 @@ export interface IBubbleCardProps {
 const BubbleCard: React.FC<IBubbleCardProps> = props => {
   const {
     locale,
-    sender,
+    senderName,
     youLabel,
     content,
     status,
@@ -44,13 +44,14 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
     read: 'checkDouble',
   };
 
-  const time = dayjs(chatTimestamp, 'HH:mm');
+  const time = dayjs(+chatTimestamp / 1000000).format('HH:mm');
+  const relativeTime = formatRelativeTime(+chatTimestamp / 1000000, locale);
 
   return (
     <Box>
       <Box direction="row" justify="between" margin={{ bottom: 'xsmall' }}>
-        <Text>{isLoggedUser ? youLabel : sender}</Text>
-        <Text color="secondaryText">{formatRelativeTime(chatTimestamp, locale)}</Text>
+        <Text>{isLoggedUser ? youLabel : senderName}</Text>
+        <Text color="secondaryText">{relativeTime}</Text>
       </Box>
       <BasicCardBox
         noBorderRadius

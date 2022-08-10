@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { RootComponentProps } from '@akashaorg/ui-awf-typings';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
 import {
@@ -96,8 +96,8 @@ const ChatPage = (props: RootComponentProps) => {
   const handleSendMessage = async publishData => {
     const result: any = await sendMessage(pubKey, publishData);
     const newMessage = {
-      content: result.body.content?.slateContent,
-      ethAddress: result.body.content?.author,
+      content: result.body?.slateContent,
+      ethAddress: result.body?.author,
       timestamp: result.createdAt,
     };
     setMessages(prev => [...prev, newMessage]);
@@ -113,9 +113,9 @@ const ChatPage = (props: RootComponentProps) => {
             if (res.body.content && (res.from === pubKey || res.from === loginState.pubKey)) {
               return {
                 content: res.body.content?.slateContent,
-                ethAddress: res.body.content.author,
+                ethAddress: res.body.content?.author,
                 timestamp: res.createdAt,
-                sender,
+                name: sender,
               };
             }
             return null;

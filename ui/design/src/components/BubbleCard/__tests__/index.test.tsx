@@ -15,7 +15,7 @@ describe('<BubbleCard /> Component', () => {
         wrapWithTheme(
           <BubbleCard
             locale="en"
-            sender="Jerry Mil"
+            senderName="Jerry Mil"
             youLabel="You"
             content={entryData.slateContent}
             isLoggedUser={false}

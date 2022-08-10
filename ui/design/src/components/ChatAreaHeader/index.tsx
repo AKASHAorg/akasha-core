@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box } from 'grommet';
 
-import { IProfileData } from '@akashaorg/ui-awf-typings/lib/profile';
+import { IProfileData } from '@akashaorg/typings/ui';
 
 import ProfileAvatarButton from '../ProfileAvatarButton';
 

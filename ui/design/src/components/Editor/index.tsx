@@ -578,7 +578,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         )}
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">
           <Box fill={true}>
-            <Slate editor={editor} value={editorState} onChange={handleChange}>
+            <Slate
+              editor={editor}
+              value={editorState || editorDefaultValue}
+              onChange={handleChange}
+            >
               <StyledEditable
                 placeholder={placeholderLabel}
                 autoComplete="off"
