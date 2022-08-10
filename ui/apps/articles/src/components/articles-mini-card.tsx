@@ -14,7 +14,7 @@ export interface IArticlesMiniCardProps {
   isSaved: boolean;
   saveLabel: string;
   savedLabel: string;
-  onClickArticle: () => void;
+  onClickArticle?: (id: string) => () => void;
   onClickTopic: (topic: string) => () => void;
   onMentionsClick: () => void;
   onRepliesClick: () => void;
@@ -61,11 +61,16 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
           )}
         </Box>
         <Box direction="row" gap="small">
-          <Icon type="akasha" style={{ cursor: 'pointer' }} />
+          <Icon type="akasha" />
           <Icon type="moreDark" style={{ cursor: 'pointer' }} />
         </Box>
       </Box>
-      <Box direction="row" justify="between" align="center" onClick={onClickArticle}>
+      <Box
+        direction="row"
+        justify="between"
+        align="center"
+        onClick={onClickArticle(articleData.id)}
+      >
         <Box gap="small">
           <Text size="xlarge" weight="bold">
             {articleData.title}
@@ -78,12 +83,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
           </Box>
         </Box>
       </Box>
-      <Box
-        direction="row"
-        wrap={true}
-        gap="xsmall"
-        // pad={{ horizontal: 'large', vertical: 'medium' }}
-      >
+      <Box direction="row" wrap={true} gap="xsmall">
         {articleData.topics.map((topic, idx) => (
           <Box
             key={idx}
