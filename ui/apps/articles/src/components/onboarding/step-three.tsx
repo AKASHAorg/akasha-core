@@ -1,7 +1,7 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
 
-import { topics } from './dummy-data';
+import { topics } from '../dummy-data';
 import { StyledButton } from '../styled';
 
 const { Box, Text, MainAreaCardBox, Icon } = DS;

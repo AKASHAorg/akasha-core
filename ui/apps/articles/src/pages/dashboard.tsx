@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import ArticleHeader from './articles-header';
-import ArticlesMiniCard from './articles-mini-card';
+import ArticleHeader from '../components/articles-header';
+import ArticlesMiniCard from '../components/articles-mini-card';
 
 import routes, { SETTINGS } from '../routes';
-import { articles } from './onboarding/dummy-data';
+import { articles } from '../components/dummy-data';
 
 const { Box } = DS;
 
@@ -34,8 +34,12 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
     /** do something */
   };
 
-  const handleClickArticle = () => {
+  const handleClickArticle = (article_id: string) => () => {
     /** do something */
+    routing.navigateTo({
+      appName: '@akashaorg/app-articles',
+      getNavigationUrl: () => `/article/${article_id}`,
+    });
   };
 
   const handleClickTopic = (topic: string) => () => {
