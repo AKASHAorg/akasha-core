@@ -23,6 +23,7 @@ import Autosizer from 'react-virtualized-auto-sizer';
 import Avatar from './components/Avatar';
 import AppAvatar from './components/AppAvatar';
 import EditableAvatar from './components/EditableAvatar';
+import StackedAvatar from './components/StackedAvatar';
 
 import Sidebar from './components/SideBar';
 import Topbar from './components/TopBar';
@@ -208,6 +209,7 @@ const exported = {
   Carousel,
   DuplexButton,
   EditableAvatar,
+  StackedAvatar,
   ErrorInfoCard,
   ErrorLoader,
   ModerationAppErrorCard,
