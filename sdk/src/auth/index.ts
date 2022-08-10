@@ -702,6 +702,18 @@ class AWF_Auth implements AWF_IAuth {
     return createObservableStream(this._deleteMessage(messageId));
   }
 
+  // returns textile usage information
+  getTextileUsage(options?: unknown) {
+    return createObservableStream(this._getTextileUsage(options));
+  }
+
+  private async _getTextileUsage(options?: unknown) {
+    if (!this.hubUser) {
+      return Promise.reject('The current user is not authenticated on textile services.');
+    }
+    return this.hubUser.getUsage(options);
+  }
+
   /**
    *
    * @param messageId
