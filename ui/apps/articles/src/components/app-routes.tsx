@@ -7,14 +7,19 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import ArticleOnboardingIntro from './onboarding/intro';
 import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
+import Dashboard from '../pages/dashboard';
+import ArticlePage from '../pages/article';
+import ArticlesSettings from './settings';
 
 import routes, {
+  ARTICLE,
   HOME,
   ONBOARDING_STEP_ONE,
   ONBOARDING_STEP_THREE,
   ONBOARDING_STEP_TWO,
+  SETTINGS,
 } from '../routes';
-import Dashboard from './dashboard';
+import { topics } from './dummy-data';
 
 const { Box } = DS;
 
@@ -22,6 +27,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const {
     plugins: { routing },
   } = props;
+  const [selectedTopics, setSelectedTopics] = React.useState<string[]>(topics.slice(0, 15));
 
   const { t } = useTranslation('app-articles');
 
@@ -32,6 +38,24 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
     });
+  };
+
+  const handleClickCloseSettings = () => {
+    routing.navigateTo({
+      appName: '@akashaorg/app-articles',
+      getNavigationUrl: () => routes[HOME],
+    });
+  };
+
+  const handleClickTopic = (topic: string) => () => {
+    if (selectedTopics.includes(topic)) {
+      const filtered = selectedTopics.filter(_topic => _topic !== topic);
+      return setSelectedTopics(filtered);
+    }
+  };
+
+  const handleUninstall = () => {
+    /** do something */
   };
 
   return (
@@ -67,6 +91,22 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               element={<ArticlesOnboardingSteps {...props} activeIndex={idx} />}
             />
           ))}
+          <Route
+            path={routes[SETTINGS]}
+            element={
+              <ArticlesSettings
+                titleLabel={t('Article App Settings')}
+                subscribedTopicsTitleLabel={t('Topics you are subscribed to')}
+                subscribedTopicsSubtitleLabel={t('You can subscribe to as many as you want')}
+                subscribedTopics={selectedTopics}
+                uninstallLabel={t('Uninstall')}
+                onClickCloseSettings={handleClickCloseSettings}
+                onClickTopic={handleClickTopic}
+                onClickUninstall={handleUninstall}
+              />
+            }
+          />
+          <Route path={routes[ARTICLE]} element={<ArticlePage {...props} />} />
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>
