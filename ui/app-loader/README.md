@@ -19,8 +19,12 @@ appLoader.start();
 ## Execution flow
 App-loader begins to execute when the `.start()` method is called.
 The following steps are a high level view of the execution flow after the start() method is called:
-- 
-- 
+- get manifests for default integrations
+  - get manifests for user integrations (if user is logged in)
+- import integration's main script
+- call getPlugin (if an integration exports it)
+- register layout into single-spa
+- register everything else into single-spa
 
 ### Options:
   - `title` - the title of this world instance
