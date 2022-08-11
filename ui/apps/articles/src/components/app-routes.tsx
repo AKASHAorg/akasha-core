@@ -9,7 +9,7 @@ import ArticleOnboardingIntro from './onboarding/intro';
 import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
 import Dashboard from '../pages/dashboard';
 import ArticlePage from '../pages/article';
-import ArticlesSettings from './settings';
+import ArticlesSettings from './article-settings';
 
 import routes, {
   ARTICLE,
@@ -45,6 +45,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[HOME],
     });
+  };
+
+  const handleSearch = () => {
+    /** do something */
   };
 
   const handleClickTopic = (topic: string) => () => {
@@ -96,11 +100,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             element={
               <ArticlesSettings
                 titleLabel={t('Article App Settings')}
+                inputPlaceholderLabel={t('Search for a topic')}
                 subscribedTopicsTitleLabel={t('Topics you are subscribed to')}
                 subscribedTopicsSubtitleLabel={t('You can subscribe to as many as you want')}
                 subscribedTopics={selectedTopics}
                 uninstallLabel={t('Uninstall')}
                 onClickCloseSettings={handleClickCloseSettings}
+                onSearch={handleSearch}
                 onClickTopic={handleClickTopic}
                 onClickUninstall={handleUninstall}
               />

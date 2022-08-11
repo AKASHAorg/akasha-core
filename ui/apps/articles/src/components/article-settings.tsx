@@ -3,15 +3,18 @@ import React from 'react';
 import DS from '@akashaorg/design-system';
 import { StyledButton } from './styled';
 
-const { Box, Icon, MainAreaCardBox, Text } = DS;
+const { Box, Icon, MainAreaCardBox, SearchBar, Text } = DS;
 
 export interface IArticlesSettingsProps {
   titleLabel: string;
+  searchKeyword?: string;
+  inputPlaceholderLabel: string;
   subscribedTopicsTitleLabel: string;
   subscribedTopicsSubtitleLabel: string;
   subscribedTopics: string[];
   uninstallLabel: string;
   onClickCloseSettings: () => void;
+  onSearch: () => void;
   onClickTopic: (topic: string) => () => void;
   onClickUninstall: () => void;
 }
@@ -19,14 +22,20 @@ export interface IArticlesSettingsProps {
 const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
   const {
     titleLabel,
+    searchKeyword = '',
+    inputPlaceholderLabel,
     subscribedTopicsTitleLabel,
     subscribedTopicsSubtitleLabel,
     subscribedTopics,
     uninstallLabel,
     onClickCloseSettings,
+    onSearch,
     onClickTopic,
     onClickUninstall,
   } = props;
+
+  const [inputValue, setInputValue] = React.useState<string>(searchKeyword);
+
   return (
     <MainAreaCardBox>
       <Box
@@ -39,6 +48,16 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
         <Text size="xlarge" weight="bold" margin={{ vertical: '0', horizontal: 'auto' }}>
           {titleLabel}
         </Text>
+      </Box>
+      <Box fill="horizontal" pad={{ horizontal: 'medium', top: 'medium' }} align="center">
+        <SearchBar
+          inputValue={inputValue}
+          inputPlaceholderLabel={inputPlaceholderLabel}
+          onInputChange={ev => setInputValue(ev.target.value)}
+          onSearch={onSearch}
+          searchInputSize="large"
+          iconSize="sm"
+        />
       </Box>
       <Box pad="medium" border={{ color: 'border', side: 'bottom' }} gap="xsmall">
         <Text size="large" weight="bold">
