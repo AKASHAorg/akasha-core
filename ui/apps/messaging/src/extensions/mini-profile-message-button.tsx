@@ -9,22 +9,22 @@ import { ThemeWrapper, useAnalytics, withProviders } from '@akashaorg/ui-awf-hoo
 const { Icon, Button } = DS;
 
 const MessageButton = (props: RootExtensionProps) => {
-  // const { extensionData } = props;
+  const { extensionData } = props;
   const [analyticsActions] = useAnalytics();
 
   const { t } = useTranslation('app-messaging');
 
   const handleClick = () => {
-    // const { pubKey } = extensionData;
+    const { pubKey } = extensionData;
 
     analyticsActions.trackEvent({
       category: AnalyticsCategories.MESSAGING,
       action: 'message-button-click',
     });
 
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}`,
+      getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });
   };
 

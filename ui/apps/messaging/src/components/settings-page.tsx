@@ -3,10 +3,16 @@ import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
+import { getTextileUsage } from '../api/message';
+import { LoginState } from '@akashaorg/ui-awf-hooks';
 
-const { BasicCardBox, Box, Icon, Text } = DS;
+const { BasicCardBox, Box, Icon, Text, TextLine, Button } = DS;
 
-const InboxPage = (props: RootComponentProps) => {
+export interface SettingsPageProps extends RootComponentProps {
+  loginState: LoginState;
+}
+
+const InboxPage = (props: SettingsPageProps) => {
   const { t } = useTranslation('app-messaging');
 
   const navigateTo = props.plugins.routing?.navigateTo;
@@ -18,8 +24,29 @@ const InboxPage = (props: RootComponentProps) => {
     });
   };
 
-  // @TODO: get used storage
-  const storageUsed = 0;
+  const [storageInfo, setStorageInfo] = React.useState(null);
+  React.useEffect(() => {
+    getTextileUsage().then(resp => {
+      setStorageInfo(resp);
+    });
+  }, []);
+
+  const storageData = storageInfo?.data?.usage?.usageMap.find(a => a[0] === 'stored_data')[1];
+  const storageUsed = storageData?.total;
+  const storageTotal = storageData?.free;
+
+  const convertFromBytes = val => {
+    if (val) {
+      const k = val > 0 ? Math.floor(Math.log2(val) / 10) : 0;
+      const rank = (k > 0 ? 'KMGT'[k - 1] : '') + 'b';
+      const count = (val / Math.pow(1024, k)).toFixed(2);
+      return `${count} ${rank}`;
+    }
+  };
+
+  const handleUninstall = () => {
+    return;
+  };
 
   return (
     <BasicCardBox style={{ maxHeight: '92vh' }}>
@@ -45,7 +72,30 @@ const InboxPage = (props: RootComponentProps) => {
         justify="between"
       >
         <Text weight={'bold'}>{t('Message storage')}</Text>
-        <Text>{`${storageUsed} GB of 5 GB used`}</Text>
+        {!storageUsed && <TextLine title="textileStorage" animated={false} width="80px" />}
+        {storageUsed && (
+          <Text>{`${convertFromBytes(storageUsed)} of ${convertFromBytes(
+            storageTotal,
+          )} used`}</Text>
+        )}
+      </Box>
+      <Box border={{ side: 'bottom', color: 'lightBorder' }} pad="medium">
+        <Text weight={'bold'}>{t('Public Key')}</Text>
+      </Box>
+      <Box
+        border={{ side: 'bottom', color: 'lightBorder' }}
+        pad="medium"
+        margin={{ left: 'small' }}
+        direction="row"
+        justify="between"
+      >
+        <Text>{props.loginState.ethAddress}</Text>
+      </Box>
+      <Box direction="row" justify="end">
+        <Button
+          label={t('Uninstall')}
+          icon={<Icon type="close" accentColor={true} onClick={handleUninstall} />}
+        />
       </Box>
     </BasicCardBox>
   );

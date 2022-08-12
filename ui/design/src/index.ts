@@ -39,6 +39,8 @@ import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
 
 import ReadOnlyEditor from './components/ReadOnlyEditor';
 
+import { TextLine } from './components/TextLine';
+
 import {
   BasicCardBox,
   MainAreaCardBox,
@@ -243,6 +245,7 @@ const exported = {
   ProfileSearchCard,
   ProfileMiniCard,
   TextInputField,
+  TextLine,
   TagCard,
   TagDetailCard,
   TagProfileCard,

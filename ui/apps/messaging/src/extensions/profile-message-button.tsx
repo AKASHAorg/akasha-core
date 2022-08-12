@@ -3,33 +3,41 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import { I18nextProvider } from 'react-i18next';
 import { ThemeWrapper, useAnalytics, withProviders } from '@akashaorg/ui-awf-hooks';
 
-const { Icon, Button } = DS;
+const { Icon, Button, styled } = DS;
+
+const StyledButton = styled(Button)`
+  display: flex;
+  align-items: center;
+`;
 
 const MessageIconButton = (props: RootExtensionProps) => {
-  // const { extensionData } = props;
+  const { extensionData } = props;
   const [analyticsActions] = useAnalytics();
 
-  const { t } = useTranslation('app-messaging');
-
   const handleClick = () => {
-    // const { pubKey } = extensionData;
+    const { pubKey } = extensionData;
 
     analyticsActions.trackEvent({
       category: AnalyticsCategories.MESSAGING,
       action: 'message-button-click',
     });
 
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
-      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}`,
+      getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });
   };
 
   return (
-    <Button primary={true} icon={<Icon type="email" />} onClick={handleClick} slimBorder={true} />
+    <StyledButton
+      primary={true}
+      icon={<Icon type="email" />}
+      onClick={handleClick}
+      slimBorder={true}
+    />
   );
 };
 

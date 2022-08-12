@@ -35,3 +35,9 @@ export const getMessages = async () => {
   const messages = await sdk.api.auth.getConversation(null);
   return messages;
 };
+
+export const getTextileUsage = async () => {
+  const sdk = getSDK();
+  const textileUsage = await lastValueFrom(sdk.api.auth.getTextileUsage());
+  return textileUsage;
+};

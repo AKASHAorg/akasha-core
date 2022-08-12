@@ -95,9 +95,11 @@ const InboxPage: React.FC<InboxPageProps> = props => {
           <Text size="large" weight={'bold'}>
             {t('Messaging App')}
           </Text>
-          <Icon type="settings" onClick={handleSettingsClick} clickable={true} />
+          <Icon type="settingsAlt" onClick={handleSettingsClick} clickable={true} />
         </Box>
-        <Text>{t('An encrypted end to end messaging app 🔒.')}</Text>
+        <Text>
+          {t('Write and send private, encrypted messages 🔐 to people in Ethereum World.')}
+        </Text>
         <Box border={{ color: 'border', side: 'all' }} round="small">
           <Box pad={{ horizontal: 'small', vertical: 'medium' }}>
             <Text weight={'bold'} size="large">
