@@ -110,15 +110,8 @@ export const getLinkPreview = async (url: string) => {
   const imageSources = { url: '', fallbackUrl: '' };
   const faviconSources = { url: '', fallbackUrl: '' };
   const linkPreviewResp = await lastValueFrom(sdk.api.entries.getLinkPreview(url));
-  const linkPreview: LinkPreview = Object.assign(
-    linkPreviewResp.data.getLinkPreview,
-    imageSources,
-    faviconSources,
-  );
-  // add url if it's missing from the response
-  if (!linkPreview.url) {
-    linkPreview.url = url;
-  }
+  const linkPreview: LinkPreview = Object.assign({}, linkPreviewResp.data.getLinkPreview);
+
   // fetch media links for image and favicon sources
   if (linkPreview.imagePreviewHash) {
     const ipfsLinks = getMediaUrl(linkPreview.imagePreviewHash);
