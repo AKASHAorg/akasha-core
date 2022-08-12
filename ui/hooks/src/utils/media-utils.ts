@@ -1,5 +1,6 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { UserProfile_Response } from '@akashaorg/typings/sdk';
+import { LinkPreview } from '@akashaorg/typings/ui';
 import { lastValueFrom } from 'rxjs';
 
 export interface IConfig {
@@ -106,6 +107,30 @@ export const uploadMediaToTextile = async (data: File, isUrl = false) => {
  */
 export const getLinkPreview = async (url: string) => {
   const sdk = getSDK();
-  const linkPreview = await lastValueFrom(sdk.api.entries.getLinkPreview(url));
-  return linkPreview.data.getLinkPreview;
+  const imageSources = { url: '', fallbackUrl: '' };
+  const faviconSources = { url: '', fallbackUrl: '' };
+  const linkPreviewResp = await lastValueFrom(sdk.api.entries.getLinkPreview(url));
+  const linkPreview: LinkPreview = Object.assign(
+    linkPreviewResp.data.getLinkPreview,
+    imageSources,
+    faviconSources,
+  );
+  // add url if it's missing from the response
+  if (!linkPreview.url) {
+    linkPreview.url = url;
+  }
+  // fetch media links for image and favicon sources
+  if (linkPreview.imagePreviewHash) {
+    const ipfsLinks = getMediaUrl(linkPreview.imagePreviewHash);
+    imageSources.url = ipfsLinks.originLink;
+    imageSources.fallbackUrl = ipfsLinks.fallbackLink;
+  }
+  if (linkPreview.faviconPreviewHash) {
+    const ipfsLinks = getMediaUrl(linkPreview.faviconPreviewHash);
+    faviconSources.url = ipfsLinks.originLink;
+    faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
+  }
+  linkPreview.imageSources = imageSources;
+  linkPreview.faviconSources = faviconSources;
+  return linkPreview;
 };
