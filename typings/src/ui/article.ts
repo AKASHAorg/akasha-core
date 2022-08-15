@@ -1,3 +1,5 @@
+import { IProfileData } from './profile';
+
 type ArticleContent = { type: string; value: string };
 
 export interface IArticleData {
@@ -6,14 +8,22 @@ export interface IArticleData {
   authorName: string;
   authorEthAddress: string;
   authorPubkey: string;
-  publishDate: string;
-  readTime: number;
+  publishDate?: string;
+  lastUpdateDate?: string;
+  readTime?: number;
   isCopyrighted: boolean;
   title: string;
   subtitle: string;
   content: ArticleContent[];
   placeholderImage?: string;
-  topics: string[];
-  mentions: number;
-  replies: number;
+  topics?: string[];
+  mentions?: number;
+  replies?: number;
+  isPublished?: boolean;
+  isDraft?: boolean;
+  isShared?: boolean;
+  collaborators?: {
+    ethAddress: string;
+    avatar?: IProfileData['avatar'];
+  }[];
 }
