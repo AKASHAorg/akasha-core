@@ -116,13 +116,13 @@
   {
     "name": "@akashaorg/ui-widget-mini-profile",
     "id": "0x3d179e60d19a1c167a0ea774d5a354b5fbfe4007d0f818498bb08e53d6d9618d",
-    "ipfsManifest": "f0155171c97369dc7fe4ef86a71bd74961f0e3874748f6a3e38852b7517bb3335",
+    "ipfsManifest": "f0155171caa33d69ab7a36ce659da4ea92411290e77f930452840d9088d1d9356",
     "type": 2
   },
   {
     "name": "@akashaorg/ui-widget-my-apps",
     "id": "0xc902513577d3192e8018931dd03ab480ea2f2a6e003835b949942e7be828665c",
-    "ipfsManifest": "f0155171cf515a0020700b7e60b577980d77c26855072daea479e7ea9f773cb27",
+    "ipfsManifest": "f0155171c4b85d7c0db3053c2e2613fea248416fd29224fa6f620cef91a4463f2",
     "type": 2
   }
 ]

@@ -105,6 +105,8 @@ const typeDefs = gql`
     siteName: String
     description: String
     images: [String]
+    imagePreviewHash: String
+    faviconPreviewHash: String
   }
 
   type IntegrationInfo @cacheControl(maxAge: 3600) {
