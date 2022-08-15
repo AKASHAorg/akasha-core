@@ -9,11 +9,13 @@ import ArticleOnboardingIntro from './onboarding/intro';
 import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
 import Dashboard from '../pages/dashboard';
 import ArticlePage from '../pages/article';
+import MyArticles from '../pages/my-articles';
 import ArticlesSettings from './article-settings';
 
 import routes, {
   ARTICLE,
   HOME,
+  MY_ARTICLES,
   ONBOARDING_STEP_ONE,
   ONBOARDING_STEP_THREE,
   ONBOARDING_STEP_TWO,
@@ -84,6 +86,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               )
             }
           />
+          <Route path={routes[MY_ARTICLES]} element={<MyArticles {...props} />} />
           {[
             routes[ONBOARDING_STEP_ONE],
             routes[ONBOARDING_STEP_TWO],
