@@ -50,9 +50,11 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
   const handleMentionsClick = () => {
     /** do something */
   };
+
   const handleRepliesClick = () => {
     /** do something */
   };
+
   const handleSaveClick = () => {
     /** do something */
   };

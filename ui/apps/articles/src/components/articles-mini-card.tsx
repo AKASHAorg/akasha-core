@@ -3,29 +3,37 @@ import React from 'react';
 import DS from '@akashaorg/design-system';
 import { IArticleData } from '@akashaorg/typings/ui';
 
-const { Avatar, Box, MainAreaCardBox, Icon, Image, Text } = DS;
+const { Avatar, Box, MainAreaCardBox, Icon, Image, StackedAvatar, Text } = DS;
 
 export interface IArticlesMiniCardProps {
   articleData: IArticleData;
-  readTimeLabel: string;
+  activeTabIndex?: number;
+  readTimeLabel?: string;
   copyrightLabel?: string;
-  mentionsLabel: string;
-  repliesLabel: string;
-  isSaved: boolean;
-  saveLabel: string;
-  savedLabel: string;
+  lastUpdatedLabel?: string;
+  draftLabel?: string;
+  collaboratingLabel?: string;
+  mentionsLabel?: string;
+  repliesLabel?: string;
+  isSaved?: boolean;
+  saveLabel?: string;
+  savedLabel?: string;
   onClickArticle?: (id: string) => () => void;
-  onClickTopic: (topic: string) => () => void;
-  onMentionsClick: () => void;
-  onRepliesClick: () => void;
-  onSaveClick: () => void;
+  onClickTopic?: (topic: string) => () => void;
+  onMentionsClick?: () => void;
+  onRepliesClick?: () => void;
+  onSaveClick?: () => void;
 }
 
 const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
   const {
     articleData,
+    activeTabIndex,
     readTimeLabel,
     copyrightLabel,
+    lastUpdatedLabel,
+    draftLabel,
+    collaboratingLabel,
     mentionsLabel,
     repliesLabel,
     isSaved,
@@ -38,6 +46,10 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     onSaveClick,
   } = props;
 
+  const userEthAddress = '0x003410490050000320006570034567114572000';
+
+  const isCollaborator = articleData.collaborators?.find(el => el.ethAddress === userEthAddress);
+
   return (
     <MainAreaCardBox pad="medium" gap="medium">
       <Box direction="row" justify="between">
@@ -49,18 +61,40 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
             onClick={() => null}
           />
           <Text size="large">{articleData.authorName}</Text>
-          <Text size="medium" color="secondaryText">
-            {articleData.publishDate}
-          </Text>
-          <Text
-            size="medium"
-            color="secondaryText"
-          >{`· ${articleData.readTime} ${readTimeLabel}`}</Text>
-          {articleData.isCopyrighted && (
-            <Text size="medium" color="secondaryText">{`· ${copyrightLabel}`}</Text>
+          {articleData.isPublished && (
+            <>
+              <Text size="medium" color="secondaryText">
+                {articleData.publishDate}
+              </Text>
+              <Text
+                size="medium"
+                color="secondaryText"
+              >{`· ${articleData.readTime} ${readTimeLabel}`}</Text>
+              {articleData.isCopyrighted && (
+                <Text size="medium" color="secondaryText">{`· ${copyrightLabel}`}</Text>
+              )}
+            </>
+          )}
+          {articleData.isDraft && (
+            <Text
+              size="medium"
+              color="secondaryText"
+            >{`· ${lastUpdatedLabel} ${articleData.lastUpdateDate}`}</Text>
           )}
         </Box>
-        <Box direction="row" gap="small">
+        <Box direction="row" gap="small" align="center">
+          {articleData.isDraft && (
+            <Box
+              round="1rem"
+              pad={{
+                horizontal: 'xsmall',
+                vertical: '1px',
+              }}
+              background="secondaryText"
+            >
+              <Text color="white">{draftLabel}</Text>
+            </Box>
+          )}
           <Icon type="akasha" />
           <Icon type="moreDark" style={{ cursor: 'pointer' }} />
         </Box>
@@ -83,43 +117,64 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
           </Box>
         </Box>
       </Box>
-      <Box direction="row" wrap={true} gap="xsmall">
-        {articleData.topics.map((topic, idx) => (
-          <Box
-            key={idx}
-            direction="row"
-            round="1rem"
-            gap="xxsmall"
-            margin={{ bottom: 'small' }}
-            pad={{
-              horizontal: 'xsmall',
-              vertical: '1.5px',
-            }}
-            background="activePanelBackground"
-            border={{ color: 'accentText' }}
-            style={{ cursor: 'pointer' }}
-            onClick={onClickTopic(topic)}
-          >
-            <Text color="accentText">{topic}</Text>
+      {articleData.isPublished && (
+        <>
+          <Box direction="row" wrap={true} gap="xsmall">
+            {articleData.topics.map((topic, idx) => (
+              <Box
+                key={idx}
+                direction="row"
+                round="1rem"
+                gap="xxsmall"
+                margin={{ bottom: 'small' }}
+                pad={{
+                  horizontal: 'xsmall',
+                  vertical: '1.5px',
+                }}
+                background="activePanelBackground"
+                border={{ color: 'accentText' }}
+                style={{ cursor: 'pointer' }}
+                onClick={onClickTopic(topic)}
+              >
+                <Text color="accentText">{topic}</Text>
+              </Box>
+            ))}
           </Box>
-        ))}
-      </Box>
-      <Box direction="row" justify="between" align="center">
-        <Box direction="row" gap="xsmall" onClick={onMentionsClick}>
-          <Icon type="reply" />
-          <Text size="large">{articleData.mentions}</Text>
-          <Text size="large">{mentionsLabel}</Text>
+
+          <Box direction="row" justify="between" align="center">
+            <Box direction="row" gap="xsmall" onClick={onMentionsClick}>
+              <Icon type="reply" />
+              <Text size="large">{articleData.mentions}</Text>
+              <Text size="large">{mentionsLabel}</Text>
+            </Box>
+            <Box direction="row" gap="xsmall" onClick={onRepliesClick}>
+              <Icon type="comments" />
+              <Text size="large">{articleData.replies}</Text>
+              <Text size="large">{repliesLabel}</Text>
+            </Box>
+            <Box direction="row" gap="xsmall" onClick={onSaveClick}>
+              <Icon type="bookmark" />
+              <Text size="large">{isSaved ? savedLabel : saveLabel}</Text>
+            </Box>
+          </Box>
+        </>
+      )}
+      {activeTabIndex === 1 && articleData.collaborators?.length > 0 && (
+        <Box direction="row" gap="small" align="center">
+          <StackedAvatar size="md" userData={articleData.collaborators} maxAvatars={4} />
+          <Text size="medium" color="secondaryText">
+            {collaboratingLabel}
+          </Text>
         </Box>
-        <Box direction="row" gap="xsmall" onClick={onRepliesClick}>
-          <Icon type="comments" />
-          <Text size="large">{articleData.replies}</Text>
-          <Text size="large">{repliesLabel}</Text>
+      )}
+      {activeTabIndex === 2 && isCollaborator && (
+        <Box direction="row" gap="small" align="center">
+          <Avatar size="md" ethAddress={userEthAddress} />
+          <Text size="medium" color="secondaryText">
+            {collaboratingLabel}
+          </Text>
         </Box>
-        <Box direction="row" gap="xsmall" onClick={onSaveClick}>
-          <Icon type="bookmark" />
-          <Text size="large">{isSaved ? savedLabel : saveLabel}</Text>
-        </Box>
-      </Box>
+      )}
     </MainAreaCardBox>
   );
 };
