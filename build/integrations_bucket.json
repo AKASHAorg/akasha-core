@@ -8,7 +8,7 @@
   {
     "name": "@akashaorg/app-akasha-integration",
     "id": "0x0f7b806cb610e298f4108f77c5454edafdd48a213ac6df2466816442b2814060",
-    "ipfsManifest": "f0155171cd9aecaa88012d5a4cb440d727d02d7fca0d9ffe6eb9f5967808fc34a",
+    "ipfsManifest": "f0155171c9c5c3417fc9b47d05b83c4451f11c2c5c186fb31d0ad51d049c11470",
     "type": 0
   },
   {
@@ -32,7 +32,7 @@
   {
     "name": "@akashaorg/app-bookmarks",
     "id": "0x20dd2505b29183c28a411f6d70eed327214ce02efec798b3c56509d1d7ac829c",
-    "ipfsManifest": "f0155171c147d1e94f69bf7ab35b36adb66af25348c1a8a5e986b846800b47644",
+    "ipfsManifest": "f0155171cc8d3d2da3ff6b7590c9b302b4449262d358f027a13b90f2aaf4f7c99",
     "type": 0
   },
   {
@@ -50,7 +50,7 @@
   {
     "name": "@akashaorg/app-profile",
     "id": "0x0c4ac6db8b99d1fbc682d27a80258d849b02ecb785ceaf082a0e4f6f4151b297",
-    "ipfsManifest": "f0155171c60e13280d2164aaebf090a4c42af54f98c7a865d397db770260546bc",
+    "ipfsManifest": "f0155171cc64520863a8eaf9a8178659afb01a9640eca0e9ba59372bc16003995",
     "type": 0
   },
   {
