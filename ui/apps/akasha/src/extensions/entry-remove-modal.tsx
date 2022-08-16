@@ -27,14 +27,14 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [props.singleSpa]);
 
   const handleDeletePost = React.useCallback(() => {
-    if (extensionData && typeof extensionData.entryType === 'number') {
-      if (extensionData.entryType === EntityTypes.COMMENT) {
+    if (extensionData && typeof +extensionData.entryType === 'number') {
+      if (+extensionData.entryType === EntityTypes.COMMENT) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.entryId);
-      } else if (extensionData.entryType === EntityTypes.ENTRY) {
+      } else if (+extensionData.entryType === EntityTypes.ENTRY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',

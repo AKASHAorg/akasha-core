@@ -311,6 +311,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 disablePublishLabel={t('Authenticating')}
                 disablePublish={disablePublishing}
                 onPublish={handleEditComment}
+                linkPreview={itemData.linkPreview}
                 getLinkPreview={getLinkPreview}
                 getMentions={handleMentionQueryChange}
                 getTags={handleTagQueryChange}
