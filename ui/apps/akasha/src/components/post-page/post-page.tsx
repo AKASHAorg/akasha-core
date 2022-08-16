@@ -394,7 +394,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     disablePublishLabel={t('Authenticating')}
                     disablePublish={disablePublishing}
                     onPublish={handlePublishComment}
-                    linkPreview={entryData?.linkPreview}
                     getLinkPreview={getLinkPreview}
                     getMentions={handleMentionQueryChange}
                     getTags={handleTagQueryChange}
