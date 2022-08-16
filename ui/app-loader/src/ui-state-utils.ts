@@ -44,7 +44,6 @@ export const handleAppLoadingScreens = (
             const homeApp = worldConfig.homepageApp;
             const config = combined.integrationConfigs.get(homeApp);
             if (config) {
-              console.log(combined.plugins, '<<< plugins here!');
               const { navigateTo } = combined.plugins.routing as {
                 navigateTo: (opts: unknown) => void;
               };
