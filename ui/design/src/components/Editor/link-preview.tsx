@@ -24,6 +24,10 @@ const StyledCoverImg = styled.img`
   border-top-left-radius: 0.5rem;
 `;
 
+const StyledPicture = styled.picture`
+  display: flex;
+`;
+
 const StyledBox = styled(Box)`
   background-color: ${props => props.theme.colors.ultraLightGrey};
 `;
@@ -100,7 +104,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
               ev.preventDefault();
               return false;
             } else {
-              window.open(linkPreviewData.url, '_blank', 'noopener');
+              window.open(linkPreviewData?.url, '_blank', 'noopener');
             }
             return ev.stopPropagation();
           }}
@@ -116,19 +120,22 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
               <Icon type="close" clickable={true} />
             </StyledCloseDiv>
           )}
-          {!!linkPreviewData.images?.length && (
+          {!!(linkPreviewData.imageSources?.url || linkPreviewData.imageSources?.fallbackUrl) && (
             <StyledCoverBox
               pad="none"
               round={{ corner: 'top', size: 'xsmall' }}
               border={[{ color: 'border', side: 'all' }]}
               showCover={showCover}
             >
-              <StyledCoverImg
-                src={linkPreviewData.images[0]}
-                onLoad={handleCoverLoad}
-                alt={linkPreviewData.images[0]}
-                referrerPolicy={'no-referrer'}
-              />
+              <StyledPicture>
+                <source srcSet={linkPreviewData.imageSources?.fallbackUrl} />
+                <StyledCoverImg
+                  src={linkPreviewData.imageSources?.url}
+                  onLoad={handleCoverLoad}
+                  alt={linkPreviewData.imageSources?.url}
+                  referrerPolicy={'no-referrer'}
+                />
+              </StyledPicture>
             </StyledCoverBox>
           )}
 
@@ -148,13 +155,18 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
             }}
           >
             <Box direction="row" gap="small" pad={{ vertical: 'small' }} align="center">
-              {linkPreviewData.favicons?.length && !faviconErr ? (
-                <Favicon
-                  src={linkPreviewData.favicons[0]}
-                  alt={linkPreviewData.favicons[0]}
-                  onError={handleFaviconErr}
-                  referrerPolicy={'no-referrer'}
-                />
+              {!!(
+                linkPreviewData.faviconSources?.url || linkPreviewData.faviconSources?.fallbackUrl
+              ) && !faviconErr ? (
+                <StyledPicture>
+                  <source srcSet={linkPreviewData.faviconSources?.fallbackUrl} />
+                  <Favicon
+                    src={linkPreviewData.faviconSources?.url}
+                    alt={linkPreviewData.faviconSources?.url}
+                    onError={handleFaviconErr}
+                    referrerPolicy={'no-referrer'}
+                  />
+                </StyledPicture>
               ) : (
                 <Icon type="link" size="xxs" accentColor={true} />
               )}
