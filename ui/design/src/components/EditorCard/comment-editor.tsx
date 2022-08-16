@@ -21,6 +21,7 @@ const CommentEditor: React.FC<
     disablePublishLabel,
     disablePublish,
     onPublish,
+    linkPreview,
     getLinkPreview,
     getMentions,
     getTags,
@@ -89,6 +90,7 @@ const CommentEditor: React.FC<
             disablePublishLabel={disablePublishLabel}
             disablePublish={disablePublish}
             onPublish={handlePublish}
+            linkPreview={linkPreview}
             getLinkPreview={getLinkPreview}
             getMentions={getMentions}
             getTags={getTags}
