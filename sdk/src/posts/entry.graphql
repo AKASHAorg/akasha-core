@@ -122,6 +122,8 @@ fragment LinkPreviewF on LinkPreview {
   siteName
   description
   images
+  imagePreviewHash
+  faviconPreviewHash
 }
 
 mutation GetLinkPreview($link: String!) {
