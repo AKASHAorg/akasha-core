@@ -128,11 +128,11 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
               showCover={showCover}
             >
               <StyledPicture>
-                <source srcSet={linkPreviewData.imageSources?.fallbackUrl} />
+                <source srcSet={linkPreviewData.imageSources?.url} />
                 <StyledCoverImg
-                  src={linkPreviewData.imageSources?.url}
+                  src={linkPreviewData.imageSources?.fallbackUrl}
                   onLoad={handleCoverLoad}
-                  alt={linkPreviewData.imageSources?.url}
+                  alt={linkPreviewData.imageSources?.fallbackUrl}
                   referrerPolicy={'no-referrer'}
                 />
               </StyledPicture>
@@ -159,10 +159,10 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
                 linkPreviewData.faviconSources?.url || linkPreviewData.faviconSources?.fallbackUrl
               ) && !faviconErr ? (
                 <StyledPicture>
-                  <source srcSet={linkPreviewData.faviconSources?.fallbackUrl} />
+                  <source srcSet={linkPreviewData.faviconSources?.url} />
                   <Favicon
-                    src={linkPreviewData.faviconSources?.url}
-                    alt={linkPreviewData.faviconSources?.url}
+                    src={linkPreviewData.faviconSources?.fallbackUrl}
+                    alt={linkPreviewData.faviconSources?.fallbackUrl}
                     onError={handleFaviconErr}
                     referrerPolicy={'no-referrer'}
                   />
