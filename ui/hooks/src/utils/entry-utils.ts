@@ -142,6 +142,32 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
 
     try {
       linkPreview = decodeb64SlateContent(linkPreviewData.value, logger);
+      const imageSources = { url: '', fallbackUrl: '' };
+      const faviconSources = { url: '', fallbackUrl: '' };
+      if (linkPreview.imagePreviewHash) {
+        const ipfsLinks = getMediaUrl(linkPreview.imagePreviewHash);
+        imageSources.url = ipfsLinks.originLink;
+        imageSources.fallbackUrl = ipfsLinks.fallbackLink;
+      } else if (!linkPreview.imagePreviewHash && linkPreview.images.length) {
+        const uploadedImageURL = new URL(linkPreview.images[0]);
+        const hash = uploadedImageURL.hostname.split('.')[0];
+        const ipfsLinks = getMediaUrl(hash);
+        imageSources.url = ipfsLinks.originLink;
+        imageSources.fallbackUrl = ipfsLinks.fallbackLink;
+      }
+      if (linkPreview.faviconPreviewHash) {
+        const ipfsLinks = getMediaUrl(linkPreview.faviconPreviewHash);
+        faviconSources.url = ipfsLinks.originLink;
+        faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
+      } else if (!linkPreview.faviconPreviewHash && linkPreview.favicons.length) {
+        const uploadedFaviconURL = new URL(linkPreview.favicons[0]);
+        const hash = uploadedFaviconURL.hostname.split('.')[0];
+        const ipfsLinks = getMediaUrl(hash);
+        faviconSources.url = ipfsLinks.originLink;
+        faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
+      }
+      linkPreview.imageSources = imageSources;
+      linkPreview.faviconSources = faviconSources;
     } catch (error) {
       if (logger) {
         logger.error(`Error serializing base64 to linkPreview: ${error.message}`);
@@ -293,10 +319,17 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
   };
 
   if (data.metadata.linkPreview) {
+    const clonedLinkPreviewData = JSON.parse(JSON.stringify(data.metadata.linkPreview));
+    if (clonedLinkPreviewData.imageSources) {
+      delete clonedLinkPreviewData.imageSources;
+    }
+    if (clonedLinkPreviewData.faviconSources) {
+      delete clonedLinkPreviewData.faviconSources;
+    }
     postObj.data.push({
       provider: PROVIDER_AKASHA,
       property: PROPERTY_LINK_PREVIEW,
-      value: serializeSlateToBase64(data.metadata.linkPreview),
+      value: serializeSlateToBase64(clonedLinkPreviewData),
     });
   }
   if (data.metadata.images) {

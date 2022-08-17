@@ -12,10 +12,11 @@ import {
   handleEnableIntegration,
   handleExtPointMountOfApps,
   handleIntegrationUninstall,
-  importIntegrations,
+  importIntegrationModules,
   processSystemModules,
 } from './integrations';
 import { handleAppLoadingScreens } from './ui-state-utils';
+import { loadPlugins } from './plugins';
 
 /**
  * App loader is the central module for micro-frontends (apps)
@@ -55,17 +56,25 @@ const startLoader = (worldConfig: ILoaderConfig) => {
     getUserIntegrationManifests(worldConfig, state$, logger),
 
     /**
-     * import, register and singleSpaRegister the layout
-     * @internal
-     */
-    loadLayout(worldConfig, state$, logger),
-
-    /**
      * import integrations just after we have the layout config
      * aka. after calling the register on layout
      * @internal
      */
-    importIntegrations(state$, logger),
+    importIntegrationModules(state$, logger),
+
+    /**
+     * Load integrations of type plugins before anything else
+     * Plugins are not rendering anything
+     * so they are not dependent of the layout
+     */
+    loadPlugins(worldConfig, state$, logger),
+
+    /**
+     * import, register and singleSpaRegister the layout
+     * The layout uses at least one plugin from the above (i18n)
+     * @internal
+     */
+    loadLayout(worldConfig, state$, logger),
 
     /**
      * call the exported `register` method on all integrations
