@@ -403,7 +403,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             {showMore && entryData.type !== 'REMOVED' && (
               <StyledIcon
                 type="moreDark"
-                plain={true}
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
                   if (disableActions) {
                     return;

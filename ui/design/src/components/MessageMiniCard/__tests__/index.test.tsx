@@ -60,6 +60,5 @@ describe('<MessageAppMiniCard /> Component', () => {
     fireEvent.click(avatar);
 
     expect(handleClickAvatar).toHaveBeenCalledTimes(1);
-    expect(handleClickCard).toHaveBeenCalledTimes(1);
   });
 });

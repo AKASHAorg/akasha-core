@@ -84,7 +84,7 @@ export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo
  * Get the integration manifest and import the source
  * store the resulting integrationConfig in state
  */
-export const importIntegrations = (state$: Observable<LoaderState>, logger: ILogger) => {
+export const importIntegrationModules = (state$: Observable<LoaderState>, logger: ILogger) => {
   return state$.pipe(getStateSlice('manifests')).pipe(
     mergeMap(systemImport(logger)),
     withLatestFrom(state$.pipe(getStateSlice('modules'))),
@@ -158,13 +158,13 @@ export const processSystemModules = (
               let plugin: PluginConf;
               let appConf: IAppConfig;
 
-              if (mod?.getPlugin && typeof mod.getPlugin === 'function') {
-                plugin = await mod.getPlugin({
-                  ...registrationProps,
-                  encodeAppName: encodeName,
-                  decodeAppName: decodeName,
-                });
-              }
+              // if (mod?.getPlugin && typeof mod.getPlugin === 'function') {
+              //   plugin = await mod.getPlugin({
+              //     ...registrationProps,
+              //     encodeAppName: encodeName,
+              //     decodeAppName: decodeName,
+              //   });
+              // }
 
               if (mod?.register && typeof mod.register === 'function') {
                 appConf = await Promise.resolve(mod.register(registrationProps));
@@ -179,7 +179,6 @@ export const processSystemModules = (
                 });
               }
               return {
-                plugin,
                 ...appConf,
                 name: moduleName,
               };
@@ -189,7 +188,7 @@ export const processSystemModules = (
             combineLatestAll(),
             map(configs => ({
               configs,
-              plugins: configs.reduce((acc, conf) => ({ ...acc, ...conf.plugin }), {}),
+              // plugins: configs.reduce((acc, conf) => ({ ...acc, ...conf.plugin }), {}),
               integrationConfigs,
               integrationsByMountPoint,
               layoutConfig: results.layoutConfig,
@@ -198,7 +197,7 @@ export const processSystemModules = (
       }),
     )
     .pipe(
-      withLatestFrom(plugins$),
+      withLatestFrom(state$.pipe(getStateSlice('plugins'))),
       mergeMap(([results, plugins]) => {
         const { configs, layoutConfig } = results;
         for (const config of configs) {
@@ -215,7 +214,7 @@ export const processSystemModules = (
             navigateToModal,
             worldConfig,
             parseQueryString,
-            plugins: results.plugins,
+            plugins: plugins,
             encodeAppName: encodeName,
             decodeAppName: decodeName,
           };
@@ -224,22 +223,17 @@ export const processSystemModules = (
             extensionLoader,
           );
         }
-        return of({ ...results, plugins });
+        return of({ results, plugins });
       }),
     )
     .pipe(
-      tap(result => {
-        const { configs, integrationConfigs, integrationsByMountPoint, plugins } = result;
+      tap(({ results, plugins }) => {
+        const { configs, integrationConfigs, integrationsByMountPoint } = results;
         const byMount = new Map(integrationsByMountPoint);
         const intConfigs = new Map(integrationConfigs);
-        let appPlugins = Object.assign({}, plugins);
         configs.forEach(config => {
           if (intConfigs.has(config.name)) {
             return;
-          }
-
-          if (config.plugin) {
-            appPlugins = Object.assign(appPlugins, config.plugin);
           }
 
           intConfigs.set(config.name, config);
@@ -253,7 +247,7 @@ export const processSystemModules = (
           pipelineEvents.next({
             integrationConfigs: intConfigs,
             integrationsByMountPoint: byMount,
-            plugins: appPlugins,
+            plugins: plugins,
           });
         }
       }),
