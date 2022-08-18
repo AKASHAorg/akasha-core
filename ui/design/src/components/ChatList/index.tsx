@@ -1,13 +1,23 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
+import { Descendant } from 'slate';
 
-import { IChat } from '../../utils/dummy-data';
-
+export interface IChatMessage {
+  name: string;
+  username: string;
+  ethAddress: string;
+  read?: boolean;
+  content: Descendant[];
+  timestamp: string;
+  id?: string;
+  from?: string;
+  to?: string;
+}
 export interface IChatListProps {
   emptyChatLabel: string;
   loggedUserEthAddress: string;
   itemCard: React.ReactElement;
-  chatArr: IChat[]; // @TODO: update with correct typing from sdk
+  chatArr: IChatMessage[]; // @TODO: update with correct typing from sdk
 }
 
 const ChatList: React.FC<IChatListProps> = props => {
@@ -35,20 +45,20 @@ const ChatList: React.FC<IChatListProps> = props => {
         </Text>
       )}
       {chatArr.length > 1 &&
-        chatArr.map((chat: IChat, id: number) => (
+        chatArr.map((message: IChatMessage, id: number) => (
           <Box
             key={id}
             width="95%"
             margin={{ vertical: 'small' }}
-            alignSelf={chat.ethAddress !== loggedUserEthAddress ? 'end' : 'start'}
+            alignSelf={message.ethAddress !== loggedUserEthAddress ? 'end' : 'start'}
             style={{ minHeight: 'min-content', flexShrink: 0 }}
           >
             {React.cloneElement(itemCard, {
-              senderName: chat.name,
-              status: chat.status,
-              isLoggedUser: chat.ethAddress === loggedUserEthAddress,
-              chatTimestamp: chat.timestamp,
-              content: chat.content,
+              senderName: message.name,
+              isRead: message.read,
+              isFromLoggedUser: message.ethAddress === loggedUserEthAddress,
+              chatTimestamp: message.timestamp,
+              content: message.content,
             })}
           </Box>
         ))}

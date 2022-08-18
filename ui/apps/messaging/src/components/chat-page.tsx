@@ -11,7 +11,7 @@ import {
   useGetProfile,
   uploadMediaToTextile,
 } from '@akashaorg/ui-awf-hooks';
-import { getMessages, sendMessage } from '../api/message';
+import { getMessages, markAsRead, sendMessage } from '../api/message';
 
 const {
   BasicCardBox,
@@ -94,14 +94,17 @@ const ChatPage = (props: RootComponentProps) => {
   );
 
   const handleSendMessage = async publishData => {
-    const result: any = await sendMessage(pubKey, publishData);
+    const res: any = await sendMessage(pubKey, publishData);
     const newMessage = {
-      content: result.body?.slateContent,
-      ethAddress: result.body?.author,
-      timestamp: result.createdAt,
+      content: res.body?.slateContent,
+      ethAddress: res.body?.author,
+      timestamp: res.createdAt,
+      from: res.from,
+      to: res.to,
+      read: res.read,
+      id: res.id,
     };
     setMessages(prev => [...prev, newMessage]);
-    console.info(result);
   };
 
   const [messages, setMessages] = React.useState([]);
@@ -116,6 +119,10 @@ const ChatPage = (props: RootComponentProps) => {
                 ethAddress: res.body.content?.author,
                 timestamp: res.createdAt,
                 name: sender,
+                from: res.from,
+                to: res.to,
+                read: res.read,
+                id: res.id,
               };
             }
             return null;
@@ -125,6 +132,14 @@ const ChatPage = (props: RootComponentProps) => {
       })
       .catch(err => console.log(err));
   }, [pubKey, loginState.pubKey, sender]);
+
+  React.useEffect(() => {
+    if (messages.length) {
+      const unreadMessages = messages.filter(message => message.from === pubKey && !message.read);
+      const unreadMessageIds = unreadMessages.map(message => message.id);
+      markAsRead(unreadMessageIds);
+    }
+  }, [messages, pubKey]);
 
   return (
     <BasicCardBox style={{ maxHeight: '92vh' }}>

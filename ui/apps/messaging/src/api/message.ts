@@ -41,3 +41,8 @@ export const getTextileUsage = async () => {
   const textileUsage = await lastValueFrom(sdk.api.auth.getTextileUsage());
   return textileUsage;
 };
+
+export const markAsRead = async (messageIds: string[]) => {
+  const sdk = getSDK();
+  messageIds.forEach(id => lastValueFrom(sdk.api.auth.markMessageAsRead(id)));
+};

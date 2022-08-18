@@ -9,15 +9,13 @@ import { formatRelativeTime, ILocale } from '../../utils/time';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 import dayjs from 'dayjs';
 
-type chatStatus = 'sent' | 'delivered' | 'read';
-
 export interface IBubbleCardProps {
   locale: ILocale;
   senderName?: string;
   youLabel: string;
   content?: Descendant[];
-  status?: chatStatus;
-  isLoggedUser?: boolean;
+  isRead?: boolean;
+  isFromLoggedUser?: boolean;
   chatTimestamp?: string;
   handleMentionClick?: (pubKey: string) => void;
   handleTagClick?: (name: string) => void;
@@ -30,8 +28,8 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
     senderName,
     youLabel,
     content,
-    status,
-    isLoggedUser,
+    isRead,
+    isFromLoggedUser,
     chatTimestamp,
     handleMentionClick,
     handleTagClick,
@@ -50,7 +48,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
   return (
     <Box>
       <Box direction="row" justify="between" margin={{ bottom: 'xsmall' }}>
-        <Text>{isLoggedUser ? youLabel : senderName}</Text>
+        <Text>{isFromLoggedUser ? youLabel : senderName}</Text>
         <Text color="secondaryText">{relativeTime}</Text>
       </Box>
       <BasicCardBox
@@ -69,7 +67,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
                 />
               </Box>
             </Box>
-            {isLoggedUser && (
+            {isFromLoggedUser && (
               <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
                 <Icon size="xs" plain={true} type="moreDark" />
               </Box>
@@ -77,12 +75,12 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
           </Box>
           <Box direction="row" height="fit-content" flex={{ shrink: 0 }} justify="end">
             {chatTimestamp && (
-              <Text color="secondaryText" margin={{ ...(status && { right: 'xsmall' }) }}>
+              <Text color="secondaryText" margin={{ ...(isRead && { right: 'xsmall' }) }}>
                 {time}
               </Text>
             )}
-            {isLoggedUser && status && (
-              <Icon size="sm" accentColor={status === 'read'} type={chatStatusIcon[status]} />
+            {isFromLoggedUser && (
+              <Icon size="sm" accentColor={true} type={isRead ? 'checkDouble' : 'checkSimple'} />
             )}
           </Box>
         </Box>
