@@ -12,6 +12,7 @@ import menuRoute, {
   ONBOARDING_STEP_TWO,
   ONBOARDING_STEP_THREE,
   HOME,
+  WRITE_ARTICLE,
 } from '../../routes';
 
 interface IOnboardingStepsProps {
@@ -100,7 +101,7 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
           onClickIcon={handleClick(ONBOARDING_STEP_TWO)}
           onClickTopic={handleClickTopic}
           onClickReadArticle={handleClick(HOME)}
-          onClickWriteArticle={handleClick(HOME)}
+          onClickWriteArticle={handleClick(WRITE_ARTICLE)}
         />
       )}
     </>

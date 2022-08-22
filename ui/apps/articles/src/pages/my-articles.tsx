@@ -7,6 +7,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import MyArticlesHeader from '../components/my-articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
 
+import routes, { WRITE_ARTICLE } from '../routes';
 import { StyledButton } from '../components/styled';
 import { articles } from '../components/dummy-data';
 
@@ -26,7 +27,10 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   const { t } = useTranslation('app-articles');
 
   const handleClickWriteArticle = () => {
-    /** do something */
+    routing.navigateTo({
+      appName: '@akashaorg/app-articles',
+      getNavigationUrl: () => routes[WRITE_ARTICLE],
+    });
   };
 
   const handleClickArticle = (article_id: string) => () => {

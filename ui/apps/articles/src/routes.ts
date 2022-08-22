@@ -6,6 +6,8 @@ export const ONBOARDING_STEP_TWO = 'OnboardingStepTwo';
 export const ONBOARDING_STEP_THREE = 'OnboardingStepThree';
 export const SETTINGS = 'Settings';
 export const ARTICLE = 'Article';
+export const WRITE_ARTICLE = 'WriteArticle';
+export const EDIT_ARTICLE = 'EditArticle';
 
 export const baseOnboardingRoute = '/onboarding';
 
@@ -17,4 +19,6 @@ export default {
   [ONBOARDING_STEP_THREE]: `${baseOnboardingRoute}/select-topics`,
   [SETTINGS]: '/settings',
   [ARTICLE]: '/article/:id',
+  [WRITE_ARTICLE]: '/write-article',
+  [EDIT_ARTICLE]: '/edit-article/:id',
 };

@@ -10,7 +10,8 @@ import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
 import Dashboard from '../pages/dashboard';
 import ArticlePage from '../pages/article';
 import MyArticles from '../pages/my-articles';
-import ArticlesSettings from './article-settings';
+import ArticleSettingsPage from '../pages/settings';
+import ArticleEditor from '../pages/article-editor';
 
 import routes, {
   ARTICLE,
@@ -20,8 +21,8 @@ import routes, {
   ONBOARDING_STEP_THREE,
   ONBOARDING_STEP_TWO,
   SETTINGS,
+  WRITE_ARTICLE,
 } from '../routes';
-import { topics } from './dummy-data';
 
 const { Box } = DS;
 
@@ -29,7 +30,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const {
     plugins: { routing },
   } = props;
-  const [selectedTopics, setSelectedTopics] = React.useState<string[]>(topics.slice(0, 15));
 
   const { t } = useTranslation('app-articles');
 
@@ -40,28 +40,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
     });
-  };
-
-  const handleClickCloseSettings = () => {
-    routing.navigateTo({
-      appName: '@akashaorg/app-articles',
-      getNavigationUrl: () => routes[HOME],
-    });
-  };
-
-  const handleSearch = () => {
-    /** do something */
-  };
-
-  const handleClickTopic = (topic: string) => () => {
-    if (selectedTopics.includes(topic)) {
-      const filtered = selectedTopics.filter(_topic => _topic !== topic);
-      return setSelectedTopics(filtered);
-    }
-  };
-
-  const handleUninstall = () => {
-    /** do something */
   };
 
   return (
@@ -86,7 +64,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               )
             }
           />
+
           <Route path={routes[MY_ARTICLES]} element={<MyArticles {...props} />} />
+
+          <Route path={routes[WRITE_ARTICLE]} element={<ArticleEditor {...props} />} />
+
           {[
             routes[ONBOARDING_STEP_ONE],
             routes[ONBOARDING_STEP_TWO],
@@ -98,24 +80,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               element={<ArticlesOnboardingSteps {...props} activeIndex={idx} />}
             />
           ))}
-          <Route
-            path={routes[SETTINGS]}
-            element={
-              <ArticlesSettings
-                titleLabel={t('Article App Settings')}
-                inputPlaceholderLabel={t('Search for a topic')}
-                subscribedTopicsTitleLabel={t('Topics you are subscribed to')}
-                subscribedTopicsSubtitleLabel={t('You can subscribe to as many as you want')}
-                subscribedTopics={selectedTopics}
-                uninstallLabel={t('Uninstall')}
-                onClickCloseSettings={handleClickCloseSettings}
-                onSearch={handleSearch}
-                onClickTopic={handleClickTopic}
-                onClickUninstall={handleUninstall}
-              />
-            }
-          />
+          <Route path={routes[SETTINGS]} element={<ArticleSettingsPage {...props} />} />
+
           <Route path={routes[ARTICLE]} element={<ArticlePage {...props} />} />
+
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>
