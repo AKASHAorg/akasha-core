@@ -11,6 +11,7 @@ import appFeed from './app-feed';
 import appIpfs from './app-ipfs';
 import appModeration from './app-moderation';
 import appSocial from './app-social';
+import alignLeft from './align-left';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -21,6 +22,7 @@ import article from './article';
 import available from './available';
 import block from './block';
 import bold from './bold';
+import boldAlt from './bold-alt';
 import book from './book';
 import bookmark from './bookmark';
 import calendar from './calendar';
@@ -68,6 +70,7 @@ import key from './key';
 import legal from './legal';
 import licensewtfpl from './license-wtfpl';
 import link from './link';
+import listBulleted from './list-bulleted';
 import loading from './loading';
 import login from './login';
 import media from './media';
@@ -110,8 +113,10 @@ import share from './share';
 import shareSmallBlue from './share-small-blue';
 import shareSmallDark from './share-small-dark';
 import shareSmallGrey from './share-small-grey';
-import subscribe from './subscribe';
 import stopwatch from './stopwatch';
+import strikethrough from './strikethrough';
+import subscribe from './subscribe';
+import textcase from './textcase';
 import thumbsDownGrey from './thumbs-down-grey';
 import thumbsDownWhite from './thumbs-down-white';
 import thumbsUpGrey from './thumbs-up-grey';
@@ -144,6 +149,7 @@ export {
   appIpfs,
   appModeration,
   appSocial,
+  alignLeft,
   announcement,
   article,
   available,
@@ -152,7 +158,6 @@ export {
   pinAlt,
   settings,
   settingsAlt,
-  stopwatch,
   transfer,
   calendar,
   code,
@@ -192,6 +197,7 @@ export {
   book,
   block,
   bold,
+  boldAlt,
   comments,
   close,
   trash,
@@ -212,6 +218,7 @@ export {
   legal,
   licensewtfpl,
   link,
+  listBulleted,
   loading,
   login,
   media,
@@ -248,7 +255,10 @@ export {
   shareSmallBlue,
   shareSmallDark,
   shareSmallGrey,
+  stopwatch,
+  strikethrough,
   subscribe,
+  textcase,
   thumbsDownWhite,
   thumbsDownGrey,
   thumbsUpWhite,

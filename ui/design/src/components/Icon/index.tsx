@@ -18,6 +18,7 @@ export type IconType =
   | 'akasha'
   | 'addAppGrey'
   | 'addCard'
+  | 'alignLeft'
   | 'announcement'
   | 'app'
   | 'arrowDown'
@@ -27,6 +28,7 @@ export type IconType =
   | 'article'
   | 'available'
   | 'bold'
+  | 'boldAlt'
   | 'block'
   | 'book'
   | 'bookmark'
@@ -75,6 +77,7 @@ export type IconType =
   | 'legal'
   | 'licensewtfpl'
   | 'link'
+  | 'listBulleted'
   | 'loading'
   | 'login'
   | 'media'
@@ -114,11 +117,13 @@ export type IconType =
   | 'share'
   | 'signOut'
   | 'status'
-  | 'subscribe'
   | 'stopwatch'
+  | 'strikethrough'
+  | 'subscribe'
   | 'shareSmallBlue'
   | 'shareSmallDark'
   | 'shareSmallGrey'
+  | 'textcase'
   | 'thumbsDownGrey'
   | 'thumbsDownWhite'
   | 'thumbsUpGrey'
@@ -153,6 +158,7 @@ export const iconTypes: IconType[] = [
   'addAppGrey',
   'akasha',
   'addCard',
+  'alignLeft',
   'announcement',
   'app',
   'arrowDown',
@@ -162,6 +168,7 @@ export const iconTypes: IconType[] = [
   'article',
   'available',
   'bold',
+  'boldAlt',
   'block',
   'book',
   'bookmark',
@@ -210,6 +217,7 @@ export const iconTypes: IconType[] = [
   'legal',
   'licensewtfpl',
   'link',
+  'listBulleted',
   'loading',
   'login',
   'media',
@@ -248,11 +256,13 @@ export const iconTypes: IconType[] = [
   'signOut',
   'status',
   'share',
-  'subscribe',
   'stopwatch',
+  'strikethrough',
+  'subscribe',
   'shareSmallBlue',
   'shareSmallDark',
   'shareSmallGrey',
+  'textcase',
   'thumbsDownGrey',
   'thumbsDownWhite',
   'thumbsUpGrey',
