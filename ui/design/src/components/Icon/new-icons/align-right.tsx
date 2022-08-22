@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AlignLeft = (props: React.SVGProps<SVGSVGElement>) => (
+const AlignRight = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="32"
     height="32"
@@ -10,10 +10,10 @@ const AlignLeft = (props: React.SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      d="M12 6H26V8H12V6ZM12 12H22V14H12V12ZM12 18H26V20H12V18ZM12 24H22V26H12V24ZM6 4H8V28H6V4Z"
+      d="M6 6H20V8H6V6ZM10 12H20V14H10V12ZM6 18H20V20H6V18ZM10 24H20V26H10V24ZM24 4H26V28H24V4Z"
       fill="#212529"
     />
   </svg>
 );
 
-export default AlignLeft;
+export default AlignRight;

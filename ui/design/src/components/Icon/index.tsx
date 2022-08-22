@@ -18,7 +18,10 @@ export type IconType =
   | 'akasha'
   | 'addAppGrey'
   | 'addCard'
+  | 'alignCenter'
+  | 'alignJustify'
   | 'alignLeft'
+  | 'alignRight'
   | 'announcement'
   | 'app'
   | 'arrowDown'
@@ -78,6 +81,7 @@ export type IconType =
   | 'licensewtfpl'
   | 'link'
   | 'listBulleted'
+  | 'listNumbered'
   | 'loading'
   | 'login'
   | 'media'
@@ -158,7 +162,10 @@ export const iconTypes: IconType[] = [
   'addAppGrey',
   'akasha',
   'addCard',
+  'alignCenter',
+  'alignJustify',
   'alignLeft',
+  'alignRight',
   'announcement',
   'app',
   'arrowDown',
@@ -218,6 +225,7 @@ export const iconTypes: IconType[] = [
   'licensewtfpl',
   'link',
   'listBulleted',
+  'listNumbered',
   'loading',
   'login',
   'media',

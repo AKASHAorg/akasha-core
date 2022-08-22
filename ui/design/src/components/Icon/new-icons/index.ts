@@ -11,7 +11,10 @@ import appFeed from './app-feed';
 import appIpfs from './app-ipfs';
 import appModeration from './app-moderation';
 import appSocial from './app-social';
+import alignCenter from './align-center';
+import alignJustify from './align-justify';
 import alignLeft from './align-left';
+import alignRight from './align-right';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
@@ -71,6 +74,7 @@ import legal from './legal';
 import licensewtfpl from './license-wtfpl';
 import link from './link';
 import listBulleted from './list-bulleted';
+import listNumbered from './list-numbered';
 import loading from './loading';
 import login from './login';
 import media from './media';
@@ -149,7 +153,10 @@ export {
   appIpfs,
   appModeration,
   appSocial,
+  alignCenter,
+  alignJustify,
   alignLeft,
+  alignRight,
   announcement,
   article,
   available,
@@ -219,6 +226,7 @@ export {
   licensewtfpl,
   link,
   listBulleted,
+  listNumbered,
   loading,
   login,
   media,

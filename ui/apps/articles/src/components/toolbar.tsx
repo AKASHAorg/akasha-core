@@ -62,7 +62,7 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
         <Icon type="dropdown" />
       </Box>
       <Box direction="row" align="center" onClick={onAlignStyleClick}>
-        <Icon type="alignLeft" plain={true} />
+        <Icon type="alignLeft" size="sm" plain={true} />
         <Icon type="dropdown" />
       </Box>
     </Box>
