@@ -46,3 +46,9 @@ export const markAsRead = async (messageIds: string[]) => {
   const sdk = getSDK();
   messageIds.forEach(id => lastValueFrom(sdk.api.auth.markMessageAsRead(id)));
 };
+
+export const getHubUser = async () => {
+  const sdk = getSDK();
+  const session = await lastValueFrom(sdk.api.auth.getSession());
+  return session.data.user;
+};

@@ -36,14 +36,9 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
     handleLinkClick,
   } = props;
 
-  const chatStatusIcon = {
-    sent: 'checkSimple',
-    delivered: 'checkDouble',
-    read: 'checkDouble',
-  };
-
   const time = dayjs(+chatTimestamp / 1000000).format('HH:mm');
   const relativeTime = formatRelativeTime(+chatTimestamp / 1000000, locale);
+  const iconType = isRead ? 'checkDouble' : 'checkSimple';
 
   return (
     <Box>
@@ -79,9 +74,7 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
                 {time}
               </Text>
             )}
-            {isFromLoggedUser && (
-              <Icon size="sm" accentColor={true} type={isRead ? 'checkDouble' : 'checkSimple'} />
-            )}
+            {isFromLoggedUser && <Icon size="sm" accentColor={isRead} type={iconType} />}
           </Box>
         </Box>
       </BasicCardBox>

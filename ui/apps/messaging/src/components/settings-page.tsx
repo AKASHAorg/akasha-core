@@ -91,7 +91,7 @@ const InboxPage = (props: SettingsPageProps) => {
       >
         <Text>{props.loginState.ethAddress}</Text>
       </Box>
-      <Box direction="row" justify="end">
+      <Box direction="row" justify="end" pad="medium">
         <Button
           label={t('Uninstall')}
           icon={<Icon type="close" accentColor={true} onClick={handleUninstall} />}

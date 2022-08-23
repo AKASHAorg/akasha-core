@@ -10,20 +10,11 @@ import {
   useTagSearch,
   useGetProfile,
   uploadMediaToTextile,
+  logError,
 } from '@akashaorg/ui-awf-hooks';
-import { getMessages, markAsRead, sendMessage } from '../api/message';
+import { getHubUser, getMessages, markAsRead, sendMessage } from '../api/message';
 
-const {
-  BasicCardBox,
-  Box,
-  Icon,
-  Text,
-  ChatArea,
-  ChatList,
-  ChatAreaHeader,
-  ChatEditor,
-  BubbleCard,
-} = DS;
+const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
 
 const ChatPage = (props: RootComponentProps) => {
   const { t } = useTranslation('app-messaging');
@@ -108,30 +99,32 @@ const ChatPage = (props: RootComponentProps) => {
   };
 
   const [messages, setMessages] = React.useState([]);
-  React.useEffect(() => {
-    getMessages()
-      .then(result => {
-        const conversation = result
-          ?.map(res => {
-            if (res.body.content && (res.from === pubKey || res.from === loginState.pubKey)) {
-              return {
-                content: res.body.content?.slateContent,
-                ethAddress: res.body.content?.author,
-                timestamp: res.createdAt,
-                name: sender,
-                from: res.from,
-                to: res.to,
-                read: res.read,
-                id: res.id,
-              };
-            }
-            return null;
-          })
-          .filter(Boolean);
-        setMessages(conversation);
+
+  const fetchMessagesCallback = React.useCallback(async () => {
+    const messagesData = await getMessages();
+    const conversation = messagesData
+      ?.map(res => {
+        if (res.body.content && (res.from === pubKey || res.from === loginState.pubKey)) {
+          return {
+            content: res.body.content?.slateContent,
+            ethAddress: res.body.content?.author,
+            timestamp: res.createdAt,
+            name: res.from === pubKey ? sender : null,
+            from: res.from,
+            to: res.to,
+            read: res.read,
+            id: res.id,
+          };
+        }
+        return null;
       })
-      .catch(err => console.log(err));
-  }, [pubKey, loginState.pubKey, sender]);
+      .filter(Boolean);
+    setMessages(conversation);
+  }, [loginState.pubKey, pubKey, sender]);
+
+  React.useEffect(() => {
+    fetchMessagesCallback();
+  }, [fetchMessagesCallback]);
 
   React.useEffect(() => {
     if (messages.length) {
@@ -140,6 +133,29 @@ const ChatPage = (props: RootComponentProps) => {
       markAsRead(unreadMessageIds);
     }
   }, [messages, pubKey]);
+
+  const getHubUserCallback = React.useCallback(getHubUser, []);
+
+  React.useEffect(() => {
+    let sub;
+    (async () => {
+      const user = await getHubUserCallback();
+      const mailboxId = await user.getMailboxID();
+      const callback = async (reply?: any, err?: Error) => {
+        if (err) {
+          return logError('messaging-app.watchInbox', err);
+        }
+        if (!reply?.message) return;
+        const messageIds = messages.map(message => message.id);
+        // @TODO: ensure it filters only conversation messages
+        if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
+          fetchMessagesCallback();
+        }
+      };
+      sub = user.watchInbox(mailboxId, callback);
+    })();
+    return () => sub.close();
+  }, [getHubUserCallback, fetchMessagesCallback, pubKey, messages]);
 
   return (
     <BasicCardBox style={{ maxHeight: '92vh' }}>
@@ -150,50 +166,51 @@ const ChatPage = (props: RootComponentProps) => {
         </Text>
       </Box>
       <Box pad="small">
-        <ChatArea
-          headerElement={
-            <ChatAreaHeader
-              name={profileDataReq.data?.name}
-              userName={profileDataReq.data?.userName}
-              avatar={profileDataReq.data?.avatar}
-              ethAddress={profileDataReq.data?.ethAddress}
-              onClickAvatar={handleProfileClick}
-            />
-          }
-          bodyElement={
-            <ChatList
-              emptyChatLabel={t('Start by saying hello! 👋🏼')}
-              loggedUserEthAddress={loginState?.ethAddress}
-              itemCard={
-                <BubbleCard
-                  locale="en"
-                  youLabel={t('You')}
-                  handleMentionClick={handleMentionClick}
-                  handleTagClick={handleTagClick}
-                  handleLinkClick={handleLinkClick}
-                />
-              }
-              chatArr={messages || []}
-            />
-          }
-          editorElement={
-            <ChatEditor
-              showAvatar={false}
-              ethAddress={loginState?.ethAddress}
-              postLabel={t('Send')}
-              placeholderLabel={t('Message')}
-              emojiPlaceholderLabel={t('Search')}
-              disablePublishLabel={t('Authenticating')}
-              disablePublish={disablePublishing}
-              onPublish={handleSendMessage}
-              getMentions={handleMentionQueryChange}
-              getTags={handleTagQueryChange}
-              tags={tagQueryReq.data}
-              mentions={mentionQueryReq.data}
-              uploadRequest={uploadMediaToTextile}
-            />
-          }
-        />
+        <Box
+          width="100%"
+          background="convoAreaBackground"
+          round={{ size: 'small' }}
+          border={{ side: 'all', size: '1px', color: 'border' }}
+        >
+          <ChatAreaHeader
+            name={profileDataReq.data?.name}
+            userName={profileDataReq.data?.userName}
+            avatar={profileDataReq.data?.avatar}
+            ethAddress={profileDataReq.data?.ethAddress}
+            onClickAvatar={handleProfileClick}
+          />
+
+          <ChatList
+            emptyChatLabel={t('Start by saying hello! 👋🏼')}
+            loggedUserEthAddress={loginState?.ethAddress}
+            itemCard={
+              <BubbleCard
+                locale="en"
+                youLabel={t('You')}
+                handleMentionClick={handleMentionClick}
+                handleTagClick={handleTagClick}
+                handleLinkClick={handleLinkClick}
+              />
+            }
+            chatArr={messages || []}
+          />
+
+          <ChatEditor
+            showAvatar={false}
+            ethAddress={loginState?.ethAddress}
+            postLabel={t('Send')}
+            placeholderLabel={t('Message')}
+            emojiPlaceholderLabel={t('Search')}
+            disablePublishLabel={t('Authenticating')}
+            disablePublish={disablePublishing}
+            onPublish={handleSendMessage}
+            getMentions={handleMentionQueryChange}
+            getTags={handleTagQueryChange}
+            tags={tagQueryReq.data}
+            mentions={mentionQueryReq.data}
+            uploadRequest={uploadMediaToTextile}
+          />
+        </Box>
       </Box>
     </BasicCardBox>
   );

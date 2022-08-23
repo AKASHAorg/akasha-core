@@ -19,7 +19,7 @@ import EmbedBox from '../EmbedBox';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
-import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
+import { StyledBox, StyledEditable, StyledIconDiv, StyledPublishButton } from './styled-editor-box';
 import { ImageData, ImageUpload } from './image-upload';
 import Button from '../Button';
 import { MentionPopover } from './mention-popover';
@@ -283,7 +283,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const textContent: string = serializeToPlainText({ children: slateContent });
     const data = { metadata, slateContent, textContent, author: ethAddress };
     onPublish(data);
-    setEditorState(editorDefaultValue);
+    editor.children = editorDefaultValue;
+    editor.onChange();
   };
 
   /**
@@ -674,7 +675,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           {showCancelButton && (
             <Button secondary={true} label={cancelButtonLabel} onClick={onCancelClick} />
           )}
-          <Button
+          <StyledPublishButton
             primary={true}
             icon={disablePublish ? <Icon type="loading" color="white" /> : null}
             label={disablePublish ? disablePublishLabel : postLabel}

@@ -25,7 +25,7 @@ const ChatEditor: React.FC<Omit<IEditorBox, 'setEditorState'>> = props => {
     editorState,
   } = props;
 
-  const [contentState, setContentState] = React.useState(editorState ?? editorDefaultValue);
+  const [contentState, setContentState] = React.useState(editorState || editorDefaultValue);
 
   return (
     <Box

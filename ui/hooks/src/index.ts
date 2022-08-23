@@ -1,5 +1,6 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import constants from './constants';
+import { logError } from './utils/error-handler';
 import { createPendingEntry, mapEntry } from './utils/entry-utils';
 import { getMediaUrl, uploadMediaToTextile, getLinkPreview } from './utils/media-utils';
 import useGlobalLogin from './use-global-login';
@@ -131,6 +132,8 @@ export {
   withProviders,
   ThemeWrapper,
   useReasons,
+  // error-utils
+  logError,
   // entry-utils
   createPendingEntry,
   mapEntry,
