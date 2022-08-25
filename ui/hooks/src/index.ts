@@ -63,7 +63,7 @@ import {
   useSignUp,
 } from './use-login';
 import { useLegalDoc } from './use-legal';
-import { useIsFollowingMultiple, useFollow, useUnfollow } from './use-follow';
+import { useIsFollowingMultiple, useIsContactMultiple, useFollow, useUnfollow } from './use-follow';
 import {
   useComment,
   useInfiniteComments,
@@ -202,6 +202,7 @@ export {
   useLegalDoc,
   // use-follow
   useIsFollowingMultiple,
+  useIsContactMultiple,
   useFollow,
   useUnfollow,
   // use-comments

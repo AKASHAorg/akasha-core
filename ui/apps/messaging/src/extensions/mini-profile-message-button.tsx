@@ -4,19 +4,40 @@ import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { ThemeWrapper, useAnalytics, withProviders } from '@akashaorg/ui-awf-hooks';
+import {
+  ThemeWrapper,
+  useAnalytics,
+  withProviders,
+  useGetLogin,
+  useIsContactMultiple,
+} from '@akashaorg/ui-awf-hooks';
 
 const { Icon, Button } = DS;
 
 const MessageButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
-  const [analyticsActions] = useAnalytics();
 
   const { t } = useTranslation('app-messaging');
 
-  const handleClick = () => {
-    const { pubKey } = extensionData;
+  const [analyticsActions] = useAnalytics();
 
+  const { pubKey } = extensionData;
+
+  const loginQuery = useGetLogin();
+  const loggedUserPubKey = loginQuery.data?.pubKey;
+
+  // if (!validateType(pubKey, 'string')) {
+  //   return;
+  // }
+
+  const isContactReq = useIsContactMultiple(loggedUserPubKey, [pubKey as string]);
+  const contactList = isContactReq.data;
+
+  const isContact = React.useMemo(() => {
+    return contactList.includes(pubKey as string);
+  }, [contactList, pubKey]);
+
+  const handleClick = () => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.MESSAGING,
       action: 'message-button-click',
@@ -30,10 +51,11 @@ const MessageButton = (props: RootExtensionProps) => {
 
   return (
     <Button
-      icon={<Icon type="email" />}
+      icon={<Icon type="email" accentColor={true} />}
       label={t('Message')}
       onClick={handleClick}
       slimBorder={true}
+      disabled={!isContact}
       fill={true}
     />
   );

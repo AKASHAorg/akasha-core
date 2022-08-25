@@ -94,7 +94,7 @@
     "rimraf": "3.0.2",
     "rxjs": "7.3.0",
     "source-map-loader": "3.0.0",
-    "styled-components": "5.3.1",
+    "styled-components": "5.3.5",
     "systemjs-webpack-interop": "2.3.7",
     "ts-jest": "27.1.3",
     "ts-loader": "9.2.5",

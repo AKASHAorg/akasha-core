@@ -72,8 +72,8 @@ const InboxPage = (props: SettingsPageProps) => {
         justify="between"
       >
         <Text weight={'bold'}>{t('Message storage')}</Text>
-        {!storageUsed && <TextLine title="textileStorage" animated={false} width="80px" />}
-        {storageUsed && (
+        {!storageTotal && <TextLine title="textileStorage" animated={false} width="80px" />}
+        {storageTotal && (
           <Text>{`${convertFromBytes(storageUsed)} of ${convertFromBytes(
             storageTotal,
           )} used`}</Text>

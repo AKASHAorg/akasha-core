@@ -4,22 +4,38 @@ import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { I18nextProvider } from 'react-i18next';
-import { ThemeWrapper, useAnalytics, withProviders } from '@akashaorg/ui-awf-hooks';
+import {
+  ThemeWrapper,
+  useAnalytics,
+  useLogin,
+  withProviders,
+  useIsContactMultiple,
+} from '@akashaorg/ui-awf-hooks';
 
 const { Icon, Button, styled } = DS;
 
 const StyledButton = styled(Button)`
   display: flex;
   align-items: center;
+  border: 1px solid ${props => props.theme.colors.accentColor};
 `;
 
 const MessageIconButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
   const [analyticsActions] = useAnalytics();
+  const { pubKey } = extensionData;
+
+  const loginQuery = useLogin();
+  const loggedUserPubKey = loginQuery.data?.pubKey;
+
+  const isContactReq = useIsContactMultiple(loggedUserPubKey, [pubKey as string]);
+  const contactList = isContactReq.data;
+
+  const isContact = React.useMemo(() => {
+    return contactList.includes(pubKey as string);
+  }, [contactList, pubKey]);
 
   const handleClick = () => {
-    const { pubKey } = extensionData;
-
     analyticsActions.trackEvent({
       category: AnalyticsCategories.MESSAGING,
       action: 'message-button-click',
@@ -33,10 +49,10 @@ const MessageIconButton = (props: RootExtensionProps) => {
 
   return (
     <StyledButton
-      primary={true}
-      icon={<Icon type="email" />}
+      icon={<Icon type="email" accentColor={true} />}
       onClick={handleClick}
       slimBorder={true}
+      disabled={!isContact}
     />
   );
 };

@@ -2,7 +2,8 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { LoginState, useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
+import { LoginState, useFollowers, useFollowing, logError } from '@akashaorg/ui-awf-hooks';
+import { getHubUser } from '../../api/message';
 
 const { BasicCardBox, Box, Icon, Text, MessageAppMiniCard } = DS;
 
@@ -74,6 +75,32 @@ const InboxPage: React.FC<InboxPageProps> = props => {
     setPinnedConvos(newData);
   };
 
+  const getHubUserCallback = React.useCallback(getHubUser, []);
+
+  React.useEffect(() => {
+    let sub;
+    (async () => {
+      const user = await getHubUserCallback();
+      const mailboxId = await user.getMailboxID();
+      const callback = async (reply?: any, err?: Error) => {
+        if (err) {
+          return logError('messaging-app.watchInbox', err);
+        }
+        if (!reply?.message) return;
+        if (reply.message.readAt === 0) {
+          const pubKey = reply.message.from;
+          if (pubKey !== loginState.pubKey) {
+            localStorage.setItem(`Unread chat ${pubKey}`, pubKey);
+          }
+        }
+      };
+      sub = user.watchInbox(mailboxId, callback);
+    })();
+    return () => {
+      if (sub) return sub.close();
+    };
+  }, [getHubUserCallback, loginState]);
+
   const handleCardClick = (pubKey: string) => {
     props.plugins.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
@@ -122,7 +149,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                       unpinConvoLabel={t('Unpin Conversation')}
                       hideBottomBorder={idx !== 0 && idx === pinnedContacts.length - 1}
                       isPinned={true}
-                      isRead={false}
+                      isRead={!localStorage.getItem(`Unread chat ${contact.pubKey}`)}
                       senderName={contact?.name}
                       senderUsername={contact?.userName}
                       senderAvatar={contact?.avatar}
@@ -148,9 +175,9 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                   locale="en"
                   pinConvoLabel={t('Pin Conversation')}
                   unpinConvoLabel={t('Unpin Conversation')}
-                  hideBottomBorder={idx !== 0 && idx === unpinnedContacts.length - 1}
+                  hideBottomBorder={idx === unpinnedContacts.length - 1}
                   isPinned={false}
-                  isRead={false}
+                  isRead={!localStorage.getItem(`Unread chat ${contact.pubKey}`)}
                   senderName={contact?.name}
                   senderUsername={contact?.userName}
                   senderAvatar={contact?.avatar}

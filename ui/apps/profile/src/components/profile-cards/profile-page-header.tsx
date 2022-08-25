@@ -123,6 +123,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
+        pubKey: profileData?.pubKey,
       },
     });
   };

@@ -83,6 +83,7 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
       onClick={onClickCard}
       style={{ cursor: 'pointer' }}
       border={hideBottomBorder ? { side: 'top' } : { side: 'horizontal' }}
+      background={isRead ? 'cardBackground' : 'activePanelBackground'}
     >
       <Box direction="row" justify="between">
         <Box direction="row" align="start">
