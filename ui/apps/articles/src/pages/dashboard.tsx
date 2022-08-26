@@ -71,24 +71,26 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
         onIconClick={handleIconClick}
         onClickWriteArticle={handleClickWriteArticle}
       />
-      {articles.map((article, idx) => (
-        <ArticlesMiniCard
-          key={idx}
-          articleData={article}
-          readTimeLabel={t('min read')}
-          copyrightLabel={t('copyrighted')}
-          mentionsLabel={t('Mentions')}
-          repliesLabel={t('Replies')}
-          isSaved={idx === 0}
-          saveLabel={t('Save')}
-          savedLabel={t('Saved')}
-          onClickArticle={handleClickArticle}
-          onClickTopic={handleClickTopic}
-          onMentionsClick={handleMentionsClick}
-          onRepliesClick={handleRepliesClick}
-          onSaveClick={handleSaveClick}
-        />
-      ))}
+      {articles
+        .filter(article => article.isPublished)
+        .map((article, idx) => (
+          <ArticlesMiniCard
+            key={idx}
+            articleData={article}
+            readTimeLabel={t('min read')}
+            copyrightLabel={t('copyrighted')}
+            mentionsLabel={t('Mentions')}
+            repliesLabel={t('Replies')}
+            isSaved={idx === 0}
+            saveLabel={t('Save')}
+            savedLabel={t('Saved')}
+            onClickArticle={handleClickArticle}
+            onClickTopic={handleClickTopic}
+            onMentionsClick={handleMentionsClick}
+            onRepliesClick={handleRepliesClick}
+            onSaveClick={handleSaveClick}
+          />
+        ))}
     </Box>
   );
 };

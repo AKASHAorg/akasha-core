@@ -61,7 +61,6 @@ const StepThree: React.FC<IStepThreeProps> = props => {
                 vertical: '1.5px',
               }}
               border={{ color: selectedTopics.includes(topic) ? 'accentText' : 'secondaryText' }}
-              style={{ cursor: 'pointer' }}
               onClick={onClickTopic(topic)}
             >
               <Text color={selectedTopics.includes(topic) ? 'primaryText' : 'secondaryText'}>
