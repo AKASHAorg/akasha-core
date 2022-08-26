@@ -12,10 +12,6 @@ const { Box, Icon, MainAreaCardBox, Text } = DS;
 
 const ArticleEditor: React.FC<RootComponentProps> = () => {
   const [fontColor] = React.useState('blue');
-  const [title] = React.useState<string>('This is my title');
-  const [content] = React.useState<string>(
-    'Today we want to share with you amazing news about AKASHA',
-  );
 
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
@@ -73,12 +69,10 @@ const ArticleEditor: React.FC<RootComponentProps> = () => {
         }}
       />
       <ArticleEditorCard
-        titleValue={title}
-        contentValue={content}
         collaboratingLabel={t('Collaborating')}
         saveDraftLabel={t('Save draft')}
         publishLabel={t('Publish')}
-        canPublish={title.length > 0 && content.length > 0}
+        canPublish={true}
         onSaveDraft={handleSaveDraft}
         onPublish={handlePublish}
       />
