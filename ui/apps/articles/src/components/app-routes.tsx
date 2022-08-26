@@ -12,9 +12,11 @@ import ArticlePage from '../pages/article';
 import MyArticles from '../pages/my-articles';
 import ArticleSettingsPage from '../pages/settings';
 import ArticleEditor from '../pages/article-editor';
+import ArticleCardSettingsPage from '../pages/article-card-settings';
 
 import routes, {
   ARTICLE,
+  ARTICLE_SETTINGS,
   HOME,
   MY_ARTICLES,
   ONBOARDING_STEP_ONE,
@@ -83,6 +85,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route path={routes[SETTINGS]} element={<ArticleSettingsPage {...props} />} />
 
           <Route path={routes[ARTICLE]} element={<ArticlePage {...props} />} />
+
+          <Route path={routes[ARTICLE_SETTINGS]} element={<ArticleCardSettingsPage {...props} />} />
 
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
