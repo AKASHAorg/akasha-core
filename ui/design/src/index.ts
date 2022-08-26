@@ -4,16 +4,18 @@ import {
   Box,
   BoxExtendedProps,
   ButtonExtendedProps,
+  Carousel,
+  FormField,
   Grid,
-  Image,
   Grommet,
   grommet,
-  ResponsiveContext,
-  ThemeContext,
-  Text,
-  Carousel,
   Heading,
+  Image,
   RadioButtonGroup,
+  ResponsiveContext,
+  Text,
+  TextArea,
+  ThemeContext,
 } from 'grommet';
 
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
@@ -50,6 +52,7 @@ import {
 
 import BoxFormCard from './components/BoxFormCard';
 import EnsFormCard from './components/EnsFormCard';
+import ImageCropper from './components/ImageCropper';
 
 import NotificationsCard from './components/NotificationCard';
 
@@ -186,6 +189,7 @@ import { formatImageSrc } from './utils/image-utils';
 import { isBase64, truncateMiddle } from './utils/string-utils';
 import { formatRelativeTime } from './utils/time';
 import useIntersectionObserver from './utils/intersection-observer';
+import getCroppedImage from './utils/get-cropped-image';
 
 /* Themes and theme related utils */
 import darkTheme from './styles/themes/dark';
@@ -237,6 +241,7 @@ const exported = {
   ReadOnlyEditor,
   BoxFormCard,
   EnsFormCard,
+  ImageCropper,
   Heading,
   MiniInfoWidgetCard,
   ProfileCard,
@@ -276,6 +281,7 @@ const exported = {
   SubtitleTextIcon,
   Sidebar,
   Text,
+  TextArea,
   TextIcon,
   LinkInput,
   Topbar,
@@ -283,6 +289,7 @@ const exported = {
   darkTheme,
   lightTheme,
   Box,
+  FormField,
   Grid,
   Image,
   Grommet,
@@ -302,6 +309,7 @@ const exported = {
   truncateMiddle,
   formatImageSrc,
   formatRelativeTime,
+  getCroppedImage,
   useIntersectionObserver,
   WidgetAreaCardBox,
   ModalCard,

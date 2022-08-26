@@ -18,13 +18,12 @@ import { ActionButtonsSection } from './sections/ActionButtonsSection';
 import { UsernameInputSection } from './sections/UsernameInputSection';
 
 import Icon from '../Icon';
+import { CropValue, StyledCropperImageWrapper, StyledZoomControlBox } from '../ImageCropper';
 import { FormImagePopover } from '../ImagePopover/form-image-popover';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 import getCroppedImage from '../../utils/get-cropped-image';
-
-import { StyledCropperImageWrapper, StyledZoomControlBox } from './styled-form-card';
 
 export interface IBoxFormCardProps {
   className?: string;
@@ -91,8 +90,6 @@ export interface IFormValues {
 export type CroppableFields =
   | ProfileProviderProperties.AVATAR
   | ProfileProviderProperties.COVER_IMAGE;
-
-export type CropValue = { x: number; y: number };
 
 const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const {
@@ -351,6 +348,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const closeCoverImagePopover = () => {
     setCoverImagePopoverOpen(false);
   };
+
   // @Todo: update this after ts-jest migration to ESM
   const handleImageInsert =
     (imageKey: string) => (src: Blob | { url?: string; fallbackUrl?: string }, isUrl: boolean) => {
