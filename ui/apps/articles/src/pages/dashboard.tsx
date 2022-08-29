@@ -47,7 +47,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
 
   const handleClickTopic = (topic: string) => () => {
     /** do something */
-    console.log(topic);
+    topic;
   };
 
   const handleMentionsClick = () => {

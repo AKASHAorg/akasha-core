@@ -22,7 +22,7 @@ const ArticlePage: React.FC<RootComponentProps> = () => {
 
   const handleClickTopic = (topic: string) => () => {
     /** do something */
-    console.log(topic);
+    topic;
   };
 
   const handleMentionsClick = () => {

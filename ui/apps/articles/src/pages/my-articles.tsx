@@ -42,8 +42,8 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   };
 
   const handleClickTopic = (topic: string) => () => {
-    /** do something */
-    console.log(topic);
+    /** do something with */
+    topic;
   };
 
   const handleMentionsClick = () => {

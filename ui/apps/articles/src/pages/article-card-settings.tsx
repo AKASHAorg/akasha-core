@@ -8,7 +8,10 @@ import { CropValue } from '@akashaorg/design-system/lib/components/ImageCropper'
 import ArticleCardSettings, {
   CardFormValues,
   KeyPressEvent,
+  MAX_CHARS,
 } from '../components/article-card-settings';
+
+import { licences } from '../utils/licenses';
 
 const { getCroppedImage } = DS;
 
@@ -25,6 +28,7 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
   const [coverImageSrc, setCoverImageSrc] =
     React.useState<{ url?: string; fallbackUrl?: string }>(null);
 
+  const [charCount, setCharCount] = React.useState<number>(0);
   const [formValues, setFormValues] = React.useState<CardFormValues>({
     coverImage: { src: { url: '', fallbackUrl: '' }, prefix: null, isUrl: false },
     description: '',
@@ -36,6 +40,11 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
   const coverImageInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const { t } = useTranslation('app-articles');
+
+  // extract and translate licenses
+  const licensesArr = licences.map(license =>
+    t('{{licenseLabel}}', { licenseLabel: license.label }),
+  );
 
   // predefined zoom values
   const minZoom = 1;
@@ -141,7 +150,14 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
   };
 
   const handleDescriptiveTextChange = (value: string) => {
-    setFormValues({ ...formValues, description: value });
+    // get number of typed characters
+    const _charCount = value.split('').length;
+
+    if (_charCount <= MAX_CHARS) {
+      setFormValues({ ...formValues, description: value });
+      setCharCount(_charCount);
+    }
+    return;
   };
 
   const handleTagInputChange = (value: string) => {
@@ -173,6 +189,10 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
     const filtered = formValues.tags.filter(_tag => _tag !== tag);
 
     setFormValues({ ...formValues, tags: filtered });
+  };
+
+  const handleSelectLicense = (license: string) => {
+    setFormValues({ ...formValues, license });
   };
 
   const handleSaveDraft = () => {
@@ -210,7 +230,8 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
       coverImagePlaceholder={t('Your cover image will appear here')}
       addDescriptiveTextLabel={t('Add descriptive text')}
       descriptiveTextSubtitleLabel={t('The preview text of the article')}
-      descriptiveTextPlaceholder={t('Describe your article in a few words (max. 100 words)')}
+      descriptiveTextPlaceholder={t('Describe your article in a few words (max. 96 chars)')}
+      charCount={charCount}
       tagsLabel={t('Tags')}
       tagsSubtitleLabel={t('Add some tags to make your article easy to find and categorized.')}
       tagPlaceholder={t('Your tags go here. Press space or enter key to add')}
@@ -218,6 +239,11 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
       licenseSubtitleLabel={t(
         'Based on the license chosen, it will prevent others from copying your article without your permission',
       )}
+      licensesArr={licensesArr}
+      selectLicensePlaceholder={t('Select your license type')}
+      selectedLicenseDescriptionArr={
+        licences.find(el => el.label === formValues.license)?.description
+      }
       saveDraftLabel={t('Save Draft')}
       confirmLabel={t('Confirm')}
       onUploadClick={handleUploadClick}
@@ -232,6 +258,7 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
       onTagInputChange={handleTagInputChange}
       onTargetKeyPress={handleTargetKeyPress}
       onClickTag={handleTagClick}
+      onSelectLicense={handleSelectLicense}
       onClickSaveDraft={handleSaveDraft}
       onClickConfirm={handleConfirm}
     />

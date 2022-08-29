@@ -6,9 +6,9 @@ import DS from '@akashaorg/design-system';
 import { IImageSrc } from '@akashaorg/design-system/lib/components/BoxFormCard';
 import { IImageCropperProps } from '@akashaorg/design-system/lib/components/ImageCropper';
 
-import { StyledButton, StyledImageInput, StyledInput } from './styled';
+import { StyledButton, StyledImageInput, StyledInput, StyledTextArea } from './styled';
 
-const { Box, Icon, MainAreaCardBox, Text, FormField, TextArea, Image, ImageCropper } = DS;
+const { Box, EditorMeter, Icon, Image, ImageCropper, MainAreaCardBox, Select, Text } = DS;
 
 export type CardFormValues = {
   coverImage: IImageSrc | null;
@@ -24,6 +24,8 @@ export type KeyPressEvent = {
   target: EventTarget & { value?: string };
 };
 
+type LicenseDescription = { icon: string; text: string };
+
 export interface IArticleCardSettingsProps extends IImageCropperProps {
   formValues: CardFormValues;
   titleLabel: string;
@@ -37,11 +39,15 @@ export interface IArticleCardSettingsProps extends IImageCropperProps {
   addDescriptiveTextLabel: string;
   descriptiveTextSubtitleLabel: string;
   descriptiveTextPlaceholder: string;
+  charCount: number;
   tagsLabel: string;
   tagsSubtitleLabel: string;
   tagPlaceholder: string;
   licenseLabel: string;
   licenseSubtitleLabel: string;
+  licensesArr: string[];
+  selectLicensePlaceholder: string;
+  selectedLicenseDescriptionArr: LicenseDescription[];
   saveDraftLabel: string;
   confirmLabel: string;
   onUploadClick: () => void;
@@ -51,6 +57,7 @@ export interface IArticleCardSettingsProps extends IImageCropperProps {
   onTagInputChange: (value: string) => void;
   onTargetKeyPress: (ev: KeyPressEvent) => void;
   onClickTag: (tag: string) => () => void;
+  onSelectLicense: (license: string) => void;
   onClickSaveDraft: () => void;
   onClickConfirm: () => void;
 }
@@ -74,7 +81,7 @@ const InputWrapper: React.FC<{ children: React.ReactNode }> = props => {
   return (
     <Box
       fill="horizontal"
-      pad="small"
+      pad="xsmall"
       round="0.25rem"
       color="secondaryText"
       border={{ color: 'border' }}
@@ -84,6 +91,8 @@ const InputWrapper: React.FC<{ children: React.ReactNode }> = props => {
     </Box>
   );
 };
+
+export const MAX_CHARS = 96;
 
 const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
   const {
@@ -99,11 +108,15 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
     addDescriptiveTextLabel,
     descriptiveTextSubtitleLabel,
     descriptiveTextPlaceholder,
+    charCount,
     tagsLabel,
     tagsSubtitleLabel,
     tagPlaceholder,
     licenseLabel,
     licenseSubtitleLabel,
+    licensesArr,
+    selectLicensePlaceholder,
+    selectedLicenseDescriptionArr,
     saveDraftLabel,
     confirmLabel,
     onUploadClick,
@@ -113,6 +126,7 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
     onTagInputChange,
     onTargetKeyPress,
     onClickTag,
+    onSelectLicense,
     onClickSaveDraft,
     onClickConfirm,
   } = props;
@@ -219,19 +233,19 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
           {descriptiveTextSubtitleLabel}
         </Text>
         <InputWrapper>
-          <FormField name="description" htmlFor="article-card-settings-description">
-            <TextArea
-              resize={false}
-              size="large"
-              rows={3}
-              style={{ padding: 0 }}
-              id="article-card-settings-description"
-              name="description"
-              value={formValues.description}
-              onChange={ev => onDescriptiveTextChange(ev.target.value)}
-              placeholder={descriptiveTextPlaceholder}
-            />
-          </FormField>
+          <StyledTextArea
+            resize={false}
+            size="large"
+            rows={2}
+            id="article-card-settings-description"
+            name="description"
+            value={formValues.description}
+            onChange={ev => onDescriptiveTextChange(ev.target.value)}
+            placeholder={descriptiveTextPlaceholder}
+          />
+          <Box width="fit-content" alignSelf="end" margin={{ top: 'xsmall' }}>
+            <EditorMeter counter={charCount} maxValue={MAX_CHARS} />
+          </Box>
         </InputWrapper>
       </SectionWrapper>
       <SectionWrapper>
@@ -242,16 +256,14 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
           {tagsSubtitleLabel}
         </Text>
         <InputWrapper>
-          <FormField name="tag" htmlFor="article-card-settings-tag" margin={{ bottom: '0' }}>
-            <StyledInput
-              id="article-card-settings-tag"
-              name="tag"
-              value={formValues.newTag}
-              onChange={ev => onTagInputChange(ev.target.value)}
-              onKeyPress={ev => onTargetKeyPress(ev)}
-              placeholder={tagPlaceholder}
-            />
-          </FormField>
+          <StyledInput
+            id="article-card-settings-tag"
+            name="tag"
+            value={formValues.newTag}
+            onChange={ev => onTagInputChange(ev.target.value)}
+            onKeyPress={ev => onTargetKeyPress(ev)}
+            placeholder={tagPlaceholder}
+          />
         </InputWrapper>
         <Box direction="row" wrap={true} gap="xsmall">
           {formValues.tags.map((tag, idx) => (
@@ -280,6 +292,18 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
         <Text size="large" color="secondaryText">
           {licenseSubtitleLabel}
         </Text>
+        <Select
+          options={licensesArr}
+          value={formValues.license}
+          placeholder={selectLicensePlaceholder}
+          onChange={({ option }) => onSelectLicense(option)}
+        />
+        {selectedLicenseDescriptionArr &&
+          selectedLicenseDescriptionArr.map((el, idx) => (
+            <Text key={idx} size="medium" color="secondaryText">
+              {el.text}
+            </Text>
+          ))}
       </SectionWrapper>
       <Box direction="row" fill="horizontal" justify="end" align="center" pad="medium" gap="small">
         <StyledButton size="large" height={2.5} label={saveDraftLabel} onClick={onClickSaveDraft} />
