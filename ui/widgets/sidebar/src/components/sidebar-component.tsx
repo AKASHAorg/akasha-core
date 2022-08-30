@@ -54,6 +54,26 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const loginQuery = useGetLogin();
 
+  // const notificationPlugin: any = React.useMemo(() => {
+  //   if (props.plugins.notification) {
+  //     return props.plugins.notification;
+  //   }
+  //   return null;
+  // }, [props.plugins]);
+
+  // React.useEffect(() => {
+  //   if (notificationPlugin) {
+  //     notificationPlugin.listen('test_notif_domain', {
+  //       next: (data: any) => {
+  //         console.log('notification received', data);
+  //       },
+  //       error: err => {
+  //         console.log('notification error', err);
+  //       },
+  //     });
+  //   }
+  // }, [notificationPlugin]);
+
   // check for new notifcations
   const checkNotifsReq = useCheckNewNotifications(
     loginQuery.data.isReady && loginQuery.data.ethAddress,

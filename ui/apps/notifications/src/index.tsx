@@ -4,7 +4,9 @@ import {
   MenuItemAreaType,
   IntegrationRegistrationOptions,
   LogoTypeSource,
+  RootComponentProps,
 } from '@akashaorg/typings/ui';
+import { NotificationPlugin } from './plugins/notification-plugin';
 
 /**
  * All the plugins must export an object like this:
@@ -20,3 +22,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     subRoutes: [],
   },
 });
+
+export const getPlugin = async (props: RootComponentProps) => {
+  return {
+    notification: new NotificationPlugin(props),
+  };
+};
