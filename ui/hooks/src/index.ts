@@ -1,6 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import constants from './constants';
 import { logError } from './utils/error-handler';
+import { validateType } from './utils/generic-utils';
 import { createPendingEntry, mapEntry } from './utils/entry-utils';
 import { getMediaUrl, uploadMediaToTextile, getLinkPreview } from './utils/media-utils';
 import useGlobalLogin from './use-global-login';
@@ -132,6 +133,8 @@ export {
   withProviders,
   ThemeWrapper,
   useReasons,
+  // generic-utils
+  validateType,
   // error-utils
   logError,
   // entry-utils

@@ -24,7 +24,6 @@ describe('<MessageAppMiniCard /> Component', () => {
             isPinned={false}
             pinConvoLabel="Pin"
             unpinConvoLabel="Unpin"
-            latestChatTimestamp="2022-06-14T16:48:00.000Z"
             senderAvatar={{ url: 'https://placebeard.it/360x360' }}
             senderEthAddress="0x003410490050000320006570034567114572000"
             onClickCard={handleClickCard}

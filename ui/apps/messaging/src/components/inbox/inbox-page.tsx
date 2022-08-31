@@ -90,7 +90,15 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         if (reply.message.readAt === 0) {
           const pubKey = reply.message.from;
           if (pubKey !== loginState.pubKey) {
-            localStorage.setItem(`Unread chat ${pubKey}`, pubKey);
+            let unreadChats = [];
+            const unreadChatsStorage = localStorage.getItem('Unread Chats');
+            if (unreadChatsStorage) {
+              unreadChats = JSON.parse(unreadChatsStorage);
+            }
+            if (!unreadChats.includes(pubKey)) {
+              unreadChats.push(pubKey);
+            }
+            localStorage.setItem('Unread Chats', JSON.stringify(unreadChats));
           }
         }
       };
@@ -127,67 +135,65 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         <Text>
           {t('Write and send private, encrypted messages 🔐 to people in Ethereum World.')}
         </Text>
-        <Box border={{ color: 'border', side: 'all' }} round="small">
+        <Box border={{ color: 'border', side: 'all' }} round="small" overflow={'hidden'}>
           <Box pad={{ horizontal: 'small', vertical: 'medium' }}>
             <Text weight={'bold'} size="large">
               {t('Conversations')}
             </Text>
           </Box>
-          <Box overflow={'auto'}>
-            <Box>
-              {!!pinnedContacts.length && (
-                <>
-                  <Box pad="medium">
-                    <Text weight={'bold'}>{t('PINNED')}</Text>
-                  </Box>
-
-                  {pinnedContacts.map((contact, idx) => (
-                    <MessageAppMiniCard
-                      key={idx}
-                      locale="en"
-                      pinConvoLabel={t('Pin Conversation')}
-                      unpinConvoLabel={t('Unpin Conversation')}
-                      hideBottomBorder={idx !== 0 && idx === pinnedContacts.length - 1}
-                      isPinned={true}
-                      isRead={!localStorage.getItem(`Unread chat ${contact.pubKey}`)}
-                      senderName={contact?.name}
-                      senderUsername={contact?.userName}
-                      senderAvatar={contact?.avatar}
-                      senderEthAddress={contact?.ethAddress}
-                      onClickCard={() => handleCardClick(contact.pubKey)}
-                      onClickAvatar={() => handleAvatarClick(contact.pubKey)}
-                      onConvoPin={() => handlePinConversation(contact.pubKey)}
-                    />
-                  ))}
-                </>
-              )}
-            </Box>
-            <Box>
-              {!!pinnedContacts.length && (
+          <Box>
+            {!!pinnedContacts.length && (
+              <>
                 <Box pad="medium">
-                  <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>
+                  <Text weight={'bold'}>{t('PINNED')}</Text>
                 </Box>
-              )}
 
-              {unpinnedContacts?.map((contact, idx) => (
-                <MessageAppMiniCard
-                  key={idx}
-                  locale="en"
-                  pinConvoLabel={t('Pin Conversation')}
-                  unpinConvoLabel={t('Unpin Conversation')}
-                  hideBottomBorder={idx === unpinnedContacts.length - 1}
-                  isPinned={false}
-                  isRead={!localStorage.getItem(`Unread chat ${contact.pubKey}`)}
-                  senderName={contact?.name}
-                  senderUsername={contact?.userName}
-                  senderAvatar={contact?.avatar}
-                  senderEthAddress={contact?.ethAddress}
-                  onClickCard={() => handleCardClick(contact.pubKey)}
-                  onClickAvatar={() => handleAvatarClick(contact.pubKey)}
-                  onConvoPin={() => handlePinConversation(contact.pubKey)}
-                />
-              ))}
-            </Box>
+                {pinnedContacts.map((contact, idx) => (
+                  <MessageAppMiniCard
+                    key={idx}
+                    locale="en"
+                    pinConvoLabel={t('Pin Conversation')}
+                    unpinConvoLabel={t('Unpin Conversation')}
+                    hideBottomBorder={idx !== 0 && idx === pinnedContacts.length - 1}
+                    isPinned={true}
+                    isRead={!localStorage.getItem(`Unread chat ${contact.pubKey}`)}
+                    senderName={contact?.name}
+                    senderUsername={contact?.userName}
+                    senderAvatar={contact?.avatar}
+                    senderEthAddress={contact?.ethAddress}
+                    onClickCard={() => handleCardClick(contact.pubKey)}
+                    onClickAvatar={() => handleAvatarClick(contact.pubKey)}
+                    onConvoPin={() => handlePinConversation(contact.pubKey)}
+                  />
+                ))}
+              </>
+            )}
+          </Box>
+          <Box>
+            {!!pinnedContacts.length && (
+              <Box pad="medium">
+                <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>
+              </Box>
+            )}
+
+            {unpinnedContacts?.map((contact, idx) => (
+              <MessageAppMiniCard
+                key={idx}
+                locale="en"
+                pinConvoLabel={t('Pin Conversation')}
+                unpinConvoLabel={t('Unpin Conversation')}
+                hideBottomBorder={idx === unpinnedContacts.length - 1}
+                isPinned={false}
+                isRead={!localStorage.getItem(`Unread chat ${contact.pubKey}`)}
+                senderName={contact?.name}
+                senderUsername={contact?.userName}
+                senderAvatar={contact?.avatar}
+                senderEthAddress={contact?.ethAddress}
+                onClickCard={() => handleCardClick(contact.pubKey)}
+                onClickAvatar={() => handleAvatarClick(contact.pubKey)}
+                onConvoPin={() => handlePinConversation(contact.pubKey)}
+              />
+            ))}
           </Box>
         </Box>
       </Box>

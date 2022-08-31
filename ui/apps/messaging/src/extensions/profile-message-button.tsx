@@ -1,5 +1,6 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
+import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
@@ -12,18 +13,22 @@ import {
   useIsContactMultiple,
 } from '@akashaorg/ui-awf-hooks';
 
-const { Icon, Button, styled } = DS;
+const { Icon, Button, styled, Drop, Box, Text } = DS;
 
 const StyledButton = styled(Button)`
   display: flex;
   align-items: center;
-  border: 1px solid ${props => props.theme.colors.accentColor};
+  border: 1px solid ${props => props.theme.colors.accent};
 `;
 
 const MessageIconButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
+  const { t } = useTranslation('app-messaging');
   const [analyticsActions] = useAnalytics();
   const { pubKey } = extensionData;
+
+  const [showTooltip, setShowTooltip] = React.useState(false);
+  const btnRef = React.useRef(null);
 
   const loginQuery = useLogin();
   const loggedUserPubKey = loginQuery.data?.pubKey;
@@ -47,13 +52,42 @@ const MessageIconButton = (props: RootExtensionProps) => {
     });
   };
 
+  const handleShowTooltip = () => {
+    if (!isContact) {
+      setShowTooltip(!showTooltip);
+    }
+  };
+
   return (
-    <StyledButton
-      icon={<Icon type="email" accentColor={true} />}
-      onClick={handleClick}
-      slimBorder={true}
-      disabled={!isContact}
-    />
+    <>
+      <div ref={btnRef} onClick={handleShowTooltip}>
+        <StyledButton
+          icon={<Icon type="email" accentColor={true} />}
+          onClick={handleClick}
+          slimBorder={true}
+          disabled={!isContact}
+        />
+      </div>
+
+      {showTooltip && btnRef.current && (
+        <Drop
+          margin={{ top: '5px' }}
+          align={{ top: 'bottom' }}
+          target={btnRef.current}
+          onClickOutside={() => setShowTooltip(false)}
+        >
+          <Box
+            background="activePanelBackground"
+            round="xsmall"
+            pad="xsmall"
+            flex={{ shrink: 0 }}
+            width={{ min: '200px' }}
+          >
+            <Text>{t('You need to follow each other to start using the messaging app')}</Text>
+          </Box>
+        </Drop>
+      )}
+    </>
   );
 };
 

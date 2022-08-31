@@ -20,7 +20,6 @@ export interface IMessageAppMiniCardProps {
   hideBottomBorder?: boolean;
   pinConvoLabel: string;
   unpinConvoLabel: string;
-  latestChatTimestamp?: string;
   senderAvatar: IProfileData['avatar'];
   senderEthAddress: IProfileData['ethAddress'];
   onClickAvatar?: () => void;
@@ -39,7 +38,6 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
     hideBottomBorder,
     pinConvoLabel,
     unpinConvoLabel,
-    latestChatTimestamp,
     senderAvatar,
     senderEthAddress,
     onClickAvatar,
@@ -116,15 +114,6 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
           </Box>
         </Box>
         <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
-          <Text
-            size="large"
-            color="secondaryText"
-            alignSelf="center"
-            margin={{ right: 'xsmall' }}
-            style={{ lineHeight: 'initial' }}
-          >
-            {formatRelativeTime(latestChatTimestamp, locale)}
-          </Text>
           <IconDiv
             onClick={(ev: React.MouseEvent<HTMLDivElement>) => toggleMenuDrop(ev)}
             isActive={menuDropOpen}

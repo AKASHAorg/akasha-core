@@ -131,8 +131,10 @@ const ChatPage = (props: RootComponentProps) => {
       const unreadMessages = messages.filter(message => message.from === pubKey && !message.read);
       const unreadMessageIds = unreadMessages.map(message => message.id);
       markAsRead(unreadMessageIds);
-      if (localStorage.getItem(`Unread chat ${pubKey}`)) {
-        localStorage.removeItem(`Unread chat ${pubKey}`);
+      if (localStorage.getItem('Unread Chats')) {
+        const unreadChats = JSON.parse(localStorage.getItem('Unread Chats'));
+        const filteredChats = unreadChats.filter(unreadChat => unreadChat !== pubKey);
+        localStorage.setItem('Unread Chats', JSON.stringify(filteredChats));
       }
     }
   }, [messages, pubKey]);

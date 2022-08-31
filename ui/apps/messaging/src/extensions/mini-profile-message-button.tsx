@@ -10,9 +10,10 @@ import {
   withProviders,
   useGetLogin,
   useIsContactMultiple,
+  validateType,
 } from '@akashaorg/ui-awf-hooks';
 
-const { Icon, Button } = DS;
+const { Icon, Button, Box, Drop, Text } = DS;
 
 const MessageButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
@@ -23,14 +24,18 @@ const MessageButton = (props: RootExtensionProps) => {
 
   const { pubKey } = extensionData;
 
+  const [showTooltip, setShowTooltip] = React.useState(false);
+  const btnRef = React.useRef(null);
+
   const loginQuery = useGetLogin();
   const loggedUserPubKey = loginQuery.data?.pubKey;
 
-  // if (!validateType(pubKey, 'string')) {
-  //   return;
-  // }
+  const contactsToCheck = [];
+  if (validateType(pubKey, 'string')) {
+    contactsToCheck.push(pubKey);
+  }
 
-  const isContactReq = useIsContactMultiple(loggedUserPubKey, [pubKey as string]);
+  const isContactReq = useIsContactMultiple(loggedUserPubKey, contactsToCheck);
   const contactList = isContactReq.data;
 
   const isContact = React.useMemo(() => {
@@ -49,15 +54,44 @@ const MessageButton = (props: RootExtensionProps) => {
     });
   };
 
+  const handleShowTooltip = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    if (!isContact) {
+      setShowTooltip(!showTooltip);
+    }
+  };
+
   return (
-    <Button
-      icon={<Icon type="email" accentColor={true} />}
-      label={t('Message')}
-      onClick={handleClick}
-      slimBorder={true}
-      disabled={!isContact}
-      fill={true}
-    />
+    <>
+      <div ref={btnRef} onClick={handleShowTooltip}>
+        <Button
+          icon={<Icon type="email" accentColor={true} />}
+          label={t('Message')}
+          onClick={handleClick}
+          slimBorder={true}
+          disabled={!isContact}
+          fill={true}
+        />
+      </div>
+      {showTooltip && btnRef.current && (
+        <Drop
+          margin={{ top: '5px' }}
+          align={{ top: 'bottom' }}
+          target={btnRef.current}
+          onClickOutside={() => setShowTooltip(false)}
+        >
+          <Box
+            background="activePanelBackground"
+            round="xsmall"
+            pad="xsmall"
+            flex={{ shrink: 0 }}
+            width={{ min: '200px' }}
+          >
+            <Text>{t('You need to follow each other to start using the messaging app')}</Text>
+          </Box>
+        </Drop>
+      )}
+    </>
   );
 };
 
