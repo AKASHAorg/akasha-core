@@ -16,6 +16,7 @@ import {
   Select,
   Text,
   TextArea,
+  TextInput,
   ThemeContext,
 } from 'grommet';
 
@@ -283,6 +284,7 @@ const exported = {
   Sidebar,
   Text,
   TextArea,
+  TextInput,
   TextIcon,
   LinkInput,
   Topbar,
