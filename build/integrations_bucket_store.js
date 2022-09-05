@@ -203,6 +203,7 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
             return stream.Readable.from([manifestData.content]);
           }
         }], {
+        name: '[manifest]'+source.package.name,
         wrapWithDirectory: false
       });
     console.info("deployed: ", source.package.name, ipfsManifest.cid.toString(), web3ManifestCID, "\n");
