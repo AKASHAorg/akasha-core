@@ -1,10 +1,20 @@
-export const licences = [
+export type License = {
+  id: string;
+  label: string;
+  icon: string;
+  description: {
+    icon?: string;
+    text: string;
+  }[];
+};
+
+export const licences: License[] = [
   {
     id: '1',
     label: 'All rights reserved',
+    icon: 'licenseAllRights',
     description: [
       {
-        icon: 'copyright-1',
         text:
           'Others cannot copy, distribute, or perform your work without your' +
           ' permission (or as permitted by fair use).',
@@ -14,21 +24,30 @@ export const licences = [
   {
     id: '2',
     label: 'Some rights reserved',
+    icon: 'licenseSomeRights',
     description: [
-      { icon: 'copyright-2', text: 'There are some rights reserved with this licence.' },
+      {
+        text: 'There are some rights reserved with this licence.',
+      },
     ],
   },
   {
     id: '3',
     label: 'No rights reserved',
-    description: [{ icon: 'CCZERO', text: 'You will not have any rights.' }],
+    icon: 'licenseNoRights',
+    description: [
+      {
+        text: 'You will not have any rights.',
+      },
+    ],
   },
   {
     id: '4',
     label: 'Attribution',
+    icon: 'licenseSomeRights',
     description: [
       {
-        icon: 'CCBY',
+        icon: 'licenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
     ],
@@ -36,13 +55,14 @@ export const licences = [
   {
     id: '5',
     label: 'Attribution, no derivatives',
+    icon: 'licenseSomeRights',
     description: [
       {
-        icon: 'CCBY',
+        icon: 'licenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        icon: 'CCND',
+        icon: 'licenseNoDerivatives',
         text: 'Others can only distribute non-derivative copies of your work.',
       },
     ],
@@ -50,13 +70,14 @@ export const licences = [
   {
     id: '6',
     label: 'Attribution, share-alike',
+    icon: 'licenseSomeRights',
     description: [
       {
-        icon: 'CCBY',
+        icon: 'licenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        icon: 'CCSA',
+        icon: 'licenseShareAlike',
         text: 'Others must distribute derivatives of your work under the same license.',
       },
     ],
@@ -64,13 +85,14 @@ export const licences = [
   {
     id: '7',
     label: 'Attribution, non-commercial',
+    icon: 'licenseSomeRights',
     description: [
       {
-        icon: 'CCBY',
+        icon: 'licenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        icon: 'CCNC',
+        icon: 'licenseNonCommercial',
         text: 'Others can use your work for non-commercial purposes only. ',
       },
     ],
@@ -78,17 +100,18 @@ export const licences = [
   {
     id: '8',
     label: 'Attribution, non-commercial, no-derivatives',
+    icon: 'licenseSomeRights',
     description: [
       {
-        icon: 'CCBY',
+        icon: 'licenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        icon: 'CCNC',
+        icon: 'licenseNonCommercial',
         text: 'Others can use your work for non-commercial purposes only. ',
       },
       {
-        icon: 'CCND',
+        icon: 'licenseNoDerivatives',
         text: 'Others can only distribute non-derivative copies of your work.',
       },
     ],
@@ -96,17 +119,18 @@ export const licences = [
   {
     id: '9',
     label: 'Attribution, non-commercial, share-alike',
+    icon: 'licenseSomeRights',
     description: [
       {
-        icon: 'CCBY',
+        icon: 'licenseAttribution',
         text: `Others can distribute, remix, and build upon your work as long as they credit you.`,
       },
       {
-        icon: 'CCNC',
+        icon: 'licenseNonCommercial',
         text: 'Others can use your work for non-commercial purposes only. ',
       },
       {
-        icon: 'CCSA',
+        icon: 'licenseShareAlike',
         text: 'Others must distribute derivatives of your work under the same license.',
       },
     ],
@@ -114,9 +138,9 @@ export const licences = [
   {
     id: '10',
     label: 'Creative Commons copyright waiver',
+    icon: 'licenseNoRights',
     description: [
       {
-        icon: 'CCZERO',
         text: 'You waive all your copyright and related rights in this work, worldwide.',
       },
     ],
@@ -124,9 +148,9 @@ export const licences = [
   {
     id: '11',
     label: 'Public Domain',
+    icon: 'licenseNoRights',
     description: [
       {
-        icon: 'CCPD',
         text: 'This work is already in the public domain and free of copyright restrictions.',
       },
     ],
