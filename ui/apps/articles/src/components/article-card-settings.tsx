@@ -6,7 +6,10 @@ import DS from '@akashaorg/design-system';
 import { IImageSrc } from '@akashaorg/design-system/lib/components/BoxFormCard';
 import { IImageCropperProps } from '@akashaorg/design-system/lib/components/ImageCropper';
 
-import { StyledButton, StyledImageInput, StyledInput, StyledTextArea } from './styled';
+import InputTags from './input-tags';
+
+import { License } from '../utils/licenses';
+import { StyledButton, StyledImageInput, StyledTextArea, StyledTextInput } from './styled';
 
 const { Box, EditorMeter, Icon, Image, ImageCropper, MainAreaCardBox, Select, Text } = DS;
 
@@ -21,10 +24,9 @@ export type CardFormValues = {
 export type KeyPressEvent = {
   key?: string;
   code?: string;
+  keyCode?: number;
   target: EventTarget & { value?: string };
 };
-
-type LicenseDescription = { icon: string; text: string };
 
 export interface IArticleCardSettingsProps extends IImageCropperProps {
   formValues: CardFormValues;
@@ -43,19 +45,21 @@ export interface IArticleCardSettingsProps extends IImageCropperProps {
   tagsLabel: string;
   tagsSubtitleLabel: string;
   tagPlaceholder: string;
+  tagSuggestions: string[];
   licenseLabel: string;
   licenseSubtitleLabel: string;
   licensesArr: string[];
   selectLicensePlaceholder: string;
-  selectedLicenseDescriptionArr: LicenseDescription[];
+  selectedLicense: License;
   saveDraftLabel: string;
   confirmLabel: string;
   onUploadClick: () => void;
   onCoverImageUpload: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   onClickEditImage: () => void;
   onDescriptiveTextChange: (value: string) => void;
+  onAddTag: (tag: string) => void;
   onTagInputChange: (value: string) => void;
-  onTargetKeyPress: (ev: KeyPressEvent) => void;
+  onTargetKeyDown: (ev: KeyPressEvent) => void;
   onClickTag: (tag: string) => () => void;
   onSelectLicense: (license: string) => void;
   onClickSaveDraft: () => void;
@@ -75,8 +79,8 @@ const SectionWrapper: React.FC<{ topBorderOnly?: boolean; children: React.ReactN
   );
 };
 
-const InputWrapper: React.FC<{ children: React.ReactNode }> = props => {
-  const { children } = props;
+const InputWrapper: React.FC<{ children: React.ReactNode; accentBorder?: boolean }> = props => {
+  const { children, accentBorder } = props;
 
   return (
     <Box
@@ -84,7 +88,7 @@ const InputWrapper: React.FC<{ children: React.ReactNode }> = props => {
       pad="xsmall"
       round="0.25rem"
       color="secondaryText"
-      border={{ color: 'border' }}
+      border={{ color: accentBorder ? 'accent' : 'border' }}
       margin={{ vertical: 'xsmall' }}
     >
       {children}
@@ -112,24 +116,28 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
     tagsLabel,
     tagsSubtitleLabel,
     tagPlaceholder,
+    tagSuggestions = [],
     licenseLabel,
     licenseSubtitleLabel,
     licensesArr,
     selectLicensePlaceholder,
-    selectedLicenseDescriptionArr,
+    selectedLicense,
     saveDraftLabel,
     confirmLabel,
     onUploadClick,
     onCoverImageUpload,
     onClickEditImage,
     onDescriptiveTextChange,
+    onAddTag,
     onTagInputChange,
-    onTargetKeyPress,
+    onTargetKeyDown,
     onClickTag,
     onSelectLicense,
     onClickSaveDraft,
     onClickConfirm,
   } = props;
+
+  const tagBoxRef = React.useRef();
 
   const navigate = useNavigate();
 
@@ -255,35 +263,24 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
         <Text size="large" color="secondaryText">
           {tagsSubtitleLabel}
         </Text>
-        <InputWrapper>
-          <StyledInput
-            id="article-card-settings-tag"
-            name="tag"
-            value={formValues.newTag}
-            onChange={ev => onTagInputChange(ev.target.value)}
-            onKeyPress={ev => onTargetKeyPress(ev)}
-            placeholder={tagPlaceholder}
-          />
-        </InputWrapper>
-        <Box direction="row" wrap={true} gap="xsmall">
-          {formValues.tags.map((tag, idx) => (
-            <Box
-              key={idx}
-              direction="row"
-              round="1rem"
-              gap="xxsmall"
-              margin={{ bottom: 'small' }}
-              pad={{
-                horizontal: 'xsmall',
-                vertical: '1.5px',
-              }}
-              border={{ color: 'secondaryText' }}
-              onClick={onClickTag(tag)}
-            >
-              <Text color="secondaryText">{tag}</Text>
+        <InputWrapper accentBorder={formValues.tags.length > 0}>
+          <Box direction="row" align="center" ref={tagBoxRef} wrap>
+            <InputTags values={formValues.tags} onClickTag={onClickTag} />
+            <Box flex margin="xxsmall" style={{ minWidth: '150px' }}>
+              <StyledTextInput
+                type="search"
+                plain
+                dropTarget={tagBoxRef.current}
+                placeholder={formValues.tags.length > 0 ? '' : tagPlaceholder}
+                suggestions={tagSuggestions}
+                onKeyDown={onTargetKeyDown}
+                onChange={(ev: { target: { value: string } }) => onTagInputChange(ev.target.value)}
+                value={formValues.newTag}
+                onSuggestionSelect={(event: { suggestion: string }) => onAddTag(event.suggestion)}
+              />
             </Box>
-          ))}
-        </Box>
+          </Box>
+        </InputWrapper>
       </SectionWrapper>
       <SectionWrapper topBorderOnly>
         <Text size="xlarge" weight="bold">
@@ -298,12 +295,27 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
           placeholder={selectLicensePlaceholder}
           onChange={({ option }) => onSelectLicense(option)}
         />
-        {selectedLicenseDescriptionArr &&
-          selectedLicenseDescriptionArr.map((el, idx) => (
-            <Text key={idx} size="medium" color="secondaryText">
-              {el.text}
-            </Text>
-          ))}
+        {selectedLicense && (
+          <Box
+            direction="row"
+            gap="xsmall"
+            align="center"
+            margin={{ top: 'small' }}
+            pad={{ horizontal: 'xsmall' }}
+          >
+            <Icon type={selectedLicense.icon} size="lg" accentColor={true} />
+            <Box gap="xxsmall">
+              {selectedLicense.description.map((el, idx) => (
+                <Box key={idx} direction="row" gap="xsmall">
+                  {el.icon && <Icon type={el.icon} size="sm" accentColor={true} />}
+                  <Text size="medium" color="secondaryText">
+                    {el.text}
+                  </Text>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
       </SectionWrapper>
       <Box direction="row" fill="horizontal" justify="end" align="center" pad="medium" gap="small">
         <StyledButton size="large" height={2.5} label={saveDraftLabel} onClick={onClickSaveDraft} />
