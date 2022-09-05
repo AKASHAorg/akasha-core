@@ -72,6 +72,13 @@ import italic from './italic';
 import key from './key';
 import legal from './legal';
 import licensewtfpl from './license-wtfpl';
+import licenseAllRights from './license-all-rights';
+import licenseAttribution from './license-attribution';
+import licenseNoDerivatives from './license-no-derivatives';
+import licenseNoRights from './license-no-rights';
+import licenseNonCommercial from './license-non-commercial';
+import licenseShareAlike from './license-share-alike';
+import licenseSomeRights from './license-some-rights';
 import link from './link';
 import listBulleted from './list-bulleted';
 import listNumbered from './list-numbered';
@@ -224,6 +231,13 @@ export {
   key,
   legal,
   licensewtfpl,
+  licenseAllRights,
+  licenseAttribution,
+  licenseNoDerivatives,
+  licenseNoRights,
+  licenseNonCommercial,
+  licenseShareAlike,
+  licenseSomeRights,
   link,
   listBulleted,
   listNumbered,

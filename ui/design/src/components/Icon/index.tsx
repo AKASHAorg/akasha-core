@@ -79,6 +79,13 @@ export type IconType =
   | 'info'
   | 'legal'
   | 'licensewtfpl'
+  | 'licenseAllRights'
+  | 'licenseAttribution'
+  | 'licenseNoDerivatives'
+  | 'licenseNoRights'
+  | 'licenseNonCommercial'
+  | 'licenseShareAlike'
+  | 'licenseSomeRights'
   | 'link'
   | 'listBulleted'
   | 'listNumbered'
@@ -223,6 +230,13 @@ export const iconTypes: IconType[] = [
   'key',
   'legal',
   'licensewtfpl',
+  'licenseAllRights',
+  'licenseAttribution',
+  'licenseNoDerivatives',
+  'licenseNoRights',
+  'licenseNonCommercial',
+  'licenseShareAlike',
+  'licenseSomeRights',
   'link',
   'listBulleted',
   'listNumbered',
