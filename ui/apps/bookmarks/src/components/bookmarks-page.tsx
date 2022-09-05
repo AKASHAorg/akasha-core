@@ -98,7 +98,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                 /* if next page, load more */
               }}
               getShareUrl={(itemId: string) =>
-                `${window.location.origin}/social-app/post/${itemId}`
+                `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
               }
               pages={[{ results: [...bookmarks.map((bm: Record<string, unknown>) => bm.entryId)] }]}
               requestStatus={bookmarksReq.status}

@@ -394,7 +394,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     disablePublishLabel={t('Authenticating')}
                     disablePublish={disablePublishing}
                     onPublish={handlePublishComment}
-                    linkPreview={entryData?.linkPreview}
                     getLinkPreview={getLinkPreview}
                     getMentions={handleMentionQueryChange}
                     getTags={handleTagQueryChange}
@@ -445,7 +444,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 itemType={EntityTypes.COMMENT}
                 onLoadMore={handleLoadMore}
                 getShareUrl={(itemId: string) =>
-                  `${window.location.origin}/social-app/post/${itemId}`
+                  `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
                 }
                 loginState={loginState}
                 navigateTo={navigateTo}

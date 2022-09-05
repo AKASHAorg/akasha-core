@@ -12,8 +12,8 @@ export interface IDetailCard {
   navigateTo: (args: NavigateToParams) => void;
 }
 
-export const BASE_SOCIAL_URL = '/social-app';
-export const BASE_PROFILE_URL = '/profile';
+export const BASE_SOCIAL_URL = '/@akashaorg/app-akasha-integration';
+export const BASE_PROFILE_URL = '/@akashaorg/app-profile';
 
 const { TransparencyLogDetailCard } = DS;
 

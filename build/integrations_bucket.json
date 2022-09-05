@@ -8,7 +8,7 @@
   {
     "name": "@akashaorg/app-akasha-integration",
     "id": "0x0f7b806cb610e298f4108f77c5454edafdd48a213ac6df2466816442b2814060",
-    "ipfsManifest": "f0155171c9c5c3417fc9b47d05b83c4451f11c2c5c186fb31d0ad51d049c11470",
+    "ipfsManifest": "f0155171c179ad4a5d5188dd7e27def32b2f4420235ca39934690f7afabee2adc",
     "type": 0
   },
   {
@@ -50,7 +50,7 @@
   {
     "name": "@akashaorg/app-profile",
     "id": "0x0c4ac6db8b99d1fbc682d27a80258d849b02ecb785ceaf082a0e4f6f4151b297",
-    "ipfsManifest": "f0155171cc64520863a8eaf9a8178659afb01a9640eca0e9ba59372bc16003995",
+    "ipfsManifest": "f0155171c1d32adc97e16a19ad685d3229962afdc5c9d09693f80200c612dd7d9",
     "type": 0
   },
   {
