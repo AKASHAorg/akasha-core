@@ -32,7 +32,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           modalSlotId={props.modalSlotId}
           loginState={props.loginState}
           itemType={props.itemType}
-          sharePostUrl={`${window.location.origin}/social-app/post/`}
+          sharePostUrl={`${window.location.origin}/@akashaorg/app-akasha-integration/post/`}
           locale={props.i18n?.languages[0] as ILocale}
           onEntryNavigate={handleEntryNavigate}
           navigateTo={props.navigateTo}

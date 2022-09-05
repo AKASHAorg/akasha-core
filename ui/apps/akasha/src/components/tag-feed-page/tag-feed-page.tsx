@@ -105,7 +105,9 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             logger={props.logger}
             onLoadMore={handleLoadMore}
             pages={postPages}
-            getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
+            getShareUrl={(itemId: string) =>
+              `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
+            }
             requestStatus={reqPosts.status}
             loginState={loginState}
             loggedProfile={loggedProfileData}

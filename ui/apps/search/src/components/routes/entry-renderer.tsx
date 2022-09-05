@@ -204,8 +204,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 style={{ height: 'auto', ...style }}
                 moderatedContentLabel={t('This content has been moderated')}
                 showMore={true}
-                profileAnchorLink={'/profile'}
-                repliesAnchorLink={'/social-app/post'}
+                profileAnchorLink={'/@akashaorg/app-profile'}
+                repliesAnchorLink={'/@akashaorg/app-akasha-integration/post'}
                 onRepost={handleRepost}
                 handleFollowAuthor={handleFollow}
                 handleUnfollowAuthor={handleUnfollow}
