@@ -483,7 +483,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                 subscribedTags={tagSubscriptionsState}
                 subscribeLabel={t('Subscribe')}
                 unsubscribeLabel={t('Unsubscribe')}
-                tagAnchorLink={'/social-app/tags'}
+                tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
                 onClickTag={() => handleTagClick(tag.name)}
                 handleSubscribeTag={handleTagSubscribe(true)}
                 handleUnsubscribeTag={handleTagSubscribe(false)}
@@ -507,7 +507,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               onTagClick={handleTagClick}
               contentClickable={true}
               locale={locale}
-              sharePostUrl={`${window.location.origin}/social-app/post/`}
+              sharePostUrl={`${window.location.origin}/@akashaorg/app-akasha-integration/post/`}
               moderatedContentLabel={t('This content has been moderated')}
               ctaLabel={t('See it anyway')}
               uiEvents={props.uiEvents}
@@ -533,7 +533,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
               onTagClick={handleTagClick}
               contentClickable={true}
               locale={locale}
-              sharePostUrl={`${window.location.origin}/social-app/post/`}
+              sharePostUrl={`${window.location.origin}/@akashaorg/app-akasha-integration/post/`}
               moderatedContentLabel={t('This content has been moderated')}
               ctaLabel={t('See it anyway')}
               uiEvents={props.uiEvents}
