@@ -8,7 +8,7 @@
   {
     "name": "@akashaorg/app-akasha-integration",
     "id": "0x0f7b806cb610e298f4108f77c5454edafdd48a213ac6df2466816442b2814060",
-    "ipfsManifest": "f0155171c179ad4a5d5188dd7e27def32b2f4420235ca39934690f7afabee2adc",
+    "ipfsManifest": "f0155171ceed1319b628dba898b848788c15853635a87cbf5e5a6e33d10e1b483",
     "type": 0
   },
   {
@@ -20,7 +20,7 @@
   {
     "name": "@akashaorg/app-moderation-ewa",
     "id": "0xb5353ae20a4ece1b430333820c5303ff86b3ef3b9662aa8c46f3c74adccf3c44",
-    "ipfsManifest": "f0155171cbe82e9ca595371c76f086f945ccae7c901c683e5a299e51c42eea7bc",
+    "ipfsManifest": "f0155171cdda6685eeab2d7e90350123cd1a60bd54ffeae5c760f81d199f5416f",
     "type": 0
   },
   {
@@ -32,7 +32,7 @@
   {
     "name": "@akashaorg/app-bookmarks",
     "id": "0x20dd2505b29183c28a411f6d70eed327214ce02efec798b3c56509d1d7ac829c",
-    "ipfsManifest": "f0155171cc8d3d2da3ff6b7590c9b302b4449262d358f027a13b90f2aaf4f7c99",
+    "ipfsManifest": "f0155171cb1c19f09b3fc0a51ed4722a1e39ad162fd37a4ad0481d2043f97f90a",
     "type": 0
   },
   {
@@ -44,19 +44,19 @@
   {
     "name": "@akashaorg/app-notifications",
     "id": "0xa97de836ff423f85cd82a60e3dd78b3213d6254e23e2a71a53c933df9527882d",
-    "ipfsManifest": "f0155171cf51a64418e70b426ad103759596e3846d1c66a21f3ad55d823302842",
+    "ipfsManifest": "f0155171c8483497c220d4155816d33c368729171eea7b732d4dfb4e66dfd4d50",
     "type": 0
   },
   {
     "name": "@akashaorg/app-profile",
     "id": "0x0c4ac6db8b99d1fbc682d27a80258d849b02ecb785ceaf082a0e4f6f4151b297",
-    "ipfsManifest": "f0155171c1d32adc97e16a19ad685d3229962afdc5c9d09693f80200c612dd7d9",
+    "ipfsManifest": "f0155171cb64bb098dd653756ddd80a173a2b984825acf58824b1d8b8d04690fc",
     "type": 0
   },
   {
     "name": "@akashaorg/app-search",
     "id": "0x9e8d1f1e86a3e25a0e5e13a3fef2758442135a6c4dc1dc3d2dce7fa24bf9a7f2",
-    "ipfsManifest": "f0155171c4ce14cff460faf39bb720020aa3c6819746393bd0589771e24a58f21",
+    "ipfsManifest": "f0155171c5626ea1ddd12f7f37ab21193dd853e77bab2807c18cde5330284304c",
     "type": 0
   },
   {
@@ -104,7 +104,7 @@
   {
     "name": "@akashaorg/ui-widget-trending",
     "id": "0xce1cab3c9a2a34d9ded2d01631cbeb0acb5a82d0334d053c84c92c225dc99709",
-    "ipfsManifest": "f0155171c13b19df392d8460cc1251c03bf1d29d3e6a603c75b7a7c6d9b9fd34d",
+    "ipfsManifest": "f0155171c2a1fb92cca0c5679fb9eab3b019ff873decf4a04de7a8b80588420a6",
     "type": 2
   },
   {
