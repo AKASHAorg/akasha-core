@@ -17,6 +17,7 @@ import ArticleCardSettingsPage from '../pages/article-card-settings';
 import routes, {
   ARTICLE,
   ARTICLE_SETTINGS,
+  EDIT_ARTICLE,
   HOME,
   MY_ARTICLES,
   ONBOARDING_STEP_ONE,
@@ -69,7 +70,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
           <Route path={routes[MY_ARTICLES]} element={<MyArticles {...props} />} />
 
-          <Route path={routes[WRITE_ARTICLE]} element={<ArticleEditor {...props} />} />
+          {[routes[WRITE_ARTICLE], routes[EDIT_ARTICLE]].map((path, idx) => (
+            <Route key={path + idx} path={path} element={<ArticleEditor {...props} />} />
+          ))}
 
           {[
             routes[ONBOARDING_STEP_ONE],
@@ -77,7 +80,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             routes[ONBOARDING_STEP_THREE],
           ].map((path, idx) => (
             <Route
-              key={path}
+              key={path + idx}
               path={path}
               element={<ArticlesOnboardingSteps {...props} activeIndex={idx} />}
             />

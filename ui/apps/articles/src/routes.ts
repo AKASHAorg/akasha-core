@@ -22,5 +22,5 @@ export default {
   [ARTICLE]: '/article/:id',
   [ARTICLE_SETTINGS]: '/article/:id/settings',
   [WRITE_ARTICLE]: '/write-article',
-  [EDIT_ARTICLE]: '/edit-article/:id',
+  [EDIT_ARTICLE]: '/article/:id/edit',
 };
