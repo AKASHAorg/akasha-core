@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import MiniHeader from '../components/mini-header';
@@ -12,12 +13,55 @@ import { articles } from '../components/dummy-data';
 
 const { Box } = DS;
 
-const ArticlePage: React.FC<RootComponentProps> = () => {
+export interface IArticlePageProps {
+  className?: string;
+}
+
+const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
+  const {
+    className,
+    plugins: { routing },
+  } = props;
+
+  const [menuDropOpen, setMenuDropOpen] = React.useState(false);
+
+  const loginQuery = useGetLogin();
+
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
 
+  const sampleArticleData = articles[0]; // fetch real article data by reading its id from url
+
   const handleClickIcon = () => {
     navigate(-1);
+  };
+
+  const closeMenuDrop = () => {
+    setMenuDropOpen(false);
+  };
+
+  const toggleMenuDrop = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
+    setMenuDropOpen(!menuDropOpen);
+  };
+
+  const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
+    if (action) {
+      routing.navigateTo({
+        appName: '@akashaorg/app-articles',
+        getNavigationUrl: () => `/article/${id}/${action}`,
+      });
+    }
+  };
+
+  const handleFlagArticle = (entryId: string, itemType: string) => () => {
+    if (!loginQuery.data?.pubKey) {
+      return props.navigateToModal({
+        name: 'login',
+        redirectTo: { name: 'report-modal', entryId, itemType },
+      });
+    }
+    props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
   const handleClickTopic = (topic: string) => () => {
@@ -28,20 +72,49 @@ const ArticlePage: React.FC<RootComponentProps> = () => {
   const handleMentionsClick = () => {
     /** do something */
   };
+
   const handleRepliesClick = () => {
     /** do something */
   };
+
   const handleSaveClick = () => {
     /** do something */
   };
 
+  const menutItems = [
+    ...(loginQuery.data?.pubKey === sampleArticleData.authorPubkey
+      ? [
+          {
+            icon: 'editSimple',
+            handler: handleDropItemClick(sampleArticleData.id, 'edit'),
+            label: t('Edit'),
+            iconColor: 'primaryText',
+          },
+          {
+            icon: 'settingsAlt',
+            handler: handleDropItemClick(sampleArticleData.id, 'settings'),
+            label: t('Settings'),
+            iconColor: 'primaryText',
+          },
+        ]
+      : [
+          {
+            icon: 'report',
+            handler: handleFlagArticle(sampleArticleData.id, 'article'),
+            label: t('Report'),
+          },
+        ]),
+  ];
+
   return (
-    <Box gap="small">
+    <Box gap="small" className={className}>
       <MiniHeader titleLabel={t('Articles')} onClickIcon={handleClickIcon} />
       <ArticleCard
-        articleData={articles[0]}
+        articleData={sampleArticleData}
         readTimeLabel={t('min read')}
         copyrightLabel={t('copyrighted article')}
+        menuDropOpen={menuDropOpen}
+        menuItems={menutItems}
         tagsLabel={t('tags')}
         collaboratorsLabel={t('collaborators')}
         mentionsLabel={t('Mentions')}
@@ -49,6 +122,8 @@ const ArticlePage: React.FC<RootComponentProps> = () => {
         isSaved={true}
         saveLabel={t('Save')}
         savedLabel={t('Saved')}
+        toggleMenuDrop={toggleMenuDrop}
+        closeMenuDrop={closeMenuDrop}
         onClickTopic={handleClickTopic}
         onMentionsClick={handleMentionsClick}
         onRepliesClick={handleRepliesClick}

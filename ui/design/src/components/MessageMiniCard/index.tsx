@@ -49,6 +49,7 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
 
   const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
   const showCardMenu = React.useMemo(
     () => !isMobileOnly && menuIconRef.current && menuDropOpen,
     [menuDropOpen],

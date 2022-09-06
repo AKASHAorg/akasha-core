@@ -127,7 +127,7 @@ export const articles: IArticleData[] = [
     replies: 8,
   },
   {
-    id: 'bbaryabc123zxcv7scxkfe32fce21ce2ce2rv',
+    id: 'bbaryabc123zxcv7scxkfe32fce21ce2ce2vr',
     authorAvatar: { url: '' },
     authorName: 'Usain Bolt',
     authorEthAddress: '0x',
@@ -190,7 +190,7 @@ export const articles: IArticleData[] = [
     replies: 8,
   },
   {
-    id: 'bbaryabc123zxcv7scxkfe32fce21ce2cer2v',
+    id: 'bbaryabc123zxcv7scxkfe32fce21ce2cerv2',
     authorAvatar: { url: '' },
     authorName: 'Usain Bolt',
     authorEthAddress: '0x',

@@ -1,9 +1,12 @@
 import React from 'react';
+import { isMobileOnly } from 'react-device-detect';
 
 import DS from '@akashaorg/design-system';
 import { IArticleData } from '@akashaorg/typings/ui';
+import { IMenuItem } from '@akashaorg/design-system/lib/components/MobileListModal';
 
-const { Avatar, Box, MainAreaCardBox, Icon, Image, StackedAvatar, Text } = DS;
+const { Avatar, Box, CardHeaderMenuDropdown, MainAreaCardBox, Icon, Image, StackedAvatar, Text } =
+  DS;
 
 export interface IArticlesMiniCardProps {
   articleData: IArticleData;
@@ -12,6 +15,8 @@ export interface IArticlesMiniCardProps {
   copyrightLabel?: string;
   lastUpdatedLabel?: string;
   draftLabel?: string;
+  menuDropOpen?: boolean;
+  menuItems?: IMenuItem[];
   collaboratingLabel?: string;
   mentionsLabel?: string;
   repliesLabel?: string;
@@ -19,6 +24,8 @@ export interface IArticlesMiniCardProps {
   saveLabel?: string;
   savedLabel?: string;
   onClickArticle?: (id: string) => () => void;
+  toggleMenuDrop?: (ev: React.SyntheticEvent, id?: string) => void;
+  closeMenuDrop?: () => void;
   onClickTopic?: (topic: string) => () => void;
   onMentionsClick?: () => void;
   onRepliesClick?: () => void;
@@ -33,6 +40,8 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     copyrightLabel,
     lastUpdatedLabel,
     draftLabel,
+    menuDropOpen,
+    menuItems,
     collaboratingLabel,
     mentionsLabel,
     repliesLabel,
@@ -40,11 +49,21 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     saveLabel,
     savedLabel,
     onClickArticle,
+    toggleMenuDrop,
+    closeMenuDrop,
     onClickTopic,
     onMentionsClick,
     onRepliesClick,
     onSaveClick,
   } = props;
+
+  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
+  const showCardMenu = React.useMemo(
+    () => !isMobileOnly && menuItems.length > 0 && menuIconRef.current && menuDropOpen,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [menuDropOpen],
+  );
 
   const userEthAddress = '0x003410490050000320006570034567114572000';
 
@@ -96,8 +115,21 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
             </Box>
           )}
           <Icon type="akasha" />
-          <Icon type="moreDark" style={{ cursor: 'pointer' }} />
+          <Icon
+            type="moreDark"
+            accentColor={menuDropOpen}
+            style={{ cursor: 'pointer' }}
+            ref={menuIconRef}
+            onClick={ev => toggleMenuDrop(ev, articleData.id)}
+          />
         </Box>
+        {showCardMenu && (
+          <CardHeaderMenuDropdown
+            target={menuIconRef.current}
+            onMenuClose={closeMenuDrop}
+            menuItems={menuItems}
+          />
+        )}
       </Box>
       <Box
         direction="row"

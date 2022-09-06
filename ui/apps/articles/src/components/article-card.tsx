@@ -1,11 +1,13 @@
 import React from 'react';
+import { isMobileOnly } from 'react-device-detect';
 
 import DS from '@akashaorg/design-system';
 
 import { IArticlesMiniCardProps } from '../components/articles-mini-card';
 import { userData } from './dummy-data';
 
-const { Avatar, Box, Icon, Image, MainAreaCardBox, StackedAvatar, Text } = DS;
+const { Avatar, Box, CardHeaderMenuDropdown, Icon, Image, MainAreaCardBox, StackedAvatar, Text } =
+  DS;
 
 export interface IArticleCardProps extends IArticlesMiniCardProps {
   tagsLabel: string;
@@ -18,17 +20,29 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
     tagsLabel,
     readTimeLabel,
     copyrightLabel,
+    menuDropOpen,
+    menuItems,
     collaboratorsLabel,
     mentionsLabel,
     repliesLabel,
     isSaved,
     saveLabel,
     savedLabel,
+    toggleMenuDrop,
+    closeMenuDrop,
     onClickTopic,
     onMentionsClick,
     onRepliesClick,
     onSaveClick,
   } = props;
+
+  const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
+
+  const showCardMenu = React.useMemo(
+    () => !isMobileOnly && menuItems.length > 0 && menuIconRef.current && menuDropOpen,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [menuDropOpen],
+  );
 
   return (
     <MainAreaCardBox margin={{ bottom: 'small' }}>
@@ -59,8 +73,21 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           </Box>
           <Box direction="row" gap="small">
             <Icon type="akasha" />
-            <Icon type="moreDark" style={{ cursor: 'pointer' }} />
+            <Icon
+              type="moreDark"
+              accentColor={menuDropOpen}
+              style={{ cursor: 'pointer' }}
+              ref={menuIconRef}
+              onClick={toggleMenuDrop}
+            />
           </Box>
+          {showCardMenu && (
+            <CardHeaderMenuDropdown
+              target={menuIconRef.current}
+              onMenuClose={closeMenuDrop}
+              menuItems={menuItems}
+            />
+          )}
         </Box>
       </Box>
       <Box

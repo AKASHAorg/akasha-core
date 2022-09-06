@@ -10,7 +10,13 @@ import ArticleEditorCard from '../components/article-editor-card';
 
 const { Box, Icon, MainAreaCardBox, Text } = DS;
 
-const ArticleEditor: React.FC<RootComponentProps> = () => {
+export interface IArticleEditorProps {
+  className?: string;
+}
+
+const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props => {
+  const { className } = props;
+
   const [fontColor] = React.useState('blue');
 
   const navigate = useNavigate();
@@ -33,7 +39,7 @@ const ArticleEditor: React.FC<RootComponentProps> = () => {
   };
 
   return (
-    <MainAreaCardBox>
+    <MainAreaCardBox className={className}>
       <Box direction="row" pad="medium" fill="horizontal">
         <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={handleClickIcon} />
         <Text size="xlarge" weight="bold">

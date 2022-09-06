@@ -39,6 +39,7 @@ import { EditorPlaceholder } from './components/EditorCard/editor-placeholder';
 import EntryCard from './components/EntryCard';
 import EntryList from './components/EntryList';
 import { EntryBox } from './components/EntryCard/entry-box';
+import CardHeaderMenuDropdown from './components/EntryCard/card-header-menu';
 import { MenuItemButton } from './components/EntryCard/menu-item-button';
 import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
 
@@ -237,6 +238,7 @@ const exported = {
   EditorPlaceholder,
   EditorModal,
   EntryBox,
+  CardHeaderMenuDropdown,
   EntryCard,
   EntryCardHidden,
   EntryCardLoading,
