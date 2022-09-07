@@ -8,7 +8,7 @@
     "@ensdomains/ens-contracts": "0.0.11",
     "@metamask/detect-provider": "1.2.0",
     "@openzeppelin/contracts": "4.6.0",
-    "@openzeppelin/contracts-upgradeable": "4.6.0",
+    "@openzeppelin/contracts-upgradeable": "4.7.3",
     "@textile/hub": "6.3.4",
     "@textile/threaddb": "0.2.2",
     "@toruslabs/openlogin": "2.0.1",
