@@ -60,6 +60,8 @@ export interface LinkPreview_Response {
   siteName: string;
   description: string;
   images: [string];
+  imagePreviewHash?: string;
+  faviconPreviewHash?: string;
 }
 
 export interface UserProfile_Response {

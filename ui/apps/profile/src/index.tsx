@@ -35,5 +35,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   },
   routes: {
     myProfile: routes[MY_PROFILE],
+    rootRoute: '',
   },
 });

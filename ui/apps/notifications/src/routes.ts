@@ -1,1 +1,1 @@
-export const rootRoute = '/notifications';
+export const rootRoute = '/@akashaorg/app-notifications';

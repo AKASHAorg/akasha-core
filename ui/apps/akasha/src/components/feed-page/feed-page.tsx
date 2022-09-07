@@ -150,7 +150,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         itemType={EntityTypes.ENTRY}
         pages={postPages}
         onLoadMore={handleLoadMore}
-        getShareUrl={(itemId: string) => `${window.location.origin}/social-app/post/${itemId}`}
+        getShareUrl={(itemId: string) =>
+          `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
+        }
         loginState={loginState}
         navigateTo={props.plugins?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}

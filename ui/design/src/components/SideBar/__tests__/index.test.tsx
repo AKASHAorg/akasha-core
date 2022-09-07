@@ -28,6 +28,7 @@ describe('<Sidebar /> Component', () => {
             onSidebarClose={handleSidebarClose}
             onClickMenuItem={handleClickMenuItem}
             onClickExplore={handleExploreClick}
+            menuItem={<></>}
           />,
         ),
         {},

@@ -311,6 +311,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 disablePublishLabel={t('Authenticating')}
                 disablePublish={disablePublishing}
                 onPublish={handleEditComment}
+                linkPreview={itemData.linkPreview}
                 getLinkPreview={getLinkPreview}
                 getMentions={handleMentionQueryChange}
                 getTags={handleTagQueryChange}
@@ -353,8 +354,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   display: isEditingComment ? 'none' : 'block',
                 }}
                 showMore={true}
-                profileAnchorLink={'/profile'}
-                repliesAnchorLink={'/social-app/post'}
+                profileAnchorLink={'/@akashaorg/app-profile'}
+                repliesAnchorLink={'/@akashaorg/app-akasha-integration/post'}
                 onRepost={onRepost}
                 onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
                 handleFollowAuthor={handleFollow}

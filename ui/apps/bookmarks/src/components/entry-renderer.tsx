@@ -223,8 +223,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   moderatedContentLabel={t('This content has been moderated')}
                   editedLabel={t('Last edited')}
                   showMore={true}
-                  profileAnchorLink={'/profile'}
-                  repliesAnchorLink={'/social-app/post'}
+                  profileAnchorLink={'/@akashaorg/app-profile'}
+                  repliesAnchorLink={'/@akashaorg/app-akasha-integration/post'}
                   onRepost={props.onRepost}
                   handleFollowAuthor={handleFollow}
                   handleUnfollowAuthor={handleUnfollow}

@@ -6,7 +6,7 @@ import {
   EventTypes,
   IAppConfig,
   ILoaderConfig,
-  PluginConf,
+  EventDataTypes,
 } from '@akashaorg/typings/ui';
 import {
   Observable,
@@ -84,7 +84,7 @@ export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo
  * Get the integration manifest and import the source
  * store the resulting integrationConfig in state
  */
-export const importIntegrations = (state$: Observable<LoaderState>, logger: ILogger) => {
+export const importIntegrationModules = (state$: Observable<LoaderState>, logger: ILogger) => {
   return state$.pipe(getStateSlice('manifests')).pipe(
     mergeMap(systemImport(logger)),
     withLatestFrom(state$.pipe(getStateSlice('modules'))),
@@ -155,16 +155,7 @@ export const processSystemModules = (
           .pipe(filter(([name]) => !integrationConfigs.has(name)))
           .pipe(
             map(async ([moduleName, mod]) => {
-              let plugin: PluginConf;
               let appConf: IAppConfig;
-
-              if (mod?.getPlugin && typeof mod.getPlugin === 'function') {
-                plugin = await mod.getPlugin({
-                  ...registrationProps,
-                  encodeAppName: encodeName,
-                  decodeAppName: decodeName,
-                });
-              }
 
               if (mod?.register && typeof mod.register === 'function') {
                 appConf = await Promise.resolve(mod.register(registrationProps));
@@ -179,7 +170,6 @@ export const processSystemModules = (
                 });
               }
               return {
-                plugin,
                 ...appConf,
                 name: moduleName,
               };
@@ -189,7 +179,6 @@ export const processSystemModules = (
             combineLatestAll(),
             map(configs => ({
               configs,
-              plugins: configs.reduce((acc, conf) => ({ ...acc, ...conf.plugin }), {}),
               integrationConfigs,
               integrationsByMountPoint,
               layoutConfig: results.layoutConfig,
@@ -198,7 +187,8 @@ export const processSystemModules = (
       }),
     )
     .pipe(
-      mergeMap(results => {
+      withLatestFrom(state$.pipe(getStateSlice('plugins'))),
+      mergeMap(([results, plugins]) => {
         const { configs, layoutConfig } = results;
         for (const config of configs) {
           if (!config.extends || typeof config.extends !== 'function') {
@@ -214,7 +204,7 @@ export const processSystemModules = (
             navigateToModal,
             worldConfig,
             parseQueryString,
-            plugins: results.plugins,
+            plugins,
             encodeAppName: encodeName,
             decodeAppName: decodeName,
           };
@@ -223,22 +213,17 @@ export const processSystemModules = (
             extensionLoader,
           );
         }
-        return of(results);
+        return of({ results });
       }),
     )
     .pipe(
-      tap(result => {
-        const { configs, integrationConfigs, integrationsByMountPoint, plugins } = result;
+      tap(({ results }) => {
+        const { configs, integrationConfigs, integrationsByMountPoint } = results;
         const byMount = new Map(integrationsByMountPoint);
         const intConfigs = new Map(integrationConfigs);
-        let appPlugins = Object.assign({}, plugins);
         configs.forEach(config => {
           if (intConfigs.has(config.name)) {
             return;
-          }
-
-          if (config.plugin) {
-            appPlugins = Object.assign(appPlugins, config.plugin);
           }
 
           intConfigs.set(config.name, config);
@@ -252,7 +237,6 @@ export const processSystemModules = (
           pipelineEvents.next({
             integrationConfigs: intConfigs,
             integrationsByMountPoint: byMount,
-            plugins: appPlugins,
           });
         }
       }),
@@ -279,122 +263,136 @@ export const handleExtPointMountOfApps = (
   return combineLatest({
     mountedExtPoints: mountedExtPoints$,
     integrationsByMountPoint: integrationsByMountPoint$,
-  }).pipe(
-    filter(({ mountedExtPoints }) => mountedExtPoints.size > 0),
-    pairwise(),
-    map(([prevMounted, nextMounted]) => {
-      const { mountedExtPoints: prevMountedExtPoints, integrationsByMountPoint: prevIntegrations } =
-        prevMounted;
-      const { mountedExtPoints, integrationsByMountPoint } = nextMounted;
-      // pairwise skips the first emitted value
-      if (prevMountedExtPoints.size === 1) {
+  })
+    .pipe(
+      filter(({ mountedExtPoints }) => mountedExtPoints.size > 0),
+      pairwise(),
+      map(([prevMounted, nextMounted]) => {
+        const {
+          mountedExtPoints: prevMountedExtPoints,
+          integrationsByMountPoint: prevIntegrations,
+        } = prevMounted;
+        const { mountedExtPoints, integrationsByMountPoint } = nextMounted;
+        // pairwise skips the first emitted value
+        if (prevMountedExtPoints.size === 1) {
+          return {
+            mountedExtPoints,
+            integrationsByMountPoint,
+          };
+        }
+
+        const unique: [string, EventDataTypes][] = Array.from(mountedExtPoints).filter(([name]) => {
+          const _prevIntegrationsCount = prevIntegrations.get(name)?.length || 0;
+          const _nextIntegrationsCount = integrationsByMountPoint.get(name)?.length || 0;
+
+          return !(
+            prevMountedExtPoints.has(name) && _prevIntegrationsCount === _nextIntegrationsCount
+          );
+        });
         return {
-          mountedExtPoints,
+          mountedExtPoints: new Map(unique),
           integrationsByMountPoint,
         };
-      }
-
-      const unique = Array.from(mountedExtPoints).filter(([name]) => {
-        const _prevIntegrationsCount = prevIntegrations.get(name)?.length || 0;
-        const _nextIntegrationsCount = integrationsByMountPoint.get(name)?.length || 0;
-
-        return !(
-          prevMountedExtPoints.has(name) && _prevIntegrationsCount === _nextIntegrationsCount
-        );
-      });
-      return {
-        mountedExtPoints: new Map(unique),
-        integrationsByMountPoint,
-      };
-    }),
-    map(({ mountedExtPoints, integrationsByMountPoint }) =>
-      from(mountedExtPoints).pipe(
-        map(([, data]) => ({
-          extData: data,
-          integrations: integrationsByMountPoint.get(data.name),
-        })),
-        filter(({ integrations }) => !!integrations),
+      }),
+      map(({ mountedExtPoints, integrationsByMountPoint }) =>
+        from(mountedExtPoints).pipe(
+          map(([, data]) => ({
+            extData: data,
+            integrations: integrationsByMountPoint.get(data.name),
+          })),
+          filter(({ integrations }) => !!integrations),
+        ),
       ),
-    ),
-    mergeAll(),
-    map(({ extData, integrations }) =>
-      from(integrations).pipe(map(config => ({ config, extData }))),
-    ),
-    mergeAll(),
-    filter(({ config }) => !singleSpa.getAppNames().includes(config.name)),
-    withLatestFrom(
-      state$.pipe(getStateSlice('manifests')),
-      state$.pipe(getStateSlice('layoutConfig')),
-      state$.pipe(getStateSlice('integrationConfigs')),
-      state$.pipe(getStateSlice('plugins')),
-    ),
-    map(([data, manifests, layoutConfig, integrationConfigs, plugins]) => ({
-      data,
-      manifests,
-      layoutConfig,
-      integrationConfigs,
-      plugins,
-    })),
-    tap(async results => {
-      const { config } = results.data;
-      const { manifests, plugins } = results;
-      const manifest = manifests.find((m: BaseIntegrationInfo) => m.name === config.name);
-      try {
-        await loadI18nNamespaces(plugins, config.i18nNamespace);
-      } catch (err) {
-        logger.error(`[integrations]: loadI18nNamespaces: ${err.message ?? JSON.stringify(err)}`);
-      }
+      mergeAll(),
+      map(({ extData, integrations }) =>
+        from(integrations).pipe(map(config => ({ config, extData }))),
+      ),
+      mergeAll(),
+      filter(({ config }) => !singleSpa.getAppNames().includes(config.name)),
+      withLatestFrom(
+        state$.pipe(getStateSlice('manifests')),
+        state$.pipe(getStateSlice('layoutConfig')),
+        state$.pipe(getStateSlice('integrationConfigs')),
+        state$.pipe(getStateSlice('plugins')),
+        state$.pipe(getStateSlice('modules')),
+      ),
+    )
+    .pipe(
+      mergeMap(([data, manifests, layoutConfig, integrationConfigs, plugins, modules]) =>
+        from(loadI18nNamespaces(plugins, data.config.i18nNamespace)).pipe(
+          map(() => ({
+            data,
+            manifests,
+            layoutConfig,
+            integrationConfigs,
+            plugins,
+            modules,
+          })),
+        ),
+      ),
+      tap(results => {
+        const { config } = results.data;
+        const { manifests, plugins, modules } = results;
+        const manifest = manifests.find((m: BaseIntegrationInfo) => m.name === config.name);
 
-      logger.info(`Registering app ${config.name}`);
+        logger.info(`Registering app ${config.name}`);
 
-      const domElement = getDomElement(config, manifest.name, logger);
+        const domElement = getDomElement(config, manifest.name, logger);
 
-      if (!domElement) {
-        console.log(
-          'app:',
-          config.name,
-          'does not have a domElement to mount to... skipping registration',
-        );
-        return;
-      }
-      singleSpa.registerApplication<
-        Omit<RootComponentProps, 'singleSpa' | 'mountParcel' | 'domElement'> & {
-          domElementGetter: () => HTMLElement;
+        if (!domElement) {
+          logger.info(`${config.name} - no dom element found, skipping registration`);
+          return;
         }
-      >({
-        name: manifest.name,
-        app: config.loadingFn,
-        activeWhen: location =>
-          checkActivityFn({
-            config,
-            encodedAppName: encodeName(manifest.name),
-            manifest,
-            location,
-          }),
-        customProps: {
-          plugins,
+        singleSpa.registerApplication<
+          Omit<RootComponentProps, 'singleSpa' | 'mountParcel' | 'domElement'> & {
+            domElementGetter?: () => HTMLElement;
+          }
+        >({
           name: manifest.name,
-          baseRouteName: `/${encodeName(manifest.name)}`,
-          parseQueryString: parseQueryString,
-          worldConfig: worldConfig,
-          uiEvents: uiEvents,
-          layoutConfig: results.layoutConfig.extensions,
-          logger: sdk.services.log.create(manifest.name),
-          domElementGetter: () => domElement,
-          navigateToModal: navigateToModal,
-          getAppRoutes: appName => results.integrationConfigs.get(appName).routes,
-          encodeAppName: encodeName,
-          decodeAppName: decodeName,
-        },
-      });
-    }),
-    catchError(err => {
-      logger.error(
-        `[integrations]: Error mounting app: ${err.message ?? JSON.stringify(err)}, ${err.stack}`,
-      );
-      throw err;
-    }),
-  );
+          app: config.loadingFn,
+          activeWhen: location =>
+            checkActivityFn({
+              config,
+              encodedAppName: encodeName(manifest.name),
+              manifest,
+              location,
+            }),
+          customProps: {
+            plugins,
+            name: manifest.name,
+            baseRouteName: `/${encodeName(manifest.name)}`,
+            parseQueryString: parseQueryString,
+            worldConfig: worldConfig,
+            uiEvents: uiEvents,
+            layoutConfig: results.layoutConfig.extensions,
+            logger: sdk.services.log.create(manifest.name),
+            domElementGetter: () => domElement,
+            navigateToModal: navigateToModal,
+            getAppRoutes: appName => results.integrationConfigs.get(appName).routes,
+            encodeAppName: encodeName,
+            decodeAppName: decodeName,
+          },
+        });
+        const intModule = modules.get(config.name);
+        if (intModule.initialize && typeof intModule.initialize === 'function') {
+          Promise.resolve(
+            intModule.initialize({
+              uiEvents,
+              plugins,
+              worldConfig,
+              layoutConfig: results.layoutConfig.extensions,
+              logger: sdk.services.log.create(`${manifest.name}/initFn`),
+            }),
+          );
+        }
+      }),
+      catchError(err => {
+        logger.error(
+          `[integrations]: Error mounting app: ${err.message ?? JSON.stringify(err)}, ${err.stack}`,
+        );
+        throw err;
+      }),
+    );
 };
 
 export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logger: ILogger) => {
