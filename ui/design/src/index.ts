@@ -26,6 +26,8 @@ import AppAvatar from './components/AppAvatar';
 import EditableAvatar from './components/EditableAvatar';
 
 import Sidebar from './components/SideBar';
+import SidebarMenuItem from './components/SideBar/sidebar-menu-item';
+
 import Topbar from './components/TopBar';
 
 import EditorCard from './components/EditorCard';
@@ -278,6 +280,7 @@ const exported = {
   SelectPopover,
   SubtitleTextIcon,
   Sidebar,
+  SidebarMenuItem,
   Text,
   TextIcon,
   LinkInput,

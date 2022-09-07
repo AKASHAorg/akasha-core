@@ -4,6 +4,7 @@ import { RootComponentProps, RootExtensionProps } from './index';
 import { UIEventData } from './ui-events';
 import { Extensions, IAppConfig } from './apps';
 import { PluginConf } from './plugins';
+import { ILogger } from '../sdk';
 
 export type ActivityFn = (
   location: Location,
@@ -17,12 +18,12 @@ export interface IntegrationRegistrationOptions {
   };
   uiEvents: RootComponentProps['uiEvents'];
   layoutConfig: Extensions;
-  integrations?: {
-    manifests: BaseIntegrationInfo[];
-    configs: Record<string, IAppConfig>;
-  };
   extensionData?: UIEventData['data'];
+  plugins?: PluginConf;
+  logger: ILogger;
 }
+
+export type IntegrationInitOptions = Partial<IntegrationRegistrationOptions>;
 
 export interface ExtensionMatcherFn<G = BehaviorSubject<unknown>> {
   (
@@ -77,6 +78,7 @@ export interface BaseIntegrationInfo {
 
 export interface IntegrationModule {
   register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
+  initialize?: (opts: IntegrationInitOptions) => Promise<void> | void;
   getPlugin?: (
     opts: IntegrationRegistrationOptions & {
       encodeAppName: (name: string) => string;

@@ -181,7 +181,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   logger={props.logger}
                   onLoadMore={handleLoadMore}
                   getShareUrl={(itemId: string) =>
-                    `${window.location.origin}/social-app/post/${itemId}`
+                    `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
                   }
                   pages={postPages}
                   requestStatus={reqPosts.status}
