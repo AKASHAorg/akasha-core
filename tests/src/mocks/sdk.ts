@@ -15,7 +15,8 @@ export interface SdkOverrides {
   common?: Partial<IAwfSDK['services']['common']>;
 }
 
-const mockSDK = (overrides?: SdkOverrides) => {
+//@Todo: requires explicit annotation because of rxjs
+const mockSDK: any = (overrides?: SdkOverrides) => {
   return {
     api: {
       auth: {

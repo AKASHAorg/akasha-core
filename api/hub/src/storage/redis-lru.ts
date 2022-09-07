@@ -1,4 +1,3 @@
-import { BaseRedisCache } from 'apollo-server-cache-redis';
 import { ILRU } from './i-lru';
 import { logger } from '../helpers';
 import { parse, stringify } from 'flatted';
@@ -6,20 +5,16 @@ import Redis from 'ioredis';
 
 export class RedisLRU implements ILRU {
   private redis: Redis;
-  private cache: BaseRedisCache;
   private prefix = '@lru#';
 
   constructor(redisInstance: Redis) {
     this.redis = redisInstance;
-    this.cache = new BaseRedisCache({
-      client: redisInstance,
-    });
   }
 
   public async set(key: string, value: unknown, ttl = 86400) {
     try {
       const _value = stringify(value);
-      return this.cache.set(`${this.prefix}${key}`, _value, { ttl: ttl });
+      return this.redis.set(`${this.prefix}${key}`, _value, 'EX', ttl);
     } catch (e) {
       logger.warn(`error setting ${key}`);
       logger.error(e);
@@ -27,7 +22,8 @@ export class RedisLRU implements ILRU {
   }
 
   public async has(key: string): Promise<boolean> {
-    return this.redis.exists(`${this.prefix}${key}`);
+    const occurrence = await this.redis.exists(`${this.prefix}${key}`);
+    return occurrence > 0;
   }
 
   public async get<T>(key: string): Promise<T> {
@@ -40,7 +36,7 @@ export class RedisLRU implements ILRU {
   }
 
   public async del(key: string): Promise<void> {
-    await this.cache.delete(`${this.prefix}${key}`);
+    await this.redis.del(`${this.prefix}${key}`);
   }
 
   public async delete(key: string): Promise<void> {
@@ -48,7 +44,8 @@ export class RedisLRU implements ILRU {
   }
 
   public async sAdd(key: string, value: string) {
-    return this.redis.multi().sadd(key, value).expire(key, 86400).exec();
+    await this.redis.multi().sadd(key, value).expire(key, 86400).exec();
+    return;
   }
 
   public async sMembers(key: string) {
