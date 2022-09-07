@@ -51,7 +51,7 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
         onClick={onClick}
         appImg={menuItem.logo}
         accentColor={accentColor}
-        stackedIcon={menuItem.name === '@akashaorg/app-notifications'}
+        stackedIcon={hasNewNotifs}
         hasNewNotifs={hasNewNotifs}
         placeholderIconType="app"
         backgroundColor="transparent"

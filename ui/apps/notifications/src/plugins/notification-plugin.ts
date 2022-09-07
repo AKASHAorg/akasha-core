@@ -1,4 +1,4 @@
-import { BehaviorSubject, filter, NextObserver } from 'rxjs';
+import { BehaviorSubject, filter, NextObserver, Subscription } from 'rxjs';
 import getSdk from '@akashaorg/awf-sdk';
 import { AUTH_EVENTS, GlobalEventBusData } from '@akashaorg/typings/sdk';
 import { RootComponentProps } from '@akashaorg/typings/ui';
@@ -66,7 +66,7 @@ export class NotificationPlugin {
     return this.notificationPool[domain].subscribe(subscriber);
   };
 
-  listen = (domain: string, listener): Listener => {
+  listen = (domain: string, listener: Listener): Subscription => {
     // add a check here to not confuse generic listeners with login listeners
     if (domain === 'login') {
       this.logger.warn('Cannot listen to login events. Use .listenLogin instead');
@@ -79,7 +79,7 @@ export class NotificationPlugin {
 
     this.listeners[domain].push(listener);
     if (this.notificationPool[domain]) {
-      this.notificationPool[domain].subscribe(listener);
+      return this.notificationPool[domain].subscribe(listener);
     }
   };
   listenLogin = (listener: Listener) => {

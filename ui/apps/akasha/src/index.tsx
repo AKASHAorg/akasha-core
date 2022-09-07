@@ -6,26 +6,27 @@ import {
   MenuItemAreaType,
   MenuItemType,
   LogoTypeSource,
-  IntegrationInitOptions,
 } from '@akashaorg/typings/ui';
 
 /**
  * Example of initialization and triggerin of a notification
  */
 
-// export const initialize: (opts: IntegrationInitOptions) => void = opts => {
-//   const notificationPlugin: any = opts.plugins.notification;
-//   if (notificationPlugin) {
-//     notificationPlugin.listenLogin(
-//       (userData: { ethAddress: string; filAddress: string; pubKey: string }) => {
-//         // user is now logged in,
-//         // we can fetch some notification data for eth address (or pubKey)
-//         // then trigger a notification
-//         notificationPlugin.notify('test_notif_domain', { message: 'This is a notification' });
-//       },
-//     );
-//   }
-// };
+/*
+export const initialize: (opts: IntegrationInitOptions) => void = opts => {
+  const notificationPlugin: any = opts.plugins.notification;
+  if (notificationPlugin) {
+    notificationPlugin.listenLogin(
+      (userData: { ethAddress: string; filAddress: string; pubKey: string }) => {
+        // user is now logged in,
+        // we can fetch some notification data for eth address (or pubKey)
+        // then trigger a notification
+        notificationPlugin.notify('test_notif_domain', { message: 'This is a notification' });
+      },
+    );
+  }
+};
+*/
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),

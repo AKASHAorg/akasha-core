@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-
+import { MenuItem } from './sidebar-menu-item';
 import DS from '@akashaorg/design-system';
-import { useCheckNewNotifications, useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps, EventTypes, MenuItemAreaType } from '@akashaorg/typings/ui';
+import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/SideBar/sidebar-menu-item';
 
 const { Box, styled, Sidebar, useViewportSize } = DS;
 
@@ -53,31 +54,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const { size } = useViewportSize();
 
   const loginQuery = useGetLogin();
-
-  // const notificationPlugin: any = React.useMemo(() => {
-  //   if (props.plugins.notification) {
-  //     return props.plugins.notification;
-  //   }
-  //   return null;
-  // }, [props.plugins]);
-
-  // React.useEffect(() => {
-  //   if (notificationPlugin) {
-  //     notificationPlugin.listen('test_notif_domain', {
-  //       next: (data: any) => {
-  //         console.log('notification received', data);
-  //       },
-  //       error: err => {
-  //         console.log('notification error', err);
-  //       },
-  //     });
-  //   }
-  // }, [notificationPlugin]);
-
-  // check for new notifcations
-  const checkNotifsReq = useCheckNewNotifications(
-    loginQuery.data.isReady && loginQuery.data.ethAddress,
-  );
 
   React.useEffect(() => {
     let sub;
@@ -179,12 +155,16 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
         currentRoute={currentLocation.pathname}
         size={size}
         isLoggedIn={!!loginQuery.data.ethAddress}
-        hasNewNotifs={checkNotifsReq.data}
         loadingUserInstalledApps={false}
         onBrandClick={handleBrandClick}
         onSidebarClose={handleSidebarClose}
         onClickMenuItem={handleNavigation}
         onClickExplore={handleClickExplore}
+        /* Menu item will surely have the props,
+           but typescript is not able to infer it
+           because the cloneElement is used
+        */
+        menuItem={<MenuItem plugins={props.plugins} {...({} as SidebarMenuItemProps)} />}
       />
     </>
   );
