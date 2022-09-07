@@ -153,7 +153,6 @@ export const getPlugin = async (
   RoutingPlugin.initRouteObservation(props.uiEvents);
   RoutingPlugin.decodeAppName = props.decodeAppName;
   RoutingPlugin.encodeAppName = props.encodeAppName;
-
   return {
     routing: {
       routeObserver: RoutingPlugin.subject,

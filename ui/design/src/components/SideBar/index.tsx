@@ -41,6 +41,7 @@ export interface ISidebarProps {
   // viewport size
   size?: string;
   className?: string;
+  menuItem: React.ReactElement;
 }
 
 const Sidebar: React.FC<ISidebarProps> = props => {
@@ -155,18 +156,18 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <SectionTitle titleLabel={worldAppsTitleLabel} subtitleLabel={poweredByLabel} />
           <StyledAccordion forwardedAs="nav">
             {worldApps &&
-              worldApps.map((menuItem: IMenuItem, index: number) => (
-                <SidebarMenuItem
-                  key={`${menuItem.name}-${index}`}
-                  menuItem={menuItem}
-                  index={index}
-                  currentRoute={currentRoute}
-                  onMenuItemClick={handleAppIconClick}
-                  onSubMenuItemClick={handleOptionClick}
-                  size={size}
-                  activeOption={activeOption}
-                />
-              ))}
+              worldApps.map((menuItem: IMenuItem, index: number) =>
+                React.cloneElement(props.menuItem, {
+                  key: `${menuItem.name}-default-${index}`,
+                  menuItem,
+                  index,
+                  currentRoute,
+                  onMenuItemClick: handleAppIconClick,
+                  onSubMenuItemClick: handleOptionClick,
+                  size,
+                  activeOption,
+                }),
+              )}
           </StyledAccordion>
         </Box>
         {isLoggedIn && loadingUserInstalledApps && (
@@ -187,7 +188,19 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           >
             <SectionTitle titleLabel={userInstalledAppsTitleLabel} />
             <StyledAccordion forwardedAs="nav">
-              {userInstalledApps?.map((menuItem: IMenuItem, index: number) => (
+              {userInstalledApps?.map(
+                (menuItem: IMenuItem, index: number) =>
+                  React.cloneElement(props.menuItem, {
+                    key: `${menuItem.name}-${index}`,
+                    menuItem,
+                    index,
+                    currentRoute,
+                    onMenuItemClick: handleAppIconClick,
+                    onSubMenuItemClick: handleOptionClick,
+                    size,
+                    activeOption,
+                  }),
+                /* (
                 <SidebarMenuItem
                   key={`${menuItem.name}-${index}`}
                   menuItem={menuItem}
@@ -199,7 +212,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                   activeOption={activeOption}
                   hasNewNotifs={hasNewNotifs}
                 />
-              ))}
+              ) */
+              )}
             </StyledAccordion>
           </Box>
         )}

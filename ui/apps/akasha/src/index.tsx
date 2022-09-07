@@ -8,6 +8,27 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
 
+/**
+ * Initialization of the integration is optional.
+ * It is called before all `register` calls but after all `getPlugin`;
+ * @example Initialization an integration and triggerin of a notification
+ * ```
+ * export const initialize: (opts: IntegrationInitOptions) => void = opts => {
+ *  const notificationPlugin: any = opts.plugins.notification;
+ *  if (notificationPlugin) {
+ *   notificationPlugin.listenLogin(
+ *     (userData: { ethAddress: string; filAddress: string; pubKey: string }) => {
+ *       // user is now logged in,
+ *       // we can fetch some notification data for eth address (or pubKey)
+ *       // then trigger a notification
+ *       notificationPlugin.notify('test_notif_domain', { message: 'This is a notification' });
+ *     },
+ *   );
+ *  }
+ * };
+ * ```
+ */
+
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,

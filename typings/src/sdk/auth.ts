@@ -80,6 +80,7 @@ export interface IMessage {
   readAt: number;
   createdAt: number;
   id: string;
+  read: boolean;
 }
 
 export default AWF_IAuth;

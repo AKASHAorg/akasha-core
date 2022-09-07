@@ -57,6 +57,13 @@ const StyledAppIconWrapper = styled.div<{
 
 const StyledAccordion = styled(Accordion)`
   width: 100%;
+  > div {
+    display: flex;
+    width: 100%;
+    > div {
+      width: 100%;
+    }
+  }
 `;
 
 const StyledAccordionPanel = styled(AccordionPanel)<{
@@ -67,11 +74,11 @@ const StyledAccordionPanel = styled(AccordionPanel)<{
   background-color: ${props =>
     props.isActive ? props.theme.colors.activePanelBackground : 'initial'};
   text-decoration: none;
-
+  width: 100%;
+  display: flex;
   &:hover {
     background-color: ${props => props.theme.colors.hoverBackground};
   }
-
   ${props => {
     return css`
       div:nth-child(2) {
