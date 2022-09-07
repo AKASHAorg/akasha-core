@@ -51,7 +51,7 @@
     "ethers": "5.7.0",
     "flatted": "3.2.7",
     "graphql": "16.6.0",
-    "ipfs-http-client": "54.0.0",
+    "ipfs-http-client": "56.0.3",
     "keyv": "4.5.0",
     "koa": "2.13.4",
     "koa-bodyparser": "4.3.0",
