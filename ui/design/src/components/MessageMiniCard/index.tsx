@@ -120,7 +120,7 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
             isMobile={isMobileOnly}
             ref={menuIconRef}
           >
-            <Icon plain={true} accentColor={menuDropOpen} type="moreDark" />
+            <Icon accentColor={menuDropOpen} type="moreDark" />
           </IconDiv>
         </Box>
         {showCardMenu && (

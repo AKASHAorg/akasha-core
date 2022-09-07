@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { getTextileUsage } from '../api/message';
-import { LoginState } from '@akashaorg/ui-awf-hooks';
+import { LoginState, useUninstallApp } from '@akashaorg/ui-awf-hooks';
 
 const { BasicCardBox, Box, Icon, Text, TextLine, Button } = DS;
 
@@ -16,6 +16,8 @@ const InboxPage = (props: SettingsPageProps) => {
   const { t } = useTranslation('app-messaging');
 
   const navigateTo = props.plugins.routing?.navigateTo;
+
+  const uninstallAppReq = useUninstallApp();
 
   const onChevronLeftClick = () => {
     navigateTo?.({
@@ -42,10 +44,17 @@ const InboxPage = (props: SettingsPageProps) => {
       const count = (val / Math.pow(1024, k)).toFixed(2);
       return `${count} ${rank}`;
     }
+    if (val == 0) {
+      return `${val} Kb`;
+    }
   };
 
   const handleUninstall = () => {
-    return;
+    uninstallAppReq.mutate('@akashaorg/app-messaging');
+    navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: routes => routes.defaultRoute,
+    });
   };
 
   return (
@@ -66,8 +75,7 @@ const InboxPage = (props: SettingsPageProps) => {
       </Box>
       <Box
         border={{ side: 'bottom', color: 'lightBorder' }}
-        pad="medium"
-        margin={{ left: 'small' }}
+        pad="large"
         direction="row"
         justify="between"
       >
@@ -84,8 +92,7 @@ const InboxPage = (props: SettingsPageProps) => {
       </Box>
       <Box
         border={{ side: 'bottom', color: 'lightBorder' }}
-        pad="medium"
-        margin={{ left: 'small' }}
+        pad="large"
         direction="row"
         justify="between"
       >

@@ -660,14 +660,16 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               <Icon type="emoji" clickable={true} onClick={openEmojiPicker} size="md" />
             </StyledIconDiv>
           )}
-          <StyledIconDiv ref={mediaIconRef}>
-            <Icon
-              type="image"
-              clickable={!uploading && !imageUploadDisabled}
-              onClick={handleMediaClick}
-              size="md"
-            />
-          </StyledIconDiv>
+          {uploadRequest && (
+            <StyledIconDiv ref={mediaIconRef}>
+              <Icon
+                type="image"
+                clickable={!uploading && !imageUploadDisabled}
+                onClick={handleMediaClick}
+                size="md"
+              />
+            </StyledIconDiv>
+          )}
         </Box>
 
         <Box direction="row" gap="small" align="center">

@@ -9,7 +9,6 @@ import {
   useMentionSearch,
   useTagSearch,
   useGetProfile,
-  uploadMediaToTextile,
   logError,
 } from '@akashaorg/ui-awf-hooks';
 import { getHubUser, getMessages, markAsRead, sendMessage } from '../api/message';
@@ -152,7 +151,6 @@ const ChatPage = (props: RootComponentProps) => {
         }
         if (!reply?.message) return;
         const messageIds = messages.map(message => message.id);
-        // @TODO: ensure it filters only conversation messages
         if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
           fetchMessagesCallback();
         }
@@ -215,7 +213,6 @@ const ChatPage = (props: RootComponentProps) => {
             getTags={handleTagQueryChange}
             tags={tagQueryReq.data}
             mentions={mentionQueryReq.data}
-            uploadRequest={uploadMediaToTextile}
           />
         </Box>
       </Box>

@@ -156,7 +156,11 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                     unpinConvoLabel={t('Unpin Conversation')}
                     hideBottomBorder={idx !== 0 && idx === pinnedContacts.length - 1}
                     isPinned={true}
-                    isRead={!localStorage.getItem(`Unread chat ${contact.pubKey}`)}
+                    isRead={
+                      !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(
+                        contact.pubKey,
+                      )
+                    }
                     senderName={contact?.name}
                     senderUsername={contact?.userName}
                     senderAvatar={contact?.avatar}
@@ -184,7 +188,9 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                 unpinConvoLabel={t('Unpin Conversation')}
                 hideBottomBorder={idx === unpinnedContacts.length - 1}
                 isPinned={false}
-                isRead={!localStorage.getItem(`Unread chat ${contact.pubKey}`)}
+                isRead={
+                  !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(contact.pubKey)
+                }
                 senderName={contact?.name}
                 senderUsername={contact?.userName}
                 senderAvatar={contact?.avatar}

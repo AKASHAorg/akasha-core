@@ -8,7 +8,7 @@ import { I18nextProvider } from 'react-i18next';
 import {
   ThemeWrapper,
   useAnalytics,
-  useLogin,
+  useGetLogin,
   withProviders,
   useIsContactMultiple,
 } from '@akashaorg/ui-awf-hooks';
@@ -30,7 +30,7 @@ const MessageIconButton = (props: RootExtensionProps) => {
   const [showTooltip, setShowTooltip] = React.useState(false);
   const btnRef = React.useRef(null);
 
-  const loginQuery = useLogin();
+  const loginQuery = useGetLogin();
   const loggedUserPubKey = loginQuery.data?.pubKey;
 
   const isContactReq = useIsContactMultiple(loggedUserPubKey, [pubKey as string]);
