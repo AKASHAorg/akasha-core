@@ -4,7 +4,7 @@ import { of as mockOf } from 'rxjs';
 import * as moderation from '../use-moderation';
 import { mockCheckModerationStatus } from '../__mocks__/moderation';
 import { createWrapper } from './utils';
-import { useInfinitePosts, useInfinitePostsByAuthor, usePost } from '../use-posts';
+import { useInfinitePosts, useInfinitePostsByAuthor, usePost, usePosts } from '../use-posts';
 import { mockUser } from '../__mocks__/user';
 import { mockEntriesByAuthor, mockEntry, mockGetEntries } from '../__mocks__/posts';
 
@@ -49,6 +49,26 @@ describe('usePosts', () => {
     );
     await waitFor(() => result.current.isFetched, { timeout: 5000 });
     const post = result.current.data;
+    expect(post.content).toHaveLength(2);
+    expect(post.author.name).toBe('Tetrarcha');
+  });
+
+  it('should get posts', async () => {
+    const [wrapper] = createWrapper();
+    const { result, waitFor } = renderHook(
+      () =>
+        usePosts({
+          postIds: mockGetEntries.posts.results.map(result => result._id),
+          loggedUser: mockUser.pubKey,
+          enabler: true,
+        }),
+      {
+        wrapper,
+      },
+    );
+
+    await waitFor(() => result.current[0].isFetched, { timeout: 5000 });
+    const post = result.current[0].data;
     expect(post.content).toHaveLength(2);
     expect(post.author.name).toBe('Tetrarcha');
   });

@@ -1,4 +1,11 @@
-import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
+import {
+  QueryClient,
+  useInfiniteQuery,
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { Post_Response } from '@akashaorg/typings/sdk';
@@ -37,6 +44,12 @@ export const CREATE_POST_MUTATION_KEY = 'CreatePost';
 
 export type usePostParam = {
   postId: string;
+  loggedUser?: string;
+  enabler: boolean;
+};
+
+export type usePostsParam = {
+  postIds: string[];
   loggedUser?: string;
   enabler: boolean;
 };
@@ -299,6 +312,32 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
     keepPreviousData: true,
     onError: (err: Error) => logError('usePosts.getPost', err),
   });
+}
+
+/**
+ * Hook to get an array of post data
+ * @example usePosts hook
+ * ```typescript
+ * const postQueries = usePost({ postIds: ['some-post-id', 'some-other-post-id'],
+ *                                        loggedUser: 'logged-user-pubkey',
+ *                                        enabler: true,
+ *                              });
+ *
+ * const entryData = postQueries.map(postQuery=>postQuery.data);
+ * ```
+ */
+export function usePosts({ postIds, loggedUser, enabler = true }: usePostsParam) {
+  const options = postId => ({
+    enabled: !!(postId && enabler),
+    keepPreviousData: true,
+    onError: (err: Error) => logError('usePosts.getPost', err),
+  });
+  const queries = postIds.map(postId => ({
+    queryKey: [ENTRY_KEY, postId],
+    queryFn: () => getPost(postId, loggedUser),
+    ...options(postId),
+  }));
+  return useQueries(queries);
 }
 
 /**
