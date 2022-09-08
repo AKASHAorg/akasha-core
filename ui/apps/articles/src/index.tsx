@@ -36,4 +36,9 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
       },
     ],
   },
+  extends: (matcher, loader) => {
+    matcher({
+      'manage-collaborators': loader(() => import('./extensions/manage-collaborators-modal')),
+    });
+  },
 });
