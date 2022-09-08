@@ -157,6 +157,7 @@ import FeedbackModal from './components/FeedbackModal';
 import ConfirmationModal from './components/ConfirmationModal';
 import StatModal from './components/StatModal';
 import InstallModal from './components/InstallModal';
+import ManageCollaboratorsModal from './components/ManagCollaboratorsModal.tsx';
 
 import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';
@@ -277,6 +278,7 @@ const exported = {
   ModerateModal,
   ProfileCompletedModal,
   FeedbackModal,
+  ManageCollaboratorsModal,
   Spinner,
   TransparencyLogMiniCard,
   TransparencyLogDetailCard,
