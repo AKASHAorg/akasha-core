@@ -34,7 +34,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const bookmarkedPostIds = bookmarks.map((bm: Record<string, unknown>) => bm.entryId);
   const bookmarkedPosts = usePosts({ postIds: bookmarkedPostIds, enabler: true });
-  const numberOfBookmarkedPostsDeleted = React.useMemo(
+  const numberOfBookmarkedInactivePosts = React.useMemo(
     () =>
       bookmarkedPosts.filter(({ data }) => (data ? !checkPostActive(mapEntry(data)) : false))
         .length,
@@ -65,11 +65,11 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     'Bookmarks help you save your favorite posts for quick access at any time.',
   );
 
-  const getDeletedPostsText = (numberOfBookmarkedPostsDeleted: number) => {
-    const result = numberOfBookmarkedPostsDeleted
+  const getInactivePostsText = (numberOfBookmarkedInactivePosts: number) => {
+    const result = numberOfBookmarkedInactivePosts
       ? t('{{ deletedCount }} of which {{ linkingVerb }} deleted', {
-          deletedCount: numberOfBookmarkedPostsDeleted,
-          linkingVerb: numberOfBookmarkedPostsDeleted > 1 ? t('are') : t('is'),
+          deletedCount: numberOfBookmarkedInactivePosts,
+          linkingVerb: numberOfBookmarkedInactivePosts > 1 ? t('are') : t('is'),
         })
       : '';
     return result ? ` (${result})` : '';
@@ -77,9 +77,9 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const getSubtitleText = () => {
     if (isLoggedIn && bookmarks?.length) {
-      return t('You have {{ bookmarkCount }} bookmarks.{{ deletedPostsText }}', {
+      return t('You have {{ bookmarkCount }} bookmarks.{{ inactivePostsText }}', {
         bookmarkCount: bookmarks.length,
-        deletedPostsText: getDeletedPostsText(numberOfBookmarkedPostsDeleted),
+        inactivePostsText: getInactivePostsText(numberOfBookmarkedInactivePosts),
       });
     }
     if (isLoggedIn && !bookmarks?.length) {
