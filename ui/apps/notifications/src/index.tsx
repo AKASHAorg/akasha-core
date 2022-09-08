@@ -21,7 +21,6 @@ export const initialize = (options: IntegrationRegistrationOptions) => {
       );
       sdk.api.auth.getMessages({}).subscribe({
         next: msg => {
-          console.log('notify messages', msg);
           notification.notify(
             '@akashaorg/app-notifications',
             msg.data.filter(m => !m.read),
