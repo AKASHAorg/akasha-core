@@ -54,7 +54,9 @@ export function useGetAllInstalledApps(enabler?: boolean) {
 
 const appInstall = async (app: { name?: string; id?: string }) => {
   const sdk = getSDK();
-  const res = await sdk.services.appSettings.install(app, true);
+  // add true 2nd param to test local installable apps
+  // in use-integration-registry, getLatestReleaseInfo app mock data can be changed
+  const res = await sdk.services.appSettings.install(app);
   if (!res) {
     throw new Error('App already installed!');
   } else if (res) {
