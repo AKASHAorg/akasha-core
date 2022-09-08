@@ -291,7 +291,7 @@ const query = {
         timeout: 60000,
         redirect: 'follow',
       });
-      const { links, sources } = await d.json();
+      const { links, sources } = (await d.json()) as { links: string[]; sources: string[] };
       const ipfsSources = multiAddrToUri(sources);
       let manifest: {
         mainFile: string;
@@ -305,7 +305,7 @@ const query = {
           timeout: 10000,
           redirect: 'follow',
         });
-        manifest = await manifestReq.json();
+        manifest = (await manifestReq.json()) as typeof manifest;
         ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
       }
       const releaseInfo = {

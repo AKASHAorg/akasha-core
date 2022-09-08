@@ -2,8 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "./AbstractSubdomainRegistrar.sol";
-import '@ensdomains/ens-contracts/contracts/ethregistrar/BaseRegistrar.sol';
-import '@ensdomains/ens-contracts/contracts/ethregistrar/BaseRegistrarImplementation.sol';
 
 contract AkashaRegistrar is AbstractSubdomainRegistrar {
 

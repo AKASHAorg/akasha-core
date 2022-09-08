@@ -18,9 +18,7 @@ const userInstalledApps = installedAppsData?.filter(menuItem =>
 );
 
 const SidebarComponent = (props: ISidebarProps) => {
-  const { size } = useViewportSize();
-
-  return <Sidebar {...props} size={size} />;
+  return <Sidebar {...props} />;
 };
 
 export default {
