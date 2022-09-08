@@ -25,12 +25,16 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
   const renderItem = () => {
     if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
       return (
-        <AppAvatar
-          size="md"
-          // edge-case for test app: ignore icons, even if specified, use only avatars
-          src={{ url: menuItem.logo.type !== LogoTypeSource.ICON ? menuItem.logo.value : null }}
+        <AppIcon
+          size="sm"
+          plain={plain}
+          onClick={onClick}
+          appImg={menuItem.logo}
+          accentColor={accentColor}
+          stackedIcon={hasNewNotifs}
+          hasNewNotifs={hasNewNotifs}
+          placeholderIconType="app"
           backgroundColor="transparent"
-          appType={IntegrationTypes.APP}
         />
       );
     }
