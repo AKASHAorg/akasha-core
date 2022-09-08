@@ -11,17 +11,31 @@ import { articles } from './dummy-data';
 const { Box, StackedAvatar, Text } = DS;
 
 export interface IArticleEditorCardProps {
+  inviteCollaboratorsLabel: string;
   collaboratingLabel: string;
   saveDraftLabel: string;
   publishLabel: string;
   canPublish: boolean;
+  onManageCollaborators: () => void;
   onSaveDraft: () => void;
   onPublish: () => void;
 }
 
 const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
-  const { collaboratingLabel, saveDraftLabel, publishLabel, canPublish, onSaveDraft, onPublish } =
-    props;
+  const {
+    inviteCollaboratorsLabel,
+    collaboratingLabel,
+    saveDraftLabel,
+    publishLabel,
+    canPublish,
+    onManageCollaborators,
+    onSaveDraft,
+    onPublish,
+  } = props;
+
+  // get collaborators
+  const articleCollaborators = articles[1].collaborators;
+  // const articleCollaborators = [];
 
   const titleEditor = React.useMemo(() => withHistory(withReact(createEditor())), []);
   const contentEditor = React.useMemo(() => withHistory(withReact(createEditor())), []);
@@ -50,11 +64,15 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
         </Slate>
       </Box>
       <Box direction="row" justify="between" pad="medium" border={{ side: 'top', color: 'border' }}>
-        <Box direction="row" gap="small" align="center">
-          <StackedAvatar size="md" userData={articles[1].collaborators} maxAvatars={4} />
-          <Text size="large">{collaboratingLabel}</Text>
+        <Box direction="row" gap="small" align="center" onClick={onManageCollaborators}>
+          {articleCollaborators.length > 0 && (
+            <StackedAvatar size="md" userData={articleCollaborators} maxAvatars={4} />
+          )}
+          <Text size="large" color={articleCollaborators.length > 0 ? 'primaryText' : 'accentText'}>
+            {articleCollaborators.length > 0 ? collaboratingLabel : inviteCollaboratorsLabel}
+          </Text>
         </Box>
-        <Box direction="row" fill="horizontal" justify="end" align="center" gap="small">
+        <Box direction="row" justify="end" align="center" gap="small">
           <StyledButton size="large" height={2.5} label={saveDraftLabel} onClick={onSaveDraft} />
           <StyledButton
             size="large"

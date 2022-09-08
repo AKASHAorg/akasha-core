@@ -30,6 +30,10 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
     /** do something */
   };
 
+  const handleManageCollaborators = () => {
+    props.navigateToModal({ name: 'manage-collaborators' });
+  };
+
   const handleSaveDraft = () => {
     /** do something */
   };
@@ -75,10 +79,12 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
         }}
       />
       <ArticleEditorCard
+        inviteCollaboratorsLabel={t('Invite collaborators')}
         collaboratingLabel={t('Collaborating')}
         saveDraftLabel={t('Save draft')}
         publishLabel={t('Publish')}
         canPublish={true}
+        onManageCollaborators={handleManageCollaborators}
         onSaveDraft={handleSaveDraft}
         onPublish={handlePublish}
       />
