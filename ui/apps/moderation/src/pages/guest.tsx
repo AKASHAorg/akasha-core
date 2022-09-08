@@ -50,7 +50,7 @@ const GuestPage: React.FC<ISharedModerationProps & RootComponentProps> = props =
       isIntro={true}
       introLabel={t('Are you interested in Moderating?')}
       descriptionLine1Label={t(
-        "We are currently creating new Moderating Systems for Ethereum World, If you'd like to join us click",
+        "We are currently creating new Moderating Systems for Ethereum World. If you'd like to join us click",
       )}
       ctaLabel="here"
       ctaUrl="https://www.notion.so/akasha-foundation/The-AKASHA-Moderating-Open-Design-Challenge-15cb49cf57e740be92534958828ca210"

@@ -48,15 +48,15 @@ jobs:
       - run: # compile ts files
           name: tsc:all
           command: yarn run tsc:all
-      - run: # build sdk
-          name: build-sdk
-          command: yarn run build:sdk
-      - run: # pack ui-apps
-          name: pack-ui-apps
-          command: yarn run pack:ui
-      - run: # extract-translations
-          name: extract-translations
-          command: yarn run extract:translations
+#      - run: # build sdk
+#          name: build-sdk
+#          command: yarn run build:sdk
+#      - run: # pack ui-apps
+#          name: pack-ui-apps
+#          command: yarn run pack:ui
+#      - run: # extract-translations
+#          name: extract-translations
+#          command: yarn run extract:translations
       - run: # unit-tests
           name: unit-tests
           command: yarn run test:all
