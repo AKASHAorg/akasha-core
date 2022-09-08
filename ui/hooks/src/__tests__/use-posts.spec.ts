@@ -4,9 +4,15 @@ import { of as mockOf } from 'rxjs';
 import * as moderation from '../use-moderation';
 import { mockCheckModerationStatus } from '../__mocks__/moderation';
 import { createWrapper } from './utils';
-import { useInfinitePosts, useInfinitePostsByAuthor, usePost, usePosts } from '../use-posts';
+import {
+  checkPostActive,
+  useInfinitePosts,
+  useInfinitePostsByAuthor,
+  usePost,
+  usePosts,
+} from '../use-posts';
 import { mockUser } from '../__mocks__/user';
-import { mockEntriesByAuthor, mockEntry, mockGetEntries } from '../__mocks__/posts';
+import { mockEntriesByAuthor, mockEntry, mockEntryData, mockGetEntries } from '../__mocks__/posts';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
@@ -85,5 +91,15 @@ describe('usePosts', () => {
     const { pages } = result.current.data;
     expect(pages[0].total).toBe(3);
     expect(pages[0].results).toHaveLength(3);
+  });
+
+  it('should return true for an active post', async () => {
+    expect(checkPostActive(mockEntryData)).toBe(true);
+  });
+
+  it('should return false for inactive post that is either delisted, removed or both', async () => {
+    expect(checkPostActive({ ...mockEntryData, delisted: true })).toBe(false);
+    expect(checkPostActive({ ...mockEntryData, isRemoved: true })).toBe(false);
+    expect(checkPostActive({ ...mockEntryData, delisted: true, isRemoved: true })).toBe(false);
   });
 });
