@@ -50,4 +50,7 @@ export class MemLRU implements ILRU {
     }
     return Promise.resolve();
   }
+  public async clear() {
+    return Promise.resolve(this.lru.clear());
+  }
 }

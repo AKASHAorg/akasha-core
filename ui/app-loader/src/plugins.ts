@@ -35,18 +35,17 @@ export const loadPlugins = (
           encodeAppName: encodeName,
           decodeAppName: decodeName,
         });
+        const plugs = {};
         for (const [k, v] of Object.entries(plugin)) {
-          if (plugins.hasOwnProperty(k)) {
-            // plugin already loaded
-            // @TODO: the plugin's namespace should be inferred
-            // from it's parent app name or the plugin's name
-            continue;
+          if (!plugins.hasOwnProperty(k)) {
+            plugs[k] = v;
           }
-          plugins[k] = v;
         }
-        pipelineEvents.next({
-          plugins,
-        });
+        if (Object.keys(plugs).length) {
+          pipelineEvents.next({
+            plugins: Object.assign({}, plugins, plugs),
+          });
+        }
       }),
     );
 };
