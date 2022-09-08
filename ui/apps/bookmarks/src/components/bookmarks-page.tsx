@@ -2,7 +2,14 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { useGetBookmarks, useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import {
+  useGetBookmarks,
+  useGetLogin,
+  useGetProfile,
+  checkPostActive,
+  usePosts,
+  mapEntry,
+} from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { ErrorLoader, Spinner, StartCard, InfoCard, Box } = DS;
@@ -24,6 +31,16 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
 
   const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && isLoggedIn);
   const bookmarks = bookmarksReq.data;
+
+  const bookmarkedPostIds = bookmarks.map((bm: Record<string, unknown>) => bm.entryId);
+  const bookmarkedPosts = usePosts({ postIds: bookmarkedPostIds, enabler: true });
+  const numberOfBookmarkedPostsDeleted = React.useMemo(
+    () =>
+      bookmarkedPosts.filter(({ data }) => (data ? !checkPostActive(mapEntry(data)) : false))
+        .length,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [bookmarkedPostIds],
+  );
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
@@ -48,10 +65,21 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     'Bookmarks help you save your favorite posts for quick access at any time.',
   );
 
+  const getDeletedPostsText = (numberOfBookmarkedPostsDeleted: number) => {
+    const result = numberOfBookmarkedPostsDeleted
+      ? t('{{ deletedCount }} of which {{ linkingVerb }} deleted', {
+          deletedCount: numberOfBookmarkedPostsDeleted,
+          linkingVerb: numberOfBookmarkedPostsDeleted > 1 ? t('are') : t('is'),
+        })
+      : '';
+    return result ? ` (${result})` : '';
+  };
+
   const getSubtitleText = () => {
     if (isLoggedIn && bookmarks?.length) {
-      return t('You have {{ bookmarkCount }} bookmarks.', {
+      return t('You have {{ bookmarkCount }} bookmarks.{{ deletedPostsText }}', {
         bookmarkCount: bookmarks.length,
+        deletedPostsText: getDeletedPostsText(numberOfBookmarkedPostsDeleted),
       });
     }
     if (isLoggedIn && !bookmarks?.length) {
@@ -100,7 +128,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               getShareUrl={(itemId: string) =>
                 `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
               }
-              pages={[{ results: [...bookmarks.map((bm: Record<string, unknown>) => bm.entryId)] }]}
+              pages={[{ results: bookmarkedPostIds }]}
               requestStatus={bookmarksReq.status}
               loginState={loginQuery.data}
               loggedProfile={loggedProfileQuery.data}
