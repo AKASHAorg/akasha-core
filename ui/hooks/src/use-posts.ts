@@ -329,6 +329,8 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
 export function usePosts({ postIds, loggedUser, enabler = true }: usePostsParam) {
   const options = postId => ({
     enabled: !!(postId && enabler),
+    retry: 3,
+    retryDelay: 1000,
     onError: (err: Error) => logError('usePosts.getPost', err),
   });
   const queries = postIds.map(postId => ({
