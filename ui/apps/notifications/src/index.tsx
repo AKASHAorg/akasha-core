@@ -8,7 +8,7 @@ import {
 } from '@akashaorg/typings/ui';
 import { NotificationPlugin } from './plugins/notification-plugin';
 import getSDK from '@akashaorg/awf-sdk';
-import { filter, withLatestFrom } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs';
 import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
 export const initialize = (options: IntegrationRegistrationOptions) => {
   const notification: any = options.plugins.notification;
@@ -17,8 +17,13 @@ export const initialize = (options: IntegrationRegistrationOptions) => {
   if (notification && typeof notification.notify === 'function') {
     notification.listenLogin(() => {
       const markAsRead$ = sdk.api.globalChannel.pipe(
-        filter(data => data.event === AUTH_EVENTS.MARK_MSG_READ),
+        filter(
+          data =>
+            data.event === AUTH_EVENTS.MARK_MSG_READ ||
+            data.event === AUTH_EVENTS.NEW_NOTIFICATIONS,
+        ),
       );
+      // get notifications for the 1st time
       sdk.api.auth.getMessages({}).subscribe({
         next: msg => {
           notification.notify(
@@ -30,18 +35,23 @@ export const initialize = (options: IntegrationRegistrationOptions) => {
           options.logger.error(`Error fetching notifications: ${err}`);
         },
       });
-      markAsRead$.pipe(withLatestFrom(sdk.api.auth.getMessages({}))).subscribe({
-        next: ([readMsg, message]) => {
-          const readMsgId = (readMsg.data as Record<string, string>).messageId;
-          notification.notify(
-            '@akashaorg/app-notifications',
-            message.data.filter(m => !m.read && m.id !== readMsgId),
-          );
-        },
-        error: err => {
-          options.logger.error(`There was an error when trying to refetch notifications: ${err}`);
-        },
-      });
+      // listen for new notifications and for mark as read
+      markAsRead$
+        .pipe(
+          mergeMap(() => {
+            return sdk.api.auth
+              .getMessages({})
+              .pipe(map(newMsg => newMsg.data.filter(m => !m.read)));
+          }),
+        )
+        .subscribe({
+          next: messages => {
+            notification.notify('@akashaorg/app-notifications', messages);
+          },
+          error: err => {
+            options.logger.error(`There was an error when trying to refetch notifications: ${err}`);
+          },
+        });
     });
   }
 };

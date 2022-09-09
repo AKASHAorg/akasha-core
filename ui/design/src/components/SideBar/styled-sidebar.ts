@@ -54,18 +54,17 @@ const StyledAppIconWrapper = styled.div<{
   border-radius: 50%;
   background-color: ${props => props.backgroundColor || props.theme.colors.background};
 `;
-
+// this is the nav element
 const StyledAccordion = styled(Accordion)`
   width: 100%;
   > div {
-    display: flex;
+    flex-direction: column;
+  }
+  > div > div {
     width: 100%;
-    > div {
-      width: 100%;
-    }
   }
 `;
-
+// actually this is the button element
 const StyledAccordionPanel = styled(AccordionPanel)<{
   size?: string;
   hasChevron?: boolean;
@@ -74,8 +73,6 @@ const StyledAccordionPanel = styled(AccordionPanel)<{
   background-color: ${props =>
     props.isActive ? props.theme.colors.activePanelBackground : 'initial'};
   text-decoration: none;
-  width: 100%;
-  display: flex;
   &:hover {
     background-color: ${props => props.theme.colors.hoverBackground};
   }
