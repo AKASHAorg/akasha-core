@@ -23,8 +23,8 @@ import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
-import { EntryImageGallery } from './entry-image-gallery';
-import { ImageObject } from '../Editor/image-gallery';
+import { EntryImageGallery } from '../ImageGallery/entry-image-gallery';
+import { ImageObject } from '../ImageGallery/image-grid-item';
 import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
 import { editorDefaultValue } from '../Editor/initialValue';
 import isEqual from 'lodash.isequal';
