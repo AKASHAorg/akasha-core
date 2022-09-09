@@ -17,8 +17,13 @@ export const initialize = (options: IntegrationRegistrationOptions) => {
   if (notification && typeof notification.notify === 'function') {
     notification.listenLogin(() => {
       const markAsRead$ = sdk.api.globalChannel.pipe(
-        filter(data => data.event === AUTH_EVENTS.MARK_MSG_READ),
+        filter(
+          data =>
+            data.event === AUTH_EVENTS.MARK_MSG_READ ||
+            data.event === AUTH_EVENTS.NEW_NOTIFICATIONS,
+        ),
       );
+      // get notifications for the 1st time
       sdk.api.auth.getMessages({}).subscribe({
         next: msg => {
           notification.notify(
@@ -30,13 +35,13 @@ export const initialize = (options: IntegrationRegistrationOptions) => {
           options.logger.error(`Error fetching notifications: ${err}`);
         },
       });
+      // listen for new notifications and for mark as read
       markAsRead$
         .pipe(
-          mergeMap(resp => {
-            const readMsgId = (resp.data as Record<string, string>).messageId;
+          mergeMap(() => {
             return sdk.api.auth
               .getMessages({})
-              .pipe(map(newMsg => newMsg.data.filter(m => m.id !== readMsgId && !m.read)));
+              .pipe(map(newMsg => newMsg.data.filter(m => !m.read)));
           }),
         )
         .subscribe({
