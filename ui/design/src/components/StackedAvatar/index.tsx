@@ -24,6 +24,10 @@ const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
     return (
       <StyledStackBox zIndex={level + 1}>
         <Avatar
+          // clickable avatars
+          onClick={() => {
+            /** */
+          }}
           ethAddress={data[level].ethAddress}
           src={data[level].avatar}
           size={size ? size : 'xs'}

@@ -159,7 +159,7 @@ import FeedbackModal from './components/FeedbackModal';
 import ConfirmationModal from './components/ConfirmationModal';
 import StatModal from './components/StatModal';
 import InstallModal from './components/InstallModal';
-import ManageCollaboratorsModal from './components/ManagCollaboratorsModal.tsx';
+import ManageCollaboratorsModal from './components/ManageCollaboratorsModal';
 
 import BookmarkPill from './components/BookmarkPill';
 import NewPostsPill from './components/NewPostsPill';

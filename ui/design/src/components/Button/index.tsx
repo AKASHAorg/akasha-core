@@ -13,6 +13,7 @@ export interface IButtonProps extends ButtonProps {
   justify?: string;
   height?: number;
   slimBorder?: boolean;
+  style?: React.CSSProperties;
 }
 
 const Button = (props: IButtonProps) => {
