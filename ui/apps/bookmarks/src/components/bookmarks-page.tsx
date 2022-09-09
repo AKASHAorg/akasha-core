@@ -63,10 +63,11 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   );
 
   const getInactivePostsText = (numberOfBookmarkedInactivePosts: number) => {
+    const linkingVerb = numberOfBookmarkedInactivePosts > 1 ? t('are') : t('is');
     const result = numberOfBookmarkedInactivePosts
       ? t('{{ deletedCount }} of which {{ linkingVerb }} deleted', {
           deletedCount: numberOfBookmarkedInactivePosts,
-          linkingVerb: numberOfBookmarkedInactivePosts > 1 ? t('are') : t('is'),
+          linkingVerb,
         })
       : '';
     return result ? ` (${result})` : '';
