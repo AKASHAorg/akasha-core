@@ -1,5 +1,3 @@
-import { mockProfile } from './profiles';
-
 export const mockEntry = {
   getPost: {
     content: [
@@ -1291,11 +1289,4 @@ export const mockEditPost = {
   ],
   textContent: 'tldr;;',
   author: '0x3Ff1621520d621b39572b952138c869758a41201',
-};
-
-export const mockEntryData = {
-  delisted: false,
-  slateContent: [],
-  entryId: 'entry-id-1',
-  author: { ...mockProfile, description: 'A sample description.' },
 };

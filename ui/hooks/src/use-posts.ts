@@ -9,7 +9,7 @@ import {
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { Post_Response } from '@akashaorg/typings/sdk';
-import { IPublishData, PostResponse, IProfileData, IEntryData } from '@akashaorg/typings/ui';
+import { IPublishData, PostResponse, IProfileData } from '@akashaorg/typings/ui';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
@@ -527,7 +527,3 @@ export const useEditPost = () => {
     },
   );
 };
-
-export function checkPostActive(props: IEntryData) {
-  return !props.delisted && !props.isRemoved;
-}
