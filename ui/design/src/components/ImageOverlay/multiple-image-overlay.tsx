@@ -5,7 +5,7 @@ import { Portal } from '../Editor/helpers';
 import Icon from '../Icon';
 import styled from 'styled-components';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import { ImageObject } from '../Editor/image-gallery';
+import { ImageObject } from '../ImageGallery/image-grid-item';
 
 export interface IImageOverlay {
   clickedImg: ImageObject;

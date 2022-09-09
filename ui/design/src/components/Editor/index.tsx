@@ -29,7 +29,8 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import LinkPreview from './link-preview';
-import { ImageGallery, ImageObject } from './image-gallery';
+import { ImageObject } from '../ImageGallery/image-grid-item';
+import ImageGallery from '../ImageGallery';
 import isUrl from 'is-url';
 
 const MAX_LENGTH = 280;
