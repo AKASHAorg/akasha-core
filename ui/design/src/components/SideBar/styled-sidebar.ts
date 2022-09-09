@@ -54,11 +54,17 @@ const StyledAppIconWrapper = styled.div<{
   border-radius: 50%;
   background-color: ${props => props.backgroundColor || props.theme.colors.background};
 `;
-
+// this is the nav element
 const StyledAccordion = styled(Accordion)`
   width: 100%;
+  > div {
+    flex-direction: column;
+  }
+  > div > div {
+    width: 100%;
+  }
 `;
-
+// actually this is the button element
 const StyledAccordionPanel = styled(AccordionPanel)<{
   size?: string;
   hasChevron?: boolean;
