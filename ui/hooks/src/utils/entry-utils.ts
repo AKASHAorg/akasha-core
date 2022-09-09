@@ -12,6 +12,7 @@ import {
 import { getMediaUrl } from './media-utils';
 
 export const MEDIA_URL_PREFIX = 'CID:';
+export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
 export const PROVIDER_AKASHA = 'AkashaApp';
 export const PROPERTY_SLATE_CONTENT = 'slateContent';
 export const PROPERTY_TEXT_CONTENT = 'textContent';
@@ -185,6 +186,18 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
           imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
         } else if (typeof img.src === 'object' && img.src?.url?.startsWith(MEDIA_URL_PREFIX)) {
           const ipfsLinks = getMediaUrl(img.src?.url?.replace(MEDIA_URL_PREFIX, ''));
+          imgClone.src.url = ipfsLinks?.originLink;
+          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+          // handle older uploaded images where the textile gatweway was saved also
+        } else if (typeof img.src === 'string' && img.src?.startsWith(TEXTILE_GATEWAY)) {
+          const ipfsLinks = getMediaUrl(img.src.replace(TEXTILE_GATEWAY, ''));
+          imgClone.src.url = ipfsLinks?.originLink;
+          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+          // handle older uploaded images where the ipfs origing link was saved also
+        } else if (typeof img.src === 'string') {
+          const uploadedUrl = new URL(img.src);
+          const hash = uploadedUrl.hostname.split('.')[0];
+          const ipfsLinks = getMediaUrl(hash);
           imgClone.src.url = ipfsLinks?.originLink;
           imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
         }

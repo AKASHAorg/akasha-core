@@ -2,8 +2,14 @@ import * as React from 'react';
 import styled, { css } from 'styled-components';
 import { StyledCloseDiv } from '../Editor/styled-editor-box';
 import Icon from '../Icon';
+import { DelayLoad } from '../../utils/delay-load';
+import { isMobile } from 'react-device-detect';
 
 export const StyledPicture = styled.picture`
+  display: flex;
+`;
+
+export const FlexDiv = styled.div`
   display: flex;
 `;
 
@@ -94,7 +100,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
       role="img"
       style={style}
       onClick={ev => {
-        if (handleClickImage && typeof handleClickImage === 'function') {
+        if (handleClickImage && typeof handleClickImage === 'function' && imgLoaded) {
           handleClickImage(imageSrc);
         }
         ev.stopPropagation();
@@ -126,14 +132,19 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
           singleImage={images.length === 1}
           onLoad={() => setImgLoaded(true)}
           hidden={!imgLoaded}
+          isMobile={isMobile && editorStyle}
         />
       </StyledPicture>
       {!imgLoaded && (
-        <StyledImg
-          src={'/images/image-placeholder.png'}
-          width={image.size.width}
-          height={image.size.height}
-        />
+        <DelayLoad>
+          <FlexDiv>
+            <StyledImg
+              src={'/images/image-placeholder.webp'}
+              singleImage={images.length === 1}
+              height={images.length === 1 ? image.size.height : ''}
+            />
+          </FlexDiv>
+        </DelayLoad>
       )}
     </StyledImgContainer>
   );
