@@ -29,7 +29,8 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   }, [loginQuery.data?.ethAddress]);
 
   const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && isLoggedIn);
-  /** Currently react query's initialData isn't working properly so bookmarksReq.data will return undefined even if we supply initialData.
+  /**
+   * Currently react query's initialData isn't working properly so bookmarksReq.data will return undefined even if we supply initialData.
    * This will be fixed in v4 of react query(https://github.com/DamianOsipiuk/vue-query/issues/124).
    * In the mean time, the following check will ensure undefined data is handled.  */
   const bookmarks = bookmarksReq.data || [];
