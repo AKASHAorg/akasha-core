@@ -26,8 +26,10 @@ describe('useBookmarks', () => {
     await waitFor(() => result.current.isFetched, { timeout: 5000 });
     const { data } = result.current;
     expect(data).toHaveLength(4);
-    expect(data[0].entryId).toBe('01g0bxz7tgxx1ftbmark5v9tb1');
-    expect(data[0].type).toBe(0);
+    if (data) {
+      expect(data[0].entryId).toBe('01g0bxz7tgxx1ftbmark5v9tb1');
+      expect(data[0].type).toBe(0);
+    }
   });
 
   it('should save bookmarks', async () => {
