@@ -52,10 +52,15 @@ const SignIn: React.FC<RootComponentProps> = props => {
 
   const signupStateReset = React.useRef(resetState);
 
-  const isNotRegistered = React.useMemo(
-    () => error && (error.message ?? '').toLowerCase().trim() === 'profile not found',
-    [error],
-  );
+  const isNotRegistered = React.useMemo(() => {
+    if (error && error.message) {
+      if (typeof error.message === 'string') {
+        return error.message.toLowerCase().trim() === 'Not registered';
+      }
+      return false;
+    }
+    return false;
+  }, [error]);
 
   React.useEffect(() => {
     if (connectProviderQuery.isError) {
