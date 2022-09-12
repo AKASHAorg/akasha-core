@@ -18,7 +18,7 @@ const entriesBookmarks = 'entries-bookmarks';
  * ```
  */
 export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
-  return useQuery(
+  return useQuery<Record<string, unknown>[]>(
     [BOOKMARKED_ENTRIES_KEY],
     async () => {
       const sdk = getSDK();
