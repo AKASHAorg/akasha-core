@@ -75,7 +75,7 @@ const InboxPage = (props: SettingsPageProps) => {
       </Box>
       <Box
         border={{ side: 'bottom', color: 'lightBorder' }}
-        pad="large"
+        pad={{ horizontal: 'xlarge', vertical: 'medium' }}
         direction="row"
         justify="between"
       >
@@ -88,11 +88,11 @@ const InboxPage = (props: SettingsPageProps) => {
         )}
       </Box>
       <Box border={{ side: 'bottom', color: 'lightBorder' }} pad="medium">
-        <Text weight={'bold'}>{t('Public Key')}</Text>
+        <Text weight={'bold'}>{t('Ethereum Public Key')}</Text>
       </Box>
       <Box
         border={{ side: 'bottom', color: 'lightBorder' }}
-        pad="large"
+        pad={{ horizontal: 'xlarge', vertical: 'medium' }}
         direction="row"
         justify="between"
       >

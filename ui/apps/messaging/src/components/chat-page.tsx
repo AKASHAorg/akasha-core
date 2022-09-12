@@ -39,6 +39,9 @@ const ChatPage = (props: RootComponentProps) => {
   const loginQuery = useGetLogin();
   const loginState = loginQuery.data;
 
+  const contactPubKey = React.useMemo(() => pubKey, [pubKey]);
+  const loggedUserPubKey = React.useMemo(() => loginState?.pubKey, [loginState]);
+
   const disablePublishing = React.useMemo(
     () => loginState?.waitForAuth || !loginState?.isReady,
     [loginState],
@@ -73,9 +76,9 @@ const ChatPage = (props: RootComponentProps) => {
     setTagQuery(query);
   };
 
-  const profileDataReq = useGetProfile(pubKey);
+  const profileDataReq = useGetProfile(contactPubKey);
 
-  const sender = React.useMemo(
+  const contactId = React.useMemo(
     () =>
       profileDataReq?.data?.name ||
       profileDataReq?.data?.userName ||
@@ -84,7 +87,7 @@ const ChatPage = (props: RootComponentProps) => {
   );
 
   const handleSendMessage = async publishData => {
-    const res: any = await sendMessage(pubKey, publishData);
+    const res: any = await sendMessage(contactPubKey, publishData);
     const newMessage = {
       content: res.body?.slateContent,
       ethAddress: res.body?.author,
@@ -103,12 +106,16 @@ const ChatPage = (props: RootComponentProps) => {
     const messagesData = await getMessages();
     const conversation = messagesData
       ?.map(res => {
-        if (res.body.content && (res.from === pubKey || res.from === loginState.pubKey)) {
+        if (
+          res.body.content &&
+          (res.from === contactPubKey ||
+            (res.from === loggedUserPubKey && res.to === contactPubKey))
+        ) {
           return {
             content: res.body.content?.slateContent,
             ethAddress: res.body.content?.author,
             timestamp: res.createdAt,
-            name: res.from === pubKey ? sender : null,
+            name: res.from === contactPubKey ? contactId : null,
             from: res.from,
             to: res.to,
             read: res.read,
@@ -119,7 +126,7 @@ const ChatPage = (props: RootComponentProps) => {
       })
       .filter(Boolean);
     setMessages(conversation);
-  }, [loginState.pubKey, pubKey, sender]);
+  }, [loggedUserPubKey, contactPubKey, contactId]);
 
   React.useEffect(() => {
     fetchMessagesCallback();

@@ -567,6 +567,7 @@ class AWF_Auth implements AWF_IAuth {
     return createObservableStream<{
       body: Record<string, any>;
       from: string;
+      to: string;
       readAt: number;
       createdAt: number;
       id: string;
@@ -581,8 +582,8 @@ class AWF_Auth implements AWF_IAuth {
     } catch (e) {
       this._log.warn(e);
     }
-    const { from, readAt, createdAt, id } = message;
-    return { body, from, readAt, createdAt, id };
+    const { from, to, readAt, createdAt, id } = message;
+    return { body, from, to, readAt, createdAt, id };
   }
 
   static serializeMessage(content) {
