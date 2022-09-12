@@ -108,14 +108,7 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
 
   return (
     <Portal>
-      <ModalContainer
-        animation={{
-          type: 'fadeIn',
-          duration: 250,
-          delay: 0,
-        }}
-        style={{ zIndex: 103 }}
-      >
+      <ModalContainer style={{ zIndex: 103 }}>
         <StyledOverlay
           onClick={(ev: React.SyntheticEvent) => {
             /**

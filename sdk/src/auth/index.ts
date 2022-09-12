@@ -377,11 +377,23 @@ class AWF_Auth implements AWF_IAuth {
       setTimeout(resolve, 15000, [null]);
     });
     const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
+    // refresh textile api tokens every 20min
+    setInterval(async () => {
+      await this.#_refreshTextileToken();
+    }, 1000 * 60 * 20);
     this.currentUser = {
       pubKey,
       ethAddress: address.data,
       filAddress: filAddress?.address,
     };
+  }
+
+  /*
+   * Force creation of a new jwt for textile buckets and mailboxes
+   */
+  async #_refreshTextileToken() {
+    await this.hubUser.getToken(this.#identity);
+    await this.buckClient.getToken(this.#identity);
   }
   /**
    * Returns current session objects for textile
