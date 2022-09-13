@@ -4,19 +4,21 @@ import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 describe('Feed Page', () => {
   context('Feed Page', () => {
     beforeEach(() => {
-      cy.visit('/social-app/feed');
+      cy.visit('/@akashaorg/app-akasha-integration/feed');
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
     it('should redirect to profile page', () => {
       cy.get('[data-testid="avatar-image"]', { timeout: 20000 }).first().click();
-      cy.location('pathname').should('contain', '/profile');
+      cy.location('pathname').should('contain', '/app-profile');
     });
   });
 
   describe('Posts', () => {
     it('should render posts on the page', () => {
-      cy.get('a[href^="/social-app/post"]', { timeout: 20000 }).its('length').should('be.gt', 0);
+      cy.get('a[href^="/@akashaorg/app-profile"]', { timeout: 20000 })
+        .its('length')
+        .should('be.gt', 0);
     });
 
     it('should render user avatars in posts', () => {
@@ -32,7 +34,7 @@ describe('Feed Page', () => {
 
     it('should redirect to profile page', () => {
       cy.get('[data-testid="avatar-image"]').first().click();
-      cy.location('pathname').should('contain', '/profile');
+      cy.location('pathname').should('contain', '/app-profile');
     });
   });
 });

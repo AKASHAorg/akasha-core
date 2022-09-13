@@ -4,7 +4,9 @@ import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 describe('Profile Page', () => {
   context('Profile Page', () => {
     before(() => {
-      cy.visit('/profile/bbaareihb5fdjg5ozj7d77tnjq2mexcktik3bwe3w7ds3yhgp335vupythi');
+      cy.visit(
+        '/@akashaorg/app-profile/bbaareihb5fdjg5ozj7d77tnjq2mexcktik3bwe3w7ds3yhgp335vupythi',
+      );
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
