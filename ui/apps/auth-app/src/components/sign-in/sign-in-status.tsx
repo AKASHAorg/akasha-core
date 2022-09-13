@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
 import { EthProviders, PROVIDER_ERROR_CODES } from '@akashaorg/typings/sdk';
+import { ErrorTypes } from '@akashaorg/ui-awf-hooks/lib/use-login';
 
 const { WalletRequestStep, Spinner } = DS;
 
@@ -12,7 +13,7 @@ interface SignInStatusProps {
   selectedProvider: EthProviders;
   onSignRequest: () => void;
   onSignIn: () => void;
-  signInError: { message?: string; code?: number; extensions?: { code?: string } };
+  signInError: ErrorTypes;
   requiredNetworkName: string;
   onSignInComplete: () => void;
 }
@@ -34,7 +35,6 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
     selectedProvider,
     onSignRequest,
     onSignIn,
-    requiredNetworkName,
     onSignInComplete,
     signInError,
   } = props;
@@ -45,18 +45,21 @@ const SignInStatus: React.FC<SignInStatusProps> = props => {
   const { t } = useTranslation('app-auth-ewa');
 
   const errorMessage = React.useMemo(() => {
-    if (signInError && signInError.code && errorMapping[signInError.code]) {
-      return t('{{ signInErrorCode }}', { signInErrorCode: errorMapping[signInError.code] });
+    if (signInError) {
+      if (signInError.code && errorMapping[signInError.code]) {
+        return t('{{ signInErrorCode }}', { signInErrorCode: errorMapping[signInError.code] });
+      }
+      if (signInError.reason && typeof signInError.reason === 'string') {
+        return signInError.reason;
+      }
+      if (signInError.message && typeof signInError.message === 'string') {
+        return signInError.message;
+      }
+      t('An unknown error has occurred. Please refresh the page and try again.');
     }
 
-    if (signInError) {
-      return signInError.message
-        ? signInError.message
-        : t('An unknown error has occurred. Please refresh the page and try again.');
-    }
     return null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signInError, requiredNetworkName]);
+  }, [signInError, t]);
 
   React.useEffect(() => {
     if (isActive) {

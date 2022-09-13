@@ -29,7 +29,14 @@ const SIGNUP_STATES = {
   [AUTH_EVENTS.SIGN_TOKEN_MESSAGE]: 7,
   [AUTH_EVENTS.READY]: 8,
 };
-type ErrorTypes = { code?: number; message?: string; extensions?: { code?: string } };
+export type ErrorTypes = {
+  code?: number;
+  message?: string;
+  reason?: string;
+  extensions?: {
+    code?: string;
+  };
+};
 
 export interface LoginState extends CurrentUser {
   isReady?: boolean;

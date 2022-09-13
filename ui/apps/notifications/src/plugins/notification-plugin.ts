@@ -25,7 +25,7 @@ export class NotificationPlugin {
     sdk.api.globalChannel
       .pipe(
         filter(payload => {
-          return payload.event === AUTH_EVENTS.SIGN_IN;
+          return payload.event === AUTH_EVENTS.READY;
         }),
       )
       .subscribe({
