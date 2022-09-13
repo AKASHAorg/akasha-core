@@ -7,7 +7,6 @@ import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useInstallApp, withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
-;
 
 const { InstallModal, ModalContainer, ErrorLoader } = DS;
 
@@ -94,7 +93,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
       )}
       successSubInfoLabel={t('Enjoy!')}
       successSubtitleLabel={t(
-        '{{integrationName}} App is now installed in {{worldName}} and is currently active.',
+        '{{integrationName}} is now installed in {{worldName}} and is currently active.',
         { integrationName, worldName: props.worldConfig.title },
       )}
       errorInfoLabel={t('Please check your network connection and try again.')}

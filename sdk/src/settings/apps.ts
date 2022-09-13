@@ -9,6 +9,8 @@ import IcRegistry from '../registry/icRegistry';
 import { ethers } from 'ethers';
 import EventBus from '../common/event-bus';
 
+declare const __DEV__: boolean;
+
 export interface VersionInfo {
   name: string;
   version: string;
@@ -64,7 +66,7 @@ class AppSettings implements IAppSettings {
    * @param app - Object
    */
   async install(app: { name?: string; id?: string }, isLocal = false) {
-    if (isLocal) {
+    if (isLocal && __DEV__) {
       const collection = await lastValueFrom(
         this._db.getCollection<any>(availableCollections.Apps),
       );

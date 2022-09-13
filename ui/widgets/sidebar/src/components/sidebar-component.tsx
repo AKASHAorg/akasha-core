@@ -73,19 +73,26 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   }, [routing]);
 
   // sort according to worldConfig index
-  const worldApps = routeData?.[MenuItemAreaType.AppArea]?.sort(
-    (a: { name: string }, b: { name: string }) => {
-      if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
-        return -1;
-      } else if (defaultApps.indexOf(a.name) > defaultApps.indexOf(b.name)) {
-        return 1;
-      }
-      return 0;
-    },
-  );
-  const userInstalledApps = routeData?.[MenuItemAreaType.UserAppArea];
+  const worldApps = React.useMemo(() => {
+    return routeData?.[MenuItemAreaType.AppArea]?.sort(
+      (a: { name: string }, b: { name: string }) => {
+        if (defaultApps.indexOf(a.name) < defaultApps.indexOf(b.name)) {
+          return -1;
+        } else if (defaultApps.indexOf(a.name) > defaultApps.indexOf(b.name)) {
+          return 1;
+        }
+        return 0;
+      },
+    );
+  }, [defaultApps, routeData]);
 
-  const allApps = [...(worldApps || []), ...(userInstalledApps || [])];
+  const userInstalledApps = React.useMemo(() => {
+    return routeData?.[MenuItemAreaType.UserAppArea];
+  }, [routeData]);
+
+  const allApps = React.useMemo(() => {
+    return [...(worldApps || []), ...(userInstalledApps || [])];
+  }, [worldApps, userInstalledApps]);
 
   const handleNavigation = (appName: string, route: string) => {
     routing.navigateTo({
