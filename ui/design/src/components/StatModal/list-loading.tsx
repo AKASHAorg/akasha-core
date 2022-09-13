@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from 'grommet';
 
-import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
+import { TextLine } from '../TextLine';
 
 interface IListLoading {
   type: 'profile' | 'topic';

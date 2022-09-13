@@ -17,7 +17,8 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
 
   const theme: any = React.useContext(ThemeContext);
 
-  const handleClick = (handler: () => void) => () => {
+  const handleClick = (ev: React.SyntheticEvent, handler: () => void) => {
+    ev.stopPropagation();
     // hide menu dropdown when clicked
     handler();
     return onMenuClose();
@@ -43,7 +44,7 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
               <TextIcon
                 iconType={menuItem.icon as IconType}
                 label={menuItem.label}
-                onClick={handleClick(menuItem.handler)}
+                onClick={ev => handleClick(ev, menuItem.handler)}
                 color={menuItem.iconColor ? menuItem.iconColor : theme.colors.errorText}
                 plain={menuItem.plain}
                 iconSize="xs"

@@ -37,6 +37,21 @@ const MenuAppButton: React.FC<IMenuAppButton> = props => {
     //   );
     // }
 
+    if (menuItem.area?.includes(MenuItemAreaType.UserAppArea)) {
+      return (
+        <AppIcon
+          size="sm"
+          plain={plain}
+          onClick={onClick}
+          appImg={menuItem.logo}
+          accentColor={accentColor}
+          stackedIcon={hasNewNotifs}
+          hasNewNotifs={hasNewNotifs}
+          placeholderIconType="app"
+          backgroundColor="transparent"
+        />
+      );
+    }
     if (menuItem.area?.includes(MenuItemAreaType.UserWidgetArea)) {
       return (
         <AppAvatar

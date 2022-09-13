@@ -9,7 +9,7 @@ export default {
   title: 'Cards/MessageAppMiniCard',
   component: MessageAppMiniCard,
   argType: {
-    sender: { control: 'text' },
+    senderName: { control: 'text' },
     senderUsername: { control: 'text' },
     content: { control: 'text' },
     isRead: { control: 'boolean' },
@@ -39,7 +39,7 @@ export const BaseMessageAppMiniCard = Template.bind({});
 
 BaseMessageAppMiniCard.args = {
   locale: 'en',
-  sender: 'Jerry Mil',
+  senderName: 'Jerry Mil',
   senderUsername: 'jerrbear',
   content: "Hello Jerry, I hope you're good and having a great day?",
   isRead: true,

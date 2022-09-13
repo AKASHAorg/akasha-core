@@ -10,7 +10,6 @@ export interface IButtonProps extends ButtonProps {
   background?: string;
   primary?: boolean;
   secondary?: boolean;
-  justify?: string;
   height?: number;
   slimBorder?: boolean;
   style?: React.CSSProperties;

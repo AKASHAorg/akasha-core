@@ -1,10 +1,10 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import { LogoTypeSource } from '@akashaorg/typings/ui';
 import routes, { MY_PROFILE } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
   MenuItemAreaType,
+  LogoTypeSource,
 } from '@akashaorg/typings/ui';
 
 /**

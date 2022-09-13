@@ -80,7 +80,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
             acc.filteredDefaultApps.push(app);
           } else {
             // select user installed apps from list of installed apps
-            if (installedAppsReq.data?.some(installedApp => installedApp.id === app.id)) {
+            if (installedAppsReq.data?.some(installedApp => installedApp.name === app.name)) {
               acc.filteredInstalledApps.push(app);
             }
           }

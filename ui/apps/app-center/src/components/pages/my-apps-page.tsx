@@ -46,7 +46,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
       if (!installedAppsInfo?.length) {
         return null;
       }
-      if (defaultIntegrations?.some(defaultApp => defaultApp !== app.name)) {
+      if (!defaultIntegrations?.some(defaultApp => defaultApp === app.name)) {
         return app;
       }
     })

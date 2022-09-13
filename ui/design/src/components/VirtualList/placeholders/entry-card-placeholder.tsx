@@ -1,33 +1,13 @@
 import * as React from 'react';
 import { Box } from 'grommet';
 import { BasicCardBox } from '../../EntryCard/basic-card-box';
-import styled, { css } from 'styled-components';
+import { TextLine } from '../../TextLine';
 
 export interface IPlaceholderProps {
   style?: React.CSSProperties;
   height?: number;
   animated?: boolean;
 }
-
-export const TextLine = styled(Box)<{ animated?: boolean }>`
-  min-height: 18px;
-  ${props => {
-    if (props.animated) {
-      return css`
-        background: linear-gradient(
-          90deg,
-          ${props.theme.colors.skeletonBackground},
-          #fff,
-          ${props.theme.colors.skeletonBackground}
-        );
-        animation: bgRotate 1s ease infinite;
-      `;
-    }
-    return css`
-      background-color: ${props.theme.colors.skeletonBackground}a6;
-    `;
-  }}
-`;
 
 const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {
   const { height = 200, animated = false } = props;

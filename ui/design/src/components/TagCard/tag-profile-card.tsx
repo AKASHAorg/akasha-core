@@ -9,7 +9,7 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
-import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
+import { TextLine } from '../TextLine';
 
 export interface ITagProfileCard {
   // data

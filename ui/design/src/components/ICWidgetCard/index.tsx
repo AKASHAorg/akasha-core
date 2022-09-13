@@ -3,7 +3,7 @@ import { Box, Text, Tabs } from 'grommet';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import Icon from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
-import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
+import { TextLine } from '../TextLine';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { WidgetAreaCardBox } from '../EntryCard/basic-card-box';
 import InfoCard from '../InfoCard';

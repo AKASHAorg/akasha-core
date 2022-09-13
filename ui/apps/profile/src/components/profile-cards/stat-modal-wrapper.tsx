@@ -41,14 +41,14 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   const { t } = useTranslation('app-profile');
 
   // get followers for this profile
-  const followersReq = useFollowers(profileData.pubKey, 10);
+  const followersReq = useFollowers(profileData.pubKey, 500);
   const followers = React.useMemo(
     () => followersReq.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followersReq.data?.pages],
   );
 
   // get accounts this profile is following
-  const followingReq = useFollowing(profileData.pubKey, 10);
+  const followingReq = useFollowing(profileData.pubKey, 500);
   const following = React.useMemo(
     () => followingReq.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followingReq.data?.pages],

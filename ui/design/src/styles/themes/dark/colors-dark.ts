@@ -40,6 +40,7 @@ const colors: IColorsDark = {
   primaryText: '#FBFCFD', // lotion white
   secondaryText: '#B6BFD1', // grey
   textBackground: '#425166',
+  chatBackground: '#425166',
   disabledText: '#9ea0a5', // disabled
   titleText: '#CACFD9',
   subtitleText: '#F4F5F7', // cadetGrey

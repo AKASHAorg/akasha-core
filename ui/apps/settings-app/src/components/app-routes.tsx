@@ -116,7 +116,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 checkedTracking={checkedTracking}
                 cookieType={cookieType}
                 onTrackingOptionChange={handleTrackingOptionChange}
-                OnChevronLeftClick={handleChevronLeftClick}
+                onChevronLeftClick={handleChevronLeftClick}
               />
             }
           />
@@ -137,7 +137,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 checkedDataAnalytics={checkedDataAnalytics}
                 onAutoUpdatesChange={handleAutoUpdatesChange}
                 onDataAnalyticsChange={handleDataAnalyticsChange}
-                OnChevronLeftClick={handleChevronLeftClick}
+                onChevronLeftClick={handleChevronLeftClick}
               />
             }
           />
@@ -152,7 +152,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 )}
                 theme={theme}
                 onThemeSelect={handleThemeSelect}
-                OnChevronLeftClick={handleChevronLeftClick}
+                onChevronLeftClick={handleChevronLeftClick}
               />
             }
           />

@@ -2,7 +2,7 @@ import { Descendant } from 'slate';
 import { LogoTypeSource, IntegrationCenterApp } from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import { IMenuItem, MenuItemType, MenuItemAreaType, IProfileData } from '@akashaorg/typings/ui';
-
+import { IChatMessage } from '../components/ChatList';
 import { IAppData } from '../components/AppsWidgetCard';
 
 const userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[] = [
@@ -905,21 +905,12 @@ const bookmarkedLabel = 'Saved';
 const repliesLabel = 'Replies';
 const repostsLabel = 'Reposts';
 
-export interface IChat {
-  name: string;
-  username: string;
-  ethAddress: string;
-  status?: 'sent' | 'read' | 'delivered';
-  content: Descendant[];
-  timestamp: string;
-}
-
-const dummyChatArr: IChat[] = [
+const dummyChatArr: IChatMessage[] = [
   {
     name: 'Jerry Mil',
     username: 'jerrbear',
     ethAddress: '0x003410490050000320006570034567114572000',
-    status: 'read',
+    read: true,
     content: [
       {
         type: 'paragraph',
@@ -948,7 +939,7 @@ const dummyChatArr: IChat[] = [
     name: 'Estelle Collier',
     username: 'estellecollier',
     ethAddress: '0x003410490050000320006570034567114572021',
-    status: 'read',
+    read: true,
     content: [
       {
         type: 'paragraph',
@@ -970,7 +961,7 @@ const dummyChatArr: IChat[] = [
     name: 'Jerry Mil',
     username: 'jerrbear',
     ethAddress: '0x003410490050000320006570034567114572000',
-    status: 'read',
+    read: true,
     content: [
       {
         type: 'paragraph',
@@ -987,7 +978,7 @@ const dummyChatArr: IChat[] = [
     name: 'Jerry Mil',
     username: 'jerrbear',
     ethAddress: '0x003410490050000320006570034567114572000',
-    status: 'read',
+    read: true,
     content: [
       {
         type: 'paragraph',
@@ -1004,7 +995,7 @@ const dummyChatArr: IChat[] = [
     name: 'Estelle Collier',
     username: 'estellecollier',
     ethAddress: '0x003410490050000320006570034567114572021',
-    status: 'delivered',
+    read: true,
     content: [
       {
         type: 'paragraph',
@@ -1021,7 +1012,7 @@ const dummyChatArr: IChat[] = [
     name: 'Jerry Mil',
     username: 'jerrbear',
     ethAddress: '0x003410490050000320006570034567114572000',
-    status: 'sent',
+    read: false,
     content: [
       {
         type: 'paragraph',

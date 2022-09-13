@@ -1,4 +1,5 @@
 import { Box, Text } from 'grommet';
+import Button from '../Button';
 import { Editable } from 'slate-react';
 import styled, { css } from 'styled-components';
 
@@ -123,6 +124,11 @@ const StyledPopoverValueBox = styled(Box)<{ selectedBackground: boolean }>`
   }
 `;
 
+const StyledPublishButton = styled(Button)`
+  background-color: ${props => props.theme.colors.accent};
+  border-color: ${props => props.theme.colors.accent};
+`;
+
 export {
   StyledBox,
   StyledDiv,
@@ -137,4 +143,5 @@ export {
   StyledCloseDiv,
   StyledPopoverDiv,
   StyledPopoverValueBox,
+  StyledPublishButton,
 };
