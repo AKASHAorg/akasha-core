@@ -6,6 +6,7 @@ const ethers = require("ethers");
 const path = require("path");
 const ipfs = require("ipfs-http-client");
 const format = require("multiformats/bases/base16");
+const stream = require("stream");
 const { Web3Storage, getFilesFromPath } = require("web3.storage");
 
 (async () => {
@@ -179,10 +180,10 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
         links: {
           publicRepository: source.package.homepage || "",
           documentation: "",
-          detailedDescription: descriptionFileHash ? `ipfs://${descriptionFileHash.cid.toString()}` : ""
+          detailedDescription: descriptionFileHash ? `ipfs://${ descriptionFileHash.cid.toString() }` : ""
         },
         sources: [
-          `ipfs://${ web3StorageCID }`,
+          `ipfs://${ web3StorageCID }`
           //`ipfs://${ output.get("ipfs") }`
         ]
       }, null, 2)
@@ -194,7 +195,18 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       pin: true
     });
     console.timeEnd(`[infura.storage]${ source.package.name }`);
-    console.info("deployed: ", source.package.name, ipfsManifest.cid.toString(), "\n");
+    const web3ManifestCID = await web3Storage.put(
+      [
+        {
+          name: manifestData.path,
+          stream: () => {
+            return stream.Readable.from([manifestData.content]);
+          }
+        }], {
+        name: '[manifest]'+source.package.name,
+        wrapWithDirectory: false
+      });
+    console.info("deployed: ", source.package.name, ipfsManifest.cid.toString(), web3ManifestCID, "\n");
     results.push({
       name: source.package.name,
       id: ethers.utils.id(source.package.name),
@@ -203,7 +215,7 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
     });
   }
   let outputFile;
-  if(process.env.NODE_ENV === 'production'){
+  if (process.env.NODE_ENV === "production") {
     outputFile = "./integrations_bucket_prod.json";
   } else {
     outputFile = "./integrations_bucket.json";

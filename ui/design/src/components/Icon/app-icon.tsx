@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Stack, Box } from 'grommet';
+import { Stack } from 'grommet';
 import { LogoSourceType, LogoTypeSource } from '@akashaorg/typings/ui';
 
 import Icon, { IconType, iconTypes } from '.';
 import { StyledIconDiv, StyledImage } from './styled-icon';
+import { BlueDot } from '../NotificationCard/styled-notifications';
 
 export interface IAppIcon extends IconSize {
   ref?: React.Ref<HTMLDivElement>;
@@ -50,7 +51,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
       <StyledIconDiv onClick={onClick} ref={ref} size={size} backgroundColor={backgroundColor}>
         <Stack anchor="top-right">
           {renderAppImg()}
-          {hasNewNotifs && <Box background="errorText" width="9px" height="9px" round={true} />}
+          {hasNewNotifs && <BlueDot />}
         </Stack>
       </StyledIconDiv>
     );

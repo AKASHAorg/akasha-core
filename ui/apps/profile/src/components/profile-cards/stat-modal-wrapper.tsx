@@ -258,8 +258,8 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       subscribeLabel={t('Subscribe')}
       subscribedLabel={t('Subscribed')}
       unsubscribeLabel={t('Unsubscribe')}
-      tagAnchorLink={'/social-app/tags'}
-      profileAnchorLink={'/profile'}
+      tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
+      profileAnchorLink={'/@akashaorg/app-profile'}
       followersPages={followersPages}
       followingPages={followingPages}
       loadingMoreLabel={`${t('Loading more')} ...`}

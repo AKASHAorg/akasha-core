@@ -23,9 +23,14 @@ export interface ITag {
   totalPosts: number;
 }
 
+export interface LinkPreview extends LinkPreview_Response {
+  imageSources?: { url: string; fallbackUrl: string };
+  faviconSources?: { url: string; fallbackUrl: string };
+}
+
 export interface IEntryData {
   CID?: string;
-  linkPreview?: LinkPreview_Response;
+  linkPreview?: LinkPreview;
   images?: IMetadata['images'];
   slateContent: Descendant[];
   time?: string | number | Date;
@@ -74,7 +79,7 @@ export interface IPublishData {
 export interface IMetadata {
   app: string;
   version: number;
-  linkPreview?: LinkPreview_Response;
+  linkPreview?: LinkPreview;
   images?: {
     originalSrc?: string;
     src: { url?: string; fallbackUrl?: string };

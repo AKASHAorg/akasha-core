@@ -143,8 +143,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         unfollowLabel={t('Unfollow')}
         followersLabel={t('Followers')}
         followingLabel={t('Following')}
-        tagAnchorLink={'/social-app/tags'}
-        profileAnchorLink={'/profile'}
+        tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
+        profileAnchorLink={'/@akashaorg/app-profile'}
         noTagsLabel={t('No tags found!')}
         noProfilesLabel={t('No profiles found!')}
         isLoadingTags={trendingTagsReq.isFetching}

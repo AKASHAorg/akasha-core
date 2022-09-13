@@ -110,6 +110,16 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "didd",
+      "name": "didd",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35398733?v=4",
+      "profile": "https://github.com/didd",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -22,7 +22,8 @@
     "prepare": "yarn run tsc"
   },
   "devDependencies": {
-    "typescript": "4.4.3",
+    "@apollo/client": "3.6.9",
+    "graphql": "16.6.0",
     "i18next": "20.6.1",
     "rxjs": "7.3.0",
     "single-spa": "5.9.3",

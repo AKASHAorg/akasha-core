@@ -1,6 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import constants from './constants';
 import { createPendingEntry, mapEntry } from './utils/entry-utils';
+import { checkPostActive } from './utils/checkPostActive';
 import { getMediaUrl, uploadMediaToTextile, getLinkPreview } from './utils/media-utils';
 import useGlobalLogin from './use-global-login';
 import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-analytics';
@@ -40,6 +41,7 @@ import {
   useInfinitePostsByTag,
   useInfinitePostsByAuthor,
   usePost,
+  usePosts,
   useCreatePost,
   useDeletePost,
   useEditPost,
@@ -134,6 +136,7 @@ export {
   // entry-utils
   createPendingEntry,
   mapEntry,
+  checkPostActive,
   // media-utils
   getLinkPreview,
   getMediaUrl,
@@ -172,6 +175,7 @@ export {
   useInfinitePostsByTag,
   useInfinitePostsByAuthor,
   usePost,
+  usePosts,
   useCreatePost,
   useDeletePost,
   useEditPost,

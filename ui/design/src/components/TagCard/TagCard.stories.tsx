@@ -80,5 +80,5 @@ BaseTagSearchCard.args = {
   subscribeLabel: 'subscribe',
   subscribedLabel: 'subscribed',
   unsubscribeLabel: 'unsubscribe',
-  tagAnchorLink: '/social-app/tags',
+  tagAnchorLink: '/@akashaorg/app-akasha-integration/tags',
 };

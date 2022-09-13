@@ -444,7 +444,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 itemType={EntityTypes.COMMENT}
                 onLoadMore={handleLoadMore}
                 getShareUrl={(itemId: string) =>
-                  `${window.location.origin}/social-app/post/${itemId}`
+                  `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
                 }
                 loginState={loginState}
                 navigateTo={navigateTo}

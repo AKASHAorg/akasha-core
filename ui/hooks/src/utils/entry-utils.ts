@@ -12,6 +12,7 @@ import {
 import { getMediaUrl } from './media-utils';
 
 export const MEDIA_URL_PREFIX = 'CID:';
+export const TEXTILE_GATEWAY = 'https://hub.textile.io/ipfs/';
 export const PROVIDER_AKASHA = 'AkashaApp';
 export const PROPERTY_SLATE_CONTENT = 'slateContent';
 export const PROPERTY_TEXT_CONTENT = 'textContent';
@@ -142,6 +143,32 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
 
     try {
       linkPreview = decodeb64SlateContent(linkPreviewData.value, logger);
+      const imageSources = { url: '', fallbackUrl: '' };
+      const faviconSources = { url: '', fallbackUrl: '' };
+      if (linkPreview.imagePreviewHash) {
+        const ipfsLinks = getMediaUrl(linkPreview.imagePreviewHash);
+        imageSources.url = ipfsLinks.originLink;
+        imageSources.fallbackUrl = ipfsLinks.fallbackLink;
+      } else if (!linkPreview.imagePreviewHash && linkPreview.images.length) {
+        const uploadedImageURL = new URL(linkPreview.images[0]);
+        const hash = uploadedImageURL.hostname.split('.')[0];
+        const ipfsLinks = getMediaUrl(hash);
+        imageSources.url = ipfsLinks.originLink;
+        imageSources.fallbackUrl = ipfsLinks.fallbackLink;
+      }
+      if (linkPreview.faviconPreviewHash) {
+        const ipfsLinks = getMediaUrl(linkPreview.faviconPreviewHash);
+        faviconSources.url = ipfsLinks.originLink;
+        faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
+      } else if (!linkPreview.faviconPreviewHash && linkPreview.favicons.length) {
+        const uploadedFaviconURL = new URL(linkPreview.favicons[0]);
+        const hash = uploadedFaviconURL.hostname.split('.')[0];
+        const ipfsLinks = getMediaUrl(hash);
+        faviconSources.url = ipfsLinks.originLink;
+        faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
+      }
+      linkPreview.imageSources = imageSources;
+      linkPreview.faviconSources = faviconSources;
     } catch (error) {
       if (logger) {
         logger.error(`Error serializing base64 to linkPreview: ${error.message}`);
@@ -159,6 +186,18 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
           imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
         } else if (typeof img.src === 'object' && img.src?.url?.startsWith(MEDIA_URL_PREFIX)) {
           const ipfsLinks = getMediaUrl(img.src?.url?.replace(MEDIA_URL_PREFIX, ''));
+          imgClone.src.url = ipfsLinks?.originLink;
+          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+          // handle older uploaded images where the textile gatweway was saved also
+        } else if (typeof img.src === 'string' && img.src?.startsWith(TEXTILE_GATEWAY)) {
+          const ipfsLinks = getMediaUrl(img.src.replace(TEXTILE_GATEWAY, ''));
+          imgClone.src.url = ipfsLinks?.originLink;
+          imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
+          // handle older uploaded images where the ipfs origing link was saved also
+        } else if (typeof img.src === 'string') {
+          const uploadedUrl = new URL(img.src);
+          const hash = uploadedUrl.hostname.split('.')[0];
+          const ipfsLinks = getMediaUrl(hash);
           imgClone.src.url = ipfsLinks?.originLink;
           imgClone.src.fallbackUrl = ipfsLinks?.fallbackLink;
         }
@@ -293,10 +332,17 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
   };
 
   if (data.metadata.linkPreview) {
+    const clonedLinkPreviewData = JSON.parse(JSON.stringify(data.metadata.linkPreview));
+    if (clonedLinkPreviewData.imageSources) {
+      delete clonedLinkPreviewData.imageSources;
+    }
+    if (clonedLinkPreviewData.faviconSources) {
+      delete clonedLinkPreviewData.faviconSources;
+    }
     postObj.data.push({
       provider: PROVIDER_AKASHA,
       property: PROPERTY_LINK_PREVIEW,
-      value: serializeSlateToBase64(data.metadata.linkPreview),
+      value: serializeSlateToBase64(clonedLinkPreviewData),
     });
   }
   if (data.metadata.images) {

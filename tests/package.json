@@ -32,13 +32,14 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "devDependencies": {
-    "cypress": "9.2.1",
-    "fs-extra": "10.0.0",
+    "cypress": "10.7.0",
+    "fs-extra": "10.1.0",
     "@akashaorg/design-system": "*",
     "@types/faker": "5.5.8",
     "@types/react-router-dom": "5.3.3",
     "faker": "5.5.3",
-    "react-i18next": "11.12.0",
-    "react-router-dom": "6.3.0"
+    "react-i18next": "11.18.5",
+    "react-router-dom": "6.3.0",
+    "@akashaorg/typings": "*"
   }
 }

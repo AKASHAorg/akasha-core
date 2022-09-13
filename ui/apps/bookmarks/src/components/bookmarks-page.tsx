@@ -2,7 +2,13 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { useGetBookmarks, useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import {
+  useGetBookmarks,
+  useGetLogin,
+  useGetProfile,
+  usePosts,
+  checkPostActive,
+} from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
 const { ErrorLoader, Spinner, StartCard, InfoCard, Box } = DS;
@@ -23,7 +29,19 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   }, [loginQuery.data?.ethAddress]);
 
   const bookmarksReq = useGetBookmarks(loginQuery.data?.isReady && isLoggedIn);
-  const bookmarks = bookmarksReq.data;
+  /**
+   * Currently react query's initialData isn't working properly so bookmarksReq.data will return undefined even if we supply initialData.
+   * This will be fixed in v4 of react query(https://github.com/DamianOsipiuk/vue-query/issues/124).
+   * In the mean time, the following check will ensure undefined data is handled.  */
+  const bookmarks = bookmarksReq.data || [];
+
+  const bookmarkedPostIds = bookmarks.map((bm: Record<string, string>) => bm.entryId);
+  const bookmarkedPosts = usePosts({ postIds: bookmarkedPostIds, enabler: true });
+  const numberOfBookmarkedInactivePosts = React.useMemo(
+    () => bookmarkedPosts.filter(({ data }) => (data ? !checkPostActive(data) : false)).length,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [bookmarkedPostIds],
+  );
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
@@ -48,10 +66,22 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     'Bookmarks help you save your favorite posts for quick access at any time.',
   );
 
+  const getInactivePostsText = (numberOfBookmarkedInactivePosts: number) => {
+    const linkingVerb = numberOfBookmarkedInactivePosts > 1 ? t('are') : t('is');
+    const result = numberOfBookmarkedInactivePosts
+      ? t('{{ deletedCount }} of which {{ linkingVerb }} deleted', {
+          deletedCount: numberOfBookmarkedInactivePosts,
+          linkingVerb,
+        })
+      : '';
+    return result ? ` (${result})` : '';
+  };
+
   const getSubtitleText = () => {
     if (isLoggedIn && bookmarks?.length) {
-      return t('You have {{ bookmarkCount }} bookmarks.', {
+      return t('You have {{ bookmarkCount }} bookmarks.{{ inactivePostsText }}', {
         bookmarkCount: bookmarks.length,
+        inactivePostsText: getInactivePostsText(numberOfBookmarkedInactivePosts),
       });
     }
     if (isLoggedIn && !bookmarks?.length) {
@@ -98,9 +128,9 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
                 /* if next page, load more */
               }}
               getShareUrl={(itemId: string) =>
-                `${window.location.origin}/social-app/post/${itemId}`
+                `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
               }
-              pages={[{ results: [...bookmarks.map((bm: Record<string, unknown>) => bm.entryId)] }]}
+              pages={[{ results: bookmarkedPostIds }]}
               requestStatus={bookmarksReq.status}
               loginState={loginQuery.data}
               loggedProfile={loggedProfileQuery.data}
