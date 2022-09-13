@@ -7,8 +7,9 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import MyArticlesHeader from '../components/my-articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
+import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboarding/intro';
 
-import routes, { WRITE_ARTICLE } from '../routes';
+import routes, { ONBOARDING_STEP_ONE, WRITE_ARTICLE } from '../routes';
 import { StyledButton } from '../components/styled';
 import { articles } from '../components/dummy-data';
 
@@ -30,6 +31,18 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   const loginQuery = useGetLogin();
 
   const { t } = useTranslation('app-articles');
+
+  const isOnboarded = React.useMemo(() => {
+    return window.localStorage.getItem(ONBOARDING_STATUS);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleClickStart = () => {
+    routing.navigateTo({
+      appName: '@akashaorg/app-articles',
+      getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
+    });
+  };
 
   const closeMenuDrop = () => {
     setMenuDropOpen(null);
@@ -94,6 +107,20 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   const handleClickTab = (idx: number) => () => {
     setActiveTabIndex(idx);
   };
+
+  if (!isOnboarded) {
+    return (
+      <ArticleOnboardingIntro
+        titleLabel={t('Welcome to the Article App')}
+        introLabel={t("✨ When a post isn't enough ✨")}
+        descriptionLabel={t(
+          'Join our community of writers, start writing and sharing your knowledge with ethereans',
+        )}
+        buttonLabel={t('Start Tutorial')}
+        onStart={handleClickStart}
+      />
+    );
+  }
 
   return (
     <Box gap="small" className={className}>

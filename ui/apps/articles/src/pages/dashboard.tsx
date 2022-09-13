@@ -7,8 +7,9 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import ArticleHeader from '../components/articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
+import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboarding/intro';
 
-import routes, { SETTINGS, WRITE_ARTICLE } from '../routes';
+import routes, { ONBOARDING_STEP_ONE, SETTINGS, WRITE_ARTICLE } from '../routes';
 import { articles } from '../components/dummy-data';
 
 const { Box } = DS;
@@ -28,6 +29,18 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
   const loginQuery = useGetLogin();
 
   const { t } = useTranslation('app-articles');
+
+  const isOnboarded = React.useMemo(() => {
+    return window.localStorage.getItem(ONBOARDING_STATUS);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleClickStart = () => {
+    routing.navigateTo({
+      appName: '@akashaorg/app-articles',
+      getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
+    });
+  };
 
   const handleIconClick = () => {
     routing.navigateTo({
@@ -95,6 +108,20 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
   const handleSaveClick = () => {
     /** do something */
   };
+
+  if (!isOnboarded) {
+    return (
+      <ArticleOnboardingIntro
+        titleLabel={t('Welcome to the Article App')}
+        introLabel={t("✨ When a post isn't enough ✨")}
+        descriptionLabel={t(
+          'Join our community of writers, start writing and sharing your knowledge with ethereans',
+        )}
+        buttonLabel={t('Start Tutorial')}
+        onStart={handleClickStart}
+      />
+    );
+  }
 
   return (
     <Box gap="small" className={className}>

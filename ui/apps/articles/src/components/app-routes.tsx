@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import ArticleOnboardingIntro from './onboarding/intro';
 import ArticlesOnboardingSteps from './onboarding/onboarding-steps';
 import Dashboard from '../pages/dashboard';
 import ArticlePage from '../pages/article';
@@ -30,43 +28,11 @@ import routes, {
 const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const {
-    plugins: { routing },
-  } = props;
-
-  const { t } = useTranslation('app-articles');
-
-  const isOnboarded = true; // check if user has been onboarded and return appropriately
-
-  const handleClickStart = () => {
-    routing.navigateTo({
-      appName: '@akashaorg/app-articles',
-      getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
-    });
-  };
-
   return (
     <Box>
       <Router basename={props.baseRouteName}>
         <Routes>
-          <Route
-            path={routes[HOME]}
-            element={
-              isOnboarded ? (
-                <Dashboard {...props} />
-              ) : (
-                <ArticleOnboardingIntro
-                  titleLabel={t('Welcome to the Article App')}
-                  introLabel={t("✨ When a post isn't enough ✨")}
-                  descriptionLabel={t(
-                    'Join our community of writers, start writing and sharing your knowledge with ethereans',
-                  )}
-                  buttonLabel={t('Start Tutorial')}
-                  onStart={handleClickStart}
-                />
-              )
-            }
-          />
+          <Route path={routes[HOME]} element={<Dashboard {...props} />} />
 
           <Route path={routes[MY_ARTICLES]} element={<MyArticles {...props} />} />
 

@@ -6,6 +6,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import StepOne from './step-one';
 import StepTwo from './step-two';
 import StepThree from './step-three';
+import { ONBOARDING_STATUS } from './intro';
 
 import menuRoute, {
   ONBOARDING_STEP_ONE,
@@ -42,7 +43,15 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
+  const isOnboarded = React.useMemo(() => {
+    return window.localStorage.getItem(ONBOARDING_STATUS);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleClick = (step: string) => () => {
+    if (activeIndex === 2 && [HOME, WRITE_ARTICLE].includes(step)) {
+      window.localStorage.setItem(ONBOARDING_STATUS, 'completed');
+    }
     routing.navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => menuRoute[step],
@@ -56,6 +65,14 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
     }
     setSelectedTopics(prev => [...prev, topic]);
   };
+
+  if (isOnboarded) {
+    // if user has been onboarded, navigate to home
+    return routing.navigateTo({
+      appName: '@akashaorg/app-articles',
+      getNavigationUrl: () => menuRoute[HOME],
+    });
+  }
 
   return (
     <>

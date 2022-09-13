@@ -13,6 +13,8 @@ export interface IArticleOnboardingIntroProps {
   onStart: () => void;
 }
 
+export const ONBOARDING_STATUS = 'ewa-articles-app-onboarding-status';
+
 const ArticleOnboardingIntro: React.FC<IArticleOnboardingIntroProps> = props => {
   const {
     assetName = 'articles',
