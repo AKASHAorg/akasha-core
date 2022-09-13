@@ -136,6 +136,7 @@ import SearchInput from './components/SearchInput';
 import DropSearchInput from './components/DropSearchInput';
 
 import EditorModal from './components/EditorModal';
+import EditorToolbar from './components/EditorToolbar';
 import ExtensionPoint from './utils/extension-point';
 import ShareModal from './components/ShareModal';
 import { StyledLayer } from './components/ListModal/styled-modal';
@@ -240,6 +241,7 @@ const exported = {
   EditorCard,
   EditorPlaceholder,
   EditorModal,
+  EditorToolbar,
   EntryBox,
   CardHeaderMenuDropdown,
   EntryCard,
