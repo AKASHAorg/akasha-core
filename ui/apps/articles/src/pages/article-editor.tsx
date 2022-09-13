@@ -5,10 +5,9 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import EditorToolbar from '../components/toolbar';
 import ArticleEditorCard from '../components/article-editor-card';
 
-const { Box, Icon, MainAreaCardBox, Text } = DS;
+const { Box, EditorToolbar, Icon, MainAreaCardBox, Text } = DS;
 
 export interface IArticleEditorProps {
   className?: string;
@@ -17,7 +16,10 @@ export interface IArticleEditorProps {
 const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props => {
   const { className } = props;
 
-  const [fontColor] = React.useState('blue');
+  const [dropOpen, setDropOpen] = React.useState<string | null>(null);
+  const [fontColor] = React.useState<string>('blue');
+  const [listStyle, setListStyle] = React.useState<string>('listBulleted');
+  const [alignStyle, setAlignStyle] = React.useState<string>('alignLeft');
 
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
@@ -26,8 +28,14 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
     navigate(-1);
   };
 
-  const handleEmojiIconClick = () => {
-    /** do something */
+  const handleListIconClick = (iconType: string) => {
+    setListStyle(iconType);
+    setDropOpen(null);
+  };
+
+  const handleAlignIconClick = (iconType: string) => {
+    setAlignStyle(iconType);
+    setDropOpen(null);
   };
 
   const handleManageCollaborators = () => {
@@ -51,14 +59,13 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
         </Text>
       </Box>
       <EditorToolbar
+        dropOpen={dropOpen}
         fontColor={fontColor}
-        onEmojiIconClick={handleEmojiIconClick}
-        onFontColorClick={() => {
-          /** */
-        }}
-        onTextCaseClick={() => {
-          /** */
-        }}
+        listStyle={listStyle}
+        alignStyle={alignStyle}
+        wrapperBorder={{ side: 'horizontal', color: 'border' }}
+        closeDrop={() => setDropOpen(null)}
+        onDropOpen={type => setDropOpen(type)}
         onBoldClick={() => {
           /** */
         }}
@@ -71,12 +78,8 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
         onStrikeThroughClick={() => {
           /** */
         }}
-        onListStyleClick={() => {
-          /** */
-        }}
-        onAlignStyleClick={() => {
-          /** */
-        }}
+        onListIconClick={handleListIconClick}
+        onAlignIconClick={handleAlignIconClick}
       />
       <ArticleEditorCard
         inviteCollaboratorsLabel={t('Invite collaborators')}
