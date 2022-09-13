@@ -1,3 +1,4 @@
+import { TIMEOUT } from '../utils/constants';
 import { TopbarTest } from './partials/topbar.spec';
 import { TrendingWidgetTest } from './partials/trendingWidget.spec';
 
@@ -10,7 +11,7 @@ describe('Legal Pages', () => {
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
     it('should have legal document visible', () => {
-      cy.get('[data-testid="md-card"]', { timeout: 20000 }).should('be.visible');
+      cy.get('[data-testid="md-card"]', { timeout: TIMEOUT }).should('be.visible');
     });
   });
   context('Terms of Use Page', () => {
@@ -21,7 +22,7 @@ describe('Legal Pages', () => {
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
     it('should have legal document visible', () => {
-      cy.get('[data-testid="md-card"]', { timeout: 20000 }).should('be.visible');
+      cy.get('[data-testid="md-card"]', { timeout: TIMEOUT }).should('be.visible');
     });
   });
   context('Privacy Policy Page', () => {
@@ -32,7 +33,7 @@ describe('Legal Pages', () => {
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
     it('should have legal document visible', () => {
-      cy.get('[data-testid="md-card"]', { timeout: 20000 }).should('be.visible');
+      cy.get('[data-testid="md-card"]', { timeout: TIMEOUT }).should('be.visible');
     });
   });
   context('Code of Conduct Page', () => {
@@ -43,7 +44,7 @@ describe('Legal Pages', () => {
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
     it('should have legal document visible', () => {
-      cy.get('[data-testid="md-card"]', { timeout: 20000 }).should('be.visible');
+      cy.get('[data-testid="md-card"]', { timeout: TIMEOUT }).should('be.visible');
     });
   });
   context('Developers Guideline Page', () => {
@@ -54,7 +55,7 @@ describe('Legal Pages', () => {
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
     it('should have legal document visible', () => {
-      cy.get('[data-testid="md-card"]', { timeout: 20000 }).should('be.visible');
+      cy.get('[data-testid="md-card"]', { timeout: TIMEOUT }).should('be.visible');
     });
   });
 });
