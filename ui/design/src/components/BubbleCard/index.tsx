@@ -1,83 +1,56 @@
 import * as React from 'react';
 import { Descendant } from 'slate';
 import { Box, Text } from 'grommet';
-import { isMobileOnly } from 'react-device-detect';
 
 import Icon from '../Icon';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
-import { IconDiv } from '../TopBar/styled-topbar';
 
 import { formatRelativeTime, ILocale } from '../../utils/time';
 import ReadOnlyEditor from '../ReadOnlyEditor';
-
-type chatStatus = 'sent' | 'delivered' | 'read';
+import dayjs from 'dayjs';
 
 export interface IBubbleCardProps {
   locale: ILocale;
-  sender?: string;
+  senderName?: string;
   youLabel: string;
   content?: Descendant[];
-  status?: chatStatus;
-  isLoggedUser?: boolean;
+  isRead?: boolean;
+  isFromLoggedUser?: boolean;
   chatTimestamp?: string;
-  onMentionClick?: () => void;
-  onTagClick?: () => void;
-  onLinkClick?: () => void;
+  handleMentionClick?: (pubKey: string) => void;
+  handleTagClick?: (name: string) => void;
+  handleLinkClick?: (url: string) => void;
 }
 
 const BubbleCard: React.FC<IBubbleCardProps> = props => {
   const {
     locale,
-    sender,
+    senderName,
     youLabel,
     content,
-    status,
-    isLoggedUser,
+    isRead,
+    isFromLoggedUser,
     chatTimestamp,
-    onMentionClick,
-    onTagClick,
-    onLinkClick,
+    handleMentionClick,
+    handleTagClick,
+    handleLinkClick,
   } = props;
 
-  const chatStatusIcon = {
-    sent: 'checkSimple',
-    delivered: 'checkDouble',
-    read: 'checkDouble',
-  };
-
-  const [isActive, setIsActive] = React.useState(false);
-
-  const handleIconClick = () => setIsActive(!isActive);
-
-  const handleMentionClick = () => {
-    if (onMentionClick) {
-      onMentionClick();
-    }
-  };
-  const handleTagClick = () => {
-    if (onTagClick) {
-      onTagClick();
-    }
-  };
-  const handleLinkClick = () => {
-    if (onLinkClick) {
-      onLinkClick();
-    }
-  };
-
-  const time = chatTimestamp?.split('T')[1].split(':');
+  const time = dayjs(+chatTimestamp / 1000000).format('HH:mm');
+  const relativeTime = formatRelativeTime(+chatTimestamp / 1000000, locale);
+  const iconType = isRead ? 'checkDouble' : 'checkSimple';
 
   return (
     <Box>
       <Box direction="row" justify="between" margin={{ bottom: 'xsmall' }}>
-        <Text>{isLoggedUser ? youLabel : sender}</Text>
-        <Text color="secondaryText">{formatRelativeTime(chatTimestamp, locale)}</Text>
+        <Text>{isFromLoggedUser ? youLabel : senderName}</Text>
+        <Text color="secondaryText">{relativeTime}</Text>
       </Box>
       <BasicCardBox
         noBorderRadius
         style={{ minHeight: 'min-content' }} // allows cards to adjust in a y-scrollable container
       >
-        <Box pad="small" style={{ cursor: 'pointer' }}>
+        <Box pad="small" style={{ cursor: 'pointer' }} background="chatBackground">
           <Box direction="row" justify="between">
             <Box direction="row" align="start">
               <Box align="start" margin={{ left: 'small' }}>
@@ -89,24 +62,19 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
                 />
               </Box>
             </Box>
-            {isLoggedUser && (
+            {isFromLoggedUser && (
               <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
-                <IconDiv onClick={handleIconClick} isActive={isActive} isMobile={isMobileOnly}>
-                  <Icon size="xs" plain={true} accentColor={isActive} type="moreDark" />
-                </IconDiv>
+                <Icon size="xs" plain={true} type="moreDark" />
               </Box>
             )}
           </Box>
           <Box direction="row" height="fit-content" flex={{ shrink: 0 }} justify="end">
             {chatTimestamp && (
-              <Text
-                color="secondaryText"
-                margin={{ ...(status && { right: 'xsmall' }) }}
-              >{`${time[0]}:${time[1]}`}</Text>
+              <Text color="secondaryText" margin={{ ...(isRead && { right: 'xsmall' }) }}>
+                {time}
+              </Text>
             )}
-            {isLoggedUser && status && (
-              <Icon size="sm" accentColor={status === 'read'} type={chatStatusIcon[status]} />
-            )}
+            {isFromLoggedUser && <Icon size="sm" accentColor={isRead} type={iconType} />}
           </Box>
         </Box>
       </BasicCardBox>

@@ -13,7 +13,7 @@ export interface IAppearanceOption extends BaseOption {
 }
 
 const AppearanceOption: React.FC<IAppearanceOption> = props => {
-  const { titleLabel, appThemeLabel, appThemeInfo, theme, onThemeSelect, OnChevronLeftClick } =
+  const { titleLabel, appThemeLabel, appThemeInfo, theme, onThemeSelect, onChevronLeftClick } =
     props;
 
   return (
@@ -25,7 +25,7 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
           align="center"
           border={{ side: 'bottom', color: 'lightBorder' }}
         >
-          <StyledIcon type="chevronLeft" onClick={OnChevronLeftClick} />
+          <StyledIcon type="chevronLeft" onClick={onChevronLeftClick} />
           <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
             {titleLabel}
           </StyledText>

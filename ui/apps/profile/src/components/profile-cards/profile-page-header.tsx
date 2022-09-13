@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import DS from '@akashaorg/design-system';
 import {
   IProfileData,
   UsernameTypes,
   NavigateToParams,
   RootComponentProps,
+  EventTypes,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
@@ -18,7 +18,7 @@ import {
 import StatModalWrapper from './stat-modal-wrapper';
 import { getUsernameTypes } from '../../utils/username-utils';
 
-const { ModalRenderer, ProfileCard, styled } = DS;
+const { ModalRenderer, ProfileCard, styled, ExtensionPoint } = DS;
 
 const ProfilePageCard = styled(ProfileCard)`
   margin-bottom: 0.5rem;
@@ -118,6 +118,25 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     setModalOpen(false);
   };
 
+  const handleExtPointMount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointMount,
+      data: {
+        name,
+        pubKey: profileData?.pubKey,
+      },
+    });
+  };
+
+  const handleExtPointUnmount = (name: string) => {
+    props.uiEvents.next({
+      event: EventTypes.ExtensionPointUnmount,
+      data: {
+        name,
+      },
+    });
+  };
+
   return (
     <>
       <ModalRenderer slotId={modalSlotId}>
@@ -179,6 +198,13 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         copyLabel={t('Copy to clipboard')}
         copiedLabel={t('Copied')}
         modalSlotId={props.layoutConfig.modalSlotId}
+        actionButtonExt={
+          <ExtensionPoint
+            name={`profile-card-action-extension`}
+            onMount={handleExtPointMount}
+            onUnmount={handleExtPointUnmount}
+          />
+        }
       />
     </>
   );

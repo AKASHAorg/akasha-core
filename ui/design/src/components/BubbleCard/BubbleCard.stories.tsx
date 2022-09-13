@@ -10,7 +10,7 @@ export default {
   title: 'Cards/BubbleCard',
   component: BubbleCard,
   argType: {
-    sender: { control: 'text' },
+    senderName: { control: 'text' },
     youLabel: { control: 'text' },
     content: { control: 'text' },
     isLoggedUser: { control: 'boolean' },
@@ -30,7 +30,7 @@ export const BaseBubbleCard = Template.bind({});
 
 BaseBubbleCard.args = {
   locale: 'en',
-  sender: 'Jerry Mil',
+  senderName: 'Jerry Mil',
   youLabel: 'You',
   content: entryData.slateContent,
   isLoggedUser: true,

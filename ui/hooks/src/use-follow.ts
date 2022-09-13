@@ -12,6 +12,7 @@ import { FOLLOWERS_KEY, PROFILE_KEY } from './use-profile';
  * @internal
  */
 export const FOLLOWED_PROFILES_KEY = 'Followed_Profiles';
+export const CONTACT_LIST_KEY = 'Contact_List';
 
 const getIsFollowingMultiple = async (followerPubKey: string, followingPubKeyArray: string[]) => {
   const sdk = getSDK();
@@ -103,6 +104,124 @@ export function useIsFollowingMultiple(followerPubKey: string, followingPubKeyAr
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetchPending, query.isFetching, followerPubKey]);
+
+  return query;
+}
+
+const getIsContactMultiple = async (mainProfile: string, checkIfContactsPubkeys: string[]) => {
+  const sdk = getSDK();
+  const filteredList = checkIfContactsPubkeys.filter(profile => !!profile);
+  const getFollowedProfilesCalls = filteredList.map((profile: string) => {
+    return sdk.api.profile
+      .isFollowing({
+        follower: mainProfile,
+        following: profile,
+      })
+      .pipe(
+        catchError(err => {
+          logError('useFollow.getFollowedProfile', err);
+          return of({ data: null });
+        }),
+      );
+  });
+  const getFollowingProfilesCalls = filteredList.map((profile: string) => {
+    return sdk.api.profile
+      .isFollowing({
+        follower: profile,
+        following: mainProfile,
+      })
+      .pipe(
+        catchError(err => {
+          logError('useFollow.getFollowingProfile', err);
+          return of({ data: null });
+        }),
+      );
+  });
+  const followedProfiles: string[] = [];
+  const followingProfiles: string[] = [];
+  if (getFollowedProfilesCalls.length) {
+    const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
+    filteredList.forEach((profile, index) => {
+      if (res[index].data?.isFollowing === true) {
+        followedProfiles.push(profile);
+      }
+    });
+  }
+  if (getFollowingProfilesCalls.length) {
+    const res = await lastValueFrom(forkJoin(getFollowingProfilesCalls));
+    filteredList.forEach((profile, index) => {
+      if (res[index].data?.isFollowing === true) {
+        followingProfiles.push(profile);
+      }
+    });
+  }
+  const contactList = followedProfiles.filter(followedProfile =>
+    followingProfiles.includes(followedProfile),
+  );
+  return contactList;
+};
+
+class GetContactListBuffer {
+  static buffer: string[] = [];
+  static addToBuffer(arr: string[]) {
+    this.buffer = deduplicateArray([...this.buffer, ...arr]);
+  }
+}
+
+/**
+ * Hook to check if a list of profiles are contacts for a specific user
+ * A contact relationship is defined by each of the two profiles following each other
+ * @example useIsContactMultiple hook
+ * ```typescript
+ * const isContactMultipleQuery = useIsContactMultiple('user-pubkey', ['some-pubkey-1', 'some-pubkey-2']);
+ *
+ * const contactList = isContactMultipleQuery.data;
+ * ```
+ */
+export function useIsContactMultiple(mainProfile: string, checkIfContactsPubkeys: string[]) {
+  const queryClient = useQueryClient();
+  const [refetchPending, setRefetchPending] = React.useState(false);
+  const filteredCheckIfContactsPubkeys = checkIfContactsPubkeys.filter(_ => _); // often we end up with [undefined] as arg
+  const allPubKeys: string[] = queryClient.getQueryData([CONTACT_LIST_KEY, 'all']) || [];
+  const newAllPubKeys = deduplicateArray([...allPubKeys, ...filteredCheckIfContactsPubkeys]);
+
+  const query = useQuery(
+    [CONTACT_LIST_KEY],
+    async () => {
+      const tempBuffer = GetContactListBuffer.buffer;
+      GetContactListBuffer.buffer = [];
+      const newContactList = await getIsContactMultiple(mainProfile, tempBuffer);
+
+      const contactList: string[] = queryClient.getQueryData([CONTACT_LIST_KEY]) || [];
+      return deduplicateArray([...contactList, ...newContactList]);
+    },
+    {
+      enabled: !!(mainProfile && GetContactListBuffer.buffer.length),
+      keepPreviousData: false,
+      initialData: [],
+      onError: (err: Error) => logError('useFollow.useIsContactMultiple', err),
+      onSuccess: () => {
+        setRefetchPending(false);
+      },
+    },
+  );
+
+  React.useEffect(() => {
+    const shouldRefetch = objHash(newAllPubKeys) !== objHash(allPubKeys);
+    if (shouldRefetch && !refetchPending) {
+      queryClient.setQueryData([CONTACT_LIST_KEY, 'all'], newAllPubKeys);
+      GetContactListBuffer.addToBuffer(filteredCheckIfContactsPubkeys);
+      setRefetchPending(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newAllPubKeys, allPubKeys, filteredCheckIfContactsPubkeys, refetchPending]);
+
+  React.useEffect(() => {
+    if (!query.isFetching && refetchPending && mainProfile && GetContactListBuffer.buffer.length) {
+      query.refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetchPending, query.isFetching, mainProfile]);
 
   return query;
 }

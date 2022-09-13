@@ -1,30 +1,27 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
-import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
   ThemeWrapper,
   useAnalytics,
-  useGetLogin,
   withProviders,
+  useGetLogin,
   useIsContactMultiple,
+  validateType,
 } from '@akashaorg/ui-awf-hooks';
 
-const { Icon, Button, styled, Drop, Box, Text } = DS;
+const { Icon, Button, Box, Drop, Text } = DS;
 
-const StyledButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  border: 1px solid ${props => props.theme.colors.accent};
-`;
-
-const MessageIconButton = (props: RootExtensionProps) => {
+const MessageButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
+
   const { t } = useTranslation('app-messaging');
+
   const [analyticsActions] = useAnalytics();
+
   const { pubKey } = extensionData;
 
   const [showTooltip, setShowTooltip] = React.useState(false);
@@ -33,7 +30,12 @@ const MessageIconButton = (props: RootExtensionProps) => {
   const loginQuery = useGetLogin();
   const loggedUserPubKey = loginQuery.data?.pubKey;
 
-  const isContactReq = useIsContactMultiple(loggedUserPubKey, [pubKey as string]);
+  const contactsToCheck = [];
+  if (validateType(pubKey, 'string')) {
+    contactsToCheck.push(pubKey);
+  }
+
+  const isContactReq = useIsContactMultiple(loggedUserPubKey, contactsToCheck);
   const contactList = isContactReq.data;
 
   const isContact = React.useMemo(() => {
@@ -52,7 +54,8 @@ const MessageIconButton = (props: RootExtensionProps) => {
     });
   };
 
-  const handleShowTooltip = () => {
+  const handleShowTooltip = (ev: React.SyntheticEvent) => {
+    ev.stopPropagation();
     if (!isContact) {
       setShowTooltip(!showTooltip);
     }
@@ -61,14 +64,15 @@ const MessageIconButton = (props: RootExtensionProps) => {
   return (
     <>
       <div ref={btnRef} onClick={handleShowTooltip}>
-        <StyledButton
+        <Button
           icon={<Icon type="email" accentColor={true} />}
+          label={t('Message')}
           onClick={handleClick}
           slimBorder={true}
           disabled={!isContact}
+          fill={true}
         />
       </div>
-
       {showTooltip && btnRef.current && (
         <Drop
           margin={{ top: '5px' }}
@@ -91,16 +95,16 @@ const MessageIconButton = (props: RootExtensionProps) => {
   );
 };
 
-const MessageIconButtonWrapper = (props: RootExtensionProps) => (
+const MessageButtonWrapper = (props: RootExtensionProps) => (
   <I18nextProvider i18n={props.plugins?.translation?.i18n}>
-    <MessageIconButton {...props} />
+    <MessageButton {...props} />
   </I18nextProvider>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: withProviders(MessageIconButtonWrapper),
+  rootComponent: withProviders(MessageButtonWrapper),
   renderType: 'createRoot',
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {

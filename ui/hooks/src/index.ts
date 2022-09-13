@@ -1,5 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
 import constants from './constants';
+import { logError } from './utils/error-handler';
+import { validateType } from './utils/generic-utils';
 import { createPendingEntry, mapEntry } from './utils/entry-utils';
 import { checkPostActive } from './utils/checkPostActive';
 import { getMediaUrl, uploadMediaToTextile, getLinkPreview } from './utils/media-utils';
@@ -64,7 +66,7 @@ import {
   useSignUp,
 } from './use-login';
 import { useLegalDoc } from './use-legal';
-import { useIsFollowingMultiple, useFollow, useUnfollow } from './use-follow';
+import { useIsFollowingMultiple, useIsContactMultiple, useFollow, useUnfollow } from './use-follow';
 import {
   useComment,
   useInfiniteComments,
@@ -133,6 +135,10 @@ export {
   withProviders,
   ThemeWrapper,
   useReasons,
+  // generic-utils
+  validateType,
+  // error-utils
+  logError,
   // entry-utils
   createPendingEntry,
   mapEntry,
@@ -203,6 +209,7 @@ export {
   useLegalDoc,
   // use-follow
   useIsFollowingMultiple,
+  useIsContactMultiple,
   useFollow,
   useUnfollow,
   // use-comments

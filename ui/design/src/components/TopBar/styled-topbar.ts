@@ -130,7 +130,7 @@ const IconDiv = styled(Box)<{ isActive: boolean; size?: string; isMobile?: boole
       `;
     }
     return css`
-      background-color: ${props.theme.colors.background};
+      background-color: ${props.theme.colors.cardBackground};
     `;
   }}
 `;

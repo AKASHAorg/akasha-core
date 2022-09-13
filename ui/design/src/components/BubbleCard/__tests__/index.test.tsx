@@ -15,11 +15,11 @@ describe('<BubbleCard /> Component', () => {
         wrapWithTheme(
           <BubbleCard
             locale="en"
-            sender="Jerry Mil"
+            senderName="Jerry Mil"
             youLabel="You"
             content={entryData.slateContent}
-            isLoggedUser={false}
-            status="sent"
+            isFromLoggedUser={false}
+            isRead={true}
             chatTimestamp="2022-06-16T10:07:15.000Z"
           />,
         ),

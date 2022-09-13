@@ -7,7 +7,7 @@ import ProfileAvatarButton from '../ProfileAvatarButton';
 import { WidgetAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import DuplexButton from '../DuplexButton';
-import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
+import { TextLine } from '../TextLine';
 
 export interface ITrendingWidgetCardProps {
   // data

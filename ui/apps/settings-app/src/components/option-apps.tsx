@@ -27,7 +27,7 @@ const AppsOption: React.FC<IAppsOption> = props => {
     checkedDataAnalytics,
     onAutoUpdatesChange,
     onDataAnalyticsChange,
-    OnChevronLeftClick,
+    onChevronLeftClick,
   } = props;
 
   return (
@@ -39,7 +39,7 @@ const AppsOption: React.FC<IAppsOption> = props => {
           align="center"
           border={{ side: 'bottom', color: 'lightBorder' }}
         >
-          <StyledIcon type="chevronLeft" onClick={OnChevronLeftClick} />
+          <StyledIcon type="chevronLeft" onClick={onChevronLeftClick} />
           <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
             {titleLabel}
           </StyledText>

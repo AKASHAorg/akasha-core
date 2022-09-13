@@ -30,7 +30,7 @@ const SignUpModal = (props: {
   checkedTermsValues?: string[];
   onCheckedTermsValues?: (ev: OnChangeEvent) => void;
   waitForCheckTerms?: boolean;
-  onAcceptTerms?: (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onAcceptTerms?: (ev: React.MouseEvent<HTMLElement, MouseEvent>) => void;
 }) => {
   useBodyScrollLock();
 

@@ -19,7 +19,7 @@ import EmbedBox from '../EmbedBox';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
-import { StyledBox, StyledEditable, StyledIconDiv } from './styled-editor-box';
+import { StyledBox, StyledEditable, StyledIconDiv, StyledPublishButton } from './styled-editor-box';
 import { ImageData, ImageUpload } from './image-upload';
 import Button from '../Button';
 import { MentionPopover } from './mention-popover';
@@ -56,7 +56,7 @@ export interface IEditorBox {
   withMeter?: boolean;
   linkPreview?: IEntryData['linkPreview'];
   uploadedImages?: IEntryData['images'];
-  getLinkPreview: (url: string) => Promise<IEntryData['linkPreview']>;
+  getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
   getMentions: (query: string) => void;
   getTags: (query: string) => void;
   mentions?: {
@@ -195,7 +195,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const handleInsertLink = (text: string) => {
     CustomEditor.insertLink(editor, { url: text.trim() });
-    if (images.length === 0 && !uploading) {
+    if (images.length === 0 && !uploading && typeof getLinkPreview === 'function') {
       handleGetLinkPreview(text);
     }
   };
@@ -284,7 +284,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const textContent: string = serializeToPlainText({ children: slateContent });
     const data = { metadata, slateContent, textContent, author: ethAddress };
     onPublish(data);
-    setEditorState(editorDefaultValue);
+    editor.children = editorDefaultValue;
+    editor.onChange();
   };
 
   /**
@@ -579,7 +580,11 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         )}
         <Box width="100%" pad={{ horizontal: 'small' }} direction="row" justify="between">
           <Box fill={true}>
-            <Slate editor={editor} value={editorState} onChange={handleChange}>
+            <Slate
+              editor={editor}
+              value={editorState || editorDefaultValue}
+              onChange={handleChange}
+            >
               <StyledEditable
                 placeholder={placeholderLabel}
                 autoComplete="off"
@@ -656,14 +661,16 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               <Icon type="emoji" clickable={true} onClick={openEmojiPicker} size="md" />
             </StyledIconDiv>
           )}
-          <StyledIconDiv ref={mediaIconRef}>
-            <Icon
-              type="image"
-              clickable={!uploading && !imageUploadDisabled}
-              onClick={handleMediaClick}
-              size="md"
-            />
-          </StyledIconDiv>
+          {uploadRequest && (
+            <StyledIconDiv ref={mediaIconRef}>
+              <Icon
+                type="image"
+                clickable={!uploading && !imageUploadDisabled}
+                onClick={handleMediaClick}
+                size="md"
+              />
+            </StyledIconDiv>
+          )}
         </Box>
 
         <Box direction="row" gap="small" align="center">
@@ -671,7 +678,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           {showCancelButton && (
             <Button secondary={true} label={cancelButtonLabel} onClick={onCancelClick} />
           )}
-          <Button
+          <StyledPublishButton
             primary={true}
             icon={disablePublish ? <Icon type="loading" color="white" /> : null}
             label={disablePublish ? disablePublishLabel : postLabel}
