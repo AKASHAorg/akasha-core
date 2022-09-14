@@ -20,7 +20,7 @@ import { AUTH_EVENTS, APP_EVENTS } from '@akashaorg/typings/sdk';
 import * as singleSpa from 'single-spa';
 
 export const pipelineEvents = new Subject<Partial<LoaderState>>();
-export const uiEvents = new ReplaySubject<UIEventData>();
+export const uiEvents = new Subject<UIEventData>();
 
 /**
  * A helper operator to filter events,
