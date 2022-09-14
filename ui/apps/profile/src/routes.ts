@@ -7,6 +7,7 @@ export const ONBOARDING_STEP_TWO = 'OnboardingStepTwo';
 export const ONBOARDING_STEP_THREE = 'OnboardingStepThree';
 export const ONBOARDING_STEP_FOUR = 'OnboardingStepFour';
 export const baseDeveloperRoute = '/my-profile/developer';
+export const rootRoute = '';
 
 export default {
   [MY_PROFILE]: `/my-profile`,

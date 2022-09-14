@@ -5,6 +5,7 @@ import {
   Box,
   BoxExtendedProps,
   ButtonExtendedProps,
+  Drop,
   Grid,
   Image,
   Grommet,
@@ -41,6 +42,8 @@ import { MenuItemButton } from './components/EntryCard/menu-item-button';
 import { EntryCardHidden } from './components/EntryCard/entry-card-hidden';
 
 import ReadOnlyEditor from './components/ReadOnlyEditor';
+
+import { TextLine } from './components/TextLine';
 
 import {
   BasicCardBox,
@@ -141,9 +144,10 @@ import { ModalContainer } from './components/SignInModal/fullscreen-modal-contai
 import { ModalRenderer } from './components/SignInModal/modal-renderer';
 import MessageAppMiniCard from './components/MessageMiniCard';
 import BubbleCard from './components/BubbleCard';
-import MessageAppConvoHeader from './components/MessageAppConvoHeader';
+import ChatAreaHeader from './components/ChatAreaHeader';
 import ChatList from './components/ChatList';
 import ChatArea from './components/ChatArea';
+import { ChatEditor } from './components/ChatEditor/Index';
 
 import MobileListModal from './components/MobileListModal';
 import ModerateModal from './components/ModerateModal';
@@ -245,6 +249,7 @@ const exported = {
   ProfileSearchCard,
   ProfileMiniCard,
   TextInputField,
+  TextLine,
   TagCard,
   TagDetailCard,
   TagProfileCard,
@@ -286,6 +291,7 @@ const exported = {
   lightTheme,
   Anchor,
   Box,
+  Drop,
   Grid,
   Image,
   Grommet,
@@ -313,9 +319,10 @@ const exported = {
   EthProviderModal,
   MessageAppMiniCard,
   BubbleCard,
-  MessageAppConvoHeader,
+  ChatAreaHeader,
   ChatList,
   ChatArea,
+  ChatEditor,
   MobileListModal,
   ModalContainer,
   ModalRenderer,

@@ -6,7 +6,7 @@ import { TagIconDiv, StyledInlineBox } from './styled-tag-card';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import DuplexButton from '../DuplexButton';
 import Icon from '../Icon';
-import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
+import { TextLine } from '../TextLine';
 
 export interface ITagSearchCard {
   // data

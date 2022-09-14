@@ -1,46 +1,107 @@
 import * as React from 'react';
 import singleSpaReact from 'single-spa-react';
+import { useTranslation } from 'react-i18next';
 import ReactDOM from 'react-dom';
 import DS from '@akashaorg/design-system';
 import { RootExtensionProps, AnalyticsCategories } from '@akashaorg/typings/ui';
-import { I18nextProvider, useTranslation } from 'react-i18next';
-import { ThemeWrapper, useAnalytics, withProviders } from '@akashaorg/ui-awf-hooks';
+import { I18nextProvider } from 'react-i18next';
+import {
+  ThemeWrapper,
+  useAnalytics,
+  useGetLogin,
+  withProviders,
+  useIsContactMultiple,
+} from '@akashaorg/ui-awf-hooks';
 
-const { Icon, Button } = DS;
+const { Icon, Button, styled, Drop, Box, Text } = DS;
 
-const MessageButton = (props: RootExtensionProps) => {
+const StyledButton = styled(Button)`
+  display: flex;
+  align-items: center;
+  border: 1px solid ${props => props.theme.colors.accent};
+`;
+
+const MessageIconButton = (props: RootExtensionProps) => {
   const { extensionData } = props;
-  const [analyticsActions] = useAnalytics();
-
   const { t } = useTranslation('app-messaging');
+  const [analyticsActions] = useAnalytics();
+  const { pubKey } = extensionData;
+
+  const [showTooltip, setShowTooltip] = React.useState(false);
+  const btnRef = React.useRef(null);
+
+  const loginQuery = useGetLogin();
+  const loggedUserPubKey = loginQuery.data?.pubKey;
+
+  const isContactReq = useIsContactMultiple(loggedUserPubKey, [pubKey as string]);
+  const contactList = isContactReq.data;
+
+  const isContact = React.useMemo(() => {
+    return contactList.includes(pubKey as string);
+  }, [contactList, pubKey]);
 
   const handleClick = () => {
-    const { pubKey } = extensionData;
-
     analyticsActions.trackEvent({
       category: AnalyticsCategories.MESSAGING,
       action: 'message-button-click',
     });
 
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
-      getNavigationUrl: navRoutes => `${navRoutes.inbox}/${pubKey}`,
+      getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });
   };
 
-  return <Button label={t('Message')} onClick={handleClick} />;
+  const handleShowTooltip = () => {
+    if (!isContact) {
+      setShowTooltip(!showTooltip);
+    }
+  };
+
+  return (
+    <>
+      <div ref={btnRef} onClick={handleShowTooltip}>
+        <StyledButton
+          icon={<Icon type="email" accentColor={true} />}
+          onClick={handleClick}
+          slimBorder={true}
+          disabled={!isContact}
+        />
+      </div>
+
+      {showTooltip && btnRef.current && (
+        <Drop
+          margin={{ top: '5px' }}
+          align={{ top: 'bottom' }}
+          target={btnRef.current}
+          onClickOutside={() => setShowTooltip(false)}
+        >
+          <Box
+            background="activePanelBackground"
+            round="xsmall"
+            pad="xsmall"
+            flex={{ shrink: 0 }}
+            width={{ min: '200px' }}
+          >
+            <Text>{t('You need to follow each other to start using the messaging app')}</Text>
+          </Box>
+        </Drop>
+      )}
+    </>
+  );
 };
 
-const MessageButtonWrapper = (props: RootExtensionProps) => (
+const MessageIconButtonWrapper = (props: RootExtensionProps) => (
   <I18nextProvider i18n={props.plugins?.translation?.i18n}>
-    <MessageButton {...props} />
+    <MessageIconButton {...props} />
   </I18nextProvider>
 );
 
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: withProviders(MessageButtonWrapper),
+  rootComponent: withProviders(MessageIconButtonWrapper),
+  renderType: 'createRoot',
   errorBoundary: (err, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
       props.logger.error(`${JSON.stringify(errorInfo)}, ${errorInfo}`);

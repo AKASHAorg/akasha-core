@@ -23,6 +23,7 @@ export interface IProfileMiniCard {
   handleFollow?: (profileEthAddress: string) => void;
   handleUnfollow?: (profileEthAddress: string) => void;
   disableFollowing?: boolean;
+  footerExt?: React.ReactNode;
 }
 
 const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
@@ -39,6 +40,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
     handleUnfollow,
     isFollowing,
     disableFollowing,
+    footerExt,
   } = props;
 
   const onFollow = (ev: React.SyntheticEvent) => {
@@ -140,6 +142,7 @@ const ProfileMiniCard: React.FC<IProfileMiniCard> = props => {
             icon={<Icon type="following" />}
           />
         )}
+        {footerExt}
       </Box>
     </Box>
   );

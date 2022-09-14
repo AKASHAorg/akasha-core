@@ -8,7 +8,7 @@ import ICDetailCardDescription from './ic-detail-card-fields/description';
 import Icon from '../Icon';
 import DuplexButton from '../DuplexButton';
 import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
-import { TextLine } from '../VirtualList/placeholders/entry-card-placeholder';
+import { TextLine } from '../TextLine';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { IProfileData } from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';

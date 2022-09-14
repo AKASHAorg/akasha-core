@@ -128,7 +128,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
               icon={<Icon type="arrowDown" />}
               activeIcon={<Icon type="checkSimple" accentColor={true} />}
               activeHoverIcon={<Icon type="close" />}
-              active={installedAppsInfo?.some(installedApp => installedApp.id === app.id)}
+              active={installedAppsInfo?.some(installedApp => installedApp.name === app.name)}
               activeLabel={t('Installed')}
               inactiveLabel={t('Install')}
               activeHoverLabel={t('Uninstall')}
