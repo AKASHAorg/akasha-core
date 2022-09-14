@@ -30,19 +30,24 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
     navigate(-1);
   };
 
-  const handleCaseIconClick = (iconType: string) => {
-    setCaseStyle(iconType);
-    setDropOpen(null);
-  };
-
-  const handleListIconClick = (iconType: string) => {
-    setListStyle(iconType);
-    setDropOpen(null);
-  };
-
-  const handleAlignIconClick = (iconType: string) => {
-    setAlignStyle(iconType);
-    setDropOpen(null);
+  const handleIconClick = (iconType: string) => {
+    switch (dropOpen) {
+      case 'align':
+        setAlignStyle(iconType);
+        setDropOpen(null);
+        break;
+      case 'list':
+        setListStyle(iconType);
+        setDropOpen(null);
+        break;
+      case 'case':
+        setCaseStyle(iconType);
+        setDropOpen(null);
+        break;
+      default:
+        setDropOpen(null);
+        break;
+    }
   };
 
   const handleManageCollaborators = () => {
@@ -86,9 +91,7 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
         onStrikeThroughClick={() => {
           /** */
         }}
-        onCaseIconClick={handleCaseIconClick}
-        onListIconClick={handleListIconClick}
-        onAlignIconClick={handleAlignIconClick}
+        onIconClick={handleIconClick}
       />
       <ArticleEditorCard
         inviteCollaboratorsLabel={t('Invite collaborators')}

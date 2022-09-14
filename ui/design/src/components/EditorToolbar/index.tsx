@@ -16,13 +16,11 @@ export interface IEditorToolbarProps {
   wrapperBorder?: BorderType;
   closeDrop: () => void;
   onDropOpen: (type: string) => void;
+  onIconClick: (iconType: string) => void;
   onBoldClick: () => void;
   onItalicClick: () => void;
   onUnderlineClick: () => void;
   onStrikeThroughClick: () => void;
-  onCaseIconClick: (iconType: string) => void;
-  onListIconClick: (iconType: string) => void;
-  onAlignIconClick: (iconType: string) => void;
 }
 
 const StyledIcon = styled(Icon)`
@@ -39,13 +37,11 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
     alignStyle,
     closeDrop,
     onDropOpen,
+    onIconClick,
     onBoldClick,
     onItalicClick,
     onUnderlineClick,
     onStrikeThroughClick,
-    onCaseIconClick,
-    onListIconClick,
-    onAlignIconClick,
   } = props;
 
   const emojiRef = React.useRef();
@@ -54,21 +50,21 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
   const alignStyleRef = React.useRef();
 
   const caseIcons = [
-    { type: 'textcaseSentence', handler: () => onCaseIconClick('textcaseSentence') },
-    { type: 'textcaseLower', handler: () => onCaseIconClick('textcaseLower') },
-    { type: 'textcaseUpper', handler: () => onCaseIconClick('textcaseUpper') },
+    { type: 'textcaseSentence', handler: () => onIconClick('textcaseSentence') },
+    { type: 'textcaseLower', handler: () => onIconClick('textcaseLower') },
+    { type: 'textcaseUpper', handler: () => onIconClick('textcaseUpper') },
   ];
 
   const listIcons = [
-    { type: 'listBulleted', handler: () => onListIconClick('listBulleted') },
-    { type: 'listNumbered', handler: () => onListIconClick('listNumbered') },
+    { type: 'listBulleted', handler: () => onIconClick('listBulleted') },
+    { type: 'listNumbered', handler: () => onIconClick('listNumbered') },
   ];
 
   const alignIcons = [
-    { type: 'alignLeft', handler: () => onAlignIconClick('alignLeft') },
-    { type: 'alignRight', handler: () => onAlignIconClick('alignRight') },
-    { type: 'alignCenter', handler: () => onAlignIconClick('alignCenter') },
-    { type: 'alignJustify', handler: () => onAlignIconClick('alignJustify') },
+    { type: 'alignLeft', handler: () => onIconClick('alignLeft') },
+    { type: 'alignRight', handler: () => onIconClick('alignRight') },
+    { type: 'alignCenter', handler: () => onIconClick('alignCenter') },
+    { type: 'alignJustify', handler: () => onIconClick('alignJustify') },
   ];
 
   return (

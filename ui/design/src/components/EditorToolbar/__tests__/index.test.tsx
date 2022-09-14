@@ -11,13 +11,11 @@ describe('<EditorToolbar /> Component', () => {
 
   const handleDropClose = jest.fn();
   const handleDropOpen = jest.fn();
+  const handleIconClick = jest.fn();
   const handleBoldClick = jest.fn();
   const handleItalicClick = jest.fn();
   const handleUnderlineClick = jest.fn();
   const handleStrikeThroughClick = jest.fn();
-  const handleCaseIconClick = jest.fn();
-  const handleListIconClick = jest.fn();
-  const handleAlignIconClick = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -32,13 +30,11 @@ describe('<EditorToolbar /> Component', () => {
             wrapperBorder={{ side: 'horizontal', color: 'border' }}
             closeDrop={handleDropClose}
             onDropOpen={handleDropOpen}
+            onIconClick={handleIconClick}
             onBoldClick={handleBoldClick}
             onItalicClick={handleItalicClick}
             onUnderlineClick={handleUnderlineClick}
             onStrikeThroughClick={handleStrikeThroughClick}
-            onCaseIconClick={handleCaseIconClick}
-            onListIconClick={handleListIconClick}
-            onAlignIconClick={handleAlignIconClick}
           />,
         ),
         {},
