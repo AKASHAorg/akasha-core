@@ -135,6 +135,9 @@ export type IconType =
   | 'shareSmallDark'
   | 'shareSmallGrey'
   | 'textcase'
+  | 'textcaseLower'
+  | 'textcaseUpper'
+  | 'textcaseSentence'
   | 'thumbsDownGrey'
   | 'thumbsDownWhite'
   | 'thumbsUpGrey'
@@ -285,6 +288,9 @@ export const iconTypes: IconType[] = [
   'shareSmallDark',
   'shareSmallGrey',
   'textcase',
+  'textcaseLower',
+  'textcaseUpper',
+  'textcaseSentence',
   'thumbsDownGrey',
   'thumbsDownWhite',
   'thumbsUpGrey',

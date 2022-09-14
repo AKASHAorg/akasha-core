@@ -128,6 +128,9 @@ import stopwatch from './stopwatch';
 import strikethrough from './strikethrough';
 import subscribe from './subscribe';
 import textcase from './textcase';
+import textcaseUpper from './textcase-upper';
+import textcaseLower from './textcase-lower';
+import textcaseSentence from './textcase-sentence';
 import thumbsDownGrey from './thumbs-down-grey';
 import thumbsDownWhite from './thumbs-down-white';
 import thumbsUpGrey from './thumbs-up-grey';
@@ -281,6 +284,9 @@ export {
   strikethrough,
   subscribe,
   textcase,
+  textcaseUpper,
+  textcaseLower,
+  textcaseSentence,
   thumbsDownWhite,
   thumbsDownGrey,
   thumbsUpWhite,
