@@ -15,6 +15,7 @@ describe('<EditorToolbar /> Component', () => {
   const handleItalicClick = jest.fn();
   const handleUnderlineClick = jest.fn();
   const handleStrikeThroughClick = jest.fn();
+  const handleCaseIconClick = jest.fn();
   const handleListIconClick = jest.fn();
   const handleAlignIconClick = jest.fn();
 
@@ -25,6 +26,7 @@ describe('<EditorToolbar /> Component', () => {
           <EditorToolbar
             dropOpen={null}
             fontColor="green"
+            caseStyle="textcaseSentence"
             listStyle="listNumbered"
             alignStyle="alignRight"
             wrapperBorder={{ side: 'horizontal', color: 'border' }}
@@ -34,6 +36,7 @@ describe('<EditorToolbar /> Component', () => {
             onItalicClick={handleItalicClick}
             onUnderlineClick={handleUnderlineClick}
             onStrikeThroughClick={handleStrikeThroughClick}
+            onCaseIconClick={handleCaseIconClick}
             onListIconClick={handleListIconClick}
             onAlignIconClick={handleAlignIconClick}
           />,

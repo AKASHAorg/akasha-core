@@ -10,6 +10,7 @@ import EmojiPopover from '../EmojiPopover';
 export interface IEditorToolbarProps {
   dropOpen: string;
   fontColor?: string;
+  caseStyle: string;
   listStyle: string;
   alignStyle: string;
   wrapperBorder?: BorderType;
@@ -19,6 +20,7 @@ export interface IEditorToolbarProps {
   onItalicClick: () => void;
   onUnderlineClick: () => void;
   onStrikeThroughClick: () => void;
+  onCaseIconClick: (iconType: string) => void;
   onListIconClick: (iconType: string) => void;
   onAlignIconClick: (iconType: string) => void;
 }
@@ -32,6 +34,7 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
     wrapperBorder,
     dropOpen,
     fontColor = 'black',
+    caseStyle,
     listStyle,
     alignStyle,
     closeDrop,
@@ -40,13 +43,21 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
     onItalicClick,
     onUnderlineClick,
     onStrikeThroughClick,
+    onCaseIconClick,
     onListIconClick,
     onAlignIconClick,
   } = props;
 
   const emojiRef = React.useRef();
+  const caseStyleRef = React.useRef();
   const listStyleRef = React.useRef();
   const alignStyleRef = React.useRef();
+
+  const caseIcons = [
+    { type: 'textcaseSentence', handler: () => onCaseIconClick('textcaseSentence') },
+    { type: 'textcaseLower', handler: () => onCaseIconClick('textcaseLower') },
+    { type: 'textcaseUpper', handler: () => onCaseIconClick('textcaseUpper') },
+  ];
 
   const listIcons = [
     { type: 'listBulleted', handler: () => onListIconClick('listBulleted') },
@@ -88,9 +99,15 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
       </Box>
 
       {/* text case style */}
-      <Box direction="row" align="center" onClick={() => onDropOpen('textCase')}>
-        <Icon type="textcase" plain={true} />
-        <Icon type="dropdown" />
+      <Box direction="row">
+        <Box direction="row" align="center" onClick={() => onDropOpen('case')} ref={caseStyleRef}>
+          <Icon type={caseStyle} size="sm" plain={true} />
+          <Icon type="dropdown" />
+        </Box>
+        {/* text case styles dropdown */}
+        {caseStyleRef.current && dropOpen === 'case' && (
+          <IconDrop target={caseStyleRef.current} dropItems={caseIcons} onMenuClose={closeDrop} />
+        )}
       </Box>
 
       {/* font style */}

@@ -18,7 +18,9 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
 
   const [dropOpen, setDropOpen] = React.useState<string | null>(null);
   const [fontColor] = React.useState<string>('blue');
+  const [caseStyle, setCaseStyle] = React.useState<string>('textcaseSentence');
   const [listStyle, setListStyle] = React.useState<string>('listBulleted');
+
   const [alignStyle, setAlignStyle] = React.useState<string>('alignLeft');
 
   const navigate = useNavigate();
@@ -26,6 +28,11 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
 
   const handleClickIcon = () => {
     navigate(-1);
+  };
+
+  const handleCaseIconClick = (iconType: string) => {
+    setCaseStyle(iconType);
+    setDropOpen(null);
   };
 
   const handleListIconClick = (iconType: string) => {
@@ -61,6 +68,7 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
       <EditorToolbar
         dropOpen={dropOpen}
         fontColor={fontColor}
+        caseStyle={caseStyle}
         listStyle={listStyle}
         alignStyle={alignStyle}
         wrapperBorder={{ side: 'horizontal', color: 'border' }}
@@ -78,6 +86,7 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
         onStrikeThroughClick={() => {
           /** */
         }}
+        onCaseIconClick={handleCaseIconClick}
         onListIconClick={handleListIconClick}
         onAlignIconClick={handleAlignIconClick}
       />

@@ -30,6 +30,7 @@ export const BaseEditorToolbar = Template.bind({});
 BaseEditorToolbar.args = {
   dropOpen: null,
   fontColor: 'green',
+  caseStyle: 'textcaseSentence',
   listStyle: 'listNumbered',
   alignStyle: 'alignRight',
   wrapperBorder: { side: 'horizontal', color: 'border' },
