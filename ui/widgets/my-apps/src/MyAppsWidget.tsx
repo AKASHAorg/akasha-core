@@ -96,7 +96,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
     });
@@ -121,7 +121,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+  <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
     <ICWidget {...props} />
   </I18nextProvider>
 );

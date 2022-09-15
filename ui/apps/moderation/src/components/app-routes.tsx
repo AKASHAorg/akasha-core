@@ -52,7 +52,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             element={
               <TransparencyLog
                 user={loginQuery.data?.pubKey}
-                navigateTo={props.plugins?.routing?.navigateTo}
+                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               />
             }
           />

@@ -38,7 +38,7 @@ const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
   });
 
   const handleAppClick = (app: ReleaseInfo) => {
-    props.plugins.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });

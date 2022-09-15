@@ -186,7 +186,7 @@ const EditorModalContainer = (props: RootExtensionProps) => {
 
 const Wrapped = (props: RootExtensionProps) => {
   return (
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <EditorModalContainer {...props} />
     </I18nextProvider>
   );

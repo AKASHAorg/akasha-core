@@ -15,7 +15,7 @@ export interface SettingsPageProps extends RootComponentProps {
 const InboxPage = (props: SettingsPageProps) => {
   const { t } = useTranslation('app-messaging');
 
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const uninstallAppReq = useUninstallApp();
 

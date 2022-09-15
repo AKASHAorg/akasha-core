@@ -48,7 +48,7 @@ const MessageButton = (props: RootExtensionProps) => {
       action: 'message-button-click',
     });
 
-    props.plugins.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
       getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });
@@ -96,7 +96,7 @@ const MessageButton = (props: RootExtensionProps) => {
 };
 
 const MessageButtonWrapper = (props: RootExtensionProps) => (
-  <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+  <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
     <MessageButton {...props} />
   </I18nextProvider>
 );

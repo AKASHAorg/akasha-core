@@ -27,7 +27,7 @@ export const loadPlugins = (
         return from(pluginMods);
       }),
       tap(async results => {
-        const { mod, plugins } = results;
+        const { name, mod, plugins } = results;
         const plugin = await mod.getPlugin({
           worldConfig,
           logger,
@@ -37,13 +37,13 @@ export const loadPlugins = (
         });
         const plugs = {};
         for (const [k, v] of Object.entries(plugin)) {
-          if (!plugins.hasOwnProperty(k)) {
+          if (!plugins[name] || !plugins[name].hasOwnProperty(k)) {
             plugs[k] = v;
           }
         }
         if (Object.keys(plugs).length) {
           pipelineEvents.next({
-            plugins: Object.assign({}, plugins, plugs),
+            plugins: { [name]: Object.assign({}, plugins[name] || {}, plugs), ...plugins },
           });
         }
       }),

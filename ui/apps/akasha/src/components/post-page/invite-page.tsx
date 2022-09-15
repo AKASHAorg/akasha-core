@@ -7,7 +7,7 @@ const InvitePage: React.FC<RootComponentProps> = props => {
   if (inviteCode) {
     localStorage.setItem('@signUpToken', inviteCode);
   }
-  props.plugins?.routing?.navigateTo?.({ getNavigationUrl: () => '/' });
+  props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({ getNavigationUrl: () => '/' });
   return <div />;
 };
 

@@ -31,7 +31,7 @@ const SignIn: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-auth-ewa');
   const [analyticsActions] = useAnalytics();
 
-  const routingPlugin = React.useRef(props.plugins.routing);
+  const routingPlugin = React.useRef(props.plugins['@akashaorg/app-routing']?.routing);
 
   const loginQuery = useGetLogin();
   const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);

@@ -255,7 +255,7 @@ const Layout: React.FC<RootComponentProps> = props => {
 
 const LayoutWidget: React.FC<RootComponentProps> = props => (
   <Router>
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <Layout {...props} />
     </I18nextProvider>
   </Router>

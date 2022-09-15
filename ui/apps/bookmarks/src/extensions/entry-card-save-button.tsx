@@ -83,7 +83,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
 };
 
 const BookmarkButtonWrapper = (props: RootExtensionProps) => (
-  <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+  <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
     <EntryCardSaveButton {...props} />
   </I18nextProvider>
 );

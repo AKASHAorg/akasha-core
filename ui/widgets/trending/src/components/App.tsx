@@ -7,7 +7,10 @@ import TrendingWidgetComponent from './trending-widget-component';
 const TrendingWidgetRoot: React.FC<RootComponentProps> = props => {
   return (
     <>
-      <I18nextProvider i18n={props.plugins?.translation?.i18n} defaultNS="ui-widget-trending">
+      <I18nextProvider
+        i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+        defaultNS="ui-widget-trending"
+      >
         <TrendingWidgetComponent {...props} />
       </I18nextProvider>
       <ReactQueryDevtools position={'bottom-right'} />

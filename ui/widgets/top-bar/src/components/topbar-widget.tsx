@@ -6,7 +6,7 @@ import TopbarComponent from './topbar-component';
 
 const TopbarWidget = (props: RootComponentProps) => {
   return (
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <Router>
         <TopbarComponent {...props} />
       </Router>
