@@ -318,10 +318,7 @@ export function usePost({ postId, loggedUser, enabler = true }: usePostParam) {
  * Hook to get an array of post data
  * @example usePosts hook
  * ```typescript
- * const postQueries = usePost({ postIds: ['some-post-id', 'some-other-post-id'],
- *                                        loggedUser: 'logged-user-pubkey',
- *                                        enabler: true,
- *                              });
+ * const postQueries = usePost({ postIds: ['some-post-id', 'some-other-post-id'], loggedUser: 'logged-user-pubkey', enabler: true });
  *
  * const entryData = postQueries.map(postQuery=>postQuery.data);
  * ```
