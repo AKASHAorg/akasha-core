@@ -17,7 +17,6 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
   const { className } = props;
 
   const [dropOpen, setDropOpen] = React.useState<string | null>(null);
-  const [fontColor] = React.useState<string>('blue');
   const [caseStyle, setCaseStyle] = React.useState<string>('textcaseSentence');
   const [listStyle, setListStyle] = React.useState<string>('listBulleted');
 
@@ -72,7 +71,6 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
       </Box>
       <EditorToolbar
         dropOpen={dropOpen}
-        fontColor={fontColor}
         caseStyle={caseStyle}
         listStyle={listStyle}
         alignStyle={alignStyle}

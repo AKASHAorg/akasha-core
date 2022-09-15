@@ -23,7 +23,6 @@ describe('<EditorToolbar /> Component', () => {
         wrapWithTheme(
           <EditorToolbar
             dropOpen={null}
-            fontColor="green"
             caseStyle="textcaseSentence"
             listStyle="listNumbered"
             alignStyle="alignRight"

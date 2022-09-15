@@ -9,7 +9,6 @@ import EmojiPopover from '../EmojiPopover';
 
 export interface IEditorToolbarProps {
   dropOpen: string;
-  fontColor?: string;
   caseStyle: string;
   listStyle: string;
   alignStyle: string;
@@ -31,7 +30,6 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
   const {
     wrapperBorder,
     dropOpen,
-    fontColor = 'black',
     caseStyle,
     listStyle,
     alignStyle,
@@ -88,11 +86,28 @@ const EditorToolbar: React.FC<IEditorToolbarProps> = props => {
         )}
       </Box>
 
+      {/* uncomment this code to enable color-picker. You must install react-color, or react-colorful -
+      a light weight alternative (recommended) */}
+
       {/* font color style */}
-      <Box direction="row" align="center" onClick={() => onDropOpen('fontColor')}>
-        <Box width="1.25rem" height="1.25rem" background={fontColor} round="xxsmall" />
-        <Icon type="dropdown" />
-      </Box>
+      {/* <Box direction="row">
+        <Box direction="row" align="center" onClick={() => onDropOpen('color')} ref={colorRef}>
+          <Box width="1.25rem" height="1.25rem" background={fontColor} round="xxsmall" />
+          <Icon type="dropdown" />
+        </Box>
+
+        {colorRef.current && dropOpen === 'color' && (
+          <StyledDrop
+            overflow="hidden"
+            target={caseStyleRef.current}
+            align={{ top: 'bottom', right: 'right' }}
+            onClickOutside={closeDrop}
+            onEsc={closeDrop}
+          >
+            <SketchPicker />
+          </StyledDrop>
+        )}
+      </Box> */}
 
       {/* text case style */}
       <Box direction="row">

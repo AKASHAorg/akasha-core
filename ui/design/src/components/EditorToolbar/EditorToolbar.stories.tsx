@@ -10,7 +10,6 @@ export default {
   component: EditorToolbar,
   argTypes: {
     dropOpen: { control: 'text' },
-    fontColor: { control: 'text' },
     listStyle: { control: 'text' },
     alignStyle: { control: 'text' },
     wrapperBorder: { control: 'text' },
@@ -29,7 +28,6 @@ export const BaseEditorToolbar = Template.bind({});
 
 BaseEditorToolbar.args = {
   dropOpen: null,
-  fontColor: 'green',
   caseStyle: 'textcaseSentence',
   listStyle: 'listNumbered',
   alignStyle: 'alignRight',
