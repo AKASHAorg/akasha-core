@@ -12,6 +12,7 @@ import {
   logError,
 } from '@akashaorg/ui-awf-hooks';
 import { getHubUser, getMessages, markAsRead, sendMessage } from '../api/message';
+import { useCallback } from 'react';
 
 const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
 
@@ -145,29 +146,31 @@ const ChatPage = (props: RootComponentProps) => {
     }
   }, [messages, pubKey]);
 
-  const getHubUserCallback = React.useCallback(getHubUser, []);
-
+  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
+  const subCallback = useCallback(
+    async (reply?: any, err?: Error) => {
+      if (err) {
+        return logError('messaging-app.watchInbox', err);
+      }
+      if (!reply?.message) return;
+      const messageIds = messages.map(message => message.id);
+      if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
+        await fetchMessagesCallback();
+      }
+    },
+    [messages],
+  );
   React.useEffect(() => {
     let sub;
     (async () => {
       const user = await getHubUserCallback();
       const mailboxId = await user.getMailboxID();
-      const callback = async (reply?: any, err?: Error) => {
-        if (err) {
-          return logError('messaging-app.watchInbox', err);
-        }
-        if (!reply?.message) return;
-        const messageIds = messages.map(message => message.id);
-        if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
-          fetchMessagesCallback();
-        }
-      };
-      sub = user.watchInbox(mailboxId, callback);
+      sub = user.watchInbox(mailboxId, subCallback);
     })();
     return () => {
       if (sub) return sub.close();
     };
-  }, [getHubUserCallback, fetchMessagesCallback, pubKey, messages]);
+  }, [getHubUserCallback, fetchMessagesCallback, pubKey]);
 
   return (
     <BasicCardBox style={{ maxHeight: '92vh' }}>
