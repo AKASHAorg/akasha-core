@@ -167,7 +167,10 @@ const ChatPage = (props: RootComponentProps) => {
       sub = user.watchInbox(mailboxId, subCallback);
     })();
     return () => {
-      if (sub) return sub.close();
+      if (sub) {
+        sub.close();
+        sub = null;
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getHubUserCallback, fetchMessagesCallback, pubKey]);
