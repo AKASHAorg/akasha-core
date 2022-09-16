@@ -6,11 +6,9 @@ import DuplexButton from '../DuplexButton';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import { StyledAnchor } from '../EntryCard/basic-card-box';
 import useIntersectionObserver from '../../utils/intersection-observer';
-import { UserFollowers_Response } from '@akashaorg/typings/sdk';
+import { IProfileData } from '@akashaorg/typings/ui';
 
 export interface IProfileEntry {
-  getMediaUrl?: (hash?: string) => { originLink: string; fallbackLink: string; pathLink: string };
-
   // hides follow button it matches with entry's pubKey
   loggedUser?: string;
 
@@ -24,7 +22,7 @@ export interface IProfileEntry {
   profileAnchorLink: string;
 
   // handles load more on scroll
-  pages?: UserFollowers_Response[];
+  profiles?: IProfileData[];
   status?: 'loading' | 'success' | 'error' | 'idle';
   hasNextPage?: boolean;
   loadingMoreLabel?: string;
@@ -38,14 +36,13 @@ export interface IProfileEntry {
 
 const ProfileEntry: React.FC<IProfileEntry> = props => {
   const {
-    getMediaUrl,
     loggedUser,
     followedProfiles,
     followLabel,
     unfollowLabel,
     followingLabel,
     profileAnchorLink,
-    pages,
+    profiles,
     status,
     hasNextPage,
     loadingMoreLabel,
@@ -65,52 +62,49 @@ const ProfileEntry: React.FC<IProfileEntry> = props => {
 
   return (
     <Box flex={false} pad={{ top: 'large' }} gap="medium">
-      {pages.map((page, index) => (
-        <Box key={index} flex={false} gap="medium">
-          {page.results.map((entry, index) => (
-            <Box key={index} direction="row" justify="between" align="center">
-              <StyledAnchor
-                onClick={e => {
-                  e.preventDefault();
-                  return false;
-                }}
-                weight="normal"
-                href={`${profileAnchorLink}/${entry.pubKey}`}
-                reducedWidth={true}
-                label={
-                  <Box width="100%" pad="none">
-                    <ProfileAvatarButton
-                      ethAddress={entry.ethAddress}
-                      onClick={() => onClickProfile(entry.pubKey)}
-                      label={entry.name || entry.userName}
-                      info={`@${entry.userName ? entry.userName : 'username'}`}
-                      size="md"
-                      avatarImage={{
-                        url: getMediaUrl(entry.avatar)?.originLink,
-                        fallbackUrl: getMediaUrl(entry.avatar)?.fallbackLink,
-                      }}
-                    />
-                  </Box>
-                }
+      {profiles.map((entry, index) => (
+        <Box key={index} direction="row" justify="between" align="center">
+          <StyledAnchor
+            onClick={e => {
+              e.preventDefault();
+              return false;
+            }}
+            weight="normal"
+            href={`${profileAnchorLink}/${entry.pubKey}`}
+            reducedWidth={true}
+            label={
+              <Box width="100%" pad="none">
+                <ProfileAvatarButton
+                  ethAddress={entry.ethAddress}
+                  onClick={() => onClickProfile(entry.pubKey)}
+                  label={entry.name || entry.userName}
+                  info={`@${entry.userName ? entry.userName : 'username'}`}
+                  size="md"
+                  avatarImage={{
+                    url: entry.avatar?.url,
+                    fallbackUrl: entry.avatar?.fallbackUrl,
+                  }}
+                />
+              </Box>
+            }
+          />
+          {loggedUser !== entry.pubKey && (
+            <Box>
+              <DuplexButton
+                inactiveLabel={followLabel}
+                activeLabel={followingLabel}
+                activeHoverLabel={unfollowLabel}
+                onClickInactive={() => handleFollowProfile(entry.pubKey)}
+                onClickActive={() => handleUnfollowProfile(entry.pubKey)}
+                active={followedProfiles?.includes(entry.pubKey)}
+                icon={<Icon type="following" />}
+                allowMinimization
               />
-              {loggedUser !== entry.pubKey && (
-                <Box>
-                  <DuplexButton
-                    inactiveLabel={followLabel}
-                    activeLabel={followingLabel}
-                    activeHoverLabel={unfollowLabel}
-                    onClickInactive={() => handleFollowProfile(entry.pubKey)}
-                    onClickActive={() => handleUnfollowProfile(entry.pubKey)}
-                    active={followedProfiles?.includes(entry.pubKey)}
-                    icon={<Icon type="following" />}
-                    allowMinimization
-                  />
-                </Box>
-              )}
             </Box>
-          ))}
+          )}
         </Box>
       ))}
+
       {/* loading state indicator for fetch on scroll */}
       {(status === 'loading' || hasNextPage) && (
         <Box pad="large" align="center">

@@ -284,8 +284,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     const textContent: string = serializeToPlainText({ children: slateContent });
     const data = { metadata, slateContent, textContent, author: ethAddress };
     onPublish(data);
-    editor.children = editorDefaultValue;
-    editor.onChange();
+    CustomEditor.clearEditor(editor);
+    ReactEditor.focus(editor);
   };
 
   /**

@@ -138,16 +138,16 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         <Text>
           {t('Write and send private, encrypted messages 🔐 to people in Ethereum World.')}
         </Text>
-        <Box border={{ color: 'border', side: 'all' }} round="small" overflow={'hidden'}>
+        <Box border={{ color: 'border', side: 'all' }} round="small">
           <Box pad={{ horizontal: 'small', vertical: 'medium' }}>
             <Text weight={'bold'} size="large">
               {t('Conversations')}
             </Text>
           </Box>
-          <Box>
+          <Box overflow={'auto'} round={{ corner: 'bottom', size: 'small' }}>
             {!!pinnedContacts.length && (
-              <>
-                <Box pad="medium">
+              <Box flex={{ shrink: 0 }}>
+                <Box pad="medium" flex={{ shrink: 0 }}>
                   <Text weight={'bold'}>{t('PINNED')}</Text>
                 </Box>
 
@@ -157,7 +157,6 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                     locale="en"
                     pinConvoLabel={t('Pin Conversation')}
                     unpinConvoLabel={t('Unpin Conversation')}
-                    hideBottomBorder={idx !== 0 && idx === pinnedContacts.length - 1}
                     isPinned={true}
                     isRead={
                       !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(
@@ -173,36 +172,39 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                     onConvoPin={() => handlePinConversation(contact.pubKey)}
                   />
                 ))}
-              </>
-            )}
-          </Box>
-          <Box>
-            {!!pinnedContacts.length && (
-              <Box pad="medium">
-                <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>
               </Box>
             )}
 
-            {unpinnedContacts?.map((contact, idx) => (
-              <MessageAppMiniCard
-                key={idx}
-                locale="en"
-                pinConvoLabel={t('Pin Conversation')}
-                unpinConvoLabel={t('Unpin Conversation')}
-                hideBottomBorder={idx === unpinnedContacts.length - 1}
-                isPinned={false}
-                isRead={
-                  !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(contact.pubKey)
-                }
-                senderName={contact?.name}
-                senderUsername={contact?.userName}
-                senderAvatar={contact?.avatar}
-                senderEthAddress={contact?.ethAddress}
-                onClickCard={() => handleCardClick(contact.pubKey)}
-                onClickAvatar={() => handleAvatarClick(contact.pubKey)}
-                onConvoPin={() => handlePinConversation(contact.pubKey)}
-              />
-            ))}
+            <Box flex={{ shrink: 0 }}>
+              {!!pinnedContacts.length && (
+                <Box pad="medium">
+                  <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>
+                </Box>
+              )}
+
+              {unpinnedContacts?.map((contact, idx) => (
+                <MessageAppMiniCard
+                  key={idx}
+                  locale="en"
+                  pinConvoLabel={t('Pin Conversation')}
+                  unpinConvoLabel={t('Unpin Conversation')}
+                  hideBottomBorder={idx === unpinnedContacts.length - 1}
+                  isPinned={false}
+                  isRead={
+                    !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(
+                      contact.pubKey,
+                    )
+                  }
+                  senderName={contact?.name}
+                  senderUsername={contact?.userName}
+                  senderAvatar={contact?.avatar}
+                  senderEthAddress={contact?.ethAddress}
+                  onClickCard={() => handleCardClick(contact.pubKey)}
+                  onClickAvatar={() => handleAvatarClick(contact.pubKey)}
+                  onConvoPin={() => handlePinConversation(contact.pubKey)}
+                />
+              ))}
+            </Box>
           </Box>
         </Box>
       </Box>

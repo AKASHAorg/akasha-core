@@ -13,7 +13,6 @@ import {
   useFollow,
   useIsFollowingMultiple,
   useUnfollow,
-  getMediaUrl,
 } from '@akashaorg/ui-awf-hooks';
 
 interface IStatModalWrapper {
@@ -86,20 +85,6 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
   // hooks to follow/unfollow profiles
   const followProfileReq = useFollow();
   const unfollowProfileReq = useUnfollow();
-
-  const followersPages = React.useMemo(() => {
-    if (followersReq.data) {
-      return followersReq.data.pages;
-    }
-    return [];
-  }, [followersReq.data]);
-
-  const followingPages = React.useMemo(() => {
-    if (followingReq.data) {
-      return followingReq.data.pages;
-    }
-    return [];
-  }, [followingReq.data]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => setActiveIndex(selectedStat), []);
@@ -232,7 +217,6 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
     <StatModal
       activeIndex={activeIndex}
       setActiveIndex={setActiveIndex}
-      getMediaUrl={getMediaUrl}
       loggedUser={loginState.pubKey}
       stats={[profileData.totalFollowers, profileData.totalFollowing, profileData.totalInterests]}
       titleLabel={
@@ -260,8 +244,6 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
       unsubscribeLabel={t('Unsubscribe')}
       tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
       profileAnchorLink={'/@akashaorg/app-profile'}
-      followersPages={followersPages}
-      followingPages={followingPages}
       loadingMoreLabel={`${t('Loading more')} ...`}
       loadMoreFollowers={loadMoreFollowers}
       loadMoreFollowing={loadMoreFollowing}
