@@ -169,6 +169,7 @@ const ChatPage = (props: RootComponentProps) => {
     return () => {
       if (sub) return sub.close();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getHubUserCallback, fetchMessagesCallback, pubKey]);
 
   return (
