@@ -38,7 +38,7 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
 
   catDocument<T>(docHash: string | CID, jsonResponse = false): ServiceCallResult<T> {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
+    const timeout = setTimeout(() => controller.abort(), 60000);
     return createObservableStream(
       fetch(this.buildFallBackLink(docHash), { signal: controller.signal }).then(res => {
         clearTimeout(timeout);
