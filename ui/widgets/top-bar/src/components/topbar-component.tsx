@@ -16,7 +16,7 @@ const { Topbar } = DS;
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
   const { uiEvents } = props;
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const location = useLocation();
 
@@ -54,7 +54,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   }, []);
 
   React.useEffect(() => {
-    const sub = props.plugins?.routing?.routeObserver?.subscribe({
+    const sub = props.plugins['@akashaorg/app-routing']?.routing?.routeObserver?.subscribe({
       next: routeData => {
         setRouteData(routeData?.byArea);
       },
@@ -131,7 +131,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       return;
     }
 
-    props.plugins.routing.navigateTo({
+    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: props.worldConfig.homepageApp,
       getNavigationUrl: appRoutes => {
         if (appRoutes.hasOwnProperty('defaultRoute')) {
@@ -157,7 +157,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     });
   };
   const handleMyProfileClick = () => {
-    props.plugins.routing.navigateTo({
+    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: routes => {
         return routes.myProfile;
@@ -165,7 +165,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     });
   };
   const handleLegalClick = (menuItem: IMenuItem) => {
-    return props.plugins.routing.navigateTo({
+    return props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-legal',
       getNavigationUrl: () => menuItem.route || '/',
     });

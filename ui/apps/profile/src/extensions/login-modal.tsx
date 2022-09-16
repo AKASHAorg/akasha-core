@@ -18,7 +18,7 @@ const LoginModal = (props: RootExtensionProps) => {
   };
 
   const handleSignInClick = () => {
-    props.plugins.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => {
         const redirectTo = new URLSearchParams(location.search).get('redirectTo');
@@ -31,7 +31,7 @@ const LoginModal = (props: RootExtensionProps) => {
 
   const handleSignUpClick = () => {
     sessionStorage.setItem(StorageKeys.LAST_URL, location.pathname);
-    props.plugins.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: navRoutes => navRoutes.SignUp,
     });
@@ -86,7 +86,7 @@ const LoginModal = (props: RootExtensionProps) => {
 const Wrapped = (props: RootExtensionProps) => (
   <Router>
     <React.Suspense fallback={<></>}>
-      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+      <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
         <LoginModal {...props} />
       </I18nextProvider>
     </React.Suspense>

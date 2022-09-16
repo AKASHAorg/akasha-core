@@ -7,7 +7,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard, Spinner } = DS;
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
-  const navigateTo = props.plugins?.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-notifications');
 

@@ -25,7 +25,7 @@ interface OnboardingPageProps extends RootComponentProps {
 const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   const { showLoginModal } = props;
 
-  const navigateTo = props.plugins?.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-notifications');
 

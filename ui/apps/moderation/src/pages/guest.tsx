@@ -11,12 +11,10 @@ import routes, { UNAUTHENTICATED, HOME } from '../routes';
 const { ModerationIntroCard } = DS;
 
 const GuestPage: React.FC<ISharedModerationProps & RootComponentProps> = props => {
-  const {
-    user,
-    isAuthorised,
-    plugins: { routing },
-  } = props;
+  const { user, isAuthorised, plugins } = props;
   const { t } = useTranslation('app-moderation-ewa');
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
 
   React.useEffect(() => {
     if (!user) {

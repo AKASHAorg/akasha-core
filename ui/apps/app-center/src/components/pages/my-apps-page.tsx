@@ -53,7 +53,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
     .filter(Boolean);
 
   const handleAppClick = (app: ReleaseInfo) => {
-    props.plugins.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,
     });

@@ -8,7 +8,7 @@ const ReplyPage: React.FC<RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
   const comment = useComment(commentId, !!commentId);
   if (comment?.data?.postId) {
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: navRoutes => `${navRoutes[POST]}/${comment.data.postId}`,
     });

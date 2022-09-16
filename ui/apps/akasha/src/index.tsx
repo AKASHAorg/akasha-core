@@ -14,7 +14,7 @@ import {
  * @example Initialization an integration and triggerin of a notification
  * ```
  * export const initialize: (opts: IntegrationInitOptions) => void = opts => {
- *  const notificationPlugin: any = opts.plugins.notification;
+ *  const notificationPlugin: any = opts.plugins["@akashaorg/app-notifications"].notification;
  *  if (notificationPlugin) {
  *   notificationPlugin.listenLogin(
  *     (userData: { ethAddress: string; filAddress: string; pubKey: string }) => {

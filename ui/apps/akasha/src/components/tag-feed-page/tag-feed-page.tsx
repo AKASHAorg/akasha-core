@@ -111,7 +111,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             requestStatus={reqPosts.status}
             loginState={loginState}
             loggedProfile={loggedProfileData}
-            navigateTo={props.plugins?.routing?.navigateTo}
+            navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
             navigateToModal={props.navigateToModal}
             onLoginModalOpen={showLoginModal}
             hasNextPage={reqPosts.hasNextPage}
@@ -123,7 +123,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             removedByAuthorLabel={t('This post was deleted by its author')}
             uiEvents={props.uiEvents}
             itemSpacing={8}
-            i18n={props.plugins?.translation?.i18n}
+            i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
           />
         </>
       )}

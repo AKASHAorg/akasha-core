@@ -26,7 +26,7 @@ export interface SignUpProps {
 }
 
 const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
-  const routingPlugin = props.plugins.routing;
+  const routingPlugin = props.plugins['@akashaorg/app-routing']?.routing;
 
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [inviteToken, setInviteToken] = React.useState<string>('');
@@ -310,7 +310,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           )}
           textUsernameAvailable={t('This username is available, hooray!')}
           buttonLabel={t('Complete Sign-Up')}
-          navigateTo={props.plugins?.routing?.navigateTo}
+          navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         />
       )}
     </SignUpCard>

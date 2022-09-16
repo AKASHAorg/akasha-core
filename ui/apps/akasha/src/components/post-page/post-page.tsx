@@ -56,7 +56,7 @@ interface IPostPageProps {
 
 const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const { showLoginModal, logger, loginState } = props;
-  const navigateTo = props.plugins?.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
 
@@ -102,7 +102,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     return [];
   }, [reqComments.data]);
 
-  const locale = (props.plugins?.translation?.i18n?.languages?.[0] || 'en') as ILocale;
+  const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
+    'en') as ILocale;
 
   const profileDataReq = useGetProfile(loginState?.pubKey);
   const loggedProfileData = profileDataReq.data;
@@ -461,7 +462,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                 removedByAuthorLabel={t('This reply was deleted by its author')}
                 uiEvents={props.uiEvents}
                 itemSpacing={8}
-                i18n={props.plugins?.translation?.i18n}
+                i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
                 trackEvent={analyticsActions.trackEvent}
               />
             </>

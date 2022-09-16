@@ -18,7 +18,7 @@ const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, Bub
 const ChatPage = (props: RootComponentProps) => {
   const { t } = useTranslation('app-messaging');
 
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { pubKey } = useParams<{ pubKey: string }>();
 

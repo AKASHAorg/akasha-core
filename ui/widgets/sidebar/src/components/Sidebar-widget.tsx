@@ -6,7 +6,7 @@ import SidebarComponent from './sidebar-component';
 
 const SidebarWidget: React.FC<RootComponentProps> = props => {
   return (
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <Router>
         <SidebarComponent {...props} />
       </Router>

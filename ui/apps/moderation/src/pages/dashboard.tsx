@@ -33,11 +33,7 @@ const {
 const DEFAULT_LIMIT = 10;
 
 const Dashboard: React.FC<ISharedModerationProps> = props => {
-  const {
-    user,
-    isAuthorised,
-    plugins: { routing },
-  } = props;
+  const { user, isAuthorised, plugins } = props;
 
   // const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [isPending, setIsPending] = React.useState<boolean>(true);
@@ -72,6 +68,8 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
     }
     return [];
   }, [delistedItemsQuery.data]);
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
 
   React.useEffect(() => {
     if (!user) {

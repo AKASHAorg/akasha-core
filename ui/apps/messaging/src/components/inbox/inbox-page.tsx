@@ -16,7 +16,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
 
   const { t } = useTranslation('app-messaging');
 
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [pinnedConvos, setPinnedConvos] = React.useState([]);
 
@@ -113,7 +113,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
   }, [getHubUserCallback, loginState]);
 
   const handleCardClick = (pubKey: string) => {
-    props.plugins.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
       getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });

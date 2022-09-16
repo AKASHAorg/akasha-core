@@ -26,7 +26,7 @@ const { Box, Text, BasicCardBox } = DS;
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
   const { t } = useTranslation('app-integration-center');
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const loginQuery = useGetLogin();
 
