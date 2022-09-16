@@ -145,29 +145,35 @@ const ChatPage = (props: RootComponentProps) => {
     }
   }, [messages, pubKey]);
 
-  const getHubUserCallback = React.useCallback(getHubUser, []);
-
+  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
+  const subCallback = React.useCallback(
+    async (reply?: any, err?: Error) => {
+      if (err) {
+        return logError('messaging-app.watchInbox', err);
+      }
+      if (!reply?.message) return;
+      const messageIds = messages.map(message => message.id);
+      if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
+        await fetchMessagesCallback();
+      }
+    },
+    [messages],
+  );
   React.useEffect(() => {
     let sub;
     (async () => {
       const user = await getHubUserCallback();
       const mailboxId = await user.getMailboxID();
-      const callback = async (reply?: any, err?: Error) => {
-        if (err) {
-          return logError('messaging-app.watchInbox', err);
-        }
-        if (!reply?.message) return;
-        const messageIds = messages.map(message => message.id);
-        if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
-          fetchMessagesCallback();
-        }
-      };
-      sub = user.watchInbox(mailboxId, callback);
+      sub = user.watchInbox(mailboxId, subCallback);
     })();
     return () => {
-      if (sub) return sub.close();
+      if (sub) {
+        sub.close();
+        sub = null;
+      }
     };
-  }, [getHubUserCallback, fetchMessagesCallback, pubKey, messages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getHubUserCallback, fetchMessagesCallback, pubKey]);
 
   return (
     <BasicCardBox style={{ maxHeight: '92vh' }}>

@@ -105,7 +105,10 @@ const InboxPage: React.FC<InboxPageProps> = props => {
       sub = user.watchInbox(mailboxId, callback);
     })();
     return () => {
-      if (sub) return sub.close();
+      if (sub) {
+        sub.close();
+        sub = null;
+      }
     };
   }, [getHubUserCallback, loginState]);
 
