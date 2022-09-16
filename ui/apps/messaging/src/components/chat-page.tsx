@@ -12,7 +12,6 @@ import {
   logError,
 } from '@akashaorg/ui-awf-hooks';
 import { getHubUser, getMessages, markAsRead, sendMessage } from '../api/message';
-import { useCallback } from 'react';
 
 const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
 
@@ -147,7 +146,7 @@ const ChatPage = (props: RootComponentProps) => {
   }, [messages, pubKey]);
 
   const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
-  const subCallback = useCallback(
+  const subCallback = React.useCallback(
     async (reply?: any, err?: Error) => {
       if (err) {
         return logError('messaging-app.watchInbox', err);
