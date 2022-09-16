@@ -9,6 +9,7 @@ const Dotenv = require('dotenv-webpack');
 const { InjectManifest } = require('workbox-webpack-plugin');
 const { SubresourceIntegrityPlugin } = require('webpack-subresource-integrity');
 const WebpackAssetsManifest = require("webpack-assets-manifest");
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isProduction = process.env.NODE_ENV === 'production';
 const config = {
   entry: './src/index.ts',
@@ -67,6 +68,7 @@ const config = {
     },
   },
   plugins: [
+    // new BundleAnalyzerPlugin(),
     new Dotenv({
       path: path.resolve(__dirname, '../.env'),
       safe:
