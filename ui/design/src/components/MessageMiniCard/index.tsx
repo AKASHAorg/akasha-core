@@ -7,7 +7,7 @@ import { IProfileData } from '@akashaorg/typings/ui';
 import Icon, { IconType } from '../Icon';
 import Avatar from '../Avatar';
 import { IconDiv } from '../TopBar/styled-topbar';
-import { formatRelativeTime, ILocale } from '../../utils/time';
+import { ILocale } from '../../utils/time';
 import CardHeaderMenuDropdown from '../EntryCard/card-header-menu';
 
 export interface IMessageAppMiniCardProps {
@@ -29,7 +29,6 @@ export interface IMessageAppMiniCardProps {
 
 const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
   const {
-    locale,
     senderName,
     senderUsername,
     content,
@@ -79,7 +78,7 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
     <Box
       pad="small"
       onClick={onClickCard}
-      style={{ cursor: 'pointer' }}
+      flex={{ shrink: 0 }}
       border={hideBottomBorder ? { side: 'top' } : { side: 'horizontal' }}
       background={isRead ? 'cardBackground' : 'activePanelBackground'}
     >

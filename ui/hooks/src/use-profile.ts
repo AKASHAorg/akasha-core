@@ -180,7 +180,14 @@ export function useGetEntryAuthor(entryId: string) {
 const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
   const res = await lastValueFrom(sdk.api.profile.getFollowers(pubKey, limit, offset));
-  return res.data.getFollowers;
+  const followersWithMediaLinks = res.data.getFollowers.results.map(follower =>
+    buildProfileMediaLinks(follower),
+  );
+  return {
+    nextIndex: res.data.getFollowers.nextIndex,
+    results: followersWithMediaLinks,
+    total: res.data.getFollowers.total,
+  };
 };
 
 /**
@@ -215,7 +222,14 @@ export function useFollowers(pubKey: string, limit: number, offset?: number) {
 const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
   const res = await lastValueFrom(sdk.api.profile.getFollowing(pubKey, limit, offset));
-  return res.data.getFollowing;
+  const followingWithMediaLinks = res.data.getFollowing.results.map(follower =>
+    buildProfileMediaLinks(follower),
+  );
+  return {
+    nextIndex: res.data.getFollowing.nextIndex,
+    results: followingWithMediaLinks,
+    total: res.data.getFollowing.total,
+  };
 };
 
 /**
