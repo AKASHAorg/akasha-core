@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 
-import MessageAppMiniCard, { IMessageAppMiniCardProps } from '.';
+import MessageContactCard, { IMessageContactCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
 export default {
-  title: 'Cards/MessageAppMiniCard',
-  component: MessageAppMiniCard,
+  title: 'Cards/MessageContactCard',
+  component: MessageContactCard,
   argType: {
     senderName: { control: 'text' },
     senderUsername: { control: 'text' },
@@ -25,19 +25,19 @@ export default {
   },
 };
 
-const Template = (args: IMessageAppMiniCardProps) => (
+const Template = (args: IMessageContactCardProps) => (
   <Grommet theme={lightTheme}>
     <Box width="42.5%" pad="none" align="center">
-      <MessageAppMiniCard {...args} />
+      <MessageContactCard {...args} />
     </Box>
   </Grommet>
 );
 
 const ethAddress = '0x003410490050000320006570034567114572000';
 
-export const BaseMessageAppMiniCard = Template.bind({});
+export const BaseMessageContactCard = Template.bind({});
 
-BaseMessageAppMiniCard.args = {
+BaseMessageContactCard.args = {
   locale: 'en',
   senderName: 'Jerry Mil',
   senderUsername: 'jerrbear',
