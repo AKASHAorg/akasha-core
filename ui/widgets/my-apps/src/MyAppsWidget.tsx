@@ -107,6 +107,8 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       <ICWidgetCard
         worldApps={filteredDefaultApps}
         installedApps={filteredInstalledApps}
+        isLoadingWorldApps={integrationsInfoReq.isFetching}
+        isLoadingInstalledApps={integrationsInfoReq.isFetching}
         titleLabel={t('My Apps')}
         worldAppsLabel={t('World Apps')}
         installedAppsLabel={t('Installed')}

@@ -63,15 +63,8 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
         </Box>
         <Tabs onActive={handleTabChange}>
           <StyledTab title={worldAppsLabel}>
-            <Box>
-              {worldApps && worldApps.length === 0 && !isLoadingWorldApps && (
-                <Box pad="medium" align="center" justify="center">
-                  <Text>{noWorldAppsLabel}</Text>
-                </Box>
-              )}
-              {worldApps &&
-                worldApps.length === 0 &&
-                isLoadingWorldApps &&
+            <Box margin={{ horizontal: 'small', top: 'xsmall' }}>
+              {isLoadingWorldApps &&
                 Array.from({ length: 4 }, (_el, index: number) => (
                   <Box key={index} direction="row" justify="between" align="center">
                     <Box gap="xxsmall">
@@ -81,54 +74,51 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                     <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
                   </Box>
                 ))}
-              {worldApps &&
-                worldApps.length !== 0 &&
-                worldApps.slice(0, 4).map((app, index) => (
-                  <Box
-                    key={index}
-                    direction="row"
-                    justify="between"
-                    border={index !== worldApps.slice(0, 4).length - 1 ? { side: 'bottom' } : null}
-                    pad={{ horizontal: 'medium', vertical: 'small' }}
-                  >
-                    <Box direction="row">
-                      <Box width="100%" pad="none" align="start">
-                        <SubtitleTextIcon
-                          onClick={() => onClickWorldApp(app.integrationID)}
-                          label={app.manifestData?.displayName}
-                          subtitle={app.name}
-                          labelSize="large"
-                          gap="xxsmall"
-                          maxWidth="10rem"
-                          iconType="integrationAppLarge"
-                          plainIcon={true}
-                          backgroundColor={true}
-                        />
+              {!isLoadingWorldApps && (
+                <>
+                  {worldApps.length === 0 && (
+                    <Box pad="medium" align="center" justify="center">
+                      <Text>{noWorldAppsLabel}</Text>
+                    </Box>
+                  )}
+                  {worldApps.length !== 0 &&
+                    worldApps.slice(0, 4).map((app, index) => (
+                      <Box
+                        key={index}
+                        direction="row"
+                        justify="between"
+                        border={
+                          index !== worldApps.slice(0, 4).length - 1 ? { side: 'bottom' } : null
+                        }
+                        pad={{ horizontal: 'medium', vertical: 'small' }}
+                      >
+                        <Box direction="row">
+                          <Box width="100%" pad="none" align="start">
+                            <SubtitleTextIcon
+                              onClick={() => onClickWorldApp(app.integrationID)}
+                              label={app.manifestData?.displayName}
+                              subtitle={app.name}
+                              labelSize="large"
+                              gap="xxsmall"
+                              maxWidth="10rem"
+                              iconType="integrationAppLarge"
+                              plainIcon={true}
+                              backgroundColor={true}
+                            />
+                          </Box>
+                        </Box>
+                        <Box justify="center">
+                          <Icon type="checkSimple" size="sm" accentColor />
+                        </Box>
                       </Box>
-                    </Box>
-                    <Box justify="center">
-                      <Icon type="checkSimple" size="sm" accentColor />
-                    </Box>
-                  </Box>
-                ))}
+                    ))}
+                </>
+              )}
             </Box>
           </StyledTab>
           <StyledTab title={installedAppsLabel}>
-            <Box>
-              {installedApps && installedApps.length === 0 && !isLoadingInstalledApps && (
-                <Box pad="medium" align="center" justify="center">
-                  <InfoCard
-                    icon="appCenter"
-                    title={noInstalledAppsLabel}
-                    suggestion={noInstalledAppsSubLabel}
-                    noBorder={true}
-                    noPadding={true}
-                  />
-                </Box>
-              )}
-              {installedApps &&
-                installedApps.length === 0 &&
-                isLoadingInstalledApps &&
+            <Box margin={{ horizontal: 'small', top: 'xsmall' }}>
+              {isLoadingInstalledApps &&
                 Array.from({ length: 4 }, (_el, index: number) => (
                   <Box key={index} direction="row" justify="between" align="center">
                     <Box gap="xxsmall">
@@ -138,38 +128,52 @@ const ICWidgetCard: React.FC<ICWidgetCardProps> = props => {
                     <TextLine title="tagName" animated={false} width="7rem" height="2rem" />
                   </Box>
                 ))}
-              {installedApps &&
-                installedApps.length !== 0 &&
-                installedApps.slice(0, 4).map((app, index) => (
-                  <Box
-                    key={index}
-                    direction="row"
-                    justify="between"
-                    border={
-                      index !== installedApps.slice(0, 4).length - 1 ? { side: 'bottom' } : null
-                    }
-                    pad={{ horizontal: 'medium', vertical: 'small' }}
-                  >
-                    <Box direction="row">
-                      <Box width="100%" pad="none" align="start">
-                        <SubtitleTextIcon
-                          onClick={() => onClickInstalledApp(app.integrationID)}
-                          label={app.manifestData?.displayName}
-                          subtitle={app.name}
-                          labelSize="large"
-                          gap="xxsmall"
-                          maxWidth="10rem"
-                          iconType="integrationAppLarge"
-                          plainIcon={true}
-                          backgroundColor={true}
-                        />
+              {!isLoadingInstalledApps && (
+                <>
+                  {installedApps.length === 0 && (
+                    <Box pad="medium" align="center" justify="center">
+                      <InfoCard
+                        icon="appCenter"
+                        title={noInstalledAppsLabel}
+                        suggestion={noInstalledAppsSubLabel}
+                        noBorder={true}
+                        noPadding={true}
+                      />
+                    </Box>
+                  )}
+                  {installedApps.length !== 0 &&
+                    installedApps.slice(0, 4).map((app, index) => (
+                      <Box
+                        key={index}
+                        direction="row"
+                        justify="between"
+                        border={
+                          index !== installedApps.slice(0, 4).length - 1 ? { side: 'bottom' } : null
+                        }
+                        pad={{ horizontal: 'medium', vertical: 'small' }}
+                      >
+                        <Box direction="row">
+                          <Box width="100%" pad="none" align="start">
+                            <SubtitleTextIcon
+                              onClick={() => onClickInstalledApp(app.integrationID)}
+                              label={app.manifestData?.displayName}
+                              subtitle={app.name}
+                              labelSize="large"
+                              gap="xxsmall"
+                              maxWidth="10rem"
+                              iconType="integrationAppLarge"
+                              plainIcon={true}
+                              backgroundColor={true}
+                            />
+                          </Box>
+                        </Box>
+                        <Box justify="center">
+                          <Icon type="checkSimple" size="sm" accentColor />
+                        </Box>
                       </Box>
-                    </Box>
-                    <Box justify="center">
-                      <Icon type="checkSimple" size="sm" accentColor />
-                    </Box>
-                  </Box>
-                ))}
+                    ))}
+                </>
+              )}
             </Box>
           </StyledTab>
         </Tabs>
