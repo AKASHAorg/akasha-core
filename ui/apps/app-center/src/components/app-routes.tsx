@@ -74,6 +74,15 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     return integrationsInfoReq.data?.getLatestRelease;
   }, [integrationsInfoReq.data?.getLatestRelease]);
 
+  const installableApps = React.useMemo(() => {
+    return latestReleasesInfo?.filter(releaseInfo => {
+      if (defaultIntegrations?.includes(releaseInfo.name)) {
+        return null;
+      }
+      return releaseInfo;
+    });
+  }, [defaultIntegrations, latestReleasesInfo]);
+
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
   return (
@@ -153,8 +162,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                     path={routes[EXPLORE]}
                     element={
                       <ExplorePage
-                        latestReleasesInfo={latestReleasesInfo}
-                        defaultIntegrations={defaultIntegrations}
+                        installableApps={installableApps}
                         installedAppsInfo={installedAppsReq.data}
                         isFetching={integrationsInfoReq.isFetching}
                         reqError={integrationsInfoReq.error}

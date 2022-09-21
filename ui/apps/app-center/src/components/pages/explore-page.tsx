@@ -20,23 +20,15 @@ const {
 } = DS;
 
 export interface IExplorePage extends RootComponentProps {
-  latestReleasesInfo?: ReleaseInfo[];
+  installableApps: ReleaseInfo[];
   installedAppsInfo?: IntegrationInfo[];
-  defaultIntegrations?: string[];
   isFetching?: boolean;
   reqError?: Error;
   isUserLoggedIn?: boolean;
 }
 
 const ExplorePage: React.FC<IExplorePage> = props => {
-  const {
-    latestReleasesInfo,
-    isFetching,
-    defaultIntegrations,
-    reqError,
-    installedAppsInfo,
-    isUserLoggedIn,
-  } = props;
+  const { installableApps, isFetching, reqError, installedAppsInfo, isUserLoggedIn } = props;
   const sdk = getSDK();
   const { t } = useTranslation('app-integration-center');
 
@@ -62,15 +54,6 @@ const ExplorePage: React.FC<IExplorePage> = props => {
   }, []);
 
   const uninstallAppReq = useUninstallApp();
-
-  const installableApps = React.useMemo(() => {
-    return latestReleasesInfo?.filter(releaseInfo => {
-      if (defaultIntegrations?.includes(releaseInfo.name)) {
-        return null;
-      }
-      return releaseInfo;
-    });
-  }, [defaultIntegrations, latestReleasesInfo]);
 
   const handleAppClick = (app: ReleaseInfo) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
@@ -102,45 +85,50 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             devDetails={reqError}
           />
         )}
-        {(installableApps?.length === 0 || !isUserLoggedIn) && (
-          <InfoCard
-            icon="appCenter"
-            title={t('Welcome to the Integration Centre!')}
-            suggestion={t(
-              'The Integration Center is the trusted go-to place to explore, discover and experience apps, widgets, and plug-ins straight from the Ethereum World interface. These applications and integrations are thoroughly reviewed by the AKASHA Foundation so you can experience a palette of fine specimens of dsocial networking in your World.',
-            )}
-            noBorder={true}
-          />
-        )}
-        {installableApps?.map((app, index) => (
-          <Box key={index} direction="row" justify="between" align="center" gap="xsmall">
-            <SubtitleTextIcon
-              label={app.manifestData?.displayName}
-              subtitle={app.name}
-              gap="xxsmall"
-              iconType="integrationAppLarge"
-              plainIcon={true}
-              onClick={() => handleAppClick(app)}
-              backgroundColor={true}
-            />
-            <DuplexButton
-              loading={!!uninstallingApps.includes(app.name)}
-              icon={<Icon type="arrowDown" />}
-              activeIcon={<Icon type="checkSimple" accentColor={true} />}
-              activeHoverIcon={<Icon type="close" />}
-              active={installedAppsInfo?.some(installedApp => installedApp.name === app.name)}
-              activeLabel={t('Installed')}
-              inactiveLabel={t('Install')}
-              activeHoverLabel={t('Uninstall')}
-              onClickActive={() => handleAppUninstall(app.name)}
-              onClickInactive={() => handleAppInstall(app.name)}
-            />
-          </Box>
-        ))}
         {isFetching && (
           <Box>
             <Spinner />
           </Box>
+        )}
+        {!isFetching && (
+          <>
+            {(installableApps?.length === 0 || !isUserLoggedIn) && (
+              <InfoCard
+                icon="appCenter"
+                title={t('Welcome to the Integration Centre!')}
+                suggestion={t(
+                  'The Integration Center is the trusted go-to place to explore, discover and experience apps, widgets, and plug-ins straight from the Ethereum World interface. These applications and integrations are thoroughly reviewed by the AKASHA Foundation so you can experience a palette of fine specimens of dsocial networking in your World.',
+                )}
+                noBorder={true}
+              />
+            )}
+            {installableApps?.length !== 0 &&
+              installableApps?.map((app, index) => (
+                <Box key={index} direction="row" justify="between" align="center" gap="xsmall">
+                  <SubtitleTextIcon
+                    label={app.manifestData?.displayName}
+                    subtitle={app.name}
+                    gap="xxsmall"
+                    iconType="integrationAppLarge"
+                    plainIcon={true}
+                    onClick={() => handleAppClick(app)}
+                    backgroundColor={true}
+                  />
+                  <DuplexButton
+                    loading={!!uninstallingApps.includes(app.name)}
+                    icon={<Icon type="arrowDown" />}
+                    activeIcon={<Icon type="checkSimple" accentColor={true} />}
+                    activeHoverIcon={<Icon type="close" />}
+                    active={installedAppsInfo?.some(installedApp => installedApp.name === app.name)}
+                    activeLabel={t('Installed')}
+                    inactiveLabel={t('Install')}
+                    activeHoverLabel={t('Uninstall')}
+                    onClickActive={() => handleAppUninstall(app.name)}
+                    onClickInactive={() => handleAppInstall(app.name)}
+                  />
+                </Box>
+              ))}
+          </>
         )}
       </Box>
 

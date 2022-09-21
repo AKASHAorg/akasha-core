@@ -24,7 +24,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.pubKey;
+    return !!loginQuery.data.pubKey && loginQuery.data.isReady;
   }, [loginQuery.data]);
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -67,8 +67,8 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       })
       .filter(Boolean);
   }, [filteredIntegrations, filteredDefaultIntegrations]);
-
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
+
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
 
   const { filteredDefaultApps, filteredInstalledApps } = React.useMemo(() => {
