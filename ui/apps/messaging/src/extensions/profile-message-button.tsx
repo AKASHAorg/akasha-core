@@ -58,6 +58,10 @@ const MessageIconButton = (props: RootExtensionProps) => {
     }
   };
 
+  if (pubKey === loggedUserPubKey) {
+    return;
+  }
+
   return (
     <>
       <div ref={btnRef} onClick={handleShowTooltip}>
