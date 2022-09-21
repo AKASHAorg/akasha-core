@@ -141,7 +141,7 @@ import EthProviderModal from './components/SignInModal/eth-provider-modal';
 import EthProviderListModal from './components/SignInModal/eth-provider-list-modal';
 import { ModalContainer } from './components/SignInModal/fullscreen-modal-container';
 import { ModalRenderer } from './components/SignInModal/modal-renderer';
-import MessageAppMiniCard from './components/MessageMiniCard';
+import MessageContactCard from './components/MessageContactCard';
 import BubbleCard from './components/BubbleCard';
 import ChatAreaHeader from './components/ChatAreaHeader';
 import ChatList from './components/ChatList';
@@ -315,7 +315,7 @@ const exported = {
   ModalCardLogin,
   EthProviderListModal,
   EthProviderModal,
-  MessageAppMiniCard,
+  MessageContactCard,
   BubbleCard,
   ChatAreaHeader,
   ChatList,

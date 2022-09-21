@@ -5,7 +5,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import { LoginState, useFollowers, useFollowing, logError } from '@akashaorg/ui-awf-hooks';
 import { getHubUser } from '../../api/message';
 
-const { BasicCardBox, Box, Icon, Text, MessageAppMiniCard } = DS;
+const { BasicCardBox, Box, Icon, Text, MessageContactCard } = DS;
 
 export interface InboxPageProps extends RootComponentProps {
   loginState: LoginState;
@@ -20,6 +20,8 @@ const InboxPage: React.FC<InboxPageProps> = props => {
 
   const [pinnedConvos, setPinnedConvos] = React.useState([]);
 
+  const loggedUserPubKey = React.useMemo(() => loginState?.pubKey, [loginState]);
+
   const handleSettingsClick = () => {
     navigateTo?.({
       appName: '@akashaorg/app-messaging',
@@ -27,13 +29,13 @@ const InboxPage: React.FC<InboxPageProps> = props => {
     });
   };
 
-  const followersQuery = useFollowers(loginState.pubKey, 500);
+  const followersQuery = useFollowers(loggedUserPubKey, 500);
   const followers = React.useMemo(
     () => followersQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followersQuery.data?.pages],
   );
 
-  const followingQuery = useFollowing(loginState.pubKey, 500);
+  const followingQuery = useFollowing(loggedUserPubKey, 500);
   const following = React.useMemo(
     () => followingQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followingQuery.data?.pages],
@@ -75,7 +77,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
     setPinnedConvos(newData);
   };
 
-  const getHubUserCallback = React.useCallback(getHubUser, []);
+  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
 
   React.useEffect(() => {
     let sub;
@@ -89,7 +91,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         if (!reply?.message) return;
         if (reply.message.readAt === 0) {
           const pubKey = reply.message.from;
-          if (pubKey !== loginState.pubKey) {
+          if (pubKey !== loggedUserPubKey) {
             let unreadChats = [];
             const unreadChatsStorage = localStorage.getItem('Unread Chats');
             if (unreadChatsStorage) {
@@ -110,7 +112,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         sub = null;
       }
     };
-  }, [getHubUserCallback, loginState]);
+  }, [getHubUserCallback, loggedUserPubKey]);
 
   const handleCardClick = (pubKey: string) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
@@ -152,11 +154,12 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                 </Box>
 
                 {pinnedContacts.map((contact, idx) => (
-                  <MessageAppMiniCard
+                  <MessageContactCard
                     key={idx}
                     locale="en"
                     pinConvoLabel={t('Pin Conversation')}
                     unpinConvoLabel={t('Unpin Conversation')}
+                    newMessageLabel={t('New')}
                     isPinned={true}
                     isRead={
                       !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(
@@ -183,11 +186,12 @@ const InboxPage: React.FC<InboxPageProps> = props => {
               )}
 
               {unpinnedContacts?.map((contact, idx) => (
-                <MessageAppMiniCard
+                <MessageContactCard
                   key={idx}
                   locale="en"
                   pinConvoLabel={t('Pin Conversation')}
                   unpinConvoLabel={t('Unpin Conversation')}
+                  newMessageLabel={t('New')}
                   hideBottomBorder={idx === unpinnedContacts.length - 1}
                   isPinned={false}
                   isRead={

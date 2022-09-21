@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { act, cleanup, fireEvent } from '@testing-library/react';
 
-import MessageAppMiniCard from '../';
+import MessageContactCard from '..';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<MessageAppMiniCard /> Component', () => {
+describe('<MessageContactCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleClickCard = jest.fn();
@@ -15,7 +15,7 @@ describe('<MessageAppMiniCard /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <MessageAppMiniCard
+          <MessageContactCard
             locale="en"
             senderName="Jerry Mil"
             senderUsername="jerrbear"
