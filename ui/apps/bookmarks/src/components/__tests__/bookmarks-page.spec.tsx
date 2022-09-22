@@ -2,9 +2,6 @@ import * as React from 'react';
 import { act, screen, renderWithAllProviders } from '@akashaorg/af-testing';
 import BookmarksPage from '../bookmarks-page';
 
-// jest
-//   .spyOn(FeedWidget, 'default')
-//   .mockImplementation(({ pages }) => <>{pages && <div>Post Placeholder</div>}</>);
 describe('<BookmarksPage /> component', () => {
   const Base = (
     <BookmarksPage
