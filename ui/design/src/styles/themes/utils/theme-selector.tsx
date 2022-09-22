@@ -105,13 +105,14 @@ const ThemeSelector = (props: IThemeSelector & GrommetProps) => {
     () => {
       componentIsUnmounted.current = true;
     };
-  }, [loadedTheme, props.availableThemes, props.settings.activeTheme]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedTheme?.name, props.availableThemes, props.settings.activeTheme]);
 
   React.useEffect(() => {
     if (props.themeReadyEvent) {
       props.themeReadyEvent();
     }
-  }, [loadedTheme, props]);
+  }, [loadedTheme?.name, props]);
 
   return (
     <>
