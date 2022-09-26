@@ -119,7 +119,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               )}
             />
           )}
-          {bookmarksReq.status === 'success' && bookmarks && (
+          {bookmarksReq.status === 'success' && bookmarks.length > 0 && (
             <FeedWidget
               modalSlotId={props.layoutConfig.modalSlotId}
               itemType={EntityTypes.ENTRY}
