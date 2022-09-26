@@ -1,6 +1,13 @@
 import * as React from 'react';
 import { Box, Text } from 'grommet';
 import { Descendant } from 'slate';
+import Spinner from '../Spinner';
+import styled from 'styled-components';
+
+export const StyledBox = styled(Box)`
+  height: 25rem;
+  overflow: auto;
+`;
 
 export interface IChatMessage {
   name: string;
@@ -15,13 +22,22 @@ export interface IChatMessage {
 }
 export interface IChatListProps {
   emptyChatLabel: string;
+  fetchingMessagesLabel?: string;
   loggedUserEthAddress: string;
   itemCard: React.ReactElement;
+  fetchingMessages?: boolean;
   chatArr: IChatMessage[]; // @TODO: update with correct typing from sdk
 }
 
 const ChatList: React.FC<IChatListProps> = props => {
-  const { emptyChatLabel, loggedUserEthAddress, itemCard, chatArr } = props;
+  const {
+    emptyChatLabel,
+    loggedUserEthAddress,
+    itemCard,
+    chatArr,
+    fetchingMessages,
+    fetchingMessagesLabel,
+  } = props;
 
   const chatBottomRef = React.useRef(null);
 
@@ -33,12 +49,19 @@ const ChatList: React.FC<IChatListProps> = props => {
     scrollToBottom();
   }, [chatArr]);
 
+  if (!chatArr?.length && fetchingMessages) {
+    return (
+      <StyledBox align="center" justify="center">
+        <>
+          <Spinner />
+          <Text>{fetchingMessagesLabel}</Text>
+        </>
+      </StyledBox>
+    );
+  }
+
   return (
-    <Box
-      pad={{ horizontal: 'xsmall' }}
-      style={{ height: '25rem', maxHeight: '25rem', overflow: 'auto' }}
-      direction="column"
-    >
+    <StyledBox pad={{ horizontal: 'xsmall' }} direction="column">
       {chatArr.length < 1 && (
         <Text textAlign="center" margin={{ top: 'medium' }}>
           {emptyChatLabel}
@@ -63,7 +86,7 @@ const ChatList: React.FC<IChatListProps> = props => {
           </Box>
         ))}
       <div ref={chatBottomRef} />
-    </Box>
+    </StyledBox>
   );
 };
 

@@ -19,7 +19,7 @@ const SettingsPage: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-settings-ewa');
 
   const handleSettingsOptionClick = (option: SettingsOption) => () => {
-    return props.plugins?.routing?.navigateTo?.({
+    return props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-settings-ewa',
       getNavigationUrl: navRoutes => navRoutes[option],
     });

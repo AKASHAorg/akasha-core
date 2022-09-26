@@ -161,7 +161,7 @@ const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
 
 const ProfileModal: React.FC<RootExtensionProps> = props => (
   <React.Suspense fallback={<></>}>
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <UpdateProfileModal {...props} />
     </I18nextProvider>
   </React.Suspense>

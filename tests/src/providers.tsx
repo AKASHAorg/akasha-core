@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { TestThemeProvider } from '@akashaorg/design-system/src/test-utils/providers';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import i18n from 'i18next';
+
+const queryClient = new QueryClient();
 
 const getI18nInstance = () => {
   i18n.use(initReactI18next).init({
@@ -29,9 +32,11 @@ const TranslationProvider: React.FC = ({ children }) => {
 
 const AllProviders: React.FC = ({ children }) => {
   return (
-    <TranslationProvider>
-      <TestThemeProvider>{children}</TestThemeProvider>
-    </TranslationProvider>
+    <QueryClientProvider client={queryClient}>
+      <TranslationProvider>
+        <TestThemeProvider>{children}</TestThemeProvider>
+      </TranslationProvider>
+    </QueryClientProvider>
   );
 };
 

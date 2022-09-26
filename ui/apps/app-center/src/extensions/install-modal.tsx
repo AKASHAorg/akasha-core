@@ -109,7 +109,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
 
 const ModalWrapper: React.FC<RootExtensionProps> = props => {
   return (
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <IntegrationInstallModal {...props} />
     </I18nextProvider>
   );

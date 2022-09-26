@@ -9,7 +9,7 @@ const { WelcomeCard } = DS;
 
 const Welcome: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-auth-ewa');
-  const navigateTo = props.plugins?.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const loginQuery = useGetLogin();
 

@@ -33,7 +33,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
 
   const { t } = useTranslation('app-akasha-integration');
-  const locale = (props.plugins?.translation?.i18n?.languages?.[0] || 'en') as ILocale;
+  const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
+    'en') as ILocale;
 
   const [analyticsActions] = useAnalytics();
 
@@ -154,7 +155,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
         }
         loginState={loginState}
-        navigateTo={props.plugins?.routing?.navigateTo}
+        navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}
@@ -168,7 +169,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
         itemSpacing={8}
-        i18n={props.plugins?.translation?.i18n}
+        i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
       />
     </Box>
   );

@@ -40,7 +40,7 @@ const SidebarOverlay = styled(Box)`
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
     uiEvents,
-    plugins: { routing },
+    plugins,
     worldConfig: { defaultApps, homepageApp },
   } = props;
 
@@ -54,6 +54,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const { size } = useViewportSize();
 
   const loginQuery = useGetLogin();
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
 
   React.useEffect(() => {
     let sub;

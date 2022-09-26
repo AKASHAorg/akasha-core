@@ -1,9 +1,9 @@
-import { PluginConf } from '@akashaorg/typings/ui';
+import { IPluginsMap } from '@akashaorg/typings/ui';
 import { i18n } from 'i18next';
 
-export const loadI18nNamespaces = async (plugins: PluginConf, namespaces: string | string[]) => {
-  if (plugins.hasOwnProperty('translation')) {
-    const i18n = plugins.translation.i18n as i18n;
+export const loadI18nNamespaces = async (plugins: IPluginsMap, namespaces: string | string[]) => {
+  if (plugins['@akashaorg/app-translation'].hasOwnProperty('translation')) {
+    const i18n = plugins['@akashaorg/app-translation'].translation.i18n as i18n;
     if (Array.isArray(namespaces)) {
       for (const namespace of namespaces) {
         if (!i18n.options?.ns?.includes(namespace)) {

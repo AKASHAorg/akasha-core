@@ -85,7 +85,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-  const navigateTo = props.plugins?.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const handleEntryNavigation = useEntryNavigation(navigateTo);
 
   const isAllTabActive = React.useMemo(() => activeButton === ButtonValues.ALL, [activeButton]);
@@ -238,7 +238,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     const trimmedValue = inputValue.trim();
     if (!trimmedValue) return;
     const encodedSearchKey = encodeURIComponent(trimmedValue);
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-search',
       getNavigationUrl: routes => `${routes.Results}/${encodedSearchKey}`,
     });

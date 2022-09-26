@@ -31,16 +31,14 @@ export interface ProfilePageProps extends RootComponentProps {
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const {
-    plugins: { routing },
-    loggedProfileData,
-    showLoginModal,
-  } = props;
+  const { plugins, loggedProfileData, showLoginModal } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const { t } = useTranslation('app-profile');
   const location = useLocation();
   const { pubKey } = useParams<{ pubKey: string }>();
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
 
   const publicKey = React.useMemo(() => {
     if (location.pathname.includes(menuRoute[MY_PROFILE])) {
@@ -173,7 +171,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                 profileData={profileState}
                 profileId={pubKey}
                 loginState={loginQuery.data}
-                navigateTo={props.plugins?.routing?.navigateTo}
+                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               />
               {isOnDevDashboard && (
                 <DevProfileCard

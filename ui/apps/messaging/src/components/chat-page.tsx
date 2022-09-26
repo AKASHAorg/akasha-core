@@ -5,20 +5,27 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
 import {
-  useGetLogin,
   useMentionSearch,
   useTagSearch,
   useGetProfile,
   logError,
+  LoginState,
 } from '@akashaorg/ui-awf-hooks';
 import { getHubUser, getMessages, markAsRead, sendMessage } from '../api/message';
 
-const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
+const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard, Spinner } =
+  DS;
 
-const ChatPage = (props: RootComponentProps) => {
+export interface ChatPageProps extends RootComponentProps {
+  loginState: LoginState;
+}
+
+const ChatPage = (props: ChatPageProps) => {
+  const { loginState } = props;
+
   const { t } = useTranslation('app-messaging');
 
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { pubKey } = useParams<{ pubKey: string }>();
 
@@ -35,9 +42,6 @@ const ChatPage = (props: RootComponentProps) => {
       getNavigationUrl: routes => `${routes.rootRoute}/${pubKey}`,
     });
   };
-
-  const loginQuery = useGetLogin();
-  const loginState = loginQuery.data;
 
   const contactPubKey = React.useMemo(() => pubKey, [pubKey]);
   const loggedUserPubKey = React.useMemo(() => loginState?.pubKey, [loginState]);
@@ -101,8 +105,10 @@ const ChatPage = (props: RootComponentProps) => {
   };
 
   const [messages, setMessages] = React.useState([]);
+  const [fetchingMessages, setFetchingMessages] = React.useState(false);
 
   const fetchMessagesCallback = React.useCallback(async () => {
+    setFetchingMessages(true);
     const messagesData = await getMessages();
     const conversation = messagesData
       ?.map(res => {
@@ -126,6 +132,7 @@ const ChatPage = (props: RootComponentProps) => {
       })
       .filter(Boolean);
     setMessages(conversation);
+    setFetchingMessages(false);
   }, [loggedUserPubKey, contactPubKey, contactId]);
 
   React.useEffect(() => {
@@ -145,29 +152,35 @@ const ChatPage = (props: RootComponentProps) => {
     }
   }, [messages, pubKey]);
 
-  const getHubUserCallback = React.useCallback(getHubUser, []);
-
+  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
+  const subCallback = React.useCallback(
+    async (reply?: any, err?: Error) => {
+      if (err) {
+        return logError('messaging-app.watchInbox', err);
+      }
+      if (!reply?.message) return;
+      const messageIds = messages.map(message => message.id);
+      if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
+        await fetchMessagesCallback();
+      }
+    },
+    [messages],
+  );
   React.useEffect(() => {
     let sub;
     (async () => {
       const user = await getHubUserCallback();
       const mailboxId = await user.getMailboxID();
-      const callback = async (reply?: any, err?: Error) => {
-        if (err) {
-          return logError('messaging-app.watchInbox', err);
-        }
-        if (!reply?.message) return;
-        const messageIds = messages.map(message => message.id);
-        if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
-          fetchMessagesCallback();
-        }
-      };
-      sub = user.watchInbox(mailboxId, callback);
+      sub = user.watchInbox(mailboxId, subCallback);
     })();
     return () => {
-      if (sub) return sub.close();
+      if (sub) {
+        sub.close();
+        sub = null;
+      }
     };
-  }, [getHubUserCallback, fetchMessagesCallback, pubKey, messages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getHubUserCallback, fetchMessagesCallback, pubKey]);
 
   return (
     <BasicCardBox style={{ maxHeight: '92vh' }}>
@@ -183,6 +196,7 @@ const ChatPage = (props: RootComponentProps) => {
           background="convoAreaBackground"
           round={{ size: 'small' }}
           border={{ side: 'all', size: '1px', color: 'border' }}
+          justify="between"
         >
           <ChatAreaHeader
             name={profileDataReq.data?.name}
@@ -194,6 +208,7 @@ const ChatPage = (props: RootComponentProps) => {
 
           <ChatList
             emptyChatLabel={t('Start by saying hello! 👋🏼')}
+            fetchingMessagesLabel={t('Fetching your messages')}
             loggedUserEthAddress={loginState?.ethAddress}
             itemCard={
               <BubbleCard
@@ -205,6 +220,7 @@ const ChatPage = (props: RootComponentProps) => {
               />
             }
             chatArr={messages || []}
+            fetchingMessages={fetchingMessages}
           />
 
           <ChatEditor

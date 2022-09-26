@@ -5,7 +5,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import { LoginState, useFollowers, useFollowing, logError } from '@akashaorg/ui-awf-hooks';
 import { getHubUser } from '../../api/message';
 
-const { BasicCardBox, Box, Icon, Text, MessageAppMiniCard } = DS;
+const { BasicCardBox, Box, Icon, Text, MessageContactCard } = DS;
 
 export interface InboxPageProps extends RootComponentProps {
   loginState: LoginState;
@@ -16,9 +16,11 @@ const InboxPage: React.FC<InboxPageProps> = props => {
 
   const { t } = useTranslation('app-messaging');
 
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [pinnedConvos, setPinnedConvos] = React.useState([]);
+
+  const loggedUserPubKey = React.useMemo(() => loginState?.pubKey, [loginState]);
 
   const handleSettingsClick = () => {
     navigateTo?.({
@@ -27,13 +29,13 @@ const InboxPage: React.FC<InboxPageProps> = props => {
     });
   };
 
-  const followersQuery = useFollowers(loginState.pubKey, 500);
+  const followersQuery = useFollowers(loggedUserPubKey, 500);
   const followers = React.useMemo(
     () => followersQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followersQuery.data?.pages],
   );
 
-  const followingQuery = useFollowing(loginState.pubKey, 500);
+  const followingQuery = useFollowing(loggedUserPubKey, 500);
   const following = React.useMemo(
     () => followingQuery.data?.pages?.reduce((acc, curr) => [...acc, ...curr.results], []),
     [followingQuery.data?.pages],
@@ -75,7 +77,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
     setPinnedConvos(newData);
   };
 
-  const getHubUserCallback = React.useCallback(getHubUser, []);
+  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
 
   React.useEffect(() => {
     let sub;
@@ -89,7 +91,7 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         if (!reply?.message) return;
         if (reply.message.readAt === 0) {
           const pubKey = reply.message.from;
-          if (pubKey !== loginState.pubKey) {
+          if (pubKey !== loggedUserPubKey) {
             let unreadChats = [];
             const unreadChatsStorage = localStorage.getItem('Unread Chats');
             if (unreadChatsStorage) {
@@ -105,12 +107,15 @@ const InboxPage: React.FC<InboxPageProps> = props => {
       sub = user.watchInbox(mailboxId, callback);
     })();
     return () => {
-      if (sub) return sub.close();
+      if (sub) {
+        sub.close();
+        sub = null;
+      }
     };
-  }, [getHubUserCallback, loginState]);
+  }, [getHubUserCallback, loggedUserPubKey]);
 
   const handleCardClick = (pubKey: string) => {
-    props.plugins.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-messaging',
       getNavigationUrl: routes => `${routes.chat}/${pubKey}`,
     });
@@ -135,26 +140,26 @@ const InboxPage: React.FC<InboxPageProps> = props => {
         <Text>
           {t('Write and send private, encrypted messages 🔐 to people in Ethereum World.')}
         </Text>
-        <Box border={{ color: 'border', side: 'all' }} round="small" overflow={'hidden'}>
+        <Box border={{ color: 'border', side: 'all' }} round="small">
           <Box pad={{ horizontal: 'small', vertical: 'medium' }}>
             <Text weight={'bold'} size="large">
               {t('Conversations')}
             </Text>
           </Box>
-          <Box>
+          <Box overflow={'auto'} round={{ corner: 'bottom', size: 'small' }}>
             {!!pinnedContacts.length && (
-              <>
-                <Box pad="medium">
+              <Box flex={{ shrink: 0 }}>
+                <Box pad="medium" flex={{ shrink: 0 }}>
                   <Text weight={'bold'}>{t('PINNED')}</Text>
                 </Box>
 
                 {pinnedContacts.map((contact, idx) => (
-                  <MessageAppMiniCard
+                  <MessageContactCard
                     key={idx}
                     locale="en"
                     pinConvoLabel={t('Pin Conversation')}
                     unpinConvoLabel={t('Unpin Conversation')}
-                    hideBottomBorder={idx !== 0 && idx === pinnedContacts.length - 1}
+                    newMessageLabel={t('New')}
                     isPinned={true}
                     isRead={
                       !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(
@@ -170,36 +175,40 @@ const InboxPage: React.FC<InboxPageProps> = props => {
                     onConvoPin={() => handlePinConversation(contact.pubKey)}
                   />
                 ))}
-              </>
-            )}
-          </Box>
-          <Box>
-            {!!pinnedContacts.length && (
-              <Box pad="medium">
-                <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>
               </Box>
             )}
 
-            {unpinnedContacts?.map((contact, idx) => (
-              <MessageAppMiniCard
-                key={idx}
-                locale="en"
-                pinConvoLabel={t('Pin Conversation')}
-                unpinConvoLabel={t('Unpin Conversation')}
-                hideBottomBorder={idx === unpinnedContacts.length - 1}
-                isPinned={false}
-                isRead={
-                  !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(contact.pubKey)
-                }
-                senderName={contact?.name}
-                senderUsername={contact?.userName}
-                senderAvatar={contact?.avatar}
-                senderEthAddress={contact?.ethAddress}
-                onClickCard={() => handleCardClick(contact.pubKey)}
-                onClickAvatar={() => handleAvatarClick(contact.pubKey)}
-                onConvoPin={() => handlePinConversation(contact.pubKey)}
-              />
-            ))}
+            <Box flex={{ shrink: 0 }}>
+              {!!pinnedContacts.length && (
+                <Box pad="medium">
+                  <Text weight={'bold'}>{t('ALL CONVERSATIONS')}</Text>
+                </Box>
+              )}
+
+              {unpinnedContacts?.map((contact, idx) => (
+                <MessageContactCard
+                  key={idx}
+                  locale="en"
+                  pinConvoLabel={t('Pin Conversation')}
+                  unpinConvoLabel={t('Unpin Conversation')}
+                  newMessageLabel={t('New')}
+                  hideBottomBorder={idx === unpinnedContacts.length - 1}
+                  isPinned={false}
+                  isRead={
+                    !JSON.parse(localStorage.getItem(`Unread Chats`) || '[]').includes(
+                      contact.pubKey,
+                    )
+                  }
+                  senderName={contact?.name}
+                  senderUsername={contact?.userName}
+                  senderAvatar={contact?.avatar}
+                  senderEthAddress={contact?.ethAddress}
+                  onClickCard={() => handleCardClick(contact.pubKey)}
+                  onClickAvatar={() => handleAvatarClick(contact.pubKey)}
+                  onConvoPin={() => handlePinConversation(contact.pubKey)}
+                />
+              ))}
+            </Box>
           </Box>
         </Box>
       </Box>

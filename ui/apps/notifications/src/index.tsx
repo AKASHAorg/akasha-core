@@ -11,7 +11,7 @@ import getSDK from '@akashaorg/awf-sdk';
 import { filter, map, mergeMap } from 'rxjs';
 import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
 export const initialize = (options: IntegrationRegistrationOptions) => {
-  const notification: any = options.plugins.notification;
+  const notification: any = options.plugins['@akashaorg/app-notifications'].notification;
   const sdk = getSDK();
 
   if (notification && typeof notification.notify === 'function') {

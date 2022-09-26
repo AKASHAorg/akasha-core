@@ -119,7 +119,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               )}
             />
           )}
-          {bookmarksReq.status === 'success' && bookmarks && (
+          {bookmarksReq.status === 'success' && bookmarks.length > 0 && (
             <FeedWidget
               modalSlotId={props.layoutConfig.modalSlotId}
               itemType={EntityTypes.ENTRY}
@@ -134,7 +134,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               requestStatus={bookmarksReq.status}
               loginState={loginQuery.data}
               loggedProfile={loggedProfileQuery.data}
-              navigateTo={props.plugins?.routing?.navigateTo}
+              navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               navigateToModal={props.navigateToModal}
               onLoginModalOpen={showLoginModal}
               hasNextPage={false}
@@ -146,7 +146,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               removedByAuthorLabel={t('This post was deleted by its author')}
               uiEvents={props.uiEvents}
               itemSpacing={8}
-              i18n={props.plugins?.translation?.i18n}
+              i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
             />
           )}
         </Box>

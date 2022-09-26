@@ -27,7 +27,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           path={`${routes[SETTINGS]}`}
           element={<SettingsPage {...props} loginState={loginQuery?.data} />}
         ></Route>
-        <Route path={`${routes[CHAT]}/:pubKey`} element={<ChatPage {...props} />}></Route>
+        <Route
+          path={`${routes[CHAT]}/:pubKey`}
+          element={<ChatPage {...props} loginState={loginQuery?.data} />}
+        ></Route>
         <Route path="/" element={<Navigate to={routes[MESSAGING]} replace />} />
       </Routes>
     </Router>

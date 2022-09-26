@@ -3,14 +3,23 @@ import { Box, Text } from 'grommet';
 import { isMobileOnly } from 'react-device-detect';
 
 import { IProfileData } from '@akashaorg/typings/ui';
-
+import Button from '../Button';
 import Icon, { IconType } from '../Icon';
 import Avatar from '../Avatar';
 import { IconDiv } from '../TopBar/styled-topbar';
-import { formatRelativeTime, ILocale } from '../../utils/time';
+import { ILocale } from '../../utils/time';
 import CardHeaderMenuDropdown from '../EntryCard/card-header-menu';
+import styled from 'styled-components';
 
-export interface IMessageAppMiniCardProps {
+export const StyledButton = styled(Button)`
+  border-radius: 100px;
+  height: 1rem;
+  padding: 4px 11px;
+  display: flex;
+  align-items: center;
+`;
+
+export interface IMessageContactCardProps {
   locale: ILocale;
   senderName: IProfileData['name'];
   senderUsername: IProfileData['userName'];
@@ -20,6 +29,7 @@ export interface IMessageAppMiniCardProps {
   hideBottomBorder?: boolean;
   pinConvoLabel: string;
   unpinConvoLabel: string;
+  newMessageLabel?: string;
   senderAvatar: IProfileData['avatar'];
   senderEthAddress: IProfileData['ethAddress'];
   onClickAvatar?: () => void;
@@ -27,9 +37,8 @@ export interface IMessageAppMiniCardProps {
   onConvoPin?: () => void;
 }
 
-const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
+const MessageContactCard: React.FC<IMessageContactCardProps> = props => {
   const {
-    locale,
     senderName,
     senderUsername,
     content,
@@ -38,6 +47,7 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
     hideBottomBorder,
     pinConvoLabel,
     unpinConvoLabel,
+    newMessageLabel,
     senderAvatar,
     senderEthAddress,
     onClickAvatar,
@@ -79,9 +89,8 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
     <Box
       pad="small"
       onClick={onClickCard}
-      style={{ cursor: 'pointer' }}
+      flex={{ shrink: 0 }}
       border={hideBottomBorder ? { side: 'top' } : { side: 'horizontal' }}
-      background={isRead ? 'cardBackground' : 'activePanelBackground'}
     >
       <Box direction="row" justify="between">
         <Box direction="row" align="start">
@@ -113,7 +122,8 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
             </Text>
           </Box>
         </Box>
-        <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
+        <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="center" gap="small">
+          {!isRead && <StyledButton size="small" label={newMessageLabel} primary={true} />}
           <IconDiv
             onClick={(ev: React.MouseEvent<HTMLDivElement>) => toggleMenuDrop(ev)}
             isActive={menuDropOpen}
@@ -143,4 +153,4 @@ const MessageAppMiniCard: React.FC<IMessageAppMiniCardProps> = props => {
   );
 };
 
-export default MessageAppMiniCard;
+export default MessageContactCard;

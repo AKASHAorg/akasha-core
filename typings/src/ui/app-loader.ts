@@ -1,10 +1,10 @@
-import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 import { ParcelConfigObject } from 'single-spa';
 import { RootComponentProps, RootExtensionProps } from './index';
 import { UIEventData } from './ui-events';
 import { Extensions, IAppConfig } from './apps';
 import { PluginConf } from './plugins';
-import { ILogger } from '../sdk';
+import { ILogger, GlobalEventBusData } from '../sdk';
 
 export type ActivityFn = (
   location: Location,
@@ -25,9 +25,9 @@ export interface IntegrationRegistrationOptions {
 
 export type IntegrationInitOptions = Partial<IntegrationRegistrationOptions>;
 
-export interface ExtensionMatcherFn<G = BehaviorSubject<unknown>> {
+export interface ExtensionMatcherFn<G = ReplaySubject<GlobalEventBusData>> {
   (
-    uiEvents: ReplaySubject<UIEventData>,
+    uiEvents: Subject<UIEventData>,
     globalChannel: G,
     extProps: Omit<
       RootExtensionProps,

@@ -24,7 +24,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const isLoggedIn = React.useMemo(() => {
-    return !!loginQuery.data.pubKey;
+    return !!loginQuery.data.pubKey && loginQuery.data.isReady;
   }, [loginQuery.data]);
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
@@ -67,8 +67,8 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       })
       .filter(Boolean);
   }, [filteredIntegrations, filteredDefaultIntegrations]);
-
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
+
   const integrationsInfoReq = useGetLatestReleaseInfo(integrationIdsNormalized);
 
   const { filteredDefaultApps, filteredInstalledApps } = React.useMemo(() => {
@@ -96,7 +96,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
     if (!isLoggedIn) {
       return showLoginModal();
     }
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: navRoutes => `${navRoutes['info']}/${integrationId}`,
     });
@@ -107,6 +107,8 @@ const ICWidget: React.FC<RootComponentProps> = props => {
       <ICWidgetCard
         worldApps={filteredDefaultApps}
         installedApps={filteredInstalledApps}
+        isLoadingWorldApps={integrationsInfoReq.isFetching}
+        isLoadingInstalledApps={integrationsInfoReq.isFetching}
         titleLabel={t('My Apps')}
         worldAppsLabel={t('World Apps')}
         installedAppsLabel={t('Installed')}
@@ -121,7 +123,7 @@ const ICWidget: React.FC<RootComponentProps> = props => {
 };
 
 const Wrapped = (props: RootComponentProps) => (
-  <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+  <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
     <ICWidget {...props} />
   </I18nextProvider>
 );
