@@ -77,7 +77,12 @@ const ExplorePage: React.FC<IExplorePage> = props => {
   return (
     <>
       <Box gap="small" margin="medium" flex={{ shrink: 0 }}>
-        {reqError && (
+        {isFetching && (
+          <Box>
+            <Spinner />
+          </Box>
+        )}
+        {!isFetching && reqError && (
           <ErrorLoader
             type="script-error"
             title={t('There was an error loading the integrations')}
@@ -85,14 +90,9 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             devDetails={reqError}
           />
         )}
-        {isFetching && (
-          <Box>
-            <Spinner />
-          </Box>
-        )}
-        {!isFetching && (
+        {!isFetching && !reqError && (
           <>
-            {(installableApps?.length === 0 || !isUserLoggedIn) && (
+            {(!installableApps?.length || !isUserLoggedIn) && (
               <InfoCard
                 icon="appCenter"
                 title={t('Welcome to the Integration Centre!')}
