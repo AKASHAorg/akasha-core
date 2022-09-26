@@ -77,7 +77,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const installableApps = React.useMemo(() => {
     return latestReleasesInfo?.filter(releaseInfo => {
       if (defaultIntegrations?.includes(releaseInfo.name)) {
-        return null;
+        return;
       }
       return releaseInfo;
     });
