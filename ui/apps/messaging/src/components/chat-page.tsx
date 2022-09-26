@@ -12,9 +12,10 @@ import {
   LoginState,
 } from '@akashaorg/ui-awf-hooks';
 import { getHubUser, getMessages, markAsRead, sendMessage } from '../api/message';
+import { db } from '../db/db';
+import { useLiveQuery } from 'dexie-react-hooks';
 
-const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard, Spinner } =
-  DS;
+const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
 
 export interface ChatPageProps extends RootComponentProps {
   loginState: LoginState;
@@ -104,8 +105,45 @@ const ChatPage = (props: ChatPageProps) => {
     setMessages(prev => [...prev, newMessage]);
   };
 
+  const localMessages =
+    useLiveQuery(() =>
+      db.messages
+        .where({ loggedUserPubKey: loggedUserPubKey, chatPartnerPubKey: pubKey })
+        .sortBy('timestamp'),
+    ) || [];
+
   const [messages, setMessages] = React.useState([]);
   const [fetchingMessages, setFetchingMessages] = React.useState(false);
+
+  const latestReadMessage = localMessages[localMessages?.length - 1];
+  const indexOfLatestReadMessage = React.useMemo(() => {
+    if (messages?.length) {
+      return messages.findIndex(msg => msg.id === latestReadMessage?.id);
+    }
+  }, [messages, latestReadMessage]);
+  const unreadMessages = React.useMemo(() => {
+    return messages.slice(indexOfLatestReadMessage + 1);
+  }, [indexOfLatestReadMessage, messages]);
+
+  const markLatestMessagesRead = () => {
+    if (unreadMessages?.length) {
+      const newMessages = unreadMessages.map(msg => {
+        return { ...msg, loggedUserPubKey, chatPartnerPubKey: pubKey };
+      });
+      db.messages.bulkPut(newMessages);
+
+      // const unreadMessages = apiMessages.filter(
+      //   message => message.from === pubKey && !message.read,
+      // );
+      const unreadMessageIds = unreadMessages.map(message => message.id);
+      markAsRead(unreadMessageIds);
+      if (localStorage.getItem('Unread Chats')) {
+        const unreadChats = JSON.parse(localStorage.getItem('Unread Chats'));
+        const filteredChats = unreadChats.filter(unreadChat => unreadChat !== pubKey);
+        localStorage.setItem('Unread Chats', JSON.stringify(filteredChats));
+      }
+    }
+  };
 
   const fetchMessagesCallback = React.useCallback(async () => {
     setFetchingMessages(true);
@@ -133,24 +171,11 @@ const ChatPage = (props: ChatPageProps) => {
       .filter(Boolean);
     setMessages(conversation);
     setFetchingMessages(false);
-  }, [loggedUserPubKey, contactPubKey, contactId]);
+  }, [contactPubKey, loggedUserPubKey, contactId]);
 
   React.useEffect(() => {
     fetchMessagesCallback();
   }, [fetchMessagesCallback]);
-
-  React.useEffect(() => {
-    if (messages.length) {
-      const unreadMessages = messages.filter(message => message.from === pubKey && !message.read);
-      const unreadMessageIds = unreadMessages.map(message => message.id);
-      markAsRead(unreadMessageIds);
-      if (localStorage.getItem('Unread Chats')) {
-        const unreadChats = JSON.parse(localStorage.getItem('Unread Chats'));
-        const filteredChats = unreadChats.filter(unreadChat => unreadChat !== pubKey);
-        localStorage.setItem('Unread Chats', JSON.stringify(filteredChats));
-      }
-    }
-  }, [messages, pubKey]);
 
   const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
   const subCallback = React.useCallback(
@@ -209,6 +234,9 @@ const ChatPage = (props: ChatPageProps) => {
           <ChatList
             emptyChatLabel={t('Start by saying hello! 👋🏼')}
             fetchingMessagesLabel={t('Fetching your messages')}
+            unreadMessagesLabel={t('You have {{numberOfUnread}} new unread messages', {
+              numberOfUnread: unreadMessages?.length,
+            })}
             loggedUserEthAddress={loginState?.ethAddress}
             itemCard={
               <BubbleCard
@@ -219,8 +247,10 @@ const ChatPage = (props: ChatPageProps) => {
                 handleLinkClick={handleLinkClick}
               />
             }
-            chatArr={messages || []}
+            oldMessages={localMessages}
+            newMessages={unreadMessages}
             fetchingMessages={fetchingMessages}
+            markLatestMessagesRead={markLatestMessagesRead}
           />
 
           <ChatEditor

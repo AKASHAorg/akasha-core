@@ -21,7 +21,7 @@ describe('<ChatList /> Component', () => {
             emptyChatLabel={emptyChatLabel}
             loggedUserEthAddress={ethAddress}
             itemCard={<BubbleCard locale="en" youLabel="You" />}
-            chatArr={[]}
+            oldMessages={[]}
           />,
         ),
         {},
