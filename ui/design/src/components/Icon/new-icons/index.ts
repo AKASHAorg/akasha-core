@@ -3,7 +3,6 @@ import activity from './activity';
 import akasha from './akasha';
 import addAppGrey from './add-app-grey';
 import addCard from './add-card';
-import app3Box from './app-3box';
 import appAkasha from './app-akasha';
 import appCenter from './app-center';
 import appEns from './app-ens';
@@ -36,7 +35,6 @@ import coins from './coins';
 import comments from './comments';
 import copy from './copy';
 import dapper from './dapper';
-import dev from './dev';
 import discord from './discord';
 import document from './document';
 import dropdown from './dropdown';
@@ -76,7 +74,6 @@ import menuPyramid from './menu-pyramid';
 import metamask from './metamask';
 import moreDark from './more-dark';
 import moreGrey from './more-grey';
-import nifty from './nifty';
 import notifications from './notifications';
 import integrationAppLarge from './integration-app-large';
 import integrationAppCTA from './integration-app-cta';
@@ -91,7 +88,6 @@ import pin from './pin';
 import pinAlt from './pinAlt';
 import plusDark from './plus-dark';
 import plusGrey from './plus-grey';
-import publisher from './publisher';
 import questionMark from './question-mark';
 import quote from './quote';
 import reddit from './reddit';
@@ -135,7 +131,6 @@ import zoomOutAlt from './zoom-out-alt';
 export {
   activity,
   addCard,
-  app3Box,
   appAkasha,
   appCenter,
   appEns,
@@ -164,7 +159,6 @@ export {
   chevronRight,
   chevronLeft,
   closedEye,
-  dev,
   discord,
   dropdown,
   payment,
@@ -219,7 +213,6 @@ export {
   metamask,
   moreDark,
   moreGrey,
-  nifty,
   notifications,
   integrationAppLarge,
   integrationAppSmall,
@@ -231,7 +224,6 @@ export {
   person,
   plusDark,
   plusGrey,
-  publisher,
   questionMark,
   quote,
   reddit,
