@@ -1,7 +1,7 @@
 import { IAppConfig, RootComponentProps } from '@akashaorg/typings/ui';
 import { genLifecycles } from '../mocks/single-spa';
-import { Subject } from 'rxjs';
 import { genWorldConfig } from './world-config';
+import { uiEventsMock } from '../mocks/uiEvents';
 
 export const genAppConfig = (
   overrides?: Partial<IAppConfig & { name: string }>,
@@ -38,7 +38,7 @@ export const genAppProps = (): RootComponentProps => ({
     },
   },
   navigateToModal: () => ({}),
-  uiEvents: new Subject(),
+  uiEvents: uiEventsMock,
   layoutConfig: {},
   singleSpa: null,
   worldConfig: genWorldConfig(),
