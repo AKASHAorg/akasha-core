@@ -10,9 +10,7 @@ describe('Feed Page', () => {
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
     it('should redirect to profile page', () => {
-      cy.get('[data-testid="avatar-image"]', { timeout: TIMEOUT * 2 })
-        .first()
-        .click();
+      cy.get('[data-testid="avatar-image"]', { timeout: TIMEOUT }).first().click();
       cy.location('pathname').should('contain', '/app-profile');
     });
   });
