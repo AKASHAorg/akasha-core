@@ -4,6 +4,7 @@ const path = require('path');
 const baseConfig = require('../webpack.config');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageName = require('./package.json').name;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 module.exports = Object.assign(baseConfig, {
@@ -14,4 +15,5 @@ module.exports = Object.assign(baseConfig, {
     publicPath: 'auto',
     path: path.resolve(__dirname, 'dist'),
   }),
+  // plugins: [new BundleAnalyzerPlugin()].concat(baseConfig.plugins)
 });
