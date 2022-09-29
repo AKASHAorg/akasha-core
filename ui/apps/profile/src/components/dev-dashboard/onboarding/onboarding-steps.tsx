@@ -34,13 +34,11 @@ interface IDevDashOnboardingStepsProps {
 const DevDashOnboardingSteps: React.FC<
   RootComponentProps & IDevDashOnboardingStepsProps
 > = props => {
-  const {
-    plugins: { routing },
-  } = props;
+  const { plugins } = props;
 
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
-  const [messageInputValue, setMessageInputValue] = React.useState<string>('');
-  const [tokenNameInputValue, setTokenNameInputValue] = React.useState<string>('');
+  const [messageName, setMessageName] = React.useState<string>('');
+  const [message, setmessage] = React.useState<string>('');
 
   const { t } = useTranslation('app-profile');
 
@@ -69,40 +67,46 @@ const DevDashOnboardingSteps: React.FC<
   }, [location.pathname]);
 
   const handleIconClick = () => {
-    routing?.navigateTo({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => menuRoute[ONBOARDING],
     });
   };
 
   const handleClick = (step: string) => () => {
-    routing.navigateTo({
+    plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => menuRoute[step],
     });
   };
 
   const handleCTAClick = () => {
-    routing?.navigateTo({
+    plugins['@akashaorg/app-routing']?.routing?.navigateTo({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: (routes: Record<string, string>) => routes.explore,
     });
   };
 
-  const handlemessageInputChange = ev => {
-    setMessageInputValue(ev.target.value);
+  const handleMessageNameInputChange = ev => {
+    setMessageName(ev.target.value);
   };
 
-  const handletokenNameInputChange = ev => {
-    setTokenNameInputValue(ev.target.value);
+  const handleMessageInputChange = ev => {
+    setmessage(ev.target.value);
   };
 
-  const handleGenerateAccessToken = () => {
+  const validateMessage = () => {
+    /** */
+  };
+
+  const handleValidateMessage = () => {
     /**
      * interact with API...
      */
+    validateMessage();
+
     // on success, navigate to the confirmation screen
-    routing.navigateTo({
+    plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => menuRoute[ONBOARDING_STEP_FOUR],
     });
@@ -113,8 +117,10 @@ const DevDashOnboardingSteps: React.FC<
   };
 
   const handleFinishOnboarding = () => {
+    /** confirm key first */
+
     // navigate to developer profile
-    routing.navigateTo({
+    plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => baseDeveloperRoute,
     });
@@ -126,7 +132,7 @@ const DevDashOnboardingSteps: React.FC<
       activeIndex={activeIndex}
       bottomMargin="small"
       stepLabels={[t('Terms and Conditions'), t('Download CLI tool'), t('Message')]}
-      extraStepLabel={t('Token Generated')}
+      extraStepLabel={t('Dev Key Confirmation')}
       handleIconClick={handleIconClick}
     >
       {activeIndex === 0 && (
@@ -187,33 +193,31 @@ const DevDashOnboardingSteps: React.FC<
             t('back'),
             t('for further instructions'),
           ]}
-          messageInputLabel={t('Message')}
+          messageNameTitleLabel={t('Message name')}
+          messageNameInputPlaceholder={t('Give your message a name (optional)')}
+          messageNameValue={messageName}
+          messageTitleLabel={t('Message')}
           messageInputPlaceholder={t('Paste the generated message here')}
-          messageInputValue={messageInputValue}
-          tokenNameInputLabel={t('Token Name')}
-          tokenNameInputPlaceholder={t('Token Name (optional)')}
-          tokenNameInputValue={tokenNameInputValue}
-          buttonLabel={t('Generate Access Token')}
+          messageValue={message}
+          buttonLabel={t('Validate Message')}
           onCTAClick={handleClick(ONBOARDING_STEP_TWO)}
-          onmessageInputChange={handlemessageInputChange}
-          ontokenNameInputChange={handletokenNameInputChange}
-          onButtonClick={handleGenerateAccessToken}
+          onMessageNameInputChange={handleMessageNameInputChange}
+          onMessageInputChange={handleMessageInputChange}
+          onButtonClick={handleValidateMessage}
         />
       )}
       {activeIndex === 3 && (
         <StepFour
-          titleLabel={t('Congrats you have just created your first token ✨!')}
+          titleLabel={t('Key Confirmation')}
           tokenDetails={{
             ...sampleTokenDetails,
-            name: !sampleTokenDetails.name.length ? t('Unnamed token') : sampleTokenDetails.name,
+            name: !sampleTokenDetails.name.length ? t('Unnamed key') : sampleTokenDetails.name,
           }}
           tokenUnUsedLabel={t('Unused')}
           tokenUsedLabel={t('Used')}
           expiresInlabel={t('Expires in')}
-          paragraphLabel={t(
-            'Please copy the generated token and paste it in the CLI tool to proceedwith the developer profile creation.',
-          )}
-          buttonLabel={t('Finish')}
+          paragraphLabel={t('Please confirm your key before you add it')}
+          buttonLabel={t('Confirm')}
           onCopyClick={handleCopy}
           onButtonClick={handleFinishOnboarding}
         />

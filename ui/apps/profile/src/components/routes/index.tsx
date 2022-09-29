@@ -24,9 +24,7 @@ import menuRoute, {
 const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const {
-    plugins: { routing },
-  } = props;
+  const { plugins } = props;
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
@@ -37,7 +35,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   };
 
   const handleGoToFeedClick = () => {
-    routing.navigateTo({
+    plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-akasha-integration',
       getNavigationUrl: (routes: Record<string, string>) => routes.defaultRoute,
     });
@@ -46,13 +44,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const handleCTAClick = () => {
     // if user is logged in, show link to their profile
     if (loggedProfileQuery.data?.pubKey) {
-      return routing.navigateTo({
+      return plugins['@akashaorg/app-routing']?.routing.navigateTo({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: (routes: Record<string, string>) => routes.myProfile,
       });
     }
     // if guest, show link to auth app
-    routing.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing.navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => routes.SignIn,
     });
@@ -61,13 +59,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const handleOnboardingCTAClick = () => {
     // if logged in, navigate to step 1
     if (loggedProfileQuery.data?.pubKey) {
-      return routing.navigateTo({
+      return plugins['@akashaorg/app-routing']?.routing.navigateTo({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: () => menuRoute[ONBOARDING_STEP_ONE],
       });
     }
     // if guest, redirect to onboarding step 1 after authentication
-    routing.navigateTo?.({
+    plugins['@akashaorg/app-routing']?.routing.navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
         return `${routes.SignIn}?${new URLSearchParams({
