@@ -1,9 +1,12 @@
+import { IProfileData } from '@akashaorg/typings/ui';
 import faker from 'faker';
 
-const genUser = (ethAddress?: string, userName?: string) => {
+const genUser = (ethAddress?: string, userName?: string): IProfileData => {
+  const avatarUrl = faker.image.avatar();
+  const coverImageUrl = faker.image.imageUrl();
   return {
-    avatar: faker.image.avatar(),
-    coverImage: faker.image.imageUrl(),
+    avatar: { url: avatarUrl, fallbackUrl: avatarUrl },
+    coverImage: { url: coverImageUrl, fallbackUrl: coverImageUrl },
     description: faker.lorem.sentences(3),
     ethAddress: ethAddress || faker.finance.ethereumAddress(),
     name: faker.fake('{{name.firstName}} {{name.lastName}}'),
