@@ -19,4 +19,4 @@ RUN yarn run tsc
 EXPOSE ${PORT}
 
 ENTRYPOINT [ "node" ]
-CMD ["--trace-warnings", "/app/lib/index.js"]
+CMD ["--trace-warnings", "--experimental-specifier-resolution=node", "/app/lib/index.js"]

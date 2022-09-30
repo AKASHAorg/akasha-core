@@ -163,7 +163,7 @@ api.post('/validate-token/:token', async (ctx, next: () => Promise<unknown>) => 
  * Create a new moderation report.
  */
 api.post('/moderation/reports/new', async (ctx, next: () => Promise<unknown>) => {
-  const report = ctx?.request.body;
+  const report = ctx?.request.body as any; // @Todo: create request type
   if (!report.data || !report.contentId || !report.contentType || !report.signature) {
     ctx.status = 400;
   } else {
@@ -220,7 +220,7 @@ api.post('/moderation/reports/list/:contentId', async (ctx, next: () => Promise<
  * Check moderation status (reported/moderated/delisted)for a list of content identifiers.
  */
 api.post('/moderation/status', async (ctx, next: () => Promise<unknown>) => {
-  const body = ctx?.request.body;
+  const body = ctx?.request.body as any; // @Todo: create request type
   const contentIDs = body.contentIds;
   if (!contentIDs) {
     ctx.status = 400;
@@ -252,7 +252,7 @@ api.get('/moderation/status/counters', async (ctx, next: () => Promise<unknown>)
  * Moderate content.
  */
 api.post('/moderation/decisions/moderate', async (ctx, next: () => Promise<unknown>) => {
-  const report = ctx?.request.body;
+  const report = ctx?.request.body as any; // @Todo: create request type
   if (!report.data || !report.contentId || !report.signature) {
     ctx.status = 400;
   } else {
@@ -307,7 +307,7 @@ api.get('/moderation/decisions/:contentId', async (ctx, next: () => Promise<unkn
  * Get a list of pending moderation decisions.
  */
 api.post('/moderation/decisions/pending', async (ctx, next: () => Promise<unknown>) => {
-  const req = ctx?.request.body;
+  const req = ctx?.request.body as any; // @Todo: create request type
   const decisions = await dataSources.decisionsAPI.getDecisions(
     dataSources.profileAPI,
     dataSources.reportingAPI,
@@ -330,7 +330,7 @@ api.post('/moderation/decisions/pending', async (ctx, next: () => Promise<unknow
  * Get a list of all decisions that have been moderated.
  */
 api.post('/moderation/decisions/moderated', async (ctx, next: () => Promise<unknown>) => {
-  const req = ctx?.request.body;
+  const req = ctx?.request.body as any; // @Todo: create request type
   if (req.delisted === undefined) {
     ctx.status = 400;
     ctx.body = 'Missing "delisted" attribute from request.';
@@ -358,7 +358,7 @@ api.post('/moderation/decisions/moderated', async (ctx, next: () => Promise<unkn
  * Get a public log of all content that has been moderated, for transparency purposes.
  */
 api.post('/moderation/decisions/log', async (ctx, next: () => Promise<unknown>) => {
-  const req = ctx?.request.body;
+  const req = ctx?.request.body as any; // @Todo: create request type
   ctx.body = await dataSources.decisionsAPI.publicLog(
     dataSources.profileAPI,
     dataSources.reportingAPI,
@@ -421,7 +421,7 @@ api.get('/moderation/decisions/actions/:contentId', async (ctx, next: () => Prom
  */
 api.post('/moderation/moderators/:user', async (ctx, next: () => Promise<unknown>) => {
   const user = ctx?.params?.user;
-  const request = ctx?.request.body;
+  const request = ctx?.request.body as any; // @Todo: create request type
   if (!user || !request.data || !request.secret) {
     ctx.status = 400;
   } else {
@@ -527,7 +527,7 @@ api.post('/moderation/reasons', async (ctx, next: () => Promise<unknown>) => {
  * Delete a moderation reason.
  */
 api.delete('/moderation/reasons', async (ctx, next: () => Promise<unknown>) => {
-  const request = ctx?.request.body;
+  const request = ctx?.request.body as any; // @Todo: create request type
   if (!request.data.id) {
     ctx.status = 400;
     ctx.body = 'Missing "id" attribute from request.';
