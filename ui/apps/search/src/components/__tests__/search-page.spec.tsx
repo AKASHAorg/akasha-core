@@ -1,13 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import SearchPage from '../routes/search-page';
-
 import {
-  RenderResult,
+  screen,
   renderWithAllProviders,
-  globalChannelMock,
-  mockSDK,
+  genLoggedInState,
+  genAppProps,
   act,
-  genUser,
 } from '@akashaorg/af-testing';
 
 const mockLocationValue = {
@@ -32,51 +30,19 @@ jest.mock('react-router', () => ({
 }));
 
 describe('<SearchPage />', () => {
-  let renderResult: RenderResult;
-  const sdkMocks = mockSDK({});
-  const mockUser = genUser();
   const BaseComponent = (
-    <SearchPage
-      globalChannel={globalChannelMock}
-      sdkModules={sdkMocks}
-      logger={{}}
-      singleSpa={{}}
-      loginState={{
-        ethAddress: mockUser.ethAddress,
-        pubKey: mockUser.pubKey,
-        currentUserCalled: false,
-        ready: { ethAddress: mockUser.ethAddress, pubKey: mockUser.pubKey },
-        waitForAuth: null,
-      }}
-      loggedProfileData={mockUser}
-      showLoginModal={jest.fn()}
-      modalState={{ login: false }}
-      layout={{
-        app: {
-          loadingFn: jest.fn(),
-          modalSlotId: '',
-          name: '',
-          pluginSlotId: '',
-          widgetSlotId: '',
-          rootWidgetSlotId: '',
-          topbarSlotId: '',
-          title: '',
-        },
-      }}
-      modalStateActions={{
-        show: jest.fn(),
-        hide: jest.fn(),
-        showAfterLogin: jest.fn(),
-      }}
-    />
+    <SearchPage {...genAppProps()} loginState={genLoggedInState()} showLoginModal={jest.fn()} />
   );
-  beforeEach(() => {
-    act(() => {
-      renderResult = renderWithAllProviders(BaseComponent, {});
+  beforeEach(async () => {
+    await act(() => {
+      renderWithAllProviders(BaseComponent, {});
     });
   });
-  it('should render with `0 Results` text', async () => {
-    const node = await renderResult.findAllByText('0 Results');
-    expect(node.length).toBeGreaterThan(0);
+  it('should render search page', () => {
+    expect(
+      screen.getByText(
+        /Search everything. Follow wonderful people. And subscribe to any and all topics that get your synapses firing./,
+      ),
+    ).toBeInTheDocument();
   });
 });
