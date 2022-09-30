@@ -67,7 +67,7 @@
     "mailgun-js": "^0.22.0",
     "multiformats": "9.9.0",
     "node-abort-controller": "3.0.1",
-    "node-fetch": "3.2.10",
+    "node-fetch": "2.6.7",
     "object-hash": "3.0.0",
     "prom-client": "14.1.0",
     "sharp": "0.31.1",
