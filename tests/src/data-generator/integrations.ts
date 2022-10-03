@@ -1,5 +1,7 @@
-import { IAppConfig } from '@akashaorg/typings/ui';
+import { IAppConfig, RootComponentProps } from '@akashaorg/typings/ui';
 import { genLifecycles } from '../mocks/single-spa';
+import { genWorldConfig } from './world-config';
+import { uiEventsMock } from '../mocks/uiEvents';
 
 export const genAppConfig = (
   overrides?: Partial<IAppConfig & { name: string }>,
@@ -18,4 +20,32 @@ export const genAppConfig = (
     matcher({ [extendsObj[0]]: loader(extendsObj[1]) });
   },
   ...overrides,
+});
+
+export const genAppProps = (): RootComponentProps => ({
+  logger: {
+    info: () => {
+      /*  */
+    },
+    warn: () => {
+      /*  */
+    },
+    error: () => {
+      /*  */
+    },
+    setLevel: () => {
+      /*  */
+    },
+  },
+  navigateToModal: () => ({}),
+  uiEvents: uiEventsMock,
+  layoutConfig: {},
+  singleSpa: null,
+  worldConfig: genWorldConfig(),
+  parseQueryString: () => ({}),
+  plugins: {},
+  baseRouteName: '',
+  domElement: null,
+  encodeAppName: name => name,
+  decodeAppName: name => name,
 });

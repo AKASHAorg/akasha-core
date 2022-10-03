@@ -20,7 +20,7 @@ export const queryCache: ILRU = redisConn
   : new MemLRU(
       new LRU({
         max: 32000,
-        maxAge: 1000 * 60 * 60 * 24,
+        ttl: 1000 * 60 * 60 * 24,
         updateAgeOnGet: true,
       }),
     );
@@ -30,6 +30,6 @@ export const registryCache: ILRU = redisConn
   : new MemLRU(
       new LRU({
         max: 12000,
-        maxAge: 1000 * 60 * 60,
+        ttl: 1000 * 60 * 60,
       }),
     );

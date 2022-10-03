@@ -1,19 +1,18 @@
 import * as React from 'react';
 
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 import {
   renderWithAllProviders,
   act,
   genUser,
   genLoggedInState,
+  genAppProps,
   genWorldConfig,
 } from '@akashaorg/af-testing';
-import { IProfileData } from '@akashaorg/typings/ui';
 
 const mockLocationValue = {
-  pathname: '/profile',
+  pathname: '/@akashaorg/app-profile',
   search: '',
   hash: '',
   state: null,
@@ -25,44 +24,22 @@ jest.mock('react-router', () => ({
   }),
 }));
 
-jest.mock('@akashaorg/awf-sdk', () => jest.fn());
-
 describe('<ProfilePageHeader />', () => {
   let renderResult;
   const mockUser = genUser();
   const BaseComponent = (
-    <Router>
-      <ProfilePageHeader
-        profileId={mockUser.pubKey}
-        profileData={mockUser as IProfileData}
-        modalSlotId="modal-slot"
-        loginState={genLoggedInState()}
-        worldConfig={genWorldConfig()}
-        parseQueryString={jest.fn()}
-        navigateToModal={jest.fn()}
-        uiEvents={null}
-        navigateTo={jest.fn()}
-        layoutConfig={null}
-        logger={{
-          info: () => {
-            /*  */
-          },
-          warn: () => {
-            /*  */
-          },
-          error: () => {
-            /*  */
-          },
-          setLevel: () => {
-            /*  */
-          },
-        }}
-        singleSpa={null}
-      />
-    </Router>
+    <ProfilePageHeader
+      {...genAppProps()}
+      profileId={mockUser.pubKey}
+      profileData={mockUser}
+      modalSlotId="modal-slot"
+      navigateTo={jest.fn()}
+      loginState={genLoggedInState()}
+      worldConfig={genWorldConfig()}
+    />
   );
-  beforeEach(() => {
-    act(() => {
+  beforeEach(async () => {
+    await act(() => {
       renderResult = renderWithAllProviders(BaseComponent, {});
     });
   });
@@ -70,6 +47,6 @@ describe('<ProfilePageHeader />', () => {
     const avatarNode = await renderResult.findByTestId('avatar-image');
     const avatarSrc = avatarNode.getAttribute('src');
     //console.log(avatarSrc, '<<<< avatar src');
-    expect(avatarSrc).toEqual(mockUser.avatar);
+    expect(avatarSrc).toEqual(mockUser.avatar?.url);
   });
 });

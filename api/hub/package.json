@@ -4,6 +4,7 @@
   "private": true,
   "description": "> TODO: description",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "type": "module",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
     "Andrei Sambra <andrei.sambra@akasha.world> (https://github.com/deiu)"
@@ -26,7 +27,7 @@
     "test": "jest",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
-    "dev:server": "tsc --build && nodemon ./lib/index.js",
+    "dev:server": "tsc --build && nodemon --experimental-specifier-resolution=node ./lib/index.js",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "bugs": {
@@ -45,13 +46,13 @@
     "algoliasearch": "4.14.2",
     "apollo-server-koa": "3.10.2",
     "apollo-server-plugin-base": "3.6.2",
-    "dotenv": "16.0.2",
-    "emittery": "0.13.1",
+    "dotenv": "16.0.3",
+    "emittery": "1.0.0",
     "eth-ens-namehash": "2.0.8",
-    "ethers": "5.7.0",
+    "ethers": "5.7.1",
     "flatted": "3.2.7",
     "graphql": "16.6.0",
-    "ipfs-http-client": "56.0.3",
+    "ipfs-http-client": "58.0.1",
     "keyv": "4.5.0",
     "koa": "2.13.4",
     "koa-bodyparser": "4.3.0",
@@ -61,23 +62,23 @@
     "koa-route": "3.2.0",
     "koa-router": "12.0.0",
     "koa-websocket": "7.0.0",
-    "link-preview-js": "3.0.3",
+    "link-preview-js": "3.0.4",
     "lru-cache": "7.14.0",
     "mailgun-js": "^0.22.0",
-    "multiformats": "9.8.1",
+    "multiformats": "9.9.0",
     "node-abort-controller": "3.0.1",
     "node-fetch": "2.6.7",
     "object-hash": "3.0.0",
     "prom-client": "14.1.0",
-    "sharp": "0.31.0",
-    "winston": "3.8.1"
+    "sharp": "0.31.1",
+    "winston": "3.8.2"
   },
   "devDependencies": {
     "@types/koa": "2.13.5",
-    "@types/koa-bodyparser": "4.3.7",
+    "@types/koa-bodyparser": "4.3.8",
     "@types/koa-json": "2.0.20",
     "@types/koa-logger": "3.1.2",
     "@types/koa-router": "7.4.4",
-    "typescript": "4.8.2"
+    "typescript": "4.8.4"
   }
 }

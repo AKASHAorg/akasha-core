@@ -295,7 +295,7 @@ export async function fetchWithTimeout(resource, options) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
 
-  const response = await fetch(resource, {
+  const response = await fetch(resource.toString(), {
     ...options,
     signal: controller.signal,
   });
