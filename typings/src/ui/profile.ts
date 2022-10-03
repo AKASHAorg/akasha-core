@@ -62,3 +62,9 @@ export enum UpdateProfileStatus {
 export enum StorageKeys {
   LAST_URL = 'lastUrl',
 }
+
+export enum StepStatus {
+  VALIDATING = 'validatingMessage',
+  ADDING_KEY = 'addingKey',
+  GETTING_KEYS = 'gettingKeys',
+}
