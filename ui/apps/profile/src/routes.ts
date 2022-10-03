@@ -16,5 +16,5 @@ export default {
   [ONBOARDING_STEP_ONE]: `${baseDeveloperRoute}/onboarding/terms-and-conditions`,
   [ONBOARDING_STEP_TWO]: `${baseDeveloperRoute}/onboarding/download-cli-tool`,
   [ONBOARDING_STEP_THREE]: `${baseDeveloperRoute}/onboarding/message`,
-  [ONBOARDING_STEP_FOUR]: `${baseDeveloperRoute}/onboarding/profile-created`,
+  [ONBOARDING_STEP_FOUR]: `${baseDeveloperRoute}/onboarding/dev-key-confirmation`,
 };

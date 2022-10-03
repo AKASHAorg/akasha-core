@@ -13,6 +13,8 @@ interface IDevDashOnboardingIntroProps {
   onCTAClick: () => void;
 }
 
+export const ONBOARDING_STATUS = 'ewa-dev-dashboard-onboarding-status';
+
 const DevDashOnboardingIntro: React.FC<IDevDashOnboardingIntroProps> = props => {
   const {
     assetName = 'dev-dashboard-intro',
@@ -23,6 +25,7 @@ const DevDashOnboardingIntro: React.FC<IDevDashOnboardingIntroProps> = props => 
     ctaLabel,
     onCTAClick,
   } = props;
+
   return (
     <BasicCardBox>
       <Box align="start" fill="horizontal" pad="medium">
