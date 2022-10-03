@@ -1,13 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
-import {
-  IProfileData,
-  UsernameTypes,
-  NavigateToParams,
-  RootComponentProps,
-  EventTypes,
-} from '@akashaorg/typings/ui';
+import { IProfileData, UsernameTypes, RootComponentProps, EventTypes } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
   useFollow,
@@ -16,6 +10,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
+
 import { getUsernameTypes } from '../../utils/username-utils';
 
 const { ModalRenderer, ProfileCard, styled, ExtensionPoint } = DS;
@@ -25,30 +20,13 @@ const ProfilePageCard = styled(ProfileCard)`
 `;
 
 export interface IProfileHeaderProps {
-  modalSlotId: string;
   profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
-  navigateTo: (args: NavigateToParams) => void;
 }
 
-type ProfilePageCardProps = IProfileHeaderProps &
-  Omit<
-    RootComponentProps,
-    | 'domElement'
-    | 'events'
-    | 'i18n'
-    | 'isMobile'
-    | 'activeWhen'
-    | 'i18nConfig'
-    | 'mountParcel'
-    | 'name'
-    | 'rootNodeId'
-    | 'unmountSelf'
-  >;
-
-export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
-  const { profileData, loginState, profileId, modalSlotId, navigateTo } = props;
+const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
+  const { profileData, loginState, profileId, plugins } = props;
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
@@ -139,13 +117,13 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   return (
     <>
-      <ModalRenderer slotId={modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {modalOpen && (
           <StatModalWrapper
             loginState={loginState}
             selectedStat={selectedStat}
             profileData={profileData}
-            navigateTo={navigateTo}
+            navigateTo={plugins['@akashaorg/app-routing']?.navigateTo}
             showLoginModal={showLoginModal}
             handleClose={handleClose}
           />
@@ -209,3 +187,5 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     </>
   );
 };
+
+export default ProfilePageHeader;
