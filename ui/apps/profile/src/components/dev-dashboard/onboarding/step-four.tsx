@@ -3,79 +3,106 @@ import React from 'react';
 import DS from '@akashaorg/design-system';
 
 import { BaseStepsProps } from './step-one';
-import { tokenDetails } from './onboarding-steps';
+import { devKey } from './onboarding-steps';
 
-const { Box, Button, Icon, Text } = DS;
+const { Box, Button, Icon, Text, Image } = DS;
 
 interface IStepFourProps extends BaseStepsProps {
-  tokenDetails: tokenDetails;
-  tokenUnUsedLabel: string;
-  tokenUsedLabel: string;
-  expiresInlabel: string;
+  assetName?: string;
+  publicImgPath?: string;
+  firstKey: devKey;
+  usedLabel: string;
+  unusedLabel: string;
+  pendingConfirmationLabel?: string;
+  devPubKeyLabel: string;
+  dateAddedLabel: string;
   paragraphLabel: string;
   buttonLabel: string[];
-  onCopyClick: () => void;
+  onCopyClick: (value: string) => () => void;
   onButtonClick: () => void;
 }
 
 const StepFour: React.FC<IStepFourProps> = props => {
   const {
+    assetName = 'key',
+    publicImgPath = '/images',
     titleLabel,
-    tokenDetails,
-    tokenUnUsedLabel,
-    tokenUsedLabel,
-    expiresInlabel,
+    firstKey,
+    unusedLabel,
+    usedLabel,
+    pendingConfirmationLabel,
+    devPubKeyLabel,
+    dateAddedLabel,
     paragraphLabel,
     buttonLabel,
     onCopyClick,
     onButtonClick,
   } = props;
   return (
-    <Box>
+    <Box gap="small">
+      <Box height="13rem" width="16rem" margin={{ vertical: 'medium' }} alignSelf="center">
+        <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+      </Box>
       {titleLabel && (
-        <Text size="large" margin={{ bottom: 'xsmall' }} weight="bold">
+        <Text size="large" weight="bold" textAlign="center">
           {titleLabel}
         </Text>
       )}
-      <Box round="0.5rem" border={{ color: 'border' }} pad="medium" gap="small">
-        <Text size="large" margin={{ vertical: 'xsmall' }}>
-          {tokenDetails.name}
-        </Text>
-        <Box direction="row" gap="small">
-          <Box direction="row" gap="small" align="center">
-            <Box
-              width="0.5rem"
-              height="0.5rem"
-              round={true}
-              background={tokenDetails.isUsed ? 'green' : 'yellow'}
-            />
-            <Text size="large">{tokenDetails.isUsed ? tokenUsedLabel : tokenUnUsedLabel}</Text>
-          </Box>
-          <Box direction="row" gap="xxsmall" align="center">
-            <Text size="large" color="accentText">
-              {expiresInlabel}
-            </Text>
-            <Text size="large" color="accentText">
-              {tokenDetails.expiresAt}
-            </Text>
-          </Box>
-        </Box>
-        <Box direction="row" gap="small" margin={{ vertical: 'xsmall' }}>
-          <Text size="large" color="secondaryText">
-            {tokenDetails.token}
-          </Text>
-          <Icon
-            type="copy"
-            color="secondaryText"
-            style={{ cursor: 'pointer' }}
-            onClick={onCopyClick}
-          />
-        </Box>
-      </Box>
-      <Text size="large" margin={{ vertical: 'large' }}>
+      <Text size="large" textAlign="center">
         {paragraphLabel}
       </Text>
-      <Box direction="row" justify="end" gap="small" margin={{ top: 'medium' }}>
+      <Box
+        round="0.5rem"
+        gap="small"
+        border={{ color: 'border' }}
+        pad={{ vertical: 'xxsmall', horizontal: 'xsmall' }}
+      >
+        <Box direction="row" gap="xxsmall" align="center">
+          <Text size="large" weight="bold">
+            {firstKey.name}
+          </Text>
+          <Box
+            width="0.5rem"
+            height="0.5rem"
+            round={true}
+            background={firstKey.usedAt ? 'green' : 'yellow'}
+          />
+
+          {pendingConfirmationLabel && <Text size="large">{pendingConfirmationLabel}</Text>}
+
+          {!pendingConfirmationLabel && (
+            <Text size="large">{firstKey.usedAt ? usedLabel : unusedLabel}</Text>
+          )}
+        </Box>
+        <Box>
+          <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
+            {devPubKeyLabel}
+          </Text>
+          <Box direction="row" gap="small">
+            <Text size="large" color="secondaryText">
+              {firstKey.pubKey}
+            </Text>
+            <Icon
+              type="copy"
+              color="secondaryText"
+              style={{ cursor: 'pointer' }}
+              onClick={onCopyClick(firstKey.pubKey)}
+            />
+          </Box>
+        </Box>
+        <Box>
+          <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
+            {dateAddedLabel}
+          </Text>
+          <Box direction="row" gap="small">
+            <Text size="large" color="secondaryText">
+              {firstKey.addedAt}
+            </Text>
+          </Box>
+        </Box>
+      </Box>
+
+      <Box direction="row" justify="end" gap="small">
         <Button primary={true} label={buttonLabel} onClick={onButtonClick} />
       </Box>
     </Box>

@@ -66,14 +66,14 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
         </Box>
       )}
       {paragraphs.map((paragraph: string, idx: number) => (
-        <>
-          <ListItem key={idx} listElementText="•" item={paragraph} />
+        <React.Fragment key={idx}>
+          <ListItem listElementText="•" item={paragraph} />
           {idx === 0 && (
             <Box height="3rem" margin={{ vertical: '-1rem' }}>
               <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
             </Box>
           )}
-        </>
+        </React.Fragment>
       ))}
       <Box direction="row" justify="end" gap="small">
         <Button label={skipLabel} onClick={onSkipClick} />

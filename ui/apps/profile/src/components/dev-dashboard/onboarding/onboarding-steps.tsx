@@ -2,15 +2,23 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { RootComponentProps, StepStatus } from '@akashaorg/typings/ui';
+import {
+  useGetLogin,
+  useGetProfile,
+  useValidateMessage,
+  useAddDevKeyFromMessage,
+  useGetDevKeys,
+} from '@akashaorg/ui-awf-hooks';
 
 import StepOne from './step-one';
 import StepTwo from './step-two';
 import StepThree from './step-three';
 import StepFour from './step-four';
+import { ONBOARDING_STATUS } from './intro-card';
 
 import menuRoute, {
-  baseDeveloperRoute,
+  DEV_DASHBOARD,
   ONBOARDING,
   ONBOARDING_STEP_FOUR,
   ONBOARDING_STEP_ONE,
@@ -20,11 +28,11 @@ import menuRoute, {
 
 const { SteppedActionCard } = DS;
 
-export type tokenDetails = {
+export type devKey = {
+  pubKey: string;
   name?: string;
-  token: string;
-  expiresAt: string;
-  isUsed: boolean;
+  addedAt: string;
+  usedAt?: string;
 };
 
 interface IDevDashOnboardingStepsProps {
@@ -39,8 +47,21 @@ const DevDashOnboardingSteps: React.FC<
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [messageName, setMessageName] = React.useState<string>('');
   const [message, setmessage] = React.useState<string>('');
+  const [status, setStatus] = React.useState<string | null>(null);
+  const [devKeys, setDevKeys] = React.useState([]);
 
+  const loginQuery = useGetLogin();
+  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
   const { t } = useTranslation('app-profile');
+
+  const validateQuery = useValidateMessage(message, status === StepStatus.VALIDATING);
+
+  const addKeyQuery = useAddDevKeyFromMessage(
+    { message, messageName },
+    status === StepStatus.ADDING_KEY,
+  );
+
+  const getKeysQuery = useGetDevKeys(status === StepStatus.GETTING_KEYS);
 
   const pathnameArr = [
     ONBOARDING_STEP_ONE,
@@ -49,13 +70,20 @@ const DevDashOnboardingSteps: React.FC<
     ONBOARDING_STEP_FOUR,
   ].map(el => `${props.baseRouteName}${menuRoute[el]}`);
 
-  // @TODO: replace with real data
-  const sampleTokenDetails: tokenDetails = {
-    name: 'My First Token',
-    token: '3fLBxdVgUkWj8UjVvUXcIdak5qe5xRRowUDkIuVRRQ',
-    expiresAt: '2032-07-20T18:00:00Z',
-    isUsed: false,
-  };
+  React.useEffect(() => {
+    if (!loggedProfileQuery.data?.pubKey) {
+      // if guest, redirect to onboarding step 1 after authentication
+      plugins['@akashaorg/app-routing']?.routing.navigateTo?.({
+        appName: '@akashaorg/app-auth-ewa',
+        getNavigationUrl: (routes: Record<string, string>) => {
+          return `${routes.SignIn}?${new URLSearchParams({
+            redirectTo: `${props.baseRouteName}${menuRoute[ONBOARDING_STEP_ONE]}`,
+          }).toString()}`;
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     const idx = pathnameArr.indexOf(location.pathname);
@@ -65,6 +93,41 @@ const DevDashOnboardingSteps: React.FC<
     setActiveIndex(idx);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
+
+  React.useEffect(() => {
+    // add key after validating
+    if (
+      validateQuery.isFetched &&
+      validateQuery.data?.body?.aud === loggedProfileQuery.data?.pubKey
+    ) {
+      setStatus(StepStatus.ADDING_KEY);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [validateQuery.data]);
+
+  React.useEffect(() => {
+    if (addKeyQuery.isFetched) {
+      setStatus(StepStatus.GETTING_KEYS);
+    }
+  }, [addKeyQuery.isFetched]);
+
+  React.useEffect(() => {
+    if (getKeysQuery.isFetched) {
+      Promise.resolve(getKeysQuery.data).then(keys => setDevKeys(keys as any));
+
+      // on success, navigate to the confirmation screen
+      return plugins['@akashaorg/app-routing']?.routing.navigateTo({
+        appName: '@akashaorg/app-profile',
+        getNavigationUrl: () => menuRoute[ONBOARDING_STEP_FOUR],
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getKeysQuery.isFetched]);
+
+  const isOnboarded = React.useMemo(() => {
+    return window.localStorage.getItem(ONBOARDING_STATUS);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleIconClick = () => {
     plugins['@akashaorg/app-routing']?.routing?.navigateTo({
@@ -95,36 +158,32 @@ const DevDashOnboardingSteps: React.FC<
     setmessage(ev.target.value);
   };
 
-  const validateMessage = () => {
-    /** */
-  };
-
   const handleValidateMessage = () => {
-    /**
-     * interact with API...
-     */
-    validateMessage();
-
-    // on success, navigate to the confirmation screen
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[ONBOARDING_STEP_FOUR],
-    });
+    setStatus(StepStatus.VALIDATING);
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(sampleTokenDetails.token);
+  const handleCopy = (value: string) => () => {
+    navigator.clipboard.writeText(value);
   };
 
   const handleFinishOnboarding = () => {
-    /** confirm key first */
+    // set key to local storage
+    window.localStorage.setItem(ONBOARDING_STATUS, 'completed');
 
     // navigate to developer profile
     plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => baseDeveloperRoute,
+      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
     });
   };
+
+  if (isOnboarded) {
+    // if user has been onboarded, navigate to home
+    return plugins['@akashaorg/app-routing']?.routing.navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    });
+  }
 
   return (
     <SteppedActionCard
@@ -199,6 +258,11 @@ const DevDashOnboardingSteps: React.FC<
           messageTitleLabel={t('Message')}
           messageInputPlaceholder={t('Paste the generated message here')}
           messageValue={message}
+          validationStatus={{
+            isError: validateQuery.isError,
+            errorMessage: t('{{error}}', { error: validateQuery.error?.message }),
+          }}
+          isFetching={validateQuery.isFetching || addKeyQuery.isFetching || getKeysQuery.isFetching}
           buttonLabel={t('Validate Message')}
           onCTAClick={handleClick(ONBOARDING_STEP_TWO)}
           onMessageNameInputChange={handleMessageNameInputChange}
@@ -209,13 +273,15 @@ const DevDashOnboardingSteps: React.FC<
       {activeIndex === 3 && (
         <StepFour
           titleLabel={t('Key Confirmation')}
-          tokenDetails={{
-            ...sampleTokenDetails,
-            name: !sampleTokenDetails.name.length ? t('Unnamed key') : sampleTokenDetails.name,
+          firstKey={{
+            ...devKeys[0],
+            name: !devKeys[0].name.length ? t('Unnamed key') : devKeys[0].name,
           }}
-          tokenUnUsedLabel={t('Unused')}
-          tokenUsedLabel={t('Used')}
-          expiresInlabel={t('Expires in')}
+          unusedLabel={t('Unused')}
+          usedLabel={t('Used')}
+          pendingConfirmationLabel={t('Pending Confirmation')}
+          devPubKeyLabel={t('Dev Public Key 🔑')}
+          dateAddedLabel={t('Date added 🗓')}
           paragraphLabel={t('Please confirm your key before you add it')}
           buttonLabel={t('Confirm')}
           onCopyClick={handleCopy}
