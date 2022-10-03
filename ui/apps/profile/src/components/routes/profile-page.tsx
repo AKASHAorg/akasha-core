@@ -17,10 +17,11 @@ import {
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 
-import menuRoute, { baseDeveloperRoute, MY_PROFILE } from '../../routes';
-
 import DevProfileCard from '../dev-dashboard/profile/dev-profile-card';
-import { ProfilePageHeader } from '../profile-cards/profile-page-header';
+import ProfilePageHeader from '../profile-cards/profile-page-header';
+import { ONBOARDING_STATUS } from '../dev-dashboard/onboarding/intro-card';
+
+import menuRoute, { MY_PROFILE, ONBOARDING } from '../../routes';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner } = DS;
 
@@ -51,7 +52,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [pubKey, loggedProfileData, location.pathname]);
 
   const isOnDevDashboard = React.useMemo(
-    () => location.pathname === baseDeveloperRoute,
+    () => location.pathname === menuRoute[ONBOARDING],
     [location.pathname],
   );
 
@@ -96,6 +97,11 @@ const ProfilePage = (props: ProfilePageProps) => {
     return [];
   }, [reqPosts.data]);
 
+  const isOnboarded = React.useMemo(() => {
+    return window.localStorage.getItem(ONBOARDING_STATUS);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginQuery.data?.pubKey) {
       return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
@@ -117,6 +123,14 @@ const ProfilePage = (props: ProfilePageProps) => {
       getNavigationUrl: () => '/legal/code-of-conduct',
     });
   };
+
+  if (!isOnboarded) {
+    // if user has not been onboarded, navigate to onboarding
+    return plugins['@akashaorg/app-routing']?.routing.navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => menuRoute[ONBOARDING],
+    });
+  }
 
   return (
     <Box fill="horizontal">
@@ -165,14 +179,6 @@ const ProfilePage = (props: ProfilePageProps) => {
           )}
           {!profileState.delisted && (
             <>
-              <ProfilePageHeader
-                {...props}
-                modalSlotId={props.layoutConfig.modalSlotId}
-                profileData={profileState}
-                profileId={pubKey}
-                loginState={loginQuery.data}
-                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-              />
               {isOnDevDashboard && (
                 <DevProfileCard
                   titleLabel={t('Welcome to your developer Dashboard')}
@@ -206,6 +212,14 @@ const ProfilePage = (props: ProfilePageProps) => {
               )}
               {!isOnDevDashboard && (
                 <>
+                  <ProfilePageHeader
+                    {...props}
+                    // modalSlotId={props.layoutConfig.modalSlotId}
+                    profileData={profileState}
+                    profileId={pubKey}
+                    loginState={loginQuery.data}
+                    // navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+                  />
                   {reqPosts.isError && reqPosts.error && (
                     <ErrorLoader
                       type="script-error"
