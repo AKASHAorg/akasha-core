@@ -8,3 +8,5 @@ jest.mock('react-i18next', () => ({
 jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK();
 });
+
+jest.spyOn(console, 'error').mockImplementation(jest.fn);

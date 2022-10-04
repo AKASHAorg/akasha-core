@@ -2,14 +2,9 @@ import * as React from 'react';
 import SettingsPage from '../settings-page';
 
 import { act, screen, renderWithAllProviders, genAppProps } from '@akashaorg/af-testing';
-import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
-describe('< SignIn /> component', () => {
-  const BaseComponent = (
-    // <AnalyticsProvider {...genAppProps()}>
-    <SettingsPage {...genAppProps()} />
-    // </AnalyticsProvider>
-  );
+describe('< SettingsPage /> component', () => {
+  const BaseComponent = <SettingsPage {...genAppProps()} />;
   beforeEach(async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
