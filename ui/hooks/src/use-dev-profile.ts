@@ -76,6 +76,7 @@ export function useGetDevKeys(enabled: boolean) {
   return useQuery([DEV_DASHBOARD_KEY, 'get_keys'], () => getDevKeys, {
     enabled,
     keepPreviousData: true,
+    initialData: () => Promise.resolve([]),
     onError: (err: Error) => logError('useDevDashboard.getDevKeys', err),
   });
 }
