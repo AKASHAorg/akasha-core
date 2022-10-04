@@ -36,19 +36,4 @@ const StyledSelectBox = styled(Box)`
   }
 `;
 
-const StyledIcon = styled(Icon)`
-  // &:hover {
-  //   & * {
-  //     stroke: none;
-  //   }
-  // }
-`;
-
-export {
-  StyledLayerElemDiv,
-  StyledDrop,
-  StyledProfileDrop,
-  StyledBox,
-  StyledSelectBox,
-  StyledIcon,
-};
+export { StyledLayerElemDiv, StyledDrop, StyledProfileDrop, StyledBox, StyledSelectBox };
