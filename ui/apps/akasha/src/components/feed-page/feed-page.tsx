@@ -11,17 +11,24 @@ import {
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
 import {
+  uploadMediaToTextile,
   useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
   useMutationListener,
   createPendingEntry,
   LoginState,
   useAnalytics,
+  useGetLogin,
+  useCreatePost,
+  useGetProfile,
+  getLinkPreview,
+  useMentionSearch,
+  useTagSearch,
 } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 
-const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
+const { Box, Helmet, CommentEditor, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -36,11 +43,16 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
     'en') as ILocale;
 
+  const [mentionQuery, setMentionQuery] = React.useState(null);
+  const [tagQuery, setTagQuery] = React.useState(null);
+  const mentionSearch = useMentionSearch(mentionQuery);
+  const tagSearch = useTagSearch(tagQuery);
   const [analyticsActions] = useAnalytics();
-
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
-
   const postsReq = useInfinitePosts(15);
+  const loginQuery = useGetLogin();
+  const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
+  const publishPost = useCreatePost();
 
   const navigateToModal = React.useRef(props.navigateToModal);
   const showLoginModal = React.useRef(props.showLoginModal);
@@ -58,9 +70,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return [];
   }, [postsReq.data]);
 
-  const handleShowEditor = React.useCallback(() => {
-    navigateToModal.current({ name: 'editor-modal' });
-  }, []);
+  const disablePublishing = React.useMemo(
+    () => loginQuery.data.waitForAuth || !loginQuery.data.isReady,
+    [loginQuery.data],
+  );
 
   const handleEntryFlag = React.useCallback(
     (entryId: string, itemType: string) => () => {
@@ -88,18 +101,46 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     });
   };
 
+  const handlePublishPost = async (data: IPublishData) => {
+    analyticsActions.trackEvent({
+      category: AnalyticsCategories.POST,
+      action: 'New Post Published',
+    });
+    publishPost.mutate({ ...data, pubKey: profileDataReq.data.pubKey });
+  };
+
+  const handleMentionQueryChange = (query: string) => {
+    setMentionQuery(query);
+  };
+
+  const handleTagQueryChange = (query: string) => {
+    setTagQuery(query);
+  };
+
   return (
     <Box fill="horizontal">
       <Helmet>
         <title>Ethereum World</title>
       </Helmet>
       {loginState?.ethAddress ? (
-        <EditorPlaceholder
-          ethAddress={loginState?.ethAddress}
-          onClick={handleShowEditor}
-          avatar={loggedProfileData?.avatar}
-          style={{ marginBottom: '0.5rem' }}
-        />
+        <Box margin={{ bottom: 'small' }}>
+          <CommentEditor
+            avatar={loggedProfileData?.avatar}
+            ethAddress={loginState?.ethAddress}
+            postLabel={t('Publish')}
+            placeholderLabel={'Share your thoughts'}
+            emojiPlaceholderLabel={t('Search')}
+            disablePublishLabel={t('Authenticating')}
+            disablePublish={disablePublishing}
+            onPublish={handlePublishPost}
+            getLinkPreview={getLinkPreview}
+            getMentions={handleMentionQueryChange}
+            getTags={handleTagQueryChange}
+            tags={tagSearch.data}
+            mentions={mentionSearch.data}
+            uploadRequest={uploadMediaToTextile}
+          />
+        </Box>
       ) : (
         <Box margin={{ bottom: 'medium' }}>
           <LoginCTAWidgetCard

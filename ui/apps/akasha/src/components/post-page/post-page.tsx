@@ -402,6 +402,7 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
                     mentions={mentionQueryReq.data}
                     uploadRequest={uploadMediaToTextile}
                     onPlaceholderClick={handleEditorPlaceholderClick}
+                    isShown={true}
                   />
                 </Box>
               )}
