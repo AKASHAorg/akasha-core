@@ -2,7 +2,7 @@
   {
     "name": "locales",
     "id": "0xc914c9efa3dec03f54e57a7f5956218306e3c1e620da9bbb91372dfea24eecdd",
-    "ipfsManifest": "f0155171c0a4030ca811d7657282ccdcfe3980377c562ea7958ec2a09c7d2fc69",
+    "ipfsManifest": "f0155171cef927fc998da36c2b3a311a6a0b868309d428d1e1781eb7cc4e5413c",
     "type": ""
   },
   {
@@ -26,13 +26,13 @@
   {
     "name": "@akashaorg/app-integration-center",
     "id": "0xb205644246860965047578d591cecced40ade1a782c6c84fa599173af6a22d9c",
-    "ipfsManifest": "f0155171c4c5d4267ce955c166fa2166dee5e83cfe5e1f556f857e138ae5e6f5f",
+    "ipfsManifest": "f0155171cff71bfd2bcb788aad38c7f58174d1d2536672a90cbd1074606fe5b1b",
     "type": 0
   },
   {
     "name": "@akashaorg/app-bookmarks",
     "id": "0x20dd2505b29183c28a411f6d70eed327214ce02efec798b3c56509d1d7ac829c",
-    "ipfsManifest": "f0155171cd9b8f27ebd0d35ea7d8414c616bd87db550816c57f4f6d9a2921dfa7",
+    "ipfsManifest": "f0155171c71244a2f53e995e4be996a13f6d2d3363114706bfa0ee6a9f88f2c1f",
     "type": 0
   },
   {
@@ -50,7 +50,7 @@
   {
     "name": "@akashaorg/app-profile",
     "id": "0x0c4ac6db8b99d1fbc682d27a80258d849b02ecb785ceaf082a0e4f6f4151b297",
-    "ipfsManifest": "f0155171c123976a0146ee3d5942c1f0d3e373b5d5e830dbcb3d600c72e0dd810",
+    "ipfsManifest": "f0155171c137fe170d821c22e2167ae78425e0a16c1c2c88e013e3beaa274efc3",
     "type": 0
   },
   {
@@ -80,7 +80,7 @@
   {
     "name": "@akashaorg/app-messaging",
     "id": "0xa9441406239791b073bea64df44bb32b2f15e6bae637847274b052e9b0bbdbbc",
-    "ipfsManifest": "f0155171c941b50711a960bc85be981f706ede4eb0741cce0130bf8f87daa4c03",
+    "ipfsManifest": "f0155171c103f6260e4f08c112e7f91b3e88d4c733abfa9d0fdda9db78ac99240",
     "type": 0
   },
   {
@@ -122,7 +122,7 @@
   {
     "name": "@akashaorg/ui-widget-my-apps",
     "id": "0xc902513577d3192e8018931dd03ab480ea2f2a6e003835b949942e7be828665c",
-    "ipfsManifest": "f0155171c6512e0ccfe0d015cc36f9c7c56b4f76ea42271befa32474dc3b468f1",
+    "ipfsManifest": "f0155171c24fc6977819b75b1760c72f08091c5ec712dea29b58e3d4ac19f5a1a",
     "type": 2
   }
 ]

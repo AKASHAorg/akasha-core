@@ -523,7 +523,7 @@ const profileProvidersData = {
       value: 'https://placebeard.it/480/480',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     coverImage: {
@@ -531,7 +531,7 @@ const profileProvidersData = {
       value: 'goldenrod',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     userName: 'ENS',
@@ -540,14 +540,14 @@ const profileProvidersData = {
       value: 'Gilbert The Bearded',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     description: {
       providerName: '3Box',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
@@ -559,7 +559,7 @@ const profileProvidersData = {
       value: 'https://placebeard.it/480/480',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     {
@@ -577,7 +577,7 @@ const profileProvidersData = {
       value: 'goldenrod',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     {
@@ -595,7 +595,7 @@ const profileProvidersData = {
       value: 'Gilbert The Bearded',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     {
@@ -612,7 +612,7 @@ const profileProvidersData = {
       providerName: '3Box',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',

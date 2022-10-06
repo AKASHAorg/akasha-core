@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { PublicKey } from '@textile/hub';
+import { PrivateKey, PublicKey } from '@textile/hub';
 
 @injectable()
 class AWF_Misc {
@@ -18,6 +18,33 @@ class AWF_Misc {
 
   public publicKeyFromString(pubKey: string): PublicKey {
     return PublicKey.fromString(pubKey);
+  }
+
+  // for testing purposes only
+  public async generateEncryptedMsgFor(pubKey: string) {
+    const toPubKey = this.publicKeyFromString(pubKey);
+
+    const randomPrivKey = PrivateKey.fromRandom();
+    const body: {
+      sub: string;
+      aud: string;
+      iat: string;
+      sig: string;
+    } = {
+      sub: randomPrivKey.public.toString(),
+      aud: pubKey,
+      iat: new Date().toISOString(),
+      sig: '',
+    };
+    const sigMsg = new TextEncoder().encode(
+      JSON.stringify({ sub: body.sub, aud: body.aud, iat: body.iat }),
+    );
+    const sig = await randomPrivKey.sign(sigMsg);
+    body.sig = Buffer.from(sig).toString('base64');
+
+    const resultMsg = new TextEncoder().encode(JSON.stringify(body));
+    const encryptedMsg = await toPubKey.encrypt(resultMsg);
+    return Buffer.from(encryptedMsg).toString('base64');
   }
 }
 

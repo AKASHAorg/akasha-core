@@ -1,14 +1,9 @@
 import * as React from 'react';
 import ContentCard from '../content-card';
 
-import { RenderResult, renderWithAllProviders, act } from '@akashaorg/af-testing';
-import { from } from 'rxjs';
+import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 
-describe('<ContentCard /> component', () => {
-  let renderResult: RenderResult;
-  const mockObs = from(['test']);
-  const mockEntryObs = from(['mock-obs']);
-  const globalChannel = { pipe: () => ({ subscribe: () => {}, unsubscribe: () => {} }) };
+describe('< ContentCard /> component', () => {
   const Base = (
     <ContentCard
       isPending={false}
@@ -23,22 +18,17 @@ describe('<ContentCard /> component', () => {
       entryId="01f3dwm7z3qep88ap4j87vw8p8"
       reasons={['reason-1', 'reason-2']}
       reportedDateTime={new Date().toString()}
-      logger={{ log: console.log }}
-      singleSpa={{}}
-      sdkModules={{
-        commons: { ipfsService: { getSettings: () => mockObs } },
-        profiles: { profileService: { getProfile: () => mockObs } },
-        posts: { entries: { getEntry: () => mockEntryObs } },
-      }}
-      globalChannel={globalChannel}
       handleButtonClick={jest.fn}
+      {...genAppProps()}
     />
   );
   act(() => {
-    renderResult = renderWithAllProviders(Base, {});
+    renderWithAllProviders(Base, {});
   });
-  it('should render an avatar', async () => {
-    const avatar = await renderResult.findByTestId('avatar-image');
-    expect(avatar).toBeDefined();
+  it('should render content card', async () => {
+    expect(screen.getByTestId('avatar-image')).toBeInTheDocument();
+    expect(screen.getByText(/Post Reported for/i)).toBeInTheDocument();
+    expect(screen.getByText(/Originally reported by/i)).toBeInTheDocument();
+    expect(screen.getByText(/Show Explanation/i)).toBeInTheDocument();
   });
 });

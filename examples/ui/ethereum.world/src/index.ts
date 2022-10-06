@@ -1,3 +1,4 @@
+import 'systemjs-webpack-interop/auto-public-path';
 import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 
 console.time('AppLoader:firstMount');

@@ -1,33 +1,21 @@
 import * as React from 'react';
 import NotificationsPage from '../notifications-page';
 
-import {
-  RenderResult,
-  renderWithAllProviders,
-  globalChannelMock,
-  getSDKMocks,
-} from '@akashaorg/af-testing';
-import { act } from 'react-dom/test-utils';
+import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 
 describe('< NotificationsPage /> component', () => {
-  let renderResult: RenderResult;
-  const sdkMocks = getSDKMocks({});
-  const BaseComponent = (
-    <NotificationsPage
-      sdkModules={sdkMocks}
-      globalChannel={globalChannelMock}
-      logger={{}}
-      singleSpa={{}}
-    />
-  );
-  beforeEach(() => {
-    act(() => {
-      renderResult = renderWithAllProviders(BaseComponent, {});
+  const BaseComponent = <NotificationsPage {...genAppProps()} />;
+  beforeEach(async () => {
+    await act(async () => {
+      renderWithAllProviders(BaseComponent, {});
     });
   });
 
-  it('should display a loading spinner', async () => {
-    const spinnerElement = renderResult.container.querySelector('svg > circle');
-    expect(spinnerElement).toBeDefined();
+  it('should render notifications page', async () => {
+    expect(
+      screen.getByText(
+        /Check out the latest development about the topics you are most interested in and people you care about./,
+      ),
+    ).toBeInTheDocument();
   });
 });
