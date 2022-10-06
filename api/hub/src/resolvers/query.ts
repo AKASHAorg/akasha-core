@@ -4,6 +4,7 @@ import { ExtendedAuthor, PostOverride } from '../collections/interfaces';
 import { ethers } from 'ethers';
 import {
   createIpfsGatewayLink,
+  createIpfsGatewayPath,
   fetchWithTimeout,
   getIcRegistryContract,
   multiAddrToUri,
@@ -286,7 +287,7 @@ const query = {
       }
       const data = await getIcRegistryContract().getReleaseData(pkgInfo.latestReleaseId);
       const cid = CID.parse('f' + data.manifestHash.substring(2), base16.decoder);
-      const ipfsLink = createIpfsGatewayLink(cid.toV1());
+      const ipfsLink = createIpfsGatewayPath(cid.toV1().toString());
       const d = await fetchWithTimeout(ipfsLink, {
         timeout: 60000,
         redirect: 'follow',
