@@ -111,9 +111,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
                   {t('General Social Feed')}
                 </Text>
               </Box>
-              <Text color="grey">
-                {t("Check what's up from your fellow Ethereans ✨")} algo mas
-              </Text>
+              <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
             </Box>
           </BasicCardBox>
           <EditorPlaceholder
