@@ -7,6 +7,7 @@ import {
   createIpfsGatewayPath,
   fetchWithTimeout,
   getIcRegistryContract,
+  logger,
   multiAddrToUri,
 } from '../helpers';
 import { CID } from 'multiformats/cid';
@@ -287,7 +288,8 @@ const query = {
       }
       const data = await getIcRegistryContract().getReleaseData(pkgInfo.latestReleaseId);
       const cid = CID.parse('f' + data.manifestHash.substring(2), base16.decoder);
-      const ipfsLink = createIpfsGatewayPath(cid.toV1().toString());
+      const ipfsLink = createIpfsGatewayPath(cid.toString());
+      logger.info(`fetching manifest ${ipfsLink}`);
       const d = await fetchWithTimeout(ipfsLink, {
         timeout: 60000,
         redirect: 'follow',
