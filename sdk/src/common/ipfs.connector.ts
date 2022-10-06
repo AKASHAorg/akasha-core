@@ -17,7 +17,7 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
   private _log: ILogger;
   readonly gateway = 'https://cloudflare-ipfs.com/ipfs/';
   readonly originGateway = 'ipfs.cf-ipfs.com';
-  readonly fallbackGateway = 'ipfs.nftstorage.link';
+  readonly fallbackGateway = 'ipfs.w3s.link';
   private readonly LEGAL_DOCS_SOURCE = {
     [LEGAL_DOCS.TERMS_OF_USE]: 'bafkreie3pa22hfttuuier6rp6sm7nngfc5jgfjzre7wc5a2ww7z375fhwm',
     [LEGAL_DOCS.TERMS_OF_SERVICE]: 'bafkreib5jg73c6bmbzkrokpusraiwwycnkypol3xh3uadsu7hhzefp6g2e',
