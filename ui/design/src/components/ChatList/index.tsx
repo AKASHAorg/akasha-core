@@ -102,19 +102,21 @@ const ChatList: React.FC<IChatListProps> = props => {
           background="activePanelBackground"
           pad={{ horizontal: 'medium', vertical: 'xxsmall' }}
           round="100px"
+          flex={{ shrink: 0 }}
         >
           <Text color="accent">{unreadMessagesLabel}</Text>
         </Box>
       )}
 
       {newMessages?.length > 1 &&
-        newMessages?.map((message: IChatMessage, id: number) => (
+        newMessages?.map((message: IChatMessage, index: number) => (
           <Box
-            key={id}
+            key={index}
             width="95%"
             margin={{ vertical: 'small' }}
             alignSelf={message.ethAddress !== loggedUserEthAddress ? 'end' : 'start'}
             style={{ minHeight: 'min-content', flexShrink: 0 }}
+            ref={index === newMessages.length - 1 ? chatBottomRef : null}
           >
             {React.cloneElement(itemCard, {
               senderName: message.name,
@@ -125,7 +127,7 @@ const ChatList: React.FC<IChatListProps> = props => {
             })}
           </Box>
         ))}
-      <div ref={chatBottomRef} />
+      {/* <div ref={chatBottomRef} /> */}
     </StyledBox>
   );
 };
