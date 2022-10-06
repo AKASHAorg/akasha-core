@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 
 import {
@@ -24,7 +23,7 @@ jest.mock('react-router', () => ({
   }),
 }));
 
-describe('<ProfilePageHeader />', () => {
+describe('< ProfilePageHeader />', () => {
   let renderResult;
   const mockUser = genUser();
   const BaseComponent = (
@@ -39,11 +38,11 @@ describe('<ProfilePageHeader />', () => {
     />
   );
   beforeEach(async () => {
-    await act(() => {
+    await act(async () => {
       renderResult = renderWithAllProviders(BaseComponent, {});
     });
   });
-  it('should render an avatar', async () => {
+  it('should render profile page header', async () => {
     const avatarNode = await renderResult.findByTestId('avatar-image');
     const avatarSrc = avatarNode.getAttribute('src');
     //console.log(avatarSrc, '<<<< avatar src');
