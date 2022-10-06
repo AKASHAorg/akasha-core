@@ -37,10 +37,12 @@ const INFURA_IPFS_SECRET = process.env.INFURA_IPFS_SECRET;
 const IPFS_GATEWAY = process.env.IPFS_GATEWAY;
 export const isIpfsEnabled = INFURA_IPFS_ID && INFURA_IPFS_SECRET && IPFS_GATEWAY;
 
-export const web3Provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETWORK, {
-  projectId: process.env.AWF_FAUCET_ID,
-  projectSecret: process.env.AWF_FAUCET_SECRET,
-});
+export const web3Provider = new ethers.providers.JsonRpcProvider(process.env.RINKEBY_JSONRPC);
+
+// export const web3Provider = new ethers.providers.InfuraProvider(process.env.AWF_FAUCET_NETWORK, {
+//   projectId: process.env.AWF_FAUCET_ID,
+//   projectSecret: process.env.AWF_FAUCET_SECRET,
+// });
 
 let ipfsClient;
 if (isIpfsEnabled) {
