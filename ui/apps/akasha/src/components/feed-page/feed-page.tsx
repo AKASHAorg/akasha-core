@@ -104,9 +104,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       </Helmet>
       {loginState?.ethAddress ? (
         <>
-          <BasicCardBox gap="small" style={{ marginBottom: '0.5rem' }}>
+          <BasicCardBox gap="small" margin={{ bottom: 'xsmall' }}>
             <Box pad="medium">
-              <Box direction="row" justify="between" style={{ marginBottom: '0.5rem' }}>
+              <Box direction="row" justify="between" margin={{ bottom: 'xsmall' }}>
                 <Text size="xlarge" weight={'bold'}>
                   {t('General Social Feed')}
                 </Text>
