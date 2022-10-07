@@ -11,7 +11,7 @@ module.exports = {
       url: 'http://127.0.0.1:8545',
     },
     rinkeby: {
-      url: 'https://rinkeby.infura.io/v3/' + process.env.INFURA_ID,
+      url: process.env.RINKEBY_JSONRPC,
       accounts: [process.env.ETH_DEPLOY_KEY],
     },
   },
