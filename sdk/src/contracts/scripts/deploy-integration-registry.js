@@ -1,11 +1,11 @@
 /* eslint-disable */
-// const { ethers, upgrades } = require('hardhat');
-// const semver = require('semver');
-// const pkgInfos = require('../../../../build/integrations_bucket.json');
+const { ethers, upgrades } = require('hardhat');
+const semver = require('semver');
+const pkgInfos = require('../../../../build/integrations_bucket.json');
 async function main() {
-  // const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
-  // const IntRegistrar = await upgrades.deployProxy(IntegrationRegistry);
-  // console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
+  const IntegrationRegistry = await ethers.getContractFactory('IntegrationRegistry');
+  const IntRegistrar = await upgrades.deployProxy(IntegrationRegistry);
+  console.log('IntegrationRegistry deployed to:', IntRegistrar.address);
   // const safe = '0x4941D523fa837A536B8bed834F6e6c807FAba24C';
   // await upgrades.admin.transferProxyAdminOwnership(safe);
   // const integrationRegistry = await IntegrationRegistry.attach(
