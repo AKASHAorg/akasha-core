@@ -29,6 +29,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
     onAcceptClick,
     onRejectClick,
   } = props;
+
   return (
     <Box>
       {titleLabel && (

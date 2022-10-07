@@ -34,6 +34,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
     onReadyClick,
     onSkipClick,
   } = props;
+
   return (
     <Box>
       {titleLabel && (

@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { RootComponentProps, StepStatus } from '@akashaorg/typings/ui';
+import { DevKeyCardType } from '@akashaorg/design-system/lib/components/DevKeyCard';
 import {
   useGetLogin,
   useGetProfile,
   useValidateMessage,
   useAddDevKeyFromMessage,
-  useGetDevKeys,
 } from '@akashaorg/ui-awf-hooks';
 
 import StepOne from './step-one';
@@ -28,13 +28,6 @@ import menuRoute, {
 
 const { SteppedActionCard } = DS;
 
-export type devKey = {
-  pubKey: string;
-  name?: string;
-  addedAt: string;
-  usedAt?: string;
-};
-
 interface IDevDashOnboardingStepsProps {
   activeIndex?: number;
 }
@@ -47,8 +40,8 @@ const DevDashOnboardingSteps: React.FC<
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [messageName, setMessageName] = React.useState<string>('');
   const [message, setmessage] = React.useState<string>('');
-  const [status, setStatus] = React.useState<string | null>(null);
-  const [devKeys, setDevKeys] = React.useState([]);
+  const [status, setStatus] = React.useState<StepStatus | null>(null);
+  const [devKey, setDevKey] = React.useState<DevKeyCardType>();
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
@@ -60,8 +53,6 @@ const DevDashOnboardingSteps: React.FC<
     { message, messageName },
     status === StepStatus.ADDING_KEY,
   );
-
-  const getKeysQuery = useGetDevKeys(status === StepStatus.GETTING_KEYS);
 
   const pathnameArr = [
     ONBOARDING_STEP_ONE,
@@ -97,7 +88,7 @@ const DevDashOnboardingSteps: React.FC<
   React.useEffect(() => {
     // add key after validating
     if (
-      validateQuery.isFetched &&
+      validateQuery.isSuccess &&
       validateQuery.data?.body?.aud === loggedProfileQuery.data?.pubKey
     ) {
       setStatus(StepStatus.ADDING_KEY);
@@ -106,26 +97,19 @@ const DevDashOnboardingSteps: React.FC<
   }, [validateQuery.data]);
 
   React.useEffect(() => {
-    if (addKeyQuery.isFetched) {
-      setStatus(StepStatus.GETTING_KEYS);
-    }
-  }, [addKeyQuery.isFetched]);
+    if (addKeyQuery.isSuccess) {
+      setDevKey(addKeyQuery.data);
 
-  React.useEffect(() => {
-    if (getKeysQuery.isFetched) {
-      Promise.resolve(getKeysQuery.data).then(keys => setDevKeys(keys as any));
-
-      // on success, navigate to the confirmation screen
       return plugins['@akashaorg/app-routing']?.routing.navigateTo({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: () => menuRoute[ONBOARDING_STEP_FOUR],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getKeysQuery.isFetched]);
+  }, [addKeyQuery.isSuccess]);
 
   const isOnboarded = React.useMemo(() => {
-    return window.localStorage.getItem(ONBOARDING_STATUS);
+    return Boolean(window.localStorage.getItem(ONBOARDING_STATUS));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -262,7 +246,7 @@ const DevDashOnboardingSteps: React.FC<
             isError: validateQuery.isError,
             errorMessage: t('{{error}}', { error: validateQuery.error?.message }),
           }}
-          isFetching={validateQuery.isFetching || addKeyQuery.isFetching || getKeysQuery.isFetching}
+          isFetching={validateQuery.isFetching || addKeyQuery.isFetching}
           buttonLabel={t('Validate Message')}
           onCTAClick={handleClick(ONBOARDING_STEP_TWO)}
           onMessageNameInputChange={handleMessageNameInputChange}
@@ -273,9 +257,9 @@ const DevDashOnboardingSteps: React.FC<
       {activeIndex === 3 && (
         <StepFour
           titleLabel={t('Key Confirmation')}
-          firstKey={{
-            ...devKeys[0],
-            name: !devKeys[0].name.length ? t('Unnamed key') : devKeys[0].name,
+          item={{
+            ...devKey,
+            name: !devKey.name.length ? t('Unnamed key') : devKey.name,
           }}
           unusedLabel={t('Unused')}
           usedLabel={t('Used')}
