@@ -1,12 +1,17 @@
 import React from 'react';
 
 import DS from '@akashaorg/design-system';
+import { NavigateToParams } from '@akashaorg/typings/ui';
+import { DevKeyCardType } from '@akashaorg/design-system/lib/components/DevKeyCard';
+
+import menuRoute from '../../../routes';
 
 const { Anchor, Box, HorizontalDivider, Icon, MainAreaCardBox, Text } = DS;
 
 type CardMenuItem = {
   label: string;
-  value?: Record<string, unknown>[];
+  route: string;
+  value?: DevKeyCardType[] | Record<string, unknown>[];
 };
 
 interface IDevProfileCardProps {
@@ -14,10 +19,18 @@ interface IDevProfileCardProps {
   subtitleLabels: string[];
   cardMenuItems: CardMenuItem[];
   ctaUrl: string;
+  navigateTo: (params: NavigateToParams) => void;
 }
 
 const DevProfileCard: React.FC<IDevProfileCardProps> = props => {
-  const { titleLabel, subtitleLabels, cardMenuItems, ctaUrl } = props;
+  const { titleLabel, subtitleLabels, cardMenuItems, ctaUrl, navigateTo } = props;
+
+  const handleClickMenuItem = (route: string) => () => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => menuRoute[route],
+    });
+  };
 
   return (
     <MainAreaCardBox>
@@ -52,9 +65,9 @@ const DevProfileCard: React.FC<IDevProfileCardProps> = props => {
             align="center"
             direction="row"
             justify="between"
-            onClick={() => null}
+            onClick={handleClickMenuItem(item.route)}
           >
-            <Text size="large" weight="bold">
+            <Text size="large" weight={500}>
               {item.label}
             </Text>
             <Box direction="row" align="center" gap="xsmall">

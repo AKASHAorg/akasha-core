@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
+import { DevKeyCardType } from '@akashaorg/design-system/lib/components/DevKeyCard';
 import {
   RootComponentProps,
   EntityTypes,
@@ -21,7 +22,15 @@ import DevProfileCard from '../dev-dashboard/profile/dev-profile-card';
 import ProfilePageHeader from '../profile-cards/profile-page-header';
 import { ONBOARDING_STATUS } from '../dev-dashboard/onboarding/intro-card';
 
-import menuRoute, { MY_PROFILE, ONBOARDING } from '../../routes';
+import menuRoute, {
+  DEV_DASHBOARD,
+  DEV_KEYS,
+  MY_PROFILE,
+  ONBOARDING,
+  PUBLISHED_APPS,
+  SIGN_MESSAGE,
+  VERIFY_SIGNATURE,
+} from '../../routes';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner } = DS;
 
@@ -29,10 +38,11 @@ export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loginState: LoginState;
+  devKeys: DevKeyCardType[];
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { plugins, loggedProfileData, showLoginModal } = props;
+  const { plugins, loggedProfileData, showLoginModal, devKeys } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const { t } = useTranslation('app-profile');
@@ -52,7 +62,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [pubKey, loggedProfileData, location.pathname]);
 
   const isOnDevDashboard = React.useMemo(
-    () => location.pathname === menuRoute[ONBOARDING],
+    () => location.pathname === menuRoute[DEV_DASHBOARD],
     [location.pathname],
   );
 
@@ -98,7 +108,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   }, [reqPosts.data]);
 
   const isOnboarded = React.useMemo(() => {
-    return window.localStorage.getItem(ONBOARDING_STATUS);
+    return Boolean(window.localStorage.getItem(ONBOARDING_STATUS));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -124,7 +134,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     });
   };
 
-  if (!isOnboarded) {
+  if (!isOnboarded && isOnDevDashboard) {
     // if user has not been onboarded, navigate to onboarding
     return plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
@@ -189,25 +199,19 @@ const ProfilePage = (props: ProfilePageProps) => {
                   ]}
                   cardMenuItems={[
                     {
-                      label: t('Authorization Tokens'),
-                      value: [
-                        {
-                          name: 'My First Token',
-                          token: '3fLBxdVgUkWj8UjVvUXcIdak5qe5xRRowUDkIuVRRQ',
-                        },
-                      ],
+                      label: t('Dev Keys'),
+                      route: DEV_KEYS,
+                      value: devKeys,
                     },
-                    { label: t('Sign a Message') },
                     {
                       label: t('Published Apps'),
-                      value: [
-                        {
-                          name: 'An awesome app',
-                        },
-                      ],
+                      route: PUBLISHED_APPS,
                     },
+                    { label: t('Sign a Message'), route: SIGN_MESSAGE },
+                    { label: t('Verify a Signature'), route: VERIFY_SIGNATURE },
                   ]}
                   ctaUrl="https://akasha-docs.pages.dev"
+                  navigateTo={plugins['@akashaorg/app-routing']?.routing.navigateTo}
                 />
               )}
               {!isOnDevDashboard && (
@@ -241,7 +245,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                       requestStatus={reqPosts.status}
                       loginState={loginQuery.data}
                       loggedProfile={loggedProfileData}
-                      navigateTo={props.plugins?.routing?.navigateTo}
+                      navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
                       navigateToModal={props.navigateToModal}
                       onLoginModalOpen={showLoginModal}
                       hasNextPage={reqPosts.hasNextPage}
@@ -254,7 +258,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                       parentIsProfilePage={true}
                       uiEvents={props.uiEvents}
                       itemSpacing={8}
-                      i18n={props.plugins?.translation?.i18n}
+                      i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
                     />
                   )}
                 </>
