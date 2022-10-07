@@ -35,8 +35,8 @@ const addDevKeyFromMessage = async ({
   messageName?: string;
 }) => {
   const sdk = getSDK();
-  await sdk.api.auth.addDevKeyFromBase64Message(message, messageName);
-  return 'message added!';
+  const res = await sdk.api.auth.addDevKeyFromBase64Message(message, messageName);
+  return res;
 };
 
 /**
@@ -73,10 +73,9 @@ const getDevKeys = async () => {
  * ```
  */
 export function useGetDevKeys(enabled: boolean) {
-  return useQuery([DEV_DASHBOARD_KEY, 'get_keys'], () => getDevKeys, {
+  return useQuery([DEV_DASHBOARD_KEY, 'get_keys'], () => getDevKeys(), {
     enabled,
     keepPreviousData: true,
-    initialData: () => Promise.resolve([]),
     onError: (err: Error) => logError('useDevDashboard.getDevKeys', err),
   });
 }
