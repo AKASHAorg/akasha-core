@@ -40,7 +40,8 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
 
   const { t } = useTranslation('app-moderation-ewa');
-  const locale = (props.plugins?.i18n?.languages?.[0] || 'en') as ILocale;
+  const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
+    'en') as ILocale;
 
   const getCountQuery = useGetCount();
   const count = getCountQuery.data;
