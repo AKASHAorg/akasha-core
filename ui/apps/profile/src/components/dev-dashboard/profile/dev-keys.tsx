@@ -1,11 +1,9 @@
 import React from 'react';
 
 import DS from '@akashaorg/design-system';
+import { useGetDevKeys } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import {
-  IDevKeyCardProps,
-  DevKeyCardType,
-} from '@akashaorg/design-system/lib/components/DevKeyCard';
+import { IDevKeyCardProps } from '@akashaorg/design-system/lib/components/DevKeyCard';
 
 import CardTitle, { ICardTitleProps } from './card-title';
 
@@ -17,15 +15,17 @@ type ExtendableProps = RootComponentProps & ICardTitleProps & IDevKeyCardProps;
 
 interface IDevKeysCardProps extends ExtendableProps {
   className?: string;
-  devKeys: DevKeyCardType[];
   noKeysLabel: string;
-  isLoading: boolean;
   editLabel: string;
   deleteLabel: string;
 }
 
 const DevKeysCard: React.FC<IDevKeysCardProps> = props => {
-  const { className, plugins, devKeys, noKeysLabel, isLoading, editLabel, deleteLabel } = props;
+  const { className, plugins, noKeysLabel, editLabel, deleteLabel } = props;
+
+  const getKeysQuery = useGetDevKeys(true);
+
+  const devKeys = getKeysQuery.data || [];
 
   const handleClickCardTitleIcon = () => {
     plugins['@akashaorg/app-routing']?.routing.navigateTo({
@@ -61,9 +61,9 @@ const DevKeysCard: React.FC<IDevKeysCardProps> = props => {
       />
       <HorizontalDivider />
       <Box pad={{ vertical: 'xsmall', horizontal: 'small' }}>
-        {isLoading && <Spinner />}
+        {getKeysQuery.isFetching && <Spinner />}
 
-        {!isLoading && (
+        {!getKeysQuery.isFetching && (
           <>
             {!devKeys.length && (
               <Text size="medium" textAlign="center">

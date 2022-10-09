@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import { DevKeyCardType } from '@akashaorg/design-system/lib/components/DevKeyCard';
 import {
   RootComponentProps,
   EntityTypes,
@@ -16,6 +15,7 @@ import {
   useInfinitePostsByAuthor,
   LoginState,
   useGetLogin,
+  useGetDevKeys,
 } from '@akashaorg/ui-awf-hooks';
 
 import DevProfileCard from '../dev-dashboard/profile/dev-profile-card';
@@ -38,11 +38,10 @@ export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loginState: LoginState;
-  devKeys: DevKeyCardType[];
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { plugins, loggedProfileData, showLoginModal, devKeys } = props;
+  const { plugins, loggedProfileData, showLoginModal } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const { t } = useTranslation('app-profile');
@@ -80,6 +79,10 @@ const ProfilePage = (props: ProfilePageProps) => {
     15,
     !!publicKey && !erroredHooks.includes('useInfinitePostsByAuthor'),
   );
+
+  const getKeysQuery = useGetDevKeys(true);
+
+  const devKeys = getKeysQuery.data || [];
 
   React.useEffect(() => {
     if (reqPosts.status === 'error' && !erroredHooks.includes('useInfinitePostsByAuthor')) {

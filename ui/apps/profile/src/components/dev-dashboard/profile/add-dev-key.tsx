@@ -53,7 +53,12 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
   React.useEffect(() => {
     if (addKeyQuery.isSuccess) {
       setStatus(null);
+      plugins['@akashaorg/app-routing']?.routing.navigateTo({
+        appName: '@akashaorg/app-profile',
+        getNavigationUrl: () => menuRoute[DEV_KEYS],
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addKeyQuery.isSuccess]);
 
   const handleClickCardTitleIcon = () => {

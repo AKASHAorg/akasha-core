@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import { DevKeyCardType } from '@akashaorg/design-system/lib/components/DevKeyCard';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 
@@ -32,8 +31,6 @@ const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
-
-  const [devKeys] = React.useState<DevKeyCardType[]>([]);
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
@@ -97,7 +94,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               element={
                 <ProfilePage
                   {...props}
-                  devKeys={devKeys}
                   loggedProfileData={loggedProfileQuery.data}
                   showLoginModal={showLoginModal}
                   loginState={loginQuery.data}
@@ -153,9 +149,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 leftIcon={true}
                 title={t('Dev Keys')}
                 buttonLabel={t('New Dev Key')}
-                devKeys={devKeys}
-                noKeysLabel={t('You have added any keys yet. Use the button to add some')}
-                isLoading={false}
+                noKeysLabel={t('You have not added any keys yet. Use the button to add some')}
                 editLabel={t('Edit')}
                 deleteLabel={t('Delete')}
                 unusedLabel={t('Inactive')}
