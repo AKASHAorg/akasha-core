@@ -6,12 +6,13 @@ const { Box, Button, Text, TextArea, LinkInput, styled } = DS;
 
 export interface IDevMessageFormProps {
   messageNameTitleLabel: string;
-  messageNameValue: string;
   messageNameInputPlaceholder: string;
+  messageNameValue: string;
   messageTitleLabel: string;
-  messageValue: string;
   messageInputPlaceholder: string;
-  validationStatus: { isError: boolean; errorMessage?: string };
+  messageValue: string;
+  canEditMessage?: boolean;
+  validationStatus: { isError: boolean; errorMessage?: string; extraInfo?: string };
   isFetching: boolean;
   buttonLabel: string;
   onMessageNameInputChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
@@ -31,6 +32,7 @@ const DevMessageForm: React.FC<IDevMessageFormProps> = props => {
     messageValue,
     messageNameInputPlaceholder,
     messageInputPlaceholder,
+    canEditMessage = true,
     validationStatus,
     isFetching,
     buttonLabel,
@@ -67,6 +69,8 @@ const DevMessageForm: React.FC<IDevMessageFormProps> = props => {
             side: 'all',
             color: validationStatus.isError
               ? 'errorText'
+              : validationStatus.extraInfo
+              ? 'border'
               : messageValue.length
               ? 'accent'
               : 'border',
@@ -77,6 +81,7 @@ const DevMessageForm: React.FC<IDevMessageFormProps> = props => {
             size="large"
             rows={8}
             style={{ padding: 0 }}
+            disabled={!canEditMessage}
             value={messageValue}
             onChange={onMessageInputChange}
             placeholder={messageInputPlaceholder}
@@ -85,6 +90,11 @@ const DevMessageForm: React.FC<IDevMessageFormProps> = props => {
         {validationStatus.isError && (
           <Text size="small" color="errorText">
             {validationStatus.errorMessage}
+          </Text>
+        )}
+        {!!validationStatus.extraInfo.length && (
+          <Text size="small" color="secondaryText">
+            *{validationStatus.extraInfo}
           </Text>
         )}
       </Box>

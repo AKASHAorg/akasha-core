@@ -160,10 +160,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
           <Route path={menuRoute[ADD_DEV_KEY]} element={<AddDevKeyCard {...props} />} />
-          <Route
-            path={menuRoute[EDIT_MESSAGE_NAME]}
-            element={<EditDevKeyCard {...props} leftIcon={true} title={t('Edit Message Name')} />}
-          />
+          <Route path={menuRoute[EDIT_MESSAGE_NAME]} element={<EditDevKeyCard {...props} />} />
         </Routes>
       </Box>
     </Router>

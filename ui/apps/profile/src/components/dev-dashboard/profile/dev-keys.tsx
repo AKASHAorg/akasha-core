@@ -48,7 +48,7 @@ const DevKeysCard: React.FC<IDevKeysCardProps> = props => {
   const handleMenuItemClick = (id: string, action: string) => () => {
     plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `${baseDeveloperRoute}/${id}/${action}`,
+      getNavigationUrl: () => `${baseDeveloperRoute}/dev-keys/${id}/${action}`,
     });
   };
 

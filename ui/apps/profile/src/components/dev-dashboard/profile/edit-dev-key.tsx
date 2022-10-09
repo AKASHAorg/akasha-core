@@ -1,22 +1,27 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import CardTitle, { ICardTitleProps } from './card-title';
+import CardTitle from './card-title';
 
 import menuRoute, { DEV_KEYS } from '../../../routes';
+import DevMessageForm from './dev-message-form';
 
-const { HorizontalDivider, MainAreaCardBox } = DS;
+const { Box, HorizontalDivider, MainAreaCardBox } = DS;
 
-type ExtendableProps = RootComponentProps & ICardTitleProps;
-
-interface IEditDevKeyCardProps extends ExtendableProps {
+interface IEditDevKeyCardProps {
   className?: string;
 }
 
-const EditDevKeyCard: React.FC<IEditDevKeyCardProps> = props => {
+const EditDevKeyCard: React.FC<RootComponentProps & IEditDevKeyCardProps> = props => {
   const { className, plugins } = props;
+
+  const [messageName] = React.useState<string>('');
+  const [message] = React.useState<string>('');
+
+  const { t } = useTranslation('app-profile');
 
   const handleClickCardTitleIcon = () => {
     plugins['@akashaorg/app-routing']?.routing.navigateTo({
@@ -25,11 +30,40 @@ const EditDevKeyCard: React.FC<IEditDevKeyCardProps> = props => {
     });
   };
 
+  const handleButtonClick = () => {
+    /** */
+  };
+
   return (
     <MainAreaCardBox className={className}>
-      <CardTitle {...props} onClickIcon={handleClickCardTitleIcon} />
+      <CardTitle
+        leftIcon={true}
+        title={t('Edit Message Name')}
+        onClickIcon={handleClickCardTitleIcon}
+      />
 
       <HorizontalDivider />
+
+      <Box pad="small">
+        <DevMessageForm
+          messageNameTitleLabel={t('Message name')}
+          messageNameInputPlaceholder={t('Give your message a name (optional)')}
+          messageNameValue={messageName}
+          messageTitleLabel={t('Message')}
+          messageInputPlaceholder={t('Paste the generated message here')}
+          messageValue={message}
+          canEditMessage={false}
+          validationStatus={{
+            isError: false,
+            extraInfo: t('Messages cannot be edited, but you can delete them and add a new one.'),
+          }}
+          isFetching={false}
+          buttonLabel={t('Save')}
+          onMessageNameInputChange={() => null}
+          onMessageInputChange={() => null}
+          onButtonClick={handleButtonClick}
+        />
+      </Box>
     </MainAreaCardBox>
   );
 };
