@@ -30,7 +30,7 @@ Emittery.isDebugEnabled = process.env.NODE_ENV !== 'production';
 //   projectId: process.env.AWF_FAUCET_ID,
 //   projectSecret: process.env.AWF_FAUCET_SECRET,
 // });
-const wallet = new ethers.Wallet(process.env.AWF_FAUCET_KEY).connect(web3Provider);
+// const wallet = new ethers.Wallet(process.env.AWF_FAUCET_KEY).connect(web3Provider);
 const wss = route.all('/ws/userauth', ctx => {
   const emitter = new Emittery();
   const dbId = ThreadID.fromString(process.env.AWF_THREADdb);
@@ -203,20 +203,9 @@ const wss = route.all('/ws/userauth', ctx => {
               logger.info('updating the invite code status');
               await db.save(dbId, 'Invites', [exists]);
             }
-            await wallet.sendTransaction({
-              to: currentUser.ethAddress,
-              value: ethers.utils.parseEther('0.1'),
-            });
             const deployedCode = await web3Provider.getCode(currentUser.ethAddress);
             if (deployedCode !== '0x') {
-              logger.info('address is a deployed smart contract');
-              const addresses = await getWalletOwners(currentUser.ethAddress, web3Provider);
-              for (const addr of addresses) {
-                await wallet.sendTransaction({
-                  to: addr,
-                  value: ethers.utils.parseEther('0.1'),
-                });
-              }
+              logger.info(`address is a deployed smart contract ${currentUser.ethAddress}`);
             }
           }
           currentUser = null;
