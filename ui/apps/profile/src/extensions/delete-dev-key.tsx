@@ -5,21 +5,37 @@ import { RootExtensionProps } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import { withProviders, ThemeWrapper, useDeleteDevKey } from '@akashaorg/ui-awf-hooks';
 import menuRoute, { DEV_KEYS } from '../routes';
 
 const { BasicCardBox, Box, Button, ModalContainer, Text, Icon, ErrorLoader } = DS;
 
 const DeleteDevKeyModal = (props: RootExtensionProps) => {
+  const { extensionData } = props;
+
   const { t } = useTranslation('app-profile');
   const location = useLocation();
+
+  const pubKey = React.useMemo(() => {
+    if (extensionData.hasOwnProperty('pubKey') && typeof extensionData.pubKey === 'string') {
+      return extensionData.pubKey;
+    }
+  }, [extensionData]);
+
+  const keyName = React.useMemo(() => {
+    if (extensionData.hasOwnProperty('keyName') && typeof extensionData.keyName === 'string') {
+      return extensionData.keyName;
+    }
+  }, [extensionData]);
+
+  const deleteKeyMutation = useDeleteDevKey();
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
   };
 
   const handleDelete = () => {
-    /** do the delete */
+    deleteKeyMutation.mutate(pubKey);
 
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-profile',
@@ -44,7 +60,10 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
             />
           </Box>
           <Text color="gray" size="large" textAlign="center">
-            {t('Are you sure you wish to delete this key')}
+            {t('Are you sure you wish to delete this key')}:{' '}
+            <Text size="large" weight="bold">
+              {keyName}
+            </Text>
           </Text>
           <Box
             direction="row"

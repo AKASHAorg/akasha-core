@@ -152,6 +152,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 noKeysLabel={t('You have not added any keys yet. Use the button to add some')}
                 editLabel={t('Edit')}
                 deleteLabel={t('Delete')}
+                nonameLabel={t('Unnamed Key')}
                 unusedLabel={t('Inactive')}
                 usedLabel={t('Active')}
                 devPubKeyLabel={t('Dev Public Key 🔑')}
