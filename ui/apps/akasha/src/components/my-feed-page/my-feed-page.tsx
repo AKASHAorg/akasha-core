@@ -88,7 +88,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         <title>Ethereum World</title>
       </Helmet>
 
-      <Box margin={{ bottom: 'medium' }} gap="medium">
+      <Box margin={{ bottom: 'small' }}>
         <StartCard
           title={t('My Feed')}
           heading={t('Add some magic to your feed 🪄')}

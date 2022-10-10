@@ -38,7 +38,7 @@ export const StartCard = ({
   CTALabel,
 }: StartProps) => {
   return (
-    <BasicCardBox noBorder={noBorder} noBorderRadius={noBorderRadius} pad="medium">
+    <BasicCardBox noBorder={noBorder} noBorderRadius={noBorderRadius} pad="medium" gap="xsmall">
       <Box align="start" fill="horizontal">
         {!!title && (
           <Text size="xlarge" weight="bold">
@@ -68,11 +68,7 @@ export const StartCard = ({
           )}
         </StyledBox>
       )}
-      {showSecondaryArea && (
-        <Box pad={{ vertical: 'medium' }}>
-          <Text>{secondaryDescription}</Text>
-        </Box>
-      )}
+      {showSecondaryArea && <Text color="grey">{secondaryDescription}</Text>}
     </BasicCardBox>
   );
 };
