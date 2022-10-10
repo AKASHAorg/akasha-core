@@ -19,6 +19,10 @@ module.exports = {
       url: 'https://sepolia.infura.io/v3/' + process.env.INFURA_ID,
       accounts: [process.env.ETH_DEPLOY_KEY],
     },
+    goerli: {
+      url: 'https://goerli.infura.io/v3/' + process.env.INFURA_ID,
+      accounts: [process.env.ETH_DEPLOY_KEY],
+    },
   },
   solidity: {
     version: '0.8.9',
