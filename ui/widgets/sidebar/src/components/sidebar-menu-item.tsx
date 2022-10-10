@@ -14,7 +14,7 @@ export const MenuItem: React.FC<SidebarMenuItemProps & MenuItemPassedProps> = pr
   const [notificationsCount, setNotificationsCount] = React.useState(0);
   React.useEffect(() => {
     let sub: { unsubscribe: () => void };
-    if (props.plugins['@akashaorg/app-notifications'].notification) {
+    if (props.plugins['@akashaorg/app-notifications']?.notification) {
       sub = props.plugins['@akashaorg/app-notifications'].notification.listen(menuItem.name, {
         next: (messages?: unknown[]) => {
           if (messages) {
