@@ -4,14 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
-import {
-  useMentionSearch,
-  useTagSearch,
-  useGetProfile,
-  logError,
-  LoginState,
-} from '@akashaorg/ui-awf-hooks';
-import { getHubUser, getMessages, markAsRead, sendMessage } from '../api/message';
+import { useMentionSearch, useTagSearch, useGetProfile, LoginState } from '@akashaorg/ui-awf-hooks';
+import { markAsRead, sendMessage } from '../api/message';
 import { db } from '../db/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
@@ -19,10 +13,11 @@ const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, Bub
 
 export interface ChatPageProps extends RootComponentProps {
   loginState: LoginState;
+  fetchingMessages?: boolean;
 }
 
 const ChatPage = (props: ChatPageProps) => {
-  const { loginState } = props;
+  const { loginState, fetchingMessages } = props;
 
   const { t } = useTranslation('app-messaging');
 
@@ -101,40 +96,41 @@ const ChatPage = (props: ChatPageProps) => {
       to: res.to,
       read: res.read,
       id: res.id,
+      loggedUserPubKey: loggedUserPubKey,
+      chatPartnerPubKey: pubKey,
     };
-    setMessages(prev => [...prev, newMessage]);
+    db.messages.put(newMessage);
   };
 
-  const localMessages =
+  const dexieMessages =
     useLiveQuery(() =>
       db.messages
         .where({ loggedUserPubKey: loggedUserPubKey, chatPartnerPubKey: pubKey })
         .sortBy('timestamp'),
     ) || [];
 
-  const [messages, setMessages] = React.useState([]);
-  const [fetchingMessages, setFetchingMessages] = React.useState(false);
-
-  const latestReadMessage = localMessages[localMessages?.length - 1];
-  const indexOfLatestReadMessage = React.useMemo(() => {
-    if (messages?.length) {
-      return messages.findIndex(msg => msg.id === latestReadMessage?.id);
+  const localMessages = dexieMessages.map(msg => {
+    if (msg.from === loggedUserPubKey) {
+      return msg;
+    } else if (msg.from === pubKey) {
+      return { ...msg, name: contactId };
     }
-  }, [messages, latestReadMessage]);
-  const unreadMessages = React.useMemo(() => {
-    return messages.slice(indexOfLatestReadMessage + 1);
-  }, [indexOfLatestReadMessage, messages]);
+  });
+
+  const indexOfLatestReadMessage = localMessages.findIndex(
+    msg => !msg.read && msg.from !== loggedUserPubKey,
+  );
+
+  const unreadMessages = localMessages.slice(indexOfLatestReadMessage + 1);
 
   const markLatestMessagesRead = () => {
     if (unreadMessages?.length) {
       const newMessages = unreadMessages.map(msg => {
-        return { ...msg, loggedUserPubKey, chatPartnerPubKey: pubKey };
+        return { ...msg, read: true };
       });
+
       db.messages.bulkPut(newMessages);
 
-      // const unreadMessages = apiMessages.filter(
-      //   message => message.from === pubKey && !message.read,
-      // );
       const unreadMessageIds = unreadMessages.map(message => message.id);
       markAsRead(unreadMessageIds);
       if (localStorage.getItem('Unread Chats')) {
@@ -144,68 +140,6 @@ const ChatPage = (props: ChatPageProps) => {
       }
     }
   };
-
-  const fetchMessagesCallback = React.useCallback(async () => {
-    setFetchingMessages(true);
-    const messagesData = await getMessages();
-    const conversation = messagesData
-      ?.map(res => {
-        if (
-          res.body.content &&
-          (res.from === contactPubKey ||
-            (res.from === loggedUserPubKey && res.to === contactPubKey))
-        ) {
-          return {
-            content: res.body.content?.slateContent,
-            ethAddress: res.body.content?.author,
-            timestamp: res.createdAt,
-            name: res.from === contactPubKey ? contactId : null,
-            from: res.from,
-            to: res.to,
-            read: res.read,
-            id: res.id,
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
-    setMessages(conversation);
-    setFetchingMessages(false);
-  }, [contactPubKey, loggedUserPubKey, contactId]);
-
-  React.useEffect(() => {
-    fetchMessagesCallback();
-  }, [fetchMessagesCallback]);
-
-  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
-  const subCallback = React.useCallback(
-    async (reply?: any, err?: Error) => {
-      if (err) {
-        return logError('messaging-app.watchInbox', err);
-      }
-      if (!reply?.message) return;
-      const messageIds = messages.map(message => message.id);
-      if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
-        await fetchMessagesCallback();
-      }
-    },
-    [messages],
-  );
-  React.useEffect(() => {
-    let sub;
-    (async () => {
-      const user = await getHubUserCallback();
-      const mailboxId = await user.getMailboxID();
-      sub = user.watchInbox(mailboxId, subCallback);
-    })();
-    return () => {
-      if (sub) {
-        sub.close();
-        sub = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getHubUserCallback, fetchMessagesCallback, pubKey]);
 
   return (
     <BasicCardBox style={{ maxHeight: '92vh' }}>

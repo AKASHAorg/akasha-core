@@ -13,7 +13,7 @@ export class LocalMessagesDexie extends Dexie {
     super('MessagesDatabase');
     this.version(1).stores({
       messages:
-        'id, from, to, read, timestamp, loggedUserPubKey, chatPartnerPubKey, [loggedUserPubKey+chatPartnerPubKey]',
+        '++dexieId, id, from, to, read, timestamp, loggedUserPubKey, chatPartnerPubKey, [loggedUserPubKey+chatPartnerPubKey]',
     });
   }
 }
