@@ -45,11 +45,15 @@ const DevKeysCard: React.FC<IDevKeysCardProps> = props => {
     navigator.clipboard.writeText(value);
   };
 
-  const handleMenuItemClick = (id: string, action: string) => () => {
+  const handleEditClick = (id: string) => () => {
     plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `${baseDeveloperRoute}/dev-keys/${id}/${action}`,
+      getNavigationUrl: () => `${baseDeveloperRoute}/dev-keys/${id}/edit`,
     });
+  };
+
+  const handleDeleteClick = () => {
+    props.navigateToModal({ name: 'delete-dev-key' });
   };
 
   return (
@@ -83,13 +87,13 @@ const DevKeysCard: React.FC<IDevKeysCardProps> = props => {
                           icon: 'edit',
                           label: editLabel,
                           iconColor: 'primaryText',
-                          handler: handleMenuItemClick(item.pubKey, 'edit'),
+                          handler: handleEditClick(item.pubKey),
                         },
                         {
                           icon: 'trash',
                           label: deleteLabel,
                           iconColor: 'errorText',
-                          handler: handleMenuItemClick(item.pubKey, 'delete'),
+                          handler: handleDeleteClick,
                         },
                       ]}
                     />

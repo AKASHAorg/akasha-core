@@ -92,7 +92,7 @@ const DevMessageForm: React.FC<IDevMessageFormProps> = props => {
             {validationStatus.errorMessage}
           </Text>
         )}
-        {!!validationStatus.extraInfo.length && (
+        {!!validationStatus.extraInfo?.length && (
           <Text size="small" color="secondaryText">
             *{validationStatus.extraInfo}
           </Text>
