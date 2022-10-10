@@ -41,6 +41,7 @@ jobs:
           INFURA_ID: ${{ secrets.INFURA_ID_STAGING }}
           ETH_DEPLOY_KEY: ${{ secrets.ETH_DEPLOY_KEY_STAGING }}
           INTEGRATION_REGISTRY_ADDRESS:  ${{ secrets.INTEGRATION_REGISTRY_ADDRESS_STAGING }}
+          RINKEBY_JSONRPC: ${{ secrets.RINKEBY_JSONRPC_STAGING }}
         run: |
           yarn run compile:sc
           yarn run deploy:sc
