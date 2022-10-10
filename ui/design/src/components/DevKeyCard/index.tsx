@@ -1,11 +1,12 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { Box, Drop, Text } from 'grommet';
-import styled from 'styled-components';
+import { Box, Text, ThemeContext } from 'grommet';
 
 import TextIcon from '../TextIcon';
 import Icon, { IconType } from '../Icon';
 import { IMenuItem } from '../MobileListModal';
+
+import { StyledDrop, StyledSelectBox } from '../EntryCard/styled-entry-box';
 
 export type DevKeyCardType = {
   pubKey: string;
@@ -16,6 +17,7 @@ export type DevKeyCardType = {
 
 export interface IDevKeyCardProps {
   item?: DevKeyCardType;
+  nonameLabel: string;
   usedLabel: string;
   unusedLabel: string;
   pendingConfirmationLabel?: string;
@@ -25,26 +27,10 @@ export interface IDevKeyCardProps {
   onCopyClick?: (value: string) => () => void;
 }
 
-const StyledDrop = styled(Drop)`
-  z-index: 10;
-  position: fixed;
-  left: 823px;
-  border: 1px solid ${props => props.theme.colors.border};
-  border-radius: ${props => props.theme.shapes.smallBorderRadius};
-`;
-
-const StyledSelectBox = styled(Box)`
-  padding: ${props => `${props.theme.shapes.baseSpacing}px`};
-  border-radius: ${props => props.theme.shapes.smallBorderRadius};
-  &:hover {
-    background-color: ${props => props.theme.colors.hoverBackground};
-    cursor: pointer;
-  }
-`;
-
 const DevKeyCard: React.FC<IDevKeyCardProps> = props => {
   const {
     item,
+    nonameLabel,
     pendingConfirmationLabel,
     usedLabel,
     unusedLabel,
@@ -53,6 +39,8 @@ const DevKeyCard: React.FC<IDevKeyCardProps> = props => {
     menuItems,
     onCopyClick,
   } = props;
+
+  const theme: any = React.useContext(ThemeContext);
 
   const [showMenu, setShowMenu] = React.useState<boolean>(false);
 
@@ -67,10 +55,10 @@ const DevKeyCard: React.FC<IDevKeyCardProps> = props => {
 
   return (
     <Box gap="small" style={{ position: 'relative' }}>
-      <Box direction="row" gap="xxsmall" align="center" justify="between">
+      <Box direction="row" align="center" justify="between">
         <Box direction="row" gap="xxsmall" align="center">
           <Text size="large" weight="bold">
-            {item?.name}
+            {item?.name?.length ? item?.name : nonameLabel}
           </Text>
           <Box
             width="0.5rem"
@@ -94,29 +82,29 @@ const DevKeyCard: React.FC<IDevKeyCardProps> = props => {
             ref={menuIconRef}
           />
         )}
+        {showMenu && menuIconRef.current && (
+          <StyledDrop
+            overflow="hidden"
+            target={menuIconRef.current}
+            align={{ top: 'bottom', right: 'right' }}
+            onClickOutside={handleMenuClose}
+            onEsc={handleMenuClose}
+          >
+            {menuItems.map((menuItem, idx) => (
+              <StyledSelectBox key={`${menuItem?.label}-${idx}`}>
+                <TextIcon
+                  iconType={menuItem?.icon as IconType}
+                  label={menuItem?.label}
+                  onClick={handleClick(menuItem?.handler)}
+                  color={menuItem?.iconColor ? menuItem?.iconColor : theme.colors.errorText}
+                  iconSize="xs"
+                  fontSize="medium"
+                />
+              </StyledSelectBox>
+            ))}
+          </StyledDrop>
+        )}
       </Box>
-      {showMenu && menuIconRef.current && (
-        <StyledDrop
-          overflow="hidden"
-          target={menuIconRef.current}
-          align={{ top: 'bottom', right: 'right' }}
-          onClickOutside={handleMenuClose}
-          onEsc={handleMenuClose}
-        >
-          {menuItems.map((menuItem, idx) => (
-            <StyledSelectBox key={`${menuItem?.label}-${idx}`}>
-              <TextIcon
-                iconType={menuItem?.icon as IconType}
-                label={menuItem?.label}
-                onClick={handleClick(menuItem?.handler)}
-                color={menuItem?.iconColor}
-                iconSize="xs"
-                fontSize="medium"
-              />
-            </StyledSelectBox>
-          ))}
-        </StyledDrop>
-      )}
       <Box>
         <Text size="small" weight="bold" style={{ textTransform: 'uppercase' }}>
           {devPubKeyLabel}

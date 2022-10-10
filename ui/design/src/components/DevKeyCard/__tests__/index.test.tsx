@@ -17,6 +17,7 @@ describe('<DevKeyCard /> Component', () => {
         wrapWithTheme(
           <DevKeyCard
             item={sampleDevKey}
+            nonameLabel="Unnamed Key"
             unusedLabel="Unused"
             usedLabel="Used"
             pendingConfirmationLabel="Pending Confirmation"

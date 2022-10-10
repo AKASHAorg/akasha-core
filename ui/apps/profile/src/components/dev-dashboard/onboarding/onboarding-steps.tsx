@@ -257,10 +257,8 @@ const DevDashOnboardingSteps: React.FC<
       {activeIndex === 3 && (
         <StepFour
           titleLabel={t('Key Confirmation')}
-          item={{
-            ...devKey,
-            name: !devKey.name.length ? t('Unnamed key') : devKey.name,
-          }}
+          item={devKey}
+          nonameLabel={t('Unnamed Key')}
           unusedLabel={t('Unused')}
           usedLabel={t('Used')}
           pendingConfirmationLabel={t('Pending Confirmation')}
