@@ -18,7 +18,7 @@ import EmbedBox from '../EmbedBox';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
-import { formatRelativeTime, ILocale } from '../../utils/time';
+import { formatDate, formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
@@ -379,9 +379,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           )}
           <Box direction="row" gap="xsmall" align="center" flex={{ shrink: 0 }}>
             {entryData.time && !hidePublishTime && (
-              <Text style={{ flexShrink: 0 }} color="secondaryText">
-                {formatRelativeTime(entryData.time, locale)}
-              </Text>
+              <Tooltip
+                dropProps={{ align: { top: 'bottom' } }}
+                message={formatDate(entryData.time, locale)}
+                plain={true}
+                caretPosition={'top'}
+              >
+                <Text style={{ flexShrink: 0 }} color="secondaryText">
+                  {formatRelativeTime(entryData.time, locale)}
+                </Text>
+              </Tooltip>
             )}
             {!!entryData?.updatedAt && (
               <Tooltip

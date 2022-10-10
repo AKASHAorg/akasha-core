@@ -21,7 +21,16 @@ import {
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 
-const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
+const {
+  Box,
+  Helmet,
+  EditorPlaceholder,
+  EntryCard,
+  EntryPublishErrorCard,
+  LoginCTAWidgetCard,
+  BasicCardBox,
+  Text,
+} = DS;
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -94,12 +103,24 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         <title>Ethereum World</title>
       </Helmet>
       {loginState?.ethAddress ? (
-        <EditorPlaceholder
-          ethAddress={loginState?.ethAddress}
-          onClick={handleShowEditor}
-          avatar={loggedProfileData?.avatar}
-          style={{ marginBottom: '0.5rem' }}
-        />
+        <>
+          <BasicCardBox gap="small" margin={{ bottom: 'xsmall' }}>
+            <Box pad="medium">
+              <Box direction="row" justify="between" margin={{ bottom: 'xsmall' }}>
+                <Text size="xlarge" weight={'bold'}>
+                  {t('General Social Feed')}
+                </Text>
+              </Box>
+              <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
+            </Box>
+          </BasicCardBox>
+          <EditorPlaceholder
+            ethAddress={loginState?.ethAddress}
+            onClick={handleShowEditor}
+            avatar={loggedProfileData?.avatar}
+            style={{ marginBottom: '0.5rem' }}
+          />
+        </>
       ) : (
         <Box margin={{ bottom: 'medium' }}>
           <LoginCTAWidgetCard

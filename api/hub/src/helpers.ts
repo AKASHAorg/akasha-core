@@ -293,7 +293,11 @@ export const encodeString = (value: string) => {
 };
 
 export async function fetchWithTimeout(resource, options) {
-  const { timeout = 12000 } = options;
+  let { timeout } = options;
+
+  if (!timeout) {
+    timeout = 20000;
+  }
 
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);

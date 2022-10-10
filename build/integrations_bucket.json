@@ -2,13 +2,13 @@
   {
     "name": "locales",
     "id": "0xc914c9efa3dec03f54e57a7f5956218306e3c1e620da9bbb91372dfea24eecdd",
-    "ipfsManifest": "f0155171cef927fc998da36c2b3a311a6a0b868309d428d1e1781eb7cc4e5413c",
+    "ipfsManifest": "f0155171c91e9d642fd9cbb09159c838911c95c33703b3f92c4ac916f56638556",
     "type": ""
   },
   {
     "name": "@akashaorg/app-akasha-integration",
     "id": "0x0f7b806cb610e298f4108f77c5454edafdd48a213ac6df2466816442b2814060",
-    "ipfsManifest": "f0155171c5e47fcf7d32a8f5d7c80081d13bd58d6813163c565c490930918084d",
+    "ipfsManifest": "f0155171cca412e4656f4ccaec4a975d84e113e7e5aab6ed81252c4c66f88f2ed",
     "type": 0
   },
   {
@@ -26,7 +26,7 @@
   {
     "name": "@akashaorg/app-integration-center",
     "id": "0xb205644246860965047578d591cecced40ade1a782c6c84fa599173af6a22d9c",
-    "ipfsManifest": "f0155171cff71bfd2bcb788aad38c7f58174d1d2536672a90cbd1074606fe5b1b",
+    "ipfsManifest": "f0155171c3ad1c858e75ec4c1528a87d8c4034ca7cd52b6764570e87e688060d5",
     "type": 0
   },
   {

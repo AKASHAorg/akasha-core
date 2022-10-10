@@ -50,7 +50,7 @@ export interface Comment {
   mentions: string[];
   metaData: DataProvider[];
   postId: string;
-  replyTo: string;
+  replyTo?: string;
 }
 
 export interface Follower {
