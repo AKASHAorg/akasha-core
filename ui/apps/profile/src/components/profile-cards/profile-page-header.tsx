@@ -195,6 +195,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
             ? t('Manage Ethereum name')
             : t('Add an Ethereum name')
         }
+        hideENSButton={true}
         copyLabel={t('Copy to clipboard')}
         copiedLabel={t('Copied')}
         modalSlotId={props.layoutConfig.modalSlotId}
