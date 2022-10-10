@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
 
@@ -78,4 +78,14 @@ export function useGetDevKeys(enabled: boolean) {
     keepPreviousData: true,
     onError: (err: Error) => logError('useDevDashboard.getDevKeys', err),
   });
+}
+
+const deleteDevKey = async (pubKey: string) => {
+  const sdk = getSDK();
+  await sdk.api.auth.removeDevKey(pubKey);
+  return 'successfully deleted!';
+};
+
+export function useDeleteDevKey() {
+  return useMutation((pubKey: string) => deleteDevKey(pubKey));
 }
