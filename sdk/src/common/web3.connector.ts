@@ -29,8 +29,8 @@ class Web3Connector
   #openLogin: OpenLogin;
   #walletConnect: WalletConnectProvider;
   #currentProviderId: EthProviders;
-  readonly network = 'sepolia';
-  #networkId = '0xaa36a7'; //hex value of 11155111
+  readonly network = 'goerli';
+  #networkId = '0x5';
   // mapping for network name and ids
   readonly networkId = Object.freeze({
     mainnet: 1,
