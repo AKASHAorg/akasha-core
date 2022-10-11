@@ -191,8 +191,6 @@ const InlineEditorContainer = (props: RootExtensionProps) => {
     });
   };
 
-  if (action === 'reply') console.log(embedEntryData, embeddedPost, editingPost);
-
   return (
     <>
       {profileDataReq.status === 'error' && <>Error occured</>}
