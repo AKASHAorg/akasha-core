@@ -34,6 +34,7 @@ const CommentEditor: React.FC<
     onCancelClick,
     editorState,
     onPlaceholderClick,
+    embedEntryData,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(isShown);
@@ -103,6 +104,7 @@ const CommentEditor: React.FC<
             cancelButtonLabel={cancelButtonLabel}
             onCancelClick={onCancelClick}
             showCancelButton={showCancelButton}
+            embedEntryData={embedEntryData}
           />
         </Box>
       )}
