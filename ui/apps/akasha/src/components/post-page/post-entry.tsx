@@ -31,7 +31,7 @@ type Props = {
   plugins: RootComponentProps['plugins'];
   singleSpa: RootComponentProps['singleSpa'];
   layoutConfig: RootComponentProps['layoutConfig'];
-  entryData: IEntryData;
+  entryData?: IEntryData;
   navigateToModal: RootComponentProps['navigateToModal'];
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
@@ -92,7 +92,7 @@ export function PostEntry({
           <Extension
             name="inline-editor_repost"
             uiEvents={uiEvents}
-            data={{ embedEntry: entryData.entryId, isShown: true }}
+            data={{ entryId: entryData.entryId, action: 'embed', isShown: true }}
           />
         );
       case 'edit':

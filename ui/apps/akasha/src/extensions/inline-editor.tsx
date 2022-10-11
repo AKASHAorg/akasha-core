@@ -3,7 +3,6 @@ import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
 import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
-import routes, { POST } from '../routes';
 import {
   uploadMediaToTextile,
   getLinkPreview,
@@ -19,14 +18,10 @@ import {
   useAnalytics,
   ThemeWrapper,
   useCreateComment,
-  createPendingEntry,
-  useIsFollowingMultiple,
-  useFollow,
-  useUnfollow,
 } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
-const { EntryBox, Box, CommentEditor, EntryCardLoading, ErrorLoader } = DS;
+const { CommentEditor, EntryCardLoading, ErrorLoader } = DS;
 
 const InlineEditorContainer = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-akasha-integration');
@@ -39,7 +34,6 @@ const InlineEditorContainer = (props: RootExtensionProps) => {
   const [analyticsActions] = useAnalytics();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
-  const loggedProfileData = profileDataReq.data;
 
   const action = React.useMemo(() => {
     if (props.extensionData.hasOwnProperty('entryId') && props.extensionData.action === 'edit')
@@ -47,7 +41,8 @@ const InlineEditorContainer = (props: RootExtensionProps) => {
     if (props.extensionData.action === 'post') return 'post';
     if (props.extensionData.hasOwnProperty('entryId') && props.extensionData.action === 'reply')
       return 'reply';
-    if (props.extensionData.hasOwnProperty('embedEntry')) return 'embed';
+    if (props.extensionData.hasOwnProperty('entryId') && props.extensionData.action === 'embed')
+      return 'embed';
     return 'unknown';
   }, [props.extensionData]);
 
@@ -55,26 +50,19 @@ const InlineEditorContainer = (props: RootExtensionProps) => {
     throw new Error('Unknown action used');
   }
 
-  const hasEmbed = action === 'embed';
-
-  const embedEntryId = React.useMemo(() => {
-    if (hasEmbed && typeof props.extensionData.embedEntry === 'string') {
-      return props.extensionData.embedEntry;
-    }
-  }, [props.extensionData, hasEmbed]);
-
   const disablePublishing = React.useMemo(
     () => loginQuery.data.waitForAuth || !loginQuery.data.isReady,
     [loginQuery.data],
   );
 
-  const embeddedPost = usePost({ postId: embedEntryId, enabler: hasEmbed });
+  const embeddedPost = usePost({
+    postId: props.extensionData.entryId,
+    enabler: action === 'embed',
+  });
   const editingPost = usePost({ postId: props.extensionData.entryId, enabler: action === 'edit' });
   const editPost = useEditPost();
   const publishPost = useCreatePost();
   const publishComment = useCreateComment();
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
 
   const entryData = React.useMemo(() => {
     if (editingPost.status === 'success') {
@@ -84,25 +72,20 @@ const InlineEditorContainer = (props: RootExtensionProps) => {
   }, [editingPost.data, editingPost.status]);
 
   const embedEntryData = React.useMemo(() => {
-    if (embeddedPost.status === 'success') {
-      return mapEntry(embeddedPost.data);
+    if (action === 'embed') {
+      if (embeddedPost.status === 'success') {
+        return mapEntry(embeddedPost.data);
+      }
+      if (editingPost.data?.quotes.length) {
+        return mapEntry(editingPost.data?.quotes[0]);
+      }
     }
-    if (editingPost.data?.quotes.length) {
-      return mapEntry(editingPost.data?.quotes[0]);
-    }
+
     return undefined;
-  }, [embeddedPost.status, embeddedPost.data, editingPost.data?.quotes]);
+  }, [action, embeddedPost.status, embeddedPost.data, editingPost.data?.quotes]);
 
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
-
-  const isFollowingMultipleReq = useIsFollowingMultiple(profileDataReq?.data?.pubKey, [
-    entryData?.author?.pubKey,
-  ]);
-
-  const followedProfiles = isFollowingMultipleReq.data;
-
-  const isFollowing = followedProfiles.includes(entryData?.author?.pubKey);
 
   const handleEntryPublish = React.useCallback(
     (data: IPublishData) => {
@@ -131,7 +114,7 @@ const InlineEditorContainer = (props: RootExtensionProps) => {
               onSuccess: () => {
                 analyticsActions.trackEvent({
                   category: AnalyticsCategories.POST,
-                  action: `${hasEmbed ? 'Repost' : 'New Post'} Published`,
+                  action: `${action === 'embed' ? 'Repost' : 'New Post'} Published`,
                 });
               },
             },
@@ -180,18 +163,6 @@ const InlineEditorContainer = (props: RootExtensionProps) => {
     return <>{t('Loading Editor')}</>;
   }
 
-  const handleFollow = () => {
-    if (entryData?.author.pubKey) {
-      followReq.mutate(entryData?.author.pubKey);
-    }
-  };
-
-  const handleUnfollow = () => {
-    if (entryData.author.pubKey) {
-      unfollowReq.mutate(entryData?.author.pubKey);
-    }
-  };
-
   const getPostLabel = () => {
     switch (action) {
       case 'edit':
@@ -220,90 +191,43 @@ const InlineEditorContainer = (props: RootExtensionProps) => {
     });
   };
 
-  const commentEditorUi = (
-    <CommentEditor
-      avatar={profileDataReq.data?.avatar}
-      ethAddress={loginQuery.data?.ethAddress}
-      postLabel={getPostLabel()}
-      placeholderLabel={getPlaceholderLabel()}
-      emojiPlaceholderLabel={t('Search')}
-      disablePublishLabel={t('Authenticating')}
-      disablePublish={disablePublishing}
-      onPublish={handleEntryPublish}
-      linkPreview={entryData?.linkPreview}
-      uploadedImages={entryData?.images}
-      getLinkPreview={getLinkPreview}
-      getMentions={handleMentionQueryChange}
-      getTags={handleTagQueryChange}
-      tags={tagSearch.data}
-      mentions={mentionSearch.data}
-      uploadRequest={uploadMediaToTextile}
-      embedEntryData={embedEntryData}
-      editorState={action !== 'reply' ? entryData?.slateContent : null}
-      onPlaceholderClick={action === 'reply' ? handleReplyPlaceholderClick : null}
-      isShown={!!props.extensionData.isShown}
-    />
-  );
+  if (action === 'reply') console.log(embedEntryData, embeddedPost, editingPost);
 
   return (
     <>
-      {profileDataReq.status === 'error' && <Box margin="small">Error occured</Box>}
-      {embeddedPost.status === 'error' && (
-        <Box margin="small">Error loading embedded content..</Box>
-      )}
-      {editingPost.status === 'error' && <Box margin="small">Error loading post</Box>}
+      {profileDataReq.status === 'error' && <>Error occured</>}
+      {embeddedPost.status === 'error' && <>Error loading embedded content..</>}
+      {editingPost.status === 'error' && <>Error loading post</>}
 
       {(profileDataReq.status === 'loading' ||
         embeddedPost.status === 'loading' ||
-        editingPost.status === 'loading') && (
-        <Box margin="small">
-          <EntryCardLoading />
-        </Box>
-      )}
+        editingPost.status === 'loading') && <EntryCardLoading />}
 
       {(!editingPost.isLoading || !embeddedPost.isLoading) &&
-        profileDataReq.status === 'success' &&
-        (action === 'reply' ? (
-          <Box margin="medium" style={{ position: 'relative' }}>
-            {commentEditorUi}
-          </Box>
-        ) : (
-          commentEditorUi
-        ))}
-
-      {publishComment.isLoading && publishComment.variables.postID === props.extensionData.entryId && (
-        <Box
-          pad={{ horizontal: 'medium' }}
-          border={{ side: 'bottom', size: '1px', color: 'border' }}
-          style={{ backgroundColor: '#4e71ff0f' }}
-        >
-          <EntryBox
-            entryData={createPendingEntry(loggedProfileData, publishComment.variables)}
-            sharePostLabel={t('Share Post')}
-            shareTextLabel={t('Share this post with your friends')}
-            repliesLabel={t('Replies')}
-            repostsLabel={t('Reposts')}
-            repostLabel={t('Repost')}
-            repostWithCommentLabel={t('Repost with comment')}
-            shareLabel={t('Share')}
-            copyLinkLabel={t('Copy Link')}
-            flagAsLabel={t('Report Comment')}
-            loggedProfileEthAddress={loggedProfileData.ethAddress}
-            locale={'en'}
-            showMore={true}
-            profileAnchorLink={'/profile'}
-            repliesAnchorLink={routes[POST]}
-            handleFollowAuthor={handleFollow}
-            handleUnfollowAuthor={handleUnfollow}
-            isFollowingAuthor={isFollowing}
-            contentClickable={false}
-            hidePublishTime={true}
-            disableActions={true}
-            hideActionButtons={true}
-            modalSlotId={props.layoutConfig.modalSlotId}
+        profileDataReq.status === 'success' && (
+          <CommentEditor
+            avatar={profileDataReq.data?.avatar}
+            ethAddress={loginQuery.data?.ethAddress}
+            postLabel={getPostLabel()}
+            placeholderLabel={getPlaceholderLabel()}
+            emojiPlaceholderLabel={t('Search')}
+            disablePublishLabel={t('Authenticating')}
+            disablePublish={disablePublishing}
+            onPublish={handleEntryPublish}
+            linkPreview={action === 'edit' ? entryData?.linkPreview : null}
+            uploadedImages={action === 'edit' ? entryData?.images : null}
+            getLinkPreview={getLinkPreview}
+            getMentions={handleMentionQueryChange}
+            getTags={handleTagQueryChange}
+            tags={tagSearch.data}
+            mentions={mentionSearch.data}
+            uploadRequest={uploadMediaToTextile}
+            embedEntryData={embedEntryData}
+            editorState={action === 'edit' ? entryData?.slateContent : null}
+            onPlaceholderClick={action === 'reply' ? handleReplyPlaceholderClick : null}
+            isShown={!!props.extensionData.isShown}
           />
-        </Box>
-      )}
+        )}
     </>
   );
 };

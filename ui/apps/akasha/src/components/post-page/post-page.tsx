@@ -17,6 +17,7 @@ import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '../extension';
 import { PostEntry } from './post-entry';
+import { PendingEntry } from './pending-entry';
 
 const {
   Box,
@@ -137,32 +138,37 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          {
-            <PostEntry
-              postId={postId}
-              loginState={loginState}
-              uiEvents={props.uiEvents}
-              plugins={props.plugins}
-              singleSpa={props.singleSpa}
-              layoutConfig={props.layoutConfig}
-              entryData={entryData}
-              navigateToModal={props.navigateToModal}
-              showLoginModal={props.showLoginModal}
-            />
-          }
-
+          <PostEntry
+            postId={postId}
+            loginState={loginState}
+            uiEvents={props.uiEvents}
+            plugins={props.plugins}
+            singleSpa={props.singleSpa}
+            layoutConfig={props.layoutConfig}
+            entryData={entryData}
+            navigateToModal={props.navigateToModal}
+            showLoginModal={props.showLoginModal}
+          />
           {!loginState?.ethAddress && (
             <Box margin="medium">
               <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
             </Box>
           )}
           {loginState?.ethAddress && !entryData.isRemoved && (
-            <Extension
-              name="inline-editor_postreply"
-              uiEvents={props.uiEvents}
-              data={{ entryId: entryData.entryId, isShown: !action, action: 'reply' }}
-            />
+            <Box margin="medium" style={{ position: 'relative' }}>
+              <Extension
+                name="inline-editor_postreply"
+                uiEvents={props.uiEvents}
+                data={{ entryId: entryData.entryId, isShown: !action, action: 'reply' }}
+              />
+            </Box>
           )}
+          <PendingEntry
+            postId={postId}
+            layoutConfig={props.layoutConfig}
+            loggedProfileData={loggedProfileData}
+            entryData={entryData}
+          />
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
             logger={logger}
