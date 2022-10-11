@@ -62,11 +62,12 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
                 />
               </Box>
             </Box>
-            {isFromLoggedUser && (
+            {/* should be used once we allow deleting messages */}
+            {/* {isFromLoggedUser && (
               <Box direction="row" height="fit-content" flex={{ shrink: 0 }} align="start">
                 <Icon size="xs" plain={true} type="moreDark" />
               </Box>
-            )}
+            )} */}
           </Box>
           <Box direction="row" height="fit-content" flex={{ shrink: 0 }} justify="end">
             {chatTimestamp && (
@@ -74,7 +75,8 @@ const BubbleCard: React.FC<IBubbleCardProps> = props => {
                 {time}
               </Text>
             )}
-            {isFromLoggedUser && <Icon size="sm" accentColor={isRead} type={iconType} />}
+            {/* should be used once we have bidirectional read function */}
+            {/* {isFromLoggedUser && <Icon size="sm" accentColor={isRead} type={iconType} />} */}
           </Box>
         </Box>
       </BasicCardBox>

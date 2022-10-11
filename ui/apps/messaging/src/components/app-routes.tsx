@@ -8,7 +8,7 @@ import SettingsPage from './settings-page';
 import ChatPage from './chat-page';
 import { useGetLogin, logError } from '@akashaorg/ui-awf-hooks';
 import { getHubUser, getMessages } from '../api/message';
-import { db } from '../db/db';
+import { db } from '../db/messages-db';
 
 const { Helmet } = DS;
 
@@ -23,8 +23,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const fetchMessagesCallback = React.useCallback(async () => {
     setFetchingMessages(true);
+    // get all messages from textile inbox, currently filterring by user pubkey is not supported
     const messagesData = await getMessages();
-    const newMessages = messagesData
+    const allMessages = messagesData
       ?.map(res => {
         if (res.body.content) {
           const chatPartnerPubKey = res.from === loggedUserPubKey ? res.to : res.from;
@@ -44,7 +45,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
         return null;
       })
       .filter(Boolean);
-    db.messages.bulkPut(newMessages);
+    // add new messages, key second param is not required since we have id as inbound index
+    db.messages.bulkPut(allMessages);
     setFetchingMessages(false);
   }, [loggedUserPubKey]);
 
@@ -69,10 +71,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           if (!unreadChats.includes(pubKey)) {
             unreadChats.push(pubKey);
           }
+          // mark this conversation as having new messages
           localStorage.setItem('Unread Chats', JSON.stringify(unreadChats));
         }
       }
-      // replace with adding encrytped message directly to db
+      // replace with adding decrytped message directly to db
       await fetchMessagesCallback();
     },
     [fetchMessagesCallback, loggedUserPubKey],
@@ -92,7 +95,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getHubUserCallback, fetchMessagesCallback]);
+  }, [getHubUserCallback]);
 
   return (
     <Router basename={props.baseRouteName}>

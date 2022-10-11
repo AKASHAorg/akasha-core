@@ -6,7 +6,7 @@ import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
 import { useMentionSearch, useTagSearch, useGetProfile, LoginState } from '@akashaorg/ui-awf-hooks';
 import { markAsRead, sendMessage } from '../api/message';
-import { db } from '../db/db';
+import { db } from '../db/messages-db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
@@ -87,6 +87,7 @@ const ChatPage = (props: ChatPageProps) => {
   );
 
   const handleSendMessage = async publishData => {
+    // publish message through textile inbox api
     const res: any = await sendMessage(contactPubKey, publishData);
     const newMessage = {
       content: res.body?.slateContent,
@@ -99,9 +100,11 @@ const ChatPage = (props: ChatPageProps) => {
       loggedUserPubKey: loggedUserPubKey,
       chatPartnerPubKey: pubKey,
     };
+    // save the published messsage to the local db
     db.messages.put(newMessage);
   };
 
+  // real time query to get messages from local db
   const dexieMessages =
     useLiveQuery(() =>
       db.messages
@@ -109,6 +112,7 @@ const ChatPage = (props: ChatPageProps) => {
         .sortBy('timestamp'),
     ) || [];
 
+  // hydrate user data on messages
   const localMessages = dexieMessages.map(msg => {
     if (msg.from === loggedUserPubKey) {
       return msg;
@@ -124,15 +128,16 @@ const ChatPage = (props: ChatPageProps) => {
   const unreadMessages = localMessages.slice(indexOfLatestReadMessage);
 
   const markLatestMessagesRead = () => {
-    if (unreadMessages?.length) {
-      const newMessages = unreadMessages.map(msg => {
-        return { ...msg, read: true };
-      });
-
-      db.messages.bulkPut(newMessages);
-
+    if (unreadMessages?.length && pubKey) {
       const unreadMessageIds = unreadMessages.map(message => message.id);
+      // mark messages as read through textile api
       markAsRead(unreadMessageIds);
+      // optimistic mark messages as read on local db
+      db.messages
+        .where({ from: pubKey })
+        .filter(msg => msg.read === false)
+        .modify({ read: true });
+      // clear new messages conversation marker
       if (localStorage.getItem('Unread Chats')) {
         const unreadChats = JSON.parse(localStorage.getItem('Unread Chats'));
         const filteredChats = unreadChats.filter(unreadChat => unreadChat !== pubKey);
