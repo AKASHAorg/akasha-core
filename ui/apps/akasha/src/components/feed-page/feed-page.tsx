@@ -20,17 +20,10 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
+import { Extension } from '../extension';
 
-const {
-  Box,
-  Helmet,
-  EditorPlaceholder,
-  EntryCard,
-  EntryPublishErrorCard,
-  LoginCTAWidgetCard,
-  BasicCardBox,
-  Text,
-} = DS;
+const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, BasicCardBox, Text } =
+  DS;
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -66,10 +59,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     return [];
   }, [postsReq.data]);
-
-  const handleShowEditor = React.useCallback(() => {
-    navigateToModal.current({ name: 'editor-modal' });
-  }, []);
 
   const handleEntryFlag = React.useCallback(
     (entryId: string, itemType: string) => () => {
@@ -114,11 +103,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
             </Box>
           </BasicCardBox>
-          <EditorPlaceholder
-            ethAddress={loginState?.ethAddress}
-            onClick={handleShowEditor}
-            avatar={loggedProfileData?.avatar}
-            style={{ marginBottom: '0.5rem' }}
+          <Extension
+            name="inline-editor_feed_page"
+            uiEvents={props.uiEvents}
+            data={{ action: 'post' }}
           />
         </>
       ) : (

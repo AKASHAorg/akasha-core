@@ -288,7 +288,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
       showLoginModal();
       return;
     } else {
-      props.navigateToModal({ name: 'editor-modal', embedEntry: entryId });
+      navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `post/${entryId}?action=repost`,
+      });
     }
   };
 

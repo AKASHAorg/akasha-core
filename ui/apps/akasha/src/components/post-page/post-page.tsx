@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
 import {
   RootComponentProps,
-  IPublishData,
   EntityTypes,
-  EventTypes,
   ModalNavigationOptions,
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
@@ -15,38 +13,31 @@ import {
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 
 import {
-  getLinkPreview,
-  uploadMediaToTextile,
   LoginState,
   useIsFollowingMultiple,
   useFollow,
   useUnfollow,
   useInfiniteComments,
-  useCreateComment,
   usePost,
-  useTagSearch,
   mapEntry,
   useGetProfile,
-  useMentionSearch,
   useEntryNavigation,
-  createPendingEntry,
 } from '@akashaorg/ui-awf-hooks';
 
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import { Extension } from '../extension';
 
 const {
   Box,
   BasicCardBox,
   EntryBox,
   Helmet,
-  CommentEditor,
   EditorPlaceholder,
   EntryCardHidden,
   ErrorLoader,
   EntryCardLoading,
-  ExtensionPoint,
 } = DS;
 
 interface IPostPageProps {
@@ -62,6 +53,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t } = useTranslation('app-akasha-integration');
+
+  const action = new URLSearchParams(location.search).get('action');
 
   const postReq = usePost({
     postId,
@@ -81,16 +74,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     }
     return postReq.isSuccess && entryData.reported;
   }, [entryData, showAnyway, postReq.isSuccess]);
-
-  const disablePublishing = React.useMemo(
-    () => loginState.waitForAuth || !loginState.isReady,
-    [loginState],
-  );
-
-  const [mentionQuery, setMentionQuery] = React.useState(null);
-  const [tagQuery, setTagQuery] = React.useState(null);
-  const mentionQueryReq = useMentionSearch(mentionQuery);
-  const tagQueryReq = useTagSearch(tagQuery);
 
   const reqComments = useInfiniteComments(15, postId);
   const [analyticsActions] = useAnalytics();
@@ -164,16 +147,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
-  const publishComment = useCreateComment();
-
-  const handlePublishComment = async (data: IPublishData) => {
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.POST,
-      action: 'Reply Published',
-    });
-    publishComment.mutate({ ...data, postID: postId });
-  };
-
   const handleRepost = (_withComment: boolean, entryId: string) => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.POST,
@@ -183,7 +156,9 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
       showLoginModal();
       return;
     } else {
-      props.navigateToModal({ name: 'editor-modal', embedEntry: entryId });
+      props.singleSpa.navigateToUrl(
+        `${window.location.origin}/@akashaorg/app-akasha-integration/post/${entryId}?action=repost`,
+      );
     }
   };
 
@@ -192,28 +167,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   const handleFlipCard = () => {
     setShowAnyway(true);
   };
-
-  const onEditPostButtonMount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-        entryId: entryData.entryId,
-        entryType: EntityTypes.ENTRY,
-      },
-    });
-  };
-  const onEditPostButtonUnmount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
-      },
-    });
-  };
-
-  const entryAuthorName =
-    entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
   const handleCommentRemove = (commentId: string) => {
     props.navigateToModal({
@@ -235,42 +188,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     showLoginModal();
   };
 
-  const handleMentionQueryChange = (query: string) => {
-    setMentionQuery(query);
-  };
-  const handleTagQueryChange = (query: string) => {
-    setTagQuery(query);
-  };
-
-  const handleEditorPlaceholderClick = () => {
-    analyticsActions.trackEvent({
-      category: AnalyticsCategories.POST,
-      action: 'Reply Placeholder Clicked',
-    });
-  };
-
-  const handleExtPointMount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-        entryId: entryData.entryId,
-        entryType: EntityTypes.ENTRY,
-      },
-    });
-  };
-
-  const handleExtPointUnmount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
-        entryId: entryData.entryId,
-        entryType: EntityTypes.ENTRY,
-      },
-    });
-  };
-
   const showEditButton = React.useMemo(
     () => loginState.isReady && loginState.ethAddress === entryData?.author?.ethAddress,
     [entryData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
@@ -280,6 +197,96 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     () => !entryData?.delisted && (!isReported || (isReported && entryData?.moderated)),
     [entryData?.delisted, entryData?.moderated, isReported],
   );
+
+  const entryUi = () => {
+    if (loginState?.ethAddress) {
+      switch (action) {
+        case 'repost':
+          return (
+            <Extension
+              name="inline-editor_repost"
+              uiEvents={props.uiEvents}
+              data={{ embedEntry: entryData.entryId, isShown: true }}
+            />
+          );
+        case 'edit':
+          return (
+            <Extension
+              name="inline-editor_postedit"
+              uiEvents={props.uiEvents}
+              data={{ entryId: entryData.entryId, action: 'edit', isShown: true }}
+            />
+          );
+      }
+    }
+    return (
+      <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
+        <EntryBox
+          isRemoved={entryData.isRemoved}
+          entryData={entryData}
+          sharePostLabel={t('Share Post')}
+          shareTextLabel={t('Share this post with your friends')}
+          sharePostUrl={`${window.location.origin}${routes[POST]}/`}
+          onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
+            handleAvatarClick(ev, entryData.author.pubKey)
+          }
+          repliesLabel={t('Replies')}
+          repostsLabel={t('Reposts')}
+          repostLabel={t('Repost')}
+          repostWithCommentLabel={t('Repost with comment')}
+          shareLabel={t('Share')}
+          copyLinkLabel={t('Copy Link')}
+          flagAsLabel={t('Report Post')}
+          loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
+          locale={locale}
+          showMore={true}
+          profileAnchorLink={'/profile'}
+          repliesAnchorLink={routes[POST]}
+          onRepost={handleRepost}
+          onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
+          handleFollowAuthor={handleFollow}
+          handleUnfollowAuthor={handleUnfollow}
+          isFollowingAuthor={isFollowing}
+          onContentClick={handleEntryNavigate}
+          navigateTo={navigateTo}
+          contentClickable={true}
+          onMentionClick={handleMentionClick}
+          onTagClick={handleTagClick}
+          moderatedContentLabel={t('This content has been moderated')}
+          ctaLabel={t('See it anyway')}
+          handleFlipCard={handleFlipCard}
+          scrollHiddenContent={true}
+          onEntryRemove={handlePostRemove}
+          removeEntryLabel={t('Delete Post')}
+          removedByMeLabel={t('You deleted this post')}
+          removedByAuthorLabel={t('This post was deleted by its author')}
+          disableReposting={entryData.isRemoved}
+          disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+          modalSlotId={props.layoutConfig.modalSlotId}
+          headerMenuExt={
+            showEditButton && (
+              <Extension
+                name={`entry-card-edit-button_${entryData.entryId}`}
+                style={{ width: '100%' }}
+                uiEvents={props.uiEvents}
+                data={{ entryId: entryData.entryId, entryType: EntityTypes.ENTRY }}
+              />
+            )
+          }
+          actionsRightExt={
+            <Extension
+              name={`entry-card-actions-right_${entryData.entryId}`}
+              uiEvents={props.uiEvents}
+              data={{
+                entryId: entryData.entryId,
+                entryType: EntityTypes.ENTRY,
+              }}
+            />
+          }
+        />
+      </Box>
+    );
+  };
 
   return (
     <BasicCardBox style={{ height: 'auto' }}>
@@ -312,161 +319,47 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          {showEntry && (
-            <>
-              <Box
-                pad={{ bottom: 'small' }}
-                border={{ side: 'bottom', size: '1px', color: 'border' }}
-              >
-                <EntryBox
-                  isRemoved={entryData.isRemoved}
-                  entryData={entryData}
-                  sharePostLabel={t('Share Post')}
-                  shareTextLabel={t('Share this post with your friends')}
-                  sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-                  onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-                    handleAvatarClick(ev, entryData.author.pubKey)
-                  }
-                  repliesLabel={t('Replies')}
-                  repostsLabel={t('Reposts')}
-                  repostLabel={t('Repost')}
-                  repostWithCommentLabel={t('Repost with comment')}
-                  shareLabel={t('Share')}
-                  copyLinkLabel={t('Copy Link')}
-                  flagAsLabel={t('Report Post')}
-                  loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
-                  locale={locale}
-                  showMore={true}
-                  profileAnchorLink={'/profile'}
-                  repliesAnchorLink={routes[POST]}
-                  onRepost={handleRepost}
-                  onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
-                  handleFollowAuthor={handleFollow}
-                  handleUnfollowAuthor={handleUnfollow}
-                  isFollowingAuthor={isFollowing}
-                  onContentClick={handleEntryNavigate}
-                  navigateTo={navigateTo}
-                  contentClickable={true}
-                  onMentionClick={handleMentionClick}
-                  onTagClick={handleTagClick}
-                  moderatedContentLabel={t('This content has been moderated')}
-                  ctaLabel={t('See it anyway')}
-                  handleFlipCard={handleFlipCard}
-                  scrollHiddenContent={true}
-                  onEntryRemove={handlePostRemove}
-                  removeEntryLabel={t('Delete Post')}
-                  removedByMeLabel={t('You deleted this post')}
-                  removedByAuthorLabel={t('This post was deleted by its author')}
-                  disableReposting={entryData.isRemoved}
-                  disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-                  modalSlotId={props.layoutConfig.modalSlotId}
-                  headerMenuExt={
-                    showEditButton && (
-                      <ExtensionPoint
-                        style={{ width: '100%' }}
-                        name={`entry-card-edit-button_${entryData.entryId}`}
-                        onMount={onEditPostButtonMount}
-                        onUnmount={onEditPostButtonUnmount}
-                      />
-                    )
-                  }
-                  actionsRightExt={
-                    <ExtensionPoint
-                      name={`entry-card-actions-right_${entryData.entryId}`}
-                      onMount={handleExtPointMount}
-                      onUnmount={handleExtPointUnmount}
-                    />
-                  }
-                />
-              </Box>
-              {!loginState?.ethAddress && (
-                <Box margin="medium">
-                  <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
-                </Box>
-              )}
-              {loginState?.ethAddress && !entryData.isRemoved && (
-                <Box margin="medium" style={{ position: 'relative' }}>
-                  <CommentEditor
-                    avatar={loggedProfileData?.avatar}
-                    ethAddress={loginState?.ethAddress}
-                    postLabel={t('Reply')}
-                    placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
-                    emojiPlaceholderLabel={t('Search')}
-                    disablePublishLabel={t('Authenticating')}
-                    disablePublish={disablePublishing}
-                    onPublish={handlePublishComment}
-                    getLinkPreview={getLinkPreview}
-                    getMentions={handleMentionQueryChange}
-                    getTags={handleTagQueryChange}
-                    tags={tagQueryReq.data}
-                    mentions={mentionQueryReq.data}
-                    uploadRequest={uploadMediaToTextile}
-                    onPlaceholderClick={handleEditorPlaceholderClick}
-                  />
-                </Box>
-              )}
-              {publishComment.isLoading && publishComment.variables.postID === postId && (
-                <Box
-                  pad={{ horizontal: 'medium' }}
-                  border={{ side: 'bottom', size: '1px', color: 'border' }}
-                  style={{ backgroundColor: '#4e71ff0f' }}
-                >
-                  <EntryBox
-                    entryData={createPendingEntry(loggedProfileData, publishComment.variables)}
-                    sharePostLabel={t('Share Post')}
-                    shareTextLabel={t('Share this post with your friends')}
-                    repliesLabel={t('Replies')}
-                    repostsLabel={t('Reposts')}
-                    repostLabel={t('Repost')}
-                    repostWithCommentLabel={t('Repost with comment')}
-                    shareLabel={t('Share')}
-                    copyLinkLabel={t('Copy Link')}
-                    flagAsLabel={t('Report Comment')}
-                    loggedProfileEthAddress={loggedProfileData.ethAddress}
-                    locale={'en'}
-                    showMore={true}
-                    profileAnchorLink={'/profile'}
-                    repliesAnchorLink={routes[POST]}
-                    handleFollowAuthor={handleFollow}
-                    handleUnfollowAuthor={handleUnfollow}
-                    isFollowingAuthor={isFollowing}
-                    contentClickable={false}
-                    hidePublishTime={true}
-                    disableActions={true}
-                    hideActionButtons={true}
-                    modalSlotId={props.layoutConfig.modalSlotId}
-                  />
-                </Box>
-              )}
-              <FeedWidget
-                modalSlotId={props.layoutConfig.modalSlotId}
-                logger={logger}
-                pages={commentPages}
-                itemType={EntityTypes.COMMENT}
-                onLoadMore={handleLoadMore}
-                getShareUrl={(itemId: string) =>
-                  `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
-                }
-                loginState={loginState}
-                navigateTo={navigateTo}
-                navigateToModal={props.navigateToModal}
-                onLoginModalOpen={showLoginModal}
-                requestStatus={reqComments.status}
-                hasNextPage={reqComments.hasNextPage}
-                loggedProfile={loggedProfileData}
-                contentClickable={true}
-                onEntryFlag={handleEntryFlag}
-                onEntryRemove={handleCommentRemove}
-                removeEntryLabel={t('Delete Reply')}
-                removedByMeLabel={t('You deleted this reply')}
-                removedByAuthorLabel={t('This reply was deleted by its author')}
-                uiEvents={props.uiEvents}
-                itemSpacing={8}
-                i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
-                trackEvent={analyticsActions.trackEvent}
-              />
-            </>
+          {showEntry && entryUi()}
+
+          {!loginState?.ethAddress && (
+            <Box margin="medium">
+              <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
+            </Box>
           )}
+          {loginState?.ethAddress && !entryData.isRemoved && (
+            <Extension
+              name="inline-editor_postreply"
+              uiEvents={props.uiEvents}
+              data={{ entryId: entryData.entryId, isShown: !action, action: 'reply' }}
+            />
+          )}
+          <FeedWidget
+            modalSlotId={props.layoutConfig.modalSlotId}
+            logger={logger}
+            pages={commentPages}
+            itemType={EntityTypes.COMMENT}
+            onLoadMore={handleLoadMore}
+            getShareUrl={(itemId: string) =>
+              `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
+            }
+            loginState={loginState}
+            navigateTo={navigateTo}
+            navigateToModal={props.navigateToModal}
+            onLoginModalOpen={showLoginModal}
+            requestStatus={reqComments.status}
+            hasNextPage={reqComments.hasNextPage}
+            loggedProfile={loggedProfileData}
+            contentClickable={true}
+            onEntryFlag={handleEntryFlag}
+            onEntryRemove={handleCommentRemove}
+            removeEntryLabel={t('Delete Reply')}
+            removedByMeLabel={t('You deleted this reply')}
+            removedByAuthorLabel={t('This reply was deleted by its author')}
+            uiEvents={props.uiEvents}
+            itemSpacing={8}
+            i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+            trackEvent={analyticsActions.trackEvent}
+          />
         </>
       )}
     </BasicCardBox>
