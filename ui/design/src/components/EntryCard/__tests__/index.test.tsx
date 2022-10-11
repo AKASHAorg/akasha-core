@@ -70,7 +70,7 @@ describe('<EntryCard /> Component', () => {
 
   it('triggers the handlers on the action buttons', async () => {
     const { getByText } = componentWrapper;
-    const repostButton = getByText(/11 Reposts/i);
+    const repostButton = getByText('11');
     expect(repostButton).toBeDefined();
 
     expect(handleRepost).toBeCalledTimes(0);

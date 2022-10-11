@@ -566,7 +566,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             shareTextLabel={shareTextLabel}
             sharePostUrl={sharePostUrl}
             repliesLabel={repliesLabel}
-            repostsLabel={repostsLabel}
             repostLabel={repostLabel}
             cancelLabel={cancelLabel}
             repostWithCommentLabel={repostWithCommentLabel}
