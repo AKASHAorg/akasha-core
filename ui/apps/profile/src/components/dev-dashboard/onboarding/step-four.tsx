@@ -4,42 +4,22 @@ import DS from '@akashaorg/design-system';
 import { IDevKeyCardProps } from '@akashaorg/design-system/lib/components/DevKeyCard';
 
 import { BaseStepsProps } from './step-one';
+import { IHeroImageCard } from '../profile/hero-image-card';
 
-const { Box, Button, DevKeyCard, Text, Image } = DS;
+const { Box, Button, DevKeyCard } = DS;
 
-type ExtendableProps = BaseStepsProps & IDevKeyCardProps;
+type ExtendableProps = BaseStepsProps & IDevKeyCardProps & IHeroImageCard;
 
 interface IStepFourProps extends ExtendableProps {
-  assetName?: string;
-  publicImgPath?: string;
-  paragraphLabel: string;
   buttonLabel: string[];
   onButtonClick: () => void;
 }
 
 const StepFour: React.FC<IStepFourProps> = props => {
-  const {
-    assetName = 'key',
-    publicImgPath = '/images',
-    titleLabel,
-    paragraphLabel,
-    buttonLabel,
-    onButtonClick,
-  } = props;
+  const { buttonLabel, onButtonClick } = props;
 
   return (
     <Box gap="small">
-      <Box height="13rem" width="16rem" margin={{ vertical: 'medium' }} alignSelf="center">
-        <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
-      </Box>
-      {titleLabel && (
-        <Text size="large" weight="bold" textAlign="center">
-          {titleLabel}
-        </Text>
-      )}
-      <Text size="large" textAlign="center">
-        {paragraphLabel}
-      </Text>
       <Box
         round="0.5rem"
         pad={{ vertical: 'xxsmall', horizontal: 'xsmall' }}

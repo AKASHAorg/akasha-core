@@ -1,13 +1,10 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
+import HeroImageCard, { IHeroImageCard } from './hero-image-card';
 
-const { Box, Button, HorizontalDivider, Text, Icon, Image } = DS;
+const { Box, Button, HorizontalDivider, Text, Icon } = DS;
 
-export interface ISummaryCardProps {
-  assetName?: string;
-  publicImgPath?: string;
-  titleLabel: string;
-  subtitleLabel: string;
+export interface ISummaryCardProps extends IHeroImageCard {
   paragraph1TitleLabel: string;
   paragraph1Content?: string | Uint8Array;
   paragraph2TitleLabel: string;
@@ -18,10 +15,6 @@ export interface ISummaryCardProps {
 
 const SummaryCard: React.FC<ISummaryCardProps> = props => {
   const {
-    assetName = 'ok',
-    publicImgPath = '/images',
-    titleLabel,
-    subtitleLabel,
     paragraph1TitleLabel,
     paragraph1Content,
     paragraph2TitleLabel,
@@ -42,19 +35,7 @@ const SummaryCard: React.FC<ISummaryCardProps> = props => {
 
   return (
     <Box gap="large">
-      <Box gap="small">
-        <Box height="13rem" width="16rem" margin={{ bottom: 'medium' }} alignSelf="center">
-          <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
-        </Box>
-        {titleLabel && (
-          <Text size="large" weight="bold" textAlign="center">
-            {titleLabel}
-          </Text>
-        )}
-        <Text size="large" textAlign="center">
-          {subtitleLabel}
-        </Text>
-      </Box>
+      <HeroImageCard {...props} />
 
       <Box round="xsmall" pad="xsmall" gap="small" border={{ color: 'border' }}>
         <Box direction="row" gap="xsmall">

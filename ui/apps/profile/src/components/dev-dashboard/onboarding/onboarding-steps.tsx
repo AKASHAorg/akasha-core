@@ -264,7 +264,7 @@ const DevDashOnboardingSteps: React.FC<
           pendingConfirmationLabel={t('Pending Confirmation')}
           devPubKeyLabel={t('Dev Public Key 🔑')}
           dateAddedLabel={t('Date added 🗓')}
-          paragraphLabel={t('Please confirm your key before you add it')}
+          subtitleLabel={t('Please confirm your key before you add it')}
           buttonLabel={t('Confirm')}
           onCopyClick={handleCopy}
           onButtonClick={handleFinishOnboarding}
