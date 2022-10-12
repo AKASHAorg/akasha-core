@@ -1,28 +1,28 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { useGetDevKeys } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { IDevKeyCardProps } from '@akashaorg/design-system/lib/components/DevKeyCard';
 
-import CardTitle, { ICardTitleProps } from './card-title';
+import CardTitle from './card-title';
 
 import menuRoute, { ADD_DEV_KEY, baseDeveloperRoute, DEV_DASHBOARD } from '../../../routes';
 
 const { Box, DevKeyCard, HorizontalDivider, MainAreaCardBox, Spinner, Text } = DS;
 
-type ExtendableProps = RootComponentProps & ICardTitleProps & IDevKeyCardProps;
-
-interface IDevKeysCardProps extends ExtendableProps {
+interface IDevKeysCardProps extends IDevKeyCardProps {
   className?: string;
   noKeysLabel: string;
   editLabel: string;
   deleteLabel: string;
 }
 
-const DevKeysCard: React.FC<IDevKeysCardProps> = props => {
+const DevKeysCard: React.FC<RootComponentProps & IDevKeysCardProps> = props => {
   const { className, plugins, noKeysLabel, editLabel, deleteLabel } = props;
 
+  const { t } = useTranslation('app-profile');
   const getKeysQuery = useGetDevKeys(true);
 
   const devKeys = getKeysQuery.data || [];
@@ -59,7 +59,9 @@ const DevKeysCard: React.FC<IDevKeysCardProps> = props => {
   return (
     <MainAreaCardBox className={className}>
       <CardTitle
-        {...props}
+        leftIcon={true}
+        title={t('Dev Keys')}
+        buttonLabel={t('New Dev Key')}
         onClickIcon={handleClickCardTitleIcon}
         onClickButton={handleClickCardTitleButton}
       />

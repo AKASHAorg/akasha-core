@@ -11,11 +11,11 @@ import DevMessageForm from './dev-message-form';
 
 const { Box, HorizontalDivider, MainAreaCardBox } = DS;
 
-interface IEditDevKeyCardProps {
+interface IEditMessageNameProps {
   className?: string;
 }
 
-const EditDevKeyCard: React.FC<RootComponentProps & IEditDevKeyCardProps> = props => {
+const EditMessageName: React.FC<RootComponentProps & IEditMessageNameProps> = props => {
   const { className, plugins } = props;
 
   const [messageName] = React.useState<string>('');
@@ -68,4 +68,4 @@ const EditDevKeyCard: React.FC<RootComponentProps & IEditDevKeyCardProps> = prop
   );
 };
 
-export default EditDevKeyCard;
+export default EditMessageName;

@@ -101,7 +101,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
       <HorizontalDivider />
 
       <Box gap="large" pad="small" margin={{ top: 'medium' }}>
-        {verifySignatureMutation.isSuccess && (
+        {!verifySignatureMutation.isSuccess && (
           <Box gap="large">
             <Box gap="xsmall">
               <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
@@ -197,7 +197,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
             </Box>
           </Box>
         )}
-        {!verifySignatureMutation.isSuccess && (
+        {verifySignatureMutation.isSuccess && (
           <SummaryCard
             {...props}
             paragraph1Content={pubKey}

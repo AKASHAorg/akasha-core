@@ -10,7 +10,8 @@ import ProfilePage from './profile-page';
 import NoProfileFound from './no-profile-found';
 import DevKeysCard from '../dev-dashboard/profile/dev-keys';
 import AddDevKeyCard from '../dev-dashboard/profile/add-dev-key';
-import EditDevKeyCard from '../dev-dashboard/profile/edit-dev-key';
+import EditMessageName from '../dev-dashboard/profile/edit-message-name';
+import PublishedAppsCard from '../dev-dashboard/profile/published-apps';
 import SignMessageCard from '../dev-dashboard/profile/sign-message';
 import VerifySignatureCard from '../dev-dashboard/profile/verify-signature';
 import DevDashOnboardingIntro from '../dev-dashboard/onboarding/intro-card';
@@ -27,6 +28,7 @@ import menuRoute, {
   DEV_KEYS,
   ADD_DEV_KEY,
   EDIT_MESSAGE_NAME,
+  PUBLISHED_APPS,
   SIGN_MESSAGE,
   VERIFY_SIGNATURE,
 } from '../../routes';
@@ -150,9 +152,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             element={
               <DevKeysCard
                 {...props}
-                leftIcon={true}
-                title={t('Dev Keys')}
-                buttonLabel={t('New Dev Key')}
                 noKeysLabel={t('You have not added any keys yet. Use the button to add some')}
                 editLabel={t('Edit')}
                 deleteLabel={t('Delete')}
@@ -165,7 +164,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
           <Route path={menuRoute[ADD_DEV_KEY]} element={<AddDevKeyCard {...props} />} />
-          <Route path={menuRoute[EDIT_MESSAGE_NAME]} element={<EditDevKeyCard {...props} />} />
+          <Route path={menuRoute[EDIT_MESSAGE_NAME]} element={<EditMessageName {...props} />} />
+          <Route path={menuRoute[PUBLISHED_APPS]} element={<PublishedAppsCard {...props} />} />
           <Route
             path={menuRoute[SIGN_MESSAGE]}
             element={
