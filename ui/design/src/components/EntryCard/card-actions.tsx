@@ -24,7 +24,6 @@ export interface CardActionProps {
   shareTextLabel?: string;
   sharePostUrl?: string;
   // labels
-  repostsLabel: string;
   repostLabel?: string;
   cancelLabel?: string;
   repostWithCommentLabel?: string;
@@ -54,7 +53,6 @@ const CardActions: React.FC<CardActionProps> = props => {
     shareTextLabel,
     sharePostUrl,
     // labels
-    repostsLabel,
     repostLabel,
     cancelLabel,
     repostWithCommentLabel,
@@ -250,9 +248,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     );
   };
 
-  const repostsBtnText = isMobile
-    ? `${entryData.reposts || 0}`
-    : `${entryData.reposts || 0} ${repostsLabel}`;
+  const repostsBtnText = `${entryData.reposts || ''}`;
   const repliesBtnText = isMobile
     ? `${entryData.replies || 0}`
     : `${entryData.replies || 0} ${repliesLabel}`;
@@ -269,6 +265,15 @@ const CardActions: React.FC<CardActionProps> = props => {
         justify="between"
       >
         <TextIcon
+          label={repliesBtnText}
+          iconType="comments"
+          iconSize="sm"
+          fontSize="large"
+          clickable={disableReposting ? false : true}
+          onClick={disableReposting ? () => false : handleRepliesClick}
+          disabled={disableReposting}
+        />
+        <TextIcon
           label={repostsBtnText}
           iconType="transfer"
           iconSize="sm"
@@ -278,15 +283,6 @@ const CardActions: React.FC<CardActionProps> = props => {
           onClick={disableReposting ? () => false : onRepost}
           disabled={disableReposting}
         />
-        <TextIcon
-          label={repliesBtnText}
-          iconType="comments"
-          iconSize="sm"
-          fontSize="large"
-          clickable={disableReposting ? false : true}
-          onClick={disableReposting ? () => false : handleRepliesClick}
-          disabled={disableReposting}
-        />
       </Box>
     );
   }
@@ -294,21 +290,6 @@ const CardActions: React.FC<CardActionProps> = props => {
   return (
     <Box pad="medium" direction="row" justify="between">
       {repostNodeRef.current && repostDropOpen && renderRepostDrop()}
-      <TextIcon
-        label={repostsBtnText}
-        iconType="transfer"
-        iconSize="sm"
-        fontSize="large"
-        clickable={!disableReposting && !disableActions}
-        ref={repostNodeRef}
-        onClick={() => {
-          if (disableActions || disableReposting) {
-            return;
-          }
-          onRepost();
-        }}
-        disabled={disableReposting || disableActions}
-      />
       <Anchor
         onClick={e => {
           e.preventDefault();
@@ -333,6 +314,21 @@ const CardActions: React.FC<CardActionProps> = props => {
             disabled={disableActions}
           />
         }
+      />
+      <TextIcon
+        label={repostsBtnText}
+        iconType="transfer"
+        iconSize="sm"
+        fontSize="large"
+        clickable={!disableReposting && !disableActions}
+        ref={repostNodeRef}
+        onClick={() => {
+          if (disableActions || disableReposting) {
+            return;
+          }
+          onRepost();
+        }}
+        disabled={disableReposting || disableActions}
       />
       {actionsRightExt}
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}
