@@ -11,6 +11,8 @@ import NoProfileFound from './no-profile-found';
 import DevKeysCard from '../dev-dashboard/profile/dev-keys';
 import AddDevKeyCard from '../dev-dashboard/profile/add-dev-key';
 import EditDevKeyCard from '../dev-dashboard/profile/edit-dev-key';
+import SignMessageCard from '../dev-dashboard/profile/sign-message';
+import VerifySignatureCard from '../dev-dashboard/profile/verify-signature';
 import DevDashOnboardingIntro from '../dev-dashboard/onboarding/intro-card';
 import DevDashOnboardingSteps from '../dev-dashboard/onboarding/onboarding-steps';
 
@@ -25,6 +27,8 @@ import menuRoute, {
   DEV_KEYS,
   ADD_DEV_KEY,
   EDIT_MESSAGE_NAME,
+  SIGN_MESSAGE,
+  VERIFY_SIGNATURE,
 } from '../../routes';
 
 const { Box } = DS;
@@ -162,6 +166,32 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           />
           <Route path={menuRoute[ADD_DEV_KEY]} element={<AddDevKeyCard {...props} />} />
           <Route path={menuRoute[EDIT_MESSAGE_NAME]} element={<EditDevKeyCard {...props} />} />
+          <Route
+            path={menuRoute[SIGN_MESSAGE]}
+            element={
+              <SignMessageCard
+                {...props}
+                messageTitleLabel={t('Message')}
+                messageInputPlaceholder={t('Place the message to be signed here')}
+                buttonLabel={t('Sign')}
+              />
+            }
+          />
+          <Route
+            path={menuRoute[VERIFY_SIGNATURE]}
+            element={
+              <VerifySignatureCard
+                {...props}
+                pubKeyTitleLabel={t('Public Key')}
+                pubKeyInputPlaceholder={t('Paste your public key here')}
+                messageTitleLabel={t('Original Message')}
+                messageInputPlaceholder={t('Place the original message here')}
+                signatureTitleLabel={t('Signature String')}
+                signatureInputPlaceholder={t('Place the signature string here')}
+                buttonLabel={t('Verify')}
+              />
+            }
+          />
         </Routes>
       </Box>
     </Router>

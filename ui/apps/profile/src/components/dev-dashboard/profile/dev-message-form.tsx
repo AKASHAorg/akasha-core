@@ -20,7 +20,7 @@ export interface IDevMessageFormProps {
   onButtonClick: () => void;
 }
 
-const StyledTextArea = styled(TextArea)`
+export const StyledTextArea = styled(TextArea)`
   border: none;
 `;
 
