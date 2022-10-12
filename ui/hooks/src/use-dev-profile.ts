@@ -1,12 +1,18 @@
 import { useMutation, useQuery } from 'react-query';
+import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
+
 import { logError } from './utils/error-handler';
 
 export const DEV_DASHBOARD_KEY = 'DevDashboard';
 
+type SignMessagePayload = {
+  message: string | Record<string, unknown> | Record<string, unknown>[];
+};
+
 type VerifySignaturePayload = {
   pubKey: string;
-  message: string;
+  data: string | Record<string, unknown> | Uint8Array;
   signature: string;
 };
 
@@ -98,16 +104,18 @@ const deleteDevKey = async (pubKey: string) => {
  * ```typescript
  * const deleteKeyMutation = useDeleteDevKey();
 
- * deleteKeyMutation.nutate('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba')
+ * deleteKeyMutation.mutate('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba')
  * ```
  */
 export function useDeleteDevKey() {
   return useMutation((pubKey: string) => deleteDevKey(pubKey));
 }
 
-const signMessage = async (message: string) => {
+const signMessage = async ({ message }: SignMessagePayload) => {
   const sdk = getSDK();
-  /** */
+  const res = await lastValueFrom(sdk.api.auth.signData(message, true));
+
+  return res.data;
 };
 
 /**
@@ -116,16 +124,18 @@ const signMessage = async (message: string) => {
  * ```typescript
  * const signMessageMutation = useSignMessage();
 
- * signMessageMutation.nutate('some message to be signed')
+ * signMessageMutation.mutate({ message: 'some message to be signed' })
  * ```
  */
 export function useSignMessage() {
-  return useMutation((message: string) => signMessage(message));
+  return useMutation(({ message }: SignMessagePayload) => signMessage({ message }));
 }
 
 const verifySignature = async (payload: VerifySignaturePayload) => {
   const sdk = getSDK();
-  /** */
+  const res = await lastValueFrom(sdk.api.auth.verifySignature(payload));
+
+  return res;
 };
 
 /**
@@ -134,7 +144,7 @@ const verifySignature = async (payload: VerifySignaturePayload) => {
  * ```typescript
  * const verifySignatureMutation = useVerifySignature();
 
- * verifySignatureMutation.nutate({pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', message: 'original message', signature: 'some signature to be veriftied'})
+ * verifySignatureMutation.mutate({pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', message: 'original message', signature: 'some signature to be veriftied'})
  * ```
  */
 export function useVerifySignature() {
