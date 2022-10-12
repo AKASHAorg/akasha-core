@@ -1,8 +1,13 @@
 import { Descendant } from 'slate';
 import { LogoTypeSource, IntegrationCenterApp } from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
-import { IMenuItem, MenuItemType, MenuItemAreaType, IProfileData } from '@akashaorg/typings/ui';
-import { IChatMessage } from '../components/ChatList';
+import {
+  IMenuItem,
+  MenuItemType,
+  MenuItemAreaType,
+  IProfileData,
+  IChatMessage,
+} from '@akashaorg/typings/ui';
 import { IAppData } from '../components/AppsWidgetCard';
 
 const userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[] = [
