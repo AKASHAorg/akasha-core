@@ -125,7 +125,7 @@ const ChatPage = (props: ChatPageProps) => {
     msg => !msg.read && msg.from !== loggedUserPubKey,
   );
 
-  const unreadMessages = localMessages.slice(indexOfLatestReadMessage);
+  const unreadMessages = localMessages.slice(indexOfLatestReadMessage + 1);
 
   const markLatestMessagesRead = () => {
     if (unreadMessages?.length && pubKey) {

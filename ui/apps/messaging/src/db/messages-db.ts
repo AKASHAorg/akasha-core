@@ -12,8 +12,7 @@ export class LocalMessagesDexie extends Dexie {
   constructor() {
     super('MessagesDatabase');
     this.version(1).stores({
-      messages:
-        'id, from, to, timestamp, loggedUserPubKey, chatPartnerPubKey, [loggedUserPubKey+chatPartnerPubKey]',
+      messages: '&id, from, to, timestamp, [loggedUserPubKey+chatPartnerPubKey]',
     });
   }
 }
