@@ -6,6 +6,7 @@ import { useGetLogin, useGetProfile, useVerifySignature } from '@akashaorg/ui-aw
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import CardTitle from './card-title';
+import SummaryCard, { ISummaryCardProps } from './summary-card';
 
 import menuRoute, { DEV_DASHBOARD } from '../../../routes';
 
@@ -13,7 +14,7 @@ import { StyledTextArea } from './dev-message-form';
 
 const { Box, Button, HorizontalDivider, MainAreaCardBox, Text, LinkInput, Spinner } = DS;
 
-interface IVerifySignatureCardProps {
+interface IVerifySignatureCardProps extends ISummaryCardProps {
   className?: string;
   pubKeyTitleLabel: string;
   pubKeyInputPlaceholder: string;
@@ -21,7 +22,7 @@ interface IVerifySignatureCardProps {
   messageInputPlaceholder: string;
   signatureTitleLabel: string;
   signatureInputPlaceholder: string;
-  buttonLabel: string;
+  verifyButtonLabel: string;
 }
 
 const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardProps> = props => {
@@ -33,7 +34,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
     messageInputPlaceholder,
     signatureTitleLabel,
     signatureInputPlaceholder,
-    buttonLabel,
+    verifyButtonLabel,
     plugins,
   } = props;
 
@@ -77,8 +78,17 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
   };
 
   const handleVerifySignature = () => {
-    verifySignatureMutation.mutate({ pubKey, message, signature });
+    verifySignatureMutation.mutate({ pubKey, signature, data: message });
   };
+
+  const handleButtonClick = () => {
+    plugins['@akashaorg/app-routing']?.routing.navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    });
+  };
+
+  const errorObject = verifySignatureMutation.error as Record<string, string>;
 
   return (
     <MainAreaCardBox className={className}>
@@ -91,98 +101,110 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
       <HorizontalDivider />
 
       <Box gap="large" pad="small" margin={{ top: 'medium' }}>
-        <Box gap="xsmall">
-          <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
-            {pubKeyTitleLabel}
-          </Text>
-          <LinkInput
-            inputPlaceholder={pubKeyInputPlaceholder}
-            inputValue={pubKey}
-            elevation="shadow"
-            margin="0rem"
-            noArrowRight={true}
-            onChange={ev => handleFieldChange(ev, 'pubKey')}
-          />
-        </Box>
+        {verifySignatureMutation.isSuccess && (
+          <Box gap="large">
+            <Box gap="xsmall">
+              <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
+                {pubKeyTitleLabel}
+              </Text>
+              <LinkInput
+                inputPlaceholder={pubKeyInputPlaceholder}
+                inputValue={pubKey}
+                elevation="shadow"
+                margin="0rem"
+                noArrowRight={true}
+                onChange={ev => handleFieldChange(ev, 'pubKey')}
+              />
+            </Box>
 
-        <Box gap="xsmall">
-          <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
-            {messageTitleLabel}
-          </Text>
-          <Box
-            fill="horizontal"
-            pad={{ vertical: 'xsmall', horizontal: 'small' }}
-            round="xxsmall"
-            elevation="shadow"
-            border={{
-              side: 'all',
-              color: verifySignatureMutation.isError
-                ? 'errorText'
-                : message.length
-                ? 'accent'
-                : 'border',
-            }}
-          >
-            <StyledTextArea
-              resize={false}
-              size="large"
-              rows={8}
-              style={{ padding: 0 }}
-              value={message}
-              onChange={ev => handleFieldChange(ev, 'message')}
-              placeholder={messageInputPlaceholder}
-            />
+            <Box gap="xsmall">
+              <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
+                {messageTitleLabel}
+              </Text>
+              <Box
+                fill="horizontal"
+                pad={{ vertical: 'xsmall', horizontal: 'small' }}
+                round="xxsmall"
+                elevation="shadow"
+                border={{
+                  side: 'all',
+                  color: verifySignatureMutation.isError
+                    ? 'errorText'
+                    : message.length
+                    ? 'accent'
+                    : 'border',
+                }}
+              >
+                <StyledTextArea
+                  resize={false}
+                  size="large"
+                  rows={8}
+                  style={{ padding: 0 }}
+                  value={message}
+                  onChange={ev => handleFieldChange(ev, 'message')}
+                  placeholder={messageInputPlaceholder}
+                />
+              </Box>
+              {verifySignatureMutation.isError && (
+                <Text size="small" color="errorText">
+                  {errorObject.message}
+                </Text>
+              )}
+            </Box>
+
+            <Box gap="xsmall">
+              <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
+                {signatureTitleLabel}
+              </Text>
+              <Box
+                fill="horizontal"
+                pad={{ vertical: 'xsmall', horizontal: 'small' }}
+                round="xxsmall"
+                elevation="shadow"
+                border={{
+                  side: 'all',
+                  color: verifySignatureMutation.isError
+                    ? 'errorText'
+                    : signature.length
+                    ? 'accent'
+                    : 'border',
+                }}
+              >
+                <StyledTextArea
+                  resize={false}
+                  size="large"
+                  rows={8}
+                  style={{ padding: 0 }}
+                  value={signature}
+                  onChange={ev => handleFieldChange(ev, 'signature')}
+                  placeholder={signatureInputPlaceholder}
+                />
+              </Box>
+              {verifySignatureMutation.isError && (
+                <Text size="small" color="errorText">
+                  {errorObject.message}
+                </Text>
+              )}
+            </Box>
+
+            <Box direction="row" justify="end">
+              <Button
+                primary={true}
+                disabled={verifySignatureMutation.isLoading || !message.length}
+                label={verifySignatureMutation.isLoading ? <Spinner /> : verifyButtonLabel}
+                onClick={handleVerifySignature}
+              />
+            </Box>
           </Box>
-          {verifySignatureMutation.isError && (
-            <Text size="small" color="errorText">
-              {verifySignatureMutation.error}
-            </Text>
-          )}
-        </Box>
-
-        <Box gap="xsmall">
-          <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
-            {signatureTitleLabel}
-          </Text>
-          <Box
-            fill="horizontal"
-            pad={{ vertical: 'xsmall', horizontal: 'small' }}
-            round="xxsmall"
-            elevation="shadow"
-            border={{
-              side: 'all',
-              color: verifySignatureMutation.isError
-                ? 'errorText'
-                : signature.length
-                ? 'accent'
-                : 'border',
-            }}
-          >
-            <StyledTextArea
-              resize={false}
-              size="large"
-              rows={8}
-              style={{ padding: 0 }}
-              value={signature}
-              onChange={ev => handleFieldChange(ev, 'signature')}
-              placeholder={signatureInputPlaceholder}
-            />
-          </Box>
-          {verifySignatureMutation.isError && (
-            <Text size="small" color="errorText">
-              {verifySignatureMutation.error}
-            </Text>
-          )}
-        </Box>
-
-        <Box direction="row" justify="end" gap="small">
-          <Button
-            primary={true}
-            disabled={verifySignatureMutation.isLoading || !message.length}
-            label={verifySignatureMutation.isLoading ? <Spinner /> : buttonLabel}
-            onClick={handleVerifySignature}
+        )}
+        {!verifySignatureMutation.isSuccess && (
+          <SummaryCard
+            {...props}
+            paragraph1Content={pubKey}
+            paragraph2Content={message}
+            onButtonClick={handleButtonClick}
           />
-        </Box>
+        )}
       </Box>
     </MainAreaCardBox>
   );

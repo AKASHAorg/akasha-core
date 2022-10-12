@@ -173,7 +173,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 {...props}
                 messageTitleLabel={t('Message')}
                 messageInputPlaceholder={t('Place the message to be signed here')}
-                buttonLabel={t('Sign')}
+                titleLabel={t('Message Signed correctly 🙌🏽')}
+                subtitleLabel={t('Here are the details of the signature')}
+                paragraph1TitleLabel={t('Signature String 🖋 ')}
+                paragraph2TitleLabel={t('Signed Message ✉️')}
+                signButtonLabel={t('Sign')}
+                doneButtonLabel={t('Done')}
               />
             }
           />
@@ -188,7 +193,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 messageInputPlaceholder={t('Place the original message here')}
                 signatureTitleLabel={t('Signature String')}
                 signatureInputPlaceholder={t('Place the signature string here')}
-                buttonLabel={t('Verify')}
+                titleLabel={t('Signature Verified Correctly 🙌🏽')}
+                subtitleLabel={t(
+                  'The message was successfully verified using the public key below',
+                )}
+                paragraph1TitleLabel={t('Public Key 🔑')}
+                paragraph2TitleLabel={t('Original Message ✉️')}
+                verifyButtonLabel={t('Verify')}
+                doneButtonLabel={t('Done')}
               />
             }
           />

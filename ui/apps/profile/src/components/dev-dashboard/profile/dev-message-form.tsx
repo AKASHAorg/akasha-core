@@ -99,7 +99,7 @@ const DevMessageForm: React.FC<IDevMessageFormProps> = props => {
         )}
       </Box>
 
-      <Box direction="row" justify="end" gap="small">
+      <Box direction="row" justify="end">
         <Button
           primary={true}
           disabled={isFetching || !messageValue.length}

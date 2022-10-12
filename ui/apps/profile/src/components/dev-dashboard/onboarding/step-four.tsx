@@ -48,7 +48,7 @@ const StepFour: React.FC<IStepFourProps> = props => {
         <DevKeyCard {...props} />
       </Box>
 
-      <Box direction="row" justify="end" gap="small">
+      <Box direction="row" justify="end">
         <Button primary={true} label={buttonLabel} onClick={onButtonClick} />
       </Box>
     </Box>
