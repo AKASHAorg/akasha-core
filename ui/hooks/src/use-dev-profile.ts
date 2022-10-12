@@ -4,6 +4,12 @@ import { logError } from './utils/error-handler';
 
 export const DEV_DASHBOARD_KEY = 'DevDashboard';
 
+type VerifySignaturePayload = {
+  pubKey: string;
+  message: string;
+  signature: string;
+};
+
 const validateMessage = async (message: string) => {
   const sdk = getSDK();
   const res = await sdk.api.auth.validateDevKeyFromBase64Message(message);
@@ -86,6 +92,51 @@ const deleteDevKey = async (pubKey: string) => {
   return 'successfully deleted!';
 };
 
+/**
+ * Hook to delete a dev key
+ *
+ * ```typescript
+ * const deleteKeyMutation = useDeleteDevKey();
+
+ * deleteKeyMutation.nutate('bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba')
+ * ```
+ */
 export function useDeleteDevKey() {
   return useMutation((pubKey: string) => deleteDevKey(pubKey));
+}
+
+const signMessage = async (message: string) => {
+  const sdk = getSDK();
+  /** */
+};
+
+/**
+ * Hook to sign a message
+ *
+ * ```typescript
+ * const signMessageMutation = useSignMessage();
+
+ * signMessageMutation.nutate('some message to be signed')
+ * ```
+ */
+export function useSignMessage() {
+  return useMutation((message: string) => signMessage(message));
+}
+
+const verifySignature = async (payload: VerifySignaturePayload) => {
+  const sdk = getSDK();
+  /** */
+};
+
+/**
+ * Hook to verify a signature
+ *
+ * ```typescript
+ * const verifySignatureMutation = useVerifySignature();
+
+ * verifySignatureMutation.nutate({pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', message: 'original message', signature: 'some signature to be veriftied'})
+ * ```
+ */
+export function useVerifySignature() {
+  return useMutation((payload: VerifySignaturePayload) => verifySignature(payload));
 }

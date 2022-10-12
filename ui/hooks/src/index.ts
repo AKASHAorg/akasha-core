@@ -129,6 +129,8 @@ import {
   useAddDevKeyFromMessage,
   useGetDevKeys,
   useDeleteDevKey,
+  useSignMessage,
+  useVerifySignature,
 } from './use-dev-profile';
 
 export {
@@ -281,4 +283,6 @@ export {
   useAddDevKeyFromMessage,
   useGetDevKeys,
   useDeleteDevKey,
+  useSignMessage,
+  useVerifySignature,
 };
