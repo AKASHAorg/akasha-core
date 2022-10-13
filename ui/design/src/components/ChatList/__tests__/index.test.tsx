@@ -10,6 +10,15 @@ describe('<ChatList /> Component', () => {
   let componentWrapper = customRender(<></>, {});
   window.HTMLElement.prototype.scrollIntoView = jest.fn;
 
+  const mock = function () {
+    return {
+      observe: jest.fn(),
+      disconnect: jest.fn(),
+    };
+  };
+
+  window.IntersectionObserver = jest.fn().mockImplementation(mock);
+
   const ethAddress = '0x003410490050000320006570034567114572000';
   const emptyChatLabel = 'Start by saying hello! 👋🏼';
 
@@ -21,7 +30,7 @@ describe('<ChatList /> Component', () => {
             emptyChatLabel={emptyChatLabel}
             loggedUserEthAddress={ethAddress}
             itemCard={<BubbleCard locale="en" youLabel="You" />}
-            chatArr={[]}
+            oldMessages={[]}
           />,
         ),
         {},
