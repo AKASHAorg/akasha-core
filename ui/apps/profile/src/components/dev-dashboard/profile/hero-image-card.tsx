@@ -7,6 +7,9 @@ export interface IHeroImageCard {
   assetName?: string;
   assetExtension?: string;
   publicImgPath?: string;
+  wrapperBoxWidth?: string;
+  wrapperBoxHeight?: string;
+  wrapperBoxMargin?: Record<string, unknown>;
   titleLabel: string;
   subtitleLabel: string;
 }
@@ -16,13 +19,21 @@ const HeroImageCard: React.FC<IHeroImageCard> = props => {
     assetName = 'ok',
     assetExtension = 'png',
     publicImgPath = '/images',
+    wrapperBoxWidth = '16rem',
+    wrapperBoxHeight = '13rem',
+    wrapperBoxMargin = { bottom: 'medium' },
     titleLabel,
     subtitleLabel,
   } = props;
 
   return (
     <Box gap="small">
-      <Box height="13rem" width="16rem" margin={{ bottom: 'medium' }} alignSelf="center">
+      <Box
+        width={wrapperBoxWidth}
+        height={wrapperBoxHeight}
+        margin={wrapperBoxMargin}
+        alignSelf="center"
+      >
         <Image fit="contain" src={`${publicImgPath}/${assetName}.${assetExtension}`} />
       </Box>
       {titleLabel && (

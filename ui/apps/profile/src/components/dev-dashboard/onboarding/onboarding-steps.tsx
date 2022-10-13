@@ -2,8 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { RootComponentProps, StepStatus } from '@akashaorg/typings/ui';
-import { DevKeyCardType } from '@akashaorg/design-system/lib/components/DevKeyCard';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useGetLogin,
   useGetProfile,
@@ -40,19 +39,13 @@ const DevDashOnboardingSteps: React.FC<
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [messageName, setMessageName] = React.useState<string>('');
   const [message, setmessage] = React.useState<string>('');
-  const [status, setStatus] = React.useState<StepStatus | null>(null);
-  const [devKey, setDevKey] = React.useState<DevKeyCardType>();
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
   const { t } = useTranslation('app-profile');
 
-  const validateQuery = useValidateMessage(message, status === StepStatus.VALIDATING);
-
-  const addKeyQuery = useAddDevKeyFromMessage(
-    { message, messageName },
-    status === StepStatus.ADDING_KEY,
-  );
+  const validateMutation = useValidateMessage();
+  const addKeyMutation = useAddDevKeyFromMessage();
 
   const pathnameArr = [
     ONBOARDING_STEP_ONE,
@@ -88,25 +81,23 @@ const DevDashOnboardingSteps: React.FC<
   React.useEffect(() => {
     // add key after validating
     if (
-      validateQuery.isSuccess &&
-      validateQuery.data?.body?.aud === loggedProfileQuery.data?.pubKey
+      validateMutation.isSuccess &&
+      validateMutation.data?.body?.aud === loggedProfileQuery.data?.pubKey
     ) {
-      setStatus(StepStatus.ADDING_KEY);
+      addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validateQuery.data]);
+  }, [validateMutation.isSuccess]);
 
   React.useEffect(() => {
-    if (addKeyQuery.isSuccess) {
-      setDevKey(addKeyQuery.data);
-
+    if (addKeyMutation.isSuccess) {
       return plugins['@akashaorg/app-routing']?.routing.navigateTo({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: () => menuRoute[ONBOARDING_STEP_FOUR],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addKeyQuery.isSuccess]);
+  }, [addKeyMutation.isSuccess]);
 
   const isOnboarded = React.useMemo(() => {
     return Boolean(window.localStorage.getItem(ONBOARDING_STATUS));
@@ -143,7 +134,7 @@ const DevDashOnboardingSteps: React.FC<
   };
 
   const handleValidateMessage = () => {
-    setStatus(StepStatus.VALIDATING);
+    validateMutation.mutate(message);
   };
 
   const handleCopy = (value: string) => () => {
@@ -243,10 +234,10 @@ const DevDashOnboardingSteps: React.FC<
           messageInputPlaceholder={t('Paste the generated message here')}
           messageValue={message}
           validationStatus={{
-            isError: validateQuery.isError,
-            errorMessage: t('{{error}}', { error: validateQuery.error?.message }),
+            isError: validateMutation.isError,
+            errorMessage: t('{{error}}', { error: validateMutation.error?.message }),
           }}
-          isFetching={validateQuery.isFetching || addKeyQuery.isFetching}
+          isFetching={validateMutation.isLoading || addKeyMutation.isLoading}
           buttonLabel={t('Validate Message')}
           onCTAClick={handleClick(ONBOARDING_STEP_TWO)}
           onMessageNameInputChange={handleMessageNameInputChange}
@@ -257,7 +248,6 @@ const DevDashOnboardingSteps: React.FC<
       {activeIndex === 3 && (
         <StepFour
           titleLabel={t('Key Confirmation')}
-          item={devKey}
           nonameLabel={t('Unnamed Key')}
           unusedLabel={t('Unused')}
           usedLabel={t('Used')}

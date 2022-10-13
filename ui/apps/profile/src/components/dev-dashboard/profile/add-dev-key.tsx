@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { RootComponentProps, StepStatus } from '@akashaorg/typings/ui';
+import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useAddDevKeyFromMessage,
   useGetLogin,
@@ -26,40 +26,34 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
 
   const [messageName, setMessageName] = React.useState<string>('');
   const [message, setmessage] = React.useState<string>('');
-  const [status, setStatus] = React.useState<StepStatus | null>(null);
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
   const { t } = useTranslation('app-profile');
 
-  const validateQuery = useValidateMessage(message, status === StepStatus.VALIDATING);
-
-  const addKeyQuery = useAddDevKeyFromMessage(
-    { message, messageName },
-    status === StepStatus.ADDING_KEY,
-  );
+  const validateMutation = useValidateMessage();
+  const addKeyMutation = useAddDevKeyFromMessage();
 
   React.useEffect(() => {
     // add key after validating
     if (
-      validateQuery.isSuccess &&
-      validateQuery.data?.body?.aud === loggedProfileQuery.data?.pubKey
+      validateMutation.isSuccess &&
+      validateMutation.data?.body?.aud === loggedProfileQuery.data?.pubKey
     ) {
-      setStatus(StepStatus.ADDING_KEY);
+      addKeyMutation.mutate({ message, messageName });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validateQuery.data]);
+  }, [validateMutation.isSuccess]);
 
   React.useEffect(() => {
-    if (addKeyQuery.isSuccess) {
-      setStatus(null);
-      plugins['@akashaorg/app-routing']?.routing.navigateTo({
+    if (addKeyMutation.isSuccess) {
+      return plugins['@akashaorg/app-routing']?.routing.navigateTo({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: () => menuRoute[DEV_KEYS],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addKeyQuery.isSuccess]);
+  }, [addKeyMutation.isSuccess]);
 
   const handleClickCardTitleIcon = () => {
     plugins['@akashaorg/app-routing']?.routing.navigateTo({
@@ -77,7 +71,7 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
   };
 
   const handleValidateMessage = () => {
-    setStatus(StepStatus.VALIDATING);
+    validateMutation.mutate(message);
   };
 
   return (
@@ -99,10 +93,10 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
           messageInputPlaceholder={t('Paste the generated message here')}
           messageValue={message}
           validationStatus={{
-            isError: validateQuery.isError,
-            errorMessage: t('{{error}}', { error: validateQuery.error?.message }),
+            isError: validateMutation.isError,
+            errorMessage: t('{{error}}', { error: validateMutation.error?.message }),
           }}
-          isFetching={validateQuery.isFetching || addKeyQuery.isFetching}
+          isFetching={validateMutation.isLoading || addKeyMutation.isLoading}
           buttonLabel={t('Validate Message')}
           onMessageNameInputChange={handleMessageNameInputChange}
           onMessageInputChange={handleMessageInputChange}

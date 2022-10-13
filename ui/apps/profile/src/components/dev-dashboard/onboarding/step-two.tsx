@@ -76,7 +76,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
           )}
         </React.Fragment>
       ))}
-      <Box direction="row" justify="end">
+      <Box direction="row" justify="end" gap="small">
         <Button label={skipLabel} onClick={onSkipClick} />
         <Button primary={true} label={readyLabel} onClick={onReadyClick} />
       </Box>

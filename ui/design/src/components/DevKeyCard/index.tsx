@@ -53,6 +53,10 @@ const DevKeyCard: React.FC<IDevKeyCardProps> = props => {
     return handleMenuClose();
   };
 
+  if (!item) {
+    return null;
+  }
+
   return (
     <Box gap="small" style={{ position: 'relative' }}>
       <Box direction="row" align="center" justify="between">

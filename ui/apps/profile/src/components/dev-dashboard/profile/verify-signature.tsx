@@ -88,7 +88,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
     });
   };
 
-  const errorObject = verifySignatureMutation.error as Record<string, string>;
+  const errorObject = verifySignatureMutation.error;
 
   return (
     <MainAreaCardBox className={className}>

@@ -6,6 +6,11 @@ import { logError } from './utils/error-handler';
 
 export const DEV_DASHBOARD_KEY = 'DevDashboard';
 
+type AddDevKeyPayload = {
+  message: string;
+  messageName?: string;
+};
+
 type SignMessagePayload = {
   message: string | Record<string, unknown> | Record<string, unknown>[];
 };
@@ -26,26 +31,18 @@ const validateMessage = async (message: string) => {
  * Hook to validate generated base64 message
  *
  * ```typescript
- * const validateQuery = useValidateMessage('some base64 message string', true);
+ * const validateMutation = useValidateMessage();
 
- * console.log(validateQuery.data)
+ * validateMutation.mutate('some base64 message string')
  * ```
  */
-export function useValidateMessage(message: string, enabled: boolean) {
-  return useQuery([DEV_DASHBOARD_KEY, 'validate_message'], () => validateMessage(message), {
-    enabled,
-    keepPreviousData: true,
+export function useValidateMessage() {
+  return useMutation((message: string) => validateMessage(message), {
     onError: (err: Error) => logError('useDevDashboard.validateMessage', err),
   });
 }
 
-const addDevKeyFromMessage = async ({
-  message,
-  messageName,
-}: {
-  message: string;
-  messageName?: string;
-}) => {
+const addDevKeyFromMessage = async ({ message, messageName }: AddDevKeyPayload) => {
   const sdk = getSDK();
   const res = await sdk.api.auth.addDevKeyFromBase64Message(message, messageName);
   return res;
@@ -55,16 +52,13 @@ const addDevKeyFromMessage = async ({
  * Hook to add dev key from message
  *
  * ```typescript
- * const addKeyQuery = useAddDevKeyFromMessage({message: 'some base64 message string', messageName: 'some message name'}, true);
+ * const addKeyMutation = useAddDevKeyFromMessage();
+
+ * addKeyMutation.mutate({message: 'some base64 message string', messageName: 'some message name'})
  * ```
  */
-export function useAddDevKeyFromMessage(
-  value: { message: string; messageName?: string },
-  enabled: boolean,
-) {
-  return useQuery([DEV_DASHBOARD_KEY, 'add_key'], () => addDevKeyFromMessage(value), {
-    enabled,
-    keepPreviousData: true,
+export function useAddDevKeyFromMessage() {
+  return useMutation((payload: AddDevKeyPayload) => addDevKeyFromMessage(payload), {
     onError: (err: Error) => logError('useDevDashboard.addDevKeyFromMessage', err),
   });
 }
@@ -108,7 +102,9 @@ const deleteDevKey = async (pubKey: string) => {
  * ```
  */
 export function useDeleteDevKey() {
-  return useMutation((pubKey: string) => deleteDevKey(pubKey));
+  return useMutation((pubKey: string) => deleteDevKey(pubKey), {
+    onError: (err: Error) => logError('useDevDashboard.deleteDevKey', err),
+  });
 }
 
 const signMessage = async ({ message }: SignMessagePayload) => {
@@ -128,7 +124,9 @@ const signMessage = async ({ message }: SignMessagePayload) => {
  * ```
  */
 export function useSignMessage() {
-  return useMutation(({ message }: SignMessagePayload) => signMessage({ message }));
+  return useMutation(({ message }: SignMessagePayload) => signMessage({ message }), {
+    onError: (err: Error) => logError('useDevDashboard.signMessage', err),
+  });
 }
 
 const verifySignature = async (payload: VerifySignaturePayload) => {
@@ -144,9 +142,11 @@ const verifySignature = async (payload: VerifySignaturePayload) => {
  * ```typescript
  * const verifySignatureMutation = useVerifySignature();
 
- * verifySignatureMutation.mutate({pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', message: 'original message', signature: 'some signature to be veriftied'})
+ * verifySignatureMutation.mutate({pubKey: 'bbabcbaa243103inr3u2mab3wivqjjq56kiuwcejcenvwzcmjilwnirecba', message: 'original message', signature: 'some signature to be verified'})
  * ```
  */
 export function useVerifySignature() {
-  return useMutation((payload: VerifySignaturePayload) => verifySignature(payload));
+  return useMutation((payload: VerifySignaturePayload) => verifySignature(payload), {
+    onError: (err: Error) => logError('useDevDashboard.verifySignature', err),
+  });
 }

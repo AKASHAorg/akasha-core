@@ -52,7 +52,7 @@ const SignMessageCard: React.FC<RootComponentProps & ISignMessageCardProps> = pr
     });
   };
 
-  const errorObject = signMessageMutation.error as Record<string, string>;
+  const errorObject = signMessageMutation.error;
 
   return (
     <MainAreaCardBox className={className}>

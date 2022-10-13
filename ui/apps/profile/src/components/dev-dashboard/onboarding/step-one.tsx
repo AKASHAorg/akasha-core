@@ -45,7 +45,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
       {paragraphs.map((paragraph: string, idx: number) => (
         <ListItem key={idx} listElementText="•" item={paragraph} />
       ))}
-      <Box direction="row" justify="end">
+      <Box direction="row" justify="end" gap="small">
         <Button label={rejectLabel} onClick={onRejectClick} />
         <Button primary={true} label={acceptLabel} onClick={onAcceptClick} />
       </Box>
