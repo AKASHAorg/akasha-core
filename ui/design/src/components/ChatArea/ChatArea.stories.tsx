@@ -44,7 +44,7 @@ BaseChatArea.args = {
       emptyChatLabel="Start by saying hello! 👋🏼"
       loggedUserEthAddress={ethAddress}
       itemCard={<BubbleCard locale="en" youLabel="You" />}
-      chatArr={dummyChatArr}
+      oldMessages={dummyChatArr}
     />
   ),
   editorElement: (
