@@ -2,8 +2,7 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { LoginState, useFollowers, useFollowing, logError } from '@akashaorg/ui-awf-hooks';
-import { getHubUser } from '../../api/message';
+import { LoginState, useFollowers, useFollowing } from '@akashaorg/ui-awf-hooks';
 
 const { BasicCardBox, Box, Icon, Text, MessageContactCard } = DS;
 
@@ -76,43 +75,6 @@ const InboxPage: React.FC<InboxPageProps> = props => {
     localStorage.setItem('Pinned Conversations', JSON.stringify(newData));
     setPinnedConvos(newData);
   };
-
-  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
-
-  React.useEffect(() => {
-    let sub;
-    (async () => {
-      const user = await getHubUserCallback();
-      const mailboxId = await user.getMailboxID();
-      const callback = async (reply?: any, err?: Error) => {
-        if (err) {
-          return logError('messaging-app.watchInbox', err);
-        }
-        if (!reply?.message) return;
-        if (reply.message.readAt === 0) {
-          const pubKey = reply.message.from;
-          if (pubKey !== loggedUserPubKey) {
-            let unreadChats = [];
-            const unreadChatsStorage = localStorage.getItem('Unread Chats');
-            if (unreadChatsStorage) {
-              unreadChats = JSON.parse(unreadChatsStorage);
-            }
-            if (!unreadChats.includes(pubKey)) {
-              unreadChats.push(pubKey);
-            }
-            localStorage.setItem('Unread Chats', JSON.stringify(unreadChats));
-          }
-        }
-      };
-      sub = user.watchInbox(mailboxId, callback);
-    })();
-    return () => {
-      if (sub) {
-        sub.close();
-        sub = null;
-      }
-    };
-  }, [getHubUserCallback, loggedUserPubKey]);
 
   const handleCardClick = (pubKey: string) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({

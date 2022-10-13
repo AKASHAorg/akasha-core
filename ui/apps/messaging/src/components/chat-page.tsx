@@ -4,24 +4,20 @@ import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { MESSAGING } from '../routes';
 import { useParams } from 'react-router';
-import {
-  useMentionSearch,
-  useTagSearch,
-  useGetProfile,
-  logError,
-  LoginState,
-} from '@akashaorg/ui-awf-hooks';
-import { getHubUser, getMessages, markAsRead, sendMessage } from '../api/message';
+import { useMentionSearch, useTagSearch, useGetProfile, LoginState } from '@akashaorg/ui-awf-hooks';
+import { markAsRead, sendMessage } from '../api/message';
+import { db } from '../db/messages-db';
+import { useLiveQuery } from 'dexie-react-hooks';
 
-const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard, Spinner } =
-  DS;
+const { BasicCardBox, Box, Icon, Text, ChatList, ChatAreaHeader, ChatEditor, BubbleCard } = DS;
 
 export interface ChatPageProps extends RootComponentProps {
   loginState: LoginState;
+  fetchingMessages?: boolean;
 }
 
 const ChatPage = (props: ChatPageProps) => {
-  const { loginState } = props;
+  const { loginState, fetchingMessages } = props;
 
   const { t } = useTranslation('app-messaging');
 
@@ -91,6 +87,7 @@ const ChatPage = (props: ChatPageProps) => {
   );
 
   const handleSendMessage = async publishData => {
+    // publish message through textile inbox api
     const res: any = await sendMessage(contactPubKey, publishData);
     const newMessage = {
       content: res.body?.slateContent,
@@ -100,87 +97,54 @@ const ChatPage = (props: ChatPageProps) => {
       to: res.to,
       read: res.read,
       id: res.id,
+      loggedUserPubKey: loggedUserPubKey,
+      chatPartnerPubKey: pubKey,
     };
-    setMessages(prev => [...prev, newMessage]);
+    // save the published messsage to the local db
+    db.messages.put(newMessage);
   };
 
-  const [messages, setMessages] = React.useState([]);
-  const [fetchingMessages, setFetchingMessages] = React.useState(false);
+  // real time query to get messages from local db
+  const dexieMessages =
+    useLiveQuery(() =>
+      db.messages
+        .where({ loggedUserPubKey: loggedUserPubKey, chatPartnerPubKey: pubKey })
+        .sortBy('timestamp'),
+    ) || [];
 
-  const fetchMessagesCallback = React.useCallback(async () => {
-    setFetchingMessages(true);
-    const messagesData = await getMessages();
-    const conversation = messagesData
-      ?.map(res => {
-        if (
-          res.body.content &&
-          (res.from === contactPubKey ||
-            (res.from === loggedUserPubKey && res.to === contactPubKey))
-        ) {
-          return {
-            content: res.body.content?.slateContent,
-            ethAddress: res.body.content?.author,
-            timestamp: res.createdAt,
-            name: res.from === contactPubKey ? contactId : null,
-            from: res.from,
-            to: res.to,
-            read: res.read,
-            id: res.id,
-          };
-        }
-        return null;
-      })
-      .filter(Boolean);
-    setMessages(conversation);
-    setFetchingMessages(false);
-  }, [loggedUserPubKey, contactPubKey, contactId]);
+  // hydrate user data on messages
+  const localMessages = dexieMessages.map(msg => {
+    if (msg.from === loggedUserPubKey) {
+      return msg;
+    } else if (msg.from === pubKey) {
+      return { ...msg, name: contactId };
+    }
+  });
 
-  React.useEffect(() => {
-    fetchMessagesCallback();
-  }, [fetchMessagesCallback]);
+  const indexOfLatestReadMessage = localMessages.findIndex(
+    msg => !msg.read && msg.from !== loggedUserPubKey,
+  );
 
-  React.useEffect(() => {
-    if (messages.length) {
-      const unreadMessages = messages.filter(message => message.from === pubKey && !message.read);
+  const unreadMessages = localMessages.slice(indexOfLatestReadMessage + 1);
+
+  const markLatestMessagesRead = () => {
+    if (unreadMessages?.length && pubKey) {
       const unreadMessageIds = unreadMessages.map(message => message.id);
+      // mark messages as read through textile api
       markAsRead(unreadMessageIds);
+      // optimistic mark messages as read on local db
+      db.messages
+        .where({ from: pubKey })
+        .filter(msg => msg.read === false)
+        .modify({ read: true });
+      // clear new messages conversation marker
       if (localStorage.getItem('Unread Chats')) {
         const unreadChats = JSON.parse(localStorage.getItem('Unread Chats'));
         const filteredChats = unreadChats.filter(unreadChat => unreadChat !== pubKey);
         localStorage.setItem('Unread Chats', JSON.stringify(filteredChats));
       }
     }
-  }, [messages, pubKey]);
-
-  const getHubUserCallback = React.useCallback(getHubUser, [loggedUserPubKey]);
-  const subCallback = React.useCallback(
-    async (reply?: any, err?: Error) => {
-      if (err) {
-        return logError('messaging-app.watchInbox', err);
-      }
-      if (!reply?.message) return;
-      const messageIds = messages.map(message => message.id);
-      if (!messageIds.includes(reply.messageID) && reply.message.from === pubKey) {
-        await fetchMessagesCallback();
-      }
-    },
-    [messages],
-  );
-  React.useEffect(() => {
-    let sub;
-    (async () => {
-      const user = await getHubUserCallback();
-      const mailboxId = await user.getMailboxID();
-      sub = user.watchInbox(mailboxId, subCallback);
-    })();
-    return () => {
-      if (sub) {
-        sub.close();
-        sub = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getHubUserCallback, fetchMessagesCallback, pubKey]);
+  };
 
   return (
     <BasicCardBox style={{ maxHeight: '92vh' }}>
@@ -209,6 +173,9 @@ const ChatPage = (props: ChatPageProps) => {
           <ChatList
             emptyChatLabel={t('Start by saying hello! 👋🏼')}
             fetchingMessagesLabel={t('Fetching your messages')}
+            unreadMessagesLabel={t('You have {{numberOfUnread}} new unread messages', {
+              numberOfUnread: unreadMessages?.length,
+            })}
             loggedUserEthAddress={loginState?.ethAddress}
             itemCard={
               <BubbleCard
@@ -219,8 +186,10 @@ const ChatPage = (props: ChatPageProps) => {
                 handleLinkClick={handleLinkClick}
               />
             }
-            chatArr={messages || []}
+            oldMessages={localMessages}
+            newMessages={unreadMessages}
             fetchingMessages={fetchingMessages}
+            markLatestMessagesRead={markLatestMessagesRead}
           />
 
           <ChatEditor
