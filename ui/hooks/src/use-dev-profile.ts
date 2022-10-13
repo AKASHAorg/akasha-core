@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 
@@ -58,7 +58,10 @@ const addDevKeyFromMessage = async ({ message, messageName }: AddDevKeyPayload) 
  * ```
  */
 export function useAddDevKeyFromMessage() {
+  const queryClient = useQueryClient();
+
   return useMutation((payload: AddDevKeyPayload) => addDevKeyFromMessage(payload), {
+    onSuccess: () => queryClient.invalidateQueries([DEV_DASHBOARD_KEY, 'get_keys']),
     onError: (err: Error) => logError('useDevDashboard.addDevKeyFromMessage', err),
   });
 }
@@ -102,7 +105,10 @@ const deleteDevKey = async (pubKey: string) => {
  * ```
  */
 export function useDeleteDevKey() {
+  const queryClient = useQueryClient();
+
   return useMutation((pubKey: string) => deleteDevKey(pubKey), {
+    onSuccess: () => queryClient.invalidateQueries([DEV_DASHBOARD_KEY, 'get_keys']),
     onError: (err: Error) => logError('useDevDashboard.deleteDevKey', err),
   });
 }

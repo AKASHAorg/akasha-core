@@ -1,11 +1,13 @@
 import * as React from 'react';
-import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
-import DS from '@akashaorg/design-system';
+import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+
+import DS from '@akashaorg/design-system';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper, useDeleteDevKey } from '@akashaorg/ui-awf-hooks';
+
 import menuRoute, { DEV_KEYS } from '../routes';
 
 const { BasicCardBox, Box, Button, ModalContainer, Text, Icon, ErrorLoader } = DS;
