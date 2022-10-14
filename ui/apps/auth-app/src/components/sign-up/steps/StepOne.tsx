@@ -1,14 +1,14 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import { ILinkInput } from '@akashaorg/design-system/lib/components/TextInputIconForm';
+import { ITextInputIconForm } from '@akashaorg/design-system/lib/components/TextInputIconForm';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { AnalyticsCategories } from '@akashaorg/typings/ui';
 
 import { StyledButton, StyledBox } from './styles';
 
-const { Box, Text, Icon, CTAAnchor, LinkInput } = DS;
+const { Box, Text, Icon, CTAAnchor, TextInputIconForm } = DS;
 
-export interface IStepOneProps extends ILinkInput {
+export interface IStepOneProps extends ITextInputIconForm {
   paragraphOneLabel: string;
   paragraphTwoLabel: string;
   paragraphTwoBoldLabel: string;
@@ -76,7 +76,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
       <Text size="large" color="secondaryText">
         {inputLabel}
       </Text>
-      <LinkInput
+      <TextInputIconForm
         inputPlaceholder={inputPlaceholder}
         inputValue={inputValue || ''}
         elevation="shadow"
