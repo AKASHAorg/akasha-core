@@ -48,40 +48,43 @@ export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryDat
   };
 
   return (
-    publishComment &&
-    publishComment.state.status === 'loading' &&
-    publishComment.state.variables.postID === postId && (
-      <Box
-        pad={{ horizontal: 'medium' }}
-        border={{ side: 'bottom', size: '1px', color: 'border' }}
-        style={{ backgroundColor: '#4e71ff0f' }}
-      >
-        <EntryBox
-          entryData={createPendingEntry(loggedProfileData, publishComment.state.variables)}
-          sharePostLabel={t('Share Post')}
-          shareTextLabel={t('Share this post with your friends')}
-          repliesLabel={t('Replies')}
-          repostsLabel={t('Reposts')}
-          repostLabel={t('Repost')}
-          repostWithCommentLabel={t('Repost with comment')}
-          shareLabel={t('Share')}
-          copyLinkLabel={t('Copy Link')}
-          flagAsLabel={t('Report Comment')}
-          loggedProfileEthAddress={loggedProfileData.ethAddress}
-          locale={'en'}
-          showMore={true}
-          profileAnchorLink={'/profile'}
-          repliesAnchorLink={routes[POST]}
-          handleFollowAuthor={handleFollow}
-          handleUnfollowAuthor={handleUnfollow}
-          isFollowingAuthor={isFollowing}
-          contentClickable={false}
-          hidePublishTime={true}
-          disableActions={true}
-          hideActionButtons={true}
-          modalSlotId={layoutConfig.modalSlotId}
-        />
-      </Box>
-    )
+    <>
+      {publishComment &&
+        publishComment.state.status === 'loading' &&
+        publishComment.state.variables.postID === postId && (
+          <Box
+            pad={{ horizontal: 'medium' }}
+            border={{ side: 'bottom', size: '1px', color: 'border' }}
+            style={{ backgroundColor: '#4e71ff0f' }}
+            data-testid="pending-entry"
+          >
+            <EntryBox
+              entryData={createPendingEntry(loggedProfileData, publishComment.state.variables)}
+              sharePostLabel={t('Share Post')}
+              shareTextLabel={t('Share this post with your friends')}
+              repliesLabel={t('Replies')}
+              repostsLabel={t('Reposts')}
+              repostLabel={t('Repost')}
+              repostWithCommentLabel={t('Repost with comment')}
+              shareLabel={t('Share')}
+              copyLinkLabel={t('Copy Link')}
+              flagAsLabel={t('Report Comment')}
+              loggedProfileEthAddress={loggedProfileData.ethAddress}
+              locale={'en'}
+              showMore={true}
+              profileAnchorLink={'/profile'}
+              repliesAnchorLink={routes[POST]}
+              handleFollowAuthor={handleFollow}
+              handleUnfollowAuthor={handleUnfollow}
+              isFollowingAuthor={isFollowing}
+              contentClickable={false}
+              hidePublishTime={true}
+              disableActions={true}
+              hideActionButtons={true}
+              modalSlotId={layoutConfig.modalSlotId}
+            />
+          </Box>
+        )}
+    </>
   );
 }
