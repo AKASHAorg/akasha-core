@@ -25,17 +25,17 @@ export const initialize = (options: IntegrationRegistrationOptions) => {
       );
 
       // get messages for the 1st time
-      sdk.api.auth.getObsConversation(null).subscribe({
-        next: msg => {
+      sdk.api.auth
+        .getConversation(null)
+        .then(messages => {
           notification.notify(
             '@akashaorg/app-messaging',
-            msg.data.filter(m => !m.read),
+            messages.filter(m => !m.read),
           );
-        },
-        error: err => {
+        })
+        .catch(err => {
           options.logger.error(`Error fetching messages: ${err}`);
-        },
-      });
+        });
       // listen for mark as read
       markAsRead$
         .pipe(
