@@ -173,7 +173,13 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
            but typescript is not able to infer it
            because the cloneElement is used
         */
-        menuItem={<MenuItem plugins={props.plugins} {...({} as SidebarMenuItemProps)} />}
+        menuItem={
+          <MenuItem
+            plugins={props.plugins}
+            loginState={loginQuery?.data}
+            {...({} as SidebarMenuItemProps)}
+          />
+        }
       />
     </>
   );

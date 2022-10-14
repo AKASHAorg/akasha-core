@@ -367,10 +367,19 @@ class AWF_Auth implements AWF_IAuth {
     await this.hubUser.setupMailbox();
     const mailboxID = await this.hubUser.getMailboxID();
     this.inboxWatcher = await this.hubUser.watchInbox(mailboxID, ev => {
-      if (ev?.message?.body && ev?.message?.readAt === 0) {
+      if (
+        ev?.message?.body &&
+        ev?.message?.from === process.env.EWA_MAILSENDER &&
+        ev?.message?.readAt === 0
+      ) {
         this._globalChannel.next({
           data: { emit: true },
           event: AUTH_EVENTS.NEW_NOTIFICATIONS,
+        });
+      } else if (ev?.message?.body && ev?.message?.readAt === 0) {
+        this._globalChannel.next({
+          data: { emit: true },
+          event: AUTH_EVENTS.NEW_MESSAGES,
         });
       }
     });
@@ -750,6 +759,11 @@ class AWF_Auth implements AWF_IAuth {
     uniqueMessages.clear();
     return inbox.slice();
   }
+
+  getObsConversation(pubKey: string) {
+    return createObservableStream<IMessage[]>(this.getConversation(pubKey));
+  }
+
   // pubKey seek does not work
   // @Todo: workaround pubKey filtering
   async getConversation(pubKey: string) {
