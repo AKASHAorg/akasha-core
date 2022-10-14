@@ -2,6 +2,7 @@ export enum AUTH_EVENTS {
   SIGN_IN = '#auth#signIn',
   READY = '#auth#ready',
   NEW_NOTIFICATIONS = '#auth#hasNewNotifications',
+  NEW_MESSAGES = '#auth#hasNewMessages',
   SIGN_OUT = '#auth#signOut',
   WAIT_FOR_AUTH = '#auth#waitForAuth',
   MARK_MSG_READ = '#auth#markMsgRead',
