@@ -367,20 +367,18 @@ class AWF_Auth implements AWF_IAuth {
     await this.hubUser.setupMailbox();
     const mailboxID = await this.hubUser.getMailboxID();
     this.inboxWatcher = await this.hubUser.watchInbox(mailboxID, ev => {
-      if (
-        ev?.message?.body &&
-        ev?.message?.from === process.env.EWA_MAILSENDER &&
-        ev?.message?.readAt === 0
-      ) {
-        this._globalChannel.next({
-          data: { emit: true },
-          event: AUTH_EVENTS.NEW_NOTIFICATIONS,
-        });
-      } else if (ev?.message?.body && ev?.message?.readAt === 0) {
-        this._globalChannel.next({
-          data: { emit: true },
-          event: AUTH_EVENTS.NEW_MESSAGES,
-        });
+      if (ev?.message?.body && ev?.message?.readAt === 0) {
+        if (ev?.message?.from === process.env.EWA_MAILSENDER) {
+          this._globalChannel.next({
+            data: { emit: true },
+            event: AUTH_EVENTS.NEW_NOTIFICATIONS,
+          });
+        } else {
+          this._globalChannel.next({
+            data: { emit: true },
+            event: AUTH_EVENTS.NEW_MESSAGES,
+          });
+        }
       }
     });
     await this.fil.getToken(this.#identity);
