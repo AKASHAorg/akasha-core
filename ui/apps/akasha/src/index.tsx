@@ -70,7 +70,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   extends: (matcher, loader) => {
     matcher({
       'entry-remove-confirmation': loader(() => import('./extensions/entry-remove-modal')),
-      'editor-modal': loader(() => import('./extensions/editor-modal')),
+      'inline-editor_*': loader(() => import('./extensions/inline-editor')),
       'entry-card-edit-button_*': loader(() => import('./extensions/entry-edit-button')),
     });
   },
