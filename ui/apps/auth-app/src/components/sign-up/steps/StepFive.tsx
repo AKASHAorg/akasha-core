@@ -10,7 +10,7 @@ import { AnalyticsCategories, NavigateToParams } from '@akashaorg/typings/ui';
 import { StyledButton, StyledBox } from './styles';
 import { WELCOME } from '../../../routes';
 
-const { Box, Text, styled, Icon, LinkInput } = DS;
+const { Box, Text, styled, Icon, TextInputIconForm } = DS;
 
 interface IStepFiveProps {
   textIdentifier: string;
@@ -169,7 +169,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
       <Text color="gray" size="large" margin={{ top: 'large' }}>
         {textUsername}
       </Text>
-      <LinkInput
+      <TextInputIconForm
         inputPlaceholder={textInputPlaceholder}
         elevation="shadow"
         margin={{ left: '0rem', top: 'small' }}

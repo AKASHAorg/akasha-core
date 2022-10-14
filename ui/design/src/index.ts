@@ -166,7 +166,7 @@ import SelectPopover from './components/SelectPopover';
 
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import TextIcon from './components/TextIcon';
-import LinkInput from './components/TextInputIconForm';
+import TextInputIconForm from './components/TextInputIconForm';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
 import Checkbox from './components/Checkbox';
 import { SearchStartCard } from './components/SearchStartCard';
@@ -283,7 +283,7 @@ const exported = {
   SidebarMenuItem,
   Text,
   TextIcon,
-  LinkInput,
+  TextInputIconForm,
   Topbar,
   createTheme,
   darkTheme,
