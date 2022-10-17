@@ -1,3 +1,4 @@
+import 'systemjs-webpack-interop/auto-public-path';
 import { BehaviorSubject } from 'rxjs';
 import * as singleSpa from 'single-spa';
 import {
@@ -6,6 +7,7 @@ import {
   UIEventData,
   NavigateToParams,
   RootComponentProps,
+  IntegrationRegistrationOptions,
 } from '@akashaorg/typings/ui';
 import getSDK from '@akashaorg/awf-sdk';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
@@ -153,9 +155,16 @@ export class RoutingPlugin {
   };
 }
 
-export const register = async () => {
+export const register = async (opts: IntegrationRegistrationOptions) => {
   return {
     loadingFn: () => Promise.resolve(),
+    // needed ???
+    mountsIn: opts.layoutConfig?.routerSlotId,
+    extends: (matcher, loader) => {
+      matcher({
+        'breadcrumb-navigation': loader(() => import('./extensions/breadcrumb-navigation')),
+      });
+    },
   };
 };
 
