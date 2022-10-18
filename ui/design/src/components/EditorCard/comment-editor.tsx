@@ -32,12 +32,13 @@ const CommentEditor: React.FC<
     showCancelButton,
     cancelButtonLabel,
     onCancelClick,
-    editorState,
+    editorState = editorDefaultValue,
     onPlaceholderClick,
+    embedEntryData,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(isShown);
-  const [contentState, setContentState] = React.useState(editorState ?? editorDefaultValue);
+  const [contentState, setContentState] = React.useState(editorState);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const editorRef = React.useRef(null);
 
@@ -103,6 +104,7 @@ const CommentEditor: React.FC<
             cancelButtonLabel={cancelButtonLabel}
             onCancelClick={onCancelClick}
             showCancelButton={showCancelButton}
+            embedEntryData={embedEntryData}
           />
         </Box>
       )}

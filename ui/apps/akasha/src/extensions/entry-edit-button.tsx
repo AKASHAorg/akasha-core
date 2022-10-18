@@ -17,11 +17,9 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
       props.extensionData.hasOwnProperty('entryId') &&
       props.extensionData?.entryType === EntityTypes.ENTRY
     ) {
-      props.navigateToModal({
-        name: 'editor-modal',
-        entryId: props.extensionData.entryId,
-        action: 'edit',
-      });
+      props.singleSpa.navigateToUrl(
+        `${window.location.origin}/@akashaorg/app-akasha-integration/post/${props.extensionData.entryId}?action=edit`,
+      );
     }
   };
 

@@ -1,5 +1,7 @@
-import { genPostData, mockSDK } from '@akashaorg/af-testing';
-import * as hooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
+import { genLoggedInState, genPostData, mockSDK } from '@akashaorg/af-testing';
+import * as postHooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
+import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login';
+import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
 require('@testing-library/jest-dom/extend-expect');
 
@@ -51,7 +53,23 @@ jest.mock('@akashaorg/typings/ui', () => ({
 
 jest.spyOn(console, 'error').mockImplementation(jest.fn);
 
-jest.spyOn(hooks, 'usePost').mockReturnValue({ data: genPostData(), isSuccess: true });
+jest
+  .spyOn(mediaHooks, 'getMediaUrl')
+  .mockReturnValue({ originLink: '', fallbackLink: '', pathLink: '' });
+
+jest.spyOn(postHooks, 'usePost').mockReturnValue({
+  data: { ...genPostData() },
+  status: 'success',
+  isSuccess: true,
+  reported: true,
+});
+
+jest.spyOn(loginHooks, 'useGetLogin').mockReturnValue({
+  data: { ...genLoggedInState(true) },
+  status: 'success',
+  isSuccess: true,
+  reported: true,
+});
 
 const mockIntersectionObserver = jest.fn();
 

@@ -6,7 +6,7 @@ import Icon from '../Icon';
 
 import { StyledTextInput, StyledArrowIcon, StyledDisabledBox } from './styles';
 
-export interface ILinkInput {
+export interface ITextInputIconForm {
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   validateTokenFn?: (ev: unknown) => void;
   className?: string;
@@ -25,7 +25,7 @@ export interface ILinkInput {
   onBlur?: (ev: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-const LinkInput: React.FC<ILinkInput> = props => {
+const TextInputIconForm: React.FC<ITextInputIconForm> = props => {
   const {
     onChange,
     className,
@@ -97,4 +97,4 @@ const LinkInput: React.FC<ILinkInput> = props => {
   );
 };
 
-export default LinkInput;
+export default TextInputIconForm;

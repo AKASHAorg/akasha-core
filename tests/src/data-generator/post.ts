@@ -1,3 +1,4 @@
+import { PendingEntry } from '@akashaorg/typings/ui';
 import faker from 'faker';
 import { genUser } from './user';
 
@@ -66,4 +67,24 @@ const genSlatePost = () => {
   };
 };
 
-export { genSlatePost, genPostData };
+const genPendingPost = (): PendingEntry => {
+  return {
+    quote: null,
+    images: [],
+    author: genAuthor(),
+    slateContent: [
+      {
+        type: 'paragraph',
+        children: [{ text: 'pending post' }],
+      },
+    ],
+    replies: 0,
+    reposts: 0,
+    time: `${Date.now()}`,
+    permalink: '',
+    ipfsLink: '',
+    entryId: 'oxfg',
+  };
+};
+
+export { genSlatePost, genPostData, genPendingPost };
