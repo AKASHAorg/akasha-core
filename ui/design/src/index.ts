@@ -198,7 +198,10 @@ import lightTheme from './styles/themes/light';
 import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
 
-export { BoxExtendedProps, ButtonExtendedProps };
+import ProfileCardEthereumId from './components/ProfileCard/profile-card-fields/profile-card-ethereum-id';
+import ProfileCardDescription from './components/ProfileCard/profile-card-fields/profile-card-description';
+import Skeleton from './components/SideBar/skeleton';
+export type { BoxExtendedProps, ButtonExtendedProps };
 
 /* Grommet utils */
 // @TODO: fix this export style...
@@ -363,6 +366,9 @@ const exported = {
   OnboardingStartCard,
   OnboardingSuggestionsCard,
   MyFeedCard,
+  ProfileCardEthereumId,
+  ProfileCardDescription,
+  Skeleton,
 };
 
 export default exported;

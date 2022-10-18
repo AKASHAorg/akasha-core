@@ -22,6 +22,7 @@ export interface ITextInputIconForm {
   inputInvalid?: boolean;
   noArrowRight?: boolean;
   noDisable?: boolean;
+  onBlur?: (ev: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const TextInputIconForm: React.FC<ITextInputIconForm> = props => {
@@ -40,6 +41,7 @@ const TextInputIconForm: React.FC<ITextInputIconForm> = props => {
     inputInvalid,
     noArrowRight,
     noDisable,
+    onBlur,
   } = props;
 
   const isEmpty = !inputValue;
@@ -72,6 +74,7 @@ const TextInputIconForm: React.FC<ITextInputIconForm> = props => {
             placeholder={placeHolder}
             value={inputValue}
             onChange={onChange}
+            onBlur={onBlur}
             disabled={isDisabled}
           />
         </form>
