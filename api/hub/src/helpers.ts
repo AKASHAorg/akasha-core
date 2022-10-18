@@ -27,6 +27,7 @@ import PostAPI from './datasources/post';
 import CommentAPI from './datasources/comment';
 import FollowerAPI from './datasources/follower';
 import { DataSource } from 'apollo-datasource';
+import { fileURLToPath } from 'url';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -37,6 +38,9 @@ const INFURA_IPFS_SECRET = process.env.INFURA_IPFS_SECRET;
 const IPFS_GATEWAY = process.env.IPFS_GATEWAY;
 export const isIpfsEnabled = INFURA_IPFS_ID && INFURA_IPFS_SECRET && IPFS_GATEWAY;
 const IPFS_PATH_GATEWAY = process.env.IPFS_PATH_GATEWAY;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 //export const web3Provider = new ethers.providers.JsonRpcProvider(process.env.RINKEBY_JSONRPC);
 
