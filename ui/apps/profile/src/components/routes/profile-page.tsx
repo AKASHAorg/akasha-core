@@ -171,6 +171,36 @@ const ProfilePage = (props: ProfilePageProps) => {
                   details={(reqPosts.error as Error).message}
                 />
               )}
+              {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
+              {reqPosts.isSuccess && postPages && (
+                <FeedWidget
+                  modalSlotId={props.layoutConfig.modalSlotId}
+                  itemType={EntityTypes.ENTRY}
+                  logger={props.logger}
+                  onLoadMore={handleLoadMore}
+                  getShareUrl={(itemId: string) =>
+                    `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
+                  }
+                  pages={postPages}
+                  requestStatus={reqPosts.status}
+                  loginState={loginQuery.data}
+                  loggedProfile={loggedProfileData}
+                  navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+                  navigateToModal={props.navigateToModal}
+                  onLoginModalOpen={showLoginModal}
+                  hasNextPage={reqPosts.hasNextPage}
+                  contentClickable={true}
+                  onEntryFlag={handleEntryFlag}
+                  onEntryRemove={handleEntryRemove}
+                  removeEntryLabel={t('Delete Post')}
+                  removedByMeLabel={t('You deleted this post')}
+                  removedByAuthorLabel={t('This post was deleted by its author')}
+                  parentIsProfilePage={true}
+                  uiEvents={props.uiEvents}
+                  itemSpacing={8}
+                  i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+                />
+              )}
             </>
           )}
         </>

@@ -107,6 +107,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             name="inline-editor_feed_page"
             uiEvents={props.uiEvents}
             data={{ action: 'post' }}
+            style={{ marginBottom: '0.5rem' }}
           />
         </>
       ) : (
