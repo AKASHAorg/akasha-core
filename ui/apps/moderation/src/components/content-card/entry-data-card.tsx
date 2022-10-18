@@ -77,8 +77,6 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               followersLabel={t('Followers')}
               followingLabel={t('Following')}
               interestsLabel={t('Interests')}
-              descriptionLabel={t('About me')}
-              badgesLabel={t('Badges')}
               shareProfileLabel={t('Share Profile')}
               onClickFollowers={() => null}
               onClickPosts={() => null}
