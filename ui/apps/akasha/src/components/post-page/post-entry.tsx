@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import routes, { POST } from '../../routes';
 
-const { Box, EntryBox } = DS;
+const { Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
   postId: string;
@@ -178,8 +178,23 @@ export function PostEntry({
     });
   };
 
+  const handlePlaceholderClick = () => {
+    showLoginModal();
+  };
+
+  const replyActive = !action && loginState?.ethAddress;
+
   return (
-    <Box pad={{ bottom: 'small' }} border={{ side: 'bottom', size: '1px', color: 'border' }}>
+    <Box
+      pad={{ bottom: 'small' }}
+      border={{
+        side: 'bottom',
+        size: '1px',
+        color: 'border',
+      }}
+      round={{ corner: 'top', size: 'xsmall' }}
+      background={{ color: replyActive ? 'entryBackground' : null }}
+    >
       <EntryBox
         isRemoved={entryData.isRemoved}
         entryData={entryData}
@@ -243,6 +258,20 @@ export function PostEntry({
           />
         }
       />
+      {!loginState?.ethAddress && (
+        <Box margin="medium">
+          <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
+        </Box>
+      )}
+      {loginState?.ethAddress && !entryData.isRemoved && (
+        <Box margin="medium" style={{ position: 'relative' }}>
+          <Extension
+            name="inline-editor_postreply"
+            uiEvents={uiEvents}
+            data={{ entryId: entryData.entryId, isShown: true, action: 'reply' }}
+          />
+        </Box>
+      )}
     </Box>
   );
 }

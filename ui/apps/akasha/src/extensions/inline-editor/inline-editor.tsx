@@ -220,6 +220,7 @@ export const InlineEditor = (props: RootExtensionProps) => {
             editorState={action === 'edit' ? entryData?.slateContent : null}
             onPlaceholderClick={action === 'reply' ? handleReplyPlaceholderClick : null}
             isShown={!!props.extensionData.isShown}
+            background="cardBackground"
           />
         )}
     </>

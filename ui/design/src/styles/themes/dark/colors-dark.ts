@@ -41,6 +41,8 @@ const colors: IColorsDark = {
   secondaryText: '#B6BFD1', // grey
   textBackground: '#425166',
   chatBackground: '#425166',
+  entryBackground: '#425166',
+  pendingEntryBackground: '#4e71ff0f',
   disabledText: '#9ea0a5', // disabled
   titleText: '#CACFD9',
   subtitleText: '#F4F5F7', // cadetGrey

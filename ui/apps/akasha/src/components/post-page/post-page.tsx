@@ -15,19 +15,10 @@ import {
 
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { Extension } from '../extension';
 import { PostEntry } from './post-entry';
 import { PendingEntry } from './pending-entry';
 
-const {
-  Box,
-  BasicCardBox,
-  Helmet,
-  EditorPlaceholder,
-  EntryCardHidden,
-  ErrorLoader,
-  EntryCardLoading,
-} = DS;
+const { BasicCardBox, Helmet, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
 
 interface IPostPageProps {
   loginState?: LoginState;
@@ -42,8 +33,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
 
   const { postId } = useParams<{ userId: string; postId: string }>();
   const { t } = useTranslation('app-akasha-integration');
-
-  const action = new URLSearchParams(location.search).get('action');
 
   const postReq = usePost({
     postId,
@@ -103,10 +92,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     });
   };
 
-  const handlePlaceholderClick = () => {
-    showLoginModal();
-  };
-
   return (
     <BasicCardBox style={{ height: 'auto' }}>
       <Helmet>
@@ -149,20 +134,6 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
             navigateToModal={props.navigateToModal}
             showLoginModal={props.showLoginModal}
           />
-          {!loginState?.ethAddress && (
-            <Box margin="medium">
-              <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
-            </Box>
-          )}
-          {loginState?.ethAddress && !entryData.isRemoved && (
-            <Box margin="medium" style={{ position: 'relative' }}>
-              <Extension
-                name="inline-editor_postreply"
-                uiEvents={props.uiEvents}
-                data={{ entryId: entryData.entryId, isShown: !action, action: 'reply' }}
-              />
-            </Box>
-          )}
           <PendingEntry
             postId={postId}
             layoutConfig={props.layoutConfig}
