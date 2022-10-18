@@ -6,8 +6,6 @@ import ProfileCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
 import {
-  aboutMeLabel,
-  badgesLabel,
   cancelLabel,
   changeCoverImageLabel,
   editProfileLabel,
@@ -40,8 +38,6 @@ describe('<ProfileCard /> Component', () => {
           <ProfileCard
             modalSlotId={''}
             profileData={profileData}
-            descriptionLabel={aboutMeLabel}
-            badgesLabel={badgesLabel}
             followingLabel={followingLabel}
             followersLabel={followersLabel}
             postsLabel={postsLabel}
