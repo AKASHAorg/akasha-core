@@ -92,6 +92,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
     navigateTo,
   } = props;
   const [username, setUsername] = React.useState('');
+  const [usernameValidationTrigger, setUsernameValidationTrigger] = React.useState(false);
   const conditions = React.useMemo(
     () => [
       {
@@ -111,8 +112,8 @@ const StepFive: React.FC<IStepFiveProps> = props => {
   );
 
   const allowUsernameCheckRequest = React.useMemo(
-    () => conditions.every(({ regex }) => regex.test(username)),
-    [username, conditions],
+    () => conditions.every(({ regex }) => regex.test(username)) && usernameValidationTrigger,
+    [username, conditions, usernameValidationTrigger],
   );
 
   const loginQuery = useGetLogin();
@@ -128,8 +129,18 @@ const StepFive: React.FC<IStepFiveProps> = props => {
     }
   }, [usernameValidationQuery, textUsernameTakenError, textUsernameUnknownError]);
 
+  React.useEffect(() => {
+    if (usernameValidationQuery.isFetched) {
+      setUsernameValidationTrigger(false);
+    }
+  }, [usernameValidationQuery.isFetched]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
+  };
+
+  const handleBlur = () => {
+    setUsernameValidationTrigger(true);
   };
 
   const finishSignUp = async () => {
@@ -174,6 +185,7 @@ const StepFive: React.FC<IStepFiveProps> = props => {
         elevation="shadow"
         margin={{ left: '0rem', top: 'small' }}
         onChange={handleChange}
+        onBlur={handleBlur}
         inputValue={username}
         hasError={!!userNameValidationError}
         errorMsg={userNameValidationError}

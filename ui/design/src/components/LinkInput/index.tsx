@@ -5,13 +5,14 @@ import { StyledCloseIconDiv, StyledLinkIconDiv, StyledTextInput } from './styled
 
 export interface ILinkInput {
   onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (ev: React.FocusEvent<HTMLInputElement>) => void;
   handleClearInput: () => void;
   className?: string;
   inputValue: string;
 }
 
 const LinkInput: React.FC<ILinkInput> = props => {
-  const { onChange, handleClearInput, className, inputValue } = props;
+  const { onChange, onBlur, handleClearInput, className, inputValue } = props;
 
   return (
     <Box
@@ -32,7 +33,7 @@ const LinkInput: React.FC<ILinkInput> = props => {
         <StyledLinkIconDiv>
           <Icon type="link" />
         </StyledLinkIconDiv>
-        <StyledTextInput plain={true} value={inputValue} onChange={onChange} />
+        <StyledTextInput plain={true} value={inputValue} onChange={onChange} onBlur={onBlur} />
       </Box>
 
       {inputValue && (

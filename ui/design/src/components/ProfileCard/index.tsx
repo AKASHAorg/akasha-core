@@ -485,43 +485,15 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           }
         />
       )}
-      <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
-        <ProfileCardEthereumId
-          profileData={profileData}
-          copiedLabel={props.copiedLabel}
-          copyLabel={props.copyLabel}
-          ensName={
-            props.userNameType?.default?.provider === ProfileProviders.ENS
-              ? props.userNameType.default.value
-              : undefined
-          }
-        />
-        {description && (
-          <>
-            <Box pad={{ horizontal: 'medium' }}>
-              <HorizontalDivider />
-            </Box>
-            <ProfileCardDescription
-              editable={editable}
-              description={description}
-              descriptionIcon={descriptionIcon}
-              handleChangeDescription={handleChangeDescription}
-              descriptionPopoverOpen={descriptionPopoverOpen}
-              setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-              profileProvidersData={profileProvidersData}
-              descriptionLabel={descriptionLabel}
-            />
-          </>
-        )}
-      </Box>
-      {profileData.badges?.length > 0 && (
+      {props.children}
+      {/* {profileData.badges?.length > 0 && (
         <>
           <Box pad={{ horizontal: 'medium' }}>
             <HorizontalDivider />
           </Box>
           <ProfileCardBadges badgesLabel={badgesLabel} badges={profileData.badges} />
         </>
-      )}
+      )} */}
     </MainAreaCardBox>
   );
 };

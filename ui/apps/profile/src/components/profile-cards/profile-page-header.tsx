@@ -13,12 +13,23 @@ import {
   useFollow,
   useUnfollow,
   LoginState,
+  useEnsByAddress,
 } from '@akashaorg/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
 import { getUsernameTypes } from '../../utils/username-utils';
 
-const { ModalRenderer, ProfileCard, styled, ExtensionPoint } = DS;
+const {
+  ModalRenderer,
+  ProfileCard,
+  styled,
+  ExtensionPoint,
+  Box,
+  ProfileCardEthereumId,
+  ProfileCardDescription,
+  HorizontalDivider,
+  Skeleton,
+} = DS;
 
 const ProfilePageCard = styled(ProfileCard)`
   margin-bottom: 0.5rem;
@@ -60,6 +71,8 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
+
+  const ENSReq = useEnsByAddress(profileData.ethAddress);
 
   const userNameTypes = React.useMemo(() => {
     if (profileData) {
@@ -206,7 +219,41 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
             onUnmount={handleExtPointUnmount}
           />
         }
-      />
+      >
+        <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
+          <ProfileCardEthereumId
+            profileData={profileData}
+            copiedLabel={t('Copied')}
+            copyLabel={t('Copy to clipboard')}
+          />
+          {ENSReq.isFetching && <Skeleton />}
+          {ENSReq.isFetched && ENSReq.data && (
+            <ProfileCardEthereumId
+              profileData={profileData}
+              copiedLabel={t('Copied')}
+              copyLabel={t('Copy to clipboard')}
+              ensName={ENSReq.data}
+            />
+          )}
+
+          {profileData.description && (
+            <>
+              <Box pad={{ horizontal: 'medium' }}>
+                <HorizontalDivider />
+              </Box>
+              <ProfileCardDescription
+                description={profileData.description}
+                editable={false}
+                handleChangeDescription={() => null}
+                descriptionPopoverOpen={false}
+                setDescriptionPopoverOpen={() => null}
+                // profileProvidersData={profileProvidersData}
+                descriptionLabel={t('About me')}
+              />
+            </>
+          )}
+        </Box>
+      </ProfilePageCard>
     </>
   );
 };

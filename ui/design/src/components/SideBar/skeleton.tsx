@@ -3,7 +3,7 @@ import { Box } from 'grommet';
 
 // import Icon from '../Icon';
 
-interface ISkeletonProps {
+export interface ISkeletonProps {
   count?: number;
 }
 
