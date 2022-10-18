@@ -204,8 +204,8 @@ export function useEnsRegistration(pubKey?: string) {
 const validateUsername = async (username: string) => {
   const sdk = getSDK();
   try {
-    const res = await sdk.api.ens.isAvailable(username);
-    return res.data;
+    const res = await lastValueFrom(sdk.api.ens.isAvailable(username));
+    return res;
   } catch (error) {
     logError('useProfile.validateUsername', error);
     throw error;

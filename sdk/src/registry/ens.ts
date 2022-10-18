@@ -133,7 +133,7 @@ class AWF_ENS implements AWF_IENS {
     return createFormattedValue(true);
   }
 
-  async isAvailable(name: string) {
+  isAvailable(name: string) {
     // if (!this._chainChecked) {
     //   await this.setupContracts();
     // }

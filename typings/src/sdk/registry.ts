@@ -7,7 +7,7 @@ export interface AWF_IENS {
 
   userIsOwnerOf(name: string): Promise<unknown>;
 
-  isAvailable(name: string): Promise<unknown>;
+  isAvailable(name: string): Observable<unknown>;
 
   resolveAddress(ethAddress: string): Promise<unknown>;
 

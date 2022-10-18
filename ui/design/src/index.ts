@@ -201,6 +201,7 @@ import { ThemeSelector } from './styles/themes/utils/theme-selector';
 import ProfileCardEthereumId from './components/ProfileCard/profile-card-fields/profile-card-ethereum-id';
 import ProfileCardDescription from './components/ProfileCard/profile-card-fields/profile-card-description';
 import Skeleton from './components/SideBar/skeleton';
+import ProfileCardSectionSkeleton from './components/Skeletons/profile-card-section';
 export type { BoxExtendedProps, ButtonExtendedProps };
 
 /* Grommet utils */
@@ -369,6 +370,7 @@ const exported = {
   ProfileCardEthereumId,
   ProfileCardDescription,
   Skeleton,
+  ProfileCardSectionSkeleton,
 };
 
 export default exported;

@@ -28,7 +28,7 @@ const {
   ProfileCardEthereumId,
   ProfileCardDescription,
   HorizontalDivider,
-  Skeleton,
+  ProfileCardSectionSkeleton,
 } = DS;
 
 const ProfilePageCard = styled(ProfileCard)`
@@ -226,7 +226,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
           />
-          {ENSReq.isFetching && <Skeleton />}
+          {ENSReq.isFetching && <ProfileCardSectionSkeleton />}
           {ENSReq.isFetched && ENSReq.data && (
             <ProfileCardEthereumId
               profileData={profileData}
