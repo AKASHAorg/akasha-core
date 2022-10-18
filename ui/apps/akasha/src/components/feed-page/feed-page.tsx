@@ -103,11 +103,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
             </Box>
           </BasicCardBox>
-          <Extension
-            name="inline-editor_feed_page"
-            uiEvents={props.uiEvents}
-            data={{ action: 'post' }}
-          />
+          <Box margin={{ bottom: 'xsmall' }}>
+            <Extension
+              name="inline-editor_feed_page"
+              uiEvents={props.uiEvents}
+              data={{ action: 'post' }}
+            />
+          </Box>
         </>
       ) : (
         <Box margin={{ bottom: 'medium' }}>

@@ -55,7 +55,7 @@ export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryDat
           <Box
             pad={{ horizontal: 'medium' }}
             border={{ side: 'bottom', size: '1px', color: 'border' }}
-            style={{ backgroundColor: '#4e71ff0f' }}
+            background="pendingEntryBackground"
             data-testid="pending-entry"
           >
             <EntryBox

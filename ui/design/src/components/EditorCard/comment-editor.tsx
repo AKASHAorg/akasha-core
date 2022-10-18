@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from 'grommet';
+import { Box, BoxProps } from 'grommet';
 import { EditorPlaceholder } from './editor-placeholder';
 import EditorBox, { IEditorBox } from '../Editor';
 import { editorDefaultValue } from '../Editor/initialValue';
@@ -10,6 +10,7 @@ import { IPublishData } from '@akashaorg/typings/ui';
 const CommentEditor: React.FC<
   Omit<IEditorBox, 'setEditorState'> & {
     isShown?: boolean;
+    background?: BoxProps['background'];
   }
 > = props => {
   const {
@@ -80,7 +81,12 @@ const CommentEditor: React.FC<
         />
       )}
       {showEditor && (
-        <Box border={{ side: 'all', size: '1px', color: 'border' }} pad="xxsmall" round="xsmall">
+        <Box
+          border={{ side: 'all', size: '1px', color: 'border' }}
+          pad="xxsmall"
+          round="xsmall"
+          background={props.background}
+        >
           <EditorBox
             ref={editorRef}
             avatar={avatar}

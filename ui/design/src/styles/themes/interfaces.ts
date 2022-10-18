@@ -42,6 +42,8 @@ export interface IColors {
   convoAreaBackground: string;
   textBackground: string;
   chatBackground: string;
+  entryBackground: string;
+  pendingEntryBackground: string;
   btnAccentColor: string;
   accent: string;
   accentOpacity: string;
