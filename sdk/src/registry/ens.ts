@@ -13,7 +13,7 @@ import EnsABI from '../contracts/abi/ENS.json';
 import { lastValueFrom } from 'rxjs';
 import { createFormattedValue, createObservableStream } from '../helpers/observable';
 import EventBus from '../common/event-bus';
-import { map, tap } from 'rxjs/operators';
+import { concatAll, map, tap } from 'rxjs/operators';
 import IpfsConnector from '../common/ipfs.connector';
 import { IsUserNameAvailable } from '../profiles/profile.graphql';
 
@@ -160,6 +160,7 @@ class AWF_ENS implements AWF_IENS {
           true,
         );
       }),
+      concatAll(),
     );
   }
 

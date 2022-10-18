@@ -205,7 +205,7 @@ const validateUsername = async (username: string) => {
   const sdk = getSDK();
   try {
     const res = await lastValueFrom(sdk.api.ens.isAvailable(username));
-    return res;
+    return res.data.isUserNameAvailable;
   } catch (error) {
     logError('useProfile.validateUsername', error);
     throw error;
