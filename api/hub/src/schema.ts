@@ -166,6 +166,7 @@ const typeDefs = gql`
     getInterests(pubKey: String!): [String]
     getLatestRelease(integrationIDs: [String]): [IntegrationReleaseInfo]
     getIntegrationInfo(integrationIDs: [String]): [IntegrationInfo]
+    isUserNameAvailable(userName: String!): Boolean
   }
 
   input DataProviderInput {

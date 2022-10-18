@@ -198,6 +198,14 @@ class ProfileAPI extends DataSource {
     return profile._id;
   }
 
+  async isUserNameAvailable(name: string): Promise<boolean> {
+    const db: Client = await getAppDB();
+    const validatedName = validateName(name);
+    const query = new Where('userName').eq(validatedName);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+    return !profilesFound?.length;
+  }
+
   async registerUserName(pubKey: string, name: string) {
     const db: Client = await getAppDB();
     const validatedName = validateName(name);

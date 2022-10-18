@@ -16,6 +16,7 @@ declare module '*/profile.graphql' {
   const GetFollowers: TypedQueryDocumentNode;
   const GetFollowing: TypedQueryDocumentNode;
   const GetInterests: TypedQueryDocumentNode;
+  const IsUserNameAvailable: TypedQueryDocumentNode;
 
   export {
     AddProfileProvider,
@@ -33,6 +34,7 @@ declare module '*/profile.graphql' {
     GetFollowing,
     ToggleInterestSub,
     GetInterests,
+    IsUserNameAvailable
   };
 }
 
