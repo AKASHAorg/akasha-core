@@ -9,6 +9,7 @@ import {
   getIcRegistryContract,
   logger,
   multiAddrToUri,
+  verifyEd25519Sig,
 } from '../helpers';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
@@ -328,6 +329,25 @@ const query = {
       await registryCache.set(cacheKey, releaseInfo, 7200);
     }
     return results;
+  },
+
+  isUserNameAvailable: async (_source, { userName }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!userName || typeof userName !== `string`) {
+      throw new Error(`did not receive a valid userName`);
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: { userName },
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad isUserNameAvailable sig`);
+      return Promise.reject(`Data signature for isUserNameAvailable was not validated!`);
+    }
+    return dataSources.profileAPI.isUserNameAvailable(userName);
   },
 };
 
