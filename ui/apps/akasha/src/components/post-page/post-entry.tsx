@@ -65,6 +65,7 @@ export function PostEntry({
   const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, [
     entryData?.author?.pubKey,
   ]);
+  const [showReplyEditor, setShowReplyEditor] = React.useState(true);
 
   const isReported = React.useMemo(() => {
     if (showAnyway) {
@@ -231,6 +232,7 @@ export function PostEntry({
         handleFlipCard={handleFlipCard}
         scrollHiddenContent={true}
         onEntryRemove={handlePostRemove}
+        onRepliesClick={() => setShowReplyEditor(show => !show)}
         removeEntryLabel={t('Delete Post')}
         removedByMeLabel={t('You deleted this post')}
         removedByAuthorLabel={t('This post was deleted by its author')}
@@ -258,20 +260,18 @@ export function PostEntry({
           />
         }
       />
-      {!loginState?.ethAddress && (
-        <Box margin="medium">
+      <Box margin="medium">
+        {!loginState?.ethAddress && (
           <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
-        </Box>
-      )}
-      {loginState?.ethAddress && !entryData.isRemoved && (
-        <Box margin="medium" style={{ position: 'relative' }}>
+        )}
+        {showReplyEditor && loginState?.ethAddress && !entryData.isRemoved && (
           <Extension
             name="inline-editor_postreply"
             uiEvents={uiEvents}
             data={{ entryId: entryData.entryId, isShown: true, action: 'reply' }}
           />
-        </Box>
-      )}
+        )}
+      </Box>
     </Box>
   );
 }
