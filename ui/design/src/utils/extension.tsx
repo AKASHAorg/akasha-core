@@ -1,8 +1,6 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
+import ExtensionPoint from './extension-point';
 import { EventTypes, RootComponentProps } from '@akashaorg/typings/ui';
-
-const { ExtensionPoint } = DS;
 
 type Props = {
   name: string;
