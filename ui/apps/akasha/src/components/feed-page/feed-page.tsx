@@ -20,10 +20,17 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
-import { Extension } from '../extension';
 
-const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, BasicCardBox, Text } =
-  DS;
+const {
+  Extension,
+  Box,
+  Helmet,
+  EntryCard,
+  EntryPublishErrorCard,
+  LoginCTAWidgetCard,
+  BasicCardBox,
+  Text,
+} = DS;
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;

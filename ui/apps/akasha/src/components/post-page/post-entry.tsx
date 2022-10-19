@@ -17,12 +17,11 @@ import {
   ModalNavigationOptions,
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
-import { Extension } from '../extension';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import routes, { POST } from '../../routes';
 
-const { Box, EditorPlaceholder, EntryBox } = DS;
+const { Extension, Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
   postId: string;
@@ -65,6 +64,7 @@ export function PostEntry({
   const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, [
     entryData?.author?.pubKey,
   ]);
+  const [showReplyEditor, setShowReplyEditor] = React.useState(true);
 
   const isReported = React.useMemo(() => {
     if (showAnyway) {
@@ -186,92 +186,97 @@ export function PostEntry({
 
   return (
     <Box
-      pad={{ bottom: 'small' }}
-      border={{
-        side: 'bottom',
-        size: '1px',
-        color: 'border',
-      }}
       round={{ corner: 'top', size: 'xsmall' }}
       background={{ color: replyActive ? 'entryBackground' : null }}
     >
-      <EntryBox
-        isRemoved={entryData.isRemoved}
-        entryData={entryData}
-        sharePostLabel={t('Share Post')}
-        shareTextLabel={t('Share this post with your friends')}
-        sharePostUrl={`${window.location.origin}${routes[POST]}/`}
-        onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-          handleAvatarClick(ev, entryData.author.pubKey)
+      <Box
+        border={
+          replyActive
+            ? null
+            : {
+                side: 'bottom',
+                size: '1px',
+                color: 'border',
+              }
         }
-        repliesLabel={t('Replies')}
-        repostsLabel={t('Reposts')}
-        repostLabel={t('Repost')}
-        repostWithCommentLabel={t('Repost with comment')}
-        shareLabel={t('Share')}
-        copyLinkLabel={t('Copy Link')}
-        flagAsLabel={t('Report Post')}
-        loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
-        locale={locale}
-        showMore={true}
-        profileAnchorLink={'/profile'}
-        repliesAnchorLink={routes[POST]}
-        onRepost={handleRepost}
-        onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
-        handleFollowAuthor={handleFollow}
-        handleUnfollowAuthor={handleUnfollow}
-        isFollowingAuthor={isFollowing}
-        onContentClick={handleEntryNavigate}
-        navigateTo={navigateTo}
-        contentClickable={true}
-        onMentionClick={handleMentionClick}
-        onTagClick={handleTagClick}
-        moderatedContentLabel={t('This content has been moderated')}
-        ctaLabel={t('See it anyway')}
-        handleFlipCard={handleFlipCard}
-        scrollHiddenContent={true}
-        onEntryRemove={handlePostRemove}
-        removeEntryLabel={t('Delete Post')}
-        removedByMeLabel={t('You deleted this post')}
-        removedByAuthorLabel={t('This post was deleted by its author')}
-        disableReposting={entryData.isRemoved}
-        disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-        modalSlotId={layoutConfig.modalSlotId}
-        headerMenuExt={
-          showEditButton && (
+      >
+        <EntryBox
+          isRemoved={entryData.isRemoved}
+          entryData={entryData}
+          sharePostLabel={t('Share Post')}
+          shareTextLabel={t('Share this post with your friends')}
+          sharePostUrl={`${window.location.origin}${routes[POST]}/`}
+          onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
+            handleAvatarClick(ev, entryData.author.pubKey)
+          }
+          repliesLabel={t('Replies')}
+          repostsLabel={t('Reposts')}
+          repostLabel={t('Repost')}
+          repostWithCommentLabel={t('Repost with comment')}
+          shareLabel={t('Share')}
+          copyLinkLabel={t('Copy Link')}
+          flagAsLabel={t('Report Post')}
+          loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
+          locale={locale}
+          showMore={true}
+          profileAnchorLink={'/profile'}
+          repliesAnchorLink={routes[POST]}
+          onRepost={handleRepost}
+          onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
+          handleFollowAuthor={handleFollow}
+          handleUnfollowAuthor={handleUnfollow}
+          isFollowingAuthor={isFollowing}
+          onContentClick={handleEntryNavigate}
+          navigateTo={navigateTo}
+          contentClickable={true}
+          onMentionClick={handleMentionClick}
+          onTagClick={handleTagClick}
+          moderatedContentLabel={t('This content has been moderated')}
+          ctaLabel={t('See it anyway')}
+          handleFlipCard={handleFlipCard}
+          scrollHiddenContent={true}
+          onEntryRemove={handlePostRemove}
+          onRepliesClick={() => setShowReplyEditor(show => !show)}
+          removeEntryLabel={t('Delete Post')}
+          removedByMeLabel={t('You deleted this post')}
+          removedByAuthorLabel={t('This post was deleted by its author')}
+          disableReposting={entryData.isRemoved}
+          disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+          modalSlotId={layoutConfig.modalSlotId}
+          headerMenuExt={
+            showEditButton && (
+              <Extension
+                name={`entry-card-edit-button_${entryData.entryId}`}
+                style={{ width: '100%' }}
+                uiEvents={uiEvents}
+                data={{ entryId: entryData.entryId, entryType: EntityTypes.ENTRY }}
+              />
+            )
+          }
+          actionsRightExt={
             <Extension
-              name={`entry-card-edit-button_${entryData.entryId}`}
-              style={{ width: '100%' }}
+              name={`entry-card-actions-right_${entryData.entryId}`}
               uiEvents={uiEvents}
-              data={{ entryId: entryData.entryId, entryType: EntityTypes.ENTRY }}
+              data={{
+                entryId: entryData.entryId,
+                entryType: EntityTypes.ENTRY,
+              }}
             />
-          )
-        }
-        actionsRightExt={
-          <Extension
-            name={`entry-card-actions-right_${entryData.entryId}`}
-            uiEvents={uiEvents}
-            data={{
-              entryId: entryData.entryId,
-              entryType: EntityTypes.ENTRY,
-            }}
-          />
-        }
-      />
-      {!loginState?.ethAddress && (
-        <Box margin="medium">
+          }
+        />
+      </Box>
+      <Box margin="medium">
+        {!loginState?.ethAddress && (
           <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
-        </Box>
-      )}
-      {loginState?.ethAddress && !entryData.isRemoved && (
-        <Box margin="medium" style={{ position: 'relative' }}>
+        )}
+        {showReplyEditor && loginState?.ethAddress && !entryData.isRemoved && (
           <Extension
             name="inline-editor_postreply"
             uiEvents={uiEvents}
             data={{ entryId: entryData.entryId, isShown: true, action: 'reply' }}
           />
-        </Box>
-      )}
+        )}
+      </Box>
     </Box>
   );
 }
