@@ -9,7 +9,7 @@ jobs:
   publish:
     name: Update registry apps
     runs-on: ubuntu-latest
-    environment: Staging
+    environment: production
     steps:
       - name: Setup Python
         uses: actions/setup-python@v2
