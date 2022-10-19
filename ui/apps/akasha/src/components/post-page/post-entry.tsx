@@ -17,12 +17,11 @@ import {
   ModalNavigationOptions,
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
-import { Extension } from '../extension';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import routes, { POST } from '../../routes';
 
-const { Box, EditorPlaceholder, EntryBox } = DS;
+const { Extension, Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
   postId: string;
