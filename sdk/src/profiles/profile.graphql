@@ -108,3 +108,7 @@ query GetFollowing($pubKey: String!, $limit: Int, $offset: Int){
 query GetInterests($pubKey:String!){
   getInterests(pubKey: $pubKey)
 }
+
+query IsUserNameAvailable($userName: String!) {
+  isUserNameAvailable(userName: $userName)
+}

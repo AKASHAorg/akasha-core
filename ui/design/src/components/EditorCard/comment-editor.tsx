@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box } from 'grommet';
+import { Box, BoxProps } from 'grommet';
 import { EditorPlaceholder } from './editor-placeholder';
 import EditorBox, { IEditorBox } from '../Editor';
 import { editorDefaultValue } from '../Editor/initialValue';
@@ -10,6 +10,7 @@ import { IPublishData } from '@akashaorg/typings/ui';
 const CommentEditor: React.FC<
   Omit<IEditorBox, 'setEditorState'> & {
     isShown?: boolean;
+    background?: BoxProps['background'];
   }
 > = props => {
   const {
@@ -32,12 +33,13 @@ const CommentEditor: React.FC<
     showCancelButton,
     cancelButtonLabel,
     onCancelClick,
-    editorState,
+    editorState = editorDefaultValue,
     onPlaceholderClick,
+    embedEntryData,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(isShown);
-  const [contentState, setContentState] = React.useState(editorState ?? editorDefaultValue);
+  const [contentState, setContentState] = React.useState(editorState);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const editorRef = React.useRef(null);
 
@@ -79,7 +81,12 @@ const CommentEditor: React.FC<
         />
       )}
       {showEditor && (
-        <Box border={{ side: 'all', size: '1px', color: 'border' }} pad="xxsmall" round="xsmall">
+        <Box
+          border={{ side: 'all', size: '1px', color: 'border' }}
+          pad="xxsmall"
+          round="xsmall"
+          background={props.background}
+        >
           <EditorBox
             ref={editorRef}
             avatar={avatar}
@@ -103,6 +110,7 @@ const CommentEditor: React.FC<
             cancelButtonLabel={cancelButtonLabel}
             onCancelClick={onCancelClick}
             showCancelButton={showCancelButton}
+            embedEntryData={embedEntryData}
           />
         </Box>
       )}

@@ -7,13 +7,24 @@ import {
   useFollow,
   useUnfollow,
   LoginState,
+  useEnsByAddress,
 } from '@akashaorg/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
 
 import { getUsernameTypes } from '../../utils/username-utils';
 
-const { ModalRenderer, ProfileCard, styled, ExtensionPoint } = DS;
+const {
+  ModalRenderer,
+  ProfileCard,
+  styled,
+  ExtensionPoint,
+  Box,
+  ProfileCardEthereumId,
+  ProfileCardDescription,
+  HorizontalDivider,
+  TextLine,
+} = DS;
 
 const ProfilePageCard = styled(ProfileCard)`
   margin-bottom: 0.5rem;
@@ -38,6 +49,8 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
+
+  const ENSReq = useEnsByAddress(profileData.ethAddress);
 
   const userNameTypes = React.useMemo(() => {
     if (profileData) {
@@ -142,8 +155,6 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
         profileData={profileData}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
-        descriptionLabel={t('About me')}
-        badgesLabel={t('Badges')}
         followingLabel={t('Following')}
         followersLabel={t('Followers')}
         postsLabel={t('Posts')}
@@ -173,6 +184,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
             ? t('Manage Ethereum name')
             : t('Add an Ethereum name')
         }
+        hideENSButton={true}
         copyLabel={t('Copy to clipboard')}
         copiedLabel={t('Copied')}
         modalSlotId={props.layoutConfig.modalSlotId}
@@ -183,7 +195,46 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
             onUnmount={handleExtPointUnmount}
           />
         }
-      />
+      >
+        <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
+          <ProfileCardEthereumId
+            profileData={profileData}
+            copiedLabel={t('Copied')}
+            copyLabel={t('Copy to clipboard')}
+          />
+          {ENSReq.isFetching && (
+            <Box pad="1em">
+              <TextLine width="25%" margin={{ bottom: '.5em' }} />
+              <TextLine width="48%" />
+            </Box>
+          )}
+          {ENSReq.isFetched && ENSReq.data && (
+            <ProfileCardEthereumId
+              profileData={profileData}
+              copiedLabel={t('Copied')}
+              copyLabel={t('Copy to clipboard')}
+              ensName={ENSReq.data}
+            />
+          )}
+
+          {profileData.description && (
+            <>
+              <Box pad={{ horizontal: 'medium' }}>
+                <HorizontalDivider />
+              </Box>
+              <ProfileCardDescription
+                description={profileData.description}
+                editable={false}
+                handleChangeDescription={() => null}
+                descriptionPopoverOpen={false}
+                setDescriptionPopoverOpen={() => null}
+                // profileProvidersData={profileProvidersData}
+                descriptionLabel={t('About me')}
+              />
+            </>
+          )}
+        </Box>
+      </ProfilePageCard>
     </>
   );
 };

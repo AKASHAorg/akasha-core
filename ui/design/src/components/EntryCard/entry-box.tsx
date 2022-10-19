@@ -95,6 +95,7 @@ export interface IEntryBoxProps {
   scrollHiddenContent?: boolean;
   removeEntryLabel?: string;
   onEntryRemove?: (entryId: string) => void;
+  onRepliesClick?: () => void;
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
   modalSlotId: string;
@@ -156,6 +157,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     editedLabel = 'Last edited',
     modalSlotId,
     actionsRightExt,
+    onRepliesClick,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -217,7 +219,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     }
   };
 
-  const handleRepliesClick = () => handleContentClick(entryData);
+  const handleRepliesClick = () => {
+    handleContentClick(entryData);
+    onRepliesClick();
+  };
 
   const handleContentClick = (data?: IEntryData) => {
     if (typeof onContentClick === 'function' && !disableActions && contentClickable && data) {

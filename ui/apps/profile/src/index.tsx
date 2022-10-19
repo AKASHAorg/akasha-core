@@ -38,7 +38,6 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     matcher({
       login: loader(() => import('./extensions/login-modal')),
       'update-profile': loader(() => import('./extensions/update-profile-modal')),
-      'update-ens': loader(() => import('./extensions/update-ens-modal')),
       'profile-share': loader(() => import('./extensions/share-profile-modal')),
       'delete-dev-key': loader(() => import('./extensions/delete-dev-key')),
     });

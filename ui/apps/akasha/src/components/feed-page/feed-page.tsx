@@ -22,9 +22,9 @@ import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 
 const {
+  Extension,
   Box,
   Helmet,
-  EditorPlaceholder,
   EntryCard,
   EntryPublishErrorCard,
   LoginCTAWidgetCard,
@@ -67,10 +67,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return [];
   }, [postsReq.data]);
 
-  const handleShowEditor = React.useCallback(() => {
-    navigateToModal.current({ name: 'editor-modal' });
-  }, []);
-
   const handleEntryFlag = React.useCallback(
     (entryId: string, itemType: string) => () => {
       if (!loginState.pubKey) {
@@ -112,12 +108,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             </Box>
             <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
           </BasicCardBox>
-          <EditorPlaceholder
-            ethAddress={loginState?.ethAddress}
-            onClick={handleShowEditor}
-            avatar={loggedProfileData?.avatar}
-            style={{ marginBottom: '0.5rem' }}
-          />
+          <Box margin={{ bottom: 'xsmall' }}>
+            <Extension
+              name="inline-editor_feed_page"
+              uiEvents={props.uiEvents}
+              data={{ action: 'post' }}
+            />
+          </Box>
         </>
       ) : (
         <Box margin={{ bottom: 'small' }}>

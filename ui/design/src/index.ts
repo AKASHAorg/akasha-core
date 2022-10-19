@@ -136,6 +136,7 @@ import DropSearchInput from './components/DropSearchInput';
 
 import EditorModal from './components/EditorModal';
 import ExtensionPoint from './utils/extension-point';
+import { Extension } from './utils/extension';
 import ShareModal from './components/ShareModal';
 import { StyledLayer } from './components/ListModal/styled-modal';
 import SignInModal from './components/SignInModal';
@@ -169,7 +170,7 @@ import SelectPopover from './components/SelectPopover';
 
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import TextIcon from './components/TextIcon';
-import LinkInput from './components/TextInputIconForm';
+import TextInputIconForm from './components/TextInputIconForm';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
 import Checkbox from './components/Checkbox';
 import { SearchStartCard } from './components/SearchStartCard';
@@ -201,7 +202,10 @@ import lightTheme from './styles/themes/light';
 import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
 
-export { BoxExtendedProps, ButtonExtendedProps };
+import ProfileCardEthereumId from './components/ProfileCard/profile-card-fields/profile-card-ethereum-id';
+import ProfileCardDescription from './components/ProfileCard/profile-card-fields/profile-card-description';
+import Skeleton from './components/SideBar/skeleton';
+export type { BoxExtendedProps, ButtonExtendedProps };
 
 /* Grommet utils */
 // @TODO: fix this export style...
@@ -234,6 +238,7 @@ const exported = {
   EditorMeter,
   editorDefaultValue,
   ExtensionPoint,
+  Extension,
   CommentEditor,
   EditorCard,
   EditorPlaceholder,
@@ -287,7 +292,7 @@ const exported = {
   SidebarMenuItem,
   Text,
   TextIcon,
-  LinkInput,
+  TextInputIconForm,
   Topbar,
   createTheme,
   darkTheme,
@@ -369,6 +374,9 @@ const exported = {
   OnboardingStartCard,
   OnboardingSuggestionsCard,
   MyFeedCard,
+  ProfileCardEthereumId,
+  ProfileCardDescription,
+  Skeleton,
 };
 
 export default exported;
