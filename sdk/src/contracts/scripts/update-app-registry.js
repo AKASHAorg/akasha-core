@@ -11,7 +11,16 @@ async function main () {
   const integrationRegistry = await IntegrationRegistry.attach(
     process.env.INTEGRATION_REGISTRY_ADDRESS
   );
-
+  const gasEstimate = await ethers.provider.getFeeData();
+  const gasSettings = {
+    maxFeePerGas: gasEstimate.maxFeePerGas,
+    maxPriorityFeePerGas: gasEstimate.maxPriorityFeePerGas,
+  };
+  // const priorityTxGas = {
+  //   maxFeePerGas: gasEstimate.maxFeePerGas.add(gasEstimate.maxFeePerGas.div(6)),
+  //   maxPriorityFeePerGas: gasEstimate.maxPriorityFeePerGas.add(gasEstimate.maxPriorityFeePerGas.div(6)),
+  //   //gasPrice: gasEstimate.gasPrice.add(gasEstimate.gasPrice.div(5))
+  // }
   for (const pkg of pkgInfos) {
     if (typeof pkg.type !== "number") {
       continue;
@@ -34,7 +43,8 @@ async function main () {
       pkg.name,
       version,
       manifestHash,
-      pkg.type
+      pkg.type,
+      gasSettings
     );
     console.info("tx.hash:", tx.hash);
     await tx.wait(1);
