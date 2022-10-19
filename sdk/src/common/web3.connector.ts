@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { ethers } from 'ethers';
 import {
-  TYPES,
+  EthProviders,
   ILogger,
   INJECTED_PROVIDERS,
-  PROVIDER_ERROR_CODES,
-  WEB3_EVENTS,
-  EthProviders,
   IWeb3Connector,
+  PROVIDER_ERROR_CODES,
+  TYPES,
+  WEB3_EVENTS,
 } from '@akashaorg/typings/sdk';
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/web3-provider';
@@ -88,6 +88,15 @@ class Web3Connector
    */
   get provider() {
     if (this.#web3Instance) {
+      return this.#web3Instance;
+    } else {
+      this.#web3Instance = new ethers.providers.InfuraProvider(
+        {
+          name: this.network,
+          chainId: this.networkId[this.network],
+        },
+        process.env.INFURA_ID,
+      );
       return this.#web3Instance;
     }
     throw new Error('Must connect first to a provider!');
