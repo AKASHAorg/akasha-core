@@ -16,6 +16,7 @@ import EventBus from '../common/event-bus';
 import { concatAll, map, tap } from 'rxjs/operators';
 import IpfsConnector from '../common/ipfs.connector';
 import { IsUserNameAvailable } from '../profiles/profile.graphql';
+import Stash from '../stash/index';
 
 export const isEncodedLabelHash = hash => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
@@ -40,6 +41,7 @@ class AWF_ENS implements AWF_IENS {
   private _auth: AWF_Auth;
   private _settings: Settings;
   private _globalChannel: EventBus;
+  private _stash: Stash;
   private _chainChecked = false;
   //private _AkashaRegistrarInstance;
   private _ReverseRegistrarInstance;
@@ -59,6 +61,7 @@ class AWF_ENS implements AWF_IENS {
     @inject(TYPES.EventBus) globalChannel: EventBus,
     @inject(TYPES.Web3) web3: Web3Connector,
     @inject(TYPES.IPFS) ipfs: IpfsConnector,
+    @inject(TYPES.Stash) stash: Stash,
   ) {
     this._log = log.create('AWF_ENS');
     this._gql = gql;
@@ -67,6 +70,7 @@ class AWF_ENS implements AWF_IENS {
     this._globalChannel = globalChannel;
     this._web3 = web3;
     this._ipfs = ipfs;
+    this._stash = stash;
   }
 
   registerName(name: string) {
@@ -164,17 +168,43 @@ class AWF_ENS implements AWF_IENS {
     );
   }
 
+  /**
+   * Returns ENS name associated with the ethereum address
+   */
   async resolveAddress(ethAddress: string) {
     if (!this._chainChecked) {
       await this.setupContracts();
     }
-    const address = await this._web3.provider.lookupAddress(ethAddress);
-    return createFormattedValue(address);
+    const uiStash = this._stash.getUiStash();
+    const key = `ens:resolveAddress:${ethAddress}`;
+    let ensName;
+    if (uiStash.has(key)) {
+      ensName = uiStash.get(key);
+    } else {
+      ensName = await this._web3.provider.lookupAddress(ethAddress);
+      uiStash.set(key, ensName);
+    }
+
+    return createFormattedValue(ensName);
   }
 
+  /**
+   * Returns eth address associated with the ens name
+   */
   async resolveName(name: string) {
-    const result = await this._web3.provider.resolveName(name);
-    return createFormattedValue(result);
+    if (!this._chainChecked) {
+      await this.setupContracts();
+    }
+    const uiStash = this._stash.getUiStash();
+    const key = `ens:resolveName:${name}`;
+    let ensAddress;
+    if (uiStash.has(key)) {
+      ensAddress = uiStash.get(key);
+    } else {
+      ensAddress = await this._web3.provider.resolveName(name);
+      uiStash.set(key, ensAddress);
+    }
+    return createFormattedValue(ensAddress);
   }
 
   public async setupContracts() {

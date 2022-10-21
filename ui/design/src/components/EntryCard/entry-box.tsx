@@ -221,7 +221,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const handleRepliesClick = () => {
     handleContentClick(entryData);
-    onRepliesClick();
+    if (typeof onRepliesClick === 'function') onRepliesClick();
   };
 
   const handleContentClick = (data?: IEntryData) => {
