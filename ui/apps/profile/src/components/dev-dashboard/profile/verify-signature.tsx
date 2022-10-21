@@ -12,7 +12,7 @@ import menuRoute, { DEV_DASHBOARD } from '../../../routes';
 
 import { StyledTextArea } from './dev-message-form';
 
-const { Box, Button, HorizontalDivider, MainAreaCardBox, Text, LinkInput, Spinner } = DS;
+const { Box, Button, HorizontalDivider, MainAreaCardBox, Text, TextInputIconForm, Spinner } = DS;
 
 interface IVerifySignatureCardProps extends ISummaryCardProps {
   className?: string;
@@ -107,7 +107,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
               <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
                 {pubKeyTitleLabel}
               </Text>
-              <LinkInput
+              <TextInputIconForm
                 inputPlaceholder={pubKeyInputPlaceholder}
                 inputValue={pubKey}
                 elevation="shadow"

@@ -2,7 +2,7 @@ import React from 'react';
 
 import DS from '@akashaorg/design-system';
 
-const { Box, Button, Text, TextArea, LinkInput, styled } = DS;
+const { Box, Button, Text, TextArea, TextInputIconForm, styled } = DS;
 
 export interface IDevMessageFormProps {
   messageNameTitleLabel: string;
@@ -47,7 +47,7 @@ const DevMessageForm: React.FC<IDevMessageFormProps> = props => {
         <Text size="medium" weight="bold" style={{ textTransform: 'uppercase' }}>
           {messageNameTitleLabel}
         </Text>
-        <LinkInput
+        <TextInputIconForm
           inputPlaceholder={messageNameInputPlaceholder}
           inputValue={messageNameValue || ''}
           elevation="shadow"
