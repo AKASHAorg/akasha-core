@@ -18,6 +18,7 @@ import {
   GetComments,
   EditComment,
   RemoveComment,
+  GetReplies,
 } from './comments.graphql';
 import { concatAll, map, tap } from 'rxjs/operators';
 import EventBus from '../common/event-bus';
@@ -75,6 +76,25 @@ class AWF_Comments implements AWF_IComments {
         query: GetComments,
         variables: { offset: opt.offset, limit: opt.limit, postID: opt.postID },
         operationName: 'GetComments',
+      },
+      true,
+    );
+  }
+
+  /**
+   * Get a list of replies for a comment
+   */
+  getReplies(opt: { offset?: string; limit: number; postID: string; commentID: string }) {
+    return this._gql.run<{ getComments: Comments_Response }>(
+      {
+        query: GetReplies,
+        variables: {
+          offset: opt.offset,
+          limit: opt.limit,
+          postID: opt.postID,
+          commentID: opt.commentID,
+        },
+        operationName: 'GetReplies',
       },
       true,
     );

@@ -84,6 +84,7 @@ declare module '*/comments.graphql' {
   const UserProfileFragment: FragmentSpreadNode;
   const GetComment: TypedQueryDocumentNode;
   const GetComments: TypedQueryDocumentNode;
+  const GetReplies: TypedQueryDocumentNode;
   const AddComment: DocumentNode;
   const EditComment: DocumentNode;
   const RemoveComment: DocumentNode;
@@ -91,6 +92,7 @@ declare module '*/comments.graphql' {
   export {
     GetComment,
     GetComments,
+    GetReplies,
     AddComment,
     DataProviderFragment,
     UserProfileFragment,

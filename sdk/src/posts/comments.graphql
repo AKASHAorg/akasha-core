@@ -52,6 +52,25 @@ query GetComments($offset: String, $limit: Int, $postID: String!) {
   }
 }
 
+query GetReplies($offset: String, $limit: Int, $postID: String!, $commentID: String!) {
+  getReplies(postID:$postID, commentID: $commentID, offset: $offset, limit: $limit){
+    total
+    nextIndex
+    results{
+      content{
+        ...DataProviderFragment
+      }
+      author{
+        ...UserProfileFragment
+      }
+      creationDate
+      replyTo
+      postId
+      _id
+    }
+  }
+}
+
 
 mutation AddComment($content: [DataProviderInput!], $comment: CommentData) {
   addComment(content: $content, comment: $comment)
