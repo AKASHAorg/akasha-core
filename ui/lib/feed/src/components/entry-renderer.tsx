@@ -58,6 +58,8 @@ export interface IEntryRenderer {
   modalSlotId: string;
   accentBorderTop?: boolean;
   trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
+  index?: number;
+  totalEntry?: number;
 }
 
 const commentStyleExt = {
@@ -326,7 +328,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
               />
             </Box>
           )}
-          {!entryAwaitingModeration &&
+          {itemData &&
+            !entryAwaitingModeration &&
             !accountAwaitingModeration &&
             !itemData.delisted &&
             !itemData.isRemoved && (
@@ -355,7 +358,9 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 }}
                 showMore={true}
                 profileAnchorLink={'/@akashaorg/app-profile'}
-                repliesAnchorLink={'/@akashaorg/app-akasha-integration/post'}
+                repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
+                  isComment ? 'reply' : 'post'
+                }`}
                 onRepost={onRepost}
                 onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
                 handleFollowAuthor={handleFollow}
@@ -373,12 +378,12 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 removeEntryLabel={props.removeEntryLabel}
                 removedByMeLabel={props.removedByMeLabel}
                 removedByAuthorLabel={props.removedByAuthorLabel}
-                disableReposting={itemData.isRemoved}
+                disableReposting={itemData.isRemoved || isComment}
                 disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-                hideActionButtons={isComment}
                 modalSlotId={modalSlotId}
                 bottomBorderOnly={isComment}
                 noBorderRadius={isComment}
+                noBorder={isComment && props.index === props.totalEntry}
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={
                   <ExtensionPoint

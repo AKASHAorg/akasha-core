@@ -34,11 +34,12 @@ const EntryList = (props: EntryListProps) => {
     <>
       {pages.map((page, index) => (
         <div data-page-idx={index} key={`${pageKeyPrefix}-${index}`}>
-          {page?.results.map((entryId, index) => (
+          {page?.results.map((entryId, index, items) => (
             <div style={{ marginBottom: itemSpacing }} key={entryId}>
               {React.cloneElement(itemCard, {
                 itemId: entryId,
                 index,
+                totalEntry: items.length,
                 className: `entry-${entryId}`,
               })}
             </div>
