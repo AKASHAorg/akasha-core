@@ -210,13 +210,13 @@ export function useCreateComment() {
 
   const pendingID = 'pending' + new Date().getTime();
   return useMutation(
-    async (publishObj: IPublishData & { postID: string }) => {
-      const comment = buildPublishObject(publishObj, publishObj.postID);
+    async (publishObj: IPublishData & { postID: string; replyTo?: string }) => {
+      const comment = buildPublishObject(publishObj, publishObj.postID, publishObj.replyTo);
       const res = await lastValueFrom(sdk.api.comments.addComment(comment));
       return res?.data?.addComment;
     },
     {
-      onMutate: async (publishObj: IPublishData & { postID: string }) => {
+      onMutate: async (publishObj: IPublishData & { postID: string; replyTo?: string }) => {
         await queryClient.cancelQueries([COMMENTS_KEY, publishObj.postID]);
 
         const optimisticComment = Object.assign({}, publishObj);
