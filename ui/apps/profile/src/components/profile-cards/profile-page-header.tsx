@@ -59,7 +59,9 @@ type ProfilePageCardProps = IProfileHeaderProps &
   >;
 
 export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
-  const { profileData, loginState, profileId, modalSlotId, navigateTo } = props;
+  const { plugins, profileData, loginState, profileId, modalSlotId, navigateTo } = props;
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
@@ -131,6 +133,13 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     setModalOpen(false);
   };
 
+  const handleClickPosts = () => {
+    routing.navigateTo({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileData.pubKey}`,
+    });
+  };
+
   const handleExtPointMount = (name: string) => {
     props.uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -165,7 +174,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
         )}
       </ModalRenderer>
       <ProfilePageCard
-        onClickPosts={() => null}
+        onClickPosts={handleClickPosts}
         onClickFollowers={handleStatIconClick(0)}
         onClickFollowing={handleStatIconClick(1)}
         onClickInterests={handleStatIconClick(2)}
