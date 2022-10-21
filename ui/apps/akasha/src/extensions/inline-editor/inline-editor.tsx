@@ -51,11 +51,18 @@ export const InlineEditor = (props: RootExtensionProps) => {
     [loginQuery.data],
   );
 
+  const replyTo =
+    typeof props.extensionData.replyTo === 'string' ? props.extensionData.replyTo : '';
+  const entryId = props.extensionData.entryId;
+
   const embeddedPost = usePost({
-    postId: props.extensionData.entryId,
+    postId: entryId,
     enabler: action === 'embed',
   });
-  const editingPost = usePost({ postId: props.extensionData.entryId, enabler: action === 'edit' });
+  const editingPost = usePost({
+    postId: entryId,
+    enabler: action === 'edit',
+  });
   const editPost = useEditPost();
   const publishPost = useCreatePost();
   const publishComment = useCreateComment();
@@ -91,7 +98,7 @@ export const InlineEditor = (props: RootExtensionProps) => {
       switch (action) {
         case 'edit':
           editPost.mutate(
-            { entryID: props.extensionData.entryId, ...data },
+            { entryID: entryId, ...data },
             {
               onSuccess: () => {
                 analyticsActions.trackEvent({
@@ -118,16 +125,21 @@ export const InlineEditor = (props: RootExtensionProps) => {
           break;
         case 'reply':
           publishComment.mutate(
-            { ...data, postID: props.extensionData.entryId },
+            {
+              ...data,
+              postID: entryId,
+              replyTo,
+            },
             {
               onSuccess: () => {
                 analyticsActions.trackEvent({
-                  category: AnalyticsCategories.POST,
+                  category: AnalyticsCategories.REPLY,
                   action: 'Reply Published',
                 });
               },
             },
           );
+          break;
       }
 
       if (action !== 'reply') props.singleSpa.navigateToUrl(location.pathname);
@@ -219,6 +231,9 @@ export const InlineEditor = (props: RootExtensionProps) => {
             embedEntryData={embedEntryData}
             editorState={action === 'edit' ? entryData?.slateContent : null}
             onPlaceholderClick={action === 'reply' ? handleReplyPlaceholderClick : null}
+            onCancelClick={() => props.singleSpa.navigateToUrl(location.pathname)}
+            cancelButtonLabel={t('Cancel')}
+            showCancelButton={action === 'edit'}
             isShown={!!props.extensionData.isShown}
             background="cardBackground"
           />
