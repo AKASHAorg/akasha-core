@@ -1,6 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
 /* Components */
 import {
+  Anchor,
   Box,
   BoxExtendedProps,
   ButtonExtendedProps,
@@ -12,6 +13,7 @@ import {
   ResponsiveContext,
   ThemeContext,
   Text,
+  TextArea,
   Carousel,
   Heading,
   RadioButtonGroup,
@@ -83,6 +85,7 @@ import { MyFeedCard } from './components/MyFeedCard';
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
 import AppsWidgetCard from './components/AppsWidgetCard';
 import CookieWidgetCard from './components/CookieCard';
+import DevKeyCard from './components/DevKeyCard';
 import ICDetailCard from './components/ICDetailCard';
 import ICWidgetCard from './components/ICWidgetCard';
 import LoginCTAWidgetCard, { CTAAnchor } from './components/LoginCTAWidgetCard';
@@ -90,7 +93,7 @@ import SourcesWidgetCard from './components/SourcesWidgetCard';
 import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
 import TrendingWidgetCard from './components/TrendingWidgetCard';
 import TutorialWidgetCard from './components/TutorialWidgetCard';
-import SignUpCard from './components/SignUpCard';
+import SteppedActionCard from './components/SteppedActionCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
@@ -215,6 +218,7 @@ const exported = {
   LineChart,
   ResponsiveChart,
   Button,
+  TextArea,
   Carousel,
   DuplexButton,
   EditableAvatar,
@@ -293,6 +297,7 @@ const exported = {
   createTheme,
   darkTheme,
   lightTheme,
+  Anchor,
   Box,
   Drop,
   Grid,
@@ -334,6 +339,7 @@ const exported = {
   HorizontalDivider,
   StepIndicator,
   CookieWidgetCard,
+  DevKeyCard,
   ICDetailCard,
   ICWidgetCard,
   LoginCTAWidgetCard,
@@ -341,7 +347,7 @@ const exported = {
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
-  SignUpCard,
+  SteppedActionCard,
   FilterCard,
   SwitchCard,
   StyledSwitchCardButton,

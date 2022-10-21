@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 
-import SignUpCard from '../';
+import SteppedActionCard from '..';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-describe('<SignUpCard /> Component', () => {
+describe('<SteppedActionCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleIconClick = jest.fn();
@@ -13,7 +13,7 @@ describe('<SignUpCard /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <SignUpCard
+          <SteppedActionCard
             titleLabel="Sign Up"
             activeIndex={1}
             stepLabels={[
@@ -26,7 +26,7 @@ describe('<SignUpCard /> Component', () => {
             handleIconClick={handleIconClick}
           >
             {<></>}
-          </SignUpCard>,
+          </SteppedActionCard>,
         ),
         {},
       );

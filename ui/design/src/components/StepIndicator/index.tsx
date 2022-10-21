@@ -8,7 +8,7 @@ import Icon from '../Icon';
 export interface IStepIndicatorProps {
   activeIndex: number;
   stepLabels: string[];
-  margin?: EdgeSizeType;
+  verticalMargin?: EdgeSizeType;
 }
 
 const StyledText = styled(Text)`
@@ -16,13 +16,13 @@ const StyledText = styled(Text)`
 `;
 
 const StepIndicator: React.FC<IStepIndicatorProps> = props => {
-  const { stepLabels, activeIndex, margin } = props;
+  const { stepLabels, activeIndex, verticalMargin = 'large' } = props;
   return (
     <Box
       direction="row"
       align="center"
       width={{ max: 'fit-content' }}
-      margin={{ vertical: margin }}
+      margin={{ vertical: verticalMargin }}
     >
       {stepLabels.map((step, idx) => (
         <React.Fragment key={idx + step}>
