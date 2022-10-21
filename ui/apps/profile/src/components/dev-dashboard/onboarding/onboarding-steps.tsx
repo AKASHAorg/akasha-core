@@ -38,7 +38,7 @@ const DevDashOnboardingSteps: React.FC<
 
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [messageName, setMessageName] = React.useState<string>('');
-  const [message, setmessage] = React.useState<string>('');
+  const [message, setMessage] = React.useState<string>('');
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
@@ -130,7 +130,7 @@ const DevDashOnboardingSteps: React.FC<
   };
 
   const handleMessageInputChange = ev => {
-    setmessage(ev.target.value);
+    setMessage(ev.target.value);
   };
 
   const handleValidateMessage = () => {
@@ -173,11 +173,11 @@ const DevDashOnboardingSteps: React.FC<
         <StepOne
           titleLabel={t('First things first ✨')}
           subtitleLabel={t(
-            'To form a part of etheruem world’s developer community you need to accept a few conditions, please make sure to read them carefully 😸',
+            'To form a part of ethereum world’s developer community you need to accept a few conditions, please make sure to read them carefully 😸',
           )}
           paragraphs={[
             t(
-              'You are entitled to create apps on our EW and have all necessary licenses and consents to do so.',
+              'You are entitled to create apps on EW and have all necessary licenses and consents to do so.',
             ),
             t(
               'The Applications do not invade any intellectual property right, including without limitation copyright, patent or trademark of any third party.',
