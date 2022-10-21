@@ -32,6 +32,7 @@ import menuRoute, {
   SIGN_MESSAGE,
   VERIFY_SIGNATURE,
 } from '../../routes';
+import DevDashboard from './dev-dashboard';
 
 const { Box } = DS;
 
@@ -93,7 +94,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
       <Box>
         <Routes>
           {/* <Route path="/list" element={<>A list of profiles</>} /> */}
-          {['/:pubKey', menuRoute[MY_PROFILE], menuRoute[DEV_DASHBOARD]].map(path => (
+          {['/:pubKey', menuRoute[MY_PROFILE]].map(path => (
             <Route
               key={path}
               path={path}
@@ -121,6 +122,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
+          <Route path={menuRoute[DEV_DASHBOARD]} element={<DevDashboard {...props} />} />
           <Route
             path={menuRoute[ONBOARDING]}
             element={

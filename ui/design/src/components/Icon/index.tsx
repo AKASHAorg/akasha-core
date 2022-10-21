@@ -42,6 +42,7 @@ export type IconType =
   | 'chevronRight'
   | 'chevronLeft'
   | 'dapper'
+  | 'dashboard'
   | 'discord'
   | 'document'
   | 'dropdown'
@@ -172,6 +173,7 @@ export const iconTypes: IconType[] = [
   'chevronLeft',
   'coins',
   'dapper',
+  'dashboard',
   'discord',
   'document',
   'dropdown',
@@ -392,6 +394,7 @@ const fillIcons: IconType[] = [
   'appModeration',
   'explore',
   'legal',
+  'dashboard',
 ];
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];

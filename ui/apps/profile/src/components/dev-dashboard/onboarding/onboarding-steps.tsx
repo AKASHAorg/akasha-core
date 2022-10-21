@@ -235,7 +235,7 @@ const DevDashOnboardingSteps: React.FC<
           messageValue={message}
           validationStatus={{
             isError: validateMutation.isError,
-            errorMessage: t('{{error}}', { error: validateMutation.error?.message }),
+            errorMessage: t('{{error}}', { error: validateMutation.error?.message || '' }),
           }}
           isFetching={validateMutation.isLoading || addKeyMutation.isLoading}
           buttonLabel={t('Validate Message')}

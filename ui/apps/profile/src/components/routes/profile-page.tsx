@@ -15,22 +15,11 @@ import {
   useInfinitePostsByAuthor,
   LoginState,
   useGetLogin,
-  useGetDevKeys,
 } from '@akashaorg/ui-awf-hooks';
 
-import DevProfileCard from '../dev-dashboard/profile/dev-profile-card';
 import ProfilePageHeader from '../profile-cards/profile-page-header';
-import { ONBOARDING_STATUS } from '../dev-dashboard/onboarding/intro-card';
 
-import menuRoute, {
-  DEV_DASHBOARD,
-  DEV_KEYS,
-  MY_PROFILE,
-  ONBOARDING,
-  PUBLISHED_APPS,
-  SIGN_MESSAGE,
-  VERIFY_SIGNATURE,
-} from '../../routes';
+import menuRoute, { MY_PROFILE } from '../../routes';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner } = DS;
 
@@ -60,11 +49,6 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [pubKey, loggedProfileData, location.pathname]);
 
-  const isOnDevDashboard = React.useMemo(
-    () => location.pathname === menuRoute[DEV_DASHBOARD],
-    [location.pathname],
-  );
-
   const loginQuery = useGetLogin();
 
   const profileDataQuery = useGetProfile(
@@ -79,10 +63,6 @@ const ProfilePage = (props: ProfilePageProps) => {
     15,
     !!publicKey && !erroredHooks.includes('useInfinitePostsByAuthor'),
   );
-
-  const getKeysQuery = useGetDevKeys(true);
-
-  const devKeys = getKeysQuery.data || [];
 
   React.useEffect(() => {
     if (reqPosts.status === 'error' && !erroredHooks.includes('useInfinitePostsByAuthor')) {
@@ -110,11 +90,6 @@ const ProfilePage = (props: ProfilePageProps) => {
     return [];
   }, [reqPosts.data]);
 
-  const isOnboarded = React.useMemo(() => {
-    return Boolean(window.localStorage.getItem(ONBOARDING_STATUS));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginQuery.data?.pubKey) {
       return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
@@ -136,14 +111,6 @@ const ProfilePage = (props: ProfilePageProps) => {
       getNavigationUrl: () => '/legal/code-of-conduct',
     });
   };
-
-  if (!isOnboarded && isOnDevDashboard) {
-    // if user has not been onboarded, navigate to onboarding
-    return plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[ONBOARDING],
-    });
-  }
 
   return (
     <Box fill="horizontal">
@@ -192,79 +159,50 @@ const ProfilePage = (props: ProfilePageProps) => {
           )}
           {!profileState.delisted && (
             <>
-              {isOnDevDashboard && (
-                <DevProfileCard
-                  titleLabel={t('Welcome to your developer Dashboard')}
-                  subtitleLabels={[
-                    t('Not sure where to start? Check our'),
-                    t('developer documentation'),
-                    '✨',
-                  ]}
-                  cardMenuItems={[
-                    {
-                      label: t('Dev Keys'),
-                      route: DEV_KEYS,
-                      value: devKeys,
-                    },
-                    {
-                      label: t('Published Apps'),
-                      route: PUBLISHED_APPS,
-                    },
-                    { label: t('Sign a Message'), route: SIGN_MESSAGE },
-                    { label: t('Verify a Signature'), route: VERIFY_SIGNATURE },
-                  ]}
-                  ctaUrl="https://akasha-docs.pages.dev"
-                  navigateTo={plugins['@akashaorg/app-routing']?.routing.navigateTo}
+              <ProfilePageHeader
+                {...props}
+                // modalSlotId={props.layoutConfig.modalSlotId}
+                profileData={profileState}
+                profileId={pubKey}
+                loginState={loginQuery.data}
+                // navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+              />
+              {reqPosts.isError && reqPosts.error && (
+                <ErrorLoader
+                  type="script-error"
+                  title="Cannot get posts for this profile"
+                  details={(reqPosts.error as Error).message}
                 />
               )}
-              {!isOnDevDashboard && (
-                <>
-                  <ProfilePageHeader
-                    {...props}
-                    // modalSlotId={props.layoutConfig.modalSlotId}
-                    profileData={profileState}
-                    profileId={pubKey}
-                    loginState={loginQuery.data}
-                    // navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-                  />
-                  {reqPosts.isError && reqPosts.error && (
-                    <ErrorLoader
-                      type="script-error"
-                      title="Cannot get posts for this profile"
-                      details={(reqPosts.error as Error).message}
-                    />
-                  )}
-                  {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
-                  {reqPosts.isSuccess && postPages && (
-                    <FeedWidget
-                      modalSlotId={props.layoutConfig.modalSlotId}
-                      itemType={EntityTypes.ENTRY}
-                      logger={props.logger}
-                      onLoadMore={handleLoadMore}
-                      getShareUrl={(itemId: string) =>
-                        `${window.location.origin}/social-app/post/${itemId}`
-                      }
-                      pages={postPages}
-                      requestStatus={reqPosts.status}
-                      loginState={loginQuery.data}
-                      loggedProfile={loggedProfileData}
-                      navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-                      navigateToModal={props.navigateToModal}
-                      onLoginModalOpen={showLoginModal}
-                      hasNextPage={reqPosts.hasNextPage}
-                      contentClickable={true}
-                      onEntryFlag={handleEntryFlag}
-                      onEntryRemove={handleEntryRemove}
-                      removeEntryLabel={t('Delete Post')}
-                      removedByMeLabel={t('You deleted this post')}
-                      removedByAuthorLabel={t('This post was deleted by its author')}
-                      parentIsProfilePage={true}
-                      uiEvents={props.uiEvents}
-                      itemSpacing={8}
-                      i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
-                    />
-                  )}
-                </>
+              {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
+              {reqPosts.isSuccess && postPages && (
+                <FeedWidget
+                  modalSlotId={props.layoutConfig.modalSlotId}
+                  itemType={EntityTypes.ENTRY}
+                  logger={props.logger}
+                  onLoadMore={handleLoadMore}
+                  getShareUrl={(itemId: string) =>
+                    `${window.location.origin}/social-app/post/${itemId}`
+                  }
+                  pages={postPages}
+                  requestStatus={reqPosts.status}
+                  loginState={loginQuery.data}
+                  loggedProfile={loggedProfileData}
+                  navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+                  navigateToModal={props.navigateToModal}
+                  onLoginModalOpen={showLoginModal}
+                  hasNextPage={reqPosts.hasNextPage}
+                  contentClickable={true}
+                  onEntryFlag={handleEntryFlag}
+                  onEntryRemove={handleEntryRemove}
+                  removeEntryLabel={t('Delete Post')}
+                  removedByMeLabel={t('You deleted this post')}
+                  removedByAuthorLabel={t('This post was deleted by its author')}
+                  parentIsProfilePage={true}
+                  uiEvents={props.uiEvents}
+                  itemSpacing={8}
+                  i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
+                />
               )}
             </>
           )}
