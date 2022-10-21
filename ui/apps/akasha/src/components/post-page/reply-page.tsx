@@ -1,20 +1,35 @@
 import * as React from 'react';
+import BaseEntryPage from './common/base-entry-page';
 import { useParams } from 'react-router-dom';
-import { useComment } from '@akashaorg/ui-awf-hooks';
-import { POST } from '../../routes';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { LoginState, mapEntry, useComment } from '@akashaorg/ui-awf-hooks';
+import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
-const ReplyPage: React.FC<RootComponentProps> = props => {
+interface IReplyPageProps {
+  loginState?: LoginState;
+  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+}
+
+const ReplyPage: React.FC<IReplyPageProps & RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
   const comment = useComment(commentId, !!commentId);
-  if (comment?.data?.postId) {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: navRoutes => `${navRoutes[POST]}/${comment.data.postId}`,
-    });
-  }
 
-  return <div>Redirecting to the post...</div>;
+  const entryData = React.useMemo(() => {
+    if (comment.data) {
+      return mapEntry(comment.data);
+    }
+    return undefined;
+  }, [comment.data]);
+
+  return (
+    <BaseEntryPage
+      {...props}
+      postId={entryData?.postId}
+      replyTo={commentId}
+      entryType={EntityTypes.COMMENT}
+      entryData={entryData}
+      entryReq={comment}
+    />
+  );
 };
 
 export default ReplyPage;

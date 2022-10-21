@@ -205,7 +205,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 moderatedContentLabel={t('This content has been moderated')}
                 showMore={true}
                 profileAnchorLink={'/@akashaorg/app-profile'}
-                repliesAnchorLink={'/@akashaorg/app-akasha-integration/post'}
+                repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
+                  itemType === EntityTypes.COMMENT ? 'reply' : 'post'
+                }`}
                 onRepost={handleRepost}
                 handleFollowAuthor={handleFollow}
                 handleUnfollowAuthor={handleUnfollow}
