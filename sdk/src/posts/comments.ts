@@ -85,7 +85,7 @@ class AWF_Comments implements AWF_IComments {
    * Get a list of replies for a comment
    */
   getReplies(opt: { offset?: string; limit: number; postID: string; commentID: string }) {
-    return this._gql.run<{ getComments: Comments_Response }>(
+    return this._gql.run<{ getReplies: Comments_Response }>(
       {
         query: GetReplies,
         variables: {
