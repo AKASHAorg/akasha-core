@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { StyledDrop, StyledSelectBox } from './styled-entry-box';
-import TextIcon from '../TextIcon';
 import { Box, ThemeContext } from 'grommet';
+
+import TextIcon from '../TextIcon';
 import { IconType } from '../Icon';
 import { IMenuItem } from '../MobileListModal';
+
+import { StyledDrop, StyledSelectBox } from './styled-entry-box';
 
 export interface ICardHeaderMenuProps {
   target: HTMLDivElement;

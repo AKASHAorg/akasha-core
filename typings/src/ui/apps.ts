@@ -101,7 +101,7 @@ export interface IAppConfig {
    * Only used for topbar.
    * @deprecated - use extension points
    */
-  menuItems: IMenuItem;
+  menuItems: IMenuItem | IMenuItem[];
 }
 
 export type AppRegistrationFn = (props: IntegrationRegistrationOptions) => IAppConfig;

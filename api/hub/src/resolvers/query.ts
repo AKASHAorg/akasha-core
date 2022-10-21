@@ -349,6 +349,21 @@ const query = {
     }
     return dataSources.profileAPI.isUserNameAvailable(userName);
   },
+  getReplies: async (_source, { postID, commentID, limit, offset }, { dataSources }) => {
+    const data = await dataSources.commentsAPI.getReplies(
+      postID,
+      commentID,
+      limit || 5,
+      offset || 0,
+    );
+    const results = [];
+    for (const comment of data.results) {
+      const author = await dataSources.profileAPI.resolveProfile(comment.author);
+      results.push(Object.assign({}, comment, { author }));
+    }
+    data.results = results;
+    return data;
+  },
 };
 
 export default query;

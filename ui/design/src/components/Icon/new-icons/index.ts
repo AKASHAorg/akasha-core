@@ -35,6 +35,7 @@ import coins from './coins';
 import comments from './comments';
 import copy from './copy';
 import dapper from './dapper';
+import dashboard from './dashboard';
 import discord from './discord';
 import document from './document';
 import dropdown from './dropdown';
@@ -152,13 +153,14 @@ export {
   coinbase,
   coins,
   copy,
-  dapper,
   check,
   checkSimple,
   checkDouble,
   chevronRight,
   chevronLeft,
   closedEye,
+  dapper,
+  dashboard,
   discord,
   dropdown,
   payment,

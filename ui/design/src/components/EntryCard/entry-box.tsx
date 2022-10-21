@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
-import { StyledProfileDrop, StyledIcon } from './styled-entry-box';
+import { StyledProfileDrop } from './styled-entry-box';
 
 import { EntryCardHidden } from './entry-card-hidden';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
@@ -413,7 +413,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               clickable={false}
             />
             {showMore && entryData.type !== 'REMOVED' && (
-              <StyledIcon
+              <Icon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
                   if (disableActions) {
