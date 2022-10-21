@@ -71,7 +71,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
 
   return (
     <BookmarkButton
-      label={isBookmarked ? t('Saved') : t('Save')}
+      label={extensionData.hideLabel ? '' : isBookmarked ? t('Saved') : t('Save')}
       iconType="bookmark"
       iconSize="sm"
       fontSize="large"
