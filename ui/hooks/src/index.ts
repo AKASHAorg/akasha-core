@@ -124,6 +124,14 @@ import {
 } from './use-app-settings';
 import { useAppDescription } from './use-app-description';
 import { usePlaformHealthCheck } from './use-health-check';
+import {
+  useValidateMessage,
+  useAddDevKeyFromMessage,
+  useGetDevKeys,
+  useDeleteDevKey,
+  useSignMessage,
+  useVerifySignature,
+} from './use-dev-profile';
 
 export {
   constants,
@@ -271,4 +279,10 @@ export {
   useUninstallApp,
   useAppDescription,
   usePlaformHealthCheck,
+  useValidateMessage,
+  useAddDevKeyFromMessage,
+  useGetDevKeys,
+  useDeleteDevKey,
+  useSignMessage,
+  useVerifySignature,
 };

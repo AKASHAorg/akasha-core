@@ -97,6 +97,11 @@ class CommentAPI extends DataSource {
       });
     }
     await queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
+    if (commentData.replyTo) {
+      await queryCache.del(
+        this.getAllCommentsCacheKey(`${commentData.postID}:${commentData.replyTo}`),
+      );
+    }
     return commentID;
   }
 
@@ -105,7 +110,31 @@ class CommentAPI extends DataSource {
     let comments;
     const allCommentsCache = this.getAllCommentsCacheKey(postID);
     if (!(await queryCache.has(allCommentsCache))) {
-      const query = new Where('postId').eq(postID).orderByDesc('creationDate');
+      const query = new Where('postId').eq(postID).orderBy('creationDate');
+      comments = await db.find<Comment>(this.dbID, this.collection, query);
+      await queryCache.set(allCommentsCache, comments);
+    }
+    comments = await queryCache.get(allCommentsCache);
+    const offsetIndex = offset ? comments.findIndex(comment => comment._id === offset) : 0;
+    let endIndex = limit + offsetIndex;
+    if (comments.length <= endIndex) {
+      endIndex = undefined;
+    }
+    const results = comments.slice(offsetIndex, endIndex);
+    const nextIndex = endIndex ? comments[endIndex]._id : null;
+    return { results: results, nextIndex: nextIndex, total: comments.length };
+  }
+
+  async getReplies(postID: string, commentId: string, limit: number, offset: string) {
+    const db: Client = await getAppDB();
+    let comments;
+    const allCommentsCache = this.getAllCommentsCacheKey(`${postID}:${commentId}`);
+    if (!(await queryCache.has(allCommentsCache))) {
+      const query = new Where('postId')
+        .eq(postID)
+        .and('replyTo')
+        .eq(commentId)
+        .orderBy('creationDate');
       comments = await db.find<Comment>(this.dbID, this.collection, query);
       await queryCache.set(allCommentsCache, comments);
     }

@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
-
-import Icon from '../../Icon';
+import { Box, Image, Text } from 'grommet';
 
 export interface IProfileCardBadgesProps {
+  publicImgPath?: string;
   badgesLabel: string;
   badges?: string[];
 }
 
 const ProfileCardBadges: React.FC<IProfileCardBadgesProps> = props => {
-  const { badgesLabel, badges } = props;
+  const { publicImgPath = '/images', badgesLabel, badges } = props;
 
   return (
     <Box
@@ -25,12 +24,10 @@ const ProfileCardBadges: React.FC<IProfileCardBadgesProps> = props => {
       </Box>
       <Box direction="row" gap="small">
         {badges.map((badge: string, id: number) => (
-          <Icon
-            key={badge + id}
-            type={badge}
-            strokeWidth={0}
-            style={{ height: '3.4375rem', width: '3.4375rem' }}
-          />
+          <Box key={badge + id} height="3.5rem" width="3.5rem">
+            {/* badges are in webp formats */}
+            <Image fit="contain" src={`${publicImgPath}/${badge}.webp`} />
+          </Box>
         ))}
       </Box>
     </Box>

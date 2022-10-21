@@ -1,16 +1,19 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Box, Text } from 'grommet';
+import { EdgeSizeType } from 'grommet/utils';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 
 import Icon from '../Icon';
 import StepIndicator, { IStepIndicatorProps } from '../StepIndicator';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
-export interface ISignUpCardProps extends IStepIndicatorProps {
+export interface ISteppedActionCardProps extends IStepIndicatorProps {
   className?: string;
   titleLabel: string;
+  extraStepLabel?: string;
   children: React.ReactNode;
+  bottomMargin?: EdgeSizeType;
   handleIconClick: () => void;
 }
 
@@ -21,8 +24,18 @@ const BoldText = styled(Text)`
   }
 `;
 
-const SignUpCard: React.FC<ISignUpCardProps> = props => {
-  const { className, titleLabel, stepLabels, activeIndex, children, handleIconClick } = props;
+const SteppedActionCard: React.FC<ISteppedActionCardProps> = props => {
+  const {
+    className,
+    titleLabel,
+    extraStepLabel = '',
+    stepLabels,
+    activeIndex,
+    verticalMargin,
+    bottomMargin = 'xlarge',
+    children,
+    handleIconClick,
+  } = props;
   return (
     <MainAreaCardBox
       style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}
@@ -44,7 +57,9 @@ const SignUpCard: React.FC<ISignUpCardProps> = props => {
             <BoldText size="xlarge" margin={{ horizontal: 'xsmall' }}>
               •
             </BoldText>
-            <BoldText size="xlarge">{stepLabels[activeIndex]}</BoldText>
+            <BoldText size="xlarge">
+              {activeIndex !== stepLabels.length ? stepLabels[activeIndex] : extraStepLabel}
+            </BoldText>
           </Box>
           {/* close icon */}
           <Icon
@@ -59,10 +74,14 @@ const SignUpCard: React.FC<ISignUpCardProps> = props => {
         <Box
           direction="row"
           justify="center"
-          margin={{ bottom: 'xlarge' }}
+          margin={{ bottom: bottomMargin }}
           border={{ side: 'bottom', color: 'border', size: 'xsmall' }}
         >
-          <StepIndicator stepLabels={stepLabels} activeIndex={activeIndex} margin="large" />
+          <StepIndicator
+            stepLabels={stepLabels}
+            activeIndex={activeIndex}
+            verticalMargin={verticalMargin}
+          />
         </Box>
         <Box>{children}</Box>
       </Box>
@@ -70,4 +89,4 @@ const SignUpCard: React.FC<ISignUpCardProps> = props => {
   );
 };
 
-export default SignUpCard;
+export default SteppedActionCard;
