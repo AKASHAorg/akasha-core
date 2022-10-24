@@ -13,7 +13,7 @@ interface AWF_IAuth {
    */
   enableSync(): void;
 
-  checkIfSignedUp(ethAddress: string): Observable<unknown>;
+  checkIfSignedUp(ethAddress: string): never;
 
   signIn(args: {
     provider?: EthProviders;

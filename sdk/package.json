@@ -4,7 +4,6 @@
   "main": "src/index.js",
   "dependencies": {
     "@akashaorg/typings": "*",
-    "@apollo/client": "3.6.9",
     "@ensdomains/ens-contracts": "0.0.12",
     "@metamask/detect-provider": "1.2.0",
     "@openzeppelin/contracts": "4.7.3",
@@ -20,6 +19,7 @@
     "eth-ens-namehash": "2.0.8",
     "ethers": "5.7.1",
     "graphql": "16.6.0",
+    "graphql-request": "5.0.0",
     "graphql-tag": "2.12.6",
     "idb-keyval": "6.2.0",
     "inversify": "6.0.1",
@@ -54,6 +54,9 @@
   "devDependencies": {
     "@gnosis.pm/safe-core-sdk": "3.0.0",
     "@gnosis.pm/safe-ethers-lib": "1.5.0",
+    "@graphql-codegen/cli": "2.13.7",
+    "@graphql-codegen/client-preset": "1.1.0",
+    "@graphql-codegen/typescript-graphql-request": "4.5.7",
     "@nomiclabs/hardhat-ethers": "2.1.1",
     "@openzeppelin/hardhat-upgrades": "1.21.0",
     "chai": "4.3.6",
@@ -69,7 +72,8 @@
     "sc:compile": "npx hardhat compile",
     "sc:deploy:goerli": "npx hardhat run --network goerli src/contracts/scripts/update-app-registry.js",
     "sc:test": "npx hardhat test --network development",
-    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
+    "graphql:generate": "graphql-codegen"
   },
   "browserslist": [
     "defaults",

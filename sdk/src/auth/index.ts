@@ -9,7 +9,6 @@ import {
   UserAuth,
   Users,
 } from '@textile/hub';
-import { GetProfile } from '../profiles/profile.graphql';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
 import {
@@ -135,25 +134,9 @@ class AWF_Auth implements AWF_IAuth {
    * Throws an UserNotRegistered error for addresses that are not registered
    * @param ethAddress
    */
-  checkIfSignedUp(ethAddress: string) {
+  async checkIfSignedUp(ethAddress: string) {
     const variables = { ethAddress: ethAddress };
-    const check = this._gql.run<{ errors?: never }>(
-      {
-        query: GetProfile,
-        variables: variables,
-        operationName: 'GetProfile',
-      },
-      false,
-    );
-    return check.pipe(
-      tap(response => {
-        if (!response.data || response.data?.errors) {
-          const err = new Error('This ethereum key is not registered');
-          err.name = 'UserNotRegistered';
-          throw err;
-        }
-      }),
-    );
+    await this._gql.getAPI().GetProfile(variables);
   }
 
   signIn(args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean }) {
@@ -206,7 +189,7 @@ class AWF_Auth implements AWF_IAuth {
           }
         }
         if (args.checkRegistered) {
-          await lastValueFrom(this.checkIfSignedUp(address));
+          await this.checkIfSignedUp(address);
         }
         this._log.info(`using eth address ${address}`);
         if (sessValue) {
@@ -506,11 +489,11 @@ class AWF_Auth implements AWF_IAuth {
    * @param data
    * @param base64Format
    */
-  signData(
+  async signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format = false,
   ) {
-    return createObservableStream(this._signData(data, base64Format));
+    return this._signData(data, base64Format);
   }
 
   private async _signData(
@@ -536,12 +519,12 @@ class AWF_Auth implements AWF_IAuth {
    * Verify if a signature was made by a specific Public Key
    * @param args
    */
-  verifySignature(args: {
+  async verifySignature(args: {
     pubKey: string;
     data: Uint8Array | string | Record<string, unknown>;
     signature: Uint8Array | string;
   }) {
-    return createObservableStream(this._verifySignature(args));
+    return this._verifySignature(args);
   }
 
   private async _verifySignature(args: {
@@ -572,12 +555,15 @@ class AWF_Auth implements AWF_IAuth {
    * Utility method for sending mutation graphql requests
    * @param data
    */
-  authenticateMutationData(data: Record<string, unknown> | string | Record<string, unknown>[]) {
-    const token = from(this.getToken());
-    const signedData = from(this.signData(data, true));
-    return forkJoin([token, signedData]).pipe(
-      map(result => ({ token: result[0], signedData: result[1] })),
-    );
+  async authenticateMutationData(
+    data: Record<string, unknown> | string | Record<string, unknown>[],
+  ) {
+    const token = await this._getToken();
+    const signedData = await this._signData(data, true);
+    return {
+      token,
+      signedData,
+    };
   }
 
   /**
