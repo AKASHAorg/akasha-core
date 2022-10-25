@@ -210,7 +210,7 @@ const getIntegrationsReleaseInfo = async releaseIds => {
   const sdk = getSDK();
   const result = await Promise.all(
     releaseIds.map(async releaseId => {
-      return await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
+      return sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
     }),
   );
 
