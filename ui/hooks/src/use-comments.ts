@@ -1,12 +1,12 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
-import { DataProviderInput, Comment_Response, Post_Response } from '@akashaorg/typings/sdk';
-import { IPublishData, CommentResponse, PostResponse } from '@akashaorg/typings/ui';
+import { DataProviderInput } from '@akashaorg/typings/sdk';
+import { IPublishData, CommentResponse } from '@akashaorg/typings/ui';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
 import { ENTRY_KEY } from './use-posts';
+import { Comment, Post } from '@akashaorg/awf-sdk/src/gql/api';
 
 /**
  * @internal
@@ -29,16 +29,14 @@ export interface Publish_Options {
 const getComments = async (limit: number, postID: string, offset?: string) => {
   const sdk = getSDK();
 
-  const res = await lastValueFrom(
-    sdk.api.comments.getComments({
-      limit: limit,
-      offset: offset,
-      postID: postID,
-    }),
-  );
+  const res = await sdk.api.comments.getComments({
+    limit: limit,
+    offset: offset,
+    postID: postID,
+  });
   return {
-    ...res.data.getComments,
-    results: res.data.getComments.results.map(comment => {
+    ...res.getComments,
+    results: res.getComments.results.map(comment => {
       return comment._id;
     }),
   };
@@ -76,25 +74,25 @@ export function useInfiniteComments(limit: number, postID: string, offset?: stri
 /**
  * Gets a comment
  */
-const getComment = async (commentID): Promise<CommentResponse> => {
+const getComment = async commentID => {
   const sdk = getSDK();
 
-  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+  const user = await sdk.api.auth.getCurrentUser();
   // check entry's moderation status
   const modStatus = await checkStatus({
-    user: user.data ? user.data.pubKey : '',
+    user: user ? user.pubKey : '',
     contentIds: [commentID],
   });
-  const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
+  const res = await sdk.api.comments.getComment(commentID);
   const modStatusAuthor = await checkStatus({
-    user: user?.data?.pubKey || '',
-    contentIds: [res.data?.getComment?.author?.pubKey],
+    user: user?.pubKey || '',
+    contentIds: [res.getComment?.author?.pubKey],
   });
   // @TODO: assign modStatus to a single prop
   return {
-    ...res.data.getComment,
+    ...res.getComment,
     ...modStatus[0],
-    author: { ...res.data.getComment.author, ...modStatusAuthor[0] },
+    author: { ...res.getComment.author, ...modStatusAuthor[0] },
   };
 };
 
@@ -125,12 +123,12 @@ export function useComment(commentID: string, enabler = true) {
 
 const deleteComment = async (commentId: string) => {
   const sdk = getSDK();
-  const resp = await lastValueFrom(sdk.api.comments.removeComment(commentId));
+  const resp = await sdk.api.comments.removeComment(commentId);
   if (resp.hasOwnProperty('error')) {
     throw new Error(resp['error']);
   }
-  if (resp.data.removeComment) {
-    return resp.data.removeComment;
+  if (resp.removeComment) {
+    return resp.removeComment;
   }
   throw new Error('Cannot delete this comment. Please try again later.');
 };
@@ -167,11 +165,8 @@ export function useDeleteComment(commentID: string) {
       return { previousComment };
     },
     onSuccess: () => {
-      const parentEntryId = queryClient.getQueryData<Comment_Response>([
-        COMMENT_KEY,
-        commentID,
-      ]).postId;
-      queryClient.setQueryData<Post_Response>([ENTRY_KEY, parentEntryId], currentEntry => {
+      const parentEntryId = queryClient.getQueryData<Comment>([COMMENT_KEY, commentID]).postId;
+      queryClient.setQueryData<Post>([ENTRY_KEY, parentEntryId], currentEntry => {
         if (currentEntry) {
           return {
             ...currentEntry,
@@ -212,8 +207,8 @@ export function useCreateComment() {
   return useMutation(
     async (publishObj: IPublishData & { postID: string }) => {
       const comment = buildPublishObject(publishObj, publishObj.postID);
-      const res = await lastValueFrom(sdk.api.comments.addComment(comment));
-      return res?.data?.addComment;
+      const res = await sdk.api.comments.addComment(comment);
+      return res?.addComment;
     },
     {
       onMutate: async (publishObj: IPublishData & { postID: string }) => {
@@ -229,7 +224,7 @@ export function useCreateComment() {
       onSuccess: async (id, variables) => {
         await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));
         const { postID } = variables;
-        queryClient.setQueryData<PostResponse>([ENTRY_KEY, postID], currentEntry => {
+        queryClient.setQueryData<Post>([ENTRY_KEY, postID], currentEntry => {
           if (currentEntry) {
             return {
               ...currentEntry,
@@ -265,9 +260,7 @@ export function useEditComment(commentID: string, hasCommentData: boolean) {
       if (!hasCommentData) return Promise.resolve();
       const { postID, ...commentData } = comment;
       const publishObj = buildPublishObject(commentData, postID);
-      return lastValueFrom(
-        sdk.api.comments.editComment({ commentID, ...Object.assign({}, publishObj) }),
-      );
+      return sdk.api.comments.editComment({ commentID, ...Object.assign({}, publishObj) });
     },
     {
       onMutate: async (comment: IPublishData & { postID: string }) => {

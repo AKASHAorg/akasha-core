@@ -1,7 +1,7 @@
 import React from 'react';
 import objHash from 'object-hash';
 import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
-import { catchError, forkJoin, lastValueFrom, of } from 'rxjs';
+import { catchError, forkJoin, of } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { IProfileData } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -407,10 +407,10 @@ export function useUnfollow() {
         }
       } else {
         const sdk = getSDK();
-        const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+        const user = await sdk.api.auth.getCurrentUser();
         if (user) {
-          await queryClient.invalidateQueries([PROFILE_KEY, user.data?.pubKey]);
-          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.data?.pubKey]);
+          await queryClient.invalidateQueries([PROFILE_KEY, user.pubKey]);
+          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.pubKey]);
         }
       }
     },

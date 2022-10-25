@@ -11,15 +11,7 @@ import {
 } from '@textile/hub';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
-import {
-  AUTH_EVENTS,
-  AWF_IAuth,
-  CurrentUser,
-  EthProviders,
-  ILogger,
-  IMessage,
-  TYPES,
-} from '@akashaorg/typings/sdk';
+import { AUTH_EVENTS, CurrentUser, EthProviders, IMessage, TYPES } from '@akashaorg/typings/sdk';
 import DB from '../db';
 import Web3Connector from '../common/web3.connector';
 import EventBus from '../common/event-bus';
@@ -34,6 +26,7 @@ import { Buffer } from 'buffer';
 import { PublicKey } from '@textile/threaddb';
 import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
+import pino from 'pino';
 
 // in memory atm
 const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
@@ -45,7 +38,7 @@ const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
  */
 
 @injectable()
-class AWF_Auth implements AWF_IAuth {
+class AWF_Auth {
   #identity: PrivateKey;
   private hubClient: Client;
   private hubUser: Users;
@@ -55,7 +48,7 @@ class AWF_Auth implements AWF_IAuth {
   private _db: DB;
   private readonly _web3: Web3Connector;
   private _globalChannel: EventBus;
-  private _log: ILogger;
+  private _log: pino.Logger;
   private _settings: Settings;
   private _gql: Gql;
   private channel: BroadcastChannel;
@@ -136,7 +129,8 @@ class AWF_Auth implements AWF_IAuth {
    */
   async checkIfSignedUp(ethAddress: string) {
     const variables = { ethAddress: ethAddress };
-    await this._gql.getAPI().GetProfile(variables);
+    const prof = await this._gql.getAPI().GetProfile(variables);
+    return !!prof?.getProfile?.pubKey;
   }
 
   signIn(args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean }) {
@@ -417,8 +411,8 @@ class AWF_Auth implements AWF_IAuth {
   /**
    * Generate a textile access token
    */
-  getToken() {
-    return createObservableStream<string>(this._getToken());
+  async getToken() {
+    return this._getToken();
   }
 
   private async _getToken() {
@@ -437,8 +431,8 @@ class AWF_Auth implements AWF_IAuth {
    * Returns the currently logged-in user object
    * It will try to log in if there is a previous session detected
    */
-  getCurrentUser() {
-    return createObservableStream(this._getCurrentUser());
+  async getCurrentUser() {
+    return this._getCurrentUser();
   }
 
   private async _getCurrentUser(): Promise<null | CurrentUser> {
@@ -709,8 +703,8 @@ class AWF_Auth implements AWF_IAuth {
    * Returns all the inbox messages from Textile Users
    * @param args - InboxListOptions
    */
-  getMessages(args: InboxListOptions) {
-    return createObservableStream<IMessage[]>(this._getMessages(args));
+  async getMessages(args: InboxListOptions): Promise<IMessage[]> {
+    return this._getMessages(args);
   }
 
   private async _getMessages(args: InboxListOptions) {
@@ -744,8 +738,8 @@ class AWF_Auth implements AWF_IAuth {
     return inbox.slice();
   }
 
-  getObsConversation(pubKey: string) {
-    return createObservableStream<IMessage[]>(this.getConversation(pubKey));
+  async getObsConversation(pubKey: string) {
+    return this.getConversation(pubKey);
   }
 
   // pubKey seek does not work
@@ -784,15 +778,13 @@ class AWF_Auth implements AWF_IAuth {
     return !!newMessage;
   }
 
-  markMessageAsRead(messageId: string) {
-    return createObservableStream(this._markMessageAsRead(messageId)).pipe(
-      tap(() => {
-        this._globalChannel.next({
-          data: { messageId },
-          event: AUTH_EVENTS.MARK_MSG_READ,
-        });
-      }),
-    );
+  async markMessageAsRead(messageId: string) {
+    const marked = await this._markMessageAsRead(messageId);
+    this._globalChannel.next({
+      data: { messageId },
+      event: AUTH_EVENTS.MARK_MSG_READ,
+    });
+    return marked;
   }
 
   /**
@@ -804,13 +796,13 @@ class AWF_Auth implements AWF_IAuth {
     return true;
   }
 
-  deleteMessage(messageId: string) {
-    return createObservableStream(this._deleteMessage(messageId));
+  async deleteMessage(messageId: string) {
+    return this._deleteMessage(messageId);
   }
 
   // returns textile usage information
-  getTextileUsage(options?: unknown) {
-    return createObservableStream(this._getTextileUsage(options));
+  async getTextileUsage(options?: unknown) {
+    return this._getTextileUsage(options);
   }
 
   private async _getTextileUsage(options?: unknown) {
@@ -829,8 +821,8 @@ class AWF_Auth implements AWF_IAuth {
     return true;
   }
 
-  validateInvite(inviteCode: string) {
-    return createObservableStream(this._validateInvite(inviteCode));
+  async validateInvite(inviteCode: string) {
+    return this._validateInvite(inviteCode);
   }
 
   /**

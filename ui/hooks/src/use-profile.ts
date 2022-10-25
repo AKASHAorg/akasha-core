@@ -78,9 +78,9 @@ const getProfileData = async (payload: {
     contentIds: [payload.pubKey],
   });
 
-  const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
+  const res = await sdk.api.profile.getProfile(payload);
   return {
-    ...buildProfileMediaLinks(res.data.getProfile || res.data.resolveProfile),
+    ...buildProfileMediaLinks(res),
     ...modStatus[0],
   };
 };

@@ -1,16 +1,11 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import {
-  COMMENTS_EVENTS,
-  AWF_IComments,
-  DataProviderInput,
-  TYPES,
-  ILogger,
-} from '@akashaorg/typings/sdk';
+import { COMMENTS_EVENTS, DataProviderInput, TYPES } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Logging from '../logging';
 import EventBus from '../common/event-bus';
+import pino from 'pino';
 
 /**
  * # sdk.api.comments
@@ -18,8 +13,8 @@ import EventBus from '../common/event-bus';
  * Comments Module
  */
 @injectable()
-class AWF_Comments implements AWF_IComments {
-  private _log: ILogger;
+class AWF_Comments {
+  private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _globalChannel: EventBus;

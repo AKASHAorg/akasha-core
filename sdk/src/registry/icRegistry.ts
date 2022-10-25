@@ -1,14 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import {
-  ILogger,
-  TYPES,
-  AWF_IIC_REGISTRY,
-  AWF_APP_BUILD_MANIFEST,
-  AWF_APP_SOURCE_MANIFEST,
-  IntegrationInfo,
-  ReleaseInfo,
-} from '@akashaorg/typings/sdk';
+import { TYPES } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
@@ -19,13 +11,19 @@ import { lastValueFrom } from 'rxjs';
 import { createFormattedValue } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import IpfsConnector from '../common/ipfs.connector';
-import { GetLatestRelease, GetIntegrationInfo } from './icRegistry.graphql';
+import pino from 'pino';
+import {
+  AWF_APP_BUILD_MANIFEST,
+  AWF_APP_SOURCE_MANIFEST,
+  IntegrationInfo,
+  ReleaseInfo,
+} from '@akashaorg/typings/sdk/registry';
 
 @injectable()
-class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
+class AWF_IC_REGISTRY {
   private readonly _web3: Web3Connector;
   private readonly _ipfs: IpfsConnector;
-  private _log: ILogger;
+  private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _settings: Settings;
@@ -35,10 +33,6 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
 
   public readonly INTEGRATION_REGISTRY_ADDRESS = process.env.INTEGRATION_REGISTRY_ADDRESS;
   public readonly MANIFEST_FILE = 'manifest.json';
-  readonly graphQLDocs = {
-    GetLatestRelease,
-    GetIntegrationInfo,
-  };
 
   constructor(
     @inject(TYPES.Log) log: Logging,
@@ -75,42 +69,37 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
   async getIntegrationInfo(integrationId: string) {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getPackageInfo(integrationId);
-    const response: IntegrationInfo = {
+    return {
       id: integrationId,
       name: data.integrationName,
       author: data.author,
       latestReleaseId: data.latestReleaseId,
       integrationType: data.integrationType,
       enabled: data.enabled,
-    };
-    return createFormattedValue(response);
+    } as IntegrationInfo;
   }
 
   async getIntegrationReleaseInfo(releaseId: string, integrationId?: string) {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getReleaseData(releaseId);
-    const manifestData = await lastValueFrom(
-      this._ipfs.catDocument<AWF_APP_BUILD_MANIFEST>(
-        this._ipfs.transformBase16HashToV1(
-          // replace 0x prefix with 'f' - base16 CID encoding
-          'f' + data.manifestHash.substring(2),
-        ),
-        true,
+    const manifestData = await this._ipfs.catDocument<AWF_APP_BUILD_MANIFEST>(
+      this._ipfs.transformBase16HashToV1(
+        // replace 0x prefix with 'f' - base16 CID encoding
+        'f' + data.manifestHash.substring(2),
       ),
+      true,
     );
-    const { links, sources } = manifestData.data;
+    const { links, sources } = manifestData;
     const integrationID = integrationId || ethersUtils.id(data.integrationName);
     const integrationInfo = await this._IntegrationRegistryInstance.getPackageInfo(integrationID);
     const ipfsSources = this._ipfs.multiAddrToUri(sources);
-    let manifest: { data?: AWF_APP_SOURCE_MANIFEST };
+    let manifest: AWF_APP_SOURCE_MANIFEST;
     if (ipfsSources.length) {
-      manifest = await lastValueFrom(
-        this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(
-          `${ipfsSources[0]}/${this.MANIFEST_FILE}`,
-          true,
-        ),
+      manifest = await this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(
+        `${ipfsSources[0]}/${this.MANIFEST_FILE}`,
+        true,
       );
-      ipfsSources[0] = `${ipfsSources[0]}/${manifest.data.mainFile}`;
+      ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
     }
     const response: ReleaseInfo = {
       id: releaseId,
@@ -122,17 +111,17 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
       integrationID: integrationID,
       author: integrationInfo.author,
       enabled: integrationInfo.enabled,
-      manifestData: manifest.data,
+      manifestData: manifest,
       createdAt: data.createdAt?.toNumber(),
     };
-    return createFormattedValue(response);
+    return response;
   }
 
   // on chain call for latest version info
   async getLatestVersionInfo(integration: { name?: string; id?: string }) {
     const integrationID = integration.id || ethers.utils.id(integration.name);
     const info = await this.getIntegrationInfo(integrationID);
-    return this.getIntegrationReleaseInfo(info.data.latestReleaseId, integrationID);
+    return this.getIntegrationReleaseInfo(info.latestReleaseId, integrationID);
   }
 
   async getIntegrationsCount() {
@@ -179,27 +168,14 @@ class AWF_IC_REGISTRY implements AWF_IIC_REGISTRY {
       return ethersUtils.id(el.name);
     });
   }
-  getIntegrationsInfo(opt: { name?: string; id?: string }[]) {
+  async getIntegrationsInfo(opt: { name?: string; id?: string }[]) {
     const normalizedIDs = this.#_normalizeIDs(opt);
-    return this._gql.run<{ getIntegrationInfo: IntegrationInfo[] }>(
-      {
-        query: GetIntegrationInfo,
-        variables: { integrationIDs: normalizedIDs },
-        operationName: 'GetIntegrationInfo',
-      },
-      true,
-    );
+    return this._gql.getAPI().GetIntegrationInfo({ integrationIDs: normalizedIDs });
   }
+
   getLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
     const normalizedIDs = this.#_normalizeIDs(opt);
-    return this._gql.run<{ getLatestRelease: ReleaseInfo[] }>(
-      {
-        query: GetLatestRelease,
-        variables: { integrationIDs: normalizedIDs },
-        operationName: 'GetLatestRelease',
-      },
-      true,
-    );
+    return this._gql.getAPI().GetLatestRelease({ integrationIDs: normalizedIDs });
   }
 
   public getContracts() {

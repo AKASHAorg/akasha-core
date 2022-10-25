@@ -1,6 +1,5 @@
-import getSDK from '@akashaorg/awf-sdk';
-import { ILogger } from '@akashaorg/typings/sdk';
-import { BaseIntegrationInfo, ILoaderConfig } from '@akashaorg/typings/ui';
+import getSDK, { Logger } from '@akashaorg/awf-sdk';
+import { ILoaderConfig } from '@akashaorg/typings/ui';
 import {
   Observable,
   mergeMap,
@@ -18,29 +17,15 @@ import {
 import { pipelineEvents } from './events';
 import { getStateSlice, LoaderState } from './state';
 
-export const getLatestReleaseInfo = (
-  integrations: { name: string }[],
-): Observable<BaseIntegrationInfo[]> => {
+export const getLatestReleaseInfo = async (integrations: { name: string }[]) => {
   const sdk = getSDK();
-  return sdk.api.icRegistry.getLatestReleaseInfo(integrations).pipe(
-    map(resp => {
-      if (!resp) {
-        throw new Error('[getLatestReleaseInfo] Response is missing');
-      }
-      if (!resp.data) {
-        throw new Error(
-          `[getLatestReleaseInfo] data property is missing in response: ${JSON.stringify(resp)}`,
-        );
-      }
-      return resp.data.getLatestRelease;
-    }),
-    catchError(err => {
-      throw new Error(err);
-    }),
-  );
+  return sdk.api.icRegistry.getLatestReleaseInfo(integrations);
 };
 
-export const getIntegrationsData = (integrationNames: string[], worldConfig: ILoaderConfig) => {
+export const getIntegrationsData = async (
+  integrationNames: string[],
+  worldConfig: ILoaderConfig,
+) => {
   const [local$, remote$] = partition(
     from(integrationNames),
     integrationName => !!worldConfig.registryOverrides.find(int => int.name === integrationName),
@@ -67,7 +52,10 @@ export const getIntegrationsData = (integrationNames: string[], worldConfig: ILo
 /*
  * Get default integrations manifests from registry
  */
-export const getDefaultIntegrationManifests = (worldConfig: ILoaderConfig, logger: ILogger) => {
+export const getDefaultIntegrationManifests = async (
+  worldConfig: ILoaderConfig,
+  logger: Logger,
+) => {
   const defaultIntegrations = [
     worldConfig.layout,
     worldConfig.homepageApp,
@@ -88,7 +76,7 @@ export const getDefaultIntegrationManifests = (worldConfig: ILoaderConfig, logge
 export const getUserIntegrationManifests = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  logger: ILogger,
+  logger: Logger,
 ) => {
   const sdk = getSDK();
   return state$

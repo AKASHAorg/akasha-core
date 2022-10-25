@@ -1,31 +1,9 @@
 import { Descendant } from 'slate';
-import { Comment_Response, Post_Response, LinkPreview_Response } from '../sdk/responses';
 import { IProfileData } from './profile';
-
-export interface PostResponse extends Post_Response {
-  moderated?: boolean;
-  reason?: string;
-  reported?: boolean;
-  delisted?: boolean;
-  isPublishing?: boolean;
-}
-
-export interface CommentResponse extends Comment_Response {
-  moderated?: boolean;
-  reason?: string;
-  reported?: boolean;
-  delisted?: boolean;
-  isPublishing?: boolean;
-}
 
 export interface ITag {
   name: string;
   totalPosts: number;
-}
-
-export interface LinkPreview extends LinkPreview_Response {
-  imageSources?: { url: string; fallbackUrl: string };
-  faviconSources?: { url: string; fallbackUrl: string };
 }
 
 export interface IEntryData {

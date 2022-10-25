@@ -15,8 +15,6 @@ export * from './type-utils';
 export * from './ui-events';
 export * from './widgets';
 
-import { IntegrationInfo, ReleaseInfo } from '../sdk/registry';
-
 export enum IntegrationTypes {
   APP = 'App',
   WIDGET = 'Widget',
@@ -56,11 +54,11 @@ export interface WalletTransactionError extends Error {
 }
 
 /* @TODO: this doesn't belong here */
-export interface IntegrationCenterApp extends IntegrationInfo {
+export interface IntegrationCenterApp {
   avatar?: string;
   coverImage?: string;
   description?: string;
-  releases?: ReleaseInfo[];
+  releases?: unknown[];
   authors?: string[];
   tags?: string[];
   license?: string;

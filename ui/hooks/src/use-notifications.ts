@@ -12,9 +12,9 @@ export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 
 const getNotifications = async () => {
   const sdk = getSDK();
-  const getMessagesResp = await lastValueFrom(sdk.api.auth.getMessages({}));
+  const getMessagesResp = await sdk.api.auth.getMessages({});
 
-  const getProfilesCalls = getMessagesResp.data.map(message => {
+  const getProfilesCalls = getMessagesResp.map(message => {
     const pubKey = message.body.value.author || message.body.value.follower;
     if (pubKey) {
       return sdk.api.profile.getProfile({ pubKey }).pipe(
@@ -75,7 +75,7 @@ export function useFetchNotifications(loggedEthAddress: string) {
 export function useMarkAsRead() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
-  return useMutation(messageId => lastValueFrom(sdk.api.auth.markMessageAsRead(messageId)), {
+  return useMutation(messageId => sdk.api.auth.markMessageAsRead(messageId), {
     // When mutate is called:
     onMutate: async (messageId: string) => {
       await queryClient.cancelQueries(NOTIFICATIONS_KEY);

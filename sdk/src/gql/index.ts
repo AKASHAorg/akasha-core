@@ -1,9 +1,10 @@
 import { inject, injectable } from 'inversify';
-import { IGqlClient, TYPES, ServiceCallResult, ILogger } from '@akashaorg/typings/sdk';
+import { TYPES } from '@akashaorg/typings/sdk';
 import Stash, { IQuickLRU } from '../stash';
 import { GraphQLClient } from 'graphql-request';
 import { getSdk, Sdk, SdkFunctionWrapper } from './api';
 import Logging from '../logging/index';
+import pino from 'pino';
 
 export interface GqlOperation {
   query: string;
@@ -15,12 +16,12 @@ export interface GqlOperation {
 
 /** @internal  */
 @injectable()
-class Gql implements IGqlClient<Sdk> {
+class Gql {
   private _stash: Stash;
 
   readonly _client: Sdk;
   // #_clientWithCache: Sdk;
-  private _log: ILogger;
+  private _log: pino.Logger;
   private _gqlStash: IQuickLRU;
 
   // create Apollo link object and initialize the stash

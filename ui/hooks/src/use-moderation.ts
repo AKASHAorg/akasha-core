@@ -44,12 +44,12 @@ export type UseModerationParam = {
 // create moderation mutation
 const createModerationMutation = async ({ dataToSign, contentId, contentType, url }) => {
   const sdk = getSDK();
-  const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign));
+  const resp = await sdk.api.auth.signData(dataToSign);
   const data = {
     contentId,
     contentType,
     data: dataToSign,
-    signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+    signature: btoa(String.fromCharCode.apply(null, resp.signature)),
   };
 
   const status = await createModeration(url, data);
@@ -107,12 +107,12 @@ export function useModeration() {
 const createReportMutation = async ({ dataToSign, contentId, contentType, url }) => {
   const sdk = getSDK();
 
-  const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign, true));
+  const resp = await sdk.api.auth.signData(dataToSign, true);
   const data = {
     contentId,
     contentType,
     data: dataToSign,
-    signature: resp.data.signature as string,
+    signature: resp.signature.toString(),
   };
 
   const status = await createModeration(url, data);

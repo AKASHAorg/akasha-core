@@ -1,4 +1,3 @@
-import { ILogger } from '../sdk/log';
 import singleSpa from 'single-spa';
 import { IAppConfig } from './apps';
 import { Subject } from 'rxjs';
@@ -8,6 +7,7 @@ import { ModalNavigationOptions } from './navigation';
 import i18n from 'i18next';
 import { IPluginsMap } from './plugins';
 import { ILoaderConfig, QueryStringType } from './app-loader';
+import { Logger } from 'pino';
 
 export interface RootComponentProps {
   activeWhen?: { path: string };
@@ -16,7 +16,7 @@ export interface RootComponentProps {
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
   layoutConfig: IAppConfig['extensions'];
-  logger: ILogger;
+  logger: Logger;
   name?: string;
   singleSpa: typeof singleSpa;
   baseRouteName: string;

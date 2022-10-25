@@ -50,6 +50,5 @@
       "path": "./typings"
     }
   ],
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp"],
-  "files": ["./sdk/src/definitions/graphql.d.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp"]
 }

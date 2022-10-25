@@ -1,29 +1,19 @@
 import { inject, injectable } from 'inversify';
-import {
-  TYPES,
-  ILogger,
-  AWF_ITags,
-  TAG_EVENTS,
-  SearchTagsResult_Response,
-  Tag_Response,
-  TagsResult_Response,
-} from '@akashaorg/typings/sdk';
-import { concatAll, map, tap } from 'rxjs/operators';
+import { TYPES, TAG_EVENTS } from '@akashaorg/typings/sdk';
 import Web3Connector from '../common/web3.connector';
 import Logging from '../logging';
 import Gql from '../gql';
-import { CreateTag, GetTag, GetTags, SearchTags } from './tag.graphql';
 import AWF_Auth from '../auth';
 import EventBus from '../common/event-bus';
+import pino from 'pino';
 
 @injectable()
-class AWF_Tags implements AWF_ITags {
+class AWF_Tags {
   private readonly _web3: Web3Connector;
-  private _log: ILogger;
+  private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _globalChannel: EventBus;
-  public readonly graphQLDocs = { GetTag, GetTags, SearchTags, CreateTag };
   constructor(
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Gql) gql: Gql,
@@ -40,82 +30,46 @@ class AWF_Tags implements AWF_ITags {
    *
    * @param tagName
    */
-  getTag(tagName: string) {
-    return this._gql.run<{ getTag: Tag_Response }>(
-      {
-        query: GetTag,
-        variables: { name: tagName },
-        operationName: 'GetTag',
-      },
-      true,
-    );
+  async getTag(tagName: string) {
+    return this._gql.getAPI().GetTag({ name: tagName });
   }
 
   /**
    *
    * @param opt
    */
-  getTags(opt: { offset?: string; limit: number }) {
-    return this._gql.run<{ tags: TagsResult_Response }>(
-      {
-        query: GetTags,
-        variables: { offset: opt.offset || '', limit: opt.limit || 5 },
-        operationName: 'GetTags',
-      },
-      true,
-    );
+  async getTags(opt: { offset?: string; limit: number }) {
+    return this._gql.getAPI().GetTags({ offset: opt.offset || '', limit: opt.limit || 5 });
   }
 
   /**
    *
    * @param name
    */
-  searchTags(name: string) {
-    return this._gql.run<{ searchTags: SearchTagsResult_Response[] }>(
-      {
-        query: SearchTags,
-        variables: { name: name },
-        operationName: 'SearchTags',
-      },
-      true,
-    );
+  async searchTags(name: string) {
+    return this._gql.getAPI().SearchTags({ name: name });
   }
 
   /**
    *
    * @param tagName
    */
-  createTag(tagName: string) {
-    return this._auth.authenticateMutationData(tagName).pipe(
-      map(res => {
-        return this._gql
-          .run<{ createTag: string }>(
-            {
-              query: CreateTag,
-              variables: { name: tagName },
-              operationName: 'CreateTag',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          )
-          .pipe(
-            tap(ev => {
-              // @emits TAG_EVENTS.CREATE
-              this._globalChannel.next({
-                data: ev.data,
-                event: TAG_EVENTS.CREATE,
-                args: { tagName },
-              });
-            }),
-          );
-      }),
-      concatAll(),
+  async createTag(tagName: string) {
+    const auth = await this._auth.authenticateMutationData(tagName);
+    const newTag = await this._gql.getAPI().CreateTag(
+      { name: tagName },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
     );
+    // @emits TAG_EVENTS.CREATE
+    this._globalChannel.next({
+      data: newTag,
+      event: TAG_EVENTS.CREATE,
+      args: { tagName },
+    });
+    return newTag;
   }
 
   /**

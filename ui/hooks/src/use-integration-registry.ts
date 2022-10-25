@@ -1,15 +1,13 @@
 import { useQuery } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
-import { lastValueFrom } from 'rxjs';
 
 export const INTEGRATIONS_KEY = 'Integrations';
 export const RELEASES_KEY = 'Releases';
 
 const getIntegrationInfo = async integrationId => {
   const sdk = getSDK();
-  const res = await sdk.api.icRegistry.getIntegrationInfo(integrationId);
-  return res.data;
+  return sdk.api.icRegistry.getIntegrationInfo(integrationId);
 };
 
 /**
@@ -31,8 +29,7 @@ export function useGetIntegrationInfo(integrationId: string) {
 
 const getIntegrationsInfo = async (opt: { name?: string; id?: string }[]) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.icRegistry.getIntegrationsInfo(opt));
-  return res.data;
+  return sdk.api.icRegistry.getIntegrationsInfo(opt);
 };
 
 /**
@@ -189,8 +186,7 @@ export function useGetAllIntegrationReleaseIds(integrationName: string, offset?:
 
 const getIntegrationReleaseInfo = async releaseId => {
   const sdk = getSDK();
-  const res = await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
-  return res.data;
+  return sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
 };
 
 /**
@@ -214,7 +210,7 @@ const getIntegrationsReleaseInfo = async releaseIds => {
   const sdk = getSDK();
   const result = await Promise.all(
     releaseIds.map(async releaseId => {
-      return (await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId)).data;
+      return await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
     }),
   );
 
@@ -269,9 +265,8 @@ export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
 
 const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.icRegistry.getLatestReleaseInfo(opt));
   // add messaging app mock to response here
-  return res.data;
+  return sdk.api.icRegistry.getLatestReleaseInfo(opt);
 };
 
 /**

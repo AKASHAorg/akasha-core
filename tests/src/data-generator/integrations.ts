@@ -2,7 +2,7 @@ import { IAppConfig, INTEGRATION_TYPES, RootComponentProps } from '@akashaorg/ty
 import { genLifecycles } from '../mocks/single-spa';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
-import { ReleaseInfo } from '@akashaorg/typings/sdk';
+import { ReleaseInfo } from '@akashaorg/typings/sdk/registry';
 
 export const genAppConfig = (
   overrides?: Partial<IAppConfig & { name: string }>,

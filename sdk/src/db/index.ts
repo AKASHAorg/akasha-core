@@ -1,5 +1,5 @@
 import { injectable } from 'inversify';
-import { IDBService, ServiceCallResult } from '@akashaorg/typings/sdk';
+import { ServiceCallResult } from '@akashaorg/typings/sdk';
 import { Collection, Database } from '@textile/threaddb';
 import settingsSchema from './settings.schema';
 import appSchema from './app.schema';
@@ -11,7 +11,7 @@ export const availableCollections = Object.freeze({
 });
 
 @injectable()
-class DB implements IDBService<Database, Collection> {
+class DB {
   private _dbName: string;
   private _db: Database;
   private _opened = false;
