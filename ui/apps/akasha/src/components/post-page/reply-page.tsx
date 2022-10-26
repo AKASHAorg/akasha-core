@@ -24,7 +24,7 @@ const ReplyPage: React.FC<IReplyPageProps & RootComponentProps> = props => {
     <BaseEntryPage
       {...props}
       postId={entryData?.postId}
-      replyTo={commentId}
+      commentId={commentId}
       entryType={EntityTypes.COMMENT}
       entryData={entryData}
       entryReq={comment}

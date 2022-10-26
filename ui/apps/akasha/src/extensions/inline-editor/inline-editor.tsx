@@ -51,8 +51,8 @@ export const InlineEditor = (props: RootExtensionProps) => {
     [loginQuery.data],
   );
 
-  const replyTo =
-    typeof props.extensionData.replyTo === 'string' ? props.extensionData.replyTo : '';
+  const commentId =
+    typeof props.extensionData.commentId === 'string' ? props.extensionData.commentId : '';
   const entryId = props.extensionData.entryId;
 
   const embeddedPost = usePost({
@@ -128,7 +128,7 @@ export const InlineEditor = (props: RootExtensionProps) => {
             {
               ...data,
               postID: entryId,
-              replyTo,
+              replyTo: commentId,
             },
             {
               onSuccess: () => {

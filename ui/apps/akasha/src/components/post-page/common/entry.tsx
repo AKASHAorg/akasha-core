@@ -25,7 +25,7 @@ const { Extension, Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
   postId: string;
-  replyTo?: string;
+  commentId?: string;
   entryType: EntityTypes;
   entryReq: UseQueryResult;
   loginState?: LoginState;
@@ -40,7 +40,7 @@ type Props = {
 
 export function Entry({
   postId,
-  replyTo,
+  commentId,
   entryType,
   entryReq,
   loginState,
@@ -53,7 +53,6 @@ export function Entry({
   showLoginModal,
 }: Props) {
   const { t } = useTranslation('app-akasha-integration');
-  const entryId = replyTo || postId;
 
   const action = new URLSearchParams(location.search).get('action');
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -61,7 +60,7 @@ export function Entry({
     'en') as ILocale;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
-  const handleEntryNavigate = useEntryNavigation(navigateTo, entryId);
+  const handleEntryNavigate = useEntryNavigation(navigateTo, commentId || postId);
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
@@ -94,17 +93,17 @@ export function Entry({
       case 'repost':
         return (
           <Extension
-            name={`inline-editor_repost_${entryId}`}
+            name={`inline-editor_repost_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId, action: 'embed', isShown: true }}
+            data={{ entryId: postId, action: 'embed', isShown: true }}
           />
         );
       case 'edit':
         return (
           <Extension
-            name={`inline-editor_postedit_${entryId}`}
+            name={`inline-editor_postedit_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId, action: 'edit', isShown: true }}
+            data={{ entryId: postId, action: 'edit', isShown: true }}
           />
         );
     }
@@ -254,7 +253,7 @@ export function Entry({
                 name={`entry-card-edit-button_${entryData?.entryId}`}
                 style={{ width: '100%' }}
                 uiEvents={uiEvents}
-                data={{ entryId, entryType }}
+                data={{ entryId: postId, entryType }}
               />
             )
           }
@@ -264,7 +263,7 @@ export function Entry({
                 name={`entry-card-actions-right_${entryData?.entryId}`}
                 uiEvents={uiEvents}
                 data={{
-                  entryId,
+                  entryId: postId,
                   entryType,
                 }}
               />
@@ -278,11 +277,11 @@ export function Entry({
         )}
         {showReplyEditor && loginState?.ethAddress && !entryData?.isRemoved && (
           <Extension
-            name={`inline-editor_postreply_${entryId}`}
+            name={`inline-editor_postreply_${entryData?.entryId}`}
             uiEvents={uiEvents}
             data={{
               entryId: postId,
-              replyTo: replyTo ?? '',
+              commentId,
               entryType,
               isShown: true,
               action: 'reply',

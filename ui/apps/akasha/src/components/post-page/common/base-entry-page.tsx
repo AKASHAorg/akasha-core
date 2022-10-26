@@ -17,12 +17,13 @@ import { Entry } from './entry';
 import { PendingReply } from './pending-reply';
 import { UseQueryResult } from 'react-query';
 import { ILogger } from '@akashaorg/typings/sdk';
+import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 const { BasicCardBox, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
 
 interface IBaseEntryProps {
   postId: string;
-  replyTo?: string;
+  commentId?: string;
   entryType: EntityTypes;
   entryReq: UseQueryResult;
   entryData?: IEntryData;
@@ -34,7 +35,7 @@ interface IBaseEntryProps {
 const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
   const {
     postId,
-    replyTo,
+    commentId,
     entryType,
     entryData,
     entryReq,
@@ -54,22 +55,31 @@ const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
     return entryReq.isSuccess && entryData?.reported;
   }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
 
-  const reqComments = useInfiniteComments(15, replyTo || postId);
+  const reqComments = useInfiniteComments({ limit: 15, postID: postId }, !commentId);
+  const reqReplies = useInfiniteReplies(
+    { limit: 15, postID: postId, commentID: commentId },
+    !!commentId,
+  );
+  const reqCommentsOrReplies = commentId ? reqReplies : reqComments;
   const [analyticsActions] = useAnalytics();
 
   const commentPages = React.useMemo(() => {
-    if (reqComments.data) {
-      return reqComments.data.pages;
+    if (reqCommentsOrReplies.data) {
+      return reqCommentsOrReplies.data.pages;
     }
     return [];
-  }, [reqComments.data]);
+  }, [reqCommentsOrReplies.data]);
 
   const profileDataReq = useGetProfile(loginState?.pubKey);
   const loggedProfileData = profileDataReq.data;
 
   const handleLoadMore = () => {
-    if (reqComments.isSuccess && reqComments.hasNextPage && loginState?.fromCache) {
-      reqComments.fetchNextPage();
+    if (
+      reqCommentsOrReplies.isSuccess &&
+      reqCommentsOrReplies.hasNextPage &&
+      loginState?.fromCache
+    ) {
+      reqCommentsOrReplies.fetchNextPage();
     }
   };
 
@@ -123,7 +133,7 @@ const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
           )}
           <Entry
             postId={postId}
-            replyTo={replyTo}
+            commentId={commentId}
             entryType={entryType}
             entryReq={entryReq}
             loginState={loginState}
@@ -154,8 +164,8 @@ const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
             navigateTo={navigateTo}
             navigateToModal={props.navigateToModal}
             onLoginModalOpen={showLoginModal}
-            requestStatus={reqComments.status}
-            hasNextPage={reqComments.hasNextPage}
+            requestStatus={reqCommentsOrReplies.status}
+            hasNextPage={reqCommentsOrReplies.hasNextPage}
             loggedProfile={loggedProfileData}
             contentClickable={true}
             onEntryFlag={handleEntryFlag}

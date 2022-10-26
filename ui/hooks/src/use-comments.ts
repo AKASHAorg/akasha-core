@@ -8,6 +8,16 @@ import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
 import { ENTRY_KEY } from './use-posts';
 
+interface InfiniteComments {
+  limit: number;
+  postID: string;
+  offset?: string;
+}
+
+interface InfiniteReplies extends InfiniteComments {
+  commentID?: string;
+}
+
 /**
  * @internal
  */
@@ -26,19 +36,42 @@ export interface Publish_Options {
   comment: { title?: string; tags?: string[]; postID: string };
 }
 
-const getComments = async (limit: number, postID: string, offset?: string) => {
+const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
   const sdk = getSDK();
 
   const res = await lastValueFrom(
     sdk.api.comments.getComments({
-      limit: limit,
-      offset: offset,
-      postID: postID,
+      limit,
+      offset,
+      postID,
+    }),
+  );
+
+  const getComments = res.data.getComments;
+  return {
+    ...getComments,
+    results: getComments.results
+      .filter(comment => !comment.replyTo)
+      .map(comment => {
+        return comment._id;
+      }),
+  };
+};
+
+const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies) => {
+  const sdk = getSDK();
+
+  const res = await lastValueFrom(
+    sdk.api.comments.getReplies({
+      limit,
+      commentID,
+      offset,
+      postID,
     }),
   );
   return {
-    ...res.data.getComments,
-    results: res.data.getComments.results.map(comment => {
+    ...res.data.getReplies,
+    results: res.data.getReplies.results.map(comment => {
       return comment._id;
     }),
   };
@@ -48,7 +81,7 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
  * Hook to get the comments for a specific post
  * @example useInfiniteComments hook
  * ```typescript
- * const commentsQuery = useInfiniteComments(10, 'some-post-id', 'optional-comment-id-to-start-from');
+ * const commentsQuery = useInfiniteComments({limit: 10, postID: 'some-post-id', offset: 'optional-offset'});
  *
  * const commentPages = React.useMemo(() => {
     if (commentsQuery.data) {
@@ -58,17 +91,49 @@ const getComments = async (limit: number, postID: string, offset?: string) => {
   }, [commentsQuery.data]);
  * ```
  */
-export function useInfiniteComments(limit: number, postID: string, offset?: string) {
+export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabler = true) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
-    async ({ pageParam = offset }) => getComments(limit, postID, pageParam),
+    async ({ pageParam = offset }) => getComments({ limit, postID, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
-      enabled: !!(offset || limit),
+      enabled: enabler && !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('useComments.getComments', err),
+    },
+  );
+}
+
+/**
+ * Hook to get the replies for a specific comment
+ * @example useInfiniteReplies hook
+ * ```typescript
+ * const repliesQuery = useInfiniteReplies({limit: 10, postID: 'some-post-id', commentID: 'some-comment-id', offset: 'optional-offset'});
+ *
+ * const repliesPages = React.useMemo(() => {
+    if (repliesQuery.data) {
+      return repliesQuery.data.pages;
+    }
+    return [];
+  }, [repliesQuery.data]);
+ * ```
+ */
+export function useInfiniteReplies(
+  { limit, postID, commentID, offset }: InfiniteReplies,
+  enabler = true,
+) {
+  return useInfiniteQuery(
+    [COMMENTS_KEY, postID, commentID],
+    async ({ pageParam = offset }) => getReplies({ limit, postID, commentID, offset: pageParam }),
+    {
+      /* Return undefined to indicate there is no next page available. */
+      getNextPageParam: lastPage => lastPage?.nextIndex,
+      //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
+      enabled: enabler && !!(offset || limit),
+      keepPreviousData: true,
+      onError: (err: Error) => logError('useInfiniteReplies.getReplies', err),
     },
   );
 }
