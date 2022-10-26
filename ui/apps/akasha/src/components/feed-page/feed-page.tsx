@@ -143,7 +143,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           entryData={createPendingEntry(loggedProfileData, createPostMutation.state.variables)}
           sharePostLabel={t('Share Post')}
           shareTextLabel={t('Share this post with your friends')}
-          repliesLabel={t('Replies')}
+          repliesLabel=""
           repostsLabel={t('Reposts')}
           repostLabel={t('Repost')}
           repostWithCommentLabel={t('Repost with comment')}
