@@ -5,10 +5,9 @@ import { Slate, Editable, withReact } from 'slate-react';
 
 import DS from '@akashaorg/design-system';
 
-import { StyledButton } from './styled';
 import { articles } from './dummy-data';
 
-const { Box, StackedAvatar, Text } = DS;
+const { Box, Button, StackedAvatar, Text } = DS;
 
 export interface IArticleEditorCardProps {
   inviteCollaboratorsLabel: string;
@@ -73,8 +72,15 @@ const ArticleEditorCard: React.FC<IArticleEditorCardProps> = props => {
           </Text>
         </Box>
         <Box direction="row" justify="end" align="center" gap="small">
-          <StyledButton size="large" height={2.5} label={saveDraftLabel} onClick={onSaveDraft} />
-          <StyledButton
+          <Button
+            slimBorder={true}
+            size="large"
+            height={2.5}
+            label={saveDraftLabel}
+            onClick={onSaveDraft}
+          />
+          <Button
+            slimBorder={true}
             size="large"
             height={2.5}
             disabled={!canPublish}
