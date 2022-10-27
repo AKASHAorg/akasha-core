@@ -20,8 +20,9 @@ import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import routes, { POST } from '../../../routes';
 import { UseQueryResult } from 'react-query';
+import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 
-const { Extension, Box, EditorPlaceholder, EntryBox } = DS;
+const { Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
   postId: string;

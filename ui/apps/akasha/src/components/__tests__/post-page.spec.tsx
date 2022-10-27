@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PostPage from '../post-page/post-page';
-import * as extension from '../extension';
+import * as extension from '@akashaorg/design-system/lib/utils/extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
 import {
@@ -49,7 +49,11 @@ describe('< PostPage /> component', () => {
     const spiedExtension = jest.spyOn(extension, 'Extension');
 
     when(spiedExtension)
-      .calledWith(partialArgs(expect.objectContaining({ name: 'inline-editor_postreply' })))
+      .calledWith(
+        partialArgs(
+          expect.objectContaining({ name: expect.stringMatching(/inline-editor_postreply/) }),
+        ),
+      )
       .mockReturnValue(<MockedInlineEditor action="reply" />);
 
     await act(async () => {
@@ -66,8 +70,12 @@ describe('< PostPage /> component', () => {
     const spiedExtension = jest.spyOn(extension, 'Extension');
 
     when(spiedExtension)
-      .calledWith(partialArgs(expect.objectContaining({ name: 'inline-editor_repost' })))
-      .mockReturnValue(<MockedInlineEditor action="embed" />);
+      .calledWith(
+        partialArgs(
+          expect.objectContaining({ name: expect.stringMatching(/inline-editor_repost/) }),
+        ),
+      )
+      .mockReturnValue(<MockedInlineEditor action="repost" />);
 
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
@@ -84,7 +92,11 @@ describe('< PostPage /> component', () => {
     const spiedExtension = jest.spyOn(extension, 'Extension');
 
     when(spiedExtension)
-      .calledWith(partialArgs(expect.objectContaining({ name: 'inline-editor_postedit' })))
+      .calledWith(
+        partialArgs(
+          expect.objectContaining({ name: expect.stringMatching(/inline-editor_postedit/) }),
+        ),
+      )
       .mockReturnValue(<MockedInlineEditor action="edit" />);
 
     await act(async () => {
