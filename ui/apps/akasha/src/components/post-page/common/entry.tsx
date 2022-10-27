@@ -95,7 +95,7 @@ export function Entry({
           <Extension
             name={`inline-editor_repost_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId: postId, action: 'embed', isShown: true }}
+            data={{ entryId: postId, action: 'repost' }}
           />
         );
       case 'edit':
@@ -103,7 +103,7 @@ export function Entry({
           <Extension
             name={`inline-editor_postedit_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId: postId, action: 'edit', isShown: true }}
+            data={{ entryId: postId, action: 'edit' }}
           />
         );
     }
@@ -283,7 +283,6 @@ export function Entry({
               entryId: postId,
               commentId,
               entryType,
-              isShown: true,
               action: 'reply',
             }}
           />
