@@ -7,7 +7,7 @@ export const LEGAL_KEY = 'Legal';
 
 const getLegalDoc = async (docName: LEGAL_DOCS) => {
   const sdk = getSDK();
-  return await sdk.services.common.ipfs.getLegalDoc(docName);
+  return sdk.services.common.ipfs.getLegalDoc(docName);
 };
 
 /**
