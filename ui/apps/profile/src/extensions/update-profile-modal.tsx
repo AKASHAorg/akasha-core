@@ -74,7 +74,7 @@ const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
    * validate username by setting the local state
    * validation hook will do the rest
    */
-  const handleUsernameChange = (userName: string) => {
+  const handleUsernameBlur = (userName: string) => {
     setPartialUsername(userName);
   };
 
@@ -148,8 +148,7 @@ const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
           onCancel={onModalClose}
           updateStatus={updateStatusQuery?.data?.status || UpdateProfileStatus.UPDATE_IDLE}
           showUsername={!profileDataQuery.data.userName}
-          onUsernameChange={handleUsernameChange}
-          onUsernameBlur={handleUsernameChange}
+          onUsernameBlur={handleUsernameBlur}
           isValidatingUsername={usernameValidationQuery.status === 'loading'}
           usernameSuccess={usernameValidationQuery.data ? ' ' : undefined}
           usernameError={userNameValidationErrors}
@@ -161,7 +160,7 @@ const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
 
 const ProfileModal: React.FC<RootExtensionProps> = props => (
   <React.Suspense fallback={<></>}>
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <UpdateProfileModal {...props} />
     </I18nextProvider>
   </React.Suspense>

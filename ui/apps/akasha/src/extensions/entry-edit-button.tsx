@@ -17,11 +17,9 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
       props.extensionData.hasOwnProperty('entryId') &&
       props.extensionData?.entryType === EntityTypes.ENTRY
     ) {
-      props.navigateToModal({
-        name: 'editor-modal',
-        entryId: props.extensionData.entryId,
-        action: 'edit',
-      });
+      props.singleSpa.navigateToUrl(
+        `${window.location.origin}/@akashaorg/app-akasha-integration/post/${props.extensionData.entryId}?action=edit`,
+      );
     }
   };
 
@@ -46,7 +44,7 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
 const ModalWrapper: React.FC<RootExtensionProps> = props => {
   return (
     <React.Suspense fallback={'...'}>
-      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+      <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
         <EntryEditButton {...props} />
       </I18nextProvider>
     </React.Suspense>

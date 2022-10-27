@@ -1,34 +1,42 @@
 import * as React from 'react';
 import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/SideBar/sidebar-menu-item';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-
+import { LoginState } from '@akashaorg/ui-awf-hooks';
 import DS from '@akashaorg/design-system';
+import { IMessage } from '@akashaorg/typings/sdk';
+
 const { Box, SidebarMenuItem } = DS;
 
 type MenuItemPassedProps = {
   plugins?: RootComponentProps['plugins'];
+  loginState?: LoginState;
 };
 
 export const MenuItem: React.FC<SidebarMenuItemProps & MenuItemPassedProps> = props => {
-  const { menuItem } = props;
+  const { menuItem, loginState } = props;
+
   const [notificationsCount, setNotificationsCount] = React.useState(0);
+
   React.useEffect(() => {
-    let sub: { unsubscribe: () => void };
-    if (props.plugins.notification) {
-      sub = props.plugins.notification.listen(menuItem.name, {
-        next: (messages?: unknown[]) => {
+    let notifSub: { unsubscribe: () => void };
+
+    if (props.plugins['@akashaorg/app-notifications']?.notification) {
+      notifSub = props.plugins['@akashaorg/app-notifications'].notification.listen(menuItem.name, {
+        next: (messages?: IMessage[]) => {
           if (messages) {
-            setNotificationsCount(messages.length);
+            const fromOthers = messages.filter(msg => msg.from !== loginState.pubKey);
+            setNotificationsCount(fromOthers.length);
           }
         },
       });
     }
+
     return () => {
-      if (sub) {
-        sub.unsubscribe();
+      if (notifSub) {
+        notifSub.unsubscribe();
       }
     };
-  }, [props.plugins, menuItem]);
+  }, [props.plugins, menuItem, loginState]);
 
   return (
     <Box flex={true} direction="row">

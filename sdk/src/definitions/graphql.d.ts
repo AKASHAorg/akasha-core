@@ -16,6 +16,7 @@ declare module '*/profile.graphql' {
   const GetFollowers: TypedQueryDocumentNode;
   const GetFollowing: TypedQueryDocumentNode;
   const GetInterests: TypedQueryDocumentNode;
+  const IsUserNameAvailable: TypedQueryDocumentNode;
 
   export {
     AddProfileProvider,
@@ -33,6 +34,7 @@ declare module '*/profile.graphql' {
     GetFollowing,
     ToggleInterestSub,
     GetInterests,
+    IsUserNameAvailable
   };
 }
 
@@ -82,6 +84,7 @@ declare module '*/comments.graphql' {
   const UserProfileFragment: FragmentSpreadNode;
   const GetComment: TypedQueryDocumentNode;
   const GetComments: TypedQueryDocumentNode;
+  const GetReplies: TypedQueryDocumentNode;
   const AddComment: DocumentNode;
   const EditComment: DocumentNode;
   const RemoveComment: DocumentNode;
@@ -89,6 +92,7 @@ declare module '*/comments.graphql' {
   export {
     GetComment,
     GetComments,
+    GetReplies,
     AddComment,
     DataProviderFragment,
     UserProfileFragment,

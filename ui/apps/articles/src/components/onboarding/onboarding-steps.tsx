@@ -21,9 +21,9 @@ interface IOnboardingStepsProps {
 }
 
 const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsProps> = props => {
-  const {
-    plugins: { routing },
-  } = props;
+  const { plugins } = props;
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
@@ -52,7 +52,7 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
     if (activeIndex === 2 && [HOME, WRITE_ARTICLE].includes(step)) {
       window.localStorage.setItem(ONBOARDING_STATUS, 'completed');
     }
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => menuRoute[step],
     });
@@ -68,7 +68,7 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
 
   if (isOnboarded) {
     // if user has been onboarded, navigate to home
-    return routing.navigateTo({
+    return navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => menuRoute[HOME],
     });
@@ -84,7 +84,7 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
             'Our article editor features pretty awesome stuff like adding blocks to your article that will help you elaborate your story better!',
           )}
           textLine3Label={t(
-            'Be sure to visit the integration center every now and then to check the apps that comes with great blocks for your articles!',
+            'Be sure to visit the integration center every now and then to check the apps that come with great blocks for your articles!',
           )}
           skipLabel={t('Skip')}
           nextLabel={t('Next')}
@@ -97,7 +97,7 @@ const ArticlesOnboardingSteps: React.FC<RootComponentProps & IOnboardingStepsPro
         <StepTwo
           titleLabel={t('Installing Apps For Blocks')}
           textLine1Label={t(
-            'Did you know what by installing these applications you will have some awesome extra blocks for you to add in your articles 🙀',
+            'Did you know that by installing these applications you will have some awesome extra blocks for you to add in your articles 🙀',
           )}
           skipLabel={t('Skip')}
           nextLabel={t('Next')}

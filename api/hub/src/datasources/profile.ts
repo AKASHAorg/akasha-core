@@ -8,13 +8,14 @@ import {
   sendNotification,
   validateName,
 } from '../helpers';
-import { ThreadID, Where, Client } from '@textile/hub';
+import { ThreadID, Where, Client, PublicKey } from '@textile/hub';
 import { DataProvider, Profile } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { clearSearchCache, searchIndex } from './search-indexes';
 import { postsStats, statsProvider } from '../resolvers/constants';
 import { parse, stringify } from 'flatted';
 import objHash from 'object-hash';
+import { utils } from 'ethers';
 
 const NOT_FOUND_PROFILE = new Error('Profile not found');
 const NOT_REGISTERED = new Error('Must be registered first.');
@@ -60,6 +61,21 @@ class ProfileAPI extends DataSource {
     const cacheKey = this.getCacheKey(pubKey);
     const hasKey = await queryCache.has(cacheKey);
     const apiProvider = getCurrentApiProvider();
+    if (!hasKey) {
+      try {
+        // check the format for pubKey
+        PublicKey.fromString(pubKey);
+      } catch (e) {
+        if (utils.isAddress(pubKey)) {
+          logger.warn(`resolving profile for eth address ${pubKey}`);
+          // fallback mechanism
+          return this.getProfile(pubKey);
+        }
+        logger.error(e.message);
+        return EMPTY_PROFILE;
+      }
+    }
+
     if (hasKey && !noCache) {
       const respData = await queryCache.get(cacheKey);
       const followers = await apiProvider.followerAPI.getFollowers(pubKey);
@@ -180,6 +196,14 @@ class ProfileAPI extends DataSource {
       .catch(e => console.error(e));
     await clearSearchCache();
     return profile._id;
+  }
+
+  async isUserNameAvailable(name: string): Promise<boolean> {
+    const db: Client = await getAppDB();
+    const validatedName = validateName(name);
+    const query = new Where('userName').eq(validatedName);
+    const profilesFound = await db.find<Profile>(this.dbID, this.collection, query);
+    return !profilesFound?.length;
   }
 
   async registerUserName(pubKey: string, name: string) {

@@ -23,11 +23,11 @@ export interface IArticlesMiniCardProps {
   isSaved?: boolean;
   saveLabel?: string;
   savedLabel?: string;
-  onClickArticle?: (id: string) => () => void;
+  onClickArticle?: (id: string) => void;
   toggleMenuDrop?: (ev: React.SyntheticEvent, id?: string) => void;
   closeMenuDrop?: () => void;
-  onClickTopic?: (topic: string) => () => void;
-  onMentionsClick?: () => void;
+  onTagClick?: (name: string) => void;
+  onMentionsClick?: (pubKey: string) => void;
   onRepliesClick?: () => void;
   onSaveClick?: () => void;
 }
@@ -51,7 +51,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
     onClickArticle,
     toggleMenuDrop,
     closeMenuDrop,
-    onClickTopic,
+    onTagClick,
     onMentionsClick,
     onRepliesClick,
     onSaveClick,
@@ -135,7 +135,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
         direction="row"
         justify="between"
         align="center"
-        onClick={onClickArticle(articleData.id)}
+        onClick={() => onClickArticle(articleData.id)}
       >
         <Box gap="small">
           <Text size="xlarge" weight="bold">
@@ -152,7 +152,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
       {articleData.isPublished && (
         <>
           <Box direction="row" wrap={true} gap="xsmall">
-            {articleData.topics.map((topic, idx) => (
+            {articleData.topics.map((tag, idx) => (
               <Box
                 key={idx}
                 direction="row"
@@ -166,9 +166,9 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
                 background="activePanelBackground"
                 border={{ color: 'accentText' }}
                 style={{ cursor: 'pointer' }}
-                onClick={onClickTopic(topic)}
+                onClick={() => onTagClick(tag)}
               >
-                <Text color="accentText">{topic}</Text>
+                <Text color="accentText">{tag}</Text>
               </Box>
             ))}
           </Box>

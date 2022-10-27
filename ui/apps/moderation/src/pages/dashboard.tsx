@@ -33,18 +33,15 @@ const {
 const DEFAULT_LIMIT = 10;
 
 const Dashboard: React.FC<ISharedModerationProps> = props => {
-  const {
-    user,
-    isAuthorised,
-    plugins: { routing },
-  } = props;
+  const { user, isAuthorised, plugins } = props;
 
   // const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [isPending, setIsPending] = React.useState<boolean>(true);
   const [isDelisted, setIsDelisted] = React.useState<boolean>(true);
 
   const { t } = useTranslation('app-moderation-ewa');
-  const locale = (props.plugins?.i18n?.languages?.[0] || 'en') as ILocale;
+  const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
+    'en') as ILocale;
 
   const getCountQuery = useGetCount();
   const count = getCountQuery.data;
@@ -72,6 +69,8 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
     }
     return [];
   }, [delistedItemsQuery.data]);
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
 
   React.useEffect(() => {
     if (!user) {

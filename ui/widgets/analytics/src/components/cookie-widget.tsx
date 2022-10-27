@@ -62,7 +62,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       {cookieType === null && (
         <div>
           <Translation ns="ui-widget-analytics">
@@ -105,7 +105,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                       size="medium"
                       style={{ cursor: 'pointer' }}
                       onClick={() =>
-                        props.plugins?.routing?.navigateTo?.({
+                        props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
                           appName: '@akashaorg/app-settings-ewa',
                           getNavigationUrl: navRoutes => navRoutes.Home,
                         })

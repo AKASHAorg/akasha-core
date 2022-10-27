@@ -152,8 +152,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
   const [avatarCroppedAreaPixels, setAvatarCroppedAreaPixels] = React.useState(null);
   const [coverImageCroppedAreaPixels, setCoverImageCroppedAreaPixels] = React.useState(null);
   const [avatarSrc, setAvatarSrc] = React.useState<{ url?: string; fallbackUrl?: string }>(null);
-  const [coverImageSrc, setCoverImageSrc] =
-    React.useState<{ url?: string; fallbackUrl?: string }>(null);
+  const [coverImageSrc, setCoverImageSrc] = React.useState<{ url?: string; fallbackUrl?: string }>(
+    null,
+  );
 
   const isEditingAvatar = showCropper === ProfileProviderProperties.AVATAR;
 

@@ -13,7 +13,7 @@ To work correctly, it depends on each app exposing a
 through its single-spa ```register``` method.
 
 ###
-The routing data is passed via single-spa plugin props into every app, and is accessible via ```props.plugins.routing```.
+The routing data is passed via single-spa plugin props into every app, and is accessible via ```props.plugins['@akashaorg/app-routing']?.routing```.
 It provides access to two objects:
 
 * The ```routeObserver```, which is an rxjs [BehaviourSubject](https://www.learnrxjs.io/learn-rxjs/subjects/behaviorsubject). Subscribing to it will provide an up-to-date routing state for all registered apps, and will update accordingly if an app is installed or uninstalled. It also keeps track of the currently active apps and widgets, without having to deduce any of it from the URL or application state.

@@ -1,6 +1,7 @@
 import 'systemjs-webpack-interop/auto-public-path';
 /* Components */
 import {
+  Anchor,
   Box,
   BoxExtendedProps,
   ButtonExtendedProps,
@@ -90,6 +91,7 @@ import { MyFeedCard } from './components/MyFeedCard';
 import AppInfoWidgetCard from './components/AppInfoWidgetCard';
 import AppsWidgetCard from './components/AppsWidgetCard';
 import CookieWidgetCard from './components/CookieCard';
+import DevKeyCard from './components/DevKeyCard';
 import ICDetailCard from './components/ICDetailCard';
 import ICWidgetCard from './components/ICWidgetCard';
 import LoginCTAWidgetCard, { CTAAnchor } from './components/LoginCTAWidgetCard';
@@ -97,7 +99,7 @@ import SourcesWidgetCard from './components/SourcesWidgetCard';
 import MiniInfoWidgetCard from './components/MiniInfoWidgetCard';
 import TrendingWidgetCard from './components/TrendingWidgetCard';
 import TutorialWidgetCard from './components/TutorialWidgetCard';
-import SignUpCard from './components/SignUpCard';
+import SteppedActionCard from './components/SteppedActionCard';
 
 import EntryCardLoading from './components/VirtualList/placeholders/entry-card-placeholder';
 
@@ -141,6 +143,7 @@ import DropSearchInput from './components/DropSearchInput';
 import EditorModal from './components/EditorModal';
 import EditorToolbar from './components/EditorToolbar';
 import ExtensionPoint from './utils/extension-point';
+import { Extension } from './utils/extension';
 import ShareModal from './components/ShareModal';
 import { StyledLayer } from './components/ListModal/styled-modal';
 import SignInModal from './components/SignInModal';
@@ -149,7 +152,7 @@ import EthProviderModal from './components/SignInModal/eth-provider-modal';
 import EthProviderListModal from './components/SignInModal/eth-provider-list-modal';
 import { ModalContainer } from './components/SignInModal/fullscreen-modal-container';
 import { ModalRenderer } from './components/SignInModal/modal-renderer';
-import MessageAppMiniCard from './components/MessageMiniCard';
+import MessageContactCard from './components/MessageContactCard';
 import BubbleCard from './components/BubbleCard';
 import ChatAreaHeader from './components/ChatAreaHeader';
 import ChatList from './components/ChatList';
@@ -175,7 +178,7 @@ import SelectPopover from './components/SelectPopover';
 
 import ViewportSizeProvider, { useViewportSize } from './components/Providers/viewport-dimension';
 import TextIcon from './components/TextIcon';
-import LinkInput from './components/TextInputIconForm';
+import TextInputIconForm from './components/TextInputIconForm';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
 import Checkbox from './components/Checkbox';
 import { SearchStartCard } from './components/SearchStartCard';
@@ -208,7 +211,10 @@ import lightTheme from './styles/themes/light';
 import { createTheme } from './styles/themes/utils/create-theme';
 import { ThemeSelector } from './styles/themes/utils/theme-selector';
 
-export { BoxExtendedProps, ButtonExtendedProps };
+import ProfileCardEthereumId from './components/ProfileCard/profile-card-fields/profile-card-ethereum-id';
+import ProfileCardDescription from './components/ProfileCard/profile-card-fields/profile-card-description';
+import Skeleton from './components/SideBar/skeleton';
+export type { BoxExtendedProps, ButtonExtendedProps };
 
 /* Grommet utils */
 // @TODO: fix this export style...
@@ -221,6 +227,7 @@ const exported = {
   LineChart,
   ResponsiveChart,
   Button,
+  TextArea,
   Carousel,
   DuplexButton,
   EditableAvatar,
@@ -241,6 +248,7 @@ const exported = {
   EditorMeter,
   editorDefaultValue,
   ExtensionPoint,
+  Extension,
   CommentEditor,
   EditorCard,
   EditorPlaceholder,
@@ -297,14 +305,14 @@ const exported = {
   Sidebar,
   SidebarMenuItem,
   Text,
-  TextArea,
   TextInput,
   TextIcon,
-  LinkInput,
+  TextInputIconForm,
   Topbar,
   createTheme,
   darkTheme,
   lightTheme,
+  Anchor,
   Box,
   FormField,
   Drop,
@@ -335,7 +343,7 @@ const exported = {
   ModalCardLogin,
   EthProviderListModal,
   EthProviderModal,
-  MessageAppMiniCard,
+  MessageContactCard,
   BubbleCard,
   ChatAreaHeader,
   ChatList,
@@ -349,6 +357,7 @@ const exported = {
   HorizontalDivider,
   StepIndicator,
   CookieWidgetCard,
+  DevKeyCard,
   ICDetailCard,
   ICWidgetCard,
   LoginCTAWidgetCard,
@@ -356,7 +365,7 @@ const exported = {
   TrendingWidgetCard,
   SourcesWidgetCard,
   TutorialWidgetCard,
-  SignUpCard,
+  SteppedActionCard,
   FilterCard,
   SwitchCard,
   StyledSwitchCardButton,
@@ -383,6 +392,9 @@ const exported = {
   OnboardingStartCard,
   OnboardingSuggestionsCard,
   MyFeedCard,
+  ProfileCardEthereumId,
+  ProfileCardDescription,
+  Skeleton,
 };
 
 export default exported;

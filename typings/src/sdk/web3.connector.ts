@@ -16,6 +16,7 @@ export interface IWeb3Connector<T> {
     mainnet: number;
     goerli: number;
     ropsten: number;
+    sepolia: number;
   }>;
   readonly provider: T;
 

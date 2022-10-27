@@ -70,8 +70,6 @@ declare const __DEV__: boolean;
       '@akashaorg/app-translation',
       '@akashaorg/app-bookmarks',
       '@akashaorg/app-settings-ewa',
-      '@akashaorg/app-articles',
-      //'@akashaorg/app-messaging',
     ],
     // pre-installed widgets;
     // layout widget is always loaded by default

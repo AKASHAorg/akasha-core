@@ -2,24 +2,24 @@ import { AUTH_MESSAGE, authStatus, SwActionType } from './constants';
 import {
   Buckets,
   Client,
+  Filecoin,
   InboxListOptions,
   PrivateKey,
   Status,
   UserAuth,
   Users,
-  Filecoin,
 } from '@textile/hub';
 import { GetProfile } from '../profiles/profile.graphql';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
 import {
-  CurrentUser,
   AUTH_EVENTS,
-  IMessage,
-  ILogger,
-  TYPES,
   AWF_IAuth,
+  CurrentUser,
   EthProviders,
+  ILogger,
+  IMessage,
+  TYPES,
 } from '@akashaorg/typings/sdk';
 import DB from '../db';
 import Web3Connector from '../common/web3.connector';
@@ -36,6 +36,8 @@ import { PublicKey } from '@textile/threaddb';
 import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
 
+// in memory atm
+const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
 /**
  * # sdk.api.auth
  *
@@ -366,10 +368,17 @@ class AWF_Auth implements AWF_IAuth {
     const mailboxID = await this.hubUser.getMailboxID();
     this.inboxWatcher = await this.hubUser.watchInbox(mailboxID, ev => {
       if (ev?.message?.body && ev?.message?.readAt === 0) {
-        this._globalChannel.next({
-          data: { emit: true },
-          event: AUTH_EVENTS.NEW_NOTIFICATIONS,
-        });
+        if (ev?.message?.from === process.env.EWA_MAILSENDER) {
+          this._globalChannel.next({
+            data: { emit: true },
+            event: AUTH_EVENTS.NEW_NOTIFICATIONS,
+          });
+        } else {
+          this._globalChannel.next({
+            data: { emit: true },
+            event: AUTH_EVENTS.NEW_MESSAGES,
+          });
+        }
       }
     });
     await this.fil.getToken(this.#identity);
@@ -442,8 +451,8 @@ class AWF_Auth implements AWF_IAuth {
   }
 
   /**
-   * Returns the currently logged in user object
-   * It will try to login if there is a previous session detected
+   * Returns the currently logged-in user object
+   * It will try to log in if there is a previous session detected
    */
   getCurrentUser() {
     return createObservableStream(this._getCurrentUser());
@@ -586,6 +595,99 @@ class AWF_Auth implements AWF_IAuth {
     }>(this._decryptMessage(message));
   }
 
+  /**
+   *
+   * @param to - public key of the recipient
+   * @param message - body text to be encrypted
+   * @param base64Format - if the payload result should be in base64
+   */
+  async createEncryptedMessage(to: string, message: string, base64Format = true) {
+    const recipient = PublicKey.fromString(to);
+    const encoder = new TextEncoder();
+    const encrypted = await recipient.encrypt(encoder.encode(message));
+    if (base64Format) {
+      return { to, base64Format, payload: Buffer.from(encrypted).toString('base64') };
+    }
+    return { to, base64Format, payload: encrypted };
+  }
+
+  // validate an encrypted message from cli
+  async validateDevKeyFromBase64Message(message: string) {
+    const decodedMessage = Buffer.from(message, 'base64');
+    const decodedMessageArray = Uint8Array.from(decodedMessage);
+    const decryptedMessage = await this.#identity.decrypt(decodedMessageArray);
+    let body: {
+      sub: string; // public key to be added
+      aud: string; // public key of the account to add the key
+      iat: string; // creation timestamp
+      sig: string; // signature of base64encoded object {sub, aud, iat}
+    };
+    try {
+      body = JSON.parse(new TextDecoder().decode(decryptedMessage));
+    } catch (e) {
+      this._log.warn(e);
+      throw new Error('The message format is not valid!');
+    }
+    if (!body.sub || !body.aud || !body.iat || !body.sig) {
+      throw new Error('The message is missing claims data!');
+    }
+    if (body.aud !== this?.currentUser?.pubKey) {
+      throw new Error(`This message was generated for a different pubKey ${body.aud}!`);
+    }
+    if (devKeys.some(e => e.pubKey === body.sub)) {
+      throw new Error('This key was already added.');
+    }
+    const issDate = new Date(body.iat);
+    //set expiration after 1 day
+    issDate.setDate(issDate.getDate() + 1);
+    const currentDate = new Date();
+    if (currentDate > issDate) {
+      throw new Error('The message has expired');
+    }
+    const arrayOfClaims = new TextEncoder().encode(
+      JSON.stringify({ sub: body.sub, aud: body.aud, iat: body.iat }),
+    );
+    const encodedSig = Buffer.from(body.sig, 'base64');
+    const devPubKey = PublicKey.fromString(body.sub);
+    const isValidRequest = await devPubKey.verify(arrayOfClaims, Uint8Array.from(encodedSig));
+    if (!isValidRequest) {
+      throw new Error('The message could not be verified!');
+    }
+    return {
+      pubKey: body.sub,
+      currentDate: currentDate.toISOString(),
+      expirationDate: issDate.toISOString(),
+      body,
+    };
+  }
+
+  /**
+   * validate and add pubKey to the dev account
+   * @param message - encrypted message with claims info
+   * @param name - human-readable string to identify the key
+   */
+  async addDevKeyFromBase64Message(message: string, name?: string) {
+    const validatedMsg = await this.validateDevKeyFromBase64Message(message);
+    devKeys.push({
+      pubKey: validatedMsg.pubKey,
+      addedAt: validatedMsg.currentDate,
+      name,
+    });
+  }
+
+  // returns all the dev public keys
+  // @Todo: connect it with the actual api
+  async getDevKeys() {
+    return Promise.resolve(devKeys);
+  }
+
+  // @Todo: connect it to the api when ready
+  async removeDevKey(pubKey: string) {
+    const index = devKeys.findIndex(e => e.pubKey === pubKey);
+    if (index !== -1) {
+      devKeys.splice(index, 1);
+    }
+  }
   private async _decryptMessage(message) {
     const decryptedBody = await this.#identity.decrypt(message.body);
     let body;
@@ -655,6 +757,11 @@ class AWF_Auth implements AWF_IAuth {
     uniqueMessages.clear();
     return inbox.slice();
   }
+
+  getObsConversation(pubKey: string) {
+    return createObservableStream<IMessage[]>(this.getConversation(pubKey));
+  }
+
   // pubKey seek does not work
   // @Todo: workaround pubKey filtering
   async getConversation(pubKey: string) {

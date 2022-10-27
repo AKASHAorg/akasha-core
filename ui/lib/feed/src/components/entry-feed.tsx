@@ -13,9 +13,12 @@ const EntryFeed = (props: IFeedWidgetProps) => {
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
     if (!props.loginState.pubKey) {
-      props.onLoginModalOpen({ modal: { name: 'editor-modal', embedEntry: entryId } });
+      props.navigateToModal({ name: 'login' });
     } else {
-      props.navigateToModal({ name: 'editor-modal', embedEntry: entryId });
+      props.navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}?action=repost`,
+      });
     }
   };
 

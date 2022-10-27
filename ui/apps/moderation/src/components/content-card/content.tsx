@@ -44,7 +44,7 @@ const Content: React.FC<IContentProps> = props => {
           entryData={props.entryData}
           itemType={props.itemType}
           locale={props.locale}
-          navigateTo={props.plugins?.routing?.navigateTo}
+          navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         />
       )}
       <Box

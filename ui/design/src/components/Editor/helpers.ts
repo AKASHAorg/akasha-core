@@ -146,6 +146,11 @@ const CustomEditor = {
       Transforms.select(editor, point);
     }
   },
+
+  clearEditor(editor: Editor) {
+    Transforms.select(editor, []);
+    Transforms.delete(editor);
+  },
 };
 
 export const moveSelectionBeforeImage = (editor: Editor) => {

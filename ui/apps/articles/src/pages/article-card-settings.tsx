@@ -26,8 +26,9 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
   const [showCropper, setShowCropper] = React.useState<boolean>(false);
   const [coverImageRotation /* setCoverImageRotation */] = React.useState<number>(0);
   const [coverImageCroppedAreaPixels, setCoverImageCroppedAreaPixels] = React.useState(null);
-  const [coverImageSrc, setCoverImageSrc] =
-    React.useState<{ url?: string; fallbackUrl?: string }>(null);
+  const [coverImageSrc, setCoverImageSrc] = React.useState<{ url?: string; fallbackUrl?: string }>(
+    null,
+  );
 
   const [charCount, setCharCount] = React.useState<number>(0);
   const [formValues, setFormValues] = React.useState<CardFormValues>({

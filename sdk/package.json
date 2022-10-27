@@ -18,7 +18,7 @@
     "browser-image-resizer": "2.2.1",
     "buffer": "6.0.3",
     "eth-ens-namehash": "2.0.8",
-    "ethers": "5.7.0",
+    "ethers": "5.7.1",
     "graphql": "16.6.0",
     "graphql-tag": "2.12.6",
     "idb-keyval": "6.2.0",
@@ -55,10 +55,10 @@
     "@gnosis.pm/safe-core-sdk": "3.0.0",
     "@gnosis.pm/safe-ethers-lib": "1.5.0",
     "@nomiclabs/hardhat-ethers": "2.1.1",
-    "@openzeppelin/hardhat-upgrades": "1.20.0",
+    "@openzeppelin/hardhat-upgrades": "1.21.0",
     "chai": "4.3.6",
     "dotenv-webpack": "8.0.1",
-    "hardhat": "2.11.1",
+    "hardhat": "2.12.0",
     "tslib": "2.4.0"
   },
   "scripts": {
@@ -67,7 +67,7 @@
     "build": "webpack --config webpack.config.js",
     "postbuild": "copyfiles -f ./dist/sw.* ../ui/build/",
     "sc:compile": "npx hardhat compile",
-    "sc:deploy:rinkeby": "npx hardhat run --network rinkeby src/contracts/scripts/update-app-registry.js",
+    "sc:deploy:goerli": "npx hardhat run --network goerli src/contracts/scripts/update-app-registry.js",
     "sc:test": "npx hardhat test --network development",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },

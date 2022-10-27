@@ -1,70 +1,54 @@
 import * as React from 'react';
-import * as singleSpa from 'single-spa';
 import FeedPage from '../feed-page/feed-page';
+import * as extension from '../extension';
 
+import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import {
-  RenderResult,
+  screen,
   renderWithAllProviders,
-  uiEventsMock,
-  genWorldConfig,
+  genAppProps,
+  genLoggedInState,
 } from '@akashaorg/af-testing';
-import { act } from 'react-dom/test-utils';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
-import { QueryClient, QueryClientProvider } from 'react-query';
-
-jest.mock('@akashaorg/typings/ui', () => ({
-  EntityTypes: {
-    ENTRY: 0,
-    PROFILE: 1,
-    COMMENT: 2,
-    TAG: 3,
-  },
-}));
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      cacheTime: 0,
-    },
-  },
-});
+import { act } from 'react-dom/test-utils';
+import * as hooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
 describe('< FeedPage /> component', () => {
-  let renderResult: RenderResult;
-  const BaseComponent = (
-    <QueryClientProvider contextSharing={true} client={queryClient}>
-      <AnalyticsProvider uiEvents={uiEventsMock}>
-        <FeedPage
-          showLoginModal={jest.fn()}
-          loginState={{ isReady: true, pubKey: '0x00', ethAddress: '0x00' }}
-          uiEvents={uiEventsMock}
-          domElement={document.body}
-          layoutConfig={{
-            modalSlotId: '',
-            pluginSlotId: '',
-            topbarSlotId: '',
-            rootWidgetSlotId: '',
-            widgetSlotId: '',
-            sidebarSlotId: '',
-          }}
-          logger={null}
-          singleSpa={singleSpa}
-          activeModal={null}
-          worldConfig={genWorldConfig()}
-          parseQueryString={jest.fn()}
-          navigateToModal={jest.fn()}
-        />
-      </AnalyticsProvider>
-    </QueryClientProvider>
+  const BaseComponent = ({ loginState }) => (
+    <AnalyticsProvider {...genAppProps()}>
+      <FeedPage {...genAppProps()} showLoginModal={jest.fn()} loginState={loginState} />
+    </AnalyticsProvider>
   );
-  beforeEach(() => {
-    act(() => {
-      renderResult = renderWithAllProviders(BaseComponent, {});
-    });
+
+  beforeAll(() => {
+    jest
+      .spyOn(extension, 'Extension')
+      .mockReturnValue(
+        <InlineEditor {...genAppProps()} extensionData={{ name: 'post', action: 'post' }} />,
+      );
+
+    (
+      jest.spyOn(hooks, 'useGetProfile') as unknown as jest.SpyInstance<{
+        status: string;
+      }>
+    ).mockReturnValue({ status: 'success' });
   });
 
-  it('should be defined', async () => {
-    expect(true).toBe(true);
+  it('should render feed page for anonymous users', async () => {
+    await act(async () => {
+      renderWithAllProviders(
+        <BaseComponent loginState={{ isReady: false, pubKey: null, ethAddress: null }} />,
+        {},
+      );
+    });
+    expect(screen.getByText(/Welcome, fellow Ethereans!/i)).toBeInTheDocument();
+  });
+
+  it('should render feed page for authenticated users', async () => {
+    await act(async () => {
+      renderWithAllProviders(<BaseComponent loginState={genLoggedInState(true)} />, {});
+    });
+    expect(screen.getAllByTestId('avatar-image')).not.toBeNull();
+    expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
   });
 });

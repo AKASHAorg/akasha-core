@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
-import { StyledProfileDrop, StyledIcon } from './styled-entry-box';
+import { StyledProfileDrop } from './styled-entry-box';
 
 import { EntryCardHidden } from './entry-card-hidden';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
@@ -18,7 +18,7 @@ import EmbedBox from '../EmbedBox';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 import ViewportSizeProvider from '../Providers/viewport-dimension';
 
-import { formatRelativeTime, ILocale } from '../../utils/time';
+import { formatDate, formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
 import LinkPreview from '../Editor/link-preview';
 import Tooltip from '../Tooltip';
@@ -95,6 +95,7 @@ export interface IEntryBoxProps {
   scrollHiddenContent?: boolean;
   removeEntryLabel?: string;
   onEntryRemove?: (entryId: string) => void;
+  onRepliesClick?: () => void;
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
   modalSlotId: string;
@@ -156,6 +157,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     editedLabel = 'Last edited',
     modalSlotId,
     actionsRightExt,
+    onRepliesClick,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -217,7 +219,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     }
   };
 
-  const handleRepliesClick = () => handleContentClick(entryData);
+  const handleRepliesClick = () => {
+    handleContentClick(entryData);
+    if (typeof onRepliesClick === 'function') onRepliesClick();
+  };
 
   const handleContentClick = (data?: IEntryData) => {
     if (typeof onContentClick === 'function' && !disableActions && contentClickable && data) {
@@ -379,9 +384,16 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           )}
           <Box direction="row" gap="xsmall" align="center" flex={{ shrink: 0 }}>
             {entryData.time && !hidePublishTime && (
-              <Text style={{ flexShrink: 0 }} color="secondaryText">
-                {formatRelativeTime(entryData.time, locale)}
-              </Text>
+              <Tooltip
+                dropProps={{ align: { top: 'bottom' } }}
+                message={formatDate(entryData.time, locale)}
+                plain={true}
+                caretPosition={'top'}
+              >
+                <Text style={{ flexShrink: 0 }} color="secondaryText">
+                  {formatRelativeTime(entryData.time, locale)}
+                </Text>
+              </Tooltip>
             )}
             {!!entryData?.updatedAt && (
               <Tooltip
@@ -401,7 +413,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               clickable={false}
             />
             {showMore && entryData.type !== 'REMOVED' && (
-              <StyledIcon
+              <Icon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
                   if (disableActions) {
@@ -559,7 +571,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             shareTextLabel={shareTextLabel}
             sharePostUrl={sharePostUrl}
             repliesLabel={repliesLabel}
-            repostsLabel={repostsLabel}
             repostLabel={repostLabel}
             cancelLabel={cancelLabel}
             repostWithCommentLabel={repostWithCommentLabel}

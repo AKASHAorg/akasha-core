@@ -4,9 +4,12 @@ import { ExtendedAuthor, PostOverride } from '../collections/interfaces';
 import { ethers } from 'ethers';
 import {
   createIpfsGatewayLink,
+  createIpfsGatewayPath,
   fetchWithTimeout,
   getIcRegistryContract,
+  logger,
   multiAddrToUri,
+  verifyEd25519Sig,
 } from '../helpers';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
@@ -286,7 +289,8 @@ const query = {
       }
       const data = await getIcRegistryContract().getReleaseData(pkgInfo.latestReleaseId);
       const cid = CID.parse('f' + data.manifestHash.substring(2), base16.decoder);
-      const ipfsLink = createIpfsGatewayLink(cid.toV1());
+      const ipfsLink = createIpfsGatewayPath(cid.toString());
+      logger.info(`fetching manifest ${ipfsLink}`);
       const d = await fetchWithTimeout(ipfsLink, {
         timeout: 60000,
         redirect: 'follow',
@@ -325,6 +329,40 @@ const query = {
       await registryCache.set(cacheKey, releaseInfo, 7200);
     }
     return results;
+  },
+
+  isUserNameAvailable: async (_source, { userName }, { dataSources, user, signature }) => {
+    if (!user) {
+      return Promise.reject('Must be authenticated!');
+    }
+    if (!userName || typeof userName !== `string`) {
+      throw new Error(`did not receive a valid userName`);
+    }
+    const verified = await verifyEd25519Sig({
+      pubKey: user?.pubKey,
+      data: { userName },
+      signature: signature,
+    });
+    if (!verified) {
+      logger.warn(`bad isUserNameAvailable sig`);
+      return Promise.reject(`Data signature for isUserNameAvailable was not validated!`);
+    }
+    return dataSources.profileAPI.isUserNameAvailable(userName);
+  },
+  getReplies: async (_source, { postID, commentID, limit, offset }, { dataSources }) => {
+    const data = await dataSources.commentsAPI.getReplies(
+      postID,
+      commentID,
+      limit || 5,
+      offset || 0,
+    );
+    const results = [];
+    for (const comment of data.results) {
+      const author = await dataSources.profileAPI.resolveProfile(comment.author);
+      results.push(Object.assign({}, comment, { author }));
+    }
+    data.results = results;
+    return data;
   },
 };
 

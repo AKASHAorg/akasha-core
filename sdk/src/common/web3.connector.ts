@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify';
 import { ethers } from 'ethers';
 import {
-  TYPES,
+  EthProviders,
   ILogger,
   INJECTED_PROVIDERS,
-  PROVIDER_ERROR_CODES,
-  WEB3_EVENTS,
-  EthProviders,
   IWeb3Connector,
+  PROVIDER_ERROR_CODES,
+  TYPES,
+  WEB3_EVENTS,
 } from '@akashaorg/typings/sdk';
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/web3-provider';
@@ -29,9 +29,8 @@ class Web3Connector
   #openLogin: OpenLogin;
   #walletConnect: WalletConnectProvider;
   #currentProviderId: EthProviders;
-  // only rinkeby network is supported atm
-  readonly network = 'rinkeby';
-  #networkId = '0x4';
+  readonly network = 'goerli';
+  #networkId = '0x5';
   // mapping for network name and ids
   readonly networkId = Object.freeze({
     mainnet: 1,
@@ -39,6 +38,7 @@ class Web3Connector
     rinkeby: 4,
     goerli: 5,
     kovan: 42,
+    sepolia: 11155111,
   });
 
   /**
@@ -88,6 +88,15 @@ class Web3Connector
    */
   get provider() {
     if (this.#web3Instance) {
+      return this.#web3Instance;
+    } else {
+      this.#web3Instance = new ethers.providers.InfuraProvider(
+        {
+          name: this.network,
+          chainId: this.networkId[this.network],
+        },
+        process.env.INFURA_ID,
+      );
       return this.#web3Instance;
     }
     throw new Error('Must connect first to a provider!');
@@ -204,7 +213,7 @@ class Web3Connector
    */
   async #_checkCurrentNetwork(): Promise<void> {
     const network = await this.#web3Instance.detectNetwork();
-    if (network?.name !== this.network) {
+    if (network?.chainId !== this.networkId[this.network]) {
       const error: Error & { code?: number } = new Error(
         `Please change the ethereum network to ${this.network}!`,
       );
@@ -220,14 +229,17 @@ class Web3Connector
    */
   async #_getProvider(provider: EthProviders) {
     let ethProvider;
-
+    const network = {
+      name: this.network,
+      chainId: this.networkId[this.network],
+    };
     if (provider === EthProviders.FallbackProvider || provider === EthProviders.None) {
-      return ethers.getDefaultProvider(this.network, { infura: process.env.INFURA_ID });
+      return new ethers.providers.InfuraProvider(network, process.env.INFURA_ID);
     }
 
     if (provider === EthProviders.Torus) {
       const openLogin = await this.#_getTorusProvider();
-      const provider = ethers.getDefaultProvider(this.network, { infura: process.env.INFURA_ID });
+      const provider = new ethers.providers.InfuraProvider(network, process.env.INFURA_ID);
       this.#wallet = new ethers.Wallet(openLogin.privKey, provider);
       return provider;
     }
@@ -240,7 +252,7 @@ class Web3Connector
       this.#walletConnect = await this.#_getWalletConnectProvider();
       ethProvider = this.#walletConnect;
     }
-    const web3Provider = new ethers.providers.Web3Provider(ethProvider, this.network);
+    const web3Provider = new ethers.providers.Web3Provider(ethProvider, network);
     this.#_registerProviderChangeEvents(web3Provider);
     return web3Provider;
   }

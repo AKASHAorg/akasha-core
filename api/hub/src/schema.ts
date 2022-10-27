@@ -158,6 +158,7 @@ const typeDefs = gql`
     isFollowing(follower: String!, following: String!): Boolean
     getComments(postID: String!, offset: String, limit: Int): CommentsResult
     getComment(commentID: String!): Comment!
+    getReplies(postID: String!, commentID: String!, offset: String, limit: Int): CommentsResult
     getPostsByAuthor(author: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
     getPostsByTag(tag: String!, offset: Int, limit: Int, pubKey: String): NewPostsResult
     getFollowers(pubKey: String!, limit: Int, offset: Int): ProfilesResult
@@ -166,6 +167,7 @@ const typeDefs = gql`
     getInterests(pubKey: String!): [String]
     getLatestRelease(integrationIDs: [String]): [IntegrationReleaseInfo]
     getIntegrationInfo(integrationIDs: [String]): [IntegrationInfo]
+    isUserNameAvailable(userName: String!): Boolean
   }
 
   input DataProviderInput {

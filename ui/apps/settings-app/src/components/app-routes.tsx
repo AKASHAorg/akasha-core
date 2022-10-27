@@ -27,7 +27,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-settings-ewa');
 
   const handleChevronLeftClick = () =>
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-settings-ewa',
       getNavigationUrl: navRoutes => navRoutes.Home,
     });

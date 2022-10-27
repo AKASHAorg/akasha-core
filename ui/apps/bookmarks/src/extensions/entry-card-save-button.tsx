@@ -71,7 +71,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
 
   return (
     <BookmarkButton
-      label={isBookmarked ? t('Saved') : t('Save')}
+      label={extensionData.hideLabel ? '' : isBookmarked ? t('Saved') : t('Save')}
       iconType="bookmark"
       iconSize="sm"
       fontSize="large"
@@ -83,7 +83,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
 };
 
 const BookmarkButtonWrapper = (props: RootExtensionProps) => (
-  <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+  <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
     <EntryCardSaveButton {...props} />
   </I18nextProvider>
 );

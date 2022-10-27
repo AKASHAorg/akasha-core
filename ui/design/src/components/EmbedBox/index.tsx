@@ -20,6 +20,7 @@ const EmbedBox: React.FC<IEmbedEntryBox> = props => (
       style: 'solid',
       side: 'all',
     }}
+    data-testid="embed-box"
   >
     <ProfileAvatarButton
       label={props.embedEntryData.author?.name}

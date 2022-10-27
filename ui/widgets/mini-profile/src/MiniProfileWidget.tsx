@@ -44,7 +44,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   };
 
   const handleProfileClick = (pubKey: string) => {
-    props.plugins?.routing?.navigateTo?.({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${pubKey}`,
     });
@@ -110,7 +110,7 @@ const Wrapped = (props: RootExtensionProps) => (
       <Route
         path="@akashaorg/app-akasha-integration/post/:postId"
         element={
-          <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+          <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
             <ProfileCardWidget {...props} />
           </I18nextProvider>
         }

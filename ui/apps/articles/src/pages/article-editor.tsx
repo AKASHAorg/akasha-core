@@ -25,7 +25,7 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
   const navigate = useNavigate();
   const { t } = useTranslation('app-articles');
 
-  const handleClickIcon = () => {
+  const handleNavigateBack = () => {
     navigate(-1);
   };
 
@@ -64,7 +64,7 @@ const ArticleEditor: React.FC<RootComponentProps & IArticleEditorProps> = props 
   return (
     <MainAreaCardBox className={className}>
       <Box direction="row" pad="medium" fill="horizontal">
-        <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={handleClickIcon} />
+        <Icon type="chevronLeft" style={{ cursor: 'pointer' }} onClick={handleNavigateBack} />
         <Text size="xlarge" weight="bold">
           {t('Article Editor')}
         </Text>

@@ -1,11 +1,7 @@
 import styled from 'styled-components';
 import DS from '@akashaorg/design-system';
 
-const { Button, TextArea, TextInput } = DS;
-
-export const StyledButton = styled(Button)`
-  border-width: 1px;
-`;
+const { TextArea, TextInput } = DS;
 
 export const StyledTextInput = styled(TextInput)`
   border: none;

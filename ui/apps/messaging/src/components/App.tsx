@@ -9,7 +9,7 @@ const { Box } = DS;
 const MessagingApp: React.FC<RootComponentProps> = props => {
   return (
     <Box width="100vw">
-      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+      <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
         <AppRoutes {...props} />
       </I18nextProvider>
     </Box>

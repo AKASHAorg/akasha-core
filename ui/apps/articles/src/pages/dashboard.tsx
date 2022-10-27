@@ -19,10 +19,9 @@ export interface IDashboardProps {
 }
 
 const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
-  const {
-    className,
-    plugins: { routing },
-  } = props;
+  const { className, plugins } = props;
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState<string | null>(null);
 
@@ -36,14 +35,14 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
   }, []);
 
   const handleClickStart = () => {
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
     });
   };
 
   const handleIconClick = () => {
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[SETTINGS],
     });
@@ -60,7 +59,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
 
   const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
     if (action) {
-      routing.navigateTo({
+      navigateTo({
         appName: '@akashaorg/app-articles',
         getNavigationUrl: () => `/article/${id}/${action}`,
       });
@@ -78,23 +77,24 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
   };
 
   const handleClickWriteArticle = () => {
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[WRITE_ARTICLE],
     });
   };
 
-  const handleClickArticle = (article_id: string) => () => {
-    /** do something */
-    routing.navigateTo({
+  const handleClickArticle = (articleId: string) => () => {
+    navigateTo({
       appName: '@akashaorg/app-articles',
-      getNavigationUrl: () => `/article/${article_id}`,
+      getNavigationUrl: () => `/article/${articleId}`,
     });
   };
 
-  const handleClickTopic = (topic: string) => () => {
-    /** do something */
-    topic;
+  const handleTagClick = (name: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
+    });
   };
 
   const handleMentionsClick = () => {
@@ -173,7 +173,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
             onClickArticle={handleClickArticle}
             toggleMenuDrop={toggleMenuDrop}
             closeMenuDrop={closeMenuDrop}
-            onClickTopic={handleClickTopic}
+            onTagClick={handleTagClick}
             onMentionsClick={handleMentionsClick}
             onRepliesClick={handleRepliesClick}
             onSaveClick={handleSaveClick}

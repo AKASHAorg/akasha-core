@@ -27,24 +27,30 @@ export const loadPlugins = (
         return from(pluginMods);
       }),
       tap(async results => {
-        const { mod, plugins } = results;
-        const plugin = await mod.getPlugin({
-          worldConfig,
-          logger,
-          uiEvents,
-          encodeAppName: encodeName,
-          decodeAppName: decodeName,
-        });
-        const plugs = {};
-        for (const [k, v] of Object.entries(plugin)) {
-          if (!plugins.hasOwnProperty(k)) {
-            plugs[k] = v;
+        const { name, mod, plugins } = results;
+        if (!plugins[name]) {
+          try {
+            const plugin = await mod.getPlugin({
+              worldConfig,
+              logger,
+              uiEvents,
+              encodeAppName: encodeName,
+              decodeAppName: decodeName,
+            });
+            if (Object.keys(plugin).length) {
+              pipelineEvents.next({
+                plugins: { [name]: Object.assign({}, plugin), ...plugins },
+              });
+            }
+          } catch (err) {
+            // from this point it's on, some of the apps
+            // that are using this plugin {name} will not work!
+
+            // @todo: show error in UI?
+
+            logger.error(`Error while loading plugin ${name}`);
+            logger.error(err.message ?? err);
           }
-        }
-        if (Object.keys(plugs).length) {
-          pipelineEvents.next({
-            plugins: Object.assign({}, plugins, plugs),
-          });
         }
       }),
     );

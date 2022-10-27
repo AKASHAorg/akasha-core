@@ -6,7 +6,6 @@ import * as icons from './new-icons';
 
 // maintain alphabetical order for icon names
 export type IconType =
-  | 'app3Box'
   | 'appCenter'
   | 'appAkasha'
   | 'appEns'
@@ -46,10 +45,10 @@ export type IconType =
   | 'check'
   | 'checkSimple'
   | 'checkDouble'
-  | 'dapper'
   | 'chevronRight'
   | 'chevronLeft'
-  | 'dev'
+  | 'dapper'
+  | 'dashboard'
   | 'discord'
   | 'document'
   | 'dropdown'
@@ -98,7 +97,6 @@ export type IconType =
   | 'metamask'
   | 'moreDark'
   | 'moreGrey'
-  | 'nifty'
   | 'notifications'
   | 'integrationAppLarge'
   | 'integrationAppSmall'
@@ -113,7 +111,6 @@ export type IconType =
   | 'pinAlt'
   | 'plusDark'
   | 'plusGrey'
-  | 'publisher'
   | 'questionMark'
   | 'quote'
   | 'reddit'
@@ -160,7 +157,6 @@ export type IconType =
   | 'zoomOutAlt';
 
 export const iconTypes: IconType[] = [
-  'app3Box',
   'appAkasha',
   'appCenter',
   'appEns',
@@ -203,7 +199,7 @@ export const iconTypes: IconType[] = [
   'chevronLeft',
   'coins',
   'dapper',
-  'dev',
+  'dashboard',
   'discord',
   'document',
   'dropdown',
@@ -252,7 +248,6 @@ export const iconTypes: IconType[] = [
   'metamask',
   'moreDark',
   'moreGrey',
-  'nifty',
   'notifications',
   'integrationAppLarge',
   'integrationAppSmall',
@@ -266,7 +261,6 @@ export const iconTypes: IconType[] = [
   'pin',
   'pinAlt',
   'plusDark',
-  'publisher',
   'questionMark',
   'quote',
   'reddit',
@@ -440,6 +434,7 @@ const fillIcons: IconType[] = [
   'appModeration',
   'explore',
   'legal',
+  'dashboard',
 ];
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];

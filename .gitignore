@@ -44,3 +44,4 @@ docs
 .env
 impl.js
 impl.js.map
+.history

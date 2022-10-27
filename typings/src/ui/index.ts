@@ -8,6 +8,7 @@ export * from './article';
 export * from './editor';
 export * from './entry';
 export * from './menu-items';
+export * from './messages';
 export * from './navigation';
 export * from './plugins';
 export * from './profile';

@@ -5,13 +5,18 @@ require('@openzeppelin/hardhat-upgrades');
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  defaultNetwork: 'rinkeby',
+  defaultNetwork: 'sepolia',
   networks: {
     development: {
       url: 'http://127.0.0.1:8545',
     },
-    rinkeby: {
-      url: 'https://rinkeby.infura.io/v3/' + process.env.INFURA_ID,
+    sepolia: {
+      chainId: 11155111,
+      url: 'https://sepolia.infura.io/v3/' + process.env.INFURA_ID,
+      accounts: [process.env.ETH_DEPLOY_KEY],
+    },
+    goerli: {
+      url: 'https://goerli.infura.io/v3/' + process.env.INFURA_ID,
       accounts: [process.env.ETH_DEPLOY_KEY],
     },
   },

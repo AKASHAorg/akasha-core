@@ -210,6 +210,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
         name,
         entryId: itemId,
         entryType: itemType,
+        hideLabel: itemType === EntityTypes.ENTRY,
       },
     });
   };
@@ -338,7 +339,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 sharePostLabel={t('Share Post')}
                 shareTextLabel={t('Share this post with your friends')}
                 onClickAvatar={handleAvatarClick}
-                repliesLabel={t('Replies')}
+                repliesLabel={itemType === EntityTypes.ENTRY ? '' : t('Replies')}
                 repostsLabel={t('Reposts')}
                 repostLabel={t('Repost')}
                 editedLabel={t('Last edited')}

@@ -76,7 +76,7 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
 const Wrapped = (props: RootExtensionProps) => {
   return (
     <Router>
-      <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+      <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
         <ModerateModalComponent {...props} />
       </I18nextProvider>
     </Router>

@@ -21,7 +21,16 @@ import {
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 
-const { Box, Helmet, EditorPlaceholder, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard } = DS;
+const {
+  Extension,
+  Box,
+  Helmet,
+  EntryCard,
+  EntryPublishErrorCard,
+  LoginCTAWidgetCard,
+  BasicCardBox,
+  Text,
+} = DS;
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -33,7 +42,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
 
   const { t } = useTranslation('app-akasha-integration');
-  const locale = (props.plugins?.translation?.i18n?.languages?.[0] || 'en') as ILocale;
+  const locale = (props.plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
+    'en') as ILocale;
 
   const [analyticsActions] = useAnalytics();
 
@@ -56,10 +66,6 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
     return [];
   }, [postsReq.data]);
-
-  const handleShowEditor = React.useCallback(() => {
-    navigateToModal.current({ name: 'editor-modal' });
-  }, []);
 
   const handleEntryFlag = React.useCallback(
     (entryId: string, itemType: string) => () => {
@@ -93,14 +99,25 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         <title>Ethereum World</title>
       </Helmet>
       {loginState?.ethAddress ? (
-        <EditorPlaceholder
-          ethAddress={loginState?.ethAddress}
-          onClick={handleShowEditor}
-          avatar={loggedProfileData?.avatar}
-          style={{ marginBottom: '0.5rem' }}
-        />
+        <>
+          <BasicCardBox pad="medium" gap="xsmall" margin={{ bottom: 'xsmall' }}>
+            <Box fill="horizontal">
+              <Text size="xlarge" weight="bold">
+                {t('General Social Feed')}
+              </Text>
+            </Box>
+            <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
+          </BasicCardBox>
+          <Box margin={{ bottom: 'xsmall' }}>
+            <Extension
+              name="inline-editor_feed_page"
+              uiEvents={props.uiEvents}
+              data={{ action: 'post' }}
+            />
+          </Box>
+        </>
       ) : (
-        <Box margin={{ bottom: 'medium' }}>
+        <Box margin={{ bottom: 'small' }}>
           <LoginCTAWidgetCard
             title={`${t('Welcome, fellow Ethereans!')} 💫`}
             subtitle={t('We are in private alpha at this time. ')}
@@ -126,7 +143,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           entryData={createPendingEntry(loggedProfileData, createPostMutation.state.variables)}
           sharePostLabel={t('Share Post')}
           shareTextLabel={t('Share this post with your friends')}
-          repliesLabel={t('Replies')}
+          repliesLabel=""
           repostsLabel={t('Reposts')}
           repostLabel={t('Repost')}
           repostWithCommentLabel={t('Repost with comment')}
@@ -154,7 +171,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
         }
         loginState={loginState}
-        navigateTo={props.plugins?.routing?.navigateTo}
+        navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}
@@ -168,7 +185,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
         removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
         itemSpacing={8}
-        i18n={props.plugins?.translation?.i18n}
+        i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
       />
     </Box>
   );

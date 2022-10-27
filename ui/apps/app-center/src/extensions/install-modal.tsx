@@ -23,6 +23,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   }, [extensionData]);
 
   const [modalState, setModalState] = React.useState(1);
+  const [error, setError] = React.useState<Error | null>(null);
 
   React.useEffect(() => {
     const subSDK = sdk.api.globalChannel.subscribe({
@@ -54,7 +55,15 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   const installApp = useInstallApp();
 
   React.useEffect(() => {
-    installApp.mutate({ name: integrationName });
+    installApp.mutate(
+      { name: integrationName },
+      {
+        onError: error => {
+          setModalState(3);
+          setError(error as Error);
+        },
+      },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -70,7 +79,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
         return null;
       }}
       onCloseModal={handleModalClose}
-      error={null}
+      error={error}
       cancelLabel={t('Cancel')}
       continueLabel={t('Continue')}
       cancelTitleLabel={t('Cancel installation')}
@@ -109,7 +118,7 @@ const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
 
 const ModalWrapper: React.FC<RootExtensionProps> = props => {
   return (
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <IntegrationInstallModal {...props} />
     </I18nextProvider>
   );

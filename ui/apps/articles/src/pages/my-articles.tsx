@@ -10,20 +10,18 @@ import ArticlesMiniCard from '../components/articles-mini-card';
 import ArticleOnboardingIntro, { ONBOARDING_STATUS } from '../components/onboarding/intro';
 
 import routes, { ONBOARDING_STEP_ONE, WRITE_ARTICLE } from '../routes';
-import { StyledButton } from '../components/styled';
 import { articles } from '../components/dummy-data';
 
-const { Box, Text, MainAreaCardBox } = DS;
+const { Box, Button, Text, MainAreaCardBox } = DS;
 
 export interface IMyArticlesProps {
   className?: string;
 }
 
 const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
-  const {
-    className,
-    plugins: { routing },
-  } = props;
+  const { className, plugins } = props;
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [activeTabIndex, setActiveTabIndex] = React.useState(0);
   const [menuDropOpen, setMenuDropOpen] = React.useState<string | null>(null);
@@ -38,7 +36,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   }, []);
 
   const handleClickStart = () => {
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[ONBOARDING_STEP_ONE],
     });
@@ -55,7 +53,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
 
   const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
     if (action) {
-      routing.navigateTo({
+      navigateTo({
         appName: '@akashaorg/app-articles',
         getNavigationUrl: () => `/article/${id}/${action}`,
       });
@@ -73,7 +71,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
   };
 
   const handleClickWriteArticle = () => {
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[WRITE_ARTICLE],
     });
@@ -81,19 +79,21 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
 
   const handleClickArticle = (article_id: string) => () => {
     /** do something */
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => `/article/${article_id}`,
     });
   };
 
-  const handleClickTopic = (topic: string) => () => {
-    /** do something with */
-    topic;
-  };
-
   const handleMentionsClick = () => {
     /** do something */
+  };
+
+  const handleTagClick = (name: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
+    });
   };
 
   const handleRepliesClick = () => {
@@ -139,7 +139,12 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
         border={{ size: '1px', color: 'accent' }}
       >
         <Text size="large">{t(' ✨😸Share your articles with Ethereum World 😸✨')}</Text>
-        <StyledButton primary={true} label={t('Start writing')} onClick={handleClickWriteArticle} />
+        <Button
+          slimBorder={true}
+          primary={true}
+          label={t('Start writing')}
+          onClick={handleClickWriteArticle}
+        />
       </MainAreaCardBox>
       {activeTabIndex === 0 &&
         articles
@@ -183,7 +188,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               onClickArticle={handleClickArticle}
               toggleMenuDrop={toggleMenuDrop}
               closeMenuDrop={closeMenuDrop}
-              onClickTopic={handleClickTopic}
+              onTagClick={handleTagClick}
               onMentionsClick={handleMentionsClick}
               onRepliesClick={handleRepliesClick}
               onSaveClick={handleSaveClick}
@@ -201,7 +206,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               draftLabel={t('Draft')}
               menuDropOpen={menuDropOpen === article.id}
               menuItems={[
-                ...(loginQuery.data?.pubKey !== article.authorPubkey
+                ...(loginQuery.data?.pubKey === article.authorPubkey
                   ? [
                       {
                         icon: 'editSimple',
@@ -242,7 +247,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
               draftLabel={t('Draft')}
               menuDropOpen={menuDropOpen === article.id}
               menuItems={[
-                ...(loginQuery.data?.pubKey !== article.authorPubkey
+                ...(loginQuery.data?.pubKey === article.authorPubkey
                   ? [
                       {
                         icon: 'editSimple',

@@ -83,6 +83,9 @@ export class NotificationPlugin {
     }
   };
   listenLogin = (listener: Listener) => {
+    if (this.user) {
+      listener(this.user);
+    }
     this.loginListeners.push(listener);
   };
 }

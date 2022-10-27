@@ -26,7 +26,7 @@ const { Box, Text, BasicCardBox } = DS;
 const AppRoutes: React.FC<RootComponentProps> = props => {
   const { worldConfig } = props;
   const { t } = useTranslation('app-integration-center');
-  const navigateTo = props.plugins.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const loginQuery = useGetLogin();
 
@@ -73,6 +73,15 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const latestReleasesInfo = React.useMemo(() => {
     return integrationsInfoReq.data?.getLatestRelease;
   }, [integrationsInfoReq.data?.getLatestRelease]);
+
+  const installableApps = React.useMemo(() => {
+    return latestReleasesInfo?.filter(releaseInfo => {
+      if (defaultIntegrations?.includes(releaseInfo.name)) {
+        return;
+      }
+      return releaseInfo;
+    });
+  }, [defaultIntegrations, latestReleasesInfo]);
 
   const installedAppsReq = useGetAllInstalledApps(isLoggedIn);
 
@@ -153,8 +162,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                     path={routes[EXPLORE]}
                     element={
                       <ExplorePage
-                        latestReleasesInfo={latestReleasesInfo}
-                        defaultIntegrations={defaultIntegrations}
+                        installableApps={installableApps}
                         installedAppsInfo={installedAppsReq.data}
                         isFetching={integrationsInfoReq.isFetching}
                         reqError={integrationsInfoReq.error}

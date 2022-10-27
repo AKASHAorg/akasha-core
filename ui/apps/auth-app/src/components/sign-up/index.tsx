@@ -19,14 +19,14 @@ import { StepFive } from './steps/StepFive';
 
 import { SIGN_UP_USERNAME } from '../../routes';
 
-const { SignUpCard } = DS;
+const { SteppedActionCard } = DS;
 
 export interface SignUpProps {
   activeIndex?: number;
 }
 
 const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
-  const routingPlugin = props.plugins.routing;
+  const routingPlugin = props.plugins['@akashaorg/app-routing']?.routing;
 
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [inviteToken, setInviteToken] = React.useState<string>('');
@@ -97,7 +97,7 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
   };
 
   return (
-    <SignUpCard
+    <SteppedActionCard
       titleLabel={t('Sign Up')}
       activeIndex={activeIndex}
       stepLabels={[
@@ -310,10 +310,10 @@ const SignUp: React.FC<RootComponentProps & SignUpProps> = props => {
           )}
           textUsernameAvailable={t('This username is available, hooray!')}
           buttonLabel={t('Complete Sign-Up')}
-          navigateTo={props.plugins?.routing?.navigateTo}
+          navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         />
       )}
-    </SignUpCard>
+    </SteppedActionCard>
   );
 };
 

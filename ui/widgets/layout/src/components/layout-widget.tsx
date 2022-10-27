@@ -195,6 +195,22 @@ const Layout: React.FC<RootComponentProps> = props => {
                       </Box>
                     </WarningCard>
                   )}
+
+                  <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
+                    <WarningIcon type="error" themeColor="secondary" />
+                    <Box width="100%">
+                      <Text size="medium">
+                        {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
+                          'We have migrated Ethereum World to the Goerli testnet',
+                        )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
+                          'But some functionalities such as claiming ENS names won’t be possible',
+                        )}. ${t('We are working hard on mitigating any issues')}. ${t(
+                          'Bear with us 🙏🏽',
+                        )}.`}
+                      </Text>
+                    </Box>
+                  </WarningCard>
+
                   <FocusedPluginSlot
                     name={props.layoutConfig.focusedPluginSlotId}
                     onMount={handleExtensionMount}
@@ -255,7 +271,7 @@ const Layout: React.FC<RootComponentProps> = props => {
 
 const LayoutWidget: React.FC<RootComponentProps> = props => (
   <Router>
-    <I18nextProvider i18n={props.plugins?.translation?.i18n}>
+    <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
       <Layout {...props} />
     </I18nextProvider>
   </Router>

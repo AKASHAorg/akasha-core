@@ -14,7 +14,6 @@ import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 import { StyledTab } from '../AppInfoWidgetCard/styled-widget-cards';
 import { ModalWrapper, StyledBox } from '../ListModal/styled-modal';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
-import { UserFollowers_Response } from '@akashaorg/typings/sdk';
 
 export interface IStatModal extends IProfileEntry, ITagEntry {
   className?: string;
@@ -39,9 +38,6 @@ export interface IStatModal extends IProfileEntry, ITagEntry {
   followingReqStatus: QueryStatus;
   interestsReqStatus: QueryStatus;
 
-  followersPages: UserFollowers_Response[];
-  followingPages: UserFollowers_Response[];
-
   loadMoreFollowers: () => void;
   loadMoreFollowing: () => void;
 
@@ -54,7 +50,6 @@ const StatModal: React.FC<IStatModal> = props => {
     className,
     activeIndex,
     setActiveIndex,
-    getMediaUrl,
     loggedUser,
     stats,
     titleLabel,
@@ -80,8 +75,6 @@ const StatModal: React.FC<IStatModal> = props => {
     subscribedLabel,
     tagAnchorLink,
     profileAnchorLink,
-    followersPages,
-    followingPages,
     loadingMoreLabel,
     onClickTag,
     onClickProfile,
@@ -159,14 +152,13 @@ const StatModal: React.FC<IStatModal> = props => {
                       )}
                       {followersReqStatus.isSuccess && followers && !!followers.length && (
                         <ProfileEntry
-                          getMediaUrl={getMediaUrl}
                           loggedUser={loggedUser}
                           followedProfiles={followedProfiles}
                           followLabel={followLabel}
                           followingLabel={followingLabel}
                           unfollowLabel={unfollowLabel}
                           profileAnchorLink={profileAnchorLink}
-                          pages={followersPages}
+                          profiles={followers}
                           status={followersReqStatus.status}
                           hasNextPage={followersReqStatus.hasNextPage}
                           loadingMoreLabel={loadingMoreLabel}
@@ -198,14 +190,13 @@ const StatModal: React.FC<IStatModal> = props => {
                       )}
                       {followingReqStatus.isSuccess && following && !!following.length && (
                         <ProfileEntry
-                          getMediaUrl={getMediaUrl}
                           loggedUser={loggedUser}
                           followedProfiles={followedProfiles}
                           followLabel={followLabel}
                           followingLabel={followingLabel}
                           unfollowLabel={unfollowLabel}
                           profileAnchorLink={profileAnchorLink}
-                          pages={followingPages}
+                          profiles={following}
                           status={followingReqStatus.status}
                           hasNextPage={followingReqStatus.hasNextPage}
                           loadingMoreLabel={loadingMoreLabel}

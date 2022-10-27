@@ -3,29 +3,16 @@ import { Box, Text } from 'grommet';
 import styled from 'styled-components';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 
-import {
-  IProfileData,
-  ProfileProviders,
-  UsernameTypes,
-  LogoSourceType,
-} from '@akashaorg/typings/ui';
+import { IProfileData, UsernameTypes, LogoSourceType } from '@akashaorg/typings/ui';
 
 import DuplexButton from '../DuplexButton';
 import Icon, { IconType } from '../Icon';
 import TextIcon from '../TextIcon';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import {
-  ProfileCardAvatar,
-  ProfileCardCoverImage,
-  ProfileCardDescription,
-  ProfileCardName,
-  ProfileCardEthereumId,
-  ProfileCardBadges,
-} from './profile-card-fields';
+import { ProfileCardAvatar, ProfileCardCoverImage, ProfileCardName } from './profile-card-fields';
 
 import ProfileMenuDropdown from './profile-card-menu-dropdown';
 import MobileListModal from '../MobileListModal';
-import HorizontalDivider from '../HorizontalDivider';
 
 import { truncateMiddle } from '../../utils/string-utils';
 
@@ -71,8 +58,6 @@ export interface IProfileCardProps {
   // reporting and moderation related labels
   flagAsLabel?: string;
   blockLabel?: string;
-  descriptionLabel: string;
-  badgesLabel: string;
   postsLabel: string;
   interestsLabel?: string;
   followingLabel: string;
@@ -169,8 +154,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     showMore,
     isFollowing,
     profileData,
-    descriptionLabel,
-    badgesLabel,
     followingLabel,
     followersLabel,
     followLabel,
@@ -209,16 +192,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   const [coverImageIcon, setCoverImageIcon] = useState(
     profileProvidersData?.currentProviders.coverImage?.providerIcon,
   );
-  const [descriptionIcon, setDescriptionIcon] = useState(
-    profileProvidersData?.currentProviders.description?.providerIcon,
-  );
+
   const [nameIcon, setNameIcon] = useState(
     profileProvidersData?.currentProviders.name?.providerIcon,
   );
 
   const [avatarPopoverOpen, setAvatarPopoverOpen] = useState(false);
   const [coverImagePopoverOpen, setCoverImagePopoverOpen] = useState(false);
-  const [descriptionPopoverOpen, setDescriptionPopoverOpen] = useState(false);
   const [namePopoverOpen, setNamePopoverOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -239,12 +219,6 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
     setCoverImage({ url: provider.value });
     setCoverImageIcon(provider.providerIcon);
     setCoverImagePopoverOpen(false);
-  };
-
-  const handleChangeDescription = (provider: IProfileDataProvider) => {
-    setDescription(provider.value);
-    setDescriptionIcon(provider.providerIcon);
-    setDescriptionPopoverOpen(false);
   };
 
   const handleChangeName = (provider: IProfileDataProvider) => {
@@ -374,6 +348,7 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
                 onClick={toggleMenu}
                 clickable={true}
                 ref={menuRef}
+                themeColor="border"
               />
             ) : null}
           </Box>
@@ -485,43 +460,15 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
           }
         />
       )}
-      <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
-        <ProfileCardEthereumId
-          profileData={profileData}
-          copiedLabel={props.copiedLabel}
-          copyLabel={props.copyLabel}
-          ensName={
-            props.userNameType?.default?.provider === ProfileProviders.ENS
-              ? props.userNameType.default.value
-              : undefined
-          }
-        />
-        {description && (
-          <>
-            <Box pad={{ horizontal: 'medium' }}>
-              <HorizontalDivider />
-            </Box>
-            <ProfileCardDescription
-              editable={editable}
-              description={description}
-              descriptionIcon={descriptionIcon}
-              handleChangeDescription={handleChangeDescription}
-              descriptionPopoverOpen={descriptionPopoverOpen}
-              setDescriptionPopoverOpen={setDescriptionPopoverOpen}
-              profileProvidersData={profileProvidersData}
-              descriptionLabel={descriptionLabel}
-            />
-          </>
-        )}
-      </Box>
-      {profileData.badges?.length > 0 && (
+      {props.children}
+      {/* {profileData.badges?.length > 0 && (
         <>
           <Box pad={{ horizontal: 'medium' }}>
             <HorizontalDivider />
           </Box>
           <ProfileCardBadges badgesLabel={badgesLabel} badges={profileData.badges} />
         </>
-      )}
+      )} */}
     </MainAreaCardBox>
   );
 };

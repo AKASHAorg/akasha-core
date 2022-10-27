@@ -17,7 +17,7 @@ import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 const { TrendingWidgetCard, ErrorLoader, Box } = DS;
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
-  const navigateTo = props.plugins?.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('ui-widget-trending');
   const loginQuery = useGetLogin();

@@ -1,24 +1,25 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import { RootComponentProps } from '@akashaorg/typings/ui';
-
 import ArticlesSettings from '../components/article-settings';
-
+import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import routes, { HOME } from '../routes';
 import { topics } from '../components/dummy-data';
 
 const ArticleSettingsPage: React.FC<RootComponentProps> = props => {
-  const {
-    plugins: { routing },
-  } = props;
+  const { plugins } = props;
 
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
+
+  // replace with real data
   const [selectedTopics, setSelectedTopics] = React.useState<string[]>(topics.slice(0, 15));
 
   const { t } = useTranslation('app-articles');
 
+  const uninstallAppReq = useUninstallApp();
+
   const handleClickCloseSettings = () => {
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-articles',
       getNavigationUrl: () => routes[HOME],
     });
@@ -36,7 +37,11 @@ const ArticleSettingsPage: React.FC<RootComponentProps> = props => {
   };
 
   const handleUninstall = () => {
-    /** do something */
+    uninstallAppReq.mutate('@akashaorg/app-messaging');
+    navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: routes => routes.defaultRoute,
+    });
   };
 
   return (

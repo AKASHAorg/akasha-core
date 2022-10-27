@@ -21,7 +21,7 @@ export interface MyFeedPageProps {
 const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
 
-  const navigateTo = props.plugins?.routing?.navigateTo;
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const isLoggedUser = React.useMemo(() => !!loginState.pubKey, [loginState.pubKey]);
 
@@ -88,7 +88,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         <title>Ethereum World</title>
       </Helmet>
 
-      <Box margin={{ bottom: 'medium' }} gap="medium">
+      <Box margin={{ bottom: 'small' }}>
         <StartCard
           title={t('My Feed')}
           heading={t('Add some magic to your feed 🪄')}
@@ -115,7 +115,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
           `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
         }
         loginState={loginState}
-        navigateTo={props.plugins?.routing?.navigateTo}
+        navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
         navigateToModal={props.navigateToModal}
         onLoginModalOpen={props.showLoginModal}
         requestStatus={postsReq.status}
@@ -129,7 +129,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         removedByAuthorLabel={t('This post was deleted by its author')}
         uiEvents={props.uiEvents}
         itemSpacing={8}
-        i18n={props.plugins?.translation?.i18n}
+        i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
         accentBorderTop={true}
       />
 

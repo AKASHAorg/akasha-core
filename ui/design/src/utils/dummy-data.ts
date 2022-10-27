@@ -1,8 +1,13 @@
 import { Descendant } from 'slate';
 import { LogoTypeSource, IntegrationCenterApp } from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
-import { IMenuItem, MenuItemType, MenuItemAreaType, IProfileData } from '@akashaorg/typings/ui';
-import { IChatMessage } from '../components/ChatList';
+import {
+  IMenuItem,
+  MenuItemType,
+  MenuItemAreaType,
+  IProfileData,
+  IChatMessage,
+} from '@akashaorg/typings/ui';
 import { IAppData } from '../components/AppsWidgetCard';
 
 const userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[] = [
@@ -518,7 +523,7 @@ const profileProvidersData = {
       value: 'https://placebeard.it/480/480',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     coverImage: {
@@ -526,7 +531,7 @@ const profileProvidersData = {
       value: 'goldenrod',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     userName: 'ENS',
@@ -535,14 +540,14 @@ const profileProvidersData = {
       value: 'Gilbert The Bearded',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     description: {
       providerName: '3Box',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
@@ -554,7 +559,7 @@ const profileProvidersData = {
       value: 'https://placebeard.it/480/480',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     {
@@ -572,7 +577,7 @@ const profileProvidersData = {
       value: 'goldenrod',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     {
@@ -590,7 +595,7 @@ const profileProvidersData = {
       value: 'Gilbert The Bearded',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
     },
     {
@@ -607,7 +612,7 @@ const profileProvidersData = {
       providerName: '3Box',
       providerIcon: {
         type: LogoTypeSource.ICON,
-        value: 'app3Box',
+        value: 'appAkasha',
       },
       value:
         'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
@@ -1027,6 +1032,12 @@ const dummyChatArr: IChatMessage[] = [
   },
 ];
 
+const sampleDevKey = {
+  addedAt: '2022-10-05T22:01:34.889Z',
+  name: 'Sample Key',
+  pubKey: 'bbaareigw7ua7k3thuacm2qpuhkgxone3ynsfo6n2v6pwgzpq2ie3eu7lpi',
+};
+
 export {
   userData,
   installedAppsData,
@@ -1077,4 +1088,5 @@ export {
   ICInstalledAppsData,
   ICDetailAppsData,
   dummyChatArr,
+  sampleDevKey,
 };

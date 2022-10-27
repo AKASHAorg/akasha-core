@@ -40,7 +40,7 @@ const SidebarOverlay = styled(Box)`
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
     uiEvents,
-    plugins: { routing },
+    plugins,
     worldConfig: { defaultApps, homepageApp },
   } = props;
 
@@ -54,6 +54,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const { size } = useViewportSize();
 
   const loginQuery = useGetLogin();
+
+  const routing = plugins['@akashaorg/app-routing']?.routing;
 
   React.useEffect(() => {
     let sub;
@@ -171,7 +173,13 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
            but typescript is not able to infer it
            because the cloneElement is used
         */
-        menuItem={<MenuItem plugins={props.plugins} {...({} as SidebarMenuItemProps)} />}
+        menuItem={
+          <MenuItem
+            plugins={props.plugins}
+            loginState={loginQuery?.data}
+            {...({} as SidebarMenuItemProps)}
+          />
+        }
       />
     </>
   );
