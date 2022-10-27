@@ -19,13 +19,11 @@ import { getStateSlice, LoaderState } from './state';
 
 export const getLatestReleaseInfo = async (integrations: { name: string }[]) => {
   const sdk = getSDK();
-  return sdk.api.icRegistry.getLatestReleaseInfo(integrations);
+  const data = await sdk.api.icRegistry.getLatestReleaseInfo(integrations);
+  return data.getLatestRelease;
 };
 
-export const getIntegrationsData = async (
-  integrationNames: string[],
-  worldConfig: ILoaderConfig,
-) => {
+export const getIntegrationsData = (integrationNames: string[], worldConfig: ILoaderConfig) => {
   const [local$, remote$] = partition(
     from(integrationNames),
     integrationName => !!worldConfig.registryOverrides.find(int => int.name === integrationName),
@@ -37,7 +35,7 @@ export const getIntegrationsData = async (
       map(name => ({ name })),
       toArray(),
     )
-    .pipe(mergeMap(getLatestReleaseInfo));
+    .pipe(mergeMap(e => from(getLatestReleaseInfo(e))));
 
   //get package info from local registry (overrides)
   const localIntegrations = local$

@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { DataProviderInput } from '@akashaorg/typings/sdk';
-import { IPublishData, CommentResponse } from '@akashaorg/typings/ui';
+import { IPublishData } from '@akashaorg/typings/ui';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
@@ -148,7 +148,7 @@ export function useDeleteComment(commentID: string) {
     // When mutate is called:
     onMutate: async (commentID: string) => {
       // Snapshot the previous value
-      const previousComment: CommentResponse = queryClient.getQueryData([COMMENT_KEY, commentID]);
+      const previousComment: Comment = queryClient.getQueryData([COMMENT_KEY, commentID]);
       // can add some optimistic updates here
       // ex: queryClient.setQueryData([COMMENT_KEY, commentID], {})
       queryClient.setQueryData([COMMENT_KEY, commentID], {
@@ -264,7 +264,7 @@ export function useEditComment(commentID: string, hasCommentData: boolean) {
     },
     {
       onMutate: async (comment: IPublishData & { postID: string }) => {
-        queryClient.setQueryData<CommentResponse>([COMMENT_KEY, commentID], current => {
+        queryClient.setQueryData<Comment>([COMMENT_KEY, commentID], current => {
           const commentPublishObj = buildPublishObject(comment, comment.postID);
           return {
             ...current,

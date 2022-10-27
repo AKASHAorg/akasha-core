@@ -2,14 +2,17 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationInfo, ReleaseInfo } from '@akashaorg/typings/sdk';
+import {
+  IntegrationReleaseInfo,
+  IntegrationReleaseInfoFragmentFragment,
+} from '@akashaorg/awf-sdk/src/gql/api';
 import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, Icon, Text, Spinner } = DS;
 
 export interface IWidgetsPage extends RootComponentProps {
-  latestReleasesInfo?: ReleaseInfo[];
-  installedAppsInfo?: IntegrationInfo[];
+  latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];
+  installedAppsInfo?: IntegrationReleaseInfo[];
   defaultIntegrations?: string[];
   isFetching?: boolean;
 }
@@ -37,7 +40,7 @@ const MyWidgetsPage: React.FC<IWidgetsPage> = props => {
     }
   });
 
-  const handleAppClick = (app: ReleaseInfo) => {
+  const handleAppClick = (app: IntegrationReleaseInfo) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,

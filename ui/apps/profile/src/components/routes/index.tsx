@@ -101,7 +101,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               element={
                 <ProfilePage
                   {...props}
-                  loggedProfileData={loggedProfileQuery.data}
+                  /* @Todo: fix my type ;/ */
+                  loggedProfileData={loggedProfileQuery.data as any}
                   showLoginModal={showLoginModal}
                   loginState={loginQuery.data}
                 />

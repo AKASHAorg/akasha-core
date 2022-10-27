@@ -10,9 +10,9 @@ import {
 } from './events';
 
 export interface DataProviderInput {
-  provider: string;
-  property: string;
-  value: string;
+  provider?: string;
+  property?: string;
+  value?: string;
 }
 
 export type GlobalEventBusData = {

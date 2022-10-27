@@ -8,7 +8,7 @@ export interface ITag {
 
 export interface IEntryData {
   CID?: string;
-  linkPreview?: LinkPreview;
+  linkPreview?: unknown;
   images?: IMetadata['images'];
   slateContent: Descendant[];
   time?: string | number | Date;
@@ -57,7 +57,7 @@ export interface IPublishData {
 export interface IMetadata {
   app: string;
   version: number;
-  linkPreview?: LinkPreview;
+  linkPreview?: unknown;
   images?: {
     originalSrc?: string;
     src: { url?: string; fallbackUrl?: string };

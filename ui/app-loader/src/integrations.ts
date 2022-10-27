@@ -34,8 +34,7 @@ import {
   parseQueryString,
 } from './utils';
 import * as singleSpa from 'single-spa';
-import getSDK from '@akashaorg/awf-sdk';
-import { Logger } from 'pino';
+import getSDK, { Logger } from '@akashaorg/awf-sdk';
 import { getIntegrationsData } from './manifests';
 import { loadI18nNamespaces } from './i18n-utils';
 import { extensionMatcher } from './extension-matcher';

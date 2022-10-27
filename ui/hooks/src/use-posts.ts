@@ -7,8 +7,8 @@ import {
   useQueryClient,
 } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { Post_Response } from '@akashaorg/typings/sdk';
-import { IPublishData, PostResponse, IProfileData } from '@akashaorg/typings/ui';
+import { PostResultFragment } from '@akashaorg/awf-sdk/src/gql/api';
+import { IPublishData, IProfileData } from '@akashaorg/typings/ui';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
@@ -347,7 +347,7 @@ export function useDeletePost(postID: string) {
       await queryClient.cancelQueries([ENTRY_KEY, postID]);
 
       // Snapshot the previous value
-      const previousPost: Post_Response = queryClient.getQueryData([ENTRY_KEY, postID]);
+      const previousPost: PostResultFragment = queryClient.getQueryData([ENTRY_KEY, postID]);
 
       queryClient.setQueryData([ENTRY_KEY, postID], {
         ...previousPost,
@@ -470,7 +470,7 @@ export const useEditPost = () => {
     },
     {
       onMutate: async editedPost => {
-        queryClient.setQueryData([ENTRY_KEY, editedPost.entryID], (current: PostResponse) => {
+        queryClient.setQueryData([ENTRY_KEY, editedPost.entryID], (current: PostResultFragment) => {
           const { data } = buildPublishObject(editedPost);
           return {
             ...current,

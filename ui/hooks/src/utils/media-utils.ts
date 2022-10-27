@@ -1,7 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { UserProfile_Response } from '@akashaorg/typings/sdk';
-import { LinkPreview } from '@akashaorg/typings/ui';
-import { lastValueFrom } from 'rxjs';
+import { UserProfileFragmentDataFragment } from '@akashaorg/awf-sdk/src/gql/api';
 
 export interface IConfig {
   quality?: number;
@@ -32,7 +30,7 @@ export const getMediaUrl = (hash?: string) => {
 /**
  * Utility to build media links attached to a given profile
  */
-export const buildProfileMediaLinks = (profile: UserProfile_Response) => {
+export const buildProfileMediaLinks = (profile: UserProfileFragmentDataFragment) => {
   const { avatar, coverImage, ...other } = profile;
   const images: {
     avatar: { url: string; fallbackUrl: string };
@@ -109,8 +107,8 @@ export const getLinkPreview = async (url: string) => {
   const sdk = getSDK();
   const imageSources = { url: '', fallbackUrl: '' };
   const faviconSources = { url: '', fallbackUrl: '' };
-  const linkPreviewResp = await lastValueFrom(sdk.api.entries.getLinkPreview(url));
-  const linkPreview: LinkPreview = Object.assign({}, linkPreviewResp.data.getLinkPreview);
+  const linkPreviewResp = await sdk.api.entries.getLinkPreview(url);
+  const linkPreview = Object.assign({}, linkPreviewResp.getLinkPreview);
 
   // fetch media links for image and favicon sources
   if (linkPreview.imagePreviewHash) {
@@ -123,7 +121,9 @@ export const getLinkPreview = async (url: string) => {
     faviconSources.url = ipfsLinks.originLink;
     faviconSources.fallbackUrl = ipfsLinks.fallbackLink;
   }
-  linkPreview.imageSources = imageSources;
-  linkPreview.faviconSources = faviconSources;
-  return linkPreview;
+  const sources = {
+    imageSources: imageSources,
+    faviconSources: faviconSources,
+  };
+  return Object.assign({}, linkPreview, sources);
 };

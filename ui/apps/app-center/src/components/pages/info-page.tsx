@@ -44,7 +44,8 @@ const InfoPage: React.FC<RootComponentProps> = props => {
   const latestReleaseInfo = latestReleaseInfoReq.data;
 
   const profileDataReq = useGetProfileByEthAddress(integrationInfo?.author);
-  const authorProfileData = profileDataReq.data;
+  /** Todo: fix my type **/
+  const authorProfileData = profileDataReq.data as any;
 
   const descriptionLink = latestReleaseInfo?.links?.detailedDescription;
 

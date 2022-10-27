@@ -7,7 +7,8 @@ import {
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
 import { of } from 'rxjs';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/awf-sdk/src/gql/api';
 
 export const encodeName = (appName: string) => {
   return appName;
@@ -20,7 +21,7 @@ export const decodeName = (appName: string) => {
 export interface CheckActivityOptions {
   config: IAppConfig;
   encodedAppName: string;
-  manifest?: BaseIntegrationInfo;
+  manifest?: IntegrationReleaseInfoFragmentFragment;
   location?: Location;
 }
 
@@ -127,7 +128,7 @@ export const findKey = (key: string, obj: unknown): string | null => {
   return null;
 };
 
-export const getDomElement = (integrationConfig: IAppConfig, name: string, logger: ILogger) => {
+export const getDomElement = (integrationConfig: IAppConfig, name: string, logger: Logger) => {
   const domNode = document.getElementById(integrationConfig.mountsIn || '');
 
   if (!domNode) {

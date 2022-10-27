@@ -1,8 +1,8 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { IAkashaError } from '@akashaorg/typings/ui';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
 
-const logger = new Map<string, ILogger>();
+const logger = new Map<string, Logger>();
 
 /**
  * Utility to get a logger from a map of loggers

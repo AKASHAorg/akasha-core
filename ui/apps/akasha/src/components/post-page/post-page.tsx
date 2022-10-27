@@ -39,8 +39,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
     loggedUser: loginState?.pubKey,
     enabler: loginState?.fromCache,
   });
-
-  const entryData = React.useMemo(() => {
+  /* @Todo: fix my type ;/ */
+  const entryData: any = React.useMemo(() => {
     if (postReq.data) {
       return mapEntry(postReq.data);
     }
@@ -65,7 +65,8 @@ const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
   }, [reqComments.data]);
 
   const profileDataReq = useGetProfile(loginState?.pubKey);
-  const loggedProfileData = profileDataReq.data;
+  /* @Todo: fix my type ;/ */
+  const loggedProfileData: any = profileDataReq.data;
 
   const handleLoadMore = () => {
     if (reqComments.isSuccess && reqComments.hasNextPage && loginState?.fromCache) {

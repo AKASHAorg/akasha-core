@@ -17,22 +17,17 @@ const getNotifications = async () => {
   const getProfilesCalls = getMessagesResp.map(message => {
     const pubKey = message.body.value.author || message.body.value.follower;
     if (pubKey) {
-      return sdk.api.profile.getProfile({ pubKey }).pipe(
-        catchError(err => {
-          logError('useNotifications.getNotifications.getProfileCalls', err);
-          return of(null);
-        }),
-      );
+      return sdk.api.profile.getProfile({ pubKey });
     }
   });
-  const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls), { defaultValue: [] });
+  const profilesResp = await Promise.all(getProfilesCalls);
 
   let completeMessages = [];
   profilesResp
-    ?.filter(res => res?.data)
+    ?.filter(res => res)
     .map(profileResp => {
-      const profileData = buildProfileMediaLinks(profileResp.data?.resolveProfile);
-      completeMessages = getMessagesResp.data?.map(message => {
+      const profileData = buildProfileMediaLinks(profileResp);
+      completeMessages = getMessagesResp.map(message => {
         if (message.body.value.author === profileData.pubKey) {
           message.body.value.author = profileData;
         }

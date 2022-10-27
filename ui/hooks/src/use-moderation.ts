@@ -2,7 +2,7 @@ import { lastValueFrom } from 'rxjs';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { Post_Response } from '@akashaorg/typings/sdk';
+import { PostResultFragment } from '@akashaorg/awf-sdk/src/gql/api';
 
 import constants from './constants';
 import { ENTRY_KEY } from './use-posts';
@@ -163,7 +163,7 @@ export function useReport() {
             reason: variables.dataToSign.reason,
             reported: true,
           }));
-          queryClient.setQueriesData<Post_Response>(ENTRY_KEY, oldData => {
+          queryClient.setQueriesData<PostResultFragment>(ENTRY_KEY, oldData => {
             if (oldData?.author?.pubKey === variables.contentId) {
               return {
                 ...oldData,

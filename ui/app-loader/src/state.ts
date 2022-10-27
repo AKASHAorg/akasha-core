@@ -1,4 +1,5 @@
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/awf-sdk/src/gql/api';
 import {
   ModalNavigationOptions,
   ILoaderConfig,
@@ -37,7 +38,7 @@ export interface LoaderState {
   /*
    * Generic Integration manifest data from registry
    */
-  manifests: BaseIntegrationInfo[];
+  manifests: IntegrationReleaseInfoFragmentFragment[];
   layoutConfig: IAppConfig;
   /**
    * SystemJS imported modules

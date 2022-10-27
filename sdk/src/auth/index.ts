@@ -738,8 +738,8 @@ class AWF_Auth {
     return inbox.slice();
   }
 
-  async getObsConversation(pubKey: string) {
-    return this.getConversation(pubKey);
+  getObsConversation(pubKey: string) {
+    return createObservableStream<IMessage[]>(this.getConversation(pubKey));
   }
 
   // pubKey seek does not work

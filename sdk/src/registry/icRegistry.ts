@@ -7,7 +7,6 @@ import Settings from '../settings';
 import Logging from '../logging';
 import { constants as ethersConstants, ethers, utils as ethersUtils } from 'ethers';
 import IntegrationRegistryABI from '../contracts/abi/IntegrationRegistry.json';
-import { lastValueFrom } from 'rxjs';
 import { createFormattedValue } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import IpfsConnector from '../common/ipfs.connector';

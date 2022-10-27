@@ -20,7 +20,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
-  const loggedProfileData = profileDataReq.data;
+  /* @Todo: fix my type ;/ */
+  const loggedProfileData: any = profileDataReq.data;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
