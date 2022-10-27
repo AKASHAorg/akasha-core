@@ -229,7 +229,33 @@ const getIntegrationsReleaseInfo = async releaseIds => {
  *
  * const releasesInfo = releaseInfoQuery.data
  * ```
- * example mock data for an integration to test locally
+ */
+export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
+  return useQuery([RELEASES_KEY, 'info'], () => getIntegrationsReleaseInfo(releaseIds), {
+    enabled: !!releaseIds?.length,
+    keepPreviousData: true,
+    onError: (err: Error) => logError('useIntegrationRegistry.getIntegrationReleaseInfo', err),
+  });
+}
+
+const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
+  const sdk = getSDK();
+  const res = await lastValueFrom(sdk.api.icRegistry.getLatestReleaseInfo(opt));
+  // add local installable app mock to response here
+  return res.data;
+};
+
+/**
+ * Hook to get latest release info for integrations
+ * @example useGetLatestReleaseInfo hook
+ * ```typescript
+ * const latestReleaseInfoQuery = useGetLatestReleaseInfo([{ id: 'some-release-id-1' }, { id: 'some-release-id-2' }, { id: 'some-release-id-3' }]);
+ *
+ * const latestReleasesInfo = React.useMemo(() => {
+    return latestReleaseInfoQuery.data?.getLatestRelease;
+  }, [latestReleaseInfoQuery.data?.getLatestRelease]);
+ * ```
+  * example mock data for an integration to test locally
  * ```typescript
  * if (!res.data.getLatestRelease.some(rel => rel.name === '@akashaorg/app-messaging')) {
  *  res.data.getLatestRelease.push({
@@ -257,32 +283,6 @@ const getIntegrationsReleaseInfo = async releaseIds => {
  *     createdAt: null,
  *   });
  * }
- * ```
- */
-export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
-  return useQuery([RELEASES_KEY, 'info'], () => getIntegrationsReleaseInfo(releaseIds), {
-    enabled: !!releaseIds?.length,
-    keepPreviousData: true,
-    onError: (err: Error) => logError('useIntegrationRegistry.getIntegrationReleaseInfo', err),
-  });
-}
-
-const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
-  const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.icRegistry.getLatestReleaseInfo(opt));
-  // add messaging app mock to response here
-  return res.data;
-};
-
-/**
- * Hook to get latest release info for integrations
- * @example useGetLatestReleaseInfo hook
- * ```typescript
- * const latestReleaseInfoQuery = useGetLatestReleaseInfo([{ id: 'some-release-id-1' }, { id: 'some-release-id-2' }, { id: 'some-release-id-3' }]);
- *
- * const latestReleasesInfo = React.useMemo(() => {
-    return latestReleaseInfoQuery.data?.getLatestRelease;
-  }, [latestReleaseInfoQuery.data?.getLatestRelease]);
  * ```
  */
 export function useGetLatestReleaseInfo(opt: { name?: string; id?: string }[]) {

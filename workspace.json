@@ -508,6 +508,28 @@
         }
       }
     },
+    "@akashaorg/app-articles": {
+      "root": "ui/apps/articles",
+      "sourceRoot": "ui/apps/articles/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/articles"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/articles",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/articles"
+          }
+        }
+      }
+    },
     "@akashaorg/app-translation": {
       "root": "ui/apps/translation",
       "sourceRoot": "ui/apps/translation/src",

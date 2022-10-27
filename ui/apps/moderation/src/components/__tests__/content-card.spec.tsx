@@ -17,7 +17,7 @@ describe('< ContentCard /> component', () => {
       originallyReportedByLabel="Originally reported by"
       entryId="01f3dwm7z3qep88ap4j87vw8p8"
       reasons={['reason-1', 'reason-2']}
-      reportedDateTime={new Date().toString()}
+      reportedDateTime={new Date()}
       handleButtonClick={jest.fn}
       {...genAppProps()}
     />

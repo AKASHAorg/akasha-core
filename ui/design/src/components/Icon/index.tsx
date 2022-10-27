@@ -17,14 +17,20 @@ export type IconType =
   | 'akasha'
   | 'addAppGrey'
   | 'addCard'
+  | 'alignCenter'
+  | 'alignJustify'
+  | 'alignLeft'
+  | 'alignRight'
   | 'announcement'
   | 'app'
   | 'arrowDown'
   | 'arrowUp'
   | 'arrowLeft'
   | 'arrowRight'
+  | 'article'
   | 'available'
   | 'bold'
+  | 'boldAlt'
   | 'block'
   | 'book'
   | 'bookmark'
@@ -72,7 +78,16 @@ export type IconType =
   | 'info'
   | 'legal'
   | 'licensewtfpl'
+  | 'licenseAllRights'
+  | 'licenseAttribution'
+  | 'licenseNoDerivatives'
+  | 'licenseNoRights'
+  | 'licenseNonCommercial'
+  | 'licenseShareAlike'
+  | 'licenseSomeRights'
   | 'link'
+  | 'listBulleted'
+  | 'listNumbered'
   | 'loading'
   | 'login'
   | 'media'
@@ -110,11 +125,16 @@ export type IconType =
   | 'share'
   | 'signOut'
   | 'status'
-  | 'subscribe'
   | 'stopwatch'
+  | 'strikethrough'
+  | 'subscribe'
   | 'shareSmallBlue'
   | 'shareSmallDark'
   | 'shareSmallGrey'
+  | 'textcase'
+  | 'textcaseLower'
+  | 'textcaseUpper'
+  | 'textcaseSentence'
   | 'thumbsDownGrey'
   | 'thumbsDownWhite'
   | 'thumbsUpGrey'
@@ -148,14 +168,20 @@ export const iconTypes: IconType[] = [
   'addAppGrey',
   'akasha',
   'addCard',
+  'alignCenter',
+  'alignJustify',
+  'alignLeft',
+  'alignRight',
   'announcement',
   'app',
   'arrowDown',
   'arrowUp',
   'arrowLeft',
   'arrowRight',
+  'article',
   'available',
   'bold',
+  'boldAlt',
   'block',
   'book',
   'bookmark',
@@ -203,7 +229,16 @@ export const iconTypes: IconType[] = [
   'key',
   'legal',
   'licensewtfpl',
+  'licenseAllRights',
+  'licenseAttribution',
+  'licenseNoDerivatives',
+  'licenseNoRights',
+  'licenseNonCommercial',
+  'licenseShareAlike',
+  'licenseSomeRights',
   'link',
+  'listBulleted',
+  'listNumbered',
   'loading',
   'login',
   'media',
@@ -240,11 +275,16 @@ export const iconTypes: IconType[] = [
   'signOut',
   'status',
   'share',
-  'subscribe',
   'stopwatch',
+  'strikethrough',
+  'subscribe',
   'shareSmallBlue',
   'shareSmallDark',
   'shareSmallGrey',
+  'textcase',
+  'textcaseLower',
+  'textcaseUpper',
+  'textcaseSentence',
   'thumbsDownGrey',
   'thumbsDownWhite',
   'thumbsUpGrey',
