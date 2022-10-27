@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { of as mockOf } from 'rxjs';
-import { mockGetComment, mockGetComments } from '../__mocks__/comments';
-import { useComment, useInfiniteComments } from '../use-comments';
+import { mockGetComment, mockGetComments, mockGetReplies } from '../__mocks__/comments';
+import { useComment, useInfiniteComments, useInfiniteReplies } from '../use-comments';
 import * as moderation from '../use-moderation';
 import { mockCheckModerationStatus } from '../__mocks__/moderation';
 import { createWrapper } from './utils';
@@ -13,6 +13,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
       comments: {
         getComments: () => mockOf(mockGetComments),
         getComment: () => mockOf(mockGetComment),
+        getReplies: () => mockOf(mockGetReplies),
       },
     });
 });
@@ -27,6 +28,21 @@ describe('useComments', () => {
     const [wrapper] = createWrapper();
     const { result, waitFor } = renderHook(
       () => useInfiniteComments({ limit: 5, postID: '0x00' }),
+      {
+        wrapper,
+      },
+    );
+    await waitFor(() => result.current.isFetched, { timeout: 5000 });
+    const page = result.current.data.pages[0];
+    expect(page.total).toBe(2);
+    expect(page.results).toHaveLength(2);
+    expect(page.results[0]).toBe('abcd');
+  });
+
+  it('should get infinite replies', async () => {
+    const [wrapper] = createWrapper();
+    const { result, waitFor } = renderHook(
+      () => useInfiniteReplies({ limit: 5, postID: '0x00', commentID: '0x11' }),
       {
         wrapper,
       },

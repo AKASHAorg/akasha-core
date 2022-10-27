@@ -84,6 +84,90 @@ export const mockGetComments = {
   },
 };
 
+export const mockGetReplies = {
+  data: {
+    getReplies: {
+      total: 2,
+      nextIndex: null,
+      results: [
+        {
+          content: [
+            {
+              provider: 'AkashaApp',
+              property: 'slateContent',
+              value:
+                'WwB7ACIAdAB5AHAAZQAiADoAIgBwAGEAcgBhAGcAcgBhAHAAaAAiACwAIgBjAGgAaQBsAGQAcgBlAG4AIgA6AFsAewAiAHQAZQB4AHQAIgA6ACIAdABlAHMAdAAiAH0AXQB9AF0A',
+            },
+            {
+              provider: 'AkashaApp',
+              property: 'textContent',
+              value: 'dGVzdA==',
+            },
+            {
+              provider: 'AkashaApp',
+              property: 'images',
+              value: 'WwBdAA==',
+            },
+          ],
+          author: {
+            pubKey: 'bbaareihb5fdjg5ozj7d77tnjq2mexcktik3bwe3w7ds3yhgp335vupythi',
+            name: 'TesterTest',
+            userName: 'testertest',
+            avatar: 'bafkreiadd5c2nczwoqmtqlvwjk5g2wwhzumuhikxpowkfj3sng6akoxfvu',
+            coverImage: null,
+            description: null,
+            ethAddress: '0x780B47915B936B08e0C590a06213cFC61BB8658c',
+            totalPosts: '11',
+            totalFollowers: 5,
+            totalFollowing: 1,
+          },
+          creationDate: '1645787409536',
+          replyTo: '02fhgha3xxaashakh359939133',
+          postId: '01fwh5gffzzff85my50vg9dm2t',
+          _id: COMMENT_ID,
+        },
+        {
+          content: [
+            {
+              provider: 'AkashaApp',
+              property: 'slateContent',
+              value:
+                'WwB7ACIAdAB5AHAAZQAiADoAIgBwAGEAcgBhAGcAcgBhAHAAaAAiACwAIgBjAGgAaQBsAGQAcgBlAG4AIgA6AFsAewAiAHQAZQB4AHQAIgA6ACIAcgBlAHAAbAB5AGkAbgBnACAAdAAiAH0AXQB9AF0A',
+            },
+            {
+              provider: 'AkashaApp',
+              property: 'textContent',
+              value: 'cmVwbHlpbmcgdA==',
+            },
+            {
+              provider: 'AkashaApp',
+              property: 'images',
+              value: 'WwBdAA==',
+            },
+          ],
+          author: {
+            pubKey: 'bbaareiaft3o2qrx4cbb73okxmyyksqzdgehh5vsk3wfd2nh7a7ko3jgv6a',
+            name: 'mcim',
+            userName: 'mcim',
+            avatar: 'bafkreiet7kmqarvediohaunqnegmfpb2gwyeku36yc6nprny6ex5skma7m',
+            coverImage: 'bafkreiet7kmqarvediohaunqnegmfpb2gwyeku36yc6nprny6ex5skma7m',
+            description:
+              'my description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongmy description here is sooooooooooo looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong',
+            ethAddress: '0x5fE8557aCc35c87B185ee80a9627dab7A921787c',
+            totalPosts: '2',
+            totalFollowers: 1,
+            totalFollowing: 1,
+          },
+          creationDate: '1645548909789',
+          replyTo: '02fhgha3xxaashakh359939133',
+          postId: '01fwh5gffzzff85my50vg9dm2t',
+          _id: '01fwh5qdh85snnz05gjxr99t0s',
+        },
+      ],
+    },
+  },
+};
+
 export const mockGetComment = { data: { getComment: mockGetComments.data.getComments.results[0] } };
 
 export const mockDeleteCommentResponse = {
