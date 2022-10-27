@@ -1,16 +1,18 @@
 import * as React from 'react';
 import ExtensionPoint from './extension-point';
-import { EventTypes, RootComponentProps } from '@akashaorg/typings/ui';
+import { EventTypes, RootComponentProps, EventDataTypes } from '@akashaorg/typings/ui';
 
 type Props = {
   name: string;
   uiEvents: RootComponentProps['uiEvents'];
-  data: Record<string, unknown>;
   style?: React.CSSProperties;
+  data: Partial<Extract<EventDataTypes, 'entryId' | 'commentId' | 'entryType'>> & {
+    [key in string]: unknown;
+  };
 };
 
-export function Extension({ name, data, uiEvents, style }: Props) {
-  const handleExtensionMount = (name: string) => {
+export function Extension({ name, uiEvents, style, data }: Props) {
+  const handleExtensionMount = (name: string, data?: Record<string, unknown>) => {
     uiEvents.next({
       event: EventTypes.ExtensionPointMount,
       data: { name, ...data },
@@ -20,7 +22,7 @@ export function Extension({ name, data, uiEvents, style }: Props) {
   const handleExtensionUnmount = (name: string) => {
     uiEvents.next({
       event: EventTypes.ExtensionPointUnmount,
-      data: { name, ...data },
+      data: { name },
     });
   };
 
@@ -30,6 +32,7 @@ export function Extension({ name, data, uiEvents, style }: Props) {
       onMount={handleExtensionMount}
       onUnmount={handleExtensionUnmount}
       style={style}
+      data={data}
     />
   );
 }
