@@ -9,9 +9,9 @@ import { IImageCropperProps } from '@akashaorg/design-system/lib/components/Imag
 import InputTags from './input-tags';
 
 import { License } from '../utils/licenses';
-import { StyledButton, StyledImageInput, StyledTextArea, StyledTextInput } from './styled';
+import { StyledImageInput, StyledTextArea, StyledTextInput } from './styled';
 
-const { Box, EditorMeter, Icon, Image, ImageCropper, MainAreaCardBox, Select, Text } = DS;
+const { Box, Button, EditorMeter, Icon, Image, ImageCropper, MainAreaCardBox, Select, Text } = DS;
 
 export type CardFormValues = {
   coverImage: IImageSrc | null;
@@ -166,7 +166,8 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
           <Text size="large" color="secondaryText">
             {coverImageSubtitleLabel}
           </Text>
-          <StyledButton
+          <Button
+            slimBorder={true}
             size="large"
             height={2.5}
             label={
@@ -318,8 +319,15 @@ const ArticleCardSettings: React.FC<IArticleCardSettingsProps> = props => {
         )}
       </SectionWrapper>
       <Box direction="row" fill="horizontal" justify="end" align="center" pad="medium" gap="small">
-        <StyledButton size="large" height={2.5} label={saveDraftLabel} onClick={onClickSaveDraft} />
-        <StyledButton
+        <Button
+          slimBorder={true}
+          size="large"
+          height={2.5}
+          label={saveDraftLabel}
+          onClick={onClickSaveDraft}
+        />
+        <Button
+          slimBorder={true}
           size="large"
           height={2.5}
           primary={true}

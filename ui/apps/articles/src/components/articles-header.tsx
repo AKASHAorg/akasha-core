@@ -1,9 +1,7 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
 
-import { StyledButton } from './styled';
-
-const { Box, MainAreaCardBox, Icon, Text } = DS;
+const { Box, Button, MainAreaCardBox, Icon, Text } = DS;
 
 export interface IArticleHeaderProps {
   titleLabel: string;
@@ -25,7 +23,8 @@ const ArticleHeader: React.FC<IArticleHeaderProps> = props => {
       </Box>
       <Box direction="row" justify="between" align="center">
         <Text size="large">{subtitleLabel}</Text>
-        <StyledButton
+        <Button
+          slimBorder={true}
           size="large"
           height={2.5}
           label={writeArticleLabel}

@@ -30,7 +30,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
     savedLabel,
     toggleMenuDrop,
     closeMenuDrop,
-    onClickTopic,
+    onTagClick,
     onMentionsClick,
     onRepliesClick,
     onSaveClick,
@@ -127,7 +127,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
                 background="activePanelBackground"
                 border={{ color: 'accentText' }}
                 style={{ cursor: 'pointer' }}
-                onClick={onClickTopic(topic)}
+                onClick={topic => onTagClick(topic)}
               >
                 <Text size="medium" color="accentText">
                   {topic}

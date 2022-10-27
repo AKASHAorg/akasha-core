@@ -1,9 +1,7 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
 
-import { StyledButton } from '../styled';
-
-const { Box, Text, Image, MainAreaCardBox, Icon } = DS;
+const { Box, Button, Text, Image, MainAreaCardBox, Icon } = DS;
 
 export interface IStepOneProps {
   assetName?: string;
@@ -58,8 +56,15 @@ const StepOne: React.FC<IStepOneProps> = props => {
           </Text>
         </Box>
         <Box direction="row" fill="horizontal" justify="end" align="center" gap="small">
-          <StyledButton size="large" height={2.5} label={skipLabel} onClick={onClickSkip} />
-          <StyledButton
+          <Button
+            slimBorder={true}
+            size="large"
+            height={2.5}
+            label={skipLabel}
+            onClick={onClickSkip}
+          />
+          <Button
+            slimBorder={true}
             size="large"
             height={2.5}
             primary={true}

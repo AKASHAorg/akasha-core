@@ -1,9 +1,8 @@
 import React from 'react';
 
 import DS from '@akashaorg/design-system';
-import { StyledButton } from './styled';
 
-const { Box, Icon, MainAreaCardBox, SearchBar, Text } = DS;
+const { Box, Button, Icon, MainAreaCardBox, SearchBar, Text } = DS;
 
 export interface IArticlesSettingsProps {
   titleLabel: string;
@@ -89,7 +88,8 @@ const ArticlesSettings: React.FC<IArticlesSettingsProps> = props => {
         </Box>
       </Box>
       <Box direction="row" fill="horizontal" justify="end" align="center" pad="medium">
-        <StyledButton
+        <Button
+          slimBorder={true}
           size="large"
           height={2.5}
           label={

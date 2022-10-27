@@ -18,10 +18,9 @@ export interface IArticlePageProps {
 }
 
 const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
-  const {
-    className,
-    plugins: { routing },
-  } = props;
+  const { className, plugins } = props;
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
 
@@ -47,7 +46,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
 
   const handleDropItemClick = (id: string, action?: 'edit' | 'settings') => () => {
     if (action) {
-      routing.navigateTo({
+      navigateTo({
         appName: '@akashaorg/app-articles',
         getNavigationUrl: () => `/article/${id}/${action}`,
       });
@@ -64,9 +63,11 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
     props.navigateToModal({ name: 'report-modal', entryId, itemType });
   };
 
-  const handleClickTopic = (topic: string) => () => {
-    /** do something */
-    topic;
+  const handleTagClick = (name: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: navRoutes => `${navRoutes.Tags}/${name}`,
+    });
   };
 
   const handleMentionsClick = () => {
@@ -124,7 +125,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
         savedLabel={t('Saved')}
         toggleMenuDrop={toggleMenuDrop}
         closeMenuDrop={closeMenuDrop}
-        onClickTopic={handleClickTopic}
+        onTagClick={handleTagClick}
         onMentionsClick={handleMentionsClick}
         onRepliesClick={handleRepliesClick}
         onSaveClick={handleSaveClick}
