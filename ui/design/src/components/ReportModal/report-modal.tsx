@@ -13,7 +13,7 @@ import {
   ModalButton,
   ModalWrapper,
   StyledTextArea,
-  StyledReportModalBox,
+  StyledModalBox,
 } from '../ListModal/styled-modal';
 import { useViewportSize } from '../Providers/viewport-dimension';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
@@ -137,7 +137,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     <ModalWrapper isTransparent={true} isMobile={isMobileOnly} justify="center" align="center">
       <StyledBox width={width > 800 ? '35%' : width > 500 ? '50%' : '100%'}>
         <MainAreaCardBox className={className}>
-          <StyledReportModalBox pad="large">
+          <StyledModalBox pad="large">
             <Box direction="row" margin={{ top: 'xsmall' }} align="start">
               {isMobileOnly && (
                 <Icon
@@ -253,7 +253,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 disabled={requesting || !reason.length}
               />
             </Box>
-          </StyledReportModalBox>
+          </StyledModalBox>
         </MainAreaCardBox>
       </StyledBox>
     </ModalWrapper>

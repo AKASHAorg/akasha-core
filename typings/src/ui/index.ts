@@ -1,7 +1,10 @@
+import { IntegrationInfo, ReleaseInfo } from '../sdk/registry';
+
 export * from './root-component';
 export * from './app-loader';
 export * from './analytics';
 export * from './apps';
+export * from './article';
 export * from './editor';
 export * from './entry';
 export * from './menu-items';
