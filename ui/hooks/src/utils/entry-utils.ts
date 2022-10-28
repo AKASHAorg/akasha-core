@@ -1,6 +1,7 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
-import { PostResultFragment, Comment, UserProfile } from '@akashaorg/awf-sdk/src/gql/api';
+import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { Comment, Post, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
 import { IEntryData, IPublishData } from '@akashaorg/typings/ui';
 
 import { getMediaUrl } from './media-utils';
@@ -90,7 +91,7 @@ export const serializeSlateToBase64 = (slateContent: unknown) => {
  * profile images - append ipfs gateway
  * entry images - append ipfs gateway
  */
-export const mapEntry = (entry: PostResultFragment | Comment, logger?: Logger) => {
+export const mapEntry = (entry: PostResultFragment | Comment | Post, logger?: Logger) => {
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
   const linkPreviewData = entry.content.find(elem => elem.property === PROPERTY_LINK_PREVIEW);
   const imagesData = entry.content.find(elem => elem.property === PROPERTY_IMAGES);

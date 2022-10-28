@@ -30,7 +30,7 @@ import {
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
 
-import { SearchTagsResult } from '@akashaorg/awf-sdk/src/gql/api';
+import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
 import EntryCardRenderer from './entry-renderer';
 

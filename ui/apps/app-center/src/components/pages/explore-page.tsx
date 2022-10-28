@@ -4,10 +4,8 @@ import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import {
-  IntegrationReleaseInfo,
-  IntegrationReleaseInfoFragmentFragment,
-} from '@akashaorg/awf-sdk/src/gql/api';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { useTranslation } from 'react-i18next';
 import { INFO } from '../../routes';
 

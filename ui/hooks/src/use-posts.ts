@@ -7,7 +7,7 @@ import {
   useQueryClient,
 } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
-import { PostResultFragment } from '@akashaorg/awf-sdk/src/gql/api';
+import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IPublishData, IProfileData } from '@akashaorg/typings/ui';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';

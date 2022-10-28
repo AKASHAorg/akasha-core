@@ -1,6 +1,7 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import { ENTRY_EVENTS, DataProviderInput, TYPES } from '@akashaorg/typings/sdk';
+import { ENTRY_EVENTS, TYPES } from '@akashaorg/typings/sdk';
+import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Logging from '../logging';

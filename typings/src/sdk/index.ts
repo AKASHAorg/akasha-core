@@ -2,6 +2,7 @@ import type IDBService from './db';
 import type IGqlClient from './gql';
 import type { ServiceCallResult } from './responses';
 import { EthProviders } from './web3.connector';
+import { IntegrationReleaseInfo } from './graphql-types';
 
 export * from './events';
 export * from './responses';
@@ -37,3 +38,5 @@ export interface IMessage {
   id: string;
   read: boolean;
 }
+
+export type ReleaseInfo = IntegrationReleaseInfo;

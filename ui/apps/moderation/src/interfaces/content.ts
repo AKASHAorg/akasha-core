@@ -1,7 +1,7 @@
 import singleSpa from 'single-spa';
 import { RootComponentProps, IEntryData, IProfileData } from '@akashaorg/typings/ui';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { Logger } from '@akashaorg/awf-sdk';
+import { ILogger } from '@akashaorg/typings/sdk/log';
 
 export interface IContentProps extends RootComponentProps {
   user?: string;
@@ -37,7 +37,7 @@ export interface IContentProps extends RootComponentProps {
   evaluationDateTime?: Date;
   makeADecisionLabel?: string;
   reviewDecisionLabel?: string;
-  logger: Logger;
+  logger: ILogger;
   singleSpa: typeof singleSpa;
   handleButtonClick: (param1: string, param2: string) => void;
 }

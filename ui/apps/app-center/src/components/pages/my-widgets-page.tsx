@@ -2,10 +2,8 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import {
-  IntegrationReleaseInfo,
-  IntegrationReleaseInfoFragmentFragment,
-} from '@akashaorg/awf-sdk/src/gql/api';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, Icon, Text, Spinner } = DS;

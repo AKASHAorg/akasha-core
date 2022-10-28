@@ -8,7 +8,7 @@ import * as singleSpa from 'single-spa';
 import qs from 'qs';
 import { of } from 'rxjs';
 import { Logger } from '@akashaorg/awf-sdk';
-import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/awf-sdk/src/gql/api';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 
 export const encodeName = (appName: string) => {
   return appName;

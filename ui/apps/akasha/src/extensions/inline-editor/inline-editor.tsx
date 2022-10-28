@@ -75,7 +75,8 @@ export const InlineEditor = (props: RootExtensionProps) => {
         return mapEntry(embeddedPost.data);
       }
       if (editingPost.data?.quotes.length) {
-        return mapEntry(editingPost.data?.quotes[0]);
+        /*@Todo: fix my type */
+        return mapEntry(editingPost.data?.quotes[0] as any);
       }
     }
 

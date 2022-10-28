@@ -332,7 +332,7 @@ export const handleExtPointMountOfApps = (
       tap(results => {
         const { config } = results.data;
         const { manifests, plugins, modules } = results;
-        const manifest = manifests.find((m: BaseIntegrationInfo) => m.name === config.name);
+        const manifest = manifests.find((m: any) => m.name === config.name);
 
         logger.info(`Registering app ${config.name}`);
 

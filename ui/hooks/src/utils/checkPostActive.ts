@@ -1,4 +1,4 @@
-import { PostResultFragment } from '@akashaorg/awf-sdk/src/gql/api';
+import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 
 /**
  * Utility to check whether a post is active or not

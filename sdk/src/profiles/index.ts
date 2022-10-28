@@ -1,7 +1,7 @@
 import { BUCKET_THREAD_NAME, PROFILE_MEDIA_FILES } from './constants';
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { TYPES, DataProviderInput, PROFILE_EVENTS } from '@akashaorg/typings/sdk';
+import { TYPES, PROFILE_EVENTS } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Logging from '../logging';
@@ -10,7 +10,8 @@ import { resizeImage } from '../helpers/img';
 import Settings from '../settings';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
-import { UserProfile, UserProfileFragmentDataFragment } from '../gql/api';
+import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');

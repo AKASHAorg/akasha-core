@@ -7,7 +7,7 @@ import { ModalNavigationOptions } from './navigation';
 import i18n from 'i18next';
 import { IPluginsMap } from './plugins';
 import { ILoaderConfig, QueryStringType } from './app-loader';
-import { Logger } from 'pino';
+import { ILogger } from '../sdk/log';
 
 export interface RootComponentProps {
   activeWhen?: { path: string };
@@ -16,7 +16,7 @@ export interface RootComponentProps {
   i18next?: typeof i18n;
   plugins?: Record<string, IPluginsMap>;
   layoutConfig: IAppConfig['extensions'];
-  logger: Logger;
+  logger: ILogger;
   name?: string;
   singleSpa: typeof singleSpa;
   baseRouteName: string;

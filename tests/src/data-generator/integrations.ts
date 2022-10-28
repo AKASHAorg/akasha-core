@@ -23,21 +23,19 @@ export const genAppConfig = (
   ...overrides,
 });
 
-export const genAppProps = (): RootComponentProps => ({
-  logger: {
-    info: () => {
-      /*  */
-    },
-    warn: () => {
-      /*  */
-    },
-    error: () => {
-      /*  */
-    },
-    setLevel: () => {
-      /*  */
-    },
+const log: any = {
+  info: () => {
+    /*  */
   },
+  warn: () => {
+    /*  */
+  },
+  error: () => {
+    /*  */
+  },
+};
+export const genAppProps = (): RootComponentProps => ({
+  logger: log,
   navigateToModal: () => ({}),
   uiEvents: uiEventsMock,
   layoutConfig: {},

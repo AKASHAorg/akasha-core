@@ -6,7 +6,7 @@ import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
 import { ENTRY_KEY } from './use-posts';
-import { Comment, Post } from '@akashaorg/awf-sdk/src/gql/api';
+import { Comment, Post } from '@akashaorg/typings/sdk/graphql-types';
 
 /**
  * @internal
