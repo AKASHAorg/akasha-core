@@ -16,7 +16,7 @@ type Props = {
   postId: string;
   commentId: string;
   singleSpa: RootExtensionProps['singleSpa'];
-  action: 'reply' | 'repost' | 'edit';
+  action: 'reply' | 'edit';
 };
 
 export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
@@ -32,8 +32,6 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
     }
     return undefined;
   }, [comment.data, comment.status]);
-
-  const embedEntryData = action === 'repost' ? entryData : undefined;
 
   const handlePublish = React.useCallback(
     (data: IPublishData) => {
@@ -52,7 +50,6 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
           );
           break;
         case 'reply':
-        case 'repost':
           publishComment.mutate(
             {
               ...data,
@@ -63,7 +60,7 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
               onSuccess: () => {
                 analyticsActions.trackEvent({
                   category: AnalyticsCategories.REPLY,
-                  action: `${action === 'repost' ? 'Reply Repost' : 'Reply'} Published`,
+                  action: 'Reply Published',
                 });
               },
             },
@@ -86,7 +83,7 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
-  if (comment.error) return <>Error loading {action === 'repost' && 'embedded'} comment</>;
+  if (comment.error) return <>Error loading comment</>;
 
   if (comment.status === 'loading') return <EntryCardLoading />;
 
@@ -97,7 +94,6 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
       onPublish={handlePublish}
       onPlaceholderClick={handlePlaceholderClick}
       singleSpa={singleSpa}
-      embedEntryData={embedEntryData}
       editorState={action === 'edit' ? entryData?.slateContent : null}
       entryData={entryData}
       isShown={true}

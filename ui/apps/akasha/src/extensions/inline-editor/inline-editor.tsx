@@ -11,7 +11,7 @@ export const InlineEditor = (props: Partial<RootExtensionProps>) => {
   const entryId = props.extensionData.entryId;
   const commentId = props.extensionData.commentId;
 
-  if (commentId && entryId && (action === 'reply' || action === 'edit' || action === 'repost'))
+  if (commentId && entryId && (action === 'reply' || action === 'edit'))
     return (
       <ReplyEditor
         postId={entryId}
