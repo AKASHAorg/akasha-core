@@ -100,6 +100,7 @@ export interface IEntryBoxProps {
   headerMenuExt?: React.ReactElement;
   modalSlotId: string;
   actionsRightExt?: React.ReactNode;
+  hideRepost?: boolean;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -158,6 +159,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     modalSlotId,
     actionsRightExt,
     onRepliesClick,
+    hideRepost,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -586,6 +588,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             isModerated={isModerated}
             modalSlotId={modalSlotId}
             actionsRightExt={actionsRightExt}
+            hideRepost={hideRepost}
           />
         )}
       </Box>

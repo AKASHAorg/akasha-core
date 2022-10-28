@@ -19,6 +19,7 @@ export interface IEntryCardProps extends IEntryBoxProps {
   bottomBorderOnly?: boolean;
   accentBorderTop?: boolean;
   navigateTo?: (args: NavigateToParams) => void;
+  hideRepost?: boolean;
 }
 
 const EntryCard: React.FC<IEntryCardProps> = props => {
@@ -78,6 +79,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     noBorderRadius,
     bottomBorderOnly,
     accentBorderTop,
+    hideRepost,
   } = props;
 
   return (
@@ -147,6 +149,7 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         modalSlotId={modalSlotId}
         headerMenuExt={props.headerMenuExt}
         actionsRightExt={props.actionsRightExt}
+        hideRepost={hideRepost}
       />
     </BasicCardBox>
   );
