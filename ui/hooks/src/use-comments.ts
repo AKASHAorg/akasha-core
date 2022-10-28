@@ -91,15 +91,16 @@ const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies)
   }, [commentsQuery.data]);
  * ```
  */
-export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabler = true) {
+export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabled) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
-    async ({ pageParam = offset }) => getComments({ limit, postID, offset: pageParam }),
+    async ({ pageParam = offset }) =>
+      enabled ? getComments({ limit, postID, offset: pageParam }) : null,
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
-      enabled: enabler && !!(offset || limit),
+      enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('useComments.getComments', err),
     },
@@ -120,18 +121,16 @@ export function useInfiniteComments({ limit, postID, offset }: InfiniteComments,
   }, [repliesQuery.data]);
  * ```
  */
-export function useInfiniteReplies(
-  { limit, postID, commentID, offset }: InfiniteReplies,
-  enabler = true,
-) {
+export function useInfiniteReplies({ limit, postID, commentID, offset }: InfiniteReplies, enabled) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID, commentID],
-    async ({ pageParam = offset }) => getReplies({ limit, postID, commentID, offset: pageParam }),
+    async ({ pageParam = offset }) =>
+      enabled ? getReplies({ limit, postID, commentID, offset: pageParam }) : null,
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
-      enabled: enabler && !!(offset || limit),
+      enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('useInfiniteReplies.getReplies', err),
     },
