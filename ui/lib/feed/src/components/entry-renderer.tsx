@@ -1,5 +1,6 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
+import DS, { BoxExtendedProps } from '@akashaorg/design-system';
+import FeedWidget from './App';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useTranslation } from 'react-i18next';
 import {
@@ -9,6 +10,8 @@ import {
   EntityTypes,
   NavigateToParams,
   RootComponentProps,
+  ModalNavigationOptions,
+  IProfileData,
 } from '@akashaorg/typings/ui';
 import {
   usePost,
@@ -25,6 +28,9 @@ import {
   useMentionSearch,
 } from '@akashaorg/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
+import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
+import { ILogger } from '@akashaorg/typings/sdk';
+import { i18n } from 'i18next';
 
 const {
   Box,
@@ -60,14 +66,18 @@ export interface IEntryRenderer {
   trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
   index?: number;
   totalEntry?: number;
+  logger: ILogger;
+  onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  navigateToModal: (props: ModalNavigationOptions) => void;
+  loggedProfile?: IProfileData;
+  i18n: i18n;
 }
 
-const commentStyleExt = {
-  padding: '0 1rem',
-  boxShadow: 'none',
-};
+const REPLY_FRAGMENT_SIZE = 2;
 
-const EntryRenderer = (props: IEntryRenderer) => {
+const EntryRenderer = (
+  props: IEntryRenderer & { replyFragment: boolean; firstLevelReply: boolean },
+) => {
   const {
     loginState,
     locale,
@@ -277,6 +287,44 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const isComment = React.useMemo(() => itemType === EntityTypes.COMMENT, [itemType]);
 
+  const canShowEntry =
+    itemData &&
+    !entryAwaitingModeration &&
+    !accountAwaitingModeration &&
+    !itemData.delisted &&
+    !itemData.isRemoved;
+
+  const repliesReq = useInfiniteReplies(
+    {
+      limit: REPLY_FRAGMENT_SIZE,
+      postID: commentData?.postId,
+      commentID: commentData?.entryId,
+    },
+    canShowEntry && props.firstLevelReply,
+  );
+
+  const replyPages = React.useMemo(() => {
+    if (repliesReq.data) {
+      return repliesReq.data.pages;
+    }
+    return [];
+  }, [repliesReq.data]);
+
+  const entryCardStyle = (): BoxExtendedProps => {
+    if (!isComment) return null;
+
+    if (props.replyFragment)
+      return {
+        margin: { left: '1.5rem' },
+        border: { color: 'replyFragmentBorder', size: '1px', side: 'left' },
+      };
+
+    if (props.index !== props.totalEntry)
+      return {
+        border: { color: 'border', side: 'bottom' },
+      };
+  };
+
   return (
     <>
       {(postReq.isLoading || commentReq.isLoading) && <EntryCardLoading />}
@@ -329,11 +377,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
               />
             </Box>
           )}
-          {itemData &&
-            !entryAwaitingModeration &&
-            !accountAwaitingModeration &&
-            !itemData.delisted &&
-            !itemData.isRemoved && (
+          {canShowEntry && (
+            <Box {...entryCardStyle()}>
               <EntryCard
                 className={props.className}
                 isRemoved={itemData.isRemoved}
@@ -354,7 +399,6 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 locale={locale || 'en'}
                 style={{
                   ...(style as React.CSSProperties),
-                  ...(commentData && commentStyleExt),
                   display: isEditingComment ? 'none' : 'block',
                 }}
                 showMore={true}
@@ -362,6 +406,7 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
                   isComment ? 'reply' : 'post'
                 }`}
+                hideRepost={isComment}
                 onRepost={onRepost}
                 onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
                 handleFollowAuthor={handleFollow}
@@ -382,16 +427,16 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 disableReposting={itemData.isRemoved || isComment}
                 disableReporting={loginState.waitForAuth || loginState.isSigningIn}
                 modalSlotId={modalSlotId}
-                bottomBorderOnly={isComment}
-                noBorderRadius={isComment}
-                noBorder={isComment && props.index === props.totalEntry}
+                noBorder={isComment}
                 accentBorderTop={accentBorderTop}
                 actionsRightExt={
-                  <ExtensionPoint
-                    name={`entry-card-actions-right_${itemId}`}
-                    onMount={handleExtensionMount}
-                    onUnmount={handleExtensionUnmount}
-                  />
+                  !isComment && (
+                    <ExtensionPoint
+                      name={`entry-card-actions-right_${itemId}`}
+                      onMount={handleExtensionMount}
+                      onUnmount={handleExtensionUnmount}
+                    />
+                  )
                 }
                 headerMenuExt={
                   showEditButton && (
@@ -405,7 +450,52 @@ const EntryRenderer = (props: IEntryRenderer) => {
                   )
                 }
               />
-            )}
+
+              {props.firstLevelReply && (
+                <Box margin={{ bottom: replyPages.length ? 'xsmall' : null }}>
+                  <FeedWidget
+                    modalSlotId={props.modalSlotId}
+                    logger={props.logger}
+                    pages={replyPages}
+                    itemType={EntityTypes.COMMENT}
+                    onLoadMore={() => ({})}
+                    getShareUrl={(itemId: string) =>
+                      `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`
+                    }
+                    loadMoreEntry={{
+                      label: 'View all replies',
+                      onClick: () => {
+                        props.navigateTo?.({
+                          appName: '@akashaorg/app-akasha-integration',
+                          getNavigationUrl: navRoutes =>
+                            `${navRoutes.Reply}/${commentData?.entryId}`,
+                        });
+                      },
+                      limit: REPLY_FRAGMENT_SIZE,
+                    }}
+                    loginState={loginState}
+                    navigateTo={navigateTo}
+                    navigateToModal={props.navigateToModal}
+                    requestStatus={repliesReq.status}
+                    hasNextPage={repliesReq.hasNextPage}
+                    loggedProfile={props.loggedProfile}
+                    contentClickable={true}
+                    onEntryFlag={props.onFlag}
+                    onEntryRemove={props.onEntryRemove}
+                    removeEntryLabel={t('Delete Reply')}
+                    removedByMeLabel={t('You deleted this reply')}
+                    removedByAuthorLabel={t('This reply was deleted by its author')}
+                    uiEvents={props.uiEvents}
+                    itemSpacing={8}
+                    i18n={props.i18n}
+                    trackEvent={props.trackEvent}
+                    onLoginModalOpen={props.onLoginModalOpen}
+                    replyFragment={true}
+                  />
+                </Box>
+              )}
+            </Box>
+          )}
         </>
       )}
     </>

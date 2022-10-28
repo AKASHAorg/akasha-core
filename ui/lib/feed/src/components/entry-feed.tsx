@@ -30,6 +30,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       itemSpacing={props.itemSpacing}
       hasNextPage={props.hasNextPage}
       pageKeyPrefix={props.itemType === EntityTypes.ENTRY ? 'entry-page' : 'comment-page'}
+      loadMoreEntry={props.loadMoreEntry}
       itemCard={
         <EntryRenderer
           modalSlotId={props.modalSlotId}
@@ -50,6 +51,13 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           uiEvents={props.uiEvents}
           trackEvent={props.trackEvent}
           accentBorderTop={props.accentBorderTop}
+          replyFragment={props.replyFragment}
+          firstLevelReply={props.firstLevelReply}
+          logger={props.logger}
+          onLoginModalOpen={props.onLoginModalOpen}
+          navigateToModal={props.navigateToModal}
+          loggedProfile={props.loggedProfile}
+          i18n={props.i18n}
         />
       }
     />

@@ -13,7 +13,7 @@ import { LoginState, useInfiniteComments, useGetProfile } from '@akashaorg/ui-aw
 
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { Entry } from './entry';
+import { ReplyEntry } from './reply-entry';
 import { PendingReply } from './pending-reply';
 import { UseQueryResult } from 'react-query';
 import { ILogger } from '@akashaorg/typings/sdk';
@@ -131,7 +131,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          <Entry
+          <ReplyEntry
             postId={postId}
             commentId={commentId}
             entryType={entryType}
@@ -177,6 +177,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             itemSpacing={8}
             i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
             trackEvent={analyticsActions.trackEvent}
+            firstLevelReply={!commentId}
           />
         </>
       )}

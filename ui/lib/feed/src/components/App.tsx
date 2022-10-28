@@ -14,6 +14,7 @@ import EntryFeed from './entry-feed';
 
 export interface EntryListPage {
   results: string[];
+  total: number;
 }
 
 export interface IFeedWidgetProps {
@@ -41,6 +42,13 @@ export interface IFeedWidgetProps {
   i18n: RootComponentProps['i18next'];
   modalSlotId: string;
   accentBorderTop?: boolean;
+  replyFragment?: boolean;
+  firstLevelReply?: boolean;
+  loadMoreEntry?: {
+    label: string;
+    onClick: () => void;
+    limit: number;
+  };
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 }
 
