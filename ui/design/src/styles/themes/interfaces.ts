@@ -29,6 +29,7 @@ export interface IColors {
   ultraLightBackground: string;
   lightBackground: string;
   darkBackground: string;
+  replyEntrySeparator: string;
   cardBackground: string;
   modalBackground: string;
   modalBackgroundAlt: string;
@@ -36,6 +37,7 @@ export interface IColors {
   hoverBackground: string;
   activePanelBackground: string;
   skeletonBackground: string;
+  entryEditorBackground: string;
   inputBackground: string;
   coverImageBackground: string;
   embedBackground: string;
@@ -50,6 +52,7 @@ export interface IColors {
   accentLight: string;
   accentLightHover: string;
   border: string;
+  replyFragmentBorder: string;
   lightBorder: string;
   darkBorder: string;
   darkerBorder: string;

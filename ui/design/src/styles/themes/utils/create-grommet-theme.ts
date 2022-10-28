@@ -42,6 +42,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         chatBackground: styledComponentsTheme.colors.chatBackground,
         entryBackground: styledComponentsTheme.colors.entryBackground,
         pendingEntryBackground: styledComponentsTheme.colors.pendingEntryBackground,
+        entryEditorBackground: styledComponentsTheme.colors.entryEditorBackground,
         subtitleText: styledComponentsTheme.colors.subtitleText,
         errorText: styledComponentsTheme.colors.errorText,
         accentText: styledComponentsTheme.colors.accentText,
@@ -51,6 +52,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
           dark: styledComponentsTheme.colors.border,
           light: styledComponentsTheme.colors.border,
         },
+        replyFragmentBorder: styledComponentsTheme.colors.replyFragmentBorder,
         lightBorder: styledComponentsTheme.colors.lightBorder,
         text: {
           light: styledComponentsTheme.colors.primaryText,
@@ -67,6 +69,7 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         modalBackground: styledComponentsTheme.colors.modalBackground,
         modalBackgroundAlt: styledComponentsTheme.colors.modalBackgroundAlt,
         modalBackgroundTransparent: styledComponentsTheme.colors.modalBackgroundTransparent,
+        replyEntrySeparator: styledComponentsTheme.colors.replyEntrySeparator,
         cardBackground: styledComponentsTheme.colors.cardBackground,
         hoverBackground: styledComponentsTheme.colors.hoverBackground,
         activePanelBackground: styledComponentsTheme.colors.activePanelBackground,
