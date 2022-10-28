@@ -73,7 +73,7 @@ export function Base(
         tags={tagSearch.data}
         mentions={mentionSearch.data}
         uploadRequest={uploadMediaToTextile}
-        background="cardBackground"
+        background={props.entryData ? 'entryEditorBackground' : 'cardBackground'}
       />
     )
   );
