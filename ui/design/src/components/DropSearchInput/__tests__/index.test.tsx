@@ -29,6 +29,9 @@ describe('<DropSearchInput /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleGetData = jest.fn();
+  const handleClickUser = jest.fn();
+  const handleClickTag = jest.fn();
+  const handleClickApp = jest.fn();
 
   beforeEach(() => {
     act(() => {
@@ -42,9 +45,9 @@ describe('<DropSearchInput /> Component', () => {
             tagsLabel="Tags"
             usersLabel="Users"
             getData={handleGetData}
-            onClickUser={() => null}
-            onClickTag={() => console.log('HELLO!!!!!!!!')}
-            onClickApp={() => null}
+            onClickUser={handleClickUser}
+            onClickTag={handleClickTag}
+            onClickApp={handleClickApp}
           />,
         ),
         {},

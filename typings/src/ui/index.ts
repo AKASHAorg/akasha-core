@@ -1,7 +1,10 @@
+import { IntegrationInfo, ReleaseInfo } from '../sdk/registry';
+
 export * from './root-component';
 export * from './app-loader';
 export * from './analytics';
 export * from './apps';
+export * from './article';
 export * from './editor';
 export * from './entry';
 export * from './menu-items';
@@ -14,8 +17,6 @@ export * from './single-spa';
 export * from './type-utils';
 export * from './ui-events';
 export * from './widgets';
-
-import { IntegrationInfo, ReleaseInfo } from '../sdk/registry';
 
 export enum IntegrationTypes {
   APP = 'App',

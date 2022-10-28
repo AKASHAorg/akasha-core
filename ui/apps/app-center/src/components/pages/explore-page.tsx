@@ -91,7 +91,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
           />
         )}
         {!isFetching && !reqError && (
-          <>
+          <Box gap="medium">
             {(!installableApps?.length || !isUserLoggedIn) && (
               <InfoCard
                 icon="appCenter"
@@ -128,7 +128,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
                   />
                 </Box>
               ))}
-          </>
+          </Box>
         )}
       </Box>
 
