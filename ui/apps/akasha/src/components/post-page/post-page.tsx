@@ -4,12 +4,12 @@ import { useParams } from 'react-router-dom';
 import { RootComponentProps, ModalNavigationOptions, EntityTypes } from '@akashaorg/typings/ui';
 import { LoginState, usePost, mapEntry } from '@akashaorg/ui-awf-hooks';
 
-interface IPostPageProps {
+type PostPageProps = {
   loginState?: LoginState;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const PostPage: React.FC<IPostPageProps & RootComponentProps> = props => {
+const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
   const { loginState } = props;
 
   const { postId } = useParams<{ postId: string }>();

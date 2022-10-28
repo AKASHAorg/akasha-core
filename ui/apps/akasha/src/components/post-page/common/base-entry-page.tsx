@@ -21,7 +21,7 @@ import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 const { BasicCardBox, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
 
-interface IBaseEntryProps {
+type BaseEntryProps = {
   postId: string;
   commentId?: string;
   entryType: EntityTypes;
@@ -30,9 +30,9 @@ interface IBaseEntryProps {
   logger: ILogger;
   loginState?: LoginState;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
+const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   const {
     postId,
     commentId,

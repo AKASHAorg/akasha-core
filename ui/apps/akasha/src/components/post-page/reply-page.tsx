@@ -4,12 +4,12 @@ import { useParams } from 'react-router-dom';
 import { LoginState, mapEntry, useComment } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
-interface IReplyPageProps {
+type ReplyPageProps = {
   loginState?: LoginState;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const ReplyPage: React.FC<IReplyPageProps & RootComponentProps> = props => {
+const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
   const comment = useComment(commentId, !!commentId);
 
