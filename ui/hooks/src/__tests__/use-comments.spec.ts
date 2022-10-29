@@ -26,7 +26,7 @@ describe('useComments', () => {
   it('should get infinite comments', async () => {
     const [wrapper] = createWrapper();
     const { result, waitFor } = renderHook(
-      () => useInfiniteComments({ limit: 5, postID: '0x00' }),
+      () => useInfiniteComments({ limit: 5, postID: '0x00' }, true),
       {
         wrapper,
       },
