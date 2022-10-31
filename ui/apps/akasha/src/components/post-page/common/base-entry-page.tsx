@@ -63,7 +63,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   const reqCommentsOrReplies = commentId ? reqReplies : reqComments;
   const [analyticsActions] = useAnalytics();
 
-  const commentPages = React.useMemo(() => {
+  /* @Todo: Fix my type */
+  const commentPages: any = React.useMemo(() => {
     if (reqCommentsOrReplies.data) {
       return reqCommentsOrReplies.data.pages;
     }

@@ -29,7 +29,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { ILogger } from '@akashaorg/typings/sdk/log';
 import { i18n } from 'i18next';
 
 const {
@@ -129,14 +129,17 @@ const EntryRenderer = (
 
   const followedProfilesReq = useIsFollowingMultiple(loginState.pubKey, [authorPubKey]);
 
-  const postData = React.useMemo(() => {
+  /** @Todo: fix my type ;/ **/
+  const postData: any = React.useMemo(() => {
     if (postReq.data && itemType === EntityTypes.ENTRY) {
-      return mapEntry(postReq.data);
+      /** @Todo: fix my type ;/ **/
+      return mapEntry(postReq.data as any);
     }
     return undefined;
   }, [postReq.data, itemType]);
 
-  const commentData = React.useMemo(() => {
+  /** @Todo: fix my type ;/ **/
+  const commentData: any = React.useMemo(() => {
     if (commentReq.data && itemType === EntityTypes.COMMENT) {
       /** @Todo: fix my type ;/ **/
       return mapEntry(commentReq.data as any);
@@ -305,7 +308,8 @@ const EntryRenderer = (
     canShowEntry && props.firstLevelReply,
   );
 
-  const replyPages = React.useMemo(() => {
+  /** @Todo: fix my type ;/ **/
+  const replyPages: any = React.useMemo(() => {
     if (repliesReq.data) {
       return repliesReq.data.pages;
     }

@@ -8,8 +8,8 @@ import {
   EntityTypes,
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
-import { Logger } from '@akashaorg/awf-sdk';
 import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
+import { ILogger } from '@akashaorg/typings/sdk/log';
 import EntryFeed from './entry-feed';
 
 export interface EntryListPage {
@@ -18,7 +18,7 @@ export interface EntryListPage {
 }
 
 export interface IFeedWidgetProps {
-  logger: Logger;
+  logger: ILogger;
   pages: EntryListPage[];
   itemType: EntityTypes;
   onLoadMore: () => void;
