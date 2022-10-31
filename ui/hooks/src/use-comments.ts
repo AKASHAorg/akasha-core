@@ -47,10 +47,9 @@ const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
     }),
   );
 
-  const getComments = res.data.getComments;
   return {
-    ...getComments,
-    results: getComments.results
+    ...res.data.getComments,
+    results: res.data.getComments.results
       .filter(comment => !comment.replyTo)
       .map(comment => {
         return comment._id;
@@ -60,6 +59,8 @@ const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
 
 const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies) => {
   const sdk = getSDK();
+
+  if (!commentID) return null;
 
   const res = await lastValueFrom(
     sdk.api.comments.getReplies({
@@ -91,16 +92,15 @@ const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies)
   }, [commentsQuery.data]);
  * ```
  */
-export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabled) {
+export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabler) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
-    async ({ pageParam = offset }) =>
-      enabled ? getComments({ limit, postID, offset: pageParam }) : null,
+    async ({ pageParam = offset }) => getComments({ limit, postID, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
-      enabled: !!(offset || limit),
+      enabled: enabler && !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('useComments.getComments', err),
     },
@@ -121,16 +121,15 @@ export function useInfiniteComments({ limit, postID, offset }: InfiniteComments,
   }, [repliesQuery.data]);
  * ```
  */
-export function useInfiniteReplies({ limit, postID, commentID, offset }: InfiniteReplies, enabled) {
+export function useInfiniteReplies({ limit, postID, commentID, offset }: InfiniteReplies, enabler) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID, commentID],
-    async ({ pageParam = offset }) =>
-      enabled ? getReplies({ limit, postID, commentID, offset: pageParam }) : null,
+    async ({ pageParam = offset }) => getReplies({ limit, postID, commentID, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
-      enabled: !!(offset || limit),
+      enabled: enabler && !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('useInfiniteReplies.getReplies', err),
     },
