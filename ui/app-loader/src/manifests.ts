@@ -36,8 +36,6 @@ export const getIntegrationsData = async (
     })
     .map(e => worldConfig.registryOverrides.find(int => int.name === e));
   const remotes = await getLatestReleaseInfo(remote.map(e => ({ name: e })));
-  console.info('getIntegrationsData');
-  console.log(remotes.concat(local as any));
   return remotes.concat(local as any);
 };
 
@@ -55,8 +53,6 @@ export const getDefaultIntegrationManifests = async (
     ...worldConfig.defaultWidgets,
   ];
   return getIntegrationsData(defaultIntegrations, worldConfig).then(manifests => {
-    console.info('getDefaultIntegrationManifests');
-    console.log({ manifests });
     pipelineEvents.next({ manifests });
   });
 };
