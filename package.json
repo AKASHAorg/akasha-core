@@ -37,7 +37,8 @@
     "test:app-loader": "nx run @akashaorg/ui-app-loader:test",
     "test:all": "yarn test:design-system && yarn test:hooks",
     "dev:server": "nx run-many --target=dev:server --projects=@akashaorg/hub-api --output-style=stream",
-    "push:integrations": "node build/integrations_bucket_store.js"
+    "push:integrations": "node build/integrations_bucket_store.js",
+    "sdk:graphql:generate": "nx run-many --target=graphql:generate --projects=@akashaorg/awf-sdk --output-style=stream"
   },
   "devDependencies": {
     "@babel/core": "7.19.0",
@@ -106,8 +107,8 @@
     "webpack-assets-manifest": "5.1.0",
     "webpack-bundle-analyzer": "4.6.1",
     "webpack-cli": "4.10.0",
-    "webpack-dev-server": "4.9.3",
-    "webpack-manifest-plugin": "4.1.1",
+    "webpack-dev-server": "4.11.1",
+    "webpack-manifest-plugin": "5.0.0",
     "webpack-subresource-integrity": "5.1.0"
   },
   "workspaces": [

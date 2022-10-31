@@ -3,14 +3,15 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { IntegrationInfo, ReleaseInfo } from '@akashaorg/typings/sdk';
 import { INFO } from '../../routes';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 
 const { Box, SubtitleTextIcon, Icon, Text, InfoCard, Spinner } = DS;
 
 export interface IMyAppsPage extends RootComponentProps {
-  latestReleasesInfo?: ReleaseInfo[];
-  installedAppsInfo?: IntegrationInfo[];
+  latestReleasesInfo?: IntegrationReleaseInfoFragmentFragment[];
+  installedAppsInfo?: IntegrationReleaseInfo[];
   defaultIntegrations?: string[];
   isFetching?: boolean;
 }
@@ -52,7 +53,7 @@ const MyAppsPage: React.FC<IMyAppsPage> = props => {
     })
     .filter(Boolean);
 
-  const handleAppClick = (app: ReleaseInfo) => {
+  const handleAppClick = (app: IntegrationReleaseInfoFragmentFragment) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,

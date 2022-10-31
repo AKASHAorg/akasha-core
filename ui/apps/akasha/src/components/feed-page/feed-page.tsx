@@ -34,7 +34,8 @@ const {
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  loggedProfileData?: IProfileData;
+  /* @Todo: Fix my type */
+  loggedProfileData?: any;
   loginState: LoginState;
 }
 
@@ -140,7 +141,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       {createPostMutation && createPostMutation.state.status === 'loading' && (
         <EntryCard
           style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-          entryData={createPendingEntry(loggedProfileData, createPostMutation.state.variables)}
+          entryData={
+            /* @Todo: Fix my type */
+            createPendingEntry(loggedProfileData, createPostMutation.state.variables) as any
+          }
           sharePostLabel={t('Share Post')}
           shareTextLabel={t('Share this post with your friends')}
           repliesLabel=""

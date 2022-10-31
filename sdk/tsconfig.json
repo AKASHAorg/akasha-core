@@ -5,7 +5,10 @@
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
     "types": ["reflect-metadata", "node"],
-    "typeRoots": [ "./src/definitions", "./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "lib": [
+      "dom"
+    ]
   },
   "include": [
     "./src",

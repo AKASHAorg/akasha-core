@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { IProfileData } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -11,8 +10,8 @@ export const SEARCH_TAGS_KEY = 'SEARCH_TAGS';
 
 const getTagSubscriptions = async () => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.profile.getTagSubscriptions());
-  return res.data.getInterests;
+  const res = await sdk.api.profile.getTagSubscriptions();
+  return res.getInterests;
 };
 
 /**
@@ -35,8 +34,7 @@ export function useTagSubscriptions(loggedEthAddress: string | null) {
 
 const getIsSubscribedToTag = async (tagName: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.profile.isSubscribedToTag(tagName));
-  return res.data;
+  return sdk.api.profile.isSubscribedToTag(tagName);
 };
 
 /**
@@ -69,7 +67,7 @@ export function useIsSubscribedToTag(tagName: string, loggedEthAddress: string |
 export function useToggleTagSubscription() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
-  return useMutation(tagName => lastValueFrom(sdk.api.profile.toggleTagSubscription(tagName)), {
+  return useMutation(tagName => sdk.api.profile.toggleTagSubscription(tagName), {
     onMutate: async (tagName: string) => {
       await queryClient.cancelQueries(TAG_SUBSCRIPTIONS_KEY);
       const previousTagSubs: string[] = queryClient.getQueryData([TAG_SUBSCRIPTIONS_KEY]);
@@ -83,9 +81,9 @@ export function useToggleTagSubscription() {
       queryClient.setQueryData([TAG_SUBSCRIPTIONS_KEY], newTagsSubs);
       return { previousTagSubs };
     },
-    onSuccess: async ({ data }) => {
-      const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
-      const ownPubKey = user.data?.pubKey;
+    onSuccess: async data => {
+      const user = await sdk.api.auth.getCurrentUser();
+      const ownPubKey = user.pubKey;
       if (user) {
         queryClient.setQueryData<IProfileData>([PROFILE_KEY, ownPubKey], profile => {
           const interestCount = profile.totalInterests;
@@ -119,10 +117,10 @@ export function useToggleTagSubscription() {
 const getTag = async (tagName: string) => {
   const sdk = getSDK();
 
-  const res = await lastValueFrom(sdk.api.tags.getTag(tagName));
+  const res = await sdk.api.tags.getTag(tagName);
 
-  if (res.data.getTag) {
-    return res.data.getTag;
+  if (res.getTag) {
+    return res.getTag;
   }
   throw new Error('Tag not found');
 };
@@ -145,11 +143,11 @@ export function useGetTag(tagName: string, enabler = true) {
 
 const getTags = async tagName => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.tags.searchTags(tagName));
+  const res = await sdk.api.tags.searchTags(tagName);
   if (res.hasOwnProperty('errors')) {
     throw new Error(res['errors'][0]);
   }
-  return res.data.searchTags;
+  return res.searchTags;
 };
 
 /**

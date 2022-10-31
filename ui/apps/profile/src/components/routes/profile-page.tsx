@@ -56,7 +56,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     loginQuery.data?.pubKey,
     loginQuery.data?.fromCache,
   );
-  const profileState = profileDataQuery.data;
+  /* @Todo: Fix my type */
+  const profileState: any = profileDataQuery.data;
 
   const reqPosts = useInfinitePostsByAuthor(
     publicKey,

@@ -26,7 +26,8 @@ export const InlineEditor = (props: RootExtensionProps) => {
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionSearch = useMentionSearch(mentionQuery);
-  const tagSearch = useTagSearch(tagQuery);
+  /* @Todo: fix my type ;/ */
+  const tagSearch: any = useTagSearch(tagQuery);
   const [analyticsActions] = useAnalytics();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
@@ -67,13 +68,15 @@ export const InlineEditor = (props: RootExtensionProps) => {
     return undefined;
   }, [editingPost.data, editingPost.status]);
 
-  const embedEntryData = React.useMemo(() => {
+  /* @Todo: fix my type ;/ */
+  const embedEntryData: any = React.useMemo(() => {
     if (action === 'embed') {
       if (embeddedPost.status === 'success') {
         return mapEntry(embeddedPost.data);
       }
       if (editingPost.data?.quotes.length) {
-        return mapEntry(editingPost.data?.quotes[0]);
+        /*@Todo: fix my type */
+        return mapEntry(editingPost.data?.quotes[0] as any);
       }
     }
 

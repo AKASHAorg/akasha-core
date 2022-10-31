@@ -1,6 +1,6 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
 import { useGetProfile, EntryReport } from '@akashaorg/ui-awf-hooks';
 
 const { Text } = DS;
@@ -9,7 +9,7 @@ export interface IExplanationsBoxEntryProps {
   flagEntry: EntryReport;
   reportedByLabel: string;
   forLabel: string;
-  logger: ILogger;
+  logger: Logger;
 }
 
 const ExplanationsBoxEntry: React.FC<IExplanationsBoxEntryProps> = props => {

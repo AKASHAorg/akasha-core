@@ -32,9 +32,11 @@ const OnboardingPage: React.FC<OnboardingPageProps> = props => {
   const loginQuery = useGetLogin();
 
   const trendingTagsReq = useTrendingTags();
-  const trendingTags = trendingTagsReq.data?.slice(0, 15) || [];
+  /* @Todo: fix my type ;/ */
+  const trendingTags: any = trendingTagsReq.data?.slice(0, 15) || [];
   const trendingProfilesReq = useTrendingProfiles();
-  const trendingProfiles = trendingProfilesReq.data?.slice(0, 7) || [];
+  /* @Todo: fix my type ;/ */
+  const trendingProfiles: any = trendingProfilesReq.data?.slice(0, 7) || [];
 
   const followPubKeyArr = trendingProfiles.map((profile: { pubKey: string }) => profile.pubKey);
 

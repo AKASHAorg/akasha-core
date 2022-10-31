@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ENS_EVENTS, AWF_IENS, TYPES, ILogger } from '@akashaorg/typings/sdk';
+import { ENS_EVENTS, TYPES } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
@@ -15,8 +15,8 @@ import { createFormattedValue, createObservableStream } from '../helpers/observa
 import EventBus from '../common/event-bus';
 import { concatAll, map, tap } from 'rxjs/operators';
 import IpfsConnector from '../common/ipfs.connector';
-import { IsUserNameAvailable } from '../profiles/profile.graphql';
 import Stash from '../stash/index';
+import pino from 'pino';
 
 export const isEncodedLabelHash = hash => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
@@ -33,10 +33,10 @@ export const validateName = (name: string) => {
 };
 
 @injectable()
-class AWF_ENS implements AWF_IENS {
+class AWF_ENS {
   private readonly _web3: Web3Connector;
   private readonly _ipfs: IpfsConnector;
-  private _log: ILogger;
+  private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _settings: Settings;
@@ -137,7 +137,7 @@ class AWF_ENS implements AWF_IENS {
     return createFormattedValue(true);
   }
 
-  isAvailable(name: string) {
+  async isAvailable(name: string) {
     // if (!this._chainChecked) {
     //   await this.setupContracts();
     // }
@@ -147,24 +147,13 @@ class AWF_ENS implements AWF_IENS {
     // }
     // const result = await this._ENSinstance.isAvailable(name);
     const validatedName = validateName(name);
-    return this._auth.authenticateMutationData({ userName: validatedName }).pipe(
-      map(res => {
-        return this._gql.run<{ isUserNameAvailable: boolean }>(
-          {
-            query: IsUserNameAvailable,
-            variables: { userName: validatedName },
-            operationName: 'IsUserNameAvailable',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
-              },
-            },
-          },
-          true,
-        );
-      }),
-      concatAll(),
+    const auth = await this._auth.authenticateMutationData({ userName: validatedName });
+    return this._gql.getAPI().IsUserNameAvailable(
+      { userName: validatedName },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
     );
   }
 

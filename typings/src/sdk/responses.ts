@@ -1,13 +1,19 @@
 import { Observable } from 'rxjs';
-import { DataProviderInput } from './common';
+import { DataProviderInput, UserProfile } from './graphql-types';
 
 export type ServiceCallResult<T> = Observable<{ data: T }>;
+
+export enum PostType {
+  DEFAULT,
+  ARTICLE,
+  APP,
+}
 
 export interface Comment_Response {
   _id: string;
   creationDate: string;
   updatedAt: string;
-  author: UserProfile_Response;
+  author: UserProfile;
   content: [DataProviderInput];
   mentions: [string];
   replyTo: string;
@@ -123,10 +129,4 @@ export interface GlobalSearchResult {
   tags: [GlobalSearchResultTagItem];
   comments: [GlobalSearchResultItem];
   profiles: [GlobalSearchResultItem];
-}
-
-export enum PostType {
-  DEFAULT,
-  ARTICLE,
-  APP,
 }

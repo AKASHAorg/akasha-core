@@ -203,7 +203,8 @@ const ChatPage = (props: ChatPageProps) => {
             onPublish={handleSendMessage}
             getMentions={handleMentionQueryChange}
             getTags={handleTagQueryChange}
-            tags={tagQueryReq.data}
+            // @Todo: pls fix my type :/
+            tags={tagQueryReq.data as any}
             mentions={mentionQueryReq.data}
           />
         </Box>

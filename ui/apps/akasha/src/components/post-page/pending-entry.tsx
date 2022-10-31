@@ -17,7 +17,8 @@ const { Box, EntryBox } = DS;
 
 type Props = {
   postId: string;
-  loggedProfileData: IProfileData;
+  /* @Todo: Fix my type */
+  loggedProfileData: any;
   layoutConfig: RootComponentProps['layoutConfig'];
   entryData?: IEntryData;
 };
@@ -59,7 +60,10 @@ export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryDat
             data-testid="pending-entry"
           >
             <EntryBox
-              entryData={createPendingEntry(loggedProfileData, publishComment.state.variables)}
+              /* @Todo: Fix my type */
+              entryData={
+                createPendingEntry(loggedProfileData, publishComment.state.variables) as any
+              }
               sharePostLabel={t('Share Post')}
               shareTextLabel={t('Share this post with your friends')}
               repliesLabel={t('Replies')}

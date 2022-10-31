@@ -4,7 +4,8 @@ import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import getSDK from '@akashaorg/awf-sdk';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { ReleaseInfo, IntegrationInfo } from '@akashaorg/typings/sdk';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { useTranslation } from 'react-i18next';
 import { INFO } from '../../routes';
 
@@ -20,8 +21,8 @@ const {
 } = DS;
 
 export interface IExplorePage extends RootComponentProps {
-  installableApps: ReleaseInfo[];
-  installedAppsInfo?: IntegrationInfo[];
+  installableApps: IntegrationReleaseInfoFragmentFragment[];
+  installedAppsInfo?: IntegrationReleaseInfo[];
   isFetching?: boolean;
   reqError?: Error;
   isUserLoggedIn?: boolean;
@@ -55,7 +56,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
 
   const uninstallAppReq = useUninstallApp();
 
-  const handleAppClick = (app: ReleaseInfo) => {
+  const handleAppClick = (app: IntegrationReleaseInfo) => {
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: routes => `${routes[INFO]}/${app.integrationID}`,

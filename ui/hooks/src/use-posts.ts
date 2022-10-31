@@ -6,10 +6,9 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
-import { Post_Response } from '@akashaorg/typings/sdk';
-import { IPublishData, PostResponse, IProfileData } from '@akashaorg/typings/ui';
+import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { IPublishData, IProfileData } from '@akashaorg/typings/ui';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
@@ -56,15 +55,13 @@ export type usePostsParam = {
 
 const getPosts = async (queryClient: QueryClient, limit: number, offset?: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.getEntries({
-      limit: limit,
-      offset: offset,
-    }),
-  );
+  const res = await sdk.api.entries.getEntries({
+    limit: limit,
+    offset: offset,
+  });
   return {
-    ...res.data.posts,
-    results: res.data.posts.results.map(post => {
+    ...res.posts,
+    results: res.posts.results.map(post => {
       return post._id;
     }),
   };
@@ -110,15 +107,13 @@ export function useInfinitePosts(limit: number, offset?: string) {
 
 const getCustomFeedPosts = async (limit: number, offset?: number) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.getFeedEntries({
-      limit: limit,
-      offset: offset,
-    }),
-  );
+  const res = await sdk.api.entries.getFeedEntries({
+    limit: limit,
+    offset: offset,
+  });
   return {
-    ...res.data.getCustomFeed,
-    results: res.data.getCustomFeed.results.map(post => {
+    ...res.getCustomFeed,
+    results: res.getCustomFeed.results.map(post => {
       return post._id;
     }),
   };
@@ -161,18 +156,16 @@ export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?:
   );
 }
 
-const getPostsByTag = async (tagName: string, limit: number, offset?: string) => {
+const getPostsByTag = async (tagName: string, limit: number, offset?: number) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.entriesByTag({
-      name: tagName,
-      limit: limit,
-      offset: offset,
-    }),
-  );
+  const res = await sdk.api.entries.entriesByTag({
+    name: tagName,
+    limit: limit,
+    offset: offset,
+  });
   return {
-    ...res.data.getPostsByTag,
-    results: res.data.getPostsByTag.results.map(post => {
+    ...res.getPostsByTag,
+    results: res.getPostsByTag.results.map(post => {
       return post._id;
     }),
   };
@@ -216,16 +209,14 @@ export function useInfinitePostsByTag(tagName: string, limit: number, offset?: s
 
 const getPostsByAuthor = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(
-    sdk.api.entries.entriesByAuthor({
-      pubKey: pubKey,
-      limit: limit,
-      offset: offset,
-    }),
-  );
+  const res = await sdk.api.entries.entriesByAuthor({
+    pubKey: pubKey,
+    limit: limit,
+    offset: offset,
+  });
   return {
-    ...res.data.getPostsByAuthor,
-    results: res.data.getPostsByAuthor.results.map(post => {
+    ...res.getPostsByAuthor,
+    results: res.getPostsByAuthor.results.map(post => {
       return post._id;
     }),
   };
@@ -273,21 +264,21 @@ export function useInfinitePostsByAuthor(
 
 const getPost = async (postID: string, loggedUser?: string) => {
   const sdk = getSDK();
-  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+  const user = await sdk.api.auth.getCurrentUser();
   // check entry's moderation status
   const modStatus = await checkStatus({
-    user: loggedUser || user?.data?.pubKey || '',
+    user: loggedUser || user?.pubKey || '',
     contentIds: [postID],
   });
-  const res = await lastValueFrom(sdk.api.entries.getEntry(postID));
+  const res = await sdk.api.entries.getEntry(postID);
   const modStatusAuthor = await checkStatus({
-    user: loggedUser || user?.data?.pubKey || '',
-    contentIds: [res.data?.getPost?.author?.pubKey],
+    user: loggedUser || user?.pubKey || '',
+    contentIds: [res.getPost?.author?.pubKey],
   });
   return {
-    ...res.data.getPost,
+    ...res.getPost,
     ...modStatus[0],
-    author: { ...res.data.getPost.author, ...modStatusAuthor[0] },
+    author: { ...res.getPost.author, ...modStatusAuthor[0] },
   };
 };
 
@@ -350,13 +341,13 @@ export function usePosts({ postIds, loggedUser, enabler = true }: usePostsParam)
 export function useDeletePost(postID: string) {
   const sdk = getSDK();
   const queryClient = useQueryClient();
-  return useMutation(postID => lastValueFrom(sdk.api.entries.removeEntry(postID)), {
+  return useMutation(postID => sdk.api.entries.removeEntry(postID), {
     // When mutate is called:
     onMutate: async (postID: string) => {
       await queryClient.cancelQueries([ENTRY_KEY, postID]);
 
       // Snapshot the previous value
-      const previousPost: Post_Response = queryClient.getQueryData([ENTRY_KEY, postID]);
+      const previousPost: PostResultFragment = queryClient.getQueryData([ENTRY_KEY, postID]);
 
       queryClient.setQueryData([ENTRY_KEY, postID], {
         ...previousPost,
@@ -373,9 +364,9 @@ export function useDeletePost(postID: string) {
       return { previousPost };
     },
     onSuccess: async () => {
-      const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+      const user = await sdk.api.auth.getCurrentUser();
       if (user) {
-        queryClient.setQueryData<IProfileData>([PROFILE_KEY, user.data?.pubKey], profile => {
+        queryClient.setQueryData<IProfileData>([PROFILE_KEY, user.pubKey], profile => {
           const postsCount = profile.totalPosts;
           let totalPosts: number;
           if (typeof postsCount === 'number') {
@@ -421,8 +412,8 @@ export function useCreatePost() {
   return useMutation(
     async (publishObj: IPublishData) => {
       const post = buildPublishObject(publishObj);
-      const res = await lastValueFrom(sdk.api.entries.postEntry(post));
-      return res?.data?.createPost;
+      const res = await sdk.api.entries.postEntry(post);
+      return res.createPost;
     },
     {
       onMutate: async (publishObj: IPublishData) => {
@@ -474,14 +465,12 @@ export const useEditPost = () => {
   return useMutation(
     async (editedPost: IPublishData & { entryID: string }) => {
       const post = buildPublishObject(editedPost);
-      const res = await lastValueFrom(
-        sdk.api.entries.editEntry({ entryID: editedPost.entryID, ...post }),
-      );
-      return res.data.editPost;
+      const res = await sdk.api.entries.editEntry({ entryID: editedPost.entryID, ...post });
+      return res.editPost;
     },
     {
       onMutate: async editedPost => {
-        queryClient.setQueryData([ENTRY_KEY, editedPost.entryID], (current: PostResponse) => {
+        queryClient.setQueryData([ENTRY_KEY, editedPost.entryID], (current: PostResultFragment) => {
           const { data } = buildPublishObject(editedPost);
           return {
             ...current,

@@ -54,7 +54,8 @@ export interface ILinkPreview {
   handleLinkClick?: (url: string) => void;
   handleDeletePreview?: () => void;
   uploading?: boolean;
-  linkPreviewData?: IEntryData['linkPreview'];
+  /* @Todo: fix my type ;/ */
+  linkPreviewData?: any;
   uploadingLinkPreviewLabel?: string;
 }
 

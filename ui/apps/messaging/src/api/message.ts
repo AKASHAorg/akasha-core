@@ -32,19 +32,17 @@ export const sendMessage = async (to: string, body: unknown) => {
 
 export const getMessages = async () => {
   const sdk = getSDK();
-  const messages = await sdk.api.auth.getConversation(null);
-  return messages;
+  return sdk.api.auth.getConversation(null);
 };
 
 export const getTextileUsage = async () => {
   const sdk = getSDK();
-  const textileUsage = await lastValueFrom(sdk.api.auth.getTextileUsage());
-  return textileUsage;
+  return sdk.api.auth.getTextileUsage();
 };
 
 export const markAsRead = async (messageIds: string[]) => {
   const sdk = getSDK();
-  messageIds.forEach(id => lastValueFrom(sdk.api.auth.markMessageAsRead(id)));
+  messageIds.forEach(id => sdk.api.auth.markMessageAsRead(id));
 };
 
 export const getHubUser = async () => {

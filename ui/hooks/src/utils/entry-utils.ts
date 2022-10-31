@@ -1,13 +1,8 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { ILogger } from '@akashaorg/typings/sdk';
-import {
-  IEntryData,
-  PostResponse,
-  CommentResponse,
-  IPublishData,
-  PendingEntry,
-  IProfileData,
-} from '@akashaorg/typings/ui';
+import { Logger } from '@akashaorg/awf-sdk';
+import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { Comment, Post, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
+import { IEntryData, IPublishData } from '@akashaorg/typings/ui';
 
 import { getMediaUrl } from './media-utils';
 
@@ -20,20 +15,20 @@ export const PROPERTY_LINK_PREVIEW = 'linkPreview';
 export const PROPERTY_IMAGES = 'images';
 
 export interface EntryPublishObject {
-  data: PostResponse['content'];
+  data: PostResultFragment['content'];
   post: {
-    tags: IPublishData['metadata']['tags'];
-    mentions: IPublishData['metadata']['mentions'];
+    tags: PostResultFragment['tags'];
+    mentions: string[];
     quotes: string[];
   };
 
-  quotes: IPublishData['metadata']['quote']['entryId'][];
+  quotes: PostResultFragment['quotes'];
 }
 export interface CommentPublishObject {
-  data: CommentResponse['content'];
+  data: Comment['content'];
   comment: {
-    tags: IPublishData['metadata']['tags'];
-    mentions: IPublishData['metadata']['mentions'];
+    tags: PostResultFragment['tags'];
+    mentions: string[];
     quotes: string[];
     postID: string;
   };
@@ -64,7 +59,7 @@ function fromBinary(binary: string) {
  */
 export const decodeb64SlateContent = (
   base64Content: string,
-  logger?: ILogger,
+  logger?: Logger,
   handleOldSlateFormat?: boolean,
 ) => {
   const stringContent = window.atob(base64Content);
@@ -96,7 +91,7 @@ export const serializeSlateToBase64 = (slateContent: unknown) => {
  * profile images - append ipfs gateway
  * entry images - append ipfs gateway
  */
-export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger): IEntryData => {
+export const mapEntry = (entry: PostResultFragment | Comment | Post, logger?: Logger) => {
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
   const linkPreviewData = entry.content.find(elem => elem.property === PROPERTY_LINK_PREVIEW);
   const imagesData = entry.content.find(elem => elem.property === PROPERTY_IMAGES);
@@ -104,7 +99,7 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
   let linkPreview;
   let images;
   let quotedByAuthors: IEntryData['author'][];
-  let quotedEntry: IEntryData;
+  let quotedEntry;
   const isRemoved = entry.content.length === 1 && entry.content[0].property === 'removed';
 
   if (isRemoved) {
@@ -219,7 +214,7 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
     entry['quotedByAuthors'] &&
     entry['quotedByAuthors'].length > 0
   ) {
-    quotedByAuthors = entry['quotedByAuthors'].map((author: PostResponse['author']) => {
+    quotedByAuthors = entry['quotedByAuthors'].map((author: PostResultFragment['author']) => {
       const avatarWithGateway = getMediaUrl(author.avatar);
       return {
         ...author,
@@ -266,9 +261,9 @@ export const mapEntry = (entry: PostResponse | CommentResponse, logger?: ILogger
  * Utility to create an entry yet to be published
  */
 export const createPendingEntry = (
-  author: IProfileData,
+  author: UserProfile,
   entryPublishData: IPublishData & { entryId?: string },
-): PendingEntry => {
+) => {
   return {
     quote: entryPublishData.metadata.quote,
     linkPreview: entryPublishData.metadata.linkPreview,
@@ -381,7 +376,7 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
         mentions: data.metadata.mentions,
         postID: parentEntryId,
       },
-    };
+    } as CommentPublishObject;
   }
   return {
     ...postObj,
@@ -390,5 +385,5 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
       mentions: data.metadata.mentions,
       quotes,
     },
-  };
+  } as EntryPublishObject;
 }

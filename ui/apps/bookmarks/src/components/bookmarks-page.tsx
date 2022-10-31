@@ -22,7 +22,8 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const { t } = useTranslation();
 
   const loginQuery = useGetLogin();
-  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
+  /* @Todo: fix my type ;/ */
+  const loggedProfileQuery: any = useGetProfile(loginQuery.data?.pubKey);
 
   const isLoggedIn = React.useMemo(() => {
     return loginQuery.data?.ethAddress;
