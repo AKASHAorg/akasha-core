@@ -19,7 +19,7 @@ export interface EntryListProps {
   hasNextPage?: boolean;
   /* string to be prepended to the page iteration index */
   pageKeyPrefix?: string;
-  loadMoreEntry?: { onClick: () => void; label: string; limit: number };
+  viewAllEntry?: { onClick: () => void; label: string; limit: number };
 }
 
 const EntryList = (props: EntryListProps) => {
@@ -29,7 +29,7 @@ const EntryList = (props: EntryListProps) => {
     itemSpacing = 0,
     onLoadMore,
     pageKeyPrefix = 'page',
-    loadMoreEntry,
+    viewAllEntry,
   } = props;
   const loadmoreRef = React.createRef<HTMLDivElement>();
 
@@ -40,11 +40,11 @@ const EntryList = (props: EntryListProps) => {
   });
 
   const items = (page: EntryPage) =>
-    loadMoreEntry ? page?.results.slice(0, loadMoreEntry.limit) : page?.results;
+    viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results;
 
   return (
     <>
-      {(loadMoreEntry ? pages.slice(0, 1) : pages).map((page, index) => (
+      {(viewAllEntry ? pages.slice(0, 1) : pages).map((page, index) => (
         <div data-page-idx={index} key={`${pageKeyPrefix}-${index}`}>
           {items(page)?.map((entryId, index, items) => (
             <div style={{ marginBottom: itemSpacing }} key={entryId}>
@@ -58,11 +58,11 @@ const EntryList = (props: EntryListProps) => {
           ))}
         </div>
       ))}
-      {loadMoreEntry && pages[0]?.total > loadMoreEntry.limit && (
+      {viewAllEntry && pages[0]?.total > viewAllEntry.limit && (
         <Anchor
           onClick={e => {
             e.preventDefault();
-            loadMoreEntry.onClick();
+            viewAllEntry.onClick();
           }}
           size="large"
           weight="bold"
@@ -71,10 +71,10 @@ const EntryList = (props: EntryListProps) => {
           margin={{ left: 'large' }}
           style={{ textDecoration: 'none' }}
         >
-          {loadMoreEntry.label}
+          {viewAllEntry.label}
         </Anchor>
       )}
-      {!loadMoreEntry && (props.status === 'loading' || props.hasNextPage) && (
+      {!viewAllEntry && (props.status === 'loading' || props.hasNextPage) && (
         <Box pad="medium">
           <Spinner ref={loadmoreRef} />
         </Box>

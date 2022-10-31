@@ -44,7 +44,7 @@ export interface IFeedWidgetProps {
   accentBorderTop?: boolean;
   replyFragment?: boolean;
   firstLevelReply?: boolean;
-  loadMoreEntry?: {
+  viewAllEntry?: {
     label: string;
     onClick: () => void;
     limit: number;

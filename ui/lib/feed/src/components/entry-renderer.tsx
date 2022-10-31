@@ -462,7 +462,7 @@ const EntryRenderer = (
                     getShareUrl={(itemId: string) =>
                       `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`
                     }
-                    loadMoreEntry={{
+                    viewAllEntry={{
                       label: 'View all replies',
                       onClick: () => {
                         props.navigateTo?.({

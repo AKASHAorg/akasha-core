@@ -30,7 +30,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       itemSpacing={props.itemSpacing}
       hasNextPage={props.hasNextPage}
       pageKeyPrefix={props.itemType === EntityTypes.ENTRY ? 'entry-page' : 'comment-page'}
-      loadMoreEntry={props.loadMoreEntry}
+      viewAllEntry={props.viewAllEntry}
       itemCard={
         <EntryRenderer
           modalSlotId={props.modalSlotId}
