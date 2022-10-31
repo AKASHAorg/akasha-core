@@ -254,7 +254,7 @@ export function ReplyEntry({
                 name={`entry-card-edit-button_${entryData?.entryId}`}
                 style={{ width: '100%' }}
                 uiEvents={uiEvents}
-                data={{ entryId: postId, entryType }}
+                data={{ entryId: postId, commentId, entryType }}
               />
             )
           }
