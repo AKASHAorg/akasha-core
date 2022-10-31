@@ -81,7 +81,7 @@ const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies)
  *
  * const commentPages = React.useMemo(() => {
     if (commentsQuery.data) {
-      return commentsQuery.pages;
+      return commentsQuery.data.pages;
     }
     return [];
   }, [commentsQuery.data]);
@@ -110,7 +110,7 @@ export function useInfiniteComments({ limit, postID, offset }: InfiniteComments,
  *
  * const repliesPages = React.useMemo(() => {
     if (repliesQuery.data) {
-      return repliesQuery.pages;
+      return repliesQuery.data.pages;
     }
     return [];
   }, [repliesQuery.data]);
@@ -155,7 +155,7 @@ const getComment = async commentID => {
   return {
     ...res.getComment,
     ...modStatus[0],
-    author: { ...res.getComment.author, ...modStatusAuthor[0] },
+    author: { ...res.getComment?.author, ...modStatusAuthor[0] },
   };
 };
 
