@@ -4,6 +4,7 @@ import Spinner from '../Spinner';
 import * as React from 'react';
 import useIntersectionObserver from '../../utils/intersection-observer';
 import { Anchor, Box } from 'grommet';
+import styled from 'styled-components';
 
 export interface EntryPage {
   results: string[];
@@ -47,14 +48,14 @@ const EntryList = (props: EntryListProps) => {
       {(viewAllEntry ? pages.slice(0, 1) : pages).map((page, index) => (
         <div data-page-idx={index} key={`${pageKeyPrefix}-${index}`}>
           {items(page)?.map((entryId, index, items) => (
-            <div style={{ marginBottom: itemSpacing }} key={entryId}>
+            <EntryContainer key={entryId} itemSpacing={itemSpacing}>
               {React.cloneElement(itemCard, {
                 itemId: entryId,
                 index,
                 totalEntry: items.length,
                 className: `entry-${entryId}`,
               })}
-            </div>
+            </EntryContainer>
           ))}
         </div>
       ))}
@@ -83,3 +84,11 @@ const EntryList = (props: EntryListProps) => {
   );
 };
 export default React.memo(EntryList);
+
+const EntryContainer = styled.div<{ itemSpacing: number }>`
+  margin-bottom: ${({ itemSpacing }) => itemSpacing}px;
+
+  &:empty {
+    margin-bottom: 0;
+  }
+`;
