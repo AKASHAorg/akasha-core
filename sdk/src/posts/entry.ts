@@ -1,49 +1,19 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import {
-  LinkPreview_Response,
-  Post_Response,
-  PostsResult_Response,
-  ENTRY_EVENTS,
-  AWF_IEntry,
-  DataProviderInput,
-  ILogger,
-  TYPES,
-} from '@akashaorg/typings/sdk';
-import { concatAll, map, tap } from 'rxjs/operators';
+import { ENTRY_EVENTS, TYPES } from '@akashaorg/typings/sdk';
+import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Logging from '../logging';
-import {
-  CreateEntry,
-  GetEntries,
-  GetEntry,
-  GetPostsByAuthor,
-  GetPostsByTag,
-  EditEntry,
-  RemoveEntry,
-  GetLinkPreview,
-  GetCustomFeed,
-} from './entry.graphql';
 import EventBus from '../common/event-bus';
+import pino from 'pino';
 
 @injectable()
-class AWF_Entry implements AWF_IEntry {
-  private _log: ILogger;
+class AWF_Entry {
+  private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _globalChannel: EventBus;
-  public readonly graphQLDocs = {
-    CreateEntry,
-    GetEntries,
-    GetEntry,
-    GetPostsByAuthor,
-    GetPostsByTag,
-    EditEntry,
-    RemoveEntry,
-    GetLinkPreview,
-    GetCustomFeed,
-  };
 
   constructor(
     @inject(TYPES.Log) log: Logging,
@@ -61,265 +31,152 @@ class AWF_Entry implements AWF_IEntry {
    *
    * @param entryId
    */
-  getEntry(entryId: string) {
-    return this._auth.getCurrentUser().pipe(
-      map(result =>
-        this._gql.run<{ getPost: Post_Response }>(
-          {
-            query: GetEntry,
-            variables: { id: entryId, pubKey: result?.data?.pubKey },
-            operationName: 'GetEntry',
-          },
-          true,
-        ),
-      ),
-      concatAll(),
-    );
+  async getEntry(entryId: string) {
+    const res = await this._auth.getCurrentUser();
+    return this._gql.getAPI().GetEntry({ id: entryId, pubKey: res?.pubKey });
   }
 
   /**
    *
    * @param opt
    */
-  getEntries(opt: { offset?: string; limit: number }) {
-    return this._auth.getCurrentUser().pipe(
-      map(result =>
-        this._gql.run<{ posts: PostsResult_Response }>(
-          {
-            query: GetEntries,
-            variables: { offset: opt.offset, limit: opt.limit, pubKey: result?.data?.pubKey },
-            operationName: 'GetEntries',
-          },
-          true,
-        ),
-      ),
-      concatAll(),
-    );
+  async getEntries(opt: { offset?: string; limit: number }) {
+    const res = await this._auth.getCurrentUser();
+    return this._gql
+      .getAPI()
+      .GetEntries({ offset: opt.offset, limit: opt.limit, pubKey: res?.pubKey });
   }
 
   /**
    *
    * @param opt
    */
-  postEntry(opt: {
+  async postEntry(opt: {
     data: DataProviderInput[];
     post: { title?: string; tags?: string[]; quotes?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
     textContent.value = Buffer.from(textContent.value).toString('base64');
-    this._gql.clearCache();
-    return this._auth
-      .authenticateMutationData(opt.data as unknown as Record<string, unknown>[])
-      .pipe(
-        map(res => {
-          return this._gql
-            .run<{ createPost: string }>(
-              {
-                query: CreateEntry,
-                variables: { content: opt.data, post: opt.post },
-                operationName: 'CreateEntry',
-                context: {
-                  headers: {
-                    Authorization: `Bearer ${res.token.data}`,
-                    Signature: res.signedData.data.signature,
-                  },
-                },
-              },
-              false,
-            )
-            .pipe(
-              tap(ev => {
-                // @emits ENTRY_EVENTS.CREATE
-                this._globalChannel.next({
-                  data: ev.data,
-                  event: ENTRY_EVENTS.CREATE,
-                  args: opt,
-                });
-              }),
-            );
-        }),
-        concatAll(),
-      );
+    const auth = await this._auth.authenticateMutationData(
+      opt.data as unknown as Record<string, unknown>[],
+    );
+    const newEntry = await this._gql.getAPI().CreateEntry(
+      { content: opt.data, post: opt.post },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
+    );
+    // @emits ENTRY_EVENTS.CREATE
+    this._globalChannel.next({
+      data: newEntry,
+      event: ENTRY_EVENTS.CREATE,
+      args: opt,
+    });
+    return newEntry;
   }
 
   /**
    * Update an existing entry
    * @param opt
    */
-  editEntry(opt: {
+  async editEntry(opt: {
     entryID: string;
     data: DataProviderInput[];
     post: { title?: string; tags?: string[]; quotes?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
     textContent.value = Buffer.from(textContent.value).toString('base64');
-    this._gql.clearCache();
-    return this._auth
-      .authenticateMutationData(opt.data as unknown as Record<string, unknown>[])
-      .pipe(
-        map(res => {
-          return this._gql
-            .run<{ editPost: boolean }>(
-              {
-                query: EditEntry,
-                variables: { content: opt.data, post: opt.post, id: opt.entryID },
-                operationName: 'EditEntry',
-                context: {
-                  headers: {
-                    Authorization: `Bearer ${res.token.data}`,
-                    Signature: res.signedData.data.signature,
-                  },
-                },
-              },
-              false,
-            )
-            .pipe(
-              tap(ev => {
-                // @emits ENTRY_EVENTS.EDIT
-                this._globalChannel.next({
-                  data: ev.data,
-                  event: ENTRY_EVENTS.EDIT,
-                  args: opt,
-                });
-              }),
-            );
-        }),
-        concatAll(),
-      );
+    const auth = await this._auth.authenticateMutationData(
+      opt.data as unknown as Record<string, unknown>[],
+    );
+    const editEntry = await this._gql.getAPI().EditEntry(
+      { content: opt.data, post: opt.post, id: opt.entryID },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
+    );
+    // @emits ENTRY_EVENTS.EDIT
+    this._globalChannel.next({
+      data: editEntry,
+      event: ENTRY_EVENTS.EDIT,
+      args: opt,
+    });
+    return editEntry;
   }
 
-  entriesByAuthor(opt: { pubKey: string; offset?: number; limit: number }) {
-    return this._auth.getCurrentUser().pipe(
-      map(result =>
-        this._gql.run<{ getPostsByAuthor: PostsResult_Response }>(
-          {
-            query: GetPostsByAuthor,
-            variables: {
-              author: opt.pubKey,
-              offset: opt.offset,
-              limit: opt.limit,
-              pubKey: result?.data?.pubKey,
-            },
-            operationName: 'GetPostsByAuthor',
-          },
-          true,
-        ),
-      ),
-      concatAll(),
-    );
+  async entriesByAuthor(opt: { pubKey: string; offset?: number; limit: number }) {
+    const currentUser = await this._auth.getCurrentUser();
+    return this._gql.getAPI().GetPostsByAuthor({
+      author: opt.pubKey,
+      offset: opt.offset,
+      limit: opt.limit,
+      pubKey: currentUser?.pubKey,
+    });
   }
 
   /**
    *
    * @param opt
    */
-  entriesByTag(opt: { name: string; offset?: string; limit: number }) {
-    return this._auth.getCurrentUser().pipe(
-      map(result =>
-        this._gql.run<{ getPostsByTag: PostsResult_Response }>(
-          {
-            query: GetPostsByTag,
-            variables: {
-              tag: opt.name,
-              offset: opt.offset,
-              limit: opt.limit,
-              pubKey: result?.data?.pubKey,
-            },
-            operationName: 'GetPostsByTag',
-          },
-          true,
-        ),
-      ),
-      concatAll(),
-    );
+  async entriesByTag(opt: { name: string; offset?: number; limit: number }) {
+    const currentUser = await this._auth.getCurrentUser();
+    return this._gql.getAPI().GetPostsByTag({
+      tag: opt.name,
+      offset: opt.offset,
+      limit: opt.limit,
+      pubKey: currentUser?.pubKey,
+    });
   }
 
   /**
    * Remove an entry's content by ID
    * @param entryID
    */
-  removeEntry(entryID: string) {
-    return this._auth.authenticateMutationData(entryID).pipe(
-      map(res => {
-        return this._gql
-          .run<{ removePost: boolean }>(
-            {
-              query: RemoveEntry,
-              variables: { id: entryID },
-              operationName: 'RemoveEntry',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          )
-          .pipe(
-            tap(ev => {
-              // @emits ENTRY_EVENTS.REMOVE
-              this._globalChannel.next({
-                data: ev.data,
-                event: ENTRY_EVENTS.REMOVE,
-                args: { entryID },
-              });
-            }),
-          );
-      }),
-      concatAll(),
+  async removeEntry(entryID: string) {
+    const auth = await this._auth.authenticateMutationData(entryID);
+    const removedEntry = await this._gql.getAPI().RemoveEntry(
+      { id: entryID },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
     );
+    // @emits ENTRY_EVENTS.REMOVE
+    this._globalChannel.next({
+      data: removedEntry,
+      event: ENTRY_EVENTS.REMOVE,
+      args: { entryID },
+    });
+    return removedEntry;
   }
 
   /**
    * @param link
    */
-  getLinkPreview(link: string) {
-    return this._auth.authenticateMutationData({ link }).pipe(
-      map(res => {
-        return this._gql.run<{ getLinkPreview: LinkPreview_Response }>(
-          {
-            query: GetLinkPreview,
-            variables: { link: link },
-            operationName: 'GetLinkPreview',
-            context: {
-              headers: {
-                Authorization: `Bearer ${res.token.data}`,
-                Signature: res.signedData.data.signature,
-              },
-            },
-          },
-          true,
-        );
-      }),
-      concatAll(),
+  async getLinkPreview(link: string) {
+    const auth = await this._auth.authenticateMutationData({ link });
+    return this._gql.getAPI().GetLinkPreview(
+      { link: link },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
     );
   }
 
-  getFeedEntries(opt: { offset?: number; limit: number }) {
-    return this._auth.getToken().pipe(
-      map(token => {
-        if (!token) {
-          throw new Error('Must be authenticated in order to access the personalized feed api.');
-        }
-        return this._gql.run<{ getCustomFeed: PostsResult_Response }>(
-          {
-            query: GetCustomFeed,
-            variables: {
-              offset: opt.offset,
-              limit: opt.limit,
-            },
-            operationName: 'GetCustomFeed',
-            context: {
-              headers: {
-                Authorization: `Bearer ${token.data}`,
-              },
-            },
-          },
-          true,
-        );
-      }),
-      concatAll(),
+  async getFeedEntries(opt: { offset?: number; limit: number }) {
+    const token = await this._auth.getToken();
+    if (!token) {
+      throw new Error('Must be authenticated in order to access the personalized feed api.');
+    }
+    return this._gql.getAPI().GetCustomFeed(
+      {
+        offset: opt.offset,
+        limit: opt.limit,
+      },
+      { Authorization: `Bearer ${token}` },
     );
   }
 }

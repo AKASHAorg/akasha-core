@@ -2,13 +2,13 @@ import { QueryFunction, QueryKey, useQuery, useQueryClient } from 'react-query';
 import { Observable } from 'rxjs';
 import { useEffect } from 'react';
 import { UseQueryOptions } from 'react-query/types/react/types';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
 
 export const useQueryStream = (
   queryKey: QueryKey,
   fetcher: QueryFunction,
   config?: UseQueryOptions,
-  logger?: ILogger,
+  logger?: Logger,
 ) => {
   const queryClient = useQueryClient();
   const queryResult = useQuery(queryKey, fetcher, config);

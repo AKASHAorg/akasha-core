@@ -16,7 +16,7 @@ import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { Entry } from './entry';
 import { PendingReply } from './pending-reply';
 import { UseQueryResult } from 'react-query';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { ILogger } from '@akashaorg/typings/sdk/log';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 const { BasicCardBox, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
@@ -71,7 +71,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   }, [reqCommentsOrReplies.data]);
 
   const profileDataReq = useGetProfile(loginState?.pubKey);
-  const loggedProfileData = profileDataReq.data;
+  /* @Todo: fix my type ;/ */
+  const loggedProfileData: any = profileDataReq.data;
 
   const handleLoadMore = () => {
     if (

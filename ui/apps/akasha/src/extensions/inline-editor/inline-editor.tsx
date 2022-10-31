@@ -6,7 +6,6 @@ import { PostEditor } from './post-editor';
 
 export const InlineEditor = (props: Partial<RootExtensionProps>) => {
   const loginQuery = useGetLogin();
-
   const action = props.extensionData.action;
   const entryId = props.extensionData.entryId;
   const commentId = props.extensionData.commentId;

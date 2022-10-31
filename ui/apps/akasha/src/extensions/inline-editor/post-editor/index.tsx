@@ -35,20 +35,24 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
   const publishComment = useCreateComment();
   const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
-  const entryData = React.useMemo(() => {
+  /*@Todo: fix my type */
+  const entryData: any = React.useMemo(() => {
     if (post.status === 'success') {
-      return mapEntry(post.data);
+      /*@Todo: fix my type */
+      return mapEntry(post.data as any);
     }
     return undefined;
   }, [post.data, post.status]);
 
-  const embedEntryData = React.useMemo(() => {
+  /* @Todo: fix my type ;/ */
+  const embedEntryData: any = React.useMemo(() => {
     if (action === 'repost') {
       if (entryData) {
         return entryData;
       }
       if (post.data?.quotes.length) {
-        return mapEntry(post.data?.quotes[0]);
+        /*@Todo: fix my type */
+        return mapEntry(post.data?.quotes[0] as any);
       }
     }
 

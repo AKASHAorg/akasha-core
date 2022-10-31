@@ -33,7 +33,8 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { tagName } = useParams<{ tagName: string }>();
-  const getTagQuery = useGetTag(tagName);
+  /* @Todo: fix my type ;/ */
+  const getTagQuery: any = useGetTag(tagName);
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 

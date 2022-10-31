@@ -1,15 +1,13 @@
 import { useQuery } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { logError } from './utils/error-handler';
-import { lastValueFrom } from 'rxjs';
 
 export const INTEGRATIONS_KEY = 'Integrations';
 export const RELEASES_KEY = 'Releases';
 
 const getIntegrationInfo = async integrationId => {
   const sdk = getSDK();
-  const res = await sdk.api.icRegistry.getIntegrationInfo(integrationId);
-  return res.data;
+  return sdk.api.icRegistry.getIntegrationInfo(integrationId);
 };
 
 /**
@@ -31,8 +29,7 @@ export function useGetIntegrationInfo(integrationId: string) {
 
 const getIntegrationsInfo = async (opt: { name?: string; id?: string }[]) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.icRegistry.getIntegrationsInfo(opt));
-  return res.data;
+  return sdk.api.icRegistry.getIntegrationsInfo(opt);
 };
 
 /**
@@ -189,8 +186,7 @@ export function useGetAllIntegrationReleaseIds(integrationName: string, offset?:
 
 const getIntegrationReleaseInfo = async releaseId => {
   const sdk = getSDK();
-  const res = await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
-  return res.data;
+  return sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
 };
 
 /**
@@ -214,7 +210,7 @@ const getIntegrationsReleaseInfo = async releaseIds => {
   const sdk = getSDK();
   const result = await Promise.all(
     releaseIds.map(async releaseId => {
-      return (await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId)).data;
+      return sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
     }),
   );
 
@@ -229,33 +225,7 @@ const getIntegrationsReleaseInfo = async releaseIds => {
  *
  * const releasesInfo = releaseInfoQuery.data
  * ```
- */
-export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
-  return useQuery([RELEASES_KEY, 'info'], () => getIntegrationsReleaseInfo(releaseIds), {
-    enabled: !!releaseIds?.length,
-    keepPreviousData: true,
-    onError: (err: Error) => logError('useIntegrationRegistry.getIntegrationReleaseInfo', err),
-  });
-}
-
-const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
-  const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.icRegistry.getLatestReleaseInfo(opt));
-  // add local installable app mock to response here
-  return res.data;
-};
-
-/**
- * Hook to get latest release info for integrations
- * @example useGetLatestReleaseInfo hook
- * ```typescript
- * const latestReleaseInfoQuery = useGetLatestReleaseInfo([{ id: 'some-release-id-1' }, { id: 'some-release-id-2' }, { id: 'some-release-id-3' }]);
- *
- * const latestReleasesInfo = React.useMemo(() => {
-    return latestReleaseInfoQuery.data?.getLatestRelease;
-  }, [latestReleaseInfoQuery.data?.getLatestRelease]);
- * ```
-  * example mock data for an integration to test locally
+ * example mock data for an integration to test locally
  * ```typescript
  * if (!res.data.getLatestRelease.some(rel => rel.name === '@akashaorg/app-messaging')) {
  *  res.data.getLatestRelease.push({
@@ -283,6 +253,31 @@ const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
  *     createdAt: null,
  *   });
  * }
+ * ```
+ */
+export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
+  return useQuery([RELEASES_KEY, 'info'], () => getIntegrationsReleaseInfo(releaseIds), {
+    enabled: !!releaseIds?.length,
+    keepPreviousData: true,
+    onError: (err: Error) => logError('useIntegrationRegistry.getIntegrationReleaseInfo', err),
+  });
+}
+
+const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
+  const sdk = getSDK();
+  // add messaging app mock to response here
+  return sdk.api.icRegistry.getLatestReleaseInfo(opt);
+};
+
+/**
+ * Hook to get latest release info for integrations
+ * @example useGetLatestReleaseInfo hook
+ * ```typescript
+ * const latestReleaseInfoQuery = useGetLatestReleaseInfo([{ id: 'some-release-id-1' }, { id: 'some-release-id-2' }, { id: 'some-release-id-3' }]);
+ *
+ * const latestReleasesInfo = React.useMemo(() => {
+    return latestReleaseInfoQuery.data?.getLatestRelease;
+  }, [latestReleaseInfoQuery.data?.getLatestRelease]);
  * ```
  */
 export function useGetLatestReleaseInfo(opt: { name?: string; id?: string }[]) {

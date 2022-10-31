@@ -54,7 +54,8 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
   const userNameTypes = React.useMemo(() => {
     if (profileData) {
-      return getUsernameTypes(profileData);
+      /* @Todo: fix my type */
+      return getUsernameTypes(profileData) as any;
     }
   }, [profileData]);
 

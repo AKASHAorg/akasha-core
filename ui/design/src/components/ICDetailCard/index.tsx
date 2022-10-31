@@ -11,7 +11,7 @@ import { MainAreaCardBox, StyledAnchor } from '../EntryCard/basic-card-box';
 import { TextLine } from '../TextLine';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { IProfileData } from '@akashaorg/typings/ui';
-import { ReleaseInfo } from '@akashaorg/typings/sdk';
+import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import Version from './version';
 
@@ -42,7 +42,7 @@ export interface ICDetailCardProps {
   authorProfile?: IProfileData;
   isInstalled: boolean;
   releases: any[];
-  latestRelease: ReleaseInfo;
+  latestRelease: IntegrationReleaseInfo;
   isFetching?: boolean;
 
   onClickShare: () => void;

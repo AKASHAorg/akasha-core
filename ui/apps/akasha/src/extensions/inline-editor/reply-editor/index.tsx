@@ -26,9 +26,11 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
   const editComment = useEditComment(commentId, true);
   const publishComment = useCreateComment();
 
-  const entryData = React.useMemo(() => {
+  /*@Todo: fix my type */
+  const entryData: any = React.useMemo(() => {
     if (comment.status === 'success') {
-      return mapEntry(comment.data);
+      /*@Todo: fix my type */
+      return mapEntry(comment.data as any);
     }
     return undefined;
   }, [comment.data, comment.status]);

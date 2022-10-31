@@ -128,7 +128,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const commentData = React.useMemo(() => {
     if (commentReq.data && itemType === EntityTypes.COMMENT) {
-      return mapEntry(commentReq.data);
+      /** @Todo: fix my type ;/ **/
+      return mapEntry(commentReq.data as any);
     }
     return undefined;
   }, [commentReq.data, itemType]);
@@ -139,7 +140,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
     );
   }, [authorPubKey, followedProfilesReq.data, followedProfilesReq.status]);
 
-  const itemData = React.useMemo(() => {
+  /* @Todo: fix my type ;/ */
+  const itemData: any = React.useMemo(() => {
     if (itemType === EntityTypes.ENTRY) {
       return postData;
     } else if (itemType === EntityTypes.COMMENT) {
@@ -318,7 +320,8 @@ const EntryRenderer = (props: IEntryRenderer) => {
                 getLinkPreview={getLinkPreview}
                 getMentions={handleMentionQueryChange}
                 getTags={handleTagQueryChange}
-                tags={tagSearch.data}
+                /* @Todo: fix my type */
+                tags={tagSearch.data as any}
                 mentions={mentionSearch.data}
                 uploadRequest={uploadMediaToTextile}
                 editorState={itemData.slateContent}

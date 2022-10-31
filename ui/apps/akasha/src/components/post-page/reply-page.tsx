@@ -13,9 +13,11 @@ const ReplyPage: React.FC<ReplyPageProps & RootComponentProps> = props => {
   const { commentId } = useParams<{ commentId: string }>();
   const comment = useComment(commentId, !!commentId);
 
-  const entryData = React.useMemo(() => {
+  /* @Todo: fix my type ;/ */
+  const entryData: any = React.useMemo(() => {
     if (comment.data) {
-      return mapEntry(comment.data);
+      /*@Todo: fix my type */
+      return mapEntry(comment.data as any);
     }
     return undefined;
   }, [comment.data]);

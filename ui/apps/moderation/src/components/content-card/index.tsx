@@ -66,7 +66,8 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     }
     if (itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT) {
       if (commentQuery.data) {
-        return mapEntry(commentQuery.data);
+        // @Todo: pls fix my type ;/
+        return mapEntry(commentQuery.data as any);
       }
       return undefined;
     }
@@ -80,7 +81,8 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           {...props}
           isPending={isPending}
           locale={locale}
-          entryData={itemType === ModerationItemTypes.ACCOUNT ? profile : entryData}
+          // @Todo: pls fix my type :/
+          entryData={itemType === ModerationItemTypes.ACCOUNT ? profile : (entryData as any)}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}

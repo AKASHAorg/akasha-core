@@ -2,9 +2,7 @@ import { inject, injectable } from 'inversify';
 import { ethers } from 'ethers';
 import {
   EthProviders,
-  ILogger,
   INJECTED_PROVIDERS,
-  IWeb3Connector,
   PROVIDER_ERROR_CODES,
   TYPES,
   WEB3_EVENTS,
@@ -16,13 +14,12 @@ import OpenLogin from '@toruslabs/openlogin';
 import { createObservableStream, createObservableValue } from '../helpers/observable';
 import EventBus from './event-bus';
 import { throwError } from 'rxjs';
+import pino from 'pino';
 
 @injectable()
-class Web3Connector
-  implements IWeb3Connector<ethers.providers.BaseProvider | ethers.providers.Web3Provider>
-{
+class Web3Connector {
   #logFactory: Logging;
-  #log: ILogger;
+  #log: pino.Logger;
   #web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider;
   #globalChannel: EventBus;
   #wallet: ethers.Wallet;

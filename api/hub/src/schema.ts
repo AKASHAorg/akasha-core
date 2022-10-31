@@ -39,17 +39,17 @@ const typeDefs = gql`
   }
 
   type SearchTagsResult {
-    name: String
-    totalPosts: Int
+    name: String!
+    totalPosts: Int!
   }
   type GlobalSearchResultItem {
-    id: String
-    name: String
+    id: String!
+    name: String!
   }
   type GlobalSearchResultTagItem {
-    id: String
-    name: String
-    totalPosts: Int
+    id: String!
+    name: String!
+    totalPosts: Int!
   }
   type GlobalSearchResult {
     posts: [GlobalSearchResultItem]
@@ -96,9 +96,9 @@ const typeDefs = gql`
     height: String
   }
   type LinkPreview @cacheControl(maxAge: 10800) {
-    url: String
+    url: String!
     mediaType: String
-    contentType: String
+    contentType: String!
     favicons: [String]
     videos: [VideoPreview]
     title: String
@@ -110,12 +110,12 @@ const typeDefs = gql`
   }
 
   type IntegrationInfo @cacheControl(maxAge: 3600) {
-    id: String
-    name: String
-    author: String
-    integrationType: Int
-    latestReleaseId: String
-    enabled: Boolean
+    id: String!
+    name: String!
+    author: String!
+    integrationType: Int!
+    latestReleaseId: String!
+    enabled: Boolean!
   }
 
   type InfoLink @cacheControl(maxAge: 3600) {
@@ -124,7 +124,7 @@ const typeDefs = gql`
     detailedDescription: String
   }
   type ManifestInfo @cacheControl(maxAge: 3600) {
-    mainFile: String
+    mainFile: String!
     license: String
     description: String
     keywords: [String]
@@ -133,15 +133,15 @@ const typeDefs = gql`
 
   type IntegrationReleaseInfo @cacheControl(maxAge: 3600) {
     id: String
-    name: String
-    version: String
-    integrationType: Int
+    name: String!
+    version: String!
+    integrationType: Int!
     links: InfoLink
-    sources: [String]
-    integrationID: String
-    author: String
-    enabled: Boolean
-    manifestData: ManifestInfo
+    sources: [String!]
+    integrationID: String!
+    author: String!
+    enabled: Boolean!
+    manifestData: ManifestInfo!
     createdAt: Int
   }
 
@@ -171,15 +171,15 @@ const typeDefs = gql`
   }
 
   input DataProviderInput {
-    provider: String
-    property: String
-    value: String
+    provider: String!
+    property: String!
+    value: String!
   }
 
   type DataProvider {
-    provider: String
-    property: String
-    value: String
+    provider: String!
+    property: String!
+    value: String!
   }
   input PostData {
     title: String
@@ -248,7 +248,7 @@ const typeDefs = gql`
     creationDate: String!
     posts: [String!]
     comments: [String!]
-    totalPosts: Int
+    totalPosts: Int!
   }
 
   type UserProfile {
@@ -264,9 +264,9 @@ const typeDefs = gql`
     totalPosts: String
     providers: [DataProvider]
     default: [DataProvider]
-    totalFollowers: Int
-    totalFollowing: Int
-    totalInterests: Int
+    totalFollowers: Int!
+    totalFollowing: Int!
+    totalInterests: Int!
   }
 
   enum PostType {
@@ -288,7 +288,7 @@ const typeDefs = gql`
     tags: [String!]
     quotedBy: [String]
     mentions: [String]
-    totalComments: String
+    totalComments: String!
     quotedByAuthors: [UserProfile]
   }
 
@@ -300,7 +300,7 @@ const typeDefs = gql`
     content: [DataProvider!]
     mentions: [String]
     replyTo: String
-    postId: String
+    postId: String!
   }
 `;
 

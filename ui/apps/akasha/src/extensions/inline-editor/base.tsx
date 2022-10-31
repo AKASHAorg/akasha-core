@@ -27,7 +27,8 @@ export function Base(
   const [mentionQuery, setMentionQuery] = React.useState(null);
   const [tagQuery, setTagQuery] = React.useState(null);
   const mentionSearch = useMentionSearch(mentionQuery);
-  const tagSearch = useTagSearch(tagQuery);
+  /* @Todo: fix my type ;/ */
+  const tagSearch: any = useTagSearch(tagQuery);
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
 

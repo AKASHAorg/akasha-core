@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { ServiceCallResult, TYPES, ISettingsService } from '@akashaorg/typings/sdk';
+import { ServiceCallResult, TYPES } from '@akashaorg/typings/sdk';
 import DB, { availableCollections } from '../db';
 import { exhaustMap, switchMap } from 'rxjs/operators';
 import { createObservableStream } from '../helpers/observable';
@@ -7,7 +7,7 @@ import { lastValueFrom } from 'rxjs';
 import { SettingsSchema } from '../db/settings.schema';
 
 @injectable()
-class Settings implements ISettingsService {
+class Settings {
   @inject(TYPES.Db) private _db: DB;
 
   /**
