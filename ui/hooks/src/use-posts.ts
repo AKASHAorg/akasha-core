@@ -272,7 +272,7 @@ const getPost = async (postID: string, loggedUser?: string) => {
   });
   const res = await sdk.api.entries.getEntry(postID);
   const modStatusAuthor = await checkStatus({
-    user: loggedUser || user.pubKey || '',
+    user: loggedUser || user?.pubKey || '',
     contentIds: [res.getPost?.author?.pubKey],
   });
   return {

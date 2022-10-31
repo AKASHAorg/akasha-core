@@ -23,28 +23,22 @@ export const getLatestReleaseInfo = async (integrations: { name: string }[]) => 
   return data.getLatestRelease;
 };
 
-export const getIntegrationsData = (integrationNames: string[], worldConfig: ILoaderConfig) => {
-  const [local$, remote$] = partition(
-    from(integrationNames),
-    integrationName => !!worldConfig.registryOverrides.find(int => int.name === integrationName),
-  );
-
-  //get package info from remote registry
-  const remoteIntegrations = remote$
-    .pipe(
-      map(name => ({ name })),
-      toArray(),
-    )
-    .pipe(mergeMap(e => from(getLatestReleaseInfo(e))));
-
-  //get package info from local registry (overrides)
-  const localIntegrations = local$
-    .pipe(map(name => worldConfig.registryOverrides.find(int => int.name === name)))
-    .pipe(toArray());
-
-  return forkJoin([remoteIntegrations, localIntegrations]).pipe(
-    map(([remote, local]) => [...remote, ...local]),
-  );
+export const getIntegrationsData = async (
+  integrationNames: string[],
+  worldConfig: ILoaderConfig,
+) => {
+  const remote = integrationNames.filter(integrationName => {
+    return !worldConfig.registryOverrides.find(int => int.name === integrationName);
+  });
+  const local = integrationNames
+    .filter(integrationName => {
+      return !remote.includes(integrationName);
+    })
+    .map(e => worldConfig.registryOverrides.find(int => int.name === e));
+  const remotes = await getLatestReleaseInfo(remote.map(e => ({ name: e })));
+  console.info('getIntegrationsData');
+  console.log(remotes.concat(local as any));
+  return remotes.concat(local as any);
 };
 
 /*
@@ -60,15 +54,11 @@ export const getDefaultIntegrationManifests = async (
     ...worldConfig.defaultApps,
     ...worldConfig.defaultWidgets,
   ];
-  return getIntegrationsData(defaultIntegrations, worldConfig).pipe(
-    tap(manifests => pipelineEvents.next({ manifests })),
-    catchError(err => {
-      logger.error(
-        `[getDefaultIntegrationManifests]: Error fetching manifests ${err.message ?? err}`,
-      );
-      throw err;
-    }),
-  );
+  return getIntegrationsData(defaultIntegrations, worldConfig).then(manifests => {
+    console.info('getDefaultIntegrationManifests');
+    console.log({ manifests });
+    pipelineEvents.next({ manifests });
+  });
 };
 
 export const getUserIntegrationManifests = (
