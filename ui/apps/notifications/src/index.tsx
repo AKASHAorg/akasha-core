@@ -8,10 +8,11 @@ import {
 } from '@akashaorg/typings/ui';
 import { NotificationPlugin } from './plugins/notification-plugin';
 import getSDK from '@akashaorg/awf-sdk';
-import { filter, map, mergeMap } from 'rxjs';
+import { filter, from, map, mergeMap } from 'rxjs';
 import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
 
-export const initialize = (options: IntegrationRegistrationOptions) => {
+export const initialize = (options: IntegrationRegistrationOptions & { logger: Logger }) => {
   const notification: any = options.plugins['@akashaorg/app-notifications'].notification;
   const sdk = getSDK();
 
@@ -25,11 +26,11 @@ export const initialize = (options: IntegrationRegistrationOptions) => {
         ),
       );
       // get notifications for the 1st time
-      sdk.api.auth.getMessages({}).subscribe({
+      from(sdk.api.auth.getMessages({})).subscribe({
         next: msg => {
           notification.notify(
             '@akashaorg/app-notifications',
-            msg.data.filter(m => !m.read),
+            msg.filter(m => !m.read),
           );
         },
         error: err => {
@@ -40,9 +41,9 @@ export const initialize = (options: IntegrationRegistrationOptions) => {
       markAsRead$
         .pipe(
           mergeMap(() => {
-            return sdk.api.auth
-              .getMessages({})
-              .pipe(map(newMsg => newMsg.data.filter(m => !m.read)));
+            return from(sdk.api.auth.getMessages({})).pipe(
+              map(newMsg => newMsg.filter(m => !m.read)),
+            );
           }),
         )
         .subscribe({

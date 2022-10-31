@@ -350,7 +350,8 @@ const trendingProfilesData = [
   },
 ];
 
-const ICDetailAppsData: IntegrationCenterApp[] = [
+/* @Todo: fix my type */
+const ICDetailAppsData: any[] = [
   {
     name: 'Theme Wizard',
     id: 'bbaryfskgshgirsnxnbv',
@@ -417,8 +418,8 @@ const ICDetailAppsData: IntegrationCenterApp[] = [
     ],
   },
 ];
-
-const ICWorldAppsData: ReleaseInfo[] = [
+/* @Todo: fix my type */
+const ICWorldAppsData: any[] = [
   {
     name: 'Theme Wizard',
     id: 'bbaryfskgshgirsnxnbv',
@@ -460,8 +461,8 @@ const ICWorldAppsData: ReleaseInfo[] = [
     enabled: true,
   },
 ];
-
-const ICInstalledAppsData: ReleaseInfo[] = [
+/* @Todo: fix my type */
+const ICInstalledAppsData: any[] = [
   {
     name: 'Feed',
     id: '#bbaryfskgshgirsnxnbv',

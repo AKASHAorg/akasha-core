@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { APP_EVENTS, IAppSettings, ILogger, TYPES } from '@akashaorg/typings/sdk';
+import { APP_EVENTS, TYPES } from '@akashaorg/typings/sdk';
 import DB, { availableCollections } from '../db';
 import { createFormattedValue } from '../helpers/observable';
 import { lastValueFrom } from 'rxjs';
@@ -8,6 +8,7 @@ import Logging from '../logging/index';
 import IcRegistry from '../registry/icRegistry';
 import { ethers } from 'ethers';
 import EventBus from '../common/event-bus';
+import pino from 'pino';
 
 declare const __DEV__: boolean;
 
@@ -20,9 +21,9 @@ export interface ConfigInfo {
   config: string[][];
 }
 @injectable()
-class AppSettings implements IAppSettings {
+class AppSettings {
   private _db: DB;
-  private _log: ILogger;
+  private _log: pino.Logger;
   private _icRegistry: IcRegistry;
   private _globalChannel: EventBus;
 
@@ -78,12 +79,12 @@ class AppSettings implements IAppSettings {
       return collection.data.save({ name: app.name, id: app.id });
     }
     const release = await this._icRegistry.getLatestVersionInfo(app);
-    const currentInfo = await this.get(release.data.name);
+    const currentInfo = await this.get(release.name);
     if (currentInfo?.data?._id) {
       this._log.warn(`${app.name} already installed.`);
       return false;
     }
-    if (!release?.data?.enabled) {
+    if (!release?.enabled) {
       this._log.warn(`${app.name} cannot be installed.`);
       return false;
     }
@@ -91,11 +92,11 @@ class AppSettings implements IAppSettings {
       this._db.getCollection<AppsSchema>(availableCollections.Apps),
     );
     const integrationInfo = {
-      id: release.data.integrationID,
-      name: release.data.name,
-      integrationType: release.data.integrationType,
-      version: release.data.version,
-      sources: release.data.sources,
+      id: release.integrationID,
+      name: release.name,
+      integrationType: release.integrationType,
+      version: release.version,
+      sources: release.sources,
       status: true,
     };
     this._globalChannel.next({
@@ -144,13 +145,13 @@ class AppSettings implements IAppSettings {
     const release = await this._icRegistry.getIntegrationReleaseInfo(
       ethers.utils.id(`${app.name}${app.version}`),
     );
-    const currentInfo = await this.get(release.data.name);
+    const currentInfo = await this.get(release.name);
     if (!currentInfo?.data?._id) {
       this._log.warn(`${app.name} is not installed`);
       return false;
     }
-    currentInfo.data.version = release.data.version;
-    currentInfo.data.sources = release.data.sources;
+    currentInfo.data.version = release.version;
+    currentInfo.data.sources = release.sources;
     this._globalChannel.next({
       data: {
         status: currentInfo.data.status,

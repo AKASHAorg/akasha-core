@@ -35,10 +35,8 @@ const updateUsernameProvider = async (
   if (!profile.providers.length || !profile.providers.find(p => p.provider === payload.provider)) {
     // profile does not have this provider yet!
     try {
-      const addProviderRes = await lastValueFrom(
-        sdk.api.profile.addProfileProvider([providerData]),
-      );
-      if (!addProviderRes.data) {
+      const addProviderRes = await sdk.api.profile.addProfileProvider([providerData]);
+      if (!addProviderRes) {
         logError(
           `use-username.updateUsernameProvider`,
           new Error(`No data received from addProfileProvider call`),
@@ -51,8 +49,8 @@ const updateUsernameProvider = async (
     }
   }
   try {
-    const makeDefaultRes = await lastValueFrom(sdk.api.profile.makeDefaultProvider([providerData]));
-    return makeDefaultRes.data;
+    const makeDefaultRes = await sdk.api.profile.makeDefaultProvider([providerData]);
+    return makeDefaultRes;
   } catch (error) {
     logError('use-username.makeDefaultProvider', error);
     throw error;
@@ -130,14 +128,14 @@ const registerENS = async ({ userName }: { userName: string }) => {
       logError('useProfile.registerENS', new Error('Cannot register username.'));
       throw new Error('Cannot register username.');
     }
-    const addProviderRes = await lastValueFrom(sdk.api.profile.addProfileProvider([providerData]));
-    if (!addProviderRes.data) {
+    const addProviderRes = await sdk.api.profile.addProfileProvider([providerData]);
+    if (!addProviderRes) {
       logError('useProfile.registerENS', new Error('Cannot add username provider.'));
       throw new Error('Cannot add username provider.');
     }
 
-    const makeDefaultRes = await lastValueFrom(sdk.api.profile.makeDefaultProvider([providerData]));
-    return makeDefaultRes.data;
+    const makeDefaultRes = await sdk.api.profile.makeDefaultProvider([providerData]);
+    return makeDefaultRes;
   } catch (error) {
     logError('use-username.registerENS', error);
     throw error;
@@ -204,8 +202,8 @@ export function useEnsRegistration(pubKey?: string) {
 const validateUsername = async (username: string) => {
   const sdk = getSDK();
   try {
-    const res = await lastValueFrom(sdk.api.ens.isAvailable(username));
-    return res.data.isUserNameAvailable;
+    const res = await sdk.api.ens.isAvailable(username);
+    return res.isUserNameAvailable;
   } catch (error) {
     logError('useProfile.validateUsername', error);
     throw error;

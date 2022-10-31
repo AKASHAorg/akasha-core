@@ -7,10 +7,10 @@ import { UseAnalyticsActions } from './use-analytics';
 import { AnalyticsCategories, WalletTransactionError } from '@akashaorg/typings/ui';
 
 import {
-  EthProviders,
-  CurrentUser,
-  PROVIDER_ERROR_CODES,
   AUTH_EVENTS,
+  CurrentUser,
+  EthProviders,
+  PROVIDER_ERROR_CODES,
 } from '@akashaorg/typings/sdk';
 
 import { useGlobalLogin } from '.';
@@ -382,8 +382,7 @@ export function useCheckSignup(ethAddress: string) {
     CHECK_SIGNUP_KEY,
     async () => {
       try {
-        const resp = await lastValueFrom(sdk.api.auth.checkIfSignedUp(ethAddress));
-        return resp.data && resp.data.hasOwnProperty('getProfile');
+        return await sdk.api.auth.checkIfSignedUp(ethAddress);
       } catch (err) {
         return false;
       }

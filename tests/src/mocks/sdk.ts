@@ -1,22 +1,7 @@
-import { IAwfSDK } from '@akashaorg/typings/sdk';
 import { noop, of, ReplaySubject } from 'rxjs';
 
-export interface SdkOverrides {
-  auth?: Partial<IAwfSDK['api']['auth']>;
-  comments?: Partial<IAwfSDK['api']['comments']>;
-  globalChannel?: ReplaySubject<any>;
-  ens?: Partial<IAwfSDK['api']['ens']>;
-  profile?: Partial<IAwfSDK['api']['profile']>;
-  entries?: Partial<IAwfSDK['api']['entries']>;
-  icRegistry?: Partial<IAwfSDK['api']['icRegistry']>;
-  tags?: Partial<IAwfSDK['api']['tags']>;
-  appSettings?: Partial<IAwfSDK['services']['appSettings']>;
-  settings?: Partial<IAwfSDK['services']['settings']>;
-  common?: Partial<IAwfSDK['services']['common']>;
-}
-
 //@Todo: requires explicit annotation because of rxjs
-const mockSDK: any = (overrides?: SdkOverrides) => {
+const mockSDK: any = (overrides?: any) => {
   return {
     api: {
       auth: {

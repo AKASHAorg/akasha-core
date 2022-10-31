@@ -19,12 +19,9 @@ const getSearchProfiles = async (
   pageSize?: number,
 ) => {
   const sdk = getSDK();
-  const searchResp = await lastValueFrom(sdk.api.profile.searchProfiles(searchQuery));
+  const searchResp = await sdk.api.profile.searchProfiles(searchQuery);
 
-  const profilesResp = searchResp.data.searchProfiles?.slice(
-    (page - 1) * pageSize,
-    page * pageSize,
-  );
+  const profilesResp = searchResp.searchProfiles?.slice((page - 1) * pageSize, page * pageSize);
   // get profiles moderation status
   const getProfilesModStatus = profilesResp.map(profile =>
     checkStatus({
@@ -83,15 +80,15 @@ const getSearchPosts = async (
   pageSize = 5,
 ) => {
   const sdk = getSDK();
-  const searchResp = await lastValueFrom(sdk.api.profile.globalSearch(searchQuery));
+  const searchResp = await sdk.api.profile.globalSearch(searchQuery);
 
   // get posts data
-  const getEntriesCalls = searchResp.data?.globalSearch?.posts
+  const getEntriesCalls = searchResp.globalSearch?.posts
     ?.slice((page - 1) * pageSize, page * pageSize)
     ?.map((entry: { id: string }) => sdk.api.entries.getEntry(entry.id));
 
   // get posts moderation status
-  const getEntriesModStatus = searchResp.data?.globalSearch?.posts?.map((entry: { id: string }) =>
+  const getEntriesModStatus = searchResp.globalSearch?.posts?.map((entry: { id: string }) =>
     checkStatus({
       user: loggedUser,
       contentIds: [entry.id],
@@ -145,20 +142,19 @@ const getSearchComments = async (
   pageSize = 5,
 ) => {
   const sdk = getSDK();
-  const searchResp = await lastValueFrom(sdk.api.profile.globalSearch(searchQuery));
+  const searchResp = await sdk.api.profile.globalSearch(searchQuery);
 
   // get comments data
-  const getCommentsCalls = searchResp.data?.globalSearch?.comments
+  const getCommentsCalls = searchResp.globalSearch?.comments
     ?.slice((page - 1) * pageSize, page * pageSize)
     ?.map((comment: { id: string }) => sdk.api.comments.getComment(comment.id));
 
   // get comments moderation status
-  const getCommentsModStatus = searchResp.data?.globalSearch?.comments?.map(
-    (comment: { id: string }) =>
-      checkStatus({
-        user: loggedUser,
-        contentIds: [comment.id],
-      }),
+  const getCommentsModStatus = searchResp.globalSearch?.comments?.map((comment: { id: string }) =>
+    checkStatus({
+      user: loggedUser,
+      contentIds: [comment.id],
+    }),
   );
 
   const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls), { defaultValue: [] });
@@ -205,10 +201,10 @@ export function useSearchComments(
 
 const getSearchTags = async (searchQuery: string) => {
   const sdk = getSDK();
-  const searchResp = await lastValueFrom(sdk.api.tags.searchTags(searchQuery));
+  const searchResp = await sdk.api.tags.searchTags(searchQuery);
 
   // get tags data
-  const completeTags = searchResp.data?.searchTags;
+  const completeTags = searchResp.searchTags;
   return completeTags || [];
 };
 
@@ -233,22 +229,19 @@ export function useSearchTags(searchQuery: string, enabler = true) {
 
 const getSearch = async (searchQuery: string, loggedUser?: string) => {
   const sdk = getSDK();
-  const searchResp = await lastValueFrom(sdk.api.profile.globalSearch(searchQuery));
+  const searchResp = await sdk.api.profile.globalSearch(searchQuery);
 
   // get profiles data
-  const getProfilesCalls = searchResp.data?.globalSearch?.profiles?.map(
-    (profile: { id: string }) => {
-      return sdk.api.profile.getProfile({ pubKey: profile.id });
-    },
-  );
+  const getProfilesCalls = searchResp.globalSearch?.profiles?.map((profile: { id: string }) => {
+    return sdk.api.profile.getProfile({ pubKey: profile.id });
+  });
 
   // get profiles moderation status
-  const getProfilesModStatus = searchResp.data?.globalSearch?.profiles?.map(
-    (profile: { id: string }) =>
-      checkStatus({
-        user: loggedUser,
-        contentIds: [profile.id],
-      }),
+  const getProfilesModStatus = searchResp.globalSearch?.profiles?.map((profile: { id: string }) =>
+    checkStatus({
+      user: loggedUser,
+      contentIds: [profile.id],
+    }),
   );
 
   const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls), { defaultValue: [] });
@@ -265,12 +258,12 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
   });
 
   // get posts data
-  const getEntriesCalls = searchResp.data?.globalSearch?.posts?.map((entry: { id: string }) =>
+  const getEntriesCalls = searchResp.globalSearch?.posts?.map((entry: { id: string }) =>
     sdk.api.entries.getEntry(entry.id),
   );
 
   // get posts moderation status
-  const getEntriesModStatus = searchResp.data?.globalSearch?.posts?.map((entry: { id: string }) =>
+  const getEntriesModStatus = searchResp.globalSearch?.posts?.map((entry: { id: string }) =>
     checkStatus({
       user: loggedUser,
       contentIds: [entry.id],
@@ -286,17 +279,16 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
   });
 
   // get comments data
-  const getCommentsCalls = searchResp.data?.globalSearch?.comments?.map((comment: { id: string }) =>
+  const getCommentsCalls = searchResp.globalSearch?.comments?.map((comment: { id: string }) =>
     sdk.api.comments.getComment(comment.id),
   );
 
   // get comments moderation status
-  const getCommentsModStatus = searchResp.data?.globalSearch?.comments?.map(
-    (comment: { id: string }) =>
-      checkStatus({
-        user: loggedUser,
-        contentIds: [comment.id],
-      }),
+  const getCommentsModStatus = searchResp.globalSearch?.comments?.map((comment: { id: string }) =>
+    checkStatus({
+      user: loggedUser,
+      contentIds: [comment.id],
+    }),
   );
 
   const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls), { defaultValue: [] });
@@ -310,7 +302,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
   });
 
   // get tags data
-  const completeTags = searchResp.data?.globalSearch?.tags;
+  const completeTags = searchResp.globalSearch?.tags;
   return {
     profiles: completeProfiles || [],
     entries: completeEntries || [],

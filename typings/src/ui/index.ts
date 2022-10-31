@@ -57,11 +57,11 @@ export interface WalletTransactionError extends Error {
 }
 
 /* @TODO: this doesn't belong here */
-export interface IntegrationCenterApp extends IntegrationInfo {
+export interface IntegrationCenterApp {
   avatar?: string;
   coverImage?: string;
   description?: string;
-  releases?: ReleaseInfo[];
+  releases?: unknown[];
   authors?: string[];
   tags?: string[];
   license?: string;

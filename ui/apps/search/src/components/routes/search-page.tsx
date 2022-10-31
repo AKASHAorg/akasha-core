@@ -30,7 +30,7 @@ import {
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
 
-import { SearchTagsResult_Response } from '@akashaorg/typings/sdk';
+import { SearchTagsResult } from '@akashaorg/typings/sdk/graphql-types';
 
 import EntryCardRenderer from './entry-renderer';
 
@@ -61,7 +61,7 @@ interface SearchPageProps extends RootComponentProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 }
 
-type DataResponse = SearchTagsResult_Response | IEntryData;
+type DataResponse = SearchTagsResult | IEntryData;
 
 const initSearchState = {
   [ButtonValues.TOPICS]: { page: 1, results: [], done: false, isLoading: false },
@@ -180,12 +180,15 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchTagsState = getSearchStateForTab(ButtonValues.TOPICS);
 
   React.useEffect(() => {
-    if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data);
+    /* @Todo: fix my type ;/ */
+    if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data as any);
   }, [searchPostsReq.data, searchPostsReq.isFetched]);
 
   React.useEffect(() => {
-    if (searchCommentsReq.isFetched)
-      updateSearchState(ButtonValues.REPLIES, searchCommentsReq.data);
+    if (searchCommentsReq.isFetched) {
+      /* @Todo: fix my type ;/ */
+      updateSearchState(ButtonValues.REPLIES, searchCommentsReq.data as any);
+    }
   }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
 
   React.useEffect(() => {

@@ -1,4 +1,4 @@
-import { ILogger } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
 import { ILoaderConfig } from '@akashaorg/typings/ui';
 import { from, mergeMap, Observable, tap, withLatestFrom } from 'rxjs';
 import { getStateSlice, LoaderState } from './state';
@@ -8,7 +8,7 @@ import { decodeName, encodeName } from './utils';
 export const loadPlugins = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  logger: ILogger,
+  logger: Logger,
 ) => {
   return state$
     .pipe(getStateSlice('modules'), withLatestFrom(state$.pipe(getStateSlice('plugins'))))

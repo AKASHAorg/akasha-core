@@ -7,8 +7,7 @@ export const APP_DESCRIPTION_KEY = 'App_Description';
 
 const getAppDescription = async (ipfsHash: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.services.common.ipfs.catDocument<string>(ipfsHash));
-  return res.data;
+  return sdk.services.common.ipfs.catDocument<string>(ipfsHash);
 };
 
 /**

@@ -1,20 +1,14 @@
 import { inject, injectable } from 'inversify';
-import {
-  ServiceCallResult,
-  TYPES,
-  ILogger,
-  LEGAL_DOCS,
-  AWF_IIpfsConnector,
-} from '@akashaorg/typings/sdk';
+import { TYPES, LEGAL_DOCS } from '@akashaorg/typings/sdk';
 import Logging from '../logging/index';
-import { createObservableStream } from '../helpers/observable';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
 import { multiaddrToUri } from '@multiformats/multiaddr-to-uri';
+import pino from 'pino';
 
 @injectable()
-class AWF_IpfsConnector implements AWF_IIpfsConnector {
-  private _log: ILogger;
+class AWF_IpfsConnector {
+  private _log: pino.Logger;
   readonly gateway = 'https://cloudflare-ipfs.com/ipfs/';
   readonly originGateway = 'ipfs.cf-ipfs.com';
   readonly fallbackGateway = 'ipfs.w3s.link';
@@ -36,29 +30,27 @@ class AWF_IpfsConnector implements AWF_IIpfsConnector {
     };
   }
 
-  catDocument<T>(docHash: string | CID, jsonResponse = false): ServiceCallResult<T> {
+  async catDocument<T>(docHash: string | CID, jsonResponse = false): Promise<T> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 60000);
-    return createObservableStream(
-      fetch(this.buildFallBackLink(docHash), { signal: controller.signal }).then(res => {
-        clearTimeout(timeout);
-        if (res.ok) {
-          if (!jsonResponse) {
-            return res.text();
-          }
-          return res.json();
+    return fetch(this.buildFallBackLink(docHash), { signal: controller.signal }).then(res => {
+      clearTimeout(timeout);
+      if (res.ok) {
+        if (!jsonResponse) {
+          return res.text();
         }
-        this._log.warn(res.statusText);
-        throw Error('An error occurred!');
-      }),
-    );
+        return res.json();
+      }
+      this._log.warn(res.statusText);
+      throw Error('An error occurred!');
+    });
   }
 
   /**
    *
    * @param doc - legal docs
    */
-  getLegalDoc(doc: LEGAL_DOCS) {
+  async getLegalDoc(doc: LEGAL_DOCS) {
     const selectedDoc = this.LEGAL_DOCS_SOURCE[doc];
     return this.catDocument<never>(selectedDoc);
   }
