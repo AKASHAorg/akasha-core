@@ -16,11 +16,14 @@ import {
   useCreateComment,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
+import { IReplyErrorState, ReplyError } from './reply-error';
 
 const { CommentEditor, EntryCardLoading } = DS;
 
 export const InlineEditor = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-akasha-integration');
+
+  const [replyState, setReplyState] = React.useState<IReplyErrorState>();
 
   const loginQuery = useGetLogin();
   const [mentionQuery, setMentionQuery] = React.useState(null);
@@ -201,7 +204,8 @@ export const InlineEditor = (props: RootExtensionProps) => {
         editingPost.status === 'loading') && <EntryCardLoading />}
 
       {(!editingPost.isLoading || !embeddedPost.isLoading) &&
-        profileDataReq.status === 'success' && (
+        profileDataReq.status === 'success' &&
+        (!replyState || replyState.state === 'retry') && (
           <CommentEditor
             avatar={profileDataReq.data?.avatar}
             ethAddress={loginQuery.data?.ethAddress}
@@ -220,12 +224,35 @@ export const InlineEditor = (props: RootExtensionProps) => {
             mentions={mentionSearch.data}
             uploadRequest={uploadMediaToTextile}
             embedEntryData={embedEntryData}
-            editorState={action === 'edit' ? entryData?.slateContent : null}
+            editorState={
+              replyState && replyState.state === 'retry'
+                ? replyState.content
+                : action === 'edit'
+                ? entryData?.slateContent
+                : null
+            }
             onPlaceholderClick={action === 'reply' ? handleReplyPlaceholderClick : null}
             isShown={!!props.extensionData.isShown}
             background="cardBackground"
           />
         )}
+
+      {props.extensionData.action === 'reply' && (
+        <ReplyError
+          postId={props.extensionData.entryId}
+          pubKey={loginQuery.data?.pubKey}
+          onChange={({ state, content }) => {
+            switch (state) {
+              case 'error':
+                setReplyState({ state });
+                break;
+              case 'retry':
+                setReplyState({ state, content });
+                break;
+            }
+          }}
+        />
+      )}
     </>
   );
 };
