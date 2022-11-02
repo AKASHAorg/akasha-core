@@ -80,6 +80,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     bottomBorderOnly,
     accentBorderTop,
     hideRepost,
+    error,
+    onRetry,
   } = props;
 
   return (
@@ -150,6 +152,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         headerMenuExt={props.headerMenuExt}
         actionsRightExt={props.actionsRightExt}
         hideRepost={hideRepost}
+        error={error}
+        onRetry={onRetry}
       />
     </BasicCardBox>
   );

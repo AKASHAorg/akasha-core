@@ -28,6 +28,7 @@ import { ImageObject } from '../ImageGallery/image-grid-item';
 import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
 import { editorDefaultValue } from '../Editor/initialValue';
 import isEqual from 'lodash.isequal';
+import { EntryCardError } from './entry-card-error';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -101,6 +102,8 @@ export interface IEntryBoxProps {
   modalSlotId: string;
   actionsRightExt?: React.ReactNode;
   hideRepost?: boolean;
+  error?: string;
+  onRetry?: () => void;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -160,6 +163,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     actionsRightExt,
     onRepliesClick,
     hideRepost,
+    error,
+    onRetry,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -315,7 +320,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <ViewportSizeProvider>
-      <Box style={style}>
+      <Box background={error ? '#FFFDF1' : null} style={style}>
         <Box
           direction="row"
           justify="between"
@@ -591,6 +596,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             hideRepost={hideRepost}
           />
         )}
+        {error && <EntryCardError error={error} onRetry={onRetry} />}
       </Box>
     </ViewportSizeProvider>
   );

@@ -33,7 +33,8 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
   const editPost = useEditPost();
   const publishPost = useCreatePost();
   const publishComment = useCreateComment();
-  const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutation: createPostMutation } =
+    useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   /*@Todo: fix my type */
   const entryData: any = React.useMemo(() => {
