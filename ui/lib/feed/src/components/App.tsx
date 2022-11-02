@@ -43,7 +43,7 @@ export type FeedWidgetProps = {
   modalSlotId: string;
   accentBorderTop?: boolean;
   replyFragmentItem?: boolean;
-  firstLevelReply?: boolean;
+  showReplyFragment?: boolean;
   viewAllEntry?: {
     label: string;
     onClick: () => void;

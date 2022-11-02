@@ -77,7 +77,7 @@ export interface IEntryRenderer {
 const REPLY_FRAGMENT_SIZE = 2;
 
 const EntryRenderer = (
-  props: IEntryRenderer & { replyFragmentItem: boolean; firstLevelReply: boolean },
+  props: IEntryRenderer & { replyFragmentItem: boolean; showReplyFragment: boolean },
 ) => {
   const {
     loginState,
@@ -307,7 +307,7 @@ const EntryRenderer = (
       postID: commentData?.postId,
       commentID: commentData?.entryId,
     },
-    canShowEntry && props.firstLevelReply,
+    canShowEntry && props.showReplyFragment,
   );
 
   /** @Todo: fix my type ;/ **/
@@ -460,7 +460,7 @@ const EntryRenderer = (
                 }
               />
 
-              {props.firstLevelReply && (
+              {props.showReplyFragment && (
                 <Box margin={{ bottom: replyPages.length ? 'xsmall' : null }}>
                   <FeedWidget
                     modalSlotId={props.modalSlotId}
