@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
-import { of as mockOf } from 'rxjs';
 import { useSearchComments, useSearchPosts, useSearchProfiles, useSearchTags } from '../use-search';
 import * as moderation from '../use-moderation';
 import { mockCheckModerationStatus } from '../__mocks__/moderation';
@@ -13,17 +12,17 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       profile: {
-        searchProfiles: () => mockOf({ data: mockSearchProfiles }),
-        globalSearch: () => mockOf({ data: mockGlobalSearch }),
+        searchProfiles: () => Promise.resolve(mockSearchProfiles),
+        globalSearch: () => Promise.resolve(mockGlobalSearch),
       },
       entries: {
-        getEntry: () => mockOf({ data: mockEntry }),
+        getEntry: () => Promise.resolve(mockEntry),
       },
       comments: {
-        getComment: () => mockOf(mockGetComment),
+        getComment: () => Promise.resolve(mockGetComment),
       },
       tags: {
-        searchTags: () => mockOf({ data: mockSearchTags }),
+        searchTags: () => Promise.resolve(mockSearchTags),
       },
       common: {
         ipfs: {
