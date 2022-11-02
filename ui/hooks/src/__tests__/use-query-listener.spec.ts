@@ -34,7 +34,7 @@ describe('useQueryListener', () => {
       },
     );
     await act(async () => {
-      expect(mutationListenerResult.current.clear).toBeFalsy();
+      expect(mutationListenerResult?.current?.mutation?.clear).toBeFalsy();
       await mutationResult.current.mutateAsync();
       expect(mutationListenerResult?.current?.mutation?.mutationId).toBe(1);
       expect(mutationListenerResult?.current?.mutation?.state.failureCount).toBe(0);
