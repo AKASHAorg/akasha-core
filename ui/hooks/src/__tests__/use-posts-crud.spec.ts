@@ -1,6 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
-import { of as mockOf } from 'rxjs';
 import * as moderation from '../use-moderation';
 import { mockCheckModerationStatus } from '../__mocks__/moderation';
 import { ENTRY_KEY, useCreatePost, useDeletePost, useEditPost } from '../use-posts';
@@ -21,13 +20,13 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       auth: {
-        getCurrentUser: () => mockOf({ data: mockUser }),
+        getCurrentUser: () => Promise.resolve(mockUser),
       },
       entries: {
-        getEntry: () => mockOf({ data: mockEntry }),
-        postEntry: () => mockOf({ data: mockPostEntry }),
-        editEntry: () => mockOf(mockEditEntry),
-        removeEntry: () => mockOf(mockDeleteEntry),
+        getEntry: () => Promise.resolve(mockEntry),
+        postEntry: () => Promise.resolve(mockPostEntry),
+        editEntry: () => Promise.resolve(mockEditEntry),
+        removeEntry: () => Promise.resolve(mockDeleteEntry),
       },
       common: {
         ipfs: {
@@ -69,7 +68,7 @@ describe('usePosts CRUD', () => {
     await act(async () => {
       const pendingComment = await editResult.current.mutateAsync({
         ...mockEditPost,
-        entryID: mockPostEntry.data.createPost,
+        entryID: mockPostEntry.createPost,
       });
       expect(pendingComment).toBeTruthy();
     });
@@ -83,7 +82,7 @@ describe('usePosts CRUD', () => {
     await act(async () => {
       const deletePost = await deleteResult.current.mutateAsync(post._id);
       const cachedPost = queryClient.getQueryData([ENTRY_KEY, post._id]);
-      expect(deletePost.data.removePost).toBeTruthy();
+      expect(deletePost.removePost).toBeTruthy();
       expect(cachedPost.isRemoved).toBeTruthy();
       expect(cachedPost.content[0].property).toBe('removed');
     });

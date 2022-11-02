@@ -1251,21 +1251,15 @@ export const mockCreatePost = {
 };
 
 export const mockPostEntry = {
-  data: {
-    createPost: '01g29vv48phnb1d6kew6nkrjj2',
-  },
+  createPost: '01g29vv48phnb1d6kew6nkrjj2',
 };
 
 export const mockEditEntry = {
-  data: {
-    editPost: true,
-  },
+  editPost: true,
 };
 
 export const mockDeleteEntry = {
-  data: {
-    removePost: true,
-  },
+  removePost: true,
 };
 
 export const mockEditPost = {

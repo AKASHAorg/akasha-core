@@ -13,7 +13,7 @@ import {
 } from '../helpers';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
-import type { ResolversParentTypes } from '@akashaorg/typings/sdk/graphql-resolver-types';
+import type { ResolversParentTypes } from '../graphql-resolver-types';
 
 export const MANIFEST_FILE = 'manifest.json';
 const query = {
