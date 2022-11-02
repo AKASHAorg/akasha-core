@@ -13,10 +13,10 @@ import { LoginState, useInfiniteComments, useGetProfile } from '@akashaorg/ui-aw
 
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { Entry } from './entry';
+import { ReplyEntry } from './reply-entry';
 import { PendingReply } from './pending-reply';
 import { UseQueryResult } from 'react-query';
-import { ILogger } from '@akashaorg/typings/sdk/log';
+import { Logger } from '@akashaorg/awf-sdk';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 const { BasicCardBox, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
@@ -27,7 +27,7 @@ type BaseEntryProps = {
   entryType: EntityTypes;
   entryReq: UseQueryResult;
   entryData?: IEntryData;
-  logger: ILogger;
+  logger: Logger;
   loginState?: LoginState;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
@@ -63,7 +63,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   const reqCommentsOrReplies = commentId ? reqReplies : reqComments;
   const [analyticsActions] = useAnalytics();
 
-  const commentPages = React.useMemo(() => {
+  /* @Todo: Fix my type */
+  const commentPages: any = React.useMemo(() => {
     if (reqCommentsOrReplies.data) {
       return reqCommentsOrReplies.data.pages;
     }
@@ -132,7 +133,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          <Entry
+          <ReplyEntry
             postId={postId}
             commentId={commentId}
             entryType={entryType}
@@ -178,6 +179,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             itemSpacing={8}
             i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
             trackEvent={analyticsActions.trackEvent}
+            showReplyFragment={true}
           />
         </>
       )}

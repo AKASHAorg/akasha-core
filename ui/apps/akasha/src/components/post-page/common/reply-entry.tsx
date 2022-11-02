@@ -20,8 +20,9 @@ import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import routes, { POST } from '../../../routes';
 import { UseQueryResult } from 'react-query';
+import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 
-const { Extension, Box, EditorPlaceholder, EntryBox } = DS;
+const { Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
   postId: string;
@@ -38,7 +39,7 @@ type Props = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-export function Entry({
+export function ReplyEntry({
   postId,
   commentId,
   entryType,
@@ -88,9 +89,10 @@ export function Entry({
 
   if (!showEntry) return null;
 
-  if (entryType === EntityTypes.ENTRY && loginState?.ethAddress) {
+  if (loginState?.ethAddress) {
     switch (action) {
       case 'repost':
+        if (entryType !== EntityTypes.ENTRY) return;
         return (
           <Extension
             name={`inline-editor_repost_${entryData?.entryId}`}
@@ -103,7 +105,7 @@ export function Entry({
           <Extension
             name={`inline-editor_postedit_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId: postId, action: 'edit' }}
+            data={{ entryId: postId, commentId, action: 'edit' }}
           />
         );
     }
@@ -247,13 +249,12 @@ export function Entry({
           disableReporting={loginState.waitForAuth || loginState.isSigningIn}
           modalSlotId={layoutConfig.modalSlotId}
           headerMenuExt={
-            showEditButton &&
-            entryType === EntityTypes.ENTRY && (
+            showEditButton && (
               <Extension
                 name={`entry-card-edit-button_${entryData?.entryId}`}
                 style={{ width: '100%' }}
                 uiEvents={uiEvents}
-                data={{ entryId: postId, entryType }}
+                data={{ entryId: postId, commentId, entryType }}
               />
             )
           }
@@ -282,7 +283,6 @@ export function Entry({
             data={{
               entryId: postId,
               commentId,
-              entryType,
               action: 'reply',
             }}
           />

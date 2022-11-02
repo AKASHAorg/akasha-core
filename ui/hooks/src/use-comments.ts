@@ -39,6 +39,8 @@ export interface Publish_Options {
 const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
   const sdk = getSDK();
 
+  if (!postID) return null;
+
   const res = await sdk.api.comments.getComments({
     limit,
     offset,
@@ -57,6 +59,8 @@ const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
 
 const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies) => {
   const sdk = getSDK();
+
+  if (!postID || !commentID) return null;
 
   const res = await sdk.api.comments.getReplies({
     limit,
@@ -87,7 +91,7 @@ const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies)
   }, [commentsQuery.data]);
  * ```
  */
-export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabler = true) {
+export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabler) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
     async ({ pageParam = offset }) => getComments({ limit, postID, offset: pageParam }),
@@ -116,16 +120,13 @@ export function useInfiniteComments({ limit, postID, offset }: InfiniteComments,
   }, [repliesQuery.data]);
  * ```
  */
-export function useInfiniteReplies(
-  { limit, postID, commentID, offset }: InfiniteReplies,
-  enabler = true,
-) {
+export function useInfiniteReplies({ limit, postID, commentID, offset }: InfiniteReplies, enabler) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID, commentID],
     async ({ pageParam = offset }) => getReplies({ limit, postID, commentID, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: enabler && !!(offset || limit),
       keepPreviousData: true,

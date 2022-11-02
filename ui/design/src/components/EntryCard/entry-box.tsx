@@ -101,6 +101,7 @@ export interface IEntryBoxProps {
   headerMenuExt?: React.ReactElement;
   modalSlotId: string;
   actionsRightExt?: React.ReactNode;
+  hideRepost?: boolean;
   error?: string;
   onRetry?: () => void;
 }
@@ -161,6 +162,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     modalSlotId,
     actionsRightExt,
     onRepliesClick,
+    hideRepost,
     error,
     onRetry,
   } = props;
@@ -591,6 +593,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             isModerated={isModerated}
             modalSlotId={modalSlotId}
             actionsRightExt={actionsRightExt}
+            hideRepost={hideRepost}
           />
         )}
         {error && <EntryCardError error={error} onRetry={onRetry} />}
