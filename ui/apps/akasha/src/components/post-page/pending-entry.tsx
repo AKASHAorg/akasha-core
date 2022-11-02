@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 
-import { IEntryData, IProfileData, IPublishData, RootComponentProps } from '@akashaorg/typings/ui';
+import { IEntryData, IPublishData, RootComponentProps } from '@akashaorg/typings/ui';
 import {
   createPendingEntry,
   useFollow,
@@ -25,9 +25,9 @@ type Props = {
 
 export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryData }: Props) {
   const { t } = useTranslation('app-akasha-integration');
-  const publishComment = useMutationListener<IPublishData & { postID: string }>(
-    PUBLISH_PENDING_KEY,
-  );
+  const { mutation: publishCommentMutation } = useMutationListener<
+    IPublishData & { postID: string }
+  >(PUBLISH_PENDING_KEY);
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
   const isFollowingMultipleReq = useIsFollowingMultiple(loggedProfileData?.pubKey, [
@@ -50,9 +50,9 @@ export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryDat
 
   return (
     <>
-      {publishComment &&
-        publishComment.state.status === 'loading' &&
-        publishComment.state.variables.postID === postId && (
+      {publishCommentMutation &&
+        publishCommentMutation.state.status === 'loading' &&
+        publishCommentMutation.state.variables.postID === postId && (
           <Box
             pad={{ horizontal: 'medium' }}
             border={{ side: 'bottom', size: '1px', color: 'border' }}
@@ -62,7 +62,7 @@ export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryDat
             <EntryBox
               /* @Todo: Fix my type */
               entryData={
-                createPendingEntry(loggedProfileData, publishComment.state.variables) as any
+                createPendingEntry(loggedProfileData, publishCommentMutation.state.variables) as any
               }
               sharePostLabel={t('Share Post')}
               shareTextLabel={t('Share this post with your friends')}

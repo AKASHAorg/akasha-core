@@ -15,6 +15,7 @@ export type IconType =
   | 'appSocial'
   | 'activity'
   | 'akasha'
+  | 'alert'
   | 'addAppGrey'
   | 'addCard'
   | 'alignCenter'
@@ -167,6 +168,7 @@ export const iconTypes: IconType[] = [
   'activity',
   'addAppGrey',
   'akasha',
+  'alert',
   'addCard',
   'alignCenter',
   'alignJustify',
