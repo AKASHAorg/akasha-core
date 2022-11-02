@@ -100,7 +100,7 @@ const getSearchPosts = async (
   const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus), { defaultValue: [] });
 
   const completeEntries = entriesResp?.map((entryResp, idx) => {
-    return mapEntry({ ...entryResp.data?.getPost, ...entriesModResp[idx][0] });
+    return mapEntry({ ...entryResp?.getPost, ...entriesModResp[idx][0] });
   });
 
   return completeEntries || [];
@@ -164,7 +164,7 @@ const getSearchComments = async (
   });
 
   const completeComments = commentsResp?.map((commentResp, idx) => {
-    return mapEntry({ ...commentResp.data?.getComment, ...commentsModResp[idx][0] });
+    return mapEntry({ ...commentResp.getComment, ...commentsModResp[idx][0] });
   });
 
   return completeComments || [];
@@ -275,7 +275,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
   const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus), { defaultValue: [] });
 
   const completeEntries = entriesResp?.map((entryResp, idx) => {
-    return mapEntry({ ...entryResp.data?.getPost, ...entriesModResp[idx][0] });
+    return mapEntry({ ...entryResp.getPost, ...entriesModResp[idx][0] });
   });
 
   // get comments data
@@ -298,7 +298,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
   });
 
   const completeComments = commentsResp?.map((commentResp, idx) => {
-    return mapEntry({ ...commentResp.data?.getComment, ...commentsModResp[idx][0] });
+    return mapEntry({ ...commentResp.getComment, ...commentsModResp[idx][0] });
   });
 
   // get tags data

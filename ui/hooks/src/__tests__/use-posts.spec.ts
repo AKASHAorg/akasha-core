@@ -1,23 +1,22 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
-import { of as mockOf } from 'rxjs';
 import * as moderation from '../use-moderation';
 import { mockCheckModerationStatus } from '../__mocks__/moderation';
 import { createWrapper } from './utils';
 import { useInfinitePosts, useInfinitePostsByAuthor, usePost, usePosts } from '../use-posts';
 import { mockUser } from '../__mocks__/user';
-import { mockEntriesByAuthor, mockEntry, mockEntryData, mockGetEntries } from '../__mocks__/posts';
+import { mockEntriesByAuthor, mockEntry, mockGetEntries } from '../__mocks__/posts';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       auth: {
-        getCurrentUser: () => mockOf({ data: mockUser }),
+        getCurrentUser: () => Promise.resolve(mockUser),
       },
       entries: {
-        entriesByAuthor: () => mockOf({ data: mockEntriesByAuthor }),
-        getEntry: () => mockOf({ data: mockEntry }),
-        getEntries: () => mockOf({ data: mockGetEntries }),
+        entriesByAuthor: () => Promise.resolve(mockEntriesByAuthor),
+        getEntry: () => Promise.resolve(mockEntry),
+        getEntries: () => Promise.resolve(mockGetEntries),
       },
     });
 });
