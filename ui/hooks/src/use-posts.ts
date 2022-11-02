@@ -96,7 +96,7 @@ export function useInfinitePosts(limit: number, offset?: string) {
     async ({ pageParam = offset }) => getPosts(queryClient, limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       keepPreviousData: true,
@@ -147,7 +147,7 @@ export function useInfiniteCustomPosts(enabler: boolean, limit: number, offset?:
     async ({ pageParam = offset }) => getCustomFeedPosts(limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit) && enabler,
       keepPreviousData: true,
@@ -198,7 +198,7 @@ export function useInfinitePostsByTag(tagName: string, limit: number, offset?: s
     async ({ pageParam = offset }) => getPostsByTag(tagName, limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: !!(offset || limit),
       onError: (err: Error) => logError('usePosts.getPostsByTag', err),
@@ -254,7 +254,7 @@ export function useInfinitePostsByAuthor(
     async ({ pageParam = offset }) => getPostsByAuthor(pubKey, limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: enabled,
       keepPreviousData: true,
       onError: (err: Error) => logError('usePosts.getPostsByAuthor', err),
