@@ -246,6 +246,7 @@ export function MainEntry({
           removedByMeLabel={t('You deleted this post')}
           removedByAuthorLabel={t('This post was deleted by its author')}
           disableReposting={entryData?.isRemoved || entryType === EntityTypes.COMMENT}
+          hideRepost={entryType === EntityTypes.COMMENT}
           disableReporting={loginState.waitForAuth || loginState.isSigningIn}
           modalSlotId={layoutConfig.modalSlotId}
           headerMenuExt={
