@@ -126,7 +126,7 @@ export function useInfiniteReplies({ limit, postID, commentID, offset }: Infinit
     async ({ pageParam = offset }) => getReplies({ limit, postID, commentID, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: enabler && !!(offset || limit),
       keepPreviousData: true,
