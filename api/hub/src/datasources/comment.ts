@@ -241,7 +241,8 @@ class CommentAPI extends DataSource {
       .then(() => logger.info(`index edited comment: ${id}`))
       // tslint:disable-next-line:no-console
       .catch(e => logger.error(e));
-    logger.warn(currentComment);
+    logger.warn('========================');
+    logger.warn(JSON.stringify(currentComment));
     await db.save(this.dbID, this.collection, [currentComment]);
     await queryCache.del(this.getCommentCacheKey(id));
     await queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
