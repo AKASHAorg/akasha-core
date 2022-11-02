@@ -179,7 +179,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             itemSpacing={8}
             i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
             trackEvent={analyticsActions.trackEvent}
-            firstLevelReply={!commentId}
+            showReplyFragment={true}
           />
         </>
       )}
