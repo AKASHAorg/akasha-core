@@ -10,21 +10,24 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
+import { IReplyErrorState, ReplyError } from '../reply-error';
 const { EntryCardLoading } = DS;
 
 type Props = {
   postId: string;
   commentId: string;
+  pubKey: string;
   singleSpa: RootExtensionProps['singleSpa'];
   action: 'reply' | 'edit';
 };
 
-export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
+export function ReplyEditor({ postId, commentId, pubKey, singleSpa, action }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const comment = useComment(commentId, true);
   const editComment = useEditComment(commentId, true);
   const publishComment = useCreateComment();
+  const [replyState, setReplyState] = React.useState<IReplyErrorState>();
 
   /*@Todo: fix my type */
   const entryData: any = React.useMemo(() => {
@@ -90,16 +93,42 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
   if (comment.status === 'loading') return <EntryCardLoading />;
 
   return (
-    <Base
-      postLabel={action === 'edit' ? t('Save Changes') : t('Reply')}
-      placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
-      onPublish={handlePublish}
-      onPlaceholderClick={handlePlaceholderClick}
-      singleSpa={singleSpa}
-      editorState={action === 'edit' ? entryData?.slateContent : null}
-      entryData={entryData}
-      isShown={true}
-      showCancelButton={action === 'edit'}
-    />
+    <>
+      {(!replyState || replyState.state === 'retry') && (
+        <Base
+          postLabel={action === 'edit' ? t('Save Changes') : t('Reply')}
+          placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
+          onPublish={handlePublish}
+          onPlaceholderClick={handlePlaceholderClick}
+          singleSpa={singleSpa}
+          editorState={
+            replyState && replyState.state === 'retry'
+              ? replyState.content
+              : action === 'edit'
+              ? entryData?.slateContent
+              : null
+          }
+          entryData={entryData}
+          isShown={true}
+          showCancelButton={action === 'edit'}
+        />
+      )}
+      {action === 'reply' && (
+        <ReplyError
+          postId={postId}
+          pubKey={pubKey}
+          onChange={({ state, content }) => {
+            switch (state) {
+              case 'error':
+                setReplyState({ state });
+                break;
+              case 'retry':
+                setReplyState({ state, content });
+                break;
+            }
+          }}
+        />
+      )}
+    </>
   );
 }

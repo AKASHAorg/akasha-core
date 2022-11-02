@@ -121,7 +121,7 @@ class CommentAPI extends DataSource {
       endIndex = undefined;
     }
     const results = comments.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? comments[endIndex]._id : null;
+    const nextIndex = endIndex ? comments[endIndex]._id : '';
     return { results: results, nextIndex: nextIndex, total: comments.length };
   }
 

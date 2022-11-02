@@ -78,6 +78,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     noBorderRadius,
     bottomBorderOnly,
     accentBorderTop,
+    error,
+    onRetry,
   } = props;
 
   return (
@@ -147,6 +149,8 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         modalSlotId={modalSlotId}
         headerMenuExt={props.headerMenuExt}
         actionsRightExt={props.actionsRightExt}
+        error={error}
+        onRetry={onRetry}
       />
     </BasicCardBox>
   );

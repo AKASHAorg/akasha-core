@@ -118,7 +118,7 @@ class PostAPI extends DataSource {
       endIndex = undefined;
     }
     const results = posts.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? posts[endIndex] : null;
+    const nextIndex = endIndex ? posts[endIndex] : '';
     for (const postID of results) {
       const post = await this.getPost(postID, pubKey);
       fetchedPosts.push(post);

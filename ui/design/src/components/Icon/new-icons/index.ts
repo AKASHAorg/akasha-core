@@ -1,6 +1,7 @@
 // maintain alphabetical order for icon names
 import activity from './activity';
 import akasha from './akasha';
+import alert from './alert';
 import addAppGrey from './add-app-grey';
 import addCard from './add-card';
 import appAkasha from './app-akasha';
@@ -200,6 +201,7 @@ export {
   ethereum,
   ethereumWorldLogo,
   akasha,
+  alert,
   addAppGrey,
   app,
   arrowDown,

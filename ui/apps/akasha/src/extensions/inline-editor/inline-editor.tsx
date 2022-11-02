@@ -15,6 +15,7 @@ export const InlineEditor = (props: Partial<RootExtensionProps>) => {
       <ReplyEditor
         postId={entryId}
         commentId={commentId}
+        pubKey={loginQuery?.data?.pubKey}
         singleSpa={props.singleSpa}
         action={action}
       />

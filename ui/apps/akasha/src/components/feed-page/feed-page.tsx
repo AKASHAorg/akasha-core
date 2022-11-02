@@ -48,7 +48,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [analyticsActions] = useAnalytics();
 
-  const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutation: createPostMutation } =
+    useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
