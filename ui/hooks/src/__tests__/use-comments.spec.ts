@@ -1,6 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
-import { of as mockOf } from 'rxjs';
 import { mockGetComment, mockGetComments } from '../__mocks__/comments';
 import { useComment, useInfiniteComments } from '../use-comments';
 import * as moderation from '../use-moderation';
@@ -11,8 +10,8 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       comments: {
-        getComments: () => mockOf(mockGetComments),
-        getComment: () => mockOf(mockGetComment),
+        getComments: () => Promise.resolve(mockGetComments),
+        getComment: () => Promise.resolve(mockGetComment),
       },
     });
 });

@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
-import { of as mockOf } from 'rxjs';
 import { useLegalDoc } from '../use-legal';
 import { LEGAL_DOCS } from '@akashaorg/typings/ui';
 
@@ -10,7 +9,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
     mockSDK({
       common: {
         ipfs: {
-          getLegalDoc: () => mockOf({ data: 'This is illegal text doc' }),
+          getLegalDoc: () => Promise.resolve('This is illegal text doc'),
         },
       },
     });
