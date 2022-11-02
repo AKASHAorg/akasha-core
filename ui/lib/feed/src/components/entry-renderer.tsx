@@ -44,6 +44,7 @@ const {
 
 export interface IEntryRenderer {
   itemId?: string;
+  itemSpacing?: number;
   sharePostUrl: string;
   loginState: LoginState;
   locale: ILocale;
@@ -94,6 +95,7 @@ const EntryRenderer = (
     modalSlotId,
     accentBorderTop,
     trackEvent,
+    itemSpacing,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -385,7 +387,7 @@ const EntryRenderer = (
             </Box>
           )}
           {canShowEntry && (
-            <Box {...entryCardStyle()}>
+            <Box margin={{ bottom: itemSpacing ? `${itemSpacing}px` : null }} {...entryCardStyle()}>
               <EntryCard
                 className={props.className}
                 isRemoved={itemData.isRemoved}
