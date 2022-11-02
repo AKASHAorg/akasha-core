@@ -11,13 +11,7 @@ const EntryCardError: React.FC<IEntryCardError> = props => {
   const { error, onRetry } = props;
   return (
     <Box background="warning" direction="row" pad="medium" justify="between">
-      <TextIcon
-        iconType="alert"
-        label={error}
-        onClick={() => ({})}
-        iconSize="sm"
-        fontSize="medium"
-      />
+      <TextIcon iconType="alert" label={error} iconSize="sm" fontSize="medium" />
       <Anchor
         onClick={event => {
           event.preventDefault();
