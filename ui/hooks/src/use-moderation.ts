@@ -275,7 +275,7 @@ export function useInfiniteLog(limit: number, offset?: string) {
       }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('[use-moderation.tsx]: useInfiniteLog err', err),
@@ -310,7 +310,7 @@ export function useInfinitePending(limit: number, offset?: string) {
     async ({ pageParam = offset }) => getPendingItems({ limit, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('[use-moderation.ts]: useInfinitePending err', err),
@@ -350,7 +350,7 @@ export function useInfiniteKept(limit: number, offset?: string) {
       }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('[use-moderation.ts]: useInfiniteKept err', err),
@@ -390,7 +390,7 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
       }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('[use-moderation.ts]: useInfiniteDelisted err', err),
