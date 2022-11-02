@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
-import { of as mockOf } from 'rxjs';
 import { useAppDescription } from '../index';
 
 jest.mock('@akashaorg/awf-sdk', () => {
@@ -9,7 +8,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
     mockSDK({
       common: {
         ipfs: {
-          catDocument: () => mockOf({ data: 'This is app description.' }),
+          catDocument: () => Promise.resolve('This is app description.'),
         },
       },
     });

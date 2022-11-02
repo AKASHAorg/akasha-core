@@ -1,6 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
-import { of as mockOf } from 'rxjs';
 import {
   mockCreateCommentInput,
   mockCreateCommentResponse,
@@ -19,10 +18,10 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       comments: {
-        getComment: () => mockOf(mockGetComment),
-        removeComment: () => mockOf(mockDeleteCommentResponse),
-        addComment: () => mockOf(mockCreateCommentResponse),
-        editComment: () => mockOf(mockEditCommentResponse),
+        getComment: () => Promise.resolve(mockGetComment),
+        removeComment: () => Promise.resolve(mockDeleteCommentResponse),
+        addComment: () => Promise.resolve(mockCreateCommentResponse),
+        editComment: () => Promise.resolve(mockEditCommentResponse),
       },
       common: {
         ipfs: {
@@ -43,7 +42,7 @@ describe('useComments CRUD', () => {
     const { result: createResult } = renderHook(() => useCreateComment(), {
       wrapper,
     });
-    const mockComment = mockGetComment.data.getComment;
+    const mockComment = mockGetComment.getComment;
     queryClient.setQueryData([ENTRY_KEY, mockComment.postId], {
       ...mockComment,
       totalComments: 0,
@@ -64,7 +63,7 @@ describe('useComments CRUD', () => {
         ...mockEditCommentInput,
         postID: mockComment.postId,
       });
-      expect(pendingComment?.data.editComment).toBeTruthy();
+      expect(pendingComment?.editComment).toBeTruthy();
     });
 
     const { result: deleteResult } = renderHook(() => useDeleteComment(commentId), {
