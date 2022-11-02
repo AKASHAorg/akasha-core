@@ -4,7 +4,6 @@ import Spinner from '../Spinner';
 import * as React from 'react';
 import useIntersectionObserver from '../../utils/intersection-observer';
 import { Box } from 'grommet';
-import styled from 'styled-components';
 
 export interface EntryPage {
   results: string[];
@@ -36,13 +35,14 @@ const EntryList = (props: EntryListProps) => {
       {pages.map((page, index) => (
         <div data-page-idx={index} key={`${pageKeyPrefix}-${index}`}>
           {page?.results.map((entryId, index) => (
-            <EntryContainer key={entryId} itemSpacing={itemSpacing}>
+            <React.Fragment key={entryId}>
               {React.cloneElement(itemCard, {
                 itemId: entryId,
                 index,
+                itemSpacing,
                 className: `entry-${entryId}`,
               })}
-            </EntryContainer>
+            </React.Fragment>
           ))}
         </div>
       ))}
@@ -55,11 +55,3 @@ const EntryList = (props: EntryListProps) => {
   );
 };
 export default React.memo(EntryList);
-
-const EntryContainer = styled.div<{ itemSpacing: number }>`
-  margin-bottom: ${({ itemSpacing }) => itemSpacing}px;
-
-  &:empty {
-    margin-bottom: 0;
-  }
-`;
