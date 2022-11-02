@@ -9,7 +9,7 @@ import {
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
 import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
-import { ILogger } from '@akashaorg/typings/sdk/log';
+import { Logger } from '@akashaorg/awf-sdk';
 import EntryFeed from './entry-feed';
 
 export interface EntryListPage {
@@ -17,8 +17,8 @@ export interface EntryListPage {
   total: number;
 }
 
-export interface IFeedWidgetProps {
-  logger: ILogger;
+export type FeedWidgetProps = {
+  logger: Logger;
   pages: EntryListPage[];
   itemType: EntityTypes;
   onLoadMore: () => void;
@@ -50,9 +50,9 @@ export interface IFeedWidgetProps {
     limit: number;
   };
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
-}
+};
 
-const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
+const FeedWidgetRoot: React.FC<FeedWidgetProps> = props => {
   return (
     <I18nextProvider i18n={props.i18n}>
       {props.itemType === EntityTypes.ENTRY && <EntryFeed {...props} />}

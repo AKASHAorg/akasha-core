@@ -16,7 +16,7 @@ import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { ReplyEntry } from './reply-entry';
 import { PendingReply } from './pending-reply';
 import { UseQueryResult } from 'react-query';
-import { ILogger } from '@akashaorg/typings/sdk/log';
+import { Logger } from '@akashaorg/awf-sdk';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 const { BasicCardBox, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
@@ -27,7 +27,7 @@ type BaseEntryProps = {
   entryType: EntityTypes;
   entryReq: UseQueryResult;
   entryData?: IEntryData;
-  logger: ILogger;
+  logger: Logger;
   loginState?: LoginState;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
