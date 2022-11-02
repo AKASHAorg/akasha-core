@@ -28,7 +28,7 @@ import CommentAPI from './datasources/comment';
 import FollowerAPI from './datasources/follower';
 import { DataSource } from 'apollo-datasource';
 import { fileURLToPath } from 'url';
-import { ResolversParentTypes } from '@akashaorg/typings/sdk/graphql-resolver-types';
+import { ResolversParentTypes } from './graphql-resolver-types';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
