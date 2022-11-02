@@ -51,7 +51,7 @@ const EntryFeed = (props: FeedWidgetProps) => {
           uiEvents={props.uiEvents}
           trackEvent={props.trackEvent}
           accentBorderTop={props.accentBorderTop}
-          replyFragment={props.replyFragment}
+          replyFragmentItem={props.replyFragmentItem}
           firstLevelReply={props.firstLevelReply}
           logger={props.logger}
           onLoginModalOpen={props.onLoginModalOpen}

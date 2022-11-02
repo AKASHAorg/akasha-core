@@ -42,7 +42,7 @@ export type FeedWidgetProps = {
   i18n: RootComponentProps['i18next'];
   modalSlotId: string;
   accentBorderTop?: boolean;
-  replyFragment?: boolean;
+  replyFragmentItem?: boolean;
   firstLevelReply?: boolean;
   viewAllEntry?: {
     label: string;

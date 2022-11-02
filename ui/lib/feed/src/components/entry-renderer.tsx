@@ -77,7 +77,7 @@ export interface IEntryRenderer {
 const REPLY_FRAGMENT_SIZE = 2;
 
 const EntryRenderer = (
-  props: IEntryRenderer & { replyFragment: boolean; firstLevelReply: boolean },
+  props: IEntryRenderer & { replyFragmentItem: boolean; firstLevelReply: boolean },
 ) => {
   const {
     loginState,
@@ -321,7 +321,7 @@ const EntryRenderer = (
   const entryCardStyle = (): BoxExtendedProps => {
     if (!isComment) return null;
 
-    if (props.replyFragment)
+    if (props.replyFragmentItem)
       return {
         margin: { left: '1.5rem' },
         border: { color: 'replyFragmentBorder', size: '1px', side: 'left' },
@@ -499,7 +499,7 @@ const EntryRenderer = (
                     i18n={props.i18n}
                     trackEvent={props.trackEvent}
                     onLoginModalOpen={props.onLoginModalOpen}
-                    replyFragment={true}
+                    replyFragmentItem={true}
                   />
                 </Box>
               )}
