@@ -39,6 +39,8 @@ export interface Publish_Options {
 const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
   const sdk = getSDK();
 
+  if (!postID) return null;
+
   const res = await sdk.api.comments.getComments({
     limit,
     offset,
@@ -58,7 +60,7 @@ const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
 const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies) => {
   const sdk = getSDK();
 
-  if (!commentID) return null;
+  if (!postID || !commentID) return null;
 
   const res = await sdk.api.comments.getReplies({
     limit,
