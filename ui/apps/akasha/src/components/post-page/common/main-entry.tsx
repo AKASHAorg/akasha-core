@@ -39,7 +39,7 @@ type Props = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-export function ReplyEntry({
+export function MainEntry({
   postId,
   commentId,
   entryType,
