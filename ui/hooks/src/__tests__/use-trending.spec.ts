@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
-import { of as mockOf } from 'rxjs';
 import { useTrendingProfiles, useTrendingTags } from '../use-trending';
 import { mockTrendingProfiles, mockTrendingTags } from '../__mocks__/trending';
 
@@ -9,10 +8,10 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       profile: {
-        getTrending: () => mockOf(mockTrendingProfiles),
+        getTrending: () => Promise.resolve(mockTrendingProfiles),
       },
       tags: {
-        getTrending: () => mockOf(mockTrendingTags),
+        getTrending: () => Promise.resolve(mockTrendingTags),
       },
       common: {
         ipfs: {
