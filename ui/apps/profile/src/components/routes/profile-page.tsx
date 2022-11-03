@@ -44,7 +44,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     loginQuery.data?.fromCache,
   );
 
-  const profileState = profileDataQuery.data;
+  const profileState: any = profileDataQuery.data;
 
   const profileUserName = React.useMemo(() => {
     if (profileState && profileState.name) {
