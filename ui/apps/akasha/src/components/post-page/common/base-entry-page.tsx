@@ -134,8 +134,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             />
           )}
           <MainEntry
-            postId={postId}
-            commentId={commentId}
+            entryId={commentId || postId}
             entryType={entryType}
             entryReq={entryReq}
             loginState={loginState}

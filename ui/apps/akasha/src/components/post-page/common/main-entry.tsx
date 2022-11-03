@@ -25,8 +25,7 @@ import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 const { Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
-  postId: string;
-  commentId?: string;
+  entryId: string;
   entryType: EntityTypes;
   entryReq: UseQueryResult;
   loginState?: LoginState;
@@ -40,8 +39,7 @@ type Props = {
 };
 
 export function MainEntry({
-  postId,
-  commentId,
+  entryId,
   entryType,
   entryReq,
   loginState,
@@ -61,7 +59,7 @@ export function MainEntry({
     'en') as ILocale;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
-  const handleEntryNavigate = useEntryNavigation(navigateTo, commentId || postId);
+  const handleEntryNavigate = useEntryNavigation(navigateTo, entryId);
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
@@ -97,7 +95,7 @@ export function MainEntry({
           <Extension
             name={`inline-editor_repost_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId: postId, action: 'repost' }}
+            data={{ entryId, entryType, action: 'repost' }}
           />
         );
       case 'edit':
@@ -105,7 +103,7 @@ export function MainEntry({
           <Extension
             name={`inline-editor_postedit_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId: postId, commentId, action: 'edit' }}
+            data={{ entryId, entryType, action: 'edit' }}
           />
         );
     }
@@ -255,21 +253,19 @@ export function MainEntry({
                 name={`entry-card-edit-button_${entryData?.entryId}`}
                 style={{ width: '100%' }}
                 uiEvents={uiEvents}
-                data={{ entryId: postId, commentId, entryType }}
+                data={{ entryId, entryType }}
               />
             )
           }
           actionsRightExt={
-            entryType === EntityTypes.ENTRY && (
-              <Extension
-                name={`entry-card-actions-right_${entryData?.entryId}`}
-                uiEvents={uiEvents}
-                data={{
-                  entryId: postId,
-                  entryType,
-                }}
-              />
-            )
+            <Extension
+              name={`entry-card-actions-right_${entryData?.entryId}`}
+              uiEvents={uiEvents}
+              data={{
+                entryId,
+                entryType,
+              }}
+            />
           }
         />
       </Box>
@@ -282,8 +278,8 @@ export function MainEntry({
             name={`inline-editor_postreply_${entryData?.entryId}`}
             uiEvents={uiEvents}
             data={{
-              entryId: postId,
-              commentId,
+              entryId,
+              entryType,
               action: 'reply',
             }}
           />

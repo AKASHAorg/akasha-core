@@ -38,21 +38,6 @@ describe('useComments', () => {
     expect(page.results[0]).toBe('abcd');
   });
 
-  it('should get infinite replies', async () => {
-    const [wrapper] = createWrapper();
-    const { result, waitFor } = renderHook(
-      () => useInfiniteReplies({ limit: 5, postID: '0x00', commentID: '0x11' }, true),
-      {
-        wrapper,
-      },
-    );
-    await waitFor(() => result.current.isFetched, { timeout: 5000 });
-    const page = result.current.data.pages[0];
-    expect(page.total).toBe(2);
-    expect(page.results).toHaveLength(2);
-    expect(page.results[0]).toBe('abcd');
-  });
-
   it('should get comment', async () => {
     const [wrapper] = createWrapper();
     const { result, waitFor } = renderHook(() => useComment('0x00'), {

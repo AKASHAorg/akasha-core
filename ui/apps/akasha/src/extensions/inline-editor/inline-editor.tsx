@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { EntityTypes, RootExtensionProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ReplyEditor } from './reply-editor';
 import { PostEditor } from './post-editor';
@@ -8,23 +8,20 @@ export const InlineEditor = (props: Partial<RootExtensionProps>) => {
   const loginQuery = useGetLogin();
   const action = props.extensionData.action;
   const entryId = props.extensionData.entryId;
-  const commentId = props.extensionData.commentId;
+  const entryType = props.extensionData.entryType;
 
-  if (commentId && entryId && (action === 'reply' || action === 'edit'))
-    return (
-      <ReplyEditor
-        postId={entryId}
-        commentId={commentId}
-        pubKey={loginQuery?.data?.pubKey}
-        singleSpa={props.singleSpa}
-        action={action}
-      />
-    );
+  /*ReplyEditor handles reply to a comment and editing a comment*/
+  if (entryType === EntityTypes.COMMENT && entryId && (action === 'reply' || action === 'edit')) {
+    return <ReplyEditor commentId={entryId} singleSpa={props.singleSpa} action={action} />;
+  }
 
+  /*PostEditor handles reply to a post, repost, and editing a post*/
   if (
     action === 'post' ||
-    (entryId && (action === 'repost' || action === 'edit' || action === 'reply'))
-  )
+    (entryType === EntityTypes.ENTRY &&
+      entryId &&
+      (action === 'repost' || action === 'edit' || action === 'reply'))
+  ) {
     return (
       <PostEditor
         postId={entryId}
@@ -33,6 +30,7 @@ export const InlineEditor = (props: Partial<RootExtensionProps>) => {
         action={action}
       />
     );
+  }
 
   throw new Error('Unknown action used');
 };

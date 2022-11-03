@@ -144,6 +144,7 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
       editorState={action === 'edit' ? entryData?.slateContent : null}
       isShown={action !== 'post'}
       showCancelButton={action === 'edit'}
+      isReply={action === 'reply'}
     />
   );
 }
