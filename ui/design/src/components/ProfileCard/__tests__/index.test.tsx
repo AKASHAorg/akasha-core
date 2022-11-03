@@ -15,9 +15,9 @@ import {
 describe('<ProfileCard /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const handleClickFollowers = jest.fn();
-  const handleClickFollowing = jest.fn();
-  const handleClickPosts = jest.fn();
+  // const handleClickFollowers = jest.fn();
+  // const handleClickFollowing = jest.fn();
+  // const handleClickPosts = jest.fn();
   const handleEntryFlag = jest.fn();
   const handleUpdateClick = jest.fn();
   const handleShareClick = jest.fn();
@@ -75,30 +75,30 @@ describe('<ProfileCard /> Component', () => {
     expect(avatarImage).toHaveAttribute('src', 'https://placebeard.it/480/480');
   });
 
-  it('has followings, followers, posts buttons', () => {
-    const { getByTestId } = componentWrapper;
-    const followersButton = getByTestId('followers-button');
-    const followingButton = getByTestId('following-button');
-    const postsButton = getByTestId('posts-button');
+  // it('has followings, followers, posts buttons', () => {
+  //   const { getByTestId } = componentWrapper;
+  //   const followersButton = getByTestId('followers-button');
+  //   const followingButton = getByTestId('following-button');
+  //   const postsButton = getByTestId('posts-button');
 
-    expect(followersButton).toBeDefined();
-    expect(followingButton).toBeDefined();
-    expect(postsButton).toBeDefined();
-  });
+  //   expect(followersButton).toBeDefined();
+  //   expect(followingButton).toBeDefined();
+  //   expect(postsButton).toBeDefined();
+  // });
 
-  it('calls handlers on followings, followers, posts buttons', async () => {
-    const { getByTestId } = componentWrapper;
-    const followersButton = getByTestId('followers-button');
-    const followingButton = getByTestId('following-button');
-    const postsButton = getByTestId('posts-button');
+  // it('calls handlers on followings, followers, posts buttons', async () => {
+  //   const { getByTestId } = componentWrapper;
+  //   const followersButton = getByTestId('followers-button');
+  //   const followingButton = getByTestId('following-button');
+  //   const postsButton = getByTestId('posts-button');
 
-    // test click actions
-    await userEvent.click(followersButton);
-    await userEvent.click(followingButton);
-    await userEvent.click(postsButton);
+  //   // test click actions
+  //   await userEvent.click(followersButton);
+  //   await userEvent.click(followingButton);
+  //   await userEvent.click(postsButton);
 
-    expect(handleClickFollowers).toBeCalledTimes(1);
-    expect(handleClickFollowing).toBeCalledTimes(1);
-    expect(handleClickPosts).toBeCalledTimes(1);
-  });
+  //   expect(handleClickFollowers).toBeCalledTimes(1);
+  //   expect(handleClickFollowing).toBeCalledTimes(1);
+  //   expect(handleClickPosts).toBeCalledTimes(1);
+  // });
 });
