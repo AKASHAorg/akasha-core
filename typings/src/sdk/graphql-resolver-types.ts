@@ -75,9 +75,9 @@ export type ResolversTypes = {
   Comment: ResolverTypeWrapper<Types.Comment>;
   ID: ResolverTypeWrapper<Types.Scalars['ID']>;
   String: ResolverTypeWrapper<Types.Scalars['String']>;
+  Int: ResolverTypeWrapper<Types.Scalars['Int']>;
   CommentData: Types.CommentData;
   CommentsResult: ResolverTypeWrapper<Types.CommentsResult>;
-  Int: ResolverTypeWrapper<Types.Scalars['Int']>;
   DataProvider: ResolverTypeWrapper<Types.DataProvider>;
   DataProviderInput: Types.DataProviderInput;
   Decision: ResolverTypeWrapper<Types.Decision>;
@@ -117,9 +117,9 @@ export type ResolversParentTypes = {
   Comment: Types.Comment;
   ID: Types.Scalars['ID'];
   String: Types.Scalars['String'];
+  Int: Types.Scalars['Int'];
   CommentData: Types.CommentData;
   CommentsResult: Types.CommentsResult;
-  Int: Types.Scalars['Int'];
   DataProvider: Types.DataProvider;
   DataProviderInput: Types.DataProviderInput;
   Decision: Types.Decision;
@@ -169,6 +169,7 @@ export type CommentResolvers<ContextType = any, ParentType extends ResolversPare
   mentions?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   postId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   replyTo?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  totalReplies?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   updatedAt?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

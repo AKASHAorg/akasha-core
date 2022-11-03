@@ -74,17 +74,32 @@ class CommentAPI extends DataSource {
       category: 'comment',
       creationDate: comment.creationDate,
       postId: comment.postId,
+      replyTo: comment.replyTo,
       content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
     });
-    await sendAuthorNotification(post.author, {
-      property: 'NEW_COMMENT',
-      provider: 'awf.graphql.comments.api',
-      value: {
-        postID: comment.postId,
-        author: author,
-        commentID: commentID,
-      },
-    });
+    if (!comment.replyTo) {
+      await sendAuthorNotification(post.author, {
+        property: 'NEW_COMMENT',
+        provider: 'awf.graphql.comments.api',
+        value: {
+          postID: comment.postId,
+          author: author,
+          commentID: commentID,
+        },
+      });
+    } else {
+      const replyToData = await this.getComment(comment.replyTo);
+      await sendAuthorNotification(replyToData.author, {
+        property: 'NEW_COMMENT_REPLY',
+        provider: 'awf.graphql.comments.api',
+        value: {
+          postID: comment.postId,
+          author: author,
+          commentID: commentID,
+        },
+      });
+    }
+
     for (const commentMentionedAuthor of comment.mentions) {
       await sendAuthorNotification(commentMentionedAuthor, {
         property: 'COMMENT_MENTION',
@@ -236,6 +251,7 @@ class CommentAPI extends DataSource {
         category: 'comment',
         creationDate: currentComment.creationDate,
         postId: currentComment.postId,
+        replyTo: currentComment.replyTo,
         content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
       })
       .then(() => logger.info(`index edited comment: ${id}`))

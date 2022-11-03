@@ -26,6 +26,7 @@ export type Comment = {
   mentions?: Maybe<Array<Maybe<Scalars['String']>>>;
   postId: Scalars['String'];
   replyTo?: Maybe<Scalars['String']>;
+  totalReplies?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['String']>;
 };
 
