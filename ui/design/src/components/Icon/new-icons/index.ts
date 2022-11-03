@@ -44,11 +44,14 @@ import copy from './copy';
 import dapper from './dapper';
 import dashboard from './dashboard';
 import discord from './discord';
+import discordAlt from './discordAlt';
+import discourse from './discourse';
 import document from './document';
 import dropdown from './dropdown';
 import edit from './edit';
 import editSimple from './edit-simple';
 import email from './email';
+import emailAlt from './emailAlt';
 import emoji from './emoji';
 import explore from './explore';
 import error from './error';
@@ -187,6 +190,8 @@ export {
   dapper,
   dashboard,
   discord,
+  discordAlt,
+  discourse,
   dropdown,
   payment,
   eye,
@@ -219,6 +224,7 @@ export {
   editSimple,
   edit,
   email,
+  emailAlt,
   emoji,
   hashtag,
   hashtagGray,
