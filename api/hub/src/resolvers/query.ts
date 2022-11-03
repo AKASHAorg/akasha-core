@@ -378,7 +378,7 @@ const query = {
       const data = await getIcRegistryContract().getReleaseData(pkgInfo.latestReleaseId);
       const cid = CID.parse('f' + data.manifestHash.substring(2), base16.decoder);
       const ipfsLink = createIpfsGatewayPath(cid.toString());
-      logger.info(`fetching manifest ${ipfsLink}`);
+      logger.info(`fetching package from ${ipfsLink}`);
       const d = await fetchWithTimeout(ipfsLink, {
         timeout: 60000,
         redirect: 'follow',
@@ -396,6 +396,7 @@ const query = {
         displayName?: string;
       };
       if (ipfsSources.length) {
+        logger.info(`fetching manifest file from ${ipfsSources[0]}/${MANIFEST_FILE}`);
         const manifestReq = await fetchWithTimeout(`${ipfsSources[0]}/${MANIFEST_FILE}`, {
           timeout: 10000,
           redirect: 'follow',
