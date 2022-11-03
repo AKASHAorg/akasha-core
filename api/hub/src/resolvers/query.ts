@@ -386,7 +386,7 @@ const query = {
         links: ResolversParentTypes['InfoLink'];
         sources: string[];
       };
-      const ipfsSources = multiAddrToUri(sources, false);
+      const ipfsSources = multiAddrToUri(sources, true);
       let manifest: {
         mainFile: string;
         license?: string;
