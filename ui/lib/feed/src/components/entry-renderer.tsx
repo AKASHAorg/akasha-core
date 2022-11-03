@@ -1,5 +1,6 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
+import DS, { BoxExtendedProps } from '@akashaorg/design-system';
+import FeedWidget from './App';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useTranslation } from 'react-i18next';
 import {
@@ -9,6 +10,8 @@ import {
   EntityTypes,
   NavigateToParams,
   RootComponentProps,
+  ModalNavigationOptions,
+  IProfileData,
 } from '@akashaorg/typings/ui';
 import {
   usePost,
@@ -25,6 +28,9 @@ import {
   useMentionSearch,
 } from '@akashaorg/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
+import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
+import { ILogger } from '@akashaorg/typings/sdk/log';
+import { i18n } from 'i18next';
 
 const {
   Box,
@@ -59,14 +65,20 @@ export interface IEntryRenderer {
   modalSlotId: string;
   accentBorderTop?: boolean;
   trackEvent?: (event: Omit<TrackEventData, 'eventType'>) => void;
+  index?: number;
+  totalEntry?: number;
+  logger: ILogger;
+  onLoginModalOpen: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  navigateToModal: (props: ModalNavigationOptions) => void;
+  loggedProfile?: IProfileData;
+  i18n: i18n;
 }
 
-const commentStyleExt = {
-  padding: '0 1rem',
-  boxShadow: 'none',
-};
+const REPLY_FRAGMENT_SIZE = 2;
 
-const EntryRenderer = (props: IEntryRenderer) => {
+const EntryRenderer = (
+  props: IEntryRenderer & { replyFragmentItem: boolean; showReplyFragment: boolean },
+) => {
   const {
     loginState,
     locale,
@@ -119,14 +131,17 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const followedProfilesReq = useIsFollowingMultiple(loginState.pubKey, [authorPubKey]);
 
-  const postData = React.useMemo(() => {
+  /** @Todo: fix my type ;/ **/
+  const postData: any = React.useMemo(() => {
     if (postReq.data && itemType === EntityTypes.ENTRY) {
-      return mapEntry(postReq.data);
+      /** @Todo: fix my type ;/ **/
+      return mapEntry(postReq.data as any);
     }
     return undefined;
   }, [postReq.data, itemType]);
 
-  const commentData = React.useMemo(() => {
+  /** @Todo: fix my type ;/ **/
+  const commentData: any = React.useMemo(() => {
     if (commentReq.data && itemType === EntityTypes.COMMENT) {
       /** @Todo: fix my type ;/ **/
       return mapEntry(commentReq.data as any);
@@ -279,9 +294,52 @@ const EntryRenderer = (props: IEntryRenderer) => {
 
   const isComment = React.useMemo(() => itemType === EntityTypes.COMMENT, [itemType]);
 
+  const canShowEntry =
+    itemData &&
+    !entryAwaitingModeration &&
+    !accountAwaitingModeration &&
+    !itemData.delisted &&
+    !itemData.isRemoved;
+
+  const repliesReq = useInfiniteReplies(
+    {
+      limit: REPLY_FRAGMENT_SIZE,
+      postID: commentData?.postId,
+      commentID: commentData?.entryId,
+    },
+    canShowEntry && props.showReplyFragment,
+  );
+
+  /** @Todo: fix my type ;/ **/
+  const replyPages: any = React.useMemo(() => {
+    if (repliesReq.data) {
+      return repliesReq.data.pages;
+    }
+    return [];
+  }, [repliesReq.data]);
+
+  const entryCardStyle = (): BoxExtendedProps => {
+    if (!isComment) return null;
+
+    if (props.replyFragmentItem)
+      return {
+        margin: { left: '1.5rem' },
+        border: { color: 'replyFragmentBorder', size: '1px', side: 'left' },
+      };
+
+    if (props.index !== props.totalEntry)
+      return {
+        border: { color: 'border', side: 'bottom' },
+      };
+  };
+
+  const entryLoading = postReq.isLoading || commentReq.isLoading;
+
   return (
-    <>
-      {(postReq.isLoading || commentReq.isLoading) && <EntryCardLoading />}
+    <Box
+      margin={{ bottom: itemSpacing && (entryLoading || canShowEntry) ? `${itemSpacing}px` : null }}
+    >
+      {entryLoading && <EntryCardLoading />}
       {(postReq.isError || commentReq.isError) && (
         <ErrorLoader
           type="script-error"
@@ -332,85 +390,128 @@ const EntryRenderer = (props: IEntryRenderer) => {
               />
             </Box>
           )}
-          {!entryAwaitingModeration &&
-            !accountAwaitingModeration &&
-            !itemData.delisted &&
-            !itemData.isRemoved && (
-              <Box margin={{ bottom: itemSpacing ? `${itemSpacing}px` : null }}>
-                <EntryCard
-                  className={props.className}
-                  isRemoved={itemData.isRemoved}
-                  entryData={itemData}
-                  sharePostUrl={sharePostUrl}
-                  sharePostLabel={t('Share Post')}
-                  shareTextLabel={t('Share this post with your friends')}
-                  onClickAvatar={handleAvatarClick}
-                  repliesLabel={itemType === EntityTypes.ENTRY ? '' : t('Replies')}
-                  repostsLabel={t('Reposts')}
-                  repostLabel={t('Repost')}
-                  editedLabel={t('Last edited')}
-                  repostWithCommentLabel={t('Repost with comment')}
-                  shareLabel={t('Share')}
-                  copyLinkLabel={t('Copy Link')}
-                  flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
-                  loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
-                  locale={locale || 'en'}
-                  style={{
-                    ...(style as React.CSSProperties),
-                    ...(commentData && commentStyleExt),
-                    display: isEditingComment ? 'none' : 'block',
-                  }}
-                  showMore={true}
-                  profileAnchorLink={'/@akashaorg/app-profile'}
-                  repliesAnchorLink={'/@akashaorg/app-akasha-integration/post'}
-                  onRepost={onRepost}
-                  onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
-                  handleFollowAuthor={handleFollow}
-                  handleUnfollowAuthor={handleUnfollow}
-                  isFollowingAuthor={isFollowing}
-                  onContentClick={handleContentClick}
-                  onMentionClick={handleMentionClick}
-                  onTagClick={handleTagClick}
-                  navigateTo={navigateTo}
-                  contentClickable={contentClickable}
-                  moderatedContentLabel={t('This content has been moderated')}
-                  ctaLabel={t('See it anyway')}
-                  handleFlipCard={handleFlipCard}
-                  onEntryRemove={props.onEntryRemove}
-                  removeEntryLabel={props.removeEntryLabel}
-                  removedByMeLabel={props.removedByMeLabel}
-                  removedByAuthorLabel={props.removedByAuthorLabel}
-                  disableReposting={itemData.isRemoved}
-                  disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-                  hideActionButtons={isComment}
-                  modalSlotId={modalSlotId}
-                  bottomBorderOnly={isComment}
-                  noBorderRadius={isComment}
-                  accentBorderTop={accentBorderTop}
-                  actionsRightExt={
+          {canShowEntry && (
+            <Box {...entryCardStyle()}>
+              <EntryCard
+                className={props.className}
+                isRemoved={itemData.isRemoved}
+                entryData={itemData}
+                sharePostUrl={sharePostUrl}
+                sharePostLabel={t('Share Post')}
+                shareTextLabel={t('Share this post with your friends')}
+                onClickAvatar={handleAvatarClick}
+                repliesLabel={itemType === EntityTypes.ENTRY ? '' : t('Replies')}
+                repostsLabel={t('Reposts')}
+                repostLabel={t('Repost')}
+                editedLabel={t('Last edited')}
+                repostWithCommentLabel={t('Repost with comment')}
+                shareLabel={t('Share')}
+                copyLinkLabel={t('Copy Link')}
+                flagAsLabel={t('Report {{itemTypeName}}', { itemTypeName })}
+                loggedProfileEthAddress={loginState.isReady && loginState.ethAddress}
+                locale={locale || 'en'}
+                style={{
+                  ...(style as React.CSSProperties),
+                  display: isEditingComment ? 'none' : 'block',
+                }}
+                showMore={true}
+                profileAnchorLink={'/@akashaorg/app-profile'}
+                repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
+                  isComment ? 'reply' : 'post'
+                }`}
+                hideRepost={isComment}
+                onRepost={onRepost}
+                onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
+                handleFollowAuthor={handleFollow}
+                handleUnfollowAuthor={handleUnfollow}
+                isFollowingAuthor={isFollowing}
+                onContentClick={handleContentClick}
+                onMentionClick={handleMentionClick}
+                onTagClick={handleTagClick}
+                navigateTo={navigateTo}
+                contentClickable={contentClickable}
+                moderatedContentLabel={t('This content has been moderated')}
+                ctaLabel={t('See it anyway')}
+                handleFlipCard={handleFlipCard}
+                onEntryRemove={props.onEntryRemove}
+                removeEntryLabel={props.removeEntryLabel}
+                removedByMeLabel={props.removedByMeLabel}
+                removedByAuthorLabel={props.removedByAuthorLabel}
+                disableReposting={itemData.isRemoved || isComment}
+                disableReporting={loginState.waitForAuth || loginState.isSigningIn}
+                modalSlotId={modalSlotId}
+                noBorder={isComment}
+                accentBorderTop={accentBorderTop}
+                actionsRightExt={
+                  !isComment && (
                     <ExtensionPoint
                       name={`entry-card-actions-right_${itemId}`}
                       onMount={handleExtensionMount}
                       onUnmount={handleExtensionUnmount}
                     />
-                  }
-                  headerMenuExt={
-                    showEditButton && (
-                      <ExtensionPoint
-                        style={{ width: '100%' }}
-                        onClick={handleEditClick}
-                        name={`entry-card-edit-button_${itemId}`}
-                        onMount={handleExtensionMount}
-                        onUnmount={handleExtensionUnmount}
-                      />
-                    )
-                  }
-                />
-              </Box>
-            )}
+                  )
+                }
+                headerMenuExt={
+                  showEditButton && (
+                    <ExtensionPoint
+                      style={{ width: '100%' }}
+                      onClick={handleEditClick}
+                      name={`entry-card-edit-button_${itemId}`}
+                      onMount={handleExtensionMount}
+                      onUnmount={handleExtensionUnmount}
+                    />
+                  )
+                }
+              />
+
+              {props.showReplyFragment && (
+                <Box margin={{ bottom: replyPages.length ? 'xsmall' : null }}>
+                  <FeedWidget
+                    modalSlotId={props.modalSlotId}
+                    logger={props.logger}
+                    pages={replyPages}
+                    itemType={EntityTypes.COMMENT}
+                    onLoadMore={() => ({})}
+                    getShareUrl={(itemId: string) =>
+                      `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`
+                    }
+                    viewAllEntry={{
+                      label: 'View all replies',
+                      onClick: () => {
+                        props.navigateTo?.({
+                          appName: '@akashaorg/app-akasha-integration',
+                          getNavigationUrl: navRoutes =>
+                            `${navRoutes.Reply}/${commentData?.entryId}`,
+                        });
+                      },
+                      limit: REPLY_FRAGMENT_SIZE,
+                    }}
+                    loginState={loginState}
+                    navigateTo={navigateTo}
+                    navigateToModal={props.navigateToModal}
+                    requestStatus={repliesReq.status}
+                    hasNextPage={repliesReq.hasNextPage}
+                    loggedProfile={props.loggedProfile}
+                    contentClickable={true}
+                    onEntryFlag={props.onFlag}
+                    onEntryRemove={props.onEntryRemove}
+                    removeEntryLabel={t('Delete Reply')}
+                    removedByMeLabel={t('You deleted this reply')}
+                    removedByAuthorLabel={t('This reply was deleted by its author')}
+                    uiEvents={props.uiEvents}
+                    itemSpacing={8}
+                    i18n={props.i18n}
+                    trackEvent={props.trackEvent}
+                    onLoginModalOpen={props.onLoginModalOpen}
+                    replyFragmentItem={true}
+                  />
+                </Box>
+              )}
+            </Box>
+          )}
         </>
       )}
-    </>
+    </Box>
   );
 };
 

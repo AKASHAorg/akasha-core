@@ -9,7 +9,7 @@ export type GetCommentQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetCommentQuery = { getComment: { creationDate: string, updatedAt?: string | null, replyTo?: string | null, postId: string, _id: string, content?: Array<{ provider: string, property: string, value: string }> | null, author: { pubKey: string, name?: string | null, userName?: string | null, avatar?: string | null, coverImage?: string | null, description?: string | null, ethAddress: string, totalPosts?: string | null, totalFollowers: number, totalFollowing: number } } };
+export type GetCommentQuery = { getComment: { creationDate: string, updatedAt?: string | null, replyTo?: string | null, postId: string, totalReplies?: number | null, _id: string, content?: Array<{ provider: string, property: string, value: string }> | null, author: { pubKey: string, name?: string | null, userName?: string | null, avatar?: string | null, coverImage?: string | null, description?: string | null, ethAddress: string, totalPosts?: string | null, totalFollowers: number, totalFollowing: number } } };
 
 export type GetCommentsQueryVariables = Types.Exact<{
   offset?: Types.InputMaybe<Types.Scalars['String']>;
@@ -18,7 +18,7 @@ export type GetCommentsQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetCommentsQuery = { getComments?: { total?: number | null, nextIndex?: string | null, results?: Array<{ creationDate: string, replyTo?: string | null, postId: string, _id: string, content?: Array<{ provider: string, property: string, value: string }> | null, author: { pubKey: string, name?: string | null, userName?: string | null, avatar?: string | null, coverImage?: string | null, description?: string | null, ethAddress: string, totalPosts?: string | null, totalFollowers: number, totalFollowing: number } }> | null } | null };
+export type GetCommentsQuery = { getComments?: { total?: number | null, nextIndex?: string | null, results?: Array<{ creationDate: string, replyTo?: string | null, postId: string, totalReplies?: number | null, _id: string, content?: Array<{ provider: string, property: string, value: string }> | null, author: { pubKey: string, name?: string | null, userName?: string | null, avatar?: string | null, coverImage?: string | null, description?: string | null, ethAddress: string, totalPosts?: string | null, totalFollowers: number, totalFollowing: number } }> | null } | null };
 
 export type GetRepliesQueryVariables = Types.Exact<{
   offset?: Types.InputMaybe<Types.Scalars['String']>;
@@ -28,7 +28,7 @@ export type GetRepliesQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetRepliesQuery = { getReplies?: { total?: number | null, nextIndex?: string | null, results?: Array<{ creationDate: string, replyTo?: string | null, postId: string, _id: string, content?: Array<{ provider: string, property: string, value: string }> | null, author: { pubKey: string, name?: string | null, userName?: string | null, avatar?: string | null, coverImage?: string | null, description?: string | null, ethAddress: string, totalPosts?: string | null, totalFollowers: number, totalFollowing: number } }> | null } | null };
+export type GetRepliesQuery = { getReplies?: { total?: number | null, nextIndex?: string | null, results?: Array<{ creationDate: string, replyTo?: string | null, postId: string, totalReplies?: number | null, _id: string, content?: Array<{ provider: string, property: string, value: string }> | null, author: { pubKey: string, name?: string | null, userName?: string | null, avatar?: string | null, coverImage?: string | null, description?: string | null, ethAddress: string, totalPosts?: string | null, totalFollowers: number, totalFollowing: number } }> | null } | null };
 
 export type AddCommentMutationVariables = Types.Exact<{
   content?: Types.InputMaybe<Array<Types.DataProviderInput> | Types.DataProviderInput>;

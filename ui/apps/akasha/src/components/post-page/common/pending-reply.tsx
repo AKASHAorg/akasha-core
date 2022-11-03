@@ -10,7 +10,7 @@ import {
   useIsFollowingMultiple,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import routes, { POST } from '../../routes';
+import routes, { REPLY } from '../../../routes';
 import { PUBLISH_PENDING_KEY } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 const { Box, EntryBox } = DS;
@@ -23,7 +23,7 @@ type Props = {
   entryData?: IEntryData;
 };
 
-export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryData }: Props) {
+export function PendingReply({ postId, layoutConfig, loggedProfileData, entryData }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutation: publishCommentMutation } = useMutationListener<
     IPublishData & { postID: string }
@@ -37,14 +37,14 @@ export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryDat
   const isFollowing = followedProfiles.includes(entryData?.author?.pubKey);
 
   const handleFollow = () => {
-    if (entryData?.author.pubKey) {
-      followReq.mutate(entryData?.author.pubKey);
+    if (entryData?.author?.pubKey) {
+      followReq.mutate(entryData?.author?.pubKey);
     }
   };
 
   const handleUnfollow = () => {
-    if (entryData.author.pubKey) {
-      unfollowReq.mutate(entryData?.author.pubKey);
+    if (entryData?.author?.pubKey) {
+      unfollowReq.mutate(entryData?.author?.pubKey);
     }
   };
 
@@ -77,7 +77,7 @@ export function PendingEntry({ postId, layoutConfig, loggedProfileData, entryDat
               locale={'en'}
               showMore={true}
               profileAnchorLink={'/profile'}
-              repliesAnchorLink={routes[POST]}
+              repliesAnchorLink={routes[REPLY]}
               handleFollowAuthor={handleFollow}
               handleUnfollowAuthor={handleUnfollow}
               isFollowingAuthor={isFollowing}

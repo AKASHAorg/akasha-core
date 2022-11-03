@@ -24,9 +24,12 @@ describe('useComments', () => {
 
   it('should get infinite comments', async () => {
     const [wrapper] = createWrapper();
-    const { result, waitFor } = renderHook(() => useInfiniteComments(5, '0x00'), {
-      wrapper,
-    });
+    const { result, waitFor } = renderHook(
+      () => useInfiniteComments({ limit: 5, postID: '0x00' }, true),
+      {
+        wrapper,
+      },
+    );
     await waitFor(() => result.current.isFetched, { timeout: 5000 });
     const page = result.current.data.pages[0];
     expect(page.total).toBe(2);

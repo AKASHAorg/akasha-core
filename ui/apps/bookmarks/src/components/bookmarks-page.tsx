@@ -131,7 +131,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               getShareUrl={(itemId: string) =>
                 `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
               }
-              pages={[{ results: bookmarkedPostIds }]}
+              pages={[{ results: bookmarkedPostIds, total: bookmarkedPostIds.length }]}
               requestStatus={bookmarksReq.status}
               loginState={loginQuery.data}
               loggedProfile={loggedProfileQuery.data}

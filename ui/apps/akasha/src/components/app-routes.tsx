@@ -70,7 +70,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
-          <Route path={`${routes[REPLY]}/:commentId`} element={<ReplyPage {...props} />} />
+          <Route
+            path={`${routes[REPLY]}/:commentId`}
+            element={
+              <ReplyPage {...props} loginState={loginQuery.data} showLoginModal={showLoginModal} />
+            }
+          />
           <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage {...props} />} />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
         </Routes>

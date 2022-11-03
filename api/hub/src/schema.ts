@@ -301,6 +301,7 @@ const typeDefs = gql`
     mentions: [String]
     replyTo: String
     postId: String!
+    totalReplies: Int
   }
 `;
 
