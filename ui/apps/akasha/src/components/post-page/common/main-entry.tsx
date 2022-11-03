@@ -7,7 +7,6 @@ import {
   useEntryNavigation,
   useFollow,
   useIsFollowingMultiple,
-  usePost,
   useUnfollow,
 } from '@akashaorg/ui-awf-hooks';
 import {
@@ -19,12 +18,16 @@ import {
 } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import routes, { POST } from '../../routes';
+import routes, { POST } from '../../../routes';
+import { UseQueryResult } from 'react-query';
+import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 
-const { Extension, Box, EditorPlaceholder, EntryBox } = DS;
+const { Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
-  postId: string;
+  entryId: string;
+  entryType: EntityTypes;
+  entryReq: UseQueryResult;
   loginState?: LoginState;
   uiEvents: RootComponentProps['uiEvents'];
   plugins: RootComponentProps['plugins'];
@@ -35,8 +38,10 @@ type Props = {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-export function PostEntry({
-  postId,
+export function MainEntry({
+  entryId,
+  entryType,
+  entryReq,
   loginState,
   uiEvents,
   plugins,
@@ -47,20 +52,17 @@ export function PostEntry({
   showLoginModal,
 }: Props) {
   const { t } = useTranslation('app-akasha-integration');
+
   const action = new URLSearchParams(location.search).get('action');
   const navigateTo = plugins['@akashaorg/app-routing']?.routing?.navigateTo;
   const locale = (plugins['@akashaorg/app-translation']?.translation?.i18n?.languages?.[0] ||
     'en') as ILocale;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
-  const handleEntryNavigate = useEntryNavigation(navigateTo, postId);
+  const handleEntryNavigate = useEntryNavigation(navigateTo, entryId);
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
-  const postReq = usePost({
-    postId,
-    loggedUser: loginState?.pubKey,
-    enabler: loginState?.fromCache,
-  });
+
   const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, [
     entryData?.author?.pubKey,
   ]);
@@ -70,8 +72,8 @@ export function PostEntry({
     if (showAnyway) {
       return false;
     }
-    return postReq.isSuccess && entryData.reported;
-  }, [entryData, showAnyway, postReq.isSuccess]);
+    return entryReq.isSuccess && entryData?.reported;
+  }, [entryData?.reported, showAnyway, entryReq.isSuccess]);
 
   const showEntry = React.useMemo(
     () => !entryData?.delisted && (!isReported || (isReported && entryData?.moderated)),
@@ -88,19 +90,20 @@ export function PostEntry({
   if (loginState?.ethAddress) {
     switch (action) {
       case 'repost':
+        if (entryType !== EntityTypes.ENTRY) return;
         return (
           <Extension
-            name="inline-editor_repost"
+            name={`inline-editor_repost_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId: entryData.entryId, action: 'embed', isShown: true }}
+            data={{ entryId, entryType, action: 'repost' }}
           />
         );
       case 'edit':
         return (
           <Extension
-            name="inline-editor_postedit"
+            name={`inline-editor_postedit_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId: entryData.entryId, action: 'edit', isShown: true }}
+            data={{ entryId, entryType, action: 'edit' }}
           />
         );
     }
@@ -141,14 +144,14 @@ export function PostEntry({
   };
 
   const handleFollow = () => {
-    if (entryData?.author.pubKey) {
-      followReq.mutate(entryData?.author.pubKey);
+    if (entryData?.author?.pubKey) {
+      followReq.mutate(entryData?.author?.pubKey);
     }
   };
 
   const handleUnfollow = () => {
-    if (entryData.author.pubKey) {
-      unfollowReq.mutate(entryData?.author.pubKey);
+    if (entryData?.author?.pubKey) {
+      unfollowReq.mutate(entryData?.author?.pubKey);
     }
   };
 
@@ -173,7 +176,7 @@ export function PostEntry({
   const handlePostRemove = (commentId: string) => {
     navigateToModal({
       name: 'entry-remove-confirmation',
-      entryType: EntityTypes.ENTRY,
+      entryType,
       entryId: commentId,
     });
   };
@@ -201,13 +204,13 @@ export function PostEntry({
         }
       >
         <EntryBox
-          isRemoved={entryData.isRemoved}
+          isRemoved={entryData?.isRemoved}
           entryData={entryData}
           sharePostLabel={t('Share Post')}
           shareTextLabel={t('Share this post with your friends')}
           sharePostUrl={`${window.location.origin}${routes[POST]}/`}
           onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
-            handleAvatarClick(ev, entryData.author.pubKey)
+            handleAvatarClick(ev, entryData?.author?.pubKey)
           }
           repliesLabel={t('Replies')}
           repostsLabel={t('Reposts')}
@@ -222,7 +225,7 @@ export function PostEntry({
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[POST]}
           onRepost={handleRepost}
-          onEntryFlag={handleEntryFlag(entryData.entryId, 'post')}
+          onEntryFlag={handleEntryFlag(entryData?.entryId, 'post')}
           handleFollowAuthor={handleFollow}
           handleUnfollowAuthor={handleUnfollow}
           isFollowingAuthor={isFollowing}
@@ -240,26 +243,27 @@ export function PostEntry({
           removeEntryLabel={t('Delete Post')}
           removedByMeLabel={t('You deleted this post')}
           removedByAuthorLabel={t('This post was deleted by its author')}
-          disableReposting={entryData.isRemoved}
+          disableReposting={entryData?.isRemoved || entryType === EntityTypes.COMMENT}
+          hideRepost={entryType === EntityTypes.COMMENT}
           disableReporting={loginState.waitForAuth || loginState.isSigningIn}
           modalSlotId={layoutConfig.modalSlotId}
           headerMenuExt={
             showEditButton && (
               <Extension
-                name={`entry-card-edit-button_${entryData.entryId}`}
+                name={`entry-card-edit-button_${entryData?.entryId}`}
                 style={{ width: '100%' }}
                 uiEvents={uiEvents}
-                data={{ entryId: entryData.entryId, entryType: EntityTypes.ENTRY }}
+                data={{ entryId, entryType }}
               />
             )
           }
           actionsRightExt={
             <Extension
-              name={`entry-card-actions-right_${entryData.entryId}`}
+              name={`entry-card-actions-right_${entryData?.entryId}`}
               uiEvents={uiEvents}
               data={{
-                entryId: entryData.entryId,
-                entryType: EntityTypes.ENTRY,
+                entryId,
+                entryType,
               }}
             />
           }
@@ -269,11 +273,15 @@ export function PostEntry({
         {!loginState?.ethAddress && (
           <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
         )}
-        {showReplyEditor && loginState?.ethAddress && !entryData.isRemoved && (
+        {showReplyEditor && loginState?.ethAddress && !entryData?.isRemoved && (
           <Extension
-            name="inline-editor_postreply"
+            name={`inline-editor_postreply_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId: entryData.entryId, isShown: true, action: 'reply' }}
+            data={{
+              entryId,
+              entryType,
+              action: 'reply',
+            }}
           />
         )}
       </Box>

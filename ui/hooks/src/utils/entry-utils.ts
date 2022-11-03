@@ -31,6 +31,7 @@ export interface CommentPublishObject {
     mentions: string[];
     quotes: string[];
     postID: string;
+    replyTo: string;
   };
 }
 
@@ -280,8 +281,12 @@ export const createPendingEntry = (
 };
 
 export function buildPublishObject(data: IPublishData): EntryPublishObject;
-export function buildPublishObject(data: IPublishData, parentEntryId: string): CommentPublishObject;
-export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
+export function buildPublishObject(
+  data: IPublishData,
+  parentEntryId: string,
+  replyTo?: string,
+): CommentPublishObject;
+export function buildPublishObject(data: IPublishData, parentEntryId?: string, replyTo?: string) {
   // save only the ipfs CID prepended with `CID:` for the slate content image urls
   const sdk = getSDK();
   const ipfsGateway = sdk.services.common.ipfs.getSettings().gateway;
@@ -375,6 +380,7 @@ export function buildPublishObject(data: IPublishData, parentEntryId?: string) {
         tags: data.metadata.tags,
         mentions: data.metadata.mentions,
         postID: parentEntryId,
+        replyTo,
       },
     } as CommentPublishObject;
   }

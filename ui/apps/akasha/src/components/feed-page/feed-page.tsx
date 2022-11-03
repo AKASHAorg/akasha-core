@@ -6,7 +6,6 @@ import {
   ModalNavigationOptions,
   IPublishData,
   RootComponentProps,
-  IProfileData,
   EntityTypes,
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
@@ -62,7 +61,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [postsReq, loginState?.fromCache]);
 
-  const postPages = React.useMemo(() => {
+  /* @Todo: Fix my type */
+  const postPages: any = React.useMemo(() => {
     if (postsReq.data) {
       return postsReq.data.pages;
     }
