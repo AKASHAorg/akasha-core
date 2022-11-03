@@ -105,6 +105,9 @@ export type CroppableFields =
   | ProfileProviderProperties.AVATAR
   | ProfileProviderProperties.COVER_IMAGE;
 
+// tslint:disable:cyclomatic-complexity
+/* eslint-disable complexity */
+
 const ProfileForm: React.FC<ProfileFormProps> = props => {
   const {
     className,
