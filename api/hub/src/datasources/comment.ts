@@ -96,6 +96,7 @@ class CommentAPI extends DataSource {
           postID: comment.postId,
           author: author,
           commentID: commentID,
+          replyTo: comment.replyTo,
         },
       });
     }
