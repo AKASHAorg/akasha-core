@@ -3,7 +3,6 @@ import { queryCache, registryCache } from '../storage/cache';
 import { ExtendedAuthor, PostOverride } from '../collections/interfaces';
 import { ethers } from 'ethers';
 import {
-  createIpfsGatewayLink,
   createIpfsGatewayPath,
   fetchWithTimeout,
   getIcRegistryContract,
@@ -387,7 +386,7 @@ const query = {
         links: ResolversParentTypes['InfoLink'];
         sources: string[];
       };
-      const ipfsSources = multiAddrToUri(sources);
+      const ipfsSources = multiAddrToUri(sources, false);
       let manifest: {
         mainFile: string;
         license?: string;
