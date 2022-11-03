@@ -13,16 +13,29 @@ import {
 } from '../helpers';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
+import type { ResolversParentTypes } from '../graphql-resolver-types';
 
 export const MANIFEST_FILE = 'manifest.json';
 const query = {
-  getProfile: async (_source, { ethAddress }, { dataSources }) => {
+  async getProfile(
+    _source,
+    { ethAddress },
+    { dataSources },
+  ): Promise<ResolversParentTypes['UserProfile']> {
     return dataSources.profileAPI.getProfile(ethAddress);
   },
-  resolveProfile: async (_source, { pubKey }, { dataSources }) => {
+  resolveProfile: async (
+    _source,
+    { pubKey },
+    { dataSources },
+  ): Promise<ResolversParentTypes['UserProfile']> => {
     return dataSources.profileAPI.resolveProfile(pubKey);
   },
-  getPost: async (_source, { id, pubKey }, { dataSources }): Promise<PostOverride> => {
+  getPost: async (
+    _source,
+    { id, pubKey },
+    { dataSources },
+  ): Promise<ResolversParentTypes['Post']> => {
     const cacheKey = dataSources.postsAPI.getPostCacheKey(id);
     const hasKey = await queryCache.has(cacheKey);
     if (hasKey) {
@@ -75,19 +88,35 @@ const query = {
     return result;
   },
 
-  getTag: async (_source, { name }, { dataSources }) => {
+  getTag: async (_source, { name }, { dataSources }): Promise<ResolversParentTypes['Tag']> => {
     return dataSources.tagsAPI.getTag(name);
   },
-  searchTags: async (_source, { name }, { dataSources }) => {
+  searchTags: async (
+    _source,
+    { name },
+    { dataSources },
+  ): Promise<ResolversParentTypes['SearchTagsResult'][]> => {
     return dataSources.tagsAPI.searchTags(name);
   },
-  searchProfiles: async (_source, { name }, { dataSources }) => {
+  searchProfiles: async (
+    _source,
+    { name },
+    { dataSources },
+  ): Promise<ResolversParentTypes['UserProfile'][]> => {
     return dataSources.profileAPI.searchProfiles(name);
   },
-  tags: async (_source, { limit, offset }, { dataSources }) => {
+  tags: async (
+    _source,
+    { limit, offset },
+    { dataSources },
+  ): Promise<ResolversParentTypes['TagsResult']> => {
     return dataSources.tagsAPI.getTags(limit, offset || 0);
   },
-  posts: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+  posts: async (
+    _source,
+    { limit, offset, pubKey },
+    { dataSources },
+  ): Promise<ResolversParentTypes['PostsResult']> => {
     const data = await dataSources.postsAPI.getPosts(limit, offset || 0, pubKey);
     const results = [];
 
@@ -138,10 +167,14 @@ const query = {
     data.results = results;
     return data;
   },
-  isFollowing: async (_source, { follower, following }, { dataSources }) => {
+  isFollowing: async (_source, { follower, following }, { dataSources }): Promise<boolean> => {
     return dataSources.followerAPI.isFollowing(follower, following);
   },
-  getComments: async (_source, { postID, limit, offset }, { dataSources }) => {
+  getComments: async (
+    _source,
+    { postID, limit, offset },
+    { dataSources },
+  ): Promise<ResolversParentTypes['CommentsResult']> => {
     const data = await dataSources.commentsAPI.getComments(postID, limit, offset || 0);
     const results = [];
     for (const comment of data.results) {
@@ -152,12 +185,20 @@ const query = {
     return data;
   },
 
-  getComment: async (_source, { commentID }, { dataSources }) => {
+  getComment: async (
+    _source,
+    { commentID },
+    { dataSources },
+  ): Promise<ResolversParentTypes['Comment']> => {
     const commentData = await dataSources.commentsAPI.getComment(commentID);
     const author = await dataSources.profileAPI.resolveProfile(commentData.author);
     return Object.assign({}, commentData, { author });
   },
-  getPostsByAuthor: async (_source, { author, limit, offset, pubKey }, { dataSources }) => {
+  getPostsByAuthor: async (
+    _source,
+    { author, limit, offset, pubKey },
+    { dataSources },
+  ): Promise<ResolversParentTypes['NewPostsResult']> => {
     const returned = await dataSources.postsAPI.getPostsByAuthor(author, offset || 0, limit);
     const posts = await Promise.all(
       returned.results.map(post => {
@@ -166,7 +207,11 @@ const query = {
     );
     return Object.assign({}, returned, { results: posts });
   },
-  getPostsByTag: async (_source, { tag, limit, offset, pubKey }, { dataSources }) => {
+  getPostsByTag: async (
+    _source,
+    { tag, limit, offset, pubKey },
+    { dataSources },
+  ): Promise<ResolversParentTypes['NewPostsResult']> => {
     const returned = await dataSources.postsAPI.getPostsByTag(tag, offset || 0, limit);
     const posts = await Promise.all(
       returned.results.map(post => {
@@ -175,7 +220,11 @@ const query = {
     );
     return Object.assign({}, returned, { results: posts });
   },
-  globalSearch: async (_source, { keyword }, { dataSources }) => {
+  globalSearch: async (
+    _source,
+    { keyword },
+    { dataSources },
+  ): Promise<ResolversParentTypes['GlobalSearchResult']> => {
     const results = await dataSources.postsAPI.globalSearch(keyword?.trim());
     results.tags = await (async () => {
       const res = [];
@@ -187,7 +236,11 @@ const query = {
     })();
     return results;
   },
-  getFollowers: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+  getFollowers: async (
+    _source,
+    { limit, offset, pubKey },
+    { dataSources },
+  ): Promise<ResolversParentTypes['ProfilesResult']> => {
     const returned = await dataSources.followerAPI.getFollowers(pubKey, limit, offset);
     returned.results = await Promise.all(
       returned.results.map(_pubKey => {
@@ -197,7 +250,11 @@ const query = {
     return returned;
   },
 
-  getFollowing: async (_source, { limit, offset, pubKey }, { dataSources }) => {
+  getFollowing: async (
+    _source,
+    { limit, offset, pubKey },
+    { dataSources },
+  ): Promise<ResolversParentTypes['ProfilesResult']> => {
     const returned = await dataSources.followerAPI.getFollowing(pubKey, limit, offset);
     returned.results = await Promise.all(
       returned.results.map(_pubKey => {
@@ -215,7 +272,11 @@ const query = {
    * @param dataSources
    * @param user
    */
-  getCustomFeed: async (_source, { limit, offset }, { dataSources, user }) => {
+  getCustomFeed: async (
+    _source,
+    { limit, offset },
+    { dataSources, user },
+  ): Promise<ResolversParentTypes['NewPostsResult']> => {
     if (!user?.pubKey) {
       return Promise.reject('Must be authenticated!');
     }
@@ -236,24 +297,33 @@ const query = {
     return Object.assign({}, postsIDs, { results: posts });
   },
 
-  getInterests: async (_source, { pubKey }, { dataSources }) => {
+  getInterests: async (_source, { pubKey }, { dataSources }): Promise<string[]> => {
     const interests: string[] = await dataSources.profileAPI.getInterests(pubKey);
     return Array.from(interests);
   },
-  getIntegrationInfo: async (_source, { integrationIDs }, { dataSources }) => {
-    const results = [];
+  getIntegrationInfo: async (
+    _source,
+    { integrationIDs },
+    { dataSources },
+  ): Promise<ResolversParentTypes['IntegrationInfo'][]> => {
+    const results: ResolversParentTypes['IntegrationInfo'][] = [];
     const queryPrefix = '0xf-';
     for (const integrationID of integrationIDs) {
       const cacheKey = `${queryPrefix}${integrationID}`;
       const hasKey = await registryCache.has(cacheKey);
       if (hasKey) {
-        results.push(registryCache.get(cacheKey));
+        results.push(await registryCache.get<ResolversParentTypes['IntegrationInfo']>(cacheKey));
         continue;
       }
       const data = await getIcRegistryContract().getPackageInfo(integrationID);
       if (data.author === ethers.constants.AddressZero) {
         results.push({
           id: integrationID,
+          name: data.integrationName,
+          author: data.author,
+          latestReleaseId: '',
+          integrationType: data.integrationType,
+          enabled: false,
         });
         continue;
       }
@@ -270,20 +340,38 @@ const query = {
     }
     return results;
   },
-  getLatestRelease: async (_source, { integrationIDs }, { dataSources }) => {
-    const results = [];
+  getLatestRelease: async (
+    _source,
+    { integrationIDs },
+    { dataSources },
+  ): Promise<ResolversParentTypes['IntegrationReleaseInfo'][]> => {
+    const results: ResolversParentTypes['IntegrationReleaseInfo'][] = [];
     const queryPrefix = '0xfi-';
     for (const integrationID of integrationIDs) {
       const cacheKey = `${queryPrefix}${integrationID}`;
       const hasKey = await registryCache.has(cacheKey);
       if (hasKey) {
-        results.push(registryCache.get(cacheKey));
+        results.push(
+          await registryCache.get<ResolversParentTypes['IntegrationReleaseInfo']>(cacheKey),
+        );
         continue;
       }
       const pkgInfo = await getIcRegistryContract().getPackageInfo(integrationID);
       if (pkgInfo.author === ethers.constants.AddressZero) {
         results.push({
           integrationID: integrationID,
+          author: pkgInfo.author,
+          enabled: false,
+          integrationType: pkgInfo.integrationType,
+          manifestData: {
+            description: '',
+            displayName: '',
+            keywords: [],
+            license: '',
+            mainFile: '',
+          },
+          name: pkgInfo.integrationName,
+          version: '',
         });
         continue;
       }
@@ -295,7 +383,10 @@ const query = {
         timeout: 60000,
         redirect: 'follow',
       });
-      const { links, sources } = (await d.json()) as { links: string[]; sources: string[] };
+      const { links, sources } = (await d.json()) as {
+        links: ResolversParentTypes['InfoLink'];
+        sources: string[];
+      };
       const ipfsSources = multiAddrToUri(sources);
       let manifest: {
         mainFile: string;
@@ -331,7 +422,11 @@ const query = {
     return results;
   },
 
-  isUserNameAvailable: async (_source, { userName }, { dataSources, user, signature }) => {
+  isUserNameAvailable: async (
+    _source,
+    { userName },
+    { dataSources, user, signature },
+  ): Promise<boolean> => {
     if (!user) {
       return Promise.reject('Must be authenticated!');
     }
@@ -349,14 +444,18 @@ const query = {
     }
     return dataSources.profileAPI.isUserNameAvailable(userName);
   },
-  getReplies: async (_source, { postID, commentID, limit, offset }, { dataSources }) => {
+  getReplies: async (
+    _source,
+    { postID, commentID, limit, offset },
+    { dataSources },
+  ): Promise<ResolversParentTypes['CommentsResult']> => {
     const data = await dataSources.commentsAPI.getReplies(
       postID,
       commentID,
       limit || 5,
       offset || 0,
     );
-    const results = [];
+    const results: ResolversParentTypes['Comment'][] = [];
     for (const comment of data.results) {
       const author = await dataSources.profileAPI.resolveProfile(comment.author);
       results.push(Object.assign({}, comment, { author }));

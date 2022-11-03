@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 
 import { logError } from './utils/error-handler';
@@ -115,9 +114,7 @@ export function useDeleteDevKey() {
 
 const signMessage = async ({ message }: SignMessagePayload) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.auth.signData(message, true));
-
-  return res.data;
+  return sdk.api.auth.signData(message, true);
 };
 
 /**
@@ -137,9 +134,7 @@ export function useSignMessage() {
 
 const verifySignature = async (payload: VerifySignaturePayload) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.auth.verifySignature(payload));
-
-  return res;
+  return sdk.api.auth.verifySignature(payload);
 };
 
 /**

@@ -1,6 +1,7 @@
 // maintain alphabetical order for icon names
 import activity from './activity';
 import akasha from './akasha';
+import alert from './alert';
 import addAppGrey from './add-app-grey';
 import addCard from './add-card';
 import appAkasha from './app-akasha';
@@ -10,15 +11,21 @@ import appFeed from './app-feed';
 import appIpfs from './app-ipfs';
 import appModeration from './app-moderation';
 import appSocial from './app-social';
+import alignCenter from './align-center';
+import alignJustify from './align-justify';
+import alignLeft from './align-left';
+import alignRight from './align-right';
 import announcement from './announcement';
 import app from './app';
 import arrowDown from './arrow-down';
 import arrowUp from './arrow-up';
 import arrowLeft from './arrow-left';
 import arrowRight from './arrow-right';
+import article from './article';
 import available from './available';
 import block from './block';
 import bold from './bold';
+import boldAlt from './bold-alt';
 import book from './book';
 import bookmark from './bookmark';
 import calendar from './calendar';
@@ -65,7 +72,16 @@ import italic from './italic';
 import key from './key';
 import legal from './legal';
 import licensewtfpl from './license-wtfpl';
+import licenseAllRights from './license-all-rights';
+import licenseAttribution from './license-attribution';
+import licenseNoDerivatives from './license-no-derivatives';
+import licenseNoRights from './license-no-rights';
+import licenseNonCommercial from './license-non-commercial';
+import licenseShareAlike from './license-share-alike';
+import licenseSomeRights from './license-some-rights';
 import link from './link';
+import listBulleted from './list-bulleted';
+import listNumbered from './list-numbered';
 import loading from './loading';
 import login from './login';
 import media from './media';
@@ -106,8 +122,13 @@ import share from './share';
 import shareSmallBlue from './share-small-blue';
 import shareSmallDark from './share-small-dark';
 import shareSmallGrey from './share-small-grey';
-import subscribe from './subscribe';
 import stopwatch from './stopwatch';
+import strikethrough from './strikethrough';
+import subscribe from './subscribe';
+import textcase from './textcase';
+import textcaseUpper from './textcase-upper';
+import textcaseLower from './textcase-lower';
+import textcaseSentence from './textcase-sentence';
 import thumbsDownGrey from './thumbs-down-grey';
 import thumbsDownWhite from './thumbs-down-white';
 import thumbsUpGrey from './thumbs-up-grey';
@@ -139,14 +160,18 @@ export {
   appIpfs,
   appModeration,
   appSocial,
+  alignCenter,
+  alignJustify,
+  alignLeft,
+  alignRight,
   announcement,
+  article,
   available,
   reload,
   pin,
   pinAlt,
   settings,
   settingsAlt,
-  stopwatch,
   transfer,
   calendar,
   code,
@@ -176,6 +201,7 @@ export {
   ethereum,
   ethereumWorldLogo,
   akasha,
+  alert,
   addAppGrey,
   app,
   arrowDown,
@@ -186,6 +212,7 @@ export {
   book,
   block,
   bold,
+  boldAlt,
   comments,
   close,
   trash,
@@ -205,7 +232,16 @@ export {
   key,
   legal,
   licensewtfpl,
+  licenseAllRights,
+  licenseAttribution,
+  licenseNoDerivatives,
+  licenseNoRights,
+  licenseNonCommercial,
+  licenseShareAlike,
+  licenseSomeRights,
   link,
+  listBulleted,
+  listNumbered,
   loading,
   login,
   media,
@@ -240,7 +276,13 @@ export {
   shareSmallBlue,
   shareSmallDark,
   shareSmallGrey,
+  stopwatch,
+  strikethrough,
   subscribe,
+  textcase,
+  textcaseUpper,
+  textcaseLower,
+  textcaseSentence,
   thumbsDownWhite,
   thumbsDownGrey,
   thumbsUpWhite,

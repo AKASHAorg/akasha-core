@@ -1,12 +1,12 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
-import { DataProviderInput, Comment_Response, Post_Response } from '@akashaorg/typings/sdk';
-import { IPublishData, CommentResponse, PostResponse } from '@akashaorg/typings/ui';
+import { DataProviderInput } from '@akashaorg/typings/sdk';
+import { IPublishData } from '@akashaorg/typings/ui';
 import { buildPublishObject } from './utils/entry-utils';
 import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
 import { ENTRY_KEY } from './use-posts';
+import { Comment, Post } from '@akashaorg/typings/sdk/graphql-types';
 
 interface InfiniteComments {
   limit: number;
@@ -39,18 +39,17 @@ export interface Publish_Options {
 const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
   const sdk = getSDK();
 
-  const res = await lastValueFrom(
-    sdk.api.comments.getComments({
-      limit,
-      offset,
-      postID,
-    }),
-  );
+  if (!postID) return null;
 
-  const getComments = res.data.getComments;
+  const res = await sdk.api.comments.getComments({
+    limit,
+    offset,
+    postID,
+  });
+
   return {
-    ...getComments,
-    results: getComments.results
+    ...res.getComments,
+    results: res.getComments.results
       .filter(comment => !comment.replyTo)
       .map(comment => {
         return comment._id;
@@ -61,17 +60,18 @@ const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
 const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies) => {
   const sdk = getSDK();
 
-  const res = await lastValueFrom(
-    sdk.api.comments.getReplies({
-      limit,
-      commentID,
-      offset,
-      postID,
-    }),
-  );
+  if (!postID || !commentID) return null;
+
+  const res = await sdk.api.comments.getReplies({
+    limit,
+    commentID,
+    offset,
+    postID,
+  });
+
   return {
-    ...res.data.getReplies,
-    results: res.data.getReplies.results.map(comment => {
+    ...res.getReplies,
+    results: res.getReplies.results.map(comment => {
       return comment._id;
     }),
   };
@@ -91,13 +91,13 @@ const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies)
   }, [commentsQuery.data]);
  * ```
  */
-export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabler = true) {
+export function useInfiniteComments({ limit, postID, offset }: InfiniteComments, enabler) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID],
     async ({ pageParam = offset }) => getComments({ limit, postID, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: enabler && !!(offset || limit),
       keepPreviousData: true,
@@ -120,16 +120,13 @@ export function useInfiniteComments({ limit, postID, offset }: InfiniteComments,
   }, [repliesQuery.data]);
  * ```
  */
-export function useInfiniteReplies(
-  { limit, postID, commentID, offset }: InfiniteReplies,
-  enabler = true,
-) {
+export function useInfiniteReplies({ limit, postID, commentID, offset }: InfiniteReplies, enabler) {
   return useInfiniteQuery(
     [COMMENTS_KEY, postID, commentID],
     async ({ pageParam = offset }) => getReplies({ limit, postID, commentID, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       //getPreviousPageParam: (lastPage, allPages) => lastPage.posts.results[0]._id,
       enabled: enabler && !!(offset || limit),
       keepPreviousData: true,
@@ -141,25 +138,25 @@ export function useInfiniteReplies(
 /**
  * Gets a comment
  */
-const getComment = async (commentID): Promise<CommentResponse> => {
+const getComment = async commentID => {
   const sdk = getSDK();
 
-  const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+  const user = await sdk.api.auth.getCurrentUser();
   // check entry's moderation status
   const modStatus = await checkStatus({
-    user: user.data ? user.data.pubKey : '',
+    user: user ? user.pubKey : '',
     contentIds: [commentID],
   });
-  const res = await lastValueFrom(sdk.api.comments.getComment(commentID));
+  const res = await sdk.api.comments.getComment(commentID);
   const modStatusAuthor = await checkStatus({
-    user: user?.data?.pubKey || '',
-    contentIds: [res.data?.getComment?.author?.pubKey],
+    user: user?.pubKey || '',
+    contentIds: [res.getComment?.author?.pubKey],
   });
   // @TODO: assign modStatus to a single prop
   return {
-    ...res.data.getComment,
+    ...res.getComment,
     ...modStatus[0],
-    author: { ...res.data.getComment.author, ...modStatusAuthor[0] },
+    author: { ...res.getComment?.author, ...modStatusAuthor[0] },
   };
 };
 
@@ -190,12 +187,12 @@ export function useComment(commentID: string, enabler = true) {
 
 const deleteComment = async (commentId: string) => {
   const sdk = getSDK();
-  const resp = await lastValueFrom(sdk.api.comments.removeComment(commentId));
+  const resp = await sdk.api.comments.removeComment(commentId);
   if (resp.hasOwnProperty('error')) {
     throw new Error(resp['error']);
   }
-  if (resp.data.removeComment) {
-    return resp.data.removeComment;
+  if (resp.removeComment) {
+    return resp.removeComment;
   }
   throw new Error('Cannot delete this comment. Please try again later.');
 };
@@ -215,7 +212,7 @@ export function useDeleteComment(commentID: string) {
     // When mutate is called:
     onMutate: async (commentID: string) => {
       // Snapshot the previous value
-      const previousComment: CommentResponse = queryClient.getQueryData([COMMENT_KEY, commentID]);
+      const previousComment: Comment = queryClient.getQueryData([COMMENT_KEY, commentID]);
       // can add some optimistic updates here
       // ex: queryClient.setQueryData([COMMENT_KEY, commentID], {})
       queryClient.setQueryData([COMMENT_KEY, commentID], {
@@ -232,11 +229,8 @@ export function useDeleteComment(commentID: string) {
       return { previousComment };
     },
     onSuccess: () => {
-      const parentEntryId = queryClient.getQueryData<Comment_Response>([
-        COMMENT_KEY,
-        commentID,
-      ]).postId;
-      queryClient.setQueryData<Post_Response>([ENTRY_KEY, parentEntryId], currentEntry => {
+      const parentEntryId = queryClient.getQueryData<Comment>([COMMENT_KEY, commentID]).postId;
+      queryClient.setQueryData<Post>([ENTRY_KEY, parentEntryId], currentEntry => {
         if (currentEntry) {
           return {
             ...currentEntry,
@@ -277,8 +271,8 @@ export function useCreateComment() {
   return useMutation(
     async (publishObj: IPublishData & { postID: string; replyTo?: string }) => {
       const comment = buildPublishObject(publishObj, publishObj.postID, publishObj.replyTo);
-      const res = await lastValueFrom(sdk.api.comments.addComment(comment));
-      return res?.data?.addComment;
+      const res = await sdk.api.comments.addComment(comment);
+      return res?.addComment;
     },
     {
       onMutate: async (publishObj: IPublishData & { postID: string; replyTo?: string }) => {
@@ -294,7 +288,7 @@ export function useCreateComment() {
       onSuccess: async (id, variables) => {
         await queryClient.fetchQuery([COMMENT_KEY, id], () => getComment(id));
         const { postID } = variables;
-        queryClient.setQueryData<PostResponse>([ENTRY_KEY, postID], currentEntry => {
+        queryClient.setQueryData<Post>([ENTRY_KEY, postID], currentEntry => {
           if (currentEntry) {
             return {
               ...currentEntry,
@@ -330,13 +324,11 @@ export function useEditComment(commentID: string, hasCommentData: boolean) {
       if (!hasCommentData) return Promise.resolve();
       const { postID, ...commentData } = comment;
       const publishObj = buildPublishObject(commentData, postID);
-      return lastValueFrom(
-        sdk.api.comments.editComment({ commentID, ...Object.assign({}, publishObj) }),
-      );
+      return sdk.api.comments.editComment({ commentID, ...Object.assign({}, publishObj) });
     },
     {
       onMutate: async (comment: IPublishData & { postID: string }) => {
-        queryClient.setQueryData<CommentResponse>([COMMENT_KEY, commentID], current => {
+        queryClient.setQueryData<Comment>([COMMENT_KEY, commentID], current => {
           const commentPublishObj = buildPublishObject(comment, comment.postID);
           return {
             ...current,

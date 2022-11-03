@@ -10,30 +10,33 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
+import { IReplyErrorState, ReplyError } from '../reply-error';
 const { EntryCardLoading } = DS;
 
 type Props = {
   postId: string;
   commentId: string;
+  pubKey: string;
   singleSpa: RootExtensionProps['singleSpa'];
-  action: 'reply' | 'repost' | 'edit';
+  action: 'reply' | 'edit';
 };
 
-export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
+export function ReplyEditor({ postId, commentId, pubKey, singleSpa, action }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const comment = useComment(commentId, true);
   const editComment = useEditComment(commentId, true);
   const publishComment = useCreateComment();
+  const [replyState, setReplyState] = React.useState<IReplyErrorState>();
 
-  const entryData = React.useMemo(() => {
+  /*@Todo: fix my type */
+  const entryData: any = React.useMemo(() => {
     if (comment.status === 'success') {
-      return mapEntry(comment.data);
+      /*@Todo: fix my type */
+      return mapEntry(comment.data as any);
     }
     return undefined;
   }, [comment.data, comment.status]);
-
-  const embedEntryData = action === 'repost' ? entryData : undefined;
 
   const handlePublish = React.useCallback(
     (data: IPublishData) => {
@@ -52,7 +55,6 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
           );
           break;
         case 'reply':
-        case 'repost':
           publishComment.mutate(
             {
               ...data,
@@ -63,7 +65,7 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
               onSuccess: () => {
                 analyticsActions.trackEvent({
                   category: AnalyticsCategories.REPLY,
-                  action: `${action === 'repost' ? 'Reply Repost' : 'Reply'} Published`,
+                  action: 'Reply Published',
                 });
               },
             },
@@ -86,22 +88,47 @@ export function ReplyEditor({ postId, commentId, singleSpa, action }: Props) {
   const entryAuthorName =
     entryData?.author?.name || entryData?.author?.userName || entryData?.author?.ethAddress;
 
-  if (comment.error) return <>Error loading {action === 'repost' && 'embedded'} comment</>;
+  if (comment.error) return <>Error loading comment</>;
 
   if (comment.status === 'loading') return <EntryCardLoading />;
 
   return (
-    <Base
-      postLabel={action === 'edit' ? t('Save Changes') : t('Reply')}
-      placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
-      onPublish={handlePublish}
-      onPlaceholderClick={handlePlaceholderClick}
-      singleSpa={singleSpa}
-      embedEntryData={embedEntryData}
-      editorState={action === 'edit' ? entryData?.slateContent : null}
-      entryData={entryData}
-      isShown={true}
-      showCancelButton={action === 'edit'}
-    />
+    <>
+      {(!replyState || replyState.state === 'retry') && (
+        <Base
+          postLabel={action === 'edit' ? t('Save Changes') : t('Reply')}
+          placeholderLabel={`${t('Reply to')} ${entryAuthorName || ''}`}
+          onPublish={handlePublish}
+          onPlaceholderClick={handlePlaceholderClick}
+          singleSpa={singleSpa}
+          editorState={
+            replyState && replyState.state === 'retry'
+              ? replyState.content
+              : action === 'edit'
+              ? entryData?.slateContent
+              : null
+          }
+          entryData={entryData}
+          isShown={true}
+          showCancelButton={action === 'edit'}
+        />
+      )}
+      {action === 'reply' && (
+        <ReplyError
+          postId={postId}
+          pubKey={pubKey}
+          onChange={({ state, content }) => {
+            switch (state) {
+              case 'error':
+                setReplyState({ state });
+                break;
+              case 'retry':
+                setReplyState({ state, content });
+                break;
+            }
+          }}
+        />
+      )}
+    </>
   );
 }

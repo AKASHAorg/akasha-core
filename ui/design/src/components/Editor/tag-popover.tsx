@@ -4,7 +4,7 @@ import { Text } from 'grommet';
 import { StyledPopoverDiv, StyledPopoverValueBox } from './styled-editor-box';
 import { ITag } from '@akashaorg/typings/ui';
 
-export interface IMentionPopover {
+export interface ITagPopover {
   postsLabel?: string;
   values: ITag[];
   ref: React.Ref<HTMLDivElement>;
@@ -13,7 +13,7 @@ export interface IMentionPopover {
   handleSelect: (index: number) => void;
 }
 
-export const TagPopover: React.FC<IMentionPopover> = React.forwardRef((props, ref) => {
+export const TagPopover: React.FC<ITagPopover> = React.forwardRef((props, ref) => {
   const { postsLabel, values, currentIndex, setIndex, handleSelect } = props;
 
   return (

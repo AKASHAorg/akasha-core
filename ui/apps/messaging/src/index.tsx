@@ -7,11 +7,11 @@ import {
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK, { Logger } from '@akashaorg/awf-sdk';
 import { filter, map, mergeMap } from 'rxjs';
 import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
 
-export const initialize = (options: IntegrationRegistrationOptions) => {
+export const initialize = (options: IntegrationRegistrationOptions & { logger: Logger }) => {
   const notification: any = options.plugins['@akashaorg/app-notifications'].notification;
   const sdk = getSDK();
 

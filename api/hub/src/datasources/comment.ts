@@ -121,7 +121,7 @@ class CommentAPI extends DataSource {
       endIndex = undefined;
     }
     const results = comments.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? comments[endIndex]._id : null;
+    const nextIndex = endIndex ? comments[endIndex]._id : '';
     return { results: results, nextIndex: nextIndex, total: comments.length };
   }
 
@@ -145,8 +145,8 @@ class CommentAPI extends DataSource {
       endIndex = undefined;
     }
     const results = comments.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? comments[endIndex]._id : null;
-    return { results: results, nextIndex: nextIndex, total: comments.length };
+    const nextIndex = endIndex ? comments[endIndex]._id : '';
+    return { results: results, nextIndex, total: comments.length };
   }
 
   async getComment(commentId: string): Promise<Comment> {
@@ -201,13 +201,14 @@ class CommentAPI extends DataSource {
     if (currentComment.author !== author) {
       throw new Error('Not authorized');
     }
-    if (currentComment?.metaData?.length) {
-      currentComment.metaData.push({
-        provider: this.graphqlCommentsApi,
-        property: this.graphqlCommentVersion,
-        value: Buffer.from(stringify(currentComment.content)).toString('base64'),
-      });
-    }
+    // disabled atm, it takes too much obj space on textile
+    // if (currentComment?.metaData?.length) {
+    //   currentComment.metaData.push({
+    //     provider: this.graphqlCommentsApi,
+    //     property: this.graphqlCommentVersion,
+    //     value: Buffer.from(stringify(currentComment.content)).toString('base64'),
+    //   });
+    // }
     currentComment.content = Array.from(content);
     let removedTags = [];
     let addedTags = [];

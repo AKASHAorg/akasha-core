@@ -56,7 +56,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     loginQuery.data?.pubKey,
     loginQuery.data?.fromCache,
   );
-  const profileState = profileDataQuery.data;
+  /* @Todo: Fix my type */
+  const profileState: any = profileDataQuery.data;
 
   const reqPosts = useInfinitePostsByAuthor(
     publicKey,
@@ -83,7 +84,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-  const postPages = React.useMemo(() => {
+    /* @Todo: Fix my type */
+  const postPages:any = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
     }

@@ -45,11 +45,11 @@
     { "path": "./ui/apps/profile" },
     { "path": "./ui/apps/search" },
     { "path": "./ui/apps/messaging" },
+    { "path": "./ui/apps/articles" },
     { "path": "./sdk" },
     {
       "path": "./typings"
     }
   ],
-  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp"],
-  "files": ["./sdk/src/definitions/graphql.d.ts"]
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "tmp"]
 }

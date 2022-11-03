@@ -1,13 +1,12 @@
 import { injectable } from 'inversify';
-import { ILogService, ILogger } from '@akashaorg/typings/sdk';
 import pino from 'pino';
 
 /**
  * @module Logger
  */
 @injectable()
-class Logging implements ILogService {
-  private _appLogger;
+class Logging {
+  private _appLogger: pino.Logger;
   public constructor() {
     this._appLogger = pino({ browser: { asObject: true }, level: process.env.LOG_LEVEL });
   }
@@ -17,7 +16,7 @@ class Logging implements ILogService {
    * @param nameSpace - Logger name attribute
    * @returns ILogger
    */
-  create(nameSpace?: string): ILogger {
+  create(nameSpace?: string) {
     const logger = this._appLogger.child({ module: nameSpace });
     logger.level = process.env.LOG_LEVEL || 'warn';
     return logger;

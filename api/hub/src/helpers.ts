@@ -28,6 +28,7 @@ import CommentAPI from './datasources/comment';
 import FollowerAPI from './datasources/follower';
 import { DataSource } from 'apollo-datasource';
 import { fileURLToPath } from 'url';
+import { ResolversParentTypes } from './graphql-resolver-types';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -74,10 +75,13 @@ if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
 export const EMPTY_KEY = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
 export const EMPTY_ADDRESS = '0x0000000000000000000000000000000000000000';
 
-export const EMPTY_PROFILE = {
+export const EMPTY_PROFILE: ResolversParentTypes['UserProfile'] = {
   _id: EMPTY_KEY,
   ethAddress: EMPTY_ADDRESS,
   pubKey: EMPTY_KEY,
+  totalFollowers: 0,
+  totalFollowing: 0,
+  totalInterests: 0,
 };
 
 export const getAPISig = async (minutes = 30) => {

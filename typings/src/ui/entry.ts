@@ -1,8 +1,8 @@
 import { Descendant } from 'slate';
-import { Comment_Response, Post_Response, LinkPreview_Response } from '../sdk/responses';
+import { Comment, Post, LinkPreview } from '../sdk/graphql-types';
 import { IProfileData } from './profile';
 
-export interface PostResponse extends Post_Response {
+export interface PostResponse extends Post {
   moderated?: boolean;
   reason?: string;
   reported?: boolean;
@@ -10,7 +10,7 @@ export interface PostResponse extends Post_Response {
   isPublishing?: boolean;
 }
 
-export interface CommentResponse extends Comment_Response {
+export interface CommentResponse extends Comment {
   moderated?: boolean;
   reason?: string;
   reported?: boolean;
@@ -23,14 +23,14 @@ export interface ITag {
   totalPosts: number;
 }
 
-export interface LinkPreview extends LinkPreview_Response {
+export interface LinkPreviewExt extends LinkPreview {
   imageSources?: { url: string; fallbackUrl: string };
   faviconSources?: { url: string; fallbackUrl: string };
 }
 
 export interface IEntryData {
   CID?: string;
-  linkPreview?: LinkPreview;
+  linkPreview?: LinkPreviewExt;
   images?: IMetadata['images'];
   slateContent: Descendant[];
   time?: string | number | Date;
@@ -79,7 +79,7 @@ export interface IPublishData {
 export interface IMetadata {
   app: string;
   version: number;
-  linkPreview?: LinkPreview;
+  linkPreview?: LinkPreviewExt;
   images?: {
     originalSrc?: string;
     src: { url?: string; fallbackUrl?: string };

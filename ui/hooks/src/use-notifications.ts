@@ -12,27 +12,22 @@ export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 
 const getNotifications = async () => {
   const sdk = getSDK();
-  const getMessagesResp = await lastValueFrom(sdk.api.auth.getMessages({}));
+  const getMessagesResp = await sdk.api.auth.getMessages({});
 
-  const getProfilesCalls = getMessagesResp.data.map(message => {
+  const getProfilesCalls = getMessagesResp.map(message => {
     const pubKey = message.body.value.author || message.body.value.follower;
     if (pubKey) {
-      return sdk.api.profile.getProfile({ pubKey }).pipe(
-        catchError(err => {
-          logError('useNotifications.getNotifications.getProfileCalls', err);
-          return of(null);
-        }),
-      );
+      return sdk.api.profile.getProfile({ pubKey });
     }
   });
-  const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls), { defaultValue: [] });
+  const profilesResp = await Promise.all(getProfilesCalls);
 
   let completeMessages = [];
   profilesResp
-    ?.filter(res => res?.data)
+    ?.filter(res => res)
     .map(profileResp => {
-      const profileData = buildProfileMediaLinks(profileResp.data?.resolveProfile);
-      completeMessages = getMessagesResp.data?.map(message => {
+      const profileData = buildProfileMediaLinks(profileResp);
+      completeMessages = getMessagesResp.map(message => {
         if (message.body.value.author === profileData.pubKey) {
           message.body.value.author = profileData;
         }
@@ -75,7 +70,7 @@ export function useFetchNotifications(loggedEthAddress: string) {
 export function useMarkAsRead() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
-  return useMutation(messageId => lastValueFrom(sdk.api.auth.markMessageAsRead(messageId)), {
+  return useMutation(messageId => sdk.api.auth.markMessageAsRead(messageId), {
     // When mutate is called:
     onMutate: async (messageId: string) => {
       await queryClient.cancelQueries(NOTIFICATIONS_KEY);

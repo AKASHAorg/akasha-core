@@ -6,16 +6,16 @@ import { PostEditor } from './post-editor';
 
 export const InlineEditor = (props: Partial<RootExtensionProps>) => {
   const loginQuery = useGetLogin();
-
   const action = props.extensionData.action;
   const entryId = props.extensionData.entryId;
   const commentId = props.extensionData.commentId;
 
-  if (commentId && entryId && (action === 'reply' || action === 'edit' || action === 'repost'))
+  if (commentId && entryId && (action === 'reply' || action === 'edit'))
     return (
       <ReplyEditor
         postId={entryId}
         commentId={commentId}
+        pubKey={loginQuery?.data?.pubKey}
         singleSpa={props.singleSpa}
         action={action}
       />

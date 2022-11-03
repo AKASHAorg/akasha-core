@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Text, Tabs } from 'grommet';
-import { ReleaseInfo } from '@akashaorg/typings/sdk';
+import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import Icon from '../Icon';
 import SubtitleTextIcon from '../SubtitleTextIcon';
 import { TextLine } from '../TextLine';
@@ -11,8 +11,8 @@ import InfoCard from '../InfoCard';
 export interface ICWidgetCardProps {
   className?: string;
 
-  worldApps: ReleaseInfo[];
-  installedApps: ReleaseInfo[];
+  worldApps: IntegrationReleaseInfo[];
+  installedApps: IntegrationReleaseInfo[];
   // labels
   titleLabel: string;
   worldAppsLabel: string;

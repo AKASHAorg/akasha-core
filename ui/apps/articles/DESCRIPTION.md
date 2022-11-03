@@ -1,0 +1,1 @@
+Articles app helps content creators write longer contents while collaborating with others.

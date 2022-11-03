@@ -13,26 +13,26 @@ import { LoginState, useInfiniteComments, useGetProfile } from '@akashaorg/ui-aw
 
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { Entry } from './entry';
+import { MainEntry } from './main-entry';
 import { PendingReply } from './pending-reply';
 import { UseQueryResult } from 'react-query';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 const { BasicCardBox, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
 
-interface IBaseEntryProps {
+type BaseEntryProps = {
   postId: string;
   commentId?: string;
   entryType: EntityTypes;
   entryReq: UseQueryResult;
   entryData?: IEntryData;
-  logger: ILogger;
+  logger: Logger;
   loginState?: LoginState;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-}
+};
 
-const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
+const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   const {
     postId,
     commentId,
@@ -63,7 +63,8 @@ const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
   const reqCommentsOrReplies = commentId ? reqReplies : reqComments;
   const [analyticsActions] = useAnalytics();
 
-  const commentPages = React.useMemo(() => {
+  /* @Todo: Fix my type */
+  const commentPages: any = React.useMemo(() => {
     if (reqCommentsOrReplies.data) {
       return reqCommentsOrReplies.data.pages;
     }
@@ -71,7 +72,8 @@ const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
   }, [reqCommentsOrReplies.data]);
 
   const profileDataReq = useGetProfile(loginState?.pubKey);
-  const loggedProfileData = profileDataReq.data;
+  /* @Todo: fix my type ;/ */
+  const loggedProfileData: any = profileDataReq.data;
 
   const handleLoadMore = () => {
     if (
@@ -131,7 +133,7 @@ const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          <Entry
+          <MainEntry
             postId={postId}
             commentId={commentId}
             entryType={entryType}
@@ -177,6 +179,7 @@ const BaseEntryPage: React.FC<IBaseEntryProps & RootComponentProps> = props => {
             itemSpacing={8}
             i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
             trackEvent={analyticsActions.trackEvent}
+            showReplyFragment={true}
           />
         </>
       )}

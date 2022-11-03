@@ -32,7 +32,10 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
       unsubscribe();
     };
   }, [mutationKey, mutationCache]);
-  return mutation;
+  return {
+    mutation,
+    clear: () => setMutation(null),
+  };
 };
 
 /**

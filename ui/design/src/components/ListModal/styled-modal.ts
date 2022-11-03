@@ -35,7 +35,7 @@ const StyledBox = styled(Box)`
   `};
 `;
 
-const StyledReportModalBox = styled(Box)`
+const StyledModalBox = styled(Box)`
   display: block;
   overflow-y: auto;
 `;
@@ -194,7 +194,7 @@ export {
   ContentWrapper,
   StyledContentArea,
   StyledButtonWrapper,
-  StyledReportModalBox,
+  StyledModalBox,
   ModalButton,
   StyledFooterArea,
 };
