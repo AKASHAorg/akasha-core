@@ -114,6 +114,7 @@ class CommentAPI extends DataSource {
     }
     await queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
     if (commentData.replyTo) {
+      await queryCache.del(this.getCommentCacheKey(commentData.replyTo));
       await queryCache.del(
         this.getAllCommentsCacheKey(`${commentData.postID}:${commentData.replyTo}`),
       );
