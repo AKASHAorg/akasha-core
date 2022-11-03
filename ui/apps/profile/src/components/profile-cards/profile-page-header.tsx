@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
 import {
   IProfileData,
-  NavigateToParams,
   RootComponentProps,
   EventTypes,
   ProfileProviderProperties,
@@ -35,30 +34,13 @@ const {
 } = DS;
 
 export interface IProfileHeaderProps {
-  modalSlotId: string;
   profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
-  navigateTo: (args: NavigateToParams) => void;
 }
 
-type ProfilePageCardProps = IProfileHeaderProps &
-  Omit<
-    RootComponentProps,
-    | 'domElement'
-    | 'events'
-    | 'i18n'
-    | 'isMobile'
-    | 'activeWhen'
-    | 'i18nConfig'
-    | 'mountParcel'
-    | 'name'
-    | 'rootNodeId'
-    | 'unmountSelf'
-  >;
-
-export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
-  const { profileData, loginState, profileId, modalSlotId, navigateTo } = props;
+const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
+  const { profileData, loginState, profileId, plugins } = props;
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
@@ -132,7 +114,7 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
   };
 
   const showUpdateProfileModal = () => {
-    props.navigateTo({
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => routes[UPDATE_PROFILE],
     });
@@ -172,13 +154,13 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
 
   return (
     <>
-      <ModalRenderer slotId={modalSlotId}>
+      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
         {modalOpen && (
           <StatModalWrapper
             loginState={loginState}
             selectedStat={selectedStat}
             profileData={profileData}
-            navigateTo={navigateTo}
+            navigateTo={plugins['@akashaorg/app-routing']?.navigateTo}
             showLoginModal={showLoginModal}
             handleClose={handleClose}
           />
@@ -273,3 +255,5 @@ export const ProfilePageHeader: React.FC<ProfilePageCardProps> = props => {
     </>
   );
 };
+
+export default ProfilePageHeader;

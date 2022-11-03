@@ -1,4 +1,4 @@
-import { ILogger } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
 import { EventTypes, ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 import { combineLatest, filter, Observable, tap, withLatestFrom } from 'rxjs';
 import { getStateSlice, LoaderState } from './state';
@@ -8,7 +8,7 @@ import { uiEvents } from './events';
 export const handleAppLoadingScreens = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  _logger: ILogger,
+  _logger: Logger,
 ) => {
   return state$
     .pipe(getStateSlice('spaEvents'))

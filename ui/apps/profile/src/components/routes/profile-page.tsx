@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
+
 import DS from '@akashaorg/design-system';
 import { RootComponentProps, IProfileData, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { ProfilePageHeader } from '../profile-cards/profile-page-header';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
-const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
+import ProfilePageHeader from '../profile-cards/profile-page-header';
+
+const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
@@ -41,6 +43,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     loginQuery.data?.pubKey,
     loginQuery.data?.fromCache,
   );
+
   const profileState = profileDataQuery.data;
 
   const profileUserName = React.useMemo(() => {
@@ -65,7 +68,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      {profileDataQuery.status === 'loading' && <></>}
+      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') && <Spinner />}
       {(profileDataQuery.status === 'error' ||
         (profileDataQuery.status === 'success' && !profileState)) && (
         <ErrorLoader
@@ -106,11 +109,9 @@ const ProfilePage = (props: ProfilePageProps) => {
             <>
               <ProfilePageHeader
                 {...props}
-                modalSlotId={props.layoutConfig.modalSlotId}
                 profileData={profileState}
                 profileId={pubKey}
                 loginState={loginQuery.data}
-                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               />
             </>
           )}

@@ -22,7 +22,8 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const { t } = useTranslation();
 
   const loginQuery = useGetLogin();
-  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
+  /* @Todo: fix my type ;/ */
+  const loggedProfileQuery: any = useGetProfile(loginQuery.data?.pubKey);
 
   const isLoggedIn = React.useMemo(() => {
     return loginQuery.data?.ethAddress;
@@ -130,7 +131,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
               getShareUrl={(itemId: string) =>
                 `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
               }
-              pages={[{ results: bookmarkedPostIds }]}
+              pages={[{ results: bookmarkedPostIds, total: bookmarkedPostIds.length }]}
               requestStatus={bookmarksReq.status}
               loginState={loginQuery.data}
               loggedProfile={loggedProfileQuery.data}

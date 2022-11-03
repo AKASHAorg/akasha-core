@@ -47,12 +47,12 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
     <BasicCardBox pad="medium" callToAction={true}>
       {props.image}
       <Box direction={isMobile ? 'column-reverse' : 'row'} align="center" justify="between">
-        <Box direction="column" width={isMobile ? '100%' : '50%'}>
+        <Box direction="column" width={isMobile ? '100%' : '50%'} gap="xsmall">
           <Text weight="bold" size="1rem" margin={{ top: 'xsmall' }}>
             {title}
           </Text>
-          <StyledText margin={{ top: 'xsmall' }}>{subtitle}</StyledText>
-          <StyledText margin={{ top: 'xsmall' }}>
+          <StyledText>{subtitle}</StyledText>
+          <StyledText>
             {beforeLinkLabel}
             <CTAAnchor
               size="medium"
@@ -62,7 +62,7 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
             />
             {afterLinkLabel}
           </StyledText>
-          <StyledText margin={{ top: 'xsmall' }}>{disclaimerLabel}</StyledText>
+          <StyledText>{disclaimerLabel}</StyledText>
         </Box>
         <Box
           width={isMobile ? '100%' : '43%'}

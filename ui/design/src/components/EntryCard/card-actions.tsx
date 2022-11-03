@@ -39,6 +39,7 @@ export interface CardActionProps {
   disableActions?: boolean;
   onRepostWithComment?: () => void;
   disableReposting?: boolean;
+  hideRepost?: boolean;
   isModerated?: boolean;
   modalSlotId: string;
   actionsRightExt?: React.ReactNode;
@@ -66,6 +67,7 @@ const CardActions: React.FC<CardActionProps> = props => {
     onRepostWithComment,
     onShare,
     disableReposting,
+    hideRepost,
     disableActions,
     isModerated,
     modalSlotId,
@@ -315,21 +317,23 @@ const CardActions: React.FC<CardActionProps> = props => {
           />
         }
       />
-      <TextIcon
-        label={repostsBtnText}
-        iconType="transfer"
-        iconSize="sm"
-        fontSize="large"
-        clickable={!disableReposting && !disableActions}
-        ref={repostNodeRef}
-        onClick={() => {
-          if (disableActions || disableReposting) {
-            return;
-          }
-          onRepost();
-        }}
-        disabled={disableReposting || disableActions}
-      />
+      {!hideRepost && (
+        <TextIcon
+          label={repostsBtnText}
+          iconType="transfer"
+          iconSize="sm"
+          fontSize="large"
+          clickable={!disableReposting && !disableActions}
+          ref={repostNodeRef}
+          onClick={() => {
+            if (disableActions || disableReposting) {
+              return;
+            }
+            onRepost();
+          }}
+          disabled={disableReposting || disableActions}
+        />
+      )}
       {actionsRightExt}
       {shareNodeRef.current && shareDropOpen && renderShareDrop()}
       {/* disable sharing for v0.1 */}

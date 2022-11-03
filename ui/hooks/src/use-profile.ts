@@ -67,10 +67,7 @@ interface ProfileUpdateStatus {
   remainingFields: string[];
 }
 
-const getProfileData = async (payload: {
-  pubKey: string;
-  loggedUser?: string;
-}): Promise<IProfileData> => {
+const getProfileData = async (payload: { pubKey: string; loggedUser?: string }) => {
   const sdk = getSDK();
 
   // check entry's moderation status
@@ -79,9 +76,9 @@ const getProfileData = async (payload: {
     contentIds: [payload.pubKey],
   });
 
-  const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
+  const res = await sdk.api.profile.getProfile(payload);
   return {
-    ...buildProfileMediaLinks(res.data.getProfile || res.data.resolveProfile),
+    ...buildProfileMediaLinks(res),
     ...modStatus[0],
   };
 };
@@ -103,10 +100,7 @@ export function useGetProfile(pubKey: string, loggedUser?: string, enabler = tru
   });
 }
 
-const getProfileDataByEthAddress = async (payload: {
-  ethAddress: string;
-  loggedUser?: string;
-}): Promise<IProfileData> => {
+const getProfileDataByEthAddress = async (payload: { ethAddress: string; loggedUser?: string }) => {
   const sdk = getSDK();
 
   // check profile's moderation status
@@ -115,9 +109,9 @@ const getProfileDataByEthAddress = async (payload: {
     contentIds: [payload.ethAddress],
   });
 
-  const res = await lastValueFrom(sdk.api.profile.getProfile(payload));
+  const res = await sdk.api.profile.getProfile(payload);
   return {
-    ...buildProfileMediaLinks(res.data.getProfile || res.data.resolveProfile),
+    ...buildProfileMediaLinks(res),
     ...modStatus[0],
   };
 };
@@ -145,15 +139,15 @@ export function useGetProfileByEthAddress(ethAddress: string, loggedUser?: strin
 
 const getEntryAuthorProfileData = async (entryId: string, queryClient: QueryClient) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.entries.getEntry(entryId));
+  const res = await sdk.api.entries.getEntry(entryId);
   const authorCache = queryClient.getQueryData<IProfileData>([
     PROFILE_KEY,
-    res?.data?.getPost?.author?.pubKey,
+    res?.getPost?.author?.pubKey,
   ]);
   if (authorCache) {
     return authorCache;
   }
-  return buildProfileMediaLinks(res.data.getPost.author);
+  return buildProfileMediaLinks(res.getPost.author);
 };
 
 /**
@@ -180,14 +174,14 @@ export function useGetEntryAuthor(entryId: string) {
 
 const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.profile.getFollowers(pubKey, limit, offset));
-  const followersWithMediaLinks = res.data.getFollowers.results.map(follower =>
+  const res = await sdk.api.profile.getFollowers(pubKey, limit, offset);
+  const followersWithMediaLinks = res.getFollowers.results.map(follower =>
     buildProfileMediaLinks(follower),
   );
   return {
-    nextIndex: res.data.getFollowers.nextIndex,
+    nextIndex: res.getFollowers.nextIndex,
     results: followersWithMediaLinks,
-    total: res.data.getFollowers.total,
+    total: res.getFollowers.total,
   };
 };
 
@@ -222,14 +216,14 @@ export function useFollowers(pubKey: string, limit: number, offset?: number) {
 
 const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.profile.getFollowing(pubKey, limit, offset));
-  const followingWithMediaLinks = res.data.getFollowing.results.map(follower =>
+  const res = await sdk.api.profile.getFollowing(pubKey, limit, offset);
+  const followingWithMediaLinks = res.getFollowing.results.map(follower =>
     buildProfileMediaLinks(follower),
   );
   return {
-    nextIndex: res.data.getFollowing.nextIndex,
+    nextIndex: res.getFollowing.nextIndex,
     results: followingWithMediaLinks,
-    total: res.data.getFollowing.total,
+    total: res.getFollowing.total,
   };
 };
 
@@ -264,16 +258,16 @@ export function useFollowing(pubKey: string, limit: number, offset?: number) {
 
 const getInterests = async (pubKey: string) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.profile.getInterests(pubKey));
+  const res = await sdk.api.profile.getInterests(pubKey);
 
-  const getTagCalls = res.data.getInterests.map(interest => {
+  const getTagCalls = res.getInterests.map(interest => {
     return sdk.api.tags.getTag(interest);
   });
 
   if (getTagCalls.length) {
     const tagsRes = await lastValueFrom(forkJoin(getTagCalls));
 
-    return tagsRes.map(res => res.data.getTag);
+    return tagsRes.map(res => res.getTag);
   }
   return [];
 };
@@ -316,7 +310,7 @@ const saveMediaFile = async ({
 const makeDefaultProvider = async (providers: DataProviderInput[]) => {
   const sdk = getSDK();
   try {
-    const makeDefaultRes = await lastValueFrom(sdk.api.profile.makeDefaultProvider(providers));
+    const makeDefaultRes = await sdk.api.profile.makeDefaultProvider(providers);
     if (makeDefaultRes.hasOwnProperty('error')) {
       throw new Error(makeDefaultRes['error']);
     }
@@ -388,15 +382,13 @@ const saveCoverImage = async (
 const saveUserName = async (userName: string) => {
   const sdk = getSDK();
   try {
-    const res = await lastValueFrom(sdk.api.profile.registerUserName(userName));
+    const res = await sdk.api.profile.registerUserName(userName);
     const userNameProvider = {
       provider: ProfileProviders.EWA_BASIC,
       property: ProfileProviderProperties.USERNAME,
       value: userName,
     };
-    const addProviderRes = await lastValueFrom(
-      sdk.api.profile.addProfileProvider([userNameProvider]),
-    );
+    const addProviderRes = await sdk.api.profile.addProfileProvider([userNameProvider]);
     if (res.hasOwnProperty('error')) {
       throw new Error(res['error']);
     }

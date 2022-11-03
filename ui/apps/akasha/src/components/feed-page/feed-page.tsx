@@ -6,7 +6,6 @@ import {
   ModalNavigationOptions,
   IPublishData,
   RootComponentProps,
-  IProfileData,
   EntityTypes,
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
@@ -34,7 +33,8 @@ const {
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  loggedProfileData?: IProfileData;
+  /* @Todo: Fix my type */
+  loggedProfileData?: any;
   loginState: LoginState;
 }
 
@@ -47,7 +47,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [analyticsActions] = useAnalytics();
 
-  const createPostMutation = useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutation: createPostMutation } =
+    useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
@@ -60,7 +61,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [postsReq, loginState?.fromCache]);
 
-  const postPages = React.useMemo(() => {
+  /* @Todo: Fix my type */
+  const postPages: any = React.useMemo(() => {
     if (postsReq.data) {
       return postsReq.data.pages;
     }
@@ -100,15 +102,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       </Helmet>
       {loginState?.ethAddress ? (
         <>
-          <BasicCardBox gap="small" margin={{ bottom: 'xsmall' }}>
-            <Box pad="medium">
-              <Box direction="row" justify="between" margin={{ bottom: 'xsmall' }}>
-                <Text size="xlarge" weight={'bold'}>
-                  {t('General Social Feed')}
-                </Text>
-              </Box>
-              <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
+          <BasicCardBox pad="medium" gap="xsmall" margin={{ bottom: 'xsmall' }}>
+            <Box fill="horizontal">
+              <Text size="xlarge" weight="bold">
+                {t('General Social Feed')}
+              </Text>
             </Box>
+            <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
           </BasicCardBox>
           <Box margin={{ bottom: 'xsmall' }}>
             <Extension
@@ -119,7 +119,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           </Box>
         </>
       ) : (
-        <Box margin={{ bottom: 'medium' }}>
+        <Box margin={{ bottom: 'small' }}>
           <LoginCTAWidgetCard
             title={`${t('Welcome, fellow Ethereans!')} 💫`}
             subtitle={t('We are in private alpha at this time. ')}
@@ -142,10 +142,13 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       {createPostMutation && createPostMutation.state.status === 'loading' && (
         <EntryCard
           style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-          entryData={createPendingEntry(loggedProfileData, createPostMutation.state.variables)}
+          entryData={
+            /* @Todo: Fix my type */
+            createPendingEntry(loggedProfileData, createPostMutation.state.variables) as any
+          }
           sharePostLabel={t('Share Post')}
           shareTextLabel={t('Share this post with your friends')}
-          repliesLabel={t('Replies')}
+          repliesLabel=""
           repostsLabel={t('Reposts')}
           repostLabel={t('Repost')}
           repostWithCommentLabel={t('Repost with comment')}

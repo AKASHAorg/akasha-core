@@ -1,4 +1,3 @@
-import { lastValueFrom } from 'rxjs';
 import { useQuery } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
@@ -15,7 +14,7 @@ export interface IUseIsValidTokenProps {
 
 const checkIsValidToken = async (inviteToken: string) => {
   const sdk = getSDK();
-  return lastValueFrom(sdk.api.auth.validateInvite(inviteToken));
+  return sdk.api.auth.validateInvite(inviteToken);
 };
 
 /**

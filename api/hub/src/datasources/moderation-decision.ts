@@ -254,7 +254,7 @@ class ModerationDecisionAPI extends DataSource {
       endIndex = undefined;
     }
     const results = list.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? list[endIndex]._id : null;
+    const nextIndex = endIndex ? list[endIndex]._id : '';
     return { results: results, nextIndex: nextIndex, total: list.length };
   }
 
@@ -359,7 +359,7 @@ class ModerationDecisionAPI extends DataSource {
       endIndex = undefined;
     }
     const results = list.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? list[endIndex]._id : null;
+    const nextIndex = endIndex ? list[endIndex]._id : '';
     const moderated = [];
     for (const result of results) {
       const decision = await this.getFinalDecision(result.contentID, profileAPI, reportingAPI);

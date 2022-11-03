@@ -9,13 +9,13 @@ class FollowUnfollowQueue {
       let response;
       switch (val?.type) {
         case 'follow':
-          response = await lastValueFrom(this.sdk.api.profile.follow(val.ethAddress));
+          response = await this.sdk.api.profile.follow(val.ethAddress);
           break;
         case 'unFollow':
-          response = await lastValueFrom(this.sdk.api.profile.unFollow(val.ethAddress));
+          response = await this.sdk.api.profile.unFollow(val.ethAddress);
           break;
         default:
-          return EMPTY;
+          return Promise.resolve(EMPTY);
       }
       return { ...val, response };
     }),

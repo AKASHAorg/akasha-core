@@ -1,8 +1,7 @@
-import { lastValueFrom } from 'rxjs';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { Post_Response } from '@akashaorg/typings/sdk';
+import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 
 import constants from './constants';
 import { ENTRY_KEY } from './use-posts';
@@ -44,12 +43,12 @@ export type UseModerationParam = {
 // create moderation mutation
 const createModerationMutation = async ({ dataToSign, contentId, contentType, url }) => {
   const sdk = getSDK();
-  const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign));
+  const resp = await sdk.api.auth.signData(dataToSign);
   const data = {
     contentId,
     contentType,
     data: dataToSign,
-    signature: btoa(String.fromCharCode.apply(null, resp.data.signature)),
+    signature: btoa(String.fromCharCode.apply(null, resp.signature)),
   };
 
   const status = await createModeration(url, data);
@@ -107,12 +106,12 @@ export function useModeration() {
 const createReportMutation = async ({ dataToSign, contentId, contentType, url }) => {
   const sdk = getSDK();
 
-  const resp = await lastValueFrom(sdk.api.auth.signData(dataToSign, true));
+  const resp = await sdk.api.auth.signData(dataToSign, true);
   const data = {
     contentId,
     contentType,
     data: dataToSign,
-    signature: resp.data.signature as string,
+    signature: resp.signature.toString(),
   };
 
   const status = await createModeration(url, data);
@@ -163,7 +162,7 @@ export function useReport() {
             reason: variables.dataToSign.reason,
             reported: true,
           }));
-          queryClient.setQueriesData<Post_Response>(ENTRY_KEY, oldData => {
+          queryClient.setQueriesData<PostResultFragment>(ENTRY_KEY, oldData => {
             if (oldData?.author?.pubKey === variables.contentId) {
               return {
                 ...oldData,
@@ -276,7 +275,7 @@ export function useInfiniteLog(limit: number, offset?: string) {
       }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('[use-moderation.tsx]: useInfiniteLog err', err),
@@ -311,7 +310,7 @@ export function useInfinitePending(limit: number, offset?: string) {
     async ({ pageParam = offset }) => getPendingItems({ limit, offset: pageParam }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('[use-moderation.ts]: useInfinitePending err', err),
@@ -351,7 +350,7 @@ export function useInfiniteKept(limit: number, offset?: string) {
       }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('[use-moderation.ts]: useInfiniteKept err', err),
@@ -391,7 +390,7 @@ export function useInfiniteDelisted(limit: number, offset?: string) {
       }),
     {
       /* Return undefined to indicate there is no next page available. */
-      getNextPageParam: lastPage => lastPage?.nextIndex,
+      getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
       enabled: !!(offset || limit),
       keepPreviousData: true,
       onError: (err: Error) => logError('[use-moderation.ts]: useInfiniteDelisted err', err),

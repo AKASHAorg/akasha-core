@@ -125,6 +125,14 @@ import {
 import { useAppDescription } from './use-app-description';
 import { usePlaformHealthCheck } from './use-health-check';
 import { useEnsTexts } from './use-ens';
+import {
+  useValidateMessage,
+  useAddDevKeyFromMessage,
+  useGetDevKeys,
+  useDeleteDevKey,
+  useSignMessage,
+  useVerifySignature,
+} from './use-dev-profile';
 
 export {
   constants,
@@ -273,4 +281,10 @@ export {
   useAppDescription,
   usePlaformHealthCheck,
   useEnsTexts,
+  useValidateMessage,
+  useAddDevKeyFromMessage,
+  useGetDevKeys,
+  useDeleteDevKey,
+  useSignMessage,
+  useVerifySignature,
 };

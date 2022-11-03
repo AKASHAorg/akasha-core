@@ -8,7 +8,6 @@ import {
   UpdateProfileStatus,
 } from '@akashaorg/typings/ui';
 
-// import { TitleSection } from './sections/TitleSection';
 import { AvatarSection } from './sections/AvatarSection';
 import { NameInputSection } from './sections/NameInputSection';
 import { CoverImageSection } from './sections/CoverImageSection';
@@ -17,12 +16,12 @@ import { ActionButtonsSection } from './sections/ActionButtonsSection';
 import { UsernameInputSection } from './sections/UsernameInputSection';
 
 import Icon from '../Icon';
+import { CropValue, StyledCropperImageWrapper, StyledZoomControlBox } from '../ImageCropper';
 import { FormImagePopover } from '../ImagePopover/form-image-popover';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
 import getCroppedImage from '../../utils/get-cropped-image';
 
-import { StyledCropperImageWrapper, StyledZoomControlBox } from './styled-form-card';
 import SocialLinksSection, { StateLink } from './sections/social-links-section';
 import EnsPrefillSection from './sections/ens-prefill-section';
 import { EnsTxtPresets } from './sections/social-link-input';
@@ -106,9 +105,7 @@ export type CroppableFields =
   | ProfileProviderProperties.AVATAR
   | ProfileProviderProperties.COVER_IMAGE;
 
-export type CropValue = { x: number; y: number };
-
-const BoxFormCard: React.FC<ProfileFormProps> = props => {
+const ProfileForm: React.FC<ProfileFormProps> = props => {
   const {
     className,
     // titleLabel,
@@ -347,6 +344,7 @@ const BoxFormCard: React.FC<ProfileFormProps> = props => {
   const closeCoverImagePopover = () => {
     setCoverImagePopoverOpen(false);
   };
+
   // @Todo: update this after ts-jest migration to ESM
   const handleImageInsert = React.useCallback(
     (imageKey: string) => (src: Blob) => {
@@ -741,7 +739,7 @@ const BoxFormCard: React.FC<ProfileFormProps> = props => {
   );
 };
 
-BoxFormCard.defaultProps = {
+ProfileForm.defaultProps = {
   nameLabel: 'Name',
   usernameLabel: 'Username',
   usernameFieldPlaceholder: 'username',
@@ -755,4 +753,4 @@ BoxFormCard.defaultProps = {
   loadingDataLabel: 'Loading profile data',
 };
 
-export default BoxFormCard;
+export default ProfileForm;

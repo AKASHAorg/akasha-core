@@ -1,7 +1,6 @@
 import React from 'react';
 import objHash from 'object-hash';
 import { Query, useMutation, useQuery, useQueryClient } from 'react-query';
-import { catchError, forkJoin, lastValueFrom, of } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { IProfileData } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -18,23 +17,16 @@ const getIsFollowingMultiple = async (followerPubKey: string, followingPubKeyArr
   const sdk = getSDK();
   const filteredList = followingPubKeyArray.filter(profile => !!profile);
   const getFollowedProfilesCalls = filteredList.map((profile: string) => {
-    return sdk.api.profile
-      .isFollowing({
-        follower: followerPubKey,
-        following: profile,
-      })
-      .pipe(
-        catchError(err => {
-          logError('useFollow.getIsFollowingMultiple', err);
-          return of({ data: null });
-        }),
-      );
+    return sdk.api.profile.isFollowing({
+      follower: followerPubKey,
+      following: profile,
+    });
   });
   const followedProfiles: string[] = [];
   if (getFollowedProfilesCalls.length) {
-    const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
+    const res = await Promise.all(getFollowedProfilesCalls);
     filteredList.forEach((profile, index) => {
-      if (res[index].data?.isFollowing === true) {
+      if (res[index]?.isFollowing === true) {
         followedProfiles.push(profile);
       }
     });
@@ -112,45 +104,31 @@ const getIsContactMultiple = async (mainProfile: string, checkIfContactsPubkeys:
   const sdk = getSDK();
   const filteredList = checkIfContactsPubkeys.filter(profile => !!profile);
   const getFollowedProfilesCalls = filteredList.map((profile: string) => {
-    return sdk.api.profile
-      .isFollowing({
-        follower: mainProfile,
-        following: profile,
-      })
-      .pipe(
-        catchError(err => {
-          logError('useFollow.getFollowedProfile', err);
-          return of({ data: null });
-        }),
-      );
+    return sdk.api.profile.isFollowing({
+      follower: mainProfile,
+      following: profile,
+    });
   });
   const getFollowingProfilesCalls = filteredList.map((profile: string) => {
-    return sdk.api.profile
-      .isFollowing({
-        follower: profile,
-        following: mainProfile,
-      })
-      .pipe(
-        catchError(err => {
-          logError('useFollow.getFollowingProfile', err);
-          return of({ data: null });
-        }),
-      );
+    return sdk.api.profile.isFollowing({
+      follower: profile,
+      following: mainProfile,
+    });
   });
   const followedProfiles: string[] = [];
   const followingProfiles: string[] = [];
   if (getFollowedProfilesCalls.length) {
-    const res = await lastValueFrom(forkJoin(getFollowedProfilesCalls));
+    const res = await Promise.all(getFollowedProfilesCalls);
     filteredList.forEach((profile, index) => {
-      if (res[index].data?.isFollowing === true) {
+      if (res[index].isFollowing === true) {
         followedProfiles.push(profile);
       }
     });
   }
   if (getFollowingProfilesCalls.length) {
-    const res = await lastValueFrom(forkJoin(getFollowingProfilesCalls));
+    const res = await Promise.all(getFollowingProfilesCalls);
     filteredList.forEach((profile, index) => {
-      if (res[index].data?.isFollowing === true) {
+      if (res[index].isFollowing === true) {
         followingProfiles.push(profile);
       }
     });
@@ -279,7 +257,7 @@ export function useIsContactMultiple(mainProfile: string, checkIfContactsPubkeys
 export function useFollow() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
-  return useMutation(followPubKey => lastValueFrom(sdk.api.profile.follow(followPubKey)), {
+  return useMutation(followPubKey => sdk.api.profile.follow(followPubKey), {
     onMutate: async (followPubKey: string) => {
       await queryClient.cancelQueries(FOLLOWED_PROFILES_KEY);
       // Snapshot the previous value
@@ -330,10 +308,10 @@ export function useFollow() {
         }
       } else {
         const sdk = getSDK();
-        const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+        const user = await sdk.api.auth.getCurrentUser();
         if (user) {
-          await queryClient.invalidateQueries([PROFILE_KEY, user.data?.pubKey]);
-          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.data?.pubKey]);
+          await queryClient.invalidateQueries([PROFILE_KEY, user.pubKey]);
+          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.pubKey]);
         }
       }
     },
@@ -358,7 +336,7 @@ export function useFollow() {
 export function useUnfollow() {
   const sdk = getSDK();
   const queryClient = useQueryClient();
-  return useMutation(unfollowPubKey => lastValueFrom(sdk.api.profile.unFollow(unfollowPubKey)), {
+  return useMutation(unfollowPubKey => sdk.api.profile.unFollow(unfollowPubKey), {
     onMutate: async (unfollowPubKey: string) => {
       await queryClient.cancelQueries(FOLLOWED_PROFILES_KEY);
       // Snapshot the previous value
@@ -407,10 +385,10 @@ export function useUnfollow() {
         }
       } else {
         const sdk = getSDK();
-        const user = await lastValueFrom(sdk.api.auth.getCurrentUser());
+        const user = await sdk.api.auth.getCurrentUser();
         if (user) {
-          await queryClient.invalidateQueries([PROFILE_KEY, user.data?.pubKey]);
-          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.data?.pubKey]);
+          await queryClient.invalidateQueries([PROFILE_KEY, user.pubKey]);
+          await queryClient.invalidateQueries([FOLLOWERS_KEY, user.pubKey]);
         }
       }
     },

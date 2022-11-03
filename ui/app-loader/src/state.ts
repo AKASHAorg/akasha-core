@@ -1,9 +1,9 @@
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import {
   ModalNavigationOptions,
   ILoaderConfig,
   IAppConfig,
-  BaseIntegrationInfo,
   UIEventData,
   EventTypes,
   IntegrationModule,
@@ -23,6 +23,7 @@ import { getEvents, ObservedEventNames } from './events';
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaorg/awf-sdk';
 
+type BaseIntegrationInfo = any;
 export interface LoaderState {
   modalRequest: ModalNavigationOptions | null;
   enableIntegrationRequest: string;
@@ -36,8 +37,9 @@ export interface LoaderState {
   integrationsByMountPoint: Map<string, (IAppConfig & { name: string })[]>;
   /*
    * Generic Integration manifest data from registry
+   * @Todo: fix my type ...
    */
-  manifests: BaseIntegrationInfo[];
+  manifests: any[];
   layoutConfig: IAppConfig;
   /**
    * SystemJS imported modules

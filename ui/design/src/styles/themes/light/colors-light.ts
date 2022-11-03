@@ -62,6 +62,7 @@ const colors: IColorsLight = {
   beigeBackground: '#F8F4F4', // lightBeige
   lightBackground: '#EDF0F5', // lightGrey
   darkBackground: '#000C20',
+  replyEntrySeparator: '#B8BEC6',
   cardBackground: '#FFF',
   modalBackground: '#7F7F7F', // deepGrey
   modalBackgroundAlt: '#87909E', // deeperGrey
@@ -70,6 +71,7 @@ const colors: IColorsLight = {
   hoverBackground: '#F1F4FF',
   activePanelBackground: '#DCE3FF',
   skeletonBackground: '#EDF0F5',
+  entryEditorBackground: '#FFFFFF',
   inputBackground: '#FFF',
   coverImageBackground: '#ECF1FE',
   embedBackground: '#FBFCFD',
@@ -80,6 +82,7 @@ const colors: IColorsLight = {
   accentLight: '#E9EDFD', // lightBlue
   accentLightHover: '#D3DAFA', //light blue
   border: '#EDF0F5', // lightGrey
+  replyFragmentBorder: '#CCD2DF',
   lightBorder: '#F5F6F7', // lighterGrey
   darkBorder: '#B6BFD1', // deepGrey
   darkerBorder: '#87909E', // deeperGrey

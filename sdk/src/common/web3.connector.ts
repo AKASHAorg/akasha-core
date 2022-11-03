@@ -1,13 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { ethers } from 'ethers';
 import {
-  TYPES,
-  ILogger,
+  EthProviders,
   INJECTED_PROVIDERS,
   PROVIDER_ERROR_CODES,
+  TYPES,
   WEB3_EVENTS,
-  EthProviders,
-  IWeb3Connector,
 } from '@akashaorg/typings/sdk';
 import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/web3-provider';
@@ -16,13 +14,12 @@ import OpenLogin from '@toruslabs/openlogin';
 import { createObservableStream, createObservableValue } from '../helpers/observable';
 import EventBus from './event-bus';
 import { throwError } from 'rxjs';
+import pino from 'pino';
 
 @injectable()
-class Web3Connector
-  implements IWeb3Connector<ethers.providers.BaseProvider | ethers.providers.Web3Provider>
-{
+class Web3Connector {
   #logFactory: Logging;
-  #log: ILogger;
+  #log: pino.Logger;
   #web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider;
   #globalChannel: EventBus;
   #wallet: ethers.Wallet;
@@ -88,6 +85,15 @@ class Web3Connector
    */
   get provider() {
     if (this.#web3Instance) {
+      return this.#web3Instance;
+    } else {
+      this.#web3Instance = new ethers.providers.InfuraProvider(
+        {
+          name: this.network,
+          chainId: this.networkId[this.network],
+        },
+        process.env.INFURA_ID,
+      );
       return this.#web3Instance;
     }
     throw new Error('Must connect first to a provider!');

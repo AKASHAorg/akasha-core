@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
-import { of as mockOf } from 'rxjs';
 import {
   useGetIntegrationId,
   useGetIntegrationInfo,
@@ -14,8 +13,8 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       icRegistry: {
-        getIntegrationInfo: async () => ({ data: mockIntegrationInfo }),
-        getIntegrationsInfo: () => mockOf({ data: [mockIntegrationInfo] }),
+        getIntegrationInfo: async () => mockIntegrationInfo,
+        getIntegrationsInfo: () => Promise.resolve([mockIntegrationInfo]),
         getIntegrationsCount: async () => ({ data: 5 }),
         getIntegrationId: async () => ({ data: 'abcd' }),
       },

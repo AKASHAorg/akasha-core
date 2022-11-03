@@ -1,72 +1,30 @@
 import { BUCKET_THREAD_NAME, PROFILE_MEDIA_FILES } from './constants';
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import {
-  TYPES,
-  DataProviderInput,
-  ILogger,
-  PROFILE_EVENTS,
-  AWF_IProfile,
-  GlobalSearchResult,
-  UserFollowers_Response,
-  UserProfile_Response,
-} from '@akashaorg/typings/sdk';
-import { concatAll, map, tap } from 'rxjs/operators';
+import { TYPES, PROFILE_EVENTS } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
-import {
-  AddProfileProvider,
-  Follow,
-  GetProfile,
-  GlobalSearch,
-  IsFollowing,
-  MakeDefaultProvider,
-  RegisterUsername,
-  ResolveProfile,
-  SaveMetaData,
-  SearchProfiles,
-  UnFollow,
-  GetFollowers,
-  GetFollowing,
-  ToggleInterestSub,
-  GetInterests,
-} from './profile.graphql';
 import Logging from '../logging';
 import { lastValueFrom, throwError } from 'rxjs';
 import { resizeImage } from '../helpers/img';
 import Settings from '../settings';
 import EventBus from '../common/event-bus';
-import { createFormattedValue } from '../helpers/observable';
+import pino from 'pino';
+import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
 
 @injectable()
-class AWF_Profile implements AWF_IProfile {
+class AWF_Profile {
   private readonly _web3: Web3Connector;
-  private _log: ILogger;
+  private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _settings: Settings;
   private _globalChannel: EventBus;
   public readonly TagSubscriptions = '@TagSubscriptions';
-  readonly graphQLDocs = {
-    AddProfileProvider,
-    MakeDefaultProvider,
-    RegisterUsername,
-    ResolveProfile,
-    GetProfile,
-    Follow,
-    UnFollow,
-    IsFollowing,
-    SaveMetaData,
-    SearchProfiles,
-    GlobalSearch,
-    GetFollowers,
-    GetFollowing,
-    ToggleInterestSub,
-    GetInterests,
-  };
 
   constructor(
     @inject(TYPES.Log) log: Logging,
@@ -86,239 +44,145 @@ class AWF_Profile implements AWF_IProfile {
    * Mutation request to add a profile provider to the profile object
    * @param opt
    */
-  addProfileProvider(opt: DataProviderInput[]) {
-    return this._auth.authenticateMutationData(opt as unknown as Record<string, unknown>[]).pipe(
-      map(res => {
-        return this._gql
-          .run<{ addProfileProvider: string }>(
-            {
-              query: AddProfileProvider,
-              variables: { data: opt },
-              operationName: 'AddProfileProvider',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          )
-          .pipe(
-            tap(ev => {
-              // @emits PROFILE_EVENTS.ADD_PROVIDER
-              this._globalChannel.next({
-                data: ev.data,
-                event: PROFILE_EVENTS.ADD_PROVIDER,
-                args: opt,
-              });
-            }),
-          );
-      }),
-      concatAll(),
+  async addProfileProvider(opt: DataProviderInput[]) {
+    const auth = await this._auth.authenticateMutationData(
+      opt as unknown as Record<string, unknown>[],
     );
+    const newProfileProvider = await this._gql.getAPI().AddProfileProvider(
+      { data: opt },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
+    );
+    // @emits PROFILE_EVENTS.ADD_PROVIDER
+    this._globalChannel.next({
+      data: newProfileProvider,
+      event: PROFILE_EVENTS.ADD_PROVIDER,
+      args: opt,
+    });
+    return newProfileProvider;
   }
 
   /**
    *
    * @param opt
    */
-  makeDefaultProvider(opt: DataProviderInput[]) {
-    return this._auth.authenticateMutationData(opt as unknown as Record<string, unknown>[]).pipe(
-      map(res => {
-        return this._gql
-          .run<{ makeDefaultProvider: string }>(
-            {
-              query: MakeDefaultProvider,
-              variables: { data: opt },
-              operationName: 'MakeDefaultProvider',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          )
-          .pipe(
-            tap(ev => {
-              // @emits PROFILE_EVENTS.DEFAULT_PROVIDER
-              this._globalChannel.next({
-                data: ev.data,
-                event: PROFILE_EVENTS.DEFAULT_PROVIDER,
-                args: opt,
-              });
-            }),
-          );
-      }),
-      concatAll(),
+  async makeDefaultProvider(opt: DataProviderInput[]) {
+    const auth = await this._auth.authenticateMutationData(
+      opt as unknown as Record<string, unknown>[],
     );
+    const makeDefaultProvider = await this._gql.getAPI().MakeDefaultProvider(
+      { data: opt },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
+    );
+    // @emits PROFILE_EVENTS.DEFAULT_PROVIDER
+    this._globalChannel.next({
+      data: makeDefaultProvider,
+      event: PROFILE_EVENTS.DEFAULT_PROVIDER,
+      args: opt,
+    });
+    return makeDefaultProvider;
   }
 
   /**
    *
    * @param userName
    */
-  registerUserName(userName: string) {
+  async registerUserName(userName: string) {
     if (userName.length < 3) {
       return throwError(() => {
         return new Error('Subdomain must have at least 3 characters');
       });
     }
-
-    return this._auth.authenticateMutationData(userName).pipe(
-      map(res => {
-        return this._gql
-          .run<{ registerUserName: string }>(
-            {
-              query: RegisterUsername,
-              variables: { name: userName },
-              operationName: 'RegisterUsername',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          )
-          .pipe(
-            tap(ev => {
-              // @emits PROFILE_EVENTS.REGISTER_USERNAME
-              this._globalChannel.next({
-                data: ev.data,
-                event: PROFILE_EVENTS.REGISTER_USERNAME,
-                args: { userName },
-              });
-            }),
-          );
-      }),
-      concatAll(),
+    const auth = await this._auth.authenticateMutationData(userName);
+    const registerUserName = await this._gql.getAPI().RegisterUsername(
+      { name: userName },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
     );
+    // @emits PROFILE_EVENTS.REGISTER_USERNAME
+    this._globalChannel.next({
+      data: registerUserName,
+      event: PROFILE_EVENTS.REGISTER_USERNAME,
+      args: { userName },
+    });
+    return registerUserName;
   }
 
   /**
    *
    * @param opt
    */
-  getProfile(opt: { ethAddress?: string; pubKey?: string }) {
-    let query, variables, operationName;
+  async getProfile(opt: { ethAddress?: string; pubKey?: string }) {
+    let resp: UserProfileFragmentDataFragment;
     if (opt.pubKey) {
-      query = ResolveProfile;
-      variables = { pubKey: opt.pubKey };
-      operationName = 'ResolveProfile';
+      const tmp = await this._gql.getAPI().ResolveProfile({ pubKey: opt.pubKey });
+      resp = tmp.resolveProfile;
     } else if (opt.ethAddress) {
-      query = GetProfile;
-      variables = { ethAddress: opt.ethAddress };
-      operationName = 'GetProfile';
+      const tmp = await this._gql.getAPI().GetProfile({ ethAddress: opt.ethAddress });
+      resp = tmp.getProfile;
     } else {
-      return throwError(() => {
-        return new Error('Must provide ethAddress or pubKey value');
-      });
+      throw new Error('Must provide ethAddress or pubKey value');
     }
-    return this._gql.run<
-      { getProfile?: UserProfile_Response } & { resolveProfile: UserProfile_Response }
-    >(
+    return resp;
+  }
+
+  /**
+   *
+   * @param pubKey
+   */
+  async follow(pubKey: string) {
+    const auth = await this._auth.authenticateMutationData(pubKey);
+    const followResult = await this._gql.getAPI().Follow(
+      { pubKey: pubKey },
       {
-        query: query,
-        variables: variables,
-        operationName: operationName,
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
       },
-      true,
     );
+    // @emits PROFILE_EVENTS.FOLLOW
+    this._globalChannel.next({
+      data: followResult,
+      event: PROFILE_EVENTS.FOLLOW,
+      args: { pubKey },
+    });
+    return followResult;
   }
 
   /**
    *
    * @param pubKey
    */
-  follow(pubKey: string) {
-    return this._auth.authenticateMutationData(pubKey).pipe(
-      map(res => {
-        this._gql.clearCache();
-        return this._gql
-          .run<{ follow: boolean }>(
-            {
-              query: Follow,
-              variables: { pubKey: pubKey },
-              operationName: 'Follow',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          )
-          .pipe(
-            tap(ev => {
-              // @emits PROFILE_EVENTS.FOLLOW
-              this._globalChannel.next({
-                data: ev.data,
-                event: PROFILE_EVENTS.FOLLOW,
-                args: { pubKey },
-              });
-            }),
-          );
-      }),
-      concatAll(),
+  async unFollow(pubKey: string) {
+    const auth = await this._auth.authenticateMutationData(pubKey);
+    const unFollowResult = await this._gql.getAPI().UnFollow(
+      { pubKey: pubKey },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
     );
-  }
-
-  /**
-   *
-   * @param pubKey
-   */
-  unFollow(pubKey: string) {
-    return this._auth.authenticateMutationData(pubKey).pipe(
-      map(res => {
-        this._gql.clearCache();
-        return this._gql
-          .run<{ unFollow: boolean }>(
-            {
-              query: UnFollow,
-              variables: { pubKey: pubKey },
-              operationName: 'UnFollow',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          )
-          .pipe(
-            tap(ev => {
-              // @emits PROFILE_EVENTS.UNFOLLOW
-              this._globalChannel.next({
-                data: ev.data,
-                event: PROFILE_EVENTS.UNFOLLOW,
-                args: { pubKey },
-              });
-            }),
-          );
-      }),
-      concatAll(),
-    );
+    // @emits PROFILE_EVENTS.UNFOLLOW
+    this._globalChannel.next({
+      data: unFollowResult,
+      event: PROFILE_EVENTS.UNFOLLOW,
+      args: { pubKey },
+    });
+    return unFollowResult;
   }
 
   /**
    *
    * @param opt
    */
-  isFollowing(opt: { follower: string; following: string }) {
-    return this._gql.run<{ isFollowing: boolean }>(
-      {
-        query: IsFollowing,
-        variables: { follower: opt.follower, following: opt.following },
-        operationName: 'IsFollowing',
-      },
-      true,
-    );
+  async isFollowing(opt: { follower: string; following: string }) {
+    return this._gql.getAPI().IsFollowing({ follower: opt.follower, following: opt.following });
   }
 
   /**
@@ -398,27 +262,15 @@ class AWF_Profile implements AWF_IProfile {
       provider: PROFILE_MEDIA_FILES,
       value: cid,
     };
-    await lastValueFrom(
-      this._auth.authenticateMutationData(dataFinal as unknown as Record<string, unknown>[]).pipe(
-        map(res => {
-          this._gql.clearCache();
-          return this._gql.run(
-            {
-              query: SaveMetaData,
-              variables: { data: dataFinal },
-              operationName: 'SaveMetaData',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          );
-        }),
-        concatAll(),
-      ),
+    const auth = await this._auth.authenticateMutationData(
+      dataFinal as unknown as Record<string, unknown>[],
+    );
+    await this._gql.getAPI().SaveMetaData(
+      { data: dataFinal },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
     );
 
     return { CID: cid, size: resized.size, blob: resized.image };
@@ -428,21 +280,14 @@ class AWF_Profile implements AWF_IProfile {
    *
    * @param name
    */
-  searchProfiles(name: string) {
-    return this._gql.run<{ searchProfiles: UserProfile_Response[] }>(
-      {
-        query: SearchProfiles,
-        variables: { name: name },
-        operationName: 'SearchProfiles',
-      },
-      true,
-    );
+  async searchProfiles(name: string) {
+    return this._gql.getAPI().SearchProfiles({ name: name });
   }
 
   /**
    *
    */
-  getTrending() {
+  async getTrending() {
     return this.searchProfiles('');
   }
 
@@ -450,79 +295,51 @@ class AWF_Profile implements AWF_IProfile {
    *
    * @param tagName
    */
-  toggleTagSubscription(tagName: string) {
-    return this._auth.authenticateMutationData({ sub: tagName }).pipe(
-      map(res => {
-        this._gql.clearCache();
-        return this._gql
-          .run<{ toggleInterestSub: boolean }>(
-            {
-              query: ToggleInterestSub,
-              variables: { sub: tagName },
-              operationName: 'ToggleInterestSub',
-              context: {
-                headers: {
-                  Authorization: `Bearer ${res.token.data}`,
-                  Signature: res.signedData.data.signature,
-                },
-              },
-            },
-            false,
-          )
-          .pipe(
-            tap(ev => {
-              // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
-              this._globalChannel.next({
-                data: { status: ev.data },
-                event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
-                args: { tagName },
-              });
-            }),
-          );
-      }),
-      concatAll(),
+  async toggleTagSubscription(tagName: string) {
+    const auth = await this._auth.authenticateMutationData({ sub: tagName });
+    const toggledTag = await this._gql.getAPI().ToggleInterestSub(
+      { sub: tagName },
+      {
+        Authorization: `Bearer ${auth.token}`,
+        Signature: auth.signedData.signature.toString(),
+      },
     );
+    // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
+    this._globalChannel.next({
+      data: { status: toggledTag },
+      event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
+      args: { tagName },
+    });
+    return toggledTag;
   }
 
   /**
    *
    */
-  getTagSubscriptions() {
-    return this._auth.getCurrentUser().pipe(
-      map(res => this.getInterests(res.data.pubKey)),
-      concatAll(),
-    );
+  async getTagSubscriptions() {
+    const currUser = await this._auth.getCurrentUser();
+    return this.getInterests(currUser.pubKey);
   }
 
   /**
    *
    * @param tagName
    */
-  isSubscribedToTag(tagName: string) {
-    return this.getTagSubscriptions().pipe(
-      map(res => {
-        if (!res || !res?.data?.getInterests?.length) {
-          return createFormattedValue<boolean>(false);
-        }
-        const el = res.data.getInterests.indexOf(tagName);
-        return createFormattedValue<boolean>(el !== -1);
-      }),
-    );
+  async isSubscribedToTag(tagName: string) {
+    const res = await this.getTagSubscriptions();
+    if (!res || !res?.getInterests?.length) {
+      return false;
+    }
+    const el = res.getInterests.indexOf(tagName);
+    return el !== -1;
   }
 
   /**
    *
    * @param keyword
    */
-  globalSearch(keyword: string) {
-    return this._gql.run<{ globalSearch: GlobalSearchResult }>(
-      {
-        query: GlobalSearch,
-        variables: { keyword: keyword },
-        operationName: 'GlobalSearch',
-      },
-      true,
-    );
+  async globalSearch(keyword: string) {
+    return this._gql.getAPI().GlobalSearch({ keyword: keyword });
   }
 
   /**
@@ -531,15 +348,8 @@ class AWF_Profile implements AWF_IProfile {
    * @param limit
    * @param offset
    */
-  getFollowers(pubKey: string, limit: number, offset?: number) {
-    return this._gql.run<{ getFollowers: UserFollowers_Response }>(
-      {
-        query: GetFollowers,
-        variables: { pubKey, limit, offset },
-        operationName: 'GetFollowers',
-      },
-      true,
-    );
+  async getFollowers(pubKey: string, limit: number, offset?: number) {
+    return this._gql.getAPI().GetFollowers({ pubKey, limit, offset });
   }
 
   /**
@@ -548,30 +358,16 @@ class AWF_Profile implements AWF_IProfile {
    * @param limit
    * @param offset
    */
-  getFollowing(pubKey: string, limit: number, offset?: number) {
-    return this._gql.run<{ getFollowing: UserFollowers_Response }>(
-      {
-        query: GetFollowing,
-        variables: { pubKey, limit, offset },
-        operationName: 'GetFollowing',
-      },
-      true,
-    );
+  async getFollowing(pubKey: string, limit: number, offset?: number) {
+    return this._gql.getAPI().GetFollowing({ pubKey, limit, offset });
   }
 
   /**
    * Retrieve subscription list
    * @param pubKey
    */
-  getInterests(pubKey: string) {
-    return this._gql.run<{ getInterests: string[] }>(
-      {
-        query: GetInterests,
-        variables: { pubKey },
-        operationName: 'GetInterests',
-      },
-      true,
-    );
+  async getInterests(pubKey: string) {
+    return this._gql.getAPI().GetInterests({ pubKey });
   }
 }
 
