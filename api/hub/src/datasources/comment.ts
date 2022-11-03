@@ -127,16 +127,24 @@ class CommentAPI extends DataSource {
     if (!(await queryCache.has(allCommentsCache))) {
       const query = new Where('postId').eq(postID).orderBy('creationDate');
       comments = await db.find<Comment>(this.dbID, this.collection, query);
-      await queryCache.set(allCommentsCache, comments);
+      await queryCache.set(
+        allCommentsCache,
+        comments.map(comment => comment._id),
+      );
     }
     comments = await queryCache.get(allCommentsCache);
-    const offsetIndex = offset ? comments.findIndex(comment => comment._id === offset) : 0;
+    const offsetIndex = offset ? comments.findIndex(comment => comment === offset) : 0;
     let endIndex = limit + offsetIndex;
     if (comments.length <= endIndex) {
       endIndex = undefined;
     }
-    const results = comments.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? comments[endIndex]._id : '';
+    const subset = comments.slice(offsetIndex, endIndex);
+    const results = [];
+    for (const commID of subset) {
+      const comment = await this.getComment(commID);
+      results.push(comment);
+    }
+    const nextIndex = endIndex ? comments[endIndex] : '';
     return { results: results, nextIndex: nextIndex, total: comments.length };
   }
 
@@ -151,16 +159,24 @@ class CommentAPI extends DataSource {
         .eq(commentId)
         .orderBy('creationDate');
       comments = await db.find<Comment>(this.dbID, this.collection, query);
-      await queryCache.set(allCommentsCache, comments);
+      await queryCache.set(
+        allCommentsCache,
+        comments.map(comment => comment._id),
+      );
     }
     comments = await queryCache.get(allCommentsCache);
-    const offsetIndex = offset ? comments.findIndex(comment => comment._id === offset) : 0;
+    const offsetIndex = offset ? comments.findIndex(comment => comment === offset) : 0;
     let endIndex = limit + offsetIndex;
     if (comments.length <= endIndex) {
       endIndex = undefined;
     }
-    const results = comments.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? comments[endIndex]._id : '';
+    const subset = comments.slice(offsetIndex, endIndex);
+    const results = [];
+    for (const commID of subset) {
+      const comment = await this.getComment(commID);
+      results.push(comment);
+    }
+    const nextIndex = endIndex ? comments[endIndex] : '';
     return { results: results, nextIndex, total: comments.length };
   }
 
@@ -176,9 +192,23 @@ class CommentAPI extends DataSource {
       logger.warn(`comment ${commentId} not found`);
       throw new Error(`Comment not found`);
     }
-    await queryCache.set(commentCacheKey, comment);
+    const totalReplies = await this.getTotalReplies(commentId);
+    const result = Object.assign({}, comment, { totalReplies });
+    await queryCache.set(commentCacheKey, result);
     await queryCache.sAdd(getAuthorCacheKeys(comment.author), commentCacheKey);
-    return comment;
+    return result;
+  }
+
+  async getTotalReplies(commentId: string): Promise<number> {
+    const result = await searchIndex.searchForFacetValues('category', 'comment', {
+      filters: `replyTo:${commentId}`,
+      restrictSearchableAttributes: ['replyTo'],
+      typoTolerance: false,
+    });
+    if (result.facetHits.length) {
+      return result.facetHits[0].count;
+    }
+    return 0;
   }
 
   /**
