@@ -1,15 +1,15 @@
-export const HOME = 'Dashboard';
-export const HISTORY = 'Transparency Log';
-export const GUEST = 'Guest';
-export const UNAUTHENTICATED = 'Unauthenticated';
-export const MODERATION_VALUE = 'ModerationValue';
+export const HOME = 'Overview';
+export const DASHBOARD = 'Dashboard';
 export const MODERATORS = 'Moderators';
+export const HISTORY = 'Transparency Log';
+export const MODERATION_VALUE = 'ModerationValue';
+
+export const baseOverviewUrl = '/overview';
 
 export default {
-  [HOME]: '/home',
-  [HISTORY]: '/history',
-  [GUEST]: '/guest',
-  [UNAUTHENTICATED]: '/unauthenticated',
-  [MODERATION_VALUE]: '/values/:value',
+  [HOME]: baseOverviewUrl,
+  [DASHBOARD]: '/dashboard',
   [MODERATORS]: '/moderators',
+  [HISTORY]: '/history',
+  [MODERATION_VALUE]: `${baseOverviewUrl}/values/:value`,
 };

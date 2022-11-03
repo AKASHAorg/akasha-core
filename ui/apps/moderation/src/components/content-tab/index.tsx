@@ -33,52 +33,40 @@ const ContentTab: React.FC<IContentTabProps> = props => {
   };
 
   return (
-    <>
-      <Box margin={{ bottom: '1rem' }}>
-        <MainAreaCardBox>
-          <Box direction="row" pad={{ horizontal: '1rem' }} style={{ cursor: 'pointer' }}>
-            <Box
-              width="50%"
-              pad={{ vertical: '1rem' }}
-              border={{
-                side: 'bottom',
-                style: isPending ? 'solid' : 'hidden',
-                color: 'accentText',
-                size: 'xsmall',
-              }}
-              onClick={handleTabClick(true)}
-            >
-              <Text
-                size="large"
-                textAlign="center"
-                color={isPending ? 'accentText' : 'secondaryText'}
-              >
-                {countPending} {pendingLabel}
-              </Text>
-            </Box>
-            <Box
-              width="50%"
-              pad="1rem"
-              border={{
-                side: 'bottom',
-                style: !isPending ? 'solid' : 'hidden',
-                color: 'accentText',
-                size: 'xsmall',
-              }}
-              onClick={handleTabClick(false)}
-            >
-              <Text
-                size="large"
-                textAlign="center"
-                color={isPending ? 'secondaryText' : 'accentText'}
-              >
-                {countKept + countDelisted} {moderatedLabel}
-              </Text>
-            </Box>
-          </Box>
-        </MainAreaCardBox>
+    <MainAreaCardBox>
+      <Box direction="row" pad={{ horizontal: '1rem' }} style={{ cursor: 'pointer' }}>
+        <Box
+          width="50%"
+          pad={{ vertical: '1rem' }}
+          border={{
+            side: 'bottom',
+            style: isPending ? 'solid' : 'hidden',
+            color: 'accentText',
+            size: 'xsmall',
+          }}
+          onClick={handleTabClick(true)}
+        >
+          <Text size="large" textAlign="center" color={isPending ? 'accentText' : 'secondaryText'}>
+            {countPending} {pendingLabel}
+          </Text>
+        </Box>
+        <Box
+          width="50%"
+          pad="1rem"
+          border={{
+            side: 'bottom',
+            style: !isPending ? 'solid' : 'hidden',
+            color: 'accentText',
+            size: 'xsmall',
+          }}
+          onClick={handleTabClick(false)}
+        >
+          <Text size="large" textAlign="center" color={isPending ? 'secondaryText' : 'accentText'}>
+            {countKept + countDelisted} {moderatedLabel}
+          </Text>
+        </Box>
       </Box>
-    </>
+    </MainAreaCardBox>
   );
 };
 
