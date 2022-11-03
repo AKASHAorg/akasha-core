@@ -5,8 +5,9 @@ import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import TransparencyLog from './transparency-log';
-import { Dashboard, GuestPage, IntroPage } from '../pages';
-import routes, { GUEST, HISTORY, HOME, UNAUTHENTICATED } from '../routes';
+import { Dashboard, GuestPage, IntroPage, ValuePage } from '../pages';
+
+import routes, { GUEST, HISTORY, HOME, MODERATION_VALUE, UNAUTHENTICATED } from '../routes';
 
 const { Box } = DS;
 
@@ -30,6 +31,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <IntroPage {...props} user={loginQuery.data?.pubKey} isAuthorised={isAuthorised} />
             }
           />
+
+          <Route path={routes[MODERATION_VALUE]} element={<ValuePage {...props} />} />
+
           <Route
             path={routes[GUEST]}
             element={
