@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PostPage from '../post-page/post-page';
+import ReplyPage from '../post-page/reply-page';
 import * as extension from '@akashaorg/design-system/lib/utils/extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
@@ -13,6 +13,7 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import { when } from 'jest-when';
+import { EntityTypes } from '@akashaorg/typings/ui';
 
 const partialArgs = (...argsToMatch) =>
   when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
@@ -23,7 +24,7 @@ const MockedInlineEditor = ({ action }) => (
     extensionData={{
       name: 'name',
       entryId: '01gf',
-      isShown: true,
+      entryType: EntityTypes.COMMENT,
       action,
     }}
   />
@@ -32,7 +33,11 @@ const MockedInlineEditor = ({ action }) => (
 describe('< ReplyPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <PostPage {...genAppProps()} showLoginModal={jest.fn()} loginState={genLoggedInState(true)} />
+      <ReplyPage
+        {...genAppProps()}
+        showLoginModal={jest.fn()}
+        loginState={genLoggedInState(true)}
+      />
     </AnalyticsProvider>
   );
 

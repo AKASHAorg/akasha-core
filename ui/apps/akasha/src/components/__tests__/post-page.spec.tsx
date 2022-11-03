@@ -13,6 +13,7 @@ import {
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import { when } from 'jest-when';
+import { EntityTypes } from '@akashaorg/typings/ui';
 
 const partialArgs = (...argsToMatch) =>
   when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
@@ -23,7 +24,7 @@ const MockedInlineEditor = ({ action }) => (
     extensionData={{
       name: 'name',
       entryId: '01gf',
-      isShown: true,
+      entryType: EntityTypes.ENTRY,
       action,
     }}
   />
