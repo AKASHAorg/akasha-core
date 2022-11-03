@@ -12,25 +12,12 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
   const { t } = useTranslation('app-akasha-integration');
 
   const handleClick = () => {
-    if (
-      props.extensionData &&
-      props.extensionData.hasOwnProperty('entryId') &&
-      props.extensionData?.entryType === EntityTypes.ENTRY
-    ) {
+    if (props.extensionData && props.extensionData.hasOwnProperty('entryId')) {
       props.singleSpa.navigateToUrl(
-        `${window.location.origin}/@akashaorg/app-akasha-integration/post/${props.extensionData.entryId}?action=edit`,
+        `${window.location.origin}/@akashaorg/app-akasha-integration/${
+          props.extensionData?.entryType === EntityTypes.ENTRY ? 'post' : 'reply'
+        }/${props.extensionData.entryId}?action=edit`,
       );
-    }
-
-    if (
-      props.extensionData &&
-      props.extensionData.hasOwnProperty('commentId') &&
-      props.extensionData?.entryType === EntityTypes.COMMENT
-    ) {
-      props.singleSpa.navigateToUrl(
-        `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${props.extensionData.commentId}?action=edit`,
-      );
-      return;
     }
   };
 

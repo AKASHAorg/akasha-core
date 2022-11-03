@@ -333,9 +333,13 @@ const EntryRenderer = (
       };
   };
 
+  const entryLoading = postReq.isLoading || commentReq.isLoading;
+
   return (
-    <>
-      {(postReq.isLoading || commentReq.isLoading) && <EntryCardLoading />}
+    <Box
+      margin={{ bottom: itemSpacing && (entryLoading || canShowEntry) ? `${itemSpacing}px` : null }}
+    >
+      {entryLoading && <EntryCardLoading />}
       {(postReq.isError || commentReq.isError) && (
         <ErrorLoader
           type="script-error"
@@ -387,7 +391,7 @@ const EntryRenderer = (
             </Box>
           )}
           {canShowEntry && (
-            <Box margin={{ bottom: itemSpacing ? `${itemSpacing}px` : null }} {...entryCardStyle()}>
+            <Box {...entryCardStyle()}>
               <EntryCard
                 className={props.className}
                 isRemoved={itemData.isRemoved}
@@ -507,7 +511,7 @@ const EntryRenderer = (
           )}
         </>
       )}
-    </>
+    </Box>
   );
 };
 

@@ -6,7 +6,6 @@ import {
   ModalNavigationOptions,
   IPublishData,
   RootComponentProps,
-  IProfileData,
   EntityTypes,
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
