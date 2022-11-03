@@ -14,7 +14,7 @@ const getEnsTexts = async (name: string) => {
  *
  */
 export function useEnsTexts(name?: string, enabler = true) {
-  return useQuery([ENS_KEY, name], async () => await getEnsTexts(name), {
+  return useQuery([ENS_KEY, name], async () => getEnsTexts(name), {
     enabled: !!name && enabler,
     keepPreviousData: true,
     onError: (err: Error) => logError('useEnsTexts.getTexts', err),
