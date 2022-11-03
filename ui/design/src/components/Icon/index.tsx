@@ -110,6 +110,7 @@ export type IconType =
   | 'signOut'
   | 'status'
   | 'subscribe'
+  | 'telegram'
   | 'stopwatch'
   | 'shareSmallBlue'
   | 'shareSmallDark'
@@ -239,6 +240,7 @@ export const iconTypes: IconType[] = [
   'status',
   'share',
   'subscribe',
+  'telegram',
   'stopwatch',
   'shareSmallBlue',
   'shareSmallDark',

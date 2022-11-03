@@ -105,8 +105,9 @@ import share from './share';
 import shareSmallBlue from './share-small-blue';
 import shareSmallDark from './share-small-dark';
 import shareSmallGrey from './share-small-grey';
-import subscribe from './subscribe';
 import stopwatch from './stopwatch';
+import subscribe from './subscribe';
+import telegram from './telegram';
 import thumbsDownGrey from './thumbs-down-grey';
 import thumbsDownWhite from './thumbs-down-white';
 import thumbsUpGrey from './thumbs-up-grey';
@@ -239,6 +240,7 @@ export {
   shareSmallDark,
   shareSmallGrey,
   subscribe,
+  telegram,
   thumbsDownWhite,
   thumbsDownGrey,
   thumbsUpWhite,

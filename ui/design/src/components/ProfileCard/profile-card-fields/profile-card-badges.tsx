@@ -3,10 +3,10 @@ import { Box, Text } from 'grommet';
 
 import Icon from '../../Icon';
 
-export interface IProfileCardBadgesProps {
+export type IProfileCardBadgesProps = {
   badgesLabel: string;
   badges?: string[];
-}
+};
 
 const ProfileCardBadges: React.FC<IProfileCardBadgesProps> = props => {
   const { badgesLabel, badges } = props;

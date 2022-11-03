@@ -6,7 +6,7 @@ import { isMobile } from 'react-device-detect';
 import Tooltip from '../../Tooltip';
 import { truncateMiddle } from '../../../utils/string-utils';
 
-export interface IProfileCardEthereumIdProps {
+export type IProfileCardEthereumIdProps = {
   ethereumAddressLabel?: string;
   ethereumNameLabel?: string;
   copyLabel?: string;
@@ -14,7 +14,7 @@ export interface IProfileCardEthereumIdProps {
   showQRCodeLabel?: string;
   profileData: IProfileData;
   ensName?: string;
-}
+};
 
 const ProfileCardEthereumId: React.FC<IProfileCardEthereumIdProps> = props => {
   const { ethereumAddressLabel, ethereumNameLabel, copyLabel, copiedLabel, profileData, ensName } =

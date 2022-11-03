@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
+import { Box, Spinner, Text } from 'grommet';
 import Cropper from 'react-easy-crop';
-import { isMobile, isMobileOnly } from 'react-device-detect';
+import { isMobileOnly } from 'react-device-detect';
 import {
   IProfileData,
   ProfileProviderProperties,
-  ProfileProviders,
   UpdateProfileStatus,
 } from '@akashaorg/typings/ui';
 
-import { TitleSection } from './sections/TitleSection';
+// import { TitleSection } from './sections/TitleSection';
 import { AvatarSection } from './sections/AvatarSection';
 import { NameInputSection } from './sections/NameInputSection';
 import { CoverImageSection } from './sections/CoverImageSection';
@@ -21,12 +20,15 @@ import Icon from '../Icon';
 import { FormImagePopover } from '../ImagePopover/form-image-popover';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
 
-import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 import getCroppedImage from '../../utils/get-cropped-image';
 
 import { StyledCropperImageWrapper, StyledZoomControlBox } from './styled-form-card';
+import SocialLinksSection, { StateLink } from './sections/social-links-section';
+import EnsPrefillSection from './sections/ens-prefill-section';
+import { EnsTxtPresets } from './sections/social-link-input';
+import { getUpdatedFields } from './get-updated-fields';
 
-export interface IBoxFormCardProps {
+export interface ProfileFormProps {
   className?: string;
   titleLabel?: string;
   avatarLabel?: string;
@@ -48,7 +50,10 @@ export interface IBoxFormCardProps {
   descriptionFieldPlaceholder: string;
   ethAddress: string;
   providerData: IBoxData;
-  onSave: (data: IFormValues, changedFields: string[]) => void;
+  onSave: (
+    data: Omit<IFormValues, 'socialLinks'> & { socialLinks?: { type: string; value: string }[] },
+    changedFields: string[],
+  ) => void;
   onCancel?: () => void;
   updateStatus: UpdateProfileStatus;
   usernameFieldInfo?: string;
@@ -59,6 +64,14 @@ export interface IBoxFormCardProps {
   onUsernameChange?: (value: string) => void;
   onUsernameBlur?: (username: string) => void;
   modalSlotId: string;
+  ensData?: { name?: string; links?: { type: string; value: string }[] };
+  onEnsPrefill?: () => void;
+  ensSectionTitle: string;
+  ensPrefillButtonLabel: string;
+  isLoading?: boolean;
+  loadingDataLabel?: string;
+  ensPrefillLoading?: boolean;
+  ensPrefillData?: { txt: string; value: string }[];
 }
 
 export interface IImageSrc {
@@ -86,6 +99,7 @@ export interface IFormValues {
   description?: string;
   pubKey: string;
   ethAddress: string;
+  socialLinks?: StateLink[];
 }
 
 export type CroppableFields =
@@ -94,10 +108,10 @@ export type CroppableFields =
 
 export type CropValue = { x: number; y: number };
 
-const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
+const BoxFormCard: React.FC<ProfileFormProps> = props => {
   const {
     className,
-    titleLabel,
+    // titleLabel,
     avatarLabel,
     coverImageLabel,
     nameLabel,
@@ -123,6 +137,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     usernameError,
     usernameSuccess,
     modalSlotId,
+    isLoading = false,
+    loadingDataLabel,
+    ensPrefillData,
   } = props;
 
   const [avatarPopoverOpen, setAvatarPopoverOpen] = React.useState(false);
@@ -136,6 +153,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     name: '',
     pubKey: '',
     ethAddress: '',
+    socialLinks: [],
   });
 
   // state values to handle image cropping
@@ -172,50 +190,12 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
 
   const avatarInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
   const coverInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
-  useBodyScrollLock();
   // Update internal state based on providerData prop
   React.useEffect(() => {
-    const updatedFields = {};
-    for (const key in providerData) {
-      if (providerData.hasOwnProperty(key)) {
-        // transform null values to empty strings
-        if (!providerData[key]) {
-          updatedFields[key] = '';
-        } else {
-          updatedFields[key] = providerData[key];
-        }
-        if (key === ProfileProviderProperties.AVATAR) {
-          if (providerData[key] && typeof providerData[key] === 'object') {
-            updatedFields[key] = {
-              preview: providerData[key].url,
-              prefix: '',
-              isUrl: true,
-            };
-          }
-        }
-        if (key === ProfileProviderProperties.COVER_IMAGE) {
-          if (providerData[key] && typeof providerData[key] === 'object') {
-            updatedFields[key] = {
-              preview: providerData[key].url,
-              prefix: '',
-              isUrl: true,
-            };
-          }
-        }
-        if (key === ProfileProviderProperties.USERNAME) {
-          if (providerData.userName) {
-            updatedFields[key] = providerData.userName;
-          } else if (providerData.default && providerData.default.length > 0) {
-            const userNameProvider = providerData.default.find(
-              p =>
-                p.property === ProfileProviderProperties.USERNAME &&
-                p.provider === ProfileProviders.EWA_BASIC,
-            );
-            updatedFields[key] = userNameProvider ? userNameProvider.value : '';
-          }
-        }
-      }
+    if (!providerData) {
+      return;
     }
+    const updatedFields = getUpdatedFields(providerData);
     setFormValues({
       ...updatedFields,
       ethAddress: providerData.ethAddress,
@@ -276,7 +256,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
         formValues.avatar.type,
       );
 
-      handleImageInsert(ProfileProviderProperties.AVATAR)(cropped, false);
+      handleImageInsert(ProfileProviderProperties.AVATAR)(cropped);
 
       resetCropperFields();
     } catch (e) {
@@ -294,7 +274,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
         formValues.coverImage.type,
       );
 
-      handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(cropped, false);
+      handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(cropped);
 
       resetCropperFields();
     } catch (e) {
@@ -318,8 +298,23 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     }
   };
 
-  const handleSave = async () => {
-    onSave(formValues, fieldsToUpdate);
+  const handleSave = () => {
+    if (formValues.socialLinks.length) {
+      const links = formValues.socialLinks.map(link => {
+        if (link.type === EnsTxtPresets.URL) {
+          return {
+            type: link.type,
+            value: encodeURIComponent(link.value),
+          };
+        }
+        return {
+          type: link.type,
+          value: link.value,
+        };
+      });
+      return onSave({ ...formValues, socialLinks: links }, fieldsToUpdate);
+    }
+    return onSave(formValues, fieldsToUpdate);
   };
 
   const handleFormFieldChange = React.useCallback(
@@ -353,17 +348,9 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     setCoverImagePopoverOpen(false);
   };
   // @Todo: update this after ts-jest migration to ESM
-  const handleImageInsert =
-    (imageKey: string) => (src: Blob | { url?: string; fallbackUrl?: string }, isUrl: boolean) => {
-      if (isUrl && src.hasOwnProperty('url')) {
-        // set blob sources to state if not already defined
-        if (imageKey === ProfileProviderProperties.AVATAR && !avatarSrc)
-          setAvatarSrc(src as { url?: string; fallbackUrl?: string });
-        if (imageKey === ProfileProviderProperties.COVER_IMAGE && !coverImageSrc)
-          setCoverImageSrc(src as { url?: string; fallbackUrl?: string });
-
-        handleFormFieldChange({ [imageKey]: { src, isUrl, preview: src } });
-      } else if (src instanceof Blob) {
+  const handleImageInsert = React.useCallback(
+    (imageKey: string) => (src: Blob) => {
+      if (src instanceof Blob) {
         // set blob sources to state if not already defined
         if (imageKey === ProfileProviderProperties.AVATAR && !avatarSrc)
           setAvatarSrc({ url: URL.createObjectURL(src) });
@@ -373,13 +360,73 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
         handleFormFieldChange({
           [imageKey]: {
             src: { url: src },
-            isUrl,
             type: src.type,
             preview: URL.createObjectURL(src),
           },
         });
       }
-    };
+    },
+    [avatarSrc, coverImageSrc, handleFormFieldChange],
+  );
+  React.useEffect(() => {
+    if (ensPrefillData) {
+      setFormValues(prev => ({ ...prev, socialLinks: [] }));
+      for (const { txt, value } of ensPrefillData) {
+        if (!value) continue;
+        switch (txt) {
+          case EnsTxtPresets.DISCORD:
+          case EnsTxtPresets.GITHUB:
+          case EnsTxtPresets.REDDIT:
+          case EnsTxtPresets.TWITTER:
+          case EnsTxtPresets.TELEGRAM:
+          case EnsTxtPresets.URL:
+            setFormValues(prev => ({
+              ...prev,
+              socialLinks: prev.socialLinks.concat({
+                id: prev.socialLinks.length,
+                type: txt,
+                value: value,
+              }),
+            }));
+            setFieldsToUpdate(prev => {
+              if (!prev.includes('socialLinks')) {
+                return prev.concat('socialLinks');
+              }
+              return prev;
+            });
+            break;
+          case EnsTxtPresets.DESCRIPTION:
+            setFormValues(prev => ({ ...prev, description: value }));
+            setFieldsToUpdate(prev => {
+              if (!prev.includes('description')) {
+                return prev.concat('description');
+              }
+              return prev;
+            });
+            break;
+          case EnsTxtPresets.AVATAR:
+            setFormValues(prev => ({
+              ...prev,
+              avatar: {
+                src: { url: value, fallbackUrl: '' },
+                prefix: '',
+                preview: value,
+                isUrl: true,
+              },
+            }));
+            setFieldsToUpdate(prev => {
+              if (!prev.includes('avatar')) {
+                return prev.concat('avatar');
+              }
+              return prev;
+            });
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }, [ensPrefillData, handleImageInsert]);
 
   const handleUsernameChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     handleFormFieldChange({ userName: ev.target.value });
@@ -400,7 +447,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       return;
     }
     const file: File = ev.target.files[0];
-    handleImageInsert(ProfileProviderProperties.AVATAR)(file, false);
+    handleImageInsert(ProfileProviderProperties.AVATAR)(file);
   };
 
   const handleCoverFileUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -408,7 +455,7 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       return;
     }
     const file: File = ev.target.files[0];
-    handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(file, false);
+    handleImageInsert(ProfileProviderProperties.COVER_IMAGE)(file);
   };
 
   const handleZoomInClick = () => {
@@ -433,18 +480,65 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
     }
   };
 
+  const handleLinkCreate = () => {
+    setFormValues(prev => {
+      if (!prev.socialLinks) {
+        return {
+          ...prev,
+          socialLinks: [{ id: 0, type: EnsTxtPresets.URL, value: '' }],
+        };
+      }
+      return {
+        ...prev,
+        socialLinks: prev.socialLinks.concat({
+          id: prev.socialLinks[prev.socialLinks.length - 1].id + 1,
+          type: EnsTxtPresets.URL,
+          value: '',
+        }),
+      };
+    });
+  };
+  const handleLinkInputChange = (id: number, value: string) => {
+    setFormValues(prev => {
+      const newLinks = prev.socialLinks.slice();
+      const linkIdx = newLinks.findIndex(link => link.id === id);
+      if (linkIdx >= 0) {
+        newLinks[linkIdx].value = value;
+      }
+      return {
+        ...prev,
+        socialLinks: newLinks,
+      };
+    });
+  };
+  const handleLinkTypeChange = (
+    id: number,
+    type: typeof EnsTxtPresets[keyof typeof EnsTxtPresets],
+  ) => {
+    setFormValues(prev => {
+      const newLinks = prev.socialLinks.slice();
+      const linkIdx = newLinks.findIndex(link => link.id === id);
+      if (linkIdx >= 0) {
+        newLinks[linkIdx].type = type;
+      }
+      return {
+        ...prev,
+        socialLinks: newLinks,
+      };
+    });
+  };
+
+  const handleLinkRemove = (id: number) => {
+    setFormValues(prev => ({
+      ...prev,
+      socialLinks: prev.socialLinks.filter(link => link.id !== id),
+    }));
+  };
+
   return (
-    <MainAreaCardBox
-      style={{ height: isMobile ? '100%' : 'auto', overflowY: 'auto' }}
-      className={className}
-    >
+    <MainAreaCardBox className={className}>
       {showCropper && (
         <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
-          <TitleSection
-            titleLabel={`${editLabel} ${isEditingAvatar ? avatarLabel : coverImageLabel}`}
-            iconType="arrowLeft"
-            onIconClick={resetCropperFields}
-          />
           {showCropper === ProfileProviderProperties.AVATAR ? (
             <StyledCropperImageWrapper>
               <Cropper
@@ -511,66 +605,93 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
       {!showCropper && (
         <>
           <Box direction="column" pad="medium" height={{ min: 'fit-content' }}>
-            <TitleSection titleLabel={titleLabel} />
+            {/* <TitleSection titleLabel={titleLabel} /> */}
             <Box direction="column" pad="xsmall">
-              <Box direction="row" justify="start">
-                <AvatarSection
-                  avatarLabel={avatarLabel}
-                  formValues={formValues}
-                  avatarPopoverOpen={avatarPopoverOpen}
-                  avatarRef={avatarRef}
-                  avatarInputRef={avatarInputRef}
-                  handleAvatarClick={handleAvatarClick}
-                  handleAvatarFileUpload={handleAvatarFileUpload}
-                />
-                <NameInputSection
-                  nameLabel={nameLabel}
-                  nameFieldPlaceholder={nameFieldPlaceholder}
-                  formValues={formValues}
-                  handleFormFieldChange={handleFormFieldChange}
-                />
-              </Box>
-              {showUsername && (
-                <UsernameInputSection
-                  usernameLabel={usernameLabel}
-                  usernameFieldInfo={usernameFieldInfo}
-                  usernameFieldPlaceholder={usernameFieldPlaceholder}
-                  isValidatingUsername={isValidatingUsername}
-                  usernameError={usernameError}
-                  usernameSuccess={usernameSuccess}
-                  formValues={formValues}
-                  handleUsernameChange={handleUsernameChange}
-                  handleUsernameBlur={handleUsernameBlur}
-                />
+              {isLoading && (
+                <Box justify="center" align="center" pad="medium">
+                  <Spinner size="medium" />
+                  <Text margin={{ top: 'xsmall' }}>{loadingDataLabel}</Text>
+                </Box>
               )}
-
-              <CoverImageSection
-                coverImageLabel={coverImageLabel}
-                formValues={formValues}
-                coverImagePopoverOpen={coverImagePopoverOpen}
-                coverImageRef={coverImageRef}
-                coverInputRef={coverInputRef}
-                handleCoverImageClick={handleCoverImageClick}
-                handleCoverFileUpload={handleCoverFileUpload}
-              />
-              <DescriptionSection
-                descriptionLabel={descriptionLabel}
-                descriptionFieldPlaceholder={descriptionFieldPlaceholder}
-                formValues={formValues}
-                handleFormFieldChange={handleFormFieldChange}
-              />
-              <ActionButtonsSection
-                cancelLabel={cancelLabel}
-                saveLabel={saveLabel}
-                showUsername={showUsername}
-                formChanged={fieldsToUpdate.length > 0}
-                isValidatingUsername={isValidatingUsername}
-                usernameError={usernameError}
-                formValues={formValues}
-                updateStatus={updateStatus}
-                handleRevert={handleRevert}
-                handleSave={handleSave}
-              />
+              {!isLoading && (
+                <>
+                  <CoverImageSection
+                    coverImageLabel={coverImageLabel}
+                    formValues={formValues}
+                    coverImagePopoverOpen={coverImagePopoverOpen}
+                    coverImageRef={coverImageRef}
+                    coverInputRef={coverInputRef}
+                    handleCoverImageClick={handleCoverImageClick}
+                    handleCoverFileUpload={handleCoverFileUpload}
+                  />
+                  <Box direction="row" justify="start">
+                    <AvatarSection
+                      avatarLabel={avatarLabel}
+                      formValues={formValues}
+                      avatarPopoverOpen={avatarPopoverOpen}
+                      avatarRef={avatarRef}
+                      avatarInputRef={avatarInputRef}
+                      handleAvatarClick={handleAvatarClick}
+                      handleAvatarFileUpload={handleAvatarFileUpload}
+                    />
+                    <NameInputSection
+                      nameLabel={nameLabel}
+                      nameFieldPlaceholder={nameFieldPlaceholder}
+                      formValues={formValues}
+                      handleFormFieldChange={handleFormFieldChange}
+                    />
+                  </Box>
+                  <Box>
+                    {props.ensData.name && (
+                      <EnsPrefillSection
+                        titleLabel={props.ensSectionTitle}
+                        prefillButtonLabel={props.ensPrefillButtonLabel}
+                        ensName={props.ensData.name}
+                        onEnsPrefill={props.onEnsPrefill}
+                      />
+                    )}
+                  </Box>
+                  {showUsername && (
+                    <UsernameInputSection
+                      usernameLabel={usernameLabel}
+                      usernameFieldInfo={usernameFieldInfo}
+                      usernameFieldPlaceholder={usernameFieldPlaceholder}
+                      isValidatingUsername={isValidatingUsername}
+                      usernameError={usernameError}
+                      usernameSuccess={usernameSuccess}
+                      formValues={formValues}
+                      handleUsernameChange={handleUsernameChange}
+                      handleUsernameBlur={handleUsernameBlur}
+                    />
+                  )}
+                  <DescriptionSection
+                    descriptionLabel={descriptionLabel}
+                    descriptionFieldPlaceholder={descriptionFieldPlaceholder}
+                    formValues={formValues}
+                    handleFormFieldChange={handleFormFieldChange}
+                  />
+                  <SocialLinksSection
+                    title="Social Links"
+                    links={formValues.socialLinks}
+                    onLinkCreate={handleLinkCreate}
+                    onLinkInputChange={handleLinkInputChange}
+                    onLinkTypeChange={handleLinkTypeChange}
+                    onLinkRemove={handleLinkRemove}
+                  />
+                  <ActionButtonsSection
+                    cancelLabel={cancelLabel}
+                    saveLabel={saveLabel}
+                    showUsername={showUsername}
+                    formChanged={fieldsToUpdate.length > 0}
+                    isValidatingUsername={isValidatingUsername}
+                    usernameError={usernameError}
+                    formValues={formValues}
+                    updateStatus={updateStatus}
+                    handleRevert={handleRevert}
+                    handleSave={handleSave}
+                  />
+                </>
+              )}
             </Box>
           </Box>
 
@@ -587,7 +708,10 @@ const BoxFormCard: React.FC<IBoxFormCardProps> = props => {
               insertImage={handleImageInsert(ProfileProviderProperties.AVATAR)}
               currentImage={!!formValues.avatar}
               onMobile={isMobileOnly}
-              editable={fieldsToUpdate.includes(ProfileProviderProperties.AVATAR)}
+              editable={
+                fieldsToUpdate.includes(ProfileProviderProperties.AVATAR) &&
+                !formValues.avatar.isUrl
+              }
               handleEdit={handleEdit}
               handleDeleteImage={() => handleFormFieldChange({ avatar: null })}
             />
@@ -628,6 +752,7 @@ BoxFormCard.defaultProps = {
   avatarLabel: 'Avatar',
   coverImageLabel: 'Cover Image',
   saveLabel: 'Save',
+  loadingDataLabel: 'Loading profile data',
 };
 
 export default BoxFormCard;

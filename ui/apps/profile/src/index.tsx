@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { MY_PROFILE } from './routes';
+import routes, { MY_PROFILE, UPDATE_PROFILE } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -28,12 +28,12 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   extends: (matcher, loader) => {
     matcher({
       login: loader(() => import('./extensions/login-modal')),
-      'update-profile': loader(() => import('./extensions/update-profile-modal')),
       'profile-share': loader(() => import('./extensions/share-profile-modal')),
     });
   },
   routes: {
     myProfile: routes[MY_PROFILE],
+    updateProfile: routes[UPDATE_PROFILE],
     rootRoute: '',
   },
 });

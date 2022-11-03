@@ -17,6 +17,17 @@ import { concatAll, map, tap } from 'rxjs/operators';
 import IpfsConnector from '../common/ipfs.connector';
 import { IsUserNameAvailable } from '../profiles/profile.graphql';
 
+const EnsDefaultTexts = [
+  'url',
+  'avatar',
+  'description',
+  'com.discord',
+  'com.github',
+  'com.reddit',
+  'com.twitter',
+  'org.telegram',
+];
+
 export const isEncodedLabelHash = hash => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
 };
@@ -175,6 +186,15 @@ class AWF_ENS implements AWF_IENS {
   async resolveName(name: string) {
     const result = await this._web3.provider.resolveName(name);
     return createFormattedValue(result);
+  }
+
+  async getTexts(name: string) {
+    const resolver = await this._web3.provider.getResolver(name);
+    const texts = EnsDefaultTexts.map(async txt => {
+      const value = await resolver.getText(txt);
+      return { txt, value };
+    });
+    return Promise.all(texts);
   }
 
   public async setupContracts() {

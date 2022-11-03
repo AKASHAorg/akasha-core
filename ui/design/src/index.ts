@@ -52,7 +52,7 @@ import {
   ModalCardLogin,
 } from './components/EntryCard/basic-card-box';
 
-import BoxFormCard from './components/BoxFormCard';
+import ProfileForm from './components/ProfileForm';
 import EnsFormCard from './components/EnsFormCard';
 
 import NotificationsCard from './components/NotificationCard';
@@ -63,6 +63,8 @@ import ProfileCard from './components/ProfileCard';
 import { ProfileDelistedCard } from './components/ProfileCard/profile-delisted-card';
 import { ProfileSearchCard } from './components/ProfileCard/profile-search-card';
 import { ProfileMiniCard } from './components/ProfileCard/profile-mini-card';
+import ProfileStatsCard from './components/ProfileStatsCard';
+import ProfileLinksCard from './components/ProfileLinksCard';
 
 import TagCard from './components/TagCard';
 import { TagDetailCard } from './components/TagCard/tag-detail-card';
@@ -244,11 +246,13 @@ const exported = {
   EntryCardHidden,
   EntryCardLoading,
   ReadOnlyEditor,
-  BoxFormCard,
+  ProfileForm,
   EnsFormCard,
   Heading,
   MiniInfoWidgetCard,
   ProfileCard,
+  ProfileStatsCard,
+  ProfileLinksCard,
   ProfileDelistedCard,
   ProfileSearchCard,
   ProfileMiniCard,

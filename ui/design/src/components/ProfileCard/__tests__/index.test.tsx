@@ -6,15 +6,9 @@ import ProfileCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
 import {
-  cancelLabel,
-  changeCoverImageLabel,
   editProfileLabel,
-  followersLabel,
   followingLabel,
-  postsLabel,
   profileData,
-  profileProvidersData,
-  saveChangesLabel,
   shareProfileLabel,
 } from '../../../utils/dummy-data';
 
@@ -24,11 +18,8 @@ describe('<ProfileCard /> Component', () => {
   const handleClickFollowers = jest.fn();
   const handleClickFollowing = jest.fn();
   const handleClickPosts = jest.fn();
-  const handleClickProfileData = jest.fn();
   const handleEntryFlag = jest.fn();
-  const handleGetProfileProvidersData = jest.fn();
   const handleUpdateClick = jest.fn();
-  const handleENSChangeClick = jest.fn();
   const handleShareClick = jest.fn();
 
   beforeEach(() => {
@@ -39,24 +30,12 @@ describe('<ProfileCard /> Component', () => {
             modalSlotId={''}
             profileData={profileData}
             followingLabel={followingLabel}
-            followersLabel={followersLabel}
-            postsLabel={postsLabel}
             shareProfileLabel={shareProfileLabel}
             editProfileLabel={editProfileLabel}
-            profileProvidersData={profileProvidersData}
-            changeCoverImageLabel={changeCoverImageLabel}
-            cancelLabel={cancelLabel}
-            saveChangesLabel={saveChangesLabel}
-            showMore={true}
             flaggable={true}
-            onClickFollowers={handleClickFollowers}
-            onClickFollowing={handleClickFollowing}
-            onClickPosts={handleClickPosts}
-            onChangeProfileData={handleClickProfileData}
+            showMore={true}
             onEntryFlag={handleEntryFlag}
-            getProfileProvidersData={handleGetProfileProvidersData}
             onUpdateClick={handleUpdateClick}
-            onENSChangeClick={handleENSChangeClick}
             handleShareClick={handleShareClick}
           />,
         ),

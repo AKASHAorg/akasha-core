@@ -124,6 +124,7 @@ import {
 } from './use-app-settings';
 import { useAppDescription } from './use-app-description';
 import { usePlaformHealthCheck } from './use-health-check';
+import { useEnsTexts } from './use-ens';
 
 export {
   constants,
@@ -271,4 +272,5 @@ export {
   useUninstallApp,
   useAppDescription,
   usePlaformHealthCheck,
+  useEnsTexts,
 };

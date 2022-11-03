@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { act, cleanup, fireEvent } from '@testing-library/react';
 
-import BoxFormCard from '../';
+import ProfileForm from '..';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 import { boxProviderData } from '../../../utils/dummy-data';
 import { UpdateProfileStatus } from '@akashaorg/typings/ui';
 
-describe('<BoxFormCard /> Component', () => {
+describe('<ProfileForm /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   const handleSave = jest.fn();
@@ -15,7 +15,7 @@ describe('<BoxFormCard /> Component', () => {
     act(() => {
       componentWrapper = customRender(
         wrapWithTheme(
-          <BoxFormCard
+          <ProfileForm
             modalSlotId={''}
             nameLabel={'Name'}
             saveLabel={'Save'}
@@ -34,6 +34,8 @@ describe('<BoxFormCard /> Component', () => {
             updateStatus={UpdateProfileStatus.UPDATE_IDLE}
             onSave={handleSave}
             onCancel={() => null}
+            ensSectionTitle={'ENS'}
+            ensPrefillButtonLabel={'Prefill ens data'}
           />,
         ),
         {},

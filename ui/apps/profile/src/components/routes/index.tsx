@@ -6,6 +6,7 @@ import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/u
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import ProfilePage from './profile-page';
+import ProfileEditPage from './profile-edit-page';
 
 const { Box } = DS;
 
@@ -23,11 +24,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     <Router basename={props.baseRouteName}>
       <Box>
         <Routes>
-          {/* <Route path="/list" element={<>A list of profiles</>} /> */}
-          {['/:pubKey', menuRoute[MY_PROFILE]].map(path => (
+          <Route path="/">
             <Route
-              key={path}
-              path={path}
+              path={':pubKey'}
               element={
                 <ProfilePage
                   {...props}
@@ -37,7 +36,29 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 />
               }
             />
-          ))}
+            <Route
+              path={menuRoute[MY_PROFILE]}
+              element={
+                <ProfilePage
+                  {...props}
+                  loggedProfileData={loggedProfileQuery.data}
+                  showLoginModal={showLoginModal}
+                  loginState={loginQuery.data}
+                />
+              }
+            />
+            <Route
+              path={`${menuRoute[MY_PROFILE]}/edit`}
+              element={
+                <ProfileEditPage
+                  {...props}
+                  loggedProfileData={loggedProfileQuery.data}
+                  showLoginModal={showLoginModal}
+                  loginState={loginQuery.data}
+                />
+              }
+            />
+          </Route>
           <Route element={<div>{t('Oops, Profile not found!')}</div>} />
         </Routes>
       </Box>

@@ -29,10 +29,10 @@ describe('<SelectPopover /> Component', () => {
       componentWrapper = customRender(
         wrapWithTheme(
           <SelectPopover
-            dataSource={providerData}
+            // dataSource={providerData}
             target={targetNode}
             closePopover={handleClosePopover}
-            onClickElem={handleClickElement}
+            // onClickElem={handleClickElement}
           />,
         ),
         {},
