@@ -1,7 +1,14 @@
 import React from 'react';
 import { Anchor, Box, Text, Image } from 'grommet';
 
+import Icon from '../Icon';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
+
+export type OverviewCTA = {
+  label: string;
+  url: string;
+  iconType: string;
+};
 
 export interface IModerationIntroCardProps {
   assetName?: string;
@@ -16,6 +23,7 @@ export interface IModerationIntroCardProps {
   descriptionLine2IntroLabel?: string;
   descriptionLine2Label?: string;
   codeOfConductLabel?: string;
+  overviewCTAArr?: OverviewCTA[];
   onCodeOfConductClick?: () => void;
 }
 
@@ -24,7 +32,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
     assetName = 'moderation',
     titleLabel,
     subtitleLabel,
-    isIntro,
+    isIntro = true,
     publicImgPath = '/images',
     introLabel,
     descriptionLine1Label,
@@ -33,11 +41,12 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
     descriptionLine2IntroLabel,
     descriptionLine2Label,
     codeOfConductLabel,
+    overviewCTAArr,
     onCodeOfConductClick,
   } = props;
 
   return (
-    <BasicCardBox margin={{ ...(!isIntro && { bottom: '1rem' }) }}>
+    <BasicCardBox>
       <Box align="start" fill="horizontal" pad="medium">
         <Box direction="row" fill="horizontal" justify="between" margin={{ bottom: 'xsmall' }}>
           <Text size="xlarge" weight="bold">
@@ -45,58 +54,90 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
           </Text>
         </Box>
         <Text color="secondaryText">{subtitleLabel}</Text>
+
         {isIntro && (
-          <Box fill="horizontal" pad="medium">
-            <Box height="10rem" width="10rem" margin={{ bottom: 'small' }} alignSelf="center">
+          <Box
+            fill="horizontal"
+            pad={{ top: 'medium', horizontal: 'medium', bottom: 'small' }}
+            gap="small"
+          >
+            <Box height="10rem" width="10rem" alignSelf="center">
               <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
             </Box>
-            <Text size="large" textAlign="center" margin={{ bottom: 'xsmall' }} weight="bold">
-              {introLabel}
-            </Text>
-            <Text
-              size="large"
-              color="secondaryText"
-              textAlign="center"
-              margin={{ bottom: 'xsmall' }}
-              style={{ lineHeight: '1.5' }}
-            >
-              {descriptionLine1Label}
-              {ctaLabel && (
-                <Anchor
-                  href={ctaUrl}
-                  size="large"
-                  weight="normal"
-                  target="_blank"
-                  color="accentText"
-                  margin={{ left: '0.2rem' }}
-                  style={{ textDecoration: 'none' }}
-                >
-                  {ctaLabel}
-                </Anchor>
-              )}
-            </Text>
-            <Text
-              size="large"
-              color="secondaryText"
-              textAlign="center"
-              margin={{ bottom: 'xsmall' }}
-              style={{ lineHeight: '1.5' }}
-            >
-              {descriptionLine2IntroLabel}
-              {codeOfConductLabel && (
-                <Text
-                  as="span"
-                  size="large"
-                  margin={{ horizontal: '0.2rem' }}
-                  color="accentText"
-                  style={{ cursor: 'pointer' }}
-                  onClick={onCodeOfConductClick}
-                >
-                  {codeOfConductLabel}
-                </Text>
-              )}
-              {descriptionLine2Label}
-            </Text>
+
+            {introLabel && (
+              <Text size="large" textAlign="center" weight="bold">
+                {introLabel}
+              </Text>
+            )}
+
+            {descriptionLine1Label && (
+              <Text
+                size="large"
+                color="secondaryText"
+                textAlign="center"
+                style={{ lineHeight: '1.5' }}
+              >
+                {descriptionLine1Label}
+                {ctaLabel && (
+                  <Anchor
+                    href={ctaUrl}
+                    size="large"
+                    weight="normal"
+                    target="_blank"
+                    color="accentText"
+                    margin={{ left: '0.2rem' }}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {ctaLabel}
+                  </Anchor>
+                )}
+              </Text>
+            )}
+
+            {descriptionLine2IntroLabel && (
+              <Text
+                size="large"
+                color="secondaryText"
+                textAlign="center"
+                style={{ lineHeight: '1.5' }}
+              >
+                {descriptionLine2IntroLabel}
+                {codeOfConductLabel && (
+                  <Text
+                    as="span"
+                    size="large"
+                    margin={{ horizontal: '0.2rem' }}
+                    color="accentText"
+                    style={{ cursor: 'pointer' }}
+                    onClick={onCodeOfConductClick}
+                  >
+                    {codeOfConductLabel}
+                  </Text>
+                )}
+                {descriptionLine2Label}
+              </Text>
+            )}
+
+            {overviewCTAArr && overviewCTAArr.length > 0 && (
+              <Box direction="row" justify="around">
+                {overviewCTAArr.map(({ url, label, iconType }, idx) => (
+                  <Box key={label + idx} width="18%" align="center" gap="xsmall">
+                    <Icon size="md" type={iconType} />
+                    <Anchor
+                      href={url}
+                      size="large"
+                      weight="normal"
+                      target="_blank"
+                      color="accentText"
+                      style={{ textDecoration: 'none', textAlign: 'center' }}
+                    >
+                      {label}
+                    </Anchor>
+                  </Box>
+                ))}
+              </Box>
+            )}
           </Box>
         )}
       </Box>
