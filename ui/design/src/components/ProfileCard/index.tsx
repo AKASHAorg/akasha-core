@@ -117,8 +117,8 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
         coverImage={coverImage}
         onShareClick={handleShareClick}
       />
-      <Box direction="column" pad={{ bottom: 'medium' }} margin={{ horizontal: 'medium' }}>
-        <Box direction="row" justify="between">
+      <Box direction="column" margin={{ horizontal: 'medium' }}>
+        <Box direction="row" justify="between" align="start">
           <Box direction="row">
             <ProfileCardAvatar
               ethAddress={profileData.ethAddress}
@@ -134,7 +134,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
               </Box>
             </Box>
           </Box>
-          <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
+          <Box
+            direction="row"
+            align="center"
+            gap="small"
+            flex={{ shrink: 0 }}
+            margin={{ top: 'small' }}
+          >
             {!viewerIsOwner && actionButtonExt}
             {!viewerIsOwner && (
               <Box data-testid="profile-card-follow-button">
