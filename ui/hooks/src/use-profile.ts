@@ -496,7 +496,6 @@ export function useProfileUpdate(pubKey: string) {
           status: UpdateProfileStatus.UPDATE_IN_PROGRESS,
           remainingFields: [],
         });
-        console.log('saving profile', providers);
         const makeDefaultRes = await makeDefaultProvider(providers);
         if (makeDefaultRes.hasOwnProperty('error')) {
           throw new Error(makeDefaultRes['error']);

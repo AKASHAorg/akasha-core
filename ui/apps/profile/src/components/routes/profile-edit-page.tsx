@@ -19,6 +19,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
+import { MY_PROFILE } from '../../routes';
 
 const { styled, ProfileForm, Box } = DS;
 
@@ -62,6 +63,18 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
     status: UpdateProfileStatus;
     remainingFields: string[];
   }>(updateStatusKey);
+
+  React.useEffect(() => {
+    if (
+      updateStatusQuery?.data &&
+      updateStatusQuery.data.status === UpdateProfileStatus.UPDATE_COMPLETE
+    ) {
+      props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
+        appName: '@akashaorg/app-profile',
+        getNavigationUrl: routes => routes.myProfile,
+      });
+    }
+  }, [updateStatusQuery, props.plugins]);
 
   const handleFormSubmit = (profileData: FormProfileData, changedFields: string[]) => {
     profileUpdateMutation.mutate({ profileData, changedFields });
@@ -136,7 +149,6 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
         ethAddress={profileDataQuery.data?.ethAddress}
         providerData={profileDataQuery.data}
         onSave={handleFormSubmit}
-        // onCancel={onModalClose}
         updateStatus={updateStatusQuery?.data?.status || UpdateProfileStatus.UPDATE_IDLE}
         showUsername={!profileDataQuery.data?.userName}
         onUsernameBlur={handleUsernameBlur}
