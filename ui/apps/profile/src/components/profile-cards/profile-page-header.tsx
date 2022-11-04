@@ -240,7 +240,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
         links={socialLinks}
       />
       <ProfileStatsCard
-        margin={{ top: 'xsmall' }}
+        margin={{ top: 'xsmall', bottom: 'large' }}
         statsTitleLabel={t('Stats')}
         profileData={profileData}
         onClickFollowing={handleStatIconClick(1)}
