@@ -112,12 +112,10 @@ class CommentAPI extends DataSource {
         },
       });
     }
-    await queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
-    if (commentData.replyTo) {
-      await queryCache.del(this.getCommentCacheKey(commentData.replyTo));
-      await queryCache.del(
-        this.getAllCommentsCacheKey(`${commentData.postID}:${commentData.replyTo}`),
-      );
+    await queryCache.del(this.getAllCommentsCacheKey(comment.postId));
+    if (comment.replyTo) {
+      await queryCache.del(this.getAllCommentsCacheKey(`${comment.postId}:${comment.replyTo}`));
+      await queryCache.del(this.getCommentCacheKey(comment.replyTo));
     }
     return commentID;
   }
@@ -325,6 +323,9 @@ class CommentAPI extends DataSource {
       .then(() => logger.info(`removed comment: ${id}`))
       .catch(e => logger.error(e));
     await queryCache.del(this.getCommentCacheKey(id));
+    if (currentComment.replyTo) {
+      await queryCache.del(this.getCommentCacheKey(currentComment.replyTo));
+    }
     await queryCache.del(this.getAllCommentsCacheKey(currentComment.postId));
     await db.save(this.dbID, this.collection, [currentComment]);
     return { removedTags };
