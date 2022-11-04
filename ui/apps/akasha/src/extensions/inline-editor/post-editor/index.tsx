@@ -1,6 +1,12 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
+import {
+  RootExtensionProps,
+  IPublishData,
+  AnalyticsCategories,
+  IEntryData,
+} from '@akashaorg/typings/ui';
+import isEqual from 'lodash.isequal';
 import {
   useCreatePost,
   useEditPost,
@@ -13,6 +19,8 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
+import { clearDraftPost, getDraftPost, saveDraftPost } from '../utils';
+import { editorDefaultValue } from '@akashaorg/design-system/lib/components/Editor/initialValue';
 
 const { EntryCardLoading } = DS;
 
@@ -129,6 +137,8 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
     );
   }
 
+  const canSaveDraft = action === 'post';
+
   return (
     <Base
       postLabel={action === 'edit' ? t('Save Changes') : t('Publish')}
@@ -139,10 +149,21 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
       singleSpa={singleSpa}
       embedEntryData={embedEntryData}
       entryData={entryData}
-      editorState={action === 'edit' ? entryData?.slateContent : null}
+      editorState={
+        action === 'edit' ? entryData?.slateContent : canSaveDraft ? getDraftPost() : null
+      }
       isShown={action !== 'post'}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
+      showDraft={canSaveDraft}
+      setEditorState={(value: IEntryData['slateContent']) => {
+        if (!canSaveDraft) return;
+        if (isEqual(value, editorDefaultValue)) {
+          clearDraftPost();
+          return;
+        }
+        saveDraftPost(value);
+      }}
     />
   );
 }

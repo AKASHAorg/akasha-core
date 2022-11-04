@@ -1,4 +1,4 @@
-import { Box } from 'grommet';
+import { Anchor, Box, Text } from 'grommet';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   createEditor,
@@ -81,6 +81,7 @@ export interface IEditorBox {
   onCancelClick?: () => void;
   cancelButtonLabel?: string;
   onPlaceholderClick?: () => void;
+  showDraft?: boolean;
 }
 
 /* eslint-disable complexity */
@@ -88,6 +89,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   const {
     avatar,
     showAvatar = true,
+    showDraft = false,
     ethAddress,
     postLabel,
     placeholderLabel,
@@ -283,9 +285,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     })(initContent);
     const textContent: string = serializeToPlainText({ children: slateContent });
     const data = { metadata, slateContent, textContent, author: ethAddress };
-    onPublish(data);
     CustomEditor.clearEditor(editor);
     ReactEditor.focus(editor);
+    onPublish(data);
   };
 
   /**
@@ -563,6 +565,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     // CustomEditor.deleteImage(editor, element);
   };
 
+  const publishEnabled = publishDisabledInternal || disablePublish || uploading;
   return (
     <StyledBox pad="none" justify="between" fill={true} isMobile={isMobile}>
       <Box
@@ -674,6 +677,29 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         </Box>
 
         <Box direction="row" gap="small" align="center">
+          {showDraft && (
+            <Box direction="row" gap="small" align="center">
+              {!publishEnabled && (
+                <Text size="medium" color="#6D737D">
+                  Draft
+                </Text>
+              )}
+              <Anchor
+                onClick={e => {
+                  e.preventDefault();
+                  CustomEditor.clearEditor(editor);
+                }}
+                size="medium"
+                weight="normal"
+                target="_self"
+                color="accentText"
+                style={{ textDecoration: 'none' }}
+                disabled={publishEnabled}
+              >
+                Clear
+              </Anchor>
+            </Box>
+          )}
           {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
           {showCancelButton && (
             <Button secondary={true} label={cancelButtonLabel} onClick={onCancelClick} />
@@ -683,7 +709,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
             icon={disablePublish ? <Icon type="loading" color="white" /> : null}
             label={disablePublish ? disablePublishLabel : postLabel}
             onClick={handlePublish}
-            disabled={publishDisabledInternal || disablePublish || uploading}
+            disabled={publishEnabled}
           />
         </Box>
       </Box>
