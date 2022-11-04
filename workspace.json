@@ -383,14 +383,9 @@
       "targets": {
         "build": {
           "builder": "@nrwl/workspace:run-commands",
-          "outputs": [
-            "ui/apps/messaging"
-          ],
+          "outputs": ["ui/apps/messaging"],
           "options": {
-            "commands": [
-              "yarn run pack",
-              "yarn postpack"
-            ],
+            "commands": ["yarn run pack", "yarn postpack"],
             "cwd": "ui/apps/messaging",
             "parallel": false
           }
@@ -509,6 +504,28 @@
           "builder": "./tools/executors/i18n:extract",
           "options": {
             "cwd": "ui/apps/settings-app"
+          }
+        }
+      }
+    },
+    "@akashaorg/app-articles": {
+      "root": "ui/apps/articles",
+      "sourceRoot": "ui/apps/articles/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": ["ui/apps/articles"],
+          "options": {
+            "commands": ["yarn run pack", "yarn postpack"],
+            "cwd": "ui/apps/articles",
+            "parallel": false
+          }
+        },
+        "extract:translations": {
+          "builder": "./tools/executors/i18n:extract",
+          "options": {
+            "cwd": "ui/apps/articles"
           }
         }
       }

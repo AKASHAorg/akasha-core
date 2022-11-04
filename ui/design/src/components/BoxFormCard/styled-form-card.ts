@@ -1,4 +1,4 @@
-import { Box, Image, Text } from 'grommet';
+import { Image, Text } from 'grommet';
 import styled, { css } from 'styled-components';
 
 const StyledText = styled(Text)`
@@ -136,20 +136,8 @@ const StyledCoverImageOverlay = styled.div`
   border-radius: ${props => props.theme.shapes.borderRadius};
 `;
 
-const StyledCropperImageWrapper = styled(BaseImageDiv)`
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 15rem;
-  border-radius: ${props => props.theme.shapes.borderRadius};
-`;
-
-const StyledZoomControlBox = styled(Box)`
-  flex-direction: row;
-  cursor: pointer;
-`;
-
 export {
+  BaseImageDiv,
   StyledText,
   StyledAvatarPlaceholderDiv,
   StyledCoverImagePlaceholderDiv,
@@ -157,8 +145,6 @@ export {
   StyledCoverImageDiv,
   StyledAvatarOverlay,
   StyledCoverImageOverlay,
-  StyledCropperImageWrapper,
-  StyledZoomControlBox,
   StyledImage,
   StyledTextInput,
   HiddenSpan,

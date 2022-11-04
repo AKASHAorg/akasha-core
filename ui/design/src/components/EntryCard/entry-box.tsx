@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
 import CardHeaderAkashaDropdown from './card-header-akasha';
-import { StyledProfileDrop, StyledIcon } from './styled-entry-box';
+import { StyledProfileDrop } from './styled-entry-box';
 
 import { EntryCardHidden } from './entry-card-hidden';
 import { ProfileMiniCard } from '../ProfileCard/profile-mini-card';
@@ -28,6 +28,7 @@ import { ImageObject } from '../ImageGallery/image-grid-item';
 import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
 import { editorDefaultValue } from '../Editor/initialValue';
 import isEqual from 'lodash.isequal';
+import { EntryCardError } from './entry-card-error';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -100,6 +101,9 @@ export interface IEntryBoxProps {
   headerMenuExt?: React.ReactElement;
   modalSlotId: string;
   actionsRightExt?: React.ReactNode;
+  hideRepost?: boolean;
+  error?: string;
+  onRetry?: () => void;
 }
 
 const StyledProfileAvatarButton = styled(ProfileAvatarButton)`
@@ -158,6 +162,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     modalSlotId,
     actionsRightExt,
     onRepliesClick,
+    hideRepost,
+    error,
+    onRetry,
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
@@ -313,7 +320,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <ViewportSizeProvider>
-      <Box style={style}>
+      <Box background={error ? '#FFFDF1' : null} style={style}>
         <Box
           direction="row"
           justify="between"
@@ -413,7 +420,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               clickable={false}
             />
             {showMore && entryData.type !== 'REMOVED' && (
-              <StyledIcon
+              <Icon
                 type="moreDark"
                 onClick={(ev: React.MouseEvent<HTMLDivElement>) => {
                   if (disableActions) {
@@ -586,8 +593,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             isModerated={isModerated}
             modalSlotId={modalSlotId}
             actionsRightExt={actionsRightExt}
+            hideRepost={hideRepost}
           />
         )}
+        {error && <EntryCardError error={error} onRetry={onRetry} />}
       </Box>
     </ViewportSizeProvider>
   );

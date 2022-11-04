@@ -24,7 +24,7 @@ import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
 import AWF_Misc from './common/misc';
-
+export { Logger } from 'pino';
 export interface SDK_API {
   globalChannel: EventBus;
   auth: AWF_Auth;
@@ -50,10 +50,10 @@ export interface SDK_Services {
   };
 }
 
-export interface AWF_SDK {
+export type AWF_SDK = {
   services: SDK_Services;
   api: SDK_API;
-}
+};
 
 let sdk: AWF_SDK;
 

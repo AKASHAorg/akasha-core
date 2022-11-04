@@ -7,7 +7,7 @@ import DS from '@akashaorg/design-system';
 
 const { ErrorLoader, ModalContainer, ShareModal } = DS;
 
-const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
+const ShareProfileModal: React.FC<RootExtensionProps> = props => {
   const { profileId } = props.extensionData;
   const url = `${window.location.origin}/@akashaorg/app-profile/${profileId}`;
 
@@ -48,7 +48,7 @@ const UpdateProfileModal: React.FC<RootExtensionProps> = props => {
 const reactLifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: withProviders(UpdateProfileModal),
+  rootComponent: withProviders(ShareProfileModal),
   renderType: 'createRoot',
   errorBoundary: (error, errorInfo, props: RootExtensionProps) => {
     if (props.logger) {
@@ -58,7 +58,7 @@ const reactLifecycles = singleSpaReact({
       <ThemeWrapper {...props}>
         <ErrorLoader
           type="script-error"
-          title="Error in update profile modal"
+          title="Error in share profile modal"
           details={error.message}
         />
       </ThemeWrapper>

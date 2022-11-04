@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
+
 import DS from '@akashaorg/design-system';
 import {
   RootComponentProps,
@@ -9,8 +10,6 @@ import {
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { ProfilePageHeader } from '../profile-cards/profile-page-header';
-import menuRoute, { MY_PROFILE } from '../../routes';
 import {
   useGetProfile,
   useInfinitePostsByAuthor,
@@ -18,7 +17,11 @@ import {
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 
-const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
+import ProfilePageHeader from '../profile-cards/profile-page-header';
+
+import menuRoute, { MY_PROFILE } from '../../routes';
+
+const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
@@ -53,7 +56,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     loginQuery.data?.pubKey,
     loginQuery.data?.fromCache,
   );
-  const profileState = profileDataQuery.data;
+  /* @Todo: Fix my type */
+  const profileState: any = profileDataQuery.data;
 
   const reqPosts = useInfinitePostsByAuthor(
     publicKey,
@@ -80,7 +84,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-  const postPages = React.useMemo(() => {
+    /* @Todo: Fix my type */
+  const postPages:any = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
     }
@@ -117,7 +122,7 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      {profileDataQuery.status === 'loading' && <></>}
+      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') && <Spinner />}
       {(profileDataQuery.status === 'error' ||
         (profileDataQuery.status === 'success' && !profileState)) && (
         <ErrorLoader
@@ -158,11 +163,11 @@ const ProfilePage = (props: ProfilePageProps) => {
             <>
               <ProfilePageHeader
                 {...props}
-                modalSlotId={props.layoutConfig.modalSlotId}
+                // modalSlotId={props.layoutConfig.modalSlotId}
                 profileData={profileState}
                 profileId={pubKey}
                 loginState={loginQuery.data}
-                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+                // navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               />
               {reqPosts.isError && reqPosts.error && (
                 <ErrorLoader
@@ -179,7 +184,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   logger={props.logger}
                   onLoadMore={handleLoadMore}
                   getShareUrl={(itemId: string) =>
-                    `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
+                    `${window.location.origin}/social-app/post/${itemId}`
                   }
                   pages={postPages}
                   requestStatus={reqPosts.status}

@@ -5,9 +5,10 @@ export interface ExtensionPointProps {
   style?: React.CSSProperties;
   mountOnRequest?: boolean;
   shouldMount?: boolean;
+  data?: Record<string, unknown>;
   onClick?: () => void;
   onWrapperClick?: () => void;
-  onMount: (name: string) => void;
+  onMount: (name: string, data?: Record<string, unknown>) => void;
   onUnmount: (name: string) => void;
 }
 
@@ -31,7 +32,7 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
   React.useEffect(() => {
     if (!mountOnRequest || (mountOnRequest && shouldMount)) {
       if (!isMounted.current) {
-        onMount.current(`${props.name}`);
+        onMount.current(`${props.name}`, props.data);
         isMounted.current = true;
       }
       const node = document.querySelector(`#${props.name}`);
@@ -40,7 +41,7 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
         node.addEventListener('click', clickHandler.current);
       }
     }
-  }, [mountOnRequest, shouldMount, props.name]);
+  }, [mountOnRequest, shouldMount, props.name, props.data]);
   React.useEffect(() => {
     const onClick = clickHandler.current;
     const unmount = onUnmount.current;
@@ -49,6 +50,7 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
         nodeRef.current.removeEventListener('click', onClick);
       }
       unmount(`${props.name}`);
+      isMounted.current = false;
     };
   }, [props.name]);
 

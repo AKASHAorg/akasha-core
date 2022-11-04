@@ -15,16 +15,23 @@ export type IconType =
   | 'appSocial'
   | 'activity'
   | 'akasha'
+  | 'alert'
   | 'addAppGrey'
   | 'addCard'
+  | 'alignCenter'
+  | 'alignJustify'
+  | 'alignLeft'
+  | 'alignRight'
   | 'announcement'
   | 'app'
   | 'arrowDown'
   | 'arrowUp'
   | 'arrowLeft'
   | 'arrowRight'
+  | 'article'
   | 'available'
   | 'bold'
+  | 'boldAlt'
   | 'block'
   | 'book'
   | 'bookmark'
@@ -39,9 +46,10 @@ export type IconType =
   | 'check'
   | 'checkSimple'
   | 'checkDouble'
-  | 'dapper'
   | 'chevronRight'
   | 'chevronLeft'
+  | 'dapper'
+  | 'dashboard'
   | 'discord'
   | 'document'
   | 'dropdown'
@@ -71,7 +79,16 @@ export type IconType =
   | 'info'
   | 'legal'
   | 'licensewtfpl'
+  | 'licenseAllRights'
+  | 'licenseAttribution'
+  | 'licenseNoDerivatives'
+  | 'licenseNoRights'
+  | 'licenseNonCommercial'
+  | 'licenseShareAlike'
+  | 'licenseSomeRights'
   | 'link'
+  | 'listBulleted'
+  | 'listNumbered'
   | 'loading'
   | 'login'
   | 'media'
@@ -109,11 +126,16 @@ export type IconType =
   | 'share'
   | 'signOut'
   | 'status'
-  | 'subscribe'
   | 'stopwatch'
+  | 'strikethrough'
+  | 'subscribe'
   | 'shareSmallBlue'
   | 'shareSmallDark'
   | 'shareSmallGrey'
+  | 'textcase'
+  | 'textcaseLower'
+  | 'textcaseUpper'
+  | 'textcaseSentence'
   | 'thumbsDownGrey'
   | 'thumbsDownWhite'
   | 'thumbsUpGrey'
@@ -146,15 +168,22 @@ export const iconTypes: IconType[] = [
   'activity',
   'addAppGrey',
   'akasha',
+  'alert',
   'addCard',
+  'alignCenter',
+  'alignJustify',
+  'alignLeft',
+  'alignRight',
   'announcement',
   'app',
   'arrowDown',
   'arrowUp',
   'arrowLeft',
   'arrowRight',
+  'article',
   'available',
   'bold',
+  'boldAlt',
   'block',
   'book',
   'bookmark',
@@ -172,6 +201,7 @@ export const iconTypes: IconType[] = [
   'chevronLeft',
   'coins',
   'dapper',
+  'dashboard',
   'discord',
   'document',
   'dropdown',
@@ -201,7 +231,16 @@ export const iconTypes: IconType[] = [
   'key',
   'legal',
   'licensewtfpl',
+  'licenseAllRights',
+  'licenseAttribution',
+  'licenseNoDerivatives',
+  'licenseNoRights',
+  'licenseNonCommercial',
+  'licenseShareAlike',
+  'licenseSomeRights',
   'link',
+  'listBulleted',
+  'listNumbered',
   'loading',
   'login',
   'media',
@@ -238,11 +277,16 @@ export const iconTypes: IconType[] = [
   'signOut',
   'status',
   'share',
-  'subscribe',
   'stopwatch',
+  'strikethrough',
+  'subscribe',
   'shareSmallBlue',
   'shareSmallDark',
   'shareSmallGrey',
+  'textcase',
+  'textcaseLower',
+  'textcaseUpper',
+  'textcaseSentence',
   'thumbsDownGrey',
   'thumbsDownWhite',
   'thumbsUpGrey',
@@ -392,6 +436,7 @@ const fillIcons: IconType[] = [
   'appModeration',
   'explore',
   'legal',
+  'dashboard',
 ];
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];

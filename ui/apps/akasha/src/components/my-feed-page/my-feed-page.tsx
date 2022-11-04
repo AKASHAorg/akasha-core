@@ -39,7 +39,8 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
     }
   }, [postsReq, loginState?.fromCache]);
 
-  const postPages = React.useMemo(() => {
+    /* @Todo: Fix my type */
+  const postPages:any = React.useMemo(() => {
     if (postsReq.data) {
       return postsReq.data.pages;
     }
@@ -88,7 +89,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
         <title>Ethereum World</title>
       </Helmet>
 
-      <Box margin={{ bottom: 'medium' }} gap="medium">
+      <Box margin={{ bottom: 'small' }}>
         <StartCard
           title={t('My Feed')}
           heading={t('Add some magic to your feed 🪄')}

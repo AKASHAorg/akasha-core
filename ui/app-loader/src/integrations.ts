@@ -1,4 +1,3 @@
-import { ILogger } from '@akashaorg/typings/sdk';
 import {
   RootComponentProps,
   RootExtensionProps,
@@ -35,7 +34,7 @@ import {
   parseQueryString,
 } from './utils';
 import * as singleSpa from 'single-spa';
-import getSDK from '@akashaorg/awf-sdk';
+import getSDK, { Logger } from '@akashaorg/awf-sdk';
 import { getIntegrationsData } from './manifests';
 import { loadI18nNamespaces } from './i18n-utils';
 import { extensionMatcher } from './extension-matcher';
@@ -57,7 +56,7 @@ export const getMountPoint = (appConfig: IAppConfig) => {
 };
 
 // exported for testing purposes
-export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo[]) => {
+export const systemImport = (logger: Logger) => (manifests: BaseIntegrationInfo[]) => {
   return from(manifests).pipe(
     filter(manifest => (manifest.hasOwnProperty('enabled') ? manifest.enabled : true)),
     mergeMap(manifest => {
@@ -84,7 +83,7 @@ export const systemImport = (logger: ILogger) => (manifests: BaseIntegrationInfo
  * Get the integration manifest and import the source
  * store the resulting integrationConfig in state
  */
-export const importIntegrationModules = (state$: Observable<LoaderState>, logger: ILogger) => {
+export const importIntegrationModules = (state$: Observable<LoaderState>, logger: Logger) => {
   return state$.pipe(getStateSlice('manifests')).pipe(
     mergeMap(systemImport(logger)),
     withLatestFrom(state$.pipe(getStateSlice('modules'))),
@@ -109,7 +108,7 @@ export const importIntegrationModules = (state$: Observable<LoaderState>, logger
 export const processSystemModules = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  logger: ILogger,
+  logger: Logger,
 ) => {
   const globalChannel = getSDK().api.globalChannel;
   const layoutConfig$ = state$.pipe(getStateSlice('layoutConfig'));
@@ -254,7 +253,7 @@ export const processSystemModules = (
 export const handleExtPointMountOfApps = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  logger: ILogger,
+  logger: Logger,
 ) => {
   const sdk = getSDK();
   const mountedExtPoints$ = state$.pipe(getStateSlice('mountedExtPoints'));
@@ -333,7 +332,7 @@ export const handleExtPointMountOfApps = (
       tap(results => {
         const { config } = results.data;
         const { manifests, plugins, modules } = results;
-        const manifest = manifests.find((m: BaseIntegrationInfo) => m.name === config.name);
+        const manifest = manifests.find((m: any) => m.name === config.name);
 
         logger.info(`Registering app ${config.name}`);
 
@@ -395,7 +394,7 @@ export const handleExtPointMountOfApps = (
     );
 };
 
-export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logger: ILogger) => {
+export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logger: Logger) => {
   const uninstallRequest$ = state$.pipe(getStateSlice('uninstallAppRequest'));
   return uninstallRequest$
     .pipe(
@@ -493,7 +492,7 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
 export const handleDisableIntegration = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  _logger: ILogger,
+  _logger: Logger,
 ) => {
   return state$
     .pipe(getStateSlice('disableIntegrationRequest'))
@@ -525,6 +524,6 @@ export const handleDisableIntegration = (
  * Enable integration (by user)
  * TODO:
  */
-export const handleEnableIntegration = (state$: Observable<LoaderState>, _logger: ILogger) => {
+export const handleEnableIntegration = (state$: Observable<LoaderState>, _logger: Logger) => {
   return state$.pipe(getStateSlice('enableIntegrationRequest')).pipe(filter(Boolean));
 };

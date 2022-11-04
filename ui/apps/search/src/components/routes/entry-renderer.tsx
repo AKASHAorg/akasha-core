@@ -9,7 +9,7 @@ import {
   NavigateToParams,
   RootComponentProps,
 } from '@akashaorg/typings/ui';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { Logger } from '@akashaorg/awf-sdk';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import { useIsFollowingMultiple } from '@akashaorg/ui-awf-hooks';
@@ -17,7 +17,7 @@ import { useIsFollowingMultiple } from '@akashaorg/ui-awf-hooks';
 const { EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
 export interface IEntryCardRendererProps {
-  logger: ILogger;
+  logger: Logger;
   singleSpa: RootComponentProps['singleSpa'];
   itemData?: IEntryData;
   itemType?: EntityTypes;
@@ -205,7 +205,9 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 moderatedContentLabel={t('This content has been moderated')}
                 showMore={true}
                 profileAnchorLink={'/@akashaorg/app-profile'}
-                repliesAnchorLink={'/@akashaorg/app-akasha-integration/post'}
+                repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
+                  itemType === EntityTypes.COMMENT ? 'reply' : 'post'
+                }`}
                 onRepost={handleRepost}
                 handleFollowAuthor={handleFollow}
                 handleUnfollowAuthor={handleUnfollow}

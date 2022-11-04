@@ -4,7 +4,7 @@ import { RootComponentProps, RootExtensionProps } from './index';
 import { UIEventData } from './ui-events';
 import { Extensions, IAppConfig } from './apps';
 import { PluginConf } from './plugins';
-import { ILogger, GlobalEventBusData } from '../sdk';
+import { GlobalEventBusData } from '../sdk';
 
 export type ActivityFn = (
   location: Location,
@@ -20,7 +20,7 @@ export interface IntegrationRegistrationOptions {
   layoutConfig: Extensions;
   extensionData?: UIEventData['data'];
   plugins?: PluginConf;
-  logger: ILogger;
+  logger: unknown;
 }
 
 export type IntegrationInitOptions = Partial<IntegrationRegistrationOptions>;

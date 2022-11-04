@@ -21,7 +21,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
-  const loggedProfileData = profileDataReq.data;
+  /* @Todo: fix my type ;/ */
+  const loggedProfileData: any = profileDataReq.data;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
@@ -81,7 +82,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
-          <Route path={`${routes[REPLY]}/:commentId`} element={<ReplyPage {...props} />} />
+          <Route
+            path={`${routes[REPLY]}/:commentId`}
+            element={
+              <ReplyPage {...props} loginState={loginQuery.data} showLoginModal={showLoginModal} />
+            }
+          />
           <Route path={`${routes[INVITE]}/:inviteCode`} element={<InvitePage {...props} />} />
           <Route path="/" element={<Navigate to={routes[FEED]} replace />} />
         </Routes>

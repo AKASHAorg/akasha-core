@@ -1,6 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
-import { of as mockOf } from 'rxjs';
 import { createWrapper } from './utils';
 import { useGetProfile, useGetProfileByEthAddress } from '../use-profile';
 import { mockProfile } from '../__mocks__/profiles';
@@ -11,7 +10,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       profile: {
-        getProfile: () => mockOf({ data: { getProfile: mockProfile } }),
+        getProfile: () => Promise.resolve(mockProfile),
       },
       common: {
         ipfs: {

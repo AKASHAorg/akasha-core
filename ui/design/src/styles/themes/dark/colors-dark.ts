@@ -41,8 +41,8 @@ const colors: IColorsDark = {
   secondaryText: '#B6BFD1', // grey
   textBackground: '#425166',
   chatBackground: '#425166',
-  entryBackground: '#425166',
-  pendingEntryBackground: '#4e71ff0f',
+  entryBackground: '#21344F',
+  pendingEntryBackground: '#314560',
   disabledText: '#9ea0a5', // disabled
   titleText: '#CACFD9',
   subtitleText: '#F4F5F7', // cadetGrey
@@ -58,11 +58,13 @@ const colors: IColorsDark = {
   ultraLightBackground: '#E7E9EC', // ultralightGrey
   lightBackground: '#132540', // dark blue
   darkBackground: '#0D1A2D',
+  replyEntrySeparator: '#949EB3',
   cardBackground: '#132540',
   modalBackground: '#132540', // deepGrey
   modalBackgroundAlt: '#87909E', // deeperGrey
   modalBackgroundTransparent: 'rgba(0, 0, 0, 0.6)', // transparentBlack
   activeCardBackground: '#F6F8FF', // aquamarine
+  entryEditorBackground: '#425166',
   inputBackground: '#CCD2DF',
   hoverBackground: '#595F6B',
   activePanelBackground: '#26374F',
@@ -76,6 +78,7 @@ const colors: IColorsDark = {
   accentLight: '#E9EDFD', // lightBlue
   accentLightHover: '#D3DAFA', // lightBlue
   border: '#425166', // lightGrey
+  replyFragmentBorder: '#425166',
   lightBorder: '#425166', // lighterGrey
   darkBorder: '#B6BFD1', // deepGrey
   darkerBorder: '#87909E', // deeperGrey

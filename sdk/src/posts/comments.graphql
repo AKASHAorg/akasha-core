@@ -29,6 +29,7 @@ query GetComment($commentID: String!) {
     updatedAt
     replyTo
     postId
+    totalReplies
     _id
   }
 }
@@ -47,6 +48,27 @@ query GetComments($offset: String, $limit: Int, $postID: String!) {
       creationDate
       replyTo
       postId
+      totalReplies
+      _id
+    }
+  }
+}
+
+query GetReplies($offset: String, $limit: Int, $postID: String!, $commentID: String!) {
+  getReplies(postID:$postID, commentID: $commentID, offset: $offset, limit: $limit){
+    total
+    nextIndex
+    results{
+      content{
+        ...DataProviderFragment
+      }
+      author{
+        ...UserProfileFragment
+      }
+      creationDate
+      replyTo
+      postId
+      totalReplies
       _id
     }
   }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, TextInput } from 'grommet';
-import Icon from '../Icon';
+import Icon, { IconProps } from '../Icon';
 import styled, { css } from 'styled-components';
 
 const SearchContainer = styled(Box)<{ adjustWidth?: boolean }>`
@@ -28,10 +28,20 @@ export interface ISearchBar {
   inputPlaceholderLabel?: string;
   onSearch: (keyword: string) => void;
   responsive?: boolean;
+  searchInputSize?: string;
+  iconSize?: IconProps['size'];
 }
 
 const SearchBar: React.FC<ISearchBar> = props => {
-  const { inputValue, onInputChange, inputPlaceholderLabel, onSearch, responsive } = props;
+  const {
+    inputValue,
+    onInputChange,
+    inputPlaceholderLabel,
+    onSearch,
+    responsive,
+    searchInputSize = 'xsmall',
+    iconSize = 'xs',
+  } = props;
 
   const handleSearch = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
@@ -50,7 +60,7 @@ const SearchBar: React.FC<ISearchBar> = props => {
       adjustWidth={responsive}
     >
       <StyledSearchInput
-        size="xsmall"
+        size={searchInputSize}
         value={inputValue}
         onChange={onInputChange}
         placeholder={inputPlaceholderLabel}
@@ -60,7 +70,7 @@ const SearchBar: React.FC<ISearchBar> = props => {
       />
       <Icon
         type="search"
-        size="xs"
+        size={iconSize}
         onClick={() => onSearch(inputValue)}
         clickable={true}
         color={'#47484A'}

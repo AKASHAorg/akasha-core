@@ -1,7 +1,7 @@
 import singleSpa from 'single-spa';
 import { RootComponentProps, IEntryData, IProfileData } from '@akashaorg/typings/ui';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { ILogger } from '@akashaorg/typings/sdk';
+import { ILogger } from '@akashaorg/typings/sdk/log';
 
 export interface IContentProps extends RootComponentProps {
   user?: string;

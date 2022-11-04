@@ -3,12 +3,12 @@ import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes } from '@akashaorg/typings/ui';
-import { IFeedWidgetProps } from './App';
+import { FeedWidgetProps } from './App';
 import EntryRenderer from './entry-renderer';
 
 const { EntryList } = DS;
 
-const EntryFeed = (props: IFeedWidgetProps) => {
+const EntryFeed = (props: FeedWidgetProps) => {
   const handleEntryNavigate = useEntryNavigation(props.navigateTo);
 
   const handleRepost = (_withComment: boolean, entryId: string) => {
@@ -30,6 +30,7 @@ const EntryFeed = (props: IFeedWidgetProps) => {
       itemSpacing={props.itemSpacing}
       hasNextPage={props.hasNextPage}
       pageKeyPrefix={props.itemType === EntityTypes.ENTRY ? 'entry-page' : 'comment-page'}
+      viewAllEntry={props.viewAllEntry}
       itemCard={
         <EntryRenderer
           modalSlotId={props.modalSlotId}
@@ -50,6 +51,13 @@ const EntryFeed = (props: IFeedWidgetProps) => {
           uiEvents={props.uiEvents}
           trackEvent={props.trackEvent}
           accentBorderTop={props.accentBorderTop}
+          replyFragmentItem={props.replyFragmentItem}
+          showReplyFragment={props.showReplyFragment}
+          logger={props.logger}
+          onLoginModalOpen={props.onLoginModalOpen}
+          navigateToModal={props.navigateToModal}
+          loggedProfile={props.loggedProfile}
+          i18n={props.i18n}
         />
       }
     />

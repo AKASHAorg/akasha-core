@@ -1,5 +1,4 @@
 import { useQuery } from 'react-query';
-import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { LEGAL_DOCS } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -8,8 +7,7 @@ export const LEGAL_KEY = 'Legal';
 
 const getLegalDoc = async (docName: LEGAL_DOCS) => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.services.common.ipfs.getLegalDoc(docName));
-  return res.data;
+  return sdk.services.common.ipfs.getLegalDoc(docName);
 };
 
 /**

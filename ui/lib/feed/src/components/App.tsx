@@ -8,16 +8,17 @@ import {
   EntityTypes,
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
-import { ILogger } from '@akashaorg/typings/sdk';
 import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
+import { Logger } from '@akashaorg/awf-sdk';
 import EntryFeed from './entry-feed';
 
 export interface EntryListPage {
   results: string[];
+  total: number;
 }
 
-export interface IFeedWidgetProps {
-  logger: ILogger;
+export type FeedWidgetProps = {
+  logger: Logger;
   pages: EntryListPage[];
   itemType: EntityTypes;
   onLoadMore: () => void;
@@ -41,10 +42,17 @@ export interface IFeedWidgetProps {
   i18n: RootComponentProps['i18next'];
   modalSlotId: string;
   accentBorderTop?: boolean;
+  replyFragmentItem?: boolean;
+  showReplyFragment?: boolean;
+  viewAllEntry?: {
+    label: string;
+    onClick: () => void;
+    limit: number;
+  };
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
-}
+};
 
-const FeedWidgetRoot: React.FC<IFeedWidgetProps> = props => {
+const FeedWidgetRoot: React.FC<FeedWidgetProps> = props => {
   return (
     <I18nextProvider i18n={props.i18n}>
       {props.itemType === EntityTypes.ENTRY && <EntryFeed {...props} />}

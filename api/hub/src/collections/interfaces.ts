@@ -119,6 +119,7 @@ export interface AuthorNotificationValue {
   postID?: string;
   commentID?: string[];
   moderatedID?: string;
+  replyTo?: string;
 }
 
 export interface PostAPISearchResult {

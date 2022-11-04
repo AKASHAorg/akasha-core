@@ -106,16 +106,11 @@ const useGlobalLogin = (props: UseGlobalLoginProps): void => {
   }, []);
   React.useLayoutEffect(() => {
     // make an attempt to load the eth address from cache;
-
-    const getDepsCall = sdk.current.api.auth.getCurrentUser();
-    const sub = getDepsCall.subscribe({
-      next: resp => {
-        if (onLoadFromCacheHandler.current) {
-          onLoadFromCacheHandler.current(resp.data);
-        }
-      },
+    sdk.current.api.auth.getCurrentUser().then(resp => {
+      if (onLoadFromCacheHandler.current) {
+        onLoadFromCacheHandler.current(resp);
+      }
     });
-    return () => sub.unsubscribe();
   }, []);
 };
 

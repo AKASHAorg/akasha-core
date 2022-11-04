@@ -1,4 +1,3 @@
-import { ILogger } from '../sdk/log';
 import singleSpa from 'single-spa';
 import { IAppConfig } from './apps';
 import { Subject } from 'rxjs';
@@ -8,6 +7,7 @@ import { ModalNavigationOptions } from './navigation';
 import i18n from 'i18next';
 import { IPluginsMap } from './plugins';
 import { ILoaderConfig, QueryStringType } from './app-loader';
+import { ILogger } from '../sdk/log';
 
 export interface RootComponentProps {
   activeWhen?: { path: string };
