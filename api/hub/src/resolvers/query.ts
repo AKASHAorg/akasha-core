@@ -386,7 +386,7 @@ const query = {
         links: ResolversParentTypes['InfoLink'];
         sources: string[];
       };
-      const ipfsSources = multiAddrToUri(sources, false);
+      const ipfsSources = multiAddrToUri(sources, true);
       let manifest: {
         mainFile: string;
         license?: string;
@@ -399,6 +399,7 @@ const query = {
         const manifestReq = await fetchWithTimeout(`${ipfsSources[0]}/${MANIFEST_FILE}`, {
           timeout: 10000,
           redirect: 'follow',
+          method: 'GET',
         });
         manifest = (await manifestReq.json()) as typeof manifest;
         ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;

@@ -18,7 +18,7 @@ import { AbortController } from 'node-abort-controller';
 import { Worker } from 'worker_threads';
 import { create } from 'ipfs-http-client';
 import sharp from 'sharp';
-import { CID, MultibaseDecoder } from 'multiformats/cid';
+import { CID } from 'multiformats/cid';
 import { AuthorNotificationValue } from './collections/interfaces';
 import { ICRegistryAbi } from './abi';
 import ProfileAPI from './datasources/profile';
@@ -29,7 +29,7 @@ import FollowerAPI from './datasources/follower';
 import { DataSource } from 'apollo-datasource';
 import { fileURLToPath } from 'url';
 import { ResolversParentTypes } from './graphql-resolver-types';
-import { Codec } from 'multiformats/bases/base';
+import { base36 } from 'multiformats/bases/base36';
 
 const MODERATION_APP_URL = process.env.MODERATION_APP_URL;
 const MODERATION_EMAIL = process.env.MODERATION_EMAIL;
@@ -352,13 +352,14 @@ export async function addToIpfs(link: string) {
   }
 }
 
-export function createIpfsGatewayLink(hash: string | CID, validateCID = true) {
-  if (!validateCID) {
-    return `https://${hash}.${IPFS_GATEWAY}`;
-  }
-  const cid = typeof hash === 'string' ? CID.parse(hash) : CID.asCID(hash);
+export function createIpfsGatewayLink(hash: string | CID, isBase36 = false) {
+  const cid =
+    typeof hash === 'string' ? CID.parse(hash, isBase36 && base36.decoder) : CID.asCID(hash);
   if (!cid) {
     throw new Error(`Hash ${hash.toString()} is not a valid CID`);
+  }
+  if (isBase36) {
+    return `https://${cid.toString(base36.encoder)}.${IPFS_GATEWAY}`;
   }
   return `https://${cid.toV1().toString()}.${IPFS_GATEWAY}`;
 }
@@ -392,16 +393,16 @@ export const getIcRegistryContract = () => {
   return IcRegistry;
 };
 
-export const multiAddrToUri = (addrList: string[], validate = true) => {
+export const multiAddrToUri = (addrList: string[], isBase36?: boolean) => {
   const results = [];
   if (!addrList?.length) {
     return results;
   }
   for (const addr of addrList) {
     if (addr.substring(0, 6) === '/ipfs/') {
-      results.push(createIpfsGatewayLink(addr.substring(6), validate));
+      results.push(createIpfsGatewayLink(addr.substring(6), isBase36));
     } else if (addr.substring(0, 7) === 'ipfs://') {
-      results.push(createIpfsGatewayLink(addr.substring(7), validate));
+      results.push(createIpfsGatewayLink(addr.substring(7), isBase36));
     } //else {
     // this package does not work on node
     // results.push(multiaddrToUri(addr));
