@@ -62,13 +62,13 @@ const StyledTextInput = styled(TextInput)`
 const getPlaceholder = (linkType: string) => {
   switch (linkType) {
     case EnsTxtPresets.DISCORD:
-      return 'Discord Username';
+      return 'Discord link';
     case EnsTxtPresets.GITHUB:
       return 'Github Username';
     case EnsTxtPresets.REDDIT:
       return 'Reddit Username';
-    // case EnsTxtPresets.TELEGRAM:
-    //   return 'Telegram Username';
+    case EnsTxtPresets.TELEGRAM:
+      return 'Telegram Group';
     case EnsTxtPresets.TWITTER:
       return 'Twitter Username';
     case EnsTxtPresets.URL:

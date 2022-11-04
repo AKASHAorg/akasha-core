@@ -60,6 +60,7 @@ const SocialLinksSection: React.FC<SocialLinksSectionProps> = props => {
                       style={{ marginRight: '0.75rem', maxWidth: '1.25rem' }}
                       type={getIconType(type)}
                       onClick={handleLinkTypeChange(link.id, type)}
+                      plain={true}
                     />
                   ),
                 }))}
@@ -83,24 +84,25 @@ const SocialLinksSection: React.FC<SocialLinksSectionProps> = props => {
 const RemoveButton = styled(IconButton)`
   height: 2.2rem;
   border-radius: 4px;
+  :hover {
+    background-color: transparent;
+  }
 `;
 
 const getIconType = (type: string) => {
   switch (type) {
-    case EnsTxtPresets.DISCORD:
-      return 'discord';
     case EnsTxtPresets.GITHUB:
-      return 'github';
+      return 'githubAlt';
     case EnsTxtPresets.REDDIT:
-      return 'reddit';
-    case EnsTxtPresets.TELEGRAM:
-      return 'telegram';
+      return 'redditAlt';
     case EnsTxtPresets.TWITTER:
-      return 'twitter';
-    case EnsTxtPresets.URL:
-      return 'link';
+      return 'twitterAlt';
+    case EnsTxtPresets.DISCORD:
+      return 'discordAlt';
+    case EnsTxtPresets.TELEGRAM:
+      return 'telegramAlt';
     default:
-      return 'link';
+      return 'linkAlt';
   }
 };
 

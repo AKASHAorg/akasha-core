@@ -6,6 +6,7 @@ import Icon from '../Icon';
 import { MarginType } from 'grommet/utils';
 import Tooltip from '../Tooltip';
 import { isMobile } from 'react-device-detect';
+import { EnsTxtPresets } from '../ProfileForm/sections/social-link-input';
 
 export interface ProfileLinksProps {
   titleLabel: string;
@@ -47,21 +48,31 @@ const ProfileLinksCard: React.FC<ProfileLinksProps> = props => {
 
 const getIconFromType = (type: string) => {
   switch (type) {
-    case 'com.twitter':
-      return 'twitter';
-    case 'com.github':
-      return 'github';
+    case EnsTxtPresets.GITHUB:
+      return 'githubAlt';
+    case EnsTxtPresets.REDDIT:
+      return 'redditAlt';
+    case EnsTxtPresets.TWITTER:
+      return 'twitterAlt';
+    case EnsTxtPresets.DISCORD:
+      return 'discordAlt';
+    case EnsTxtPresets.TELEGRAM:
+      return 'telegramAlt';
     default:
-      return 'link';
+      return 'linkAlt';
   }
 };
 
 const getLinkUrl = (link: { type: string; value: string }) => {
   switch (link.type) {
-    case 'com.twitter':
-      return `https://twitter.com/${link.value}`;
-    case 'com.github':
+    case EnsTxtPresets.GITHUB:
       return `https://github.com/${link.value}`;
+    case EnsTxtPresets.REDDIT:
+      return `https://reddit.com/user/${link.value}`;
+    case EnsTxtPresets.TWITTER:
+      return `https://twitter.com/${link.value}`;
+    case EnsTxtPresets.TELEGRAM:
+      return `https://t.me/${link.value}`;
     default:
       return link.value;
   }
@@ -91,7 +102,7 @@ const ProfileLinkItem: React.FC<LinkItemProps> = props => {
 
   return (
     <Box direction="row" margin={{ top: 'small' }}>
-      <Icon type={getIconFromType(props.link.type)} />
+      <Icon plain={true} type={getIconFromType(props.link.type)} />
       <Text size="medium" color="primaryText" margin={{ horizontal: 'small' }}>
         {getLinkUrl(props.link)}
       </Text>

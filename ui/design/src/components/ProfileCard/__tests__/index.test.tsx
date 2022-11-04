@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+// import userEvent from '@testing-library/user-event';
 
 import ProfileCard from '../';
 import { customRender, wrapWithTheme } from '../../../test-utils';

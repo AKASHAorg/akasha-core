@@ -83,7 +83,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
               };
             }
             return {
-              title: link.type,
+              type: link.type,
               value: link.value,
             };
           });
