@@ -498,6 +498,12 @@ const ProfileForm: React.FC<ProfileFormProps> = props => {
         }),
       };
     });
+    setFieldsToUpdate(prev => {
+      if (!prev.includes('socialLinks')) {
+        return prev.concat('socialLinks');
+      }
+      return prev;
+    });
   };
   const handleLinkInputChange = (id: number, value: string) => {
     setFormValues(prev => {
@@ -510,6 +516,12 @@ const ProfileForm: React.FC<ProfileFormProps> = props => {
         ...prev,
         socialLinks: newLinks,
       };
+    });
+    setFieldsToUpdate(prev => {
+      if (!prev.includes('socialLinks')) {
+        return prev.concat('socialLinks');
+      }
+      return prev;
     });
   };
   const handleLinkTypeChange = (

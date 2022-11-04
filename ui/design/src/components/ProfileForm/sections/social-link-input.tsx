@@ -10,7 +10,7 @@ export const EnsTxtPresets = {
   GITHUB: 'com.github',
   REDDIT: 'com.reddit',
   TWITTER: 'com.twitter',
-  TELEGRAM: 'com.telegram',
+  TELEGRAM: 'org.telegram',
   URL: 'url',
   AVATAR: 'avatar',
   DESCRIPTION: 'description',
