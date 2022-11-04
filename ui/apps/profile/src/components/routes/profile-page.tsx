@@ -84,8 +84,7 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-    /* @Todo: Fix my type */
-  const postPages:any = React.useMemo(() => {
+  const postPages = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
     }
