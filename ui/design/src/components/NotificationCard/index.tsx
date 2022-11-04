@@ -92,6 +92,8 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
           handleMessageRead(notif.id);
           if (replyID) {
             handleEntryClick(replyID, EntityTypes.COMMENT);
+          } else if (postID) {
+            handleEntryClick(postID, EntityTypes.ENTRY);
           }
         };
         break;
