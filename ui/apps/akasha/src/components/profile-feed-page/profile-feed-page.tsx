@@ -53,8 +53,8 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
       reqPosts.fetchNextPage();
     }
   }, [reqPosts, loginState?.fromCache]);
-
-  const postPages = React.useMemo(() => {
+  // @TODO: fix type
+  const postPages: any = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
     }
