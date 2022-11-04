@@ -73,7 +73,8 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 followingLabel={t('is now following you')}
                 mentionedPostLabel={t('mentioned you in a post')}
                 mentionedCommentLabel={t('mentioned you in a comment')}
-                replyLabel={t('replied to your post')}
+                replyToPostLabel={t('replied to your post')}
+                replyToReplyLabel={t('replied to your reply')}
                 repostLabel={t('reposted your post')}
                 moderatedPostLabel={t('moderated your post')}
                 moderatedReplyLabel={t('moderated your reply')}

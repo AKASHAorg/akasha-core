@@ -17,7 +17,8 @@ export interface INotificationsCard {
   mentionedPostLabel?: string;
   mentionedCommentLabel?: string;
   repostLabel?: string;
-  replyLabel?: string;
+  replyToPostLabel?: string;
+  replyToReplyLabel?: string;
   markAsReadLabel?: string;
   moderatedPostLabel?: string;
   moderatedReplyLabel?: string;
@@ -38,7 +39,8 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     followingLabel,
     mentionedPostLabel,
     mentionedCommentLabel,
-    replyLabel,
+    replyToPostLabel,
+    replyToReplyLabel,
     repostLabel,
     moderatedPostLabel,
     moderatedReplyLabel,
@@ -66,11 +68,13 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     const postID = Array.isArray(notif.body?.value?.postID)
       ? notif.body?.value?.postID[0]
       : notif.body?.value?.postID;
+
     const moderatedID = notif.body?.value?.contentID;
-    // use this when we have routing available for comments
-    // const commentID = Array.isArray(notif.body?.value?.commentID)
-    //   ? notif.body?.value?.commentID[0]
-    //   : notif.body?.value?.commentID;
+
+    const replyID = Array.isArray(notif.body?.value?.replyTo)
+      ? notif.body?.value?.replyTo[0]
+      : notif.body?.value?.replyTo;
+
     switch (notif.body.property) {
       case 'POST_MENTION':
         label = mentionedPostLabel;
@@ -91,11 +95,20 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         };
         break;
       case 'NEW_COMMENT':
-        label = replyLabel;
+        label = replyToPostLabel;
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
             handleEntryClick(postID);
+          }
+        };
+        break;
+      case 'NEW_COMMENT_REPLY':
+        label = replyToReplyLabel;
+        clickHandler = () => {
+          handleMessageRead(notif.id);
+          if (replyID) {
+            handleEntryClick(replyID);
           }
         };
         break;
@@ -230,7 +243,8 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
 NotificationsCard.defaultProps = {
   mentionedPostLabel: 'mentioned you in a post',
   mentionedCommentLabel: 'mentioned you in a comment',
-  replyLabel: 'replied to your post',
+  replyToPostLabel: 'replied to your post',
+  replyToReplyLabel: 'replied to your reply',
   followingLabel: 'is now following you',
   repostLabel: 'reposted your post',
   markAsReadLabel: 'Mark as read',
