@@ -359,7 +359,7 @@ export function createIpfsGatewayLink(hash: string | CID, isBase36 = false) {
     throw new Error(`Hash ${hash.toString()} is not a valid CID`);
   }
   if (isBase36) {
-    return `https://${cid.toString()}.${IPFS_GATEWAY}`;
+    return `https://${cid.toString(base36.encoder)}.${IPFS_GATEWAY}`;
   }
   return `https://${cid.toV1().toString()}.${IPFS_GATEWAY}`;
 }
