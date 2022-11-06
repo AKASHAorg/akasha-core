@@ -36,9 +36,13 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
             width="31.5%"
             height="7.5rem"
             margin={{ ...(idx < values.length - 3 && { bottom: 'medium' }) }}
-            onClick={onValueClick(value.path)}
           >
-            <ModerationValueCard isMini={true} label={value.title} assetName={value.assetName} />
+            <ModerationValueCard
+              isMini={true}
+              label={value.title}
+              assetName={value.assetName}
+              onClick={onValueClick(value.path)}
+            />
           </Box>
         ))}
       </Box>

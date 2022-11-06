@@ -66,13 +66,15 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
   };
 
   return (
-    <StyledWrapper pad={{ vertical: 'medium', left: 'medium' }}>
+    <StyledWrapper pad={{ left: 'medium' }} gap="medium">
       <Box
+        gap="small"
         pad={{ bottom: 'large', right: 'medium' }}
         border={{ color: 'border', side: 'bottom', style: 'solid' }}
       >
         <MobileHeading title={title} isDelisted={isDelisted} onClickArrowLeft={onClickArrowLeft} />
-        <Box direction="row" margin={{ top: 'small' }} justify="between">
+
+        <Box direction="row" justify="between">
           <Text size="large" weight="bold">
             {reportedTimesLabel}
           </Text>
@@ -81,14 +83,9 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
               href={viewItemLink}
               onClick={handleClickViewItem}
               label={
-                <Box direction="row">
+                <Box direction="row" gap="xsmall">
                   <Icon type="quote" accentColor={true} clickable={true} />
-                  <Text
-                    color="accentText"
-                    size="medium"
-                    weight="normal"
-                    margin={{ left: '0.25rem' }}
-                  >
+                  <Text color="accentText" size="medium" weight="normal">
                     {viewItemLabel}
                   </Text>
                 </Box>
@@ -96,9 +93,11 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
             />
           )}
         </Box>
-        <StyledText margin={{ top: 'small' }} weight="normal" color="secondaryText" size="small">
+
+        <StyledText weight="normal" color="secondaryText" size="small">
           {reasonsLabel}
         </StyledText>
+
         <Box direction="row" wrap={true} align="center">
           {reasons.map((reason, idx) => (
             <StyledBox
@@ -114,53 +113,59 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
           ))}
         </Box>
       </Box>
+
       <Box
+        gap="small"
         pad={{ bottom: 'large', right: 'medium' }}
         border={{ color: 'border', side: 'bottom', style: 'solid' }}
       >
-        <Box margin={{ top: 'large' }} direction="row" justify="between" align="start">
-          <Box direction="row">
+        <Box direction="row" justify="between" align="start">
+          <Box direction="row" align="center" gap="xsmall">
             <Avatar
               src={moderatorAvatar}
               ethAddress={moderatorEthAddress}
               onClick={onClickAvatar}
             />
-            <Box margin={{ left: 'xsmall' }}>
-              <Box direction="row" align="center" pad={{ right: 'small' }}>
+            <Box>
+              <Box direction="row" align="center" gap="xsmall">
                 <Box
                   width="8px"
                   height="8px"
-                  margin={{ right: 'xsmall' }}
                   round="50%"
                   background={isDelisted ? 'red' : 'green'}
                 />
                 <Text size="medium">{title}</Text>
               </Box>
+
               <Text size="large" weight="bold">
                 {moderator}
               </Text>
             </Box>
           </Box>
-          <Box pad={{ left: 'small' }} flex={{ shrink: 0 }}>
+
+          <Box flex={{ shrink: 0 }}>
             <Text color="secondaryText" style={{ textAlign: 'right' }}>
               {formatRelativeTime(moderatedTimestamp, locale)}
             </Text>
           </Box>
         </Box>
-        <StyledText margin={{ top: 'small' }} weight="normal" color="secondaryText" size="small">
+
+        <StyledText weight="normal" color="secondaryText" size="small">
           {explanationLabel}
         </StyledText>
-        <Text size="large" margin={{ top: 'xsmall' }} style={{ letterSpacing: '0.025em' }}>
+
+        <Text size="large" style={{ letterSpacing: '0.025em' }}>
           {content}
         </Text>
       </Box>
+
       <StyledAnchor
         href={contactModeratorsLink}
         style={{ textDecoration: 'none' }}
         label={
-          <Box direction="row" margin={{ top: 'large' }} pad={{ bottom: 'large', right: 'medium' }}>
+          <Box direction="row" pad={{ right: 'medium' }} gap="xsmall">
             <Icon type="feedback" accentColor={true} clickable={true} />
-            <Text color="accentText" margin={{ top: '0.15rem', left: '0.25rem' }} weight="normal">
+            <Text color="accentText" weight="normal">
               {contactModeratorsLabel}
             </Text>
           </Box>

@@ -11,6 +11,7 @@ export interface IModerationValueCardProps {
   ctaLabel?: string;
   ctaUrl?: string;
   isMini?: boolean;
+  onClick?: () => void;
 }
 
 const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
@@ -22,10 +23,17 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
     ctaLabel,
     ctaUrl,
     isMini = false,
+    onClick,
   } = props;
 
   return (
-    <BasicCardBox height="inherit" border={{ ...(isMini && { color: 'accent' }) }}>
+    <BasicCardBox
+      height="inherit"
+      border={{ ...(isMini && { color: 'accent' }) }}
+      // works only when onClick is specified
+      hoverIndicator={{ ...(isMini && { background: 'hoverBackground' }) }}
+      onClick={onClick}
+    >
       <Box align="center" pad={isMini ? 'small' : 'medium'} gap={isMini ? 'xxsmall' : 'small'}>
         <Box width={isMini ? '4.25rem' : '17.5rem'} height={isMini ? '3.75rem' : '15.45rem'}>
           <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
