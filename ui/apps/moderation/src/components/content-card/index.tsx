@@ -13,6 +13,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
   const {
     isPending,
     locale,
+    incidentLabel,
     showExplanationsLabel,
     hideExplanationsLabel,
     determinationLabel,
@@ -83,6 +84,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           locale={locale}
           // @Todo: pls fix my type :/
           entryData={itemType === ModerationItemTypes.ACCOUNT ? profile : (entryData as any)}
+          incidentLabel={incidentLabel}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}

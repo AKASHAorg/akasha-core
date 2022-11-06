@@ -180,6 +180,10 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   const shouldLoadMore = hasLoadMoreRef && logItemsQuery.isFetching && logItemPages.length > 0;
 
+  const handleCopy = (value: string) => () => {
+    navigator.clipboard.writeText(value);
+  };
+
   return (
     <VerticalFillBox fill="vertical">
       <StyledIntroWrapper>
@@ -286,12 +290,32 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         </SidebarWrapper>
         <DetailCardWrapper isVisible={!!selected}>
           {selected && (
-            <DetailCard
-              selected={selected}
-              handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
-              handleClickArrowLeft={handleClickArrowLeft}
-              navigateTo={navigateTo}
-            />
+            <Box>
+              {/* incident label */}
+              <Box
+                direction="row"
+                pad="medium"
+                gap="xsmall"
+                round={{ size: 'xsmall', corner: 'top' }}
+                background="warning"
+              >
+                <Text size="large">{`${t('Incident')} #${selected.contentID}`}</Text>
+                <Icon
+                  type="copy"
+                  color="secondaryText"
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleCopy(selected.contentID)}
+                />
+              </Box>
+
+              {/* rest of the detail card */}
+              <DetailCard
+                selected={selected}
+                handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
+                handleClickArrowLeft={handleClickArrowLeft}
+                navigateTo={navigateTo}
+              />
+            </Box>
           )}
           {!selected && <Banner count={count} />}
         </DetailCardWrapper>
