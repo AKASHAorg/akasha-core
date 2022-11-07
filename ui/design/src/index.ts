@@ -131,6 +131,7 @@ import EntryPublishErrorCard from './components/EntryPublishErrorCard';
 import ModerationAppErrorCard from './components/ModerationAppErrorCard';
 import ModerationIntroCard from './components/ModerationIntroCard';
 import ModerationValueCard from './components/ModerationValueCard';
+import ModeratorDetailCard from './components/ModeratorDetailCard';
 
 import TextInputField from './components/TextInputField';
 
@@ -238,6 +239,7 @@ const exported = {
   ModerationAppErrorCard,
   ModerationIntroCard,
   ModerationValueCard,
+  ModeratorDetailCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
