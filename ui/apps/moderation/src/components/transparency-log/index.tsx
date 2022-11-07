@@ -34,7 +34,6 @@ const DetailCardWrapper = styled(BasicCardBox)<{
   isVisible: boolean;
 }>`
   width: 63.5%;
-  border-radius: 0.5rem;
   background: ${props => props.theme.colors.cardBackground};
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     width: 100%;
@@ -54,7 +53,6 @@ const SidebarWrapper = styled(BasicCardBox)<{
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  border-radius: 0.5rem;
   background: ${props => props.theme.colors.cardBackground};
   ${props => {
     if (props.isVisible) {
@@ -71,7 +69,6 @@ const SidebarWrapper = styled(BasicCardBox)<{
 
 const ListWrapper = styled(Box)`
   flex: 1;
-  margin-top: 0.5rem;
   flex-direction: row;
   justify-content: space-between;
 `;
@@ -185,7 +182,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   return (
-    <VerticalFillBox fill="vertical">
+    <VerticalFillBox fill="vertical" gap="small">
       <StyledIntroWrapper>
         <StyledBox fill="horizontal" margin={{ bottom: 'xlarge' }}>
           <Text size="xlarge" weight="bold" margin={{ bottom: 'xsmall' }}>

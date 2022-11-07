@@ -5,9 +5,9 @@ import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import TransparencyLog from './transparency-log';
-import { Dashboard, Overview, ValuePage } from '../pages';
+import { Dashboard, Overview, AllModerators, ValuePage } from '../pages';
 
-import routes, { DASHBOARD, HISTORY, HOME, MODERATION_VALUE } from '../routes';
+import routes, { DASHBOARD, HISTORY, HOME, MODERATION_VALUE, MODERATORS } from '../routes';
 
 const { Box } = DS;
 
@@ -40,6 +40,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
+
+          <Route path={routes[MODERATORS]} element={<AllModerators {...props} />} />
 
           <Route
             path={routes[HISTORY]}
