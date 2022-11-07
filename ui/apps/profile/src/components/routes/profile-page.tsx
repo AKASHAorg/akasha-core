@@ -17,6 +17,7 @@ import {
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 
+import ModeratorLabel from './moderator-label';
 import ProfilePageHeader from '../profile-cards/profile-page-header';
 
 import menuRoute, { MY_PROFILE } from '../../routes';
@@ -24,13 +25,14 @@ import menuRoute, { MY_PROFILE } from '../../routes';
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner } = DS;
 
 export interface ProfilePageProps extends RootComponentProps {
+  isModerator: boolean;
+  loginState: LoginState;
   loggedProfileData: IProfileData;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  loginState: LoginState;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { plugins, loggedProfileData, showLoginModal } = props;
+  const { plugins, isModerator, loggedProfileData, showLoginModal } = props;
   const [erroredHooks, setErroredHooks] = React.useState([]);
 
   const { t } = useTranslation('app-profile');
@@ -84,8 +86,8 @@ const ProfilePage = (props: ProfilePageProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-    /* @Todo: Fix my type */
-  const postPages:any = React.useMemo(() => {
+  /* @Todo: Fix my type */
+  const postPages: any = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
     }
@@ -160,7 +162,7 @@ const ProfilePage = (props: ProfilePageProps) => {
             />
           )}
           {!profileState.delisted && (
-            <>
+            <Box gap="small">
               <ProfilePageHeader
                 {...props}
                 // modalSlotId={props.layoutConfig.modalSlotId}
@@ -169,6 +171,9 @@ const ProfilePage = (props: ProfilePageProps) => {
                 loginState={loginQuery.data}
                 // navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               />
+
+              {isModerator && <ModeratorLabel label={t('Moderator')} />}
+
               {reqPosts.isError && reqPosts.error && (
                 <ErrorLoader
                   type="script-error"
@@ -206,7 +211,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                   i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
                 />
               )}
-            </>
+            </Box>
           )}
         </>
       )}

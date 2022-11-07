@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import { useCheckModerator, useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 
 import ProfilePage from './profile-page';
 import NoProfileFound from './no-profile-found';
@@ -42,7 +42,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
+  const checkModeratorQuery = useCheckModerator(loginQuery.data?.pubKey);
+  const checkModeratorResp = checkModeratorQuery.data;
+
   const { t } = useTranslation('app-profile');
+
+  const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
@@ -102,9 +107,10 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 <ProfilePage
                   {...props}
                   /* @Todo: fix my type ;/ */
+                  isModerator={isModerator}
+                  loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data as any}
                   showLoginModal={showLoginModal}
-                  loginState={loginQuery.data}
                 />
               }
             />

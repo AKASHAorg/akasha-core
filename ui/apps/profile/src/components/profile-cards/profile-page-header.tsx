@@ -17,7 +17,6 @@ import { getUsernameTypes } from '../../utils/username-utils';
 const {
   ModalRenderer,
   ProfileCard,
-  styled,
   ExtensionPoint,
   Box,
   ProfileCardEthereumId,
@@ -25,10 +24,6 @@ const {
   HorizontalDivider,
   TextLine,
 } = DS;
-
-const ProfilePageCard = styled(ProfileCard)`
-  margin-bottom: 0.5rem;
-`;
 
 export interface IProfileHeaderProps {
   profileId: string;
@@ -143,7 +138,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           />
         )}
       </ModalRenderer>
-      <ProfilePageCard
+      <ProfileCard
         onClickPosts={() => null}
         onClickFollowers={handleStatIconClick(0)}
         onClickFollowing={handleStatIconClick(1)}
@@ -235,7 +230,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
             </>
           )}
         </Box>
-      </ProfilePageCard>
+      </ProfileCard>
     </>
   );
 };
