@@ -35,6 +35,10 @@ const AllModerators: React.FC<RootComponentProps> = () => {
     value: tab,
   }));
 
+  const filteredModeratorList = allModerators.filter(moderator =>
+    activeTab === 'All' ? moderator : moderator.status === activeTab.toLowerCase(),
+  );
+
   const handleTabClick = (value: string) => () => {
     setActiveTab(value);
   };
@@ -77,7 +81,7 @@ const AllModerators: React.FC<RootComponentProps> = () => {
 
       <ListWrapper>
         <ListArea>
-          {allModerators.map((moderator, idx) => (
+          {filteredModeratorList.map((moderator, idx) => (
             <ModeratorDetailCard
               key={moderator.name + idx}
               moderator={moderator}
