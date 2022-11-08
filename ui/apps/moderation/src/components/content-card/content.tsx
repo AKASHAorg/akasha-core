@@ -51,9 +51,9 @@ const Content: React.FC<IContentProps> = props => {
         round={{ size: 'xsmall', corner: 'top' }}
         background="warning"
       >
-        <Text size="large">{`${props.incidentLabel} # ${getReasonPrefix(props.reasons[0])}-${
-          props.entryId
-        }`}</Text>
+        <Text size="large">{`${props.incidentLabel} # ${getReasonPrefix(
+          props.reasons[0],
+        )}-${props.entryId.slice(0, 26)}`}</Text>
         <Icon
           type="copy"
           color="secondaryText"
