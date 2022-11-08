@@ -28,8 +28,7 @@ export enum ConnectStep {
   CONNECT_WALLET = 'Connect_Wallet',
   INVITE_CODE = 'Invite_Code',
 }
-
-const baseAppLegalRoute = '/@akashaorg/app-legal';
+export const baseAppLegalRoute = '/@akashaorg/app-legal';
 
 const Connect: React.FC<RootComponentProps> = props => {
   const [step, setStep] = React.useState<ConnectStep>(ConnectStep.CHOOSE_PROVIDER);
