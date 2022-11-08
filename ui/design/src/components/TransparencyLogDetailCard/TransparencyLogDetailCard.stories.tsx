@@ -22,6 +22,7 @@ export default {
     reasonsLabel: { control: 'text' },
     reasons: [{ control: 'text' }],
     explanationLabel: { control: 'text' },
+    footerLabel: { control: 'text' },
     contactModeratorsLabel: { control: 'text' },
     contactModeratorsLink: { control: 'text' },
     onClickArrowLeft: { action: 'arrow left clicked' },
@@ -60,6 +61,7 @@ BaseTransparencyLogDetailCard.args = {
   reasonsLabel: `${reasons.length > 1 ? 'reasons' : 'reason'}`,
   reasons: reasons,
   explanationLabel: 'explanation',
-  contactModeratorsLabel: 'Contact the moderators',
+  footerLabel: 'Something is not right?',
+  contactModeratorsLabel: 'Let us know',
   contactModeratorsLink: 'mailto:moderators@ethereum.world',
 };

@@ -73,7 +73,8 @@ const DetailCard: React.FC<IDetailCard> = props => {
       })}
       reasons={selected.reasons}
       explanationLabel={t('explanation')}
-      contactModeratorsLabel={t('Contact the moderators')}
+      footerLabel={t('Something is not right?')}
+      contactModeratorsLabel={t('Let us know')}
       contactModeratorsLink="mailto:moderators@ethereum.world"
       onClickArrowLeft={handleClickArrowLeft}
       onClickViewItem={handleClickViewItem(selected.contentType, selected.contentID)}

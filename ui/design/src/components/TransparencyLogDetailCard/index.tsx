@@ -20,6 +20,7 @@ export interface ITransparencyLogDetailCardProps
   reasonsLabel: string;
   reasons: string[];
   explanationLabel: string;
+  footerLabel: string;
   contactModeratorsLabel: string;
   contactModeratorsLink: string;
   onClickArrowLeft: () => void;
@@ -49,6 +50,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
     viewItemLabel,
     reasonsLabel,
     explanationLabel,
+    footerLabel,
     contactModeratorsLabel,
     contactModeratorsLink,
     moderatorAvatar,
@@ -83,7 +85,7 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
               href={viewItemLink}
               onClick={handleClickViewItem}
               label={
-                <Box direction="row" gap="xsmall">
+                <Box direction="row" gap="xxsmall">
                   <Icon type="quote" accentColor={true} clickable={true} />
                   <Text color="accentText" size="medium" weight="normal">
                     {viewItemLabel}
@@ -159,18 +161,18 @@ const TransparencyLogDetailCard: React.FC<ITransparencyLogDetailCardProps> = pro
         </Text>
       </Box>
 
-      <StyledAnchor
-        href={contactModeratorsLink}
-        style={{ textDecoration: 'none' }}
-        label={
-          <Box direction="row" pad={{ right: 'medium' }} gap="xsmall">
-            <Icon type="feedback" accentColor={true} clickable={true} />
-            <Text color="accentText" weight="normal">
-              {contactModeratorsLabel}
-            </Text>
-          </Box>
-        }
-      />
+      <Box direction="row" align="center" gap="xxsmall">
+        <Text size="medium">{footerLabel}</Text>
+        <StyledAnchor
+          href={contactModeratorsLink}
+          size="medium"
+          weight="normal"
+          target="_blank"
+          color="accentText"
+        >
+          {contactModeratorsLabel}
+        </StyledAnchor>
+      </Box>
     </StyledWrapper>
   );
 };
