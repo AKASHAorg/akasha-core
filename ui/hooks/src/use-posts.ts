@@ -77,7 +77,6 @@ const getPosts = async (
     return post._id;
   });
 
-  console.log({ postsIds, posts, filterDeleted });
   return {
     ...res.posts,
     results: postsIds,
