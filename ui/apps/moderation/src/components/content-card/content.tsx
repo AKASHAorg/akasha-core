@@ -1,11 +1,14 @@
 import React from 'react';
 import moment from 'moment';
+
 import DS from '@akashaorg/design-system';
 import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
 
-import { IContentProps } from '../../interfaces';
 import EntryDataCard from './entry-data-card';
 import ExplanationsBox from './explanations-box';
+
+import { IContentProps } from '../../interfaces';
+import getReasonPrefix from '../../utils/getReasonPrefix';
 
 const { Avatar, Box, Button, Icon, Text, styled, useViewportSize } = DS;
 
@@ -48,7 +51,9 @@ const Content: React.FC<IContentProps> = props => {
         round={{ size: 'xsmall', corner: 'top' }}
         background="warning"
       >
-        <Text size="large">{`${props.incidentLabel} #${props.entryId}`}</Text>
+        <Text size="large">{`${props.incidentLabel} # ${getReasonPrefix(props.reasons[0])}-${
+          props.entryId
+        }`}</Text>
         <Icon
           type="copy"
           color="secondaryText"

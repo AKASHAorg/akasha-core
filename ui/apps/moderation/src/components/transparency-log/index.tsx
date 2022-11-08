@@ -8,8 +8,9 @@ import { useGetCount, useInfiniteLog, ILogItem } from '@akashaorg/ui-awf-hooks';
 import Banner from './banner';
 import DetailCard from './detail-card';
 import MiniCardRenderer from './mini-card-renderer';
-
 import { NoItemsFound } from '../error-cards';
+
+import getReasonPrefix from '../../utils/getReasonPrefix';
 
 const {
   styled,
@@ -296,7 +297,9 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                 round={{ size: 'xsmall', corner: 'top' }}
                 background="warning"
               >
-                <Text size="large">{`${t('Incident')} #${selected.contentID}`}</Text>
+                <Text size="large">{`${t('Incident')} # ${getReasonPrefix(selected.reasons[0])}-${
+                  selected.contentID
+                }`}</Text>
                 <Icon
                   type="copy"
                   color="secondaryText"
