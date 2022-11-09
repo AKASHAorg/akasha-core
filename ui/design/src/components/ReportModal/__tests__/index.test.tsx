@@ -9,6 +9,8 @@ import { customRender, wrapWithTheme } from '../../../test-utils';
 describe('<ReportModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const handleSetReason = jest.fn();
+  const handleSetExplanation = jest.fn();
   const handleCloseModal = jest.fn();
   const handleReport = jest.fn();
 
@@ -19,7 +21,12 @@ describe('<ReportModal /> Component', () => {
           <ReportModal
             titleLabel="Report a Post"
             successTitleLabel="Thank you for helping us keep Ethereum World safe! 🙌"
-            successMessageLabel="We will investigate this post and take appropriate action."
+            successMessageLabel="We have received your message"
+            reasonPrefix="TI"
+            contentId="0845"
+            footerLabel="Feel like you want to contribute more to improve our community?"
+            footerCTAUrl="https://discord.gg/A5wfg6ZCRt"
+            footerCTALabel="Join our Moderation Discord channel"
             optionsTitleLabel="Please select a reason"
             optionLabels={[
               'Suspicious, deceptive, or spam',
@@ -37,8 +44,10 @@ describe('<ReportModal /> Component', () => {
               'Nudity',
               'Violence',
             ]}
+            reason="Other"
             descriptionLabel="Explanation"
             descriptionPlaceholder="Please explain your reason(s)"
+            explanation="some explanation"
             footerText1Label="If you are unsure, you can refer to our"
             footerLink1Label="Code of Conduct"
             footerUrl1="https://akasha.ethereum.world/legal/code-of-conduct"
@@ -47,10 +56,10 @@ describe('<ReportModal /> Component', () => {
             footerUrl2="https://akasha.ethereum.world/legal/terms-of-service"
             cancelLabel="Cancel"
             reportLabel="Report"
-            blockLabel="Block User"
-            closeLabel="Close"
             requesting={false}
             success={false}
+            setReason={handleSetReason}
+            setExplanation={handleSetExplanation}
             closeModal={handleCloseModal}
             onReport={handleReport}
           />,

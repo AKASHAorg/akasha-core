@@ -25,6 +25,9 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   optionValues: string[];
   descriptionLabel: string;
   descriptionPlaceholder: string;
+  explanation: string;
+  setReason: React.Dispatch<React.SetStateAction<string>>;
+  setExplanation: React.Dispatch<React.SetStateAction<string>>;
 
   // footer labels and links
   footerText1Label: string;
@@ -50,11 +53,18 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     titleLabel,
     successTitleLabel,
     successMessageLabel,
+    reasonPrefix,
+    contentId,
+    footerLabel,
+    footerCTALabel,
+    footerCTAUrl,
     optionsTitleLabel,
     optionLabels,
     optionValues,
+    reason,
     descriptionLabel,
     descriptionPlaceholder,
+    explanation,
     footerText1Label,
     footerLink1Label,
     footerUrl1,
@@ -63,20 +73,17 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     footerUrl2,
     cancelLabel,
     reportLabel,
-    blockLabel,
-    closeLabel,
     errorText,
     user,
-    contentId,
     itemType,
     requesting,
     success,
+    setReason,
+    setExplanation,
     closeModal,
     onReport,
   } = props;
 
-  const [reason, setReason] = React.useState<string>('');
-  const [explanation, setExplanation] = React.useState('');
   const [rows, setRows] = React.useState(1);
 
   const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
@@ -124,9 +131,12 @@ const ReportModal: React.FC<IReportModalProps> = props => {
         className={className}
         successTitleLabel={successTitleLabel}
         successMessageLabel={successMessageLabel}
+        reason={reason}
+        reasonPrefix={reasonPrefix}
         contentId={contentId}
-        blockLabel={blockLabel}
-        closeLabel={closeLabel}
+        footerLabel={footerLabel}
+        footerCTALabel={footerCTALabel}
+        footerCTAUrl={footerCTAUrl}
         size={size}
         closeModal={closeModal}
       />

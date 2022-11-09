@@ -1,9 +1,10 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
+
+import DS from '@akashaorg/design-system';
 import {
   ModerationItemTypes,
   RootExtensionProps,
@@ -17,19 +18,21 @@ import {
   useAnalytics,
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
+
 import { BASE_REPORT_URL } from '../services/constants';
+import getReasonPrefix from '../utils/getReasonPrefix';
 
 const { ReportModal, ErrorLoader } = DS;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
   const { extensionData } = props;
 
+  const [reason, setReason] = React.useState<string>('');
+  const [explanation, setExplanation] = React.useState('');
+
   const [analyticsActions] = useAnalytics();
-
   const loginQuery = useGetLogin();
-
   const [reasons, reasonsActions] = useReasons();
-
   const { t } = useTranslation('app-moderation-ewa');
 
   React.useEffect(() => {
@@ -78,13 +81,20 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       successMessageLabel={t('We will investigate this {{itemType}} and take appropriate action.', {
         itemType,
       })}
+      reasonPrefix={getReasonPrefix(reason)}
+      contentId={extensionData.entryId}
+      footerLabel="Feel like you want to contribute more to improve our community?"
+      footerCTAUrl="https://discord.gg/A5wfg6ZCRt"
+      footerCTALabel="Join our Moderation Discord channel"
       optionsTitleLabel={t('Please select a reason')}
       optionLabels={reasons.map((el: string) =>
         t('{{ reportModalReason }}', { reportModalReason: el }),
       )}
       optionValues={reasons}
+      reason={reason}
       descriptionLabel={t('Explanation')}
       descriptionPlaceholder={t('Please explain your reason(s)')}
+      explanation={explanation}
       footerText1Label={t('If you are unsure, you can refer to our')}
       footerLink1Label={t('Code of Conduct')}
       footerUrl1={'/legal/code-of-conduct'}
@@ -93,14 +103,13 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       footerUrl2={'/legal/terms-of-service'}
       cancelLabel={t('Cancel')}
       reportLabel={t('Report')}
-      blockLabel={t('Block User')}
-      closeLabel={t('Close')}
       errorText={reportMutation.error ? `${reportMutation.error}` : ''}
       user={loginQuery.data?.pubKey || ''}
-      contentId={extensionData.entryId}
       itemType={itemType}
       requesting={reportMutation.status === 'loading'}
       success={reportMutation.status === 'success'}
+      setReason={setReason}
+      setExplanation={setExplanation}
       closeModal={handleModalClose}
       onReport={onReport}
     />
