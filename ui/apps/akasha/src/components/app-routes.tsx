@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
+import { IProfileData, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
 import FeedPage from './feed-page/feed-page';
 import MyFeedPage from './my-feed-page/my-feed-page';
@@ -20,8 +20,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
-  /* @Todo: fix my type ;/ */
-  const loggedProfileData: any = profileDataReq.data;
+  const loggedProfileData: IProfileData = profileDataReq.data;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });

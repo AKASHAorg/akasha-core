@@ -9,7 +9,6 @@ import {
   shareLabel,
   flagAsLabel,
   repliesLabel,
-  repostsLabel,
   copyLinkLabel,
 } from '../../../utils/dummy-data';
 import userEvent from '@testing-library/user-event';
@@ -31,7 +30,6 @@ describe('<EntryCard /> Component', () => {
             shareLabel={shareLabel}
             flagAsLabel={flagAsLabel}
             isFollowingAuthor={false}
-            repostsLabel={repostsLabel}
             repliesLabel={repliesLabel}
             copyLinkLabel={copyLinkLabel}
             locale={'en'}

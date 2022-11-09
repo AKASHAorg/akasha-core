@@ -1,4 +1,4 @@
-import { UserProfile } from '@akashaorg/typings/sdk/graphql-types';
+import { UserProfile } from '../sdk/graphql-types';
 
 export type IProfileProvider = {
   property: ProfileProviderProperties;
@@ -6,7 +6,7 @@ export type IProfileProvider = {
   value: string;
 };
 
-export type IProfileData = Omit<UserProfile, 'avatar, coverImage'> & {
+export type IProfileData = Omit<UserProfile, 'avatar' | 'coverImage' | '_id'> & {
   // props with media links built
   avatar?: { url?: string; fallbackUrl?: string };
   coverImage?: { url?: string; fallbackUrl?: string };

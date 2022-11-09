@@ -40,7 +40,6 @@ export interface IProfileCardProps {
   // edit profile related
   profileProvidersData?: IProfileProvidersData;
   canUserEdit?: boolean;
-  // @TODO fix this
   onChangeProfileData?: (newProfileData: IProfileData) => void;
   // determines when to render the 'show more' icon
   className?: string;
@@ -210,13 +209,13 @@ const ProfileCard: React.FC<IProfileCardProps> = props => {
   };
 
   const handleChangeAvatar = (provider: IProfileDataProvider) => {
-    setAvatar({ url: provider.value });
+    setAvatar({ url: provider.value, fallbackUrl: provider.value });
     setAvatarIcon(provider.providerIcon);
     setAvatarPopoverOpen(false);
   };
 
   const handleChangeCoverImage = (provider: IProfileDataProvider) => {
-    setCoverImage({ url: provider.value });
+    setCoverImage({ url: provider.value, fallbackUrl: provider.value });
     setCoverImageIcon(provider.providerIcon);
     setCoverImagePopoverOpen(false);
   };
