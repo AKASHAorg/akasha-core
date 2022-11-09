@@ -19,19 +19,20 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
-import { clearDraftPost, getDraftPost, saveDraftPost } from '../utils';
+import { clearDraftItem, getDraftItem, saveDraftItem } from '../utils';
 import { editorDefaultValue } from '@akashaorg/design-system/lib/components/Editor/initialValue';
 
 const { EntryCardLoading } = DS;
 
 type Props = {
+  appName: string;
   postId: string;
   pubKey: string;
   singleSpa: RootExtensionProps['singleSpa'];
   action: 'post' | 'reply' | 'repost' | 'edit';
 };
 
-export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
+export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const post = usePost({
@@ -150,7 +151,11 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
       embedEntryData={embedEntryData}
       entryData={entryData}
       editorState={
-        action === 'edit' ? entryData?.slateContent : canSaveDraft ? getDraftPost() : null
+        action === 'edit'
+          ? entryData?.slateContent
+          : canSaveDraft
+          ? getDraftItem({ pubKey, appName })
+          : null
       }
       isShown={action !== 'post'}
       showCancelButton={action === 'edit'}
@@ -159,10 +164,10 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
       setEditorState={(value: IEntryData['slateContent']) => {
         if (!canSaveDraft) return;
         if (isEqual(value, editorDefaultValue)) {
-          clearDraftPost();
+          clearDraftItem({ pubKey, appName });
           return;
         }
-        saveDraftPost(value);
+        saveDraftItem({ pubKey, appName, content: value });
       }}
     />
   );

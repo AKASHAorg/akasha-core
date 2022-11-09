@@ -1,19 +1,30 @@
 import { IEntryData } from '@akashaorg/typings/ui';
 
-const DRAFT_POST = '@draftPost';
-
-export function saveDraftPost(content: IEntryData['slateContent']) {
-  window.localStorage.setItem(DRAFT_POST, JSON.stringify(content));
+interface IDraft {
+  appName: string;
+  pubKey: string;
 }
 
-export function getDraftPost() {
+interface ISaveDraft extends IDraft {
+  content: IEntryData['slateContent'];
+}
+
+const getDraftKey = (appName: string, pubKey: string) => `${appName}-${pubKey}-draft-item`;
+
+export function saveDraftItem({ content, appName, pubKey }: ISaveDraft) {
+  window.localStorage.setItem(getDraftKey(appName, pubKey), JSON.stringify(content));
+}
+
+export function getDraftItem({ appName, pubKey }: IDraft) {
   try {
-    return JSON.parse(window.localStorage.getItem(DRAFT_POST)) as IEntryData['slateContent'];
+    return JSON.parse(
+      window.localStorage.getItem(getDraftKey(appName, pubKey)),
+    ) as IEntryData['slateContent'];
   } catch {
     return null;
   }
 }
 
-export function clearDraftPost() {
-  window.localStorage.removeItem(DRAFT_POST);
+export function clearDraftItem({ appName, pubKey }: IDraft) {
+  window.localStorage.removeItem(getDraftKey(appName, pubKey));
 }
