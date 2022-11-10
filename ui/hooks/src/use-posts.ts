@@ -69,7 +69,7 @@ const getPosts = async (
   let posts = res.posts.results;
 
   if (filterDeleted) {
-    posts = posts.filter(post => checkPostActive(post));
+    posts = posts.filter(post => checkPostActive({ content: post.content }));
   }
 
   const postsIds = posts.map(post => {
