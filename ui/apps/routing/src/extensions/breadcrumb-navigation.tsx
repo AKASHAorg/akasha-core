@@ -1,4 +1,4 @@
-import { FormNext } from 'grommet-icons';
+import { FormPrevious } from 'grommet-icons';
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
@@ -13,43 +13,29 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 const { Icon, BasicCardBox, Box, Text, styled } = DS;
 
-type StackEntry = { label: string; route?: string; fullRoute?: string; name: string };
-
 const StyledText = styled(Text)`
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-const StyledLink = styled(StyledText)`
-  color: ${({ theme }) => theme.colors.grey};
-  cursor: pointer;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.accentText};
-  }
+const StyledCardBox = styled(BasicCardBox)`
+  max-width: 100vw;
 `;
 
-const StyledBackIcon = styled(Icon)`
-  & * {
-    stroke: ${({ theme }) => theme.colors.btnAccentColor};
-  }
-`;
-
-const stackLimit = 4;
 const BreadcrumbNavigation: React.FC<RootExtensionProps> = props => {
   const {
     worldConfig: { defaultApps },
   } = props;
 
   const [routeData, setRouteData] = React.useState(null);
-  const [canNavigateBack, setCanNavigateBack] = React.useState(false);
-  const [isNavigatingDeep, setIsNavigatingDeep] = React.useState(false);
-  const [oldApp, setOldApp] = React.useState<any>();
+  const [historyCount] = React.useState(history.length);
 
   const currentLocation = useLocation();
-
-  const [stack, setStack] = React.useState<StackEntry[]>([]);
 
   const worldApps = React.useMemo(() => {
     return routeData?.[MenuItemAreaType.AppArea]?.sort(
@@ -70,96 +56,7 @@ const BreadcrumbNavigation: React.FC<RootExtensionProps> = props => {
     return [...(worldApps || []), ...(userInstalledApps || [])];
   }, [worldApps, userInstalledApps]);
 
-  const matchingApp = allApps.find(app => currentLocation.pathname.includes(app.name));
-
   const routing = props.plugins['@akashaorg/app-routing']?.routing;
-
-  React.useEffect(
-    function navigationEventListener() {
-      const controller = new AbortController();
-      const signal = controller.signal;
-      window.addEventListener(
-        'single-spa:before-routing-event',
-        (evt: CustomEvent) => {
-          const url = new URL(evt.detail.newUrl as string);
-          const newUrl: string = url.origin + url.pathname;
-          const newMatchingApp = allApps.find(app => newUrl.includes(app.name));
-
-          const url2 = new URL(evt.detail.oldUrl as string);
-          const oldUrl: string = url2.origin + url2.pathname;
-          const oldMatchingApp = allApps.find(app => oldUrl.includes(app.name));
-
-          const matchingSubRoute = newMatchingApp?.subRoutes.find(subRoute =>
-            newUrl.includes(subRoute.route),
-          );
-
-          if (
-            !newUrl.includes(stack[0]?.name) ||
-            (!!matchingApp && !matchingApp.navRoutes) ||
-            location.pathname === matchingApp?.navRoutes.defaultRoute ||
-            location.pathname === `/${matchingApp?.name}${matchingSubRoute?.route}`
-          ) {
-            const newStack = [
-              {
-                label: newMatchingApp?.label,
-                route: newMatchingApp?.navRoutes?.defaultRoute ?? '/',
-                name: newMatchingApp?.name,
-              },
-            ];
-            if (matchingSubRoute) {
-              newStack.push({
-                label: matchingSubRoute.label,
-                route: matchingSubRoute.route,
-                name: newMatchingApp?.name,
-              });
-            }
-
-            if (
-              !!oldMatchingApp &&
-              !!newMatchingApp &&
-              oldMatchingApp?.name !== newMatchingApp?.name
-            ) {
-              setCanNavigateBack(true);
-              setOldApp(oldMatchingApp);
-            }
-
-            setIsNavigatingDeep(false);
-            setStack(newStack);
-          }
-
-          if (
-            !!newMatchingApp &&
-            !!newMatchingApp.navRoutes &&
-            !newUrl.includes(matchingSubRoute?.route) &&
-            !newUrl.includes(newMatchingApp.navRoutes.defaultRoute)
-          ) {
-            const newRoute = Object.entries<string>(newMatchingApp.navRoutes).find(([, route]) =>
-              newUrl.includes(route),
-            );
-            const newEntry: StackEntry = {
-              label: newRoute[0],
-              fullRoute: newUrl,
-              name: matchingApp.name,
-            };
-            setBackButtonActive(true);
-            setStack(oldStack => {
-              const indexOfRepeatedEntry = stack.findIndex(entry => entry.fullRoute === newUrl);
-              const newStack = [...oldStack, newEntry];
-              if (indexOfRepeatedEntry !== -1) {
-                newStack.splice(indexOfRepeatedEntry, 1);
-              }
-              return newStack;
-            });
-          }
-        },
-        { signal },
-      );
-      return () => {
-        controller.abort();
-      };
-    },
-    [allApps, stack],
-  );
 
   React.useEffect(
     function routingSubscription() {
@@ -180,85 +77,59 @@ const BreadcrumbNavigation: React.FC<RootExtensionProps> = props => {
     [routing],
   );
 
-  const isBackButtonActive = canNavigateBack || isNavigatingDeep;
+  const handleLogoNavigation = () => {
+    routing.navigateTo({
+      appName: matchingApp?.name,
+      getNavigationUrl: () => '/',
+    });
+  };
 
-  const handleNavigation = (appName: string, route?: string, fullRoute?: string) => {
-    // console.log({ appName, route, fullRoute });
-    if (route) {
-      routing.navigateTo({
-        appName,
-        getNavigationUrl: () => route,
-      });
-    } else {
-      setStack(oldStack => {
-        const newStack = oldStack.slice(
-          0,
-          stack.findIndex(entry => entry.fullRoute === fullRoute),
-        );
-        return newStack;
-      });
-      singleSpa.navigateToUrl(fullRoute);
+  const handleBackClick = () => {
+    if (history.length - historyCount > 0) {
+      history.back();
     }
   };
 
+  const isBackButtonActive = true;
+
+  const matchingApp = allApps.find(app => currentLocation.pathname.includes(app.name));
+
   if (!matchingApp) return null;
+
+  const matchingRouteName = matchingApp.navRoutes
+    ? Object.entries<string>(matchingApp.navRoutes).find(([, route]) =>
+        currentLocation.pathname.includes(route),
+      )?.[0]
+    : matchingApp.label;
+
+  console.log({
+    matchingApp,
+    isBackButtonActive,
+  });
+
   return (
-    <>
-      <Box direction="row" align="stretch">
-        <BasicCardBox
-          onClick={
-            backButtonActive
-              ? () =>
-                  handleNavigation(
-                    matchingApp.name,
-                    stack[stack.length - 2].route,
-                    stack[stack.length - 2].fullRoute,
-                  )
-              : undefined
-          }
-          pad="medium"
-          margin={{ bottom: 'xsmall', right: 'xsmall' }}
-          width="auto !important"
-          align="center"
-          direction="row"
-        >
-          {backButtonActive ? (
-            <StyledBackIcon type="arrowLeft" size="sm" />
-          ) : (
-            <Icon type={matchingApp.logo.value ?? 'akasha'} size="sm" />
-          )}
-        </BasicCardBox>
-        <BasicCardBox pad="medium" margin={{ bottom: 'xsmall' }}>
-          <Box as="span" direction="row" align="center">
-            {[
-              stack[0],
-              ...(stack.length - 1 === 0
-                ? [undefined]
-                : stack.slice(-Math.min(stack.length - 1, stackLimit - 1))),
-            ]
-              .filter(entry => !!entry)
-              .map(({ label, route, fullRoute }, index, { length }) => (
-                <React.Fragment key={(route || fullRoute) + index}>
-                  {index !== 0 && <FormNext size="20px" />}
-                  {index === length - 1 ? (
-                    <Text size="xlarge" weight="bold">
-                      {label}
-                    </Text>
-                  ) : (
-                    <StyledLink
-                      onClick={() => handleNavigation(matchingApp.name, route, fullRoute)}
-                      size="xlarge"
-                      weight="bold"
-                    >
-                      {label}
-                    </StyledLink>
-                  )}
-                </React.Fragment>
-              ))}
+    <Box direction="row" align="stretch">
+      <StyledCardBox
+        onClick={handleLogoNavigation}
+        pad="medium"
+        margin={{ bottom: 'xsmall', right: 'xsmall' }}
+        width="auto !important"
+        align="center"
+        direction="row"
+      >
+        <Icon type={matchingApp.logo.value ?? 'akasha'} size="sm" />
+      </StyledCardBox>
+      <BasicCardBox pad="medium" margin={{ bottom: 'xsmall' }} direction="row" align="center">
+        {isBackButtonActive && (
+          <Box onClick={handleBackClick} width="24px">
+            <FormPrevious size="sm" />
           </Box>
-        </BasicCardBox>
-      </Box>
-    </>
+        )}
+        <StyledText size="xlarge" weight="bold">
+          {matchingRouteName}
+        </StyledText>
+      </BasicCardBox>
+    </Box>
   );
 };
 
