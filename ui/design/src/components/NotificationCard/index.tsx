@@ -8,6 +8,7 @@ import { BlueDot, IconDiv, StyledNotifBox } from './styled-notifications';
 import Spinner from '../Spinner';
 import Tooltip from '../Tooltip';
 import InfoCard from '../InfoCard';
+import { EntityTypes } from '@akashaorg/typings/ui';
 
 export interface INotificationsCard {
   // data
@@ -17,7 +18,8 @@ export interface INotificationsCard {
   mentionedPostLabel?: string;
   mentionedCommentLabel?: string;
   repostLabel?: string;
-  replyLabel?: string;
+  replyToPostLabel?: string;
+  replyToReplyLabel?: string;
   markAsReadLabel?: string;
   moderatedPostLabel?: string;
   moderatedReplyLabel?: string;
@@ -26,7 +28,7 @@ export interface INotificationsCard {
   emptySubtitle?: string;
   // handlers
   handleMessageRead: (notifId: string) => void;
-  handleEntryClick: (entryId: string) => void;
+  handleEntryClick: (entryId: string, entryType: EntityTypes) => void;
   handleProfileClick: (pubKey: string) => void;
   loggedIn?: boolean;
 }
@@ -38,7 +40,8 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     followingLabel,
     mentionedPostLabel,
     mentionedCommentLabel,
-    replyLabel,
+    replyToPostLabel,
+    replyToReplyLabel,
     repostLabel,
     moderatedPostLabel,
     moderatedReplyLabel,
@@ -66,18 +69,20 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     const postID = Array.isArray(notif.body?.value?.postID)
       ? notif.body?.value?.postID[0]
       : notif.body?.value?.postID;
+
     const moderatedID = notif.body?.value?.contentID;
-    // use this when we have routing available for comments
-    // const commentID = Array.isArray(notif.body?.value?.commentID)
-    //   ? notif.body?.value?.commentID[0]
-    //   : notif.body?.value?.commentID;
+
+    const replyID = Array.isArray(notif.body?.value?.replyTo)
+      ? notif.body?.value?.replyTo[0]
+      : notif.body?.value?.replyTo;
+
     switch (notif.body.property) {
       case 'POST_MENTION':
         label = mentionedPostLabel;
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID);
+            handleEntryClick(postID, EntityTypes.ENTRY);
           }
         };
         break;
@@ -85,17 +90,28 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         label = mentionedCommentLabel;
         clickHandler = () => {
           handleMessageRead(notif.id);
-          if (postID) {
-            handleEntryClick(postID);
+          if (replyID) {
+            handleEntryClick(replyID, EntityTypes.COMMENT);
+          } else if (postID) {
+            handleEntryClick(postID, EntityTypes.ENTRY);
           }
         };
         break;
       case 'NEW_COMMENT':
-        label = replyLabel;
+        label = replyToPostLabel;
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID);
+            handleEntryClick(postID, EntityTypes.ENTRY);
+          }
+        };
+        break;
+      case 'NEW_COMMENT_REPLY':
+        label = replyToReplyLabel;
+        clickHandler = () => {
+          handleMessageRead(notif.id);
+          if (replyID) {
+            handleEntryClick(replyID, EntityTypes.COMMENT);
           }
         };
         break;
@@ -104,7 +120,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID);
+            handleEntryClick(postID, EntityTypes.ENTRY);
           }
         };
         break;
@@ -120,7 +136,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (moderatedID) {
-            handleEntryClick(moderatedID);
+            handleEntryClick(moderatedID, EntityTypes.ENTRY);
           }
         };
         break;
@@ -129,8 +145,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (moderatedID) {
-            // need to change to the reply view page later
-            handleEntryClick(moderatedID);
+            handleEntryClick(moderatedID, EntityTypes.COMMENT);
           }
         };
         break;
@@ -230,7 +245,8 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
 NotificationsCard.defaultProps = {
   mentionedPostLabel: 'mentioned you in a post',
   mentionedCommentLabel: 'mentioned you in a comment',
-  replyLabel: 'replied to your post',
+  replyToPostLabel: 'replied to your post',
+  replyToReplyLabel: 'replied to your reply',
   followingLabel: 'is now following you',
   repostLabel: 'reposted your post',
   markAsReadLabel: 'Mark as read',

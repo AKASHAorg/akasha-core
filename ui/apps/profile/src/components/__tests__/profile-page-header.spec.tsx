@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ProfilePageHeader } from '../profile-cards/profile-page-header';
+import ProfilePageHeader from '../profile-cards/profile-page-header';
 
 import {
   renderWithAllProviders,
