@@ -66,7 +66,7 @@ const Avatar: React.FC<AvatarProps> = props => {
   }
   if (!avatarImageFallback) {
     const seed = getAvatarFromSeed(ethAddress);
-    avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.png`;
+    avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
   }
 
   return (
