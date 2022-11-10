@@ -15,6 +15,7 @@ import { checkStatus } from './use-moderation';
 import { SEARCH_KEY } from './use-search';
 import { TRENDING_TAGS_KEY } from './use-trending';
 import { PROFILE_KEY } from './use-profile';
+import { checkPostActive } from './utils/checkPostActive';
 
 /**
  * @internal
@@ -68,9 +69,7 @@ const getPosts = async (
   let posts = res.posts.results;
 
   if (filterDeleted) {
-    posts = posts.filter(
-      post => post.content.length !== 1 || post.content[0].property !== 'removed',
-    );
+    posts = posts.filter(post => checkPostActive(post));
   }
 
   const postsIds = posts.map(post => {
