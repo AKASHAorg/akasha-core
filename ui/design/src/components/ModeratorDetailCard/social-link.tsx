@@ -29,7 +29,7 @@ const SocialLink: React.FC<ISocialLinksProps> = props => {
       align="center"
       width={backgroundWidth}
       height={backgroundHeight}
-      round={true}
+      round="100%"
       background={backgroundColor}
       onClick={onClick}
     >

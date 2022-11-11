@@ -3,6 +3,7 @@ import { Anchor, Box, Text, Image } from 'grommet';
 
 import Icon from '../Icon';
 import { BasicCardBox } from '../EntryCard/basic-card-box';
+import { useViewportSize } from '../Providers/viewport-dimension';
 
 export type OverviewCTA = {
   label: string;
@@ -45,15 +46,17 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
     onCodeOfConductClick,
   } = props;
 
+  const { size } = useViewportSize();
+
   return (
     <BasicCardBox>
-      <Box align="start" fill="horizontal" pad="medium">
-        <Box direction="row" fill="horizontal" justify="between" margin={{ bottom: 'xsmall' }}>
+      <Box align="start" fill="horizontal" pad="medium" gap="xsmall">
+        <Box>
           <Text size="xlarge" weight="bold">
             {titleLabel}
           </Text>
+          <Text color="secondaryText">{subtitleLabel}</Text>
         </Box>
-        <Text color="secondaryText">{subtitleLabel}</Text>
 
         {isIntro && (
           <Box
@@ -120,9 +123,14 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
             )}
 
             {overviewCTAArr && overviewCTAArr.length > 0 && (
-              <Box direction="row" justify="around">
+              <Box direction="row" justify={size === 'small' ? 'between' : 'around'}>
                 {overviewCTAArr.map(({ url, label, iconType }, idx) => (
-                  <Box key={label + idx} width="18%" align="center" gap="xsmall">
+                  <Box
+                    key={label + idx}
+                    width={size === 'small' ? '30%' : '18%'}
+                    align="center"
+                    gap="xsmall"
+                  >
                     <Icon size="md" type={iconType} />
                     <Anchor
                       href={url}

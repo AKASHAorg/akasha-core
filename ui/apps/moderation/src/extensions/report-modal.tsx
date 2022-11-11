@@ -82,7 +82,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
         itemType,
       })}
       reasonPrefix={getReasonPrefix(reason)}
-      contentId={extensionData.entryId}
+      contentId={reportMutation.data?.decisionID as string}
       footerLabel="Feel like you want to contribute more to improve our community?"
       footerCTAUrl="https://discord.gg/A5wfg6ZCRt"
       footerCTALabel="Join our Moderation Discord channel"

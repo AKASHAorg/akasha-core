@@ -222,7 +222,8 @@ const Dashboard: React.FC<IDashboardProps> = props => {
                     key={index}
                     isPending={isPending}
                     locale={locale}
-                    incidentLabel={t('Incident')}
+                    incidentLabel={t('Case ID')}
+                    uniqueId={pendingItem._id}
                     showExplanationsLabel={t('Show explanations')}
                     hideExplanationsLabel={t('Hide explanations')}
                     reportedLabel={t('reported')}
@@ -278,7 +279,8 @@ const Dashboard: React.FC<IDashboardProps> = props => {
                     key={index}
                     isPending={isPending}
                     locale={locale}
-                    incidentLabel={t('Incident')}
+                    incidentLabel={t('Case ID')}
+                    uniqueId={moderatedItem._id}
                     showExplanationsLabel={t('Show explanations')}
                     hideExplanationsLabel={t('Hide explanations')}
                     determinationLabel={t('Determination')}
@@ -333,7 +335,8 @@ const Dashboard: React.FC<IDashboardProps> = props => {
                     key={index}
                     isPending={isPending}
                     locale={locale}
-                    incidentLabel={t('Incident')}
+                    incidentLabel={t('Case ID')}
+                    uniqueId={moderatedItem._id}
                     showExplanationsLabel={t('Show explanations')}
                     hideExplanationsLabel={t('Hide explanations')}
                     determinationLabel={t('Determination')}

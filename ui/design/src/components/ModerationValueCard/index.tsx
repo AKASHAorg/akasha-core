@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Text, Image, Anchor } from 'grommet';
+import { Anchor, Box, Text, Image } from 'grommet';
 
 import { BasicCardBox } from '../EntryCard/basic-card-box';
+import { useViewportSize } from '../Providers/viewport-dimension';
 
 export interface IModerationValueCardProps {
   publicImgPath?: string;
@@ -26,6 +27,8 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
     onClick,
   } = props;
 
+  const { size } = useViewportSize();
+
   return (
     <BasicCardBox
       height="inherit"
@@ -34,12 +37,18 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
       hoverIndicator={{ ...(isMini && { background: 'hoverBackground' }) }}
       onClick={onClick}
     >
-      <Box align="center" pad={isMini ? 'small' : 'medium'} gap={isMini ? 'xxsmall' : 'small'}>
+      <Box
+        fill="vertical"
+        align="center"
+        justify="evenly"
+        pad={isMini ? 'small' : 'medium'}
+        gap={isMini ? 'xxsmall' : 'small'}
+      >
         <Box width={isMini ? '4.25rem' : '17.5rem'} height={isMini ? '3.75rem' : '15.45rem'}>
           <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
         </Box>
         <Text
-          size={isMini ? 'large' : 'xlarge'}
+          size={size === 'small' ? 'medium' : isMini ? 'large' : 'xlarge'}
           textAlign="center"
           weight="bold"
           style={{ ...(isMini && { textTransform: 'uppercase' }) }}

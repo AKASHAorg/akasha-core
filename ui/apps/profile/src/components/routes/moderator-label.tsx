@@ -20,7 +20,7 @@ const ModeratorLabel: React.FC<IModeratorLabelProps> = props => {
         align="center"
         width="2rem"
         height="2rem"
-        round={true}
+        round="100%"
         background="hoverBackground"
       >
         <Icon type={iconType} size="md" />

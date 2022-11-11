@@ -6,6 +6,7 @@ import { IModeratorInfo } from '@akashaorg/typings/ui';
 
 import SocialLink from './social-link';
 import Avatar from '../Avatar';
+import { useViewportSize } from '../Providers/viewport-dimension';
 
 export interface IModeratorDetailCardProps {
   moderator: IModeratorInfo;
@@ -16,6 +17,8 @@ export interface IModeratorDetailCardProps {
 
 const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
   const { moderator, hasBorderBottom, tenureInfoLabel, onSocialLinkClick } = props;
+
+  const { size } = useViewportSize();
 
   const formatDate = (date: string) => {
     return dayjs(date).format('MMM YYYY');
@@ -30,13 +33,13 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
     >
       <Box
         direction="row"
-        width="38%"
+        width={size === 'small' ? '50%' : '38%'}
         align="center"
         gap="xsmall"
         pad={{ horizontal: 'medium' }}
         border={{ side: 'right', color: 'border' }}
       >
-        <Avatar src={moderator.avatar} size="xxl" />
+        <Avatar src={moderator.avatar} size={size === 'small' ? 'sm' : 'xxl'} />
 
         <Box gap="xxsmall">
           <Text size="large">{moderator.name}</Text>
@@ -47,7 +50,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
 
       <Box
         direction="row"
-        width="62%"
+        width={size === 'small' ? '50%' : '62%'}
         pad={{ horizontal: 'medium' }}
         justify="between"
         align="center"
@@ -85,11 +88,19 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
         {moderator.status === 'active' && (moderator.social.discord || moderator.social.email) && (
           <Box direction="row" gap="small">
             {moderator.social.discord && (
-              <SocialLink iconType="discord" onClick={onSocialLinkClick} />
+              <SocialLink
+                iconType="discord"
+                iconSize={size === 'small' ? 'sm' : 'md'}
+                onClick={onSocialLinkClick}
+              />
             )}
 
             {moderator.social.email && (
-              <SocialLink iconType="emailAlt" onClick={onSocialLinkClick} />
+              <SocialLink
+                iconType="emailAlt"
+                iconSize={size === 'small' ? 'sm' : 'md'}
+                onClick={onSocialLinkClick}
+              />
             )}
           </Box>
         )}

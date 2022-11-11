@@ -43,7 +43,7 @@ const Content: React.FC<IContentProps> = props => {
 
   return (
     <Box>
-      {/* incident label */}
+      {/* Case ID label */}
       <Box
         direction="row"
         pad="medium"
@@ -51,9 +51,9 @@ const Content: React.FC<IContentProps> = props => {
         round={{ size: 'xsmall', corner: 'top' }}
         background="warning"
       >
-        <Text size="large">{`${props.incidentLabel} # ${getReasonPrefix(
-          props.reasons[0],
-        )}-${props.entryId.slice(0, 26)}`}</Text>
+        <Text size="large">{`${props.incidentLabel} # ${getReasonPrefix(props.reasons[0])}-${
+          props.uniqueId
+        }`}</Text>
         <Icon
           type="copy"
           color="secondaryText"

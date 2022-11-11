@@ -289,7 +289,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         <DetailCardWrapper isVisible={!!selected}>
           {selected && (
             <Box>
-              {/* incident label */}
+              {/* Case ID label */}
               <Box
                 direction="row"
                 pad="medium"
@@ -297,9 +297,9 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                 round={{ size: 'xsmall', corner: 'top' }}
                 background="warning"
               >
-                <Text size="large">{`${t('Incident')} # ${getReasonPrefix(
-                  selected.reasons[0],
-                )}-${selected.contentID.slice(0, 26)}`}</Text>
+                <Text size="large">{`${t('Case ID')} # ${getReasonPrefix(selected.reasons[0])}-${
+                  selected.contentID
+                }`}</Text>
                 <Icon
                   type="copy"
                   color="secondaryText"

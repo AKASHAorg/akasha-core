@@ -16,10 +16,12 @@ export interface ModerationValuesCardProps {
   onValueClick: (path: ModerationValue['path']) => () => void;
 }
 
-const { Anchor, BasicCardBox, Box, ModerationValueCard, Text } = DS;
+const { Anchor, BasicCardBox, Box, ModerationValueCard, Text, useViewportSize } = DS;
 
 const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
   const { titleLabel, subtitleLabel, ctaLabel, ctaUrl, values, onValueClick } = props;
+
+  const { size } = useViewportSize();
 
   return (
     <BasicCardBox pad="medium" gap="medium" margin={{ bottom: 'medium' }}>
@@ -33,9 +35,11 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
         {values.map((value, idx) => (
           <Box
             key={value.title + idx}
-            width="31.5%"
+            width={size === 'small' ? '48%' : '31.5%'}
             height="7.5rem"
-            margin={{ ...(idx < values.length - 3 && { bottom: 'medium' }) }}
+            margin={{
+              ...(idx < values.length - (size === 'small' ? 1 : 3) && { bottom: 'medium' }),
+            }}
           >
             <ModerationValueCard
               isMini={true}
