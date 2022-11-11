@@ -69,12 +69,30 @@ export interface Invite {
   used: boolean;
 }
 
-export interface Moderator {
+export enum ModeratorDisableReason {
+  REVOKED = 'Revoked',
+  RESIGNED = 'Resigned',
+}
+
+export type ModeratorStatus = {
+  timestamp: number;
+  reason: string;
+};
+
+export type ModeratorSocialLink = {
+  label: string;
+  value: string;
+};
+
+export type Moderator = {
   _id: string;
   creationDate: number;
   admin: boolean;
   active: boolean;
-}
+  updatedAt?: number;
+  activityLog?: ModeratorStatus[];
+  links?: ModeratorSocialLink[];
+};
 
 export interface ModerationReport {
   _id: string;
@@ -119,6 +137,7 @@ export interface AuthorNotificationValue {
   postID?: string;
   commentID?: string[];
   moderatedID?: string;
+  replyTo?: string;
 }
 
 export interface PostAPISearchResult {

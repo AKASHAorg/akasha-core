@@ -178,6 +178,7 @@ class ModerationReportAPI extends DataSource {
 
     // we need to check if a pending decision was created for this post
     const query = new Where('contentID').eq(contentID);
+    let decID: string;
     const results = await db.find<ModerationReport>(this.dbID, decisionsCollection, query);
     if (results.length < 1) {
       // need to create a pending decision to track moderation status
@@ -196,9 +197,12 @@ class ModerationReportAPI extends DataSource {
         logger.warn(`pending decision could not be created for contentID ${contentID}`);
         // throw new Error('pending decision could not be created');
       } else {
+        decID = decisionID[0];
         // send email notification to moderators
         await sendEmailNotification();
       }
+    } else {
+      decID = results[0]._id;
     }
 
     const report: ModerationReport = {
@@ -231,6 +235,7 @@ class ModerationReportAPI extends DataSource {
     await queryCache.del(decisionsAPI.getCountersCacheKey());
     await queryCache.del(decisionsAPI.getModeratedListCacheKey());
     await queryCache.del(decisionsAPI.getPendingListCacheKey());
+    return { reportID: reportID[0], decisionID: decID };
   }
 }
 

@@ -74,17 +74,33 @@ class CommentAPI extends DataSource {
       category: 'comment',
       creationDate: comment.creationDate,
       postId: comment.postId,
+      replyTo: comment.replyTo,
       content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
     });
-    await sendAuthorNotification(post.author, {
-      property: 'NEW_COMMENT',
-      provider: 'awf.graphql.comments.api',
-      value: {
-        postID: comment.postId,
-        author: author,
-        commentID: commentID,
-      },
-    });
+    if (!comment.replyTo) {
+      await sendAuthorNotification(post.author, {
+        property: 'NEW_COMMENT',
+        provider: 'awf.graphql.comments.api',
+        value: {
+          postID: comment.postId,
+          author: author,
+          commentID: commentID,
+        },
+      });
+    } else {
+      const replyToData = await this.getComment(comment.replyTo);
+      await sendAuthorNotification(replyToData.author, {
+        property: 'NEW_COMMENT_REPLY',
+        provider: 'awf.graphql.comments.api',
+        value: {
+          postID: comment.postId,
+          author: author,
+          commentID: commentID,
+          replyTo: comment.replyTo,
+        },
+      });
+    }
+
     for (const commentMentionedAuthor of comment.mentions) {
       await sendAuthorNotification(commentMentionedAuthor, {
         property: 'COMMENT_MENTION',
@@ -96,11 +112,10 @@ class CommentAPI extends DataSource {
         },
       });
     }
-    await queryCache.del(this.getAllCommentsCacheKey(commentData.postID));
-    if (commentData.replyTo) {
-      await queryCache.del(
-        this.getAllCommentsCacheKey(`${commentData.postID}:${commentData.replyTo}`),
-      );
+    await queryCache.del(this.getAllCommentsCacheKey(comment.postId));
+    if (comment.replyTo) {
+      await queryCache.del(this.getAllCommentsCacheKey(`${comment.postId}:${comment.replyTo}`));
+      await queryCache.del(this.getCommentCacheKey(comment.replyTo));
     }
     return commentID;
   }
@@ -112,16 +127,24 @@ class CommentAPI extends DataSource {
     if (!(await queryCache.has(allCommentsCache))) {
       const query = new Where('postId').eq(postID).orderBy('creationDate');
       comments = await db.find<Comment>(this.dbID, this.collection, query);
-      await queryCache.set(allCommentsCache, comments);
+      await queryCache.set(
+        allCommentsCache,
+        comments.map(comment => comment._id),
+      );
     }
     comments = await queryCache.get(allCommentsCache);
-    const offsetIndex = offset ? comments.findIndex(comment => comment._id === offset) : 0;
+    const offsetIndex = offset ? comments.findIndex(comment => comment === offset) : 0;
     let endIndex = limit + offsetIndex;
     if (comments.length <= endIndex) {
       endIndex = undefined;
     }
-    const results = comments.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? comments[endIndex]._id : '';
+    const subset = comments.slice(offsetIndex, endIndex);
+    const results = [];
+    for (const commID of subset) {
+      const comment = await this.getComment(commID);
+      results.push(comment);
+    }
+    const nextIndex = endIndex ? comments[endIndex] : '';
     return { results: results, nextIndex: nextIndex, total: comments.length };
   }
 
@@ -136,16 +159,24 @@ class CommentAPI extends DataSource {
         .eq(commentId)
         .orderBy('creationDate');
       comments = await db.find<Comment>(this.dbID, this.collection, query);
-      await queryCache.set(allCommentsCache, comments);
+      await queryCache.set(
+        allCommentsCache,
+        comments.map(comment => comment._id),
+      );
     }
     comments = await queryCache.get(allCommentsCache);
-    const offsetIndex = offset ? comments.findIndex(comment => comment._id === offset) : 0;
+    const offsetIndex = offset ? comments.findIndex(comment => comment === offset) : 0;
     let endIndex = limit + offsetIndex;
     if (comments.length <= endIndex) {
       endIndex = undefined;
     }
-    const results = comments.slice(offsetIndex, endIndex);
-    const nextIndex = endIndex ? comments[endIndex]._id : '';
+    const subset = comments.slice(offsetIndex, endIndex);
+    const results = [];
+    for (const commID of subset) {
+      const comment = await this.getComment(commID);
+      results.push(comment);
+    }
+    const nextIndex = endIndex ? comments[endIndex] : '';
     return { results: results, nextIndex, total: comments.length };
   }
 
@@ -161,9 +192,23 @@ class CommentAPI extends DataSource {
       logger.warn(`comment ${commentId} not found`);
       throw new Error(`Comment not found`);
     }
-    await queryCache.set(commentCacheKey, comment);
+    const totalReplies = await this.getTotalReplies(commentId);
+    const result = Object.assign({}, comment, { totalReplies });
+    await queryCache.set(commentCacheKey, result);
     await queryCache.sAdd(getAuthorCacheKeys(comment.author), commentCacheKey);
-    return comment;
+    return result;
+  }
+
+  async getTotalReplies(commentId: string): Promise<number> {
+    const result = await searchIndex.searchForFacetValues('category', 'comment', {
+      filters: `replyTo:${commentId}`,
+      restrictSearchableAttributes: ['replyTo'],
+      typoTolerance: false,
+    });
+    if (result.facetHits.length) {
+      return result.facetHits[0].count;
+    }
+    return 0;
   }
 
   /**
@@ -236,6 +281,7 @@ class CommentAPI extends DataSource {
         category: 'comment',
         creationDate: currentComment.creationDate,
         postId: currentComment.postId,
+        replyTo: currentComment.replyTo,
         content: textContent ? Buffer.from(textContent?.value, 'base64').toString() : '',
       })
       .then(() => logger.info(`index edited comment: ${id}`))
@@ -277,6 +323,9 @@ class CommentAPI extends DataSource {
       .then(() => logger.info(`removed comment: ${id}`))
       .catch(e => logger.error(e));
     await queryCache.del(this.getCommentCacheKey(id));
+    if (currentComment.replyTo) {
+      await queryCache.del(this.getCommentCacheKey(currentComment.replyTo));
+    }
     await queryCache.del(this.getAllCommentsCacheKey(currentComment.postId));
     await db.save(this.dbID, this.collection, [currentComment]);
     return { removedTags };

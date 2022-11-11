@@ -6,6 +6,8 @@ const ethers = require("ethers");
 const path = require("path");
 const ipfs = require("ipfs-http-client");
 const format = require("multiformats/bases/base16");
+const formatb36 = require("multiformats/bases/base36");
+const cid = require("multiformats/cid");
 const stream = require("stream");
 const { Web3Storage, getFilesFromPath } = require("web3.storage");
 
@@ -167,7 +169,8 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       name: source.package.name
     });
     console.timeEnd(`[web3.storage]${ source.package.name }`);
-    console.info(`${ source.package.name } - web3.storage CID: ${ web3StorageCID }`);
+    const b36Web3StorageCID = cid.CID.parse(web3StorageCID).toString(formatb36.base36.encoder);
+    console.info(`${ source.package.name } - web3.storage CID: ${ b36Web3StorageCID }`);
     const descriptionFile = path.join(source.path, DESCRIPTION_MD_FILE);
     let descriptionFileHash = "";
     if (fs.existsSync(descriptionFile)) {
@@ -185,10 +188,10 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
         links: {
           publicRepository: source.package.homepage || "",
           documentation: "",
-          detailedDescription: descriptionFileHash ? `ipfs://${ descriptionFileHash.cid.toString() }` : ""
+          detailedDescription: descriptionFileHash ? `ipfs://${ descriptionFileHash.cid.toString(formatb36.base36.encoder) }` : ""
         },
         sources: [
-          `ipfs://${ web3StorageCID }`
+          `ipfs://${ b36Web3StorageCID }`
           //`ipfs://${ output.get("ipfs") }`
         ]
       }, null, 2)

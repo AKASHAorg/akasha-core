@@ -165,6 +165,7 @@ export const GetCommentDocument = gql`
     updatedAt
     replyTo
     postId
+    totalReplies
     _id
   }
 }
@@ -185,6 +186,7 @@ export const GetCommentsDocument = gql`
       creationDate
       replyTo
       postId
+      totalReplies
       _id
     }
   }
@@ -211,6 +213,7 @@ export const GetRepliesDocument = gql`
       creationDate
       replyTo
       postId
+      totalReplies
       _id
     }
   }

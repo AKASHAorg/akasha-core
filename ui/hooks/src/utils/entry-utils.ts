@@ -227,7 +227,12 @@ export const mapEntry = (entry: PostResultFragment | Comment | Post, logger?: Lo
     });
   }
 
-  const totalComments = entry.hasOwnProperty('totalComments') ? +entry['totalComments'] : undefined;
+  let totalComments = 0;
+  if ('totalComments' in entry && !!entry.totalComments) {
+    totalComments = Number(entry.totalComments);
+  } else if ('totalReplies' in entry && !!entry.totalReplies) {
+    totalComments = Number(entry.totalReplies);
+  }
 
   return {
     ...entry,

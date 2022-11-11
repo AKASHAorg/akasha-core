@@ -11,6 +11,7 @@ import {
 import { getPreviewFromContent } from 'link-preview-js';
 import { Counter } from 'prom-client';
 import { promRegistry } from '../api';
+import { clearSearchCache } from '../datasources/search-indexes';
 
 const dataSigError = new Error('Data signature was not validated!');
 const mutationsCounter = new Counter({
@@ -295,6 +296,7 @@ const mutations = {
       return Promise.reject('Post was not found!');
     }
     const commentID = await dataSources.commentsAPI.addComment(user.pubKey, content, comment);
+    await clearSearchCache();
     if (!commentID?.length) {
       return Promise.reject('Could not save the comment!');
     }

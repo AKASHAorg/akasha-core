@@ -2,7 +2,7 @@ import * as React from 'react';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard, Spinner } = DS;
 
@@ -29,11 +29,18 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handlePostClick = (entryId: string) => {
-    navigateTo?.({
-      appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}`,
-    });
+  const handleEntryClick = (entryId: string, entryType: EntityTypes) => {
+    if (entryType === EntityTypes.ENTRY) {
+      navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}`,
+      });
+    } else if (entryType === EntityTypes.COMMENT) {
+      navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: navRoutes => `${navRoutes.Reply}/${entryId}`,
+      });
+    }
   };
 
   return (
@@ -73,7 +80,8 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 followingLabel={t('is now following you')}
                 mentionedPostLabel={t('mentioned you in a post')}
                 mentionedCommentLabel={t('mentioned you in a comment')}
-                replyLabel={t('replied to your post')}
+                replyToPostLabel={t('replied to your post')}
+                replyToReplyLabel={t('replied to your reply')}
                 repostLabel={t('reposted your post')}
                 moderatedPostLabel={t('moderated your post')}
                 moderatedReplyLabel={t('moderated your reply')}
@@ -84,7 +92,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                   "You don't have any new alerts at the moment, we'll let you know when you have new followers and mentions.",
                 )}
                 handleMessageRead={markAsRead.mutate}
-                handleEntryClick={handlePostClick}
+                handleEntryClick={handleEntryClick}
                 handleProfileClick={handleAvatarClick}
                 loggedIn={!!loginQuery.data?.ethAddress}
                 isFetching={notifReq.isFetching}
