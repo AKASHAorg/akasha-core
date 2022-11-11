@@ -1,7 +1,8 @@
 import { DataSource } from 'apollo-datasource';
 import { getAppDB } from '../helpers';
 import { Client, ThreadID } from '@textile/hub';
-import { Moderator } from '../collections/interfaces';
+import type { ModeratorSocialLink } from '../collections/interfaces';
+import { Moderator, ModeratorDisableReason, ModeratorStatus } from '../collections/interfaces';
 import { queryCache } from '../storage/cache';
 import { ethers } from 'ethers';
 import ProfileAPI from './profile';
@@ -73,14 +74,54 @@ class ModerationAdminAPI extends DataSource {
     return moderator && moderator.active && moderator.admin;
   }
 
+  async disableModerator(pubKey: string, reason: ModeratorDisableReason) {
+    const moderator = await this.getModerator(pubKey);
+    if (!moderator) {
+      throw new Error(`${pubKey} not a moderator!`);
+    }
+    let log: ModeratorStatus[] = [];
+    if (moderator.activityLog && Array.isArray(moderator.activityLog)) {
+      log = moderator.activityLog;
+    }
+    log.push({
+      timestamp: new Date().getTime(),
+      reason,
+    });
+    moderator.activityLog = log;
+    moderator.active = false;
+    moderator.updatedAt = new Date().getTime();
+    const moderatorCacheKey = this.getModeratorCacheKey(pubKey);
+    const db: Client = await getAppDB();
+    await db.save(this.dbID, this.collection, [moderator]);
+    await queryCache.del(moderatorCacheKey);
+    return;
+  }
+
+  async listModerators() {
+    const db: Client = await getAppDB();
+    try {
+      return db.find<Moderator>(this.dbID, this.collection, {
+        sort: { desc: true, fieldPath: 'creationDate' },
+      });
+    } catch (err) {
+      return undefined;
+    }
+  }
   /**
    * Update moderator data (admin/active).
    * @param user - The moderator user
    * @param admin - A boolean flag for the admin status
    * @param active - A boolean flag for the active status
    * @param profileAPI
+   * @param links
    */
-  async updateModerator(user: string, admin: boolean, active: boolean, profileAPI: ProfileAPI) {
+  async updateModerator(
+    user: string,
+    admin: boolean,
+    active: boolean,
+    profileAPI: ProfileAPI,
+    links?: ModeratorSocialLink[],
+  ) {
     // resolve ETH address to pubKey if needed
     if (ethers.utils.isAddress(user)) {
       const moderator = await profileAPI.getProfile(user);
@@ -95,6 +136,10 @@ class ModerationAdminAPI extends DataSource {
     if (moderator) {
       moderator.admin = admin;
       moderator.active = active;
+      if (Array.isArray(links)) {
+        moderator.links = links;
+      }
+      moderator.updatedAt = new Date().getTime();
       await db.save(this.dbID, this.collection, [moderator]);
       await queryCache.del(moderatorCacheKey);
       return;
@@ -103,6 +148,7 @@ class ModerationAdminAPI extends DataSource {
       _id: user,
       admin,
       active,
+      links,
       creationDate: new Date().getTime(),
     };
     await db.create(this.dbID, this.collection, [moderator]);

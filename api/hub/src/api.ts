@@ -43,21 +43,18 @@ const dataSources = {
 const isAdmin = async (request, ctx) => {
   let ok = false;
   ctx.status = 401;
-  if (request.secret === adminSecret) {
+  if (adminSecret && request.secret === adminSecret) {
     ok = true;
-  } else if (request.data.admin) {
+  } else if (request.adminPubKey || request.data.admin) {
+    const adminPubKey = request.adminPubKey || request.data.admin;
     // verify request signature (from client)
-    const { verified, error } = await verifySignature(
-      request.data.admin,
-      request.data,
-      request.signature,
-    );
+    const { verified, error } = await verifySignature(adminPubKey, request.data, request.signature);
     if (!verified) {
       ctx.status = error ? 401 : 403;
     }
 
     // check is the user has admin rights to be able to add moderators
-    const isAdmin = await dataSources.moderatorsAPI.isAdmin(request.data.admin);
+    const isAdmin = await dataSources.moderatorsAPI.isAdmin(adminPubKey);
     if (!verified || !isAdmin) {
       ctx.status = 403;
     } else {
@@ -179,7 +176,7 @@ api.post('/moderation/reports/new', async (ctx, next: () => Promise<unknown>) =>
     } else {
       try {
         // add report
-        await dataSources.reportingAPI.addReport(
+        const result = await dataSources.reportingAPI.addReport(
           'ModerationDecisions',
           report.contentType,
           report.contentId,
@@ -187,6 +184,7 @@ api.post('/moderation/reports/new', async (ctx, next: () => Promise<unknown>) =>
           report.data.reason,
           report.data.explanation,
         );
+        ctx.body = { reportID: result.reportID, decisionID: result.decisionID };
         ctx.status = 201;
       } catch (error) {
         ctx.status = 500;
@@ -244,6 +242,13 @@ api.post('/moderation/status', async (ctx, next: () => Promise<unknown>) => {
 api.get('/moderation/status/counters', async (ctx, next: () => Promise<unknown>) => {
   ctx.set('Content-Type', 'application/json');
   ctx.body = await dataSources.decisionsAPI.countDecisions();
+  ctx.status = 200;
+  await next();
+});
+
+api.get('/moderation/list-moderators', async (ctx, next: () => Promise<unknown>) => {
+  ctx.set('Content-Type', 'application/json');
+  ctx.body = await dataSources.moderatorsAPI.listModerators();
   ctx.status = 200;
   await next();
 });
@@ -418,6 +423,17 @@ api.get('/moderation/decisions/actions/:contentId', async (ctx, next: () => Prom
 
 /**
  * Update an existing moderator.
+ * {
+ * signature: string
+ * adminPubKey: string
+ * data: {
+ *   isAdmin: boolean,
+ *   active: boolean,
+ *   links: {
+ *     label: string,
+ *     value: string
+ *   }[]
+ * }}
  */
 api.post('/moderation/moderators/:user', async (ctx, next: () => Promise<unknown>) => {
   const user = ctx?.params?.user;
@@ -432,14 +448,48 @@ api.post('/moderation/moderators/:user', async (ctx, next: () => Promise<unknown
         // add the new moderator
         await dataSources.moderatorsAPI.updateModerator(
           user,
-          request.data.admin,
+          request.data.isAdmin,
           request.data.active,
           dataSources.profileAPI,
+          request.data.links,
         );
         ctx.status = 200;
       }
     } catch (error) {
       ctx.body = `Cannot update moderator! Error: ${error}`;
+      ctx.status = 500;
+    }
+  }
+  await next();
+});
+/**
+ * {
+ *  data: {
+ *    moderatorPubKey: string,
+ *    reason: string // one of ['Revoked', 'Resigned']
+ *  }
+ * }
+ */
+
+api.post('/moderation/disable-moderator/:user', async (ctx, next: () => Promise<unknown>) => {
+  const user = ctx?.params?.user;
+  const request = ctx?.request.body as any; // @Todo: create request type
+  if (!user || !request.data || !request.secret) {
+    ctx.status = 400;
+  } else {
+    try {
+      const allowed = await isAdmin(request, ctx);
+      ctx = allowed.ctx;
+      if (allowed.ok) {
+        // add the new moderator
+        await dataSources.moderatorsAPI.disableModerator(
+          request.data.moderatorPubKey,
+          request.data.reason,
+        );
+        ctx.status = 200;
+      }
+    } catch (error) {
+      ctx.body = `Cannot disable moderator! Error: ${error}`;
       ctx.status = 500;
     }
   }

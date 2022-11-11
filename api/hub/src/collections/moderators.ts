@@ -10,6 +10,27 @@ const schema = {
     creationDate: { type: 'number' },
     admin: { type: 'boolean' },
     active: { type: 'boolean' },
+    updatedAt: { type: 'number' },
+    activityLog: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          timestamp: { type: 'number' },
+          reason: { type: 'string' },
+        },
+      },
+    },
+    links: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          label: { type: 'string' },
+          value: { type: 'string' },
+        },
+      },
+    },
   },
 };
 
