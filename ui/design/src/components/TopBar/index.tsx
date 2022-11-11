@@ -292,8 +292,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
                 <Button
                   onClick={onLoginClick}
                   label={signInLabel}
+                  primary={true}
                   slimBorder={true}
-                  primary
                   hoverIndicator="accentText"
                 />
               </Box>

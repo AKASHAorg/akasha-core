@@ -179,7 +179,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       stuckLabel={t('Stuck?')}
       helpLabel={t('We can help')}
       writeToUs="mailto:alpha@ethereum.world"
-      versionLabel={__DEV__ ? 'TEST' : 'ALPHA'}
+      versionLabel={__DEV__ && 'DEV'}
       versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
       sidebarVisible={sidebarVisible}
       onNavigation={handleNavigation}

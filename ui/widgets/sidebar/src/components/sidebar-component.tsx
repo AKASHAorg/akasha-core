@@ -153,7 +153,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     <>
       <SidebarOverlay onClick={handleSidebarClose} />
       <AppSidebar
-        versionLabel={__DEV__ ? 'TEST' : 'ALPHA'}
+        versionLabel={__DEV__ && 'DEV'}
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         worldAppsTitleLabel={t('World Apps')}
         poweredByLabel="Powered by AKASHA"
