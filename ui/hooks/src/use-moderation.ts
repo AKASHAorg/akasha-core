@@ -14,6 +14,7 @@ import {
   getEntryReports,
   getLogItems,
   getModeratedItems,
+  getModerators,
   getModerationCounters,
   getModeratorStatus,
   getPendingItems,
@@ -30,6 +31,7 @@ const {
   CHECK_MODERATOR_KEY,
   MODERATION_ITEM_FLAGS_KEY,
   MODERATION_ITEMS_COUNT_KEY,
+  LIST_MODERATORS_KEY,
 } = constants;
 
 export type UseModerationParam = {
@@ -209,6 +211,21 @@ export function useCheckModerator(loggedUser: string) {
     enabled: !!loggedUser,
     keepPreviousData: true,
     onError: (err: Error) => logError('[use-moderation.ts]: useCheckModerator err', err),
+  });
+}
+
+/**
+ * Hook to list all moderators
+ * @example useGetModerators hook
+ * ```typescript
+ * const getModeratorsQuery = useGetModerators();
+ *
+ * const moderators = getModeratorsQuery.data;
+ * ```
+ */
+export function useGetModerators() {
+  return useQuery([LIST_MODERATORS_KEY], () => getModerators(), {
+    onError: (err: Error) => logError('[use-moderation.ts]: useGetModerators err', err),
   });
 }
 

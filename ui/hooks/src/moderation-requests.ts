@@ -7,11 +7,12 @@ const {
   BASE_STATUS_URL,
   BASE_REASONS_URL,
   BASE_DECISION_URL,
-  BASE_MODERATOR_URL,
+  BASE_MODERATORS_URL,
   DEFAULT_FETCH_TIMEOUT,
   PENDING_CACHE_KEY_PREFIX,
   MODERATED_CACHE_KEY_PREFIX,
   MODERATION_COUNT_CACHE_KEY_PREFIX,
+  LIST_MODERATORS_CACHE_KEY_PREFIX,
 } = constants;
 
 type Profile = {
@@ -37,6 +38,14 @@ export interface Reason {
   active: boolean;
   description: string;
   label: string;
+}
+
+export interface Moderator {
+  _id: string;
+  _mod: Date;
+  creationDate: Date;
+  active: boolean;
+  admin: string;
 }
 
 export interface ICount {
@@ -278,7 +287,7 @@ export const getModeratorStatus = async (
   const sdk = getSDK();
   const key = sdk.services.stash.computeKey({
     method: 'HEAD',
-    url: `${BASE_MODERATOR_URL}/${loggedUser}`,
+    url: `${BASE_MODERATORS_URL}/status/${loggedUser}`,
     data: {},
     statusOnly: true,
   });
@@ -290,7 +299,7 @@ export const getModeratorStatus = async (
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
-  const response = await fetch(`${BASE_MODERATOR_URL}/${loggedUser}`, {
+  const response = await fetch(`${BASE_MODERATORS_URL}/status/${loggedUser}`, {
     signal: controller.signal,
     method: 'HEAD',
     headers: rheaders,
@@ -301,6 +310,49 @@ export const getModeratorStatus = async (
   uiCache.set(key, response.status);
 
   return response.status;
+};
+
+/**
+ * Gets a list of moderators
+ * @returns serialized response
+ * @example Getting list of moderators
+ * ```typescript
+ * const response = await getModerators(12000);
+ * ```
+ */
+export const getModerators = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<Moderator> => {
+  const rheaders = new Headers();
+  const sdk = getSDK();
+
+  const key = sdk.services.stash.computeKey({
+    method: 'GET',
+    url: `${BASE_MODERATORS_URL}/all`,
+    data: {},
+    statusOnly: false,
+  });
+
+  const uiCache = sdk.services.stash.getUiStash();
+
+  if (uiCache.has(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`)) {
+    return uiCache.get(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`) as Moderator;
+  }
+
+  rheaders.append('Content-Type', 'application/json');
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+  const response = await fetch(`${BASE_MODERATORS_URL}/all`, {
+    signal: controller.signal,
+    method: 'GET',
+    headers: rheaders,
+  });
+
+  clearTimeout(timer);
+
+  return response.json().then(serializedResponse => {
+    uiCache.set(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`, serializedResponse);
+    return serializedResponse;
+  });
 };
 
 /**

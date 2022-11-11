@@ -88,6 +88,7 @@ import { useEntryNavigation } from './use-navigation';
 import {
   useCheckModerator,
   useGetCount,
+  useGetModerators,
   useGetFlags,
   useInfiniteDelisted,
   useInfiniteKept,
@@ -241,6 +242,7 @@ export {
   // use-moderation
   useCheckModerator,
   useGetCount,
+  useGetModerators,
   useGetFlags,
   useInfiniteDelisted,
   useInfiniteKept,
