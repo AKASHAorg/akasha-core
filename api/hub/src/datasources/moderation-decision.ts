@@ -324,6 +324,7 @@ class ModerationDecisionAPI extends DataSource {
       reportedDate,
       reportedByProfile,
       reasons,
+      decisionID: finalDecision?._id,
     });
     await queryCache.set(decisionCache, finalDecision);
     return finalDecision;
@@ -374,6 +375,7 @@ class ModerationDecisionAPI extends DataSource {
         : await profileAPI.resolveProfile(decision.moderator);
 
       moderated.push({
+        decisionID: decision._id,
         contentID: decision.contentID,
         contentType: decision.contentType,
         moderatedDate: decision.moderatedDate,
