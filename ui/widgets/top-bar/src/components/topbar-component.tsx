@@ -115,13 +115,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     setTimeout(() => window.location.reload(), 50);
   };
 
-  const handleSignUpClick = () => {
-    navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes => appRoutes.SignUp,
-    });
-  };
-
   const handleFeedbackModalShow = () => {
     props.navigateToModal({ name: 'feedback-modal' });
   };
@@ -174,9 +167,8 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   return (
     <Topbar
       loggedProfileData={loggedProfileData}
-      brandLabel="Ethereum World"
-      signInLabel={t('Sign In')}
-      signUpLabel={t('Sign Up')}
+      brandLabel="AKASHA World"
+      signInLabel={t('Connect')}
       signOutLabel={t('Sign Out')}
       legalLabel={t('Legal')}
       feedbackLabel={t('Send Us Feedback')}
@@ -185,7 +177,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       stuckLabel={t('Stuck?')}
       helpLabel={t('We can help')}
       writeToUs="mailto:alpha@ethereum.world"
-      versionLabel="ALPHA"
+      versionLabel="TEST"
       versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
       sidebarVisible={sidebarVisible}
       onNavigation={handleNavigation}
@@ -195,7 +187,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       quickAccessItems={sortedQuickAccessItems}
       otherAreaItems={otherAreaItems}
       onLoginClick={handleLoginClick}
-      onSignUpClick={handleSignUpClick}
       onLogout={handleLogout}
       onFeedbackClick={handleFeedbackModalShow}
       currentLocation={location?.pathname}

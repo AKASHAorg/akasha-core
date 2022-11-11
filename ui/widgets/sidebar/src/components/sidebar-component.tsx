@@ -151,7 +151,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     <>
       <SidebarOverlay onClick={handleSidebarClose} />
       <AppSidebar
-        versionLabel="ALPHA"
+        versionLabel="TEST"
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         worldAppsTitleLabel={t('World Apps')}
         poweredByLabel="Powered by AKASHA"
