@@ -43,6 +43,7 @@ export type UseModerationParam = {
 // create moderation mutation
 const createModerationMutation = async ({ dataToSign, contentId, contentType, url }) => {
   const sdk = getSDK();
+
   const resp = await sdk.api.auth.signData(dataToSign);
   const data = {
     contentId,
@@ -51,17 +52,17 @@ const createModerationMutation = async ({ dataToSign, contentId, contentType, ur
     signature: btoa(String.fromCharCode.apply(null, resp.signature)),
   };
 
-  const status = await createModeration(url, data);
+  const response = await createModeration(url, data);
 
   switch (true) {
-    case status === 409:
+    case response.status === 409:
       throw new Error(`This content has already been moderated by you`);
-    case status === 403:
+    case response.status === 403:
       throw new Error('You are not authorized to perform this operation');
-    case status >= 400:
+    case response.status >= 400:
       throw new Error('Bad request. Please try again later');
     default:
-      return status;
+      return response;
   }
 };
 
@@ -114,17 +115,17 @@ const createReportMutation = async ({ dataToSign, contentId, contentType, url })
     signature: resp.signature.toString(),
   };
 
-  const status = await createModeration(url, data);
+  const response = await createModeration(url, data);
 
   switch (true) {
-    case status === 409:
+    case response.status === 409:
       throw new Error(`This content has already been reported by you`);
-    case status === 403:
+    case response.status === 403:
       throw new Error('You are not authorized to perform this operation');
-    case status >= 400:
+    case response.status >= 400:
       throw new Error('Bad request. Please try again later');
     default:
-      return status;
+      return response;
   }
 };
 

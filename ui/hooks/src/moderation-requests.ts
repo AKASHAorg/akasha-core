@@ -108,6 +108,10 @@ export interface ModeratedItemsReponse extends PaginatedResponse {
   results: IModeratedItem[];
 }
 
+export interface CreateModerationReturn {
+  [key: string]: string | number;
+}
+
 /**
  * Creates moderation entry
  * @returns response HTTP status code
@@ -125,7 +129,7 @@ export const createModeration = async (
     signature: string;
   },
   timeout = DEFAULT_FETCH_TIMEOUT,
-): Promise<number> => {
+): Promise<CreateModerationReturn> => {
   const rheaders = new Headers();
 
   const sdk = getSDK();
@@ -138,7 +142,7 @@ export const createModeration = async (
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as CreateModerationReturn;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -154,9 +158,10 @@ export const createModeration = async (
 
   clearTimeout(timer);
 
-  uiCache.set(key, response.status);
-
-  return response.status;
+  return response.json().then(serializedResponse => {
+    uiCache.set(key, serializedResponse);
+    return serializedResponse;
+  });
 };
 
 /**
@@ -467,6 +472,7 @@ export const getPendingItems = async (
 
   return response.json().then(serializedResponse => {
     uiCache.set(`${PENDING_CACHE_KEY_PREFIX}-${key}`, serializedResponse);
+
     return {
       ...serializedResponse,
       results: serializedResponse.results.map((item: IPendingItem) => {
