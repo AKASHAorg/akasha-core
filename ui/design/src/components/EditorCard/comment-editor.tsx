@@ -40,6 +40,7 @@ const CommentEditor: React.FC<
     embedEntryData,
     setEditorState,
     showDraft,
+    uploadedImages,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(isShown);
@@ -108,6 +109,7 @@ const CommentEditor: React.FC<
             mentions={mentions}
             tags={tags}
             uploadRequest={uploadRequest}
+            uploadedImages={uploadedImages}
             withMeter={true}
             editorState={contentState}
             setEditorState={value => {
