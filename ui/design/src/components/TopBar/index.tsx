@@ -271,7 +271,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
                 </StyledText>
               )}
             </Box>
-            {versionURL && (
+            {versionURL && versionLabel && (
               <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
             )}
           </Box>
