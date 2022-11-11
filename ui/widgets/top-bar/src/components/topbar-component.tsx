@@ -14,6 +14,8 @@ import { useGetLogin, useGetProfile, useLogout } from '@akashaorg/ui-awf-hooks';
 
 const { Topbar } = DS;
 
+declare const __DEV__: boolean;
+
 const TopbarComponent: React.FC<RootComponentProps> = props => {
   const { uiEvents } = props;
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -177,7 +179,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       stuckLabel={t('Stuck?')}
       helpLabel={t('We can help')}
       writeToUs="mailto:alpha@ethereum.world"
-      versionLabel="TEST"
+      versionLabel={__DEV__ ? 'TEST' : 'ALPHA'}
       versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
       sidebarVisible={sidebarVisible}
       onNavigation={handleNavigation}
