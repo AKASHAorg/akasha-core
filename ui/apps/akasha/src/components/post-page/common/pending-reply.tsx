@@ -5,7 +5,7 @@ import { IEntryData, IPublishData, RootComponentProps } from '@akashaorg/typings
 import {
   createPendingEntry,
   useFollow,
-  useMutationListener,
+  useMutationsListener,
   useUnfollow,
   useIsFollowingMultiple,
 } from '@akashaorg/ui-awf-hooks';
@@ -25,9 +25,9 @@ type Props = {
 
 export function PendingReply({ postId, layoutConfig, loggedProfileData, entryData }: Props) {
   const { t } = useTranslation('app-akasha-integration');
-  const { mutation: publishCommentMutation } = useMutationListener<
-    IPublishData & { postID: string }
-  >(PUBLISH_PENDING_KEY);
+  const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
+    PUBLISH_PENDING_KEY,
+  );
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
   const isFollowingMultipleReq = useIsFollowingMultiple(loggedProfileData?.pubKey, [
@@ -50,45 +50,48 @@ export function PendingReply({ postId, layoutConfig, loggedProfileData, entryDat
 
   return (
     <>
-      {publishCommentMutation &&
-        publishCommentMutation.state.status === 'loading' &&
-        publishCommentMutation.state.variables.postID === postId && (
-          <Box
-            pad={{ horizontal: 'medium' }}
-            border={{ side: 'bottom', size: '1px', color: 'border' }}
-            background="pendingEntryBackground"
-            data-testid="pending-entry"
-          >
-            <EntryBox
-              /* @Todo: Fix my type */
-              entryData={
-                createPendingEntry(loggedProfileData, publishCommentMutation.state.variables) as any
-              }
-              sharePostLabel={t('Share Post')}
-              shareTextLabel={t('Share this post with your friends')}
-              repliesLabel={t('Replies')}
-              repostsLabel={t('Reposts')}
-              repostLabel={t('Repost')}
-              repostWithCommentLabel={t('Repost with comment')}
-              shareLabel={t('Share')}
-              copyLinkLabel={t('Copy Link')}
-              flagAsLabel={t('Report Comment')}
-              loggedProfileEthAddress={loggedProfileData.ethAddress}
-              locale={'en'}
-              showMore={true}
-              profileAnchorLink={'/profile'}
-              repliesAnchorLink={routes[REPLY]}
-              handleFollowAuthor={handleFollow}
-              handleUnfollowAuthor={handleUnfollow}
-              isFollowingAuthor={isFollowing}
-              contentClickable={false}
-              hidePublishTime={true}
-              disableActions={true}
-              hideActionButtons={true}
-              modalSlotId={layoutConfig.modalSlotId}
-            />
-          </Box>
-        )}
+      {pendingReplyStates?.map(
+        pendingReplyState =>
+          pendingReplyState &&
+          pendingReplyState.state.status === 'loading' &&
+          pendingReplyState.state.variables.postID === postId && (
+            <Box
+              pad={{ horizontal: 'medium' }}
+              border={{ side: 'bottom', size: '1px', color: 'border' }}
+              background="pendingEntryBackground"
+              data-testid="pending-entry"
+            >
+              <EntryBox
+                /* @Todo: Fix my type */
+                entryData={
+                  createPendingEntry(loggedProfileData, pendingReplyState.state.variables) as any
+                }
+                sharePostLabel={t('Share Post')}
+                shareTextLabel={t('Share this post with your friends')}
+                repliesLabel={t('Replies')}
+                repostsLabel={t('Reposts')}
+                repostLabel={t('Repost')}
+                repostWithCommentLabel={t('Repost with comment')}
+                shareLabel={t('Share')}
+                copyLinkLabel={t('Copy Link')}
+                flagAsLabel={t('Report Comment')}
+                loggedProfileEthAddress={loggedProfileData.ethAddress}
+                locale={'en'}
+                showMore={true}
+                profileAnchorLink={'/profile'}
+                repliesAnchorLink={routes[REPLY]}
+                handleFollowAuthor={handleFollow}
+                handleUnfollowAuthor={handleUnfollow}
+                isFollowingAuthor={isFollowing}
+                contentClickable={false}
+                hidePublishTime={true}
+                disableActions={true}
+                hideActionButtons={true}
+                modalSlotId={layoutConfig.modalSlotId}
+              />
+            </Box>
+          ),
+      )}
     </>
   );
 }

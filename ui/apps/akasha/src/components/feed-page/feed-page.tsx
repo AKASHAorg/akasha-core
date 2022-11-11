@@ -12,7 +12,7 @@ import {
 import {
   useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
-  useMutationListener,
+  useMutationsListener,
   createPendingEntry,
   LoginState,
   useAnalytics,
@@ -47,8 +47,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [analyticsActions] = useAnalytics();
 
-  const { mutation: createPostMutation } =
-    useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutations: pendingPostStates } =
+    useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
@@ -136,35 +136,45 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           />
         </Box>
       )}
-      {createPostMutation && createPostMutation.state.status === 'error' && (
-        <EntryPublishErrorCard message={t('Cannot publish this entry. Please try again later!')} />
+      {pendingPostStates?.map(
+        pendingPostState =>
+          pendingPostState.state.status === 'error' && (
+            <EntryPublishErrorCard
+              key={pendingPostState.mutationId}
+              message={t('Cannot publish this entry. Please try again later!')}
+            />
+          ),
       )}
-      {createPostMutation && createPostMutation.state.status === 'loading' && (
-        <EntryCard
-          style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-          entryData={
-            /* @Todo: Fix my type */
-            createPendingEntry(loggedProfileData, createPostMutation.state.variables) as any
-          }
-          sharePostLabel={t('Share Post')}
-          shareTextLabel={t('Share this post with your friends')}
-          repliesLabel=""
-          repostsLabel={t('Reposts')}
-          repostLabel={t('Repost')}
-          repostWithCommentLabel={t('Repost with comment')}
-          shareLabel={t('Share')}
-          copyLinkLabel={t('Copy Link')}
-          flagAsLabel={t('Report Post')}
-          loggedProfileEthAddress={loggedProfileData.ethAddress}
-          locale={locale || 'en'}
-          showMore={true}
-          profileAnchorLink={'/profile'}
-          repliesAnchorLink={routes[POST]}
-          contentClickable={false}
-          hidePublishTime={true}
-          disableActions={true}
-          modalSlotId={props.layoutConfig.modalSlotId}
-        />
+      {pendingPostStates?.map(
+        pendingPostState =>
+          pendingPostState.state.status === 'loading' && (
+            <EntryCard
+              key={pendingPostState.mutationId}
+              style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
+              entryData={
+                /* @Todo: Fix my type */
+                createPendingEntry(loggedProfileData, pendingPostState.state.variables) as any
+              }
+              sharePostLabel={t('Share Post')}
+              shareTextLabel={t('Share this post with your friends')}
+              repliesLabel=""
+              repostsLabel={t('Reposts')}
+              repostLabel={t('Repost')}
+              repostWithCommentLabel={t('Repost with comment')}
+              shareLabel={t('Share')}
+              copyLinkLabel={t('Copy Link')}
+              flagAsLabel={t('Report Post')}
+              loggedProfileEthAddress={loggedProfileData.ethAddress}
+              locale={locale || 'en'}
+              showMore={true}
+              profileAnchorLink={'/profile'}
+              repliesAnchorLink={routes[POST]}
+              contentClickable={false}
+              hidePublishTime={true}
+              disableActions={true}
+              modalSlotId={props.layoutConfig.modalSlotId}
+            />
+          ),
       )}
       <FeedWidget
         modalSlotId={props.layoutConfig.modalSlotId}

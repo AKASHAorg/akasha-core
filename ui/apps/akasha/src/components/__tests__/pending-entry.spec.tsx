@@ -19,10 +19,15 @@ describe('< PendingEntry /> component', () => {
 
   beforeAll(() => {
     (
-      jest.spyOn(queryListnerHooks, 'useMutationListener') as unknown as jest.SpyInstance<{
-        state: Record<string, unknown>;
-      }>
-    ).mockReturnValue({ state: { status: 'loading', variables: { postID: 'oxfg' } } });
+      jest.spyOn(queryListnerHooks, 'useMutationsListener') as unknown as jest.SpyInstance<
+        {
+          mutationId: number;
+          state: Record<string, unknown>;
+        }[]
+      >
+    ).mockReturnValue([
+      { mutationId: 1, state: { status: 'loading', variables: { postID: 'oxfg' } } },
+    ]);
 
     jest.spyOn(entryUtilHooks, 'createPendingEntry').mockReturnValue(genPendingPost());
   });
