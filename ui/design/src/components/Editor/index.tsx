@@ -223,8 +223,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
    * set the selection at the end of the content when component is mounted
    */
   useEffect(() => {
-    Transforms.move(editorRef.current);
-  }, []);
+    Transforms.select(editor, Editor.end(editor, []));
+  }, [editor]);
 
   /**
    * position the mention and tag popovers based on the matching text range
