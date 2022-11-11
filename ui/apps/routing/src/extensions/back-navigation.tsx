@@ -33,7 +33,8 @@ const BreadcrumbNavigation: React.FC<RootExtensionProps> = props => {
   } = props;
 
   const [routeData, setRouteData] = React.useState(null);
-  const [historyCount] = React.useState(history.length);
+  const isNavigatingBackRef = React.useRef(false);
+  const historyCount = React.useRef(0);
 
   const currentLocation = useLocation();
 
@@ -57,6 +58,32 @@ const BreadcrumbNavigation: React.FC<RootExtensionProps> = props => {
   }, [worldApps, userInstalledApps]);
 
   const routing = props.plugins['@akashaorg/app-routing']?.routing;
+
+  React.useEffect(function navigationEventListener() {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    window.addEventListener(
+      'single-spa:before-routing-event',
+      (evt: CustomEvent) => {
+        const url = new URL(evt.detail.newUrl as string);
+        const newUrl: string = url.origin + url.pathname;
+
+        const url2 = new URL(evt.detail.oldUrl as string);
+        const oldUrl: string = url2.origin + url2.pathname;
+
+        if (isNavigatingBackRef.current) {
+          isNavigatingBackRef.current = false;
+          historyCount.current = historyCount.current - 1;
+        } else if (newUrl !== oldUrl) {
+          historyCount.current++;
+        }
+      },
+      { signal },
+    );
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   React.useEffect(
     function routingSubscription() {
@@ -85,12 +112,11 @@ const BreadcrumbNavigation: React.FC<RootExtensionProps> = props => {
   };
 
   const handleBackClick = () => {
-    if (history.length - historyCount > 0) {
+    if (historyCount.current > 0) {
+      isNavigatingBackRef.current = true;
       history.back();
     }
   };
-
-  const isBackButtonActive = true;
 
   const matchingApp = allApps.find(app => currentLocation.pathname.includes(app.name));
 
@@ -101,11 +127,6 @@ const BreadcrumbNavigation: React.FC<RootExtensionProps> = props => {
         currentLocation.pathname.includes(route),
       )?.[0]
     : matchingApp.label;
-
-  console.log({
-    matchingApp,
-    isBackButtonActive,
-  });
 
   return (
     <Box direction="row" align="stretch">
@@ -120,11 +141,9 @@ const BreadcrumbNavigation: React.FC<RootExtensionProps> = props => {
         <Icon type={matchingApp.logo.value ?? 'akasha'} size="sm" />
       </StyledCardBox>
       <BasicCardBox pad="medium" margin={{ bottom: 'xsmall' }} direction="row" align="center">
-        {isBackButtonActive && (
-          <Box onClick={handleBackClick} width="24px">
-            <FormPrevious size="sm" />
-          </Box>
-        )}
+        <Box onClick={handleBackClick} width="24px">
+          <FormPrevious size="sm" />
+        </Box>
         <StyledText size="xlarge" weight="bold">
           {matchingRouteName}
         </StyledText>

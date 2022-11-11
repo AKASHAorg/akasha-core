@@ -162,7 +162,7 @@ export const register = async (opts: IntegrationRegistrationOptions) => {
     mountsIn: opts.layoutConfig?.routerSlotId,
     extends: (matcher, loader) => {
       matcher({
-        'breadcrumb-navigation': loader(() => import('./extensions/breadcrumb-navigation')),
+        'back-navigation': loader(() => import('./extensions/back-navigation')),
       });
     },
   };

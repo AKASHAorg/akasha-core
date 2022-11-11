@@ -211,11 +211,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                     </Box>
                   </WarningCard>
 
-                  <Extension
-                    name="breadcrumb-navigation"
-                    uiEvents={props.uiEvents}
-                    // data={{ routes }}
-                  />
+                  <Extension name="back-navigation" uiEvents={props.uiEvents} />
 
                   <FocusedPluginSlot
                     name={props.layoutConfig.focusedPluginSlotId}
