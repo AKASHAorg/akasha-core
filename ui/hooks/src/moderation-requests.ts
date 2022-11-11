@@ -57,6 +57,7 @@ export interface EntryReport {
 }
 
 export interface ILogItem {
+  decisionID: string;
   contentID: string;
   contentType: string;
   delisted: false;
@@ -71,6 +72,7 @@ export interface IPendingItem {
   _id: string;
   _mod: Date;
   creationDate: Date;
+  decisionID: string;
   contentID: string;
   contentType: string;
   delisted: boolean;
@@ -138,7 +140,7 @@ export const createModeration = async (
     method: 'POST',
     url,
     data: data,
-    statusOnly: true,
+    statusOnly: false,
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
