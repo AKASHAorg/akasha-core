@@ -40,10 +40,6 @@ const ReportModalComponent = (props: RootExtensionProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleModalClose = () => {
-    props.singleSpa.navigateToUrl(location.pathname);
-  };
-
   const itemType = React.useMemo(() => {
     if (
       props.extensionData.hasOwnProperty('itemType') &&
@@ -52,6 +48,14 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       return props.extensionData.itemType;
     }
   }, [props.extensionData]);
+
+  const handleModalClose = () => {
+    props.singleSpa.navigateToUrl(location.pathname);
+  };
+
+  const handleSelectReason = (reason: string) => setReason(reason);
+
+  const handleSetExplanation = (explanation: string) => setExplanation(explanation);
 
   const reportMutation = useReport();
 
@@ -108,8 +112,8 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       itemType={itemType}
       requesting={reportMutation.status === 'loading'}
       success={reportMutation.status === 'success'}
-      setReason={setReason}
-      setExplanation={setExplanation}
+      onSelectReason={handleSelectReason}
+      onSetExplanation={handleSetExplanation}
       closeModal={handleModalClose}
       onReport={onReport}
     />

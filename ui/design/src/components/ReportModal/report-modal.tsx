@@ -26,8 +26,6 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   descriptionLabel: string;
   descriptionPlaceholder: string;
   explanation: string;
-  setReason: React.Dispatch<React.SetStateAction<string>>;
-  setExplanation: React.Dispatch<React.SetStateAction<string>>;
 
   // footer labels and links
   footerText1Label: string;
@@ -44,6 +42,8 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   itemType?: string;
   requesting: boolean;
   success: boolean;
+  onSelectReason: (reason: string) => void;
+  onSetExplanation: (explanation: string) => void;
   onReport: (data: Record<string, unknown>) => void;
 }
 
@@ -78,8 +78,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     itemType,
     requesting,
     success,
-    setReason,
-    setExplanation,
+    onSelectReason,
+    onSetExplanation,
     closeModal,
     onReport,
   } = props;
@@ -106,7 +106,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       // check if text area is empty or not and set rows accordingly
       setRows(prevRows => (calcRows === 0 ? prevRows / prevRows : calcRows + 1));
     }
-    setExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
+    onSetExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
   };
 
   const handleReport = () => {
@@ -190,9 +190,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 name="reasons"
                 options={optionLabels}
                 value={reason}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setReason(event.target.value)
-                }
+                onChange={ev => onSelectReason(ev.target.value)}
               />
             </Box>
             <StyledText

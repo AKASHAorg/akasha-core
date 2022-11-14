@@ -9,7 +9,7 @@ import { customRender, wrapWithTheme } from '../../../test-utils';
 describe('<ReportModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
-  const handleSetReason = jest.fn();
+  const handleSelectReason = jest.fn();
   const handleSetExplanation = jest.fn();
   const handleCloseModal = jest.fn();
   const handleReport = jest.fn();
@@ -58,8 +58,8 @@ describe('<ReportModal /> Component', () => {
             reportLabel="Report"
             requesting={false}
             success={false}
-            setReason={handleSetReason}
-            setExplanation={handleSetExplanation}
+            onSelectReason={handleSelectReason}
+            onSetExplanation={handleSetExplanation}
             closeModal={handleCloseModal}
             onReport={handleReport}
           />,
@@ -92,52 +92,34 @@ describe('<ReportModal /> Component', () => {
     expect(options).toHaveLength(6);
   });
 
-  it.skip('can select radio option', async () => {
+  it('calls handler when selecting a radio option', async () => {
     const { getByRole } = componentWrapper;
 
     // target an option
     const illegalOption = getByRole('radio', { name: 'Illegal' });
 
-    expect(illegalOption).not.toBeChecked();
+    expect(handleSelectReason).toBeCalledTimes(0);
 
-    // select illegalOption
+    // click illegalOption
     await userEvent.click(illegalOption);
 
-    // illegalOption is now checked
-    expect(illegalOption).toBeChecked();
+    // handler is now called
+    expect(handleSelectReason).toBeCalledTimes(1);
   });
 
-  it.skip('enables action button when an option is selected', async () => {
-    const { getByRole } = componentWrapper;
-
-    // target an option
-    const illegalOption = getByRole('radio', { name: 'Illegal' });
-    // target report action handler
-    const actionButton = getByRole('button', { name: 'Report' });
-
-    // button should be initially disabled
-    expect(actionButton).toHaveAttribute('disabled');
-
-    // select illegalOption
-    await userEvent.click(illegalOption);
-
-    // illegalOption is now checked
-    expect(illegalOption).toBeChecked();
-    // action button should no longer be disabled
-    expect(actionButton.hasAttribute('disabled')).not.toBeTruthy();
-  });
-
-  it.skip('can type into the input field', async () => {
+  it('calls handler when typing into the input field', async () => {
     const { getByRole } = componentWrapper;
 
     const input = getByRole('textbox');
     expect(input).toBeDefined();
 
+    expect(handleSetExplanation).toBeCalledTimes(0);
+
     // type into the input field
     await userEvent.type(input, 'optional explanation supporting the report action');
 
-    // input value should match typed in value
-    expect(input).toHaveValue('optional explanation supporting the report action');
+    // handler is now called
+    expect(handleSetExplanation).toBeCalled();
   });
 
   it('has two buttons', () => {
