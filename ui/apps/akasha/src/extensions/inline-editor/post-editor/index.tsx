@@ -139,6 +139,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   }
 
   const canSaveDraft = action === 'post';
+  const draftItem = canSaveDraft ? getDraftItem({ pubKey, appName }) : null;
 
   return (
     <Base
@@ -150,14 +151,8 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
       singleSpa={singleSpa}
       embedEntryData={embedEntryData}
       entryData={entryData}
-      editorState={
-        action === 'edit'
-          ? entryData?.slateContent
-          : canSaveDraft
-          ? getDraftItem({ pubKey, appName })
-          : null
-      }
-      isShown={action !== 'post'}
+      editorState={action === 'edit' ? entryData?.slateContent : draftItem}
+      isShown={action !== 'post' || (action === 'post' && !!draftItem)}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
       showDraft={canSaveDraft}
