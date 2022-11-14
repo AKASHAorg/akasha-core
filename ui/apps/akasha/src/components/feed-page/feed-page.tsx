@@ -147,7 +147,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       )}
       {pendingPostStates?.map(
         pendingPostState =>
-          pendingPostState.state.status === 'loading' && (
+          (pendingPostState.state.status === 'loading' ||
+            /*The following line ensures that even if the post is published pending post UI should be shown till the new entry appears on the feed */
+            (pendingPostState.state.status === 'success' &&
+              !postPages[0]?.results.includes(pendingPostState.state.data.toString()))) && (
             <EntryCard
               key={pendingPostState.mutationId}
               style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}

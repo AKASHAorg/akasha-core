@@ -151,6 +151,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             layoutConfig={props.layoutConfig}
             loggedProfileData={loggedProfileData}
             entryData={entryData}
+            commentIds={commentPages ? commentPages[0].results : []}
           />
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}

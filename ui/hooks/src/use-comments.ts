@@ -297,8 +297,9 @@ export function useCreateComment() {
           }
         });
       },
-      onSettled: async () => {
-        await queryClient.invalidateQueries(COMMENTS_KEY);
+      onSettled: () => {
+        //shouldn't await 'COMMENTS_KEY' as it creates a race condition
+        queryClient.invalidateQueries(COMMENTS_KEY);
       },
       mutationKey: PUBLISH_PENDING_KEY,
     },

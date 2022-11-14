@@ -430,7 +430,8 @@ export function useCreatePost() {
         await queryClient.fetchQuery([ENTRY_KEY, id], () => getPost(id));
       },
       onSettled: async () => {
-        await queryClient.invalidateQueries(ENTRIES_KEY);
+        //shouldn't await 'ENTRIES_KEY' as as it creates a race condition
+        queryClient.invalidateQueries(ENTRIES_KEY);
         await queryClient.invalidateQueries(TRENDING_TAGS_KEY);
       },
       mutationKey: CREATE_POST_MUTATION_KEY,
