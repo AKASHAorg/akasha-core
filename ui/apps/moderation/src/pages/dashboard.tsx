@@ -3,14 +3,17 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { ButtonValues, RootComponentProps } from '@akashaorg/typings/ui';
+import {
+  ButtonValues,
+  IModeratedItem,
+  IPendingItem,
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import {
   useGetCount,
   useInfiniteKept,
   useInfinitePending,
   useInfiniteDelisted,
-  IModeratedItem,
-  IPendingItem,
 } from '@akashaorg/ui-awf-hooks';
 
 import GuestDashboard from '../components/guest';

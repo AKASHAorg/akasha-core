@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { IAkashaError } from '@akashaorg/typings/ui';
+import { IAkashaError, Reason } from '@akashaorg/typings/ui';
 
 import { logError } from './utils/error-handler';
-import { getModerationReasons, Reason } from './moderation-requests';
+import { getModerationReasons } from './moderation-requests';
 
 export interface UseReasonsActions {
   /**

@@ -97,7 +97,6 @@ import {
   useModeration,
   useReport,
 } from './use-moderation';
-import { ICount, ILogItem, IModeratedItem, IPendingItem, EntryReport } from './moderation-requests';
 import {
   useConnectProvider,
   useInjectedProvider,
@@ -250,12 +249,6 @@ export {
   useInfinitePending,
   useModeration,
   useReport,
-  // moderation-requests
-  ICount,
-  ILogItem,
-  IModeratedItem,
-  IPendingItem,
-  EntryReport,
   // use-injected-provider
   useInjectedProvider,
   useConnectProvider,
