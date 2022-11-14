@@ -1,6 +1,12 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import { RootExtensionProps, IPublishData, AnalyticsCategories } from '@akashaorg/typings/ui';
+import {
+  RootExtensionProps,
+  IPublishData,
+  AnalyticsCategories,
+  IEntryData,
+} from '@akashaorg/typings/ui';
+import isEqual from 'lodash.isequal';
 import {
   useCreatePost,
   useEditPost,
@@ -13,17 +19,20 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
+import { clearDraftItem, getDraftItem, saveDraftItem } from '../utils';
+import { editorDefaultValue } from '@akashaorg/design-system/lib/components/Editor/initialValue';
 
 const { EntryCardLoading } = DS;
 
 type Props = {
+  appName: string;
   postId: string;
   pubKey: string;
   singleSpa: RootExtensionProps['singleSpa'];
   action: 'post' | 'reply' | 'repost' | 'edit';
 };
 
-export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
+export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const post = usePost({
@@ -129,6 +138,8 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
     );
   }
 
+  const canSaveDraft = action === 'post';
+
   return (
     <Base
       postLabel={
@@ -141,10 +152,25 @@ export function PostEditor({ postId, pubKey, singleSpa, action }: Props) {
       singleSpa={singleSpa}
       embedEntryData={embedEntryData}
       entryData={entryData}
-      editorState={action === 'edit' ? entryData?.slateContent : null}
+      editorState={
+        action === 'edit'
+          ? entryData?.slateContent
+          : canSaveDraft
+          ? getDraftItem({ pubKey, appName })
+          : null
+      }
       isShown={action !== 'post'}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
+      showDraft={canSaveDraft}
+      setEditorState={(value: IEntryData['slateContent']) => {
+        if (!canSaveDraft) return;
+        if (isEqual(value, editorDefaultValue)) {
+          clearDraftItem({ pubKey, appName });
+          return;
+        }
+        saveDraftItem({ pubKey, appName, content: value });
+      }}
     />
   );
 }
