@@ -225,6 +225,7 @@ export function useCheckModerator(loggedUser: string) {
  */
 export function useGetModerators() {
   return useQuery([LIST_MODERATORS_KEY], () => getModerators(), {
+    keepPreviousData: true,
     onError: (err: Error) => logError('[use-moderation.ts]: useGetModerators err', err),
   });
 }

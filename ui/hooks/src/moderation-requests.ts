@@ -1,6 +1,19 @@
+import { forkJoin, lastValueFrom } from 'rxjs';
+
 import getSDK from '@akashaorg/awf-sdk';
+import {
+  EntryReport,
+  ICount,
+  ILogItem,
+  IPendingItem,
+  IModeratedItem,
+  Moderator,
+  ModerationStatus,
+  Reason,
+} from '@akashaorg/typings/ui';
 
 import constants from './constants';
+import { getMediaUrl } from './utils/media-utils';
 
 const {
   BASE_REPORT_URL,
@@ -14,93 +27,6 @@ const {
   MODERATION_COUNT_CACHE_KEY_PREFIX,
   LIST_MODERATORS_CACHE_KEY_PREFIX,
 } = constants;
-
-type Profile = {
-  pubKey: string;
-  ethAddress: string;
-  name: string;
-  userName: string;
-  avatar: string;
-};
-
-export interface ModerationStatus {
-  contentId: string;
-  delisted: boolean;
-  moderated: boolean;
-  reason: string;
-  reported: boolean;
-}
-
-export interface Reason {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  active: boolean;
-  description: string;
-  label: string;
-}
-
-export interface Moderator {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  active: boolean;
-  admin: string;
-}
-
-export interface ICount {
-  kept: number;
-  pending: number;
-  delisted: number;
-}
-
-export interface EntryReport {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  author: string;
-  contentID: string;
-  contentType: string;
-  explanation: string;
-  reason: string;
-}
-
-export interface ILogItem {
-  decisionID: string;
-  contentID: string;
-  contentType: string;
-  delisted: false;
-  reasons: string[];
-  explanation: string;
-  moderator: Profile;
-  moderatedDate: Date;
-  reports: number;
-}
-
-export interface IPendingItem {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  decisionID: string;
-  contentID: string;
-  contentType: string;
-  delisted: boolean;
-  moderated: boolean;
-  reasons: string[];
-  explanation: string;
-  reportedBy: string;
-  reportedByProfile: Profile;
-  reportedDate: Date;
-  reports: number;
-  count: number;
-}
-
-export interface IModeratedItem extends IPendingItem {
-  moderator: string;
-  moderatedDate?: Date;
-  evaluationDate?: Date;
-  moderatorProfile: Profile;
-}
 
 interface PaginatedResponse {
   nextIndex: string | null;
@@ -320,7 +246,7 @@ export const getModeratorStatus = async (
  * const response = await getModerators(12000);
  * ```
  */
-export const getModerators = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<Moderator> => {
+export const getModerators = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<Moderator[]> => {
   const rheaders = new Headers();
   const sdk = getSDK();
 
@@ -334,25 +260,74 @@ export const getModerators = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<Mo
   const uiCache = sdk.services.stash.getUiStash();
 
   if (uiCache.has(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`)) {
-    return uiCache.get(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`) as Moderator;
+    return uiCache.get(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`) as Moderator[];
   }
 
   rheaders.append('Content-Type', 'application/json');
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
+
   const response = await fetch(`${BASE_MODERATORS_URL}/all`, {
     signal: controller.signal,
     method: 'GET',
     headers: rheaders,
   });
 
+  const serializedResponse = await response.json();
+
+  // get moderators ewa profile data
+  const getEWProfilesCalls = serializedResponse.map(({ _id }) => {
+    return sdk.api.profile.getProfile({ pubKey: _id });
+  });
+
+  // get moderators moderation profile data
+  // const getModProfilesCalls = serializedResponse.map(({ _id }) => {
+  //   return fetch(`${BASE_MODERATORS_URL}/${_id}`, {
+  //     signal: controller.signal,
+  //     method: 'GET',
+  //     headers: rheaders,
+  //   }).then(res => res.json());
+  // });
+
+  const getEWProfilesResp = (await lastValueFrom(forkJoin(getEWProfilesCalls))) as Record<
+    string,
+    unknown
+  >[];
+
+  // const getModProfilesResp = (await lastValueFrom(forkJoin(getModProfilesCalls))) as Record<
+  //   string,
+  //   unknown
+  // >[];
+
+  const moderators = serializedResponse.map((moderator: Moderator) => {
+    const profile = getEWProfilesResp.find(_profile => _profile.pubKey === moderator._id);
+
+    const avatarIpfsLinks = getMediaUrl(profile?.avatar as string);
+
+    return {
+      ...moderator,
+      avatar: {
+        url: avatarIpfsLinks?.originLink,
+        fallbackUrl: avatarIpfsLinks?.fallbackLink,
+      },
+      coverImage: profile?.coverImage,
+      name: profile?.name,
+      userName: profile?.userName,
+      pubKey: profile?.pubKey,
+      ethAddress: profile?.ethAddress,
+      // @TODO: replace with mod info
+      status: moderator.active ? 'active' : 'revoked',
+      social: { discord: 'isabelmilkovic', email: 'isabel.milkovic@akasha.world' },
+    };
+  });
+
+  // clear timeout and set cache
   clearTimeout(timer);
 
-  return response.json().then(serializedResponse => {
-    uiCache.set(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`, serializedResponse);
-    return serializedResponse;
-  });
+  uiCache.set(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`, moderators);
+
+  return moderators;
 };
 
 /**
