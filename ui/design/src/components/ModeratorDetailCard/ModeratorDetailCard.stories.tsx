@@ -6,13 +6,20 @@ import ModeratorDetailCard, { IModeratorDetailCardProps } from '.';
 import lightTheme from '../../styles/themes/light/light-theme';
 
 const moderator = {
+  _id: 'bbaareie6w5f2l6b4kpysopls6n4nuejbcyjrzwf7wcjpi3hg',
+  _mod: new Date(),
+  creationDate: new Date(),
+  admin: true,
+  active: true,
+  coverImage: '',
+  pubKey: 'bbaareie6w5f2l6b4kpysopls6n4nuejbcyjrzwf7wcjpi3hg',
+  ethAddress: '',
   name: 'Isabel Milkovic',
-  username: 'isabelmilkovic',
+  userName: 'isabelmilkovic',
   avatar: {
     url: '',
     fallbackUrl: '',
   },
-  moderatorStartDate: '2020-10-01T00:00:00.000Z',
   status: 'active',
   social: { discord: 'isabelmilkovic', email: 'isabel.milkovic@akasha.world' },
 };

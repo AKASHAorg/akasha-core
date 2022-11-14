@@ -1,19 +1,29 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import { Box, Text } from 'grommet';
+import styled from 'styled-components';
 
-import { IModeratorInfo } from '@akashaorg/typings/ui';
+import { Moderator } from '@akashaorg/typings/ui';
 
 import SocialLink from './social-link';
 import Avatar from '../Avatar';
+import Tooltip from '../Tooltip';
 import { useViewportSize } from '../Providers/viewport-dimension';
 
 export interface IModeratorDetailCardProps {
-  moderator: IModeratorInfo;
+  moderator: Moderator;
   hasBorderBottom: boolean;
   tenureInfoLabel: string;
   onSocialLinkClick: () => void;
 }
+
+const TruncateText = styled(Text)<{ viewportSize?: string }>`
+  max-width: ${props => (props.viewportSize === 'small' ? '12.5rem' : '7.5rem')};
+  width: fit-content;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
   const { moderator, hasBorderBottom, tenureInfoLabel, onSocialLinkClick } = props;
@@ -21,7 +31,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
   const { size } = useViewportSize();
 
   const formatDate = (date: string) => {
-    return dayjs(date).format('MMM YYYY');
+    return dayjs(date).format('DD MMM YYYY');
   };
 
   return (
@@ -42,9 +52,29 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
         <Avatar src={moderator.avatar} size={size === 'small' ? 'sm' : 'xxl'} />
 
         <Box gap="xxsmall">
-          <Text size="large">{moderator.name}</Text>
+          <Tooltip
+            dropProps={{ align: { left: 'right' } }}
+            message={`${moderator.name}`}
+            plain={true}
+            caretPosition="left"
+          >
+            <TruncateText size="large" viewportSize={size}>
+              {`${moderator.name}`}
+            </TruncateText>
+          </Tooltip>
 
-          <Text size="medium" color="subtitleText">{`@${moderator.username}`}</Text>
+          <Tooltip
+            dropProps={{ align: { left: 'right' } }}
+            message={`@${moderator.userName}`}
+            plain={true}
+            caretPosition="left"
+          >
+            <TruncateText
+              size="medium"
+              viewportSize={size}
+              color="subtitleText"
+            >{`@${moderator.userName}`}</TruncateText>
+          </Tooltip>
         </Box>
       </Box>
 
@@ -63,7 +93,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
 
             <Text size="medium" color="subtitleText">
               {moderator.status === 'active'
-                ? formatDate(moderator.moderatorStartDate)
+                ? formatDate(new Date(moderator.creationDate).toISOString())
                 : formatDate(moderator.moderatorEndDate)}
             </Text>
           </Box>
@@ -85,9 +115,9 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
           </Box>
         </Box>
 
-        {moderator.status === 'active' && (moderator.social.discord || moderator.social.email) && (
+        {moderator.status === 'active' && (moderator.social?.discord || moderator.social?.email) && (
           <Box direction="row" gap="small">
-            {moderator.social.discord && (
+            {moderator.social?.discord && (
               <SocialLink
                 iconType="discord"
                 iconSize={size === 'small' ? 'sm' : 'md'}
@@ -95,7 +125,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
               />
             )}
 
-            {moderator.social.email && (
+            {moderator.social?.email && (
               <SocialLink
                 iconType="emailAlt"
                 iconSize={size === 'small' ? 'sm' : 'md'}

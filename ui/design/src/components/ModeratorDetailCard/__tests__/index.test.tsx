@@ -1,19 +1,26 @@
 import * as React from 'react';
 
 import { act, cleanup } from '@testing-library/react';
-import { IModeratorInfo } from '@akashaorg/typings/ui';
+import { Moderator } from '@akashaorg/typings/ui';
 
 import ModeratorDetailCard from '..';
 import { customRender, wrapWithTheme } from '../../../test-utils';
 
-const moderator: IModeratorInfo = {
+const moderator: Moderator = {
+  _id: 'bbaareie6w5f2l6b4kpysopls6n4nuejbcyjrzwf7wcjpi3hg',
+  _mod: new Date(),
+  creationDate: new Date(),
+  admin: true,
+  active: true,
+  coverImage: '',
+  pubKey: 'bbaareie6w5f2l6b4kpysopls6n4nuejbcyjrzwf7wcjpi3hg',
+  ethAddress: '',
   name: 'Isabel Milkovic',
-  username: 'isabelmilkovic',
+  userName: 'isabelmilkovic',
   avatar: {
     url: '',
     fallbackUrl: '',
   },
-  moderatorStartDate: '2020-10-01T00:00:00.000Z',
   status: 'active',
   social: { discord: 'isabelmilkovic', email: 'isabel.milkovic@akasha.world' },
 };
@@ -51,7 +58,7 @@ describe('<ModeratorDetailCard /> Component', () => {
   it('renders correct name and username', () => {
     const { getByText } = componentWrapper;
     const name = getByText(moderator.name);
-    const username = getByText(`@${moderator.username}`);
+    const username = getByText(`@${moderator.userName}`);
 
     expect(name).toBeDefined();
     expect(username).toBeDefined();
