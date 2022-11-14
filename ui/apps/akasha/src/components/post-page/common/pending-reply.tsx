@@ -20,10 +20,17 @@ type Props = {
   /* @Todo: Fix my type */
   loggedProfileData: any;
   layoutConfig: RootComponentProps['layoutConfig'];
+  commentIds: string[];
   entryData?: IEntryData;
 };
 
-export function PendingReply({ postId, layoutConfig, loggedProfileData, entryData }: Props) {
+export function PendingReply({
+  postId,
+  layoutConfig,
+  loggedProfileData,
+  commentIds,
+  entryData,
+}: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
     PUBLISH_PENDING_KEY,
@@ -53,7 +60,10 @@ export function PendingReply({ postId, layoutConfig, loggedProfileData, entryDat
       {pendingReplyStates?.map(
         pendingReplyState =>
           pendingReplyState &&
-          pendingReplyState.state.status === 'loading' &&
+          (pendingReplyState.state.status === 'loading' ||
+            /*The following line ensures that even if the reply is published pending reply UI should be shown till the new entry appears in the feed */
+            (pendingReplyState.state.status === 'success' &&
+              !commentIds.includes(pendingReplyState.state.data.toString()))) &&
           pendingReplyState.state.variables.postID === postId && (
             <Box
               pad={{ horizontal: 'medium' }}
