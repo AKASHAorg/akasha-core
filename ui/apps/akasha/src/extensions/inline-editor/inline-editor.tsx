@@ -24,6 +24,7 @@ export const InlineEditor = (props: Partial<RootExtensionProps>) => {
   ) {
     return (
       <PostEditor
+        appName={props?.worldConfig?.homepageApp || 'inline-editor'}
         postId={entryId}
         pubKey={loginQuery?.data?.pubKey}
         singleSpa={props.singleSpa}
