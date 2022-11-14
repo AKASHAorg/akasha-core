@@ -2,10 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
+import { useGetModerators } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import { allModerators } from '../services/dummy-data';
 
-const { BasicCardBox, Box, ModeratorDetailCard, Text, styled } = DS;
+const { BasicCardBox, Box, ModeratorDetailCard, Text, Spinner, styled } = DS;
 
 const tabs = ['All', 'Active', 'Resigned', 'Revoked'];
 
@@ -30,12 +30,16 @@ const AllModerators: React.FC<RootComponentProps> = () => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
+  const getModeratorsQuery = useGetModerators();
+
+  const allModerators = getModeratorsQuery.data;
+
   const modTabs = tabs.map(tab => ({
     title: t('{{tab}}', { tab }),
     value: tab,
   }));
 
-  const filteredModeratorList = allModerators.filter(moderator =>
+  const filteredModeratorList = allModerators?.filter(moderator =>
     activeTab === 'All' ? moderator : moderator.status === activeTab.toLowerCase(),
   );
 
@@ -79,21 +83,27 @@ const AllModerators: React.FC<RootComponentProps> = () => {
         </Box>
       </BasicCardBox>
 
-      <ListWrapper>
-        <ListArea>
-          {filteredModeratorList.map((moderator, idx) => (
-            <ModeratorDetailCard
-              key={moderator.name + idx}
-              moderator={moderator}
-              hasBorderBottom={idx < allModerators.length - 1}
-              tenureInfoLabel={
-                moderator.status === 'active' ? t('Moderator since') : t('Moderator until')
-              }
-              onSocialLinkClick={handleSocialLinkClick}
-            />
-          ))}
-        </ListArea>
-      </ListWrapper>
+      {getModeratorsQuery.isFetching && <Spinner />}
+
+      {!getModeratorsQuery.isFetching &&
+        getModeratorsQuery.data &&
+        getModeratorsQuery.data.length > 0 && (
+          <ListWrapper>
+            <ListArea>
+              {filteredModeratorList?.map((moderator, idx) => (
+                <ModeratorDetailCard
+                  key={idx}
+                  moderator={moderator}
+                  hasBorderBottom={idx < allModerators.length - 1}
+                  tenureInfoLabel={
+                    moderator.status === 'active' ? t('Moderator since') : t('Moderator until')
+                  }
+                  onSocialLinkClick={handleSocialLinkClick}
+                />
+              ))}
+            </ListArea>
+          </ListWrapper>
+        )}
     </VerticalFillBox>
   );
 };
