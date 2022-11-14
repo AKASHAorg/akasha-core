@@ -246,7 +246,7 @@ api.get('/moderation/status/counters', async (ctx, next: () => Promise<unknown>)
   await next();
 });
 
-api.get('/moderation/list-moderators', async (ctx, next: () => Promise<unknown>) => {
+api.get('/moderation/moderators/all', async (ctx, next: () => Promise<unknown>) => {
   ctx.set('Content-Type', 'application/json');
   ctx.body = await dataSources.moderatorsAPI.listModerators();
   ctx.status = 200;
@@ -273,12 +273,13 @@ api.post('/moderation/decisions/moderate', async (ctx, next: () => Promise<unkno
     } else {
       try {
         // store moderation decision
-        await dataSources.decisionsAPI.makeDecision(
+        const decision = await dataSources.decisionsAPI.makeDecision(
           report,
           dataSources.postsAPI,
           dataSources.commentsAPI,
         );
         ctx.status = 200;
+        ctx.body = { decision };
       } catch (error) {
         ctx.body = `Cannot moderate content! Error: ${error}`;
         ctx.status = 500;
