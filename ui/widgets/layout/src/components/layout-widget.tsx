@@ -25,7 +25,7 @@ import {
 } from './styled-slots';
 import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
 
-const { Box, BasicCardBox, Icon, styled, Text } = DS;
+const { Box, BasicCardBox, Icon, styled, Text, Extension } = DS;
 
 const WarningCard = styled(BasicCardBox)`
   background-color: ${props => props.theme.colors.warning};
@@ -210,6 +210,8 @@ const Layout: React.FC<RootComponentProps> = props => {
                       </Text>
                     </Box>
                   </WarningCard>
+
+                  <Extension name="back-navigation" uiEvents={props.uiEvents} />
 
                   <FocusedPluginSlot
                     name={props.layoutConfig.focusedPluginSlotId}
