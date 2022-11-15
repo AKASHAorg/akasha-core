@@ -69,6 +69,7 @@ export function PendingReply({
               border={{ side: 'bottom', size: '1px', color: 'border' }}
               background="pendingEntryBackground"
               data-testid="pending-entry"
+              key={pendingReplyState.mutationId}
             >
               <EntryBox
                 entryData={createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
