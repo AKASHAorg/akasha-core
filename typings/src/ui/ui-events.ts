@@ -42,6 +42,7 @@ export type EventDataTypes = {
   name: string;
   version?: string;
   entryId?: string;
+  commentId?: string;
   entryType?: EntityTypes;
   menuItems?: IMenuItem | IMenuItem[];
   navRoutes?: Record<string, string>;
