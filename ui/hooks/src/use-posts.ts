@@ -15,6 +15,7 @@ import { checkStatus } from './use-moderation';
 import { SEARCH_KEY } from './use-search';
 import { TRENDING_TAGS_KEY } from './use-trending';
 import { PROFILE_KEY } from './use-profile';
+import { checkPostActive } from './utils/checkPostActive';
 
 /**
  * @internal
@@ -53,17 +54,31 @@ export type usePostsParam = {
   enabler: boolean;
 };
 
-const getPosts = async (queryClient: QueryClient, limit: number, offset?: string) => {
+const getPosts = async (
+  queryClient: QueryClient,
+  limit: number,
+  offset?: string,
+  filterDeleted = true,
+) => {
   const sdk = getSDK();
   const res = await sdk.api.entries.getEntries({
     limit: limit,
     offset: offset,
   });
+
+  let posts = res.posts.results;
+
+  if (filterDeleted) {
+    posts = posts.filter(post => checkPostActive(post));
+  }
+
+  const postsIds = posts.map(post => {
+    return post._id;
+  });
+
   return {
     ...res.posts,
-    results: res.posts.results.map(post => {
-      return post._id;
-    }),
+    results: postsIds,
   };
 };
 
