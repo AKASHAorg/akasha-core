@@ -3,8 +3,8 @@ import React from 'react';
 import TextIcon from '../../TextIcon';
 import QRCode from 'qrcode.react';
 
-interface IProfileEditMenuProps {
-  target: {};
+type IProfileEditMenuProps = {
+  target: Record<string, unknown>;
   onClose: () => void;
   ensName?: string;
   ethAddress: string;
@@ -13,7 +13,7 @@ interface IProfileEditMenuProps {
   ethereumNameLabel?: string;
   copyLabel?: string;
   showQRCodeLabel?: string;
-}
+};
 
 const EthereumIdDrop = (props: IProfileEditMenuProps) => {
   const {

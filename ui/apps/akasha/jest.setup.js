@@ -1,5 +1,6 @@
-import { genLoggedInState, genPostData, mockSDK } from '@akashaorg/af-testing';
+import { genLoggedInState, genPostData, genCommentData, mockSDK } from '@akashaorg/af-testing';
 import * as postHooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
+import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
@@ -59,6 +60,13 @@ jest
 
 jest.spyOn(postHooks, 'usePost').mockReturnValue({
   data: { ...genPostData() },
+  status: 'success',
+  isSuccess: true,
+  reported: true,
+});
+
+jest.spyOn(commentHooks, 'useComment').mockReturnValue({
+  data: { ...genCommentData() },
   status: 'success',
   isSuccess: true,
   reported: true,

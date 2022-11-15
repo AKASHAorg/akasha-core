@@ -146,9 +146,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               onClick={onBrandClick}
             >
               <Box direction="row" gap="small" align="center">
-                <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
+                <BrandIcon type="akasha" clickable={true} plain={true} />
               </Box>
-              {versionURL && (
+              {versionURL && versionLabel && (
                 <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
               )}
             </Box>

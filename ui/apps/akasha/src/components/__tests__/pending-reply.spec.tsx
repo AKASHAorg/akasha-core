@@ -10,19 +10,24 @@ import {
   genPendingPost,
   genUser,
 } from '@akashaorg/af-testing';
-import { PendingEntry } from '../post-page/pending-entry';
+import { PendingReply } from '../post-page/common/pending-reply';
 
-describe('< PendingEntry /> component', () => {
+describe('< PendingReply /> component', () => {
   const BaseComponent = (
-    <PendingEntry postId="oxfg" {...genAppProps()} loggedProfileData={genUser()} />
+    <PendingReply postId="oxfg" {...genAppProps()} loggedProfileData={genUser()} commentIds={[]} />
   );
 
   beforeAll(() => {
     (
-      jest.spyOn(queryListnerHooks, 'useMutationListener') as unknown as jest.SpyInstance<{
-        state: Record<string, unknown>;
+      jest.spyOn(queryListnerHooks, 'useMutationsListener') as unknown as jest.SpyInstance<{
+        mutations: {
+          mutationId: number;
+          state: Record<string, unknown>;
+        }[];
       }>
-    ).mockReturnValue({ state: { status: 'loading', variables: { postID: 'oxfg' } } });
+    ).mockReturnValue({
+      mutations: [{ mutationId: 1, state: { status: 'loading', variables: { postID: 'oxfg' } } }],
+    });
 
     jest.spyOn(entryUtilHooks, 'createPendingEntry').mockReturnValue(genPendingPost());
   });
@@ -31,10 +36,6 @@ describe('< PendingEntry /> component', () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
     });
-
     expect(screen.getByText('pending post')).toBeInTheDocument();
-    expect(screen.getByTestId('pending-entry').style.backgroundColor).toBe(
-      'rgba(78, 113, 255, 0.059)',
-    );
   });
 });

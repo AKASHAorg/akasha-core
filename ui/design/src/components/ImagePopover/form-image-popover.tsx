@@ -10,7 +10,7 @@ import {
 
 import Icon from '../Icon';
 import MobileListModal from '../MobileListModal';
-import { CroppableFields } from '../BoxFormCard';
+import { CroppableFields } from '../ProfileForm';
 
 export interface IFormImagePopover {
   uploadLabel?: string;
@@ -20,7 +20,7 @@ export interface IFormImagePopover {
   deleteLabel?: string;
   target: HTMLElement;
   closePopover: () => void;
-  insertImage?: (src: Blob | { url?: string; fallbackUrl?: string }, isUrl: boolean) => void;
+  insertImage?: (src: Blob) => void;
   currentImage?: boolean;
   onMobile: boolean;
   editable?: boolean;
@@ -71,7 +71,7 @@ const FormImagePopover: React.FC<IFormImagePopover> = props => {
     }
     const file = ev.target.files[0];
     if (insertImage) {
-      insertImage(file, false);
+      insertImage(file);
     }
     closePopover();
   };

@@ -10,7 +10,7 @@ import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-ana
 import withProviders from './utils/provider-hoc';
 import ThemeWrapper from './utils/theme-wrapper';
 import useReasons from './use-reasons';
-import { useQueryListener, useMutationListener } from './use-query-listener';
+import { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
 import {
   useUpdateUsernameProvider,
   useUsernameValidation,
@@ -124,6 +124,7 @@ import {
 } from './use-app-settings';
 import { useAppDescription } from './use-app-description';
 import { usePlaformHealthCheck } from './use-health-check';
+import { useEnsTexts } from './use-ens';
 import {
   useValidateMessage,
   useAddDevKeyFromMessage,
@@ -158,6 +159,7 @@ export {
   // use-query-listener
   useQueryListener,
   useMutationListener,
+  useMutationsListener,
   // use-username
   useUpdateUsernameProvider,
   useUsernameValidation,
@@ -279,6 +281,7 @@ export {
   useUninstallApp,
   useAppDescription,
   usePlaformHealthCheck,
+  useEnsTexts,
   useValidateMessage,
   useAddDevKeyFromMessage,
   useGetDevKeys,

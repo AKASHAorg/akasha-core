@@ -35,6 +35,7 @@ export enum ProfileProviderProperties {
   DESCRIPTION = 'description',
   NAME = 'name',
   USERNAME = 'userName',
+  SOCIAL_LINKS = 'socialLinks',
 }
 
 export enum UpdateProfileStatus {
