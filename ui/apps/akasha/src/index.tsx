@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { FEED, MY_FEED, POST, REPLY, TAGS } from './routes';
+import routes, { FEED, MY_FEED, POST, PROFILE_FEED, REPLY, TAGS } from './routes';
 import {
   IAppConfig,
   IntegrationRegistrationOptions,
@@ -40,6 +40,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   routes: {
     defaultRoute: routes[FEED],
     [MY_FEED]: routes[MY_FEED],
+    [PROFILE_FEED]: routes[PROFILE_FEED],
     [POST]: routes[POST],
     [TAGS]: routes[TAGS],
     [REPLY]: routes[REPLY],
