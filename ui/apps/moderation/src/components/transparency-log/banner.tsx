@@ -2,10 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { ICount } from '@akashaorg/typings/ui';
+import { IModerationLogItemsCount } from '@akashaorg/typings/ui';
 
 export interface IBanner {
-  count: ICount;
+  count: IModerationLogItemsCount;
 }
 
 const { TransparencyLogBanner } = DS;

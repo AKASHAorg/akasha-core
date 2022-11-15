@@ -3,8 +3,8 @@ import { forkJoin, lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import {
   EntryReport,
-  ICount,
-  ILogItem,
+  IModerationLogItemsCount,
+  IModerationLogItem,
   IPendingItem,
   IModeratedItem,
   Moderator,
@@ -34,7 +34,7 @@ interface PaginatedResponse {
 }
 
 export interface LogItemsReponse extends PaginatedResponse {
-  results: ILogItem[];
+  results: IModerationLogItem[];
 }
 
 export interface PendingItemsReponse extends PaginatedResponse {
@@ -339,7 +339,9 @@ export const getModerators = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<Mo
  * const response = await getModerationCounters(12000);
  * ```
  */
-export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<ICount> => {
+export const getModerationCounters = async (
+  timeout = DEFAULT_FETCH_TIMEOUT,
+): Promise<IModerationLogItemsCount> => {
   const rheaders = new Headers();
   const sdk = getSDK();
   const key = sdk.services.stash.computeKey({
@@ -350,7 +352,7 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Pr
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`)) {
-    return uiCache.get(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`) as ICount;
+    return uiCache.get(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`) as IModerationLogItemsCount;
   }
   rheaders.append('Content-Type', 'application/json');
 

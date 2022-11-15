@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
-import { ILogItem, ModerationItemTypes, NavigateToParams } from '@akashaorg/typings/ui';
+import { IModerationLogItem, ModerationItemTypes, NavigateToParams } from '@akashaorg/typings/ui';
 
 export interface IDetailCard {
-  selected: ILogItem;
+  selected: IModerationLogItem;
   handleClickAvatar: () => void;
   handleClickArrowLeft: () => void;
   navigateTo: (args: NavigateToParams) => void;

@@ -65,7 +65,7 @@ export interface Reason {
   label: string;
 }
 
-export interface ICount {
+export interface IModerationLogItemsCount {
   kept: number;
   pending: number;
   delisted: number;
@@ -82,7 +82,7 @@ export interface EntryReport {
   reason: string;
 }
 
-export interface ILogItem {
+export interface IModerationLogItem {
   decisionID: string;
   contentID: string;
   contentType: string;

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { ButtonValues, ILogItem, NavigateToParams } from '@akashaorg/typings/ui';
+import { ButtonValues, IModerationLogItem, NavigateToParams } from '@akashaorg/typings/ui';
 import { useGetCount, useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import Banner from './banner';
@@ -102,7 +102,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const { user, navigateTo } = props;
 
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
-  const [selected, setSelected] = React.useState<ILogItem | null>(null);
+  const [selected, setSelected] = React.useState<IModerationLogItem | null>(null);
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -147,7 +147,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
       });
   };
 
-  const handleCardClick = (el: ILogItem) => () => {
+  const handleCardClick = (el: IModerationLogItem) => () => {
     selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
   };
 
