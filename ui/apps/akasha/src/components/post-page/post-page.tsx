@@ -19,8 +19,8 @@ const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
     loggedUser: loginState?.pubKey,
     enabler: loginState?.fromCache,
   });
-  /* @Todo: fix my type ;/ */
-  const entryData: any = React.useMemo(() => {
+
+  const entryData = React.useMemo(() => {
     if (postReq.data) {
       return mapEntry(postReq.data);
     }

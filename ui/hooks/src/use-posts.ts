@@ -368,11 +368,11 @@ export function useDeletePost(postID: string) {
       if (user) {
         queryClient.setQueryData<IProfileData>([PROFILE_KEY, user.pubKey], profile => {
           const postsCount = profile.totalPosts;
-          let totalPosts: number;
+          let totalPosts: string;
           if (typeof postsCount === 'number') {
-            totalPosts = Math.max(0, postsCount - 1);
+            totalPosts = JSON.stringify(Math.max(0, postsCount - 1));
           } else {
-            totalPosts = Math.max(0, parseInt(postsCount, 10) - 1);
+            totalPosts = JSON.stringify(Math.max(0, parseInt(postsCount, 10) - 1));
           }
           return {
             ...profile,

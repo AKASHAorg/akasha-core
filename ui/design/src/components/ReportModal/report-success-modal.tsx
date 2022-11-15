@@ -17,7 +17,6 @@ export interface IReportSuccessModalProps {
   footerCTALabel: string;
   // screen size passed by viewport provider
   size?: string;
-  // @TODO: make prop required, and modify all instances appropriately
   closeModal: () => void;
 }
 

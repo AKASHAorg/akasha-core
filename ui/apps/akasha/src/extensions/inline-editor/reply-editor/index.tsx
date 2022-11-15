@@ -25,11 +25,9 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
   const editComment = useEditComment(commentId, true);
   const publishComment = useCreateComment();
 
-  /*@Todo: fix my type */
-  const entryData: any = React.useMemo(() => {
+  const entryData = React.useMemo(() => {
     if (comment.status === 'success') {
-      /*@Todo: fix my type */
-      return mapEntry(comment.data as any);
+      return mapEntry(comment.data);
     }
     return undefined;
   }, [comment.data, comment.status]);
@@ -39,7 +37,7 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
       switch (action) {
         case 'edit':
           editComment.mutate(
-            { ...data, postID: entryData?.postId },
+            { ...data, postID: !!entryData && 'postId' in entryData && entryData?.postId },
             {
               onSuccess: () => {
                 analyticsActions.trackEvent({
@@ -54,7 +52,7 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
           publishComment.mutate(
             {
               ...data,
-              postID: entryData?.postId,
+              postID: !!entryData && 'postId' in entryData && entryData?.postId,
               replyTo: commentId,
             },
             {
@@ -71,15 +69,7 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
 
       singleSpa.navigateToUrl(location.pathname);
     },
-    [
-      action,
-      entryData?.postId,
-      commentId,
-      singleSpa,
-      editComment,
-      publishComment,
-      analyticsActions,
-    ],
+    [action, entryData, commentId, singleSpa, editComment, publishComment, analyticsActions],
   );
 
   const handlePlaceholderClick = () => {

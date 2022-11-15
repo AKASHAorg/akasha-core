@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 
-import { IEntryData, IPublishData, RootComponentProps } from '@akashaorg/typings/ui';
+import { IEntryData, IProfileData, IPublishData, RootComponentProps } from '@akashaorg/typings/ui';
 import {
   createPendingEntry,
   useFollow,
@@ -17,8 +17,7 @@ const { Box, EntryBox } = DS;
 
 type Props = {
   postId: string;
-  /* @Todo: Fix my type */
-  loggedProfileData: any;
+  loggedProfileData: IProfileData;
   layoutConfig: RootComponentProps['layoutConfig'];
   entryData?: IEntryData;
 };
@@ -60,14 +59,13 @@ export function PendingReply({ postId, layoutConfig, loggedProfileData, entryDat
             data-testid="pending-entry"
           >
             <EntryBox
-              /* @Todo: Fix my type */
-              entryData={
-                createPendingEntry(loggedProfileData, publishCommentMutation.state.variables) as any
-              }
+              entryData={createPendingEntry(
+                loggedProfileData,
+                publishCommentMutation.state.variables,
+              )}
               sharePostLabel={t('Share Post')}
               shareTextLabel={t('Share this post with your friends')}
               repliesLabel={t('Replies')}
-              repostsLabel={t('Reposts')}
               repostLabel={t('Repost')}
               repostWithCommentLabel={t('Repost with comment')}
               shareLabel={t('Share')}

@@ -23,7 +23,6 @@ import { getEvents, ObservedEventNames } from './events';
 import * as singleSpa from 'single-spa';
 import getSDK from '@akashaorg/awf-sdk';
 
-type BaseIntegrationInfo = any;
 export interface LoaderState {
   modalRequest: ModalNavigationOptions | null;
   enableIntegrationRequest: string;
@@ -39,7 +38,7 @@ export interface LoaderState {
    * Generic Integration manifest data from registry
    * @Todo: fix my type ...
    */
-  manifests: any[];
+  manifests: IntegrationReleaseInfoFragmentFragment[];
   layoutConfig: IAppConfig;
   /**
    * SystemJS imported modules
@@ -76,7 +75,7 @@ export interface LoaderState {
   layoutReady: boolean;
 
   // extension points that must be unmounted
-  unmountingExtensionPoints: ({ name: string } & BaseIntegrationInfo)[];
+  unmountingExtensionPoints: IntegrationReleaseInfoFragmentFragment[];
 }
 
 // export to be used in tests
@@ -112,7 +111,7 @@ export const getStateSlice: GetStateSlice = key => obs$ =>
  */
 interface EventDataTypes {
   event?: EventTypes & APP_EVENTS.REMOVED & APP_EVENTS.INFO_READY;
-  data?: UIEventData['data'] & ({ name: string } & BaseIntegrationInfo);
+  data?: UIEventData['data'] & IntegrationReleaseInfoFragmentFragment;
 }
 
 export const initState = (
