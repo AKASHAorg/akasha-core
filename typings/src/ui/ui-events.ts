@@ -41,8 +41,8 @@ export const enum EntityTypes {
 export type EventDataTypes = {
   name: string;
   version?: string;
-  entryId?: string;
-  entryType?: EntityTypes;
+  itemId?: string;
+  itemType?: EntityTypes;
   menuItems?: IMenuItem | IMenuItem[];
   navRoutes?: Record<string, string>;
   [key: string]: unknown;
