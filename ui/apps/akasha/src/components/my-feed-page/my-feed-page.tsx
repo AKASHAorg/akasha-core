@@ -96,7 +96,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
             'To create your unique feed view, subscribe to your favourite topics and find wonderful people to follow in our community. ',
           )}
           secondaryDescription={t('Your customized view of Ethereum World')}
-          image="/images/news-feed.png"
+          image="/images/news-feed.webp"
           showMainArea={!userHasSubscriptions}
           hideMainAreaOnMobile={false}
           showSecondaryArea={userHasSubscriptions}

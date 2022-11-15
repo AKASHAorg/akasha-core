@@ -121,7 +121,6 @@ export const articles: IArticleData[] = [
           "Many of the topics covered in this post are a breakdown of the concepts discussed in the yellow paper.I've added my own explanations and diagrams to make understanding Ethereum easier.Those brave enough to take on the technical challenge can also read the Ethereum yellow paper.",
       },
     ],
-    placeholderImage: '0',
     topics: ["NFT's", 'Crypto', 'Devcon', 'Famous', 'Developer', 'Web3', 'Web3', 'Web3', 'Design'],
     mentions: 11,
     replies: 8,
@@ -163,7 +162,6 @@ export const articles: IArticleData[] = [
           "Many of the topics covered in this post are a breakdown of the concepts discussed in the yellow paper.I've added my own explanations and diagrams to make understanding Ethereum easier.Those brave enough to take on the technical challenge can also read the Ethereum yellow paper.",
       },
     ],
-    placeholderImage: '0',
     topics: ["NFT's", 'Crypto', 'Devcon', 'Famous', 'Developer', 'Web3', 'Web3', 'Web3', 'Design'],
   },
   {
@@ -184,7 +182,6 @@ export const articles: IArticleData[] = [
         value: 'This is just a long text about cats',
       },
     ],
-    placeholderImage: '1',
     topics: ['cats', 'nyan'],
     mentions: 11,
     replies: 8,
@@ -207,7 +204,6 @@ export const articles: IArticleData[] = [
         value: 'This is just a long text about cats',
       },
     ],
-    placeholderImage: '1',
     topics: ['cats', 'nyan'],
   },
 ];

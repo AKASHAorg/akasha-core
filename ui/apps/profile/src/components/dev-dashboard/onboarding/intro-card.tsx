@@ -36,7 +36,7 @@ const DevDashOnboardingIntro: React.FC<IDevDashOnboardingIntroProps> = props => 
         </Box>
         <Box fill="horizontal" pad="medium">
           <Box height="17.5rem" width="17.5rem" margin={{ bottom: 'small' }} alignSelf="center">
-            <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+            <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
           </Box>
           <Text size="large" textAlign="center" margin={{ bottom: 'xsmall' }} weight="bold">
             {introLabel}

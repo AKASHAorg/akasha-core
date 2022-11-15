@@ -49,7 +49,7 @@ const StepOne: React.FC<IStepOneProps> = props => {
             {textLine2Label}
           </Text>
           <Box width="12.125rem" margin={{ bottom: 'medium' }}>
-            <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+            <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
           </Box>
           <Text size="large" margin={{ bottom: 'xsmall' }}>
             {textLine3Label}

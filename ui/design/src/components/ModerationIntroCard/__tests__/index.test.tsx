@@ -52,6 +52,6 @@ describe('<ModerationIntroCard /> Component', () => {
     const image = getByRole('img');
 
     expect(image).toBeDefined();
-    expect(image).toHaveAttribute('src', '/images/moderation.png');
+    expect(image).toHaveAttribute('src', '/images/moderation.webp');
   });
 });

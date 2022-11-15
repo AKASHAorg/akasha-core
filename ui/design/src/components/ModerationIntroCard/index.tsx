@@ -65,7 +65,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
             gap="small"
           >
             <Box height="10rem" width="10rem" alignSelf="center">
-              <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+              <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
             </Box>
 
             {introLabel && (

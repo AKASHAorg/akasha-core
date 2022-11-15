@@ -45,6 +45,6 @@ describe('<ErrorLoader /> Component', () => {
     const image = getByRole('img');
 
     expect(image).toBeDefined();
-    expect(image).toHaveAttribute('src', '/images/general-error.png');
+    expect(image).toHaveAttribute('src', '/images/general-error.webp');
   });
 });
