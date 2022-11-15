@@ -1,9 +1,4 @@
-import {
-  BaseIntegrationInfo,
-  IAppConfig,
-  ModalNavigationOptions,
-  QueryStringType,
-} from '@akashaorg/typings/ui';
+import { IAppConfig, ModalNavigationOptions, QueryStringType } from '@akashaorg/typings/ui';
 import * as singleSpa from 'single-spa';
 import qs from 'qs';
 import { of } from 'rxjs';

@@ -1,60 +1,65 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import {
   RootComponentProps,
   EntityTypes,
-  ModalNavigationOptions,
   IProfileData,
+  ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
-import {
-  useTagSubscriptions,
-  useToggleTagSubscription,
-  useGetTag,
-  LoginState,
-  useInfinitePostsByTag,
-} from '@akashaorg/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import { useInfinitePostsByAuthor, LoginState, useGetProfile } from '@akashaorg/ui-awf-hooks';
 
-const { Box, TagProfileCard, Helmet, styled, ErrorLoader, Spinner } = DS;
+const { Box, Helmet, ErrorLoader } = DS;
 
-interface ITagFeedPage {
-  loggedProfileData?: IProfileData;
-  loginState: LoginState;
+export interface ProfilePageProps extends RootComponentProps {
+  loggedProfileData: IProfileData;
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
+  loginState: LoginState;
 }
 
-const TagInfoCard = styled(TagProfileCard)`
-  margin-bottom: 0.5rem;
-`;
+const ProfileFeedPage = (props: ProfilePageProps) => {
+  const { loggedProfileData, showLoginModal, loginState } = props;
+  const [erroredHooks, setErroredHooks] = React.useState([]);
 
-const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
-  const { showLoginModal, loggedProfileData, loginState } = props;
-  const { t } = useTranslation('app-akasha-integration');
-  const { tagName } = useParams<{ tagName: string }>();
+  const { t } = useTranslation('app-profile');
+  const { pubKey } = useParams<{ pubKey: string }>();
 
-  const getTagQuery = useGetTag(tagName);
+  const profileDataQuery = useGetProfile(pubKey, loginState?.pubKey, loginState?.fromCache);
+  const profileState = profileDataQuery.data;
 
-  const reqPosts = useInfinitePostsByTag(tagName, 15);
-
-  const tagSubscriptionsReq = useTagSubscriptions(loginState?.isReady && loginState?.ethAddress);
-  const tagSubscriptions = tagSubscriptionsReq.data;
-
-  const toggleTagSubscriptionReq = useToggleTagSubscription();
-
-  const postPages = React.useMemo(() => {
-    if (reqPosts.data) {
-      return reqPosts.data.pages;
+  const profileUserName = React.useMemo(() => {
+    if (profileState && profileState.name) {
+      return profileState.name;
     }
-    return [];
-  }, [reqPosts.data]);
+    return pubKey;
+  }, [profileState, pubKey]);
+
+  const reqPosts = useInfinitePostsByAuthor(
+    pubKey,
+    15,
+    !!pubKey && !erroredHooks.includes('useInfinitePostsByAuthor'),
+  );
+
+  React.useEffect(() => {
+    if (reqPosts.status === 'error' && !erroredHooks.includes('useInfinitePostsByAuthor')) {
+      setErroredHooks(['useInfinitePostsByAuthor']);
+    }
+  }, [reqPosts, erroredHooks]);
 
   const handleLoadMore = React.useCallback(() => {
     if (!reqPosts.isLoading && reqPosts.hasNextPage && loginState?.fromCache) {
       reqPosts.fetchNextPage();
     }
   }, [reqPosts, loginState?.fromCache]);
+  // @TODO: fix type
+  const postPages: any = React.useMemo(() => {
+    if (reqPosts.data) {
+      return reqPosts.data.pages;
+    }
+    return [];
+  }, [reqPosts.data]);
 
   const handleEntryFlag = (entryId: string, itemType: string) => () => {
     if (!loginState?.pubKey) {
@@ -71,44 +76,34 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     });
   };
 
-  const handleTagSubscribe = (tagName: string) => {
-    if (!loginState?.ethAddress) {
-      showLoginModal();
-      return;
-    }
-    toggleTagSubscriptionReq.mutate(tagName);
-  };
-
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>Ethereum World</title>
+        <title>
+          {t("{{profileUsername}}'s Page", { profileUsername: profileUserName || '' })} | Ethereum
+          World
+        </title>
       </Helmet>
-      {getTagQuery.status === 'loading' && <Spinner />}
-      {getTagQuery.status === 'error' && (
-        <ErrorLoader
-          type="script-error"
-          title={t('Error loading tag data')}
-          details={getTagQuery.error?.message}
-        />
-      )}
-      {getTagQuery.status === 'success' && (
-        <>
-          <TagInfoCard
-            tag={getTagQuery.data}
-            subscribedTags={tagSubscriptions}
-            handleSubscribeTag={handleTagSubscribe}
-            handleUnsubscribeTag={handleTagSubscribe}
+
+      <>
+        {reqPosts.isError && reqPosts.error && (
+          <ErrorLoader
+            type="script-error"
+            title="Cannot get posts for this profile"
+            details={(reqPosts.error as Error).message}
           />
+        )}
+        {reqPosts.isSuccess && !postPages && <div>There are no posts!</div>}
+        {reqPosts.isSuccess && postPages && (
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
             itemType={EntityTypes.ENTRY}
             logger={props.logger}
             onLoadMore={handleLoadMore}
-            pages={postPages}
             getShareUrl={(itemId: string) =>
               `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}`
             }
+            pages={postPages}
             requestStatus={reqPosts.status}
             loginState={loginState}
             loggedProfile={loggedProfileData}
@@ -117,19 +112,20 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
             onLoginModalOpen={showLoginModal}
             hasNextPage={reqPosts.hasNextPage}
             contentClickable={true}
-            onEntryRemove={handleEntryRemove}
             onEntryFlag={handleEntryFlag}
+            onEntryRemove={handleEntryRemove}
             removeEntryLabel={t('Delete Post')}
             removedByMeLabel={t('You deleted this post')}
             removedByAuthorLabel={t('This post was deleted by its author')}
+            parentIsProfilePage={true}
             uiEvents={props.uiEvents}
             itemSpacing={8}
             i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}
           />
-        </>
-      )}
+        )}
+      </>
     </Box>
   );
 };
 
-export default TagFeedPage;
+export default ProfileFeedPage;

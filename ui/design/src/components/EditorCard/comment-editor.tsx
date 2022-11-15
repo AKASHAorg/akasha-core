@@ -7,8 +7,10 @@ import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 import { IPublishData } from '@akashaorg/typings/ui';
 
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
 const CommentEditor: React.FC<
-  Omit<IEditorBox, 'setEditorState'> & {
+  Optional<IEditorBox, 'setEditorState'> & {
     isShown?: boolean;
     background?: BoxProps['background'];
   }
@@ -36,6 +38,9 @@ const CommentEditor: React.FC<
     editorState = editorDefaultValue,
     onPlaceholderClick,
     embedEntryData,
+    setEditorState,
+    showDraft,
+    uploadedImages,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(isShown);
@@ -104,13 +109,18 @@ const CommentEditor: React.FC<
             mentions={mentions}
             tags={tags}
             uploadRequest={uploadRequest}
+            uploadedImages={uploadedImages}
             withMeter={true}
             editorState={contentState}
-            setEditorState={setContentState}
+            setEditorState={value => {
+              setContentState(value);
+              if (setEditorState) setEditorState(value);
+            }}
             cancelButtonLabel={cancelButtonLabel}
             onCancelClick={onCancelClick}
             showCancelButton={showCancelButton}
             embedEntryData={embedEntryData}
+            showDraft={showDraft}
           />
         </Box>
       )}

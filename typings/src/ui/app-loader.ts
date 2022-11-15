@@ -5,6 +5,7 @@ import { UIEventData } from './ui-events';
 import { Extensions, IAppConfig } from './apps';
 import { PluginConf } from './plugins';
 import { GlobalEventBusData } from '../sdk';
+import { IntegrationReleaseInfoFragmentFragment } from '../sdk/graphql-operation-types';
 
 export type ActivityFn = (
   location: Location,
@@ -68,14 +69,6 @@ export enum INTEGRATION_TYPES {
   WIDGET,
 }
 
-export interface BaseIntegrationInfo {
-  name: string;
-  integrationType: INTEGRATION_TYPES;
-  sources: string[];
-  version?: string;
-  enabled?: boolean;
-}
-
 export interface IntegrationModule {
   register?: (opts: IntegrationRegistrationOptions) => IAppConfig;
   initialize?: (opts: IntegrationInitOptions) => Promise<void> | void;
@@ -125,7 +118,7 @@ export interface ILoaderConfig {
     siteId: string;
     trackerUrl: string;
   };
-  registryOverrides?: BaseIntegrationInfo[];
+  registryOverrides?: IntegrationReleaseInfoFragmentFragment[];
 }
 
 export interface QueryStringType {
