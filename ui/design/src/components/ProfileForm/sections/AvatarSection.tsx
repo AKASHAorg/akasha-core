@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from 'grommet';
 
 import Icon from '../../Icon';
-import { IFormValues } from '../';
+import { IFormValues } from '..';
 
 import { StyledImageInput } from '../../Editor/styled-editor-box';
 import {

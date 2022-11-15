@@ -55,6 +55,7 @@ export interface FormProfileData {
   coverImage?: { src: { url?: string; fallbackUrl?: string }; isUrl: boolean } | null;
   pubKey: string;
   ethAddress: string;
+  socialLinks?: { type: string; value: string }[];
 }
 interface UpdateProfileFormData {
   profileData: FormProfileData;
@@ -483,11 +484,18 @@ export function useProfileUpdate(pubKey: string) {
           });
         }
 
+        if (changedFields.includes('socialLinks')) {
+          providers.push({
+            provider: ProfileProviders.EWA_BASIC,
+            property: ProfileProviderProperties.SOCIAL_LINKS,
+            value: JSON.stringify(profileData.socialLinks),
+          });
+        }
+
         queryClient.setQueryData([UPDATE_PROFILE_STATUS, pubKey], {
           status: UpdateProfileStatus.UPDATE_IN_PROGRESS,
           remainingFields: [],
         });
-
         const makeDefaultRes = await makeDefaultProvider(providers);
         if (makeDefaultRes.hasOwnProperty('error')) {
           throw new Error(makeDefaultRes['error']);

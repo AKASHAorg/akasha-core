@@ -44,6 +44,7 @@ import copy from './copy';
 import dapper from './dapper';
 import dashboard from './dashboard';
 import discord from './discord';
+import discordAlt from './discord-alt';
 import document from './document';
 import dropdown from './dropdown';
 import edit from './edit';
@@ -60,6 +61,7 @@ import feedback from './feedback';
 import follower from './follower';
 import following from './following';
 import github from './github';
+import githubAlt from './github-alt';
 import hashtag from './hashtag';
 import hashtagGray from './hashtag-gray';
 import heart from './heart';
@@ -80,6 +82,7 @@ import licenseNonCommercial from './license-non-commercial';
 import licenseShareAlike from './license-share-alike';
 import licenseSomeRights from './license-some-rights';
 import link from './link';
+import linkAlt from './link-alt';
 import listBulleted from './list-bulleted';
 import listNumbered from './list-numbered';
 import loading from './loading';
@@ -108,6 +111,7 @@ import plusGrey from './plus-grey';
 import questionMark from './question-mark';
 import quote from './quote';
 import reddit from './reddit';
+import redditAlt from './reddit-alt';
 import reload from './reload';
 import reply from './reply';
 import report from './report';
@@ -125,6 +129,8 @@ import shareSmallGrey from './share-small-grey';
 import stopwatch from './stopwatch';
 import strikethrough from './strikethrough';
 import subscribe from './subscribe';
+import telegram from './telegram';
+import telegramAlt from './telegram-alt';
 import textcase from './textcase';
 import textcaseUpper from './textcase-upper';
 import textcaseLower from './textcase-lower';
@@ -138,6 +144,7 @@ import trash from './trash';
 import trendingApps from './trending-apps';
 import trust from './trust';
 import twitter from './twitter';
+import twitterAlt from './twitter-alt';
 import underline from './underline';
 import unpinAlt from './unpinAlt';
 import upload from './upload';
@@ -187,6 +194,7 @@ export {
   dapper,
   dashboard,
   discord,
+  discordAlt,
   dropdown,
   payment,
   eye,
@@ -197,6 +205,7 @@ export {
   follower,
   following,
   github,
+  githubAlt,
   document,
   ethereum,
   ethereumWorldLogo,
@@ -240,6 +249,7 @@ export {
   licenseShareAlike,
   licenseSomeRights,
   link,
+  linkAlt,
   listBulleted,
   listNumbered,
   loading,
@@ -265,6 +275,7 @@ export {
   questionMark,
   quote,
   reddit,
+  redditAlt,
   reply,
   report,
   safe,
@@ -279,6 +290,8 @@ export {
   stopwatch,
   strikethrough,
   subscribe,
+  telegram,
+  telegramAlt,
   textcase,
   textcaseUpper,
   textcaseLower,
@@ -290,6 +303,7 @@ export {
   trendingApps,
   trust,
   twitter,
+  twitterAlt,
   underline,
   unpinAlt,
   upload,
