@@ -14,9 +14,11 @@ import {
   useUnfollow,
   LoginState,
   useEnsByAddress,
+  useCheckModerator,
 } from '@akashaorg/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
+import ModeratorLabel from '../routes/moderator-label';
 import routes, { UPDATE_PROFILE } from '../../routes';
 
 const {
@@ -42,8 +44,6 @@ export interface IProfileHeaderProps {
 const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
   const { profileData, loginState, profileId, plugins } = props;
 
-  const routing = plugins['@akashaorg/app-routing']?.routing;
-
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
 
@@ -56,6 +56,11 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
   const unfollowReq = useUnfollow();
 
   const ENSReq = useEnsByAddress(profileData.ethAddress);
+
+  const checkModeratorQuery = useCheckModerator(loginState?.pubKey);
+  const checkModeratorResp = checkModeratorQuery.data;
+
+  const isModerator = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
 
   const handleFollow = () => {
     if (!loginState.ethAddress) {
@@ -168,92 +173,102 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           />
         )}
       </ModalRenderer>
-      <ProfileCard
-        handleFollow={handleFollow}
-        handleUnfollow={handleUnfollow}
-        handleShareClick={showShareModal}
-        isFollowing={followedProfiles?.includes(profileData.pubKey)}
-        profileData={profileData}
-        followLabel={t('Follow')}
-        followingLabel={t('Following')}
-        unfollowLabel={t('Unfollow')}
-        shareProfileLabel={t('Share')}
-        editProfileLabel={t('Edit profile')}
-        showMore={true}
-        viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
-        flaggable={loginState.ethAddress !== profileData.ethAddress}
-        flagAsLabel={t('Report')}
-        onEntryFlag={handleEntryFlag(
-          profileData.pubKey ? profileData.pubKey : '',
-          'account',
-          profileData.name,
+
+      {/* wrapping with a box to use gap prop instead of individual box margins */}
+      <Box gap="xsmall">
+        <ProfileCard
+          handleFollow={handleFollow}
+          handleUnfollow={handleUnfollow}
+          handleShareClick={showShareModal}
+          isFollowing={followedProfiles?.includes(profileData.pubKey)}
+          profileData={profileData}
+          followLabel={t('Follow')}
+          followingLabel={t('Following')}
+          unfollowLabel={t('Unfollow')}
+          shareProfileLabel={t('Share')}
+          editProfileLabel={t('Edit profile')}
+          showMore={true}
+          viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
+          flaggable={loginState.ethAddress !== profileData.ethAddress}
+          flagAsLabel={t('Report')}
+          onEntryFlag={handleEntryFlag(
+            profileData.pubKey ? profileData.pubKey : '',
+            'account',
+            profileData.name,
+          )}
+          onUpdateClick={showUpdateProfileModal}
+          modalSlotId={props.layoutConfig.modalSlotId}
+          actionButtonExt={
+            <ExtensionPoint
+              name={`profile-card-action-extension`}
+              onMount={handleExtPointMount}
+              onUnmount={handleExtPointUnmount}
+            />
+          }
+        >
+          <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
+            <ProfileCardEthereumId
+              profileData={profileData}
+              copiedLabel={t('Copied')}
+              copyLabel={t('Copy to clipboard')}
+            />
+            {ENSReq.isFetching && !ENSReq.isFetched && (
+              <Box pad="1em">
+                <TextLine width="25%" margin={{ bottom: '.5em' }} />
+                <TextLine width="48%" />
+              </Box>
+            )}
+            {ENSReq.isFetched && ENSReq.data && (
+              <>
+                <Box pad={{ horizontal: 'medium' }}>
+                  <HorizontalDivider />
+                </Box>
+                <ProfileCardEthereumId
+                  ethereumNameLabel={t('ENS')}
+                  profileData={profileData}
+                  copiedLabel={t('Copied')}
+                  copyLabel={t('Copy to clipboard')}
+                  ensName={ENSReq.data}
+                />
+              </>
+            )}
+          </Box>
+        </ProfileCard>
+
+        {isModerator && <ModeratorLabel label={t('Moderator')} />}
+
+        {profileData.description && (
+          <BasicCardBox>
+            <ProfileCardDescription
+              description={profileData.description}
+              descriptionLabel={t('About me')}
+            />
+          </BasicCardBox>
         )}
-        onUpdateClick={showUpdateProfileModal}
-        modalSlotId={props.layoutConfig.modalSlotId}
-        actionButtonExt={
-          <ExtensionPoint
-            name={`profile-card-action-extension`}
-            onMount={handleExtPointMount}
-            onUnmount={handleExtPointUnmount}
-          />
-        }
-      >
-        <Box pad={{ top: 'medium', bottom: 'xsmall' }}>
-          <ProfileCardEthereumId
-            profileData={profileData}
+
+        {socialLinks.length > 0 && (
+          <ProfileLinksCard
+            titleLabel={t('Find me on')}
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
+            links={socialLinks}
           />
-          {ENSReq.isFetching && !ENSReq.isFetched && (
-            <Box pad="1em">
-              <TextLine width="25%" margin={{ bottom: '.5em' }} />
-              <TextLine width="48%" />
-            </Box>
-          )}
-          {ENSReq.isFetched && ENSReq.data && (
-            <>
-              <Box pad={{ horizontal: 'medium' }}>
-                <HorizontalDivider />
-              </Box>
-              <ProfileCardEthereumId
-                ethereumNameLabel={t('ENS')}
-                profileData={profileData}
-                copiedLabel={t('Copied')}
-                copyLabel={t('Copy to clipboard')}
-                ensName={ENSReq.data}
-              />
-            </>
-          )}
-        </Box>
-      </ProfileCard>
-      {profileData.description && (
-        <BasicCardBox margin={{ top: 'xsmall' }}>
-          <ProfileCardDescription
-            description={profileData.description}
-            descriptionLabel={t('About me')}
-          />
-        </BasicCardBox>
-      )}
-      <ProfileLinksCard
-        margin={{ top: 'xsmall' }}
-        titleLabel={t('Find me on')}
-        copiedLabel={t('Copied')}
-        copyLabel={t('Copy to clipboard')}
-        links={socialLinks}
-      />
-      <ProfileStatsCard
-        margin={{ top: 'xsmall', bottom: 'large' }}
-        statsTitleLabel={t('Stats')}
-        profileData={profileData}
-        onClickFollowing={handleStatIconClick(1)}
-        onClickFollowers={handleStatIconClick(0)}
-        onClickInterests={handleStatIconClick(2)}
-        onClickPosts={() => null}
-        followingLabel={t('Following')}
-        followersLabel={t('Followers')}
-        postsLabel={t('Posts')}
-        interestsLabel={t('Interests')}
-      />
+        )}
+
+        <ProfileStatsCard
+          margin={{ bottom: 'large' }}
+          statsTitleLabel={t('Stats')}
+          profileData={profileData}
+          onClickFollowing={handleStatIconClick(1)}
+          onClickFollowers={handleStatIconClick(0)}
+          onClickInterests={handleStatIconClick(2)}
+          onClickPosts={() => null}
+          followingLabel={t('Following')}
+          followersLabel={t('Followers')}
+          postsLabel={t('Posts')}
+          interestsLabel={t('Interests')}
+        />
+      </Box>
     </>
   );
 };

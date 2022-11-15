@@ -13,7 +13,6 @@ const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner 
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
-  // showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loginState: LoginState;
 }
 
