@@ -14,8 +14,7 @@ export interface IlistModal {
   label: string;
   secondaryLabel: string;
   closeModal: () => void;
-  // @Todo: fix this :D
-  onClickAvatar: React.EventHandler<any>;
+  onClickAvatar: (ethAddress: string) => void;
   locale: ILocale;
   iconType: IconType;
 }
@@ -56,7 +55,7 @@ const ListModal: React.FC<IlistModal> = props => {
                 info={formatDate(elem.time, locale)}
                 label={elem.name}
                 avatarImage={elem.avatar}
-                onClick={handleClickAvatar(elem.ethAddress)}
+                onClick={() => handleClickAvatar(elem.ethAddress)}
                 ethAddress={elem.ethAddress}
               />
             </StyledLayerElemDiv>

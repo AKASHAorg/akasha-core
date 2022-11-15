@@ -4,7 +4,7 @@ import { Box, Text } from 'grommet';
 import isUrl from 'is-url';
 import Icon from '../Icon';
 import { StyledCloseDiv, StyledUploadingDiv, StyledText } from './styled-editor-box';
-import { IEntryData } from '@akashaorg/typings/ui';
+import { LinkPreviewExt } from '@akashaorg/typings/ui';
 
 const Favicon = styled.img`
   width: 1rem;
@@ -54,8 +54,7 @@ export interface ILinkPreview {
   handleLinkClick?: (url: string) => void;
   handleDeletePreview?: () => void;
   uploading?: boolean;
-  /* @Todo: fix my type ;/ */
-  linkPreviewData?: any;
+  linkPreviewData?: LinkPreviewExt;
   uploadingLinkPreviewLabel?: string;
 }
 

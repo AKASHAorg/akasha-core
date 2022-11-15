@@ -85,8 +85,7 @@ const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
         handleUnfollow={handleUnfollow}
         isFollowing={isFollowing}
         loggedEthAddress={loginQuery.data?.ethAddress}
-        /* @Todo: fix my type ;/ */
-        profileData={profileData as any}
+        profileData={profileData}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         followingLabel={t('Following')}

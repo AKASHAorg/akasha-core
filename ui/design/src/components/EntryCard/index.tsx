@@ -33,7 +33,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
     othersLabel,
     onClickAvatar,
     repliesLabel,
-    repostsLabel,
     repostLabel,
     repostWithCommentLabel,
     shareLabel,
@@ -109,7 +108,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
         shareTextLabel={shareTextLabel}
         sharePostUrl={sharePostUrl}
         onClickAvatar={onClickAvatar}
-        repostsLabel={repostsLabel}
         repostLabel={repostLabel}
         repostWithCommentLabel={repostWithCommentLabel}
         repliesLabel={repliesLabel}
@@ -160,7 +158,6 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
 };
 
 EntryCard.defaultProps = {
-  repostsLabel: 'Reposts',
   repostLabel: 'Repost',
   repostWithCommentLabel: 'Repost With Comment',
   copyLinkLabel: 'Copy Link',

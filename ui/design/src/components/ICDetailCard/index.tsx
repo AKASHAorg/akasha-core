@@ -41,7 +41,7 @@ export interface ICDetailCardProps {
   authorEthAddress?: string;
   authorProfile?: IProfileData;
   isInstalled: boolean;
-  releases: any[];
+  releases: IntegrationReleaseInfo[];
   latestRelease: IntegrationReleaseInfo;
   isFetching?: boolean;
 

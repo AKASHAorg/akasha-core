@@ -1,10 +1,6 @@
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
-import {
-  EventTypes,
-  UIEventData,
-  ExtensionMatcherFn,
-  BaseIntegrationInfo,
-} from '@akashaorg/typings/ui';
+import { IntegrationInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
+import { EventTypes, UIEventData, ExtensionMatcherFn } from '@akashaorg/typings/ui';
 import { filter, from, map, mergeMap, ReplaySubject } from 'rxjs';
 import { filterEvent } from './events';
 import { stringToRegExp } from './utils';
@@ -79,10 +75,10 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
       .pipe(
         filterEvent(APP_EVENTS.REMOVED),
         filter(res => {
-          const { data } = res as { data: BaseIntegrationInfo };
+          const { data } = res as { data: IntegrationInfoFragmentFragment };
           return data.name === parentConfig.name;
         }),
-        mergeMap(({ event, data }: { event: APP_EVENTS; data: BaseIntegrationInfo }) =>
+        mergeMap(({ event, data }: { event: APP_EVENTS; data: IntegrationInfoFragmentFragment }) =>
           from(Object.entries(extConfig)).pipe(
             filter(([mountPoint]) => stringToRegExp(mountPoint).test(data.name)),
             map(([mountPoint, loader]) => ({
