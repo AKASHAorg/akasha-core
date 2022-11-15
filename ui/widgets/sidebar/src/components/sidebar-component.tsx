@@ -9,6 +9,8 @@ import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/Si
 
 const { Box, styled, Sidebar, useViewportSize } = DS;
 
+declare const __DEV__: boolean;
+
 const AppSidebar = styled(Sidebar)`
   height: calc(100vh - 3rem);
   min-width: 15em;
@@ -142,7 +144,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     <>
       <SidebarOverlay onClick={handleSidebarClose} />
       <AppSidebar
-        versionLabel="ALPHA"
+        versionLabel={__DEV__ && 'DEV'}
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         worldAppsTitleLabel={t('World Apps')}
         poweredByLabel="Powered by AKASHA"
