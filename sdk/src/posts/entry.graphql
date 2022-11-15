@@ -4,7 +4,7 @@ fragment DataProviderFragment on DataProvider{
   value
 }
 
-fragment UserProfileFragment on UserProfile{
+fragment AuthorInfo on UserProfile{
   pubKey
   name
   userName
@@ -15,6 +15,7 @@ fragment UserProfileFragment on UserProfile{
   totalPosts
   totalFollowers
   totalFollowing
+  totalInterests
 }
 
 fragment PostResult on Post{
@@ -22,7 +23,7 @@ fragment PostResult on Post{
     ...DataProviderFragment
   }
   author{
-    ...UserProfileFragment
+    ...AuthorInfo
   }
   title
   type
@@ -33,14 +34,14 @@ fragment PostResult on Post{
   totalComments
   quotedBy
   quotedByAuthors{
-    ...UserProfileFragment
+    ...AuthorInfo
   }
   quotes{
     content{
       ...DataProviderFragment
     }
     author{
-      ...UserProfileFragment
+      ...AuthorInfo
     }
     title
     type
@@ -48,6 +49,7 @@ fragment PostResult on Post{
     creationDate
     updatedAt
     tags
+    totalComments
   }
 }
 
