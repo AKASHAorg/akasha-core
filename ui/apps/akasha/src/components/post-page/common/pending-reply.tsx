@@ -71,7 +71,6 @@ export function PendingReply({
               data-testid="pending-entry"
             >
               <EntryBox
-                /* @Todo: Fix my type */
                 entryData={createPendingEntry(loggedProfileData, pendingReplyState.state.variables)}
                 sharePostLabel={t('Share Post')}
                 shareTextLabel={t('Share this post with your friends')}
