@@ -18,10 +18,10 @@ export interface CommentResponse extends Comment {
   isPublishing?: boolean;
 }
 
-export interface ITag {
+export type ITag = {
   name: string;
   totalPosts: number;
-}
+};
 
 export interface LinkPreviewExt extends LinkPreview {
   imageSources?: { url: string; fallbackUrl: string };
@@ -44,6 +44,7 @@ export interface IEntryData {
   quotedByAuthors?: IProfileData[];
   quotedBy?: string[];
   quote?: IEntryData;
+
   delisted?: boolean;
   reported?: boolean;
   moderated?: boolean;
@@ -89,4 +90,9 @@ export interface IMetadata {
   quote?: IEntryData;
   tags: string[];
   mentions: string[];
+}
+
+export interface IEntryPage {
+  results: string[];
+  total?: number;
 }

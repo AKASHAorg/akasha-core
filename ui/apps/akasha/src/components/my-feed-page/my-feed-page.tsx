@@ -39,8 +39,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
     }
   }, [postsReq, loginState?.fromCache]);
 
-  /* @Todo: Fix my type */
-  const postPages: any = React.useMemo(() => {
+  const postPages = React.useMemo(() => {
     if (postsReq.data) {
       return postsReq.data.pages;
     }

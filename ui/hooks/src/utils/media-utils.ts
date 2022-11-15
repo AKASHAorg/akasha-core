@@ -1,8 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import {
-  UserProfileFragmentDataFragment,
-  UserProfileFragmentFragment,
-} from '@akashaorg/typings/sdk/graphql-operation-types';
+import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 
 export interface IConfig {
   quality?: number;
@@ -33,9 +30,7 @@ export const getMediaUrl = (hash?: string) => {
 /**
  * Utility to build media links attached to a given profile
  */
-export const buildProfileMediaLinks = (
-  profile: UserProfileFragmentDataFragment | UserProfileFragmentFragment,
-) => {
+export const buildProfileMediaLinks = (profile: UserProfileFragmentDataFragment) => {
   const { avatar, coverImage, ...other } = profile;
   const images: {
     avatar: { url: string; fallbackUrl: string };

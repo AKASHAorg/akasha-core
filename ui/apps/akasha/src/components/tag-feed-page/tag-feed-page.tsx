@@ -33,8 +33,8 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
   const { showLoginModal, loggedProfileData, loginState } = props;
   const { t } = useTranslation('app-akasha-integration');
   const { tagName } = useParams<{ tagName: string }>();
-  /* @Todo: fix my type ;/ */
-  const getTagQuery: any = useGetTag(tagName);
+
+  const getTagQuery = useGetTag(tagName);
 
   const reqPosts = useInfinitePostsByTag(tagName, 15);
 
@@ -43,8 +43,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-    /* @Todo: Fix my type */
-  const postPages:any = React.useMemo(() => {
+  const postPages = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
     }
