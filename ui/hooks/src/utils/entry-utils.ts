@@ -6,8 +6,7 @@ import {
   PostResultFragment,
 } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { Comment, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
-import { IEntryData, IPublishData, IProfileData } from '@akashaorg/typings/ui';
-import { ModerationStatus } from '../moderation-requests';
+import { IEntryData, IPublishData, IProfileData, ModerationStatus } from '@akashaorg/typings/ui';
 
 import { getMediaUrl } from './media-utils';
 

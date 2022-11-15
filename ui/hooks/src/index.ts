@@ -88,6 +88,7 @@ import { useEntryNavigation } from './use-navigation';
 import {
   useCheckModerator,
   useGetCount,
+  useGetModerators,
   useGetFlags,
   useInfiniteDelisted,
   useInfiniteKept,
@@ -96,7 +97,6 @@ import {
   useModeration,
   useReport,
 } from './use-moderation';
-import { ICount, ILogItem, IModeratedItem, IPendingItem, EntryReport } from './moderation-requests';
 import {
   useConnectProvider,
   useInjectedProvider,
@@ -243,6 +243,7 @@ export {
   // use-moderation
   useCheckModerator,
   useGetCount,
+  useGetModerators,
   useGetFlags,
   useInfiniteDelisted,
   useInfiniteKept,
@@ -250,12 +251,6 @@ export {
   useInfinitePending,
   useModeration,
   useReport,
-  // moderation-requests
-  ICount,
-  ILogItem,
-  IModeratedItem,
-  IPendingItem,
-  EntryReport,
   // use-injected-provider
   useInjectedProvider,
   useConnectProvider,

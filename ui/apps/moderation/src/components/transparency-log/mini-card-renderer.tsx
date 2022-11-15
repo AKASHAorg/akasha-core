@@ -2,16 +2,16 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { getMediaUrl, ILogItem } from '@akashaorg/ui-awf-hooks';
-import { ButtonValues } from '@akashaorg/typings/ui';
+import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
+import { ButtonValues, IModerationLogItem } from '@akashaorg/typings/ui';
 
 const { TransparencyLogMiniCard } = DS;
 
 export interface IMiniCardRenderer {
-  results: ILogItem[];
+  results: IModerationLogItem[];
   activeButton: string;
-  selected: ILogItem | null;
-  onCardClick: (el: ILogItem) => () => void;
+  selected: IModerationLogItem | null;
+  onCardClick: (el: IModerationLogItem) => () => void;
 }
 
 const MiniCardRenderer: React.FC<IMiniCardRenderer> = props => {
@@ -19,7 +19,7 @@ const MiniCardRenderer: React.FC<IMiniCardRenderer> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const renderCard = (el: ILogItem, index: number) => {
+  const renderCard = (el: IModerationLogItem, index: number) => {
     const avatarIpfsLinks = getMediaUrl(el.moderator.avatar);
     return (
       <TransparencyLogMiniCard

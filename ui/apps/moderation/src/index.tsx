@@ -6,7 +6,7 @@ import {
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
-import routes, { HISTORY, HOME } from './routes';
+import routes, { DASHBOARD, HISTORY, HOME, MODERATORS } from './routes';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
@@ -23,15 +23,27 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     area: [MenuItemAreaType.AppArea, MenuItemAreaType.OtherArea],
     subRoutes: [
       {
-        label: HISTORY,
-        index: 1,
-        route: routes[HISTORY],
-        type: MenuItemType.Internal,
-      },
-      {
         label: HOME,
         index: 0,
         route: routes[HOME],
+        type: MenuItemType.Internal,
+      },
+      {
+        label: DASHBOARD,
+        index: 1,
+        route: routes[DASHBOARD],
+        type: MenuItemType.Internal,
+      },
+      {
+        label: MODERATORS,
+        index: 2,
+        route: routes[MODERATORS],
+        type: MenuItemType.Internal,
+      },
+      {
+        label: HISTORY,
+        index: 3,
+        route: routes[HISTORY],
         type: MenuItemType.Internal,
       },
     ],

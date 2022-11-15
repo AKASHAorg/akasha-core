@@ -3,23 +3,23 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { ButtonValues } from '@akashaorg/typings/ui';
+import {
+  ButtonValues,
+  IModeratedItem,
+  IPendingItem,
+  RootComponentProps,
+} from '@akashaorg/typings/ui';
 import {
   useGetCount,
   useInfiniteKept,
   useInfinitePending,
   useInfiniteDelisted,
-  IModeratedItem,
-  IPendingItem,
 } from '@akashaorg/ui-awf-hooks';
 
+import GuestDashboard from '../components/guest';
 import ContentTab from '../components/content-tab';
 import ContentCard from '../components/content-card';
 import { NoItemsFound } from '../components/error-cards';
-
-import { ISharedModerationProps } from '../interfaces';
-
-import routes, { GUEST, UNAUTHENTICATED } from '../routes';
 
 const {
   Box,
@@ -30,9 +30,16 @@ const {
   useIntersectionObserver,
 } = DS;
 
+export interface IDashboardProps extends RootComponentProps {
+  slotId?: string;
+  user: string | null;
+  isAuthorised: boolean;
+  handleCTAClick?: () => void;
+}
+
 const DEFAULT_LIMIT = 10;
 
-const Dashboard: React.FC<ISharedModerationProps> = props => {
+const Dashboard: React.FC<IDashboardProps> = props => {
   const { user, isAuthorised, plugins } = props;
 
   // const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
@@ -69,26 +76,6 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
     }
     return [];
   }, [delistedItemsQuery.data]);
-
-  const routing = plugins['@akashaorg/app-routing']?.routing;
-
-  React.useEffect(() => {
-    if (!user) {
-      // if not authenticated, prompt to authenticate
-      routing.navigateTo({
-        appName: '@akashaorg/app-moderation-ewa',
-        getNavigationUrl: () => routes[UNAUTHENTICATED],
-      });
-    }
-    if (user && !isAuthorised) {
-      // if authenticated and not authorised, restrict access
-      routing.navigateTo({
-        appName: '@akashaorg/app-moderation-ewa',
-        getNavigationUrl: () => routes[GUEST],
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isAuthorised]);
 
   const handleLoadMorePending = React.useCallback(() => {
     if (!pendingItemsQuery.isLoading && pendingItemsQuery.hasNextPage) {
@@ -175,11 +162,16 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
     return false;
   }, [isDelisted, keptItemPages, keptItemsQuery.isLoading]);
 
+  if (!isAuthorised) {
+    return <GuestDashboard plugins={plugins} />;
+  }
+
   return (
-    <Box>
+    <Box gap="small">
       <ModerationIntroCard
         titleLabel="Moderating"
         subtitleLabel="Find all the moderated posts, replies and accounts"
+        isIntro={false}
       />
       <ContentTab
         isPending={isPending}
@@ -233,6 +225,8 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
                     key={index}
                     isPending={isPending}
                     locale={locale}
+                    incidentLabel={t('Case ID')}
+                    uniqueId={pendingItem.decisionID}
                     showExplanationsLabel={t('Show explanations')}
                     hideExplanationsLabel={t('Hide explanations')}
                     reportedLabel={t('reported')}
@@ -288,6 +282,8 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
                     key={index}
                     isPending={isPending}
                     locale={locale}
+                    incidentLabel={t('Case ID')}
+                    uniqueId={moderatedItem.decisionID}
                     showExplanationsLabel={t('Show explanations')}
                     hideExplanationsLabel={t('Hide explanations')}
                     determinationLabel={t('Determination')}
@@ -342,6 +338,8 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
                     key={index}
                     isPending={isPending}
                     locale={locale}
+                    incidentLabel={t('Case ID')}
+                    uniqueId={moderatedItem.decisionID}
                     showExplanationsLabel={t('Show explanations')}
                     hideExplanationsLabel={t('Hide explanations')}
                     determinationLabel={t('Determination')}

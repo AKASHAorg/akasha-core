@@ -51,11 +51,15 @@ export type IconType =
   | 'dapper'
   | 'dashboard'
   | 'discord'
+  | 'discordAlt'
+  | 'discordWtBg'
+  | 'discourse'
   | 'document'
   | 'dropdown'
   | 'editSimple'
   | 'edit'
   | 'email'
+  | 'emailAlt'
   | 'emoji'
   | 'explore'
   | 'eye'
@@ -205,11 +209,15 @@ export const iconTypes: IconType[] = [
   'dapper',
   'dashboard',
   'discord',
+  'discordAlt',
+  'discordWtBg',
+  'discourse',
   'document',
   'dropdown',
   'editSimple',
   'edit',
   'email',
+  'emailAlt',
   'emoji',
   'explore',
   'eye',

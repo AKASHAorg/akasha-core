@@ -25,6 +25,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   optionValues: string[];
   descriptionLabel: string;
   descriptionPlaceholder: string;
+  explanation: string;
 
   // footer labels and links
   footerText1Label: string;
@@ -41,6 +42,8 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   itemType?: string;
   requesting: boolean;
   success: boolean;
+  onSelectReason: (reason: string) => void;
+  onSetExplanation: (explanation: string) => void;
   onReport: (data: Record<string, unknown>) => void;
 }
 
@@ -50,11 +53,18 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     titleLabel,
     successTitleLabel,
     successMessageLabel,
+    reasonPrefix,
+    contentId,
+    footerLabel,
+    footerCTALabel,
+    footerCTAUrl,
     optionsTitleLabel,
     optionLabels,
     optionValues,
+    reason,
     descriptionLabel,
     descriptionPlaceholder,
+    explanation,
     footerText1Label,
     footerLink1Label,
     footerUrl1,
@@ -63,20 +73,17 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     footerUrl2,
     cancelLabel,
     reportLabel,
-    blockLabel,
-    closeLabel,
     errorText,
     user,
-    contentId,
     itemType,
     requesting,
     success,
+    onSelectReason,
+    onSetExplanation,
     closeModal,
     onReport,
   } = props;
 
-  const [reason, setReason] = React.useState<string>('');
-  const [explanation, setExplanation] = React.useState('');
   const [rows, setRows] = React.useState(1);
 
   const hiddenSpanRef = React.useRef<HTMLSpanElement>(null);
@@ -99,7 +106,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
       // check if text area is empty or not and set rows accordingly
       setRows(prevRows => (calcRows === 0 ? prevRows / prevRows : calcRows + 1));
     }
-    setExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
+    onSetExplanation(ev.currentTarget.value.replace(/  +/g, ' '));
   };
 
   const handleReport = () => {
@@ -124,9 +131,12 @@ const ReportModal: React.FC<IReportModalProps> = props => {
         className={className}
         successTitleLabel={successTitleLabel}
         successMessageLabel={successMessageLabel}
+        reason={reason}
+        reasonPrefix={reasonPrefix}
         contentId={contentId}
-        blockLabel={blockLabel}
-        closeLabel={closeLabel}
+        footerLabel={footerLabel}
+        footerCTALabel={footerCTALabel}
+        footerCTAUrl={footerCTAUrl}
         size={size}
         closeModal={closeModal}
       />
@@ -180,9 +190,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
                 name="reasons"
                 options={optionLabels}
                 value={reason}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setReason(event.target.value)
-                }
+                onChange={ev => onSelectReason(ev.target.value)}
               />
             </Box>
             <StyledText
