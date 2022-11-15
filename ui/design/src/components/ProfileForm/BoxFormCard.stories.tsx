@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grommet } from 'grommet';
 
-import BoxFormCard, { IBoxFormCardProps } from '.';
+import ProfileForm, { ProfileFormProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
 
@@ -9,7 +9,7 @@ import { boxProviderData } from '../../utils/dummy-data';
 
 export default {
   title: 'Cards/BoxFormCard',
-  component: BoxFormCard,
+  component: ProfileForm,
   argTypes: {
     nameLabel: { control: 'text' },
     saveLabel: { control: 'text' },
@@ -29,15 +29,15 @@ export default {
   },
 };
 
-const Template = (args: IBoxFormCardProps) => (
+const Template = (args: ProfileFormProps) => (
   <Grommet theme={lightTheme}>
-    <BoxFormCard {...args} />
+    <ProfileForm {...args} />
   </Grommet>
 );
 
-export const BaseBoxFormCard = Template.bind({});
+export const BaseProfileForm = Template.bind({});
 
-BaseBoxFormCard.args = {
+BaseProfileForm.args = {
   nameLabel: 'Name',
   saveLabel: 'Save',
   urlLabel: 'By url',

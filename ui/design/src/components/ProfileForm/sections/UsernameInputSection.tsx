@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, FormField, Text } from 'grommet';
 
 import Icon from '../../Icon';
-import { IFormValues } from '../';
+import { IFormValues } from '..';
 
 import { StyledText, StyledTextInput } from '../styled-form-card';
 

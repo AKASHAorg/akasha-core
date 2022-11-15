@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
-import { IProfileData, UsernameTypes, RootComponentProps, EventTypes } from '@akashaorg/typings/ui';
+import {
+  IProfileData,
+  RootComponentProps,
+  EventTypes,
+  ProfileProviderProperties,
+  ProfileProviders,
+} from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
   useFollow,
@@ -11,8 +17,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
-
-import { getUsernameTypes } from '../../utils/username-utils';
+import routes, { UPDATE_PROFILE } from '../../routes';
 
 const {
   ModalRenderer,
@@ -23,6 +28,9 @@ const {
   ProfileCardDescription,
   HorizontalDivider,
   TextLine,
+  BasicCardBox,
+  ProfileStatsCard,
+  ProfileLinksCard,
 } = DS;
 
 export interface IProfileHeaderProps {
@@ -49,12 +57,6 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
   const ENSReq = useEnsByAddress(profileData.ethAddress);
 
-  const userNameTypes = React.useMemo(() => {
-    if (profileData) {
-      return getUsernameTypes(profileData);
-    }
-  }, [profileData]);
-
   const handleFollow = () => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({ name: 'login', profileId });
@@ -64,6 +66,34 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
       followReq.mutate(profileData.pubKey);
     }
   };
+
+  const socialLinks: { type: string; value: string }[] = React.useMemo(() => {
+    if (profileData.default.length > 0) {
+      const socialLinksProvider = profileData.default.find(
+        p =>
+          p.property === ProfileProviderProperties.SOCIAL_LINKS &&
+          p.provider === ProfileProviders.EWA_BASIC,
+      );
+      if (socialLinksProvider) {
+        const links = JSON.parse(socialLinksProvider.value);
+        if (links.length > 0) {
+          return links.map((link: { type: string; value: string }) => {
+            if (link.type === 'url') {
+              return {
+                type: link.type,
+                value: decodeURIComponent(link.value),
+              };
+            }
+            return {
+              type: link.type,
+              value: link.value,
+            };
+          });
+        }
+      }
+    }
+    return [];
+  }, [profileData]);
 
   const handleUnfollow = () => {
     if (profileData?.pubKey) {
@@ -86,11 +116,10 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
   };
 
   const showUpdateProfileModal = () => {
-    props.navigateToModal({ name: 'update-profile' });
-  };
-
-  const showEnsModal = () => {
-    props.navigateToModal({ name: 'update-ens' });
+    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: () => routes[UPDATE_PROFILE],
+    });
   };
 
   const showShareModal = () => {
@@ -104,13 +133,6 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
   const handleClose = () => {
     setModalOpen(false);
-  };
-
-  const handleClickPosts = () => {
-    routing.navigateTo({
-      appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileData.pubKey}`,
-    });
   };
 
   const handleExtPointMount = (name: string) => {
@@ -147,50 +169,26 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
         )}
       </ModalRenderer>
       <ProfileCard
-        onClickPosts={handleClickPosts}
-        onClickFollowers={handleStatIconClick(0)}
-        onClickFollowing={handleStatIconClick(1)}
-        onClickInterests={handleStatIconClick(2)}
         handleFollow={handleFollow}
         handleUnfollow={handleUnfollow}
         handleShareClick={showShareModal}
         isFollowing={followedProfiles?.includes(profileData.pubKey)}
-        loggedEthAddress={loginState.ethAddress}
         profileData={profileData}
         followLabel={t('Follow')}
-        unfollowLabel={t('Unfollow')}
         followingLabel={t('Following')}
-        followersLabel={t('Followers')}
-        postsLabel={t('Posts')}
-        interestsLabel={t('Interests')}
+        unfollowLabel={t('Unfollow')}
         shareProfileLabel={t('Share')}
         editProfileLabel={t('Edit profile')}
-        updateProfileLabel={t('Update profile')}
-        changeCoverImageLabel={t('Change cover image')}
-        cancelLabel={t('Cancel')}
-        saveChangesLabel={t('Save changes')}
         showMore={true}
-        canUserEdit={loginState.ethAddress === profileData.ethAddress}
+        viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
         flaggable={loginState.ethAddress !== profileData.ethAddress}
         flagAsLabel={t('Report')}
-        // blockLabel={t('Block')}
-        userNameType={userNameTypes}
         onEntryFlag={handleEntryFlag(
           profileData.pubKey ? profileData.pubKey : '',
           'account',
           profileData.name,
         )}
         onUpdateClick={showUpdateProfileModal}
-        onENSChangeClick={showEnsModal}
-        changeENSLabel={
-          userNameTypes.available.includes(UsernameTypes.AKASHA_ENS_SUBDOMAIN) ||
-          userNameTypes.available.includes(UsernameTypes.ENS_DOMAIN)
-            ? t('Manage Ethereum name')
-            : t('Add an Ethereum name')
-        }
-        hideENSButton={true}
-        copyLabel={t('Copy to clipboard')}
-        copiedLabel={t('Copied')}
         modalSlotId={props.layoutConfig.modalSlotId}
         actionButtonExt={
           <ExtensionPoint
@@ -206,39 +204,56 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
           />
-          {ENSReq.isFetching && (
+          {ENSReq.isFetching && !ENSReq.isFetched && (
             <Box pad="1em">
               <TextLine width="25%" margin={{ bottom: '.5em' }} />
               <TextLine width="48%" />
             </Box>
           )}
           {ENSReq.isFetched && ENSReq.data && (
-            <ProfileCardEthereumId
-              profileData={profileData}
-              copiedLabel={t('Copied')}
-              copyLabel={t('Copy to clipboard')}
-              ensName={ENSReq.data}
-            />
-          )}
-
-          {profileData.description && (
             <>
               <Box pad={{ horizontal: 'medium' }}>
                 <HorizontalDivider />
               </Box>
-              <ProfileCardDescription
-                description={profileData.description}
-                editable={false}
-                handleChangeDescription={() => null}
-                descriptionPopoverOpen={false}
-                setDescriptionPopoverOpen={() => null}
-                // profileProvidersData={profileProvidersData}
-                descriptionLabel={t('About me')}
+              <ProfileCardEthereumId
+                ethereumNameLabel={t('ENS')}
+                profileData={profileData}
+                copiedLabel={t('Copied')}
+                copyLabel={t('Copy to clipboard')}
+                ensName={ENSReq.data}
               />
             </>
           )}
         </Box>
       </ProfileCard>
+      {profileData.description && (
+        <BasicCardBox margin={{ top: 'xsmall' }}>
+          <ProfileCardDescription
+            description={profileData.description}
+            descriptionLabel={t('About me')}
+          />
+        </BasicCardBox>
+      )}
+      <ProfileLinksCard
+        margin={{ top: 'xsmall' }}
+        titleLabel={t('Find me on')}
+        copiedLabel={t('Copied')}
+        copyLabel={t('Copy to clipboard')}
+        links={socialLinks}
+      />
+      <ProfileStatsCard
+        margin={{ top: 'xsmall', bottom: 'large' }}
+        statsTitleLabel={t('Stats')}
+        profileData={profileData}
+        onClickFollowing={handleStatIconClick(1)}
+        onClickFollowers={handleStatIconClick(0)}
+        onClickInterests={handleStatIconClick(2)}
+        onClickPosts={() => null}
+        followingLabel={t('Following')}
+        followersLabel={t('Followers')}
+        postsLabel={t('Posts')}
+        interestsLabel={t('Interests')}
+      />
     </>
   );
 };

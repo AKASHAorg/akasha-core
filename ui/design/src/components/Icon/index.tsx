@@ -52,6 +52,7 @@ export type IconType =
   | 'dashboard'
   | 'discord'
   | 'discordAlt'
+  | 'discordWtBg'
   | 'discourse'
   | 'document'
   | 'dropdown'
@@ -129,6 +130,8 @@ export type IconType =
   | 'share'
   | 'signOut'
   | 'status'
+  | 'subscribe'
+  | 'telegram'
   | 'stopwatch'
   | 'strikethrough'
   | 'subscribe'
@@ -207,6 +210,7 @@ export const iconTypes: IconType[] = [
   'dashboard',
   'discord',
   'discordAlt',
+  'discordWtBg',
   'discourse',
   'document',
   'dropdown',
@@ -283,6 +287,8 @@ export const iconTypes: IconType[] = [
   'signOut',
   'status',
   'share',
+  'subscribe',
+  'telegram',
   'stopwatch',
   'strikethrough',
   'subscribe',

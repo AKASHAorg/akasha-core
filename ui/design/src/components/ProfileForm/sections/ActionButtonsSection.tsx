@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from 'grommet';
 
-import { IFormValues } from '../';
+import { IFormValues } from '..';
 import Button from '../../Button';
 import Spinner from '../../Spinner';
 import { UpdateProfileStatus } from '@akashaorg/typings/ui';

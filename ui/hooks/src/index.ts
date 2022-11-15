@@ -124,6 +124,7 @@ import {
 } from './use-app-settings';
 import { useAppDescription } from './use-app-description';
 import { usePlaformHealthCheck } from './use-health-check';
+import { useEnsTexts } from './use-ens';
 import {
   useValidateMessage,
   useAddDevKeyFromMessage,
@@ -274,6 +275,7 @@ export {
   useUninstallApp,
   useAppDescription,
   usePlaformHealthCheck,
+  useEnsTexts,
   useValidateMessage,
   useAddDevKeyFromMessage,
   useGetDevKeys,

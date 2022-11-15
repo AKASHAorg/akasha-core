@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DiscordAlt = (props: React.SVGProps<SVGSVGElement>) => (
+const DiscordWtBg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" {...props}>
     <g fill="none" fillRule="evenodd">
       <circle cx="9" cy="9" r="9" fill="#8b9FFF" />
@@ -18,4 +18,4 @@ const DiscordAlt = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default DiscordAlt;
+export default DiscordWtBg;

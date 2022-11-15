@@ -5,7 +5,7 @@ import Button from '../Button';
 import Icon from '../Icon';
 import Spinner from '../Spinner';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { StyledText } from '../BoxFormCard/styled-form-card';
+import { StyledText } from '../ProfileForm/styled-form-card';
 import useBodyScrollLock from '../../utils/use-body-scroll-lock';
 
 export enum ENSOptionTypes {
