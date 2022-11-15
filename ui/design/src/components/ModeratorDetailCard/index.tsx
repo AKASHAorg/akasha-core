@@ -23,6 +23,7 @@ const TruncateText = styled(Text)<{ viewportSize?: string }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: default;
 `;
 
 const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {

@@ -316,9 +316,10 @@ export const getModerators = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<Mo
       userName: profile?.userName,
       pubKey: profile?.pubKey,
       ethAddress: profile?.ethAddress,
+
       // @TODO: replace with mod info
       status: moderator.active ? 'active' : 'revoked',
-      social: { discord: 'isabelmilkovic', email: 'isabel.milkovic@akasha.world' },
+      social: { discord: '', email: '' },
     };
   });
 
