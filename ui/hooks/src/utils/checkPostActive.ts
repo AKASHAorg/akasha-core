@@ -1,5 +1,5 @@
+import { ModerationStatus } from '@akashaorg/typings/ui';
 import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { ModerationStatus } from '../moderation-requests';
 
 /**
  * Utility to check whether a post is active or not
