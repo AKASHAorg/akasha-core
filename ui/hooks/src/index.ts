@@ -10,7 +10,7 @@ import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-ana
 import withProviders from './utils/provider-hoc';
 import ThemeWrapper from './utils/theme-wrapper';
 import useReasons from './use-reasons';
-import { useQueryListener, useMutationListener } from './use-query-listener';
+import { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
 import {
   useUpdateUsernameProvider,
   useUsernameValidation,
@@ -159,6 +159,7 @@ export {
   // use-query-listener
   useQueryListener,
   useMutationListener,
+  useMutationsListener,
   // use-username
   useUpdateUsernameProvider,
   useUsernameValidation,
