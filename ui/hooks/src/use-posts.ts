@@ -69,7 +69,7 @@ const getPosts = async (
   let posts = res.posts.results;
 
   if (filterDeleted) {
-    posts = posts.filter(post => checkPostActive({ content: post.content }));
+    posts = posts.filter(post => checkPostActive(post));
   }
 
   const postsIds = posts.map(post => {
@@ -119,20 +119,6 @@ export function useInfinitePosts(limit: number, offset?: string) {
     },
   );
 }
-
-const getCustomFeedPosts = async (limit: number, offset?: number) => {
-  const sdk = getSDK();
-  const res = await sdk.api.entries.getFeedEntries({
-    limit: limit,
-    offset: offset,
-  });
-  return {
-    ...res.getCustomFeed,
-    results: res.getCustomFeed.results.map(post => {
-      return post._id;
-    }),
-  };
-};
 
 /**
  * Hook to get posts for personalised user feed from followed profiles and subscribed tags,
