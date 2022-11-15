@@ -23,7 +23,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const location = useLocation();
 
   const [routeData, setRouteData] = React.useState({});
-  // sidebar is open by default on larger screens >=1440px
+  // sidebar is open by default on larger screens >= 1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
