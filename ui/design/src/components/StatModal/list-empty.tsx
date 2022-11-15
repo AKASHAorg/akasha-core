@@ -19,7 +19,7 @@ const ListEmpty: React.FC<IListEmpty> = props => {
   return (
     <Box margin="auto">
       <Box width="100%" height="20rem" margin={{ bottom: 'small' }} align="center">
-        <Image width="50%" fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+        <Image width="50%" fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
         <Text weight={600} margin={{ top: '2.5rem' }} size="xlarge">
           {placeholderTitleLabel}
         </Text>

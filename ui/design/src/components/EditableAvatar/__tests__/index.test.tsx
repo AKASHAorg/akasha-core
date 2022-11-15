@@ -43,7 +43,7 @@ describe('<EditableAvatar /> Component', () => {
 
     const fileInput = await waitFor(() => findByTestId('avatar-file-input'));
 
-    fireEvent.change(fileInput, { target: { file: createFile('test-file.png') } });
+    fireEvent.change(fileInput, { target: { file: createFile('test-file.webp') } });
     expect(handleChange).toBeCalledTimes(1);
   });
 });

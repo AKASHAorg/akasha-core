@@ -15,7 +15,7 @@ export interface IArticleData {
   title: string;
   subtitle: string;
   content: ArticleContent[];
-  placeholderImage?: string;
+  image?: string;
   topics?: string[];
   mentions?: number;
   replies?: number;

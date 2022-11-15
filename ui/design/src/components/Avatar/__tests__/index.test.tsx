@@ -37,7 +37,7 @@ describe('<Avatar /> Component', () => {
   it('when not in guest mode, should load src prop', async () => {
     const { findByTestId } = componentWrapper;
 
-    const src = '/images/avatar-placeholder-1.png';
+    const src = '/images/avatar-placeholder-1.webp';
     const image = await waitFor(() => findByTestId('avatar-image'));
     expect(image.getAttribute('src')).toEqual(src);
   });

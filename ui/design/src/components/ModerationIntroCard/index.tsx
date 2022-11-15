@@ -48,7 +48,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
         {isIntro && (
           <Box fill="horizontal" pad="medium">
             <Box height="10rem" width="10rem" margin={{ bottom: 'small' }} alignSelf="center">
-              <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+              <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
             </Box>
             <Text size="large" textAlign="center" margin={{ bottom: 'xsmall' }} weight="bold">
               {introLabel}

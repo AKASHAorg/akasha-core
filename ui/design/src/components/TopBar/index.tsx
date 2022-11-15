@@ -35,7 +35,6 @@ export interface ITopbarProps {
   brandLabel: string;
   versionLabel?: string;
   signInLabel?: string;
-  signUpLabel?: string;
   signOutLabel?: string;
   legalLabel?: string;
   feedbackLabel?: string;
@@ -53,7 +52,6 @@ export interface ITopbarProps {
   // external css
   className?: string;
   onLoginClick: () => void;
-  onSignUpClick: () => void;
   onLogout: () => void;
   onBrandClick?: () => void;
   onMyProfileClick: () => void;
@@ -69,7 +67,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     brandLabel,
     versionLabel,
     signInLabel,
-    signUpLabel,
     signOutLabel,
     legalLabel,
     feedbackLabel,
@@ -85,7 +82,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onNavigation,
     onSidebarToggle,
     onLoginClick,
-    onSignUpClick,
     onFeedbackClick,
     onLogout,
     hasNewNotifications,
@@ -268,14 +264,14 @@ const Topbar: React.FC<ITopbarProps> = props => {
             onClick={onBrandClick}
           >
             <Box direction="row" gap="small" align="center">
-              <BrandIcon type="ethereumWorldLogo" clickable={true} plain={true} />
+              <BrandIcon type="akasha" clickable={true} plain={true} />
               {!isMobileOnly && (
                 <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">
                   {brandLabel}
                 </StyledText>
               )}
             </Box>
-            {versionURL && (
+            {versionURL && versionLabel && (
               <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
             )}
           </Box>
@@ -296,10 +292,10 @@ const Topbar: React.FC<ITopbarProps> = props => {
                 <Button
                   onClick={onLoginClick}
                   label={signInLabel}
+                  primary={true}
                   slimBorder={true}
                   hoverIndicator="accentText"
                 />
-                <Button primary={true} onClick={onSignUpClick} label={signUpLabel} />
               </Box>
             )}
             {shouldRenderOnboarding && (
@@ -333,7 +329,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     return (
       <Box direction="row" align="center" gap="xsmall" fill="horizontal">
         <Button onClick={onLoginClick} label={signInLabel} fill="horizontal" />
-        <Button primary={true} onClick={onSignUpClick} label={signUpLabel} fill="horizontal" />
       </Box>
     );
   };
@@ -446,8 +441,7 @@ Topbar.defaultProps = {
   onBrandClick: () => {
     return;
   },
-  signUpLabel: 'Sign Up',
-  signInLabel: 'Sign In',
+  signInLabel: 'Connect',
   signOutLabel: 'Sign Out',
   legalLabel: 'Legal',
   feedbackLabel: 'Send Us Feedback',

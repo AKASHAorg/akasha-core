@@ -117,7 +117,7 @@ const ManageCollaboratorsModal: React.FC<IManageCollaboratorsModalProps> = props
             {!collaborators.length && (
               <Box fill="horizontal" gap="small">
                 <Box height="15rem" width="15rem" alignSelf="center">
-                  <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+                  <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
                 </Box>
                 <Text size="large" textAlign="center">
                   {noCollaboratorsLabel}

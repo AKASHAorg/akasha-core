@@ -71,7 +71,7 @@ const StepTwo: React.FC<IStepTwoProps> = props => {
           <ListItem listElementText="•" item={paragraph} />
           {idx === 0 && (
             <Box height="3rem" margin={{ vertical: '-1rem' }}>
-              <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+              <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
             </Box>
           )}
         </React.Fragment>

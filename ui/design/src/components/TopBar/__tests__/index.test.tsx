@@ -9,7 +9,6 @@ let componentWrapper = customRender(<></>, {});
 
 const handleNavigation = jest.fn();
 const handleLogin = jest.fn();
-const handleSignup = jest.fn();
 const handleLogout = jest.fn();
 const handleFeedback = jest.fn();
 
@@ -30,7 +29,6 @@ describe('<Topbar /> Component', () => {
             onLegalClick={() => {
               return;
             }}
-            onSignUpClick={handleSignup}
             onLogout={handleLogout}
             onFeedbackClick={handleFeedback}
             currentLocation=""
@@ -64,7 +62,6 @@ describe.skip('<TopBar /> component on /auth-app* route', () => {
               brandLabel="test"
               quickAccessItems={[]}
               onLoginClick={handleLogin}
-              onSignUpClick={handleSignup}
               onLogout={handleLogout}
               onFeedbackClick={handleFeedback}
               onMyProfileClick={() => {

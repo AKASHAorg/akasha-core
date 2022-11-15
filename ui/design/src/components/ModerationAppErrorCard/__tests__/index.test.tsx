@@ -49,7 +49,7 @@ describe('<ModerationAppErrorCard /> Component', () => {
     const image = getByRole('img');
 
     expect(image).toBeDefined();
-    expect(image).toHaveAttribute('src', '/images/no-authentication.png');
+    expect(image).toHaveAttribute('src', '/images/no-authentication.webp');
   });
 
   it('has a call to action button', () => {
