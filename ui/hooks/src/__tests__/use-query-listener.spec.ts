@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
-import { useMutationListener, useQueryListener } from '../use-query-listener';
+import { useMutationListener, useMutationsListener, useQueryListener } from '../use-query-listener';
 import { useMutation, useQuery } from 'react-query';
 import { act } from 'react-test-renderer';
 
@@ -54,6 +54,37 @@ describe('useQueryListener', () => {
       expect(queryListenerResult.current.isFetched).toBeTruthy();
       expect(queryListenerResult.current.data).toBeFalsy();
       expect(queryListenerResult.current.isError).toBeFalsy();
+    });
+  });
+
+  it('should listen to mutations changes', async () => {
+    const [wrapper] = createWrapper();
+    const { result: mutationsListenerResult } = renderHook(
+      () => useMutationsListener('mutationKey'),
+      {
+        wrapper,
+      },
+    );
+
+    const { result: mutationResult } = renderHook(
+      () =>
+        useMutation(
+          async () => {
+            // do nothing
+          },
+          {
+            mutationKey: 'mutationKey',
+          },
+        ),
+      {
+        wrapper,
+      },
+    );
+    await act(async () => {
+      expect(mutationsListenerResult?.current?.mutations[0]?.clear).toBeFalsy();
+      await mutationResult.current.mutateAsync();
+      expect(mutationsListenerResult?.current?.mutations[0]?.mutationId).toBe(1);
+      expect(mutationsListenerResult?.current?.mutations[0]?.state.failureCount).toBe(0);
     });
   });
 });

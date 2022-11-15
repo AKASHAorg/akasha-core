@@ -39,7 +39,7 @@ describe('< MyFeedPage /> component', () => {
         {},
       );
     });
-    expect(screen.getByText(/Add some magic to your feed/)).toBeInTheDocument();
+    expect(screen.getByText(/Your customized view of Ethereum World/)).toBeInTheDocument();
   });
 
   it('should render my feed for authenticated users', async () => {
