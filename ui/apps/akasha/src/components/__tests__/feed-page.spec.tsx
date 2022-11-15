@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FeedPage from '../feed-page/feed-page';
-import * as extension from '../extension';
+import * as extension from '@akashaorg/design-system/lib/utils/extension';
 
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import {

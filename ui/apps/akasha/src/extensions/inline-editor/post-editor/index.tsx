@@ -139,7 +139,9 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
 
   return (
     <Base
-      postLabel={action === 'edit' ? t('Save Changes') : t('Publish')}
+      postLabel={
+        action === 'edit' ? t('Save Changes') : action === 'reply' ? t('Reply') : t('Publish')
+      }
       placeholderLabel={
         action === 'reply' ? `${t('Reply to')} ${entryAuthorName || ''}` : t('Share your thoughts')
       }
