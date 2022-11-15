@@ -21,6 +21,8 @@ const StyledText = styled(Text)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  margin-left: -24px;
 `;
 
 const StyledCardBox = styled(BasicCardBox)`
