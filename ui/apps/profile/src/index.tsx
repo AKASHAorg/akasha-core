@@ -6,7 +6,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
 
-import routes, { DEV_DASHBOARD, MY_PROFILE } from './routes';
+import routes, { DEV_DASHBOARD, MY_PROFILE, UPDATE_PROFILE } from './routes';
 /**
  * All plugins must export an object like this:
  */
@@ -37,13 +37,13 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   extends: (matcher, loader) => {
     matcher({
       login: loader(() => import('./extensions/login-modal')),
-      'update-profile': loader(() => import('./extensions/update-profile-modal')),
       'profile-share': loader(() => import('./extensions/share-profile-modal')),
       'delete-dev-key': loader(() => import('./extensions/delete-dev-key')),
     });
   },
   routes: {
     myProfile: routes[MY_PROFILE],
+    updateProfile: routes[UPDATE_PROFILE],
     rootRoute: '',
   },
 });

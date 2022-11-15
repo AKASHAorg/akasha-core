@@ -2,7 +2,7 @@ import React from 'react';
 
 import Icon from '../../Icon';
 
-import { IFormValues } from '../';
+import { IFormValues } from '..';
 import {
   StyledText,
   StyledImage,

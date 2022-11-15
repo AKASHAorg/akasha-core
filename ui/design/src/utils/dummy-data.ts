@@ -1,5 +1,9 @@
 import { Descendant } from 'slate';
-import { LogoTypeSource } from '@akashaorg/typings/ui';
+import {
+  LogoTypeSource,
+  ProfileProviders,
+  ProfileProviderProperties,
+} from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import {
   IMenuItem,
@@ -688,6 +692,18 @@ const boxProviderData = {
   userName: '',
   pubKey: '',
   ethAddress: '',
+  default: [
+    {
+      provider: ProfileProviders.EWA_BASIC,
+      property: ProfileProviderProperties.SOCIAL_LINKS,
+      value: JSON.stringify([
+        {
+          type: 'com.twitter',
+          value: 'https://twitter.com/akashaorg',
+        },
+      ]),
+    },
+  ],
 };
 
 const ensProviderData = {

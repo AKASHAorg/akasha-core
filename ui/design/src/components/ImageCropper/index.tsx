@@ -7,7 +7,7 @@ import { Box, Text } from 'grommet';
 import Button from '../Button';
 import Icon from '../Icon';
 import Spinner from '../Spinner';
-import { BaseImageDiv } from '../BoxFormCard/styled-form-card';
+import { BaseImageDiv } from '../ProfileForm/styled-form-card';
 
 export type CropValue = { x: number; y: number };
 

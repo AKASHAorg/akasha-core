@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, FormField, Text, TextInput } from 'grommet';
 
-import { IFormValues } from '../';
+import { IFormValues } from '..';
 import { StyledText } from '../styled-form-card';
 
 export interface INameInputSectionProps {
@@ -9,10 +9,17 @@ export interface INameInputSectionProps {
   nameFieldPlaceholder?: string;
   formValues: IFormValues;
   handleFormFieldChange: (arg1: { name: string }) => void;
+  required?: boolean;
 }
 
 const NameInputSection: React.FC<INameInputSectionProps> = props => {
-  const { nameLabel, nameFieldPlaceholder, formValues, handleFormFieldChange } = props;
+  const {
+    nameLabel,
+    nameFieldPlaceholder,
+    formValues,
+    handleFormFieldChange,
+    required = false,
+  } = props;
   return (
     <Box justify="start" fill="horizontal" flex={{ shrink: 1, grow: 1 }} margin={{ left: '0.5em' }}>
       <FormField
@@ -25,7 +32,7 @@ const NameInputSection: React.FC<INameInputSectionProps> = props => {
             color="secondaryText"
             style={{ verticalAlign: 'text-top', userSelect: 'none' }}
           >
-            {nameLabel} <Text color="accentText">*</Text>
+            {nameLabel} {required && <Text color="accentText">*</Text>}
           </StyledText>
         }
       >
@@ -37,7 +44,7 @@ const NameInputSection: React.FC<INameInputSectionProps> = props => {
             handleFormFieldChange({ name: ev.target.value })
           }
           placeholder={nameFieldPlaceholder}
-          required={true}
+          required={required}
           size="large"
           style={{
             width: '100%',
