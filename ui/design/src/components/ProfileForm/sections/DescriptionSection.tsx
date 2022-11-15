@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, FormField, TextArea } from 'grommet';
 
-import { IFormValues } from '../';
+import { IFormValues } from '..';
 import { StyledText } from '../styled-form-card';
 
 export interface IDescriptionSectionProps {

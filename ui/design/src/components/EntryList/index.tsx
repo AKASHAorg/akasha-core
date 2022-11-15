@@ -4,14 +4,10 @@ import Spinner from '../Spinner';
 import * as React from 'react';
 import useIntersectionObserver from '../../utils/intersection-observer';
 import { Anchor, Box } from 'grommet';
-
-export interface EntryPage {
-  results: string[];
-  total: number;
-}
+import { IEntryPage } from '@akashaorg/typings/ui';
 
 export interface EntryListProps {
-  pages: EntryPage[];
+  pages: IEntryPage[];
   itemCard: React.ReactElement;
   onLoadMore: () => void;
   itemSpacing?: number;
@@ -39,7 +35,7 @@ const EntryList = (props: EntryListProps) => {
     threshold: 0,
   });
 
-  const items = (page: EntryPage) =>
+  const items = (page: IEntryPage) =>
     viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results;
 
   return (

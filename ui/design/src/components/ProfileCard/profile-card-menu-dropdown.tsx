@@ -10,12 +10,8 @@ interface IProfileEditMenuProps {
   onClose: () => void;
   onBlockClick: () => void;
   onReportClick: () => void;
-  onUpdateClick: () => void;
-  onENSChangeClick: () => void;
   flagAsLabel?: string;
   blockLabel?: string;
-  updateProfileLabel?: string;
-  changeENSLabel?: string;
   hideENSButton?: boolean;
   flaggable?: boolean;
 }
@@ -28,8 +24,7 @@ const MenuOption = styled(StyledSelectBox)`
 `;
 
 const ProfileMenuDropdown = (props: IProfileEditMenuProps) => {
-  const { flaggable, onClose, onENSChangeClick, onBlockClick, onReportClick, onUpdateClick } =
-    props;
+  const { flaggable, onClose, onBlockClick, onReportClick } = props;
 
   const theme: any = React.useContext(ThemeContext);
 
@@ -67,22 +62,6 @@ const ProfileMenuDropdown = (props: IProfileEditMenuProps) => {
                   iconSize="xs"
                   fontSize="medium"
                 />
-              </MenuOption>
-            )}
-          </>
-        )}
-        {!flaggable && (
-          <>
-            <MenuOption>
-              <Box onClick={onUpdateClick}>
-                <StyledText>{props.updateProfileLabel}</StyledText>
-              </Box>
-            </MenuOption>
-            {!props.hideENSButton && (
-              <MenuOption>
-                <Box onClick={onENSChangeClick}>
-                  <StyledText>{props.changeENSLabel}</StyledText>
-                </Box>
               </MenuOption>
             )}
           </>

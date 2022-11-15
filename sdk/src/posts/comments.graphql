@@ -4,7 +4,7 @@ fragment DataProviderFragment on DataProvider{
   value
 }
 
-fragment UserProfileFragment on UserProfile{
+fragment AuthorInfo on UserProfile {
   pubKey
   name
   userName
@@ -15,6 +15,7 @@ fragment UserProfileFragment on UserProfile{
   totalPosts
   totalFollowers
   totalFollowing
+  totalInterests
 }
 
 query GetComment($commentID: String!) {
@@ -23,7 +24,7 @@ query GetComment($commentID: String!) {
       ...DataProviderFragment
     }
     author{
-     ...UserProfileFragment
+     ...AuthorInfo
     }
     creationDate
     updatedAt
@@ -43,7 +44,7 @@ query GetComments($offset: String, $limit: Int, $postID: String!) {
        ...DataProviderFragment
       }
       author{
-       ...UserProfileFragment
+       ...AuthorInfo
       }
       creationDate
       replyTo
@@ -63,7 +64,7 @@ query GetReplies($offset: String, $limit: Int, $postID: String!, $commentID: Str
         ...DataProviderFragment
       }
       author{
-        ...UserProfileFragment
+        ...AuthorInfo
       }
       creationDate
       replyTo

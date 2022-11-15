@@ -1,33 +1,22 @@
-import { DataProviderInput } from '../sdk/common';
-export interface IProfileProvider {
+import { UserProfile } from '../sdk/graphql-types';
+
+export type IProfileProvider = {
   property: ProfileProviderProperties;
   provider: ProfileProviders;
   value: string;
-}
+};
 
-export interface IProfileData {
-  CID?: string;
+export type IProfileData = Omit<UserProfile, 'avatar' | 'coverImage' | '_id'> & {
+  // props with media links built
   avatar?: { url?: string; fallbackUrl?: string };
   coverImage?: { url?: string; fallbackUrl?: string };
-  userName?: string;
-  description?: string;
-  name?: string;
-  ethAddress: string;
-  pubKey: string;
-  totalPosts?: string | number;
-  totalFollowers?: string | number;
-  totalFollowing?: string | number;
-  totalInterests?: number;
-  default: DataProviderInput[];
-  providers: DataProviderInput[];
+  // moderation related
   contentId?: string;
   reported?: boolean;
   delisted?: boolean;
   moderated?: boolean;
   reason?: string;
-  isDev?: boolean;
-  badges?: string[];
-}
+};
 
 export enum UsernameTypes {
   TEXTILE = 0,
@@ -46,6 +35,7 @@ export enum ProfileProviderProperties {
   DESCRIPTION = 'description',
   NAME = 'name',
   USERNAME = 'userName',
+  SOCIAL_LINKS = 'socialLinks',
 }
 
 export enum UpdateProfileStatus {

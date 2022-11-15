@@ -99,26 +99,17 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   }, [worldApps, userInstalledApps]);
 
   const handleNavigation = (appName: string, route: string) => {
-    routing.navigateTo({
+    routing?.navigateTo({
       appName,
       getNavigationUrl: () => route,
     });
   };
 
   const handleClickExplore = () => {
-    // find IC app from world apps
-    // @TODO: replace string with a constant
-    const icApp = worldApps.find(
-      (menuItem: { name: string }) => menuItem.name === '@akashaorg/app-integration-center',
-    );
-
-    // if found, navigate to route
-    if (icApp) {
-      routing.navigateTo({
-        appName: icApp.name,
-        getNavigationUrl: () => icApp.route,
-      });
-    }
+    routing?.navigateTo({
+      appName: '@akashaorg/app-integration-center',
+      getNavigationUrl: routes => routes.explore,
+    });
   };
 
   const handleBrandClick = () => {

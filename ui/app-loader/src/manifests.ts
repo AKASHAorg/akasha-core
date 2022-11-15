@@ -36,7 +36,7 @@ export const getIntegrationsData = async (
     })
     .map(e => worldConfig.registryOverrides.find(int => int.name === e));
   const remotes = await getLatestReleaseInfo(remote.map(e => ({ name: e })));
-  return remotes.concat(local as any);
+  return remotes.concat(local);
 };
 
 /*

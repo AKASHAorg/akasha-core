@@ -3,15 +3,16 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
-import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
+import { IProfileData, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 
 import FeedPage from './feed-page/feed-page';
 import MyFeedPage from './my-feed-page/my-feed-page';
+import ProfileFeedPage from './profile-feed-page/profile-feed-page';
 import PostPage from './post-page/post-page';
 import InvitePage from './post-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 
-import routes, { FEED, MY_FEED, POST, REPLY, TAGS, INVITE } from '../routes';
+import routes, { FEED, MY_FEED, PROFILE_FEED, POST, REPLY, TAGS, INVITE } from '../routes';
 import ReplyPage from './post-page/reply-page';
 
 const { Box } = DS;
@@ -20,8 +21,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const loginQuery = useGetLogin();
 
   const profileDataReq = useGetProfile(loginQuery.data?.pubKey);
-  /* @Todo: fix my type ;/ */
-  const loggedProfileData: any = profileDataReq.data;
+  const loggedProfileData: IProfileData = profileDataReq.data;
 
   const showLoginModal = (redirectTo?: { modal: ModalNavigationOptions }) => {
     props.navigateToModal({ name: 'login', redirectTo });
@@ -63,6 +63,17 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             path={`${routes[TAGS]}/:tagName`}
             element={
               <TagFeedPage
+                {...props}
+                loggedProfileData={loggedProfileData}
+                loginState={loginQuery.data}
+                showLoginModal={showLoginModal}
+              />
+            }
+          />
+          <Route
+            path={`${routes[PROFILE_FEED]}/:pubKey`}
+            element={
+              <ProfileFeedPage
                 {...props}
                 loggedProfileData={loggedProfileData}
                 loginState={loginQuery.data}

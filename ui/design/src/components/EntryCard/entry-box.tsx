@@ -49,7 +49,6 @@ export interface IEntryBoxProps {
   sharePostUrl?: string;
   // labels
   repliesLabel: string;
-  repostsLabel: string;
   repostLabel?: string;
   cancelLabel?: string;
   repostWithCommentLabel?: string;
@@ -119,7 +118,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     shareTextLabel,
     sharePostUrl,
     repliesLabel,
-    repostsLabel,
     repostLabel,
     cancelLabel,
     repostWithCommentLabel,

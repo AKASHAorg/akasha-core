@@ -15,8 +15,8 @@ import {
   AWF_APP_BUILD_MANIFEST,
   AWF_APP_SOURCE_MANIFEST,
   IntegrationInfo,
-  ReleaseInfo,
 } from '@akashaorg/typings/sdk/registry';
+import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 
 @injectable()
 class AWF_IC_REGISTRY {
@@ -100,7 +100,7 @@ class AWF_IC_REGISTRY {
       );
       ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
     }
-    const response: ReleaseInfo = {
+    const response: IntegrationReleaseInfo = {
       id: releaseId,
       name: integrationInfo.integrationName,
       version: data.version,

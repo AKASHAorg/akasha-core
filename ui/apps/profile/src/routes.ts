@@ -1,5 +1,6 @@
 export const PROFILE_LIST = 'ProfileList';
 export const MY_PROFILE = 'MyProfile';
+export const UPDATE_PROFILE = 'EditProfile';
 export const DEV_DASHBOARD = 'DevDashboard';
 export const ONBOARDING = 'Onboarding';
 export const ONBOARDING_STEP_ONE = 'OnboardingStepOne';
@@ -18,6 +19,7 @@ export const rootRoute = '';
 
 export default {
   [MY_PROFILE]: `/my-profile`,
+  [UPDATE_PROFILE]: `/my-profile/edit`,
   [DEV_DASHBOARD]: `${baseDeveloperRoute}`,
   [ONBOARDING]: `${baseDeveloperRoute}/onboarding`,
   [ONBOARDING_STEP_ONE]: `${baseDeveloperRoute}/onboarding/terms-and-conditions`,

@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Text } from 'grommet';
 
 import Icon from '../../Icon';
+import HorizontalDivider from '../../HorizontalDivider';
 
 export interface ITitleSectionProps {
   titleLabel?: string;
@@ -25,6 +26,7 @@ const TitleSection: React.FC<ITitleSectionProps> = props => {
         >
           {titleLabel}
         </Text>
+        <HorizontalDivider />
       </Box>
     );
   }
