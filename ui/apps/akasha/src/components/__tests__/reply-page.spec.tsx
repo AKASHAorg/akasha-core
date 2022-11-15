@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PostPage from '../post-page/post-page';
+import ReplyPage from '../post-page/reply-page';
 import * as extension from '@akashaorg/design-system/lib/utils/extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
@@ -24,16 +24,20 @@ const MockedInlineEditor = ({ action }) => (
     extensionData={{
       name: 'name',
       entryId: '01gf',
-      entryType: EntityTypes.ENTRY,
+      entryType: EntityTypes.COMMENT,
       action,
     }}
   />
 );
 
-describe('< PostPage /> component', () => {
+describe('< ReplyPage /> component', () => {
   const BaseComponent = (
     <AnalyticsProvider {...genAppProps()}>
-      <PostPage {...genAppProps()} showLoginModal={jest.fn()} loginState={genLoggedInState(true)} />
+      <ReplyPage
+        {...genAppProps()}
+        showLoginModal={jest.fn()}
+        loginState={genLoggedInState(true)}
+      />
     </AnalyticsProvider>
   );
 
@@ -46,7 +50,7 @@ describe('< PostPage /> component', () => {
     ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
   });
 
-  it('should render post page', async () => {
+  it('should render reply page', async () => {
     const spiedExtension = jest.spyOn(extension, 'Extension');
 
     when(spiedExtension)
@@ -63,47 +67,5 @@ describe('< PostPage /> component', () => {
 
     expect(screen.getByText(/Reply to/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
-  });
-
-  it('should render repost page', async () => {
-    history.pushState(null, '', `${location.origin}?action=repost`);
-
-    const spiedExtension = jest.spyOn(extension, 'Extension');
-
-    when(spiedExtension)
-      .calledWith(
-        partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_repost/) }),
-        ),
-      )
-      .mockReturnValue(<MockedInlineEditor action="repost" />);
-
-    await act(async () => {
-      renderWithAllProviders(BaseComponent, {});
-    });
-
-    expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Publish/i })).toBeInTheDocument();
-    expect(screen.getByTestId('embed-box')).toBeInTheDocument();
-  });
-
-  it('should render edit page', async () => {
-    history.pushState(null, '', `${location.origin}?action=edit`);
-
-    const spiedExtension = jest.spyOn(extension, 'Extension');
-
-    when(spiedExtension)
-      .calledWith(
-        partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_postedit/) }),
-        ),
-      )
-      .mockReturnValue(<MockedInlineEditor action="edit" />);
-
-    await act(async () => {
-      renderWithAllProviders(BaseComponent, {});
-    });
-
-    expect(screen.getByRole('button', { name: /Save Changes/i })).toBeInTheDocument();
   });
 });
