@@ -42,6 +42,8 @@ export interface IProfileHeaderProps {
 const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
   const { profileData, loginState, profileId, plugins } = props;
 
+  const routing = plugins['@akashaorg/app-routing']?.routing;
+
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
 
@@ -131,6 +133,13 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
   const handleClose = () => {
     setModalOpen(false);
+  };
+
+  const handleClickPosts = () => {
+    routing.navigateTo({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileData.pubKey}`,
+    });
   };
 
   const handleExtPointMount = (name: string) => {
