@@ -75,8 +75,7 @@ export function PendingReply({
                 sharePostLabel={t('Share Post')}
                 shareTextLabel={t('Share this post with your friends')}
                 repliesLabel={t('Replies')}
-                repostsLabel={t('Reposts')}
-                repostLabel={t('Repost')}
+                repostLabel={t('Reposts')}
                 repostWithCommentLabel={t('Repost with comment')}
                 shareLabel={t('Share')}
                 copyLinkLabel={t('Copy Link')}
