@@ -62,7 +62,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
             )}
           </Box>
           <Box height="10rem" width="10rem" margin={{ bottom: 'small' }} alignSelf="center">
-            <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+            <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
           </Box>
           <Text
             weight={600}

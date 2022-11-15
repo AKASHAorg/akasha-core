@@ -145,7 +145,7 @@ const ArticlesMiniCard: React.FC<IArticlesMiniCardProps> = props => {
         </Box>
         <Box>
           <Box height="5.1875rem" width="17.25rem" alignSelf="center">
-            <Image fit="contain" src={`/images/article_${articleData.placeholderImage}.png`} />
+            <Image fit="contain" src={articleData.image} />
           </Box>
         </Box>
       </Box>

@@ -62,7 +62,7 @@ const WelcomeCard: React.FC<IWelcomeCardProps> = props => {
         height={{ min: 'fit-content' }}
       >
         <Box width={isMobileOnly ? '100%' : '50%'} margin={{ bottom: 'small' }} alignSelf="center">
-          <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+          <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
         </Box>
         <Box
           pad={{ vertical: 'large' }}
