@@ -13,7 +13,6 @@ export interface IReportSuccessModalProps {
   closeLabel?: string;
   // screen size passed by viewport provider
   size?: string;
-  // @TODO: make prop required, and modify all instances appropriately
   closeModal: () => void;
   // signData?: any;
 }

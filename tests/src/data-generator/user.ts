@@ -14,6 +14,9 @@ const genUser = (ethAddress?: string, userName?: string): IProfileData => {
     userName: userName || faker.internet.userName(),
     default: [],
     providers: [],
+    totalFollowers: faker.datatype.number(),
+    totalFollowing: faker.datatype.number(),
+    totalInterests: faker.datatype.number(),
   };
 };
 

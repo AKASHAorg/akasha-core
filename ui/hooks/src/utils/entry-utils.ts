@@ -1,8 +1,13 @@
 import getSDK from '@akashaorg/awf-sdk';
 import { Logger } from '@akashaorg/awf-sdk';
-import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
-import { Comment, Post, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
-import { IEntryData, IPublishData } from '@akashaorg/typings/ui';
+import {
+  GetCommentQuery,
+  GetEntryQuery,
+  PostResultFragment,
+} from '@akashaorg/typings/sdk/graphql-operation-types';
+import { Comment, UserProfile } from '@akashaorg/typings/sdk/graphql-types';
+import { IEntryData, IPublishData, IProfileData } from '@akashaorg/typings/ui';
+import { ModerationStatus } from '../moderation-requests';
 
 import { getMediaUrl } from './media-utils';
 
@@ -14,7 +19,7 @@ export const PROPERTY_TEXT_CONTENT = 'textContent';
 export const PROPERTY_LINK_PREVIEW = 'linkPreview';
 export const PROPERTY_IMAGES = 'images';
 
-export interface EntryPublishObject {
+export type EntryPublishObject = {
   data: PostResultFragment['content'];
   post: {
     tags: PostResultFragment['tags'];
@@ -23,8 +28,8 @@ export interface EntryPublishObject {
   };
 
   quotes: PostResultFragment['quotes'];
-}
-export interface CommentPublishObject {
+};
+export type CommentPublishObject = {
   data: Comment['content'];
   comment: {
     tags: PostResultFragment['tags'];
@@ -33,7 +38,7 @@ export interface CommentPublishObject {
     postID: string;
     replyTo: string;
   };
-}
+};
 
 function toBinary(data: string) {
   const codeUnits = new Uint16Array(data.length);
@@ -92,7 +97,18 @@ export const serializeSlateToBase64 = (slateContent: unknown) => {
  * profile images - append ipfs gateway
  * entry images - append ipfs gateway
  */
-export const mapEntry = (entry: PostResultFragment | Comment | Post, logger?: Logger) => {
+export const mapEntry = (
+  entry:
+    | (Omit<GetCommentQuery['getComment'], 'author'> &
+        Partial<ModerationStatus> & {
+          author: Omit<UserProfile, '_id'> & Partial<ModerationStatus>;
+        })
+    | (Omit<GetEntryQuery['getPost'], 'author'> &
+        Partial<ModerationStatus> & {
+          author: Omit<UserProfile, '_id'> & Partial<ModerationStatus>;
+        }),
+  logger?: Logger,
+) => {
   const slateContent = entry.content.find(elem => elem.property === PROPERTY_SLATE_CONTENT);
   const linkPreviewData = entry.content.find(elem => elem.property === PROPERTY_LINK_PREVIEW);
   const imagesData = entry.content.find(elem => elem.property === PROPERTY_IMAGES);
@@ -267,7 +283,7 @@ export const mapEntry = (entry: PostResultFragment | Comment | Post, logger?: Lo
  * Utility to create an entry yet to be published
  */
 export const createPendingEntry = (
-  author: UserProfile,
+  author: IProfileData,
   entryPublishData: IPublishData & { entryId?: string },
 ) => {
   return {
