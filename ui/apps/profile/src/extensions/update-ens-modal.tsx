@@ -141,8 +141,7 @@ const UpdateENSModal: React.FC<RootExtensionProps> = props => {
   const { navigateToModal, extensionData } = props;
   const loginQuery = useGetLogin();
   const checkNetworkReq = useNetworkState(loginQuery.data.isReady);
-  /* @Todo: fix my type ;/ */
-  const profileDataQuery: any = useGetProfile(loginQuery.data.pubKey);
+  const profileDataQuery = useGetProfile(loginQuery.data.pubKey);
   const ensByAddress = useEnsByAddress(loginQuery.data.ethAddress);
   const updateUsernameProviderQuery = useUpdateUsernameProvider(loginQuery.data.pubKey);
   const registerEnsQuery = useEnsRegistration();

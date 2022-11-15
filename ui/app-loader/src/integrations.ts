@@ -1,12 +1,12 @@
 import {
   RootComponentProps,
   RootExtensionProps,
-  BaseIntegrationInfo,
   EventTypes,
   IAppConfig,
   ILoaderConfig,
   EventDataTypes,
 } from '@akashaorg/typings/ui';
+import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import {
   Observable,
   mergeMap,
@@ -56,28 +56,31 @@ export const getMountPoint = (appConfig: IAppConfig) => {
 };
 
 // exported for testing purposes
-export const systemImport = (logger: Logger) => (manifests: BaseIntegrationInfo[]) => {
-  return from(manifests).pipe(
-    filter(manifest => (manifest.hasOwnProperty('enabled') ? manifest.enabled : true)),
-    mergeMap(manifest => {
-      if (manifest.sources.length === 0) {
-        logger.warn(`No source path was found for integration ${manifest.name}. Skipping!`);
-        return;
-      }
-      const source = manifest.sources[0];
-      if (manifest.sources.length > 1) {
-        logger.info(`Multiple sources found for integration ${manifest.name}. Using ${source}`);
-      }
-      return from(System.import(source)).pipe(map(module => ({ manifest, module })));
-    }),
-    catchError(err => {
-      logger.error(
-        `[integrations]: processSystemModules: ${err.message ?? JSON.stringify(err)} ${err.stack}`,
-      );
-      throw err;
-    }),
-  );
-};
+export const systemImport =
+  (logger: Logger) => (manifests: IntegrationReleaseInfoFragmentFragment[]) => {
+    return from(manifests).pipe(
+      filter(manifest => (manifest.hasOwnProperty('enabled') ? manifest.enabled : true)),
+      mergeMap(manifest => {
+        if (manifest.sources.length === 0) {
+          logger.warn(`No source path was found for integration ${manifest.name}. Skipping!`);
+          return;
+        }
+        const source = manifest.sources[0];
+        if (manifest.sources.length > 1) {
+          logger.info(`Multiple sources found for integration ${manifest.name}. Using ${source}`);
+        }
+        return from(System.import(source)).pipe(map(module => ({ manifest, module })));
+      }),
+      catchError(err => {
+        logger.error(
+          `[integrations]: processSystemModules: ${err.message ?? JSON.stringify(err)} ${
+            err.stack
+          }`,
+        );
+        throw err;
+      }),
+    );
+  };
 
 /*
  * Get the integration manifest and import the source
@@ -509,7 +512,7 @@ export const handleDisableIntegration = (
           return;
         }
 
-        const config = disableIntegration[0] as BaseIntegrationInfo;
+        const config = disableIntegration[0];
         const manifests = props.manifests.slice();
         const manifest = manifests.find(man => man.name === config.name);
         manifests.splice(manifests.indexOf(manifest), 1, { ...manifest, enabled: false });

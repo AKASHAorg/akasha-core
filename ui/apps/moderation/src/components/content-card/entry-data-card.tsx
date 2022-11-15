@@ -50,7 +50,6 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               modalSlotId={modalSlotId}
               showMore={false}
               entryData={entryData as IEntryData}
-              repostsLabel={t('Reposts')}
               repliesLabel={t('Replies')}
               locale={locale}
               style={{ height: 'auto' }}

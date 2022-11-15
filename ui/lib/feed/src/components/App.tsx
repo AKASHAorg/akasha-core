@@ -7,19 +7,15 @@ import {
   RootComponentProps,
   EntityTypes,
   ModalNavigationOptions,
+  IEntryPage,
 } from '@akashaorg/typings/ui';
 import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
 import { Logger } from '@akashaorg/awf-sdk';
 import EntryFeed from './entry-feed';
 
-export interface EntryListPage {
-  results: string[];
-  total: number;
-}
-
 export type FeedWidgetProps = {
   logger: Logger;
-  pages: EntryListPage[];
+  pages: IEntryPage[];
   itemType: EntityTypes;
   onLoadMore: () => void;
   getShareUrl?: (entryId: string) => string;

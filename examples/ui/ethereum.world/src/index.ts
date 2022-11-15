@@ -1,4 +1,5 @@
 import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
+import { missingRequiredFields } from './registry-overrides';
 
 console.time('AppLoader:firstMount');
 
@@ -13,36 +14,43 @@ declare const __DEV__: boolean;
       name: '@akashaorg/app-translation',
       integrationType: INTEGRATION_TYPES.APPLICATION,
       sources: ['/apps/translation/index.js'],
+      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/app-routing',
       integrationType: INTEGRATION_TYPES.APPLICATION,
       sources: ['/apps/routing/index.js'],
+      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-layout',
       integrationType: INTEGRATION_TYPES.WIDGET,
       sources: ['/widgets/layout/index.js'],
+      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-sidebar',
       integrationType: INTEGRATION_TYPES.WIDGET,
       sources: ['/widgets/sidebar/index.js'],
+      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-topbar',
       integrationType: INTEGRATION_TYPES.WIDGET,
       sources: ['/widgets/topbar/index.js'],
+      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-mini-profile',
       integrationType: INTEGRATION_TYPES.WIDGET,
       sources: ['/widgets/mini-profile/index.js'],
+      ...missingRequiredFields,
     },
     {
       name: '@akashaorg/ui-widget-my-apps',
       integrationType: INTEGRATION_TYPES.WIDGET,
       sources: ['/widgets/my-apps/index.js'],
+      ...missingRequiredFields,
     },
   ];
 

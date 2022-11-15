@@ -55,8 +55,7 @@ const StatModalWrapper: React.FC<IStatModalWrapper> = props => {
 
   // get interests for this profile
   const interestsReq = useInterests(profileData.pubKey);
-  /* @Todo: fix my type ;/ */
-  const interests: any = interestsReq.data;
+  const interests = interestsReq.data;
 
   const profilePubKeys: string[] = React.useMemo(() => {
     let profiles: IProfileData[] = [];

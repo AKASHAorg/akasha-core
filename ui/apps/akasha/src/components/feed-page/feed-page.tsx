@@ -5,6 +5,7 @@ import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
+  IProfileData,
   RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
@@ -33,8 +34,8 @@ const {
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  /* @Todo: Fix my type */
-  loggedProfileData?: any;
+
+  loggedProfileData?: IProfileData;
   loginState: LoginState;
 }
 
@@ -61,8 +62,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [postsReq, loginState?.fromCache]);
 
-  /* @Todo: Fix my type */
-  const postPages: any = React.useMemo(() => {
+  const postPages = React.useMemo(() => {
     if (postsReq.data) {
       return postsReq.data.pages;
     }
@@ -156,7 +156,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
               entryData={
                 /* @Todo: Fix my type */
-                createPendingEntry(loggedProfileData, pendingPostState.state.variables) as any
+                createPendingEntry(loggedProfileData, pendingPostState.state.variables)
               }
               sharePostLabel={t('Share Post')}
               shareTextLabel={t('Share this post with your friends')}

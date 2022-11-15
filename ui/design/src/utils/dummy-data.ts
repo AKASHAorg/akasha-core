@@ -1,5 +1,5 @@
 import { Descendant } from 'slate';
-import { LogoTypeSource, IntegrationCenterApp } from '@akashaorg/typings/ui';
+import { LogoTypeSource } from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import {
   IMenuItem,
@@ -9,6 +9,7 @@ import {
   IChatMessage,
 } from '@akashaorg/typings/ui';
 import { IAppData } from '../components/AppsWidgetCard';
+import { IntegrationInfo, IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 
 const userData: { ethAddress: string; avatar?: IProfileData['avatar'] }[] = [
   {
@@ -178,16 +179,18 @@ const profileData = {
   ensName: 'gilbert.akasha.eth',
   description:
     'Product design @companyname. Main interests: User experience, Design processes, Project Management. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
-  totalFollowers: '15',
-  totalFollowing: '1876',
+  totalFollowers: 15,
+  totalFollowing: 1876,
+  totalInterests: 3,
   isFollowed: true,
   apps: '12',
   profileType: 'user',
-  totalPosts: 235,
+  totalPosts: '235',
   vnd: {},
   default: [],
   providers: [],
   badges: ['dev', 'publisher'],
+  _id: '31231',
 };
 
 const TAGS = [
@@ -273,6 +276,7 @@ const trendingTagsData = [
 
 const trendingProfilesData = [
   {
+    _id: '123',
     ethAddress: '0x003410490050000320006570034567114572000',
     pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv1',
     name: 'Jon Gilbert',
@@ -281,13 +285,16 @@ const trendingProfilesData = [
     avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
     coverImage: { url: 'goldenrod', fallbackUrl: 'red' },
     totalFollowers: 312,
-    postsNumber: 235,
+    totalFollowing: 33,
+    totalInterests: 8,
+    totalPosts: '235',
     default: [],
     providers: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
+    _id: '123',
     ethAddress: '0x003410490050778032325657003456711457212',
     pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rvr2',
     name: 'Alexei Gilbertovich',
@@ -296,7 +303,9 @@ const trendingProfilesData = [
     avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
     coverImage: { fallbackUrl: 'blue' },
     totalFollowers: 7585,
-    postsNumber: 235,
+    totalFollowing: 33,
+    totalInterests: 8,
+    totalPosts: '235',
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
     isFollowed: true,
@@ -304,6 +313,7 @@ const trendingProfilesData = [
     providers: [],
   },
   {
+    _id: '123',
     ethAddress: '0x003410490050000320006570034567114572000',
     pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv2',
     name: 'Jon Silbert',
@@ -312,13 +322,16 @@ const trendingProfilesData = [
     avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
     coverImage: { url: 'goldenrod', fallbackUrl: 'red' },
     totalFollowers: 312,
-    postsNumber: 235,
+    totalFollowing: 33,
+    totalInterests: 8,
+    totalPosts: '235',
     default: [],
     providers: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
+    _id: '123',
     ethAddress: '0x003410490050000320006570034567114572000',
     pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv3',
     name: 'Jon Wilbert',
@@ -327,13 +340,16 @@ const trendingProfilesData = [
     avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
     coverImage: { url: 'goldenrod', fallbackUrl: 'red' },
     totalFollowers: 312,
-    postsNumber: 235,
+    totalFollowing: 33,
+    totalInterests: 8,
+    totalPosts: '235',
     default: [],
     providers: [],
     description:
       'Product design @companyname. Main interests: User experience, Design processes, Project Managament. Author of This could be a book name, and Another Book. Love people, plants, words, and food.',
   },
   {
+    _id: '123',
     ethAddress: '0x003410490050000320006570034567114572000',
     pubKey: 'abc123zxcv7scxkfe32fce21ce2ce2rv4',
     name: 'Jon Bilbert',
@@ -342,7 +358,9 @@ const trendingProfilesData = [
     avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
     coverImage: { url: 'goldenrod', fallbackUrl: 'red' },
     totalFollowers: 312,
-    postsNumber: 235,
+    totalFollowing: 33,
+    totalInterests: 8,
+    totalPosts: '235',
     default: [],
     providers: [],
     description:
@@ -350,8 +368,7 @@ const trendingProfilesData = [
   },
 ];
 
-/* @Todo: fix my type */
-const ICDetailAppsData: any[] = [
+const ICDetailAppsData: (IntegrationInfo & Partial<{ releases: ReleaseInfo[] }>)[] = [
   {
     name: 'Theme Wizard',
     id: 'bbaryfskgshgirsnxnbv',
@@ -383,12 +400,7 @@ const ICDetailAppsData: any[] = [
     integrationType: 1,
     latestReleaseId: '0xf9427384382',
     enabled: true,
-    description: `Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
-      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
-      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
-      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups.
-      Never take a screenshot of a map again! With Mapsicle, you can quickly and seamlessly place maps in your mockups. An interactive map lets you pan to the perfect location, or you can search for a place anywhere in the world.
-      Never take a screenshot of a map again!`,
+
     releases: [
       {
         integrationID: 'bbaryfskgshgirsnxnbv',
@@ -418,16 +430,21 @@ const ICDetailAppsData: any[] = [
     ],
   },
 ];
-/* @Todo: fix my type */
-const ICWorldAppsData: any[] = [
+
+const ICInstalledAppsData: IntegrationReleaseInfo[] = [
   {
     name: 'Theme Wizard',
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xfD8c38044489fe74b2eC548E9e02d573Aa1EC9a7',
-    version: '0.2.1',
-    sources: [],
+    integrationID: '3182731927391',
+    version: '0.1.0',
+    manifestData: {
+      mainFile: 'index.js',
+      displayName: 'Theme Wiz',
+      keywords: ['theme'],
+      license: 'wtfpl',
+    },
     enabled: true,
   },
   {
@@ -435,9 +452,14 @@ const ICWorldAppsData: any[] = [
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xd4cd165bc286160d7d51a5c21079fbcb9f22afa5',
-    version: '0.2.1',
-    sources: [],
+    integrationID: '3182731927391',
+    version: '0.1.0',
+    manifestData: {
+      mainFile: 'index.js',
+      displayName: 'Mod Tools',
+      keywords: ['moderation'],
+      license: 'wtfpl',
+    },
     enabled: true,
   },
   {
@@ -445,9 +467,14 @@ const ICWorldAppsData: any[] = [
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xkasfkjas',
-    version: '0.2.1',
-    sources: [],
+    integrationID: '3182731924391',
+    version: '0.1.0',
+    manifestData: {
+      mainFile: 'index.js',
+      displayName: 'Quik Mod',
+      keywords: ['moderation'],
+      license: 'wtfpl',
+    },
     enabled: true,
   },
   {
@@ -455,22 +482,31 @@ const ICWorldAppsData: any[] = [
     id: 'bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xkasfkjas',
-    version: '0.2.1',
-    sources: [],
+    integrationID: '3182731923391',
+    version: '0.1.0',
+    manifestData: {
+      mainFile: 'index.js',
+      displayName: 'Confetti Replies',
+      keywords: ['replies'],
+      license: 'wtfpl',
+    },
     enabled: true,
   },
 ];
-/* @Todo: fix my type */
-const ICInstalledAppsData: any[] = [
+const ICWorldAppsData: IntegrationReleaseInfo[] = [
   {
     name: 'Feed',
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xkasfkjas',
-    version: '0.2.1',
-    sources: [],
+    integrationID: '3182731927321',
+    version: '0.1.0',
+    manifestData: {
+      mainFile: 'index.js',
+      displayName: 'Feed',
+      keywords: ['feed'],
+      license: 'wtfpl',
+    },
     enabled: true,
   },
   {
@@ -478,9 +514,14 @@ const ICInstalledAppsData: any[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xkasfkjas',
-    version: '0.2.1',
-    sources: [],
+    integrationID: '3182731927124',
+    version: '0.1.0',
+    manifestData: {
+      mainFile: 'index.js',
+      displayName: 'Settings',
+      keywords: ['settings'],
+      license: 'wtfpl',
+    },
     enabled: true,
   },
   {
@@ -488,9 +529,14 @@ const ICInstalledAppsData: any[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xkasfkjas',
-    version: '0.2.1',
-    sources: [],
+    integrationID: '3182731927392',
+    version: '0.1.0',
+    manifestData: {
+      mainFile: 'index.js',
+      displayName: 'Search',
+      keywords: ['search'],
+      license: 'wtfpl',
+    },
     enabled: true,
   },
   {
@@ -498,9 +544,14 @@ const ICInstalledAppsData: any[] = [
     id: '#bbaryfskgshgirsnxnbv',
     author: '@akasha',
     integrationType: 1,
-    integrationID: '0xkasfkjas',
-    version: '0.2.1',
-    sources: [],
+    integrationID: '3182731927396',
+    version: '0.1.0',
+    manifestData: {
+      mainFile: 'index.js',
+      displayName: 'Bookmarks',
+      keywords: ['saving', 'bookmarks'],
+      license: 'wtfpl',
+    },
     enabled: true,
   },
 ];
@@ -752,9 +803,16 @@ const entryData = {
         ethAddress: '0x003410490050000320006570047391024572000',
         userName: '@marianagomes',
         ensName: 'marianagomes.world.eth',
-        avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
-        coverImage: 'teal',
-        postsNumber: 12,
+        avatar: {
+          url: 'https://placebeard.it/480/480',
+          fallbackUrl: 'https://placebeard.it/480/480',
+        },
+        coverImage: { url: 'teal', fallbackUrl: 'teal' },
+        totalPosts: '12',
+        _id: '3123123',
+        totalFollowers: 15,
+        totalFollowing: 1876,
+        totalInterests: 3,
       },
 
       content: 'Great Job!',
@@ -769,9 +827,16 @@ const entryData = {
         ethAddress: '0x003410490050000320006570047391024572000',
         userName: '@gigipatratel',
         ensName: 'gigipatratel.world.eth',
-        avatar: { fallbackUrl: 'https://placebeard.it/480/480' },
-        coverImage: 'brown',
-        postsNumber: 123,
+        avatar: {
+          url: 'https://placebeard.it/480/480',
+          fallbackUrl: 'https://placebeard.it/480/480',
+        },
+        coverImage: { url: 'teal', fallbackUrl: 'teal' },
+        totalPosts: '123',
+        _id: '3123143',
+        totalFollowers: 15,
+        totalFollowing: 1877,
+        totalInterests: 3,
       },
       content: 'Amazing!',
 
@@ -909,7 +974,6 @@ const flagAsLabel = 'Flag as inappropriate';
 const bookmarkLabel = 'Save';
 const bookmarkedLabel = 'Saved';
 const repliesLabel = 'Replies';
-const repostsLabel = 'Reposts';
 
 const dummyChatArr: IChatMessage[] = [
   {
@@ -1082,7 +1146,6 @@ export {
   bookmarkLabel,
   bookmarkedLabel,
   repliesLabel,
-  repostsLabel,
   trendingProfilesData,
   trendingTagsData,
   ICWorldAppsData,

@@ -148,11 +148,11 @@ const getComment = async commentID => {
     contentIds: [commentID],
   });
   const res = await sdk.api.comments.getComment(commentID);
+  // check author's moderation status
   const modStatusAuthor = await checkStatus({
     user: user?.pubKey || '',
     contentIds: [res.getComment?.author?.pubKey],
   });
-  // @TODO: assign modStatus to a single prop
   return {
     ...res.getComment,
     ...modStatus[0],

@@ -131,20 +131,16 @@ const EntryRenderer = (
 
   const followedProfilesReq = useIsFollowingMultiple(loginState.pubKey, [authorPubKey]);
 
-  /** @Todo: fix my type ;/ **/
-  const postData: any = React.useMemo(() => {
+  const postData = React.useMemo(() => {
     if (postReq.data && itemType === EntityTypes.ENTRY) {
-      /** @Todo: fix my type ;/ **/
-      return mapEntry(postReq.data as any);
+      return mapEntry(postReq.data);
     }
     return undefined;
   }, [postReq.data, itemType]);
 
-  /** @Todo: fix my type ;/ **/
-  const commentData: any = React.useMemo(() => {
+  const commentData = React.useMemo(() => {
     if (commentReq.data && itemType === EntityTypes.COMMENT) {
-      /** @Todo: fix my type ;/ **/
-      return mapEntry(commentReq.data as any);
+      return mapEntry(commentReq.data);
     }
     return undefined;
   }, [commentReq.data, itemType]);
@@ -155,8 +151,7 @@ const EntryRenderer = (
     );
   }, [authorPubKey, followedProfilesReq.data, followedProfilesReq.status]);
 
-  /* @Todo: fix my type ;/ */
-  const itemData: any = React.useMemo(() => {
+  const itemData = React.useMemo(() => {
     if (itemType === EntityTypes.ENTRY) {
       return postData;
     } else if (itemType === EntityTypes.COMMENT) {
@@ -283,7 +278,10 @@ const EntryRenderer = (
         action: 'Reply Edited',
       });
     }
-    commentEditReq.mutate({ ...commentData, postID: itemData.postId });
+    commentEditReq.mutate({
+      ...commentData,
+      postID: !!itemData && 'postId' in itemData && itemData.postId,
+    });
     setIsEditingComment(false);
   };
 
@@ -304,14 +302,13 @@ const EntryRenderer = (
   const repliesReq = useInfiniteReplies(
     {
       limit: REPLY_FRAGMENT_SIZE,
-      postID: commentData?.postId,
+      postID: !!commentData && 'postId' in commentData && commentData?.postId,
       commentID: commentData?.entryId,
     },
     canShowEntry && props.showReplyFragment,
   );
 
-  /** @Todo: fix my type ;/ **/
-  const replyPages: any = React.useMemo(() => {
+  const replyPages = React.useMemo(() => {
     if (repliesReq.data) {
       return repliesReq.data.pages;
     }
@@ -378,8 +375,7 @@ const EntryRenderer = (
                 getLinkPreview={getLinkPreview}
                 getMentions={handleMentionQueryChange}
                 getTags={handleTagQueryChange}
-                /* @Todo: fix my type */
-                tags={tagSearch.data as any}
+                tags={tagSearch.data}
                 mentions={mentionSearch.data}
                 uploadRequest={uploadMediaToTextile}
                 editorState={itemData.slateContent}
@@ -401,7 +397,6 @@ const EntryRenderer = (
                 shareTextLabel={t('Share this post with your friends')}
                 onClickAvatar={handleAvatarClick}
                 repliesLabel={itemType === EntityTypes.ENTRY ? '' : t('Replies')}
-                repostsLabel={t('Reposts')}
                 repostLabel={t('Repost')}
                 editedLabel={t('Last edited')}
                 repostWithCommentLabel={t('Repost with comment')}
