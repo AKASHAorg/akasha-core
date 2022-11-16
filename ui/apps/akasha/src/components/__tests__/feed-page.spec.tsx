@@ -54,7 +54,7 @@ describe('< FeedPage /> component', () => {
     expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
   });
 
-  it('should show draft post from local storage and clear it', async () => {
+  it('should show saved draft post', async () => {
     const loginState = genLoggedInState(true);
     localStorage.setItem(
       `${appProps?.worldConfig?.homepageApp}-${loginState.pubKey}-draft-item`,
@@ -76,6 +76,26 @@ describe('< FeedPage /> component', () => {
     expect(screen.getByText(/Post in progress .../i)).toBeInTheDocument();
     expect(screen.getByText(/Draft/i)).toBeInTheDocument();
     expect(screen.getByText(/Clear/i)).toBeInTheDocument();
+  });
+
+  it('should clear draft post', async () => {
+    const loginState = genLoggedInState(true);
+    localStorage.setItem(
+      `${appProps?.worldConfig?.homepageApp}-${loginState.pubKey}-draft-item`,
+      JSON.stringify([
+        {
+          type: 'paragraph',
+          children: [
+            {
+              text: 'Post in progress ...',
+            },
+          ],
+        },
+      ]),
+    );
+    await act(async () => {
+      renderWithAllProviders(<BaseComponent loginState={loginState} />, {});
+    });
 
     await userEvent.click(screen.getByText(/Clear/i));
 
