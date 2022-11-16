@@ -99,6 +99,6 @@ describe('< FeedPage /> component', () => {
 
     await userEvent.click(screen.getByText(/Clear/i));
 
-    expect(Object.keys(localStorage).length).toBe(0);
+    expect(Object.keys(localStorage.getAll()).length).toBe(0);
   });
 });
