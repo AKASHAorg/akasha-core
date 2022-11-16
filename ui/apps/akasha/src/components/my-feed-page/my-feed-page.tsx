@@ -39,8 +39,8 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
     }
   }, [postsReq, loginState?.fromCache]);
 
-    /* @Todo: Fix my type */
-  const postPages:any = React.useMemo(() => {
+  /* @Todo: Fix my type */
+  const postPages: any = React.useMemo(() => {
     if (postsReq.data) {
       return postsReq.data.pages;
     }
@@ -56,20 +56,20 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   }, [postPages]);
 
   const handleEntryFlag = React.useCallback(
-    (entryId: string, itemType: string) => () => {
+    (itemId: string, itemType: string) => () => {
       if (!isLoggedUser) {
-        return showLoginModal.current({ modal: { name: 'report-modal', entryId, itemType } });
+        return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      navigateToModal.current({ name: 'report-modal', entryId, itemType });
+      navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
     [isLoggedUser],
   );
 
-  const handleEntryRemove = React.useCallback((entryId: string) => {
+  const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal.current({
       name: 'entry-remove-confirmation',
-      entryType: EntityTypes.ENTRY,
-      entryId,
+      itemType: EntityTypes.ENTRY,
+      itemId,
     });
   }, []);
 

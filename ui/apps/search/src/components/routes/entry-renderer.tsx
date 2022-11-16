@@ -76,7 +76,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       {
         id: itemData.entryId,
         authorEthAddress: itemData.author.ethAddress,
-        replyTo: itemData.postId ? { entryId: itemData.postId } : null,
+        replyTo: itemData.postId ? { itemId: itemData.postId } : null,
       },
       itemType,
     );
@@ -112,8 +112,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
-        entryId,
-        entryType: itemType,
+        itemId: entryId,
+        itemType: itemType,
       },
     });
   };
@@ -122,12 +122,12 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     /* todo */
   };
 
-  const handleEntryRemove = (entryId: string) => {
-    if (entryId)
+  const handleEntryRemove = (itemId: string) => {
+    if (itemId)
       props.navigateToModal({
         name: 'entry-remove-confirmation',
-        entryType: EntityTypes.ENTRY,
-        entryId,
+        itemType: EntityTypes.ENTRY,
+        itemId,
       });
   };
 
@@ -135,12 +135,20 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+  // why is itemType string here??
+  const handleEntryFlag = (itemId: string, itemType: string) => () => {
     if (!ethAddress) {
-      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+      return showLoginModal({
+        modal: { name: 'report-modal', itemId, itemType: itemType as unknown as EntityTypes },
+      });
     }
 
-    if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    if (itemId)
+      props.navigateToModal({
+        name: 'report-modal',
+        itemId,
+        itemType: itemType as unknown as EntityTypes,
+      });
   };
 
   const isFollowing = useIsFollowingMultiple(pubKey, [itemData?.author?.pubKey]);

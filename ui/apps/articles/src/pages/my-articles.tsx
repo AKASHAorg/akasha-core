@@ -60,14 +60,14 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
     }
   };
 
-  const handleFlagArticle = (entryId: string, itemType: string) => () => {
+  const handleFlagArticle = (itemId: string, itemType: string) => () => {
     if (!loginQuery.data?.pubKey) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { name: 'report-modal', entryId, itemType },
+        redirectTo: { name: 'report-modal', itemId, itemType },
       });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleClickWriteArticle = () => {

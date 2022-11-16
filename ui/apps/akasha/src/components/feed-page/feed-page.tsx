@@ -70,20 +70,20 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   }, [postsReq.data]);
 
   const handleEntryFlag = React.useCallback(
-    (entryId: string, itemType: string) => () => {
+    (itemId: string, itemType: string) => () => {
       if (!loginState.pubKey) {
-        return showLoginModal.current({ modal: { name: 'report-modal', entryId, itemType } });
+        return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      navigateToModal.current({ name: 'report-modal', entryId, itemType });
+      navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
     [loginState.pubKey],
   );
 
-  const handleEntryRemove = React.useCallback((entryId: string) => {
+  const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal.current({
       name: 'entry-remove-confirmation',
-      entryType: EntityTypes.ENTRY,
-      entryId,
+      itemType: EntityTypes.ENTRY,
+      itemId,
     });
   }, []);
 

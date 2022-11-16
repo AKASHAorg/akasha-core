@@ -43,8 +43,8 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
 
   const toggleTagSubscriptionReq = useToggleTagSubscription();
 
-    /* @Todo: Fix my type */
-  const postPages:any = React.useMemo(() => {
+  /* @Todo: Fix my type */
+  const postPages: any = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
     }
@@ -57,18 +57,18 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     }
   }, [reqPosts, loginState?.fromCache]);
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: string) => () => {
     if (!loginState?.pubKey) {
-      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
-  const handleEntryRemove = (entryId: string) => {
+  const handleEntryRemove = (itemId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryId,
-      entryType: EntityTypes.ENTRY,
+      itemId,
+      itemType: EntityTypes.ENTRY,
     });
   };
 

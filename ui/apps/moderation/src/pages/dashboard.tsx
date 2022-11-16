@@ -132,11 +132,11 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
     threshold: 0,
   });
 
-  const handleButtonClick = (entryId: string, itemType: string) => {
+  const handleButtonClick = (itemId: string, itemType: string) => {
     props.navigateToModal({
       name: 'moderate-modal',
       status: isPending ? 'pending' : 'moderated',
-      entryId,
+      itemId,
       itemType,
     });
   };
@@ -240,7 +240,7 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={pendingItem.contentID}
+                    itemId={pendingItem.contentID}
                     reasons={pendingItem.reasons.map((el: string) =>
                       t('{{ pendingItemReasons }}', { pendingItemReasons: el }),
                     )}
@@ -297,7 +297,7 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={moderatedItem.contentID}
+                    itemId={moderatedItem.contentID}
                     reasons={moderatedItem.reasons.map(el =>
                       t('{{ moderatedItemReasons }}', { moderatedItemReasons: el }),
                     )}
@@ -351,7 +351,7 @@ const Dashboard: React.FC<ISharedModerationProps> = props => {
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={moderatedItem.contentID}
+                    itemId={moderatedItem.contentID}
                     reasons={moderatedItem.reasons.map(el =>
                       t('{{ moderatedItemReasons }}', { moderatedItemReasons: el }),
                     )}

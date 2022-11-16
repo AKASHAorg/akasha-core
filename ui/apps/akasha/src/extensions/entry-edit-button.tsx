@@ -12,28 +12,28 @@ const EntryEditButton: React.FC<RootExtensionProps> = props => {
   const { t } = useTranslation('app-akasha-integration');
 
   const handleClick = () => {
-    if (props.extensionData && props.extensionData.hasOwnProperty('entryId')) {
+    if (props.extensionData && props.extensionData.hasOwnProperty('itemId')) {
       props.singleSpa.navigateToUrl(
         `${window.location.origin}/@akashaorg/app-akasha-integration/${
-          props.extensionData?.entryType === EntityTypes.ENTRY ? 'post' : 'reply'
-        }/${props.extensionData.entryId}?action=edit`,
+          props.extensionData?.itemType === EntityTypes.ENTRY ? 'post' : 'reply'
+        }/${props.extensionData.itemId}?action=edit`,
       );
     }
   };
 
-  const entryTypeLabel = React.useMemo(() => {
-    if (props.extensionData.entryType === EntityTypes.COMMENT) {
+  const itemTypeLabel = React.useMemo(() => {
+    if (props.extensionData.itemType === EntityTypes.COMMENT) {
       return t('reply');
     }
-    if (props.extensionData.entryType === EntityTypes.ENTRY) {
+    if (props.extensionData.itemType === EntityTypes.ENTRY) {
       return t('post');
     }
-  }, [props.extensionData.entryType, t]);
+  }, [props.extensionData.itemType, t]);
 
   return (
     <MenuItemButton
       icon={'edit'}
-      label={t('Edit {{ entryTypeLabel }}', { entryTypeLabel })}
+      label={t('Edit {{ itemTypeLabel }}', { itemTypeLabel })}
       onClick={handleClick}
     />
   );

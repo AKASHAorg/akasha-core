@@ -27,36 +27,36 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [props.singleSpa]);
 
   const handleDeletePost = React.useCallback(() => {
-    if (extensionData && typeof +extensionData.entryType === 'number') {
-      if (+extensionData.entryType === EntityTypes.COMMENT) {
+    if (extensionData && typeof +extensionData.itemType === 'number') {
+      if (+extensionData.itemType === EntityTypes.COMMENT) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.itemId);
-      } else if (+extensionData.entryType === EntityTypes.ENTRY) {
+      } else if (+extensionData.itemType === EntityTypes.ENTRY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
         });
         postDeleteQuery.mutate(extensionData.itemId);
       } else {
-        logger.error('entryType is undefined!');
+        logger.error('itemType is undefined!');
       }
     } else {
-      logger.error('property entryType is undefined!');
+      logger.error('property itemType is undefined!');
     }
     handleModalClose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = React.useMemo(() => {
-    if (extensionData.entryType === EntityTypes.ENTRY) {
+    if (extensionData.itemType === EntityTypes.ENTRY) {
       return t('post');
     }
     return t('reply');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [extensionData.entryType]);
+  }, [extensionData.itemType]);
 
   return (
     <ConfirmationModal

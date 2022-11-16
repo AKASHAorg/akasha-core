@@ -24,7 +24,7 @@ const { BasicCardBox, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
 type BaseEntryProps = {
   postId: string;
   commentId?: string;
-  entryType: EntityTypes;
+  itemType: EntityTypes;
   entryReq: UseQueryResult;
   entryData?: IEntryData;
   logger: Logger;
@@ -36,7 +36,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   const {
     postId,
     commentId,
-    entryType,
+    itemType,
     entryData,
     entryReq,
     showLoginModal,
@@ -85,11 +85,11 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     }
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: string) => () => {
     if (!loginState?.pubKey) {
-      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleFlipCard = () => {
@@ -99,8 +99,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   const handleCommentRemove = (commentId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryType: EntityTypes.COMMENT,
-      entryId: commentId,
+      itemType: EntityTypes.COMMENT,
+      itemId: commentId,
     });
   };
 
@@ -134,8 +134,8 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             />
           )}
           <MainEntry
-            entryId={commentId || postId}
-            entryType={entryType}
+            itemId={commentId || postId}
+            itemType={itemType}
             entryReq={entryReq}
             loginState={loginState}
             uiEvents={props.uiEvents}

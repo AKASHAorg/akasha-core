@@ -19,7 +19,7 @@ export interface IContentProps extends RootComponentProps {
   andLabel?: string;
   reportedByLabel: string;
   originallyReportedByLabel: string;
-  entryId: string;
+  itemId: string;
   reasons: string[];
   reporter?: string;
   reporterAvatar?: string | null;

@@ -79,14 +79,14 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
     props.navigateToModal({ name: 'login' });
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string, user: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: string, user: string) => () => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { modal: { name: 'report-modal', entryId, itemType, user } },
+        redirectTo: { modal: { name: 'report-modal', itemId, itemType, user } },
       });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType, user });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
 
   const showUpdateProfileModal = () => {

@@ -23,7 +23,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     andLabel,
     reportedByLabel,
     originallyReportedByLabel,
-    entryId,
+    itemId,
     reasons,
     reporter,
     reporterAvatar,
@@ -44,16 +44,16 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
   } = props;
 
   const profileDataQuery = useGetProfile(
-    entryId,
+    itemId,
     props.user,
     itemType === ModerationItemTypes.ACCOUNT,
   );
   const profile = profileDataQuery.data;
 
-  const postQuery = usePost({ postId: entryId, enabler: itemType === ModerationItemTypes.POST });
+  const postQuery = usePost({ postId: itemId, enabler: itemType === ModerationItemTypes.POST });
 
   const commentQuery = useComment(
-    entryId,
+    itemId,
     itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT,
   );
 
@@ -93,7 +93,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           andLabel={andLabel}
           reportedByLabel={reportedByLabel}
           originallyReportedByLabel={originallyReportedByLabel}
-          entryId={entryId}
+          itemId={itemId}
           reasons={reasons}
           reporter={reporter}
           reporterAvatar={reporterAvatar}

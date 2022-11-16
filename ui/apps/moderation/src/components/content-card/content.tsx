@@ -27,8 +27,8 @@ const Content: React.FC<IContentProps> = props => {
   const isMobile = size === 'small';
 
   const handleClick = () => {
-    if (props.entryId) {
-      props.handleButtonClick(props.entryId, props.itemType);
+    if (props.itemId) {
+      props.handleButtonClick(props.itemId, props.itemType);
     }
   };
 
@@ -89,7 +89,7 @@ const Content: React.FC<IContentProps> = props => {
       </Text>
       {showExplanations && (
         <ExplanationsBox
-          entryId={props.entryId}
+          itemId={props.itemId}
           reportedByLabel={props.reportedByLabel}
           forLabel={props.forLabel}
           logger={props.logger}

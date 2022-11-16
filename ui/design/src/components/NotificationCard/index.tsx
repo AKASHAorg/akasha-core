@@ -28,7 +28,7 @@ export interface INotificationsCard {
   emptySubtitle?: string;
   // handlers
   handleMessageRead: (notifId: string) => void;
-  handleEntryClick: (entryId: string, entryType: EntityTypes) => void;
+  handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
   handleProfileClick: (pubKey: string) => void;
   loggedIn?: boolean;
 }

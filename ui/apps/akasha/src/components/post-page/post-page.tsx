@@ -31,7 +31,7 @@ const PostPage: React.FC<PostPageProps & RootComponentProps> = props => {
     <BaseEntryPage
       {...props}
       postId={postId}
-      entryType={EntityTypes.ENTRY}
+      itemType={EntityTypes.ENTRY}
       entryData={entryData}
       entryReq={postReq}
     />

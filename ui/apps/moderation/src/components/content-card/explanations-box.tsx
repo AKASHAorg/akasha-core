@@ -7,14 +7,14 @@ import ExplanationsBoxEntry, { IExplanationsBoxEntryProps } from './explanations
 const { Box, Text } = DS;
 
 export interface IExplanationsBoxProps extends Omit<IExplanationsBoxEntryProps, 'flagEntry'> {
-  entryId: string;
+  itemId: string;
   logger: Logger;
 }
 
 const ExplanationsBox: React.FC<IExplanationsBoxProps> = props => {
-  const { entryId, reportedByLabel, forLabel, logger } = props;
+  const { itemId, reportedByLabel, forLabel, logger } = props;
 
-  const getFlagsQuery = useGetFlags(entryId);
+  const getFlagsQuery = useGetFlags(itemId);
   const flagEntries = getFlagsQuery.data;
 
   return (

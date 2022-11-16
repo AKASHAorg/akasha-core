@@ -22,7 +22,7 @@ const MockedInlineEditor = ({ action }) => (
     {...genAppProps()}
     extensionData={{
       name: 'name',
-      entryId: '01gf',
+      itemId: '01gf',
       isShown: true,
       action,
     }}

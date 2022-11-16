@@ -282,7 +282,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   };
 
   // repost related
-  const handleRepost = (_withComment: boolean, entryId: string) => {
+  const handleRepost = (_withComment: boolean, itemId: string) => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.POST,
       action: 'Repost Clicked',
@@ -293,7 +293,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     } else {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}?action=repost`,
+        getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemId}?action=repost`,
       });
     }
   };
@@ -499,7 +499,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.POSTS) &&
           searchPostsState?.map(itemData => (
             <EntryCardRenderer
-              key={itemData.entryId}
+              key={itemData.itemId}
               itemData={itemData}
               itemType={EntityTypes.ENTRY}
               logger={props.logger}
@@ -524,7 +524,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         {(activeButton === ButtonValues.ALL || activeButton === ButtonValues.REPLIES) &&
           searchCommentsState?.map(itemData => (
             <EntryCardRenderer
-              key={itemData.entryId}
+              key={itemData.itemId}
               itemData={itemData}
               itemType={EntityTypes.COMMENT}
               logger={props.logger}
