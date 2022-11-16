@@ -24,12 +24,14 @@ describe('< FeedPage /> component', () => {
   );
 
   beforeAll(() => {
-    Object.defineProperty(global, 'localStorage', { value: localStorageMock });
-
     jest
       .spyOn(extension, 'Extension')
       .mockReturnValue(
-        <InlineEditor {...genAppProps()} extensionData={{ name: 'post', action: 'post' }} />,
+        <InlineEditor
+          {...genAppProps()}
+          draftStorage={localStorageMock}
+          extensionData={{ name: 'post', action: 'post' }}
+        />,
       );
 
     (
@@ -59,7 +61,7 @@ describe('< FeedPage /> component', () => {
 
   it('should show saved draft post', async () => {
     const loginState = genLoggedInState(true);
-    localStorage.setItem(
+    localStorageMock.setItem(
       `${appProps?.worldConfig?.homepageApp}-${loginState.pubKey}-draft-item`,
       JSON.stringify([
         {
@@ -83,7 +85,7 @@ describe('< FeedPage /> component', () => {
 
   it('should clear draft post', async () => {
     const loginState = genLoggedInState(true);
-    localStorage.setItem(
+    localStorageMock.setItem(
       `${appProps?.worldConfig?.homepageApp}-${loginState.pubKey}-draft-item`,
       JSON.stringify([
         {
@@ -102,6 +104,6 @@ describe('< FeedPage /> component', () => {
 
     await userEvent.click(screen.getByText(/Clear/i));
 
-    expect(Object.keys(localStorage.getAll()).length).toBe(0);
+    expect(Object.keys(localStorageMock.getAll()).length).toBe(0);
   });
 });

@@ -3,12 +3,16 @@ import { EntityTypes, RootExtensionProps } from '@akashaorg/typings/ui';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { ReplyEditor } from './reply-editor';
 import { PostEditor } from './post-editor';
+import { IDraftStorage } from './utils';
 
-export const InlineEditor = (props: Partial<RootExtensionProps>) => {
+export const InlineEditor = (
+  props: Partial<RootExtensionProps> & { draftStorage?: IDraftStorage },
+) => {
   const loginQuery = useGetLogin();
   const action = props.extensionData.action;
   const entryId = props.extensionData.entryId;
   const entryType = props.extensionData.entryType;
+  const draftStorage = props.draftStorage || localStorage;
 
   /*ReplyEditor handles reply to a comment and editing a comment*/
   if (entryType === EntityTypes.COMMENT && entryId && (action === 'reply' || action === 'edit')) {
@@ -29,6 +33,7 @@ export const InlineEditor = (props: Partial<RootExtensionProps>) => {
         pubKey={loginQuery?.data?.pubKey}
         singleSpa={props.singleSpa}
         action={action}
+        draftStorage={draftStorage}
       />
     );
   }
