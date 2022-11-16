@@ -274,7 +274,7 @@ export function MainEntry({
         )}
         {showReplyEditor && loginState?.ethAddress && !entryData?.isRemoved && (
           <Extension
-            name={`inline-editor_postreply_${entryData?.entryId}`}
+            name={`inline-editor_reply_${entryData?.entryId}`}
             uiEvents={uiEvents}
             data={{
               entryId,
