@@ -9,6 +9,8 @@ import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/Si
 
 const { Box, styled, Sidebar, useViewportSize } = DS;
 
+declare const __DEV__: boolean;
+
 const AppSidebar = styled(Sidebar)`
   height: calc(100vh - 3rem);
   min-width: 15em;
@@ -97,26 +99,17 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   }, [worldApps, userInstalledApps]);
 
   const handleNavigation = (appName: string, route: string) => {
-    routing.navigateTo({
+    routing?.navigateTo({
       appName,
       getNavigationUrl: () => route,
     });
   };
 
   const handleClickExplore = () => {
-    // find IC app from world apps
-    // @TODO: replace string with a constant
-    const icApp = worldApps.find(
-      (menuItem: { name: string }) => menuItem.name === '@akashaorg/app-integration-center',
-    );
-
-    // if found, navigate to route
-    if (icApp) {
-      routing.navigateTo({
-        appName: icApp.name,
-        getNavigationUrl: () => icApp.route,
-      });
-    }
+    routing?.navigateTo({
+      appName: '@akashaorg/app-integration-center',
+      getNavigationUrl: routes => routes.explore,
+    });
   };
 
   const handleBrandClick = () => {
@@ -151,7 +144,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
     <>
       <SidebarOverlay onClick={handleSidebarClose} />
       <AppSidebar
-        versionLabel="ALPHA"
+        versionLabel={__DEV__ && 'DEV'}
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
         worldAppsTitleLabel={t('World Apps')}
         poweredByLabel="Powered by AKASHA"

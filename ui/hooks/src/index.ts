@@ -10,7 +10,7 @@ import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-ana
 import withProviders from './utils/provider-hoc';
 import ThemeWrapper from './utils/theme-wrapper';
 import useReasons from './use-reasons';
-import { useQueryListener, useMutationListener } from './use-query-listener';
+import { useQueryListener, useMutationListener, useMutationsListener } from './use-query-listener';
 import {
   useUpdateUsernameProvider,
   useUsernameValidation,
@@ -88,6 +88,7 @@ import { useEntryNavigation } from './use-navigation';
 import {
   useCheckModerator,
   useGetCount,
+  useGetModerators,
   useGetFlags,
   useInfiniteDelisted,
   useInfiniteKept,
@@ -96,7 +97,6 @@ import {
   useModeration,
   useReport,
 } from './use-moderation';
-import { ICount, ILogItem, IModeratedItem, IPendingItem, EntryReport } from './moderation-requests';
 import {
   useConnectProvider,
   useInjectedProvider,
@@ -124,6 +124,7 @@ import {
 } from './use-app-settings';
 import { useAppDescription } from './use-app-description';
 import { usePlaformHealthCheck } from './use-health-check';
+import { useEnsTexts } from './use-ens';
 import {
   useValidateMessage,
   useAddDevKeyFromMessage,
@@ -158,6 +159,7 @@ export {
   // use-query-listener
   useQueryListener,
   useMutationListener,
+  useMutationsListener,
   // use-username
   useUpdateUsernameProvider,
   useUsernameValidation,
@@ -241,6 +243,7 @@ export {
   // use-moderation
   useCheckModerator,
   useGetCount,
+  useGetModerators,
   useGetFlags,
   useInfiniteDelisted,
   useInfiniteKept,
@@ -248,12 +251,6 @@ export {
   useInfinitePending,
   useModeration,
   useReport,
-  // moderation-requests
-  ICount,
-  ILogItem,
-  IModeratedItem,
-  IPendingItem,
-  EntryReport,
   // use-injected-provider
   useInjectedProvider,
   useConnectProvider,
@@ -279,6 +276,7 @@ export {
   useUninstallApp,
   useAppDescription,
   usePlaformHealthCheck,
+  useEnsTexts,
   useValidateMessage,
   useAddDevKeyFromMessage,
   useGetDevKeys,

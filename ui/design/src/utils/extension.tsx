@@ -6,7 +6,7 @@ type Props = {
   name: string;
   uiEvents: RootComponentProps['uiEvents'];
   style?: React.CSSProperties;
-  data: Partial<Pick<EventDataTypes, 'itemId' | 'itemType'>> & {
+  data?: Partial<Pick<EventDataTypes, 'itemId' | 'commentId' | 'itemType'>> & {
     [key in string]: unknown;
   };
 };

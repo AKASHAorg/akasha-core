@@ -48,7 +48,7 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
           margin={{ ...(imageBoxHasMargin && { bottom: 'small' }) }}
           alignSelf="center"
         >
-          <Image fit="contain" src={`${publicImgPath}/${errorType}.png`} />
+          <Image fit="contain" src={`${publicImgPath}/${errorType}.webp`} />
         </Box>
         <Text
           weight={600}

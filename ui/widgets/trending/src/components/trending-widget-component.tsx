@@ -149,10 +149,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         noProfilesLabel={t('No profiles found!')}
         isLoadingTags={trendingTagsReq.isFetching}
         isLoadingProfiles={trendingProfilesReq.isFetching}
-        /* @Todo: fix my type ;/ */
-        tags={trendingTags as any}
-        /* @Todo: fix my type ;/ */
-        profiles={trendingProfiles as any}
+        tags={trendingTags}
+        profiles={trendingProfiles}
         followedProfiles={followedProfiles}
         subscribedTags={tagSubscriptions}
         onClickTag={handleTagClick}

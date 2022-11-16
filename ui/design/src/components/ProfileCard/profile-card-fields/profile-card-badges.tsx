@@ -5,7 +5,7 @@ export interface IProfileCardBadgesProps {
   publicImgPath?: string;
   badgesLabel: string;
   badges?: string[];
-}
+};
 
 const ProfileCardBadges: React.FC<IProfileCardBadgesProps> = props => {
   const { publicImgPath = '/images', badgesLabel, badges } = props;

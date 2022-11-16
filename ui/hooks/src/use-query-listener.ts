@@ -1,4 +1,5 @@
 import * as React from 'react';
+import uniqBy from 'lodash/uniqBy';
 import {
   MutationKey,
   QueryKey,
@@ -25,7 +26,7 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
   React.useEffect(() => {
     const unsubscribe = mutationCache.subscribe(mutation => {
       if (mutation.options.mutationKey === mutationKey) {
-        setMutation(Object.assign({}, mutation as unknown as Mutation<unknown, unknown, TVars>));
+        setMutation(mutation as unknown as Mutation<unknown, unknown, TVars>);
       }
     });
     return () => {
@@ -36,6 +37,49 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
     mutation,
     clear: () => setMutation(null),
   };
+};
+
+/**
+ * Hook to detect changes to mutations
+ * @returns Mutation[] | undefined
+ * @example useMutationsListener hook
+ * ```typescript
+ * const sampleMutations = useMutationsListener('mutation key');
+ *
+ * const variables = sampleMutations[0]?.state?.variables;
+ * ```
+ */
+export const useMutationsListener = <TVars>(mutationKey: MutationKey) => {
+  const [mutations, setMutations] = React.useState<Mutation<unknown, unknown, TVars>[]>([]);
+  const queryClient = useQueryClient();
+  const mutationCache = queryClient.getMutationCache();
+  React.useEffect(() => {
+    const unsubscribe = mutationCache.subscribe(mutation => {
+      if (mutation.options.mutationKey === mutationKey) {
+        if (mutation.state.status === 'loading') {
+          setMutations(mutations =>
+            uniqBy(
+              [mutation as unknown as Mutation<unknown, unknown, TVars>, ...mutations],
+              'mutationId',
+            ),
+          );
+          return;
+        }
+        setMutations(mutations =>
+          mutations.map(_mutation => {
+            if (_mutation.mutationId === mutation.mutationId) {
+              return mutation as unknown as Mutation<unknown, unknown, TVars>;
+            }
+            return _mutation;
+          }),
+        );
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [mutationKey, mutationCache]);
+  return { mutations };
 };
 
 /**

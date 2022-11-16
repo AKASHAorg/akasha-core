@@ -1,25 +1,39 @@
 import React from 'react';
-import { Box, Text } from 'grommet';
+import { Anchor, Box, Text } from 'grommet';
 
+import Icon from '../Icon';
 import { MainAreaCardBox } from '../EntryCard/basic-card-box';
-import { StyledBox, ModalWrapper, ModalButton } from '../ListModal/styled-modal';
+import { StyledBox, ModalWrapper } from '../ListModal/styled-modal';
 
 export interface IReportSuccessModalProps {
   className?: string;
   successTitleLabel: string;
-  successMessageLabel?: string;
-  contentId?: string;
-  blockLabel?: string;
-  closeLabel?: string;
+  successMessageLabel: string;
+  reason: string;
+  reasonPrefix: string;
+  contentId: string;
+  footerLabel: string;
+  footerCTAUrl: string;
+  footerCTALabel: string;
   // screen size passed by viewport provider
   size?: string;
-  // @TODO: make prop required, and modify all instances appropriately
   closeModal: () => void;
-  // signData?: any;
 }
 
 const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
-  const { className, successTitleLabel, successMessageLabel, closeLabel, size, closeModal } = props;
+  const {
+    className,
+    successTitleLabel,
+    successMessageLabel,
+    reason,
+    reasonPrefix,
+    contentId,
+    footerLabel,
+    footerCTAUrl,
+    footerCTALabel,
+    size,
+    closeModal,
+  } = props;
 
   const handleModalClose =
     (blockUser = false) =>
@@ -30,52 +44,68 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
       closeModal();
     };
 
+  const handleCopy = (value: string) => () => {
+    navigator.clipboard.writeText(value);
+  };
+
   return (
     <ModalWrapper isTransparent={true} justify="center" align="center">
       <StyledBox width={size === 'small' ? '90%' : '33%'}>
-        <MainAreaCardBox className={className}>
-          <Box direction="column" pad="large">
-            <Box direction="row" margin={{ top: 'xsmall' }} align="start">
-              <Text
-                weight={600}
-                margin={{ bottom: '1rem', horizontal: 'auto' }}
-                size="large"
-                textAlign="center"
-              >
+        <MainAreaCardBox className={className} style={{ position: 'relative' }}>
+          <Icon
+            type="close"
+            onClick={handleModalClose(false)}
+            style={{ position: 'absolute', right: '0.75rem', top: '0.75rem', cursor: 'pointer' }}
+          />
+          <Box direction="column" pad="large" gap="xlarge" align="center">
+            <Box margin={{ top: 'small' }}>
+              <Text weight={600} size="large" textAlign="center">
                 {successTitleLabel}
               </Text>
+              <Text weight="normal" color="secondaryText" size="large" textAlign="center">
+                {successMessageLabel}
+              </Text>
             </Box>
-            <Text
-              weight="normal"
-              margin={{ top: 'xsmall' }}
-              color="secondaryText"
-              size="large"
-              textAlign="center"
-              alignSelf="center"
-            >
-              {successMessageLabel}
-            </Text>
-            <Box direction="row" margin={{ top: 'large' }} alignSelf="center">
-              {/* un-comment this to implement block user functionality */}
 
-              {/* <ModalButton
-                label={blockLabel}
-                margin={{ right: '0.5rem' }}
-                disabled={true}
-                onClick={handleModalClose(true)}
-              /> */}
-              <ModalButton primary={true} label={closeLabel} onClick={handleModalClose()} />
+            <Box width="fit-content" align="center">
+              <Box round="0.125rem" background="hoverBackground">
+                <Text as="span" color="accentText" size="large" weight={600}>
+                  {reason}
+                </Text>
+              </Box>
+
+              <Box direction="row" gap="xsmall">
+                <Text size="large">{`${reasonPrefix}-${contentId}`}</Text>
+                <Icon
+                  type="copy"
+                  color="secondaryText"
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleCopy(contentId)}
+                />
+              </Box>
+            </Box>
+
+            <Box align="center">
+              <Text size="medium">{footerLabel}</Text>
+              <Box direction="row" align="center" gap="xxsmall">
+                <Icon size="xs" type="discord" />
+                <Anchor
+                  href={footerCTAUrl}
+                  size="medium"
+                  weight="normal"
+                  target="_blank"
+                  color="accentText"
+                  style={{ textDecoration: 'none' }}
+                >
+                  {footerCTALabel}
+                </Anchor>
+              </Box>
             </Box>
           </Box>
         </MainAreaCardBox>
       </StyledBox>
     </ModalWrapper>
   );
-};
-
-ReportSuccessModal.defaultProps = {
-  blockLabel: 'Block User',
-  closeLabel: 'Close',
 };
 
 export default ReportSuccessModal;

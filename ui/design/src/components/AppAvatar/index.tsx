@@ -35,14 +35,14 @@ const AppAvatar: React.FC<AppAvatarProps> = props => {
     // currently there are 3 placeholders for sidebar apps
     avatarImageFallback = `${publicImgPath}/sidebar-app-placeholder-${
       Math.floor(Math.random() * 3) + 1
-    }.png`;
+    }.webp`;
   }
 
   if (!src?.fallbackUrl && appType === IntegrationTypes.WIDGET) {
     // currently there are 2 placeholders for sidebar apps
     avatarImageFallback = `${publicImgPath}/sidebar-widget-placeholder-${
       Math.floor(Math.random() * 2) + 1
-    }.png`;
+    }.webp`;
   }
 
   return (

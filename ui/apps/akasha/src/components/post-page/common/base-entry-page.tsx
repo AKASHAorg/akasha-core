@@ -63,8 +63,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   const reqCommentsOrReplies = commentId ? reqReplies : reqComments;
   const [analyticsActions] = useAnalytics();
 
-  /* @Todo: Fix my type */
-  const commentPages: any = React.useMemo(() => {
+  const commentPages = React.useMemo(() => {
     if (reqCommentsOrReplies.data) {
       return reqCommentsOrReplies.data.pages;
     }
@@ -72,8 +71,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   }, [reqCommentsOrReplies.data]);
 
   const profileDataReq = useGetProfile(loginState?.pubKey);
-  /* @Todo: fix my type ;/ */
-  const loggedProfileData: any = profileDataReq.data;
+  const loggedProfileData = profileDataReq.data;
 
   const handleLoadMore = () => {
     if (
@@ -151,6 +149,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             layoutConfig={props.layoutConfig}
             loggedProfileData={loggedProfileData}
             entryData={entryData}
+            commentIds={commentPages[0]?.results || []}
           />
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}

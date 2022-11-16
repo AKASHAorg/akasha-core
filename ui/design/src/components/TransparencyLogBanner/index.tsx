@@ -70,7 +70,7 @@ const TransparencyLogBanner: React.FC<ITransparencyLogBannerProps> = props => {
   return (
     <Box pad="large">
       <Box height={size} width={size} margin={{ bottom: 'small' }} alignSelf="center">
-        <Image fit="contain" src={`${publicImgPath}/${assetName}.png`} />
+        <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
       </Box>
       <StyledBox>
         <Text size="xlarge" textAlign="center" weight="bold">

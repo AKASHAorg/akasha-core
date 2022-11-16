@@ -5,6 +5,7 @@ import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
+  IProfileData,
   RootComponentProps,
   EntityTypes,
   AnalyticsCategories,
@@ -12,29 +13,22 @@ import {
 import {
   useInfinitePosts,
   CREATE_POST_MUTATION_KEY,
-  useMutationListener,
+  useMutationsListener,
   createPendingEntry,
   LoginState,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
+import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import routes, { POST } from '../../routes';
 
-const {
-  Extension,
-  Box,
-  Helmet,
-  EntryCard,
-  EntryPublishErrorCard,
-  LoginCTAWidgetCard,
-  BasicCardBox,
-  Text,
-} = DS;
+const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, BasicCardBox, Text } =
+  DS;
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
-  /* @Todo: Fix my type */
-  loggedProfileData?: any;
+
+  loggedProfileData?: IProfileData;
   loginState: LoginState;
 }
 
@@ -47,8 +41,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [analyticsActions] = useAnalytics();
 
-  const { mutation: createPostMutation } =
-    useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutations: pendingPostStates } =
+    useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
   const postsReq = useInfinitePosts(15);
 
@@ -61,8 +55,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     }
   }, [postsReq, loginState?.fromCache]);
 
-  /* @Todo: Fix my type */
-  const postPages: any = React.useMemo(() => {
+  const postPages = React.useMemo(() => {
     if (postsReq.data) {
       return postsReq.data.pages;
     }
@@ -136,35 +129,44 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           />
         </Box>
       )}
-      {createPostMutation && createPostMutation.state.status === 'error' && (
-        <EntryPublishErrorCard message={t('Cannot publish this entry. Please try again later!')} />
+      {pendingPostStates?.map(
+        pendingPostState =>
+          pendingPostState.state.status === 'error' && (
+            <EntryPublishErrorCard
+              key={pendingPostState.mutationId}
+              message={t('Cannot publish this entry. Please try again later!')}
+            />
+          ),
       )}
-      {createPostMutation && createPostMutation.state.status === 'loading' && (
-        <EntryCard
-          style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
-          entryData={
-            /* @Todo: Fix my type */
-            createPendingEntry(loggedProfileData, createPostMutation.state.variables) as any
-          }
-          sharePostLabel={t('Share Post')}
-          shareTextLabel={t('Share this post with your friends')}
-          repliesLabel=""
-          repostsLabel={t('Reposts')}
-          repostLabel={t('Repost')}
-          repostWithCommentLabel={t('Repost with comment')}
-          shareLabel={t('Share')}
-          copyLinkLabel={t('Copy Link')}
-          flagAsLabel={t('Report Post')}
-          loggedProfileEthAddress={loggedProfileData.ethAddress}
-          locale={locale || 'en'}
-          showMore={true}
-          profileAnchorLink={'/profile'}
-          repliesAnchorLink={routes[POST]}
-          contentClickable={false}
-          hidePublishTime={true}
-          disableActions={true}
-          modalSlotId={props.layoutConfig.modalSlotId}
-        />
+      {pendingPostStates?.map(
+        pendingPostState =>
+          (pendingPostState.state.status === 'loading' ||
+            /*The following line ensures that even if the post is published pending post UI should be shown till the new entry appears on the feed */
+            (pendingPostState.state.status === 'success' &&
+              !postPages[0]?.results.includes(pendingPostState.state.data.toString()))) && (
+            <EntryCard
+              key={pendingPostState.mutationId}
+              style={{ backgroundColor: '#4e71ff0f', marginBottom: '0.5rem' }}
+              entryData={createPendingEntry(loggedProfileData, pendingPostState.state.variables)}
+              sharePostLabel={t('Share Post')}
+              shareTextLabel={t('Share this post with your friends')}
+              repliesLabel=""
+              repostLabel={t('Reposts')}
+              repostWithCommentLabel={t('Repost with comment')}
+              shareLabel={t('Share')}
+              copyLinkLabel={t('Copy Link')}
+              flagAsLabel={t('Report Post')}
+              loggedProfileEthAddress={loggedProfileData.ethAddress}
+              locale={locale || 'en'}
+              showMore={true}
+              profileAnchorLink={'/profile'}
+              repliesAnchorLink={routes[POST]}
+              contentClickable={false}
+              hidePublishTime={true}
+              disableActions={true}
+              modalSlotId={props.layoutConfig.modalSlotId}
+            />
+          ),
       )}
       <FeedWidget
         modalSlotId={props.layoutConfig.modalSlotId}

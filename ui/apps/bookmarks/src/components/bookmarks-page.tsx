@@ -22,8 +22,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const { t } = useTranslation();
 
   const loginQuery = useGetLogin();
-  /* @Todo: fix my type ;/ */
-  const loggedProfileQuery: any = useGetProfile(loginQuery.data?.pubKey);
+  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
   const isLoggedIn = React.useMemo(() => {
     return loginQuery.data?.ethAddress;
@@ -107,7 +106,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
             subtitle={getSubtitleText()}
             heading={t('✨ Save what inspires you ✨')}
             description={description}
-            image={'/images/no-bookmarks.png'}
+            image={'/images/no-bookmarks.webp'}
             showMainArea={!isLoggedIn}
           />
           {!bookmarksReq.isFetched && isLoggedIn && <Spinner />}

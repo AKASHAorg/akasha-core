@@ -99,7 +99,7 @@ const ArticleCard: React.FC<IArticleCardProps> = props => {
           {articleData.title}
         </Text>
         <Box height="12.625rem" width="100%" round="xxsmall">
-          <Image fit="cover" src="/images/article_header.png" style={{ borderRadius: 'xxsmall' }} />
+          <Image fit="cover" src={articleData.image} style={{ borderRadius: 'xxsmall' }} />
         </Box>
         {articleData.content.map((el, idx) => (
           <Text key={idx} size="large" margin={{ top: 'small' }}>

@@ -51,11 +51,15 @@ export type IconType =
   | 'dapper'
   | 'dashboard'
   | 'discord'
+  | 'discordAlt'
+  | 'discordWtBg'
+  | 'discourse'
   | 'document'
   | 'dropdown'
   | 'editSimple'
   | 'edit'
   | 'email'
+  | 'emailAlt'
   | 'emoji'
   | 'explore'
   | 'eye'
@@ -126,6 +130,8 @@ export type IconType =
   | 'share'
   | 'signOut'
   | 'status'
+  | 'subscribe'
+  | 'telegram'
   | 'stopwatch'
   | 'strikethrough'
   | 'subscribe'
@@ -203,11 +209,15 @@ export const iconTypes: IconType[] = [
   'dapper',
   'dashboard',
   'discord',
+  'discordAlt',
+  'discordWtBg',
+  'discourse',
   'document',
   'dropdown',
   'editSimple',
   'edit',
   'email',
+  'emailAlt',
   'emoji',
   'explore',
   'eye',
@@ -277,6 +287,8 @@ export const iconTypes: IconType[] = [
   'signOut',
   'status',
   'share',
+  'subscribe',
+  'telegram',
   'stopwatch',
   'strikethrough',
   'subscribe',

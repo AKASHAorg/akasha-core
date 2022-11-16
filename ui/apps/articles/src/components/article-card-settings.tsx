@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 
-import { IImageSrc } from '@akashaorg/design-system/lib/components/BoxFormCard';
+import { IImageSrc } from '@akashaorg/design-system/lib/components/ProfileForm';
 import { IImageCropperProps } from '@akashaorg/design-system/lib/components/ImageCropper';
 
 import InputTags from './input-tags';

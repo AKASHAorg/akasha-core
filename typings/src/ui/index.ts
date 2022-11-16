@@ -1,5 +1,3 @@
-import { IntegrationInfo, ReleaseInfo } from '../sdk/registry';
-
 export * from './root-component';
 export * from './app-loader';
 export * from './analytics';
@@ -9,6 +7,7 @@ export * from './editor';
 export * from './entry';
 export * from './menu-items';
 export * from './messages';
+export * from './moderation';
 export * from './navigation';
 export * from './plugins';
 export * from './profile';
@@ -73,20 +72,4 @@ export enum LEGAL_DOCS {
   PRIVACY_POLICY = 'PrivacyPolicy',
   CODE_OF_CONDUCT = 'CodeOfConduct',
   APP_GUIDE = 'AppGuide',
-}
-
-/* @TODO: this doesn't belong here */
-export enum ButtonValues {
-  ALL = 'All',
-  KEPT = 'Kept',
-  DELISTED = 'Delisted',
-  STATS = 'Stats',
-}
-
-export enum ModerationItemTypes {
-  ACCOUNT = 'account',
-  POST = 'post',
-  COMMENT = 'comment',
-  REPLY = 'reply',
-  // @TODO: add support for tag type, when tag moderation is implemented
 }

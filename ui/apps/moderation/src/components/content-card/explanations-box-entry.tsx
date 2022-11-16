@@ -1,7 +1,9 @@
 import React from 'react';
+
 import DS from '@akashaorg/design-system';
 import { Logger } from '@akashaorg/awf-sdk';
-import { useGetProfile, EntryReport } from '@akashaorg/ui-awf-hooks';
+import { EntryReport } from '@akashaorg/typings/ui';
+import { useGetProfile } from '@akashaorg/ui-awf-hooks';
 
 const { Text } = DS;
 

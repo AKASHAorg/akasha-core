@@ -13,6 +13,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
   const {
     isPending,
     locale,
+    incidentLabel,
     showExplanationsLabel,
     hideExplanationsLabel,
     determinationLabel,
@@ -59,8 +60,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     }
     if (itemType === EntityTypes.COMMENT) {
       if (commentQuery.data) {
-        // @Todo: pls fix my type ;/
-        return mapEntry(commentQuery.data as any);
+        return mapEntry(commentQuery.data);
       }
       return undefined;
     }
@@ -74,8 +74,8 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           {...props}
           isPending={isPending}
           locale={locale}
-          // @Todo: pls fix my type :/
-          entryData={itemType === EntityTypes.PROFILE ? profile : (entryData as any)}
+          entryData={itemType === EntityTypes.PROFILE ? profile : entryData}
+          incidentLabel={incidentLabel}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
           determinationLabel={determinationLabel}

@@ -148,11 +148,11 @@ const getComment = async commentID => {
     contentIds: [commentID],
   });
   const res = await sdk.api.comments.getComment(commentID);
+  // check author's moderation status
   const modStatusAuthor = await checkStatus({
     user: user?.pubKey || '',
     contentIds: [res.getComment?.author?.pubKey],
   });
-  // @TODO: assign modStatus to a single prop
   return {
     ...res.getComment,
     ...modStatus[0],
@@ -297,8 +297,9 @@ export function useCreateComment() {
           }
         });
       },
-      onSettled: async () => {
-        await queryClient.invalidateQueries(COMMENTS_KEY);
+      onSettled: () => {
+        //shouldn't await 'COMMENTS_KEY' as it creates a race condition
+        queryClient.invalidateQueries(COMMENTS_KEY);
       },
       mutationKey: PUBLISH_PENDING_KEY,
     },

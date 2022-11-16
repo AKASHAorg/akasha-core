@@ -45,24 +45,20 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   const { mutation: createPostMutation } =
     useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
-  /*@Todo: fix my type */
-  const entryData: any = React.useMemo(() => {
+  const entryData = React.useMemo(() => {
     if (post.status === 'success') {
-      /*@Todo: fix my type */
-      return mapEntry(post.data as any);
+      return mapEntry(post.data);
     }
     return undefined;
   }, [post.data, post.status]);
 
-  /* @Todo: fix my type ;/ */
-  const embedEntryData: any = React.useMemo(() => {
+  const embedEntryData = React.useMemo(() => {
     if (action === 'repost') {
       if (entryData) {
         return entryData;
       }
       if (post.data?.quotes.length) {
-        /*@Todo: fix my type */
-        return mapEntry(post.data?.quotes[0] as any);
+        return mapEntry(post.data?.quotes[0]);
       }
     }
 
@@ -139,10 +135,13 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   }
 
   const canSaveDraft = action === 'post';
+  const draftItem = canSaveDraft ? getDraftItem({ pubKey, appName }) : null;
 
   return (
     <Base
-      postLabel={action === 'edit' ? t('Save Changes') : t('Publish')}
+      postLabel={
+        action === 'edit' ? t('Save Changes') : action === 'reply' ? t('Reply') : t('Publish')
+      }
       placeholderLabel={
         action === 'reply' ? `${t('Reply to')} ${entryAuthorName || ''}` : t('Share your thoughts')
       }
@@ -150,14 +149,8 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
       singleSpa={singleSpa}
       embedEntryData={embedEntryData}
       entryData={entryData}
-      editorState={
-        action === 'edit'
-          ? entryData?.slateContent
-          : canSaveDraft
-          ? getDraftItem({ pubKey, appName })
-          : null
-      }
-      isShown={action !== 'post'}
+      editorState={action === 'edit' ? entryData?.slateContent : draftItem}
+      isShown={action !== 'post' || (action === 'post' && !!draftItem)}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
       showDraft={canSaveDraft}

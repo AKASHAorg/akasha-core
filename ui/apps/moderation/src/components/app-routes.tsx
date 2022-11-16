@@ -5,8 +5,9 @@ import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import TransparencyLog from './transparency-log';
-import { Dashboard, GuestPage, IntroPage } from '../pages';
-import routes, { GUEST, HISTORY, HOME, UNAUTHENTICATED } from '../routes';
+import { Dashboard, Overview, AllModerators, ValuePage } from '../pages';
+
+import routes, { DASHBOARD, HISTORY, HOME, MODERATION_VALUE, MODERATORS } from '../routes';
 
 const { Box } = DS;
 
@@ -24,20 +25,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     <Box>
       <Router basename={props.baseRouteName}>
         <Routes>
+          <Route path={routes[HOME]} element={<Overview {...props} />} />
+
+          <Route path={routes[MODERATION_VALUE]} element={<ValuePage {...props} />} />
+
           <Route
-            path={routes[UNAUTHENTICATED]}
-            element={
-              <IntroPage {...props} user={loginQuery.data?.pubKey} isAuthorised={isAuthorised} />
-            }
-          />
-          <Route
-            path={routes[GUEST]}
-            element={
-              <GuestPage {...props} user={loginQuery.data?.pubKey} isAuthorised={isAuthorised} />
-            }
-          />
-          <Route
-            path={routes[HOME]}
+            path={routes[DASHBOARD]}
             element={
               <Dashboard
                 {...props}
@@ -47,6 +40,9 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
+
+          <Route path={routes[MODERATORS]} element={<AllModerators {...props} />} />
+
           <Route
             path={routes[HISTORY]}
             element={
@@ -56,6 +52,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
+
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
       </Router>

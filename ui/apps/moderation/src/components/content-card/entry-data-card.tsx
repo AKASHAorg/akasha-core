@@ -43,7 +43,6 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               modalSlotId={modalSlotId}
               showMore={false}
               entryData={entryData as IEntryData}
-              repostsLabel={t('Reposts')}
               repliesLabel={t('Replies')}
               locale={locale}
               style={{ height: 'auto' }}
@@ -62,21 +61,14 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               modalSlotId={modalSlotId}
               showMore={false}
               flaggable={true}
-              canUserEdit={false}
+              viewerIsOwner={false}
               profileData={entryData as IProfileData}
-              postsLabel={t('Posts')}
               followLabel={t('Follow')}
               unfollowLabel={t('Unfollow')}
-              followersLabel={t('Followers')}
               followingLabel={t('Following')}
-              interestsLabel={t('Interests')}
               shareProfileLabel={t('Share Profile')}
-              onClickFollowers={() => null}
-              onClickPosts={() => null}
-              onClickFollowing={() => null}
               onEntryFlag={() => null}
               onUpdateClick={() => null}
-              onENSChangeClick={() => null}
               hideENSButton={true}
               handleShareClick={() => null}
             />

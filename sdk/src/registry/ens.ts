@@ -18,6 +18,17 @@ import IpfsConnector from '../common/ipfs.connector';
 import Stash from '../stash/index';
 import pino from 'pino';
 
+const EnsDefaultTexts = [
+  'url',
+  'avatar',
+  'description',
+  'com.discord',
+  'com.github',
+  'com.reddit',
+  'com.twitter',
+  'org.telegram',
+];
+
 export const isEncodedLabelHash = hash => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
 };
@@ -194,6 +205,15 @@ class AWF_ENS {
       uiStash.set(key, ensAddress);
     }
     return createFormattedValue(ensAddress);
+  }
+
+  async getTexts(name: string) {
+    const resolver = await this._web3.provider.getResolver(name);
+    const texts = EnsDefaultTexts.map(async txt => {
+      const value = await resolver.getText(txt);
+      return { txt, value };
+    });
+    return Promise.all(texts);
   }
 
   public async setupContracts() {

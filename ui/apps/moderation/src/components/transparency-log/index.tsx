@@ -2,14 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { ButtonValues, NavigateToParams } from '@akashaorg/typings/ui';
-import { useGetCount, useInfiniteLog, ILogItem } from '@akashaorg/ui-awf-hooks';
+import { ButtonValues, IModerationLogItem, NavigateToParams } from '@akashaorg/typings/ui';
+import { useGetCount, useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import Banner from './banner';
 import DetailCard from './detail-card';
 import MiniCardRenderer from './mini-card-renderer';
-
 import { NoItemsFound } from '../error-cards';
+
+import getReasonPrefix from '../../utils/getReasonPrefix';
 
 const {
   styled,
@@ -34,7 +35,6 @@ const DetailCardWrapper = styled(BasicCardBox)<{
   isVisible: boolean;
 }>`
   width: 63.5%;
-  border-radius: 0.5rem;
   background: ${props => props.theme.colors.cardBackground};
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     width: 100%;
@@ -54,7 +54,6 @@ const SidebarWrapper = styled(BasicCardBox)<{
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  border-radius: 0.5rem;
   background: ${props => props.theme.colors.cardBackground};
   ${props => {
     if (props.isVisible) {
@@ -71,7 +70,6 @@ const SidebarWrapper = styled(BasicCardBox)<{
 
 const ListWrapper = styled(Box)`
   flex: 1;
-  margin-top: 0.5rem;
   flex-direction: row;
   justify-content: space-between;
 `;
@@ -104,7 +102,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const { user, navigateTo } = props;
 
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
-  const [selected, setSelected] = React.useState<ILogItem | null>(null);
+  const [selected, setSelected] = React.useState<IModerationLogItem | null>(null);
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -149,7 +147,7 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
       });
   };
 
-  const handleCardClick = (el: ILogItem) => () => {
+  const handleCardClick = (el: IModerationLogItem) => () => {
     selected?.contentID === el.contentID ? setSelected(null) : setSelected(el);
   };
 
@@ -180,8 +178,12 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   const shouldLoadMore = hasLoadMoreRef && logItemsQuery.isFetching && logItemPages.length > 0;
 
+  const handleCopy = (value: string) => () => {
+    navigator.clipboard.writeText(value);
+  };
+
   return (
-    <VerticalFillBox fill="vertical">
+    <VerticalFillBox fill="vertical" gap="small">
       <StyledIntroWrapper>
         <StyledBox fill="horizontal" margin={{ bottom: 'xlarge' }}>
           <Text size="xlarge" weight="bold" margin={{ bottom: 'xsmall' }}>
@@ -286,12 +288,34 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         </SidebarWrapper>
         <DetailCardWrapper isVisible={!!selected}>
           {selected && (
-            <DetailCard
-              selected={selected}
-              handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
-              handleClickArrowLeft={handleClickArrowLeft}
-              navigateTo={navigateTo}
-            />
+            <Box>
+              {/* Case ID label */}
+              <Box
+                direction="row"
+                pad="medium"
+                gap="xsmall"
+                round={{ size: 'xsmall', corner: 'top' }}
+                background="warning"
+              >
+                <Text size="large">{`${t('Case ID')} # ${getReasonPrefix(selected.reasons[0])}-${
+                  selected.decisionID
+                }`}</Text>
+                <Icon
+                  type="copy"
+                  color="secondaryText"
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleCopy(selected.contentID)}
+                />
+              </Box>
+
+              {/* rest of the detail card */}
+              <DetailCard
+                selected={selected}
+                handleClickAvatar={handleClickAvatar(selected.moderator?.pubKey)}
+                handleClickArrowLeft={handleClickArrowLeft}
+                navigateTo={navigateTo}
+              />
+            </Box>
           )}
           {!selected && <Banner count={count} />}
         </DetailCardWrapper>

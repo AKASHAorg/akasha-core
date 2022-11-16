@@ -180,14 +180,12 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   const searchTagsState = getSearchStateForTab(ButtonValues.TOPICS);
 
   React.useEffect(() => {
-    /* @Todo: fix my type ;/ */
-    if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data as any);
+    if (searchPostsReq.isFetched) updateSearchState(ButtonValues.POSTS, searchPostsReq.data);
   }, [searchPostsReq.data, searchPostsReq.isFetched]);
 
   React.useEffect(() => {
     if (searchCommentsReq.isFetched) {
-      /* @Todo: fix my type ;/ */
-      updateSearchState(ButtonValues.REPLIES, searchCommentsReq.data as any);
+      updateSearchState(ButtonValues.REPLIES, searchCommentsReq.data);
     }
   }, [searchCommentsReq.data, searchCommentsReq.isFetched]);
 

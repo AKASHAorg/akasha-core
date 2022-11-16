@@ -10,8 +10,8 @@ export const DataProviderFragmentFragmentDoc = gql`
   value
 }
     `;
-export const UserProfileFragmentFragmentDoc = gql`
-    fragment UserProfileFragment on UserProfile {
+export const AuthorInfoFragmentDoc = gql`
+    fragment AuthorInfo on UserProfile {
   pubKey
   name
   userName
@@ -22,6 +22,7 @@ export const UserProfileFragmentFragmentDoc = gql`
   totalPosts
   totalFollowers
   totalFollowing
+  totalInterests
 }
     `;
 export const PostResultFragmentDoc = gql`
@@ -30,7 +31,7 @@ export const PostResultFragmentDoc = gql`
     ...DataProviderFragment
   }
   author {
-    ...UserProfileFragment
+    ...AuthorInfo
   }
   title
   type
@@ -41,14 +42,14 @@ export const PostResultFragmentDoc = gql`
   totalComments
   quotedBy
   quotedByAuthors {
-    ...UserProfileFragment
+    ...AuthorInfo
   }
   quotes {
     content {
       ...DataProviderFragment
     }
     author {
-      ...UserProfileFragment
+      ...AuthorInfo
     }
     title
     type
@@ -56,10 +57,11 @@ export const PostResultFragmentDoc = gql`
     creationDate
     updatedAt
     tags
+    totalComments
   }
 }
     ${DataProviderFragmentFragmentDoc}
-${UserProfileFragmentFragmentDoc}`;
+${AuthorInfoFragmentDoc}`;
 export const FeedResultFragmentDoc = gql`
     fragment FeedResult on NewPostsResult {
   results {
@@ -159,7 +161,7 @@ export const GetCommentDocument = gql`
       ...DataProviderFragment
     }
     author {
-      ...UserProfileFragment
+      ...AuthorInfo
     }
     creationDate
     updatedAt
@@ -170,7 +172,7 @@ export const GetCommentDocument = gql`
   }
 }
     ${DataProviderFragmentFragmentDoc}
-${UserProfileFragmentFragmentDoc}`;
+${AuthorInfoFragmentDoc}`;
 export const GetCommentsDocument = gql`
     query GetComments($offset: String, $limit: Int, $postID: String!) {
   getComments(postID: $postID, offset: $offset, limit: $limit) {
@@ -181,7 +183,7 @@ export const GetCommentsDocument = gql`
         ...DataProviderFragment
       }
       author {
-        ...UserProfileFragment
+        ...AuthorInfo
       }
       creationDate
       replyTo
@@ -192,7 +194,7 @@ export const GetCommentsDocument = gql`
   }
 }
     ${DataProviderFragmentFragmentDoc}
-${UserProfileFragmentFragmentDoc}`;
+${AuthorInfoFragmentDoc}`;
 export const GetRepliesDocument = gql`
     query GetReplies($offset: String, $limit: Int, $postID: String!, $commentID: String!) {
   getReplies(
@@ -208,7 +210,7 @@ export const GetRepliesDocument = gql`
         ...DataProviderFragment
       }
       author {
-        ...UserProfileFragment
+        ...AuthorInfo
       }
       creationDate
       replyTo
@@ -219,7 +221,7 @@ export const GetRepliesDocument = gql`
   }
 }
     ${DataProviderFragmentFragmentDoc}
-${UserProfileFragmentFragmentDoc}`;
+${AuthorInfoFragmentDoc}`;
 export const AddCommentDocument = gql`
     mutation AddComment($content: [DataProviderInput!], $comment: CommentData) {
   addComment(content: $content, comment: $comment)

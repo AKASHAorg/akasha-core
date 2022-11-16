@@ -201,7 +201,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 sharePostUrl={props.sharePostUrl}
                 onClickAvatar={handleClickAvatar}
                 repliesLabel={t('Replies')}
-                repostsLabel={t('Reposts')}
                 repostLabel={t('Repost')}
                 repostWithCommentLabel={t('Repost with comment')}
                 shareLabel={t('Share')}

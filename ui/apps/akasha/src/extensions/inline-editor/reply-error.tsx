@@ -27,8 +27,7 @@ export function ReplyError({ postId, pubKey, onChange }: Props) {
   >(PUBLISH_PENDING_KEY);
 
   const profileDataReq = useGetProfile(pubKey);
-  /* @Todo: fix my type ;/ */
-  const loggedProfileData: any = profileDataReq.data;
+  const loggedProfileData = profileDataReq.data;
 
   React.useEffect(() => {
     if (publishCommentMutation && publishCommentMutation.state.status === 'error') {
@@ -51,12 +50,8 @@ export function ReplyError({ postId, pubKey, onChange }: Props) {
     <>
       {entryData && (
         <EntryBox
-          /* @Todo: Fix my type */
-          entryData={
-            createPendingEntry(loggedProfileData, publishCommentMutation.state.variables) as any
-          }
+          entryData={createPendingEntry(loggedProfileData, publishCommentMutation.state.variables)}
           repliesLabel={t('Replies')}
-          repostsLabel={t('Reposts')}
           locale={'en'}
           showMore={true}
           profileAnchorLink={'/profile'}

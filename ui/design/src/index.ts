@@ -59,7 +59,7 @@ import {
   ModalCardLogin,
 } from './components/EntryCard/basic-card-box';
 
-import BoxFormCard from './components/BoxFormCard';
+import ProfileForm from './components/ProfileForm';
 import EnsFormCard from './components/EnsFormCard';
 import ImageCropper from './components/ImageCropper';
 
@@ -71,6 +71,8 @@ import ProfileCard from './components/ProfileCard';
 import { ProfileDelistedCard } from './components/ProfileCard/profile-delisted-card';
 import { ProfileSearchCard } from './components/ProfileCard/profile-search-card';
 import { ProfileMiniCard } from './components/ProfileCard/profile-mini-card';
+import ProfileStatsCard from './components/ProfileStatsCard';
+import ProfileLinksCard from './components/ProfileLinksCard';
 
 import TagCard from './components/TagCard';
 import { TagDetailCard } from './components/TagCard/tag-detail-card';
@@ -130,6 +132,8 @@ import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
 import EntryPublishErrorCard from './components/EntryPublishErrorCard';
 import ModerationAppErrorCard from './components/ModerationAppErrorCard';
 import ModerationIntroCard from './components/ModerationIntroCard';
+import ModerationValueCard from './components/ModerationValueCard';
+import ModeratorDetailCard from './components/ModeratorDetailCard';
 
 import TextInputField from './components/TextInputField';
 
@@ -236,6 +240,8 @@ const exported = {
   ErrorLoader,
   ModerationAppErrorCard,
   ModerationIntroCard,
+  ModerationValueCard,
+  ModeratorDetailCard,
   AppInfoWidgetCard,
   AppsWidgetCard,
   BasicCardBox,
@@ -260,12 +266,14 @@ const exported = {
   EntryCardHidden,
   EntryCardLoading,
   ReadOnlyEditor,
-  BoxFormCard,
+  ProfileForm,
   EnsFormCard,
   ImageCropper,
   Heading,
   MiniInfoWidgetCard,
   ProfileCard,
+  ProfileStatsCard,
+  ProfileLinksCard,
   ProfileDelistedCard,
   ProfileSearchCard,
   ProfileMiniCard,

@@ -213,7 +213,6 @@ export function MainEntry({
             handleAvatarClick(ev, entryData?.author?.pubKey)
           }
           repliesLabel={t('Replies')}
-          repostsLabel={t('Reposts')}
           repostLabel={t('Repost')}
           repostWithCommentLabel={t('Repost with comment')}
           shareLabel={t('Share')}
