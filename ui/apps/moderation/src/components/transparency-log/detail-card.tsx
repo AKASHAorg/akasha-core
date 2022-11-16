@@ -22,7 +22,7 @@ const DetailCard: React.FC<IDetailCard> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  const handleClickViewItem = (itemType: string, contentID: string) => () => {
+  const handleClickViewItem = (itemType: EntityTypes, contentID: string) => () => {
     if (itemType === EntityTypes.ENTRY) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',

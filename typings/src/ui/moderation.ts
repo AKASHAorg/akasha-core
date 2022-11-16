@@ -1,3 +1,5 @@
+import { EntityTypes } from './ui-events';
+
 export enum ButtonValues {
   ALL = 'All',
   KEPT = 'Kept',
@@ -77,7 +79,7 @@ export interface EntryReport {
   creationDate: Date;
   author: string;
   contentID: string;
-  contentType: string;
+  contentType: EntityTypes;
   explanation: string;
   reason: string;
 }
@@ -85,7 +87,7 @@ export interface EntryReport {
 export interface IModerationLogItem {
   decisionID: string;
   contentID: string;
-  contentType: string;
+  contentType: EntityTypes;
   delisted: false;
   reasons: string[];
   explanation: string;
@@ -100,7 +102,7 @@ export interface IPendingItem {
   creationDate: Date;
   decisionID: string;
   contentID: string;
-  contentType: string;
+  contentType: EntityTypes;
   delisted: boolean;
   moderated: boolean;
   reasons: string[];

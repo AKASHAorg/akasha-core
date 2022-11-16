@@ -56,7 +56,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     }
   }, [reqPosts, loginState?.fromCache]);
 
-  const handleEntryFlag = (itemId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginState?.pubKey) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }

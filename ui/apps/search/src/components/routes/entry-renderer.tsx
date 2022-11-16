@@ -136,7 +136,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
   };
 
   // why is itemType string here??
-  const handleEntryFlag = (itemId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!ethAddress) {
       return showLoginModal({
         modal: { name: 'report-modal', itemId, itemType: itemType as unknown as EntityTypes },
@@ -227,7 +227,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 disableReposting={itemData.isRemoved}
                 removeEntryLabel={t('Delete Post')}
                 onEntryRemove={handleEntryRemove}
-                onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
+                onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.ENTRY)}
                 hideActionButtons={hideActionButtons}
                 modalSlotId={modalSlotId}
                 actionsRightExt={

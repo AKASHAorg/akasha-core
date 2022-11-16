@@ -24,7 +24,7 @@ const MockedInlineEditor = ({ action }) => (
     extensionData={{
       name: 'name',
       itemId: '01gf',
-      entryType: EntityTypes.ENTRY,
+      itemType: EntityTypes.ENTRY,
       action,
     }}
   />

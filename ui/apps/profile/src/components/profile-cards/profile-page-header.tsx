@@ -110,7 +110,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
     props.navigateToModal({ name: 'login' });
   };
 
-  const handleEntryFlag = (itemId: string, itemType: string, user: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({
         name: 'login',

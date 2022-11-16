@@ -83,7 +83,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
     }
   };
 
-  const handleEntryFlag = (itemId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginState?.pubKey) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }

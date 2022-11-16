@@ -136,7 +136,7 @@ export function MainEntry({
     }
   };
 
-  const handleEntryFlag = (itemId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginState?.pubKey) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
@@ -224,7 +224,7 @@ export function MainEntry({
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[POST]}
           onRepost={handleRepost}
-          onEntryFlag={handleEntryFlag(entryData?.entryId, 'post')}
+          onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.ENTRY)}
           handleFollowAuthor={handleFollow}
           handleUnfollowAuthor={handleUnfollow}
           isFollowingAuthor={isFollowing}

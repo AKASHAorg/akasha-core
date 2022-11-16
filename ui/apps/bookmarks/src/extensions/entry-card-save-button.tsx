@@ -62,7 +62,7 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
           category: AnalyticsCategories.POST,
           action: 'Post Bookmarked',
         });
-        bookmarkCreate.mutate({ entryId: itemId, itemType: itemType as EntityTypes });
+        bookmarkCreate.mutate({ entryId: itemId, itemType: itemType });
       }
     } else {
       props.navigateToModal({ name: 'login' });

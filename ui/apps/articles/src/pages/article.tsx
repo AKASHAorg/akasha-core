@@ -53,7 +53,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
     }
   };
 
-  const handleFlagArticle = (itemId: string, itemType: string) => () => {
+  const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginQuery.data?.pubKey) {
       return props.navigateToModal({
         name: 'login',

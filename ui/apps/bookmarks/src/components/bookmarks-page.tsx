@@ -47,7 +47,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
 
-  const handleEntryFlag = (itemId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginQuery.data?.pubKey) {
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }

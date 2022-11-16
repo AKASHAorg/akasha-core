@@ -55,7 +55,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   }, [postPages]);
 
   const handleEntryFlag = React.useCallback(
-    (itemId: string, itemType: string) => () => {
+    (itemId: string, itemType: EntityTypes) => () => {
       if (!isLoggedUser) {
         return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }

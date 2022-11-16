@@ -119,7 +119,7 @@ const Dashboard: React.FC<IDashboardProps> = props => {
     threshold: 0,
   });
 
-  const handleButtonClick = (itemId: string, itemType: string) => {
+  const handleButtonClick = (itemId: string, itemType: EntityTypes) => {
     props.navigateToModal({
       name: 'moderate-modal',
       status: isPending ? 'pending' : 'moderated',

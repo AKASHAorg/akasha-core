@@ -60,7 +60,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
     }
   };
 
-  const handleFlagArticle = (itemId: string, itemType: string) => () => {
+  const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginQuery.data?.pubKey) {
       return props.navigateToModal({
         name: 'login',

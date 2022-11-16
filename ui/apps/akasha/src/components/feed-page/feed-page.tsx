@@ -63,7 +63,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   }, [postsReq.data]);
 
   const handleEntryFlag = React.useCallback(
-    (itemId: string, itemType: string) => () => {
+    (itemId: string, itemType: EntityTypes) => () => {
       if (!loginState.pubKey) {
         return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
