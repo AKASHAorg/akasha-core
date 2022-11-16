@@ -7,6 +7,7 @@ import {
   EventTypes,
   ProfileProviderProperties,
   ProfileProviders,
+  EntityTypes,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
@@ -193,7 +194,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           flagAsLabel={t('Report')}
           onEntryFlag={handleEntryFlag(
             profileData.pubKey ? profileData.pubKey : '',
-            'account',
+            EntityTypes.PROFILE,
             profileData.name,
           )}
           onUpdateClick={showUpdateProfileModal}

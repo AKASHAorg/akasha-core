@@ -36,6 +36,7 @@ export const enum EntityTypes {
   PROFILE = 'profile',
   COMMENT = 'comment',
   TAG = 'tag',
+  ARTICLE = 'article',
 }
 
 export type EventDataTypes = {

@@ -5,6 +5,7 @@ import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import {
   ButtonValues,
+  EntityTypes,
   IModeratedItem,
   IPendingItem,
   RootComponentProps,

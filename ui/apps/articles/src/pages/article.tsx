@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 import MiniHeader from '../components/mini-header';
 import ArticleCard from '../components/article-card';
@@ -101,7 +101,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
       : [
           {
             icon: 'report',
-            handler: handleFlagArticle(sampleArticleData.id, 'article'),
+            handler: handleFlagArticle(sampleArticleData.id, EntityTypes.ARTICLE),
             label: t('Report'),
           },
         ]),

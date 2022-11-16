@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 import ArticleHeader from '../components/articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
@@ -160,7 +160,7 @@ const Dashboard: React.FC<RootComponentProps & IDashboardProps> = props => {
                 : [
                     {
                       icon: 'report',
-                      handler: handleFlagArticle(article.id, 'article'),
+                      handler: handleFlagArticle(article.id, EntityTypes.ARTICLE),
                       label: t('Report'),
                     },
                   ]),
