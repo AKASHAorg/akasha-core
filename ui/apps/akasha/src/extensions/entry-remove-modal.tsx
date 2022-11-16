@@ -18,8 +18,8 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   const { extensionData, logger } = props;
   const { t } = useTranslation('app-akasha-integration');
 
-  const postDeleteQuery = useDeletePost(extensionData.entryId);
-  const commentDeleteQuery = useDeleteComment(extensionData.entryId);
+  const postDeleteQuery = useDeletePost(extensionData.itemId);
+  const commentDeleteQuery = useDeleteComment(extensionData.itemId);
   const [analyticsActions] = useAnalytics();
 
   const handleModalClose = React.useCallback(() => {
@@ -33,13 +33,13 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
-        commentDeleteQuery.mutate(extensionData.entryId);
+        commentDeleteQuery.mutate(extensionData.itemId);
       } else if (+extensionData.entryType === EntityTypes.ENTRY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
         });
-        postDeleteQuery.mutate(extensionData.entryId);
+        postDeleteQuery.mutate(extensionData.itemId);
       } else {
         logger.error('entryType is undefined!');
       }

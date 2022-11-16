@@ -60,13 +60,13 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       });
       reportMutation.mutate({
         dataToSign,
-        contentId: extensionData.entryId,
+        contentId: extensionData.itemId,
         contentType: itemType,
         url: `${BASE_REPORT_URL}/new`,
       });
     },
 
-    [itemType, extensionData.entryId, reportMutation, analyticsActions],
+    [itemType, extensionData.itemId, reportMutation, analyticsActions],
   );
 
   return (
@@ -97,7 +97,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       closeLabel={t('Close')}
       errorText={reportMutation.error ? `${reportMutation.error}` : ''}
       user={loginQuery.data?.pubKey || ''}
-      contentId={extensionData.entryId}
+      contentId={extensionData.itemId}
       itemType={itemType}
       requesting={reportMutation.status === 'loading'}
       success={reportMutation.status === 'success'}

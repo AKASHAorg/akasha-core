@@ -42,7 +42,8 @@ export type EventDataTypes = {
   name: string;
   version?: string;
   itemId?: string;
-  itemType?: EntityTypes;
+  // some parts of the code use this var as EntityTypes and other parts like moderation as string
+  itemType?: EntityTypes | string;
   menuItems?: IMenuItem | IMenuItem[];
   navRoutes?: Record<string, string>;
   [key: string]: unknown;

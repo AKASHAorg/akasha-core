@@ -33,7 +33,7 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
     (dataToSign: Record<string, string>) => {
       moderateMutation.mutate({
         dataToSign,
-        contentId: extensionData.entryId,
+        contentId: extensionData.itemId,
         contentType: itemType,
         url: `${BASE_DECISION_URL}/moderate`,
         isPending: extensionData.status === 'pending',

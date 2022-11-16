@@ -42,27 +42,27 @@ const EntryCardSaveButton = (props: RootExtensionProps) => {
 
   const isBookmarked = React.useMemo(() => {
     return bookmarkReq.data?.some(
-      (bookmark: { entryId: string; entryType: EntityTypes }) =>
-        bookmark.entryId === extensionData.entryId,
+      (bookmark: { itemId: string; itemType: EntityTypes }) =>
+        bookmark.itemId === extensionData.itemId,
     );
   }, [bookmarkReq.data, extensionData]);
 
   const handleEntryBookmark = () => {
-    const { entryId, entryType } = extensionData;
+    const { itemId, itemType } = extensionData;
     if (loggedUserReq.isSuccess && loggedUserReq.data.ethAddress) {
       if (isBookmarked) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Bookmark Removed',
         });
-        bookmarkDelete.mutate(entryId);
+        bookmarkDelete.mutate(itemId);
       }
       if (!isBookmarked) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Bookmarked',
         });
-        bookmarkCreate.mutate({ entryId, itemType: entryType });
+        bookmarkCreate.mutate({ entryId: itemId, itemType });
       }
     } else {
       props.navigateToModal({ name: 'login' });
