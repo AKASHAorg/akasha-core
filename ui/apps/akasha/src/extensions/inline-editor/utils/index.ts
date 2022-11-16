@@ -1,14 +1,5 @@
 import { IEntryData } from '@akashaorg/typings/ui';
 
-interface IDraft {
-  appName: string;
-  pubKey: string;
-}
-
-interface ISaveDraft extends IDraft {
-  content: IEntryData['slateContent'];
-}
-
 export interface IDraftStorage {
   setItem(key: string, value: string): void;
   getItem(key: string): string;
@@ -17,24 +8,26 @@ export interface IDraftStorage {
 
 const getDraftKey = (appName: string, pubKey: string) => `${appName}-${pubKey}-draft-item`;
 
-export function Draft(storage: IDraftStorage) {
+export function Draft(storage: IDraftStorage, appName: string, pubKey: string) {
   this.storage = storage;
+  this.appName = appName;
+  this.pubKey = pubKey;
 }
 
 Draft.prototype = {
-  save({ content, appName, pubKey }: ISaveDraft) {
-    this.storage.setItem(getDraftKey(appName, pubKey), JSON.stringify(content));
+  save(content: IEntryData['slateContent']) {
+    this.storage.setItem(getDraftKey(this.appName, this.pubKey), JSON.stringify(content));
   },
-  get({ appName, pubKey }: IDraft) {
+  get() {
     try {
       return JSON.parse(
-        this.storage.getItem(getDraftKey(appName, pubKey)),
+        this.storage.getItem(getDraftKey(this.appName, this.pubKey)),
       ) as IEntryData['slateContent'];
     } catch {
       return null;
     }
   },
-  clear({ appName, pubKey }: IDraft) {
-    this.storage.removeItem(getDraftKey(appName, pubKey));
+  clear() {
+    this.storage.removeItem(getDraftKey(this.appName, this.pubKey));
   },
 };

@@ -45,7 +45,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
   const publishComment = useCreateComment();
   const { mutation: createPostMutation } =
     useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
-  const draft = new Draft(draftStorage);
+  const draft = new Draft(draftStorage, appName, pubKey);
 
   const entryData = React.useMemo(() => {
     if (post.status === 'success') {
@@ -137,7 +137,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
   }
 
   const canSaveDraft = action === 'post';
-  const draftItem = canSaveDraft ? draft.get({ pubKey, appName }) : null;
+  const draftItem = canSaveDraft ? draft.get() : null;
 
   return (
     <Base
@@ -159,10 +159,10 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
       setEditorState={(value: IEntryData['slateContent']) => {
         if (!canSaveDraft) return;
         if (isEqual(value, editorDefaultValue)) {
-          draft.clear({ pubKey, appName });
+          draft.clear();
           return;
         }
-        draft.save({ pubKey, appName, content: value });
+        draft.save();
       }}
     />
   );
