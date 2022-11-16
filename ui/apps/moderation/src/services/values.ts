@@ -9,7 +9,7 @@ export const values = [
   {
     path: 'people-first',
     title: 'People First',
-    assetName: 'peoplefirst',
+    assetName: 'people-first',
     description:
       'Everyone is welcome. We do not discriminate based on specific inborn traits. We care for every individual, group, and community.',
   },
@@ -30,14 +30,14 @@ export const values = [
   {
     path: 'human-centric-products',
     title: 'Human-Centric Products',
-    assetName: 'humancentricproducts',
+    assetName: 'human-centric-products',
     description:
       'Our mission places humans at the center. Our effort is to keep communities safe. We must resonate with those using the platform. Designers and creators respect and build for their audiences.',
   },
   {
     path: 'community-resilience',
     title: 'Community Resilience',
-    assetName: 'communityresilience',
+    assetName: 'community-resilience',
     description:
       'Our communities are resilient. They use available resources to respond, withstand, recover, and evolve beyond adverse situations.',
   },
@@ -51,7 +51,7 @@ export const values = [
   {
     path: 'intellectual-honesty',
     title: 'Intellectual Honesty',
-    assetName: 'intellectualhonesty',
+    assetName: 'intellectual-honesty',
     description:
       'Honesty is always the best policy. Our actions in our communities are driven by sincerity, integrity, and transparency. We call out obvious contradictions to our peers and hold each other to high standards.',
   },
