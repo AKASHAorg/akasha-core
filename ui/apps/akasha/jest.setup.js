@@ -1,10 +1,4 @@
-import {
-  genLoggedInState,
-  genPostData,
-  genCommentData,
-  mockSDK,
-  localStorageMock,
-} from '@akashaorg/af-testing';
+import { genLoggedInState, genPostData, genCommentData, mockSDK } from '@akashaorg/af-testing';
 import * as postHooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
 import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login';
@@ -94,5 +88,3 @@ mockIntersectionObserver.mockReturnValue({
 });
 
 global.IntersectionObserver = mockIntersectionObserver;
-
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });

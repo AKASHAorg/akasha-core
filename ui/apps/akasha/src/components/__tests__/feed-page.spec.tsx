@@ -9,6 +9,7 @@ import {
   renderWithAllProviders,
   genAppProps,
   genLoggedInState,
+  localStorageMock,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
@@ -23,6 +24,8 @@ describe('< FeedPage /> component', () => {
   );
 
   beforeAll(() => {
+    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
     jest
       .spyOn(extension, 'Extension')
       .mockReturnValue(
