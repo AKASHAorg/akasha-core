@@ -4,11 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
-import {
-  ModerationItemTypes,
-  RootExtensionProps,
-  AnalyticsCategories,
-} from '@akashaorg/typings/ui';
+import { RootExtensionProps, AnalyticsCategories, EntityTypes } from '@akashaorg/typings/ui';
 import {
   withProviders,
   useReasons,
@@ -72,7 +68,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
   return (
     <ReportModal
       titleLabel={t('Report {{ itemType }}', {
-        itemType: itemType === ModerationItemTypes.ACCOUNT ? extensionData.user : itemType,
+        itemType: itemType === EntityTypes.PROFILE ? extensionData.user : itemType,
       })}
       successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
       successMessageLabel={t('We will investigate this {{itemType}} and take appropriate action.', {

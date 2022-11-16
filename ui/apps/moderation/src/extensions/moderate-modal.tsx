@@ -22,7 +22,7 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
   };
 
   const itemType = React.useMemo(() => {
-    if (extensionData.hasOwnProperty('itemType') && typeof extensionData.itemType === 'string') {
+    if (extensionData.hasOwnProperty('itemType')) {
       return extensionData.itemType;
     }
   }, [extensionData]);

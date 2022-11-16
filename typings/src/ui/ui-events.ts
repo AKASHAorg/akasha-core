@@ -32,10 +32,10 @@ export enum EventTypes {
 }
 
 export const enum EntityTypes {
-  ENTRY = 0,
-  PROFILE,
-  COMMENT,
-  TAG,
+  ENTRY = 'entry',
+  PROFILE = 'profile',
+  COMMENT = 'comment',
+  TAG = 'tag',
 }
 
 export type EventDataTypes = {
@@ -43,7 +43,7 @@ export type EventDataTypes = {
   version?: string;
   itemId?: string;
   // some parts of the code use this var as EntityTypes and other parts like moderation as string
-  itemType?: EntityTypes | string;
+  itemType?: EntityTypes;
   menuItems?: IMenuItem | IMenuItem[];
   navRoutes?: Record<string, string>;
   [key: string]: unknown;

@@ -1,5 +1,5 @@
 import singleSpa from 'single-spa';
-import { RootComponentProps, IEntryData, IProfileData } from '@akashaorg/typings/ui';
+import { RootComponentProps, IEntryData, IProfileData, EntityTypes } from '@akashaorg/typings/ui';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { ILogger } from '@akashaorg/typings/sdk/log';
 
@@ -14,7 +14,7 @@ export interface IContentProps extends RootComponentProps {
   determinationLabel?: string;
   determination?: string;
   reportedLabel: string;
-  itemType: string;
+  itemType: EntityTypes;
   forLabel: string;
   andLabel?: string;
   reportedByLabel: string;

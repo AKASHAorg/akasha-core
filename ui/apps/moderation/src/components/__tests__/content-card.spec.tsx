@@ -2,6 +2,7 @@ import * as React from 'react';
 import ContentCard from '../content-card';
 
 import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import { EntityTypes } from '@akashaorg/typings/ui';
 
 describe('< ContentCard /> component', () => {
   const Base = (
@@ -12,7 +13,7 @@ describe('< ContentCard /> component', () => {
       hideExplanationsLabel="Hide Explanation"
       reportedByLabel="Reported by"
       reportedLabel="Reported"
-      itemType="post"
+      itemType={EntityTypes.ENTRY}
       forLabel="for"
       originallyReportedByLabel="Originally reported by"
       itemId="01f3dwm7z3qep88ap4j87vw8p8"

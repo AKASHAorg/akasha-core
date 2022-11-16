@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { getMediaUrl, ILogItem } from '@akashaorg/ui-awf-hooks';
-import { ModerationItemTypes, NavigateToParams } from '@akashaorg/typings/ui';
+import { EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
 
 export interface IDetailCard {
   selected: ILogItem;
@@ -23,17 +23,17 @@ const DetailCard: React.FC<IDetailCard> = props => {
   const { t } = useTranslation('app-moderation-ewa');
 
   const handleClickViewItem = (itemType: string, contentID: string) => () => {
-    if (itemType === ModerationItemTypes.POST) {
+    if (itemType === EntityTypes.ENTRY) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Post}/${contentID}`,
       });
-    } else if (itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT) {
+    } else if (itemType === EntityTypes.COMMENT) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Reply}/${contentID}`,
       });
-    } else if (itemType === ModerationItemTypes.ACCOUNT) {
+    } else if (itemType === EntityTypes.PROFILE) {
       navigateTo?.({
         appName: '@akashaorg/app-profile',
         getNavigationUrl: navRoutes => `${navRoutes.rootRoute}/${contentID}`,
@@ -63,7 +63,7 @@ const DetailCard: React.FC<IDetailCard> = props => {
         reportedTimes: selected.reports > 1 ? `${selected.reports} times` : 'once',
       })}
       viewItemLink={`${window.location.origin}${
-        selected.contentType === ModerationItemTypes.ACCOUNT
+        selected.contentType === EntityTypes.PROFILE
           ? `${BASE_PROFILE_URL}/${selected.contentID}`
           : `${BASE_SOCIAL_URL}/${selected.contentType}/${selected.contentID}`
       }`}
