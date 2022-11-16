@@ -49,7 +49,11 @@ export interface IEntryRenderer {
   loginState: LoginState;
   locale: ILocale;
   style?: React.CSSProperties;
-  onFlag?: (entryId: string, itemType: string, reporterEthAddress?: string | null) => () => void;
+  onFlag?: (
+    entryId: string,
+    itemType: EntityTypes,
+    reporterEthAddress?: string | null,
+  ) => () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
   onEntryNavigate: (details: IContentClickDetails, itemType: EntityTypes) => void;
   navigateTo: (args: NavigateToParams) => void;
@@ -416,7 +420,7 @@ const EntryRenderer = (
                 }`}
                 hideRepost={isComment}
                 onRepost={onRepost}
-                onEntryFlag={onFlag && onFlag(itemData.entryId, itemTypeName)}
+                onEntryFlag={onFlag && onFlag(itemData.entryId, itemType)}
                 handleFollowAuthor={handleFollow}
                 handleUnfollowAuthor={handleUnfollow}
                 isFollowingAuthor={isFollowing}

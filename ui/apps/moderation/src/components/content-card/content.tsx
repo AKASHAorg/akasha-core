@@ -9,6 +9,7 @@ import ExplanationsBox from './explanations-box';
 
 import { IContentProps } from '../../interfaces';
 import getReasonPrefix from '../../utils/getReasonPrefix';
+import { ModerationEntityTypesMap } from '@akashaorg/typings/ui';
 
 const { Avatar, Box, Button, Icon, Text, styled, useViewportSize } = DS;
 
@@ -65,9 +66,12 @@ const Content: React.FC<IContentProps> = props => {
       {/* rest of the content card */}
       <Box pad="medium" gap="medium">
         <Box direction="row" wrap={true} align="center">
-          <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} size="large" weight={600}>{`${
-            props.itemType && props.itemType[0].toUpperCase()
-          }${props.itemType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
+          <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} size="large" weight={600}>
+            <span style={{ textTransform: 'capitalize' }}>
+              {ModerationEntityTypesMap[props.itemType]}
+            </span>
+            {` ${props.reportedLabel}  ${props.forLabel}`}
+          </Text>
 
           {props.reasons.map((reason, idx) => (
             <React.Fragment key={idx}>

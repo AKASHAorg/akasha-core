@@ -27,7 +27,7 @@ export type FeedWidgetProps = {
   hasNextPage: boolean;
   loggedProfile?: IProfileData;
   contentClickable?: boolean;
-  onEntryFlag: (entryId: string, itemType: string) => () => void;
+  onEntryFlag: (entryId: string, itemType: EntityTypes) => () => void;
   onEntryRemove?: (entryId: string) => void;
   parentIsProfilePage?: boolean;
   removeEntryLabel?: string;

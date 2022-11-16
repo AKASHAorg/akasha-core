@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { ModerationEntityTypesMap, RootExtensionProps } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useModeration, withProviders, useGetLogin, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { BASE_DECISION_URL } from '../services/constants';
@@ -26,6 +26,7 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
       return extensionData.itemType;
     }
   }, [extensionData]);
+  const itemTypeName = ModerationEntityTypesMap[itemType];
 
   const moderateMutation = useModeration();
 
@@ -34,13 +35,13 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
       moderateMutation.mutate({
         dataToSign,
         contentId: extensionData.itemId,
-        contentType: itemType,
+        contentType: itemTypeName,
         url: `${BASE_DECISION_URL}/moderate`,
         isPending: extensionData.status === 'pending',
       });
     },
 
-    [itemType, extensionData, moderateMutation],
+    [moderateMutation, extensionData.itemId, extensionData.status, itemTypeName],
   );
 
   React.useEffect(() => {

@@ -32,12 +32,23 @@ export enum EventTypes {
 }
 
 export const enum EntityTypes {
-  ENTRY = 'entry',
-  PROFILE = 'profile',
-  COMMENT = 'comment',
-  TAG = 'tag',
-  ARTICLE = 'article',
+  ENTRY = 0,
+  PROFILE = 1,
+  COMMENT = 2,
+  TAG = 3,
+  ARTICLE = 4,
 }
+
+/**
+  To be used as per example `EntityTypesMap[EntityTypes.ENTRY]` to get the name of the entity type
+ */
+export const EntityTypesMap = {
+  [EntityTypes.ENTRY]: 'entry',
+  [EntityTypes.PROFILE]: 'profile',
+  [EntityTypes.COMMENT]: 'comment',
+  [EntityTypes.TAG]: 'tag',
+  [EntityTypes.ARTICLE]: 'article',
+} as const;
 
 export type EventDataTypes = {
   name: string;

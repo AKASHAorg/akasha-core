@@ -3,7 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
-import { NavigateToParams, IEntryData, IProfileData, EntityTypes } from '@akashaorg/typings/ui';
+import {
+  NavigateToParams,
+  IEntryData,
+  IProfileData,
+  EntityTypes,
+  ModerationEntityTypesMap,
+} from '@akashaorg/typings/ui';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 
@@ -33,6 +39,8 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
     [handleEntryNavigate, itemType],
   );
 
+  const itemTypeName = ModerationEntityTypesMap[itemType];
+
   return (
     <MainAreaCardBox>
       {entryData ? (
@@ -53,7 +61,9 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               isModerated={true}
               isRemoved={(entryData as IEntryData).isRemoved}
               removedByMeLabel={t('You deleted this post')}
-              removedByAuthorLabel={t('This {{itemType}} was deleted by its author', { itemType })}
+              removedByAuthorLabel={t('This {{itemTypeName}} was deleted by its author', {
+                itemTypeName,
+              })}
             />
           )}
           {itemType === EntityTypes.PROFILE && (

@@ -41,5 +41,5 @@ export interface IContentProps extends RootComponentProps {
   reviewDecisionLabel?: string;
   logger: ILogger;
   singleSpa: typeof singleSpa;
-  handleButtonClick: (param1: string, param2: string) => void;
+  handleButtonClick: (param1: string, param2: string | number) => void;
 }
