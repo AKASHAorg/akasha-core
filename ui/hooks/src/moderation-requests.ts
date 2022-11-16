@@ -1,95 +1,32 @@
+import { forkJoin, lastValueFrom } from 'rxjs';
+
 import getSDK from '@akashaorg/awf-sdk';
+import {
+  EntryReport,
+  IModerationLogItemsCount,
+  IModerationLogItem,
+  IPendingItem,
+  IModeratedItem,
+  Moderator,
+  ModerationStatus,
+  Reason,
+} from '@akashaorg/typings/ui';
 
 import constants from './constants';
+import { getMediaUrl } from './utils/media-utils';
 
 const {
   BASE_REPORT_URL,
   BASE_STATUS_URL,
   BASE_REASONS_URL,
   BASE_DECISION_URL,
-  BASE_MODERATOR_URL,
+  BASE_MODERATORS_URL,
   DEFAULT_FETCH_TIMEOUT,
   PENDING_CACHE_KEY_PREFIX,
   MODERATED_CACHE_KEY_PREFIX,
   MODERATION_COUNT_CACHE_KEY_PREFIX,
+  LIST_MODERATORS_CACHE_KEY_PREFIX,
 } = constants;
-
-type Profile = {
-  pubKey: string;
-  ethAddress: string;
-  name: string;
-  userName: string;
-  avatar: string;
-};
-
-export interface ModerationStatus {
-  contentId: string;
-  delisted: boolean;
-  moderated: boolean;
-  reason: string;
-  reported: boolean;
-}
-
-export interface Reason {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  active: boolean;
-  description: string;
-  label: string;
-}
-
-export interface ICount {
-  kept: number;
-  pending: number;
-  delisted: number;
-}
-
-export interface EntryReport {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  author: string;
-  contentID: string;
-  contentType: string;
-  explanation: string;
-  reason: string;
-}
-
-export interface ILogItem {
-  contentID: string;
-  contentType: string;
-  delisted: false;
-  reasons: string[];
-  explanation: string;
-  moderator: Profile;
-  moderatedDate: Date;
-  reports: number;
-}
-
-export interface IPendingItem {
-  _id: string;
-  _mod: Date;
-  creationDate: Date;
-  contentID: string;
-  contentType: string;
-  delisted: boolean;
-  moderated: boolean;
-  reasons: string[];
-  explanation: string;
-  reportedBy: string;
-  reportedByProfile: Profile;
-  reportedDate: Date;
-  reports: number;
-  count: number;
-}
-
-export interface IModeratedItem extends IPendingItem {
-  moderator: string;
-  moderatedDate?: Date;
-  evaluationDate?: Date;
-  moderatorProfile: Profile;
-}
 
 interface PaginatedResponse {
   nextIndex: string | null;
@@ -97,7 +34,7 @@ interface PaginatedResponse {
 }
 
 export interface LogItemsReponse extends PaginatedResponse {
-  results: ILogItem[];
+  results: IModerationLogItem[];
 }
 
 export interface PendingItemsReponse extends PaginatedResponse {
@@ -106,6 +43,10 @@ export interface PendingItemsReponse extends PaginatedResponse {
 
 export interface ModeratedItemsReponse extends PaginatedResponse {
   results: IModeratedItem[];
+}
+
+export interface CreateModerationReturn {
+  [key: string]: string | number;
 }
 
 /**
@@ -125,7 +66,7 @@ export const createModeration = async (
     signature: string;
   },
   timeout = DEFAULT_FETCH_TIMEOUT,
-): Promise<number> => {
+): Promise<CreateModerationReturn> => {
   const rheaders = new Headers();
 
   const sdk = getSDK();
@@ -134,11 +75,11 @@ export const createModeration = async (
     method: 'POST',
     url,
     data: data,
-    statusOnly: true,
+    statusOnly: false,
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(key)) {
-    return uiCache.get(key) as number;
+    return uiCache.get(key) as CreateModerationReturn;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -154,9 +95,10 @@ export const createModeration = async (
 
   clearTimeout(timer);
 
-  uiCache.set(key, response.status);
-
-  return response.status;
+  return response.json().then(serializedResponse => {
+    uiCache.set(key, serializedResponse);
+    return serializedResponse;
+  });
 };
 
 /**
@@ -271,7 +213,7 @@ export const getModeratorStatus = async (
   const sdk = getSDK();
   const key = sdk.services.stash.computeKey({
     method: 'HEAD',
-    url: `${BASE_MODERATOR_URL}/${loggedUser}`,
+    url: `${BASE_MODERATORS_URL}/status/${loggedUser}`,
     data: {},
     statusOnly: true,
   });
@@ -283,7 +225,7 @@ export const getModeratorStatus = async (
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
-  const response = await fetch(`${BASE_MODERATOR_URL}/${loggedUser}`, {
+  const response = await fetch(`${BASE_MODERATORS_URL}/status/${loggedUser}`, {
     signal: controller.signal,
     method: 'HEAD',
     headers: rheaders,
@@ -297,6 +239,99 @@ export const getModeratorStatus = async (
 };
 
 /**
+ * Gets a list of moderators
+ * @returns serialized response
+ * @example Getting list of moderators
+ * ```typescript
+ * const response = await getModerators(12000);
+ * ```
+ */
+export const getModerators = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<Moderator[]> => {
+  const rheaders = new Headers();
+  const sdk = getSDK();
+
+  const key = sdk.services.stash.computeKey({
+    method: 'GET',
+    url: `${BASE_MODERATORS_URL}/all`,
+    data: {},
+    statusOnly: false,
+  });
+
+  const uiCache = sdk.services.stash.getUiStash();
+
+  if (uiCache.has(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`)) {
+    return uiCache.get(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`) as Moderator[];
+  }
+
+  rheaders.append('Content-Type', 'application/json');
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+
+  const response = await fetch(`${BASE_MODERATORS_URL}/all`, {
+    signal: controller.signal,
+    method: 'GET',
+    headers: rheaders,
+  });
+
+  const serializedResponse = await response.json();
+
+  // get moderators ewa profile data
+  const getEWProfilesCalls = serializedResponse.map(({ _id }) => {
+    return sdk.api.profile.getProfile({ pubKey: _id });
+  });
+
+  // get moderators moderation profile data
+  // const getModProfilesCalls = serializedResponse.map(({ _id }) => {
+  //   return fetch(`${BASE_MODERATORS_URL}/${_id}`, {
+  //     signal: controller.signal,
+  //     method: 'GET',
+  //     headers: rheaders,
+  //   }).then(res => res.json());
+  // });
+
+  const getEWProfilesResp = (await lastValueFrom(forkJoin(getEWProfilesCalls))) as Record<
+    string,
+    unknown
+  >[];
+
+  // const getModProfilesResp = (await lastValueFrom(forkJoin(getModProfilesCalls))) as Record<
+  //   string,
+  //   unknown
+  // >[];
+
+  const moderators = serializedResponse.map((moderator: Moderator) => {
+    const profile = getEWProfilesResp.find(_profile => _profile.pubKey === moderator._id);
+
+    const avatarIpfsLinks = getMediaUrl(profile?.avatar as string);
+
+    return {
+      ...moderator,
+      avatar: {
+        url: avatarIpfsLinks?.originLink,
+        fallbackUrl: avatarIpfsLinks?.fallbackLink,
+      },
+      coverImage: profile?.coverImage,
+      name: profile?.name,
+      userName: profile?.userName,
+      pubKey: profile?.pubKey,
+      ethAddress: profile?.ethAddress,
+
+      // @TODO: replace with mod info
+      status: moderator.active ? 'active' : 'revoked',
+      social: { discord: '', email: '' },
+    };
+  });
+
+  // clear timeout and set cache
+  clearTimeout(timer);
+
+  uiCache.set(`${LIST_MODERATORS_CACHE_KEY_PREFIX}-${key}`, moderators);
+
+  return moderators;
+};
+
+/**
  * Gets a detailed breakdown of moderation items
  * @returns serialized response
  * @example Getting moderation counters
@@ -304,7 +339,9 @@ export const getModeratorStatus = async (
  * const response = await getModerationCounters(12000);
  * ```
  */
-export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Promise<ICount> => {
+export const getModerationCounters = async (
+  timeout = DEFAULT_FETCH_TIMEOUT,
+): Promise<IModerationLogItemsCount> => {
   const rheaders = new Headers();
   const sdk = getSDK();
   const key = sdk.services.stash.computeKey({
@@ -315,7 +352,7 @@ export const getModerationCounters = async (timeout = DEFAULT_FETCH_TIMEOUT): Pr
   });
   const uiCache = sdk.services.stash.getUiStash();
   if (uiCache.has(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`)) {
-    return uiCache.get(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`) as ICount;
+    return uiCache.get(`${MODERATION_COUNT_CACHE_KEY_PREFIX}-${key}`) as IModerationLogItemsCount;
   }
   rheaders.append('Content-Type', 'application/json');
 
@@ -467,6 +504,7 @@ export const getPendingItems = async (
 
   return response.json().then(serializedResponse => {
     uiCache.set(`${PENDING_CACHE_KEY_PREFIX}-${key}`, serializedResponse);
+
     return {
       ...serializedResponse,
       results: serializedResponse.results.map((item: IPendingItem) => {

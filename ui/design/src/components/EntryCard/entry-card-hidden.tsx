@@ -40,7 +40,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
     <MainAreaCardBox
       dashedBorder={true}
       redDashedBorder={delistedAccount}
-      margin={{ ...((reportedAccount || delistedAccount) && { bottom: 'xsmall' }) }}
+      margin={{ bottom: 'xsmall' }}
     >
       <Box direction="row" pad="medium" align="start">
         <Icon type={delistedAccount ? 'block' : 'error'} size="md" accentColor={!delistedAccount} />

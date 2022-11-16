@@ -16,7 +16,6 @@ describe('<ModerationIntroCard /> Component', () => {
           <ModerationIntroCard
             titleLabel="Moderating"
             subtitleLabel="Find all the moderated posts, replies and accounts"
-            isIntro={true}
             introLabel="Welcome to the Moderation App"
             descriptionLine1Label="Here you will find the moderated posts, replies, and accounts of Ethereum World. We do not reveal any personal information of the author or submitter(s) to protect their privacy."
             descriptionLine2IntroLabel="Visit our"

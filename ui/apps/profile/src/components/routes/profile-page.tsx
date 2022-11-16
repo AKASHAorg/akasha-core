@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import { RootComponentProps, IProfileData, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import { RootComponentProps, IProfileData } from '@akashaorg/typings/ui';
 import menuRoute, { MY_PROFILE } from '../../routes';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
@@ -13,7 +13,6 @@ const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner 
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
-  showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
   loginState: LoginState;
 }
 

@@ -9,6 +9,8 @@ import { customRender, wrapWithTheme } from '../../../test-utils';
 describe('<ReportModal /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
+  const handleSelectReason = jest.fn();
+  const handleSetExplanation = jest.fn();
   const handleCloseModal = jest.fn();
   const handleReport = jest.fn();
 
@@ -19,7 +21,12 @@ describe('<ReportModal /> Component', () => {
           <ReportModal
             titleLabel="Report a Post"
             successTitleLabel="Thank you for helping us keep Ethereum World safe! 🙌"
-            successMessageLabel="We will investigate this post and take appropriate action."
+            successMessageLabel="We have received your message"
+            reasonPrefix="TI"
+            contentId="0845"
+            footerLabel="Feel like you want to contribute more to improve our community?"
+            footerCTAUrl="https://discord.gg/A5wfg6ZCRt"
+            footerCTALabel="Join our Moderation Discord channel"
             optionsTitleLabel="Please select a reason"
             optionLabels={[
               'Suspicious, deceptive, or spam',
@@ -37,8 +44,10 @@ describe('<ReportModal /> Component', () => {
               'Nudity',
               'Violence',
             ]}
+            reason="Other"
             descriptionLabel="Explanation"
             descriptionPlaceholder="Please explain your reason(s)"
+            explanation="some explanation"
             footerText1Label="If you are unsure, you can refer to our"
             footerLink1Label="Code of Conduct"
             footerUrl1="https://akasha.ethereum.world/legal/code-of-conduct"
@@ -47,10 +56,10 @@ describe('<ReportModal /> Component', () => {
             footerUrl2="https://akasha.ethereum.world/legal/terms-of-service"
             cancelLabel="Cancel"
             reportLabel="Report"
-            blockLabel="Block User"
-            closeLabel="Close"
             requesting={false}
             success={false}
+            onSelectReason={handleSelectReason}
+            onSetExplanation={handleSetExplanation}
             closeModal={handleCloseModal}
             onReport={handleReport}
           />,
@@ -83,52 +92,34 @@ describe('<ReportModal /> Component', () => {
     expect(options).toHaveLength(6);
   });
 
-  it('can select radio option', async () => {
+  it('calls handler when selecting a radio option', async () => {
     const { getByRole } = componentWrapper;
 
     // target an option
     const illegalOption = getByRole('radio', { name: 'Illegal' });
 
-    expect(illegalOption).not.toBeChecked();
+    expect(handleSelectReason).toBeCalledTimes(0);
 
-    // select illegalOption
+    // click illegalOption
     await userEvent.click(illegalOption);
 
-    // illegalOption is now checked
-    expect(illegalOption).toBeChecked();
+    // handler is now called
+    expect(handleSelectReason).toBeCalledTimes(1);
   });
 
-  it('enables action button when an option is selected', async () => {
-    const { getByRole } = componentWrapper;
-
-    // target an option
-    const illegalOption = getByRole('radio', { name: 'Illegal' });
-    // target report action handler
-    const actionButton = getByRole('button', { name: 'Report' });
-
-    // button should be initially disabled
-    expect(actionButton).toHaveAttribute('disabled');
-
-    // select illegalOption
-    await userEvent.click(illegalOption);
-
-    // illegalOption is now checked
-    expect(illegalOption).toBeChecked();
-    // action button should no longer be disabled
-    expect(actionButton.hasAttribute('disabled')).not.toBeTruthy();
-  });
-
-  it('can type into the input field', async () => {
+  it('calls handler when typing into the input field', async () => {
     const { getByRole } = componentWrapper;
 
     const input = getByRole('textbox');
     expect(input).toBeDefined();
 
+    expect(handleSetExplanation).toBeCalledTimes(0);
+
     // type into the input field
     await userEvent.type(input, 'optional explanation supporting the report action');
 
-    // input value should match typed in value
-    expect(input).toHaveValue('optional explanation supporting the report action');
+    // handler is now called
+    expect(handleSetExplanation).toBeCalled();
   });
 
   it('has two buttons', () => {

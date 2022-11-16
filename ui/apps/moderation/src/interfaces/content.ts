@@ -9,6 +9,8 @@ export interface IContentProps extends RootComponentProps {
   locale: ILocale;
   entryData: IEntryData | IProfileData;
 
+  incidentLabel: string;
+  uniqueId: string;
   showExplanationsLabel: string;
   hideExplanationsLabel: string;
   determinationLabel?: string;

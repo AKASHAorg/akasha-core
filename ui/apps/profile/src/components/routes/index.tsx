@@ -100,9 +100,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               element={
                 <ProfilePage
                   {...props}
-                  loggedProfileData={loggedProfileQuery.data}
-                  showLoginModal={showLoginModal}
                   loginState={loginQuery.data}
+                  loggedProfileData={loggedProfileQuery.data}
                 />
               }
             />
@@ -111,9 +110,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               element={
                 <ProfilePage
                   {...props}
-                  loggedProfileData={loggedProfileQuery.data as any}
-                  showLoginModal={showLoginModal}
                   loginState={loginQuery.data}
+                  loggedProfileData={loggedProfileQuery.data}
                 />
               }
             />
@@ -122,7 +120,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               element={
                 <ProfileEditPage
                   {...props}
-                  loggedProfileData={loggedProfileQuery.data as any}
+                  loggedProfileData={loggedProfileQuery.data}
                   showLoginModal={showLoginModal}
                   loginState={loginQuery.data}
                 />

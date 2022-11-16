@@ -2,11 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { getMediaUrl, ILogItem } from '@akashaorg/ui-awf-hooks';
-import { ModerationItemTypes, NavigateToParams } from '@akashaorg/typings/ui';
+import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
+import { IModerationLogItem, ModerationItemTypes, NavigateToParams } from '@akashaorg/typings/ui';
 
 export interface IDetailCard {
-  selected: ILogItem;
+  selected: IModerationLogItem;
   handleClickAvatar: () => void;
   handleClickArrowLeft: () => void;
   navigateTo: (args: NavigateToParams) => void;
@@ -73,7 +73,8 @@ const DetailCard: React.FC<IDetailCard> = props => {
       })}
       reasons={selected.reasons}
       explanationLabel={t('explanation')}
-      contactModeratorsLabel={t('Contact the moderators')}
+      footerLabel={t('Something is not right?')}
+      contactModeratorsLabel={t('Let us know')}
       contactModeratorsLink="mailto:moderators@ethereum.world"
       onClickArrowLeft={handleClickArrowLeft}
       onClickViewItem={handleClickViewItem(selected.contentType, selected.contentID)}
