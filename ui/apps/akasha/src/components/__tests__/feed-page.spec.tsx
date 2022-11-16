@@ -24,7 +24,7 @@ describe('< FeedPage /> component', () => {
   );
 
   beforeAll(() => {
-    Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+    Object.defineProperty(global, 'localStorage', { value: localStorageMock });
 
     jest
       .spyOn(extension, 'Extension')
