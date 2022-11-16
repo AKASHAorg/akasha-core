@@ -83,8 +83,6 @@ describe('< PostPage /> component', () => {
       renderWithAllProviders(BaseComponent, {});
     });
 
-    expect(screen.getByText(/Reply to/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
     expect(screen.getByTestId('reply-fragment')).toBeInTheDocument();
     expect(screen.getByText(/View all replies/)).toBeInTheDocument();
   });
