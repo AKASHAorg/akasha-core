@@ -13,7 +13,7 @@ import { LoginState, useInfiniteComments, useGetProfile } from '@akashaorg/ui-aw
 
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
-import { MainEntry } from './main-entry';
+import { OriginalItem } from './original-item';
 import { PendingReply } from './pending-reply';
 import { UseQueryResult } from 'react-query';
 import { Logger } from '@akashaorg/awf-sdk';
@@ -131,14 +131,13 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
               handleFlipCard={handleFlipCard}
             />
           )}
-          <MainEntry
+          <OriginalItem
             itemId={commentId || postId}
             itemType={itemType}
             entryReq={entryReq}
             loginState={loginState}
             uiEvents={props.uiEvents}
             plugins={props.plugins}
-            singleSpa={props.singleSpa}
             layoutConfig={props.layoutConfig}
             entryData={entryData}
             navigateToModal={props.navigateToModal}

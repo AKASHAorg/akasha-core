@@ -45,7 +45,7 @@ const EntryList = (props: EntryListProps) => {
           {items(page)?.map((itemId, index, items) => (
             <React.Fragment key={itemId}>
               {React.cloneElement(itemCard, {
-                itemId: itemId,
+                itemId,
                 index,
                 itemSpacing,
                 totalEntry: items.length,

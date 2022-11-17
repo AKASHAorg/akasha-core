@@ -31,21 +31,19 @@ type Props = {
   loginState?: LoginState;
   uiEvents: RootComponentProps['uiEvents'];
   plugins: RootComponentProps['plugins'];
-  singleSpa: RootComponentProps['singleSpa'];
   layoutConfig: RootComponentProps['layoutConfig'];
   entryData?: IEntryData;
   navigateToModal: RootComponentProps['navigateToModal'];
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-export function MainEntry({
+export function OriginalItem({
   itemId,
   itemType,
   entryReq,
   loginState,
   uiEvents,
   plugins,
-  singleSpa,
   layoutConfig,
   entryData,
   navigateToModal,
@@ -265,7 +263,7 @@ export function MainEntry({
         )}
         {showReplyEditor && loginState?.ethAddress && !entryData?.isRemoved && (
           <Extension
-            name={`inline-editor_postreply_${entryData?.entryId}`}
+            name={`inline-editor_reply_${entryData?.entryId}`}
             uiEvents={uiEvents}
             data={{
               itemId,
