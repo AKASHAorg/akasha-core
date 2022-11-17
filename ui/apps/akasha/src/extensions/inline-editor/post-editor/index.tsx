@@ -56,15 +56,14 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   );
 
   const embedEntryData = React.useMemo(() => {
-    if (action === 'repost') {
-      if (entryData) {
-        return entryData;
-      }
+    if (entryData && action === 'repost') {
+      return entryData;
+    }
+    if (action === 'repost' || action === 'edit') {
       if (post.data?.quotes.length) {
         return mapEntry(post.data?.quotes[0]);
       }
     }
-
     return undefined;
   }, [action, entryData, post.data?.quotes]);
 
