@@ -120,7 +120,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           <Box margin={{ bottom: 'xsmall' }}>
             {postId ? (
               <Extension
-                name={`inline-editor_repost_postId`}
+                name={`inline-editor_repost_${postId}`}
                 uiEvents={props.uiEvents}
                 data={{ entryId: postId, entryType: EntityTypes.ENTRY, action: 'repost' }}
               />
