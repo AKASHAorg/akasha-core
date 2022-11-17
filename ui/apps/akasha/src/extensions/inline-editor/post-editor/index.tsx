@@ -19,7 +19,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
-import { clearDraftItem, getDraftItem, saveDraftItem } from '../utils';
+import { Draft, IDraftStorage } from '../utils';
 import { editorDefaultValue } from '@akashaorg/design-system/lib/components/Editor/initialValue';
 
 const { EntryCardLoading } = DS;
@@ -30,9 +30,10 @@ type Props = {
   pubKey: string;
   singleSpa: RootExtensionProps['singleSpa'];
   action: 'post' | 'reply' | 'repost' | 'edit';
+  draftStorage: IDraftStorage;
 };
 
-export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props) {
+export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftStorage }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const post = usePost({
@@ -44,6 +45,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   const publishComment = useCreateComment();
   const { mutation: createPostMutation } =
     useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const draft = new Draft(draftStorage, appName, pubKey);
 
   const entryData = React.useMemo(() => {
     if (post.status === 'success') {
@@ -135,7 +137,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   }
 
   const canSaveDraft = action === 'post';
-  const draftItem = canSaveDraft ? getDraftItem({ pubKey, appName }) : null;
+  const draftItem = canSaveDraft ? draft.get() : null;
 
   return (
     <Base
@@ -157,10 +159,10 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
       setEditorState={(value: IEntryData['slateContent']) => {
         if (!canSaveDraft) return;
         if (isEqual(value, editorDefaultValue)) {
-          clearDraftItem({ pubKey, appName });
+          draft.clear();
           return;
         }
-        saveDraftItem({ pubKey, appName, content: value });
+        draft.save(value);
       }}
       noBorderRound={action === 'edit' || action === 'repost'}
       borderBottomOnly={action === 'edit' || action === 'repost'}
