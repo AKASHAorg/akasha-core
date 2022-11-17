@@ -97,7 +97,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   const handleCommentRemove = (commentId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      itemType: EntityTypes.COMMENT,
+      itemType: EntityTypes.REPLY,
       itemId: commentId,
     });
   };
@@ -155,7 +155,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
             modalSlotId={props.layoutConfig.modalSlotId}
             logger={logger}
             pages={commentPages}
-            itemType={EntityTypes.COMMENT}
+            itemType={EntityTypes.REPLY}
             onLoadMore={handleLoadMore}
             getShareUrl={(itemId: string) =>
               `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`

@@ -30,12 +30,12 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   };
 
   const handleEntryClick = (itemId: string, itemType: EntityTypes) => {
-    if (itemType === EntityTypes.ENTRY) {
+    if (itemType === EntityTypes.POST) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemId}`,
       });
-    } else if (itemType === EntityTypes.COMMENT) {
+    } else if (itemType === EntityTypes.REPLY) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Reply}/${itemId}`,

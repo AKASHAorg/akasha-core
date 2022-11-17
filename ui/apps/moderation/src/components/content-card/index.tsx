@@ -47,18 +47,18 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
   const profileDataQuery = useGetProfile(itemId, props.user, itemType === EntityTypes.PROFILE);
   const profile = profileDataQuery.data;
 
-  const postQuery = usePost({ postId: itemId, enabler: itemType === EntityTypes.ENTRY });
+  const postQuery = usePost({ postId: itemId, enabler: itemType === EntityTypes.POST });
 
-  const commentQuery = useComment(itemId, itemType === EntityTypes.COMMENT);
+  const commentQuery = useComment(itemId, itemType === EntityTypes.REPLY);
 
   const entryData = React.useMemo(() => {
-    if (itemType === EntityTypes.ENTRY) {
+    if (itemType === EntityTypes.POST) {
       if (postQuery.data) {
         return mapEntry(postQuery.data);
       }
       return undefined;
     }
-    if (itemType === EntityTypes.COMMENT) {
+    if (itemType === EntityTypes.REPLY) {
       if (commentQuery.data) {
         return mapEntry(commentQuery.data);
       }

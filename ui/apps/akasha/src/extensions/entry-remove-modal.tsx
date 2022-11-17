@@ -28,13 +28,13 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
 
   const handleDeletePost = React.useCallback(() => {
     if (extensionData && typeof +extensionData.itemType === 'number') {
-      if (extensionData.itemType === EntityTypes.COMMENT) {
+      if (extensionData.itemType === EntityTypes.REPLY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.itemId);
-      } else if (extensionData.itemType === EntityTypes.ENTRY) {
+      } else if (extensionData.itemType === EntityTypes.POST) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
@@ -51,7 +51,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = React.useMemo(() => {
-    if (extensionData.itemType === EntityTypes.ENTRY) {
+    if (extensionData.itemType === EntityTypes.POST) {
       return t('post');
     }
     return t('reply');

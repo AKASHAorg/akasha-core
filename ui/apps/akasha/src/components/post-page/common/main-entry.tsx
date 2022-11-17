@@ -90,7 +90,7 @@ export function MainEntry({
   if (loginState?.ethAddress) {
     switch (action) {
       case 'repost':
-        if (itemType !== EntityTypes.ENTRY) return;
+        if (itemType !== EntityTypes.POST) return;
         return (
           <Extension
             name={`inline-editor_repost_${entryData?.entryId}`}
@@ -224,7 +224,7 @@ export function MainEntry({
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[POST]}
           onRepost={handleRepost}
-          onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.ENTRY)}
+          onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.POST)}
           handleFollowAuthor={handleFollow}
           handleUnfollowAuthor={handleUnfollow}
           isFollowingAuthor={isFollowing}
@@ -242,8 +242,8 @@ export function MainEntry({
           removeEntryLabel={t('Delete Post')}
           removedByMeLabel={t('You deleted this post')}
           removedByAuthorLabel={t('This post was deleted by its author')}
-          disableReposting={entryData?.isRemoved || itemType === EntityTypes.COMMENT}
-          hideRepost={itemType === EntityTypes.COMMENT}
+          disableReposting={entryData?.isRemoved || itemType === EntityTypes.REPLY}
+          hideRepost={itemType === EntityTypes.REPLY}
           disableReporting={loginState.waitForAuth || loginState.isSigningIn}
           modalSlotId={layoutConfig.modalSlotId}
           headerMenuExt={

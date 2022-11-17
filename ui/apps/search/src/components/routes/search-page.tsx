@@ -499,7 +499,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             <EntryCardRenderer
               key={itemData.itemId}
               itemData={itemData}
-              itemType={EntityTypes.ENTRY}
+              itemType={EntityTypes.POST}
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}
@@ -524,7 +524,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             <EntryCardRenderer
               key={itemData.itemId}
               itemData={itemData}
-              itemType={EntityTypes.COMMENT}
+              itemType={EntityTypes.REPLY}
               logger={props.logger}
               singleSpa={singleSpa}
               ethAddress={loginState?.ethAddress}

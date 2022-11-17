@@ -23,12 +23,12 @@ const DetailCard: React.FC<IDetailCard> = props => {
   const { t } = useTranslation('app-moderation-ewa');
 
   const handleClickViewItem = (itemType: EntityTypes, contentID: string) => () => {
-    if (itemType === EntityTypes.ENTRY) {
+    if (itemType === EntityTypes.POST) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Post}/${contentID}`,
       });
-    } else if (itemType === EntityTypes.COMMENT) {
+    } else if (itemType === EntityTypes.REPLY) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes => `${navRoutes.Reply}/${contentID}`,

@@ -122,13 +122,13 @@ const EntryRenderer = (
 
   const { t } = useTranslation('ui-lib-feed');
 
-  const postReq = usePost({ postId: itemId, enabler: itemType === EntityTypes.ENTRY });
-  const commentReq = useComment(itemId, itemType === EntityTypes.COMMENT);
+  const postReq = usePost({ postId: itemId, enabler: itemType === EntityTypes.POST });
+  const commentReq = useComment(itemId, itemType === EntityTypes.REPLY);
   const authorPubKey = React.useMemo(() => {
-    if (itemType === EntityTypes.COMMENT && commentReq.status === 'success') {
+    if (itemType === EntityTypes.REPLY && commentReq.status === 'success') {
       return commentReq.data.author.pubKey;
     }
-    if (itemType === EntityTypes.ENTRY && postReq.status === 'success') {
+    if (itemType === EntityTypes.POST && postReq.status === 'success') {
       return postReq.data.author.pubKey;
     }
   }, [itemType, commentReq, postReq]);
@@ -136,14 +136,14 @@ const EntryRenderer = (
   const followedProfilesReq = useIsFollowingMultiple(loginState.pubKey, [authorPubKey]);
 
   const postData = React.useMemo(() => {
-    if (postReq.data && itemType === EntityTypes.ENTRY) {
+    if (postReq.data && itemType === EntityTypes.POST) {
       return mapEntry(postReq.data);
     }
     return undefined;
   }, [postReq.data, itemType]);
 
   const commentData = React.useMemo(() => {
-    if (commentReq.data && itemType === EntityTypes.COMMENT) {
+    if (commentReq.data && itemType === EntityTypes.REPLY) {
       return mapEntry(commentReq.data);
     }
     return undefined;
@@ -156,9 +156,9 @@ const EntryRenderer = (
   }, [authorPubKey, followedProfilesReq.data, followedProfilesReq.status]);
 
   const itemData = React.useMemo(() => {
-    if (itemType === EntityTypes.ENTRY) {
+    if (itemType === EntityTypes.POST) {
       return postData;
-    } else if (itemType === EntityTypes.COMMENT) {
+    } else if (itemType === EntityTypes.REPLY) {
       return commentData;
     }
   }, [postData, commentData, itemType]);
@@ -191,7 +191,7 @@ const EntryRenderer = (
   }, [unfollowProfileQuery, authorPubKey]);
 
   const handleEditClick = React.useCallback(() => {
-    if (itemType === EntityTypes.COMMENT) {
+    if (itemType === EntityTypes.REPLY) {
       setIsEditingComment(true);
     }
   }, [itemType]);
@@ -228,7 +228,7 @@ const EntryRenderer = (
         name,
         entryId: itemId,
         entryType: itemType,
-        hideLabel: itemType === EntityTypes.ENTRY,
+        hideLabel: itemType === EntityTypes.POST,
       },
     });
   };
@@ -249,11 +249,11 @@ const EntryRenderer = (
 
   const itemTypeName = React.useMemo(() => {
     switch (itemType) {
-      case EntityTypes.ENTRY:
+      case EntityTypes.POST:
         return t('post');
       case EntityTypes.PROFILE:
         return t('account');
-      case EntityTypes.COMMENT:
+      case EntityTypes.REPLY:
         return t('reply');
       case EntityTypes.TAG:
         return t('tag');
@@ -294,7 +294,7 @@ const EntryRenderer = (
     [itemData?.author?.ethAddress, loginState.ethAddress, loginState.isReady],
   );
 
-  const isComment = React.useMemo(() => itemType === EntityTypes.COMMENT, [itemType]);
+  const isComment = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
 
   const canShowEntry =
     itemData &&
@@ -400,7 +400,7 @@ const EntryRenderer = (
                 sharePostLabel={t('Share Post')}
                 shareTextLabel={t('Share this post with your friends')}
                 onClickAvatar={handleAvatarClick}
-                repliesLabel={itemType === EntityTypes.ENTRY ? '' : t('Replies')}
+                repliesLabel={itemType === EntityTypes.POST ? '' : t('Replies')}
                 repostLabel={t('Repost')}
                 editedLabel={t('Last edited')}
                 repostWithCommentLabel={t('Repost with comment')}
@@ -469,7 +469,7 @@ const EntryRenderer = (
                     modalSlotId={props.modalSlotId}
                     logger={props.logger}
                     pages={replyPages}
-                    itemType={EntityTypes.COMMENT}
+                    itemType={EntityTypes.REPLY}
                     onLoadMore={() => ({})}
                     getShareUrl={(itemId: string) =>
                       `${window.location.origin}/@akashaorg/app-akasha-integration/reply/${itemId}`

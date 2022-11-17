@@ -7,13 +7,15 @@ export enum ButtonValues {
   STATS = 'Stats',
 }
 
-export enum ModerationItemTypes {
-  ACCOUNT = 'account',
-  POST = 'post',
-  COMMENT = 'comment',
-  REPLY = 'reply',
+export const ModerationEntityTypesMap = {
+  [EntityTypes.PROFILE]: 'account',
+  [EntityTypes.POST]: 'post',
+  [EntityTypes.REPLY]: 'reply',
+
   // @TODO: add support for tag type, when tag moderation is implemented
-}
+  [EntityTypes.ARTICLE]: 'article',
+  [EntityTypes.TAG]: 'tag',
+} as const;
 
 export type ModeratorStatus = 'active' | 'revoked' | 'resigned';
 

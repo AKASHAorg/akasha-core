@@ -58,7 +58,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
-      itemType: EntityTypes.ENTRY,
+      itemType: EntityTypes.POST,
     });
   };
 
@@ -122,7 +122,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
           {bookmarksReq.status === 'success' && bookmarks.length > 0 && (
             <FeedWidget
               modalSlotId={props.layoutConfig.modalSlotId}
-              itemType={EntityTypes.ENTRY}
+              itemType={EntityTypes.POST}
               logger={props.logger}
               onLoadMore={() => {
                 /* if next page, load more */

@@ -11,14 +11,14 @@ export const InlineEditor = (props: Partial<RootExtensionProps>) => {
   const itemType = props.extensionData.itemType;
 
   /*ReplyEditor handles reply to a comment and editing a comment*/
-  if (itemType === EntityTypes.COMMENT && itemId && (action === 'reply' || action === 'edit')) {
+  if (itemType === EntityTypes.REPLY && itemId && (action === 'reply' || action === 'edit')) {
     return <ReplyEditor commentId={itemId} singleSpa={props.singleSpa} action={action} />;
   }
 
   /*PostEditor handles reply to a post, repost, and editing a post*/
   if (
     action === 'post' ||
-    (itemType === EntityTypes.ENTRY &&
+    (itemType === EntityTypes.POST &&
       itemId &&
       (action === 'repost' || action === 'edit' || action === 'reply'))
   ) {

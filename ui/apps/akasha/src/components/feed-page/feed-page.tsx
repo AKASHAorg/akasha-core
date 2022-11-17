@@ -75,7 +75,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal.current({
       name: 'entry-remove-confirmation',
-      itemType: EntityTypes.ENTRY,
+      itemType: EntityTypes.POST,
       itemId,
     });
   }, []);
@@ -171,7 +171,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <FeedWidget
         modalSlotId={props.layoutConfig.modalSlotId}
         logger={logger}
-        itemType={EntityTypes.ENTRY}
+        itemType={EntityTypes.POST}
         pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) =>

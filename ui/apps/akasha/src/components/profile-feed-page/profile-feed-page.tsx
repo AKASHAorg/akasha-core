@@ -71,7 +71,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
       itemId,
-      itemType: EntityTypes.ENTRY,
+      itemType: EntityTypes.POST,
     });
   };
 
@@ -96,7 +96,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
         {reqPosts.isSuccess && postPages && (
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
-            itemType={EntityTypes.ENTRY}
+            itemType={EntityTypes.POST}
             logger={props.logger}
             onLoadMore={handleLoadMore}
             getShareUrl={(itemId: string) =>

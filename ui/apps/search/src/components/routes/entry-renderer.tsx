@@ -94,11 +94,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const itemTypeName = React.useMemo(() => {
     switch (itemType) {
-      case EntityTypes.ENTRY:
+      case EntityTypes.POST:
         return t('post');
       case EntityTypes.PROFILE:
         return t('account');
-      case EntityTypes.COMMENT:
+      case EntityTypes.REPLY:
         return t('reply');
       case EntityTypes.TAG:
         return t('tag');
@@ -126,7 +126,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     if (itemId)
       props.navigateToModal({
         name: 'entry-remove-confirmation',
-        itemType: EntityTypes.ENTRY,
+        itemType: EntityTypes.POST,
         itemId,
       });
   };
@@ -167,7 +167,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   };
 
-  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.COMMENT, [itemType]);
+  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
 
   return (
     <>
@@ -213,7 +213,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 showMore={true}
                 profileAnchorLink={'/@akashaorg/app-profile'}
                 repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
-                  itemType === EntityTypes.COMMENT ? 'reply' : 'post'
+                  itemType === EntityTypes.REPLY ? 'reply' : 'post'
                 }`}
                 onRepost={handleRepost}
                 handleFollowAuthor={handleFollow}
@@ -227,7 +227,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 disableReposting={itemData.isRemoved}
                 removeEntryLabel={t('Delete Post')}
                 onEntryRemove={handleEntryRemove}
-                onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.ENTRY)}
+                onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.POST)}
                 hideActionButtons={hideActionButtons}
                 modalSlotId={modalSlotId}
                 actionsRightExt={

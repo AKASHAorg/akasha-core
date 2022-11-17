@@ -28,7 +28,7 @@ export const useEntryNavigation = (
       navigateFn({
         appName: '@akashaorg/app-akasha-integration',
         getNavigationUrl: navRoutes =>
-          `${itemType === EntityTypes.COMMENT ? navRoutes.Reply : navRoutes.Post}/${id}`,
+          `${itemType === EntityTypes.REPLY ? navRoutes.Reply : navRoutes.Post}/${id}`,
       });
     },
     [navigateFn, currentPostId],

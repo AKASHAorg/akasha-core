@@ -75,13 +75,3 @@ export enum LEGAL_DOCS {
   CODE_OF_CONDUCT = 'CodeOfConduct',
   APP_GUIDE = 'AppGuide',
 }
-
-export const ModerationEntityTypesMap = {
-  [EntityTypes.PROFILE]: 'account',
-  [EntityTypes.ENTRY]: 'post',
-  [EntityTypes.COMMENT]: 'reply',
-
-  // @TODO: add support for tag type, when tag moderation is implemented
-  [EntityTypes.ARTICLE]: 'article',
-  [EntityTypes.TAG]: 'tag',
-} as const;
