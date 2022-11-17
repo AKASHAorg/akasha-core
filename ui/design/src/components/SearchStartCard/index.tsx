@@ -42,7 +42,7 @@ export const SearchStartCard = ({
         </Text>
       </Box>
       <StyledBox shouldMinimize={shouldMinimize} pad={{ horizontal: 'medium' }}>
-        <StyledImage src="/images/search-page-start.webp" />
+        <StyledImage src="/images/search.webp" />
         <Text size="large" weight={600} margin={{ top: 'medium' }} textAlign="center">
           {introLabel}
         </Text>

@@ -9,15 +9,14 @@ import {
   useGetLogin,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
-import { IEditorBox } from '@akashaorg/design-system/lib/components/Editor';
+import { CommentEditorProps } from '@akashaorg/design-system/lib/components/EditorCard/comment-editor';
 import { IEntryData, RootExtensionProps } from '@akashaorg/typings/ui';
 import { IReplyErrorState, ReplyError } from './reply-error';
 
 const { CommentEditor, EntryCardLoading } = DS;
 
 export function Base(
-  props: Partial<IEditorBox> & {
-    isShown: boolean;
+  props: Partial<CommentEditorProps> & {
     singleSpa: RootExtensionProps['singleSpa'];
     entryData: IEntryData;
     isReply: boolean;

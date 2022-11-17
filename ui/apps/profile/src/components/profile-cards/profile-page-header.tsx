@@ -43,7 +43,9 @@ export interface IProfileHeaderProps {
 }
 
 const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
-  const { profileData, loginState, profileId, plugins } = props;
+  const { profileData, loginState, profileId } = props;
+
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
@@ -122,7 +124,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
   };
 
   const showUpdateProfileModal = () => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => routes[UPDATE_PROFILE],
     });
@@ -139,6 +141,13 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
   const handleClose = () => {
     setModalOpen(false);
+  };
+
+  const handleNavigateToProfilePosts = () => {
+    navigateTo({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileData.pubKey}`,
+    });
   };
 
   const handleExtPointMount = (name: string) => {
@@ -168,7 +177,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
             loginState={loginState}
             selectedStat={selectedStat}
             profileData={profileData}
-            navigateTo={plugins['@akashaorg/app-routing']?.navigateTo}
+            navigateTo={navigateTo}
             showLoginModal={showLoginModal}
             handleClose={handleClose}
           />
@@ -263,7 +272,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           onClickFollowing={handleStatIconClick(1)}
           onClickFollowers={handleStatIconClick(0)}
           onClickInterests={handleStatIconClick(2)}
-          onClickPosts={() => null}
+          onClickPosts={handleNavigateToProfilePosts}
           followingLabel={t('Following')}
           followersLabel={t('Followers')}
           postsLabel={t('Posts')}

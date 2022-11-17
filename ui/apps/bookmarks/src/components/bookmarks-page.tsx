@@ -106,7 +106,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
             subtitle={getSubtitleText()}
             heading={t('✨ Save what inspires you ✨')}
             description={description}
-            image={'/images/no-bookmarks.webp'}
+            image={'/images/no-saved-posts-error.webp'}
             showMainArea={!isLoggedIn}
           />
           {!bookmarksReq.isFetched && isLoggedIn && <Spinner />}
