@@ -17,6 +17,7 @@ import {
   createPendingEntry,
   LoginState,
   useAnalytics,
+  useCloseNotification,
 } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -24,6 +25,8 @@ import routes, { POST } from '../../routes';
 
 const { Box, Helmet, EntryCard, EntryPublishErrorCard, LoginCTAWidgetCard, BasicCardBox, Text } =
   DS;
+
+const CLOSE_PRIVATE_ALPHA_NOTIFICATION_FLAG = 'close-private-alpha-notification';
 
 export interface FeedPageProps {
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
@@ -40,6 +43,10 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     'en') as ILocale;
 
   const [analyticsActions] = useAnalytics();
+
+  const [closeNotification, setCloseNotification] = useCloseNotification(
+    CLOSE_PRIVATE_ALPHA_NOTIFICATION_FLAG,
+  );
 
   const { mutations: pendingPostStates } =
     useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
@@ -112,22 +119,25 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           </Box>
         </>
       ) : (
-        <Box margin={{ bottom: 'small' }}>
-          <LoginCTAWidgetCard
-            title={`${t('Welcome, fellow Ethereans!')} 💫`}
-            subtitle={t('We are in private alpha at this time. ')}
-            beforeLinkLabel={t("If you'd like to participate, just ")}
-            afterLinkLabel={t(
-              " and we'll send you a ticket for the next shuttle going to Ethereum World.",
-            )}
-            disclaimerLabel={t(
-              "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
-            )}
-            writeToUsLabel={t('drop us a message')}
-            writeToUsUrl={'mailto:alpha@ethereum.world'}
-            onWriteToUsLabelClick={handleWriteToUsLabelClick}
-          />
-        </Box>
+        !closeNotification && (
+          <Box margin={{ bottom: 'small' }}>
+            <LoginCTAWidgetCard
+              title={`${t('Welcome, fellow Ethereans!')} 💫`}
+              subtitle={t('We are in private alpha at this time. ')}
+              beforeLinkLabel={t("If you'd like to participate, just ")}
+              afterLinkLabel={t(
+                " and we'll send you a ticket for the next shuttle going to Ethereum World.",
+              )}
+              disclaimerLabel={t(
+                "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
+              )}
+              writeToUsLabel={t('drop us a message')}
+              writeToUsUrl={'mailto:alpha@ethereum.world'}
+              onWriteToUsLabelClick={handleWriteToUsLabelClick}
+              onCloseIconClick={() => setCloseNotification(true)}
+            />
+          </Box>
+        )
       )}
       {pendingPostStates?.map(
         pendingPostState =>

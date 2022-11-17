@@ -23,9 +23,10 @@ import {
   FocusedPluginSlot,
   CookieWidgetSlot,
 } from './styled-slots';
-import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
+import { usePlaformHealthCheck, useCloseNotification } from '@akashaorg/ui-awf-hooks';
 
 const { Box, BasicCardBox, Icon, styled, Text, Extension } = DS;
+const CLOSE_THE_MERGE_NOTIFICATION_FLAG = 'close-the-merge-notification';
 
 const WarningCard = styled(BasicCardBox)`
   background-color: ${props => props.theme.colors.warning};
@@ -51,6 +52,10 @@ const Layout: React.FC<RootComponentProps> = props => {
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
   const maintenanceReq = usePlaformHealthCheck();
+  const [closeNotification, setCloseNotification] = useCloseNotification(
+    CLOSE_THE_MERGE_NOTIFICATION_FLAG,
+  );
+
   const isPlatformHealty = React.useMemo(() => {
     if (maintenanceReq.status === 'success') {
       return maintenanceReq.data.success;
@@ -196,20 +201,30 @@ const Layout: React.FC<RootComponentProps> = props => {
                     </WarningCard>
                   )}
 
-                  <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
-                    <WarningIcon type="error" themeColor="secondary" />
-                    <Box width="100%">
-                      <Text size="medium">
-                        {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
-                          'We have migrated Ethereum World to the Goerli testnet',
-                        )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
-                          'But some functionalities such as claiming ENS names won’t be possible',
-                        )}. ${t('We are working hard on mitigating any issues')}. ${t(
-                          'Bear with us 🙏🏽',
-                        )}.`}
-                      </Text>
-                    </Box>
-                  </WarningCard>
+                  {!closeNotification && (
+                    <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
+                      <WarningIcon type="error" themeColor="secondary" />
+                      <Box width="100%">
+                        <Text size="medium">
+                          {`${t(
+                            'Following the merge, the Rinkeby network has been deprecated',
+                          )}. ${t('We have migrated Ethereum World to the Goerli testnet')}. ${t(
+                            'This will not affect your content or posts, they are saved',
+                          )}! ${t(
+                            'But some functionalities such as claiming ENS names won’t be possible',
+                          )}. ${t('We are working hard on mitigating any issues')}. ${t(
+                            'Bear with us 🙏🏽',
+                          )}.`}
+                        </Text>
+                      </Box>
+                      <Icon
+                        type="close"
+                        clickable={true}
+                        onClick={() => setCloseNotification(true)}
+                        size="xs"
+                      />
+                    </WarningCard>
+                  )}
 
                   <Extension name="back-navigation" uiEvents={props.uiEvents} />
 
