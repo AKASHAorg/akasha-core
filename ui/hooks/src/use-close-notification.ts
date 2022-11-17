@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export function useCloseNotification(key: string, initialValue = false) {
-  const [closed, setClosed] = useState(() => {
+  const [closed, setClosed] = useState<boolean>(() => {
     if (window?.localStorage) {
       try {
         const closedFlag = window.localStorage.getItem(key);
@@ -18,10 +18,8 @@ export function useCloseNotification(key: string, initialValue = false) {
     }
   });
 
-  const setValue = value => {
+  const setValue = (newClosedValue: boolean) => {
     try {
-      // Allow value to be a function so we have same API as useState
-      const newClosedValue = value instanceof Function ? value(closed) : value;
       setClosed(newClosedValue);
       if (window?.localStorage) {
         window.localStorage.setItem(key, JSON.stringify(newClosedValue));
@@ -30,5 +28,5 @@ export function useCloseNotification(key: string, initialValue = false) {
       console.log(err);
     }
   };
-  return [closed, setValue];
+  return [closed, setValue] as const;
 }
