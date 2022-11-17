@@ -10,7 +10,9 @@ describe('Feed Page', () => {
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
     it('should redirect to profile page', () => {
-      cy.get('[data-testid="avatar-image"]', { timeout: TIMEOUT }).first().click();
+      cy.get('[data-page-idx="0"] [data-testid="avatar-image"]', { timeout: TIMEOUT })
+        .first()
+        .click();
       cy.location('pathname').should('contain', '/app-profile');
     });
   });
@@ -23,7 +25,7 @@ describe('Feed Page', () => {
     });
 
     it('should render user avatars in posts', () => {
-      cy.get('[data-testid="avatar-image"]', { timeout: TIMEOUT })
+      cy.get('[data-page-idx="0"] [data-testid="avatar-image"]', { timeout: TIMEOUT })
         .first()
         .should('have.attr', 'src')
         .and('not.be.empty');
@@ -31,11 +33,6 @@ describe('Feed Page', () => {
 
     it('should open report popup on click', () => {
       cy.get('svg[type="moreDark"]', { timeout: TIMEOUT }).first().click();
-    });
-
-    it('should redirect to profile page', () => {
-      cy.get('[data-testid="avatar-image"]').first().click();
-      cy.location('pathname').should('contain', '/app-profile');
     });
   });
 });
