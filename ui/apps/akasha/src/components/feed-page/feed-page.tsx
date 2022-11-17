@@ -122,7 +122,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               <Extension
                 name={`inline-editor_repost_${postId}`}
                 uiEvents={props.uiEvents}
-                data={{ itemId: postId, itemType: EntityTypes.ENTRY, action: 'repost' }}
+                data={{ itemId: postId, itemType: EntityTypes.POST, action: 'repost' }}
               />
             ) : (
               <Extension
