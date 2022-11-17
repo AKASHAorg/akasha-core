@@ -88,24 +88,14 @@ export function MainEntry({
   if (!showEntry) return null;
 
   if (loginState?.ethAddress) {
-    switch (action) {
-      case 'repost':
-        if (entryType !== EntityTypes.ENTRY) return;
-        return (
-          <Extension
-            name={`inline-editor_repost_${entryData?.entryId}`}
-            uiEvents={uiEvents}
-            data={{ entryId, entryType, action: 'repost' }}
-          />
-        );
-      case 'edit':
-        return (
-          <Extension
-            name={`inline-editor_postedit_${entryData?.entryId}`}
-            uiEvents={uiEvents}
-            data={{ entryId, entryType, action: 'edit' }}
-          />
-        );
+    if (action === 'edit') {
+      return (
+        <Extension
+          name={`inline-editor_postedit_${entryData?.entryId}`}
+          uiEvents={uiEvents}
+          data={{ entryId, entryType, action: 'edit' }}
+        />
+      );
     }
   }
 
@@ -130,9 +120,10 @@ export function MainEntry({
       showLoginModal();
       return;
     } else {
-      singleSpa.navigateToUrl(
-        `${window.location.origin}/@akashaorg/app-akasha-integration/post/${entryId}?action=repost`,
-      );
+      navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `/feed?repost=${entryId}`,
+      });
     }
   };
 

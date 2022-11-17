@@ -65,28 +65,6 @@ describe('< PostPage /> component', () => {
     expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
   });
 
-  it('should render repost page', async () => {
-    history.pushState(null, '', `${location.origin}?action=repost`);
-
-    const spiedExtension = jest.spyOn(extension, 'Extension');
-
-    when(spiedExtension)
-      .calledWith(
-        partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_repost/) }),
-        ),
-      )
-      .mockReturnValue(<MockedInlineEditor action="repost" />);
-
-    await act(async () => {
-      renderWithAllProviders(BaseComponent, {});
-    });
-
-    expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Publish/i })).toBeInTheDocument();
-    expect(screen.getByTestId('embed-box')).toBeInTheDocument();
-  });
-
   it('should render edit page', async () => {
     history.pushState(null, '', `${location.origin}?action=edit`);
 

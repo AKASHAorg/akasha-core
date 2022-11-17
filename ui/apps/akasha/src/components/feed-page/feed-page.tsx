@@ -41,6 +41,20 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [analyticsActions] = useAnalytics();
 
+  //get the post id for repost from the search param
+  const [postId, setPostId] = React.useState(new URLSearchParams(location.search).get('repost'));
+
+  React.useEffect(() => {
+    /*The popstate listener is required for reposts happening from the feed page */
+    const popStateHandler = () => {
+      setPostId(new URLSearchParams(location.search).get('repost'));
+    };
+    window.addEventListener('popstate', popStateHandler);
+    return () => {
+      window.removeEventListener('popstate', popStateHandler);
+    };
+  }, []);
+
   const { mutations: pendingPostStates } =
     useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
@@ -104,11 +118,19 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
           </BasicCardBox>
           <Box margin={{ bottom: 'xsmall' }}>
-            <Extension
-              name="inline-editor_feed_page"
-              uiEvents={props.uiEvents}
-              data={{ action: 'post' }}
-            />
+            {postId ? (
+              <Extension
+                name={`inline-editor_repost_postId`}
+                uiEvents={props.uiEvents}
+                data={{ entryId: postId, entryType: EntityTypes.ENTRY, action: 'repost' }}
+              />
+            ) : (
+              <Extension
+                name="inline-editor_feed_page"
+                uiEvents={props.uiEvents}
+                data={{ action: 'post' }}
+              />
+            )}
           </Box>
         </>
       ) : (

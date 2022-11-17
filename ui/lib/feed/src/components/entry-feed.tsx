@@ -17,7 +17,7 @@ const EntryFeed = (props: FeedWidgetProps) => {
     } else {
       props.navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}?action=repost`,
+        getNavigationUrl: () => `/feed?repost=${entryId}`,
       });
     }
   };
