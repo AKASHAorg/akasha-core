@@ -14,8 +14,6 @@ import {
   mapEntry,
   useAnalytics,
   useCreateComment,
-  useMutationListener,
-  CREATE_POST_MUTATION_KEY,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
@@ -42,8 +40,9 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   const editPost = useEditPost();
   const publishPost = useCreatePost();
   const publishComment = useCreateComment();
-  const { mutation: createPostMutation } =
-    useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+
+  const canSaveDraft = action === 'post';
+  const draftItem = canSaveDraft ? getDraftItem({ pubKey, appName }) : null;
 
   const entryData = React.useMemo(() => {
     if (post.status === 'success') {
@@ -51,6 +50,10 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
     }
     return undefined;
   }, [post.data, post.status]);
+
+  const [editorState, setEditorState] = React.useState(
+    action === 'edit' ? entryData?.slateContent : draftItem,
+  );
 
   const embedEntryData = React.useMemo(() => {
     if (action === 'repost') {
@@ -122,20 +125,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
 
   if (post.error) return <>Error loading {action === 'repost' && 'embedded'} post</>;
 
-  if (
-    post.status === 'loading' ||
-    (createPostMutation && createPostMutation.state.status === 'loading' && action === 'repost')
-  )
-    return <EntryCardLoading />;
-
-  if (createPostMutation && createPostMutation.state.status === 'success' && action === 'repost') {
-    singleSpa.navigateToUrl(
-      `${window.location.origin}/@akashaorg/app-akasha-integration/post/${createPostMutation.state.data}`,
-    );
-  }
-
-  const canSaveDraft = action === 'post';
-  const draftItem = canSaveDraft ? getDraftItem({ pubKey, appName }) : null;
+  if (post.status === 'loading') return <EntryCardLoading />;
 
   return (
     <Base
@@ -149,21 +139,23 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
       singleSpa={singleSpa}
       embedEntryData={embedEntryData}
       entryData={entryData}
-      editorState={action === 'edit' ? entryData?.slateContent : draftItem}
-      isShown={action !== 'post' || (action === 'post' && !!draftItem)}
+      editorState={editorState}
+      openEditor={action !== 'post' || (action === 'post' && !!draftItem)}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
       showDraft={canSaveDraft}
       setEditorState={(value: IEntryData['slateContent']) => {
-        if (!canSaveDraft) return;
-        if (isEqual(value, editorDefaultValue)) {
-          clearDraftItem({ pubKey, appName });
-          return;
+        if (canSaveDraft) {
+          if (isEqual(value, editorDefaultValue)) {
+            clearDraftItem({ pubKey, appName });
+            return;
+          }
+          saveDraftItem({ pubKey, appName, content: value });
         }
-        saveDraftItem({ pubKey, appName, content: value });
+        setEditorState(value);
       }}
-      noBorderRound={action === 'edit' || action === 'repost'}
-      borderBottomOnly={action === 'edit' || action === 'repost'}
+      noBorderRound={action === 'edit'}
+      borderBottomOnly={action === 'edit'}
     />
   );
 }
