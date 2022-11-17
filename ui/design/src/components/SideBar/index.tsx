@@ -146,7 +146,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               onClick={onBrandClick}
             >
               <Box direction="row" gap="small" align="center">
-                <BrandIcon type="akasha" clickable={true} plain={true} />
+                <BrandIcon type="akasha" clickable={true} />
               </Box>
               {versionURL && versionLabel && (
                 <VersionButton color="errorText" label={versionLabel} primary={true} size="small" />
