@@ -184,8 +184,8 @@ const EntryRenderer = (
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
-        entryId: itemId,
-        entryType: itemType,
+        itemId,
+        itemType,
         hideLabel: itemType === EntityTypes.POST,
       },
     });
@@ -196,8 +196,8 @@ const EntryRenderer = (
       event: EventTypes.ExtensionPointUnmount,
       data: {
         name,
-        entryId: itemId,
-        entryType: itemType,
+        itemId,
+        itemType,
       },
     });
   };
