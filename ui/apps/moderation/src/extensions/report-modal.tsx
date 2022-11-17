@@ -6,9 +6,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import {
-  ModerationItemTypes,
   RootExtensionProps,
   AnalyticsCategories,
+  EntityTypes,
+  ModerationEntityTypesMap,
 } from '@akashaorg/typings/ui';
 import {
   withProviders,
@@ -41,13 +42,11 @@ const ReportModalComponent = (props: RootExtensionProps) => {
   }, []);
 
   const itemType = React.useMemo(() => {
-    if (
-      props.extensionData.hasOwnProperty('itemType') &&
-      typeof props.extensionData.itemType === 'string'
-    ) {
+    if (props.extensionData.hasOwnProperty('itemType')) {
       return props.extensionData.itemType;
     }
   }, [props.extensionData]);
+  const itemTypeName = ModerationEntityTypesMap[itemType];
 
   const handleModalClose = () => {
     props.singleSpa.navigateToUrl(location.pathname);
@@ -63,28 +62,31 @@ const ReportModalComponent = (props: RootExtensionProps) => {
     (dataToSign: Record<string, string>) => {
       analyticsActions.trackEvent({
         category: AnalyticsCategories.POST,
-        action: `${itemType[0].toLocaleUpperCase()}${itemType.substring(1)} Reported`,
+        action: `${itemTypeName.toLocaleUpperCase()}${itemTypeName.substring(1)} Reported`,
       });
       reportMutation.mutate({
         dataToSign,
-        contentId: extensionData.entryId,
-        contentType: itemType,
+        contentId: extensionData.itemId,
+        contentType: itemTypeName,
         url: `${BASE_REPORT_URL}/new`,
       });
     },
 
-    [itemType, extensionData.entryId, reportMutation, analyticsActions],
+    [analyticsActions, itemTypeName, reportMutation, extensionData.itemId],
   );
 
   return (
     <ReportModal
-      titleLabel={t('Report {{ itemType }}', {
-        itemType: itemType === ModerationItemTypes.ACCOUNT ? extensionData.user : itemType,
+      titleLabel={t('Report {{ itemTypeName }}', {
+        itemTypeName: itemType === EntityTypes.PROFILE ? extensionData.user : itemTypeName,
       })}
       successTitleLabel={t('Thank you for helping us keep Ethereum World safe! 🙌')}
-      successMessageLabel={t('We will investigate this {{itemType}} and take appropriate action.', {
-        itemType,
-      })}
+      successMessageLabel={t(
+        'We will investigate this {{itemTypeName}} and take appropriate action.',
+        {
+          itemTypeName,
+        },
+      )}
       reasonPrefix={getReasonPrefix(reason)}
       contentId={reportMutation.data?.decisionID as string}
       footerLabel="Feel like you want to contribute more to improve our community?"
@@ -109,7 +111,7 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       reportLabel={t('Report')}
       errorText={reportMutation.error ? `${reportMutation.error}` : ''}
       user={loginQuery.data?.pubKey || ''}
-      itemType={itemType}
+      itemTypeName={itemTypeName}
       requesting={reportMutation.status === 'loading'}
       success={reportMutation.status === 'success'}
       onSelectReason={handleSelectReason}

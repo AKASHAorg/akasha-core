@@ -1,5 +1,5 @@
 import singleSpa from 'single-spa';
-import { RootComponentProps, IEntryData, IProfileData } from '@akashaorg/typings/ui';
+import { RootComponentProps, IEntryData, IProfileData, EntityTypes } from '@akashaorg/typings/ui';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { ILogger } from '@akashaorg/typings/sdk/log';
 
@@ -16,12 +16,12 @@ export interface IContentProps extends RootComponentProps {
   determinationLabel?: string;
   determination?: string;
   reportedLabel: string;
-  itemType: string;
+  itemType: EntityTypes;
   forLabel: string;
   andLabel?: string;
   reportedByLabel: string;
   originallyReportedByLabel: string;
-  entryId: string;
+  itemId: string;
   reasons: string[];
   reporter?: string;
   reporterAvatar?: string | null;
@@ -41,5 +41,5 @@ export interface IContentProps extends RootComponentProps {
   reviewDecisionLabel?: string;
   logger: ILogger;
   singleSpa: typeof singleSpa;
-  handleButtonClick: (param1: string, param2: string) => void;
+  handleButtonClick: (param1: string, param2: string | number) => void;
 }

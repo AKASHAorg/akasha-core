@@ -2,10 +2,10 @@ import React from 'react';
 
 import DS from '@akashaorg/design-system';
 import { usePost, useComment, useGetProfile, mapEntry } from '@akashaorg/ui-awf-hooks';
-import { ModerationItemTypes } from '@akashaorg/typings/ui';
 
 import Content from './content';
 import { IContentProps } from '../../interfaces';
+import { EntityTypes } from '@akashaorg/typings/ui';
 
 const { Box, MainAreaCardBox } = DS;
 
@@ -24,7 +24,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     andLabel,
     reportedByLabel,
     originallyReportedByLabel,
-    entryId,
+    itemId,
     reasons,
     reporter,
     reporterAvatar,
@@ -44,28 +44,21 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
     reviewDecisionLabel,
   } = props;
 
-  const profileDataQuery = useGetProfile(
-    entryId,
-    props.user,
-    itemType === ModerationItemTypes.ACCOUNT,
-  );
+  const profileDataQuery = useGetProfile(itemId, props.user, itemType === EntityTypes.PROFILE);
   const profile = profileDataQuery.data;
 
-  const postQuery = usePost({ postId: entryId, enabler: itemType === ModerationItemTypes.POST });
+  const postQuery = usePost({ postId: itemId, enabler: itemType === EntityTypes.POST });
 
-  const commentQuery = useComment(
-    entryId,
-    itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT,
-  );
+  const commentQuery = useComment(itemId, itemType === EntityTypes.REPLY);
 
   const entryData = React.useMemo(() => {
-    if (itemType === ModerationItemTypes.POST) {
+    if (itemType === EntityTypes.POST) {
       if (postQuery.data) {
         return mapEntry(postQuery.data);
       }
       return undefined;
     }
-    if (itemType === ModerationItemTypes.REPLY || itemType === ModerationItemTypes.COMMENT) {
+    if (itemType === EntityTypes.REPLY) {
       if (commentQuery.data) {
         return mapEntry(commentQuery.data);
       }
@@ -81,7 +74,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           {...props}
           isPending={isPending}
           locale={locale}
-          entryData={itemType === ModerationItemTypes.ACCOUNT ? profile : entryData}
+          entryData={itemType === EntityTypes.PROFILE ? profile : entryData}
           incidentLabel={incidentLabel}
           showExplanationsLabel={showExplanationsLabel}
           hideExplanationsLabel={hideExplanationsLabel}
@@ -93,7 +86,7 @@ const ContentCard: React.FC<Omit<IContentProps, 'entryData'>> = props => {
           andLabel={andLabel}
           reportedByLabel={reportedByLabel}
           originallyReportedByLabel={originallyReportedByLabel}
-          entryId={entryId}
+          itemId={itemId}
           reasons={reasons}
           reporter={reporter}
           reporterAvatar={reporterAvatar}

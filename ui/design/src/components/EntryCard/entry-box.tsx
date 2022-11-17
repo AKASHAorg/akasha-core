@@ -35,7 +35,7 @@ export interface IContentClickDetails {
   id: string;
   replyTo?: {
     authorEthAddress?: string;
-    entryId?: string;
+    itemId?: string;
   };
 }
 export interface IEntryBoxProps {
@@ -70,8 +70,8 @@ export interface IEntryBoxProps {
   repliesAnchorLink?: string;
   // handlers
   onClickAvatar?: React.MouseEventHandler<HTMLDivElement>;
-  onRepost?: (withComment: boolean, entryId: string) => void;
-  onEntryFlag?: (entryId?: string, itemType?: string) => void;
+  onRepost?: (withComment: boolean, itemId: string) => void;
+  onEntryFlag?: (itemId?: string, itemType?: string) => void;
   // follow related
   handleFollowAuthor?: (profileEthAddress: string) => void;
   handleUnfollowAuthor?: (profileEthAddress: string) => void;
@@ -94,7 +94,7 @@ export interface IEntryBoxProps {
   isModerated?: boolean;
   scrollHiddenContent?: boolean;
   removeEntryLabel?: string;
-  onEntryRemove?: (entryId: string) => void;
+  onEntryRemove?: (itemId: string) => void;
   onRepliesClick?: () => void;
   isRemoved?: boolean;
   headerMenuExt?: React.ReactElement;
@@ -188,8 +188,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
     }
   };
 
-  const handleEntryShare = (service: ServiceNames, entryId: string) => {
-    const url = `${sharePostUrl}${entryId}`;
+  const handleEntryShare = (service: ServiceNames, itemId: string) => {
+    const url = `${sharePostUrl}${itemId}`;
     let shareUrl;
     switch (service) {
       case 'twitter':
@@ -231,8 +231,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const handleContentClick = (data?: IEntryData) => {
     if (typeof onContentClick === 'function' && !disableActions && contentClickable && data) {
-      const replyTo = data.postId ? { entryId: data.postId } : null;
-      const itemType = replyTo ? EntityTypes.COMMENT : EntityTypes.ENTRY;
+      const replyTo = data.postId ? { itemId: data.postId } : null;
+      const itemType = replyTo ? EntityTypes.REPLY : EntityTypes.POST;
       onContentClick(
         {
           authorEthAddress: data.author.ethAddress,
