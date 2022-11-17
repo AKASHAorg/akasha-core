@@ -1,6 +1,11 @@
 import { useState } from 'react';
 
-export function useCloseNotification(key: string, initialValue = false) {
+export const enum CloseNotificationFlags {
+  CLOSE_THE_MERGE_NOTIFICATION_FLAG = 'close-the-merge-notification',
+  CLOSE_PRIVATE_ALPHA_NOTIFICATION_FLAG = 'close-private-alpha-notification',
+}
+
+export function useCloseNotification(key: CloseNotificationFlags, initialValue = false) {
   const [closed, setClosed] = useState<boolean>(() => {
     if (window?.localStorage) {
       try {

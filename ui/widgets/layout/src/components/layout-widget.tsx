@@ -23,10 +23,13 @@ import {
   FocusedPluginSlot,
   CookieWidgetSlot,
 } from './styled-slots';
-import { usePlaformHealthCheck, useCloseNotification } from '@akashaorg/ui-awf-hooks';
+import {
+  usePlaformHealthCheck,
+  useCloseNotification,
+  CloseNotificationFlags,
+} from '@akashaorg/ui-awf-hooks';
 
 const { Box, BasicCardBox, Icon, styled, Text, Extension } = DS;
-const CLOSE_THE_MERGE_NOTIFICATION_FLAG = 'close-the-merge-notification';
 
 const WarningCard = styled(BasicCardBox)`
   background-color: ${props => props.theme.colors.warning};
@@ -53,7 +56,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   );
   const maintenanceReq = usePlaformHealthCheck();
   const [closeNotification, setCloseNotification] = useCloseNotification(
-    CLOSE_THE_MERGE_NOTIFICATION_FLAG,
+    CloseNotificationFlags.CLOSE_THE_MERGE_NOTIFICATION_FLAG,
   );
 
   const isPlatformHealty = React.useMemo(() => {
@@ -160,6 +163,11 @@ const Layout: React.FC<RootComponentProps> = props => {
     };
   }, [handleModal]);
 
+  const onCloseButtonClick = React.useCallback(
+    () => setCloseNotification(true),
+    [closeNotification],
+  );
+
   return (
     <>
       <ScrollRestorer />
@@ -220,8 +228,9 @@ const Layout: React.FC<RootComponentProps> = props => {
                       <Icon
                         type="close"
                         clickable={true}
-                        onClick={() => setCloseNotification(true)}
+                        onClick={onCloseButtonClick}
                         size="xs"
+                        accentColor={true}
                       />
                     </WarningCard>
                   )}
