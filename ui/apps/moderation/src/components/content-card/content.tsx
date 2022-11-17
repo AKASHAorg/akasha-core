@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import DS from '@akashaorg/design-system';
 import { getMediaUrl } from '@akashaorg/ui-awf-hooks';
@@ -162,9 +162,9 @@ const Content: React.FC<IContentProps> = props => {
                 </>
               )}
             </Box>
-            <Text color="secondaryText">{`${props.reportedOnLabel} ${moment(
+            <Text color="secondaryText">{`${props.reportedOnLabel} ${dayjs(
               props.reportedDateTime,
-            ).format('D MMM yyyy・h:mm a')}`}</Text>
+            ).format('DD MMM YYYY・h:mm a')}`}</Text>
           </Box>
           {props.isPending && (
             <Box
@@ -210,9 +210,9 @@ const Content: React.FC<IContentProps> = props => {
                         props.moderatorENSName ? `(@${props.moderatorENSName})` : ''
                       }`}
                 </Text>
-                <Text color="secondaryText">{`${props.moderatedOnLabel} ${moment(
+                <Text color="secondaryText">{`${props.moderatedOnLabel} ${dayjs(
                   props.evaluationDateTime,
-                ).format('D MMM yyyy・h:mm a')}`}</Text>
+                ).format('DD MMM YYYY・h:mm a')}`}</Text>
               </Box>
               <Box
                 direction="row"

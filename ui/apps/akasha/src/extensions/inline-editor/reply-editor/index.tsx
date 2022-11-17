@@ -98,6 +98,8 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
       isShown={true}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
+      noBorderRound={action === 'edit'}
+      borderBottomOnly={action === 'edit'}
     />
   );
 }
