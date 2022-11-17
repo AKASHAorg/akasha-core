@@ -162,7 +162,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
           draft.clear();
           return;
         }
-        draft.save();
+        draft.save(value);
       }}
     />
   );
