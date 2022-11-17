@@ -39,7 +39,7 @@ export interface IReportModalProps extends IReportSuccessModalProps {
   reportLabel?: string;
   errorText?: string;
   user?: string;
-  itemType?: string;
+  itemTypeName?: string;
   requesting: boolean;
   success: boolean;
   onSelectReason: (reason: string) => void;
@@ -75,7 +75,7 @@ const ReportModal: React.FC<IReportModalProps> = props => {
     reportLabel,
     errorText,
     user,
-    itemType,
+    itemTypeName,
     requesting,
     success,
     onSelectReason,
@@ -110,8 +110,8 @@ const ReportModal: React.FC<IReportModalProps> = props => {
   };
 
   const handleReport = () => {
-    // hard check: makes sure itemType is specified
-    if (!itemType || itemType?.length < 1) {
+    // hard check: makes sure itemTypeName is specified
+    if (!itemTypeName || itemTypeName?.length < 1) {
       return closeModal();
     }
 

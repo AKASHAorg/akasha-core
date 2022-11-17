@@ -264,7 +264,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
             onClick={onBrandClick}
           >
             <Box direction="row" gap="small" align="center">
-              <BrandIcon type="akasha" clickable={true} plain={true} />
+              <BrandIcon type="akasha" clickable={true} />
               {!isMobileOnly && (
                 <StyledText style={{ userSelect: 'none' }} size="large" color="primaryText">
                   {brandLabel}

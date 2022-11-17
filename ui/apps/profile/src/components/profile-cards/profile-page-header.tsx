@@ -7,6 +7,7 @@ import {
   EventTypes,
   ProfileProviderProperties,
   ProfileProviders,
+  EntityTypes,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
@@ -112,14 +113,14 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
     props.navigateToModal({ name: 'login' });
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string, user: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { modal: { name: 'report-modal', entryId, itemType, user } },
+        redirectTo: { modal: { name: 'report-modal', itemId, itemType, user } },
       });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType, user });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
 
   const showUpdateProfileModal = () => {
@@ -202,7 +203,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           flagAsLabel={t('Report')}
           onEntryFlag={handleEntryFlag(
             profileData.pubKey ? profileData.pubKey : '',
-            'account',
+            EntityTypes.PROFILE,
             profileData.name,
           )}
           onUpdateClick={showUpdateProfileModal}

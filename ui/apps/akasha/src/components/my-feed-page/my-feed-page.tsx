@@ -55,20 +55,20 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
   }, [postPages]);
 
   const handleEntryFlag = React.useCallback(
-    (entryId: string, itemType: string) => () => {
+    (itemId: string, itemType: EntityTypes) => () => {
       if (!isLoggedUser) {
-        return showLoginModal.current({ modal: { name: 'report-modal', entryId, itemType } });
+        return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      navigateToModal.current({ name: 'report-modal', entryId, itemType });
+      navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
     [isLoggedUser],
   );
 
-  const handleEntryRemove = React.useCallback((entryId: string) => {
+  const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal.current({
       name: 'entry-remove-confirmation',
-      entryType: EntityTypes.ENTRY,
-      entryId,
+      itemType: EntityTypes.POST,
+      itemId,
     });
   }, []);
 
@@ -108,7 +108,7 @@ const MyFeedPage: React.FC<MyFeedPageProps & RootComponentProps> = props => {
       <FeedWidget
         modalSlotId={props.layoutConfig.modalSlotId}
         logger={logger}
-        itemType={EntityTypes.ENTRY}
+        itemType={EntityTypes.POST}
         pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) =>

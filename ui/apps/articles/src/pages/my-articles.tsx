@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 import MyArticlesHeader from '../components/my-articles-header';
 import ArticlesMiniCard from '../components/articles-mini-card';
@@ -60,14 +60,14 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
     }
   };
 
-  const handleFlagArticle = (entryId: string, itemType: string) => () => {
+  const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginQuery.data?.pubKey) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { name: 'report-modal', entryId, itemType },
+        redirectTo: { name: 'report-modal', itemId, itemType },
       });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleClickWriteArticle = () => {
@@ -175,7 +175,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
                   : [
                       {
                         icon: 'report',
-                        handler: handleFlagArticle(article.id, 'article'),
+                        handler: handleFlagArticle(article.id, EntityTypes.ARTICLE),
                         label: t('Report'),
                       },
                     ]),
@@ -224,7 +224,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
                   : [
                       {
                         icon: 'report',
-                        handler: handleFlagArticle(article.id, 'article'),
+                        handler: handleFlagArticle(article.id, EntityTypes.ARTICLE),
                         label: t('Report'),
                       },
                     ]),
@@ -265,7 +265,7 @@ const MyArticles: React.FC<RootComponentProps & IMyArticlesProps> = props => {
                   : [
                       {
                         icon: 'report',
-                        handler: handleFlagArticle(article.id, 'article'),
+                        handler: handleFlagArticle(article.id, EntityTypes.ARTICLE),
                         label: t('Report'),
                       },
                     ]),

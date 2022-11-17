@@ -18,8 +18,8 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   const { extensionData, logger } = props;
   const { t } = useTranslation('app-akasha-integration');
 
-  const postDeleteQuery = useDeletePost(extensionData.entryId);
-  const commentDeleteQuery = useDeleteComment(extensionData.entryId);
+  const postDeleteQuery = useDeletePost(extensionData.itemId);
+  const commentDeleteQuery = useDeleteComment(extensionData.itemId);
   const [analyticsActions] = useAnalytics();
 
   const handleModalClose = React.useCallback(() => {
@@ -27,36 +27,36 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [props.singleSpa]);
 
   const handleDeletePost = React.useCallback(() => {
-    if (extensionData && typeof +extensionData.entryType === 'number') {
-      if (+extensionData.entryType === EntityTypes.COMMENT) {
+    if (extensionData && typeof +extensionData.itemType === 'number') {
+      if (extensionData.itemType === EntityTypes.REPLY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
-        commentDeleteQuery.mutate(extensionData.entryId);
-      } else if (+extensionData.entryType === EntityTypes.ENTRY) {
+        commentDeleteQuery.mutate(extensionData.itemId);
+      } else if (extensionData.itemType === EntityTypes.POST) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
         });
-        postDeleteQuery.mutate(extensionData.entryId);
+        postDeleteQuery.mutate(extensionData.itemId);
       } else {
-        logger.error('entryType is undefined!');
+        logger.error('itemType is undefined!');
       }
     } else {
-      logger.error('property entryType is undefined!');
+      logger.error('property itemType is undefined!');
     }
     handleModalClose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = React.useMemo(() => {
-    if (extensionData.entryType === EntityTypes.ENTRY) {
+    if (extensionData.itemType === EntityTypes.POST) {
       return t('post');
     }
     return t('reply');
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [extensionData.entryType]);
+  }, [extensionData.itemType]);
 
   return (
     <ConfirmationModal

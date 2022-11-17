@@ -77,20 +77,20 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   }, [postsReq.data]);
 
   const handleEntryFlag = React.useCallback(
-    (entryId: string, itemType: string) => () => {
+    (itemId: string, itemType: EntityTypes) => () => {
       if (!loginState.pubKey) {
-        return showLoginModal.current({ modal: { name: 'report-modal', entryId, itemType } });
+        return showLoginModal.current({ modal: { name: 'report-modal', itemId, itemType } });
       }
-      navigateToModal.current({ name: 'report-modal', entryId, itemType });
+      navigateToModal.current({ name: 'report-modal', itemId, itemType });
     },
     [loginState.pubKey],
   );
 
-  const handleEntryRemove = React.useCallback((entryId: string) => {
+  const handleEntryRemove = React.useCallback((itemId: string) => {
     navigateToModal.current({
       name: 'entry-remove-confirmation',
-      entryType: EntityTypes.ENTRY,
-      entryId,
+      itemType: EntityTypes.POST,
+      itemId,
     });
   }, []);
 
@@ -122,7 +122,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               <Extension
                 name={`inline-editor_repost_${postId}`}
                 uiEvents={props.uiEvents}
-                data={{ entryId: postId, entryType: EntityTypes.ENTRY, action: 'repost' }}
+                data={{ itemId: postId, itemType: EntityTypes.ENTRY, action: 'repost' }}
               />
             ) : (
               <Extension
@@ -193,7 +193,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
       <FeedWidget
         modalSlotId={props.layoutConfig.modalSlotId}
         logger={logger}
-        itemType={EntityTypes.ENTRY}
+        itemType={EntityTypes.POST}
         pages={postPages}
         onLoadMore={handleLoadMore}
         getShareUrl={(itemId: string) =>
