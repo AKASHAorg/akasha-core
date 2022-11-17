@@ -5,6 +5,7 @@ import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import {
   ButtonValues,
+  EntityTypes,
   IModeratedItem,
   IPendingItem,
   RootComponentProps,
@@ -119,11 +120,11 @@ const Dashboard: React.FC<IDashboardProps> = props => {
     threshold: 0,
   });
 
-  const handleButtonClick = (entryId: string, itemType: string) => {
+  const handleButtonClick = (itemId: string, itemType: EntityTypes) => {
     props.navigateToModal({
       name: 'moderate-modal',
       status: isPending ? 'pending' : 'moderated',
-      entryId,
+      itemId,
       itemType,
     });
   };
@@ -234,7 +235,7 @@ const Dashboard: React.FC<IDashboardProps> = props => {
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={pendingItem.contentID}
+                    itemId={pendingItem.contentID}
                     reasons={pendingItem.reasons.map((el: string) =>
                       t('{{ pendingItemReasons }}', { pendingItemReasons: el }),
                     )}
@@ -293,7 +294,7 @@ const Dashboard: React.FC<IDashboardProps> = props => {
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={moderatedItem.contentID}
+                    itemId={moderatedItem.contentID}
                     reasons={moderatedItem.reasons.map(el =>
                       t('{{ moderatedItemReasons }}', { moderatedItemReasons: el }),
                     )}
@@ -349,7 +350,7 @@ const Dashboard: React.FC<IDashboardProps> = props => {
                     forLabel={t('for')}
                     reportedByLabel={t('Reported by')}
                     originallyReportedByLabel={t('Initially reported by')}
-                    entryId={moderatedItem.contentID}
+                    itemId={moderatedItem.contentID}
                     reasons={moderatedItem.reasons.map(el =>
                       t('{{ moderatedItemReasons }}', { moderatedItemReasons: el }),
                     )}

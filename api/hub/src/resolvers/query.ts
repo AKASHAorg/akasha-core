@@ -78,7 +78,8 @@ const query = {
           continue;
         }
         const resolvedAuthor = await dataSources.profileAPI.resolveProfile(quote.author);
-        Object.assign(quote, { author: resolvedAuthor });
+        // we don't need to display totalComments for quoted posts
+        Object.assign(quote, { author: resolvedAuthor, totalComments: 0 });
       }
     }
     const result = Object.assign({}, postData, { totalComments });
@@ -157,7 +158,8 @@ const query = {
             continue;
           }
           const resolvedAuthor = await dataSources.profileAPI.resolveProfile(quote.author);
-          Object.assign(quote, { author: resolvedAuthor });
+          // we don't need to display totalComments for quoted posts
+          Object.assign(quote, { author: resolvedAuthor, totalComments: 0 });
         }
       }
 

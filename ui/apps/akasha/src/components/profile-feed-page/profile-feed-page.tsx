@@ -53,26 +53,25 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
       reqPosts.fetchNextPage();
     }
   }, [reqPosts, loginState?.fromCache]);
-  // @TODO: fix type
-  const postPages: any = React.useMemo(() => {
+  const postPages = React.useMemo(() => {
     if (reqPosts.data) {
       return reqPosts.data.pages;
     }
     return [];
   }, [reqPosts.data]);
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginState?.pubKey) {
-      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
-  const handleEntryRemove = (entryId: string) => {
+  const handleEntryRemove = (itemId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryId,
-      entryType: EntityTypes.ENTRY,
+      itemId,
+      itemType: EntityTypes.POST,
     });
   };
 
@@ -97,7 +96,7 @@ const ProfileFeedPage = (props: ProfilePageProps) => {
         {reqPosts.isSuccess && postPages && (
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
-            itemType={EntityTypes.ENTRY}
+            itemType={EntityTypes.POST}
             logger={props.logger}
             onLoadMore={handleLoadMore}
             getShareUrl={(itemId: string) =>

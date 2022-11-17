@@ -28,7 +28,7 @@ export interface INotificationsCard {
   emptySubtitle?: string;
   // handlers
   handleMessageRead: (notifId: string) => void;
-  handleEntryClick: (entryId: string, entryType: EntityTypes) => void;
+  handleEntryClick: (itemId: string, itemType: EntityTypes) => void;
   handleProfileClick: (pubKey: string) => void;
   loggedIn?: boolean;
 }
@@ -82,7 +82,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.ENTRY);
+            handleEntryClick(postID, EntityTypes.POST);
           }
         };
         break;
@@ -91,9 +91,9 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (replyID) {
-            handleEntryClick(replyID, EntityTypes.COMMENT);
+            handleEntryClick(replyID, EntityTypes.REPLY);
           } else if (postID) {
-            handleEntryClick(postID, EntityTypes.ENTRY);
+            handleEntryClick(postID, EntityTypes.POST);
           }
         };
         break;
@@ -102,7 +102,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.ENTRY);
+            handleEntryClick(postID, EntityTypes.POST);
           }
         };
         break;
@@ -111,7 +111,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (replyID) {
-            handleEntryClick(replyID, EntityTypes.COMMENT);
+            handleEntryClick(replyID, EntityTypes.REPLY);
           }
         };
         break;
@@ -120,7 +120,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (postID) {
-            handleEntryClick(postID, EntityTypes.ENTRY);
+            handleEntryClick(postID, EntityTypes.POST);
           }
         };
         break;
@@ -136,7 +136,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (moderatedID) {
-            handleEntryClick(moderatedID, EntityTypes.ENTRY);
+            handleEntryClick(moderatedID, EntityTypes.POST);
           }
         };
         break;
@@ -145,7 +145,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
         clickHandler = () => {
           handleMessageRead(notif.id);
           if (moderatedID) {
-            handleEntryClick(moderatedID, EntityTypes.COMMENT);
+            handleEntryClick(moderatedID, EntityTypes.REPLY);
           }
         };
         break;

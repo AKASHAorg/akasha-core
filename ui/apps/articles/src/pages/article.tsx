@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { useGetLogin } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
 import MiniHeader from '../components/mini-header';
 import ArticleCard from '../components/article-card';
@@ -53,14 +53,14 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
     }
   };
 
-  const handleFlagArticle = (entryId: string, itemType: string) => () => {
+  const handleFlagArticle = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginQuery.data?.pubKey) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { name: 'report-modal', entryId, itemType },
+        redirectTo: { name: 'report-modal', itemId, itemType },
       });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleTagClick = (name: string) => {
@@ -101,7 +101,7 @@ const ArticlePage: React.FC<RootComponentProps & IArticlePageProps> = props => {
       : [
           {
             icon: 'report',
-            handler: handleFlagArticle(sampleArticleData.id, 'article'),
+            handler: handleFlagArticle(sampleArticleData.id, EntityTypes.ARTICLE),
             label: t('Report'),
           },
         ]),

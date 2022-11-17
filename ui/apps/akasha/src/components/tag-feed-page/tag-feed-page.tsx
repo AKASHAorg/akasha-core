@@ -56,18 +56,18 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
     }
   }, [reqPosts, loginState?.fromCache]);
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginState?.pubKey) {
-      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
-  const handleEntryRemove = (entryId: string) => {
+  const handleEntryRemove = (itemId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryId,
-      entryType: EntityTypes.ENTRY,
+      itemId,
+      itemType: EntityTypes.POST,
     });
   };
 
@@ -102,7 +102,7 @@ const TagFeedPage: React.FC<ITagFeedPage & RootComponentProps> = props => {
           />
           <FeedWidget
             modalSlotId={props.layoutConfig.modalSlotId}
-            itemType={EntityTypes.ENTRY}
+            itemType={EntityTypes.POST}
             logger={props.logger}
             onLoadMore={handleLoadMore}
             pages={postPages}

@@ -2,6 +2,7 @@ import * as React from 'react';
 import ContentCard from '../content-card';
 
 import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
+import { EntityTypes } from '@akashaorg/typings/ui';
 
 describe('< ContentCard /> component', () => {
   const Base = (
@@ -12,10 +13,10 @@ describe('< ContentCard /> component', () => {
       hideExplanationsLabel="Hide Explanation"
       reportedByLabel="Reported by"
       reportedLabel="Reported"
-      itemType="post"
+      itemType={EntityTypes.POST}
       forLabel="for"
       originallyReportedByLabel="Originally reported by"
-      entryId="01f3dwm7z3qep88ap4j87vw8p8"
+      itemId="01f3dwm7z3qep88ap4j87vw8p8"
       reasons={['reason-1', 'reason-2']}
       reportedDateTime={new Date()}
       handleButtonClick={jest.fn}

@@ -9,6 +9,7 @@ import ExplanationsBox from './explanations-box';
 
 import { IContentProps } from '../../interfaces';
 import getReasonPrefix from '../../utils/getReasonPrefix';
+import { ModerationEntityTypesMap } from '@akashaorg/typings/ui';
 
 const { Avatar, Box, Button, Icon, Text, styled, useViewportSize } = DS;
 
@@ -30,8 +31,8 @@ const Content: React.FC<IContentProps> = props => {
   const isMobile = size === 'small';
 
   const handleClick = () => {
-    if (props.entryId) {
-      props.handleButtonClick(props.entryId, props.itemType);
+    if (props.itemId) {
+      props.handleButtonClick(props.itemId, props.itemType);
     }
   };
 
@@ -58,16 +59,19 @@ const Content: React.FC<IContentProps> = props => {
           type="copy"
           color="secondaryText"
           style={{ cursor: 'pointer' }}
-          onClick={handleCopy(props.entryId)}
+          onClick={handleCopy(props.itemId)}
         />
       </Box>
 
       {/* rest of the content card */}
       <Box pad="medium" gap="medium">
         <Box direction="row" wrap={true} align="center">
-          <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} size="large" weight={600}>{`${
-            props.itemType && props.itemType[0].toUpperCase()
-          }${props.itemType.slice(1)} ${props.reportedLabel}  ${props.forLabel}`}</Text>
+          <Text margin={{ left: '0.2rem', bottom: '0.2rem' }} size="large" weight={600}>
+            <span style={{ textTransform: 'capitalize' }}>
+              {ModerationEntityTypesMap[props.itemType]}
+            </span>
+            {` ${props.reportedLabel}  ${props.forLabel}`}
+          </Text>
 
           {props.reasons.map((reason, idx) => (
             <React.Fragment key={idx}>
@@ -110,7 +114,7 @@ const Content: React.FC<IContentProps> = props => {
         </Text>
         {showExplanations && (
           <ExplanationsBox
-            entryId={props.entryId}
+            itemId={props.itemId}
             reportedByLabel={props.reportedByLabel}
             forLabel={props.forLabel}
             logger={props.logger}
