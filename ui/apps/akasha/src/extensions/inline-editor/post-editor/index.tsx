@@ -162,6 +162,8 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
         }
         saveDraftItem({ pubKey, appName, content: value });
       }}
+      noBorderRound={action === 'edit' || action === 'repost'}
+      borderBottomOnly={action === 'edit' || action === 'repost'}
     />
   );
 }
