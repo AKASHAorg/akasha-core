@@ -42,14 +42,14 @@ const EntryList = (props: EntryListProps) => {
     <>
       {(viewAllEntry ? pages.slice(0, 1) : pages).map((page, index) => (
         <div data-page-idx={index} key={`${pageKeyPrefix}-${index}`}>
-          {items(page)?.map((entryId, index, items) => (
-            <React.Fragment key={entryId}>
+          {items(page)?.map((itemId, index, items) => (
+            <React.Fragment key={itemId}>
               {React.cloneElement(itemCard, {
-                itemId: entryId,
+                itemId: itemId,
                 index,
                 itemSpacing,
                 totalEntry: items.length,
-                className: `entry-${entryId}`,
+                className: `entry-${itemId}`,
               })}
             </React.Fragment>
           ))}

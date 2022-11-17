@@ -24,8 +24,8 @@ const MockedInlineEditor = ({ action }) => (
     {...genAppProps()}
     extensionData={{
       name: 'name',
-      entryId: '01gf',
-      entryType: EntityTypes.ENTRY,
+      itemId: '01gf',
+      itemType: EntityTypes.POST,
       action,
     }}
   />
