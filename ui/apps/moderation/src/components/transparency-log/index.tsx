@@ -297,9 +297,9 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
                 round={{ size: 'xsmall', corner: 'top' }}
                 background="warning"
               >
-                <Text size="large">{`${t('Case ID')} # ${getReasonPrefix(selected.reasons[0])}-${
-                  selected.decisionID
-                }`}</Text>
+                <Text size="large" color="secondary">{`${t('Case ID')} # ${getReasonPrefix(
+                  selected.reasons[0],
+                )}-${selected.decisionID}`}</Text>
                 <Icon
                   type="copy"
                   color="secondaryText"
