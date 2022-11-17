@@ -15,8 +15,6 @@ interface IDraft {
   clear(): void;
 }
 
-const getDraftKey = (appName: string, pubKey: string) => `${appName}-${pubKey}-draft-item`;
-
 export class Draft implements IDraft {
   storage: IDraftStorage;
   appName: string;
@@ -28,14 +26,18 @@ export class Draft implements IDraft {
     this.pubKey = pubKey;
   }
 
+  static getDraftKey(appName: string, pubKey: string) {
+    return `${appName}-${pubKey}-draft-item`;
+  }
+
   save(content: IEntryData['slateContent']) {
-    this.storage.setItem(getDraftKey(this.appName, this.pubKey), JSON.stringify(content));
+    this.storage.setItem(Draft.getDraftKey(this.appName, this.pubKey), JSON.stringify(content));
   }
 
   get() {
     try {
       return JSON.parse(
-        this.storage.getItem(getDraftKey(this.appName, this.pubKey)),
+        this.storage.getItem(Draft.getDraftKey(this.appName, this.pubKey)),
       ) as IEntryData['slateContent'];
     } catch {
       return null;
@@ -43,6 +45,6 @@ export class Draft implements IDraft {
   }
 
   clear() {
-    this.storage.removeItem(getDraftKey(this.appName, this.pubKey));
+    this.storage.removeItem(Draft.getDraftKey(this.appName, this.pubKey));
   }
 }
