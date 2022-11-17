@@ -164,6 +164,8 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
         }
         draft.save(value);
       }}
+      noBorderRound={action === 'edit' || action === 'repost'}
+      borderBottomOnly={action === 'edit' || action === 'repost'}
     />
   );
 }
