@@ -35,5 +35,5 @@ export function useCloseNotification(key: CloseNotificationFlags, initialValue =
       console.log(err);
     }
   };
-  return [closed, setValue] as const;
+  return [closed, setValue];
 }
