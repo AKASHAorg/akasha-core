@@ -2,6 +2,8 @@
 
 import Spinner from '../Spinner';
 import * as React from 'react';
+import styled from 'styled-components';
+import ScrollTopButton from '../ScrollTopButton';
 import useIntersectionObserver from '../../utils/intersection-observer';
 import { Anchor, Box } from 'grommet';
 import { IEntryPage } from '@akashaorg/typings/ui';
@@ -28,6 +30,10 @@ const EntryList = (props: EntryListProps) => {
     viewAllEntry,
   } = props;
   const loadmoreRef = React.createRef<HTMLDivElement>();
+  const scrollTopRef = React.createRef<HTMLDivElement>();
+  const scrollTopWrapperRef = React.createRef<HTMLDivElement>();
+  const rootElementRef = React.createRef<HTMLDivElement>();
+  const startScrollRef = React.createRef<HTMLDivElement>();
 
   useIntersectionObserver({
     target: loadmoreRef,
@@ -38,15 +44,48 @@ const EntryList = (props: EntryListProps) => {
   const items = (page: IEntryPage) =>
     viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results;
 
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      if (entry.isIntersecting) {
+        scrollTopWrapperRef.current.style.marginLeft = `${
+          rootElementRef.current.clientWidth - 64
+        }px`;
+        scrollTopRef.current.classList.remove('hideScrollTop');
+      }
+    });
+
+    if (startScrollRef?.current) {
+      observer.observe(startScrollRef?.current);
+    }
+
+    return () => observer.disconnect();
+  }, [scrollTopRef, startScrollRef, scrollTopWrapperRef, rootElementRef]);
+
+  React.useEffect(() => {
+    const scrollStopElement = document.getElementById('scrollTopStop');
+    const observer = new IntersectionObserver(entries => {
+      const entry = entries[0];
+      if (entry.isIntersecting) {
+        scrollTopRef.current.classList.add('hideScrollTop');
+      }
+    });
+
+    if (scrollStopElement) observer.observe(scrollStopElement);
+
+    return () => observer.disconnect();
+  }, [scrollTopRef, rootElementRef]);
+
   return (
-    <>
-      {(viewAllEntry ? pages.slice(0, 1) : pages).map((page, index) => (
-        <div data-page-idx={index} key={`${pageKeyPrefix}-${index}`}>
-          {items(page)?.map((itemId, index, items) => (
+    <Root ref={rootElementRef}>
+      {(viewAllEntry ? pages.slice(0, 1) : pages).map((page, pageIndex) => (
+        <div data-page-idx={pageIndex} key={`${pageKeyPrefix}-${pageIndex}`}>
+          {items(page)?.map((itemId, itemIndex, items) => (
             <React.Fragment key={itemId}>
+              {pageIndex === 0 && itemIndex === 2 && <div ref={startScrollRef}></div>}
               {React.cloneElement(itemCard, {
-                itemId: itemId,
-                index,
+                itemId,
+                index: itemIndex,
                 itemSpacing,
                 totalEntry: items.length,
                 className: `entry-${itemId}`,
@@ -76,7 +115,34 @@ const EntryList = (props: EntryListProps) => {
           <Spinner ref={loadmoreRef} />
         </Box>
       )}
-    </>
+      <ScrollTopWrapper ref={scrollTopWrapperRef}>
+        <ScrollTopButton
+          ref={scrollTopRef}
+          onClick={() => {
+            const currentScrollPos = document.documentElement.scrollTop || document.body.scrollTop;
+            document.documentElement.scrollTo({
+              top: 0,
+              behavior: currentScrollPos > 10000 ? 'auto' : 'smooth',
+            });
+          }}
+          className="hideScrollTop"
+        />
+      </ScrollTopWrapper>
+    </Root>
   );
 };
+
+const Root = styled.div`
+  position: relative;
+  .hideScrollTop {
+    display: none;
+  }
+`;
+
+const ScrollTopWrapper = styled.div`
+  position: fixed;
+  bottom: 20px;
+  z-index: 9;
+`;
+
 export default React.memo(EntryList);

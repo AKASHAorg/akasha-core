@@ -35,6 +35,8 @@ export interface IColors {
   modalBackgroundAlt: string;
   modalBackgroundTransparent: string;
   hoverBackground: string;
+  scrollTopBackground: string;
+  scrollTopHoverBackground: string;
   activePanelBackground: string;
   skeletonBackground: string;
   entryEditorBackground: string;

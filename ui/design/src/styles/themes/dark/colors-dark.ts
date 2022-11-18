@@ -67,6 +67,8 @@ const colors: IColorsDark = {
   entryEditorBackground: '#425166',
   inputBackground: '#CCD2DF',
   hoverBackground: '#595F6B',
+  scrollTopBackground: '#26374F',
+  scrollTopHoverBackground: '#8B9FFF',
   activePanelBackground: '#26374F',
   skeletonBackground: '#595F6B',
   coverImageBackground: '#425166',

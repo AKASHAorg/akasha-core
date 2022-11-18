@@ -191,6 +191,7 @@ import { SearchBar } from './components/SearchBar';
 // import VirtualList from './components/VirtualList';
 import Helmet from 'react-helmet';
 import Spinner from './components/Spinner';
+import ScrollTopButton from './components/ScrollTopButton';
 
 import TransparencyLogMiniCard from './components/TransparencyLogMiniCard';
 import TransparencyLogDetailCard from './components/TransparencyLogDetailCard';
@@ -403,6 +404,7 @@ const exported = {
   ProfileCardEthereumId,
   ProfileCardDescription,
   Skeleton,
+  ScrollTopButton,
 };
 
 export default exported;
