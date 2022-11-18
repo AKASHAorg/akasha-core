@@ -42,9 +42,21 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
   const publishPost = useCreatePost();
   const publishComment = useCreateComment();
 
-  const draft = new Draft(draftStorage, appName, pubKey);
+  const postDraft = new Draft<IEntryData['slateContent']>({
+    storage: draftStorage,
+    appName,
+    pubKey,
+    action: 'post',
+  });
+  const repostDraft = new Draft<IEntryData>({
+    storage: draftStorage,
+    appName,
+    pubKey,
+    action: 'repost',
+  });
   const canSaveDraft = action === 'post';
-  const draftItem = canSaveDraft ? draft.get() : null;
+  const draftPost = canSaveDraft ? postDraft.get() : null;
+  const draftRepost = canSaveDraft ? repostDraft.get() : null;
 
   const entryData = React.useMemo(() => {
     if (post.status === 'success') {
@@ -52,10 +64,6 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
     }
     return undefined;
   }, [post.data, post.status]);
-
-  const [editorState, setEditorState] = React.useState(
-    action === 'edit' ? entryData?.slateContent : draftItem,
-  );
 
   const embedEntryData = React.useMemo(() => {
     if (entryData && action === 'repost') {
@@ -68,6 +76,21 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
     }
     return undefined;
   }, [action, entryData, post.data?.quotes]);
+
+  const [editorState, setEditorState] = React.useState(
+    action === 'edit' ? entryData?.slateContent : draftPost,
+  );
+
+  const [embededEntry, setEmbededEntry] = React.useState(
+    canSaveDraft ? draftRepost : embedEntryData,
+  );
+
+  React.useEffect(() => {
+    if (action === 'repost') {
+      repostDraft.save(embedEntryData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [action, embedEntryData]);
 
   const handlePublish = React.useCallback(
     (data: IPublishData) => {
@@ -138,22 +161,27 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
       }
       onPublish={handlePublish}
       singleSpa={singleSpa}
-      embedEntryData={embedEntryData}
+      embedEntryData={embededEntry}
       entryData={entryData}
       editorState={editorState}
-      openEditor={action !== 'post' || (action === 'post' && !!draftItem)}
+      openEditor={action !== 'post' || (action === 'post' && (!!draftPost || !!draftRepost))}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
       showDraft={canSaveDraft}
       setEditorState={(value: IEntryData['slateContent']) => {
         if (canSaveDraft) {
           if (isEqual(value, editorDefaultValue)) {
-            draft.clear();
+            postDraft.clear();
             return;
           }
-          draft.save(value);
+          postDraft.save(value);
         }
         setEditorState(value);
+      }}
+      onClear={() => {
+        setEditorState(null);
+        setEmbededEntry(null);
+        repostDraft.clear();
       }}
       noBorderRound={action === 'edit'}
       borderBottomOnly={action === 'edit'}

@@ -43,6 +43,7 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
     uploadedImages,
     borderBottomOnly,
     noBorderRound,
+    onClear,
   } = props;
 
   const [showEditor, setShowEditor] = React.useState(openEditor);
@@ -120,6 +121,7 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
             showCancelButton={showCancelButton}
             embedEntryData={embedEntryData}
             showDraft={showDraft}
+            onClear={onClear}
           />
         </Box>
       )}

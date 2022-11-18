@@ -82,6 +82,7 @@ export interface IEditorBox {
   cancelButtonLabel?: string;
   onPlaceholderClick?: () => void;
   showDraft?: boolean;
+  onClear?: () => void;
 }
 
 /* eslint-disable complexity */
@@ -116,6 +117,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     cancelButtonLabel,
     onCancelClick,
     showCancelButton,
+    onClear,
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
@@ -565,7 +567,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     // CustomEditor.deleteImage(editor, element);
   };
 
-  const publishEnabled = publishDisabledInternal || disablePublish || uploading;
+  const publishDisabled = publishDisabledInternal || disablePublish || uploading;
   return (
     <StyledBox pad="none" justify="between" fill={true} isMobile={isMobile}>
       <Box
@@ -679,7 +681,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         <Box direction="row" gap="small" align="center">
           {showDraft && (
             <Box direction="row" gap="small" align="center">
-              {!publishEnabled && (
+              {!publishDisabled && (
                 <Text size="medium" color="#6D737D">
                   Draft
                 </Text>
@@ -688,13 +690,14 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 onClick={e => {
                   e.preventDefault();
                   CustomEditor.clearEditor(editor);
+                  if (onClear) onClear();
                 }}
                 size="medium"
                 weight="normal"
                 target="_self"
                 color="accentText"
                 style={{ textDecoration: 'none' }}
-                disabled={publishEnabled}
+                disabled={embedEntryData ? !embedEntryData : publishDisabled}
               >
                 Clear
               </Anchor>
@@ -709,7 +712,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
             icon={disablePublish ? <Icon type="loading" color="white" /> : null}
             label={disablePublish ? disablePublishLabel : postLabel}
             onClick={handlePublish}
-            disabled={publishEnabled}
+            disabled={publishDisabled}
           />
         </Box>
       </Box>
