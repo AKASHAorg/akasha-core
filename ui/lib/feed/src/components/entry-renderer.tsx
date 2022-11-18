@@ -464,7 +464,10 @@ const EntryRenderer = (
               />
 
               {props.showReplyFragment && (
-                <Box margin={{ bottom: replyPages.length ? 'xsmall' : null }}>
+                <Box
+                  data-testid="reply-fragment"
+                  margin={{ bottom: replyPages.length ? 'xsmall' : null }}
+                >
                   <FeedWidget
                     modalSlotId={props.modalSlotId}
                     logger={props.logger}

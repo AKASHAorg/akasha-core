@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReplyPage from '../post-page/reply-page';
+import ReplyPage from '../entry-page/reply-page';
 import * as extension from '@akashaorg/design-system/lib/utils/extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
@@ -56,7 +56,7 @@ describe('< ReplyPage /> component', () => {
     when(spiedExtension)
       .calledWith(
         partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_postreply/) }),
+          expect.objectContaining({ name: expect.stringMatching(/inline-editor_reply/) }),
         ),
       )
       .mockReturnValue(<MockedInlineEditor action="reply" />);

@@ -1,7 +1,8 @@
 import * as React from 'react';
-import PostPage from '../post-page/post-page';
+import PostPage from '../entry-page/post-page';
 import * as extension from '@akashaorg/design-system/lib/utils/extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
+import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
 import {
   screen,
@@ -44,6 +45,18 @@ describe('< PostPage /> component', () => {
         status: string;
       }>
     ).mockReturnValue({ data: genLoggedInState(true), status: 'success' });
+
+    (
+      jest.spyOn(commentHooks, 'useInfiniteComments') as unknown as jest.SpyInstance<{
+        data: { pages: [{ results: string[] }] };
+      }>
+    ).mockReturnValue({ data: { pages: [{ results: ['oxaa'] }] } });
+
+    (
+      jest.spyOn(commentHooks, 'useInfiniteReplies') as unknown as jest.SpyInstance<{
+        data: { pages: [{ results: string[]; total?: number }] };
+      }>
+    ).mockReturnValue({ data: { pages: [{ results: ['oxrr', 'oxgg', 'oxrrt'], total: 3 }] } });
   });
 
   it('should render post page', async () => {
@@ -52,7 +65,7 @@ describe('< PostPage /> component', () => {
     when(spiedExtension)
       .calledWith(
         partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_postreply/) }),
+          expect.objectContaining({ name: expect.stringMatching(/inline-editor_reply/) }),
         ),
       )
       .mockReturnValue(<MockedInlineEditor action="reply" />);
@@ -63,6 +76,15 @@ describe('< PostPage /> component', () => {
 
     expect(screen.getByText(/Reply to/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
+  });
+
+  it('should render reply fragment with view all replies link', async () => {
+    await act(async () => {
+      renderWithAllProviders(BaseComponent, {});
+    });
+
+    expect(screen.getByTestId('reply-fragment')).toBeInTheDocument();
+    expect(screen.getByText(/View all replies/)).toBeInTheDocument();
   });
 
   it('should render repost page', async () => {
