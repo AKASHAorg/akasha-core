@@ -41,12 +41,11 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [analyticsActions] = useAnalytics();
 
-  const controller = new AbortController();
-
   //get the post id for repost from the search param
   const [postId, setPostId] = React.useState(new URLSearchParams(location.search).get('repost'));
 
   React.useEffect(() => {
+    const controller = new AbortController();
     /*The single-spa:before-routing-event listener is required for reposts happening from the feed page */
     const popStateHandler = () => {
       setPostId(new URLSearchParams(location.search).get('repost'));
@@ -54,11 +53,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     window.addEventListener('single-spa:before-routing-event', popStateHandler, {
       signal: controller.signal,
     });
-    return () => {
-      window.removeEventListener('single-spa:before-routing-event', () => {
-        controller.abort();
-      });
-    };
+    return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
