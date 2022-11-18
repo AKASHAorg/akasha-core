@@ -6,7 +6,6 @@ import { RootExtensionProps } from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { I18nextProvider } from 'react-i18next';
-import * as singleSpa from 'single-spa';
 import { useLocation } from 'react-router-dom';
 import { MenuItemAreaType } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -22,6 +21,7 @@ const StyledText = styled(Text)`
   overflow: hidden;
   text-overflow: ellipsis;
 
+  pointer-events: none;
   margin-left: -24px;
 `;
 
