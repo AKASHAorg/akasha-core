@@ -25,8 +25,8 @@ import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 const { Box, EditorPlaceholder, EntryBox } = DS;
 
 type Props = {
-  entryId: string;
-  entryType: EntityTypes;
+  itemId: string;
+  itemType: EntityTypes;
   entryReq: UseQueryResult;
   loginState?: LoginState;
   uiEvents: RootComponentProps['uiEvents'];
@@ -39,8 +39,8 @@ type Props = {
 };
 
 export function MainEntry({
-  entryId,
-  entryType,
+  itemId,
+  itemType,
   entryReq,
   loginState,
   uiEvents,
@@ -59,7 +59,7 @@ export function MainEntry({
     'en') as ILocale;
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
-  const handleEntryNavigate = useEntryNavigation(navigateTo, entryId);
+  const handleEntryNavigate = useEntryNavigation(navigateTo, itemId);
   const followReq = useFollow();
   const unfollowReq = useUnfollow();
 
@@ -90,12 +90,12 @@ export function MainEntry({
   if (loginState?.ethAddress) {
     switch (action) {
       case 'repost':
-        if (entryType !== EntityTypes.ENTRY) return;
+        if (itemType !== EntityTypes.POST) return;
         return (
           <Extension
             name={`inline-editor_repost_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId, entryType, action: 'repost' }}
+            data={{ itemId, itemType, action: 'repost' }}
           />
         );
       case 'edit':
@@ -103,7 +103,7 @@ export function MainEntry({
           <Extension
             name={`inline-editor_postedit_${entryData?.entryId}`}
             uiEvents={uiEvents}
-            data={{ entryId, entryType, action: 'edit' }}
+            data={{ itemId, itemType, action: 'edit' }}
           />
         );
     }
@@ -121,7 +121,7 @@ export function MainEntry({
     });
   };
 
-  const handleRepost = (_withComment: boolean, entryId: string) => {
+  const handleRepost = (_withComment: boolean, itemId: string) => {
     analyticsActions.trackEvent({
       category: AnalyticsCategories.POST,
       action: 'Repost Clicked',
@@ -131,16 +131,16 @@ export function MainEntry({
       return;
     } else {
       singleSpa.navigateToUrl(
-        `${window.location.origin}/@akashaorg/app-akasha-integration/post/${entryId}?action=repost`,
+        `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}?action=repost`,
       );
     }
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginState?.pubKey) {
-      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    navigateToModal({ name: 'report-modal', entryId, itemType });
+    navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
   const handleFollow = () => {
@@ -176,8 +176,8 @@ export function MainEntry({
   const handlePostRemove = (commentId: string) => {
     navigateToModal({
       name: 'entry-remove-confirmation',
-      entryType,
-      entryId: commentId,
+      itemType,
+      itemId: commentId,
     });
   };
 
@@ -224,7 +224,7 @@ export function MainEntry({
           profileAnchorLink={'/profile'}
           repliesAnchorLink={routes[POST]}
           onRepost={handleRepost}
-          onEntryFlag={handleEntryFlag(entryData?.entryId, 'post')}
+          onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.POST)}
           handleFollowAuthor={handleFollow}
           handleUnfollowAuthor={handleUnfollow}
           isFollowingAuthor={isFollowing}
@@ -242,8 +242,8 @@ export function MainEntry({
           removeEntryLabel={t('Delete Post')}
           removedByMeLabel={t('You deleted this post')}
           removedByAuthorLabel={t('This post was deleted by its author')}
-          disableReposting={entryData?.isRemoved || entryType === EntityTypes.COMMENT}
-          hideRepost={entryType === EntityTypes.COMMENT}
+          disableReposting={entryData?.isRemoved || itemType === EntityTypes.REPLY}
+          hideRepost={itemType === EntityTypes.REPLY}
           disableReporting={loginState.waitForAuth || loginState.isSigningIn}
           modalSlotId={layoutConfig.modalSlotId}
           headerMenuExt={
@@ -252,7 +252,7 @@ export function MainEntry({
                 name={`entry-card-edit-button_${entryData?.entryId}`}
                 style={{ width: '100%' }}
                 uiEvents={uiEvents}
-                data={{ entryId, entryType }}
+                data={{ itemId, itemType }}
               />
             )
           }
@@ -261,8 +261,8 @@ export function MainEntry({
               name={`entry-card-actions-right_${entryData?.entryId}`}
               uiEvents={uiEvents}
               data={{
-                entryId,
-                entryType,
+                itemId,
+                itemType,
               }}
             />
           }
@@ -274,11 +274,11 @@ export function MainEntry({
         )}
         {showReplyEditor && loginState?.ethAddress && !entryData?.isRemoved && (
           <Extension
-            name={`inline-editor_postreply_${entryData?.entryId}`}
+            name={`inline-editor_reply_${entryData?.entryId}`}
             uiEvents={uiEvents}
             data={{
-              entryId,
-              entryType,
+              itemId,
+              itemType,
               action: 'reply',
             }}
           />

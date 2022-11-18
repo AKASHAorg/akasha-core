@@ -76,7 +76,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       {
         id: itemData.entryId,
         authorEthAddress: itemData.author.ethAddress,
-        replyTo: itemData.postId ? { entryId: itemData.postId } : null,
+        replyTo: itemData.postId ? { itemId: itemData.postId } : null,
       },
       itemType,
     );
@@ -94,11 +94,11 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
 
   const itemTypeName = React.useMemo(() => {
     switch (itemType) {
-      case EntityTypes.ENTRY:
+      case EntityTypes.POST:
         return t('post');
       case EntityTypes.PROFILE:
         return t('account');
-      case EntityTypes.COMMENT:
+      case EntityTypes.REPLY:
         return t('reply');
       case EntityTypes.TAG:
         return t('tag');
@@ -112,8 +112,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
-        entryId,
-        entryType: itemType,
+        itemId: entryId,
+        itemType: itemType,
       },
     });
   };
@@ -122,12 +122,12 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     /* todo */
   };
 
-  const handleEntryRemove = (entryId: string) => {
-    if (entryId)
+  const handleEntryRemove = (itemId: string) => {
+    if (itemId)
       props.navigateToModal({
         name: 'entry-remove-confirmation',
-        entryType: EntityTypes.ENTRY,
-        entryId,
+        itemType: EntityTypes.POST,
+        itemId,
       });
   };
 
@@ -135,12 +135,20 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+  // why is itemType string here??
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!ethAddress) {
-      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+      return showLoginModal({
+        modal: { name: 'report-modal', itemId, itemType: itemType as unknown as EntityTypes },
+      });
     }
 
-    if (entryId) props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    if (itemId)
+      props.navigateToModal({
+        name: 'report-modal',
+        itemId,
+        itemType: itemType as unknown as EntityTypes,
+      });
   };
 
   const isFollowing = useIsFollowingMultiple(pubKey, [itemData?.author?.pubKey]);
@@ -159,7 +167,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     }
   };
 
-  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.COMMENT, [itemType]);
+  const hideActionButtons = React.useMemo(() => itemType === EntityTypes.REPLY, [itemType]);
 
   return (
     <>
@@ -205,7 +213,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 showMore={true}
                 profileAnchorLink={'/@akashaorg/app-profile'}
                 repliesAnchorLink={`/@akashaorg/app-akasha-integration/${
-                  itemType === EntityTypes.COMMENT ? 'reply' : 'post'
+                  itemType === EntityTypes.REPLY ? 'reply' : 'post'
                 }`}
                 onRepost={handleRepost}
                 handleFollowAuthor={handleFollow}
@@ -219,7 +227,7 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 disableReposting={itemData.isRemoved}
                 removeEntryLabel={t('Delete Post')}
                 onEntryRemove={handleEntryRemove}
-                onEntryFlag={handleEntryFlag(itemData.entryId, 'post')}
+                onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.POST)}
                 hideActionButtons={hideActionButtons}
                 modalSlotId={modalSlotId}
                 actionsRightExt={

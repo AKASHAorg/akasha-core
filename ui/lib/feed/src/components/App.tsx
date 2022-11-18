@@ -27,7 +27,7 @@ export type FeedWidgetProps = {
   hasNextPage: boolean;
   loggedProfile?: IProfileData;
   contentClickable?: boolean;
-  onEntryFlag: (entryId: string, itemType: string) => () => void;
+  onEntryFlag: (entryId: string, itemType: EntityTypes) => () => void;
   onEntryRemove?: (entryId: string) => void;
   parentIsProfilePage?: boolean;
   removeEntryLabel?: string;
@@ -51,8 +51,8 @@ export type FeedWidgetProps = {
 const FeedWidgetRoot: React.FC<FeedWidgetProps> = props => {
   return (
     <I18nextProvider i18n={props.i18n}>
-      {props.itemType === EntityTypes.ENTRY && <EntryFeed {...props} />}
-      {props.itemType === EntityTypes.COMMENT && <EntryFeed {...props} itemSpacing={0} />}
+      {props.itemType === EntityTypes.POST && <EntryFeed {...props} />}
+      {props.itemType === EntityTypes.REPLY && <EntryFeed {...props} itemSpacing={0} />}
       {/* {props.itemType === EntityTypes.PROFILE && <ProfileFeed {...props} />} */}
     </I18nextProvider>
   );
