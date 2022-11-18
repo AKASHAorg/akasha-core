@@ -4,7 +4,7 @@ import DS from '@akashaorg/design-system';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 import { DevKeyCardType } from '@akashaorg/design-system/lib/components/DevKeyCard';
 
-import menuRoute from '../../../routes';
+import menuRoute from '../../routes';
 
 const { Anchor, Box, HorizontalDivider, Icon, MainAreaCardBox, Text } = DS;
 
@@ -26,8 +26,8 @@ const DevProfileCard: React.FC<IDevProfileCardProps> = props => {
   const { titleLabel, subtitleLabels, cardMenuItems, ctaUrl, navigateTo } = props;
 
   const handleClickMenuItem = (route: string) => () => {
-    navigateTo({
-      appName: '@akashaorg/app-profile',
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
       getNavigationUrl: () => menuRoute[route],
     });
   };

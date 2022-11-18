@@ -17,7 +17,7 @@ export interface IHeroImageCard {
 const HeroImageCard: React.FC<IHeroImageCard> = props => {
   const {
     assetName = 'ok',
-    assetExtension = 'png',
+    assetExtension = 'webp',
     publicImgPath = '/images',
     wrapperBoxWidth = '16rem',
     wrapperBoxHeight = '13rem',

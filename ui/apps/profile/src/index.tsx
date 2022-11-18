@@ -6,7 +6,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
 
-import routes, { DEV_DASHBOARD, MY_PROFILE, UPDATE_PROFILE } from './routes';
+import routes, { MY_PROFILE, UPDATE_PROFILE } from './routes';
 /**
  * All plugins must export an object like this:
  */
@@ -26,19 +26,11 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
         route: routes[routeName],
       })),
     },
-    {
-      label: 'Dev Dashboard',
-      area: [MenuItemAreaType.AppArea],
-      route: routes[DEV_DASHBOARD],
-      logo: { type: LogoTypeSource.ICON, value: 'dashboard' },
-      subRoutes: [],
-    },
   ],
   extends: (matcher, loader) => {
     matcher({
       login: loader(() => import('./extensions/login-modal')),
       'profile-share': loader(() => import('./extensions/share-profile-modal')),
-      'delete-dev-key': loader(() => import('./extensions/delete-dev-key')),
     });
   },
   routes: {
