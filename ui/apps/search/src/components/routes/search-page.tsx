@@ -291,7 +291,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
     } else {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemId}?action=repost`,
+        getNavigationUrl: () => `/feed?repost=${itemId}`,
       });
     }
   };
