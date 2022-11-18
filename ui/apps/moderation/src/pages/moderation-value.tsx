@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
+
 import { values } from '../services/values';
+import { externalLinks } from '../utils/external-links';
 
 const { ModerationValueCard } = DS;
 
@@ -21,7 +23,7 @@ const ValuePage: React.FC<RootComponentProps> = () => {
       assetName={activeValue.assetName}
       description={t('{{description}}', { description: activeValue.description })}
       ctaLabel={t('Discuss this value')}
-      ctaUrl=""
+      ctaUrl={externalLinks.discourse.values}
     />
   );
 };

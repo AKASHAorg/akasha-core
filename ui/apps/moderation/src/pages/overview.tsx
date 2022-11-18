@@ -7,6 +7,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import ModerationValuesCard from '../components/values-card';
 
 import { values } from '../services/values';
+import { externalLinks } from '../utils/external-links';
 
 const { Box, ModerationIntroCard } = DS;
 
@@ -41,18 +42,18 @@ const IntroPage: React.FC<RootComponentProps> = props => {
         )}
         overviewCTAArr={[
           {
-            label: t('CoC Discussions'),
-            url: 'https://discord.gg/A5wfg6ZCRt',
+            label: t('Discuss CoC'),
+            url: externalLinks.discourse.CoC,
             iconType: 'discourse',
           },
           {
-            label: t('Moderation thoughts'),
-            url: 'https://discord.gg/A5wfg6ZCRt',
+            label: t('Moderation Team'),
+            url: externalLinks.discord,
             iconType: 'discord',
           },
           {
-            label: t('Send us a message'),
-            url: 'mailto:moderators@ethereum.world',
+            label: t('Send us an email'),
+            url: externalLinks.email,
             iconType: 'emailAlt',
           },
         ]}
@@ -63,7 +64,7 @@ const IntroPage: React.FC<RootComponentProps> = props => {
         titleLabel={t('Our Values')}
         subtitleLabel={t('The principles guiding our behaviour')}
         ctaLabel={t('Propose your own')}
-        ctaUrl=""
+        ctaUrl={externalLinks.discourse.values}
         values={values.map(value => ({
           path: value.path,
           title: t('{{title}}', { title: value.title }),
