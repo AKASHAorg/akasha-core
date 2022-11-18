@@ -8,12 +8,12 @@ import { IProfileData, ModalNavigationOptions, RootComponentProps } from '@akash
 import FeedPage from './feed-page/feed-page';
 import MyFeedPage from './my-feed-page/my-feed-page';
 import ProfileFeedPage from './profile-feed-page/profile-feed-page';
-import PostPage from './entry-page/post-page';
-import InvitePage from './entry-page/invite-page';
+import PostPage from './item-page/post-page';
+import InvitePage from './item-page/invite-page';
 import TagFeedPage from './tag-feed-page/tag-feed-page';
 
 import routes, { FEED, MY_FEED, PROFILE_FEED, POST, REPLY, TAGS, INVITE } from '../routes';
-import ReplyPage from './entry-page/reply-page';
+import ReplyPage from './item-page/reply-page';
 
 const { Box } = DS;
 

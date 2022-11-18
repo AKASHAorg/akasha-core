@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PostPage from '../entry-page/post-page';
+import PostPage from '../item-page/post-page';
 import * as extension from '@akashaorg/design-system/lib/utils/extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
@@ -77,7 +77,6 @@ describe('< PostPage /> component', () => {
     expect(screen.getByText(/Reply to/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Reply/i })).toBeInTheDocument();
   });
-
   it('should render reply fragment with view all replies link', async () => {
     await act(async () => {
       renderWithAllProviders(BaseComponent, {});
@@ -86,29 +85,6 @@ describe('< PostPage /> component', () => {
     expect(screen.getByTestId('reply-fragment')).toBeInTheDocument();
     expect(screen.getByText(/View all replies/)).toBeInTheDocument();
   });
-
-  it('should render repost page', async () => {
-    history.pushState(null, '', `${location.origin}?action=repost`);
-
-    const spiedExtension = jest.spyOn(extension, 'Extension');
-
-    when(spiedExtension)
-      .calledWith(
-        partialArgs(
-          expect.objectContaining({ name: expect.stringMatching(/inline-editor_repost/) }),
-        ),
-      )
-      .mockReturnValue(<MockedInlineEditor action="repost" />);
-
-    await act(async () => {
-      renderWithAllProviders(BaseComponent, {});
-    });
-
-    expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Publish/i })).toBeInTheDocument();
-    expect(screen.getByTestId('embed-box')).toBeInTheDocument();
-  });
-
   it('should render edit page', async () => {
     history.pushState(null, '', `${location.origin}?action=edit`);
 

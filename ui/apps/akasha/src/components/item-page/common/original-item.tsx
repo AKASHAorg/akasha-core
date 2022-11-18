@@ -31,21 +31,19 @@ type Props = {
   loginState?: LoginState;
   uiEvents: RootComponentProps['uiEvents'];
   plugins: RootComponentProps['plugins'];
-  singleSpa: RootComponentProps['singleSpa'];
   layoutConfig: RootComponentProps['layoutConfig'];
   entryData?: IEntryData;
   navigateToModal: RootComponentProps['navigateToModal'];
   showLoginModal: (redirectTo?: { modal: ModalNavigationOptions }) => void;
 };
 
-export function MainEntry({
+export function OriginalItem({
   itemId,
   itemType,
   entryReq,
   loginState,
   uiEvents,
   plugins,
-  singleSpa,
   layoutConfig,
   entryData,
   navigateToModal,
@@ -88,24 +86,14 @@ export function MainEntry({
   if (!showEntry) return null;
 
   if (loginState?.ethAddress) {
-    switch (action) {
-      case 'repost':
-        if (itemType !== EntityTypes.POST) return;
-        return (
-          <Extension
-            name={`inline-editor_repost_${entryData?.entryId}`}
-            uiEvents={uiEvents}
-            data={{ itemId, itemType, action: 'repost' }}
-          />
-        );
-      case 'edit':
-        return (
-          <Extension
-            name={`inline-editor_postedit_${entryData?.entryId}`}
-            uiEvents={uiEvents}
-            data={{ itemId, itemType, action: 'edit' }}
-          />
-        );
+    if (action === 'edit') {
+      return (
+        <Extension
+          name={`inline-editor_postedit_${entryData?.entryId}`}
+          uiEvents={uiEvents}
+          data={{ itemId, itemType, action: 'edit' }}
+        />
+      );
     }
   }
 
@@ -130,9 +118,10 @@ export function MainEntry({
       showLoginModal();
       return;
     } else {
-      singleSpa.navigateToUrl(
-        `${window.location.origin}/@akashaorg/app-akasha-integration/post/${itemId}?action=repost`,
-      );
+      navigateTo?.({
+        appName: '@akashaorg/app-akasha-integration',
+        getNavigationUrl: () => `/feed?repost=${itemId}`,
+      });
     }
   };
 
