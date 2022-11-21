@@ -122,14 +122,25 @@
       ]
     },
     {
+      "login": "basmatiii",
+      "name": "Basma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91470583?v=4",
+      "profile": "https://github.com/Basmatiii",
+      "contributions": [
+        "a11y",
+        "design",
+        "userTesting"
+      ]
+    },
+    {
       "login": "themonster2015",
       "name": "Quynh Yen Vo T.",
       "avatar_url": "https://avatars.githubusercontent.com/u/10905837?v=4",
       "profile": "https://github.com/themonster2015",
       "contributions": [
         "code"
-      ]
-    }
+       ]
+     }
   ],
   "contributorsPerLine": 7,
   "projectName": "akasha-framework",
