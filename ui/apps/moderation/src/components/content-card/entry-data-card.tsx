@@ -4,21 +4,21 @@ import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import {
-  ModerationItemTypes,
   NavigateToParams,
   IEntryData,
   IProfileData,
+  EntityTypes,
+  ModerationEntityTypesMap,
 } from '@akashaorg/typings/ui';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
-import { ITEM_TYPE_CONVERTER } from '../../services/constants';
 
 const { Text, EntryCard, ProfileCard, MainAreaCardBox } = DS;
 
 export interface IEntryDataCardProps {
   entryData: IEntryData | IProfileData;
   locale: ILocale;
-  itemType: string;
+  itemType: EntityTypes;
   modalSlotId: string;
   navigateTo?: (args: NavigateToParams) => void;
 }
@@ -32,20 +32,21 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
 
   const handleContentClick = React.useCallback(
     (details: IContentClickDetails) => {
-      const translatedItemType = ITEM_TYPE_CONVERTER[itemType];
-      if (translatedItemType >= 0) {
-        handleEntryNavigate(details, translatedItemType);
+      if (itemType) {
+        handleEntryNavigate(details, itemType);
       }
     },
     [handleEntryNavigate, itemType],
   );
+
+  const itemTypeName = ModerationEntityTypesMap[itemType];
 
   return (
     <MainAreaCardBox>
       {entryData ? (
         <>
           {/* for other contents (reply | comment, post) */}
-          {itemType !== ModerationItemTypes.ACCOUNT && entryData && (
+          {itemType !== EntityTypes.PROFILE && entryData && (
             <EntryCard
               modalSlotId={modalSlotId}
               showMore={false}
@@ -60,10 +61,12 @@ const EntryDataCard: React.FC<IEntryDataCardProps> = props => {
               isModerated={true}
               isRemoved={(entryData as IEntryData).isRemoved}
               removedByMeLabel={t('You deleted this post')}
-              removedByAuthorLabel={t('This {{itemType}} was deleted by its author', { itemType })}
+              removedByAuthorLabel={t('This {{itemTypeName}} was deleted by its author', {
+                itemTypeName,
+              })}
             />
           )}
-          {itemType === ModerationItemTypes.ACCOUNT && (
+          {itemType === EntityTypes.PROFILE && (
             <ProfileCard
               modalSlotId={modalSlotId}
               showMore={false}

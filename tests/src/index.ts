@@ -42,3 +42,4 @@ export * from './mocks/sdk';
 export * from './mocks/operator';
 export * from './mocks/single-spa';
 export * from './mocks/uiEvents';
+export * from './mocks/localStorage';

@@ -29,16 +29,16 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleEntryClick = (entryId: string, entryType: EntityTypes) => {
-    if (entryType === EntityTypes.ENTRY) {
+  const handleEntryClick = (itemId: string, itemType: EntityTypes) => {
+    if (itemType === EntityTypes.POST) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}`,
+        getNavigationUrl: navRoutes => `${navRoutes.Post}/${itemId}`,
       });
-    } else if (entryType === EntityTypes.COMMENT) {
+    } else if (itemType === EntityTypes.REPLY) {
       navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes => `${navRoutes.Reply}/${entryId}`,
+        getNavigationUrl: navRoutes => `${navRoutes.Reply}/${itemId}`,
       });
     }
   };

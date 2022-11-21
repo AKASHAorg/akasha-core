@@ -1,6 +1,7 @@
 import * as React from 'react';
 import FeedPage from '../feed-page/feed-page';
 import * as extension from '@akashaorg/design-system/lib/utils/extension';
+import userEvent from '@testing-library/user-event';
 
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
 import {
@@ -8,15 +9,34 @@ import {
   renderWithAllProviders,
   genAppProps,
   genLoggedInState,
+  localStorageMock,
 } from '@akashaorg/af-testing';
 import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 import { act } from 'react-dom/test-utils';
+import { when } from 'jest-when';
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
+import { EntityTypes } from '@akashaorg/typings/ui';
 
+const partialArgs = (...argsToMatch) =>
+  when.allArgs((args, equals) => equals(args, expect.arrayContaining(argsToMatch)));
+
+const MockedInlineEditor = ({ action }) => (
+  <InlineEditor
+    {...genAppProps()}
+    extensionData={{
+      name: 'name',
+      entryId: '01gf',
+      entryType: EntityTypes.ENTRY,
+      action,
+    }}
+  />
+);
+
+const appProps = genAppProps();
 describe('< FeedPage /> component', () => {
   const BaseComponent = ({ loginState }) => (
     <AnalyticsProvider {...genAppProps()}>
-      <FeedPage {...genAppProps()} showLoginModal={jest.fn()} loginState={loginState} />
+      <FeedPage {...appProps} showLoginModal={jest.fn()} loginState={loginState} />
     </AnalyticsProvider>
   );
 
@@ -24,7 +44,11 @@ describe('< FeedPage /> component', () => {
     jest
       .spyOn(extension, 'Extension')
       .mockReturnValue(
-        <InlineEditor {...genAppProps()} extensionData={{ name: 'post', action: 'post' }} />,
+        <InlineEditor
+          {...genAppProps()}
+          draftStorage={localStorageMock}
+          extensionData={{ name: 'post', action: 'post' }}
+        />,
       );
 
     (
@@ -50,5 +74,73 @@ describe('< FeedPage /> component', () => {
     });
     expect(screen.getAllByTestId('avatar-image')).not.toBeNull();
     expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
+  });
+
+  it('should render repost feed page', async () => {
+    history.pushState(null, '', `${location.origin}?repost=oxfceee`);
+
+    const spiedExtension = jest.spyOn(extension, 'Extension');
+
+    when(spiedExtension)
+      .calledWith(
+        partialArgs(
+          expect.objectContaining({ name: expect.stringMatching(/inline-editor_repost/) }),
+        ),
+      )
+      .mockReturnValue(<MockedInlineEditor action="repost" />);
+
+    await act(async () => {
+      renderWithAllProviders(<BaseComponent loginState={genLoggedInState(true)} />, {});
+    });
+
+    expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Publish/i })).toBeInTheDocument();
+    expect(screen.getByTestId('embed-box')).toBeInTheDocument();
+  it('should show saved draft post', async () => {
+    const loginState = genLoggedInState(true);
+    localStorageMock.setItem(
+      `${appProps?.worldConfig?.homepageApp}-${loginState.pubKey}-draft-item`,
+      JSON.stringify([
+        {
+          type: 'paragraph',
+          children: [
+            {
+              text: 'Post in progress ...',
+            },
+          ],
+        },
+      ]),
+    );
+    await act(async () => {
+      renderWithAllProviders(<BaseComponent loginState={loginState} />, {});
+    });
+
+    expect(screen.getByText(/Post in progress .../i)).toBeInTheDocument();
+    expect(screen.getByText(/Draft/i)).toBeInTheDocument();
+    expect(screen.getByText(/Clear/i)).toBeInTheDocument();
+  });
+
+  it('should clear draft post', async () => {
+    const loginState = genLoggedInState(true);
+    localStorageMock.setItem(
+      `${appProps?.worldConfig?.homepageApp}-${loginState.pubKey}-draft-item`,
+      JSON.stringify([
+        {
+          type: 'paragraph',
+          children: [
+            {
+              text: 'Post in progress ...',
+            },
+          ],
+        },
+      ]),
+    );
+    await act(async () => {
+      renderWithAllProviders(<BaseComponent loginState={loginState} />, {});
+    });
+
+    await userEvent.click(screen.getByText(/Clear/i));
+
+    expect(Object.keys(localStorageMock.getAll()).length).toBe(0);
   });
 });
