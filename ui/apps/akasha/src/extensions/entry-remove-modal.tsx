@@ -26,15 +26,16 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
     props.singleSpa.navigateToUrl(location.pathname);
   }, [props.singleSpa]);
 
+  // extensionData.itemType comes as a string from navigateToModal this can lead to bugs
   const handleDeletePost = React.useCallback(() => {
-    if (extensionData && typeof +extensionData.itemType === 'number') {
-      if (extensionData.itemType === EntityTypes.REPLY) {
+    if (extensionData && +extensionData.itemType) {
+      if (+extensionData.itemType === EntityTypes.REPLY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.itemId);
-      } else if (extensionData.itemType === EntityTypes.POST) {
+      } else if (+extensionData.itemType === EntityTypes.POST) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
@@ -51,7 +52,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = React.useMemo(() => {
-    if (extensionData.itemType === EntityTypes.POST) {
+    if (+extensionData.itemType === EntityTypes.POST) {
       return t('post');
     }
     return t('reply');
