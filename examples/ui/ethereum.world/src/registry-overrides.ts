@@ -81,6 +81,12 @@ const overrides = [
     ...missingRequiredFields,
   },
   {
+    name: '@akashaorg/app-dev-dashboard',
+    integrationType: INTEGRATION_TYPES.APPLICATION,
+    sources: [`${HOST}/apps/dev-dashboard/index.js`],
+    ...missingRequiredFields,
+  },
+  {
     name: '@akashaorg/app-translation',
     integrationType: INTEGRATION_TYPES.APPLICATION,
     sources: [`${HOST}/apps/translation/index.js`],

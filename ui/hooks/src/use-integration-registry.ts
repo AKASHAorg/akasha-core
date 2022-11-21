@@ -186,7 +186,8 @@ export function useGetAllIntegrationReleaseIds(integrationName: string, offset?:
 
 const getIntegrationReleaseInfo = async releaseId => {
   const sdk = getSDK();
-  return sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
+  const res = await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
+  return res;
 };
 
 /**
@@ -227,8 +228,8 @@ const getIntegrationsReleaseInfo = async releaseIds => {
  * ```
  * example mock data for an integration to test locally
  * ```typescript
- * if (!res.data.getLatestRelease.some(rel => rel.name === '@akashaorg/app-messaging')) {
- *  res.data.getLatestRelease.push({
+ * if (!res.getLatestRelease.some(rel => rel.name === '@akashaorg/app-messaging')) {
+ *  res.getLatestRelease.push({
  *     id: '0x82d31f280645cb2f74a47115a36f1e1b4370eda1812cf4d38d9107996bb60560',
  *     name: '@akashaorg/app-messaging',
  *     version: 'v0.1.0',
@@ -266,7 +267,8 @@ export function useGetIntegrationsReleaseInfo(releaseIds: string[]) {
 const getLatestReleaseInfo = async (opt: { name?: string; id?: string }[]) => {
   const sdk = getSDK();
   // add messaging app mock to response here
-  return sdk.api.icRegistry.getLatestReleaseInfo(opt);
+  const res = await sdk.api.icRegistry.getLatestReleaseInfo(opt);
+  return res;
 };
 
 /**
