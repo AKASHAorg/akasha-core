@@ -3,12 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import {
-  useGetLogin,
-  useGetProfile,
-  useValidateMessage,
-  useAddDevKeyFromMessage,
-} from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useValidateMessage, useAddDevKeyFromMessage } from '@akashaorg/ui-awf-hooks';
 
 import StepOne from './step-one';
 import StepTwo from './step-two';
@@ -17,13 +12,13 @@ import StepFour from './step-four';
 import { ONBOARDING_STATUS } from './intro-card';
 
 import menuRoute, {
-  DEV_DASHBOARD,
+  DASHBOARD,
   ONBOARDING,
   ONBOARDING_STEP_FOUR,
   ONBOARDING_STEP_ONE,
   ONBOARDING_STEP_THREE,
   ONBOARDING_STEP_TWO,
-} from '../../../routes';
+} from '../../routes';
 
 const { SteppedActionCard } = DS;
 
@@ -36,13 +31,15 @@ const DevDashOnboardingSteps: React.FC<
 > = props => {
   const { plugins } = props;
 
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+
   const [activeIndex, setActiveIndex] = React.useState<number>(props.activeIndex || 0);
   const [messageName, setMessageName] = React.useState<string>('');
   const [message, setMessage] = React.useState<string>('');
 
   const loginQuery = useGetLogin();
-  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
-  const { t } = useTranslation('app-profile');
+
+  const { t } = useTranslation('app-dev-dashboard');
 
   const validateMutation = useValidateMessage();
   const addKeyMutation = useAddDevKeyFromMessage();
@@ -55,9 +52,9 @@ const DevDashOnboardingSteps: React.FC<
   ].map(el => `${props.baseRouteName}${menuRoute[el]}`);
 
   React.useEffect(() => {
-    if (!loggedProfileQuery.data?.pubKey) {
+    if (!loginQuery.data?.pubKey) {
       // if guest, redirect to onboarding step 1 after authentication
-      plugins['@akashaorg/app-routing']?.routing.navigateTo?.({
+      navigateTo?.({
         appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: (routes: Record<string, string>) => {
           return `${routes.SignIn}?${new URLSearchParams({
@@ -82,7 +79,7 @@ const DevDashOnboardingSteps: React.FC<
     // add key after validating
     if (
       validateMutation.isSuccess &&
-      validateMutation.data?.body?.aud === loggedProfileQuery.data?.pubKey
+      validateMutation.data?.body?.aud === loginQuery.data?.pubKey
     ) {
       addKeyMutation.mutate({ message, messageName });
     }
@@ -91,8 +88,8 @@ const DevDashOnboardingSteps: React.FC<
 
   React.useEffect(() => {
     if (addKeyMutation.isSuccess) {
-      return plugins['@akashaorg/app-routing']?.routing.navigateTo({
-        appName: '@akashaorg/app-profile',
+      return navigateTo?.({
+        appName: '@akashaorg/app-dev-dashboard',
         getNavigationUrl: () => menuRoute[ONBOARDING_STEP_FOUR],
       });
     }
@@ -106,20 +103,20 @@ const DevDashOnboardingSteps: React.FC<
 
   const handleIconClick = () => {
     plugins['@akashaorg/app-routing']?.routing?.navigateTo({
-      appName: '@akashaorg/app-profile',
+      appName: '@akashaorg/app-dev-dashboard',
       getNavigationUrl: () => menuRoute[ONBOARDING],
     });
   };
 
   const handleClick = (step: string) => () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
       getNavigationUrl: () => menuRoute[step],
     });
   };
 
   const handleCTAClick = () => {
-    plugins['@akashaorg/app-routing']?.routing?.navigateTo({
+    navigateTo?.({
       appName: '@akashaorg/app-integration-center',
       getNavigationUrl: (routes: Record<string, string>) => routes.explore,
     });
@@ -146,17 +143,17 @@ const DevDashOnboardingSteps: React.FC<
     window.localStorage.setItem(ONBOARDING_STATUS, 'completed');
 
     // navigate to developer profile
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
+      getNavigationUrl: () => menuRoute[DASHBOARD],
     });
   };
 
   if (isOnboarded) {
     // if user has been onboarded, navigate to home
-    return plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    return navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
+      getNavigationUrl: () => menuRoute[DASHBOARD],
     });
   }
 

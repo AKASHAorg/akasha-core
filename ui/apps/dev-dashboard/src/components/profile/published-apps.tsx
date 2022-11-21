@@ -6,7 +6,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import CardTitle from './card-title';
 
-import menuRoute, { DEV_DASHBOARD } from '../../../routes';
+import menuRoute, { DASHBOARD } from '../../routes';
 
 const { HorizontalDivider, MainAreaCardBox } = DS;
 
@@ -17,12 +17,14 @@ interface IPublishedAppsCardProps {
 const PublishedAppsCard: React.FC<RootComponentProps & IPublishedAppsCardProps> = props => {
   const { className, plugins } = props;
 
-  const { t } = useTranslation('app-profile');
+  const { t } = useTranslation('app-dev-dashboard');
+
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
   const handleClickCardTitleIcon = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
+      getNavigationUrl: () => menuRoute[DASHBOARD],
     });
   };
 

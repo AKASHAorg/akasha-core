@@ -2,13 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { useGetLogin, useGetProfile, useVerifySignature } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useVerifySignature } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import CardTitle from './card-title';
 import SummaryCard, { ISummaryCardProps } from './summary-card';
 
-import menuRoute, { DEV_DASHBOARD } from '../../../routes';
+import menuRoute, { DASHBOARD } from '../../routes';
 
 import { StyledTextArea } from './dev-message-form';
 
@@ -43,21 +43,23 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
   const [signature, setSignature] = React.useState<string>('');
 
   const loginQuery = useGetLogin();
-  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
+
   const verifySignatureMutation = useVerifySignature();
 
-  const { t } = useTranslation('app-profile');
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+
+  const { t } = useTranslation('app-dev-dashboard');
 
   React.useEffect(() => {
-    if (loggedProfileQuery.data) {
-      setPubKey(loggedProfileQuery.data.pubKey);
+    if (loginQuery.data) {
+      setPubKey(loginQuery.data.pubKey);
     }
-  }, [loggedProfileQuery.data]);
+  }, [loginQuery.data]);
 
   const handleClickCardTitleIcon = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
+      getNavigationUrl: () => menuRoute[DASHBOARD],
     });
   };
 
@@ -84,7 +86,7 @@ const VerifySignatureCard: React.FC<RootComponentProps & IVerifySignatureCardPro
   const handleButtonClick = () => {
     plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+      getNavigationUrl: () => menuRoute[DASHBOARD],
     });
   };
 
