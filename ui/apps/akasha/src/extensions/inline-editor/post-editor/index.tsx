@@ -14,12 +14,10 @@ import {
   mapEntry,
   useAnalytics,
   useCreateComment,
-  useMutationListener,
-  CREATE_POST_MUTATION_KEY,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 import { Base } from '../base';
-import { clearDraftItem, getDraftItem, saveDraftItem } from '../utils';
+import { Draft, IDraftStorage } from '../utils';
 import { editorDefaultValue } from '@akashaorg/design-system/lib/components/Editor/initialValue';
 
 const { EntryCardLoading } = DS;
@@ -30,9 +28,10 @@ type Props = {
   pubKey: string;
   singleSpa: RootExtensionProps['singleSpa'];
   action: 'post' | 'reply' | 'repost' | 'edit';
+  draftStorage: IDraftStorage;
 };
 
-export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props) {
+export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftStorage }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const [analyticsActions] = useAnalytics();
   const post = usePost({
@@ -42,8 +41,22 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   const editPost = useEditPost();
   const publishPost = useCreatePost();
   const publishComment = useCreateComment();
-  const { mutation: createPostMutation } =
-    useMutationListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+
+  const postDraft = new Draft<IEntryData['slateContent']>({
+    storage: draftStorage,
+    appName,
+    pubKey,
+    action: 'post',
+  });
+  const repostDraft = new Draft<IEntryData>({
+    storage: draftStorage,
+    appName,
+    pubKey,
+    action: 'repost',
+  });
+  const canSaveDraft = action === 'post';
+  const draftPost = canSaveDraft ? postDraft.get() : null;
+  const draftRepost = canSaveDraft ? repostDraft.get() : null;
 
   const entryData = React.useMemo(() => {
     if (post.status === 'success') {
@@ -53,17 +66,31 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
   }, [post.data, post.status]);
 
   const embedEntryData = React.useMemo(() => {
-    if (action === 'repost') {
-      if (entryData) {
-        return entryData;
-      }
+    if (entryData && action === 'repost') {
+      return entryData;
+    }
+    if (action === 'repost' || action === 'edit') {
       if (post.data?.quotes.length) {
         return mapEntry(post.data?.quotes[0]);
       }
     }
-
     return undefined;
   }, [action, entryData, post.data?.quotes]);
+
+  const [editorState, setEditorState] = React.useState(
+    action === 'edit' ? entryData?.slateContent : draftPost,
+  );
+
+  const [embededEntry, setEmbededEntry] = React.useState(
+    canSaveDraft ? draftRepost : embedEntryData,
+  );
+
+  React.useEffect(() => {
+    if (action === 'repost') {
+      repostDraft.save(embedEntryData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [action, embedEntryData]);
 
   const handlePublish = React.useCallback(
     (data: IPublishData) => {
@@ -122,20 +149,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
 
   if (post.error) return <>Error loading {action === 'repost' && 'embedded'} post</>;
 
-  if (
-    post.status === 'loading' ||
-    (createPostMutation && createPostMutation.state.status === 'loading' && action === 'repost')
-  )
-    return <EntryCardLoading />;
-
-  if (createPostMutation && createPostMutation.state.status === 'success' && action === 'repost') {
-    singleSpa.navigateToUrl(
-      `${window.location.origin}/@akashaorg/app-akasha-integration/post/${createPostMutation.state.data}`,
-    );
-  }
-
-  const canSaveDraft = action === 'post';
-  const draftItem = canSaveDraft ? getDraftItem({ pubKey, appName }) : null;
+  if (post.status === 'loading') return <EntryCardLoading />;
 
   return (
     <Base
@@ -147,21 +161,30 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action }: Props
       }
       onPublish={handlePublish}
       singleSpa={singleSpa}
-      embedEntryData={embedEntryData}
+      embedEntryData={embededEntry}
       entryData={entryData}
-      editorState={action === 'edit' ? entryData?.slateContent : draftItem}
-      isShown={action !== 'post' || (action === 'post' && !!draftItem)}
+      editorState={editorState}
+      openEditor={action !== 'post' || (action === 'post' && (!!draftPost || !!draftRepost))}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
       showDraft={canSaveDraft}
       setEditorState={(value: IEntryData['slateContent']) => {
-        if (!canSaveDraft) return;
-        if (isEqual(value, editorDefaultValue)) {
-          clearDraftItem({ pubKey, appName });
-          return;
+        if (canSaveDraft) {
+          if (isEqual(value, editorDefaultValue)) {
+            postDraft.clear();
+            return;
+          }
+          postDraft.save(value);
         }
-        saveDraftItem({ pubKey, appName, content: value });
+        setEditorState(value);
       }}
+      onClear={() => {
+        setEditorState(null);
+        setEmbededEntry(null);
+        repostDraft.clear();
+      }}
+      noBorderRound={action === 'edit'}
+      borderBottomOnly={action === 'edit'}
     />
   );
 }

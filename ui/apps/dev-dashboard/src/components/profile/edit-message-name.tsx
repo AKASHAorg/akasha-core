@@ -6,7 +6,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import CardTitle from './card-title';
 
-import menuRoute, { DEV_KEYS } from '../../../routes';
+import menuRoute, { DEV_KEYS } from '../../routes';
 import DevMessageForm from './dev-message-form';
 
 const { Box, HorizontalDivider, MainAreaCardBox } = DS;
@@ -18,13 +18,15 @@ interface IEditMessageNameProps {
 const EditMessageName: React.FC<RootComponentProps & IEditMessageNameProps> = props => {
   const { className, plugins } = props;
 
-  const [messageName] = React.useState<string>('');
-  const [message] = React.useState<string>('');
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
   const { t } = useTranslation('app-profile');
 
+  const [messageName] = React.useState<string>('');
+  const [message] = React.useState<string>('');
+
   const handleClickCardTitleIcon = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
+    navigateTo?.({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => menuRoute[DEV_KEYS],
     });

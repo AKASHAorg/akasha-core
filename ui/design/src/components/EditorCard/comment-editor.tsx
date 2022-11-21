@@ -7,14 +7,14 @@ import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 import { IPublishData } from '@akashaorg/typings/ui';
 
-type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+export type CommentEditorProps = IEditorBox & {
+  openEditor?: boolean;
+  borderBottomOnly?: boolean;
+  noBorderRound?: boolean;
+  background?: BoxProps['background'];
+};
 
-const CommentEditor: React.FC<
-  Optional<IEditorBox, 'setEditorState'> & {
-    isShown?: boolean;
-    background?: BoxProps['background'];
-  }
-> = props => {
+const CommentEditor: React.FC<CommentEditorProps> = props => {
   const {
     ethAddress,
     avatar,
@@ -31,7 +31,7 @@ const CommentEditor: React.FC<
     mentions,
     tags,
     uploadRequest,
-    isShown = false,
+    openEditor = false,
     showCancelButton,
     cancelButtonLabel,
     onCancelClick,
@@ -41,17 +41,20 @@ const CommentEditor: React.FC<
     setEditorState,
     showDraft,
     uploadedImages,
+    borderBottomOnly,
+    noBorderRound,
+    onClear,
   } = props;
 
-  const [showEditor, setShowEditor] = React.useState(isShown);
-  const [contentState, setContentState] = React.useState(editorState);
+  const [showEditor, setShowEditor] = React.useState(openEditor);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const editorRef = React.useRef(null);
 
   const handleClickAway = () => {
     if (
+      !openEditor &&
       showEditor &&
-      isEqual(contentState, editorDefaultValue) &&
+      isEqual(editorState, editorDefaultValue) &&
       !editorRef.current?.getPopoversState() &&
       !editorRef.current?.getUploadingState() &&
       !editorRef.current?.getImagesState()
@@ -87,9 +90,9 @@ const CommentEditor: React.FC<
       )}
       {showEditor && (
         <Box
-          border={{ side: 'all', size: '1px', color: 'border' }}
+          border={{ side: borderBottomOnly ? 'bottom' : 'all', size: '1px', color: 'border' }}
           pad="xxsmall"
-          round="xsmall"
+          round={noBorderRound ? false : 'xsmall'}
           background={props.background}
         >
           <EditorBox
@@ -111,16 +114,14 @@ const CommentEditor: React.FC<
             uploadRequest={uploadRequest}
             uploadedImages={uploadedImages}
             withMeter={true}
-            editorState={contentState}
-            setEditorState={value => {
-              setContentState(value);
-              if (setEditorState) setEditorState(value);
-            }}
+            editorState={editorState}
+            setEditorState={setEditorState}
             cancelButtonLabel={cancelButtonLabel}
             onCancelClick={onCancelClick}
             showCancelButton={showCancelButton}
             embedEntryData={embedEntryData}
             showDraft={showDraft}
+            onClear={onClear}
           />
         </Box>
       )}

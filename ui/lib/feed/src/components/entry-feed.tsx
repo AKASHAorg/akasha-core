@@ -17,7 +17,7 @@ const EntryFeed = (props: FeedWidgetProps) => {
     } else {
       props.navigateTo?.({
         appName: '@akashaorg/app-akasha-integration',
-        getNavigationUrl: navRoutes => `${navRoutes.Post}/${entryId}?action=repost`,
+        getNavigationUrl: () => `/feed?repost=${entryId}`,
       });
     }
   };
@@ -29,7 +29,7 @@ const EntryFeed = (props: FeedWidgetProps) => {
       status={props.requestStatus}
       itemSpacing={props.itemSpacing}
       hasNextPage={props.hasNextPage}
-      pageKeyPrefix={props.itemType === EntityTypes.ENTRY ? 'entry-page' : 'comment-page'}
+      pageKeyPrefix={props.itemType === EntityTypes.POST ? 'entry-page' : 'comment-page'}
       viewAllEntry={props.viewAllEntry}
       itemCard={
         <EntryRenderer

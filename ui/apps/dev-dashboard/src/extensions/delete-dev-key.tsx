@@ -15,7 +15,7 @@ const { BasicCardBox, Box, Button, ModalContainer, Text, Icon, ErrorLoader } = D
 const DeleteDevKeyModal = (props: RootExtensionProps) => {
   const { extensionData } = props;
 
-  const { t } = useTranslation('app-profile');
+  const { t } = useTranslation('app-dev-dashboard');
   const location = useLocation();
 
   const pubKey = React.useMemo(() => {
@@ -40,7 +40,7 @@ const DeleteDevKeyModal = (props: RootExtensionProps) => {
     deleteKeyMutation.mutate(pubKey);
 
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-profile',
+      appName: '@akashaorg/app-dev-dashboard',
       getNavigationUrl: () => menuRoute[DEV_KEYS],
     });
   };

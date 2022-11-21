@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 import DS from '@akashaorg/design-system';
 import {
   IProfileData,
@@ -7,6 +8,7 @@ import {
   EventTypes,
   ProfileProviderProperties,
   ProfileProviders,
+  EntityTypes,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
@@ -42,7 +44,11 @@ export interface IProfileHeaderProps {
 }
 
 const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
-  const { profileData, loginState, profileId, plugins } = props;
+  const { profileData, loginState, profileId } = props;
+
+  const { pubKey } = useParams<{ pubKey: string }>();
+
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [selectedStat, setSelectedStat] = React.useState<number>(0);
@@ -110,18 +116,18 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
     props.navigateToModal({ name: 'login' });
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string, user: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { modal: { name: 'report-modal', entryId, itemType, user } },
+        redirectTo: { modal: { name: 'report-modal', itemId, itemType, user } },
       });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType, user });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
 
   const showUpdateProfileModal = () => {
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-profile',
       getNavigationUrl: () => routes[UPDATE_PROFILE],
     });
@@ -138,6 +144,13 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
   const handleClose = () => {
     setModalOpen(false);
+  };
+
+  const handleNavigateToProfilePosts = () => {
+    navigateTo({
+      appName: '@akashaorg/app-akasha-integration',
+      getNavigationUrl: routes => `${routes.ProfileFeed}/${pubKey}`,
+    });
   };
 
   const handleExtPointMount = (name: string) => {
@@ -167,7 +180,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
             loginState={loginState}
             selectedStat={selectedStat}
             profileData={profileData}
-            navigateTo={plugins['@akashaorg/app-routing']?.navigateTo}
+            navigateTo={navigateTo}
             showLoginModal={showLoginModal}
             handleClose={handleClose}
           />
@@ -193,7 +206,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           flagAsLabel={t('Report')}
           onEntryFlag={handleEntryFlag(
             profileData.pubKey ? profileData.pubKey : '',
-            'account',
+            EntityTypes.PROFILE,
             profileData.name,
           )}
           onUpdateClick={showUpdateProfileModal}
@@ -262,7 +275,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           onClickFollowing={handleStatIconClick(1)}
           onClickFollowers={handleStatIconClick(0)}
           onClickInterests={handleStatIconClick(2)}
-          onClickPosts={() => null}
+          onClickPosts={handleNavigateToProfilePosts}
           followingLabel={t('Following')}
           followersLabel={t('Followers')}
           postsLabel={t('Posts')}

@@ -35,7 +35,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
    * In the mean time, the following check will ensure undefined data is handled.  */
   const bookmarks = bookmarksReq.data || [];
 
-  const bookmarkedPostIds = bookmarks.map((bm: Record<string, string>) => bm.entryId);
+  const bookmarkedPostIds = bookmarks.map((bm: Record<string, string>) => bm.itemId);
   const bookmarkedPosts = usePosts({ postIds: bookmarkedPostIds, enabler: true });
   const numberOfBookmarkedInactivePosts = React.useMemo(
     () => bookmarkedPosts.filter(({ data }) => (data ? !checkPostActive(data) : false)).length,
@@ -47,18 +47,18 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!loginQuery.data?.pubKey) {
-      return showLoginModal({ modal: { name: 'report-modal', entryId, itemType } });
+      return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType });
   };
 
-  const handleEntryRemove = (entryId: string) => {
+  const handleEntryRemove = (itemId: string) => {
     props.navigateToModal({
       name: 'entry-remove-confirmation',
-      entryId,
-      entryType: EntityTypes.ENTRY,
+      itemId,
+      itemType: EntityTypes.POST,
     });
   };
 
@@ -106,7 +106,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
             subtitle={getSubtitleText()}
             heading={t('✨ Save what inspires you ✨')}
             description={description}
-            image={'/images/no-bookmarks.webp'}
+            image={'/images/no-saved-posts-error.webp'}
             showMainArea={!isLoggedIn}
           />
           {!bookmarksReq.isFetched && isLoggedIn && <Spinner />}
@@ -122,7 +122,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
           {bookmarksReq.status === 'success' && bookmarks.length > 0 && (
             <FeedWidget
               modalSlotId={props.layoutConfig.modalSlotId}
-              itemType={EntityTypes.ENTRY}
+              itemType={EntityTypes.POST}
               logger={props.logger}
               onLoadMore={() => {
                 /* if next page, load more */

@@ -1,3 +1,5 @@
+import { EntityTypes } from './ui-events';
+
 export enum ButtonValues {
   ALL = 'All',
   KEPT = 'Kept',
@@ -5,13 +7,15 @@ export enum ButtonValues {
   STATS = 'Stats',
 }
 
-export enum ModerationItemTypes {
-  ACCOUNT = 'account',
-  POST = 'post',
-  COMMENT = 'comment',
-  REPLY = 'reply',
+export const ModerationEntityTypesMap = {
+  [EntityTypes.PROFILE]: 'account',
+  [EntityTypes.POST]: 'post',
+  [EntityTypes.REPLY]: 'reply',
+
   // @TODO: add support for tag type, when tag moderation is implemented
-}
+  [EntityTypes.ARTICLE]: 'article',
+  [EntityTypes.TAG]: 'tag',
+} as const;
 
 export type ModeratorStatus = 'active' | 'revoked' | 'resigned';
 
@@ -77,7 +81,7 @@ export interface EntryReport {
   creationDate: Date;
   author: string;
   contentID: string;
-  contentType: string;
+  contentType: EntityTypes;
   explanation: string;
   reason: string;
 }
@@ -85,7 +89,7 @@ export interface EntryReport {
 export interface IModerationLogItem {
   decisionID: string;
   contentID: string;
-  contentType: string;
+  contentType: EntityTypes;
   delisted: false;
   reasons: string[];
   explanation: string;
@@ -100,7 +104,7 @@ export interface IPendingItem {
   creationDate: Date;
   decisionID: string;
   contentID: string;
-  contentType: string;
+  contentType: EntityTypes;
   delisted: boolean;
   moderated: boolean;
   reasons: string[];

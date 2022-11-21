@@ -32,6 +32,10 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
     return undefined;
   }, [comment.data, comment.status]);
 
+  const [editorState, setEditorState] = React.useState(
+    action === 'edit' ? entryData?.slateContent : null,
+  );
+
   const handlePublish = React.useCallback(
     (data: IPublishData) => {
       switch (action) {
@@ -93,11 +97,14 @@ export function ReplyEditor({ commentId, singleSpa, action }: Props) {
       onPublish={handlePublish}
       onPlaceholderClick={handlePlaceholderClick}
       singleSpa={singleSpa}
-      editorState={action === 'edit' ? entryData?.slateContent : null}
+      editorState={editorState}
+      setEditorState={setEditorState}
       entryData={entryData}
-      isShown={true}
+      openEditor={true}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
+      noBorderRound={action === 'edit'}
+      borderBottomOnly={action === 'edit'}
     />
   );
 }

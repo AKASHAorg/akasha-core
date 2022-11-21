@@ -11,7 +11,7 @@ export type NavigateToParams = RequireAtLeastOne<NavigationOptions, 'appName' | 
 export interface ModalNavigationOptions {
   name: string;
   pubKey?: string;
-  entryId?: string;
-  entryType?: EntityTypes;
+  itemId?: string;
+  itemType?: EntityTypes;
   [key: string]: string | unknown | undefined;
 }
