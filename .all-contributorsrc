@@ -120,6 +120,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "themonster2015",
+      "name": "Quynh Yen Vo T.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10905837?v=4",
+      "profile": "https://github.com/themonster2015",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -127,5 +136,6 @@
   "projectOwner": "AKASHAorg",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
