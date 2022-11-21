@@ -1,4 +1,9 @@
-import { UIEventData, ExtensionLoaderFn, RootExtensionProps } from '@akashaorg/typings/ui';
+import {
+  UIEventData,
+  ExtensionLoaderFn,
+  RootExtensionProps,
+  EntityTypes,
+} from '@akashaorg/typings/ui';
 import * as singleSpa from 'single-spa';
 
 export const extensionLoader: ExtensionLoaderFn = loadingFn => {
@@ -19,7 +24,18 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
         rootNode.id = rootNodeId;
         domElement.appendChild(rootNode);
         const parcel = singleSpa.mountRootParcel(loadingFn, {
-          ...props,
+          ...{
+            ...props,
+            extensionData: {
+              ...props.extensionData,
+              itemType:
+                // Make sure that itemType coming from extensionData is the correct type `EntityTypes`
+                // as it will be stringified when passed to the extension by navigateToModal
+                props.extensionData.itemType === undefined
+                  ? undefined
+                  : (new Number(props.extensionData.itemType) as EntityTypes),
+            },
+          },
           domElement: rootNode,
         });
         parcels[props.extensionData.name] = parcel;

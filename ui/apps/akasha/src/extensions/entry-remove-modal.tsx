@@ -1,7 +1,12 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps, AnalyticsCategories, EntityTypes } from '@akashaorg/typings/ui';
+import {
+  RootExtensionProps,
+  AnalyticsCategories,
+  EntityTypes,
+  EntityTypesMap,
+} from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
@@ -28,21 +33,21 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
 
   // extensionData.itemType comes as a string from navigateToModal this can lead to bugs
   const handleDeletePost = React.useCallback(() => {
-    if (extensionData && +extensionData.itemType) {
-      if (+extensionData.itemType === EntityTypes.REPLY) {
+    if (!!extensionData && extensionData.itemType !== undefined) {
+      if (extensionData.itemType === EntityTypes.REPLY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Reply Deleted',
         });
         commentDeleteQuery.mutate(extensionData.itemId);
-      } else if (+extensionData.itemType === EntityTypes.POST) {
+      } else if (extensionData.itemType === EntityTypes.POST) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
           action: 'Post Deleted',
         });
         postDeleteQuery.mutate(extensionData.itemId);
       } else {
-        logger.error('itemType is undefined!');
+        logger.error(`unsupported itemType ${EntityTypesMap[extensionData.itemType]}!`);
       }
     } else {
       logger.error('property itemType is undefined!');
@@ -52,7 +57,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [extensionData, commentDeleteQuery, postDeleteQuery, handleModalClose, logger]);
 
   const entryLabelText = React.useMemo(() => {
-    if (+extensionData.itemType === EntityTypes.POST) {
+    if (extensionData.itemType === EntityTypes.POST) {
       return t('post');
     }
     return t('reply');
