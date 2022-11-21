@@ -1,5 +1,5 @@
 import * as React from 'react';
-import BaseEntryPage from './common/base-entry-page';
+import BaseEntryPage from './common/base-page';
 import { useParams } from 'react-router-dom';
 import { LoginState, mapEntry, useComment } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes, ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';

@@ -41,6 +41,22 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [analyticsActions] = useAnalytics();
 
+  //get the post id for repost from the search param
+  const [postId, setPostId] = React.useState(new URLSearchParams(location.search).get('repost'));
+
+  React.useEffect(() => {
+    const controller = new AbortController();
+    /*The single-spa:before-routing-event listener is required for reposts happening from the feed page */
+    const popStateHandler = () => {
+      setPostId(new URLSearchParams(location.search).get('repost'));
+    };
+    window.addEventListener('single-spa:before-routing-event', popStateHandler, {
+      signal: controller.signal,
+    });
+    return () => controller.abort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const { mutations: pendingPostStates } =
     useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
 
@@ -104,11 +120,19 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
             <Text color="grey">{t("Check what's up from your fellow Ethereans ✨")}</Text>
           </BasicCardBox>
           <Box margin={{ bottom: 'xsmall' }}>
-            <Extension
-              name="inline-editor_feed_page"
-              uiEvents={props.uiEvents}
-              data={{ action: 'post' }}
-            />
+            {postId ? (
+              <Extension
+                name={`inline-editor_repost_${postId}`}
+                uiEvents={props.uiEvents}
+                data={{ itemId: postId, itemType: EntityTypes.POST, action: 'repost' }}
+              />
+            ) : (
+              <Extension
+                name="inline-editor_feed_page"
+                uiEvents={props.uiEvents}
+                data={{ action: 'post' }}
+              />
+            )}
           </Box>
         </>
       ) : (

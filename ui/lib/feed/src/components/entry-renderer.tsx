@@ -4,7 +4,6 @@ import FeedWidget from './App';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
 import { useTranslation } from 'react-i18next';
 import {
-  AnalyticsCategories,
   TrackEventData,
   EventTypes,
   EntityTypes,
@@ -16,31 +15,18 @@ import {
 import {
   usePost,
   useComment,
-  useEditComment,
   mapEntry,
   useFollow,
   useIsFollowingMultiple,
   useUnfollow,
-  getLinkPreview,
-  uploadMediaToTextile,
   LoginState,
-  useTagSearch,
-  useMentionSearch,
 } from '@akashaorg/ui-awf-hooks';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import { ILogger } from '@akashaorg/typings/sdk/log';
 import { i18n } from 'i18next';
 
-const {
-  Box,
-  CommentEditor,
-  ErrorLoader,
-  EntryCardLoading,
-  EntryCard,
-  EntryCardHidden,
-  ExtensionPoint,
-} = DS;
+const { Box, ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
 
 export interface IEntryRenderer {
   itemId?: string;
@@ -98,27 +84,12 @@ const EntryRenderer = (
     parentIsProfilePage,
     modalSlotId,
     accentBorderTop,
-    trackEvent,
     itemSpacing,
   } = props;
 
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const followProfileQuery = useFollow();
   const unfollowProfileQuery = useUnfollow();
-  const [isEditingComment, setIsEditingComment] = React.useState<boolean>(false);
-
-  const [mentionQuery, setMentionQuery] = React.useState(null);
-  const [tagQuery, setTagQuery] = React.useState(null);
-  const mentionSearch = useMentionSearch(mentionQuery);
-  const tagSearch = useTagSearch(tagQuery);
-
-  const handleMentionQueryChange = (query: string) => {
-    setMentionQuery(query);
-  };
-
-  const handleTagQueryChange = (query: string) => {
-    setTagQuery(query);
-  };
 
   const { t } = useTranslation('ui-lib-feed');
 
@@ -163,8 +134,6 @@ const EntryRenderer = (
     }
   }, [postData, commentData, itemType]);
 
-  const commentEditReq = useEditComment(itemData?.entryId, !!commentData);
-
   const [isReported, isAccountReported] = React.useMemo(() => {
     if (showAnyway) {
       return [false, false];
@@ -172,11 +141,6 @@ const EntryRenderer = (
     const reqSuccess = postReq.isSuccess || commentReq.isSuccess;
     return [reqSuccess && itemData?.reported, reqSuccess && itemData?.author?.reported];
   }, [itemData, showAnyway, postReq.isSuccess, commentReq.isSuccess]);
-
-  const disablePublishing = React.useMemo(
-    () => loginState.waitForAuth || !loginState.isReady,
-    [loginState],
-  );
 
   const handleFollow = React.useCallback(() => {
     if (authorPubKey) {
@@ -189,12 +153,6 @@ const EntryRenderer = (
       unfollowProfileQuery.mutate(authorPubKey);
     }
   }, [unfollowProfileQuery, authorPubKey]);
-
-  const handleEditClick = React.useCallback(() => {
-    if (itemType === EntityTypes.REPLY) {
-      setIsEditingComment(true);
-    }
-  }, [itemType]);
 
   const handleAvatarClick = () => {
     navigateTo?.({
@@ -226,8 +184,8 @@ const EntryRenderer = (
       event: EventTypes.ExtensionPointMount,
       data: {
         name,
-        entryId: itemId,
-        entryType: itemType,
+        itemId,
+        itemType,
         hideLabel: itemType === EntityTypes.POST,
       },
     });
@@ -238,8 +196,8 @@ const EntryRenderer = (
       event: EventTypes.ExtensionPointUnmount,
       data: {
         name,
-        entryId: itemId,
-        entryType: itemType,
+        itemId,
+        itemType,
       },
     });
   };
@@ -270,24 +228,6 @@ const EntryRenderer = (
     if (accountAwaitingModeration) return `the author of this ${itemTypeName}`;
     return `this ${itemTypeName}`;
   }, [accountAwaitingModeration, itemTypeName]);
-
-  const handleCancelClick = () => {
-    setIsEditingComment(false);
-  };
-
-  const handleEditComment = commentData => {
-    if (trackEvent) {
-      trackEvent({
-        category: AnalyticsCategories.POST,
-        action: 'Reply Edited',
-      });
-    }
-    commentEditReq.mutate({
-      ...commentData,
-      postID: !!itemData && 'postId' in itemData && itemData.postId,
-    });
-    setIsEditingComment(false);
-  };
 
   const showEditButton = React.useMemo(
     () => loginState.isReady && loginState.ethAddress === itemData?.author?.ethAddress,
@@ -362,34 +302,6 @@ const EntryRenderer = (
               handleFlipCard={handleFlipCard}
             />
           )}
-          {isEditingComment && (
-            <Box margin="medium">
-              <CommentEditor
-                avatar={itemData.author.avatar}
-                ethAddress={itemData.author.ethAddress}
-                postLabel={t('Save')}
-                placeholderLabel={t('Reply to {{itemDataAuthorName}}', {
-                  itemDataAuthorName: itemData.author.name || '',
-                })}
-                emojiPlaceholderLabel={t('Search')}
-                disablePublishLabel={t('Authenticating')}
-                disablePublish={disablePublishing}
-                onPublish={handleEditComment}
-                linkPreview={itemData.linkPreview}
-                getLinkPreview={getLinkPreview}
-                getMentions={handleMentionQueryChange}
-                getTags={handleTagQueryChange}
-                tags={tagSearch.data}
-                mentions={mentionSearch.data}
-                uploadRequest={uploadMediaToTextile}
-                editorState={itemData.slateContent}
-                isShown={true}
-                showCancelButton={true}
-                onCancelClick={handleCancelClick}
-                cancelButtonLabel={t('Cancel')}
-              />
-            </Box>
-          )}
           {canShowEntry && (
             <Box {...entryCardStyle()}>
               <EntryCard
@@ -411,7 +323,6 @@ const EntryRenderer = (
                 locale={locale || 'en'}
                 style={{
                   ...(style as React.CSSProperties),
-                  display: isEditingComment ? 'none' : 'block',
                 }}
                 showMore={true}
                 profileAnchorLink={'/@akashaorg/app-profile'}
@@ -454,7 +365,6 @@ const EntryRenderer = (
                   showEditButton && (
                     <ExtensionPoint
                       style={{ width: '100%' }}
-                      onClick={handleEditClick}
                       name={`entry-card-edit-button_${itemId}`}
                       onMount={handleExtensionMount}
                       onUnmount={handleExtensionUnmount}
