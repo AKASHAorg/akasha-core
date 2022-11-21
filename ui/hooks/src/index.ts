@@ -133,6 +133,7 @@ import {
   useSignMessage,
   useVerifySignature,
 } from './use-dev-profile';
+import { useDismissedCard } from './use-dismissed-card';
 
 export {
   constants,
@@ -283,4 +284,6 @@ export {
   useDeleteDevKey,
   useSignMessage,
   useVerifySignature,
+  // use-dismissed-card
+  useDismissedCard,
 };
