@@ -4,6 +4,7 @@ import { isMobile } from 'react-device-detect';
 import styled from 'styled-components';
 
 import { BasicCardBox } from '../EntryCard/basic-card-box';
+import Icon from '../Icon';
 
 const StyledText = styled(Text)`
   font-size: ${props => props.theme.shapes.fontSizes.large.size};
@@ -30,6 +31,7 @@ export interface ILoginWidgetCardProps {
   writeToUsUrl: string;
   image?: React.ReactElement;
   publicImgPath?: string;
+  onCloseIconClick?: () => void;
 }
 const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
   const {
@@ -42,39 +44,43 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
     writeToUsUrl,
     publicImgPath = '/images',
     onWriteToUsLabelClick,
+    onCloseIconClick,
   } = props;
   return (
     <BasicCardBox pad="medium" callToAction={true}>
       {props.image}
-      <Box direction={isMobile ? 'column-reverse' : 'row'} align="center" justify="between">
-        <Box direction="column" width={isMobile ? '100%' : '50%'} gap="xsmall">
-          <Text weight="bold" size="1rem" margin={{ top: 'xsmall' }}>
-            {title}
-          </Text>
-          <StyledText>{subtitle}</StyledText>
-          <StyledText>
-            {beforeLinkLabel}
-            <CTAAnchor
-              size="medium"
-              href={writeToUsUrl}
-              label={writeToUsLabel}
-              onClick={onWriteToUsLabelClick}
+      <Box align="flex-start" justify="between" direction="row">
+        <Box direction={isMobile ? 'column-reverse' : 'row'} align="center" justify="between">
+          <Box direction="column" width={isMobile ? '100%' : '50%'} gap="xsmall">
+            <Text weight="bold" size="1rem" margin={{ top: 'xsmall' }}>
+              {title}
+            </Text>
+            <StyledText>{subtitle}</StyledText>
+            <StyledText>
+              {beforeLinkLabel}
+              <CTAAnchor
+                size="medium"
+                href={writeToUsUrl}
+                label={writeToUsLabel}
+                onClick={onWriteToUsLabelClick}
+              />
+              {afterLinkLabel}
+            </StyledText>
+            <StyledText>{disclaimerLabel}</StyledText>
+          </Box>
+          <Box
+            width={isMobile ? '100%' : '43%'}
+            margin={{ ...(isMobile && { bottom: 'small' }) }}
+            pad={{ ...(!isMobile && { right: 'small' }) }}
+          >
+            <Image
+              style={{ width: '100%', ...(isMobile && { width: '60%', alignSelf: 'center' }) }}
+              fit="contain"
+              src={`${publicImgPath}/login-widget-illustration.webp`}
             />
-            {afterLinkLabel}
-          </StyledText>
-          <StyledText>{disclaimerLabel}</StyledText>
+          </Box>
         </Box>
-        <Box
-          width={isMobile ? '100%' : '43%'}
-          margin={{ ...(isMobile && { bottom: 'small' }) }}
-          pad={{ ...(!isMobile && { right: 'small' }) }}
-        >
-          <Image
-            style={{ width: '100%', ...(isMobile && { width: '60%', alignSelf: 'center' }) }}
-            fit="contain"
-            src={`${publicImgPath}/login-widget-illustration.webp`}
-          />
-        </Box>
+        <Icon type="close" clickable={true} onClick={onCloseIconClick} size="xs" />
       </Box>
     </BasicCardBox>
   );

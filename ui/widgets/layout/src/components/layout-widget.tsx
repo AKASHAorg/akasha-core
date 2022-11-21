@@ -23,7 +23,7 @@ import {
   FocusedPluginSlot,
   CookieWidgetSlot,
 } from './styled-slots';
-import { usePlaformHealthCheck } from '@akashaorg/ui-awf-hooks';
+import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
 const { Box, BasicCardBox, Icon, styled, Text, Extension } = DS;
 
@@ -51,6 +51,10 @@ const Layout: React.FC<RootComponentProps> = props => {
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
   const maintenanceReq = usePlaformHealthCheck();
+  
+  const dismissedCardId = 'dismiss-the-merge-notification';
+  const [dismissed, setDismissed] = useDismissedCard();
+
   const isPlatformHealty = React.useMemo(() => {
     if (maintenanceReq.status === 'success') {
       return maintenanceReq.data.success;
@@ -155,6 +159,8 @@ const Layout: React.FC<RootComponentProps> = props => {
     };
   }, [handleModal]);
 
+  const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
+
   return (
     <>
       <ScrollRestorer />
@@ -196,20 +202,36 @@ const Layout: React.FC<RootComponentProps> = props => {
                     </WarningCard>
                   )}
 
-                  <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
-                    <WarningIcon type="error" themeColor="secondary" />
-                    <Box width="100%">
-                      <Text size="medium">
-                        {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
-                          'We have migrated Ethereum World to the Goerli testnet',
-                        )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
-                          'But some functionalities such as claiming ENS names won’t be possible',
-                        )}. ${t('We are working hard on mitigating any issues')}. ${t(
-                          'Bear with us 🙏🏽',
-                        )}.`}
-                      </Text>
-                    </Box>
-                  </WarningCard>
+                  {!dismissed.includes(dismissedCardId) && (
+                    <WarningCard
+                      margin={{ bottom: 'small' }}
+                      pad="small"
+                      direction="row"
+                      key={dismissedCardId}
+                    >
+                      <WarningIcon type="error" themeColor="secondary" />
+                      <Box width="100%">
+                        <Text size="medium">
+                          {`${t(
+                            'Following the merge, the Rinkeby network has been deprecated',
+                          )}. ${t('We have migrated Ethereum World to the Goerli testnet')}. ${t(
+                            'This will not affect your content or posts, they are saved',
+                          )}! ${t(
+                            'But some functionalities such as claiming ENS names won’t be possible',
+                          )}. ${t('We are working hard on mitigating any issues')}. ${t(
+                            'Bear with us 🙏🏽',
+                          )}.`}
+                        </Text>
+                      </Box>
+                      <Icon
+                        type="close"
+                        clickable={true}
+                        onClick={onCloseButtonClick}
+                        size="xs"
+                        accentColor={true}
+                      />
+                    </WarningCard>
+                  )}
 
                   <Extension name="back-navigation" uiEvents={props.uiEvents} />
 

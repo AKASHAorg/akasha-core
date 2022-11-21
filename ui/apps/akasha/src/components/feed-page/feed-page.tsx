@@ -17,6 +17,7 @@ import {
   createPendingEntry,
   LoginState,
   useAnalytics,
+  useDismissedCard,
 } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -56,6 +57,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     return () => controller.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const dismissedCardId = 'dismiss-private-alpha-notification';
+  const [dismissed, setDismissed] = useDismissedCard();
 
   const { mutations: pendingPostStates } =
     useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
@@ -104,6 +108,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     });
   };
 
+  const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
+
   return (
     <Box fill="horizontal">
       <Helmet>
@@ -136,22 +142,26 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           </Box>
         </>
       ) : (
-        <Box margin={{ bottom: 'small' }}>
-          <LoginCTAWidgetCard
-            title={`${t('Welcome, fellow Ethereans!')} 💫`}
-            subtitle={t('We are in private alpha at this time. ')}
-            beforeLinkLabel={t("If you'd like to participate, just ")}
-            afterLinkLabel={t(
-              " and we'll send you a ticket for the next shuttle going to Ethereum World.",
-            )}
-            disclaimerLabel={t(
-              "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
-            )}
-            writeToUsLabel={t('drop us a message')}
-            writeToUsUrl={'mailto:alpha@ethereum.world'}
-            onWriteToUsLabelClick={handleWriteToUsLabelClick}
-          />
-        </Box>
+        !dismissed.includes(dismissedCardId) && (
+          <Box margin={{ bottom: 'small' }}>
+            <LoginCTAWidgetCard
+              title={`${t('Welcome, fellow Ethereans!')} 💫`}
+              subtitle={t('We are in private alpha at this time. ')}
+              beforeLinkLabel={t("If you'd like to participate, just ")}
+              afterLinkLabel={t(
+                " and we'll send you a ticket for the next shuttle going to Ethereum World.",
+              )}
+              disclaimerLabel={t(
+                "Please bear in mind we're onboarding new people gradually to make sure our systems can scale up. Bon voyage! 🚀",
+              )}
+              writeToUsLabel={t('drop us a message')}
+              writeToUsUrl={'mailto:alpha@ethereum.world'}
+              onWriteToUsLabelClick={handleWriteToUsLabelClick}
+              onCloseIconClick={onCloseButtonClick}
+              key={dismissedCardId}
+            />
+          </Box>
+        )
       )}
       {pendingPostStates?.map(
         pendingPostState =>
