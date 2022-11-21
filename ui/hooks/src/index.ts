@@ -133,7 +133,7 @@ import {
   useSignMessage,
   useVerifySignature,
 } from './use-dev-profile';
-import { useCloseNotification, CloseNotificationFlags } from './use-close-notification';
+import { useCloseNotification, checkMessageCardId } from './use-close-notification';
 
 export {
   constants,
@@ -286,5 +286,5 @@ export {
   useVerifySignature,
   // use-close-notification
   useCloseNotification,
-  CloseNotificationFlags,
+  checkMessageCardId,
 };

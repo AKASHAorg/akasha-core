@@ -26,7 +26,7 @@ import {
 import {
   usePlaformHealthCheck,
   useCloseNotification,
-  CloseNotificationFlags,
+  checkMessageCardId,
 } from '@akashaorg/ui-awf-hooks';
 
 const { Box, BasicCardBox, Icon, styled, Text, Extension } = DS;
@@ -48,6 +48,8 @@ const WarningIcon = styled(Icon)`
   margin-top: 0.2rem;
 `;
 
+const closeTheMergeNotification = checkMessageCardId('close-the-merge-notification');
+
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
   // sidebar is open by default on larger screens >=1440px
@@ -55,9 +57,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
   const maintenanceReq = usePlaformHealthCheck();
-  const [closeNotification, setCloseNotification] = useCloseNotification(
-    CloseNotificationFlags.CLOSE_THE_MERGE_NOTIFICATION_FLAG,
-  );
+  const [closeNotification, setCloseNotification] = useCloseNotification(closeTheMergeNotification);
 
   const isPlatformHealty = React.useMemo(() => {
     if (maintenanceReq.status === 'success') {
@@ -164,7 +164,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   }, [handleModal]);
 
   const onCloseButtonClick = React.useCallback(
-    () => setCloseNotification(true),
+    () => setCloseNotification(!closeNotification),
     [closeNotification],
   );
 
@@ -210,7 +210,12 @@ const Layout: React.FC<RootComponentProps> = props => {
                   )}
 
                   {!closeNotification && (
-                    <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
+                    <WarningCard
+                      margin={{ bottom: 'small' }}
+                      pad="small"
+                      direction="row"
+                      key={closeTheMergeNotification}
+                    >
                       <WarningIcon type="error" themeColor="secondary" />
                       <Box width="100%">
                         <Text size="medium">

@@ -18,7 +18,7 @@ import {
   LoginState,
   useAnalytics,
   useCloseNotification,
-  CloseNotificationFlags,
+  checkMessageCardId,
 } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -33,6 +33,7 @@ export interface FeedPageProps {
   loggedProfileData?: IProfileData;
   loginState: LoginState;
 }
+const closePrivateAlphaNotification = checkMessageCardId('close-private-alpha-notification');
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
@@ -44,7 +45,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const [analyticsActions] = useAnalytics();
 
   const [closeNotification, setCloseNotification] = useCloseNotification(
-    CloseNotificationFlags.CLOSE_PRIVATE_ALPHA_NOTIFICATION_FLAG,
+    closePrivateAlphaNotification,
   );
 
   const { mutations: pendingPostStates } =
@@ -95,7 +96,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   };
 
   const onCloseButtonClick = React.useCallback(
-    () => setCloseNotification(true),
+    () => setCloseNotification(!closeNotification),
     [closeNotification],
   );
 
@@ -139,6 +140,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               writeToUsUrl={'mailto:alpha@ethereum.world'}
               onWriteToUsLabelClick={handleWriteToUsLabelClick}
               onCloseIconClick={onCloseButtonClick}
+              key={closePrivateAlphaNotification}
             />
           </Box>
         )
