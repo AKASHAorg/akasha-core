@@ -133,7 +133,7 @@ import {
   useSignMessage,
   useVerifySignature,
 } from './use-dev-profile';
-import { useCloseNotification, checkMessageCardId } from './use-close-notification';
+import { useDismissedCard } from './use-dismissed-card';
 
 export {
   constants,
@@ -284,7 +284,6 @@ export {
   useDeleteDevKey,
   useSignMessage,
   useVerifySignature,
-  // use-close-notification
-  useCloseNotification,
-  checkMessageCardId,
+  // use-dismissed-card
+  useDismissedCard,
 };

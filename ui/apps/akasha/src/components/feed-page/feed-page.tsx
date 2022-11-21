@@ -17,8 +17,7 @@ import {
   createPendingEntry,
   LoginState,
   useAnalytics,
-  useCloseNotification,
-  checkMessageCardId,
+  useDismissedCard,
 } from '@akashaorg/ui-awf-hooks';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -33,7 +32,6 @@ export interface FeedPageProps {
   loggedProfileData?: IProfileData;
   loginState: LoginState;
 }
-const closePrivateAlphaNotification = checkMessageCardId('close-private-alpha-notification');
 
 const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const { logger, loggedProfileData, loginState } = props;
@@ -44,9 +42,8 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
 
   const [analyticsActions] = useAnalytics();
 
-  const [closeNotification, setCloseNotification] = useCloseNotification(
-    closePrivateAlphaNotification,
-  );
+  const dismissedCardId = 'dismiss-private-alpha-notification';
+  const [dismissed, setDismissed] = useDismissedCard();
 
   const { mutations: pendingPostStates } =
     useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
@@ -95,10 +92,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
     });
   };
 
-  const onCloseButtonClick = React.useCallback(
-    () => setCloseNotification(!closeNotification),
-    [closeNotification],
-  );
+  const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   return (
     <Box fill="horizontal">
@@ -124,7 +118,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
           </Box>
         </>
       ) : (
-        !closeNotification && (
+        !dismissed.includes(dismissedCardId) && (
           <Box margin={{ bottom: 'small' }}>
             <LoginCTAWidgetCard
               title={`${t('Welcome, fellow Ethereans!')} 💫`}
@@ -140,7 +134,7 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
               writeToUsUrl={'mailto:alpha@ethereum.world'}
               onWriteToUsLabelClick={handleWriteToUsLabelClick}
               onCloseIconClick={onCloseButtonClick}
-              key={closePrivateAlphaNotification}
+              key={dismissedCardId}
             />
           </Box>
         )
