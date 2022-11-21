@@ -33,7 +33,7 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
                 // as it will be stringified when passed to the extension by navigateToModal
                 props.extensionData.itemType === undefined
                   ? undefined
-                  : (new Number(props.extensionData.itemType) as EntityTypes),
+                  : +props.extensionData.itemType,
             },
           },
           domElement: rootNode,
