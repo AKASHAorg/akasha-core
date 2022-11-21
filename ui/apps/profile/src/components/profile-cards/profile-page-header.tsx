@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 import DS from '@akashaorg/design-system';
 import {
   IProfileData,
@@ -44,6 +45,8 @@ export interface IProfileHeaderProps {
 
 const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
   const { profileData, loginState, profileId } = props;
+
+  const { pubKey } = useParams<{ pubKey: string }>();
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -146,7 +149,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
   const handleNavigateToProfilePosts = () => {
     navigateTo({
       appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileData.pubKey}`,
+      getNavigationUrl: routes => `${routes.ProfileFeed}/${pubKey}`,
     });
   };
 

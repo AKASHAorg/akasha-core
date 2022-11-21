@@ -8,7 +8,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import CardTitle from './card-title';
 import SummaryCard, { ISummaryCardProps } from './summary-card';
 
-import menuRoute, { DEV_DASHBOARD } from '../../../routes';
+import menuRoute, { DASHBOARD } from '../../routes';
 
 import { StyledTextArea } from './dev-message-form';
 
@@ -24,16 +24,18 @@ interface ISignMessageCardProps extends ISummaryCardProps {
 const SignMessageCard: React.FC<RootComponentProps & ISignMessageCardProps> = props => {
   const { className, messageTitleLabel, messageInputPlaceholder, signButtonLabel, plugins } = props;
 
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+
+  const { t } = useTranslation('app-dev-dashboard');
+
   const [message, setMessage] = React.useState<string>('');
 
   const signMessageMutation = useSignMessage();
 
-  const { t } = useTranslation('app-profile');
-
   const handleClickCardTitleIcon = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
+      getNavigationUrl: () => menuRoute[DASHBOARD],
     });
   };
 
@@ -46,9 +48,9 @@ const SignMessageCard: React.FC<RootComponentProps & ISignMessageCardProps> = pr
   };
 
   const handleButtonClick = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
+      getNavigationUrl: () => menuRoute[DASHBOARD],
     });
   };
 

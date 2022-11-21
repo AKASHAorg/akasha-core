@@ -1,0 +1,1 @@
+The AKASHA Foundation built this app so developers can manage their keys and publish and update apps and widgets in the AKASHA ecosystem.

@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { RootComponentProps, IProfileData, ModalNavigationOptions } from '@akashaorg/typings/ui';
-import { LoginState, useGetDevKeys } from '@akashaorg/ui-awf-hooks';
+import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useGetDevKeys } from '@akashaorg/ui-awf-hooks';
 
-import DevProfileCard from '../dev-dashboard/profile/dev-profile-card';
-import { ONBOARDING_STATUS } from '../dev-dashboard/onboarding/intro-card';
+import DevProfileCard from './profile/dev-profile-card';
+import { ONBOARDING_STATUS } from './onboarding/intro-card';
 
 import menuRoute, {
   DEV_KEYS,
@@ -14,14 +14,16 @@ import menuRoute, {
   PUBLISHED_APPS,
   SIGN_MESSAGE,
   VERIFY_SIGNATURE,
-} from '../../routes';
+} from '../routes';
 
 const { Box, Helmet } = DS;
 
 const DevDashboard = (props: RootComponentProps) => {
   const { plugins } = props;
 
-  const { t } = useTranslation('app-profile');
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+
+  const { t } = useTranslation('app-dev-dashboard');
 
   const getKeysQuery = useGetDevKeys(true);
 
@@ -34,8 +36,8 @@ const DevDashboard = (props: RootComponentProps) => {
 
   if (!isOnboarded) {
     // if user has not been onboarded, navigate to onboarding
-    return plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
+    return navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
       getNavigationUrl: () => menuRoute[ONBOARDING],
     });
   }
@@ -43,7 +45,7 @@ const DevDashboard = (props: RootComponentProps) => {
   return (
     <Box fill="horizontal">
       <Helmet>
-        <title>{t('Dev Dashboard')} | Ethereum World</title>
+        <title>Dev Dashboard | Ethereum World</title>
       </Helmet>
 
       <>
@@ -68,7 +70,7 @@ const DevDashboard = (props: RootComponentProps) => {
             { label: t('Verify a Signature'), route: VERIFY_SIGNATURE },
           ]}
           ctaUrl="https://akasha-docs.pages.dev"
-          navigateTo={plugins['@akashaorg/app-routing']?.routing.navigateTo}
+          navigateTo={navigateTo}
         />
       </>
     </Box>

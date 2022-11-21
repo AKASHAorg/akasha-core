@@ -8,7 +8,7 @@ import { IDevKeyCardProps } from '@akashaorg/design-system/lib/components/DevKey
 
 import CardTitle from './card-title';
 
-import menuRoute, { ADD_DEV_KEY, baseDeveloperRoute, DEV_DASHBOARD } from '../../../routes';
+import menuRoute, { ADD_DEV_KEY, DASHBOARD, DEV_KEYS } from '../../routes';
 
 const { Box, DevKeyCard, HorizontalDivider, MainAreaCardBox, Spinner, Text } = DS;
 
@@ -22,21 +22,23 @@ interface IDevKeysCardProps extends IDevKeyCardProps {
 const DevKeysCard: React.FC<RootComponentProps & IDevKeysCardProps> = props => {
   const { className, plugins, noKeysLabel, editLabel, deleteLabel } = props;
 
-  const { t } = useTranslation('app-profile');
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+
+  const { t } = useTranslation('app-dev-dashboard');
   const getKeysQuery = useGetDevKeys(true);
 
   const devKeys = getKeysQuery.data || [];
 
   const handleClickCardTitleIcon = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => menuRoute[DEV_DASHBOARD],
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
+      getNavigationUrl: () => menuRoute[DASHBOARD],
     });
   };
 
   const handleClickCardTitleButton = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
       getNavigationUrl: () => menuRoute[ADD_DEV_KEY],
     });
   };
@@ -46,9 +48,9 @@ const DevKeysCard: React.FC<RootComponentProps & IDevKeysCardProps> = props => {
   };
 
   const handleEditClick = (pubKey: string) => () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
-      getNavigationUrl: () => `${baseDeveloperRoute}/dev-keys/${pubKey}/edit`,
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
+      getNavigationUrl: () => `${menuRoute[DEV_KEYS]}/${pubKey}/edit`,
     });
   };
 
