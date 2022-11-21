@@ -7,6 +7,7 @@ import ScrollTopButton from '../ScrollTopButton';
 import useIntersectionObserver from '../../utils/intersection-observer';
 import { Anchor, Box } from 'grommet';
 import { IEntryPage } from '@akashaorg/typings/ui';
+import { elementIntersectionObserver } from './elementIntersectionObserver';
 
 export interface EntryListProps {
   pages: IEntryPage[];
@@ -18,6 +19,7 @@ export interface EntryListProps {
   /* string to be prepended to the page iteration index */
   pageKeyPrefix?: string;
   viewAllEntry?: { onClick: () => void; label: string; limit: number };
+  languageDirection?: 'ltr' | 'rtl';
 }
 
 const EntryList = (props: EntryListProps) => {
@@ -29,10 +31,10 @@ const EntryList = (props: EntryListProps) => {
     pageKeyPrefix = 'page',
     viewAllEntry,
   } = props;
+  const [hideScrollTop, setHideScrollTop] = React.useState(true);
+  const scrollStopElement = document.getElementById('scrollTopStop');
+  const rootElementRef = React.useRef<HTMLDivElement>();
   const loadmoreRef = React.createRef<HTMLDivElement>();
-  const scrollTopRef = React.createRef<HTMLDivElement>();
-  const scrollTopWrapperRef = React.createRef<HTMLDivElement>();
-  const rootElementRef = React.createRef<HTMLDivElement>();
   const startScrollRef = React.createRef<HTMLDivElement>();
 
   useIntersectionObserver({
@@ -41,43 +43,43 @@ const EntryList = (props: EntryListProps) => {
     threshold: 0,
   });
 
+  React.useEffect(() => {
+    const observer = elementIntersectionObserver({
+      element: scrollStopElement,
+      onIntersect: () => {
+        setHideScrollTop(true);
+      },
+    });
+    return () => observer.disconnect();
+  }, [scrollStopElement]);
+
+  React.useEffect(() => {
+    const observer = elementIntersectionObserver({
+      element: startScrollRef?.current,
+      onIntersect: () => {
+        setHideScrollTop(false);
+      },
+    });
+
+    return () => observer.disconnect();
+  }, [startScrollRef]);
+
   const items = (page: IEntryPage) =>
     viewAllEntry ? page?.results.slice(0, viewAllEntry.limit) : page?.results;
 
-  React.useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const entry = entries[0];
-      if (entry.isIntersecting) {
-        scrollTopWrapperRef.current.style.marginLeft = `${
-          rootElementRef.current.clientWidth - 64
-        }px`;
-        scrollTopRef.current.classList.remove('hideScrollTop');
-      }
-    });
-
-    if (startScrollRef?.current) {
-      observer.observe(startScrollRef?.current);
-    }
-
-    return () => observer.disconnect();
-  }, [scrollTopRef, startScrollRef, scrollTopWrapperRef, rootElementRef]);
-
-  React.useEffect(() => {
-    const scrollStopElement = document.getElementById('scrollTopStop');
-    const observer = new IntersectionObserver(entries => {
-      const entry = entries[0];
-      if (entry.isIntersecting) {
-        scrollTopRef.current.classList.add('hideScrollTop');
-      }
-    });
-
-    if (scrollStopElement) observer.observe(scrollStopElement);
-
-    return () => observer.disconnect();
-  }, [scrollTopRef, rootElementRef]);
+  const scrollTopButtonPlacement = React.useMemo(() => {
+    if (props.languageDirection === 'rtl') return 0;
+    return rootElementRef.current ? rootElementRef.current.clientWidth - 64 : null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    props.languageDirection,
+    rootElementRef,
+    //We want to calculate scroll top button placement whenever the scroll top flag changes as browser may have resized
+    hideScrollTop,
+  ]);
 
   return (
-    <Root ref={rootElementRef}>
+    <div ref={rootElementRef}>
       {(viewAllEntry ? pages.slice(0, 1) : pages).map((page, pageIndex) => (
         <div data-page-idx={pageIndex} key={`${pageKeyPrefix}-${pageIndex}`}>
           {items(page)?.map((itemId, itemIndex, items) => (
@@ -115,9 +117,9 @@ const EntryList = (props: EntryListProps) => {
           <Spinner ref={loadmoreRef} />
         </Box>
       )}
-      <ScrollTopWrapper ref={scrollTopWrapperRef}>
+      <ScrollTopWrapper placement={scrollTopButtonPlacement}>
         <ScrollTopButton
-          ref={scrollTopRef}
+          hide={hideScrollTop}
           onClick={() => {
             const currentScrollPos = document.documentElement.scrollTop || document.body.scrollTop;
             document.documentElement.scrollTo({
@@ -125,24 +127,19 @@ const EntryList = (props: EntryListProps) => {
               behavior: currentScrollPos > 10000 ? 'auto' : 'smooth',
             });
           }}
-          className="hideScrollTop"
         />
       </ScrollTopWrapper>
-    </Root>
+    </div>
   );
 };
 
-const Root = styled.div`
-  position: relative;
-  .hideScrollTop {
-    display: none;
-  }
-`;
-
-const ScrollTopWrapper = styled.div`
+const ScrollTopWrapper = styled.div<{
+  placement?: React.CSSProperties['marginLeft'];
+}>`
   position: fixed;
   bottom: 20px;
   z-index: 9;
+  ${props => props.placement && { marginLeft: props.placement }}
 `;
 
 export default React.memo(EntryList);

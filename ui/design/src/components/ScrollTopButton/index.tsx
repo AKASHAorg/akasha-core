@@ -4,15 +4,17 @@ import styled from 'styled-components';
 
 export type ScrollTopButtonProps = {
   onClick: () => void;
-  className?: string;
+  hide?: boolean;
 };
 
 const ScrollTopButton = React.forwardRef<HTMLDivElement, ScrollTopButtonProps>(
-  ({ onClick, className }, ref) => {
+  ({ onClick, hide }, ref) => {
     return (
-      <Root ref={ref} className={className} onClick={() => onClick()}>
-        <Icon type="arrowUp" clickable={true} accentColor={true} />
-      </Root>
+      !hide && (
+        <Root ref={ref} onClick={() => onClick()}>
+          <Icon type="arrowUp" clickable={true} accentColor={true} />
+        </Root>
+      )
     );
   },
 );
