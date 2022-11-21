@@ -31,7 +31,7 @@ const Root = styled.div`
   &: hover {
     background: ${props => props.theme.colors.scrollTopHoverBackground};
     & * {
-      stroke: ${props => props.theme.colors.background};
+      stroke: #fff;
     }
   }
 `;
