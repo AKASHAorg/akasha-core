@@ -1,11 +1,4 @@
-import {
-  QueryClient,
-  useInfiniteQuery,
-  useMutation,
-  useQueries,
-  useQuery,
-  useQueryClient,
-} from 'react-query';
+import { useInfiniteQuery, useMutation, useQueries, useQuery, useQueryClient } from 'react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { PostResultFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IPublishData, IProfileData } from '@akashaorg/typings/ui';
@@ -54,12 +47,7 @@ export type usePostsParam = {
   enabler: boolean;
 };
 
-const getPosts = async (
-  queryClient: QueryClient,
-  limit: number,
-  offset?: string,
-  filterDeleted = true,
-) => {
+const getPosts = async (limit: number, offset?: string, filterDeleted = true) => {
   const sdk = getSDK();
   const res = await sdk.api.entries.getEntries({
     limit: limit,
@@ -69,7 +57,7 @@ const getPosts = async (
   let posts = res.posts.results;
 
   if (filterDeleted) {
-    posts = posts.filter(post => checkPostActive(post));
+    posts = posts.filter(checkPostActive);
   }
 
   const postsIds = posts.map(post => {
@@ -104,11 +92,9 @@ const getPosts = async (
  * ```
  */
 export function useInfinitePosts(limit: number, offset?: string) {
-  const queryClient = useQueryClient();
-
   return useInfiniteQuery(
     ENTRIES_KEY,
-    async ({ pageParam = offset }) => getPosts(queryClient, limit, pageParam),
+    async ({ pageParam = offset }) => getPosts(limit, pageParam),
     {
       /* Return undefined to indicate there is no next page available. */
       getNextPageParam: lastPage => lastPage?.nextIndex || undefined,
