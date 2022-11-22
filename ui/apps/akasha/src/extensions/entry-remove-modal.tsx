@@ -1,7 +1,12 @@
 import singleSpaReact from 'single-spa-react';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps, AnalyticsCategories, EntityTypes } from '@akashaorg/typings/ui';
+import {
+  RootExtensionProps,
+  AnalyticsCategories,
+  EntityTypes,
+  EntityTypesMap,
+} from '@akashaorg/typings/ui';
 import DS from '@akashaorg/design-system';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
@@ -26,8 +31,9 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
     props.singleSpa.navigateToUrl(location.pathname);
   }, [props.singleSpa]);
 
+  // extensionData.itemType comes as a string from navigateToModal this can lead to bugs
   const handleDeletePost = React.useCallback(() => {
-    if (extensionData && typeof +extensionData.itemType === 'number') {
+    if (!!extensionData && extensionData.itemType !== undefined) {
       if (extensionData.itemType === EntityTypes.REPLY) {
         analyticsActions.trackEvent({
           category: AnalyticsCategories.POST,
@@ -41,7 +47,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
         });
         postDeleteQuery.mutate(extensionData.itemId);
       } else {
-        logger.error('itemType is undefined!');
+        logger.error(`unsupported itemType ${EntityTypesMap[extensionData.itemType]}!`);
       }
     } else {
       logger.error('property itemType is undefined!');
