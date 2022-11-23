@@ -63,6 +63,8 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
           loader.unload(event, parentConfig.name);
         },
         error: err => {
+          // sometimes this error si swallowed..
+          // TODO: force the error from the stream
           props.logger.error(
             `Error unloading extension from app ${parentConfig.name}: ${
               err.message ?? err.toString()
