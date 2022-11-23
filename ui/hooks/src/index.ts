@@ -99,6 +99,7 @@ import {
 } from './use-moderation';
 import {
   useConnectProvider,
+  disconnectProvider,
   useInjectedProvider,
   useRequiredNetworkName,
   switchToRequiredNetwork,
@@ -255,6 +256,7 @@ export {
   // use-injected-provider
   useInjectedProvider,
   useConnectProvider,
+  disconnectProvider,
   useRequiredNetworkName,
   switchToRequiredNetwork,
   // use-invite-token-validation
