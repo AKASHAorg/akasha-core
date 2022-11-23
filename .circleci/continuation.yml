@@ -1,0 +1,72 @@
+version: 2.1
+
+parameters:
+  affected-projects-type-check:
+    type: string
+    default: ''
+  num-affected-projects-type-check:
+    type: integer
+    default: 1
+  affected-projects-test:
+    type: string
+    default: ''
+  num-affected-projects-test:
+    type: integer
+    default: 1
+
+jobs:
+  typecheck:
+    docker:
+      - image: cimg/node:16.13.0
+    parallelism: <<pipeline.parameters.num-affected-projects-type-check>>
+    steps:
+      - when:
+          condition: <<pipeline.parameters.affected-projects-type-check>>
+          steps:
+            - checkout
+            - restore_cache:
+                keys:
+                  - dependency-cache-v1-{{ checksum "yarn.lock" }}
+                  - dependency-cache-v1
+            - run:
+                name: Lint affected projects
+                command: |
+                  AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects-type-check>>" | circleci tests split)
+                  yarn tsc:all --projects=$AFFECTED_PROJECTS
+      - unless:
+          condition: <<pipeline.parameters.affected-projects-type-check>>
+          steps:
+            - run:
+                name: No affected projects to type-check
+                command: echo "No affected projects to type-check"
+
+  test:
+    docker:
+      - image: cimg/node:16.13.0
+    parallelism: <<pipeline.parameters.num-affected-projects-test>>
+    steps:
+      - when:
+          condition: <<pipeline.parameters.affected-projects-test>>
+          steps:
+            - checkout
+            - restore_cache:
+                keys:
+                  - dependency-cache-v1-{{ checksum "yarn.lock" }}
+                  - dependency-cache-v1
+            - run:
+                name: Test affected projects
+                command: |
+                  AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects-test>>" | circleci tests split)
+                  npx nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests
+      - unless:
+          condition: <<pipeline.parameters.affected-projects-test>>
+          steps:
+            - run:
+                name: No affected projects to test
+                command: echo "No affected projects to test"
+
+workflows:
+  typecheck-test:
+    jobs:
+      - typecheck
+      - test

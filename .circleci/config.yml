@@ -3,6 +3,12 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
+
+setup: true
+
+orbs:
+  continuation: circleci/continuation@0.3.1
+
 jobs:
   build:
     docker:
@@ -42,24 +48,31 @@ jobs:
           paths:
             - node_modules
           key: dependency-cache-v1-{{ checksum "yarn.lock" }}
-#      - run: # tslint check
-#          name: linter-check
-#          command: npm run linter:check
-      - run: # compile ts files
-          name: tsc:all
-          command: yarn run tsc:all
-#      - run: # build sdk
-#          name: build-sdk
-#          command: yarn run build:sdk
-#      - run: # pack ui-apps
-#          name: pack-ui-apps
-#          command: yarn run pack:ui
-#      - run: # extract-translations
-#          name: extract-translations
-#          command: yarn run extract:translations
-      - run: # unit-tests
-          name: unit-tests
-          command: yarn run test:all
-#      - run: # build-storybook
-#          name: build-storybook
-#          command: make build.staging.storybook
+      #      - run: # tslint check
+      #          name: linter-check
+      #          command: npm run linter:check
+      #      - run: # build sdk
+      #          name: build-sdk
+      #          command: yarn run build:sdk
+      #      - run: # pack ui-apps
+      #          name: pack-ui-apps
+      #          command: yarn run pack:ui
+      #      - run: # extract-translations
+      #          name: extract-translations
+      #          command: yarn run extract:translations
+      - run:
+          name: Prepare continuation parameters
+          command: |
+            # TYPE CHECK
+            export AFFECTED_PROJECTS_TYPE_CHECK=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next | sed 's/, /\n/g' | sed -r 's/@akashaorg\/ui-widget.*//g' | sed '/^$/d')
+            export NUM_AFFECTED_PROJECTS_TYPE_CHECK=$(echo $AFFECTED_PROJECTS_TYPE_CHECK | wc -l | xargs)
+            # Test
+            export AFFECTED_PROJECTS_TEST=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next | sed 's/, /\n/g' | sed -r 's/@akashaorg\/ui-widget.*//g' | sed '/^$/d')
+            export NUM_AFFECTED_PROJECTS_TEST=$(echo $AFFECTED_PROJECTS_TEST | wc -l | xargs)
+            echo '{ "affected-projects-type-check": "'$AFFECTED_PROJECTS_TYPE_CHECK'", "num-affected-projects-type-check": '$NUM_AFFECTED_PROJECTS_TYPE_CHECK', "affected-projects-test": "'$AFFECTED_PROJECTS_TEST'", "num-affected-projects-test": '$NUM_AFFECTED_PROJECTS_TEST' }' >> .circleci/continuation-params.json
+
+      #      - run: # build-storybook
+      #          name: build-storybook
+      #          command: make build.staging.storybook
+      - continuation/continue:
+          configuration_path: ./.circleci/continuation.yml
