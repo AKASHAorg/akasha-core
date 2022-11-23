@@ -76,7 +76,7 @@ describe('< FeedPage /> component', () => {
     expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
   });
 
-  it('should render repost feed page', async () => {
+  it('should render repost feed page ...', async () => {
     history.pushState(null, '', `${location.origin}?repost=oxfceee`);
 
     const spiedExtension = jest.spyOn(extension, 'Extension');
