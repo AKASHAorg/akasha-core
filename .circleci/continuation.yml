@@ -63,7 +63,7 @@ jobs:
           steps:
             - run:
                 name: No affected projects to test
-                command: echo "No affected projects to test" <<pipeline.parameters.affected-projects-test>>
+                command: echo "No affected projects to test"
 
 workflows:
   typecheck-test:
