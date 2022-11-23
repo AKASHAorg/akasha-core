@@ -63,12 +63,14 @@ jobs:
       - run:
           name: Prepare continuation parameters
           command: |
-            # TYPE CHECK
+            # Type Check
             export AFFECTED_PROJECTS_TYPE_CHECK=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next | sed 's/, /\n/g' | sed -r 's/@akashaorg\/ui-widget.*//g' | sed '/^$/d')
             export NUM_AFFECTED_PROJECTS_TYPE_CHECK=$(echo $AFFECTED_PROJECTS_TYPE_CHECK | wc -l | xargs)
+
             # Test
             export AFFECTED_PROJECTS_TEST=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next | sed 's/, /\n/g' | sed -r 's/@akashaorg\/ui-widget.*//g' | sed '/^$/d')
             export NUM_AFFECTED_PROJECTS_TEST=$(echo $AFFECTED_PROJECTS_TEST | wc -l | xargs)
+
             echo '{ "affected-projects-type-check": "'$AFFECTED_PROJECTS_TYPE_CHECK'", "num-affected-projects-type-check": '$NUM_AFFECTED_PROJECTS_TYPE_CHECK', "affected-projects-test": "'$AFFECTED_PROJECTS_TEST'", "num-affected-projects-test": '$NUM_AFFECTED_PROJECTS_TEST' }' >> .circleci/continuation-params.json
 
       #      - run: # build-storybook

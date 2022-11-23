@@ -29,7 +29,7 @@ jobs:
                   - dependency-cache-v1-{{ checksum "yarn.lock" }}
                   - dependency-cache-v1
             - run:
-                name: Lint affected projects
+                name: Type check affected projects
                 command: |
                   AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects-type-check>>" | circleci tests split)
                   yarn tsc:all --projects=$AFFECTED_PROJECTS
@@ -37,7 +37,7 @@ jobs:
           condition: <<pipeline.parameters.affected-projects-type-check>>
           steps:
             - run:
-                name: No affected projects to type-check
+                name: No affected projects to type check
                 command: echo "No affected projects to type-check"
 
   test:
