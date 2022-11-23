@@ -32,6 +32,13 @@ const getRequiredNetwork = async () => {
 };
 
 /**
+ * An utility function to disconnect from currently connected network
+ */
+export const disconnectProvider = async () => {
+  const sdk = getSDK();
+  return sdk.services.common.web3.disconnect();
+};
+/**
  * An utility function to switch to required network - Metamask
  */
 export const switchToRequiredNetwork = async () => {

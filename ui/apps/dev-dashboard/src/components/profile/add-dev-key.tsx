@@ -12,7 +12,7 @@ import {
 
 import CardTitle from './card-title';
 
-import menuRoute, { DEV_KEYS } from '../../../routes';
+import menuRoute, { DEV_KEYS } from '../../routes';
 import DevMessageForm from './dev-message-form';
 
 const { Box, HorizontalDivider, MainAreaCardBox } = DS;
@@ -24,12 +24,15 @@ interface IAddDevKeyCardProps {
 const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props => {
   const { className, plugins } = props;
 
+  const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
+
+  const { t } = useTranslation('app-dev-dashboard');
+
   const [messageName, setMessageName] = React.useState<string>('');
   const [message, setmessage] = React.useState<string>('');
 
   const loginQuery = useGetLogin();
   const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
-  const { t } = useTranslation('app-profile');
 
   const validateMutation = useValidateMessage();
   const addKeyMutation = useAddDevKeyFromMessage();
@@ -47,8 +50,8 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
 
   React.useEffect(() => {
     if (addKeyMutation.isSuccess) {
-      return plugins['@akashaorg/app-routing']?.routing.navigateTo({
-        appName: '@akashaorg/app-profile',
+      return navigateTo?.({
+        appName: '@akashaorg/app-dev-dashboard',
         getNavigationUrl: () => menuRoute[DEV_KEYS],
       });
     }
@@ -56,8 +59,8 @@ const AddDevKeyCard: React.FC<RootComponentProps & IAddDevKeyCardProps> = props 
   }, [addKeyMutation.isSuccess]);
 
   const handleClickCardTitleIcon = () => {
-    plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
+    navigateTo?.({
+      appName: '@akashaorg/app-dev-dashboard',
       getNavigationUrl: () => menuRoute[DEV_KEYS],
     });
   };

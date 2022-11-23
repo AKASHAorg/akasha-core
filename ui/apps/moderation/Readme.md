@@ -23,7 +23,7 @@ The core components include:
 > The [Dashboard](src/components/dashboard/index.tsx) is a scrollable list of pending or moderated (kept/delisted) entries and allows moderators to moderate or review decisions.
 The actively displayed list is controlled by the [Content Tab](src/components/dashboard/content-tab/index.tsx) component
 
-> Each entry in the list is rendered by [Content Card](src/components/dashboard/content-card/index.tsx) component. In each Content Card, an [Entry Data Card](src/components/dashboard/content-card/entry-data-card.tsx) component renders an `EntryCard` or `ProfileCard` depending on the specified `itemType` (post, reply, account).
+> Each entry in the list is rendered by [Content Card](src/components/dashboard/content-card/index.tsx) component. In each Content Card, an [Entry Data Card](src/components/dashboard/content-card/entry-data-card.tsx) component renders an `EntryCard` or `ProfileCard` depending on the specified `itemType` (entry, comment, profile).
 
 > Each card also has [Explanations Box](src/components/dashboard/content-card/explanations-box.tsx) which when toggled, loads all flags for an entry
 

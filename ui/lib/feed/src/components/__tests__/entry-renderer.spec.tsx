@@ -30,7 +30,7 @@ describe('<EntryCardRenderer /> component', () => {
         isFetching: false,
       }}
       checkIsFollowing={jest.fn()}
-      itemType={EntityTypes.ENTRY}
+      itemType={EntityTypes.POST}
       followedProfiles={[]}
       onFollow={jest.fn()}
       onUnfollow={jest.fn()}

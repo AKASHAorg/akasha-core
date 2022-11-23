@@ -99,6 +99,7 @@ import {
 } from './use-moderation';
 import {
   useConnectProvider,
+  disconnectProvider,
   useInjectedProvider,
   useRequiredNetworkName,
   switchToRequiredNetwork,
@@ -133,6 +134,7 @@ import {
   useSignMessage,
   useVerifySignature,
 } from './use-dev-profile';
+import { useDismissedCard } from './use-dismissed-card';
 
 export {
   constants,
@@ -254,6 +256,7 @@ export {
   // use-injected-provider
   useInjectedProvider,
   useConnectProvider,
+  disconnectProvider,
   useRequiredNetworkName,
   switchToRequiredNetwork,
   // use-invite-token-validation
@@ -283,4 +286,6 @@ export {
   useDeleteDevKey,
   useSignMessage,
   useVerifySignature,
+  // use-dismissed-card
+  useDismissedCard,
 };

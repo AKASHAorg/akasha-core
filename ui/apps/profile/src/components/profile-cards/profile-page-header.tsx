@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 import DS from '@akashaorg/design-system';
 import {
   IProfileData,
@@ -7,6 +8,7 @@ import {
   EventTypes,
   ProfileProviderProperties,
   ProfileProviders,
+  EntityTypes,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
@@ -43,6 +45,8 @@ export interface IProfileHeaderProps {
 
 const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
   const { profileData, loginState, profileId } = props;
+
+  const { pubKey } = useParams<{ pubKey: string }>();
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -112,14 +116,14 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
     props.navigateToModal({ name: 'login' });
   };
 
-  const handleEntryFlag = (entryId: string, itemType: string, user: string) => () => {
+  const handleEntryFlag = (itemId: string, itemType: EntityTypes, user: string) => () => {
     if (!loginState.ethAddress) {
       return props.navigateToModal({
         name: 'login',
-        redirectTo: { modal: { name: 'report-modal', entryId, itemType, user } },
+        redirectTo: { modal: { name: 'report-modal', itemId, itemType, user } },
       });
     }
-    props.navigateToModal({ name: 'report-modal', entryId, itemType, user });
+    props.navigateToModal({ name: 'report-modal', itemId, itemType, user });
   };
 
   const showUpdateProfileModal = () => {
@@ -145,7 +149,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
   const handleNavigateToProfilePosts = () => {
     navigateTo({
       appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: routes => `${routes.ProfileFeed}/${profileData.pubKey}`,
+      getNavigationUrl: routes => `${routes.ProfileFeed}/${pubKey}`,
     });
   };
 
@@ -202,7 +206,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           flagAsLabel={t('Report')}
           onEntryFlag={handleEntryFlag(
             profileData.pubKey ? profileData.pubKey : '',
-            'account',
+            EntityTypes.PROFILE,
             profileData.name,
           )}
           onUpdateClick={showUpdateProfileModal}

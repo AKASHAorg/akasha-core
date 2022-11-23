@@ -7,10 +7,8 @@ import { useOnClickAway } from '../../utils/clickAway';
 import isEqual from 'lodash.isequal';
 import { IPublishData } from '@akashaorg/typings/ui';
 
-type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
-
-export type CommentEditorProps = Optional<IEditorBox, 'setEditorState'> & {
-  isShown?: boolean;
+export type CommentEditorProps = IEditorBox & {
+  openEditor?: boolean;
   borderBottomOnly?: boolean;
   noBorderRound?: boolean;
   background?: BoxProps['background'];
@@ -33,7 +31,7 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
     mentions,
     tags,
     uploadRequest,
-    isShown = false,
+    openEditor = false,
     showCancelButton,
     cancelButtonLabel,
     onCancelClick,
@@ -45,14 +43,16 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
     uploadedImages,
     borderBottomOnly,
     noBorderRound,
+    onClear,
   } = props;
 
-  const [showEditor, setShowEditor] = React.useState(isShown);
+  const [showEditor, setShowEditor] = React.useState(openEditor);
   const wrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   const editorRef = React.useRef(null);
 
   const handleClickAway = () => {
     if (
+      !openEditor &&
       showEditor &&
       isEqual(editorState, editorDefaultValue) &&
       !editorRef.current?.getPopoversState() &&
@@ -115,14 +115,13 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
             uploadedImages={uploadedImages}
             withMeter={true}
             editorState={editorState}
-            setEditorState={value => {
-              if (setEditorState) setEditorState(value);
-            }}
+            setEditorState={setEditorState}
             cancelButtonLabel={cancelButtonLabel}
             onCancelClick={onCancelClick}
             showCancelButton={showCancelButton}
             embedEntryData={embedEntryData}
             showDraft={showDraft}
+            onClear={onClear}
           />
         </Box>
       )}

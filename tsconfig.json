@@ -46,6 +46,7 @@
     { "path": "./ui/apps/search" },
     { "path": "./ui/apps/messaging" },
     { "path": "./ui/apps/articles" },
+    { "path": "./ui/apps/dev-dashboard" },
     { "path": "./sdk" },
     {
       "path": "./typings"
