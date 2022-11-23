@@ -2,7 +2,12 @@ import * as React from 'react';
 
 import DS from '@akashaorg/design-system';
 import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
-import { switchToRequiredNetwork, useAnalytics, useNetworkState } from '@akashaorg/ui-awf-hooks';
+import {
+  switchToRequiredNetwork,
+  useAnalytics,
+  useNetworkState,
+  disconnectProvider,
+} from '@akashaorg/ui-awf-hooks';
 import { IInjectedProviderDetails } from '@akashaorg/ui-awf-hooks/lib/utils/getProviderDetails';
 import { AnalyticsCategories } from '@akashaorg/typings/ui';
 
@@ -93,7 +98,7 @@ const StepThree: React.FC<IStepThreeProps> = props => {
   };
 
   const handleChangeProvider = () => {
-    onProviderSelect(EthProviders.None);
+    disconnectProvider();
   };
 
   const handleNetworkCheck = () => {
