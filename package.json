@@ -38,8 +38,7 @@
     "test:all": "yarn test:design-system && yarn test:hooks",
     "dev:server": "nx run-many --target=dev:server --projects=@akashaorg/hub-api --output-style=stream",
     "push:integrations": "node build/integrations_bucket_store.js",
-    "sdk:graphql:generate": "nx run-many --target=graphql:generate --projects=@akashaorg/awf-sdk --output-style=stream",
-    "all": " " 
+    "sdk:graphql:generate": "nx run-many --target=graphql:generate --projects=@akashaorg/awf-sdk --output-style=stream"
   },
   "devDependencies": {
     "@babel/core": "7.19.0",
