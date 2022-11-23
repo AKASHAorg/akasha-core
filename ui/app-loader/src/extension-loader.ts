@@ -11,18 +11,25 @@ export const extensionLoader: ExtensionLoaderFn = loadingFn => {
         return;
       }
       const rootNodeId = `${props.extensionData.name}_${parentName}`;
+      // TODO: can this fail?
       const rootNode = document.createElement('div');
       if (
         !domElement.children.length ||
         !Array.from(domElement.children).find(child => child.id === rootNodeId)
       ) {
         rootNode.id = rootNodeId;
-        domElement.appendChild(rootNode);
-        const parcel = singleSpa.mountRootParcel(loadingFn, {
-          ...props,
-          domElement: rootNode,
-        });
-        parcels[props.extensionData.name] = parcel;
+        try {
+          domElement.appendChild(rootNode);
+          const parcel = singleSpa.mountRootParcel(loadingFn, {
+            ...props,
+            domElement: rootNode,
+          });
+          parcels[props.extensionData.name] = parcel;
+        } catch (err) {
+          props.logger.error(
+            `Failed to mount extension of app: ${props.extensionData.name} Error: ${err}`,
+          );
+        }
       }
     },
     async unload(event: UIEventData, parentName: string) {

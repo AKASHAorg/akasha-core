@@ -22,6 +22,18 @@ describe('Feed Page', () => {
         .should('be.gt', 0);
     });
 
+    it('should mount card actions right extension point', () => {
+      cy.get('[id*="entry-card-actions-right"]', { timeout: TIMEOUT })
+        .its('length')
+        .should('be.gt', 0);
+    });
+
+    it('should mount bookmark button into card actions right extension point', () => {
+      cy.get('[id*="entry-card-actions-right"]', { timeout: TIMEOUT })
+        .children()
+        .should('have.length.gt', 0);
+    });
+
     it('should render user avatars in posts', () => {
       cy.get('[data-testid="avatar-image"]', { timeout: TIMEOUT })
         .first()
