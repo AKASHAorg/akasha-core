@@ -71,7 +71,7 @@ export class MemoryStorageProxy implements IProxyStorage {
   }
 }
 
-const proxyStorageFrom = (isAvailable: boolean) =>
-  isAvailable ? new LocalStorageProxy() : new MemoryStorageProxy();
+const proxyStorageFrom = (isLocalStorageAvailable: boolean) =>
+  isLocalStorageAvailable ? new LocalStorageProxy() : new MemoryStorageProxy();
 
 export const storage = proxyStorageFrom(localStorageAvailable());
