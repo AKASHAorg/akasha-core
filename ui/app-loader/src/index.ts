@@ -92,8 +92,8 @@ const startLoader = (worldConfig: ILoaderConfig) => {
 
     handleIntegrationUninstall(state$, logger),
 
-    handleEnableIntegration(state$, logger),
-    handleDisableIntegration(worldConfig, state$, logger),
+    handleEnableIntegration(state$),
+    handleDisableIntegration(worldConfig, state$),
 
     handleAppLoadingScreens(worldConfig, state$, logger),
   ).subscribe({
