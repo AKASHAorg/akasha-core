@@ -1,5 +1,3 @@
-import { EntityTypes } from './ui-events';
-
 export * from './root-component';
 export * from './app-loader';
 export * from './analytics';
