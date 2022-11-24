@@ -188,6 +188,8 @@ const Layout: React.FC<RootComponentProps> = props => {
             <MainAreaContainer sidebarVisible={isFocusedMode ? false : showSidebar}>
               <Box direction="row">
                 <PluginContainer>
+                  {/* This is used to mark scroll top stop position  */}
+                  <div id="scrollTopStop"></div>
                   {!isPlatformHealty && (
                     <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
                       <WarningIcon type="error" themeColor="secondary" />
@@ -201,7 +203,6 @@ const Layout: React.FC<RootComponentProps> = props => {
                       </Box>
                     </WarningCard>
                   )}
-
                   {!dismissed.includes(dismissedCardId) && (
                     <WarningCard
                       margin={{ bottom: 'small' }}
@@ -234,7 +235,6 @@ const Layout: React.FC<RootComponentProps> = props => {
                   )}
 
                   <Extension name="back-navigation" uiEvents={props.uiEvents} />
-
                   <FocusedPluginSlot
                     name={props.layoutConfig.focusedPluginSlotId}
                     onMount={handleExtensionMount}

@@ -31,6 +31,7 @@ const EntryFeed = (props: FeedWidgetProps) => {
       hasNextPage={props.hasNextPage}
       pageKeyPrefix={props.itemType === EntityTypes.POST ? 'entry-page' : 'comment-page'}
       viewAllEntry={props.viewAllEntry}
+      languageDirection={props.i18n.dir()}
       itemCard={
         <EntryRenderer
           modalSlotId={props.modalSlotId}
