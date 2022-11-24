@@ -8,6 +8,7 @@ setup: true
 
 orbs:
   continuation: circleci/continuation@0.3.1
+  nx: nrwl/nx@1.6.0
 
 jobs:
   build:
@@ -24,6 +25,7 @@ jobs:
 
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
+      - nx/set-shas
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@8.1.2'
