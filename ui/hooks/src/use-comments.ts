@@ -7,6 +7,7 @@ import { logError } from './utils/error-handler';
 import { checkStatus } from './use-moderation';
 import { ENTRY_KEY } from './use-posts';
 import { Comment, Post } from '@akashaorg/typings/sdk/graphql-types';
+import { checkEntryActive } from './utils/checkEntryActive';
 
 interface InfiniteComments {
   limit: number;
@@ -50,7 +51,7 @@ const getComments = async ({ limit, postID, offset }: InfiniteComments) => {
   return {
     ...res.getComments,
     results: res.getComments.results
-      .filter(comment => !comment.replyTo)
+      .filter(comment => !comment.replyTo && checkEntryActive(comment))
       .map(comment => {
         return comment._id;
       }),
@@ -71,7 +72,7 @@ const getReplies = async ({ limit, postID, commentID, offset }: InfiniteReplies)
 
   return {
     ...res.getReplies,
-    results: res.getReplies.results.map(comment => {
+    results: res.getReplies.results.filter(checkEntryActive).map(comment => {
       return comment._id;
     }),
   };
