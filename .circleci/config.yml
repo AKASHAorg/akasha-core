@@ -8,6 +8,7 @@ setup: true
 
 orbs:
   continuation: circleci/continuation@0.3.1
+  nx: nrwl/nx@1.6.0
 
 jobs:
   build:
@@ -27,6 +28,7 @@ jobs:
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@8.1.2'
+      - nx/set-shas
       - run:
           name: install gcc
           command: 'sudo apt-get update -y && sudo apt-get install -y build-essential libsqlite3-dev'
