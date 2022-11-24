@@ -1,6 +1,7 @@
 import { TIMEOUT } from '../utils/constants';
 import { TopbarTest } from './partials/topbar.spec';
 import { TrendingWidgetTest } from './partials/trendingWidget.spec';
+import { DismissableNotificationCard } from './partials/layout-widget.spec';
 
 describe('Feed Page', () => {
   context('Feed Page', () => {
@@ -9,6 +10,7 @@ describe('Feed Page', () => {
     });
     describe('Should test top bar', () => TopbarTest());
     describe('Should test trending widget', () => TrendingWidgetTest());
+    describe('Should test dismissable notification card', () => DismissableNotificationCard());
     it('should redirect to profile page', () => {
       cy.get('[data-page-idx="0"] [data-testid="avatar-image"]', { timeout: TIMEOUT })
         .first()
