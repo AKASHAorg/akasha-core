@@ -19,9 +19,6 @@ export const DismissableNotificationCard = () => {
   });
   it('should not display the merge notification on next visit', () => {
     cy.visit('/@akashaorg/app-akasha-integration/feed');
-    cy.get('[data-testid="the-merge-notification-close-button"]', { timeout: TIMEOUT })
-      .first()
-      .click();
     cy.get('[data-testid="the-merge-notification"]', { timeout: TIMEOUT }).should('not.exist');
   });
 };
