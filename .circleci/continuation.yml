@@ -27,12 +27,13 @@ jobs:
             - restore_cache:
                 keys:
                   - dependency-cache-v1-{{ checksum "yarn.lock" }}
-                  - dependency-cache-v1
             - run:
                 name: Type check affected projects
                 command: |
                   AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects-type-check>>" | circleci tests split)
-                  yarn tsc:all --projects=$AFFECTED_PROJECTS
+                  #DEBUG
+                  npx nx list
+                  npx nx run-many --target=tsc --all --skip-nx-cache --projects=$AFFECTED_PROJECTS
       - unless:
           condition: <<pipeline.parameters.affected-projects-type-check>>
           steps:
@@ -52,11 +53,12 @@ jobs:
             - restore_cache:
                 keys:
                   - dependency-cache-v1-{{ checksum "yarn.lock" }}
-                  - dependency-cache-v1
             - run:
                 name: Test affected projects
                 command: |
                   AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects-test>>" | circleci tests split)
+                  #DEBUG
+                  npx nx list
                   npx nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests
       - unless:
           condition: <<pipeline.parameters.affected-projects-test>>

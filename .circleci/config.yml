@@ -8,7 +8,6 @@ setup: true
 
 orbs:
   continuation: circleci/continuation@0.3.1
-  nx: nrwl/nx@1.6.1
 
 jobs:
   build:
@@ -25,7 +24,6 @@ jobs:
 
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
-      - nx/set-shas
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@8.1.2'
@@ -36,7 +34,6 @@ jobs:
           # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           keys:
             - dependency-cache-v1-{{ checksum "yarn.lock" }}
-            - dependency-cache-v1
       - run:
           name: python-setup
           command: 'npm config set python /usr/bin/python3'
