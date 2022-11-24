@@ -335,7 +335,7 @@ export const handleExtPointMountOfApps = (
       tap(results => {
         const { config } = results.data;
         const { manifests, plugins, modules } = results;
-        const manifest = manifests.find((m: any) => m.name === config.name);
+        const manifest = manifests.find(m => m.name === config.name);
 
         logger.info(`Registering app ${config.name}`);
 
@@ -495,7 +495,6 @@ export const handleIntegrationUninstall = (state$: Observable<LoaderState>, logg
 export const handleDisableIntegration = (
   worldConfig: ILoaderConfig,
   state$: Observable<LoaderState>,
-  _logger: Logger,
 ) => {
   return state$
     .pipe(getStateSlice('disableIntegrationRequest'))
@@ -527,6 +526,6 @@ export const handleDisableIntegration = (
  * Enable integration (by user)
  * TODO:
  */
-export const handleEnableIntegration = (state$: Observable<LoaderState>, _logger: Logger) => {
+export const handleEnableIntegration = (state$: Observable<LoaderState>) => {
   return state$.pipe(getStateSlice('enableIntegrationRequest')).pipe(filter(Boolean));
 };
