@@ -12,9 +12,9 @@ jest.mock('@akashaorg/awf-sdk', () => {
 /*TODO: This mock should be removed when using proper babel plugin */
 jest.mock('@akashaorg/typings/ui', () => ({
   EntityTypes: {
-    ENTRY: 0,
+    POST: 0,
     PROFILE: 1,
-    COMMENT: 2,
+    REPLY: 2,
     TAG: 3,
   },
   ModerationItemTypes: {
