@@ -28,7 +28,8 @@ jobs:
       - run:
           name: update-npm
           command: 'sudo npm install -g npm@8.1.2'
-      - nx/set-shas
+      - nx/set-shas:
+          main-branch-name: next
       - run:
           name: install gcc
           command: 'sudo apt-get update -y && sudo apt-get install -y build-essential libsqlite3-dev'
