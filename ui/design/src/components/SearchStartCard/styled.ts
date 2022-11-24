@@ -15,7 +15,7 @@ export const StyledText = styled(Text)`
 
 export const StyledBox = styled(Box)<{ shouldMinimize?: boolean }>`
   height: auto;
-  max-height: ${props => (props.shouldMinimize ? '0' : '25rem')};
+  max-height: ${props => (props.shouldMinimize ? '0' : '')};
   opacity: ${props => (props.shouldMinimize ? 0 : 1)};
   z-index: ${props => (props.shouldMinimize ? -1 : 1)};
   transition: 0.25s ease-in-out max-height, 0.25s ease-out opacity;

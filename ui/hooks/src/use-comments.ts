@@ -234,7 +234,9 @@ export function useDeleteComment(commentID: string) {
         if (currentEntry) {
           return {
             ...currentEntry,
-            totalComments: `${+currentEntry.totalComments - 1}`,
+            totalComments: `${
+              +currentEntry.totalComments > 0 ? +currentEntry.totalComments - 1 : 0
+            }`,
           };
         }
       });
