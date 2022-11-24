@@ -32,7 +32,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   }, [props.singleSpa]);
 
   // extensionData.itemType comes as a string from navigateToModal this can lead to bugs
-  const handleDeletePost = React.useCallback(() => {
+  const handleDelete = React.useCallback(() => {
     if (!!extensionData && extensionData.itemType !== undefined) {
       if (extensionData.itemType === EntityTypes.REPLY) {
         analyticsActions.trackEvent({
@@ -67,7 +67,7 @@ const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   return (
     <ConfirmationModal
       onClose={handleModalClose}
-      onConfirm={handleDeletePost}
+      onConfirm={handleDelete}
       onCancel={handleModalClose}
       modalTitle={`${t('Delete')} ${entryLabelText}`}
       closeLabel={t('Close')}
