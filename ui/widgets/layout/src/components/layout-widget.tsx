@@ -51,7 +51,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
   const maintenanceReq = usePlaformHealthCheck();
-  
+
   const dismissedCardId = 'dismiss-the-merge-notification';
   const [dismissed, setDismissed] = useDismissedCard();
 
@@ -208,6 +208,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                       pad="small"
                       direction="row"
                       key={dismissedCardId}
+                      data-testid="the-merge-notification"
                     >
                       <WarningIcon type="error" themeColor="secondary" />
                       <Box width="100%">
@@ -229,6 +230,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                         onClick={onCloseButtonClick}
                         size="xs"
                         accentColor={true}
+                        data-testid="the-merge-notification-close-button"
                       />
                     </WarningCard>
                   )}
