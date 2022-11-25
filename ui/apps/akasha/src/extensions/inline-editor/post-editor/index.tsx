@@ -42,7 +42,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
   const publishPost = useCreatePost();
   const publishComment = useCreateComment();
 
-  const postDraft = new Draft<IEntryData['slateContent']>({
+  const postDraft = new Draft<Partial<IEntryData>>({
     storage: draftStorage,
     appName,
     pubKey,
@@ -55,8 +55,8 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
     action: 'repost',
   });
   const canSaveDraft = action === 'post' || action === 'repost';
-  const draftPost = canSaveDraft ? postDraft.get() : null;
-  const draftRepost = canSaveDraft ? repostDraft.get() : null;
+  const draftPostData = canSaveDraft ? postDraft.get() : null;
+  const draftRepostData = canSaveDraft ? repostDraft.get() : null;
 
   const entryData = React.useMemo(() => {
     if (post.status === 'success') {
@@ -78,11 +78,23 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
   }, [action, entryData, post.data?.quotes]);
 
   const [editorState, setEditorState] = React.useState(
-    action === 'edit' ? entryData?.slateContent : draftPost,
+    action === 'edit' ? entryData?.slateContent : draftPostData.slateContent,
   );
   const [embeddedEntry, setEmbededEntry] = React.useState(
-    action === 'repost' ? embedEntryData : draftRepost,
+    action === 'repost' ? embedEntryData : draftRepostData,
   );
+
+  const handleSaveImagesDraft = images => {
+    const currentDraftPost = postDraft.get();
+    const newDraftPost = { ...currentDraftPost, images };
+    postDraft.save(newDraftPost);
+  };
+
+  const handleSaveLinkPreviewDraft = linkPreview => {
+    const currentDraftPost = postDraft.get();
+    const newDraftPost = { ...currentDraftPost, linkPreview };
+    postDraft.save(newDraftPost);
+  };
 
   React.useEffect(() => {
     if (action === 'repost') {
@@ -160,20 +172,24 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
       }
       onPublish={handlePublish}
       singleSpa={singleSpa}
+      linkPreview={entryData?.linkPreview || draftPostData?.linkPreview}
+      uploadedImages={entryData?.images || draftPostData?.images}
       embedEntryData={embeddedEntry}
       entryData={entryData}
       editorState={editorState}
-      openEditor={action === 'edit' || action === 'reply' || !!embeddedEntry || !!draftPost}
+      openEditor={action === 'edit' || action === 'reply' || !!embeddedEntry || !!draftPostData}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
       showDraft={canSaveDraft}
+      handleSaveImagesDraft={handleSaveImagesDraft}
+      handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
       setEditorState={(value: IEntryData['slateContent']) => {
         if (canSaveDraft) {
           if (isEqual(value, editorDefaultValue)) {
             postDraft.clear();
             return;
           }
-          postDraft.save(value);
+          postDraft.save({ slateContent: value });
         }
         setEditorState(value);
       }}

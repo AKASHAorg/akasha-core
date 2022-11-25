@@ -66,8 +66,6 @@ export function Base(
             props.onPublish(data);
           }}
           setEditorState={props.setEditorState}
-          linkPreview={props.entryData?.linkPreview}
-          uploadedImages={props.entryData?.images}
           onCancelClick={() => props.singleSpa.navigateToUrl(location.pathname)}
           cancelButtonLabel={t('Cancel')}
           avatar={profileDataReq.data?.avatar}
