@@ -33,8 +33,7 @@ jobs:
             - run:
                 name: Type check, build and test affected projects
                 command: |
-                  #TODO: add widgets as part of affected projects once the failing unit tests are fixed
-                  AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects>>" | sed 's/, /\n/g' | sed -r 's/@akashaorg\/ui-widget.*//g' | sed '/^$/d' | circleci tests split)
+                  AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects>>" | sed 's/, /\n/g' | circleci tests split)
                   nx run-many --target=tsc --projects=$AFFECTED_PROJECTS
                   nx run-many --target=build --projects=$AFFECTED_PROJECTS
                   nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests

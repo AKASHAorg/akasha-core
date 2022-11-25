@@ -51,9 +51,8 @@ jobs:
       - run:
           name: Prepare continuation parameters
           command: |
-            #TODO: add widgets as part of affected projects once the failing unit tests are fixed
             export AFFECTED_PROJECTS=$(npx nx print-affected --target=build --select=tasks.target.project --base=next)
-            export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | sed -r 's/@akashaorg\/ui-widget.*//g' | sed '/^$/d' | wc -l | xargs)
+            export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | wc -l | xargs)
 
             echo '{ "affected-projects": "'$AFFECTED_PROJECTS'", "num-affected-projects": '$NUM_AFFECTED_PROJECTS' }' >> .circleci/continuation-params.json
       - continuation/continue:
