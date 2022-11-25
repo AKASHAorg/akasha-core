@@ -129,6 +129,10 @@ const StyledPublishButton = styled(Button)`
   border-color: ${props => props.theme.colors.accent};
 `;
 
+const StyledCancelButton = styled(Button)`
+  border-color: ${props => props.theme.colors.accent};
+`;
+
 export {
   StyledBox,
   StyledDiv,
@@ -144,4 +148,5 @@ export {
   StyledPopoverDiv,
   StyledPopoverValueBox,
   StyledPublishButton,
+  StyledCancelButton,
 };

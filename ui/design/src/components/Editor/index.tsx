@@ -19,7 +19,13 @@ import EmbedBox from '../EmbedBox';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
-import { StyledBox, StyledEditable, StyledIconDiv, StyledPublishButton } from './styled-editor-box';
+import {
+  StyledBox,
+  StyledEditable,
+  StyledIconDiv,
+  StyledPublishButton,
+  StyledCancelButton,
+} from './styled-editor-box';
 import { ImageData, ImageUpload } from './image-upload';
 import Button from '../Button';
 import { MentionPopover } from './mention-popover';
@@ -705,7 +711,12 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           )}
           {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
           {showCancelButton && (
-            <Button secondary={true} label={cancelButtonLabel} onClick={onCancelClick} />
+            <StyledCancelButton
+              secondary={true}
+              slimBorder={true}
+              label={cancelButtonLabel}
+              onClick={onCancelClick}
+            />
           )}
           <StyledPublishButton
             primary={true}
