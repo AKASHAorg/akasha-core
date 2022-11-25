@@ -1,19 +1,19 @@
 import { useState } from 'react';
+import { storage } from './utils/storage';
 
 const INITIAL_CLOSE_STATE = [];
 const LOCAL_STORAGE_KEY = 'dismissed-card-ids';
 
 const writeToLocalStorage = (key: string, value: string[]): void => {
-  if (window?.localStorage) {
-    window.localStorage.setItem(key, JSON.stringify(value));
+  if (storage) {
+    storage.setItem(key, JSON.stringify(value));
   }
 };
 
 export function useDismissedCard(): [string[], (newClosedValue: string) => void] {
   const [closed, setClosed] = useState<string[]>(() => {
-    if (window?.localStorage) {
-      const currentClosedStatus = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY));
-
+    if (storage) {
+      const currentClosedStatus = JSON.parse(storage.getItem(LOCAL_STORAGE_KEY));
       if (currentClosedStatus) {
         return currentClosedStatus;
       }
