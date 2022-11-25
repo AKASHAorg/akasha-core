@@ -27,7 +27,6 @@ import {
   StyledCancelButton,
 } from './styled-editor-box';
 import { ImageData, ImageUpload } from './image-upload';
-import Button from '../Button';
 import { MentionPopover } from './mention-popover';
 import { TagPopover } from './tag-popover';
 import EditorMeter from '../EditorMeter';
