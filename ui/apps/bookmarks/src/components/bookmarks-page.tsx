@@ -7,7 +7,7 @@ import {
   useGetLogin,
   useGetProfile,
   usePosts,
-  checkPostActive,
+  checkEntryActive,
 } from '@akashaorg/ui-awf-hooks';
 import { useTranslation } from 'react-i18next';
 
@@ -38,7 +38,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
   const bookmarkedPostIds = bookmarks.map((bm: Record<string, string>) => bm.itemId);
   const bookmarkedPosts = usePosts({ postIds: bookmarkedPostIds, enabler: true });
   const numberOfBookmarkedInactivePosts = React.useMemo(
-    () => bookmarkedPosts.filter(({ data }) => (data ? !checkPostActive(data) : false)).length,
+    () => bookmarkedPosts.filter(({ data }) => (data ? !checkEntryActive(data) : false)).length,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [bookmarkedPostIds],
   );

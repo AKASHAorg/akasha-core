@@ -3,7 +3,7 @@ import constants from './constants';
 import { logError } from './utils/error-handler';
 import { validateType } from './utils/generic-utils';
 import { createPendingEntry, mapEntry } from './utils/entry-utils';
-import { checkPostActive } from './utils/checkPostActive';
+import { checkEntryActive } from './utils/checkEntryActive';
 import { getMediaUrl, uploadMediaToTextile, getLinkPreview } from './utils/media-utils';
 import useGlobalLogin from './use-global-login';
 import useAnalytics, { COOKIE_CONSENT_NAME, CookieConsentTypes } from './use-analytics';
@@ -99,6 +99,7 @@ import {
 } from './use-moderation';
 import {
   useConnectProvider,
+  disconnectProvider,
   useInjectedProvider,
   useRequiredNetworkName,
   switchToRequiredNetwork,
@@ -152,7 +153,7 @@ export {
   // entry-utils
   createPendingEntry,
   mapEntry,
-  checkPostActive,
+  checkEntryActive,
   // media-utils
   getLinkPreview,
   getMediaUrl,
@@ -255,6 +256,7 @@ export {
   // use-injected-provider
   useInjectedProvider,
   useConnectProvider,
+  disconnectProvider,
   useRequiredNetworkName,
   switchToRequiredNetwork,
   // use-invite-token-validation

@@ -1,4 +1,4 @@
-import { checkPostActive } from '../utils/checkPostActive';
+import { checkEntryActive } from '../utils/checkEntryActive';
 
 const textContext = {
   provider: 'AkashaApp',
@@ -9,7 +9,7 @@ const textContext = {
 describe('checkPostAcitve', () => {
   it('should return true for an active post', async () => {
     expect(
-      checkPostActive({
+      checkEntryActive({
         content: [textContext],
         delisted: false,
       }),
@@ -18,18 +18,18 @@ describe('checkPostAcitve', () => {
 
   it('should return false for inactive post that is either delisted, removed or both', async () => {
     expect(
-      checkPostActive({
+      checkEntryActive({
         content: [textContext],
         delisted: true,
       }),
     ).toBe(false);
     expect(
-      checkPostActive({
+      checkEntryActive({
         content: [{ property: 'removed', provider: 'sample-provider', value: '1' }],
       }),
     ).toBe(false);
     expect(
-      checkPostActive({
+      checkEntryActive({
         content: [{ property: 'removed', provider: 'sample-provider', value: '1' }],
         delisted: true,
       }),

@@ -108,6 +108,11 @@ const { Web3Storage, getFilesFromPath } = require("web3.storage");
       type: TYPE_APP,
       path: path.resolve(__dirname, "../ui/build/apps", "articles")
     };
+    yield {
+      package: require("../ui/apps/dev-dashboard/package.json"),
+      type: TYPE_APP,
+      path: path.resolve(__dirname, "../ui/build/apps", "dev-dashboard")
+    };
     // widgets
     yield {
       package: require("../ui/widgets/layout/package.json"),

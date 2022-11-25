@@ -54,7 +54,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
     pubKey,
     action: 'repost',
   });
-  const canSaveDraft = action === 'post';
+  const canSaveDraft = action === 'post' || action === 'repost';
   const draftPost = canSaveDraft ? postDraft.get() : null;
   const draftRepost = canSaveDraft ? repostDraft.get() : null;
 
@@ -80,9 +80,8 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
   const [editorState, setEditorState] = React.useState(
     action === 'edit' ? entryData?.slateContent : draftPost,
   );
-
-  const [embededEntry, setEmbededEntry] = React.useState(
-    canSaveDraft ? draftRepost : embedEntryData,
+  const [embeddedEntry, setEmbededEntry] = React.useState(
+    action === 'repost' ? embedEntryData : draftRepost,
   );
 
   React.useEffect(() => {
@@ -161,10 +160,10 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
       }
       onPublish={handlePublish}
       singleSpa={singleSpa}
-      embedEntryData={embededEntry}
+      embedEntryData={embeddedEntry}
       entryData={entryData}
       editorState={editorState}
-      openEditor={action !== 'post' || (action === 'post' && (!!draftPost || !!draftRepost))}
+      openEditor={action === 'edit' || action === 'reply' || !!embeddedEntry || !!draftPost}
       showCancelButton={action === 'edit'}
       isReply={action === 'reply'}
       showDraft={canSaveDraft}
@@ -179,9 +178,10 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
         setEditorState(value);
       }}
       onClear={() => {
-        setEditorState(null);
-        setEmbededEntry(null);
+        postDraft.clear();
         repostDraft.clear();
+        setEmbededEntry(null);
+        setEditorState(editorDefaultValue);
       }}
       noBorderRound={action === 'edit'}
       borderBottomOnly={action === 'edit'}

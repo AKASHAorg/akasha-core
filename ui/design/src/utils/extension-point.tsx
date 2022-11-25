@@ -33,6 +33,7 @@ const ExtensionPoint: React.FC<ExtensionPointProps> = props => {
     if (!mountOnRequest || (mountOnRequest && shouldMount)) {
       if (!isMounted.current) {
         onMount.current(`${props.name}`, props.data);
+        console.info(`Mounting extension point ${props.name}`);
         isMounted.current = true;
       }
       const node = document.querySelector(`#${props.name}`);

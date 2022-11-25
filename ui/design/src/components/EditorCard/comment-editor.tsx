@@ -63,6 +63,10 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
     }
   };
 
+  React.useEffect(() => {
+    setShowEditor(openEditor);
+  }, [openEditor]);
+
   const handlePublish = (data: IPublishData) => {
     onPublish(data);
     setShowEditor(false);
