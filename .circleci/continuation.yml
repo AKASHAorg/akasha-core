@@ -15,7 +15,7 @@ executors:
     working_directory: ~/akasha-world-framework
 
 jobs:
-  typecheck-build-test:
+  build-test:
     executor: shared-executor
     parallelism: <<pipeline.parameters.num-affected-projects>>
     steps:
@@ -28,25 +28,24 @@ jobs:
                   - dependency-cache-v1-{{ checksum "yarn.lock" }}
                   - dependency-cache-v1
             - run: #TODO: The command 'npx nx' isn't working in jobs steps. It returns `nx command not found` error hence we are using the following alternative.
-                name: install-nx
+                name: Install nx
                 command: sudo npm install -g nx@14.6.5
             - run:
-                name: Type check, build and test affected projects
+                name: Test affected projects
                 command: |
-                  #TODO: exclude messaging app till the build and tsc is fixed
+                  #TODO: exclude messaging and moderation app till the build and tsc is fixed
                   AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects>>" | sed 's/, /\n/g' | circleci tests split)
                   nx run-many --target=tsc --projects=$AFFECTED_PROJECTS
                   nx run-many --target=build --projects=$AFFECTED_PROJECTS
-                  nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests
-
+                  nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests --runInBand
       - unless:
           condition: <<pipeline.parameters.affected-projects>>
           steps:
             - run:
-                name: No affected projects to build
-                command: echo "No affected projects to build"
+                name: No affected projects to test
+                command: echo "No affected projects to test"
 
 workflows:
-  typecheck-build-test:
+  build-test:
     jobs:
-      - typecheck-build-test
+      - build-test
