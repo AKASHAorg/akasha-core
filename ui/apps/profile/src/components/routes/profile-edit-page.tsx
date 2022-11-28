@@ -19,7 +19,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
-import { MY_PROFILE } from '../../routes';
 
 const { styled, ProfileForm, Box } = DS;
 
@@ -80,6 +79,13 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
     profileUpdateMutation.mutate({ profileData, changedFields });
   };
 
+  const handleCancel = () => {
+    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: routes => routes.myProfile,
+    });
+  };
+
   /**
    * validate username by setting the local state
    * validation hook will do the rest
@@ -137,6 +143,8 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
         nameLabel={t('Name')}
         coverImageLabel={t('Cover Image')}
         descriptionLabel={t('About me')}
+        socialLinksTitle={t('Social Links')}
+        socialLinksButtonLabel={t('Add Social Links')}
         uploadLabel={t('Upload')}
         urlLabel={t('By url')}
         editLabel={t('Edit')}
@@ -148,6 +156,7 @@ const ProfileEditPage: React.FC<ProfileEditProps> = props => {
         descriptionFieldPlaceholder={t('Add a description about you here')}
         ethAddress={profileDataQuery.data?.ethAddress}
         providerData={profileDataQuery.data}
+        onCancel={handleCancel}
         onSave={handleFormSubmit}
         updateStatus={updateStatusQuery?.data?.status || UpdateProfileStatus.UPDATE_IDLE}
         showUsername={!profileDataQuery.data?.userName}
