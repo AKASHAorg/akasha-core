@@ -1,19 +1,28 @@
 import { useState } from 'react';
-import { storage } from './utils/storage';
 
 const INITIAL_CLOSE_STATE = [];
 const LOCAL_STORAGE_KEY = 'dismissed-card-ids';
 
-const writeToLocalStorage = (key: string, value: string[]): void => {
+interface IStorage {
+  setItem(key: string, value: string): void;
+  getItem(key: string): string;
+  removeItem(key: string): void;
+}
+
+const writeToLocalStorage = (storage: IStorage, key: string, value: string[]): void => {
   if (storage) {
-    storage.setItem(key, JSON.stringify(value));
+    window.localStorage.setItem(key, JSON.stringify(value));
   }
 };
 
-export function useDismissedCard(): [string[], (newClosedValue: string) => void] {
+export function useDismissedCard(
+  mockStorage?: IStorage,
+): [string[], (newClosedValue: string) => void] {
+  const storage = mockStorage ?? window.localStorage;
   const [closed, setClosed] = useState<string[]>(() => {
     if (storage) {
       const currentClosedStatus = JSON.parse(storage.getItem(LOCAL_STORAGE_KEY));
+
       if (currentClosedStatus) {
         return currentClosedStatus;
       }
@@ -27,7 +36,7 @@ export function useDismissedCard(): [string[], (newClosedValue: string) => void]
         return prevClosed;
       }
       const newClosedValues = prevClosed.concat(newClosedValue);
-      writeToLocalStorage(LOCAL_STORAGE_KEY, newClosedValues);
+      writeToLocalStorage(storage, LOCAL_STORAGE_KEY, newClosedValues);
       return newClosedValues;
     });
   };
