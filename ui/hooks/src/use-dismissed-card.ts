@@ -11,7 +11,7 @@ interface IStorage {
 
 const writeToLocalStorage = (storage: IStorage, key: string, value: string[]): void => {
   if (storage) {
-    window.localStorage.setItem(key, JSON.stringify(value));
+    storage.setItem(key, JSON.stringify(value));
   }
 };
 
