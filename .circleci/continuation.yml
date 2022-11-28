@@ -15,7 +15,7 @@ executors:
     working_directory: ~/akasha-world-framework
 
 jobs:
-  build-test:
+  build:
     executor: shared-executor
     parallelism: <<pipeline.parameters.num-affected-projects>>
     steps:
@@ -46,6 +46,6 @@ jobs:
                 command: echo "No affected projects to test"
 
 workflows:
-  build-test:
+  build:
     jobs:
-      - build-test
+      - build
