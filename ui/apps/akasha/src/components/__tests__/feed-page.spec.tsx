@@ -68,6 +68,31 @@ describe('< FeedPage /> component', () => {
     expect(screen.getByText(/Welcome, fellow Ethereans!/i)).toBeInTheDocument();
   });
 
+  it('should dismiss the notification when close button is clicked', async () => {
+    await act(async () => {
+      renderWithAllProviders(
+        <BaseComponent loginState={{ isReady: false, pubKey: null, ethAddress: null }} />,
+        {},
+      );
+    });
+    const closeIcon = screen.queryByTestId('close-icon-alpha-notification');
+    expect(closeIcon).toBeDefined();
+    if (closeIcon) {
+      await userEvent.click(closeIcon);
+    }
+    expect(screen.queryByText(/Welcome, fellow Ethereans!/i)).not.toBeInTheDocument();
+  });
+
+  it('should not display the notification again after close button is clicked', async () => {
+    await act(async () => {
+      renderWithAllProviders(
+        <BaseComponent loginState={{ isReady: false, pubKey: null, ethAddress: null }} />,
+        {},
+      );
+    });
+    expect(screen.queryByText(/Welcome, fellow Ethereans!/i)).not.toBeInTheDocument();
+  });
+
   it('should render feed page for authenticated users', async () => {
     await act(async () => {
       renderWithAllProviders(<BaseComponent loginState={genLoggedInState(true)} />, {});
@@ -96,6 +121,8 @@ describe('< FeedPage /> component', () => {
     expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Publish/i })).toBeInTheDocument();
     expect(screen.getByTestId('embed-box')).toBeInTheDocument();
+  });
+
   it('should show saved draft post', async () => {
     const loginState = genLoggedInState(true);
     localStorageMock.setItem(

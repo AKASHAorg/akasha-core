@@ -27,6 +27,8 @@ import { PublicKey } from '@textile/threaddb';
 import { createObservableStream } from '../helpers/observable';
 import { executeOnSW } from './helpers';
 import pino from 'pino';
+import Lit from '../auth-v2/lit';
+import CeramicService from '../auth-v2/ceramic';
 
 // in memory atm
 const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
@@ -51,6 +53,8 @@ class AWF_Auth {
   private _log: pino.Logger;
   private _settings: Settings;
   private _gql: Gql;
+  private _lit: Lit;
+  private _ceramic: CeramicService;
   private channel: BroadcastChannel;
   private sessKey;
   private inboxWatcher;
@@ -73,6 +77,8 @@ class AWF_Auth {
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Settings) settings: Settings,
     @inject(TYPES.Gql) gql: Gql,
+    @inject(TYPES.Lit) lit: Lit,
+    @inject(TYPES.Ceramic) ceramic: CeramicService,
   ) {
     this._db = db;
     this._web3 = web3;
@@ -80,6 +86,8 @@ class AWF_Auth {
     this._log = log.create('AWF_Auth');
     this._settings = settings;
     this._gql = gql;
+    this._lit = lit;
+    this._ceramic = ceramic;
     this.enableSync();
   }
 
@@ -254,6 +262,8 @@ class AWF_Auth {
       event: AUTH_EVENTS.READY,
     });
     this._lockSignIn = false;
+    //await this._lit.connect();
+    //await this._ceramic.connect();
     return Object.assign(this.currentUser, authStatus);
   }
 
@@ -475,6 +485,8 @@ class AWF_Auth {
       this.channel.postMessage({ type: this.SIGN_OUT_EVENT });
     }
     await this._web3.disconnect();
+    await this._lit.disconnect();
+    await this._ceramic.disconnect();
     return true;
   }
 
