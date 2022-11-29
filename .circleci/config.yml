@@ -48,8 +48,8 @@ jobs:
       - run:
           name: Prepare continuation parameters
           command: |
-            #TODO: exclude moderation app till compile is fixed
-            export AFFECTED_PROJECTS=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next --exclude='@akashaorg/app-moderation-ewa')
+            #TODO: exclude messaging and moderation app till compile issues are fixed
+            export AFFECTED_PROJECTS=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next --exclude='@akashaorg/app-messaging', '@akashaorg/app-moderation-ewa')
             export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | wc -l | xargs)
 
             echo '{ "affected-projects": "'$AFFECTED_PROJECTS'", "num-affected-projects": '$NUM_AFFECTED_PROJECTS' }' >> .circleci/continuation-params.json
