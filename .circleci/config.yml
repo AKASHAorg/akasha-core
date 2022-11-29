@@ -42,24 +42,19 @@ jobs:
           paths:
             - node_modules
           key: dependency-cache-v1-{{ checksum "yarn.lock" }}
-#      - run: # tslint check
-#          name: linter-check
-#          command: npm run linter:check
-      - run: # compile ts files
-          name: tsc:all
-          command: yarn run tsc:all
-#      - run: # build sdk
-#          name: build-sdk
-#          command: yarn run build:sdk
-#      - run: # pack ui-apps
-#          name: pack-ui-apps
-#          command: yarn run pack:ui
-#      - run: # extract-translations
-#          name: extract-translations
-#          command: yarn run extract:translations
-      - run: # unit-tests
-          name: unit-tests
-          command: yarn run test:all
-#      - run: # build-storybook
-#          name: build-storybook
-#          command: make build.staging.storybook
+      - run:
+          name: Prepare continuation parameters
+          command: |
+            #TODO: exclude moderation app till compile is fixed
+            export AFFECTED_PROJECTS=$(npx nx print-affected --target=tsc --select=tasks.target.project --base=next --exclude='@akashaorg/app-moderation-ewa')
+            export NUM_AFFECTED_PROJECTS=$(echo $AFFECTED_PROJECTS | sed 's/, /\n/g' | wc -l | xargs)
+
+            echo '{ "affected-projects": "'$AFFECTED_PROJECTS'", "num-affected-projects": '$NUM_AFFECTED_PROJECTS' }' >> .circleci/continuation-params.json
+      - continuation/continue:
+          configuration_path: ./.circleci/continuation.yml
+          parameters: ./.circleci/continuation-params.json
+
+workflows:
+  setup:
+    jobs:
+      - setup
