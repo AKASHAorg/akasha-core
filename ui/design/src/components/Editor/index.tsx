@@ -705,7 +705,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           )}
           {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
           {showCancelButton && (
-            <Button secondary={true} label={cancelButtonLabel} onClick={onCancelClick} />
+            <Button
+              secondary={true}
+              accentBorder={true}
+              slimBorder={true}
+              label={cancelButtonLabel}
+              onClick={onCancelClick}
+            />
           )}
           <StyledPublishButton
             primary={true}

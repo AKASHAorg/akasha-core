@@ -80,7 +80,13 @@ const LoginCTACard: React.FC<ILoginWidgetCardProps> = props => {
             />
           </Box>
         </Box>
-        <Icon type="close" clickable={true} onClick={onCloseIconClick} size="xs" />
+        <Icon
+          type="close"
+          clickable={true}
+          onClick={onCloseIconClick}
+          size="xs"
+          data-testid="close-icon-alpha-notification"
+        />
       </Box>
     </BasicCardBox>
   );
