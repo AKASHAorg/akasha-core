@@ -28,6 +28,8 @@ const ServiceTypes = {
   IPFS: Symbol.for('awf-IPFS'),
   ICRegistry: Symbol.for('awf-ic-Registry'),
   Misc: Symbol.for('awf-Misc'),
+  Lit: Symbol.for('awf-LIT'),
+  Ceramic: Symbol.for('awf-Ceramic'),
 };
 
 export interface IMessage {

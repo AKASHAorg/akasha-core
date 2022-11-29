@@ -1,6 +1,7 @@
 {
   "name": "@akashaorg/ui-widget-layout",
   "version": "0.1.0",
+  "type": "module",
   "description": "AKASHA specific page-layout widget",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
@@ -21,10 +22,10 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/layout.json",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
+    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs --profile --json ../../stats/layout.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/layout",
-    "watch": "webpack --config webpack.config.js --watch",
+    "watch": "webpack --config webpack.config.cjs --watch",
     "pretest": "tsc -m commonjs",
     "test": "jest",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
