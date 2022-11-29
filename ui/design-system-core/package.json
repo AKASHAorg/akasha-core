@@ -7,6 +7,7 @@
     "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
   ],
+  "type": "module",
   "directories": {
     "lib": "lib"
   },
@@ -28,7 +29,7 @@
     "copy-images": "copyfiles -f ./src/static/img/* ../build/images",
     "copy-css": "copyfiles -f ./src/static/css/* ../build/css",
     "copy-dist-files": "copyfiles -f ./dist/* ../build/design/",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "yarn run copy-css & yarn run copy-images & yarn run copy-dist-files",
     "tsc": "tsc --build tsconfig.json",
     "storybook": "start-storybook -p 6006",
