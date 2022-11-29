@@ -1,0 +1,91 @@
+{
+  "name": "@akashaorg/design-system-core",
+  "version": "0.1.0",
+  "author": "AKASHA <hello@akasha.world> (https://akasha.org/)",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
+  ],
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
+  },
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/AKASHAorg/akasha-framework/issues"
+  },
+  "homepage": "https://github.com/AKASHAorg/akasha-framework/ui/design#readme",
+  "scripts": {
+    "build:css": "postcss src/tailwind/tailwind.src.css -o src/static/css/tailwind.css",
+    "watch:css": "postcss src/tailwind/tailwind.src.css -o src/static/css/tailwind.css -w",
+    "copy-images": "copyfiles -f ./src/static/img/* ../build/images",
+    "copy-css": "copyfiles -f ./src/static/css/* ../build/css",
+    "copy-dist-files": "copyfiles -f ./dist/* ../build/design/",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "postpack": "yarn run copy-css & yarn run copy-images & yarn run copy-dist-files",
+    "tsc": "tsc --build tsconfig.json",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
+    "build": "tsc --build tsconfig.json",
+    "test": "BABEL_ENV=test jest --runInBand",
+    "test:watch": "jest --watch",
+    "prepare": "yarn run tsc",
+    "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "classnames": "2.3.2",
+    "tailwindcss": "3.2.4",
+    "@lottiefiles/react-lottie-player": "3.4.9",
+    "@heroicons/react": "2.0.13"
+  },
+  "devDependencies": {
+    "@nrwl/cli": "13.7.1",
+    "@nrwl/js": "13.7.1",
+    "@nrwl/tao": "13.7.1",
+    "@nrwl/web": "13.7.1",
+    "@nrwl/workspace": "13.7.1",
+    "@storybook/addon-actions": "6.5.13",
+    "@storybook/addon-essentials": "6.5.13",
+    "@storybook/addon-links": "6.5.13",
+    "@storybook/react": "6.5.13",
+    "@types/classnames": "2.3.1",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.9",
+    "@types/react-test-renderer": "18.0.0",
+    "babel-loader": "^8.2.2",
+    "dayjs": "1.11.6",
+    "react-docgen-typescript": "2.2.2",
+    "storybook-addon-designs": "6.3.1",
+    "ts-jest": "29.0.3",
+    "tailwind-config-viewer": "1.7.2"
+  },
+  "peerDependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "typescript": "^4.4.3"
+  }
+}
