@@ -2,6 +2,7 @@
   "name": "@akashaorg/app-settings-ewa",
   "private": true,
   "version": "0.1.0",
+  "type": "module",
   "description": "The Settings app allows you to customize your settings for Ethereum World.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
@@ -29,9 +30,9 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "copyfiles -f ./dist/* ../../build/apps/settings-app",
-    "watch": "webpack --config webpack.config.js --watch",
+    "watch": "webpack --config webpack.config.cjs --watch",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "bugs": {

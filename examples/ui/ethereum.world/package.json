@@ -2,6 +2,7 @@
   "name": "@akashaorg/ethereum.world",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "devDependencies": {
     "@akashaorg/awf-sdk": "*",
     "@akashaorg/ui-app-loader": "*",
@@ -10,11 +11,11 @@
     "@types/react-dom": "17.0.9"
   },
   "scripts": {
-    "start": "webpack serve --config ./webpack.config.js --port 8131",
-    "start:expose": "webpack serve --config ./webpack.config.js --port 8131 --host 0.0.0.0",
-    "build": "webpack --config ./webpack.config.js",
+    "start": "webpack serve --config ./webpack.config.cjs --port 8131",
+    "start:expose": "webpack serve --config ./webpack.config.cjs --port 8131 --host 0.0.0.0",
+    "build": "webpack --config ./webpack.config.cjs",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
-    "build:staging": "webpack --config ./webpack.config.js",
+    "build:staging": "webpack --config ./webpack.config.cjs",
     "postbuild:staging": "copyfiles -u 1 \"./dist/**/*\" ./public"
   },
   "browserslist": [

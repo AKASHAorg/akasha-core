@@ -1,6 +1,7 @@
 {
   "name": "@akashaorg/app-translation",
   "version": "0.0.1",
+  "type": "module",
   "description": "Lib to serve config for translations",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
@@ -23,10 +24,9 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "copyfiles -f ./dist/* ../../build/apps/translation",
-    "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
-    "watch": "webpack --config webpack.config.js --watch",
+    "watch": "webpack --config webpack.config.cjs --watch",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {

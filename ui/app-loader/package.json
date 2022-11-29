@@ -2,6 +2,7 @@
   "name": "@akashaorg/ui-app-loader",
   "version": "0.1.0",
   "description": "App loader for AKASHA web",
+  "type": "module",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
@@ -21,10 +22,10 @@
     "build": "tsc --build && yarn run pack",
     "test": "BABEL_ENV=test jest",
     "tsc": "tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "copyfiles -f ./dist/* ../build/app-loader",
     "prepare": "yarn run tsc",
-    "watch": "webpack --config webpack.config.js --watch",
+    "watch": "webpack --config webpack.config.cjs --watch",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {

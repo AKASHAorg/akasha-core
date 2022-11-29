@@ -1,6 +1,7 @@
 {
   "name": "@akashaorg/ui-widget-trending",
   "version": "0.1.0",
+  "type": "module",
   "description": "Trending widget",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
@@ -21,8 +22,8 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/trending-widget.json",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
+    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs --profile --json ../../stats/trending-widget.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/trending",
     "pretest": "tsc -m commonjs",
     "test": "jest",

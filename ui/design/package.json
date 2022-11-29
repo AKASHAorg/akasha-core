@@ -1,6 +1,7 @@
 {
   "name": "@akashaorg/design-system",
   "version": "0.1.0",
+  "type": "module",
   "author": "AKASHA <hello@akasha.world> (https://akasha.org/)",
   "contributors": [
     "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
@@ -31,7 +32,7 @@
     "test:watch": "jest --watch",
     "tsc": "tsc --build tsconfig.json",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "copyfiles -f ./src/static/img/* ../build/images && copyfiles -f ./dist/* ../build/design/",
     "pack:watch": "nodemon",
     "storybook": "start-storybook -p 6006",
