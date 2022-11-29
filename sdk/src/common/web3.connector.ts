@@ -171,6 +171,9 @@ class Web3Connector {
     }
     return null;
   }
+  async getCurrentEthAddress() {
+    return this.#_getCurrentAddress();
+  }
 
   checkCurrentNetwork() {
     return createObservableStream(this.#_checkCurrentNetwork());

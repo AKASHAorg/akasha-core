@@ -7,8 +7,11 @@
     "types": ["reflect-metadata", "node"],
     "typeRoots": ["./node_modules/@types"],
     "lib": [
-      "dom"
-    ]
+      "dom",
+      "es2020"
+    ],
+    "module": "ES2020",
+    "target": "es2020"
   },
   "include": [
     "./src",
