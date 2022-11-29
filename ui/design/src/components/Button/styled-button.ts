@@ -4,10 +4,12 @@ import styled, { css } from 'styled-components';
 const StyledButton = styled(Button)<{
   height?: number;
   slimBorder?: boolean;
+  accentBorder?: boolean;
 }>`
   height: ${props => (props.height ? `${props.height}rem` : '2rem')};
   border-width: ${props => (props.slimBorder ? '1px' : 'initial')};
   border-radius: ${props => props.theme.shapes.smallBorderRadius};
+  ${props => props.accentBorder && `border-color: ${props.theme.colors.accent}`};
   color: ${props => props.theme.colors.btnAccentColor};
   white-space: nowrap;
   &:hover {

@@ -8,7 +8,8 @@ import IconButton from '../../IconButton';
 import styled from 'styled-components';
 
 export interface SocialLinksSectionProps {
-  title: string;
+  socialLinksTitle: string;
+  socialLinksButtonLabel: string;
   links?: StateLink[];
   onLinkCreate: () => void;
   onLinkInputChange: (id: number, value: string) => void;
@@ -37,10 +38,10 @@ const SocialLinksSection: React.FC<SocialLinksSectionProps> = props => {
           color="secondaryText"
           style={{ userSelect: 'none' }}
         >
-          {props.title}
+          {props.socialLinksTitle}
         </StyledText>
         <Box align="end" margin={{ bottom: 'medium' }}>
-          <Button label={'Add Social Link'} onClick={props.onLinkCreate} />
+          <Button label={props.socialLinksButtonLabel} onClick={props.onLinkCreate} />
         </Box>
       </Box>
       <Box>
