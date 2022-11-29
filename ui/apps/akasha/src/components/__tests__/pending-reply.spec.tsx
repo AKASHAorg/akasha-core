@@ -10,7 +10,7 @@ import {
   genPendingPost,
   genUser,
 } from '@akashaorg/af-testing';
-import { PendingReply } from '../entry-page/common/pending-reply';
+import { PendingReply } from '../item-page/common/pending-reply';
 
 describe('< PendingReply /> component', () => {
   const BaseComponent = (

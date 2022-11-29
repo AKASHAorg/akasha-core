@@ -4,6 +4,7 @@ import * as extension from '@akashaorg/design-system/lib/utils/extension';
 import userEvent from '@testing-library/user-event';
 
 import { InlineEditor } from '../../extensions/inline-editor/inline-editor';
+import { Draft } from '../../extensions/inline-editor/utils/draft';
 import {
   screen,
   renderWithAllProviders,
@@ -25,8 +26,8 @@ const MockedInlineEditor = ({ action }) => (
     {...genAppProps()}
     extensionData={{
       name: 'name',
-      entryId: '01gf',
-      entryType: EntityTypes.ENTRY,
+      itemId: '01gf',
+      itemType: EntityTypes.POST,
       action,
     }}
   />
@@ -77,6 +78,7 @@ describe('< FeedPage /> component', () => {
   });
 
   it('should render repost feed page', async () => {
+    //TODO: change URLSearchParams usage on feed page(and elsewhere) with a search param hook and mock the hook here
     history.pushState(null, '', `${location.origin}?repost=oxfceee`);
 
     const spiedExtension = jest.spyOn(extension, 'Extension');
@@ -96,10 +98,15 @@ describe('< FeedPage /> component', () => {
     expect(screen.getByText(/Share your thoughts/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Publish/i })).toBeInTheDocument();
     expect(screen.getByTestId('embed-box')).toBeInTheDocument();
+
+    //TODO: change URLSearchParams usage on feed page(and elsewhere) with a search param hook and mock the hook here
+    history.pushState(null, '', location.origin);
+  });
   it('should show saved draft post', async () => {
     const loginState = genLoggedInState(true);
+
     localStorageMock.setItem(
-      `${appProps?.worldConfig?.homepageApp}-${loginState.pubKey}-draft-item`,
+      Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState.pubKey, 'post'),
       JSON.stringify([
         {
           type: 'paragraph',
@@ -123,7 +130,7 @@ describe('< FeedPage /> component', () => {
   it('should clear draft post', async () => {
     const loginState = genLoggedInState(true);
     localStorageMock.setItem(
-      `${appProps?.worldConfig?.homepageApp}-${loginState.pubKey}-draft-item`,
+      Draft.getDraftKey(appProps?.worldConfig?.homepageApp, loginState.pubKey, 'post'),
       JSON.stringify([
         {
           type: 'paragraph',

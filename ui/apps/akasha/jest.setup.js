@@ -25,9 +25,9 @@ jest.mock('@akashaorg/awf-sdk', () => {
 
 jest.mock('@akashaorg/typings/ui', () => ({
   EntityTypes: {
-    ENTRY: 0,
+    POST: 0,
     PROFILE: 1,
-    COMMENT: 2,
+    REPLY: 2,
     TAG: 3,
   },
   EventTypes: {

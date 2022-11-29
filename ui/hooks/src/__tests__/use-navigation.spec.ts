@@ -7,7 +7,7 @@ const navigateTo = jest.fn();
 jest.mock('@akashaorg/awf-sdk', () => () => mockSDK());
 jest.mock('@akashaorg/typings/ui', () => ({
   EntityTypes: {
-    ENTRY: 0,
+    POST: 0,
   },
 }));
 

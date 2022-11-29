@@ -18,6 +18,7 @@ const mockLocationValue = {
 };
 
 jest.mock('react-router', () => ({
+  useParams: jest.fn(() => ({ pubKey: '' })),
   useLocation: jest.fn().mockImplementation(() => {
     return mockLocationValue;
   }),
