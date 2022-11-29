@@ -35,6 +35,8 @@ export interface ProfileFormProps {
   nameLabel?: string;
   usernameLabel?: string;
   descriptionLabel?: string;
+  socialLinksTitle: string;
+  socialLinksButtonLabel: string;
   cancelLabel?: string;
   saveLabel?: string;
   // popover labels
@@ -117,6 +119,8 @@ const ProfileForm: React.FC<ProfileFormProps> = props => {
     nameLabel,
     usernameLabel,
     descriptionLabel,
+    socialLinksTitle,
+    socialLinksButtonLabel,
     cancelLabel,
     saveLabel,
     uploadLabel,
@@ -684,7 +688,8 @@ const ProfileForm: React.FC<ProfileFormProps> = props => {
                     handleFormFieldChange={handleFormFieldChange}
                   />
                   <SocialLinksSection
-                    title="Social Links"
+                    socialLinksTitle={socialLinksTitle}
+                    socialLinksButtonLabel={socialLinksButtonLabel}
                     links={formValues.socialLinks}
                     onLinkCreate={handleLinkCreate}
                     onLinkInputChange={handleLinkInputChange}
