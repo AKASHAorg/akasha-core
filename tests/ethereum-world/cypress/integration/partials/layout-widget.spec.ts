@@ -6,3 +6,19 @@ export const LayoutWidgetFocused = () => {
     cy.get(FOCUSED_PLUGIN_SLOT_ID, { timeout: TIMEOUT }).should('exist');
   });
 };
+
+export const DismissableNotificationCard = () => {
+  it('should display the merge notification', () => {
+    cy.get('[data-testid="the-merge-notification"]', { timeout: TIMEOUT }).should('exist');
+  });
+  it('should close the merge notification when button clicked', () => {
+    cy.get('[data-testid="the-merge-notification-close-button"]', { timeout: TIMEOUT })
+      .first()
+      .click();
+    cy.get('[data-testid="the-merge-notification"]', { timeout: TIMEOUT }).should('not.exist');
+  });
+  it('should not display the merge notification on next visit', () => {
+    cy.visit('/@akashaorg/app-akasha-integration/feed');
+    cy.get('[data-testid="the-merge-notification"]', { timeout: TIMEOUT }).should('not.exist');
+  });
+};
