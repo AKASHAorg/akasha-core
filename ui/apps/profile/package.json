@@ -1,6 +1,7 @@
 {
   "name": "@akashaorg/app-profile",
   "version": "0.1.0",
+  "type": "module",
   "description": "The Profile app displays the information in your profile and makes it easy to customize it any time.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
@@ -23,10 +24,10 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "copyfiles -f ./dist/* ../../build/apps/profile",
-    "start": "webpack-dev-server --config ./webpack.config.js --port 8332",
-    "watch": "webpack --config ./webpack.config.js --watch",
+    "start": "webpack-dev-server --config ./webpack.config.cjs --port 8332",
+    "watch": "webpack --config ./webpack.config.cjs --watch",
     "pretest": "tsc -m commonjs",
     "test": "BABEL_ENV=test jest",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"

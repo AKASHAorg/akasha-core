@@ -1,6 +1,7 @@
 {
   "name": "@akashaorg/app-notifications",
   "version": "0.1.0",
+  "type": "module",
   "description": "This application helps you stay in the loop on what is going on in Ethereum World and see how other participants are interacting with you and/or your content.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
@@ -22,10 +23,9 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "copyfiles -f ./dist/* ../../build/apps/notifications",
-    "start": "webpack-dev-server --config ./webpack.config.dev.js --port 8333",
-    "watch": "webpack --config webpack.config.js --watch",
+    "watch": "webpack --config webpack.config.cjs --watch",
     "pretest": "tsc -m commonjs",
     "test": "jest",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
