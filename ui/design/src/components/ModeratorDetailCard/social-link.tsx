@@ -33,7 +33,7 @@ const SocialLink: React.FC<ISocialLinksProps> = props => {
       background={backgroundColor}
       onClick={onClick}
     >
-      <Icon type={iconType} size={iconSize} />
+      <Icon type={iconType} size={iconSize} plain={iconType === 'discordAlt'} />
     </Box>
   );
 };
