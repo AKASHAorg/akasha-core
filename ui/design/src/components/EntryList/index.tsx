@@ -57,7 +57,8 @@ const EntryList = (props: EntryListProps) => {
     const observer = elementIntersectionObserver({
       element: startScrollRef?.current,
       onIntersect: () => {
-        setHideScrollTop(false);
+        //scrollY check prevents the scroll top button from showing on page load
+        if (window.scrollY > 0) setHideScrollTop(false);
       },
     });
 
