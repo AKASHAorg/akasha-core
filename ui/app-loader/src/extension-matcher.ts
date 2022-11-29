@@ -92,9 +92,7 @@ export const extensionMatcher: ExtensionMatcherFn<ReplaySubject<unknown>> =
         ),
       )
       .subscribe({
-        next: ({ loader, event }) => {
-          loader.unload(event, parentConfig.name);
-        },
+        next: ({ loader, event }) => loader.unload(event, parentConfig.name),
         error: err => {
           props.logger.error(
             `Error unloading extension from app ${parentConfig.name}: ${
