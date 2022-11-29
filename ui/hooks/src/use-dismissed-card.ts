@@ -16,9 +16,9 @@ const writeToLocalStorage = (storage: IStorage, key: string, value: string[]): v
 };
 
 export function useDismissedCard(
-  draftStorage?: IStorage,
+  statusStorage?: IStorage,
 ): [string[], (newClosedValue: string) => void] {
-  const storage = draftStorage || window.localStorage;
+  const storage = statusStorage || window.localStorage;
   const [closed, setClosed] = useState<string[]>(() => {
     if (storage) {
       const currentClosedStatus = JSON.parse(storage.getItem(LOCAL_STORAGE_KEY));
