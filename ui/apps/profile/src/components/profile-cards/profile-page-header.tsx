@@ -46,6 +46,7 @@ export interface IProfileHeaderProps {
 const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
   const { profileData, loginState, profileId } = props;
 
+  // undefined for logged user's profile page, use loginState?.pubKey instead
   const { pubKey } = useParams<{ pubKey: string }>();
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -149,7 +150,7 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
   const handleNavigateToProfilePosts = () => {
     navigateTo({
       appName: '@akashaorg/app-akasha-integration',
-      getNavigationUrl: routes => `${routes.ProfileFeed}/${pubKey}`,
+      getNavigationUrl: routes => `${routes.ProfileFeed}/${pubKey ?? loginState?.pubKey}`,
     });
   };
 
