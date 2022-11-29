@@ -33,7 +33,7 @@ jobs:
             - run:
                 name: Test affected projects
                 command: |
-                  #TODO: exclude messaging and moderation app till the build and tsc is fixed
+                  #TODO: exclude messaging, moderation, af-testing, hup-api, nx-executors, and app loader apps till their tsc and failing tests are is fixed
                   AFFECTED_PROJECTS=$(echo "<<pipeline.parameters.affected-projects>>" | sed 's/, /\n/g' | circleci tests split)
                   nx run-many --target=tsc --projects=$AFFECTED_PROJECTS
                   nx run-many --target=test --projects=$AFFECTED_PROJECTS --passWithNoTests --runInBand
