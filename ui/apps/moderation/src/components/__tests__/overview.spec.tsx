@@ -1,12 +1,6 @@
 import * as React from 'react';
 
-import {
-  renderWithAllProviders,
-  act,
-  genAppProps,
-  cleanup,
-  fireEvent,
-} from '@akashaorg/af-testing';
+import { renderWithAllProviders, act, genAppProps, cleanup } from '@akashaorg/af-testing';
 
 import Overview from '../../pages/overview';
 
@@ -41,15 +35,5 @@ describe('<Overview /> component', () => {
 
     expect(image).toBeDefined();
     expect(image).toHaveAttribute('src', `/images/${assetName}.webp`);
-  });
-
-  it('should click a call to action element', () => {
-    const discourseLink = componentWrapper.getByTestId('discord-link');
-
-    expect(discourseLink).toBeInTheDocument();
-
-    fireEvent.click(discourseLink);
-
-    // make an assertion
   });
 });
