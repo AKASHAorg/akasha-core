@@ -62,7 +62,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
       },
     });
 
-    return () => sub.unsubscribe();
+    return () => sub?.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

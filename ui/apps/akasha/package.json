@@ -2,6 +2,7 @@
   "name": "@akashaorg/app-akasha-integration",
   "private": true,
   "version": "0.1.0",
+  "type": "module",
   "description": "The AKASHA team builds this application so you can engage with the Ethereum World community.",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
@@ -27,9 +28,9 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "copyfiles -f ./dist/* ../../build/apps/akasha",
-    "watch": "webpack --config webpack.config.js --watch",
+    "watch": "webpack --config webpack.config.cjs --watch",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "bugs": {
