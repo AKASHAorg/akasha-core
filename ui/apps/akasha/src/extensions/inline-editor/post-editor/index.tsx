@@ -78,7 +78,7 @@ export function PostEditor({ appName, postId, pubKey, singleSpa, action, draftSt
   }, [action, entryData, post.data?.quotes]);
 
   const [editorState, setEditorState] = React.useState(
-    action === 'edit' ? entryData?.slateContent : draftPostData?.slateContent,
+    action === 'edit' ? entryData?.slateContent : draftPostData,
   );
   const [embeddedEntry, setEmbededEntry] = React.useState(
     action === 'repost' ? embedEntryData : draftRepostData,
