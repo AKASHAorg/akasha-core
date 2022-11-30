@@ -210,10 +210,10 @@ export const processSystemModules = (
             encodeAppName: encodeName,
             decodeAppName: decodeName,
           };
-          config.extends(
-            extensionMatcher(uiEvents, globalChannel, extProps, config),
-            extensionLoader,
-          );
+
+          const extMatcher = extensionMatcher(uiEvents, globalChannel, extProps, config);
+
+          config.extends(extMatcher, extensionLoader);
         }
         return of({ results });
       }),

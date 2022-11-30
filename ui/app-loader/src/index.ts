@@ -36,6 +36,7 @@ const startLoader = (worldConfig: ILoaderConfig) => {
   singleSpa.start({
     urlRerouteOnly: true,
   });
+  singleSpa.setUnmountMaxTime(5000, false);
 
   const sdk = getSDK();
   const logger = sdk.services.log.create('AppLoader');
