@@ -6,36 +6,27 @@ import {
   genPostData,
   renderWithAllProviders,
   act,
+  genAppProps,
+  genLoggedInState,
 } from '@akashaorg/af-testing';
 
 import EntryCardRenderer from '../entry-renderer';
 
 describe('<EntryCardRenderer /> component', () => {
   let renderResult: RenderResult;
-  const mockEth = genEthAddress();
-  const itemData = genPostData();
 
   const BaseComponent = (
     <EntryCardRenderer
-      itemData={itemData}
-      ethAddress={mockEth}
-      onBookmark={jest.fn}
-      onNavigate={jest.fn}
+      {...genAppProps()}
       onRepost={jest.fn}
       sharePostUrl=""
-      pubKey=""
       locale="en"
-      bookmarkState={{
-        bookmarks: [],
-        isFetching: false,
-      }}
-      checkIsFollowing={jest.fn()}
       itemType={EntityTypes.POST}
-      followedProfiles={[]}
-      onFollow={jest.fn()}
-      onUnfollow={jest.fn()}
-      onEntryFlag={jest.fn()}
-      singleSpaNavigate={jest.fn}
+      loginState={genLoggedInState(true)}
+      onEntryNavigate={jest.fn}
+      navigateTo={jest.fn}
+      modalSlotId=""
+      i18n={{}} /*TODO: generate mock data for i18n */
     />
   );
   act(() => {
@@ -45,6 +36,5 @@ describe('<EntryCardRenderer /> component', () => {
   it('should render avatar', async () => {
     const avatarNode = await renderResult.findByTestId('avatar-image');
     expect(avatarNode).toBeDefined();
-    expect(avatarNode?.getAttribute('src')).toEqual(itemData.author.avatar);
   });
 });

@@ -1,6 +1,7 @@
 {
   "name": "@akashaorg/ui-awf-hooks",
   "version": "0.1.0",
+  "type": "module",
   "description": "Reusable hooks for AWF",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "main": "lib/index.js",
@@ -24,7 +25,7 @@
     "prepare": "yarn run tsc",
     "test": "BABEL_ENV=test jest --runInBand",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
     "postpack": "copyfiles -f ./dist/* ../build/hooks"
   },
   "files": [
@@ -39,6 +40,7 @@
   "devDependencies": {
     "@akashaorg/typings": "*",
     "@akashaorg/design-system": "*",
+    "@akashaorg/af-testing": "*",
     "@types/react": "17.0.20"
   },
   "peerDependencies": {

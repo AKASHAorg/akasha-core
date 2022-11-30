@@ -6,9 +6,11 @@ import Icon from '../../Icon';
 import SocialLinkInput, { EnsTxtPresets } from './social-link-input';
 import IconButton from '../../IconButton';
 import styled from 'styled-components';
+import { getIconFromType } from '../../ProfileLinksCard';
 
 export interface SocialLinksSectionProps {
-  title: string;
+  socialLinksTitle: string;
+  socialLinksButtonLabel: string;
   links?: StateLink[];
   onLinkCreate: () => void;
   onLinkInputChange: (id: number, value: string) => void;
@@ -37,10 +39,10 @@ const SocialLinksSection: React.FC<SocialLinksSectionProps> = props => {
           color="secondaryText"
           style={{ userSelect: 'none' }}
         >
-          {props.title}
+          {props.socialLinksTitle}
         </StyledText>
         <Box align="end" margin={{ bottom: 'medium' }}>
-          <Button label={'Add Social Link'} onClick={props.onLinkCreate} />
+          <Button label={props.socialLinksButtonLabel} onClick={props.onLinkCreate} />
         </Box>
       </Box>
       <Box>
@@ -58,7 +60,7 @@ const SocialLinksSection: React.FC<SocialLinksSectionProps> = props => {
                     <Icon
                       key={link.id}
                       style={{ marginRight: '0.75rem', maxWidth: '1.25rem' }}
-                      type={getIconType(type)}
+                      type={getIconFromType(type)}
                       onClick={handleLinkTypeChange(link.id, type)}
                       plain={true}
                     />
@@ -88,22 +90,5 @@ const RemoveButton = styled(IconButton)`
     background-color: transparent;
   }
 `;
-
-const getIconType = (type: string) => {
-  switch (type) {
-    case EnsTxtPresets.GITHUB:
-      return 'githubAlt';
-    case EnsTxtPresets.REDDIT:
-      return 'redditAlt';
-    case EnsTxtPresets.TWITTER:
-      return 'twitterAlt';
-    case EnsTxtPresets.DISCORD:
-      return 'discordAlt';
-    case EnsTxtPresets.TELEGRAM:
-      return 'telegramAlt';
-    default:
-      return 'linkAlt';
-  }
-};
 
 export default SocialLinksSection;

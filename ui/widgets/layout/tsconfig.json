@@ -9,5 +9,5 @@
       "path": "../../design"
     }
   ],
-  "include": ["./src/**/*"]
+  "include": ["./src/**/*", "../analytics/src/components/__tests__"]
 }

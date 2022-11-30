@@ -1,6 +1,7 @@
 {
   "name": "@akashaorg/ui-widget-topbar",
   "version": "0.1.0",
+  "type": "module",
   "description": "AKASHA specific top bar widget",
   "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
   "contributors": [
@@ -21,12 +22,11 @@
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js",
-    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.js --profile --json ../../stats/top-bar.json",
+    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
+    "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs --profile --json ../../stats/top-bar.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/topbar",
     "watch": "yarn run pack -- --watch",
     "pretest": "tsc -m commonjs",
-    "test": "jest",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {

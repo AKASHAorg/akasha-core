@@ -54,6 +54,8 @@ export interface IEditorBox {
   embedEntryData?: IEntryData;
   minHeight?: string;
   withMeter?: boolean;
+  handleSaveImagesDraft?: (images: IEntryData['images']) => void;
+  handleSaveLinkPreviewDraft?: (LinkPreview: IEntryData['linkPreview']) => void;
   linkPreview?: IEntryData['linkPreview'];
   uploadedImages?: IEntryData['images'];
   getLinkPreview?: (url: string) => Promise<IEntryData['linkPreview']>;
@@ -103,6 +105,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     embedEntryData,
     minHeight,
     withMeter,
+    handleSaveImagesDraft,
+    handleSaveLinkPreviewDraft,
     linkPreview,
     uploadedImages = [],
     getLinkPreview,
@@ -147,11 +151,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     setLinkPreviewUploading(true);
     const linkPreview = await getLinkPreview(url);
     setLinkPreviewState(linkPreview);
+    handleSaveLinkPreviewDraft(linkPreview);
     setLinkPreviewUploading(false);
   };
 
   const handleDeletePreview = () => {
     setLinkPreviewState(null);
+    handleSaveLinkPreviewDraft(null);
   };
 
   /**
@@ -536,10 +542,14 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     // clear any existing link preview when inserting an image
     if (linkPreviewState) {
       setLinkPreviewState(null);
+      handleSaveLinkPreviewDraft(null);
     }
     const imgData = { ...data, id: `${Date.now()}-${data.src?.url}` };
     if (images.length < 9) {
-      setImages(prev => [...prev, imgData]);
+      setImages(prev => {
+        handleSaveImagesDraft([...prev, imgData]);
+        return [...prev, imgData];
+      });
     }
     setPublishDisabledInternal(false);
 
@@ -564,6 +574,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       setPublishDisabledInternal(true);
     }
     setImages(newImages);
+    handleSaveImagesDraft(newImages);
     // CustomEditor.deleteImage(editor, element);
   };
 
@@ -705,7 +716,13 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           )}
           {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
           {showCancelButton && (
-            <Button secondary={true} label={cancelButtonLabel} onClick={onCancelClick} />
+            <Button
+              secondary={true}
+              accentBorder={true}
+              slimBorder={true}
+              label={cancelButtonLabel}
+              onClick={onCancelClick}
+            />
           )}
           <StyledPublishButton
             primary={true}

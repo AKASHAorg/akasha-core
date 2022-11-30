@@ -120,7 +120,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
           <Box direction="row" gap="small">
             {moderator.social?.discord && (
               <SocialLink
-                iconType="discord"
+                iconType="discordAlt"
                 iconSize={size === 'small' ? 'sm' : 'md'}
                 onClick={onSocialLinkClick}
               />
