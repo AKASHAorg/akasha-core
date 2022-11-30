@@ -88,7 +88,7 @@ const ReportSuccessModal: React.FC<IReportSuccessModalProps> = props => {
             <Box align="center">
               <Text size="medium">{footerLabel}</Text>
               <Box direction="row" align="center" gap="xxsmall">
-                <Icon size="xs" type="discord" />
+                <Icon size="xs" type="discordAlt" plain={true} />
                 <Anchor
                   href={footerCTAUrl}
                   size="medium"
