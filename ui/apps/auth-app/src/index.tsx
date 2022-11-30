@@ -5,7 +5,7 @@ import { IAppConfig, IntegrationRegistrationOptions, LogoTypeSource } from '@aka
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => {
   return {
     loadingFn: () => import('./components'),
-    mountsIn: opts.layoutConfig?.focusedPluginSlotId,
+    mountsIn: opts.layoutConfig?.pluginSlotId,
     i18nNamespace: ['app-auth-ewa'],
     logo: { type: LogoTypeSource.ICON, value: 'app' },
     // allow other apps to navigate to this app
