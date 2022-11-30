@@ -24,6 +24,8 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
     disablePublishLabel,
     disablePublish,
     onPublish,
+    handleSaveImagesDraft,
+    handleSaveLinkPreviewDraft,
     linkPreview,
     getLinkPreview,
     getMentions,
@@ -109,6 +111,8 @@ const CommentEditor: React.FC<CommentEditorProps> = props => {
             disablePublishLabel={disablePublishLabel}
             disablePublish={disablePublish}
             onPublish={handlePublish}
+            handleSaveImagesDraft={handleSaveImagesDraft}
+            handleSaveLinkPreviewDraft={handleSaveLinkPreviewDraft}
             linkPreview={linkPreview}
             getLinkPreview={getLinkPreview}
             getMentions={getMentions}
