@@ -131,7 +131,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
                     align="center"
                     gap="xsmall"
                   >
-                    <Icon size="md" type={iconType} />
+                    <Icon size="md" plain={idx !== 2} type={iconType} />
                     <Anchor
                       href={url}
                       size="large"

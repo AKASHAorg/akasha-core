@@ -46,7 +46,7 @@ const ProfileLinksCard: React.FC<ProfileLinksProps> = props => {
   );
 };
 
-const getIconFromType = (type: string) => {
+export const getIconFromType = (type: string) => {
   switch (type) {
     case EnsTxtPresets.GITHUB:
       return 'githubAlt';

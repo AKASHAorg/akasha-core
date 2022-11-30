@@ -122,7 +122,7 @@ const FeedbackModal: React.FC<IFeedbackModalProps> = props => {
               <Text color="accentText" margin={{ right: '0.25rem', bottom: '0.2rem' }}>
                 {footerLinkText1Label}
               </Text>
-              <Icon type="discord" clickable={true} plain={true} />
+              <Icon type="discordAlt" clickable={true} plain={true} />
               <Text color="accentText" margin={{ horizontal: '0.25rem', bottom: '0.2rem' }}>
                 {footerLinkText2Label}
               </Text>
