@@ -2,8 +2,13 @@
   "name": "@akashaorg/awf-sdk",
   "version": "0.1.0",
   "main": "src/index.js",
+  "type": "module",
   "dependencies": {
+    "@ceramicnetwork/http-client": "2.10.0",
+    "@didtools/cacao": "1.0.0",
+    "@didtools/pkh-ethereum": "0.0.2",
     "@ensdomains/ens-contracts": "0.0.12",
+    "@lit-protocol/sdk-browser": "1.1.235",
     "@metamask/detect-provider": "1.2.0",
     "@openzeppelin/contracts": "4.7.3",
     "@openzeppelin/contracts-upgradeable": "4.7.3",
@@ -14,6 +19,8 @@
     "assert": "2.0.0",
     "browser-image-resizer": "2.2.1",
     "buffer": "6.0.3",
+    "caip": "1.1.0",
+    "did-session": "1.0.0",
     "eth-ens-namehash": "2.0.8",
     "ethers": "5.7.1",
     "graphql": "16.6.0",
@@ -69,13 +76,14 @@
   "scripts": {
     "tsc": "tsc --build",
     "prepare": "npm run tsc",
-    "build": "webpack --config webpack.config.js",
+    "build": "webpack --config webpack.config.cjs",
     "postbuild": "copyfiles -f ./dist/sw.* ../ui/build/",
-    "sc:compile": "npx hardhat compile",
-    "sc:deploy:goerli": "npx hardhat run --network goerli src/contracts/scripts/update-app-registry.js",
+    "sc:compile": "npx hardhat compile --config hardhat.config.cjs",
+    "sc:deploy:goerli": "npx hardhat run --network goerli --config hardhat.config.cjs src/contracts/scripts/update-app-registry.cjs",
     "sc:test": "npx hardhat test --network development",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
-    "graphql:generate": "graphql-codegen"
+    "graphql:generate": "graphql-codegen",
+    "start:ceramic": "npx @ceramicnetwork/cli daemon"
   },
   "browserslist": [
     "defaults",
