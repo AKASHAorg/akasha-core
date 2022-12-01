@@ -246,15 +246,28 @@ const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         {/* setting height and overflow behaviour to make y-scrollable container */}
         <SidebarWrapper isVisible={!!selected}>
           {!logItemsQuery.isLoading && !logItemPages.length && (
-            <NoItemsFound activeTab={'moderated'} />
+            <NoItemsFound
+              titleLabel={t('No moderated items')}
+              subtitleLabel={t(
+                'There are no moderated items at the moment. Please check back later',
+              )}
+            />
           )}
           {!!logItemPages.length &&
             (activeButton === ButtonValues.STATS ? (
               <Banner count={count} />
             ) : activeButton === ButtonValues.KEPT && count.kept === 0 ? (
-              <NoItemsFound activeTab={'kept'} />
+              <NoItemsFound
+                titleLabel={t('No kept items')}
+                subtitleLabel={t('There are no kept items at the moment. Please check back later')}
+              />
             ) : activeButton === ButtonValues.DELISTED && count.delisted === 0 ? (
-              <NoItemsFound activeTab={'delisted'} />
+              <NoItemsFound
+                titleLabel={t('No delisted items')}
+                subtitleLabel={t(
+                  'There are no delisted items at the moment. Please check back later',
+                )}
+              />
             ) : (
               // map through pages, for each page, filter results according to activeButton, then map through to render the mini card
               logItemPages.map((page, index) => (

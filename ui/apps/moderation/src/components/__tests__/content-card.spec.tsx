@@ -1,12 +1,15 @@
 import * as React from 'react';
+
+import { EntityTypes } from '@akashaorg/typings/ui';
+import { screen, renderWithAllProviders, act, genAppProps, cleanup } from '@akashaorg/af-testing';
+
 import ContentCard from '../content-card';
 
-import { screen, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
-import { EntityTypes } from '@akashaorg/typings/ui';
-
-describe('< ContentCard /> component', () => {
+describe('<ContentCard /> component', () => {
   const Base = (
     <ContentCard
+      incidentLabel=""
+      uniqueId="skhgdfbiruwoytwrht"
       isPending={false}
       locale="en"
       showExplanationsLabel="Show Explanation"
@@ -23,13 +26,23 @@ describe('< ContentCard /> component', () => {
       {...genAppProps()}
     />
   );
-  act(() => {
-    renderWithAllProviders(Base, {});
+
+  let componentWrapper = renderWithAllProviders(<></>, {});
+
+  beforeAll(() => {
+    act(() => {
+      componentWrapper = renderWithAllProviders(Base, {});
+    });
   });
+
+  afterAll(() => {
+    act(() => componentWrapper.unmount());
+    cleanup();
+  });
+
   it('should render content card', async () => {
     expect(screen.getByTestId('avatar-image')).toBeInTheDocument();
-    expect(screen.getByText(/Post Reported for/i)).toBeInTheDocument();
+    expect(screen.getByText(/Reported for/i)).toBeInTheDocument();
     expect(screen.getByText(/Originally reported by/i)).toBeInTheDocument();
-    expect(screen.getByText(/Show Explanation/i)).toBeInTheDocument();
   });
 });
