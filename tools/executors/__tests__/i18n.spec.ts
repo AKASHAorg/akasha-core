@@ -1,8 +1,15 @@
+import path from 'path';
 import { getParserConfig } from '../i18n/impl';
 
 describe('i18nExecutor', () => {
   it('should generate the correct parser config', async () => {
-    const parserConfig = getParserConfig('some-namespace', 'ui/apps/akasha');
+    const translationAppPath = path.resolve('ui', 'lib', 'translation');
+    const translationAppOutputDir = `${translationAppPath}/dist/locales`;
+    const parserConfig = getParserConfig(
+      'some-namespace',
+      'ui/apps/akasha',
+      translationAppOutputDir,
+    );
     expect(parserConfig.useKeysAsDefaultValue).toBeTruthy();
     expect(parserConfig.locales).toContain('en');
     expect(parserConfig.verbose).toBeTruthy();
