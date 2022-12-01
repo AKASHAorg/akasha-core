@@ -27,10 +27,9 @@ jest.mock('@akashaorg/typings/ui', () => ({
     REPLY: 2,
     TAG: 3,
   },
-  ModerationItemTypes: {
-    ACCOUNT: 'account',
+  ModerationEntityTypesMap: {
+    PROFILE: 'account',
     POST: 'post',
-    COMMENT: 'comment',
     REPLY: 'reply',
   },
 }));

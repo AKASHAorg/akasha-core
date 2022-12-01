@@ -65,7 +65,13 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
             gap="small"
           >
             <Box height="10rem" width="10rem" alignSelf="center">
-              <Image fit="contain" src={`${publicImgPath}/${assetName}.webp`} />
+              <Image
+                aria-label={assetName}
+                fit="contain"
+                src={`${publicImgPath}/${assetName}.webp`}
+                alt={assetName}
+                data-testid={`${assetName}-image`}
+              />
             </Box>
 
             {introLabel && (
@@ -139,6 +145,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
                       target="_blank"
                       color="accentText"
                       style={{ textDecoration: 'none', textAlign: 'center' }}
+                      data-testid={`${iconType}-link`}
                     >
                       {label}
                     </Anchor>

@@ -264,7 +264,10 @@ const Dashboard: React.FC<IDashboardProps> = props => {
             <Box pad="xxsmall" ref={loadmorePendingRef} />
           </>
         ) : (
-          <NoItemsFound activeTab={'pending'} />
+          <NoItemsFound
+            titleLabel={t('No pending items')}
+            subtitleLabel={t('There are no pending items at the moment. Please check back later')}
+          />
         ))}
       {/* fetch indicator for load more on scroll */}
       {pendingItemsQuery.isLoading && isPending && (
@@ -386,7 +389,10 @@ const Dashboard: React.FC<IDashboardProps> = props => {
             <Box pad="xxsmall" ref={loadmoreKeptRef} />
           </>
         ) : (
-          <NoItemsFound activeTab={'moderated'} />
+          <NoItemsFound
+            titleLabel={t('No moderated items')}
+            subtitleLabel={t('There are no moderated items at the moment. Please check back later')}
+          />
         ))}
       {/* fetch indicator for load more on scroll */}
       {delistedItemsQuery.isLoading && !isPending && isDelisted && (
