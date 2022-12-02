@@ -158,9 +158,18 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
     },
     accordion: {
       icons: {
-        color: `${styledComponentsTheme.colors.border}`,
+        color: `${styledComponentsTheme.colors.secondaryText}`,
       },
       border: undefined,
+      heading: {
+        level: '6',
+        margin: 'small',
+      },
+      panel: {
+        border: {
+          color: 'transparent',
+        },
+      },
     },
     text: {
       small: {
