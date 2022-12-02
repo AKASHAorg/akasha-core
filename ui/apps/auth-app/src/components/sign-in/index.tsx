@@ -3,6 +3,7 @@ import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
 
 import DS from '@akashaorg/design-system';
+import { StyledBox } from './styles';
 
 import {
   switchToRequiredNetwork,
@@ -23,7 +24,7 @@ import RequiredNetworkStep from '../sign-up/steps/required-network';
 import SuggestSignup from './suggest-signup';
 import { SIGN_UP_USERNAME } from '../../routes';
 
-const { MainAreaCardBox, Box, Heading, HorizontalDivider } = DS;
+const { MainAreaCardBox, Box, Heading, Text, Anchor } = DS;
 
 const SignIn: React.FC<RootComponentProps> = props => {
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
@@ -131,27 +132,59 @@ const SignIn: React.FC<RootComponentProps> = props => {
       {isNotRegistered && <SuggestSignup onNavigate={handleNavigateToSignup} />}
       {!isNotRegistered && (
         <MainAreaCardBox pad="large">
-          <Box margin={{ bottom: 'xlarge' }}>
-            <Box flex={true} direction="row">
-              <Heading
-                style={{ userSelect: 'none', width: '100%' }}
-                level="4"
-                size="small"
-                textAlign="center"
-                fill={true}
-                margin={{ left: 'small' }}
-              >
-                {t('Sign In')}
-              </Heading>
-            </Box>
-            <HorizontalDivider />
+          <StyledBox align="center" width="70%" responsive={true} margin="auto" gap="small">
+            <Heading
+              style={{ userSelect: 'none', width: '100%' }}
+              level="4"
+              size="medium"
+              textAlign="center"
+              fill={true}
+              margin={{ bottom: 'none' }}
+            >
+              {t('✨ Welcome to AKASHA World ✨')}
+            </Heading>
+            <Text size="medium" color="secondaryText">
+              {t('Choose a way to connect')}
+            </Text>
+
+            <ChooseProvider
+              selectedProvider={selectedProvider}
+              providerIsConnected={connectProviderQuery.data}
+              injectedProvider={injectedProvider}
+              onProviderSelect={handleProviderSelect}
+            />
+          </StyledBox>
+          <Box align="center" width="90%" responsive={true} margin="auto">
+            <Text
+              textAlign={'start'}
+              size="medium"
+              color={'secondaryText'}
+              margin={{ top: '1rem' }}
+            >
+              {'By connecting to AKASHA world, you agree to our'}
+              <Anchor
+                size="medium"
+                href={'/legal/terms-of-service'}
+                label={' Terms & Conditions '}
+                target={'_blank'}
+              />
+              {', '}
+              <Anchor
+                size="medium"
+                href={'/legal/privacy-policy'}
+                label={' Privacy Policy, '}
+                target={'_blank'}
+              />
+              {', and '}
+              <Anchor
+                size="medium"
+                href={'/legal/code-of-conduct'}
+                label={' Code of Conduct '}
+                target={'_blank'}
+              />
+              {'.'}
+            </Text>
           </Box>
-          <ChooseProvider
-            selectedProvider={selectedProvider}
-            providerIsConnected={connectProviderQuery.data}
-            injectedProvider={injectedProvider}
-            onProviderSelect={handleProviderSelect}
-          />
           <SignInStatus
             isActive={
               selectedProvider !== EthProviders.None &&
