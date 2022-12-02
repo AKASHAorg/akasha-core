@@ -30,12 +30,7 @@ const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
             margin={{ right: 'xsmall' }}
             style={{ borderRadius: '10%' }}
           >
-            <Icon
-              type={leftIconType}
-              color={largerIcon ? 'initial' : 'white'}
-              size={'xl'}
-              plain={true}
-            />
+            <Icon type={leftIconType} size="xl" plain={true} />
           </Box>
         )}
         <Box direction="column" justify="between" align="start">

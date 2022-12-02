@@ -43,8 +43,9 @@ import comments from './comments';
 import copy from './copy';
 import dapper from './dapper';
 import dashboard from './dashboard';
-import discord from './discord';
+import disconnect from './disconnect';
 import discordAlt from './discord-alt';
+import discord from './discord';
 import discordWtBg from './discordWtBg';
 import discourse from './discourse';
 import document from './document';
@@ -196,8 +197,9 @@ export {
   closedEye,
   dapper,
   dashboard,
-  discord,
+  disconnect,
   discordAlt,
+  discord,
   discordWtBg,
   discourse,
   dropdown,
