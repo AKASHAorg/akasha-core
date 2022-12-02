@@ -3,10 +3,11 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 
-import routes, { SIGN_IN, SIGN_UP, SIGN_UP_USERNAME, WELCOME } from '../routes';
+import routes, { CONNECT, SIGN_IN, SIGN_UP, SIGN_UP_USERNAME, WELCOME } from '../routes';
 import SignUp from './sign-up';
 import SignIn from './sign-in';
 import Welcome from './welcome';
+import Connect from './connect';
 
 const { Box } = DS;
 
@@ -47,6 +48,16 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               </div>
             }
           />
+
+          <Route
+            path={routes[CONNECT]}
+            element={
+              <div>
+                <Connect {...props} />
+              </div>
+            }
+          />
+
           <Route path="/" element={<Navigate to={routes[SIGN_IN]} replace />} />
         </Routes>
       </Router>
