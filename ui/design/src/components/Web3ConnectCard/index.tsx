@@ -35,7 +35,6 @@ const Web3ConnectCard: React.FC<IWeb3ConnectCardProps> = props => {
               color={largerIcon ? 'initial' : 'white'}
               size={'xl'}
               plain={true}
-              backgroundColor={'blue'}
             />
           </Box>
         )}
