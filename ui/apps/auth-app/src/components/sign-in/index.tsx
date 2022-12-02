@@ -164,21 +164,21 @@ const SignIn: React.FC<RootComponentProps> = props => {
               {'By connecting to AKASHA world, you agree to our'}
               <Anchor
                 size="medium"
-                href={'/legal/terms-of-service'}
+                href={'/@akashaorg/app-legal/terms-of-service'}
                 label={' Terms & Conditions '}
                 target={'_blank'}
               />
               {', '}
               <Anchor
                 size="medium"
-                href={'/legal/privacy-policy'}
-                label={' Privacy Policy, '}
+                href={'/@akashaorg/app-legal/privacy-policy'}
+                label={' Privacy Policy'}
                 target={'_blank'}
               />
               {', and '}
               <Anchor
                 size="medium"
-                href={'/legal/code-of-conduct'}
+                href={'/@akashaorg/app-legal/code-of-conduct'}
                 label={' Code of Conduct '}
                 target={'_blank'}
               />
