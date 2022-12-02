@@ -7,6 +7,7 @@ import {
   genAppProps,
   act,
 } from '@akashaorg/af-testing';
+import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
 const mockLocationValue = {
   pathname: '/search/grhfsdfk',
@@ -30,12 +31,15 @@ jest.mock('react-router', () => ({
 }));
 
 describe('<SearchPage />', () => {
+  const appProps = genAppProps();
   const BaseComponent = (
-    <SearchPage {...genAppProps()} loginState={genLoggedInState()} showLoginModal={jest.fn()} />
+    <AnalyticsProvider {...appProps}>
+      <SearchPage {...appProps} loginState={genLoggedInState()} showLoginModal={jest.fn()} />
+    </AnalyticsProvider>
   );
   beforeEach(async () => {
-    await act(() => {
-      renderWithAllProviders(BaseComponent, {});
+    await act(async () => {
+      await renderWithAllProviders(BaseComponent, {});
     });
   });
   it('should render search page', () => {
