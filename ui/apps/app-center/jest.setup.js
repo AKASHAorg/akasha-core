@@ -1,5 +1,4 @@
-import React from 'react';
-const { mockSDK } = require('@akashaorg/af-testing');
+import { mockSDK } from '@akashaorg/af-testing';
 
 require('@testing-library/jest-dom/extend-expect');
 

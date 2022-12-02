@@ -131,6 +131,7 @@
     "ui/widgets/trending",
     "ui/app-loader",
     "ui/apps/akasha",
+    "ui/apps/moderation",
     "ui/apps/profile",
     "ui/apps/auth-app",
     "ui/apps/settings-app",

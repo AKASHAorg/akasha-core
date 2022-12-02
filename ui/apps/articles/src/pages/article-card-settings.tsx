@@ -16,7 +16,7 @@ import { licences } from '../utils/licenses';
 
 const { getCroppedImage } = DS;
 
-const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
+const ArticleCardSettingsPage: React.FC<RootComponentProps> = props => {
   // state values to handle image cropping
   const [coverImageCrop, setCoverImageCrop] = React.useState<CropValue>({
     x: 0,
@@ -164,7 +164,7 @@ const ArticleCardSettingsPage: React.FC<RootComponentProps> = () => {
 
       resetCropperFields();
     } catch (e) {
-      console.error(e);
+      props.logger.error(e);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coverImageCroppedAreaPixels, coverImageRotation]);

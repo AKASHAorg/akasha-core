@@ -449,6 +449,7 @@ const fillIcons: IconType[] = [
   'explore',
   'legal',
   'dashboard',
+  'emailAlt',
 ];
 const IconBase: React.FC<IconProps> = React.forwardRef((props, ref) => {
   const Component = (icons as any)[props.type];

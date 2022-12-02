@@ -1,8 +1,7 @@
 import * as React from 'react';
 import TopbarComponent from '../topbar-component';
 
-import { RenderResult, renderWithAllProviders, act } from '@akashaorg/af-testing';
-import { ReplaySubject } from 'rxjs';
+import { RenderResult, renderWithAllProviders, act, genAppProps } from '@akashaorg/af-testing';
 
 const mockLocationValue = {
   pathname: '/profile',
@@ -21,33 +20,14 @@ jest.mock('react-router', () =>
 
 describe('<TopbarComponent />', () => {
   let renderResult: RenderResult;
-  const BaseComponent = (
-    <TopbarComponent
-      logger={console as any}
-      domElement={document.body}
-      uiEvents={new ReplaySubject()}
-      layoutConfig={{
-        modalSlotId: '',
-        pluginSlotId: '',
-        topbarSlotId: '',
-        rootWidgetSlotId: '',
-        widgetSlotId: '',
-        sidebarSlotId: '',
-      }}
-      singleSpa={{} as any}
-      name=""
-      navigateToModal={jest.fn()}
-      worldConfig={{} as any}
-      parseQueryString={jest.fn as any}
-    />
-  );
-  beforeEach(() => {
-    act(() => {
-      renderResult = renderWithAllProviders(BaseComponent, {});
+  const BaseComponent = <TopbarComponent {...genAppProps()} />;
+  beforeEach(async () => {
+    await act(async () => {
+      renderResult = await renderWithAllProviders(BaseComponent, {});
     });
   });
   it('should render brand name', async () => {
-    const brandNode = await renderResult.findByText('Ethereum World');
+    const brandNode = await renderResult.findByText('AKASHA World');
     expect(brandNode).toBeDefined();
   });
 });
