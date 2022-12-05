@@ -143,7 +143,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                     target="_blank"
                     margin={{ left: '0.5rem', right: '0.5rem' }}
                   />
-                  <Share color="#8D96FF" size="medium" />
+                  <Icon type="expand" size="lg" plain={true} />
                 </Box>
               </Box>
               <HorizontalDivider />

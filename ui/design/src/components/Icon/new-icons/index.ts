@@ -55,6 +55,7 @@ import editSimple from './edit-simple';
 import email from './email';
 import emailAlt from './emailAlt';
 import emoji from './emoji';
+import expand from './expand';
 import explore from './explore';
 import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
@@ -205,6 +206,7 @@ export {
   dropdown,
   payment,
   eye,
+  expand,
   explore,
   error,
   facebook,

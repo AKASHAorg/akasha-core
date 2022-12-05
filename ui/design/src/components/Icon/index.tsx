@@ -62,6 +62,7 @@ export type IconType =
   | 'email'
   | 'emailAlt'
   | 'emoji'
+  | 'expand'
   | 'explore'
   | 'eye'
   | 'ethereum'
@@ -221,6 +222,7 @@ export const iconTypes: IconType[] = [
   'email',
   'emailAlt',
   'emoji',
+  'expand',
   'explore',
   'eye',
   'ethereum',
