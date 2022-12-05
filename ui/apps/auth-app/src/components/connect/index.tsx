@@ -158,17 +158,17 @@ const Connect: React.FC<RootComponentProps> = props => {
           footerCTAArr={[
             {
               href: `${baseAppLegalRoute}/terms-of-service`,
-              label: 'Terms & Conditions',
+              label: t('Terms & Conditions'),
               delimiter: ', ',
             },
             {
               href: `${baseAppLegalRoute}/privacy-policy`,
-              label: 'Privacy Policy',
+              label: t('Privacy Policy'),
               delimiter: ', and ',
             },
             {
               href: `${baseAppLegalRoute}/code-of-conduct`,
-              label: 'Code of Conduct',
+              label: t('Code of Conduct'),
               delimiter: '.',
             },
           ]}
