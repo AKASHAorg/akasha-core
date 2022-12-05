@@ -147,11 +147,9 @@ const Connect: React.FC<RootComponentProps> = props => {
           subtitleLabel={t('Choose a way to connect')}
           infoLabel={t('Web3 Wallets')}
           accordionTitle={t('What is a wallet?')}
-          accordionContent={`${t(
-            'A web3 wallet is simply a digital wallet that can be used to store digital assets',
-          )}. ${t('These digital assets include Non-fungible tokens (NFTs)')}. ${t(
-            "it's also a tool that allows people to interact with Dapps and pltaforms like AKASHA world with out storing any personal data.",
-          )}`}
+          accordionContent={t(
+            "A web3 wallet is simply a digital wallet that can be used to store digital assets. These digital assets include Non-fungible tokens (NFTs). It's also a tool that allows people to interact with Dapps and pltaforms like AKASHA world with out storing any personal data.",
+          )}
           accordionFooter={t('Get your own wallet')}
           accordionFooterCTA={t('Get a Metamask Wallet')}
           accordionFooterCTAUrl="https://metamask.io"
@@ -180,9 +178,7 @@ const Connect: React.FC<RootComponentProps> = props => {
             ...injectedProvider,
             details: {
               ...injectedProvider.details,
-              subtitleLabel: t('{{ injectedProviderSubtitleLabel }}', {
-                injectedProviderSubtitleLabel: injectedProvider.details.subtitleLabel,
-              }),
+              subtitleLabel: t(injectedProvider.details.subtitleLabel),
             },
           }}
           onProviderSelect={handleProviderSelect}
