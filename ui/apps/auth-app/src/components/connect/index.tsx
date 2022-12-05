@@ -151,7 +151,7 @@ const Connect: React.FC<RootComponentProps> = props => {
             "A web3 wallet is simply a digital wallet that can be used to store digital assets. These digital assets include Non-fungible tokens (NFTs). It's also a tool that allows people to interact with Dapps and pltaforms like AKASHA world with out storing any personal data.",
           )}
           accordionFooter={t('Get your own wallet')}
-          accordionFooterCTA={t('Get a Metamask Wallet')}
+          accordionFooterCTA={t('Get a MetaMask Wallet')}
           accordionFooterCTAUrl="https://metamask.io"
           wcSubtitleLabel={t('Scan with WalletConnect')}
           footerLabel={t('By connecting to AKASHA world, you agree to our ')}
