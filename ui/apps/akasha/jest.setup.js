@@ -1,33 +1,16 @@
-import { genLoggedInState, genPostData, genCommentData, mockSDK } from '@akashaorg/af-testing';
+import '../jest.setup';
+
+import { genLoggedInState, genPostData, genCommentData } from '@akashaorg/af-testing';
 import * as postHooks from '@akashaorg/ui-awf-hooks/lib/use-posts';
 import * as commentHooks from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import * as loginHooks from '@akashaorg/ui-awf-hooks/lib/use-login';
 import * as mediaHooks from '@akashaorg/ui-awf-hooks/lib/utils/media-utils';
 
-require('@testing-library/jest-dom/extend-expect');
-
-jest.mock('react-i18next', () => ({
-  ...jest.requireActual('react-i18next'),
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: str => str,
-      i18n: {
-        changeLanguage: () => new Promise(() => {}),
-      },
-    };
-  },
-}));
-
-jest.mock('@akashaorg/awf-sdk', () => {
-  return () => mockSDK({});
-});
-
 jest.mock('@akashaorg/typings/ui', () => ({
   EntityTypes: {
-    ENTRY: 0,
+    POST: 0,
     PROFILE: 1,
-    COMMENT: 2,
+    REPLY: 2,
     TAG: 3,
   },
   EventTypes: {
@@ -51,8 +34,6 @@ jest.mock('@akashaorg/typings/ui', () => ({
     ThemeChange: 'theme-change',
   },
 }));
-
-jest.spyOn(console, 'error').mockImplementation(jest.fn);
 
 jest
   .spyOn(mediaHooks, 'getMediaUrl')

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ReplyPage from '../entry-page/reply-page';
+import ReplyPage from '../item-page/reply-page';
 import * as extension from '@akashaorg/design-system/lib/utils/extension';
 import * as profileHooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 

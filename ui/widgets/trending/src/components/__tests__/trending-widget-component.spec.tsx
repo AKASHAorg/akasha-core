@@ -1,26 +1,18 @@
 import * as React from 'react';
 import TrendingWidgetComponent from '../trending-widget-component';
 
-import {
-  RenderResult,
-  renderWithAllProviders,
-  globalChannelMock,
-  mockSDK,
-  act,
-} from '@akashaorg/af-testing';
+import { RenderResult, renderWithAllProviders, genAppProps, act } from '@akashaorg/af-testing';
+import { AnalyticsProvider } from '@akashaorg/ui-awf-hooks/lib/use-analytics';
 
 describe('<TrendingWidgetComponent /> component', () => {
   let renderResult: RenderResult;
-  const sdkMocks = mockSDK({});
+  const appProps = genAppProps();
   const BaseComponent = (
-    <TrendingWidgetComponent
-      logger={{}}
-      globalChannel={globalChannelMock}
-      sdkModules={sdkMocks}
-      layout={{ app: { modalSlotId: '' } }}
-      singleSpa={{}}
-    />
+    <AnalyticsProvider {...appProps}>
+      <TrendingWidgetComponent {...appProps} />
+    </AnalyticsProvider>
   );
+
   beforeEach(() => {
     act(() => {
       renderResult = renderWithAllProviders(BaseComponent, {});

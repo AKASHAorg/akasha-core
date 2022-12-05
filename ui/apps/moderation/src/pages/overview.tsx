@@ -49,7 +49,7 @@ const IntroPage: React.FC<RootComponentProps> = props => {
           {
             label: t('Moderation Team'),
             url: externalLinks.discord,
-            iconType: 'discord',
+            iconType: 'discordAlt',
           },
           {
             label: t('Send us an email'),

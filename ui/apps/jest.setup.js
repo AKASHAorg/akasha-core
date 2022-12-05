@@ -1,8 +1,6 @@
 import { mockSDK } from '@akashaorg/af-testing';
 
-jest.mock('@akashaorg/awf-sdk', () => {
-  return () => mockSDK({});
-});
+require('@testing-library/jest-dom/extend-expect');
 
 jest.mock('react-i18next', () => ({
   ...jest.requireActual('react-i18next'),
@@ -11,8 +9,13 @@ jest.mock('react-i18next', () => ({
     return {
       t: str => str,
       i18n: {
+        languages: [],
         changeLanguage: () => new Promise(() => {}),
       },
     };
   },
 }));
+
+jest.mock('@akashaorg/awf-sdk', () => {
+  return () => mockSDK({});
+});

@@ -26,7 +26,6 @@
     "pack:stats": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs --profile --json ../../stats/trending-widget.json",
     "postpack": "copyfiles -f ./dist/* ../../build/widgets/trending",
     "pretest": "tsc -m commonjs",
-    "test": "jest",
     "watch": "webpack --config webpack.config.js",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
