@@ -1,12 +1,18 @@
 import React from 'react';
+
 import DS from '@akashaorg/design-system';
+import { EthProviders } from '@akashaorg/typings/sdk';
+
 import BoxedIcon from './boxed-icon';
 import IndicatorDots from './indicator-dots';
+
 import { ConnectWalletStatus } from '.';
 
 export interface IConnectWalletProps {
+  isActive: boolean;
   titleLine1Label: string;
   titleLine2Label: string;
+  selectedProvider: EthProviders;
   status: ConnectWalletStatus;
   statusLabel: string;
   statusDescription: string;
@@ -14,14 +20,19 @@ export interface IConnectWalletProps {
   connectedAddress: string;
   connectedAddressPlaceholder: string;
   footerLabel: string;
+  onSignIn: () => void;
+  onSignInComplete: () => void;
+  onDisconnect: () => void;
 }
 
 const { Box, Icon, Text } = DS;
 
 const ConnectWallet: React.FC<IConnectWalletProps> = props => {
   const {
+    isActive,
     titleLine1Label,
     titleLine2Label,
+    selectedProvider,
     status,
     statusLabel,
     statusDescription,
@@ -29,7 +40,25 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     connectedAddress,
     connectedAddressPlaceholder,
     footerLabel,
+    onSignIn,
+    onSignInComplete,
+    onDisconnect,
   } = props;
+
+  const signInCall = React.useRef(onSignIn);
+  const signInCompleteCall = React.useRef(onSignInComplete);
+
+  React.useEffect(() => {
+    if (isActive) {
+      return signInCall.current();
+    }
+  }, [isActive]);
+
+  React.useEffect(() => {
+    if (status === ConnectWalletStatus.CONNECTED) {
+      signInCompleteCall.current();
+    }
+  }, [status]);
 
   return (
     <Box
@@ -46,7 +75,11 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
       </Box>
 
       <Box direction="row" justify="center" align="center" gap="small">
-        <BoxedIcon iconType="metamask" backgroundColor="#fef5e6" iconSize="xxl" />
+        <BoxedIcon
+          iconType={selectedProvider === EthProviders.Web3Injected ? 'metamask' : 'walletconnect'}
+          backgroundColor={selectedProvider === EthProviders.Web3Injected ? '#fef5e6' : '#5397F7'}
+          iconSize="xxl"
+        />
 
         <IndicatorDots status={status} />
 
@@ -78,7 +111,12 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
 
         <Box direction="row" justify="center" gap="small">
           <Icon type="disconnect" plain={true} />
-          <Text size="large" color="accentText" onClick={() => null}>
+          <Text
+            size="large"
+            color="accentText"
+            onClick={onDisconnect}
+            style={{ cursor: 'pointer' }}
+          >
             {footerLabel}
           </Text>
         </Box>
