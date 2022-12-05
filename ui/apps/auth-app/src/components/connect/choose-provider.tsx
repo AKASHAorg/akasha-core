@@ -52,6 +52,12 @@ const StyledBox: React.FC<BoxExtendedProps> = styled(Box)`
   }
 `;
 
+const StyledAccordionPanel = styled(AccordionPanel)`
+  div:nth-child(2) {
+    padding-right: 0;
+  }
+`;
+
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   const {
     titleLabel,
@@ -94,30 +100,24 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
           <Heading level="5" size="small" textAlign="start" margin={{ bottom: '0.5rem' }}>
             {infoLabel}
           </Heading>
-          <Accordion background={{ dark: 'dark-4', light: 'light-0' }}>
-            <AccordionPanel
-              style={{}}
+          <Accordion background={{ dark: 'dark-4', light: 'light-0' }} margin={{ bottom: '1rem' }}>
+            <StyledAccordionPanel
               label={
                 <Text color="secondaryText" style={{ width: '100%' }}>
                   {accordionTitle}
                 </Text>
               }
             >
-              <Text margin={{ bottom: '1rem' }}>{accordionContent}</Text>
+              <Text margin={{ bottom: '1rem' }} textAlign="justify">
+                {accordionContent}
+              </Text>
               <HorizontalDivider />
-              <Box
-                flex={true}
-                direction="column"
-                pad="small"
-                justify="center"
-                align="center"
-                margin="auto"
-              >
+              <Box flex={true} direction="column" pad="medium" justify="center" align="center">
                 <Heading
                   level="6"
                   size="small"
                   textAlign="center"
-                  margin={{ top: '1rem', bottom: 'none' }}
+                  margin={{ top: 'none', bottom: '1.1rem' }}
                 >
                   {accordionFooter}
                 </Heading>
@@ -126,9 +126,16 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                   direction="row"
                   justify="center"
                   align="center"
-                  margin={{ bottom: '0.5rem' }}
+                  pad={{ bottom: 'none' }}
                 >
-                  <Icon type="metamask" color="initial" size={'md'} plain={true} />
+                  <Box
+                    pad="0.25rem"
+                    background="#fef5e6"
+                    margin={{ right: 'xsmall' }}
+                    style={{ borderRadius: '10%' }}
+                  >
+                    <Icon type="metamask" size={'md'} plain={true} />
+                  </Box>
                   <Anchor
                     size="medium"
                     href={accordionFooterCTAUrl}
@@ -136,10 +143,11 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                     target="_blank"
                     margin={{ left: '0.5rem', right: '0.5rem' }}
                   />
-                  <Share color="plain" size="medium" />
+                  <Share color="#8D96FF" size="medium" />
                 </Box>
               </Box>
-            </AccordionPanel>
+              <HorizontalDivider />
+            </StyledAccordionPanel>
           </Accordion>
           {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
             <Box margin={{ vertical: 'xsmall' }}>
@@ -157,14 +165,14 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
               leftIconType="walletconnect"
               subtitleLabel={wcSubtitleLabel}
               titleLabel="WalletConnect"
-              iconBackground="#52a4fc"
+              iconBackground="#3B98F7"
               handleClick={handleProviderClick(EthProviders.WalletConnect)}
             />
           </Box>
         </Box>
       </StyledBox>
 
-      <Box align="center" width="90%" responsive={true} margin="auto">
+      <StyledBox align="center" width="90%" responsive={true} margin="auto">
         <Text textAlign="start" size="medium" color="secondaryText" margin={{ top: '1rem' }}>
           {footerLabel}
           {footerCTAArr.map((cta, idx) => (
@@ -174,7 +182,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
             </React.Fragment>
           ))}
         </Text>
-      </Box>
+      </StyledBox>
     </>
   );
 };
