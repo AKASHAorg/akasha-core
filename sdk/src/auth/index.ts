@@ -362,7 +362,7 @@ class AWF_Auth implements AWF_IAuth {
     this.hubClient = Client.withUserAuth(userAuth, process.env.AUTH_ENDPOINT);
     this.hubUser = Users.withUserAuth(userAuth);
     this.buckClient = Buckets.withUserAuth(userAuth);
-    this.fil = Filecoin.withUserAuth(userAuth);
+    //this.fil = Filecoin.withUserAuth(userAuth);
     await this.hubUser.getToken(this.#identity);
     await this.hubUser.setupMailbox();
     const mailboxID = await this.hubUser.getMailboxID();
@@ -381,11 +381,11 @@ class AWF_Auth implements AWF_IAuth {
         }
       }
     });
-    await this.fil.getToken(this.#identity);
+    //await this.fil.getToken(this.#identity);
     const timeoutApi = new Promise<never[]>(resolve => {
       setTimeout(resolve, 15000, [null]);
     });
-    const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
+    //const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
     // refresh textile api tokens every 20min
     setInterval(async () => {
       await this.#_refreshTextileToken();
@@ -393,7 +393,7 @@ class AWF_Auth implements AWF_IAuth {
     this.currentUser = {
       pubKey,
       ethAddress: address.data,
-      filAddress: filAddress?.address,
+      //filAddress: filAddress?.address,
     };
   }
 
