@@ -6,14 +6,12 @@ import { EthProviders } from '@akashaorg/typings/sdk';
 import BoxedIcon from './boxed-icon';
 import IndicatorDots from './indicator-dots';
 
-import { ConnectWalletStatus } from '.';
-
 export interface IConnectWalletProps {
   isActive: boolean;
   titleLine1Label: string;
   titleLine2Label: string;
   selectedProvider: EthProviders;
-  status: ConnectWalletStatus;
+  status: number;
   statusLabel: string;
   statusDescription: string;
   yourAddressLabel: string;
@@ -55,10 +53,12 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
   }, [isActive]);
 
   React.useEffect(() => {
-    if (status === ConnectWalletStatus.CONNECTED) {
+    if (status >= 8) {
       signInCompleteCall.current();
     }
   }, [status]);
+
+  console.log({ status });
 
   return (
     <Box

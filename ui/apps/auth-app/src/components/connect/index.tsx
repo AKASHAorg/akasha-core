@@ -18,7 +18,7 @@ import ConnectWallet from './connect-wallet';
 import ChooseProvider from './choose-provider';
 
 import { SIGN_UP_USERNAME } from '../../routes';
-import { getStatusLabel } from '../../utils/connect';
+import { getStatusDescription, getStatusLabel } from '../../utils/connect';
 
 const { MainAreaCardBox } = DS;
 
@@ -27,18 +27,17 @@ export enum ConnectStep {
   CONNECT_WALLET = 'Connect_Wallet',
 }
 
-export enum ConnectWalletStatus {
-  CONNECTING = 'Connecting',
-  CONNECTED = 'Connected',
-  ERROR = 'Error',
-}
+// export enum ConnectWalletStatus {
+//   CONNECTING = 'Connecting',
+//   CONNECTED = 'Connected',
+//   ERROR = 'Error',
+// }
 
 const baseAppLegalRoute = '/@akashaorg/app-legal';
 
 const Connect: React.FC<RootComponentProps> = props => {
   const [step, setStep] = React.useState<ConnectStep>(ConnectStep.CHOOSE_PROVIDER);
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
-  const [status] = React.useState<ConnectWalletStatus>(ConnectWalletStatus.CONNECTING);
   const [signInComplete, setSignInComplete] = React.useState(false);
 
   const [errorText] = React.useState<string>('Failed to Authorize');
@@ -62,7 +61,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   // const requiredNetworkQuery = useRequiredNetworkName();
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
 
-  const { ethAddress, fullSignUp } = useSignUp(selectedProvider, true);
+  const { ethAddress, fullSignUp, signUpState } = useSignUp(selectedProvider, true);
 
   const networkNotSupported = React.useMemo(() => {
     if (
@@ -120,10 +119,7 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   const handleProviderSelect = (provider: EthProviders) => {
     setSelectedProvider(provider);
-    if (connectProviderQuery.data) {
-      setStep(ConnectStep.CONNECT_WALLET);
-    }
-    // fullSignUp.mutate();
+    setStep(ConnectStep.CONNECT_WALLET);
   };
 
   const handleSignInComplete = () => {
@@ -172,8 +168,6 @@ const Connect: React.FC<RootComponentProps> = props => {
               delimiter: '.',
             },
           ]}
-          // selectedProvider={selectedProvider}
-          // providerIsConnected={connectProviderQuery.data}
           injectedProvider={{
             ...injectedProvider,
             details: {
@@ -184,37 +178,29 @@ const Connect: React.FC<RootComponentProps> = props => {
           onProviderSelect={handleProviderSelect}
         />
       )}
-      {step === ConnectStep.CONNECT_WALLET && (
-        <ConnectWallet
-          isActive={
-            selectedProvider !== EthProviders.None &&
-            !networkNotSupported &&
-            connectProviderQuery.data
-          }
-          titleLine1Label={t('{{connect}} to AKASHA World', {
-            connect: status === ConnectWalletStatus.CONNECTED ? 'Connected' : 'Connecting',
-          })}
-          titleLine2Label={t('using your wallet')}
-          selectedProvider={selectedProvider}
-          status={status}
-          statusLabel={t(getStatusLabel(status, errorText))}
-          statusDescription={t('{{descprition}}', {
-            descprition:
-              selectedProvider === EthProviders.Web3Injected
-                ? 'You will be prompted with 2 signatures'
-                : 'Please sign the requests to gain access',
-          })}
-          yourAddressLabel={t('Your Address')}
-          connectedAddress={ethAddress}
-          connectedAddressPlaceholder={t(
-            'the address you select to connect with will be shown here',
-          )}
-          footerLabel="Disconnect or change way to connect"
-          onSignIn={fullSignUp.mutate}
-          onSignInComplete={handleSignInComplete}
-          onDisconnect={handleDisconnect}
-        />
-      )}
+      {(step === ConnectStep.CONNECT_WALLET || signUpState > 1) &&
+        selectedProvider !== EthProviders.None && (
+          <ConnectWallet
+            isActive={!networkNotSupported && connectProviderQuery.data}
+            titleLine1Label={t('{{connect}} to AKASHA World', {
+              connect: signUpState > 5 ? 'Connected' : 'Connecting',
+            })}
+            titleLine2Label={t('using your wallet')}
+            selectedProvider={selectedProvider}
+            status={signUpState}
+            statusLabel={t(getStatusLabel(signUpState, errorText))}
+            statusDescription={t(getStatusDescription(signUpState, selectedProvider))}
+            yourAddressLabel={t('Your Address')}
+            connectedAddress={ethAddress}
+            connectedAddressPlaceholder={t(
+              'the address you select to connect with will be shown here',
+            )}
+            footerLabel="Disconnect or change way to connect"
+            onSignIn={fullSignUp.mutate}
+            onSignInComplete={handleSignInComplete}
+            onDisconnect={handleDisconnect}
+          />
+        )}
     </MainAreaCardBox>
   );
 };

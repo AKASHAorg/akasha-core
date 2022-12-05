@@ -1,12 +1,12 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
-import { ConnectWalletStatus } from '.';
+
 import { getDotColor } from '../../utils/connect';
 
 const { Box, Icon, styled } = DS;
 
 export interface IndicatorDotsProps {
-  status: ConnectWalletStatus;
+  status: number;
 }
 
 const Dot = styled(Box)<{ size?: string; color?: string; opacity?: number }>`
@@ -27,10 +27,8 @@ const IndicatorDots: React.FC<IndicatorDotsProps> = props => {
       <Dot background={getDotColor(status)} opacity={0.5} />
 
       <Dot size="1.25rem" background={getDotColor(status)}>
-        {status === ConnectWalletStatus.CONNECTED && (
-          <Icon type="checkSimple" size="xxs" color="white" />
-        )}
-        {status === ConnectWalletStatus.ERROR && <Icon type="error" size="xxs" color="white" />}
+        {status > 5 && <Icon type="checkSimple" size="xxs" color="white" />}
+        {status === 0 && <Icon type="error" size="xxs" color="white" />}
       </Dot>
 
       <Dot background={getDotColor(status)} opacity={0.5} />
