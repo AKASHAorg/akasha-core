@@ -39,7 +39,7 @@ export enum ConnectStep {
 const baseAppLegalRoute = '/@akashaorg/app-legal';
 
 const Connect: React.FC<RootComponentProps> = props => {
-  const [step, setStep] = React.useState<ConnectStep>(ConnectStep.INVITE_CODE);
+  const [step, setStep] = React.useState<ConnectStep>(ConnectStep.CHOOSE_PROVIDER);
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [signInComplete, setSignInComplete] = React.useState(false);
   const [inviteToken, setInviteToken] = React.useState<string>('');
