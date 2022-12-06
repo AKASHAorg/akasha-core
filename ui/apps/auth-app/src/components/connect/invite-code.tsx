@@ -3,7 +3,7 @@ import DS from '@akashaorg/design-system';
 
 import { ITextInputIconForm } from '@akashaorg/design-system/lib/components/TextInputIconForm';
 
-const { Box, Text, Icon, CTAAnchor, TextInputIconForm, Button, styled } = DS;
+const { Box, Text, Icon, CTAAnchor, TextInputIconForm, Button } = DS;
 
 interface IInviteCodeProps extends ITextInputIconForm {
   paragraphOneLabel: string;
@@ -13,6 +13,7 @@ interface IInviteCodeProps extends ITextInputIconForm {
   paragraphTwo: string;
   writeToUsUrl: string;
   inputPlaceholder: string;
+  disabled?: boolean;
   onContinueClick: () => void;
   onCancelClick: () => void;
 }
@@ -27,17 +28,24 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
     writeToUsUrl,
     inputValue,
     inputPlaceholder,
+    disabled,
     onChange,
     onCancelClick,
     onContinueClick,
   } = props;
+
   return (
     <Box gap="0.5rem" alignContent="center">
-      <Text size="xlarge" margin={{ bottom: 'large', top: '4rem' }} weight="bold">
+      <Text
+        size="xlarge"
+        margin={{ bottom: 'large', top: '4rem' }}
+        weight="bold"
+        textAlign="center"
+      >
         {paragraphOneLabel}
       </Text>
-      <Box flex={true} align="center" width="100%">
-        <Icon type="inviteLetter" plain={true} />
+      <Box flex={true} align="center">
+        <Icon type="inviteLetter" plain={true} size="xxxl" />
       </Box>
 
       <Text
@@ -66,6 +74,7 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
         inputPlaceholder={inputPlaceholder}
         inputValue={inputValue || ''}
         noArrowRight={true}
+        errorIconColor="red"
         elevation="shadow"
         margin={{ left: '0rem', top: 'small' }}
         {...props}
@@ -76,7 +85,19 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
           {props.errorMsg}
         </Text>
       )}
-      <Box flex={true} direction="row" width="100%" align="end" justify="end">
+      {props.success && (
+        <Text size="large" color="green" margin={{ top: 'xxsmall' }}>
+          Looks good 🙌🏽
+        </Text>
+      )}
+      <Box
+        flex={true}
+        direction="row"
+        width="100%"
+        align="end"
+        justify="end"
+        margin={{ top: '1.5rem' }}
+      >
         <Button
           secondary={true}
           slimBorder={true}
@@ -86,10 +107,11 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
         />
         <Button
           primary={true}
+          slimBorder={true}
           label="Continue"
           onClick={onContinueClick}
-          disabled={inputValue.length === 0}
-          slimBorder={true}
+          disabled={disabled}
+          style={{ backgroundColor: disabled ? 'grey' : '' }}
         />
       </Box>
     </Box>

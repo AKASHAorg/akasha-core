@@ -159,7 +159,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   const handleContinueClick = () => {
-    console.log('handled');
+    console.log('go to next step');
   };
   return (
     <MainAreaCardBox pad="large">
@@ -245,9 +245,10 @@ const Connect: React.FC<RootComponentProps> = props => {
           // also toggle hasError if input value exceeds default token length
           hasError={inviteTokenQuery?.isError}
           errorMsg={inviteTokenQuery?.error?.message}
+          disabled={inviteTokenQuery?.isError || inviteToken.length !== DEFAULT_TOKEN_LENGTH}
           onChange={onInputTokenChange}
           onContinueClick={handleContinueClick}
-          onCancelClick={() => console.log('canceled')}
+          onCancelClick={() => setStep(ConnectStep.CHOOSE_PROVIDER)}
         />
       )}
     </MainAreaCardBox>
