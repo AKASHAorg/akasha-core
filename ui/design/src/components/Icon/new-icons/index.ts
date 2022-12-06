@@ -75,6 +75,7 @@ import hotTopics from './hot-topics';
 import image from './image';
 import imtoken from './imtoken';
 import info from './info';
+import inviteLetter from './invite-letter';
 import italic from './italic';
 import key from './key';
 import legal from './legal';
@@ -247,6 +248,7 @@ export {
   image,
   imtoken,
   info,
+  inviteLetter,
   italic,
   key,
   legal,

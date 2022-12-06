@@ -12,10 +12,12 @@ import {
   useInjectedProvider,
   useNetworkState,
   useSignUp,
+  useIsValidToken,
 } from '@akashaorg/ui-awf-hooks';
 
 import ConnectWallet from './connect-wallet';
 import ChooseProvider from './choose-provider';
+import InviteCode from './invite-code';
 
 import { SIGN_UP_USERNAME } from '../../routes';
 import { getStatusDescription, getStatusLabel } from '../../utils/connect';
@@ -25,6 +27,7 @@ const { MainAreaCardBox } = DS;
 export enum ConnectStep {
   CHOOSE_PROVIDER = 'Choose_Provider',
   CONNECT_WALLET = 'Connect_Wallet',
+  INVITE_CODE = 'Invite_Code',
 }
 
 // export enum ConnectWalletStatus {
@@ -36,11 +39,14 @@ export enum ConnectStep {
 const baseAppLegalRoute = '/@akashaorg/app-legal';
 
 const Connect: React.FC<RootComponentProps> = props => {
-  const [step, setStep] = React.useState<ConnectStep>(ConnectStep.CHOOSE_PROVIDER);
+  const [step, setStep] = React.useState<ConnectStep>(ConnectStep.INVITE_CODE);
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [signInComplete, setSignInComplete] = React.useState(false);
+  const [inviteToken, setInviteToken] = React.useState<string>('');
 
   const [errorText] = React.useState<string>('Failed to Authorize');
+
+  const DEFAULT_TOKEN_LENGTH = 24;
 
   const [analyticsActions] = useAnalytics();
   const routingPlugin = React.useRef(props.plugins['@akashaorg/app-routing']?.routing);
@@ -80,6 +86,19 @@ const Connect: React.FC<RootComponentProps> = props => {
   //   }
   //   return false;
   // }, [error]);
+
+  const inviteTokenQuery = useIsValidToken({
+    inviteToken,
+    enabler: inviteToken?.length === DEFAULT_TOKEN_LENGTH,
+  });
+
+  React.useEffect(() => {
+    // retrieve token if already saved
+    const savedToken = localStorage.getItem('@signUpToken');
+    if (savedToken) {
+      setInviteToken(savedToken);
+    }
+  }, [inviteToken]);
 
   React.useEffect(() => {
     if (connectProviderQuery.isError) {
@@ -135,6 +154,13 @@ const Connect: React.FC<RootComponentProps> = props => {
     setStep(ConnectStep.CHOOSE_PROVIDER);
   };
 
+  const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInviteToken(e.target.value);
+  };
+
+  const handleContinueClick = () => {
+    console.log('handled');
+  };
   return (
     <MainAreaCardBox pad="large">
       {step === ConnectStep.CHOOSE_PROVIDER && (
@@ -201,6 +227,29 @@ const Connect: React.FC<RootComponentProps> = props => {
             onDisconnect={handleDisconnect}
           />
         )}
+      {step === ConnectStep.INVITE_CODE && (
+        <InviteCode
+          paragraphOneLabel={t(
+            'Oh-uh! We have detected that  there’s no account associated with the address you’re trying to connect',
+          )}
+          paragraphThreePartOneLabel={t('If you don’t have an invitation code, you can request it')}
+          paragraphThreeAccentLabel={t(' here ')}
+          writeToUsUrl={'mailto:alpha@ethereum.world'}
+          paragraphThreePartTwoLabel={t('and we’ll get back to you shortly!')}
+          paragraphTwo={t('You need an invitation code to sign up!')}
+          inputPlaceholder={t('Your Invitation Code')}
+          inputValue={inviteToken}
+          submitted={!inviteTokenQuery?.isLoading}
+          submitting={inviteTokenQuery?.isLoading}
+          success={inviteTokenQuery?.isSuccess}
+          // also toggle hasError if input value exceeds default token length
+          hasError={inviteTokenQuery?.isError}
+          errorMsg={inviteTokenQuery?.error?.message}
+          onChange={onInputTokenChange}
+          onContinueClick={handleContinueClick}
+          onCancelClick={() => console.log('canceled')}
+        />
+      )}
     </MainAreaCardBox>
   );
 };

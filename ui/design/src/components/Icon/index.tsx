@@ -83,6 +83,7 @@ export type IconType =
   | 'italic'
   | 'key'
   | 'info'
+  | 'inviteLetter'
   | 'legal'
   | 'licensewtfpl'
   | 'licenseAllRights'
@@ -241,6 +242,7 @@ export const iconTypes: IconType[] = [
   'image',
   'imtoken',
   'info',
+  'inviteLetter',
   'italic',
   'key',
   'legal',
