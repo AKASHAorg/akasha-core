@@ -67,7 +67,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   // const requiredNetworkQuery = useRequiredNetworkName();
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
 
-  const { ethAddress, fullSignUp, signUpState } = useSignUp(selectedProvider, true);
+  const { ethAddress, fullSignUp, signUpState, error } = useSignUp(selectedProvider, true);
 
   const networkNotSupported = React.useMemo(() => {
     if (
@@ -105,6 +105,17 @@ const Connect: React.FC<RootComponentProps> = props => {
       setSelectedProvider(EthProviders.None);
     }
   }, [connectProviderQuery.isError]);
+
+  React.useEffect(() => {
+    // if not registered, show invite code page
+    if (
+      error?.message &&
+      typeof error.message === 'string' &&
+      error.message.toLowerCase().trim() === 'profile not found'
+    ) {
+      setStep(ConnectStep.INVITE_CODE);
+    }
+  }, [error]);
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
@@ -159,8 +170,9 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   const handleContinueClick = () => {
-    console.log('go to next step');
+    /** do something */
   };
+
   return (
     <MainAreaCardBox pad="large">
       {step === ConnectStep.CHOOSE_PROVIDER && (
@@ -230,12 +242,12 @@ const Connect: React.FC<RootComponentProps> = props => {
       {step === ConnectStep.INVITE_CODE && (
         <InviteCode
           paragraphOneLabel={t(
-            'Oh-uh! We have detected that  there’s no account associated with the address you’re trying to connect',
+            "Oh-uh! We have detected that  there's no account associated with the address you're trying to connect",
           )}
-          paragraphThreePartOneLabel={t('If you don’t have an invitation code, you can request it')}
+          paragraphThreePartOneLabel={t("If you don't have an invitation code, you can request it")}
           paragraphThreeAccentLabel={t(' here ')}
           writeToUsUrl={'mailto:alpha@ethereum.world'}
-          paragraphThreePartTwoLabel={t('and we’ll get back to you shortly!')}
+          paragraphThreePartTwoLabel={t("and we'll get back to you shortly!")}
           paragraphTwo={t('You need an invitation code to sign up!')}
           inputPlaceholder={t('Your Invitation Code')}
           inputValue={inviteToken}
@@ -245,7 +257,9 @@ const Connect: React.FC<RootComponentProps> = props => {
           // also toggle hasError if input value exceeds default token length
           hasError={inviteTokenQuery?.isError}
           errorMsg={inviteTokenQuery?.error?.message}
-          disabled={inviteTokenQuery?.isError || inviteToken.length !== DEFAULT_TOKEN_LENGTH}
+          successPromptLabel={t('Looks good 🙌🏽')}
+          cancelButtonLabel={t('Cancel')}
+          continueButtonLabel={t('Continue')}
           onChange={onInputTokenChange}
           onContinueClick={handleContinueClick}
           onCancelClick={() => setStep(ConnectStep.CHOOSE_PROVIDER)}

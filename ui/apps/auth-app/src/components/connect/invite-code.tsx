@@ -1,9 +1,12 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-
+// import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+// import { AnalyticsCategories } from '@akashaorg/typings/ui';
 import { ITextInputIconForm } from '@akashaorg/design-system/lib/components/TextInputIconForm';
 
-const { Box, Text, Icon, CTAAnchor, TextInputIconForm, Button } = DS;
+import { StyledButton } from './styles';
+
+const { Box, Text, Icon, CTAAnchor, TextInputIconForm } = DS;
 
 interface IInviteCodeProps extends ITextInputIconForm {
   paragraphOneLabel: string;
@@ -13,9 +16,11 @@ interface IInviteCodeProps extends ITextInputIconForm {
   paragraphTwo: string;
   writeToUsUrl: string;
   inputPlaceholder: string;
-  disabled?: boolean;
-  onContinueClick: () => void;
+  successPromptLabel: string;
+  cancelButtonLabel: string;
+  continueButtonLabel: string;
   onCancelClick: () => void;
+  onContinueClick: () => void;
 }
 
 const InviteCode: React.FC<IInviteCodeProps> = props => {
@@ -28,11 +33,25 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
     writeToUsUrl,
     inputValue,
     inputPlaceholder,
-    disabled,
+    successPromptLabel,
+    cancelButtonLabel,
+    continueButtonLabel,
     onChange,
     onCancelClick,
     onContinueClick,
   } = props;
+
+  // const [analyticsActions] = useAnalytics();
+
+  const handleContinueClick = () => {
+    // analyticsActions.trackEvent({
+    //   category: AnalyticsCategories.SIGN_UP,
+    //   action: 'Invitation Code',
+    // });
+    onContinueClick();
+  };
+
+  const disabled = !props.success;
 
   return (
     <Box gap="0.5rem" alignContent="center">
@@ -66,9 +85,8 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
           color="accentText"
           href={writeToUsUrl}
           label={paragraphThreeAccentLabel}
-          onClick={() => console.log('clicked')}
         />
-        {paragraphThreePartTwoLabel}.
+        {paragraphThreePartTwoLabel}
       </Text>
       <TextInputIconForm
         inputPlaceholder={inputPlaceholder}
@@ -81,13 +99,13 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
         onChange={onChange}
       />
       {props.errorMsg && props.hasError && (
-        <Text color={'status-critical'} margin={{ top: 'xxsmall' }}>
+        <Text color="status-critical" margin={{ top: 'xxsmall' }}>
           {props.errorMsg}
         </Text>
       )}
       {props.success && (
         <Text size="large" color="green" margin={{ top: 'xxsmall' }}>
-          Looks good 🙌🏽
+          {successPromptLabel}
         </Text>
       )}
       <Box
@@ -98,20 +116,17 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
         justify="end"
         margin={{ top: '1.5rem' }}
       >
-        <Button
-          secondary={true}
+        <StyledButton
           slimBorder={true}
-          label="Cancel"
+          label={cancelButtonLabel}
           onClick={onCancelClick}
           margin={{ right: '0.5rem' }}
         />
-        <Button
+        <StyledButton
           primary={true}
-          slimBorder={true}
-          label="Continue"
-          onClick={onContinueClick}
+          label={continueButtonLabel}
+          onClick={handleContinueClick}
           disabled={disabled}
-          style={{ backgroundColor: disabled ? 'grey' : '' }}
         />
       </Box>
     </Box>
