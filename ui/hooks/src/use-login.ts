@@ -183,7 +183,7 @@ export function useSignUp(
   const [ethAddress, setEthAddress] = React.useState<string>('');
   const [error, setError] = React.useState<ErrorTypes>(null);
 
-  const onError = (error: WalletTransactionError) => {
+  const handleError = (error: WalletTransactionError) => {
     setError(error);
   };
 
@@ -212,7 +212,7 @@ export function useSignUp(
         }),
       ),
     {
-      onError,
+      onError: (err: any) => handleError(err.response.errors[0]),
     },
   );
 
@@ -226,7 +226,7 @@ export function useSignUp(
             action: 'Step 4-1 Aborted',
           });
         }
-        onError(err);
+        handleError(err);
       },
       onSuccess: () => {
         analyticsActions?.trackEvent({
@@ -245,7 +245,7 @@ export function useSignUp(
           action: 'Step 4-2 Declined',
         });
       }
-      onError(err);
+      handleError(err);
     },
     onSuccess: () => {
       analyticsActions?.trackEvent({
@@ -265,7 +265,7 @@ export function useSignUp(
             action: 'Step 4-3 Declined',
           });
         }
-        onError(err);
+        handleError(err);
       },
       onSuccess: () => {
         analyticsActions?.trackEvent({
@@ -295,7 +295,7 @@ export function useSignUp(
             action: 'Step 4-4 Declined',
           });
         }
-        onError(err);
+        handleError(err);
       },
       onSuccess: () => {
         analyticsActions?.trackEvent({
