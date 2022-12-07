@@ -24,13 +24,11 @@
   },
   "homepage": "https://github.com/AKASHAorg/akasha-framework/ui/design#readme",
   "scripts": {
-    "build:css": "postcss src/tailwind/tailwind.src.css -o src/static/css/tailwind.css",
-    "watch:css": "postcss src/tailwind/tailwind.src.css -o src/static/css/tailwind.css -w",
+    "build:css": "postcss src/tailwind/tailwind.src.css -o lib/css/main.css",
+    "watch:css": "postcss src/tailwind/tailwind.src.css -o lib/css/main.css -w",
     "copy-images": "copyfiles -f ./src/static/img/* ../build/images",
-    "copy-css": "copyfiles -f ./src/static/css/* ../build/css",
-    "copy-dist-files": "copyfiles -f ./dist/* ../build/design/",
-    "pack": "NODE_OPTIONS='--max-old-space-size=4096' webpack --config webpack.config.cjs",
-    "postpack": "yarn run copy-css & yarn run copy-images & yarn run copy-dist-files",
+    "pack": "tsc --build tsconfig.json",
+    "postpack": "yarn run build:css & yarn run copy-images",
     "tsc": "tsc --build tsconfig.json",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
@@ -73,7 +71,6 @@
     "@storybook/addon-essentials": "6.5.13",
     "@storybook/addon-links": "6.5.13",
     "@storybook/react": "6.5.13",
-    "@types/classnames": "2.3.1",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
     "@types/react-test-renderer": "18.0.0",
@@ -82,7 +79,10 @@
     "react-docgen-typescript": "2.2.2",
     "storybook-addon-designs": "6.3.1",
     "ts-jest": "29.0.3",
-    "tailwind-config-viewer": "1.7.2"
+    "tailwind-config-viewer": "1.7.2",
+    "postcss": "8.4.19",
+    "postcss-cli": "10.1.0",
+    "autoprefixer": "10.4.13"
   },
   "peerDependencies": {
     "react": "^18.1.0",

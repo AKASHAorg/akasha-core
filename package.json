@@ -123,6 +123,7 @@
     "sdk",
     "ui/hooks",
     "ui/design",
+    "ui/design-system-core",
     "tests",
     "ui/hooks",
     "ui/lib/feed",
