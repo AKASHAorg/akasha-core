@@ -58,13 +58,8 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     }
   }, [status]);
 
-  console.log({ status });
-
   return (
-    <Box
-      // border={{ color: 'red' }}
-      gap="medium"
-    >
+    <Box gap="medium">
       <Box align="center">
         <Text size="xlarge" weight="bold">
           {titleLine1Label}

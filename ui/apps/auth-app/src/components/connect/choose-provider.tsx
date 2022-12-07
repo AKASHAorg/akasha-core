@@ -1,21 +1,10 @@
 import * as React from 'react';
-import DS, { BoxExtendedProps } from '@akashaorg/design-system';
-import { Share } from 'grommet-icons';
-
+import DS from '@akashaorg/design-system';
 import { EthProviders, INJECTED_PROVIDERS } from '@akashaorg/typings/sdk';
 
-const {
-  Box,
-  Web3ConnectCard,
-  HorizontalDivider,
-  Accordion,
-  AccordionPanel,
-  Heading,
-  Text,
-  Icon,
-  Anchor,
-  styled,
-} = DS;
+import { StyledAccordionPanel, StyledBox } from './styles';
+
+const { Box, Web3ConnectCard, HorizontalDivider, Accordion, Heading, Text, Icon, Anchor } = DS;
 
 interface ChooseProviderProps {
   titleLabel: string;
@@ -39,24 +28,6 @@ interface ChooseProviderProps {
   };
   onProviderSelect: (provider: EthProviders) => void;
 }
-
-const StyledBox: React.FC<BoxExtendedProps> = styled(Box)`
-  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    width: 100%;
-    > div: {
-      padding-left: 0;
-      padding-right: 0;
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-`;
-
-const StyledAccordionPanel = styled(AccordionPanel)`
-  div:nth-child(2) {
-    padding-right: 0;
-  }
-`;
 
 const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   const {
