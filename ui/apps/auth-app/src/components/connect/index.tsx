@@ -238,7 +238,7 @@ const Connect: React.FC<RootComponentProps> = props => {
             connectedAddressPlaceholder={t(
               'the address you select to connect with will be shown here',
             )}
-            footerLabel="Disconnect or change way to connect"
+            footerLabel={t('Disconnect or change way to connect')}
             onSignIn={validInviteToken ? fireRemainingMessages : fullSignUp.mutate}
             onSignInComplete={handleSignInComplete}
             onDisconnect={handleDisconnect}
