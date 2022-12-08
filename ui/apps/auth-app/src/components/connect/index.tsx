@@ -19,7 +19,6 @@ import ConnectWallet from './connect-wallet';
 import ChooseProvider from './choose-provider';
 import InviteCode from './invite-code';
 
-import { SIGN_UP_USERNAME } from '../../routes';
 import { getStatusDescription, getStatusLabel } from '../../utils/connect';
 
 const { MainAreaCardBox } = DS;
@@ -43,6 +42,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [signInComplete, setSignInComplete] = React.useState(false);
   const [inviteToken, setInviteToken] = React.useState<string>('');
+  const [validInviteToken, setValidInviteToken] = React.useState<boolean>(false);
 
   const [errorText] = React.useState<string>('Failed to Authorize');
 
@@ -67,7 +67,8 @@ const Connect: React.FC<RootComponentProps> = props => {
   // const requiredNetworkQuery = useRequiredNetworkName();
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
 
-  const { ethAddress, fullSignUp, signUpState, error } = useSignUp(selectedProvider, true);
+  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages, resetState } =
+    useSignUp(selectedProvider, true);
 
   const networkNotSupported = React.useMemo(() => {
     if (
@@ -109,6 +110,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   React.useEffect(() => {
     // if not registered, show invite code page
     if (
+      validInviteToken === false &&
       error?.message &&
       typeof error.message === 'string' &&
       error.message.toLowerCase().trim() === 'profile not found'
@@ -129,11 +131,11 @@ const Connect: React.FC<RootComponentProps> = props => {
     }
     if (signInComplete && profileDataReq.isSuccess && !profileDataReq.data?.userName) {
       routingPlugin.current?.navigateTo({
-        appName: '@akashaorg/app-auth-ewa',
-        getNavigationUrl: routes => routes[SIGN_UP_USERNAME],
+        appName: '@akashaorg/app-profile',
+        getNavigationUrl: navRoutes => `${navRoutes.myProfile}/edit`,
       });
     }
-  }, [signInComplete, profileDataReq, props.baseRouteName, props.worldConfig.homepageApp]);
+  }, [signInComplete, profileDataReq, props.worldConfig.homepageApp]);
 
   // const requiredNetworkName = `${requiredNetworkQuery.data
   //   .charAt(0)
@@ -149,6 +151,7 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   const handleProviderSelect = (provider: EthProviders) => {
     setSelectedProvider(provider);
+    localStorage.setItem('@acceptedTermsAndPrivacy', JSON.stringify(true));
     setStep(ConnectStep.CONNECT_WALLET);
   };
 
@@ -166,11 +169,15 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInviteToken(e.target.value);
+    const token = e.target.value;
+    localStorage.setItem('@signUpToken', token);
+    setInviteToken(token);
   };
 
   const handleContinueClick = () => {
-    /** do something */
+    setValidInviteToken(true);
+    fireRemainingMessages();
+    setStep(ConnectStep.CONNECT_WALLET);
   };
 
   return (
@@ -216,7 +223,9 @@ const Connect: React.FC<RootComponentProps> = props => {
           onProviderSelect={handleProviderSelect}
         />
       )}
-      {(step === ConnectStep.CONNECT_WALLET || signUpState > 1) &&
+      {((validInviteToken && signUpState <= 1) ||
+        signUpState > 1 ||
+        step === ConnectStep.CONNECT_WALLET) &&
         selectedProvider !== EthProviders.None && (
           <ConnectWallet
             isActive={!networkNotSupported && connectProviderQuery.data}
@@ -234,12 +243,12 @@ const Connect: React.FC<RootComponentProps> = props => {
               'the address you select to connect with will be shown here',
             )}
             footerLabel="Disconnect or change way to connect"
-            onSignIn={fullSignUp.mutate}
+            onSignIn={validInviteToken ? fireRemainingMessages : fullSignUp.mutate}
             onSignInComplete={handleSignInComplete}
             onDisconnect={handleDisconnect}
           />
         )}
-      {step === ConnectStep.INVITE_CODE && (
+      {step === ConnectStep.INVITE_CODE && !validInviteToken && (
         <InviteCode
           paragraphOneLabel={t(
             "Oh-uh! We have detected that  there's no account associated with the address you're trying to connect",

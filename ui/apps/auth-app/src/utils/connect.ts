@@ -21,6 +21,10 @@ const getStatusDescription = (status: number, provider: EthProviders) => {
     if (provider === EthProviders.Web3Injected) return 'You will be prompted with 2 signatures';
     if (provider === EthProviders.WalletConnect) return 'Please sign the requests to gain access';
   }
+  if (status === 1) {
+    if (provider === EthProviders.Web3Injected) return 'You will be prompted with 3 signatures';
+    if (provider === EthProviders.WalletConnect) return 'Please sign the requests to gain access';
+  }
   return '';
 };
 
