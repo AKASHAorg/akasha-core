@@ -27,6 +27,9 @@
     {
       "path": "./ui/design"
     },
+    {
+      "path": "./ui/design-system-core"
+    },
     { "path": "./tests" },
     { "path": "./ui/hooks" },
     { "path": "./ui/lib/feed" },

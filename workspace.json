@@ -31,6 +31,24 @@
         }
       }
     },
+    "@akashaorg/design-system-core": {
+      "root": "ui/design-system-core",
+      "sourceRoot": "ui/design-system-core/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputPath": "ui/build/design-system-core",
+          "options": {
+            "commands": [
+              "yarn run pack"
+            ],
+            "cwd": "ui/design-system-core",
+            "parallel": false
+          }
+        }
+      }
+    },
     "@akashaorg/design-system": {
       "root": "ui/design",
       "sourceRoot": "ui/design/src",

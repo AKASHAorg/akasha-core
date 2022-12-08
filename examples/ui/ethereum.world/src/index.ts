@@ -1,5 +1,6 @@
 import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 import { missingRequiredFields } from './registry-overrides';
+import '@akashaorg/design-system-core/lib/css/main.css';
 
 console.time('AppLoader:firstMount');
 
