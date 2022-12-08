@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+// import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 // import { AnalyticsCategories } from '@akashaorg/typings/ui';
 import { ITextInputIconForm } from '@akashaorg/design-system/lib/components/TextInputIconForm';
 
@@ -9,6 +9,7 @@ import { StyledButton } from './styles';
 const { Box, Text, CTAAnchor, TextInputIconForm, Image } = DS;
 
 interface IInviteCodeProps extends ITextInputIconForm {
+  publicImagePath?: string;
   paragraphOneLabel: string;
   paragraphThreePartOneLabel: string;
   paragraphThreeAccentLabel: string;
@@ -25,6 +26,7 @@ interface IInviteCodeProps extends ITextInputIconForm {
 
 const InviteCode: React.FC<IInviteCodeProps> = props => {
   const {
+    publicImagePath = '/images',
     paragraphOneLabel,
     paragraphThreePartOneLabel,
     paragraphThreeAccentLabel,
@@ -41,7 +43,7 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
     onContinueClick,
   } = props;
 
-  //const [analyticsActions] = useAnalytics();
+  // const [analyticsActions] = useAnalytics();
 
   const handleContinueClick = () => {
     // analyticsActions.trackEvent({
@@ -52,7 +54,6 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
   };
 
   const disabled = !props.success;
-  const imagePath = '/images';
 
   return (
     <Box gap="0.5rem" alignContent="center">
@@ -65,7 +66,7 @@ const InviteCode: React.FC<IInviteCodeProps> = props => {
         {paragraphOneLabel}
       </Text>
       <Box flex={true} align="center" margin={{ bottom: 'small' }}>
-        <Image fit="contain" src={`${imagePath}/invite-letter.webp`} />
+        <Image fit="contain" src={`${publicImagePath}/invite-letter.webp`} />
       </Box>
       <Text
         size="xlarge"
