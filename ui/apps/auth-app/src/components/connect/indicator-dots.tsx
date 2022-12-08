@@ -1,12 +1,14 @@
 import React from 'react';
 import DS from '@akashaorg/design-system';
 
+import { ErrorTypes } from '@akashaorg/ui-awf-hooks/lib/use-login';
 import { getDotColor } from '../../utils/connect';
 
 const { Box, Icon, styled } = DS;
 
 export interface IndicatorDotsProps {
   status: number;
+  error: ErrorTypes;
 }
 
 const Dot = styled(Box)<{ size?: string; color?: string; opacity?: number }>`
@@ -20,18 +22,20 @@ const Dot = styled(Box)<{ size?: string; color?: string; opacity?: number }>`
 `;
 
 const IndicatorDots: React.FC<IndicatorDotsProps> = props => {
-  const { status } = props;
+  const { status, error } = props;
+
+  const dotColor = getDotColor(status, error);
 
   return (
     <Box direction="row" gap="xsmall" align="center">
-      <Dot background={getDotColor(status)} opacity={0.5} />
+      <Dot background={dotColor} opacity={0.5} />
 
-      <Dot size="1.25rem" background={getDotColor(status)}>
+      <Dot size="1.25rem" background={dotColor}>
         {status > 5 && <Icon type="checkSimple" size="xxs" color="white" />}
         {status === 0 && <Icon type="error" size="xxs" color="white" />}
       </Dot>
 
-      <Dot background={getDotColor(status)} opacity={0.5} />
+      <Dot background={dotColor} opacity={0.5} />
     </Box>
   );
 };

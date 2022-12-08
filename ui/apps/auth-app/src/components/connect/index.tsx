@@ -29,12 +29,6 @@ export enum ConnectStep {
   INVITE_CODE = 'Invite_Code',
 }
 
-// export enum ConnectWalletStatus {
-//   CONNECTING = 'Connecting',
-//   CONNECTED = 'Connected',
-//   ERROR = 'Error',
-// }
-
 const baseAppLegalRoute = '/@akashaorg/app-legal';
 
 const Connect: React.FC<RootComponentProps> = props => {
@@ -43,8 +37,6 @@ const Connect: React.FC<RootComponentProps> = props => {
   const [signInComplete, setSignInComplete] = React.useState(false);
   const [inviteToken, setInviteToken] = React.useState<string>('');
   const [validInviteToken, setValidInviteToken] = React.useState<boolean>(false);
-
-  const [errorText] = React.useState<string>('Failed to Authorize');
 
   const DEFAULT_TOKEN_LENGTH = 24;
 
@@ -67,8 +59,10 @@ const Connect: React.FC<RootComponentProps> = props => {
   // const requiredNetworkQuery = useRequiredNetworkName();
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
 
-  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages, resetState } =
-    useSignUp(selectedProvider, true);
+  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages } = useSignUp(
+    selectedProvider,
+    true,
+  );
 
   const networkNotSupported = React.useMemo(() => {
     if (
@@ -117,6 +111,7 @@ const Connect: React.FC<RootComponentProps> = props => {
     ) {
       setStep(ConnectStep.INVITE_CODE);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   React.useEffect(() => {
@@ -175,9 +170,9 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   const handleContinueClick = () => {
+    setStep(ConnectStep.CONNECT_WALLET);
     setValidInviteToken(true);
     fireRemainingMessages();
-    setStep(ConnectStep.CONNECT_WALLET);
   };
 
   return (
@@ -235,7 +230,8 @@ const Connect: React.FC<RootComponentProps> = props => {
             titleLine2Label={t('using your wallet')}
             selectedProvider={selectedProvider}
             status={signUpState}
-            statusLabel={t(getStatusLabel(signUpState, errorText))}
+            error={error}
+            statusLabel={t(getStatusLabel(signUpState, error))}
             statusDescription={t(getStatusDescription(signUpState, selectedProvider))}
             yourAddressLabel={t('Your Address')}
             connectedAddress={ethAddress}

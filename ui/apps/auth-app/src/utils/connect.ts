@@ -1,15 +1,16 @@
 import { EthProviders } from '@akashaorg/typings/sdk';
+import { ErrorTypes } from '@akashaorg/ui-awf-hooks/lib/use-login';
 
-const getDotColor = (status: number) => {
+const getDotColor = (status: number, error: ErrorTypes) => {
   if (status > 5) return 'green';
-  if (status > 1) return 'accent';
-  if (status === 0) return 'errorText';
+  if (status >= 0) return 'accent';
+  if (error) return 'errorText';
 };
 
-const getStatusLabel = (status: number, errorText?: string) => {
+const getStatusLabel = (status: number, error: ErrorTypes) => {
   if (status > 5) return 'Authorized';
-  if (status > 1) return 'Authorizing';
-  if (status === 0) return errorText;
+  if (status >= 0) return 'Authorizing';
+  if (error) return 'Failed to Authorize';
 };
 
 const getStatusDescription = (status: number, provider: EthProviders) => {

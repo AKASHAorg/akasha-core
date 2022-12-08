@@ -2,6 +2,7 @@ import React from 'react';
 
 import DS from '@akashaorg/design-system';
 import { EthProviders } from '@akashaorg/typings/sdk';
+import { ErrorTypes } from '@akashaorg/ui-awf-hooks/lib/use-login';
 
 import BoxedIcon from './boxed-icon';
 import IndicatorDots from './indicator-dots';
@@ -12,6 +13,7 @@ export interface IConnectWalletProps {
   titleLine2Label: string;
   selectedProvider: EthProviders;
   status: number;
+  error: ErrorTypes;
   statusLabel: string;
   statusDescription: string;
   yourAddressLabel: string;
@@ -32,6 +34,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     titleLine2Label,
     selectedProvider,
     status,
+    error,
     statusLabel,
     statusDescription,
     yourAddressLabel,
@@ -76,7 +79,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           iconSize="xxl"
         />
 
-        <IndicatorDots status={status} />
+        <IndicatorDots status={status} error={error} />
 
         <BoxedIcon
           iconType="akasha"
