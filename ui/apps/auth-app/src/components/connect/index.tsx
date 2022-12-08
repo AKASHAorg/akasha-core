@@ -212,7 +212,9 @@ const Connect: React.FC<RootComponentProps> = props => {
             ...injectedProvider,
             details: {
               ...injectedProvider.details,
-              subtitleLabel: t(injectedProvider.details.subtitleLabel),
+              subtitleLabel: t('{{subtitleLabel}}', {
+                subtitleLabel: injectedProvider.details.subtitleLabel,
+              }),
             },
           }}
           onProviderSelect={handleProviderSelect}
@@ -231,8 +233,10 @@ const Connect: React.FC<RootComponentProps> = props => {
             selectedProvider={selectedProvider}
             status={signUpState}
             error={error}
-            statusLabel={t(getStatusLabel(signUpState, error))}
-            statusDescription={t(getStatusDescription(signUpState, selectedProvider))}
+            statusLabel={t('{{statusLabel}}', { statusLabel: getStatusLabel(signUpState, error) })}
+            statusDescription={t('{{statusDescription}}}', {
+              statusDescription: getStatusDescription(signUpState, selectedProvider),
+            })}
             yourAddressLabel={t('Your Address')}
             connectedAddress={ethAddress}
             connectedAddressPlaceholder={t(
