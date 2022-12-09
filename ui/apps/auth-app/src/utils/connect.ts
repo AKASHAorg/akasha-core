@@ -7,13 +7,17 @@ const getDotColor = (status: number, error: ErrorTypes) => {
   if (error) return 'errorText';
 };
 
-const getStatusLabel = (status: number, error: ErrorTypes) => {
+const getStatusLabel = (status: number, error: ErrorTypes, errorMessage?: string) => {
   if (status > 5) return 'Authorized';
-  if (status >= 0) return 'Authorizing';
+  if (status >= 0 && !errorMessage) return 'Authorizing';
   if (error) return 'Failed to Authorize';
 };
 
-const getStatusDescription = (status: number, provider: EthProviders) => {
+const getStatusDescription = (status: number, errorMessage: string, provider: EthProviders) => {
+  if (errorMessage) {
+    return errorMessage;
+  }
+
   if (status > 5) {
     return 'You have successfuly connected and authorized your address. You will be redirected shortly';
   }

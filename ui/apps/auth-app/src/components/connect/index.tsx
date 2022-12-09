@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { EthProviders } from '@akashaorg/typings/sdk';
+import { PROVIDER_ERROR_CODES, EthProviders } from '@akashaorg/typings/sdk';
 import { AnalyticsCategories, RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useAnalytics,
@@ -12,7 +12,10 @@ import {
   useInjectedProvider,
   useNetworkState,
   useSignUp,
+  useCheckSignup,
   useIsValidToken,
+  useLogout,
+  useRequiredNetworkName,
 } from '@akashaorg/ui-awf-hooks';
 
 import ConnectWallet from './connect-wallet';
@@ -28,7 +31,17 @@ export enum ConnectStep {
   CONNECT_WALLET = 'Connect_Wallet',
   INVITE_CODE = 'Invite_Code',
 }
-export const baseAppLegalRoute = '/@akashaorg/app-legal';
+
+const errorMapping = {
+  [PROVIDER_ERROR_CODES.UserRejected]:
+    'You have declined the signature request. You will not be able to proceed unless you accept all signature requests.',
+  [PROVIDER_ERROR_CODES.WrongNetwork]:
+    'Ethereum World only works with the {{requiredNetworkName}} test network. Please set your network to ${requiredNetworkName} to continue.',
+  [PROVIDER_ERROR_CODES.RequestTimeout]:
+    'The signature request has timed out. Please try again to sign the request.',
+};
+
+const baseAppLegalRoute = '/@akashaorg/app-legal';
 
 const Connect: React.FC<RootComponentProps> = props => {
   const [step, setStep] = React.useState<ConnectStep>(ConnectStep.CHOOSE_PROVIDER);
@@ -36,6 +49,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   const [signInComplete, setSignInComplete] = React.useState(false);
   const [inviteToken, setInviteToken] = React.useState<string>('');
   const [validInviteToken, setValidInviteToken] = React.useState<boolean>(false);
+  const logoutMutation = useLogout();
 
   const DEFAULT_TOKEN_LENGTH = 24;
 
@@ -55,13 +69,13 @@ const Connect: React.FC<RootComponentProps> = props => {
     [injectedProviderQuery.data],
   );
 
-  // const requiredNetworkQuery = useRequiredNetworkName();
+  const requiredNetworkQuery = useRequiredNetworkName();
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
 
-  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages } = useSignUp(
-    selectedProvider,
-    true,
-  );
+  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages, connectWallet } =
+    useSignUp(selectedProvider, true);
+
+  const checkSignupQuery = useCheckSignup(ethAddress);
 
   const networkNotSupported = React.useMemo(() => {
     if (
@@ -102,16 +116,15 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     // if not registered, show invite code page
-    if (
-      validInviteToken === false &&
-      error?.message &&
-      typeof error.message === 'string' &&
-      error.message.toLowerCase().trim() === 'profile not found'
-    ) {
-      setStep(ConnectStep.INVITE_CODE);
+    if (checkSignupQuery.data === false) {
+      if (!validInviteToken) {
+        setStep(ConnectStep.INVITE_CODE);
+      } else {
+        fireRemainingMessages();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  }, [checkSignupQuery.data]);
 
   React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
@@ -131,9 +144,28 @@ const Connect: React.FC<RootComponentProps> = props => {
     }
   }, [signInComplete, profileDataReq, props.worldConfig.homepageApp]);
 
-  // const requiredNetworkName = `${requiredNetworkQuery.data
-  //   .charAt(0)
-  //   .toLocaleUpperCase()}${requiredNetworkQuery.data.substr(1).toLocaleLowerCase()}`;
+  const requiredNetworkName = `${requiredNetworkQuery.data
+    .charAt(0)
+    .toLocaleUpperCase()}${requiredNetworkQuery.data.substr(1).toLocaleLowerCase()}`;
+
+  const errorMessage = React.useMemo(() => {
+    if (networkNotSupported) {
+      return `Your network needs to be set to ${requiredNetworkName} to sign up for an account with us.`;
+    }
+    if (error && error.message !== 'Profile not found') {
+      if (error.code && errorMapping[error.code]) {
+        return errorMapping[error.code];
+      }
+      if (error.reason && typeof error.reason === 'string') {
+        return error.reason;
+      }
+      if (error.message && typeof error.message === 'string') {
+        return error.message;
+      }
+      return 'An unknown error has occurred. Please refresh the page and try again.';
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, networkNotSupported]);
 
   // const handleSwitchNetworkMetamask = () => {
   //   switchToRequiredNetwork();
@@ -145,6 +177,7 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   const handleProviderSelect = (provider: EthProviders) => {
     setSelectedProvider(provider);
+    //this is required because of the backend
     localStorage.setItem('@acceptedTermsAndPrivacy', JSON.stringify(true));
     setStep(ConnectStep.CONNECT_WALLET);
   };
@@ -157,7 +190,8 @@ const Connect: React.FC<RootComponentProps> = props => {
     setSignInComplete(true);
   };
 
-  const handleDisconnect = () => {
+  const handleDisconnect = async () => {
+    await logoutMutation.mutateAsync();
     setSelectedProvider(EthProviders.None);
     setStep(ConnectStep.CHOOSE_PROVIDER);
   };
@@ -169,9 +203,9 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   const handleContinueClick = () => {
-    setStep(ConnectStep.CONNECT_WALLET);
     setValidInviteToken(true);
     fireRemainingMessages();
+    setStep(ConnectStep.CONNECT_WALLET);
   };
 
   return (
@@ -219,9 +253,7 @@ const Connect: React.FC<RootComponentProps> = props => {
           onProviderSelect={handleProviderSelect}
         />
       )}
-      {((validInviteToken && signUpState <= 1) ||
-        signUpState > 1 ||
-        step === ConnectStep.CONNECT_WALLET) &&
+      {(step === ConnectStep.CONNECT_WALLET || signUpState > 1) &&
         selectedProvider !== EthProviders.None && (
           <ConnectWallet
             isActive={!networkNotSupported && connectProviderQuery.data}
@@ -232,9 +264,11 @@ const Connect: React.FC<RootComponentProps> = props => {
             selectedProvider={selectedProvider}
             status={signUpState}
             error={error}
-            statusLabel={t('{{statusLabel}}', { statusLabel: getStatusLabel(signUpState, error) })}
-            statusDescription={t('{{statusDescription}}}', {
-              statusDescription: getStatusDescription(signUpState, selectedProvider),
+            statusLabel={t('{{statusLabel}}', {
+              statusLabel: getStatusLabel(signUpState, error, errorMessage),
+            })}
+            statusDescription={t('{{statusDescription}}', {
+              statusDescription: getStatusDescription(signUpState, errorMessage, selectedProvider),
             })}
             yourAddressLabel={t('Your Address')}
             connectedAddress={ethAddress}
