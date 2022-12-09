@@ -3,9 +3,7 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 
-import routes, { CONNECT, SIGN_IN, SIGN_UP, SIGN_UP_USERNAME, WELCOME } from '../routes';
-import SignUp from './sign-up';
-import SignIn from './sign-in';
+import routes, { CONNECT, WELCOME } from '../routes';
 import Welcome from './welcome';
 import Connect from './connect';
 
@@ -16,30 +14,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     <Box>
       <Router basename={props.baseRouteName}>
         <Routes>
-          <Route
-            path={`${routes[SIGN_UP_USERNAME]}`}
-            element={
-              <div>
-                <SignUp activeIndex={4} {...props} />
-              </div>
-            }
-          />
-          <Route
-            path={routes[SIGN_UP]}
-            element={
-              <div>
-                <SignUp {...props} />
-              </div>
-            }
-          />
-          <Route
-            path={routes[SIGN_IN]}
-            element={
-              <div>
-                <SignIn {...props} />
-              </div>
-            }
-          />
           <Route
             path={routes[WELCOME]}
             element={
@@ -58,7 +32,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
 
-          <Route path="/" element={<Navigate to={routes[SIGN_IN]} replace />} />
+          <Route path="/" element={<Navigate to={routes[CONNECT]} replace />} />
         </Routes>
       </Router>
     </Box>
