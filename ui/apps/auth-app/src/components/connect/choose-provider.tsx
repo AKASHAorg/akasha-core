@@ -101,7 +101,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                 >
                   <Box
                     pad="0.25rem"
-                    background="#fef5e6"
+                    background="lightGold"
                     margin={{ right: 'xsmall' }}
                     style={{ borderRadius: '10%' }}
                   >
@@ -126,7 +126,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
                 leftIconType={injectedProvider.details.iconType}
                 titleLabel={injectedProvider.details.titleLabel}
                 subtitleLabel={injectedProvider.details.subtitleLabel}
-                iconBackground="#fef5e6"
+                iconBackground="lightGold"
                 handleClick={handleProviderClick(EthProviders.Web3Injected)}
               />
             </Box>
@@ -136,7 +136,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
               leftIconType="walletconnect"
               subtitleLabel={wcSubtitleLabel}
               titleLabel="WalletConnect"
-              iconBackground="#3B98F7"
+              iconBackground="deepBlue"
               handleClick={handleProviderClick(EthProviders.WalletConnect)}
             />
           </Box>

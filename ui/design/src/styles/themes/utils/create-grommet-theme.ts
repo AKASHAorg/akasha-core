@@ -83,6 +83,8 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
         skeletonBackground: styledComponentsTheme.colors.skeletonBackground,
         focus: styledComponentsTheme.colors.accent,
+        lightGold: styledComponentsTheme.colors.lightGold,
+        deepBlue: styledComponentsTheme.colors.deepBlue,
       },
       focus: {
         border: {

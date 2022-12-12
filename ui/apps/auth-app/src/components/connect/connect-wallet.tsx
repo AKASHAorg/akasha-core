@@ -77,7 +77,9 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
       <Box direction="row" justify="center" align="center" gap="small">
         <BoxedIcon
           iconType={selectedProvider === EthProviders.Web3Injected ? 'metamask' : 'walletconnect'}
-          backgroundColor={selectedProvider === EthProviders.Web3Injected ? '#fef5e6' : '#5397F7'}
+          backgroundColor={
+            selectedProvider === EthProviders.Web3Injected ? 'lightGold' : 'deepBlue'
+          }
           iconSize="xxl"
         />
 

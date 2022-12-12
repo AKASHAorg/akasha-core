@@ -212,7 +212,7 @@ export function useSignUp(
         }),
       ),
     {
-      onError: (err: any) => handleError(err),
+      onError: (err: WalletTransactionError) => handleError(err),
     },
   );
 
