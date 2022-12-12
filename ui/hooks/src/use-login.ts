@@ -316,7 +316,7 @@ export function useSignUp(
   }, [signUpState, connectWallet, signAuthMessage, signComposedMessage, finishSignUp]);
 
   const resetState = () => {
-    setSignUpState(SIGNUP_STATES[AUTH_EVENTS.CONNECT_ADDRESS]);
+    // setSignUpState(SIGNUP_STATES[AUTH_EVENTS.CONNECT_ADDRESS]);
     setError(null);
     setEthAddress('');
   };
