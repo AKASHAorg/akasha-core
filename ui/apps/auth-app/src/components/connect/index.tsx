@@ -41,7 +41,7 @@ const errorMapping = {
     'The signature request has timed out. Please try again to sign the request.',
 };
 
-const baseAppLegalRoute = '/@akashaorg/app-legal';
+export const baseAppLegalRoute = '/@akashaorg/app-legal';
 
 const Connect: React.FC<RootComponentProps> = props => {
   const [step, setStep] = React.useState<ConnectStep>(ConnectStep.CHOOSE_PROVIDER);
@@ -72,8 +72,10 @@ const Connect: React.FC<RootComponentProps> = props => {
   const requiredNetworkQuery = useRequiredNetworkName();
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
 
-  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages, connectWallet } =
-    useSignUp(selectedProvider, true);
+  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages } = useSignUp(
+    selectedProvider,
+    true,
+  );
 
   const checkSignupQuery = useCheckSignup(ethAddress);
 
