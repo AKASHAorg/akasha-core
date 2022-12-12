@@ -66,6 +66,10 @@ const Connect: React.FC<RootComponentProps> = props => {
   const requiredNetworkQuery = useRequiredNetworkName();
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
 
+  const requiredNetworkName = `${requiredNetworkQuery.data
+    .charAt(0)
+    .toLocaleUpperCase()}${requiredNetworkQuery.data.substring(1).toLocaleLowerCase()}`;
+
   const { ethAddress, fullSignUp, signUpState, resetState, error, fireRemainingMessages } =
     useSignUp(selectedProvider, true);
 
@@ -87,6 +91,21 @@ const Connect: React.FC<RootComponentProps> = props => {
     enabler: inviteToken?.length === DEFAULT_TOKEN_LENGTH,
   });
 
+  const errorMessage = React.useMemo(() => {
+    if (error && !error.message?.includes('Profile not found')) {
+      if (error.message?.includes(`Please change the ethereum network to`)) {
+        return `To use Akasha World during the alpha period, you'll need to set the ${mapProviders[selectedProvider]} network to ${requiredNetworkName}`;
+      }
+      if (error.message?.includes('user rejected signing')) {
+        return 'You have declined the signature request. You will not be able to proceed unless you accept all signature requests';
+      }
+    }
+
+    return null;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
   const searchParam = new URLSearchParams(location.search);
 
   React.useEffect(() => {
@@ -105,7 +124,8 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     // if not registered, show invite code page
-    if (checkSignupQuery.data === false && !validInviteToken) {
+    if (checkSignupQuery.data === false) {
+      resetState();
       setStep(ConnectStep.INVITE_CODE);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +133,7 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     // if user is logged in, do not show the connect page
-    if (loginQuery.data?.pubKey) {
+    if (loginQuery.data?.pubKey && checkSignupQuery.data) {
       routingPlugin.current?.handleRedirect({
         search: searchParam,
         fallback: {
@@ -141,25 +161,6 @@ const Connect: React.FC<RootComponentProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signInComplete, profileDataReq, props.worldConfig.homepageApp]);
-
-  const requiredNetworkName = `${requiredNetworkQuery.data
-    .charAt(0)
-    .toLocaleUpperCase()}${requiredNetworkQuery.data.substr(1).toLocaleLowerCase()}`;
-
-  const errorMessage = React.useMemo(() => {
-    if (error && !error.message.includes('Profile not found')) {
-      if (error.message.includes(`Please change the ethereum network to`)) {
-        return `To use Akasha World during the alpha period, you'll need to set the ${mapProviders[selectedProvider]} network to ${requiredNetworkName}`;
-      }
-      if (error.message.includes('user rejected signing')) {
-        return 'You have declined the signature request. You will not be able to proceed unless you accept all signature requests';
-      }
-    }
-
-    return null;
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
 
   // const handleSwitchNetworkMetamask = () => {
   //   switchToRequiredNetwork();
