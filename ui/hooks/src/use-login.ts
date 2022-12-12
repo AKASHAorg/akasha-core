@@ -212,7 +212,7 @@ export function useSignUp(
         }),
       ),
     {
-      onError: (err: any) => handleError(err.response.errors[0]),
+      onError: (err: any) => handleError(err),
     },
   );
 
@@ -316,7 +316,7 @@ export function useSignUp(
   }, [signUpState, connectWallet, signAuthMessage, signComposedMessage, finishSignUp]);
 
   const resetState = () => {
-    setSignUpState(SIGNUP_STATES[AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]);
+    setSignUpState(SIGNUP_STATES[AUTH_EVENTS.CONNECT_ADDRESS]);
     setError(null);
     setEthAddress('');
   };
