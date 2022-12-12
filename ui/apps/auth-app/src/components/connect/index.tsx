@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { PROVIDER_ERROR_CODES, EthProviders } from '@akashaorg/typings/sdk';
+import { EthProviders } from '@akashaorg/typings/sdk';
 import { AnalyticsCategories, RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useAnalytics,
@@ -31,15 +31,6 @@ export enum ConnectStep {
   CONNECT_WALLET = 'Connect_Wallet',
   INVITE_CODE = 'Invite_Code',
 }
-
-const errorMapping = {
-  [PROVIDER_ERROR_CODES.UserRejected]:
-    'You have declined the signature request. You will not be able to proceed unless you accept all signature requests.',
-  [PROVIDER_ERROR_CODES.WrongNetwork]:
-    'Ethereum World only works with the {{requiredNetworkName}} test network. Please set your network to ${requiredNetworkName} to continue.',
-  [PROVIDER_ERROR_CODES.RequestTimeout]:
-    'The signature request has timed out. Please try again to sign the request.',
-};
 
 export const baseAppLegalRoute = '/@akashaorg/app-legal';
 
@@ -72,22 +63,20 @@ const Connect: React.FC<RootComponentProps> = props => {
   const requiredNetworkQuery = useRequiredNetworkName();
   const networkStateQuery = useNetworkState(connectProviderQuery.data);
 
-  const { ethAddress, fullSignUp, signUpState, error, fireRemainingMessages } = useSignUp(
-    selectedProvider,
-    true,
-  );
+  const { ethAddress, fullSignUp, signUpState, resetState, error, fireRemainingMessages } =
+    useSignUp(selectedProvider, true);
 
   const checkSignupQuery = useCheckSignup(ethAddress);
-
-  const networkNotSupported = React.useMemo(() => {
+  let networkNotSupported;
+  React.useEffect(() => {
     if (
       selectedProvider !== EthProviders.None &&
       !networkStateQuery.isFetching &&
       connectProviderQuery.data
     ) {
-      return networkStateQuery.data.networkNotSupported;
+      networkNotSupported = networkStateQuery.data.networkNotSupported;
     }
-    return false;
+    networkNotSupported = false;
   }, [networkStateQuery, selectedProvider, connectProviderQuery.data]);
 
   // const isNotRegistered = React.useMemo(() => {
@@ -118,12 +107,8 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     // if not registered, show invite code page
-    if (checkSignupQuery.data === false) {
-      if (!validInviteToken) {
-        setStep(ConnectStep.INVITE_CODE);
-      } else {
-        fireRemainingMessages();
-      }
+    if (checkSignupQuery.data === false && !validInviteToken) {
+      setStep(ConnectStep.INVITE_CODE);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkSignupQuery.data]);
@@ -151,23 +136,19 @@ const Connect: React.FC<RootComponentProps> = props => {
     .toLocaleUpperCase()}${requiredNetworkQuery.data.substr(1).toLocaleLowerCase()}`;
 
   const errorMessage = React.useMemo(() => {
-    if (networkNotSupported) {
-      return `Your network needs to be set to ${requiredNetworkName} to sign up for an account with us.`;
-    }
-    if (error && error.message !== 'Profile not found') {
-      if (error.code && errorMapping[error.code]) {
-        return errorMapping[error.code];
+    if (error && !error.message.includes('Profile not found')) {
+      if (error.message.includes(`Please change the ethereum network to`)) {
+        return `Akasha World only works with the ${requiredNetworkName} test network. Please set your network to ${requiredNetworkName} to continue.`;
       }
-      if (error.reason && typeof error.reason === 'string') {
-        return error.reason;
+      if (error.message.includes('user rejected signing')) {
+        return 'You have declined the signature request. You will not be able to proceed unless you accept all signature requests.';
       }
-      if (error.message && typeof error.message === 'string') {
-        return error.message;
-      }
+
       return 'An unknown error has occurred. Please refresh the page and try again.';
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error, networkNotSupported]);
+  }, [error]);
 
   // const handleSwitchNetworkMetamask = () => {
   //   switchToRequiredNetwork();
@@ -192,27 +173,40 @@ const Connect: React.FC<RootComponentProps> = props => {
     setSignInComplete(true);
   };
 
-  const handleDisconnect = async () => {
-    await logoutMutation.mutateAsync();
-    setSelectedProvider(EthProviders.None);
-    setStep(ConnectStep.CHOOSE_PROVIDER);
+  const handleDisconnect = () => {
+    async function disconnect() {
+      await logoutMutation.mutateAsync();
+    }
+    disconnect().then(() => {
+      resetState();
+      setSelectedProvider(EthProviders.None);
+      setStep(ConnectStep.CHOOSE_PROVIDER);
+    });
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const token = e.target.value;
-    localStorage.setItem('@signUpToken', token);
+    if (inviteTokenQuery.isSuccess) {
+      localStorage.setItem('@signUpToken', token);
+    }
     setInviteToken(token);
   };
 
   const handleContinueClick = () => {
     setValidInviteToken(true);
-    fireRemainingMessages();
     setStep(ConnectStep.CONNECT_WALLET);
+  };
+
+  const handleCancelClick = () => {
+    setValidInviteToken(false);
+    resetState();
+    setSelectedProvider(EthProviders.None);
+    setStep(ConnectStep.CHOOSE_PROVIDER);
   };
 
   return (
     <MainAreaCardBox pad="large">
-      {step === ConnectStep.CHOOSE_PROVIDER && (
+      {(step === ConnectStep.CHOOSE_PROVIDER || selectedProvider === EthProviders.None) && (
         <ChooseProvider
           titleLabel={t('✨ Welcome to AKASHA World ✨')}
           subtitleLabel={t('Choose a way to connect')}
@@ -255,7 +249,8 @@ const Connect: React.FC<RootComponentProps> = props => {
           onProviderSelect={handleProviderSelect}
         />
       )}
-      {(step === ConnectStep.CONNECT_WALLET || signUpState > 1) &&
+      {(step === ConnectStep.CONNECT_WALLET ||
+        (signUpState > 1 && step !== ConnectStep.INVITE_CODE)) &&
         selectedProvider !== EthProviders.None && (
           <ConnectWallet
             isActive={!networkNotSupported && connectProviderQuery.data}
@@ -266,6 +261,7 @@ const Connect: React.FC<RootComponentProps> = props => {
             selectedProvider={selectedProvider}
             status={signUpState}
             error={error}
+            errorMessage={errorMessage}
             statusLabel={t('{{statusLabel}}', {
               statusLabel: getStatusLabel(signUpState, error, errorMessage),
             })}
@@ -275,12 +271,13 @@ const Connect: React.FC<RootComponentProps> = props => {
             yourAddressLabel={t('Your Address')}
             connectedAddress={ethAddress}
             connectedAddressPlaceholder={t(
-              'the address you select to connect with will be shown here',
+              'The address you select to connect with will be shown here',
             )}
             footerLabel={t('Disconnect or change way to connect')}
-            onSignIn={validInviteToken ? fireRemainingMessages : fullSignUp.mutate}
+            onSignIn={checkSignupQuery.data === false ? fireRemainingMessages : fullSignUp.mutate}
             onSignInComplete={handleSignInComplete}
             onDisconnect={handleDisconnect}
+            // onSwitchNetwork={handleSwitchNetworkMetamask}
           />
         )}
       {step === ConnectStep.INVITE_CODE && !validInviteToken && (
@@ -306,7 +303,7 @@ const Connect: React.FC<RootComponentProps> = props => {
           continueButtonLabel={t('Continue')}
           onChange={onInputTokenChange}
           onContinueClick={handleContinueClick}
-          onCancelClick={() => setStep(ConnectStep.CHOOSE_PROVIDER)}
+          onCancelClick={handleCancelClick}
         />
       )}
     </MainAreaCardBox>

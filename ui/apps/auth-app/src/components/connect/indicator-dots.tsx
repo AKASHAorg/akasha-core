@@ -9,6 +9,7 @@ const { Box, Icon, styled } = DS;
 export interface IndicatorDotsProps {
   status: number;
   error: ErrorTypes;
+  errorMessage: string;
 }
 
 const Dot = styled(Box)<{ size?: string; color?: string; opacity?: number }>`
@@ -22,9 +23,9 @@ const Dot = styled(Box)<{ size?: string; color?: string; opacity?: number }>`
 `;
 
 const IndicatorDots: React.FC<IndicatorDotsProps> = props => {
-  const { status, error } = props;
+  const { status, error, errorMessage } = props;
 
-  const dotColor = getDotColor(status, error);
+  const dotColor = getDotColor(status, error, errorMessage);
 
   return (
     <Box direction="row" gap="xsmall" align="center">

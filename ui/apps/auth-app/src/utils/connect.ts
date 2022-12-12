@@ -1,10 +1,10 @@
 import { EthProviders } from '@akashaorg/typings/sdk';
 import { ErrorTypes } from '@akashaorg/ui-awf-hooks/lib/use-login';
 
-const getDotColor = (status: number, error: ErrorTypes) => {
+const getDotColor = (status: number, error: ErrorTypes, errorMessage: string) => {
+  if (error && errorMessage) return 'errorText';
   if (status > 5) return 'green';
   if (status >= 0) return 'accent';
-  if (error) return 'errorText';
 };
 
 const getStatusLabel = (status: number, error: ErrorTypes, errorMessage?: string) => {

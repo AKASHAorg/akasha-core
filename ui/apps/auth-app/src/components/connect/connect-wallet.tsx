@@ -14,6 +14,7 @@ export interface IConnectWalletProps {
   selectedProvider: EthProviders;
   status: number;
   error: ErrorTypes;
+  errorMessage: string;
   statusLabel: string;
   statusDescription: string;
   yourAddressLabel: string;
@@ -35,6 +36,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     selectedProvider,
     status,
     error,
+    errorMessage,
     statusLabel,
     statusDescription,
     yourAddressLabel,
@@ -51,7 +53,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
 
   React.useEffect(() => {
     if (isActive) {
-      return signInCall.current();
+      signInCall.current();
     }
   }, [isActive]);
 
@@ -79,7 +81,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           iconSize="xxl"
         />
 
-        <IndicatorDots status={status} error={error} />
+        <IndicatorDots status={status} error={error} errorMessage={errorMessage} />
 
         <BoxedIcon
           iconType="akasha"
@@ -93,7 +95,9 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           <Text size="xlarge" weight="bold">
             {statusLabel}
           </Text>
-          <Text color="secondaryText">{statusDescription}</Text>
+          <Text color="secondaryText" textAlign="justify">
+            {statusDescription}
+          </Text>
         </Box>
 
         <Box align="center">
