@@ -2,7 +2,6 @@ import React from 'react';
 
 import DS from '@akashaorg/design-system';
 import { EthProviders } from '@akashaorg/typings/sdk';
-import { ErrorTypes } from '@akashaorg/ui-awf-hooks/lib/use-login';
 
 import BoxedIcon from './boxed-icon';
 import IndicatorDots from './indicator-dots';
@@ -13,7 +12,6 @@ export interface IConnectWalletProps {
   titleLine2Label: string;
   selectedProvider: EthProviders;
   status: number;
-  error: ErrorTypes;
   errorMessage: string;
   statusLabel: string;
   statusDescription: string;
@@ -35,7 +33,6 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     titleLine2Label,
     selectedProvider,
     status,
-    error,
     errorMessage,
     statusLabel,
     statusDescription,
@@ -83,7 +80,7 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           iconSize="xxl"
         />
 
-        <IndicatorDots status={status} error={error} errorMessage={errorMessage} />
+        <IndicatorDots status={status} errorMessage={errorMessage} />
 
         <BoxedIcon
           iconType="akasha"
@@ -97,8 +94,8 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           <Text size="xlarge" weight="bold">
             {statusLabel}
           </Text>
-          <Text color="secondaryText" textAlign="justify">
-            {statusDescription}
+          <Text color="secondaryText" textAlign="center">
+            {statusDescription}.
           </Text>
         </Box>
 

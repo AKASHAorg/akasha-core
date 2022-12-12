@@ -14,7 +14,6 @@ import {
   useSignUp,
   useCheckSignup,
   useIsValidToken,
-  useLogout,
   useRequiredNetworkName,
 } from '@akashaorg/ui-awf-hooks';
 
@@ -34,13 +33,17 @@ export enum ConnectStep {
 
 export const baseAppLegalRoute = '/@akashaorg/app-legal';
 
+const mapProviders = {
+  [EthProviders.Web3Injected]: 'MetaMask',
+  [EthProviders.WalletConnect]: 'WalletConnect',
+};
+
 const Connect: React.FC<RootComponentProps> = props => {
   const [step, setStep] = React.useState<ConnectStep>(ConnectStep.CHOOSE_PROVIDER);
   const [selectedProvider, setSelectedProvider] = React.useState<EthProviders>(EthProviders.None);
   const [signInComplete, setSignInComplete] = React.useState(false);
   const [inviteToken, setInviteToken] = React.useState<string>('');
   const [validInviteToken, setValidInviteToken] = React.useState<boolean>(false);
-  const logoutMutation = useLogout();
 
   const DEFAULT_TOKEN_LENGTH = 24;
 
@@ -67,29 +70,24 @@ const Connect: React.FC<RootComponentProps> = props => {
     useSignUp(selectedProvider, true);
 
   const checkSignupQuery = useCheckSignup(ethAddress);
-  let networkNotSupported;
-  React.useEffect(() => {
+
+  const networkNotSupported = React.useMemo(() => {
     if (
       selectedProvider !== EthProviders.None &&
       !networkStateQuery.isFetching &&
       connectProviderQuery.data
     ) {
-      networkNotSupported = networkStateQuery.data.networkNotSupported;
+      return networkStateQuery.data.networkNotSupported;
     }
-    networkNotSupported = false;
+    return false;
   }, [networkStateQuery, selectedProvider, connectProviderQuery.data]);
-
-  // const isNotRegistered = React.useMemo(() => {
-  //   if (error?.message && typeof error.message === 'string') {
-  //     return error.message.toLowerCase().trim() === 'profile not found';
-  //   }
-  //   return false;
-  // }, [error]);
 
   const inviteTokenQuery = useIsValidToken({
     inviteToken,
     enabler: inviteToken?.length === DEFAULT_TOKEN_LENGTH,
   });
+
+  const searchParam = new URLSearchParams(location.search);
 
   React.useEffect(() => {
     // retrieve token if already saved
@@ -114,8 +112,20 @@ const Connect: React.FC<RootComponentProps> = props => {
   }, [checkSignupQuery.data]);
 
   React.useEffect(() => {
+    // if user is logged in, do not show the connect page
+    if (loginQuery.data?.pubKey) {
+      routingPlugin.current?.handleRedirect({
+        search: searchParam,
+        fallback: {
+          appName: props.worldConfig.homepageApp,
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loginQuery, props.worldConfig.homepageApp]);
+
+  React.useEffect(() => {
     if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
-      const searchParam = new URLSearchParams(location.search);
       routingPlugin.current?.handleRedirect({
         search: searchParam,
         fallback: {
@@ -129,6 +139,7 @@ const Connect: React.FC<RootComponentProps> = props => {
         getNavigationUrl: navRoutes => `${navRoutes.myProfile}/edit`,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signInComplete, profileDataReq, props.worldConfig.homepageApp]);
 
   const requiredNetworkName = `${requiredNetworkQuery.data
@@ -138,14 +149,14 @@ const Connect: React.FC<RootComponentProps> = props => {
   const errorMessage = React.useMemo(() => {
     if (error && !error.message.includes('Profile not found')) {
       if (error.message.includes(`Please change the ethereum network to`)) {
-        return `Akasha World only works with the ${requiredNetworkName} test network. Please set your network to ${requiredNetworkName} to continue.`;
+        return `To use Akasha World during the alpha period, you'll need to set the ${mapProviders[selectedProvider]} network to ${requiredNetworkName}`;
       }
       if (error.message.includes('user rejected signing')) {
-        return 'You have declined the signature request. You will not be able to proceed unless you accept all signature requests.';
+        return 'You have declined the signature request. You will not be able to proceed unless you accept all signature requests';
       }
-
-      return 'An unknown error has occurred. Please refresh the page and try again.';
     }
+
+    return null;
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
@@ -174,14 +185,9 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   const handleDisconnect = () => {
-    async function disconnect() {
-      await logoutMutation.mutateAsync();
-    }
-    disconnect().then(() => {
-      resetState();
-      setSelectedProvider(EthProviders.None);
-      setStep(ConnectStep.CHOOSE_PROVIDER);
-    });
+    resetState();
+    setSelectedProvider(EthProviders.None);
+    setStep(ConnectStep.CHOOSE_PROVIDER);
   };
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -260,13 +266,17 @@ const Connect: React.FC<RootComponentProps> = props => {
             titleLine2Label={t('using your wallet')}
             selectedProvider={selectedProvider}
             status={signUpState}
-            error={error}
-            errorMessage={errorMessage}
+            errorMessage={t(errorMessage)}
             statusLabel={t('{{statusLabel}}', {
-              statusLabel: getStatusLabel(signUpState, error, errorMessage),
+              statusLabel: getStatusLabel(signUpState, errorMessage),
             })}
             statusDescription={t('{{statusDescription}}', {
-              statusDescription: getStatusDescription(signUpState, errorMessage, selectedProvider),
+              statusDescription: getStatusDescription(
+                signUpState,
+                errorMessage,
+                selectedProvider,
+                checkSignupQuery.data,
+              ),
             })}
             yourAddressLabel={t('Your Address')}
             connectedAddress={ethAddress}
@@ -274,7 +284,7 @@ const Connect: React.FC<RootComponentProps> = props => {
               'The address you select to connect with will be shown here',
             )}
             footerLabel={t('Disconnect or change way to connect')}
-            onSignIn={checkSignupQuery.data === false ? fireRemainingMessages : fullSignUp.mutate}
+            onSignIn={checkSignupQuery.data ? fullSignUp.mutate : fireRemainingMessages}
             onSignInComplete={handleSignInComplete}
             onDisconnect={handleDisconnect}
             // onSwitchNetwork={handleSwitchNetworkMetamask}
