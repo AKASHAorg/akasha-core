@@ -1,5 +1,5 @@
-export const Landing = 'Landing';
+export const Example = 'Example';
 
 export default {
-  [Landing]: '/',
+  [Example]: '/',
 };

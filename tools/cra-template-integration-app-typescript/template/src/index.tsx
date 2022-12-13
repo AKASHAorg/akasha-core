@@ -5,22 +5,22 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { Landing } from './routes';
+import routes, { Example } from './routes';
 
 export const register = (options: IntegrationRegistrationOptions) => ({
   activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen('/@akashaorg/app-landing', false)(location);
+    return pathToActiveWhen('/@akashaorg/app-example', false)(location);
   },
   loadingFn: () => import('./components'),
   mountsIn: options.layoutConfig?.pluginSlotId,
-  i18nNamespace: ['app-landing'],
+  i18nNamespace: ['app-example'],
   routes: {
-    defaultRoute: routes[Landing],
+    defaultRoute: routes[Example],
   },
   title: 'Home',
   logo: { type: LogoTypeSource.ICON, value: 'appAkasha' },
   menuItems: {
-    label: 'Landing',
+    label: 'Example',
     type: MenuItemType.App,
     logo: { type: LogoTypeSource.ICON, value: 'akasha' },
     area: [MenuItemAreaType.AppArea],

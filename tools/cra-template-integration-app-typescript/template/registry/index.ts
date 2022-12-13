@@ -49,9 +49,9 @@ declare const __DEV__: boolean;
       ...missingRequiredFields,
     },
     {
-      name: '@akashaorg/app-landing',
+      name: '@akashaorg/app-example',
       integrationType: INTEGRATION_TYPES.APPLICATION,
-      sources: [`/app-landing/index.js`],
+      sources: [`/app-example/index.js`],
       ...missingRequiredFields,
     },
   ];
@@ -61,11 +61,11 @@ declare const __DEV__: boolean;
   }
 
   const loaderConfig: ILoaderConfig = {
-    title: 'Landing App',
+    title: 'Example App',
     // main layout (shell)
     layout: '@akashaorg/ui-widget-layout',
     // define an app that will load at root '/' path
-    homepageApp: '@akashaorg/app-landing',
+    homepageApp: '@akashaorg/app-example',
     // define pre-installed apps,
     // homepageApp is always loaded by default
     defaultApps: [

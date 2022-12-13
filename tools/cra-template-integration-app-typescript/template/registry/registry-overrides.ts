@@ -46,9 +46,9 @@ const overrides = [
     ...missingRequiredFields,
   },
   {
-    name: '@akashaorg/app-landing',
+    name: '@akashaorg/app-example',
     integrationType: INTEGRATION_TYPES.APPLICATION,
-    sources: [`${LOCAL_HOST}/app-landing/index.js`],
+    sources: [`${LOCAL_HOST}/app-example/index.js`],
     ...missingRequiredFields,
   },
   {

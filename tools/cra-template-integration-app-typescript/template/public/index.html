@@ -12,7 +12,7 @@
     <meta name="theme-color" content="#000000" />
     <link rel="stylesheet" href="https://akasha.ethereum.world/fonts/inter.css" />
     <link rel="stylesheet" href="https://akasha.ethereum.world/css/global.css" />
-    <title>Landing App</title>
+    <title>Example App</title>
     <script src="https://cdn.jsdelivr.net/npm/react@18.1.0/umd/react.development.js"
         integrity="sha256-O0ZCbs+1va83WjpVQuSLmQY0xV3jHyeThUup7w0xE4s=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.1.0/umd/react-dom.development.js"
@@ -67,7 +67,7 @@
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker
-                    .register("https://akasha.ethereum.world/sw.js", { scope: "/" })
+                    .register("/sw.js", { scope: "/" })
                     .then(registration => {
                         console.log("SW registered: ", registration);
                     })
