@@ -2,7 +2,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const commons = require('./app.pack.conf');
-const SaveRemoteFilePlugin = require('save-remote-file-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
@@ -46,15 +45,6 @@ module.exports = {
     new webpack.DefinePlugin({
       __DEV__: !isProduction,
     }),
-    new SaveRemoteFilePlugin([
-      {
-        url: isProduction
-          ? 'https://akasha.ethereum.world/sw.js'
-          : 'https://next.akasha-world-framework.pages.dev/sw.js',
-        filepath: 'sw.js',
-        hash: false,
-      },
-    ]),
   ],
   devtool: isProduction ? 'source-map' : 'inline-source-map',
   externals: commons.externals,

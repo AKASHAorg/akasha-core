@@ -65,21 +65,6 @@
     </div>
   </template>
   <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        fetch('/sw.js');
-        navigator.serviceWorker
-          .register("/sw.js", { scope: "/" })
-          .then(registration => {
-            console.log("SW registered: ", registration);
-          })
-          .catch(registrationError => {
-            console.log("SW registration failed: ", registrationError);
-          });
-      });
-    }
-  </script>
-  <script>
     let theme = "Light-Theme";
 
     window.addEventListener("theme-change", (ev) => {
