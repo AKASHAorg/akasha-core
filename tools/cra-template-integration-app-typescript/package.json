@@ -1,0 +1,14 @@
+{
+  "name": "cra-template-integration-app-typescript",
+  "version": "0.1.0",
+  "description": "A typescript template for integration app.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-world-framework.git",
+    "directory": "tools/cra-template-integration-app-typescript"
+  },
+  "files": [
+    "template",
+    "template.json"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "allowJs": false,
+    "jsx": "react",
+    "declaration": true,
+    "outDir": "./lib",
+    "rootDir": ".",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "alwaysStrict": true,
+    "noImplicitAny": false,
+    "removeComments": false,
+    "noLib": false,
+    "composite": true,
+    "importHelpers": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "pretty": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "es2020"],
+    "module": "ES2020",
+    "target": "es2020"
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "**/*.spec.*"]
+}
