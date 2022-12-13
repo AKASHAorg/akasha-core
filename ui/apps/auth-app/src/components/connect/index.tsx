@@ -141,6 +141,16 @@ const Connect: React.FC<RootComponentProps> = props => {
         },
       });
     }
+
+    // if user is signed up, do not show the connect page
+    if (loginQuery.data?.pubKey && loginQuery.data?.isNewUser) {
+      routingPlugin.current?.handleRedirect({
+        search: searchParam,
+        fallback: {
+          appName: props.worldConfig.homepageApp,
+        },
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginQuery, props.worldConfig.homepageApp]);
 
@@ -193,9 +203,7 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   const onInputTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const token = e.target.value;
-    if (inviteTokenQuery.isSuccess) {
-      localStorage.setItem('@signUpToken', token);
-    }
+    localStorage.setItem('@signUpToken', token);
     setInviteToken(token);
   };
 
