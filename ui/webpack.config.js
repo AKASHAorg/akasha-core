@@ -1,6 +1,6 @@
 /* eslint-disable */
 const webpack = require('webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const commons = require('./app.pack.conf');
 const path = require('path');
 const Dotenv = require('dotenv-webpack');
@@ -34,33 +34,35 @@ const exp = {
     publicPath: 'auto',
     filename: outputMainFile,
     crossOriginLoading: 'anonymous',
+    clean: true,
   },
   plugins: [
-    new CleanWebpackPlugin({
-      verbose: true,
-      dangerouslyAllowCleanPatternsOutsideProject: process.env.NODE_ENV !== 'production'
-    }),
+    // new CleanWebpackPlugin({
+    //   verbose: true,
+    //   dry: false,
+    //   dangerouslyAllowCleanPatternsOutsideProject: process.env.NODE_ENV !== 'production',
+    // }),
     new WebpackManifestPlugin({
       generate: (seed, files, entries) => {
-      const packageJson = require(path.join(process.cwd(), './package.json'));
-      let displayName;
-      if(packageJson.hasOwnProperty('akasha') && packageJson.akasha.displayName){
-        displayName = packageJson.akasha.displayName;
-      }
-      return {
-        displayName,
-        mainFile: outputMainFile,
-        license: packageJson.license,
-        description: packageJson.description,
-        keywords: packageJson.keywords || []
-      };
-      }
+        const packageJson = require(path.join(process.cwd(), './package.json'));
+        let displayName;
+        if (packageJson.hasOwnProperty('akasha') && packageJson.akasha.displayName) {
+          displayName = packageJson.akasha.displayName;
+        }
+        return {
+          displayName,
+          mainFile: outputMainFile,
+          license: packageJson.license,
+          description: packageJson.description,
+          keywords: packageJson.keywords || [],
+        };
+      },
     }),
     new CopyPlugin({
       patterns: [
         {
-          from: "*.md",
-          context: process.cwd()
+          from: '*.md',
+          context: process.cwd(),
         },
       ],
     }),
@@ -77,11 +79,13 @@ const exp = {
     new SubresourceIntegrityPlugin({
       enabled: false,
     }),
-    new WebpackAssetsManifest({ integrity: true }),
+    new WebpackAssetsManifest({
+      integrity: true,
+    }),
     // new webpack.ProgressPlugin({
-    //   entries: true,
+    //   entries: false,
     //   modules: true,
-    //   modulesCount: 100,
+    //   modulesCount: 10,
     //   profile: true,
     // }),
   ],

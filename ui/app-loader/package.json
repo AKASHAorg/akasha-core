@@ -29,7 +29,7 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo"
   },
   "dependencies": {
-    "qs": "6.10.2",
+    "qs": "6.10.3",
     "single-spa": "5.9.3",
     "path-to-regexp": "6.2.1"
   },

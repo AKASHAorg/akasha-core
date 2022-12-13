@@ -1,0 +1,95 @@
+{
+  "name": "@akashaorg/design-system-core",
+  "version": "0.1.0",
+  "author": "AKASHA <hello@akasha.world> (https://akasha.org/)",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Valentin Cotea <valentin.cotea@akasha.world> (https://github.com/quininez)",
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
+  ],
+  "type": "module",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
+  },
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/AKASHAorg/akasha-framework/issues"
+  },
+  "homepage": "https://github.com/AKASHAorg/akasha-framework/ui/design#readme",
+  "scripts": {
+    "build:css": "postcss src/tailwind/tailwind.src.css -o lib/css/main.css",
+    "watch:css": "postcss src/tailwind/tailwind.src.css -o lib/css/main.css -w",
+    "copy-images": "copyfiles -f ./src/static/img/* ../build/images",
+    "pack": "tsc --build tsconfig.json",
+    "postpack": "yarn run build:css & yarn run copy-images",
+    "tsc": "tsc --build tsconfig.json",
+    "storybook": "yarn build:css && start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
+    "build": "tsc --build tsconfig.json",
+    "test": "BABEL_ENV=test jest --runInBand",
+    "test:watch": "jest --watch",
+    "prepare": "yarn run tsc",
+    "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "dependencies": {
+    "classnames": "2.3.2",
+    "tailwindcss": "3.2.4",
+    "@lottiefiles/react-lottie-player": "3.4.9",
+    "@heroicons/react": "2.0.13"
+  },
+  "devDependencies": {
+    "@nrwl/cli": "15.3.0",
+    "@nrwl/js": "15.3.0",
+    "@nrwl/tao": "15.3.0",
+    "@nrwl/web": "15.3.0",
+    "@nrwl/workspace": "15.3.0",
+    "@storybook/addon-actions": "6.5.14",
+    "@storybook/addon-essentials": "6.5.14",
+    "@storybook/addon-links": "6.5.14",
+    "@storybook/addon-postcss": "2.0.0",
+    "@storybook/react": "6.5.14",
+    "@types/react": "18.0.26",
+    "@types/react-dom": "18.0.9",
+    "@types/react-test-renderer": "18.0.0",
+    "babel-loader": "^8.2.2",
+    "dayjs": "1.11.7",
+    "react-docgen-typescript": "2.2.2",
+    "storybook-addon-designs": "6.3.1",
+    "storybook-tailwind-dark-mode": "1.0.15",
+    "storybook-tailwind-foundations": "1.1.2",
+    "ts-jest": "29.0.3",
+    "tailwind-config-viewer": "1.7.2",
+    "postcss": "8.4.19",
+    "postcss-cli": "10.1.0",
+    "autoprefixer": "10.4.13"
+  },
+  "peerDependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "typescript": "^4.4.3"
+  }
+}
