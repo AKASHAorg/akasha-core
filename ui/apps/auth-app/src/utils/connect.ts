@@ -8,7 +8,10 @@ const getDotColor = (status: number, errorMessage: string) => {
 
 const getStatusLabel = (status: number, errorMessage?: string) => {
   if (status > 5) return 'Authorized';
-  if (status >= 0 && !errorMessage) return 'Authorizing';
+  if (status > 1 && !errorMessage) return 'Authorizing';
+  if (status == 1 && !errorMessage) return 'Connected';
+  if (status == 0 && !errorMessage) return 'Connecting';
+
   if (errorMessage.includes("you'll need to set the")) return 'Network Error';
   if (errorMessage) return 'Failed to Authorize';
 };

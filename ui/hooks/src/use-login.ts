@@ -316,7 +316,7 @@ export function useSignUp(
   }, [signUpState, connectWallet, signAuthMessage, signComposedMessage, finishSignUp]);
 
   const resetState = () => {
-    // setSignUpState(SIGNUP_STATES[AUTH_EVENTS.CONNECT_ADDRESS]);
+    setSignUpState(SIGNUP_STATES[AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS]);
     setError(null);
     setEthAddress('');
   };
@@ -389,7 +389,7 @@ export function useCheckSignup(ethAddress: string) {
     },
     {
       enabled: !!ethAddress,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       retry: false,
       onError: (err: Error) => logError('useCheckSignup', err),
     },

@@ -22,6 +22,7 @@ export interface IConnectWalletProps {
   onSignIn: () => void;
   onSignInComplete: () => void;
   onDisconnect: () => void;
+  onConnectWallet: () => void;
 }
 
 const { Box, Icon, Text } = DS;
@@ -43,14 +44,21 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
     onSignIn,
     onSignInComplete,
     onDisconnect,
+    onConnectWallet,
   } = props;
 
   const signInCall = React.useRef(onSignIn);
   const signInCompleteCall = React.useRef(onSignInComplete);
 
   React.useEffect(() => {
+    onConnectWallet();
+  }, []);
+
+  React.useEffect(() => {
     if (isActive) {
-      signInCall.current();
+      if (signInCall.current) {
+        signInCall.current();
+      }
     }
   }, [isActive]);
 
@@ -103,9 +111,9 @@ const ConnectWallet: React.FC<IConnectWalletProps> = props => {
           <Text size="small" color="secondaryText">
             {yourAddressLabel}
           </Text>
-          {!!connectedAddress.length && <Text color="secondaryText">{connectedAddress}</Text>}
+          {!!connectedAddress?.length && <Text color="secondaryText">{connectedAddress}</Text>}
 
-          {!connectedAddress.length && (
+          {!connectedAddress?.length && (
             <Text color="secondaryText">{connectedAddressPlaceholder}</Text>
           )}
         </Box>

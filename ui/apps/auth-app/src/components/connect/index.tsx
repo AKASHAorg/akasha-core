@@ -70,8 +70,15 @@ const Connect: React.FC<RootComponentProps> = props => {
     .charAt(0)
     .toLocaleUpperCase()}${requiredNetworkQuery.data.substring(1).toLocaleLowerCase()}`;
 
-  const { ethAddress, fullSignUp, signUpState, resetState, error, fireRemainingMessages } =
-    useSignUp(selectedProvider, true);
+  const {
+    ethAddress,
+    fullSignUp,
+    signUpState,
+    resetState,
+    connectWallet,
+    error,
+    fireRemainingMessages,
+  } = useSignUp(selectedProvider, true);
 
   const checkSignupQuery = useCheckSignup(ethAddress);
 
@@ -124,12 +131,12 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   React.useEffect(() => {
     // if not registered, show invite code page
-    if (checkSignupQuery.data === false) {
+    if (checkSignupQuery.data === false && !validInviteToken) {
       resetState();
       setStep(ConnectStep.INVITE_CODE);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkSignupQuery.data]);
+  }, [checkSignupQuery.data, ethAddress]);
 
   React.useEffect(() => {
     // if user is logged in, do not show the connect page
@@ -179,6 +186,12 @@ const Connect: React.FC<RootComponentProps> = props => {
   // const handleNetworkRecheck = () => {
   //   networkStateQuery.refetch();
   // };
+  React.useEffect(() => {
+    if (connectWallet.isError) {
+      connectWallet.reset();
+      connectWallet.mutateAsync();
+    }
+  }, [connectWallet]);
 
   const handleProviderSelect = (provider: EthProviders) => {
     setSelectedProvider(provider);
@@ -268,7 +281,10 @@ const Connect: React.FC<RootComponentProps> = props => {
         (signUpState > 1 && step !== ConnectStep.INVITE_CODE)) &&
         selectedProvider !== EthProviders.None && (
           <ConnectWallet
-            isActive={!networkNotSupported && connectProviderQuery.data}
+            isActive={
+              (!networkNotSupported && connectProviderQuery.data && validInviteToken) ||
+              checkSignupQuery.data === true
+            }
             titleLine1Label={t('{{connect}} to AKASHA World', {
               connect: signUpState > 5 ? 'Connected' : 'Connecting',
             })}
@@ -296,10 +312,11 @@ const Connect: React.FC<RootComponentProps> = props => {
             onSignIn={checkSignupQuery.data ? fullSignUp.mutate : fireRemainingMessages}
             onSignInComplete={handleSignInComplete}
             onDisconnect={handleDisconnect}
+            onConnectWallet={connectWallet.mutate}
             // onSwitchNetwork={handleSwitchNetworkMetamask}
           />
         )}
-      {step === ConnectStep.INVITE_CODE && !validInviteToken && (
+      {step === ConnectStep.INVITE_CODE && (
         <InviteCode
           paragraphOneLabel={t(
             "Oh-uh! We have detected that  there's no account associated with the address you're trying to connect",
