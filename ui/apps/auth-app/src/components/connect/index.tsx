@@ -187,7 +187,10 @@ const Connect: React.FC<RootComponentProps> = props => {
   //   networkStateQuery.refetch();
   // };
   React.useEffect(() => {
-    if (connectWallet.isError) {
+    if (
+      connectWallet.isError &&
+      connectWallet.error.message.includes('already pending for origin')
+    ) {
       connectWallet.reset();
       connectWallet.mutateAsync();
     }
