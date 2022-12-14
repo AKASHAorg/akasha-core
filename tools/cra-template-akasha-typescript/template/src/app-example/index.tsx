@@ -12,7 +12,7 @@ export const register = (options: IntegrationRegistrationOptions) => ({
     return pathToActiveWhen('/@akashaorg/app-example', false)(location);
   },
   loadingFn: () => import('./components'),
-  mountsIn: options.layoutConfig?.pluginSlotId,
+  mountsIn: options.layoutConfig?.pluginSlotId || '',
   i18nNamespace: ['app-example'],
   routes: {
     defaultRoute: routes[Example],

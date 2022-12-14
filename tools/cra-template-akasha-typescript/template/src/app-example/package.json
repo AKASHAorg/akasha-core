@@ -1,0 +1,19 @@
+{
+  "name": "@akashaorg/app-example",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "App example",
+  "scripts": {
+    "start": "webpack serve --config ./webpack.config.js --port 8131",
+    "build": "webpack --config ./webpack.config.js",
+    "postbuild": "copyfiles -f ./dist/* ../public/app-example"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "akasha": {
+    "displayName": "App Example"
+  }
+}

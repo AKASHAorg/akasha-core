@@ -52,6 +52,12 @@ const overrides = [
     ...missingRequiredFields,
   },
   {
+    name: '@akashaorg/ui-widget-example',
+    integrationType: INTEGRATION_TYPES.WIDGET,
+    sources: [`/widget-example/index.js`],
+    ...missingRequiredFields,
+  },
+  {
     name: '@akashaorg/ui-widget-sidebar',
     integrationType: INTEGRATION_TYPES.WIDGET,
     sources: [`${HOST}/widgets/sidebar/index.js`],

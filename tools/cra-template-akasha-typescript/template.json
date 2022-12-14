@@ -21,10 +21,11 @@
       "copyfiles": "2.4.1"
     },
     "scripts": {
-      "start": "webpack serve --config ./webpack.config.js --port 8131",
-      "build": "webpack --config webpack.config.js && webpack --config ./registry/webpack.config.js",
-      "postbuild": "yarn copy-files",
-      "copy-files": "copyfiles -f ./dist/* ./public/app-example && copyfiles -f ./registry/dist/* ./public"
+      "start": "cd ./src/app-example && yarn start",
+      "build": "cd ./src/app-example && yarn build",
+      "postbuild": "yarn build:registry && cd ./src/widget-example && yarn build",
+      "build:registry": "webpack --config ./registry/webpack.config.js",
+      "postbuild:registry": "copyfiles -f ./registry/dist/* ./public"
     },
     "eslintConfig": {
       "extends": ["react-app", "plugin:jsx-a11y/recommended"],
@@ -35,8 +36,6 @@
       "npm": ">=8.1.0",
       "yarn": "^1.22.0"
     },
-    "akasha": {
-      "displayName": "Example App"
-    }
+    "workspaces": ["app-example", "widget-example"]
   }
 }

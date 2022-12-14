@@ -1,4 +1,4 @@
-# Getting Started with integration app
+# Getting started with integration app
 
 ## Available Scripts
 

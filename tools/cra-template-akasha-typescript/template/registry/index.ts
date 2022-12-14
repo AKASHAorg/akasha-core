@@ -25,6 +25,18 @@ declare const __DEV__: boolean;
       ...missingRequiredFields,
     },
     {
+      name: '@akashaorg/app-example',
+      integrationType: INTEGRATION_TYPES.APPLICATION,
+      sources: [`/app-example/index.js`],
+      ...missingRequiredFields,
+    },
+    {
+      name: '@akashaorg/ui-widget-example',
+      integrationType: INTEGRATION_TYPES.WIDGET,
+      sources: [`/widget-example/index.js`],
+      ...missingRequiredFields,
+    },
+    {
       name: '@akashaorg/ui-widget-layout',
       integrationType: INTEGRATION_TYPES.WIDGET,
       sources: [`${HOST}/widgets/layout/index.js`],
@@ -46,12 +58,6 @@ declare const __DEV__: boolean;
       name: '@akashaorg/ui-widget-mini-profile',
       integrationType: INTEGRATION_TYPES.WIDGET,
       sources: [`${HOST}/widgets/mini-profile/index.js`],
-      ...missingRequiredFields,
-    },
-    {
-      name: '@akashaorg/app-example',
-      integrationType: INTEGRATION_TYPES.APPLICATION,
-      sources: [`/app-example/index.js`],
       ...missingRequiredFields,
     },
   ];
@@ -78,6 +84,7 @@ declare const __DEV__: boolean;
     // pre-installed widgets;
     // layout widget is always loaded by default
     defaultWidgets: [
+      '@akashaorg/ui-widget-example',
       '@akashaorg/ui-widget-topbar',
       '@akashaorg/ui-widget-sidebar',
       '@akashaorg/ui-widget-mini-profile',
