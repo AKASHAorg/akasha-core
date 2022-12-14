@@ -291,7 +291,7 @@ const Connect: React.FC<RootComponentProps> = props => {
             titleLine2Label={t('using your wallet')}
             selectedProvider={selectedProvider}
             status={signUpState}
-            errorMessage={t(errorMessage)}
+            errorMessage={t('{{errorMessage}}', { errorMessage })}
             statusLabel={t('{{statusLabel}}', {
               statusLabel: getStatusLabel(signUpState, errorMessage),
             })}
