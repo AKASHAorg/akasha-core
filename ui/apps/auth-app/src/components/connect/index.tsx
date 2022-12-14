@@ -88,7 +88,7 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   const inviteTokenQuery = useIsValidToken({
     inviteToken,
-    enabler: inviteToken?.length === DEFAULT_TOKEN_LENGTH,
+    enabler: step === ConnectStep.INVITE_CODE && inviteToken?.length === DEFAULT_TOKEN_LENGTH,
   });
 
   const errorMessage = React.useMemo(() => {
