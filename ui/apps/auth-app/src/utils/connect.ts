@@ -24,7 +24,9 @@ const getStatusDescription = (
   }
 
   if (status > 5) {
-    return 'You have successfuly connected and authorized your address. You will be redirected shortly';
+    return isSignedUp
+      ? 'You have successfully connected and authorized your address. You will be redirected shortly'
+      : 'You have successfully connected and authorized your address. Please register your public key in the next prompt and you will be redirected shortly';
   }
 
   if (status >= 0) {
