@@ -6,9 +6,9 @@ To use this template, add `--template file:./tools/cra-template-akasha-typescrip
 
 For example:
 ```
-npx create-react-app akasha --template file:./tools/cra-template-akasha-typescript
+npx create-react-app my-app --template file:./tools/cra-template-akasha-typescript
 
 # or
 
-yarn create react-app akasha --template file:./tools/cra-template-akasha-typescript
+yarn create react-app my-app --template file:./tools/cra-template-akasha-typescript
 ```

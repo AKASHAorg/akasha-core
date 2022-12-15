@@ -74,12 +74,5 @@ module.exports = {
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
-    proxy: {
-      '/locales': {
-        target: 'https://next.akasha-world-framework.pages.dev',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
   },
 };

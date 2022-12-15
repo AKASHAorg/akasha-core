@@ -5,9 +5,9 @@
   "type": "module",
   "description": "App example",
   "scripts": {
-    "start": "webpack serve --config ./webpack.config.js --port 8131",
-    "build": "webpack --config ./webpack.config.js",
-    "postbuild": "copyfiles -f ./dist/* ../public/app-example"
+    "start": "webpack serve --config ./webpack.config.cjs --port 8131",
+    "build": "webpack --config ./webpack.config.cjs",
+    "postbuild": "copyfiles -f ./dist/* ../../public/app-example"
   },
   "main": "lib/index.js",
   "files": [
