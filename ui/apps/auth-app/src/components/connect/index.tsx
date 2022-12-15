@@ -319,7 +319,7 @@ const Connect: React.FC<RootComponentProps> = props => {
             // onSwitchNetwork={handleSwitchNetworkMetamask}
           />
         )}
-      {step === ConnectStep.INVITE_CODE && (
+      {step === ConnectStep.INVITE_CODE && selectedProvider !== EthProviders.None && (
         <InviteCode
           paragraphOneLabel={t(
             "Oh-uh! We have detected that  there's no account associated with the address you're trying to connect",
