@@ -106,6 +106,9 @@ const Connect: React.FC<RootComponentProps> = props => {
       if (error.message?.includes('user rejected signing')) {
         return 'You have declined the signature request. You will not be able to proceed unless you accept all signature requests';
       }
+      if (error.message?.includes('unknown account #0')) {
+        return 'You have changed or disconnected your wallet. Please refresh the page and try again.';
+      }
     }
 
     return null;
