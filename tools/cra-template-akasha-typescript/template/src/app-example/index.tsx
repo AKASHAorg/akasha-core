@@ -1,16 +1,15 @@
+import 'systemjs-webpack-interop/auto-public-path';
 import {
   IntegrationRegistrationOptions,
   MenuItemAreaType,
   MenuItemType,
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
-import 'systemjs-webpack-interop/auto-public-path';
 import routes, { Example } from './routes';
 
 export const register = (options: IntegrationRegistrationOptions) => ({
-  activeWhen: (location, pathToActiveWhen) => {
-    return pathToActiveWhen('/@akashaorg/app-example', false)(location);
-  },
+  activeWhen: (location, pathToActiveWhen) =>
+    pathToActiveWhen('/@akashaorg/app-example', false)(location),
   loadingFn: () => import('./components'),
   mountsIn: options.layoutConfig?.pluginSlotId || '',
   i18nNamespace: ['app-example'],
