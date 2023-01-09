@@ -102,7 +102,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => {
-        return `${appRoutes.SignIn}?${new URLSearchParams({
+        return `${appRoutes.Connect}?${new URLSearchParams({
           redirectTo: location.pathname,
         }).toString()}`;
       },

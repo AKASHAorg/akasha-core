@@ -1,11 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, useMatch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
-
-import { FocusedPluginSlot } from './styled-slots';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
@@ -46,28 +44,8 @@ const Layout: React.FC<RootComponentProps> = props => {
     return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
 
-  const isMatchingFocusedMode = useMatch('/@akashaorg/app-auth-ewa/*');
-  const isFocusedMode = !!isMatchingFocusedMode;
-
   const uiEvents = React.useRef(props.uiEvents);
   const { t } = useTranslation();
-  const handleExtensionMount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-      },
-    });
-  };
-
-  const handleExtensionUnmount = (name: string) => {
-    uiEvents.current.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
-      },
-    });
-  };
 
   const handleSidebarShow = () => {
     setShowSidebar(true);
@@ -121,6 +99,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     };
   }, [handleModal]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   return (
@@ -183,12 +162,6 @@ const Layout: React.FC<RootComponentProps> = props => {
           )}
 
           <Extension name="back-navigation" uiEvents={props.uiEvents} />
-          <FocusedPluginSlot
-            name={props.layoutConfig.focusedPluginSlotId}
-            onMount={handleExtensionMount}
-            onUnmount={handleExtensionUnmount}
-            style={!isFocusedMode ? { display: 'none' } : {}}
-          />
           <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
         </div>
         <div>

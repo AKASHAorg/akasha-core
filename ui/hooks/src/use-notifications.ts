@@ -1,4 +1,4 @@
-import { lastValueFrom, forkJoin, catchError, of } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
