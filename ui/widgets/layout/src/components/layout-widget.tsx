@@ -4,8 +4,6 @@ import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
-import { tw } from '@twind/core';
-import { Container } from '@akashaorg/design-system-core/lib/components/Container';
 
 import { FocusedPluginSlot } from './styled-slots';
 
@@ -198,9 +196,9 @@ const Layout: React.FC<RootComponentProps> = props => {
             <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
             <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
           </div>
-          <Container fixedBottom maxWXL rightMd>
+          <div className="fixed bottom-0 right-20 max-w-xl">
             <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
-          </Container>
+          </div>
         </div>
       </div>
     </div>
