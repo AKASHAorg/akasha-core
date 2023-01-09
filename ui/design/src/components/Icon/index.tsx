@@ -50,8 +50,9 @@ export type IconType =
   | 'chevronLeft'
   | 'dapper'
   | 'dashboard'
-  | 'discord'
+  | 'disconnect'
   | 'discordAlt'
+  | 'discord'
   | 'discordWtBg'
   | 'discourse'
   | 'document'
@@ -61,6 +62,7 @@ export type IconType =
   | 'email'
   | 'emailAlt'
   | 'emoji'
+  | 'expand'
   | 'explore'
   | 'eye'
   | 'ethereum'
@@ -208,8 +210,9 @@ export const iconTypes: IconType[] = [
   'coins',
   'dapper',
   'dashboard',
-  'discord',
+  'disconnect',
   'discordAlt',
+  'discord',
   'discordWtBg',
   'discourse',
   'document',
@@ -219,6 +222,7 @@ export const iconTypes: IconType[] = [
   'email',
   'emailAlt',
   'emoji',
+  'expand',
   'explore',
   'eye',
   'ethereum',
@@ -331,7 +335,7 @@ export interface IconProps extends CommonInterface<any> {
   clickableRed?: boolean;
   accentColor?: boolean;
   plain?: boolean;
-  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
   disabled?: boolean;
   wrapperStyle?: React.CSSProperties;
   testId?: string;
@@ -541,6 +545,11 @@ const Icon: React.FC<IconProps> = styled(IconBase)`
             height: 2.5rem;
           `;
         case 'xxl':
+          return css`
+            width: 5rem;
+            height: 5rem;
+          `;
+        case 'xxxl':
           return css`
             width: 6.5rem;
             height: 6.5rem;

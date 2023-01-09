@@ -303,7 +303,7 @@ const ProfileForm: React.FC<ProfileFormProps> = props => {
   };
 
   const handleSave = () => {
-    if (formValues.socialLinks.length) {
+    if (formValues.socialLinks?.length) {
       const links = formValues.socialLinks.map(link => {
         if (link.type === EnsTxtPresets.URL) {
           return {

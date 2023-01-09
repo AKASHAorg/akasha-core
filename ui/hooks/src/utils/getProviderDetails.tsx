@@ -28,8 +28,7 @@ const getProviderDetails = (provider: INJECTED_PROVIDERS): IInjectedProviderDeta
       return {
         iconType: 'metamask',
         titleLabel: provider,
-        subtitleLabel:
-          "We recommend using MetaMask. It's the wallet we've tested most extensively with Ethereum World. We're very sure it'll work.",
+        subtitleLabel: 'Connect using your MetaMask wallet',
       };
     // provider not detected
     case INJECTED_PROVIDERS.NOT_DETECTED:

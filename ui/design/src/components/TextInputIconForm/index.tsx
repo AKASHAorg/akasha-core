@@ -17,6 +17,7 @@ export interface ITextInputIconForm {
   success?: boolean;
   hasError?: boolean;
   errorMsg?: string;
+  errorIconColor?: string;
   margin?: MarginType | EdgeSizeType;
   elevation?: string;
   inputInvalid?: boolean;
@@ -33,6 +34,7 @@ const TextInputIconForm: React.FC<ITextInputIconForm> = props => {
     submitted,
     submitting,
     hasError,
+    errorIconColor,
     success,
     inputPlaceholder,
     validateTokenFn,
@@ -46,7 +48,8 @@ const TextInputIconForm: React.FC<ITextInputIconForm> = props => {
 
   const isEmpty = !inputValue;
   const isWriting = inputValue && !submitted && !submitting;
-  const inputColor = (isWriting && 'accent') || (hasError && 'errorText') || 'border';
+  const inputColor =
+    (isWriting && 'accent') || (hasError && 'errorText') || (success && 'green') || 'border';
   const placeHolder = inputPlaceholder || 'Invitation Code';
   const isDisabled = !noDisable && (submitting || success);
   const Container = isDisabled ? StyledDisabledBox : Box;
@@ -89,7 +92,7 @@ const TextInputIconForm: React.FC<ITextInputIconForm> = props => {
         />
       )}
       {submitting && <Icon type="loading" />}
-      {hasError && !isEmpty && <Icon type="error" />}
+      {hasError && !isEmpty && <Icon type="error" color={errorIconColor} />}
       {success && !submitting && !hasError && !inputInvalid && (
         <Icon type="available" color={'green'} />
       )}
