@@ -78,6 +78,8 @@ const colors: IColorsLight = {
   coverImageBackground: '#ECF1FE',
   embedBackground: '#FBFCFD',
   convoAreaBackground: '#f4f5f7',
+  lightGold: '#fef5e6',
+  deepBlue: '#5397F7',
   btnAccentColor: '#4E71FF', // blue
   accent: '#4E71FF', // blue
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity

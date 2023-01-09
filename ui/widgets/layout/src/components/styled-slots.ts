@@ -36,8 +36,6 @@ export const TopbarSlot: React.FC<ExtensionPointProps> = styled(ExtensionPoint)`
 
 export const PluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)``;
 
-export const FocusedPluginSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)``;
-
 export const WidgetSlot: React.FC<ExtensionPointProps> = styled(BaseStyledSlot)`
   display: none;
   ${props => css`

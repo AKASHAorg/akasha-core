@@ -74,6 +74,8 @@ const colors: IColorsDark = {
   coverImageBackground: '#425166',
   embedBackground: '#253142',
   convoAreaBackground: '#132540',
+  lightGold: '#fef5e6',
+  deepBlue: '#5397F7',
   btnAccentColor: '#FBFCFD', // lotion
   accent: '#8b9FFF', // light ultramarine
   accentOpacity: 'rgba(78, 113, 255, 0.1)', // blue with 0.1 opacity

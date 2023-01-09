@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, useMatch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
@@ -20,7 +20,6 @@ import {
   TopbarSlot,
   SidebarSlot,
   WidgetSlot,
-  FocusedPluginSlot,
   CookieWidgetSlot,
 } from './styled-slots';
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
@@ -62,9 +61,6 @@ const Layout: React.FC<RootComponentProps> = props => {
     // defaults to healty.
     return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
-
-  const isMatchingFocusedMode = useMatch('/@akashaorg/app-auth-ewa/*');
-  const isFocusedMode = !!isMatchingFocusedMode;
 
   const uiEvents = React.useRef(props.uiEvents);
   const { t } = useTranslation();
@@ -159,6 +155,7 @@ const Layout: React.FC<RootComponentProps> = props => {
     };
   }, [handleModal]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   return (
@@ -178,14 +175,14 @@ const Layout: React.FC<RootComponentProps> = props => {
               <SidebarAreaContainer>
                 {/* container enforces sticky position on scroll */}
                 <SidebarSlot
-                  visible={isFocusedMode ? false : showSidebar}
+                  visible={showSidebar}
                   name={props.layoutConfig.sidebarSlotId}
                   onMount={handleExtensionMount}
                   onUnmount={handleExtensionUnmount}
                 />
               </SidebarAreaContainer>
             </SidebarWrapper>
-            <MainAreaContainer sidebarVisible={isFocusedMode ? false : showSidebar}>
+            <MainAreaContainer sidebarVisible={showSidebar}>
               <Box direction="row">
                 <PluginContainer>
                   {/* This is used to mark scroll top stop position  */}
@@ -237,23 +234,16 @@ const Layout: React.FC<RootComponentProps> = props => {
                   )}
 
                   <Extension name="back-navigation" uiEvents={props.uiEvents} />
-                  <FocusedPluginSlot
-                    name={props.layoutConfig.focusedPluginSlotId}
-                    onMount={handleExtensionMount}
-                    onUnmount={handleExtensionUnmount}
-                    style={!isFocusedMode ? { display: 'none' } : {}}
-                  />
                   <PluginSlot
                     name={props.layoutConfig.pluginSlotId}
                     onMount={handleExtensionMount}
                     onUnmount={handleExtensionUnmount}
-                    style={isFocusedMode ? { display: 'none' } : {}}
                   />
                 </PluginContainer>
                 <WidgetContainer>
                   {/* ^ sticky container for widgets */}
                   <WidgetAreaContainer>
-                    <ScrollableWidgetArea style={isFocusedMode ? { display: 'none' } : {}}>
+                    <ScrollableWidgetArea>
                       <WidgetSlot
                         name={props.layoutConfig.widgetSlotId}
                         onMount={handleExtensionMount}

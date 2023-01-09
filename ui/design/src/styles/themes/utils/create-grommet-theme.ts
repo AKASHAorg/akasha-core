@@ -83,6 +83,8 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
         ultraLightBackground: styledComponentsTheme.colors.ultraLightBackground,
         skeletonBackground: styledComponentsTheme.colors.skeletonBackground,
         focus: styledComponentsTheme.colors.accent,
+        lightGold: styledComponentsTheme.colors.lightGold,
+        deepBlue: styledComponentsTheme.colors.deepBlue,
       },
       focus: {
         border: {
@@ -158,9 +160,18 @@ const createGrommetTheme = (styledComponentsTheme: DefaultTheme) => {
     },
     accordion: {
       icons: {
-        color: `${styledComponentsTheme.colors.border}`,
+        color: `${styledComponentsTheme.colors.secondaryText}`,
       },
       border: undefined,
+      heading: {
+        level: '6',
+        margin: 'small',
+      },
+      panel: {
+        border: {
+          color: 'transparent',
+        },
+      },
     },
     text: {
       small: {
