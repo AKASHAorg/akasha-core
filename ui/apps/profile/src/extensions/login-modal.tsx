@@ -22,7 +22,7 @@ const LoginModal = (props: RootExtensionProps) => {
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: appRoutes => {
         const redirectTo = new URLSearchParams(location.search).get('redirectTo');
-        return `${appRoutes[appRoutes.SIGN_IN]}?${new URLSearchParams({
+        return `${appRoutes.Connect}?${new URLSearchParams({
           redirectTo: redirectTo || location.pathname,
         }).toString()}`;
       },
@@ -33,7 +33,7 @@ const LoginModal = (props: RootExtensionProps) => {
     sessionStorage.setItem(StorageKeys.LAST_URL, location.pathname);
     props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: navRoutes => navRoutes.SignUp,
+      getNavigationUrl: navRoutes => navRoutes.Connect,
     });
   };
 
