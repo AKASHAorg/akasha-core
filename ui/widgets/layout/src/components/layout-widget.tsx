@@ -3,26 +3,12 @@ import { BrowserRouter as Router, useMatch } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { GlobalStyle } from './global-style';
 import ScrollRestorer from './scroll-restorer';
-import {
-  MainAreaContainer,
-  ScrollableWidgetArea,
-  SidebarAreaContainer,
-  SidebarWrapper,
-  WidgetAreaContainer,
-  WidgetContainer,
-  PluginContainer,
-} from './styled-containers';
-import {
-  ModalSlot,
-  PluginSlot,
-  TopbarSlot,
-  SidebarSlot,
-  WidgetSlot,
-  FocusedPluginSlot,
-  CookieWidgetSlot,
-} from './styled-slots';
+import { tw } from '@twind/core';
+import { Container } from '@akashaorg/design-system-core/lib/components/Container';
+
+import { FocusedPluginSlot } from './styled-slots';
+
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
 const { Box, BasicCardBox, Icon, styled, Text, Extension } = DS;
@@ -36,7 +22,6 @@ const WarningCard = styled(BasicCardBox)`
   border-style: solid;
   display: inline-flex;
   align-items: start;
-  width: 100vw;
 `;
 
 const WarningIcon = styled(Icon)`
@@ -83,27 +68,6 @@ const Layout: React.FC<RootComponentProps> = props => {
       data: {
         name,
       },
-    });
-  };
-
-  /**
-   * Handler for modal mount events
-   * This event is only triggered when `navigateToModal` fn is called
-   */
-  const handleModalNodeMount = React.useCallback(() => {
-    uiEvents.current.next({
-      event: EventTypes.ExtensionPointMount,
-      data: activeModal,
-    });
-  }, [activeModal]);
-
-  const handleModalNodeUnmount = (name: string) => {
-    if (!name) {
-      return;
-    }
-    uiEvents.current.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: { name },
     });
   };
 
@@ -162,136 +126,84 @@ const Layout: React.FC<RootComponentProps> = props => {
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   return (
-    <>
-      <ScrollRestorer />
-      <div>
-        <GlobalStyle />
+    <div className="bg-background dark:(bg-background-dark)">
+      <div className="grid sm:grid-cols-[8fr_4fr] md:grid-cols-[3fr_6fr_3fr] gap-6 max-w-7xl mx-auto">
+        <ScrollRestorer />
         <div>
-          {/* ^ topbar sticky container */}
-          <TopbarSlot
-            name={props.layoutConfig.topbarSlotId}
-            onMount={handleExtensionMount}
-            onUnmount={handleExtensionUnmount}
-          />
-          <Box direction="row" flex={true}>
-            <SidebarWrapper>
-              <SidebarAreaContainer>
-                {/* container enforces sticky position on scroll */}
-                <SidebarSlot
-                  visible={isFocusedMode ? false : showSidebar}
-                  name={props.layoutConfig.sidebarSlotId}
-                  onMount={handleExtensionMount}
-                  onUnmount={handleExtensionUnmount}
-                />
-              </SidebarAreaContainer>
-            </SidebarWrapper>
-            <MainAreaContainer sidebarVisible={isFocusedMode ? false : showSidebar}>
-              <Box direction="row">
-                <PluginContainer>
-                  {/* This is used to mark scroll top stop position  */}
-                  <div id="scrollTopStop"></div>
-                  {!isPlatformHealty && (
-                    <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
-                      <WarningIcon type="error" themeColor="secondary" />
-                      <Box width="100%">
-                        <Text size="medium">
-                          {`${t(
-                            'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
-                          )}. ${t('Please check back soon')}.`}
-                        </Text>
-                        <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
-                      </Box>
-                    </WarningCard>
-                  )}
-                  {!dismissed.includes(dismissedCardId) && (
-                    <WarningCard
-                      margin={{ bottom: 'small' }}
-                      pad="small"
-                      direction="row"
-                      key={dismissedCardId}
-                      data-testid="the-merge-notification"
-                    >
-                      <WarningIcon type="error" themeColor="secondary" />
-                      <Box width="100%">
-                        <Text size="medium">
-                          {`${t(
-                            'Following the merge, the Rinkeby network has been deprecated',
-                          )}. ${t('We have migrated Ethereum World to the Goerli testnet')}. ${t(
-                            'This will not affect your content or posts, they are saved',
-                          )}! ${t(
-                            'But some functionalities such as claiming ENS names won’t be possible',
-                          )}. ${t('We are working hard on mitigating any issues')}. ${t(
-                            'Bear with us 🙏🏽',
-                          )}.`}
-                        </Text>
-                      </Box>
-                      <Icon
-                        type="close"
-                        clickable={true}
-                        onClick={onCloseButtonClick}
-                        size="xs"
-                        accentColor={true}
-                        data-testid="the-merge-notification-close-button"
-                      />
-                    </WarningCard>
-                  )}
+          <div className="sticky top-2">
+            <Extension name={props.layoutConfig.sidebarSlotId} uiEvents={props.uiEvents} />
+          </div>
+        </div>
+        <div>
+          <div className="sticky top-2">
+            <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
+          </div>
 
-                  <Extension name="back-navigation" uiEvents={props.uiEvents} />
-                  <FocusedPluginSlot
-                    name={props.layoutConfig.focusedPluginSlotId}
-                    onMount={handleExtensionMount}
-                    onUnmount={handleExtensionUnmount}
-                    style={!isFocusedMode ? { display: 'none' } : {}}
-                  />
-                  <PluginSlot
-                    name={props.layoutConfig.pluginSlotId}
-                    onMount={handleExtensionMount}
-                    onUnmount={handleExtensionUnmount}
-                    style={isFocusedMode ? { display: 'none' } : {}}
-                  />
-                </PluginContainer>
-                <WidgetContainer>
-                  {/* ^ sticky container for widgets */}
-                  <WidgetAreaContainer>
-                    <ScrollableWidgetArea style={isFocusedMode ? { display: 'none' } : {}}>
-                      <WidgetSlot
-                        name={props.layoutConfig.widgetSlotId}
-                        onMount={handleExtensionMount}
-                        onUnmount={handleExtensionUnmount}
-                      />
-                      <WidgetSlot
-                        name={props.layoutConfig.rootWidgetSlotId}
-                        onMount={handleExtensionMount}
-                        onUnmount={handleExtensionUnmount}
-                      />
-                    </ScrollableWidgetArea>
-                    <CookieWidgetSlot
-                      name={props.layoutConfig.cookieWidgetSlotId}
-                      onMount={handleExtensionMount}
-                      onUnmount={handleExtensionUnmount}
-                    />
-                  </WidgetAreaContainer>
-                </WidgetContainer>
+          <div id="scrollTopStop"></div>
+          {!isPlatformHealty && (
+            <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
+              <WarningIcon type="error" themeColor="secondary" />
+              <Box width="100%">
+                <Text size="medium">
+                  {`${t(
+                    'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
+                  )}. ${t('Please check back soon')}.`}
+                </Text>
+                <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
               </Box>
-            </MainAreaContainer>
-          </Box>
-          {activeModal && (
-            <ModalSlot
-              name={activeModal.name}
-              onMount={handleModalNodeMount}
-              onUnmount={handleModalNodeUnmount}
-              style={{ position: 'relative', zIndex: 200 }}
-            />
+            </WarningCard>
           )}
-          <ModalSlot
-            name={props.layoutConfig.modalSlotId}
+          {!dismissed.includes(dismissedCardId) && (
+            <WarningCard
+              margin={{ bottom: 'small' }}
+              pad="small"
+              direction="row"
+              key={dismissedCardId}
+              data-testid="the-merge-notification"
+            >
+              <WarningIcon type="error" themeColor="secondary" />
+              <Box width="100%">
+                <Text size="medium">
+                  {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
+                    'We have migrated Ethereum World to the Goerli testnet',
+                  )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
+                    'But some functionalities such as claiming ENS names won’t be possible',
+                  )}. ${t('We are working hard on mitigating any issues')}. ${t(
+                    'Bear with us 🙏🏽',
+                  )}.`}
+                </Text>
+              </Box>
+              <Icon
+                type="close"
+                clickable={true}
+                onClick={onCloseButtonClick}
+                size="xs"
+                accentColor={true}
+                data-testid="the-merge-notification-close-button"
+              />
+            </WarningCard>
+          )}
+
+          <Extension name="back-navigation" uiEvents={props.uiEvents} />
+          <FocusedPluginSlot
+            name={props.layoutConfig.focusedPluginSlotId}
             onMount={handleExtensionMount}
             onUnmount={handleExtensionUnmount}
-            style={{ position: 'relative', zIndex: 200 }}
+            style={!isFocusedMode ? { display: 'none' } : {}}
           />
+          <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
+        </div>
+        <div>
+          <div className="sticky top-2">
+            <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
+            <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
+          </div>
+          <Container fixedBottom maxWXL rightMd>
+            <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
+          </Container>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
