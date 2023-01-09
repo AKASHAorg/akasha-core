@@ -11,7 +11,7 @@ export class RedisLRU implements ILRU {
     this.redis = redisInstance;
   }
 
-  public async set(key: string, value: unknown, ttl = 86400) {
+  public async set(key: string, value: unknown, ttl = 86400 * 30 * 12) {
     try {
       const _value = stringify(value);
       return this.redis.set(`${this.prefix}${key}`, _value, 'EX', ttl);

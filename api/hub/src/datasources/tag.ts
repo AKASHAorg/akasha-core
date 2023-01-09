@@ -82,7 +82,7 @@ class TagAPI extends DataSource {
 
   // threadsdb doesn't have limit and offset selectors atm
   // https://github.com/textileio/js-threads/issues/140
-  async getTags(limit: number, offset: string) {
+  async getTags(limit?: number, offset?: string) {
     let tag: Tag[];
     const db: Client = await getAppDB();
     if (await queryCache.has(this.collection)) {
