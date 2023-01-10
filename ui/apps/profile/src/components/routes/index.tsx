@@ -44,7 +44,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     // if guest, show link to auth app
     plugins['@akashaorg/app-routing']?.routing.navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: (routes: Record<string, string>) => routes.SignIn,
+      getNavigationUrl: (routes: Record<string, string>) => routes.Connect,
     });
   };
 
