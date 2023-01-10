@@ -2,7 +2,7 @@
   {
     "name": "locales",
     "id": "0xc914c9efa3dec03f54e57a7f5956218306e3c1e620da9bbb91372dfea24eecdd",
-    "ipfsManifest": "f0155171c1654366579c9bcff509cf6933e5a060d55aec35cf834bafcdc513e1f",
+    "ipfsManifest": "f0155171ccb266dc3979a45bb8e4a3a84f64a89f3562470b98b66fa2c9d6454ea",
     "type": ""
   },
   {
@@ -14,19 +14,19 @@
   {
     "name": "@akashaorg/app-auth-ewa",
     "id": "0x6f8326aa8c1116feff879fa16af65849148e8fae5a79326de17a0cfa78b699b6",
-    "ipfsManifest": "f0155171c0dabbba96ecb7d11b5fa55a7d48a5317f2f76535d7f5ca293b4930d0",
+    "ipfsManifest": "f0155171cb3ad34d07621a621d59ee6703ad33f9c132809e89f974ac1a32a7d8b",
     "type": 0
   },
   {
     "name": "@akashaorg/app-moderation-ewa",
     "id": "0xb5353ae20a4ece1b430333820c5303ff86b3ef3b9662aa8c46f3c74adccf3c44",
-    "ipfsManifest": "f0155171cf1ba09f5037c2ac91aba36df87d14462689648b0cf9d7a5b986ad5c8",
+    "ipfsManifest": "f0155171ce57bf73c2b447fcfbadaef9929860407e02bd521c8cad9c3eee6fc51",
     "type": 0
   },
   {
     "name": "@akashaorg/app-integration-center",
     "id": "0xb205644246860965047578d591cecced40ade1a782c6c84fa599173af6a22d9c",
-    "ipfsManifest": "f0155171c4bfcdddb867d22dd0cd7ab74b78606d29bb1aca952da06acbf0b1ea1",
+    "ipfsManifest": "f0155171cf6e72e98ccd4c93575efdf47f02f8bba7dfec6d4fa8dd53cfa744f6a",
     "type": 0
   },
   {
@@ -44,7 +44,7 @@
   {
     "name": "@akashaorg/app-notifications",
     "id": "0xa97de836ff423f85cd82a60e3dd78b3213d6254e23e2a71a53c933df9527882d",
-    "ipfsManifest": "f0155171c81313957394efcaaf58ece11bf4c53079a893a06d260fc0c7195e39d",
+    "ipfsManifest": "f0155171cbf606ddb3474d4b0e2bdecc0352835a9276ae45274b2c06480c03589",
     "type": 0
   },
   {
@@ -74,13 +74,13 @@
   {
     "name": "@akashaorg/app-routing",
     "id": "0xc7dbd964618fa46a51ec3633a23d10c77b458d218ba061755ca7452f627d6504",
-    "ipfsManifest": "f0155171cc8bec6776b4027538a50ce69d8c5bb669d3f3e14bbb773d5de27b06c",
+    "ipfsManifest": "f0155171c090cb91ee8cd7c908368d2fbea8ab8efc0eab9e3d8493d0bff019589",
     "type": 0
   },
   {
     "name": "@akashaorg/app-messaging",
     "id": "0xa9441406239791b073bea64df44bb32b2f15e6bae637847274b052e9b0bbdbbc",
-    "ipfsManifest": "f0155171c50c622cac1ed64468e2abf05941c8b4b22c2a5750a8a2d74cdb7010e",
+    "ipfsManifest": "f0155171cb00c65d4764c963de74ec6a7d25a460d07d4cab4bae3dd42591d672b",
     "type": 0
   },
   {
@@ -98,7 +98,7 @@
   {
     "name": "@akashaorg/ui-widget-layout",
     "id": "0x7babda8c4fdba6cf5a2b439ee0318041e164073b25e0e757f5e98db2d889263f",
-    "ipfsManifest": "f0155171c98fd29bb29fb3c07ef3c924ebbffa847748f922e798637a3ebc72754",
+    "ipfsManifest": "f0155171cddcb68e791a48811ac2eefc057178d108569cb5b9ff9d8a1e601cc0f",
     "type": 2
   },
   {
@@ -110,7 +110,7 @@
   {
     "name": "@akashaorg/ui-widget-topbar",
     "id": "0xdaa1a853c9e7ce4b075a9c36a0b44b14bcea7d16641bbb9be33eb14e2e867dd5",
-    "ipfsManifest": "f0155171c83931fd179826488cd83d7bcdaf9a81f78a2442f349ccd47f45fcb78",
+    "ipfsManifest": "f0155171c5a12f09b2189ccb9cfb8485f4fe480869cd00572c09a9def53d8dc54",
     "type": 2
   },
   {

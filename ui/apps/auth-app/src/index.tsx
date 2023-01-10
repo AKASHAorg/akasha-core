@@ -1,5 +1,5 @@
 import 'systemjs-webpack-interop/auto-public-path';
-import routes, { CONNECT } from './routes';
+import routes from './routes';
 import { IAppConfig, IntegrationRegistrationOptions, LogoTypeSource } from '@akashaorg/typings/ui';
 
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => {
@@ -9,10 +9,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     i18nNamespace: ['app-auth-ewa'],
     logo: { type: LogoTypeSource.ICON, value: 'app' },
     // allow other apps to navigate to this app
-    routes: {
-      CONNECT,
-      ...routes,
-    },
+    routes: routes,
     menuItems: {
       label: 'Authentication App',
       area: [],
