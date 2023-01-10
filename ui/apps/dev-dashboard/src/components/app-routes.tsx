@@ -53,7 +53,7 @@ const AppRoutes = (props: RootComponentProps) => {
     navigateTo?.({
       appName: '@akashaorg/app-auth-ewa',
       getNavigationUrl: (routes: Record<string, string>) => {
-        return `${routes.SignIn}?${new URLSearchParams({
+        return `${routes.Connect}?${new URLSearchParams({
           redirectTo: `${props.baseRouteName}${routes[ONBOARDING_STEP_ONE]}`,
         }).toString()}`;
       },

@@ -18,7 +18,7 @@ const Welcome: React.FC<RootComponentProps> = props => {
     if (loginQuery.isSuccess && !loginQuery.data?.pubKey) {
       navigateTo?.({
         appName: '@akashaorg/app-auth-ewa',
-        getNavigationUrl: navRoutes => navRoutes.SignIn,
+        getNavigationUrl: navRoutes => navRoutes.Connect,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
