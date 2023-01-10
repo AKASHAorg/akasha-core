@@ -6,6 +6,6 @@ module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
   entry: './index',
   output: Object.assign(baseConfig.output, {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../../public/app-example'),
   }),
 });

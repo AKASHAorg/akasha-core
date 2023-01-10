@@ -17,15 +17,11 @@
       "typescript": "4.9.3",
       "jest": "29.0.3",
       "ts-loader": "9.4.1",
-      "webpack": "5.74.0",
-      "copyfiles": "2.4.1"
+      "webpack": "5.74.0"
     },
     "scripts": {
-      "start": "cd ./src/app-example && yarn start",
-      "build": "cd ./src/app-example && yarn build",
-      "postbuild": "yarn build:registry && cd ./src/widget-example && yarn build",
-      "build:registry": "webpack --config ./registry/webpack.config.js",
-      "postbuild:registry": "copyfiles -f ./registry/dist/* ./public"
+      "start": "webpack --watch --config ./src/widget-example/webpack.config.cjs & webpack --watch --config ./src/app-example/webpack.config.cjs & webpack serve --config ./registry/webpack.config.js --port 8131",
+      "build": "webpack --config ./src/widget-example/webpack.config.cjs && webpack --config ./src/app-example/webpack.config.cjs && webpack --config ./registry/webpack.config.js"
     },
     "eslintConfig": {
       "extends": ["react-app", "plugin:jsx-a11y/recommended"],

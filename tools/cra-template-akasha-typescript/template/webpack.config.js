@@ -2,12 +2,10 @@
 const webpack = require('webpack');
 const path = require('path');
 const commons = require('./app.pack.conf');
-const fs = require('fs');
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   context: path.resolve(__dirname),
-  entry: './src/index',
   mode: process.env.NODE_ENV || 'development',
   target: ['web', 'es2017'],
   module: {
@@ -35,7 +33,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public'),
     libraryTarget: 'system',
     publicPath: 'auto',
     filename: 'index.js',
@@ -50,29 +48,7 @@ module.exports = {
   devtool: isProduction ? 'source-map' : 'inline-source-map',
   externals: commons.externals,
   optimization: commons.optimization,
-  devServer: {
-    server: {
-      type: 'https',
-      options:
-        process.env.DEV_CERT_KEY_PATH && process.env.DEV_CERT_PATH
-          ? {
-              key: fs.readFileSync(process.env.DEV_CERT_KEY_PATH),
-              cert: fs.readFileSync(process.env.DEV_CERT_PATH),
-            }
-          : {},
-    },
-    static: {
-      directory: path.join(__dirname, 'public'),
-      publicPath: '/',
-      staticOptions: {
-        index: 'index.dev.html',
-      },
-    },
-    historyApiFallback: {
-      index: 'index.dev.html',
-    },
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
+  watchOptions: {
+    ignored: /node_modules|public|lib/,
   },
 };
