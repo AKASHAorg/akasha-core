@@ -52,7 +52,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
 
   return (
     <>
-      <StyledBox align="center" width="70%" responsive={true} margin="auto" gap="small">
+      <StyledBox align="center" width="100%" responsive={true} margin="auto" gap="small">
         <Heading
           style={{ userSelect: 'none', width: '100%' }}
           level="4"
@@ -67,7 +67,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
           {subtitleLabel}
         </Text>
 
-        <Box direction="column" pad="small" style={{ width: '100%' }}>
+        <Box direction="column" style={{ width: '100%' }}>
           <Heading level="5" size="small" textAlign="start" margin={{ bottom: '0.5rem' }}>
             {infoLabel}
           </Heading>
@@ -141,10 +141,8 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
             />
           </Box>
         </Box>
-      </StyledBox>
 
-      <StyledBox align="center" width="90%" responsive={true} margin="auto">
-        <Text textAlign="start" size="medium" color="secondaryText" margin={{ top: '1rem' }}>
+        <Text textAlign="center" size="medium" color="secondaryText" margin={{ top: '1rem' }}>
           {footerLabel}
           {footerCTAArr.map((cta, idx) => (
             <React.Fragment key={cta.label + idx}>

@@ -239,7 +239,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <MainAreaCardBox pad="large">
+    <MainAreaCardBox pad="xlarge">
       {(step === ConnectStep.CHOOSE_PROVIDER || selectedProvider === EthProviders.None) && (
         <ChooseProvider
           titleLabel={t('✨ Welcome to AKASHA World ✨')}
