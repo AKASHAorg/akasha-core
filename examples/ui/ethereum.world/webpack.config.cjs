@@ -25,15 +25,6 @@ module.exports = Object.assign(baseConfig, {
       ],
     }),
   ]),
-  module: {
-    ...baseConfig.module,
-    rules: baseConfig.module.rules.concat([
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ]),
-  },
   externals: baseConfig.externals,
   devServer: {
     server: {

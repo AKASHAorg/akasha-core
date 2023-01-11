@@ -8,7 +8,7 @@ const { Box } = DS;
 
 const App: React.FC<RootComponentProps> = props => {
   return (
-    <Box width="100vw">
+    <Box>
       <I18nextProvider i18n={props.plugins['@akashaorg/app-translation']?.translation?.i18n}>
         <AppRoutes {...props} />
       </I18nextProvider>
