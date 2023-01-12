@@ -23,7 +23,7 @@ import InviteCode from './invite-code';
 
 import { getStatusDescription, getStatusLabel } from '../../utils/connect';
 
-const { MainAreaCardBox } = DS;
+const { MainAreaCardBox, useViewportSize } = DS;
 
 export enum ConnectStep {
   CHOOSE_PROVIDER = 'Choose_Provider',
@@ -46,6 +46,9 @@ const Connect: React.FC<RootComponentProps> = props => {
   const [validInviteToken, setValidInviteToken] = React.useState<boolean>(false);
 
   const DEFAULT_TOKEN_LENGTH = 24;
+
+  const { size } = useViewportSize();
+  const isMobile = size === 'small';
 
   const [analyticsActions] = useAnalytics();
   const routingPlugin = React.useRef(props.plugins['@akashaorg/app-routing']?.routing);
@@ -239,7 +242,10 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <MainAreaCardBox pad="large">
+    <MainAreaCardBox
+      pad={{ vertical: 'large', horizontal: isMobile ? 'none' : 'large' }}
+      responsive={true}
+    >
       {(step === ConnectStep.CHOOSE_PROVIDER || selectedProvider === EthProviders.None) && (
         <ChooseProvider
           titleLabel={t('✨ Welcome to AKASHA World ✨')}
