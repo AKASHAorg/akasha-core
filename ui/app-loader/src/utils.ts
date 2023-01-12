@@ -71,6 +71,7 @@ export const createRootNode = (parent: HTMLElement, nodeName: string) => {
   }
   const wrapNode = document.createElement('div');
   wrapNode.id = `${nodeID}`;
+  wrapNode.classList.add('global-styles__inherit-height', 'global-styles__inherit-width');
   parent.append(wrapNode);
   return wrapNode;
 };

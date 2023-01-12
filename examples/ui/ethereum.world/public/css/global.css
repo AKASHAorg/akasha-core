@@ -19,3 +19,11 @@ body.Dark-Theme>#splash-screen-root {
   --color-background-default: 255 255 255;
   --color-background-dark: 13 26 45;
 }
+
+.global-styles__inherit-height {
+  height: inherit;
+}
+
+.global-styles__inherit-width {
+  width: inherit;
+}

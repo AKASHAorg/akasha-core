@@ -20,17 +20,17 @@ const AppSidebar = styled(Sidebar)`
   }
 `;
 
-const SidebarOverlay = styled(Box)`
-  width: 100%;
-  opacity: 0.8;
-  height: 100vh;
-  position: fixed;
-  background-color: ${props => props.theme.colors.overlay};
-  /* hide overlay from large desktop breakpoint */
-  @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
-    display: none;
-  }
-`;
+// const SidebarOverlay = styled(Box)`
+//   width: 100%;
+//   opacity: 0.8;
+//   height: 100vh;
+//   position: fixed;
+//   background-color: ${props => props.theme.colors.overlay};
+//   /* hide overlay from large desktop breakpoint */
+//   @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
+//     display: none;
+//   }
+// `;
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
@@ -135,7 +135,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <>
-      <SidebarOverlay onClick={handleSidebarClose} />
       <AppSidebar
         versionLabel={__DEV__ && 'DEV'}
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
