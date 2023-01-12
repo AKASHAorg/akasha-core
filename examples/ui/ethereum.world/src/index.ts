@@ -1,10 +1,13 @@
 import { ILoaderConfig, INTEGRATION_TYPES } from '@akashaorg/typings/ui';
 import { missingRequiredFields } from './registry-overrides';
-import '@akashaorg/design-system-core/lib/css/main.css';
+import { install } from '@twind/core';
+import twindConfig from './twind.config';
 
 console.time('AppLoader:firstMount');
 
 declare const __DEV__: boolean;
+
+install(twindConfig);
 
 (async function bootstrap(System) {
   const { default: startLoader } = await System.import('@akashaorg/ui-app-loader');
