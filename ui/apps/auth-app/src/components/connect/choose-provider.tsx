@@ -52,7 +52,14 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
 
   return (
     <>
-      <StyledBox align="center" width="70%" responsive={true} margin="auto" gap="small">
+      <StyledBox
+        data-testid="providers-list"
+        align="center"
+        width="70%"
+        responsive={true}
+        margin="auto"
+        gap="small"
+      >
         <Heading
           style={{ userSelect: 'none', width: '100%' }}
           level="4"

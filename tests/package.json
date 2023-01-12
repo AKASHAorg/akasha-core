@@ -21,9 +21,9 @@
     "npm": ">=5"
   },
   "scripts": {
-    "ethereum-world-local": "cypress open --project ethereum-world --env configFile=local --browser chrome",
+    "ethereum-world-local": "cypress open --project ethereum-world --env configFile=local --browser firefox",
     "ethereum-world-prod": "cypress open --project ethereum-world --env configFile=production",
-    "cy:e2e:chrome:record": "cypress run --project ethereum-world --env configFile=staging --record --browser chrome",
+    "cy:e2e:chrome:record": "cypress run --project ethereum-world --env configFile=staging --record --browser firefox",
     "build": "tsc --build",
     "tsc": "tsc --build",
     "prepare": "yarn run tsc",
