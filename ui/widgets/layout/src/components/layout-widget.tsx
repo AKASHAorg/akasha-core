@@ -103,74 +103,86 @@ const Layout: React.FC<RootComponentProps> = props => {
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   return (
-    <div className="bg-background dark:(bg-background-dark)">
-      <div className="grid sm:grid-cols-[8fr_4fr] md:grid-cols-[3fr_6fr_3fr] gap-6 max-w-7xl mx-auto">
-        <ScrollRestorer />
-        <div>
-          <div className="sticky top-2">
-            <Extension name={props.layoutConfig.sidebarSlotId} uiEvents={props.uiEvents} />
+    <div className="bg-background dark:(bg-background-dark) min-h-screen">
+      <div className="h-full w-full">
+        <div className="grid md:grid-cols-[8fr_4fr] lg:grid-cols-[3fr_6fr_3fr] xl:max-w-7xl xl:mx-auto gap-x-4">
+          <ScrollRestorer />
+          <div className="hidden lg:flex h-full min-w-max">
+            <div className="sticky top-0 h-screen w-full">
+              <div className="pt-4">
+                <Extension
+                  fullHeight
+                  name={props.layoutConfig.sidebarSlotId}
+                  uiEvents={props.uiEvents}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="sticky top-2">
-            <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
+          <div>
+            <div className="sticky top-0 z-50">
+              <div className="text() pt-4 bg-background dark:(bg-background-dark)">
+                <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
+              </div>
+            </div>
+            <div id="scrollTopStop"></div>
+            <div className="pt-4">
+              {!isPlatformHealty && (
+                <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
+                  <WarningIcon type="error" themeColor="secondary" />
+                  <Box width="100%">
+                    <Text size="medium">
+                      {`${t(
+                        'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
+                      )}. ${t('Please check back soon')}.`}
+                    </Text>
+                    <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
+                  </Box>
+                </WarningCard>
+              )}
+              {!dismissed.includes(dismissedCardId) && (
+                <WarningCard
+                  margin={{ bottom: 'small' }}
+                  pad="small"
+                  direction="row"
+                  key={dismissedCardId}
+                  data-testid="the-merge-notification"
+                >
+                  <WarningIcon type="error" themeColor="secondary" />
+                  <Box width="100%">
+                    <Text size="medium">
+                      {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
+                        'We have migrated Ethereum World to the Goerli testnet',
+                      )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
+                        'But some functionalities such as claiming ENS names won’t be possible',
+                      )}. ${t('We are working hard on mitigating any issues')}. ${t(
+                        'Bear with us 🙏🏽',
+                      )}.`}
+                    </Text>
+                  </Box>
+                  <Icon
+                    type="close"
+                    clickable={true}
+                    onClick={onCloseButtonClick}
+                    size="xs"
+                    accentColor={true}
+                    data-testid="the-merge-notification-close-button"
+                  />
+                </WarningCard>
+              )}
+              <Extension name="back-navigation" uiEvents={props.uiEvents} />
+              <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
+            </div>
           </div>
-
-          <div id="scrollTopStop"></div>
-          {!isPlatformHealty && (
-            <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
-              <WarningIcon type="error" themeColor="secondary" />
-              <Box width="100%">
-                <Text size="medium">
-                  {`${t(
-                    'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
-                  )}. ${t('Please check back soon')}.`}
-                </Text>
-                <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
-              </Box>
-            </WarningCard>
-          )}
-          {!dismissed.includes(dismissedCardId) && (
-            <WarningCard
-              margin={{ bottom: 'small' }}
-              pad="small"
-              direction="row"
-              key={dismissedCardId}
-              data-testid="the-merge-notification"
-            >
-              <WarningIcon type="error" themeColor="secondary" />
-              <Box width="100%">
-                <Text size="medium">
-                  {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
-                    'We have migrated Ethereum World to the Goerli testnet',
-                  )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
-                    'But some functionalities such as claiming ENS names won’t be possible',
-                  )}. ${t('We are working hard on mitigating any issues')}. ${t(
-                    'Bear with us 🙏🏽',
-                  )}.`}
-                </Text>
-              </Box>
-              <Icon
-                type="close"
-                clickable={true}
-                onClick={onCloseButtonClick}
-                size="xs"
-                accentColor={true}
-                data-testid="the-merge-notification-close-button"
-              />
-            </WarningCard>
-          )}
-
-          <Extension name="back-navigation" uiEvents={props.uiEvents} />
-          <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
-        </div>
-        <div>
-          <div className="sticky top-2">
-            <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
-            <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
-          </div>
-          <div className="fixed bottom-0 right-20 max-w-xl">
-            <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
+          <div>
+            <div className="sticky top-0">
+              <div className="grid grid-auto-rows pt-4">
+                <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
+                <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
+              </div>
+              <div className="">
+                <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
