@@ -51,117 +51,114 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
   };
 
   return (
-    <>
-      <StyledBox
-        data-testid="providers-list"
-        align="center"
-        width="70%"
-        responsive={true}
-        margin="auto"
-        gap="small"
+    <StyledBox
+      data-testid="providers-list"
+      align="center"
+      width="100%"
+      pad={{ horizontal: 'medium', bottom: 'medium' }}
+      responsive={true}
+      margin="auto"
+      gap="small"
+    >
+      <Heading
+        style={{ userSelect: 'none', width: '100%' }}
+        level="4"
+        size="medium"
+        textAlign="center"
+        fill={true}
+        margin={{ bottom: 'none' }}
       >
-        <Heading
-          style={{ userSelect: 'none', width: '100%' }}
-          level="4"
-          size="medium"
-          textAlign="center"
-          fill={true}
-          margin={{ bottom: 'none' }}
-        >
-          {titleLabel}
-        </Heading>
-        <Text size="medium" color="secondaryText">
-          {subtitleLabel}
-        </Text>
+        {titleLabel}
+      </Heading>
+      <Text size="medium" color="secondaryText">
+        {subtitleLabel}
+      </Text>
 
-        <Box direction="column" pad="small" style={{ width: '100%' }}>
-          <Heading level="5" size="small" textAlign="start" margin={{ bottom: '0.5rem' }}>
-            {infoLabel}
-          </Heading>
-          <Accordion background={{ dark: 'dark-4', light: 'light-0' }} margin={{ bottom: '1rem' }}>
-            <StyledAccordionPanel
-              label={
-                <Text color="secondaryText" style={{ width: '100%' }}>
-                  {accordionTitle}
-                </Text>
-              }
-            >
-              <Text margin={{ bottom: '1rem' }} textAlign="justify">
-                {accordionContent}
+      <Box direction="column" width="100%">
+        <Heading level="5" size="small" textAlign="start" margin={{ bottom: '0.5rem' }}>
+          {infoLabel}
+        </Heading>
+        <Accordion background={{ dark: 'dark-4', light: 'light-0' }} margin={{ bottom: '1rem' }}>
+          <StyledAccordionPanel
+            label={
+              <Text color="secondaryText" style={{ width: '100%' }}>
+                {accordionTitle}
               </Text>
-              <HorizontalDivider />
-              <Box flex={true} direction="column" pad="medium" justify="center" align="center">
-                <Heading
-                  level="6"
-                  size="small"
-                  textAlign="center"
-                  margin={{ top: 'none', bottom: '1.1rem' }}
-                >
-                  {accordionFooter}
-                </Heading>
+            }
+          >
+            <Text margin={{ bottom: '1rem' }} textAlign="justify">
+              {accordionContent}
+            </Text>
+            <HorizontalDivider />
+            <Box flex={true} direction="column" pad="medium" justify="center" align="center">
+              <Heading
+                level="6"
+                size="small"
+                textAlign="center"
+                margin={{ top: 'none', bottom: '1.1rem' }}
+              >
+                {accordionFooter}
+              </Heading>
+              <Box
+                flex={true}
+                direction="row"
+                justify="center"
+                align="center"
+                pad={{ bottom: 'none' }}
+              >
                 <Box
-                  flex={true}
-                  direction="row"
-                  justify="center"
-                  align="center"
-                  pad={{ bottom: 'none' }}
+                  pad="0.25rem"
+                  background="lightGold"
+                  margin={{ right: 'xsmall' }}
+                  style={{ borderRadius: '10%' }}
                 >
-                  <Box
-                    pad="0.25rem"
-                    background="lightGold"
-                    margin={{ right: 'xsmall' }}
-                    style={{ borderRadius: '10%' }}
-                  >
-                    <Icon type="metamask" size={'md'} plain={true} />
-                  </Box>
-                  <Anchor
-                    size="medium"
-                    href={accordionFooterCTAUrl}
-                    label={accordionFooterCTA}
-                    target="_blank"
-                    margin={{ left: '0.5rem', right: '0.5rem' }}
-                  />
-                  <Icon type="expand" size="lg" plain={true} />
+                  <Icon type="metamask" size={'md'} plain={true} />
                 </Box>
+                <Anchor
+                  size="medium"
+                  href={accordionFooterCTAUrl}
+                  label={accordionFooterCTA}
+                  target="_blank"
+                  margin={{ left: '0.5rem', right: '0.5rem' }}
+                />
+                <Icon type="expand" size="lg" plain={true} />
               </Box>
-              <HorizontalDivider />
-            </StyledAccordionPanel>
-          </Accordion>
-          {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
-            <Box margin={{ vertical: 'xsmall' }}>
-              <Web3ConnectCard
-                leftIconType={injectedProvider.details.iconType}
-                titleLabel={injectedProvider.details.titleLabel}
-                subtitleLabel={injectedProvider.details.subtitleLabel}
-                iconBackground="lightGold"
-                handleClick={handleProviderClick(EthProviders.Web3Injected)}
-              />
             </Box>
-          )}
+            <HorizontalDivider />
+          </StyledAccordionPanel>
+        </Accordion>
+        {injectedProvider.name !== INJECTED_PROVIDERS.NOT_DETECTED && (
           <Box margin={{ vertical: 'xsmall' }}>
             <Web3ConnectCard
-              leftIconType="walletconnect"
-              subtitleLabel={wcSubtitleLabel}
-              titleLabel="WalletConnect"
-              iconBackground="deepBlue"
-              handleClick={handleProviderClick(EthProviders.WalletConnect)}
+              leftIconType={injectedProvider.details.iconType}
+              titleLabel={injectedProvider.details.titleLabel}
+              subtitleLabel={injectedProvider.details.subtitleLabel}
+              iconBackground="lightGold"
+              handleClick={handleProviderClick(EthProviders.Web3Injected)}
             />
           </Box>
+        )}
+        <Box margin={{ vertical: 'xsmall' }}>
+          <Web3ConnectCard
+            leftIconType="walletconnect"
+            subtitleLabel={wcSubtitleLabel}
+            titleLabel="WalletConnect"
+            iconBackground="deepBlue"
+            handleClick={handleProviderClick(EthProviders.WalletConnect)}
+          />
         </Box>
-      </StyledBox>
+      </Box>
 
-      <StyledBox align="center" width="90%" responsive={true} margin="auto">
-        <Text textAlign="start" size="medium" color="secondaryText" margin={{ top: '1rem' }}>
-          {footerLabel}
-          {footerCTAArr.map((cta, idx) => (
-            <React.Fragment key={cta.label + idx}>
-              <Anchor size="medium" href={cta.href} label={cta.label} target={'_blank'} />
-              {cta.delimiter}
-            </React.Fragment>
-          ))}
-        </Text>
-      </StyledBox>
-    </>
+      <Text textAlign="center" size="medium" color="secondaryText" margin={{ top: '1rem' }}>
+        {footerLabel}
+        {footerCTAArr.map((cta, idx) => (
+          <React.Fragment key={cta.label + idx}>
+            <Anchor size="medium" href={cta.href} label={cta.label} target={'_blank'} />
+            {cta.delimiter}
+          </React.Fragment>
+        ))}
+      </Text>
+    </StyledBox>
   );
 };
 
