@@ -57,7 +57,7 @@ const DevDashOnboardingSteps: React.FC<
       navigateTo?.({
         appName: '@akashaorg/app-auth-ewa',
         getNavigationUrl: (routes: Record<string, string>) => {
-          return `${routes.SignIn}?${new URLSearchParams({
+          return `${routes.Connect}?${new URLSearchParams({
             redirectTo: `${props.baseRouteName}${menuRoute[ONBOARDING_STEP_ONE]}`,
           }).toString()}`;
         },
