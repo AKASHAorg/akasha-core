@@ -52,6 +52,7 @@ const ChooseProvider: React.FC<ChooseProviderProps> = props => {
 
   return (
     <StyledBox
+      data-testid="providers-list"
       align="center"
       width="100%"
       pad={{ horizontal: 'medium', bottom: 'medium' }}

@@ -44,7 +44,7 @@ jobs:
           npx cypress verify
           npx cypress info
       - name: e2e tests
-        run: npm run cy:e2e:chrome:record
+        run: npm run cy:e2e:firefox:record
         working-directory: tests
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
