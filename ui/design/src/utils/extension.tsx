@@ -9,9 +9,11 @@ type Props = {
   data?: Partial<Pick<EventDataTypes, 'itemId' | 'commentId' | 'itemType'>> & {
     [key in string]: unknown;
   };
+  fullHeight?: boolean;
+  fullWidth?: boolean;
 };
 
-export function Extension({ name, uiEvents, style, data }: Props) {
+export function Extension({ name, uiEvents, style, fullHeight, data }: Props) {
   const handleExtensionMount = (name: string, data?: Record<string, unknown>) => {
     uiEvents.next({
       event: EventTypes.ExtensionPointMount,
@@ -29,6 +31,7 @@ export function Extension({ name, uiEvents, style, data }: Props) {
   return (
     <ExtensionPoint
       name={name}
+      className={fullHeight ? 'h-full' : undefined}
       onMount={handleExtensionMount}
       onUnmount={handleExtensionUnmount}
       style={style}
