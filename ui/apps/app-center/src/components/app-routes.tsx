@@ -93,7 +93,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
         <Route
           path="*"
           element={
-            <BasicCardBox style={{ maxHeight: '92vh' }} onClick={handleSignedOutUser}>
+            <BasicCardBox
+              data-testid="integration-center"
+              style={{ maxHeight: '92vh' }}
+              onClick={handleSignedOutUser}
+            >
               <Box height="6rem" alignContent="stretch" flex={{ shrink: 0 }}>
                 <Box pad="medium">
                   <Text size="xlarge" weight={'bold'}>

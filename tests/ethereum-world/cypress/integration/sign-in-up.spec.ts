@@ -1,10 +1,13 @@
-import { LayoutWidgetFocused } from './partials/layout-widget.spec';
+import { TIMEOUT } from '../utils/constants';
 
 describe('SignIn/SignUp app', () => {
   context('Sign in', () => {
     before(() => {
-      cy.visit('/auth-app/sign-in');
+      cy.visit('/@akashaorg/app-auth-ewa');
     });
-    describe('Should have focused plugin element', () => LayoutWidgetFocused());
+
+    it('should have wallets list visible', () => {
+      cy.get('[data-testid="providers-list"]', { timeout: TIMEOUT }).should('be.visible');
+    });
   });
 });
