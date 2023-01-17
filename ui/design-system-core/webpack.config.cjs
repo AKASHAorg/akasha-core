@@ -13,6 +13,7 @@ module.exports = {
   entry: {
     GridContainer: './src/components/GridContainer',
     FlexContainer: './src/components/FlexContainer',
+    Card: './src/components/Card',
   },
   output: Object.assign(baseConfig.output, {
     //library: packageName.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),

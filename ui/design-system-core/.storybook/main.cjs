@@ -15,20 +15,17 @@ module.exports = {
     '@storybook/addon-essentials',
     'storybook-addon-designs',
     'storybook-tailwind-dark-mode',
-    {
-      name: '@storybook/addon-postcss',
-      options: {
-        postcssLoaderOptions: {
-          implementation: require('postcss'),
-        },
-      },
-    },
   ],
   typescript: {
     check: false,
     checkOptions: {},
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
+      compilerOptions: {
+        module: 'es2020',
+        target: 'es2020',
+        lib: ['dom', 'es2020'],
+      },
       shouldExtractLiteralValuesFromEnum: true,
       propFilter: prop => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
     },

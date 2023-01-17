@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React, { PropsWithChildren } from 'react';
+import { tw, apply } from '@twind/core';
 
 export type ContainerProps = {
   display?: 'block' | 'inline-block' | 'inline-flex';
@@ -13,15 +13,17 @@ export type ContainerProps = {
 };
 
 export const Container: React.FC<PropsWithChildren<ContainerProps>> = props => {
-  const rootClassnames = classNames({
-    flex: !props.display,
-    'flex-col': props.direction === 'column' || !props.direction,
-    'sticky top-0': props.stickyTop,
-    'sticky bottom-0': props.stickyBottom,
-    'fixed bottom-0': props.fixedBottom,
-    'max-w-xl': props.maxWXL,
-    'right-20': props.rightMd,
-  });
+  const { display, direction, stickyTop, stickyBottom, fixedBottom, maxWXL, rightMd } = props;
 
-  return <div className={rootClassnames}>{props.children}</div>;
+  const instanceStyles = apply`
+    ${display ? '' : 'flex'}
+    flex-${direction === 'row' ? 'row' : 'col'}
+    ${stickyTop && 'sticky top-0'}
+    ${stickyBottom && 'sticky bottom-0'}
+    ${fixedBottom && 'fixed bottom-0'}
+    ${maxWXL && 'max-w-xl'}
+    ${rightMd && 'right-20'}
+  `;
+
+  return <div className={tw(instanceStyles)}>{props.children}</div>;
 };
