@@ -71,4 +71,6 @@ export interface IColors {
   altGreen: string;
   warning: string;
   warningBorder: string;
+  lightGold: string;
+  deepBlue: string;
 }

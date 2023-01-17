@@ -43,8 +43,9 @@ import comments from './comments';
 import copy from './copy';
 import dapper from './dapper';
 import dashboard from './dashboard';
-import discord from './discord';
+import disconnect from './disconnect';
 import discordAlt from './discord-alt';
+import discord from './discord';
 import discordWtBg from './discordWtBg';
 import discourse from './discourse';
 import document from './document';
@@ -54,6 +55,7 @@ import editSimple from './edit-simple';
 import email from './email';
 import emailAlt from './emailAlt';
 import emoji from './emoji';
+import expand from './expand';
 import explore from './explore';
 import error from './error';
 import ethereumWorldLogo from './ethereum-world-logo';
@@ -196,13 +198,15 @@ export {
   closedEye,
   dapper,
   dashboard,
-  discord,
+  disconnect,
   discordAlt,
+  discord,
   discordWtBg,
   discourse,
   dropdown,
   payment,
   eye,
+  expand,
   explore,
   error,
   facebook,

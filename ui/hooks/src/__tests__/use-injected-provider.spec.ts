@@ -25,7 +25,7 @@ describe('useInjectedProvider', () => {
     await waitFor(() => result.current.isFetched, { timeout: 5000 });
     expect(result.current.data.name).toBe('MetaMask');
     expect(result.current.data.details.iconType).toBe('metamask');
-    expect(result.current.data.details.subtitleLabel).toMatch(/We recommend using MetaMask/);
+    expect(result.current.data.details.subtitleLabel).toMatch(/Connect using your MetaMask wallet/);
   });
 
   it('should return correct required network', async () => {

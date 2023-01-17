@@ -44,7 +44,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Box fill="horizontal">
+    <Box data-testid="notifications" fill="horizontal">
       <Helmet>
         <title>{t('My notifications')}</title>
       </Helmet>

@@ -1,28 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, useMatch } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
-import { GlobalStyle } from './global-style';
 import ScrollRestorer from './scroll-restorer';
-import {
-  MainAreaContainer,
-  ScrollableWidgetArea,
-  SidebarAreaContainer,
-  SidebarWrapper,
-  WidgetAreaContainer,
-  WidgetContainer,
-  PluginContainer,
-} from './styled-containers';
-import {
-  ModalSlot,
-  PluginSlot,
-  TopbarSlot,
-  SidebarSlot,
-  WidgetSlot,
-  FocusedPluginSlot,
-  CookieWidgetSlot,
-} from './styled-slots';
+
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
 const { Box, BasicCardBox, Icon, styled, Text, Extension } = DS;
@@ -36,7 +18,6 @@ const WarningCard = styled(BasicCardBox)`
   border-style: solid;
   display: inline-flex;
   align-items: start;
-  width: 100vw;
 `;
 
 const WarningIcon = styled(Icon)`
@@ -63,49 +44,8 @@ const Layout: React.FC<RootComponentProps> = props => {
     return true;
   }, [maintenanceReq.status, maintenanceReq.data]);
 
-  const isMatchingFocusedMode = useMatch('/@akashaorg/app-auth-ewa/*');
-  const isFocusedMode = !!isMatchingFocusedMode;
-
   const uiEvents = React.useRef(props.uiEvents);
   const { t } = useTranslation();
-  const handleExtensionMount = (name: string) => {
-    props.uiEvents.next({
-      event: EventTypes.ExtensionPointMount,
-      data: {
-        name,
-      },
-    });
-  };
-
-  const handleExtensionUnmount = (name: string) => {
-    uiEvents.current.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: {
-        name,
-      },
-    });
-  };
-
-  /**
-   * Handler for modal mount events
-   * This event is only triggered when `navigateToModal` fn is called
-   */
-  const handleModalNodeMount = React.useCallback(() => {
-    uiEvents.current.next({
-      event: EventTypes.ExtensionPointMount,
-      data: activeModal,
-    });
-  }, [activeModal]);
-
-  const handleModalNodeUnmount = (name: string) => {
-    if (!name) {
-      return;
-    }
-    uiEvents.current.next({
-      event: EventTypes.ExtensionPointUnmount,
-      data: { name },
-    });
-  };
 
   const handleSidebarShow = () => {
     setShowSidebar(true);
@@ -159,139 +99,94 @@ const Layout: React.FC<RootComponentProps> = props => {
     };
   }, [handleModal]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   return (
-    <>
-      <ScrollRestorer />
-      <div>
-        <GlobalStyle />
-        <div>
-          {/* ^ topbar sticky container */}
-          <TopbarSlot
-            name={props.layoutConfig.topbarSlotId}
-            onMount={handleExtensionMount}
-            onUnmount={handleExtensionUnmount}
-          />
-          <Box direction="row" flex={true}>
-            <SidebarWrapper>
-              <SidebarAreaContainer>
-                {/* container enforces sticky position on scroll */}
-                <SidebarSlot
-                  visible={isFocusedMode ? false : showSidebar}
+    <div className="bg-background dark:(bg-background-dark) min-h-screen">
+      <div className="h-full w-full">
+        <div className="grid md:grid-cols-[8fr_4fr] lg:grid-cols-[3fr_6fr_3fr] xl:max-w-7xl xl:mx-auto gap-x-4">
+          <ScrollRestorer />
+          <div className="hidden lg:flex h-full min-w-max">
+            <div className="sticky top-0 h-screen w-full">
+              <div className="pt-4">
+                <Extension
+                  fullHeight
                   name={props.layoutConfig.sidebarSlotId}
-                  onMount={handleExtensionMount}
-                  onUnmount={handleExtensionUnmount}
+                  uiEvents={props.uiEvents}
                 />
-              </SidebarAreaContainer>
-            </SidebarWrapper>
-            <MainAreaContainer sidebarVisible={isFocusedMode ? false : showSidebar}>
-              <Box direction="row">
-                <PluginContainer>
-                  {/* This is used to mark scroll top stop position  */}
-                  <div id="scrollTopStop"></div>
-                  {!isPlatformHealty && (
-                    <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
-                      <WarningIcon type="error" themeColor="secondary" />
-                      <Box width="100%">
-                        <Text size="medium">
-                          {`${t(
-                            'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
-                          )}. ${t('Please check back soon')}.`}
-                        </Text>
-                        <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
-                      </Box>
-                    </WarningCard>
-                  )}
-                  {!dismissed.includes(dismissedCardId) && (
-                    <WarningCard
-                      margin={{ bottom: 'small' }}
-                      pad="small"
-                      direction="row"
-                      key={dismissedCardId}
-                      data-testid="the-merge-notification"
-                    >
-                      <WarningIcon type="error" themeColor="secondary" />
-                      <Box width="100%">
-                        <Text size="medium">
-                          {`${t(
-                            'Following the merge, the Rinkeby network has been deprecated',
-                          )}. ${t('We have migrated Ethereum World to the Goerli testnet')}. ${t(
-                            'This will not affect your content or posts, they are saved',
-                          )}! ${t(
-                            'But some functionalities such as claiming ENS names won’t be possible',
-                          )}. ${t('We are working hard on mitigating any issues')}. ${t(
-                            'Bear with us 🙏🏽',
-                          )}.`}
-                        </Text>
-                      </Box>
-                      <Icon
-                        type="close"
-                        clickable={true}
-                        onClick={onCloseButtonClick}
-                        size="xs"
-                        accentColor={true}
-                        data-testid="the-merge-notification-close-button"
-                      />
-                    </WarningCard>
-                  )}
-
-                  <Extension name="back-navigation" uiEvents={props.uiEvents} />
-                  <FocusedPluginSlot
-                    name={props.layoutConfig.focusedPluginSlotId}
-                    onMount={handleExtensionMount}
-                    onUnmount={handleExtensionUnmount}
-                    style={!isFocusedMode ? { display: 'none' } : {}}
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="sticky top-0 z-50">
+              <div className="text() pt-4 bg-background dark:(bg-background-dark)">
+                <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
+              </div>
+            </div>
+            <div id="scrollTopStop"></div>
+            <div className="pt-4">
+              {!isPlatformHealty && (
+                <WarningCard margin={{ bottom: 'small' }} pad="small" direction="row">
+                  <WarningIcon type="error" themeColor="secondary" />
+                  <Box width="100%">
+                    <Text size="medium">
+                      {`${t(
+                        'AKASHA is undergoing maintenance and you may experience difficulties accessing some of the apps right now',
+                      )}. ${t('Please check back soon')}.`}
+                    </Text>
+                    <Text size="medium">{`${t('Thank you for your patience')} 😸`}</Text>
+                  </Box>
+                </WarningCard>
+              )}
+              {!dismissed.includes(dismissedCardId) && (
+                <WarningCard
+                  margin={{ bottom: 'small' }}
+                  pad="small"
+                  direction="row"
+                  key={dismissedCardId}
+                  data-testid="the-merge-notification"
+                >
+                  <WarningIcon type="error" themeColor="secondary" />
+                  <Box width="100%">
+                    <Text size="medium">
+                      {`${t('Following the merge, the Rinkeby network has been deprecated')}. ${t(
+                        'We have migrated Ethereum World to the Goerli testnet',
+                      )}. ${t('This will not affect your content or posts, they are saved')}! ${t(
+                        'But some functionalities such as claiming ENS names won’t be possible',
+                      )}. ${t('We are working hard on mitigating any issues')}. ${t(
+                        'Bear with us 🙏🏽',
+                      )}.`}
+                    </Text>
+                  </Box>
+                  <Icon
+                    type="close"
+                    clickable={true}
+                    onClick={onCloseButtonClick}
+                    size="xs"
+                    accentColor={true}
+                    data-testid="the-merge-notification-close-button"
                   />
-                  <PluginSlot
-                    name={props.layoutConfig.pluginSlotId}
-                    onMount={handleExtensionMount}
-                    onUnmount={handleExtensionUnmount}
-                    style={isFocusedMode ? { display: 'none' } : {}}
-                  />
-                </PluginContainer>
-                <WidgetContainer>
-                  {/* ^ sticky container for widgets */}
-                  <WidgetAreaContainer>
-                    <ScrollableWidgetArea style={isFocusedMode ? { display: 'none' } : {}}>
-                      <WidgetSlot
-                        name={props.layoutConfig.widgetSlotId}
-                        onMount={handleExtensionMount}
-                        onUnmount={handleExtensionUnmount}
-                      />
-                      <WidgetSlot
-                        name={props.layoutConfig.rootWidgetSlotId}
-                        onMount={handleExtensionMount}
-                        onUnmount={handleExtensionUnmount}
-                      />
-                    </ScrollableWidgetArea>
-                    <CookieWidgetSlot
-                      name={props.layoutConfig.cookieWidgetSlotId}
-                      onMount={handleExtensionMount}
-                      onUnmount={handleExtensionUnmount}
-                    />
-                  </WidgetAreaContainer>
-                </WidgetContainer>
-              </Box>
-            </MainAreaContainer>
-          </Box>
-          {activeModal && (
-            <ModalSlot
-              name={activeModal.name}
-              onMount={handleModalNodeMount}
-              onUnmount={handleModalNodeUnmount}
-              style={{ position: 'relative', zIndex: 200 }}
-            />
-          )}
-          <ModalSlot
-            name={props.layoutConfig.modalSlotId}
-            onMount={handleExtensionMount}
-            onUnmount={handleExtensionUnmount}
-            style={{ position: 'relative', zIndex: 200 }}
-          />
+                </WarningCard>
+              )}
+              <Extension name="back-navigation" uiEvents={props.uiEvents} />
+              <Extension name={props.layoutConfig.pluginSlotId} uiEvents={props.uiEvents} />
+            </div>
+          </div>
+          <div>
+            <div className="sticky top-0">
+              <div className="grid grid-auto-rows pt-4">
+                <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
+                <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
+              </div>
+              <div className="">
+                <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

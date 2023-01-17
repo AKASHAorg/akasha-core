@@ -12,32 +12,25 @@ const { Box, styled, Sidebar, useViewportSize } = DS;
 declare const __DEV__: boolean;
 
 const AppSidebar = styled(Sidebar)`
-  height: calc(100vh - 3rem);
   min-width: 15em;
   background-color: ${props => props.theme.colors.cardBackground};
-  @media screen and (min-width: ${props => props.theme.breakpoints.medium.value}px) {
-    min-width: 13em;
-  }
-  @media screen and (min-width: ${props => props.theme.breakpoints.large.value}px) {
-    max-width: 17em;
-  }
   @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
     height: 100vh;
     width: 85vw;
   }
 `;
 
-const SidebarOverlay = styled(Box)`
-  width: 100%;
-  opacity: 0.8;
-  height: 100vh;
-  position: fixed;
-  background-color: ${props => props.theme.colors.overlay};
-  /* hide overlay from large desktop breakpoint */
-  @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
-    display: none;
-  }
-`;
+// const SidebarOverlay = styled(Box)`
+//   width: 100%;
+//   opacity: 0.8;
+//   height: 100vh;
+//   position: fixed;
+//   background-color: ${props => props.theme.colors.overlay};
+//   /* hide overlay from large desktop breakpoint */
+//   @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
+//     display: none;
+//   }
+// `;
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
@@ -142,7 +135,6 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <>
-      <SidebarOverlay onClick={handleSidebarClose} />
       <AppSidebar
         versionLabel={__DEV__ && 'DEV'}
         versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"

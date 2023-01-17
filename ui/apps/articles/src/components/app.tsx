@@ -9,7 +9,7 @@ const { Box, Spinner } = DS;
 
 const Application: React.FC<RootComponentProps> = props => {
   return (
-    <Box width="100vw">
+    <Box>
       <React.Suspense fallback={<Spinner />}>
         <I18nextProvider i18n={props.plugins?.translation?.i18n}>
           <AppRoutes {...props} />

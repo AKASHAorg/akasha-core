@@ -1,4 +1,4 @@
-#splash-screen-root {
+/* #splash-screen-root {
   color: #808080;
 }
 
@@ -13,4 +13,17 @@ html.Dark-Theme {
 body.Dark-Theme>#splash-screen-root {
   background-color: #0D1A2D;
   color: #fff;
+}
+
+*/:root {
+  --color-background-default: 255 255 255;
+  --color-background-dark: 13 26 45;
+}
+
+.global-styles__inherit-height {
+  height: inherit;
+}
+
+.global-styles__inherit-width {
+  width: inherit;
 }

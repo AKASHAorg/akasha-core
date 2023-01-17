@@ -2,7 +2,7 @@ import * as React from 'react';
 import { act, cleanup } from '@testing-library/react';
 import { fireEvent, queries, render } from '@testing-library/react';
 
-import { GridContainer } from '../index';
+import { GridContainer } from '../';
 
 describe('<AppAvatar /> Component', () => {
   let componentWrapper;
@@ -10,7 +10,7 @@ describe('<AppAvatar /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = render(
-        <GridContainer grid margin="auto">
+        <GridContainer>
           <div data-testid="grid-child">1</div>
         </GridContainer>,
       );

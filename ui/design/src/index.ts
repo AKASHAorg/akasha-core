@@ -20,6 +20,8 @@ import {
   TextArea,
   TextInput,
   ThemeContext,
+  Accordion,
+  AccordionPanel,
 } from 'grommet';
 
 import styled, { createGlobalStyle, css, withTheme } from 'styled-components';
@@ -113,6 +115,7 @@ import ProfileAvatarButton from './components/ProfileAvatarButton';
 import VoteIconButton from './components/VoteIconButton';
 import VariableIconButton from './components/VariableIconButton';
 import Web3ConnectButton from './components/Web3ConnectButton';
+import Web3ConnectCard from './components/Web3ConnectCard';
 import TabButton from './components/TabButton';
 
 import AreaChart from './components/AreaChart';
@@ -224,6 +227,8 @@ export type { BoxExtendedProps, ButtonExtendedProps };
 /* Grommet utils */
 // @TODO: fix this export style...
 const exported = {
+  Accordion,
+  AccordionPanel,
   Autosizer,
   Avatar,
   AppAvatar,
@@ -294,6 +299,7 @@ const exported = {
   VoteIconButton,
   VariableIconButton,
   Web3ConnectButton,
+  Web3ConnectCard,
   TabButton,
   CommentInput,
   SearchInput,
