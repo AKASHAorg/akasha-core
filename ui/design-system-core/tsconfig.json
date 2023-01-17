@@ -5,7 +5,8 @@
     "composite": true,
     "rootDir": "./src",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx"
   },
   "include": ["./src/**/*"]
 }
