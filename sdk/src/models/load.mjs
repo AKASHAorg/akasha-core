@@ -10,7 +10,7 @@ import { fromString } from "uint8arrays";
 import modelAliases from "./models.json";
 
 // The key must be provided as an environment variable
-const key = fromString("d623aeaeaab707433bee13b5cfc26872e6a6f3a5698392840f11c900794e0ca5", "base16");
+const key = fromString(process.env.DID_KEY, "base16");
 // Create and authenticate the DID
 const did = new DID({
   provider: new Ed25519Provider(key),
