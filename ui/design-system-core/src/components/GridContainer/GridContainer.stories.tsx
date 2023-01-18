@@ -9,7 +9,7 @@ export default {
 
 const Template = args => <GridContainer {...args} />;
 
-const GridContents = (
+const GridContents = () => (
   <>
     <div>1</div>
     <div>2</div>
@@ -17,8 +17,9 @@ const GridContents = (
 );
 
 export const Default = Template.bind({});
+
 Default.args = {
   grid: true,
   margin: 'auto',
-  children: GridContents,
+  children: <GridContents />,
 };

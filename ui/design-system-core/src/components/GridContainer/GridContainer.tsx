@@ -1,8 +1,8 @@
 import React, { PropsWithChildren } from 'react';
 import classNames from 'classnames';
-import { matchColumnsFromChildren } from '../../utils/match-columns-from-children';
 
 export type Margin = 'auto' | 'none' | 'small' | 'medium' | 'large';
+
 export type GridContainerProps = {
   columns?: boolean;
   rows?: boolean;
