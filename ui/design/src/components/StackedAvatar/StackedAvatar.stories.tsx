@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grommet } from 'grommet';
-import { withDesign } from 'storybook-addon-designs';
 import StackedAvatar, { IStackedAvatarProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -9,7 +8,7 @@ import { userData } from '../../utils/dummy-data';
 export default {
   title: 'Avatars/StackedAvatar',
   component: StackedAvatar,
-  decorators: [withDesign],
+  decorators: [],
 };
 
 const Template = (args: IStackedAvatarProps) => (

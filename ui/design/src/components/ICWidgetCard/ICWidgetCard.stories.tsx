@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-import { withDesign } from 'storybook-addon-designs';
 import ICWidgetCard, { ICWidgetCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -14,7 +13,7 @@ export default {
     onClickInstalledApp: { action: 'clicked installed app' },
     onActiveTabChange: { action: 'active tab changed' },
   },
-  decorators: [withDesign],
+  decorators: [],
 };
 
 const Template = (args: ICWidgetCardProps) => (

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grommet } from 'grommet';
-import { withDesign } from 'storybook-addon-designs';
 import Button, { IButtonProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -12,7 +11,7 @@ export default {
     label: { control: 'text' },
     primary: { control: 'boolean' },
   },
-  decorators: [withDesign],
+  decorators: [],
 };
 
 const Template = (args: IButtonProps) => (
