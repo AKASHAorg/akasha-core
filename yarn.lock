@@ -13634,7 +13634,7 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
   integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
-csstype@^3.0.5, csstype@^3.1.1:
+csstype@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.1.tgz#841b532c45c758ee546a11d5bd7b7b473c8c30b9"
   integrity sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==
@@ -17735,7 +17735,7 @@ html-webpack-plugin@5.5.0, html-webpack-plugin@^5.5.0:
     pretty-error "^4.0.0"
     tapable "^2.0.0"
 
-htmlparser2@^6.0.0, htmlparser2@^6.1.0:
+htmlparser2@^6.1.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/htmlparser2/-/htmlparser2-6.1.0.tgz#c4d762b6c3371a05dbe65e94ae43a9f845fb8fb7"
   integrity sha512-gyyPk6rgonLFEDGoeRgQNaEUvdJ4ktTmmUh/h2t7s+M8oPpIPxgNACWa+6ESR57kXstwqPiCut0V8NRpcwgU7A==
@@ -27849,7 +27849,7 @@ style-to-object@^0.3.0:
   dependencies:
     inline-style-parser "0.1.1"
 
-style-vendorizer@^2.0.0, style-vendorizer@^2.2.3:
+style-vendorizer@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/style-vendorizer/-/style-vendorizer-2.2.3.tgz#e18098fd981c5884c58ff939475fbba74aaf080c"
   integrity sha512-/VDRsWvQAgspVy9eATN3z6itKTuyg+jW1q6UoTCQCFRqPDw8bi3E1hXIKnGw5LvXS2AQPuJ7Af4auTLYeBOLEg==
@@ -28731,15 +28731,6 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
-
-twind@0.16.19:
-  version "0.16.19"
-  resolved "https://registry.yarnpkg.com/twind/-/twind-0.16.19.tgz#3338dd33c0e9dbb7e976b843b328d9dba0c39a7d"
-  integrity sha512-/9H7I/Xzji6UZ+x1V8/llcQSAI0bINqpZtvAqqTzuU/qAdzRCnrpaME8x57k8tUu2KbosjSQE85sSwcLBGD1DQ==
-  dependencies:
-    csstype "^3.0.5"
-    htmlparser2 "^6.0.0"
-    style-vendorizer "^2.0.0"
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
