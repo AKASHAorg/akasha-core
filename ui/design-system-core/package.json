@@ -81,7 +81,6 @@
     "dayjs": "1.11.7",
     "react-docgen-typescript": "2.2.2",
     "storybook": "7.0.0-beta.29",
-    "storybook-addon-designs": "7.0.0-beta.29",
     "ts-jest": "29.0.3"
   },
   "peerDependencies": {
