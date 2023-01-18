@@ -1,10 +1,10 @@
-import '../src/twind/main.css'
+import '../src/twind/main.css';
 import { install } from '@twind/core';
-import twindConfig from '../src/twind/twind.config.js'
+import twindConfig from '../src/twind/twind.config.js';
 
 install(twindConfig);
 
-module.exports.parameters = {
+export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
