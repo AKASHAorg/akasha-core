@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-import { withDesign } from 'storybook-addon-designs';
 import EmojiPopover, { IEmojiPopover } from '.';
 
 import Icon from '../Icon';
@@ -13,7 +12,7 @@ export default {
   argTypes: {
     onClickEmoji: { action: 'clicked emoji' },
   },
-  decorators: [withDesign],
+  decorators: [],
 };
 
 const Template = (args: IEmojiPopover) => {
