@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grommet } from 'grommet';
-import { withDesign } from 'storybook-addon-designs';
 import { MenuItemAreaType } from '@akashaorg/typings/ui';
 
 import Topbar, { ITopbarProps } from '.';
@@ -28,7 +27,7 @@ export default {
     onLogout: { action: 'logging out...' },
     onFeedbackClick: { action: 'sending feedback...' },
   },
-  decorators: [withDesign],
+  decorators: [],
 };
 
 const Template = (args: ITopbarProps) => (

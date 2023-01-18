@@ -1,7 +1,8 @@
-//import '../lib/css/main.css';
+import '../src/twind/main.css';
 import { install } from '@twind/core';
+import twindConfig from '../src/twind/twind.config.js';
 
-install({});
+install(twindConfig);
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
