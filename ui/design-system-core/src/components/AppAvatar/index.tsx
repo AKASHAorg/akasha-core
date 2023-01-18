@@ -1,38 +1,16 @@
 import React from 'react';
 import { apply, tw } from '@twind/core';
 
-import AvatarImage from './AvatarImage';
+import { IntegrationTypes } from '@akashaorg/typings/ui';
 
-import { IAvatarProps } from '../../interfaces/avatar.interface';
-import { getAvatarFromSeed } from '../../utils/get-avatar-from-seed';
+import AvatarImage from '../Avatar/AvatarImage';
+import { avatarBorderColorsMap, avatarBorderSizesMap, avatarSizesMap } from '../Avatar';
 
-export const avatarSizesMap = {
-  xs: '6',
-  sm: '8',
-  md: '10',
-  lg: '16',
-  xl: '20',
-  xxl: '[7.5rem]',
-};
+import { IAppAvatarProps } from '../../interfaces/appAvatar.interface';
 
-export const avatarBorderSizesMap = {
-  xs: '1',
-  sm: '2',
-  md: '4',
-  lg: '8',
-  xl: '[12px]',
-  xxl: '[16px]',
-};
-
-export const avatarBorderColorsMap = {
-  white: '[#ffffff]',
-  darkerBlue: '[#0046CB]',
-  accent: '[#8b9FFF]',
-};
-
-const Avatar: React.FC<IAvatarProps> = props => {
+const Avatar: React.FC<IAppAvatarProps> = props => {
   const {
-    ethAddress = '0x0000000000000000000000000000000',
+    appType,
     alt,
     publicImgPath = '/images',
     backgroundColor,
@@ -52,9 +30,18 @@ const Avatar: React.FC<IAvatarProps> = props => {
     avatarImageFallback = src.fallbackUrl;
   }
 
-  if (!avatarImageFallback) {
-    const seed = getAvatarFromSeed(ethAddress);
-    avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
+  if (!src?.fallbackUrl && appType === IntegrationTypes.APP) {
+    // currently there are 3 placeholders for sidebar apps
+    avatarImageFallback = `${publicImgPath}/sidebar-app-placeholder-${
+      Math.floor(Math.random() * 3) + 1
+    }.webp`;
+  }
+
+  if (!src?.fallbackUrl && appType === IntegrationTypes.WIDGET) {
+    // currently there are 2 placeholders for sidebar apps
+    avatarImageFallback = `${publicImgPath}/sidebar-widget-placeholder-${
+      Math.floor(Math.random() * 2) + 1
+    }.webp`;
   }
 
   const className = apply`box-border cursor-${
