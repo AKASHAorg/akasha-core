@@ -120,7 +120,7 @@ class CommentAPI extends DataSource {
     return commentID;
   }
 
-  async getComments(postID: string, limit: number, offset: string) {
+  async getComments(postID: string, limit: number, offset?: string) {
     const db: Client = await getAppDB();
     let comments;
     const allCommentsCache = this.getAllCommentsCacheKey(postID);

@@ -373,7 +373,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
   }, [searchState, activeButton, allQueriesFinished]);
 
   return (
-    <Box fill="horizontal">
+    <Box data-testid="search-box" fill="horizontal">
       <SearchStartCard
         searchKeyword={searchKeyword}
         handleSearch={handleSearch}

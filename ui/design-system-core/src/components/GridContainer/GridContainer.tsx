@@ -15,7 +15,7 @@ export type GridContainerProps = {
 // React 18 and later typings does no longer have children declared in props
 // https://solverfox.dev/writing/no-implicit-children/
 export const GridContainer: React.FC<PropsWithChildren<GridContainerProps>> = props => {
-  let { children, dense, noGap, columns, rows, maxW, centerX } = props;
+  const { children, dense, noGap, maxW, centerX } = props;
 
   const containerClass = apply`
     grid mt-2

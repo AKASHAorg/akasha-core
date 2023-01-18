@@ -126,8 +126,9 @@ export const getAppDB = async () => {
     return Promise.resolve(appDBClient);
   }
   const API = process.env.API || undefined;
+  const expiration = new Date(Date.now() + 1000 * 60 * 120);
   const client = await Client.withUserAuth(
-    await createUserAuth(process.env.APP_API_KEY, process.env.APP_API_SECRET),
+    await createUserAuth(process.env.APP_API_KEY, process.env.APP_API_SECRET, expiration),
     API,
     process.env.NODE_ENV !== 'production',
   );

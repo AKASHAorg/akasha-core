@@ -100,7 +100,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
         />
       )}
       {bookmarksReq.status !== 'error' && (
-        <Box gap="medium">
+        <Box data-testid="bookmarks" gap="medium">
           <StartCard
             title={t('Bookmarks')}
             subtitle={getSubtitleText()}

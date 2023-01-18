@@ -95,7 +95,7 @@ class PostAPI extends DataSource {
     await this.storeCacheKey(post.author, cacheKey);
     return result;
   }
-  async getPosts(limit: number, offset: string, pubKey?: string) {
+  async getPosts(limit: number, offset?: string, pubKey?: string) {
     let posts;
     const db: Client = await getAppDB();
     const hasAllPostsCache = await queryCache.has(this.allPostsCache);
