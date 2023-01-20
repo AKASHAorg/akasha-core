@@ -33,9 +33,8 @@ disabled:opacity-50 disabled:cursor-not-allowed space-x-2
 `;
 
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
-  const { label, size, greyBg, primary } = props;
-  const loading = props.loading === true;
-  const textonly = props.textonly === true || props.textonly !== undefined;
+  const { label, size, greyBg, primary, loading, textonly } = props;
+
   const greyBgIcon =
     (greyBg === true && label === undefined) || (greyBg === true && size === 'xsmall');
 
