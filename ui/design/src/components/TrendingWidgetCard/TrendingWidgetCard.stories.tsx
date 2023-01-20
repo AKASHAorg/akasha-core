@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
-import { withDesign } from 'storybook-addon-designs';
 import TrendingWidgetCard, { ITrendingWidgetCardProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -17,7 +16,7 @@ export default {
     handleSubscribeTag: { action: 'clicked subscribe tag' },
     handleUnsubscribeTag: { action: 'clicked unsubscribe tag' },
   },
-  decorators: [withDesign],
+  decorators: [],
 };
 
 const Template = (args: ITrendingWidgetCardProps) => (

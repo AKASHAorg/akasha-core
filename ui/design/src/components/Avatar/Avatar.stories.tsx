@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grommet } from 'grommet';
-import { withDesign } from 'storybook-addon-designs';
 import Avatar, { AvatarProps } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -12,7 +11,7 @@ export default {
     backgroundColor: { control: 'color' },
     onClick: { action: 'clicked' },
   },
-  decorators: [withDesign],
+  decorators: [],
 };
 
 const ethAddress = '0x003410490050000320006570034567114572000';

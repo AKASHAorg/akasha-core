@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Grommet } from 'grommet';
 import { LogoTypeSource } from '@akashaorg/typings/ui';
-import { withDesign } from 'storybook-addon-designs';
 import Icon, { IconProps, iconTypes } from '.';
 
 import lightTheme from '../../styles/themes/light/light-theme';
@@ -28,7 +27,7 @@ export default {
       },
     },
   },
-  decorators: [withDesign],
+  decorators: [],
 };
 
 const Template = (args: IconProps) => (

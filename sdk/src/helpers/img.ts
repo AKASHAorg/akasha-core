@@ -32,7 +32,7 @@ export const getImageSize = async (
 };
 
 export const resizeImage = async (args: {
-  file: File | Blob;
+  file: File;
   config: {
     quality?: number;
     maxWidth: number;

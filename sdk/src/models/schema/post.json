@@ -1,0 +1,47 @@
+ {
+  "title": "Post",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["content"],
+  "properties": {
+    "postType": { "type": "string", "maxLength": 100 },
+    "title": { "type": "string", "maxLength": 150 },
+    "content": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["provider", "property", "value"],
+        "properties": {
+          "provider": { "type": "string", "maxLength": 150 },
+          "property": { "type": "string", "maxLength": 150 },
+          "value": { "type": "string", "maxLength": 5000 }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "maxLength": 80
+      }
+    },
+    "mentions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "maxLength": 150
+      }
+    },
+    "replyTo": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "maxLength": 150
+      }
+    }
+  }
+}
