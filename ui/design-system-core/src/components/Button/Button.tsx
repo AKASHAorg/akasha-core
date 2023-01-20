@@ -28,7 +28,7 @@ const sizing = {
 const baseStyles = apply`text-center flex items-center justify-center	font-medium md:max-md:w-full`;
 const textOnlyStyles = apply`
 ${baseStyles}
-text-secondary-light dark:text-secondary-dark hover:opacity-50 
+text-secondary-light dark:text-secondary-dark hover:opacity-50
 disabled:opacity-50 disabled:cursor-not-allowed space-x-2
 `;
 
