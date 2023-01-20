@@ -25,10 +25,10 @@ const sizing = {
   large: { textSize: 'text-3xl', iconSize: 'h-7, w-7', buttonSize: 'w-96' },
 };
 
-const baseStyles = apply`text-center flex items-center justify-center	font-medium md:max-md:w-full`;
+const baseStyles = apply`text-center flex items-center justify-center	font-medium md:max-md:w-full hover:drop-shadow-md`;
 const textOnlyStyles = apply`
 ${baseStyles}
-text-secondary-light dark:text-secondary-dark hover:opacity-50 
+text-secondary-light dark:text-secondary-dark hover:opacity-50 dark:hover:text-white
 disabled:opacity-50 disabled:cursor-not-allowed space-x-2
 `;
 
@@ -63,7 +63,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   const iconColor = greyBgIcon
     ? 'text-secondary-light'
     : textonly
-    ? 'text-secondary-light hover:opacity-50 disabled:opacity-50'
+    ? 'text-secondary-light hover:opacity-50 disabled:opacity-50 dark:hover:text-white'
     : 'fill-current';
   const disabled = props.disabled ? 'opacity-50 cursor-not-allowed' : '';
 
