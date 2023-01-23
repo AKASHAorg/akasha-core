@@ -1,5 +1,5 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 
 import AvatarImage from './AvatarImage';
 
@@ -57,7 +57,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
   }
 
-  const className = apply`box-border cursor-${
+  const className = `box-border cursor-${
     isClickable ? 'pointer' : 'default'
   } select-none relative overflow-hidden w-${avatarSizesMap[size]} h-${
     avatarSizesMap[size]
@@ -65,7 +65,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     border ? avatarBorderSizesMap[border] : '0'
   } border-${borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'}`;
 
-  const activeOverlayClass = apply`bg-[#8b9FFF] opacity-25 z-10 absolute top-0 left-0 w-full h-full`;
+  const activeOverlayClass = 'bg-[#8b9FFF] opacity-25 z-10 absolute top-0 left-0 w-full h-full';
 
   return (
     <div className={tw(className)} onClick={onClick}>
