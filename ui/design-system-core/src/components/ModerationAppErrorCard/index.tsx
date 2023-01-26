@@ -1,6 +1,8 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
+import { Button } from '../Button';
+
 import { IModerationAppErrorCardProps } from '../../interfaces/moderationAppErrorCard';
 
 const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => {
@@ -46,10 +48,8 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
       </span>
 
       {hasButton && (
-        <div className={tw('w-fit')}>
-          <button className={tw('h-auto py-1 px-2')} onClick={handleClick}>
-            {buttonLabel}
-          </button>
+        <div className={tw('w-fit mt-4')}>
+          <Button onClick={handleClick} label={buttonLabel} />
         </div>
       )}
     </div>
