@@ -27,7 +27,7 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
   };
 
   const contentWrapperClass =
-    'flex flex-col items-center bg-[#FFFFFF] dark:bg-[#0D1A2D] pt-0 px-4 md:px-20 pb-5 rounded-lg';
+    'flex flex-col items-center bg-white dark:bg-grey2 pt-0 px-4 md:px-20 pb-5 rounded-lg';
 
   return (
     <div className={tw(contentWrapperClass)}>
@@ -41,7 +41,7 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
         className={tw(
           `font-normal mt-${textMarginTop ? '0.25' : ''} mb-${
             textMarginBottom ? '1.5' : ''
-          } text-[##425166] text-lg text-center leading-6`,
+          } text-secondary text-lg text-center leading-6`,
         )}
       >
         {subtitleLabel}

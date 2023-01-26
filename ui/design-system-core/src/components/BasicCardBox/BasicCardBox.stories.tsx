@@ -43,31 +43,9 @@ BasicCardWithDashedBorder.args = {
   dashedBorder: true,
 };
 
-export const BasicCardWithRedDashedBorder = Template.bind({});
-
-BasicCardWithRedDashedBorder.args = {
-  children: CardContents,
-  dashedBorder: true,
-  redDashedBorder: true,
-};
-
-export const BasicCardWithDarkBorder = Template.bind({});
-
-BasicCardWithDarkBorder.args = {
-  children: CardContents,
-  darkBorder: true,
-};
-
 export const BasicCardWithoutBorder = Template.bind({});
 
 BasicCardWithoutBorder.args = {
   children: CardContents,
   noBorder: true,
-};
-
-export const BasicCardSelected = Template.bind({});
-
-BasicCardSelected.args = {
-  children: CardContents,
-  isSelected: true,
 };

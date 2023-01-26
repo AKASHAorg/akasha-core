@@ -25,9 +25,9 @@ export const avatarBorderSizesMap = {
 };
 
 export const avatarBorderColorsMap = {
-  white: '[#ffffff]',
-  darkerBlue: '[#0046CB]',
-  accent: '[#8b9FFF]',
+  white: 'white',
+  darkerBlue: 'grey2',
+  accent: 'secondary',
 };
 
 const Avatar: React.FC<IAvatarProps> = props => {
@@ -65,7 +65,8 @@ const Avatar: React.FC<IAvatarProps> = props => {
     border ? avatarBorderSizesMap[border] : '0'
   } border-${borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'}`;
 
-  const activeOverlayClass = 'bg-[#8b9FFF] opacity-25 z-10 absolute top-0 left-0 w-full h-full';
+  const activeOverlayClass =
+    'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
 
   return (
     <div className={tw(className)} onClick={onClick}>
