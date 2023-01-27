@@ -61,6 +61,7 @@
     "@heroicons/react": "2.0.13"
   },
   "devDependencies": {
+    "@akashaorg/typings": "*",
     "@babel/preset-env": "7.19.0",
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
