@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from './index';
+import { Button } from '.';
 
 export default {
-  title: 'Button',
+  title: 'Buttons/Button',
   component: Button,
 };
 
@@ -12,7 +12,6 @@ export const DefaultButton = Template.bind({});
 DefaultButton.args = {
   label: 'Button',
   icon: 'BeakerIcon',
-  size: 'small',
 };
 export const LargeButton = Template.bind({});
 LargeButton.args = {

@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { tw, apply } from '@twind/core';
-import { Icon } from '../Icon';
-import { IconName } from '../Icon/Icon';
+
+import Icon, { IconName } from '../Icon';
 
 const DefaultIconSize = 'h-4, w-4';
 
@@ -16,6 +16,7 @@ export type ButtonProps = {
   size?: 'xsmall' | 'small' | 'regular' | 'large';
   greyBg?: boolean;
   textonly?: boolean;
+  onClick?: () => void;
 };
 
 const sizing = {
@@ -26,6 +27,7 @@ const sizing = {
 };
 
 const baseStyles = apply`text-center flex items-center justify-center	font-medium md:max-md:w-full hover:drop-shadow-md`;
+
 const textOnlyStyles = apply`
 ${baseStyles}
 text-secondary-light dark:text-secondary-dark hover:opacity-50 dark:hover:text-white
@@ -33,7 +35,18 @@ disabled:opacity-50 disabled:cursor-not-allowed space-x-2
 `;
 
 export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
-  const { label, size, greyBg, primary, loading, textonly } = props;
+  const {
+    label,
+    size = 'small',
+    greyBg,
+    primary,
+    disabled,
+    icon,
+    iconRight,
+    loading,
+    textonly,
+    onClick,
+  } = props;
 
   const greyBgIcon =
     (greyBg === true && label === undefined) || (greyBg === true && size === 'xsmall');
@@ -54,7 +67,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   const border = primary
     ? ''
     : 'dark:border-1 dark:border-secondary-dark border-1 border-secondary-light';
-  const iconRight = props.iconRight === true ? 'flex-row-reverse space-x-2 space-x-reverse' : '';
+  const iconRightStyles = iconRight ? 'flex-row-reverse space-x-2 space-x-reverse' : '';
 
   const buttonSize = (label !== undefined && sizing[size]?.buttonSize) ?? 'w-48';
   const textSize = sizing[size]?.textSize ?? 'text-sm';
@@ -64,7 +77,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
     : textonly
     ? 'text-secondary-light hover:opacity-50 disabled:opacity-50 dark:hover:text-white'
     : 'fill-current';
-  const disabled = props.disabled ? 'opacity-50 cursor-not-allowed' : '';
+  const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : '';
 
   const instanceStyles = textonly
     ? textOnlyStyles
@@ -74,10 +87,10 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   ${textColor}
   ${border}
   ${isIconButton}
-  ${iconRight}
+  ${iconRightStyles}
   ${buttonSize}
   ${textSize}
-  ${disabled}
+  ${disabledStyles}
 `;
 
   const instanceIconStyles = apply`
@@ -85,13 +98,19 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   ${iconColor}
   `;
 
+  const handleClick = () => {
+    if (onClick && !!disabled) {
+      return onClick();
+    }
+  };
+
   return loading ? (
-    <button type="button" className={tw(instanceStyles)}>
-      {<Icon icon="ArrowPathIcon" styling={`${DefaultIconSize} ${textColor}`} />}
+    <button type="button" className={tw(instanceStyles)} onClick={handleClick}>
+      <Icon icon="ArrowPathIcon" styling={`${DefaultIconSize} ${textColor}`} />
     </button>
   ) : (
-    <button type="button" className={tw(instanceStyles)}>
-      {<Icon icon={props.icon} styling={tw(instanceIconStyles)} />}
+    <button type="button" className={tw(instanceStyles)} onClick={handleClick}>
+      {icon && <Icon icon={icon} styling={tw(instanceIconStyles)} />}
       {!loading && !greyBgIcon && <p>{label}</p>}
     </button>
   );

@@ -7,8 +7,10 @@ interface IconProps {
   styling?: string;
 }
 
-export const Icon: React.FC<IconProps> = props => {
+const Icon: React.FC<IconProps> = props => {
   const PassedIcon = HeroIcons[props.icon];
 
   return <PassedIcon className={props.styling} />;
 };
+
+export default Icon;
