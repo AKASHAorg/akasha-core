@@ -3,9 +3,22 @@ import { tw } from '@twind/core';
 
 import { Button } from '../Button';
 
-import { IModerationAppErrorCardProps } from '../../interfaces/moderationAppErrorCard';
+export interface IErrorCardProps {
+  boxSize: string;
+  errorType: string;
+  titleLabel: string;
+  subtitleLabel: string;
+  buttonLabel?: string;
+  textMarginTop?: boolean;
+  textMarginBottom?: boolean;
+  hasButton?: boolean;
+  imageBoxHasMargin?: boolean;
+  /* Path to public folder */
+  publicImgPath?: string;
+  onClick?: () => void;
+}
 
-const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => {
+const ErrorCard: React.FC<IErrorCardProps> = props => {
   const {
     boxSize,
     errorType,
@@ -56,4 +69,4 @@ const ModerationAppErrorCard: React.FC<IModerationAppErrorCardProps> = props => 
   );
 };
 
-export default ModerationAppErrorCard;
+export default ErrorCard;

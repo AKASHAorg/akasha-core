@@ -1,8 +1,6 @@
 import React from 'react';
 
-import BasicPopover from '.';
-
-import { IBasicPopover } from '../../interfaces/basicpopover.interface';
+import BasicPopover, { IBasicPopover } from '.';
 
 export default {
   title: 'Popovers/BasicPopover',

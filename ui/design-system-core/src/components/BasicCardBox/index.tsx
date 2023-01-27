@@ -1,7 +1,17 @@
 import { tw } from '@twind/core';
 import React, { PropsWithChildren } from 'react';
 
-import { IBasicCardBox } from '../../interfaces/basicCardBox.interface';
+export interface IBasicCardBox {
+  elevation?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'inner' | 'none';
+  dashedBorder?: boolean;
+  rootNodeRef?: React.Ref<HTMLDivElement>;
+  pad?: string;
+  margin?: string;
+  round?: string;
+  noBorder?: boolean;
+  noBorderRadius?: boolean;
+  onClick?: () => void;
+}
 
 const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
   const {

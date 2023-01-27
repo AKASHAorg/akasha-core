@@ -1,6 +1,5 @@
 import React from 'react';
-import Avatar from '.';
-import { IAvatarProps } from '../../interfaces/avatar.interface';
+import Avatar, { IAvatarProps } from '.';
 
 export default {
   title: 'Avatars/Avatar',

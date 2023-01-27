@@ -4,9 +4,16 @@ import { tw } from '@twind/core';
 import { IntegrationTypes } from '@akashaorg/typings/ui';
 
 import AvatarImage from '../Avatar/AvatarImage';
-import { avatarBorderColorsMap, avatarBorderSizesMap, avatarSizesMap } from '../Avatar';
+import {
+  avatarBorderColorsMap,
+  avatarBorderSizesMap,
+  avatarSizesMap,
+  IAvatarProps,
+} from '../Avatar';
 
-import { IAppAvatarProps } from '../../interfaces/appAvatar.interface';
+export interface IAppAvatarProps extends IAvatarProps {
+  appType: IntegrationTypes;
+}
 
 const Avatar: React.FC<IAppAvatarProps> = props => {
   const {

@@ -1,4 +1,4 @@
-import { UserDataType } from '../interfaces/stackedAvatar.interface';
+import { UserDataType } from '../components/StackedAvatar';
 
 const userData: UserDataType = [
   {

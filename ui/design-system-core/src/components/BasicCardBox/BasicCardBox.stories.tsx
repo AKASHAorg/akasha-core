@@ -1,8 +1,6 @@
 import React from 'react';
 
-import BasicCardBox from '.';
-
-import { IBasicCardBox } from '../../interfaces/basicCardBox.interface';
+import BasicCardBox, { IBasicCardBox } from '.';
 
 export default {
   title: 'Cards/BasicCardBox',

@@ -1,7 +1,15 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { IBasicPopover } from '../../interfaces/basicpopover.interface';
+export type OverflowType = 'auto' | 'hidden' | 'scroll' | 'visible';
+
+export interface IBasicPopover {
+  children: React.ReactNode;
+  closePopover: () => void;
+  target: HTMLElement;
+  gap?: string;
+  overflow?: OverflowType | { horizontal?: OverflowType; vertical?: OverflowType };
+}
 
 const BasicPopover: React.FC<IBasicPopover> = ({ children, ...props }) => {
   const { gap, overflow = 'hidden' } = props;

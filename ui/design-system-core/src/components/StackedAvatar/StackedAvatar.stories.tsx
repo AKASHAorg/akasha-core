@@ -1,8 +1,7 @@
 import React from 'react';
 
-import StackedAvatar from '.';
+import StackedAvatar, { IStackedAvatarProps } from '.';
 
-import { IStackedAvatarProps } from '../../interfaces/stackedAvatar.interface';
 import { userData } from '../../utils/dummy-data';
 
 export default {

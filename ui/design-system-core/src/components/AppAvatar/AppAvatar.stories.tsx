@@ -1,9 +1,7 @@
 import React from 'react';
 import { IntegrationTypes } from '@akashaorg/typings/ui';
 
-import AppAvatar from '.';
-
-import { IAppAvatarProps } from '../../interfaces/appAvatar.interface';
+import AppAvatar, { IAppAvatarProps } from '.';
 
 export default {
   title: 'Avatars/AppAvatar',

@@ -1,9 +1,16 @@
 import React from 'react';
 import { tw } from '@twind/core';
+import { IProfileData } from '@akashaorg/typings/ui';
 
-import Avatar from '../Avatar';
+import Avatar, { AvatarSize } from '../Avatar';
 
-import { IStackedAvatarProps } from '../../interfaces/stackedAvatar.interface';
+export type UserDataType = { ethAddress: string; avatar?: IProfileData['avatar'] }[];
+
+export interface IStackedAvatarProps {
+  userData: UserDataType;
+  maxAvatars?: number;
+  size?: AvatarSize;
+}
 
 const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
   const { userData, maxAvatars, size } = props;
