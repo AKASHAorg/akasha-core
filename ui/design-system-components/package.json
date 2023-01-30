@@ -1,5 +1,5 @@
 {
-  "name": "@akashaorg/design-system-core",
+  "name": "@akashaorg/design-system-components",
   "version": "0.1.0",
   "author": "AKASHA <hello@akasha.world> (https://akasha.org/)",
   "contributors": [
@@ -53,12 +53,11 @@
     ]
   },
   "dependencies": {
+    "@akashaorg/design-system-core": "*",
     "@twind/core": "1.1.2",
-    "@twind/with-react": "1.1.2",
     "@twind/preset-autoprefix": "1.0.6",
     "@twind/preset-tailwind": "1.1.3",
     "@headlessui/react": "1.7.7",
-    "@lottiefiles/react-lottie-player": "3.4.9",
     "@heroicons/react": "2.0.13"
   },
   "devDependencies": {
