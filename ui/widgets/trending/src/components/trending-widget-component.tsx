@@ -1,5 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
+import Card from '@akashaorg/design-system-core';
+
 import { useTranslation } from 'react-i18next';
 import {
   useTrendingTags,
@@ -14,7 +16,7 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 
-const { TrendingWidgetCard, ErrorLoader, Box } = DS;
+const { ErrorLoader, Box, TrendingWidgetCard } = DS;
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -124,6 +126,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <Box pad={{ bottom: 'small' }}>
+      <Card>testing</Card>
       {(trendingTagsReq.isError || trendingProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
