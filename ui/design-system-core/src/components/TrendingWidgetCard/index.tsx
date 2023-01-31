@@ -45,7 +45,7 @@ export interface ITrendingWidgetCardProps {
   className?: string;
 }
 const BaseTabListStyles = apply`
-    w-full py-2.5 text-sm font-medium    
+    w-full py-2.5 text-sm font-medium
     ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none
     `;
 
