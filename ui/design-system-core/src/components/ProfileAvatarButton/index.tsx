@@ -21,7 +21,7 @@ export interface ProfileAvatarButtonProps {
 }
 
 const BaseStyles = apply`
-    text-ellipsis overflow-hidden whitespace-nowrap truncate 
+    text-ellipsis overflow-hidden whitespace-nowrap truncate
     `;
 
 const ProfileAvatarButton = React.forwardRef(
