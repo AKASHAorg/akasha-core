@@ -98,7 +98,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
   return (
     // <div className="w-full max-w-md px-2 sm:px-0 bg-white dark:bg-grey2 dark:bg-grey8">
     <BasicCardBox noBorder={true} pad="0">
-      <h3>{titleLabel}</h3>
+      <h3 className={tw('py-4 pl-8 font-medium text-lg')}>{titleLabel}</h3>
       <Tab.Group onChange={handleTabChange}>
         <Tab.List className="flex space-x-1 rounded-t-md">
           <Tab
