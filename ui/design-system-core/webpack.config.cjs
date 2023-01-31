@@ -12,6 +12,7 @@ module.exports = {
   context: path.resolve(__dirname),
   entry: {
     Card: './src/components/Card',
+    TrendingWidgetCard: './src/components/TrendingWidgetCard',
   },
   output: Object.assign(baseConfig.output, {
     //library: packageName.replace(/@/, '').replace(/\//, '__').replace(/-/, '_'),

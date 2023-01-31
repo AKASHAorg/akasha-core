@@ -8,7 +8,6 @@
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
   ],
   "type": "module",
-  "main": "lib/index.js",
   "directories": {
     "lib": "lib"
   },
