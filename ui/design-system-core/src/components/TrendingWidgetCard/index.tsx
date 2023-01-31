@@ -50,7 +50,7 @@ const BaseTabListStyles = apply`
     `;
 
 const BaseTabPanelStyles = apply`
-    ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none 
+    ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none px-8
     `;
 
 const SelectedTabStyles = apply`
@@ -97,7 +97,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
 
   return (
     // <div className="w-full max-w-md px-2 sm:px-0 bg-white dark:bg-grey2 dark:bg-grey8">
-    <BasicCardBox noBorder={true}>
+    <BasicCardBox noBorder={true} pad="0">
       <h3>{titleLabel}</h3>
       <Tab.Group onChange={handleTabChange}>
         <Tab.List className="flex space-x-1 rounded-t-md">
