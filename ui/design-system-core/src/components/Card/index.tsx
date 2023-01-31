@@ -21,3 +21,5 @@ export const Card: React.FC<PropsWithChildren<CardProps>> = props => {
 
   return <div className={tw(instanceStyles)}>{props.children}</div>;
 };
+
+export default Card;

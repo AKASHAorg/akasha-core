@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import Card from '@akashaorg/design-system-core';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
 
 import { useTranslation } from 'react-i18next';
 import {
