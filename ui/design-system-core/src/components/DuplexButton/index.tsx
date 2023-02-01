@@ -1,7 +1,7 @@
 import * as React from 'react';
-import Button from '../Button';
+import { Button } from '../Button';
 import Icon, { IconName } from '../Icon/';
-import { ButtonProps } from '../Button';
+import { ButtonProps } from '../Button/Button';
 import { tw } from '@twind/core';
 
 export interface IDuplexButtonProps extends ButtonProps {
