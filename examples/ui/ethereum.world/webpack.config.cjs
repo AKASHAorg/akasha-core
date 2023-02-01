@@ -10,10 +10,13 @@ const fs = require('fs');
 baseConfig.plugins.splice(1, 1);
 module.exports = Object.assign(baseConfig, {
   context: path.resolve(__dirname),
-  entry: './src/index',
+  entry: {
+    main: './src/index.ts',
+    'setup.twind': './src/setup.twind.ts'
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    filename: '[name].js',
     crossOriginLoading: 'anonymous',
   },
   plugins: baseConfig.plugins.concat([
