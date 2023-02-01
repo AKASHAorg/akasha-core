@@ -11,11 +11,7 @@ const Template = args => {
   const [active, setActive] = React.useState(false);
 
   const handleClick = () => {
-    if (!active) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
+    setActive(!active);
   };
   return (
     <DuplexButton

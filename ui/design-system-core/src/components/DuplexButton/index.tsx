@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Button } from '../Button';
+import Button from '../Button';
 import Icon, { IconName } from '../Icon/';
-import { ButtonProps } from '../Button/Button';
+import { ButtonProps } from '../Button';
 import { tw } from '@twind/core';
 
 export interface IDuplexButtonProps extends ButtonProps {
@@ -39,14 +39,11 @@ const DuplexButton = (props: IDuplexButtonProps) => {
 
   React.useEffect(() => {
     const mql = window.matchMedia('(max-width: 992px)');
+    const resize = e => {
+      setIconOnly(e.matches);
+    };
     mql.addEventListener('change', resize);
-    function resize(e) {
-      if (e.matches) {
-        setIconOnly(true);
-      } else {
-        setIconOnly(false);
-      }
-    }
+
     return () => {
       mql.removeEventListener('change', resize);
     };
