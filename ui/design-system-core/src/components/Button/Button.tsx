@@ -17,11 +17,14 @@ export type ButtonProps = {
   greyBg?: boolean;
   textonly?: boolean;
   onClick?: () => void;
+  onHover?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 };
 
 const sizing = {
   xsmall: { textSize: 'text-xs', iconSize: 'h-3 w-3', buttonSize: 'w-24' },
-  small: { textSize: 'text-sm', iconSize: DefaultIconSize, buttonSize: 'w-48' },
+  small: { textSize: 'text-sm', iconSize: DefaultIconSize, buttonSize: 'w-[8rem]' },
   regular: { textSize: 'text-lg', iconSize: 'h-5, w-5', buttonSize: 'w-64' },
   large: { textSize: 'text-3xl', iconSize: 'h-7, w-7', buttonSize: 'w-96' },
 };
