@@ -20,12 +20,12 @@ const Template = (args: IAccordionProps) => (
 const Title = (
   <div className={tw('flex flex-row items-center')}>
     <Avatar ethAddress={ethAddress} src={{ url: 'https://placebeard.it/360x360' }} />
-    <p className={tw('ml-2.5 text-black dark: text-white')}>Item name</p>
+    <p className={tw('ml-2.5 text-white dark:text-black')}>Item name</p>
   </div>
 );
 
 const Content = (
-  <div className={tw('text-black dark: text-white')}>
+  <div className={tw('text-white dark:text-black')}>
     <p>Accordion content</p>
     <p>Accordion content</p>
     <p>Accordion content</p>
