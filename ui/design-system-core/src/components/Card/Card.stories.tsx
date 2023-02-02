@@ -3,7 +3,7 @@ import React from 'react';
 import { Card } from './index';
 
 export default {
-  title: 'Card',
+  title: 'Cards/Card',
   component: Card,
 };
 

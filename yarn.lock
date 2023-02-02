@@ -4549,7 +4549,7 @@
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.1.tgz#076d78ce99822258cf813ecc1e7fa460fa74d052"
   integrity sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==
 
-"@headlessui/react@1.7.7":
+"@headlessui/react@~1.7.7":
   version "1.7.7"
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.7.7.tgz#d6f8708d8943ae8ebb1a6929108234e4515ac7e8"
   integrity sha512-BqDOd/tB9u2tA0T3Z0fn18ktw+KbVwMnkxxsGPIH2hzssrQhKB5n/6StZOyvLYP/FsYtvuXfi9I0YowKPv2c1w==
@@ -8330,10 +8330,10 @@
   dependencies:
     csstype "^3.1.1"
 
-"@twind/core@1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@twind/core/-/core-1.1.2.tgz#64caa880dfae791759df2f129bfb255cb570d482"
-  integrity sha512-jaw7eWnwpuTUcrtgfmND0b3rSRVgNH/m+xV5CuxSJ2cuVmlEt3ZucoXAoNwhwocAAnDbxhLGhlfVDfxnagflkA==
+"@twind/core@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@twind/core/-/core-1.1.3.tgz#7ab2f6390d6feb5e1315db101b97434ab2761048"
+  integrity sha512-/B/aNFerMb2IeyjSJy3SJxqVxhrT77gBDknLMiZqXIRr4vNJqiuhx7KqUSRzDCwUmyGuogkamz+aOLzN6MeSLw==
   dependencies:
     csstype "^3.1.1"
 
