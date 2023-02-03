@@ -4,6 +4,8 @@ export default {
     extend: {
       colors: {
         primary: 'linear-gradient(90deg, var(--foundation-primary))',
+        primaryStart: 'var(--gradient-primary-start)',
+        primaryStop: 'var(--gradient-primary-stop)',
         secondary: {
           light: 'var(--foundation-secondary)',
           dark: 'var(--foundation-secondary-dark)',

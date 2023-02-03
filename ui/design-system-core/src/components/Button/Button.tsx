@@ -60,7 +60,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   const bgColor = primary
     ? greyBgIcon
       ? 'bg-grey8'
-      : 'bg-primary'
+      : 'bg-gradient-to-r from-primaryStart to-primaryStop'
     : ' bg-white hover:bg-secondary-dark';
 
   const textColor =
