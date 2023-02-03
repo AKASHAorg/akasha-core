@@ -87,6 +87,7 @@ export const getAPISig = async (minutes = 30) => {
 
 let userDBClient;
 export const newClientDB = async () => {
+  return Promise.resolve({}); // bypass textile auth
   if (userDBClient) {
     if (userDBClient.context.isExpired) {
       userDBClient = undefined;
@@ -111,6 +112,7 @@ export const newClientDB = async () => {
 const identity = () => PrivateKey.fromString(process.env.AWF_DBkey);
 let appDBClient;
 export const getAppDB = async () => {
+  return Promise.resolve({}); // bypass textile auth
   if (appDBClient) {
     if (appDBClient.context.isExpired) {
       // tslint:disable-next-line:no-console
