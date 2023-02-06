@@ -1,12 +1,12 @@
 import React from 'react';
 import { Tab } from '@headlessui/react';
 import { ITag, IProfileData } from '@akashaorg/typings/ui';
-import DuplexButton from '../DuplexButton';
-import SubtitleTextIcon from '../SubtitleTextIcon';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 import { tw, apply } from '@twind/core';
-import TextLine from '../TextLine';
-import ProfileAvatarButton from '../ProfileAvatarButton';
-import BasicCardBox from '../BasicCardBox';
 
 export interface ITrendingWidgetCardProps {
   // data
@@ -50,7 +50,7 @@ const BaseTabListStyles = apply`
     `;
 
 const BaseTabPanelStyles = apply`
-    ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none px-8
+    ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none px-4
     `;
 
 const SelectedTabStyles = apply`
@@ -154,7 +154,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                         onClick={() => onClickTag(tag.name)}
                         label={`#${tag.name}`}
                         subtitle={`Used in ${tag.totalPosts} posts`}
-                        labelSize="large"
+                        labelSize="small"
                       />
                     </a>
                     <div>
@@ -221,7 +221,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                         onClickInactive={() => handleFollowProfile(profile.pubKey)}
                         onClickActive={() => handleUnfollowProfile(profile.pubKey)}
                         active={followedProfiles?.includes(profile.pubKey)}
-                        icon="ArrowRightOnRectangleIcon"
+                        icon="UserPlusIcon"
                         allowMinimization={true}
                       />
                     </div>

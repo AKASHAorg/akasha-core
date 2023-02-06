@@ -83,7 +83,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
     ? 'text-secondary-light'
     : textonly
     ? 'text-secondary-light hover:opacity-50 disabled:opacity-50 dark:hover:text-white'
-    : 'fill-current';
+    : 'stroke-current';
   const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : '';
 
   const instanceStyles = textonly
@@ -103,6 +103,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   const instanceIconStyles = apply`
   ${iconSize}
   ${iconColor}
+  stroke-1
   `;
 
   const handleClick = () => {
