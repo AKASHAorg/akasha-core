@@ -75,7 +75,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
         <span
           className={tw(
             `block text-ellipsis overflow-hidden whitespace-nowrap truncate
-            ${labelColor ? labelColor : 'black'} 
+            ${labelColor ? labelColor : 'black'}
             ${labelSize ? labelSize : 'lg:text-sm md:text-sx font-light'}`,
           )}
         >
