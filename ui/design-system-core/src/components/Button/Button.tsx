@@ -14,6 +14,7 @@ export type ButtonProps = {
   label?: string;
   loading?: boolean;
   size?: 'xsmall' | 'small' | 'regular' | 'large';
+  fontSize?: string;
   greyBg?: boolean;
   textonly?: boolean;
   onClick?: () => void;
@@ -41,21 +42,24 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   const {
     label,
     size = 'small',
+    fontSize,
     greyBg,
     primary,
-    disabled,
+    disabled = false,
     icon,
     iconRight,
     loading,
     textonly,
     onClick,
+    onMouseEnter,
+    onMouseLeave,
   } = props;
 
   const greyBgIcon =
     (greyBg === true && label === undefined) || (greyBg === true && size === 'xsmall');
 
   const isIconButton =
-    label !== undefined && !greyBgIcon ? 'rounded-2xl space-x-2 py-2.5 px-5' : 'rounded-full p-2.5';
+    label !== undefined && !greyBgIcon ? 'rounded-2xl space-x-2 py-2 px-4' : 'rounded-full p-2.5';
   const bgColor = primary
     ? greyBgIcon
       ? 'bg-grey8'
@@ -73,7 +77,7 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   const iconRightStyles = iconRight ? 'flex-row-reverse space-x-2 space-x-reverse' : '';
 
   const buttonSize = (label !== undefined && sizing[size]?.buttonSize) ?? 'w-48';
-  const textSize = sizing[size]?.textSize ?? 'text-sm';
+  const textSize = (fontSize || sizing[size]?.textSize) ?? 'text-sm';
   const iconSize = sizing[size]?.iconSize ?? DefaultIconSize;
   const iconColor = greyBgIcon
     ? 'text-secondary-light'
@@ -102,17 +106,29 @@ export const Button: React.FC<PropsWithChildren<ButtonProps>> = props => {
   `;
 
   const handleClick = () => {
-    if (onClick && !!disabled) {
+    if (onClick !== undefined && !disabled) {
       return onClick();
     }
   };
 
   return loading ? (
-    <button type="button" className={tw(instanceStyles)} onClick={handleClick}>
+    <button
+      type="button"
+      className={tw(instanceStyles)}
+      onClick={handleClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <Icon icon="ArrowPathIcon" styling={`${DefaultIconSize} ${textColor}`} />
     </button>
   ) : (
-    <button type="button" className={tw(instanceStyles)} onClick={handleClick}>
+    <button
+      type="button"
+      className={tw(instanceStyles)}
+      onClick={handleClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {icon && <Icon icon={icon} styling={tw(instanceIconStyles)} />}
       {!loading && !greyBgIcon && <p>{label}</p>}
     </button>

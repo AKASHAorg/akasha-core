@@ -18,6 +18,25 @@ body.Dark-Theme>#splash-screen-root {
 */:root {
   --color-background-default: 255 255 255;
   --color-background-dark: 13 26 45;
+  --foundation-primary: #FF89B6, #4E71FF;
+  --foundation-secondary: #7222D2;
+  --foundation-secondary-dark: #BA9AE0;
+  --system-black: #1A1B1F;
+  --system-white: #F4F4F4;
+  --system-grey-1: #2D2F33;
+  --system-grey-2: #222428;
+  --system-grey-3: #313235;
+  --system-grey-4: #666768;
+  --system-grey-5: #4E4E4E;
+  --system-grey-6: #B6BFD1;
+  --system-grey-7: #989898;
+  --system-grey-8: #EAEAEA;
+  --system-grey-9: #F4F4F4;
+  --feedback-success: #63B86B;
+  --feeback-warning: #F1B210;
+  --feedback-warning-dark: #FFDF8C;
+  --feedback-error: #EE6135;
+  --feedback-error-dark: #FF9271;
 }
 
 .global-styles__inherit-height {

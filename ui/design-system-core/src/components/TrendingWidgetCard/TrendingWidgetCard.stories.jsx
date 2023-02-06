@@ -1,7 +1,7 @@
 import React from 'react';
 import TrendingWidgetCard from '.';
 
-import { trendingProfilesData, trendingTagsData } from './dummy-data';
+import { trendingProfilesData, trendingTagsData } from '../../utils/dummy-data';
 
 export default {
   title: 'Cards/TrendingWidgetCard',

@@ -26,7 +26,7 @@
   "scripts": {
     "copy-images": "copyfiles -f ./src/static/img/* ../build/images",
     "pack": "tsc --build tsconfig.json",
-    "postpack": "yarn run build:css & yarn run copy-images",
+    "postpack": "yarn run copy-images",
     "tsc": "tsc --build tsconfig.json",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",

@@ -100,11 +100,11 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
     <BasicCardBox noBorder={true} pad="0">
       <h3 className={tw('py-4 pl-8 font-medium text-lg')}>{titleLabel}</h3>
       <Tab.Group onChange={handleTabChange}>
-        <Tab.List className="flex space-x-1 rounded-t-md">
+        <Tab.List className={tw('flex space-x-1 rounded-t-md')}>
           <Tab
             key={topicsLabel}
             className={({ selected }) =>
-              tw(BaseTabListStyles) + (selected ? tw(SelectedTabStyles) : 'text-gray-400')
+              tw(`${BaseTabListStyles} ${selected ? tw(SelectedTabStyles) : 'text-gray-400'}`)
             }
           >
             {topicsLabel}
@@ -112,7 +112,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           <Tab
             key={profilesLabel}
             className={({ selected }) =>
-              tw(BaseTabListStyles) + (selected ? tw(SelectedTabStyles) : 'text-gray-400')
+              tw(`${BaseTabListStyles} ${selected ? tw(SelectedTabStyles) : 'text-gray-400'}`)
             }
           >
             {profilesLabel}

@@ -50,12 +50,12 @@ const ProfileAvatarButton = React.forwardRef(
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <div className={tw(`${BaseStyles} lg:text-base md:text-sx max-w-[7rem]`)}>
+          <div className={tw(`${BaseStyles} lg:text-base md:text-sx max-w-[7rem] xs:max-w-[2rem]`)}>
             <span ref={ref}>{label || truncateMiddle(ethAddress)}</span>
           </div>
           <div
             className={tw(
-              `${BaseStyles} max-w-[10rem] xs:max-w-[2rem] text-xs sm:text-[10px]
+              `${BaseStyles} max-w-[7rem] xs:max-w-[2rem] text-xs sm:text-[10px]
               ${active ? ' text-white ' : ' text-black '}`,
             )}
           >
