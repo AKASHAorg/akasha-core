@@ -73,7 +73,9 @@ if (process.env.AWF_THREADdb) {
   dbID = ThreadID.fromString(process.env.AWF_THREADdb);
 }
 
-(async () => setupDBCollections())();
+(async () => {
+  //setupDBCollections()
+})();
 
 const server = new ApolloServer({
   typeDefs,

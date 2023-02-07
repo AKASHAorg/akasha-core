@@ -8,7 +8,7 @@ import {
 } from 'workbox-recipes';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const idb = require('idb-keyval');
+import { get as idbGet, set as idbSet } from 'idb-keyval';
 //import { get as idbGet, set as idbSet } from 'idb-keyval/dist/compat';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -31,7 +31,7 @@ const ENC_KEY = 'ENC_KEY';
 const IV_SEPARATOR = '|';
 let key;
 const genKey = async () => {
-  let exportedKey = await idb.get(ENC_KEY);
+  let exportedKey = await idbGet(ENC_KEY);
   if (!exportedKey) {
     const privateKey = await self.crypto.subtle.generateKey(
       {
@@ -43,7 +43,7 @@ const genKey = async () => {
     );
     const exportedKeyJWK = await self.crypto.subtle.exportKey('jwk', privateKey);
     exportedKey = JSON.stringify(exportedKeyJWK);
-    await idb.set(ENC_KEY, exportedKey);
+    await idbSet(ENC_KEY, exportedKey);
   }
   key = await self.crypto.subtle.importKey(
     'jwk',

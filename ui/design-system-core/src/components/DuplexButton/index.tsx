@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Button } from '../Button';
+import Button, { IButtonProps } from '../Button';
 import Icon, { IconName } from '../Icon/';
-import { ButtonProps } from '../Button/Button';
 import { tw } from '@twind/core';
 
-export interface IDuplexButtonProps extends ButtonProps {
+export interface IDuplexButtonProps extends IButtonProps {
   onClickInactive?: () => void;
   onClickActive?: () => void;
   inactiveLabel?: string;

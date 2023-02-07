@@ -19,4 +19,34 @@ const userData: UserDataType = [
   },
 ];
 
-export { userData };
+const sidebarItems = [
+  {
+    title: 'Social Feed',
+    submenu: {},
+  },
+  {
+    title: 'Integration Center',
+  },
+  {
+    title: 'Moderation',
+    submenu: {},
+  },
+  {
+    title: 'Search',
+  },
+  {
+    title: 'Bookmarks',
+  },
+  {
+    title: 'Notifications',
+  },
+  {
+    title: 'Settings',
+  },
+  {
+    title: 'Legal',
+    submenu: {},
+  },
+];
+
+export { userData, sidebarItems };
