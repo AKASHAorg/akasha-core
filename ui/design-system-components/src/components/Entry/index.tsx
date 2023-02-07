@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
-import styled from 'styled-components';
+import { tw } from '@twind/core';
 import { isMobileOnly } from 'react-device-detect';
 import CardHeaderMenuDropdown from './card-header-menu';
 import CardActions, { ServiceNames } from './card-actions';
@@ -13,11 +12,10 @@ import MobileListModal from '../MobileListModal';
 import ProfileAvatarButton from '../ProfileAvatarButton';
 import EmbedBox from '../EmbedBox';
 import ReadOnlyEditor from '../ReadOnlyEditor';
-import ViewportSizeProvider from '../Providers/viewport-dimension';
 
 import { formatDate, formatRelativeTime, ILocale } from '../../utils/time';
 import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
-import LinkPreview from '../Editor/link-preview';
+import LinkPreview from '../LinkPreview';
 import Tooltip from '../Tooltip';
 import { EntryCardRemoved } from './entry-card-removed';
 import { EntryImageGallery } from '../ImageGallery/entry-image-gallery';
@@ -156,7 +154,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   } = props;
 
   const [menuDropOpen, setMenuDropOpen] = React.useState(false);
-  const [profileDropOpen, setProfileDropOpen] = React.useState(false);
   const [displayCID, setDisplayCID] = React.useState(false);
 
   const menuIconRef: React.Ref<HTMLDivElement> = React.useRef(null);
@@ -250,11 +247,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   const showMobileCardMenu = React.useMemo(() => isMobileOnly && menuDropOpen, [menuDropOpen]);
 
-  const showProfileDrop = React.useMemo(
-    () => profileRef.current && profileDropOpen,
-    [profileDropOpen],
-  );
-
   const showCID = React.useMemo(
     () => entryData.CID && akashaRef.current && displayCID,
     [displayCID, entryData.CID],
@@ -307,14 +299,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   };
 
   return (
-    <ViewportSizeProvider>
-      <Box background={error ? '#FFFDF1' : null} style={style}>
-        <Box
-          direction="row"
-          justify="between"
-          pad={{ top: 'medium', horizontal: 'medium' }}
-          flex={{ shrink: 0 }}
-        >
+    <>
+      <div className={tw(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
+        <div className={tw(`flex(row) justify-between pt-4 px-4 shrink-0`)}>
           <StyledAnchor
             onClick={(e: React.SyntheticEvent) => {
               e.preventDefault();
@@ -349,7 +336,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               />
             }
           />
-          <Box direction="row" gap="xsmall" align="center" flex={{ shrink: 0 }}>
+          <div className={tw(`flex(row) gap-2 items-center shrink-0`)}>
             {entryData.time && !hidePublishTime && (
               <Tooltip
                 dropProps={{ align: { top: 'bottom' } }}
@@ -357,9 +344,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 plain={true}
                 caretPosition={'top'}
               >
-                <Text style={{ flexShrink: 0 }} color="secondaryText">
+                <p className={tw(`flex shrink-0 text(grey4 dark:grey7)`)}>
                   {formatRelativeTime(entryData.time, locale)}
-                </Text>
+                </p>
               </Tooltip>
             )}
             {!!entryData?.updatedAt && (
@@ -392,17 +379,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 ref={menuIconRef}
               />
             )}
-          </Box>
-        </Box>
-        {showCID && (
-          <CardHeaderAkashaDropdown
-            target={akashaRef.current}
-            onMenuClose={() => {
-              setDisplayCID(false);
-            }}
-            CID={entryData.CID}
-          />
-        )}
+          </div>
+        </div>
         {showCardMenu && (
           <CardHeaderMenuDropdown
             target={menuIconRef.current}
@@ -467,11 +445,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {!props.isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
-          <Box
-            pad={{ horizontal: 'medium' }}
-            height={{ max: '50rem' }}
-            overflow={scrollHiddenContent ? 'auto' : 'hidden'}
-            style={{ cursor: contentClickable ? 'pointer' : 'default' }}
+          <div
+            className={tw(
+              `px-4 max-h-[50rem] ${scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'} ${
+                contentClickable ? 'cursor-pointer' : 'cursor-default'
+              }`,
+            )}
             onClick={() => handleContentClick(entryData)}
           >
             <ReadOnlyEditor
@@ -480,20 +459,20 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               handleTagClick={onTagClick}
               handleLinkClick={handleLinkClick}
             />
-          </Box>
+          </div>
         )}
         {showLinkPreview && (
-          <Box pad="medium">
+          <div className={tw(`flex p-4`)}>
             <LinkPreview
               linkPreviewData={entryData.linkPreview}
               handleLinkClick={handleLinkClick}
             />
-          </Box>
+          </div>
         )}
         {entryData.images && (
-          <Box pad="medium">
+          <div className={tw(`flex p-4`)}>
             <EntryImageGallery images={entryData.images} handleClickImage={handleClickImage} />
-          </Box>
+          </div>
         )}
         {imageOverlayOpen && (
           <MultipleImageOverlay
@@ -503,9 +482,9 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {showQuote && (
-          <Box pad="medium" onClick={() => handleContentClick(entryData.quote)}>
+          <div className={tw(`flex p-4`)} onClick={() => handleContentClick(entryData.quote)}>
             <EmbedBox embedEntryData={entryData.quote} />
-          </Box>
+          </div>
         )}
         {showRemovedQuote && (
           <EntryCardRemoved
@@ -515,7 +494,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {showReportedQuote && (
-          <Box pad="medium" onClick={() => null}>
+          <div className={tw(`flex p-4`)} onClick={() => null}>
             <EntryCardHidden
               reason={entryData.reason}
               headerTextLabel={headerTextLabel}
@@ -523,12 +502,12 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ctaLabel={ctaLabel}
               handleFlipCard={handleFlipCard}
             />
-          </Box>
+          </div>
         )}
         {showDelistedQuote && (
-          <Box pad="medium" onClick={() => null}>
+          <div className={tw(`flex p-4`)} onClick={() => null}>
             <EntryCardHidden moderatedContentLabel={moderatedContentLabel} isDelisted={true} />
-          </Box>
+          </div>
         )}
         {!hideActionButtons && (
           <CardActions
@@ -557,8 +536,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
           />
         )}
         {error && <EntryCardError error={error} onRetry={onRetry} />}
-      </Box>
-    </ViewportSizeProvider>
+      </div>
+    </>
   );
 };
 
