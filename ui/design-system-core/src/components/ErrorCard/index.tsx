@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import { Button } from '../Button';
+import Button from '../Button';
 
 export interface IErrorCardProps {
   boxSize: string;
