@@ -17,9 +17,11 @@ export interface IButtonProps {
   textOnly?: boolean;
   greyBg?: boolean;
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
-export const ButtonAlt: React.FC<IButtonProps> = props => {
+const Button: React.FC<IButtonProps> = props => {
   const {
     icon,
     label,
@@ -32,6 +34,8 @@ export const ButtonAlt: React.FC<IButtonProps> = props => {
     textOnly = false,
     greyBg = false,
     onClick,
+    onMouseEnter,
+    onMouseLeave,
   } = props;
 
   // adjust padding if iconOnly prop or loading prop or size of icon is xsmall
@@ -56,6 +60,18 @@ export const ButtonAlt: React.FC<IButtonProps> = props => {
   const handleClick = () => {
     if (typeof onClick === 'function' && !disabled && !loading) {
       return onClick();
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (typeof onMouseEnter === 'function' && !disabled && !loading) {
+      return onMouseEnter();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (typeof onMouseLeave === 'function' && !disabled && !loading) {
+      return onMouseLeave();
     }
   };
 
@@ -89,7 +105,13 @@ export const ButtonAlt: React.FC<IButtonProps> = props => {
   }`;
 
   return (
-    <button type="button" className={tw(className)} onClick={handleClick}>
+    <button
+      type="button"
+      className={tw(className)}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {loading ? (
         <Icon icon="ArrowPathIcon" styling={tw(iconStyle)} />
       ) : iconOnly ? (
@@ -106,3 +128,5 @@ export const ButtonAlt: React.FC<IButtonProps> = props => {
     </button>
   );
 };
+
+export default Button;

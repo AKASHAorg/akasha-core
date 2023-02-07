@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 import Avatar from '../Avatar';
-import { Button } from '../Button';
+import Button from '../Button';
 import Accordion from '../Accordion';
 
 export interface ISidebarProps {
