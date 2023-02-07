@@ -29,6 +29,7 @@ export default {
           light: 'var(--feedback-error)',
           dark: 'var(--feedback-error-dark)',
         },
+        elevation: 'var(--elevation)',
       },
       borderRadius: {
         large: '20px',
