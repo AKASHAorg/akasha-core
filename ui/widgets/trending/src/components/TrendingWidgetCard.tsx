@@ -46,15 +46,19 @@ export interface ITrendingWidgetCardProps {
 }
 const BaseTabListStyles = apply`
     w-full py-2.5 text-sm font-medium
-    ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none
+    ring(white opacity-60 offset(2 blue-400)) focus:outline-none
     `;
 
 const BaseTabPanelStyles = apply`
-    ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none px-4
+    ring(white opacity-60  offset(2 blue-400)) focus:outline-none px-4
     `;
 
 const SelectedTabStyles = apply`
-    text-secondary-light border-b-secondary-light border-b-2
+    text-secondary-light border-b(2 secondary-light)
+    `;
+
+const BaseItemStyles = apply`
+    flex justify-between items-center py-2
     `;
 
 const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
@@ -129,7 +133,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
               {tags.length === 0 &&
                 isLoadingTags &&
                 Array.from({ length: 4 }, (_el, index: number) => (
-                  <div key={index} className={tw('flex flex-row justify-between items-center')}>
+                  <div key={index} className={tw(BaseItemStyles)}>
                     <div>
                       <TextLine title="tagName" animated={false} width="140px" />
                       <TextLine title="tagName" animated={false} width="80px" />
@@ -139,10 +143,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                 ))}
               {tags.length !== 0 &&
                 tags.slice(0, 4).map((tag, index) => (
-                  <div
-                    key={index}
-                    className={tw('flex flex-row justify-between items-center py-2')}
-                  >
+                  <div key={index} className={tw(BaseItemStyles)}>
                     <a
                       onClick={e => {
                         e.preventDefault();
@@ -175,14 +176,14 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           </Tab.Panel>
           <Tab.Panel className={tw(BaseTabPanelStyles)}>
             {profiles.length === 0 && !isLoadingProfiles && (
-              <div className={tw('flex flex-row justify-center items-center py-2')}>
+              <div className={tw('flex justify-center items-center py-2')}>
                 <p>{noProfilesLabel}</p>
               </div>
             )}
             {profiles.length === 0 &&
               isLoadingProfiles &&
               Array.from({ length: 4 }, (_el, index: number) => (
-                <div key={index} className={tw('flex flex-row justify-between items-center py-2')}>
+                <div key={index} className={tw(BaseItemStyles)}>
                   <div className={tw('py-2')}>
                     <TextLine title="avatar" width="40px" height="40px" className="rounded-full" />
                     <div className={tw('py-1')}>
@@ -195,7 +196,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
               ))}
             {profiles.length !== 0 &&
               profiles.slice(0, 4).map((profile, index) => (
-                <div key={index} className={tw('flex flex-row justify-between items-center py-2	')}>
+                <div key={index} className={tw(BaseItemStyles)}>
                   <a
                     onClick={e => {
                       e.preventDefault();
