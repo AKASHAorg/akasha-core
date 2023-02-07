@@ -44,7 +44,6 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     labelSize,
     subtitle,
     subtitleColor,
-    subtitleIcon,
     onClick,
     maxWidth,
   } = props;
