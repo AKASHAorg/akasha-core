@@ -66,14 +66,13 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
 
   return (
     <>
-      <button
-        type="button"
+      <div
         onMouseOver={() => setShowTooltip(true)}
         onMouseOut={() => setShowTooltip(false)}
         ref={setReferenceElement}
       >
         {children}
-      </button>
+      </div>
       {showTooltip && (
         <div
           ref={setContent}
