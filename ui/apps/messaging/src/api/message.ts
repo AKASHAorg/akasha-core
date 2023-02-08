@@ -20,12 +20,14 @@ export const sendMessage = async (to: string, body: unknown) => {
     },
   };
   const message = await sdk.api.auth.sendMessage(to, serializedContent);
+
+  if (!message.data) {
+    throw new Error('Message sending not implemented');
+  }
+
   return {
-    id: message.id,
-    from: message.from,
-    to: message.to,
-    createdAt: message.createdAt,
-    body: body,
+    ...message.data,
+    body,
   };
 };
 
@@ -36,7 +38,8 @@ export const getMessages = async () => {
 
 export const getTextileUsage = async () => {
   const sdk = getSDK();
-  return sdk.api.auth.getTextileUsage();
+  //return sdk.api.auth.getTextileUsage();
+  return 0;
 };
 
 export const markAsRead = async (messageIds: string[]) => {
@@ -47,8 +50,8 @@ export const markAsRead = async (messageIds: string[]) => {
 export const getHubUser = async () => {
   const sdk = getSDK();
   const session = await sdk.api.auth.getSession();
-  if (session.data) {
-    return session.data.user;
+  if (!session.data) {
+    return null;
   }
-  return null;
+  return (session.data as { user: string }).user;
 };

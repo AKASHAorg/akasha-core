@@ -1,13 +1,5 @@
 import { AUTH_MESSAGE, authStatus, SwActionType } from './constants';
-import {
-  Buckets,
-  Client,
-  InboxListOptions,
-  PrivateKey,
-  Status,
-  UserAuth,
-  Users,
-} from '@textile/hub';
+import { InboxListOptions, PrivateKey, UserAuth } from '@textile/hub';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
 import { AUTH_EVENTS, CurrentUser, EthProviders, IMessage, TYPES } from '@akashaorg/typings/sdk';
@@ -39,9 +31,6 @@ const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
 @injectable()
 class AWF_Auth {
   #identity: PrivateKey;
-  private hubClient: Client;
-  private hubUser: Users;
-  private buckClient: Buckets;
   private auth: UserAuth;
   private _db: DB;
   private readonly _web3: Web3Connector;
@@ -346,34 +335,8 @@ class AWF_Auth {
     }
     const pubKey = this.#identity.public.toString();
     const address = await this._web3.getCurrentEthAddress();
-    const userAuth = loginWithChallenge(this.#identity, this._web3);
-    this.hubClient = Client.withUserAuth(userAuth, process.env.AUTH_ENDPOINT);
-    this.hubUser = Users.withUserAuth(userAuth);
-    this.buckClient = Buckets.withUserAuth(userAuth);
-    // this.fil = Filecoin.withUserAuth(userAuth);
-    await this.hubUser.getToken(this.#identity);
-    await this.hubUser.setupMailbox();
-    const mailboxID = await this.hubUser.getMailboxID();
-    this.inboxWatcher = await this.hubUser.watchInbox(mailboxID, ev => {
-      if (ev?.message?.body && ev?.message?.readAt === 0) {
-        if (ev?.message?.from === process.env.EWA_MAILSENDER) {
-          this._globalChannel.next({
-            data: { emit: true },
-            event: AUTH_EVENTS.NEW_NOTIFICATIONS,
-          });
-        } else {
-          this._globalChannel.next({
-            data: { emit: true },
-            event: AUTH_EVENTS.NEW_MESSAGES,
-          });
-        }
-      }
-    });
-    // await this.fil.getToken(this.#identity);
-    // const timeoutApi = new Promise<never[]>(resolve => {
-    //   setTimeout(resolve, 15000, [null]);
-    // });
-    //const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
+    // const userAuth = loginWithChallenge(this.#identity, this._web3);
+
     // refresh textile api tokens every 20min
     setInterval(async () => {
       await this.#_refreshTextileToken();
@@ -381,7 +344,6 @@ class AWF_Auth {
     this.currentUser = {
       pubKey,
       ethAddress: address,
-      //filAddress: filAddress?.address,
     };
   }
 
@@ -389,8 +351,7 @@ class AWF_Auth {
    * Force creation of a new jwt for textile buckets and mailboxes
    */
   async #_refreshTextileToken() {
-    await this.hubUser.getToken(this.#identity);
-    await this.buckClient.getToken(this.#identity);
+    // empty
   }
   /**
    * Returns current session objects for textile
@@ -409,11 +370,7 @@ class AWF_Auth {
       await this.signIn({ provider: EthProviders.None, checkRegistered: false });
     }
 
-    return {
-      client: this.hubClient,
-      user: this.hubUser,
-      buck: this.buckClient,
-    };
+    return {};
   }
 
   /**
@@ -473,10 +430,7 @@ class AWF_Auth {
     localStorage.removeItem(this.providerKey);
     localStorage.removeItem(this.currentUserKey);
     this.#identity = null;
-    this.hubClient = null;
-    this.hubUser = null;
     this.inboxWatcher = null;
-    this.buckClient = null;
     this.auth = null;
     this.currentUser = null;
     if (this.channel) {
@@ -572,7 +526,7 @@ class AWF_Auth {
 
   /**
    * Allows decryption of privately sent messages to the current identity
-   * @param message
+   * @param message - the message
    */
   /*decryptMessage(message) {
     return createObservableStream<{
@@ -701,72 +655,32 @@ class AWF_Auth {
   }
 
   async sendMessage(to: string, content: unknown) {
-    const toPubKey = PublicKey.fromString(to);
+    const _toPubKey = PublicKey.fromString(to);
     const serializedMessage = AWF_Auth.serializeMessage(content);
     if (!serializedMessage) {
       throw new Error('Content is not serializable');
     }
-    return this.hubUser.sendMessage(this.#identity, toPubKey, serializedMessage);
+    return createFormattedValue({});
   }
 
   /**
    * Returns all the inbox messages from Textile Users
    * @param args - InboxListOptions
    */
-  async getMessages(args: InboxListOptions): Promise<IMessage[]> {
-    return this._getMessages(args);
+  async getMessages(args: InboxListOptions): Promise<{ data: IMessage[] }> {
+    return createFormattedValue(await this._getMessages(args));
   }
 
   private async _getMessages(args: InboxListOptions) {
     const limit = args?.limit || 50;
-    const messages = await this.hubUser.listInboxMessages(
-      Object.assign({}, { status: Status.UNREAD, limit: limit }, args),
-    );
-    const readMessagesLimit = limit - messages.length;
-    const readMessages =
-      readMessagesLimit > 0
-        ? await this.hubUser.listInboxMessages(
-            Object.assign({}, { status: Status.ALL, limit: limit }, args),
-          )
-        : [];
-    const combinedMessages = messages
-      .concat(readMessages)
-      .sort((a, b) => b.createdAt - a.createdAt);
-    const inbox = [];
-    const uniqueMessages = new Map();
-    for (const messageObj of combinedMessages) {
-      if (messageObj.from !== process.env.EWA_MAILSENDER) {
-        continue;
-      }
-      uniqueMessages.set(messageObj.id, messageObj);
-    }
-    for (const message of uniqueMessages.values()) {
-      const decryptedObj = await this._decryptMessage(message);
-      inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
-    }
-    uniqueMessages.clear();
-    return inbox.slice();
+    return [].slice(0, limit);
   }
 
   // pubKey seek does not work
   // @Todo: workaround pubKey filtering
   async getConversation(_pubKey: string) {
     const limit = 10000;
-    const messagesReceived = await this.hubUser.listInboxMessages(
-      Object.assign({}, { limit: limit }),
-    );
-    const messagesSent = await this.hubUser.listSentboxMessages(
-      Object.assign({}, { limit: limit }),
-    );
-    const combinedMessages = messagesReceived
-      .concat(messagesSent)
-      .sort((a, b) => a.createdAt - b.createdAt);
-    const inbox = [];
-    for (const message of combinedMessages) {
-      const decryptedObj = await this._decryptMessage(message);
-      inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
-    }
-    return createFormattedValue(inbox.slice());
+    return createFormattedValue([].slice(0, limit));
   }
 
   /**
@@ -780,9 +694,7 @@ class AWF_Auth {
 
   private async _hasNewNotifications() {
     const limit = 1;
-    const messages = await this.hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
-    const newMessage = messages.find(rec => rec.from === process.env.EWA_MAILSENDER);
-    return !!newMessage;
+    return false;
   }
 
   async markMessageAsRead(messageId: string) {
@@ -796,35 +708,9 @@ class AWF_Auth {
 
   /**
    *
-   * @param messageId
+   * @param _messageId - message id to mark as read
    */
-  private async _markMessageAsRead(messageId: string) {
-    await this.hubUser.readInboxMessage(messageId);
-    return true;
-  }
-
-  async deleteMessage(messageId: string) {
-    return this._deleteMessage(messageId);
-  }
-
-  // returns textile usage information
-  async getTextileUsage(options?: unknown) {
-    return this._getTextileUsage(options);
-  }
-
-  private async _getTextileUsage(options?: unknown) {
-    if (!this.hubUser) {
-      return Promise.reject('The current user is not authenticated on textile services.');
-    }
-    return this.hubUser.getUsage(options);
-  }
-
-  /**
-   *
-   * @param messageId
-   */
-  private async _deleteMessage(messageId: string) {
-    await this.hubUser.deleteInboxMessage(messageId);
+  private async _markMessageAsRead(_messageId: string) {
     return true;
   }
 
@@ -834,7 +720,7 @@ class AWF_Auth {
 
   /**
    *
-   * @param inviteCode
+   * @param inviteCode - invitation code received by email
    */
   private async _validateInvite(inviteCode: string) {
     const response = await fetch(`${process.env.INVITATION_ENDPOINT}/${inviteCode}`, {

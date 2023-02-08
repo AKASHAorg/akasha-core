@@ -216,13 +216,6 @@ class AWF_Profile {
       path = data.name;
     }
     const sess = await this._auth.getSession();
-    const buck = sess.data.buck;
-    const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES, {
-      threadName: BUCKET_THREAD_NAME,
-    });
-    if (!root) {
-      throw new Error('Failed to open bucket');
-    }
     if (!data.config) {
       data.config = {
         maxWidth: 640,
@@ -237,21 +230,12 @@ class AWF_Profile {
     const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
     const bufferImage: ArrayBuffer = await resized.image.arrayBuffer();
     this._log.info(buckPath);
-    try {
-      const currentPath = await buck.listPath(root.key, buckPath);
-      if (currentPath) {
-        for await (const remaining of buck.pullPath(root.key, buckPath)) {
-          this._log.info('chunk ' + remaining.length.toString());
-        }
-      }
-    } catch (e) {
-      this._log.info(e?.message);
-    }
 
-    const upload = await buck.pushPath(root.key, buckPath, {
-      path: buckPath,
-      content: new Uint8Array(bufferImage),
-    });
+    const upload = () => {
+      /* @TODO: implement upload functionality*/
+    };
+    throw new Error('Upload is not implemented yet!');
+    /*
     const cid = upload.path.cid.toString();
     const dataFinal: DataProviderInput = {
       property: buckPath,
@@ -270,6 +254,7 @@ class AWF_Profile {
     );
 
     return { CID: cid, size: resized.size, blob: resized.image };
+    */
   }
 
   /**

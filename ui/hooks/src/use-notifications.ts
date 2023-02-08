@@ -14,7 +14,7 @@ const getNotifications = async () => {
   const sdk = getSDK();
   const getMessagesResp = await sdk.api.auth.getMessages({});
 
-  const getProfilesCalls = getMessagesResp.map(message => {
+  const getProfilesCalls = getMessagesResp.data.map(message => {
     const pubKey = message.body.value.author || message.body.value.follower;
     if (pubKey) {
       return sdk.api.profile.getProfile({ pubKey });
@@ -27,7 +27,7 @@ const getNotifications = async () => {
     ?.filter(res => res)
     .map(profileResp => {
       const profileData = buildProfileMediaLinks(profileResp);
-      completeMessages = getMessagesResp.map(message => {
+      completeMessages = getMessagesResp.data.map(message => {
         if (message.body.value.author === profileData.pubKey) {
           message.body.value.author = profileData;
         }

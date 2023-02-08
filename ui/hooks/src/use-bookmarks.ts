@@ -63,6 +63,7 @@ export function useSaveBookmark() {
       const resp = await sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
         [entriesBookmarks, JSON.stringify(bookmarks)],
       ]);
+      console.log(resp, '<<resp');
       if (resp.data) {
         return resp.data;
       }

@@ -335,7 +335,7 @@ const saveAvatar = async (
       return {
         provider: ProfileProviders.EWA_BASIC,
         property: ProfileProviderProperties.AVATAR,
-        value: res.CID,
+        // value: res.CID,
       };
     } else if (isRemoved) {
       return {
@@ -364,7 +364,7 @@ const saveCoverImage = async (
       return {
         provider: ProfileProviders.EWA_BASIC,
         property: ProfileProviderProperties.COVER_IMAGE,
-        value: res.CID,
+        // value: res.CID,
       };
     } else if (isRemoved) {
       return {
