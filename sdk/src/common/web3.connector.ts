@@ -11,10 +11,10 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Logging from '../logging';
 import OpenLogin from '@toruslabs/openlogin';
-import { createObservableStream, createObservableValue } from '../helpers/observable';
 import EventBus from './event-bus';
 import { throwError } from 'rxjs';
 import pino from 'pino';
+import { createFormattedValue } from "../helpers/observable";
 
 @injectable()
 class Web3Connector {
@@ -72,9 +72,7 @@ class Web3Connector {
 
   requestWalletPermissions() {
     if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
-      return createObservableStream(
-        this.#web3Instance.send('wallet_requestPermissions', [{ eth_accounts: {} }]),
-      );
+      return this.#web3Instance.send('wallet_requestPermissions', [{ eth_accounts: {} }]);
     }
     return throwError(() => {
       return new Error(`Method wallet_requestPermissions not supported on the current provider`);
@@ -121,7 +119,7 @@ class Web3Connector {
    * Enforce personal_sign method for message signature
    * @param message - Human readable string to sign
    */
-  async signMessage(message: string) {
+  signMessage(message: string) {
     return this.getSigner().signMessage(message);
   }
 
@@ -136,29 +134,19 @@ class Web3Connector {
     return;
   }
 
-  /**
-   * @returns the current eth address that is connected to the provider
-   */
-  getCurrentAddress() {
-    return createObservableStream(this.#_getCurrentAddress());
-  }
-
   getRequiredNetworkName() {
     if (!this.network) {
       throw new Error('The required ethereum network was not set!');
     }
-    return createObservableValue(this.network);
+    return createFormattedValue(this.network);
   }
 
-  switchToRequiredNetwork() {
-    if (this.#web3Instance instanceof ethers.providers.Web3Provider)
-      return createObservableStream(
-        this.#web3Instance.send('wallet_switchEthereumChain', [{ chainId: this.#networkId }]),
-      );
-
-    return throwError(() => {
-      return new Error(`Method wallet_switchEthereumChain not supported on the current provider`);
-    });
+  async switchToRequiredNetwork() {
+    if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
+      const result = await this.#web3Instance.send('wallet_switchEthereumChain', [{ chainId: this.#networkId }]);
+      return createFormattedValue(result);
+    }
+    return new Error(`Method wallet_switchEthereumChain not supported on the current provider`);
   }
 
   async #_getCurrentAddress() {
@@ -171,15 +159,15 @@ class Web3Connector {
     }
     return null;
   }
-  async getCurrentEthAddress() {
+  getCurrentEthAddress() {
     return this.#_getCurrentAddress();
   }
 
   checkCurrentNetwork() {
-    return createObservableStream(this.#_checkCurrentNetwork());
+    return this.#_checkCurrentNetwork();
   }
-  detectInjectedProvider() {
-    return createObservableStream(this.#_detectInjectedProvider());
+  async detectInjectedProvider() {
+    return createFormattedValue(await this.#_detectInjectedProvider());
   }
 
   async #_detectInjectedProvider() {

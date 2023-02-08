@@ -9,7 +9,7 @@ const checkNetworkState = async () => {
   const sdk = getSDK();
   const res = { networkNotSupported: false };
   try {
-    await lastValueFrom(sdk.services.common.web3.checkCurrentNetwork());
+    await sdk.services.common.web3.checkCurrentNetwork();
   } catch (error) {
     res.networkNotSupported = true;
   }

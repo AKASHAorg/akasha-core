@@ -1,5 +1,4 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { lastValueFrom } from 'rxjs';
 
 export const appId = '0xa9441406239791b073bea64df44bb32b2f15e6bae637847274b052e9b0bbdbbc';
 export const serializeMessage = content => {
@@ -47,6 +46,9 @@ export const markAsRead = async (messageIds: string[]) => {
 
 export const getHubUser = async () => {
   const sdk = getSDK();
-  const session = await lastValueFrom(sdk.api.auth.getSession());
-  return session.data.user;
+  const session = await sdk.api.auth.getSession();
+  if (session.data) {
+    return session.data.user;
+  }
+  return null;
 };

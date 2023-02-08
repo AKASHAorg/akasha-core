@@ -1,10 +1,8 @@
 import { injectable, inject } from 'inversify';
-import { ServiceCallResult, TYPES } from '@akashaorg/typings/sdk';
+import { TYPES } from '@akashaorg/typings/sdk';
 import DB, { availableCollections } from '../db';
-import { exhaustMap, switchMap } from 'rxjs/operators';
-import { createObservableStream } from '../helpers/observable';
-import { lastValueFrom } from 'rxjs';
 import { SettingsSchema } from '../db/settings.schema';
+import { createFormattedValue } from '../helpers/observable';
 
 @injectable()
 class Settings {
@@ -14,15 +12,13 @@ class Settings {
    * Returns the settings object for a specified service name
    * @param service - The service name
    */
-  get<T>(service: string) {
-    return this._db.getCollection<SettingsSchema<T>>(availableCollections.Settings).pipe(
-      switchMap(collection => {
-        // this does not play well with threaddb typings
-        const query: unknown = { serviceName: { $eq: service } };
-        const doc = collection.data.findOne(query);
-        return createObservableStream(doc);
-      }),
-    );
+  async get<T>(service: string) {
+    const collection = this._db.getCollection<T>(availableCollections.Settings);
+    const query: unknown = {
+      serviceName: { $eq: service },
+    };
+    const doc = await collection.findOne(query as any);
+    return createFormattedValue(doc);
   }
 
   /**
@@ -31,36 +27,31 @@ class Settings {
    * @param options - Array of option pairs [optionName, value]
    * @returns ServiceCallResult
    */
-  set(
+  async set(
     service: string,
     options: [[string, string | number | boolean]],
-  ): ServiceCallResult<string[]> {
-    return this.get(service).pipe(
-      exhaustMap(settings => {
-        const objToSave = {
-          _id: settings?.data?._id || '',
-          serviceName: service,
-          options: options,
-        };
-        return this._db
-          .getCollection<SettingsSchema<typeof options>>(availableCollections.Settings)
-          .pipe(
-            switchMap(collection => {
-              return createObservableStream(collection.data.save(objToSave));
-            }),
-          );
-      }),
+  ): Promise<{ data: string[] }> {
+    const doc = await this.get(service);
+    const objToSave = {
+      _id: doc?.data?._id || '',
+      serviceName: service,
+      options: options,
+    };
+    const collection = this._db.getCollection<SettingsSchema<typeof options>>(
+      availableCollections.Settings,
     );
+    const saveResult = await collection.save(objToSave);
+    return createFormattedValue(saveResult);
   }
 
   async remove(serviceName: string): Promise<void> {
-    const collection = await lastValueFrom(
-      this._db.getCollection<SettingsSchema<unknown>>(availableCollections.Settings),
+    const collection = this._db.getCollection<SettingsSchema<unknown>>(
+      availableCollections.Settings,
     );
     const query: unknown = { serviceName: { $eq: serviceName } };
-    const doc = await collection.data.findOne(query);
+    const doc = await collection.findOne(query);
     if (doc._id) {
-      return collection.data.delete(doc._id);
+      return collection.delete(doc._id);
     }
   }
 }

@@ -25,7 +25,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     setFetchingMessages(true);
     // get all messages from textile inbox, currently filterring by user pubkey is not supported
     const messagesData = await getMessages();
-    const allMessages = messagesData
+    const allMessages = messagesData.data
       ?.map(res => {
         if (res.body.content) {
           const chatPartnerPubKey = res.from === loggedUserPubKey ? res.to : res.from;

@@ -106,7 +106,7 @@ export function useMarkAsRead() {
 
 const checkNewNotifications = async () => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.auth.hasNewNotifications());
+  const res = await sdk.api.auth.hasNewNotifications();
   return res.data;
 };
 

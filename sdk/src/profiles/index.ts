@@ -5,9 +5,8 @@ import { TYPES, PROFILE_EVENTS } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Logging from '../logging';
-import { lastValueFrom, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { resizeImage } from '../helpers/img';
-import Settings from '../settings';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
@@ -22,7 +21,6 @@ class AWF_Profile {
   private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
-  private _settings: Settings;
   private _globalChannel: EventBus;
   public readonly TagSubscriptions = '@TagSubscriptions';
 
@@ -30,13 +28,11 @@ class AWF_Profile {
     @inject(TYPES.Log) log: Logging,
     @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
-    @inject(TYPES.Settings) settings: Settings,
     @inject(TYPES.EventBus) globalChannel: EventBus,
   ) {
     this._log = log.create('AWF_Profile');
     this._gql = gql;
     this._auth = auth;
-    this._settings = settings;
     this._globalChannel = globalChannel;
   }
 
@@ -219,7 +215,7 @@ class AWF_Profile {
       file = data.content;
       path = data.name;
     }
-    const sess = await lastValueFrom(this._auth.getSession());
+    const sess = await this._auth.getSession();
     const buck = sess.data.buck;
     const { root } = await buck.getOrCreate(PROFILE_MEDIA_FILES, {
       threadName: BUCKET_THREAD_NAME,
