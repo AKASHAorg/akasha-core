@@ -28,29 +28,25 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
   centerArrowToReference,
   children,
 }) => {
-  const offset = centerArrowToReference
-    ? {
-        name: 'offset',
-        options: {
-          offset: [0, ARROW_SIZE],
-        },
-      }
-    : {};
   const [referenceElement, setReferenceElement] = useState(null);
   const [contentElement, setContent] = useState(null);
   const [arrowElement, setArrowElement] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
+  const arrowModifier = {
+    name: 'arrow',
+    options: {
+      element: arrowElement,
+    },
+  };
+  const offsetModifier = {
+    name: 'offset',
+    options: {
+      offset: [0, ARROW_SIZE],
+    },
+  };
   const { styles, attributes, state } = usePopper(referenceElement, contentElement, {
     placement,
-    modifiers: [
-      {
-        name: 'arrow',
-        options: {
-          element: arrowElement,
-        },
-      },
-      offset,
-    ],
+    modifiers: centerArrowToReference ? [arrowModifier, offsetModifier] : [arrowModifier],
   });
 
   const contextualPlacement = getContextualPlacement(state?.placement);
