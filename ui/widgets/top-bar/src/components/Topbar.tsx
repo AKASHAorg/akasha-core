@@ -39,16 +39,18 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const BaseStyles = apply`
     flex justify-between items-center
     py-1.5 px-2 space-x-4 w-full
-    border(1 grey8) rounded-md shadow-sm
+    border(1 grey8) rounded-none sm:rounded-md shadow-sm
+    bg-white dark:bg-black
+    xs:(fixed top-0 z-50)
     `;
 
-  const InstanceStyles = apply`
+  const instanceStyles = apply`
   ${BaseStyles}
   ${className}
   `;
 
   return (
-    <div className={tw(InstanceStyles)}>
+    <div className={tw(instanceStyles)}>
       <div className={tw('flex space-x-2')}>
         {isMobileOnly ? (
           <Button
