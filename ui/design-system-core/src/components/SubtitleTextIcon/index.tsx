@@ -24,12 +24,12 @@ const baseStyles = apply`
   py-2
   pl-2
   flex
-  flex-column
+  flex-col
   rounded-md
   bg-white
   dark:bg-grey2
   items-center
-  max-w-[7rem]
+  justify-center
 `;
 
 const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
@@ -44,38 +44,41 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     labelSize,
     subtitle,
     subtitleColor,
-    subtitleIcon,
     onClick,
-    gap,
     maxWidth,
   } = props;
 
+  const InstanceStyles = apply`
+    ${baseStyles}
+    ${maxWidth}
+    `;
+
   return (
-    <div data-testid={`${props['data-testid']}`} className={tw(baseStyles)} onClick={onClick}>
+    <div data-testid={`${props['data-testid']}`} className={tw(InstanceStyles)} onClick={onClick}>
       {iconType ? (
         <div
           className={tw(
             `flex flex-row justify-center items-center mr-2 ${
               backgroundSize ? backgroundSize : 'w-12 h-12'
-            } ${props.backgroundColor ? 'bg-green-200 rounded-sm' : 'none'}`,
+            } ${props.backgroundColor ? 'bg-grey1 rounded-sm' : 'none'}`,
           )}
         >
           <Icon icon={iconType} styling={`${iconSize ? iconSize : 'h-4, w-4'} black`} />
         </div>
       ) : null}
-      <div className={tw('flex flex-column')}>
-        <div className={tw('container')}>
-          <span
-            className={tw(
-              `${labelColor ? labelColor : 'black'} ${
-                labelSize ? labelSize : 'text-xs font-medium'
-              }`,
-            )}
-          >
-            {label}
-          </span>
-          <p className={tw(`${subtitleColor ? subtitleColor : 'black'} text-xs`)}>{subtitle}</p>
-        </div>
+      <div className={tw('flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])')}>
+        <span
+          className={tw(
+            `block text-ellipsis overflow-hidden whitespace-nowrap truncate
+            ${labelColor ? labelColor : 'black'}
+            ${labelSize ? labelSize : 'text(lg:sm md:xs) font-light'}`,
+          )}
+        >
+          {label}
+        </span>
+        <p className={tw(`block ${subtitleColor ? subtitleColor : 'black'} text(xs sm:[10px])`)}>
+          {subtitle}
+        </p>
       </div>
     </div>
   );
