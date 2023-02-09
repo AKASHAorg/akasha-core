@@ -37,8 +37,8 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   const iconSize = isMobileOnly ? 'small' : 'regular';
   const BaseStyles = apply`
-    flex justify-between items-center 
-    py-2 px-2 space-x-4 w-full 
+    flex justify-between items-center
+    py-2 px-2 space-x-4 w-full
     border(1 grey8) rounded-md shadow-sm
     `;
 
