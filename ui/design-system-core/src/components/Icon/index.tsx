@@ -2,7 +2,7 @@ import React from 'react';
 import * as HeroIcons from '@heroicons/react/24/outline';
 import * as CustomIcons from './akasha-icons';
 
-export type IconName = 'TopbarLogo' | 'AppCenter' | keyof typeof HeroIcons;
+export type IconName = 'Akasha' | 'AppCenter' | keyof typeof HeroIcons;
 
 interface IconProps {
   icon: IconName;

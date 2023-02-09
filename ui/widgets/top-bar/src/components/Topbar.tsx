@@ -38,7 +38,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   const iconSize = isMobileOnly ? 'small' : 'regular';
   const BaseStyles = apply`
     flex justify-between items-center
-    py-2 px-2 space-x-4 w-full
+    py-1.5 px-2 space-x-4 w-full
     border(1 grey8) rounded-md shadow-sm
     `;
 
@@ -70,8 +70,14 @@ const Topbar: React.FC<ITopbarProps> = props => {
         />
       </div>
 
-      <div className={tw('p-0 m-0 cursor-pointer')} onClick={onBrandClick}>
-        <Icon icon="TopbarLogo" styling="w-18 h-8" />
+      <div
+        className={tw('p-0 m-0 cursor-pointer flex(& col) justify-center items-center')}
+        onClick={onBrandClick}
+      >
+        <Icon icon="Akasha" styling="w-18 h-8" />
+        <span className={tw('uppercase font([Inter] light) text-xs drop-shadow-md')}>
+          Akasha World
+        </span>
       </div>
 
       <div className={tw('flex space-x-2')}>

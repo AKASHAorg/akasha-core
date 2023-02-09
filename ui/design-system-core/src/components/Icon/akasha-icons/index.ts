@@ -1,4 +1,4 @@
-import TopbarLogo from './TopbarLogo';
 import AppCenter from './AppCenter';
+import Akasha from './Akasha';
 
-export { AppCenter, TopbarLogo };
+export { Akasha, AppCenter };
