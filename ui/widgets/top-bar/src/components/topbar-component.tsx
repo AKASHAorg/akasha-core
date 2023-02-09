@@ -1,38 +1,20 @@
 import * as React from 'react';
 import { useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-
-import DS from '@akashaorg/design-system';
-import {
-  EventTypes,
-  IMenuItem,
-  MenuItemAreaType,
-  UIEventData,
-  RootComponentProps,
-} from '@akashaorg/typings/ui';
-import { useGetLogin, useGetProfile, useLogout } from '@akashaorg/ui-awf-hooks';
-
-const { Topbar } = DS;
-
-declare const __DEV__: boolean;
+import { EventTypes, UIEventData, RootComponentProps } from '@akashaorg/typings/ui';
+import Topbar from './Topbar';
 
 const TopbarComponent: React.FC<RootComponentProps> = props => {
   const { uiEvents } = props;
-  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const location = useLocation();
+  const historyCount = React.useRef(0);
+  const isNavigatingBackRef = React.useRef(false);
 
   const [routeData, setRouteData] = React.useState({});
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
-
-  const loginQuery = useGetLogin();
-  const logoutMutation = useLogout();
-
-  const profileDataReq = useGetProfile(loginQuery.data.pubKey, null, loginQuery.isSuccess);
-  const loggedProfileData = profileDataReq.data;
 
   const uiEventsRef = React.useRef(uiEvents);
 
@@ -66,59 +48,39 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const quickAccessItems = routeData?.[MenuItemAreaType.QuickAccessArea];
-  const otherAreaItems = routeData?.[MenuItemAreaType.OtherArea];
+  // back navigation functionality
 
-  // sort them so that avatar is last on the topbar menu
-  const sortedQuickAccessItems = quickAccessItems?.sort((menuItemA, menuItemB) => {
-    if (menuItemA.name && menuItemB.name) {
-      const getPluginName = (pluginName: string) => {
-        const splitName = pluginName.split('-');
-        return splitName[splitName.length - 1];
-      };
+  React.useEffect(function navigationEventListener() {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    window.addEventListener(
+      'single-spa:before-routing-event',
+      (evt: CustomEvent) => {
+        const url = new URL(evt.detail.newUrl as string);
+        const newUrl: string = url.origin + url.pathname;
 
-      if (getPluginName(menuItemA.name) > getPluginName(menuItemB.name)) {
-        return 1;
-      }
-      if (getPluginName(menuItemA.name) < getPluginName(menuItemB.name)) {
-        return -1;
-      }
-    }
+        const url2 = new URL(evt.detail.oldUrl as string);
+        const oldUrl: string = url2.origin + url2.pathname;
 
-    return 0;
-  });
-
-  const handleNavigation = (path: string) => {
-    navigateTo?.({
-      getNavigationUrl: () => path,
-    });
-  };
-
-  const handleLoginClick = () => {
-    /*
-     * TODO: This handler along with the buttons
-     * in the topbar should be moved to extension points
-     */
-    navigateTo?.({
-      appName: '@akashaorg/app-auth-ewa',
-      getNavigationUrl: appRoutes => {
-        return `${appRoutes.Connect}?${new URLSearchParams({
-          redirectTo: location.pathname,
-        }).toString()}`;
+        if (isNavigatingBackRef.current) {
+          isNavigatingBackRef.current = false;
+          historyCount.current = historyCount.current - 1;
+        } else if (newUrl !== oldUrl) {
+          historyCount.current++;
+        }
       },
-    });
-  };
+      { signal },
+    );
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
-  const handleLogout = async () => {
-    await logoutMutation.mutateAsync();
-    navigateTo?.({
-      appName: props.worldConfig.homepageApp,
-    });
-    setTimeout(() => window.location.reload(), 50);
-  };
-
-  const handleFeedbackModalShow = () => {
-    props.navigateToModal({ name: 'feedback-modal' });
+  const handleBackClick = () => {
+    if (historyCount.current > 0) {
+      isNavigatingBackRef.current = true;
+      history.back();
+    }
   };
 
   const handleBrandClick = () => {
@@ -144,53 +106,37 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const { t } = useTranslation('ui-widget-topbar');
-
   const handleSidebarToggle = () => {
     uiEvents.next({
       event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
     });
   };
-  const handleMyProfileClick = () => {
+
+  const handleAppCenterClick = () => {
     props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-profile',
+      appName: '@akashaorg/app-integration-center',
       getNavigationUrl: routes => {
         return routes.myProfile;
       },
     });
   };
-  const handleLegalClick = (menuItem: IMenuItem) => {
-    return props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-legal',
-      getNavigationUrl: () => menuItem.route || '/',
+
+  const handleNotificationClick = () => {
+    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
+      appName: '@akashaorg/app-notifications',
+      getNavigationUrl: routes => {
+        return routes.myProfile;
+      },
     });
   };
 
   return (
     <Topbar
-      loggedProfileData={loggedProfileData}
-      brandLabel="AKASHA World"
-      signInLabel={t('Connect')}
-      signOutLabel={t('Sign Out')}
-      legalLabel={t('Legal')}
-      feedbackLabel={t('Send Us Feedback')}
-      feedbackInfoLabel={t('Help us improve the experience!')}
-      legalCopyRightLabel={'© Ethereum World Association'}
-      stuckLabel={t('Stuck?')}
-      helpLabel={t('We can help')}
-      writeToUs="mailto:alpha@ethereum.world"
-      versionLabel={__DEV__ && 'DEV'}
-      versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
       sidebarVisible={sidebarVisible}
-      onNavigation={handleNavigation}
-      onMyProfileClick={handleMyProfileClick}
-      onLegalClick={handleLegalClick}
       onSidebarToggle={handleSidebarToggle}
-      quickAccessItems={sortedQuickAccessItems}
-      otherAreaItems={otherAreaItems}
-      onLoginClick={handleLoginClick}
-      onLogout={handleLogout}
-      onFeedbackClick={handleFeedbackModalShow}
+      onAppCenterClick={handleAppCenterClick}
+      onNotificationClick={handleNotificationClick}
+      onBackClick={handleBackClick}
       currentLocation={location?.pathname}
       onBrandClick={handleBrandClick}
       modalSlotId={props.layoutConfig.modalSlotId}

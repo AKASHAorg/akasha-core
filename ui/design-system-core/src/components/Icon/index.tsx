@@ -1,14 +1,17 @@
 import React from 'react';
 import * as HeroIcons from '@heroicons/react/24/outline';
+import * as CustomIcons from './akasha-icons';
 
-export type IconName = keyof typeof HeroIcons;
+export type IconName = 'TopbarLogo' | 'AppCenter' | keyof typeof HeroIcons;
+
 interface IconProps {
   icon: IconName;
   styling?: string;
 }
 
 const Icon: React.FC<IconProps> = props => {
-  const PassedIcon = HeroIcons[props.icon];
+  const PassedIcon = HeroIcons[props.icon] ?? CustomIcons[props.icon];
+  if (PassedIcon === 'undefined') return null;
 
   return <PassedIcon className={props.styling} />;
 };

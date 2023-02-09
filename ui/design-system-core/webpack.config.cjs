@@ -11,7 +11,10 @@ module.exports = {
   ...baseConfig,
   context: path.resolve(__dirname),
   entry: {
+    Button: './src/components/Button',
     Card: './src/components/Card',
+    Icon: './src/components/Icon',
+    Topbar: './src/components/Topbar',
     TrendingWidgetCard: './src/components/TrendingWidgetCard',
   },
   output: Object.assign(baseConfig.output, {

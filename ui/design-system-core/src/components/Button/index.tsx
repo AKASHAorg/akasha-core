@@ -16,6 +16,7 @@ export interface IButtonProps {
   iconOnly?: boolean;
   textOnly?: boolean;
   greyBg?: boolean;
+  noBorder?: boolean;
   onClick?: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
@@ -33,6 +34,7 @@ const Button: React.FC<IButtonProps> = props => {
     iconOnly = false,
     textOnly = false,
     greyBg = false,
+    noBorder = false,
     onClick,
     onMouseEnter,
     onMouseLeave,
@@ -90,7 +92,7 @@ const Button: React.FC<IButtonProps> = props => {
     ? 'text-white'
     : 'text-secondary-light hover:text-white';
 
-  const border = primary || textOnly ? 'border-0' : 'border-1 border-secondary-dark';
+  const border = primary || textOnly || noBorder ? 'border-0' : 'border-1 border-secondary-dark';
 
   const opacity = `opacity-${disabled ? '50' : '100'}`;
 
