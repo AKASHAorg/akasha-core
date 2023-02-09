@@ -45,7 +45,7 @@ const Button: React.FC<IButtonProps> = props => {
   const ButtonSizesMap = {
     xsmall: `h-6 ${altPad ? 'p-1.5' : 'p-2.5'}`,
     small: `h-[22px] ${altPad ? 'py-4 px-2.5' : 'py-1 px-4'} text-xs`,
-    regular: `h-10 ${altPad ? 'p-3' : 'py-2 px-6'} text-sm`,
+    regular: `h-10 ${altPad ? 'p-[0.8rem]' : 'py-2 px-6'} text-sm`,
     large: `h-[58px] ${altPad ? 'p-5' : 'py-4 px-6'} text-base`,
   };
 
