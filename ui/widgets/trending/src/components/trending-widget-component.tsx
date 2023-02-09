@@ -1,7 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
-import TrendingWidgetCard from '@akashaorg/design-system-core/lib/components/TrendingWidgetCard';
+import TrendingWidgetCard from './TrendingWidgetCard';
 
 import { useTranslation } from 'react-i18next';
 import {
@@ -127,7 +126,6 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
 
   return (
     <Box pad={{ bottom: 'small' }}>
-      <Card>testing</Card>
       {(trendingTagsReq.isError || trendingProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
