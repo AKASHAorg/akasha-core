@@ -3,7 +3,7 @@ import React from 'react';
 import Text from './index';
 
 export default {
-  title: 'Typography/Typography',
+  title: 'Text/Text',
   component: Text,
 };
 
