@@ -42,11 +42,11 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   body1: 'text-[1rem] leading-[1.5rem] font-normal',
   body2: 'text-[0.875rem] leading-[1.375rem] font-normal',
   label: 'text-[1rem] leading-[1.5rem] font-medium',
-  footnotes1: 'text-[0.75rem] leading-[1.5rem] font-bold tracking-[.075em]',
-  footnotes2: 'text-[0.75rem] leading-[1.5rem] font-medium',
+  footnotes1: 'text-[0.75rem] leading-[1.125rem] font-bold tracking-[.075em]',
+  footnotes2: 'text-[0.75rem] leading-[1.125rem] font-medium',
   'button-lg': 'block text-[1rem] leading-[1.5rem] font-bold',
   'button-md': 'block text-[0.875rem] leading-[1.5rem] font-bold',
-  'button-sm': 'block text-[0.75rem] leading-[1.5rem] font-medium',
+  'button-sm': 'block text-[0.75rem] leading-[1.125rem] font-medium',
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
