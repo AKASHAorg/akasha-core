@@ -37,10 +37,10 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
   const iconSize = isMobileOnly ? 'small' : 'regular';
   const BaseStyles = apply`
-    flex justify-between items-center
-    py-1.5 px-2 space-x-4 w-full
+    flex justify-between items-center w-full
+    py-1.5 px-2 space-x-4
     border(1 grey8) rounded-none sm:rounded-md shadow-sm
-    bg-white dark:bg-black
+    bg-white-700 dark:bg-black
     xs:(fixed top-0 z-50)
     `;
 
@@ -52,7 +52,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
   return (
     <div className={tw(instanceStyles)}>
       <div className={tw('flex space-x-2')}>
-        {isMobileOnly ? (
+        {!sidebarVisible ? (
           <Button
             iconOnly={true}
             noBorder={true}
@@ -61,7 +61,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
             onClick={onSidebarToggle}
           />
         ) : (
-          <Button iconOnly={true} noBorder={true} icon="ArrowLeftOnRectangleIcon" size={iconSize} />
+          <Button
+            iconOnly={true}
+            noBorder={true}
+            icon="ArrowLeftOnRectangleIcon"
+            size={iconSize}
+            onClick={onSidebarToggle}
+          />
         )}
         <Button
           iconOnly={true}

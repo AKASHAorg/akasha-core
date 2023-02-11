@@ -10,7 +10,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
   const historyCount = React.useRef(0);
   const isNavigatingBackRef = React.useRef(false);
 
-  const [routeData, setRouteData] = React.useState({});
   // sidebar is open by default on larger screens >=1440px
   const [sidebarVisible, setSidebarVisible] = React.useState<boolean>(
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
@@ -18,6 +17,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
 
   const uiEventsRef = React.useRef(uiEvents);
 
+  // show or hide sidebar
   React.useEffect(() => {
     const eventsSub = uiEventsRef.current.subscribe({
       next: (eventInfo: UIEventData) => {
@@ -37,16 +37,15 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     };
   }, []);
 
-  React.useEffect(() => {
-    const sub = props.plugins['@akashaorg/app-routing']?.routing?.routeObserver?.subscribe({
-      next: routeData => {
-        setRouteData(routeData?.byArea);
-      },
+  const handleSidebarToggle = () => {
+    uiEvents.next({
+      event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
     });
-
-    return () => sub?.unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    console.log('sidebar toggle', sidebarVisible);
+  };
+  React.useEffect(() => {
+    console.log('sidebar visible', sidebarVisible);
+  }, [sidebarVisible]);
 
   // back navigation functionality
 
@@ -103,12 +102,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
           return appRoutes.defaultRoute;
         }
       },
-    });
-  };
-
-  const handleSidebarToggle = () => {
-    uiEvents.next({
-      event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
     });
   };
 
