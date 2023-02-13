@@ -89,13 +89,15 @@ const Topbar: React.FC<ITopbarProps> = props => {
       </div>
 
       <div className={tw('flex space-x-2')}>
-        <Button
-          iconOnly={true}
-          noBorder={true}
-          icon="AppCenter"
-          size={iconSize}
-          onClick={onAppCenterClick}
-        />
+        {isMobileOnly && (
+          <Button
+            iconOnly={true}
+            noBorder={true}
+            icon="AppCenter"
+            size={iconSize}
+            onClick={onAppCenterClick}
+          />
+        )}
         <Button
           iconOnly={true}
           noBorder={true}
