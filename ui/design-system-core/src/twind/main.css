@@ -1,5 +1,5 @@
 /* Define CSS vars as color channels because want them to work with the opacity modifier syntax
-   For more info check https://tailwindcss.com/docs/customizing-colors#using-css-variables
+  For more info check https://tailwindcss.com/docs/customizing-colors#using-css-variables
 */
 :root {
   --foundation-primary: #ff89b6, #4e71ff;

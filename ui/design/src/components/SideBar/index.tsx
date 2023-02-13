@@ -5,7 +5,6 @@ import { IMenuItem } from '@akashaorg/typings/ui';
 
 import Skeleton from './skeleton';
 import SectionTitle from './section-title';
-import SidebarMenuItem from './sidebar-menu-item';
 
 import Icon from '../Icon';
 
@@ -56,7 +55,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     worldApps,
     currentRoute,
     isLoggedIn,
-    hasNewNotifs,
+    // hasNewNotifs,
     loadingUserInstalledApps,
     versionURL,
     versionLabel,
@@ -103,6 +102,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       }
     }
   };
+
   const handleOptionClick = (
     menuItem: IMenuItem,
     subrouteMenuItem: IMenuItem,
