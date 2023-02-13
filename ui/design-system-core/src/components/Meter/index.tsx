@@ -3,7 +3,7 @@ import { tw, apply } from '@twind/core';
 import { getColorClasses } from '../../utils/getColorClasses';
 import { Color } from '../types/common.types';
 
-export type ProgressMeterProps = {
+export type MeterProps = {
   size: number;
   thickness: number;
   value: number;
@@ -12,7 +12,7 @@ export type ProgressMeterProps = {
   background?: Color;
 };
 
-const ProgressMeter: React.FC<PropsWithChildren<ProgressMeterProps>> = ({
+const Meter: React.FC<PropsWithChildren<MeterProps>> = ({
   size,
   thickness,
   value,
@@ -64,4 +64,4 @@ const ProgressMeter: React.FC<PropsWithChildren<ProgressMeterProps>> = ({
   );
 };
 
-export default ProgressMeter;
+export default Meter;
