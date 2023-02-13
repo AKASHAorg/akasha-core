@@ -23,7 +23,9 @@ const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
           key={subRoute.label + idx}
           className={tw(
             `ml-4 border-l-4 ${
-              subRoute?.route === activeOption?.route ? 'border-secondary-900' : 'border-grey9-900'
+              subRoute?.route === activeOption?.route
+                ? 'border-secondary-light dark:border-secondary-dark'
+                : 'border-grey9 dark:border-grey3'
             }`,
           )}
           onClick={e => {
