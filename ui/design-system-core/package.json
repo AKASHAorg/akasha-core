@@ -26,7 +26,7 @@
   "scripts": {
     "copy-images": "copyfiles -f ./src/static/img/* ../build/images",
     "pack": "tsc --build tsconfig.json",
-    "postpack": "yarn run build:css & yarn run copy-images",
+    "postpack": "yarn run copy-images",
     "tsc": "tsc --build tsconfig.json",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -58,7 +58,9 @@
     "@twind/preset-tailwind": "1.1.3",
     "@headlessui/react": "1.7.7",
     "@lottiefiles/react-lottie-player": "3.4.9",
-    "@heroicons/react": "2.0.13"
+    "@heroicons/react": "2.0.13",
+    "react-popper": "2.3.0",
+    "@popperjs/core": "2.11.6"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",
