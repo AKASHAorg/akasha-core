@@ -36,4 +36,4 @@ export const mockQueryData = [
   },
 ];
 
-export const mockGetBookmarksObservable = of(mockGetBookmarks);
+export const mockGetBookmarksAsync = Promise.resolve(mockGetBookmarks);

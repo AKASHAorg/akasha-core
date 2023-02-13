@@ -136,6 +136,7 @@ class Web3Connector {
 
   getRequiredNetworkName() {
     if (!this.network) {
+      console.log('throwing error');
       throw new Error('The required ethereum network was not set!');
     }
     return createFormattedValue(this.network);

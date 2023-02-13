@@ -1,4 +1,3 @@
-import { BUCKET_THREAD_NAME, PROFILE_MEDIA_FILES } from './constants';
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
 import { TYPES, PROFILE_EVENTS } from '@akashaorg/typings/sdk';
@@ -11,6 +10,7 @@ import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
+import { createFormattedValue } from '../helpers/observable';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
@@ -126,7 +126,7 @@ class AWF_Profile {
     } else {
       throw new Error('Must provide ethAddress or pubKey value');
     }
-    return resp;
+    return createFormattedValue(resp);
   }
 
   /**

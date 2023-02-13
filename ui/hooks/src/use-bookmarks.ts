@@ -23,7 +23,7 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
       const sdk = getSDK();
       try {
         const doc = await sdk.services.settings.get<string[][]>(BOOKMARKED_ENTRIES_KEY);
-
+        console.log('doc::', doc);
         if (doc.data && doc.data.length) {
           const bookmarkedEntries = doc.data.findIndex((e: string[]) => e[0] === entriesBookmarks);
           if (bookmarkedEntries !== -1) {
@@ -63,7 +63,6 @@ export function useSaveBookmark() {
       const resp = await sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
         [entriesBookmarks, JSON.stringify(bookmarks)],
       ]);
-      console.log(resp, '<<resp');
       if (resp.data) {
         return resp.data;
       }
