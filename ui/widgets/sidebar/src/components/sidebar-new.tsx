@@ -42,8 +42,15 @@ export interface ISidebarProps {
   footerIcons: { name: IButtonProps['icon']; link: string }[];
 }
 
+const guestEthAddress = '0x00000000000000000000000000000';
+
+const titleText = 'text-sm font-bold';
+
+const subtitleText = 'text-xs text-grey5';
+
 const Sidebar: React.FC<ISidebarProps> = props => {
   const {
+    userInstalledApps,
     worldApps,
     allMenuItems,
     currentRoute,
@@ -108,15 +115,36 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     }
   };
 
-  const guestEthAddress = '0x00000000000000000000000000000';
-
-  const titleText = 'text-sm font-bold';
-
-  const subtitleText = 'text-xs text-grey5';
+  const listApps = (list: IMenuItem[], hasBorderTop = false) => (
+    <div className={tw(`flex flex-col px-4 py-2 ${hasBorderTop ? 'border-t-1 border-grey8' : ''}`)}>
+      {list?.map((app, idx) => (
+        <React.Fragment key={app.label + idx}>
+          {app.subRoutes.length > 0 ? (
+            <Accordion
+              titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
+              contentNode={
+                <MenuSubItems
+                  menuItem={app}
+                  activeOption={activeOption}
+                  onOptionClick={handleOptionClick}
+                />
+              }
+            />
+          ) : (
+            <div className={tw('p-2 cursor-pointer')}>
+              <MenuItemLabel menuItem={app} isActive={false} onClickMenuItem={handleAppIconClick} />
+            </div>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
 
   return (
     <div
-      className={tw('max-w-[19.5rem] w-[19.5rem] h-screen bg-white dark:bg-grey2 rounded-[20px]')}
+      className={tw(
+        'max-w-[19.5rem] w-[19.5rem] max-h-[calc(100vh - 20px)] bg-white dark:bg-grey2 border-1 border-grey8 dark:border-none rounded-2xl',
+      )}
     >
       <div className={tw('flex flex-row p-4 border-b-1 border-grey8')}>
         <div className={tw('w-fit h-fit mr-2')}>
@@ -131,31 +159,16 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         </div>
       </div>
 
-      <div className={tw('flex flex-col p-4')}>
-        {worldApps?.map((item, idx) => (
-          <React.Fragment key={item.label + idx}>
-            {item.subRoutes.length > 0 ? (
-              <Accordion
-                titleNode={<MenuItemLabel menuItem={item} isActive={false} />}
-                contentNode={
-                  <MenuSubItems
-                    menuItem={item}
-                    activeOption={activeOption}
-                    onOptionClick={handleOptionClick}
-                  />
-                }
-              />
-            ) : (
-              <div className={tw('p-2 cursor-pointer')}>
-                <MenuItemLabel
-                  menuItem={item}
-                  isActive={false}
-                  onClickMenuItem={handleAppIconClick}
-                />
-              </div>
-            )}
-          </React.Fragment>
-        ))}
+      {/* 
+          this container will grow up to a max height of 100vh-345px.
+          [345px] currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
+        */}
+      <div className={tw('flex flex-col max-h-[calc(100vh - 345px)] overflow-auto')}>
+        {/* container for world apps */}
+        {worldApps?.length > 0 && listApps(worldApps)}
+
+        {/* container for user-installed apps */}
+        {userInstalledApps?.length > 0 && listApps(userInstalledApps, true)}
       </div>
 
       <div className={tw('flex flex-col px-8 py-4 bg-grey8')}>
