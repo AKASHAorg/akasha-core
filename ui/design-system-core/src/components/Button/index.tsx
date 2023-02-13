@@ -79,7 +79,9 @@ const Button: React.FC<IButtonProps> = props => {
   const background = textOnly
     ? 'bg-none'
     : greyBg
-    ? `${primary ? 'bg-grey3' : 'bg-none'} hover:${primary ? 'bg-grey3' : 'bg-secondary-dark'}`
+    ? `${primary ? 'bg-grey9 dark:bg-grey3' : 'bg-none'} hover:${
+        primary ? 'bg-grey9 dark:bg-grey3' : 'bg-secondary-dark'
+      }`
     : primary
     ? 'bg-gradient-to-r from-primaryStart to-primaryStop'
     : 'bg-white hover:bg-secondary-dark';
@@ -96,7 +98,7 @@ const Button: React.FC<IButtonProps> = props => {
 
   const cursor = `cursor-${disabled || loading ? 'not-allowed' : 'pointer'}`;
 
-  const shadow = `${primary ? 'shadow-none hover:shadow-lg, shadow-elevation' : 'shadow-none'}`;
+  const shadow = `${primary ? 'shadow-none hover:shadow-lg shadow-elevation' : 'shadow-none'}`;
 
   const className = `flex items-center ${ButtonSizesMap[size]} ${background} ${color} ${border} rounded-full ${opacity} ${cursor} ${shadow}`;
 
