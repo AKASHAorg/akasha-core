@@ -1,8 +1,9 @@
 import React, { PropsWithChildren } from 'react';
 import { tw, apply } from '@twind/core';
 import { getTag } from './getTag';
-import { getColorClasses } from './getColorClasses';
 import { getAlignmentClasses } from './getAlignmentClasses';
+import { getColorClasses } from '../../utils/getColorClasses';
+import { getWeightClasses } from './getWeightClasses';
 
 export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -23,11 +24,14 @@ export type Color = string | { light: string; dark: string };
 
 export type Alignment = 'start' | 'center' | 'end' | 'justify';
 
+export type Weight = 'normal' | 'bold' | 'light' | 'medium';
+
 export type TextProps = {
   variant?: Variant;
   color?: Color;
   align?: Alignment;
   truncate?: boolean;
+  weight?: Weight;
 };
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
@@ -54,27 +58,23 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   align,
   color = { dark: 'text-white', light: 'text-black' },
   truncate,
+  weight,
   children,
 }) => {
   const tag = getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
   const colorStyles = getColorClasses(color);
   const truncateStyle = truncate ? 'truncate' : '';
-
-  if (tag === 'invalid') {
-    throw Error('Invalid variant ...');
-  }
-
-  if (colorStyles === 'invalid') {
-    throw Error('Invalid color ...');
-  }
+  const weightStyle = weight ? getWeightClasses(weight) : '';
 
   const baseStyles = VARIANT_TO_CSS_CLASSES_MAPPER[variant];
 
   return React.createElement(
     tag,
     {
-      className: tw(apply`${baseStyles} ${colorStyles} ${alignmentStyle} ${truncateStyle}`),
+      className: tw(
+        apply`${baseStyles} ${colorStyles} ${alignmentStyle} ${truncateStyle} ${weightStyle}`,
+      ),
     },
     children,
   );

@@ -32,8 +32,8 @@ export default {
         grey9: withOpacity('--system-grey-9'),
         success: withOpacity('--feedback-success'),
         warning: {
-          light: withOpacity('--feeback-warning'),
-          dark: withOpacity('--feeback-warning-dark'),
+          light: withOpacity('--feedback-warning'),
+          dark: withOpacity('--feedback-warning-dark'),
         },
         error: {
           light: withOpacity('--feedback-error'),
