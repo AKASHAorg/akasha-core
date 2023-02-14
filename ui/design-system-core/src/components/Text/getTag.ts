@@ -20,6 +20,4 @@ export function getTag(variant: Variant) {
   if (isBodyText(variant)) return 'p';
 
   if (isButtonText(variant)) return 'span';
-
-  return 'invalid';
 }

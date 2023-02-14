@@ -4,6 +4,7 @@ import { tw } from '@twind/core';
 import { arrowClasses } from './arrowClasses';
 import { contentClasses } from './contentClasses';
 import { Placement } from '@popperjs/core';
+import Text from '../Text';
 
 export type TooltipProps = {
   content: ReactNode;
@@ -86,8 +87,9 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
               'flex items-center justify-center flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]',
             )}
           >
-            {/*@TOD: Use text component */}
-            <div className={tw('font-light text-sm text-black dark:text-white')}>{content}</div>
+            <Text variant="subtitle2" color={{ light: 'text-black', dark: 'dark:text-white' }}>
+              {content}
+            </Text>
           </div>
         </div>
       )}
