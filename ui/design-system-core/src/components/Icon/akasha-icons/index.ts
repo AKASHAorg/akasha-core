@@ -1,8 +1,38 @@
-import Discord from './Discord';
-import Github from './Github';
-import Telegram from './Telegram';
-import Twitter from './Twitter';
+import akasha from './akasha';
+import appCenter from './app-center';
+import appModeration from './app-moderation';
+import bookmark from './bookmark';
+import discord from './discord';
+import github from './github';
+import notifications from './notifications';
+import search from './search';
+import settings from './settings';
+import telegram from './telegram';
+import twitter from './twitter';
 
-export type CustomIconTypes = 'Discord' | 'Github' | 'Telegram' | 'Twitter';
+export type CustomIconTypes =
+  | 'akasha'
+  | 'appCenter'
+  | 'appModeration'
+  | 'bookmark'
+  | 'discord'
+  | 'github'
+  | 'notifications'
+  | 'search'
+  | 'settings'
+  | 'telegram'
+  | 'twitter';
 
-export { Discord, Github, Telegram, Twitter };
+export {
+  akasha,
+  appCenter,
+  appModeration,
+  bookmark,
+  discord,
+  github,
+  notifications,
+  search,
+  settings,
+  telegram,
+  twitter,
+};

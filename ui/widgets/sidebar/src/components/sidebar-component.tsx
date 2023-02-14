@@ -131,10 +131,10 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       ctaButtonLabel={t('Check them out!')}
       footerLabel={t('Get in touch')}
       footerIcons={[
-        { name: 'Github', link: 'https://github.com/AKASHAorg' },
-        { name: 'Discord', link: '' },
-        { name: 'Telegram', link: 'https://t.me/worldofethereum' },
-        { name: 'Twitter', link: 'https://twitter.com/AKASHAworld' },
+        { name: 'github', link: 'https://github.com/AKASHAorg' },
+        { name: 'discord', link: '' },
+        { name: 'telegram', link: 'https://t.me/worldofethereum' },
+        { name: 'twitter', link: 'https://twitter.com/AKASHAworld' },
       ]}
       onBrandClick={handleBrandClick}
       onSidebarClose={handleSidebarClose}
