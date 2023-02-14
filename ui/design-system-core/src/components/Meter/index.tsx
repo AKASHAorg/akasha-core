@@ -22,8 +22,8 @@ const Meter: React.FC<PropsWithChildren<MeterProps>> = ({
   progressBg,
   background,
 }) => {
-  const progressStyles = progressBg ? getColorClasses(progressBg) : 'text-black';
-  const backgroundStyles = background ? getColorClasses(background) : 'text-grey8';
+  const progressStyles = getColorClasses(progressBg || 'text-black');
+  const backgroundStyles = getColorClasses(background || 'text-grey8');
 
   if (size < 0 || thickness < 0 || value < 0) {
     throw Error('Invalid prop ...');

@@ -1,7 +1,7 @@
 import { Color } from '../components/types/common.types';
 
 export function getColorClasses(color: Color) {
-  if (typeof color === 'string' && color.startsWith('text-') && !color.trim().includes(' ')) {
+  if (typeof color === 'string' && !color.trim().includes(' ')) {
     return color;
   }
 
@@ -9,14 +9,9 @@ export function getColorClasses(color: Color) {
     const light = color.light;
     const dark = color.dark;
 
-    if (
-      light.startsWith('text-') &&
-      !light.trim().includes(' ') &&
-      dark.startsWith('text-') &&
-      !dark.trim().includes(' ')
-    )
+    if (!light.trim().includes(' ') && !dark.trim().includes(' '))
       return `${color.light} dark:${color.dark}`;
   }
 
-  return 'invalid';
+  return '';
 }
