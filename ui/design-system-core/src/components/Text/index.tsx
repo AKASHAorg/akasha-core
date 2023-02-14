@@ -1,8 +1,8 @@
 import React, { PropsWithChildren } from 'react';
 import { tw, apply } from '@twind/core';
 import { getTag } from './getTag';
-import { getColorClasses } from './getColorClasses';
 import { getAlignmentClasses } from './getAlignmentClasses';
+import { getColorClasses } from '../../utils/getColorClasses';
 
 export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -60,14 +60,6 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
   const colorStyles = getColorClasses(color);
   const truncateStyle = truncate ? 'truncate' : '';
-
-  if (tag === 'invalid') {
-    throw Error('Invalid variant ...');
-  }
-
-  if (colorStyles === 'invalid') {
-    throw Error('Invalid color ...');
-  }
 
   const baseStyles = VARIANT_TO_CSS_CLASSES_MAPPER[variant];
 
