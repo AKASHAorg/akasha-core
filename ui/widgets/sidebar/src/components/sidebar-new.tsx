@@ -159,7 +159,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         </div>
       </div>
 
-      {/* 
+      {/*
           this container will grow up to a max height of 100vh-345px.
           [345px] currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
