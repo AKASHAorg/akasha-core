@@ -3,7 +3,7 @@ import React from 'react';
 import DuplexButton from './';
 
 export default {
-  title: 'DuplexButton',
+  title: 'Buttons/DuplexButton',
   component: DuplexButton,
 };
 
