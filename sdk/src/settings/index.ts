@@ -13,11 +13,11 @@ class Settings {
    * @param service - The service name
    */
   async get<T>(service: string) {
-    const collection = this._db.getCollection<T>(availableCollections.Settings);
+    const collection = this._db.getCollection<SettingsSchema<T>>(availableCollections.Settings);
     const query: unknown = {
       serviceName: { $eq: service },
     };
-    const doc = await collection.findOne(query as any);
+    const doc = await collection.findOne(query);
     return createFormattedValue(doc);
   }
 

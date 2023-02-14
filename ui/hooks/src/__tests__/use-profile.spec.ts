@@ -10,7 +10,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       profile: {
-        getProfile: () => Promise.resolve(mockProfile),
+        getProfile: () => Promise.resolve({ data: mockProfile }),
       },
       common: {
         ipfs: {
