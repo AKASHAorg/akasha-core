@@ -11,7 +11,13 @@ module.exports = {
   ...baseConfig,
   context: path.resolve(__dirname),
   entry: {
+    BasicCardBox: './src/components/BasicCardBox',
+    Button: './src/components/Button',
     Card: './src/components/Card',
+    DuplexButton: './src/components/DuplexButton',
+    ProfileAvatarButton: './src/components/ProfileAvatarButton',
+    SubtitleTextIcon: './src/components/SubtitleTextIcon',
+    TextLine: './src/components/TextLine',
     TrendingWidgetCard: './src/components/TrendingWidgetCard',
   },
   output: Object.assign(baseConfig.output, {
