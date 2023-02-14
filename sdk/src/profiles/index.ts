@@ -234,7 +234,6 @@ class AWF_Profile {
     const upload = () => {
       /* @TODO: implement upload functionality*/
     };
-    throw new Error('Upload is not implemented yet!');
     /*
     const cid = upload.path.cid.toString();
     const dataFinal: DataProviderInput = {
@@ -253,8 +252,9 @@ class AWF_Profile {
       },
     );
 
-    return { CID: cid, size: resized.size, blob: resized.image };
+
     */
+    return { CID: null, size: {}, blob: null };
   }
 
   /**

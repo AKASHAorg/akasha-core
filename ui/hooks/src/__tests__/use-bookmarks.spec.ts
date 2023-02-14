@@ -17,7 +17,7 @@ jest.mock('@akashaorg/awf-sdk', () => {
 });
 
 describe('useBookmarks', () => {
-  it.skip('should return correct bookmarks', async () => {
+  it('should return correct bookmarks', async () => {
     const [wrapper] = createWrapper();
     const { result, waitFor } = renderHook(() => useGetBookmarks('0x00'), {
       wrapper,
