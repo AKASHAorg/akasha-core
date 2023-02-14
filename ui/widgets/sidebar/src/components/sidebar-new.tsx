@@ -171,7 +171,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         {userInstalledApps?.length > 0 && listApps(userInstalledApps, true)}
       </div>
 
-      <div className={tw('flex flex-col px-8 py-4 bg-grey8')}>
+      <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
         <p className={tw(subtitleText)}>{ctaText}</p>
         <div className={tw('w-fit h-fit mt-6')}>
           <Button label={ctaButtonLabel} primary={true} />
@@ -183,7 +183,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         <div className={tw('flex w-fit h-fit mt-6')}>
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
-              <Button icon={icon.name} greyBg={true} primary={true} iconOnly={true} />
+              <a href={icon.link} target="_blank" rel="noreferrer noopener">
+                <Button icon={icon.name} greyBg={true} primary={true} iconOnly={true} />
+              </a>
             </div>
           ))}
         </div>
