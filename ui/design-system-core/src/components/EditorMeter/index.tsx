@@ -32,7 +32,7 @@ const EditorMeter: React.FC<EditorMeterProps> = props => {
       background={{ light: 'text-grey8', dark: 'text-grey4' }}
       progressBg={progressStyles}
     >
-      <Text variant="footnotes2" color={progressStyles}>
+      <Text variant="footnotes2" color={progressStyles} weight="normal">
         {displayCounter}
       </Text>
     </Meter>
