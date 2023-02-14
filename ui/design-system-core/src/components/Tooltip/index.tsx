@@ -4,6 +4,7 @@ import { tw } from '@twind/core';
 import { arrowClasses } from './arrowClasses';
 import { contentClasses } from './contentClasses';
 import { Placement } from '@popperjs/core';
+import Text from '../Text';
 
 export type TooltipProps = {
   content: ReactNode;
@@ -28,29 +29,25 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
   centerArrowToReference,
   children,
 }) => {
-  const offset = centerArrowToReference
-    ? {
-        name: 'offset',
-        options: {
-          offset: [0, ARROW_SIZE],
-        },
-      }
-    : {};
   const [referenceElement, setReferenceElement] = useState(null);
   const [contentElement, setContent] = useState(null);
   const [arrowElement, setArrowElement] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
+  const arrowModifier = {
+    name: 'arrow',
+    options: {
+      element: arrowElement,
+    },
+  };
+  const offsetModifier = {
+    name: 'offset',
+    options: {
+      offset: [0, ARROW_SIZE],
+    },
+  };
   const { styles, attributes, state } = usePopper(referenceElement, contentElement, {
     placement,
-    modifiers: [
-      {
-        name: 'arrow',
-        options: {
-          element: arrowElement,
-        },
-      },
-      offset,
-    ],
+    modifiers: centerArrowToReference ? [arrowModifier, offsetModifier] : [arrowModifier],
   });
 
   const contextualPlacement = getContextualPlacement(state?.placement);
@@ -90,8 +87,9 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
               'flex items-center justify-center flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]',
             )}
           >
-            {/*@TOD: Use text component */}
-            <div className={tw('font-light text-sm text-black dark:text-white')}>{content}</div>
+            <Text variant="subtitle2" color={{ light: 'text-black', dark: 'dark:text-white' }}>
+              {content}
+            </Text>
           </div>
         </div>
       )}
