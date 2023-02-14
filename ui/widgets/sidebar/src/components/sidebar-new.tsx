@@ -5,6 +5,7 @@ import { IMenuItem } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button, { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';
@@ -151,8 +152,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Avatar ethAddress={guestEthAddress} src={{ url: 'https://placebeard.it/360x360' }} />
         </div>
         <div className={tw('w-fit')}>
-          <p className={tw(titleText)}>{guestTitle}</p>
-          <p className={tw(subtitleText)}>{guestSubtitle}</p>
+          <Text variant="footnotes1" className={titleText}>
+            {guestTitle}
+          </Text>
+          <Text variant="subtitle2" className={tw(subtitleText)}>
+            {guestSubtitle}
+          </Text>
         </div>
         <div className={tw('w-fit h-fit ml-6 self-end')}>
           <Button icon="BoltIcon" primary={true} iconOnly={true} />
@@ -172,14 +177,18 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
-        <p className={tw(subtitleText)}>{ctaText}</p>
+        <Text variant="subtitle2" className={tw(subtitleText)}>
+          {ctaText}
+        </Text>
         <div className={tw('w-fit h-fit mt-6')}>
           <Button label={ctaButtonLabel} primary={true} />
         </div>
       </div>
 
       <div className={tw('flex flex-col px-8 py-4')}>
-        <p className={tw(subtitleText)}>{footerLabel}</p>
+        <Text variant="subtitle2" className={tw(subtitleText)}>
+          {footerLabel}
+        </Text>
         <div className={tw('flex w-fit h-fit mt-6')}>
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>

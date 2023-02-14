@@ -2,6 +2,7 @@ import React from 'react';
 import { tw } from '@twind/core';
 
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 
@@ -30,9 +31,12 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
       }}
     >
       <Avatar src={{ url: 'https://placebeard.it/360x360' }} />
-      <p className={tw(`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'} `)}>
+      <Text
+        variant="body1"
+        className={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}
+      >
         {menuItem.label}
-      </p>
+      </Text>
     </div>
   );
 };

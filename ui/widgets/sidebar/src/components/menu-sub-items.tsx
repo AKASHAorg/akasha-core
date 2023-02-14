@@ -3,6 +3,8 @@ import { tw } from '@twind/core';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+
 export interface IMenuSubItemsProps {
   menuItem: IMenuItem;
   activeOption: IMenuItem | null;
@@ -33,7 +35,9 @@ const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
             onOptionClick(menuItem, subRoute);
           }}
         >
-          <p className={tw('py-4 px-8')}>{subRoute.label}</p>
+          <Text variant="body1" className="py-4 px-8">
+            {subRoute.label}
+          </Text>
         </div>
       ))}
     </div>
