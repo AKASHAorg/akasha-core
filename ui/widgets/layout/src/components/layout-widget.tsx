@@ -105,10 +105,17 @@ const Layout: React.FC<RootComponentProps> = props => {
   return (
     <div className="bg-background dark:(bg-background-dark) min-h-screen">
       <div className="h-full w-full">
-        <div className="grid md:grid-cols-[8fr_4fr] lg:grid-cols-[3fr_6fr_3fr] xl:max-w-7xl xl:mx-auto gap-x-4">
+        <div
+          className={`grid md:grid-cols-[8fr_4fr] ${
+            showSidebar ? 'lg:grid-cols-[3fr_6fr_3fr] ' : 'lg:grid-cols-[1fr_6fr_3fr_2fr] '
+          } xl:max-w-7xl xl:mx-auto gap-x-4`}
+        >
           <ScrollRestorer />
           <div className="hidden lg:flex h-full min-w-max">
-            <div className="sticky top-0 h-screen w-full">
+            <div
+              className={`sticky top-0 h-screen w-full ${showSidebar ? '' : 'hidden'}
+`}
+            >
               <div className="pt-4">
                 <Extension
                   fullHeight
