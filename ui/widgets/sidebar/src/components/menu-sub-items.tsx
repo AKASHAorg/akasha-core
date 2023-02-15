@@ -21,23 +21,25 @@ const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
   return (
     <div className={tw('text-black dark:text-white cursor-pointer')}>
       {subRoutes.map((subRoute, idx) => (
-        <div
-          key={subRoute.label + idx}
-          className={tw(
-            `ml-4 border-l-4 ${
-              subRoute?.route === activeOption?.route
-                ? 'border-secondary-light dark:border-secondary-dark'
-                : 'border-grey9 dark:border-grey3'
-            }`,
-          )}
-          onClick={e => {
-            e.preventDefault();
-            onOptionClick(menuItem, subRoute);
-          }}
-        >
-          <Text variant="body1" className="py-4 px-8">
-            {subRoute.label}
-          </Text>
+        <div key={subRoute.label + idx} className={tw('hover:bg-grey8 dark:hover:bg-grey5')}>
+          <div
+            key={subRoute.label + idx}
+            className={tw(
+              `ml-8 border-l-4 hover:border-transparent dark:hover:border-transparent ${
+                subRoute?.route === activeOption?.route
+                  ? 'border-secondary-light dark:border-secondary-dark'
+                  : 'border-grey9 dark:border-grey3'
+              }`,
+            )}
+            onClick={e => {
+              e.preventDefault();
+              onOptionClick(menuItem, subRoute);
+            }}
+          >
+            <Text variant="body1" className="py-4 px-8">
+              {subRoute.label}
+            </Text>
+          </div>
         </div>
       ))}
     </div>

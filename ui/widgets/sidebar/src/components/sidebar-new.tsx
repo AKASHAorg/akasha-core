@@ -117,11 +117,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   };
 
   const listApps = (list: IMenuItem[], hasBorderTop = false) => (
-    <div className={tw(`flex flex-col px-4 py-2 ${hasBorderTop ? 'border-t-1 border-grey8' : ''}`)}>
+    <div className={tw(`flex flex-col py-2 ${hasBorderTop ? 'border-t-1 border-grey8' : ''}`)}>
       {list?.map((app, idx) => (
         <React.Fragment key={app.label + idx}>
           {app.subRoutes.length > 0 ? (
             <Accordion
+              className="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
               titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
               contentNode={
                 <MenuSubItems
@@ -132,8 +133,14 @@ const Sidebar: React.FC<ISidebarProps> = props => {
               }
             />
           ) : (
-            <div className={tw('p-2 cursor-pointer')}>
-              <MenuItemLabel menuItem={app} isActive={false} onClickMenuItem={handleAppIconClick} />
+            <div key={app.label + idx} className={tw('px-4 hover:bg-grey8 dark:hover:bg-grey5')}>
+              <div className={tw('p-2 cursor-pointer')}>
+                <MenuItemLabel
+                  menuItem={app}
+                  isActive={false}
+                  onClickMenuItem={handleAppIconClick}
+                />
+              </div>
             </div>
           )}
         </React.Fragment>

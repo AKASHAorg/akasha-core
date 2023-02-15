@@ -4,12 +4,13 @@ import { tw } from '@twind/core';
 import Icon from '../Icon';
 
 export interface IAccordionProps {
+  className?: string;
   titleNode: React.ReactNode;
   contentNode: React.ReactNode;
 }
 
 const Accordion: React.FC<IAccordionProps> = props => {
-  const { titleNode, contentNode } = props;
+  const { className, titleNode, contentNode } = props;
 
   // internal state for accordion toggle
   const [isToggled, setIsToggled] = React.useState<boolean>(false);
@@ -19,7 +20,7 @@ const Accordion: React.FC<IAccordionProps> = props => {
   return (
     <>
       <div
-        className={tw('flex flex-row justify-between items-center p-2 cursor-pointer')}
+        className={tw(`flex flex-row justify-between items-center cursor-pointer ${className}`)}
         onClick={handleToggle}
       >
         {titleNode}
