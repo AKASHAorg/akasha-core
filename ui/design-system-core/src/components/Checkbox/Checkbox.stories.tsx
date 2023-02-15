@@ -8,8 +8,9 @@ export default {
 
 const checkboxes = [
   { label: 'Checkbox 1' },
-  { label: 'Checkbox 2' },
+  { label: 'Checkbox 2', size: 'large' },
   { label: 'Checkbox error', error: true },
+  { label: 'Checkbox disabled', disabled: true },
 ];
 const name = 'checkboxes';
 
@@ -19,12 +20,11 @@ const Template = () => {
   const changeHandler = pos => {
     const updatedCheckedState = checkedState.map((item, idx) => (idx === pos ? !item : item));
     setCheckedState(updatedCheckedState);
-    console.log('checkedState', checkedState);
   };
 
   return (
     <>
-      {checkboxes.map(({ label, error = false }, index) => (
+      {checkboxes.map(({ label, error = false, size = 'small' }, index) => (
         <Checkbox
           key={index}
           label={label}
@@ -33,6 +33,8 @@ const Template = () => {
           id={index.toString()}
           isSelected={checkedState[index]}
           error={error}
+          disabled={true}
+          size={size}
           handleChange={() => changeHandler(index)}
         />
       ))}
