@@ -16,6 +16,7 @@ export interface IButtonProps {
   iconOnly?: boolean;
   textOnly?: boolean;
   greyBg?: boolean;
+  isCustomIcon?: boolean;
   onClick?: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
@@ -33,6 +34,7 @@ const Button: React.FC<IButtonProps> = props => {
     iconOnly = false,
     textOnly = false,
     greyBg = false,
+    isCustomIcon = false,
     onClick,
     onMouseEnter,
     onMouseLeave,
@@ -117,14 +119,18 @@ const Button: React.FC<IButtonProps> = props => {
       {loading ? (
         <Icon icon="ArrowPathIcon" styling={tw(iconStyle)} />
       ) : iconOnly ? (
-        <Icon icon={icon} styling={tw(iconStyle)} />
+        <Icon icon={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
       ) : (
         <>
-          {leftIcon && icon && <Icon icon={icon} styling={tw(iconStyle)} />}
+          {leftIcon && icon && (
+            <Icon icon={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
+          )}
 
           {size !== 'xsmall' && label}
 
-          {!leftIcon && icon && <Icon icon={icon} styling={tw(iconStyle)} />}
+          {!leftIcon && icon && (
+            <Icon icon={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
+          )}
         </>
       )}
     </button>

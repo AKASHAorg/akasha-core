@@ -6,15 +6,18 @@ export type IconName = CustomIcons.CustomIconTypes | keyof typeof HeroIcons;
 
 interface IconProps {
   icon: IconName;
+  isCustomIcon?: boolean;
   styling?: string;
 }
 
 const Icon: React.FC<IconProps> = props => {
-  const PassedIcon = HeroIcons[props.icon] ?? CustomIcons[props.icon];
+  const { icon, isCustomIcon, styling } = props;
+
+  const PassedIcon = isCustomIcon ? CustomIcons[icon] : HeroIcons[icon];
 
   if (PassedIcon === 'undefined') return null;
 
-  return <PassedIcon className={props.styling} />;
+  return <PassedIcon className={styling} />;
 };
 
 export default Icon;
