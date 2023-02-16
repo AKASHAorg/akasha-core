@@ -59,7 +59,7 @@ const Checkbox: React.FC<iCheckboxProps> = ({
     ? 'text-black dark:text-grey4'
     : 'text-black dark:text-white';
   const inputColor = error ? 'orange-400' : isDisabled ? 'grey4' : 'secondary-light';
-  const checkmarkColor = error ? 'white dark:black' : isDisabled ? 'grey6' : 'white';
+  const checkmarkColor = error ? 'white dark:black' : isDisabled ? 'grey6 dark:grey5' : 'white';
   const minusMarkColor = isDisabled ? 'bg-grey6 dark:bg-grey5' : 'bg-grey4 dark:bg-white';
   const bgColor = isDisabled
     ? 'before:bg-grey4'
