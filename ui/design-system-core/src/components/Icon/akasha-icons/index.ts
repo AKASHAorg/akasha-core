@@ -6,7 +6,7 @@ import discord from './discord';
 import github from './github';
 import notifications from './notifications';
 import search from './search';
-import settings from './settings';
+import settingsAlt from './settings-alt';
 import telegram from './telegram';
 import twitter from './twitter';
 
@@ -19,7 +19,7 @@ export type CustomIconTypes =
   | 'github'
   | 'notifications'
   | 'search'
-  | 'settings'
+  | 'settingsAlt'
   | 'telegram'
   | 'twitter';
 
@@ -32,7 +32,7 @@ export {
   github,
   notifications,
   search,
-  settings,
+  settingsAlt,
   telegram,
   twitter,
 };
