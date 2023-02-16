@@ -200,7 +200,13 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
               <a href={icon.link} target="_blank" rel="noreferrer noopener">
-                <Button icon={icon.name} greyBg={true} primary={true} iconOnly={true} />
+                <Button
+                  icon={icon.name}
+                  greyBg={true}
+                  primary={true}
+                  iconOnly={true}
+                  isCustomIcon={true}
+                />
               </a>
             </div>
           ))}

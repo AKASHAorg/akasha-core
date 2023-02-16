@@ -1,8 +1,8 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon, { IconName } from '@akashaorg/design-system-core/lib/components/Icon';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 
@@ -30,7 +30,13 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
         handleClick();
       }}
     >
-      <Avatar src={{ url: 'https://placebeard.it/360x360' }} />
+      <div
+        className={tw(
+          'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
+        )}
+      >
+        <Icon icon={menuItem.logo.value as IconName} isCustomIcon={true} />
+      </div>
       <Text
         variant="body1"
         className={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}
