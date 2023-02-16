@@ -1,7 +1,7 @@
 import { apply } from '@twind/core';
 import { TooltipProps } from './index';
 
-export function contentClasses(placement: TooltipProps['placement'], arrowSize: number) {
+export function getContentClasses(placement: TooltipProps['placement'], arrowSize: number) {
   switch (placement) {
     case 'left':
       return apply`flex flex-row-reverse items-center mr-[${arrowSize}px]`;
