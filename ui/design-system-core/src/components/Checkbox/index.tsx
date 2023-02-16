@@ -42,12 +42,25 @@ const Checkbox: React.FC<iCheckboxProps> = ({
   isDisabled = false,
   handleChange,
 }) => {
+  const checkboxRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (indeterminate === true) {
+      checkboxRef.current.indeterminate = true;
+      checkboxRef.current.checked = false;
+    }
+  }, [indeterminate]);
+
   const textColor = error
-    ? 'dark:text-error-dark'
+    ? 'text-error-light dark:text-error-dark hover:text-error-light'
+    : isDisabled
+    ? 'text-grey4 hover:text-grey4'
     : 'text(black dark:white) hover:text-secondary-light dark:hover:text-secondary-dark';
-  const inputColor = error ? 'orange-400' : 'secondary-light';
-  const checkmarkColor = error ? 'white dark:black' : 'white';
-  const bgColor = isSelected
+  const inputColor = error ? 'orange-400' : isDisabled ? 'grey4' : 'secondary-light';
+  const checkmarkColor = error ? 'white dark:black' : isDisabled ? 'grey6' : 'white';
+  const bgColor = isDisabled
+    ? 'before:bg-grey4'
+    : isSelected
     ? error
       ? 'before:bg-error-dark'
       : 'before:bg-secondary-light dark:before:bg-secondary-dark'
@@ -85,18 +98,28 @@ const Checkbox: React.FC<iCheckboxProps> = ({
     after:content-none invisible w-4 h-4 relative
     `;
 
+  React.useEffect(() => {
+    console.log(indeterminate);
+  }, [indeterminate]);
+
   return (
     <div className={tw('leading-6 my-2 hover:text-secondary-light dark:hover:text-secondary-dark')}>
       <input
+        ref={checkboxRef}
         type="checkbox"
         id={id}
         name={name}
         value={value}
         aria-labelledby={value}
-        disabled={isDisabled}
         checked={isSelected}
         onChange={handleChange}
-        className={tw(isSelected ? selectedPseudoCheckboxStyles : unselectedPseudoCheckboxStyles)}
+        className={tw(
+          indeterminate
+            ? 'w-6 h-6 bg-grey4 text-grey6'
+            : isSelected
+            ? selectedPseudoCheckboxStyles
+            : unselectedPseudoCheckboxStyles,
+        )}
       />
       <label htmlFor={value} className={tw(instanceLabelStyles)}>
         {label}

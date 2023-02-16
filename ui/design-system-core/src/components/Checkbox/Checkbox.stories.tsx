@@ -6,11 +6,12 @@ export default {
   component: Checkbox,
 };
 
-const checkboxes = [
-  { label: 'Checkbox 1' },
-  { label: 'Checkbox 2', size: 'large' },
+const checkboxes: any[] = [
+  { label: 'Checkbox small' },
+  { label: 'Checkbox large', size: 'large' },
   { label: 'Checkbox error', error: true },
   { label: 'Checkbox disabled', disabled: true },
+  { label: 'Checkbox indeterminate', indeterminate: true },
 ];
 const name = 'checkboxes';
 
@@ -24,20 +25,23 @@ const Template = () => {
 
   return (
     <>
-      {checkboxes.map(({ label, error = false, size = 'small' }, index) => (
-        <Checkbox
-          key={index}
-          label={label}
-          name={name}
-          value={label}
-          id={index.toString()}
-          isSelected={checkedState[index]}
-          error={error}
-          disabled={true}
-          size={size}
-          handleChange={() => changeHandler(index)}
-        />
-      ))}
+      {checkboxes.map(
+        ({ label, error = false, size = 'small', disabled, indeterminate = false }, index) => (
+          <Checkbox
+            key={index}
+            label={label}
+            name={name}
+            value={label}
+            id={index.toString()}
+            isSelected={checkedState[index]}
+            error={error}
+            isDisabled={disabled}
+            indeterminate={indeterminate}
+            size={size}
+            handleChange={() => changeHandler(index)}
+          />
+        ),
+      )}
     </>
   );
 };
