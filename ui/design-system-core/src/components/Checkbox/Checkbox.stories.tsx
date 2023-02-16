@@ -12,6 +12,7 @@ const checkboxes: any[] = [
   { label: 'Checkbox error', error: true },
   { label: 'Checkbox disabled', disabled: true },
   { label: 'Checkbox indeterminate', indeterminate: true },
+  { label: 'Checkbox indeterminate large', size: 'large', indeterminate: true, disabled: true },
 ];
 const name = 'checkboxes';
 
@@ -46,9 +47,3 @@ const Template = () => {
   );
 };
 export const Default = Template.bind({});
-// Default.args = {
-//   label: 'Checkbox 1',
-//   value: 'Checkbox 1',
-//   id: '1',
-//   name: 'food',
-// };

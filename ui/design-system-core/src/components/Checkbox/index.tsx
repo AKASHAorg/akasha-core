@@ -27,7 +27,6 @@ before:absolute after:absolute before:visible after:visible
 after:content-[''] before:content-['']
 before:inline-block after:inline-block
 before:rounded-md
-after:-rotate-45
 `;
 
 const Checkbox: React.FC<iCheckboxProps> = ({
@@ -56,8 +55,12 @@ const Checkbox: React.FC<iCheckboxProps> = ({
     : isDisabled
     ? 'text-grey4 hover:text-grey4'
     : 'text(black dark:white) hover:text-secondary-light dark:hover:text-secondary-dark';
+  const textColorIndeterminate = isDisabled
+    ? 'text-black dark:text-grey4'
+    : 'text-black dark:text-white';
   const inputColor = error ? 'orange-400' : isDisabled ? 'grey4' : 'secondary-light';
   const checkmarkColor = error ? 'white dark:black' : isDisabled ? 'grey6' : 'white';
+  const minusMarkColor = isDisabled ? 'bg-grey6 dark:bg-grey5' : 'bg-grey4 dark:bg-white';
   const bgColor = isDisabled
     ? 'before:bg-grey4'
     : isSelected
@@ -74,9 +77,14 @@ const Checkbox: React.FC<iCheckboxProps> = ({
       ? 'after:w-2.5 after:h-1.5 after:-ml-0.5 after:mt-1.5'
       : 'after:w-4 after:h-2 after:-ml-1 after:mt-1.5';
 
+  const minusMarkSizes =
+    size === 'small'
+      ? 'after:w-2.5 after:h-[2px] after:-ml-[3px] after:mt-2.5'
+      : 'after:w-3.5 after:h-[1.5px] after:-ml-[3px] after:mt-2.5';
+
   const instanceLabelStyles = apply`
   ${baseLabelStyles}
-  ${textColor}
+  ${indeterminate ? textColorIndeterminate : textColor}
   `;
 
   const instancePseudoCheckboxStyles = apply`
@@ -84,8 +92,22 @@ const Checkbox: React.FC<iCheckboxProps> = ({
    ${checkboxSizes}
    ${tickMarkSizes}
   before:border(2 ${inputColor})
-  after:border(l-2 ${checkmarkColor}) after:border(b-2 ${checkmarkColor})
+  after:border(l-2 ${checkmarkColor}) after:border(b-2 ${checkmarkColor}) after:-rotate-45
   ${bgColor}
+  `;
+
+  const minusMarkStyles = apply`
+  ${minusMarkSizes}
+  after:${minusMarkColor}
+  `;
+
+  const instanceInderterminateCheckboxStyles = apply`
+  ${basePseudoCheckboxStyles}
+  ${checkboxSizes}
+  ${minusMarkStyles}
+  before:border(2 ${isDisabled ? 'grey4' : 'secondary-dark'})
+  before:${isDisabled ? 'bg-grey4' : 'bg-secondary-dark'}
+  invisible w-4 h-4 relative
   `;
 
   const selectedPseudoCheckboxStyles = apply`
@@ -97,10 +119,6 @@ const Checkbox: React.FC<iCheckboxProps> = ({
     ${instancePseudoCheckboxStyles}
     after:content-none invisible w-4 h-4 relative
     `;
-
-  React.useEffect(() => {
-    console.log(indeterminate);
-  }, [indeterminate]);
 
   return (
     <div className={tw('leading-6 my-2 hover:text-secondary-light dark:hover:text-secondary-dark')}>
@@ -115,7 +133,7 @@ const Checkbox: React.FC<iCheckboxProps> = ({
         onChange={handleChange}
         className={tw(
           indeterminate
-            ? 'w-6 h-6 bg-grey4 text-grey6'
+            ? instanceInderterminateCheckboxStyles
             : isSelected
             ? selectedPseudoCheckboxStyles
             : unselectedPseudoCheckboxStyles,
