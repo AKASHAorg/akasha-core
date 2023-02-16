@@ -45,7 +45,7 @@ SuccessCaptionField.args = {
 export const DisabledField = Template.bind({});
 DisabledField.args = {
   label: 'Label',
-  value: 'Example input',
+  placeholder: 'Example input',
   disabled: true,
 };
 
@@ -53,7 +53,7 @@ export const DefaultCaptionWithIconField = Template.bind({});
 DefaultCaptionWithIconField.args = {
   label: 'Label',
   caption: 'Default Caption',
-  value: 'Example input',
+  placeholder: 'Example input',
   iconLeft: 'CheckCircleIcon',
   iconRight: 'CheckCircleIcon',
 };
@@ -62,7 +62,7 @@ export const WarningCaptionWithIconField = Template.bind({});
 WarningCaptionWithIconField.args = {
   label: 'Label',
   caption: 'Default Caption',
-  value: 'Example input',
+  placeholder: 'Example input',
   status: 'warning',
   iconLeft: 'CheckCircleIcon',
   iconRight: 'CheckCircleIcon',
@@ -72,7 +72,7 @@ export const ErrorCaptionWithIconField = Template.bind({});
 ErrorCaptionWithIconField.args = {
   label: 'Label',
   caption: 'Default Caption',
-  value: 'Example input',
+  placeholder: 'Example input',
   status: 'error',
   iconLeft: 'CheckCircleIcon',
   iconRight: 'CheckCircleIcon',
@@ -82,7 +82,7 @@ export const SuccessCaptionWithIconField = Template.bind({});
 SuccessCaptionWithIconField.args = {
   label: 'Label',
   caption: 'Default Caption',
-  value: 'Example input',
+  placeholder: 'Example input',
   status: 'success',
   iconLeft: 'CheckCircleIcon',
   iconRight: 'CheckCircleIcon',
@@ -91,7 +91,7 @@ SuccessCaptionWithIconField.args = {
 export const DisabledWithIconField = Template.bind({});
 DisabledWithIconField.args = {
   label: 'Label',
-  value: 'Example input',
+  placeholder: 'Example input',
   disabled: true,
   iconLeft: 'CheckCircleIcon',
   iconRight: 'CheckCircleIcon',

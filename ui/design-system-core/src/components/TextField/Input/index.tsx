@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import Icon from '../../Icon';
 import { apply, tw } from '@twind/core';
 import { getContainerClasses } from './getContainerClasses';
@@ -6,36 +6,30 @@ import { getIconClasses } from './getIconClasses';
 import { getInputClasses } from './getInputClasses';
 import { InputProps } from '../types';
 
-export const Input: React.FC<InputProps> = ({
-  id,
-  name,
-  value,
-  status,
-  iconLeft,
-  iconRight,
-  disabled,
-  onChange,
-}) => {
-  const containerStyle = getContainerClasses(disabled, status);
-  const inputStyle = getInputClasses(disabled);
-  const iconStyle = getIconClasses(disabled, status);
+export const Input: React.FC<InputProps> = forwardRef(
+  (
+    { status, iconLeft, iconRight, disabled, className, ...rest },
+    ref?: React.RefObject<HTMLInputElement>,
+  ) => {
+    const containerStyle = getContainerClasses(disabled, status);
+    const inputStyle = getInputClasses(disabled, status);
+    const iconStyle = getIconClasses(disabled, status);
 
-  return (
-    <div
-      className={tw(apply(containerStyle))}
-      /* @TODO: Replace with stack component */
-    >
-      <input
-        id={id}
-        name={name}
-        type="text"
-        value={value}
-        className={tw(apply(inputStyle))}
-        disabled={disabled}
-        onChange={onChange}
-      />
-      {iconLeft && <Icon icon={iconLeft} styling={tw(apply(`${iconStyle} order-first`))} />}
-      {iconRight && <Icon icon={iconRight} styling={tw(apply(iconStyle))} />}
-    </div>
-  );
-};
+    return (
+      <div
+        className={tw(apply(containerStyle, className))}
+        /* @TODO: Replace with stack component */
+      >
+        <input
+          type="text"
+          className={tw(apply(inputStyle))}
+          disabled={disabled}
+          ref={ref}
+          {...rest}
+        />
+        {iconLeft && <Icon icon={iconLeft} styling={tw(apply(`${iconStyle} order-first`))} />}
+        {iconRight && <Icon icon={iconRight} styling={tw(apply(iconStyle))} />}
+      </div>
+    );
+  },
+);
