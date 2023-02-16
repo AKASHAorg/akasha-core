@@ -31,6 +31,11 @@ const Layout: React.FC<RootComponentProps> = props => {
   const [showSidebar, setShowSidebar] = React.useState(
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
+
+  const [showWidgets, setshowWidgets] = React.useState(
+    window.matchMedia('(min-width: 769px)').matches ? true : false,
+  );
+
   const maintenanceReq = usePlaformHealthCheck();
 
   const dismissedCardId = 'dismiss-the-merge-notification';
@@ -53,6 +58,14 @@ const Layout: React.FC<RootComponentProps> = props => {
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
+
+  const handleWidgetsShow = () => {
+    setshowWidgets(true);
+  };
+  const handleWidgetsHide = () => {
+    setshowWidgets(false);
+  };
+
   const handleModal = React.useCallback(
     (data: UIEventData['data']) => {
       setActiveModal(active => {
@@ -84,6 +97,12 @@ const Layout: React.FC<RootComponentProps> = props => {
           case EventTypes.HideSidebar:
             handleSidebarHide();
             break;
+          case EventTypes.ShowWidgets:
+            handleWidgetsShow();
+            break;
+          case EventTypes.HideWidgets:
+            handleWidgetsHide();
+            break;
           default:
             break;
         }
@@ -106,14 +125,14 @@ const Layout: React.FC<RootComponentProps> = props => {
     <div className="bg-background dark:(bg-background-dark) min-h-screen">
       <div className="h-full w-full">
         <div
-          className={`grid md:grid-cols-[8fr_4fr] ${
-            showSidebar ? 'lg:grid-cols-[3fr_6fr_3fr] ' : 'lg:grid-cols-[1fr_6fr_3fr_2fr] '
+          className={`grid md:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${
+            showSidebar ? 'lg:grid-cols-[3fr_6fr_3fr] ' : 'lg:grid-cols-[1.5fr_6fr_3fr_1.5fr] '
           } xl:max-w-7xl xl:mx-auto gap-x-4`}
         >
           <ScrollRestorer />
           <div className="hidden lg:flex h-full min-w-max">
             <div
-              className={`sticky top-0 h-screen w-full ${showSidebar ? '' : 'hidden'}
+              className={`sticky top-0 h-screen w-full ${showSidebar ? 'z-[9999] ' : 'hidden'}
 `}
             >
               <div className="pt-4">
@@ -125,7 +144,7 @@ const Layout: React.FC<RootComponentProps> = props => {
               </div>
             </div>
           </div>
-          <div>
+          <div className={`${showWidgets ? '' : 'col-start-2 col-end-3'}`}>
             <div className="sticky top-0 z-50">
               <div className="text() pt-4 bg-background dark:(bg-background-dark)">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
@@ -182,7 +201,7 @@ const Layout: React.FC<RootComponentProps> = props => {
           </div>
           <div>
             <div className="sticky top-0">
-              <div className="grid grid-auto-rows pt-4">
+              <div className={`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`}>
                 <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
                 <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
               </div>

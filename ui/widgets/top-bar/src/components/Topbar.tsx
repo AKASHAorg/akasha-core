@@ -14,7 +14,7 @@ export interface ITopbarProps {
   // handlers
   onSidebarToggle?: () => void;
   onBackClick: () => void;
-  onAppCenterClick: () => void;
+  onAppWidgetClick: () => void;
   onBrandClick?: () => void;
   onNotificationClick: () => void;
   // external css
@@ -28,7 +28,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     sidebarVisible,
     onSidebarToggle,
     onBrandClick,
-    onAppCenterClick,
+    onAppWidgetClick,
     onNotificationClick,
     onBackClick,
     hasNewNotifications,
@@ -36,11 +36,27 @@ const Topbar: React.FC<ITopbarProps> = props => {
   } = props;
 
   const iconSize = isMobileOnly ? 'small' : 'regular';
+  const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
+    window.matchMedia('(max-width: 768px)').matches,
+  );
+
+  React.useEffect(() => {
+    const mql = window.matchMedia('(max-width: 768px)');
+    const resize = e => {
+      setDisplayWidgetTogglingButton(e.matches);
+    };
+    mql.addEventListener('change', resize);
+
+    return () => {
+      mql.removeEventListener('change', resize);
+    };
+  }, []);
+
   const BaseStyles = apply`
     flex justify-between items-center w-full
     py-1.5 px-2 space-x-4
     border(1 grey8) rounded-none sm:rounded-md shadow-sm
-    bg-white-700 dark:bg-black
+    bg-white-200 dark:bg-black
     xs:(fixed top-0 z-50)
     `;
 
@@ -89,13 +105,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
       </div>
 
       <div className={tw('flex space-x-2')}>
-        {isMobileOnly && (
+        {displayWidgetTogglingButton && (
           <Button
             iconOnly={true}
             noBorder={true}
             icon="AppCenter"
             size={iconSize}
-            onClick={onAppCenterClick}
+            onClick={onAppWidgetClick}
           />
         )}
         <Button

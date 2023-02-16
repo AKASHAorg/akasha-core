@@ -15,6 +15,11 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
 
+  // widgets are displayeed by default on larger screens >=768px
+  const [widgetVisible, setWidgetVisible] = React.useState<boolean>(
+    window.matchMedia('(min-width: 769px)').matches ? true : false,
+  );
+
   const uiEventsRef = React.useRef(uiEvents);
 
   // show or hide sidebar
@@ -26,6 +31,12 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
         }
         if (eventInfo.event === EventTypes.ShowSidebar) {
           setSidebarVisible(true);
+        }
+        if (eventInfo.event === EventTypes.HideWidgets) {
+          setWidgetVisible(false);
+        }
+        if (eventInfo.event === EventTypes.ShowWidgets) {
+          setWidgetVisible(true);
         }
       },
     });
@@ -41,11 +52,14 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     uiEvents.next({
       event: sidebarVisible ? EventTypes.HideSidebar : EventTypes.ShowSidebar,
     });
-    console.log('sidebar toggle', sidebarVisible);
   };
-  React.useEffect(() => {
-    console.log('sidebar visible', sidebarVisible);
-  }, [sidebarVisible]);
+  // show or hide widgets
+
+  const handleWidgetToggle = () => {
+    uiEvents.next({
+      event: widgetVisible ? EventTypes.HideWidgets : EventTypes.ShowWidgets,
+    });
+  };
 
   // back navigation functionality
 
@@ -105,15 +119,6 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     });
   };
 
-  const handleAppCenterClick = () => {
-    props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
-      appName: '@akashaorg/app-integration-center',
-      getNavigationUrl: routes => {
-        return routes.myProfile;
-      },
-    });
-  };
-
   const handleNotificationClick = () => {
     props.plugins['@akashaorg/app-routing']?.routing.navigateTo({
       appName: '@akashaorg/app-notifications',
@@ -127,7 +132,7 @@ const TopbarComponent: React.FC<RootComponentProps> = props => {
     <Topbar
       sidebarVisible={sidebarVisible}
       onSidebarToggle={handleSidebarToggle}
-      onAppCenterClick={handleAppCenterClick}
+      onAppWidgetClick={handleWidgetToggle}
       onNotificationClick={handleNotificationClick}
       onBackClick={handleBackClick}
       currentLocation={location?.pathname}
