@@ -22,8 +22,8 @@ const Meter: React.FC<PropsWithChildren<MeterProps>> = ({
   progressBg,
   background,
 }) => {
-  const progressStyles = getColorClasses(progressBg || 'text-black');
-  const backgroundStyles = getColorClasses(background || 'text-grey8');
+  const progressStyle = getColorClasses(progressBg || 'text-black');
+  const backgroundStyle = getColorClasses(background || 'text-grey8');
 
   if (size < 0 || thickness < 0 || value < 0) {
     throw Error('Invalid prop ...');
@@ -52,7 +52,7 @@ const Meter: React.FC<PropsWithChildren<MeterProps>> = ({
     <div className={tw(apply`inline-flex items-center justify-center overflow-hidden]`)}>
       <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
         <circle
-          className={tw(apply(backgroundStyles))}
+          className={tw(apply(backgroundStyle))}
           strokeWidth={thickness}
           stroke="currentColor"
           fill="transparent"
@@ -61,7 +61,7 @@ const Meter: React.FC<PropsWithChildren<MeterProps>> = ({
           cy={centerY}
         />
         <path
-          className={tw(apply(`${progressStyles}`))}
+          className={tw(apply(`${progressStyle}`))}
           d={d}
           strokeWidth={thickness}
           strokeLinecap="butt"
