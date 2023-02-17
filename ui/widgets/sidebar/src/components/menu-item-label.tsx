@@ -35,7 +35,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
           'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
         )}
       >
-        <Icon type={menuItem.logo.value as IconType} isCustomIcon={true} />
+        <Icon type={menuItem.logo.value as IconType} isCustomIcon={true} plain={true} />
       </div>
       <Text
         variant="body1"
