@@ -2,7 +2,7 @@ import React from 'react';
 import { tw } from '@twind/core';
 
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Icon, { IconName } from '@akashaorg/design-system-core/lib/components/Icon';
+import Icon, { IconType } from '@akashaorg/design-system-core/lib/components/Icon';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 
@@ -35,7 +35,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
           'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
         )}
       >
-        <Icon icon={menuItem.logo.value as IconName} isCustomIcon={true} />
+        <Icon type={menuItem.logo.value as IconType} isCustomIcon={true} />
       </div>
       <Text
         variant="body1"

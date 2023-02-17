@@ -10,6 +10,9 @@ import settingsAlt from './settings-alt';
 import telegram from './telegram';
 import twitter from './twitter';
 
+/**
+ * maintain alphabetical order for custom icon names
+ */
 export type CustomIconTypes =
   | 'akasha'
   | 'appCenter'

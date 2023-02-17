@@ -1,13 +1,13 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import Icon, { IconName } from '../Icon';
+import Icon, { IconType } from '../Icon';
 
 type ButtonSize = 'xsmall' | 'small' | 'regular' | 'large';
 
 export interface IButtonProps {
   label?: string;
-  icon?: IconName;
+  icon?: IconType;
   size?: ButtonSize;
   primary?: boolean;
   disabled?: boolean;
@@ -117,19 +117,19 @@ const Button: React.FC<IButtonProps> = props => {
       onMouseLeave={handleMouseLeave}
     >
       {loading ? (
-        <Icon icon="ArrowPathIcon" styling={tw(iconStyle)} />
+        <Icon type="ArrowPathIcon" styling={tw(iconStyle)} />
       ) : iconOnly ? (
-        <Icon icon={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
+        <Icon type={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
       ) : (
         <>
           {leftIcon && icon && (
-            <Icon icon={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
+            <Icon type={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
           )}
 
           {size !== 'xsmall' && label}
 
           {!leftIcon && icon && (
-            <Icon icon={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
+            <Icon type={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
           )}
         </>
       )}
