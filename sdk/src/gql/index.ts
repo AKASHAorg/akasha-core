@@ -30,14 +30,10 @@ class Gql {
     const endPoint = new GraphQLClient(process.env.GRAPHQL_URI || '/graphql');
     this._log = log.create('AWF_GQL');
     // create the cache stash for the gql client
-    this._stash
-      .create({
-        maxSize: 1280,
-        maxAge: 1000 * 60 * 2,
-      })
-      .subscribe(x => {
-        this._gqlStash = x.data;
-      });
+    this._gqlStash = this._stash.create({
+      maxSize: 1280,
+      maxAge: 1000 * 60 * 2,
+    }).data;
     this._client = getSdk(endPoint);
   }
 

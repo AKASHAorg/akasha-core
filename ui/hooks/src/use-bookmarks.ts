@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -23,15 +22,13 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
     async () => {
       const sdk = getSDK();
       try {
-        const res = await lastValueFrom(
-          sdk.services.settings.get<string[][]>(BOOKMARKED_ENTRIES_KEY),
-        );
-        if (res.data && res.data.options) {
-          const bookmarkedEntries = res.data.options.findIndex(
+        const doc = await sdk.services.settings.get<string[][]>(BOOKMARKED_ENTRIES_KEY);
+        if (doc.data && doc.data.options.length) {
+          const bookmarkedEntries = doc.data.options.findIndex(
             (e: string[]) => e[0] === entriesBookmarks,
           );
           if (bookmarkedEntries !== -1) {
-            return JSON.parse(res.data.options[bookmarkedEntries][1]);
+            return JSON.parse(doc.data.options[bookmarkedEntries][1]);
           }
         }
       } catch (error) {
@@ -64,11 +61,9 @@ export function useSaveBookmark() {
     async () => {
       const bookmarks: { entryId: string; type: EntityTypes }[] =
         queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
-      const resp = await lastValueFrom(
-        sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
-          [entriesBookmarks, JSON.stringify(bookmarks)],
-        ]),
-      );
+      const resp = await sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
+        [entriesBookmarks, JSON.stringify(bookmarks)],
+      ]);
       if (resp.data) {
         return resp.data;
       }
@@ -116,11 +111,9 @@ export function useDeleteBookmark() {
       const bookmarks: { entryId: string; type: EntityTypes }[] =
         queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
 
-      return lastValueFrom(
-        sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
-          [entriesBookmarks, JSON.stringify(bookmarks)],
-        ]),
-      );
+      return sdk.services.settings.set(BOOKMARKED_ENTRIES_KEY, [
+        [entriesBookmarks, JSON.stringify(bookmarks)],
+      ]);
     },
     {
       onMutate: async (itemId: string) => {

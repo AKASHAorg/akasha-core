@@ -78,7 +78,7 @@ const getProfileData = async (payload: { pubKey: string; loggedUser?: string }) 
 
   const res = await sdk.api.profile.getProfile(payload);
   return {
-    ...buildProfileMediaLinks(res),
+    ...buildProfileMediaLinks(res.data),
     ...modStatus[0],
   };
 };
@@ -111,7 +111,7 @@ const getProfileDataByEthAddress = async (payload: { ethAddress: string; loggedU
 
   const res = await sdk.api.profile.getProfile(payload);
   return {
-    ...buildProfileMediaLinks(res),
+    ...buildProfileMediaLinks(res.data),
     ...modStatus[0],
   };
 };
@@ -335,7 +335,7 @@ const saveAvatar = async (
       return {
         provider: ProfileProviders.EWA_BASIC,
         property: ProfileProviderProperties.AVATAR,
-        value: res.CID,
+        value: res?.CID,
       };
     } else if (isRemoved) {
       return {
@@ -364,7 +364,7 @@ const saveCoverImage = async (
       return {
         provider: ProfileProviders.EWA_BASIC,
         property: ProfileProviderProperties.COVER_IMAGE,
-        value: res.CID,
+        value: res?.CID,
       };
     } else if (isRemoved) {
       return {

@@ -16,9 +16,9 @@ jest.mock(
   () => () =>
     mockSDK({
       auth: {
-        getMessages: () => Promise.resolve(mockNotifications),
+        getMessages: () => Promise.resolve({ data: mockNotifications }),
         markMessageAsRead: () => Promise.resolve({ data: true }),
-        hasNewNotifications: () => mockOf({ data: true }),
+        hasNewNotifications: () => ({ data: true }),
       },
       profile: {
         getProfile: () => Promise.resolve(mockNotificationsProfiles[0]),
