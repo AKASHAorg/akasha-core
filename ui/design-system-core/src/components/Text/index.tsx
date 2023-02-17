@@ -4,6 +4,7 @@ import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
 import { getWeightClasses } from './getWeightClasses';
+import { Color } from '../types/common.types';
 
 export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -19,8 +20,6 @@ export type BodyText =
 export type ButtonText = 'button-lg' | 'button-md' | 'button-sm';
 
 export type Variant = Heading | BodyText | ButtonText;
-
-export type Color = string | { light: string; dark: string };
 
 export type Alignment = 'start' | 'center' | 'end' | 'justify';
 
@@ -63,7 +62,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
 }) => {
   const tag = getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
-  const colorStyles = getColorClasses(color);
+  const colorStyle = getColorClasses(color);
   const truncateStyle = truncate ? 'truncate' : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
 
@@ -73,7 +72,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        apply`${baseStyles} ${colorStyles} ${alignmentStyle} ${truncateStyle} ${weightStyle}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${weightStyle}`,
       ),
     },
     children,
