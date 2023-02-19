@@ -30,7 +30,7 @@ export const initialize = (options: IntegrationRegistrationOptions & { logger: L
         next: msg => {
           notification.notify(
             '@akashaorg/app-notifications',
-            msg.filter(m => !m.read),
+            msg.data.filter(m => !m.read),
           );
         },
         error: err => {
@@ -42,7 +42,7 @@ export const initialize = (options: IntegrationRegistrationOptions & { logger: L
         .pipe(
           mergeMap(() => {
             return from(sdk.api.auth.getMessages({})).pipe(
-              map(newMsg => newMsg.filter(m => !m.read)),
+              map(newMsg => newMsg.data.filter(m => !m.read)),
             );
           }),
         )

@@ -1,5 +1,4 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { lastValueFrom } from 'rxjs';
 
 export const appId = '0xa9441406239791b073bea64df44bb32b2f15e6bae637847274b052e9b0bbdbbc';
 export const serializeMessage = content => {
@@ -21,12 +20,14 @@ export const sendMessage = async (to: string, body: unknown) => {
     },
   };
   const message = await sdk.api.auth.sendMessage(to, serializedContent);
+
+  if (!message.data) {
+    throw new Error('Message sending not implemented');
+  }
+
   return {
-    id: message.id,
-    from: message.from,
-    to: message.to,
-    createdAt: message.createdAt,
-    body: body,
+    ...message.data,
+    body,
   };
 };
 
@@ -37,7 +38,8 @@ export const getMessages = async () => {
 
 export const getTextileUsage = async () => {
   const sdk = getSDK();
-  return sdk.api.auth.getTextileUsage();
+  //return sdk.api.auth.getTextileUsage();
+  return 0;
 };
 
 export const markAsRead = async (messageIds: string[]) => {
@@ -47,6 +49,9 @@ export const markAsRead = async (messageIds: string[]) => {
 
 export const getHubUser = async () => {
   const sdk = getSDK();
-  const session = await lastValueFrom(sdk.api.auth.getSession());
-  return session.data.user;
+  const session = await sdk.api.auth.getSession();
+  if (!session.data) {
+    return null;
+  }
+  return (session.data as { user: string }).user;
 };

@@ -1,35 +1,45 @@
+function withOpacity(variable) {
+  return ({ opacityValue }) => {
+    if (opacityValue === undefined) {
+      return `rgb(var(${variable}))`;
+    }
+    return `rgb(var(${variable}) / ${opacityValue})`;
+  };
+}
+
 export default {
   darkMode: 'class',
   theme: {
     extend: {
       colors: {
         primary: 'linear-gradient(90deg, var(--foundation-primary))',
-        primaryStart: 'var(--gradient-primary-start)',
-        primaryStop: 'var(--gradient-primary-stop)',
+        primaryStart: withOpacity('--gradient-primary-start'),
+        primaryStop: withOpacity('--gradient-primary-stop'),
         secondary: {
-          light: 'var(--foundation-secondary)',
-          dark: 'var(--foundation-secondary-dark)',
+          light: withOpacity('--foundation-secondary'),
+          dark: withOpacity('--foundation-secondary-dark'),
         },
-        black: 'var(--system-black)',
-        white: 'var(--system-white)',
-        grey1: 'var(--system-grey-1)',
-        grey2: 'var(--system-grey-2)',
-        grey3: 'var(--system-grey-3)',
-        grey4: 'var(--system-grey-4)',
-        grey5: 'var(--system-grey-5)',
-        grey6: 'var(--system-grey-6)',
-        grey7: 'var(--system-grey-7)',
-        grey8: 'var(--system-grey-8)',
-        success: 'var(--feedback-success)',
+        black: withOpacity('--system-black'),
+        white: withOpacity('--system-white'),
+        grey1: withOpacity('--system-grey-1'),
+        grey2: withOpacity('--system-grey-2'),
+        grey3: withOpacity('--system-grey-3'),
+        grey4: withOpacity('--system-grey-4'),
+        grey5: withOpacity('--system-grey-5'),
+        grey6: withOpacity('--system-grey-6'),
+        grey7: withOpacity('--system-grey-7'),
+        grey8: withOpacity('--system-grey-8'),
+        grey9: withOpacity('--system-grey-9'),
+        success: withOpacity('--feedback-success'),
         warning: {
-          light: 'var(--feeback-warning)',
-          dark: 'var(--feeback-warning-dark)',
+          light: withOpacity('--feedback-warning'),
+          dark: withOpacity('--feedback-warning-dark'),
         },
         error: {
-          light: 'var(--feedback-error)',
-          dark: 'var(--feedback-error-dark)',
+          light: withOpacity('--feedback-error'),
+          dark: withOpacity('--feedback-error-dark'),
         },
-        elevation: 'var(--elevation)',
+        elevation: withOpacity('--elevation'),
       },
       borderRadius: {
         large: '20px',

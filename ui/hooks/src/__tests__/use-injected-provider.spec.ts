@@ -2,15 +2,16 @@ import { renderHook } from '@testing-library/react-hooks';
 import { mockSDK } from '@akashaorg/af-testing';
 import { createWrapper } from './utils';
 import { useInjectedProvider, useRequiredNetworkName } from '../use-injected-provider';
-import { of as mockOf } from 'rxjs';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
       common: {
         web3: {
-          detectInjectedProvider: () => mockOf({ data: 'MetaMask' }),
-          getRequiredNetworkName: () => mockOf({ data: 'Rinkeby' }),
+          detectInjectedProvider: () => ({ data: 'MetaMask' }),
+          getRequiredNetworkName: () => {
+            return { data: 'Rinkeby' };
+          },
         },
       },
     });

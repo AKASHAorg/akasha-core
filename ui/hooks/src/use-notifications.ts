@@ -1,4 +1,3 @@
-import { lastValueFrom } from 'rxjs';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
@@ -14,7 +13,7 @@ const getNotifications = async () => {
   const sdk = getSDK();
   const getMessagesResp = await sdk.api.auth.getMessages({});
 
-  const getProfilesCalls = getMessagesResp.map(message => {
+  const getProfilesCalls = getMessagesResp.data.map(message => {
     const pubKey = message.body.value.author || message.body.value.follower;
     if (pubKey) {
       return sdk.api.profile.getProfile({ pubKey });
@@ -23,20 +22,18 @@ const getNotifications = async () => {
   const profilesResp = await Promise.all(getProfilesCalls);
 
   let completeMessages = [];
-  profilesResp
-    ?.filter(res => res)
-    .map(profileResp => {
-      const profileData = buildProfileMediaLinks(profileResp);
-      completeMessages = getMessagesResp.map(message => {
-        if (message.body.value.author === profileData.pubKey) {
-          message.body.value.author = profileData;
-        }
-        if (message.body.value.follower === profileData.pubKey) {
-          message.body.value.follower = profileData;
-        }
-        return message;
-      });
+  profilesResp?.filter(Boolean).map(profile => {
+    const profileData = buildProfileMediaLinks(profile.data);
+    completeMessages = getMessagesResp.data.map(message => {
+      if (message.body.value.author === profileData.pubKey) {
+        message.body.value.author = profileData;
+      }
+      if (message.body.value.follower === profileData.pubKey) {
+        message.body.value.follower = profileData;
+      }
+      return message;
     });
+  });
   return completeMessages;
 };
 
@@ -106,7 +103,7 @@ export function useMarkAsRead() {
 
 const checkNewNotifications = async () => {
   const sdk = getSDK();
-  const res = await lastValueFrom(sdk.api.auth.hasNewNotifications());
+  const res = await sdk.api.auth.hasNewNotifications();
   return res.data;
 };
 

@@ -6,7 +6,7 @@
     "rootDir": "./src",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react-jsx"
+    "jsx": "react"
   },
   "include": ["./src/**/*"]
 }
