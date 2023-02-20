@@ -1,28 +1,36 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
 
-export interface ITextLine {
-  title?: string;
+export type TextLineProps = {
   animated?: boolean;
   width?: string;
   height?: string;
+  background?: string;
+  round?: string;
   className?: string;
-}
-const baseStyles = apply`min-h-[18px] flex flex-row justify-center items-center px-2 py-2`;
+};
 
-const TextLine: React.FC<ITextLine> = props => {
-  const { animated, title, width, height, className } = props;
+const baseStyle = apply`min-h-[18px]`;
+
+const TextLine: React.FC<TextLineProps> = props => {
+  const {
+    animated,
+    width = 'w-[19.4375rem]',
+    height = 'h-[1.1875rem]',
+    background = 'bg-gradient-to-r from-grey6 to-white dark:from-grey5 dark:to-grey7',
+    round = 'rounded',
+    className,
+  } = props;
   const instanceStyles = apply`
-    ${baseStyles}
+    ${baseStyle}
+    ${animated ? 'animate-pulse' : ''}
+    ${width}
+    ${height}
+    ${background}
+    ${round}
     ${className}
-    ${
-      animated
-        ? 'bg-gradient-to-r from-purple-500 to-pink-500 animate-[bgRotate_1s_ease_infinite]'
-        : ''
-    }
-    ${width ? `w-[${width}]` : ''}
-    ${width ? `h-[${height}]` : ''}
   `;
-  return <div className={tw(instanceStyles)}>{title}</div>;
+
+  return <div className={tw(instanceStyles)} />;
 };
 export default TextLine;
