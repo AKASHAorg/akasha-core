@@ -44,10 +44,8 @@ class AppSettings {
    * @param appName - Name of the app
    */
   async get(appName: string) {
-    const collection = await lastValueFrom(
-      this._db.getCollection<AppsSchema>(availableCollections.Apps),
-    );
-    const doc = await collection.data.findOne({ name: { $eq: appName } });
+    const collection = this._db.getCollection<AppsSchema>(availableCollections.Apps);
+    const doc = await collection.findOne({ name: { $eq: appName } });
     return createFormattedValue(doc);
   }
 
@@ -55,10 +53,8 @@ class AppSettings {
    * Returns all installed apps
    */
   async getAll() {
-    const collection = await lastValueFrom(
-      this._db.getCollection<AppsSchema>(availableCollections.Apps),
-    );
-    const doc = await collection.data.find().toArray();
+    const collection = this._db.getCollection<AppsSchema>(availableCollections.Apps);
+    const doc = await collection.find().toArray();
     return createFormattedValue(doc);
   }
 
@@ -68,15 +64,13 @@ class AppSettings {
    */
   async install(app: { name?: string; id?: string }, isLocal = false) {
     if (isLocal && __DEV__) {
-      const collection = await lastValueFrom(
-        this._db.getCollection<any>(availableCollections.Apps),
-      );
+      const collection = this._db.getCollection<any>(availableCollections.Apps);
       this._globalChannel.next({
         data: { name: app.name, id: app.id },
         event: APP_EVENTS.INFO_READY,
       });
 
-      return collection.data.save({ name: app.name, id: app.id });
+      return collection.save({ name: app.name, id: app.id });
     }
     const release = await this._icRegistry.getLatestVersionInfo(app);
     const currentInfo = await this.get(release.name);
@@ -88,9 +82,7 @@ class AppSettings {
       this._log.warn(`${app.name} cannot be installed.`);
       return false;
     }
-    const collection = await lastValueFrom(
-      this._db.getCollection<AppsSchema>(availableCollections.Apps),
-    );
+    const collection = this._db.getCollection<AppsSchema>(availableCollections.Apps);
     const integrationInfo = {
       id: release.integrationID,
       name: release.name,
@@ -103,7 +95,7 @@ class AppSettings {
       data: integrationInfo,
       event: APP_EVENTS.INFO_READY,
     });
-    return collection.data.save(integrationInfo);
+    return collection.save(integrationInfo);
   }
 
   /**
@@ -113,10 +105,8 @@ class AppSettings {
   async uninstall(appName: string): Promise<void> {
     const currentInfo = await this.get(appName);
     if (currentInfo?.data?._id) {
-      const collection = await lastValueFrom(
-        this._db.getCollection<AppsSchema>(availableCollections.Apps),
-      );
-      await collection.data.delete(currentInfo.data._id);
+      const collection = this._db.getCollection<AppsSchema>(availableCollections.Apps);
+      await collection.delete(currentInfo.data._id);
       this._globalChannel.next({
         data: { name: appName },
         event: APP_EVENTS.REMOVED,
@@ -125,11 +115,9 @@ class AppSettings {
   }
 
   async toggleAppStatus(appName: string): Promise<boolean> {
-    const collection = await lastValueFrom(
-      this._db.getCollection<AppsSchema>(availableCollections.Settings),
-    );
+    const collection = this._db.getCollection<AppsSchema>(availableCollections.Settings);
     const query: unknown = { name: { $eq: appName } };
-    const doc = await collection.data.findOne(query);
+    const doc = await collection.findOne(query);
     if (doc._id) {
       doc.status = !doc.status;
       await doc.save();
