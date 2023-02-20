@@ -5,8 +5,8 @@ import { getJustifyClasses } from './getJustifyClasses';
 import { apply, tw } from '@twind/core';
 
 export type Direction = 'column' | 'column-reverse' | 'row' | 'row-reverse';
-export type Justify = 'start' | 'end' | 'center' | 'stretch';
 export type Align = 'start' | 'end' | 'center' | 'stretch' | 'baseline';
+export type Justify = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
 
 type StackProps = {
   direction?: 'column' | 'column-reverse' | 'row' | 'row-reverse';
