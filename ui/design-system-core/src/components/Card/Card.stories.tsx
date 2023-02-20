@@ -18,5 +18,6 @@ const CardContents = (
 export const Default = Template.bind({});
 Default.args = {
   margin: 'auto',
+  radius: 8,
   children: CardContents,
 };
