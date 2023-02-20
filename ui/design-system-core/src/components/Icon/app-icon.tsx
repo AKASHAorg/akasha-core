@@ -49,7 +49,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     }
     if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
       return (
-        <img className={tw(`${sizesMap[size]} rounded-[50%] bject-contain`)} src={appImg?.value} />
+        <img className={tw(`${sizesMap[size]} rounded-[50%] object-contain`)} src={appImg?.value} />
       );
     }
     return <Icon type={placeholderIconType} plain={plain} accentColor={accentColor} />;
