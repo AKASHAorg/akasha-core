@@ -1,5 +1,3 @@
-import { of } from 'rxjs';
-
 const mockGetBookmarks = {
   data: {
     _id: '01G10G10FM8HBNX3YFN407QX8Y',
@@ -36,4 +34,4 @@ export const mockQueryData = [
   },
 ];
 
-export const mockGetBookmarksObservable = of(mockGetBookmarks);
+export const mockGetBookmarksAsync = Promise.resolve(mockGetBookmarks);

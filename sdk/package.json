@@ -12,7 +12,6 @@
     "@metamask/detect-provider": "2.0.0",
     "@openzeppelin/contracts": "4.8.0",
     "@openzeppelin/contracts-upgradeable": "4.8.0",
-    "@textile/hub": "6.3.4",
     "@textile/threaddb": "0.2.4",
     "@toruslabs/openlogin": "2.10.0",
     "@walletconnect/web3-provider": "1.8.0",

@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import QuickLRU from 'quick-lru';
-import { createObservableValue } from '../helpers/observable';
+import { createFormattedValue } from '../helpers/observable';
 import hash from 'object-hash';
 
 export type IQuickLRU = QuickLRU<string, any>;
@@ -14,7 +14,7 @@ class Stash {
    */
   create(args: { maxSize: number; maxAge: number }) {
     const cache = new QuickLRU<never, never>(args);
-    return createObservableValue(cache);
+    return createFormattedValue(cache);
   }
 
   /**

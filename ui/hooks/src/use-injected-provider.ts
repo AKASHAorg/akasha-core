@@ -1,4 +1,3 @@
-import { lastValueFrom } from 'rxjs';
 import { useQuery } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
@@ -12,7 +11,7 @@ const { INJECTED_PROVIDER_KEY, CONNECT_PROVIDER_KEY, REQUIRED_NETWORK_KEY } = co
 
 const getInjectedProvider = async () => {
   const sdk = getSDK();
-  const provider = await lastValueFrom(sdk.services.common.web3.detectInjectedProvider());
+  const provider = await sdk.services.common.web3.detectInjectedProvider();
 
   // get detected provider details
   const details = getProviderDetails(provider.data);
@@ -27,23 +26,23 @@ const connectProvider = async (provider: EthProviders) => {
 
 const getRequiredNetwork = async () => {
   const sdk = getSDK();
-  const networkName = await lastValueFrom(sdk.services.common.web3.getRequiredNetworkName());
+  const networkName = sdk.services.common.web3.getRequiredNetworkName();
   return networkName.data;
 };
 
 /**
- * An utility function to disconnect from currently connected network
+ * A utility function to disconnect from currently connected network
  */
 export const disconnectProvider = async () => {
   const sdk = getSDK();
   return sdk.services.common.web3.disconnect();
 };
 /**
- * An utility function to switch to required network - Metamask
+ * A utility function to switch to required network - Metamask
  */
 export const switchToRequiredNetwork = async () => {
   const sdk = getSDK();
-  await lastValueFrom(sdk.services.common.web3.switchToRequiredNetwork());
+  await sdk.services.common.web3.switchToRequiredNetwork();
 };
 
 /**
