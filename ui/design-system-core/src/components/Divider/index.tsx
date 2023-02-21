@@ -6,7 +6,7 @@ type DividerProps = {
   className?: string;
 };
 
-const Divider: React.FC<PropsWithChildren<DividerProps>> = ({ className, children }) => {
+const Divider: React.FC<PropsWithChildren<DividerProps>> = ({ className = '', children }) => {
   return (
     <div className={tw(apply(`rounded-[1.25rem] h-px w-full bg-grey8 dark:bg-grey5 ${className}`))}>
       {children}

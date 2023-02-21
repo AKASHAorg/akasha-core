@@ -11,7 +11,7 @@ export type CircularPlaceholderProps = {
   className?: string;
 };
 
-const baseStyle = apply`rounded-full border-2 border-white dark:border-grey2 bg-placeholder-gradient-light dark:placeholder-gradient-dark`;
+const baseStyle = apply`rounded-full border-2 border-white dark:border-grey2 bg-placeholder-gradient-light dark:bg-placeholder-gradient-dark`;
 
 export const CircularPlaceholder: React.FC<CircularPlaceholderProps> = props => {
   const { title, animated, width = 'w-20', height = 'h-20', className } = props;
