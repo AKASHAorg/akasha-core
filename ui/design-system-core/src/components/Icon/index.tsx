@@ -63,7 +63,7 @@ const Icon: React.FC<IconProps> = props => {
   // this determines what prop to target - 'fill' for fillIcons, 'stroke' for others
   const svgPrefix = isfill ? 'fill' : 'stroke';
 
-  const className = `flex items-center select-none ${
+  const className = `flex items-center justify-center select-none ${
     plain ? `[& *]:${svgPrefix}-black dark:[& *]:${svgPrefix}-white` : ''
   } ${color ? `[& *]:${svgPrefix}-${color}` : ''} ${
     accentColor ? `[& *]:${svgPrefix}-secondary-dark` : ''
