@@ -4,11 +4,9 @@ import { tw } from '@twind/core';
 import { IMenuItem } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button, { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import MenuItemLabel from './menu-item-label';
-import MenuSubItems from './menu-sub-items';
+import ListSidebarApps from './list-sidebar-apps';
 
 export interface ISidebarProps {
   worldAppsTitleLabel: string;
@@ -116,38 +114,6 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     }
   };
 
-  const listApps = (list: IMenuItem[], hasBorderTop = false) => (
-    <div className={tw(`flex flex-col py-2 ${hasBorderTop ? 'border-t-1 border-grey8' : ''}`)}>
-      {list?.map((app, idx) => (
-        <React.Fragment key={app.label + idx}>
-          {app.subRoutes.length > 0 ? (
-            <Accordion
-              className="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
-              titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
-              contentNode={
-                <MenuSubItems
-                  menuItem={app}
-                  activeOption={activeOption}
-                  onOptionClick={handleOptionClick}
-                />
-              }
-            />
-          ) : (
-            <div key={app.label + idx} className={tw('px-4 hover:bg-grey8 dark:hover:bg-grey5')}>
-              <div className={tw('p-2 cursor-pointer')}>
-                <MenuItemLabel
-                  menuItem={app}
-                  isActive={false}
-                  onClickMenuItem={handleAppIconClick}
-                />
-              </div>
-            </div>
-          )}
-        </React.Fragment>
-      ))}
-    </div>
-  );
-
   return (
     <div
       className={tw(
@@ -177,10 +143,25 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         */}
       <div className={tw('flex flex-col max-h-[calc(100vh - 345px)] overflow-auto')}>
         {/* container for world apps */}
-        {worldApps?.length > 0 && listApps(worldApps)}
+        {worldApps?.length > 0 && (
+          <ListSidebarApps
+            list={worldApps}
+            activeOption={activeOption}
+            onOptionClick={handleOptionClick}
+            onClickMenuItem={handleAppIconClick}
+          />
+        )}
 
         {/* container for user-installed apps */}
-        {userInstalledApps?.length > 0 && listApps(userInstalledApps, true)}
+        {userInstalledApps?.length > 0 && (
+          <ListSidebarApps
+            list={userInstalledApps}
+            activeOption={activeOption}
+            hasBorderTop={true}
+            onOptionClick={handleOptionClick}
+            onClickMenuItem={handleAppIconClick}
+          />
+        )}
       </div>
 
       <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
