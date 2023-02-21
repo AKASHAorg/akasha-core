@@ -20,10 +20,10 @@ export const CircularPlaceholder: React.FC<CircularPlaceholderProps> = props => 
   const heightStyle = getHeightClasses(height);
 
   const instanceStyles = apply`
-    ${baseStyle} 
+    ${baseStyle}
     ${animated ? 'animate-pulse' : ''}
-    ${widthStyle} 
-    ${heightStyle} 
+    ${widthStyle}
+    ${heightStyle}
     ${className}
 `;
 
