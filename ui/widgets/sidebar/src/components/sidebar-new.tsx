@@ -4,6 +4,7 @@ import { tw } from '@twind/core';
 import { IMenuItem } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import Button, { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ListSidebarApps from './list-sidebar-apps';
@@ -181,13 +182,13 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
               <a href={icon.link} target="_blank" rel="noreferrer noopener">
-                <Button
-                  icon={icon.name}
-                  greyBg={true}
-                  primary={true}
-                  iconOnly={true}
-                  isCustomIcon={true}
-                />
+                <div
+                  className={tw(
+                    'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
+                  )}
+                >
+                  <Icon type={icon.name} isCustomIcon={true} plain={true} accentColor={true} />
+                </div>
               </a>
             </div>
           ))}
