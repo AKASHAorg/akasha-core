@@ -49,8 +49,10 @@ const Toggle: React.FC<iToggleProps> = ({
 
   // Setting the color of the button and circle in two cases: disabled and normal button.
   const color = disabled
-    ? 'bg-grey7 border([1px] grey4) after:bg-grey4'
-    : 'bg-white dark:bg-grey3 border([1px] secondary-light) after:bg-grey6';
+    ? `bg-grey7 border([1px] grey4) after:bg-grey4`
+    : `bg-white dark:bg-grey3 border([1px] secondary-light)
+    after:bg-grey6 after:border after:border-grey6
+    peer-checked:bg-white peer-checked:after:border-secondary-light peer-checked:after:bg-secondary-light`;
 
   const baseTransitionStyle = 'after:transition-all after:duration-300';
 
@@ -59,11 +61,10 @@ const Toggle: React.FC<iToggleProps> = ({
       ${buttonSize}
       rounded-full
       hover:shadow-md
-      ${color}
       ${spacingProperties}
       ${pseudoCircleSizingProperties}
-      after:rounded-full after:border after:border-grey6
-      peer-checked:bg-white peer-checked:after:border-secondary-light peer-checked:after:bg-secondary-light
+      after:rounded-full
+      ${color}
       ${baseTransitionStyle}
       `;
   const instanceIconStyle = apply`
@@ -80,6 +81,7 @@ const Toggle: React.FC<iToggleProps> = ({
           type="checkbox"
           id={id}
           disabled={disabled}
+          checked={enabled}
           className="peer sr-only"
           onClick={() => setEnabled(!enabled)}
         />

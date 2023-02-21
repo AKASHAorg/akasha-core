@@ -30,9 +30,24 @@ IconToggle.args = {
   iconUnchecked: 'MoonIcon',
 };
 
+export const DisabledIconToggle = Template.bind({});
+DisabledIconToggle.args = {
+  checked: true,
+  iconChecked: 'SunIcon',
+  iconUnchecked: 'MoonIcon',
+  disabled: true,
+};
+
 export const DisabledToggle = Template.bind({});
 DisabledToggle.args = {
   checked: false,
+  size: 'large',
+  disabled: true,
+};
+
+export const DisabledEnabledToggle = Template.bind({});
+DisabledEnabledToggle.args = {
+  checked: true,
   size: 'large',
   disabled: true,
 };
