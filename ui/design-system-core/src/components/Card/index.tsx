@@ -20,7 +20,7 @@ const baseStyles = apply`
   flex
 `;
 
-export const Card: React.FC<PropsWithChildren<CardProps>> = props => {
+const Card: React.FC<PropsWithChildren<CardProps>> = props => {
   const {
     elevation = 'none',
     background = { light: 'bg-white', dark: 'bg-grey2' },

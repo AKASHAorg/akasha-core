@@ -8,7 +8,7 @@ export type Direction = 'column' | 'column-reverse' | 'row' | 'row-reverse';
 export type Align = 'start' | 'end' | 'center' | 'stretch' | 'baseline';
 export type Justify = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
 
-type StackProps = {
+export type StackProps = {
   direction?: 'column' | 'column-reverse' | 'row' | 'row-reverse';
   justify?: Justify;
   align?: Align;

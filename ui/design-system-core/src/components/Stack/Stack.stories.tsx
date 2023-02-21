@@ -1,12 +1,12 @@
 import React from 'react';
-import Stack from './index';
+import Stack, { StackProps } from './index';
 
 export default {
   title: 'Stack/Stack',
   component: Stack,
 };
 
-const Template = args => (
+const Template = (args: StackProps) => (
   <Stack {...args}>
     <div>Element 1</div>
     <div>Element 2</div>
