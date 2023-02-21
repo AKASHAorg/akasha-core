@@ -17,15 +17,14 @@ BaseToggle.args = {
 
 export const LargeToggle = Template.bind({});
 LargeToggle.args = {
-  label: 'Toggle button',
   checked: false,
   iconChecked: 'SunIcon',
   iconUnchecked: 'MoonIcon',
   size: 'large',
 };
+
 export const IconToggle = Template.bind({});
 IconToggle.args = {
-  label: 'Toggle button',
   checked: false,
   iconChecked: 'SunIcon',
   iconUnchecked: 'MoonIcon',
@@ -33,7 +32,6 @@ IconToggle.args = {
 
 export const DisabledToggle = Template.bind({});
 DisabledToggle.args = {
-  label: 'Toggle button',
   checked: false,
   size: 'large',
   disabled: true,
