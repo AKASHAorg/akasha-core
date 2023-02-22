@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import Icon, { IconName } from '../../Icon';
+import Icon, { IconType } from '../../Icon';
 import Text from '../../Text';
 import { Status, STATUS_TO_COLOR_MAP } from '../../types/common.types';
 import { apply, tw } from '@twind/core';
@@ -21,7 +21,7 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, 
     <div
       className={tw(apply('flex items-center	gap-1.5'))} /* @TODO: Replace with stack component */
     >
-      {status && <Icon icon={STATUS_TO_ICON_MAP[status]} styling={tw(apply(iconStyle))} />}
+      {status && <Icon type={STATUS_TO_ICON_MAP[status]} styling={tw(apply(iconStyle))} />}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}
       </Text>
@@ -29,7 +29,7 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, 
   );
 };
 
-const STATUS_TO_ICON_MAP: Record<Status, IconName> = {
+const STATUS_TO_ICON_MAP: Record<Status, IconType> = {
   success: 'CheckCircleIcon',
   error: 'XCircleIcon',
   warning: 'ExclamationTriangleIcon',

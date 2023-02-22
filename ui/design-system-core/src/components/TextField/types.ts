@@ -1,9 +1,9 @@
-import { IconName } from '../Icon';
+import { IconType } from '../Icon';
 import { Status } from '../types/common.types';
 
 export type InputProps = {
-  iconLeft?: IconName;
-  iconRight?: IconName;
+  iconLeft?: IconType;
+  iconRight?: IconType;
   status?: Status;
 } & JSX.IntrinsicElements['input'];
 

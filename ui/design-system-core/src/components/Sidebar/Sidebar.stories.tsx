@@ -24,9 +24,9 @@ BaseSidebar.args = {
   footerLabel: 'Get in Touch',
   listItems: sidebarItems,
   footerIcons: [
-    { name: 'BeakerIcon', link: '' },
-    { name: 'BeakerIcon', link: '' },
-    { name: 'BeakerIcon', link: '' },
-    { name: 'BeakerIcon', link: '' },
+    { name: 'Github', link: '' },
+    { name: 'Discord', link: '' },
+    { name: 'Telegram', link: '' },
+    { name: 'Twitter', link: '' },
   ],
 };
