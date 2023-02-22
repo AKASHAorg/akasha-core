@@ -1,10 +1,11 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Icon, { IconType } from '@akashaorg/design-system-core/lib/components/Icon';
-
+import DS from '@akashaorg/design-system-core';
 import { IMenuItem } from '@akashaorg/typings/ui';
+import { IconType } from '@akashaorg/design-system-core/lib/components/Icon';
+
+const { Icon, Text } = DS;
 
 export interface IMenuItemLabelProps {
   menuItem: IMenuItem;

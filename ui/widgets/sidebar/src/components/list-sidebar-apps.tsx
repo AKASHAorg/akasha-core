@@ -1,11 +1,13 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
+import DS from '@akashaorg/design-system-core';
 import { IMenuItem } from '@akashaorg/typings/ui';
-import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';
+
+const { Accordion } = DS;
 
 export interface IListSidebarAppsProps {
   list: IMenuItem[];

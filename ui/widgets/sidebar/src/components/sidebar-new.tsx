@@ -1,11 +1,11 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
+import DS from '@akashaorg/design-system-core';
 import { IMenuItem } from '@akashaorg/typings/ui';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button, { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
+import { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
+
+const { Avatar, Button, Icon, Text } = DS;
 
 import ListSidebarApps from './list-sidebar-apps';
 
