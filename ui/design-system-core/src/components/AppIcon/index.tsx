@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
 
-import { Stack } from 'grommet';
 import { LogoSourceType, LogoTypeSource } from '@akashaorg/typings/ui';
 
-import Icon, { IconType, iconTypes } from '.';
+import Icon, { IconType, iconTypes } from '../Icon';
 
 export interface IconSize {
   size?: 'xs' | 'sm' | 'md' | 'lg';
@@ -16,8 +15,8 @@ export interface IAppIcon extends IconSize {
   onClick?: React.EventHandler<React.SyntheticEvent>;
   placeholderIconType: IconType;
   plain?: boolean;
-  backgroundColor?: string;
   accentColor?: boolean;
+  isCustomIcon?: boolean;
   // props for notifications icon
   stackedIcon?: boolean;
   hasNewNotifs?: boolean;
@@ -37,34 +36,48 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     placeholderIconType,
     size = 'md',
     plain,
-    backgroundColor = 'white',
     accentColor,
     stackedIcon,
+    isCustomIcon,
     hasNewNotifs,
   } = props;
 
   const renderAppImg = () => {
     if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
-      return <Icon type={appImg?.value} plain={plain} size={size} accentColor={accentColor} />;
+      return (
+        <Icon
+          type={appImg?.value}
+          plain={plain}
+          size={size}
+          accentColor={accentColor}
+          isCustomIcon={isCustomIcon}
+        />
+      );
     }
     if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
       return (
         <img className={tw(`${sizesMap[size]} rounded-[50%] object-contain`)} src={appImg?.value} />
       );
     }
-    return <Icon type={placeholderIconType} plain={plain} accentColor={accentColor} />;
+    return (
+      <Icon
+        type={placeholderIconType}
+        plain={plain}
+        accentColor={accentColor}
+        isCustomIcon={isCustomIcon}
+      />
+    );
   };
 
-  const className = `flex items-center justify-center ${sizesMap[size]} round-[50%] cursor-pointer bg-${backgroundColor}`;
+  const className = `${sizesMap[size]} flex items-center justify-center relative rounded-full bg-grey9 dark:bg-grey3`;
 
   if (stackedIcon)
     return (
       <div className={tw(className)} ref={ref} onClick={onClick}>
-        {/* @TODO: implement stack with twind */}
-        <Stack anchor="top-right">
-          {renderAppImg()}
-          {hasNewNotifs && <div className={tw('w-2 h-2 rounded-[50%] bg-secondary-dark')} />}
-        </Stack>
+        {renderAppImg()}
+        {hasNewNotifs && (
+          <div className={tw('w-2 h-2 rounded-full absolute top-0 right-0 bg-secondary-dark')} />
+        )}
       </div>
     );
 
@@ -75,4 +88,4 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
   );
 });
 
-export { AppIcon };
+export default AppIcon;

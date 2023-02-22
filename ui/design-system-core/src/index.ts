@@ -1,5 +1,6 @@
 import Accordion from './components/Accordion';
 import AppAvatar from './components/AppAvatar';
+import AppIcon from './components/AppIcon';
 import Avatar from './components/Avatar';
 import BasicCardBox from './components/BasicCardBox';
 import BasicPopover from './components/BasicPopover';
@@ -23,6 +24,7 @@ import Tooltip from './components/Tooltip';
 export default {
   Accordion,
   AppAvatar,
+  AppIcon,
   Avatar,
   BasicCardBox,
   BasicPopover,

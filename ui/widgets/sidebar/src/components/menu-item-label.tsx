@@ -5,7 +5,7 @@ import DS from '@akashaorg/design-system-core';
 import { IMenuItem } from '@akashaorg/typings/ui';
 import { IconType } from '@akashaorg/design-system-core/lib/components/Icon';
 
-const { Icon, Text } = DS;
+const { AppIcon, Text } = DS;
 
 export interface IMenuItemLabelProps {
   menuItem: IMenuItem;
@@ -36,7 +36,13 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
           'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
         )}
       >
-        <Icon type={menuItem.logo.value as IconType} isCustomIcon={true} plain={true} />
+        <AppIcon
+          size="lg"
+          plain={true}
+          isCustomIcon={true}
+          stackedIcon={menuItem.logo.value === 'notifications'}
+          placeholderIconType={menuItem.logo.value as IconType}
+        />
       </div>
       <Text
         variant="body1"
