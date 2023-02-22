@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps, EventTypes, MenuItemAreaType } from '@akashaorg/typings/ui';
 import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/SideBar/sidebar-menu-item';
 
@@ -25,6 +25,8 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   const currentLocation = useLocation();
 
   const loginQuery = useGetLogin();
+
+  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
@@ -123,10 +125,13 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       worldApps={worldApps}
       currentRoute={currentLocation.pathname}
       // size={size}
+      loggedProfileData={loggedProfileQuery?.data}
       isLoggedIn={!!loginQuery.data.ethAddress}
       loadingUserInstalledApps={false}
-      guestTitle={t('Guest')}
-      guestSubtitle={t('Connect to see exclusive member only features.')}
+      title={loggedProfileQuery?.data?.name ?? t('Guest')}
+      subtitle={
+        loggedProfileQuery?.data?.userName ?? t('Connect to see exclusive member only features.')
+      }
       ctaText={t('Add magic to your world by installing cool apps developed by the community')}
       ctaButtonLabel={t('Check them out!')}
       footerLabel={t('Get in touch')}

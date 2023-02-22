@@ -2,7 +2,7 @@ import React from 'react';
 import { tw } from '@twind/core';
 
 import DS from '@akashaorg/design-system-core';
-import { IMenuItem } from '@akashaorg/typings/ui';
+import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
 import { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
 
 const { Avatar, Button, Icon, Text } = DS;
@@ -19,6 +19,7 @@ export interface ISidebarProps {
   allMenuItems: IMenuItem[];
   activeApps?: string[];
   currentRoute?: string;
+  loggedProfileData?: IProfileData;
   isLoggedIn: boolean;
   hasNewNotifs?: boolean;
   loadingUserInstalledApps: boolean;
@@ -34,15 +35,13 @@ export interface ISidebarProps {
   className?: string;
   menuItem: React.ReactElement;
 
-  guestTitle: string;
-  guestSubtitle: string;
+  title: string;
+  subtitle: string;
   ctaText: string;
   ctaButtonLabel: string;
   footerLabel: string;
   footerIcons: { name: IButtonProps['icon']; link: string }[];
 }
-
-const guestEthAddress = '0x00000000000000000000000000000';
 
 const titleText = 'text-sm font-bold';
 
@@ -54,10 +53,11 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     worldApps,
     allMenuItems,
     currentRoute,
+    loggedProfileData,
     activeApps,
 
-    guestTitle,
-    guestSubtitle,
+    title,
+    subtitle,
     ctaText,
     ctaButtonLabel,
     footerLabel,
@@ -123,14 +123,14 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     >
       <div className={tw('flex flex-row p-4 border-b-1 border-grey8')}>
         <div className={tw('w-fit h-fit mr-2')}>
-          <Avatar ethAddress={guestEthAddress} src={{ url: 'https://placebeard.it/360x360' }} />
+          <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
         </div>
         <div className={tw('w-fit')}>
           <Text variant="footnotes1" className={titleText}>
-            {guestTitle}
+            {title}
           </Text>
           <Text variant="subtitle2" className={tw(subtitleText)}>
-            {guestSubtitle}
+            {subtitle}
           </Text>
         </div>
         <div className={tw('w-fit h-fit ml-6 self-end')}>
