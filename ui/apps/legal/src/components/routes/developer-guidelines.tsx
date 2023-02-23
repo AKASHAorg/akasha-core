@@ -1,12 +1,16 @@
-import * as React from 'react';
-import DS from '@akashaorg/design-system';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { LEGAL_DOCS } from '@akashaorg/typings/ui';
 import { useLegalDoc } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps, LEGAL_DOCS } from '@akashaorg/typings/ui';
 
-const { ErrorInfoCard, ErrorLoader, MdCard } = DS;
+const { MdCard } = DS;
 
-const DeveloperGuidelinesPage = (_props: RootComponentProps) => {
+const { ErrorInfoCard, ErrorLoader } = DSNew;
+
+const DeveloperGuidelinesPage = () => {
   const { t } = useTranslation('app-legal');
 
   const legalDocReq = useLegalDoc(LEGAL_DOCS.APP_GUIDE);
@@ -22,7 +26,7 @@ const DeveloperGuidelinesPage = (_props: RootComponentProps) => {
               <ErrorLoader
                 type="script-error"
                 title={t('There was an error loading the docs')}
-                details={message}
+                details={message as unknown as string}
               />
             )}
             {!message && <MdCard mdText={legalDoc} />}

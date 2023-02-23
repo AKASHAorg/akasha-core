@@ -1,30 +1,26 @@
-import * as React from 'react';
-import DS from '@akashaorg/design-system';
-import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import getSDK from '@akashaorg/awf-sdk';
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
+import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { IntegrationReleaseInfoFragmentFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
-import { useTranslation } from 'react-i18next';
+
 import { INFO } from '../../routes';
 
-const {
-  Box,
-  SubtitleTextIcon,
-  DuplexButton,
-  Icon,
-  ErrorLoader,
-  Spinner,
-  NotificationPill,
-  InfoCard,
-} = DS;
+const { Box, SubtitleTextIcon, DuplexButton, Icon, Spinner, NotificationPill, InfoCard } = DS;
+
+const { ErrorLoader } = DSNew;
 
 export interface IExplorePage extends RootComponentProps {
   installableApps: IntegrationReleaseInfoFragmentFragment[];
   installedAppsInfo?: IntegrationReleaseInfo[];
   isFetching?: boolean;
-  reqError?: Error;
+  reqError?: unknown;
   isUserLoggedIn?: boolean;
 }
 
@@ -88,7 +84,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             type="script-error"
             title={t('There was an error loading the integrations')}
             details={t('We cannot show this page right now')}
-            devDetails={reqError}
+            devDetails={reqError as string}
           />
         )}
         {!isFetching && !reqError && (

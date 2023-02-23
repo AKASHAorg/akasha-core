@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import DS from '@akashaorg/design-system';
+import { useTranslation } from 'react-i18next';
 
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useGetAllInstalledApps,
@@ -14,9 +16,10 @@ import {
   useCurrentNetwork,
   useAppDescription,
 } from '@akashaorg/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
 
-const { Box, ICDetailCard, ErrorLoader } = DS;
+const { Box, ICDetailCard } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const InfoPage: React.FC<RootComponentProps> = props => {
   const { integrationId } = useParams<{ integrationId: string }>();
@@ -92,7 +95,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           type="script-error"
           title={t('There was an error loading the integration info')}
           details={t('We cannot show this integration right now')}
-          devDetails={latestReleaseInfoReq.error}
+          devDetails={latestReleaseInfoReq.error as unknown as string}
         />
       )}
       {!latestReleaseInfoReq.error && (

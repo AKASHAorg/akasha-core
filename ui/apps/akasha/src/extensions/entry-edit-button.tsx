@@ -1,12 +1,16 @@
-import singleSpaReact from 'single-spa-react';
-import * as React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/ui';
-import DS from '@akashaorg/design-system';
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
-const { MenuItemButton, ErrorLoader, ModalContainer } = DS;
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/ui';
+import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+
+const { MenuItemButton, ModalContainer } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const EntryEditButton: React.FC<RootExtensionProps> = props => {
   const { t } = useTranslation('app-akasha-integration');
