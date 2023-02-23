@@ -22,6 +22,7 @@ import {
 import StatModalWrapper from './stat-modal-wrapper';
 import ModeratorLabel from '../routes/moderator-label';
 import routes, { UPDATE_PROFILE } from '../../routes';
+import { Stats, Bio, Links } from '@akashaorg/design-system-core/lib/components/ProfileCard';
 
 const {
   ModalRenderer,
@@ -29,12 +30,8 @@ const {
   ExtensionPoint,
   Box,
   ProfileCardEthereumId,
-  ProfileCardDescription,
   HorizontalDivider,
   TextLine,
-  BasicCardBox,
-  ProfileStatsCard,
-  ProfileLinksCard,
 } = DS;
 
 export interface IProfileHeaderProps {
@@ -251,36 +248,38 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
         {isModerator && <ModeratorLabel label={t('Moderator')} />}
 
-        {profileData.description && (
-          <BasicCardBox>
-            <ProfileCardDescription
-              description={profileData.description}
-              descriptionLabel={t('About me')}
-            />
-          </BasicCardBox>
-        )}
+        {profileData.description && <Bio title={t('Bio')} biography={profileData.description} />}
 
         {socialLinks.length > 0 && (
-          <ProfileLinksCard
-            titleLabel={t('Find me on')}
+          <Links
+            title={t('Find me on')}
+            links={socialLinks}
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
-            links={socialLinks}
           />
         )}
 
-        <ProfileStatsCard
-          margin={{ bottom: 'large' }}
-          statsTitleLabel={t('Stats')}
-          profileData={profileData}
-          onClickFollowing={handleStatIconClick(1)}
-          onClickFollowers={handleStatIconClick(0)}
-          onClickInterests={handleStatIconClick(2)}
-          onClickPosts={handleNavigateToProfilePosts}
-          followingLabel={t('Following')}
-          followersLabel={t('Followers')}
-          postsLabel={t('Posts')}
-          interestsLabel={t('Interests')}
+        <Stats
+          posts={{
+            label: t('Posts'),
+            total: profileData.totalPosts,
+            onClick: handleNavigateToProfilePosts,
+          }}
+          interests={{
+            label: t('Interests'),
+            total: profileData.totalInterests,
+            onClick: handleStatIconClick(2),
+          }}
+          followers={{
+            label: t('Followers'),
+            total: profileData.totalFollowers,
+            onClick: handleStatIconClick(0),
+          }}
+          following={{
+            label: t('Following'),
+            total: profileData.totalFollowing,
+            onClick: handleStatIconClick(1),
+          }}
         />
       </Box>
     </>

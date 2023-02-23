@@ -8,6 +8,7 @@ import menuRoute, { MY_PROFILE } from '../../routes';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import ProfilePageHeader from '../profile-cards/profile-page-header';
+import { ProfileLoading } from '@akashaorg/design-system-core/lib/components/ProfileCard';
 
 const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard, Spinner } = DS;
 
@@ -67,7 +68,9 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') && <Spinner />}
+      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') && (
+        <ProfileLoading />
+      )}
       {(profileDataQuery.status === 'error' ||
         (profileDataQuery.status === 'success' && !profileState)) && (
         <ErrorLoader
