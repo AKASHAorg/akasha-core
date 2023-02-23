@@ -29,12 +29,12 @@ export interface IAvatarProps {
 }
 
 export const avatarSizesMap = {
-  xs: '6',
-  sm: '8',
-  md: '10',
-  lg: '16',
-  xl: '20',
-  xxl: '[7.5rem]',
+  xs: 'w-6 h-6',
+  sm: 'w-8 h-8',
+  md: 'w-10 h-10',
+  lg: 'w-16 h-16',
+  xl: 'w-20 h-20',
+  xxl: 'w-[7.5rem] h-[7.5rem]',
 };
 
 export const avatarBorderSizesMap = {
@@ -49,7 +49,7 @@ export const avatarBorderSizesMap = {
 export const avatarBorderColorsMap = {
   white: 'white',
   darkerBlue: 'grey2',
-  accent: 'secondary',
+  accent: 'secondary-dark',
 };
 
 const Avatar: React.FC<IAvatarProps> = props => {
@@ -81,11 +81,11 @@ const Avatar: React.FC<IAvatarProps> = props => {
 
   const className = `box-border cursor-${
     isClickable ? 'pointer' : 'default'
-  } select-none relative overflow-hidden w-${avatarSizesMap[size]} h-${
-    avatarSizesMap[size]
-  } rounded-full bg-${backgroundColor ? backgroundColor : 'white'} border-${
-    border ? avatarBorderSizesMap[border] : '0'
-  } border-${borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'}`;
+  } select-none relative overflow-hidden ${avatarSizesMap[size]} rounded-full bg-${
+    backgroundColor ? backgroundColor : 'white'
+  } border-${border ? avatarBorderSizesMap[border] : '0'} border-${
+    borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'
+  }`;
 
   const activeOverlayClass =
     'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';

@@ -1,36 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { MenuItem } from './sidebar-menu-item';
-import DS from '@akashaorg/design-system';
-import { useGetLogin } from '@akashaorg/ui-awf-hooks';
+import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps, EventTypes, MenuItemAreaType } from '@akashaorg/typings/ui';
 import { SidebarMenuItemProps } from '@akashaorg/design-system/lib/components/SideBar/sidebar-menu-item';
 
-const { Box, styled, Sidebar, useViewportSize } = DS;
+import Sidebar from './sidebar-new';
+import { MenuItem } from './sidebar-menu-item';
 
 declare const __DEV__: boolean;
-
-const AppSidebar = styled(Sidebar)`
-  min-width: 15em;
-  background-color: ${props => props.theme.colors.cardBackground};
-  @media screen and (max-width: ${props => props.theme.breakpoints.medium.value}px) {
-    height: 100vh;
-    width: 85vw;
-  }
-`;
-
-// const SidebarOverlay = styled(Box)`
-//   width: 100%;
-//   opacity: 0.8;
-//   height: 100vh;
-//   position: fixed;
-//   background-color: ${props => props.theme.colors.overlay};
-//   /* hide overlay from large desktop breakpoint */
-//   @media screen and (min-width: ${props => props.theme.breakpoints.largeDesktop.value}px) {
-//     display: none;
-//   }
-// `;
 
 const SidebarComponent: React.FC<RootComponentProps> = props => {
   const {
@@ -46,9 +24,9 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
 
   const currentLocation = useLocation();
 
-  const { size } = useViewportSize();
-
   const loginQuery = useGetLogin();
+
+  const loggedProfileQuery = useGetProfile(loginQuery.data?.pubKey);
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
@@ -134,39 +112,51 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <>
-      <AppSidebar
-        versionLabel={__DEV__ && 'DEV'}
-        versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
-        worldAppsTitleLabel={t('World Apps')}
-        poweredByLabel="Powered by AKASHA"
-        userInstalledAppsTitleLabel={t('Apps')}
-        userInstalledApps={userInstalledApps}
-        exploreButtonLabel={t('Explore')}
-        allMenuItems={allApps}
-        activeApps={activeIntegrations?.apps}
-        worldApps={worldApps}
-        currentRoute={currentLocation.pathname}
-        size={size}
-        isLoggedIn={!!loginQuery.data.ethAddress}
-        loadingUserInstalledApps={false}
-        onBrandClick={handleBrandClick}
-        onSidebarClose={handleSidebarClose}
-        onClickMenuItem={handleNavigation}
-        onClickExplore={handleClickExplore}
-        /* Menu item will surely have the props,
-           but typescript is not able to infer it
-           because the cloneElement is used
+    <Sidebar
+      versionLabel={__DEV__ && 'DEV'}
+      versionURL="https://github.com/AKASHAorg/akasha-world-framework/discussions/categories/general"
+      worldAppsTitleLabel={t('World Apps')}
+      poweredByLabel="Powered by AKASHA"
+      userInstalledAppsTitleLabel={t('Apps')}
+      userInstalledApps={userInstalledApps}
+      exploreButtonLabel={t('Explore')}
+      allMenuItems={allApps}
+      activeApps={activeIntegrations?.apps}
+      worldApps={worldApps}
+      currentRoute={currentLocation.pathname}
+      // size={size}
+      loggedProfileData={loggedProfileQuery?.data}
+      isLoggedIn={!!loginQuery.data.ethAddress}
+      loadingUserInstalledApps={false}
+      title={loggedProfileQuery?.data?.name ?? t('Guest')}
+      subtitle={
+        loggedProfileQuery?.data?.userName ?? t('Connect to see exclusive member only features.')
+      }
+      ctaText={t('Add magic to your world by installing cool apps developed by the community')}
+      ctaButtonLabel={t('Check them out!')}
+      footerLabel={t('Get in touch')}
+      footerIcons={[
+        { name: 'github', link: 'https://github.com/AKASHAorg' },
+        { name: 'discord', link: '' },
+        { name: 'telegram', link: 'https://t.me/worldofethereum' },
+        { name: 'twitter', link: 'https://twitter.com/AKASHAworld' },
+      ]}
+      onBrandClick={handleBrandClick}
+      onSidebarClose={handleSidebarClose}
+      onClickMenuItem={handleNavigation}
+      onClickExplore={handleClickExplore}
+      /* Menu item will surely have the props,
+          but typescript is not able to infer it
+          because the cloneElement is used
         */
-        menuItem={
-          <MenuItem
-            plugins={props.plugins}
-            loginState={loginQuery?.data}
-            {...({} as SidebarMenuItemProps)}
-          />
-        }
-      />
-    </>
+      menuItem={
+        <MenuItem
+          plugins={props.plugins}
+          loginState={loginQuery?.data}
+          {...({} as SidebarMenuItemProps)}
+        />
+      }
+    />
   );
 };
 
