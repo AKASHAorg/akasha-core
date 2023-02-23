@@ -50,7 +50,7 @@ const Icon: React.FC<IconProps> = props => {
     styling,
   } = props;
 
-  const PassedIcon = isCustomIcon ? CustomIcons[type] : HeroIcons[type];
+  const PassedIcon = isCustomIcon || !HeroIcons[type] ? CustomIcons[type] : HeroIcons[type];
 
   if (!PassedIcon) {
     // tslint:disable-next-line no-console

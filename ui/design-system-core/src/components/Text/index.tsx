@@ -56,7 +56,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
   className,
   variant = 'body1',
-  align,
+  align = 'start',
   color = { dark: 'text-white', light: 'text-black' },
   truncate,
   weight,

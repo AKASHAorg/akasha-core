@@ -12,7 +12,7 @@ export type TextLineProps = {
   className?: string;
 };
 
-const baseStyle = apply`min-h-[18px] bg-placeholder-gradient-light dark:bg-placeholder-gradient-dark`;
+const baseStyle = apply`min-h-[18px] bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
 
 const TextLine: React.FC<TextLineProps> = props => {
   const {

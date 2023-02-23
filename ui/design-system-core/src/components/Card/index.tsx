@@ -17,7 +17,7 @@ export type CardProps = {
 };
 
 const baseStyles = apply`
-  flex
+  block
 `;
 
 const Card: React.FC<PropsWithChildren<CardProps>> = props => {
