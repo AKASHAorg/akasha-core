@@ -74,7 +74,9 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${weightStyle} ${className}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${weightStyle} ${
+          className ?? ''
+        }`,
       ),
     },
     children,

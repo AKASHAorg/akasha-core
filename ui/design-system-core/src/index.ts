@@ -9,6 +9,8 @@ import Card from './components/Card';
 import DuplexButton from './components/DuplexButton';
 import EditorMeter from './components/EditorMeter';
 import ErrorCard from './components/ErrorCard';
+import ErrorLoader from './components/ErrorLoader';
+import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
 import Icon from './components/Icon';
 import Meter from './components/Meter';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
@@ -33,6 +35,8 @@ export default {
   DuplexButton,
   EditorMeter,
   ErrorCard,
+  ErrorLoader,
+  ErrorInfoCard,
   Icon,
   Meter,
   ProfileAvatarButton,
