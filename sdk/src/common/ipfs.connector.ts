@@ -1,9 +1,10 @@
-import { inject, injectable } from 'inversify';
-import { TYPES, LEGAL_DOCS } from '@akashaorg/typings/sdk';
+import {inject, injectable} from 'inversify';
+import {LEGAL_DOCS, TYPES} from '@akashaorg/typings/sdk';
 import Logging from '../logging/index';
-import { CID } from 'multiformats/cid';
-import { base16 } from 'multiformats/bases/base16';
-import { multiaddrToUri } from '@multiformats/multiaddr-to-uri';
+import {CID} from 'multiformats/cid';
+import {base16} from 'multiformats/bases/base16';
+import {multiaddrToUri} from '@multiformats/multiaddr-to-uri';
+import {Client, create} from '@web3-storage/w3up-client';
 import pino from 'pino';
 
 @injectable()
@@ -19,15 +20,37 @@ class AWF_IpfsConnector {
     [LEGAL_DOCS.CODE_OF_CONDUCT]: 'bafkreie6ygpcmpckoxnb6rip62nxztntwu5k2oqmwfvxyubfppwimhype4',
     [LEGAL_DOCS.APP_GUIDE]: 'bafkreidpkbwzpxupnnty4bua5w4n7ddiyugb2ermb2htkxczrw7okan3nu',
   };
+  #w3upClient: Client;
 
   constructor(@inject(TYPES.Log) log: Logging) {
     this._log = log.create('AWF_IpfsConnector');
+    create().then(c => {
+      this.#w3upClient = c;
+    });
   }
 
   getSettings() {
     return {
       gateway: this.gateway,
     };
+  }
+
+  // email is just temporary until delegation works
+  async uploadFile(file: Blob, email?: string) {
+    const spaces = this.#w3upClient.spaces();
+    if (!spaces.length) {
+      const newSpace = await this.#w3upClient.createSpace(`akasha-uploads.${new Date().getTime()}`);
+      await this.#w3upClient.setCurrentSpace(newSpace.did());
+    }
+
+    if (!this.#w3upClient.spaces()[0].registered()) {
+      if (!email) {
+        throw new Error('Must specify an email address');
+      }
+      await this.#w3upClient.registerSpace(email);
+      this._log.info(`Check email received on ${email}`);
+    }
+    return this.#w3upClient.uploadFile(file);
   }
 
   async catDocument<T>(docHash: string | CID, jsonResponse = false): Promise<T> {

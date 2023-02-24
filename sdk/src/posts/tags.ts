@@ -6,6 +6,7 @@ import Gql from '../gql';
 import AWF_Auth from '../auth';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
+import { z } from 'zod';
 
 @injectable()
 class AWF_Tags {
@@ -55,6 +56,7 @@ class AWF_Tags {
    * @param tagName
    */
   async createTag(tagName: string) {
+    z.string().min(3).parse(tagName);
     const auth = await this._auth.authenticateMutationData(tagName);
     const newTag = await this._gql.getAPI().CreateTag(
       { name: tagName },

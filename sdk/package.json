@@ -15,6 +15,7 @@
     "@textile/threaddb": "0.2.4",
     "@toruslabs/openlogin": "2.10.0",
     "@walletconnect/web3-provider": "1.8.0",
+    "@web3-storage/w3up-client": "4.2.0",
     "assert": "2.0.0",
     "browser-image-resizer": "2.4.1",
     "buffer": "6.0.3",
@@ -43,7 +44,8 @@
     "stream-browserify": "3.0.0",
     "uint8arrays": "^4.0.2",
     "util": "0.12.5",
-    "web3-utils": "1.8.1"
+    "web3-utils": "1.8.1",
+    "zod": "3.20.6"
   },
   "peerDependencies": {
     "@multiformats/multiaddr-to-uri": "^9.0.1",
