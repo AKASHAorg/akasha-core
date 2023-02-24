@@ -233,7 +233,7 @@ class AWF_Profile {
     });
     // const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
     // const bufferImage: ArrayBuffer = await resized.image.arrayBuffer();
-    const CID = await this._ipfs.uploadFile(resized.image);
+    const CID = await this._ipfs.uploadFile(resized.image, data.email);
     const cid: string = CID.toString();
     return { CID: cid, size: resized.size, blob: resized.image };
   }
