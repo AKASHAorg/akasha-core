@@ -18,6 +18,7 @@ export interface IconProps {
   disabled?: boolean;
   testId?: string;
   styling?: string;
+  onClick?: () => void;
 }
 
 export const iconTypes: IconType[] = [
@@ -34,7 +35,7 @@ export const iconTypes: IconType[] = [
   'twitter',
 ];
 
-const fillIcons: IconType[] = ['akasha', 'appModeration'];
+const fillIcons: IconType[] = ['akasha', 'appModeration', 'InformationCircleIcon'];
 
 const Icon: React.FC<IconProps> = props => {
   const {
@@ -48,6 +49,7 @@ const Icon: React.FC<IconProps> = props => {
     disabled,
     testId,
     styling,
+    onClick,
   } = props;
 
   const PassedIcon = isCustomIcon ? CustomIcons[type] : HeroIcons[type];
@@ -70,7 +72,7 @@ const Icon: React.FC<IconProps> = props => {
   } ${clickable && !disabled ? `cursor-pointer hover:[& *]:${svgPrefix}-secondary-dark` : ''}`;
 
   return (
-    <div className={tw(className)} ref={ref}>
+    <div className={tw(className)} ref={ref} onClick={onClick}>
       <PassedIcon className={styling} data-testid={testId} />
     </div>
   );
