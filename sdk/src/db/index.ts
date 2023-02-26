@@ -1,9 +1,7 @@
 import { injectable } from 'inversify';
-import { ServiceCallResult } from '@akashaorg/typings/sdk';
 import { Collection, Database } from '@textile/threaddb';
 import settingsSchema from './settings.schema';
 import appSchema from './app.schema';
-import { createObservableStream, createObservableValue } from '../helpers/observable';
 
 export const availableCollections = Object.freeze({
   Settings: settingsSchema.name,
@@ -31,24 +29,24 @@ class DB {
    *
    * @param version - number representing the db version
    */
-  public open(version = 1): ServiceCallResult<Database> {
+  public async open(version = 1): Promise<Database> {
     if (!this._db) {
       throw new Error('Must call `DB:create` first');
     }
 
     if (!this._opened) {
       this._opened = true;
-      return createObservableStream<Database>(this._db.open(version));
+      return this._db.open(version);
     }
-    return createObservableValue<Database>(this._db);
+    return this._db;
   }
 
   /**
    * Get access to the local db
    */
-  public getDb(): ServiceCallResult<Database> {
+  public async getDb(): Promise<Database> {
     this._ensureDbOpened();
-    return createObservableValue<Database>(this._db);
+    return this._db;
   }
 
   /**
@@ -57,9 +55,9 @@ class DB {
    */
   public getCollection<T>(
     name: typeof availableCollections[keyof typeof availableCollections],
-  ): ServiceCallResult<Collection<T>> {
+  ): Collection<T> {
     this._ensureDbOpened();
-    return createObservableValue<Collection<T>>(this._db.collection(name));
+    return this._db.collection(name);
   }
 
   /**

@@ -6,14 +6,13 @@ import {
   useSaveBookmark,
 } from '../use-bookmarks';
 import { mockSDK } from '@akashaorg/af-testing';
-import { mockGetBookmarksObservable, mockQueryData } from '../__mocks__/bookmarks';
-import { of as mockOf } from 'rxjs';
+import { mockGetBookmarksAsync, mockQueryData } from '../__mocks__/bookmarks';
 import { createWrapper } from './utils';
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () =>
     mockSDK({
-      settings: { get: () => mockGetBookmarksObservable, set: () => mockOf({ data: 3 }) },
+      settings: { get: () => mockGetBookmarksAsync, set: () => Promise.resolve({ data: 3 }) },
     });
 });
 

@@ -15,7 +15,7 @@ export interface IAppAvatarProps extends IAvatarProps {
   appType: IntegrationTypes;
 }
 
-const Avatar: React.FC<IAppAvatarProps> = props => {
+const AppAvatar: React.FC<IAppAvatarProps> = props => {
   const {
     appType,
     alt,
@@ -72,4 +72,4 @@ const Avatar: React.FC<IAppAvatarProps> = props => {
   );
 };
 
-export default Avatar;
+export default AppAvatar;

@@ -1,5 +1,5 @@
 /* Define CSS vars as color channels because want them to work with the opacity modifier syntax
-   For more info check https://tailwindcss.com/docs/customizing-colors#using-css-variables
+  For more info check https://tailwindcss.com/docs/customizing-colors#using-css-variables
 */
 :root {
   --foundation-primary: #ff89b6, #4e71ff;
@@ -8,7 +8,7 @@
   --gradient-primary-start: 255 137 182; /* #ff89b6 */
   --gradient-primary-stop: 78 113 255; /* #4e71ff */
   --system-black: 26 27 31; /* #1a1b1f */
-  --system-white: 244 244 244; /* #f4f4f4 */
+  --system-white: 255 255 255; /* #ffffff */
   --system-grey-1: 45 47 51; /* #2d2f33 */
   --system-grey-2: 34 36 40; /* #222428 */
   --system-grey-3: 49 50 53; /* #313235 */
@@ -19,7 +19,7 @@
   --system-grey-8: 234 234 234; /* #eaeaea */
   --system-grey-9: 244 244 244; /* #f4f4f4 */
   --feedback-success: 99 184 107; /* #63b86b */
-  --feeback-warning: 241 178 16; /* #f1b210 */
+  --feedback-warning: 241 178 16; /* #f1b210 */
   --feedback-warning-dark: 255 223 140; /* #ffdf8c */
   --feedback-error: 238 97 53; /* #ee6135 */
   --feedback-error-dark: 255 146 113; /* #ff9271 */

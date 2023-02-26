@@ -1,19 +1,13 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { ENS_EVENTS, TYPES } from '@akashaorg/typings/sdk';
+import { TYPES } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
 import Logging from '../logging';
 import { normalize } from 'eth-ens-namehash';
-import { ContractFactory } from 'ethers';
-import AkashaRegistrarABI from '../contracts/abi/AkashaRegistrar.json';
-import ReverseRegistrarABI from '../contracts/abi/ReverseRegistrar.json';
-import EnsABI from '../contracts/abi/ENS.json';
-import { lastValueFrom } from 'rxjs';
-import { createFormattedValue, createObservableStream } from '../helpers/observable';
+import { createFormattedValue } from '../helpers/observable';
 import EventBus from '../common/event-bus';
-import { concatAll, map, tap } from 'rxjs/operators';
 import IpfsConnector from '../common/ipfs.connector';
 import Stash from '../stash/index';
 import pino from 'pino';
@@ -84,8 +78,9 @@ class AWF_ENS {
     this._stash = stash;
   }
 
-  registerName(name: string) {
-    return createObservableStream(this._registerName(name));
+  async registerName(name: string) {
+    const result = this._registerName(name);
+    return createFormattedValue(result);
   }
 
   private async _registerName(name: string) {
@@ -113,7 +108,7 @@ class AWF_ENS {
     // return this._claimName(validatedName);
   }
 
-  claimName(name: string) {
+  /*claimName(name: string) {
     return createObservableStream(this._claimName(name)).pipe(
       tap(ev => {
         // @emits ENS_EVENTS.CLAIM
@@ -124,7 +119,7 @@ class AWF_ENS {
         });
       }),
     );
-  }
+  }*/
 
   // set the returned name for address lookup
   private async _claimName(name: string) {
@@ -218,7 +213,7 @@ class AWF_ENS {
 
   public async setupContracts() {
     if (!this._chainChecked && this._web3.provider) {
-      await lastValueFrom(this._web3.checkCurrentNetwork());
+      await this._web3.checkCurrentNetwork();
       this._chainChecked = true;
     }
     //const AkashaRegistrar = await ContractFactory.fromSolidity(AkashaRegistrarABI);
