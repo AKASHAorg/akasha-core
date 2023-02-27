@@ -35,7 +35,7 @@ export const iconTypes: IconType[] = [
   'twitter',
 ];
 
-const fillIcons: IconType[] = ['akasha', 'appModeration', 'InformationCircleIcon'];
+const fillIcons: IconType[] = ['akasha', 'appModeration'];
 
 const Icon: React.FC<IconProps> = props => {
   const {
