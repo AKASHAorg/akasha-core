@@ -17,3 +17,14 @@ export const STATUS_TO_COLOR_MAP: Record<Status, Color> = {
   warning: 'warning',
   success: 'success',
 };
+
+export const EnsTxtPresets = {
+  DISCORD: 'com.discord',
+  GITHUB: 'com.github',
+  REDDIT: 'com.reddit',
+  TWITTER: 'com.twitter',
+  TELEGRAM: 'org.telegram',
+  URL: 'url',
+  AVATAR: 'avatar',
+  DESCRIPTION: 'description',
+};

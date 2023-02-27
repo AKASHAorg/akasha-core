@@ -17,7 +17,7 @@ export interface IButtonProps {
   textOnly?: boolean;
   greyBg?: boolean;
   isCustomIcon?: boolean;
-  onClick?: () => void;
+  onClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }
@@ -59,9 +59,9 @@ const Button: React.FC<IButtonProps> = props => {
     large: 'w-4 h-4',
   };
 
-  const handleClick = () => {
+  const handleClick = event => {
     if (typeof onClick === 'function' && !disabled && !loading) {
-      return onClick();
+      return onClick(event);
     }
   };
 
