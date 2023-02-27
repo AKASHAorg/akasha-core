@@ -1,11 +1,11 @@
 import React, { ReactNode, useState, PropsWithChildren } from 'react';
+import Text, { TextProps } from '../Text';
+import Stack from '../Stack';
 import { usePopper } from 'react-popper';
 import { apply, tw } from '@twind/core';
 import { getArrowClasses } from './getArrowClasses';
 import { getContentClasses } from './getContentClasses';
 import { Placement } from '@popperjs/core';
-import Text, { TextProps } from '../Text';
-import Stack from '../Stack';
 
 export type TooltipProps = {
   content: ReactNode;
