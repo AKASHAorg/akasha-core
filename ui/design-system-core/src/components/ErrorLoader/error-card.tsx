@@ -9,10 +9,10 @@ interface ErrorRendererProps {
 }
 
 const ErrorRenderer: React.FC<PropsWithChildren<ErrorRendererProps>> = props => {
-  const { children, className } = props;
+  const { children, className = '' } = props;
 
   return (
-    <details className={tw(`w-full ${className ?? ''}`)}>
+    <details className={tw(`w-full ${className}`)}>
       <summary className={tw('whitespace-nowrap')}>Expand to see error details</summary>
       <div
         className={tw(
@@ -32,7 +32,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
   const message = details ?? devDetails;
 
   return (
-    <div className={tw(`flex flex-col items-center p-[1em] bg-white ${className ?? ''}`)}>
+    <div className={tw(`flex flex-col items-center p-[1em] bg-white ${className}`)}>
       <div>
         <img className={tw('max-w-[50%] h-auto my-0 mx-auto py-[2em] px-0')} src={imageSrc} />
       </div>
