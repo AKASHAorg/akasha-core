@@ -31,6 +31,7 @@ export type TextProps = {
   color?: Color;
   align?: Alignment;
   truncate?: boolean;
+  breakWord?: boolean;
   weight?: Weight;
 };
 
@@ -56,9 +57,10 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
   className = '',
   variant = 'body1',
-  align,
+  align = 'start',
   color = { dark: 'text-white', light: 'text-black' },
   truncate,
+  breakWord,
   weight,
   children,
 }) => {
@@ -66,6 +68,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
   const colorStyle = getColorClasses(color);
   const truncateStyle = truncate ? 'truncate' : '';
+  const wordBreakStyle = breakWord ? 'break-all' : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
 
   const baseStyles = VARIANT_TO_CSS_CLASSES_MAPPER[variant];
@@ -74,7 +77,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${weightStyle} ${className}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${className}`,
       ),
     },
     children,

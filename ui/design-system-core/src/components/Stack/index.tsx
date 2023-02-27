@@ -20,11 +20,11 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   direction = 'row',
   justify,
   align,
-  spacing = 'gap-2',
+  spacing = '',
   className = '',
   children,
 }) => {
-  const baseStyle = `flex w-full`;
+  const baseStyle = `flex`;
   const justifyStyle = justify ? getJustifyClasses(justify) : '';
   const alignStyle = align ? getAlignClasses(align) : '';
   const directionStyle = direction ? getDirectionClasses(direction) : '';

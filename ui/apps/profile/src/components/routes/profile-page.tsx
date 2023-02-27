@@ -10,9 +10,8 @@ import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks'
 import menuRoute, { MY_PROFILE } from '../../routes';
 import ProfilePageHeader from '../profile-cards/profile-page-header';
 
-const { Box, Helmet, EntryCardHidden, ProfileDelistedCard, Spinner } = DS;
-
-const { ErrorLoader } = DSNew;
+const { Box, Helmet, EntryCardHidden, ProfileDelistedCard } = DS;
+const { ErrorLoader, ProfileLoading } = DSNew;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
@@ -70,7 +69,9 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') && <Spinner />}
+      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') && (
+        <ProfileLoading />
+      )}
       {(profileDataQuery.status === 'error' ||
         (profileDataQuery.status === 'success' && !profileState)) && (
         <ErrorLoader
