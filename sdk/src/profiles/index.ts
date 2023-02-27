@@ -11,6 +11,8 @@ import pino from 'pino';
 import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import { createFormattedValue } from '../helpers/observable';
+import IpfsConnector from '../common/ipfs.connector';
+import { z } from 'zod';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
@@ -22,6 +24,7 @@ class AWF_Profile {
   private _gql: Gql;
   private _auth: AWF_Auth;
   private _globalChannel: EventBus;
+  private _ipfs: IpfsConnector;
   public readonly TagSubscriptions = '@TagSubscriptions';
 
   constructor(
@@ -29,11 +32,13 @@ class AWF_Profile {
     @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
     @inject(TYPES.EventBus) globalChannel: EventBus,
+    @inject(TYPES.IPFS) ipfs: IpfsConnector,
   ) {
     this._log = log.create('AWF_Profile');
     this._gql = gql;
     this._auth = auth;
     this._globalChannel = globalChannel;
+    this._ipfs = ipfs;
   }
 
   /**
@@ -89,11 +94,7 @@ class AWF_Profile {
    * @param userName
    */
   async registerUserName(userName: string) {
-    if (userName.length < 3) {
-      return throwError(() => {
-        return new Error('Subdomain must have at least 3 characters');
-      });
-    }
+    z.string().min(3).parse(userName);
     const auth = await this._auth.authenticateMutationData(userName);
     const registerUserName = await this._gql.getAPI().RegisterUsername(
       { name: userName },
@@ -134,6 +135,7 @@ class AWF_Profile {
    * @param pubKey
    */
   async follow(pubKey: string) {
+    z.string().min(32).parse(pubKey);
     const auth = await this._auth.authenticateMutationData(pubKey);
     const followResult = await this._gql.getAPI().Follow(
       { pubKey: pubKey },
@@ -156,6 +158,7 @@ class AWF_Profile {
    * @param pubKey
    */
   async unFollow(pubKey: string) {
+    z.string().min(32).parse(pubKey);
     const auth = await this._auth.authenticateMutationData(pubKey);
     const unFollowResult = await this._gql.getAPI().UnFollow(
       { pubKey: pubKey },
@@ -196,6 +199,7 @@ class AWF_Profile {
       autoRotate?: boolean;
       mimeType?: string;
     };
+    email?: string; // temporary workaround until space delegation works
   }) {
     let file;
     let path;
@@ -215,7 +219,7 @@ class AWF_Profile {
       file = data.content;
       path = data.name;
     }
-    const sess = await this._auth.getSession();
+    //const sess = await this._auth.getSession();
     if (!data.config) {
       data.config = {
         maxWidth: 640,
@@ -227,34 +231,11 @@ class AWF_Profile {
       file,
       config: data.config,
     });
-    const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
-    const bufferImage: ArrayBuffer = await resized.image.arrayBuffer();
-    this._log.info(buckPath);
-
-    const upload = () => {
-      /* @TODO: implement upload functionality*/
-    };
-    /*
-    const cid = upload.path.cid.toString();
-    const dataFinal: DataProviderInput = {
-      property: buckPath,
-      provider: PROFILE_MEDIA_FILES,
-      value: cid,
-    };
-    const auth = await this._auth.authenticateMutationData(
-      dataFinal as unknown as Record<string, unknown>[],
-    );
-    await this._gql.getAPI().SaveMetaData(
-      { data: dataFinal },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
-
-
-    */
-    return { CID: null, size: {}, blob: null };
+    // const buckPath = `ewa/${path}/${resized.size.width}x${resized.size.height}`;
+    // const bufferImage: ArrayBuffer = await resized.image.arrayBuffer();
+    const CID = await this._ipfs.uploadFile(resized.image, data.email);
+    const cid: string = CID.toString();
+    return { CID: cid, size: resized.size, blob: resized.image };
   }
 
   /**
@@ -262,6 +243,7 @@ class AWF_Profile {
    * @param name
    */
   async searchProfiles(name: string) {
+    z.string().min(3).parse(name);
     return this._gql.getAPI().SearchProfiles({ name: name });
   }
 
@@ -277,6 +259,7 @@ class AWF_Profile {
    * @param tagName
    */
   async toggleTagSubscription(tagName: string) {
+    z.string().min(3).parse(tagName);
     const auth = await this._auth.authenticateMutationData({ sub: tagName });
     const toggledTag = await this._gql.getAPI().ToggleInterestSub(
       { sub: tagName },
@@ -320,6 +303,7 @@ class AWF_Profile {
    * @param keyword
    */
   async globalSearch(keyword: string) {
+    z.string().min(3).parse(keyword);
     return this._gql.getAPI().GlobalSearch({ keyword: keyword });
   }
 
