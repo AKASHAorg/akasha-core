@@ -13,6 +13,6 @@ export const getLinkFromType = (link: Link, includeProtocol = false) => {
     case EnsTxtPresets.TELEGRAM:
       return `${protocol}t.me/${link.value}`;
     default:
-      return (link.value || '').replace(protocol, '');
+      return includeProtocol ? link.value : (link.value || '').replace(protocol, '');
   }
 };
