@@ -20,19 +20,18 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
-import ModeratorLabel from '../routes/moderator-label';
+// import ModeratorLabel from '../routes/moderator-label';
 import routes, { UPDATE_PROFILE } from '../../routes';
-import { Stats, Bio, Links } from '@akashaorg/design-system-core/lib/components/ProfileCard';
+import {
+  ProfileStats,
+  ProfileBio,
+  ProfileLinks,
+  ProfileHeader,
+} from '@akashaorg/design-system-core/lib/components/ProfileCard';
 
-const {
-  ModalRenderer,
-  ProfileCard,
-  ExtensionPoint,
-  Box,
-  ProfileCardEthereumId,
-  HorizontalDivider,
-  TextLine,
-} = DS;
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+
+const { ModalRenderer } = DS;
 
 export interface IProfileHeaderProps {
   profileId: string;
@@ -186,8 +185,9 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
       </ModalRenderer>
 
       {/* wrapping with a box to use gap prop instead of individual box margins */}
-      <Box gap="xsmall">
-        <ProfileCard
+      <Stack direction="column" spacing="gap-y-4">
+        {/*@TODO remove the following line when the profile app is done */}
+        {/* <ProfileCard
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
           handleShareClick={showShareModal}
@@ -244,22 +244,31 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
               </>
             )}
           </Box>
-        </ProfileCard>
-
-        {isModerator && <ModeratorLabel label={t('Moderator')} />}
-
-        {profileData.description && <Bio title={t('Bio')} biography={profileData.description} />}
-
-        {socialLinks.length > 0 && (
-          <Links
-            title={t('Find me on')}
-            links={socialLinks}
-            copiedLabel={t('Copied')}
-            copyLabel={t('Copy to clipboard')}
-          />
+        </ProfileCard> */}
+        <ProfileHeader
+          ethAddress={profileData.ethAddress}
+          coverImage={profileData.coverImage}
+          avatar={profileData.avatar}
+          name={profileData.name}
+          userName={profileData.userName}
+          ensName={
+            ENSReq.isFetching && !ENSReq.isFetched
+              ? 'loading'
+              : ENSReq.isFetched && ENSReq.data
+              ? ENSReq.data
+              : ''
+          }
+          isFollowing={followedProfiles?.includes(profileData.pubKey)}
+          viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
+          handleUnfollow={handleUnfollow}
+          handleFollow={handleFollow}
+        />
+        {/*@TODO replace moderator label with new design when its ready */}
+        {/* {isModerator && <ModeratorLabel label={t('Moderator')} />} */}
+        {profileData.description && (
+          <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
-
-        <Stats
+        <ProfileStats
           posts={{
             label: t('Posts'),
             total: profileData.totalPosts,
@@ -281,7 +290,15 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
             onClick: handleStatIconClick(1),
           }}
         />
-      </Box>
+        {socialLinks.length > 0 && (
+          <ProfileLinks
+            title={t('Find me on')}
+            links={socialLinks}
+            copiedLabel={t('Copied')}
+            copyLabel={t('Copy to clipboard')}
+          />
+        )}
+      </Stack>
     </>
   );
 };
