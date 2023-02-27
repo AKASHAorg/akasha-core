@@ -11,7 +11,7 @@ export interface IconSize {
 
 export interface IAppIcon extends IconSize {
   ref?: React.Ref<HTMLDivElement>;
-  appImg?: LogoSourceType;
+  appImg?: LogoSourceType & { value: IconType };
   onClick?: React.EventHandler<React.SyntheticEvent>;
   placeholderIconType: IconType;
   plain?: boolean;
@@ -46,7 +46,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
       return (
         <Icon
-          type={appImg?.value as IconType}
+          type={appImg?.value}
           plain={plain}
           size={size}
           accentColor={accentColor}
