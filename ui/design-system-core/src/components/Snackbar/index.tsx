@@ -40,7 +40,11 @@ const Snackbar: React.FC<ISnackbar> = ({
   return (
     <div className={tw(instanceStyle)}>
       <span className={tw('mr-2')}>
-        <Icon type="InformationCircleIcon" color="secondary-light" styling="w-5 h-5" />
+        <Icon
+          type="InformationCircleIcon"
+          color="red"
+          styling={`w-6 h-6 fill-${colorLight} dark:fill-${colorDark} stroke-white dark:stroke-black`}
+        />
       </span>
       <div className={tw('w-11/12')}>
         <Text variant="button-md" color={tw(textcolor)}>
