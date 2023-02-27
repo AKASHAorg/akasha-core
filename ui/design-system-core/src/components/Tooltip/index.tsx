@@ -72,7 +72,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
       {showTooltip && (
         <div
           ref={setContent}
-          style={styles.popper}
+          style={{ ...styles.popper, zIndex: 99 }}
           {...attributes.popper}
           className={tw(getContentClasses(contextualPlacement, ARROW_SIZE))}
         >

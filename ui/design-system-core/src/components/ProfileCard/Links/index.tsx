@@ -37,6 +37,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
               <Text
                 variant="body2"
                 color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                breakWord
               >
                 {getLinkFromType(link)}
               </Text>
