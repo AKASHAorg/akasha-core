@@ -29,7 +29,7 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
     padding,
     direction,
     className,
-    style,
+    style = '',
   } = props;
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);

@@ -66,7 +66,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     faded,
     active,
     isClickable = false,
-    className,
+    className = '',
     onClick,
   } = props;
 

@@ -25,10 +25,8 @@ import StatModalWrapper from './stat-modal-wrapper';
 // import ModeratorLabel from '../routes/moderator-label';
 import routes, { UPDATE_PROFILE } from '../../routes';
 
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-
 const { ModalRenderer } = DS;
-const { ProfileStats, ProfileBio, ProfileLinks, ProfileHeader } = DSNew;
+const { ProfileStats, ProfileBio, ProfileLinks, ProfileHeader, Stack } = DSNew;
 
 export interface IProfileHeaderProps {
   profileId: string;

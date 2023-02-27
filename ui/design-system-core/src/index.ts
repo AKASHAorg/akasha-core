@@ -20,6 +20,7 @@ import Text from './components/Text';
 import TextField from './components/TextField';
 import TextLine from './components/TextLine';
 import Tooltip from './components/Tooltip';
+import Stack from './components/Stack';
 import {
   ProfileStats,
   ProfileBio,
@@ -45,6 +46,7 @@ export default {
   Meter,
   ProfileAvatarButton,
   RadioButton,
+  Stack,
   Sidebar,
   StackedAvatar,
   SubtitleTextIcon,
