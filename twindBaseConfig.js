@@ -44,10 +44,8 @@ export default {
       borderRadius: {
         large: '20px',
       },
-      backgroundImage: {
-        /* @TODO define hex colors in the design system and afterwards use tailwind classes to define gradient */
-        'placeholder-gradient-light': `linear-gradient(90deg, rgb(var(--system-grey-6)) -5.28%, #DCE2ED 60.39%, #FFFFFF 119.57%);`,
-        'placeholder-gradient-dark': `linear-gradient(90deg, rgb(var(--system-grey-5)) -5.28%, #7F838B 60.39%, #9B9FA7 119.57%)`,
+      scale: {
+        flip: '-1',
       },
     },
   },
