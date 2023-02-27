@@ -40,11 +40,11 @@ class AWF_Auth {
   private _gql: Gql;
   private _lit: Lit;
   private _ceramic: CeramicService;
-  private channel: BroadcastChannel;
+  private channel: BroadcastChannel | undefined;
   private sessKey;
   private inboxWatcher;
-  private currentUser: CurrentUser;
-  private _lockSignIn: boolean;
+  private currentUser: CurrentUser | undefined;
+  private _lockSignIn: boolean | undefined;
   #signedAuthMessage: string;
   #tokenGenerator: () => Promise<UserAuth>;
   public readonly waitForAuth = 'waitForAuth';
@@ -98,7 +98,7 @@ class AWF_Auth {
           const { response } = event.data;
           if (response && response.identity.key !== this.sessKey) {
             this._log.info('syncing session');
-            this.currentUser = null;
+            this.currentUser = undefined;
             this._getCurrentUser().then(() => this._log.info('logged in'));
           }
         } else if (type === this.SIGN_OUT_EVENT && this.currentUser) {
