@@ -17,7 +17,7 @@ export interface IButtonProps {
   textOnly?: boolean;
   greyBg?: boolean;
   isCustomIcon?: boolean;
-  onClick?: () => void;
+  onClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }

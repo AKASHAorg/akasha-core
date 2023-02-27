@@ -25,6 +25,7 @@ export interface IAvatarProps {
   faded?: boolean;
   active?: boolean;
   isClickable?: boolean;
+  className?: string;
   onClick?: () => void;
 }
 
@@ -65,6 +66,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     faded,
     active,
     isClickable = false,
+    className,
     onClick,
   } = props;
 
@@ -79,7 +81,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
   }
 
-  const className = `box-border cursor-${
+  const containerStyle = `box-border cursor-${
     isClickable ? 'pointer' : 'default'
   } select-none relative overflow-hidden ${avatarSizesMap[size]} rounded-full bg-${
     backgroundColor ? backgroundColor : 'white'
@@ -91,7 +93,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
 
   return (
-    <div className={tw(className)} onClick={onClick}>
+    <div className={tw(`${containerStyle} ${className}`)} onClick={onClick}>
       <React.Suspense fallback={<></>}>
         <AvatarImage url={src?.url} alt={alt} fallbackUrl={avatarImageFallback} faded={faded} />
       </React.Suspense>

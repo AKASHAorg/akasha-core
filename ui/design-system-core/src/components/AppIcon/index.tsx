@@ -46,7 +46,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
       return (
         <Icon
-          type={appImg?.value}
+          type={appImg?.value as IconType}
           plain={plain}
           size={size}
           accentColor={accentColor}

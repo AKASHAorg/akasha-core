@@ -9,7 +9,7 @@ export type IconType = CustomIcons.CustomIconTypes | keyof typeof HeroIcons;
 export interface IconProps {
   color?: string;
   ref?: React.Ref<HTMLDivElement>;
-  type: IconType | string;
+  type: IconType;
   clickable?: boolean;
   size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
   plain?: boolean;
