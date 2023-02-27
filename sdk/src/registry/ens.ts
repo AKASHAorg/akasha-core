@@ -11,6 +11,7 @@ import EventBus from '../common/event-bus';
 import IpfsConnector from '../common/ipfs.connector';
 import Stash from '../stash/index';
 import pino from 'pino';
+import { z } from 'zod';
 
 const EnsDefaultTexts = [
   'url',
@@ -79,6 +80,7 @@ class AWF_ENS {
   }
 
   async registerName(name: string) {
+    z.string().min(4).parse(name);
     const result = this._registerName(name);
     return createFormattedValue(result);
   }

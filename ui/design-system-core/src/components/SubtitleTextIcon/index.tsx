@@ -1,11 +1,11 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
-import { IconName } from '../Icon';
+import { IconType } from '../Icon';
 import Icon from '../Icon';
 
 export interface ISubtitleTextIcon {
   className?: string;
-  iconType?: IconName;
+  iconType?: IconType;
   iconSize?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   backgroundSize?: string;
   backgroundColor?: boolean;
@@ -14,7 +14,7 @@ export interface ISubtitleTextIcon {
   labelSize?: 'small' | 'large';
   subtitle?: string;
   subtitleColor?: string;
-  subtitleIcon?: IconName;
+  subtitleIcon?: IconType;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
   maxWidth?: string;
@@ -34,7 +34,6 @@ const baseStyles = apply`
 
 const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
   const {
-    className,
     iconType,
     iconSize,
     backgroundColor,
@@ -60,10 +59,10 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
           className={tw(
             `flex flex-row justify-center items-center mr-2 ${
               backgroundSize ? backgroundSize : 'w-12 h-12'
-            } ${props.backgroundColor ? 'bg-grey1 rounded-sm' : 'none'}`,
+            } ${backgroundColor ? 'bg-grey1 rounded-sm' : 'none'}`,
           )}
         >
-          <Icon icon={iconType} styling={`${iconSize ? iconSize : 'h-4, w-4'} black`} />
+          <Icon type={iconType} styling={`${iconSize ? iconSize : 'h-4, w-4'} black`} />
         </div>
       ) : null}
       <div className={tw('flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])')}>

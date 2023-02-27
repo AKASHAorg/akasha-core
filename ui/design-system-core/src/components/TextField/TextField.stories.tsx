@@ -1,13 +1,14 @@
 import React from 'react';
 
 import TextField from './index';
+import { TextFieldProps } from './types';
 
 export default {
   title: 'Fields/TextField',
   component: TextField,
 };
 
-const Template = args => {
+const Template = (args: TextFieldProps) => {
   const [value, setValue] = React.useState(args.value || '');
   return <TextField {...args} value={value} onChange={e => setValue(e.currentTarget.value)} />;
 };

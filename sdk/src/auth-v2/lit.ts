@@ -8,6 +8,7 @@ import Logging from '../logging/index';
 import Settings from '../settings/index';
 import Gql from '../gql/index';
 import pino from 'pino';
+import { z } from 'zod';
 
 const buildAccessControlConditions = (ethAddress: string) => {
   return [
@@ -60,6 +61,7 @@ export default class Lit {
     if (!this.litNodeClient) {
       await this.connect();
     }
+    z.string().min(2).parse(text);
     const authSig = await LitJsSdk.checkAndSignAuthMessage({
       chain: this._web3.network,
       chainId: this._web3.networkId[this._web3.network],
@@ -86,7 +88,7 @@ export default class Lit {
     if (!this.litNodeClient) {
       await this.connect();
     }
-
+    z.string().parse(encryptedString);
     const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: this._web3.network });
     const ethAddress = await this._web3.getCurrentEthAddress();
     if (!ethAddress) {
