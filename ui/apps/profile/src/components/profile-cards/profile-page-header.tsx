@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+
 import {
   IProfileData,
   RootComponentProps,
@@ -22,16 +24,11 @@ import {
 import StatModalWrapper from './stat-modal-wrapper';
 // import ModeratorLabel from '../routes/moderator-label';
 import routes, { UPDATE_PROFILE } from '../../routes';
-import {
-  ProfileStats,
-  ProfileBio,
-  ProfileLinks,
-  ProfileHeader,
-} from '@akashaorg/design-system-core/lib/components/ProfileCard';
 
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 
 const { ModalRenderer } = DS;
+const { ProfileStats, ProfileBio, ProfileLinks, ProfileHeader } = DSNew;
 
 export interface IProfileHeaderProps {
   profileId: string;
