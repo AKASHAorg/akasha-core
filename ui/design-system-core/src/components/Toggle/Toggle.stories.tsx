@@ -21,6 +21,7 @@ LargeToggle.args = {
   iconChecked: 'SunIcon',
   iconUnchecked: 'MoonIcon',
   size: 'large',
+  darkModeToggle: true,
 };
 
 export const IconToggle = Template.bind({});

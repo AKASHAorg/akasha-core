@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon, { IconName } from '../Icon';
+import Icon, { IconType } from '../Icon';
 import Text from '../Text';
 import { tw, apply } from '@twind/core';
 
@@ -12,17 +12,20 @@ export interface iToggleProps {
   // status
   checked?: boolean;
   disabled?: boolean;
-  iconUnchecked?: IconName;
-  iconChecked?: IconName;
+  //toggle with icons
+  iconUnchecked?: IconType;
+  iconChecked?: IconType;
+  darkModeToggle?: boolean;
 }
 
 const Toggle: React.FC<iToggleProps> = ({
   id = 'toggle',
-  label = '',
+  label,
   disabled = false,
   checked = false,
-  iconChecked = null,
+  darkModeToggle = false,
   iconUnchecked = null,
+  iconChecked = null,
   size = 'small',
 }) => {
   const [enabled, setEnabled] = React.useState(checked);
@@ -30,10 +33,7 @@ const Toggle: React.FC<iToggleProps> = ({
   const buttonSize = size === 'large' ? 'h-8 w-16' : 'h-5 w-9';
 
   //For defining the margin between the outer button and the inner circle
-  const spacingProperties =
-    size === 'large'
-      ? 'after:absolute after:top-px after:left-0.5'
-      : 'after:absolute after:top-px after:left-0.5';
+  const spacingProperties = 'after:absolute after:top-px after:left-0.5';
 
   //For defining the width and height of the inner circle and how much it will move when the button is toggled
   const pseudoCircleSizingProperties =
@@ -51,7 +51,9 @@ const Toggle: React.FC<iToggleProps> = ({
   const color = disabled
     ? `bg-grey7 border([1px] grey4) after:bg-grey4`
     : `bg-white dark:bg-grey3 border([1px] secondary-light)
-    after:bg-grey6 after:border after:border-grey6
+    after:bg-grey6
+    dark:${darkModeToggle ? 'after:bg-secondary-dark' : 'after:bg-black'}
+    after:border after:border-grey6
     peer-checked:bg-white peer-checked:after:border-secondary-light peer-checked:after:bg-secondary-light`;
 
   const baseTransitionStyle = 'after:transition-all after:duration-300';
@@ -68,36 +70,34 @@ const Toggle: React.FC<iToggleProps> = ({
       ${baseTransitionStyle}
       `;
   const instanceIconStyle = apply`
-      absolute ml-1
       ${iconSizingProperties}
       ${baseTransitionStyle}
+      absolute ml-1
       peer-checked:transition-all peer-checked:duration-300
       `;
 
   return (
     <div>
-      <label htmlFor={id} className="flex cursor-pointer items-center">
+      <label htmlFor={id} className={tw('flex cursor-pointer items-center')}>
         <input
           type="checkbox"
           id={id}
           disabled={disabled}
           checked={enabled}
-          className="peer sr-only"
+          className={tw('peer sr-only')}
           onClick={() => setEnabled(!enabled)}
         />
-        <div className={tw(instanceButtonStyle)}></div>
+        <div className={tw(instanceButtonStyle)} />
 
         {iconChecked && iconUnchecked && (
-          <Icon
-            icon={enabled ? iconChecked : iconUnchecked}
-            styling={tw(instanceIconStyle)}
-            fillColor="white"
-            strokeColor="white"
-            iconType="solid"
-          />
+          <div className={tw(instanceIconStyle)}>
+            <Icon
+              type={enabled ? iconChecked : iconUnchecked}
+              styling={tw('fill-white stroke-white')}
+            />
+          </div>
         )}
-
-        <span className="pl-2 text-base text-gray-800">
+        <span className={tw('pl-2 text-base text-gray-800')}>
           <Text variant="label">{label}</Text>
         </span>
       </label>
