@@ -11,7 +11,7 @@ export interface ISnackbar {
   description?: string;
   actionButtonLabel?: string;
   type: snackBarType;
-  handleButtonClick?: () => void;
+  handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   handleDismiss?: () => void;
 }
 
