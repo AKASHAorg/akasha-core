@@ -25,11 +25,11 @@ export interface ErrorLoaderProps {
   /**
    * Additional details about the error
    */
-  details: string;
+  details: React.ReactElement | string;
   /**
    *  Message to be shown when in deveolopment mode
    */
-  devDetails?: string;
+  devDetails?: React.ReactElement | string;
   className?: string; // use valid twind classes;
 }
 

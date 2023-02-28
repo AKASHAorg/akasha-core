@@ -26,7 +26,7 @@ const TermsOfServicePage = () => {
               <ErrorLoader
                 type="script-error"
                 title={t('There was an error loading the docs')}
-                details={message as unknown as string}
+                details={message}
               />
             )}
             {!message && <MdCard mdText={legalDoc} />}

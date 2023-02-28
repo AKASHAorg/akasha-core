@@ -20,7 +20,7 @@ export interface IExplorePage extends RootComponentProps {
   installableApps: IntegrationReleaseInfoFragmentFragment[];
   installedAppsInfo?: IntegrationReleaseInfo[];
   isFetching?: boolean;
-  reqError?: unknown;
+  reqError?: Error;
   isUserLoggedIn?: boolean;
 }
 
@@ -84,7 +84,7 @@ const ExplorePage: React.FC<IExplorePage> = props => {
             type="script-error"
             title={t('There was an error loading the integrations')}
             details={t('We cannot show this page right now')}
-            devDetails={reqError as string}
+            devDetails={reqError.message}
           />
         )}
         {!isFetching && !reqError && (

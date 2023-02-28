@@ -75,7 +75,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
                 type="script-error"
                 title={t('Sorry, we cannot get the notifications this time')}
                 details={t('Please try again later!')}
-                devDetails={message as unknown as string}
+                devDetails={message}
               />
             )}
             {!message && notificationsState?.length > 0 && (

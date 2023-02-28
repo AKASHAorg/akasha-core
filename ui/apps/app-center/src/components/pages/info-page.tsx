@@ -95,7 +95,7 @@ const InfoPage: React.FC<RootComponentProps> = props => {
           type="script-error"
           title={t('There was an error loading the integration info')}
           details={t('We cannot show this integration right now')}
-          devDetails={latestReleaseInfoReq.error as unknown as string}
+          devDetails={latestReleaseInfoReq.error.message}
         />
       )}
       {!latestReleaseInfoReq.error && (

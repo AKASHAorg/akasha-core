@@ -292,7 +292,7 @@ const EntryRenderer = (
           type="script-error"
           title={t('There was an error loading the {{itemTypeName}}', { itemTypeName })}
           details={t('We cannot show this {{itemTypeName}} now', { itemTypeName })}
-          devDetails={postReq.error as unknown as string}
+          devDetails={postReq.error.message}
         />
       )}
       {(postReq.isSuccess || commentReq.isSuccess) && (
