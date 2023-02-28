@@ -7,6 +7,7 @@ import AWF_Auth from '../auth';
 import Logging from '../logging';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
+import { z } from 'zod';
 
 @injectable()
 class AWF_Entry {
@@ -135,6 +136,7 @@ class AWF_Entry {
    * @param entryID
    */
   async removeEntry(entryID: string) {
+    z.string().min(4).parse(entryID);
     const auth = await this._auth.authenticateMutationData(entryID);
     const removedEntry = await this._gql.getAPI().RemoveEntry(
       { id: entryID },
