@@ -20,6 +20,15 @@ import Text from './components/Text';
 import TextField from './components/TextField';
 import TextLine from './components/TextLine';
 import Tooltip from './components/Tooltip';
+import Stack from './components/Stack';
+import {
+  ProfileStats,
+  ProfileBio,
+  ProfileHeader,
+  ProfileLinks,
+  ProfileLoading,
+} from './components/ProfileCard';
+import CopyToClipboard from './components/CopyToClipboard';
 
 export default {
   Accordion,
@@ -37,6 +46,7 @@ export default {
   Meter,
   ProfileAvatarButton,
   RadioButton,
+  Stack,
   Sidebar,
   StackedAvatar,
   SubtitleTextIcon,
@@ -44,4 +54,10 @@ export default {
   TextField,
   TextLine,
   Tooltip,
+  ProfileHeader,
+  ProfileBio,
+  ProfileStats,
+  ProfileLinks,
+  ProfileLoading,
+  CopyToClipboard,
 };
