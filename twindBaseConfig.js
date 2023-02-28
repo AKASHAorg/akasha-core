@@ -29,10 +29,11 @@ export default {
         grey6: withOpacity('--system-grey-6'),
         grey7: withOpacity('--system-grey-7'),
         grey8: withOpacity('--system-grey-8'),
+        grey9: withOpacity('--system-grey-9'),
         success: withOpacity('--feedback-success'),
         warning: {
-          light: withOpacity('--feeback-warning'),
-          dark: withOpacity('--feeback-warning-dark'),
+          light: withOpacity('--feedback-warning'),
+          dark: withOpacity('--feedback-warning-dark'),
         },
         error: {
           light: withOpacity('--feedback-error'),
@@ -42,6 +43,11 @@ export default {
       },
       borderRadius: {
         large: '20px',
+      },
+      backgroundImage: {
+        /* @TODO define hex colors in the design system and afterwards use tailwind classes to define gradient */
+        'placeholder-gradient-light': `linear-gradient(90deg, rgb(var(--system-grey-6)) -5.28%, #DCE2ED 60.39%, #FFFFFF 119.57%);`,
+        'placeholder-gradient-dark': `linear-gradient(90deg, rgb(var(--system-grey-5)) -5.28%, #7F838B 60.39%, #9B9FA7 119.57%)`,
       },
     },
   },

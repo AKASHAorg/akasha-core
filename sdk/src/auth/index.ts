@@ -1,14 +1,5 @@
 import { AUTH_MESSAGE, authStatus, SwActionType } from './constants';
-import {
-  Buckets,
-  Client,
-  Filecoin,
-  InboxListOptions,
-  PrivateKey,
-  Status,
-  UserAuth,
-  Users,
-} from '@textile/hub';
+import { InboxListOptions, PrivateKey, UserAuth } from '@textile/hub';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
 import { AUTH_EVENTS, CurrentUser, EthProviders, IMessage, TYPES } from '@akashaorg/typings/sdk';
@@ -19,12 +10,10 @@ import Logging from '../logging';
 import Settings from '../settings';
 
 import Gql from '../gql';
-import { map, tap } from 'rxjs/operators';
-import { forkJoin, from, lastValueFrom } from 'rxjs';
 import hash from 'object-hash';
 import { Buffer } from 'buffer';
 import { PublicKey } from '@textile/threaddb';
-import { createObservableStream } from '../helpers/observable';
+import { createFormattedValue } from '../helpers/observable';
 import { executeOnSW } from './helpers';
 import pino from 'pino';
 import Lit from '../auth-v2/lit';
@@ -42,10 +31,6 @@ const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
 @injectable()
 class AWF_Auth {
   #identity: PrivateKey;
-  private hubClient: Client;
-  private hubUser: Users;
-  private buckClient: Buckets;
-  private fil: Filecoin;
   private auth: UserAuth;
   private _db: DB;
   private readonly _web3: Web3Connector;
@@ -55,11 +40,11 @@ class AWF_Auth {
   private _gql: Gql;
   private _lit: Lit;
   private _ceramic: CeramicService;
-  private channel: BroadcastChannel;
+  private channel: BroadcastChannel | undefined;
   private sessKey;
   private inboxWatcher;
-  private currentUser: CurrentUser;
-  private _lockSignIn: boolean;
+  private currentUser: CurrentUser | undefined;
+  private _lockSignIn: boolean | undefined;
   #signedAuthMessage: string;
   #tokenGenerator: () => Promise<UserAuth>;
   public readonly waitForAuth = 'waitForAuth';
@@ -113,11 +98,11 @@ class AWF_Auth {
           const { response } = event.data;
           if (response && response.identity.key !== this.sessKey) {
             this._log.info('syncing session');
-            this.currentUser = null;
-            this._getCurrentUser().then(data => this._log.info('logged in'));
+            this.currentUser = undefined;
+            this._getCurrentUser().then(() => this._log.info('logged in'));
           }
         } else if (type === this.SIGN_OUT_EVENT && this.currentUser) {
-          this._signOut().then(_ => {
+          this._signOut().then(() => {
             const response = {
               data: null,
               event: AUTH_EVENTS.SIGN_OUT,
@@ -133,7 +118,7 @@ class AWF_Auth {
   /**
    * Verifies if an ethereum address is already registered
    * Throws an UserNotRegistered error for addresses that are not registered
-   * @param ethAddress
+   * @param ethAddress - the eth address
    */
   async checkIfSignedUp(ethAddress: string) {
     const variables = { ethAddress: ethAddress };
@@ -141,9 +126,14 @@ class AWF_Auth {
     return !!prof?.getProfile?.pubKey;
   }
 
-  signIn(args: { provider?: EthProviders; checkRegistered: boolean; resumeSignIn?: boolean }) {
+  async signIn(args: {
+    provider?: EthProviders;
+    checkRegistered: boolean;
+    resumeSignIn?: boolean;
+  }) {
     const normalisedArgs = Object.assign({}, { checkRegistered: true }, args);
-    return createObservableStream(this._signIn(normalisedArgs));
+    const user = await this._signIn(normalisedArgs);
+    return createFormattedValue(user);
   }
 
   private async _signIn(
@@ -255,7 +245,7 @@ class AWF_Auth {
       // remote.config.metadata.set('x-textile-thread-name', db.dexie.name);
       // remote.config.metadata.set('x-textile-thread', db.id);
       // await remote.authorize(identity);
-      await lastValueFrom(this._db.open(3));
+      await this._db.open(3);
     }
     this._globalChannel.next({
       data: this.currentUser,
@@ -273,21 +263,21 @@ class AWF_Auth {
       event: AUTH_EVENTS.CONNECT_ADDRESS,
     });
     await this._web3.connect(provider);
-    await lastValueFrom(this._web3.checkCurrentNetwork());
-    const resp = await lastValueFrom(this._web3.getCurrentAddress());
+    await this._web3.checkCurrentNetwork();
+    const resp = await this._web3.getCurrentEthAddress();
     this._globalChannel.next({
-      data: { address: resp.data },
+      data: { address: resp },
       event: AUTH_EVENTS.CONNECT_ADDRESS_SUCCESS,
     });
-    return resp.data;
+    return resp;
   }
 
-  connectAddress(provider: EthProviders) {
-    return createObservableStream(this._connectAddress(provider));
+  async connectAddress(provider: EthProviders) {
+    return this._connectAddress(provider);
   }
 
-  signAuthMessage() {
-    return createObservableStream(this.#_signAuthMessage());
+  async signAuthMessage() {
+    return this.#_signAuthMessage();
   }
   async #_signAuthMessage(): Promise<void> {
     this._globalChannel.next({
@@ -302,7 +292,7 @@ class AWF_Auth {
   }
 
   signComposedMessage() {
-    return createObservableStream(this.#_signComposedMessage());
+    return this.#_signComposedMessage();
   }
   async #_signComposedMessage() {
     if (!this.#signedAuthMessage) {
@@ -321,7 +311,7 @@ class AWF_Auth {
   }
 
   signTokenMessage() {
-    return createObservableStream(this.#_signTokenMessage());
+    return this.#_signTokenMessage();
   }
   async #_signTokenMessage() {
     if (!this.#identity) {
@@ -344,43 +334,16 @@ class AWF_Auth {
       throw new Error('Token message was not signed!');
     }
     const pubKey = this.#identity.public.toString();
-    const address = await lastValueFrom(this._web3.getCurrentAddress());
-    const userAuth = loginWithChallenge(this.#identity, this._web3);
-    this.hubClient = Client.withUserAuth(userAuth, process.env.AUTH_ENDPOINT);
-    this.hubUser = Users.withUserAuth(userAuth);
-    this.buckClient = Buckets.withUserAuth(userAuth);
-    // this.fil = Filecoin.withUserAuth(userAuth);
-    await this.hubUser.getToken(this.#identity);
-    await this.hubUser.setupMailbox();
-    const mailboxID = await this.hubUser.getMailboxID();
-    this.inboxWatcher = await this.hubUser.watchInbox(mailboxID, ev => {
-      if (ev?.message?.body && ev?.message?.readAt === 0) {
-        if (ev?.message?.from === process.env.EWA_MAILSENDER) {
-          this._globalChannel.next({
-            data: { emit: true },
-            event: AUTH_EVENTS.NEW_NOTIFICATIONS,
-          });
-        } else {
-          this._globalChannel.next({
-            data: { emit: true },
-            event: AUTH_EVENTS.NEW_MESSAGES,
-          });
-        }
-      }
-    });
-    // await this.fil.getToken(this.#identity);
-    const timeoutApi = new Promise<never[]>(resolve => {
-      setTimeout(resolve, 15000, [null]);
-    });
-    //const [filAddress] = await Promise.race([this.fil.addresses(), timeoutApi]);
+    const address = await this._web3.getCurrentEthAddress();
+    // const userAuth = loginWithChallenge(this.#identity, this._web3);
+
     // refresh textile api tokens every 20min
     setInterval(async () => {
       await this.#_refreshTextileToken();
     }, 1000 * 60 * 20);
     this.currentUser = {
       pubKey,
-      ethAddress: address.data,
-      //filAddress: filAddress?.address,
+      ethAddress: address,
     };
   }
 
@@ -388,18 +351,14 @@ class AWF_Auth {
    * Force creation of a new jwt for textile buckets and mailboxes
    */
   async #_refreshTextileToken() {
-    await this.hubUser.getToken(this.#identity);
-    await this.buckClient.getToken(this.#identity);
+    // empty
   }
   /**
    * Returns current session objects for textile
    */
-  getSession() {
-    return createObservableStream<{
-      buck: Buckets;
-      client: Client;
-      user: Users;
-    }>(this._getSession());
+  async getSession() {
+    const session = await this._getSession();
+    return createFormattedValue(session);
   }
 
   private async _getSession() {
@@ -411,11 +370,7 @@ class AWF_Auth {
       await this.signIn({ provider: EthProviders.None, checkRegistered: false });
     }
 
-    return {
-      client: this.hubClient,
-      user: this.hubUser,
-      buck: this.buckClient,
-    };
+    return {};
   }
 
   /**
@@ -426,7 +381,7 @@ class AWF_Auth {
   }
 
   private async _getToken() {
-    const session = await lastValueFrom(this.getSession());
+    const session = await this.getSession();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const isExpired = session.data.client.context?.isExpired;
@@ -465,8 +420,8 @@ class AWF_Auth {
   /**
    * Destroy all the session objects
    */
-  signOut() {
-    return createObservableStream<boolean>(this._signOut());
+  async signOut() {
+    return createFormattedValue(await this._signOut());
   }
 
   private async _signOut() {
@@ -475,10 +430,7 @@ class AWF_Auth {
     localStorage.removeItem(this.providerKey);
     localStorage.removeItem(this.currentUserKey);
     this.#identity = null;
-    this.hubClient = null;
-    this.hubUser = null;
     this.inboxWatcher = null;
-    this.buckClient = null;
     this.auth = null;
     this.currentUser = null;
     if (this.channel) {
@@ -492,8 +444,8 @@ class AWF_Auth {
 
   /**
    * Sign data with the identity key
-   * @param data
-   * @param base64Format
+   * @param data -
+   * @param base64Format - set to true if the data is base64 encoded
    */
   async signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
@@ -523,7 +475,7 @@ class AWF_Auth {
 
   /**
    * Verify if a signature was made by a specific Public Key
-   * @param args
+   * @param args - object containing the signature, the serialized data and the public key
    */
   async verifySignature(args: {
     pubKey: string;
@@ -540,11 +492,11 @@ class AWF_Auth {
   }) {
     const pub = PublicKey.fromString(args.pubKey);
     let sig: Uint8Array;
-    if (args.signature instanceof Uint8Array) {
-      sig = args.signature;
-    } else {
+    if (!(args.signature instanceof Uint8Array)) {
       const str = Buffer.from(args.signature, 'base64');
       sig = Uint8Array.from(str);
+    } else {
+      sig = args.signature;
     }
     let serializedData;
     if (args.data instanceof Uint8Array) {
@@ -559,7 +511,7 @@ class AWF_Auth {
 
   /**
    * Utility method for sending mutation graphql requests
-   * @param data
+   * @param data - mutation data
    */
   async authenticateMutationData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
@@ -574,9 +526,9 @@ class AWF_Auth {
 
   /**
    * Allows decryption of privately sent messages to the current identity
-   * @param message
+   * @param message - the message
    */
-  decryptMessage(message) {
+  /*decryptMessage(message) {
     return createObservableStream<{
       body: Record<string, any>;
       from: string;
@@ -585,7 +537,7 @@ class AWF_Auth {
       createdAt: number;
       id: string;
     }>(this._decryptMessage(message));
-  }
+  }*/
 
   /**
    *
@@ -703,91 +655,46 @@ class AWF_Auth {
   }
 
   async sendMessage(to: string, content: unknown) {
-    const toPubKey = PublicKey.fromString(to);
+    const _toPubKey = PublicKey.fromString(to);
     const serializedMessage = AWF_Auth.serializeMessage(content);
     if (!serializedMessage) {
       throw new Error('Content is not serializable');
     }
-    return this.hubUser.sendMessage(this.#identity, toPubKey, serializedMessage);
+    return createFormattedValue({});
   }
 
   /**
    * Returns all the inbox messages from Textile Users
    * @param args - InboxListOptions
    */
-  async getMessages(args: InboxListOptions): Promise<IMessage[]> {
-    return this._getMessages(args);
+  async getMessages(args: InboxListOptions): Promise<{ data: IMessage[] }> {
+    return createFormattedValue(await this._getMessages(args));
   }
 
   private async _getMessages(args: InboxListOptions) {
     const limit = args?.limit || 50;
-    const messages = await this.hubUser.listInboxMessages(
-      Object.assign({}, { status: Status.UNREAD, limit: limit }, args),
-    );
-    const readMessagesLimit = limit - messages.length;
-    const readMessages =
-      readMessagesLimit > 0
-        ? await this.hubUser.listInboxMessages(
-            Object.assign({}, { status: Status.ALL, limit: limit }, args),
-          )
-        : [];
-    const combinedMessages = messages
-      .concat(readMessages)
-      .sort((a, b) => b.createdAt - a.createdAt);
-    const inbox = [];
-    const uniqueMessages = new Map();
-    for (const messageObj of combinedMessages) {
-      if (messageObj.from !== process.env.EWA_MAILSENDER) {
-        continue;
-      }
-      uniqueMessages.set(messageObj.id, messageObj);
-    }
-    for (const message of uniqueMessages.values()) {
-      const decryptedObj = await this._decryptMessage(message);
-      inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
-    }
-    uniqueMessages.clear();
-    return inbox.slice();
-  }
-
-  getObsConversation(pubKey: string) {
-    return createObservableStream<IMessage[]>(this.getConversation(pubKey));
+    return [].slice(0, limit);
   }
 
   // pubKey seek does not work
   // @Todo: workaround pubKey filtering
-  async getConversation(pubKey: string) {
+  async getConversation(_pubKey: string) {
     const limit = 10000;
-    const messagesReceived = await this.hubUser.listInboxMessages(
-      Object.assign({}, { limit: limit }),
-    );
-    const messagesSent = await this.hubUser.listSentboxMessages(
-      Object.assign({}, { limit: limit }),
-    );
-    const combinedMessages = messagesReceived
-      .concat(messagesSent)
-      .sort((a, b) => a.createdAt - b.createdAt);
-    const inbox = [];
-    for (const message of combinedMessages) {
-      const decryptedObj = await this._decryptMessage(message);
-      inbox.push(Object.assign({}, decryptedObj, { read: decryptedObj.readAt > 0 }));
-    }
-    return inbox.slice();
+    return createFormattedValue([].slice(0, limit));
   }
 
   /**
    * Checks the Textile Users inbox and looks for specific
    * notification message type
    */
-  hasNewNotifications() {
-    return createObservableStream(this._hasNewNotifications());
+  async hasNewNotifications() {
+    const hasNewNotifications = await this._hasNewNotifications();
+    return createFormattedValue(hasNewNotifications);
   }
 
   private async _hasNewNotifications() {
     const limit = 1;
-    const messages = await this.hubUser.listInboxMessages({ status: Status.UNREAD, limit: limit });
-    const newMessage = messages.find(rec => rec.from === process.env.EWA_MAILSENDER);
-    return !!newMessage;
+    return false;
   }
 
   async markMessageAsRead(messageId: string) {
@@ -801,35 +708,9 @@ class AWF_Auth {
 
   /**
    *
-   * @param messageId
+   * @param _messageId - message id to mark as read
    */
-  private async _markMessageAsRead(messageId: string) {
-    await this.hubUser.readInboxMessage(messageId);
-    return true;
-  }
-
-  async deleteMessage(messageId: string) {
-    return this._deleteMessage(messageId);
-  }
-
-  // returns textile usage information
-  async getTextileUsage(options?: unknown) {
-    return this._getTextileUsage(options);
-  }
-
-  private async _getTextileUsage(options?: unknown) {
-    if (!this.hubUser) {
-      return Promise.reject('The current user is not authenticated on textile services.');
-    }
-    return this.hubUser.getUsage(options);
-  }
-
-  /**
-   *
-   * @param messageId
-   */
-  private async _deleteMessage(messageId: string) {
-    await this.hubUser.deleteInboxMessage(messageId);
+  private async _markMessageAsRead(_messageId: string) {
     return true;
   }
 
@@ -839,7 +720,7 @@ class AWF_Auth {
 
   /**
    *
-   * @param inviteCode
+   * @param inviteCode - invitation code received by email
    */
   private async _validateInvite(inviteCode: string) {
     const response = await fetch(`${process.env.INVITATION_ENDPOINT}/${inviteCode}`, {

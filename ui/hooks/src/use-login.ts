@@ -144,12 +144,10 @@ export function useLogin(onError?: (err: Error) => void) {
       selectedProvider: EthProviders;
       checkRegistered: boolean;
     }) => {
-      const resp = await lastValueFrom(
-        sdk.api.auth.signIn({
-          provider: selectedProvider,
-          checkRegistered,
-        }),
-      );
+      const resp = await sdk.api.auth.signIn({
+        provider: selectedProvider,
+        checkRegistered,
+      });
       return resp.data;
     },
     {
@@ -204,40 +202,36 @@ export function useSignUp(
 
   const fullSignUp = useMutation(
     async () =>
-      lastValueFrom(
-        sdk.api.auth.signIn({
-          provider,
-          checkRegistered: checkRegistered,
-          resumeSignIn: false,
-        }),
-      ),
+      sdk.api.auth.signIn({
+        provider,
+        checkRegistered: checkRegistered,
+        resumeSignIn: false,
+      }),
+
     {
       onError: (err: WalletTransactionError) => handleError(err),
     },
   );
 
-  const connectWallet = useMutation(
-    async () => lastValueFrom(sdk.api.auth.connectAddress(provider)),
-    {
-      onError: (err: WalletTransactionError) => {
-        if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
-          analyticsActions?.trackEvent({
-            category: AnalyticsCategories.SIGN_UP_WALLET,
-            action: 'Step 4-1 Aborted',
-          });
-        }
-        handleError(err);
-      },
-      onSuccess: () => {
+  const connectWallet = useMutation(async () => sdk.api.auth.connectAddress(provider), {
+    onError: (err: WalletTransactionError) => {
+      if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
         analyticsActions?.trackEvent({
           category: AnalyticsCategories.SIGN_UP_WALLET,
-          action: 'Step 4-1 Completed',
+          action: 'Step 4-1 Aborted',
         });
-      },
+      }
+      handleError(err);
     },
-  );
+    onSuccess: () => {
+      analyticsActions?.trackEvent({
+        category: AnalyticsCategories.SIGN_UP_WALLET,
+        action: 'Step 4-1 Completed',
+      });
+    },
+  });
 
-  const signAuthMessage = useMutation(async () => lastValueFrom(sdk.api.auth.signAuthMessage()), {
+  const signAuthMessage = useMutation(async () => sdk.api.auth.signAuthMessage(), {
     onError: (err: WalletTransactionError) => {
       if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
         analyticsActions?.trackEvent({
@@ -255,37 +249,32 @@ export function useSignUp(
     },
   });
 
-  const signComposedMessage = useMutation(
-    async () => lastValueFrom(sdk.api.auth.signComposedMessage()),
-    {
-      onError: (err: WalletTransactionError) => {
-        if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
-          analyticsActions?.trackEvent({
-            category: AnalyticsCategories.SIGN_UP_WALLET,
-            action: 'Step 4-3 Declined',
-          });
-        }
-        handleError(err);
-      },
-      onSuccess: () => {
+  const signComposedMessage = useMutation(async () => sdk.api.auth.signComposedMessage(), {
+    onError: (err: WalletTransactionError) => {
+      if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
         analyticsActions?.trackEvent({
           category: AnalyticsCategories.SIGN_UP_WALLET,
-          action: 'Step 4-3 Completed',
+          action: 'Step 4-3 Declined',
         });
-      },
+      }
+      handleError(err);
     },
-  );
+    onSuccess: () => {
+      analyticsActions?.trackEvent({
+        category: AnalyticsCategories.SIGN_UP_WALLET,
+        action: 'Step 4-3 Completed',
+      });
+    },
+  });
 
   const finishSignUp = useMutation(
     async () => {
-      await lastValueFrom(sdk.api.auth.signTokenMessage());
-      return lastValueFrom(
-        sdk.api.auth.signIn({
-          provider,
-          checkRegistered: false,
-          resumeSignIn: true,
-        }),
-      );
+      await sdk.api.auth.signTokenMessage();
+      return sdk.api.auth.signIn({
+        provider,
+        checkRegistered: false,
+        resumeSignIn: true,
+      });
     },
     {
       onError: (err: WalletTransactionError) => {
@@ -350,7 +339,7 @@ export function useLogout() {
   const sdk = getSDK();
   return useMutation(
     async () => {
-      const resp = await lastValueFrom(sdk.api.auth.signOut());
+      const resp = await sdk.api.auth.signOut();
       if (resp.data) {
         queryClient.setQueryData([LOGIN_STATE_KEY], {
           ethAddress: null,

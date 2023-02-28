@@ -2,7 +2,6 @@ import { PrivateKey, Identity, UserAuth } from '@textile/hub';
 import { authStatus } from './constants';
 import { ethers } from 'ethers';
 import Web3Connector from '../common/web3.connector';
-import { lastValueFrom } from 'rxjs';
 
 /**
  *
@@ -43,9 +42,9 @@ export const generatePrivateKey = async (
   signer: Web3Connector,
   sig: string,
 ): Promise<PrivateKey> => {
-  const ethAddress = await lastValueFrom(signer.getCurrentAddress());
+  const ethAddress = await signer.getCurrentEthAddress();
   const secret = ethers.utils.keccak256(sig);
-  let message = metamaskGen(ethAddress.data, secret, 'ethereum.world');
+  let message = metamaskGen(ethAddress, secret, 'ethereum.world');
   if (process.env.NODE_ENV === 'development') {
     message += '==DEV Key==';
   }
@@ -114,7 +113,7 @@ export const loginWithChallenge = (
                 let acceptedTermsAndPrivacy;
                 if (data.addressChallenge) {
                   addressChallenge = await signer.signMessage(data.addressChallenge);
-                  ethAddress = (await lastValueFrom(signer.getCurrentAddress())).data;
+                  ethAddress = await signer.getCurrentEthAddress();
                   authStatus.isNewUser = true;
                   signUpToken = localStorage.getItem('@signUpToken');
                   acceptedTermsAndPrivacy = localStorage.getItem('@acceptedTermsAndPrivacy');
