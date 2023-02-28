@@ -1,5 +1,5 @@
 import React from 'react';
-import Circle from './Cirlce';
+import Circle from './Circle';
 import { PropsWithChildren } from 'react';
 import { MeterProps } from './types';
 import Bar from './Bar';
