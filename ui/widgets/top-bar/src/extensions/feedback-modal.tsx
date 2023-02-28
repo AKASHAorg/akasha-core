@@ -1,14 +1,17 @@
-import * as React from 'react';
-import singleSpaReact from 'single-spa-react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
-import DS from '@akashaorg/design-system';
+import singleSpaReact from 'single-spa-react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { useLocation, BrowserRouter as Router } from 'react-router-dom';
+
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
-const { FeedbackModal, ErrorLoader } = DS;
+const { FeedbackModal } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const FeedbackModalContainer = (props: RootExtensionProps) => {
   const { t } = useTranslation('ui-widget-topbar');

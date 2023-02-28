@@ -1,10 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { I18nextProvider, useTranslation } from 'react-i18next';
 import singleSpaReact from 'single-spa-react';
-import { RootExtensionProps, EventTypes } from '@akashaorg/typings/ui';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
+
 import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { RootExtensionProps, EventTypes } from '@akashaorg/typings/ui';
 import {
   useGetEntryAuthor,
   useIsFollowingMultiple,
@@ -15,7 +17,9 @@ import {
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 
-const { Box, ProfileMiniCard, ErrorLoader, ExtensionPoint } = DS;
+const { Box, ProfileMiniCard, ExtensionPoint } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const params: { postId?: string } = useParams();
