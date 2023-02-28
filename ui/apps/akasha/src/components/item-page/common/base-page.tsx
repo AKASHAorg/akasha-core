@@ -1,7 +1,14 @@
-import * as React from 'react';
+import React from 'react';
+import { UseQueryResult } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { Logger } from '@akashaorg/awf-sdk';
+import { useAnalytics } from '@akashaorg/ui-awf-hooks';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import { LoginState, useInfiniteComments, useGetProfile } from '@akashaorg/ui-awf-hooks';
+import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 import {
   RootComponentProps,
   EntityTypes,
@@ -9,17 +16,12 @@ import {
   IEntryData,
 } from '@akashaorg/typings/ui';
 
-import { LoginState, useInfiniteComments, useGetProfile } from '@akashaorg/ui-awf-hooks';
-
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import { OriginalItem } from './original-item';
 import { PendingReply } from './pending-reply';
-import { UseQueryResult } from 'react-query';
-import { Logger } from '@akashaorg/awf-sdk';
-import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
 
-const { BasicCardBox, EntryCardHidden, ErrorLoader, EntryCardLoading } = DS;
+const { BasicCardBox, EntryCardHidden, EntryCardLoading } = DS;
+
+const { ErrorLoader } = DSNew;
 
 type BaseEntryProps = {
   postId: string;
@@ -111,7 +113,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
           type="script-error"
           title={t('There was an error loading the entry')}
           details={t('We cannot show this entry right now')}
-          devDetails={entryReq.error}
+          devDetails={entryReq.error as string}
         />
       )}
       {entryReq.isSuccess && (
