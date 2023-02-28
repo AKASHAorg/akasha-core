@@ -12,7 +12,7 @@ export interface ISnackbar {
   actionButtonLabel?: string;
   type: snackBarType;
   handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
-  handleDismiss?: () => void;
+  handleDismiss?: (event: React.SyntheticEvent<Element, Event>) => void;
 }
 
 const Snackbar: React.FC<ISnackbar> = ({
