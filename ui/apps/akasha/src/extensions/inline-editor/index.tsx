@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import singleSpaReact from 'single-spa-react';
 import ReactDOM from 'react-dom';
-import DS from '@akashaorg/design-system';
+import DS from '@akashaorg/design-system-core';
 
 import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';

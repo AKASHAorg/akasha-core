@@ -1,17 +1,21 @@
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+
 import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import { useInfinitePostsByAuthor, LoginState, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import {
   RootComponentProps,
   EntityTypes,
   IProfileData,
   ModalNavigationOptions,
 } from '@akashaorg/typings/ui';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
-import { useInfinitePostsByAuthor, LoginState, useGetProfile } from '@akashaorg/ui-awf-hooks';
 
-const { Box, Helmet, ErrorLoader } = DS;
+const { Box, Helmet } = DS;
+
+const { ErrorLoader } = DSNew;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
