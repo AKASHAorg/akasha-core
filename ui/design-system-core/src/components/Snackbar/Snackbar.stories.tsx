@@ -11,7 +11,7 @@ const Template = args => {
   const handleClick = () => {
     console.log('clicked');
   };
-  return <Snackbar {...args} handleButtonClick={handleClick} onClickInactive={handleClick} />;
+  return <Snackbar {...args} handleButtonClick={handleClick} handleDismiss={handleClick} />;
 };
 
 export const BaseSnackbar = Template.bind({});
