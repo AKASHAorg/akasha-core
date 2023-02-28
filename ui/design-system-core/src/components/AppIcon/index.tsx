@@ -11,7 +11,7 @@ export interface IconSize {
 
 export interface IAppIcon extends IconSize {
   ref?: React.Ref<HTMLDivElement>;
-  appImg?: LogoSourceType & { value: IconType };
+  appImg?: LogoSourceType;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   placeholderIconType: IconType;
   plain?: boolean;
