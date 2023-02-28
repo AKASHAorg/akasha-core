@@ -82,12 +82,12 @@ const Checkbox: React.FC<iCheckboxProps> = ({
       ? 'after:w-2.5 after:h-[2px] after:-ml-[3px] after:mt-2.5'
       : 'after:w-3.5 after:h-[1.5px] after:-ml-[3px] after:mt-2.5';
 
-  const instanceLabelStyles = apply`
+  const instanceLabelStyle = apply`
   ${baseLabelStyles}
   ${indeterminate ? textColorIndeterminate : textColor}
   `;
 
-  const instancePseudoCheckboxStyles = apply`
+  const instancePseudoCheckboxStyle = apply`
   ${basePseudoCheckboxStyles}
    ${checkboxSizes}
    ${tickMarkSizes}
@@ -101,7 +101,7 @@ const Checkbox: React.FC<iCheckboxProps> = ({
   after:${minusMarkColor}
   `;
 
-  const instanceInderterminateCheckboxStyles = apply`
+  const instanceInderterminateCheckboxStyle = apply`
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${minusMarkStyles}
@@ -110,13 +110,13 @@ const Checkbox: React.FC<iCheckboxProps> = ({
   invisible w-4 h-4 relative
   `;
 
-  const selectedPseudoCheckboxStyles = apply`
-    ${instancePseudoCheckboxStyles}
+  const selectedPseudoCheckboxStyle = apply`
+    ${instancePseudoCheckboxStyle}
     invisible w-4 h-4 relative
     `;
 
-  const unselectedPseudoCheckboxStyles = apply`
-    ${instancePseudoCheckboxStyles}
+  const unselectedPseudoCheckboxStyle = apply`
+    ${instancePseudoCheckboxStyle}
     after:content-none invisible w-4 h-4 relative
     `;
 
@@ -133,13 +133,13 @@ const Checkbox: React.FC<iCheckboxProps> = ({
         onChange={handleChange}
         className={tw(
           indeterminate
-            ? instanceInderterminateCheckboxStyles
+            ? instanceInderterminateCheckboxStyle
             : isSelected
-            ? selectedPseudoCheckboxStyles
-            : unselectedPseudoCheckboxStyles,
+            ? selectedPseudoCheckboxStyle
+            : unselectedPseudoCheckboxStyle,
         )}
       />
-      <label htmlFor={value} className={tw(instanceLabelStyles)}>
+      <label htmlFor={value} className={tw(instanceLabelStyle)}>
         {label}
       </label>
     </div>
