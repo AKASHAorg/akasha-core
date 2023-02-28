@@ -1,12 +1,16 @@
-import * as React from 'react';
-import DS from '@akashaorg/design-system';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { LEGAL_DOCS } from '@akashaorg/typings/ui';
 import { useLegalDoc } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps, LEGAL_DOCS } from '@akashaorg/typings/ui';
 
-const { ErrorInfoCard, ErrorLoader, MdCard } = DS;
+const { MdCard } = DS;
 
-const PrivacyPolicyPage = (_props: RootComponentProps) => {
+const { ErrorInfoCard, ErrorLoader } = DSNew;
+
+const PrivacyPolicyPage = () => {
   const { t } = useTranslation('app-legal');
 
   const legalDocReq = useLegalDoc(LEGAL_DOCS.PRIVACY_POLICY);
