@@ -2,8 +2,11 @@ import akasha from './akasha';
 import appCenter from './app-center';
 import appModeration from './app-moderation';
 import bookmark from './bookmark';
+import chatBubble from './chat-bubble';
 import discord from './discord';
+import explore from './explore';
 import github from './github';
+import message from './message';
 import notifications from './notifications';
 import search from './search';
 import settingsAlt from './settings-alt';
@@ -18,8 +21,11 @@ export type CustomIconTypes =
   | 'appCenter'
   | 'appModeration'
   | 'bookmark'
+  | 'chatBubble'
   | 'discord'
+  | 'explore'
   | 'github'
+  | 'message'
   | 'notifications'
   | 'search'
   | 'settingsAlt'
@@ -31,8 +37,11 @@ export {
   appCenter,
   appModeration,
   bookmark,
+  chatBubble,
   discord,
+  explore,
   github,
+  message,
   notifications,
   search,
   settingsAlt,

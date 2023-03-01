@@ -30,8 +30,11 @@ export const iconTypes: IconType[] = [
   'appCenter',
   'appModeration',
   'bookmark',
+  'chatBubble',
   'discord',
+  'explore',
   'github',
+  'message',
   'notifications',
   'search',
   'settingsAlt',
@@ -84,20 +87,39 @@ const Icon: React.FC<IconProps> = props => {
   const isFillAndStrokeIcon = fillAndStrokeIcons.includes(type);
 
   const plainStyle = plain
-    ? `${isFillOnlyIcon ? '' : '[&>*]:stroke-black dark:[&>*]:stroke-white'} ${
-        isFillAndStrokeIcon ? '[&>*]:fill-transparent' : ''
+    ? `${
+        isFillOnlyIcon
+          ? '[& *]:fill-black dark:[& *]:fill-white'
+          : isFillAndStrokeIcon
+          ? '[& *]:fill-black [& *]:stroke-black dark:[& *]:fill-white dark:[& *]:stroke-white'
+          : '[& *]:stroke-black dark:[& *]:stroke-white'
       }`
     : '';
-  const colorStyle = color ? `[&>*]:stroke-${color} [&>*]:fill-${color}` : '';
+
+  const colorStyle = color
+    ? `${
+        isFillOnlyIcon
+          ? `[& *]:fill-${color}`
+          : isFillAndStrokeIcon
+          ? `[& *]:fill-${color} [& *]:stroke-${color}`
+          : `[& *]:stroke-${color}`
+      }`
+    : '';
+
   const accentColorStyle = accentColor
-    ? `${isFillOnlyIcon ? '' : '[&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark'} ${
-        isFillAndStrokeIcon ? '[&>*]:fill-transparent' : ''
+    ? `${
+        isFillOnlyIcon
+          ? '[& *]:fill-secondary-light dark:[& *]:fill-secondary-dark'
+          : isFillAndStrokeIcon
+          ? '[& *]:fill-secondary-light [& *]:stroke-secondary-light dark:[& *]:fill-secondary-dark dark:[& *]:stroke-secondary-dark'
+          : '[& *]:stroke-secondary-light dark:[& *]:stroke-secondary-dark'
       }`
     : '';
+
   const iconStyle = `select-none ${plainStyle} ${colorStyle} ${accentColorStyle} ${
     clickable && !disabled
-      ? `cursor-pointer ${isFillOnlyIcon ? '' : 'hover:[&>*]:stroke-secondary-dark'} ${
-          isFillAndStrokeIcon ? 'hover:[&>*]:fill-transparent' : ''
+      ? `cursor-pointer ${isFillOnlyIcon ? '' : 'hover:[& *]:stroke-secondary-dark'} ${
+          isFillAndStrokeIcon ? 'hover:[& *]:fill-transparent' : ''
         }`
       : ''
   }`;

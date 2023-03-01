@@ -6,6 +6,7 @@ import BasicCardBox from './components/BasicCardBox';
 import BasicPopover from './components/BasicPopover';
 import Button from './components/Button';
 import Card from './components/Card';
+import CopyToClipboard from './components/CopyToClipboard';
 import DuplexButton from './components/DuplexButton';
 import EditorMeter from './components/EditorMeter';
 import ErrorCard from './components/ErrorCard';
@@ -13,7 +14,18 @@ import ErrorLoader from './components/ErrorLoader';
 import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
 import Icon from './components/Icon';
 import Meter from './components/Meter';
+import ModerationIntroCard from './components/ModerationIntroCard';
+import ModerationValueCard from './components/ModerationValuesCard/value-card';
+import ModerationValuesCard from './components/ModerationValuesCard';
+
 import ProfileAvatarButton from './components/ProfileAvatarButton';
+import {
+  ProfileStats,
+  ProfileBio,
+  ProfileHeader,
+  ProfileLinks,
+  ProfileLoading,
+} from './components/ProfileCard';
 import RadioButton from './components/RadioButton';
 import Sidebar from './components/Sidebar';
 import StackedAvatar from './components/StackedAvatar';
@@ -23,14 +35,6 @@ import TextField from './components/TextField';
 import TextLine from './components/TextLine';
 import Tooltip from './components/Tooltip';
 import Stack from './components/Stack';
-import {
-  ProfileStats,
-  ProfileBio,
-  ProfileHeader,
-  ProfileLinks,
-  ProfileLoading,
-} from './components/ProfileCard';
-import CopyToClipboard from './components/CopyToClipboard';
 
 export default {
   Accordion,
@@ -41,6 +45,7 @@ export default {
   BasicPopover,
   Button,
   Card,
+  CopyToClipboard,
   DuplexButton,
   EditorMeter,
   ErrorCard,
@@ -48,7 +53,15 @@ export default {
   ErrorInfoCard,
   Icon,
   Meter,
+  ModerationIntroCard,
+  ModerationValueCard,
+  ModerationValuesCard,
   ProfileAvatarButton,
+  ProfileBio,
+  ProfileHeader,
+  ProfileLinks,
+  ProfileLoading,
+  ProfileStats,
   RadioButton,
   Stack,
   Sidebar,
@@ -58,10 +71,4 @@ export default {
   TextField,
   TextLine,
   Tooltip,
-  ProfileHeader,
-  ProfileBio,
-  ProfileStats,
-  ProfileLinks,
-  ProfileLoading,
-  CopyToClipboard,
 };
