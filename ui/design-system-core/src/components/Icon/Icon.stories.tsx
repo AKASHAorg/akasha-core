@@ -13,5 +13,4 @@ export const BaseIcon = Template.bind({});
 BaseIcon.args = {
   type: 'akasha',
   plain: true,
-  isCustomIcon: true,
 };

@@ -5,7 +5,7 @@ export function getPaddingClasses(padding: Padding) {
     return `p-[${padding / 16}rem]`;
   }
 
-  if (typeof padding === 'object') `px-[${padding.x / 16}rem] py-[${padding.y / 16}rem]`;
+  if (typeof padding === 'object') return `px-[${padding.x / 16}rem] py-[${padding.y / 16}rem]`;
 
   if (typeof padding === 'string') return padding;
 

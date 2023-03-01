@@ -187,7 +187,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
                     'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
                   )}
                 >
-                  <Icon type={icon.name} isCustomIcon={true} plain={true} accentColor={true} />
+                  <Icon type={icon.name} plain={true} accentColor={true} />
                 </div>
               </a>
             </div>

@@ -14,6 +14,5 @@ BaseIcon.args = {
   placeholderIconType: 'notifications',
   plain: true,
   stackedIcon: true,
-  isCustomIcon: true,
   hasNewNotifs: true,
 };
