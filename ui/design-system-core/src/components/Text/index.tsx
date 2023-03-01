@@ -33,7 +33,6 @@ export type TextProps = {
   truncate?: boolean;
   breakWord?: boolean;
   weight?: Weight;
-  onClick?: () => void;
 };
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
@@ -64,7 +63,6 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   breakWord,
   weight,
   children,
-  onClick,
 }) => {
   const tag = getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
@@ -81,7 +79,6 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
       className: tw(
         apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${className}`,
       ),
-      onClick,
     },
     children,
   );

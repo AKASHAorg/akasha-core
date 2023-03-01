@@ -64,23 +64,24 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
         )}
 
         {codeOfConductLabel && (
-          <Text
-            variant="subtitle2"
-            color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-dark' }}
-            weight="bold"
-            align="center"
-            className="cursor-pointer"
-            onClick={onCodeOfConductClick}
-          >
-            {codeOfConductLabel}
-          </Text>
+          <div onClick={onCodeOfConductClick}>
+            <Text
+              variant="subtitle2"
+              color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-dark' }}
+              weight="bold"
+              align="center"
+              className="cursor-pointer"
+            >
+              {codeOfConductLabel}
+            </Text>
+          </div>
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
           <div className={tw('flex md:px-20 justify-between')}>
             {overviewCTAArr.map(({ url, label, iconType }) => (
               <div key={label + iconType} className={tw('grid gap-1 grid-cols-1 w-[30%]')}>
-                <Icon size="md" accentColor={true} type={iconType} />
+                <Icon size="md" accentColor={true} type={iconType} styling="mx-auto my-0" />
                 <a
                   href={url}
                   className={tw(
