@@ -255,8 +255,14 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           }
           isFollowing={followedProfiles?.includes(profileData.pubKey)}
           viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
+          flagLabel={t('Report')}
           handleUnfollow={handleUnfollow}
           handleFollow={handleFollow}
+          handleFlag={handleEntryFlag(
+            profileData.pubKey ? profileData.pubKey : '',
+            EntityTypes.PROFILE,
+            profileData.name,
+          )}
         />
         {/*@TODO replace moderator label with new design when its ready */}
         {/* {isModerator && <ModeratorLabel label={t('Moderator')} />} */}

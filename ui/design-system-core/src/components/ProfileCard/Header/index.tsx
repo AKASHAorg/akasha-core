@@ -1,5 +1,5 @@
 import { apply, tw } from '@twind/core';
-import React from 'react';
+import React, { useState } from 'react';
 import Card from '../../Card';
 import Stack from '../../Stack';
 import Avatar, { AvatarSrc } from '../../Avatar';
@@ -9,6 +9,8 @@ import Divider from '../../Divider';
 import TextLine from '../../TextLine';
 import CopyToClipboard from '../../CopyToClipboard';
 import Button from '../../Button';
+import AppIcon from '../../AppIcon';
+import { useCloseActions } from '../../../utils/useCloseActions';
 
 export type CoverImage = { url?: string; fallbackUrl?: string };
 
@@ -21,8 +23,10 @@ export type HeaderProps = {
   ensName: 'loading' | string;
   isFollowing: boolean;
   viewerIsOwner: boolean;
+  flagLabel: string;
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
+  handleFlag: (event: React.SyntheticEvent<Element, Event>) => void;
   actionButtonExt?: React.ReactNode;
 };
 
@@ -35,12 +39,20 @@ const Header: React.FC<HeaderProps> = ({
   ensName,
   isFollowing,
   viewerIsOwner,
+  flagLabel,
   handleUnfollow,
   handleFollow,
+  handleFlag,
 }) => {
-  const iconContainerStyle = tw(apply`h-8 w-8 rounded-full bg-grey9 dark:grey3`);
-  const iconStyle = tw(apply`h-4 [&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark`);
   const avatarContainer = tw(apply`relative w-20 h-[3.5rem] shrink-0`);
+  const flagIconStyle = tw(apply`h-4 [&>*]:stroke-error-light dark:[&>*]:stroke-error-dark`);
+  const [showMore, setShowMore] = useState(false);
+  const showMoreRef = useCloseActions(() => {
+    setShowMore(false);
+  });
+  const onShowMore = () => {
+    setShowMore(!showMore);
+  };
 
   return (
     <div>
@@ -67,48 +79,67 @@ const Header: React.FC<HeaderProps> = ({
             <Stack direction="column">
               <Text variant="button-lg">{name}</Text>
               <Text variant="body2" color={{ light: 'text-grey5', dark: 'text-grey7' }}>
-                {`@${userName}`}
+                {`@${userName.replace('@', '')}`}
               </Text>
             </Stack>
             <div className="ml-auto mt-2">
               {viewerIsOwner ? (
                 <button>
-                  <Stack align="center" justify="center" className={iconContainerStyle}>
-                    {/*@TODO customize AppIcon and use it here */}
-                    <Icon type="Cog6ToothIcon" styling={iconStyle} />
-                  </Stack>
+                  <AppIcon placeholderIconType="Cog6ToothIcon" iconSize="xs" accentColor />
                 </button>
               ) : (
-                <Stack spacing="gap-x-2">
-                  <button>
-                    <Stack align="center" justify="center" className={iconContainerStyle}>
-                      {/*@TODO customize AppIcon and use it here */}
-                      <Icon type="EnvelopeIcon" styling={iconStyle} />
-                    </Stack>
-                  </button>
-                  {isFollowing ? (
-                    <Button
-                      size="small"
-                      icon="UserPlusIcon"
-                      onClick={handleUnfollow}
-                      iconOnly
-                      primary
-                    />
-                  ) : (
-                    <button onClick={handleFollow}>
-                      <Stack align="center" justify="center" className={iconContainerStyle}>
-                        {/*@TODO customize AppIcon and use it here */}
-                        <Icon type="UsersIcon" styling={iconStyle} />
-                      </Stack>
+                <div className="relative">
+                  <Stack spacing="gap-x-2">
+                    <button>
+                      <AppIcon placeholderIconType="EnvelopeIcon" iconSize="xs" accentColor />
                     </button>
+                    {isFollowing ? (
+                      <>
+                        {/*Enhance button component */}
+                        <Button
+                          size="small"
+                          icon="UserPlusIcon"
+                          onClick={handleUnfollow}
+                          iconOnly
+                          primary
+                        />
+                      </>
+                    ) : (
+                      <button onClick={handleFollow}>
+                        <AppIcon placeholderIconType="UsersIcon" iconSize="xs" accentColor />
+                      </button>
+                    )}
+                    <button onClick={onShowMore} ref={showMoreRef}>
+                      <AppIcon
+                        placeholderIconType="EllipsisVerticalIcon"
+                        iconSize="xs"
+                        hover={true}
+                        active={showMore}
+                        accentColor
+                      />
+                    </button>
+                  </Stack>
+                  {showMore && (
+                    <Card
+                      elevation="1"
+                      padding={{ x: 18, y: 8 }}
+                      radius={8}
+                      className="absolute top-[36px] right-0"
+                    >
+                      <button onClick={handleFlag}>
+                        <Stack align="center" spacing="gap-x-1">
+                          <Icon type="FlagIcon" styling={flagIconStyle} />
+                          <Text
+                            variant="body1"
+                            color={{ light: 'text-error-light', dark: 'text-error-dark' }}
+                          >
+                            {flagLabel}
+                          </Text>
+                        </Stack>
+                      </button>
+                    </Card>
                   )}
-                  <button>
-                    <Stack align="center" justify="center" className={iconContainerStyle}>
-                      {/*@TODO customize AppIcon and use it here */}
-                      <Icon type="EllipsisVerticalIcon" styling={iconStyle} />
-                    </Stack>
-                  </button>
-                </Stack>
+                </div>
               )}
             </div>
           </Stack>

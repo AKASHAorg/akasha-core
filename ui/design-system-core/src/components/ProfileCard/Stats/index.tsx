@@ -4,6 +4,7 @@ import Stack from '../../Stack';
 import Icon, { IconType } from '../../Icon';
 import Text, { TextProps } from '../../Text';
 import { apply, tw } from '@twind/core';
+import AppIcon from '../../AppIcon';
 
 type Stat = {
   label: string;
@@ -19,11 +20,6 @@ export type StatsProps = {
 };
 
 const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following }) => {
-  const iconContainerStyle = tw(
-    apply`rounded-full p-2 h-8 w-8 sm:p-2 sm:h-12 sm:w-12 bg-grey9 dark:grey3`,
-  );
-  const iconStyle = tw(apply`h-4 sm:h-6 stroke-secondary-light dark:stroke-secondary-dark`);
-
   const labelProp: TextProps = {
     variant: 'footnotes2',
     weight: 'normal',
@@ -56,13 +52,12 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
           {stats.map((stat, index) => (
             <button onClick={stat.onClick} key={stat.label + index}>
               <Stack direction="column" align="center">
-                <Stack
-                  className={tw(apply`${iconContainerStyle} ${stat.className}`)}
-                  align="center"
-                  justify="center"
-                >
-                  <Icon type={stat.icon} styling={iconStyle} />
-                </Stack>
+                <AppIcon
+                  placeholderIconType={stat.icon}
+                  iconSize={{ height: 'h-4 sm:h-6' }}
+                  size={{ height: 'h-8 sm:h-12', width: 'w-8 sm:w-12' }}
+                  accentColor
+                />
                 <Text {...labelProp}>{stat.label}</Text>
                 <Text {...totalProps}>{stat.total}</Text>
               </Stack>
