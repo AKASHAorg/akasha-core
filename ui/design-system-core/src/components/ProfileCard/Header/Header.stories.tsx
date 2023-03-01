@@ -18,6 +18,31 @@ BasicProfileHeader.args = {
   name: 'Coffee Lover',
   userName: '@ilovecoffee',
   ensName: 'coffeelover.eth',
+  flagLabel: 'Report',
+};
+
+export const BasicProfileHeaderFollowing = Template.bind({});
+BasicProfileHeaderFollowing.args = {
+  ethAddress,
+  coverImage: null,
+  avatar: { url: 'https://placebeard.it/360x360' },
+  name: 'Coffee Lover',
+  userName: '@ilovecoffee',
+  ensName: 'coffeelover.eth',
+  flagLabel: 'Report',
+  isFollowing: true,
+};
+
+export const BasicProfileHeaderOwnProfile = Template.bind({});
+BasicProfileHeaderOwnProfile.args = {
+  ethAddress,
+  coverImage: null,
+  avatar: { url: 'https://placebeard.it/360x360' },
+  name: 'Coffee Lover',
+  userName: '@ilovecoffee',
+  ensName: 'coffeelover.eth',
+  flagLabel: 'Report',
+  viewerIsOwner: true,
 };
 
 export const ProfileHeaderWithoutEns = Template.bind({});
@@ -27,4 +52,5 @@ ProfileHeaderWithoutEns.args = {
   avatar: { url: 'https://placebeard.it/360x360' },
   name: 'Coffee Lover',
   userName: '@ilovecoffee',
+  flagLabel: 'Report',
 };

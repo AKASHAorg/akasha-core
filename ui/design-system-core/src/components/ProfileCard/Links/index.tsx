@@ -1,12 +1,11 @@
-import { apply, tw } from '@twind/core';
 import React from 'react';
-import Icon from '../../Icon';
 import Stack from '../../Stack';
 import Text from '../../Text';
 import Card from '../../Card';
+import CopyToClipboard from '../../CopyToClipboard';
+import AppIcon from '../../AppIcon';
 import { getIconFromType } from './getIconFromType';
 import { getLinkFromType } from './getLinkFromType';
-import CopyToClipboard from '../../CopyToClipboard';
 
 export type Link = {
   type: string;
@@ -21,9 +20,6 @@ export interface LinksProps {
 }
 
 const Links: React.FC<LinksProps> = ({ title, links }) => {
-  const iconContainerStyle = tw(apply`h-5 w-5 rounded-full bg-grey9 dark:grey3`);
-  const iconStyle = tw(apply`h-3 [&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark`);
-
   return (
     <Card elevation="1" radius={20} padding={16}>
       <Stack direction="column" spacing="gap-y-2.5">
@@ -31,9 +27,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
         {links.map((link, index) => (
           <CopyToClipboard key={link.type + index} value={getLinkFromType(link, true)}>
             <Stack spacing="gap-x-2">
-              <Stack align="center" justify="center" className={iconContainerStyle}>
-                <Icon type={getIconFromType(link.type)} styling={iconStyle} />
-              </Stack>
+              <AppIcon placeholderIconType={getIconFromType(link.type)} size="xs" accentColor />
               <Text
                 variant="body2"
                 color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}

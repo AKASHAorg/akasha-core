@@ -1,8 +1,10 @@
-import * as React from 'react';
-import DS from '@akashaorg/design-system';
-import TrendingWidgetCard from './TrendingWidgetCard';
-
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
+
 import {
   useTrendingTags,
   useTrendingProfiles,
@@ -14,9 +16,12 @@ import {
   useGetLogin,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
-import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 
-const { ErrorLoader, Box } = DS;
+import TrendingWidgetCard from './TrendingWidgetCard';
+
+const { Box } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;

@@ -5,7 +5,7 @@ import DS from '@akashaorg/design-system-core';
 import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
 import { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
 
-const { Avatar, Button, Icon, Text } = DS;
+const { Avatar, Button, AppIcon, Text } = DS;
 
 import ListSidebarApps from './list-sidebar-apps';
 
@@ -182,13 +182,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
               <a href={icon.link} target="_blank" rel="noreferrer noopener">
-                <div
-                  className={tw(
-                    'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
-                  )}
-                >
-                  <Icon type={icon.name} isCustomIcon={true} plain={true} accentColor={true} />
-                </div>
+                <AppIcon placeholderIconType={icon.name} size="sm" plain accentColor />
               </a>
             </div>
           ))}

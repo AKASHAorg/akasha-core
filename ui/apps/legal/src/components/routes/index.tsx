@@ -16,11 +16,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     <Router basename={props.baseRouteName}>
       <Box>
         <Routes>
-          <Route path={route[TOS]} element={<TermsOfService {...props} />} />
-          <Route path={route[TOU]} element={<TermsOfUse {...props} />} />
-          <Route path={route[PP]} element={<PrivacyPolicy {...props} />} />
-          <Route path={route[COC]} element={<CodeOfConduct {...props} />} />
-          <Route path={route[DG]} element={<DeveloperGuidelines {...props} />} />
+          <Route path={route[TOS]} element={<TermsOfService />} />
+          <Route path={route[TOU]} element={<TermsOfUse />} />
+          <Route path={route[PP]} element={<PrivacyPolicy />} />
+          <Route path={route[COC]} element={<CodeOfConduct />} />
+          <Route path={route[DG]} element={<DeveloperGuidelines />} />
         </Routes>
       </Box>
     </Router>
