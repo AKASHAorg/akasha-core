@@ -4,6 +4,12 @@ jest.mock('@akashaorg/typings/ui', () => ({
   EntityTypes: {
     PROFILE: 1,
   },
+  LogoTypeSource: {
+    ICON: 'icon',
+    String: 'string',
+    IPFS: 'ipfs',
+    AVATAR: 'avatar',
+  },
   EventTypes: {
     Instantiated: 'instantiated',
     InstallIntegration: 'install-integration',

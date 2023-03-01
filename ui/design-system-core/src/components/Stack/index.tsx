@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { LegacyRef, PropsWithChildren } from 'react';
 import { getAlignClasses } from './getAlignClasses';
 import { getDirectionClasses } from './getDirectionClasses';
 import { getJustifyClasses } from './getJustifyClasses';
@@ -14,6 +14,7 @@ export type StackProps = {
   align?: Align;
   spacing?: string;
   className?: string;
+  ref?: LegacyRef<HTMLDivElement>;
 };
 
 const Stack: React.FC<PropsWithChildren<StackProps>> = ({
