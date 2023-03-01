@@ -129,7 +129,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Text variant="footnotes1" className={titleText}>
             {title}
           </Text>
-          <Text variant="subtitle2" className={tw(subtitleText)}>
+          <Text variant="subtitle2" className={subtitleText}>
             {subtitle}
           </Text>
         </div>
@@ -166,7 +166,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
-        <Text variant="subtitle2" className={tw(subtitleText)}>
+        <Text variant="subtitle2" className={subtitleText}>
           {ctaText}
         </Text>
         <div className={tw('w-fit h-fit mt-6')}>
@@ -175,7 +175,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4')}>
-        <Text variant="subtitle2" className={tw(subtitleText)}>
+        <Text variant="subtitle2" className={subtitleText}>
           {footerLabel}
         </Text>
         <div className={tw('flex w-fit h-fit mt-6')}>
