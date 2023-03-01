@@ -25,8 +25,11 @@ export const iconTypes: IconType[] = [
   'appCenter',
   'appModeration',
   'bookmark',
+  'chatBubble',
   'discord',
+  'explore',
   'github',
+  'message',
   'notifications',
   'search',
   'settingsAlt',
@@ -66,7 +69,7 @@ const Icon: React.FC<IconProps> = props => {
   const className = `flex items-center justify-center select-none ${
     plain ? `[& *]:${svgPrefix}-black dark:[& *]:${svgPrefix}-white` : ''
   } ${color ? `[& *]:${svgPrefix}-${color}` : ''} ${
-    accentColor ? `[& *]:${svgPrefix}-secondary-dark` : ''
+    accentColor ? `[& *]:${svgPrefix}-secondary-light dark:[& *]:${svgPrefix}-secondary-dark` : ''
   } ${clickable && !disabled ? `cursor-pointer hover:[& *]:${svgPrefix}-secondary-dark` : ''}`;
 
   return (
