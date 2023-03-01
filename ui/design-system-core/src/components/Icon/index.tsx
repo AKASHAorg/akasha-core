@@ -39,10 +39,10 @@ export const iconTypes: IconType[] = [
   'twitter',
 ];
 
-/*@TODO: change all custom icons into ones in the design system and avoid the following */
+/*@TODO: change all custom icons into ones in the design system and remove the following */
 const fillOnlyIcons: IconType[] = ['akasha', 'appModeration'];
 
-/*@TODO: change all custom icons into ones in the design system and avoid the following */
+/*@TODO: change all custom icons into ones in the design system and remove the following */
 const fillAndStrokeIcons: IconType[] = ['twitter', 'telegram', 'discord'];
 
 const Icon: React.FC<IconProps> = props => {
@@ -77,10 +77,10 @@ const Icon: React.FC<IconProps> = props => {
     return null;
   }
 
-  /*@TODO: change all custom icons into ones in the design system and avoid the following */
+  /*@TODO: change all custom icons into ones in the design system and remove the following */
   const isFillOnlyIcon = fillOnlyIcons.includes(type);
 
-  /*@TODO: change all custom icons into ones in the design system and avoid the following */
+  /*@TODO: change all custom icons into ones in the design system and remove the following */
   const isFillAndStrokeIcon = fillAndStrokeIcons.includes(type);
 
   const plainStyle = plain
