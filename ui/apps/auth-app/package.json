@@ -41,6 +41,7 @@
   "dependencies": {
     "@akashaorg/awf-sdk": "*",
     "@akashaorg/design-system": "*",
+    "@akashaorg/design-system-core": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/af-testing": "*",
     "i18next": "20.6.1",

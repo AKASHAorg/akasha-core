@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
+
+import DS from '@akashaorg/design-system-core';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+
 import App from './App';
 
-import DS from '@akashaorg/design-system';
 const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact({
