@@ -85,13 +85,13 @@ const Header: React.FC<HeaderProps> = ({
             <div className="ml-auto mt-2">
               {viewerIsOwner ? (
                 <button>
-                  <AppIcon placeholderIconType="Cog6ToothIcon" iconSize="xs" accentColor />
+                  <AppIcon placeholderIconType="Cog6ToothIcon" size="sm" accentColor />
                 </button>
               ) : (
                 <div className="relative">
                   <Stack spacing="gap-x-2">
                     <button>
-                      <AppIcon placeholderIconType="EnvelopeIcon" iconSize="xs" accentColor />
+                      <AppIcon placeholderIconType="EnvelopeIcon" size="sm" accentColor />
                     </button>
                     {isFollowing ? (
                       <>
@@ -106,13 +106,13 @@ const Header: React.FC<HeaderProps> = ({
                       </>
                     ) : (
                       <button onClick={handleFollow}>
-                        <AppIcon placeholderIconType="UsersIcon" iconSize="xs" accentColor />
+                        <AppIcon placeholderIconType="UsersIcon" size="sm" accentColor />
                       </button>
                     )}
                     <button onClick={onShowMore} ref={showMoreRef}>
                       <AppIcon
                         placeholderIconType="EllipsisVerticalIcon"
-                        iconSize="xs"
+                        size="sm"
                         hover={true}
                         active={showMore}
                         accentColor

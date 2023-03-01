@@ -3,9 +3,7 @@ import Icon, { IconType, iconTypes } from '../Icon';
 import Stack from '../Stack';
 import { LogoSourceType, LogoTypeSource } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
-import { ICON_SIZE_MAP, Size } from '../types/common.types';
-import { getWidthClasses } from '../../utils/getWidthClasses';
-import { getHeightClasses } from '../../utils/getHeightClasses';
+import { BasicSize } from '../types/common.types';
 
 export interface IAppIcon {
   ref?: React.Ref<HTMLDivElement>;
@@ -17,8 +15,8 @@ export interface IAppIcon {
   // props for notifications icon
   stackedIcon?: boolean;
   hasNewNotifs?: boolean;
-  size?: Size;
-  iconSize?: Size;
+  size?: BasicSize;
+  breakPointSize?: { breakPoint: string; size: BasicSize };
   hover?: boolean;
   active?: boolean;
   className?: string;
@@ -30,7 +28,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     onClick,
     placeholderIconType,
     size = 'md',
-    iconSize = 'sm',
+    breakPointSize,
     plain,
     accentColor,
     stackedIcon,
@@ -40,14 +38,23 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     className = '',
   } = props;
 
-  const sizeStyle =
-    typeof size === 'object'
-      ? `${getWidthClasses(size?.width)} ${getHeightClasses(size?.height)}`
-      : ICON_SIZE_MAP[size];
+  const breakPointStyle = breakPointSize
+    ? APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]
+    : '';
+
+  const sizeStyle = `${APP_ICON_CONTAINER_SIZE_MAP[size]} ${breakPointStyle}`;
 
   const renderAppImg = () => {
     if (appImg?.type === LogoTypeSource.ICON && iconTypes.includes(appImg?.value as IconType)) {
-      return <Icon type={appImg?.value} plain={plain} size={iconSize} accentColor={accentColor} />;
+      return (
+        <Icon
+          type={appImg?.value}
+          size={size}
+          breakPointSize={breakPointSize}
+          plain={plain}
+          accentColor={accentColor}
+        />
+      );
     }
     if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
       return (
@@ -55,13 +62,20 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
       );
     }
     return (
-      <Icon type={placeholderIconType} plain={plain} size={iconSize} accentColor={accentColor} />
+      <Icon
+        type={placeholderIconType}
+        size={size}
+        breakPointSize={breakPointSize}
+        plain={plain}
+        accentColor={accentColor}
+      />
     );
   };
 
   const hoverStyle = hover ? 'hover:bg-secondary-light/30 dark:hover:bg-secondary-dark' : '';
   const activeStyle = active ? 'bg-secondary-light/30 hover:bg-secondary-dark' : '';
   const iconContainerStyle = `${sizeStyle} ${hoverStyle} ${activeStyle} relative rounded-full bg-grey9 dark:bg-grey3 ${className}`;
+  const notifyStyle = NOTIFY_MAP[size];
 
   if (stackedIcon)
     return (
@@ -69,7 +83,11 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
         <Stack align="center" justify="center" className={tw(apply`${iconContainerStyle}`)}>
           {renderAppImg()}
           {hasNewNotifs && (
-            <div className={tw('w-2 h-2 rounded-full absolute top-0 right-0 bg-secondary-dark')} />
+            <div
+              className={tw(
+                apply`w-2 h-2 rounded-full absolute top-0  bg-secondary-dark ${notifyStyle}`,
+              )}
+            />
           )}
         </Stack>
       </div>
@@ -83,5 +101,28 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     </div>
   );
 });
+
+export const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicSize, string> = {
+  xs: 'w-5 w-5',
+  sm: 'h-8 w-8',
+  md: 'h-10 w-10',
+  lg: 'h-12 w-12',
+};
+
+export const APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT = (
+  breakPoint: string,
+): Record<BasicSize, string> => ({
+  xs: `${breakPoint}:w-5 ${breakPoint}:w-5`,
+  sm: `${breakPoint}:h-8 ${breakPoint}:w-8`,
+  md: `${breakPoint}:h-10 ${breakPoint}:w-10`,
+  lg: `${breakPoint}:h-12 ${breakPoint}:w-12`,
+});
+
+export const NOTIFY_MAP: Record<BasicSize, string> = {
+  xs: 'right-[0.1875rem] w-1 h-1',
+  sm: 'right-[0.1875rem]',
+  md: 'right-1.5',
+  lg: 'right-2',
+};
 
 export default AppIcon;

@@ -54,9 +54,10 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
               <Stack direction="column" align="center">
                 <AppIcon
                   placeholderIconType={stat.icon}
-                  iconSize={{ height: 'h-4 sm:h-6' }}
-                  size={{ height: 'h-8 sm:h-12', width: 'w-8 sm:w-12' }}
+                  size="sm"
+                  breakPointSize={{ breakPoint: 'sm', size: 'lg' }}
                   accentColor
+                  className={stat.className}
                 />
                 <Text {...labelProp}>{stat.label}</Text>
                 <Text {...totalProps}>{stat.total}</Text>
