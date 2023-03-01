@@ -37,7 +37,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
         )}
       >
         <AppIcon
-          size="lg"
+          size="md"
           plain={true}
           stackedIcon={menuItem.logo.value === 'notifications'}
           placeholderIconType={menuItem.logo.value as IconType}

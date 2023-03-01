@@ -182,7 +182,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
               <a href={icon.link} target="_blank" rel="noreferrer noopener">
-                <AppIcon placeholderIconType={icon.name} plain accentColor />
+                <AppIcon placeholderIconType={icon.name} size="sm" plain accentColor />
               </a>
             </div>
           ))}
