@@ -37,7 +37,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <img className={tw('max-w-[50%] h-auto my-0 mx-auto py-[2em] px-0')} src={imageSrc} />
       </div>
 
-      <Text variant="h5" className={tw('text-black dark:text-black')}>
+      <Text variant="h5" color={{ light: 'text-black', dark: 'dark:text-black' }}>
         {title}
       </Text>
 
@@ -45,9 +45,8 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <ErrorRenderer className={className}>
           <Text
             variant="label"
-            className={tw(
-              'pt-[1em] max-w-[70%] w-full text-secondary-light dark:text-secondary-light',
-            )}
+            color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
+            className={tw('pt-[1em] max-w-[70%] w-full')}
           >
             {message}
           </Text>
@@ -55,9 +54,8 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
       ) : (
         <Text
           variant="label"
-          className={tw(
-            'text-center pt-[1em] max-w-[70%] w-full text-secondary-light dark:text-secondary-light',
-          )}
+          color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
+          className={tw('text-center pt-[1em] max-w-[70%] w-full')}
         >
           {message}
         </Text>
