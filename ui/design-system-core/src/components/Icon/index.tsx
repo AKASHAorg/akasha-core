@@ -38,6 +38,8 @@ export const iconTypes: IconType[] = [
 
 const fillOnlyIcons: IconType[] = ['akasha', 'appModeration'];
 
+const fillAndStrokeIcons: IconType[] = ['twitter', 'telegram', 'discord'];
+
 const Icon: React.FC<IconProps> = props => {
   const {
     type,
@@ -45,7 +47,7 @@ const Icon: React.FC<IconProps> = props => {
     plain,
     accentColor,
     clickable,
-    size = 'sm',
+    size = 'xs',
     color,
     disabled,
     testId,
@@ -65,24 +67,26 @@ const Icon: React.FC<IconProps> = props => {
     return null;
   }
 
-  const isFillOnly = fillOnlyIcons.includes(type);
+  const isFillOnlyIcon = fillOnlyIcons.includes(type);
+
+  const isFillAndStrokeIcon = fillAndStrokeIcons.includes(type);
 
   const plainStyle = plain
-    ? `${
-        isFillOnly ? '' : '[&>*]:stroke-black dark:[&>*]:stroke-white'
-      } [&>*]:fill-black dark:[&>*]:fill-white`
+    ? `${isFillOnlyIcon ? '' : '[&>*]:stroke-black dark:[&>*]:stroke-white'} ${
+        isFillAndStrokeIcon ? '[&>*]:fill-transparent' : ''
+      }`
     : '';
   const colorStyle = color ? `[&>*]:stroke-${color} [&>*]:fill-${color}` : '';
   const accentColorStyle = accentColor
-    ? `${
-        isFillOnly ? '' : '[&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark'
-      } [&>*]:fill-secondary-light dark:[&>*]:fill-secondary-dark`
+    ? `${isFillOnlyIcon ? '' : '[&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark'} ${
+        isFillAndStrokeIcon ? '[&>*]:fill-transparent' : ''
+      }`
     : '';
   const iconStyle = `select-none ${plainStyle} ${colorStyle} ${accentColorStyle} ${
     clickable && !disabled
-      ? `cursor-pointer ${
-          isFillOnly ? '' : 'hover:[&>*]:stroke-secondary-dark'
-        } hover:[&>*]:fill-secondary-dark`
+      ? `cursor-pointer ${isFillOnlyIcon ? '' : 'hover:[&>*]:stroke-secondary-dark'} ${
+          isFillAndStrokeIcon ? 'hover:[&>*]:fill-transparent' : ''
+        }`
       : ''
   }`;
 
