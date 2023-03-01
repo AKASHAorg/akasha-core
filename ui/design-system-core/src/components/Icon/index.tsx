@@ -114,9 +114,9 @@ const Icon: React.FC<IconProps> = props => {
 
 export const ICON_SIZE_MAP: Record<BasicSize, string> = {
   xs: 'w-3 w-3',
-  sm: 'h-4 w-4',
-  md: 'h-5 w-5',
-  lg: 'h-6 w-6',
+  sm: 'h-[0.9375rem] w-[0.9375rem]',
+  md: 'h-[1.125rem] w-[1.125rem]',
+  lg: 'h-[1.3125rem] w-[1.3125rem]',
 };
 
 export const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicSize, string> => ({
