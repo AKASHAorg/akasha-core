@@ -4,6 +4,7 @@ import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
+import { isMobileOnly } from 'react-device-detect';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
@@ -27,11 +28,11 @@ const WarningIcon = styled(Icon)`
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
+  const sidebarWrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   // sidebar is open by default on larger screens >=1440px
   const [showSidebar, setShowSidebar] = React.useState(
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
-
   const [showWidgets, setshowWidgets] = React.useState(
     window.matchMedia('(min-width: 769px)').matches ? true : false,
   );
@@ -54,9 +55,11 @@ const Layout: React.FC<RootComponentProps> = props => {
 
   const handleSidebarShow = () => {
     setShowSidebar(true);
+    console.log(showSidebar);
   };
   const handleSidebarHide = () => {
     setShowSidebar(false);
+    console.log(showSidebar);
   };
 
   const handleWidgetsShow = () => {
@@ -83,7 +86,32 @@ const Layout: React.FC<RootComponentProps> = props => {
     },
     [activeModal],
   );
+  React.useEffect(() => {
+    function handleClickOutside(e) {
+      if (window.matchMedia('(min-width: 1440px)').matches) {
+        return;
+      }
+      if (!showSidebar) {
+        return;
+      }
+      e.stopPropagation();
+      if (sidebarWrapperRef.current && !sidebarWrapperRef.current.contains(e.target)) {
+        console.log('clicked outside');
+        uiEvents.current.next({
+          event: EventTypes.HideSidebar,
+        });
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sidebarWrapperRef]);
 
+  React.useEffect(() => {
+    console.log('showSidebar inside layout-widget: ', showSidebar);
+  }, [showSidebar]);
   React.useEffect(() => {
     const eventsSub = uiEvents.current.subscribe({
       next: (eventInfo: UIEventData) => {
@@ -123,19 +151,28 @@ const Layout: React.FC<RootComponentProps> = props => {
 
   return (
     <div className="bg-background dark:(bg-background-dark) min-h-screen">
-      <div className="h-full w-full">
+      <div className={`h-full w-full`}>
         <div
-          className={`grid md:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${
-            showSidebar ? 'lg:grid-cols-[3fr_6fr_3fr] ' : 'lg:grid-cols-[1.5fr_6fr_3fr_1.5fr] '
+          className={`grid md:(grid-flow-row) lg:${
+            showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'
+          } ${
+            showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '
           } xl:max-w-7xl xl:mx-auto gap-x-4`}
         >
           <ScrollRestorer />
-          <div className="hidden lg:flex h-full min-w-max">
+          <div
+            className={`fixed xl:sticky z-[9999] h-full 
+           ${
+             showSidebar && !window.matchMedia('(min-width: 1440px)').matches
+               ? 'min-w-[100vw] xl:min-w-max bg-black/20'
+               : ''
+           }`}
+          >
             <div
-              className={`sticky top-0 h-screen w-full ${showSidebar ? 'z-[9999] ' : 'hidden'}
+              className={`sticky top-0 h-screen w-fit ${showSidebar ? '' : 'hidden'}
 `}
             >
-              <div className="pt-4">
+              <div className={`pt-0 xl:pt-4`} ref={sidebarWrapperRef}>
                 <Extension
                   fullHeight
                   name={props.layoutConfig.sidebarSlotId}
@@ -144,7 +181,7 @@ const Layout: React.FC<RootComponentProps> = props => {
               </div>
             </div>
           </div>
-          <div className={`${showWidgets ? '' : 'col-start-2 col-end-3'}`}>
+          <div className={`${showWidgets ? '' : 'col-start-2 col-end-3 md:col-start-1'}`}>
             <div className="sticky top-0 z-50">
               <div className="text() pt-4 bg-background dark:(bg-background-dark)">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
@@ -205,7 +242,7 @@ const Layout: React.FC<RootComponentProps> = props => {
                 <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
                 <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
-              <div className="">
+              <div className="fixed right-0 bottom-0">
                 <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
             </div>
