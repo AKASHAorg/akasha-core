@@ -118,7 +118,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   return (
     <div
       className={tw(
-        'max-w-[19.5rem] w-[19.5rem] max-h-[calc(100vh - 20px)] bg-white dark:bg-grey2 border-1 border-grey8 dark:border-none rounded-2xl',
+        'sm:max-w-[19.5rem] sm:w-[19.5rem] max-w-[calc(100vw - 80px)] h-[100vh] xl:max-h-[calc(100vh - 20px)] bg-white dark:bg-grey2 border-1 border-grey8 dark:border-none rounded-r-2xl xl:rounded-2xl',
       )}
     >
       <div className={tw('flex flex-row p-4 border-b-1 border-grey8')}>

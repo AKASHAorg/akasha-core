@@ -1,8 +1,9 @@
 import React from 'react';
 import { apply, tw } from '@twind/core';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import DS from '@akashaorg/design-system-core';
 import { isMobileOnly } from 'react-device-detect';
+
+const { Button, Icon } = DS;
 
 export interface ITopbarProps {
   // data
@@ -31,14 +32,18 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onAppWidgetClick,
     onNotificationClick,
     onBackClick,
-    hasNewNotifications,
+    hasNewNotifications = false,
     modalSlotId,
   } = props;
 
-  const iconSize = isMobileOnly ? 'small' : 'regular';
+  const iconSize = 'regular';
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
     window.matchMedia('(max-width: 768px)').matches,
   );
+
+  React.useEffect(() => {
+    console.log('sidebarVisible', sidebarVisible);
+  }, [sidebarVisible]);
 
   React.useEffect(() => {
     const mql = window.matchMedia('(max-width: 768px)');
@@ -52,42 +57,45 @@ const Topbar: React.FC<ITopbarProps> = props => {
     };
   }, []);
 
-  const BaseStyles = apply`
+  const BaseStyle = apply`
     flex justify-between items-center w-full
     py-1.5 px-2 space-x-4
     border(1 grey8) rounded-none sm:rounded-md shadow-sm
-    bg-white-200 dark:bg-black
+    bg-white dark:bg-black
     xs:(fixed top-0 z-50)
     `;
 
-  const instanceStyles = apply`
-  ${BaseStyles}
+  const instanceStyle = apply`
+  ${BaseStyle}
   ${className}
   `;
 
   return (
-    <div className={tw(instanceStyles)}>
+    <div className={tw(instanceStyle)}>
       <div className={tw('flex space-x-2')}>
         {!sidebarVisible ? (
           <Button
             iconOnly={true}
-            noBorder={true}
             icon="ArrowRightOnRectangleIcon"
             size={iconSize}
             onClick={onSidebarToggle}
+            // greyBg={true}
+            primary={true}
           />
         ) : (
           <Button
             iconOnly={true}
-            noBorder={true}
             icon="ArrowLeftOnRectangleIcon"
             size={iconSize}
             onClick={onSidebarToggle}
+            // greyBg={true}
+            primary={true}
           />
         )}
         <Button
           iconOnly={true}
-          noBorder={true}
+          greyBg={true}
+          primary={true}
           icon="ChevronLeftIcon"
           size={iconSize}
           onClick={onBackClick}
@@ -98,7 +106,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         className={tw('p-0 m-0 cursor-pointer flex(& col) justify-center items-center')}
         onClick={onBrandClick}
       >
-        <Icon icon="Akasha" styling="w-18 h-8" />
+        <Icon type="akasha" styling="w-18 h-8" />
         <span className={tw('uppercase font([Inter] light) text-xs drop-shadow-md')}>
           Akasha World
         </span>
@@ -108,18 +116,19 @@ const Topbar: React.FC<ITopbarProps> = props => {
         {displayWidgetTogglingButton && (
           <Button
             iconOnly={true}
-            noBorder={true}
-            icon="AppCenter"
+            icon="appCenter"
             size={iconSize}
             onClick={onAppWidgetClick}
+            primary={true}
           />
         )}
         <Button
           iconOnly={true}
-          noBorder={true}
           icon={hasNewNotifications ? 'BellAlertIcon' : 'BellIcon'}
           size={iconSize}
           onClick={onNotificationClick}
+          greyBg={true}
+          primary={true}
         />
       </div>
     </div>
