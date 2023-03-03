@@ -2,10 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
 import { useGetModerators } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-const { BasicCardBox, Box, ModeratorDetailCard, Text, Spinner, styled } = DS;
+const { Box, ModeratorDetailCard, Spinner, styled } = DS;
+
+const { BasicCardBox, ModerationSwitchCard } = DSNew;
 
 const tabs = ['All', 'Active', 'Resigned', 'Revoked'];
 
@@ -53,34 +56,8 @@ const AllModerators: React.FC<RootComponentProps> = () => {
 
   return (
     <VerticalFillBox gap="small">
-      <BasicCardBox>
-        <Box pad="medium" gap="small">
-          <Text size="xlarge" weight="bold">
-            {t('Moderators')}
-          </Text>
-          <Text color="subtitleText">
-            {t('Learn more about and reach out to your moderators.')}
-          </Text>
-        </Box>
-        <Box direction="row" width="98%" margin={{ vertical: '0', horizontal: 'auto' }}>
-          {modTabs.map((tab, idx) => (
-            <Box
-              key={tab.title + idx}
-              width="25%"
-              pad="small"
-              border={tab.value === activeTab ? { side: 'bottom', color: 'accentText' } : false}
-              onClick={handleTabClick(tab.value)}
-            >
-              <Text
-                size="large"
-                color={tab.value === activeTab ? 'accentText' : 'subtitleText'}
-                textAlign="center"
-              >
-                {tab.title}
-              </Text>
-            </Box>
-          ))}
-        </Box>
+      <BasicCardBox pad="pb-0" styling="rounded-b-none">
+        <ModerationSwitchCard tabs={modTabs} activeTab={activeTab} onTabClick={handleTabClick} />
       </BasicCardBox>
 
       {getModeratorsQuery.isFetching && <Spinner />}
