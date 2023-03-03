@@ -84,13 +84,13 @@ const Layout: React.FC<RootComponentProps> = props => {
     [activeModal],
   );
 
-  const handleClickOutside = e => {
+  const handleClickOutside = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (
       window.matchMedia('(max-width: 1440px)').matches &&
       showSidebar &&
       sidebarWrapperRef.current &&
-      !sidebarWrapperRef.current.contains(e.target)
+      !sidebarWrapperRef.current.contains(e.target as Node)
     ) {
       uiEvents.current.next({
         event: EventTypes.HideSidebar,
