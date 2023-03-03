@@ -1,14 +1,16 @@
-import singleSpaReact from 'single-spa-react';
-import * as React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
+import singleSpaReact from 'single-spa-react';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
 import {
   RootExtensionProps,
   AnalyticsCategories,
   EntityTypes,
   EntityTypesMap,
 } from '@akashaorg/typings/ui';
-import DS from '@akashaorg/design-system';
-import { I18nextProvider, useTranslation } from 'react-i18next';
 import {
   useDeletePost,
   useDeleteComment,
@@ -17,7 +19,9 @@ import {
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 
-const { ConfirmationModal, ModalContainer, ErrorLoader } = DS;
+const { ConfirmationModal, ModalContainer } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   const { extensionData, logger } = props;

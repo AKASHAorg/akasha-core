@@ -1,13 +1,17 @@
-import * as React from 'react';
-import singleSpaReact from 'single-spa-react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps, StorageKeys } from '@akashaorg/typings/ui';
-import DS from '@akashaorg/design-system';
-import { I18nextProvider, useTranslation } from 'react-i18next';
+import singleSpaReact from 'single-spa-react';
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+
+import DS from '@akashaorg/design-system';
+import { RootExtensionProps, StorageKeys } from '@akashaorg/typings/ui';
+import DSNew from '@akashaorg/design-system-core';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
-const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon, ErrorLoader } = DS;
+const { Box, Button, ModalContainer, ModalCardLogin, Text, Icon } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const LoginModal = (props: RootExtensionProps) => {
   const { t } = useTranslation('app-profile');

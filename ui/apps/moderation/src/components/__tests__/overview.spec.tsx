@@ -23,11 +23,8 @@ describe('<Overview /> component', () => {
   });
 
   it('should render component', async () => {
-    expect(componentWrapper.getByText(/Moderating/i)).toBeInTheDocument();
-    expect(
-      componentWrapper.getByText(/Find all the moderated posts, replies and accounts/i),
-    ).toBeInTheDocument();
-    expect(componentWrapper.getByText(/Welcome to the Moderation App/i)).toBeInTheDocument();
+    expect(componentWrapper.getByText(/Overview/i)).toBeInTheDocument();
+    expect(componentWrapper.getByText(/Welcome to Akasha Moderation/i)).toBeInTheDocument();
   });
 
   it('renders an image with correct src', () => {

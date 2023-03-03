@@ -8,6 +8,8 @@ export type Radius = number | { top?: number; bottom?: number } | string;
 
 export type Padding = number | { x: number; y: number } | string;
 
+export type BasicSize = 'xs' | 'sm' | 'md' | 'lg';
+
 export const isStatusType = (type: Color): type is Status => {
   return type === 'warning' || type === 'error' || type === 'success';
 };

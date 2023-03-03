@@ -1,10 +1,14 @@
-import * as React from 'react';
-import DS from '@akashaorg/design-system';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaorg/ui-awf-hooks';
-import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
 
-const { Helmet, Box, ErrorLoader, ErrorInfoCard, NotificationsCard, StartCard, Spinner } = DS;
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
+import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaorg/ui-awf-hooks';
+
+const { Helmet, Box, NotificationsCard, StartCard, Spinner } = DS;
+
+const { ErrorLoader, ErrorInfoCard } = DSNew;
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -48,7 +52,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       <Helmet>
         <title>{t('My notifications')}</title>
       </Helmet>
-      <ErrorInfoCard error={notifReq?.error as Error}>
+      <ErrorInfoCard error={notifReq?.error}>
         {message => (
           <Box gap="medium">
             <StartCard

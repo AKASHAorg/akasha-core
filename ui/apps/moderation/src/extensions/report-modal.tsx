@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
 import {
   RootExtensionProps,
   AnalyticsCategories,
@@ -20,10 +21,12 @@ import {
   ThemeWrapper,
 } from '@akashaorg/ui-awf-hooks';
 
-import { BASE_REPORT_URL } from '../services/constants';
 import getReasonPrefix from '../utils/getReasonPrefix';
+import { BASE_REPORT_URL } from '../services/constants';
 
-const { ReportModal, ErrorLoader } = DS;
+const { ReportModal } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
   const { extensionData } = props;

@@ -1,18 +1,17 @@
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useLocation } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import DSNew from '@akashaorg/design-system-core';
-
 import { RootComponentProps, IProfileData } from '@akashaorg/typings/ui';
-import menuRoute, { MY_PROFILE } from '../../routes';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
+import menuRoute, { MY_PROFILE } from '../../routes';
 import ProfilePageHeader from '../profile-cards/profile-page-header';
 
-const { Box, Helmet, EntryCardHidden, ErrorLoader, ProfileDelistedCard } = DS;
-const { Stack, ProfileLoading } = DSNew;
+const { Box, Helmet, EntryCardHidden, ProfileDelistedCard } = DS;
+const { ErrorLoader, ProfileLoading } = DSNew;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
