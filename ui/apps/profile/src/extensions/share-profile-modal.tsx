@@ -1,11 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { RootExtensionProps } from '@akashaorg/typings/ui';
 import singleSpaReact from 'single-spa-react';
-import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
-import DS from '@akashaorg/design-system';
 
-const { ErrorLoader, ModalContainer, ShareModal } = DS;
+import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+import { RootExtensionProps } from '@akashaorg/typings/ui';
+import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
+
+const { ModalContainer, ShareModal } = DS;
+
+const { ErrorLoader } = DSNew;
 
 const ShareProfileModal: React.FC<RootExtensionProps> = props => {
   const { profileId } = props.extensionData;

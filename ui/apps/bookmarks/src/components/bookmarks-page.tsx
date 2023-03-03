@@ -1,7 +1,10 @@
-import * as React from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import DS from '@akashaorg/design-system';
-import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
+import DSNew from '@akashaorg/design-system-core';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
+import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import {
   useGetBookmarks,
   useGetLogin,
@@ -9,9 +12,10 @@ import {
   usePosts,
   checkEntryActive,
 } from '@akashaorg/ui-awf-hooks';
-import { useTranslation } from 'react-i18next';
 
-const { ErrorLoader, Spinner, StartCard, InfoCard, Box } = DS;
+const { Spinner, StartCard, InfoCard, Box } = DS;
+
+const { ErrorLoader } = DSNew;
 
 type BookmarksPageProps = Omit<
   RootComponentProps,
@@ -96,7 +100,7 @@ const BookmarksPage: React.FC<BookmarksPageProps> = props => {
         <ErrorLoader
           type="script-error"
           title={t('There was an error loading the bookmarks')}
-          details={bookmarksReq.error}
+          details={bookmarksReq.error as string}
         />
       )}
       {bookmarksReq.status !== 'error' && (

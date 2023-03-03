@@ -1,15 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
+import DS from '@akashaorg/design-system-core';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-
-import ModerationValuesCard from '../components/values-card';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils/external-links';
 
-const { Box, ModerationIntroCard } = DS;
+const { ModerationIntroCard, ModerationValuesCard } = DS;
 
 const IntroPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
@@ -32,29 +30,29 @@ const IntroPage: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <Box gap="small">
+    <div>
       <ModerationIntroCard
-        titleLabel={t('Moderating')}
-        subtitleLabel={t('Find all the moderated posts, replies and accounts')}
-        introLabel={t('Welcome to the Moderation App')}
-        descriptionLine1Label={t(
-          'Here you can find all the moderated content in Ethereum World without revealing any personal information 🔒',
+        titleLabel={t('Overview')}
+        introLabel={t('Welcome to Akasha Moderation')}
+        subtitleLabel={t(
+          'The Moderation app facilitates cooperation and prevents abuse. The app is open and transparent. Take part in the process of governing this community.',
         )}
+        codeOfConductLabel={t('Read our Code of Conduct')}
         overviewCTAArr={[
           {
-            label: t('Discuss CoC'),
+            label: t('CoC discussions'),
             url: externalLinks.discourse.CoC,
-            iconType: 'discourse',
+            iconType: 'explore',
           },
           {
-            label: t('Moderation Team'),
+            label: t('Moderation thoughts'),
             url: externalLinks.discord,
-            iconType: 'discordAlt',
+            iconType: 'chatBubble',
           },
           {
-            label: t('Send us an email'),
+            label: t('Send us a message'),
             url: externalLinks.email,
-            iconType: 'emailAlt',
+            iconType: 'message',
           },
         ]}
         onCodeOfConductClick={handleCodeOfConductClick}
@@ -73,7 +71,7 @@ const IntroPage: React.FC<RootComponentProps> = props => {
         }))}
         onValueClick={handleValueClick}
       />
-    </Box>
+    </div>
   );
 };
 

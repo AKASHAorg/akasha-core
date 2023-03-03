@@ -1,9 +1,9 @@
-export function getWidthClasses(width: string) {
-  if (!width) return '';
-
-  if (width.startsWith('w-')) {
+export function getWidthClasses(width: string | number) {
+  if (typeof width === 'string') {
     return width;
   }
 
-  return Number.isInteger(+width[0]) ? `w-[${width}]` : '';
+  if (typeof width === 'number') return `h-[${width / 16}rem]`;
+
+  return '';
 }
