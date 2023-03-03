@@ -10,6 +10,7 @@ export interface IBasicCardBox {
   round?: string;
   noBorder?: boolean;
   noBorderRadius?: boolean;
+  styling?: string;
   onClick?: () => void;
 }
 
@@ -24,6 +25,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     round = 'rounded-2xl',
     noBorder,
     noBorderRadius,
+    styling,
     onClick,
   } = props;
 
@@ -45,7 +47,9 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
 
   const className = `flex flex-col shadow-${elevation} w-full ${pad ? pad : 'p-0'} ${
     margin ? margin : 'm-0'
-  } bg-white dark:bg-grey2 ${noBorderRadius ? 'rounded-none' : round} ${generateBorder()}`;
+  } bg-white dark:bg-grey2 ${
+    noBorderRadius ? 'rounded-none' : round
+  } ${generateBorder()} ${styling}`;
 
   return (
     <div className={tw(className)} ref={rootNodeRef} onClick={onClick}>

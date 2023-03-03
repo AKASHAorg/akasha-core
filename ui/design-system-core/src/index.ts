@@ -15,9 +15,9 @@ import { ErrorInfoCard } from './components/ErrorLoader/error-info-card';
 import Icon from './components/Icon';
 import Meter from './components/Meter';
 import ModerationIntroCard from './components/ModerationIntroCard';
+import ModerationSwitchCard from './components/ModerationSwitchCard';
 import ModerationValueCard from './components/ModerationValuesCard/value-card';
 import ModerationValuesCard from './components/ModerationValuesCard';
-
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import {
   ProfileStats,
@@ -28,13 +28,13 @@ import {
 } from './components/ProfileCard';
 import RadioButton from './components/RadioButton';
 import Sidebar from './components/Sidebar';
+import Stack from './components/Stack';
 import StackedAvatar from './components/StackedAvatar';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
 import Text from './components/Text';
 import TextField from './components/TextField';
 import TextLine from './components/TextLine';
 import Tooltip from './components/Tooltip';
-import Stack from './components/Stack';
 
 export default {
   Accordion,
@@ -54,6 +54,7 @@ export default {
   Icon,
   Meter,
   ModerationIntroCard,
+  ModerationSwitchCard,
   ModerationValueCard,
   ModerationValuesCard,
   ProfileAvatarButton,
