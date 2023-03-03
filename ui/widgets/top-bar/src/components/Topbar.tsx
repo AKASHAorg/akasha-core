@@ -42,10 +42,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
   );
 
   React.useEffect(() => {
-    console.log('sidebarVisible', sidebarVisible);
-  }, [sidebarVisible]);
-
-  React.useEffect(() => {
     const mql = window.matchMedia('(max-width: 768px)');
     const resize = e => {
       setDisplayWidgetTogglingButton(e.matches);
