@@ -6,27 +6,11 @@ import DSNew from '@akashaorg/design-system-core';
 import { useGetModerators } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-const { Box, ModeratorDetailCard, Spinner, styled } = DS;
+const { Spinner } = DS;
 
-const { BasicCardBox, ModerationSwitchCard } = DSNew;
+const { Box, BasicCardBox, ModerationSwitchCard, ModeratorDetailCard } = DSNew;
 
 const tabs = ['All', 'Active', 'Resigned', 'Revoked'];
-
-const VerticalFillBox = styled(Box)`
-  height: calc(
-    100vh - 48px /* topbar height */ - 104px /* merge info card height */ - 2rem /* offset bottom */
-  );
-`;
-
-const ListWrapper = styled(Box)`
-  flex: 1;
-`;
-
-const ListArea = styled(BasicCardBox)`
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-`;
 
 const AllModerators: React.FC<RootComponentProps> = () => {
   const [activeTab, setActiveTab] = React.useState<string>('All');
@@ -46,42 +30,42 @@ const AllModerators: React.FC<RootComponentProps> = () => {
     activeTab === 'All' ? moderator : moderator.status === activeTab.toLowerCase(),
   );
 
-  const handleTabClick = (value: string) => () => {
-    setActiveTab(value);
-  };
-
   const handleSocialLinkClick = () => {
     /** TODO: connect this */
   };
 
   return (
-    <VerticalFillBox gap="small">
-      <BasicCardBox pad="pb-0" styling="rounded-b-none">
-        <ModerationSwitchCard tabs={modTabs} activeTab={activeTab} onTabClick={handleTabClick} />
-      </BasicCardBox>
+    <BasicCardBox pad="p-0">
+      <ModerationSwitchCard tabs={modTabs} activeTab={activeTab} onTabClick={setActiveTab} />
 
       {getModeratorsQuery.isFetching && <Spinner />}
 
       {!getModeratorsQuery.isFetching &&
         getModeratorsQuery.data &&
         getModeratorsQuery.data.length > 0 && (
-          <ListWrapper>
-            <ListArea>
+          <Box style="flex-1">
+            <Box style="w-full h-full overflow-y-scroll">
               {filteredModeratorList?.map((moderator, idx) => (
                 <ModeratorDetailCard
                   key={idx}
                   moderator={moderator}
-                  hasBorderBottom={idx < allModerators.length - 1}
+                  hasBorderBottom={idx < filteredModeratorList.length - 1}
                   tenureInfoLabel={
-                    moderator.status === 'active' ? t('Moderator since') : t('Moderator until')
+                    moderator.status === 'active'
+                      ? t('Moderator since')
+                      : t(`{{status}} on`, {
+                          status: moderator.status
+                            ? moderator.status[0].toUpperCase() + moderator.status.slice(1)
+                            : '',
+                        })
                   }
                   onSocialLinkClick={handleSocialLinkClick}
                 />
               ))}
-            </ListArea>
-          </ListWrapper>
+            </Box>
+          </Box>
         )}
-    </VerticalFillBox>
+    </BasicCardBox>
   );
 };
 

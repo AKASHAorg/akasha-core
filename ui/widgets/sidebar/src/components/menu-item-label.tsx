@@ -43,10 +43,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
           placeholderIconType={menuItem.logo.value as IconType}
         />
       </div>
-      <Text
-        variant="body1"
-        className={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}
-      >
+      <Text className={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}>
         {menuItem.label}
       </Text>
     </div>
