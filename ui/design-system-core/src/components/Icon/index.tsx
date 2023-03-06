@@ -52,7 +52,11 @@ const Icon: React.FC<IconProps> = props => {
   const isFillOnlyIcon = fillOnlyIcons.includes(type);
 
   const baseStyle = `select-none ${
-    hover ? `dark:group-hover:${isFillOnlyIcon ? '[&>*]:fill-white' : '[&>*]:stroke-white'}` : ''
+    hover
+      ? `cursor-pointer dark:group-hover:${
+          isFillOnlyIcon ? '[&>*]:fill-white' : '[&>*]:stroke-white'
+        }`
+      : ''
   }`;
 
   const colorStyle = color

@@ -1,8 +1,9 @@
 import React from 'react';
 import * as HeroIcons from '@heroicons/react/24/outline';
 import * as CustomIcons from './akasha-icons';
-import { APP_ICON_TO_HERO_ICON_MAP, IconType, isAppIcon } from '@akashaorg/typings/ui';
+import { APP_ICON_TO_HERO_ICON_MAP, IconType } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
+import { isAppIcon } from './isAppIcon';
 
 type PassedIconProps = {
   type: IconType;

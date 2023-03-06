@@ -36,17 +36,3 @@ export const APP_ICON_TO_HERO_ICON_MAP: Record<AppIcons, IconType> = {
   search: 'MagnifyingGlassIcon',
   settingsAlt: 'Cog8ToothIcon',
 };
-
-export function isAppIcon(icon: IconType): icon is AppIcons {
-  return [
-    'appCenter',
-    'appModeration',
-    'bookmark',
-    'chatBubble',
-    'explore',
-    'message',
-    'notifications',
-    'search',
-    'settingsAlt',
-  ].includes(icon);
-}
