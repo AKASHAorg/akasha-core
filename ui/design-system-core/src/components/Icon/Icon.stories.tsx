@@ -1,26 +1,34 @@
 import { apply, tw } from '@twind/core';
 import React from 'react';
 import Icon, { IconProps } from '.';
+import { CustomIconTypes } from './akasha-icons';
 
 export default {
   title: 'Icons/Icon',
   component: Icon,
 };
 
-const AkashaIconsTemplate = (args: IconProps) => {
-  const flagIconStyle = tw(apply`h-4`);
+const CustomIconsTemplate = (args: IconProps) => {
+  const customIcons: CustomIconTypes[] = [
+    'akasha',
+    'discord',
+    'github',
+    'telegram',
+    'twitter',
+    'widget',
+  ];
 
   return (
-    <Icon
-      type="FlagIcon"
-      styling={flagIconStyle}
-      color={{ light: 'error-light', dark: 'error-dark' }}
-    />
+    <>
+      {customIcons.map(icon => (
+        <Icon key={icon} type={icon} {...args} />
+      ))}
+    </>
   );
 };
 
-export const AkashaIcons = AkashaIconsTemplate.bind({});
-AkashaIcons.args = {};
+export const CustomIcons = CustomIconsTemplate.bind({});
+CustomIcons.args = {};
 
 const Template = (args: IconProps) => <Icon {...args} />;
 

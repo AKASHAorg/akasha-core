@@ -83,8 +83,6 @@ const Icon: React.FC<IconProps> = props => {
       : ''
   } ${styling}`;
 
-  console.log(iconStyle);
-
   return (
     <Stack ref={ref}>
       <PassedIcon className={iconStyle} testId={testId} type={type} />
