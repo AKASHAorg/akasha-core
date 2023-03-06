@@ -78,7 +78,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Messaging',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'email' },
+    logo: { type: LogoTypeSource.ICON, value: 'EnvelopeIcon' },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [],
   },

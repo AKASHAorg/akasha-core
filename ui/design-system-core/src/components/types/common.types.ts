@@ -2,13 +2,15 @@ export type Status = 'warning' | 'error' | 'success';
 
 export type Color = { light: string; dark: string } | Status | string;
 
-export type Elevation = 'none' | '1';
+export type BaseElevation = 'none' | '1' | '2';
+
+export type Elevation = BaseElevation | { light: BaseElevation; dark: BaseElevation };
 
 export type Radius = number | { top?: number; bottom?: number } | string;
 
 export type Padding = number | { x: number; y: number } | string;
 
-export type BasicSize = 'xs' | 'sm' | 'md' | 'lg';
+export type BasicSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export const isStatusType = (type: Color): type is Status => {
   return type === 'warning' || type === 'error' || type === 'success';
