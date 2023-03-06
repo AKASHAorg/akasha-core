@@ -4,6 +4,7 @@ import AppIcon from './components/AppIcon';
 import Avatar from './components/Avatar';
 import BasicCardBox from './components/BasicCardBox';
 import BasicPopover from './components/BasicPopover';
+import Box from './components/Box';
 import Button from './components/Button';
 import Card from './components/Card';
 import CopyToClipboard from './components/CopyToClipboard';
@@ -18,6 +19,7 @@ import ModerationIntroCard from './components/ModerationIntroCard';
 import ModerationSwitchCard from './components/ModerationSwitchCard';
 import ModerationValueCard from './components/ModerationValuesCard/value-card';
 import ModerationValuesCard from './components/ModerationValuesCard';
+import ModeratorDetailCard from './components/ModeratorDetailCard';
 import ProfileAvatarButton from './components/ProfileAvatarButton';
 import {
   ProfileStats,
@@ -43,6 +45,7 @@ export default {
   Avatar,
   BasicCardBox,
   BasicPopover,
+  Box,
   Button,
   Card,
   CopyToClipboard,
@@ -57,6 +60,7 @@ export default {
   ModerationSwitchCard,
   ModerationValueCard,
   ModerationValuesCard,
+  ModeratorDetailCard,
   ProfileAvatarButton,
   ProfileBio,
   ProfileHeader,
