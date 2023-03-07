@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { LegacyRef, PropsWithChildren } from 'react';
 import { getAlignClasses } from './getAlignClasses';
 import { getDirectionClasses } from './getDirectionClasses';
 import { getJustifyClasses } from './getJustifyClasses';
@@ -14,17 +14,18 @@ export type StackProps = {
   align?: Align;
   spacing?: string;
   className?: string;
+  ref?: LegacyRef<HTMLDivElement>;
 };
 
 const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   direction = 'row',
   justify,
   align,
-  spacing = 'gap-2',
+  spacing = '',
   className = '',
   children,
 }) => {
-  const baseStyle = `flex w-full`;
+  const baseStyle = `flex`;
   const justifyStyle = justify ? getJustifyClasses(justify) : '';
   const alignStyle = align ? getAlignClasses(align) : '';
   const directionStyle = direction ? getDirectionClasses(direction) : '';

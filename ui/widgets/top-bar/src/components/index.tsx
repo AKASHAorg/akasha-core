@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
-import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+
+import DS from '@akashaorg/design-system-core';
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import DS from '@akashaorg/design-system';
+import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
+
 import Widget from './topbar-widget';
 
 const { ErrorLoader } = DS;

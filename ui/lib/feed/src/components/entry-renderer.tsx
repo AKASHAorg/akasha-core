@@ -1,8 +1,14 @@
-import * as React from 'react';
-import DS, { BoxExtendedProps } from '@akashaorg/design-system';
-import FeedWidget from './App';
-import { ILocale } from '@akashaorg/design-system/src/utils/time';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { i18n } from 'i18next';
+
+import DS, { BoxExtendedProps } from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+
+import { ILogger } from '@akashaorg/typings/sdk/log';
+import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
+import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import {
   TrackEventData,
   EventTypes,
@@ -21,12 +27,12 @@ import {
   useUnfollow,
   LoginState,
 } from '@akashaorg/ui-awf-hooks';
-import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
-import { useInfiniteReplies } from '@akashaorg/ui-awf-hooks/lib/use-comments';
-import { ILogger } from '@akashaorg/typings/sdk/log';
-import { i18n } from 'i18next';
 
-const { Box, ErrorLoader, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
+import FeedWidget from './App';
+
+const { Box, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
+
+const { ErrorLoader } = DSNew;
 
 export interface IEntryRenderer {
   itemId?: string;
@@ -286,7 +292,7 @@ const EntryRenderer = (
           type="script-error"
           title={t('There was an error loading the {{itemTypeName}}', { itemTypeName })}
           details={t('We cannot show this {{itemTypeName}} now', { itemTypeName })}
-          devDetails={postReq.error}
+          devDetails={postReq.error.message}
         />
       )}
       {(postReq.isSuccess || commentReq.isSuccess) && (

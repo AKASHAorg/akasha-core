@@ -1,7 +1,7 @@
 import React from 'react';
+import Icon from '../Icon';
 import { tw } from '@twind/core';
-
-import Icon, { IconType } from '../Icon';
+import { IconType } from '@akashaorg/typings/ui';
 
 type ButtonSize = 'xsmall' | 'small' | 'regular' | 'large';
 
@@ -16,8 +16,7 @@ export interface IButtonProps {
   iconOnly?: boolean;
   textOnly?: boolean;
   greyBg?: boolean;
-  isCustomIcon?: boolean;
-  onClick?: () => void;
+  onClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }
@@ -34,7 +33,6 @@ const Button: React.FC<IButtonProps> = props => {
     iconOnly = false,
     textOnly = false,
     greyBg = false,
-    isCustomIcon = false,
     onClick,
     onMouseEnter,
     onMouseLeave,
@@ -59,9 +57,9 @@ const Button: React.FC<IButtonProps> = props => {
     large: 'w-4 h-4',
   };
 
-  const handleClick = () => {
+  const handleClick = event => {
     if (typeof onClick === 'function' && !disabled && !loading) {
-      return onClick();
+      return onClick(event);
     }
   };
 
@@ -119,18 +117,14 @@ const Button: React.FC<IButtonProps> = props => {
       {loading ? (
         <Icon type="ArrowPathIcon" styling={tw(iconStyle)} />
       ) : iconOnly ? (
-        <Icon type={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
+        <Icon type={icon} styling={tw(iconStyle)} />
       ) : (
         <>
-          {leftIcon && icon && (
-            <Icon type={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
-          )}
+          {leftIcon && icon && <Icon type={icon} styling={tw(iconStyle)} />}
 
           {size !== 'xsmall' && label}
 
-          {!leftIcon && icon && (
-            <Icon type={icon} isCustomIcon={isCustomIcon} styling={tw(iconStyle)} />
-          )}
+          {!leftIcon && icon && <Icon type={icon} styling={tw(iconStyle)} />}
         </>
       )}
     </button>

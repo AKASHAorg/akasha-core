@@ -40,7 +40,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
      * Define other border-changing props here
      */
 
-    return 'border-2 border-solid border-grey5';
+    return 'border-1 border-solid border-grey8 dark:border-none';
   };
 
   const className = `flex flex-col shadow-${elevation} w-full ${pad ? pad : 'p-0'} ${

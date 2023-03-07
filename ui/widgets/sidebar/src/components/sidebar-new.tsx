@@ -5,7 +5,7 @@ import DS from '@akashaorg/design-system-core';
 import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
 import { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
 
-const { Avatar, Button, Icon, Text } = DS;
+const { Avatar, Button, AppIcon, Text } = DS;
 
 import ListSidebarApps from './list-sidebar-apps';
 
@@ -129,11 +129,12 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Text variant="footnotes1" className={titleText}>
             {title}
           </Text>
-          <Text variant="subtitle2" className={tw(subtitleText)}>
+          <Text variant="subtitle2" className={subtitleText}>
             {subtitle}
           </Text>
         </div>
         <div className={tw('w-fit h-fit ml-6 self-end')}>
+          {/*@TODO the color of the icon button should be white on both light and dark theme */}
           <Button icon="BoltIcon" primary={true} iconOnly={true} />
         </div>
       </div>
@@ -166,7 +167,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
-        <Text variant="subtitle2" className={tw(subtitleText)}>
+        <Text variant="subtitle2" className={subtitleText}>
           {ctaText}
         </Text>
         <div className={tw('w-fit h-fit mt-6')}>
@@ -175,20 +176,14 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4')}>
-        <Text variant="subtitle2" className={tw(subtitleText)}>
+        <Text variant="subtitle2" className={subtitleText}>
           {footerLabel}
         </Text>
         <div className={tw('flex w-fit h-fit mt-6')}>
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
               <a href={icon.link} target="_blank" rel="noreferrer noopener">
-                <div
-                  className={tw(
-                    'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
-                  )}
-                >
-                  <Icon type={icon.name} isCustomIcon={true} plain={true} accentColor={true} />
-                </div>
+                <AppIcon placeholderIconType={icon.name} size="md" accentColor />
               </a>
             </div>
           ))}

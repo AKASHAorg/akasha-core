@@ -3,7 +3,6 @@ import { tw } from '@twind/core';
 
 import DS from '@akashaorg/design-system-core';
 import { IMenuItem } from '@akashaorg/typings/ui';
-import { IconType } from '@akashaorg/design-system-core/lib/components/Icon';
 
 const { AppIcon, Text } = DS;
 
@@ -36,13 +35,13 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
           'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
         )}
       >
-        <AppIcon
-          size="lg"
-          plain={true}
-          isCustomIcon={true}
-          stackedIcon={menuItem.logo.value === 'notifications'}
-          placeholderIconType={menuItem.logo.value as IconType}
-        />
+        {menuItem.logo.type === 'icon' && (
+          <AppIcon
+            size="lg"
+            stackedIcon={menuItem.logo.value === 'notifications'}
+            placeholderIconType={menuItem.logo.value}
+          />
+        )}
       </div>
       <Text
         variant="body1"
