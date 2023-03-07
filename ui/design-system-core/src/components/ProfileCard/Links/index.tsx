@@ -27,7 +27,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
         {links.map((link, index) => (
           <CopyToClipboard key={link.type + index} value={getLinkFromType(link, true)}>
             <Stack spacing="gap-x-2">
-              <AppIcon placeholderIconType={getIconFromType(link.type)} size="xs" accentColor />
+              <AppIcon placeholderIconType={getIconFromType(link.type)} size="sm" accentColor />
               <Text
                 variant="body2"
                 color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}

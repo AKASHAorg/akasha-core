@@ -1,7 +1,8 @@
 import React from 'react';
-import Icon, { IconType } from '../Icon';
+import Icon from '../Icon';
 import Text from '../Text';
 import { tw, apply } from '@twind/core';
+import { IconType } from '@akashaorg/typings/ui';
 
 export type toggleSize = 'small' | 'large';
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import Card from '../../Card';
 import Stack from '../../Stack';
-import Icon, { IconType } from '../../Icon';
 import Text, { TextProps } from '../../Text';
-import { apply, tw } from '@twind/core';
 import AppIcon from '../../AppIcon';
+import { IconType } from '@akashaorg/typings/ui';
 
 type Stat = {
   label: string;
@@ -51,13 +50,14 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
         <Stack justify="between">
           {stats.map((stat, index) => (
             <button onClick={stat.onClick} key={stat.label + index}>
-              <Stack direction="column" align="center">
+              <Stack direction="column" align="center" className="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
-                  size="sm"
-                  breakPointSize={{ breakPoint: 'sm', size: 'lg' }}
+                  size="md"
+                  breakPointSize={{ breakPoint: 'md', size: 'xl' }}
                   accentColor
                   className={stat.className}
+                  hover
                 />
                 <Text {...labelProp}>{stat.label}</Text>
                 <Text {...totalProps}>{stat.total}</Text>

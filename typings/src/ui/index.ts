@@ -16,6 +16,7 @@ export * from './single-spa';
 export * from './type-utils';
 export * from './ui-events';
 export * from './widgets';
+export * from './icon';
 
 export enum IntegrationTypes {
   APP = 'App',
