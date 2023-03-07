@@ -54,7 +54,7 @@ const Snackbar: React.FC<ISnackbar> = ({
           {description}
         </Text>
         {actionButtonLabel && (
-          <span onClick={handleButtonClick} className={tw(`cursor-pointer`)}>
+          <button onClick={handleButtonClick}>
             <Text
               variant="button-md"
               color={{ light: `text-${colorLight}`, dark: `text-${colorDark}` }}
