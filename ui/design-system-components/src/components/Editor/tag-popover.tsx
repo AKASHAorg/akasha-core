@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Portal } from './helpers';
-import { Text } from 'grommet';
-import { StyledPopoverDiv, StyledPopoverValueBox } from './styled-editor-box';
+import { tw } from '@twind/core';
+import DS from '@akashaorg/design-system-core';
 import { ITag } from '@akashaorg/typings/ui';
+
+const { Text } = DS;
 
 export interface ITagPopover {
   postsLabel?: string;
@@ -18,12 +20,20 @@ export const TagPopover: React.FC<ITagPopover> = React.forwardRef((props, ref) =
 
   return (
     <Portal>
-      <StyledPopoverDiv ref={ref}>
+      <div
+        className={tw(
+          `absolute -top-[9999px] -left-[9999px] z-50 p-1 bg(grey9 dark: grey1) rounded-lg border(grey8 dark:grey8)`,
+        )}
+        ref={ref}
+      >
         {values.map((value, i) => (
-          <StyledPopoverValueBox
-            pad="small"
+          <div
+            className={tw(
+              `p-2 cursor-pointer p-1 rounded-sm max-w-xs min-w-[12rem] truncate hover:text-secondary ${
+                i === currentIndex && 'bg-grey3'
+              }`,
+            )}
             key={i}
-            selectedBackground={i === currentIndex}
             onClick={() => {
               handleSelect(i);
             }}
@@ -31,13 +41,13 @@ export const TagPopover: React.FC<ITagPopover> = React.forwardRef((props, ref) =
               setIndex(i);
             }}
           >
-            <Text size="medium" color="primaryText">{`#${value.name}`}</Text>
-            <Text size="small" color="secondaryText">
+            <Text>{`#${value.name}`}</Text>
+            <Text className={'text-sm'} variant={'subtitle1'}>
               {`${value.totalPosts} ${postsLabel}`}
             </Text>
-          </StyledPopoverValueBox>
+          </div>
         ))}
-      </StyledPopoverDiv>
+      </div>
     </Portal>
   );
 });

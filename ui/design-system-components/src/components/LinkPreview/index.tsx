@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { tw, apply } from '@twind/core';
 import isUrl from 'is-url';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import DS from '@akashaorg/design-system-core';
 import { LinkPreviewExt } from '@akashaorg/typings/ui';
+
+const { Icon } = DS;
 
 const closeDivClass = apply(
   'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
@@ -58,7 +60,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
           )}
         >
           <div className={tw(`flex flex-col gap-4 items-center justify-items-center`)}>
-            <Icon icon="loading" styling={'text-secondary'} />
+            <Icon type="loading" styling={'text-secondary'} />
             <p className={tw(`text(center secondary) px-12`)}>{uploadingLinkPreviewLabel}</p>
           </div>
         </div>
@@ -87,7 +89,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
                 handleDeletePreview();
               }}
             >
-              <Icon icon="XMarkIcon" />
+              <Icon type="XMarkIcon" />
             </div>
           )}
           {!!(linkPreviewData.imageSources?.url || linkPreviewData.imageSources?.fallbackUrl) &&
@@ -132,7 +134,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
                   />
                 </div>
               ) : (
-                <Icon icon="LinkIcon" styling={'h-3 w-3 text-secondary'} />
+                <Icon type="LinkIcon" styling={'h-3 w-3 text-secondary'} />
               )}
               {!!linkPreviewData.url && <p className={'text-secondary truncate'}>{hostname}</p>}
             </div>

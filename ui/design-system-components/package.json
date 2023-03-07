@@ -89,7 +89,8 @@
     "lodash.isequal": "4.5.0",
     "slate": "0.82.0",
     "slate-history": "0.66.0",
-    "slate-react": "0.82.0"
+    "slate-react": "0.82.0",
+    "emoji-mart": "5.5.2"
   },
   "peerDependencies": {
     "react": "^18.1.0",

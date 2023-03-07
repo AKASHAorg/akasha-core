@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Box, Text } from 'grommet';
+import { tw } from '@twind/core';
+import DS from '@akashaorg/design-system-core';
 
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import { MainAreaCardBox } from './basic-card-box';
-import { StyledBox } from './styled-entry-box';
+const { Icon, Text } = DS;
 
 export interface IEntryCardHiddenProps {
   moderatedContentLabel?: string;
@@ -37,68 +36,58 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
   } = props;
 
   return (
-    <MainAreaCardBox
-      dashedBorder={true}
-      redDashedBorder={delistedAccount}
-      margin={{ bottom: 'xsmall' }}
+    <div
+      className={tw(
+        `flex mb-1 rounded-lg border border-dashed ${
+          delistedAccount && 'border-color(error-light dark:error-dark)'
+        }`,
+      )}
     >
-      <Box direction="row" pad="medium" align="start">
-        <Icon type={delistedAccount ? 'block' : 'error'} size="md" accentColor={!delistedAccount} />
+      <div className={tw(`flex flex-row items-start p-4`)}>
+        <Icon type={delistedAccount ? 'NoSymbolIcon' : 'ExclamationTriangleIcon'} />
         {reportedAccount && (
-          <Text size="large" margin={{ left: 'medium' }}>
+          <Text variant={'h4'}>
             {`${headerTextLabel}:`}
             {reason.length > 0 && (
-              <StyledBox
-                width="fit-content"
-                margin={{ bottom: '0.5rem' }}
-                pad={{ horizontal: '0.2rem' }}
-                round="0.125rem"
-              >
-                <Text as="span" color="accentText" style={{ fontSize: '1rem', fontWeight: 600 }}>
+              <div className={tw(`flex w-fit mb-2 px-[0.2rem] rounded-xs bg-secondary/10`)}>
+                <Text color={'secondary'} weight={'bold'}>
                   {reason}
                 </Text>
-              </StyledBox>
+              </div>
             )}
             {footerTextLabel}
           </Text>
         )}
         {!reportedAccount && (
-          <Text size="large" margin={{ left: 'medium' }}>
+          <Text variant={'h4'}>
             {isDelisted && moderatedContentLabel}
             {headerTextLabel && `${headerTextLabel}:`}
             {reason && reason.length > 0 && (
-              <StyledBox
-                width="fit-content"
-                margin={{ bottom: '0.5rem' }}
-                pad={{ horizontal: '0.2rem' }}
-                round="0.125rem"
-              >
-                <Text as="span" color="accentText" style={{ fontSize: '1rem', fontWeight: 600 }}>
+              <div className={tw(`flex w-fit mb-2 px-[0.2rem] rounded-xs bg-secondary/10`)}>
+                <Text color={'secondary'} weight={'bold'}>
                   {reason}
                 </Text>
-              </StyledBox>
+              </div>
             )}
             {footerTextLabel && footerTextLabel}
             {ctaLabel && (
-              <Text
-                as="span"
-                size="large"
-                margin={{ left: '0.2rem' }}
-                color="accentText"
-                style={{ cursor: 'pointer' }}
+              <div
+                className={'cursor-pointer'}
                 onClick={e => {
                   e.stopPropagation();
                   // open call to action url if specified
                   ctaUrl ? onCTAClick() : handleFlipCard();
                 }}
               >
-                {ctaLabel}
-              </Text>
+                <Text variant={'h4'} color={'text-secondary'}>
+                  {ctaLabel}
+                </Text>
+              </div>
             )}
           </Text>
         )}
-      </Box>
-    </MainAreaCardBox>
+      </div>
+    </div>
   );
 };
 

@@ -12,11 +12,14 @@ import { withHistory } from 'slate-history';
 import { Editable } from 'slate-react';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
+
+import { tw } from '@twind/core';
+import { Popover } from '@headlessui/react';
 import { IEntryData, IMetadata, IPublishData, IProfileData } from '@akashaorg/typings/ui';
-import Avatar from '../Avatar';
-import Button from '../Button';
-import Icon from '../Icon';
-import EmojiPopover from '../EmojiPopover';
+import DS from '@akashaorg/design-system-core';
+
 import EmbedBox from '../EmbedBox';
 import { TagPopover } from './tag-popover';
 import EditorMeter from '../EditorMeter';
@@ -27,15 +30,14 @@ import ImageGallery from '../ImageGallery';
 import { CustomEditor } from './helpers';
 import { withMentions, withImages, withTags, withLinks } from './plugins';
 import { renderElement, renderLeaf } from './renderers';
-import { StyledBox, StyledEditable, StyledIconDiv, StyledPublishButton } from './styled-editor-box';
 import { ImageData, ImageUpload } from './image-upload';
 import { MentionPopover } from './mention-popover';
 import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
-
 import isUrl from 'is-url';
-import { tw } from '@twind/core';
+
+const { Avatar, Button, Icon } = DS;
 
 const MAX_LENGTH = 280;
 
@@ -100,7 +102,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     ethAddress,
     postLabel,
     placeholderLabel,
-    emojiPlaceholderLabel,
     uploadFailedLabel,
     uploadingImageLabel,
     disablePublishLabel,
@@ -129,8 +130,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   } = props;
 
   const mentionPopoverRef: React.RefObject<HTMLDivElement> = useRef(null);
-  const mediaIconRef: React.RefObject<HTMLDivElement> = useRef(null);
-  const emojiIconRef: React.RefObject<HTMLDivElement> = useRef(null);
   const uploadInputRef: React.RefObject<HTMLInputElement> = React.useRef(null);
 
   const [mentionTargetRange, setMentionTargetRange] = useState<Range | null>(null);
@@ -142,8 +141,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
 
   const [publishDisabledInternal, setPublishDisabledInternal] = useState(true);
   const [imageUploadDisabled, setImageUploadDisabled] = useState(false);
-
-  const [emojiPopoverOpen, setEmojiPopoverOpen] = useState(false);
 
   const [linkPreviewState, setLinkPreviewState] = useState(linkPreview);
   const [linkPreviewUploading, setLinkPreviewUploading] = useState(false);
@@ -178,9 +175,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   React.useImperativeHandle(
     ref,
     () => ({
-      getPopoversState: () => {
-        return emojiPopoverOpen;
-      },
       getImagesState: () => {
         return images.length > 0;
       },
@@ -188,7 +182,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         return uploading;
       },
     }),
-    [emojiPopoverOpen, images, uploading],
+    [images, uploading],
   );
 
   /**
@@ -500,14 +494,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
     ],
   );
 
-  const openEmojiPicker = () => {
-    setEmojiPopoverOpen(!emojiPopoverOpen);
-  };
-
-  const closeEmojiPicker = () => {
-    setEmojiPopoverOpen(false);
-  };
-
   /**
    * used for inserting mentions when clicking on popover
    */
@@ -597,8 +583,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
         )}
       >
         {showAvatar && (
-          <div className={tw(`flex shrink-0`)}>
-            <Avatar src={avatar} ethAddress={ethAddress} margin={{ top: '0.5rem' }} />
+          <div className={tw(`flex shrink-0 pb-2`)}>
+            <Avatar src={avatar} ethAddress={ethAddress} />
           </div>
         )}
         <div className={tw(`w-full px-2 flex(row) justify-between`)}>
@@ -613,7 +599,6 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
                 autoComplete="off"
                 spellCheck={false}
                 autoFocus={true}
-                readOnly={emojiPopoverOpen}
                 renderElement={(renderProps: RenderElementProps) =>
                   renderElement(
                     renderProps,
@@ -674,19 +659,21 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
       <div className={tw(`w-full px-4 pt-2 pb-4 justify-between flex(row)`)}>
         <div className={tw(`flex(row) gap-2 items-center`)}>
           {!isMobile && (
-            <StyledIconDiv ref={emojiIconRef}>
-              <Icon type="emoji" clickable={true} onClick={openEmojiPicker} size="md" />
-            </StyledIconDiv>
+            <Popover className="relative">
+              <Popover.Button>
+                <Icon type="FaceSmileIcon" />
+              </Popover.Button>
+              <Popover.Panel className="absolute z-10">
+                <Popover.Button>
+                  <Picker data={data} onEmojiSelect={handleInsertEmoji} />
+                </Popover.Button>
+              </Popover.Panel>
+            </Popover>
           )}
           {uploadRequest && (
-            <StyledIconDiv ref={mediaIconRef}>
-              <Icon
-                type="image"
-                clickable={!uploading && !imageUploadDisabled}
-                onClick={handleMediaClick}
-                size="md"
-              />
-            </StyledIconDiv>
+            <button className={tw(`flex items-center`)} onClick={handleMediaClick}>
+              <Icon type="PhotoIcon" disabled={uploading || imageUploadDisabled} />
+            </button>
           )}
         </div>
 
@@ -696,50 +683,31 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               {!publishDisabled && (
                 <p className={tw(`text(secondary-light dark:secondary-dark)`)}>Draft</p>
               )}
-              <Anchor
+              <a
+                className={tw(`text-color-secondary no-underline`)}
                 onClick={e => {
                   e.preventDefault();
                   CustomEditor.clearEditor(editor);
                   if (onClear) onClear();
                 }}
-                size="medium"
-                weight="normal"
                 target="_self"
-                color="accentText"
                 style={{ textDecoration: 'none' }}
-                disabled={embedEntryData ? !embedEntryData : publishDisabled}
               >
                 Clear
-              </Anchor>
+              </a>
             </div>
           )}
           {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
-          {showCancelButton && (
-            <Button
-              secondary={true}
-              accentBorder={true}
-              slimBorder={true}
-              label={cancelButtonLabel}
-              onClick={onCancelClick}
-            />
-          )}
-          <StyledPublishButton
+          {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
+          <Button
             primary={true}
-            icon={disablePublish ? <Icon type="loading" color="white" /> : null}
+            icon={disablePublish ? 'ArrowPathIcon' : null}
             label={disablePublish ? disablePublishLabel : postLabel}
             onClick={handlePublish}
             disabled={publishDisabled}
           />
         </div>
       </div>
-      {emojiPopoverOpen && emojiIconRef.current && (
-        <EmojiPopover
-          emojiPlaceholderLabel={emojiPlaceholderLabel}
-          target={emojiIconRef.current}
-          closePopover={closeEmojiPicker}
-          onClickEmoji={handleInsertEmoji}
-        />
-      )}
     </div>
   );
 });

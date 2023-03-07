@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import DS from '@akashaorg/design-system-core';
+
+const { Icon } = DS;
 
 export interface IEntryCardRemoved {
   isAuthor: boolean;
@@ -11,20 +13,16 @@ export interface IEntryCardRemoved {
 const EntryCardRemoved: React.FC<IEntryCardRemoved> = props => {
   const { isAuthor, removedByAuthorLabel, removedByMeLabel } = props;
   return (
-    <Box pad={{ horizontal: 'medium' }} margin={{ vertical: 'small' }}>
-      <Box
-        pad="medium"
-        border={{ style: 'dashed', side: 'all', color: 'lightGrey' }}
-        round="xsmall"
-      >
-        <Box direction="row" align="center">
-          <Icon size="md" color="grey" type="trash" />
-          <Box margin={{ left: 'small' }}>
+    <div className={tw(`flex px-4 my-2`)}>
+      <div className={tw(`p-4 rounded-xs border border-grey8 border-dashed`)}>
+        <div className={tw(`flex flex-row items-center`)}>
+          <Icon type="TrashIcon" />
+          <div className={tw(`ml-2`)}>
             {isAuthor ? `${removedByMeLabel}.` : `${removedByAuthorLabel}.`}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
