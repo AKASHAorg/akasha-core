@@ -1,7 +1,7 @@
 import React from 'react';
+import Icon from '../Icon';
 import { tw } from '@twind/core';
-
-import Icon, { IconType } from '../Icon';
+import { IconType } from '@akashaorg/typings/ui';
 
 type ButtonSize = 'xsmall' | 'small' | 'regular' | 'large';
 

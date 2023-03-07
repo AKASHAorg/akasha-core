@@ -29,7 +29,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Dev Dashboard',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'dashboard' },
+    logo: { type: LogoTypeSource.ICON, value: 'Squares2X2Icon' },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [],
   },

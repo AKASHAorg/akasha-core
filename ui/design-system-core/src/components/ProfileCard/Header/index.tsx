@@ -45,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({
   handleFlag,
 }) => {
   const avatarContainer = tw(apply`relative w-20 h-[3.5rem] shrink-0`);
-  const flagIconStyle = tw(apply`h-4 [&>*]:stroke-error-light dark:[&>*]:stroke-error-dark`);
+  const flagIconStyle = tw(apply`h-4`);
   const [showMore, setShowMore] = useState(false);
   const showMoreRef = useCloseActions(() => {
     setShowMore(false);
@@ -85,13 +85,13 @@ const Header: React.FC<HeaderProps> = ({
             <div className="ml-auto mt-2">
               {viewerIsOwner ? (
                 <button>
-                  <AppIcon placeholderIconType="Cog6ToothIcon" size="sm" accentColor />
+                  <AppIcon placeholderIconType="Cog6ToothIcon" size="md" accentColor />
                 </button>
               ) : (
                 <div className="relative">
                   <Stack spacing="gap-x-2">
                     <button>
-                      <AppIcon placeholderIconType="EnvelopeIcon" size="sm" accentColor />
+                      <AppIcon placeholderIconType="EnvelopeIcon" size="md" accentColor />
                     </button>
                     {isFollowing ? (
                       <>
@@ -106,29 +106,33 @@ const Header: React.FC<HeaderProps> = ({
                       </>
                     ) : (
                       <button onClick={handleFollow}>
-                        <AppIcon placeholderIconType="UsersIcon" size="sm" accentColor />
+                        <AppIcon placeholderIconType="UsersIcon" size="md" accentColor />
                       </button>
                     )}
                     <button onClick={onShowMore} ref={showMoreRef}>
                       <AppIcon
                         placeholderIconType="EllipsisVerticalIcon"
-                        size="sm"
-                        hover={true}
+                        size="md"
                         active={showMore}
                         accentColor
+                        hover
                       />
                     </button>
                   </Stack>
                   {showMore && (
                     <Card
-                      elevation="1"
+                      elevation={{ light: '1', dark: '2' }}
                       padding={{ x: 18, y: 8 }}
                       radius={8}
-                      className="absolute top-[36px] right-0"
+                      className="absolute top-[36px] right-0 bg-white dark:bg-grey3"
                     >
                       <button onClick={handleFlag}>
                         <Stack align="center" spacing="gap-x-1">
-                          <Icon type="FlagIcon" styling={flagIconStyle} />
+                          <Icon
+                            type="FlagIcon"
+                            styling={flagIconStyle}
+                            color={{ light: 'error-light', dark: 'error-dark' }}
+                          />
                           <Text
                             variant="body1"
                             color={{ light: 'text-error-light', dark: 'text-error-dark' }}
