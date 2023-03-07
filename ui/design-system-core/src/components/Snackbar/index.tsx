@@ -61,19 +61,12 @@ const Snackbar: React.FC<ISnackbar> = ({
             >
               {actionButtonLabel}
             </Text>
-          </span>
+          </button>
         )}
       </div>
-      <span className={tw('ml-2')}>
-        <Icon
-          type="XMarkIcon"
-          plain={true}
-          color="grey7"
-          styling="w-4 h-4"
-          clickable={true}
-          onClick={handleDismiss}
-        />
-      </span>
+      <button onClick={handleDismiss} className={tw('ml-2')}>
+        <Icon type="XMarkIcon" color="grey7" styling="w-4 h-4" clickable={true} />
+      </button>
     </div>
   );
 };
