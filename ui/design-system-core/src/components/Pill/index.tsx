@@ -47,8 +47,8 @@ const Pill: React.FC<IPill> = ({
         {infoLabel}
       </Text>
       {trailingIcon && (
-        <span className={tw('ml-2')}>
-          <Icon type={trailingIcon} styling="w-4 h-4" clickable={true} onClick={handleDismiss} />
+        <span className={tw('ml-2')} onClick={handleDismiss}>
+          <Icon type={trailingIcon} styling="w-4 h-4" />
         </span>
       )}
     </div>

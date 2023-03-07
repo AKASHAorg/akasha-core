@@ -18,7 +18,6 @@ export interface IconProps {
   disabled?: boolean;
   testId?: string;
   styling?: string;
-  onClick?: (event: React.SyntheticEvent<Element, Event>) => void;
 }
 
 export const iconTypes: IconType[] = [
