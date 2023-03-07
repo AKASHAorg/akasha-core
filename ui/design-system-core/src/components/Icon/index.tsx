@@ -48,7 +48,6 @@ const Icon: React.FC<IconProps> = props => {
     disabled,
     testId,
     styling,
-    onClick,
   } = props;
 
   const PassedIcon = isCustomIcon || !HeroIcons[type] ? CustomIcons[type] : HeroIcons[type];
@@ -71,7 +70,7 @@ const Icon: React.FC<IconProps> = props => {
   } ${clickable && !disabled ? `cursor-pointer hover:[& *]:${svgPrefix}-secondary-dark` : ''}`;
 
   return (
-    <div className={tw(className)} ref={ref} onClick={onClick}>
+    <div className={tw(className)} ref={ref}>
       <PassedIcon className={styling} data-testid={testId} />
     </div>
   );
