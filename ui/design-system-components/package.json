@@ -79,6 +79,7 @@
     "@types/react-test-renderer": "18.0.0",
     "@types/is-url": "1.2.30",
     "@types/lodash.isequal": "4.5.5",
+    "@types/emoji-mart": "3.0.9",
     "babel-loader": "^8.2.2",
     "dayjs": "1.11.7",
     "react-docgen-typescript": "2.2.2",

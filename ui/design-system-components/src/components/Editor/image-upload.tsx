@@ -147,14 +147,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           )}
         >
           <div className={tw(`flex flex-col gap-8 items-center justify-items-center px-2`)}>
-            <Meter
-              type="bar"
-              round={true}
-              value={loadingProgress}
-              max={100}
-              // color defined in grommet config
-              color="secondaryText"
-            />
+            <Meter type="bar" value={loadingProgress} max={100} size={600} thickness={48} />
             <Text>{uploadingImageLabel}</Text>
           </div>
         </div>

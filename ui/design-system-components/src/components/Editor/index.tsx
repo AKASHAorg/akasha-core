@@ -22,7 +22,6 @@ import DS from '@akashaorg/design-system-core';
 
 import EmbedBox from '../EmbedBox';
 import { TagPopover } from './tag-popover';
-import EditorMeter from '../EditorMeter';
 import LinkPreview from '../LinkPreview';
 import { ImageObject } from '../ImageGallery/image-grid-item';
 import ImageGallery from '../ImageGallery';
@@ -37,7 +36,7 @@ import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import isUrl from 'is-url';
 
-const { Avatar, Button, Icon } = DS;
+const { Avatar, Button, Icon, Meter } = DS;
 
 const MAX_LENGTH = 280;
 
@@ -697,7 +696,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               </a>
             </div>
           )}
-          {withMeter && <EditorMeter counter={letterCount} maxValue={MAX_LENGTH} />}
+          {withMeter && (
+            <Meter type="circle" value={letterCount} max={MAX_LENGTH} size={24} thickness={3} />
+          )}
           {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
           <Button
             primary={true}
