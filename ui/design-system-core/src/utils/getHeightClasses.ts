@@ -1,9 +1,9 @@
-export function getHeightClasses(height: string) {
-  if (!height) return '';
-
-  if (height.startsWith('h-')) {
+export function getHeightClasses(height: string | number) {
+  if (typeof height === 'string') {
     return height;
   }
 
-  return !Number.isInteger(+height[0]) ? `h-[${height}]` : '';
+  if (typeof height === 'number') return `h-[${height / 16}rem]`;
+
+  return '';
 }
