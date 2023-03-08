@@ -36,11 +36,11 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
     >
       <div
         className={tw(
-          'flex items-start w-[50%] md:w-[30%] px-4 items-center border-r-1 border-solid border-grey8 dark:border-grey3',
+          'flex space-x-2 items-start w-[50%] md:w-[30%] px-4 border-r-1 border-solid border-grey8 dark:border-grey3',
         )}
       >
         <Avatar src={moderator.avatar} />
-        <div className={tw('ml-2')}>
+        <div>
           <Tooltip content={`${moderator.name}`} placement="right">
             <Text
               variant="body2"
@@ -57,10 +57,10 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
               color={{ light: 'text-grey4', dark: 'text-grey7' }}
             >{`@${moderator.userName}`}</Text>
           </Tooltip>
-          <div className={tw('flex items-center')}>
+          <div className={tw('flex space-x-1.5 items-center')}>
             <div
               className={tw(
-                `w-1.5 h-1.5 mr-1.5 rounded-full ${
+                `w-1.5 h-1.5 rounded-full ${
                   moderator.status === 'active'
                     ? 'bg-success'
                     : moderator.status === 'revoked'
