@@ -27,6 +27,9 @@ module.exports = Object.assign(baseConfig, {
         { from: path.resolve(__dirname, '../../../locales'), to: 'locales' },
       ],
     }),
+    new webpack.DefinePlugin({
+      __LOAD_LOCAL_SOURCES__: !!process.env.LOAD_LOCAL_SOURCES,
+    }),
   ]),
   externals: baseConfig.externals,
   devServer: {
