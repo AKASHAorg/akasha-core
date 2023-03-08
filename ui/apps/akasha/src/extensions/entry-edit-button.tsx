@@ -4,13 +4,11 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootExtensionProps, EntityTypes } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
 const { MenuItemButton, ModalContainer } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const EntryEditButton: React.FC<RootExtensionProps> = props => {
   const { t } = useTranslation('app-akasha-integration');

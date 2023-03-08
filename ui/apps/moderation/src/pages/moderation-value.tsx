@@ -2,13 +2,11 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system-core';
 import { RootComponentProps } from '@akashaorg/typings/ui';
+import ModerationValueCard from '@akashaorg/design-system/lib/components/ModerationValueCard';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils/external-links';
-
-const { ModerationValueCard } = DS;
 
 const ValuePage: React.FC<RootComponentProps> = () => {
   const { t } = useTranslation('app-moderation-ewa');

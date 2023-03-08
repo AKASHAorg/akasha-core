@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootComponentProps, EntityTypes, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import {
@@ -14,8 +14,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 const { Spinner, StartCard, InfoCard, Box } = DS;
-
-const { ErrorLoader } = DSNew;
 
 type BookmarksPageProps = Omit<
   RootComponentProps,

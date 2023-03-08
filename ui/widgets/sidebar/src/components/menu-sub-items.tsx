@@ -1,10 +1,8 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import DS from '@akashaorg/design-system-core';
 import { IMenuItem } from '@akashaorg/typings/ui';
-
-const { Text } = DS;
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IMenuSubItemsProps {
   menuItem: IMenuItem;

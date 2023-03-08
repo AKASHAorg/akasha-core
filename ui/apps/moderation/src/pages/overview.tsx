@@ -1,13 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system-core';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils/external-links';
-
-const { ModerationIntroCard, ModerationValuesCard } = DS;
+import ModerationIntroCard from '@akashaorg/design-system-core/lib/components/ModerationIntroCard';
+import ModerationValuesCard from '@akashaorg/design-system-core/lib/components/ModerationValuesCard';
 
 const IntroPage: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
