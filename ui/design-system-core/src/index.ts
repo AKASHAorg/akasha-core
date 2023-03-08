@@ -30,6 +30,7 @@ import {
 } from './components/ProfileCard';
 import RadioButton from './components/RadioButton';
 import Sidebar from './components/Sidebar';
+import Spinner from './components/Spinner';
 import Stack from './components/Stack';
 import StackedAvatar from './components/StackedAvatar';
 import SubtitleTextIcon from './components/SubtitleTextIcon';
@@ -68,6 +69,7 @@ export default {
   ProfileLoading,
   ProfileStats,
   RadioButton,
+  Spinner,
   Stack,
   Sidebar,
   StackedAvatar,
