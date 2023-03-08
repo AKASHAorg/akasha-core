@@ -1,14 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import DS from '@akashaorg/design-system-core';
 import { useGetModerators } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-const { Spinner } = DS;
-
-const { Box, BasicCardBox, ModerationSwitchCard, ModeratorDetailCard } = DSNew;
+const { BasicCardBox, Box, ModerationSwitchCard, ModeratorDetailCard, Spinner } = DS;
 
 const tabs = ['All', 'Active', 'Resigned', 'Revoked'];
 
@@ -38,7 +35,7 @@ const AllModerators: React.FC<RootComponentProps> = () => {
     <BasicCardBox pad="p-0">
       <ModerationSwitchCard tabs={modTabs} activeTab={activeTab} onTabClick={setActiveTab} />
 
-      {getModeratorsQuery.isFetching && <Spinner />}
+      {getModeratorsQuery.isFetching && <Spinner size="lg" />}
 
       {!getModeratorsQuery.isFetching &&
         getModeratorsQuery.data &&
