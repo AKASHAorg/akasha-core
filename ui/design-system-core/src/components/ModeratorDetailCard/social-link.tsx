@@ -17,7 +17,7 @@ const SocialLink: React.FC<ISocialLinksProps> = props => {
       className={tw(`flex items-center justify-center w-8 h-8 rounded-full bg-grey9 dark:bg-grey3`)}
       onClick={onClick}
     >
-      <AppIcon size={iconSize} plain={true} placeholderIconType={iconType} />
+      <AppIcon size={iconSize} placeholderIconType={iconType} />
     </div>
   );
 };
