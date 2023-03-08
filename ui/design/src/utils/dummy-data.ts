@@ -1,9 +1,5 @@
 import { Descendant } from 'slate';
-import {
-  LogoTypeSource,
-  ProfileProviders,
-  ProfileProviderProperties,
-} from '@akashaorg/typings/ui';
+import { LogoTypeSource, ProfileProviders, ProfileProviderProperties } from '@akashaorg/typings/ui';
 import { ReleaseInfo } from '@akashaorg/typings/sdk';
 import {
   IMenuItem,
@@ -149,7 +145,7 @@ const installedAppsData: IMenuItem[] = [
     index: 5,
     route: '/search',
     type: MenuItemType.Plugin,
-    logo: { type: LogoTypeSource.ICON, value: 'searchApp' },
+    logo: { type: LogoTypeSource.ICON, value: 'search' },
     area: [MenuItemAreaType.SearchArea],
     subRoutes: [],
   },

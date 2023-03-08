@@ -1,10 +1,11 @@
 import React, { PropsWithChildren } from 'react';
-import Icon, { IconType } from '../../Icon';
+import Icon from '../../Icon';
 import Text from '../../Text';
 import { Status, STATUS_TO_COLOR_MAP } from '../../types/common.types';
 import { apply, tw } from '@twind/core';
 import { CaptionProps } from '../types';
 import { getIconClasses } from './getIconClasses';
+import { IconType } from '@akashaorg/typings/ui';
 
 const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, children }) => {
   const iconStyle = getIconClasses(status);

@@ -1,9 +1,9 @@
 import React from 'react';
-import { tw } from '@twind/core';
-
 import BasicCardBox from '../BasicCardBox';
-import Icon, { IconType } from '../Icon';
+import Icon from '../Icon';
 import Text from '../Text';
+import { tw } from '@twind/core';
+import { IconType } from '@akashaorg/typings/ui';
 
 export type OverviewCTA = {
   label: string;

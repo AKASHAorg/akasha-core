@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
-import { IconType } from '../Icon';
 import Icon from '../Icon';
+import { IconType } from '@akashaorg/typings/ui';
 
 export interface ISubtitleTextIcon {
   className?: string;

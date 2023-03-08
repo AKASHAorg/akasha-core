@@ -13,4 +13,16 @@ jest.mock('@akashaorg/typings/ui', () => ({
     POST: 'post',
     REPLY: 'reply',
   },
+  APP_ICON_TO_HERO_ICON_MAP: {
+    appSocial: 'akasha',
+    appCenter: 'SquaresPlusIcon',
+    appModeration: 'UsersIcon',
+    bookmark: 'BookmarkIcon',
+    chatBubble: 'ChatBubbleOvalLeftEllipsisIcon',
+    explore: 'SparklesIcon',
+    message: 'EnvelopeIcon',
+    notifications: 'BellIcon',
+    search: 'MagnifyingGlassIcon',
+    settingsAlt: 'Cog8ToothIcon',
+  },
 }));

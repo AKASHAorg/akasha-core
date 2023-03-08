@@ -134,6 +134,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           </Text>
         </div>
         <div className={tw('w-fit h-fit ml-6 self-end')}>
+          {/*@TODO the color of the icon button should be white on both light and dark theme */}
           <Button icon="BoltIcon" primary={true} iconOnly={true} />
         </div>
       </div>
@@ -182,7 +183,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
               <a href={icon.link} target="_blank" rel="noreferrer noopener">
-                <AppIcon placeholderIconType={icon.name} size="sm" plain accentColor />
+                <AppIcon placeholderIconType={icon.name} size="md" accentColor />
               </a>
             </div>
           ))}

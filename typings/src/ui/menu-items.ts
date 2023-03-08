@@ -1,9 +1,18 @@
+import { IconType } from './icon';
 import { ValueOf } from './type-utils';
 
-export interface LogoSourceType {
-  type: LogoTypeSource;
-  value: string;
-}
+type Sources = 'icon' | 'source' | 'string' | 'ipfs' | 'avatar';
+
+export type LogoSourceType =
+  | {
+      type: Extract<Sources, 'icon'>;
+      value: IconType;
+    }
+  | {
+      type: Exclude<Sources, 'icon'>;
+      value: string;
+    };
+
 export enum LogoTypeSource {
   ICON = 'icon',
   String = 'string',
