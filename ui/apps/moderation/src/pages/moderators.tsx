@@ -37,7 +37,11 @@ const AllModerators: React.FC<RootComponentProps> = () => {
     <BasicCardBox pad="p-0">
       <ModerationSwitchCard tabs={modTabs} activeTab={activeTab} onTabClick={setActiveTab} />
 
-      {getModeratorsQuery.isFetching && <Spinner size="lg" />}
+      {getModeratorsQuery.isFetching && (
+        <Box style="flex items-center justify-center p-4">
+          <Spinner size="lg" />
+        </Box>
+      )}
 
       {!getModeratorsQuery.isFetching &&
         getModeratorsQuery.data &&
