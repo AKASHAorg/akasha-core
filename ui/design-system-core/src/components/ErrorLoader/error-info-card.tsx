@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 export interface IErrorInfoCardProps {
   error?: Error;
@@ -9,8 +9,9 @@ export interface IErrorInfoCardProps {
 export const ErrorInfoCard = (props: IErrorInfoCardProps) => {
   const { error, children } = props;
 
-  const className =
-    'text-start text-error-light dark:text-error-dark text-[0.65em] overflow-x-auto';
+  const className = apply(
+    'text-start text-error-light dark:text-error-dark text-[0.65em] overflow-x-auto',
+  );
 
   if (error) {
     const message = (

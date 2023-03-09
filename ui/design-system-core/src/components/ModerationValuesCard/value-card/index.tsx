@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 import Text from '../../Text';
 
@@ -28,13 +28,17 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
 
   return (
     <div
-      className={tw(`h-${isMini ? '32' : ''}  bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`)}
+      className={tw(
+        apply`h-${isMini ? '32' : ''}  bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`,
+      )}
       onClick={onClick}
     >
       <div
-        className={tw(`flex flex-col h-full ${isMini ? 'p-3' : 'p-4'} items-center justify-evenly`)}
+        className={tw(
+          apply`flex flex-col h-full ${isMini ? 'p-3' : 'p-4'} items-center justify-evenly`,
+        )}
       >
-        <div className={tw(`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`)}>
+        <div className={tw(apply`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`)}>
           <img className={tw('object-contain')} src={`${publicImgPath}/${assetName}.webp`} />
         </div>
 
@@ -50,7 +54,7 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
           {label}
         </Text>
         {!isMini && (
-          <div className={tw('flex flex-col w-full')}>
+          <div className={tw(apply('flex flex-col w-full'))}>
             {description && (
               <Text variant="body2" align="center">
                 {description}
@@ -60,7 +64,9 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
               <a
                 href={ctaUrl}
                 className={tw(
-                  'text-sm self-end font-bold no-underline text-secondary-light dark:text-secondary-dark',
+                  apply(
+                    'text-sm self-end font-bold no-underline text-secondary-light dark:text-secondary-dark',
+                  ),
                 )}
                 target="_blank"
                 rel="noreferrer noopener"

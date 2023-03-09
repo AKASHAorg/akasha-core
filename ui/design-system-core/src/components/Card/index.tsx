@@ -31,10 +31,12 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
     className,
     style = '',
   } = props;
+
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);
   const paddingStyle = getPaddingClasses(padding);
   const backgroundStyle = getColorClasses(background);
+
   const instanceStyles = apply`
     ${baseStyles}
     ${backgroundStyle}

@@ -56,7 +56,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
           d={d}
         />
       </svg>
-      <div className="absolute"> {children} </div>
+      <div className={tw('absolute')}> {children} </div>
     </Stack>
   );
 };

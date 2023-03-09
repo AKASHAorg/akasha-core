@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button, { IButtonProps } from '../Button';
 import Icon from '../Icon/';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
 
 export interface IDuplexButtonProps extends IButtonProps {
@@ -60,7 +60,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
         onClick={active ? onClickActive : onClickInactive}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={tw('rounded-sm border-1 border-secondary-light p-1')}
+        className={tw(apply('rounded-sm border-1 border-secondary-light p-1'))}
       >
         <Icon
           type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}

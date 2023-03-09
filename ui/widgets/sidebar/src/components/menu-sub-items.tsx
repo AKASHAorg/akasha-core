@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -18,13 +18,13 @@ const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
   });
 
   return (
-    <div className={tw('text-black dark:text-white cursor-pointer')}>
+    <div className={tw(apply('text-black dark:text-white cursor-pointer'))}>
       {subRoutes.map((subRoute, idx) => (
-        <div key={subRoute.label + idx} className={tw('hover:bg-grey8 dark:hover:bg-grey5')}>
+        <div key={subRoute.label + idx} className={tw(apply('hover:bg-grey8 dark:hover:bg-grey5'))}>
           <div
             key={subRoute.label + idx}
             className={tw(
-              `ml-8 border-l-4 hover:border-transparent dark:hover:border-transparent ${
+              apply`ml-8 border-l-4 hover:border-transparent dark:hover:border-transparent ${
                 subRoute?.route === activeOption?.route
                   ? 'border-secondary-light dark:border-secondary-dark'
                   : 'border-grey9 dark:border-grey3'

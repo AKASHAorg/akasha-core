@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from '../Icon';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
 
 type ButtonSize = 'xsmall' | 'small' | 'regular' | 'large';
@@ -100,11 +100,15 @@ const Button: React.FC<IButtonProps> = props => {
 
   const shadow = `${primary ? 'shadow-none hover:shadow-lg shadow-elevation' : 'shadow-none'}`;
 
-  const className = `flex items-center ${ButtonSizesMap[size]} ${background} ${color} ${border} rounded-full ${opacity} ${cursor} ${shadow}`;
+  const className = apply(
+    `flex items-center ${ButtonSizesMap[size]} ${background} ${color} ${border} rounded-full ${opacity} ${cursor} ${shadow}`,
+  );
 
-  const iconStyle = `${ButtonIconSizesMap[size]} ${color} ${
-    size !== 'xsmall' && !iconOnly && !loading ? (leftIcon ? 'mr-2' : 'ml-2') : 'm-0'
-  }`;
+  const iconStyle = apply(
+    `${ButtonIconSizesMap[size]} ${color} ${
+      size !== 'xsmall' && !iconOnly && !loading ? (leftIcon ? 'mr-2' : 'ml-2') : 'm-0'
+    }`,
+  );
 
   return (
     <button

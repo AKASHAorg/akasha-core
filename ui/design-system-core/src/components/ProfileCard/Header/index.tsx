@@ -66,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({
         className="h-32"
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
-        <Stack direction="column" className={tw(apply('pl-2'))}>
+        <Stack direction="column" className={tw('pl-2')}>
           <Stack spacing="gap-x-2 -ml-2">
             <div className={avatarContainer}>
               <Avatar

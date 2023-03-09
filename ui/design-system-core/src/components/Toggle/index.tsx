@@ -70,6 +70,7 @@ const Toggle: React.FC<iToggleProps> = ({
       ${color}
       ${baseTransitionStyle}
       `;
+
   const instanceIconStyle = apply`
       ${iconSizingProperties}
       ${baseTransitionStyle}
@@ -79,13 +80,13 @@ const Toggle: React.FC<iToggleProps> = ({
 
   return (
     <div>
-      <label htmlFor={id} className={tw('flex cursor-pointer items-center')}>
+      <label htmlFor={id} className={tw(apply('flex cursor-pointer items-center'))}>
         <input
           type="checkbox"
           id={id}
           disabled={disabled}
           checked={enabled}
-          className={tw('peer sr-only')}
+          className={tw(apply('peer sr-only'))}
           onClick={() => setEnabled(!enabled)}
         />
         <div className={tw(instanceButtonStyle)} />
@@ -98,7 +99,7 @@ const Toggle: React.FC<iToggleProps> = ({
             />
           </div>
         )}
-        <span className={tw('pl-2 text-base text-gray-800')}>
+        <span className={tw(apply('pl-2 text-base text-gray-800'))}>
           <Text variant="label">{label}</Text>
         </span>
       </label>

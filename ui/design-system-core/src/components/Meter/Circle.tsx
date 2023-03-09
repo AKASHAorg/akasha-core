@@ -61,7 +61,7 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
           fill="transparent"
         />
       </svg>
-      <div className="absolute"> {children} </div>
+      <div className={tw('absolute')}> {children} </div>
     </Stack>
   );
 };

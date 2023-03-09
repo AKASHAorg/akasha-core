@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 import Icon from '../Icon';
 
@@ -20,12 +20,14 @@ const Accordion: React.FC<IAccordionProps> = props => {
   return (
     <>
       <div
-        className={tw(`flex flex-row justify-between items-center cursor-pointer ${className}`)}
+        className={tw(
+          apply`flex flex-row justify-between items-center cursor-pointer ${className}`,
+        )}
         onClick={handleToggle}
       >
         {titleNode}
         <Icon
-          styling={tw('h-4, w-4 text-secondary-dark')}
+          styling={tw(apply('h-4, w-4 text-secondary-dark'))}
           type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
         />
       </div>

@@ -8,6 +8,7 @@ import { TextFieldProps } from './types';
 const TextField: React.FC<TextFieldProps> = forwardRef(
   (props, ref?: React.RefObject<HTMLInputElement>) => {
     const { label, status, caption, disabled } = props;
+
     return (
       <div className={tw(apply('flex flex-col	gap-y-2'))} /* @TODO: Replace with stack component */>
         {label && <Label disabled={disabled}>{label}</Label>}

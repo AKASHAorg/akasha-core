@@ -32,6 +32,7 @@ const IconByType: React.FC<AppImgProps> = ({
       />
     );
   }
+
   if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
     return <img className={tw(apply`rounded-[50%] object-contain`)} src={appImg?.value} />;
   }

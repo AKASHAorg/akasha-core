@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 import AvatarImage from './AvatarImage';
 
@@ -81,19 +81,20 @@ const Avatar: React.FC<IAvatarProps> = props => {
     avatarImageFallback = `${publicImgPath}/avatar-placeholder-${seed}.webp`;
   }
 
-  const containerStyle = `box-border cursor-${
+  const containerStyle = apply`box-border cursor-${
     isClickable ? 'pointer' : 'default'
   } select-none relative overflow-hidden ${avatarSizesMap[size]} rounded-full bg-${
     backgroundColor ? backgroundColor : 'white'
   } border-${border ? avatarBorderSizesMap[border] : '0'} border-${
     borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'
-  }`;
+  } ${className}`;
 
-  const activeOverlayClass =
-    'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
+  const activeOverlayClass = apply(
+    'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full',
+  );
 
   return (
-    <div className={tw(`${containerStyle} ${className}`)} onClick={onClick}>
+    <div className={tw(containerStyle)} onClick={onClick}>
       <React.Suspense fallback={<></>}>
         <AvatarImage url={src?.url} alt={alt} fallbackUrl={avatarImageFallback} faded={faded} />
       </React.Suspense>

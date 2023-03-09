@@ -1,4 +1,5 @@
 import React from 'react';
+import { apply, tw } from '@twind/core';
 import { Tab } from '@headlessui/react';
 import { ITag, IProfileData } from '@akashaorg/typings/ui';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
@@ -6,7 +7,6 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
-import { tw, apply } from '@twind/core';
 
 export interface ITrendingWidgetCardProps {
   // data
@@ -102,13 +102,13 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
   return (
     // <div className="w-full max-w-md px-2 sm:px-0 bg-white dark:bg-grey2 dark:bg-grey8">
     <BasicCardBox noBorder={true} pad="0">
-      <h3 className={tw('py-4 pl-8 font-medium text-lg')}>{titleLabel}</h3>
+      <h3 className={tw(apply('py-4 pl-8 font-medium text-lg'))}>{titleLabel}</h3>
       <Tab.Group onChange={handleTabChange}>
-        <Tab.List className={tw('flex space-x-1 rounded-t-md')}>
+        <Tab.List className={tw(apply('flex space-x-1 rounded-t-md'))}>
           <Tab
             key={topicsLabel}
             className={({ selected }) =>
-              tw(`${BaseTabListStyles} ${selected ? tw(SelectedTabStyles) : 'text-gray-400'}`)
+              tw(apply`${BaseTabListStyles} ${selected ? tw(SelectedTabStyles) : 'text-gray-400'}`)
             }
           >
             {topicsLabel}
@@ -116,7 +116,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           <Tab
             key={profilesLabel}
             className={({ selected }) =>
-              tw(`${BaseTabListStyles} ${selected ? tw(SelectedTabStyles) : 'text-gray-400'}`)
+              tw(apply`${BaseTabListStyles} ${selected ? tw(SelectedTabStyles) : 'text-gray-400'}`)
             }
           >
             {profilesLabel}
@@ -126,7 +126,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           <Tab.Panel className={tw(BaseTabPanelStyles)}>
             <ul>
               {tags.length === 0 && !isLoadingTags && (
-                <div className={tw('flex justify-center items-center')}>
+                <div className={tw(apply('flex justify-center items-center'))}>
                   <p>{noTagsLabel}</p>
                 </div>
               )}
@@ -176,7 +176,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           </Tab.Panel>
           <Tab.Panel className={tw(BaseTabPanelStyles)}>
             {profiles.length === 0 && !isLoadingProfiles && (
-              <div className={tw('flex justify-center items-center py-2')}>
+              <div className={tw(apply('flex justify-center items-center py-2'))}>
                 <p>{noProfilesLabel}</p>
               </div>
             )}

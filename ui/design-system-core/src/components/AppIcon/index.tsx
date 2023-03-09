@@ -45,14 +45,17 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
   const hoverStyle = hover
     ? 'hover:bg-secondary-light/30 dark:hover:bg-secondary-dark group-hover:bg-secondary-light/30 dark:group-hover:bg-secondary-dark'
     : '';
+
   const activeStyle = active ? 'bg-secondary-light/30 hover:bg-secondary-dark' : '';
-  const iconContainerStyle = `${sizeStyle} ${hoverStyle} ${activeStyle} group relative rounded-full bg-grey9 dark:bg-grey3 ${className}`;
+
+  const iconContainerStyle = apply`${sizeStyle} ${hoverStyle} ${activeStyle} group relative rounded-full bg-grey9 dark:bg-grey3 ${className}`;
+
   const notifyStyle = NOTIFY_MAP[size];
 
   if (stackedIcon)
     return (
       <div ref={ref} onClick={onClick}>
-        <Stack align="center" justify="center" className={`${iconContainerStyle}`}>
+        <Stack align="center" justify="center" className={tw(iconContainerStyle)}>
           <IconByType
             appImg={appImg}
             size={size}
@@ -74,7 +77,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
 
   return (
     <div ref={ref} onClick={onClick}>
-      <Stack align="center" justify="center" className={`${iconContainerStyle}`}>
+      <Stack align="center" justify="center" className={tw(iconContainerStyle)}>
         <IconByType
           appImg={appImg}
           size={size}

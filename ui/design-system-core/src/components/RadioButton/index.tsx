@@ -65,12 +65,15 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
         aria-labelledby={value}
         className={tw('hidden')}
       />
-      <label htmlFor={id} className={tw(`flex items-center cursor-pointer text-sm ${textColor}`)}>
+      <label
+        htmlFor={id}
+        className={tw(apply`flex items-center cursor-pointer text-sm ${textColor}`)}
+      >
         <span
           className={tw(
             isSelected
-              ? `${buttonSize} ${instanceButtonStyles} after:block after:bg-${inputColor} after:rounded-full ${pseudoCircleSize}`
-              : `${buttonSize} ${instanceButtonStyles} after:hidden`,
+              ? apply`${buttonSize} ${instanceButtonStyles} after:block after:bg-${inputColor} after:rounded-full ${pseudoCircleSize}`
+              : apply`${buttonSize} ${instanceButtonStyles} after:hidden`,
           )}
         ></span>
         {label}

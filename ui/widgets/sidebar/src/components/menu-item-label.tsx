@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
@@ -23,7 +23,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
 
   return (
     <div
-      className={tw('flex flex-row items-center')}
+      className={tw(apply('flex flex-row items-center'))}
       onClick={e => {
         e.preventDefault();
         handleClick();
@@ -31,7 +31,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
     >
       <div
         className={tw(
-          'w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3',
+          apply('w-10 h-10 flex items-center justify-center rounded-full bg-grey9 dark:bg-grey3'),
         )}
       >
         {menuItem.logo.type === 'icon' && (
@@ -44,7 +44,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
       </div>
       <Text
         variant="body1"
-        className={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}
+        className={tw(apply`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`)}
       >
         {menuItem.label}
       </Text>

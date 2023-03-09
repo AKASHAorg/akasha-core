@@ -64,7 +64,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
       <div
         onMouseOver={() => setShowTooltip(true)}
         onMouseOut={() => setShowTooltip(false)}
-        className={tw(apply('w-fit'))}
+        className={tw('w-fit')}
         ref={setReferenceElement}
       >
         {children}
@@ -74,7 +74,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
           ref={setContent}
           style={{ ...styles.popper, zIndex: 99 }}
           {...attributes.popper}
-          className={tw(getContentClasses(contextualPlacement, ARROW_SIZE))}
+          className={tw(apply(getContentClasses(contextualPlacement, ARROW_SIZE)))}
         >
           <div
             ref={setArrowElement}
@@ -82,13 +82,13 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
               ...arrowStyle,
               [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
             }}
-            className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE))}
+            className={tw(apply(getArrowClasses(contextualPlacement, ARROW_SIZE)))}
           />
           <Stack
             align="center"
             justify="center"
             className={tw(
-              'flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]',
+              apply('flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]'),
             )}
           >
             <Text variant={textSize} color={{ light: 'text-black', dark: 'dark:text-white' }}>

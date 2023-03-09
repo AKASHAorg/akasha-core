@@ -25,6 +25,7 @@ const TextLine: React.FC<TextLineProps> = props => {
   } = props;
   const widthStyle = getWidthClasses(width);
   const heightStyle = getHeightClasses(height);
+
   const instanceStyles = apply`
     ${baseStyle}
     ${animated ? 'animate-pulse' : ''}

@@ -29,12 +29,11 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   const justifyStyle = justify ? getJustifyClasses(justify) : '';
   const alignStyle = align ? getAlignClasses(align) : '';
   const directionStyle = direction ? getDirectionClasses(direction) : '';
+
   return (
     <div
       className={tw(
-        apply(
-          `${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${className}`,
-        ),
+        apply`${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${className}`,
       )}
     >
       {children}
