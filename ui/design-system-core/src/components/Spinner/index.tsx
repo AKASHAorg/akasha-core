@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 export interface ISpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
@@ -22,7 +22,9 @@ const Spinner: React.FC<ISpinnerProps> = props => {
       <svg
         aria-hidden="true"
         className={tw(
-          `${spinnerSizesMap[size]} mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600`,
+          apply(
+            `${spinnerSizesMap[size]} mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600`,
+          ),
         )}
         viewBox="0 0 100 101"
         fill="none"

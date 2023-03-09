@@ -1,4 +1,4 @@
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import React, { PropsWithChildren } from 'react';
 
 export interface IBasicCardBox {
@@ -25,7 +25,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     round = 'rounded-2xl',
     noBorder,
     noBorderRadius,
-    style,
+    style = '',
     onClick,
   } = props;
 
@@ -50,7 +50,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
   } bg-white dark:bg-grey2 ${noBorderRadius ? 'rounded-none' : round} ${generateBorder()} ${style}`;
 
   return (
-    <div className={tw(className)} ref={rootNodeRef} onClick={onClick}>
+    <div className={tw(apply(className))} ref={rootNodeRef} onClick={onClick}>
       {children}
     </div>
   );
