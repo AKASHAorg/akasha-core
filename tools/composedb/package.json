@@ -1,0 +1,48 @@
+{
+  "name": "@akashaorg/composedb-models",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "composedb models used by AKASHA",
+  "author": "AKASHA Foundation <hello@akasha.org> (https://akasha.org/)",
+  "contributors": [
+    "Marius Darila <marius.darila@akasha.world> (https://github.com/kenshyx)",
+    "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
+  ],
+  "homepage": "https://github.com/AKASHAorg/akasha-framework#readme",
+  "license": "AGPL-3.0",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKASHAorg/akasha-framework.git"
+  },
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "tsc": "tsc --build",
+    "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
+    "create": "node ./src/create-composite.mjs",
+    "merge": "node ./src/merge-composites.mjs",
+    "compile": "composedb composite:compile build/merged-composite.json lib/runtime-composite.json",
+    "start:graphql": "composedb graphql:server --ceramic-url=http://localhost:7007 --graphiql lib/runtime-composite.json --did-private-key=1021474a1fe1cf3431f6b2a11a8863eb4b89c9856833c52cc1f83cf9d51c68aa --port=5005"
+  },
+  "bugs": {
+    "url": "https://github.com/AKASHAorg/akasha-framework/issues"
+  },
+  "devDependencies": {
+    "@ceramicnetwork/http-client": "^2.20.0",
+    "@composedb/cli": "^0.4.3",
+    "@composedb/devtools": "^0.4.3",
+    "@composedb/devtools-node": "^0.4.3",
+    "dids": "^4.0.0",
+    "dotenv": "16.0.3",
+    "key-did-provider-ed25519": "^3.0.0",
+    "key-did-resolver": "^3.0.0",
+    "uint8arrays": "^4.0.3"
+  }
+}

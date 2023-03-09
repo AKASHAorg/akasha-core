@@ -1,0 +1,21 @@
+type ProviderValue{
+  provider: String! @string(minLength: 6, maxLength: 100)
+  property: String! @string(minLength: 2, maxLength: 40)
+  value: String! @string(minLength: 3, maxLength: 2000)
+}
+
+type Profile @loadModel(id: "kjzl6hvfrbw6c66nr8p9ihlpojhkqe4mtwnqvbfocek27w0zm2lyigp06wu72gr"){
+  id: ID!
+}
+
+type Post @createModel(accountRelation: LIST, description: "AKASHA social app post") {
+  author: DID! @documentAccount
+  profileID: StreamID! @documentReference(model: "Profile")
+  profile: Profile! @relationDocument(property: "profileID")
+  content: [ProviderValue!]! @list(maxLength: 10)
+  tags: [String] @list(maxLength: 10) @string(minLength:3, maxLength: 32)
+  version: CommitID! @documentVersion
+  active: Boolean!
+  quote: StreamID!
+  mentions: [StreamID!] @list(maxLength: 6)
+}

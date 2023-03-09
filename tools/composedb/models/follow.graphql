@@ -1,0 +1,11 @@
+type Profile @loadModel(id: "kjzl6hvfrbw6c66nr8p9ihlpojhkqe4mtwnqvbfocek27w0zm2lyigp06wu72gr"){
+  id: ID!
+}
+
+
+type Follow @createModel(accountRelation: LIST, description: "Following list") {
+  isFollowing: Boolean!
+  profileID: StreamID! @documentReference(model: "Profile")
+  profile: Profile! @relationDocument(property: "profileID")
+  did: DID! @documentAccount
+}

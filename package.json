@@ -154,7 +154,8 @@
       "ui/apps/translation",
       "ui/apps/routing",
       "examples/ui/ethereum.world",
-      "tools/executors"
+      "tools/executors",
+      "tools/composedb"
     ],
     "nohoist": [
       "storybook",

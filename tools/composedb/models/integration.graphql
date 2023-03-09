@@ -1,0 +1,16 @@
+enum IntegrationType {
+  APP
+  PLUGIN
+  WIDGET
+  OTHER
+}
+
+type AppIntegration @createModel(accountRelation: LIST, description: "AKASHA app integration") {
+  name: String! @string(minLength:4, maxLength: 48),
+  displayName: String! @string(minLength:4, maxLength: 24)
+  integrationType: IntegrationType!
+  licence: String! @string(maxLength: 1000)
+  description: String! @string(maxLength: 2000)
+  keywords: [String!] @list(maxLength: 16) @string(minLength:3, maxLength: 32)
+  author: DID! @documentAccount
+}

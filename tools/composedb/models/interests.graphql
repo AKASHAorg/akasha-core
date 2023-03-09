@@ -1,0 +1,9 @@
+type Labeled{
+  labelType: String! @string(maxLength: 30)
+  value: String! @string(minLength:2, maxLength: 60)
+}
+
+type Interests @createModel(accountRelation: SINGLE, description: "Interests list") {
+  topics: [Labeled!]! @list(maxLength: 100)
+  did: DID! @documentAccount
+}
