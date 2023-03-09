@@ -1,4 +1,4 @@
-import { IconType } from '../Icon';
+import { IconType } from '@akashaorg/typings/ui';
 import { Status } from '../types/common.types';
 
 export type InputProps = {

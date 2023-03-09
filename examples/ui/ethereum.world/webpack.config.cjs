@@ -6,6 +6,7 @@ const path = require('path');
 const baseConfig = require('../../../ui/webpack.config');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const fs = require('fs');
+const webpack = require('webpack');
 // remove manifest plugin
 baseConfig.plugins.splice(1, 1);
 module.exports = Object.assign(baseConfig, {
@@ -26,6 +27,9 @@ module.exports = Object.assign(baseConfig, {
         { from: path.resolve(__dirname, '../../../sdk/dist'), to: 'sdk' },
         { from: path.resolve(__dirname, '../../../locales'), to: 'locales' },
       ],
+    }),
+    new webpack.DefinePlugin({
+      __LOAD_LOCAL_SOURCES__: !!process.env.LOAD_LOCAL_SOURCES,
     }),
   ]),
   externals: baseConfig.externals,

@@ -1,4 +1,4 @@
-import { IconType } from '../../Icon';
+import { IconType } from '@akashaorg/typings/ui';
 import { EnsTxtPresets } from '../../types/common.types';
 
 export const getIconFromType = (type: string): IconType => {
