@@ -2,7 +2,7 @@ import * as React from 'react';
 import Stack from '../Stack';
 import IconByType from './IconByType';
 import { IconType, LogoSourceType } from '@akashaorg/typings/ui';
-import { cx, tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import { BasicIconSize } from '../types/common.types';
 
 export interface IAppIcon {
@@ -46,7 +46,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     ? 'hover:bg-secondary-light/30 dark:hover:bg-secondary-dark group-hover:bg-secondary-light/30 dark:group-hover:bg-secondary-dark'
     : '';
   const activeStyle = active ? 'bg-secondary-light/30 hover:bg-secondary-dark' : '';
-  const iconContainerStyle = cx`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${className}`;
+  const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${className}`;
   const notifyStyle = NOTIFY_MAP[size];
 
   if (stackedIcon)
