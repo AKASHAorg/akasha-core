@@ -35,7 +35,7 @@ const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
               onOptionClick(menuItem, subRoute);
             }}
           >
-            <Text variant="body1" className="py-4 px-8">
+            <Text variant="body1" style="py-4 px-8">
               {subRoute.label}
             </Text>
           </div>

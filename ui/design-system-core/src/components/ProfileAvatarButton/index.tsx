@@ -10,7 +10,7 @@ export interface ProfileAvatarButtonProps {
   avatarImage?: IProfileData['avatar'];
   label?: string;
   size?: AvatarSize;
-  className?: string;
+  style?: string;
   onClickAvatar?: () => void;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   ethAddress: string;
@@ -27,7 +27,7 @@ const BaseStyles = apply`
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLElement>) => {
     const {
-      className = '',
+      style = '',
       size,
       avatarImage,
       label,
@@ -40,7 +40,7 @@ const ProfileAvatarButton = React.forwardRef(
       onMouseLeave,
     } = props;
     return (
-      <div className={tw(apply`inline-flex items-center justify-center ${className}`)}>
+      <div className={tw(apply`inline-flex items-center justify-center ${style}`)}>
         <div className={tw('shrink-0')}>
           <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
         </div>

@@ -125,10 +125,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
         </div>
         <div className={tw('w-fit')}>
-          <Text variant="footnotes1" className={tw(titleText)}>
+          <Text variant="footnotes1" style={titleText}>
             {title}
           </Text>
-          <Text variant="subtitle2" className={tw(subtitleText)}>
+          <Text variant="subtitle2" style={subtitleText}>
             {subtitle}
           </Text>
         </div>
@@ -166,7 +166,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw(apply('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3'))}>
-        <Text variant="subtitle2" className={tw(subtitleText)}>
+        <Text variant="subtitle2" style={subtitleText}>
           {ctaText}
         </Text>
         <div className={tw(apply('w-fit h-fit mt-6'))}>
@@ -175,7 +175,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw(apply('flex flex-col px-8 py-4'))}>
-        <Text variant="subtitle2" className={tw(subtitleText)}>
+        <Text variant="subtitle2" style={subtitleText}>
           {footerLabel}
         </Text>
         <div className={tw(apply('flex w-fit h-fit mt-6'))}>

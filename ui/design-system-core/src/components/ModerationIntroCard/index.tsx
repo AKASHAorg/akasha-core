@@ -1,9 +1,11 @@
 import React from 'react';
+import { apply, tw } from '@twind/core';
+
+import { IconType } from '@akashaorg/typings/ui';
+
 import BasicCardBox from '../BasicCardBox';
 import Icon from '../Icon';
 import Text from '../Text';
-import { apply, tw } from '@twind/core';
-import { IconType } from '@akashaorg/typings/ui';
 
 export type OverviewCTA = {
   label: string;
@@ -70,7 +72,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
               color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-dark' }}
               weight="bold"
               align="center"
-              className={tw('cursor-pointer')}
+              style="cursor-pointer"
             >
               {codeOfConductLabel}
             </Text>
@@ -81,7 +83,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
           <div className={tw(apply('flex md:px-20 justify-between'))}>
             {overviewCTAArr.map(({ url, label, iconType }) => (
               <div key={label + iconType} className={tw(apply('grid gap-1 grid-cols-1 w-[30%]'))}>
-                <Icon size="md" accentColor={true} type={iconType} styling="mx-auto my-0" />
+                <Icon size="md" accentColor={true} type={iconType} style="mx-auto my-0" />
                 <a
                   href={url}
                   className={tw(

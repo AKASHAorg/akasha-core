@@ -13,7 +13,7 @@ export type StackProps = {
   justify?: Justify;
   align?: Align;
   spacing?: string;
-  className?: string;
+  style?: string;
   ref?: LegacyRef<HTMLDivElement>;
 };
 
@@ -22,7 +22,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   justify,
   align,
   spacing = '',
-  className = '',
+  style = '',
   children,
 }) => {
   const baseStyle = `flex`;
@@ -33,7 +33,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   return (
     <div
       className={tw(
-        apply`${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${className}`,
+        apply`${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${style}`,
       )}
     >
       {children}

@@ -20,7 +20,7 @@ export interface IconProps {
   disabled?: boolean;
   testId?: string;
   hover?: boolean;
-  styling?: string;
+  style?: string;
 }
 
 const fillOnlyIcons: IconType[] = ['akasha', 'discord', 'telegram', 'twitter', 'widget'];
@@ -37,7 +37,7 @@ const Icon: React.FC<IconProps> = props => {
     disabled,
     testId,
     hover,
-    styling = '',
+    style = '',
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -81,11 +81,11 @@ const Icon: React.FC<IconProps> = props => {
     clickable && !disabled
       ? `cursor-pointer ${isFillOnlyIcon ? '' : 'hover:[&>*]:stroke-secondary-dark'}`
       : ''
-  } ${styling}`;
+  } ${style}`;
 
   return (
     <Stack ref={ref}>
-      <PassedIcon className={iconStyle} testId={testId} type={type} />
+      <PassedIcon style={iconStyle} testId={testId} type={type} />
     </Stack>
   );
 };

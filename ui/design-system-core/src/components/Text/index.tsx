@@ -26,7 +26,7 @@ export type Alignment = 'start' | 'center' | 'end' | 'justify';
 export type Weight = 'normal' | 'bold' | 'light' | 'medium';
 
 export type TextProps = {
-  className?: string; // pass only the string classes without 'apply' or 'tw'
+  style?: string; // pass only the string classes without 'apply' or 'tw'
   variant?: Variant;
   color?: Color;
   align?: Alignment;
@@ -55,7 +55,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
-  className = '',
+  style = '',
   variant = 'body1',
   align = 'start',
   color = { dark: 'text-white', light: 'text-black' },
@@ -77,7 +77,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${className}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${style}`,
       ),
     },
     children,

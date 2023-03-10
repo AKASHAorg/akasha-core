@@ -30,7 +30,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
       : `M ${mid},${capOffset} L ${mid},${size - capOffset}`;
 
   return (
-    <Stack justify="center" align="center" className={tw(apply`inline-flex overflow-hidden]`)}>
+    <Stack justify="center" align="center" style="inline-flex overflow-hidden">
       <svg
         viewBox={
           direction === 'horizontal' ? `0 0 ${size} ${thickness}` : `0 0 ${thickness} ${size}`

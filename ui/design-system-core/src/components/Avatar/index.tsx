@@ -25,7 +25,7 @@ export interface IAvatarProps {
   faded?: boolean;
   active?: boolean;
   isClickable?: boolean;
-  className?: string;
+  style?: string;
   onClick?: () => void;
 }
 
@@ -66,7 +66,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     faded,
     active,
     isClickable = false,
-    className = '',
+    style = '',
     onClick,
   } = props;
 
@@ -87,7 +87,7 @@ const Avatar: React.FC<IAvatarProps> = props => {
     backgroundColor ? backgroundColor : 'white'
   } border-${border ? avatarBorderSizesMap[border] : '0'} border-${
     borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'
-  } ${className}`;
+  } ${style}`;
 
   const activeOverlayClass = apply(
     'bg-grey6 dark:bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full',

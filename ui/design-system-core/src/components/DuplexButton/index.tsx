@@ -64,7 +64,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
       >
         <Icon
           type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-          styling="text-secondary-light h-5 w-5"
+          style="text-secondary-light h-5 w-5"
         />
       </button>
     );

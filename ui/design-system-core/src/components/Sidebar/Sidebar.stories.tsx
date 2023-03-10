@@ -1,4 +1,5 @@
 import React from 'react';
+import { tw } from '@twind/core';
 
 import Sidebar, { ISidebarProps } from '.';
 import { sidebarItems } from '../../utils/dummy-data';
@@ -9,7 +10,7 @@ export default {
 };
 
 const Template = (args: ISidebarProps) => (
-  <div style={{ width: '25%' }}>
+  <div className={tw('w-[25%]')}>
     <Sidebar {...args} />
   </div>
 );

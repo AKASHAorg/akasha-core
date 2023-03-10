@@ -3,12 +3,12 @@ import { apply, tw } from '@twind/core';
 import { PropsWithChildren } from 'react';
 
 type DividerProps = {
-  className?: string;
+  style?: string;
 };
 
-const Divider: React.FC<PropsWithChildren<DividerProps>> = ({ className = '', children }) => {
+const Divider: React.FC<PropsWithChildren<DividerProps>> = ({ style = '', children }) => {
   return (
-    <div className={tw(apply(`rounded-[1.25rem] h-px w-full bg-grey8 dark:bg-grey5 ${className}`))}>
+    <div className={tw(apply(`rounded-[1.25rem] h-px w-full bg-grey8 dark:bg-grey5 ${style}`))}>
       {children}
     </div>
   );

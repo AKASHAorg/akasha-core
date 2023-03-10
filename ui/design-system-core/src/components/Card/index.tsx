@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import Stack from '../Stack';
-import { tw, apply } from '@twind/core';
+import { apply } from '@twind/core';
 import { Color, Elevation, Padding, Radius } from '../types/common.types';
 import { getElevationClasses } from '../../utils/getElevationClasses';
 import { getRadiusClasses } from '../../utils/getRadiusClasses';
@@ -13,13 +13,10 @@ export type CardProps = {
   radius?: Radius;
   padding?: Padding;
   direction?: 'row' | 'column';
-  className?: string;
   style?: string;
 };
 
-const baseStyles = apply`
-  block
-`;
+const baseStyles = 'block';
 
 const Card: React.FC<PropsWithChildren<CardProps>> = props => {
   const {
@@ -28,7 +25,6 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
     radius,
     padding,
     direction,
-    className,
     style = '',
   } = props;
 
@@ -43,12 +39,11 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
     ${elevationStyle}
     ${radiusStyle}
     ${paddingStyle}
-    ${className}
     ${style}
   `;
 
   return (
-    <Stack direction={direction} className={tw(instanceStyles)}>
+    <Stack direction={direction} style={instanceStyles}>
       {props.children}
     </Stack>
   );

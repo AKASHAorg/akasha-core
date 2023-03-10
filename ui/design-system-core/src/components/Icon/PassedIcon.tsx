@@ -7,23 +7,23 @@ import { isAppIcon } from './isAppIcon';
 
 type PassedIconProps = {
   type: IconType;
-  className: string;
   testId: string;
+  style: string;
 };
 
-export const PassedIcon: React.FC<PassedIconProps> = ({ type, className, testId }) => {
-  let iconStyle = className;
+export const PassedIcon: React.FC<PassedIconProps> = ({ type, style, testId }) => {
+  let iconStyle = style;
   let PassedIcon = null;
 
   /* @TODO: change the following logic once the old design system is fully replaced */
   if (isAppIcon(type)) {
     PassedIcon = HeroIcons[APP_ICON_TO_HERO_ICON_MAP[type]];
     if (type === 'appModeration') {
-      iconStyle = `${className} scale-x-flip`;
+      iconStyle = `${style} scale-x-flip`;
     }
 
     if (type === 'appCenter') {
-      iconStyle = `${className} -rotate-90`;
+      iconStyle = `${style} -rotate-90`;
     }
   }
 

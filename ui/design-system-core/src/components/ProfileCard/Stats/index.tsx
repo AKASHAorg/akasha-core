@@ -50,13 +50,13 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
         <Stack justify="between">
           {stats.map((stat, index) => (
             <button onClick={stat.onClick} key={stat.label + index}>
-              <Stack direction="column" align="center" className="group">
+              <Stack direction="column" align="center" style="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
                   size="md"
                   breakPointSize={{ breakPoint: 'md', size: 'xl' }}
                   accentColor
-                  className={stat.className}
+                  style={stat.className}
                   hover
                 />
                 <Text {...labelProp}>{stat.label}</Text>

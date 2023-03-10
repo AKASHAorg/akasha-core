@@ -12,7 +12,7 @@ export default {
 const ethAddress = '0x003410490050000320006570034567114572000';
 
 const Template = (args: IAccordionProps) => (
-  <div style={{ width: '15%' }}>
+  <div className={tw('w-[15%]')}>
     <Accordion {...args} />
   </div>
 );
