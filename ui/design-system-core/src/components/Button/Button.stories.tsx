@@ -77,74 +77,90 @@ LargeButton.args = {
   size: 'large',
 };
 
-export const XSmallOutlined = Template.bind({});
+export const XSmallSecondary = Template.bind({});
 
-XSmallOutlined.args = {
+XSmallSecondary.args = {
   label: 'Button',
   size: 'xsmall',
-  variant: 'outlined',
+  variant: 'secondary',
   icon: 'PlusIcon',
 };
 
-export const SmallButtonOutlined = Template.bind({});
+export const SmallButtonSecondary = Template.bind({});
 
-SmallButtonOutlined.args = {
+SmallButtonSecondary.args = {
   label: 'Button',
   size: 'small',
-  variant: 'outlined',
+  variant: 'secondary',
 };
 
-export const RegularIconOnlyContained = Template.bind({});
+export const RegularButtonSecondary = Template.bind({});
 
-RegularIconOnlyContained.args = {
+RegularButtonSecondary.args = {
+  label: 'Button',
+  size: 'regular',
+  variant: 'secondary',
+};
+
+export const LargeButtonSecondary = Template.bind({});
+
+LargeButtonSecondary.args = {
+  label: 'Button',
+  size: 'large',
+  variant: 'secondary',
+};
+
+export const RegularIconOnlyPrimary = Template.bind({});
+
+RegularIconOnlyPrimary.args = {
   icon: 'PlusIcon',
   iconOnly: true,
-  variant: 'contained',
+  variant: 'primary',
 };
 
-export const RegularIconOnlyContainedLoading = Template.bind({});
+export const RegularIconOnlyPrimaryLoading = Template.bind({});
 
-RegularIconOnlyContainedLoading.args = {
+RegularIconOnlyPrimaryLoading.args = {
   icon: 'PlusIcon',
   iconOnly: true,
   loading: true,
-  variant: 'contained',
+  variant: 'primary',
 };
 
-export const RegularIconOnlyContainedDisabled = Template.bind({});
+export const RegularIconOnlyPrimaryDisabled = Template.bind({});
 
-RegularIconOnlyContainedDisabled.args = {
+RegularIconOnlyPrimaryDisabled.args = {
   icon: 'PlusIcon',
   iconOnly: true,
-  variant: 'contained',
+  variant: 'primary',
   disabled: true,
 };
 
-export const RegularIconOnlyContainedGreyBg = Template.bind({});
+export const RegularIconOnlyPrimaryGreyBg = Template.bind({});
 
-RegularIconOnlyContainedGreyBg.args = {
+RegularIconOnlyPrimaryGreyBg.args = {
   icon: 'PlusIcon',
   iconOnly: true,
-  variant: 'contained',
+  variant: 'primary',
   greyBg: true,
 };
 
-export const RegularIconOnlyContainedGreyBgLoading = Template.bind({});
+export const RegularIconOnlyPrimaryGreyBgLoading = Template.bind({});
 
-RegularIconOnlyContainedGreyBgLoading.args = {
+RegularIconOnlyPrimaryGreyBgLoading.args = {
   icon: 'PlusIcon',
   iconOnly: true,
   loading: true,
-  variant: 'contained',
+  variant: 'primary',
   greyBg: true,
 };
 
-export const RegularIconOnlyContainedGreyBgDisabled = Template.bind({});
+export const RegularIconOnlyPrimaryGreyBgDisabled = Template.bind({});
 
-RegularIconOnlyContainedGreyBgDisabled.args = {
+RegularIconOnlyPrimaryGreyBgDisabled.args = {
   icon: 'PlusIcon',
   iconOnly: true,
-  variant: 'contained',
+  variant: 'primary',
   disabled: true,
   greyBg: true,
 };

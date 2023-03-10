@@ -24,11 +24,11 @@ export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
     return `${textColorStyle} ${hoverStyle}`;
   }
 
-  if (variant === 'contained') {
+  if (variant === 'primary') {
     return 'text-white';
   }
 
-  if (variant === 'outlined') {
+  if (variant === 'secondary') {
     const textColorStyle = getColorClasses({
       light: 'text-secondary-light',
       dark: 'text-secondary-dark',

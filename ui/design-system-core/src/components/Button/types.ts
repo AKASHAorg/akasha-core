@@ -13,6 +13,6 @@ export type ButtonProps = {
   greyBg?: boolean;
 };
 
-export type Variant = 'contained' | 'outlined' | 'text';
+export type Variant = 'primary' | 'secondary' | 'text';
 
 export type ButtonSize = 'xsmall' | 'small' | 'regular' | 'large';

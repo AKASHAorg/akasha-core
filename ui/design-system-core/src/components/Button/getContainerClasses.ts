@@ -10,24 +10,24 @@ interface IContainerClasses {
 }
 
 export function getContainerClasses({ greyBg, variant, loading, disabled }: IContainerClasses) {
-  if (variant === 'contained') {
-    return getContainedClasses({ greyBg, loading, disabled });
+  if (variant === 'primary') {
+    return getPrimaryClasses({ greyBg, loading, disabled });
   }
 
-  if (variant === 'outlined') {
-    return getOutlinedClasses({ loading, disabled });
+  if (variant === 'secondary') {
+    return getSecondaryClasses({ loading, disabled });
   }
 
   return '';
 }
 
-interface IContainedClasses {
+interface IPrimaryClasses {
   greyBg: ButtonProps['greyBg'];
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
 }
 
-function getContainedClasses({ greyBg, loading, disabled }: IContainedClasses) {
+function getPrimaryClasses({ greyBg, loading, disabled }: IPrimaryClasses) {
   let backgroundStyle = `bg-gradient-to-r from-primaryStart to-primaryStop`;
   const hoverStyle = !loading && !disabled ? `hover:${getElevationClasses('4')}` : '';
 
@@ -41,12 +41,12 @@ function getContainedClasses({ greyBg, loading, disabled }: IContainedClasses) {
   return `${disabled ? 'opacity-50' : ''} ${backgroundStyle} ${hoverStyle}`;
 }
 
-interface IOutlinedClasses {
+interface ISecondaryClasses {
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
 }
 
-function getOutlinedClasses({ loading, disabled }: IOutlinedClasses) {
+function getSecondaryClasses({ loading, disabled }: ISecondaryClasses) {
   const backgroundStyle = 'bg-transparent';
   const borderStyle = getColorClasses({
     light: 'border-secondary-light',
@@ -60,5 +60,5 @@ function getOutlinedClasses({ loading, disabled }: IOutlinedClasses) {
         })}`
       : '';
 
-  return `${disabled ? 'opacity-50' : ''} border ${backgroundStyle} ${hoverStyle} ${borderStyle}`;
+  return `${disabled ? 'opacity-50' : ''}border ${backgroundStyle} ${hoverStyle} ${borderStyle}`;
 }

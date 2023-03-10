@@ -13,12 +13,12 @@ export function getIconClasses({ greyBg, variant, loading, disabled }: IIconClas
     return getTextClasses({ loading, disabled });
   }
 
-  if (variant === 'contained') {
-    return getContainedClasses({ greyBg });
+  if (variant === 'primary') {
+    return getPrimaryClasses({ greyBg });
   }
 
-  if (variant === 'outlined') {
-    return getOutlinedClasses({ loading, disabled });
+  if (variant === 'secondary') {
+    return getSecondaryClasses({ loading, disabled });
   }
 
   return '';
@@ -44,11 +44,11 @@ function getTextClasses({ loading, disabled }: ITextClasses) {
   return `${iconStrokeStyle} ${hoverStyle}`;
 }
 
-interface IContainedClasses {
+interface IPrimaryClasses {
   greyBg: ButtonProps['greyBg'];
 }
 
-function getContainedClasses({ greyBg }: IContainedClasses) {
+function getPrimaryClasses({ greyBg }: IPrimaryClasses) {
   let iconStrokeStyle = '[&>*]:stroke-white';
 
   if (greyBg) {
@@ -61,12 +61,12 @@ function getContainedClasses({ greyBg }: IContainedClasses) {
   return iconStrokeStyle;
 }
 
-interface IOutlinedClasses {
+interface ISecondaryClasses {
   loading: ButtonProps['loading'];
   disabled: ButtonProps['disabled'];
 }
 
-function getOutlinedClasses({ loading, disabled }: IOutlinedClasses) {
+function getSecondaryClasses({ loading, disabled }: ISecondaryClasses) {
   const iconStrokeStyle = getColorClasses({
     light: '[&>*]:stroke-secondary-light',
     dark: '[&>*]:stroke-secondary-dark',

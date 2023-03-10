@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from 'react';
 import Icon from '../Icon';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 import { IconOnlyButton } from './IconOnlyButton';
 import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps & HTMLAttributes<HTMLButtonElement>> = props 
     iconDirection,
     label,
     size = 'regular',
-    variant = 'contained',
+    variant = 'primary',
     disabled = false,
     loading = false,
     iconOnly = false,
@@ -48,7 +48,7 @@ const Button: React.FC<ButtonProps & HTMLAttributes<HTMLButtonElement>> = props 
         align="center"
         justify="center"
         spacing="gap-x-1"
-        className={tw(apply`group ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
+        className={tw(`group ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
       >
         {loading ? (
           <Icon type="ArrowPathIcon" size="md" styling={iconStyle} />
