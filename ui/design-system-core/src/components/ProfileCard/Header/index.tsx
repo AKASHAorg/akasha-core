@@ -95,13 +95,12 @@ const Header: React.FC<HeaderProps> = ({
                     </button>
                     {isFollowing ? (
                       <>
-                        {/*Enhance button component */}
                         <Button
                           size="small"
                           icon="UserPlusIcon"
                           onClick={handleUnfollow}
+                          variant="primary"
                           iconOnly
-                          primary
                         />
                       </>
                     ) : (

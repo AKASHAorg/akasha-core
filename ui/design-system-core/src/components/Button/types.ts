@@ -11,6 +11,7 @@ export type ButtonProps = {
   leftIcon?: boolean;
   iconOnly?: boolean;
   greyBg?: boolean;
+  plain?: boolean;
 };
 
 export type Variant = 'primary' | 'secondary' | 'text';

@@ -55,7 +55,7 @@ function getSecondaryClasses({ loading, disabled }: ISecondaryClasses) {
   const hoverStyle =
     !loading && !disabled
       ? `${getColorClasses({
-          light: 'hover:bg-secondary-light',
+          light: 'hover:bg-secondary-light/30',
           dark: 'hover:bg-secondary-dark',
         })}`
       : '';

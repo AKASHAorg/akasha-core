@@ -16,12 +16,12 @@ export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
     const hoverStyle =
       !loading && !disabled
         ? getColorClasses({
-            light: 'text-secondary-dark',
-            dark: 'text-white',
+            light: 'group-hover:text-secondary-dark',
+            dark: 'group-hover:text-white',
           })
         : '';
 
-    return `${textColorStyle} ${hoverStyle}`;
+    return `${disabled ? 'opacity-50' : ''} ${textColorStyle} ${hoverStyle}`;
   }
 
   if (variant === 'primary') {

@@ -1,12 +1,13 @@
 import React from 'react';
 import Button from '.';
+import { ButtonProps } from './types';
 
 export default {
   title: 'Buttons/Button',
   component: Button,
 };
 
-const Template = args => <Button {...args} />;
+const Template = (args: ButtonProps) => <Button {...args} />;
 
 export const BaseButton = Template.bind({});
 
@@ -14,67 +15,75 @@ BaseButton.args = {
   label: 'Button',
 };
 
-export const XSmallButton = Template.bind({});
+export const XSmallButtonPrimary = Template.bind({});
 
-XSmallButton.args = {
+XSmallButtonPrimary.args = {
   label: 'Button',
   size: 'xsmall',
   icon: 'PlusIcon',
+  variant: 'primary',
 };
 
-export const SmallButton = Template.bind({});
+export const SmallButtonPrimary = Template.bind({});
 
-SmallButton.args = {
+SmallButtonPrimary.args = {
   label: 'Button',
   size: 'small',
+  variant: 'primary',
 };
 
-export const SmallButtonWithLeftIcon = Template.bind({});
+export const SmallButtonWithLeftIconPrimary = Template.bind({});
 
-SmallButtonWithLeftIcon.args = {
+SmallButtonWithLeftIconPrimary.args = {
   label: 'Button',
   size: 'small',
   icon: 'PlusIcon',
   iconDirection: 'left',
+  variant: 'primary',
 };
 
-export const SmallButtonWithRightIcon = Template.bind({});
+export const SmallButtonWithRightIconPrimary = Template.bind({});
 
-SmallButtonWithRightIcon.args = {
+SmallButtonWithRightIconPrimary.args = {
   label: 'Button',
   size: 'small',
   icon: 'PlusIcon',
   iconDirection: 'right',
+  variant: 'primary',
 };
 
-export const SmallButtonLoading = Template.bind({});
+export const SmallButtonLoadingPrimary = Template.bind({});
 
-SmallButtonLoading.args = {
+SmallButtonLoadingPrimary.args = {
   label: 'Button',
   loading: true,
+  variant: 'primary',
 };
 
-export const SmallButtonDisabled = Template.bind({});
+export const SmallButtonDisabledPrimary = Template.bind({});
 
-SmallButtonDisabled.args = {
+SmallButtonDisabledPrimary.args = {
   label: 'Button',
-  disabled: true,
   icon: 'PlusIcon',
   iconDirection: 'right',
+  disabled: true,
+  variant: 'primary',
 };
 
-export const RegularButton = Template.bind({});
+export const RegularButtonPrimary = Template.bind({});
 
-RegularButton.args = {
+RegularButtonPrimary.args = {
   label: 'Button',
   size: 'regular',
+  variant: 'primary',
 };
 
-export const LargeButton = Template.bind({});
+export const LargeButtonPrimary = Template.bind({});
 
-LargeButton.args = {
+LargeButtonPrimary.args = {
   label: 'Button',
   size: 'large',
+  variant: 'primary',
 };
 
 export const XSmallSecondary = Template.bind({});
@@ -161,8 +170,51 @@ RegularIconOnlyPrimaryGreyBgDisabled.args = {
   icon: 'PlusIcon',
   iconOnly: true,
   variant: 'primary',
-  disabled: true,
   greyBg: true,
+  disabled: true,
+};
+
+export const TextButton = Template.bind({});
+
+TextButton.args = {
+  label: 'Button',
+  variant: 'text',
+};
+
+export const TextButtonLeftIcon = Template.bind({});
+
+TextButtonLeftIcon.args = {
+  label: 'Button',
+  icon: 'PlusIcon',
+  iconDirection: 'left',
+  variant: 'text',
+};
+
+export const TextButtonRightIcon = Template.bind({});
+
+TextButtonRightIcon.args = {
+  label: 'Button',
+  icon: 'PlusIcon',
+  iconDirection: 'right',
+  variant: 'text',
+};
+
+export const TextButtonLoading = Template.bind({});
+
+TextButtonLoading.args = {
+  label: 'Button',
+  loading: true,
+  variant: 'text',
+};
+
+export const TextButtonDisabled = Template.bind({});
+
+TextButtonDisabled.args = {
+  label: 'Button',
+  icon: 'PlusIcon',
+  iconDirection: 'right',
+  variant: 'text',
+  disabled: true,
 };
 
 export const IconOnlyTextButton = Template.bind({});

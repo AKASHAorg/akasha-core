@@ -1,5 +1,4 @@
-import React, { HTMLAttributes } from 'react';
-import Icon from '../Icon';
+import React from 'react';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
 import { tw } from '@twind/core';
@@ -7,21 +6,28 @@ import { IconOnlyButton } from './IconOnlyButton';
 import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
-import { getIconClasses } from './getIconClasses';
+import { ButtonIcon } from './ButtonIcon';
 
-const Button: React.FC<ButtonProps & HTMLAttributes<HTMLButtonElement>> = props => {
+const Button: React.FC<
+  ButtonProps &
+    React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+> = props => {
   const {
+    plain,
     icon,
     iconDirection,
     label,
     size = 'regular',
-    variant = 'primary',
+    variant = 'secondary',
     disabled = false,
     loading = false,
     iconOnly = false,
     greyBg = false,
+    children,
     ...rest
   } = props;
+
+  if (plain) return <button {...rest}>{children}</button>;
 
   if (iconOnly || size === 'xsmall') {
     if (!icon) return null;
@@ -38,7 +44,6 @@ const Button: React.FC<ButtonProps & HTMLAttributes<HTMLButtonElement>> = props 
     );
   }
 
-  const iconStyle = getIconClasses({ variant, loading, greyBg, disabled });
   const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled });
   const textStyle = getTextClasses({ variant, loading, disabled });
 
@@ -51,10 +56,24 @@ const Button: React.FC<ButtonProps & HTMLAttributes<HTMLButtonElement>> = props 
         className={tw(`group ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
       >
         {loading ? (
-          <Icon type="ArrowPathIcon" size="md" styling={iconStyle} />
+          <ButtonIcon
+            type="ArrowPathIcon"
+            variant={variant}
+            greyBg={greyBg}
+            loading={true}
+            disabled={disabled}
+          />
         ) : (
           <>
-            {icon && iconDirection === 'left' && <Icon type={icon} size="md" styling={iconStyle} />}
+            {icon && iconDirection === 'left' && (
+              <ButtonIcon
+                type={icon}
+                variant={variant}
+                greyBg={greyBg}
+                loading={false}
+                disabled={disabled}
+              />
+            )}
             <Text
               variant={variant === 'text' ? 'button-sm' : BUTTON_SIZE_TEXT_MAP[size]}
               className={textStyle}
@@ -62,7 +81,13 @@ const Button: React.FC<ButtonProps & HTMLAttributes<HTMLButtonElement>> = props 
               {label}
             </Text>
             {icon && iconDirection === 'right' && (
-              <Icon type={icon} size="md" styling={iconStyle} />
+              <ButtonIcon
+                type={icon}
+                variant={variant}
+                greyBg={greyBg}
+                loading={false}
+                disabled={disabled}
+              />
             )}
           </>
         )}

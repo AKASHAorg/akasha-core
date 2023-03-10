@@ -21,6 +21,7 @@ export interface IconProps {
   testId?: string;
   hover?: boolean;
   styling?: string;
+  hoverColor?: Color;
 }
 
 const fillOnlyIcons: IconType[] = ['akasha', 'discord', 'telegram', 'twitter', 'widget'];
@@ -38,6 +39,7 @@ const Icon: React.FC<IconProps> = props => {
     testId,
     hover,
     styling = '',
+    hoverColor = 'white',
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -53,18 +55,15 @@ const Icon: React.FC<IconProps> = props => {
 
   const baseStyle = `select-none ${
     hover
-      ? `cursor-pointer dark:group-hover:${
-          isFillOnlyIcon ? '[&>*]:fill-white' : '[&>*]:stroke-white'
-        }`
+      ? `cursor-pointer ${getColorClasses(
+          hoverColor,
+          isFillOnlyIcon ? 'group-hover:[&>*]:fill' : 'group-hover:[&>*]:stroke',
+        )}`
       : ''
   }`;
 
   const colorStyle = color
-    ? `${
-        isFillOnlyIcon
-          ? `${getColorClasses(color, '[&>*]:fill')}`
-          : `${getColorClasses(color, '[&>*]:stroke')}`
-      }`
+    ? `${getColorClasses(color, isFillOnlyIcon ? '[&>*]:fill' : '[&>*]:stroke')}`
     : isFillOnlyIcon
     ? '[&>*]:fill-black dark:[&>*]:fill-white'
     : '[&>*]:stroke-black dark:[&>*]:stroke-white';

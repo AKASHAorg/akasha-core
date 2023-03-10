@@ -1,10 +1,10 @@
 import React, { HTMLAttributes } from 'react';
-import Icon from '../../Icon';
 import Stack from '../../Stack';
+import Button from '..';
 import { tw } from '@twind/core';
 import { getContainerClasses } from '../getContainerClasses';
-import { getIconClasses } from '../getIconClasses';
 import { ButtonProps, ButtonSize } from '../types';
+import { ButtonIcon } from '../ButtonIcon';
 
 type IconOnlyButtonProps = {
   icon: ButtonProps['icon'];
@@ -24,19 +24,24 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
   disabled,
   ...rest
 }) => {
-  const iconStyle = getIconClasses({ variant, loading, greyBg, disabled });
   const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled });
 
   return (
-    <button {...rest}>
+    <Button {...rest} plain>
       <Stack
         align="center"
         justify="center"
         className={tw(`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
       >
-        <Icon type={loading ? 'ArrowPathIcon' : icon} size="md" styling={tw(`${iconStyle}`)} />
+        <ButtonIcon
+          type={loading ? 'ArrowPathIcon' : icon}
+          variant={variant}
+          greyBg={greyBg}
+          loading={loading}
+          disabled={disabled}
+        />
       </Stack>
-    </button>
+    </Button>
   );
 };
 
