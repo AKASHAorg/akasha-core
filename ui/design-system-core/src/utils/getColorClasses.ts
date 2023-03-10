@@ -1,3 +1,4 @@
+import { apply } from '@twind/core';
 import { Color, isStatusType, Status } from '../components/types/common.types';
 
 export function getColorClasses(color: Color, utility?: string) {
@@ -13,8 +14,8 @@ export function getColorClasses(color: Color, utility?: string) {
 
     if (!light.trim().includes(' ') && !dark.trim().includes(' '))
       return utility
-        ? `${utility}-${color.light} dark:${utility}-${color.dark}`
-        : `${color.light} dark:${color.dark}`;
+        ? apply`${utility}-${color.light} dark:${utility}-${color.dark}`
+        : apply`${color.light} dark:${color.dark}`;
   }
 
   return '';

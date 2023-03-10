@@ -10,28 +10,28 @@ export const ButtonIcon: React.FC<
     loading: ButtonProps['loading'];
     disabled: ButtonProps['disabled'];
   }
-> = ({ type, styling, variant, greyBg, loading, disabled }) => {
-  const getHoverColor = () => {
-    if (variant === 'text') return { light: 'secondary-dark', dark: 'white' };
-    if (variant === 'secondary') return { light: 'secondary-light', dark: 'white' };
-
-    return '';
-  };
+> = ({ type, variant, greyBg, loading, disabled }) => {
   return (
     <Icon
       type={type}
       size="md"
-      styling={`${disabled ? 'opacity-50' : ''} ${styling}`}
-      color={variant === 'primary' ? 'white' : ''}
+      color={variant === 'primary' && !greyBg ? 'white' : ''}
       accentColor={
         (variant !== 'primary' && loading) ||
         variant === 'text' ||
         variant === 'secondary' ||
         (variant === 'primary' && greyBg)
       }
-      hoverColor={getHoverColor()}
+      hoverColor={getHoverColor(variant)}
       hover={!disabled && !loading}
       disabled={disabled}
     />
   );
+};
+
+const getHoverColor = (variant: ButtonProps['variant']) => {
+  if (variant === 'text') return { light: 'secondary-dark', dark: 'white' };
+  if (variant === 'secondary') return { light: 'secondary-light', dark: 'white' };
+
+  return '';
 };

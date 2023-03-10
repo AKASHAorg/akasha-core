@@ -2,7 +2,7 @@ import * as React from 'react';
 import Stack from '../Stack';
 import IconByType from './IconByType';
 import { IconType, LogoSourceType } from '@akashaorg/typings/ui';
-import { apply, tw } from '@twind/core';
+import { cx, tw } from '@twind/core';
 import { BasicIconSize } from '../types/common.types';
 
 export interface IAppIcon {
@@ -46,13 +46,13 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     ? 'hover:bg-secondary-light/30 dark:hover:bg-secondary-dark group-hover:bg-secondary-light/30 dark:group-hover:bg-secondary-dark'
     : '';
   const activeStyle = active ? 'bg-secondary-light/30 hover:bg-secondary-dark' : '';
-  const iconContainerStyle = `${sizeStyle} ${hoverStyle} ${activeStyle} group relative rounded-full bg-grey9 dark:bg-grey3 ${className}`;
+  const iconContainerStyle = cx`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${className}`;
   const notifyStyle = NOTIFY_MAP[size];
 
   if (stackedIcon)
     return (
       <div ref={ref} onClick={onClick}>
-        <Stack align="center" justify="center" className={`${iconContainerStyle}`}>
+        <Stack align="center" justify="center" className={iconContainerStyle}>
           <IconByType
             appImg={appImg}
             size={size}
@@ -62,11 +62,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
             hover={hover}
           />
           {hasNewNotifs && (
-            <div
-              className={tw(
-                apply`w-2 h-2 rounded-full absolute top-0  bg-secondary-dark ${notifyStyle}`,
-              )}
-            />
+            <div className={tw(`rounded-full absolute top-0  bg-secondary-dark ${notifyStyle})`)} />
           )}
         </Stack>
       </div>
@@ -74,7 +70,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
 
   return (
     <div ref={ref} onClick={onClick}>
-      <Stack align="center" justify="center" className={`${iconContainerStyle}`}>
+      <Stack align="center" justify="center" className={iconContainerStyle}>
         <IconByType
           appImg={appImg}
           size={size}
@@ -106,9 +102,9 @@ const APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT = (
 
 const NOTIFY_MAP: Record<BasicIconSize, string> = {
   sm: 'right-[0.1875rem] w-1 h-1',
-  md: 'right-[0.1875rem]',
-  lg: 'right-1.5',
-  xl: 'right-2',
+  md: 'right-[0.1875rem] w-2 h-2',
+  lg: 'right-[0.125rem] w-3 h-3',
+  xl: 'right-1 w-3 h-3',
 };
 
 export default AppIcon;

@@ -46,7 +46,7 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
 
   return (
     <Card elevation="1" radius={20} padding={16}>
-      <Stack direction="column" spacing="gap-4">
+      <Stack direction="column" spacing="gap-4" fullWidth>
         <Stack justify="between">
           {stats.map((stat, index) => (
             <button onClick={stat.onClick} key={stat.label + index}>

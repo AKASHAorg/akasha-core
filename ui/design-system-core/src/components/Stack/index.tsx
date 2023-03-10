@@ -14,6 +14,7 @@ export type StackProps = {
   align?: Align;
   spacing?: string;
   className?: string;
+  fullWidth?: boolean;
   ref?: LegacyRef<HTMLDivElement>;
 };
 
@@ -23,18 +24,18 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   align,
   spacing = '',
   className = '',
+  fullWidth,
   children,
 }) => {
   const baseStyle = `flex`;
   const justifyStyle = justify ? getJustifyClasses(justify) : '';
   const alignStyle = align ? getAlignClasses(align) : '';
   const directionStyle = direction ? getDirectionClasses(direction) : '';
+  const fullWidthStyle = fullWidth ? 'w-full' : '';
   return (
     <div
       className={tw(
-        apply(
-          `${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${className}`,
-        ),
+        apply`${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${className}`,
       )}
     >
       {children}

@@ -6,6 +6,7 @@ import { getHeightClasses } from '../../utils/getHeightClasses';
 import { IconType } from '@akashaorg/typings/ui';
 import { PassedIcon } from './PassedIcon';
 import { getColorClasses } from '../../utils/getColorClasses';
+import { apply } from '@twind/core';
 
 export type IconSize = BasicIconSize | { width?: string | number; height?: string | number };
 
@@ -13,7 +14,6 @@ export interface IconProps {
   color?: Color;
   ref?: React.Ref<HTMLDivElement>;
   type: IconType;
-  clickable?: boolean;
   size?: IconSize;
   breakPointSize?: { breakPoint: string; size: BasicIconSize };
   accentColor?: boolean;
@@ -31,7 +31,6 @@ const Icon: React.FC<IconProps> = props => {
     type,
     ref,
     accentColor,
-    clickable,
     size = 'lg',
     breakPointSize,
     color,
@@ -76,11 +75,9 @@ const Icon: React.FC<IconProps> = props => {
       }`
     : '';
 
-  const iconStyle = `${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${
-    clickable && !disabled
-      ? `cursor-pointer ${isFillOnlyIcon ? '' : 'hover:[&>*]:stroke-secondary-dark'}`
-      : ''
-  } ${styling}`;
+  const disabledStyle = disabled ? 'opacity-50' : '';
+
+  const iconStyle = apply`${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${disabledStyle} ${styling}`;
 
   return (
     <Stack ref={ref}>

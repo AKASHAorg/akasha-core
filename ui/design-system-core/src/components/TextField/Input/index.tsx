@@ -1,10 +1,11 @@
 import React, { forwardRef } from 'react';
 import Icon from '../../Icon';
-import { apply, tw } from '@twind/core';
+import Stack from '../../Stack';
 import { getContainerClasses } from './getContainerClasses';
 import { getIconClasses } from './getIconClasses';
 import { getInputClasses } from './getInputClasses';
 import { InputProps } from '../types';
+import { tw } from '@twind/core';
 
 export const Input: React.FC<InputProps> = forwardRef(
   (
@@ -16,20 +17,13 @@ export const Input: React.FC<InputProps> = forwardRef(
     const iconStyle = getIconClasses(disabled, status);
 
     return (
-      <div
-        className={tw(apply(containerStyle, className))}
-        /* @TODO: Replace with stack component */
-      >
-        <input
-          type="text"
-          className={tw(apply(inputStyle))}
-          disabled={disabled}
-          ref={ref}
-          {...rest}
-        />
-        {iconLeft && <Icon type={iconLeft} styling={tw(apply(`${iconStyle} order-first`))} />}
-        {iconRight && <Icon type={iconRight} styling={tw(apply(iconStyle))} />}
-      </div>
+      <Stack align="center" spacing="gap-x-2" className={`${containerStyle} ${className}`}>
+        <input type="text" className={tw(inputStyle)} disabled={disabled} ref={ref} {...rest} />
+        {iconLeft && (
+          <Icon type={iconLeft} styling={`${iconStyle} order-first`} disabled={disabled} />
+        )}
+        {iconRight && <Icon type={iconRight} styling={iconStyle} disabled={disabled} />}
+      </Stack>
     );
   },
 );

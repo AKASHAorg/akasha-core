@@ -14,10 +14,9 @@ export type CardProps = {
   padding?: Padding;
   direction?: 'row' | 'column';
   className?: string;
-  style?: string;
 };
 
-const baseStyles = apply`
+const baseStyles = `
   block
 `;
 
@@ -28,8 +27,7 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
     radius,
     padding,
     direction,
-    className,
-    style = '',
+    className = '',
   } = props;
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);
@@ -42,7 +40,6 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
     ${radiusStyle}
     ${paddingStyle}
     ${className}
-    ${style}
   `;
 
   return (
