@@ -1,13 +1,13 @@
 import React from 'react';
 import Stack from '../Stack';
-import { BasicSize, Color } from '../types/common.types';
+import { BasicIconSize, Color } from '../types/common.types';
 import { getWidthClasses } from '../../utils/getWidthClasses';
 import { getHeightClasses } from '../../utils/getHeightClasses';
 import { IconType } from '@akashaorg/typings/ui';
 import { PassedIcon } from './PassedIcon';
 import { getColorClasses } from '../../utils/getColorClasses';
 
-export type IconSize = BasicSize | { width?: string | number; height?: string | number };
+export type IconSize = BasicIconSize | { width?: string | number; height?: string | number };
 
 export interface IconProps {
   color?: Color;
@@ -15,7 +15,7 @@ export interface IconProps {
   type: IconType;
   clickable?: boolean;
   size?: IconSize;
-  breakPointSize?: { breakPoint: string; size: BasicSize };
+  breakPointSize?: { breakPoint: string; size: BasicIconSize };
   accentColor?: boolean;
   disabled?: boolean;
   testId?: string;
@@ -90,14 +90,14 @@ const Icon: React.FC<IconProps> = props => {
   );
 };
 
-const ICON_SIZE_MAP: Record<BasicSize, string> = {
+const ICON_SIZE_MAP: Record<BasicIconSize, string> = {
   sm: 'h-3 w-3',
   md: 'h-4 w-4',
   lg: 'h-5 w-5',
   xl: 'h-6 w-6',
 };
 
-const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicSize, string> => ({
+const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicIconSize, string> => ({
   sm: `${breakPoint}:h-3 ${breakPoint}:w-3`,
   md: `${breakPoint}:h-4 ${breakPoint}:w-4`,
   lg: `${breakPoint}:h-5 ${breakPoint}:w-5`,

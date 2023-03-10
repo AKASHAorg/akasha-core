@@ -3,7 +3,7 @@ import Stack from '../Stack';
 import IconByType from './IconByType';
 import { IconType, LogoSourceType } from '@akashaorg/typings/ui';
 import { apply, tw } from '@twind/core';
-import { BasicSize } from '../types/common.types';
+import { BasicIconSize } from '../types/common.types';
 
 export interface IAppIcon {
   ref?: React.Ref<HTMLDivElement>;
@@ -14,8 +14,8 @@ export interface IAppIcon {
   // props for notifications icon
   stackedIcon?: boolean;
   hasNewNotifs?: boolean;
-  size?: BasicSize;
-  breakPointSize?: { breakPoint: string; size: BasicSize };
+  size?: BasicIconSize;
+  breakPointSize?: { breakPoint: string; size: BasicIconSize };
   hover?: boolean;
   active?: boolean;
   className?: string;
@@ -88,7 +88,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
   );
 });
 
-const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicSize, string> = {
+const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicIconSize, string> = {
   sm: 'h-5 w-5',
   md: 'h-8 w-8',
   lg: 'h-10 w-10',
@@ -97,14 +97,14 @@ const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicSize, string> = {
 
 const APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT = (
   breakPoint: string,
-): Record<BasicSize, string> => ({
+): Record<BasicIconSize, string> => ({
   sm: `${breakPoint}:h-5 ${breakPoint}:w-5`,
   md: `${breakPoint}:h-8 ${breakPoint}:w-8`,
   lg: `${breakPoint}:h-10 ${breakPoint}:w-10`,
   xl: `${breakPoint}:h-12 ${breakPoint}:w-12`,
 });
 
-const NOTIFY_MAP: Record<BasicSize, string> = {
+const NOTIFY_MAP: Record<BasicIconSize, string> = {
   sm: 'right-[0.1875rem] w-1 h-1',
   md: 'right-[0.1875rem]',
   lg: 'right-1.5',
