@@ -1,7 +1,8 @@
 import * as React from 'react';
 import Button, { IButtonProps } from '../Button';
-import Icon, { IconType } from '../Icon/';
+import Icon from '../Icon/';
 import { tw } from '@twind/core';
+import { IconType } from '@akashaorg/typings/ui';
 
 export interface IDuplexButtonProps extends IButtonProps {
   onClickInactive?: () => void;
