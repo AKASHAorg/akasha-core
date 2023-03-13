@@ -119,16 +119,16 @@ const Button: React.FC<IButtonProps> = props => {
       onMouseLeave={handleMouseLeave}
     >
       {loading ? (
-        <Icon type="ArrowPathIcon" style={tw(iconStyle)} />
+        <Icon type="ArrowPathIcon" customStyle={tw(iconStyle)} />
       ) : iconOnly ? (
-        <Icon type={icon} style={tw(iconStyle)} />
+        <Icon type={icon} customStyle={tw(iconStyle)} />
       ) : (
         <>
-          {leftIcon && icon && <Icon type={icon} style={tw(iconStyle)} />}
+          {leftIcon && icon && <Icon type={icon} customStyle={tw(iconStyle)} />}
 
           {size !== 'xsmall' && label}
 
-          {!leftIcon && icon && <Icon type={icon} style={tw(iconStyle)} />}
+          {!leftIcon && icon && <Icon type={icon} customStyle={tw(iconStyle)} />}
         </>
       )}
     </button>

@@ -26,7 +26,7 @@ const ListSidebarApps: React.FC<IListSidebarAppsProps> = props => {
         <React.Fragment key={app.label + idx}>
           {app.subRoutes.length > 0 ? (
             <Accordion
-              style="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
+              customStyle="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
               titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
               contentNode={
                 <MenuSubItems

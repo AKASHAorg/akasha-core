@@ -44,7 +44,7 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
       </div>
       <Text
         variant="body1"
-        style={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}
+        customStyle={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}
       >
         {menuItem.label}
       </Text>

@@ -5,14 +5,14 @@ import { ErrorLoaderProps } from '.';
 import Text from '../Text';
 
 interface ErrorRendererProps {
-  style?: string; // use valid twind classes;
+  customStyle?: string; // use valid twind classes;
 }
 
 const ErrorRenderer: React.FC<PropsWithChildren<ErrorRendererProps>> = props => {
-  const { children, style = '' } = props;
+  const { children, customStyle = '' } = props;
 
   return (
-    <details className={tw(apply`w-full ${style}`)}>
+    <details className={tw(apply`w-full ${customStyle}`)}>
       <summary className={tw('whitespace-nowrap')}>Expand to see error details</summary>
       <div
         className={tw(
@@ -28,13 +28,13 @@ const ErrorRenderer: React.FC<PropsWithChildren<ErrorRendererProps>> = props => 
 };
 
 const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: string }>> = props => {
-  const { children, title, imageSrc, details, devDetails, style } = props;
+  const { children, title, imageSrc, details, devDetails, customStyle } = props;
 
   const isDevMode = false;
   const message = details ?? devDetails;
 
   return (
-    <div className={tw(apply`flex flex-col items-center p-[1em] bg-white ${style}`)}>
+    <div className={tw(apply`flex flex-col items-center p-[1em] bg-white ${customStyle}`)}>
       <div>
         <img
           className={tw(apply('max-w-[50%] h-auto my-0 mx-auto py-[2em] px-0'))}
@@ -47,11 +47,11 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
       </Text>
 
       {isDevMode && devDetails ? (
-        <ErrorRenderer style={style}>
+        <ErrorRenderer customStyle={customStyle}>
           <Text
             variant="label"
             color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
-            style={'pt-[1em] max-w-[70%] w-full'}
+            customStyle={'pt-[1em] max-w-[70%] w-full'}
           >
             {message}
           </Text>
@@ -60,7 +60,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <Text
           variant="label"
           color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
-          style={'text-center pt-[1em] max-w-[70%] w-full'}
+          customStyle={'text-center pt-[1em] max-w-[70%] w-full'}
         >
           {message}
         </Text>

@@ -72,7 +72,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
               color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-dark' }}
               weight="bold"
               align="center"
-              style="cursor-pointer"
+              customStyle="cursor-pointer"
             >
               {codeOfConductLabel}
             </Text>
@@ -83,7 +83,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
           <div className={tw(apply('flex md:px-20 justify-between'))}>
             {overviewCTAArr.map(({ url, label, iconType }) => (
               <div key={label + iconType} className={tw(apply('grid gap-1 grid-cols-1 w-[30%]'))}>
-                <Icon size="md" accentColor={true} type={iconType} style="mx-auto my-0" />
+                <Icon size="md" accentColor={true} type={iconType} customStyle="mx-auto my-0" />
                 <a
                   href={url}
                   className={tw(

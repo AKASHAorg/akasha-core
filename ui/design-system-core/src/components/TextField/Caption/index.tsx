@@ -22,7 +22,7 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, 
     <div
       className={tw(apply('flex items-center	gap-1.5'))} /* @TODO: Replace with stack component */
     >
-      {status && <Icon type={STATUS_TO_ICON_MAP[status]} style={iconStyle} />}
+      {status && <Icon type={STATUS_TO_ICON_MAP[status]} customStyle={iconStyle} />}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}
       </Text>

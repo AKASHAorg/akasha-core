@@ -30,7 +30,7 @@ export interface ErrorLoaderProps {
    *  Message to be shown when in deveolopment mode
    */
   devDetails?: React.ReactElement | string;
-  style?: string; // use valid twind classes;
+  customStyle?: string; // use valid twind classes;
 }
 
 const ErrorLoader: React.FC<ErrorLoaderProps> = props => {

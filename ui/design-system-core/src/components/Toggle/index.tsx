@@ -93,7 +93,10 @@ const Toggle: React.FC<iToggleProps> = ({
 
         {iconChecked && iconUnchecked && (
           <div className={tw(instanceIconStyle)}>
-            <Icon type={enabled ? iconChecked : iconUnchecked} style="fill-white stroke-white" />
+            <Icon
+              type={enabled ? iconChecked : iconUnchecked}
+              customStyle="fill-white stroke-white"
+            />
           </div>
         )}
         <span className={tw(apply('pl-2 text-base text-gray-800'))}>

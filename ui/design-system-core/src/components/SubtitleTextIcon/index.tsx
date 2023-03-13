@@ -62,7 +62,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
             } ${backgroundColor ? 'bg-grey1 rounded-sm' : 'none'}`,
           )}
         >
-          <Icon type={iconType} style={`${iconSize ? iconSize : 'h-4, w-4'} black`} />
+          <Icon type={iconType} customStyle={`${iconSize ? iconSize : 'h-4, w-4'} black`} />
         </div>
       ) : null}
       <div className={tw(apply('flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])'))}>

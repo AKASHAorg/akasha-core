@@ -60,19 +60,19 @@ const Header: React.FC<HeaderProps> = ({
         elevation="1"
         radius={{ top: 20 }}
         background={{ light: 'bg-grey6', dark: 'bg-grey5' }}
-        style={`h-32 ${
+        customStyle={`h-32 ${
           coverImage ? `background-image: url(${coverImage.url || coverImage.fallbackUrl})` : ''
         }`}
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
-        <Stack direction="column" style="pl-2">
+        <Stack direction="column" customStyle="pl-2">
           <Stack spacing="gap-x-2 -ml-2">
             <div className={avatarContainer}>
               <Avatar
                 ethAddress={ethAddress}
                 size="xl"
                 src={avatar}
-                style="absolute -top-6 rounded-full border-2 border-white dark:border-grey2"
+                customStyle="absolute -top-6 rounded-full border-2 border-white dark:border-grey2"
               />
             </div>
             <Stack direction="column">
@@ -123,13 +123,13 @@ const Header: React.FC<HeaderProps> = ({
                       elevation={{ light: '1', dark: '2' }}
                       padding={{ x: 18, y: 8 }}
                       radius={8}
-                      style="absolute top-[36px] right-0 bg-white dark:bg-grey3"
+                      customStyle="absolute top-[36px] right-0 bg-white dark:bg-grey3"
                     >
                       <button onClick={handleFlag}>
                         <Stack align="center" spacing="gap-x-1">
                           <Icon
                             type="FlagIcon"
-                            style={flagIconStyle}
+                            customStyle={flagIconStyle}
                             color={{ light: 'error-light', dark: 'error-dark' }}
                           />
                           <Text

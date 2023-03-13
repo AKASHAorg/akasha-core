@@ -27,8 +27,8 @@ export const Input: React.FC<InputProps> = forwardRef(
           ref={ref}
           {...rest}
         />
-        {iconLeft && <Icon type={iconLeft} style={tw(apply(`${iconStyle} order-first`))} />}
-        {iconRight && <Icon type={iconRight} style={iconStyle} />}
+        {iconLeft && <Icon type={iconLeft} customStyle={tw(apply(`${iconStyle} order-first`))} />}
+        {iconRight && <Icon type={iconRight} customStyle={iconStyle} />}
       </div>
     );
   },
