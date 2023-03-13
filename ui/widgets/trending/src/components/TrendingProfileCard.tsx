@@ -16,7 +16,6 @@ export interface ITrendingProfileCardProps {
   // labels
   noProfilesLabel?: string;
   titleLabel: string;
-  profilesLabel: string;
   followLabel?: string;
   followersLabel?: string;
   unfollowLabel?: string;
@@ -54,6 +53,7 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
     profileAnchorLink,
     followedProfiles,
   } = props;
+  console.log(isLoadingProfiles);
 
   return (
     <BasicCardBox noBorder={true} pad="0" elevation="md">
@@ -124,7 +124,6 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
 
 TrendingProfileCard.defaultProps = {
   titleLabel: 'Start Following',
-  profilesLabel: 'People',
   followLabel: 'Follow',
   unfollowLabel: 'Unfollow',
   followersLabel: 'Followers',

@@ -141,7 +141,6 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
       />
       <TrendingProfileCard
         titleLabel={t('Start Following')}
-        profilesLabel={t('People')}
         followLabel={t('Follow')}
         unfollowLabel={t('Unfollow')}
         followersLabel={t('Followers')}
