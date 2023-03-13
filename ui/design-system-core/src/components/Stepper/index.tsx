@@ -61,7 +61,7 @@ const CompletedStepIcon = () => {
 
 const StepIndicator: React.FC<IStepIndicatorProps> = ({ stepLabels, activeIndex }) => {
   const baseHorizontalLineStyle = cx`
-    w-20 h-4 border-b-2 
+    w-20 h-4 border-b-2
     mr-4 md:mr-10
     `;
 
