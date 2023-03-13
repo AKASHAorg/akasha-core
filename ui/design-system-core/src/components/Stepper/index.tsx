@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { apply, tw } from '@twind/core';
-
-import Icon from '../Icon';
-import RadioButton from '../RadioButton';
-import Checkbox from '../Checkbox';
+import { tx, cx } from '@twind/core';
 
 export interface IStepIndicatorProps {
   activeIndex: number;
   stepLabels: string[];
 }
 
-const UncompletedStepIcon = ({ color = 'grey5', darkColor = 'grey6' }) => {
+const IncompletedStepIcon = ({ color = 'grey5', darkColor = 'grey6' }) => {
   return (
     <div>
       <svg
@@ -24,10 +20,10 @@ const UncompletedStepIcon = ({ color = 'grey5', darkColor = 'grey6' }) => {
           cx="16"
           cy="16"
           r="15"
-          className={tw(`stroke-${color} dark:stroke-${darkColor}`)}
+          className={tx(`stroke-${color} dark:stroke-${darkColor}`)}
           strokeWidth="2"
         />
-        <circle cx="16" cy="16" r="5" className={tw(`fill-${color} dark:fill-${darkColor}`)} />
+        <circle cx="16" cy="16" r="5" className={tx(`fill-${color} dark:fill-${darkColor}`)} />
       </svg>
     </div>
   );
@@ -47,7 +43,7 @@ const CompletedStepIcon = () => {
           cx="16"
           cy="16"
           r="16"
-          className={tw(
+          className={tx(
             `fill-secondary-light hover:fill-secondary-dark dark:fill-secondary-dark dark:hover:fill-secondary-light`,
           )}
         />
@@ -64,27 +60,37 @@ const CompletedStepIcon = () => {
 };
 
 const StepIndicator: React.FC<IStepIndicatorProps> = ({ stepLabels, activeIndex }) => {
+  const baseHorizontalLineStyle = cx`
+    w-20 h-4 border-b-2 
+    mr-4 md:mr-10
+    `;
+
+  const completedHorizontalLineStyle = cx`
+    ${baseHorizontalLineStyle}
+    border-secondary-light hover:border-secondary-dark dark:border:secondary-dark
+    `;
+  const incompletedHorizontalLineStyle = cx`
+    ${baseHorizontalLineStyle}
+    border-grey5 dark:border-grey6
+    `;
+
   return (
-    <div className={tw('flex justify-center max-w-fit my-2')}>
+    <div className={tx('flex justify-center max-w-fit my-2')}>
       {stepLabels.map((step, idx) => (
         <React.Fragment key={idx + step}>
           <div>
             {idx < activeIndex ? (
               <CompletedStepIcon />
             ) : idx === activeIndex ? (
-              <UncompletedStepIcon color={tw('secondary-light')} darkColor={tw('secondary-dark')} />
+              <IncompletedStepIcon color="secondary-light" darkColor="secondary-dark" />
             ) : (
-              <UncompletedStepIcon />
+              <IncompletedStepIcon />
             )}
           </div>
           {idx !== stepLabels.length - 1 && (
             <div
-              className={tw(
-                `w-20 h-4 border(b-2 ${
-                  idx < activeIndex
-                    ? 'secondary-light hover:secondary-dark dark:secondary-dark'
-                    : 'grey5 dark:grey6'
-                }) mr-4 md:mr-10`,
+              className={tx(
+                idx < activeIndex ? completedHorizontalLineStyle : incompletedHorizontalLineStyle,
               )}
             />
           )}
