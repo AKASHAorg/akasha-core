@@ -17,7 +17,7 @@ export const Input: React.FC<InputProps> = forwardRef(
     const iconStyle = getIconClasses(disabled, status);
 
     return (
-      <Stack align="center" spacing="gap-x-2" className={`${containerStyle} ${className}`}>
+      <Stack align="center" spacing="gap-x-2" customStyle={`${containerStyle} ${className}`}>
         <input type="text" className={tw(inputStyle)} disabled={disabled} ref={ref} {...rest} />
         {iconLeft && (
           <Icon type={iconLeft} styling={`${iconStyle} order-first`} disabled={disabled} />

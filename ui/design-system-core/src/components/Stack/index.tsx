@@ -13,7 +13,7 @@ export type StackProps = {
   justify?: Justify;
   align?: Align;
   spacing?: string;
-  className?: string;
+  customStyle?: string;
   fullWidth?: boolean;
   ref?: LegacyRef<HTMLDivElement>;
 };
@@ -23,7 +23,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   justify,
   align,
   spacing = '',
-  className = '',
+  customStyle = '',
   fullWidth,
   children,
 }) => {
@@ -35,7 +35,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   return (
     <div
       className={tw(
-        apply`${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${className}`,
+        apply`${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
       )}
     >
       {children}

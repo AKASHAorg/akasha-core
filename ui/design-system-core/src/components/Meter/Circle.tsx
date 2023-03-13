@@ -41,7 +41,7 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
   const d = arcCommands(centerX, centerY, radius, startAngle, endAngle);
 
   return (
-    <Stack justify="center" align="center" className="inline-flex overflow-hidden">
+    <Stack justify="center" align="center" customStyle="inline-flex overflow-hidden">
       <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
         <circle
           className={tw(backgroundStyle)}

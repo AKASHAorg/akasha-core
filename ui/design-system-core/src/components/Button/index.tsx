@@ -53,7 +53,7 @@ const Button: React.FC<
         align="center"
         justify="center"
         spacing="gap-x-1"
-        className={tw(`group ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
+        customStyle={tw(`group ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
       >
         {loading ? (
           <ButtonIcon

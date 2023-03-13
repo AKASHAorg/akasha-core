@@ -31,7 +31,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
       <Stack
         align="center"
         justify="center"
-        className={tw(`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
+        customStyle={tw(`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
       >
         <ButtonIcon
           type={loading ? 'ArrowPathIcon' : icon}

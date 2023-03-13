@@ -18,7 +18,7 @@ export interface IAppIcon {
   breakPointSize?: { breakPoint: string; size: BasicIconSize };
   hover?: boolean;
   active?: boolean;
-  className?: string;
+  customStyle?: string;
 }
 
 const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
@@ -33,7 +33,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     hasNewNotifs,
     hover,
     active,
-    className = '',
+    customStyle = '',
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -46,13 +46,13 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     ? 'hover:bg-secondary-light/30 dark:hover:bg-secondary-dark group-hover:bg-secondary-light/30 dark:group-hover:bg-secondary-dark'
     : '';
   const activeStyle = active ? 'bg-secondary-light/30 hover:bg-secondary-dark' : '';
-  const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${className}`;
+  const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${customStyle}`;
   const notifyStyle = NOTIFY_MAP[size];
 
   if (stackedIcon)
     return (
       <div ref={ref} onClick={onClick}>
-        <Stack align="center" justify="center" className={iconContainerStyle}>
+        <Stack align="center" justify="center" customStyle={iconContainerStyle}>
           <IconByType
             appImg={appImg}
             size={size}
@@ -70,7 +70,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
 
   return (
     <div ref={ref} onClick={onClick}>
-      <Stack align="center" justify="center" className={iconContainerStyle}>
+      <Stack align="center" justify="center" customStyle={iconContainerStyle}>
         <IconByType
           appImg={appImg}
           size={size}
