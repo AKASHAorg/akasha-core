@@ -40,22 +40,22 @@ const ProfileAvatarButton = React.forwardRef(
       onMouseLeave,
     } = props;
     return (
-      <div className={tw(apply`inline-flex items-center justify-center ${style}`)}>
+      <div className={tw(`inline-flex items-center justify-center ${style}`)}>
         <div className={tw('shrink-0')}>
           <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
         </div>
         <div
-          className={tw(apply('pl(lg:4 md:2 sm:1 xs:0.5) justify-center align-top'))}
+          className={tw('pl(lg:4 md:2 sm:1 xs:0.5) justify-center align-top')}
           onClick={onClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <div className={tw(apply`${BaseStyles} text(lg:base md:xs) max-w([7rem] xs:[2rem])`)}>
+          <div className={tw(`${BaseStyles} text(lg:base md:xs) max-w([7rem] xs:[2rem])`)}>
             <span ref={ref}>{label || truncateMiddle(ethAddress)}</span>
           </div>
           <div
             className={tw(
-              apply`${BaseStyles} max-w(7rem xs:2rem) text(lg:xs sm:[10px])
+              `${BaseStyles} max-w(7rem xs:2rem) text(lg:xs sm:[10px])
               ${active ? ' text-white ' : ' text-black '}`,
             )}
           >

@@ -40,9 +40,9 @@ export interface ISidebarProps {
   footerIcons: { name: IButtonProps['icon']; link: string }[];
 }
 
-const titleText = apply('text-sm font-bold');
+const titleText = 'text-sm font-bold';
 
-const subtitleText = apply('text-xs text-grey5');
+const subtitleText = 'text-xs text-grey5';
 
 const Sidebar: React.FC<ISidebarProps> = props => {
   const {
@@ -115,13 +115,11 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   return (
     <div
       className={tw(
-        apply(
-          'max-w-[19.5rem] w-[19.5rem] max-h-[calc(100vh - 20px)] bg-white dark:bg-grey2 border-1 border-grey8 dark:border-none rounded-2xl',
-        ),
+        'max-w-[19.5rem] w-[19.5rem] max-h-[calc(100vh - 20px)] bg-white dark:bg-grey2 border-1 border-grey8 dark:border-none rounded-2xl',
       )}
     >
-      <div className={tw(apply('flex flex-row p-4 border-b-1 border-grey8'))}>
-        <div className={tw(apply('w-fit h-fit mr-2'))}>
+      <div className={tw('flex flex-row p-4 border-b-1 border-grey8')}>
+        <div className={tw('w-fit h-fit mr-2')}>
           <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
         </div>
         <div className={tw('w-fit')}>
@@ -132,7 +130,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             {subtitle}
           </Text>
         </div>
-        <div className={tw(apply('w-fit h-fit ml-6 self-end'))}>
+        <div className={tw('w-fit h-fit ml-6 self-end')}>
           {/*@TODO the color of the icon button should be white on both light and dark theme */}
           <Button icon="BoltIcon" primary={true} iconOnly={true} />
         </div>
@@ -142,7 +140,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           this container will grow up to a max height of 100vh-345px.
           [345px] currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
-      <div className={tw(apply('flex flex-col max-h-[calc(100vh - 345px)] overflow-auto'))}>
+      <div className={tw('flex flex-col max-h-[calc(100vh - 345px)] overflow-auto')}>
         {/* container for world apps */}
         {worldApps?.length > 0 && (
           <ListSidebarApps
@@ -165,20 +163,20 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         )}
       </div>
 
-      <div className={tw(apply('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3'))}>
+      <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
         <Text variant="subtitle2" style={subtitleText}>
           {ctaText}
         </Text>
-        <div className={tw(apply('w-fit h-fit mt-6'))}>
+        <div className={tw('w-fit h-fit mt-6')}>
           <Button label={ctaButtonLabel} primary={true} />
         </div>
       </div>
 
-      <div className={tw(apply('flex flex-col px-8 py-4'))}>
+      <div className={tw('flex flex-col px-8 py-4')}>
         <Text variant="subtitle2" style={subtitleText}>
           {footerLabel}
         </Text>
-        <div className={tw(apply('flex w-fit h-fit mt-6'))}>
+        <div className={tw('flex w-fit h-fit mt-6')}>
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
               <a href={icon.link} target="_blank" rel="noreferrer noopener">

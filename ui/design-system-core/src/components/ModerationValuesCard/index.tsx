@@ -1,5 +1,5 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 
 import ModerationValueCard from './value-card';
 
@@ -26,7 +26,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
 
   return (
     <BasicCardBox pad="p-4">
-      <div className={tw(apply('grid gap-4 grid-cols-1 md:px-10'))}>
+      <div className={tw('grid gap-4 grid-cols-1 md:px-10')}>
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
@@ -34,7 +34,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
         <Text variant="subtitle2" align="center">
           {subtitleLabel}
         </Text>
-        <div className={tw(apply('grid gap-4 grid-cols-2 md:grid-cols-3'))}>
+        <div className={tw('grid gap-4 grid-cols-2 md:grid-cols-3')}>
           {values.map((value, idx) => (
             <ModerationValueCard
               key={value.title + idx}
@@ -48,18 +48,14 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
           <a
             href={ctaUrl}
             className={tw(
-              apply(
-                'flex md:hidden text-sm text-center font-bold no-underline text-secondary-light dark:text-secondary-dark',
-              ),
+              'flex md:hidden text-sm text-center font-bold no-underline text-secondary-light dark:text-secondary-dark',
             )}
             target="_blank"
             rel="noreferrer noopener"
           >
             <div
               className={tw(
-                apply(
-                  'h-32 w-full flex items-center justify-center p-3 bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer',
-                ),
+                'h-32 w-full flex items-center justify-center p-3 bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer',
               )}
             >
               <Text
@@ -79,17 +75,13 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
         {ctaLabel && (
           <div
             className={tw(
-              apply(
-                'hidden md:flex p-5 justify-center bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer',
-              ),
+              'hidden md:flex p-5 justify-center bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer',
             )}
           >
             <a
               href={ctaUrl}
               className={tw(
-                apply(
-                  'text-sm text-center font-bold no-underline text-secondary-light dark:text-secondary-dark',
-                ),
+                'text-sm text-center font-bold no-underline text-secondary-light dark:text-secondary-dark',
               )}
               target="_blank"
               rel="noreferrer noopener"

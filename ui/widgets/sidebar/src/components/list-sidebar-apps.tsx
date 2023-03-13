@@ -1,5 +1,5 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 
 import { IMenuItem } from '@akashaorg/typings/ui';
 import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
@@ -18,8 +18,10 @@ export interface IListSidebarAppsProps {
 const ListSidebarApps: React.FC<IListSidebarAppsProps> = props => {
   const { list, activeOption, hasBorderTop = false, onOptionClick, onClickMenuItem } = props;
 
+  const borderStyle = hasBorderTop ? 'border-t-1 border-grey8' : '';
+
   return (
-    <div className={tw(apply`flex flex-col py-2 ${hasBorderTop ? 'border-t-1 border-grey8' : ''}`)}>
+    <div className={tw(`flex flex-col py-2 ${borderStyle}`)}>
       {list?.map((app, idx) => (
         <React.Fragment key={app.label + idx}>
           {app.subRoutes.length > 0 ? (
@@ -35,11 +37,8 @@ const ListSidebarApps: React.FC<IListSidebarAppsProps> = props => {
               }
             />
           ) : (
-            <div
-              key={app.label + idx}
-              className={tw(apply('px-4 hover:bg-grey8 dark:hover:bg-grey5'))}
-            >
-              <div className={tw(apply('p-2 cursor-pointer'))}>
+            <div key={app.label + idx} className={tw('px-4 hover:bg-grey8 dark:hover:bg-grey5')}>
+              <div className={tw('p-2 cursor-pointer')}>
                 <MenuItemLabel menuItem={app} isActive={false} onClickMenuItem={onClickMenuItem} />
               </div>
             </div>

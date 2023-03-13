@@ -26,19 +26,17 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
     onClick,
   } = props;
 
+  const wrapperHeight = apply`h-${isMini ? '32' : ''}`;
+  const wrapperPadding = apply`p-${isMini ? '3' : '4'}`;
+  const imgBoxStyle = apply`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`;
+
   return (
     <div
-      className={tw(
-        apply`h-${isMini ? '32' : ''}  bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`,
-      )}
+      className={tw(`${wrapperHeight} bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`)}
       onClick={onClick}
     >
-      <div
-        className={tw(
-          apply`flex flex-col h-full ${isMini ? 'p-3' : 'p-4'} items-center justify-evenly`,
-        )}
-      >
-        <div className={tw(apply`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`)}>
+      <div className={tw(`flex flex-col h-full ${wrapperPadding} items-center justify-evenly`)}>
+        <div className={tw(imgBoxStyle)}>
           <img className={tw('object-contain')} src={`${publicImgPath}/${assetName}.webp`} />
         </div>
 
@@ -54,7 +52,7 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
           {label}
         </Text>
         {!isMini && (
-          <div className={tw(apply('flex flex-col w-full'))}>
+          <div className={tw('flex flex-col w-full')}>
             {description && (
               <Text variant="body2" align="center">
                 {description}
@@ -64,9 +62,7 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
               <a
                 href={ctaUrl}
                 className={tw(
-                  apply(
-                    'text-sm self-end font-bold no-underline text-secondary-light dark:text-secondary-dark',
-                  ),
+                  'text-sm self-end font-bold no-underline text-secondary-light dark:text-secondary-dark',
                 )}
                 target="_blank"
                 rel="noreferrer noopener"
