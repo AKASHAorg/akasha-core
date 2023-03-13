@@ -9,10 +9,8 @@ export interface IDuplexButtonProps extends IButtonProps {
   onClickActive?: () => void;
   inactiveLabel?: string;
   activeLabel?: string;
-  activeHoverLabel?: string;
   active?: boolean;
   activeIcon?: IconType;
-  activeHoverIcon?: IconType;
   allowMinimization?: boolean;
   style?: React.CSSProperties;
 }
@@ -23,18 +21,14 @@ const DuplexButton = (props: IDuplexButtonProps) => {
     onClickInactive,
     inactiveLabel,
     activeLabel,
-    activeHoverLabel,
     active,
     icon,
     activeIcon,
-    activeHoverIcon,
     allowMinimization,
     loading,
   } = props;
 
-  const [hovered, setHovered] = React.useState(false);
   const [iconOnly, setIconOnly] = React.useState(window.matchMedia('(max-width: 992px)').matches);
-  const activeHoverIconElem = activeHoverIcon || icon;
   const activeIconElem = activeIcon || icon;
 
   React.useEffect(() => {
@@ -58,14 +52,9 @@ const DuplexButton = (props: IDuplexButtonProps) => {
       <button
         data-testid="duplex-button"
         onClick={active ? onClickActive : onClickInactive}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         className={tw('rounded-sm border-1 border-secondary-light p-1')}
       >
-        <Icon
-          type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-          styling="text-secondary-light h-5 w-5"
-        />
+        <Icon type={active ? activeIconElem : icon} styling="text-secondary-light h-5 w-5" />
       </button>
     );
   }
@@ -73,11 +62,9 @@ const DuplexButton = (props: IDuplexButtonProps) => {
   return (
     <Button
       data-testid="duplex-button"
-      label={active ? (hovered ? activeHoverLabel : activeLabel) : inactiveLabel}
+      primary={!active}
+      label={active ? activeLabel : inactiveLabel}
       onClick={active ? onClickActive : onClickInactive}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      icon={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
       size="small"
     />
   );
@@ -85,8 +72,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
 
 DuplexButton.defaultProps = {
   inactiveLabel: 'Follow',
-  activeLabel: 'Following',
-  activeHoverLabel: 'Unfollow',
+  activeLabel: 'Unfollow',
   active: false,
 };
 
