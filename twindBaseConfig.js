@@ -9,6 +9,7 @@ function withOpacity(variable) {
 
 export default {
   darkMode: 'class',
+  hash: false,
   theme: {
     extend: {
       colors: {

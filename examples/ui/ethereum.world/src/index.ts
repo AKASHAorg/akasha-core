@@ -4,6 +4,7 @@ import { missingRequiredFields } from './registry-overrides';
 console.time('AppLoader:firstMount');
 
 declare const __DEV__: boolean;
+declare const __LOAD_LOCAL_SOURCES__: boolean;
 
 (async function bootstrap(System) {
   const { default: startLoader } = await System.import('@akashaorg/ui-app-loader');
@@ -54,7 +55,7 @@ declare const __DEV__: boolean;
     },
   ];
 
-  if (__DEV__) {
+  if (__DEV__ || __LOAD_LOCAL_SOURCES__) {
     registryOverrides = (await import('./registry-overrides')).default;
   }
 
