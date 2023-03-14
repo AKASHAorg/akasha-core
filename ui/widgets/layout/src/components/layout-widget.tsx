@@ -4,7 +4,7 @@ import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
-import { apply, tw, tx } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
@@ -227,7 +227,7 @@ const Layout: React.FC<RootComponentProps> = props => {
           </div>
           <div>
             <div className={tw('sticky top-0')}>
-              <div className={tx(`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`)}>
+              <div className={tw(`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`)}>
                 <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
                 <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
               </div>

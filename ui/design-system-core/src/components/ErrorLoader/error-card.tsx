@@ -5,14 +5,14 @@ import { ErrorLoaderProps } from '.';
 import Text from '../Text';
 
 interface ErrorRendererProps {
-  className?: string; // use valid twind classes;
+  customStyle?: string; // use valid twind classes;
 }
 
 const ErrorRenderer: React.FC<PropsWithChildren<ErrorRendererProps>> = props => {
-  const { children, className = '' } = props;
+  const { children, customStyle = '' } = props;
 
   return (
-    <details className={tw(`w-full ${className}`)}>
+    <details className={tw(`w-full ${customStyle}`)}>
       <summary className={tw('whitespace-nowrap')}>Expand to see error details</summary>
       <div
         className={tw(
@@ -26,13 +26,13 @@ const ErrorRenderer: React.FC<PropsWithChildren<ErrorRendererProps>> = props => 
 };
 
 const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: string }>> = props => {
-  const { children, title, imageSrc, details, devDetails, className } = props;
+  const { children, title, imageSrc, details, devDetails, customStyle } = props;
 
   const isDevMode = false;
   const message = details ?? devDetails;
 
   return (
-    <div className={tw(`flex flex-col items-center p-[1em] bg-white ${className}`)}>
+    <div className={tw(`flex flex-col items-center p-[1em] bg-white ${customStyle}`)}>
       <div>
         <img className={tw('max-w-[50%] h-auto my-0 mx-auto py-[2em] px-0')} src={imageSrc} />
       </div>
@@ -42,11 +42,11 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
       </Text>
 
       {isDevMode && devDetails ? (
-        <ErrorRenderer className={className}>
+        <ErrorRenderer customStyle={customStyle}>
           <Text
             variant="label"
             color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
-            className={tw('pt-[1em] max-w-[70%] w-full')}
+            customStyle={'pt-[1em] max-w-[70%] w-full'}
           >
             {message}
           </Text>
@@ -55,7 +55,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <Text
           variant="label"
           color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
-          className={tw('text-center pt-[1em] max-w-[70%] w-full')}
+          customStyle={'text-center pt-[1em] max-w-[70%] w-full'}
         >
           {message}
         </Text>

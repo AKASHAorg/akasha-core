@@ -3,14 +3,14 @@ import { IProfileData } from '@akashaorg/typings/ui';
 import { truncateMiddle } from '../../utils/string-utils';
 import Avatar from '../Avatar';
 import { AvatarSize } from '../Avatar';
-import { tw, apply } from '@twind/core';
+import { tw } from '@twind/core';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
   avatarImage?: IProfileData['avatar'];
   label?: string;
   size?: AvatarSize;
-  className?: string;
+  customStyle?: string;
   onClickAvatar?: () => void;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   ethAddress: string;
@@ -20,14 +20,12 @@ export interface ProfileAvatarButtonProps {
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const BaseStyles = apply`
-    text-ellipsis overflow-hidden whitespace-nowrap truncate
-    `;
+const BaseStyles = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
 
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLElement>) => {
     const {
-      className,
+      customStyle = '',
       size,
       avatarImage,
       label,
@@ -40,7 +38,7 @@ const ProfileAvatarButton = React.forwardRef(
       onMouseLeave,
     } = props;
     return (
-      <div className={tw(`inline-flex items-center justify-center ${className ? className : ''} `)}>
+      <div className={tw(`inline-flex items-center justify-center ${customStyle}`)}>
         <div className={tw('shrink-0')}>
           <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
         </div>

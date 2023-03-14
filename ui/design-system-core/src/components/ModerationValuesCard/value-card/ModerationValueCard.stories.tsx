@@ -1,4 +1,5 @@
 import React from 'react';
+import { tw } from '@twind/core';
 
 import ModerationValueCard, { IModerationValueCardProps } from '.';
 
@@ -8,7 +9,7 @@ export default {
 };
 
 const Template = (args: IModerationValueCardProps) => (
-  <div style={{ width: '40%' }}>
+  <div className={tw('w-[49%]')}>
     <ModerationValueCard {...args} />
   </div>
 );

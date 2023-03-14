@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import { IProfileData } from '@akashaorg/typings/ui';
 
 import Avatar, { AvatarSize } from '../Avatar';
@@ -22,7 +22,7 @@ const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
   const renderStack = (level: number) => {
     const zIndex = level + 1;
 
-    const className = `inline-flex z-${zIndex} -ml-${zIndex > 1 ? '3' : '0'}`;
+    const className = apply`inline-flex z-${zIndex} -ml-${zIndex > 1 ? '3' : '0'}`;
 
     return (
       <div className={tw(className)}>

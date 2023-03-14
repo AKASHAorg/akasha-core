@@ -4,15 +4,13 @@ import singleSpaReact from 'single-spa-react';
 
 import getSDK from '@akashaorg/awf-sdk';
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { EventTypes, UIEventData, RootExtensionProps } from '@akashaorg/typings/ui';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useInstallApp, withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
 const { InstallModal, ModalContainer } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const IntegrationInstallModal: React.FC<RootExtensionProps> = props => {
   const { extensionData } = props;

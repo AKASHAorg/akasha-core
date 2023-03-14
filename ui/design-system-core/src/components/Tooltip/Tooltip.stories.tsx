@@ -1,4 +1,5 @@
 import React from 'react';
+import { tw, apply } from '@twind/core';
 
 import Tooltip, { TooltipProps } from './index';
 
@@ -8,7 +9,7 @@ export default {
 };
 
 const Template = (args: TooltipProps) => (
-  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+  <div className={tw(apply('flex justify-center items-center h-screen'))}>
     <Tooltip {...args} />
   </div>
 );

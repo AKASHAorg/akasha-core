@@ -15,7 +15,6 @@ export type DuplexButtonProps = ButtonProps & {
   activeIcon?: IconType;
   activeHoverIcon?: IconType;
   allowMinimization?: boolean;
-  style?: React.CSSProperties;
 };
 
 const DuplexButton = (props: DuplexButtonProps) => {
@@ -65,7 +64,7 @@ const DuplexButton = (props: DuplexButtonProps) => {
       >
         <Icon
           type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-          styling="text-secondary-light h-5 w-5"
+          customStyle="text-secondary-light h-5 w-5"
         />
       </button>
     );

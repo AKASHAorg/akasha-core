@@ -1,7 +1,6 @@
 import React from 'react';
 import Stack from '../Stack';
 import Text, { TextProps } from '../Text';
-import { tw } from '@twind/core';
 import { IconOnlyButton } from './IconOnlyButton';
 import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
@@ -53,7 +52,7 @@ const Button: React.FC<
         align="center"
         justify="center"
         spacing="gap-x-1"
-        customStyle={tw(`group ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
+        customStyle={`group ${containerStyle} ${BUTTON_SIZE_MAP[size]}`}
       >
         {loading ? (
           <ButtonIcon
@@ -76,7 +75,7 @@ const Button: React.FC<
             )}
             <Text
               variant={variant === 'text' ? 'button-sm' : BUTTON_SIZE_TEXT_MAP[size]}
-              className={textStyle}
+              customStyle={textStyle}
             >
               {label}
             </Text>

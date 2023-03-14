@@ -5,13 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, BrowserRouter as Router } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
 const { FeedbackModal } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const FeedbackModalContainer = (props: RootExtensionProps) => {
   const { t } = useTranslation('ui-widget-topbar');

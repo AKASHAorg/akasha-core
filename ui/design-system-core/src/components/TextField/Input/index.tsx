@@ -20,9 +20,9 @@ export const Input: React.FC<InputProps> = forwardRef(
       <Stack align="center" spacing="gap-x-2" customStyle={`${containerStyle} ${className}`}>
         <input type="text" className={tw(inputStyle)} disabled={disabled} ref={ref} {...rest} />
         {iconLeft && (
-          <Icon type={iconLeft} styling={`${iconStyle} order-first`} disabled={disabled} />
+          <Icon type={iconLeft} customStyle={`${iconStyle} order-first`} disabled={disabled} />
         )}
-        {iconRight && <Icon type={iconRight} styling={iconStyle} disabled={disabled} />}
+        {iconRight && <Icon type={iconRight} customStyle={iconStyle} disabled={disabled} />}
       </Stack>
     );
   },

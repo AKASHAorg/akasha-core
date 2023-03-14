@@ -1,9 +1,7 @@
 import React from 'react';
 import { apply, tw } from '@twind/core';
-import DS from '@akashaorg/design-system-core';
-import { isMobileOnly } from 'react-device-detect';
-
-const { Button, Icon } = DS;
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface ITopbarProps {
   // data
@@ -36,7 +34,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     modalSlotId,
   } = props;
 
-  const iconSize = 'regular';
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(
     window.matchMedia('(max-width: 768px)').matches,
   );
@@ -73,7 +70,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           <Button
             iconOnly={true}
             icon="ArrowRightOnRectangleIcon"
-            size={iconSize}
             onClick={onSidebarToggle}
             greyBg={true}
             variant="primary"
@@ -82,7 +78,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           <Button
             iconOnly={true}
             icon="ArrowLeftOnRectangleIcon"
-            size={iconSize}
             onClick={onSidebarToggle}
             greyBg={true}
             variant="primary"
@@ -93,7 +88,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
           greyBg={true}
           variant="primary"
           icon="ChevronLeftIcon"
-          size={iconSize}
           onClick={onBackClick}
         />
       </div>
@@ -102,7 +96,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
         className={tw('p-0 m-0 cursor-pointer flex(& col) justify-center items-center')}
         onClick={onBrandClick}
       >
-        <Icon type="akasha" styling="w-18 h-8" />
+        <Icon type="akasha" customStyle="w-18 h-8" />
         <span className={tw('uppercase font([Inter] light) text-xs drop-shadow-md')}>
           Akasha World
         </span>
@@ -110,18 +104,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
 
       <div className={tw('flex space-x-2')}>
         {displayWidgetTogglingButton && (
-          <Button
-            iconOnly={true}
-            icon="appCenter"
-            size={iconSize}
-            onClick={onAppWidgetClick}
-            variant="primary"
-          />
+          <Button iconOnly={true} icon="appCenter" onClick={onAppWidgetClick} variant="primary" />
         )}
         <Button
           iconOnly={true}
           icon={hasNewNotifications ? 'BellAlertIcon' : 'BellIcon'}
-          size={iconSize}
           onClick={onNotificationClick}
           greyBg={true}
           variant="primary"

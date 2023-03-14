@@ -1,4 +1,4 @@
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import React, { PropsWithChildren } from 'react';
 
 export interface IBasicCardBox {
@@ -43,7 +43,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     return 'border-1 border-solid border-grey8 dark:border-none';
   };
 
-  const className = `flex flex-col shadow-${elevation} w-full ${pad ? pad : 'p-0'} ${
+  const className = apply`flex flex-col shadow-${elevation} w-full ${pad ? pad : 'p-0'} ${
     margin ? margin : 'm-0'
   } bg-white dark:bg-grey2 ${noBorderRadius ? 'rounded-none' : round} ${generateBorder()}`;
 
