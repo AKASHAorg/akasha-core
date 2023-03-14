@@ -185,6 +185,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
               Array.from({ length: 4 }, (_el, index: number) => (
                 <div key={index} className={tw(BaseItemStyles)}>
                   <div className={tw('py-2')}>
+                    /@TODO: change the following to circular placeholder */
                     <TextLine title="avatar" width="40px" height="40px" className="rounded-full" />
                     <div className={tw('py-1')}>
                       <TextLine title="tagName" animated={false} width="140px" />

@@ -43,7 +43,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <p className={tw(subtitleText)}>{guestSubtitle}</p>
         </div>
         <div className={tw('w-fit h-fit ml-6 self-end')}>
-          <Button icon="BoltIcon" primary={true} iconOnly={true} />
+          <Button icon="BoltIcon" variant="primary" iconOnly={true} />
         </div>
       </div>
 
@@ -73,7 +73,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       <div className={tw('flex flex-col px-8 py-4 bg-grey8')}>
         <p className={tw(subtitleText)}>{ctaText}</p>
         <div className={tw('w-fit h-fit mt-6')}>
-          <Button label={ctaButtonLabel} primary={true} />
+          <Button label={ctaButtonLabel} variant="primary" />
         </div>
       </div>
 
@@ -82,7 +82,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
         <div className={tw('flex w-fit h-fit mt-6')}>
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
-              <Button icon={icon.name} greyBg={true} primary={true} iconOnly={true} />
+              <Button icon={icon.name} greyBg={true} variant="primary" iconOnly={true} />
             </div>
           ))}
         </div>

@@ -2,7 +2,7 @@ import React, { ReactNode, useState, PropsWithChildren } from 'react';
 import Text, { TextProps } from '../Text';
 import Stack from '../Stack';
 import { usePopper } from 'react-popper';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 import { getArrowClasses } from './getArrowClasses';
 import { getContentClasses } from './getContentClasses';
 import { Placement } from '@popperjs/core';
@@ -64,7 +64,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
       <div
         onMouseOver={() => setShowTooltip(true)}
         onMouseOut={() => setShowTooltip(false)}
-        className={tw(apply('w-fit'))}
+        className={tw('w-fit')}
         ref={setReferenceElement}
       >
         {children}
@@ -87,7 +87,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
           <Stack
             align="center"
             justify="center"
-            className={tw(
+            customStyle={tw(
               'flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]',
             )}
           >

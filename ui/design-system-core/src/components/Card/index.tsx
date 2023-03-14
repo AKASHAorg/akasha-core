@@ -13,11 +13,10 @@ export type CardProps = {
   radius?: Radius;
   padding?: Padding;
   direction?: 'row' | 'column';
-  className?: string;
-  style?: string;
+  customStyle?: string;
 };
 
-const baseStyles = apply`
+const baseStyles = `
   block
 `;
 
@@ -28,8 +27,7 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
     radius,
     padding,
     direction,
-    className,
-    style = '',
+    customStyle = '',
   } = props;
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);
@@ -41,12 +39,11 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
     ${elevationStyle}
     ${radiusStyle}
     ${paddingStyle}
-    ${className}
-    ${style}
+    ${customStyle}
   `;
 
   return (
-    <Stack direction={direction} className={tw(instanceStyles)}>
+    <Stack direction={direction} customStyle={tw(instanceStyles)}>
       {props.children}
     </Stack>
   );
