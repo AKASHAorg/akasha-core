@@ -4,7 +4,7 @@ export function getColorClasses(color: Color, utility?: string) {
   if (isStatusType(color)) return STATUS_TO_TEXT_CLASSES_MAP[color];
 
   if (typeof color === 'string' && !color.trim().includes(' ')) {
-    return utility ? `${utility}-color` : color;
+    return utility ? `${utility}-${color}` : color;
   }
 
   if (typeof color === 'object') {

@@ -1,26 +1,27 @@
 import React from 'react';
 import Stack from '../Stack';
-import { BasicSize, Color } from '../types/common.types';
+import { BasicIconSize, Color } from '../types/common.types';
 import { getWidthClasses } from '../../utils/getWidthClasses';
 import { getHeightClasses } from '../../utils/getHeightClasses';
 import { IconType } from '@akashaorg/typings/ui';
 import { PassedIcon } from './PassedIcon';
 import { getColorClasses } from '../../utils/getColorClasses';
+import { apply } from '@twind/core';
 
-export type IconSize = BasicSize | { width?: string | number; height?: string | number };
+export type IconSize = BasicIconSize | { width?: string | number; height?: string | number };
 
 export interface IconProps {
   color?: Color;
   ref?: React.Ref<HTMLDivElement>;
   type: IconType;
-  clickable?: boolean;
   size?: IconSize;
-  breakPointSize?: { breakPoint: string; size: BasicSize };
+  breakPointSize?: { breakPoint: string; size: BasicIconSize };
   accentColor?: boolean;
   disabled?: boolean;
   testId?: string;
   hover?: boolean;
   styling?: string;
+  hoverColor?: Color;
 }
 
 const fillOnlyIcons: IconType[] = ['akasha', 'discord', 'telegram', 'twitter', 'widget'];
@@ -30,7 +31,6 @@ const Icon: React.FC<IconProps> = props => {
     type,
     ref,
     accentColor,
-    clickable,
     size = 'lg',
     breakPointSize,
     color,
@@ -38,6 +38,7 @@ const Icon: React.FC<IconProps> = props => {
     testId,
     hover,
     styling = '',
+    hoverColor = 'white',
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -53,18 +54,15 @@ const Icon: React.FC<IconProps> = props => {
 
   const baseStyle = `select-none ${
     hover
-      ? `cursor-pointer dark:group-hover:${
-          isFillOnlyIcon ? '[&>*]:fill-white' : '[&>*]:stroke-white'
-        }`
+      ? `cursor-pointer ${getColorClasses(
+          hoverColor,
+          isFillOnlyIcon ? 'group-hover:[&>*]:fill' : 'group-hover:[&>*]:stroke',
+        )}`
       : ''
   }`;
 
   const colorStyle = color
-    ? `${
-        isFillOnlyIcon
-          ? `${getColorClasses(color, '[&>*]:fill')}`
-          : `${getColorClasses(color, '[&>*]:stroke')}`
-      }`
+    ? `${getColorClasses(color, isFillOnlyIcon ? '[&>*]:fill' : '[&>*]:stroke')}`
     : isFillOnlyIcon
     ? '[&>*]:fill-black dark:[&>*]:fill-white'
     : '[&>*]:stroke-black dark:[&>*]:stroke-white';
@@ -77,11 +75,9 @@ const Icon: React.FC<IconProps> = props => {
       }`
     : '';
 
-  const iconStyle = `${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${
-    clickable && !disabled
-      ? `cursor-pointer ${isFillOnlyIcon ? '' : 'hover:[&>*]:stroke-secondary-dark'}`
-      : ''
-  } ${styling}`;
+  const disabledStyle = disabled ? 'opacity-50' : '';
+
+  const iconStyle = apply`${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${disabledStyle} ${styling}`;
 
   return (
     <Stack ref={ref}>
@@ -90,14 +86,14 @@ const Icon: React.FC<IconProps> = props => {
   );
 };
 
-const ICON_SIZE_MAP: Record<BasicSize, string> = {
+const ICON_SIZE_MAP: Record<BasicIconSize, string> = {
   sm: 'h-3 w-3',
   md: 'h-4 w-4',
   lg: 'h-5 w-5',
   xl: 'h-6 w-6',
 };
 
-const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicSize, string> => ({
+const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicIconSize, string> => ({
   sm: `${breakPoint}:h-3 ${breakPoint}:w-3`,
   md: `${breakPoint}:h-4 ${breakPoint}:w-4`,
   lg: `${breakPoint}:h-5 ${breakPoint}:w-5`,
