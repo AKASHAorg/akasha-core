@@ -76,7 +76,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
             size={iconSize}
             onClick={onSidebarToggle}
             greyBg={true}
-            primary={true}
+            variant="primary"
           />
         ) : (
           <Button
@@ -85,13 +85,13 @@ const Topbar: React.FC<ITopbarProps> = props => {
             size={iconSize}
             onClick={onSidebarToggle}
             greyBg={true}
-            primary={true}
+            variant="primary"
           />
         )}
         <Button
           iconOnly={true}
           greyBg={true}
-          primary={true}
+          variant="primary"
           icon="ChevronLeftIcon"
           size={iconSize}
           onClick={onBackClick}
@@ -115,7 +115,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
             icon="appCenter"
             size={iconSize}
             onClick={onAppWidgetClick}
-            primary={true}
+            variant="primary"
           />
         )}
         <Button
@@ -124,7 +124,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           size={iconSize}
           onClick={onNotificationClick}
           greyBg={true}
-          primary={true}
+          variant="primary"
         />
       </div>
     </div>
