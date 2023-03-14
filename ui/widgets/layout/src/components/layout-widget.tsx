@@ -137,7 +137,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
   const layoutStyle = apply`
-      grid md:(grid-flow-row) 
+      grid md:(grid-flow-row)
       lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
       ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '}
       xl:max-w-7xl xl:mx-auto gap-x-4
