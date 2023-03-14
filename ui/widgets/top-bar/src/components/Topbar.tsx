@@ -75,7 +75,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
             icon="ArrowRightOnRectangleIcon"
             size={iconSize}
             onClick={onSidebarToggle}
-            // greyBg={true}
+            greyBg={true}
             primary={true}
           />
         ) : (
@@ -84,7 +84,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
             icon="ArrowLeftOnRectangleIcon"
             size={iconSize}
             onClick={onSidebarToggle}
-            // greyBg={true}
+            greyBg={true}
             primary={true}
           />
         )}

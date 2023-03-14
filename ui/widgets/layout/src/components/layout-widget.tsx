@@ -4,6 +4,7 @@ import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
+import { apply, tw, tx } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
@@ -135,30 +136,32 @@ const Layout: React.FC<RootComponentProps> = props => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
+  const layoutStyle = apply`
+      grid md:(grid-flow-row) 
+      lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
+      ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '}
+      xl:max-w-7xl xl:mx-auto gap-x-4
+      `;
+  const mobileLayoverStyle = apply`
+      fixed xl:sticky z-[9999] h-full
+      ${
+        showSidebar && !window.matchMedia('(min-width: 1440px)').matches
+          ? 'min-w-[100vw] xl:min-w-max bg-black/30'
+          : ''
+      }
+      `;
+  const sidebarSlotStyle = apply`
+      sticky top-0 h-screen w-fit ${showSidebar ? '' : 'hidden'}
+      `;
+
   return (
-    <div className="bg-background dark:(bg-background-dark) min-h-screen">
-      <div className={`h-full w-full`} onClick={handleClickOutside}>
-        <div
-          className={`grid md:(grid-flow-row) lg:${
-            showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'
-          } ${
-            showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '
-          } xl:max-w-7xl xl:mx-auto gap-x-4`}
-        >
+    <div className={tw('bg-background dark:(bg-background-dark) min-h-screen')}>
+      <div className={tw('h-full w-full')} onClick={handleClickOutside}>
+        <div className={tw(layoutStyle)}>
           <ScrollRestorer />
-          <div
-            className={`fixed xl:sticky z-[9999] h-full
-           ${
-             showSidebar && !window.matchMedia('(min-width: 1440px)').matches
-               ? 'min-w-[100vw] xl:min-w-max bg-black/30'
-               : ''
-           }`}
-          >
-            <div
-              className={`sticky top-0 h-screen w-fit ${showSidebar ? '' : 'hidden'}
-`}
-            >
-              <div className={`pt-0 xl:pt-4`} ref={sidebarWrapperRef}>
+          <div className={tw(mobileLayoverStyle)}>
+            <div className={tw(sidebarSlotStyle)}>
+              <div className={tw('pt-0 xl:pt-4')} ref={sidebarWrapperRef}>
                 <Extension
                   fullHeight
                   name={props.layoutConfig.sidebarSlotId}
@@ -223,12 +226,12 @@ const Layout: React.FC<RootComponentProps> = props => {
             </div>
           </div>
           <div>
-            <div className="sticky top-0">
-              <div className={`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`}>
+            <div className={tw('sticky top-0')}>
+              <div className={tx(`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`)}>
                 <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
                 <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
-              <div className="fixed bottom-0 xl:static">
+              <div className={tw('fixed bottom-0 xl:static')}>
                 <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
             </div>
