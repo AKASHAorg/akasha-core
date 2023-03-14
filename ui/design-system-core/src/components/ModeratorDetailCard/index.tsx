@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 import { Moderator } from '@akashaorg/typings/ui';
 
@@ -23,20 +23,25 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
     return dayjs(date).format('MMM YYYY');
   };
 
-  const truncateStyle =
-    'max-w-[12.5rem] md:max-w-[7.5rem] w-fit whitespace-nowrap overflow-hidden text-ellipsis cursor-default';
+  const borderBottomStyle = apply`${hasBorderBottom ? 'border(b-1 solid grey8 dark:grey3)' : ''}`;
+
+  const truncateStyle = tw(
+    'max-w([12.5rem] md:[7.5rem]) w-fit whitespace-nowrap overflow-hidden text-ellipsis cursor-default',
+  );
+
+  const moderatorStatusIndicator = apply`${
+    moderator.status === 'active'
+      ? 'bg-success'
+      : moderator.status === 'revoked'
+      ? 'bg(error-light dark:error-dark)'
+      : 'bg(warning-light dark:warning-dark)'
+  }`;
 
   return (
-    <div
-      className={tw(
-        `flex py-4 flex-none ${
-          hasBorderBottom ? 'border-b-1 border-solid border-grey8 dark:border-grey3' : ''
-        }`,
-      )}
-    >
+    <div className={tw(`flex py-4 flex-none ${borderBottomStyle}`)}>
       <div
         className={tw(
-          'flex space-x-2 items-start w-[50%] md:w-[30%] px-4 border-r-1 border-solid border-grey8 dark:border-grey3',
+          'flex space-x-2 items-start w([50%] md:[30%]) px-4 border(r-1 solid grey8 dark:grey3)',
         )}
       >
         <Avatar src={moderator.avatar} />
@@ -45,7 +50,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
             <Text
               variant="body2"
               weight="bold"
-              className={tw(truncateStyle)}
+              className={truncateStyle}
             >{`${moderator.name}`}</Text>
           </Tooltip>
 
@@ -53,22 +58,12 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
             <Text
               variant="button-md"
               weight="normal"
-              className={tw(truncateStyle)}
+              className={truncateStyle}
               color={{ light: 'text-grey4', dark: 'text-grey7' }}
             >{`@${moderator.userName}`}</Text>
           </Tooltip>
           <div className={tw('flex space-x-1.5 items-center')}>
-            <div
-              className={tw(
-                `w-1.5 h-1.5 rounded-full ${
-                  moderator.status === 'active'
-                    ? 'bg-success'
-                    : moderator.status === 'revoked'
-                    ? 'bg-error-light dark:bg-error-dark'
-                    : 'bg-warning-light dark:bg-warning-dark'
-                }`,
-              )}
-            />
+            <div className={tw(`w-1.5 h-1.5 rounded-full ${moderatorStatusIndicator}`)} />
             <Text variant="button-md" weight="normal" className={tw('capitalize')}>
               {moderator.status}
             </Text>
@@ -76,7 +71,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
         </div>
       </div>
 
-      <div className={tw('flex w-[50%] md:w-[62%] px-4 justify-between items-center')}>
+      <div className={tw('flex w([50%] md:[62%]) px-4 justify-between items-center')}>
         <div>
           <div>
             <Text

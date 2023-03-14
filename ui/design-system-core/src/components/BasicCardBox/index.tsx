@@ -45,12 +45,12 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     return 'border-1 border-solid border-grey8 dark:border-none';
   };
 
-  const className = `flex flex-col shadow-${elevation} w-full ${pad ? pad : 'p-0'} ${
+  const className = apply`flex flex-col shadow-${elevation} w-full ${pad ? pad : 'p-0'} ${
     margin ? margin : 'm-0'
   } bg-white dark:bg-grey2 ${noBorderRadius ? 'rounded-none' : round} ${generateBorder()} ${style}`;
 
   return (
-    <div className={tw(apply(className))} ref={rootNodeRef} onClick={onClick}>
+    <div className={tw(className)} ref={rootNodeRef} onClick={onClick}>
       {children}
     </div>
   );

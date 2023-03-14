@@ -24,8 +24,8 @@ const ModerationSwitchCard: React.FC<IModerationSwitchCardProps> = props => {
           className={tw(
             `w-[25%] p-4 border-b ${
               tab.value === activeTab
-                ? ' border-secondary-light dark:border-secondary-dark'
-                : 'border-grey8 dark:border-grey3'
+                ? ' border(secondary-light dark:secondary-dark)'
+                : 'border(grey8 dark:grey3)'
             } cursor-pointer`,
           )}
           onClick={() => handleTabClick(tab.value)}
