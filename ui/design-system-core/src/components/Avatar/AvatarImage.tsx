@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 export interface IAvatarImageProps {
   url?: string;
@@ -11,7 +11,7 @@ export interface IAvatarImageProps {
 const AvatarImage: React.FC<IAvatarImageProps> = props => {
   const { url, alt = 'avatar', fallbackUrl, faded } = props;
 
-  const className = `opacity-${faded ? '50' : '100'}`;
+  const className = apply`opacity-${faded ? '50' : '100'}`;
 
   return (
     <picture className={tw(className)}>

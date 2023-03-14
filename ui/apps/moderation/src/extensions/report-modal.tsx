@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   RootExtensionProps,
   AnalyticsCategories,
@@ -25,8 +25,6 @@ import getReasonPrefix from '../utils/getReasonPrefix';
 import { BASE_REPORT_URL } from '../services/constants';
 
 const { ReportModal } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
   const { extensionData } = props;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { tw } from '@twind/core';
 
 import BasicCardBox, { IBasicCardBox } from '.';
 
@@ -8,7 +9,7 @@ export default {
 };
 
 const Template = (args: IBasicCardBox) => (
-  <div style={{ width: '50%' }}>
+  <div className={tw('w-[50%]')}>
     <BasicCardBox {...args} />
   </div>
 );

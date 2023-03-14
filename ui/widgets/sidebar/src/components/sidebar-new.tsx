@@ -1,11 +1,11 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import DS from '@akashaorg/design-system-core';
 import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
+import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
-
-const { Avatar, Button, Text } = DS;
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ListSidebarApps from './list-sidebar-apps';
 
@@ -30,9 +30,6 @@ export interface ISidebarProps {
   onSidebarClose: () => void;
   onClickMenuItem: (appName: string, route: string) => void;
   onClickExplore: () => void;
-  // viewport size
-  size?: string;
-  className?: string;
   menuItem: React.ReactElement;
 
   title: string;
@@ -126,10 +123,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
         </div>
         <div className={tw('w-fit')}>
-          <Text variant="footnotes1" className={titleText}>
+          <Text variant="footnotes1" customStyle={titleText}>
             {title}
           </Text>
-          <Text variant="subtitle2" className={subtitleText}>
+          <Text variant="subtitle2" customStyle={subtitleText}>
             {subtitle}
           </Text>
         </div>
@@ -166,7 +163,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
-        <Text variant="subtitle2" className={subtitleText}>
+        <Text variant="subtitle2" customStyle={subtitleText}>
           {ctaText}
         </Text>
         <div className={tw('w-fit h-fit mt-6')}>
@@ -175,7 +172,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4')}>
-        <Text variant="subtitle2" className={subtitleText}>
+        <Text variant="subtitle2" customStyle={subtitleText}>
           {footerLabel}
         </Text>
         <div className={tw('flex w-fit h-fit mt-6')}>

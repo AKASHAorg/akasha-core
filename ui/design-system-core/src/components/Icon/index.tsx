@@ -1,12 +1,13 @@
 import React from 'react';
+
+import { IconType } from '@akashaorg/typings/ui';
+
+import { PassedIcon } from './PassedIcon';
 import Stack from '../Stack';
 import { BasicIconSize, Color } from '../types/common.types';
 import { getWidthClasses } from '../../utils/getWidthClasses';
 import { getHeightClasses } from '../../utils/getHeightClasses';
-import { IconType } from '@akashaorg/typings/ui';
-import { PassedIcon } from './PassedIcon';
 import { getColorClasses } from '../../utils/getColorClasses';
-import { apply } from '@twind/core';
 
 export type IconSize = BasicIconSize | { width?: string | number; height?: string | number };
 
@@ -20,7 +21,7 @@ export interface IconProps {
   disabled?: boolean;
   testId?: string;
   hover?: boolean;
-  styling?: string;
+  customStyle?: string;
   hoverColor?: Color;
 }
 
@@ -37,7 +38,7 @@ const Icon: React.FC<IconProps> = props => {
     disabled,
     testId,
     hover,
-    styling = '',
+    customStyle = '',
     hoverColor = 'white',
   } = props;
 
@@ -77,11 +78,11 @@ const Icon: React.FC<IconProps> = props => {
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 
-  const iconStyle = apply`${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${disabledStyle} ${styling}`;
+  const iconStyle = `${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${disabledStyle} ${customStyle}`;
 
   return (
     <Stack ref={ref}>
-      <PassedIcon className={iconStyle} testId={testId} type={type} />
+      <PassedIcon customStyle={iconStyle} testId={testId} type={type} />
     </Stack>
   );
 };

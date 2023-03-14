@@ -20,7 +20,7 @@ const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, 
 
   return (
     <Stack align="center" spacing="gap-1.5">
-      {status && <Icon type={STATUS_TO_ICON_MAP[status]} styling={iconStyle} />}
+      {status && <Icon type={STATUS_TO_ICON_MAP[status]} customStyle={iconStyle} />}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}
       </Text>

@@ -28,11 +28,11 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
 
   return (
     <div
-      className={tw(`h-${isMini ? '32' : ''}  bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`)}
+      className={tw(`h-${isMini ? '32' : ''} bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`)}
       onClick={onClick}
     >
       <div
-        className={tw(`flex flex-col h-full ${isMini ? 'p-3' : 'p-4'} items-center justify-evenly`)}
+        className={tw(`flex flex-col h-full p-${isMini ? '3' : '4'} items-center justify-evenly`)}
       >
         <div className={tw(`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`)}>
           <img className={tw('object-contain')} src={`${publicImgPath}/${assetName}.webp`} />

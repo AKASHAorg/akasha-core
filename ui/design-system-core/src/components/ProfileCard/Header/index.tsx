@@ -44,12 +44,14 @@ const Header: React.FC<HeaderProps> = ({
   handleFollow,
   handleFlag,
 }) => {
-  const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
-  const flagIconStyle = `h-4`;
   const [showMore, setShowMore] = useState(false);
   const showMoreRef = useCloseActions(() => {
     setShowMore(false);
   });
+
+  const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
+  const flagIconStyle = `h-4`;
+
   const onShowMore = () => {
     setShowMore(!showMore);
   };
@@ -72,7 +74,7 @@ const Header: React.FC<HeaderProps> = ({
                 ethAddress={ethAddress}
                 size="xl"
                 src={avatar}
-                className="absolute -top-6 rounded-full border-2 border-white dark:border-grey2"
+                customStyle="absolute -top-6 rounded-full border-2 border-white dark:border-grey2"
               />
             </div>
             <Stack direction="column">
@@ -128,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({
                         <Stack align="center" spacing="gap-x-1">
                           <Icon
                             type="FlagIcon"
-                            styling={flagIconStyle}
+                            customStyle={flagIconStyle}
                             color={{ light: 'error-light', dark: 'error-dark' }}
                           />
                           <Text
