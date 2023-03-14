@@ -1,4 +1,4 @@
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 import React, { useState } from 'react';
 import Card from '../../Card';
 import Stack from '../../Stack';
@@ -44,8 +44,8 @@ const Header: React.FC<HeaderProps> = ({
   handleFollow,
   handleFlag,
 }) => {
-  const avatarContainer = tw(apply`relative w-20 h-[3.5rem] shrink-0`);
-  const flagIconStyle = tw(apply`h-4`);
+  const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
+  const flagIconStyle = `h-4`;
   const [showMore, setShowMore] = useState(false);
   const showMoreRef = useCloseActions(() => {
     setShowMore(false);
@@ -60,15 +60,14 @@ const Header: React.FC<HeaderProps> = ({
         elevation="1"
         radius={{ top: 20 }}
         background={{ light: 'bg-grey6', dark: 'bg-grey5' }}
-        style={
+        customStyle={`h-32 ${
           coverImage ? `background-image: url(${coverImage.url || coverImage.fallbackUrl})` : ''
-        }
-        className="h-32"
+        }`}
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
-        <Stack direction="column" className={tw(apply('pl-2'))}>
+        <Stack direction="column" customStyle="pl-2" fullWidth>
           <Stack spacing="gap-x-2 -ml-2">
-            <div className={avatarContainer}>
+            <div className={tw(avatarContainer)}>
               <Avatar
                 ethAddress={ethAddress}
                 size="xl"
@@ -82,7 +81,7 @@ const Header: React.FC<HeaderProps> = ({
                 {`@${userName.replace('@', '')}`}
               </Text>
             </Stack>
-            <div className="ml-auto mt-2">
+            <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (
                 <button>
                   <AppIcon placeholderIconType="Cog6ToothIcon" size="md" accentColor />
@@ -95,13 +94,12 @@ const Header: React.FC<HeaderProps> = ({
                     </button>
                     {isFollowing ? (
                       <>
-                        {/*Enhance button component */}
                         <Button
                           size="small"
                           icon="UserPlusIcon"
                           onClick={handleUnfollow}
+                          variant="primary"
                           iconOnly
-                          primary
                         />
                       </>
                     ) : (
@@ -124,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({
                       elevation={{ light: '1', dark: '2' }}
                       padding={{ x: 18, y: 8 }}
                       radius={8}
-                      className="absolute top-[36px] right-0 bg-white dark:bg-grey3"
+                      customStyle="absolute top-[36px] right-0 bg-white dark:bg-grey3"
                     >
                       <button onClick={handleFlag}>
                         <Stack align="center" spacing="gap-x-1">
