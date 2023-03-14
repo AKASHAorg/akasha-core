@@ -1,5 +1,5 @@
-import { apply, tw } from '@twind/core';
 import React from 'react';
+import { apply, tw } from '@twind/core';
 import { getHeightClasses } from '../../utils/getHeightClasses';
 import { getWidthClasses } from '../../utils/getWidthClasses';
 

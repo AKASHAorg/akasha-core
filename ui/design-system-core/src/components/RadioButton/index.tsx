@@ -16,15 +16,10 @@ export type RadioButtonProps = {
   handleChange: (e) => void;
 };
 
-const baseStyles = apply`
-  flex items-center
-  space-x-2 mb-2
-`;
+const baseStyles = 'flex items-center space-x-2 mb-2';
 
-const baseButtonStyles = apply`
-  inline-block mr-4 ml-0 p-0 rounded-full
-  flex-no-shrink after:content-[''] after:absolute
-`;
+const baseButtonStyles =
+  'inline-block mr-4 ml-0 p-0 rounded-full flex-no-shrink after:content-[] after:absolute';
 
 export const RadioButton: React.FC<RadioButtonProps> = props => {
   const {

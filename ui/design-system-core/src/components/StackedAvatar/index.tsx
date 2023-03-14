@@ -41,7 +41,7 @@ const StackedAvatar: React.FC<IStackedAvatarProps> = props => {
     );
   };
 
-  return <div className={tw(apply('flex flex-row'))}>{renderStack(0)}</div>;
+  return <div className={tw('flex flex-row')}>{renderStack(0)}</div>;
 };
 
 export default StackedAvatar;

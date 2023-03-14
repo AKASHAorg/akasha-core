@@ -1,12 +1,13 @@
 import React from 'react';
+
+import { IconType } from '@akashaorg/typings/ui';
+
+import { PassedIcon } from './PassedIcon';
 import Stack from '../Stack';
 import { BasicIconSize, Color } from '../types/common.types';
 import { getWidthClasses } from '../../utils/getWidthClasses';
 import { getHeightClasses } from '../../utils/getHeightClasses';
-import { IconType } from '@akashaorg/typings/ui';
-import { PassedIcon } from './PassedIcon';
 import { getColorClasses } from '../../utils/getColorClasses';
-import { apply } from '@twind/core';
 
 export type IconSize = BasicIconSize | { width?: string | number; height?: string | number };
 
@@ -77,7 +78,7 @@ const Icon: React.FC<IconProps> = props => {
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 
-  const iconStyle = apply`${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${disabledStyle} ${customStyle}`;
+  const iconStyle = `${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${disabledStyle} ${customStyle}`;
 
   return (
     <Stack ref={ref}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 
 import Text from '../../Text';
 
@@ -26,17 +26,15 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
     onClick,
   } = props;
 
-  const wrapperHeight = apply`h-${isMini ? '32' : ''}`;
-  const wrapperPadding = apply`p-${isMini ? '3' : '4'}`;
-  const imgBoxStyle = apply`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`;
-
   return (
     <div
-      className={tw(`${wrapperHeight} bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`)}
+      className={tw(`h-${isMini ? '32' : ''} bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`)}
       onClick={onClick}
     >
-      <div className={tw(`flex flex-col h-full ${wrapperPadding} items-center justify-evenly`)}>
-        <div className={tw(imgBoxStyle)}>
+      <div
+        className={tw(`flex flex-col h-full p-${isMini ? '3' : '4'} items-center justify-evenly`)}
+      >
+        <div className={tw(`w-${isMini ? '16' : '72'} h-${isMini ? '16' : '72'}`)}>
           <img className={tw('object-contain')} src={`${publicImgPath}/${assetName}.webp`} />
         </div>
 

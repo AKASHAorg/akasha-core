@@ -1,7 +1,6 @@
 import React, { HTMLAttributes } from 'react';
 import Stack from '../../Stack';
 import Button from '..';
-import { tw } from '@twind/core';
 import { getContainerClasses } from '../getContainerClasses';
 import { ButtonProps, ButtonSize } from '../types';
 import { ButtonIcon } from '../ButtonIcon';
@@ -31,7 +30,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
       <Stack
         align="center"
         justify="center"
-        customStyle={tw(`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
+        customStyle={`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]}`}
       >
         <ButtonIcon
           type={loading ? 'ArrowPathIcon' : icon}

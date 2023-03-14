@@ -57,7 +57,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
       {iconType ? (
         <div
           className={tw(
-            apply`flex flex-row justify-center items-center mr-2 ${
+            `flex flex-row justify-center items-center mr-2 ${
               backgroundSize ? backgroundSize : 'w-12 h-12'
             } ${backgroundColor ? 'bg-grey1 rounded-sm' : 'none'}`,
           )}
@@ -65,19 +65,17 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
           <Icon type={iconType} customStyle={`${iconSize ? iconSize : 'h-4, w-4'} black`} />
         </div>
       ) : null}
-      <div className={tw(apply('flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])'))}>
+      <div className={tw('flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])')}>
         <span
           className={tw(
-            apply`block text-ellipsis overflow-hidden whitespace-nowrap truncate
+            `block text-ellipsis overflow-hidden whitespace-nowrap truncate
             ${labelColor ? labelColor : 'black'}
             ${labelSize ? labelSize : 'text(lg:sm md:xs) font-light'}`,
           )}
         >
           {label}
         </span>
-        <p
-          className={tw(apply`block ${subtitleColor ? subtitleColor : 'black'} text(xs sm:[10px])`)}
-        >
+        <p className={tw(`block ${subtitleColor ? subtitleColor : 'black'} text(xs sm:[10px])`)}>
           {subtitle}
         </p>
       </div>

@@ -3,7 +3,7 @@ import { IProfileData } from '@akashaorg/typings/ui';
 import { truncateMiddle } from '../../utils/string-utils';
 import Avatar from '../Avatar';
 import { AvatarSize } from '../Avatar';
-import { tw, apply } from '@twind/core';
+import { tw } from '@twind/core';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
@@ -20,9 +20,7 @@ export interface ProfileAvatarButtonProps {
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const BaseStyles = apply`
-    text-ellipsis overflow-hidden whitespace-nowrap truncate
-    `;
+const BaseStyles = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
 
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLElement>) => {

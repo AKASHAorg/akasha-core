@@ -1,5 +1,5 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 
 import Button from '../Button';
 
@@ -39,25 +39,20 @@ const ErrorCard: React.FC<IErrorCardProps> = props => {
     }
   };
 
-  const contentWrapperClass = apply(
-    'flex flex-col items-center bg-white dark:bg-grey2 pt-0 px-4 md:px-20 pb-5 rounded-lg',
-  );
+  const contentWrapperClass =
+    'flex flex-col items-center bg-white dark:bg-grey2 pt-0 px-4 md:px-20 pb-5 rounded-lg';
 
   return (
     <div className={tw(contentWrapperClass)}>
-      <div
-        className={tw(apply`h-[${boxSize}] w-[${boxSize}] mb-${imageBoxHasMargin ? '0.5' : '0'}`)}
-      >
+      <div className={tw(`h-[${boxSize}] w-[${boxSize}] mb-${imageBoxHasMargin ? '0.5' : '0'}`)}>
         <img className={tw('object-contain')} src={`${publicImgPath}/${errorType}.webp`} />
       </div>
 
-      <span className={tw(apply('font-semibold mb-0.5 mx-auto text-xl text-center'))}>
-        {titleLabel}
-      </span>
+      <span className={tw('font-semibold mb-0.5 mx-auto text-xl text-center')}>{titleLabel}</span>
 
       <span
         className={tw(
-          apply`font-normal mt-${textMarginTop ? '0.25' : ''} mb-${
+          `font-normal mt-${textMarginTop ? '0.25' : ''} mb-${
             textMarginBottom ? '1.5' : ''
           } text-secondary text-lg text-center leading-6`,
         )}
@@ -66,7 +61,7 @@ const ErrorCard: React.FC<IErrorCardProps> = props => {
       </span>
 
       {hasButton && (
-        <div className={tw(apply('w-fit mt-4'))}>
+        <div className={tw('w-fit mt-4')}>
           <Button onClick={handleClick} label={buttonLabel} />
         </div>
       )}

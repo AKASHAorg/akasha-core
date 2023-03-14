@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { tw, apply } from '@twind/core';
+import { tw } from '@twind/core';
 import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
@@ -77,7 +77,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${customStyle}`,
+        `${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${customStyle}`,
       ),
     },
     children,

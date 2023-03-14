@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from 'react';
-import Stack from '../Stack';
 import { tw } from '@twind/core';
+
+import Stack from '../Stack';
 import { getColorClasses } from '../../utils/getColorClasses';
 import { MeterProps } from './types';
 
