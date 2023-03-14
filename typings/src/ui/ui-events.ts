@@ -14,7 +14,8 @@ export enum EventTypes {
   ModalUnmount = 'modal-unmount',
   ShowSidebar = 'show-sidebar',
   HideSidebar = 'hide-sidebar',
-
+  ShowWidgets = 'show-widgets',
+  HideWidgets = 'hide-widgets',
   /*
    * Events that are handled by the layout widget
    */

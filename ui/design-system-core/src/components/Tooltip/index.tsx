@@ -2,7 +2,7 @@ import React, { ReactNode, useState, PropsWithChildren } from 'react';
 import Text, { TextProps } from '../Text';
 import Stack from '../Stack';
 import { usePopper } from 'react-popper';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 import { getArrowClasses } from './getArrowClasses';
 import { getContentClasses } from './getContentClasses';
 import { Placement } from '@popperjs/core';
@@ -74,7 +74,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
           ref={setContent}
           style={{ ...styles.popper, zIndex: 99 }}
           {...attributes.popper}
-          className={tw(apply(getContentClasses(contextualPlacement, ARROW_SIZE)))}
+          className={tw(getContentClasses(contextualPlacement, ARROW_SIZE))}
         >
           <div
             ref={setArrowElement}
@@ -82,7 +82,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
               ...arrowStyle,
               [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
             }}
-            className={tw(apply(getArrowClasses(contextualPlacement, ARROW_SIZE)))}
+            className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE))}
           />
           <Stack
             align="center"

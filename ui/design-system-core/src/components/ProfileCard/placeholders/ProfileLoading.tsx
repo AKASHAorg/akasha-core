@@ -5,7 +5,6 @@ import Card from '../../Card';
 import Divider from '../../Divider';
 import Stack from '../../Stack';
 import TextLine from '../../TextLine';
-
 import { CircularPlaceholder } from '../../CircularPlaceholder';
 
 const ProfileLoading = () => {

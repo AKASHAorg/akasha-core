@@ -12,7 +12,7 @@ export type TextLineProps = {
   customStyle?: string;
 };
 
-const baseStyle = apply`min-h-[18px] bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
+const baseStyle = `min-h-[18px] bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
 
 const TextLine: React.FC<TextLineProps> = props => {
   const {
@@ -23,6 +23,7 @@ const TextLine: React.FC<TextLineProps> = props => {
     round = 'rounded',
     customStyle,
   } = props;
+
   const widthStyle = getWidthClasses(width);
   const heightStyle = getHeightClasses(height);
 

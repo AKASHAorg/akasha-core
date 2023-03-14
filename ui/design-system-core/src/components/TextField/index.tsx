@@ -1,7 +1,8 @@
 import React, { forwardRef } from 'react';
 import Caption from './Caption';
 import Label from './Label';
-import { apply, tw } from '@twind/core';
+import Stack from '../Stack';
+
 import { Input } from './Input';
 import { TextFieldProps } from './types';
 
@@ -10,7 +11,7 @@ const TextField: React.FC<TextFieldProps> = forwardRef(
     const { label, status, caption, disabled } = props;
 
     return (
-      <div className={tw(apply('flex flex-col	gap-y-2'))} /* @TODO: Replace with stack component */>
+      <Stack direction="column" spacing="gap-y-2">
         {label && <Label disabled={disabled}>{label}</Label>}
         <Input {...props} ref={ref} />
         {caption && (
@@ -18,7 +19,7 @@ const TextField: React.FC<TextFieldProps> = forwardRef(
             {caption}
           </Caption>
         )}
-      </div>
+      </Stack>
     );
   },
 );

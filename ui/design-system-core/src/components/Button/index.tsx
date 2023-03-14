@@ -1,138 +1,111 @@
 import React from 'react';
-import Icon from '../Icon';
-import { apply, tw } from '@twind/core';
-import { IconType } from '@akashaorg/typings/ui';
+import Stack from '../Stack';
+import Text, { TextProps } from '../Text';
+import { tw } from '@twind/core';
+import { IconOnlyButton } from './IconOnlyButton';
+import { ButtonProps, ButtonSize } from './types';
+import { getTextClasses } from './getTextClasses';
+import { getContainerClasses } from './getContainerClasses';
+import { ButtonIcon } from './ButtonIcon';
 
-type ButtonSize = 'xsmall' | 'small' | 'regular' | 'large';
-
-export interface IButtonProps {
-  label?: string;
-  icon?: IconType;
-  size?: ButtonSize;
-  primary?: boolean;
-  disabled?: boolean;
-  loading?: boolean;
-  leftIcon?: boolean;
-  iconOnly?: boolean;
-  textOnly?: boolean;
-  greyBg?: boolean;
-  onClick?: (event: React.SyntheticEvent<Element, Event>) => void;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
-}
-
-const Button: React.FC<IButtonProps> = props => {
+const Button: React.FC<
+  ButtonProps &
+    React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+> = props => {
   const {
+    plain,
     icon,
+    iconDirection,
     label,
     size = 'regular',
-    primary = false,
+    variant = 'secondary',
     disabled = false,
     loading = false,
-    leftIcon = false,
     iconOnly = false,
-    textOnly = false,
     greyBg = false,
-    onClick,
-    onMouseEnter,
-    onMouseLeave,
+    children,
+    ...rest
   } = props;
 
-  // adjust padding if iconOnly prop or loading prop or size of icon is xsmall
-  const altPad = iconOnly || loading || size === 'xsmall';
+  if (plain) return <button {...rest}>{children}</button>;
 
-  /** sets height, padding and font sizes based on specified button size */
-  const ButtonSizesMap = {
-    xsmall: `h-6 ${altPad ? 'p-1.5' : 'p-2.5'}`,
-    small: `h-[22px] ${altPad ? 'py-4 px-2.5' : 'py-1 px-4'} text-xs`,
-    regular: `h-10 ${altPad ? 'p-[0.8rem]' : 'py-2 px-6'} text-sm`,
-    large: `h-[58px] ${altPad ? 'p-5' : 'py-4 px-6'} text-base`,
-  };
+  if (iconOnly || size === 'xsmall') {
+    if (!icon) return null;
+    return (
+      <IconOnlyButton
+        icon={icon}
+        size={size}
+        variant={variant}
+        loading={loading}
+        greyBg={greyBg}
+        disabled={disabled}
+        {...rest}
+      />
+    );
+  }
 
-  /** sets icon width and height matching the specified button size */
-  const ButtonIconSizesMap = {
-    xsmall: 'w-2.5 h-2.5',
-    small: 'w-3 h-3',
-    regular: 'w-3.5 h-3.5',
-    large: 'w-4 h-4',
-  };
-
-  const handleClick = event => {
-    if (typeof onClick === 'function' && !disabled && !loading) {
-      return onClick(event);
-    }
-  };
-
-  const handleMouseEnter = () => {
-    if (typeof onMouseEnter === 'function' && !disabled && !loading) {
-      return onMouseEnter();
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (typeof onMouseLeave === 'function' && !disabled && !loading) {
-      return onMouseLeave();
-    }
-  };
-
-  // specific styles
-  const background = textOnly
-    ? 'bg-none'
-    : greyBg
-    ? `${primary ? 'bg-grey9 dark:bg-grey3' : 'bg-none'} hover:${
-        primary ? 'bg-grey9 dark:bg-grey3' : 'bg-secondary-dark'
-      }`
-    : primary
-    ? 'bg-gradient-to-r from-primaryStart to-primaryStop'
-    : 'bg-white hover:bg-secondary-dark';
-
-  const color = greyBg
-    ? 'text-white'
-    : primary
-    ? 'text-white'
-    : 'text-secondary-light hover:text-white';
-
-  const border = primary || textOnly ? 'border-0' : 'border-1 border-secondary-dark';
-
-  const opacity = `opacity-${disabled ? '50' : '100'}`;
-
-  const cursor = `cursor-${disabled || loading ? 'not-allowed' : 'pointer'}`;
-
-  const shadow = `${primary ? 'shadow-none hover:shadow-lg shadow-elevation' : 'shadow-none'}`;
-
-  const className = apply(
-    `flex items-center ${ButtonSizesMap[size]} ${background} ${color} ${border} rounded-full ${opacity} ${cursor} ${shadow}`,
-  );
-
-  const iconStyle = apply(
-    `${ButtonIconSizesMap[size]} ${color} ${
-      size !== 'xsmall' && !iconOnly && !loading ? (leftIcon ? 'mr-2' : 'ml-2') : 'm-0'
-    }`,
-  );
+  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled });
+  const textStyle = getTextClasses({ variant, loading, disabled });
 
   return (
-    <button
-      type="button"
-      className={tw(className)}
-      onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {loading ? (
-        <Icon type="ArrowPathIcon" customStyle={tw(iconStyle)} />
-      ) : iconOnly ? (
-        <Icon type={icon} customStyle={tw(iconStyle)} />
-      ) : (
-        <>
-          {leftIcon && icon && <Icon type={icon} customStyle={tw(iconStyle)} />}
-
-          {size !== 'xsmall' && label}
-
-          {!leftIcon && icon && <Icon type={icon} customStyle={tw(iconStyle)} />}
-        </>
-      )}
+    <button {...rest}>
+      <Stack
+        align="center"
+        justify="center"
+        spacing="gap-x-1"
+        customStyle={tw(`group ${containerStyle} ${BUTTON_SIZE_MAP[size]}`)}
+      >
+        {loading ? (
+          <ButtonIcon
+            type="ArrowPathIcon"
+            variant={variant}
+            greyBg={greyBg}
+            loading={true}
+            disabled={disabled}
+          />
+        ) : (
+          <>
+            {icon && iconDirection === 'left' && (
+              <ButtonIcon
+                type={icon}
+                variant={variant}
+                greyBg={greyBg}
+                loading={false}
+                disabled={disabled}
+              />
+            )}
+            <Text
+              variant={variant === 'text' ? 'button-sm' : BUTTON_SIZE_TEXT_MAP[size]}
+              customStyle={textStyle}
+            >
+              {label}
+            </Text>
+            {icon && iconDirection === 'right' && (
+              <ButtonIcon
+                type={icon}
+                variant={variant}
+                greyBg={greyBg}
+                loading={false}
+                disabled={disabled}
+              />
+            )}
+          </>
+        )}
+      </Stack>
     </button>
   );
+};
+
+const BUTTON_SIZE_MAP: Record<Exclude<ButtonSize, 'xsmall'>, string> = {
+  small: 'h-8 rounded-3xl px-4',
+  regular: 'h-12 rounded-3xl px-6',
+  large: 'h-14 rounded-[1.875rem] px-6',
+};
+
+const BUTTON_SIZE_TEXT_MAP: Record<Exclude<ButtonSize, 'xsmall'>, TextProps['variant']> = {
+  small: 'button-sm',
+  regular: 'button-md',
+  large: 'button-lg',
 };
 
 export default Button;
