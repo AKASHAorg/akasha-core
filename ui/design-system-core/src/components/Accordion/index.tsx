@@ -10,7 +10,7 @@ export interface IAccordionProps {
 }
 
 const Accordion: React.FC<IAccordionProps> = props => {
-  const { customStyle, titleNode, contentNode } = props;
+  const { customStyle = '', titleNode, contentNode } = props;
 
   // internal state for accordion toggle
   const [isToggled, setIsToggled] = React.useState<boolean>(false);

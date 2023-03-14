@@ -50,7 +50,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
             <Text
               variant="body2"
               weight="bold"
-              className={truncateStyle}
+              customStyle={truncateStyle}
             >{`${moderator.name}`}</Text>
           </Tooltip>
 
@@ -58,13 +58,13 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
             <Text
               variant="button-md"
               weight="normal"
-              className={truncateStyle}
+              customStyle={truncateStyle}
               color={{ light: 'text-grey4', dark: 'text-grey7' }}
             >{`@${moderator.userName}`}</Text>
           </Tooltip>
           <div className={tw('flex space-x-1.5 items-center')}>
             <div className={tw(`w-1.5 h-1.5 rounded-full ${moderatorStatusIndicator}`)} />
-            <Text variant="button-md" weight="normal" className={tw('capitalize')}>
+            <Text variant="button-md" weight="normal" customStyle={tw('capitalize')}>
               {moderator.status}
             </Text>
           </div>

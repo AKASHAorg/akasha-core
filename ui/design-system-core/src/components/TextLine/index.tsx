@@ -21,7 +21,7 @@ const TextLine: React.FC<TextLineProps> = props => {
     width = 'w-[19.4375rem]',
     height = 'h-[1.1875rem]',
     round = 'rounded',
-    customStyle,
+    customStyle = '',
   } = props;
 
   const widthStyle = getWidthClasses(width);

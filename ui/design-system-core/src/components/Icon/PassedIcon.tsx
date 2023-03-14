@@ -20,11 +20,11 @@ export const PassedIcon: React.FC<PassedIconProps> = ({ type, customStyle, testI
   if (isAppIcon(type)) {
     PassedIcon = HeroIcons[APP_ICON_TO_HERO_ICON_MAP[type]];
     if (type === 'appModeration') {
-      iconStyle = `${customStyle} scale-x-flip`;
+      iconStyle = `scale-x-flip ${customStyle}`;
     }
 
     if (type === 'appCenter') {
-      iconStyle = `${customStyle} -rotate-90`;
+      iconStyle = `-rotate-90 ${customStyle}`;
     }
   }
 

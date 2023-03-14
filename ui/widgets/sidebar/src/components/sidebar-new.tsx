@@ -40,10 +40,6 @@ export interface ISidebarProps {
   footerIcons: { name: ButtonProps['icon']; link: string }[];
 }
 
-const titleText = 'text-sm font-bold';
-
-const subtitleText = 'text-xs text-grey5';
-
 const Sidebar: React.FC<ISidebarProps> = props => {
   const {
     userInstalledApps,
@@ -123,10 +119,8 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
         </div>
         <div className={tw('w-fit')}>
-          <Text variant="footnotes1" customStyle={titleText}>
-            {title}
-          </Text>
-          <Text variant="subtitle2" customStyle={subtitleText}>
+          <Text customStyle="font-bold">{title}</Text>
+          <Text variant="footnotes2" customStyle="text-grey5">
             {subtitle}
           </Text>
         </div>
@@ -163,7 +157,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
-        <Text variant="subtitle2" customStyle={subtitleText}>
+        <Text variant="footnotes2" customStyle="text-grey5">
           {ctaText}
         </Text>
         <div className={tw('w-fit h-fit mt-6')}>
@@ -172,7 +166,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4')}>
-        <Text variant="subtitle2" customStyle={subtitleText}>
+        <Text variant="footnotes2" customStyle="text-grey5">
           {footerLabel}
         </Text>
         <div className={tw('flex w-fit h-fit mt-6')}>
