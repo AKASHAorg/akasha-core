@@ -5,7 +5,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootExtensionProps, EventTypes } from '@akashaorg/typings/ui';
 import {
   useGetEntryAuthor,
@@ -18,8 +18,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 const { Box, ProfileMiniCard, ExtensionPoint } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const ProfileCardWidget: React.FC<RootExtensionProps> = props => {
   const params: { postId?: string } = useParams();

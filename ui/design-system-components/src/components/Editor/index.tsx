@@ -703,7 +703,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           )}
           {showCancelButton && <Button label={cancelButtonLabel} onClick={onCancelClick} />}
           <Button
-            primary={true}
+            variant={'primary'}
             icon={disablePublish ? 'ArrowPathIcon' : null}
             label={disablePublish ? disablePublishLabel : postLabel}
             onClick={handlePublish}

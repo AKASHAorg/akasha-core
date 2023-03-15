@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   RootExtensionProps,
   AnalyticsCategories,
@@ -20,8 +20,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 const { ConfirmationModal, ModalContainer } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const EntryRemoveModal: React.FC<RootExtensionProps> = props => {
   const { extensionData, logger } = props;

@@ -46,17 +46,17 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
 
   return (
     <Card elevation="1" radius={20} padding={16}>
-      <Stack direction="column" spacing="gap-4">
+      <Stack direction="column" spacing="gap-4" fullWidth>
         <Stack justify="between">
           {stats.map((stat, index) => (
             <button onClick={stat.onClick} key={stat.label + index}>
-              <Stack direction="column" align="center" className="group">
+              <Stack direction="column" align="center" customStyle="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
                   size="md"
                   breakPointSize={{ breakPoint: 'md', size: 'xl' }}
                   accentColor
-                  className={stat.className}
+                  customStyle={stat.className}
                   hover
                 />
                 <Text {...labelProp}>{stat.label}</Text>

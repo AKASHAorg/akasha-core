@@ -118,7 +118,7 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
           )}
         >
           <button className={tx(`${closeDivClass}`)} onClick={handleCancelUpload}>
-            <Icon type="XMarkIcon" clickable={true} />
+            <Icon type="XMarkIcon" />
           </button>
           <div
             className={tx(
@@ -128,12 +128,12 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
             <Icon type="PhotoIcon" />
           </div>
           <div className={tx(`flex flex-col gap-2 pl-2`)}>
-            <Text truncate={true} className={'max-w-[11rem]'}>
+            <Text truncate={true} customStyle={'max-w-[11rem]'}>
               {uploadValueName}
             </Text>
 
             <div className={tx(`flex flex-row items-center max-w-xs`)}>
-              <Text className={'break-words'} color={'error'}>
+              <Text customStyle={'break-words'} color={'error'}>
                 {uploadErrorState}
               </Text>
             </div>

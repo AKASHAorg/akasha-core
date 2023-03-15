@@ -52,7 +52,7 @@ const ImgElement = ({
               return false;
             }}
           >
-            <Icon type="XMarkIcon" clickable={true} />
+            <Icon type="XMarkIcon" />
           </div>
         )}
         <picture className={tw(`flex`)}>

@@ -231,7 +231,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
             href={`${profileAnchorLink}/${entryData.author.pubKey}`}
           >
             <ProfileAvatarButton
-              className={'grow shrink'}
+              customStyle={'grow shrink'}
               label={entryData.author?.name}
               info={entryData.author?.userName && `@${entryData.author?.userName}`}
               avatarImage={entryData.author?.avatar}
@@ -260,10 +260,10 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 placement={'top'}
                 content={`${editedLabel} ${formatRelativeTime(entryData.updatedAt, locale)}`}
               >
-                <Icon size="sm" type="PencilIcon" clickable={false} />
+                <Icon size="sm" type="PencilIcon" />
               </Tooltip>
             )}
-            <Icon type="akasha" size="sm" ref={akashaRef} clickable={false} />
+            <Icon type="akasha" size="sm" ref={akashaRef} />
             {entryData.type !== 'REMOVED' && (
               <CardHeaderMenu
                 disabled={disableActions}

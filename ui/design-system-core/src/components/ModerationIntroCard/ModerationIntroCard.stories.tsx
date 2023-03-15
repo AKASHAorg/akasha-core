@@ -1,4 +1,5 @@
 import React from 'react';
+import { tw } from '@twind/core';
 
 import ModerationIntroCard, { IModerationIntroCardProps } from '.';
 
@@ -8,7 +9,7 @@ export default {
 };
 
 const Template = (args: IModerationIntroCardProps) => (
-  <div style={{ width: '40%' }}>
+  <div className={tw('w-[40%]')}>
     <ModerationIntroCard {...args} />
   </div>
 );

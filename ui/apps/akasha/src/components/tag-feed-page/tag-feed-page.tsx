@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import {
   RootComponentProps,
@@ -20,8 +20,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 const { Box, TagProfileCard, Helmet, styled, Spinner } = DS;
-
-const { ErrorLoader } = DSNew;
 
 interface ITagFeedPage {
   loggedProfileData?: IProfileData;

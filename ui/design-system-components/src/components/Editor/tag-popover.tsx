@@ -40,7 +40,7 @@ export const TagPopover: React.FC<ITagPopover> = React.forwardRef((props, ref) =
             }}
           >
             <Text>{`#${value.name}`}</Text>
-            <Text className={'text-sm'} variant={'subtitle1'}>
+            <Text customStyle={'text-sm'} variant={'subtitle1'}>
               {`${value.totalPosts} ${postsLabel}`}
             </Text>
           </div>

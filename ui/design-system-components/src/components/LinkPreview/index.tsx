@@ -132,7 +132,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
                   />
                 </div>
               ) : (
-                <Icon type="LinkIcon" styling={'h-3 w-3 text-secondary'} />
+                <Icon type="LinkIcon" customStyle={'h-3 w-3 text-secondary'} />
               )}
               {!!linkPreviewData.url && <p className={'text-secondary truncate'}>{hostname}</p>}
             </div>
