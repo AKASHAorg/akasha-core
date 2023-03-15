@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import DS from '@akashaorg/design-system-core';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import { IEntryData } from '@akashaorg/typings/ui';
 import ReadOnlyEditor from '../ReadOnlyEditor';
-
-const { ProfileAvatarButton } = DS;
 
 export interface IEmbedEntryBox {
   embedEntryData: IEntryData;

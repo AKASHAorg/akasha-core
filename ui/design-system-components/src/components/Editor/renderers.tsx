@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
-import DS from '@akashaorg/design-system-core';
 import { tw, apply } from '@twind/core';
 import { ImageElement } from '@akashaorg/typings/ui';
-
-const { Icon } = DS;
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const closeDivClass = apply(
   'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',

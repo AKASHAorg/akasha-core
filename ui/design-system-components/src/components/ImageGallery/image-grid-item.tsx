@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { apply, tw } from '@twind/core';
+import { apply, tw, tx } from '@twind/core';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { DelayLoad } from '../../utils/delay-load';
 import { isMobile } from 'react-device-detect';
@@ -61,7 +61,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
 
   return (
     <div
-      className={tw('flex relative border border-solid border-grey1 rounded')}
+      className={tw('flex relative border(solid grey1) rounded')}
       role="img"
       style={style}
       onClick={ev => {
@@ -87,7 +87,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
             return false;
           }}
         >
-          <Icon icon="TrashIcon" />
+          <Icon type="TrashIcon" />
         </div>
       )}
       {/* when we have a single image we need to keep the original aspect ratio,
@@ -96,7 +96,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
         <source srcSet={imageSrc.originalSrc} />
         <source srcSet={imageSrc.src.url} />
         <img
-          className={tw(
+          className={tx(
             `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
           )}
           src={imageSrc.src.fallbackUrl}
@@ -108,7 +108,7 @@ export const ImageGridItem: React.FC<IGridItemProps> = props => {
         <DelayLoad>
           <div className={tw('flex')}>
             <img
-              className={tw(
+              className={tx(
                 `rounded object-cover w-full aspect-square ${mobileStyle} ${singleImageStyle}`,
               )}
               src={'/images/image-placeholder.webp'}

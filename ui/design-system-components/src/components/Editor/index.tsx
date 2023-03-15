@@ -12,13 +12,16 @@ import { withHistory } from 'slate-history';
 import { Editable } from 'slate-react';
 import { Slate, withReact, ReactEditor, RenderElementProps } from 'slate-react';
 
-import data from '@emoji-mart/data';
-import Picker from '@emoji-mart/react';
+// import data from '@emoji-mart/data';
+// import Picker from '@emoji-mart/react';
 
-import { tw } from '@twind/core';
+import { tw, tx } from '@twind/core';
 import { Popover } from '@headlessui/react';
 import { IEntryData, IMetadata, IPublishData, IProfileData } from '@akashaorg/typings/ui';
-import DS from '@akashaorg/design-system-core';
+import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Meter from '@akashaorg/design-system-core/lib/components/Meter';
 
 import EmbedBox from '../EmbedBox';
 import { TagPopover } from './tag-popover';
@@ -35,8 +38,6 @@ import { serializeToPlainText } from './serialize';
 import { editorDefaultValue } from './initialValue';
 import { isMobile } from 'react-device-detect';
 import isUrl from 'is-url';
-
-const { Avatar, Button, Icon, Meter } = DS;
 
 const MAX_LENGTH = 280;
 
@@ -568,17 +569,18 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
   };
 
   const publishDisabled = publishDisabledInternal || disablePublish || uploading;
+
   return (
     <div
-      className={tw(
-        `flex justify-between w-full ${
-          isMobile ? 'h-[45vh] bg(grey9 dark:grey1)' : 'max-h-[38rem]'
+      className={tx(
+        `flex justify-between w-full bg(grey9 dark:grey1) ${
+          isMobile ? 'h-[45vh]' : 'max-h-[38rem]'
         }`,
       )}
     >
       <div
-        className={tw(
-          `flex(row) px-4 items-start overflow-auto ${minHeight && `min-h-[${minHeight}]`}`,
+        className={tx(
+          `flex flex-row px-4 items-start overflow-auto ${minHeight && `min-h-[${minHeight}]`}`,
         )}
       >
         {showAvatar && (
@@ -586,7 +588,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
             <Avatar src={avatar} ethAddress={ethAddress} />
           </div>
         )}
-        <div className={tw(`w-full px-2 flex(row) justify-between`)}>
+        <div className={tw(`w-full px-2 flex flex-row justify-between`)}>
           <div className={tw(`w-full flex`)}>
             <Slate
               editor={editor}
@@ -655,8 +657,8 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           </div>
         </div>
       </div>
-      <div className={tw(`w-full px-4 pt-2 pb-4 justify-between flex(row)`)}>
-        <div className={tw(`flex(row) gap-2 items-center`)}>
+      <div className={tw(`w-full px-4 pt-2 pb-4 justify-between flex flex-row`)}>
+        <div className={tw(`flex flex-row gap-2 items-center`)}>
           {!isMobile && (
             <Popover className="relative">
               <Popover.Button>
@@ -664,7 +666,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
               </Popover.Button>
               <Popover.Panel className="absolute z-10">
                 <Popover.Button>
-                  <Picker data={data} onEmojiSelect={handleInsertEmoji} />
+                  {/* <Picker data={data} onEmojiSelect={handleInsertEmoji} /> */}
                 </Popover.Button>
               </Popover.Panel>
             </Popover>
@@ -676,9 +678,9 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           )}
         </div>
 
-        <div className={tw(`flex(row) gap-2 items-center`)}>
+        <div className={tw(`flex flex-row gap-2 items-center`)}>
           {showDraft && (
-            <div className={tw(`flex(row) gap-2 items-center`)}>
+            <div className={tw(`flex flex-row gap-2 items-center`)}>
               {!publishDisabled && (
                 <p className={tw(`text(secondary-light dark:secondary-dark)`)}>Draft</p>
               )}

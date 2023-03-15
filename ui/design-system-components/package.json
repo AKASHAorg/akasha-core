@@ -88,9 +88,9 @@
     "react-zoom-pan-pinch": "2.3.2",
     "is-url": "1.2.4",
     "lodash.isequal": "4.5.0",
-    "slate": "0.82.0",
-    "slate-history": "0.66.0",
-    "slate-react": "0.82.0",
+    "slate": "0.91.4",
+    "slate-history": "0.86.0",
+    "slate-react": "0.91.10",
     "emoji-mart": "5.5.2"
   },
   "peerDependencies": {

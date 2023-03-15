@@ -1,3 +1,4 @@
+import { CustomElement } from '@akashaorg/typings/ui';
 import { Editor, Node, Path, Range, Transforms } from 'slate';
 
 const withImages = (editor: Editor) => {
@@ -74,7 +75,7 @@ const withCorrectVoidBehavior = editor => {
 
     const selectedNodePath = Path.parent(editor.selection.anchor.path);
     const selectedNode = Node.get(editor, selectedNodePath);
-    if (Editor.isVoid(editor, selectedNode)) {
+    if (Editor.isVoid(editor, selectedNode as CustomElement)) {
       Editor.insertNode(editor, {
         type: 'paragraph',
         children: [{ text: '' }],
@@ -102,7 +103,7 @@ const withCorrectVoidBehavior = editor => {
     if (parentIsEmpty && Path.hasPrevious(parentPath)) {
       const prevNodePath = Path.previous(parentPath);
       const prevNode = Node.get(editor, prevNodePath);
-      if (Editor.isVoid(editor, prevNode)) {
+      if (Editor.isVoid(editor, prevNode as CustomElement)) {
         return Transforms.removeNodes(editor);
       }
     }

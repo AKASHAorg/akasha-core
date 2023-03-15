@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { tw } from '@twind/core';
+import { tw, tx } from '@twind/core';
 import CardHeaderMenu from './card-header-menu';
 import CardActions from './card-actions';
 
 import { EntryCardHidden } from './entry-card-hidden';
 
-import DS from '@akashaorg/design-system-core';
 import EmbedBox from '../EmbedBox';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 import LinkPreview from '../LinkPreview';
@@ -21,7 +20,9 @@ import { editorDefaultValue } from '../Editor/initialValue';
 import isEqual from 'lodash.isequal';
 import { EntryCardError } from './entry-card-error';
 
-const { Tooltip, Icon, ProfileAvatarButton } = DS;
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 export interface IContentClickDetails {
   authorEthAddress: string;
@@ -219,8 +220,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <>
-      <div className={tw(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
-        <div className={tw(`flex(row) justify-between pt-4 px-4 shrink-0`)}>
+      <div className={tx(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
+        <div className={tw(`flex flex-row justify-between pt-4 px-4 shrink-0`)}>
           <a
             className={tw(`flex min-w-0 no-underline`)}
             onClick={(e: React.SyntheticEvent) => {
@@ -246,7 +247,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={profileRef}
             />
           </a>
-          <div className={tw(`flex(row) gap-2 items-center shrink-0`)}>
+          <div className={tw(`flex flex-row gap-2 items-center shrink-0`)}>
             {entryData.time && !hidePublishTime && (
               <Tooltip placement={'top'} content={formatDate(entryData.time, locale)}>
                 <p className={tw(`flex shrink-0 text(grey4 dark:grey7)`)}>
@@ -302,7 +303,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {!props.isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
           <div
-            className={tw(
+            className={tx(
               `px-4 max-h-[50rem] ${scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'} ${
                 contentClickable ? 'cursor-pointer' : 'cursor-default'
               }`,

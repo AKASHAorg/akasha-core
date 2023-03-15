@@ -1,8 +1,7 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system-core';
 import { tw } from '@twind/core';
-
-const { Icon, Text } = DS;
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface IEntryCardError {
   error: string;
@@ -12,7 +11,7 @@ export interface IEntryCardError {
 const EntryCardError: React.FC<IEntryCardError> = props => {
   const { error, onRetry } = props;
   return (
-    <div className={tw(`bg(warning-light dark:warning-dark) flex(row) p-4 justify-between`)}>
+    <div className={tw(`bg(warning-light dark:warning-dark) flex flex-row p-4 justify-between`)}>
       <div className={tw(`flex flex-row gap-4`)}>
         <Icon type="ExclamationTriangleIcon" />
         <Text>{error}</Text>

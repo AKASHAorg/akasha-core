@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { tw, apply } from '@twind/core';
+import { tw, apply, tx } from '@twind/core';
 import isUrl from 'is-url';
-import DS from '@akashaorg/design-system-core';
 import { LinkPreviewExt } from '@akashaorg/typings/ui';
-
-const { Icon } = DS;
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 const closeDivClass = apply(
   'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
 );
+const flexCenteredClass = apply(`flex items-center justify-items-center`);
 
 function htmlDecode(input) {
   if (!input) {
@@ -55,12 +54,11 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
     <>
       {uploading && (
         <div
-          className={tw(
-            `relative h-[8.125rem] w-full bg(grey9 dark:grey1) border(solid grey8 dark:grey3) rounded-lg flex items-center justify-items-center`,
+          className={tx(
+            `${flexCenteredClass} relative h-[8.125rem] w-full bg(grey9 dark:grey1) border(solid grey8 dark:grey3) rounded-lg`,
           )}
         >
           <div className={tw(`flex flex-col gap-4 items-center justify-items-center`)}>
-            <Icon type="loading" styling={'text-secondary'} />
             <p className={tw(`text(center secondary) px-12`)}>{uploadingLinkPreviewLabel}</p>
           </div>
         </div>
@@ -82,7 +80,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
         >
           {handleDeletePreview && (
             <div
-              className={tw(`${closeDivClass}`)}
+              className={tx(`${closeDivClass}`)}
               onClick={ev => {
                 ev.stopPropagation();
                 ev.preventDefault();
@@ -113,7 +111,7 @@ const LinkPreview: React.FC<ILinkPreview> = props => {
             )}
 
           <div
-            className={tw(
+            className={tx(
               `bg(grey9 dark:grey2) p-4 gap-4 border(solid grey8 dark:grey3) ${
                 linkPreviewData.images?.length && showCover ? 'rounded-b-sm' : 'rounded-sm'
               }`,

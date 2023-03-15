@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { tw, apply } from '@twind/core';
+import { tw, apply, tx } from '@twind/core';
 import ModalContainer from '@akashaorg/design-system-core/lib/components/ModalContainer';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import { Portal } from '../Editor/helpers';
@@ -15,6 +15,7 @@ export interface IImageOverlay {
 const closeDivClass = apply(
   'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
 );
+const flexCenteredClass = apply(`flex items-center justify-items-center`);
 
 /**
  * renders the full screen image modal that is triggered on image click
@@ -68,7 +69,7 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
     <Portal>
       <ModalContainer style={{ zIndex: 103 }}>
         <div
-          className={tw(`w-screen h-screen flex items-center justify-items-center bg-grey3`)}
+          className={tw(`${flexCenteredClass} w-screen h-screen bg-grey3`)}
           onClick={(ev: React.SyntheticEvent) => {
             /**
              * prevents click bubbling to parent so the user doesn't get redirected
@@ -77,27 +78,27 @@ const MultipleImageOverlay: React.FC<IImageOverlay> = props => {
           }}
         >
           <div className={tw(`flex flex-row gap-3 p-3 absolute top-1 right-1 z-1`)}>
-            <div className={tw(`${closeDivClass}`)} onClick={handleZoomIn}>
-              <Icon icon="MagnifyingGlassPlusIcon" />
+            <div className={tx(`${closeDivClass}`)} onClick={handleZoomIn}>
+              <Icon type="MagnifyingGlassPlusIcon" />
             </div>
-            <div className={tw(`${closeDivClass}`)} onClick={handleZoomOut}>
-              <Icon icon="MagnifyingGlassMinusIcon" />
+            <div className={tx(`${closeDivClass}`)} onClick={handleZoomOut}>
+              <Icon type="MagnifyingGlassMinusIcon" />
             </div>
-            <div className={tw(`${closeDivClass}`)} onClick={closeModal}>
-              <Icon icon="XMarkIcon" />
+            <div className={tx(`${closeDivClass}`)} onClick={closeModal}>
+              <Icon type="XMarkIcon" />
             </div>
           </div>
           {images.length > 1 && (
             <div className={tw(`absolute left-2.5 top-1/2 z-1`)}>
-              <div className={tw(`${closeDivClass}`)} onClick={handlePrevImg}>
-                <Icon icon="ArrowLeftIcon" />
+              <div className={tx(`${closeDivClass}`)} onClick={handlePrevImg}>
+                <Icon type="ArrowLeftIcon" />
               </div>
             </div>
           )}
           {images.length > 1 && (
             <div className={tw(`absolute right-2.5 top-1/2 z-1`)}>
-              <div className={tw(`${closeDivClass}`)} onClick={handleNextImg}>
-                <Icon icon="ArrowRightIcon" />
+              <div className={tx(`${closeDivClass}`)} onClick={handleNextImg}>
+                <Icon type="ArrowRightIcon" />
               </div>
             </div>
           )}

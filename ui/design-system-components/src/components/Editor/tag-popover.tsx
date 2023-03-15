@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { Portal } from './helpers';
-import { tw } from '@twind/core';
-import DS from '@akashaorg/design-system-core';
+import { tw, tx } from '@twind/core';
 import { ITag } from '@akashaorg/typings/ui';
-
-const { Text } = DS;
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface ITagPopover {
   postsLabel?: string;
@@ -28,7 +26,7 @@ export const TagPopover: React.FC<ITagPopover> = React.forwardRef((props, ref) =
       >
         {values.map((value, i) => (
           <div
-            className={tw(
+            className={tx(
               `p-2 cursor-pointer p-1 rounded-sm max-w-xs min-w-[12rem] truncate hover:text-secondary ${
                 i === currentIndex && 'bg-grey3'
               }`,

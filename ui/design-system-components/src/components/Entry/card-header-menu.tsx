@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
 import { Menu } from '@headlessui/react';
-import DS from '@akashaorg/design-system-core';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import { IconType } from '@akashaorg/typings/ui';
 
 export interface IMenuItem {
   label?: string;
@@ -11,8 +13,6 @@ export interface IMenuItem {
   handler?: (arg1?: React.SyntheticEvent) => void;
   disabled?: boolean;
 }
-
-const { Icon, Text } = DS;
 
 export interface ICardHeaderMenuProps {
   disabled?: boolean;
@@ -45,7 +45,7 @@ const CardHeaderMenuDropdown: React.FC<ICardHeaderMenuProps> = props => {
                     disabled={menuItem.disabled}
                   >
                     <Text>{menuItem.label}</Text>
-                    <Icon type={menuItem.icon} />
+                    <Icon type={menuItem.icon as IconType} />
                   </button>
                 </div>
               </Menu.Item>

@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { tw, apply } from '@twind/core';
-import DS from '@akashaorg/design-system-core';
+import { tx, apply } from '@twind/core';
 import { useDropzone } from 'react-dropzone';
 import { isMobile } from 'react-device-detect';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Meter from '@akashaorg/design-system-core/lib/components/Meter';
 
-const { Text, Icon, Meter } = DS;
-
-const closeDivClass = apply(
-  'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
-);
+const closeDivClass = apply('${flexCenteredClass} z-1 w-6 h-6 rounded-full bg-grey7');
+const flexCenteredClass = apply(`flex items-center justify-items-center`);
+const backgroundClass = apply(`bg(grey9 dark:grey1)`);
 
 export interface IImageUpload {
   // labels
@@ -113,26 +113,26 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
     <>
       {!uploading && uploadErrorState && imageSize && (
         <div
-          className={tw(
-            `relative h-[8.125rem] w-full bg(grey9 dark:grey1) border(solid grey8 dark:grey3) rounded-lg flex items-center justify-items-center`,
+          className={tx(
+            `relative h-[8.125rem] w-full ${backgroundClass} border(solid grey8 dark:grey3) rounded-lg ${flexCenteredClass}`,
           )}
         >
-          <button className={tw(`${closeDivClass}`)} onClick={handleCancelUpload}>
+          <button className={tx(`${closeDivClass}`)} onClick={handleCancelUpload}>
             <Icon type="XMarkIcon" clickable={true} />
           </button>
           <div
-            className={tw(
-              `h-12 w-12 bg(grey9 dark:grey-4) border border-grey3 rounded-lg flex items-center justify-items-center`,
+            className={tx(
+              `h-12 w-12 bg(grey9 dark:grey-4) border border-grey3 rounded-lg ${flexCenteredClass}`,
             )}
           >
             <Icon type="PhotoIcon" />
           </div>
-          <div className={tw(`flex flex-col gap-2 pl-2`)}>
+          <div className={tx(`flex flex-col gap-2 pl-2`)}>
             <Text truncate={true} className={'max-w-[11rem]'}>
               {uploadValueName}
             </Text>
 
-            <div className={tw(`flex flex-row items-center max-w-xs`)}>
+            <div className={tx(`flex flex-row items-center max-w-xs`)}>
               <Text className={'break-words'} color={'error'}>
                 {uploadErrorState}
               </Text>
@@ -142,11 +142,11 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
       )}
       {uploading && (
         <div
-          className={tw(
-            `relative h-[8.125rem] w-full bg(grey9 dark:grey1) border(solid grey8 dark:grey3) rounded-lg flex items-center justify-items-center`,
+          className={tx(
+            `relative h-[8.125rem] w-full ${backgroundClass} border(solid grey8 dark:grey3) rounded-lg ${flexCenteredClass}`,
           )}
         >
-          <div className={tw(`flex flex-col gap-8 items-center justify-items-center px-2`)}>
+          <div className={tx(`${flexCenteredClass} flex-col gap-8 px-2`)}>
             <Meter type="bar" value={loadingProgress} max={100} size={600} thickness={48} />
             <Text>{uploadingImageLabel}</Text>
           </div>
@@ -156,14 +156,14 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
         <input {...getInputProps({ ref, accept: 'image/*', type: 'file' })} />
         {!isMobile && isDragActive ? (
           <div
-            className={tw(
-              `flex mb-2 rounded-sm items-center justify-items-center w-full h-12 border(secondary dashed)`,
+            className={tx(
+              `${flexCenteredClass} mb-2 rounded-sm w-full h-12 border(secondary dashed)`,
             )}
           >
             <Text color={'secondary'}>{dropZoneActiveLabel}</Text>
           </div>
         ) : (
-          <div className={tw(`h-full min-h-[3rem]`)} />
+          <div className={tx(`h-full min-h-[3rem]`)} />
         )}
       </div>
     </>

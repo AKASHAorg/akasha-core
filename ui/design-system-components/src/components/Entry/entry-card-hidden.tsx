@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { tw } from '@twind/core';
-import DS from '@akashaorg/design-system-core';
-
-const { Icon, Text } = DS;
+import { tw, tx } from '@twind/core';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface IEntryCardHiddenProps {
   moderatedContentLabel?: string;
@@ -37,7 +36,7 @@ const EntryCardHidden: React.FC<IEntryCardHiddenProps> = props => {
 
   return (
     <div
-      className={tw(
+      className={tx(
         `flex mb-1 rounded-lg border border-dashed ${
           delistedAccount && 'border-color(error-light dark:error-dark)'
         }`,

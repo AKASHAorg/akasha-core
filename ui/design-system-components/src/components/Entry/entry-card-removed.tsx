@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { tw } from '@twind/core';
-import DS from '@akashaorg/design-system-core';
-
-const { Icon } = DS;
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface IEntryCardRemoved {
   isAuthor: boolean;

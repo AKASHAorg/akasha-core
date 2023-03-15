@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { tw } from '@twind/core';
+import { tw, apply, tx } from '@twind/core';
+
+const flexCenteredClass = apply(`flex items-center justify-items-center`);
 
 export interface IMoreImagesPill {
   imageLabel?: string;
@@ -13,10 +15,11 @@ export const MoreImagesPill: React.FC<IMoreImagesPill> = ({
   imagesLabel,
 }) => {
   const label = hiddenImages > 1 ? imagesLabel : imageLabel;
+
   return (
     <div
-      className={tw(
-        'flex flex-row items-center justify-items-center w-full max-w-[6rem] h-6 rounded-xl bg-secondary absolute right-4 bottom-5 z-1',
+      className={tx(
+        `${flexCenteredClass} flex-row  w-full max-w-[6rem] h-6 rounded-xl bg-secondary absolute right-4 bottom-5 z-1`,
       )}
     >
       <p className={tw('text-white')}>{`+${hiddenImages} ${label}`}</p>

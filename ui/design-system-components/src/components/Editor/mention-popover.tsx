@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { Portal } from './helpers';
-import { tw } from '@twind/core';
-import DS from '@akashaorg/design-system-core';
+import { tw, tx } from '@twind/core';
 import { IProfileData } from '@akashaorg/typings/ui';
-
-const { ProfileAvatarButton } = DS;
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 
 export interface IMentionPopover {
   values: Partial<IProfileData>[];
@@ -27,8 +25,8 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
       >
         {values.map((value, i) => (
           <div
-            className={tw(
-              `p-2 cursor-pointer p-1 rounded-sm max-w-xs min-w-[12rem] truncate hover:text-secondary ${
+            className={tx(
+              `p-2 cursor-pointer rounded-sm max-w-xs min-w-[12rem] truncate hover:text-secondary ${
                 i === currentIndex && 'bg-grey3'
               }`,
             )}

@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { isMobile } from 'react-device-detect';
-import DS from '@akashaorg/design-system-core';
 import { IEntryData } from '@akashaorg/typings/ui';
 import { tw } from '@twind/core';
-
-const { Text, Icon } = DS;
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
 export interface CardActionProps {
   // data
