@@ -38,7 +38,7 @@ const AllModerators: React.FC<RootComponentProps> = () => {
       <ModerationSwitchCard tabs={modTabs} activeTab={activeTab} onTabClick={setActiveTab} />
 
       {getModeratorsQuery.isFetching && (
-        <Box style="flex items-center justify-center p-4">
+        <Box customStyle="flex items-center justify-center p-4">
           <Spinner size="lg" />
         </Box>
       )}
@@ -46,8 +46,8 @@ const AllModerators: React.FC<RootComponentProps> = () => {
       {!getModeratorsQuery.isFetching &&
         getModeratorsQuery.data &&
         getModeratorsQuery.data.length > 0 && (
-          <Box style="flex-1">
-            <Box style="w-full h-full overflow-y-scroll">
+          <Box customStyle="flex-1">
+            <Box customStyle="w-full h-full overflow-y-scroll">
               {filteredModeratorList?.map((moderator, idx) => (
                 <ModeratorDetailCard
                   key={idx}
