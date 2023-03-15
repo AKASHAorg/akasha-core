@@ -11,7 +11,7 @@ import {
 export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = opts => ({
   loadingFn: () => import('./components'),
   mountsIn: opts.layoutConfig?.pluginSlotId,
-  logo: { type: LogoTypeSource.ICON, value: 'article' },
+  logo: { type: LogoTypeSource.ICON, value: 'NewspaperIcon' },
   i18nNamespace: ['app-articles'],
   routes: {
     ...routes,
@@ -19,7 +19,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Articles',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'article' },
+    logo: { type: LogoTypeSource.ICON, value: 'NewspaperIcon' },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [
       {

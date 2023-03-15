@@ -1,28 +1,39 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
+import { getWidthClasses } from '../../utils/getWidthClasses';
+import { getHeightClasses } from '../../utils/getHeightClasses';
 
-export interface ITextLine {
+export type TextLineProps = {
   title?: string;
   animated?: boolean;
   width?: string;
   height?: string;
+  round?: string;
   className?: string;
-}
-const baseStyles = apply`min-h-[18px] flex flex-row justify-center items-center px-2 py-2`;
+};
 
-const TextLine: React.FC<ITextLine> = props => {
-  const { animated, title, width, height, className } = props;
+const baseStyle = apply`min-h-[18px] bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
+
+const TextLine: React.FC<TextLineProps> = props => {
+  const {
+    title,
+    animated,
+    width = 'w-[19.4375rem]',
+    height = 'h-[1.1875rem]',
+    round = 'rounded',
+    className,
+  } = props;
+  const widthStyle = getWidthClasses(width);
+  const heightStyle = getHeightClasses(height);
   const instanceStyles = apply`
-    ${baseStyles}
+    ${baseStyle}
+    ${animated ? 'animate-pulse' : ''}
+    ${widthStyle}
+    ${heightStyle}
+    ${round}
     ${className}
-    ${
-      animated
-        ? 'bg-gradient-to-r from-purple-500 to-pink-500 animate-[bgRotate_1s_ease_infinite]'
-        : ''
-    }
-    ${width ? `w-[${width}]` : ''}
-    ${width ? `h-[${height}]` : ''}
   `;
-  return <div className={tw(instanceStyles)}>{title}</div>;
+
+  return <div title={title} className={tw(instanceStyles)} />;
 };
 export default TextLine;

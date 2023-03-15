@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@akashaorg/design-system": "*",
+    "@akashaorg/design-system-core": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "i18next": "20.6.1",
     "i18next-browser-languagedetector": "6.1.2",

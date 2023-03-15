@@ -1,13 +1,15 @@
 import React, { ReactNode, useState, PropsWithChildren } from 'react';
+import Text, { TextProps } from '../Text';
+import Stack from '../Stack';
 import { usePopper } from 'react-popper';
-import { tw } from '@twind/core';
-import { arrowClasses } from './arrowClasses';
-import { contentClasses } from './contentClasses';
+import { apply, tw } from '@twind/core';
+import { getArrowClasses } from './getArrowClasses';
+import { getContentClasses } from './getContentClasses';
 import { Placement } from '@popperjs/core';
-import Text from '../Text';
 
 export type TooltipProps = {
   content: ReactNode;
+  textSize?: TextProps['variant'];
   placement: 'top' | 'left' | 'bottom' | 'right';
   centerArrowToReference?: boolean;
 };
@@ -25,6 +27,7 @@ const PLACEMENT_TO_CSS_POSITION_MAP: Record<TooltipProps['placement'], CSSPositi
 
 const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
   placement = 'bottom',
+  textSize = 'subtitle2',
   content,
   centerArrowToReference,
   children,
@@ -33,6 +36,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
   const [contentElement, setContent] = useState(null);
   const [arrowElement, setArrowElement] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
+
   const arrowModifier = {
     name: 'arrow',
     options: {
@@ -45,6 +49,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
       offset: [0, ARROW_SIZE],
     },
   };
+
   const { styles, attributes, state } = usePopper(referenceElement, contentElement, {
     placement,
     modifiers: centerArrowToReference ? [arrowModifier, offsetModifier] : [arrowModifier],
@@ -52,20 +57,14 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
 
   const contextualPlacement = getContextualPlacement(state?.placement);
 
-  const arrowStyle = centerArrowToReference
-    ? {
-        style: {
-          ...styles.arrow,
-          [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
-        },
-      }
-    : {};
+  const arrowStyle = centerArrowToReference ? styles.arrow : {};
 
   return (
     <>
       <div
         onMouseOver={() => setShowTooltip(true)}
         onMouseOut={() => setShowTooltip(false)}
+        className={tw(apply('w-fit'))}
         ref={setReferenceElement}
       >
         {children}
@@ -73,24 +72,29 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
       {showTooltip && (
         <div
           ref={setContent}
-          style={styles.popper}
+          style={{ ...styles.popper, zIndex: 99 }}
           {...attributes.popper}
-          className={tw(contentClasses(contextualPlacement, ARROW_SIZE))}
+          className={tw(getContentClasses(contextualPlacement, ARROW_SIZE))}
         >
           <div
             ref={setArrowElement}
-            {...arrowStyle}
-            className={tw(arrowClasses(contextualPlacement, ARROW_SIZE))}
+            style={{
+              ...arrowStyle,
+              [PLACEMENT_TO_CSS_POSITION_MAP[contextualPlacement]]: `-${ARROW_SIZE}px`,
+            }}
+            className={tw(getArrowClasses(contextualPlacement, ARROW_SIZE))}
           />
-          <div
+          <Stack
+            align="center"
+            justify="center"
             className={tw(
-              'flex items-center justify-center flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]',
+              'flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]',
             )}
           >
-            <Text variant="subtitle2" color={{ light: 'text-black', dark: 'dark:text-white' }}>
+            <Text variant={textSize} color={{ light: 'text-black', dark: 'dark:text-white' }}>
               {content}
             </Text>
-          </div>
+          </Stack>
         </div>
       )}
     </>

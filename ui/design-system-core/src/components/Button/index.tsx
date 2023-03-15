@@ -1,13 +1,13 @@
 import React from 'react';
+import Icon from '../Icon';
 import { tw } from '@twind/core';
-
-import Icon, { IconName } from '../Icon';
+import { IconType } from '@akashaorg/typings/ui';
 
 type ButtonSize = 'xsmall' | 'small' | 'regular' | 'large';
 
 export interface IButtonProps {
   label?: string;
-  icon?: IconName;
+  icon?: IconType;
   size?: ButtonSize;
   primary?: boolean;
   disabled?: boolean;
@@ -16,7 +16,7 @@ export interface IButtonProps {
   iconOnly?: boolean;
   textOnly?: boolean;
   greyBg?: boolean;
-  onClick?: () => void;
+  onClick?: (event: React.SyntheticEvent<Element, Event>) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }
@@ -45,7 +45,7 @@ const Button: React.FC<IButtonProps> = props => {
   const ButtonSizesMap = {
     xsmall: `h-6 ${altPad ? 'p-1.5' : 'p-2.5'}`,
     small: `h-[22px] ${altPad ? 'py-4 px-2.5' : 'py-1 px-4'} text-xs`,
-    regular: `h-10 ${altPad ? 'p-3' : 'py-2 px-6'} text-sm`,
+    regular: `h-10 ${altPad ? 'p-[0.8rem]' : 'py-2 px-6'} text-sm`,
     large: `h-[58px] ${altPad ? 'p-5' : 'py-4 px-6'} text-base`,
   };
 
@@ -57,9 +57,9 @@ const Button: React.FC<IButtonProps> = props => {
     large: 'w-4 h-4',
   };
 
-  const handleClick = () => {
+  const handleClick = event => {
     if (typeof onClick === 'function' && !disabled && !loading) {
-      return onClick();
+      return onClick(event);
     }
   };
 
@@ -79,7 +79,9 @@ const Button: React.FC<IButtonProps> = props => {
   const background = textOnly
     ? 'bg-none'
     : greyBg
-    ? `${primary ? 'bg-grey3' : 'bg-none'} hover:${primary ? 'bg-grey3' : 'bg-secondary-dark'}`
+    ? `${primary ? 'bg-grey9 dark:bg-grey3' : 'bg-none'} hover:${
+        primary ? 'bg-grey9 dark:bg-grey3' : 'bg-secondary-dark'
+      }`
     : primary
     ? 'bg-gradient-to-r from-primaryStart to-primaryStop'
     : 'bg-white hover:bg-secondary-dark';
@@ -96,7 +98,7 @@ const Button: React.FC<IButtonProps> = props => {
 
   const cursor = `cursor-${disabled || loading ? 'not-allowed' : 'pointer'}`;
 
-  const shadow = `${primary ? 'shadow-none hover:shadow-lg, shadow-elevation' : 'shadow-none'}`;
+  const shadow = `${primary ? 'shadow-none hover:shadow-lg shadow-elevation' : 'shadow-none'}`;
 
   const className = `flex items-center ${ButtonSizesMap[size]} ${background} ${color} ${border} rounded-full ${opacity} ${cursor} ${shadow}`;
 
@@ -113,16 +115,16 @@ const Button: React.FC<IButtonProps> = props => {
       onMouseLeave={handleMouseLeave}
     >
       {loading ? (
-        <Icon icon="ArrowPathIcon" styling={tw(iconStyle)} />
+        <Icon type="ArrowPathIcon" styling={tw(iconStyle)} />
       ) : iconOnly ? (
-        <Icon icon={icon} styling={tw(iconStyle)} />
+        <Icon type={icon} styling={tw(iconStyle)} />
       ) : (
         <>
-          {leftIcon && icon && <Icon icon={icon} styling={tw(iconStyle)} />}
+          {leftIcon && icon && <Icon type={icon} styling={tw(iconStyle)} />}
 
           {size !== 'xsmall' && label}
 
-          {!leftIcon && icon && <Icon icon={icon} styling={tw(iconStyle)} />}
+          {!leftIcon && icon && <Icon type={icon} styling={tw(iconStyle)} />}
         </>
       )}
     </button>

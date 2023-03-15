@@ -4,6 +4,7 @@ import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
 import { getWeightClasses } from './getWeightClasses';
+import { Color } from '../types/common.types';
 
 export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
@@ -20,17 +21,17 @@ export type ButtonText = 'button-lg' | 'button-md' | 'button-sm';
 
 export type Variant = Heading | BodyText | ButtonText;
 
-export type Color = string | { light: string; dark: string };
-
 export type Alignment = 'start' | 'center' | 'end' | 'justify';
 
 export type Weight = 'normal' | 'bold' | 'light' | 'medium';
 
 export type TextProps = {
+  className?: string; // pass only the string classes without 'apply' or 'tw'
   variant?: Variant;
   color?: Color;
   align?: Alignment;
   truncate?: boolean;
+  breakWord?: boolean;
   weight?: Weight;
 };
 
@@ -54,17 +55,20 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
+  className = '',
   variant = 'body1',
-  align,
+  align = 'start',
   color = { dark: 'text-white', light: 'text-black' },
   truncate,
+  breakWord,
   weight,
   children,
 }) => {
   const tag = getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
-  const colorStyles = getColorClasses(color);
+  const colorStyle = getColorClasses(color);
   const truncateStyle = truncate ? 'truncate' : '';
+  const wordBreakStyle = breakWord ? 'break-all' : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
 
   const baseStyles = VARIANT_TO_CSS_CLASSES_MAPPER[variant];
@@ -73,7 +77,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        apply`${baseStyles} ${colorStyles} ${alignmentStyle} ${truncateStyle} ${weightStyle}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${className}`,
       ),
     },
     children,

@@ -1,29 +1,12 @@
 import * as React from 'react';
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
-import styled from 'styled-components';
-import Icon from '../Icon';
-import { StyledAnchor } from '../TextInputIconForm/styles';
-import { StyledCloseDiv } from './styled-editor-box';
+import { tw, apply } from '@twind/core';
 import { ImageElement } from '@akashaorg/typings/ui';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 
-const StyledPicture = styled.picture`
-  display: flex;
-`;
-
-const StyledImg = styled.img`
-  display: block;
-  max-width: 100%;
-  border-radius: ${props => props.theme.shapes.smallBorderRadius};
-`;
-
-const StyledMention = styled.span`
-  color: ${props => props.theme.colors.accentText};
-  cursor: pointer;
-`;
-
-const DisabledSpan = styled.span`
-  color: ${props => props.theme.colors.secondaryText};
-`;
+const closeDivClass = apply(
+  'flex items-center justify-items-center z-1 w-6 h-6 rounded-full bg-grey7',
+);
 
 const ImgElement = ({
   attributes,
@@ -58,7 +41,8 @@ const ImgElement = ({
         }}
       >
         {handleDeleteImage && (
-          <StyledCloseDiv
+          <div
+            className={closeDivClass}
             onClick={ev => {
               if (handleDeleteImage && typeof handleDeleteImage === 'function') {
                 handleDeleteImage(element);
@@ -68,13 +52,13 @@ const ImgElement = ({
               return false;
             }}
           >
-            <Icon type="close" clickable={true} />
-          </StyledCloseDiv>
+            <Icon type="XMarkIcon" clickable={true} />
+          </div>
         )}
-        <StyledPicture>
+        <picture className={tw(`flex`)}>
           <source srcSet={element.url} />
-          <StyledImg src={element.fallbackUrl} />
-        </StyledPicture>
+          <img className={tw(`block max-w-full rounded-sm`)} src={element.fallbackUrl} />
+        </picture>
       </div>
       {children}
     </div>
@@ -86,7 +70,8 @@ const MentionElement = (props: any) => {
   const mention = element.userName || element.name || element.ethAddress;
   const displayedMention = mention && mention.startsWith('@') ? mention : `@${mention}`;
   return (
-    <StyledMention
+    <span
+      className={tw(`cursor-pointer text-color-secondary`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -98,13 +83,14 @@ const MentionElement = (props: any) => {
     >
       {displayedMention}
       {children}
-    </StyledMention>
+    </span>
   );
 };
 
 const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
   return (
-    <StyledMention
+    <span
+      className={tw(`cursor-pointer text-color-secondary`)}
       {...attributes}
       contentEditable={false}
       onClick={(ev: Event) => {
@@ -114,13 +100,14 @@ const TagElement = ({ attributes, children, element, handleTagClick }: any) => {
     >
       #{element.name}
       {children}
-    </StyledMention>
+    </span>
   );
 };
 
 const LinkElement = ({ attributes, children, element, handleLinkClick }: any) => {
   return (
-    <StyledAnchor
+    <a
+      className={tw(`text-color-secondary no-underline`)}
       {...attributes}
       contentEditable={false}
       href={element.url as string}
@@ -139,7 +126,7 @@ const LinkElement = ({ attributes, children, element, handleLinkClick }: any) =>
     >
       {element.url}
       {children}
-    </StyledAnchor>
+    </a>
   );
 };
 
@@ -206,7 +193,11 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
 
   if (leaf.disabled) {
-    return <DisabledSpan {...attributes}>{children}</DisabledSpan>;
+    return (
+      <span className={tw(`text-color-grey8`)} {...attributes}>
+        {children}
+      </span>
+    );
   }
 
   return <span {...attributes}>{children}</span>;

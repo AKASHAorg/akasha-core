@@ -29,6 +29,7 @@ export default {
         grey6: withOpacity('--system-grey-6'),
         grey7: withOpacity('--system-grey-7'),
         grey8: withOpacity('--system-grey-8'),
+        grey9: withOpacity('--system-grey-9'),
         success: withOpacity('--feedback-success'),
         warning: {
           light: withOpacity('--feedback-warning'),
@@ -42,6 +43,9 @@ export default {
       },
       borderRadius: {
         large: '20px',
+      },
+      scale: {
+        flip: '-1',
       },
     },
   },

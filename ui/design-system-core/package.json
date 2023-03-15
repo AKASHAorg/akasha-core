@@ -8,6 +8,7 @@
     "Sever Abibula <sever.abibula@akasha.world> (https://github.com/SeverS)"
   ],
   "type": "module",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib"
   },
@@ -60,7 +61,8 @@
     "@lottiefiles/react-lottie-player": "3.4.9",
     "@heroicons/react": "2.0.13",
     "react-popper": "2.3.0",
-    "@popperjs/core": "2.11.6"
+    "@popperjs/core": "2.11.6",
+    "react-use": "17.4.0"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",

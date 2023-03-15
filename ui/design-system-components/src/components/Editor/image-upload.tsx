@@ -1,20 +1,14 @@
 import * as React from 'react';
-import { Box, Text, Meter } from 'grommet';
-import {
-  StyledImageDiv,
-  StyledValueText,
-  StyledUploadingDiv,
-  StyledText,
-  StyledCloseDiv,
-} from './styled-editor-box';
-import styled from 'styled-components';
-import Icon from '../Icon';
+import { tx, apply } from '@twind/core';
 import { useDropzone } from 'react-dropzone';
 import { isMobile } from 'react-device-detect';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Meter from '@akashaorg/design-system-core/lib/components/Meter';
 
-const StyledMeter = styled(Meter)`
-  height: 0.5rem;
-`;
+const closeDivClass = apply('${flexCenteredClass} z-1 w-6 h-6 rounded-full bg-grey7');
+const flexCenteredClass = apply(`flex items-center justify-items-center`);
+const backgroundClass = apply(`bg(grey9 dark:grey1)`);
 
 export interface IImageUpload {
   // labels
@@ -118,68 +112,58 @@ const ImageUpload: React.FC<IImageUpload> = React.forwardRef((props, ref) => {
   return (
     <>
       {!uploading && uploadErrorState && imageSize && (
-        <StyledUploadingDiv>
-          <StyledCloseDiv onClick={handleCancelUpload}>
-            <Icon type="close" clickable={true} />
-          </StyledCloseDiv>
-          <StyledImageDiv>
-            <Icon type="image" />
-          </StyledImageDiv>
-          <Box direction="column" gap="small" pad={{ left: 'small' }}>
-            <StyledValueText>{uploadValueName}</StyledValueText>
+        <div
+          className={tx(
+            `relative h-[8.125rem] w-full ${backgroundClass} border(solid grey8 dark:grey3) rounded-lg ${flexCenteredClass}`,
+          )}
+        >
+          <button className={tx(`${closeDivClass}`)} onClick={handleCancelUpload}>
+            <Icon type="XMarkIcon" clickable={true} />
+          </button>
+          <div
+            className={tx(
+              `h-12 w-12 bg(grey9 dark:grey-4) border border-grey3 rounded-lg ${flexCenteredClass}`,
+            )}
+          >
+            <Icon type="PhotoIcon" />
+          </div>
+          <div className={tx(`flex flex-col gap-2 pl-2`)}>
+            <Text truncate={true} className={'max-w-[11rem]'}>
+              {uploadValueName}
+            </Text>
 
-            <Box direction="row" gap="xsmall" align="center" width={{ max: '20rem' }}>
-              <Text wordBreak="break-all" color="errorText">
+            <div className={tx(`flex flex-row items-center max-w-xs`)}>
+              <Text className={'break-words'} color={'error'}>
                 {uploadErrorState}
               </Text>
-            </Box>
-          </Box>
-        </StyledUploadingDiv>
+            </div>
+          </div>
+        </div>
       )}
       {uploading && (
-        <StyledUploadingDiv height={75}>
-          <Box
-            direction="column"
-            gap="medium"
-            align="center"
-            justify="center"
-            pad={{ horizontal: 'small' }}
-          >
-            <StyledMeter
-              type="bar"
-              round={true}
-              value={loadingProgress}
-              max={100}
-              // color defined in grommet config
-              color="secondaryText"
-            />
-            <StyledText size="medium" color="darkText">
-              {uploadingImageLabel}
-            </StyledText>
-          </Box>
-        </StyledUploadingDiv>
+        <div
+          className={tx(
+            `relative h-[8.125rem] w-full ${backgroundClass} border(solid grey8 dark:grey3) rounded-lg ${flexCenteredClass}`,
+          )}
+        >
+          <div className={tx(`${flexCenteredClass} flex-col gap-8 px-2`)}>
+            <Meter type="bar" value={loadingProgress} max={100} size={600} thickness={48} />
+            <Text>{uploadingImageLabel}</Text>
+          </div>
+        </div>
       )}
       <div {...getRootProps()}>
         <input {...getInputProps({ ref, accept: 'image/*', type: 'file' })} />
         {!isMobile && isDragActive ? (
-          <Box
-            margin={{ bottom: 'small' }}
-            round="xsmall"
-            justify="center"
-            align="center"
-            fill="horizontal"
-            height="3rem"
-            border={{
-              color: 'accent',
-              style: 'dashed',
-              side: 'all',
-              size: '1px',
-            }}
+          <div
+            className={tx(
+              `${flexCenteredClass} mb-2 rounded-sm w-full h-12 border(secondary dashed)`,
+            )}
           >
-            <Text color="accentText">{dropZoneActiveLabel}</Text>
-          </Box>
+            <Text color={'secondary'}>{dropZoneActiveLabel}</Text>
+          </div>
         ) : (
-          <Box fill="vertical" height={{ min: '3rem' }} />
+          <div className={tx(`h-full min-h-[3rem]`)} />
         )}
       </div>
     </>

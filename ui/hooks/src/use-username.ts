@@ -3,7 +3,6 @@ import getSDK from '@akashaorg/awf-sdk';
 import { IProfileData, ProfileProviderProperties, ProfileProviders } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
 import { PROFILE_KEY } from './use-profile';
-import { lastValueFrom } from 'rxjs';
 
 export const UPDATE_USERNAME_PROVIDER_KEY = 'UPDATE_USERNAME_PROVIDER';
 export const REGISTER_ENS_KEY = 'REGISTER_ENS';
@@ -121,8 +120,8 @@ const registerENS = async ({ userName }: { userName: string }) => {
     value: userName.replace('@', ''),
   };
   try {
-    const registerRes = await lastValueFrom(
-      sdk.api.ens.registerName(`${userName.replace('@', '').replace('.akasha.eth', '')}`),
+    const registerRes = await sdk.api.ens.registerName(
+      `${userName.replace('@', '').replace('.akasha.eth', '')}`,
     );
     if (!registerRes.data) {
       logError('useProfile.registerENS', new Error('Cannot register username.'));

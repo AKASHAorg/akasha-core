@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import DS from '@akashaorg/design-system';
+import DSNew from '@akashaorg/design-system-core';
+
 import {
   IProfileData,
   RootComponentProps,
@@ -20,22 +22,11 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 import StatModalWrapper from './stat-modal-wrapper';
-import ModeratorLabel from '../routes/moderator-label';
+// import ModeratorLabel from '../routes/moderator-label';
 import routes, { UPDATE_PROFILE } from '../../routes';
 
-const {
-  ModalRenderer,
-  ProfileCard,
-  ExtensionPoint,
-  Box,
-  ProfileCardEthereumId,
-  ProfileCardDescription,
-  HorizontalDivider,
-  TextLine,
-  BasicCardBox,
-  ProfileStatsCard,
-  ProfileLinksCard,
-} = DS;
+const { ModalRenderer } = DS;
+const { ProfileStats, ProfileBio, ProfileLinks, ProfileHeader, Stack } = DSNew;
 
 export interface IProfileHeaderProps {
   profileId: string;
@@ -189,8 +180,9 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
       </ModalRenderer>
 
       {/* wrapping with a box to use gap prop instead of individual box margins */}
-      <Box gap="xsmall">
-        <ProfileCard
+      <Stack direction="column" spacing="gap-y-4">
+        {/*@TODO remove the following line when the profile app is done */}
+        {/* <ProfileCard
           handleFollow={handleFollow}
           handleUnfollow={handleUnfollow}
           handleShareClick={showShareModal}
@@ -247,42 +239,67 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
               </>
             )}
           </Box>
-        </ProfileCard>
-
-        {isModerator && <ModeratorLabel label={t('Moderator')} />}
-
+        </ProfileCard> */}
+        <ProfileHeader
+          ethAddress={profileData.ethAddress}
+          coverImage={profileData.coverImage}
+          avatar={profileData.avatar}
+          name={profileData.name}
+          userName={profileData.userName}
+          ensName={
+            ENSReq.isFetching && !ENSReq.isFetched
+              ? 'loading'
+              : ENSReq.isFetched && ENSReq.data
+              ? ENSReq.data
+              : ''
+          }
+          isFollowing={followedProfiles?.includes(profileData.pubKey)}
+          viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
+          flagLabel={t('Report')}
+          handleUnfollow={handleUnfollow}
+          handleFollow={handleFollow}
+          handleFlag={handleEntryFlag(
+            profileData.pubKey ? profileData.pubKey : '',
+            EntityTypes.PROFILE,
+            profileData.name,
+          )}
+        />
+        {/*@TODO replace moderator label with new design when its ready */}
+        {/* {isModerator && <ModeratorLabel label={t('Moderator')} />} */}
         {profileData.description && (
-          <BasicCardBox>
-            <ProfileCardDescription
-              description={profileData.description}
-              descriptionLabel={t('About me')}
-            />
-          </BasicCardBox>
+          <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
-
+        <ProfileStats
+          posts={{
+            label: t('Posts'),
+            total: profileData.totalPosts,
+            onClick: handleNavigateToProfilePosts,
+          }}
+          interests={{
+            label: t('Interests'),
+            total: profileData.totalInterests,
+            onClick: handleStatIconClick(2),
+          }}
+          followers={{
+            label: t('Followers'),
+            total: profileData.totalFollowers,
+            onClick: handleStatIconClick(0),
+          }}
+          following={{
+            label: t('Following'),
+            total: profileData.totalFollowing,
+            onClick: handleStatIconClick(1),
+          }}
+        />
         {socialLinks.length > 0 && (
-          <ProfileLinksCard
-            titleLabel={t('Find me on')}
+          <ProfileLinks
+            title={t('Find me on')}
+            links={socialLinks}
             copiedLabel={t('Copied')}
             copyLabel={t('Copy to clipboard')}
-            links={socialLinks}
           />
         )}
-
-        <ProfileStatsCard
-          margin={{ bottom: 'large' }}
-          statsTitleLabel={t('Stats')}
-          profileData={profileData}
-          onClickFollowing={handleStatIconClick(1)}
-          onClickFollowers={handleStatIconClick(0)}
-          onClickInterests={handleStatIconClick(2)}
-          onClickPosts={handleNavigateToProfilePosts}
-          followingLabel={t('Following')}
-          followersLabel={t('Followers')}
-          postsLabel={t('Posts')}
-          interestsLabel={t('Interests')}
-        />
-      </Box>
+      </Stack>
     </>
   );
 };

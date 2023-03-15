@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Portal } from './helpers';
-import { StyledPopoverDiv, StyledPopoverValueBox } from './styled-editor-box';
-import ProfileAvatarButton from '../ProfileAvatarButton';
+import { tw, tx } from '@twind/core';
 import { IProfileData } from '@akashaorg/typings/ui';
+import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 
 export interface IMentionPopover {
   values: Partial<IProfileData>[];
@@ -17,12 +17,20 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
 
   return (
     <Portal>
-      <StyledPopoverDiv ref={ref}>
+      <div
+        className={tw(
+          `absolute -top-[9999px] -left-[9999px] z-50 p-1 bg(grey9 dark: grey1) rounded-lg border(grey8 dark:grey8)`,
+        )}
+        ref={ref}
+      >
         {values.map((value, i) => (
-          <StyledPopoverValueBox
-            pad="small"
+          <div
+            className={tx(
+              `p-2 cursor-pointer rounded-sm max-w-xs min-w-[12rem] truncate hover:text-secondary ${
+                i === currentIndex && 'bg-grey3'
+              }`,
+            )}
             key={i}
-            selectedBackground={i === currentIndex}
             onClick={() => {
               handleSelect(i);
             }}
@@ -36,9 +44,9 @@ export const MentionPopover: React.FC<IMentionPopover> = React.forwardRef((props
               avatarImage={value.avatar}
               ethAddress={value.ethAddress as string}
             />
-          </StyledPopoverValueBox>
+          </div>
         ))}
-      </StyledPopoverDiv>
+      </div>
     </Portal>
   );
 });

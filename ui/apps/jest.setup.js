@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { mockSDK } from '@akashaorg/af-testing';
 
 require('@testing-library/jest-dom/extend-expect');
@@ -18,4 +19,11 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('@akashaorg/awf-sdk', () => {
   return () => mockSDK({});
+});
+
+jest.mock('@twind/core', () => {
+  return {
+    tw: () => {},
+    apply: () => {},
+  };
 });

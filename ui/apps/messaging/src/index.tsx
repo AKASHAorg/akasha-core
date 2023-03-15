@@ -8,7 +8,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
 import getSDK, { Logger } from '@akashaorg/awf-sdk';
-import { filter, map, mergeMap } from 'rxjs';
+import { filter, mergeMap } from 'rxjs';
 import { AUTH_EVENTS } from '@akashaorg/typings/sdk';
 
 export const initialize = (options: IntegrationRegistrationOptions & { logger: Logger }) => {
@@ -27,10 +27,10 @@ export const initialize = (options: IntegrationRegistrationOptions & { logger: L
       // get messages for the 1st time
       sdk.api.auth
         .getConversation(null)
-        .then(messages => {
+        .then(response => {
           notification.notify(
             '@akashaorg/app-messaging',
-            messages.filter(m => !m.read),
+            response.data.filter(m => !m.read),
           );
         })
         .catch(err => {
@@ -40,15 +40,15 @@ export const initialize = (options: IntegrationRegistrationOptions & { logger: L
       markAsRead$
         .pipe(
           mergeMap(() => {
-            return sdk.api.auth
-              .getObsConversation(null)
-              .pipe(map(newMsg => newMsg.data.filter(m => !m.read)));
+            return sdk.api.auth.getConversation(null).then(res => {
+              notification.notify(
+                '@akashaorg/app-messaging',
+                res.data.filter(m => !m.read),
+              );
+            });
           }),
         )
         .subscribe({
-          next: messages => {
-            notification.notify('@akashaorg/app-messaging', messages);
-          },
           error: err => {
             options.logger.error(`There was an error when trying to refetch messages: ${err}`);
           },
@@ -78,7 +78,7 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
   menuItems: {
     label: 'Messaging',
     type: MenuItemType.App,
-    logo: { type: LogoTypeSource.ICON, value: 'email' },
+    logo: { type: LogoTypeSource.ICON, value: 'EnvelopeIcon' },
     area: [MenuItemAreaType.UserAppArea],
     subRoutes: [],
   },
