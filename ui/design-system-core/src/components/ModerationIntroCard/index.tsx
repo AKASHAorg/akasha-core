@@ -54,7 +54,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
         </div>
 
         {introLabel && (
-          <Text variant="body1" weight="bold" align="center">
+          <Text weight="bold" align="center">
             {introLabel}
           </Text>
         )}

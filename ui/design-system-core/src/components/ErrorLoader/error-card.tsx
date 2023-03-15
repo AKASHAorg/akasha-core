@@ -26,7 +26,7 @@ const ErrorRenderer: React.FC<PropsWithChildren<ErrorRendererProps>> = props => 
 };
 
 const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: string }>> = props => {
-  const { children, title, imageSrc, details, devDetails, customStyle } = props;
+  const { children, title, imageSrc, details, devDetails, customStyle = '' } = props;
 
   const isDevMode = false;
   const message = details ?? devDetails;
@@ -46,7 +46,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
           <Text
             variant="label"
             color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
-            customStyle={'pt-[1em] max-w-[70%] w-full'}
+            customStyle="pt-[1em] max-w-[70%] w-full"
           >
             {message}
           </Text>
@@ -55,7 +55,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <Text
           variant="label"
           color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
-          customStyle={'text-center pt-[1em] max-w-[70%] w-full'}
+          customStyle="text-center pt-[1em] max-w-[70%] w-full"
         >
           {message}
         </Text>
