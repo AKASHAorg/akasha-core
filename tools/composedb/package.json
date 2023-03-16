@@ -28,8 +28,8 @@
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
     "create": "node ./src/create-composite.mjs",
     "merge": "node ./src/merge-composites.mjs",
-    "compile": "composedb composite:compile build/merged-composite.json lib/runtime-composite.js --ceramic-url=https://staging-ceramic.akasha.world",
-    "start:graphql": "composedb graphql:server --ceramic-url=http://localhost:7007 --graphiql lib/runtime-composite.json --did-private-key=1021474a1fe1cf3431f6b2a11a8863eb4b89c9856833c52cc1f83cf9d51c68aa --port=5005"
+    "compile": "composedb composite:compile build/merged-composite.json lib/runtime-composite.js ",
+    "start:graphql": "composedb graphql:server --ceramic-url=http://localhost:7007 --graphiql lib/runtime-composite.json --port=5005"
   },
   "bugs": {
     "url": "https://github.com/AKASHAorg/akasha-framework/issues"
