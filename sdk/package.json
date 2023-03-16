@@ -93,10 +93,7 @@
     "sc:deploy:goerli": "npx hardhat run --network goerli --config hardhat.config.cjs src/contracts/scripts/update-app-registry.cjs",
     "sc:test": "npx hardhat test --network development",
     "clean": "tsc --build --clean && rimraf lib dist node_modules tsconfig.tsbuildinfo",
-    "graphql:generate": "graphql-codegen",
-    "start:ceramic": "npx @ceramicnetwork/cli daemon",
-    "deploy:ceramic": "node src/models/deploy.mjs",
-    "load:ceramic": "node src/models/load.mjs"
+    "graphql:generate": "graphql-codegen-esm --config codegen.cjs"
   },
   "browserslist": [
     "defaults",

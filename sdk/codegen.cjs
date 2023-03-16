@@ -1,8 +1,10 @@
-import { CodegenConfig } from '@graphql-codegen/cli';
+// @ts-check
 
-const config: CodegenConfig = {
-  schema: '../api/hub/src/schema.ts', //can be also an url
+/** @type {import("@graphql-codegen/cli").CodegenConfig} */
+const config = {
+  schema: 'http://localhost:5005/graphql', //can be also an url
   documents: ['src/**/*.graphql'],
+  emitLegacyCommonJSImports: false,
   generates: {
     '../typings/src/sdk/graphql-types.ts': {
       plugins: ['typescript'],
@@ -35,4 +37,4 @@ const config: CodegenConfig = {
   },
 };
 
-export default config;
+module.exports = config;

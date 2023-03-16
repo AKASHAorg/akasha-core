@@ -11,7 +11,8 @@
       "dom",
       "es2020"
     ],
-    "module": "ES2020",
+    "moduleResolution": "node16",
+    "module": "es2020",
     "target": "es2020"
   },
   "include": [

@@ -29,7 +29,7 @@
     "create": "node ./src/create-composite.mjs",
     "merge": "node ./src/merge-composites.mjs",
     "compile": "composedb composite:compile build/merged-composite.json lib/runtime-composite.js ",
-    "start:graphql": "composedb graphql:server --ceramic-url=http://localhost:7007 --graphiql lib/runtime-composite.json --port=5005"
+    "start:graphql": "composedb graphql:server --ceramic-url=https://staging-ceramic.akasha.world --graphiql lib/runtime-composite.json --port=5005"
   },
   "bugs": {
     "url": "https://github.com/AKASHAorg/akasha-framework/issues"
