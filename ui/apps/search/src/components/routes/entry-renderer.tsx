@@ -10,7 +10,7 @@ import {
   RootComponentProps,
 } from '@akashaorg/typings/ui';
 import { Logger } from '@akashaorg/awf-sdk';
-import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
 import { useIsFollowingMultiple } from '@akashaorg/ui-awf-hooks';
 

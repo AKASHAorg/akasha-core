@@ -31,8 +31,8 @@
     "i18next": "20.6.1",
     "rxjs": "7.3.0",
     "single-spa": "5.9.3",
-    "slate": "0.82.0",
-    "slate-history": "0.66.0",
-    "slate-react": "0.82.0"
+    "slate": "0.91.4",
+    "slate-history": "0.86.0",
+    "slate-react": "0.91.10"
   }
 }

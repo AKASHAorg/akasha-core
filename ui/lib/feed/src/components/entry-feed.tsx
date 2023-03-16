@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import { useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import { FeedWidgetProps } from './App';
