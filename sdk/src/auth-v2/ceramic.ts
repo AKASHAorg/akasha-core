@@ -12,6 +12,7 @@ import { EthereumWebAuth } from '@didtools/pkh-ethereum';
 import { ComposeClient } from '@composedb/client';
 import { AccountId } from 'caip';
 import { ethers } from 'ethers';
+import { definition } from '@akashaorg/composedb-models/lib/runtime-composite';
 
 @injectable()
 export default class CeramicService {
@@ -54,7 +55,7 @@ export default class CeramicService {
     const authMethod = await EthereumWebAuth.getAuthMethod(web3Provider, accountId);
     this._composeClient = new ComposeClient({
       ceramic: process.env.CERAMIC_API_ENDPOINT,
-      definition: null,
+      definition: definition,
     });
     this._didSession = await DIDSession.authorize(authMethod, {
       resources: this._composeClient.resources,

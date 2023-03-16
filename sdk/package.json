@@ -4,6 +4,7 @@
   "main": "src/index.js",
   "type": "module",
   "dependencies": {
+    "@akashaorg/composedb-models": "*",
     "@ceramicnetwork/http-client": "2.20.0",
     "@composedb/client": "^0.4.3",
     "@didtools/cacao": "1.2.0",
