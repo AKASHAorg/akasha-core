@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { tw, apply } from '@twind/core';
+import { tw } from '@twind/core';
 import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
@@ -26,7 +26,7 @@ export type Alignment = 'start' | 'center' | 'end' | 'justify';
 export type Weight = 'normal' | 'bold' | 'light' | 'medium';
 
 export type TextProps = {
-  className?: string; // pass only the string classes without 'apply' or 'tw'
+  customStyle?: string; // pass only the string classes without 'apply' or 'tw'
   variant?: Variant;
   color?: Color;
   align?: Alignment;
@@ -44,8 +44,8 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   h6: 'text-[1rem] leading-[1.5rem] font-bold',
   subtitle1: 'text-[1rem] leading-[1.5rem] font-light',
   subtitle2: 'text-[0.875rem] leading-[1.375rem] font-light',
-  body1: 'text-[1rem] leading-[1.5rem] font-normal',
-  body2: 'text-[0.875rem] leading-[1.375rem] font-normal',
+  body1: 'text-[1rem] leading-[1.5rem]',
+  body2: 'text-[0.875rem] leading-[1.375rem]',
   label: 'text-[1rem] leading-[1.5rem] font-medium',
   footnotes1: 'text-[0.75rem] leading-[1.125rem] font-bold tracking-[.075em]',
   footnotes2: 'text-[0.75rem] leading-[1.125rem] font-medium',
@@ -55,7 +55,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
-  className = '',
+  customStyle = '',
   variant = 'body1',
   align = 'start',
   color = { dark: 'text-white', light: 'text-black' },
@@ -77,7 +77,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${className}`,
+        `${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${customStyle}`,
       ),
     },
     children,

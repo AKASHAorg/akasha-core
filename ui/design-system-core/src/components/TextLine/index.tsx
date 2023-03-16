@@ -9,10 +9,10 @@ export type TextLineProps = {
   width?: string;
   height?: string;
   round?: string;
-  className?: string;
+  customStyle?: string;
 };
 
-const baseStyle = apply`min-h-[18px] bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
+const baseStyle = `min-h-[18px] bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
 
 const TextLine: React.FC<TextLineProps> = props => {
   const {
@@ -21,17 +21,19 @@ const TextLine: React.FC<TextLineProps> = props => {
     width = 'w-[19.4375rem]',
     height = 'h-[1.1875rem]',
     round = 'rounded',
-    className,
+    customStyle = '',
   } = props;
+
   const widthStyle = getWidthClasses(width);
   const heightStyle = getHeightClasses(height);
+
   const instanceStyles = apply`
     ${baseStyle}
     ${animated ? 'animate-pulse' : ''}
     ${widthStyle}
     ${heightStyle}
     ${round}
-    ${className}
+    ${customStyle}
   `;
 
   return <div title={title} className={tw(instanceStyles)} />;

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import Button, { IButtonProps } from '../Button';
+import Button from '../Button';
 import Icon from '../Icon/';
 import { tw } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
+import { ButtonProps } from '../Button/types';
 
-export interface IDuplexButtonProps extends IButtonProps {
+export type DuplexButtonProps = ButtonProps & {
   onClickInactive?: () => void;
   onClickActive?: () => void;
   inactiveLabel?: string;
@@ -14,10 +15,9 @@ export interface IDuplexButtonProps extends IButtonProps {
   activeIcon?: IconType;
   activeHoverIcon?: IconType;
   allowMinimization?: boolean;
-  style?: React.CSSProperties;
-}
+};
 
-const DuplexButton = (props: IDuplexButtonProps) => {
+const DuplexButton = (props: DuplexButtonProps) => {
   const {
     onClickActive,
     onClickInactive,
@@ -64,7 +64,7 @@ const DuplexButton = (props: IDuplexButtonProps) => {
       >
         <Icon
           type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-          styling="text-secondary-light h-5 w-5"
+          customStyle="text-secondary-light h-5 w-5"
         />
       </button>
     );

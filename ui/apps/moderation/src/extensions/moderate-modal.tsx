@@ -5,15 +5,13 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ModerationEntityTypesMap, RootExtensionProps } from '@akashaorg/typings/ui';
 import { useModeration, withProviders, useGetLogin, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { ModerateModal } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const ModerateModalComponent = (props: RootExtensionProps) => {
   const { extensionData } = props;

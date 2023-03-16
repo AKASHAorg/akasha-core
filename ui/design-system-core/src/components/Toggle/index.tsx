@@ -70,6 +70,7 @@ const Toggle: React.FC<iToggleProps> = ({
       ${color}
       ${baseTransitionStyle}
       `;
+
   const instanceIconStyle = apply`
       ${iconSizingProperties}
       ${baseTransitionStyle}
@@ -94,7 +95,7 @@ const Toggle: React.FC<iToggleProps> = ({
           <div className={tw(instanceIconStyle)}>
             <Icon
               type={enabled ? iconChecked : iconUnchecked}
-              styling={tw('fill-white stroke-white')}
+              customStyle="fill-white stroke-white"
             />
           </div>
         )}

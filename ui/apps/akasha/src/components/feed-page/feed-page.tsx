@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import DS from '@akashaorg/design-system';
-import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import {
   ModalNavigationOptions,
   IPublishData,
