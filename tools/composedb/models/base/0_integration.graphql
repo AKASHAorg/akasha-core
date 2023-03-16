@@ -13,4 +13,5 @@ type AppIntegration @createModel(accountRelation: LIST, description: "AKASHA app
   description: String! @string(maxLength: 2000)
   keywords: [String!] @list(maxLength: 16) @string(minLength:3, maxLength: 32)
   author: DID! @documentAccount
+  contributors: [DID] @list(maxLength: 16)
 }

@@ -3,19 +3,29 @@ import {Composite} from '@composedb/devtools'
 import {readEncodedComposite, writeEncodedComposite} from '@composedb/devtools-node'
 import path from "path";
 import {fileURLToPath} from 'url';
+import dotenv from "dotenv";
 
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
-
+dotenv.config({
+  path: path.resolve(__dirname, '../../../.env'),
+  debug: true
+})
 const ceramic = new CeramicClient(process.env.CERAMIC_API_ENDPOINT)
 
 const loadSources = [
-  path.resolve(__dirname, '../build/profile-composite.json'),
-  path.resolve(__dirname, '../build/integration-composite.json'),
-  path.resolve(__dirname, '../build/follow-composite.json'),
-  path.resolve(__dirname, '../build/interests-composite.json'),
-  path.resolve(__dirname, '../build/posts-composite.json')
+  path.resolve(__dirname, '../build/0_integration.json'),
+  path.resolve(__dirname, '../build/0_models.json'),
+  path.resolve(__dirname, '../build/1_follow.json'),
+  path.resolve(__dirname, '../build/1_integration.json'),
+  path.resolve(__dirname, '../build/1_posts.json'),
+  path.resolve(__dirname, '../build/2_integration.json'),
+  path.resolve(__dirname, '../build/2_models.json'),
+  path.resolve(__dirname, '../build/2_posts.json'),
+  path.resolve(__dirname, '../build/3_posts.json'),
+  path.resolve(__dirname, '../build/4_posts.json'),
+  path.resolve(__dirname, '../build/5_posts.json')
 ].map(
   async (path) => await readEncodedComposite(ceramic, path)
 )

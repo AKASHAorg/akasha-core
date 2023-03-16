@@ -1,4 +1,4 @@
-type Profile @loadModel(id: "kjzl6hvfrbw6c66nr8p9ihlpojhkqe4mtwnqvbfocek27w0zm2lyigp06wu72gr"){
+type Profile @loadModel(id: "kjzl6hvfrbw6c7i4k7vffsms9flppqephozynftoaqcttt0q33xr5wbelna4bsb"){
   id: ID!
 }
 
