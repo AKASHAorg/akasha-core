@@ -7,6 +7,7 @@ import BasicPopover from './components/BasicPopover';
 import Button from './components/Button';
 import Card from './components/Card';
 import CopyToClipboard from './components/CopyToClipboard';
+import Dropdown from './components/Dropdown';
 import DuplexButton from './components/DuplexButton';
 import EditorMeter from './components/EditorMeter';
 import ErrorCard from './components/ErrorCard';
@@ -46,6 +47,7 @@ export default {
   Button,
   Card,
   CopyToClipboard,
+  Dropdown,
   DuplexButton,
   EditorMeter,
   ErrorCard,
