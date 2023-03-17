@@ -25,7 +25,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
   const listButtonStyle = cx`
       relative w-full cursor-default rounded-lg
       bg-white dark:bg-grey5
-      py-2 pl-3 pr-10 text-left 
+      py-2 pl-3 pr-10 text-left
   `;
 
   const listButtonRightIconStyle = cx`
@@ -34,7 +34,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
   const optionListStyle = cx`
       absolute mt-1 max-h-60 w-full overflow-auto rounded-md
-      bg-white dark:bg-grey5 
+      bg-white dark:bg-grey5
       py-0 text-base sm:text-sm
       border([1px] grey8) dark:border([1px] grey3)
       `;
@@ -60,7 +60,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
         {({ open }) => (
           <div className="relative mt-1">
             <Listbox.Button
-              className={tx(`${listButtonStyle} 
+              className={tx(`${listButtonStyle}
               ${open ? 'border([1px] secondary-light)' : 'border([1px] grey8)'}`)}
             >
               <div className={tx`flex items-center space-x-2`}>
