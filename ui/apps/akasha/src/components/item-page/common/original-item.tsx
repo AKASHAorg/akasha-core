@@ -17,7 +17,7 @@ import {
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
 import { useTranslation } from 'react-i18next';
-import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import routes, { POST } from '../../../routes';
 import { UseQueryResult } from 'react-query';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';

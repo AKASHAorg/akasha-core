@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useGetAllInstalledApps,
@@ -18,8 +18,6 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 
 const { Box, ICDetailCard } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const InfoPage: React.FC<RootComponentProps> = props => {
   const { integrationId } = useParams<{ integrationId: string }>();

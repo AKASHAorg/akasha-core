@@ -2,7 +2,7 @@ import React, { LegacyRef, PropsWithChildren } from 'react';
 import { getAlignClasses } from './getAlignClasses';
 import { getDirectionClasses } from './getDirectionClasses';
 import { getJustifyClasses } from './getJustifyClasses';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 
 export type Direction = 'column' | 'column-reverse' | 'row' | 'row-reverse';
 export type Align = 'start' | 'end' | 'center' | 'stretch' | 'baseline';
@@ -35,7 +35,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   return (
     <div
       className={tw(
-        apply`${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
+        `${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
       )}
     >
       {children}

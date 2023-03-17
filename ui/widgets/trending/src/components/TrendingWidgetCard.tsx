@@ -1,4 +1,5 @@
 import React from 'react';
+import { apply, tw } from '@twind/core';
 import { Tab } from '@headlessui/react';
 import { ITag, IProfileData } from '@akashaorg/typings/ui';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
@@ -6,7 +7,6 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
-import { tw, apply } from '@twind/core';
 
 export interface ITrendingWidgetCardProps {
   // data
@@ -100,7 +100,6 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
   };
 
   return (
-    // <div className="w-full max-w-md px-2 sm:px-0 bg-white dark:bg-grey2 dark:bg-grey8">
     <BasicCardBox noBorder={true} pad="0">
       <h3 className={tw('py-4 pl-8 font-medium text-lg')}>{titleLabel}</h3>
       <Tab.Group onChange={handleTabChange}>
@@ -185,8 +184,12 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
               Array.from({ length: 4 }, (_el, index: number) => (
                 <div key={index} className={tw(BaseItemStyles)}>
                   <div className={tw('py-2')}>
-                    /@TODO: change the following to circular placeholder */
-                    <TextLine title="avatar" width="40px" height="40px" className="rounded-full" />
+                    <TextLine
+                      title="avatar"
+                      width="40px"
+                      height="40px"
+                      customStyle="rounded-full"
+                    />
                     <div className={tw('py-1')}>
                       <TextLine title="tagName" animated={false} width="140px" />
                       <TextLine title="tagName" animated={false} width="80px" />
@@ -233,7 +236,6 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-      {/* </div> */}
     </BasicCardBox>
   );
 };

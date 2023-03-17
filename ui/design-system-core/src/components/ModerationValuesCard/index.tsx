@@ -55,7 +55,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
           >
             <div
               className={tw(
-                `h-32 w-full flex items-center justify-center p-3 bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer`,
+                'h-32 w-full flex items-center justify-center p-3 bg-grey9 dark:bg-grey3 rounded-2xl cursor-pointer',
               )}
             >
               <Text

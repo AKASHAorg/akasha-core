@@ -4,7 +4,7 @@ import singleSpaReact from 'single-spa-react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ModalNavigationOptions, RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useGetAllInstalledApps,
@@ -18,8 +18,6 @@ import {
 import { hiddenIntegrations } from './hidden-integrations';
 
 const { Box, ICWidgetCard } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const ICWidget: React.FC<RootComponentProps> = props => {
   const { t } = useTranslation('app-integration-center');

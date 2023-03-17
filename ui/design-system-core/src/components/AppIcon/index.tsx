@@ -45,6 +45,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
   const hoverStyle = hover
     ? 'hover:bg-secondary-light/30 dark:hover:bg-secondary-dark group-hover:bg-secondary-light/30 dark:group-hover:bg-secondary-dark'
     : '';
+
   const activeStyle = active ? 'bg-secondary-light/30 hover:bg-secondary-dark' : '';
   const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${customStyle}`;
   const notifyStyle = NOTIFY_MAP[size];

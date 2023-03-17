@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 
-import DS from '@akashaorg/design-system-core';
 import { RootComponentProps } from '@akashaorg/typings/ui';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ThemeWrapper, withProviders } from '@akashaorg/ui-awf-hooks';
 
 import LayoutWidget from './layout-widget';
@@ -15,8 +15,6 @@ import LayoutWidget from './layout-widget';
 //     trackAllPureComponents: true,
 //   });
 // }
-
-const { ErrorLoader } = DS;
 
 const reactLifecycles = singleSpaReact({
   React,

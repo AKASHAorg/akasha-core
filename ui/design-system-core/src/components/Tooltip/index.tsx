@@ -87,9 +87,7 @@ const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
           <Stack
             align="center"
             justify="center"
-            customStyle={tw(
-              'flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]',
-            )}
+            customStyle="flex-wrap rounded-md bg-secondary-dark/50 dark:bg-grey4 py-[4px] px-[16px]"
           >
             <Text variant={textSize} color={{ light: 'text-black', dark: 'dark:text-white' }}>
               {content}

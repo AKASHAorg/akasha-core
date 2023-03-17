@@ -9,6 +9,7 @@ import { TextFieldProps } from './types';
 const TextField: React.FC<TextFieldProps> = forwardRef(
   (props, ref?: React.RefObject<HTMLInputElement>) => {
     const { label, status, caption, disabled } = props;
+
     return (
       <Stack direction="column" spacing="gap-y-2">
         {label && <Label disabled={disabled}>{label}</Label>}
