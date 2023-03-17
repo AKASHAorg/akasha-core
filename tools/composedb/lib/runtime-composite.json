@@ -213,33 +213,6 @@
           "model": "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1",
           "property": "profileID"
         }
-      },
-      "following": {
-        "type": "view",
-        "viewType": "relation",
-        "relation": {
-          "source": "queryConnection",
-          "model": "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1",
-          "property": "did"
-        }
-      },
-      "totalFollowers": {
-        "type": "view",
-        "viewType": "relation",
-        "relation": {
-          "source": "queryCount",
-          "model": "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1",
-          "property": "profileID"
-        }
-      },
-      "totalFollowing": {
-        "type": "view",
-        "viewType": "relation",
-        "relation": {
-          "source": "queryCount",
-          "model": "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1",
-          "property": "did"
-        }
       }
     },
     "InterestsLabeled": {

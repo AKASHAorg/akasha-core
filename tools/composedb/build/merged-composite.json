@@ -173,21 +173,6 @@
           "type": "relationFrom",
           "model": "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1",
           "property": "profileID"
-        },
-        "following": {
-          "type": "relationFrom",
-          "model": "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1",
-          "property": "did"
-        },
-        "totalFollowers": {
-          "type": "relationCountFrom",
-          "model": "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1",
-          "property": "profileID"
-        },
-        "totalFollowing": {
-          "type": "relationCountFrom",
-          "model": "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1",
-          "property": "did"
         }
       },
       "kjzl6hvfrbw6c6oxadj4nluncq38cbzjyf9wzmbws99g7imktj170nir4g2phlj": {
