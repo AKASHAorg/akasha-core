@@ -8,9 +8,9 @@ import DS from '@akashaorg/design-system';
 import AppsOption from './option-apps';
 import SettingsPage from './settings-page';
 import PrivacyOption from './option-privacy';
-import AppearanceOption from './option-appearance';
+import ThemeOption from './option-theme';
 
-import routes, { APPEARANCE, APPS, HOME, PRIVACY } from '../routes';
+import routes, { THEME, APPS, HOME, PRIVACY } from '../routes';
 
 const { Box } = DS;
 
@@ -142,13 +142,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
           <Route
-            path={routes[APPEARANCE]}
+            path={routes[THEME]}
             element={
-              <AppearanceOption
-                titleLabel="Appearance"
+              <ThemeOption
+                titleLabel="Theme"
                 appThemeLabel={t('App Theme')}
                 appThemeInfo={t(
-                  'Choose your preferred Ethereum World’s theme. So what will it be today?',
+                  "Choose your preferred Ethereum World's theme. So what will it be today?",
                 )}
                 theme={theme}
                 onThemeSelect={handleThemeSelect}
