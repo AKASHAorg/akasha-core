@@ -162,7 +162,8 @@
       "ui/apps/translation",
       "ui/apps/routing",
       "examples/ui/ethereum.world",
-      "tools/executors"
+      "tools/executors",
+      "tools/composedb"
     ],
     "nohoist": [
       "storybook",
@@ -170,8 +171,8 @@
     ]
   },
   "engines": {
-    "node": ">=16.13.0",
-    "npm": ">=8.1.0",
+    "node": ">=16.19.0",
+    "npm": ">=8.19.0",
     "yarn": "^1.22.0"
   },
   "husky": {
