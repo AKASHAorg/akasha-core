@@ -1,5 +1,5 @@
-import { apply, tw } from '@twind/core';
 import React from 'react';
+
 import Icon, { IconProps } from '.';
 import { CustomIconTypes } from './akasha-icons';
 
