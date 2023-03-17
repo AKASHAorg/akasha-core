@@ -1,0 +1,13 @@
+type Follow @loadModel(id: "kjzl6hvfrbw6c92pp4e2s3wnwhfm8msk74lm0t8wmip4dt5ibsvzvfivgk13pg1") {
+  id: ID!
+}
+
+
+type Profile @loadModel(id: "kjzl6hvfrbw6c7i4k7vffsms9flppqephozynftoaqcttt0q33xr5wbelna4bsb") {
+  id: ID!
+  followers: [Follow] @relationFrom(model: "Follow", property: "profileID")
+# this part is not working properly because it depends on a flag 'isFollowing'
+#  following: [Follow] @relationFrom(model: "Follow", property: "did")
+#  totalFollowers: Int! @relationCountFrom(model: "Follow", property: "profileID")
+#  totalFollowing: Int! @relationCountFrom(model: "Follow", property: "did")
+}

@@ -13,7 +13,7 @@ import {
   AnalyticsCategories,
 } from '@akashaorg/typings/ui';
 
-import { ILocale } from '@akashaorg/design-system/lib/utils/time';
+import { ILocale } from '@akashaorg/design-system/src/utils/time';
 
 import {
   useTagSubscriptions,

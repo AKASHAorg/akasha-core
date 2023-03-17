@@ -1,0 +1,38 @@
+type Post @loadModel(id: "kjzl6hvfrbw6c5h0i021hdiacksynsnxnzy8v95kcadkj4cqzs1894ms0wvewn2") {
+  id: ID!
+}
+
+type Profile @loadModel(id: "kjzl6hvfrbw6c7i4k7vffsms9flppqephozynftoaqcttt0q33xr5wbelna4bsb"){
+  id: ID!
+}
+
+type PostQuote @createModel(accountRelation: LIST, description: "Posts quoted in other posts") {
+  postID: StreamID! @documentReference(model: "Post")
+  post: Post! @relationDocument(property: "postID")
+  quotedPostID: StreamID! @documentReference(model: "Post")
+  quotedPost: Post! @relationDocument(property: "quotedPostID")
+  active: Boolean!
+}
+
+type ProfileMention @createModel(accountRelation: LIST, description: "Profiles mentioned in posts") {
+  postID: StreamID! @documentReference(model: "Post")
+  post: Post! @relationDocument(property: "postID")
+  profileID: StreamID! @documentReference(model: "Profile")
+  profile: Profile! @relationDocument(property: "profileID")
+}
+
+type ProviderValue{
+  provider: String! @string(minLength: 6, maxLength: 100)
+  property: String! @string(minLength: 2, maxLength: 40)
+  value: String! @string(minLength: 3, maxLength: 2000)
+}
+
+type Comment type Comment @createModel(accountRelation: LIST, description: "A comment on a Post") {
+  postID: StreamID! @documentReference(model: "Post")
+  post: Post! @relationDocument(property: "postID")
+  author: DID! @documentAccount
+  content: [ProviderValue!]! @list(maxLength: 10)
+  version: CommitID! @documentVersion
+  isReply: Boolean!
+  active: Boolean!
+}

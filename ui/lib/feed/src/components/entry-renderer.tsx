@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { i18n } from 'i18next';
 
 import DS, { BoxExtendedProps } from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import { ILogger } from '@akashaorg/typings/sdk/log';
 import { ILocale } from '@akashaorg/design-system/lib/utils/time';
@@ -31,8 +31,6 @@ import {
 import FeedWidget from './App';
 
 const { Box, EntryCardLoading, EntryCard, EntryCardHidden, ExtensionPoint } = DS;
-
-const { ErrorLoader } = DSNew;
 
 export interface IEntryRenderer {
   itemId?: string;

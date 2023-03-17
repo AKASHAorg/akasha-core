@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import Avatar from '../Avatar';
 import Button from '../Button';
 import Accordion from '../Accordion';
@@ -28,9 +28,9 @@ const Sidebar: React.FC<ISidebarProps> = props => {
 
   const guestEthAddress = '0x00000000000000000000000000000';
 
-  const titleText = 'text-sm font-bold';
+  const titleText = apply('text-sm font-bold');
 
-  const subtitleText = 'text-xs text-grey5';
+  const subtitleText = apply('text-xs text-grey5');
 
   return (
     <div className={tw('h-screen bg-white dark:bg-grey2 rounded-[20px]')}>

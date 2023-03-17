@@ -10,6 +10,7 @@ import container from './container';
 import Logging from './logging';
 import Settings from './settings';
 import Gql from './gql';
+import GqlNew from './gql/index.new';
 import DB from './db';
 import Stash from './stash';
 import Web3Connector from './common/web3.connector';
@@ -103,6 +104,8 @@ export function init(): AWF_SDK {
   const appSettings = container.get<AppSettings>(TYPES.AppSettings);
   const icRegistry = container.get<AWF_IC_REGISTRY>(TYPES.ICRegistry);
   const misc = container.get<AWF_Misc>(TYPES.Misc);
+  const gqlNew = container.get<GqlNew>(TYPES.GqlNew);
+  console.info('new gql client', gqlNew);
   return {
     services: {
       log,

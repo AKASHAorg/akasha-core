@@ -43,7 +43,7 @@ const Snackbar: React.FC<ISnackbar> = ({
         <Icon
           type="InformationCircleIcon"
           color="red"
-          styling={`w-6 h-6 fill-${colorLight} dark:fill-${colorDark} stroke-white dark:stroke-black`}
+          customStyle={`w-6 h-6 fill-${colorLight} dark:fill-${colorDark} stroke-white dark:stroke-black`}
         />
       </span>
       <div className={tw('w-11/12')}>
@@ -65,7 +65,7 @@ const Snackbar: React.FC<ISnackbar> = ({
         )}
       </div>
       <button onClick={handleDismiss} className={tw('ml-2')}>
-        <Icon type="XMarkIcon" color="grey7" styling="w-4 h-4" />
+        <Icon type="XMarkIcon" color="grey7" customStyle="w-4 h-4" />
       </button>
     </div>
   );

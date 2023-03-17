@@ -89,8 +89,8 @@ const Checkbox: React.FC<iCheckboxProps> = ({
 
   const instancePseudoCheckboxStyle = apply`
   ${basePseudoCheckboxStyles}
-   ${checkboxSizes}
-   ${tickMarkSizes}
+  ${checkboxSizes}
+  ${tickMarkSizes}
   before:border(2 ${inputColor})
   after:border(l-[1px] ${checkmarkColor}) after:border(b-[1px] ${checkmarkColor}) after:-rotate-45
   ${bgColor}

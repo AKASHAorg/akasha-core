@@ -1,0 +1,10 @@
+type Comment @loadModel(id: "kjzl6hvfrbw6c5golzc94ty8m2dmkestqdee89if5k5sh2xyhvpbi94tikky7f5"){
+  id: ID!
+}
+type CommentReply @createModel(accountRelation: LIST, description: "A comment on a Comment") {
+  commentID: StreamID! @documentReference(model: "Comment")
+  comment: Comment! @relationDocument(property: "commentID")
+  replyID:  StreamID! @documentReference(model: "Comment")
+  reply: Comment! @relationDocument(property: "replyID")
+  active: Boolean!
+}

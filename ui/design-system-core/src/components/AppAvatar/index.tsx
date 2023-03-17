@@ -1,5 +1,5 @@
 import React from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 import { IntegrationTypes } from '@akashaorg/typings/ui';
 
@@ -51,7 +51,7 @@ const AppAvatar: React.FC<IAppAvatarProps> = props => {
     }.webp`;
   }
 
-  const className = `box-border cursor-${
+  const className = apply`box-border cursor-${
     isClickable ? 'pointer' : 'default'
   } select-none relative overflow-hidden w-${avatarSizesMap[size]} h-${
     avatarSizesMap[size]
@@ -59,7 +59,7 @@ const AppAvatar: React.FC<IAppAvatarProps> = props => {
     border ? avatarBorderSizesMap[border] : '0'
   } border-${borderColor ? avatarBorderColorsMap[borderColor] : 'transparent'}`;
 
-  const activeOverlayClass = 'bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full';
+  const activeOverlayClass = apply('bg-grey6 opacity-25 z-10 absolute top-0 left-0 w-full h-full');
 
   return (
     <div className={tw(className)} onClick={onClick}>
