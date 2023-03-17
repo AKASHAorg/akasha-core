@@ -6,10 +6,14 @@ import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import { ISettingsItem, settingsItems, SettingsOption } from '../utils/settings-items';
 import PageLayout from './base-layout';
+import { ISettingsItem, settingsItems, SettingsOption } from '../utils/settings-items';
 
-const SettingsPage: React.FC<RootComponentProps> = props => {
+export interface BaseOption {
+  titleLabel: string;
+}
+
+const SettingsPage: React.FC<BaseOption & RootComponentProps> = props => {
   const { t } = useTranslation('app-settings-ewa');
 
   const handleSettingsOptionClick = (option: SettingsOption) => () => {

@@ -14,11 +14,14 @@ import routes, { THEME, APPS, HOME, PRIVACY } from '../routes';
 
 const { Box } = DS;
 
+export type theme = 'Light-Theme' | 'Dark-Theme';
+
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const currentTheme = window.localStorage.getItem('Theme');
-  const [theme, setTheme] = React.useState<string>(currentTheme || 'Light-Theme');
+  const currentTheme = window.localStorage.getItem('Theme') as theme | null;
   const cookieType = window.localStorage.getItem(COOKIE_CONSENT_NAME);
-  const [checkedTracking, setCheckedTracking] = React.useState(
+
+  const [theme, setTheme] = React.useState<theme | null>(currentTheme);
+  const [checkedTracking, setCheckedTracking] = React.useState<boolean>(
     cookieType === CookieConsentTypes.ALL,
   );
   const [checkedAutoUpdates, setCheckedAutoUpdates] = React.useState<boolean>(false);
@@ -26,11 +29,14 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-settings-ewa');
 
-  const handleChevronLeftClick = () =>
-    props.plugins['@akashaorg/app-routing']?.routing?.navigateTo?.({
-      appName: '@akashaorg/app-settings-ewa',
-      getNavigationUrl: navRoutes => navRoutes.Home,
+  const routing = props.plugins['@akashaorg/app-routing']?.routing;
+
+  const handlePrivacyPolicyClick = () => {
+    routing.navigateTo({
+      appName: '@akashaorg/app-legal',
+      getNavigationUrl: () => '/legal/privacy-policy',
     });
+  };
 
   const handleTrackingOptionChange = event => {
     setCheckedTracking(event.target.checked);
@@ -61,9 +67,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     // @TODO: handle data analytics subscription
   };
 
-  const handleThemeSelect = event => {
-    setTheme(event.target.value);
-    window.localStorage.setItem('Theme', event.target.value);
+  const handleThemeSelect = () => {
+    const selectedTheme = theme === 'Dark-Theme' ? 'Light-Theme' : 'Dark-Theme';
+
+    setTheme(selectedTheme);
+
+    window.localStorage.setItem('Theme', selectedTheme);
 
     /*
      * Custom event used in main html file
@@ -71,17 +80,19 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
      */
     const ev = new CustomEvent(EventTypes.ThemeChange, {
       detail: {
-        theme: event.target.value,
+        theme: selectedTheme,
       },
     });
+
     window.dispatchEvent(ev);
+
     /*
      * Propagate the change to all apps and widgets
      */
     props.uiEvents.next({
       event: EventTypes.ThemeChange,
       data: {
-        name: event.target.value,
+        name: selectedTheme,
       },
     });
   };
@@ -90,33 +101,47 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
     <Box>
       <Router basename={props.baseRouteName}>
         <Routes>
-          <Route path={routes[HOME]} element={<SettingsPage {...props} />} />
+          <Route
+            path={routes[HOME]}
+            element={<SettingsPage titleLabel={t('Settings')} {...props} />}
+          />
           <Route
             path={routes[PRIVACY]}
             element={
               <PrivacyOption
                 titleLabel={t('Privacy')}
+                worldLabel="AKASHA World"
                 essentialCookiesLabel={t('Essential cookies')}
                 essentialCookiesInfo1={t(
-                  "We've gotta have essential cookies. The clue's in the name. They're essential to initiating your experience of Ethereum World, and keeping it secure, stable, and optimized so you'll feel like this is your kind of thing — to use, celebrate, and help grow. If you're a privacy geek like us, you'll find ",
+                  "We've gotta have essential cookies. The clue's in the name. They're essential to initiating your experience of ",
                 )}
-                essentialCookiesInfo2={t(' makes for perfect bedtime reading.')}
-                essentialCookiesInfo3={t(
-                  'And the best thing about Ethereum World is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we’re doing this thing together.',
+                essentialCookiesInfo2={t(
+                  ", and keeping it secure, stable, and optimized so you'll feel like this is your kind of thing — to use, celebrate, and help grow. If you're a privacy geek like us, you'll find ",
                 )}
                 privacyPolicyLabel={t('our privacy policy')}
+                essentialCookiesInfo3={t(' makes for perfect bedtime reading. ')}
+                essentialCookiesInfo4={t(
+                  "And the best thing about AKASHA World is that when we write “our app” and “our Privacy Policy” that means “your app” and “your Privacy Policy” because we're doing this thing together.",
+                )}
                 trackingAnalyticsLabel={t('Tracking and analytics')}
                 trackingAnalyticsInfo1={t(
-                  'As we’ve said ☝🏽, we’re doing this together. If you want to contribute some insight into how Ethereum World is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
+                  "As we've said ☝🏽, we're doing this together. If you want to contribute some insight into how ",
                 )}
                 trackingAnalyticsInfo2={t(
+                  ' is used so we can all work all the more brilliantly to improve it, you can opt-in to our own ',
+                )}
+                matomoLabel="Matomo"
+                matomoUrl="https://matomo.org"
+                trackingAnalyticsInfo3={t(
                   " analytics. We don't store personal identifiable information (PII) and you can opt-out at any time.",
                 )}
-                trackingAnalyticsLinkLabel={t('Click here to learn more.')}
+                ctaLabel={t('Click here')}
+                trackingAnalyticsInfo4={t(' to learn more.')}
+                ctaUrl="https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100"
                 checkedTracking={checkedTracking}
                 cookieType={cookieType}
+                onPrivacyPolicyClick={handlePrivacyPolicyClick}
                 onTrackingOptionChange={handleTrackingOptionChange}
-                onChevronLeftClick={handleChevronLeftClick}
               />
             }
           />
@@ -137,7 +162,6 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 checkedDataAnalytics={checkedDataAnalytics}
                 onAutoUpdatesChange={handleAutoUpdatesChange}
                 onDataAnalyticsChange={handleDataAnalyticsChange}
-                onChevronLeftClick={handleChevronLeftClick}
               />
             }
           />
@@ -146,13 +170,12 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             element={
               <ThemeOption
                 titleLabel="Theme"
-                appThemeLabel={t('App Theme')}
-                appThemeInfo={t(
-                  "Choose your preferred Ethereum World's theme. So what will it be today?",
+                themeIntroLabel={t('What mode your feeling today?')}
+                themeSubtitleLabel={t(
+                  'You can change your theme between dark mode or light mode! Which side are you on 😼',
                 )}
                 theme={theme}
                 onThemeSelect={handleThemeSelect}
-                onChevronLeftClick={handleChevronLeftClick}
               />
             }
           />
