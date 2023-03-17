@@ -12,6 +12,7 @@ export { IDBService, ServiceCallResult, IGqlClient, EthProviders, ServiceTypes a
 
 const ServiceTypes = {
   Gql: Symbol.for('awf-Gql'),
+  GqlNew: Symbol.for('awf-Gql-new'),
   Stash: Symbol.for('awf-Stash'),
   Log: Symbol.for('awf-Log'),
   Settings: Symbol.for('awf-Settings'),

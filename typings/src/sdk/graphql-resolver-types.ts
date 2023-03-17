@@ -1,6 +1,6 @@
 import * as Types from './graphql-types';
 
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { GraphQLResolveInfo } from 'graphql';
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 
 
@@ -69,842 +69,399 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  AppIntegration: ResolverTypeWrapper<Types.AppIntegration>;
-  String: ResolverTypeWrapper<Types.Scalars['String']>;
-  ID: ResolverTypeWrapper<Types.Scalars['ID']>;
-  Int: ResolverTypeWrapper<Types.Scalars['Int']>;
-  AppIntegrationConnection: ResolverTypeWrapper<Types.AppIntegrationConnection>;
-  AppIntegrationEdge: ResolverTypeWrapper<Types.AppIntegrationEdge>;
-  AppIntegrationInput: Types.AppIntegrationInput;
-  AppIntegrationIntegrationType: Types.AppIntegrationIntegrationType;
-  AppRelease: ResolverTypeWrapper<Types.AppRelease>;
-  AppReleaseConnection: ResolverTypeWrapper<Types.AppReleaseConnection>;
-  AppReleaseEdge: ResolverTypeWrapper<Types.AppReleaseEdge>;
-  AppReleaseInput: Types.AppReleaseInput;
-  CeramicAccount: ResolverTypeWrapper<Types.CeramicAccount>;
-  Boolean: ResolverTypeWrapper<Types.Scalars['Boolean']>;
-  CeramicCommitID: ResolverTypeWrapper<Types.Scalars['CeramicCommitID']>;
-  CeramicStreamID: ResolverTypeWrapper<Types.Scalars['CeramicStreamID']>;
+  CacheControlScope: Types.CacheControlScope;
   Comment: ResolverTypeWrapper<Types.Comment>;
-  CommentConnection: ResolverTypeWrapper<Types.CommentConnection>;
-  CommentEdge: ResolverTypeWrapper<Types.CommentEdge>;
-  CommentInput: Types.CommentInput;
-  CommentProviderValue: ResolverTypeWrapper<Types.CommentProviderValue>;
-  CommentProviderValueInput: Types.CommentProviderValueInput;
-  CommentReply: ResolverTypeWrapper<Types.CommentReply>;
-  CommentReplyConnection: ResolverTypeWrapper<Types.CommentReplyConnection>;
-  CommentReplyEdge: ResolverTypeWrapper<Types.CommentReplyEdge>;
-  CommentReplyInput: Types.CommentReplyInput;
-  CreateAppIntegrationInput: Types.CreateAppIntegrationInput;
-  CreateAppIntegrationPayload: ResolverTypeWrapper<Types.CreateAppIntegrationPayload>;
-  CreateAppReleaseInput: Types.CreateAppReleaseInput;
-  CreateAppReleasePayload: ResolverTypeWrapper<Types.CreateAppReleasePayload>;
-  CreateCommentInput: Types.CreateCommentInput;
-  CreateCommentPayload: ResolverTypeWrapper<Types.CreateCommentPayload>;
-  CreateCommentReplyInput: Types.CreateCommentReplyInput;
-  CreateCommentReplyPayload: ResolverTypeWrapper<Types.CreateCommentReplyPayload>;
-  CreateFollowInput: Types.CreateFollowInput;
-  CreateFollowPayload: ResolverTypeWrapper<Types.CreateFollowPayload>;
-  CreateInterestsInput: Types.CreateInterestsInput;
-  CreateInterestsPayload: ResolverTypeWrapper<Types.CreateInterestsPayload>;
-  CreatePostInput: Types.CreatePostInput;
-  CreatePostPayload: ResolverTypeWrapper<Types.CreatePostPayload>;
-  CreatePostQuoteInput: Types.CreatePostQuoteInput;
-  CreatePostQuotePayload: ResolverTypeWrapper<Types.CreatePostQuotePayload>;
-  CreateProfileInput: Types.CreateProfileInput;
-  CreateProfileMentionInput: Types.CreateProfileMentionInput;
-  CreateProfileMentionPayload: ResolverTypeWrapper<Types.CreateProfileMentionPayload>;
-  CreateProfilePayload: ResolverTypeWrapper<Types.CreateProfilePayload>;
-  DID: ResolverTypeWrapper<Types.Scalars['DID']>;
-  DateTime: ResolverTypeWrapper<Types.Scalars['DateTime']>;
-  Follow: ResolverTypeWrapper<Types.Follow>;
-  FollowConnection: ResolverTypeWrapper<Types.FollowConnection>;
-  FollowEdge: ResolverTypeWrapper<Types.FollowEdge>;
-  FollowInput: Types.FollowInput;
-  InterPlanetaryCID: ResolverTypeWrapper<Types.Scalars['InterPlanetaryCID']>;
-  Interests: ResolverTypeWrapper<Types.Interests>;
-  InterestsConnection: ResolverTypeWrapper<Types.InterestsConnection>;
-  InterestsEdge: ResolverTypeWrapper<Types.InterestsEdge>;
-  InterestsInput: Types.InterestsInput;
-  InterestsLabeled: ResolverTypeWrapper<Types.InterestsLabeled>;
-  InterestsLabeledInput: Types.InterestsLabeledInput;
+  ID: ResolverTypeWrapper<Types.Scalars['ID']>;
+  String: ResolverTypeWrapper<Types.Scalars['String']>;
+  Int: ResolverTypeWrapper<Types.Scalars['Int']>;
+  CommentData: Types.CommentData;
+  CommentsResult: ResolverTypeWrapper<Types.CommentsResult>;
+  DataProvider: ResolverTypeWrapper<Types.DataProvider>;
+  DataProviderInput: Types.DataProviderInput;
+  Decision: ResolverTypeWrapper<Types.Decision>;
+  Boolean: ResolverTypeWrapper<Types.Scalars['Boolean']>;
+  DecisionData: Types.DecisionData;
+  DecisionMeta: Types.DecisionMeta;
+  DecisionsCount: ResolverTypeWrapper<Types.DecisionsCount>;
+  GlobalSearchResult: ResolverTypeWrapper<Types.GlobalSearchResult>;
+  GlobalSearchResultItem: ResolverTypeWrapper<Types.GlobalSearchResultItem>;
+  GlobalSearchResultTagItem: ResolverTypeWrapper<Types.GlobalSearchResultTagItem>;
+  InfoLink: ResolverTypeWrapper<Types.InfoLink>;
+  IntegrationInfo: ResolverTypeWrapper<Types.IntegrationInfo>;
+  IntegrationReleaseInfo: ResolverTypeWrapper<Types.IntegrationReleaseInfo>;
+  LinkPreview: ResolverTypeWrapper<Types.LinkPreview>;
+  ManifestInfo: ResolverTypeWrapper<Types.ManifestInfo>;
+  Moderator: ResolverTypeWrapper<Types.Moderator>;
+  ModeratorData: Types.ModeratorData;
   Mutation: ResolverTypeWrapper<{}>;
-  Node: ResolversTypes['AppIntegration'] | ResolversTypes['AppRelease'] | ResolversTypes['CeramicAccount'] | ResolversTypes['Comment'] | ResolversTypes['CommentReply'] | ResolversTypes['Follow'] | ResolversTypes['Interests'] | ResolversTypes['Post'] | ResolversTypes['PostQuote'] | ResolversTypes['Profile'] | ResolversTypes['ProfileMention'];
-  PageInfo: ResolverTypeWrapper<Types.PageInfo>;
-  PartialAppIntegrationInput: Types.PartialAppIntegrationInput;
-  PartialAppReleaseInput: Types.PartialAppReleaseInput;
-  PartialCommentInput: Types.PartialCommentInput;
-  PartialCommentReplyInput: Types.PartialCommentReplyInput;
-  PartialFollowInput: Types.PartialFollowInput;
-  PartialInterestsInput: Types.PartialInterestsInput;
-  PartialPostInput: Types.PartialPostInput;
-  PartialPostQuoteInput: Types.PartialPostQuoteInput;
-  PartialProfileInput: Types.PartialProfileInput;
-  PartialProfileMentionInput: Types.PartialProfileMentionInput;
+  NewPostsResult: ResolverTypeWrapper<Types.NewPostsResult>;
   Post: ResolverTypeWrapper<Types.Post>;
-  PostConnection: ResolverTypeWrapper<Types.PostConnection>;
-  PostEdge: ResolverTypeWrapper<Types.PostEdge>;
-  PostInput: Types.PostInput;
-  PostProviderValue: ResolverTypeWrapper<Types.PostProviderValue>;
-  PostProviderValueInput: Types.PostProviderValueInput;
-  PostQuote: ResolverTypeWrapper<Types.PostQuote>;
-  PostQuoteConnection: ResolverTypeWrapper<Types.PostQuoteConnection>;
-  PostQuoteEdge: ResolverTypeWrapper<Types.PostQuoteEdge>;
-  PostQuoteInput: Types.PostQuoteInput;
-  Profile: ResolverTypeWrapper<Types.Profile>;
-  ProfileConnection: ResolverTypeWrapper<Types.ProfileConnection>;
-  ProfileEdge: ResolverTypeWrapper<Types.ProfileEdge>;
-  ProfileImageSource: ResolverTypeWrapper<Types.ProfileImageSource>;
-  ProfileImageSourceInput: Types.ProfileImageSourceInput;
-  ProfileImageVersions: ResolverTypeWrapper<Types.ProfileImageVersions>;
-  ProfileImageVersionsInput: Types.ProfileImageVersionsInput;
-  ProfileInput: Types.ProfileInput;
-  ProfileLinkSource: ResolverTypeWrapper<Types.ProfileLinkSource>;
-  ProfileLinkSourceInput: Types.ProfileLinkSourceInput;
-  ProfileMention: ResolverTypeWrapper<Types.ProfileMention>;
-  ProfileMentionConnection: ResolverTypeWrapper<Types.ProfileMentionConnection>;
-  ProfileMentionEdge: ResolverTypeWrapper<Types.ProfileMentionEdge>;
-  ProfileMentionInput: Types.ProfileMentionInput;
+  PostData: Types.PostData;
+  PostType: Types.PostType;
+  PostsResult: ResolverTypeWrapper<Types.PostsResult>;
+  ProfilesResult: ResolverTypeWrapper<Types.ProfilesResult>;
   Query: ResolverTypeWrapper<{}>;
-  URI: ResolverTypeWrapper<Types.Scalars['URI']>;
-  UpdateAppIntegrationInput: Types.UpdateAppIntegrationInput;
-  UpdateAppIntegrationPayload: ResolverTypeWrapper<Types.UpdateAppIntegrationPayload>;
-  UpdateAppReleaseInput: Types.UpdateAppReleaseInput;
-  UpdateAppReleasePayload: ResolverTypeWrapper<Types.UpdateAppReleasePayload>;
-  UpdateCommentInput: Types.UpdateCommentInput;
-  UpdateCommentPayload: ResolverTypeWrapper<Types.UpdateCommentPayload>;
-  UpdateCommentReplyInput: Types.UpdateCommentReplyInput;
-  UpdateCommentReplyPayload: ResolverTypeWrapper<Types.UpdateCommentReplyPayload>;
-  UpdateFollowInput: Types.UpdateFollowInput;
-  UpdateFollowPayload: ResolverTypeWrapper<Types.UpdateFollowPayload>;
-  UpdateInterestsInput: Types.UpdateInterestsInput;
-  UpdateInterestsPayload: ResolverTypeWrapper<Types.UpdateInterestsPayload>;
-  UpdateOptionsInput: Types.UpdateOptionsInput;
-  UpdatePostInput: Types.UpdatePostInput;
-  UpdatePostPayload: ResolverTypeWrapper<Types.UpdatePostPayload>;
-  UpdatePostQuoteInput: Types.UpdatePostQuoteInput;
-  UpdatePostQuotePayload: ResolverTypeWrapper<Types.UpdatePostQuotePayload>;
-  UpdateProfileInput: Types.UpdateProfileInput;
-  UpdateProfileMentionInput: Types.UpdateProfileMentionInput;
-  UpdateProfileMentionPayload: ResolverTypeWrapper<Types.UpdateProfileMentionPayload>;
-  UpdateProfilePayload: ResolverTypeWrapper<Types.UpdateProfilePayload>;
+  ReportData: Types.ReportData;
+  ReportMeta: Types.ReportMeta;
+  SearchTagsResult: ResolverTypeWrapper<Types.SearchTagsResult>;
+  Tag: ResolverTypeWrapper<Types.Tag>;
+  TagsResult: ResolverTypeWrapper<Types.TagsResult>;
+  UserProfile: ResolverTypeWrapper<Types.UserProfile>;
+  VideoPreview: ResolverTypeWrapper<Types.VideoPreview>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  AppIntegration: Types.AppIntegration;
-  String: Types.Scalars['String'];
-  ID: Types.Scalars['ID'];
-  Int: Types.Scalars['Int'];
-  AppIntegrationConnection: Types.AppIntegrationConnection;
-  AppIntegrationEdge: Types.AppIntegrationEdge;
-  AppIntegrationInput: Types.AppIntegrationInput;
-  AppRelease: Types.AppRelease;
-  AppReleaseConnection: Types.AppReleaseConnection;
-  AppReleaseEdge: Types.AppReleaseEdge;
-  AppReleaseInput: Types.AppReleaseInput;
-  CeramicAccount: Types.CeramicAccount;
-  Boolean: Types.Scalars['Boolean'];
-  CeramicCommitID: Types.Scalars['CeramicCommitID'];
-  CeramicStreamID: Types.Scalars['CeramicStreamID'];
   Comment: Types.Comment;
-  CommentConnection: Types.CommentConnection;
-  CommentEdge: Types.CommentEdge;
-  CommentInput: Types.CommentInput;
-  CommentProviderValue: Types.CommentProviderValue;
-  CommentProviderValueInput: Types.CommentProviderValueInput;
-  CommentReply: Types.CommentReply;
-  CommentReplyConnection: Types.CommentReplyConnection;
-  CommentReplyEdge: Types.CommentReplyEdge;
-  CommentReplyInput: Types.CommentReplyInput;
-  CreateAppIntegrationInput: Types.CreateAppIntegrationInput;
-  CreateAppIntegrationPayload: Types.CreateAppIntegrationPayload;
-  CreateAppReleaseInput: Types.CreateAppReleaseInput;
-  CreateAppReleasePayload: Types.CreateAppReleasePayload;
-  CreateCommentInput: Types.CreateCommentInput;
-  CreateCommentPayload: Types.CreateCommentPayload;
-  CreateCommentReplyInput: Types.CreateCommentReplyInput;
-  CreateCommentReplyPayload: Types.CreateCommentReplyPayload;
-  CreateFollowInput: Types.CreateFollowInput;
-  CreateFollowPayload: Types.CreateFollowPayload;
-  CreateInterestsInput: Types.CreateInterestsInput;
-  CreateInterestsPayload: Types.CreateInterestsPayload;
-  CreatePostInput: Types.CreatePostInput;
-  CreatePostPayload: Types.CreatePostPayload;
-  CreatePostQuoteInput: Types.CreatePostQuoteInput;
-  CreatePostQuotePayload: Types.CreatePostQuotePayload;
-  CreateProfileInput: Types.CreateProfileInput;
-  CreateProfileMentionInput: Types.CreateProfileMentionInput;
-  CreateProfileMentionPayload: Types.CreateProfileMentionPayload;
-  CreateProfilePayload: Types.CreateProfilePayload;
-  DID: Types.Scalars['DID'];
-  DateTime: Types.Scalars['DateTime'];
-  Follow: Types.Follow;
-  FollowConnection: Types.FollowConnection;
-  FollowEdge: Types.FollowEdge;
-  FollowInput: Types.FollowInput;
-  InterPlanetaryCID: Types.Scalars['InterPlanetaryCID'];
-  Interests: Types.Interests;
-  InterestsConnection: Types.InterestsConnection;
-  InterestsEdge: Types.InterestsEdge;
-  InterestsInput: Types.InterestsInput;
-  InterestsLabeled: Types.InterestsLabeled;
-  InterestsLabeledInput: Types.InterestsLabeledInput;
+  ID: Types.Scalars['ID'];
+  String: Types.Scalars['String'];
+  Int: Types.Scalars['Int'];
+  CommentData: Types.CommentData;
+  CommentsResult: Types.CommentsResult;
+  DataProvider: Types.DataProvider;
+  DataProviderInput: Types.DataProviderInput;
+  Decision: Types.Decision;
+  Boolean: Types.Scalars['Boolean'];
+  DecisionData: Types.DecisionData;
+  DecisionMeta: Types.DecisionMeta;
+  DecisionsCount: Types.DecisionsCount;
+  GlobalSearchResult: Types.GlobalSearchResult;
+  GlobalSearchResultItem: Types.GlobalSearchResultItem;
+  GlobalSearchResultTagItem: Types.GlobalSearchResultTagItem;
+  InfoLink: Types.InfoLink;
+  IntegrationInfo: Types.IntegrationInfo;
+  IntegrationReleaseInfo: Types.IntegrationReleaseInfo;
+  LinkPreview: Types.LinkPreview;
+  ManifestInfo: Types.ManifestInfo;
+  Moderator: Types.Moderator;
+  ModeratorData: Types.ModeratorData;
   Mutation: {};
-  Node: ResolversParentTypes['AppIntegration'] | ResolversParentTypes['AppRelease'] | ResolversParentTypes['CeramicAccount'] | ResolversParentTypes['Comment'] | ResolversParentTypes['CommentReply'] | ResolversParentTypes['Follow'] | ResolversParentTypes['Interests'] | ResolversParentTypes['Post'] | ResolversParentTypes['PostQuote'] | ResolversParentTypes['Profile'] | ResolversParentTypes['ProfileMention'];
-  PageInfo: Types.PageInfo;
-  PartialAppIntegrationInput: Types.PartialAppIntegrationInput;
-  PartialAppReleaseInput: Types.PartialAppReleaseInput;
-  PartialCommentInput: Types.PartialCommentInput;
-  PartialCommentReplyInput: Types.PartialCommentReplyInput;
-  PartialFollowInput: Types.PartialFollowInput;
-  PartialInterestsInput: Types.PartialInterestsInput;
-  PartialPostInput: Types.PartialPostInput;
-  PartialPostQuoteInput: Types.PartialPostQuoteInput;
-  PartialProfileInput: Types.PartialProfileInput;
-  PartialProfileMentionInput: Types.PartialProfileMentionInput;
+  NewPostsResult: Types.NewPostsResult;
   Post: Types.Post;
-  PostConnection: Types.PostConnection;
-  PostEdge: Types.PostEdge;
-  PostInput: Types.PostInput;
-  PostProviderValue: Types.PostProviderValue;
-  PostProviderValueInput: Types.PostProviderValueInput;
-  PostQuote: Types.PostQuote;
-  PostQuoteConnection: Types.PostQuoteConnection;
-  PostQuoteEdge: Types.PostQuoteEdge;
-  PostQuoteInput: Types.PostQuoteInput;
-  Profile: Types.Profile;
-  ProfileConnection: Types.ProfileConnection;
-  ProfileEdge: Types.ProfileEdge;
-  ProfileImageSource: Types.ProfileImageSource;
-  ProfileImageSourceInput: Types.ProfileImageSourceInput;
-  ProfileImageVersions: Types.ProfileImageVersions;
-  ProfileImageVersionsInput: Types.ProfileImageVersionsInput;
-  ProfileInput: Types.ProfileInput;
-  ProfileLinkSource: Types.ProfileLinkSource;
-  ProfileLinkSourceInput: Types.ProfileLinkSourceInput;
-  ProfileMention: Types.ProfileMention;
-  ProfileMentionConnection: Types.ProfileMentionConnection;
-  ProfileMentionEdge: Types.ProfileMentionEdge;
-  ProfileMentionInput: Types.ProfileMentionInput;
+  PostData: Types.PostData;
+  PostsResult: Types.PostsResult;
+  ProfilesResult: Types.ProfilesResult;
   Query: {};
-  URI: Types.Scalars['URI'];
-  UpdateAppIntegrationInput: Types.UpdateAppIntegrationInput;
-  UpdateAppIntegrationPayload: Types.UpdateAppIntegrationPayload;
-  UpdateAppReleaseInput: Types.UpdateAppReleaseInput;
-  UpdateAppReleasePayload: Types.UpdateAppReleasePayload;
-  UpdateCommentInput: Types.UpdateCommentInput;
-  UpdateCommentPayload: Types.UpdateCommentPayload;
-  UpdateCommentReplyInput: Types.UpdateCommentReplyInput;
-  UpdateCommentReplyPayload: Types.UpdateCommentReplyPayload;
-  UpdateFollowInput: Types.UpdateFollowInput;
-  UpdateFollowPayload: Types.UpdateFollowPayload;
-  UpdateInterestsInput: Types.UpdateInterestsInput;
-  UpdateInterestsPayload: Types.UpdateInterestsPayload;
-  UpdateOptionsInput: Types.UpdateOptionsInput;
-  UpdatePostInput: Types.UpdatePostInput;
-  UpdatePostPayload: Types.UpdatePostPayload;
-  UpdatePostQuoteInput: Types.UpdatePostQuoteInput;
-  UpdatePostQuotePayload: Types.UpdatePostQuotePayload;
-  UpdateProfileInput: Types.UpdateProfileInput;
-  UpdateProfileMentionInput: Types.UpdateProfileMentionInput;
-  UpdateProfileMentionPayload: Types.UpdateProfileMentionPayload;
-  UpdateProfilePayload: Types.UpdateProfilePayload;
+  ReportData: Types.ReportData;
+  ReportMeta: Types.ReportMeta;
+  SearchTagsResult: Types.SearchTagsResult;
+  Tag: Types.Tag;
+  TagsResult: Types.TagsResult;
+  UserProfile: Types.UserProfile;
+  VideoPreview: Types.VideoPreview;
 };
 
-export type AppIntegrationResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppIntegration'] = ResolversParentTypes['AppIntegration']> = {
-  author?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
-  contributors?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CeramicAccount']>>>, ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  integrationType?: Resolver<Types.Maybe<ResolversTypes['AppIntegrationIntegrationType']>, ParentType, ContextType>;
-  keywords?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
-  licence?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+export type CacheControlDirectiveArgs = {
+  inheritMaxAge?: Types.Maybe<Types.Scalars['Boolean']>;
+  maxAge?: Types.Maybe<Types.Scalars['Int']>;
+  scope?: Types.Maybe<Types.CacheControlScope>;
+};
+
+export type CacheControlDirectiveResolver<Result, Parent, ContextType = any, Args = CacheControlDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type CommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  author?: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
+  content?: Resolver<Types.Maybe<Array<ResolversTypes['DataProvider']>>, ParentType, ContextType>;
+  creationDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mentions?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  postId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  replyTo?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  totalReplies?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CommentsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CommentsResult'] = ResolversParentTypes['CommentsResult']> = {
+  nextIndex?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  results?: Resolver<Types.Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>;
+  total?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DataProviderResolvers<ContextType = any, ParentType extends ResolversParentTypes['DataProvider'] = ResolversParentTypes['DataProvider']> = {
+  property?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DecisionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Decision'] = ResolversParentTypes['Decision']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  contentID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  contentType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  creationDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  delisted?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  explanation?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  moderated?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  moderatedDate?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  moderator?: Resolver<Types.Maybe<ResolversTypes['UserProfile']>, ParentType, ContextType>;
+  reasons?: Resolver<Array<Types.Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  reportedBy?: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
+  reportedDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  reports?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type DecisionsCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['DecisionsCount'] = ResolversParentTypes['DecisionsCount']> = {
+  delisted?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  kept?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  pending?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GlobalSearchResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['GlobalSearchResult'] = ResolversParentTypes['GlobalSearchResult']> = {
+  comments?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['GlobalSearchResultItem']>>>, ParentType, ContextType>;
+  posts?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['GlobalSearchResultItem']>>>, ParentType, ContextType>;
+  profiles?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['GlobalSearchResultItem']>>>, ParentType, ContextType>;
+  tags?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['GlobalSearchResultTagItem']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GlobalSearchResultItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['GlobalSearchResultItem'] = ResolversParentTypes['GlobalSearchResultItem']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  releases?: Resolver<ResolversTypes['AppReleaseConnection'], ParentType, ContextType, Partial<Types.AppIntegrationReleasesArgs>>;
-  releasessCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.AppIntegrationReleasessCountArgs>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AppIntegrationConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppIntegrationConnection'] = ResolversParentTypes['AppIntegrationConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AppIntegrationEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+export type GlobalSearchResultTagItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['GlobalSearchResultTagItem'] = ResolversParentTypes['GlobalSearchResultTagItem']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  totalPosts?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AppIntegrationEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppIntegrationEdge'] = ResolversParentTypes['AppIntegrationEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['AppIntegration']>, ParentType, ContextType>;
+export type InfoLinkResolvers<ContextType = any, ParentType extends ResolversParentTypes['InfoLink'] = ResolversParentTypes['InfoLink']> = {
+  detailedDescription?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  documentation?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  publicRepository?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AppReleaseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppRelease'] = ResolversParentTypes['AppRelease']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  integration?: Resolver<Types.Maybe<ResolversTypes['AppIntegration']>, ParentType, ContextType>;
-  integrationID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  source?: Resolver<ResolversTypes['InterPlanetaryCID'], ParentType, ContextType>;
+export type IntegrationInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['IntegrationInfo'] = ResolversParentTypes['IntegrationInfo']> = {
+  author?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  enabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  integrationType?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  latestReleaseId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type IntegrationReleaseInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['IntegrationReleaseInfo'] = ResolversParentTypes['IntegrationReleaseInfo']> = {
+  author?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  enabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  integrationID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  integrationType?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  links?: Resolver<Types.Maybe<ResolversTypes['InfoLink']>, ParentType, ContextType>;
+  manifestData?: Resolver<ResolversTypes['ManifestInfo'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sources?: Resolver<Types.Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AppReleaseConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppReleaseConnection'] = ResolversParentTypes['AppReleaseConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['AppReleaseEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+export type LinkPreviewResolvers<ContextType = any, ParentType extends ResolversParentTypes['LinkPreview'] = ResolversParentTypes['LinkPreview']> = {
+  contentType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  faviconPreviewHash?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  favicons?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  imagePreviewHash?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  images?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  mediaType?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  siteName?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  videos?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['VideoPreview']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type AppReleaseEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AppReleaseEdge'] = ResolversParentTypes['AppReleaseEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['AppRelease']>, ParentType, ContextType>;
+export type ManifestInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['ManifestInfo'] = ResolversParentTypes['ManifestInfo']> = {
+  description?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  displayName?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  keywords?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  license?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  mainFile?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type CeramicAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['CeramicAccount'] = ResolversParentTypes['CeramicAccount']> = {
-  appIntegrationList?: Resolver<Types.Maybe<ResolversTypes['AppIntegrationConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAppIntegrationListArgs>>;
-  appReleaseList?: Resolver<Types.Maybe<ResolversTypes['AppReleaseConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountAppReleaseListArgs>>;
-  commentList?: Resolver<Types.Maybe<ResolversTypes['CommentConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountCommentListArgs>>;
-  commentReplyList?: Resolver<Types.Maybe<ResolversTypes['CommentReplyConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountCommentReplyListArgs>>;
-  followList?: Resolver<Types.Maybe<ResolversTypes['FollowConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountFollowListArgs>>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  interests?: Resolver<Types.Maybe<ResolversTypes['Interests']>, ParentType, ContextType>;
-  isViewer?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  postList?: Resolver<Types.Maybe<ResolversTypes['PostConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountPostListArgs>>;
-  postQuoteList?: Resolver<Types.Maybe<ResolversTypes['PostQuoteConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountPostQuoteListArgs>>;
-  profile?: Resolver<Types.Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
-  profileMentionList?: Resolver<Types.Maybe<ResolversTypes['ProfileMentionConnection']>, ParentType, ContextType, Partial<Types.CeramicAccountProfileMentionListArgs>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export interface CeramicCommitIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['CeramicCommitID'], any> {
-  name: 'CeramicCommitID';
-}
-
-export interface CeramicStreamIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['CeramicStreamID'], any> {
-  name: 'CeramicStreamID';
-}
-
-export type CommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = {
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  author?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
-  content?: Resolver<Array<ResolversTypes['CommentProviderValue']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isReply?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  post?: Resolver<Types.Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
-  postID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  replies?: Resolver<ResolversTypes['CommentReplyConnection'], ParentType, ContextType, Partial<Types.CommentRepliesArgs>>;
-  repliesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.CommentRepliesCountArgs>>;
-  version?: Resolver<ResolversTypes['CeramicCommitID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CommentConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CommentConnection'] = ResolversParentTypes['CommentConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CommentEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CommentEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CommentEdge'] = ResolversParentTypes['CommentEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Comment']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CommentProviderValueResolvers<ContextType = any, ParentType extends ResolversParentTypes['CommentProviderValue'] = ResolversParentTypes['CommentProviderValue']> = {
-  property?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  provider?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CommentReplyResolvers<ContextType = any, ParentType extends ResolversParentTypes['CommentReply'] = ResolversParentTypes['CommentReply']> = {
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  comment?: Resolver<Types.Maybe<ResolversTypes['Comment']>, ParentType, ContextType>;
-  commentID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  reply?: Resolver<Types.Maybe<ResolversTypes['Comment']>, ParentType, ContextType>;
-  replyID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CommentReplyConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CommentReplyConnection'] = ResolversParentTypes['CommentReplyConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['CommentReplyEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CommentReplyEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CommentReplyEdge'] = ResolversParentTypes['CommentReplyEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['CommentReply']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreateAppIntegrationPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAppIntegrationPayload'] = ResolversParentTypes['CreateAppIntegrationPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['AppIntegration'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAppIntegrationPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreateAppReleasePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateAppReleasePayload'] = ResolversParentTypes['CreateAppReleasePayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['AppRelease'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateAppReleasePayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreateCommentPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateCommentPayload'] = ResolversParentTypes['CreateCommentPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Comment'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateCommentPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreateCommentReplyPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateCommentReplyPayload'] = ResolversParentTypes['CreateCommentReplyPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['CommentReply'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateCommentReplyPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreateFollowPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateFollowPayload'] = ResolversParentTypes['CreateFollowPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Follow'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateFollowPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreateInterestsPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateInterestsPayload'] = ResolversParentTypes['CreateInterestsPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Interests'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateInterestsPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreatePostPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatePostPayload'] = ResolversParentTypes['CreatePostPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreatePostPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreatePostQuotePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatePostQuotePayload'] = ResolversParentTypes['CreatePostQuotePayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['PostQuote'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreatePostQuotePayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreateProfileMentionPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateProfileMentionPayload'] = ResolversParentTypes['CreateProfileMentionPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['ProfileMention'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateProfileMentionPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type CreateProfilePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateProfilePayload'] = ResolversParentTypes['CreateProfilePayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.CreateProfilePayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export interface DidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DID'], any> {
-  name: 'DID';
-}
-
-export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
-  name: 'DateTime';
-}
-
-export type FollowResolvers<ContextType = any, ParentType extends ResolversParentTypes['Follow'] = ResolversParentTypes['Follow']> = {
-  did?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isFollowing?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  profile?: Resolver<Types.Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
-  profileID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type FollowConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['FollowConnection'] = ResolversParentTypes['FollowConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['FollowEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type FollowEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['FollowEdge'] = ResolversParentTypes['FollowEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Follow']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export interface InterPlanetaryCidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['InterPlanetaryCID'], any> {
-  name: 'InterPlanetaryCID';
-}
-
-export type InterestsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Interests'] = ResolversParentTypes['Interests']> = {
-  did?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  topics?: Resolver<Array<ResolversTypes['InterestsLabeled']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type InterestsConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['InterestsConnection'] = ResolversParentTypes['InterestsConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['InterestsEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type InterestsEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['InterestsEdge'] = ResolversParentTypes['InterestsEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Interests']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type InterestsLabeledResolvers<ContextType = any, ParentType extends ResolversParentTypes['InterestsLabeled'] = ResolversParentTypes['InterestsLabeled']> = {
-  labelType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+export type ModeratorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Moderator'] = ResolversParentTypes['Moderator']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  active?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  admin?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  creationDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  ethAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createAppIntegration?: Resolver<Types.Maybe<ResolversTypes['CreateAppIntegrationPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAppIntegrationArgs, 'input'>>;
-  createAppRelease?: Resolver<Types.Maybe<ResolversTypes['CreateAppReleasePayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateAppReleaseArgs, 'input'>>;
-  createComment?: Resolver<Types.Maybe<ResolversTypes['CreateCommentPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateCommentArgs, 'input'>>;
-  createCommentReply?: Resolver<Types.Maybe<ResolversTypes['CreateCommentReplyPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateCommentReplyArgs, 'input'>>;
-  createFollow?: Resolver<Types.Maybe<ResolversTypes['CreateFollowPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateFollowArgs, 'input'>>;
-  createInterests?: Resolver<Types.Maybe<ResolversTypes['CreateInterestsPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateInterestsArgs, 'input'>>;
-  createPost?: Resolver<Types.Maybe<ResolversTypes['CreatePostPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreatePostArgs, 'input'>>;
-  createPostQuote?: Resolver<Types.Maybe<ResolversTypes['CreatePostQuotePayload']>, ParentType, ContextType, RequireFields<Types.MutationCreatePostQuoteArgs, 'input'>>;
-  createProfile?: Resolver<Types.Maybe<ResolversTypes['CreateProfilePayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateProfileArgs, 'input'>>;
-  createProfileMention?: Resolver<Types.Maybe<ResolversTypes['CreateProfileMentionPayload']>, ParentType, ContextType, RequireFields<Types.MutationCreateProfileMentionArgs, 'input'>>;
-  updateAppIntegration?: Resolver<Types.Maybe<ResolversTypes['UpdateAppIntegrationPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAppIntegrationArgs, 'input'>>;
-  updateAppRelease?: Resolver<Types.Maybe<ResolversTypes['UpdateAppReleasePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateAppReleaseArgs, 'input'>>;
-  updateComment?: Resolver<Types.Maybe<ResolversTypes['UpdateCommentPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateCommentArgs, 'input'>>;
-  updateCommentReply?: Resolver<Types.Maybe<ResolversTypes['UpdateCommentReplyPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateCommentReplyArgs, 'input'>>;
-  updateFollow?: Resolver<Types.Maybe<ResolversTypes['UpdateFollowPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateFollowArgs, 'input'>>;
-  updateInterests?: Resolver<Types.Maybe<ResolversTypes['UpdateInterestsPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateInterestsArgs, 'input'>>;
-  updatePost?: Resolver<Types.Maybe<ResolversTypes['UpdatePostPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdatePostArgs, 'input'>>;
-  updatePostQuote?: Resolver<Types.Maybe<ResolversTypes['UpdatePostQuotePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdatePostQuoteArgs, 'input'>>;
-  updateProfile?: Resolver<Types.Maybe<ResolversTypes['UpdateProfilePayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateProfileArgs, 'input'>>;
-  updateProfileMention?: Resolver<Types.Maybe<ResolversTypes['UpdateProfileMentionPayload']>, ParentType, ContextType, RequireFields<Types.MutationUpdateProfileMentionArgs, 'input'>>;
+  addComment?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<Types.MutationAddCommentArgs>>;
+  addProfileProvider?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<Types.MutationAddProfileProviderArgs>>;
+  createPost?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<Types.MutationCreatePostArgs>>;
+  createTag?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<Types.MutationCreateTagArgs, 'name'>>;
+  editComment?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.MutationEditCommentArgs, 'id'>>;
+  editPost?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.MutationEditPostArgs, 'id'>>;
+  follow?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.MutationFollowArgs, 'pubKey'>>;
+  getLinkPreview?: Resolver<Types.Maybe<ResolversTypes['LinkPreview']>, ParentType, ContextType, RequireFields<Types.MutationGetLinkPreviewArgs, 'link'>>;
+  makeDefaultProvider?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<Types.MutationMakeDefaultProviderArgs>>;
+  moderateContent?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<Types.MutationModerateContentArgs>>;
+  registerUserName?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<Types.MutationRegisterUserNameArgs, 'name'>>;
+  removeComment?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.MutationRemoveCommentArgs, 'id'>>;
+  removePost?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.MutationRemovePostArgs, 'id'>>;
+  reportContent?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType, Partial<Types.MutationReportContentArgs>>;
+  saveMetaData?: Resolver<ResolversTypes['String'], ParentType, ContextType, Partial<Types.MutationSaveMetaDataArgs>>;
+  toggleInterestSub?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.MutationToggleInterestSubArgs, 'sub'>>;
+  unFollow?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.MutationUnFollowArgs, 'pubKey'>>;
+  updateModerator?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<Types.MutationUpdateModeratorArgs>>;
 };
 
-export type NodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Node'] = ResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'AppIntegration' | 'AppRelease' | 'CeramicAccount' | 'Comment' | 'CommentReply' | 'Follow' | 'Interests' | 'Post' | 'PostQuote' | 'Profile' | 'ProfileMention', ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-};
-
-export type PageInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo']> = {
-  endCursor?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  startCursor?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+export type NewPostsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['NewPostsResult'] = ResolversParentTypes['NewPostsResult']> = {
+  nextIndex?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  results?: Resolver<Types.Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>;
+  total?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  author?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
-  comments?: Resolver<ResolversTypes['CommentConnection'], ParentType, ContextType, Partial<Types.PostCommentsArgs>>;
-  commentsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.PostCommentsCountArgs>>;
-  content?: Resolver<Array<ResolversTypes['PostProviderValue']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  mentions?: Resolver<ResolversTypes['ProfileMentionConnection'], ParentType, ContextType, Partial<Types.PostMentionsArgs>>;
-  quotes?: Resolver<ResolversTypes['PostQuoteConnection'], ParentType, ContextType, Partial<Types.PostQuotesArgs>>;
-  quotesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.PostQuotesCountArgs>>;
-  tags?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
-  version?: Resolver<ResolversTypes['CeramicCommitID'], ParentType, ContextType>;
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  author?: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType>;
+  content?: Resolver<Types.Maybe<Array<ResolversTypes['DataProvider']>>, ParentType, ContextType>;
+  creationDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mentions?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  quotedBy?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  quotedByAuthors?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['UserProfile']>>>, ParentType, ContextType>;
+  quotes?: Resolver<Types.Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>;
+  tags?: Resolver<Types.Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  title?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  totalComments?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['PostType'], ParentType, ContextType>;
+  updatedAt?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PostConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostConnection'] = ResolversParentTypes['PostConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['PostEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
+export type PostsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostsResult'] = ResolversParentTypes['PostsResult']> = {
+  nextIndex?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  results?: Resolver<Types.Maybe<Array<ResolversTypes['Post']>>, ParentType, ContextType>;
+  total?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PostEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostEdge'] = ResolversParentTypes['PostEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type PostProviderValueResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostProviderValue'] = ResolversParentTypes['PostProviderValue']> = {
-  property?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  provider?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type PostQuoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostQuote'] = ResolversParentTypes['PostQuote']> = {
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  post?: Resolver<Types.Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
-  postID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  quotedPost?: Resolver<Types.Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
-  quotedPostID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type PostQuoteConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostQuoteConnection'] = ResolversParentTypes['PostQuoteConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['PostQuoteEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type PostQuoteEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostQuoteEdge'] = ResolversParentTypes['PostQuoteEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['PostQuote']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {
-  avatar?: Resolver<Types.Maybe<ResolversTypes['ProfileImageVersions']>, ParentType, ContextType>;
-  background?: Resolver<Types.Maybe<ResolversTypes['ProfileImageVersions']>, ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  description?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  did?: Resolver<ResolversTypes['CeramicAccount'], ParentType, ContextType>;
-  followers?: Resolver<ResolversTypes['FollowConnection'], ParentType, ContextType, Partial<Types.ProfileFollowersArgs>>;
-  following?: Resolver<ResolversTypes['FollowConnection'], ParentType, ContextType, Partial<Types.ProfileFollowingArgs>>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  links?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['ProfileLinkSource']>>>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  totalFollowers?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.ProfileTotalFollowersArgs>>;
-  totalFollowing?: Resolver<ResolversTypes['Int'], ParentType, ContextType, Partial<Types.ProfileTotalFollowingArgs>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileConnection'] = ResolversParentTypes['ProfileConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['ProfileEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileEdge'] = ResolversParentTypes['ProfileEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileImageSourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileImageSource'] = ResolversParentTypes['ProfileImageSource']> = {
-  height?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  src?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
-  width?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileImageVersionsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileImageVersions'] = ResolversParentTypes['ProfileImageVersions']> = {
-  alternatives?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['ProfileImageSource']>>>, ParentType, ContextType>;
-  default?: Resolver<ResolversTypes['ProfileImageSource'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileLinkSourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileLinkSource'] = ResolversParentTypes['ProfileLinkSource']> = {
-  href?: Resolver<ResolversTypes['URI'], ParentType, ContextType>;
-  label?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileMentionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileMention'] = ResolversParentTypes['ProfileMention']> = {
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  post?: Resolver<Types.Maybe<ResolversTypes['Post']>, ParentType, ContextType>;
-  postID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  profile?: Resolver<Types.Maybe<ResolversTypes['Profile']>, ParentType, ContextType>;
-  profileID?: Resolver<ResolversTypes['CeramicStreamID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileMentionConnectionResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileMentionConnection'] = ResolversParentTypes['ProfileMentionConnection']> = {
-  edges?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['ProfileMentionEdge']>>>, ParentType, ContextType>;
-  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ProfileMentionEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfileMentionEdge'] = ResolversParentTypes['ProfileMentionEdge']> = {
-  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['ProfileMention']>, ParentType, ContextType>;
+export type ProfilesResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProfilesResult'] = ResolversParentTypes['ProfilesResult']> = {
+  nextIndex?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  results?: Resolver<Types.Maybe<Array<ResolversTypes['UserProfile']>>, ParentType, ContextType>;
+  total?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  appIntegrationIndex?: Resolver<Types.Maybe<ResolversTypes['AppIntegrationConnection']>, ParentType, ContextType, Partial<Types.QueryAppIntegrationIndexArgs>>;
-  appReleaseIndex?: Resolver<Types.Maybe<ResolversTypes['AppReleaseConnection']>, ParentType, ContextType, Partial<Types.QueryAppReleaseIndexArgs>>;
-  commentIndex?: Resolver<Types.Maybe<ResolversTypes['CommentConnection']>, ParentType, ContextType, Partial<Types.QueryCommentIndexArgs>>;
-  commentReplyIndex?: Resolver<Types.Maybe<ResolversTypes['CommentReplyConnection']>, ParentType, ContextType, Partial<Types.QueryCommentReplyIndexArgs>>;
-  followIndex?: Resolver<Types.Maybe<ResolversTypes['FollowConnection']>, ParentType, ContextType, Partial<Types.QueryFollowIndexArgs>>;
-  interestsIndex?: Resolver<Types.Maybe<ResolversTypes['InterestsConnection']>, ParentType, ContextType, Partial<Types.QueryInterestsIndexArgs>>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.QueryNodeArgs, 'id'>>;
-  postIndex?: Resolver<Types.Maybe<ResolversTypes['PostConnection']>, ParentType, ContextType, Partial<Types.QueryPostIndexArgs>>;
-  postQuoteIndex?: Resolver<Types.Maybe<ResolversTypes['PostQuoteConnection']>, ParentType, ContextType, Partial<Types.QueryPostQuoteIndexArgs>>;
-  profileIndex?: Resolver<Types.Maybe<ResolversTypes['ProfileConnection']>, ParentType, ContextType, Partial<Types.QueryProfileIndexArgs>>;
-  profileMentionIndex?: Resolver<Types.Maybe<ResolversTypes['ProfileMentionConnection']>, ParentType, ContextType, Partial<Types.QueryProfileMentionIndexArgs>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+  getComment?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<Types.QueryGetCommentArgs, 'commentID'>>;
+  getComments?: Resolver<Types.Maybe<ResolversTypes['CommentsResult']>, ParentType, ContextType, RequireFields<Types.QueryGetCommentsArgs, 'postID'>>;
+  getCustomFeed?: Resolver<Types.Maybe<ResolversTypes['NewPostsResult']>, ParentType, ContextType, Partial<Types.QueryGetCustomFeedArgs>>;
+  getFollowers?: Resolver<Types.Maybe<ResolversTypes['ProfilesResult']>, ParentType, ContextType, RequireFields<Types.QueryGetFollowersArgs, 'pubKey'>>;
+  getFollowing?: Resolver<Types.Maybe<ResolversTypes['ProfilesResult']>, ParentType, ContextType, RequireFields<Types.QueryGetFollowingArgs, 'pubKey'>>;
+  getIntegrationInfo?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['IntegrationInfo']>>>, ParentType, ContextType, Partial<Types.QueryGetIntegrationInfoArgs>>;
+  getInterests?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['String']>>>, ParentType, ContextType, RequireFields<Types.QueryGetInterestsArgs, 'pubKey'>>;
+  getLatestRelease?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['IntegrationReleaseInfo']>>>, ParentType, ContextType, Partial<Types.QueryGetLatestReleaseArgs>>;
+  getPost?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<Types.QueryGetPostArgs, 'id'>>;
+  getPostsByAuthor?: Resolver<Types.Maybe<ResolversTypes['NewPostsResult']>, ParentType, ContextType, RequireFields<Types.QueryGetPostsByAuthorArgs, 'author'>>;
+  getPostsByTag?: Resolver<Types.Maybe<ResolversTypes['NewPostsResult']>, ParentType, ContextType, RequireFields<Types.QueryGetPostsByTagArgs, 'tag'>>;
+  getProfile?: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType, RequireFields<Types.QueryGetProfileArgs, 'ethAddress'>>;
+  getReplies?: Resolver<Types.Maybe<ResolversTypes['CommentsResult']>, ParentType, ContextType, RequireFields<Types.QueryGetRepliesArgs, 'commentID' | 'postID'>>;
+  getTag?: Resolver<Types.Maybe<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<Types.QueryGetTagArgs, 'name'>>;
+  globalSearch?: Resolver<Types.Maybe<ResolversTypes['GlobalSearchResult']>, ParentType, ContextType, RequireFields<Types.QueryGlobalSearchArgs, 'keyword'>>;
+  isFollowing?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.QueryIsFollowingArgs, 'follower' | 'following'>>;
+  isUserNameAvailable?: Resolver<Types.Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<Types.QueryIsUserNameAvailableArgs, 'userName'>>;
+  posts?: Resolver<Types.Maybe<ResolversTypes['PostsResult']>, ParentType, ContextType, Partial<Types.QueryPostsArgs>>;
+  resolveProfile?: Resolver<ResolversTypes['UserProfile'], ParentType, ContextType, RequireFields<Types.QueryResolveProfileArgs, 'pubKey'>>;
+  searchProfiles?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['UserProfile']>>>, ParentType, ContextType, RequireFields<Types.QuerySearchProfilesArgs, 'name'>>;
+  searchTags?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['SearchTagsResult']>>>, ParentType, ContextType, RequireFields<Types.QuerySearchTagsArgs, 'name'>>;
+  tags?: Resolver<Types.Maybe<ResolversTypes['TagsResult']>, ParentType, ContextType, Partial<Types.QueryTagsArgs>>;
 };
 
-export interface UriScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['URI'], any> {
-  name: 'URI';
-}
-
-export type UpdateAppIntegrationPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAppIntegrationPayload'] = ResolversParentTypes['UpdateAppIntegrationPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['AppIntegration'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAppIntegrationPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+export type SearchTagsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SearchTagsResult'] = ResolversParentTypes['SearchTagsResult']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  totalPosts?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UpdateAppReleasePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateAppReleasePayload'] = ResolversParentTypes['UpdateAppReleasePayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['AppRelease'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateAppReleasePayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+export type TagResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  comments?: Resolver<Types.Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  creationDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  posts?: Resolver<Types.Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  totalPosts?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UpdateCommentPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateCommentPayload'] = ResolversParentTypes['UpdateCommentPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Comment'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateCommentPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+export type TagsResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['TagsResult'] = ResolversParentTypes['TagsResult']> = {
+  nextIndex?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  results?: Resolver<Types.Maybe<Array<ResolversTypes['Tag']>>, ParentType, ContextType>;
+  total?: Resolver<Types.Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UpdateCommentReplyPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateCommentReplyPayload'] = ResolversParentTypes['UpdateCommentReplyPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['CommentReply'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateCommentReplyPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+export type UserProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserProfile'] = ResolversParentTypes['UserProfile']> = {
+  _id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  avatar?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  coverImage?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creationDate?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  default?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['DataProvider']>>>, ParentType, ContextType>;
+  description?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ethAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  providers?: Resolver<Types.Maybe<Array<Types.Maybe<ResolversTypes['DataProvider']>>>, ParentType, ContextType>;
+  pubKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  totalFollowers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalFollowing?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalInterests?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalPosts?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userName?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UpdateFollowPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateFollowPayload'] = ResolversParentTypes['UpdateFollowPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Follow'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateFollowPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UpdateInterestsPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateInterestsPayload'] = ResolversParentTypes['UpdateInterestsPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Interests'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateInterestsPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UpdatePostPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdatePostPayload'] = ResolversParentTypes['UpdatePostPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdatePostPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UpdatePostQuotePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdatePostQuotePayload'] = ResolversParentTypes['UpdatePostQuotePayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['PostQuote'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdatePostQuotePayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UpdateProfileMentionPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateProfileMentionPayload'] = ResolversParentTypes['UpdateProfileMentionPayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['ProfileMention'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateProfileMentionPayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UpdateProfilePayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['UpdateProfilePayload'] = ResolversParentTypes['UpdateProfilePayload']> = {
-  clientMutationId?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  document?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>;
-  node?: Resolver<Types.Maybe<ResolversTypes['Node']>, ParentType, ContextType, RequireFields<Types.UpdateProfilePayloadNodeArgs, 'id'>>;
-  viewer?: Resolver<Types.Maybe<ResolversTypes['CeramicAccount']>, ParentType, ContextType>;
+export type VideoPreviewResolvers<ContextType = any, ParentType extends ResolversParentTypes['VideoPreview'] = ResolversParentTypes['VideoPreview']> = {
+  height?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  secureUrl?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  width?: Resolver<Types.Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
-  AppIntegration?: AppIntegrationResolvers<ContextType>;
-  AppIntegrationConnection?: AppIntegrationConnectionResolvers<ContextType>;
-  AppIntegrationEdge?: AppIntegrationEdgeResolvers<ContextType>;
-  AppRelease?: AppReleaseResolvers<ContextType>;
-  AppReleaseConnection?: AppReleaseConnectionResolvers<ContextType>;
-  AppReleaseEdge?: AppReleaseEdgeResolvers<ContextType>;
-  CeramicAccount?: CeramicAccountResolvers<ContextType>;
-  CeramicCommitID?: GraphQLScalarType;
-  CeramicStreamID?: GraphQLScalarType;
   Comment?: CommentResolvers<ContextType>;
-  CommentConnection?: CommentConnectionResolvers<ContextType>;
-  CommentEdge?: CommentEdgeResolvers<ContextType>;
-  CommentProviderValue?: CommentProviderValueResolvers<ContextType>;
-  CommentReply?: CommentReplyResolvers<ContextType>;
-  CommentReplyConnection?: CommentReplyConnectionResolvers<ContextType>;
-  CommentReplyEdge?: CommentReplyEdgeResolvers<ContextType>;
-  CreateAppIntegrationPayload?: CreateAppIntegrationPayloadResolvers<ContextType>;
-  CreateAppReleasePayload?: CreateAppReleasePayloadResolvers<ContextType>;
-  CreateCommentPayload?: CreateCommentPayloadResolvers<ContextType>;
-  CreateCommentReplyPayload?: CreateCommentReplyPayloadResolvers<ContextType>;
-  CreateFollowPayload?: CreateFollowPayloadResolvers<ContextType>;
-  CreateInterestsPayload?: CreateInterestsPayloadResolvers<ContextType>;
-  CreatePostPayload?: CreatePostPayloadResolvers<ContextType>;
-  CreatePostQuotePayload?: CreatePostQuotePayloadResolvers<ContextType>;
-  CreateProfileMentionPayload?: CreateProfileMentionPayloadResolvers<ContextType>;
-  CreateProfilePayload?: CreateProfilePayloadResolvers<ContextType>;
-  DID?: GraphQLScalarType;
-  DateTime?: GraphQLScalarType;
-  Follow?: FollowResolvers<ContextType>;
-  FollowConnection?: FollowConnectionResolvers<ContextType>;
-  FollowEdge?: FollowEdgeResolvers<ContextType>;
-  InterPlanetaryCID?: GraphQLScalarType;
-  Interests?: InterestsResolvers<ContextType>;
-  InterestsConnection?: InterestsConnectionResolvers<ContextType>;
-  InterestsEdge?: InterestsEdgeResolvers<ContextType>;
-  InterestsLabeled?: InterestsLabeledResolvers<ContextType>;
+  CommentsResult?: CommentsResultResolvers<ContextType>;
+  DataProvider?: DataProviderResolvers<ContextType>;
+  Decision?: DecisionResolvers<ContextType>;
+  DecisionsCount?: DecisionsCountResolvers<ContextType>;
+  GlobalSearchResult?: GlobalSearchResultResolvers<ContextType>;
+  GlobalSearchResultItem?: GlobalSearchResultItemResolvers<ContextType>;
+  GlobalSearchResultTagItem?: GlobalSearchResultTagItemResolvers<ContextType>;
+  InfoLink?: InfoLinkResolvers<ContextType>;
+  IntegrationInfo?: IntegrationInfoResolvers<ContextType>;
+  IntegrationReleaseInfo?: IntegrationReleaseInfoResolvers<ContextType>;
+  LinkPreview?: LinkPreviewResolvers<ContextType>;
+  ManifestInfo?: ManifestInfoResolvers<ContextType>;
+  Moderator?: ModeratorResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
-  Node?: NodeResolvers<ContextType>;
-  PageInfo?: PageInfoResolvers<ContextType>;
+  NewPostsResult?: NewPostsResultResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
-  PostConnection?: PostConnectionResolvers<ContextType>;
-  PostEdge?: PostEdgeResolvers<ContextType>;
-  PostProviderValue?: PostProviderValueResolvers<ContextType>;
-  PostQuote?: PostQuoteResolvers<ContextType>;
-  PostQuoteConnection?: PostQuoteConnectionResolvers<ContextType>;
-  PostQuoteEdge?: PostQuoteEdgeResolvers<ContextType>;
-  Profile?: ProfileResolvers<ContextType>;
-  ProfileConnection?: ProfileConnectionResolvers<ContextType>;
-  ProfileEdge?: ProfileEdgeResolvers<ContextType>;
-  ProfileImageSource?: ProfileImageSourceResolvers<ContextType>;
-  ProfileImageVersions?: ProfileImageVersionsResolvers<ContextType>;
-  ProfileLinkSource?: ProfileLinkSourceResolvers<ContextType>;
-  ProfileMention?: ProfileMentionResolvers<ContextType>;
-  ProfileMentionConnection?: ProfileMentionConnectionResolvers<ContextType>;
-  ProfileMentionEdge?: ProfileMentionEdgeResolvers<ContextType>;
+  PostsResult?: PostsResultResolvers<ContextType>;
+  ProfilesResult?: ProfilesResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  URI?: GraphQLScalarType;
-  UpdateAppIntegrationPayload?: UpdateAppIntegrationPayloadResolvers<ContextType>;
-  UpdateAppReleasePayload?: UpdateAppReleasePayloadResolvers<ContextType>;
-  UpdateCommentPayload?: UpdateCommentPayloadResolvers<ContextType>;
-  UpdateCommentReplyPayload?: UpdateCommentReplyPayloadResolvers<ContextType>;
-  UpdateFollowPayload?: UpdateFollowPayloadResolvers<ContextType>;
-  UpdateInterestsPayload?: UpdateInterestsPayloadResolvers<ContextType>;
-  UpdatePostPayload?: UpdatePostPayloadResolvers<ContextType>;
-  UpdatePostQuotePayload?: UpdatePostQuotePayloadResolvers<ContextType>;
-  UpdateProfileMentionPayload?: UpdateProfileMentionPayloadResolvers<ContextType>;
-  UpdateProfilePayload?: UpdateProfilePayloadResolvers<ContextType>;
+  SearchTagsResult?: SearchTagsResultResolvers<ContextType>;
+  Tag?: TagResolvers<ContextType>;
+  TagsResult?: TagsResultResolvers<ContextType>;
+  UserProfile?: UserProfileResolvers<ContextType>;
+  VideoPreview?: VideoPreviewResolvers<ContextType>;
 };
 
+export type DirectiveResolvers<ContextType = any> = {
+  cacheControl?: CacheControlDirectiveResolver<any, any, ContextType>;
+};
