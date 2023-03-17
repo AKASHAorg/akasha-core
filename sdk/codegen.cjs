@@ -3,7 +3,7 @@
 /** @type {import("@graphql-codegen/cli").CodegenConfig} */
 const config = {
   schema: 'http://localhost:5005/graphql', //can be also an url
-  documents: ['src/**/*.graphql'],
+  documents: ['src/profiles/*.graphql'], // @Todo: replace with src/**/*.graphql
   emitLegacyCommonJSImports: false,
   generates: {
     '../typings/src/sdk/graphql-types.ts': {

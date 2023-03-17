@@ -1,0 +1,1199 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"An object with an ID"
+interface Node {
+    "The id of the object."
+    id: ID!
+}
+
+type AppIntegration implements Node {
+    "Account controlling the document"
+    author: CeramicAccount!
+    contributors: [CeramicAccount]
+    description: String!
+    displayName: String!
+    id: ID!
+    integrationType: AppIntegrationIntegrationType
+    keywords: [String]
+    licence: String!
+    name: String!
+    releases(
+        "Returns only documents created by the provided account"
+        account: ID,
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): AppReleaseConnection!
+    releasessCount(
+        "Counts only documents created by the provided account"
+        account: ID
+    ): Int!
+}
+
+"A connection to a list of items."
+type AppIntegrationConnection {
+    "A list of edges."
+    edges: [AppIntegrationEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AppIntegrationEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AppIntegration
+}
+
+type AppRelease implements Node {
+    id: ID!
+    integration: AppIntegration
+    integrationID: CeramicStreamID!
+    source: InterPlanetaryCID!
+    version: String!
+}
+
+"A connection to a list of items."
+type AppReleaseConnection {
+    "A list of edges."
+    edges: [AppReleaseEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AppReleaseEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AppRelease
+}
+
+type CeramicAccount implements Node {
+    appIntegrationList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): AppIntegrationConnection
+    appReleaseList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): AppReleaseConnection
+    commentList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): CommentConnection
+    commentReplyList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): CommentReplyConnection
+    followList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): FollowConnection
+    "Globally unique identifier of the account (DID string)"
+    id: ID!
+    interests: Interests
+    "Whether the Ceramic instance is currently authenticated with this account or not"
+    isViewer: Boolean!
+    postList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): PostConnection
+    postQuoteList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): PostQuoteConnection
+    profile: Profile
+    profileMentionList(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): ProfileMentionConnection
+}
+
+type Comment implements Node {
+    active: Boolean!
+    "Account controlling the document"
+    author: CeramicAccount!
+    content: [CommentProviderValue!]!
+    id: ID!
+    isReply: Boolean!
+    post: Post
+    postID: CeramicStreamID!
+    replies(
+        "Returns only documents created by the provided account"
+        account: ID,
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): CommentReplyConnection!
+    repliesCount(
+        "Counts only documents created by the provided account"
+        account: ID
+    ): Int!
+    "Current version of the document"
+    version: CeramicCommitID!
+}
+
+"A connection to a list of items."
+type CommentConnection {
+    "A list of edges."
+    edges: [CommentEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type CommentEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: Comment
+}
+
+type CommentProviderValue {
+    property: String!
+    provider: String!
+    value: String!
+}
+
+type CommentReply implements Node {
+    active: Boolean!
+    comment: Comment
+    commentID: CeramicStreamID!
+    id: ID!
+    reply: Comment
+    replyID: CeramicStreamID!
+}
+
+"A connection to a list of items."
+type CommentReplyConnection {
+    "A list of edges."
+    edges: [CommentReplyEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type CommentReplyEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: CommentReply
+}
+
+type CreateAppIntegrationPayload {
+    clientMutationId: String
+    document: AppIntegration!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreateAppReleasePayload {
+    clientMutationId: String
+    document: AppRelease!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreateCommentPayload {
+    clientMutationId: String
+    document: Comment!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreateCommentReplyPayload {
+    clientMutationId: String
+    document: CommentReply!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreateFollowPayload {
+    clientMutationId: String
+    document: Follow!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreateInterestsPayload {
+    clientMutationId: String
+    document: Interests!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreatePostPayload {
+    clientMutationId: String
+    document: Post!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreatePostQuotePayload {
+    clientMutationId: String
+    document: PostQuote!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreateProfileMentionPayload {
+    clientMutationId: String
+    document: ProfileMention!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type CreateProfilePayload {
+    clientMutationId: String
+    document: Profile!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type Follow implements Node {
+    "Account controlling the document"
+    did: CeramicAccount!
+    id: ID!
+    isFollowing: Boolean!
+    profile: Profile
+    profileID: CeramicStreamID!
+}
+
+"A connection to a list of items."
+type FollowConnection {
+    "A list of edges."
+    edges: [FollowEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type FollowEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: Follow
+}
+
+type Interests implements Node {
+    "Account controlling the document"
+    did: CeramicAccount!
+    id: ID!
+    topics: [InterestsLabeled!]!
+}
+
+"A connection to a list of items."
+type InterestsConnection {
+    "A list of edges."
+    edges: [InterestsEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type InterestsEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: Interests
+}
+
+type InterestsLabeled {
+    labelType: String!
+    value: String!
+}
+
+type Mutation {
+    createAppIntegration(input: CreateAppIntegrationInput!): CreateAppIntegrationPayload
+    createAppRelease(input: CreateAppReleaseInput!): CreateAppReleasePayload
+    createComment(input: CreateCommentInput!): CreateCommentPayload
+    createCommentReply(input: CreateCommentReplyInput!): CreateCommentReplyPayload
+    createFollow(input: CreateFollowInput!): CreateFollowPayload
+    createInterests(input: CreateInterestsInput!): CreateInterestsPayload
+    createPost(input: CreatePostInput!): CreatePostPayload
+    createPostQuote(input: CreatePostQuoteInput!): CreatePostQuotePayload
+    createProfile(input: CreateProfileInput!): CreateProfilePayload
+    createProfileMention(input: CreateProfileMentionInput!): CreateProfileMentionPayload
+    updateAppIntegration(input: UpdateAppIntegrationInput!): UpdateAppIntegrationPayload
+    updateAppRelease(input: UpdateAppReleaseInput!): UpdateAppReleasePayload
+    updateComment(input: UpdateCommentInput!): UpdateCommentPayload
+    updateCommentReply(input: UpdateCommentReplyInput!): UpdateCommentReplyPayload
+    updateFollow(input: UpdateFollowInput!): UpdateFollowPayload
+    updateInterests(input: UpdateInterestsInput!): UpdateInterestsPayload
+    updatePost(input: UpdatePostInput!): UpdatePostPayload
+    updatePostQuote(input: UpdatePostQuoteInput!): UpdatePostQuotePayload
+    updateProfile(input: UpdateProfileInput!): UpdateProfilePayload
+    updateProfileMention(input: UpdateProfileMentionInput!): UpdateProfileMentionPayload
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+    "When paginating forwards, the cursor to continue."
+    endCursor: String
+    "When paginating forwards, are there more items?"
+    hasNextPage: Boolean!
+    "When paginating backwards, are there more items?"
+    hasPreviousPage: Boolean!
+    "When paginating backwards, the cursor to continue."
+    startCursor: String
+}
+
+type Post implements Node {
+    active: Boolean!
+    "Account controlling the document"
+    author: CeramicAccount!
+    comments(
+        "Returns only documents created by the provided account"
+        account: ID,
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): CommentConnection!
+    commentsCount(
+        "Counts only documents created by the provided account"
+        account: ID
+    ): Int!
+    content: [PostProviderValue!]!
+    id: ID!
+    mentions(
+        "Returns only documents created by the provided account"
+        account: ID,
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): ProfileMentionConnection!
+    quotes(
+        "Returns only documents created by the provided account"
+        account: ID,
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): PostQuoteConnection!
+    quotesCount(
+        "Counts only documents created by the provided account"
+        account: ID
+    ): Int!
+    tags: [String]
+    "Current version of the document"
+    version: CeramicCommitID!
+}
+
+"A connection to a list of items."
+type PostConnection {
+    "A list of edges."
+    edges: [PostEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type PostEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: Post
+}
+
+type PostProviderValue {
+    property: String!
+    provider: String!
+    value: String!
+}
+
+type PostQuote implements Node {
+    active: Boolean!
+    id: ID!
+    post: Post
+    postID: CeramicStreamID!
+    quotedPost: Post
+    quotedPostID: CeramicStreamID!
+}
+
+"A connection to a list of items."
+type PostQuoteConnection {
+    "A list of edges."
+    edges: [PostQuoteEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type PostQuoteEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: PostQuote
+}
+
+type Profile implements Node {
+    avatar: ProfileImageVersions
+    background: ProfileImageVersions
+    createdAt: DateTime!
+    description: String
+    "Account controlling the document"
+    did: CeramicAccount!
+    followers(
+        "Returns only documents created by the provided account"
+        account: ID,
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): FollowConnection!
+    following(
+        "Returns only documents created by the provided account"
+        account: ID,
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): FollowConnection!
+    id: ID!
+    links: [ProfileLinkSource]
+    name: String!
+    totalFollowers(
+        "Counts only documents created by the provided account"
+        account: ID
+    ): Int!
+    totalFollowing(
+        "Counts only documents created by the provided account"
+        account: ID
+    ): Int!
+}
+
+"A connection to a list of items."
+type ProfileConnection {
+    "A list of edges."
+    edges: [ProfileEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type ProfileEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: Profile
+}
+
+type ProfileImageSource {
+    height: Int!
+    src: URI!
+    width: Int!
+}
+
+type ProfileImageVersions {
+    alternatives: [ProfileImageSource]
+    default: ProfileImageSource!
+}
+
+type ProfileLinkSource {
+    href: URI!
+    label: String
+}
+
+type ProfileMention implements Node {
+    id: ID!
+    post: Post
+    postID: CeramicStreamID!
+    profile: Profile
+    profileID: CeramicStreamID!
+}
+
+"A connection to a list of items."
+type ProfileMentionConnection {
+    "A list of edges."
+    edges: [ProfileMentionEdge]
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type ProfileMentionEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: ProfileMention
+}
+
+type Query {
+    appIntegrationIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): AppIntegrationConnection
+    appReleaseIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): AppReleaseConnection
+    commentIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): CommentConnection
+    commentReplyIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): CommentReplyConnection
+    followIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): FollowConnection
+    interestsIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): InterestsConnection
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    postIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): PostConnection
+    postQuoteIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): PostQuoteConnection
+    profileIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): ProfileConnection
+    profileMentionIndex(
+        "Returns the items in the list that come after the specified cursor."
+        after: String,
+        "Returns the items in the list that come before the specified cursor."
+        before: String,
+        "Returns the first n items from the list."
+        first: Int,
+        "Returns the last n items from the list."
+        last: Int
+    ): ProfileMentionConnection
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateAppIntegrationPayload {
+    clientMutationId: String
+    document: AppIntegration!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateAppReleasePayload {
+    clientMutationId: String
+    document: AppRelease!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateCommentPayload {
+    clientMutationId: String
+    document: Comment!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateCommentReplyPayload {
+    clientMutationId: String
+    document: CommentReply!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateFollowPayload {
+    clientMutationId: String
+    document: Follow!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateInterestsPayload {
+    clientMutationId: String
+    document: Interests!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdatePostPayload {
+    clientMutationId: String
+    document: Post!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdatePostQuotePayload {
+    clientMutationId: String
+    document: PostQuote!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateProfileMentionPayload {
+    clientMutationId: String
+    document: ProfileMention!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+type UpdateProfilePayload {
+    clientMutationId: String
+    document: Profile!
+    "Fetches an object given its ID"
+    node(
+        "The ID of an object"
+        id: ID!
+    ): Node
+    "Account currently authenticated on the Ceramic instance, if set"
+    viewer: CeramicAccount
+}
+
+enum AppIntegrationIntegrationType {
+    APP
+    OTHER
+    PLUGIN
+    WIDGET
+}
+
+"A Ceramic Commit ID"
+scalar CeramicCommitID
+
+"A Ceramic Stream ID"
+scalar CeramicStreamID
+
+"A field whose value conforms to the standard DID format as specified in did-core: https://www.w3.org/TR/did-core/."
+scalar DID
+
+"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."
+scalar DateTime
+
+"A IPLD CID"
+scalar InterPlanetaryCID
+
+"A field whose value conforms to the standard Uniform Resource Identifier (URI) format as specified in RFC3986."
+scalar URI
+
+input AppIntegrationInput {
+    contributors: [DID]
+    description: String!
+    displayName: String!
+    integrationType: AppIntegrationIntegrationType
+    keywords: [String]
+    licence: String!
+    name: String!
+}
+
+input AppReleaseInput {
+    integrationID: CeramicStreamID!
+    source: InterPlanetaryCID!
+    version: String!
+}
+
+input CommentInput {
+    active: Boolean!
+    content: [CommentProviderValueInput]!
+    isReply: Boolean!
+    postID: CeramicStreamID!
+}
+
+input CommentProviderValueInput {
+    property: String!
+    provider: String!
+    value: String!
+}
+
+input CommentReplyInput {
+    active: Boolean!
+    commentID: CeramicStreamID!
+    replyID: CeramicStreamID!
+}
+
+input CreateAppIntegrationInput {
+    clientMutationId: String
+    content: AppIntegrationInput!
+}
+
+input CreateAppReleaseInput {
+    clientMutationId: String
+    content: AppReleaseInput!
+}
+
+input CreateCommentInput {
+    clientMutationId: String
+    content: CommentInput!
+}
+
+input CreateCommentReplyInput {
+    clientMutationId: String
+    content: CommentReplyInput!
+}
+
+input CreateFollowInput {
+    clientMutationId: String
+    content: FollowInput!
+}
+
+input CreateInterestsInput {
+    clientMutationId: String
+    content: InterestsInput!
+}
+
+input CreatePostInput {
+    clientMutationId: String
+    content: PostInput!
+}
+
+input CreatePostQuoteInput {
+    clientMutationId: String
+    content: PostQuoteInput!
+}
+
+input CreateProfileInput {
+    clientMutationId: String
+    content: ProfileInput!
+}
+
+input CreateProfileMentionInput {
+    clientMutationId: String
+    content: ProfileMentionInput!
+}
+
+input FollowInput {
+    isFollowing: Boolean!
+    profileID: CeramicStreamID!
+}
+
+input InterestsInput {
+    topics: [InterestsLabeledInput]!
+}
+
+input InterestsLabeledInput {
+    labelType: String!
+    value: String!
+}
+
+input PartialAppIntegrationInput {
+    contributors: [DID]
+    description: String
+    displayName: String
+    integrationType: AppIntegrationIntegrationType
+    keywords: [String]
+    licence: String
+    name: String
+}
+
+input PartialAppReleaseInput {
+    integrationID: CeramicStreamID
+    source: InterPlanetaryCID
+    version: String
+}
+
+input PartialCommentInput {
+    active: Boolean
+    content: [CommentProviderValueInput]
+    isReply: Boolean
+    postID: CeramicStreamID
+}
+
+input PartialCommentReplyInput {
+    active: Boolean
+    commentID: CeramicStreamID
+    replyID: CeramicStreamID
+}
+
+input PartialFollowInput {
+    isFollowing: Boolean
+    profileID: CeramicStreamID
+}
+
+input PartialInterestsInput {
+    topics: [InterestsLabeledInput]
+}
+
+input PartialPostInput {
+    active: Boolean
+    content: [PostProviderValueInput]
+    tags: [String]
+}
+
+input PartialPostQuoteInput {
+    active: Boolean
+    postID: CeramicStreamID
+    quotedPostID: CeramicStreamID
+}
+
+input PartialProfileInput {
+    avatar: ProfileImageVersionsInput
+    background: ProfileImageVersionsInput
+    createdAt: DateTime
+    description: String
+    links: [ProfileLinkSourceInput]
+    name: String
+}
+
+input PartialProfileMentionInput {
+    postID: CeramicStreamID
+    profileID: CeramicStreamID
+}
+
+input PostInput {
+    active: Boolean!
+    content: [PostProviderValueInput]!
+    tags: [String]
+}
+
+input PostProviderValueInput {
+    property: String!
+    provider: String!
+    value: String!
+}
+
+input PostQuoteInput {
+    active: Boolean!
+    postID: CeramicStreamID!
+    quotedPostID: CeramicStreamID!
+}
+
+input ProfileImageSourceInput {
+    height: Int!
+    src: URI!
+    width: Int!
+}
+
+input ProfileImageVersionsInput {
+    alternatives: [ProfileImageSourceInput]
+    default: ProfileImageSourceInput!
+}
+
+input ProfileInput {
+    avatar: ProfileImageVersionsInput
+    background: ProfileImageVersionsInput
+    createdAt: DateTime!
+    description: String
+    links: [ProfileLinkSourceInput]
+    name: String!
+}
+
+input ProfileLinkSourceInput {
+    href: URI!
+    label: String
+}
+
+input ProfileMentionInput {
+    postID: CeramicStreamID!
+    profileID: CeramicStreamID!
+}
+
+input UpdateAppIntegrationInput {
+    clientMutationId: String
+    content: PartialAppIntegrationInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateAppReleaseInput {
+    clientMutationId: String
+    content: PartialAppReleaseInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateCommentInput {
+    clientMutationId: String
+    content: PartialCommentInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateCommentReplyInput {
+    clientMutationId: String
+    content: PartialCommentReplyInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateFollowInput {
+    clientMutationId: String
+    content: PartialFollowInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateInterestsInput {
+    clientMutationId: String
+    content: PartialInterestsInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateOptionsInput {
+    "Fully replace the document contents instead of performing a shallow merge"
+    replace: Boolean = false
+    "Only perform mutation if the document matches the provided version"
+    version: CeramicCommitID
+}
+
+input UpdatePostInput {
+    clientMutationId: String
+    content: PartialPostInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdatePostQuoteInput {
+    clientMutationId: String
+    content: PartialPostQuoteInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateProfileInput {
+    clientMutationId: String
+    content: PartialProfileInput!
+    id: ID!
+    options: UpdateOptionsInput
+}
+
+input UpdateProfileMentionInput {
+    clientMutationId: String
+    content: PartialProfileMentionInput!
+    id: ID!
+    options: UpdateOptionsInput
+}

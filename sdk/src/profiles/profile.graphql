@@ -4,18 +4,17 @@ fragment DataProviderFragment on DataProvider{
   value
 }
 
-fragment UserProfileFragmentData on UserProfile{
-  pubKey
+fragment UserProfileFragmentData on Profile{
+  id
+  did{
+    id
+  }
   name
-  userName
-  avatar
-  coverImage
-  description
-  ethAddress
-  totalPosts
-  totalFollowers
-  totalFollowing
-  totalInterests
+  links{
+    href
+    label
+  }
+  createdAt
 }
 
 mutation AddProfileProvider($data: [DataProviderInput]) {
