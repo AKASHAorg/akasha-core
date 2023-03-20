@@ -5,7 +5,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ProfileLoading } from '@akashaorg/design-system-core/lib/components/ProfileCard';
-import { ProfileStatLoading } from '@akashaorg/design-system-core/lib/components/ProfileStat/ProfileStatLoading';
+import { ProfileStatLoading } from '@akashaorg/design-system-core/lib/components/ProfileStatLists/placeholders/ProfileStatLoading';
 
 import { RootComponentProps, IProfileData, ProfileStatType } from '@akashaorg/typings/ui';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';

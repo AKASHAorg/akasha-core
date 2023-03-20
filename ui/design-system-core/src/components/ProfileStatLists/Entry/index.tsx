@@ -7,7 +7,7 @@ import Icon from '../../Icon';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '../../../utils/getColorClasses';
 
-export type FollowEntryProps = {
+export type ListEntryProps = {
   followLabel: string;
   unFollowLabel: string;
   followingLabel: string;
@@ -28,7 +28,7 @@ export type FollowEntryProps = {
   onUnfollow: (ethAddress: string) => void;
 };
 
-const FollowEntry: React.FC<FollowEntryProps> = props => {
+const ListEntry: React.FC<ListEntryProps> = props => {
   const {
     followLabel,
     unFollowLabel,
@@ -69,7 +69,7 @@ const FollowEntry: React.FC<FollowEntryProps> = props => {
     : '';
 
   return (
-    <Stack direction="column" spacing={`pb-3 gap-y-2 ${borderBottomStyle}`}>
+    <Stack direction="column" spacing={`px-4 pb-4 ${borderBottomStyle}`}>
       <Stack align="center" justify="between">
         {/*@TODO: create anchor component */}
         <a href={`${profileAnchorLink}/${pubKey}`}>
@@ -111,4 +111,4 @@ const FollowEntry: React.FC<FollowEntryProps> = props => {
   );
 };
 
-export default FollowEntry;
+export default ListEntry;

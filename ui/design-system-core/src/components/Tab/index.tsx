@@ -13,11 +13,11 @@ export type TabProps = {
 
 const Tab: React.FC<PropsWithChildren<TabProps>> = ({
   labels,
-  activeTab = 0,
+  activeTab,
   borderBottom,
   children,
 }) => {
-  const [selectedIndex, changeSelectedIndex] = useState(activeTab);
+  const [selectedIndex, changeSelectedIndex] = useState(activeTab || 0);
   const borderBottomStyle = borderBottom
     ? `border-b ${getColorClasses({
         light: 'border-grey8',
@@ -39,7 +39,7 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
   )}`;
 
   return (
-    <Stack direction="column" spacing="gap-y-2" fullWidth>
+    <Stack direction="column" spacing="gap-y-4" fullWidth>
       <div className={tw(`grid grid-cols-${labels.length}`)}>
         {labels.map((label, index) => (
           <Button
@@ -70,13 +70,11 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
         ))}
       </div>
 
-      <div className={tw(`px-4`)}>
-        {Children.toArray(children)
-          .slice(0, labels.length)
-          .map((child, index) => (
-            <Fragment key={labels[index]}>{index === selectedIndex && child}</Fragment>
-          ))}
-      </div>
+      {Children.toArray(children)
+        .slice(0, labels.length)
+        .map((child, index) => (
+          <Fragment key={labels[index]}>{index === selectedIndex && child}</Fragment>
+        ))}
     </Stack>
   );
 };

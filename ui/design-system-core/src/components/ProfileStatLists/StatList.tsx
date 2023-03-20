@@ -1,14 +1,15 @@
 import React from 'react';
-import FollowEntry from '../ProfileCard/FollowEntry';
-import EntryError from '../ProfileCard/FollowEntry/EntryError';
-import FollowEntryLoading from '../ProfileCard/placeholders/FollowEntryLoading';
-import { Stat, ProfileStatProps } from './index';
+import ListEntry from './Entry';
+import EntryError from './Entry/EntryError';
+import ListEntryLoading from './placeholders/ListEntryLoading';
+import Stack from '../Stack';
+import { List, ProfileStatProps } from './index';
 import { ProfileStatType } from '@akashaorg/typings/ui';
 
 export const LOADING_LIST_SIZE = 9;
 
 type StatListProps = {
-  follow: Stat;
+  follow: List;
 } & Omit<ProfileStatProps, ProfileStatType>;
 
 export const StatList: React.FC<StatListProps> = ({
@@ -26,15 +27,15 @@ export const StatList: React.FC<StatListProps> = ({
   onUnfollow,
 }) => {
   return (
-    <>
+    <Stack direction="column" spacing="gap-y-4">
       {follow.status === 'loading' &&
         Array.from({ length: LOADING_LIST_SIZE }).map((_, index) => (
-          <FollowEntryLoading key={index} />
+          <ListEntryLoading key={index} />
         ))}
       {follow.status === 'error' && <EntryError onError={onError} />}
       {follow.status === 'success' &&
         follow.data.map(profile => (
-          <FollowEntry
+          <ListEntry
             key={profile.contentId}
             followLabel={followLabel}
             unFollowLabel={unFollowLabel}
@@ -55,6 +56,6 @@ export const StatList: React.FC<StatListProps> = ({
             onUnfollow={onUnfollow}
           />
         ))}
-    </>
+    </Stack>
   );
 };

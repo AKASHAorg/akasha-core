@@ -133,7 +133,7 @@ const ProfileCards: React.FC<RootComponentProps & IProfileHeaderProps> = props =
   const onStatClick = (stat: ProfileStatType) => () => {
     navigateTo({
       appName: '@akashaorg/app-profile',
-      getNavigationUrl: routes => `/${pubKey ?? loginState?.pubKey}/${routes.stat}?tab=${stat}`,
+      getNavigationUrl: routes => `/${pubKey ?? loginState?.pubKey}${routes.stat}?tab=${stat}`,
     });
   };
 
@@ -165,7 +165,7 @@ const ProfileCards: React.FC<RootComponentProps & IProfileHeaderProps> = props =
 
   return (
     <>
-      {/* wrapping with a box to use gap prop instead of individual box margins */}(
+      {/* wrapping with a box to use gap prop instead of individual box margins */}
       <Stack direction="column" spacing="gap-y-4">
         {/*@TODO remove the following line when the profile app is done */}
         {/* <ProfileCard

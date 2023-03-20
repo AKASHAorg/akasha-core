@@ -1,22 +1,22 @@
 import React from 'react';
-import Card from '../Card';
-import FollowEntryLoading from '../ProfileCard/placeholders/FollowEntryLoading';
-import Stack from '../Stack';
-import Tab from '../Tab';
-import { LOADING_LIST_SIZE } from './StatList';
+import Card from '../../Card';
+import Stack from '../../Stack';
+import Tab from '../../Tab';
+import ListEntryLoading from './ListEntryLoading';
+import { LOADING_LIST_SIZE } from '../StatList';
 
 export const ProfileStatLoading = () => {
   return (
     <Card radius={20} elevation="1" customStyle="py-4">
       <Tab labels={['...', '...']}>
-        <Stack direction="column">
+        <Stack direction="column" spacing="gap-y-4">
           {Array.from({ length: LOADING_LIST_SIZE }).map((_, index) => (
-            <FollowEntryLoading key={index} />
+            <ListEntryLoading key={index} />
           ))}
         </Stack>
-        <Stack direction="column">
+        <Stack direction="column" spacing="gap-y-4">
           {Array.from({ length: LOADING_LIST_SIZE }).map((_, index) => (
-            <FollowEntryLoading key={index} />
+            <ListEntryLoading key={index} />
           ))}
         </Stack>
       </Tab>

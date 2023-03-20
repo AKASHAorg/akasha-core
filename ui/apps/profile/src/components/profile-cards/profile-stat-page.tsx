@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ProfileStat from '@akashaorg/design-system-core/lib/components/ProfileStat/index';
+import ProfileStatLists from '@akashaorg/design-system-core/lib/components/ProfileStatLists/index';
 import {
   IProfileData,
   NavigateToParams,
@@ -23,12 +23,6 @@ type StatProps = {
   profileData: IProfileData;
   navigateTo?: (args: NavigateToParams) => void;
 };
-
-export const enum SelectedTab {
-  FOLLOWERS = 0,
-  FOLLOWING,
-  INTERESTS,
-}
 
 const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
   const { loginState, selectedStat, profileData, navigateTo } = props;
@@ -115,7 +109,7 @@ const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
   };
 
   return (
-    <ProfileStat
+    <ProfileStatLists
       activeTab={selectedStat}
       pubKeyOfLoggedUser={loginState.pubKey}
       followedProfiles={followedProfiles}
