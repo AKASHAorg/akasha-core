@@ -20,9 +20,9 @@ const mockLocationValue = {
   state: null,
 };
 
-jest.mock('react-router', () => ({
+jest.mock('react-router-dom', () => ({
   useParams: jest.fn(() => ({ pubKey: '' })),
-  useSearchParams: jest.fn(() => ['', () => '']),
+  useSearchParams: jest.fn(() => [{ get: () => '' }, () => '']),
   useLocation: jest.fn().mockImplementation(() => {
     return mockLocationValue;
   }),

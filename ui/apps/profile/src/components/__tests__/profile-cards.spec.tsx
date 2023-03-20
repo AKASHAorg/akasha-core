@@ -17,15 +17,15 @@ const mockLocationValue = {
   state: null,
 };
 
-jest.mock('react-router', () => ({
+jest.mock('react-router-dom', () => ({
   useParams: jest.fn(() => ({ pubKey: '' })),
-  useSearchParams: jest.fn(() => ['', () => '']),
+  useSearchParams: jest.fn(() => [{ get: () => '' }, () => '']),
   useLocation: jest.fn().mockImplementation(() => {
     return mockLocationValue;
   }),
 }));
 
-describe('< ProfilePageHeader />', () => {
+describe('< ProfileCards />', () => {
   let renderResult;
   const mockUser = genUser();
   const BaseComponent = (
@@ -42,7 +42,7 @@ describe('< ProfilePageHeader />', () => {
       renderResult = renderWithAllProviders(BaseComponent, {});
     });
   });
-  it('should render profile page header', async () => {
+  it('should render profile cards', async () => {
     const avatarNode = await renderResult.findByTestId('avatar-image');
     const avatarSrc = avatarNode.getAttribute('src');
     //console.log(avatarSrc, '<<<< avatar src');
