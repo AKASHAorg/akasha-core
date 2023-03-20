@@ -9,12 +9,14 @@ export type TabProps = {
   labels: string[];
   activeTab?: number;
   borderBottom?: boolean;
+  onChange?: (selectedIndex: number) => void;
 };
 
 const Tab: React.FC<PropsWithChildren<TabProps>> = ({
   labels,
   activeTab,
   borderBottom,
+  onChange,
   children,
 }) => {
   const [selectedIndex, changeSelectedIndex] = useState(activeTab || 0);
@@ -38,13 +40,18 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
     'hover:border',
   )}`;
 
+  const onTabChange = (selectedIndex: number) => {
+    changeSelectedIndex(selectedIndex);
+    onChange(selectedIndex);
+  };
+
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
       <div className={tw(`grid grid-cols-${labels.length}`)}>
         {labels.map((label, index) => (
           <Button
             key={label}
-            onClick={() => changeSelectedIndex(index)}
+            onClick={() => onTabChange(index)}
             className={tw(
               `${baseStyle} ${hoverStyle}	${selectedIndex === index ? activeStyle : ''}`,
             )}

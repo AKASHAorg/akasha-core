@@ -30,13 +30,13 @@ export const StatList: React.FC<StatListProps> = ({
     <Stack direction="column" spacing="gap-y-4">
       {follow.status === 'loading' &&
         Array.from({ length: LOADING_LIST_SIZE }).map((_, index) => (
-          <ListEntryLoading key={index} />
+          <ListEntryLoading key={`stat-list-${index}`} />
         ))}
       {follow.status === 'error' && <EntryError onError={onError} />}
       {follow.status === 'success' &&
-        follow.data.map(profile => (
+        follow.data.map((profile, index) => (
           <ListEntry
-            key={profile.contentId}
+            key={`${profile.userName}-${index}`}
             followLabel={followLabel}
             unFollowLabel={unFollowLabel}
             followingLabel={followingLabel}

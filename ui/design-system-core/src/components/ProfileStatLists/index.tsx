@@ -14,7 +14,7 @@ export type List = {
 };
 
 export type ProfileStatProps = {
-  activeTab: ProfileStatType;
+  selectedStat: ProfileStatType;
   pubKeyOfLoggedUser: string;
   followedProfiles: string[];
   followers: List;
@@ -28,15 +28,17 @@ export type ProfileStatProps = {
   onProfileClick: (ethAddress: string) => void;
   onFollow: (ethAddress: string) => void;
   onUnfollow: (ethAddress: string) => void;
+  onChange?: (selectedStat: ProfileStatType) => void;
 };
 
 const ProfileStatLists: React.FC<ProfileStatProps> = props => {
-  const { followers, following, activeTab } = props;
+  const { followers, following, selectedStat, onChange } = props;
   return (
     <Card radius={20} elevation="1" customStyle="py-4">
       <Tab
-        activeTab={activeTab === 'followers' ? 0 : 1}
+        activeTab={selectedStat === 'followers' ? 0 : 1}
         labels={[followers.label, following.label]}
+        onChange={selectedIndex => onChange(selectedIndex === 0 ? 'followers' : 'following')}
       >
         <StatList follow={followers} {...props} />
         <StatList follow={following} {...props} />

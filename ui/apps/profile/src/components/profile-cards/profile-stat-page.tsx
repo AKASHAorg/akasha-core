@@ -16,6 +16,7 @@ import {
   useIsFollowingMultiple,
   useUnfollow,
 } from '@akashaorg/ui-awf-hooks';
+import { useSearchParams } from 'react-router-dom';
 
 type StatProps = {
   loginState: LoginState;
@@ -28,6 +29,8 @@ const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
   const { loginState, selectedStat, profileData, navigateTo } = props;
 
   const { t } = useTranslation('app-profile');
+
+  const [params, setSearchParams] = useSearchParams();
 
   // get followers for this profile
   const followersReq = useFollowers(profileData.pubKey, 500);
@@ -110,7 +113,7 @@ const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
 
   return (
     <ProfileStatLists
-      activeTab={selectedStat}
+      selectedStat={selectedStat}
       pubKeyOfLoggedUser={loginState.pubKey}
       followedProfiles={followedProfiles}
       followers={{
@@ -136,6 +139,7 @@ const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
       onProfileClick={onProfileClick}
       onFollow={onFollow}
       onUnfollow={onUnfollow}
+      onChange={selectedStat => setSearchParams({ tab: selectedStat }, { replace: true })}
     />
   );
 };

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useSearchParams } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ProfileLoading } from '@akashaorg/design-system-core/lib/components/ProfileCard';
 import { ProfileStatLoading } from '@akashaorg/design-system-core/lib/components/ProfileStatLists/placeholders/ProfileStatLoading';
 
-import { RootComponentProps, IProfileData, ProfileStatType } from '@akashaorg/typings/ui';
+import { RootComponentProps, IProfileData } from '@akashaorg/typings/ui';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import menuRoute, { MY_PROFILE } from '../../routes';
@@ -27,10 +27,13 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const { t } = useTranslation('app-profile');
   const location = useLocation();
-  const { pubKey, tab: selectedStat } = useParams<{
+  const { pubKey } = useParams<{
     pubKey: string;
-    tab?: ProfileStatType;
   }>();
+
+  const [params] = useSearchParams();
+
+  const selectedStat = params.get('tab');
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 

@@ -11,12 +11,12 @@ export const ProfileStatLoading = () => {
       <Tab labels={['...', '...']}>
         <Stack direction="column" spacing="gap-y-4">
           {Array.from({ length: LOADING_LIST_SIZE }).map((_, index) => (
-            <ListEntryLoading key={index} />
+            <ListEntryLoading key={`stat-1-loading-${index}`} />
           ))}
         </Stack>
         <Stack direction="column" spacing="gap-y-4">
           {Array.from({ length: LOADING_LIST_SIZE }).map((_, index) => (
-            <ListEntryLoading key={index} />
+            <ListEntryLoading key={`stat-2-loading-${index}`} />
           ))}
         </Stack>
       </Tab>
