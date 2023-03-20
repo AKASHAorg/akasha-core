@@ -33,7 +33,9 @@ const ProfilePage = (props: ProfilePageProps) => {
 
   const [params] = useSearchParams();
 
-  const selectedStat = params.get('tab');
+  const tab = params.get('tab');
+
+  const selectedStat = tab === 'followers' || tab === 'following' ? tab : 'followers';
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
@@ -121,11 +123,7 @@ const ProfilePage = (props: ProfilePageProps) => {
             (showStat ? (
               <ProfileStatPage
                 {...props}
-                selectedStat={
-                  selectedStat === 'followers' || selectedStat === 'following'
-                    ? selectedStat
-                    : 'followers'
-                }
+                selectedStat={selectedStat}
                 loginState={loginQuery.data}
                 profileData={profileState}
               />

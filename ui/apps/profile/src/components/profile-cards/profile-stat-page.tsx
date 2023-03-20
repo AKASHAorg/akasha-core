@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import ProfileStatLists from '@akashaorg/design-system-core/lib/components/ProfileStatLists/index';
+import ProfileStatLists from '@akashaorg/design-system-core/lib/components/ProfileStatLists';
 import {
   IProfileData,
   NavigateToParams,
