@@ -51,9 +51,7 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
           <Button
             key={label}
             onClick={() => onTabChange(index)}
-            customStyle={`${baseStyle}
-                          ${selectedIndex === index ? activeStyle : ''}
-                          ${hoverStyle}`}
+            className={`${baseStyle} ${hoverStyle} ${selectedIndex === index ? activeStyle : ''}`}
             plain
           >
             <Text
