@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
@@ -33,6 +33,7 @@ export type TextProps = {
   truncate?: boolean;
   breakWord?: boolean;
   weight?: Weight;
+  hover?: boolean;
 };
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
@@ -47,11 +48,11 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   body1: 'text-[1rem] leading-[1.5rem]',
   body2: 'text-[0.875rem] leading-[1.375rem]',
   label: 'text-[1rem] leading-[1.5rem] font-medium',
-  footnotes1: 'text-[0.75rem] leading-[1.125rem] font-bold tracking-[.075em]',
+  footnotes1: 'text-[0.75rem] leading-[1.125rem] font-bold tracking-[.075em] font-normal',
   footnotes2: 'text-[0.75rem] leading-[1.125rem] font-medium',
   'button-lg': 'block text-[1rem] leading-[1.5rem] font-bold',
   'button-md': 'block text-[0.875rem] leading-[1.5rem] font-bold',
-  'button-sm': 'block text-[0.75rem] leading-[1.125rem] font-medium',
+  'button-sm': 'block text-[0.75rem] leading-[1.125rem] font-bold',
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
@@ -62,6 +63,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   truncate,
   breakWord,
   weight,
+  hover,
   children,
 }) => {
   const tag = getTag(variant);
@@ -70,6 +72,21 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   const truncateStyle = truncate ? 'truncate' : '';
   const wordBreakStyle = breakWord ? 'break-all' : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
+  const hoverStyle = hover
+    ? `${getColorClasses(
+        {
+          light: 'secondary-light',
+          dark: 'secondary-dark',
+        },
+        'hover:text',
+      )} ${getColorClasses(
+        {
+          light: 'secondary-light',
+          dark: 'secondary-dark',
+        },
+        'group-hover:text',
+      )}`
+    : '';
 
   const baseStyles = VARIANT_TO_CSS_CLASSES_MAPPER[variant];
 
@@ -77,7 +94,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        `${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${customStyle}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${hoverStyle} ${customStyle}`,
       ),
     },
     children,

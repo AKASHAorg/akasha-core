@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ProfilePageHeader from '../profile-cards/profile-page-header';
+import ProfileCards from '../profile-cards';
 
 import {
   renderWithAllProviders,
@@ -28,12 +28,10 @@ describe('< ProfilePageHeader />', () => {
   let renderResult;
   const mockUser = genUser();
   const BaseComponent = (
-    <ProfilePageHeader
+    <ProfileCards
       {...genAppProps()}
       profileId={mockUser.pubKey}
       profileData={mockUser}
-      modalSlotId="modal-slot"
-      navigateTo={jest.fn()}
       loginState={genLoggedInState()}
       worldConfig={genWorldConfig()}
     />

@@ -33,7 +33,6 @@ describe('< ProfilePage />', () => {
       {...genAppProps()}
       loggedProfileData={genLoggedUser()}
       loginState={genLoggedInState()}
-      showLoginModal={jest.fn()}
     />
   );
 

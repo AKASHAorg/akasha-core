@@ -25,6 +25,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
   spacing = '',
   customStyle = '',
   fullWidth,
+  ref,
   children,
 }) => {
   const baseStyle = `flex`;
@@ -37,6 +38,7 @@ const Stack: React.FC<PropsWithChildren<StackProps>> = ({
       className={tw(
         `${baseStyle} ${directionStyle} ${justifyStyle} ${alignStyle} ${spacing} ${fullWidthStyle} ${customStyle}`,
       )}
+      ref={ref}
     >
       {children}
     </div>

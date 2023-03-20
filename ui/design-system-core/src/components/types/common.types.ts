@@ -10,7 +10,11 @@ export type Radius = number | { top?: number; bottom?: number } | string;
 
 export type Padding = number | { x: number; y: number } | string;
 
-export type BasicIconSize = 'sm' | 'md' | 'lg' | 'xl';
+export type BasicSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+export type BasicIconSize = Exclude<BasicSize, 'xl'>;
+
+export type BreakPointSize = { breakPoint: string; size: BasicSize };
 
 export const isStatusType = (type: Color): type is Status => {
   return type === 'warning' || type === 'error' || type === 'success';

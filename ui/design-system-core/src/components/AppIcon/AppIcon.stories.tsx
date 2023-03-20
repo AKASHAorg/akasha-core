@@ -17,6 +17,15 @@ BaseIcon.args = {
   hasNewNotifs: true,
 };
 
+export const ExtraSmallIcon = Template.bind({});
+ExtraSmallIcon.args = {
+  placeholderIconType: 'notifications',
+  plain: true,
+  stackedIcon: true,
+  hasNewNotifs: true,
+  size: 'xs',
+};
+
 export const SmallIcon = Template.bind({});
 SmallIcon.args = {
   placeholderIconType: 'notifications',
@@ -26,15 +35,6 @@ SmallIcon.args = {
   size: 'sm',
 };
 
-export const MediumIcon = Template.bind({});
-MediumIcon.args = {
-  placeholderIconType: 'notifications',
-  plain: true,
-  stackedIcon: true,
-  hasNewNotifs: true,
-  size: 'md',
-};
-
 export const LargeIcon = Template.bind({});
 LargeIcon.args = {
   placeholderIconType: 'notifications',
@@ -42,13 +42,4 @@ LargeIcon.args = {
   stackedIcon: true,
   hasNewNotifs: true,
   size: 'lg',
-};
-
-export const ExtraLargeIcon = Template.bind({});
-ExtraLargeIcon.args = {
-  placeholderIconType: 'notifications',
-  plain: true,
-  stackedIcon: true,
-  hasNewNotifs: true,
-  size: 'xl',
 };
