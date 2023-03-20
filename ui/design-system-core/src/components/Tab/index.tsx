@@ -39,7 +39,6 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
     },
     'hover:border',
   )}`;
-
   const onTabChange = (selectedIndex: number) => {
     changeSelectedIndex(selectedIndex);
     onChange(selectedIndex);
