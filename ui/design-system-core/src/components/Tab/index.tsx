@@ -69,7 +69,13 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
               }
               weight={selectedIndex === index ? 'bold' : 'normal'}
               align="center"
-              hover
+              customStyle={getColorClasses(
+                {
+                  light: 'secondary-light',
+                  dark: 'secondary-dark',
+                },
+                'group-hover:text',
+              )}
             >
               {label}
             </Text>

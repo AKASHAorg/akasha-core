@@ -30,7 +30,7 @@ const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
 
   const { t } = useTranslation('app-profile');
 
-  const [params, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   // get followers for this profile
   const followersReq = useFollowers(profileData.pubKey, 500);
@@ -108,7 +108,10 @@ const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
   };
 
   const onError = () => {
-    /* TODO:  */
+    navigateTo?.({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: navRoutes => `${navRoutes.rootRoute}`,
+    });
   };
 
   return (

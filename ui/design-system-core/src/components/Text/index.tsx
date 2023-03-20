@@ -33,7 +33,6 @@ export type TextProps = {
   truncate?: boolean;
   breakWord?: boolean;
   weight?: Weight;
-  hover?: boolean;
 };
 
 const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
@@ -63,7 +62,6 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   truncate,
   breakWord,
   weight,
-  hover,
   children,
 }) => {
   const tag = getTag(variant);
@@ -72,21 +70,6 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   const truncateStyle = truncate ? 'truncate' : '';
   const wordBreakStyle = breakWord ? 'break-all' : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
-  const hoverStyle = hover
-    ? `${getColorClasses(
-        {
-          light: 'secondary-light',
-          dark: 'secondary-dark',
-        },
-        'hover:text',
-      )} ${getColorClasses(
-        {
-          light: 'secondary-light',
-          dark: 'secondary-dark',
-        },
-        'group-hover:text',
-      )}`
-    : '';
 
   const baseStyles = VARIANT_TO_CSS_CLASSES_MAPPER[variant];
 
@@ -94,7 +77,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${hoverStyle} ${customStyle}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${customStyle}`,
       ),
     },
     children,
