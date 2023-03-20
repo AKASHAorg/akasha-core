@@ -7,7 +7,15 @@ export default {
   component: Toggle,
 };
 
-const Template = args => <Toggle {...args} />;
+const Template = args => {
+  const [checked, setChecked] = React.useState<boolean>(args.checked);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
+
+  return <Toggle checked={checked} onChange={handleChange} {...args} />;
+};
 
 export const BaseToggle = Template.bind({});
 BaseToggle.args = {
@@ -46,8 +54,8 @@ DisabledToggle.args = {
   disabled: true,
 };
 
-export const DisabledEnabledToggle = Template.bind({});
-DisabledEnabledToggle.args = {
+export const DisabledCheckedToggle = Template.bind({});
+DisabledCheckedToggle.args = {
   checked: true,
   size: 'large',
   disabled: true,
