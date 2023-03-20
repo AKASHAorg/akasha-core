@@ -47,7 +47,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   body1: 'text-[1rem] leading-[1.5rem]',
   body2: 'text-[0.875rem] leading-[1.375rem]',
   label: 'text-[1rem] leading-[1.5rem] font-medium',
-  footnotes1: 'text-[0.75rem] leading-[1.125rem] font-bold tracking-[.075em] font-normal',
+  footnotes1: 'text-[0.75rem] leading-[1.125rem] tracking-[.075em] font-normal',
   footnotes2: 'text-[0.75rem] leading-[1.125rem] font-medium',
   'button-lg': 'block text-[1rem] leading-[1.5rem] font-bold',
   'button-md': 'block text-[0.875rem] leading-[1.5rem] font-bold',
