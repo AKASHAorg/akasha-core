@@ -83,7 +83,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
           <div className={tw('flex md:px-20 justify-between')}>
             {overviewCTAArr.map(({ url, label, iconType }) => (
               <div key={label + iconType} className={tw('grid gap-1 grid-cols-1 w-[30%]')}>
-                <Icon size="md" accentColor={true} type={iconType} customStyle="mx-auto my-0" />
+                <Icon size="sm" accentColor={true} type={iconType} customStyle="mx-auto my-0" />
                 <a
                   href={url}
                   className={tw(
