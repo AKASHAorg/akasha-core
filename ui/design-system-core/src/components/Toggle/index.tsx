@@ -56,10 +56,11 @@ const Toggle: React.FC<IToggleProps> = ({
   };
 
   return (
-    <div className={tw('relative inline-flex items-center cursor-pointer')}>
+    <label className={tw('relative inline-flex items-center cursor-pointer')}>
       <input
         type="checkbox"
         value=""
+        name="toggle"
         checked={checked}
         disabled={disabled}
         onChange={handleChange}
@@ -86,7 +87,7 @@ const Toggle: React.FC<IToggleProps> = ({
           {label}
         </Text>
       )}
-    </div>
+    </label>
   );
 };
 
