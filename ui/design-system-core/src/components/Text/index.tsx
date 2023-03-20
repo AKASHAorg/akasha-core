@@ -29,6 +29,7 @@ export type TextProps = {
   customStyle?: string; // pass only the string classes without 'apply' or 'tw'
   variant?: Variant;
   color?: Color;
+  as?: Heading | 'p' | 'span';
   align?: Alignment;
   truncate?: boolean;
   breakWord?: boolean;
@@ -55,6 +56,7 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
+  as,
   customStyle = '',
   variant = 'body1',
   align = 'start',
@@ -64,7 +66,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   weight,
   children,
 }) => {
-  const tag = getTag(variant);
+  const tag = as ?? getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
   const colorStyle = getColorClasses(color);
   const truncateStyle = truncate ? 'truncate' : '';

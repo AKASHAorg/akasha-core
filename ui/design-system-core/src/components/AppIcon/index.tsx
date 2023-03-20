@@ -86,6 +86,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
 });
 
 const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicIconSize, string> = {
+  xs: 'h-3 w-3',
   sm: 'h-5 w-5',
   md: 'h-8 w-8',
   lg: 'h-10 w-10',
@@ -95,6 +96,7 @@ const APP_ICON_CONTAINER_SIZE_MAP: Record<BasicIconSize, string> = {
 const APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT = (
   breakPoint: string,
 ): Record<BasicIconSize, string> => ({
+  xs: `${breakPoint}:h-3 ${breakPoint}:w-3`,
   sm: `${breakPoint}:h-5 ${breakPoint}:w-5`,
   md: `${breakPoint}:h-8 ${breakPoint}:w-8`,
   lg: `${breakPoint}:h-10 ${breakPoint}:w-10`,
@@ -102,6 +104,7 @@ const APP_ICON_CONTAINER_SIZE_MAP_BY_BREAKPOINT = (
 });
 
 const NOTIFY_MAP: Record<BasicIconSize, string> = {
+  xs: 'right-[0.2rem] w-0.5 h-0.5',
   sm: 'right-[0.1875rem] w-1 h-1',
   md: 'right-[0.1875rem] w-2 h-2',
   lg: 'right-[0.125rem] w-3 h-3',

@@ -90,6 +90,7 @@ const Icon: React.FC<IconProps> = props => {
 };
 
 const ICON_SIZE_MAP: Record<BasicIconSize, string> = {
+  xs: 'h-2 w-2',
   sm: 'h-3 w-3',
   md: 'h-4 w-4',
   lg: 'h-5 w-5',
@@ -97,6 +98,7 @@ const ICON_SIZE_MAP: Record<BasicIconSize, string> = {
 };
 
 const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicIconSize, string> => ({
+  xs: `${breakPoint}:h-2 ${breakPoint}:w-2`,
   sm: `${breakPoint}:h-3 ${breakPoint}:w-3`,
   md: `${breakPoint}:h-4 ${breakPoint}:w-4`,
   lg: `${breakPoint}:h-5 ${breakPoint}:w-5`,
