@@ -38,10 +38,10 @@ query ResolveProfile($pubKey: String!) {
   resolveProfile(pubKey: $pubKey) {
     ...UserProfileFragmentData
     providers{
-    ...DataProviderFragment
+      ...DataProviderFragment
     }
     default{
-    ...DataProviderFragment
+      ...DataProviderFragment
     }
   }
 }
@@ -50,10 +50,10 @@ query GetProfile($ethAddress: String!) {
   getProfile(ethAddress: $ethAddress) {
     ...UserProfileFragmentData
     providers{
-    ...DataProviderFragment
+      ...DataProviderFragment
     }
     default{
-    ...DataProviderFragment
+      ...DataProviderFragment
     }
   }
 }
