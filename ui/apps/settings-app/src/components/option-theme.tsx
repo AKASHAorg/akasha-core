@@ -1,13 +1,11 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import PageLayout from './base-layout';
 import { BaseOption } from './settings-page';
-
-const { Checkbox } = DS;
 
 export interface IAppearanceOption extends BaseOption {
   themeIntroLabel: string;
@@ -25,7 +23,12 @@ const AppearanceOption: React.FC<IAppearanceOption> = props => {
         <Box customStyle="flex justify-between items-center mb-2">
           <Text weight="bold">{themeIntroLabel}</Text>
 
-          <Checkbox checked={theme === 'Light-Theme'} onChange={onThemeSelect} toggle={true} />
+          <Toggle
+            checked={theme === 'Light-Theme'}
+            iconChecked="SunIcon"
+            iconUnchecked="MoonIcon"
+            onChange={onThemeSelect}
+          />
         </Box>
 
         <Text>{themeSubtitleLabel}</Text>

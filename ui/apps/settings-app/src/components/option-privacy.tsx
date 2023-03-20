@@ -1,14 +1,12 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
 
 import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
 import PageLayout from './base-layout';
 import { BaseOption } from './settings-page';
-
-const { Checkbox } = DS;
 
 export interface IPrivacyOption extends BaseOption {
   worldLabel: string;
@@ -67,23 +65,25 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
             <Text weight="bold">{essentialCookiesLabel}</Text>
 
             {/* always checked and cannot be toggled */}
-            <Checkbox checked={true} toggle={true} disabled={true} />
+            <Toggle checked={true} disabled={true} />
           </Box>
 
           <Text>
             {essentialCookiesInfo1}
-            <Text customStyle="inline-block" weight="bold">
+            <Text customStyle="inline-block" as="span" weight="bold">
               {worldLabel}
             </Text>
             {essentialCookiesInfo2}
-            <Box customStyle="inline-block" onClick={onPrivacyPolicyClick}>
+            <span onClick={onPrivacyPolicyClick}>
               <Text
+                customStyle="inline-block cursor-pointer"
+                as="span"
                 weight="bold"
                 color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
               >
                 {privacyPolicyLabel}
               </Text>
-            </Box>
+            </span>
             {essentialCookiesInfo3}
             {essentialCookiesInfo4}
           </Text>
@@ -94,22 +94,22 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
           <Box customStyle="flex justify-between items-center mb-2">
             <Text weight="bold">{trackingAnalyticsLabel}</Text>
 
-            <Checkbox
+            <Toggle
               checked={checkedTracking}
               onChange={onTrackingOptionChange}
-              toggle={true}
               disabled={!cookieType}
             />
           </Box>
 
           <Text>
             {trackingAnalyticsInfo1}
-            <Text customStyle="inline-block" weight="bold">
+            <Text customStyle="inline-block" as="span" weight="bold">
               {worldLabel}
             </Text>
             {trackingAnalyticsInfo2}
             <Anchor href={matomoUrl}>
               <Text
+                as="span"
                 weight="bold"
                 color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
               >
@@ -118,7 +118,10 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
             </Anchor>
             {trackingAnalyticsInfo3}
             <Anchor href={ctaUrl}>
-              <Text color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}>
+              <Text
+                as="span"
+                color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+              >
                 {ctaLabel}
               </Text>
             </Anchor>

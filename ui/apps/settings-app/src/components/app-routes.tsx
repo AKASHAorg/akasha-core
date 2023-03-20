@@ -34,7 +34,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const handlePrivacyPolicyClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-legal',
-      getNavigationUrl: () => '/legal/privacy-policy',
+      getNavigationUrl: () => '/privacy-policy',
     });
   };
 
