@@ -6,6 +6,7 @@ import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
 import { ButtonIcon } from './ButtonIcon';
+import { tw } from '@twind/core';
 
 const Button: React.FC<
   ButtonProps &
@@ -30,7 +31,7 @@ const Button: React.FC<
 
   if (plain)
     return (
-      <button ref={ref} {...rest}>
+      <button ref={ref} {...rest} className={tw(customStyle)}>
         {children}
       </button>
     );
