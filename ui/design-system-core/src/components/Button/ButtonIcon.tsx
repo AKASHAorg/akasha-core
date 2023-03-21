@@ -8,13 +8,15 @@ export const ButtonIcon: React.FC<
     variant: ButtonProps['variant'];
     greyBg: ButtonProps['greyBg'];
     loading: ButtonProps['loading'];
+    breakPointSize: ButtonProps['breakPointSize'];
     disabled: ButtonProps['disabled'];
   }
-> = ({ type, variant, greyBg, loading, disabled }) => {
+> = ({ size, type, variant, greyBg, loading, breakPointSize, disabled }) => {
   return (
     <Icon
       type={type}
-      size="md"
+      size={size}
+      breakPointSize={breakPointSize}
       color={variant === 'primary' && !greyBg ? 'white' : ''}
       accentColor={
         (variant !== 'primary' && loading) ||

@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import { getTag } from './getTag';
 import { getAlignmentClasses } from './getAlignmentClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
@@ -48,11 +48,11 @@ const VARIANT_TO_CSS_CLASSES_MAPPER: Record<Variant, string> = {
   body1: 'text-[1rem] leading-[1.5rem]',
   body2: 'text-[0.875rem] leading-[1.375rem]',
   label: 'text-[1rem] leading-[1.5rem] font-medium',
-  footnotes1: 'text-[0.75rem] leading-[1.125rem] font-bold tracking-[.075em]',
+  footnotes1: 'text-[0.75rem] leading-[1.125rem] tracking-[.075em] font-normal',
   footnotes2: 'text-[0.75rem] leading-[1.125rem] font-medium',
   'button-lg': 'block text-[1rem] leading-[1.5rem] font-bold',
   'button-md': 'block text-[0.875rem] leading-[1.5rem] font-bold',
-  'button-sm': 'block text-[0.75rem] leading-[1.125rem] font-medium',
+  'button-sm': 'block text-[0.75rem] leading-[1.125rem] font-bold',
 };
 
 const Text: React.FC<PropsWithChildren<TextProps>> = ({
@@ -79,7 +79,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
     tag,
     {
       className: tw(
-        `${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${customStyle}`,
+        apply`${baseStyles} ${colorStyle} ${alignmentStyle} ${truncateStyle} ${wordBreakStyle} ${weightStyle} ${customStyle}`,
       ),
     },
     children,

@@ -19,7 +19,7 @@ export const XSmallButtonPrimary = Template.bind({});
 
 XSmallButtonPrimary.args = {
   label: 'Button',
-  size: 'xsmall',
+  size: 'xs',
   icon: 'PlusIcon',
   variant: 'primary',
 };
@@ -28,7 +28,7 @@ export const SmallButtonPrimary = Template.bind({});
 
 SmallButtonPrimary.args = {
   label: 'Button',
-  size: 'small',
+  size: 'sm',
   variant: 'primary',
 };
 
@@ -36,7 +36,7 @@ export const SmallButtonWithLeftIconPrimary = Template.bind({});
 
 SmallButtonWithLeftIconPrimary.args = {
   label: 'Button',
-  size: 'small',
+  size: 'sm',
   icon: 'PlusIcon',
   iconDirection: 'left',
   variant: 'primary',
@@ -46,7 +46,7 @@ export const SmallButtonWithRightIconPrimary = Template.bind({});
 
 SmallButtonWithRightIconPrimary.args = {
   label: 'Button',
-  size: 'small',
+  size: 'sm',
   icon: 'PlusIcon',
   iconDirection: 'right',
   variant: 'primary',
@@ -70,11 +70,11 @@ SmallButtonDisabledPrimary.args = {
   variant: 'primary',
 };
 
-export const RegularButtonPrimary = Template.bind({});
+export const MediumButtonPrimary = Template.bind({});
 
-RegularButtonPrimary.args = {
+MediumButtonPrimary.args = {
   label: 'Button',
-  size: 'regular',
+  size: 'md',
   variant: 'primary',
 };
 
@@ -82,7 +82,7 @@ export const LargeButtonPrimary = Template.bind({});
 
 LargeButtonPrimary.args = {
   label: 'Button',
-  size: 'large',
+  size: 'lg',
   variant: 'primary',
 };
 
@@ -90,7 +90,7 @@ export const XSmallSecondary = Template.bind({});
 
 XSmallSecondary.args = {
   label: 'Button',
-  size: 'xsmall',
+  size: 'xs',
   variant: 'secondary',
   icon: 'PlusIcon',
 };
@@ -99,15 +99,15 @@ export const SmallButtonSecondary = Template.bind({});
 
 SmallButtonSecondary.args = {
   label: 'Button',
-  size: 'small',
+  size: 'sm',
   variant: 'secondary',
 };
 
-export const RegularButtonSecondary = Template.bind({});
+export const MediumButtonSecondary = Template.bind({});
 
-RegularButtonSecondary.args = {
+MediumButtonSecondary.args = {
   label: 'Button',
-  size: 'regular',
+  size: 'md',
   variant: 'secondary',
 };
 
@@ -115,59 +115,65 @@ export const LargeButtonSecondary = Template.bind({});
 
 LargeButtonSecondary.args = {
   label: 'Button',
-  size: 'large',
+  size: 'lg',
   variant: 'secondary',
 };
 
-export const RegularIconOnlyPrimary = Template.bind({});
+export const MediumIconOnlyPrimary = Template.bind({});
 
-RegularIconOnlyPrimary.args = {
+MediumIconOnlyPrimary.args = {
   icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
   variant: 'primary',
 };
 
-export const RegularIconOnlyPrimaryLoading = Template.bind({});
+export const MediumIconOnlyPrimaryLoading = Template.bind({});
 
-RegularIconOnlyPrimaryLoading.args = {
+MediumIconOnlyPrimaryLoading.args = {
   icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
   loading: true,
   variant: 'primary',
 };
 
-export const RegularIconOnlyPrimaryDisabled = Template.bind({});
+export const MediumIconOnlyPrimaryDisabled = Template.bind({});
 
-RegularIconOnlyPrimaryDisabled.args = {
+MediumIconOnlyPrimaryDisabled.args = {
   icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
   variant: 'primary',
   disabled: true,
 };
 
-export const RegularIconOnlyPrimaryGreyBg = Template.bind({});
+export const MediumIconOnlyPrimaryGreyBg = Template.bind({});
 
-RegularIconOnlyPrimaryGreyBg.args = {
+MediumIconOnlyPrimaryGreyBg.args = {
   icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
   variant: 'primary',
   greyBg: true,
 };
 
-export const RegularIconOnlyPrimaryGreyBgLoading = Template.bind({});
+export const MediumIconOnlyPrimaryGreyBgLoading = Template.bind({});
 
-RegularIconOnlyPrimaryGreyBgLoading.args = {
+MediumIconOnlyPrimaryGreyBgLoading.args = {
   icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
   loading: true,
   variant: 'primary',
   greyBg: true,
 };
 
-export const RegularIconOnlyPrimaryGreyBgDisabled = Template.bind({});
+export const MediumIconOnlyPrimaryGreyBgDisabled = Template.bind({});
 
-RegularIconOnlyPrimaryGreyBgDisabled.args = {
+MediumIconOnlyPrimaryGreyBgDisabled.args = {
   icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
   variant: 'primary',
   greyBg: true,
