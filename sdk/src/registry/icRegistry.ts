@@ -18,6 +18,7 @@ import {
 } from '@akashaorg/typings/sdk/registry';
 import { validate } from '../common/validator';
 import { z } from 'zod';
+import { throwError } from "../common/error-handling";
 
 @injectable()
 class AWF_IC_REGISTRY {
@@ -107,19 +108,29 @@ class AWF_IC_REGISTRY {
       enabled: integrationInfo.enabled,
       createdAt: data.createdAt?.toNumber(),
       sources: [] as string[],
-      manifestData: {},
+      manifestData: {} as AWF_APP_SOURCE_MANIFEST,
     };
 
     if (ipfsSources.length) {
-      manifest = await this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(
-        `${ipfsSources[0]}/${this.MANIFEST_FILE}`,
-        true,
-      );
-      ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
-      response.sources = ipfsSources;
-      response.manifestData = manifest;
-      return response;
+      try {
+        manifest = await this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(
+          `${ipfsSources[0]}/${this.MANIFEST_FILE}`,
+          true,
+        );
+        ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
+        response.sources = ipfsSources;
+        response.manifestData = manifest;
+        return response;
+      } catch (e) {
+        throwError(`Failed to get manifest data: ${e.message}`, [
+          'sdk',
+          'registry',
+          'getIntegrationReleaseInfo',
+          releaseId,
+        ]);
+      }
     }
+    // @todo: maybe better to throw error here since we don't have sources?
     return response;
   }
 

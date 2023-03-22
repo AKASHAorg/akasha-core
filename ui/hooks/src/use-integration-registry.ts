@@ -1,6 +1,6 @@
-import { useQuery } from 'react-query';
-import getSDK from '@akashaorg/awf-sdk';
-import { logError } from './utils/error-handler';
+import { useQuery } from "react-query";
+import getSDK from "@akashaorg/awf-sdk";
+import { logError } from "./utils/error-handler";
 
 export const INTEGRATIONS_KEY = 'Integrations';
 export const RELEASES_KEY = 'Releases';
@@ -186,8 +186,7 @@ export function useGetAllIntegrationReleaseIds(integrationName: string, offset?:
 
 const getIntegrationReleaseInfo = async releaseId => {
   const sdk = getSDK();
-  const res = await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
-  return res;
+  return await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
 };
 
 /**
