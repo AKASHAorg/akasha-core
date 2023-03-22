@@ -18,7 +18,7 @@ import {
 } from '@akashaorg/typings/sdk/registry';
 import { validate } from '../common/validator';
 import { z } from 'zod';
-import { throwError } from "../common/error-handling";
+import { throwError } from '../common/error-handling';
 
 @injectable()
 class AWF_IC_REGISTRY {
@@ -122,7 +122,7 @@ class AWF_IC_REGISTRY {
         response.manifestData = manifest;
         return response;
       } catch (e) {
-        throwError(`Failed to get manifest data: ${e.message}`, [
+        throwError(`Failed to get manifest data: ${(e as Error).message}`, [
           'sdk',
           'registry',
           'getIntegrationReleaseInfo',
