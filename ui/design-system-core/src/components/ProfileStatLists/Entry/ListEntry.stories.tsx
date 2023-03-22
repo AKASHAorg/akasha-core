@@ -2,7 +2,7 @@ import React from 'react';
 import ListEntry, { ListEntryProps } from './index';
 
 export default {
-  title: 'Cards/ListEntry',
+  title: 'Profile/ListEntry',
   component: ListEntry,
 };
 

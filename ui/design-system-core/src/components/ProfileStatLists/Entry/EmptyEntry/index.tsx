@@ -2,17 +2,17 @@ import React, { ReactNode } from 'react';
 import InfoCard from '../../../InfoCard';
 
 export type EmptyEntryProps = {
+  type: 'following' | 'followers';
+  viewerIsOwner?: boolean;
+  userName?: string;
   titleLabel?: ReactNode;
   subTitleLabel?: ReactNode;
-  type?: 'following' | 'followers';
-  userName?: string;
-  viewerIsOwner?: boolean;
 };
 
 const EmptyEntry: React.FC<EmptyEntryProps> = ({
   titleLabel,
   subTitleLabel,
-  type = 'followers',
+  type,
   userName = 'user',
   viewerIsOwner = true,
 }) => {
