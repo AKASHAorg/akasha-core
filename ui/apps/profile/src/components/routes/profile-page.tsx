@@ -1,29 +1,41 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useSearchParams } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import { ProfileLoading } from '@akashaorg/design-system-core/lib/components/ProfileCard';
+import { ProfileStatLoading } from '@akashaorg/design-system-core/lib/components/ProfileStatLists/placeholders/ProfileStatLoading';
+
 import { RootComponentProps, IProfileData } from '@akashaorg/typings/ui';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import menuRoute, { MY_PROFILE } from '../../routes';
-import ProfilePageHeader from '../profile-cards/profile-page-header';
+import ProfileCards from '../profile-cards';
+import ProfileStatPage from '../profile-cards/profile-stat-page';
 
 const { Box, Helmet, EntryCardHidden, ProfileDelistedCard } = DS;
-const { ErrorLoader, ProfileLoading } = DSNew;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;
   loginState: LoginState;
+  showStat?: boolean;
 }
 
 const ProfilePage = (props: ProfilePageProps) => {
-  const { plugins, loggedProfileData } = props;
+  const { plugins, loggedProfileData, showStat } = props;
 
   const { t } = useTranslation('app-profile');
   const location = useLocation();
-  const { pubKey } = useParams<{ pubKey: string }>();
+  const { pubKey } = useParams<{
+    pubKey: string;
+  }>();
+
+  const [params] = useSearchParams();
+
+  const tab = params.get('tab');
+
+  const selectedStat = tab === 'followers' || tab === 'following' ? tab : 'followers';
 
   const routing = plugins['@akashaorg/app-routing']?.routing;
 
@@ -69,9 +81,8 @@ const ProfilePage = (props: ProfilePageProps) => {
           World
         </title>
       </Helmet>
-      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') && (
-        <ProfileLoading />
-      )}
+      {(profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle') &&
+        (showStat ? <ProfileStatLoading /> : <ProfileLoading />)}
       {(profileDataQuery.status === 'error' ||
         (profileDataQuery.status === 'success' && !profileState)) && (
         <ErrorLoader
@@ -108,16 +119,22 @@ const ProfilePage = (props: ProfilePageProps) => {
               userName={profileState.userName || ''}
             />
           )}
-          {!profileState.delisted && (
-            <>
-              <ProfilePageHeader
+          {!profileState.delisted &&
+            (showStat ? (
+              <ProfileStatPage
+                {...props}
+                selectedStat={selectedStat}
+                loginState={loginQuery.data}
+                profileData={profileState}
+              />
+            ) : (
+              <ProfileCards
                 {...props}
                 profileData={profileState}
                 profileId={pubKey}
                 loginState={loginQuery.data}
               />
-            </>
-          )}
+            ))}
         </>
       )}
     </Box>

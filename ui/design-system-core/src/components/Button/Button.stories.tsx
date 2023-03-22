@@ -1,12 +1,13 @@
 import React from 'react';
 import Button from '.';
+import { ButtonProps } from './types';
 
 export default {
   title: 'Buttons/Button',
   component: Button,
 };
 
-const Template = args => <Button {...args} />;
+const Template = (args: ButtonProps) => <Button {...args} />;
 
 export const BaseButton = Template.bind({});
 
@@ -14,100 +15,236 @@ BaseButton.args = {
   label: 'Button',
 };
 
-export const TextOnlyButton = Template.bind({});
+export const XSmallButtonPrimary = Template.bind({});
 
-TextOnlyButton.args = {
+XSmallButtonPrimary.args = {
   label: 'Button',
-  textOnly: true,
-};
-
-export const ButtonWithSize = Template.bind({});
-
-ButtonWithSize.args = {
-  size: 'small',
-  label: 'Small Button',
-};
-
-export const XsmallButton = Template.bind({});
-
-XsmallButton.args = {
-  size: 'xsmall',
+  size: 'xs',
   icon: 'PlusIcon',
-  label: 'Small Button',
+  variant: 'primary',
 };
 
-export const PrimaryButton = Template.bind({});
+export const SmallButtonPrimary = Template.bind({});
 
-PrimaryButton.args = {
-  label: 'Primary Button',
-  primary: true,
+SmallButtonPrimary.args = {
+  label: 'Button',
+  size: 'sm',
+  variant: 'primary',
 };
 
-export const IconButton = Template.bind({});
+export const SmallButtonWithLeftIconPrimary = Template.bind({});
 
-IconButton.args = {
-  icon: 'BeakerIcon',
-  label: 'Icon Button',
+SmallButtonWithLeftIconPrimary.args = {
+  label: 'Button',
+  size: 'sm',
+  icon: 'PlusIcon',
+  iconDirection: 'left',
+  variant: 'primary',
 };
 
-export const TextOnlyIconButton = Template.bind({});
+export const SmallButtonWithRightIconPrimary = Template.bind({});
 
-TextOnlyIconButton.args = {
-  icon: 'BeakerIcon',
-  label: 'Icon Button',
-  textOnly: true,
+SmallButtonWithRightIconPrimary.args = {
+  label: 'Button',
+  size: 'sm',
+  icon: 'PlusIcon',
+  iconDirection: 'right',
+  variant: 'primary',
 };
 
-export const LeftIconButton = Template.bind({});
+export const SmallButtonLoadingPrimary = Template.bind({});
 
-LeftIconButton.args = {
-  icon: 'BeakerIcon',
-  label: 'Left Icon Button',
-  leftIcon: true,
+SmallButtonLoadingPrimary.args = {
+  label: 'Button',
+  loading: true,
+  variant: 'primary',
 };
 
-export const TextOnlyLeftIconButton = Template.bind({});
+export const SmallButtonDisabledPrimary = Template.bind({});
 
-TextOnlyLeftIconButton.args = {
-  icon: 'BeakerIcon',
-  label: 'Left Icon Button',
-  leftIcon: true,
-  textOnly: true,
+SmallButtonDisabledPrimary.args = {
+  label: 'Button',
+  icon: 'PlusIcon',
+  iconDirection: 'right',
+  disabled: true,
+  variant: 'primary',
 };
 
-export const IconOnlyButton = Template.bind({});
+export const MediumButtonPrimary = Template.bind({});
 
-IconOnlyButton.args = {
-  icon: 'BeakerIcon',
+MediumButtonPrimary.args = {
+  label: 'Button',
+  size: 'md',
+  variant: 'primary',
+};
+
+export const LargeButtonPrimary = Template.bind({});
+
+LargeButtonPrimary.args = {
+  label: 'Button',
+  size: 'lg',
+  variant: 'primary',
+};
+
+export const XSmallSecondary = Template.bind({});
+
+XSmallSecondary.args = {
+  label: 'Button',
+  size: 'xs',
+  variant: 'secondary',
+  icon: 'PlusIcon',
+};
+
+export const SmallButtonSecondary = Template.bind({});
+
+SmallButtonSecondary.args = {
+  label: 'Button',
+  size: 'sm',
+  variant: 'secondary',
+};
+
+export const MediumButtonSecondary = Template.bind({});
+
+MediumButtonSecondary.args = {
+  label: 'Button',
+  size: 'md',
+  variant: 'secondary',
+};
+
+export const LargeButtonSecondary = Template.bind({});
+
+LargeButtonSecondary.args = {
+  label: 'Button',
+  size: 'lg',
+  variant: 'secondary',
+};
+
+export const MediumIconOnlyPrimary = Template.bind({});
+
+MediumIconOnlyPrimary.args = {
+  icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
+  variant: 'primary',
 };
 
-export const TextOnlyIconOnlyButton = Template.bind({});
+export const MediumIconOnlyPrimaryLoading = Template.bind({});
 
-TextOnlyIconOnlyButton.args = {
-  icon: 'BeakerIcon',
+MediumIconOnlyPrimaryLoading.args = {
+  icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
-  textOnly: true,
+  loading: true,
+  variant: 'primary',
 };
 
-export const IconOnlyGreyBgButton = Template.bind({});
+export const MediumIconOnlyPrimaryDisabled = Template.bind({});
 
-IconOnlyGreyBgButton.args = {
-  icon: 'BeakerIcon',
-  greyBg: true,
+MediumIconOnlyPrimaryDisabled.args = {
+  icon: 'PlusIcon',
+  size: 'md',
   iconOnly: true,
-};
-
-export const DisabledButton = Template.bind({});
-
-DisabledButton.args = {
-  label: 'Disabled Button',
+  variant: 'primary',
   disabled: true,
 };
 
-export const LoadingButton = Template.bind({});
+export const MediumIconOnlyPrimaryGreyBg = Template.bind({});
 
-LoadingButton.args = {
-  label: 'Loading Button',
+MediumIconOnlyPrimaryGreyBg.args = {
+  icon: 'PlusIcon',
+  size: 'md',
+  iconOnly: true,
+  variant: 'primary',
+  greyBg: true,
+};
+
+export const MediumIconOnlyPrimaryGreyBgLoading = Template.bind({});
+
+MediumIconOnlyPrimaryGreyBgLoading.args = {
+  icon: 'PlusIcon',
+  size: 'md',
+  iconOnly: true,
   loading: true,
+  variant: 'primary',
+  greyBg: true,
+};
+
+export const MediumIconOnlyPrimaryGreyBgDisabled = Template.bind({});
+
+MediumIconOnlyPrimaryGreyBgDisabled.args = {
+  icon: 'PlusIcon',
+  size: 'md',
+  iconOnly: true,
+  variant: 'primary',
+  greyBg: true,
+  disabled: true,
+};
+
+export const TextButton = Template.bind({});
+
+TextButton.args = {
+  label: 'Button',
+  variant: 'text',
+};
+
+export const TextButtonLeftIcon = Template.bind({});
+
+TextButtonLeftIcon.args = {
+  label: 'Button',
+  icon: 'PlusIcon',
+  iconDirection: 'left',
+  variant: 'text',
+};
+
+export const TextButtonRightIcon = Template.bind({});
+
+TextButtonRightIcon.args = {
+  label: 'Button',
+  icon: 'PlusIcon',
+  iconDirection: 'right',
+  variant: 'text',
+};
+
+export const TextButtonLoading = Template.bind({});
+
+TextButtonLoading.args = {
+  label: 'Button',
+  loading: true,
+  variant: 'text',
+};
+
+export const TextButtonDisabled = Template.bind({});
+
+TextButtonDisabled.args = {
+  label: 'Button',
+  icon: 'PlusIcon',
+  iconDirection: 'right',
+  variant: 'text',
+  disabled: true,
+};
+
+export const IconOnlyTextButton = Template.bind({});
+
+IconOnlyTextButton.args = {
+  icon: 'PlusIcon',
+  iconOnly: true,
+  variant: 'text',
+};
+
+export const IconOnlyTextButtonLoading = Template.bind({});
+
+IconOnlyTextButtonLoading.args = {
+  icon: 'PlusIcon',
+  loading: true,
+  iconOnly: true,
+  variant: 'text',
+};
+
+export const IconOnlyTextButtonDisabled = Template.bind({});
+
+IconOnlyTextButtonDisabled.args = {
+  icon: 'PlusIcon',
+  iconOnly: true,
+  variant: 'text',
+  disabled: true,
 };

@@ -1,0 +1,10 @@
+type AppIntegration @loadModel(id: "kjzl6hvfrbw6c6oxadj4nluncq38cbzjyf9wzmbws99g7imktj170nir4g2phlj") {
+  id: ID!
+}
+
+type AppRelease @createModel(accountRelation: LIST, description: "AKASHA app integration releases list") {
+  integrationID: StreamID! @documentReference(model: "AppIntegration")
+  integration: AppIntegration! @relationDocument(property: "integrationID")
+  version: String! @string(minLength:2, maxLength: 16)
+  source: CID!
+}

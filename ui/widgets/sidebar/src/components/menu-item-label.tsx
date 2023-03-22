@@ -1,10 +1,9 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import DS from '@akashaorg/design-system-core';
 import { IMenuItem } from '@akashaorg/typings/ui';
-
-const { AppIcon, Text } = DS;
+import AppIcon from '@akashaorg/design-system-core/lib/components/AppIcon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IMenuItemLabelProps {
   menuItem: IMenuItem;
@@ -37,16 +36,13 @@ const MenuItemLabel: React.FC<IMenuItemLabelProps> = props => {
       >
         {menuItem.logo.type === 'icon' && (
           <AppIcon
-            size="lg"
+            size="md"
             stackedIcon={menuItem.logo.value === 'notifications'}
             placeholderIconType={menuItem.logo.value}
           />
         )}
       </div>
-      <Text
-        variant="body1"
-        className={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}
-      >
+      <Text customStyle={`ml-2.5 ${isActive ? 'text-secondary' : 'text-black dark:text-white'}`}>
         {menuItem.label}
       </Text>
     </div>

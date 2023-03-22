@@ -9,9 +9,10 @@ import Gql from '../gql/index';
 import pino from 'pino';
 import { DIDSession } from 'did-session';
 import { EthereumWebAuth } from '@didtools/pkh-ethereum';
-import { CeramicClient } from '@ceramicnetwork/http-client';
+import { ComposeClient } from '@composedb/client';
 import { AccountId } from 'caip';
 import { ethers } from 'ethers';
+import { definition } from '@akashaorg/composedb-models/lib/runtime-composite';
 
 @injectable()
 export default class CeramicService {
@@ -20,7 +21,7 @@ export default class CeramicService {
   private _globalChannel: EventBus;
   private _log: pino.Logger;
   private _settings: Settings;
-  private _ceramicClient?: CeramicClient;
+  readonly _composeClient: ComposeClient;
   private _didSession?: DIDSession;
   private _gql: Gql;
   constructor(
@@ -37,6 +38,10 @@ export default class CeramicService {
     this._log = log.create('AWF_Ceramic');
     this._settings = settings;
     this._gql = gql;
+    this._composeClient = new ComposeClient({
+      ceramic: process.env.CERAMIC_API_ENDPOINT,
+      definition: definition,
+    });
   }
   async connect() {
     const chainNameSpace = 'eip155';
@@ -52,15 +57,18 @@ export default class CeramicService {
       web3Provider = this._web3.provider.provider;
     }
     const authMethod = await EthereumWebAuth.getAuthMethod(web3Provider, accountId);
-    this._didSession = await DIDSession.authorize(authMethod, { resources: ['ceramic://*'] });
-    this._ceramicClient = new CeramicClient(process.env.CERAMIC_API_ENDPOINT);
-    this._ceramicClient.did = this._didSession.did;
+    this._didSession = await DIDSession.authorize(authMethod, {
+      resources: this._composeClient.resources,
+    });
+    this._composeClient.setDID(this._didSession.did);
+  }
+  getComposeClient() {
+    return this._composeClient;
   }
   async disconnect() {
-    if (this._ceramicClient) {
-      await this._ceramicClient.close();
+    if (this._didSession) {
       this._didSession = undefined;
-      this._ceramicClient = undefined;
+      this._composeClient.setDID(undefined);
     }
   }
 }

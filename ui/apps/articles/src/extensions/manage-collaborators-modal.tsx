@@ -5,14 +5,12 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { IProfileData, RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 import { trendingProfilesData } from '@akashaorg/design-system/lib/utils/dummy-data';
 
 const { ManageCollaboratorsModal } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const ManageCollaborators = (props: RootExtensionProps) => {
   const [inputValue, setInputValue] = React.useState<string>('');

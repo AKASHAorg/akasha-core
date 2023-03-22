@@ -10,7 +10,6 @@ type AppImgProps = {
   placeholderIconType: IAppIcon['placeholderIconType'];
   breakPointSize?: IAppIcon['breakPointSize'];
   accentColor?: IAppIcon['accentColor'];
-  hover?: boolean;
 };
 
 const IconByType: React.FC<AppImgProps> = ({
@@ -19,7 +18,6 @@ const IconByType: React.FC<AppImgProps> = ({
   placeholderIconType,
   breakPointSize,
   accentColor,
-  hover,
 }) => {
   if (appImg?.type === LogoTypeSource.ICON) {
     return (
@@ -28,10 +26,10 @@ const IconByType: React.FC<AppImgProps> = ({
         size={size}
         breakPointSize={breakPointSize}
         accentColor={accentColor}
-        hover={hover}
       />
     );
   }
+
   if (appImg?.type === (LogoTypeSource.String || LogoTypeSource.IPFS)) {
     return <img className={tw(apply`rounded-[50%] object-contain`)} src={appImg?.value} />;
   }
@@ -41,7 +39,6 @@ const IconByType: React.FC<AppImgProps> = ({
       size={size}
       breakPointSize={breakPointSize}
       accentColor={accentColor}
-      hover={hover}
     />
   );
 };

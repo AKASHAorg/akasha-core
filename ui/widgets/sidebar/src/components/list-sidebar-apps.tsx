@@ -1,13 +1,11 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import DS from '@akashaorg/design-system-core';
 import { IMenuItem } from '@akashaorg/typings/ui';
+import Accordion from '@akashaorg/design-system-core/lib/components/Accordion';
 
 import MenuItemLabel from './menu-item-label';
 import MenuSubItems from './menu-sub-items';
-
-const { Accordion } = DS;
 
 export interface IListSidebarAppsProps {
   list: IMenuItem[];
@@ -20,13 +18,15 @@ export interface IListSidebarAppsProps {
 const ListSidebarApps: React.FC<IListSidebarAppsProps> = props => {
   const { list, activeOption, hasBorderTop = false, onOptionClick, onClickMenuItem } = props;
 
+  const borderStyle = hasBorderTop ? 'border-t-1 border-grey8' : '';
+
   return (
-    <div className={tw(`flex flex-col py-2 ${hasBorderTop ? 'border-t-1 border-grey8' : ''}`)}>
+    <div className={tw(`flex flex-col py-2 ${borderStyle}`)}>
       {list?.map((app, idx) => (
         <React.Fragment key={app.label + idx}>
           {app.subRoutes.length > 0 ? (
             <Accordion
-              className="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
+              customStyle="py-2 px-6 hover:bg-grey8 dark:hover:bg-grey5"
               titleNode={<MenuItemLabel menuItem={app} isActive={false} />}
               contentNode={
                 <MenuSubItems

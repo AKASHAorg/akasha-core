@@ -5,6 +5,7 @@
     },
     { "path": "./ui/design" },
     { "path": "./ui/design-system-core" },
+    { "path": "./ui/design-system-components" },
     { "path": "./tests"},
     { "path": "./ui/hooks" },
     { "path": "./ui/widgets/feed" },

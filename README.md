@@ -99,6 +99,15 @@ This [workspace](./examples) contains examples of applications that showcase the
 
 Follow the steps described [here](./LOCAL_DEV.md)
 
+## Adding a new package
+
+1. in the root package.json add the package to the workspace package list
+2. in the root package.json create scripts to build it ex: ```"pack:ui-design": "nx run @akashaorg/design-system:build"```
+3. in the root package.json add it to build process in scripts, for example in the ```pack:ui``` script
+4. add it to tsconfig.json
+5. add it to workspace.json
+6. add it to tsconfig.typedoc.json
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import Stack from '../Stack';
-import { tw, apply } from '@twind/core';
+import { tw } from '@twind/core';
 import { getColorClasses } from '../../utils/getColorClasses';
 import { arcCommands, calculateEndAngle } from '../../utils/graphics';
 import { MeterProps } from './types';
@@ -41,10 +41,10 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
   const d = arcCommands(centerX, centerY, radius, startAngle, endAngle);
 
   return (
-    <Stack justify="center" align="center" className={tw(apply`inline-flex overflow-hidden]`)}>
+    <Stack justify="center" align="center" customStyle="inline-flex overflow-hidden">
       <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
         <circle
-          className={tw(apply(backgroundStyle))}
+          className={tw(backgroundStyle)}
           strokeWidth={thickness}
           stroke="currentColor"
           fill="transparent"
@@ -53,7 +53,7 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
           cy={centerY}
         />
         <path
-          className={tw(apply(`${progressStyle}`))}
+          className={tw(`${progressStyle}`)}
           d={d}
           strokeWidth={thickness}
           strokeLinecap="butt"
@@ -61,7 +61,7 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
           fill="transparent"
         />
       </svg>
-      <div className="absolute"> {children} </div>
+      <div className={tw('absolute')}> {children} </div>
     </Stack>
   );
 };

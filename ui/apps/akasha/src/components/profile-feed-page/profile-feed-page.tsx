@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
 import { useInfinitePostsByAuthor, LoginState, useGetProfile } from '@akashaorg/ui-awf-hooks';
 import {
@@ -14,8 +14,6 @@ import {
 } from '@akashaorg/typings/ui';
 
 const { Box, Helmet } = DS;
-
-const { ErrorLoader } = DSNew;
 
 export interface ProfilePageProps extends RootComponentProps {
   loggedProfileData: IProfileData;

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import Button, { IButtonProps } from '../Button';
+import Button from '../Button';
 import Icon from '../Icon/';
 import { tw } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
+import { ButtonProps } from '../Button/types';
 
-export interface IDuplexButtonProps extends IButtonProps {
+export type DuplexButtonProps = ButtonProps & {
   onClickInactive?: () => void;
   onClickActive?: () => void;
   inactiveLabel?: string;
@@ -14,10 +15,9 @@ export interface IDuplexButtonProps extends IButtonProps {
   activeIcon?: IconType;
   activeHoverIcon?: IconType;
   allowMinimization?: boolean;
-  style?: React.CSSProperties;
-}
+};
 
-const DuplexButton = (props: IDuplexButtonProps) => {
+const DuplexButton = (props: DuplexButtonProps) => {
   const {
     onClickActive,
     onClickInactive,
@@ -55,18 +55,19 @@ const DuplexButton = (props: IDuplexButtonProps) => {
 
   if (iconOnly && allowMinimization) {
     return (
-      <button
+      <Button
         data-testid="duplex-button"
         onClick={active ? onClickActive : onClickInactive}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         className={tw('rounded-sm border-1 border-secondary-light p-1')}
+        plain
       >
         <Icon
           type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-          styling="text-secondary-light h-5 w-5"
+          customStyle="text-secondary-light h-5 w-5"
         />
-      </button>
+      </Button>
     );
   }
 
@@ -78,7 +79,8 @@ const DuplexButton = (props: IDuplexButtonProps) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       icon={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-      size="small"
+      variant={active ? 'secondary' : 'primary'}
+      size="sm"
     />
   );
 };

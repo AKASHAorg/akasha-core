@@ -4,6 +4,7 @@ import DS from '@akashaorg/design-system';
 import { RootComponentProps, EventTypes, UIEventData } from '@akashaorg/typings/ui';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import ScrollRestorer from './scroll-restorer';
+import { apply, tw } from '@twind/core';
 
 import { usePlaformHealthCheck, useDismissedCard } from '@akashaorg/ui-awf-hooks';
 
@@ -27,10 +28,15 @@ const WarningIcon = styled(Icon)`
 
 const Layout: React.FC<RootComponentProps> = props => {
   const [activeModal, setActiveModal] = React.useState<UIEventData['data'] | null>(null);
+  const sidebarWrapperRef: React.RefObject<HTMLDivElement> = React.useRef(null);
   // sidebar is open by default on larger screens >=1440px
   const [showSidebar, setShowSidebar] = React.useState(
     window.matchMedia('(min-width: 1440px)').matches ? true : false,
   );
+  const [showWidgets, setshowWidgets] = React.useState(
+    window.matchMedia('(min-width: 769px)').matches ? true : false,
+  );
+
   const maintenanceReq = usePlaformHealthCheck();
 
   const dismissedCardId = 'dismiss-the-merge-notification';
@@ -53,6 +59,14 @@ const Layout: React.FC<RootComponentProps> = props => {
   const handleSidebarHide = () => {
     setShowSidebar(false);
   };
+
+  const handleWidgetsShow = () => {
+    setshowWidgets(true);
+  };
+  const handleWidgetsHide = () => {
+    setshowWidgets(false);
+  };
+
   const handleModal = React.useCallback(
     (data: UIEventData['data']) => {
       setActiveModal(active => {
@@ -71,6 +85,20 @@ const Layout: React.FC<RootComponentProps> = props => {
     [activeModal],
   );
 
+  const handleClickOutside = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (
+      window.matchMedia('(max-width: 1440px)').matches &&
+      showSidebar &&
+      sidebarWrapperRef.current &&
+      !sidebarWrapperRef.current.contains(e.target as Node)
+    ) {
+      uiEvents.current.next({
+        event: EventTypes.HideSidebar,
+      });
+    }
+  };
+
   React.useEffect(() => {
     const eventsSub = uiEvents.current.subscribe({
       next: (eventInfo: UIEventData) => {
@@ -83,6 +111,12 @@ const Layout: React.FC<RootComponentProps> = props => {
             break;
           case EventTypes.HideSidebar:
             handleSidebarHide();
+            break;
+          case EventTypes.ShowWidgets:
+            handleWidgetsShow();
+            break;
+          case EventTypes.HideWidgets:
+            handleWidgetsHide();
             break;
           default:
             break;
@@ -102,14 +136,32 @@ const Layout: React.FC<RootComponentProps> = props => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onCloseButtonClick = React.useCallback(() => setDismissed(dismissedCardId), [dismissed]);
 
+  const layoutStyle = apply`
+      grid md:(grid-flow-row)
+      lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'}
+      ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr] '}
+      xl:max-w-7xl xl:mx-auto gap-x-4
+      `;
+  const mobileLayoverStyle = apply`
+      fixed xl:sticky z-[9999] h-full
+      ${
+        showSidebar && !window.matchMedia('(min-width: 1440px)').matches
+          ? 'min-w-[100vw] xl:min-w-max bg-black/30'
+          : ''
+      }
+      `;
+  const sidebarSlotStyle = apply`
+      sticky top-0 h-screen w-fit ${showSidebar ? '' : 'hidden'}
+      `;
+
   return (
-    <div className="bg-background dark:(bg-background-dark) min-h-screen">
-      <div className="h-full w-full">
-        <div className="grid md:grid-cols-[8fr_4fr] lg:grid-cols-[3fr_6fr_3fr] xl:max-w-7xl xl:mx-auto gap-x-4">
+    <div className={tw('bg-background dark:(bg-background-dark) min-h-screen')}>
+      <div className={tw('h-full w-full')} onClick={handleClickOutside}>
+        <div className={tw(layoutStyle)}>
           <ScrollRestorer />
-          <div className="hidden lg:flex h-full min-w-max">
-            <div className="sticky top-0 h-screen w-full">
-              <div className="pt-4">
+          <div className={tw(mobileLayoverStyle)}>
+            <div className={tw(sidebarSlotStyle)}>
+              <div className={tw('pt-0 xl:pt-4')} ref={sidebarWrapperRef}>
                 <Extension
                   fullHeight
                   name={props.layoutConfig.sidebarSlotId}
@@ -118,7 +170,7 @@ const Layout: React.FC<RootComponentProps> = props => {
               </div>
             </div>
           </div>
-          <div>
+          <div className={`${showWidgets ? '' : 'lg:(col-start-2 col-end-3) col-start-1'}`}>
             <div className="sticky top-0 z-50">
               <div className="text() pt-4 bg-background dark:(bg-background-dark)">
                 <Extension name={props.layoutConfig.topbarSlotId} uiEvents={props.uiEvents} />
@@ -174,12 +226,12 @@ const Layout: React.FC<RootComponentProps> = props => {
             </div>
           </div>
           <div>
-            <div className="sticky top-0">
-              <div className="grid grid-auto-rows pt-4">
+            <div className={tw('sticky top-0')}>
+              <div className={tw(`${showWidgets ? '' : 'hidden'} grid grid-auto-rows pt-4`)}>
                 <Extension name={props.layoutConfig.widgetSlotId} uiEvents={props.uiEvents} />
                 <Extension name={props.layoutConfig.rootWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
-              <div className="">
+              <div className={tw('fixed bottom-0 xl:static')}>
                 <Extension name={props.layoutConfig.cookieWidgetSlotId} uiEvents={props.uiEvents} />
               </div>
             </div>

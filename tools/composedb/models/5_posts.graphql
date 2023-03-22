@@ -1,0 +1,24 @@
+type Profile @loadModel(id: "kjzl6hvfrbw6c7i4k7vffsms9flppqephozynftoaqcttt0q33xr5wbelna4bsb"){
+  id: ID!
+}
+
+type Comment @loadModel(id: "kjzl6hvfrbw6c5golzc94ty8m2dmkestqdee89if5k5sh2xyhvpbi94tikky7f5"){
+  id: ID!
+}
+
+type PostQuote @loadModel(id: "kjzl6hvfrbw6c95riwpy9pcqk05uwh41ssahwbso2iuml4y0mqiwrqf8rsc8tok"){
+  id: ID!
+}
+
+type ProfileMention @loadModel(id: "kjzl6hvfrbw6c9cqix9xkokxonyeuexkiao36hudoswrj0phfjljdnmoe6d23po"){
+  id: ID!
+}
+
+type Post @loadModel(id: "kjzl6hvfrbw6c5h0i021hdiacksynsnxnzy8v95kcadkj4cqzs1894ms0wvewn2") {
+  id: ID!
+  comments: [Comment] @relationFrom(model: "Comment", property: "postID")
+  commentsCount: Int! @relationCountFrom(model: "Comment", property: "postID")
+  quotes: [PostQuote] @relationFrom(model: "PostQuote", property: "quotedPostID")
+  quotesCount: Int! @relationCountFrom(model: "PostQuote", property: "quotedPostID")
+  mentions: [ProfileMention] @relationFrom(model: "ProfileMention", property: "postID")
+}
