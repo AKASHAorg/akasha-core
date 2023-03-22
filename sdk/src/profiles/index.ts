@@ -270,8 +270,7 @@ class AWF_Profile {
    *
    */
   async getTrending() {
-    // return this._gql.getAPI().SearchProfiles({ name: '' });
-    return this.searchProfiles('');
+    return this._gql.getAPI().SearchProfiles({ name: '' });
   }
 
   /**
