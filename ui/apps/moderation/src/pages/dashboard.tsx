@@ -40,7 +40,7 @@ export interface IDashboardProps extends RootComponentProps {
 
 const DEFAULT_LIMIT = 10;
 
-const Dashboard: React.FC<IDashboardProps> = props => {
+export const Dashboard: React.FC<IDashboardProps> = props => {
   const { user, isAuthorised, plugins } = props;
 
   // const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
@@ -409,5 +409,3 @@ const Dashboard: React.FC<IDashboardProps> = props => {
     </Box>
   );
 };
-
-export default Dashboard;

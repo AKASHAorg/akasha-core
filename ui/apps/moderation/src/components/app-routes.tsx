@@ -4,8 +4,7 @@ import DS from '@akashaorg/design-system';
 import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import TransparencyLog from './transparency-log';
-import { Dashboard, Overview, AllModerators, ValuePage } from '../pages';
+import { Dashboard, Overview, Moderators, TransparencyLog, ModerationValue } from '../pages';
 
 import routes, { DASHBOARD, HISTORY, HOME, MODERATION_VALUE, MODERATORS } from '../routes';
 
@@ -27,7 +26,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
         <Routes>
           <Route path={routes[HOME]} element={<Overview {...props} />} />
 
-          <Route path={routes[MODERATION_VALUE]} element={<ValuePage {...props} />} />
+          <Route path={routes[MODERATION_VALUE]} element={<ModerationValue {...props} />} />
 
           <Route
             path={routes[DASHBOARD]}
@@ -41,7 +40,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
 
-          <Route path={routes[MODERATORS]} element={<AllModerators {...props} />} />
+          <Route path={routes[MODERATORS]} element={<Moderators {...props} />} />
 
           <Route
             path={routes[HISTORY]}
