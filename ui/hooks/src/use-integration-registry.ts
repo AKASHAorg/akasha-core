@@ -186,7 +186,7 @@ export function useGetAllIntegrationReleaseIds(integrationName: string, offset?:
 
 const getIntegrationReleaseInfo = async releaseId => {
   const sdk = getSDK();
-  return await sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
+  return sdk.api.icRegistry.getIntegrationReleaseInfo(releaseId);
 };
 
 /**
