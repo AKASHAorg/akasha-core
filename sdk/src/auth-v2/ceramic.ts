@@ -20,8 +20,8 @@ export default class CeramicService {
   private _globalChannel: EventBus;
   private _log: pino.Logger;
   private _settings: Settings;
-  private _ceramicClient: CeramicClient;
-  private _didSession: DIDSession;
+  private _ceramicClient?: CeramicClient;
+  private _didSession?: DIDSession;
   private _gql: Gql;
   constructor(
     @inject(TYPES.Db) db: DB,
@@ -56,7 +56,6 @@ export default class CeramicService {
     this._ceramicClient = new CeramicClient(process.env.CERAMIC_API_ENDPOINT);
     this._ceramicClient.did = this._didSession.did;
   }
-
   async disconnect() {
     if (this._ceramicClient) {
       await this._ceramicClient.close();

@@ -1,4 +1,4 @@
-export const executeOnSW = payload => {
+export const executeOnSW = <T>(payload): Promise<T | null> => {
   const messageChannel = new MessageChannel();
   return new Promise(resolve => {
     // for browsers that don't have the service worker installed

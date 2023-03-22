@@ -19,6 +19,7 @@ import AppSettings from './settings/apps';
 import AWF_Misc from './common/misc';
 import AWF_Lit from './auth-v2/lit';
 import AWF_Ceramic from './auth-v2/ceramic';
+
 const diContainer = new Container({
   defaultScope: 'Singleton',
 });

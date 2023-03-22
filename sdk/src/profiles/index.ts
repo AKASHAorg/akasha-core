@@ -1,10 +1,18 @@
 import { inject, injectable } from 'inversify';
-import Web3Connector from '../common/web3.connector';
-import { TYPES, PROFILE_EVENTS } from '@akashaorg/typings/sdk';
+import {
+  TYPES,
+  PROFILE_EVENTS,
+  TagName,
+  TagNameSchema,
+  PubKey,
+  PubKeySchema,
+  DataProviderInputSchema,
+  Username,
+  UsernameSchema,
+} from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Logging from '../logging';
-import { throwError } from 'rxjs';
 import { resizeImage } from '../helpers/img';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
@@ -13,13 +21,14 @@ import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import { createFormattedValue } from '../helpers/observable';
 import IpfsConnector from '../common/ipfs.connector';
 import { z } from 'zod';
+import { validate } from '../common/validator';
+import { throwError } from '../common/error-handling';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
 
 @injectable()
 class AWF_Profile {
-  private readonly _web3: Web3Connector;
   private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
@@ -45,6 +54,7 @@ class AWF_Profile {
    * Mutation request to add a profile provider to the profile object
    * @param opt
    */
+  @validate(z.array(DataProviderInputSchema))
   async addProfileProvider(opt: DataProviderInput[]) {
     const auth = await this._auth.authenticateMutationData(
       opt as unknown as Record<string, unknown>[],
@@ -69,6 +79,7 @@ class AWF_Profile {
    *
    * @param opt
    */
+  @validate(z.array(DataProviderInputSchema))
   async makeDefaultProvider(opt: DataProviderInput[]) {
     const auth = await this._auth.authenticateMutationData(
       opt as unknown as Record<string, unknown>[],
@@ -93,7 +104,8 @@ class AWF_Profile {
    *
    * @param userName
    */
-  async registerUserName(userName: string) {
+  @validate(UsernameSchema)
+  async registerUserName(userName: Username) {
     z.string().min(3).parse(userName);
     const auth = await this._auth.authenticateMutationData(userName);
     const registerUserName = await this._gql.getAPI().RegisterUsername(
@@ -116,6 +128,12 @@ class AWF_Profile {
    *
    * @param opt
    */
+  @validate(
+    z.object({
+      userName: UsernameSchema.optional(),
+      pubKey: PubKeySchema.optional(),
+    }),
+  )
   async getProfile(opt: { ethAddress?: string; pubKey?: string }) {
     let resp: UserProfileFragmentDataFragment;
     if (opt.pubKey) {
@@ -134,8 +152,8 @@ class AWF_Profile {
    *
    * @param pubKey
    */
-  async follow(pubKey: string) {
-    z.string().min(32).parse(pubKey);
+  @validate(PubKeySchema)
+  async follow(pubKey: PubKey) {
     const auth = await this._auth.authenticateMutationData(pubKey);
     const followResult = await this._gql.getAPI().Follow(
       { pubKey: pubKey },
@@ -157,8 +175,8 @@ class AWF_Profile {
    *
    * @param pubKey
    */
-  async unFollow(pubKey: string) {
-    z.string().min(32).parse(pubKey);
+  @validate(PubKeySchema)
+  async unFollow(pubKey: PubKey) {
     const auth = await this._auth.authenticateMutationData(pubKey);
     const unFollowResult = await this._gql.getAPI().UnFollow(
       { pubKey: pubKey },
@@ -180,6 +198,7 @@ class AWF_Profile {
    *
    * @param opt
    */
+  @validate(z.object({ follower: PubKeySchema, following: PubKeySchema }))
   async isFollowing(opt: { follower: string; following: string }) {
     return this._gql.getAPI().IsFollowing({ follower: opt.follower, following: opt.following });
   }
@@ -208,7 +227,7 @@ class AWF_Profile {
     }
     if (data.isUrl) {
       const source = urlSource(data.content);
-      const arr = [];
+      const arr: BlobPart[] = [];
 
       for await (const entry of source.content) {
         arr.push(entry);
@@ -242,8 +261,8 @@ class AWF_Profile {
    *
    * @param name
    */
+  @validate(z.string().min(3))
   async searchProfiles(name: string) {
-    z.string().min(3).parse(name);
     return this._gql.getAPI().SearchProfiles({ name: name });
   }
 
@@ -251,6 +270,7 @@ class AWF_Profile {
    *
    */
   async getTrending() {
+    // return this._gql.getAPI().SearchProfiles({ name: '' });
     return this.searchProfiles('');
   }
 
@@ -258,8 +278,8 @@ class AWF_Profile {
    *
    * @param tagName
    */
-  async toggleTagSubscription(tagName: string) {
-    z.string().min(3).parse(tagName);
+  @validate(TagNameSchema)
+  async toggleTagSubscription(tagName: TagName) {
     const auth = await this._auth.authenticateMutationData({ sub: tagName });
     const toggledTag = await this._gql.getAPI().ToggleInterestSub(
       { sub: tagName },
@@ -281,30 +301,61 @@ class AWF_Profile {
    *
    */
   async getTagSubscriptions() {
-    const currUser = await this._auth.getCurrentUser();
-    return this.getInterests(currUser.pubKey);
+    try {
+      const currUser = await this._auth.getCurrentUser();
+      if (currUser && currUser.pubKey) {
+        const result = await this.getInterests(currUser.pubKey);
+        return createFormattedValue(result?.data);
+      }
+      throwError('User not authenticated', ['sdk', 'profile', 'getTagSubscriptions']);
+    } catch (e) {
+      throwError(`Error getting tag subscriptions: ${(e as Error).message}`, [
+        'sdk',
+        'profile',
+        'getTagSubscriptions',
+      ]);
+    }
   }
 
   /**
    *
    * @param tagName
    */
-  async isSubscribedToTag(tagName: string) {
-    const res = await this.getTagSubscriptions();
-    if (!res || !res?.getInterests?.length) {
-      return false;
+  @validate(TagNameSchema)
+  async isSubscribedToTag(tagName: TagName) {
+    try {
+      const res = await this.getTagSubscriptions();
+      if (!res || !res?.data?.getInterests?.length) {
+        return false;
+      }
+      const el = res.data.getInterests.indexOf(tagName);
+      return el !== -1;
+    } catch (e) {
+      throwError(`Error getting tag subscriptions: ${(e as Error).message}`, [
+        'sdk',
+        'profile',
+        'isSubscribedToTag',
+        tagName,
+      ]);
     }
-    const el = res.getInterests.indexOf(tagName);
-    return el !== -1;
   }
 
   /**
    *
    * @param keyword
    */
+  @validate(z.string().min(3))
   async globalSearch(keyword: string) {
-    z.string().min(3).parse(keyword);
-    return this._gql.getAPI().GlobalSearch({ keyword: keyword });
+    try {
+      return this._gql.getAPI().GlobalSearch({ keyword: keyword });
+    } catch (e) {
+      throwError(`Error getting global search: ${(e as Error).message}`, [
+        'sdk',
+        'profile',
+        'globalSearch',
+        keyword,
+      ]);
+    }
   }
 
   /**
@@ -313,8 +364,19 @@ class AWF_Profile {
    * @param limit
    * @param offset
    */
+  @validate(z.string(), z.number(), z.number().optional())
   async getFollowers(pubKey: string, limit: number, offset?: number) {
-    return this._gql.getAPI().GetFollowers({ pubKey, limit, offset });
+    try {
+      const resp = await this._gql.getAPI().GetFollowers({ pubKey, limit, offset });
+      return createFormattedValue(resp);
+    } catch (e) {
+      throwError(`Cannot get followers: ${(e as Error).message}`, [
+        'sdk',
+        'profiles',
+        'getFollowers',
+        pubKey,
+      ]);
+    }
   }
 
   /**
@@ -323,16 +385,38 @@ class AWF_Profile {
    * @param limit
    * @param offset
    */
+  @validate(z.string(), z.number(), z.number().optional())
   async getFollowing(pubKey: string, limit: number, offset?: number) {
-    return this._gql.getAPI().GetFollowing({ pubKey, limit, offset });
+    try {
+      const resp = await this._gql.getAPI().GetFollowing({ pubKey, limit, offset });
+      return createFormattedValue(resp);
+    } catch (e) {
+      throwError(`Cannot get following: ${(e as Error).message}`, [
+        'sdk',
+        'profiles',
+        'getFollowing',
+        pubKey,
+      ]);
+    }
   }
 
   /**
    * Retrieve subscription list
    * @param pubKey
    */
+  @validate(z.string())
   async getInterests(pubKey: string) {
-    return this._gql.getAPI().GetInterests({ pubKey });
+    try {
+      const resp = await this._gql.getAPI().GetInterests({ pubKey });
+      return createFormattedValue(resp);
+    } catch (e) {
+      throwError(`Cannot get interests: ${(e as Error).message}`, [
+        'sdk',
+        'profiles',
+        'getInterests',
+        pubKey,
+      ]);
+    }
   }
 }
 

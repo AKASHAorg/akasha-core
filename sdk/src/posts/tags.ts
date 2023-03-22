@@ -10,7 +10,6 @@ import { z } from 'zod';
 
 @injectable()
 class AWF_Tags {
-  private readonly _web3: Web3Connector;
   private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
