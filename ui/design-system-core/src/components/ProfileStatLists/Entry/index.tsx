@@ -101,7 +101,6 @@ const ListEntry: React.FC<ListEntryProps> = props => {
           onClickActive={() => onUnfollow(pubKey)}
           active={isFollowing}
           size="sm"
-          customStyle="h-7"
           allowMinimization
         />
       </Stack>
