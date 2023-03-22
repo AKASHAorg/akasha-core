@@ -1,4 +1,4 @@
-import { SafeParseError, z } from "zod";
+import { z } from 'zod';
 import { throwError } from './error-handling';
 
 export const validate = (...schemas: z.ZodSchema[]) => {
@@ -9,8 +9,9 @@ export const validate = (...schemas: z.ZodSchema[]) => {
         if (schemas[index]) {
           const result = schemas[index].safeParse(arg);
           if (!result.success) {
+            const error = (result as z.SafeParseError<any>).error;
             // @todo: pretty format arg
-            throwError(result.error.toString(), [
+            throwError(error.toString(), [
               'sdk',
               'validate',
               target.constructor.name,
