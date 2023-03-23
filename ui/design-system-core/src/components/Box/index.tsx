@@ -3,22 +3,14 @@ import { apply, tw } from '@twind/core';
 
 export interface IBoxProps {
   customStyle?: string;
-  onClick?: () => void;
 }
 
 const Box: React.FC<PropsWithChildren<IBoxProps>> = props => {
-  const { customStyle = '', onClick, children } = props;
+  const { customStyle = '', children } = props;
 
-  // if onClick is defined, use cursor pointer, unless otherwise
-  const cursorStyle = `cursor-${typeof onClick === 'function' ? 'pointer' : 'default'}`;
+  const className = apply`${customStyle}`;
 
-  const className = apply`${cursorStyle} ${customStyle}`;
-
-  return (
-    <div className={tw(className)} onClick={onClick}>
-      {children}
-    </div>
-  );
+  return <div className={tw(className)}>{children}</div>;
 };
 
 export default Box;
