@@ -22,7 +22,7 @@ app.registerPlugin(ProfileApp).then(() => {
   - **`articles/`**
     - **`actions`** - action creators (a la redux)
     - **`reducer.ts`** - reducer (imports actions and types)
-    - **`index.ts`** - export reducer API mainly
+    - **`validator.ts`** - export reducer API mainly
     - **`interfaces.d.ts`**
     - **`types.ts`**
 

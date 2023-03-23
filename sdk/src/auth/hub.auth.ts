@@ -43,25 +43,32 @@ export const generatePrivateKey = async (
   sig: string,
 ): Promise<PrivateKey> => {
   const ethAddress = await signer.getCurrentEthAddress();
+  if (!ethAddress) {
+    throw new Error('No eth address provided.');
+  }
   const secret = ethers.utils.keccak256(sig);
   let message = metamaskGen(ethAddress, secret, 'ethereum.world');
   if (process.env.NODE_ENV === 'development') {
     message += '==DEV Key==';
   }
-  let signedText = await signer.signMessage(message);
+  let signedText: string | null | undefined = await signer.signMessage(message);
   if (!signedText || signedText === '0x') {
     signedText = localStorage.getItem('signedText');
   }
+  if (!signedText) {
+    throw new Error('No signed text provided.');
+  }
   const hash = ethers.utils.keccak256(signedText);
-  if (hash === null || !signedText) {
+  if (hash === null) {
     throw new Error('No account is provided. Please provide an account to this application.');
   }
-  const array = hash
+
+  const array = (hash as string)
     .replace('0x', '')
     .match(/.{2}/g)
-    .map(hexNoPrefix => ethers.BigNumber.from(`0x${hexNoPrefix}`).toNumber());
+    ?.map(hexNoPrefix => ethers.BigNumber.from(`0x${hexNoPrefix}`).toNumber());
 
-  if (array.length !== 32) {
+  if (!array || array.length !== 32) {
     throw new Error('Hash of signature is not the correct size! Something went wrong!');
   }
   const identity = PrivateKey.fromRawEd25519Seed(Uint8Array.from(array));
@@ -84,7 +91,7 @@ export const loginWithChallenge = (
         () => reject(new Error('The login request has timed out.')),
         61000,
       );
-      const socket = new WebSocket(process.env.AUTH_ENDPOINT);
+      const socket = new WebSocket(process.env.AUTH_ENDPOINT as string);
       socket.onopen = () => {
         const publicKey = identity.public.toString();
         socket.send(

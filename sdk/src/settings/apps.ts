@@ -2,7 +2,6 @@ import { inject, injectable } from 'inversify';
 import { APP_EVENTS, TYPES } from '@akashaorg/typings/sdk';
 import DB, { availableCollections } from '../db';
 import { createFormattedValue } from '../helpers/observable';
-import { lastValueFrom } from 'rxjs';
 import { AppsSchema } from '../db/app.schema';
 import Logging from '../logging/index';
 import IcRegistry from '../registry/icRegistry';
@@ -116,9 +115,9 @@ class AppSettings {
 
   async toggleAppStatus(appName: string): Promise<boolean> {
     const collection = this._db.getCollection<AppsSchema>(availableCollections.Settings);
-    const query: unknown = { name: { $eq: appName } };
+    const query = { name: { $eq: appName } };
     const doc = await collection.findOne(query);
-    if (doc._id) {
+    if (doc && doc._id) {
       doc.status = !doc.status;
       await doc.save();
       this._globalChannel.next({
@@ -127,6 +126,7 @@ class AppSettings {
       });
       return doc.status;
     }
+    return false;
   }
 
   async updateVersion(app: VersionInfo) {
