@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import { ENTRY_EVENTS, TYPES } from '@akashaorg/typings/sdk';
+import { ENTRY_EVENTS, TYPES, PostToPublishSchema, PostToPublish } from '@akashaorg/typings/sdk';
 import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
@@ -8,6 +8,9 @@ import Logging from '../logging';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { z } from 'zod';
+import { validate } from '../common/validator';
+import { DataProviderInputSchema } from '@akashaorg/typings/sdk/common';
+import { throwError } from '../common/error-handling';
 
 @injectable()
 class AWF_Entry {
@@ -52,11 +55,13 @@ class AWF_Entry {
    *
    * @param opt
    */
-  async postEntry(opt: {
-    data: DataProviderInput[];
-    post: { title?: string; tags?: string[]; quotes?: string[]; mentions?: string[] };
-  }) {
+  @validate(z.object({ data: z.array(DataProviderInputSchema), post: PostToPublishSchema }))
+  async postEntry(opt: { data: DataProviderInput[]; post: PostToPublish }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
+    if (!textContent) {
+      throwError('Cannot post entry without content', ['sdk', 'entry', 'postEntry']);
+      return;
+    }
     textContent.value = Buffer.from(textContent.value).toString('base64');
     const auth = await this._auth.authenticateMutationData(
       opt.data as unknown as Record<string, unknown>[],
@@ -87,6 +92,10 @@ class AWF_Entry {
     post: { title?: string; tags?: string[]; quotes?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
+    if (!textContent) {
+      throwError('Edited post does not have content', ['sdk', 'entry', 'editEntry']);
+      return;
+    }
     textContent.value = Buffer.from(textContent.value).toString('base64');
     const auth = await this._auth.authenticateMutationData(
       opt.data as unknown as Record<string, unknown>[],

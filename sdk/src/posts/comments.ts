@@ -7,6 +7,7 @@ import AWF_Auth from '../auth';
 import Logging from '../logging';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
+import { throwError } from '../common/error-handling';
 
 /**
  * # sdk.api.comments
@@ -68,6 +69,10 @@ class AWF_Comments {
     comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
+    if (!textContent) {
+      throwError('Comment does not have content', ['sdk', 'comments', 'addComment']);
+      return;
+    }
     textContent.value = Buffer.from(textContent.value).toString('base64');
     const auth = await this._auth.authenticateMutationData(
       opt.data as unknown as Record<string, unknown>[],
@@ -97,6 +102,10 @@ class AWF_Comments {
     comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
+    if (!textContent) {
+      throwError('Cannot edit comment with no content', ['sdk', 'comments', 'editComment']);
+      return;
+    }
     textContent.value = Buffer.from(textContent.value).toString('base64');
     const auth = await this._auth.authenticateMutationData(
       opt.data as unknown as Record<string, unknown>[],

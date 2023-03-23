@@ -21,8 +21,8 @@ export default class CeramicService {
   private _globalChannel: EventBus;
   private _log: pino.Logger;
   private _settings: Settings;
-  readonly _composeClient: ComposeClient;
-  private _didSession: DIDSession;
+  private _composeClient: ComposeClient;
+  private _didSession?: DIDSession;
   private _gql: Gql;
   constructor(
     @inject(TYPES.Db) db: DB,
@@ -39,7 +39,7 @@ export default class CeramicService {
     this._settings = settings;
     this._gql = gql;
     this._composeClient = new ComposeClient({
-      ceramic: process.env.CERAMIC_API_ENDPOINT,
+      ceramic: process.env.CERAMIC_API_ENDPOINT as string,
       definition: definition,
     });
   }
@@ -62,14 +62,16 @@ export default class CeramicService {
     });
     this._composeClient.setDID(this._didSession.did);
   }
-
   getComposeClient() {
     return this._composeClient;
   }
   async disconnect() {
     if (this._didSession) {
       this._didSession = undefined;
-      this._composeClient.setDID(undefined);
+      this._composeClient = new ComposeClient({
+        ceramic: process.env.CERAMIC_API_ENDPOINT as string,
+        definition: definition,
+      });
     }
   }
 }
