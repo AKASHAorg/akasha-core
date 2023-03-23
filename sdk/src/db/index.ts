@@ -10,11 +10,14 @@ export const availableCollections = Object.freeze({
 
 @injectable()
 class DB {
-  private _dbName: string;
-  private _db: Database;
+  private _dbName: string | null;
+  private _db: Database | null;
   private _opened = false;
   private static NOT_OPENED_ERROR = new Error('Database is closed, must call open() first');
-
+  constructor() {
+    this._dbName = null;
+    this._db = null;
+  }
   /**
    * Create a new DB instance
    * @param name - database name
@@ -46,6 +49,9 @@ class DB {
    */
   public async getDb(): Promise<Database> {
     this._ensureDbOpened();
+    if (!this._db) {
+      throw new Error('Must call `DB:create` first');
+    }
     return this._db;
   }
 
@@ -57,7 +63,14 @@ class DB {
     name: typeof availableCollections[keyof typeof availableCollections],
   ): Collection<T> {
     this._ensureDbOpened();
-    return this._db.collection(name);
+    if (!this._db) {
+      throw new Error('Must call `DB:create` first');
+    }
+    const collection = this._db.collection(name);
+    if (!collection) {
+      throw new Error('Collection not found');
+    }
+    return collection as Collection<T>;
   }
 
   /**

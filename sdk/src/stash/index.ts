@@ -7,6 +7,9 @@ export type IQuickLRU = QuickLRU<string, any>;
 @injectable()
 class Stash {
   private _uiStash: QuickLRU<string, unknown>;
+  constructor() {
+    this._uiStash = new QuickLRU<never, unknown>({ maxSize: 999, maxAge: 1000 * 60 * 5 });
+  }
   /**
    *
    * @param args - Object with props maxSize: number and maxAge: number
