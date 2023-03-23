@@ -6,7 +6,7 @@ import { ButtonProps, ButtonSize } from './types';
 import { getTextClasses } from './getTextClasses';
 import { getContainerClasses } from './getContainerClasses';
 import { ButtonIcon } from './ButtonIcon';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 const Button: React.FC<
   ButtonProps &
@@ -66,7 +66,7 @@ const Button: React.FC<
         align="center"
         justify="center"
         spacing="gap-x-1"
-        customStyle={`group ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${
+        customStyle={apply`group ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${
           variant !== 'text' ? BUTTON_SIZE_PADDING_MAP[size] : ''
         } ${customStyle}`}
       >

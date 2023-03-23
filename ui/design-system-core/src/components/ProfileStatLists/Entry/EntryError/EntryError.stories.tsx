@@ -2,7 +2,7 @@ import React from 'react';
 import EntryError, { EntryErrorProps } from '.';
 
 export default {
-  title: 'Cards/EntryError',
+  title: 'Profile/EntryError',
   component: EntryError,
 };
 

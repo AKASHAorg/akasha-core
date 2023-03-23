@@ -138,6 +138,8 @@ const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
       followingLabel={t('Following')}
       loadingMoreLabel={`${t('Loading more')} ...`}
       profileAnchorLink={'/@akashaorg/app-profile'}
+      ownerUserName={profileData.userName}
+      viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
       onError={onError}
       onProfileClick={onProfileClick}
       onFollow={onFollow}
