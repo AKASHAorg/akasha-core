@@ -11,7 +11,7 @@ export const SEARCH_TAGS_KEY = 'SEARCH_TAGS';
 const getTagSubscriptions = async () => {
   const sdk = getSDK();
   const res = await sdk.api.profile.getTagSubscriptions();
-  return res.getInterests;
+  return res.data.getInterests;
 };
 
 /**
@@ -119,8 +119,8 @@ const getTag = async (tagName: string) => {
 
   const res = await sdk.api.tags.getTag(tagName);
 
-  if (res.getTag) {
-    return res.getTag;
+  if (res.data.getTag) {
+    return res.data.getTag;
   }
   throw new Error('Tag not found');
 };

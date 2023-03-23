@@ -2,7 +2,7 @@ import React from 'react';
 import Bio, { BioProps } from './index';
 
 export default {
-  title: 'Cards/ProfileBio',
+  title: 'Profile/ProfileBio',
   component: Bio,
 };
 

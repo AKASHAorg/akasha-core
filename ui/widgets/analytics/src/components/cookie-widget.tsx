@@ -118,7 +118,7 @@ const CookieWidget: React.FC<RootComponentProps> = props => {
                 }
                 privacyCTALabel={t('For more info, see our ')}
                 privacyUrlLabel={t('Privacy Policy.')}
-                privacyUrl={`${window.location.protocol}//${window.location.host}/legal/privacy-policy`}
+                privacyUrl={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/privacy-policy`}
                 onlyEssentialLabel={t('Only essential')}
                 acceptAllLabel={t('Accept all')}
                 onClickOnlyEssential={() => handleAcceptCookie()}

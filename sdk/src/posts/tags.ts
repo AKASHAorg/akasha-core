@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { TYPES, TAG_EVENTS } from '@akashaorg/typings/sdk';
+import { TYPES, TAG_EVENTS, TagNameSchema } from "@akashaorg/typings/sdk";
 import Web3Connector from '../common/web3.connector';
 import Logging from '../logging';
 import Gql from '../gql';
@@ -7,10 +7,12 @@ import AWF_Auth from '../auth';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { z } from 'zod';
+import { validate } from '../common/validator';
+import { throwError } from '../common/error-handling';
+import { createFormattedValue } from '../helpers/observable';
 
 @injectable()
 class AWF_Tags {
-  private readonly _web3: Web3Connector;
   private _log: pino.Logger;
   private _gql: Gql;
   private _auth: AWF_Auth;
@@ -31,8 +33,14 @@ class AWF_Tags {
    *
    * @param tagName
    */
+  @validate(TagNameSchema)
   async getTag(tagName: string) {
-    return this._gql.getAPI().GetTag({ name: tagName });
+    try {
+      const result = await this._gql.getAPI().GetTag({ name: tagName });
+      return createFormattedValue(result);
+    } catch (err) {
+      throwError(`Cannot get tag: ${(err as Error).message}`, ['sdk', 'tags', 'getTag', tagName]);
+    }
   }
 
   /**

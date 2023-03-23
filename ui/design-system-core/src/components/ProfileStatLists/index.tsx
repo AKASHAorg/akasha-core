@@ -1,5 +1,4 @@
 import React from 'react';
-import Stack from '../Stack';
 import Tab from '../Tab';
 import Card from '../Card';
 import { IProfileData, ProfileStatType, QueryStatus } from '@akashaorg/typings/ui';
@@ -24,6 +23,8 @@ export type ProfileStatProps = {
   followingLabel: string;
   profileAnchorLink: string;
   loadingMoreLabel: string;
+  ownerUserName: string;
+  viewerIsOwner: boolean;
   onError: () => void;
   onProfileClick: (ethAddress: string) => void;
   onFollow: (ethAddress: string) => void;
@@ -38,10 +39,12 @@ const ProfileStatLists: React.FC<ProfileStatProps> = props => {
       <Tab
         activeTab={selectedStat === 'followers' ? 0 : 1}
         labels={[followers.label, following.label]}
-        onChange={selectedIndex => onChange(selectedIndex === 0 ? 'followers' : 'following')}
+        onChange={selectedIndex => {
+          if (onChange) onChange(selectedIndex === 0 ? 'followers' : 'following');
+        }}
       >
-        <StatList follow={followers} {...props} />
-        <StatList follow={following} {...props} />
+        <StatList type="followers" follow={followers} {...props} />
+        <StatList type="following" follow={following} {...props} />
       </Tab>
     </Card>
   );

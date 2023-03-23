@@ -16,7 +16,9 @@ import {
   AWF_APP_SOURCE_MANIFEST,
   IntegrationInfo,
 } from '@akashaorg/typings/sdk/registry';
-import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
+import { validate } from '../common/validator';
+import { z } from 'zod';
+import { throwError } from '../common/error-handling';
 
 @injectable()
 class AWF_IC_REGISTRY {
@@ -30,7 +32,7 @@ class AWF_IC_REGISTRY {
 
   private _IntegrationRegistryInstance;
 
-  public readonly INTEGRATION_REGISTRY_ADDRESS = process.env.INTEGRATION_REGISTRY_ADDRESS;
+  public readonly INTEGRATION_REGISTRY_ADDRESS = process.env.INTEGRATION_REGISTRY_ADDRESS as string;
   public readonly MANIFEST_FILE = 'manifest.json';
 
   constructor(
@@ -64,7 +66,7 @@ class AWF_IC_REGISTRY {
       );
     }
   }
-
+  @validate(z.string())
   async getIntegrationInfo(integrationId: string) {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getPackageInfo(integrationId);
@@ -78,6 +80,7 @@ class AWF_IC_REGISTRY {
     } as IntegrationInfo;
   }
 
+  @validate(z.string(), z.string().optional())
   async getIntegrationReleaseInfo(releaseId: string, integrationId?: string) {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getReleaseData(releaseId);
@@ -93,32 +96,48 @@ class AWF_IC_REGISTRY {
     const integrationInfo = await this._IntegrationRegistryInstance.getPackageInfo(integrationID);
     const ipfsSources = this._ipfs.multiAddrToUri(sources);
     let manifest: AWF_APP_SOURCE_MANIFEST;
-    if (ipfsSources.length) {
-      manifest = await this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(
-        `${ipfsSources[0]}/${this.MANIFEST_FILE}`,
-        true,
-      );
-      ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
-    }
-    const response: IntegrationReleaseInfo = {
+
+    const response = {
       id: releaseId,
       name: integrationInfo.integrationName,
       version: data.version,
       integrationType: integrationInfo.integrationType,
       links: links,
-      sources: ipfsSources,
       integrationID: integrationID,
       author: integrationInfo.author,
       enabled: integrationInfo.enabled,
-      manifestData: manifest,
       createdAt: data.createdAt?.toNumber(),
+      sources: [] as string[],
+      manifestData: {} as AWF_APP_SOURCE_MANIFEST,
     };
+
+    if (ipfsSources.length) {
+      try {
+        manifest = await this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(
+          `${ipfsSources[0]}/${this.MANIFEST_FILE}`,
+          true,
+        );
+        ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
+        response.sources = ipfsSources;
+        response.manifestData = manifest;
+        return response;
+      } catch (e) {
+        throwError(`Failed to get manifest data: ${(e as Error).message}`, [
+          'sdk',
+          'registry',
+          'getIntegrationReleaseInfo',
+          releaseId,
+        ]);
+      }
+    }
+    // @todo: maybe better to throw error here since we don't have sources?
     return response;
   }
 
   // on chain call for latest version info
+  @validate(z.object({ name: z.string(), id: z.string() }).partial())
   async getLatestVersionInfo(integration: { name?: string; id?: string }) {
-    const integrationID = integration.id || ethers.utils.id(integration.name);
+    const integrationID = integration.id || ethers.utils.id(integration.name || '');
     const info = await this.getIntegrationInfo(integrationID);
     return this.getIntegrationReleaseInfo(info.latestReleaseId, integrationID);
   }
@@ -159,21 +178,22 @@ class AWF_IC_REGISTRY {
     return Promise.resolve(createFormattedValue({ id: data }));
   }
 
-  #_normalizeIDs(opt: { name?: string; id?: string }[]) {
+  @validate(z.array(z.object({ name: z.string(), id: z.string() }).partial()))
+  _normalizeIDs(opt: { name?: string; id?: string }[]) {
     return opt.map(el => {
       if (el.id) {
         return el.id;
       }
-      return ethersUtils.id(el.name);
+      return ethersUtils.id(el.name || '');
     });
   }
   async getIntegrationsInfo(opt: { name?: string; id?: string }[]) {
-    const normalizedIDs = this.#_normalizeIDs(opt);
+    const normalizedIDs = this._normalizeIDs(opt);
     return this._gql.getAPI().GetIntegrationInfo({ integrationIDs: normalizedIDs });
   }
 
   getLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
-    const normalizedIDs = this.#_normalizeIDs(opt);
+    const normalizedIDs = this._normalizeIDs(opt);
     return this._gql.getAPI().GetLatestRelease({ integrationIDs: normalizedIDs });
   }
 

@@ -3,6 +3,7 @@ import Stack from '../../Stack';
 import { getContainerClasses } from '../getContainerClasses';
 import { ButtonProps, ButtonSize } from '../types';
 import { ButtonIcon } from '../ButtonIcon';
+import { apply } from '@twind/core';
 
 type IconOnlyButtonProps = {
   icon: ButtonProps['icon'];
@@ -32,7 +33,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
           <Stack
             align="center"
             justify="center"
-            customStyle={`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${customStyle}`}
+            customStyle={apply`group rounded-full ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${customStyle}`}
           >
             <ButtonIcon
               size={size}

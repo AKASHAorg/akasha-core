@@ -41,7 +41,7 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
   )}`;
   const onTabChange = (selectedIndex: number) => {
     changeSelectedIndex(selectedIndex);
-    onChange(selectedIndex);
+    if (onChange) onChange(selectedIndex);
   };
 
   return (
@@ -49,7 +49,7 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
       <div className={tw(`grid grid-cols-${labels.length}`)}>
         {labels.map((label, index) => (
           <Button
-            key={label}
+            key={index}
             onClick={() => onTabChange(index)}
             customStyle={`${baseStyle} ${hoverStyle} ${selectedIndex === index ? activeStyle : ''}`}
             plain
@@ -83,7 +83,7 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
       {Children.toArray(children)
         .slice(0, labels.length)
         .map((child, index) => (
-          <Fragment key={labels[index]}>{index === selectedIndex && child}</Fragment>
+          <Fragment key={index}>{index === selectedIndex && child}</Fragment>
         ))}
     </Stack>
   );

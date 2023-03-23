@@ -21,7 +21,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
     dashedBorder,
     rootNodeRef,
     pad = 'p-6',
-    margin,
+    margin = 'm-0',
     round = 'rounded-2xl',
     noBorder,
     noBorderRadius,
@@ -31,7 +31,7 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
 
   const generateBorder = () => {
     if (dashedBorder) {
-      return 'border-2 border-dashed border-grey5';
+      return 'border(2 dashed grey5)';
     }
 
     if (noBorder) {
@@ -42,12 +42,12 @@ const BasicCardBox: React.FC<PropsWithChildren<IBasicCardBox>> = props => {
      * Define other border-changing props here
      */
 
-    return 'border-1 border-solid border-grey8 dark:border-none';
+    return 'border(1 solid grey8 dark:none)';
   };
 
-  const className = apply`flex flex-col shadow-${elevation} w-full ${pad ? pad : 'p-0'} ${
-    margin ? margin : 'm-0'
-  } bg-white dark:bg-grey2 ${noBorderRadius ? 'rounded-none' : round} ${generateBorder()} ${style}`;
+  const className = apply`flex flex-col shadow-${elevation} w-full ${pad} ${margin} bg(white dark:grey2) ${
+    noBorderRadius ? 'rounded-none' : round
+  } ${generateBorder()} ${style}`;
 
   return (
     <div className={tw(className)} ref={rootNodeRef} onClick={onClick}>
