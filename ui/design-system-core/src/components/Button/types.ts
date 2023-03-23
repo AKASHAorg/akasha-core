@@ -10,7 +10,6 @@ export type ButtonProps = {
   variant?: Variant;
   disabled?: boolean;
   loading?: boolean;
-  leftIcon?: boolean;
   iconOnly?: boolean;
   greyBg?: boolean;
   plain?: boolean;

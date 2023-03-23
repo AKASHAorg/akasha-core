@@ -2,7 +2,7 @@ import React from 'react';
 import EmptyEntry, { EmptyEntryProps } from '.';
 
 export default {
-  title: 'Cards/EmptyEntry',
+  title: 'Profile/EmptyEntry',
   component: EmptyEntry,
 };
 

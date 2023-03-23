@@ -2,7 +2,7 @@ import React from 'react';
 import Stats, { StatsProps } from './index';
 
 export default {
-  title: 'Cards/ProfileStatsCard',
+  title: 'Profile/ProfileStatsCard',
   component: Stats,
 };
 

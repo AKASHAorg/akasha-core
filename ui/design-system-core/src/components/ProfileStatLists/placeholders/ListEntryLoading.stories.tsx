@@ -3,7 +3,7 @@ import React from 'react';
 import ListEntryLoading from './ListEntryLoading';
 
 export default {
-  title: 'Cards/ListEntryLoading',
+  title: 'Profile/ListEntryLoading',
   component: ListEntryLoading,
 };
 

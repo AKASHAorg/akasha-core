@@ -21,6 +21,8 @@ const DuplexButton = (props: DuplexButtonProps) => {
   const {
     onClickActive,
     onClickInactive,
+    size = 'sm',
+    customStyle,
     inactiveLabel,
     activeLabel,
     activeHoverLabel,
@@ -80,7 +82,8 @@ const DuplexButton = (props: DuplexButtonProps) => {
       onMouseLeave={() => setHovered(false)}
       icon={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
       variant={active ? 'secondary' : 'primary'}
-      size="sm"
+      size={size}
+      customStyle={customStyle}
     />
   );
 };

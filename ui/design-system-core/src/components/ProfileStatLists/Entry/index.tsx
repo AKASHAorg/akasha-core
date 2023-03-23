@@ -6,6 +6,7 @@ import DuplexButton from '../../DuplexButton';
 import Icon from '../../Icon';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '../../../utils/getColorClasses';
+import Button from '../../Button';
 
 export type ListEntryProps = {
   followLabel: string;
@@ -68,8 +69,10 @@ const ListEntry: React.FC<ListEntryProps> = props => {
       })}`
     : '';
 
+  if (pubKeyOfLoggedUser === pubKey) return null;
+
   return (
-    <Stack direction="column" spacing={`px-4 pb-4 ${borderBottomStyle}`}>
+    <Stack direction="column" spacing="gap-y-4" customStyle={`px-4 pb-4 ${borderBottomStyle}`}>
       <Stack align="center" justify="between">
         {/*@TODO: create anchor component */}
         <a href={`${profileAnchorLink}/${pubKey}`}>
@@ -89,23 +92,27 @@ const ListEntry: React.FC<ListEntryProps> = props => {
             </Stack>
           </Stack>
         </a>
-        {pubKeyOfLoggedUser !== pubKey && (
-          <DuplexButton
-            inactiveLabel={followLabel}
-            activeLabel={followingLabel}
-            activeHoverLabel={unFollowLabel}
-            onClickInactive={() => onFollow(pubKey)}
-            onClickActive={() => onUnfollow(pubKey)}
-            active={isFollowing}
-            allowMinimization
-          />
-        )}
+
+        <DuplexButton
+          inactiveLabel={followLabel}
+          activeLabel={followingLabel}
+          activeHoverLabel={unFollowLabel}
+          onClickInactive={() => onFollow(pubKey)}
+          onClickActive={() => onUnfollow(pubKey)}
+          active={isFollowing}
+          size="sm"
+          allowMinimization
+        />
       </Stack>
       {hasNextPage && (
-        <div>
-          <Icon type="ArrowPathIcon" accentColor={true} ref={loadmoreRef} />
-          <Text color="accentText">{loadingMoreLabel}</Text>
-        </div>
+        <Stack justify="center" ref={loadmoreRef}>
+          <Button
+            icon="ArrowPathIcon"
+            iconDirection="left"
+            label={loadingMoreLabel}
+            variant="text"
+          />
+        </Stack>
       )}
     </Stack>
   );
