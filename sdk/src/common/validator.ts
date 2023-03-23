@@ -16,7 +16,7 @@ export const validate = (...schemas: z.ZodSchema[]) => {
               'validate',
               target.constructor.name,
               propertyName.toString(),
-              arg.toString(),
+              arg ? arg.toString() : '',
             ]);
           }
         }
