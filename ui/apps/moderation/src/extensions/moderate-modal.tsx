@@ -65,7 +65,7 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
       descriptionPlaceholder={t('Please explain the reason(s)')}
       footerText1Label={t('If you are unsure, you can refer to our')}
       footerLink1Label={t('Code of Conduct')}
-      footerUrl1={'/legal/code-of-conduct'}
+      footerUrl1={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/code-of-conduct`}
       cancelLabel={t('Cancel')}
       errorText={moderateMutation.error ? `${moderateMutation.error}` : ''}
       user={loginQuery.data?.pubKey || ''}

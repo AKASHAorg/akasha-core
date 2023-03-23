@@ -69,7 +69,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   const handleCTAClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-legal',
-      getNavigationUrl: () => '/legal/code-of-conduct',
+      getNavigationUrl: () => '/code-of-conduct',
     });
   };
 
@@ -101,7 +101,7 @@ const ProfilePage = (props: ProfilePageProps) => {
               moderatedContentLabel={t('This account was suspended for violating the')}
               ctaLabel={t('Code of Conduct')}
               // @TODO: fix navigation for cta: check moderation intro card
-              ctaUrl="/legal/code-of-conduct"
+              ctaUrl="/code-of-conduct"
               onCTAClick={handleCTAClick}
             />
           )}

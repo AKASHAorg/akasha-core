@@ -29,7 +29,7 @@ const Icon: React.FC<IconProps> = props => {
   const {
     type,
     ref,
-    accentColor,
+    accentColor = false,
     size = 'md',
     breakPointSize,
     color,
@@ -73,10 +73,12 @@ const Icon: React.FC<IconProps> = props => {
           : '[&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark'
       }`
     : '';
+  // Note: setting accentColor to true will overrride other color styles
+  const activeIconColorStyle = accentColor ? accentColorStyle : colorStyle;
 
   const disabledStyle = disabled ? 'opacity-50' : '';
 
-  const iconStyle = `${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${disabledStyle} ${customStyle}`;
+  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${customStyle}`;
 
   return (
     <Stack ref={ref}>
