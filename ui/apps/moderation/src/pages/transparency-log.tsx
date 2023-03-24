@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
@@ -6,6 +7,7 @@ import { ButtonValues, IModerationLogItem, NavigateToParams } from '@akashaorg/t
 import { useGetCount, useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Table from '@akashaorg/design-system-core/lib/components/Table';
 
 import Banner from '../components/transparency-log/banner';
 import DetailCard from '../components/transparency-log/detail-card';
@@ -65,6 +67,12 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     threshold: 0,
   });
 
+  const contentTypeMap = {
+    account: 'User',
+    reply: 'Reply',
+    post: 'Post',
+  };
+
   const onTabClick = (value: string) => () => {
     setActiveButton(value);
   };
@@ -116,9 +124,29 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     navigator.clipboard.writeText(value);
   };
 
+  const handleIconClick = (id: string) => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: navRoutes => `${navRoutes['Transparency Log']}/${id}`,
+    });
+  };
+
+  const trimmedRows =
+    logItemsQuery.data?.pages[0]?.results?.map(el => [
+      dayjs(el.moderatedDate).format('DD MMM YYYY'),
+      t('{{type}}', { type: contentTypeMap[el.contentType] }),
+      el.delisted ? t('Delisted') : t('Kept'),
+      el.contentID,
+    ]) ?? [];
+
   return (
-    <BasicCardBox>
-      <div>Transparency Log</div>
+    <BasicCardBox pad="p-0">
+      <Table
+        theadValues={[t('Date'), t('Category'), t('Decision'), '']}
+        rows={trimmedRows}
+        hasIcons={true}
+        onIconClick={handleIconClick}
+      />
     </BasicCardBox>
   );
 };
