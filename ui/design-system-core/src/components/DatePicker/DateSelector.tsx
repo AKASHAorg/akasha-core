@@ -160,7 +160,7 @@ const DateSelector = ({
         className={tx(
           `${inBetweenDays(day) ? 'px-1 bg-secondary-light dark:bg-secondary-dark' : 'px-1'}
                     ${compareDate(day) && 'rounded-l-lg'}
-                    ${compareDate(day, secondDate) && 'rounded-r-lg'} 
+                    ${compareDate(day, secondDate) && 'rounded-r-lg'}
                     mb-1
                     `,
         )}

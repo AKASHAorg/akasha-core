@@ -21,7 +21,7 @@ const MonthSelector = ({
       <Button
         plain={true}
         className={tx(
-          `${baseMonthCellStyle} 
+          `${baseMonthCellStyle}
           ${currentMonth === index ? selectedCellStyle : unselectedCellStyle}`,
         )}
         key={index}
