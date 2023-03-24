@@ -6,7 +6,21 @@ import { selectedCellStyle, unselectedCellStyle } from './MonthSelector';
 import Button from '../Button';
 import Text from '../Text';
 
-const DateSelector = ({
+export interface DateSelectorProps {
+  month: number;
+  setMonth: React.Dispatch<React.SetStateAction<number>>;
+  year: number;
+  setYear: React.Dispatch<React.SetStateAction<number>>;
+  firstDate: Date;
+  setFirstDate: React.Dispatch<React.SetStateAction<Date>>;
+  secondDate: Date;
+  setSecondDate: React.Dispatch<React.SetStateAction<Date>>;
+  setSelectedDates: (date: Date) => void;
+  handleMonthSelectToggle: () => void;
+  compareDate: (currentDay, secondDay?) => boolean;
+}
+
+const DateSelector: React.FC<DateSelectorProps> = ({
   month,
   setMonth,
   year,
@@ -183,11 +197,7 @@ const DateSelector = ({
 
   return (
     <>
-      <div
-        className={tx(
-          'bg-white dark:bg-grey3 mt-10 rounded-lg shadow p-4 absolute top-0 left-0 w-full',
-        )}
-      >
+      <div className={tx('bg-white dark:bg-grey3 mt-2 rounded-lg shadow p-4 w-full')}>
         <div className={tx('flex justify-between items-center')}>
           <div>
             <Button onClick={() => getPreviousMonth(month, year)} plain={true}>

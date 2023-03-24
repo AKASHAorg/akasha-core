@@ -1,4 +1,5 @@
 import React from 'react';
+import useSimpleClickAway from '../../utils/simpleClickAway';
 import Icon from '../Icon';
 import { MONTHS_IN_A_YEAR } from './calendarHelpers';
 import { tw, tx } from '@twind/core';
@@ -9,7 +10,15 @@ const baseMonthCellStyle = 'grid place-items-center w-full h-full py-3';
 export const selectedCellStyle = 'text-white bg-secondary-light dark:bg-secondary-dark rounded-lg';
 export const unselectedCellStyle = 'text-grey5 dark:text-grey7';
 
-const MonthSelector = ({
+interface MonthSelectorProps {
+  currentMonth: number;
+  currentYear: number;
+  handleMonthSelect: (index: number) => void;
+  goToNextYear: () => void;
+  goToPreviousYear: () => void;
+}
+
+const MonthSelector: React.FC<MonthSelectorProps> = ({
   currentMonth,
   currentYear,
   handleMonthSelect,
@@ -31,11 +40,7 @@ const MonthSelector = ({
   });
 
   return (
-    <div
-      className={tw(
-        'mt-10 bg-white dark:bg-grey3 rounded-lg shadow p-4 absolute top-0 left-0 w-full',
-      )}
-    >
+    <div className={tw('mt-2 bg-white dark:bg-grey3 rounded-lg shadow p-4 w-full')}>
       <div className={tw('flex justify-between items-center')}>
         <div>
           <Button onClick={goToPreviousYear} plain={true}>

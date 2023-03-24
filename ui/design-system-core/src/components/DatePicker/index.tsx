@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useClickAway } from 'react-use';
 import Icon from '../Icon';
 import MonthSelector from './MonthSelector';
 import DateSelector from './DateSelector';
 import { tw } from '@twind/core';
-import Button from '../Button';
 import Text from '../Text';
 
 const DatePicker = () => {
@@ -59,10 +59,15 @@ const DatePicker = () => {
     setShowMonthpicker(true);
   };
 
+  const wrapperRef = React.createRef<HTMLDivElement>();
+
+  useClickAway(wrapperRef, () => {
+    setShowDatepicker(false);
+    setShowMonthpicker(false);
+  });
+
   return (
-    // <div className={tw('')}>
-    //   <div className={tw('container mx-auto px-4 py-2 bg-grey8')}>
-    <div className={tw('w-full md:w-80')}>
+    <div className={tw('w-full md:w-80')} ref={wrapperRef}>
       <div className={tw('relative')}>
         <div
           onClick={() => {
@@ -110,8 +115,6 @@ const DatePicker = () => {
         )}
       </div>
     </div>
-    //   </div>
-    // </div>
   );
 };
 
