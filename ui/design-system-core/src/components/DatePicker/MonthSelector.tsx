@@ -1,5 +1,4 @@
 import React from 'react';
-import useSimpleClickAway from '../../utils/simpleClickAway';
 import Icon from '../Icon';
 import { MONTHS_IN_A_YEAR } from './calendarHelpers';
 import { tw, tx } from '@twind/core';
