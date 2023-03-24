@@ -4,9 +4,23 @@ import DS from '@akashaorg/design-system';
 import { useCheckModerator, useGetLogin } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
-import { Dashboard, Overview, Moderators, TransparencyLog, ModerationValue } from '../pages';
+import {
+  Dashboard,
+  Overview,
+  Moderators,
+  TransparencyLog,
+  TransparencyLogItem,
+  ModerationValue,
+} from '../pages';
 
-import routes, { DASHBOARD, HISTORY, HOME, MODERATION_VALUE, MODERATORS } from '../routes';
+import routes, {
+  DASHBOARD,
+  HISTORY,
+  HISTORY_ITEM,
+  HOME,
+  MODERATION_VALUE,
+  MODERATORS,
+} from '../routes';
 
 const { Box } = DS;
 
@@ -51,6 +65,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               />
             }
           />
+
+          <Route path={routes[HISTORY_ITEM]} element={<TransparencyLogItem />} />
 
           <Route path="/" element={<Navigate to={routes[HOME]} replace />} />
         </Routes>
