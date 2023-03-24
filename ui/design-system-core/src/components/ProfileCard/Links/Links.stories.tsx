@@ -2,7 +2,7 @@ import React from 'react';
 import Links, { LinksProps } from './index';
 
 export default {
-  title: 'Cards/ProfileLinks',
+  title: 'Profile/ProfileLinks',
   component: Links,
 };
 

@@ -31,7 +31,6 @@ const Topbar: React.FC<ITopbarProps> = props => {
     onNotificationClick,
     onBackClick,
     hasNewNotifications = false,
-    modalSlotId,
   } = props;
 
   const [displayWidgetTogglingButton, setDisplayWidgetTogglingButton] = React.useState(

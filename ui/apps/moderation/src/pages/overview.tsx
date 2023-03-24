@@ -17,7 +17,7 @@ const IntroPage: React.FC<RootComponentProps> = props => {
   const handleCodeOfConductClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-legal',
-      getNavigationUrl: () => '/legal/code-of-conduct',
+      getNavigationUrl: () => '/code-of-conduct',
     });
   };
 

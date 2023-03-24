@@ -104,10 +104,10 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       explanation={explanation}
       footerText1Label={t('If you are unsure, you can refer to our')}
       footerLink1Label={t('Code of Conduct')}
-      footerUrl1={'/legal/code-of-conduct'}
+      footerUrl1={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/code-of-conduct`}
       footerText2Label={t('and')}
       footerLink2Label={t('Terms of Service')}
-      footerUrl2={'/legal/terms-of-service'}
+      footerUrl2={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/terms-of-service`}
       cancelLabel={t('Cancel')}
       reportLabel={t('Report')}
       errorText={reportMutation.error ? `${reportMutation.error}` : ''}

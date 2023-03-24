@@ -9,7 +9,6 @@ import Divider from '../../Divider';
 import TextLine from '../../TextLine';
 import CopyToClipboard from '../../CopyToClipboard';
 import Button from '../../Button';
-import AppIcon from '../../AppIcon';
 import { useCloseActions } from '../../../utils/useCloseActions';
 
 export type CoverImage = { url?: string; fallbackUrl?: string };
@@ -48,10 +47,7 @@ const Header: React.FC<HeaderProps> = ({
   const showMoreRef = useCloseActions(() => {
     setShowMore(false);
   });
-
   const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
-  const flagIconStyle = `h-4`;
-
   const onShowMore = () => {
     setShowMore(!showMore);
   };
@@ -85,19 +81,15 @@ const Header: React.FC<HeaderProps> = ({
             </Stack>
             <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (
-                <button>
-                  <AppIcon placeholderIconType="Cog6ToothIcon" size="md" accentColor />
-                </button>
+                <Button icon="Cog6ToothIcon" greyBg iconOnly />
               ) : (
                 <div className="relative">
                   <Stack spacing="gap-x-2">
-                    <button>
-                      <AppIcon placeholderIconType="EnvelopeIcon" size="md" accentColor />
-                    </button>
+                    <Button icon="EnvelopeIcon" greyBg iconOnly />
                     {isFollowing ? (
                       <>
                         <Button
-                          size="small"
+                          size="sm"
                           icon="UserPlusIcon"
                           onClick={handleUnfollow}
                           variant="primary"
@@ -105,19 +97,15 @@ const Header: React.FC<HeaderProps> = ({
                         />
                       </>
                     ) : (
-                      <button onClick={handleFollow}>
-                        <AppIcon placeholderIconType="UsersIcon" size="md" accentColor />
-                      </button>
+                      <Button onClick={handleFollow} icon="UsersIcon" greyBg iconOnly />
                     )}
-                    <button onClick={onShowMore} ref={showMoreRef}>
-                      <AppIcon
-                        placeholderIconType="EllipsisVerticalIcon"
-                        size="md"
-                        active={showMore}
-                        accentColor
-                        hover
-                      />
-                    </button>
+                    <Button
+                      ref={showMoreRef}
+                      onClick={onShowMore}
+                      icon="EllipsisVerticalIcon"
+                      greyBg
+                      iconOnly
+                    />
                   </Stack>
                   {showMore && (
                     <Card
@@ -126,11 +114,11 @@ const Header: React.FC<HeaderProps> = ({
                       radius={8}
                       customStyle="absolute top-[36px] right-0 bg-white dark:bg-grey3"
                     >
-                      <button onClick={handleFlag}>
-                        <Stack align="center" spacing="gap-x-1">
+                      <Button onClick={handleFlag} plain>
+                        <Stack align="center" spacing="gap-x-2">
                           <Icon
                             type="FlagIcon"
-                            customStyle={flagIconStyle}
+                            size="sm"
                             color={{ light: 'error-light', dark: 'error-dark' }}
                           />
                           <Text
@@ -140,7 +128,7 @@ const Header: React.FC<HeaderProps> = ({
                             {flagLabel}
                           </Text>
                         </Stack>
-                      </button>
+                      </Button>
                     </Card>
                   )}
                 </div>
