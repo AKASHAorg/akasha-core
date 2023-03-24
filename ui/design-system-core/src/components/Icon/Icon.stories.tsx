@@ -1,5 +1,5 @@
-import { apply, tw } from '@twind/core';
 import React from 'react';
+
 import Icon, { IconProps } from '.';
 import { CustomIconTypes } from './akasha-icons';
 
@@ -38,6 +38,12 @@ BaseIcon.args = {
   type: 'akasha',
 };
 
+export const ExtraSmallIcon = Template.bind({});
+ExtraSmallIcon.args = {
+  type: 'akasha',
+  size: 'xs',
+};
+
 export const SmallIcon = Template.bind({});
 SmallIcon.args = {
   type: 'akasha',
@@ -48,10 +54,4 @@ export const LargeIcon = Template.bind({});
 LargeIcon.args = {
   type: 'akasha',
   size: 'lg',
-};
-
-export const ExtraLargeIcon = Template.bind({});
-ExtraLargeIcon.args = {
-  type: 'akasha',
-  size: 'xl',
 };

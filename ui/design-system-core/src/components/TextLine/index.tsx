@@ -6,13 +6,13 @@ import { getHeightClasses } from '../../utils/getHeightClasses';
 export type TextLineProps = {
   title?: string;
   animated?: boolean;
-  width?: string;
-  height?: string;
+  width?: string | number;
+  height?: string | number;
   round?: string;
   customStyle?: string;
 };
 
-const baseStyle = `min-h-[18px] bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
+const baseStyle = `bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white`;
 
 const TextLine: React.FC<TextLineProps> = props => {
   const {

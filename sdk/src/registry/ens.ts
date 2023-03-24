@@ -24,7 +24,7 @@ const EnsDefaultTexts = [
   'org.telegram',
 ];
 
-export const isEncodedLabelHash = hash => {
+export const isEncodedLabelHash = (hash: string) => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
 };
 
@@ -207,7 +207,7 @@ class AWF_ENS {
   async getTexts(name: string) {
     const resolver = await this._web3.provider.getResolver(name);
     const texts = EnsDefaultTexts.map(async txt => {
-      const value = await resolver.getText(txt);
+      const value = await resolver?.getText(txt);
       return { txt, value };
     });
     return Promise.all(texts);

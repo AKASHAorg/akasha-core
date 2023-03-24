@@ -2,7 +2,7 @@ import React from 'react';
 import ProfileLoading from './ProfileLoading';
 
 export default {
-  title: 'Cards/ProfileLoading',
+  title: 'Profile/ProfileLoading',
   component: ProfileLoading,
 };
 

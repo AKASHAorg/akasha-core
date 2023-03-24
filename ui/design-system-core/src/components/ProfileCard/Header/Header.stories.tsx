@@ -2,7 +2,7 @@ import React from 'react';
 import Header, { HeaderProps } from './index';
 
 export default {
-  title: 'Cards/ProfileHeader',
+  title: 'Profile/ProfileHeader',
   component: Header,
 };
 

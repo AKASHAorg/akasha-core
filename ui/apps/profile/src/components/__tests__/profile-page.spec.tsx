@@ -20,8 +20,9 @@ const mockLocationValue = {
   state: null,
 };
 
-jest.mock('react-router', () => ({
+jest.mock('react-router-dom', () => ({
   useParams: jest.fn(() => ({ pubKey: '' })),
+  useSearchParams: jest.fn(() => [{ get: () => '' }, () => '']),
   useLocation: jest.fn().mockImplementation(() => {
     return mockLocationValue;
   }),
@@ -33,7 +34,6 @@ describe('< ProfilePage />', () => {
       {...genAppProps()}
       loggedProfileData={genLoggedUser()}
       loginState={genLoggedInState()}
-      showLoginModal={jest.fn()}
     />
   );
 

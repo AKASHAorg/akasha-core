@@ -6,15 +6,14 @@ import { createFormattedValue } from '../helpers/observable';
 
 @injectable()
 class Settings {
-  @inject(TYPES.Db) private _db: DB;
-
+  constructor(@inject(TYPES.Db) private _db: DB) {}
   /**
    * Returns the settings object for a specified service name
    * @param service - The service name
    */
   async get<T>(service: string) {
     const collection = this._db.getCollection<SettingsSchema<T>>(availableCollections.Settings);
-    const query: unknown = {
+    const query = {
       serviceName: { $eq: service },
     };
     const doc = await collection.findOne(query);
@@ -48,9 +47,9 @@ class Settings {
     const collection = this._db.getCollection<SettingsSchema<unknown>>(
       availableCollections.Settings,
     );
-    const query: unknown = { serviceName: { $eq: serviceName } };
+    const query = { serviceName: { $eq: serviceName } };
     const doc = await collection.findOne(query);
-    if (doc._id) {
+    if (doc && doc._id) {
       return collection.delete(doc._id);
     }
   }

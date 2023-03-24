@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import DS from '@akashaorg/design-system';
 
 import {
   IProfileData,
@@ -10,6 +9,7 @@ import {
   ProfileProviderProperties,
   ProfileProviders,
   EntityTypes,
+  ProfileStatType,
 } from '@akashaorg/typings/ui';
 import {
   useIsFollowingMultiple,
@@ -20,7 +20,6 @@ import {
   useCheckModerator,
 } from '@akashaorg/ui-awf-hooks';
 
-import StatModalWrapper from './stat-modal-wrapper';
 // import ModeratorLabel from '../routes/moderator-label';
 import routes, { UPDATE_PROFILE } from '../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -31,24 +30,21 @@ import {
   ProfileStats,
 } from '@akashaorg/design-system-core/lib/components/ProfileCard';
 
-const { ModalRenderer } = DS;
-
 export interface IProfileHeaderProps {
   profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
 }
 
-const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
+const ProfileCards: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
   const { profileData, loginState, profileId } = props;
 
   // undefined for logged user's profile page, use loginState?.pubKey instead
-  const { pubKey } = useParams<{ pubKey: string }>();
+  const { pubKey } = useParams<{
+    pubKey: string;
+  }>();
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
-
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [selectedStat, setSelectedStat] = React.useState<number>(0);
 
   const { t } = useTranslation('app-profile');
 
@@ -134,13 +130,11 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
     props.navigateToModal({ name: 'profile-share' });
   };
 
-  const handleStatIconClick = (positionIndex: number) => () => {
-    setSelectedStat(positionIndex);
-    setModalOpen(true);
-  };
-
-  const handleClose = () => {
-    setModalOpen(false);
+  const onStatClick = (stat: ProfileStatType) => () => {
+    navigateTo({
+      appName: '@akashaorg/app-profile',
+      getNavigationUrl: routes => `/${pubKey ?? loginState?.pubKey}${routes.stat}?tab=${stat}`,
+    });
   };
 
   const handleNavigateToProfilePosts = () => {
@@ -171,19 +165,6 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
 
   return (
     <>
-      <ModalRenderer slotId={props.layoutConfig.modalSlotId}>
-        {modalOpen && (
-          <StatModalWrapper
-            loginState={loginState}
-            selectedStat={selectedStat}
-            profileData={profileData}
-            navigateTo={navigateTo}
-            showLoginModal={showLoginModal}
-            handleClose={handleClose}
-          />
-        )}
-      </ModalRenderer>
-
       {/* wrapping with a box to use gap prop instead of individual box margins */}
       <Stack direction="column" spacing="gap-y-4">
         {/*@TODO remove the following line when the profile app is done */}
@@ -283,17 +264,16 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
           interests={{
             label: t('Interests'),
             total: profileData.totalInterests,
-            onClick: handleStatIconClick(2),
           }}
           followers={{
             label: t('Followers'),
             total: profileData.totalFollowers,
-            onClick: handleStatIconClick(0),
+            onClick: onStatClick('followers'),
           }}
           following={{
             label: t('Following'),
             total: profileData.totalFollowing,
-            onClick: handleStatIconClick(1),
+            onClick: onStatClick('following'),
           }}
         />
         {socialLinks.length > 0 && (
@@ -309,4 +289,4 @@ const ProfilePageHeader: React.FC<RootComponentProps & IProfileHeaderProps> = pr
   );
 };
 
-export default ProfilePageHeader;
+export default ProfileCards;

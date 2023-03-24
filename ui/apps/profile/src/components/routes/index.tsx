@@ -10,7 +10,7 @@ import ProfilePage from './profile-page';
 import ProfileEditPage from './profile-edit-page';
 import NoProfileFound from './no-profile-found';
 
-import menuRoute, { MY_PROFILE } from '../../routes';
+import menuRoute, { MY_PROFILE, STAT } from '../../routes';
 
 const { Box } = DS;
 
@@ -60,6 +60,17 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
+                />
+              }
+            />
+            <Route
+              path={`:pubKey${menuRoute[STAT]}`}
+              element={
+                <ProfilePage
+                  {...props}
+                  loginState={loginQuery.data}
+                  loggedProfileData={loggedProfileQuery.data}
+                  showStat
                 />
               }
             />

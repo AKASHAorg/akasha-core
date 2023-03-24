@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ProfilePageHeader from '../profile-cards/profile-page-header';
+import ProfileCards from '../profile-cards';
 
 import {
   renderWithAllProviders,
@@ -17,23 +17,22 @@ const mockLocationValue = {
   state: null,
 };
 
-jest.mock('react-router', () => ({
+jest.mock('react-router-dom', () => ({
   useParams: jest.fn(() => ({ pubKey: '' })),
+  useSearchParams: jest.fn(() => [{ get: () => '' }, () => '']),
   useLocation: jest.fn().mockImplementation(() => {
     return mockLocationValue;
   }),
 }));
 
-describe('< ProfilePageHeader />', () => {
+describe('< ProfileCards />', () => {
   let renderResult;
   const mockUser = genUser();
   const BaseComponent = (
-    <ProfilePageHeader
+    <ProfileCards
       {...genAppProps()}
       profileId={mockUser.pubKey}
       profileData={mockUser}
-      modalSlotId="modal-slot"
-      navigateTo={jest.fn()}
       loginState={genLoggedInState()}
       worldConfig={genWorldConfig()}
     />
@@ -43,7 +42,7 @@ describe('< ProfilePageHeader />', () => {
       renderResult = renderWithAllProviders(BaseComponent, {});
     });
   });
-  it('should render profile page header', async () => {
+  it('should render profile cards', async () => {
     const avatarNode = await renderResult.findByTestId('avatar-image');
     const avatarSrc = avatarNode.getAttribute('src');
     //console.log(avatarSrc, '<<<< avatar src');

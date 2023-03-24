@@ -1,4 +1,6 @@
 import React, { PropsWithChildren, useState } from 'react';
+import { useCopyToClipboard } from 'react-use';
+import Button from '../Button';
 import Tooltip from '../Tooltip';
 
 type CopyToClipboardChildren = {
@@ -13,9 +15,10 @@ const CopyToClipboard: React.FC<PropsWithChildren<CopyToClipboardChildren>> = ({
   children,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [, copyToClipboard] = useCopyToClipboard();
 
   const onCopy = () => {
-    navigator.clipboard.writeText(value);
+    copyToClipboard(value);
     setCopied(true);
   };
 
@@ -28,11 +31,11 @@ const CopyToClipboard: React.FC<PropsWithChildren<CopyToClipboardChildren>> = ({
   }, [copied]);
 
   return (
-    <button onClick={onCopy}>
+    <Button onClick={onCopy} plain>
       <Tooltip content={copied ? copiedText : copyText} placement="right">
         {children}
       </Tooltip>
-    </button>
+    </Button>
   );
 };
 

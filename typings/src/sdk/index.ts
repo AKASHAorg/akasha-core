@@ -1,14 +1,22 @@
 import type IDBService from './db';
 import type IGqlClient from './gql';
 import type { ServiceCallResult } from './responses';
-import { EthProviders } from './web3.connector';
+import { EthProviders, EthProvidersSchema } from './web3.connector';
 import { IntegrationReleaseInfo } from './graphql-types';
 
 export * from './events';
 export * from './responses';
 export * from './common';
+export * from './posts';
 
-export { IDBService, ServiceCallResult, IGqlClient, EthProviders, ServiceTypes as TYPES };
+export {
+  IDBService,
+  ServiceCallResult,
+  IGqlClient,
+  EthProviders,
+  EthProvidersSchema,
+  ServiceTypes as TYPES,
+};
 
 const ServiceTypes = {
   Gql: Symbol.for('awf-Gql'),

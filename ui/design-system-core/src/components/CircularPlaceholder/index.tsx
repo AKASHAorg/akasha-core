@@ -6,8 +6,8 @@ import { getWidthClasses } from '../../utils/getWidthClasses';
 export type CircularPlaceholderProps = {
   title?: string;
   animated?: boolean;
-  width?: string;
-  height?: string;
+  width?: string | number;
+  height?: string | number;
   customStyle?: string;
 };
 

@@ -31,7 +31,7 @@ const Banner: React.FC<IBanner> = props => {
       footerLabel1={t('Check out the Ethereum World ')}
       footerLabel2={t(' here')}
       footerLinkLabel={t('Code of Conduct')}
-      footerLink="https://akasha.ethereum.world/legal/code-of-conduct"
+      footerLink="https://akasha.ethereum.world/@akashaorg/app-legal/code-of-conduct"
     />
   );
 };
