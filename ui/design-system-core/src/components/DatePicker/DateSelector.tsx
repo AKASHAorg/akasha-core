@@ -173,7 +173,7 @@ const DateSelector = ({
           onClick={() => {
             !secondDate ? setSelectedDates(day) : deselectDates;
           }}
-          className={tx(applyCellClasses(day))}
+          customStyle={applyCellClasses(day)}
         >
           {day}
         </Button>

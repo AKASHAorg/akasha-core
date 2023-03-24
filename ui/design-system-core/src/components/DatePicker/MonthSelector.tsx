@@ -20,10 +20,8 @@ const MonthSelector = ({
     return (
       <Button
         plain={true}
-        className={tx(
-          `${baseMonthCellStyle}
-          ${currentMonth === index ? selectedCellStyle : unselectedCellStyle}`,
-        )}
+        customStyle={`${baseMonthCellStyle}
+          ${currentMonth === index ? selectedCellStyle : unselectedCellStyle}`}
         key={index}
         onClick={() => handleMonthSelect(index)}
       >
@@ -35,7 +33,7 @@ const MonthSelector = ({
   return (
     <div
       className={tw(
-        'mt-10  bg-white dark:bg-grey3 rounded-lg shadow p-4 absolute top-0 left-0 w-full',
+        'mt-10 bg-white dark:bg-grey3 rounded-lg shadow p-4 absolute top-0 left-0 w-full',
       )}
     >
       <div className={tw('flex justify-between items-center')}>
