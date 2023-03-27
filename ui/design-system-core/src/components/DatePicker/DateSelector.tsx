@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Icon from '../Icon';
 import { MONTHS_IN_A_YEAR, DAYS } from './calendarHelpers';
 import { tx } from '@twind/core';
-import { selectedCellStyle, unselectedCellStyle } from './MonthSelector';
+import { selectedCellStyle, unselectedCellStyle, wrapperStyle } from './MonthSelector';
 import Button from '../Button';
 import Text from '../Text';
 
@@ -143,9 +143,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     const isClickEnabled = isInThePast(day) ? 'pointer-events-none' : 'cursor-pointer';
     const isTodayStyle = isToday(day) ? 'font-bold' : '';
     const selectedDayStyle = checkIfDayIsFirstOrSecondDate(day)
-      ? 'text-white bg-secondary-light dark:(bg-secondary-dark text-white) rounded-lg'
+      ? `${selectedCellStyle} rounded-lg`
       : inBetweenDays(day)
-      ? 'bg-secondary-light text-white dark:(bg-secondary-dark text-white)'
+      ? selectedCellStyle
       : '';
     return `${baseStyle} ${unselectedCellStyle} ${isClickEnabled} ${isTodayStyle} ${selectedDayStyle}`;
   };
@@ -153,12 +153,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   const displayDayTitles = DAYS.map((day, index) => {
     return (
       <div className={tx('px-1')} key={index}>
-        <div
-          key={index}
-          className={tx(
-            'text-grey4 dark:text-white font-medium text-center text-xs w-7 font-skylight',
-          )}
-        >
+        <div key={index}>
           <Text variant="footnotes2" color={{ light: 'text-grey4', dark: 'text-white' }}>
             {day}
           </Text>
@@ -196,11 +191,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
 
   return (
     <>
-      <div
-        className={tx(
-          'bg-white dark:bg-grey3 mt-10 rounded-lg shadow p-4 w-full absolute top-0 left-0',
-        )}
-      >
+      <div className={tx(wrapperStyle)}>
         <div className={tx('flex justify-between items-center')}>
           <div>
             <Button onClick={() => getPreviousMonth(month, year)} plain={true}>
