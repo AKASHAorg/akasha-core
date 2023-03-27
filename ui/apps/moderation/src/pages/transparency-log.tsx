@@ -7,7 +7,11 @@ import { ButtonValues, IModerationLogItem, NavigateToParams } from '@akashaorg/t
 import { useGetCount, useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
 import Table from '@akashaorg/design-system-core/lib/components/Table';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import Banner from '../components/transparency-log/banner';
 import DetailCard from '../components/transparency-log/detail-card';
@@ -16,16 +20,7 @@ import { NoItemsFound } from '../components/error-cards';
 
 import getReasonPrefix from '../utils/getReasonPrefix';
 
-const {
-  styled,
-  Box,
-  Text,
-  Icon,
-  Spinner,
-  TabsToolbar,
-  StyledSwitchCardButton,
-  useIntersectionObserver,
-} = DS;
+const { styled, Icon, Spinner, TabsToolbar, StyledSwitchCardButton, useIntersectionObserver } = DS;
 
 export interface ITransparencyLogProps {
   user: string | null;
@@ -39,6 +34,10 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<IModerationLogItem | null>(null);
+
+  // list filters
+  const [filterByType, setfilterByType] = React.useState(null);
+  const [filterByApp, setfilterByApp] = React.useState(null);
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -124,6 +123,11 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     navigator.clipboard.writeText(value);
   };
 
+  const resetFilters = () => {
+    setfilterByType(null);
+    setfilterByApp(null);
+  };
+
   const handleIconClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
@@ -140,13 +144,48 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     ]) ?? [];
 
   return (
-    <BasicCardBox pad="p-0">
-      <Table
-        theadValues={[t('Date'), t('Category'), t('Decision'), '']}
-        rows={trimmedRows}
-        hasIcons={true}
-        onIconClick={handleIconClick}
-      />
-    </BasicCardBox>
+    <>
+      <Box customStyle="flex justify-between items-center mb-2">
+        <Box customStyle="flex items-center space-x-2">
+          <Dropdown
+            name="filterByType"
+            placeholderLabel={t('Select an option')}
+            selected={filterByType}
+            menuItems={[
+              { id: '1', title: t('Decision 1') },
+              { id: '2', title: t('Decision 2') },
+            ]}
+            setSelected={setfilterByType}
+          />
+          <Dropdown
+            name="filterByApp"
+            placeholderLabel={t('Select an option')}
+            selected={filterByApp}
+            menuItems={[
+              { id: '1', title: t('App 1') },
+              { id: '2', title: t('App 2') },
+            ]}
+            setSelected={setfilterByApp}
+          />
+        </Box>
+
+        <Button plain={true} onClick={resetFilters}>
+          <Text
+            variant="body2"
+            color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+          >
+            {`${t('Reset')}`}
+          </Text>
+        </Button>
+      </Box>
+      <BasicCardBox pad="p-0">
+        <Table
+          theadValues={[t('Date'), t('Category'), t('Decision'), '']}
+          rows={trimmedRows}
+          hasIcons={true}
+          onIconClick={handleIconClick}
+        />
+      </BasicCardBox>
+    </>
   );
 };
