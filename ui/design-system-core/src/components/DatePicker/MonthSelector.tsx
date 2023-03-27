@@ -39,7 +39,11 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
   });
 
   return (
-    <div className={tw('mt-2 bg-white dark:bg-grey3 rounded-lg shadow p-4 w-full')}>
+    <div
+      className={tw(
+        'mt-10 bg-white dark:bg-grey3 rounded-lg shadow p-4 w-full absolute top-0 left-0',
+      )}
+    >
       <div className={tw('flex justify-between items-center')}>
         <div>
           <Button onClick={goToPreviousYear} plain={true}>

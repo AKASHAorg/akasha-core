@@ -139,13 +139,13 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   };
 
   const applyCellClasses = day => {
-    const baseStyle = 'text-center text-sm leading-loose w-7 font-skylight';
+    const baseStyle = 'text-center w-7';
     const isClickEnabled = isInThePast(day) ? 'pointer-events-none' : 'cursor-pointer';
     const isTodayStyle = isToday(day) ? 'font-bold' : '';
     const selectedDayStyle = checkIfDayIsFirstOrSecondDate(day)
-      ? 'text-white bg-secondary-light dark:bg-secondary-dark rounded-lg'
+      ? 'text-white bg-secondary-light dark:(bg-secondary-dark text-white) rounded-lg'
       : inBetweenDays(day)
-      ? 'bg-secondary-light dark:bg-secondary-dark text-white'
+      ? 'bg-secondary-light text-white dark:(bg-secondary-dark text-white)'
       : '';
     return `${baseStyle} ${unselectedCellStyle} ${isClickEnabled} ${isTodayStyle} ${selectedDayStyle}`;
   };
@@ -159,7 +159,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({
             'text-grey4 dark:text-white font-medium text-center text-xs w-7 font-skylight',
           )}
         >
-          {/* {day} */}
           <Text variant="footnotes2" color={{ light: 'text-grey4', dark: 'text-white' }}>
             {day}
           </Text>
@@ -197,7 +196,11 @@ const DateSelector: React.FC<DateSelectorProps> = ({
 
   return (
     <>
-      <div className={tx('bg-white dark:bg-grey3 mt-2 rounded-lg shadow p-4 w-full')}>
+      <div
+        className={tx(
+          'bg-white dark:bg-grey3 mt-10 rounded-lg shadow p-4 w-full absolute top-0 left-0',
+        )}
+      >
         <div className={tx('flex justify-between items-center')}>
           <div>
             <Button onClick={() => getPreviousMonth(month, year)} plain={true}>
@@ -205,15 +208,9 @@ const DateSelector: React.FC<DateSelectorProps> = ({
             </Button>
           </div>
           <div onClick={handleMonthSelectToggle} className={tx('flex')}>
-            {/* <span className={tx('text-lg font-bold text-gray-800 font-skylight')}>
-              {MONTHS_IN_A_YEAR[month]}
-            </span> */}
             <Text variant="button-lg" color={{ light: 'text-black', dark: 'text-white' }}>
               {MONTHS_IN_A_YEAR[month]}
             </Text>
-            {/* <span className={tx('ml-1 text-lg text-gray-600 font-normal font-skylight')}>
-              {year}
-            </span> */}
             <Text
               variant="button-lg"
               color={{ light: 'text-black', dark: 'text-white' }}
@@ -237,7 +234,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({
                   <Text variant="button-md" color={{ light: 'text-grey8', dark: 'text-grey5' }}>
                     {day}
                   </Text>
-                  {/* {day} */}
                 </div>
               </div>
             );
@@ -250,7 +246,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({
                   <Text variant="button-md" color={{ light: 'text-grey8', dark: 'text-grey5' }}>
                     {day}
                   </Text>
-                  {/* {day} */}
                 </div>
               </div>
             );

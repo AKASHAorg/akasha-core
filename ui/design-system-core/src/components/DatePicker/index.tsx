@@ -67,7 +67,7 @@ const DatePicker = () => {
   });
 
   return (
-    <div className={tw('w-full md:w-80')} ref={wrapperRef}>
+    <div className={tw('w-full md:w-80')}>
       <div className={tw('relative')}>
         <div
           onClick={() => {
@@ -76,7 +76,7 @@ const DatePicker = () => {
           }}
           className={tw(
             `flex justify-start items-center border([1px] grey8) dark:border([1px] grey5) rounded-lg px-2 w-auto h-8 cursor-pointer ${
-              showDatepicker && 'border(2 secondary-light)'
+              showDatepicker && 'border(2 secondary-light) dark:border(2 secondary-dark)'
             })`,
           )}
         >
@@ -89,30 +89,32 @@ const DatePicker = () => {
             {datepickerValue.toString()}
           </Text>
         </div>
-        {showDatepicker && (
-          <DateSelector
-            month={month}
-            setMonth={setMonth}
-            year={year}
-            setYear={setYear}
-            handleMonthSelectToggle={handleMonthSelectToggle}
-            compareDate={compareDate}
-            firstDate={firstDate}
-            setFirstDate={setFirstDate}
-            secondDate={secondDate}
-            setSecondDate={setSecondDate}
-            setSelectedDates={setSelectedDates}
-          />
-        )}
-        {showMonthpicker && (
-          <MonthSelector
-            currentMonth={month}
-            currentYear={year}
-            handleMonthSelect={handleMonthSelect}
-            goToNextYear={() => setYear(year => year + 1)}
-            goToPreviousYear={() => setYear(year => year - 1)}
-          />
-        )}
+        <div ref={wrapperRef} className="w-full h-full">
+          {showDatepicker && (
+            <DateSelector
+              month={month}
+              setMonth={setMonth}
+              year={year}
+              setYear={setYear}
+              handleMonthSelectToggle={handleMonthSelectToggle}
+              compareDate={compareDate}
+              firstDate={firstDate}
+              setFirstDate={setFirstDate}
+              secondDate={secondDate}
+              setSecondDate={setSecondDate}
+              setSelectedDates={setSelectedDates}
+            />
+          )}
+          {showMonthpicker && (
+            <MonthSelector
+              currentMonth={month}
+              currentYear={year}
+              handleMonthSelect={handleMonthSelect}
+              goToNextYear={() => setYear(year => year + 1)}
+              goToPreviousYear={() => setYear(year => year - 1)}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
