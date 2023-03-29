@@ -159,7 +159,7 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     });
   };
 
-  const handleIconClick = (id: string) => {
+  const handleRowClick = (id: string) => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
       getNavigationUrl: navRoutes => `${navRoutes['Transparency Log']}/${id}`,
@@ -218,7 +218,8 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           theadValues={[t('Date'), t('Category'), t('Decision'), '']}
           rows={trimmedRows}
           hasIcons={true}
-          onIconClick={handleIconClick}
+          clickableRows={true}
+          onRowClick={handleRowClick}
         />
       </BasicCardBox>
 

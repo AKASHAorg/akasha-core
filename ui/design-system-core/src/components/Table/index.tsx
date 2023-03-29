@@ -2,7 +2,6 @@ import React from 'react';
 import { apply, tw } from '@twind/core';
 import Text from '../Text';
 import Icon from '../Icon';
-import Button from '../Button';
 
 type TDataValues = string[];
 
@@ -10,15 +9,16 @@ export interface ITableProps {
   theadValues: string[];
   rows: TDataValues[];
   hasIcons?: boolean;
-  onIconClick?: (contentId: string) => void;
+  clickableRows?: boolean;
+  onRowClick?: (contentId: string) => void;
 }
 
 const Table: React.FC<ITableProps> = props => {
-  const { theadValues, rows, hasIcons = false, onIconClick } = props;
+  const { theadValues, rows, hasIcons = false, clickableRows = false, onRowClick } = props;
 
-  const handleIconClick = (contentId: string) => () => {
-    if (typeof onIconClick === 'function') {
-      onIconClick(contentId);
+  const handleRowClick = (contentId: string) => () => {
+    if (clickableRows && typeof onRowClick === 'function') {
+      onRowClick(contentId);
     }
   };
 
@@ -37,7 +37,13 @@ const Table: React.FC<ITableProps> = props => {
       </thead>
       <tbody>
         {rows.map((valueArr, idx) => (
-          <tr key={idx} className={tw('border(t-1 grey8 dark:grey5)')}>
+          <tr
+            key={idx}
+            className={tw(
+              `border(t-1 grey8 dark:grey5) cursor-${clickableRows ? 'pointer' : 'default'}`,
+            )}
+            onClick={handleRowClick(valueArr[3])}
+          >
             {valueArr.map((value, idx) => (
               <td key={value + idx} className={baseRowStyle}>
                 {hasIcons && idx === 2 ? (
@@ -54,9 +60,7 @@ const Table: React.FC<ITableProps> = props => {
                     </Text>
                   </div>
                 ) : hasIcons && idx === 3 ? (
-                  <Button plain={true} onClick={handleIconClick(value)}>
-                    <Icon type="ChevronRightIcon" accentColor={true} />
-                  </Button>
+                  <Icon type="ChevronRightIcon" accentColor={true} />
                 ) : (
                   <Text variant="body2" color={{ light: 'text-black', dark: 'text-white' }}>
                     {value}
