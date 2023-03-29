@@ -5,20 +5,27 @@ import { getContainerClasses } from './getContainerClasses';
 import { getIconClasses } from './getIconClasses';
 import { getInputClasses } from './getInputClasses';
 import { InputProps } from '../types';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
-export const Input: React.FC<InputProps> = forwardRef(
+export const Input: React.FC<InputProps & JSX.IntrinsicElements['input']> = forwardRef(
   (
-    { status, iconLeft, iconRight, disabled, className, ...rest },
+    { status, iconLeft, iconRight, readOnly, disabled, ...rest },
     ref?: React.RefObject<HTMLInputElement>,
   ) => {
-    const containerStyle = getContainerClasses(disabled, status);
-    const inputStyle = getInputClasses(disabled, status);
+    const containerStyle = getContainerClasses(disabled, status, readOnly);
+    const inputStyle = getInputClasses(disabled, status, readOnly);
     const iconStyle = getIconClasses(disabled, status);
 
     return (
-      <Stack align="center" spacing="gap-x-2" customStyle={`${containerStyle} ${className}`}>
-        <input type="text" className={tw(inputStyle)} disabled={disabled} ref={ref} {...rest} />
+      <Stack align="center" spacing="gap-x-2" customStyle={containerStyle}>
+        <input
+          type="text"
+          className={tw(apply`${inputStyle}`)}
+          disabled={disabled}
+          readOnly={readOnly}
+          ref={ref}
+          {...rest}
+        />
         {iconLeft && (
           <Icon type={iconLeft} customStyle={`${iconStyle} order-first`} disabled={disabled} />
         )}

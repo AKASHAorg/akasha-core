@@ -2,7 +2,7 @@ import { tw } from '@twind/core';
 import React, { useState } from 'react';
 import Card from '../../Card';
 import Stack from '../../Stack';
-import Avatar, { AvatarSrc } from '../../Avatar';
+import Avatar from '../../Avatar';
 import Text from '../../Text';
 import Icon from '../../Icon';
 import Divider from '../../Divider';
@@ -10,19 +10,19 @@ import TextLine from '../../TextLine';
 import CopyToClipboard from '../../CopyToClipboard';
 import Button from '../../Button';
 import { useCloseActions } from '../../../utils/useCloseActions';
-
-export type CoverImage = { url?: string; fallbackUrl?: string };
+import { ImageSrc } from '../../types/common.types';
 
 export type HeaderProps = {
   ethAddress: string;
-  coverImage: CoverImage;
-  avatar: AvatarSrc;
+  coverImage: ImageSrc;
+  avatar: ImageSrc;
   name: string;
   userName: string;
   ensName: 'loading' | string;
   isFollowing: boolean;
   viewerIsOwner: boolean;
   flagLabel: string;
+  handleEdit: (event: React.SyntheticEvent<Element, Event>) => void;
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleFlag: (event: React.SyntheticEvent<Element, Event>) => void;
@@ -39,6 +39,7 @@ const Header: React.FC<HeaderProps> = ({
   isFollowing,
   viewerIsOwner,
   flagLabel,
+  handleEdit,
   handleUnfollow,
   handleFollow,
   handleFlag,
@@ -59,7 +60,11 @@ const Header: React.FC<HeaderProps> = ({
         radius={{ top: 20 }}
         background={{ light: 'bg-grey6', dark: 'bg-grey5' }}
         customStyle={`h-32 ${
-          coverImage ? `background-image: url(${coverImage.url || coverImage.fallbackUrl})` : ''
+          coverImage
+            ? `bg-center bg-[url(${
+                coverImage?.url || coverImage?.fallbackUrl || '/images/cover-image.webp'
+              })]`
+            : ''
         }`}
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
@@ -70,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({
                 ethAddress={ethAddress}
                 size="xl"
                 src={avatar}
-                customStyle="absolute -top-6 rounded-full border-2 border-white dark:border-grey2"
+                customStyle="absolute -top-6 border-2 border-white dark:border-grey2"
               />
             </div>
             <Stack direction="column">
@@ -81,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({
             </Stack>
             <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (
-                <Button icon="Cog6ToothIcon" greyBg iconOnly />
+                <Button icon="Cog6ToothIcon" onClick={handleEdit} greyBg iconOnly />
               ) : (
                 <div className="relative">
                   <Stack spacing="gap-x-2">

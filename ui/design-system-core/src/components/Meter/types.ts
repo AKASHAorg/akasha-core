@@ -7,4 +7,5 @@ export type MeterProps = {
   max?: number;
   progressBg?: Color;
   background?: Color;
+  customStyle?: string;
 };
