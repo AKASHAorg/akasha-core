@@ -10,6 +10,7 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
+import Pagination from '@akashaorg/design-system-core/lib/components/Pagination';
 import Table from '@akashaorg/design-system-core/lib/components/Table';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -20,7 +21,7 @@ import { NoItemsFound } from '../components/error-cards';
 
 import getReasonPrefix from '../utils/getReasonPrefix';
 
-const { styled, Icon, Spinner, TabsToolbar, StyledSwitchCardButton, useIntersectionObserver } = DS;
+const { useIntersectionObserver } = DS;
 
 export interface ITransparencyLogProps {
   user: string | null;
@@ -36,10 +37,15 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const [selected, setSelected] = React.useState<IModerationLogItem | null>(null);
 
   // list filters
-  const [filterByType, setfilterByType] = React.useState(null);
-  const [filterByApp, setfilterByApp] = React.useState(null);
+  const [filterByDecision, setfilterByDecision] = React.useState(null);
+  const [filterByCategory, setfilterByCategory] = React.useState(null);
+  const [curPage, setCurPage] = React.useState<number>(1);
+  const pages = 10;
 
   const { t } = useTranslation('app-moderation-ewa');
+
+  const decisionPlaceholderLabel = t('Decision');
+  const categoryPlaceholderLabel = t('Category');
 
   const getCountQuery = useGetCount();
   const count = getCountQuery.data || { delisted: 0, kept: 0, pending: 0 };
@@ -67,9 +73,25 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   });
 
   const contentTypeMap = {
-    account: 'User',
+    account: 'Account',
     reply: 'Reply',
     post: 'Post',
+  };
+
+  const handleClickPage = (page: number) => () => {
+    setCurPage(page);
+  };
+
+  const handleClickPrev = () => {
+    if (!(curPage === 1)) {
+      setCurPage(curPage - 1);
+    }
+  };
+
+  const handleClickNext = () => {
+    if (!(curPage === pages)) {
+      setCurPage(curPage + 1);
+    }
   };
 
   const onTabClick = (value: string) => () => {
@@ -124,8 +146,17 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const resetFilters = () => {
-    setfilterByType(null);
-    setfilterByApp(null);
+    setfilterByDecision({
+      id: '',
+      iconName: null,
+      title: decisionPlaceholderLabel,
+    });
+
+    setfilterByCategory({
+      id: '',
+      iconName: null,
+      title: categoryPlaceholderLabel,
+    });
   };
 
   const handleIconClick = (id: string) => {
@@ -145,27 +176,30 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
   return (
     <>
-      <Box customStyle="flex justify-between items-center mb-2">
-        <Box customStyle="flex items-center space-x-2">
+      <Box customStyle="flex justify-between items-center mb-3">
+        <Box customStyle="flex items-center space-x-3">
           <Dropdown
-            name="filterByType"
-            placeholderLabel={t('Select an option')}
-            selected={filterByType}
+            name="filterByDecision"
+            placeholderLabel={decisionPlaceholderLabel}
+            selected={filterByDecision}
             menuItems={[
-              { id: '1', title: t('Decision 1') },
-              { id: '2', title: t('Decision 2') },
+              { id: '1', title: t('Kept') },
+              { id: '2', title: t('Delisted') },
+              { id: '3', title: t('Suspended') },
             ]}
-            setSelected={setfilterByType}
+            setSelected={setfilterByDecision}
           />
           <Dropdown
-            name="filterByApp"
-            placeholderLabel={t('Select an option')}
-            selected={filterByApp}
+            name="filterByCategory"
+            placeholderLabel={categoryPlaceholderLabel}
+            selected={filterByCategory}
             menuItems={[
-              { id: '1', title: t('App 1') },
-              { id: '2', title: t('App 2') },
+              { id: '1', title: t('Post') },
+              { id: '2', title: t('Reply') },
+              { id: '3', title: t('Account') },
+              { id: '4', title: t('Article') },
             ]}
-            setSelected={setfilterByApp}
+            setSelected={setfilterByCategory}
           />
         </Box>
 
@@ -178,6 +212,7 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           </Text>
         </Button>
       </Box>
+
       <BasicCardBox pad="p-0">
         <Table
           theadValues={[t('Date'), t('Category'), t('Decision'), '']}
@@ -186,6 +221,19 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
           onIconClick={handleIconClick}
         />
       </BasicCardBox>
+
+      <Pagination
+        customStyle="mt-3 justify-end"
+        pageCount={pages}
+        currentPage={curPage}
+        prevButtonLabel={t('Prev')}
+        nextButtonLabel={t('Next')}
+        prevButtonDisabled={curPage === 1}
+        nextButtonDisabled={curPage === pages}
+        onClickPage={handleClickPage}
+        onClickPrev={handleClickPrev}
+        onClickNext={handleClickNext}
+      />
     </>
   );
 };
