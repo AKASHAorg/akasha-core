@@ -26,18 +26,18 @@ const PasswordField: React.FC<PasswordFieldProps & JSX.IntrinsicElements['input'
     const [showPassword, setShowPassword] = React.useState(false);
     return (
       <Stack direction="column" spacing="gap-y-2">
-        <Stack align="center">
+        <Stack align="center" customStyle="relative">
           <input
             type={showPassword ? 'input' : 'password'}
             id="success"
             className={tw(
-              'relative text-grey5 dark:text-grey6 placeholder-grey5 dark:placeholder-grey6 text-sm rounded-lg block w-full p-2.5 bg-grey9 border-0 focus:(outline-none ring-secondary-light border([1px] secondary-light)) dark:(bg-grey3 focus:(ring-secondary-dark border-secondary-dark) border([1px] secondary-dark))',
+              'text-grey5 dark:text-grey6 placeholder-grey5 dark:placeholder-grey6 text-sm rounded-lg block w-full p-2.5 bg-grey9 border-0 focus:(outline-none ring-secondary-light border([1px] secondary-light)) dark:(bg-grey3 focus:(ring-secondary-dark border-secondary-dark) border([1px] secondary-dark))',
             )}
             placeholder="Enter your password"
             ref={ref}
             {...rest}
           />
-          <div className={tw('absolute right-6')} onClick={() => setShowPassword(!showPassword)}>
+          <div className={tw('absolute right-2')} onClick={() => setShowPassword(!showPassword)}>
             <Icon type={showPassword ? 'EyeSlashIcon' : 'EyeIcon'} accentColor={true} />
           </div>
         </Stack>
