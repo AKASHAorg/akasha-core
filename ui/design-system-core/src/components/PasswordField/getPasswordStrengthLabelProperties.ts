@@ -18,14 +18,14 @@ export function getPasswordStrengthLabel(strengthLevel: PasswordStrengthLevel) {
 export function getPasswordStrengthLabelColor(strengthLevel: PasswordStrengthLevel) {
   switch (strengthLevel) {
     case PasswordStrengthLevel.VERY_WEAK:
-      return { light: 'grey8', dark: 'grey5' };
+      return { light: 'text-grey4', dark: 'text-grey6' };
     case PasswordStrengthLevel.WEAK:
-      return { light: 'error-light', dark: 'error-dark' };
+      return { light: 'text-error-light', dark: 'text-error-dark' };
     case PasswordStrengthLevel.FAIR:
-      return { light: 'warning-light', dark: 'warning-dark' };
+      return { light: 'text-warning-light', dark: 'text-warning-dark' };
     case PasswordStrengthLevel.GOOD:
-      return { light: 'success', dark: 'success' };
+      return { light: 'text-success', dark: 'text-success' };
     case PasswordStrengthLevel.STRONG:
-      return { light: 'success', dark: 'success' };
+      return { light: 'text-success', dark: 'text-success' };
   }
 }
