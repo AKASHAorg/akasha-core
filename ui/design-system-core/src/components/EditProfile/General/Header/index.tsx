@@ -6,6 +6,7 @@ import Stack from '../../../Stack';
 import Text from '../../../Text';
 import { ImageSrc } from '../../../types/common.types';
 import { tw } from '@twind/core';
+import { getColorClasses } from '../../../../utils/getColorClasses';
 
 export type HeaderProps = {
   coverImage: ImageSrc;
@@ -35,7 +36,13 @@ export const Header: React.FC<HeaderProps> = ({ label, coverImage, ethAddress, a
             ethAddress={ethAddress}
             size="lg"
             src={avatar}
-            customStyle="border-2 border-white dark:border-grey2"
+            customStyle={`border-2 ${getColorClasses(
+              {
+                light: 'white',
+                dark: 'grey2',
+              },
+              'border',
+            )}`}
           />
           <Button
             icon="PencilSquareIcon"
