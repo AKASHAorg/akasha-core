@@ -2,6 +2,7 @@ import * as React from 'react';
 import { apply, tw, tx } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
 
+import Box from '../Box';
 import Icon from '../Icon';
 import Text from '../Text';
 
@@ -17,7 +18,7 @@ export interface IDropdownProps {
 }
 
 const Dropdown: React.FC<IDropdownProps> = ({
-  label = '',
+  label,
   placeholderLabel,
   menuItems,
   selected,
@@ -52,7 +53,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
   };
 
   return (
-    <div>
+    <Box customStyle="relative min-w-[8rem]">
       {label && (
         <Text variant="label" color={{ light: 'text-dark', dark: 'text-white' }}>
           {label}
@@ -60,7 +61,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
       )}
 
       <button
-        className={tx`inline-flex items-center p-3 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
+        className={tx`inline-flex items-center justify-between min-w-[8rem] p-3 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
           dropOpen ? 'secondary-light dark:secondark-dark' : 'grey8 dark:grey3'
         })`}
         onClick={handleDropClick}
@@ -77,7 +78,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
       {/* <!-- Dropdown menu --> */}
       {dropOpen && (
-        <div className={tw(optionsWrapperStyle)}>
+        <Box customStyle={optionsWrapperStyle}>
           <ul aria-labelledby="dropdownDefaultButton">
             {menuItems.map((menuItem, idx) => {
               const isSelected = selected?.id === menuItem.id;
@@ -91,8 +92,8 @@ const Dropdown: React.FC<IDropdownProps> = ({
                   )}
                   onClick={handleChange(menuItem)}
                 >
-                  <div
-                    className={tx`flex items-center space-x-2 ${
+                  <Box
+                    customStyle={`flex items-center space-x-2 ${
                       isSelected ? 'text-secondary-light' : 'text-black'
                     }`}
                   >
@@ -116,7 +117,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                     >
                       {menuItem.title}
                     </Text>
-                  </div>
+                  </Box>
                   {isSelected && (
                     <span className={tw('ml-4')}>
                       <Icon
@@ -129,9 +130,9 @@ const Dropdown: React.FC<IDropdownProps> = ({
               );
             })}
           </ul>
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 
