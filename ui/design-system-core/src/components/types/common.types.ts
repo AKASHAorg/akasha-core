@@ -16,6 +16,8 @@ export type BasicIconSize = Exclude<BasicSize, 'xl'>;
 
 export type BreakPointSize = { breakPoint: string; size: BasicSize };
 
+export type ImageSrc = { url?: string; fallbackUrl?: string };
+
 export const isStatusType = (type: Color): type is Status => {
   return type === 'warning' || type === 'error' || type === 'success';
 };

@@ -11,8 +11,8 @@ import { RootComponentProps, IProfileData } from '@akashaorg/typings/ui';
 import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks';
 
 import menuRoute, { MY_PROFILE } from '../../routes';
-import ProfileCards from '../profile-cards';
-import ProfileStatPage from '../profile-cards/profile-stat-page';
+import Profile from '../profile';
+import ProfileStatPage from '../profile/profile-stat-page';
 
 const { Box, Helmet, EntryCardHidden, ProfileDelistedCard } = DS;
 
@@ -128,7 +128,7 @@ const ProfilePage = (props: ProfilePageProps) => {
                 profileData={profileState}
               />
             ) : (
-              <ProfileCards
+              <Profile
                 {...props}
                 profileData={profileState}
                 profileId={pubKey}
