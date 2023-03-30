@@ -22,7 +22,7 @@ export interface PasswordFieldProps {
 }
 
 const PasswordField: React.FC<PasswordFieldProps & JSX.IntrinsicElements['input']> = forwardRef(
-  ({ strengthLevel, ...rest }, ref?: React.RefObject<HTMLInputElement>) => {
+  ({ strengthLevel = 0, ...rest }, ref?: React.RefObject<HTMLInputElement>) => {
     const [showPassword, setShowPassword] = React.useState(false);
     return (
       <Stack direction="column" spacing="gap-y-2">
