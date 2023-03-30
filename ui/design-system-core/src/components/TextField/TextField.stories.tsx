@@ -16,6 +16,11 @@ const Template = (args: TextFieldProps) => {
 export const DefaultField = Template.bind({});
 DefaultField.args = {};
 
+export const MultilineField = Template.bind({});
+MultilineField.args = {
+  type: 'multiline',
+};
+
 export const DefaultCaptionWithLabelField = Template.bind({});
 DefaultCaptionWithLabelField.args = {
   label: 'Label',
