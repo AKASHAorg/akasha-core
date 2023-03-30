@@ -35,6 +35,9 @@ const Pagination: React.FC<IPaginationProps> = props => {
 
   const pages = Array.from({ length: pageCount }, (_, index) => index + 1);
 
+  // show buttons only when specified and there's more than a page
+  const showButtons = hasButtons && pageCount > 1;
+
   const activeButtonTextColor = { light: 'text-secondary-light', dark: 'text-secondary-dark' };
 
   const disabledButtonTextColor = 'text(secondary-light dark:secondary-dark)';
@@ -47,7 +50,7 @@ const Pagination: React.FC<IPaginationProps> = props => {
 
   return (
     <Box customStyle={`flex items-center space-x-2 ${customStyle}`}>
-      {hasButtons && (
+      {showButtons && (
         <Button
           plain={true}
           customStyle={prevButtonDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}
@@ -87,7 +90,7 @@ const Pagination: React.FC<IPaginationProps> = props => {
         );
       })}
 
-      {hasButtons && (
+      {showButtons && (
         <Button
           plain={true}
           customStyle={nextButtonDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}
