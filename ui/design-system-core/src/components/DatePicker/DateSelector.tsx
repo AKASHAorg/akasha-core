@@ -153,7 +153,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
   const displayDayTitles = DAYS.map((day, index) => {
     return (
       <div className={tx('px-1')} key={index}>
-        <div key={index}>
+        <div>
           <Text variant="footnotes2" color={{ light: 'text-grey4', dark: 'text-white' }}>
             {day}
           </Text>
@@ -176,7 +176,6 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         onClick={secondDate ? () => deselectDates(day) : null}
       >
         <Button
-          key={index}
           plain={true}
           onClick={() => {
             !secondDate ? setSelectedDates(day) : deselectDates;
