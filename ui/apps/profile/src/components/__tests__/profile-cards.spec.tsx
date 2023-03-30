@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ProfileCards from '../profile-cards';
+import Profile from '../profile';
 
 import {
   renderWithAllProviders,
@@ -25,11 +25,11 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('< ProfileCards />', () => {
+describe('< Profile />', () => {
   let renderResult;
   const mockUser = genUser();
   const BaseComponent = (
-    <ProfileCards
+    <Profile
       {...genAppProps()}
       profileId={mockUser.pubKey}
       profileData={mockUser}
