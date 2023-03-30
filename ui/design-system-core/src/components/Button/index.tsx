@@ -61,14 +61,14 @@ const Button: React.FC<
     : '';
 
   return (
-    <button ref={ref} {...rest}>
+    <button ref={ref} className={tw(customStyle)} {...rest}>
       <Stack
         align="center"
         justify="center"
         spacing="gap-x-1"
         customStyle={apply`group ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${
           variant !== 'text' ? BUTTON_SIZE_PADDING_MAP[size] : ''
-        } ${customStyle}`}
+        }`}
       >
         {loading ? (
           <ButtonIcon

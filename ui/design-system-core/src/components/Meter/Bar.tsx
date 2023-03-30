@@ -14,9 +14,10 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
   progressBg,
   background,
   direction = 'horizontal',
+  customStyle = '',
 }) => {
-  const progressStyle = getColorClasses(progressBg || 'text-black');
-  const backgroundStyle = getColorClasses(background || 'text-grey8');
+  const progressStyle = getColorClasses(progressBg || 'black', 'stroke');
+  const backgroundStyle = getColorClasses(background || 'grey8', 'stroke');
   const capOffset = 0;
   const mid = thickness / 2;
   const start = direction === 'horizontal' ? capOffset : (max * (size - 2 * capOffset)) / max;
@@ -31,7 +32,11 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
       : `M ${mid},${capOffset} L ${mid},${size - capOffset}`;
 
   return (
-    <Stack justify="center" align="center" customStyle="inline-flex overflow-hidden">
+    <Stack
+      justify="center"
+      align="center"
+      customStyle={`inline-flex overflow-hidden ${customStyle}`}
+    >
       <svg
         viewBox={
           direction === 'horizontal' ? `0 0 ${size} ${thickness}` : `0 0 ${thickness} ${size}`
