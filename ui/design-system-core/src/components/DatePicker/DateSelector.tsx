@@ -147,7 +147,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
       : inBetweenDays(day)
       ? selectedCellStyle
       : '';
-    return `${baseStyle} ${unselectedCellStyle} ${isClickEnabled} ${isTodayStyle} ${selectedDayStyle}`;
+    return `${unselectedCellStyle} ${isClickEnabled} ${isTodayStyle} ${selectedDayStyle} ${baseStyle}`;
   };
 
   const displayDayTitles = DAYS.map((day, index) => {
@@ -215,13 +215,19 @@ const DateSelector: React.FC<DateSelectorProps> = ({
             </Button>
           </div>
         </div>
-        <div className={tx('grid grid-cols-7 justify-items-center mt-3')}>{displayDayTitles}</div>
+        <div className={tx('grid grid-cols-7 justify-items-center mt-3 mb-2')}>
+          {displayDayTitles}
+        </div>
         <div className={tx('grid grid-cols-7')}>
           {previousMonthDays.map((day, index) => {
             return (
               <div className={tx('px-1 mb-1')} key={index}>
                 <div key={index} className={tx('pointer-events-none w-7')}>
-                  <Text variant="button-md" color={{ light: 'text-grey8', dark: 'text-grey5' }}>
+                  <Text
+                    variant="button-md"
+                    color={{ light: 'text-grey8', dark: 'text-grey5' }}
+                    customStyle="text-center"
+                  >
                     {day}
                   </Text>
                 </div>
@@ -233,7 +239,11 @@ const DateSelector: React.FC<DateSelectorProps> = ({
             return (
               <div className={tx('px-1 mb-1')} key={index}>
                 <div key={index} className={tx('pointer-events-none text-center')}>
-                  <Text variant="button-md" color={{ light: 'text-grey8', dark: 'text-grey5' }}>
+                  <Text
+                    variant="button-md"
+                    color={{ light: 'text-grey8', dark: 'text-grey5' }}
+                    customStyle="text-center"
+                  >
                     {day}
                   </Text>
                 </div>
