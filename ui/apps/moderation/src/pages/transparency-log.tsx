@@ -2,9 +2,8 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import { ButtonValues, IModerationLogItem, NavigateToParams } from '@akashaorg/typings/ui';
-import { useGetCount, useInfiniteLog } from '@akashaorg/ui-awf-hooks';
+import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
@@ -14,69 +13,54 @@ import Pagination from '@akashaorg/design-system-core/lib/components/Pagination'
 import Table from '@akashaorg/design-system-core/lib/components/Table';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import Banner from '../components/transparency-log/banner';
-import DetailCard from '../components/transparency-log/detail-card';
-import MiniCardRenderer from '../components/transparency-log/mini-card-renderer';
 import { NoItemsFound } from '../components/error-cards';
 
 import getReasonPrefix from '../utils/getReasonPrefix';
-
-const { useIntersectionObserver } = DS;
 
 export interface ITransparencyLogProps {
   user: string | null;
   navigateTo: (args: NavigateToParams) => void;
 }
 
+type PaginatedItem = IModerationLogItem[];
+
 const DEFAULT_LIMIT = 10;
 
-export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
-  const { user, navigateTo } = props;
+const contentTypeMap = {
+  account: 'Account',
+  reply: 'Reply',
+  post: 'Post',
+};
 
-  const [activeButton, setActiveButton] = React.useState<string>(ButtonValues.ALL);
+export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
+  const { navigateTo } = props;
+
+  const [, setActiveButton] = React.useState<string>(ButtonValues.ALL);
   const [selected, setSelected] = React.useState<IModerationLogItem | null>(null);
+  const [pages, setPages] = React.useState<PaginatedItem[]>([]);
 
   // list filters
   const [filterByDecision, setfilterByDecision] = React.useState(null);
   const [filterByCategory, setfilterByCategory] = React.useState(null);
   const [curPage, setCurPage] = React.useState<number>(1);
-  const pages = 10;
 
   const { t } = useTranslation('app-moderation-ewa');
 
   const decisionPlaceholderLabel = t('Decision');
   const categoryPlaceholderLabel = t('Category');
 
-  const getCountQuery = useGetCount();
-  const count = getCountQuery.data || { delisted: 0, kept: 0, pending: 0 };
-
   const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
-  const logItemPages = React.useMemo(() => {
-    if (logItemsQuery.data) {
-      return logItemsQuery.data.pages;
-    }
-    return [];
-  }, [logItemsQuery.data]);
 
-  const handleLoadMore = React.useCallback(() => {
-    if (!logItemsQuery.isLoading && logItemsQuery.hasNextPage) {
+  React.useEffect(() => {
+    if (logItemsQuery.data && !logItemsQuery.isFetching && logItemsQuery.hasNextPage) {
+      const results = logItemsQuery.data.pages[0].results;
+
+      setPages([...pages, results]);
+
       logItemsQuery.fetchNextPage();
     }
-  }, [logItemsQuery]);
-
-  const loadmoreRef = React.createRef<HTMLDivElement>();
-
-  useIntersectionObserver({
-    target: loadmoreRef,
-    onIntersect: handleLoadMore,
-    threshold: 0,
-  });
-
-  const contentTypeMap = {
-    account: 'Account',
-    reply: 'Reply',
-    post: 'Post',
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
@@ -89,7 +73,7 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const handleClickNext = () => {
-    if (!(curPage === pages)) {
+    if (!(curPage === pages.length - 1)) {
       setCurPage(curPage + 1);
     }
   };
@@ -133,18 +117,6 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
     },
   ];
 
-  const hasKeptItems = activeButton === ButtonValues.KEPT && count.kept > 0;
-
-  const hasDelistedItems = activeButton === ButtonValues.DELISTED && count.delisted > 0;
-
-  const hasLoadMoreRef = hasKeptItems || hasDelistedItems || activeButton === ButtonValues.ALL;
-
-  const shouldLoadMore = hasLoadMoreRef && logItemsQuery.isFetching && logItemPages.length > 0;
-
-  const handleCopy = (value: string) => () => {
-    navigator.clipboard.writeText(value);
-  };
-
   const resetFilters = () => {
     setfilterByDecision({
       id: '',
@@ -167,7 +139,7 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   };
 
   const trimmedRows =
-    logItemsQuery.data?.pages[0]?.results?.map(el => [
+    pages[curPage - 1]?.map(el => [
       dayjs(el.moderatedDate).format('DD MMM YYYY'),
       t('{{type}}', { type: contentTypeMap[el.contentType] }),
       el.delisted ? t('Delisted') : t('Kept'),
@@ -225,12 +197,12 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
 
       <Pagination
         customStyle="mt-3 justify-end"
-        pageCount={pages}
+        pageCount={pages.length}
         currentPage={curPage}
         prevButtonLabel={t('Prev')}
         nextButtonLabel={t('Next')}
         prevButtonDisabled={curPage === 1}
-        nextButtonDisabled={curPage === pages}
+        nextButtonDisabled={curPage === pages.length - 1}
         onClickPage={handleClickPage}
         onClickPrev={handleClickPrev}
         onClickNext={handleClickNext}
