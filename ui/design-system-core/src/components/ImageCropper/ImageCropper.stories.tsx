@@ -10,5 +10,5 @@ const Template = (args: ImageCropperProps) => <ImageCropper {...args} />;
 
 export const BaseImageCropper = Template.bind({});
 BaseImageCropper.args = {
-  image: 'https://placebeard.it/360x360',
+  image: { url: 'https://placebeard.it/360x360' },
 };

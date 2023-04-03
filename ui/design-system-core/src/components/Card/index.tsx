@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { LegacyRef, PropsWithChildren, forwardRef } from 'react';
 import Stack from '../Stack';
 import { apply } from '@twind/core';
 import { Color, Elevation, Padding, Radius } from '../types/common.types';
@@ -14,11 +14,12 @@ export type CardProps = {
   padding?: Padding;
   direction?: 'row' | 'column';
   customStyle?: string;
+  ref?: LegacyRef<HTMLDivElement>;
 };
 
 const baseStyles = 'block';
 
-const Card: React.FC<PropsWithChildren<CardProps>> = props => {
+const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => {
   const {
     elevation = 'none',
     background = { light: 'bg-white', dark: 'bg-grey2' },
@@ -43,10 +44,10 @@ const Card: React.FC<PropsWithChildren<CardProps>> = props => {
   `;
 
   return (
-    <Stack direction={direction} customStyle={instanceStyles}>
+    <Stack direction={direction} customStyle={instanceStyles} ref={ref}>
       {props.children}
     </Stack>
   );
-};
+});
 
 export default Card;

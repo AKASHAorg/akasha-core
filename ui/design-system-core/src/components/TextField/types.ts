@@ -28,4 +28,5 @@ export type TextFieldProps = (InputProps | MultlineProps) & {
   status?: Status;
   required?: boolean;
   customStyle?: string;
+  inputRef?: InputProps['ref'] & MultlineProps['ref'];
 };
