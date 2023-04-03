@@ -52,15 +52,15 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
   const logItemsQuery = useInfiniteLog(DEFAULT_LIMIT);
 
   React.useEffect(() => {
-    if (logItemsQuery.data && !logItemsQuery.isFetching && logItemsQuery.hasNextPage) {
+    if (logItemsQuery.data) {
       const results = logItemsQuery.data.pages[0].results;
 
       setPages([...pages, results]);
 
-      logItemsQuery.fetchNextPage();
+      // logItemsQuery.fetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [logItemsQuery.data]);
 
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
