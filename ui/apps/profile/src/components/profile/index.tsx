@@ -30,7 +30,7 @@ import {
   ProfileLinks,
   ProfileStats,
 } from '@akashaorg/design-system-core/lib/components/ProfileCard';
-import { GeneralForm } from '@akashaorg/design-system-core/src/components/EditProfile/GeneralForm';
+import { GeneralForm } from '@akashaorg/design-system-core/lib/components/EditProfile/GeneralForm';
 
 export interface IProfileHeaderProps {
   profileId: string;
@@ -256,6 +256,7 @@ const Profile: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
               }}
               name={{ label: t('Name'), initialValue: profileData.name }}
               userName={{ label: t('Username'), initialValue: profileData.userName }}
+              bio={{ label: t('Bio'), initialValue: profileData.description }}
               ens={{
                 label: t('ENS Name'),
                 initialValue:

@@ -5,6 +5,7 @@ import TextField from '../../TextField';
 import { Header, HeaderProps } from './Header';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { isMobile } from 'react-device-detect';
 import * as z from 'zod';
 
 type GeneralFormValues = {
@@ -45,19 +46,15 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
   saveButton,
 }) => {
   const {
-    register,
     control,
     setValue,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    formState: { isDirty, isValid },
   } = useForm<GeneralFormValues>({
     resolver: zodResolver(schema),
   });
 
-  const onSave = (formValues: GeneralFormValues) => {
-    console.log(formValues);
-    saveButton.handleClick(formValues);
-  };
+  const onSave = (formValues: GeneralFormValues) => saveButton.handleClick(formValues);
 
   return (
     <form onSubmit={handleSubmit(onSave)}>
@@ -86,61 +83,63 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
         <Controller
           control={control}
           name="userName"
-          render={({ field: { name, value, onChange, ref } }) => (
+          render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
             <TextField
               name={name}
               label={userNameField.label}
               value={value}
+              caption={error?.message}
+              status={error?.message ? 'error' : null}
               onChange={onChange}
               inputRef={ref}
               readOnly
             />
           )}
-          defaultValue={userNameField.initialValue}
+          defaultValue={userNameField.initialValue ? userNameField.initialValue : ''}
         />
 
-        <Stack
-          align="end"
-          justify="between"
-          customStyle="hidden sm:flex"
-          spacing="sm:gap-x-6"
-          fullWidth
-        >
-          <Controller
-            control={control}
-            name="ens"
-            render={({ field: { name, value, onChange, ref } }) => (
-              <TextField
-                name={name}
-                label={ensField.label}
-                value={value}
-                onChange={onChange}
-                inputRef={ref}
-              />
-            )}
-            defaultValue={ensField.initialValue}
-          />
-          <Button label={ensButton.label} customStyle="ml-auto" />
-        </Stack>
-        <Controller
-          control={control}
-          name="ens"
-          render={({ field: { name, value, onChange, ref } }) => (
-            <TextField
-              name={name}
-              label={ensField.label}
-              value={value}
-              onChange={onChange}
-              inputRef={ref}
+        {!isMobile && (
+          <Stack align="end" justify="between" spacing="gap-x-6" fullWidth>
+            <Controller
+              control={control}
+              name="ens"
+              render={({ field: { name, value, onChange, ref } }) => (
+                <TextField
+                  name={name}
+                  label={ensField.label}
+                  value={value}
+                  onChange={onChange}
+                  inputRef={ref}
+                />
+              )}
+              defaultValue={ensField.initialValue}
             />
-          )}
-          defaultValue={ensField.initialValue}
-        />
-        <Button
-          label={ensButton.label}
-          onClick={ensButton.handleClick}
-          customStyle="block w-fit ml-auto sm:hidden"
-        />
+            <Button label={ensButton.label} customStyle="ml-auto" />
+          </Stack>
+        )}
+        {isMobile && (
+          <>
+            <Controller
+              control={control}
+              name="ens"
+              render={({ field: { name, value, onChange, ref } }) => (
+                <TextField
+                  name={name}
+                  label={ensField.label}
+                  value={value}
+                  onChange={onChange}
+                  inputRef={ref}
+                />
+              )}
+              defaultValue={ensField.initialValue}
+            />
+            <Button
+              label={ensButton.label}
+              onClick={ensButton.handleClick}
+              customStyle="w-fit ml-auto"
+            />
+          </>
+        )}
         <Controller
           control={control}
           name="bio"
@@ -173,7 +172,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
 
 const schema = z.object({
   name: z.string().optional(),
-  userName: z.string().optional(),
+  userName: z.string().min(1, 'User name is required'),
   avatar: z.string().optional(),
   coverImage: z.string().optional(),
   ens: z.string().optional(),
