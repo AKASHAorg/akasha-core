@@ -91,7 +91,7 @@ const CardActions: React.FC<CardActionProps> = props => {
           <Icon type="ArrowPathIcon" />
         </button>
       )}
-      {actionsRightExt}
+      <>{actionsRightExt}</>
     </div>
   );
 };
