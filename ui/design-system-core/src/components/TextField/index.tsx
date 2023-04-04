@@ -7,7 +7,7 @@ import { TextFieldProps } from './types';
 import { Multiline } from './Multiline';
 
 const TextField: React.FC<TextFieldProps> = props => {
-  const { required, label, status, caption, customStyle, disabled } = props;
+  const { inputRef, required, label, status, caption, customStyle, disabled, ...rest } = props;
 
   return (
     <Stack direction="column" spacing="gap-y-2" customStyle={customStyle}>
@@ -16,7 +16,11 @@ const TextField: React.FC<TextFieldProps> = props => {
           {label}
         </Label>
       )}
-      {props.type === 'multiline' ? <Multiline {...props} /> : <Input {...props} />}
+      {rest.type === 'multiline' ? (
+        <Multiline {...rest} status={status} disabled={disabled} ref={inputRef} />
+      ) : (
+        <Input {...rest} status={status} disabled={disabled} ref={inputRef} />
+      )}
       {caption && (
         <Caption status={status} disabled={disabled}>
           {caption}

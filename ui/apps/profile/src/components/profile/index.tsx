@@ -30,7 +30,7 @@ import {
   ProfileLinks,
   ProfileStats,
 } from '@akashaorg/design-system-core/lib/components/ProfileCard';
-import { General } from '@akashaorg/design-system-core/lib/components/EditProfile/General';
+import { GeneralForm } from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
 
 export interface IProfileHeaderProps {
   profileId: string;
@@ -232,15 +232,31 @@ const Profile: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
         </ProfileCard> */}
         {showEditProfile && (
           <Tab labels={[t('General')]}>
-            <General
+            <GeneralForm
               header={{
-                label: t('Avatar & Cover Image'),
+                title: t('Avatar & Cover Image'),
                 coverImage: profileData.coverImage,
                 avatar: profileData.avatar,
                 ethAddress: profileData.ethAddress,
+                cancelLabel: t('Cancel'),
+                deleteLabel: t('Delete'),
+                saveLabel: t('Save'),
+                imageTitle: {
+                  avatar: { label: t('Edit Avatar') },
+                  coverImage: { label: t('Edit Cover') },
+                },
+                deleteTitle: {
+                  avatar: { label: t('Delete Avatar') },
+                  coverImage: { label: t('Delete Cover') },
+                },
+                confirmationLabel: {
+                  avatar: t('Are you sure you want to delete your avatar?'),
+                  coverImage: t('Are you sure you want to delete your cover?'),
+                },
               }}
               name={{ label: t('Name'), initialValue: profileData.name }}
               userName={{ label: t('Username'), initialValue: profileData.userName }}
+              bio={{ label: t('Bio'), initialValue: profileData.description }}
               ens={{
                 label: t('ENS Name'),
                 initialValue:

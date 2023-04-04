@@ -17,8 +17,8 @@ export interface IconProps {
   breakPointSize?: BreakPointSize;
   accentColor?: boolean;
   disabled?: boolean;
-  testId?: string;
   hover?: boolean;
+  testId?: string;
   customStyle?: string;
   hoverColor?: Color;
 }
@@ -34,10 +34,10 @@ const Icon: React.FC<IconProps> = props => {
     breakPointSize,
     color,
     disabled,
-    testId,
     hover,
+    testId,
     customStyle = '',
-    hoverColor = 'white',
+    hoverColor,
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -73,6 +73,7 @@ const Icon: React.FC<IconProps> = props => {
           : '[&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark'
       }`
     : '';
+
   // Note: setting accentColor to true will overrride other color styles
   const activeIconColorStyle = accentColor ? accentColorStyle : colorStyle;
 

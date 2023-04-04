@@ -1,8 +1,14 @@
-import { Color, isStatusType, Status } from '../components/types/common.types';
+import { Color, isStatusType, STATUS_TO_COLOR_CLASSES_MAP } from '../components/types/common.types';
 
 export function getColorClasses(color: Color, utility?: string) {
-  if (isStatusType(color)) return STATUS_TO_TEXT_CLASSES_MAP[color];
+  if (isStatusType(color)) {
+    return getBaseColorClasses(STATUS_TO_COLOR_CLASSES_MAP[color], utility);
+  }
 
+  return getBaseColorClasses(color, utility);
+}
+
+function getBaseColorClasses(color: Color, utility?: string) {
   if (typeof color === 'string' && !color.trim().includes(' ')) {
     return utility ? `${utility}-${color}` : color;
   }
@@ -16,12 +22,5 @@ export function getColorClasses(color: Color, utility?: string) {
         ? `${utility}-${color.light} dark:${utility}-${color.dark}`
         : `${color.light} dark:${color.dark}`;
   }
-
   return '';
 }
-
-const STATUS_TO_TEXT_CLASSES_MAP: Record<Status, string> = {
-  error: 'text-error-light dark:text-error-dark',
-  success: 'text-success',
-  warning: 'text-warning-light dark:text-warning-dark',
-};

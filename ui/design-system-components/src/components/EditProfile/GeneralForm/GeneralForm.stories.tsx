@@ -1,22 +1,37 @@
 import React from 'react';
-import { General, GeneralProps } from '.';
+import { GeneralForm, GeneralFormProps } from '.';
 
 export default {
   title: 'Profile/GeneralForm',
-  component: General,
+  component: GeneralForm,
 };
 
 const ethAddress = '0x003410490050000320006570034567114572000';
 
-const Template = (args: GeneralProps) => <General {...args} />;
+const Template = (args: GeneralFormProps) => <GeneralForm {...args} />;
 
 export const BaseGeneralForm = Template.bind({});
 BaseGeneralForm.args = {
   header: {
-    label: 'Avatar & Cover Image',
+    title: 'Avatar & Cover Image',
     coverImage: { url: 'https://static.licdn.com/sc/h/55k1z8997gh8dwtihm11aajyq' },
     avatar: { url: 'https://placebeard.it/360x360' },
     ethAddress,
+    cancelLabel: 'Cancel',
+    deleteLabel: 'Delete',
+    saveLabel: 'Save',
+    imageTitle: {
+      avatar: { label: 'Edit Avatar' },
+      coverImage: { label: 'Edit Cover' },
+    },
+    deleteTitle: {
+      avatar: { label: 'Delete Avatar' },
+      coverImage: { label: 'Delete Cover' },
+    },
+    confirmationLabel: {
+      avatar: 'Are you sure you want to delete your avatar?',
+      coverImage: 'Are you sure you want to delete your cover?',
+    },
   },
   name: { label: 'Name', initialValue: 'Mr. Snowman' },
   userName: { label: 'Username', initialValue: 'snowman' },
@@ -27,6 +42,10 @@ BaseGeneralForm.args = {
   ensButton: {
     label: 'Fill info from ENS data',
     handleClick: () => ({}),
+  },
+  bio: {
+    label: 'Bio',
+    initialValue: 'Bio',
   },
   cancelButton: {
     label: 'Cancel',
