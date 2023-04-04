@@ -30,7 +30,7 @@ const ActionDropdown: React.FC<ActionDropdownProps> = forwardRef(
     const hoverStyle = `${getColorClasses({ light: 'grey8', dark: 'grey5' }, 'hover:bg')}`;
 
     return (
-      <Card elevation="1" radius={8} customStyle={`w-fit ${customStyle}`} ref={ref}>
+      <Card elevation="1" radius={8} customStyle={`z-50	w-fit ${customStyle}`} ref={ref}>
         <Stack direction="column">
           {actions.map((action, index) => (
             <Button
