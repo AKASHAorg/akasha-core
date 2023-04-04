@@ -4,8 +4,8 @@ import Stack from '../../Stack';
 import TextField from '../../TextField';
 import { Header, HeaderProps } from './Header';
 import { useForm, Controller } from 'react-hook-form';
+import { useMedia } from 'react-use';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { isMobile } from 'react-device-detect';
 import * as z from 'zod';
 
 type GeneralFormValues = {
@@ -56,6 +56,8 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
 
   const onSave = (formValues: GeneralFormValues) => saveButton.handleClick(formValues);
 
+  const isLargeScreen = useMedia('(min-width: 640px)');
+
   return (
     <form onSubmit={handleSubmit(onSave)}>
       <Stack direction="column" spacing="gap-y-3.5">
@@ -98,7 +100,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           defaultValue={userNameField.initialValue ? userNameField.initialValue : ''}
         />
 
-        {!isMobile && (
+        {isLargeScreen && (
           <Stack align="end" justify="between" spacing="gap-x-6" fullWidth>
             <Controller
               control={control}
@@ -110,6 +112,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
                   value={value}
                   onChange={onChange}
                   inputRef={ref}
+                  customStyle="grow"
                 />
               )}
               defaultValue={ensField.initialValue}
@@ -117,7 +120,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
             <Button label={ensButton.label} customStyle="ml-auto" />
           </Stack>
         )}
-        {isMobile && (
+        {!isLargeScreen && (
           <>
             <Controller
               control={control}
