@@ -3,9 +3,9 @@ import { tw } from '@twind/core';
 
 import { IconType } from '@akashaorg/typings/ui';
 
-import BasicCardBox from '../BasicCardBox';
-import Icon from '../Icon';
-import Text from '../Text';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type OverviewCTA = {
   label: string;
