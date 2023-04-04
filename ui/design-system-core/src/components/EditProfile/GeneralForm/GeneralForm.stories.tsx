@@ -45,7 +45,7 @@ BaseGeneralForm.args = {
   },
   bio: {
     label: 'Bio',
-    initialValue: 'snowman.eth',
+    initialValue: 'Bio',
   },
   cancelButton: {
     label: 'Cancel',
