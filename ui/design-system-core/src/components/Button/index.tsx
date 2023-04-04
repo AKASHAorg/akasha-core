@@ -8,10 +8,7 @@ import { getContainerClasses } from './getContainerClasses';
 import { ButtonIcon } from './ButtonIcon';
 import { apply, tw } from '@twind/core';
 
-const Button: React.FC<
-  ButtonProps &
-    React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
-> = forwardRef((props, ref) => {
+const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   const {
     plain,
     icon,

@@ -1,23 +1,11 @@
-import { Status } from '../../types/common.types';
+import { Color, STATUS_TO_COLOR_CLASSES_MAP, Status } from '../../types/common.types';
 
-const STATUS_TO_ICON_CLASSES_MAP: Record<Status, string> = {
-  error: 'stroke-error-light dark:stroke-error-dark',
-  success: 'stroke-success',
-  warning: 'stroke-warning-light dark:stroke-warning-dark',
-};
-
-export function getIconClasses(disabled: boolean, status: Status) {
-  const defaultClasses = 'h-5';
-
-  if (!disabled && !status) {
-    return `${defaultClasses} dark:stroke-white stroke-grey2 peer-focus:stroke-secondary-light peer-focus:dark:stroke-secondary-dark`;
-  }
-
+export function getIconClasses(disabled: boolean, status: Status): Color {
   if (disabled) {
-    return `${defaultClasses} dark:stroke-grey2 stroke-grey7`;
+    return { light: 'grey2', dark: 'grey7' };
   }
 
   if (status) {
-    return `${defaultClasses}  ${STATUS_TO_ICON_CLASSES_MAP[status]}`;
+    return STATUS_TO_COLOR_CLASSES_MAP[status];
   }
 }

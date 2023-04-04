@@ -4,15 +4,14 @@ import Cropper, { CropperProps } from 'react-easy-crop';
 import Text from '../Text';
 import Icon from '../Icon';
 import { Point, Area } from 'react-easy-crop/types';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 import { getRadiusClasses } from '../../utils/getRadiusClasses';
 import { ImageSrc } from '../types/common.types';
 
 import getCroppedImage from '../../utils/get-cropped-image';
 
-export type ImageCropperProps = {
-  image: CropperProps['image'];
-  avatar: ImageSrc;
+export type ImageCropperProps = Partial<Omit<CropperProps, 'image'>> & {
+  image: string | ImageSrc;
   onCrop: (image: Blob) => void;
 };
 
@@ -23,40 +22,40 @@ const ZOOM_STEP = 0.01;
 const CROPPER_WIDTH = 320;
 const CROPPWER_HEIGHT = 224;
 
-const ImageCropper: React.FC<ImageCropperProps> = ({ image, avatar, onCrop }) => {
+const ImageCropper: React.FC<ImageCropperProps> = ({ image, onCrop, ...rest }) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const imageUrl = typeof image === 'string' ? image : image?.url || image?.fallbackUrl;
+
   const onCropComplete = useCallback(
     async (_: Area, croppedAreaPixels: Area) => {
-      const [cropped] = await getCroppedImage(
-        avatar.url || avatar.fallbackUrl,
-        croppedAreaPixels,
-        0,
-      );
-      onCrop(cropped);
+      if (imageUrl && croppedAreaPixels.width && croppedAreaPixels.height) {
+        const [cropped] = await getCroppedImage(imageUrl, croppedAreaPixels, 0);
+        onCrop(cropped);
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [avatar],
+    [image, imageUrl],
   );
 
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle={`w-fit h-fit`}>
       <div
         className={tw(
-          `relative w-[${CROPPER_WIDTH / 16}rem] h-[${
+          apply`relative w-[${CROPPER_WIDTH / 16}rem] h-[${
             CROPPWER_HEIGHT / 16
-          }rem] overflow-hidden bg-white ${getRadiusClasses(20)}`,
+          }rem] overflow-hidden bg-transparent ${getRadiusClasses(20)}`,
         )}
       >
         <Cropper
-          image={image}
+          image={imageUrl}
           crop={crop}
           zoom={zoom}
           aspect={CROPPER_WIDTH / CROPPWER_HEIGHT}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
-          objectFit="horizontal-cover"
+          {...rest}
         />
       </div>
       <Text variant="footnotes2" align="center" weight="normal">
