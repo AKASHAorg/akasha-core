@@ -1,7 +1,7 @@
 import React from 'react';
-import Button from '../../Button';
-import Stack from '../../Stack';
-import TextField from '../../TextField';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import TextField from '@akashaorg/design-system-core/lib/components/TextField';
 import { Header, HeaderProps } from './Header';
 import { useForm, Controller } from 'react-hook-form';
 import { useMedia } from 'react-use';

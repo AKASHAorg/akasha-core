@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import Modal, { ModalProps } from '../../../../Modal';
-import ImageCropper, { ImageCropperProps } from '../../../../ImageCropper';
+import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
+import ImageCropper, {
+  ImageCropperProps,
+} from '@akashaorg/design-system-core/lib/components/ImageCropper';
 
 type EditImageModalProps = {
   title: ModalProps['title'];

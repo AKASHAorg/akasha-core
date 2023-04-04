@@ -30,7 +30,7 @@ import {
   ProfileLinks,
   ProfileStats,
 } from '@akashaorg/design-system-core/lib/components/ProfileCard';
-import { GeneralForm } from '@akashaorg/design-system-core/lib/components/EditProfile/GeneralForm';
+import { GeneralForm } from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
 
 export interface IProfileHeaderProps {
   profileId: string;

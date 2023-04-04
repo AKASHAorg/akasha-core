@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import Avatar, { AvatarSrc, IAvatarProps } from '../../../Avatar';
-import Button from '../../../Button';
-import Card from '../../../Card';
-import Stack from '../../../Stack';
-import Text from '../../../Text';
-import ActionDropdown, { ActionDropdownProps } from '../../../ActionDropDown';
-import { ModalProps } from '../../../Modal';
-import { ImageSrc } from '../../../types/common.types';
+import Avatar, {
+  AvatarSrc,
+  IAvatarProps,
+} from '@akashaorg/design-system-core/lib/components/Avatar';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import Card from '@akashaorg/design-system-core/lib/components/Card';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import ActionDropdown, { ActionDropdownProps } from '@akashaorg/design-system-core/lib/components/ActionDropDown';
+import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
+import { ImageSrc } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import { tw } from '@twind/core';
-import { getColorClasses } from '../../../../utils/getColorClasses';
-import { useCloseActions } from '../../../../utils/useCloseActions';
+import { getColorClasses } from '@akashaorg/design-system-core/lib/utils/getColorClasses';
+import { useCloseActions } from '@akashaorg/design-system-core/lib/utils/useCloseActions';
 import { EditImageModal } from './EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
 import { CropperProps } from 'react-easy-crop';
