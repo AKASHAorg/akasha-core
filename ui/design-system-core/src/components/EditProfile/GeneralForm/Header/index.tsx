@@ -14,7 +14,6 @@ import { EditImageModal } from './EditImageModal';
 import { DeleteImageModal } from './DeleteImageModal';
 import { CropperProps } from 'react-easy-crop';
 import { useEffect } from 'react';
-import { isNull } from 'util';
 
 type ImageType = 'avatar' | 'cover-image';
 
@@ -28,7 +27,7 @@ export type HeaderProps = {
   saveLabel: string;
   imageTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   deleteTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
-  deleteConfirmation: { avatar: string; coverImage: string };
+  confirmationLabel: { avatar: string; coverImage: string };
   onAvatarChange: (avatar?: AvatarSrc) => void;
   onCoverImageChange: (coverImage?: ImageSrc) => void;
 };
@@ -43,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
   saveLabel,
   imageTitle,
   deleteTitle,
-  deleteConfirmation,
+  confirmationLabel,
   onAvatarChange,
   onCoverImageChange,
 }) => {
@@ -219,8 +218,8 @@ export const Header: React.FC<HeaderProps> = ({
         title={imageType === 'avatar' ? deleteTitle.avatar : deleteTitle.coverImage}
         cancelLabel={cancelLabel}
         deleteLabel={deleteLabel}
-        deleteConfirmation={
-          imageType === 'avatar' ? deleteConfirmation.avatar : deleteConfirmation.coverImage
+        confirmationLabel={
+          imageType === 'avatar' ? confirmationLabel.avatar : confirmationLabel.coverImage
         }
         onDelete={onDelete}
         onClose={() => setShowDeleteImage(false)}

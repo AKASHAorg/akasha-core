@@ -249,7 +249,7 @@ const Profile: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
                   avatar: { label: t('Delete Avatar') },
                   coverImage: { label: t('Delete Cover') },
                 },
-                deleteConfirmation: {
+                confirmationLabel: {
                   avatar: t('Are you sure you want to delete your avatar?'),
                   coverImage: t('Are you sure you want to delete your cover?'),
                 },

@@ -7,7 +7,7 @@ type DeleteImageModalProps = {
   show: ModalProps['show'];
   cancelLabel: string;
   deleteLabel: string;
-  deleteConfirmation: string;
+  confirmationLabel: string;
   onDelete: () => void;
   onClose: ModalProps['onClose'];
 };
@@ -17,7 +17,7 @@ export const DeleteImageModal: React.FC<DeleteImageModalProps> = ({
   title,
   cancelLabel,
   deleteLabel,
-  deleteConfirmation,
+  confirmationLabel,
   onDelete,
   onClose,
 }) => {
@@ -33,7 +33,7 @@ export const DeleteImageModal: React.FC<DeleteImageModalProps> = ({
       onClose={onClose}
       customStyle="min-w-[20rem] sm:min-w-[38rem]"
     >
-      <Text variant="body1">{deleteConfirmation}</Text>
+      <Text variant="body1">{confirmationLabel}</Text>
     </Modal>
   );
 };

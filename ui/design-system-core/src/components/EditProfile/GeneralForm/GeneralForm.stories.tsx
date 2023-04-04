@@ -28,7 +28,7 @@ BaseGeneralForm.args = {
       avatar: { label: 'Delete Avatar' },
       coverImage: { label: 'Delete Cover' },
     },
-    deleteConfirmation: {
+    confirmationLabel: {
       avatar: 'Are you sure you want to delete your avatar?',
       coverImage: 'Are you sure you want to delete your cover?',
     },
