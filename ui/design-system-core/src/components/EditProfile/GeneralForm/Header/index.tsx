@@ -11,9 +11,10 @@ import { tw } from '@twind/core';
 import { getColorClasses } from '../../../../utils/getColorClasses';
 import { useCloseActions } from '../../../../utils/useCloseActions';
 import { EditImageModal } from './EditImageModal';
-import { DeleteImageModal } from '../DeleteImageModal';
+import { DeleteImageModal } from './DeleteImageModal';
 import { CropperProps } from 'react-easy-crop';
 import { useEffect } from 'react';
+import { isNull } from 'util';
 
 type ImageType = 'avatar' | 'cover-image';
 
@@ -28,8 +29,8 @@ export type HeaderProps = {
   imageTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   deleteTitle: { avatar: ModalProps['title']; coverImage: ModalProps['title'] };
   deleteConfirmation: { avatar: string; coverImage: string };
-  onAvatarChange: (avatar: AvatarSrc) => void;
-  onCoverImageChange: (coverImage: ImageSrc) => void;
+  onAvatarChange: (avatar?: AvatarSrc) => void;
+  onCoverImageChange: (coverImage?: ImageSrc) => void;
 };
 
 export const Header: React.FC<HeaderProps> = ({
@@ -54,12 +55,15 @@ export const Header: React.FC<HeaderProps> = ({
   const [showDeleteImage, setShowDeleteImage] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(avatar);
   const [coverImageUrl, setCoverImageUrl] = useState(coverImage);
+
   const editAvatarRef = useCloseActions(() => {
     setShowAvatarActions(false);
   });
+
   const editCoverRef = useCloseActions(() => {
     setShowCoverDropdown(false);
   });
+
   const dropDownActions: ActionDropdownProps['actions'] = [
     {
       label: 'Upload',
@@ -80,6 +84,12 @@ export const Header: React.FC<HeaderProps> = ({
       onClick: () => setShowDeleteImage(true),
     },
   ];
+
+  const imageModalProps: Partial<CropperProps> =
+    imageType === 'avatar'
+      ? { aspect: 250 / 250, cropShape: 'round' }
+      : { aspect: 560 / 169, objectFit: 'contain' };
+
   const onSave = image => {
     if (image) {
       switch (imageType) {
@@ -92,18 +102,18 @@ export const Header: React.FC<HeaderProps> = ({
     }
     setShowEditImage(false);
   };
+
   const onDelete = () => {
     switch (imageType) {
       case 'avatar':
-        setAvatarUrl({
-          url: '/images/avatar-placeholder-1.webp',
-        });
+        setAvatarUrl(null);
         break;
       case 'cover-image':
-        setCoverImageUrl({ url: '/images/cover-image.webp' });
+        setCoverImageUrl(null);
     }
     setShowDeleteImage(false);
   };
+
   const onUpload = (image: File) => {
     if (image) {
       switch (imageType) {
@@ -116,10 +126,6 @@ export const Header: React.FC<HeaderProps> = ({
     }
     uploadInputRef.current.value = null;
   };
-  const imageModalProps: Partial<CropperProps> =
-    imageType === 'avatar'
-      ? { aspect: 250 / 250, cropShape: 'round' }
-      : { aspect: 560 / 169, objectFit: 'contain' };
 
   useEffect(() => {
     onAvatarChange(avatarUrl);
@@ -137,15 +143,15 @@ export const Header: React.FC<HeaderProps> = ({
       <div className={tw('relative mb-8')}>
         <Card
           radius={20}
-          background={{ light: 'bg-grey6', dark: 'bg-grey5' }}
+          background={{ light: 'bg-grey7', dark: 'bg-grey5' }}
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
-            coverImageUrl?.url || coverImageUrl?.fallbackUrl || '/images/cover-image.webp'
+            coverImageUrl?.url || coverImageUrl?.fallbackUrl
           })]`}
         >
           <Stack direction="column" spacing="gap-y-1" customStyle="relative mt-auto ml-auto">
             <Button
               icon="PencilSquareIcon"
-              size="sm"
+              size="xs"
               variant="primary"
               onClick={() => {
                 setShowCoverDropdown(!showCoverActions);
@@ -171,12 +177,18 @@ export const Header: React.FC<HeaderProps> = ({
                 dark: 'grey2',
               },
               'border',
+            )} ${getColorClasses(
+              {
+                light: 'grey8',
+                dark: 'grey4',
+              },
+              'bg',
             )}`}
           />
           <div className={tw('absolute')}>
             <Button
               icon="PencilSquareIcon"
-              size="sm"
+              size="xs"
               variant="primary"
               onClick={() => {
                 setShowAvatarActions(!showAvatarActions);

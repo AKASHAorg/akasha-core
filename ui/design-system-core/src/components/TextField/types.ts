@@ -3,6 +3,7 @@ import { Status } from '../types/common.types';
 
 export type MultlineProps = {
   type?: 'multiline';
+  status?: Status;
 } & JSX.IntrinsicElements['textarea'];
 
 export type InputProps = {

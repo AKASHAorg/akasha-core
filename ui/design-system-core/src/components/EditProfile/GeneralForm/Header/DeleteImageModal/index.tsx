@@ -1,6 +1,6 @@
 import React from 'react';
-import Modal, { ModalProps } from '../../../Modal';
-import Text from '../../../Text';
+import Modal, { ModalProps } from '../../../../Modal';
+import Text from '../../../../Text';
 
 type DeleteImageModalProps = {
   title: ModalProps['title'];

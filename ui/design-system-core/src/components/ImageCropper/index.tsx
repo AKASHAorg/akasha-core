@@ -25,10 +25,7 @@ const CROPPWER_HEIGHT = 224;
 const ImageCropper: React.FC<ImageCropperProps> = ({ image, onCrop, ...rest }) => {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const imageUrl =
-    typeof image === 'string'
-      ? image
-      : image.url || image.fallbackUrl || '/images/cover-image.webp';
+  const imageUrl = typeof image === 'string' ? image : image?.url || image?.fallbackUrl;
 
   const onCropComplete = useCallback(
     async (_: Area, croppedAreaPixels: Area) => {

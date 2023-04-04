@@ -17,9 +17,9 @@ const TextField: React.FC<TextFieldProps> = props => {
         </Label>
       )}
       {rest.type === 'multiline' ? (
-        <Multiline {...rest} ref={inputRef} />
+        <Multiline {...rest} status={status} disabled={disabled} ref={inputRef} />
       ) : (
-        <Input {...rest} ref={inputRef} />
+        <Input {...rest} status={status} disabled={disabled} ref={inputRef} />
       )}
       {caption && (
         <Caption status={status} disabled={disabled}>

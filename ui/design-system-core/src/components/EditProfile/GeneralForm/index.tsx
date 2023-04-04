@@ -63,9 +63,9 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
       <Stack direction="column" spacing="gap-y-3.5">
         <Header
           {...header}
-          onAvatarChange={avatar => setValue('avatar', avatar.url || avatar.fallbackUrl)}
+          onAvatarChange={avatar => setValue('avatar', avatar?.url || avatar?.fallbackUrl)}
           onCoverImageChange={coverImage =>
-            setValue('coverImage', coverImage.url || coverImage.fallbackUrl)
+            setValue('coverImage', coverImage?.url || coverImage?.fallbackUrl)
           }
         />
         <Controller
@@ -94,6 +94,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
               status={error?.message ? 'error' : null}
               onChange={onChange}
               inputRef={ref}
+              required
               readOnly
             />
           )}

@@ -6,7 +6,7 @@ const STATUS_TO_BORDER_CLASSES_MAP: Record<Status, string> = {
   warning: 'border border-warning-light dark:border-warning-dark',
 };
 
-export function getContainerClasses(disabled: boolean, status?: Status, readOnly?: boolean) {
+export function getContainerClasses(disabled: boolean, status: Status, readOnly?: boolean) {
   const defaultStyle = `px-2.5 rounded-lg bg-grey9 dark:bg-grey3`;
 
   if (!disabled && !status && !readOnly) {
