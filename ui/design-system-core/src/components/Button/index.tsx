@@ -61,7 +61,7 @@ const Button: React.FC<
     : '';
 
   return (
-    <button ref={ref} className={tw(customStyle)} {...rest}>
+    <button ref={ref} className={tw(customStyle)} {...rest} disabled={disabled}>
       <Stack
         align="center"
         justify="center"
