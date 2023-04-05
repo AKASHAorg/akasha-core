@@ -12,7 +12,12 @@ const checkboxes: any[] = [
   { label: 'Checkbox error', error: true },
   { label: 'Checkbox disabled', disabled: true },
   { label: 'Checkbox indeterminate', indeterminate: true },
-  { label: 'Checkbox indeterminate large', size: 'large', indeterminate: true, disabled: true },
+  {
+    label: 'Checkbox indeterminate disabled large',
+    size: 'large',
+    indeterminate: true,
+    disabled: true,
+  },
 ];
 const name = 'checkboxes';
 
