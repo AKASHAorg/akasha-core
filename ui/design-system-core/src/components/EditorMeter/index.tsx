@@ -14,16 +14,16 @@ const EditorMeter: React.FC<EditorMeterProps> = props => {
   const { value, max, background = { light: 'grey8', dark: 'grey4' }, customStyle } = props;
   const remainingChars = max - value;
   let displayCounter: null | number = null;
-  let progressStyle = { light: 'secondary-light', dark: 'secondary-dark' };
+  let progressStyle: Color = { light: 'secondaryLight', dark: 'secondaryDark' };
 
   if (remainingChars < 0) {
     displayCounter = Math.max(remainingChars, -99);
-    progressStyle = { light: 'error-light', dark: 'error-dark' };
+    progressStyle = { light: 'errorLight', dark: 'errorDark' };
   }
 
   if (remainingChars === 1 || remainingChars === 0) {
     displayCounter = remainingChars;
-    progressStyle = { light: 'warning-light', dark: 'warning-dark' };
+    progressStyle = { light: 'warningLight', dark: 'warningDark' };
   }
 
   return (

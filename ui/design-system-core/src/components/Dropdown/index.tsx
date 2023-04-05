@@ -54,21 +54,15 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
   return (
     <Box customStyle="relative min-w-[8rem]">
-      {label && (
-        <Text variant="label" color={{ light: 'text-dark', dark: 'text-white' }}>
-          {label}
-        </Text>
-      )}
+      {label && <Text variant="label">{label}</Text>}
 
       <button
         className={tx`inline-flex items-center justify-between min-w-[8rem] p-3 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
-          dropOpen ? 'secondary-light dark:secondark-dark' : 'grey8 dark:grey3'
+          dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
         })`}
         onClick={handleDropClick}
       >
-        <Text variant="body1" color={{ light: 'text-dark', dark: 'text-white' }}>
-          {selected?.title}
-        </Text>
+        <Text variant="body1">{selected?.title}</Text>
         {dropOpen ? (
           <Icon type="ChevronUpIcon" customStyle="ml-4" />
         ) : (
@@ -94,7 +88,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                 >
                   <Box
                     customStyle={`flex items-center space-x-2 ${
-                      isSelected ? 'text-secondary-light' : 'text-black'
+                      isSelected ? 'text-secondaryLight' : 'text-black'
                     }`}
                   >
                     {menuItem?.iconName && (
@@ -102,7 +96,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                         type={menuItem.iconName}
                         color={
                           isSelected
-                            ? { light: 'secondary-light', dark: 'secondary-dark' }
+                            ? { light: 'secondaryLight', dark: 'secondaryDark' }
                             : { light: 'black', dark: 'white' }
                         }
                       />
@@ -111,8 +105,8 @@ const Dropdown: React.FC<IDropdownProps> = ({
                       variant="body1"
                       color={
                         isSelected
-                          ? { light: 'text-secondary-light', dark: 'text-secondary-dark' }
-                          : { light: 'text-black', dark: 'text-white' }
+                          ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                          : { light: 'black', dark: 'white' }
                       }
                     >
                       {menuItem.title}
@@ -122,7 +116,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
                     <span className={tw('ml-4')}>
                       <Icon
                         type="CheckIcon"
-                        color={{ light: 'secondary-light', dark: 'secondary-dark' }}
+                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                       />
                     </span>
                   )}

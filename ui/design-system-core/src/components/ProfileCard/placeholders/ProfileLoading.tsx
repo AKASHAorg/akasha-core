@@ -14,7 +14,7 @@ const ProfileLoading = () => {
         <Card
           elevation="1"
           radius={{ top: 20 }}
-          background={{ light: 'bg-grey6', dark: 'bg-grey5' }}
+          background={{ light: 'grey6', dark: 'grey5' }}
           customStyle="h-32"
         ></Card>
         <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
