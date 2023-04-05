@@ -3,7 +3,7 @@ import { act, cleanup } from '@testing-library/react';
 import { customRender } from '../../../test-utils';
 import Icon from '../';
 
-describe('<Snackbar /> Component', () => {
+describe('<Icon /> Component', () => {
   let componentWrapper = customRender(<></>, {});
 
   beforeEach(() => {
