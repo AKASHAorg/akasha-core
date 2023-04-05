@@ -8,8 +8,8 @@ import { getColorLight, getColorDark } from './getColor';
 export type snackBarType = 'alert' | 'caution' | 'success' | 'info';
 
 export interface ISnackbar {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
   actionButtonLabel?: string;
   type: snackBarType;
   handleButtonClick?: (event: React.SyntheticEvent<Element, Event>) => void;
@@ -17,8 +17,8 @@ export interface ISnackbar {
 }
 
 const Snackbar: React.FC<ISnackbar> = ({
-  title = 'Alert Title',
-  description = 'Some important information will appear here.',
+  title,
+  description,
   type,
   //action button
   actionButtonLabel,
@@ -55,7 +55,7 @@ const Snackbar: React.FC<ISnackbar> = ({
           {description}
         </Text>
         {actionButtonLabel && (
-          <Button onClick={handleButtonClick} plain>
+          <Button onClick={handleButtonClick} plain={true}>
             <Text
               variant="button-md"
               color={{ light: `text-${colorLight}`, dark: `text-${colorDark}` }}
@@ -65,7 +65,7 @@ const Snackbar: React.FC<ISnackbar> = ({
           </Button>
         )}
       </div>
-      <Button onClick={handleDismiss} className={tw('ml-2')} plain>
+      <Button onClick={handleDismiss} customStyle="ml-2" plain={true} data-testid="dismiss-button">
         <Icon type="XMarkIcon" color="grey7" customStyle="w-4 h-4" />
       </Button>
     </div>

@@ -3,6 +3,7 @@ import Icon from '../Icon';
 import { IconType } from '@akashaorg/typings/ui';
 import Text from '../Text';
 import { tw, apply } from '@twind/core';
+import Button from '../Button';
 
 export type pillSize = 'small' | 'large';
 
@@ -51,9 +52,14 @@ const Pill: React.FC<IPill> = ({
         {infoLabel}
       </Text>
       {trailingIcon && (
-        <span className={tw('ml-2')} onClick={handleDismiss}>
+        <Button
+          customStyle="ml-2"
+          plain={true}
+          onClick={handleDismiss}
+          data-testid="dismiss-button"
+        >
           <Icon type={trailingIcon} customStyle="w-4 h-4" />
-        </span>
+        </Button>
       )}
     </div>
   );
