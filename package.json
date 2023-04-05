@@ -32,6 +32,7 @@
     "build:feed-app": "nx run @akashaorg/ethereum.world:build",
     "start:design-system:storybook": "nx run @akashaorg/design-system:storybook",
     "start:design-system-core:storybook": "nx run @akashaorg/design-system-core:storybook",
+    "start:design-system-components:storybook": "nx run @akashaorg/design-system-components:storybook",
     "build:storybook": "nx run @akashaorg/design-system:build-storybook",
     "build:design-system-core:storybook": "nx run @akashaorg/design-system-core:build-storybook",
     "test:apps": "nx run-many --target=test --projects=@akashaorg/app-akasha-integration,@akashaorg/app-translation,@akashaorg/app-integration-center,@akashaorg/app-auth-ewa,@akashaorg/app-bookmarks,@akashaorg/app-legal,@akashaorg/app-moderation-ewa,@akashaorg/app-notifications,@akashaorg/app-profile,@akashaorg/app-search,@akashaorg/app-settings-ewa,@akashaorg/app-articles,@akashaorg/app-dev-dashboard",

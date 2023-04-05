@@ -8,7 +8,7 @@ import { externalLinks } from '../utils/external-links';
 import ModerationIntroCard from '@akashaorg/design-system-core/lib/components/ModerationIntroCard';
 import ModerationValuesCard from '@akashaorg/design-system-core/lib/components/ModerationValuesCard';
 
-const IntroPage: React.FC<RootComponentProps> = props => {
+export const Overview: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -73,5 +73,3 @@ const IntroPage: React.FC<RootComponentProps> = props => {
     </div>
   );
 };
-
-export default IntroPage;
