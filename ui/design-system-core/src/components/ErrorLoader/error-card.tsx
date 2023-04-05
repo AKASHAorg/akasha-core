@@ -37,15 +37,13 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <img className={tw('max-w-[50%] h-auto my-0 mx-auto py-[2em] px-0')} src={imageSrc} />
       </div>
 
-      <Text variant="h5" color={{ light: 'black', dark: 'black' }}>
-        {title}
-      </Text>
+      <Text variant="h5">{title}</Text>
 
       {isDevMode && devDetails ? (
         <ErrorRenderer customStyle={customStyle}>
           <Text
             variant="label"
-            color={{ light: 'secondaryLight', dark: 'secondaryLight' }}
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
             customStyle="pt-[1em] max-w-[70%] w-full"
           >
             {message}

@@ -20,18 +20,12 @@ export const TransparencyLogItem: React.FC = () => {
         })`}
       >
         <Box customStyle={flexStyle}>
-          <Text variant="h5" color={{ light: 'black', dark: 'white' }}>
-            Social App
-          </Text>
+          <Text variant="h5">Social App</Text>
 
-          <Text variant="body1" color={{ light: 'black', dark: 'white' }}>
-            Case # S-21920
-          </Text>
+          <Text variant="body1">Case # S-21920</Text>
         </Box>
         <Box customStyle={flexStyle}>
-          <Text variant="body1" color={{ light: 'black', dark: 'white' }}>
-            Post
-          </Text>
+          <Text variant="body1">Post</Text>
 
           <Box customStyle="flex space-x-1.5 items-center">
             <Box
@@ -39,19 +33,13 @@ export const TransparencyLogItem: React.FC = () => {
                 value === 'Kept' ? 'bg-success' : 'bg-(errorLight dark:errorDark)'
               }`}
             />
-            <Text variant="body2" color={{ light: 'black', dark: 'white' }}>
-              {value}
-            </Text>
+            <Text variant="body2">{value}</Text>
           </Box>
         </Box>
         <Box customStyle={flexStyle}>
-          <Text variant="body1" color={{ light: 'black', dark: 'white' }}>
-            Reported 16-03-2022
-          </Text>
+          <Text variant="body1">Reported 16-03-2022</Text>
 
-          <Text variant="body1" color={{ light: 'black', dark: 'white' }}>
-            Resolved 20-03-2022
-          </Text>
+          <Text variant="body1">Resolved 20-03-2022</Text>
         </Box>
       </Box>
 

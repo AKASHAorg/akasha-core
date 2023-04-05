@@ -30,7 +30,7 @@ const Table: React.FC<ITableProps> = props => {
         <tr>
           {theadValues.map((value, idx) => (
             <th key={value + idx} className={tw(baseRowStyle)}>
-              <Text color={{ light: 'black', dark: 'white' }}>{value}</Text>
+              <Text>{value}</Text>
             </th>
           ))}
         </tr>
@@ -55,16 +55,12 @@ const Table: React.FC<ITableProps> = props => {
                         }`,
                       )}
                     />
-                    <Text variant="body2" color={{ light: 'black', dark: 'white' }}>
-                      {value}
-                    </Text>
+                    <Text variant="body2">{value}</Text>
                   </div>
                 ) : hasIcons && idx === 3 ? (
                   <Icon type="ChevronRightIcon" accentColor={true} />
                 ) : (
-                  <Text variant="body2" color={{ light: 'black', dark: 'white' }}>
-                    {value}
-                  </Text>
+                  <Text variant="body2">{value}</Text>
                 )}
               </td>
             ))}

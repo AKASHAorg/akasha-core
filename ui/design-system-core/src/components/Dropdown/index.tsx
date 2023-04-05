@@ -54,11 +54,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
 
   return (
     <Box customStyle="relative min-w-[8rem]">
-      {label && (
-        <Text variant="label" color={{ light: 'black', dark: 'white' }}>
-          {label}
-        </Text>
-      )}
+      {label && <Text variant="label">{label}</Text>}
 
       <button
         className={tx`inline-flex items-center justify-between min-w-[8rem] p-3 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
@@ -66,9 +62,7 @@ const Dropdown: React.FC<IDropdownProps> = ({
         })`}
         onClick={handleDropClick}
       >
-        <Text variant="body1" color={{ light: 'black', dark: 'white' }}>
-          {selected?.title}
-        </Text>
+        <Text variant="body1">{selected?.title}</Text>
         {dropOpen ? (
           <Icon type="ChevronUpIcon" customStyle="ml-4" />
         ) : (
