@@ -22,7 +22,7 @@ const baseStyles = 'block';
 const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => {
   const {
     elevation = 'none',
-    background = { light: 'bg-white', dark: 'bg-grey2' },
+    background = { light: 'white', dark: 'grey2' },
     radius,
     padding,
     direction,
@@ -32,7 +32,7 @@ const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => 
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);
   const paddingStyle = getPaddingClasses(padding);
-  const backgroundStyle = getColorClasses(background);
+  const backgroundStyle = getColorClasses(background, 'bg');
 
   const instanceStyles = apply`
     ${baseStyles}

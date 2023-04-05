@@ -24,8 +24,8 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
     variant: 'footnotes2',
     weight: 'normal',
     color: {
-      light: 'text-grey4',
-      dark: 'text-grey7',
+      light: 'grey4',
+      dark: 'grey7',
     },
   };
 
@@ -33,8 +33,8 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
     variant: 'button-sm',
     weight: 'bold',
     color: {
-      light: 'text-secondary-light',
-      dark: 'text-secondary-dark',
+      light: 'secondaryLight',
+      dark: 'secondaryDark',
     },
   };
 

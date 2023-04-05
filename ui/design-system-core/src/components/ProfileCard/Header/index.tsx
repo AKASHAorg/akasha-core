@@ -58,7 +58,7 @@ const Header: React.FC<HeaderProps> = ({
       <Card
         elevation="1"
         radius={{ top: 20 }}
-        background={{ light: 'bg-grey7', dark: 'bg-grey5' }}
+        background={{ light: 'grey7', dark: 'grey5' }}
         customStyle={`h-32 ${
           coverImage ? `bg-center bg-[url(${coverImage?.url || coverImage?.fallbackUrl})]` : ''
         }`}
@@ -76,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <Stack direction="column">
               <Text variant="button-lg">{name}</Text>
-              <Text variant="body2" color={{ light: 'text-grey5', dark: 'text-grey7' }}>
+              <Text variant="body2" color={{ light: 'grey5', dark: 'grey7' }}>
                 {`@${userName.replace('@', '')}`}
               </Text>
             </Stack>
@@ -120,12 +120,9 @@ const Header: React.FC<HeaderProps> = ({
                           <Icon
                             type="FlagIcon"
                             size="sm"
-                            color={{ light: 'error-light', dark: 'error-dark' }}
+                            color={{ light: 'errorLight', dark: 'errorDark' }}
                           />
-                          <Text
-                            variant="body1"
-                            color={{ light: 'text-error-light', dark: 'text-error-dark' }}
-                          >
+                          <Text variant="body1" color={{ light: 'errorLight', dark: 'errorDark' }}>
                             {flagLabel}
                           </Text>
                         </Stack>
@@ -142,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({
               <CopyToClipboard value={ethAddress}>
                 <Text
                   variant="footnotes2"
-                  color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 >
                   {ethAddress}
                 </Text>
@@ -162,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({
                     <CopyToClipboard value={ensName}>
                       <Text
                         variant="body2"
-                        color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                       >
                         {ensName}
                       </Text>

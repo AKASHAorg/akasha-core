@@ -16,7 +16,7 @@ BaseDialog.args = {
     {
       label: 'Delete',
       icon: 'TrashIcon',
-      color: { light: 'error-light', dark: 'error-dark' },
+      color: { light: 'errorLight', dark: 'errorDark' },
       onClick: () => ({}),
     },
   ],

@@ -7,7 +7,9 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ActionDropdown, { ActionDropdownProps } from '@akashaorg/design-system-core/lib/components/ActionDropDown';
+import ActionDropdown, {
+  ActionDropdownProps,
+} from '@akashaorg/design-system-core/lib/components/ActionDropDown';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { ImageSrc } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import { tw } from '@twind/core';
@@ -82,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
     {
       label: 'Delete',
       icon: 'TrashIcon',
-      color: { light: 'error-light', dark: 'error-dark' },
+      color: { light: 'errorLight', dark: 'errorDark' },
       onClick: () => setShowDeleteImage(true),
     },
   ];
@@ -145,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className={tw('relative mb-8')}>
         <Card
           radius={20}
-          background={{ light: 'bg-grey7', dark: 'bg-grey5' }}
+          background={{ light: 'grey7', dark: 'grey5' }}
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
             coverImageUrl?.url || coverImageUrl?.fallbackUrl
           })]`}

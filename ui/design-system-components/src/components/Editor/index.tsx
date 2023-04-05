@@ -682,7 +682,7 @@ const EditorBox: React.FC<IEditorBox> = React.forwardRef((props, ref) => {
           {showDraft && (
             <div className={tw(`flex flex-row gap-2 items-center`)}>
               {!publishDisabled && (
-                <p className={tw(`text(secondary-light dark:secondary-dark)`)}>Draft</p>
+                <p className={tw(`text(secondaryLight dark:secondaryDark)`)}>Draft</p>
               )}
               <a
                 className={tw(`text-color-secondary no-underline`)}

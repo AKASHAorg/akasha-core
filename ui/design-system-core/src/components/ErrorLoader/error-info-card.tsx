@@ -9,8 +9,7 @@ export interface IErrorInfoCardProps {
 export const ErrorInfoCard = (props: IErrorInfoCardProps) => {
   const { error, children } = props;
 
-  const className =
-    'text-start text-error-light dark:text-error-dark text-[0.65em] overflow-x-auto';
+  const className = 'text-start text-errorLight dark:text-errorDark text-[0.65em] overflow-x-auto';
 
   if (error) {
     const message = (

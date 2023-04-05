@@ -60,7 +60,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   customStyle = '',
   variant = 'body1',
   align = 'start',
-  color = { dark: 'text-white', light: 'text-black' },
+  color = { dark: 'white', light: 'black' },
   truncate,
   breakWord,
   weight,
