@@ -147,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
       <div className={tw('relative mb-8')}>
         <Card
           radius={20}
-          background={{ light: 'bg-grey7', dark: 'bg-grey5' }}
+          background={{ light: 'grey7', dark: 'grey5' }}
           customStyle={`flex p-4 h-28 w-full bg-no-repeat bg-center bg-cover bg-[url(${
             coverImageUrl?.url || coverImageUrl?.fallbackUrl
           })]`}
