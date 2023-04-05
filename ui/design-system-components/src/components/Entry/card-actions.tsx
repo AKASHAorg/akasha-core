@@ -81,6 +81,7 @@ const CardActions: React.FC<CardActionProps> = props => {
           <Icon type="ChatBubbleLeftRightIcon" />
         </button>
       </a>
+
       {!hideRepost && (
         <button
           onClick={onRepost}
