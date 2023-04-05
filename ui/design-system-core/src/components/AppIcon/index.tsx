@@ -47,7 +47,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
     ? `${`hover:${getElevationClasses('4')}`} ${`group-hover:${getElevationClasses('4')}`}`
     : '';
 
-  const activeStyle = active ? 'bg-secondary-light/30 hover:bg-secondary-dark' : '';
+  const activeStyle = active ? 'bg-secondaryLight/30 hover:bg-secondaryDark' : '';
   const iconContainerStyle = apply`group relative rounded-full bg-grey9 dark:bg-grey3 ${sizeStyle} ${hoverStyle} ${activeStyle} ${customStyle}`;
   const notifyStyle = NOTIFY_MAP[size];
 
@@ -63,7 +63,7 @@ const AppIcon: React.FC<IAppIcon> = React.forwardRef((props, ref) => {
             accentColor={accentColor}
           />
           {hasNewNotifs && (
-            <div className={tw(`rounded-full absolute top-0  bg-secondary-dark ${notifyStyle})`)} />
+            <div className={tw(`rounded-full absolute top-0  bg-secondaryDark ${notifyStyle})`)} />
           )}
         </Stack>
       </div>

@@ -5,10 +5,13 @@ import Stack from '../../Stack';
 import TextLine from '../../TextLine';
 
 const ListEntryLoading = () => {
-  const borderBottomStyle = `border-b ${getColorClasses({
-    light: 'border-grey8',
-    dark: 'border-grey5',
-  })}`;
+  const borderBottomStyle = `border-b ${getColorClasses(
+    {
+      light: 'grey8',
+      dark: 'grey5',
+    },
+    'border',
+  )}`;
 
   return (
     <Stack align="center" justify="between" spacing={`px-4 pb-4 ${borderBottomStyle}`}>

@@ -50,7 +50,7 @@ export const avatarBorderSizesMap = {
 export const avatarBorderColorsMap = {
   white: 'white',
   darkerBlue: 'grey2',
-  accent: 'secondary-dark',
+  accent: 'secondaryDark',
 };
 
 const Avatar: React.FC<IAvatarProps> = props => {

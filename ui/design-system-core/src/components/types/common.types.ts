@@ -1,6 +1,8 @@
+import { Colors } from '@akashaorg/typings/ui';
+
 export type Status = 'warning' | 'error' | 'success';
 
-export type Color = { light: string; dark: string } | Status | string;
+export type Color = { light: Colors; dark: Colors } | Status | string;
 
 export type BaseElevation = 'none' | '1' | '2' | '4';
 
@@ -34,7 +36,7 @@ export const EnsTxtPresets = {
 };
 
 export const STATUS_TO_COLOR_CLASSES_MAP: Record<Status, Color> = {
-  error: { light: 'error-light', dark: 'error-dark' },
+  error: { light: 'errorLight', dark: 'errorDark' },
   success: 'success',
-  warning: { light: 'warning-light', dark: 'warning-dark' },
+  warning: { light: 'warningLight', dark: 'warningDark' },
 };

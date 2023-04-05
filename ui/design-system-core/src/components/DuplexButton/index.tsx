@@ -62,12 +62,12 @@ const DuplexButton = (props: DuplexButtonProps) => {
         onClick={active ? onClickActive : onClickInactive}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={tw('rounded-sm border-1 border-secondary-light p-1')}
+        className={tw('rounded-sm border-1 border-secondaryLight p-1')}
         plain
       >
         <Icon
           type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-          customStyle="text-secondary-light h-5 w-5"
+          customStyle="text-secondaryLight h-5 w-5"
         />
       </Button>
     );

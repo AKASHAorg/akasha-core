@@ -16,7 +16,7 @@ const ErrorRenderer: React.FC<PropsWithChildren<ErrorRendererProps>> = props => 
       <summary className={tw('whitespace-nowrap')}>Expand to see error details</summary>
       <div
         className={tw(
-          'w-full bg-white right-0 border-1 border-error-light dark:border-error-dark text-[0.8em]',
+          'w-full bg-white right-0 border-1 border-errorLight dark:border-errorDark text-[0.8em]',
         )}
       >
         {children}
@@ -37,7 +37,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <img className={tw('max-w-[50%] h-auto my-0 mx-auto py-[2em] px-0')} src={imageSrc} />
       </div>
 
-      <Text variant="h5" color={{ light: 'text-black', dark: 'dark:text-black' }}>
+      <Text variant="h5" color={{ light: 'black', dark: 'black' }}>
         {title}
       </Text>
 
@@ -45,7 +45,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
         <ErrorRenderer customStyle={customStyle}>
           <Text
             variant="label"
-            color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
+            color={{ light: 'secondaryLight', dark: 'secondaryLight' }}
             customStyle="pt-[1em] max-w-[70%] w-full"
           >
             {message}
@@ -54,7 +54,7 @@ const ErrorCard: React.FC<PropsWithChildren<ErrorLoaderProps & { imageSrc: strin
       ) : (
         <Text
           variant="label"
-          color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-light' }}
+          color={{ light: 'secondaryLight', dark: 'secondaryLight' }}
           customStyle="text-center pt-[1em] max-w-[70%] w-full"
         >
           {message}
