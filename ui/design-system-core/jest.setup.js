@@ -1,9 +1,5 @@
 require('@testing-library/jest-dom/extend-expect');
 
-jest.mock('@twind/core', () => {
-  return {
-    tw: () => {},
-    tx: () => {},
-    apply: () => {},
-  };
-});
+import { install } from '@twind/core';
+import twindConfig from './src/twind/twind.config.js';
+install(twindConfig);
