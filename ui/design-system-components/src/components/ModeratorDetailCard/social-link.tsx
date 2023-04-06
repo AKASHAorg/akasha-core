@@ -1,7 +1,7 @@
 import React from 'react';
 import { apply, tw } from '@twind/core';
 
-import AppIcon, { IAppIcon } from '../AppIcon';
+import AppIcon, { IAppIcon } from '@akashaorg/design-system-core/lib/components/AppIcon';
 
 export interface ISocialLinksProps {
   iconType: IAppIcon['placeholderIconType'];

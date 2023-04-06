@@ -1,7 +1,7 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import Text from '../../Text';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface IModerationValueCardProps {
   publicImgPath?: string;

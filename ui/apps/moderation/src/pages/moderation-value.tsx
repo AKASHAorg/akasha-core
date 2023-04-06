@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { RootComponentProps } from '@akashaorg/typings/ui';
-import ModerationValueCard from '@akashaorg/design-system-core/lib/components/ModerationValuesCard/value-card';
+import ModerationValueCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard/value-card';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils/external-links';

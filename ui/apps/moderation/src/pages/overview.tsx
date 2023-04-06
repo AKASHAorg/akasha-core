@@ -5,8 +5,8 @@ import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils/external-links';
-import ModerationIntroCard from '@akashaorg/design-system-core/lib/components/ModerationIntroCard';
-import ModerationValuesCard from '@akashaorg/design-system-core/lib/components/ModerationValuesCard';
+import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
+import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
 
 export const Overview: React.FC<RootComponentProps> = props => {
   const { plugins } = props;

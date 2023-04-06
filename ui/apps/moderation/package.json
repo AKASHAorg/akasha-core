@@ -41,6 +41,7 @@
   "dependencies": {
     "@akashaorg/design-system": "*",
     "@akashaorg/design-system-core": "*",
+    "@akashaorg/design-system-components": "*",
     "@akashaorg/ui-awf-hooks": "*",
     "@akashaorg/af-testing": "*",
     "@akashaorg/awf-sdk": "*",
