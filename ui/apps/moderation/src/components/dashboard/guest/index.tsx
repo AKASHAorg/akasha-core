@@ -2,22 +2,20 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import { RootComponentProps } from '@akashaorg/typings/ui';
+import { NavigateToParams } from '@akashaorg/typings/ui';
 
 const { ModerationIntroCard } = DS;
 
 export interface IGuestProps {
-  plugins: RootComponentProps['plugins'];
+  navigateTo: (args: NavigateToParams) => void;
 }
 
 const GuestDashboard: React.FC<IGuestProps> = props => {
-  const { plugins } = props;
+  const { navigateTo } = props;
   const { t } = useTranslation('app-moderation-ewa');
 
-  const routing = plugins['@akashaorg/app-routing']?.routing;
-
   const handleCodeOfConductClick = () => {
-    routing.navigateTo({
+    navigateTo({
       appName: '@akashaorg/app-legal',
       getNavigationUrl: routes => routes.codeOfConduct,
     });
