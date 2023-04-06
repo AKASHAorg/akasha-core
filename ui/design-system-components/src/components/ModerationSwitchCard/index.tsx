@@ -24,7 +24,7 @@ const ModerationSwitchCard: React.FC<IModerationSwitchCardProps> = props => {
           className={tw(
             `w-[25%] p-4 border-b ${
               tab.value === activeTab
-                ? ' border(secondary-light dark:secondary-dark)'
+                ? ' border(secondaryLight dark:secondaryDark)'
                 : 'border(grey8 dark:grey3)'
             } cursor-pointer`,
           )}
@@ -33,8 +33,8 @@ const ModerationSwitchCard: React.FC<IModerationSwitchCardProps> = props => {
           <Text
             color={
               tab.value === activeTab
-                ? { light: 'text-secondary-light', dark: 'text-secondary-dark' }
-                : { light: 'text-grey7', dark: 'text-grey5' }
+                ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                : { light: 'grey7', dark: 'grey5' }
             }
             align="center"
           >

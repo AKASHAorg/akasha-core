@@ -1,26 +1,31 @@
 import { Color, isStatusType, STATUS_TO_COLOR_CLASSES_MAP } from '../components/types/common.types';
 
-export function getColorClasses(color: Color, utility?: string) {
+export function getColorClasses(color: Color, directive: string) {
   if (isStatusType(color)) {
-    return getBaseColorClasses(STATUS_TO_COLOR_CLASSES_MAP[color], utility);
+    return getBaseColorClasses(STATUS_TO_COLOR_CLASSES_MAP[color], directive);
   }
 
-  return getBaseColorClasses(color, utility);
+  return getBaseColorClasses(color, directive);
 }
 
-function getBaseColorClasses(color: Color, utility?: string) {
-  if (typeof color === 'string' && !color.trim().includes(' ')) {
-    return utility ? `${utility}-${color}` : color;
+function getBaseColorClasses(color: Color, directive?: string) {
+  if (typeof color === 'string' && isValidColor(color)) {
+    return directive ? `${directive}-${color}` : color;
   }
 
   if (typeof color === 'object') {
     const light = color.light;
     const dark = color.dark;
 
-    if (!light.trim().includes(' ') && !dark.trim().includes(' '))
-      return utility
-        ? `${utility}-${color.light} dark:${utility}-${color.dark}`
-        : `${color.light} dark:${color.dark}`;
+    return directive ? `${directive}-${light} dark:${directive}-${dark}` : `${light} dark:${dark}`;
   }
   return '';
+}
+
+function isValidColor(color: string) {
+  if (color.trim().includes(' ')) {
+    throw new Error('Invalid color!');
+  }
+
+  return true;
 }

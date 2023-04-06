@@ -3,6 +3,7 @@ import React from 'react';
 import Box from '../Box';
 import Button from '../Button';
 import Text from '../Text';
+import { Color } from '../types/common.types';
 
 export interface IPaginationProps {
   pageCount: number;
@@ -38,13 +39,13 @@ const Pagination: React.FC<IPaginationProps> = props => {
   // show buttons only when specified and there's more than a page
   const showButtons = hasButtons && pageCount > 1;
 
-  const activeButtonTextColor = { light: 'text-secondary-light', dark: 'text-secondary-dark' };
+  const activeButtonTextColor: Color = { light: 'secondaryLight', dark: 'secondaryDark' };
 
-  const disabledButtonTextColor = 'text(secondary-light dark:secondary-dark)';
+  const disabledButtonTextColor = 'text(secondaryLight dark:secondaryDark)';
 
   const basePageWrapperStyle = 'flex items-center justify-center w-8 h-8 rounded-full';
 
-  const activePageWrapperBg = 'bg-(secondary-light dark:secondary-dark)';
+  const activePageWrapperBg = 'bg-(secondaryLight dark:secondaryDark)';
 
   const regularPageWrapperBg = 'bg-(grey8 dark:grey3)';
 
@@ -79,8 +80,8 @@ const Pagination: React.FC<IPaginationProps> = props => {
                 variant="body2"
                 weight="bold"
                 color={{
-                  light: isActive ? 'text-white' : 'text-black',
-                  dark: isActive ? 'text-black' : 'text-white',
+                  light: isActive ? 'white' : 'black',
+                  dark: isActive ? 'black' : 'white',
                 }}
               >
                 {page}

@@ -25,7 +25,7 @@ const Accordion: React.FC<IAccordionProps> = props => {
       >
         {titleNode}
         <Icon
-          customStyle="h-4, w-4 text-secondary-dark"
+          customStyle="h-4, w-4 text-secondaryDark"
           type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
         />
       </div>

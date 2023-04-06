@@ -48,7 +48,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
           <a
             href={ctaUrl}
             className={tw(
-              'flex md:hidden text-sm text-center font-bold no-underline text-secondary-light dark:text-secondary-dark',
+              'flex md:hidden text-sm text-center font-bold no-underline text-secondaryLight dark:text-secondaryDark',
             )}
             target="_blank"
             rel="noreferrer noopener"
@@ -62,8 +62,8 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
                 variant="footnotes1"
                 align="center"
                 color={{
-                  light: 'text-secondary-light',
-                  dark: 'dark:text-secondary-dark',
+                  light: 'secondaryLight',
+                  dark: 'secondaryDark',
                 }}
                 weight="bold"
               >
@@ -81,7 +81,7 @@ const ModerationValuesCard: React.FC<ModerationValuesCardProps> = props => {
             <a
               href={ctaUrl}
               className={tw(
-                'text-sm text-center font-bold no-underline text-secondary-light dark:text-secondary-dark',
+                'text-sm text-center font-bold no-underline text-secondaryLight dark:text-secondaryDark',
               )}
               target="_blank"
               rel="noreferrer noopener"

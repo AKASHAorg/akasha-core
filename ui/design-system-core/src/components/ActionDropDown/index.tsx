@@ -23,10 +23,13 @@ export type ActionDropdownProps = {
 
 const ActionDropdown: React.FC<ActionDropdownProps> = forwardRef(
   ({ actions, customStyle }, ref) => {
-    const baseStyle = `border-b ${getColorClasses({
-      light: 'border-grey8',
-      dark: 'border-grey3',
-    })}`;
+    const baseStyle = `border-b ${getColorClasses(
+      {
+        light: 'grey8',
+        dark: 'grey3',
+      },
+      'border',
+    )}`;
     const hoverStyle = `${getColorClasses({ light: 'grey8', dark: 'grey5' }, 'hover:bg')}`;
 
     return (

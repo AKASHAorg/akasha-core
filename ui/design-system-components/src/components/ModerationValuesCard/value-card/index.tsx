@@ -42,8 +42,8 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
           variant={isMini ? 'footnotes1' : 'h5'}
           align="center"
           color={{
-            light: isMini ? 'text-secondary-light' : 'text-black',
-            dark: isMini ? 'dark:text-secondary-dark' : 'text-white',
+            light: isMini ? 'secondaryLight' : 'black',
+            dark: isMini ? 'secondaryDark' : 'white',
           }}
           weight="bold"
         >
@@ -60,7 +60,7 @@ const ModerationValueCard: React.FC<IModerationValueCardProps> = props => {
               <a
                 href={ctaUrl}
                 className={tw(
-                  'text-sm self-end font-bold no-underline text-secondary-light dark:text-secondary-dark',
+                  'text-sm self-end font-bold no-underline text-secondaryLight dark:text-secondaryDark',
                 )}
                 target="_blank"
                 rel="noreferrer noopener"
