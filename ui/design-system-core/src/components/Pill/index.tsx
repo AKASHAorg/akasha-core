@@ -3,57 +3,61 @@ import Icon from '../Icon';
 import { IconType } from '@akashaorg/typings/ui';
 import Text from '../Text';
 import { tw, apply } from '@twind/core';
+import Button from '../Button';
 
-export type pillSize = 'small' | 'large';
+export type PillSize = 'xs' | 'sm' | 'lg';
 
-export interface IPill {
-  infoLabel?: string;
-  size?: pillSize;
+export interface IPillProps {
+  customStyle?: string;
+  label?: string;
+  size?: PillSize;
   secondaryBg?: boolean;
   leadingIcon?: IconType;
   trailingIcon?: IconType;
   handleDismiss?: () => void;
 }
 
-const Pill: React.FC<IPill> = ({
-  infoLabel = 'Pill Text',
-  size = 'small',
+const Pill: React.FC<IPillProps> = ({
+  customStyle = '',
+  label,
+  size = 'sm',
   secondaryBg = false,
   leadingIcon,
   trailingIcon,
   handleDismiss,
 }) => {
-  const buttonSize = size === 'small' ? 'px-2 py-1 max-w-fit' : 'px-4 py-2 max-w-fit';
+  const buttonSizesMap = {
+    xs: '',
+    sm: 'px-2 py-1',
+    lg: 'px-4 py-2',
+  };
 
   const bgColor = secondaryBg
-    ? 'bg-secondaryLight/30 dark:bg-secondaryDark text-secondaryLight dark:text-grey1'
-    : 'bg-white dark:bg-black text-secondaryLight dark:text-secondaryDark';
+    ? 'bg(secondaryLight/30 dark:secondaryDark) text(secondaryLight dark:grey1)'
+    : 'bg(white dark:black) text(secondaryLight dark:secondaryDark)';
 
-  const textColor = secondaryBg
-    ? 'text-secondaryLight dark:text-grey1'
-    : 'text-secondaryLight dark:text-secondaryDark';
-
-  const instanceStyle = apply`
-  flex items-center
-  ${bgColor}
-  border([1px] secondaryLight dark:secondaryDark) rounded-full
-  ${buttonSize}
+  const instanceStyle = apply`max-w-fit flex items-center space-x-2 ${bgColor} border(1 secondaryLight dark:secondaryDark) rounded-full ${buttonSizesMap[size]} ${customStyle}
   `;
 
   return (
     <div className={tw(instanceStyle)}>
-      {leadingIcon && (
-        <span className={tw('mr-2')}>
-          <Icon type={leadingIcon} customStyle="w-4 h-4" />
-        </span>
-      )}
-      <Text variant="body1" color={tw(textColor)}>
-        {infoLabel}
+      {leadingIcon && <Icon type={leadingIcon} customStyle="w-4 h-4" />}
+
+      <Text
+        variant="body1"
+        color={
+          secondaryBg
+            ? { light: 'secondaryLight', dark: 'grey1' }
+            : { light: 'secondaryLight', dark: 'secondaryDark' }
+        }
+      >
+        {label}
       </Text>
+
       {trailingIcon && (
-        <span className={tw('ml-2')} onClick={handleDismiss}>
+        <Button plain={true} onClick={handleDismiss}>
           <Icon type={trailingIcon} customStyle="w-4 h-4" />
-        </span>
+        </Button>
       )}
     </div>
   );
