@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { IProfileData } from '@akashaorg/typings/ui';
-import { truncateMiddle } from '../../utils/string-utils';
-import Avatar from '../Avatar';
-import { AvatarSize } from '../Avatar';
 import { tw } from '@twind/core';
+import { IProfileData } from '@akashaorg/typings/ui';
+
+import Avatar, { AvatarSize } from '../Avatar';
+import Text from '../Text';
+
+import { truncateMiddle } from '../../utils/string-utils';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
@@ -20,8 +22,6 @@ export interface ProfileAvatarButtonProps {
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const BaseStyles = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
-
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLElement>) => {
     const {
@@ -33,10 +33,12 @@ const ProfileAvatarButton = React.forwardRef(
       onClick,
       onClickAvatar,
       ethAddress,
-      active,
       onMouseEnter,
       onMouseLeave,
     } = props;
+
+    const textTrucateStyle = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
+
     return (
       <div className={tw(`inline-flex items-center justify-center ${customStyle}`)}>
         <div className={tw('shrink-0')}>
@@ -48,17 +50,9 @@ const ProfileAvatarButton = React.forwardRef(
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <div className={tw(`${BaseStyles} text(lg:base md:xs) max-w([7rem] xs:[2rem])`)}>
-            <span ref={ref}>{label || truncateMiddle(ethAddress)}</span>
-          </div>
-          <div
-            className={tw(
-              `${BaseStyles} max-w(7rem xs:2rem) text(lg:xs sm:[10px])
-              ${active ? ' text-white ' : ' text-black '}`,
-            )}
-          >
-            {info}
-          </div>
+          <Text customStyle={textTrucateStyle}>{label || truncateMiddle(ethAddress)}</Text>
+
+          <Text customStyle={`${textTrucateStyle} text-xs`}>{info}</Text>
         </div>
       </div>
     );

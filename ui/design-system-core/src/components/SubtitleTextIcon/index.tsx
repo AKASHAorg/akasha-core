@@ -1,7 +1,9 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
-import Icon from '../Icon';
 import { IconType } from '@akashaorg/typings/ui';
+
+import Icon from '../Icon';
+import Text from '../Text';
 
 export interface ISubtitleTextIcon {
   className?: string;
@@ -10,10 +12,7 @@ export interface ISubtitleTextIcon {
   backgroundSize?: string;
   backgroundColor?: boolean;
   label?: string | number;
-  labelColor?: string;
-  labelSize?: 'small' | 'large';
   subtitle?: string;
-  subtitleColor?: string;
   subtitleIcon?: IconType;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
@@ -39,10 +38,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     backgroundColor,
     backgroundSize,
     label,
-    labelColor,
-    labelSize,
     subtitle,
-    subtitleColor,
     onClick,
     maxWidth,
   } = props;
@@ -51,6 +47,8 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     ${baseStyles}
     ${maxWidth}
     `;
+
+  const textTrucateStyle = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
 
   return (
     <div data-testid={`${props['data-testid']}`} className={tw(InstanceStyles)} onClick={onClick}>
@@ -66,27 +64,12 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
         </div>
       ) : null}
       <div className={tw('flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])')}>
-        <span
-          className={tw(
-            `block text-ellipsis overflow-hidden whitespace-nowrap truncate
-            ${labelColor ? labelColor : 'black'}
-            ${labelSize ? labelSize : 'text(lg:sm md:xs) font-light'}`,
-          )}
-        >
-          {label}
-        </span>
-        <p className={tw(`block ${subtitleColor ? subtitleColor : 'black'} text(xs sm:[10px])`)}>
-          {subtitle}
-        </p>
+        <Text customStyle={textTrucateStyle}>{label}</Text>
+
+        <Text customStyle={`${textTrucateStyle}text-xs`}>{subtitle}</Text>
       </div>
     </div>
   );
-};
-
-SubtitleTextIcon.defaultProps = {
-  labelColor: 'primaryText',
-  labelSize: 'large',
-  subtitleColor: 'secondaryText',
 };
 
 export default SubtitleTextIcon;

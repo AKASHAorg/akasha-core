@@ -7,6 +7,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export interface ITrendingWidgetCardProps {
   // data
@@ -101,7 +102,9 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
 
   return (
     <BasicCardBox noBorder={true} pad="0">
-      <h3 className={tw('py-4 pl-8 font-medium text-lg')}>{titleLabel}</h3>
+      <Text variant="h6" customStyle="p-4 text-center">
+        {titleLabel}
+      </Text>
       <Tab.Group onChange={handleTabChange}>
         <Tab.List className={tw('flex space-x-1 rounded-t-md')}>
           <Tab
@@ -126,7 +129,7 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
             <ul>
               {tags.length === 0 && !isLoadingTags && (
                 <div className={tw('flex justify-center items-center')}>
-                  <p>{noTagsLabel}</p>
+                  <Text>{noTagsLabel}</Text>
                 </div>
               )}
               {tags.length === 0 &&
@@ -154,7 +157,6 @@ const TrendingWidgetCard: React.FC<ITrendingWidgetCardProps> = props => {
                         onClick={() => onClickTag(tag.name)}
                         label={`#${tag.name}`}
                         subtitle={`Used in ${tag.totalPosts} posts`}
-                        labelSize="small"
                       />
                     </a>
                     <div>
