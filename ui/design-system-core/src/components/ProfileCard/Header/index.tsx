@@ -2,7 +2,7 @@ import { tw } from '@twind/core';
 import React, { useState } from 'react';
 import Card from '../../Card';
 import Stack from '../../Stack';
-import Avatar, { AvatarSrc } from '../../Avatar';
+import Avatar from '../../Avatar';
 import Text from '../../Text';
 import Icon from '../../Icon';
 import Divider from '../../Divider';
@@ -10,19 +10,19 @@ import TextLine from '../../TextLine';
 import CopyToClipboard from '../../CopyToClipboard';
 import Button from '../../Button';
 import { useCloseActions } from '../../../utils/useCloseActions';
-
-export type CoverImage = { url?: string; fallbackUrl?: string };
+import { ImageSrc } from '../../types/common.types';
 
 export type HeaderProps = {
   ethAddress: string;
-  coverImage: CoverImage;
-  avatar: AvatarSrc;
+  coverImage: ImageSrc;
+  avatar: ImageSrc;
   name: string;
   userName: string;
   ensName: 'loading' | string;
   isFollowing: boolean;
   viewerIsOwner: boolean;
   flagLabel: string;
+  handleEdit: (event: React.SyntheticEvent<Element, Event>) => void;
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleFlag: (event: React.SyntheticEvent<Element, Event>) => void;
@@ -39,6 +39,7 @@ const Header: React.FC<HeaderProps> = ({
   isFollowing,
   viewerIsOwner,
   flagLabel,
+  handleEdit,
   handleUnfollow,
   handleFollow,
   handleFlag,
@@ -57,9 +58,9 @@ const Header: React.FC<HeaderProps> = ({
       <Card
         elevation="1"
         radius={{ top: 20 }}
-        background={{ light: 'bg-grey6', dark: 'bg-grey5' }}
+        background={{ light: 'grey7', dark: 'grey5' }}
         customStyle={`h-32 ${
-          coverImage ? `background-image: url(${coverImage.url || coverImage.fallbackUrl})` : ''
+          coverImage ? `bg-center bg-[url(${coverImage?.url || coverImage?.fallbackUrl})]` : ''
         }`}
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
@@ -70,18 +71,18 @@ const Header: React.FC<HeaderProps> = ({
                 ethAddress={ethAddress}
                 size="xl"
                 src={avatar}
-                customStyle="absolute -top-6 rounded-full border-2 border-white dark:border-grey2"
+                customStyle="absolute -top-6 border-2 border-white dark:border-grey2"
               />
             </div>
             <Stack direction="column">
               <Text variant="button-lg">{name}</Text>
-              <Text variant="body2" color={{ light: 'text-grey5', dark: 'text-grey7' }}>
+              <Text variant="body2" color={{ light: 'grey5', dark: 'grey7' }}>
                 {`@${userName.replace('@', '')}`}
               </Text>
             </Stack>
             <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (
-                <Button icon="Cog6ToothIcon" greyBg iconOnly />
+                <Button icon="Cog6ToothIcon" onClick={handleEdit} greyBg iconOnly />
               ) : (
                 <div className="relative">
                   <Stack spacing="gap-x-2">
@@ -119,12 +120,9 @@ const Header: React.FC<HeaderProps> = ({
                           <Icon
                             type="FlagIcon"
                             size="sm"
-                            color={{ light: 'error-light', dark: 'error-dark' }}
+                            color={{ light: 'errorLight', dark: 'errorDark' }}
                           />
-                          <Text
-                            variant="body1"
-                            color={{ light: 'text-error-light', dark: 'text-error-dark' }}
-                          >
+                          <Text variant="body1" color={{ light: 'errorLight', dark: 'errorDark' }}>
                             {flagLabel}
                           </Text>
                         </Stack>
@@ -141,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({
               <CopyToClipboard value={ethAddress}>
                 <Text
                   variant="footnotes2"
-                  color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 >
                   {ethAddress}
                 </Text>
@@ -161,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({
                     <CopyToClipboard value={ensName}>
                       <Text
                         variant="body2"
-                        color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                       >
                         {ensName}
                       </Text>

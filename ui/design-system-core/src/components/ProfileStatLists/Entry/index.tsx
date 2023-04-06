@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import Avatar, { AvatarSrc } from '../../Avatar';
+import Avatar from '../../Avatar';
 import Stack from '../../Stack';
 import Text from '../../Text';
 import DuplexButton from '../../DuplexButton';
-import Icon from '../../Icon';
 import { useIntersection } from 'react-use';
 import { getColorClasses } from '../../../utils/getColorClasses';
 import Button from '../../Button';
+import { ImageSrc } from '../../types/common.types';
 
 export type ListEntryProps = {
   followLabel: string;
@@ -15,7 +15,7 @@ export type ListEntryProps = {
   profileAnchorLink: string;
   ethAddress: string;
   pubKey: string;
-  avatar: AvatarSrc;
+  avatar: ImageSrc;
   name: string;
   userName: string;
   isFollowing: boolean;
@@ -63,10 +63,13 @@ const ListEntry: React.FC<ListEntryProps> = props => {
   }, [intersection]);
 
   const borderBottomStyle = borderBottom
-    ? `border-b ${getColorClasses({
-        light: 'border-grey8',
-        dark: 'border-grey5',
-      })}`
+    ? `border-b ${getColorClasses(
+        {
+          light: 'grey8',
+          dark: 'grey5',
+        },
+        'border',
+      )}`
     : '';
 
   if (pubKeyOfLoggedUser === pubKey) return null;

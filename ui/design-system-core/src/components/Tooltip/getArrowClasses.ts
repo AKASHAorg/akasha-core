@@ -2,7 +2,7 @@ import { apply } from '@twind/core';
 import { TooltipProps } from './index';
 
 const getClass = (axis: 'x' | 'y', direction: 'r' | 'l' | 'b' | 't', arrowSize: number) =>
-  apply`h-0 w-0 border-${axis}-${arrowSize} border-${axis}-transparent border-${direction}-[${arrowSize}px] border-${direction}-secondary-dark/50 dark:border-${direction}-grey4`;
+  apply`h-0 w-0 border-${axis}-${arrowSize} border-${axis}-transparent border-${direction}-[${arrowSize}px] border-${direction}-secondaryDark/50 dark:border-${direction}-grey4`;
 
 export function getArrowClasses(placement: TooltipProps['placement'], arrowSize: number) {
   switch (placement) {

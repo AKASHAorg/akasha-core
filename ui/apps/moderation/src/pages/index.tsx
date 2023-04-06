@@ -1,6 +1,6 @@
-import Dashboard from './dashboard';
-import Overview from './overview';
-import AllModerators from './moderators';
-import ValuePage from './moderation-value';
-
-export { Dashboard, Overview, AllModerators, ValuePage };
+export * from './dashboard';
+export * from './overview';
+export * from './moderators';
+export * from './transparency-log';
+export * from './transparency-log-item';
+export * from './moderation-value';

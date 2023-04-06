@@ -3,9 +3,9 @@ import { tw } from '@twind/core';
 
 import { IconType } from '@akashaorg/typings/ui';
 
-import BasicCardBox from '../BasicCardBox';
-import Icon from '../Icon';
-import Text from '../Text';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 export type OverviewCTA = {
   label: string;
@@ -69,7 +69,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
           <div onClick={onCodeOfConductClick}>
             <Text
               variant="subtitle2"
-              color={{ light: 'text-secondary-light', dark: 'dark:text-secondary-dark' }}
+              color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
               weight="bold"
               align="center"
               customStyle="cursor-pointer"
@@ -87,7 +87,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
                 <a
                   href={url}
                   className={tw(
-                    'text-sm text-center font-bold no-underline text-secondary-light dark:text-secondary-dark',
+                    'text-sm text-center font-bold no-underline text-secondaryLight dark:text-secondaryDark',
                   )}
                   target="_blank"
                   rel="noreferrer noopener"

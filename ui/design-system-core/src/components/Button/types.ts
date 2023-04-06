@@ -17,7 +17,7 @@ export type ButtonProps = {
   customStyle?: string;
   as?: 'button' | 'a';
   ref?: LegacyRef<HTMLButtonElement>;
-};
+} & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
 export type Variant = 'primary' | 'secondary' | 'text';
 

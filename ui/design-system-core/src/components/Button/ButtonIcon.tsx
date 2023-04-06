@@ -2,6 +2,7 @@ import React from 'react';
 
 import Icon, { IconProps } from '../Icon';
 import { ButtonProps } from './types';
+import { Color } from '../types/common.types';
 
 export const ButtonIcon: React.FC<
   IconProps & {
@@ -31,9 +32,7 @@ export const ButtonIcon: React.FC<
   );
 };
 
-const getHoverColor = (variant: ButtonProps['variant']) => {
-  if (variant === 'text') return { light: 'secondary-dark', dark: 'white' };
-  if (variant === 'secondary') return { light: 'secondary-light', dark: 'white' };
-
-  return '';
+const getHoverColor = (variant: ButtonProps['variant']): Color => {
+  if (variant === 'text') return { light: 'secondaryDark', dark: 'white' };
+  if (variant === 'secondary') return { light: 'secondaryLight', dark: 'white' };
 };

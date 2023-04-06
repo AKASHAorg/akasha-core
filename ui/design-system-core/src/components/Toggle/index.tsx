@@ -42,7 +42,7 @@ const Toggle: React.FC<IToggleProps> = ({
 
   const color = disabled
     ? 'bg(grey7 after:grey4) border(1 grey4 after:grey7)'
-    : `bg(white dark:grey3 after:grey6 dark:after:grey4 peer-checked:secondary-dark peer-checked:dark:secondary-light peer-checked:after:secondary-light peer-checked:dark:after:secondary-dark) border(1 secondary-light dark:secondary-dark peer-checked:after:secondary-light peer-checked:dark:after:secondary-dark)`;
+    : `bg(white dark:grey3 after:grey6 dark:after:grey4 peer-checked:secondaryDark peer-checked:dark:secondaryLight peer-checked:after:secondaryLight peer-checked:dark:after:secondaryDark) border(1 secondaryLight dark:secondaryDark peer-checked:after:secondaryLight peer-checked:dark:after:secondaryDark)`;
 
   const knobStyle = apply`${sizeMap[size].dimension} rounded(full after:full) hover:shadow-md peer-focus:outline-none peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:transition-all ${color}`;
 
@@ -82,7 +82,7 @@ const Toggle: React.FC<IToggleProps> = ({
         <Text
           variant="label"
           customStyle="ml-3"
-          color={{ light: 'text-secondary-dark', dark: 'text-secondary-light' }}
+          color={{ light: 'secondaryDark', dark: 'secondaryLight' }}
         >
           {label}
         </Text>
