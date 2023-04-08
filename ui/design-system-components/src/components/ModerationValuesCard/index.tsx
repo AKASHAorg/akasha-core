@@ -3,8 +3,8 @@ import { tw } from '@twind/core';
 
 import ModerationValueCard from './value-card';
 
-import BasicCardBox from '../BasicCardBox';
-import Text from '../Text';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 type ModerationValue = {
   path: string;
