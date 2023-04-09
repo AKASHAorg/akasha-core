@@ -41,13 +41,13 @@ describe('<Toggle /> Component', () => {
     fireEvent.click(toggleButton);
     expect(mockChangeHandler).toHaveBeenCalledTimes(1);
   });
-  //not passing
-  // it('correctly toggle when clicked', async () => {
-  //   const { container } = componentWrapper;
-  //   const toggleButton = container.querySelector('input');
-  //   const isChecked = toggleButton.checked;
-  //   // console.log(isChecked);
-  //   await fireEvent.click(toggleButton);
-  //   expect(toggleButton.checked).toEqual(!isChecked);
-  // });
+  it('correctly toggle when clicked', () => {
+    const { container, rerender } = componentWrapper;
+    const toggleButton = container.querySelector('input');
+    const isChecked = toggleButton.checked;
+    fireEvent.click(toggleButton);
+    //rerender the component with the updated checked prop
+    rerender(<Toggle label={label} checked={enabled} onChange={mockChangeHandler} />);
+    expect(toggleButton.checked).toEqual(!isChecked);
+  });
 });

@@ -13,7 +13,7 @@ const Template = args => {
   const changeHandler = e => {
     setSelected(!selected);
   };
-  return <Toggle {...args} onChange={changeHandler} />;
+  return <Toggle {...args} checked={selected} onChange={changeHandler} />;
 };
 
 export const BaseToggle = Template.bind({});
