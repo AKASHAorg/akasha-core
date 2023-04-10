@@ -3,28 +3,29 @@ import Icon from '../Icon';
 import { IconType } from '@akashaorg/typings/ui';
 import Text from '../Text';
 import { tw, apply } from '@twind/core';
-import Button from '../Button';
 
 export type PillSize = 'xs' | 'sm' | 'lg';
 
 export interface IPillProps {
   customStyle?: string;
-  label?: string;
+  label: string;
   size?: PillSize;
+  clickable?: boolean;
   secondaryBg?: boolean;
   leadingIcon?: IconType;
   trailingIcon?: IconType;
-  handleDismiss?: () => void;
+  onPillClick?: () => void;
 }
 
 const Pill: React.FC<IPillProps> = ({
   customStyle = '',
   label,
   size = 'sm',
+  clickable = false,
   secondaryBg = false,
   leadingIcon,
   trailingIcon,
-  handleDismiss,
+  onPillClick,
 }) => {
   const buttonSizesMap = {
     xs: '',
@@ -32,15 +33,23 @@ const Pill: React.FC<IPillProps> = ({
     lg: 'px-4 py-2',
   };
 
+  const handlePillClick = () => {
+    if (onPillClick && typeof onPillClick === 'function' && clickable) {
+      onPillClick();
+    }
+  };
+
   const bgColor = secondaryBg
     ? 'bg(secondaryLight/30 dark:secondaryDark) text(secondaryLight dark:grey1)'
     : 'bg(white dark:black) text(secondaryLight dark:secondaryDark)';
 
-  const instanceStyle = apply`max-w-fit flex items-center space-x-2 ${bgColor} border(1 secondaryLight dark:secondaryDark) rounded-full ${buttonSizesMap[size]} ${customStyle}
+  const cursorStyle = `cursor-${clickable ? 'pointer' : 'default'}`;
+
+  const instanceStyle = apply`max-w-fit flex items-center space-x-2 ${bgColor} border(1 secondaryLight dark:secondaryDark) rounded-full ${buttonSizesMap[size]} ${cursorStyle} ${customStyle}
   `;
 
   return (
-    <div className={tw(instanceStyle)}>
+    <div className={tw(instanceStyle)} onClick={handlePillClick}>
       {leadingIcon && <Icon type={leadingIcon} customStyle="w-4 h-4" />}
 
       <Text
@@ -54,11 +63,7 @@ const Pill: React.FC<IPillProps> = ({
         {label}
       </Text>
 
-      {trailingIcon && (
-        <Button plain={true} onClick={handleDismiss}>
-          <Icon type={trailingIcon} customStyle="w-4 h-4" />
-        </Button>
-      )}
+      {trailingIcon && <Icon type={trailingIcon} customStyle="w-4 h-4" />}
     </div>
   );
 };

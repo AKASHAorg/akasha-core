@@ -20,6 +20,12 @@ LargePill.args = {
   size: 'lg',
 };
 
+export const ClickablePill = Template.bind({});
+ClickablePill.args = {
+  label: 'Large pill',
+  clickable: true,
+};
+
 export const SecondaryBgPill = Template.bind({});
 SecondaryBgPill.args = {
   label: 'Secondary bg pill',
