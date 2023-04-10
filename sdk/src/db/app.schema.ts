@@ -1,4 +1,5 @@
 import { JSONSchema } from '@textile/threaddb';
+import { ReleaseInfo } from '@akashaorg/typings/sdk';
 
 export const schema: JSONSchema = {
   title: 'Integrations',
@@ -36,12 +37,13 @@ export const schema: JSONSchema = {
   },
 };
 
+// @TODO: this should be replaced with some generated types. Which one?
 export interface AppsSchema {
   name: string;
   id: string;
   integrationType: number;
   version: string;
-  sources: string[];
+  sources: ReleaseInfo['sources'];
   status: boolean;
   config?: string[][];
 }

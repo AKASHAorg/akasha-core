@@ -1,6 +1,6 @@
-import { useQuery } from "react-query";
-import getSDK from "@akashaorg/awf-sdk";
-import { logError } from "./utils/error-handler";
+import { useQuery } from 'react-query';
+import getSDK from '@akashaorg/awf-sdk';
+import { logError } from './utils/error-handler';
 
 export const INTEGRATIONS_KEY = 'Integrations';
 export const RELEASES_KEY = 'Releases';

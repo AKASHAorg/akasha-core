@@ -21,20 +21,25 @@ const getNotifications = async () => {
   });
   const profilesResp = await Promise.all(getProfilesCalls);
 
-  let completeMessages = [];
-  profilesResp?.filter(Boolean).map(profile => {
+  return profilesResp?.filter(Boolean).flatMap(profile => {
     const profileData = buildProfileMediaLinks(profile.data);
-    completeMessages = getMessagesResp.data.map(message => {
+    return getMessagesResp.data.map(message => {
+      let populatedMessage;
       if (message.body.value.author === profileData.pubKey) {
-        message.body.value.author = profileData;
+        populatedMessage = {
+          ...message,
+          body: { ...message.body, value: { ...message.body.value, author: profileData } },
+        };
       }
       if (message.body.value.follower === profileData.pubKey) {
-        message.body.value.follower = profileData;
+        populatedMessage = {
+          ...message,
+          body: { ...message.body, value: { ...message.body.value, follower: profileData } },
+        };
       }
-      return message;
+      return populatedMessage;
     });
   });
-  return completeMessages;
 };
 
 /**
