@@ -16,7 +16,7 @@ const Anchor: React.FC<
 
   // if onClick is defined, use cursor pointer, unless otherwise
   const baseStyle =
-    'inline-block cursor-pointer no-underline text-secondary-light dark:text-secondary-dark';
+    'inline-block cursor-pointer no-underline text-secondaryLight dark:text-secondaryDark';
 
   const className = apply`${baseStyle} ${customStyle}`;
 

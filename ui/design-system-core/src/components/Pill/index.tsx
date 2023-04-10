@@ -27,17 +27,17 @@ const Pill: React.FC<IPill> = ({
   const buttonSize = size === 'small' ? 'px-2 py-1 max-w-fit' : 'px-4 py-2 max-w-fit';
 
   const bgColor = secondaryBg
-    ? 'bg-secondary-light/30 dark:bg-secondary-dark text-secondary-light dark:text-grey1'
-    : 'bg-white dark:bg-black text-secondary-light dark:text-secondary-dark';
+    ? 'bg-secondaryLight/30 dark:bg-secondaryDark text-secondaryLight dark:text-grey1'
+    : 'bg-white dark:bg-black text-secondaryLight dark:text-secondaryDark';
 
   const textColor = secondaryBg
-    ? 'text-secondary-light dark:text-grey1'
-    : 'text-secondary-light dark:text-secondary-dark';
+    ? 'text-secondaryLight dark:text-grey1'
+    : 'text-secondaryLight dark:text-secondaryDark';
 
   const instanceStyle = apply`
   flex items-center
   ${bgColor}
-  border([1px] secondary-light dark:secondary-dark) rounded-full
+  border([1px] secondaryLight dark:secondaryDark) rounded-full
   ${buttonSize}
   `;
 

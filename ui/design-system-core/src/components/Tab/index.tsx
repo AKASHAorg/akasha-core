@@ -21,21 +21,27 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
 }) => {
   const [selectedIndex, changeSelectedIndex] = useState(activeTab || 0);
   const borderBottomStyle = borderBottom
-    ? `border-b ${getColorClasses({
-        light: 'border-grey8',
-        dark: 'border-grey5',
-      })}`
+    ? `border-b ${getColorClasses(
+        {
+          light: 'grey8',
+          dark: 'grey5',
+        },
+        'border',
+      )}`
     : '';
 
   const baseStyle = `group pb-3 ${borderBottomStyle}`;
-  const activeStyle = `border-b ${getColorClasses({
-    light: 'border-secondary-light',
-    dark: 'border-secondary-dark',
-  })}`;
+  const activeStyle = `border-b ${getColorClasses(
+    {
+      light: 'secondaryLight',
+      dark: 'secondaryDark',
+    },
+    'border',
+  )}`;
   const hoverStyle = `hover:border-b ${getColorClasses(
     {
-      light: 'secondary-light',
-      dark: 'secondary-dark',
+      light: 'secondaryLight',
+      dark: 'secondaryDark',
     },
     'hover:border',
   )}`;
@@ -59,17 +65,17 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
               color={
                 selectedIndex === index
                   ? {
-                      light: 'text-secondary-light',
-                      dark: 'text-secondary-dark',
+                      light: 'secondaryLight',
+                      dark: 'secondaryDark',
                     }
-                  : 'text-grey7'
+                  : 'grey7'
               }
               weight={selectedIndex === index ? 'bold' : 'normal'}
               align="center"
               customStyle={getColorClasses(
                 {
-                  light: 'secondary-light',
-                  dark: 'secondary-dark',
+                  light: 'secondaryLight',
+                  dark: 'secondaryDark',
                 },
                 'group-hover:text',
               )}

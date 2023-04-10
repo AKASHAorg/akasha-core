@@ -176,10 +176,7 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         </Box>
 
         <Button plain={true} onClick={resetFilters}>
-          <Text
-            variant="body2"
-            color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
-          >
+          <Text variant="body2" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {`${t('Reset')}`}
           </Text>
         </Button>

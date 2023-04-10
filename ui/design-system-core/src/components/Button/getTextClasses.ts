@@ -9,16 +9,22 @@ interface ITextClasses {
 
 export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
   if (variant === 'text') {
-    const textColorStyle = getColorClasses({
-      light: 'text-secondary-light',
-      dark: 'text-secondary-dark',
-    });
+    const textColorStyle = getColorClasses(
+      {
+        light: 'secondaryLight',
+        dark: 'secondaryDark',
+      },
+      'text',
+    );
     const hoverStyle =
       !loading && !disabled
-        ? getColorClasses({
-            light: 'group-hover:text-secondary-dark',
-            dark: 'group-hover:text-white',
-          })
+        ? getColorClasses(
+            {
+              light: 'secondaryDark',
+              dark: 'white',
+            },
+            'group-hover:text',
+          )
         : '';
 
     return `${disabled ? 'opacity-50' : ''} ${textColorStyle} ${hoverStyle}`;
@@ -29,10 +35,13 @@ export function getTextClasses({ variant, loading, disabled }: ITextClasses) {
   }
 
   if (variant === 'secondary') {
-    const textColorStyle = getColorClasses({
-      light: 'text-secondary-light',
-      dark: 'text-secondary-dark',
-    });
+    const textColorStyle = getColorClasses(
+      {
+        light: 'secondaryLight',
+        dark: 'secondaryDark',
+      },
+      'text',
+    );
     const hoverStyle = !loading && !disabled ? 'dark:group-hover:text-white' : '';
     return `${textColorStyle} ${hoverStyle}`;
   }

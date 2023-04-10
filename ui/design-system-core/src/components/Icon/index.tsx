@@ -69,8 +69,8 @@ const Icon: React.FC<IconProps> = props => {
   const accentColorStyle = accentColor
     ? `${
         isFillOnlyIcon
-          ? '[&>*]:fill-secondary-light dark:[&>*]:fill-secondary-dark'
-          : '[&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark'
+          ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
+          : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
       }`
     : '';
 

@@ -55,11 +55,8 @@ const Snackbar: React.FC<ISnackbar> = ({
           {description}
         </Text>
         {actionButtonLabel && (
-          <Button onClick={handleButtonClick} plain={true}>
-            <Text
-              variant="button-md"
-              color={{ light: `text-${colorLight}`, dark: `text-${colorDark}` }}
-            >
+          <Button onClick={handleButtonClick} plain>
+            <Text variant="button-md" color={{ light: `${colorLight}`, dark: `${colorDark}` }}>
               {actionButtonLabel}
             </Text>
           </Button>

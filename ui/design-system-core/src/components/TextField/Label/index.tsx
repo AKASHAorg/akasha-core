@@ -13,7 +13,7 @@ const Label: React.FC<PropsWithChildren<LabelProps>> = ({ required, disabled, ch
         <sup
           className={tw(
             `-top-0.5 ${getColorClasses(
-              { light: 'secondary-light', dark: 'secondary-dark' },
+              { light: 'secondaryLight', dark: 'secondaryDark' },
               'text',
             )}`,
           )}

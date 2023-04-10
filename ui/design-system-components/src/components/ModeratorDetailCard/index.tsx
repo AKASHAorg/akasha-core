@@ -5,9 +5,9 @@ import { apply, tw } from '@twind/core';
 import { Moderator } from '@akashaorg/typings/ui';
 
 import SocialLink from './social-link';
-import Avatar from '../Avatar';
-import Text from '../Text';
-import Tooltip from '../Tooltip';
+import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 export interface IModeratorDetailCardProps {
   moderator: Moderator;
@@ -33,8 +33,8 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
     moderator.status === 'active'
       ? 'bg-success'
       : moderator.status === 'revoked'
-      ? 'bg(error-light dark:error-dark)'
-      : 'bg(warning-light dark:warning-dark)'
+      ? 'bg(errorLight dark:errorDark)'
+      : 'bg(warningLight dark:warningDark)'
   }`;
 
   return (
@@ -59,7 +59,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
               variant="button-md"
               weight="normal"
               customStyle={truncateStyle}
-              color={{ light: 'text-grey4', dark: 'text-grey7' }}
+              color={{ light: 'grey4', dark: 'grey7' }}
             >{`@${moderator.userName}`}</Text>
           </Tooltip>
           <div className={tw('flex space-x-1.5 items-center')}>
@@ -74,19 +74,11 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
       <div className={tw('flex w([50%] md:[62%]) px-4 justify-between items-center')}>
         <div>
           <div>
-            <Text
-              variant="button-md"
-              weight="normal"
-              color={{ light: 'text-grey4', dark: 'text-grey6' }}
-            >
+            <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
               {tenureInfoLabel}:
             </Text>
 
-            <Text
-              variant="button-md"
-              weight="normal"
-              color={{ light: 'text-grey4', dark: 'text-grey6' }}
-            >
+            <Text variant="button-md" weight="normal" color={{ light: 'grey4', dark: 'grey6' }}>
               {moderator.status === 'active'
                 ? formatDate(new Date(moderator.creationDate).toISOString())
                 : formatDate(moderator.moderatorEndDate)}
