@@ -13,9 +13,10 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
   max = 100,
   progressBg,
   background,
+  customStyle = '',
 }) => {
-  const progressStyle = getColorClasses(progressBg || 'text-black');
-  const backgroundStyle = getColorClasses(background || 'text-grey8');
+  const progressStyle = getColorClasses(progressBg || 'black', 'stroke');
+  const backgroundStyle = getColorClasses(background || 'grey8', 'stroke');
 
   if (size < 0 || thickness < 0 || value < 0) {
     throw Error('Invalid prop ...');
@@ -41,7 +42,11 @@ const Circle: React.FC<PropsWithChildren<MeterProps>> = ({
   const d = arcCommands(centerX, centerY, radius, startAngle, endAngle);
 
   return (
-    <Stack justify="center" align="center" customStyle="inline-flex overflow-hidden">
+    <Stack
+      justify="center"
+      align="center"
+      customStyle={`inline-flex overflow-hidden ${customStyle}`}
+    >
       <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size}>
         <circle
           className={tw(backgroundStyle)}

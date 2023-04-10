@@ -2,7 +2,8 @@ export const HOME = 'Overview';
 export const DASHBOARD = 'Dashboard';
 export const MODERATORS = 'Moderators';
 export const HISTORY = 'Transparency Log';
-export const MODERATION_VALUE = 'ModerationValue';
+export const HISTORY_ITEM = 'Transparency Log Item';
+export const MODERATION_VALUE = 'Moderation Value';
 
 export const baseOverviewUrl = '/overview';
 
@@ -11,5 +12,6 @@ export default {
   [DASHBOARD]: '/dashboard',
   [MODERATORS]: '/moderators',
   [HISTORY]: '/history',
+  [HISTORY_ITEM]: '/history/:itemId',
   [MODERATION_VALUE]: `${baseOverviewUrl}/values/:value`,
 };

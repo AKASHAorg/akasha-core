@@ -8,10 +8,7 @@ import { getContainerClasses } from './getContainerClasses';
 import { ButtonIcon } from './ButtonIcon';
 import { apply, tw } from '@twind/core';
 
-const Button: React.FC<
-  ButtonProps &
-    React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
-> = forwardRef((props, ref) => {
+const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
   const {
     plain,
     icon,
@@ -61,14 +58,14 @@ const Button: React.FC<
     : '';
 
   return (
-    <button ref={ref} {...rest}>
+    <button ref={ref} className={tw(customStyle)} {...rest}>
       <Stack
         align="center"
         justify="center"
         spacing="gap-x-1"
         customStyle={apply`group ${containerStyle} ${BUTTON_SIZE_MAP[size]} ${breakPointStyle} ${
           variant !== 'text' ? BUTTON_SIZE_PADDING_MAP[size] : ''
-        } ${customStyle}`}
+        }`}
       >
         {loading ? (
           <ButtonIcon

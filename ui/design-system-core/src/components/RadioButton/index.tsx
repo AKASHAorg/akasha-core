@@ -33,7 +33,7 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
   } = props;
 
   const textColor = error ? 'text-orange-400' : 'text(black dark:white)';
-  const inputColor = error ? 'orange-400' : 'secondary-light';
+  const inputColor = error ? 'orange-400' : 'secondaryLight';
   const buttonSize = size === 'small' ? 'w-4 h-4' : 'w-6 h-6';
   const pseudoCircleSize =
     size === 'small'

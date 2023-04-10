@@ -23,12 +23,14 @@ import {
 // import ModeratorLabel from '../routes/moderator-label';
 import routes, { UPDATE_PROFILE } from '../../routes';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import {
   ProfileHeader,
   ProfileBio,
   ProfileLinks,
   ProfileStats,
 } from '@akashaorg/design-system-core/lib/components/ProfileCard';
+import { GeneralForm } from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
 
 export interface IProfileHeaderProps {
   profileId: string;
@@ -36,7 +38,7 @@ export interface IProfileHeaderProps {
   loginState: LoginState;
 }
 
-const ProfileCards: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
+const Profile: React.FC<RootComponentProps & IProfileHeaderProps> = props => {
   const { profileData, loginState, profileId } = props;
 
   // undefined for logged user's profile page, use loginState?.pubKey instead
@@ -47,6 +49,8 @@ const ProfileCards: React.FC<RootComponentProps & IProfileHeaderProps> = props =
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   const { t } = useTranslation('app-profile');
+
+  const [showEditProfile, setShowEditProfile] = React.useState(false);
 
   const isFollowingReq = useIsFollowingMultiple(loginState.pubKey, [profileData.pubKey]);
   const followedProfiles = isFollowingReq.data;
@@ -226,67 +230,129 @@ const ProfileCards: React.FC<RootComponentProps & IProfileHeaderProps> = props =
             )}
           </Box>
         </ProfileCard> */}
-        <ProfileHeader
-          ethAddress={profileData.ethAddress}
-          coverImage={profileData.coverImage}
-          avatar={profileData.avatar}
-          name={profileData.name}
-          userName={profileData.userName}
-          ensName={
-            ENSReq.isFetching && !ENSReq.isFetched
-              ? 'loading'
-              : ENSReq.isFetched && ENSReq.data
-              ? ENSReq.data
-              : ''
-          }
-          isFollowing={followedProfiles?.includes(profileData.pubKey)}
-          viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
-          flagLabel={t('Report')}
-          handleUnfollow={handleUnfollow}
-          handleFollow={handleFollow}
-          handleFlag={handleEntryFlag(
-            profileData.pubKey ? profileData.pubKey : '',
-            EntityTypes.PROFILE,
-            profileData.name,
-          )}
-        />
-        {/*@TODO replace moderator label with new design when its ready */}
-        {/* {isModerator && <ModeratorLabel label={t('Moderator')} />} */}
-        {profileData.description && (
-          <ProfileBio title={t('Bio')} biography={profileData.description} />
+        {showEditProfile && (
+          <Tab labels={[t('General')]}>
+            <GeneralForm
+              header={{
+                title: t('Avatar & Cover Image'),
+                coverImage: profileData.coverImage,
+                avatar: profileData.avatar,
+                ethAddress: profileData.ethAddress,
+                cancelLabel: t('Cancel'),
+                deleteLabel: t('Delete'),
+                saveLabel: t('Save'),
+                imageTitle: {
+                  avatar: { label: t('Edit Avatar') },
+                  coverImage: { label: t('Edit Cover') },
+                },
+                deleteTitle: {
+                  avatar: { label: t('Delete Avatar') },
+                  coverImage: { label: t('Delete Cover') },
+                },
+                confirmationLabel: {
+                  avatar: t('Are you sure you want to delete your avatar?'),
+                  coverImage: t('Are you sure you want to delete your cover?'),
+                },
+              }}
+              name={{ label: t('Name'), initialValue: profileData.name }}
+              userName={{ label: t('Username'), initialValue: profileData.userName }}
+              bio={{ label: t('Bio'), initialValue: profileData.description }}
+              ens={{
+                label: t('ENS Name'),
+                initialValue:
+                  ENSReq.isFetching && !ENSReq.isFetched
+                    ? 'loading'
+                    : ENSReq.isFetched && ENSReq.data
+                    ? ENSReq.data
+                    : '',
+              }}
+              ensButton={{
+                label: t('Fill info from ENS data'),
+                handleClick: () => {
+                  //@TODO
+                },
+              }}
+              cancelButton={{
+                label: t('Cancel'),
+                handleClick: () => {
+                  setShowEditProfile(false);
+                },
+              }}
+              saveButton={{
+                label: t('Save'),
+                handleClick: () => {
+                  //@TODO
+                },
+              }}
+            />
+          </Tab>
         )}
-        <ProfileStats
-          posts={{
-            label: t('Posts'),
-            total: profileData.totalPosts,
-            onClick: handleNavigateToProfilePosts,
-          }}
-          interests={{
-            label: t('Interests'),
-            total: profileData.totalInterests,
-          }}
-          followers={{
-            label: t('Followers'),
-            total: profileData.totalFollowers,
-            onClick: onStatClick('followers'),
-          }}
-          following={{
-            label: t('Following'),
-            total: profileData.totalFollowing,
-            onClick: onStatClick('following'),
-          }}
-        />
-        {socialLinks.length > 0 && (
-          <ProfileLinks
-            title={t('Find me on')}
-            links={socialLinks}
-            copiedLabel={t('Copied')}
-            copyLabel={t('Copy to clipboard')}
-          />
+        {!showEditProfile && (
+          <>
+            <ProfileHeader
+              ethAddress={profileData.ethAddress}
+              coverImage={profileData.coverImage}
+              avatar={profileData.avatar}
+              name={profileData.name}
+              userName={profileData.userName}
+              ensName={
+                ENSReq.isFetching && !ENSReq.isFetched
+                  ? 'loading'
+                  : ENSReq.isFetched && ENSReq.data
+                  ? ENSReq.data
+                  : ''
+              }
+              isFollowing={followedProfiles?.includes(profileData.pubKey)}
+              viewerIsOwner={loginState.ethAddress === profileData.ethAddress}
+              flagLabel={t('Report')}
+              handleUnfollow={handleUnfollow}
+              handleFollow={handleFollow}
+              handleFlag={handleEntryFlag(
+                profileData.pubKey ? profileData.pubKey : '',
+                EntityTypes.PROFILE,
+                profileData.name,
+              )}
+              handleEdit={() => setShowEditProfile(true)}
+            />
+            {/*@TODO replace moderator label with new design when its ready */}
+            {/* {isModerator && <ModeratorLabel label={t('Moderator')} />} */}
+            {profileData.description && (
+              <ProfileBio title={t('Bio')} biography={profileData.description} />
+            )}
+            <ProfileStats
+              posts={{
+                label: t('Posts'),
+                total: profileData.totalPosts,
+                onClick: handleNavigateToProfilePosts,
+              }}
+              interests={{
+                label: t('Interests'),
+                total: profileData.totalInterests,
+              }}
+              followers={{
+                label: t('Followers'),
+                total: profileData.totalFollowers,
+                onClick: onStatClick('followers'),
+              }}
+              following={{
+                label: t('Following'),
+                total: profileData.totalFollowing,
+                onClick: onStatClick('following'),
+              }}
+            />
+            {socialLinks.length > 0 && (
+              <ProfileLinks
+                title={t('Find me on')}
+                links={socialLinks}
+                copiedLabel={t('Copied')}
+                copyLabel={t('Copy to clipboard')}
+              />
+            )}
+          </>
         )}
       </Stack>
     </>
   );
 };
 
-export default ProfileCards;
+export default Profile;

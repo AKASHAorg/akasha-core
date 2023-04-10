@@ -1,22 +1,27 @@
- :root {
-     --foundation-primary: #FF89B6, #4E71FF;
-     --foundation-secondary: #7222D2;
-     --foundation-secondary-dark: #BA9AE0;
-     --system-black: #1A1B1F;
-     --system-white: #F4F4F4;
-     --system-grey-1: #2D2F33;
-     --system-grey-2: #222428;
-     --system-grey-3: #313235;
-     --system-grey-4: #666768;
-     --system-grey-5: #4E4E4E;
-     --system-grey-6: #B6BFD1;
-     --system-grey-7: #989898;
-     --system-grey-8: #EAEAEA;
-     --system-grey-9: #F4F4F4;
-     --feedback-success: #63B86B;
-     --feeback-warning: #F1B210;
-     --feedback-warning-dark: #FFDF8C;
-     --feedback-error: #EE6135;
-     --feedback-error-dark: #FF9271;
-
- }
+/* Define CSS vars as color channels because want them to work with the opacity modifier syntax
+  For more info check https://tailwindcss.com/docs/customizing-colors#using-css-variables
+*/
+:root {
+  --foundation-primary: #ff89b6, #4e71ff;
+  --foundation-secondary: 114 34 210; /* #7222d2 */
+  --foundation-secondary-dark: 186 154 224; /* #ba9ae0 */
+  --gradient-primary-start: 255 137 182; /* #ff89b6 */
+  --gradient-primary-stop: 78 113 255; /* #4e71ff */
+  --system-black: 26 27 31; /* #1a1b1f */
+  --system-white: 255 255 255; /* #ffffff */
+  --system-grey-1: 45 47 51; /* #2d2f33 */
+  --system-grey-2: 34 36 40; /* #222428 */
+  --system-grey-3: 49 50 53; /* #313235 */
+  --system-grey-4: 102 103 104; /* #666768 */
+  --system-grey-5: 78 78 78; /* #4e4e4e */
+  --system-grey-6: 182 191 209; /* #b6bfd1 */
+  --system-grey-7: 152 152 152; /* #989898 */
+  --system-grey-8: 234 234 234; /* #eaeaea */
+  --system-grey-9: 244 244 244; /* #f4f4f4 */
+  --feedback-success: 99 184 107; /* #63b86b */
+  --feedback-warning: 241 178 16; /* #f1b210 */
+  --feedback-warning-dark: 255 223 140; /* #ffdf8c */
+  --feedback-error: 238 97 53; /* #ee6135 */
+  --feedback-error-dark: 255 146 113; /* #ff9271 */
+  --elevation: 49 50 53; /* #313235 */
+}

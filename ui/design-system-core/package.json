@@ -58,7 +58,10 @@
     "@heroicons/react": "2.0.13",
     "react-popper": "2.3.0",
     "@popperjs/core": "2.11.6",
-    "react-use": "17.4.0"
+    "react-use": "17.4.0",
+    "react-easy-crop": "4.0.1",
+    "@hookform/resolvers": "3.0.0",
+    "react-hook-form": "7.43.9"
   },
   "devDependencies": {
     "@akashaorg/typings": "*",

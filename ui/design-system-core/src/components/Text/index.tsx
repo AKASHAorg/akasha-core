@@ -60,7 +60,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
   customStyle = '',
   variant = 'body1',
   align = 'start',
-  color = { dark: 'text-white', light: 'text-black' },
+  color = { dark: 'white', light: 'black' },
   truncate,
   breakWord,
   weight,
@@ -68,7 +68,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({
 }) => {
   const tag = as ?? getTag(variant);
   const alignmentStyle = align ? getAlignmentClasses(align) : '';
-  const colorStyle = getColorClasses(color);
+  const colorStyle = getColorClasses(color, 'text');
   const truncateStyle = truncate ? 'truncate' : '';
   const wordBreakStyle = breakWord ? 'break-all' : '';
   const weightStyle = weight ? getWeightClasses(weight) : '';
