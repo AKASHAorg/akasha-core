@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 
 import { IconType } from '@akashaorg/typings/ui';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
@@ -14,7 +15,9 @@ import { EDIT_CATEGORIES, EDIT_CONTACT_INFO, RESIGN_ROLE } from '../../routes';
 export interface IModeratorDashboardProps {
   tabLabels: string[];
   moderatorSinceLabel: string;
+  moderatorSince: number;
   moderationCategoriesLabel: string;
+  noCategoriesLabel: string;
   moderationCategories: string[];
   contactInfoLabel: string;
   contactInfo: { type: IconType; value: string }[];
@@ -29,7 +32,9 @@ const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
   const {
     tabLabels,
     moderatorSinceLabel,
+    moderatorSince,
     moderationCategoriesLabel,
+    noCategoriesLabel,
     moderationCategories,
     contactInfoLabel,
     contactInfo,
@@ -49,7 +54,7 @@ const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
         <Box customStyle={wrapperStyle}>
           <Box customStyle="flex items-center justify-between">
             <Text weight="bold">{moderatorSinceLabel}</Text>
-            <Text color="grey4">01-Jan-2020</Text>
+            <Text color="grey4">{dayjs(moderatorSince).format('DD-MMM-YYYY')}</Text>
           </Box>
 
           <Divider />
@@ -64,16 +69,20 @@ const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
                 </Text>
               </Button>
             </Box>
-            <Box customStyle="flex flex-wrap">
-              {moderationCategories.map((category, idx) => (
-                <Pill
-                  key={category + idx}
-                  label={category}
-                  secondaryBg={true}
-                  customStyle="mt-3 mr-3"
-                />
-              ))}
-            </Box>
+            {moderationCategories.length > 0 ? (
+              <Box customStyle="flex flex-wrap">
+                {moderationCategories.map((category, idx) => (
+                  <Pill
+                    key={category + idx}
+                    label={category}
+                    secondaryBg={true}
+                    customStyle="mt-3 mr-3"
+                  />
+                ))}
+              </Box>
+            ) : (
+              <Text>{noCategoriesLabel}</Text>
+            )}
           </Box>
 
           <Divider />

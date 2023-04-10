@@ -2,8 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
-import GuestDashboard from '../components/dashboard/guest';
 import ModeratorDashboard from '../components/dashboard';
+import GuestDashboard from '../components/dashboard/guest';
+
+import { preSelectedReasons } from '../utils/reasons';
 
 export interface IDashboardProps {
   user: string | null;
@@ -16,39 +18,25 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
 
   const { t } = useTranslation('app-moderation-ewa');
 
-  // const buttonValues = [
-  //   {
-  //     value: ButtonValues.KEPT,
-  //     label: t('{{ buttonValueKept }} items', { buttonValueKept: ButtonValues.KEPT }),
-  //   },
-  //   {
-  //     value: ButtonValues.DELISTED,
-  //     label: t('{{ buttonValueDelisted }} items', { buttonValueDelisted: ButtonValues.DELISTED }),
-  //   },
-  // ];
-
   const handleButtonClick = (route: string) => () => {
     navigateTo?.({
       appName: '@akashaorg/app-moderation-ewa',
       getNavigationUrl: routes => routes[route],
     });
   };
+
   if (!isAuthorised) {
     return <GuestDashboard navigateTo={navigateTo} />;
   }
-
-  const categories = [
-    'Threats of violence and incitement',
-    'Bullying and harassment',
-    'Illegal or certain regulated goods or services',
-  ];
 
   return (
     <ModeratorDashboard
       tabLabels={[t('{{tab1}}', { tab1: 'General' }), t('{{tab2}}', { tab2: 'Activity' })]}
       moderatorSinceLabel={t('Moderator since')}
+      moderatorSince={Date.parse(new Date('01 Jan 2020').toISOString())}
       moderationCategoriesLabel={t('Moderation categories')}
-      moderationCategories={categories.map(el => t('{{el}}', el))}
+      noCategoriesLabel={t('You do not have any categories selected yet.')}
+      moderationCategories={preSelectedReasons.map(el => t('{{el}}', el))}
       contactInfoLabel={t('Contact info')}
       contactInfo={[
         { type: 'discord', value: 'julie#t112' },

@@ -11,10 +11,12 @@ import {
   TransparencyLog,
   TransparencyLogItem,
   ModerationValue,
+  EditCategoriesPage,
 } from '../pages';
 
 import routes, {
   DASHBOARD,
+  EDIT_CATEGORIES,
   HISTORY,
   HISTORY_ITEM,
   HOME,
@@ -51,6 +53,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                 navigateTo={navigateTo}
               />
             }
+          />
+
+          <Route
+            path={routes[EDIT_CATEGORIES]}
+            element={<EditCategoriesPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
           />
 
           <Route path={routes[MODERATORS]} element={<Moderators {...props} />} />
