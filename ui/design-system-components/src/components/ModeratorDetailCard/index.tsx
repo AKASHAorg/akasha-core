@@ -5,9 +5,9 @@ import { apply, tw } from '@twind/core';
 import { Moderator } from '@akashaorg/typings/ui';
 
 import SocialLink from './social-link';
-import Avatar from '../Avatar';
-import Text from '../Text';
-import Tooltip from '../Tooltip';
+import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 
 export interface IModeratorDetailCardProps {
   moderator: Moderator;
