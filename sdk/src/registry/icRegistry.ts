@@ -11,6 +11,7 @@ import {
   IntegrationName,
   ReleaseInfo,
 } from '@akashaorg/typings/sdk';
+import { ManifestInfo } from '@akashaorg/typings/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
@@ -24,7 +25,6 @@ import pino from 'pino';
 import { validate } from '../common/validator';
 import { z } from 'zod';
 import { throwError } from '../common/error-handling';
-import { ManifestInfo } from "@akashaorg/hub-api/lib/graphql-types";
 
 @injectable()
 class AWF_IC_REGISTRY {
