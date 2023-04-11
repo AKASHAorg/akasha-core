@@ -1,5 +1,5 @@
 import * as React from 'react';
-import IndexPage from '../pages';
+import Index from '../pages';
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
 import {
@@ -28,13 +28,9 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('< IndexPage />', () => {
+describe('< Index />', () => {
   const BaseComponent = (
-    <IndexPage
-      {...genAppProps()}
-      loggedProfileData={genLoggedUser()}
-      loginState={genLoggedInState()}
-    />
+    <Index {...genAppProps()} loggedProfileData={genLoggedUser()} loginState={genLoggedInState()} />
   );
 
   beforeEach(async () => {

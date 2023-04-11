@@ -30,13 +30,13 @@ import {
   ProfileStats,
 } from '@akashaorg/design-system-core/lib/components/ProfileCard';
 
-export type ProfilePageProps = {
+export type ProfileProps = {
   profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
 };
 
-const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
+const Profile: React.FC<RootComponentProps & ProfileProps> = props => {
   const { profileData, loginState, profileId } = props;
 
   // undefined for logged user's profile page, use loginState?.pubKey instead
@@ -294,4 +294,4 @@ const ProfilePage: React.FC<RootComponentProps & ProfilePageProps> = props => {
   );
 };
 
-export default ProfilePage;
+export default Profile;

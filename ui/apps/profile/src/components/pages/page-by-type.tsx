@@ -1,6 +1,6 @@
 import React from 'react';
-import ProfileStatPage from './profile-stat-page';
-import ProfilePage from './profile-page';
+import ProfileStat from './profile-stat';
+import ProfilePage from './profile';
 import DS from '@akashaorg/design-system';
 import { IProfileData, RootComponentProps } from '@akashaorg/typings/ui';
 import { LoginState } from '@akashaorg/ui-awf-hooks';
@@ -73,7 +73,7 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
   if (!profileData.delisted) {
     if (pageType === 'stat') {
       return (
-        <ProfileStatPage
+        <ProfileStat
           {...rest}
           selectedStat={selectedStat}
           loginState={loginState}

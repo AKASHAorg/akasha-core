@@ -19,7 +19,7 @@ export type ProfilePageProps = {
   loginState: LoginState;
 };
 
-const ProfileEditPage: React.FC<RootComponentProps & ProfilePageProps> = props => {
+const ProfileEdit: React.FC<RootComponentProps & ProfilePageProps> = props => {
   const { profileData } = props;
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -149,4 +149,4 @@ const ProfileEditPage: React.FC<RootComponentProps & ProfilePageProps> = props =
   );
 };
 
-export default ProfileEditPage;
+export default ProfileEdit;

@@ -9,13 +9,13 @@ import { useGetProfile, LoginState, useGetLogin } from '@akashaorg/ui-awf-hooks'
 
 const { Box, Helmet } = DS;
 
-export interface IndexPageProps extends RootComponentProps {
+export interface IndexProps extends RootComponentProps {
   loggedProfileData: IProfileData;
   loginState: LoginState;
   pageType?: PageType;
 }
 
-const IndexPage = (props: IndexPageProps) => {
+const Index = (props: IndexProps) => {
   const { plugins, loggedProfileData, pageType } = props;
 
   const { t } = useTranslation('app-profile');
@@ -91,4 +91,4 @@ const IndexPage = (props: IndexPageProps) => {
   );
 };
 
-export default IndexPage;
+export default Index;

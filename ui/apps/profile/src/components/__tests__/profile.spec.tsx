@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ProfilePage from '../pages/profile-page';
+import Profile from '../pages/profile';
 
 import {
   renderWithAllProviders,
@@ -29,7 +29,7 @@ describe('< Profile />', () => {
   let renderResult;
   const mockUser = genUser();
   const BaseComponent = (
-    <ProfilePage
+    <Profile
       {...genAppProps()}
       profileId={mockUser.pubKey}
       profileData={mockUser}
