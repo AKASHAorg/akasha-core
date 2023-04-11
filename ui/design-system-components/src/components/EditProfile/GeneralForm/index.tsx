@@ -155,7 +155,7 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           )}
           defaultValue={bioField.initialValue}
         />
-        <Stack spacing="gap-x-2" customStyle="ml-auto">
+        <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button variant="text" label={cancelButton.label} onClick={cancelButton.handleClick} />
           <Button
             variant="primary"
