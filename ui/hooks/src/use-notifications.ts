@@ -12,7 +12,7 @@ export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 const getNotifications = async () => {
   const sdk = getSDK();
   const getMessagesResp = await sdk.api.auth.getMessages({});
-  return getMessagesResp.data.map(async message => {
+  const messages = getMessagesResp.data.map(async message => {
     const pubKey = message.body.value.author || message.body.value.follower;
     if (pubKey) {
       let populatedMessage;
@@ -33,6 +33,7 @@ const getNotifications = async () => {
       return populatedMessage;
     }
   });
+  return Promise.all(messages);
 };
 
 /**
