@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ProfilePage from '../routes/profile-page';
+import IndexPage from '../pages';
 import * as hooks from '@akashaorg/ui-awf-hooks/lib/use-profile';
 
 import {
@@ -28,9 +28,9 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('< ProfilePage />', () => {
+describe('< IndexPage />', () => {
   const BaseComponent = (
-    <ProfilePage
+    <IndexPage
       {...genAppProps()}
       loggedProfileData={genLoggedUser()}
       loginState={genLoggedInState()}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
-import ProfilePage from '../pages';
+import IndexPage from '../pages';
 import NoProfileFound from '../pages/no-profile-found';
 import menuRoute, { EDIT, STAT } from '../../routes';
 import { useTranslation } from 'react-i18next';
@@ -52,7 +52,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <Route
               path={':pubKey'}
               element={
-                <ProfilePage
+                <IndexPage
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
@@ -62,7 +62,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <Route
               path={`:pubKey${menuRoute[STAT]}`}
               element={
-                <ProfilePage
+                <IndexPage
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
@@ -73,7 +73,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             <Route
               path={`:pubKey${menuRoute[EDIT]}`}
               element={
-                <ProfilePage
+                <IndexPage
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
