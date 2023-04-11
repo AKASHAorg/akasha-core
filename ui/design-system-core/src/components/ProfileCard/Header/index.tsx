@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
         <Stack direction="column" customStyle="pl-2" fullWidth>
-          <Stack spacing="gap-x-2 -ml-2">
+          <Stack spacing="gap-x-2" customStyle="-ml-2">
             <div className={tw(avatarContainer)}>
               <Avatar
                 ethAddress={ethAddress}
