@@ -12,19 +12,12 @@ export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 const getNotifications = async () => {
   const sdk = getSDK();
   const getMessagesResp = await sdk.api.auth.getMessages({});
-
-  const getProfilesCalls = getMessagesResp.data.map(message => {
+  return getMessagesResp.data.map(async message => {
     const pubKey = message.body.value.author || message.body.value.follower;
     if (pubKey) {
-      return sdk.api.profile.getProfile({ pubKey });
-    }
-  });
-  const profilesResp = await Promise.all(getProfilesCalls);
-
-  return profilesResp?.filter(Boolean).flatMap(profile => {
-    const profileData = buildProfileMediaLinks(profile.data);
-    return getMessagesResp.data.map(message => {
       let populatedMessage;
+      const profile = await sdk.api.profile.getProfile({ pubKey });
+      const profileData = buildProfileMediaLinks(profile.data);
       if (message.body.value.author === profileData.pubKey) {
         populatedMessage = {
           ...message,
@@ -38,7 +31,7 @@ const getNotifications = async () => {
         };
       }
       return populatedMessage;
-    });
+    }
   });
 };
 
