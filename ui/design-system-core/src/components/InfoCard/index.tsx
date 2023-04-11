@@ -10,7 +10,13 @@ export type InfoCardProps = {
 
 const InfoCard: React.FC<InfoCardProps> = ({ titleLabel, subTitleLabel }) => {
   return (
-    <Stack direction="column" align="center" justify="center" spacing="gap-y-3 sm:gap-y-4">
+    <Stack
+      direction="column"
+      align="center"
+      justify="center"
+      spacing="gap-y-3"
+      customStyle="sm:gap-y-4"
+    >
       <Card
         radius={20}
         background={{ light: 'grey8', dark: 'grey5' }}

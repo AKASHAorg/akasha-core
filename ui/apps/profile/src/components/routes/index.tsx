@@ -1,16 +1,12 @@
 import * as React from 'react';
+import DS from '@akashaorg/design-system';
+import ProfilePage from '../pages';
+import NoProfileFound from '../pages/no-profile-found';
+import menuRoute, { EDIT, STAT } from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-import DS from '@akashaorg/design-system';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
 import { useGetLogin, useGetProfile } from '@akashaorg/ui-awf-hooks';
-
-import ProfilePage from './profile-page';
-import ProfileEditPage from './profile-edit-page';
-import NoProfileFound from './no-profile-found';
-
-import menuRoute, { MY_PROFILE, STAT } from '../../routes';
 
 const { Box } = DS;
 
@@ -70,28 +66,18 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
-                  showStat
+                  pageType="stat"
                 />
               }
             />
             <Route
-              path={menuRoute[MY_PROFILE]}
+              path={`:pubKey${menuRoute[EDIT]}`}
               element={
                 <ProfilePage
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
-                />
-              }
-            />
-            <Route
-              path={`${menuRoute[MY_PROFILE]}/edit`}
-              element={
-                <ProfileEditPage
-                  {...props}
-                  loggedProfileData={loggedProfileQuery.data}
-                  showLoginModal={showLoginModal}
-                  loginState={loginQuery.data}
+                  pageType="stat"
                 />
               }
             />

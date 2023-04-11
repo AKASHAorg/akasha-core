@@ -42,7 +42,7 @@ const ActionDropdown: React.FC<ActionDropdownProps> = forwardRef(
               onClick={action.onClick}
               plain
             >
-              <Stack align="center" spacing="gap-x-3 py-2 px-4">
+              <Stack align="center" spacing="gap-x-3" customStyle="py-2 px-4">
                 <Icon type={action.icon} color={action.color} size="sm" />
                 <Text variant="body1" color={action.color}>
                   {action.label}

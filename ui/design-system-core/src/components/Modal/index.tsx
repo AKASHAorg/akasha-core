@@ -77,7 +77,13 @@ const Modal: React.FC<PropsWithChildren<ModalProps>> = ({
 
                   {showDivider && <Divider />}
 
-                  <Stack align="center" justify="center" direction="column" spacing="gap-y-4 px-4">
+                  <Stack
+                    align="center"
+                    justify="center"
+                    direction="column"
+                    spacing="gap-y-4"
+                    customStyle="px-4"
+                  >
                     {children}
                     <Stack spacing="gap-x-4" justify={actionsAlign} customStyle="mt-auto">
                       {actions.map((action, index) => (

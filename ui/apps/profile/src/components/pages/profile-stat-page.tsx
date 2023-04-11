@@ -18,14 +18,14 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useSearchParams } from 'react-router-dom';
 
-type StatProps = {
+type ProfileStatPageProps = {
   loginState: LoginState;
   selectedStat: ProfileStatType;
   profileData: IProfileData;
   navigateTo?: (args: NavigateToParams) => void;
 };
 
-const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
+const ProfileStatPage: React.FC<RootComponentProps & ProfileStatPageProps> = props => {
   const { loginState, selectedStat, profileData, navigateTo } = props;
 
   const { t } = useTranslation('app-profile');
