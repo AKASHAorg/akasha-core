@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { LEGAL_DOCS, TYPES } from '@akashaorg/typings/sdk';
+import { LEGAL_DOCS, LegalDocsSchema, TYPES } from '@akashaorg/typings/sdk';
 import Logging from '../logging/index';
 import { CID } from 'multiformats/cid';
 import { base16 } from 'multiformats/bases/base16';
@@ -38,6 +38,7 @@ class AWF_IpfsConnector {
   }
 
   // email is just temporary until delegation works
+  @validate(z.instanceof(Blob), z.string().optional())
   async uploadFile(file: Blob, email?: string) {
     const spaces = this.#w3upClient.spaces();
     if (!spaces.length) {
@@ -75,6 +76,7 @@ class AWF_IpfsConnector {
    *
    * @param doc - legal docs
    */
+  @validate(LegalDocsSchema)
   async getLegalDoc(doc: LEGAL_DOCS) {
     const selectedDoc = this.LEGAL_DOCS_SOURCE[doc];
     return this.catDocument<never>(selectedDoc);
