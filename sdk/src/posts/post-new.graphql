@@ -1,0 +1,145 @@
+fragment PostFragment on Post{
+  id
+  commentsCount
+  quotesCount
+  active
+  author{
+    id
+  }
+  # the creation date should be saved here since it can be modified by the author
+  # {property: "creationDate", provider: "app.AKASHA", value: "isodate format"}
+  content {
+    property
+    provider
+    value
+  }
+  tags
+  version
+}
+
+query GetPosts($after: String, $before: String, $first: Int, $last: Int){
+  postIndex(after: $after, before: $before, first: $first, last: $last){
+    edges {
+     node {
+       ...PostFragment
+     }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+query GetPostsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int){
+  node(id: $id){
+    ... on CeramicAccount{
+      postList(after: $after, before: $before, first: $first, last: $last){
+        edges {
+          node {
+            ...PostFragment
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+
+query GetPostById($id: ID!){
+  node(id: $id){
+    ... on Post{
+      ...PostFragment
+    }
+  }
+}
+
+query GetQuotedPostsFromPost($id: ID!){
+  node(id: $id){
+    ... on Post{
+      quotes(first: 5) {
+        edges{
+          node{
+            quotedPost{
+              ...PostFragment
+            }
+            post{
+              ...PostFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetMentionsFromPost($id: ID!){
+  node(id: $id){
+    ... on Post{
+      mentions(first: 10) {
+        edges{
+          node{
+            profile{
+              ...UserProfileFragment
+            }
+            post{
+              ...PostFragment
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation CreatePost($i: CreatePostInput!){
+  createPost(input: $i){
+    document {
+      ...PostFragment
+    }
+  }
+}
+
+mutation UpdatePost($i: UpdatePostInput!){
+  updatePost(input: $i){
+    document {
+      ...PostFragment
+    }
+    clientMutationId
+  }
+}
+
+mutation CreatePostQuote($i: CreatePostQuoteInput!){
+  createPostQuote(input: $i){
+    document {
+      post {
+        ...PostFragment
+      }
+      quotedPost {
+        ...PostFragment
+      }
+      active
+    }
+    clientMutationId
+  }
+}
+
+mutation CreatePostProfileMention($i: CreateProfileMentionInput!){
+  createProfileMention(input: $i){
+    document {
+      post {
+        ...PostFragment
+      }
+      profile {
+        ...UserProfileFragment
+      }
+    }
+  }
+}
