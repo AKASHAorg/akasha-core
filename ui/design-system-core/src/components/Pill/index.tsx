@@ -31,8 +31,8 @@ const Pill: React.FC<IPill> = ({
     : 'bg-white dark:bg-black text-secondaryLight dark:text-secondaryDark';
 
   const textColor = secondaryBg
-    ? 'text-secondaryLight dark:text-grey1'
-    : 'text-secondaryLight dark:text-secondaryDark';
+    ? { dark: 'grey1', light: 'secondaryLight' }
+    : { dark: 'secondaryDark', light: 'secondaryLight' };
 
   const instanceStyle = apply`
   flex items-center
@@ -48,7 +48,7 @@ const Pill: React.FC<IPill> = ({
           <Icon type={leadingIcon} customStyle="w-4 h-4" />
         </span>
       )}
-      <Text variant="body1" color={tw(textColor)}>
+      <Text variant="body1" color={textColor}>
         {infoLabel}
       </Text>
       {trailingIcon && (

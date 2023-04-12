@@ -28,7 +28,7 @@ const Snackbar: React.FC<ISnackbar> = ({
   const colorLight = getColorLight(type);
   const colorDark = getColorDark(type);
 
-  const textcolor = 'text-black dark:text-white';
+  const textcolor = { dark: 'white', light: 'black' };
   const bgColor = 'bg-white dark:bg-grey1';
 
   const instanceStyle = apply`
@@ -48,10 +48,10 @@ const Snackbar: React.FC<ISnackbar> = ({
         />
       </span>
       <div className={tw('w-11/12')}>
-        <Text variant="button-md" color={tw(textcolor)}>
+        <Text variant="button-md" color={textcolor}>
           {title}
         </Text>
-        <Text variant="body2" color={tw(textcolor)}>
+        <Text variant="body2" color={textcolor}>
           {description}
         </Text>
         {actionButtonLabel && (
