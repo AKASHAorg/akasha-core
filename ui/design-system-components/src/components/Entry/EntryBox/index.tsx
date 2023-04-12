@@ -3,22 +3,22 @@ import { tw, tx } from '@twind/core';
 import CardHeaderMenu from './card-header-menu';
 import CardActions from './card-actions';
 
-import { EntryCardHidden } from './entry-card-hidden';
+import EntryCardHidden from '../EntryCardHidden';
 
-import EmbedBox from '../EmbedBox';
-import ReadOnlyEditor from '../ReadOnlyEditor';
-import LinkPreview from '../LinkPreview';
+import EmbedBox from '../../EmbedBox';
+import ReadOnlyEditor from '../../ReadOnlyEditor';
+import LinkPreview from '../../LinkPreview';
 
-import { formatDate, formatRelativeTime, ILocale } from '../../utils/time';
+import { formatDate, formatRelativeTime, ILocale } from '../../../utils/time';
 import { IEntryData, EntityTypes, NavigateToParams } from '@akashaorg/typings/ui';
 
-import { EntryCardRemoved } from './entry-card-removed';
-import { EntryImageGallery } from '../ImageGallery/entry-image-gallery';
-import { ImageObject } from '../ImageGallery/image-grid-item';
-import MultipleImageOverlay from '../ImageOverlay/multiple-image-overlay';
-import { editorDefaultValue } from '../Editor/initialValue';
+import EntryCardRemoved from '../EntryCardRemoved';
+import { EntryImageGallery } from '../../ImageGallery/entry-image-gallery';
+import { ImageObject } from '../../ImageGallery/image-grid-item';
+import MultipleImageOverlay from '../../ImageOverlay/multiple-image-overlay';
+import { editorDefaultValue } from '../../Editor/initialValue';
 import isEqual from 'lodash.isequal';
-import { EntryCardError } from './entry-card-error';
+import EntryCardError from '../EntryCardError';
 
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import ProfileAvatarButton from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton';
@@ -386,4 +386,4 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   );
 };
 
-export { EntryBox };
+export default EntryBox;

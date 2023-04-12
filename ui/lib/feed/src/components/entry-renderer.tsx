@@ -4,7 +4,7 @@ import { i18n } from 'i18next';
 
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
-import EntryCardHidden from '@akashaorg/design-system-components/lib/componentsEntry/EntryCardHidden';
+import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
 import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
 
 import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';

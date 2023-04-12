@@ -2,8 +2,10 @@ import React from 'react';
 import { UseQueryResult } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
+import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
+import EntryCardLoading from '@akashaorg/design-system-components/lib/components/Entry/EntryCardLoading';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import { Logger } from '@akashaorg/awf-sdk';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -18,8 +20,6 @@ import {
 
 import { OriginalItem } from './original-item';
 import { PendingReply } from './pending-reply';
-
-const { BasicCardBox, EntryCardHidden, EntryCardLoading } = DS;
 
 type BaseEntryProps = {
   postId: string;
@@ -103,7 +103,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   };
 
   return (
-    <BasicCardBox style={{ height: 'auto' }} overflow="hidden">
+    <BasicCardBox style={`h-auto overflow-hidden`}>
       {children}
       {entryReq.isLoading && <EntryCardLoading />}
       {entryReq.isError && (
@@ -145,9 +145,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
           />
           <PendingReply
             postId={postId}
-            layoutConfig={props.layoutConfig}
             loggedProfileData={loggedProfileData}
-            entryData={entryData}
             commentIds={commentPages[0]?.results || []}
           />
           <FeedWidget

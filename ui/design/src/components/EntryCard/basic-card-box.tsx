@@ -28,6 +28,7 @@ export interface IBasicCardBox extends BoxProps {
   accentBorderTop?: boolean;
   isSelected?: boolean;
   onClick?: BoxProps['onClick'];
+  children?: React.ReactNode;
 }
 
 const BasicCardBox: React.FC<IBasicCardBox> = ({

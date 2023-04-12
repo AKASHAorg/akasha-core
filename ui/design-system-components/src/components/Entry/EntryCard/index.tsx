@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import { SocialBox } from '../../SocialBox';
-import { IEntryBoxProps, EntryBox } from '../EntryBox';
+import EntryBox, { IEntryBoxProps } from '../EntryBox';
 import { NavigateToParams } from '@akashaorg/typings/ui';
 
 export interface IEntryCardProps extends IEntryBoxProps {

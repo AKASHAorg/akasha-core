@@ -10,6 +10,7 @@ export interface ExtensionPointProps {
   onWrapperClick?: () => void;
   onMount: (name: string, data?: Record<string, unknown>) => void;
   onUnmount: (name: string) => void;
+  children?: React.ReactNode;
 }
 
 const ExtensionPoint: React.FC<ExtensionPointProps> = props => {

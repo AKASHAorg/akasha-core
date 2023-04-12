@@ -6,6 +6,7 @@ import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
 export interface IPlaceholderProps {
   height?: number;
   animated?: boolean;
+  children?: React.ReactNode;
 }
 
 const EntryLoadingPlaceholder: React.FC<IPlaceholderProps> = props => {

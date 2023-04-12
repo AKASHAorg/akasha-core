@@ -11,10 +11,10 @@ import {
 } from '@akashaorg/typings/ui';
 import { Logger } from '@akashaorg/awf-sdk';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
-import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
-import { useIsFollowingMultiple } from '@akashaorg/ui-awf-hooks';
-
-const { EntryCard, EntryCardHidden, ExtensionPoint } = DS;
+import EntryCard from '@akashaorg/design-system-components/lib/components/Entry/EntryCard';
+import EntryCardHidden from '@akashaorg/design-system-components/lib/components/Entry/EntryCardHidden';
+import ExtensionPoint from '@akashaorg/design-system-components/lib/utils/extension-point';
+import { IContentClickDetails } from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
 export interface IEntryCardRendererProps {
   logger: Logger;
@@ -23,12 +23,9 @@ export interface IEntryCardRendererProps {
   itemType?: EntityTypes;
   locale?: ILocale;
   ethAddress?: string | null;
-  pubKey?: string;
   navigateTo?: (args: NavigateToParams) => void;
   onContentClick: (details: IContentClickDetails, itemType: EntityTypes) => void;
-  onLinkCopy?: () => void;
   onRepost: (withComment: boolean, entryId: string) => void;
-  sharePostUrl: string;
   onAvatarClick: (ev: React.MouseEvent<HTMLDivElement>, authorEth: string) => void;
   onMentionClick: (ethAddress: string) => void;
   onTagClick: (name: string) => void;
@@ -39,22 +36,11 @@ export interface IEntryCardRendererProps {
   handleFlipCard?: (entry: IEntryData, isQuote: boolean) => () => void;
   uiEvents: RootComponentProps['uiEvents'];
   navigateToModal: RootComponentProps['navigateToModal'];
-  modalSlotId: string;
 }
 
 const EntryCardRenderer = (props: IEntryCardRendererProps) => {
-  const {
-    ethAddress,
-    pubKey,
-    locale,
-    itemData,
-    itemType,
-    style,
-    contentClickable,
-    onRepost,
-    modalSlotId,
-    navigateTo,
-  } = props;
+  const { ethAddress, locale, itemData, itemType, style, contentClickable, onRepost, navigateTo } =
+    props;
 
   const { entryId } = itemData || {};
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
@@ -135,7 +121,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
     props.navigateToModal({ name: 'login', redirectTo });
   };
 
-  // why is itemType string here??
   const handleEntryFlag = (itemId: string, itemType: EntityTypes) => () => {
     if (!ethAddress) {
       return showLoginModal({
@@ -149,16 +134,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
         itemId,
         itemType: itemType as unknown as EntityTypes,
       });
-  };
-
-  const isFollowing = useIsFollowingMultiple(pubKey, [itemData?.author?.pubKey]);
-
-  const handleFollow = () => {
-    /* todo */
-  };
-
-  const handleUnfollow = () => {
-    /* todo */
   };
 
   const handleRepost = () => {
@@ -196,15 +171,8 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
               <EntryCard
                 isRemoved={itemData.isRemoved}
                 entryData={itemData}
-                sharePostLabel={t('Share Post')}
-                shareTextLabel={t('Share this post with your friends')}
-                sharePostUrl={props.sharePostUrl}
                 onClickAvatar={handleClickAvatar}
                 repliesLabel={t('Replies')}
-                repostLabel={t('Repost')}
-                repostWithCommentLabel={t('Repost with comment')}
-                shareLabel={t('Share')}
-                copyLinkLabel={t('Copy Link')}
                 flagAsLabel={t('Report Post')}
                 loggedProfileEthAddress={ethAddress}
                 locale={locale || 'en'}
@@ -216,9 +184,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                   itemType === EntityTypes.REPLY ? 'reply' : 'post'
                 }`}
                 onRepost={handleRepost}
-                handleFollowAuthor={handleFollow}
-                handleUnfollowAuthor={handleUnfollow}
-                isFollowingAuthor={isFollowing.data?.includes(ethAddress)}
                 onContentClick={handleContentClick}
                 onMentionClick={props.onMentionClick}
                 onTagClick={props.onTagClick}
@@ -229,7 +194,6 @@ const EntryCardRenderer = (props: IEntryCardRendererProps) => {
                 onEntryRemove={handleEntryRemove}
                 onEntryFlag={handleEntryFlag(itemData.entryId, EntityTypes.POST)}
                 hideActionButtons={hideActionButtons}
-                modalSlotId={modalSlotId}
                 actionsRightExt={
                   <ExtensionPoint
                     name={`entry-card-actions-right_${entryId}`}

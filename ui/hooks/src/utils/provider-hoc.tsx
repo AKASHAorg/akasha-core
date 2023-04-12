@@ -28,17 +28,16 @@ export default function withProviders<T>(WrappedComponent: React.ComponentType<T
 
   const ComponentWithProviders = props => {
     return (
-      <>
-        <QueryClientProvider contextSharing={true} client={queryClient}>
-          <ThemeWrapper {...props}>
-            <AnalyticsProvider {...props}>
-              <ViewportSizeProvider>
-                <WrappedComponent {...props} />
-              </ViewportSizeProvider>
-            </AnalyticsProvider>
-          </ThemeWrapper>
-        </QueryClientProvider>
-      </>
+      // @ts-ignore
+      <QueryClientProvider contextSharing={true} client={queryClient}>
+        <ThemeWrapper {...props}>
+          <AnalyticsProvider {...props}>
+            <ViewportSizeProvider>
+              <WrappedComponent {...props} />
+            </ViewportSizeProvider>
+          </AnalyticsProvider>
+        </ThemeWrapper>
+      </QueryClientProvider>
     );
   };
 
