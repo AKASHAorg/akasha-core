@@ -33,14 +33,6 @@ const config = {
         useTypeImports: true
       },
     },
-    // '../ui/hooks/src/generated/':{
-    //   preset: 'client',
-    //   presetConfig: {
-    //     typesPath: '@akashaorg/typings/sdk/graphql-operation-types',
-    //   },
-    //   plugins: ['typescript-react-query'],
-    //   config: { federation: true, skipTypename: true, dedupeFragments: true, addInfiniteQuery: true },
-    // },
     '../typings/src/sdk/graphql-resolver-types-new.ts': {
       preset: 'import-types-preset',
       presetConfig: {
@@ -48,6 +40,41 @@ const config = {
       },
       plugins: ['typescript-resolvers'],
       config: { federation: true, skipTypename: true, useTypeImports: true },
+    },
+    '../ui/hooks/src/generated/hooks-new.ts':{
+      preset: 'import-types-preset',
+      presetConfig: {
+        typesPath: '@akashaorg/awf-sdk/src/gql/api.new',
+        // baseTypesPath: '~@akashaorg/typings/sdk/graphql-operation-types-new',
+        // importAllFragmentsFrom: '~@akashaorg/awf-sdk/src/gql/api.new' // does not work with import-preset
+      },
+      plugins: [
+        {
+          add: {
+            content:
+              `import getSDK from '@akashaorg/awf-sdk';
+const sdk = getSDK();`
+          }
+        },
+        'typescript-react-query'
+      ],
+      config: {
+        federation: true,
+        skipTypename: true,
+        dedupeOperationSuffix: true,
+        dedupeFragments: true,
+        pureMagicComment: true,
+        useTypeImports: true,
+        addInfiniteQuery: true,
+        legacyMode: false,
+        exposeDocument: true,
+        exposeQueryKeys: true,
+        exposeMutationKeys: true,
+        exposeFetcher: true,
+        fetcher: {
+          endpoint: 'sdk.services.ceramic.getOptions().endpointURL'
+        }
+      },
     },
   },
 };
