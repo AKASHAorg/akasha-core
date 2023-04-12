@@ -151,6 +151,16 @@ export type GetProfileByDidQueryVariables = Types.Exact<{
 
 export type GetProfileByDidQuery = { node?: { profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | {} | null };
 
+export type GetProfilesQueryVariables = Types.Exact<{
+  after?: Types.InputMaybe<Types.Scalars['String']>;
+  before?: Types.InputMaybe<Types.Scalars['String']>;
+  first?: Types.InputMaybe<Types.Scalars['Int']>;
+  last?: Types.InputMaybe<Types.Scalars['Int']>;
+}>;
+
+
+export type GetProfilesQuery = { profileIndex?: { edges?: Array<{ node?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } | null };
+
 export type GetInterestsQueryVariables = Types.Exact<{
   after?: Types.InputMaybe<Types.Scalars['String']>;
   before?: Types.InputMaybe<Types.Scalars['String']>;
@@ -196,6 +206,11 @@ export type GetFollowersListByDidQueryVariables = Types.Exact<{
 
 
 export type GetFollowersListByDidQuery = { node?: { profile?: { followers: { edges?: Array<{ node?: { isFollowing: boolean, profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | null } | null> | null, pageInfo: { startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | null } | {} | null };
+
+export type GetMyProfileQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type GetMyProfileQuery = { viewer?: { profile?: { id: string, name: string, description?: string | null, createdAt: any, did: { id: string }, links?: Array<{ href: any, label?: string | null } | null> | null, background?: { alternatives?: Array<{ src: any, width: number, height: number } | null> | null, default: { src: any, width: number, height: number } } | null, avatar?: { default: { src: any, width: number, height: number }, alternatives?: Array<{ src: any, width: number, height: number } | null> | null } | null } | null } | null };
 
 export type CreateProfileMutationVariables = Types.Exact<{
   i: Types.CreateProfileInput;

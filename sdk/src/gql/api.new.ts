@@ -354,6 +354,23 @@ export const GetProfileByDidDocument = /*#__PURE__*/ gql`
   }
 }
     ${UserProfileFragmentDoc}`;
+export const GetProfilesDocument = /*#__PURE__*/ gql`
+    query GetProfiles($after: String, $before: String, $first: Int, $last: Int) {
+  profileIndex(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        ...UserProfileFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
 export const GetInterestsDocument = /*#__PURE__*/ gql`
     query GetInterests($after: String, $before: String, $first: Int, $last: Int) {
   interestsIndex(after: $after, before: $before, first: $first, last: $last) {
@@ -458,6 +475,15 @@ export const GetFollowersListByDidDocument = /*#__PURE__*/ gql`
           }
         }
       }
+    }
+  }
+}
+    ${UserProfileFragmentDoc}`;
+export const GetMyProfileDocument = /*#__PURE__*/ gql`
+    query GetMyProfile {
+  viewer {
+    profile {
+      ...UserProfileFragment
     }
   }
 }
@@ -605,6 +631,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     GetProfileByDid(variables: Types.GetProfileByDidQueryVariables, options?: C): Promise<Types.GetProfileByDidQuery> {
       return requester<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options) as Promise<Types.GetProfileByDidQuery>;
     },
+    GetProfiles(variables?: Types.GetProfilesQueryVariables, options?: C): Promise<Types.GetProfilesQuery> {
+      return requester<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options) as Promise<Types.GetProfilesQuery>;
+    },
     GetInterests(variables?: Types.GetInterestsQueryVariables, options?: C): Promise<Types.GetInterestsQuery> {
       return requester<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options) as Promise<Types.GetInterestsQuery>;
     },
@@ -619,6 +648,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     GetFollowersListByDid(variables: Types.GetFollowersListByDidQueryVariables, options?: C): Promise<Types.GetFollowersListByDidQuery> {
       return requester<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables, options) as Promise<Types.GetFollowersListByDidQuery>;
+    },
+    GetMyProfile(variables?: Types.GetMyProfileQueryVariables, options?: C): Promise<Types.GetMyProfileQuery> {
+      return requester<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options) as Promise<Types.GetMyProfileQuery>;
     },
     CreateProfile(variables: Types.CreateProfileMutationVariables, options?: C): Promise<Types.CreateProfileMutation> {
       return requester<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options) as Promise<Types.CreateProfileMutation>;

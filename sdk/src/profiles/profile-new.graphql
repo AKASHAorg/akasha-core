@@ -55,6 +55,22 @@ query GetProfileByDid($id: ID!) {
   }
 }
 
+query GetProfiles($after: String, $before: String, $first: Int, $last: Int){
+  profileIndex(after: $after, before: $before, first: $first, last: $last ){
+    edges {
+      node {
+        ...UserProfileFragment
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
 # saved interests for all documents, might be useful at some point
 query GetInterests($after: String, $before: String, $first: Int, $last: Int){
   interestsIndex(after: $after, before: $before, first: $first, last: $last ){
@@ -162,6 +178,15 @@ query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: I
   }
 
 }
+
+query GetMyProfile{
+  viewer {
+    profile {
+      ...UserProfileFragment
+    }
+  }
+}
+
 # create new Profile document attached to did
 mutation CreateProfile($i: CreateProfileInput!){
   createProfile(input: $i){
