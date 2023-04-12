@@ -1,3 +1,4 @@
+import { Color } from '../types/common.types';
 import { PasswordStrengthLevel } from './index';
 
 export function getPasswordStrengthLabel(strengthLevel: PasswordStrengthLevel) {
@@ -18,14 +19,12 @@ export function getPasswordStrengthLabel(strengthLevel: PasswordStrengthLevel) {
 export function getPasswordStrengthLabelColor(strengthLevel: PasswordStrengthLevel) {
   switch (strengthLevel) {
     case PasswordStrengthLevel.VERY_WEAK:
-      return { light: 'text-grey4', dark: 'text-grey6' };
+      return { light: 'grey4', dark: 'grey6' } as Color;
     case PasswordStrengthLevel.WEAK:
-      return { light: 'text-error-light', dark: 'text-error-dark' };
+      return { light: 'errorLight', dark: 'errorDark' } as Color;
     case PasswordStrengthLevel.FAIR:
-      return { light: 'text-warning-light', dark: 'text-warning-dark' };
-    case PasswordStrengthLevel.GOOD:
-      return { light: 'text-success', dark: 'text-success' };
-    case PasswordStrengthLevel.STRONG:
-      return { light: 'text-success', dark: 'text-success' };
+      return { light: 'warningLight', dark: 'warningDark' } as Color;
+    case PasswordStrengthLevel.GOOD || PasswordStrengthLevel.STRONG:
+      return 'success' as Color;
   }
 }

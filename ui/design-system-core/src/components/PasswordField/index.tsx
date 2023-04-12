@@ -31,7 +31,7 @@ const PasswordField: React.FC<PasswordFieldProps & JSX.IntrinsicElements['input'
             type={showPassword ? 'input' : 'password'}
             id="success"
             className={tw(
-              'text-grey5 dark:text-grey6 placeholder-grey5 dark:placeholder-grey6 text-sm rounded-lg block w-full p-2.5 bg-grey9 border-0 focus:(outline-none ring-secondary-light border([1px] secondary-light)) dark:(bg-grey3 focus:(ring-secondary-dark border-secondary-dark) border([1px] secondary-dark))',
+              'text-grey5 dark:text-grey6 placeholder-grey5 dark:placeholder-grey6 text-sm rounded-lg block w-full p-2.5 bg-grey9 border-0 focus:(outline-none ring-secondaryLight border([1px] secondaryLight)) dark:(bg-grey3 focus:(ring-secondaryDark border-secondaryDark) border([1px] secondaryDark))',
             )}
             placeholder="Enter your password"
             ref={ref}
