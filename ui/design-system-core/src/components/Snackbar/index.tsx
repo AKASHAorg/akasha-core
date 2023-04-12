@@ -4,6 +4,7 @@ import Text from '../Text';
 import Button from '../Button';
 import { tw, apply } from '@twind/core';
 import { getColorLight, getColorDark } from './getColor';
+import { Color } from '../types/common.types';
 
 export type snackBarType = 'alert' | 'caution' | 'success' | 'info';
 
@@ -28,7 +29,7 @@ const Snackbar: React.FC<ISnackbar> = ({
   const colorLight = getColorLight(type);
   const colorDark = getColorDark(type);
 
-  const textcolor = { dark: 'white', light: 'black' };
+  const textcolor = { dark: 'white', light: 'black' } as Color;
   const bgColor = 'bg-white dark:bg-grey1';
 
   const instanceStyle = apply`
