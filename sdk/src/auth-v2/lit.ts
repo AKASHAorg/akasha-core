@@ -59,7 +59,7 @@ export default class Lit {
   }
 
   @validate(z.string().min(2))
-  async encryptText(text) {
+  async encryptText(text: string) {
     if (!this.litNodeClient) {
       await this.connect();
     }

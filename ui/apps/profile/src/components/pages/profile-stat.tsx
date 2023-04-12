@@ -18,14 +18,14 @@ import {
 } from '@akashaorg/ui-awf-hooks';
 import { useSearchParams } from 'react-router-dom';
 
-type StatProps = {
+type ProfileStatProps = {
   loginState: LoginState;
   selectedStat: ProfileStatType;
   profileData: IProfileData;
   navigateTo?: (args: NavigateToParams) => void;
 };
 
-const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
+const ProfileStat: React.FC<RootComponentProps & ProfileStatProps> = props => {
   const { loginState, selectedStat, profileData, navigateTo } = props;
 
   const { t } = useTranslation('app-profile');
@@ -149,4 +149,4 @@ const ProfileStatPage: React.FC<RootComponentProps & StatProps> = props => {
   );
 };
 
-export default ProfileStatPage;
+export default ProfileStat;
