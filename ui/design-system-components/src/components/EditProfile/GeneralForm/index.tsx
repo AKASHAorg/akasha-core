@@ -6,6 +6,7 @@ import { Header, HeaderProps } from './Header';
 import { useForm, Controller } from 'react-hook-form';
 import { useMedia } from 'react-use';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ButtonType } from '../types';
 import * as z from 'zod';
 
 type GeneralFormValues = {
@@ -18,11 +19,6 @@ type GeneralFormValues = {
 };
 
 type InputType = { label: string; initialValue: string };
-
-type ButtonType = {
-  label: string;
-  handleClick: (event: React.SyntheticEvent<Element, Event>) => void;
-};
 
 export type GeneralFormProps = {
   header: Omit<HeaderProps, 'onAvatarChange' | 'onCoverImageChange'>;
@@ -159,12 +155,12 @@ export const GeneralForm: React.FC<GeneralFormProps> = ({
           )}
           defaultValue={bioField.initialValue}
         />
-        <Stack spacing="gap-x-2" customStyle="ml-auto">
+        <Stack spacing="gap-x-2" customStyle="ml-auto mt-auto">
           <Button variant="text" label={cancelButton.label} onClick={cancelButton.handleClick} />
           <Button
             variant="primary"
             label={saveButton.label}
-            disabled={!isDirty && !isValid}
+            disabled={!isDirty || !isValid}
             onClick={handleSubmit(onSave)}
             type="submit"
           />
