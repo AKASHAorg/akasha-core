@@ -79,7 +79,7 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
                 customStyle="inline-block cursor-pointer"
                 as="span"
                 weight="bold"
-                color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
               >
                 {privacyPolicyLabel}
               </Text>
@@ -111,17 +111,14 @@ const PrivacyOption: React.FC<IPrivacyOption> = props => {
               <Text
                 as="span"
                 weight="bold"
-                color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
               >
                 {matomoLabel}
               </Text>
             </Anchor>
             {trackingAnalyticsInfo3}
             <Anchor href={ctaUrl}>
-              <Text
-                as="span"
-                color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
-              >
+              <Text as="span" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
                 {ctaLabel}
               </Text>
             </Anchor>

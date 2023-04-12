@@ -5,13 +5,13 @@ import { useGetModerators } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import ModerationSwitchCard from '@akashaorg/design-system-core/lib/components/ModerationSwitchCard';
-import ModeratorDetailCard from '@akashaorg/design-system-core/lib/components/ModeratorDetailCard';
+import ModerationSwitchCard from '@akashaorg/design-system-components/lib/components/ModerationSwitchCard';
+import ModeratorDetailCard from '@akashaorg/design-system-components/lib/components/ModeratorDetailCard';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 
 const tabs = ['All', 'Active', 'Resigned', 'Revoked'];
 
-const AllModerators: React.FC<RootComponentProps> = () => {
+export const Moderators: React.FC<RootComponentProps> = () => {
   const [activeTab, setActiveTab] = React.useState<string>('All');
 
   const { t } = useTranslation('app-moderation-ewa');
@@ -71,5 +71,3 @@ const AllModerators: React.FC<RootComponentProps> = () => {
     </BasicCardBox>
   );
 };
-
-export default AllModerators;

@@ -12,29 +12,28 @@ export const HAS_NEW_NOTIFICATIONS_KEY = 'Has_New_Notifications';
 const getNotifications = async () => {
   const sdk = getSDK();
   const getMessagesResp = await sdk.api.auth.getMessages({});
-
-  const getProfilesCalls = getMessagesResp.data.map(message => {
+  const messages = getMessagesResp.data.map(async message => {
     const pubKey = message.body.value.author || message.body.value.follower;
     if (pubKey) {
-      return sdk.api.profile.getProfile({ pubKey });
-    }
-  });
-  const profilesResp = await Promise.all(getProfilesCalls);
-
-  let completeMessages = [];
-  profilesResp?.filter(Boolean).map(profile => {
-    const profileData = buildProfileMediaLinks(profile.data);
-    completeMessages = getMessagesResp.data.map(message => {
+      let populatedMessage;
+      const profile = await sdk.api.profile.getProfile({ pubKey });
+      const profileData = buildProfileMediaLinks(profile.data);
       if (message.body.value.author === profileData.pubKey) {
-        message.body.value.author = profileData;
+        populatedMessage = {
+          ...message,
+          body: { ...message.body, value: { ...message.body.value, author: profileData } },
+        };
       }
       if (message.body.value.follower === profileData.pubKey) {
-        message.body.value.follower = profileData;
+        populatedMessage = {
+          ...message,
+          body: { ...message.body, value: { ...message.body.value, follower: profileData } },
+        };
       }
-      return message;
-    });
+      return populatedMessage;
+    }
   });
-  return completeMessages;
+  return Promise.all(messages);
 };
 
 /**

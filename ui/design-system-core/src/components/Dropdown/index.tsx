@@ -1,129 +1,132 @@
 import * as React from 'react';
-import Icon from '../Icon';
-import Text from '../Text';
-import { cx, tw, tx } from '@twind/core';
-import { Listbox, Transition } from '@headlessui/react';
+import { apply, tw, tx } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
 
+import Box from '../Box';
+import Icon from '../Icon';
+import Text from '../Text';
+
+export type DropdownMenuItemType = { id: string; iconName?: IconType; title: string };
+
 export interface IDropdownProps {
-  name: string;
-  menuItems: { id: string; item: { iconName: IconType; title: string } }[];
+  name?: string;
   label?: string;
-  defaultSelectorLabel?: string;
-  onChange?: (e: { iconName?: IconType; title: string }) => void;
+  placeholderLabel?: string;
+  selected: DropdownMenuItemType;
+  menuItems: DropdownMenuItemType[];
+  setSelected: React.Dispatch<React.SetStateAction<DropdownMenuItemType>>;
 }
 
 const Dropdown: React.FC<IDropdownProps> = ({
-  name,
+  label,
+  placeholderLabel,
   menuItems,
-  label = '',
-  defaultSelectorLabel = 'Select an Option',
-  onChange,
+  selected,
+  setSelected,
 }) => {
-  const [selected, setSelected] = React.useState({ iconName: null, title: defaultSelectorLabel });
+  const [dropOpen, setDropOpen] = React.useState<boolean>(false);
 
-  const listButtonStyle = cx`
-      relative w-full cursor-default rounded-lg
-      bg-white dark:bg-grey5
-      py-2 pl-3 pr-10 text-left
-  `;
+  React.useEffect(() => {
+    if (placeholderLabel) {
+      setSelected({
+        id: '',
+        iconName: null,
+        title: placeholderLabel ?? menuItems[0].title,
+      });
+    } else {
+      setSelected(menuItems[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const listButtonRightIconStyle = cx`
-      pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2
-      `;
+  const optionsWrapperStyle = apply`absolute w-full z-10 max-h-60 mt-1 py-0 rounded-lg overflow-auto bg-(white dark:grey5) border(1 grey8 dark:grey3)`;
 
-  const optionListStyle = cx`
-      absolute mt-1 max-h-60 w-full overflow-auto rounded-md
-      bg-white dark:bg-grey5
-      py-0 text-base sm:text-sm
-      border([1px] grey8) dark:border([1px] grey3)
-      `;
+  const optionStyle = apply`flex items-center justify-between p-3 bg-(hover:grey8 dark:hover:grey5)`;
 
-  const optionStyle = cx`
-      relative py-2 pl-5 pr-4
-      border-b([1px] grey8) hover:bg-grey8 dark:(border-b([1px] grey3) hover:bg-grey5)
-      `;
+  const handleDropClick = () => {
+    setDropOpen(!dropOpen);
+  };
+
+  const handleChange = (menuItem: DropdownMenuItemType) => () => {
+    setSelected(menuItem);
+    setDropOpen(!dropOpen);
+  };
 
   return (
-    <div className={tx('w-full min-[426px]:w-80 py-2')}>
+    <Box customStyle="relative min-w-[8rem]">
       {label && <Text variant="label">{label}</Text>}
-      <Listbox
-        name={name}
-        value={selected}
-        onChange={e => {
-          if (onChange !== undefined) {
-            onChange(e);
-          }
-          setSelected(e);
-        }}
+
+      <button
+        className={tx`inline-flex items-center justify-between min-w-[8rem] p-3 rounded-lg bg-(white dark:grey5) rounded-lg border-(1 solid ${
+          dropOpen ? 'secondaryLight dark:secondark-dark' : 'grey8 dark:grey3'
+        })`}
+        onClick={handleDropClick}
       >
-        {({ open }) => (
-          <div className="relative mt-1">
-            <Listbox.Button
-              className={tx(`${listButtonStyle}
-              ${open ? 'border([1px] secondary-light)' : 'border([1px] grey8)'}`)}
-            >
-              <div className={tx`flex items-center space-x-2`}>
-                {selected.iconName && <Icon type={selected.iconName} />}
-                <Text variant="body1">{selected.title}</Text>
-              </div>
-              <span className={tw(listButtonRightIconStyle)}>
-                {open ? <Icon type="ChevronUpIcon" /> : <Icon type="ChevronDownIcon" />}
-              </span>
-            </Listbox.Button>
-            <Transition
-              as={React.Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options className={tw(optionListStyle)}>
-                {menuItems.map((menuItem, idx) => (
-                  <Listbox.Option key={idx} className={tw(optionStyle)} value={menuItem.item}>
-                    {({ selected }) => (
-                      <>
-                        <div
-                          className={tx`flex items-center space-x-2  ${
-                            selected ? 'text-secondary-light' : 'text-black'
-                          }`}
-                        >
-                          <Icon
-                            type={menuItem.item.iconName}
-                            color={
-                              selected
-                                ? { light: 'secondary-light', dark: 'secondary-dark' }
-                                : { light: 'black', dark: 'white' }
-                            }
-                          />
-                          <Text
-                            variant="body1"
-                            color={
-                              selected
-                                ? { light: 'text-secondary-light', dark: 'text-secondary-dark' }
-                                : { light: 'text-black', dark: 'text-white' }
-                            }
-                          >
-                            {menuItem.item.title}
-                          </Text>
-                        </div>
-                        {selected ? (
-                          <span className="absolute inset-y-0 right-2 flex items-center pl-3">
-                            <Icon
-                              type="CheckIcon"
-                              color={{ light: 'secondary-light', dark: 'secondary-dark' }}
-                            />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </Transition>
-          </div>
+        <Text variant="body1">{selected?.title}</Text>
+        {dropOpen ? (
+          <Icon type="ChevronUpIcon" customStyle="ml-4" />
+        ) : (
+          <Icon type="ChevronDownIcon" customStyle="ml-4" />
         )}
-      </Listbox>
-    </div>
+      </button>
+
+      {/* <!-- Dropdown menu --> */}
+      {dropOpen && (
+        <Box customStyle={optionsWrapperStyle}>
+          <ul aria-labelledby="dropdownDefaultButton">
+            {menuItems.map((menuItem, idx) => {
+              const isSelected = selected?.id === menuItem.id;
+              return (
+                <li
+                  key={menuItem.id}
+                  className={tw(
+                    `${optionStyle} ${
+                      idx < menuItems.length - 1 ? 'border-b(1 grey8 dark:grey3)' : ''
+                    } cursor-pointer`,
+                  )}
+                  onClick={handleChange(menuItem)}
+                >
+                  <Box
+                    customStyle={`flex items-center space-x-2 ${
+                      isSelected ? 'text-secondaryLight' : 'text-black'
+                    }`}
+                  >
+                    {menuItem?.iconName && (
+                      <Icon
+                        type={menuItem.iconName}
+                        color={
+                          isSelected
+                            ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                            : { light: 'black', dark: 'white' }
+                        }
+                      />
+                    )}
+                    <Text
+                      variant="body1"
+                      color={
+                        isSelected
+                          ? { light: 'secondaryLight', dark: 'secondaryDark' }
+                          : { light: 'black', dark: 'white' }
+                      }
+                    >
+                      {menuItem.title}
+                    </Text>
+                  </Box>
+                  {isSelected && (
+                    <span className={tw('ml-4')}>
+                      <Icon
+                        type="CheckIcon"
+                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+                      />
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </Box>
+      )}
+    </Box>
   );
 };
 

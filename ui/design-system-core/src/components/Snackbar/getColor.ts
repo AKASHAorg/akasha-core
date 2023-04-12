@@ -3,25 +3,25 @@ import { snackBarType } from './index';
 export function getColorLight(type: snackBarType) {
   switch (type) {
     case 'alert':
-      return 'error-light';
+      return 'errorLight';
     case 'caution':
-      return 'warning-light';
+      return 'warningLight';
     case 'success':
       return 'success';
     case 'info':
-      return 'secondary-light';
+      return 'secondaryLight';
   }
 }
 
 export function getColorDark(type: snackBarType) {
   switch (type) {
     case 'alert':
-      return 'error-dark';
+      return 'errorDark';
     case 'caution':
-      return 'warning-dark';
+      return 'warningDark';
     case 'success':
       return 'success';
     case 'info':
-      return 'secondary-dark';
+      return 'secondaryDark';
   }
 }

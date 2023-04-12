@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { renderWithAllProviders, act, genAppProps, cleanup } from '@akashaorg/af-testing';
 
-import Overview from '../../pages/overview';
+import { Overview } from '../../pages';
 
 describe('<Overview /> component', () => {
   const Base = <Overview {...genAppProps()} />;

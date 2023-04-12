@@ -32,10 +32,13 @@ function getPrimaryClasses({ greyBg, loading, disabled }: IPrimaryClasses) {
   const hoverStyle = !loading && !disabled ? `hover:${getElevationClasses('4')}` : '';
 
   if (greyBg) {
-    backgroundStyle = getColorClasses({
-      light: 'bg-grey9',
-      dark: 'bg-grey3',
-    });
+    backgroundStyle = getColorClasses(
+      {
+        light: 'grey9',
+        dark: 'grey3',
+      },
+      'bg',
+    );
   }
 
   return `${disabled ? 'opacity-50' : ''} ${backgroundStyle} ${hoverStyle}`;
@@ -48,16 +51,22 @@ interface ISecondaryClasses {
 
 function getSecondaryClasses({ loading, disabled }: ISecondaryClasses) {
   const backgroundStyle = 'bg-transparent';
-  const borderStyle = getColorClasses({
-    light: 'border-secondary-light',
-    dark: 'border-secondary-dark',
-  });
+  const borderStyle = getColorClasses(
+    {
+      light: 'secondaryLight',
+      dark: 'secondaryDark',
+    },
+    'border',
+  );
   const hoverStyle =
     !loading && !disabled
-      ? `${getColorClasses({
-          light: 'hover:bg-secondary-light/30',
-          dark: 'hover:bg-secondary-dark',
-        })}`
+      ? `${getColorClasses(
+          {
+            light: 'secondaryLight/30',
+            dark: 'secondaryDark',
+          },
+          'hover:bg',
+        )}`
       : '';
 
   return `${disabled ? 'opacity-50' : ''}border ${backgroundStyle} ${hoverStyle} ${borderStyle}`;

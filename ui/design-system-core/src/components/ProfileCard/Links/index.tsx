@@ -30,7 +30,7 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
               <AppIcon placeholderIconType={getIconFromType(link.type)} size="xs" accentColor />
               <Text
                 variant="body2"
-                color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 breakWord
               >
                 {getLinkFromType(link)}
