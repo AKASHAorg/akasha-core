@@ -2,7 +2,7 @@ import { IAppConfig, INTEGRATION_TYPES, RootComponentProps } from '@akashaorg/ty
 import { genLifecycles } from '../mocks/single-spa';
 import { genWorldConfig } from './world-config';
 import { uiEventsMock } from '../mocks/uiEvents';
-import { ReleaseInfo } from '@akashaorg/typings/sdk/registry';
+import { ReleaseInfo } from '@akashaorg/typings/sdk';
 
 export const genAppConfig = (
   overrides?: Partial<IAppConfig & { name: string }>,
@@ -58,4 +58,7 @@ export const genReleaseInfo = (): ReleaseInfo => ({
   sources: [''],
   author: 'author',
   enabled: true,
+  manifestData: {
+    mainFile: '',
+  },
 });

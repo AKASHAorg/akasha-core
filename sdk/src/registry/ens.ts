@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { TYPES } from '@akashaorg/typings/sdk';
+import { Ens, EnsSchema, EthAddress, EthAddressSchema, TYPES } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
@@ -12,6 +12,7 @@ import IpfsConnector from '../common/ipfs.connector';
 import Stash from '../stash/index';
 import pino from 'pino';
 import { z } from 'zod';
+import { validate } from '../common/validator';
 
 const EnsDefaultTexts = [
   'url',
@@ -28,7 +29,7 @@ export const isEncodedLabelHash = (hash: string) => {
   return hash.startsWith('[') && hash.endsWith(']') && hash.length === 66;
 };
 
-export const validateName = (name: string) => {
+export const validateName = (name: Ens) => {
   const nameArray = name.split('.');
   const hasEmptyLabels = nameArray.filter(e => e.length < 1).length > 0;
   if (hasEmptyLabels) throw new Error('Domain cannot have empty labels');
@@ -79,13 +80,14 @@ class AWF_ENS {
     this._stash = stash;
   }
 
-  async registerName(name: string) {
-    z.string().min(4).parse(name);
+  @validate(EnsSchema)
+  async registerName(name: Ens) {
     const result = this._registerName(name);
     return createFormattedValue(result);
   }
 
-  private async _registerName(name: string) {
+  @validate(EnsSchema)
+  private async _registerName(name: Ens) {
     this._log.warn(`_registerName is deprecated`);
     return Promise.reject('Method not supported.');
     // const validatedName = validateName(name);
@@ -124,7 +126,8 @@ class AWF_ENS {
   }*/
 
   // set the returned name for address lookup
-  private async _claimName(name: string) {
+  @validate(EnsSchema)
+  private async _claimName(name: Ens) {
     this._log.warn(`_claimName is deprecated`);
     return Promise.reject('Method not supported.');
     // if (!this._ReverseRegistrarInstance) {
@@ -133,8 +136,8 @@ class AWF_ENS {
     // const validatedName = validateName(name);
     // return this._ReverseRegistrarInstance.setName(`${validatedName}.akasha.eth`);
   }
-
-  async userIsOwnerOf(name: string) {
+  @validate(EnsSchema)
+  async userIsOwnerOf(name: Ens) {
     // const curUser = await lastValueFrom(this._auth.getCurrentUser());
     // if (curUser?.data.ethAddress) {
     //   const resolved = await this.resolveName(`${name}.akasha.eth`);
@@ -144,8 +147,8 @@ class AWF_ENS {
     // }
     return createFormattedValue(true);
   }
-
-  async isAvailable(name: string) {
+  @validate(EnsSchema)
+  async isAvailable(name: Ens) {
     // if (!this._chainChecked) {
     //   await this.setupContracts();
     // }
@@ -168,7 +171,8 @@ class AWF_ENS {
   /**
    * Returns ENS name associated with the ethereum address
    */
-  async resolveAddress(ethAddress: string) {
+  @validate(EthAddressSchema)
+  async resolveAddress(ethAddress: EthAddress) {
     if (!this._chainChecked) {
       await this.setupContracts();
     }
@@ -188,7 +192,8 @@ class AWF_ENS {
   /**
    * Returns eth address associated with the ens name
    */
-  async resolveName(name: string) {
+  @validate(EnsSchema)
+  async resolveName(name: Ens) {
     if (!this._chainChecked) {
       await this.setupContracts();
     }
@@ -203,8 +208,8 @@ class AWF_ENS {
     }
     return createFormattedValue(ensAddress);
   }
-
-  async getTexts(name: string) {
+  @validate(EnsSchema)
+  async getTexts(name: Ens) {
     const resolver = await this._web3.provider.getResolver(name);
     const texts = EnsDefaultTexts.map(async txt => {
       const value = await resolver?.getText(txt);

@@ -10,13 +10,12 @@ export const validate = (...schemas: z.ZodSchema[]) => {
           const result = schemas[index].safeParse(arg);
           if (!result.success) {
             const error = (result as z.SafeParseError<any>).error;
-            // @todo: pretty format arg
             throwError(error.toString(), [
               'sdk',
               'validate',
               target.constructor.name,
               propertyName.toString(),
-              arg ? arg.toString() : '',
+              arg ? JSON.stringify(arg) : '',
             ]);
           }
         }

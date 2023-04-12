@@ -6,7 +6,7 @@ import {
   LogoTypeSource,
 } from '@akashaorg/typings/ui';
 
-import routes, { MY_PROFILE, STAT, UPDATE_PROFILE } from './routes';
+import routes, { STAT } from './routes';
 /**
  * All plugins must export an object like this:
  */
@@ -34,9 +34,8 @@ export const register: (opts: IntegrationRegistrationOptions) => IAppConfig = op
     });
   },
   routes: {
-    myProfile: routes[MY_PROFILE],
-    updateProfile: routes[UPDATE_PROFILE],
     stat: routes[STAT],
+    edit: routes['edit'],
     rootRoute: '',
   },
 });

@@ -63,10 +63,13 @@ const ListEntry: React.FC<ListEntryProps> = props => {
   }, [intersection]);
 
   const borderBottomStyle = borderBottom
-    ? `border-b ${getColorClasses({
-        light: 'border-grey8',
-        dark: 'border-grey5',
-      })}`
+    ? `border-b ${getColorClasses(
+        {
+          light: 'grey8',
+          dark: 'grey5',
+        },
+        'border',
+      )}`
     : '';
 
   if (pubKeyOfLoggedUser === pubKey) return null;

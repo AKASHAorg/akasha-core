@@ -50,7 +50,7 @@ export const avatarBorderSizesMap = {
 export const avatarBorderColorsMap = {
   white: 'white',
   darkerBlue: 'grey2',
-  accent: 'secondary-dark',
+  accent: 'secondaryDark',
 };
 
 const Avatar: React.FC<IAvatarProps> = props => {
@@ -95,9 +95,11 @@ const Avatar: React.FC<IAvatarProps> = props => {
 
   return (
     <div className={tw(containerStyle)} onClick={onClick}>
-      <React.Suspense fallback={<></>}>
-        <AvatarImage url={src?.url} alt={alt} fallbackUrl={avatarImageFallback} faded={faded} />
-      </React.Suspense>
+      {src && (
+        <React.Suspense fallback={<></>}>
+          <AvatarImage url={src.url} alt={alt} fallbackUrl={avatarImageFallback} faded={faded} />
+        </React.Suspense>
+      )}
 
       {active && <div className={tw(activeOverlayClass)}></div>}
     </div>

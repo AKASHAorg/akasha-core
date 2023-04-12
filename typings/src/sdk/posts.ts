@@ -1,4 +1,6 @@
 import { z } from 'zod';
+export const EntryIDSchema = z.string().min(4);
+export type EntryID = z.infer<typeof EntryIDSchema>;
 // title?: string; tags?: string[]; quotes?: string[]; mentions?: string[]
 export const PostToPublishSchema = z
   .object({

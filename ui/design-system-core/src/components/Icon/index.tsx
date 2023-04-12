@@ -17,8 +17,8 @@ export interface IconProps {
   breakPointSize?: BreakPointSize;
   accentColor?: boolean;
   disabled?: boolean;
-  testId?: string;
   hover?: boolean;
+  testId?: string;
   customStyle?: string;
   hoverColor?: Color;
 }
@@ -34,10 +34,10 @@ const Icon: React.FC<IconProps> = props => {
     breakPointSize,
     color,
     disabled,
-    testId,
     hover,
+    testId,
     customStyle = '',
-    hoverColor = 'white',
+    hoverColor,
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -69,10 +69,11 @@ const Icon: React.FC<IconProps> = props => {
   const accentColorStyle = accentColor
     ? `${
         isFillOnlyIcon
-          ? '[&>*]:fill-secondary-light dark:[&>*]:fill-secondary-dark'
-          : '[&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark'
+          ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
+          : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
       }`
     : '';
+
   // Note: setting accentColor to true will overrride other color styles
   const activeIconColorStyle = accentColor ? accentColorStyle : colorStyle;
 
