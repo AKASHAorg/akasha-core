@@ -114,7 +114,9 @@
     }
   }
 
-  document.body.classList.add(theme);
+  if (theme) {
+    document.body.classList.add(theme);
+  }
 </script>
 <script type="module" src="/main.js" async></script>
 </body>

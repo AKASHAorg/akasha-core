@@ -10,6 +10,9 @@ import {
   EthProviders,
   EthProvidersSchema,
   IMessage,
+  InviteCode,
+  InviteCodeSchema,
+  PubKey,
   PubKeySchema,
   TYPES,
 } from '@akashaorg/typings/sdk';
@@ -231,7 +234,8 @@ class AWF_Auth {
           await new Promise(res => setTimeout(res, 600));
           await this.#_signComposedMessage();
         }
-        await this.#_signTokenMessage();
+        await this._ceramic.connect();
+        // await this.#_signTokenMessage();
       } catch (e) {
         this._lockSignIn = false;
         localStorage.removeItem(this.sessKey);
@@ -480,6 +484,13 @@ class AWF_Auth {
    * @param data -
    * @param base64Format - set to true if the data is base64 encoded
    */
+  @validate(
+    z
+      .record(z.unknown())
+      .or(z.string())
+      .or(z.array(z.record(z.unknown()))),
+    z.boolean().optional(),
+  )
   async signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format = false,
@@ -553,6 +564,12 @@ class AWF_Auth {
    * Utility method for sending mutation graphql requests
    * @param data - mutation data
    */
+  @validate(
+    z
+      .record(z.unknown())
+      .or(z.string())
+      .or(z.array(z.record(z.unknown()))),
+  )
   async authenticateMutationData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
   ) {
@@ -596,6 +613,7 @@ class AWF_Auth {
   }
 
   // validate an encrypted message from cli
+  @validate(z.string())
   async validateDevKeyFromBase64Message(message: string) {
     const decodedMessage = Buffer.from(message, 'base64');
     const decodedMessageArray = Uint8Array.from(decodedMessage);
@@ -650,6 +668,7 @@ class AWF_Auth {
    * @param message - encrypted message with claims info
    * @param name - human-readable string to identify the key
    */
+  @validate(z.string(), z.string().optional())
   async addDevKeyFromBase64Message(message: string, name?: string) {
     const validatedMsg = await this.validateDevKeyFromBase64Message(message);
     devKeys.push({
@@ -666,7 +685,8 @@ class AWF_Auth {
   }
 
   // @Todo: connect it to the api when ready
-  async removeDevKey(pubKey: string) {
+  @validate(PubKeySchema)
+  async removeDevKey(pubKey: PubKey) {
     const index = devKeys.findIndex(e => e.pubKey === pubKey);
     if (index !== -1) {
       devKeys.splice(index, 1);
@@ -693,7 +713,7 @@ class AWF_Auth {
       return undefined;
     }
   }
-
+  @validate(PubKeySchema, z.unknown())
   async sendMessage(to: string, content: unknown) {
     const _toPubKey = PublicKey.fromString(to);
     const serializedMessage = AWF_Auth.serializeMessage(content);
@@ -736,7 +756,7 @@ class AWF_Auth {
     const limit = 1;
     return false;
   }
-
+  @validate(z.string())
   async markMessageAsRead(messageId: string) {
     const marked = await this._markMessageAsRead(messageId);
     this._globalChannel.next({
@@ -750,11 +770,13 @@ class AWF_Auth {
    *
    * @param _messageId - message id to mark as read
    */
+  @validate(z.string())
   private async _markMessageAsRead(_messageId: string) {
     return true;
   }
 
-  async validateInvite(inviteCode: string) {
+  @validate(InviteCodeSchema)
+  async validateInvite(inviteCode: InviteCode) {
     return this._validateInvite(inviteCode);
   }
 
@@ -762,7 +784,7 @@ class AWF_Auth {
    *
    * @param inviteCode - invitation code received by email
    */
-  private async _validateInvite(inviteCode: string) {
+  private async _validateInvite(inviteCode: InviteCode) {
     const response = await fetch(`${process.env.INVITATION_ENDPOINT}/${inviteCode}`, {
       method: 'POST',
     });

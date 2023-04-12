@@ -29,7 +29,7 @@ export const IconOnlyButton: React.FC<IconOnlyButtonProps & HTMLAttributes<HTMLB
         : '';
 
       return (
-        <button ref={ref} className={tw(customStyle)} {...rest}>
+        <button ref={ref} className={tw(customStyle)} type="button" disabled={disabled} {...rest}>
           <Stack
             align="center"
             justify="center"

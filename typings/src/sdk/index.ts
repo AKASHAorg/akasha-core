@@ -2,12 +2,14 @@ import type IDBService from './db';
 import type IGqlClient from './gql';
 import type { ServiceCallResult } from './responses';
 import { EthProviders, EthProvidersSchema } from './web3.connector';
-import { IntegrationReleaseInfo } from './graphql-types';
+import { EthAddress } from "./common";
 
 export * from './events';
 export * from './responses';
 export * from './common';
 export * from './posts';
+export * from './comments';
+export * from './registry';
 
 export {
   IDBService,
@@ -41,13 +43,18 @@ const ServiceTypes = {
   Ceramic: Symbol.for('awf-Ceramic'),
 };
 
-export interface IMessage {
-  body: Record<string, any>;
+export type IMessageBody = {
+  value: {
+    author: EthAddress;
+    follower: EthAddress;
+  };
+};
+
+export type IMessage = {
+  body: IMessageBody;
   from: string;
   readAt: number;
   createdAt: number;
   id: string;
   read: boolean;
 }
-
-export type ReleaseInfo = IntegrationReleaseInfo;

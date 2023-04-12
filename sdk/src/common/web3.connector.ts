@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import { ethers } from 'ethers';
 import {
   EthProviders,
+  EthProvidersSchema,
   INJECTED_PROVIDERS,
   PROVIDER_ERROR_CODES,
   TYPES,
@@ -15,6 +16,8 @@ import EventBus from './event-bus';
 import { throwError } from 'rxjs';
 import pino from 'pino';
 import { createFormattedValue } from '../helpers/observable';
+import { validate } from './validator';
+import { z } from 'zod';
 
 @injectable()
 class Web3Connector {
@@ -59,6 +62,7 @@ class Web3Connector {
    *
    * @param provider - Number representing the provider option
    */
+  @validate(EthProvidersSchema)
   async connect(provider: EthProviders = EthProviders.None): Promise<boolean> {
     this.#log.info(`connecting to provider ${provider}`);
     if (this.#web3Instance && this.#currentProviderId && this.#currentProviderId === provider) {
@@ -99,7 +103,6 @@ class Web3Connector {
       );
       return this.#web3Instance;
     }
-    throw new Error('Must connect first to a provider!');
   }
 
   /**
@@ -124,6 +127,7 @@ class Web3Connector {
    * Enforce personal_sign method for message signature
    * @param message - Human readable string to sign
    */
+  @validate(z.string().min(3))
   signMessage(message: string) {
     return this.getSigner()?.signMessage(message);
   }
@@ -141,7 +145,6 @@ class Web3Connector {
 
   getRequiredNetworkName() {
     if (!this.network) {
-      console.log('throwing error');
       throw new Error('The required ethereum network was not set!');
     }
     return createFormattedValue(this.network);

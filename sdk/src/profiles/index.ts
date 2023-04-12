@@ -9,6 +9,8 @@ import {
   DataProviderInputSchema,
   Username,
   UsernameSchema,
+  EthAddress,
+  EthAddressSchema,
 } from '@akashaorg/typings/sdk';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
@@ -52,7 +54,7 @@ class AWF_Profile {
 
   /**
    * Mutation request to add a profile provider to the profile object
-   * @param opt
+   * @param opt - DataProviderInput
    */
   @validate(z.array(DataProviderInputSchema))
   async addProfileProvider(opt: DataProviderInput[]) {
@@ -77,7 +79,7 @@ class AWF_Profile {
 
   /**
    *
-   * @param opt
+   * @param opt - DataProviderInput
    */
   @validate(z.array(DataProviderInputSchema))
   async makeDefaultProvider(opt: DataProviderInput[]) {
@@ -102,7 +104,7 @@ class AWF_Profile {
 
   /**
    *
-   * @param userName
+   * @param userName - Username
    */
   @validate(UsernameSchema)
   async registerUserName(userName: Username) {
@@ -126,15 +128,15 @@ class AWF_Profile {
 
   /**
    *
-   * @param opt
+   * @param opt - object - ethAddress or pubKey
    */
   @validate(
     z.object({
-      userName: UsernameSchema.optional(),
+      ethAddress: EthAddressSchema.optional(),
       pubKey: PubKeySchema.optional(),
     }),
   )
-  async getProfile(opt: { ethAddress?: string; pubKey?: string }) {
+  async getProfile(opt: { ethAddress?: EthAddress; pubKey?: PubKey }) {
     let resp: UserProfileFragmentDataFragment;
     if (opt.pubKey) {
       const tmp = await this._gql.getAPI().ResolveProfile({ pubKey: opt.pubKey });
@@ -150,7 +152,7 @@ class AWF_Profile {
 
   /**
    *
-   * @param pubKey
+   * @param pubKey - public key
    */
   @validate(PubKeySchema)
   async follow(pubKey: PubKey) {
@@ -173,7 +175,7 @@ class AWF_Profile {
 
   /**
    *
-   * @param pubKey
+   * @param pubKey - public key
    */
   @validate(PubKeySchema)
   async unFollow(pubKey: PubKey) {
@@ -196,16 +198,16 @@ class AWF_Profile {
 
   /**
    *
-   * @param opt
+   * @param opt - object - follower and following public keys
    */
   @validate(z.object({ follower: PubKeySchema, following: PubKeySchema }))
-  async isFollowing(opt: { follower: string; following: string }) {
+  async isFollowing(opt: { follower: PubKey; following: PubKey }) {
     return this._gql.getAPI().IsFollowing({ follower: opt.follower, following: opt.following });
   }
 
   /**
    *
-   * @param data
+   * @param data - media file data
    */
   async saveMediaFile(data: {
     content: Buffer | ArrayBuffer | string | any;
@@ -259,7 +261,7 @@ class AWF_Profile {
 
   /**
    *
-   * @param name
+   * @param name - name to search for
    */
   @validate(z.string().min(3))
   async searchProfiles(name: string) {
@@ -275,7 +277,7 @@ class AWF_Profile {
 
   /**
    *
-   * @param tagName
+   * @param tagName - tag name
    */
   @validate(TagNameSchema)
   async toggleTagSubscription(tagName: TagName) {
@@ -318,7 +320,7 @@ class AWF_Profile {
 
   /**
    *
-   * @param tagName
+   * @param tagName - tag name
    */
   @validate(TagNameSchema)
   async isSubscribedToTag(tagName: TagName) {
@@ -341,7 +343,7 @@ class AWF_Profile {
 
   /**
    *
-   * @param keyword
+   * @param keyword - keyword to search for
    */
   @validate(z.string().min(3))
   async globalSearch(keyword: string) {
@@ -359,9 +361,9 @@ class AWF_Profile {
 
   /**
    *
-   * @param pubKey
-   * @param limit
-   * @param offset
+   * @param pubKey - public key of the user
+   * @param limit - number of followers to return
+   * @param offset - offset to start from
    */
   @validate(z.string(), z.number(), z.number().optional())
   async getFollowers(pubKey: string, limit: number, offset?: number) {
@@ -380,9 +382,9 @@ class AWF_Profile {
 
   /**
    *
-   * @param pubKey
-   * @param limit
-   * @param offset
+   * @param pubKey - public key of the user
+   * @param limit - number of following to return
+   * @param offset - offset to start from
    */
   @validate(z.string(), z.number(), z.number().optional())
   async getFollowing(pubKey: string, limit: number, offset?: number) {
@@ -401,7 +403,7 @@ class AWF_Profile {
 
   /**
    * Retrieve subscription list
-   * @param pubKey
+   * @param pubKey - public key of the user
    */
   @validate(z.string())
   async getInterests(pubKey: string) {

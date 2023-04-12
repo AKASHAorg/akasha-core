@@ -28,7 +28,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
 
   if (plain)
     return (
-      <button ref={ref} {...rest} className={tw(customStyle)}>
+      <button ref={ref} type="button" className={tw(customStyle)} disabled={disabled} {...rest}>
         {children}
       </button>
     );
@@ -58,7 +58,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     : '';
 
   return (
-    <button ref={ref} className={tw(customStyle)} {...rest} disabled={disabled}>
+    <button ref={ref} className={tw(customStyle)} type="button" {...rest} disabled={disabled}>
       <Stack
         align="center"
         justify="center"

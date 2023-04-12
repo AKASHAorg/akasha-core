@@ -1,6 +1,17 @@
 import { inject, injectable } from 'inversify';
 import Web3Connector from '../common/web3.connector';
-import { TYPES } from '@akashaorg/typings/sdk';
+import {
+  TYPES,
+  IntegrationIdSchema,
+  AWF_APP_BUILD_MANIFEST,
+  IntegrationId,
+  IntegrationInfo,
+  IntegrationReleaseIdSchema,
+  IntegrationNameSchema,
+  IntegrationName,
+  ReleaseInfo,
+} from '@akashaorg/typings/sdk';
+import { ManifestInfo } from '@akashaorg/typings/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Settings from '../settings';
@@ -11,11 +22,6 @@ import { createFormattedValue } from '../helpers/observable';
 import EventBus from '../common/event-bus';
 import IpfsConnector from '../common/ipfs.connector';
 import pino from 'pino';
-import {
-  AWF_APP_BUILD_MANIFEST,
-  AWF_APP_SOURCE_MANIFEST,
-  IntegrationInfo,
-} from '@akashaorg/typings/sdk/registry';
 import { validate } from '../common/validator';
 import { z } from 'zod';
 import { throwError } from '../common/error-handling';
@@ -66,8 +72,8 @@ class AWF_IC_REGISTRY {
       );
     }
   }
-  @validate(z.string())
-  async getIntegrationInfo(integrationId: string) {
+  @validate(IntegrationIdSchema)
+  async getIntegrationInfo(integrationId: IntegrationId): Promise<IntegrationInfo> {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getPackageInfo(integrationId);
     return {
@@ -77,11 +83,11 @@ class AWF_IC_REGISTRY {
       latestReleaseId: data.latestReleaseId,
       integrationType: data.integrationType,
       enabled: data.enabled,
-    } as IntegrationInfo;
+    };
   }
 
-  @validate(z.string(), z.string().optional())
-  async getIntegrationReleaseInfo(releaseId: string, integrationId?: string) {
+  @validate(IntegrationReleaseIdSchema, IntegrationIdSchema.optional())
+  async getIntegrationReleaseInfo(releaseId: string, integrationId?: string): Promise<ReleaseInfo> {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getReleaseData(releaseId);
     const manifestData = await this._ipfs.catDocument<AWF_APP_BUILD_MANIFEST>(
@@ -95,9 +101,9 @@ class AWF_IC_REGISTRY {
     const integrationID = integrationId || ethersUtils.id(data.integrationName);
     const integrationInfo = await this._IntegrationRegistryInstance.getPackageInfo(integrationID);
     const ipfsSources = this._ipfs.multiAddrToUri(sources);
-    let manifest: AWF_APP_SOURCE_MANIFEST;
+    let manifest: ManifestInfo;
 
-    const response = {
+    const response: Partial<ReleaseInfo> = {
       id: releaseId,
       name: integrationInfo.integrationName,
       version: data.version,
@@ -107,20 +113,18 @@ class AWF_IC_REGISTRY {
       author: integrationInfo.author,
       enabled: integrationInfo.enabled,
       createdAt: data.createdAt?.toNumber(),
-      sources: [] as string[],
-      manifestData: {} as AWF_APP_SOURCE_MANIFEST,
     };
 
     if (ipfsSources.length) {
       try {
-        manifest = await this._ipfs.catDocument<AWF_APP_SOURCE_MANIFEST>(
+        manifest = await this._ipfs.catDocument<ManifestInfo>(
           `${ipfsSources[0]}/${this.MANIFEST_FILE}`,
           true,
         );
         ipfsSources[0] = `${ipfsSources[0]}/${manifest.mainFile}`;
         response.sources = ipfsSources;
         response.manifestData = manifest;
-        return response;
+        return response as ReleaseInfo;
       } catch (e) {
         throwError(`Failed to get manifest data: ${(e as Error).message}`, [
           'sdk',
@@ -131,12 +135,12 @@ class AWF_IC_REGISTRY {
       }
     }
     // @todo: maybe better to throw error here since we don't have sources?
-    return response;
+    return response as ReleaseInfo;
   }
 
   // on chain call for latest version info
-  @validate(z.object({ name: z.string(), id: z.string() }).partial())
-  async getLatestVersionInfo(integration: { name?: string; id?: string }) {
+  @validate(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial())
+  async getLatestVersionInfo(integration: { name?: IntegrationName; id?: IntegrationId }) {
     const integrationID = integration.id || ethers.utils.id(integration.name || '');
     const info = await this.getIntegrationInfo(integrationID);
     return this.getIntegrationReleaseInfo(info.latestReleaseId, integrationID);
@@ -150,6 +154,7 @@ class AWF_IC_REGISTRY {
     });
   }
 
+  @validate(z.number().optional())
   async getAllIntegrationsIds(offset = 0) {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getAllPackageIds(offset);
@@ -159,7 +164,8 @@ class AWF_IC_REGISTRY {
     });
   }
 
-  async getAllIntegrationReleaseIds(integrationName: string, offset = 0) {
+  @validate(IntegrationNameSchema, z.number().optional())
+  async getAllIntegrationReleaseIds(integrationName: IntegrationName, offset = 0) {
     this.#_setupContracts();
     const data = await this._IntegrationRegistryInstance.getAllReleaseIds(integrationName, offset);
     return createFormattedValue({
@@ -168,18 +174,19 @@ class AWF_IC_REGISTRY {
     });
   }
 
-  async getIntegrationId(name: string) {
+  @validate(IntegrationNameSchema)
+  async getIntegrationId(name: IntegrationName) {
     const data = ethersUtils.id(name);
     return Promise.resolve(createFormattedValue({ id: data }));
   }
-
-  async getIntegrationReleaseId(name: string, version: string) {
+  @validate(IntegrationNameSchema, z.string())
+  async getIntegrationReleaseId(name: IntegrationName, version: string) {
     const data = ethersUtils.id(name + version);
     return Promise.resolve(createFormattedValue({ id: data }));
   }
 
-  @validate(z.array(z.object({ name: z.string(), id: z.string() }).partial()))
-  _normalizeIDs(opt: { name?: string; id?: string }[]) {
+  @validate(z.array(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial()))
+  _normalizeIDs(opt: { name?: IntegrationName; id?: IntegrationId }[]) {
     return opt.map(el => {
       if (el.id) {
         return el.id;
@@ -187,11 +194,12 @@ class AWF_IC_REGISTRY {
       return ethersUtils.id(el.name || '');
     });
   }
+  @validate(z.array(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial()))
   async getIntegrationsInfo(opt: { name?: string; id?: string }[]) {
     const normalizedIDs = this._normalizeIDs(opt);
     return this._gql.getAPI().GetIntegrationInfo({ integrationIDs: normalizedIDs });
   }
-
+  @validate(z.array(z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial()))
   getLatestReleaseInfo(opt: { name?: string; id?: string }[]) {
     const normalizedIDs = this._normalizeIDs(opt);
     return this._gql.getAPI().GetLatestRelease({ integrationIDs: normalizedIDs });
