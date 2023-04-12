@@ -8,8 +8,7 @@ import Text from '../Text';
 export const wrapperStyle =
   'bg-white dark:bg-grey3 mt-10 rounded-lg shadow p-4 w-full absolute top-0 left-0 z-[9999]';
 const baseMonthCellStyle = 'grid place-items-center w-full h-full py-3';
-export const selectedCellStyle =
-  'text-white bg-secondary-light dark:(bg-secondary-dark text-white)';
+export const selectedCellStyle = 'text-white bg-secondaryLight dark:(bg-secondaryDark text-white)';
 export const unselectedCellStyle = 'text-grey5 dark:text-grey7';
 
 interface MonthSelectorProps {
@@ -50,7 +49,7 @@ const MonthSelector: React.FC<MonthSelectorProps> = ({
           </Button>
         </div>
         <div>
-          <Text variant="h6" color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}>
+          <Text variant="h6" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
             {currentYear}
           </Text>
         </div>

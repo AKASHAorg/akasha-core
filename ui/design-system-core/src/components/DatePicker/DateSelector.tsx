@@ -154,7 +154,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     return (
       <div className={tx('px-1')} key={index}>
         <div>
-          <Text variant="footnotes2" color={{ light: 'text-grey4', dark: 'text-white' }}>
+          <Text variant="footnotes2" color={{ light: 'grey4', dark: 'white' }}>
             {day}
           </Text>
         </div>
@@ -166,7 +166,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     return (
       <div
         className={tx(
-          `${inBetweenDays(day) ? 'px-1 bg-secondary-light dark:bg-secondary-dark' : 'px-1'}
+          `${inBetweenDays(day) ? 'px-1 bg-secondaryLight dark:bg-secondaryDark' : 'px-1'}
                     ${compareDate(day) && 'rounded-l-lg'}
                     ${compareDate(day, secondDate) && 'rounded-r-lg'}
                     mb-1
@@ -198,14 +198,10 @@ const DateSelector: React.FC<DateSelectorProps> = ({
             </Button>
           </div>
           <div onClick={handleMonthSelectToggle} className={tx('flex')}>
-            <Text variant="button-lg" color={{ light: 'text-black', dark: 'text-white' }}>
+            <Text variant="button-lg" color={{ light: 'black', dark: 'white' }}>
               {MONTHS_IN_A_YEAR[month]}
             </Text>
-            <Text
-              variant="button-lg"
-              color={{ light: 'text-black', dark: 'text-white' }}
-              customStyle="ml-1"
-            >
+            <Text variant="button-lg" color={{ light: 'black', dark: 'white' }} customStyle="ml-1">
               {year}
             </Text>
           </div>
@@ -225,7 +221,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
                 <div key={index} className={tx('pointer-events-none w-7')}>
                   <Text
                     variant="button-md"
-                    color={{ light: 'text-grey8', dark: 'text-grey5' }}
+                    color={{ light: 'grey8', dark: 'grey5' }}
                     customStyle="text-center"
                   >
                     {day}
@@ -241,7 +237,7 @@ const DateSelector: React.FC<DateSelectorProps> = ({
                 <div key={index} className={tx('pointer-events-none text-center')}>
                   <Text
                     variant="button-md"
-                    color={{ light: 'text-grey8', dark: 'text-grey5' }}
+                    color={{ light: 'grey8', dark: 'grey5' }}
                     customStyle="text-center"
                   >
                     {day}

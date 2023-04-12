@@ -76,16 +76,12 @@ const DatePicker = () => {
           }}
           className={tw(
             `flex justify-start items-center border([1px] grey8) dark:border([1px] grey5) rounded-lg px-2 w-auto h-8 cursor-pointer ${
-              showDatepicker && 'border(2 secondary-light) dark:border(2 secondary-dark)'
+              showDatepicker && 'border(2 secondaryLight) dark:border(2 secondaryDark)'
             })`,
           )}
         >
           <Icon type="CalendarIcon" accentColor={true} />
-          <Text
-            variant="body2"
-            color={{ light: 'text-black', dark: 'text-grey6' }}
-            customStyle="ml-2"
-          >
+          <Text variant="body2" color={{ light: 'black', dark: 'grey6' }} customStyle="ml-2">
             {datepickerValue.toString()}
           </Text>
         </div>
