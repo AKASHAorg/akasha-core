@@ -1,4 +1,4 @@
-import type * as Types from '@akashaorg/awf-sdk/src/gql/api.new';
+import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new';
 
 import getSDK from '@akashaorg/awf-sdk';
 const sdk = getSDK();

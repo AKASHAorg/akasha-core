@@ -44,7 +44,7 @@ const config = {
     '../ui/hooks/src/generated/hooks-new.ts':{
       preset: 'import-types-preset',
       presetConfig: {
-        typesPath: '@akashaorg/awf-sdk/src/gql/api.new',
+        typesPath: '@akashaorg/typings/sdk/graphql-operation-types-new',
         // baseTypesPath: '~@akashaorg/typings/sdk/graphql-operation-types-new',
         // importAllFragmentsFrom: '~@akashaorg/awf-sdk/src/gql/api.new' // does not work with import-preset
       },
