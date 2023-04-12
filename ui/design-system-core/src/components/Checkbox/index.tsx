@@ -51,22 +51,22 @@ const Checkbox: React.FC<iCheckboxProps> = ({
   }, [indeterminate]);
 
   const textColor = error
-    ? 'text-error-light dark:text-error-dark hover:text-error-light'
+    ? 'text-errorLight dark:text-errorDark hover:text-errorLight'
     : isDisabled
     ? 'text-grey4 hover:text-grey4'
-    : 'text(black dark:white) hover:text-secondary-light dark:hover:text-secondary-dark';
+    : 'text(black dark:white) hover:text-secondaryLight dark:hover:text-secondaryDark';
   const textColorIndeterminate = isDisabled
     ? 'text-black dark:text-grey4'
     : 'text-black dark:text-white';
-  const inputColor = error ? 'orange-400' : isDisabled ? 'grey4' : 'secondary-light';
+  const inputColor = error ? 'orange-400' : isDisabled ? 'grey4' : 'secondaryLight';
   const checkmarkColor = error ? 'white dark:black' : isDisabled ? 'grey6 dark:grey5' : 'white';
   const minusMarkColor = isDisabled ? 'bg-grey6 dark:bg-grey5' : 'bg-grey4 dark:bg-white';
   const bgColor = isDisabled
     ? 'before:bg-grey4'
     : isSelected
     ? error
-      ? 'before:bg-error-dark'
-      : 'before:bg-secondary-light dark:before:bg-secondary-dark'
+      ? 'before:bg-errorDark'
+      : 'before:bg-secondaryLight dark:before:bg-secondaryDark'
     : 'before:bg-transparent before:disabled:opacity-75 disabled:before:bg-grey4';
   const checkboxSizes =
     size === 'small'
@@ -105,8 +105,8 @@ const Checkbox: React.FC<iCheckboxProps> = ({
   ${basePseudoCheckboxStyles}
   ${checkboxSizes}
   ${minusMarkStyles}
-  before:border(2 ${isDisabled ? 'grey4' : 'secondary-dark'})
-  before:${isDisabled ? 'bg-grey4' : 'bg-secondary-dark'}
+  before:border(2 ${isDisabled ? 'grey4' : 'secondaryDark'})
+  before:${isDisabled ? 'bg-grey4' : 'bg-secondaryDark'}
   invisible w-4 h-4 relative
   `;
 
@@ -121,7 +121,7 @@ const Checkbox: React.FC<iCheckboxProps> = ({
     `;
 
   return (
-    <div className={tw('leading-6 my-2 hover:text-secondary-light dark:hover:text-secondary-dark')}>
+    <div className={tw('leading-6 my-2 hover:text-secondaryLight dark:hover:text-secondaryDark')}>
       <input
         ref={checkboxRef}
         type="checkbox"

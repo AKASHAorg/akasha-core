@@ -7,36 +7,25 @@ export default {
   component: Toggle,
 };
 
-const Template = args => <Toggle {...args} />;
+const Template = args => {
+  return <Toggle {...args} />;
+};
 
 export const BaseToggle = Template.bind({});
 BaseToggle.args = {
-  label: 'Toggle button',
-  checked: false,
+  label: 'small toggle',
 };
 
 export const LargeToggle = Template.bind({});
 LargeToggle.args = {
-  checked: false,
-  iconChecked: 'SunIcon',
-  iconUnchecked: 'MoonIcon',
+  label: 'large toggle',
   size: 'large',
-  darkModeToggle: true,
 };
 
 export const IconToggle = Template.bind({});
 IconToggle.args = {
-  checked: false,
   iconChecked: 'SunIcon',
   iconUnchecked: 'MoonIcon',
-};
-
-export const DisabledIconToggle = Template.bind({});
-DisabledIconToggle.args = {
-  checked: true,
-  iconChecked: 'SunIcon',
-  iconUnchecked: 'MoonIcon',
-  disabled: true,
 };
 
 export const DisabledToggle = Template.bind({});
@@ -46,9 +35,17 @@ DisabledToggle.args = {
   disabled: true,
 };
 
-export const DisabledEnabledToggle = Template.bind({});
-DisabledEnabledToggle.args = {
+export const DisabledCheckedToggle = Template.bind({});
+DisabledCheckedToggle.args = {
   checked: true,
   size: 'large',
+  disabled: true,
+};
+
+export const DisabledCheckedIconToggle = Template.bind({});
+DisabledCheckedIconToggle.args = {
+  checked: true,
+  iconChecked: 'SunIcon',
+  iconUnchecked: 'MoonIcon',
   disabled: true,
 };

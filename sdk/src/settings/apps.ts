@@ -1,14 +1,21 @@
 import { inject, injectable } from 'inversify';
-import { APP_EVENTS, TYPES } from '@akashaorg/typings/sdk';
+import {
+  APP_EVENTS,
+  IntegrationIdSchema,
+  IntegrationName,
+  IntegrationNameSchema,
+  TYPES,
+} from '@akashaorg/typings/sdk';
 import DB, { availableCollections } from '../db';
 import { createFormattedValue } from '../helpers/observable';
-import { lastValueFrom } from 'rxjs';
 import { AppsSchema } from '../db/app.schema';
 import Logging from '../logging/index';
 import IcRegistry from '../registry/icRegistry';
 import { ethers } from 'ethers';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
+import { validate } from '../common/validator';
+import { z } from 'zod';
 
 declare const __DEV__: boolean;
 
@@ -43,7 +50,8 @@ class AppSettings {
    * Returns an app configuration object
    * @param appName - Name of the app
    */
-  async get(appName: string) {
+  @validate(IntegrationNameSchema)
+  async get(appName: IntegrationName) {
     const collection = this._db.getCollection<AppsSchema>(availableCollections.Apps);
     const doc = await collection.findOne({ name: { $eq: appName } });
     return createFormattedValue(doc);
@@ -61,16 +69,21 @@ class AppSettings {
   /**
    * Persist installed app configuration for the current user
    * @param app - Object
+   * @param isLocal - True only for development. Default is false
    */
+  @validate(
+    z.object({ name: IntegrationNameSchema, id: IntegrationIdSchema }).partial(),
+    z.boolean().optional(),
+  )
   async install(app: { name?: string; id?: string }, isLocal = false) {
     if (isLocal && __DEV__) {
-      const collection = this._db.getCollection<any>(availableCollections.Apps);
+      // @TODO: find a way to avoid handling local apps here
+      const collection = this._db.getCollection<AppsSchema>(availableCollections.Apps);
       this._globalChannel.next({
         data: { name: app.name, id: app.id },
         event: APP_EVENTS.INFO_READY,
       });
-
-      return collection.save({ name: app.name, id: app.id });
+      return collection.save({ name: app.name, id: app.name } as AppsSchema);
     }
     const release = await this._icRegistry.getLatestVersionInfo(app);
     const currentInfo = await this.get(release.name);
@@ -102,7 +115,8 @@ class AppSettings {
    * Uninstall app by name
    * @param appName - Name of the app
    */
-  async uninstall(appName: string): Promise<void> {
+  @validate(IntegrationNameSchema)
+  async uninstall(appName: IntegrationName): Promise<void> {
     const currentInfo = await this.get(appName);
     if (currentInfo?.data?._id) {
       const collection = this._db.getCollection<AppsSchema>(availableCollections.Apps);
@@ -113,12 +127,12 @@ class AppSettings {
       });
     }
   }
-
-  async toggleAppStatus(appName: string): Promise<boolean> {
+  @validate(IntegrationNameSchema)
+  async toggleAppStatus(appName: IntegrationName): Promise<boolean> {
     const collection = this._db.getCollection<AppsSchema>(availableCollections.Settings);
-    const query: unknown = { name: { $eq: appName } };
+    const query = { name: { $eq: appName } };
     const doc = await collection.findOne(query);
-    if (doc._id) {
+    if (doc && doc._id) {
       doc.status = !doc.status;
       await doc.save();
       this._globalChannel.next({
@@ -127,6 +141,7 @@ class AppSettings {
       });
       return doc.status;
     }
+    return false;
   }
 
   async updateVersion(app: VersionInfo) {

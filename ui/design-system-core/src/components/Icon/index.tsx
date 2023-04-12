@@ -1,10 +1,8 @@
 import React from 'react';
-
-import { IconType } from '@akashaorg/typings/ui';
-
-import { PassedIcon } from './PassedIcon';
 import Stack from '../Stack';
-import { BasicIconSize, Color } from '../types/common.types';
+import { IconType } from '@akashaorg/typings/ui';
+import { PassedIcon } from './PassedIcon';
+import { BasicIconSize, BreakPointSize, Color } from '../types/common.types';
 import { getWidthClasses } from '../../utils/getWidthClasses';
 import { getHeightClasses } from '../../utils/getHeightClasses';
 import { getColorClasses } from '../../utils/getColorClasses';
@@ -16,11 +14,11 @@ export interface IconProps {
   ref?: React.Ref<HTMLDivElement>;
   type: IconType;
   size?: IconSize;
-  breakPointSize?: { breakPoint: string; size: BasicIconSize };
+  breakPointSize?: BreakPointSize;
   accentColor?: boolean;
   disabled?: boolean;
-  testId?: string;
   hover?: boolean;
+  testId?: string;
   customStyle?: string;
   hoverColor?: Color;
 }
@@ -31,15 +29,15 @@ const Icon: React.FC<IconProps> = props => {
   const {
     type,
     ref,
-    accentColor,
-    size = 'lg',
+    accentColor = false,
+    size = 'md',
     breakPointSize,
     color,
     disabled,
-    testId,
     hover,
+    testId,
     customStyle = '',
-    hoverColor = 'white',
+    hoverColor,
   } = props;
 
   const breakPointStyle = breakPointSize
@@ -71,14 +69,17 @@ const Icon: React.FC<IconProps> = props => {
   const accentColorStyle = accentColor
     ? `${
         isFillOnlyIcon
-          ? '[&>*]:fill-secondary-light dark:[&>*]:fill-secondary-dark'
-          : '[&>*]:stroke-secondary-light dark:[&>*]:stroke-secondary-dark'
+          ? '[&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark'
+          : '[&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark'
       }`
     : '';
 
+  // Note: setting accentColor to true will overrride other color styles
+  const activeIconColorStyle = accentColor ? accentColorStyle : colorStyle;
+
   const disabledStyle = disabled ? 'opacity-50' : '';
 
-  const iconStyle = `${baseStyle} ${colorStyle} ${sizeStyle} ${accentColorStyle} ${disabledStyle} ${customStyle}`;
+  const iconStyle = `${baseStyle} ${activeIconColorStyle} ${sizeStyle} ${disabledStyle} ${customStyle}`;
 
   return (
     <Stack ref={ref}>
@@ -88,17 +89,17 @@ const Icon: React.FC<IconProps> = props => {
 };
 
 const ICON_SIZE_MAP: Record<BasicIconSize, string> = {
-  sm: 'h-3 w-3',
-  md: 'h-4 w-4',
-  lg: 'h-5 w-5',
-  xl: 'h-6 w-6',
+  xs: 'h-3 w-3',
+  sm: 'h-4 w-4',
+  md: 'h-5 w-5',
+  lg: 'h-6 w-6',
 };
 
 const ICON_SIZE_MAP_BY_BREAKPOINT = (breakPoint: string): Record<BasicIconSize, string> => ({
-  sm: `${breakPoint}:h-3 ${breakPoint}:w-3`,
-  md: `${breakPoint}:h-4 ${breakPoint}:w-4`,
-  lg: `${breakPoint}:h-5 ${breakPoint}:w-5`,
-  xl: `${breakPoint}:h-6 ${breakPoint}:w-6`,
+  xs: `${breakPoint}:h-3 ${breakPoint}:w-3`,
+  sm: `${breakPoint}:h-4 ${breakPoint}:w-4`,
+  md: `${breakPoint}:h-5 ${breakPoint}:w-5`,
+  lg: `${breakPoint}:h-6 ${breakPoint}:w-6`,
 });
 
 export default Icon;

@@ -1,13 +1,14 @@
 import React from 'react';
+import { tw, apply } from '@twind/core';
+
+import { IconType } from '@akashaorg/typings/ui';
+
 import Icon from '../Icon';
 import Text from '../Text';
-import { tw, apply } from '@twind/core';
-import { IconType } from '@akashaorg/typings/ui';
 
 export type toggleSize = 'small' | 'large';
 
-export interface iToggleProps {
-  id?: string;
+export interface IToggleProps {
   label?: string;
   size?: toggleSize;
   // status
@@ -16,94 +17,77 @@ export interface iToggleProps {
   //toggle with icons
   iconUnchecked?: IconType;
   iconChecked?: IconType;
-  darkModeToggle?: boolean;
+  onChange?: (ev: React.SyntheticEvent) => void;
 }
 
-const Toggle: React.FC<iToggleProps> = ({
-  id = 'toggle',
+const Toggle: React.FC<IToggleProps> = ({
   label,
-  disabled = false,
+  size = 'small',
   checked = false,
-  darkModeToggle = false,
+  disabled = false,
   iconUnchecked = null,
   iconChecked = null,
-  size = 'small',
+  onChange,
 }) => {
-  const [enabled, setEnabled] = React.useState(checked);
+  const sizeMap = {
+    large: {
+      dimension: 'h-8 w-16 after:h-7 after:w-7 after:top-[2px] after:left-[4px]',
+      iconSize: 'h-6 w-6 peer-checked:translate-x-[1.95rem]',
+    },
+    small: {
+      dimension: 'h-5 w-9 after:h-4 after:w-4 after:top-[2px] after:left-[2px]',
+      iconSize: 'h-3 w-3 peer-checked:translate-x-[0.95rem]',
+    },
+  };
 
-  const buttonSize = size === 'large' ? 'h-8 w-16' : 'h-5 w-9';
-
-  //For defining the margin between the outer button and the inner circle
-  const spacingProperties = 'after:absolute after:top-px after:left-0.5';
-
-  //For defining the width and height of the inner circle and how much it will move when the button is toggled
-  const pseudoCircleSizingProperties =
-    size === 'large'
-      ? 'after:h-7 after:w-7 peer-checked:after:translate-x-[1.9rem]'
-      : 'after:h-4 after:w-4 peer-checked:after:translate-x-3.5';
-
-  //For defining the width and height of the icon and how much it will move when the button is toggled
-  const iconSizingProperties =
-    size === 'large'
-      ? 'h-6 w-6 peer-checked:translate-x-[1.95rem]'
-      : 'h-3 w-3 peer-checked:translate-x-[0.95rem]';
-
-  // Setting the color of the button and circle in two cases: disabled and normal button.
   const color = disabled
-    ? `bg-grey7 border([1px] grey4) after:bg-grey4`
-    : `bg-white dark:bg-grey3 border([1px] secondary-light)
-    after:bg-grey6
-    dark:${darkModeToggle ? 'after:bg-secondary-dark' : 'after:bg-black'}
-    after:border after:border-grey6
-    peer-checked:bg-white peer-checked:after:border-secondary-light peer-checked:after:bg-secondary-light`;
+    ? 'bg(grey7 after:grey4) border(1 grey4 after:grey7)'
+    : `bg(white dark:grey3 after:grey6 dark:after:grey4 peer-checked:secondaryDark peer-checked:dark:secondaryLight peer-checked:after:secondaryLight peer-checked:dark:after:secondaryDark) border(1 secondaryLight dark:secondaryDark peer-checked:after:secondaryLight peer-checked:dark:after:secondaryDark)`;
 
-  const baseTransitionStyle = 'after:transition-all after:duration-300';
+  const knobStyle = apply`${sizeMap[size].dimension} rounded(full after:full) hover:shadow-md peer-focus:outline-none peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:transition-all ${color}`;
 
-  const instanceButtonStyle = apply`
-      relative
-      ${buttonSize}
-      rounded-full
-      hover:shadow-md
-      ${spacingProperties}
-      ${pseudoCircleSizingProperties}
-      after:rounded-full
-      ${color}
-      ${baseTransitionStyle}
-      `;
+  const iconStyle = apply`flex items-center justify-center ${sizeMap[size].iconSize} absolute ml-1 rounded(full after:full) hover:shadow-md peer-focus:outline-none peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:transition-all ${color}`;
 
-  const instanceIconStyle = apply`
-      ${iconSizingProperties}
-      ${baseTransitionStyle}
-      absolute ml-1
-      peer-checked:transition-all peer-checked:duration-300
-      `;
+  const handleChange = e => {
+    if (typeof onChange === 'function') {
+      return onChange(e);
+    }
+    return null;
+  };
 
   return (
-    <div>
-      <label htmlFor={id} className={tw('flex cursor-pointer items-center')}>
-        <input
-          type="checkbox"
-          id={id}
-          disabled={disabled}
-          checked={enabled}
-          className={tw('peer sr-only')}
-          onClick={() => setEnabled(!enabled)}
-        />
-        <div className={tw(instanceButtonStyle)} />
+    <label className={tw('relative inline-flex items-center cursor-pointer')}>
+      <input
+        type="checkbox"
+        value=""
+        name="toggle"
+        checked={checked}
+        disabled={disabled}
+        onChange={handleChange}
+        className={tw('sr-only peer')}
+      />
+      <div className={tw(knobStyle)} />
 
-        {iconChecked && iconUnchecked && (
-          <div className={tw(instanceIconStyle)}>
-            <Icon
-              type={enabled ? iconChecked : iconUnchecked}
-              customStyle="fill-white stroke-white"
-            />
-          </div>
-        )}
-        <span className={tw('pl-2 text-base text-gray-800')}>
-          <Text variant="label">{label}</Text>
-        </span>
-      </label>
-    </div>
+      {iconChecked && iconUnchecked && (
+        <div className={tw(iconStyle)}>
+          <Icon
+            size={size === 'small' ? { width: 'w-2', height: 'h-2' } : 'sm'}
+            type={checked ? iconChecked : iconUnchecked}
+            customStyle="fill-white stroke-white"
+          />
+        </div>
+      )}
+
+      {label && (
+        <Text
+          variant="label"
+          customStyle="ml-3"
+          color={{ light: 'secondaryDark', dark: 'secondaryLight' }}
+        >
+          {label}
+        </Text>
+      )}
+    </label>
   );
 };
 

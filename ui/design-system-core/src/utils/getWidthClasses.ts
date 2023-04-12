@@ -3,7 +3,7 @@ export function getWidthClasses(width: string | number) {
     return width;
   }
 
-  if (typeof width === 'number') return `h-[${width / 16}rem]`;
+  if (typeof width === 'number') return `w-[${width / 16}rem]`;
 
   return '';
 }

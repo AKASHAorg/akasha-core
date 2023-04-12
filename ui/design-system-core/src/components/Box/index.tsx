@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { tw } from '@twind/core';
+import { apply, tw } from '@twind/core';
 
 export interface IBoxProps {
   customStyle?: string;
@@ -8,7 +8,9 @@ export interface IBoxProps {
 const Box: React.FC<PropsWithChildren<IBoxProps>> = props => {
   const { customStyle = '', children } = props;
 
-  return <div className={tw(customStyle)}>{children}</div>;
+  const className = apply`${customStyle}`;
+
+  return <div className={tw(className)}>{children}</div>;
 };
 
 export default Box;

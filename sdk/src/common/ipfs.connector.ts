@@ -1,11 +1,13 @@
-import {inject, injectable} from 'inversify';
-import {LEGAL_DOCS, TYPES} from '@akashaorg/typings/sdk';
+import { inject, injectable } from 'inversify';
+import { LEGAL_DOCS, LegalDocsSchema, TYPES } from '@akashaorg/typings/sdk';
 import Logging from '../logging/index';
-import {CID} from 'multiformats/cid';
-import {base16} from 'multiformats/bases/base16';
-import {multiaddrToUri} from '@multiformats/multiaddr-to-uri';
-import {Client, create} from '@web3-storage/w3up-client';
+import { CID } from 'multiformats/cid';
+import { base16 } from 'multiformats/bases/base16';
+import { multiaddrToUri } from '@multiformats/multiaddr-to-uri';
+import { Client, create } from '@web3-storage/w3up-client';
 import pino from 'pino';
+import { z } from 'zod';
+import { validate } from './validator';
 
 @injectable()
 class AWF_IpfsConnector {
@@ -20,7 +22,7 @@ class AWF_IpfsConnector {
     [LEGAL_DOCS.CODE_OF_CONDUCT]: 'bafkreie6ygpcmpckoxnb6rip62nxztntwu5k2oqmwfvxyubfppwimhype4',
     [LEGAL_DOCS.APP_GUIDE]: 'bafkreidpkbwzpxupnnty4bua5w4n7ddiyugb2ermb2htkxczrw7okan3nu',
   };
-  #w3upClient: Client;
+  #w3upClient!: Client;
 
   constructor(@inject(TYPES.Log) log: Logging) {
     this._log = log.create('AWF_IpfsConnector');
@@ -36,6 +38,7 @@ class AWF_IpfsConnector {
   }
 
   // email is just temporary until delegation works
+  @validate(z.instanceof(Blob), z.string().optional())
   async uploadFile(file: Blob, email?: string) {
     const spaces = this.#w3upClient.spaces();
     if (!spaces.length) {
@@ -52,7 +55,7 @@ class AWF_IpfsConnector {
     }
     return this.#w3upClient.uploadFile(file);
   }
-
+  @validate(z.union([z.string(), z.instanceof(CID)]), z.boolean().optional())
   async catDocument<T>(docHash: string | CID, jsonResponse = false): Promise<T> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 60000);
@@ -73,11 +76,13 @@ class AWF_IpfsConnector {
    *
    * @param doc - legal docs
    */
+  @validate(LegalDocsSchema)
   async getLegalDoc(doc: LEGAL_DOCS) {
     const selectedDoc = this.LEGAL_DOCS_SOURCE[doc];
     return this.catDocument<never>(selectedDoc);
   }
 
+  @validate(z.union([z.string(), z.instanceof(CID)]))
   validateCid(hash: string | CID) {
     if (typeof hash === 'string' && hash.startsWith('https://')) {
       return { link: hash };
@@ -88,31 +93,31 @@ class AWF_IpfsConnector {
     }
     return { cid };
   }
-
+  @validate(z.union([z.string(), z.instanceof(CID)]))
   buildOriginLink(hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
     if (link) {
       return link;
     }
-    return `https://${cid.toV1().toString()}.${this.originGateway}`;
+    return `https://${cid?.toV1().toString()}.${this.originGateway}`;
   }
-
+  @validate(z.union([z.string(), z.instanceof(CID)]))
   buildFallBackLink(hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
     if (link) {
       return link;
     }
-    return `https://${cid.toV1().toString()}.${this.fallbackGateway}`;
+    return `https://${cid?.toV1().toString()}.${this.fallbackGateway}`;
   }
-
+  @validate(z.union([z.string(), z.instanceof(CID)]))
   buildPathLink(hash: string | CID) {
     const { link, cid } = this.validateCid(hash);
     if (link) {
       return link;
     }
-    return `${this.gateway}${cid.toV1().toString()}`;
+    return `${this.gateway}${cid?.toV1().toString()}`;
   }
-
+  @validate(z.union([z.string(), z.instanceof(CID)]))
   buildIpfsLinks(hash: string | CID) {
     const originLink = this.buildOriginLink(hash);
     const fallbackLink = this.buildFallBackLink(hash);
@@ -124,14 +129,15 @@ class AWF_IpfsConnector {
       pathLink,
     };
   }
-
+  @validate(z.string())
   transformBase16HashToV1(hash: string) {
     const cid = CID.parse(hash, base16.decoder);
     return cid.toV1();
   }
 
+  @validate(z.array(z.string()))
   multiAddrToUri(addrList: string[]) {
-    const results = [];
+    const results: string[] = [];
     if (!addrList?.length) {
       return results;
     }

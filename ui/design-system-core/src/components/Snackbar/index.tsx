@@ -1,6 +1,7 @@
 import React from 'react';
 import Icon from '../Icon';
 import Text from '../Text';
+import Button from '../Button';
 import { tw, apply } from '@twind/core';
 import { getColorLight, getColorDark } from './getColor';
 
@@ -54,19 +55,16 @@ const Snackbar: React.FC<ISnackbar> = ({
           {description}
         </Text>
         {actionButtonLabel && (
-          <button onClick={handleButtonClick}>
-            <Text
-              variant="button-md"
-              color={{ light: `text-${colorLight}`, dark: `text-${colorDark}` }}
-            >
+          <Button onClick={handleButtonClick} plain>
+            <Text variant="button-md" color={{ light: `${colorLight}`, dark: `${colorDark}` }}>
               {actionButtonLabel}
             </Text>
-          </button>
+          </Button>
         )}
       </div>
-      <button onClick={handleDismiss} className={tw('ml-2')}>
+      <Button onClick={handleDismiss} className={tw('ml-2')} plain>
         <Icon type="XMarkIcon" color="grey7" customStyle="w-4 h-4" />
-      </button>
+      </Button>
     </div>
   );
 };

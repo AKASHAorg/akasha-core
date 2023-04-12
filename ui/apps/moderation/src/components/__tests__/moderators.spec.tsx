@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { renderWithAllProviders, act, genAppProps, cleanup } from '@akashaorg/af-testing';
 
-import Moderators from '../../pages/moderators';
+import { Moderators } from '../../pages';
 
 describe('<Moderators /> component', () => {
   const Base = <Moderators {...genAppProps()} />;

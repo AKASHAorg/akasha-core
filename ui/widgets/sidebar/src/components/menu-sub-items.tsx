@@ -19,7 +19,7 @@ const MenuSubItems: React.FC<IMenuSubItemsProps> = props => {
 
   const genBorderStyles = (route: string) =>
     route === activeOption?.route
-      ? 'border-secondary-light dark:border-secondary-dark'
+      ? 'border-secondaryLight dark:border-secondaryDark'
       : 'border-grey9 dark:border-grey3';
 
   return (

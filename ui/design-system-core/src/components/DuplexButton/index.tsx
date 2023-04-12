@@ -21,6 +21,8 @@ const DuplexButton = (props: DuplexButtonProps) => {
   const {
     onClickActive,
     onClickInactive,
+    size = 'sm',
+    customStyle,
     inactiveLabel,
     activeLabel,
     activeHoverLabel,
@@ -55,18 +57,19 @@ const DuplexButton = (props: DuplexButtonProps) => {
 
   if (iconOnly && allowMinimization) {
     return (
-      <button
+      <Button
         data-testid="duplex-button"
         onClick={active ? onClickActive : onClickInactive}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={tw('rounded-sm border-1 border-secondary-light p-1')}
+        className={tw('rounded-sm border-1 border-secondaryLight p-1')}
+        plain
       >
         <Icon
           type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-          customStyle="text-secondary-light h-5 w-5"
+          customStyle="text-secondaryLight h-5 w-5"
         />
-      </button>
+      </Button>
     );
   }
 
@@ -78,7 +81,9 @@ const DuplexButton = (props: DuplexButtonProps) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       icon={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
-      size="small"
+      variant={active ? 'secondary' : 'primary'}
+      size={size}
+      customStyle={customStyle}
     />
   );
 };

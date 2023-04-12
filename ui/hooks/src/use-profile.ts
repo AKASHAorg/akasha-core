@@ -2,7 +2,7 @@ import { forkJoin, lastValueFrom } from 'rxjs';
 import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
-import { DataProviderInput } from '@akashaorg/typings/sdk';
+import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import {
   IProfileData,
   ProfileProviderProperties,
@@ -175,13 +175,13 @@ export function useGetEntryAuthor(entryId: string) {
 const getFollowers = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
   const res = await sdk.api.profile.getFollowers(pubKey, limit, offset);
-  const followersWithMediaLinks = res.getFollowers.results.map(follower =>
+  const followersWithMediaLinks = res.data.getFollowers.results.map(follower =>
     buildProfileMediaLinks(follower),
   );
   return {
-    nextIndex: res.getFollowers.nextIndex,
+    nextIndex: res.data.getFollowers.nextIndex,
     results: followersWithMediaLinks,
-    total: res.getFollowers.total,
+    total: res.data.getFollowers.total,
   };
 };
 
@@ -217,13 +217,13 @@ export function useFollowers(pubKey: string, limit: number, offset?: number) {
 const getFollowing = async (pubKey: string, limit: number, offset?: number) => {
   const sdk = getSDK();
   const res = await sdk.api.profile.getFollowing(pubKey, limit, offset);
-  const followingWithMediaLinks = res.getFollowing.results.map(follower =>
+  const followingWithMediaLinks = res.data.getFollowing.results.map(follower =>
     buildProfileMediaLinks(follower),
   );
   return {
-    nextIndex: res.getFollowing.nextIndex,
+    nextIndex: res.data.getFollowing.nextIndex,
     results: followingWithMediaLinks,
-    total: res.getFollowing.total,
+    total: res.data.getFollowing.total,
   };
 };
 
@@ -260,14 +260,13 @@ const getInterests = async (pubKey: string) => {
   const sdk = getSDK();
   const res = await sdk.api.profile.getInterests(pubKey);
 
-  const getTagCalls = res.getInterests.map(interest => {
+  const getTagCalls = res.data.getInterests.map(interest => {
     return sdk.api.tags.getTag(interest);
   });
 
   if (getTagCalls.length) {
-    const tagsRes = await lastValueFrom(forkJoin(getTagCalls));
-
-    return tagsRes.map(res => res.getTag);
+    const tagsRes = await Promise.all(getTagCalls);
+    return tagsRes.map(res => res.data.getTag);
   }
   return [];
 };

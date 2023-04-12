@@ -54,7 +54,7 @@ const BaseTabPanelStyles = apply`
     `;
 
 const SelectedTabStyles = apply`
-    text-secondary-light border-b(2 secondary-light)
+    text-secondaryLight border-b(2 secondaryLight)
     `;
 
 const BaseItemStyles = apply`
