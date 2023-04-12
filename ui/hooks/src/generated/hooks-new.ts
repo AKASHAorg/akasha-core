@@ -1,27 +1,17 @@
+//@ts-nocheck
 import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new';
+
+import { useQuery, useInfiniteQuery, useMutation, type UseQueryOptions, type UseInfiniteQueryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
 const sdk = getSDK();
-import { useQuery, useInfiniteQuery, useMutation, type UseQueryOptions, type UseInfiniteQueryOptions, type UseMutationOptions } from '@tanstack/react-query';
-
-function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
+export function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
   return async (): Promise<TData> => {
-    const res = await fetch(sdk.services.ceramic.getOptions().endpointURL as string, {
-    method: "POST",
-      body: JSON.stringify({ query, variables }),
-    });
-
-    const json = await res.json();
-
-    if (json.errors) {
-      const { message } = json.errors[0];
-
-      throw new Error(message);
-    }
-
-    return json.data;
-  }
+    // @ts-ignore
+    return sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+  };
 }
+
 export const CommentFragmentDoc = /*#__PURE__*/ `
     fragment CommentFragment on Comment {
   author {
@@ -147,18 +137,19 @@ export const useInfiniteGetCommentsFromPostQuery = <
       pageParamKey: keyof Types.GetCommentsFromPostQueryVariables,
       variables: Types.GetCommentsFromPostQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetCommentsFromPostQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetCommentsFromPostQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetCommentsFromPostQuery, TError, TData>(
       ['GetCommentsFromPost.infinite', variables],
       (metaData) => fetcher<Types.GetCommentsFromPostQuery, Types.GetCommentsFromPostQueryVariables>(GetCommentsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetCommentsFromPostQuery.getKey = (variables: Types.GetCommentsFromPostQueryVariables) => ['GetCommentsFromPost.infinite', variables];
 ;
 
-useGetCommentsFromPostQuery.fetcher = (variables: Types.GetCommentsFromPostQueryVariables) => fetcher<Types.GetCommentsFromPostQuery, Types.GetCommentsFromPostQueryVariables>(GetCommentsFromPostDocument, variables);
+useGetCommentsFromPostQuery.fetcher = (variables: Types.GetCommentsFromPostQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetCommentsFromPostQuery, Types.GetCommentsFromPostQueryVariables>(GetCommentsFromPostDocument, variables, options);
 export const GetCommentsByAuthorDidDocument = /*#__PURE__*/ `
     query GetCommentsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
@@ -205,18 +196,19 @@ export const useInfiniteGetCommentsByAuthorDidQuery = <
       pageParamKey: keyof Types.GetCommentsByAuthorDidQueryVariables,
       variables: Types.GetCommentsByAuthorDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetCommentsByAuthorDidQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetCommentsByAuthorDidQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetCommentsByAuthorDidQuery, TError, TData>(
       ['GetCommentsByAuthorDid.infinite', variables],
       (metaData) => fetcher<Types.GetCommentsByAuthorDidQuery, Types.GetCommentsByAuthorDidQueryVariables>(GetCommentsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetCommentsByAuthorDidQuery.getKey = (variables: Types.GetCommentsByAuthorDidQueryVariables) => ['GetCommentsByAuthorDid.infinite', variables];
 ;
 
-useGetCommentsByAuthorDidQuery.fetcher = (variables: Types.GetCommentsByAuthorDidQueryVariables) => fetcher<Types.GetCommentsByAuthorDidQuery, Types.GetCommentsByAuthorDidQueryVariables>(GetCommentsByAuthorDidDocument, variables);
+useGetCommentsByAuthorDidQuery.fetcher = (variables: Types.GetCommentsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetCommentsByAuthorDidQuery, Types.GetCommentsByAuthorDidQueryVariables>(GetCommentsByAuthorDidDocument, variables, options);
 export const GetCommentRepliesDocument = /*#__PURE__*/ `
     query GetCommentReplies($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
@@ -265,18 +257,19 @@ export const useInfiniteGetCommentRepliesQuery = <
       pageParamKey: keyof Types.GetCommentRepliesQueryVariables,
       variables: Types.GetCommentRepliesQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetCommentRepliesQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetCommentRepliesQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetCommentRepliesQuery, TError, TData>(
       ['GetCommentReplies.infinite', variables],
       (metaData) => fetcher<Types.GetCommentRepliesQuery, Types.GetCommentRepliesQueryVariables>(GetCommentRepliesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetCommentRepliesQuery.getKey = (variables: Types.GetCommentRepliesQueryVariables) => ['GetCommentReplies.infinite', variables];
 ;
 
-useGetCommentRepliesQuery.fetcher = (variables: Types.GetCommentRepliesQueryVariables) => fetcher<Types.GetCommentRepliesQuery, Types.GetCommentRepliesQueryVariables>(GetCommentRepliesDocument, variables);
+useGetCommentRepliesQuery.fetcher = (variables: Types.GetCommentRepliesQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetCommentRepliesQuery, Types.GetCommentRepliesQueryVariables>(GetCommentRepliesDocument, variables, options);
 export const CreateCommentDocument = /*#__PURE__*/ `
     mutation CreateComment($i: CreateCommentInput!) {
   createComment(input: $i) {
@@ -298,7 +291,7 @@ export const useCreateCommentMutation = <
     );
 useCreateCommentMutation.getKey = () => ['CreateComment'];
 
-useCreateCommentMutation.fetcher = (variables: Types.CreateCommentMutationVariables) => fetcher<Types.CreateCommentMutation, Types.CreateCommentMutationVariables>(CreateCommentDocument, variables);
+useCreateCommentMutation.fetcher = (variables: Types.CreateCommentMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateCommentMutation, Types.CreateCommentMutationVariables>(CreateCommentDocument, variables, options);
 export const UpdateCommentDocument = /*#__PURE__*/ `
     mutation UpdateComment($i: UpdateCommentInput!) {
   updateComment(input: $i) {
@@ -320,7 +313,7 @@ export const useUpdateCommentMutation = <
     );
 useUpdateCommentMutation.getKey = () => ['UpdateComment'];
 
-useUpdateCommentMutation.fetcher = (variables: Types.UpdateCommentMutationVariables) => fetcher<Types.UpdateCommentMutation, Types.UpdateCommentMutationVariables>(UpdateCommentDocument, variables);
+useUpdateCommentMutation.fetcher = (variables: Types.UpdateCommentMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateCommentMutation, Types.UpdateCommentMutationVariables>(UpdateCommentDocument, variables, options);
 export const CreateCommentReplyDocument = /*#__PURE__*/ `
     mutation CreateCommentReply($i: CreateCommentReplyInput!) {
   createCommentReply(input: $i) {
@@ -347,7 +340,7 @@ export const useCreateCommentReplyMutation = <
     );
 useCreateCommentReplyMutation.getKey = () => ['CreateCommentReply'];
 
-useCreateCommentReplyMutation.fetcher = (variables: Types.CreateCommentReplyMutationVariables) => fetcher<Types.CreateCommentReplyMutation, Types.CreateCommentReplyMutationVariables>(CreateCommentReplyDocument, variables);
+useCreateCommentReplyMutation.fetcher = (variables: Types.CreateCommentReplyMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateCommentReplyMutation, Types.CreateCommentReplyMutationVariables>(CreateCommentReplyDocument, variables, options);
 export const UpdateCommentReplyDocument = /*#__PURE__*/ `
     mutation UpdateCommentReply($i: UpdateCommentReplyInput!) {
   updateCommentReply(input: $i) {
@@ -374,7 +367,7 @@ export const useUpdateCommentReplyMutation = <
     );
 useUpdateCommentReplyMutation.getKey = () => ['UpdateCommentReply'];
 
-useUpdateCommentReplyMutation.fetcher = (variables: Types.UpdateCommentReplyMutationVariables) => fetcher<Types.UpdateCommentReplyMutation, Types.UpdateCommentReplyMutationVariables>(UpdateCommentReplyDocument, variables);
+useUpdateCommentReplyMutation.fetcher = (variables: Types.UpdateCommentReplyMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateCommentReplyMutation, Types.UpdateCommentReplyMutationVariables>(UpdateCommentReplyDocument, variables, options);
 export const GetPostsDocument = /*#__PURE__*/ `
     query GetPosts($after: String, $before: String, $first: Int, $last: Int) {
   postIndex(after: $after, before: $before, first: $first, last: $last) {
@@ -417,18 +410,19 @@ export const useInfiniteGetPostsQuery = <
       pageParamKey: keyof Types.GetPostsQueryVariables,
       variables?: Types.GetPostsQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetPostsQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetPostsQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetPostsQuery, TError, TData>(
       variables === undefined ? ['GetPosts.infinite'] : ['GetPosts.infinite', variables],
       (metaData) => fetcher<Types.GetPostsQuery, Types.GetPostsQueryVariables>(GetPostsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetPostsQuery.getKey = (variables?: Types.GetPostsQueryVariables) => variables === undefined ? ['GetPosts.infinite'] : ['GetPosts.infinite', variables];
 ;
 
-useGetPostsQuery.fetcher = (variables?: Types.GetPostsQueryVariables) => fetcher<Types.GetPostsQuery, Types.GetPostsQueryVariables>(GetPostsDocument, variables);
+useGetPostsQuery.fetcher = (variables?: Types.GetPostsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetPostsQuery, Types.GetPostsQueryVariables>(GetPostsDocument, variables, options);
 export const GetPostsByAuthorDidDocument = /*#__PURE__*/ `
     query GetPostsByAuthorDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
@@ -475,18 +469,19 @@ export const useInfiniteGetPostsByAuthorDidQuery = <
       pageParamKey: keyof Types.GetPostsByAuthorDidQueryVariables,
       variables: Types.GetPostsByAuthorDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetPostsByAuthorDidQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetPostsByAuthorDidQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetPostsByAuthorDidQuery, TError, TData>(
       ['GetPostsByAuthorDid.infinite', variables],
       (metaData) => fetcher<Types.GetPostsByAuthorDidQuery, Types.GetPostsByAuthorDidQueryVariables>(GetPostsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetPostsByAuthorDidQuery.getKey = (variables: Types.GetPostsByAuthorDidQueryVariables) => ['GetPostsByAuthorDid.infinite', variables];
 ;
 
-useGetPostsByAuthorDidQuery.fetcher = (variables: Types.GetPostsByAuthorDidQueryVariables) => fetcher<Types.GetPostsByAuthorDidQuery, Types.GetPostsByAuthorDidQueryVariables>(GetPostsByAuthorDidDocument, variables);
+useGetPostsByAuthorDidQuery.fetcher = (variables: Types.GetPostsByAuthorDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetPostsByAuthorDidQuery, Types.GetPostsByAuthorDidQueryVariables>(GetPostsByAuthorDidDocument, variables, options);
 export const GetPostByIdDocument = /*#__PURE__*/ `
     query GetPostById($id: ID!) {
   node(id: $id) {
@@ -521,18 +516,19 @@ export const useInfiniteGetPostByIdQuery = <
       pageParamKey: keyof Types.GetPostByIdQueryVariables,
       variables: Types.GetPostByIdQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetPostByIdQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetPostByIdQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetPostByIdQuery, TError, TData>(
       ['GetPostById.infinite', variables],
       (metaData) => fetcher<Types.GetPostByIdQuery, Types.GetPostByIdQueryVariables>(GetPostByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetPostByIdQuery.getKey = (variables: Types.GetPostByIdQueryVariables) => ['GetPostById.infinite', variables];
 ;
 
-useGetPostByIdQuery.fetcher = (variables: Types.GetPostByIdQueryVariables) => fetcher<Types.GetPostByIdQuery, Types.GetPostByIdQueryVariables>(GetPostByIdDocument, variables);
+useGetPostByIdQuery.fetcher = (variables: Types.GetPostByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetPostByIdQuery, Types.GetPostByIdQueryVariables>(GetPostByIdDocument, variables, options);
 export const GetQuotedPostsFromPostDocument = /*#__PURE__*/ `
     query GetQuotedPostsFromPost($id: ID!) {
   node(id: $id) {
@@ -578,18 +574,19 @@ export const useInfiniteGetQuotedPostsFromPostQuery = <
       pageParamKey: keyof Types.GetQuotedPostsFromPostQueryVariables,
       variables: Types.GetQuotedPostsFromPostQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetQuotedPostsFromPostQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetQuotedPostsFromPostQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetQuotedPostsFromPostQuery, TError, TData>(
       ['GetQuotedPostsFromPost.infinite', variables],
       (metaData) => fetcher<Types.GetQuotedPostsFromPostQuery, Types.GetQuotedPostsFromPostQueryVariables>(GetQuotedPostsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetQuotedPostsFromPostQuery.getKey = (variables: Types.GetQuotedPostsFromPostQueryVariables) => ['GetQuotedPostsFromPost.infinite', variables];
 ;
 
-useGetQuotedPostsFromPostQuery.fetcher = (variables: Types.GetQuotedPostsFromPostQueryVariables) => fetcher<Types.GetQuotedPostsFromPostQuery, Types.GetQuotedPostsFromPostQueryVariables>(GetQuotedPostsFromPostDocument, variables);
+useGetQuotedPostsFromPostQuery.fetcher = (variables: Types.GetQuotedPostsFromPostQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetQuotedPostsFromPostQuery, Types.GetQuotedPostsFromPostQueryVariables>(GetQuotedPostsFromPostDocument, variables, options);
 export const GetMentionsFromPostDocument = /*#__PURE__*/ `
     query GetMentionsFromPost($id: ID!) {
   node(id: $id) {
@@ -636,18 +633,19 @@ export const useInfiniteGetMentionsFromPostQuery = <
       pageParamKey: keyof Types.GetMentionsFromPostQueryVariables,
       variables: Types.GetMentionsFromPostQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetMentionsFromPostQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetMentionsFromPostQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetMentionsFromPostQuery, TError, TData>(
       ['GetMentionsFromPost.infinite', variables],
       (metaData) => fetcher<Types.GetMentionsFromPostQuery, Types.GetMentionsFromPostQueryVariables>(GetMentionsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetMentionsFromPostQuery.getKey = (variables: Types.GetMentionsFromPostQueryVariables) => ['GetMentionsFromPost.infinite', variables];
 ;
 
-useGetMentionsFromPostQuery.fetcher = (variables: Types.GetMentionsFromPostQueryVariables) => fetcher<Types.GetMentionsFromPostQuery, Types.GetMentionsFromPostQueryVariables>(GetMentionsFromPostDocument, variables);
+useGetMentionsFromPostQuery.fetcher = (variables: Types.GetMentionsFromPostQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMentionsFromPostQuery, Types.GetMentionsFromPostQueryVariables>(GetMentionsFromPostDocument, variables, options);
 export const CreatePostDocument = /*#__PURE__*/ `
     mutation CreatePost($i: CreatePostInput!) {
   createPost(input: $i) {
@@ -668,7 +666,7 @@ export const useCreatePostMutation = <
     );
 useCreatePostMutation.getKey = () => ['CreatePost'];
 
-useCreatePostMutation.fetcher = (variables: Types.CreatePostMutationVariables) => fetcher<Types.CreatePostMutation, Types.CreatePostMutationVariables>(CreatePostDocument, variables);
+useCreatePostMutation.fetcher = (variables: Types.CreatePostMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreatePostMutation, Types.CreatePostMutationVariables>(CreatePostDocument, variables, options);
 export const UpdatePostDocument = /*#__PURE__*/ `
     mutation UpdatePost($i: UpdatePostInput!) {
   updatePost(input: $i) {
@@ -690,7 +688,7 @@ export const useUpdatePostMutation = <
     );
 useUpdatePostMutation.getKey = () => ['UpdatePost'];
 
-useUpdatePostMutation.fetcher = (variables: Types.UpdatePostMutationVariables) => fetcher<Types.UpdatePostMutation, Types.UpdatePostMutationVariables>(UpdatePostDocument, variables);
+useUpdatePostMutation.fetcher = (variables: Types.UpdatePostMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdatePostMutation, Types.UpdatePostMutationVariables>(UpdatePostDocument, variables, options);
 export const CreatePostQuoteDocument = /*#__PURE__*/ `
     mutation CreatePostQuote($i: CreatePostQuoteInput!) {
   createPostQuote(input: $i) {
@@ -718,7 +716,7 @@ export const useCreatePostQuoteMutation = <
     );
 useCreatePostQuoteMutation.getKey = () => ['CreatePostQuote'];
 
-useCreatePostQuoteMutation.fetcher = (variables: Types.CreatePostQuoteMutationVariables) => fetcher<Types.CreatePostQuoteMutation, Types.CreatePostQuoteMutationVariables>(CreatePostQuoteDocument, variables);
+useCreatePostQuoteMutation.fetcher = (variables: Types.CreatePostQuoteMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreatePostQuoteMutation, Types.CreatePostQuoteMutationVariables>(CreatePostQuoteDocument, variables, options);
 export const CreatePostProfileMentionDocument = /*#__PURE__*/ `
     mutation CreatePostProfileMention($i: CreateProfileMentionInput!) {
   createProfileMention(input: $i) {
@@ -745,7 +743,7 @@ export const useCreatePostProfileMentionMutation = <
     );
 useCreatePostProfileMentionMutation.getKey = () => ['CreatePostProfileMention'];
 
-useCreatePostProfileMentionMutation.fetcher = (variables: Types.CreatePostProfileMentionMutationVariables) => fetcher<Types.CreatePostProfileMentionMutation, Types.CreatePostProfileMentionMutationVariables>(CreatePostProfileMentionDocument, variables);
+useCreatePostProfileMentionMutation.fetcher = (variables: Types.CreatePostProfileMentionMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreatePostProfileMentionMutation, Types.CreatePostProfileMentionMutationVariables>(CreatePostProfileMentionDocument, variables, options);
 export const GetProfileByIdDocument = /*#__PURE__*/ `
     query GetProfileByID($id: ID!) {
   node(id: $id) {
@@ -780,18 +778,19 @@ export const useInfiniteGetProfileByIdQuery = <
       pageParamKey: keyof Types.GetProfileByIdQueryVariables,
       variables: Types.GetProfileByIdQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetProfileByIdQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetProfileByIdQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetProfileByIdQuery, TError, TData>(
       ['GetProfileByID.infinite', variables],
       (metaData) => fetcher<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetProfileByIdQuery.getKey = (variables: Types.GetProfileByIdQueryVariables) => ['GetProfileByID.infinite', variables];
 ;
 
-useGetProfileByIdQuery.fetcher = (variables: Types.GetProfileByIdQueryVariables) => fetcher<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables);
+useGetProfileByIdQuery.fetcher = (variables: Types.GetProfileByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, variables, options);
 export const GetProfileByDidDocument = /*#__PURE__*/ `
     query GetProfileByDid($id: ID!) {
   node(id: $id) {
@@ -828,18 +827,19 @@ export const useInfiniteGetProfileByDidQuery = <
       pageParamKey: keyof Types.GetProfileByDidQueryVariables,
       variables: Types.GetProfileByDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetProfileByDidQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetProfileByDidQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetProfileByDidQuery, TError, TData>(
       ['GetProfileByDid.infinite', variables],
       (metaData) => fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetProfileByDidQuery.getKey = (variables: Types.GetProfileByDidQueryVariables) => ['GetProfileByDid.infinite', variables];
 ;
 
-useGetProfileByDidQuery.fetcher = (variables: Types.GetProfileByDidQueryVariables) => fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables);
+useGetProfileByDidQuery.fetcher = (variables: Types.GetProfileByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, variables, options);
 export const GetProfilesDocument = /*#__PURE__*/ `
     query GetProfiles($after: String, $before: String, $first: Int, $last: Int) {
   profileIndex(after: $after, before: $before, first: $first, last: $last) {
@@ -882,18 +882,19 @@ export const useInfiniteGetProfilesQuery = <
       pageParamKey: keyof Types.GetProfilesQueryVariables,
       variables?: Types.GetProfilesQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetProfilesQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetProfilesQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetProfilesQuery, TError, TData>(
       variables === undefined ? ['GetProfiles.infinite'] : ['GetProfiles.infinite', variables],
       (metaData) => fetcher<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetProfilesQuery.getKey = (variables?: Types.GetProfilesQueryVariables) => variables === undefined ? ['GetProfiles.infinite'] : ['GetProfiles.infinite', variables];
 ;
 
-useGetProfilesQuery.fetcher = (variables?: Types.GetProfilesQueryVariables) => fetcher<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables);
+useGetProfilesQuery.fetcher = (variables?: Types.GetProfilesQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, variables, options);
 export const GetInterestsDocument = /*#__PURE__*/ `
     query GetInterests($after: String, $before: String, $first: Int, $last: Int) {
   interestsIndex(after: $after, before: $before, first: $first, last: $last) {
@@ -943,18 +944,19 @@ export const useInfiniteGetInterestsQuery = <
       pageParamKey: keyof Types.GetInterestsQueryVariables,
       variables?: Types.GetInterestsQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetInterestsQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetInterestsQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetInterestsQuery, TError, TData>(
       variables === undefined ? ['GetInterests.infinite'] : ['GetInterests.infinite', variables],
       (metaData) => fetcher<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetInterestsQuery.getKey = (variables?: Types.GetInterestsQueryVariables) => variables === undefined ? ['GetInterests.infinite'] : ['GetInterests.infinite', variables];
 ;
 
-useGetInterestsQuery.fetcher = (variables?: Types.GetInterestsQueryVariables) => fetcher<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables);
+useGetInterestsQuery.fetcher = (variables?: Types.GetInterestsQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, variables, options);
 export const GetInterestsByDidDocument = /*#__PURE__*/ `
     query GetInterestsByDid($id: ID!) {
   node(id: $id) {
@@ -998,18 +1000,19 @@ export const useInfiniteGetInterestsByDidQuery = <
       pageParamKey: keyof Types.GetInterestsByDidQueryVariables,
       variables: Types.GetInterestsByDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetInterestsByDidQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetInterestsByDidQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetInterestsByDidQuery, TError, TData>(
       ['GetInterestsByDid.infinite', variables],
       (metaData) => fetcher<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetInterestsByDidQuery.getKey = (variables: Types.GetInterestsByDidQueryVariables) => ['GetInterestsByDid.infinite', variables];
 ;
 
-useGetInterestsByDidQuery.fetcher = (variables: Types.GetInterestsByDidQueryVariables) => fetcher<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, variables);
+useGetInterestsByDidQuery.fetcher = (variables: Types.GetInterestsByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, variables, options);
 export const GetInterestsByIdDocument = /*#__PURE__*/ `
     query GetInterestsById($id: ID!) {
   node(id: $id) {
@@ -1051,18 +1054,19 @@ export const useInfiniteGetInterestsByIdQuery = <
       pageParamKey: keyof Types.GetInterestsByIdQueryVariables,
       variables: Types.GetInterestsByIdQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetInterestsByIdQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetInterestsByIdQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetInterestsByIdQuery, TError, TData>(
       ['GetInterestsById.infinite', variables],
       (metaData) => fetcher<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetInterestsByIdQuery.getKey = (variables: Types.GetInterestsByIdQueryVariables) => ['GetInterestsById.infinite', variables];
 ;
 
-useGetInterestsByIdQuery.fetcher = (variables: Types.GetInterestsByIdQueryVariables) => fetcher<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, variables);
+useGetInterestsByIdQuery.fetcher = (variables: Types.GetInterestsByIdQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, variables, options);
 export const GetFollowingListByDidDocument = /*#__PURE__*/ `
     query GetFollowingListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
@@ -1112,18 +1116,19 @@ export const useInfiniteGetFollowingListByDidQuery = <
       pageParamKey: keyof Types.GetFollowingListByDidQueryVariables,
       variables: Types.GetFollowingListByDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetFollowingListByDidQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetFollowingListByDidQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetFollowingListByDidQuery, TError, TData>(
       ['GetFollowingListByDid.infinite', variables],
       (metaData) => fetcher<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetFollowingListByDidQuery.getKey = (variables: Types.GetFollowingListByDidQueryVariables) => ['GetFollowingListByDid.infinite', variables];
 ;
 
-useGetFollowingListByDidQuery.fetcher = (variables: Types.GetFollowingListByDidQueryVariables) => fetcher<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, variables);
+useGetFollowingListByDidQuery.fetcher = (variables: Types.GetFollowingListByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, variables, options);
 export const GetFollowersListByDidDocument = /*#__PURE__*/ `
     query GetFollowersListByDid($id: ID!, $after: String, $before: String, $first: Int, $last: Int) {
   node(id: $id) {
@@ -1175,18 +1180,19 @@ export const useInfiniteGetFollowersListByDidQuery = <
       pageParamKey: keyof Types.GetFollowersListByDidQueryVariables,
       variables: Types.GetFollowersListByDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetFollowersListByDidQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetFollowersListByDidQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetFollowersListByDidQuery, TError, TData>(
       ['GetFollowersListByDid.infinite', variables],
       (metaData) => fetcher<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetFollowersListByDidQuery.getKey = (variables: Types.GetFollowersListByDidQueryVariables) => ['GetFollowersListByDid.infinite', variables];
 ;
 
-useGetFollowersListByDidQuery.fetcher = (variables: Types.GetFollowersListByDidQueryVariables) => fetcher<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables);
+useGetFollowersListByDidQuery.fetcher = (variables: Types.GetFollowersListByDidQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, variables, options);
 export const GetMyProfileDocument = /*#__PURE__*/ `
     query GetMyProfile {
   viewer {
@@ -1221,18 +1227,19 @@ export const useInfiniteGetMyProfileQuery = <
       pageParamKey: keyof Types.GetMyProfileQueryVariables,
       variables?: Types.GetMyProfileQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetMyProfileQuery, TError, TData>
-    ) =>
-    useInfiniteQuery<Types.GetMyProfileQuery, TError, TData>(
+    ) =>{
+
+    return useInfiniteQuery<Types.GetMyProfileQuery, TError, TData>(
       variables === undefined ? ['GetMyProfile.infinite'] : ['GetMyProfile.infinite', variables],
       (metaData) => fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
-    );
+    )};
 
 
 useInfiniteGetMyProfileQuery.getKey = (variables?: Types.GetMyProfileQueryVariables) => variables === undefined ? ['GetMyProfile.infinite'] : ['GetMyProfile.infinite', variables];
 ;
 
-useGetMyProfileQuery.fetcher = (variables?: Types.GetMyProfileQueryVariables) => fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables);
+useGetMyProfileQuery.fetcher = (variables?: Types.GetMyProfileQueryVariables, options?: RequestInit['headers']) => fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, variables, options);
 export const CreateProfileDocument = /*#__PURE__*/ `
     mutation CreateProfile($i: CreateProfileInput!) {
   createProfile(input: $i) {
@@ -1254,7 +1261,7 @@ export const useCreateProfileMutation = <
     );
 useCreateProfileMutation.getKey = () => ['CreateProfile'];
 
-useCreateProfileMutation.fetcher = (variables: Types.CreateProfileMutationVariables) => fetcher<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables);
+useCreateProfileMutation.fetcher = (variables: Types.CreateProfileMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateProfileMutation, Types.CreateProfileMutationVariables>(CreateProfileDocument, variables, options);
 export const UpdateProfileDocument = /*#__PURE__*/ `
     mutation UpdateProfile($i: UpdateProfileInput!) {
   updateProfile(input: $i) {
@@ -1276,7 +1283,7 @@ export const useUpdateProfileMutation = <
     );
 useUpdateProfileMutation.getKey = () => ['UpdateProfile'];
 
-useUpdateProfileMutation.fetcher = (variables: Types.UpdateProfileMutationVariables) => fetcher<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables);
+useUpdateProfileMutation.fetcher = (variables: Types.UpdateProfileMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateProfileMutation, Types.UpdateProfileMutationVariables>(UpdateProfileDocument, variables, options);
 export const CreateInterestsDocument = /*#__PURE__*/ `
     mutation CreateInterests($i: CreateInterestsInput!) {
   createInterests(input: $i) {
@@ -1305,7 +1312,7 @@ export const useCreateInterestsMutation = <
     );
 useCreateInterestsMutation.getKey = () => ['CreateInterests'];
 
-useCreateInterestsMutation.fetcher = (variables: Types.CreateInterestsMutationVariables) => fetcher<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables);
+useCreateInterestsMutation.fetcher = (variables: Types.CreateInterestsMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateInterestsMutation, Types.CreateInterestsMutationVariables>(CreateInterestsDocument, variables, options);
 export const UpdateInterestsDocument = /*#__PURE__*/ `
     mutation UpdateInterests($i: UpdateInterestsInput!) {
   updateInterests(input: $i) {
@@ -1334,7 +1341,7 @@ export const useUpdateInterestsMutation = <
     );
 useUpdateInterestsMutation.getKey = () => ['UpdateInterests'];
 
-useUpdateInterestsMutation.fetcher = (variables: Types.UpdateInterestsMutationVariables) => fetcher<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables);
+useUpdateInterestsMutation.fetcher = (variables: Types.UpdateInterestsMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateInterestsMutation, Types.UpdateInterestsMutationVariables>(UpdateInterestsDocument, variables, options);
 export const CreateFollowDocument = /*#__PURE__*/ `
     mutation CreateFollow($i: CreateFollowInput!) {
   createFollow(input: $i) {
@@ -1362,7 +1369,7 @@ export const useCreateFollowMutation = <
     );
 useCreateFollowMutation.getKey = () => ['CreateFollow'];
 
-useCreateFollowMutation.fetcher = (variables: Types.CreateFollowMutationVariables) => fetcher<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables);
+useCreateFollowMutation.fetcher = (variables: Types.CreateFollowMutationVariables, options?: RequestInit['headers']) => fetcher<Types.CreateFollowMutation, Types.CreateFollowMutationVariables>(CreateFollowDocument, variables, options);
 export const UpdateFollowDocument = /*#__PURE__*/ `
     mutation UpdateFollow($i: UpdateFollowInput!) {
   updateFollow(input: $i) {
@@ -1390,4 +1397,4 @@ export const useUpdateFollowMutation = <
     );
 useUpdateFollowMutation.getKey = () => ['UpdateFollow'];
 
-useUpdateFollowMutation.fetcher = (variables: Types.UpdateFollowMutationVariables) => fetcher<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables);
+useUpdateFollowMutation.fetcher = (variables: Types.UpdateFollowMutationVariables, options?: RequestInit['headers']) => fetcher<Types.UpdateFollowMutation, Types.UpdateFollowMutationVariables>(UpdateFollowDocument, variables, options);

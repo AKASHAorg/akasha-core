@@ -3,7 +3,7 @@
 /** @type {import("@graphql-codegen/cli").CodegenConfig} */
 const config = {
   schema: 'http://localhost:5005/graphql', //can be also an url
-  documents: ['src/**/*-new.graphql'], // @Todo: replace with src/**/*.graphql
+  documents: ['src/**/*-compose-new.graphql'], // @Todo: replace with src/**/*.graphql
   emitLegacyCommonJSImports: false,
   generates: {
     '../typings/src/sdk/graphql-types-new.ts': {
@@ -52,8 +52,16 @@ const config = {
         {
           add: {
             content:
-              `import getSDK from '@akashaorg/awf-sdk';
-const sdk = getSDK();`
+              `
+import getSDK from '@akashaorg/awf-sdk';
+const sdk = getSDK();
+export function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
+  return async (): Promise<TData> => {
+    // @ts-ignore
+    return sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+  };
+}
+`
           }
         },
         'typescript-react-query'
@@ -72,7 +80,7 @@ const sdk = getSDK();`
         exposeMutationKeys: true,
         exposeFetcher: true,
         fetcher: {
-          endpoint: 'sdk.services.ceramic.getOptions().endpointURL'
+          func: 'fetcher'
         }
       },
     },
