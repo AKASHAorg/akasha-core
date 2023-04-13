@@ -3,6 +3,7 @@ import Icon from '../Icon';
 import { IconType } from '@akashaorg/typings/ui';
 import Text from '../Text';
 import { tw, apply } from '@twind/core';
+import Button from '../Button';
 
 export type pillSize = 'small' | 'large';
 
@@ -29,10 +30,6 @@ const Pill: React.FC<IPill> = ({
     ? 'bg-secondaryLight/30 dark:bg-secondaryDark text-secondaryLight dark:text-grey1'
     : 'bg-white dark:bg-black text-secondaryLight dark:text-secondaryDark';
 
-  const textColor = secondaryBg
-    ? 'text-secondaryLight dark:text-grey1'
-    : 'text-secondaryLight dark:text-secondaryDark';
-
   const instanceStyle = apply`
   flex items-center
   ${bgColor}
@@ -47,13 +44,25 @@ const Pill: React.FC<IPill> = ({
           <Icon type={leadingIcon} customStyle="w-4 h-4" />
         </span>
       )}
-      <Text variant="body1" color={tw(textColor)}>
+      <Text
+        variant="body1"
+        color={
+          secondaryBg
+            ? { light: 'secondaryLight', dark: 'grey1' }
+            : { light: 'secondaryLight', dark: 'secondaryDark' }
+        }
+      >
         {infoLabel}
       </Text>
       {trailingIcon && (
-        <span className={tw('ml-2')} onClick={handleDismiss}>
+        <Button
+          customStyle="ml-2"
+          plain={true}
+          onClick={handleDismiss}
+          data-testid="dismiss-button"
+        >
           <Icon type={trailingIcon} customStyle="w-4 h-4" />
-        </span>
+        </Button>
       )}
     </div>
   );
