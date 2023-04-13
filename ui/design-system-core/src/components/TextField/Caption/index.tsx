@@ -1,32 +1,30 @@
 import React, { PropsWithChildren } from 'react';
 import Icon from '../../Icon';
 import Text from '../../Text';
-import { Status, STATUS_TO_COLOR_MAP } from '../../types/common.types';
-import { apply, tw } from '@twind/core';
+import Stack from '../../Stack';
+import { Color, Status } from '../../types/common.types';
 import { CaptionProps } from '../types';
-import { getIconClasses } from './getIconClasses';
 import { IconType } from '@akashaorg/typings/ui';
+import { getIconClasses } from '../Input/getIconClasses';
 
 const Caption: React.FC<PropsWithChildren<CaptionProps>> = ({ status, disabled, children }) => {
-  const iconStyle = getIconClasses(status);
-  const textColor = status
-    ? STATUS_TO_COLOR_MAP[status]
+  const iconStyle = getIconClasses(disabled, status);
+  const textColor: Color = status
+    ? status
     : {
-        light: 'text-grey4',
-        dark: 'text-grey6',
+        light: 'grey4',
+        dark: 'grey6',
       };
 
   if (disabled) return null;
 
   return (
-    <div
-      className={tw(apply('flex items-center	gap-1.5'))} /* @TODO: Replace with stack component */
-    >
-      {status && <Icon type={STATUS_TO_ICON_MAP[status]} styling={tw(apply(iconStyle))} />}
+    <Stack align="center" spacing="gap-1.5">
+      {status && <Icon type={STATUS_TO_ICON_MAP[status]} color={iconStyle} />}
       <Text color={textColor} variant="footnotes2" weight="normal">
         {children}
       </Text>
-    </div>
+    </Stack>
   );
 };
 

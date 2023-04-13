@@ -1,15 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import DS from '@akashaorg/design-system-core';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 import { values } from '../services/values';
 import { externalLinks } from '../utils/external-links';
+import ModerationIntroCard from '@akashaorg/design-system-components/lib/components/ModerationIntroCard';
+import ModerationValuesCard from '@akashaorg/design-system-components/lib/components/ModerationValuesCard';
 
-const { ModerationIntroCard, ModerationValuesCard } = DS;
-
-const IntroPage: React.FC<RootComponentProps> = props => {
+export const Overview: React.FC<RootComponentProps> = props => {
   const { plugins } = props;
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -18,7 +17,7 @@ const IntroPage: React.FC<RootComponentProps> = props => {
   const handleCodeOfConductClick = () => {
     routing.navigateTo({
       appName: '@akashaorg/app-legal',
-      getNavigationUrl: () => '/legal/code-of-conduct',
+      getNavigationUrl: () => '/code-of-conduct',
     });
   };
 
@@ -74,5 +73,3 @@ const IntroPage: React.FC<RootComponentProps> = props => {
     </div>
   );
 };
-
-export default IntroPage;

@@ -1,34 +1,42 @@
 import * as React from 'react';
-import Button, { IButtonProps } from '../Button';
+import Button from '../Button';
 import Icon from '../Icon/';
 import { tw } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
+import { ButtonProps } from '../Button/types';
 
-export interface IDuplexButtonProps extends IButtonProps {
+export type DuplexButtonProps = ButtonProps & {
   onClickInactive?: () => void;
   onClickActive?: () => void;
   inactiveLabel?: string;
   activeLabel?: string;
+  activeHoverLabel?: string;
   active?: boolean;
   activeIcon?: IconType;
+  activeHoverIcon?: IconType;
   allowMinimization?: boolean;
-  style?: React.CSSProperties;
-}
+};
 
-const DuplexButton = (props: IDuplexButtonProps) => {
+const DuplexButton = (props: DuplexButtonProps) => {
   const {
     onClickActive,
     onClickInactive,
+    size = 'sm',
+    customStyle,
     inactiveLabel,
     activeLabel,
+    activeHoverLabel,
     active,
     icon,
     activeIcon,
+    activeHoverIcon,
     allowMinimization,
     loading,
   } = props;
 
+  const [hovered, setHovered] = React.useState(false);
   const [iconOnly, setIconOnly] = React.useState(window.matchMedia('(max-width: 992px)').matches);
+  const activeHoverIconElem = activeHoverIcon || icon;
   const activeIconElem = activeIcon || icon;
 
   React.useEffect(() => {
@@ -49,30 +57,41 @@ const DuplexButton = (props: IDuplexButtonProps) => {
 
   if (iconOnly && allowMinimization) {
     return (
-      <button
+      <Button
         data-testid="duplex-button"
         onClick={active ? onClickActive : onClickInactive}
-        className={tw('rounded-sm border-1 border-secondary-light p-1')}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className={tw('rounded-sm border-1 border-secondaryLight p-1')}
+        plain
       >
-        <Icon type={active ? activeIconElem : icon} styling="text-secondary-light h-5 w-5" />
-      </button>
+        <Icon
+          type={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
+          customStyle="text-secondaryLight h-5 w-5"
+        />
+      </Button>
     );
   }
 
   return (
     <Button
       data-testid="duplex-button"
-      primary={!active}
-      label={active ? activeLabel : inactiveLabel}
+      label={active ? (hovered ? activeHoverLabel : activeLabel) : inactiveLabel}
       onClick={active ? onClickActive : onClickInactive}
-      size="small"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      icon={active ? (hovered ? activeHoverIconElem : activeIconElem) : icon}
+      variant={active ? 'secondary' : 'primary'}
+      size={size}
+      customStyle={customStyle}
     />
   );
 };
 
 DuplexButton.defaultProps = {
   inactiveLabel: 'Follow',
-  activeLabel: 'Unfollow',
+  activeLabel: 'Following',
+  activeHoverLabel: 'Unfollow',
   active: false,
 };
 

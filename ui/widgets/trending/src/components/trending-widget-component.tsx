@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { tw, apply } from '@twind/core';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 
 import {
@@ -18,8 +18,6 @@ import {
 
 import TrendingTagCard from './TrendingTagCard';
 import TrendingProfileCard from './TrendingProfileCard';
-
-const { ErrorLoader } = DSNew;
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;

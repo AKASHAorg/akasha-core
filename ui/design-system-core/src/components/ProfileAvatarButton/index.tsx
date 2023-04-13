@@ -10,7 +10,7 @@ export interface ProfileAvatarButtonProps {
   avatarImage?: IProfileData['avatar'];
   label?: string;
   size?: AvatarSize;
-  className?: string;
+  customStyle?: string;
   onClickAvatar?: () => void;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   ethAddress: string;
@@ -20,14 +20,12 @@ export interface ProfileAvatarButtonProps {
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const BaseStyles = apply`
-    text-ellipsis overflow-hidden whitespace-nowrap truncate
-    `;
+const BaseStyle = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
 
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLElement>) => {
     const {
-      className,
+      customStyle = '',
       size,
       avatarImage,
       label,
@@ -41,12 +39,12 @@ const ProfileAvatarButton = React.forwardRef(
     } = props;
 
     const InstantStyle = apply`
-    ${BaseStyles}
+    ${BaseStyle}
     text(lg:base md:xs) max-w([7rem] xs:[2rem])
     `;
 
     return (
-      <div className={tw(`inline-flex items-center justify-center ${className} `)}>
+      <div className={tw(`inline-flex items-center justify-center ${customStyle}`)}>
         <div className={tw('shrink-0')}>
           <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
         </div>
@@ -61,7 +59,7 @@ const ProfileAvatarButton = React.forwardRef(
               {label || ethAddress}
             </Text>
           </div>
-          <Text variant="footnotes2" color={{ dark: 'text-grey7', light: 'grey7' }} truncate={true}>
+          <Text variant="footnotes2" color="grey7" truncate={true}>
             {info}
           </Text>
         </div>

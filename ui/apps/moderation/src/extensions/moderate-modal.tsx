@@ -5,15 +5,13 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { ModerationEntityTypesMap, RootExtensionProps } from '@akashaorg/typings/ui';
 import { useModeration, withProviders, useGetLogin, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
 import { BASE_DECISION_URL } from '../services/constants';
 
 const { ModerateModal } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const ModerateModalComponent = (props: RootExtensionProps) => {
   const { extensionData } = props;
@@ -67,7 +65,7 @@ const ModerateModalComponent = (props: RootExtensionProps) => {
       descriptionPlaceholder={t('Please explain the reason(s)')}
       footerText1Label={t('If you are unsure, you can refer to our')}
       footerLink1Label={t('Code of Conduct')}
-      footerUrl1={'/legal/code-of-conduct'}
+      footerUrl1={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/code-of-conduct`}
       cancelLabel={t('Cancel')}
       errorText={moderateMutation.error ? `${moderateMutation.error}` : ''}
       user={loginQuery.data?.pubKey || ''}

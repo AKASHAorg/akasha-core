@@ -1,148 +1,132 @@
 import React from 'react';
-import DS from '@akashaorg/design-system';
 
-import { StyledIcon, StyledText } from '../styles';
+import Anchor from '@akashaorg/design-system-core/lib/components/Anchor';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
+import Toggle from '@akashaorg/design-system-core/lib/components/Toggle';
 
-const { Box, BasicCardBox, Checkbox } = DS;
-
-export interface BaseOption {
-  titleLabel: string;
-  onChevronLeftClick: () => void;
-}
+import PageLayout from './base-layout';
+import { BaseOption } from './settings-page';
 
 export interface IPrivacyOption extends BaseOption {
+  worldLabel: string;
   essentialCookiesLabel: string;
   essentialCookiesInfo1: string;
+  privacyPolicyLabel: string;
   essentialCookiesInfo2: string;
   essentialCookiesInfo3: string;
+  essentialCookiesInfo4: string;
   trackingAnalyticsLabel: string;
   trackingAnalyticsInfo1: string;
   trackingAnalyticsInfo2: string;
-  trackingAnalyticsLinkLabel: string;
-  privacyPolicyLabel: string;
+  matomoLabel: string;
+  matomoUrl: string;
+  trackingAnalyticsInfo3: string;
+  trackingAnalyticsInfo4: string;
+  ctaLabel: string;
+  ctaUrl: string;
   checkedTracking: boolean;
   cookieType: string;
+  onPrivacyPolicyClick: () => void;
   onTrackingOptionChange: (ev: React.SyntheticEvent) => void;
 }
 
 const PrivacyOption: React.FC<IPrivacyOption> = props => {
   const {
     titleLabel,
+    worldLabel,
     essentialCookiesLabel,
     essentialCookiesInfo1,
     essentialCookiesInfo2,
     essentialCookiesInfo3,
+    essentialCookiesInfo4,
     trackingAnalyticsLabel,
     trackingAnalyticsInfo1,
     trackingAnalyticsInfo2,
-    trackingAnalyticsLinkLabel,
+    trackingAnalyticsInfo3,
+    trackingAnalyticsInfo4,
+    matomoLabel,
+    matomoUrl,
+    ctaLabel,
+    ctaUrl,
     privacyPolicyLabel,
     checkedTracking,
     cookieType,
+    onPrivacyPolicyClick,
     onTrackingOptionChange,
-    onChevronLeftClick,
   } = props;
+
   return (
-    <Box direction="column" gap="small">
-      <BasicCardBox>
-        <Box
-          direction="row"
-          pad="medium"
-          align="center"
-          border={{ side: 'bottom', color: 'lightBorder' }}
-        >
-          <StyledIcon type="chevronLeft" onClick={onChevronLeftClick} />
-          <StyledText weight="bold" size="large" margin={{ vertical: '0', horizontal: 'auto' }}>
-            {titleLabel}
-          </StyledText>
-        </Box>
-        <Box
-          direction="row"
-          pad="medium"
-          justify="between"
-          align="center"
-          border={{ side: 'bottom', color: 'lightBorder' }}
-        >
-          <StyledText weight="bold" size="large">
-            {essentialCookiesLabel}
-          </StyledText>
-        </Box>
-        <Box
-          pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
-          justify="center"
-          align="start"
-          border={{ side: 'bottom', color: 'lightBorder' }}
-        >
-          <StyledText>
+    <PageLayout title={titleLabel}>
+      <Box customStyle="px-4">
+        {/* essential cookies */}
+        <Box customStyle="py-4 border(b-1 solid grey8)">
+          <Box customStyle="flex justify-between items-center mb-2">
+            <Text weight="bold">{essentialCookiesLabel}</Text>
+
+            {/* always checked and cannot be toggled */}
+            <Toggle checked={true} disabled={true} />
+          </Box>
+
+          <Text>
             {essentialCookiesInfo1}
-            <StyledText
-              color="accentText"
-              style={{ cursor: 'pointer' }}
-              onClick={() =>
-                window.open(
-                  `${window.location.protocol}//${window.location.host}/legal/privacy-policy`,
-                  'Privacy Policy',
-                  '_blank noopener noreferrer',
-                )
-              }
-            >
-              {privacyPolicyLabel}
-            </StyledText>
+            <Text customStyle="inline-block" as="span" weight="bold">
+              {worldLabel}
+            </Text>
             {essentialCookiesInfo2}
-          </StyledText>
-          <StyledText>{essentialCookiesInfo3}</StyledText>
+            <span onClick={onPrivacyPolicyClick}>
+              <Text
+                customStyle="inline-block cursor-pointer"
+                as="span"
+                weight="bold"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              >
+                {privacyPolicyLabel}
+              </Text>
+            </span>
+            {essentialCookiesInfo3}
+            {essentialCookiesInfo4}
+          </Text>
         </Box>
-        <Box
-          direction="row"
-          pad="medium"
-          justify="between"
-          align="center"
-          border={{ side: 'bottom', color: 'lightBorder' }}
-        >
-          <StyledText weight="bold" size="large">
-            {trackingAnalyticsLabel}
-          </StyledText>
-          <Checkbox
-            checked={checkedTracking}
-            onChange={onTrackingOptionChange}
-            toggle={true}
-            disabled={!cookieType}
-          />
-        </Box>
-        <Box
-          pad={{ top: 'medium', horizontal: 'medium', bottom: 'xlarge' }}
-          justify="center"
-          align="start"
-        >
-          <StyledText>
+
+        {/* tracking analytics */}
+        <Box customStyle="py-4">
+          <Box customStyle="flex justify-between items-center mb-2">
+            <Text weight="bold">{trackingAnalyticsLabel}</Text>
+
+            <Toggle
+              checked={checkedTracking}
+              onChange={onTrackingOptionChange}
+              disabled={!cookieType}
+            />
+          </Box>
+
+          <Text>
             {trackingAnalyticsInfo1}
-            <StyledText
-              color="accentText"
-              style={{ cursor: 'pointer' }}
-              onClick={() =>
-                window.open('https://matomo.org', 'Matomo', '_blank noopener noreferrer')
-              }
-            >
-              Matomo
-            </StyledText>
+            <Text customStyle="inline-block" as="span" weight="bold">
+              {worldLabel}
+            </Text>
             {trackingAnalyticsInfo2}
-            <StyledText
-              color="accentText"
-              style={{ cursor: 'pointer' }}
-              onClick={() =>
-                window.open(
-                  'https://forum.akasha.org/t/implementing-analytics-on-ethereum-world-an-open-discussion-on-the-rationale-and-your-choices/100',
-                  'Akasha Forum',
-                  '_blank noopener noreferrer',
-                )
-              }
-            >
-              {trackingAnalyticsLinkLabel}
-            </StyledText>
-          </StyledText>
+            <Anchor href={matomoUrl}>
+              <Text
+                as="span"
+                weight="bold"
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+              >
+                {matomoLabel}
+              </Text>
+            </Anchor>
+            {trackingAnalyticsInfo3}
+            <Anchor href={ctaUrl}>
+              <Text as="span" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+                {ctaLabel}
+              </Text>
+            </Anchor>
+            {trackingAnalyticsInfo4}
+          </Text>
         </Box>
-      </BasicCardBox>
-    </Box>
+      </Box>
+    </PageLayout>
   );
 };
 

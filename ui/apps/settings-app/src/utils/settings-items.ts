@@ -1,21 +1,30 @@
+export type SettingsOption =
+  | 'Settings'
+  | 'Privacy'
+  | 'Theme'
+  | 'General'
+  | 'Apps'
+  | 'Plugins'
+  | 'Widgets';
+
 export interface ISettingsItem {
-  label: string;
+  label: SettingsOption;
   clickable: boolean;
   isSubheading?: boolean;
 }
 
 export const settingsItems: ISettingsItem[] = [
-  {
-    label: 'World',
-    clickable: false,
-    isSubheading: true,
-  },
+  // {
+  //   label: 'World',
+  //   clickable: false,
+  //   isSubheading: true,
+  // },
   {
     label: 'Privacy',
     clickable: true,
   },
   {
-    label: 'Appearance',
+    label: 'Theme',
     clickable: true,
   },
   // disable these untill they are used

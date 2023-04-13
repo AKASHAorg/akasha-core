@@ -1,4 +1,5 @@
 import React from 'react';
+import { tw } from '@twind/core';
 
 import Sidebar, { ISidebarProps } from '.';
 import { sidebarItems } from '../../utils/dummy-data';
@@ -9,7 +10,7 @@ export default {
 };
 
 const Template = (args: ISidebarProps) => (
-  <div style={{ width: '25%' }}>
+  <div className={tw('w-[25%]')}>
     <Sidebar {...args} />
   </div>
 );
@@ -24,9 +25,9 @@ BaseSidebar.args = {
   footerLabel: 'Get in Touch',
   listItems: sidebarItems,
   footerIcons: [
-    { name: 'Github', link: '' },
-    { name: 'Discord', link: '' },
-    { name: 'Telegram', link: '' },
-    { name: 'Twitter', link: '' },
+    { name: 'github', link: '', icon: 'akasha' },
+    { name: 'discord', link: '', icon: 'akasha' },
+    { name: 'telegram', link: '', icon: 'akasha' },
+    { name: 'twitter', link: '', icon: 'akasha' },
   ],
 };

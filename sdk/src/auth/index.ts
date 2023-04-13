@@ -2,7 +2,20 @@ import { AUTH_MESSAGE, authStatus, SwActionType } from './constants';
 import { InboxListOptions, PrivateKey, UserAuth } from '@textile/hub';
 import { generatePrivateKey, loginWithChallenge } from './hub.auth';
 import { inject, injectable } from 'inversify';
-import { AUTH_EVENTS, CurrentUser, EthProviders, IMessage, TYPES } from '@akashaorg/typings/sdk';
+import {
+  AUTH_EVENTS,
+  CurrentUser,
+  EthAddress,
+  EthAddressSchema,
+  EthProviders,
+  EthProvidersSchema,
+  IMessage,
+  InviteCode,
+  InviteCodeSchema,
+  PubKey,
+  PubKeySchema,
+  TYPES,
+} from '@akashaorg/typings/sdk';
 import DB from '../db';
 import Web3Connector from '../common/web3.connector';
 import EventBus from '../common/event-bus';
@@ -18,6 +31,8 @@ import { executeOnSW } from './helpers';
 import pino from 'pino';
 import Lit from '../auth-v2/lit';
 import CeramicService from '../auth-v2/ceramic';
+import { z } from 'zod';
+import { validate } from '../common/validator';
 
 // in memory atm
 const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
@@ -30,8 +45,8 @@ const devKeys: { pubKey: string; addedAt: string; name?: string }[] = [];
 
 @injectable()
 class AWF_Auth {
-  #identity: PrivateKey;
-  private auth: UserAuth;
+  #identity?: PrivateKey;
+  private auth?: UserAuth;
   private _db: DB;
   private readonly _web3: Web3Connector;
   private _globalChannel: EventBus;
@@ -40,13 +55,13 @@ class AWF_Auth {
   private _gql: Gql;
   private _lit: Lit;
   private _ceramic: CeramicService;
-  private channel: BroadcastChannel | undefined;
+  private channel?: BroadcastChannel;
   private sessKey;
   private inboxWatcher;
-  private currentUser: CurrentUser | undefined;
-  private _lockSignIn: boolean | undefined;
-  #signedAuthMessage: string;
-  #tokenGenerator: () => Promise<UserAuth>;
+  private currentUser?: CurrentUser;
+  private _lockSignIn?: boolean;
+  #signedAuthMessage?: string;
+  tokenGenerator?: () => Promise<UserAuth>;
   public readonly waitForAuth = 'waitForAuth';
   public readonly providerKey = '@providerType';
   public readonly currentUserKey = '@currentUserType';
@@ -92,7 +107,7 @@ class AWF_Auth {
               [this.currentUserKey]: localStorage.getItem(this.currentUserKey),
               identity: { key: this.sessKey },
             };
-            this.channel.postMessage({ response, type: this.SYNC_RESPONSE });
+            this.channel?.postMessage({ response, type: this.SYNC_RESPONSE });
           }
         } else if (type === this.SYNC_RESPONSE) {
           const { response } = event.data;
@@ -120,12 +135,26 @@ class AWF_Auth {
    * Throws an UserNotRegistered error for addresses that are not registered
    * @param ethAddress - the eth address
    */
-  async checkIfSignedUp(ethAddress: string) {
-    const variables = { ethAddress: ethAddress };
+  @validate(EthAddressSchema)
+  async checkIfSignedUp(ethAddress: EthAddress) {
+    const variables = { ethAddress };
     const prof = await this._gql.getAPI().GetProfile(variables);
     return !!prof?.getProfile?.pubKey;
   }
 
+  @validate(
+    z.object({
+      provider: z.optional(EthProvidersSchema),
+      checkRegistered: z.boolean({
+        required_error: 'checkRegistered flag is required',
+      }),
+      resumeSignIn: z.optional(
+        z.boolean({
+          invalid_type_error: 'resumeSignIn must be a boolean',
+        }),
+      ),
+    }),
+  )
   async signIn(args: {
     provider?: EthProviders;
     checkRegistered: boolean;
@@ -141,11 +170,11 @@ class AWF_Auth {
       provider: EthProviders.Web3Injected,
       checkRegistered: true,
     },
-  ): Promise<CurrentUser & { isNewUser: boolean }> {
-    let currentProvider: number = args.provider;
+  ): Promise<(CurrentUser & { isNewUser: boolean }) | null> {
+    let currentProvider = args.provider as EthProviders;
     if (!args.resumeSignIn) {
       if (this._lockSignIn) {
-        return;
+        return null;
       }
       if (this.currentUser) {
         this._log.warn(`Already signed in!`);
@@ -156,7 +185,10 @@ class AWF_Auth {
         if (!localStorage.getItem(this.providerKey)) {
           throw new Error('The provider must have a wallet/key in order to authenticate.');
         }
-        currentProvider = +localStorage.getItem(this.providerKey); // cast to int
+        const providerKey = localStorage.getItem(this.providerKey);
+        if (providerKey) {
+          currentProvider = +providerKey; // cast to int
+        }
       } else {
         if (currentProvider === EthProviders.WalletConnect) {
           this._log.info('using wc bridge');
@@ -166,7 +198,7 @@ class AWF_Auth {
       try {
         const address = await this._connectAddress(currentProvider);
         const localUser = localStorage.getItem(this.currentUserKey);
-        this.sessKey = `@identity:${address.toLowerCase()}:${currentProvider}`;
+        this.sessKey = `@identity:${address?.toLowerCase()}:${currentProvider}`;
         const sessValue = localStorage.getItem(this.sessKey);
         if (localUser && sessValue) {
           const tmpSession = JSON.parse(localUser);
@@ -180,12 +212,12 @@ class AWF_Auth {
             args.checkRegistered = true;
           }
         }
-        if (args.checkRegistered) {
+        if (args.checkRegistered && address) {
           await this.checkIfSignedUp(address);
         }
         this._log.info(`using eth address ${address}`);
         if (sessValue) {
-          const rawKey: { value?: string } = await executeOnSW(
+          const rawKey = await executeOnSW<{ value?: string }>(
             Object.assign(
               {
                 type: SwActionType.DECRYPT,
@@ -202,7 +234,8 @@ class AWF_Auth {
           await new Promise(res => setTimeout(res, 600));
           await this.#_signComposedMessage();
         }
-        await this.#_signTokenMessage();
+        await this._ceramic.connect();
+        // await this.#_signTokenMessage();
       } catch (e) {
         this._lockSignIn = false;
         localStorage.removeItem(this.sessKey);
@@ -216,7 +249,7 @@ class AWF_Auth {
     await this.#_setupHubClient();
     const swResponse = await executeOnSW({
       type: SwActionType.ENCRYPT,
-      value: this.#identity.toString(),
+      value: this.#identity?.toString(),
     });
     if (swResponse) {
       localStorage.setItem(this.sessKey, JSON.stringify(swResponse));
@@ -254,9 +287,9 @@ class AWF_Auth {
     this._lockSignIn = false;
     //await this._lit.connect();
     //await this._ceramic.connect();
-    return Object.assign(this.currentUser, authStatus);
+    return Object.assign({}, this.currentUser, authStatus);
   }
-
+  @validate(EthProvidersSchema)
   async _connectAddress(provider: EthProviders) {
     this._globalChannel.next({
       data: {},
@@ -272,6 +305,7 @@ class AWF_Auth {
     return resp;
   }
 
+  @validate(EthProvidersSchema)
   async connectAddress(provider: EthProviders) {
     return this._connectAddress(provider);
   }
@@ -317,12 +351,12 @@ class AWF_Auth {
     if (!this.#identity) {
       throw new Error('Composed message was not signed!');
     }
-    this.#tokenGenerator = loginWithChallenge(this.#identity, this._web3);
+    this.tokenGenerator = loginWithChallenge(this.#identity, this._web3);
     this._globalChannel.next({
       data: {},
       event: AUTH_EVENTS.SIGN_TOKEN_MESSAGE,
     });
-    this.auth = await this.#tokenGenerator();
+    this.auth = await this.tokenGenerator();
     this._globalChannel.next({
       data: {},
       event: AUTH_EVENTS.SIGN_TOKEN_MESSAGE_SUCCESS,
@@ -330,10 +364,10 @@ class AWF_Auth {
   }
 
   async #_setupHubClient() {
-    if (!this.#tokenGenerator) {
+    if (!this.tokenGenerator) {
       throw new Error('Token message was not signed!');
     }
-    const pubKey = this.#identity.public.toString();
+    const pubKey = this.#identity?.public.toString();
     const address = await this._web3.getCurrentEthAddress();
     // const userAuth = loginWithChallenge(this.#identity, this._web3);
 
@@ -341,9 +375,10 @@ class AWF_Auth {
     setInterval(async () => {
       await this.#_refreshTextileToken();
     }, 1000 * 60 * 20);
+
     this.currentUser = {
       pubKey,
-      ethAddress: address,
+      ethAddress: address ?? undefined,
     };
   }
 
@@ -388,8 +423,10 @@ class AWF_Auth {
     if (!isExpired && this.auth) {
       return this.auth.token;
     }
-    this.auth = await this.#tokenGenerator();
-    return this.auth.token;
+    if (this.tokenGenerator) {
+      this.auth = await this.tokenGenerator();
+      return this.auth.token;
+    }
   }
 
   /**
@@ -429,10 +466,10 @@ class AWF_Auth {
     localStorage.removeItem(this.sessKey);
     localStorage.removeItem(this.providerKey);
     localStorage.removeItem(this.currentUserKey);
-    this.#identity = null;
+    this.#identity = undefined;
     this.inboxWatcher = null;
-    this.auth = null;
-    this.currentUser = null;
+    this.auth = undefined;
+    this.currentUser = undefined;
     if (this.channel) {
       this.channel.postMessage({ type: this.SIGN_OUT_EVENT });
     }
@@ -447,6 +484,13 @@ class AWF_Auth {
    * @param data -
    * @param base64Format - set to true if the data is base64 encoded
    */
+  @validate(
+    z
+      .record(z.unknown())
+      .or(z.string())
+      .or(z.array(z.record(z.unknown()))),
+    z.boolean().optional(),
+  )
   async signData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format = false,
@@ -477,6 +521,13 @@ class AWF_Auth {
    * Verify if a signature was made by a specific Public Key
    * @param args - object containing the signature, the serialized data and the public key
    */
+  @validate(
+    z.object({
+      pubKey: PubKeySchema,
+      data: z.union([z.string(), z.record(z.unknown()), z.instanceof(Uint8Array)]),
+      signature: z.union([z.string(), z.instanceof(Uint8Array)]),
+    }),
+  )
   async verifySignature(args: {
     pubKey: string;
     data: Uint8Array | string | Record<string, unknown>;
@@ -513,6 +564,12 @@ class AWF_Auth {
    * Utility method for sending mutation graphql requests
    * @param data - mutation data
    */
+  @validate(
+    z
+      .record(z.unknown())
+      .or(z.string())
+      .or(z.array(z.record(z.unknown()))),
+  )
   async authenticateMutationData(
     data: Record<string, unknown> | string | Record<string, unknown>[],
   ) {
@@ -556,10 +613,11 @@ class AWF_Auth {
   }
 
   // validate an encrypted message from cli
+  @validate(z.string())
   async validateDevKeyFromBase64Message(message: string) {
     const decodedMessage = Buffer.from(message, 'base64');
     const decodedMessageArray = Uint8Array.from(decodedMessage);
-    const decryptedMessage = await this.#identity.decrypt(decodedMessageArray);
+    const decryptedMessage = await this.#identity?.decrypt(decodedMessageArray);
     let body: {
       sub: string; // public key to be added
       aud: string; // public key of the account to add the key
@@ -610,6 +668,7 @@ class AWF_Auth {
    * @param message - encrypted message with claims info
    * @param name - human-readable string to identify the key
    */
+  @validate(z.string(), z.string().optional())
   async addDevKeyFromBase64Message(message: string, name?: string) {
     const validatedMsg = await this.validateDevKeyFromBase64Message(message);
     devKeys.push({
@@ -626,14 +685,15 @@ class AWF_Auth {
   }
 
   // @Todo: connect it to the api when ready
-  async removeDevKey(pubKey: string) {
+  @validate(PubKeySchema)
+  async removeDevKey(pubKey: PubKey) {
     const index = devKeys.findIndex(e => e.pubKey === pubKey);
     if (index !== -1) {
       devKeys.splice(index, 1);
     }
   }
   private async _decryptMessage(message) {
-    const decryptedBody = await this.#identity.decrypt(message.body);
+    const decryptedBody = await this.#identity?.decrypt(message.body);
     let body;
     try {
       body = JSON.parse(new TextDecoder().decode(decryptedBody));
@@ -653,7 +713,7 @@ class AWF_Auth {
       return undefined;
     }
   }
-
+  @validate(PubKeySchema, z.unknown())
   async sendMessage(to: string, content: unknown) {
     const _toPubKey = PublicKey.fromString(to);
     const serializedMessage = AWF_Auth.serializeMessage(content);
@@ -696,7 +756,7 @@ class AWF_Auth {
     const limit = 1;
     return false;
   }
-
+  @validate(z.string())
   async markMessageAsRead(messageId: string) {
     const marked = await this._markMessageAsRead(messageId);
     this._globalChannel.next({
@@ -710,11 +770,13 @@ class AWF_Auth {
    *
    * @param _messageId - message id to mark as read
    */
+  @validate(z.string())
   private async _markMessageAsRead(_messageId: string) {
     return true;
   }
 
-  async validateInvite(inviteCode: string) {
+  @validate(InviteCodeSchema)
+  async validateInvite(inviteCode: InviteCode) {
     return this._validateInvite(inviteCode);
   }
 
@@ -722,7 +784,7 @@ class AWF_Auth {
    *
    * @param inviteCode - invitation code received by email
    */
-  private async _validateInvite(inviteCode: string) {
+  private async _validateInvite(inviteCode: InviteCode) {
     const response = await fetch(`${process.env.INVITATION_ENDPOINT}/${inviteCode}`, {
       method: 'POST',
     });

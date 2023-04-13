@@ -1,5 +1,7 @@
 import { injectable } from 'inversify';
 import pino from 'pino';
+import { validate } from '../common/validator';
+import { z } from 'zod';
 
 /**
  * @module Logger
@@ -16,6 +18,7 @@ class Logging {
    * @param nameSpace - Logger name attribute
    * @returns ILogger
    */
+  @validate(z.string().optional())
   create(nameSpace?: string) {
     const logger = this._appLogger.child({ module: nameSpace });
     logger.level = process.env.LOG_LEVEL || 'warn';

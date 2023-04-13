@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import getSDK from '@akashaorg/awf-sdk';
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { APP_EVENTS } from '@akashaorg/typings/sdk';
 import { useUninstallApp } from '@akashaorg/ui-awf-hooks';
 import { RootComponentProps } from '@akashaorg/typings/ui';
@@ -13,8 +13,6 @@ import { IntegrationReleaseInfo } from '@akashaorg/typings/sdk/graphql-types';
 import { INFO } from '../../routes';
 
 const { Box, SubtitleTextIcon, DuplexButton, Icon, Spinner, NotificationPill, InfoCard } = DS;
-
-const { ErrorLoader } = DSNew;
 
 export interface IExplorePage extends RootComponentProps {
   installableApps: IntegrationReleaseInfoFragmentFragment[];

@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from 'react';
+import { tw } from '@twind/core';
+
 import Stack from '../Stack';
-import { tw, apply } from '@twind/core';
 import { getColorClasses } from '../../utils/getColorClasses';
 import { MeterProps } from './types';
 
@@ -13,9 +14,10 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
   progressBg,
   background,
   direction = 'horizontal',
+  customStyle = '',
 }) => {
-  const progressStyle = getColorClasses(progressBg || 'text-black');
-  const backgroundStyle = getColorClasses(background || 'text-grey8');
+  const progressStyle = getColorClasses(progressBg || 'black', 'stroke');
+  const backgroundStyle = getColorClasses(background || 'grey8', 'stroke');
   const capOffset = 0;
   const mid = thickness / 2;
   const start = direction === 'horizontal' ? capOffset : (max * (size - 2 * capOffset)) / max;
@@ -30,7 +32,11 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
       : `M ${mid},${capOffset} L ${mid},${size - capOffset}`;
 
   return (
-    <Stack justify="center" align="center" className={tw(apply`inline-flex overflow-hidden]`)}>
+    <Stack
+      justify="center"
+      align="center"
+      customStyle={`inline-flex overflow-hidden ${customStyle}`}
+    >
       <svg
         viewBox={
           direction === 'horizontal' ? `0 0 ${size} ${thickness}` : `0 0 ${thickness} ${size}`
@@ -40,7 +46,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
         height={direction === 'horizontal' ? thickness : size}
       >
         <path
-          className={tw(apply(backgroundStyle))}
+          className={tw(backgroundStyle)}
           strokeWidth={thickness}
           stroke="currentColor"
           fill="transparent"
@@ -48,7 +54,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
           d={backgroundPath}
         />
         <path
-          className={tw(apply(progressStyle))}
+          className={tw(progressStyle)}
           strokeWidth={direction === 'horizontal' ? thickness : size}
           stroke="currentColor"
           fill="transparent"
@@ -56,7 +62,7 @@ const Bar: React.FC<PropsWithChildren<MeterProps & { direction?: 'horizontal' | 
           d={d}
         />
       </svg>
-      <div className="absolute"> {children} </div>
+      <div className={tw('absolute')}> {children} </div>
     </Stack>
   );
 };

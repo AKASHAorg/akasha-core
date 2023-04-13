@@ -1,29 +1,28 @@
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 import React, { useState } from 'react';
 import Card from '../../Card';
 import Stack from '../../Stack';
-import Avatar, { AvatarSrc } from '../../Avatar';
+import Avatar from '../../Avatar';
 import Text from '../../Text';
 import Icon from '../../Icon';
 import Divider from '../../Divider';
 import TextLine from '../../TextLine';
 import CopyToClipboard from '../../CopyToClipboard';
 import Button from '../../Button';
-import AppIcon from '../../AppIcon';
 import { useCloseActions } from '../../../utils/useCloseActions';
-
-export type CoverImage = { url?: string; fallbackUrl?: string };
+import { ImageSrc } from '../../types/common.types';
 
 export type HeaderProps = {
   ethAddress: string;
-  coverImage: CoverImage;
-  avatar: AvatarSrc;
+  coverImage: ImageSrc;
+  avatar: ImageSrc;
   name: string;
   userName: string;
   ensName: 'loading' | string;
   isFollowing: boolean;
   viewerIsOwner: boolean;
   flagLabel: string;
+  handleEdit: (event: React.SyntheticEvent<Element, Event>) => void;
   handleFollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleUnfollow: (event: React.SyntheticEvent<Element, Event>) => void;
   handleFlag: (event: React.SyntheticEvent<Element, Event>) => void;
@@ -40,16 +39,16 @@ const Header: React.FC<HeaderProps> = ({
   isFollowing,
   viewerIsOwner,
   flagLabel,
+  handleEdit,
   handleUnfollow,
   handleFollow,
   handleFlag,
 }) => {
-  const avatarContainer = tw(apply`relative w-20 h-[3.5rem] shrink-0`);
-  const flagIconStyle = tw(apply`h-4`);
   const [showMore, setShowMore] = useState(false);
   const showMoreRef = useCloseActions(() => {
     setShowMore(false);
   });
+  const avatarContainer = `relative w-20 h-[3.5rem] shrink-0`;
   const onShowMore = () => {
     setShowMore(!showMore);
   };
@@ -59,88 +58,75 @@ const Header: React.FC<HeaderProps> = ({
       <Card
         elevation="1"
         radius={{ top: 20 }}
-        background={{ light: 'bg-grey6', dark: 'bg-grey5' }}
-        style={
-          coverImage ? `background-image: url(${coverImage.url || coverImage.fallbackUrl})` : ''
-        }
-        className="h-32"
+        background={{ light: 'grey7', dark: 'grey5' }}
+        customStyle={`h-32 ${
+          coverImage ? `bg-center bg-[url(${coverImage?.url || coverImage?.fallbackUrl})]` : ''
+        }`}
       ></Card>
       <Card elevation="1" radius={{ bottom: 20 }} padding="px-[0.5rem] pb-[1rem] pt-0">
-        <Stack direction="column" className={tw(apply('pl-2'))}>
-          <Stack spacing="gap-x-2 -ml-2">
-            <div className={avatarContainer}>
+        <Stack direction="column" customStyle="pl-2" fullWidth>
+          <Stack spacing="gap-x-2" customStyle="-ml-2">
+            <div className={tw(avatarContainer)}>
               <Avatar
                 ethAddress={ethAddress}
                 size="xl"
                 src={avatar}
-                className="absolute -top-6 rounded-full border-2 border-white dark:border-grey2"
+                customStyle="absolute -top-6 border-2 border-white dark:border-grey2"
               />
             </div>
             <Stack direction="column">
               <Text variant="button-lg">{name}</Text>
-              <Text variant="body2" color={{ light: 'text-grey5', dark: 'text-grey7' }}>
+              <Text variant="body2" color={{ light: 'grey5', dark: 'grey7' }}>
                 {`@${userName.replace('@', '')}`}
               </Text>
             </Stack>
-            <div className="ml-auto mt-2">
+            <div className={tw(`ml-auto mt-2`)}>
               {viewerIsOwner ? (
-                <button>
-                  <AppIcon placeholderIconType="Cog6ToothIcon" size="md" accentColor />
-                </button>
+                <Button icon="Cog6ToothIcon" onClick={handleEdit} greyBg iconOnly />
               ) : (
                 <div className="relative">
                   <Stack spacing="gap-x-2">
-                    <button>
-                      <AppIcon placeholderIconType="EnvelopeIcon" size="md" accentColor />
-                    </button>
+                    <Button icon="EnvelopeIcon" greyBg iconOnly />
                     {isFollowing ? (
                       <>
-                        {/*Enhance button component */}
                         <Button
-                          size="small"
+                          size="sm"
                           icon="UserPlusIcon"
                           onClick={handleUnfollow}
+                          variant="primary"
                           iconOnly
-                          primary
                         />
                       </>
                     ) : (
-                      <button onClick={handleFollow}>
-                        <AppIcon placeholderIconType="UsersIcon" size="md" accentColor />
-                      </button>
+                      <Button onClick={handleFollow} icon="UsersIcon" greyBg iconOnly />
                     )}
-                    <button onClick={onShowMore} ref={showMoreRef}>
-                      <AppIcon
-                        placeholderIconType="EllipsisVerticalIcon"
-                        size="md"
-                        active={showMore}
-                        accentColor
-                        hover
-                      />
-                    </button>
+                    <Button
+                      ref={showMoreRef}
+                      onClick={onShowMore}
+                      icon="EllipsisVerticalIcon"
+                      greyBg
+                      iconOnly
+                    />
                   </Stack>
                   {showMore && (
                     <Card
                       elevation={{ light: '1', dark: '2' }}
                       padding={{ x: 18, y: 8 }}
                       radius={8}
-                      className="absolute top-[36px] right-0 bg-white dark:bg-grey3"
+                      customStyle="absolute top-[36px] right-0 bg-white dark:bg-grey3"
                     >
-                      <button onClick={handleFlag}>
-                        <Stack align="center" spacing="gap-x-1">
+                      <Button onClick={handleFlag} plain>
+                        <Stack align="center" spacing="gap-x-2">
                           <Icon
                             type="FlagIcon"
-                            styling={flagIconStyle}
-                            color={{ light: 'error-light', dark: 'error-dark' }}
+                            size="sm"
+                            color={{ light: 'errorLight', dark: 'errorDark' }}
                           />
-                          <Text
-                            variant="body1"
-                            color={{ light: 'text-error-light', dark: 'text-error-dark' }}
-                          >
+                          <Text variant="body1" color={{ light: 'errorLight', dark: 'errorDark' }}>
                             {flagLabel}
                           </Text>
                         </Stack>
-                      </button>
+                      </Button>
                     </Card>
                   )}
                 </div>
@@ -153,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({
               <CopyToClipboard value={ethAddress}>
                 <Text
                   variant="footnotes2"
-                  color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                  color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 >
                   {ethAddress}
                 </Text>
@@ -173,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({
                     <CopyToClipboard value={ensName}>
                       <Text
                         variant="body2"
-                        color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                        color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                       >
                         {ensName}
                       </Text>

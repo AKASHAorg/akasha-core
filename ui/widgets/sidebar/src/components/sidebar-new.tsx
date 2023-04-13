@@ -1,11 +1,11 @@
 import React from 'react';
 import { tw } from '@twind/core';
 
-import DS from '@akashaorg/design-system-core';
 import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
-import { IButtonProps } from '@akashaorg/design-system-core/lib/components/Button';
-
-const { Avatar, Button, AppIcon, Text } = DS;
+import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
+import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import ListSidebarApps from './list-sidebar-apps';
 
@@ -30,9 +30,6 @@ export interface ISidebarProps {
   onSidebarClose: () => void;
   onClickMenuItem: (appName: string, route: string) => void;
   onClickExplore: () => void;
-  // viewport size
-  size?: string;
-  className?: string;
   menuItem: React.ReactElement;
 
   title: string;
@@ -40,12 +37,8 @@ export interface ISidebarProps {
   ctaText: string;
   ctaButtonLabel: string;
   footerLabel: string;
-  footerIcons: { name: IButtonProps['icon']; link: string }[];
+  footerIcons: { name: ButtonProps['icon']; link: string }[];
 }
-
-const titleText = 'text-sm font-bold';
-
-const subtitleText = 'text-xs text-grey5';
 
 const Sidebar: React.FC<ISidebarProps> = props => {
   const {
@@ -118,7 +111,7 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   return (
     <div
       className={tw(
-        'max-w-[19.5rem] w-[19.5rem] max-h-[calc(100vh - 20px)] bg-white dark:bg-grey2 border-1 border-grey8 dark:border-none rounded-2xl',
+        'max-w-[19.5rem] w-[19.5rem] h-[100vh] xl:max-h-[calc(100vh - 20px)] bg-white dark:bg-grey2 border-1 border-grey8 dark:border-none rounded-r-2xl xl:rounded-2xl',
       )}
     >
       <div className={tw('flex flex-row p-4 border-b-1 border-grey8')}>
@@ -126,16 +119,13 @@ const Sidebar: React.FC<ISidebarProps> = props => {
           <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
         </div>
         <div className={tw('w-fit')}>
-          <Text variant="footnotes1" className={titleText}>
-            {title}
-          </Text>
-          <Text variant="subtitle2" className={subtitleText}>
+          <Text customStyle="font-bold">{title}</Text>
+          <Text variant="footnotes2" customStyle="text-grey5">
             {subtitle}
           </Text>
         </div>
         <div className={tw('w-fit h-fit ml-6 self-end')}>
-          {/*@TODO the color of the icon button should be white on both light and dark theme */}
-          <Button icon="BoltIcon" primary={true} iconOnly={true} />
+          <Button icon="BoltIcon" variant="primary" iconOnly={true} />
         </div>
       </div>
 
@@ -167,23 +157,23 @@ const Sidebar: React.FC<ISidebarProps> = props => {
       </div>
 
       <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
-        <Text variant="subtitle2" className={subtitleText}>
+        <Text variant="footnotes2" customStyle="text-grey5">
           {ctaText}
         </Text>
         <div className={tw('w-fit h-fit mt-6')}>
-          <Button label={ctaButtonLabel} primary={true} />
+          <Button label={ctaButtonLabel} variant="primary" />
         </div>
       </div>
 
       <div className={tw('flex flex-col px-8 py-4')}>
-        <Text variant="subtitle2" className={subtitleText}>
+        <Text variant="footnotes2" customStyle="text-grey5">
           {footerLabel}
         </Text>
         <div className={tw('flex w-fit h-fit mt-6')}>
           {footerIcons.map((icon, idx) => (
             <div key={icon.name + idx} className={tw('mr-4')}>
               <a href={icon.link} target="_blank" rel="noreferrer noopener">
-                <AppIcon placeholderIconType={icon.name} size="md" accentColor />
+                <Button icon={icon.name} variant="primary" greyBg={true} iconOnly={true} />
               </a>
             </div>
           ))}

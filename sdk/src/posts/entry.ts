@@ -1,6 +1,17 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import { ENTRY_EVENTS, TYPES } from '@akashaorg/typings/sdk';
+import {
+  ENTRY_EVENTS,
+  TYPES,
+  PostToPublishSchema,
+  TagNameSchema,
+  EntryIDSchema,
+  PubKeySchema,
+  DataProviderInputSchema,
+  PostToPublish,
+  EntryID,
+  PubKey,
+} from '@akashaorg/typings/sdk';
 import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
@@ -8,6 +19,8 @@ import Logging from '../logging';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { z } from 'zod';
+import { validate } from '../common/validator';
+import { throwError } from '../common/error-handling';
 
 @injectable()
 class AWF_Entry {
@@ -32,6 +45,7 @@ class AWF_Entry {
    *
    * @param entryId
    */
+  @validate(EntryIDSchema)
   async getEntry(entryId: string) {
     const res = await this._auth.getCurrentUser();
     return this._gql.getAPI().GetEntry({ id: entryId, pubKey: res?.pubKey });
@@ -41,7 +55,8 @@ class AWF_Entry {
    *
    * @param opt
    */
-  async getEntries(opt: { offset?: string; limit: number }) {
+  @validate(z.object({ offset: EntryIDSchema.optional(), limit: z.number() }))
+  async getEntries(opt: { offset?: EntryID; limit: number }) {
     const res = await this._auth.getCurrentUser();
     return this._gql
       .getAPI()
@@ -52,11 +67,13 @@ class AWF_Entry {
    *
    * @param opt
    */
-  async postEntry(opt: {
-    data: DataProviderInput[];
-    post: { title?: string; tags?: string[]; quotes?: string[]; mentions?: string[] };
-  }) {
+  @validate(z.object({ data: z.array(DataProviderInputSchema), post: PostToPublishSchema }))
+  async postEntry(opt: { data: DataProviderInput[]; post: PostToPublish }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
+    if (!textContent) {
+      throwError('Cannot post entry without content', ['sdk', 'entry', 'postEntry']);
+      return;
+    }
     textContent.value = Buffer.from(textContent.value).toString('base64');
     const auth = await this._auth.authenticateMutationData(
       opt.data as unknown as Record<string, unknown>[],
@@ -81,12 +98,23 @@ class AWF_Entry {
    * Update an existing entry
    * @param opt
    */
+  @validate(
+    z.object({
+      entryID: EntryIDSchema,
+      data: z.array(DataProviderInputSchema),
+      post: z.object({ title: z.string().optional(), tags: z.array(z.string()).optional() }),
+    }),
+  )
   async editEntry(opt: {
-    entryID: string;
+    entryID: EntryID;
     data: DataProviderInput[];
     post: { title?: string; tags?: string[]; quotes?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
+    if (!textContent) {
+      throwError('Edited post does not have content', ['sdk', 'entry', 'editEntry']);
+      return;
+    }
     textContent.value = Buffer.from(textContent.value).toString('base64');
     const auth = await this._auth.authenticateMutationData(
       opt.data as unknown as Record<string, unknown>[],
@@ -107,7 +135,8 @@ class AWF_Entry {
     return editEntry;
   }
 
-  async entriesByAuthor(opt: { pubKey: string; offset?: number; limit: number }) {
+  @validate(z.object({ pubKey: PubKeySchema, offset: z.number().optional(), limit: z.number() }))
+  async entriesByAuthor(opt: { pubKey: PubKey; offset?: number; limit: number }) {
     const currentUser = await this._auth.getCurrentUser();
     return this._gql.getAPI().GetPostsByAuthor({
       author: opt.pubKey,
@@ -121,6 +150,7 @@ class AWF_Entry {
    *
    * @param opt
    */
+  @validate(z.object({ name: TagNameSchema, offset: z.number().optional(), limit: z.number() }))
   async entriesByTag(opt: { name: string; offset?: number; limit: number }) {
     const currentUser = await this._auth.getCurrentUser();
     return this._gql.getAPI().GetPostsByTag({
@@ -135,8 +165,8 @@ class AWF_Entry {
    * Remove an entry's content by ID
    * @param entryID
    */
-  async removeEntry(entryID: string) {
-    z.string().min(4).parse(entryID);
+  @validate(EntryIDSchema)
+  async removeEntry(entryID: EntryID) {
     const auth = await this._auth.authenticateMutationData(entryID);
     const removedEntry = await this._gql.getAPI().RemoveEntry(
       { id: entryID },
@@ -157,6 +187,7 @@ class AWF_Entry {
   /**
    * @param link
    */
+  @validate(z.string())
   async getLinkPreview(link: string) {
     const auth = await this._auth.authenticateMutationData({ link });
     return this._gql.getAPI().GetLinkPreview(
@@ -168,6 +199,7 @@ class AWF_Entry {
     );
   }
 
+  @validate(z.object({ offset: z.number().optional(), limit: z.number() }))
   async getFeedEntries(opt: { offset?: number; limit: number }) {
     const token = await this._auth.getToken();
     if (!token) {

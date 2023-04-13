@@ -3,13 +3,11 @@ import ReactDOM from 'react-dom';
 import singleSpaReact from 'single-spa-react';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootExtensionProps } from '@akashaorg/typings/ui';
 import { withProviders, ThemeWrapper } from '@akashaorg/ui-awf-hooks';
 
 const { ModalContainer, ShareModal } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const ShareProfileModal: React.FC<RootExtensionProps> = props => {
   const { profileId } = props.extensionData;

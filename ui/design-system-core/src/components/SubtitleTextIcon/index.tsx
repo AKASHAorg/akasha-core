@@ -67,7 +67,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
           <Icon
             type={iconType}
             size={{ width: 'w-4', height: 'h-5' }}
-            color={{ light: 'secondary-light', dark: 'secondary-dark' }}
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
           />
         </div>
       ) : null}
@@ -75,7 +75,7 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
         <Text variant="button-sm" weight="bold" truncate={true}>
           {label}
         </Text>
-        <Text variant="footnotes2" color={{ dark: 'text-grey7', light: 'grey7' }} truncate={true}>
+        <Text variant="footnotes2" color="grey7" truncate={true}>
           {subtitle}
         </Text>
       </div>

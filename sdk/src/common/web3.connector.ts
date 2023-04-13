@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import { ethers } from 'ethers';
 import {
   EthProviders,
+  EthProvidersSchema,
   INJECTED_PROVIDERS,
   PROVIDER_ERROR_CODES,
   TYPES,
@@ -14,18 +15,20 @@ import OpenLogin from '@toruslabs/openlogin';
 import EventBus from './event-bus';
 import { throwError } from 'rxjs';
 import pino from 'pino';
-import { createFormattedValue } from "../helpers/observable";
+import { createFormattedValue } from '../helpers/observable';
+import { validate } from './validator';
+import { z } from 'zod';
 
 @injectable()
 class Web3Connector {
   #logFactory: Logging;
   #log: pino.Logger;
-  #web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider;
+  #web3Instance: ethers.providers.BaseProvider | ethers.providers.Web3Provider | null;
   #globalChannel: EventBus;
-  #wallet: ethers.Wallet;
-  #openLogin: OpenLogin;
-  #walletConnect: WalletConnectProvider;
-  #currentProviderId: EthProviders;
+  #wallet: ethers.Wallet | null;
+  #openLogin: OpenLogin | null;
+  #walletConnect: WalletConnectProvider | null;
+  #currentProviderId: EthProviders | null;
   readonly network = 'goerli';
   #networkId = '0x5';
   // mapping for network name and ids
@@ -48,12 +51,18 @@ class Web3Connector {
     this.#logFactory = logFactory;
     this.#log = this.#logFactory.create('Web3Connector');
     this.#globalChannel = globalChannel;
+    this.#web3Instance = null;
+    this.#wallet = null;
+    this.#openLogin = null;
+    this.#walletConnect = null;
+    this.#currentProviderId = null;
   }
 
   /**
    *
    * @param provider - Number representing the provider option
    */
+  @validate(EthProvidersSchema)
   async connect(provider: EthProviders = EthProviders.None): Promise<boolean> {
     this.#log.info(`connecting to provider ${provider}`);
     if (this.#web3Instance && this.#currentProviderId && this.#currentProviderId === provider) {
@@ -94,7 +103,6 @@ class Web3Connector {
       );
       return this.#web3Instance;
     }
-    throw new Error('Must connect first to a provider!');
   }
 
   /**
@@ -119,8 +127,9 @@ class Web3Connector {
    * Enforce personal_sign method for message signature
    * @param message - Human readable string to sign
    */
+  @validate(z.string().min(3))
   signMessage(message: string) {
-    return this.getSigner().signMessage(message);
+    return this.getSigner()?.signMessage(message);
   }
 
   getSigner() {
@@ -136,7 +145,6 @@ class Web3Connector {
 
   getRequiredNetworkName() {
     if (!this.network) {
-      console.log('throwing error');
       throw new Error('The required ethereum network was not set!');
     }
     return createFormattedValue(this.network);
@@ -144,7 +152,9 @@ class Web3Connector {
 
   async switchToRequiredNetwork() {
     if (this.#web3Instance instanceof ethers.providers.Web3Provider) {
-      const result = await this.#web3Instance.send('wallet_switchEthereumChain', [{ chainId: this.#networkId }]);
+      const result = await this.#web3Instance.send('wallet_switchEthereumChain', [
+        { chainId: this.#networkId },
+      ]);
       return createFormattedValue(result);
     }
     return new Error(`Method wallet_switchEthereumChain not supported on the current provider`);
@@ -201,6 +211,9 @@ class Web3Connector {
    * Ensures that the web3 provider is connected to the specified network
    */
   async #_checkCurrentNetwork(): Promise<void> {
+    if (!this.#web3Instance) {
+      throw new Error('Must connect first to a provider!');
+    }
     const network = await this.#web3Instance.detectNetwork();
     if (network?.chainId !== this.networkId[this.network]) {
       const error: Error & { code?: number } = new Error(
@@ -251,11 +264,17 @@ class Web3Connector {
    * and dApp browsers(ex: metamask mobile dApp browser)
    */
   async #_getInjectedProvider() {
-    const provider: ethers.providers.ExternalProvider & {
-      on?: (event: string, listener: (...args: unknown[]) => void) => void;
-    } = await detectEthereumProvider();
+    const provider:
+      | (ethers.providers.ExternalProvider & {
+          on?: (event: string, listener: (...args: unknown[]) => void) => void;
+        })
+      | null = await detectEthereumProvider();
+
     if (!provider) {
       throw new Error('No Web3 Provider found');
+    }
+    if (!provider.request) {
+      throw new Error('Provider does not support request method');
     }
     const acc = await provider.request({
       method: 'eth_requestAccounts',
@@ -271,6 +290,12 @@ class Web3Connector {
   #_registerProviderChangeEvents(provider: {
     on?: (event: string, listener: (...args: unknown[]) => void) => void;
   }) {
+    if (!provider) {
+      throw new Error('Provider not specified');
+    }
+    if (!provider.on) {
+      throw new Error('Provider does not support on method');
+    }
     provider.on('accountsChanged', () => {
       this.#log.warn('ethereum address changed');
       this.#globalChannel.next({
@@ -292,7 +317,7 @@ class Web3Connector {
    */
   async #_getTorusProvider() {
     this.#openLogin = new OpenLogin({
-      clientId: process.env.TORUS_PROJECT,
+      clientId: process.env.TORUS_PROJECT as string,
       network: 'testnet',
       uxMode: 'popup',
     });

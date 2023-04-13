@@ -1,6 +1,6 @@
-import React, { PropsWithChildren } from 'react';
+import React, { LegacyRef, PropsWithChildren, forwardRef } from 'react';
 import Stack from '../Stack';
-import { tw, apply } from '@twind/core';
+import { apply } from '@twind/core';
 import { Color, Elevation, Padding, Radius } from '../types/common.types';
 import { getElevationClasses } from '../../utils/getElevationClasses';
 import { getRadiusClasses } from '../../utils/getRadiusClasses';
@@ -13,43 +13,41 @@ export type CardProps = {
   radius?: Radius;
   padding?: Padding;
   direction?: 'row' | 'column';
-  className?: string;
-  style?: string;
+  customStyle?: string;
+  ref?: LegacyRef<HTMLDivElement>;
 };
 
-const baseStyles = apply`
-  block
-`;
+const baseStyles = 'block';
 
-const Card: React.FC<PropsWithChildren<CardProps>> = props => {
+const Card: React.FC<PropsWithChildren<CardProps>> = forwardRef((props, ref) => {
   const {
     elevation = 'none',
-    background = { light: 'bg-white', dark: 'bg-grey2' },
+    background = { light: 'white', dark: 'grey2' },
     radius,
     padding,
     direction,
-    className,
-    style = '',
+    customStyle = '',
   } = props;
+
   const elevationStyle = getElevationClasses(elevation);
   const radiusStyle = getRadiusClasses(radius);
   const paddingStyle = getPaddingClasses(padding);
-  const backgroundStyle = getColorClasses(background);
+  const backgroundStyle = getColorClasses(background, 'bg');
+
   const instanceStyles = apply`
     ${baseStyles}
     ${backgroundStyle}
     ${elevationStyle}
     ${radiusStyle}
     ${paddingStyle}
-    ${className}
-    ${style}
+    ${customStyle}
   `;
 
   return (
-    <Stack direction={direction} className={tw(instanceStyles)}>
+    <Stack direction={direction} customStyle={instanceStyles} ref={ref}>
       {props.children}
     </Stack>
   );
-};
+});
 
 export default Card;

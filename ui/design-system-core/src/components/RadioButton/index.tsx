@@ -16,15 +16,10 @@ export type RadioButtonProps = {
   handleChange: (e) => void;
 };
 
-const baseStyles = apply`
-  flex items-center
-  space-x-2 mb-2
-`;
+const baseStyles = 'flex items-center space-x-2 mb-2';
 
-const baseButtonStyles = apply`
-  inline-block mr-4 ml-0 p-0 rounded-full
-  flex-no-shrink after:content-[''] after:absolute
-`;
+const baseButtonStyles =
+  'inline-block mr-4 ml-0 p-0 rounded-full flex-no-shrink after:content-[] after:absolute';
 
 export const RadioButton: React.FC<RadioButtonProps> = props => {
   const {
@@ -38,7 +33,7 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
   } = props;
 
   const textColor = error ? 'text-orange-400' : 'text(black dark:white)';
-  const inputColor = error ? 'orange-400' : 'secondary-light';
+  const inputColor = error ? 'orange-400' : 'secondaryLight';
   const buttonSize = size === 'small' ? 'w-4 h-4' : 'w-6 h-6';
   const pseudoCircleSize =
     size === 'small'
@@ -65,12 +60,15 @@ export const RadioButton: React.FC<RadioButtonProps> = props => {
         aria-labelledby={value}
         className={tw('hidden')}
       />
-      <label htmlFor={id} className={tw(`flex items-center cursor-pointer text-sm ${textColor}`)}>
+      <label
+        htmlFor={id}
+        className={tw(apply`flex items-center cursor-pointer text-sm ${textColor}`)}
+      >
         <span
           className={tw(
             isSelected
-              ? `${buttonSize} ${instanceButtonStyles} after:block after:bg-${inputColor} after:rounded-full ${pseudoCircleSize}`
-              : `${buttonSize} ${instanceButtonStyles} after:hidden`,
+              ? apply`${buttonSize} ${instanceButtonStyles} after:block after:bg-${inputColor} after:rounded-full ${pseudoCircleSize}`
+              : apply`${buttonSize} ${instanceButtonStyles} after:hidden`,
           )}
         ></span>
         {label}

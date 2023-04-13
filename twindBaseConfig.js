@@ -16,10 +16,8 @@ export default {
         primary: 'linear-gradient(90deg, var(--foundation-primary))',
         primaryStart: withOpacity('--gradient-primary-start'),
         primaryStop: withOpacity('--gradient-primary-stop'),
-        secondary: {
-          light: withOpacity('--foundation-secondary'),
-          dark: withOpacity('--foundation-secondary-dark'),
-        },
+        secondaryLight: withOpacity('--foundation-secondary'),
+        secondaryDark: withOpacity('--foundation-secondary-dark'),
         black: withOpacity('--system-black'),
         white: withOpacity('--system-white'),
         grey1: withOpacity('--system-grey-1'),
@@ -32,14 +30,10 @@ export default {
         grey8: withOpacity('--system-grey-8'),
         grey9: withOpacity('--system-grey-9'),
         success: withOpacity('--feedback-success'),
-        warning: {
-          light: withOpacity('--feedback-warning'),
-          dark: withOpacity('--feedback-warning-dark'),
-        },
-        error: {
-          light: withOpacity('--feedback-error'),
-          dark: withOpacity('--feedback-error-dark'),
-        },
+        warningLight: withOpacity('--feedback-warning'),
+        warningDark: withOpacity('--feedback-warningDark'),
+        errorLight: withOpacity('--feedback-error'),
+        errorDark: withOpacity('--feedback-errorDark'),
         elevation: withOpacity('--elevation'),
       },
       borderRadius: {

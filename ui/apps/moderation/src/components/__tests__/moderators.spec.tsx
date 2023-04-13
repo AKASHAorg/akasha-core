@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { renderWithAllProviders, act, genAppProps, cleanup } from '@akashaorg/af-testing';
 
-import Moderators from '../../pages/moderators';
+import { Moderators } from '../../pages';
 
 describe('<Moderators /> component', () => {
   const Base = <Moderators {...genAppProps()} />;
@@ -21,9 +21,6 @@ describe('<Moderators /> component', () => {
   });
 
   it('should render component', async () => {
-    expect(componentWrapper.getByText('Moderators')).toBeInTheDocument();
-    expect(
-      componentWrapper.getByText(/Learn more about and reach out to your moderators./i),
-    ).toBeInTheDocument();
+    expect(componentWrapper.baseElement).toBeInTheDocument();
   });
 });

@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import {
   RootExtensionProps,
   AnalyticsCategories,
@@ -25,8 +25,6 @@ import getReasonPrefix from '../utils/getReasonPrefix';
 import { BASE_REPORT_URL } from '../services/constants';
 
 const { ReportModal } = DS;
-
-const { ErrorLoader } = DSNew;
 
 const ReportModalComponent = (props: RootExtensionProps) => {
   const { extensionData } = props;
@@ -106,10 +104,10 @@ const ReportModalComponent = (props: RootExtensionProps) => {
       explanation={explanation}
       footerText1Label={t('If you are unsure, you can refer to our')}
       footerLink1Label={t('Code of Conduct')}
-      footerUrl1={'/legal/code-of-conduct'}
+      footerUrl1={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/code-of-conduct`}
       footerText2Label={t('and')}
       footerLink2Label={t('Terms of Service')}
-      footerUrl2={'/legal/terms-of-service'}
+      footerUrl2={`${window.location.protocol}//${window.location.host}/@akashaorg/app-legal/terms-of-service`}
       cancelLabel={t('Cancel')}
       reportLabel={t('Report')}
       errorText={reportMutation.error ? `${reportMutation.error}` : ''}

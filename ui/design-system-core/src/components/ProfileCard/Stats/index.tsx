@@ -1,9 +1,10 @@
 import React from 'react';
 import Card from '../../Card';
 import Stack from '../../Stack';
+import Button from '../../Button';
 import Text, { TextProps } from '../../Text';
-import AppIcon from '../../AppIcon';
 import { IconType } from '@akashaorg/typings/ui';
+import AppIcon from '../../AppIcon';
 
 type Stat = {
   label: string;
@@ -23,8 +24,8 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
     variant: 'footnotes2',
     weight: 'normal',
     color: {
-      light: 'text-grey4',
-      dark: 'text-grey7',
+      light: 'grey4',
+      dark: 'grey7',
     },
   };
 
@@ -32,8 +33,8 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
     variant: 'button-sm',
     weight: 'bold',
     color: {
-      light: 'text-secondary-light',
-      dark: 'text-secondary-dark',
+      light: 'secondaryLight',
+      dark: 'secondaryDark',
     },
   };
 
@@ -46,23 +47,23 @@ const Stats: React.FC<StatsProps> = ({ posts, interests, followers, following })
 
   return (
     <Card elevation="1" radius={20} padding={16}>
-      <Stack direction="column" spacing="gap-4">
+      <Stack direction="column" spacing="gap-4" fullWidth>
         <Stack justify="between">
           {stats.map((stat, index) => (
-            <button onClick={stat.onClick} key={stat.label + index}>
-              <Stack direction="column" align="center" className="group">
+            <Button onClick={stat.onClick} key={stat.label + index} plain>
+              <Stack direction="column" align="center" customStyle="group">
                 <AppIcon
                   placeholderIconType={stat.icon}
-                  size="md"
-                  breakPointSize={{ breakPoint: 'md', size: 'xl' }}
+                  size="sm"
+                  breakPointSize={{ breakPoint: 'sm', size: 'lg' }}
                   accentColor
-                  className={stat.className}
+                  customStyle={stat.className}
                   hover
                 />
                 <Text {...labelProp}>{stat.label}</Text>
                 <Text {...totalProps}>{stat.total}</Text>
               </Stack>
-            </button>
+            </Button>
           ))}
         </Stack>
       </Stack>

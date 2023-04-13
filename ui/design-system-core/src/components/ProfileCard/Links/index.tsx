@@ -26,11 +26,11 @@ const Links: React.FC<LinksProps> = ({ title, links }) => {
         <Text variant="label">{title}</Text>
         {links.map((link, index) => (
           <CopyToClipboard key={link.type + index} value={getLinkFromType(link, true)}>
-            <Stack spacing="gap-x-2">
-              <AppIcon placeholderIconType={getIconFromType(link.type)} size="sm" accentColor />
+            <Stack align="center" spacing="gap-x-2">
+              <AppIcon placeholderIconType={getIconFromType(link.type)} size="xs" accentColor />
               <Text
                 variant="body2"
-                color={{ light: 'text-secondary-light', dark: 'text-secondary-dark' }}
+                color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
                 breakWord
               >
                 {getLinkFromType(link)}

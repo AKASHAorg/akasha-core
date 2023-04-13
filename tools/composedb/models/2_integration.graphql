@@ -1,0 +1,9 @@
+type AppRelease @loadModel(id: "kjzl6hvfrbw6c7mzj5l5mjujjcw6xvwy80qwngrnbgcjpa1pe6hne9d1wtg7pqg") {
+  id: ID!
+}
+
+type AppIntegration @loadModel(id: "kjzl6hvfrbw6c6oxadj4nluncq38cbzjyf9wzmbws99g7imktj170nir4g2phlj") {
+  id: ID!
+  releases: [AppRelease] @relationFrom(model: "AppRelease", property: "integrationID")
+  releasessCount: Int! @relationCountFrom(model: "AppRelease", property: "integrationID")
+}

@@ -3,7 +3,7 @@ import { UseQueryResult } from 'react-query';
 import { useTranslation } from 'react-i18next';
 
 import DS from '@akashaorg/design-system';
-import DSNew from '@akashaorg/design-system-core';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { Logger } from '@akashaorg/awf-sdk';
 import { useAnalytics } from '@akashaorg/ui-awf-hooks';
 import FeedWidget from '@akashaorg/ui-lib-feed/lib/components/App';
@@ -20,8 +20,6 @@ import { OriginalItem } from './original-item';
 import { PendingReply } from './pending-reply';
 
 const { BasicCardBox, EntryCardHidden, EntryCardLoading } = DS;
-
-const { ErrorLoader } = DSNew;
 
 type BaseEntryProps = {
   postId: string;
