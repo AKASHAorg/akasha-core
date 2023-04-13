@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { IProfileData } from '@akashaorg/typings/ui';
-import { truncateMiddle } from '../../utils/string-utils';
+import Text from '../Text';
 import Avatar from '../Avatar';
 import { AvatarSize } from '../Avatar';
-import { tw } from '@twind/core';
+import { tw, apply } from '@twind/core';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
@@ -20,7 +20,7 @@ export interface ProfileAvatarButtonProps {
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const BaseStyles = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
+const BaseStyle = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
 
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLElement>) => {
@@ -37,28 +37,31 @@ const ProfileAvatarButton = React.forwardRef(
       onMouseEnter,
       onMouseLeave,
     } = props;
+
+    const InstantStyle = apply`
+    ${BaseStyle}
+    text(lg:base md:xs) max-w([7rem] xs:[2rem])
+    `;
+
     return (
       <div className={tw(`inline-flex items-center justify-center ${customStyle}`)}>
         <div className={tw('shrink-0')}>
           <Avatar size={size} src={avatarImage} ethAddress={ethAddress} onClick={onClickAvatar} />
         </div>
         <div
-          className={tw('pl(lg:4 md:2 sm:1 xs:0.5) justify-center align-top')}
+          className={tw('pl(lg:4 md:2 sm:2 xs:1) justify-center align-top')}
           onClick={onClick}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <div className={tw(`${BaseStyles} text(lg:base md:xs) max-w([7rem] xs:[2rem])`)}>
-            <span ref={ref}>{label || truncateMiddle(ethAddress)}</span>
+          <div className={tw(InstantStyle)}>
+            <Text variant="button-sm" weight="bold" truncate={true}>
+              {label || ethAddress}
+            </Text>
           </div>
-          <div
-            className={tw(
-              `${BaseStyles} max-w(7rem xs:2rem) text(lg:xs sm:[10px])
-              ${active ? ' text-white ' : ' text-black '}`,
-            )}
-          >
+          <Text variant="footnotes2" color="grey7" truncate={true}>
             {info}
-          </div>
+          </Text>
         </div>
       </div>
     );
