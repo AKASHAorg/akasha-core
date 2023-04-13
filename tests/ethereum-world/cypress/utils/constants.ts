@@ -1,1 +1,1 @@
-export const TIMEOUT = 2 * 60000;
+export const TIMEOUT = 60000;
