@@ -36,7 +36,7 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
       moderatorSince={Date.parse(new Date('01 Jan 2020').toISOString())}
       moderationCategoriesLabel={t('Moderation categories')}
       noCategoriesLabel={t('You do not have any categories selected yet.')}
-      moderationCategories={preSelectedReasons.map(el => t('{{el}}', el))}
+      moderationCategories={preSelectedReasons.map(el => t('{{el}}', { el }))}
       contactInfoLabel={t('Contact info')}
       contactInfo={[
         { type: 'discord', value: 'julie#t112' },
