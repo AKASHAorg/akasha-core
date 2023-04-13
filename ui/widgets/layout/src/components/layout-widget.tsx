@@ -88,7 +88,7 @@ const Layout: React.FC<RootComponentProps> = props => {
   const handleClickOutside = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (
-      window.matchMedia('(max-width: 1440px)').matches &&
+      window.matchMedia('(max-width: 1439px)').matches &&
       showSidebar &&
       sidebarWrapperRef.current &&
       !sidebarWrapperRef.current.contains(e.target as Node)

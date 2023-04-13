@@ -3,7 +3,7 @@ import React from 'react';
 import Snackbar from './';
 
 export default {
-  title: 'Snackbar',
+  title: 'Snackbar/Snackbar',
   component: Snackbar,
 };
 
