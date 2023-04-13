@@ -12,11 +12,17 @@ import {
   TransparencyLogItem,
   ModerationValue,
   EditCategoriesPage,
+  EditContactInfoPage,
+  ResignRolePage,
+  ResignConfirmationPage,
 } from '../pages';
 
 import routes, {
   DASHBOARD,
   EDIT_CATEGORIES,
+  EDIT_CONTACT_INFO,
+  RESIGN_CONFIRMATION,
+  RESIGN_ROLE,
   HISTORY,
   HISTORY_ITEM,
   HOME,
@@ -58,6 +64,23 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           <Route
             path={routes[EDIT_CATEGORIES]}
             element={<EditCategoriesPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[EDIT_CONTACT_INFO]}
+            element={<EditContactInfoPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[RESIGN_ROLE]}
+            element={<ResignRolePage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[RESIGN_CONFIRMATION]}
+            element={
+              <ResignConfirmationPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />
+            }
           />
 
           <Route path={routes[MODERATORS]} element={<Moderators {...props} />} />
