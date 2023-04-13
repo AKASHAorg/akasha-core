@@ -127,6 +127,3 @@ Topbar.defaultProps = {
 };
 
 export default Topbar;
-function getElevationClasses(): import('@twind/core').Class {
-  throw new Error('Function not implemented.');
-}
