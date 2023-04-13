@@ -55,10 +55,14 @@ const config = {
               `
 import getSDK from '@akashaorg/awf-sdk';
 const sdk = getSDK();
-export function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
+export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
   return async (): Promise<TData> => {
-    // @ts-ignore
-    return sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+
+    const result = await sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+    if (!result.errors || !result.errors.length) {
+        return result.data as TData;
+    }
+    throw result.errors;
   };
 }
 `

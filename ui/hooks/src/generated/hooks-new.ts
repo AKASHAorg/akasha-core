@@ -1,14 +1,17 @@
-//@ts-nocheck
 import type * as Types from '@akashaorg/typings/sdk/graphql-operation-types-new';
 
 import { useQuery, useInfiniteQuery, useMutation, type UseQueryOptions, type UseInfiniteQueryOptions, type UseMutationOptions } from '@tanstack/react-query';
 
 import getSDK from '@akashaorg/awf-sdk';
 const sdk = getSDK();
-export function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
+export function fetcher<TData, TVariables extends Record<string, unknown>>(query: string, variables?: TVariables, options?: unknown) {
   return async (): Promise<TData> => {
-    // @ts-ignore
-    return sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+
+    const result = await sdk.services.ceramic.getComposeClient().executeQuery(query, variables);
+    if (!result.errors || !result.errors.length) {
+        return result.data as TData;
+    }
+    throw result.errors;
   };
 }
 
@@ -138,7 +141,7 @@ export const useInfiniteGetCommentsFromPostQuery = <
       variables: Types.GetCommentsFromPostQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetCommentsFromPostQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetCommentsFromPostQuery, TError, TData>(
       ['GetCommentsFromPost.infinite', variables],
       (metaData) => fetcher<Types.GetCommentsFromPostQuery, Types.GetCommentsFromPostQueryVariables>(GetCommentsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -197,7 +200,7 @@ export const useInfiniteGetCommentsByAuthorDidQuery = <
       variables: Types.GetCommentsByAuthorDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetCommentsByAuthorDidQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetCommentsByAuthorDidQuery, TError, TData>(
       ['GetCommentsByAuthorDid.infinite', variables],
       (metaData) => fetcher<Types.GetCommentsByAuthorDidQuery, Types.GetCommentsByAuthorDidQueryVariables>(GetCommentsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -258,7 +261,7 @@ export const useInfiniteGetCommentRepliesQuery = <
       variables: Types.GetCommentRepliesQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetCommentRepliesQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetCommentRepliesQuery, TError, TData>(
       ['GetCommentReplies.infinite', variables],
       (metaData) => fetcher<Types.GetCommentRepliesQuery, Types.GetCommentRepliesQueryVariables>(GetCommentRepliesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -411,7 +414,7 @@ export const useInfiniteGetPostsQuery = <
       variables?: Types.GetPostsQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetPostsQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetPostsQuery, TError, TData>(
       variables === undefined ? ['GetPosts.infinite'] : ['GetPosts.infinite', variables],
       (metaData) => fetcher<Types.GetPostsQuery, Types.GetPostsQueryVariables>(GetPostsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -470,7 +473,7 @@ export const useInfiniteGetPostsByAuthorDidQuery = <
       variables: Types.GetPostsByAuthorDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetPostsByAuthorDidQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetPostsByAuthorDidQuery, TError, TData>(
       ['GetPostsByAuthorDid.infinite', variables],
       (metaData) => fetcher<Types.GetPostsByAuthorDidQuery, Types.GetPostsByAuthorDidQueryVariables>(GetPostsByAuthorDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -517,7 +520,7 @@ export const useInfiniteGetPostByIdQuery = <
       variables: Types.GetPostByIdQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetPostByIdQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetPostByIdQuery, TError, TData>(
       ['GetPostById.infinite', variables],
       (metaData) => fetcher<Types.GetPostByIdQuery, Types.GetPostByIdQueryVariables>(GetPostByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -575,7 +578,7 @@ export const useInfiniteGetQuotedPostsFromPostQuery = <
       variables: Types.GetQuotedPostsFromPostQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetQuotedPostsFromPostQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetQuotedPostsFromPostQuery, TError, TData>(
       ['GetQuotedPostsFromPost.infinite', variables],
       (metaData) => fetcher<Types.GetQuotedPostsFromPostQuery, Types.GetQuotedPostsFromPostQueryVariables>(GetQuotedPostsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -634,7 +637,7 @@ export const useInfiniteGetMentionsFromPostQuery = <
       variables: Types.GetMentionsFromPostQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetMentionsFromPostQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetMentionsFromPostQuery, TError, TData>(
       ['GetMentionsFromPost.infinite', variables],
       (metaData) => fetcher<Types.GetMentionsFromPostQuery, Types.GetMentionsFromPostQueryVariables>(GetMentionsFromPostDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -779,7 +782,7 @@ export const useInfiniteGetProfileByIdQuery = <
       variables: Types.GetProfileByIdQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetProfileByIdQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetProfileByIdQuery, TError, TData>(
       ['GetProfileByID.infinite', variables],
       (metaData) => fetcher<Types.GetProfileByIdQuery, Types.GetProfileByIdQueryVariables>(GetProfileByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -828,7 +831,7 @@ export const useInfiniteGetProfileByDidQuery = <
       variables: Types.GetProfileByDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetProfileByDidQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetProfileByDidQuery, TError, TData>(
       ['GetProfileByDid.infinite', variables],
       (metaData) => fetcher<Types.GetProfileByDidQuery, Types.GetProfileByDidQueryVariables>(GetProfileByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -883,7 +886,7 @@ export const useInfiniteGetProfilesQuery = <
       variables?: Types.GetProfilesQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetProfilesQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetProfilesQuery, TError, TData>(
       variables === undefined ? ['GetProfiles.infinite'] : ['GetProfiles.infinite', variables],
       (metaData) => fetcher<Types.GetProfilesQuery, Types.GetProfilesQueryVariables>(GetProfilesDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -945,7 +948,7 @@ export const useInfiniteGetInterestsQuery = <
       variables?: Types.GetInterestsQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetInterestsQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetInterestsQuery, TError, TData>(
       variables === undefined ? ['GetInterests.infinite'] : ['GetInterests.infinite', variables],
       (metaData) => fetcher<Types.GetInterestsQuery, Types.GetInterestsQueryVariables>(GetInterestsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -1001,7 +1004,7 @@ export const useInfiniteGetInterestsByDidQuery = <
       variables: Types.GetInterestsByDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetInterestsByDidQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetInterestsByDidQuery, TError, TData>(
       ['GetInterestsByDid.infinite', variables],
       (metaData) => fetcher<Types.GetInterestsByDidQuery, Types.GetInterestsByDidQueryVariables>(GetInterestsByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -1055,7 +1058,7 @@ export const useInfiniteGetInterestsByIdQuery = <
       variables: Types.GetInterestsByIdQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetInterestsByIdQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetInterestsByIdQuery, TError, TData>(
       ['GetInterestsById.infinite', variables],
       (metaData) => fetcher<Types.GetInterestsByIdQuery, Types.GetInterestsByIdQueryVariables>(GetInterestsByIdDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -1117,7 +1120,7 @@ export const useInfiniteGetFollowingListByDidQuery = <
       variables: Types.GetFollowingListByDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetFollowingListByDidQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetFollowingListByDidQuery, TError, TData>(
       ['GetFollowingListByDid.infinite', variables],
       (metaData) => fetcher<Types.GetFollowingListByDidQuery, Types.GetFollowingListByDidQueryVariables>(GetFollowingListByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -1181,7 +1184,7 @@ export const useInfiniteGetFollowersListByDidQuery = <
       variables: Types.GetFollowersListByDidQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetFollowersListByDidQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetFollowersListByDidQuery, TError, TData>(
       ['GetFollowersListByDid.infinite', variables],
       (metaData) => fetcher<Types.GetFollowersListByDidQuery, Types.GetFollowersListByDidQueryVariables>(GetFollowersListByDidDocument, {...variables, ...(metaData.pageParam ?? {})})(),
@@ -1228,7 +1231,7 @@ export const useInfiniteGetMyProfileQuery = <
       variables?: Types.GetMyProfileQueryVariables,
       options?: UseInfiniteQueryOptions<Types.GetMyProfileQuery, TError, TData>
     ) =>{
-
+    
     return useInfiniteQuery<Types.GetMyProfileQuery, TError, TData>(
       variables === undefined ? ['GetMyProfile.infinite'] : ['GetMyProfile.infinite', variables],
       (metaData) => fetcher<Types.GetMyProfileQuery, Types.GetMyProfileQueryVariables>(GetMyProfileDocument, {...variables, ...(metaData.pageParam ?? {})})(),
