@@ -92,7 +92,7 @@ const Checkbox: React.FC<iCheckboxProps> = ({
   ${checkboxSizes}
   ${tickMarkSizes}
   before:border(2 ${inputColor})
-  after:border(l-2 ${checkmarkColor}) after:border(b-2 ${checkmarkColor}) after:-rotate-45
+  after:border(l-[1px] ${checkmarkColor}) after:border(b-[1px] ${checkmarkColor}) after:-rotate-45
   ${bgColor}
   `;
 
