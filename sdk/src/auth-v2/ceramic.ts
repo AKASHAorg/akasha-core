@@ -24,6 +24,8 @@ export default class CeramicService {
   private _composeClient: ComposeClient;
   private _didSession?: DIDSession;
   private _gql: Gql;
+  private _ceramic_endpoint: string;
+
   constructor(
     @inject(TYPES.Db) db: DB,
     @inject(TYPES.Web3) web3: Web3Connector,
@@ -38,11 +40,13 @@ export default class CeramicService {
     this._log = log.create('AWF_Ceramic');
     this._settings = settings;
     this._gql = gql;
+    this._ceramic_endpoint = process.env.CERAMIC_API_ENDPOINT || '';
     this._composeClient = new ComposeClient({
-      ceramic: process.env.CERAMIC_API_ENDPOINT as string,
+      ceramic: this._ceramic_endpoint,
       definition: definition,
     });
   }
+
   async connect() {
     const chainNameSpace = 'eip155';
     const chainId = this._web3.networkId[this._web3.network];
@@ -62,14 +66,27 @@ export default class CeramicService {
     });
     this._composeClient.setDID(this._didSession.did);
   }
+
   getComposeClient() {
     return this._composeClient;
   }
+
+  async setCeramicEndpoint(endPoint: string) {
+    this._ceramic_endpoint = endPoint;
+    await this.disconnect();
+  }
+
+  getOptions() {
+    return {
+      endpointURL: this._ceramic_endpoint,
+    };
+  }
+
   async disconnect() {
     if (this._didSession) {
       this._didSession = undefined;
       this._composeClient = new ComposeClient({
-        ceramic: process.env.CERAMIC_API_ENDPOINT as string,
+        ceramic: this._ceramic_endpoint,
         definition: definition,
       });
     }
