@@ -42,7 +42,7 @@ export const EditCategoriesPage: React.FC<IEditCategoriesPageProps> = props => {
 
   return (
     <EditCategories
-      categoriesLabel={t('Change Categories')}
+      label={t('Change Categories')}
       selectedCategories={selectedCategories}
       moderationCategories={categories}
       allCategoriesLabel={t('All categories')}

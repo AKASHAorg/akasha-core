@@ -1,16 +1,14 @@
 import React from 'react';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
-import Text from '@akashaorg/design-system-core/lib/components/Text';
-import Divider from '@akashaorg/design-system-core/lib/components/Divider';
+
+import PageHeader, { IPageHeaderProps } from './page-header';
 
 export type ModerationCategory = { value: string; label: string };
 
-export interface IEditCategoriesProps {
-  categoriesLabel: string;
+export interface IEditCategoriesProps extends IPageHeaderProps {
+  label: string;
   selectedCategories: ModerationCategory[];
   moderationCategories: ModerationCategory[];
   allCategoriesLabel: string;
@@ -21,16 +19,7 @@ export interface IEditCategoriesProps {
 }
 
 const EditCategories: React.FC<IEditCategoriesProps> = props => {
-  const {
-    categoriesLabel,
-    selectedCategories,
-    moderationCategories,
-    allCategoriesLabel,
-    cancelButtonLabel,
-    confirmButtonLabel,
-    onCancelButtonClick,
-    onConfirmButtonClick,
-  } = props;
+  const { selectedCategories, moderationCategories, allCategoriesLabel } = props;
 
   const [categories, setCategories] = React.useState<ModerationCategory[]>(
     selectedCategories ?? [],
@@ -58,16 +47,8 @@ const EditCategories: React.FC<IEditCategoriesProps> = props => {
   };
 
   return (
-    <BasicCardBox pad="p-0">
-      <Box customStyle="px-4 py-6">
-        <Text variant="h5" align="center">
-          {categoriesLabel}
-        </Text>
-      </Box>
-
-      <Divider />
-
-      <Box customStyle="flex flex-wrap p-4">
+    <PageHeader {...props}>
+      <Box customStyle="flex flex-wrap">
         <Pill
           label={allCategoriesLabel}
           clickable={true}
@@ -90,22 +71,7 @@ const EditCategories: React.FC<IEditCategoriesProps> = props => {
           />
         ))}
       </Box>
-
-      <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
-        <Button plain={true} onClick={onCancelButtonClick}>
-          <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-            {cancelButtonLabel}
-          </Text>
-        </Button>
-
-        <Button
-          size="md"
-          variant="primary"
-          label={confirmButtonLabel}
-          onClick={onConfirmButtonClick}
-        />
-      </Box>
-    </BasicCardBox>
+    </PageHeader>
   );
 };
 
