@@ -2,6 +2,8 @@ import { injectable } from 'inversify';
 import { Collection, Database } from '@textile/threaddb';
 import settingsSchema from './settings.schema';
 import appSchema from './app.schema';
+import { validate } from '../common/validator';
+import { z } from 'zod';
 
 export const availableCollections = Object.freeze({
   Settings: settingsSchema.name,
@@ -22,6 +24,7 @@ class DB {
    * Create a new DB instance
    * @param name - database name
    */
+  @validate(z.string())
   public create(name: string) {
     this._dbName = name;
     this._db = new Database(name, settingsSchema, appSchema);
@@ -32,6 +35,7 @@ class DB {
    *
    * @param version - number representing the db version
    */
+  @validate(z.number().positive().int('version parameter must be an integer'))
   public async open(version = 1): Promise<Database> {
     if (!this._db) {
       throw new Error('Must call `DB:create` first');
@@ -59,6 +63,11 @@ class DB {
    * Get access to the db collection by name
    * @param name - string representing the collection name
    */
+  @validate(
+    z.string().refine(name => Object.values(availableCollections).includes(name), {
+      message: 'Invalid collection name',
+    }),
+  )
   public getCollection<T>(
     name: typeof availableCollections[keyof typeof availableCollections],
   ): Collection<T> {

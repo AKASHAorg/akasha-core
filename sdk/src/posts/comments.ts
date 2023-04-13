@@ -1,6 +1,14 @@
 import { Buffer } from 'buffer';
 import { inject, injectable } from 'inversify';
-import { COMMENTS_EVENTS, TYPES } from '@akashaorg/typings/sdk';
+import {
+  CommentID,
+  CommentIDSchema,
+  COMMENTS_EVENTS,
+  DataProviderInputSchema,
+  EntryID,
+  EntryIDSchema,
+  TYPES,
+} from '@akashaorg/typings/sdk';
 import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import Gql from '../gql';
 import AWF_Auth from '../auth';
@@ -8,6 +16,8 @@ import Logging from '../logging';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
 import { throwError } from '../common/error-handling';
+import { validate } from '../common/validator';
+import { z } from 'zod';
 
 /**
  * # sdk.api.comments
@@ -36,14 +46,16 @@ class AWF_Comments {
   /**
    * Get comment data
    */
-  async getComment(commentID: string) {
+  @validate(CommentIDSchema)
+  async getComment(commentID: CommentID) {
     return this._gql.getAPI().GetComment({ commentID: commentID });
   }
 
   /**
    * Get a list of comments for a post
    */
-  async getComments(opt: { offset?: string; limit: number; postID: string }) {
+  @validate(z.object({ offset: CommentIDSchema, limit: z.number(), postID: EntryIDSchema }))
+  async getComments(opt: { offset?: CommentID; limit: number; postID: EntryID }) {
     return this._gql
       .getAPI()
       .GetComments({ offset: opt.offset, limit: opt.limit, postID: opt.postID });
@@ -52,7 +64,20 @@ class AWF_Comments {
   /**
    * Get a list of replies for a comment
    */
-  async getReplies(opt: { offset?: string; limit: number; postID: string; commentID: string }) {
+  @validate(
+    z.object({
+      offset: CommentIDSchema,
+      limit: z.number(),
+      postID: EntryIDSchema,
+      commentID: CommentIDSchema,
+    }),
+  )
+  async getReplies(opt: {
+    offset?: CommentID;
+    limit: number;
+    postID: EntryID;
+    commentID: CommentID;
+  }) {
     return this._gql.getAPI().GetReplies({
       offset: opt.offset,
       limit: opt.limit,
@@ -64,9 +89,20 @@ class AWF_Comments {
   /**
    * Create a new comment
    */
+  @validate(
+    z.object({
+      data: z.array(DataProviderInputSchema),
+      comment: z.object({
+        postID: EntryIDSchema,
+        replyTo: CommentIDSchema.optional(),
+        tags: z.array(z.string()).optional(),
+        mentions: z.array(z.string()).optional(),
+      }),
+    }),
+  )
   async addComment(opt: {
     data: DataProviderInput[];
-    comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
+    comment: { postID: EntryID; replyTo?: CommentID; tags?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
     if (!textContent) {
@@ -96,10 +132,22 @@ class AWF_Comments {
   /**
    * Update an existing comment
    */
+  @validate(
+    z.object({
+      commentID: CommentIDSchema,
+      data: z.array(DataProviderInputSchema),
+      comment: z.object({
+        postID: EntryIDSchema,
+        replyTo: CommentIDSchema.optional(),
+        tags: z.array(z.string()).optional(),
+        mentions: z.array(z.string()).optional(),
+      }),
+    }),
+  )
   async editComment(opt: {
     commentID: string;
     data: DataProviderInput[];
-    comment: { postID: string; replyTo?: string; tags?: string[]; mentions?: string[] };
+    comment: { postID: EntryID; replyTo?: CommentID; tags?: string[]; mentions?: string[] };
   }) {
     const textContent = opt.data.find(e => e.property === 'textContent');
     if (!textContent) {
@@ -129,7 +177,8 @@ class AWF_Comments {
   /**
    * Remove a comment's data by ID
    */
-  async removeComment(commentID: string) {
+  @validate(CommentIDSchema)
+  async removeComment(commentID: CommentID) {
     const auth = await this._auth.authenticateMutationData(commentID);
     const res = await this._gql.getAPI().RemoveComment(
       { id: commentID },

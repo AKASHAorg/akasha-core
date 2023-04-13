@@ -12,7 +12,7 @@ export type StackProps = {
   direction?: 'column' | 'column-reverse' | 'row' | 'row-reverse';
   justify?: Justify;
   align?: Align;
-  spacing?: string;
+  spacing?: `gap-x-${number}` | `gap-y-${number}` | `gap-${number}`;
   customStyle?: string;
   fullWidth?: boolean;
   ref?: LegacyRef<HTMLDivElement>;

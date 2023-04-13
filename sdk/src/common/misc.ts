@@ -1,5 +1,7 @@
 import { injectable } from 'inversify';
 import { PrivateKey, PublicKey } from '@textile/hub';
+import { validate } from './validator';
+import { PubKey, PubKeySchema } from '@akashaorg/typings/sdk';
 
 @injectable()
 class AWF_Misc {
@@ -16,7 +18,8 @@ class AWF_Misc {
     });
   }
 
-  public publicKeyFromString(pubKey: string): PublicKey {
+  @validate(PubKeySchema)
+  public publicKeyFromString(pubKey: PubKey): PublicKey {
     return PublicKey.fromString(pubKey);
   }
 

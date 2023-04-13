@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { TYPES, TAG_EVENTS, TagNameSchema } from "@akashaorg/typings/sdk";
+import { TYPES, TAG_EVENTS, TagNameSchema, TagName } from "@akashaorg/typings/sdk";
 import Web3Connector from '../common/web3.connector';
 import Logging from '../logging';
 import Gql from '../gql';
@@ -47,7 +47,8 @@ class AWF_Tags {
    *
    * @param opt
    */
-  async getTags(opt: { offset?: string; limit: number }) {
+  @validate(z.object({ offset: TagNameSchema, limit: z.number() }))
+  async getTags(opt: { offset?: TagName; limit: number }) {
     return this._gql.getAPI().GetTags({ offset: opt.offset || '', limit: opt.limit || 5 });
   }
 
@@ -55,7 +56,8 @@ class AWF_Tags {
    *
    * @param name
    */
-  async searchTags(name: string) {
+  @validate(TagNameSchema)
+  async searchTags(name: TagName) {
     return this._gql.getAPI().SearchTags({ name: name });
   }
 
@@ -63,7 +65,8 @@ class AWF_Tags {
    *
    * @param tagName
    */
-  async createTag(tagName: string) {
+  @validate(TagNameSchema)
+  async createTag(tagName: TagName) {
     z.string().min(3).parse(tagName);
     const auth = await this._auth.authenticateMutationData(tagName);
     const newTag = await this._gql.getAPI().CreateTag(
@@ -86,7 +89,7 @@ class AWF_Tags {
    * Returns most recent used tags
    */
   getTrending() {
-    return this.searchTags('');
+    return this._gql.getAPI().SearchTags({ name: '' });
   }
 }
 
