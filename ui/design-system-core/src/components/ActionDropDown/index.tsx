@@ -8,28 +8,31 @@ import { IconType } from '@akashaorg/typings/ui';
 import { TextProps } from '../Text';
 import { getColorClasses } from '../../utils/getColorClasses';
 
-type Action = {
+export type Action = {
   label: string;
-  icon: IconType;
-  color?: TextProps['color'];
-  onClick: (event: React.SyntheticEvent<Element, Event>) => void;
-};
+  icon?: IconType;
+  onClick: (index: number) => void;
+} & TextProps;
 
 export type ActionDropdownProps = {
   actions: Action[];
   customStyle?: string;
+  showBorder?: boolean;
   ref?: LegacyRef<HTMLDivElement>;
 };
 
 const ActionDropdown: React.FC<ActionDropdownProps> = forwardRef(
-  ({ actions, customStyle }, ref) => {
-    const baseStyle = `border-b ${getColorClasses(
-      {
-        light: 'grey8',
-        dark: 'grey3',
-      },
-      'border',
-    )}`;
+  ({ actions, customStyle, showBorder = true }, ref) => {
+    const borderStyle = showBorder
+      ? `border-b ${getColorClasses(
+          {
+            light: 'grey8',
+            dark: 'grey3',
+          },
+          'border',
+        )}`
+      : '';
+    const baseStyle = `${borderStyle}`;
     const hoverStyle = `${getColorClasses({ light: 'grey8', dark: 'grey5' }, 'hover:bg')}`;
 
     return (
@@ -39,12 +42,12 @@ const ActionDropdown: React.FC<ActionDropdownProps> = forwardRef(
             <Button
               key={action.label + index}
               customStyle={`${baseStyle} ${hoverStyle} first:rounded-t-lg	last:rounded-b-lg`}
-              onClick={action.onClick}
+              onClick={() => action.onClick(index)}
               plain
             >
               <Stack align="center" spacing="gap-x-3" customStyle="py-2 px-4">
-                <Icon type={action.icon} color={action.color} size="sm" />
-                <Text variant="body1" color={action.color}>
+                {action.icon && <Icon type={action.icon} color={action.color} size="sm" />}
+                <Text variant="body1" {...action}>
                   {action.label}
                 </Text>
               </Stack>

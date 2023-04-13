@@ -8,13 +8,13 @@ import {
   ProfileProviders,
   ProfileProviderProperties,
 } from '@akashaorg/typings/ui';
-import { LoginState, useEnsByAddress } from '@akashaorg/ui-awf-hooks';
+import { LoginState, useEnsByAddress, useInterests } from '@akashaorg/ui-awf-hooks';
 import { GeneralForm } from '@akashaorg/design-system-components/lib/components/EditProfile/GeneralForm';
 import { SocialLinks } from '@akashaorg/design-system-components/lib/components/EditProfile/SocialLinks';
+import { Interests } from '@akashaorg/design-system-components/lib/components/EditProfile/Interests';
 import { useParams } from 'react-router';
 
 export type ProfilePageProps = {
-  profileId: string;
   profileData: IProfileData;
   loginState: LoginState;
 };
@@ -29,6 +29,8 @@ const ProfileEdit: React.FC<RootComponentProps & ProfilePageProps> = props => {
   }>();
 
   const ENSReq = useEnsByAddress(profileData.ethAddress);
+
+  const interestsReq = useInterests(profileData.pubKey);
 
   /* @TODO: move this logic into hooks module*/
   const socialLinks: { type: string; value: string }[] = React.useMemo(() => {
@@ -143,6 +145,37 @@ const ProfileEdit: React.FC<RootComponentProps & ProfilePageProps> = props => {
             }}
             onDelete={() => ({})}
           />
+          {/*@TODO: Create loading and error states for interests list */}
+          {interestsReq.status === 'success' && (
+            <Interests
+              title={t('Your interests')}
+              description={t(
+                'Your interests will help refine your social feed and throughout AKASHA World.  You can have a maximum of 10 topics',
+              )}
+              moreInterestTitle={t('Find more interests')}
+              moreInterestDescription={t(
+                'You can find more interests and add them to your list of interests!',
+              )}
+              moreInterestPlaceholder={t('Search for interests')}
+              myInterests={interestsReq.data.map(interest => interest.name)}
+              interests={interestsReq.data.map(interest => interest.name)}
+              cancelButton={{
+                label: t('Cancel'),
+                handleClick: () => {
+                  navigateTo({
+                    appName: '@akashaorg/app-profile',
+                    getNavigationUrl: () => `/${pubKey}`,
+                  });
+                },
+              }}
+              saveButton={{
+                label: 'Save',
+                handleClick: () => {
+                  //@TODO
+                },
+              }}
+            />
+          )}
         </Tab>
       </Stack>
     </>
