@@ -1,7 +1,8 @@
 import React from 'react';
-import { apply, tw } from '@twind/core';
+import { tw } from '@twind/core';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
+import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 
 export interface ITopbarProps {
   // data
@@ -16,14 +17,11 @@ export interface ITopbarProps {
   onAppWidgetClick: () => void;
   onBrandClick?: () => void;
   onNotificationClick: () => void;
-  // external css
-  className?: string;
   modalSlotId: string;
 }
 
 const Topbar: React.FC<ITopbarProps> = props => {
   const {
-    className = '',
     sidebarVisible,
     onSidebarToggle,
     onBrandClick,
@@ -49,21 +47,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
     };
   }, []);
 
-  const BaseStyle = apply`
-    flex justify-between items-center w-full
-    py-1.5 px-2 space-x-4
-    border(1 grey8) rounded-none sm:rounded-md shadow-sm
-    bg-white dark:(bg-grey2 border(1 grey2) shadow-[0_0_4px_rgba(0,0,0,0.2)]))
-    xs:(fixed top-0 z-50)
-    `;
-
-  const instanceStyle = apply`
-  ${BaseStyle}
-  ${className}
-  `;
+  const BaseStyle =
+    'flex-row justify-between items-center py-1.5 px-2 space-x-4 xs:(fixed top-0 z-50)';
 
   return (
-    <div className={tw(instanceStyle)}>
+    <BasicCardBox elevation="sm" style={BaseStyle}>
       <div className={tw('flex space-x-2')}>
         {!sidebarVisible ? (
           <Button
@@ -113,7 +101,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
           variant="primary"
         />
       </div>
-    </div>
+    </BasicCardBox>
   );
 };
 
