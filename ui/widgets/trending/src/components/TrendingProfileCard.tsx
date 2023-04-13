@@ -74,7 +74,7 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
             Array.from({ length: 3 }, (_el, index: number) => (
               <div key={index} className={tw(BaseItemStyles)}>
                 <div className={tw('py-2')}>
-                  <TextLine title="avatar" width="40px" height="40px" className="rounded-full" />
+                  <TextLine title="avatar" width="40px" height="40px" customStyle="rounded-full" />
                   <div className={tw('py-1')}>
                     <TextLine title="tagName" animated={false} width="140px" />
                     <TextLine title="tagName" animated={false} width="80px" />
