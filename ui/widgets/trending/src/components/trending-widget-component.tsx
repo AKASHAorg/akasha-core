@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import DS from '@akashaorg/design-system';
+import { tw, apply } from '@twind/core';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 
@@ -17,9 +16,8 @@ import {
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
 
-import TrendingWidgetCard from './TrendingWidgetCard';
-
-const { Box } = DS;
+import TrendingTagCard from './TrendingTagCard';
+import TrendingProfileCard from './TrendingProfileCard';
 
 const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
@@ -113,22 +111,8 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
     unfollowReq.mutate(pubKey);
   };
 
-  const handleActiveTabChange = (tab: number) => {
-    if (tab === 0) {
-      analyticsActions.trackEvent({
-        category: AnalyticsCategories.TRENDING_WIDGET,
-        action: 'Trending Topic Tab Selected',
-      });
-    } else {
-      analyticsActions.trackEvent({
-        category: AnalyticsCategories.TRENDING_WIDGET,
-        action: 'Trending People Tab Selected',
-      });
-    }
-  };
-
   return (
-    <Box pad={{ bottom: 'small' }}>
+    <div className={tw(apply('space-y-8'))}>
       {(trendingTagsReq.isError || trendingProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
@@ -140,34 +124,35 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
           }
         />
       )}
-      <TrendingWidgetCard
-        titleLabel={t('Trending Right Now')}
-        topicsLabel={t('Topics')}
-        profilesLabel={t('People')}
-        followLabel={t('Follow')}
-        unfollowLabel={t('Unfollow')}
-        followersLabel={t('Followers')}
-        followingLabel={t('Following')}
+      <TrendingTagCard
+        titleLabel={t('Trending Topics')}
+        subscribeLabel={t('Subscribe')}
+        unsubscribeLabel={t('Unsubscribe')}
         tagAnchorLink={'/@akashaorg/app-akasha-integration/tags'}
-        profileAnchorLink={'/@akashaorg/app-profile'}
         noTagsLabel={t('No tags found!')}
-        noProfilesLabel={t('No profiles found!')}
         isLoadingTags={trendingTagsReq.isFetching}
-        isLoadingProfiles={trendingProfilesReq.isFetching}
         tags={trendingTags}
-        profiles={trendingProfiles}
-        followedProfiles={followedProfiles}
         subscribedTags={tagSubscriptions}
         onClickTag={handleTagClick}
         handleSubscribeTag={handleTagSubscribe}
         handleUnsubscribeTag={handleTagUnSubscribe}
+      />
+      <TrendingProfileCard
+        titleLabel={t('Start Following')}
+        followLabel={t('Follow')}
+        unfollowLabel={t('Unfollow')}
+        followersLabel={t('Followers')}
+        profileAnchorLink={'/@akashaorg/app-profile'}
+        noProfilesLabel={t('No profiles found!')}
+        isLoadingProfiles={trendingProfilesReq.isFetching}
+        profiles={trendingProfiles}
+        followedProfiles={followedProfiles}
         onClickProfile={handleProfileClick}
         handleFollowProfile={handleFollowProfile}
         handleUnfollowProfile={handleUnfollowProfile}
         loggedEthAddress={loginQuery.data?.ethAddress}
-        onActiveTabChange={handleActiveTabChange}
       />
-    </Box>
+    </div>
   );
 };
 
