@@ -8,7 +8,12 @@ export default {
 };
 
 const Template = args => {
-  return <Toggle {...args} />;
+  const [selected, setSelected] = React.useState(false);
+
+  const changeHandler = e => {
+    setSelected(!selected);
+  };
+  return <Toggle {...args} checked={selected} onChange={changeHandler} />;
 };
 
 export const BaseToggle = Template.bind({});
