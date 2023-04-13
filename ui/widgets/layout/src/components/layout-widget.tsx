@@ -155,7 +155,7 @@ const Layout: React.FC<RootComponentProps> = props => {
       `;
 
   return (
-    <div className={tw('bg-background dark:(bg-background-dark) min-h-screen')}>
+    <div className={tw('bg-white dark:bg-black min-h-screen')}>
       <div className={tw('h-full w-full')} onClick={handleClickOutside}>
         <div className={tw(layoutStyle)}>
           <ScrollRestorer />

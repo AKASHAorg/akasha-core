@@ -53,7 +53,7 @@ const Topbar: React.FC<ITopbarProps> = props => {
     flex justify-between items-center w-full
     py-1.5 px-2 space-x-4
     border(1 grey8) rounded-none sm:rounded-md shadow-sm
-    bg-white dark:bg-black
+    bg-white dark:(bg-grey2 border(1 grey2) shadow-[0_0_4px_rgba(0,0,0,0.2)]))
     xs:(fixed top-0 z-50)
     `;
 
@@ -127,3 +127,6 @@ Topbar.defaultProps = {
 };
 
 export default Topbar;
+function getElevationClasses(): import('@twind/core').Class {
+  throw new Error('Function not implemented.');
+}
