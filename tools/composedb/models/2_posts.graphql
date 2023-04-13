@@ -27,7 +27,7 @@ type ProviderValue{
   value: String! @string(minLength: 3, maxLength: 2000)
 }
 
-type Comment type Comment @createModel(accountRelation: LIST, description: "A comment on a Post") {
+type Comment @createModel(accountRelation: LIST, description: "A comment on a Post") {
   postID: StreamID! @documentReference(model: "Post")
   post: Post! @relationDocument(property: "postID")
   author: DID! @documentAccount
