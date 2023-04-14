@@ -28,6 +28,7 @@ const EditContactInfo: React.FC<IEditContactInfoProps> = props => {
   const handleFillInfo = () => {
     /** fill info from profile */
   };
+
   return (
     <PageHeader {...props}>
       <Box customStyle="flex flex-col space-y-4">
