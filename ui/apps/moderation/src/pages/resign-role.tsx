@@ -8,11 +8,12 @@ import { DASHBOARD, RESIGN_CONFIRMATION } from '../routes';
 
 export interface IResignRolePageProps {
   user: string | null;
+  isAdmin: boolean;
   navigateTo: (args: NavigateToParams) => void;
 }
 
 export const ResignRolePage: React.FC<IResignRolePageProps> = props => {
-  const { navigateTo } = props;
+  const { isAdmin, navigateTo } = props;
 
   const { t } = useTranslation('app-moderation-ewa');
 
@@ -30,11 +31,13 @@ export const ResignRolePage: React.FC<IResignRolePageProps> = props => {
     });
   };
 
+  const role = isAdmin ? 'Admin' : 'Moderator';
+
   return (
     <ResignRole
-      label={t('Resign From Moderator Role')}
+      label={t('Resign From {{role}} Role', { role: role })}
       textLine1Label={t(
-        'Once you resign you won’t be able to preform any moderation actions such as, keeping, delisting content and suspending or banning users.',
+        "Once you resign you won't be able to preform any moderation actions such as, keeping, delisting content and suspending or banning users.",
       )}
       reasonTitleLabel={t('Why do you want to resign?')}
       reasonPlaceholderLabel={t('Write down your reasons here')}

@@ -13,6 +13,7 @@ import {
   ModerationValue,
   EditCategoriesPage,
   EditContactInfoPage,
+  EditMaxApplicantsPage,
   ResignRolePage,
   ResignConfirmationPage,
 } from '../pages';
@@ -28,6 +29,7 @@ import routes, {
   HOME,
   MODERATION_VALUE,
   MODERATORS,
+  EDIT_MAX_APPLICANTS,
 } from '../routes';
 
 const { Box } = DS;
@@ -39,6 +41,8 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
   const checkModeratorResp = checkModeratorQuery.data;
 
   const isAuthorised = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
+
+  const isAdmin = false;
 
   const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
@@ -56,6 +60,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               <Dashboard
                 user={loginQuery.data?.pubKey}
                 isAuthorised={isAuthorised}
+                isAdmin={isAdmin}
                 navigateTo={navigateTo}
               />
             }
@@ -72,8 +77,21 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
           />
 
           <Route
+            path={routes[EDIT_MAX_APPLICANTS]}
+            element={
+              <EditMaxApplicantsPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />
+            }
+          />
+
+          <Route
             path={routes[RESIGN_ROLE]}
-            element={<ResignRolePage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+            element={
+              <ResignRolePage
+                user={loginQuery.data?.pubKey}
+                isAdmin={isAdmin}
+                navigateTo={navigateTo}
+              />
+            }
           />
 
           <Route
