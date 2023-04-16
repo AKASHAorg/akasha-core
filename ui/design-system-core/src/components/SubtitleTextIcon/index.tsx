@@ -23,8 +23,6 @@ const baseStyles = apply`
   py-2
   pl-2
   flex
-  flex-col
-  rounded-md
   bg-white
   dark:bg-grey2
   items-center
@@ -34,7 +32,7 @@ const baseStyles = apply`
 const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
   const {
     iconType,
-    iconSize,
+    // iconSize,
     backgroundColor,
     backgroundSize,
     label,
@@ -43,30 +41,38 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
     maxWidth,
   } = props;
 
-  const InstanceStyles = apply`
+  const InstanceWrapperStyle = apply`
     ${baseStyles}
     ${maxWidth}
     `;
 
-  const textTrucateStyle = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
+  const iconBackgroundStyle = apply`
+    flex flex-row justify-center items-center mr-2
+    ${backgroundSize ? backgroundSize : 'w-10 h-10'}
+    ${backgroundColor ? 'bg-grey8 dark:bg-grey3 rounded-full' : 'none'}`;
 
   return (
-    <div data-testid={`${props['data-testid']}`} className={tw(InstanceStyles)} onClick={onClick}>
+    <div
+      data-testid={`${props['data-testid']}`}
+      className={tw(InstanceWrapperStyle)}
+      onClick={onClick}
+    >
       {iconType ? (
-        <div
-          className={tw(
-            `flex flex-row justify-center items-center mr-2 ${
-              backgroundSize ? backgroundSize : 'w-12 h-12'
-            } ${backgroundColor ? 'bg-grey1 rounded-sm' : 'none'}`,
-          )}
-        >
-          <Icon type={iconType} customStyle={`${iconSize ? iconSize : 'h-4, w-4'} black`} />
+        <div className={tw(iconBackgroundStyle)}>
+          <Icon
+            type={iconType}
+            size={{ width: 'w-4', height: 'h-5' }}
+            color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
+          />
         </div>
       ) : null}
-      <div className={tw('flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])')}>
-        <Text customStyle={textTrucateStyle}>{label}</Text>
-
-        <Text customStyle={`${textTrucateStyle}text-xs`}>{subtitle}</Text>
+      <div className={tw(apply('flex flex-col max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem])'))}>
+        <Text variant="button-sm" weight="bold" truncate={true}>
+          {label}
+        </Text>
+        <Text variant="footnotes2" color="grey7" truncate={true}>
+          {subtitle}
+        </Text>
       </div>
     </div>
   );

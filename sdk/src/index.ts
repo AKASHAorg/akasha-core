@@ -25,6 +25,7 @@ import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
 import AWF_Misc from './common/misc';
+import AWF_Ceramic from "./auth-v2/ceramic";
 export { Logger } from 'pino';
 export interface SDK_API {
   globalChannel: EventBus;
@@ -43,6 +44,7 @@ export interface SDK_Services {
   stash: Stash;
   settings: Settings;
   appSettings: AppSettings;
+  ceramic: AWF_Ceramic;
   db: DB;
   common: {
     web3: Web3Connector;
@@ -105,6 +107,7 @@ export function init(): AWF_SDK {
   const icRegistry = container.get<AWF_IC_REGISTRY>(TYPES.ICRegistry);
   const misc = container.get<AWF_Misc>(TYPES.Misc);
   const gqlNew = container.get<GqlNew>(TYPES.GqlNew);
+  const ceramic = container.get<AWF_Ceramic>(TYPES.Ceramic);
   console.info('new gql client', gqlNew);
   return {
     services: {
@@ -113,6 +116,7 @@ export function init(): AWF_SDK {
       stash,
       settings,
       appSettings,
+      ceramic,
       db,
       common: {
         web3,
