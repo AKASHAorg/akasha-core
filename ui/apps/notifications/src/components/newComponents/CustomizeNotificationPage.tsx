@@ -20,14 +20,16 @@ const socialAppCheckboxes: { label: string; selected: boolean }[] = [
     selected: true,
   },
 ];
-const articleAppCheckboxes: { label: string }[] = [
-  { label: 'Replies to my Article' },
-  { label: 'Quotes me in an Article.' },
-  { label: 'Someone shares my Article' },
+const articleAppCheckboxes: { label: string; selected: boolean }[] = [
+  { label: 'Replies to my Article', selected: true },
+  { label: 'Quotes me in an Article.', selected: true },
+  { label: 'Someone shares my Article', selected: true },
 ];
-const moderationAppCheckboxes: { label: string }[] = [{ label: 'My content gets delisted/kept' }];
-const integrationCenterCheckboxes: { label: string }[] = [
-  { label: 'New versions of installed integrations' },
+const moderationAppCheckboxes: { label: string; selected: boolean }[] = [
+  { label: 'My content gets delisted/kept', selected: true },
+];
+const integrationCenterCheckboxes: { label: string; selected: boolean }[] = [
+  { label: 'New versions of installed integrations', selected: true },
 ];
 
 const CustomizeNotificationPage: React.FC<RootComponentProps> = props => {
@@ -36,9 +38,9 @@ const CustomizeNotificationPage: React.FC<RootComponentProps> = props => {
   const [selected, setSelected] = React.useState(false);
   const [allStates, setAllStates] = React.useState({
     social: Array.from(socialAppCheckboxes.map(e => e.selected)),
-    articleApp: Array(articleAppCheckboxes.length).fill(true),
-    moderationApp: Array(moderationAppCheckboxes.length).fill(true),
-    integrationCenter: Array(integrationCenterCheckboxes.length).fill(true),
+    articleApp: Array.from(articleAppCheckboxes.map(e => e.selected)),
+    moderationApp: Array(moderationAppCheckboxes.map(e => e.selected)),
+    integrationCenter: Array(integrationCenterCheckboxes.map(e => e.selected)),
   });
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
