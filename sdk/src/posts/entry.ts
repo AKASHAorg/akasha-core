@@ -48,7 +48,7 @@ class AWF_Entry {
   @validate(EntryIDSchema)
   async getEntry(entryId: string) {
     const res = await this._auth.getCurrentUser();
-    return this._gql.getAPI().GetEntry({ id: entryId, pubKey: res?.pubKey });
+    return this._gql.getAPI().GetEntry({ id: entryId, pubKey: res?.id });
   }
 
   /**
@@ -58,9 +58,7 @@ class AWF_Entry {
   @validate(z.object({ offset: EntryIDSchema.optional(), limit: z.number() }))
   async getEntries(opt: { offset?: EntryID; limit: number }) {
     const res = await this._auth.getCurrentUser();
-    return this._gql
-      .getAPI()
-      .GetEntries({ offset: opt.offset, limit: opt.limit, pubKey: res?.pubKey });
+    return this._gql.getAPI().GetEntries({ offset: opt.offset, limit: opt.limit, pubKey: res?.id });
   }
 
   /**
@@ -142,7 +140,7 @@ class AWF_Entry {
       author: opt.pubKey,
       offset: opt.offset,
       limit: opt.limit,
-      pubKey: currentUser?.pubKey,
+      pubKey: currentUser?.id,
     });
   }
 
@@ -157,7 +155,7 @@ class AWF_Entry {
       tag: opt.name,
       offset: opt.offset,
       limit: opt.limit,
-      pubKey: currentUser?.pubKey,
+      pubKey: currentUser?.id,
     });
   }
 

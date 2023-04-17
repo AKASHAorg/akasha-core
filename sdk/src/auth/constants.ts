@@ -12,6 +12,7 @@ export const enum SwActionType {
   ENCRYPT = 'ENCRYPT_VALUE',
   DECRYPT = 'DECRYPT_VALUE',
 }
+
 export const authStatus = {
   isNewUser: false,
 };
