@@ -11,7 +11,7 @@ describe('< CustomizeNotificationPage /> component', () => {
     });
   });
 
-  it("should render notifications app's welcome page", async () => {
+  it("should render the notifications app's customization page", async () => {
     expect(screen.getByText(/I want to receive all types of notifications/i)).toBeInTheDocument();
   });
 });

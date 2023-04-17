@@ -51,6 +51,7 @@ const AppRoutes = (props: RootComponentProps) => {
                 'Get the latest updates about what’s going on with your world. You can personalize your notifications and get only what you want to see!',
               )}
               leftButtonLabel={t('Skip')}
+              rightButtonLabel={t('Customize your notifications')}
               {...props}
             />
           }
@@ -68,6 +69,7 @@ const AppRoutes = (props: RootComponentProps) => {
                 'You will receive notifications based on your choices now! You can always change that or even pause it from the notifications settings!',
               )}
               finalStep={true}
+              rightButtonLabel={t('Go to my notifications')}
               {...props}
             />
           }

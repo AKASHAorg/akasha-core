@@ -11,11 +11,19 @@ interface IWelcomePageProps {
   header: string;
   description: string;
   leftButtonLabel?: string;
+  rightButtonLabel: string;
   finalStep?: boolean;
 }
 
 const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
-  const { plugins, leftButtonLabel, header, description, finalStep = false } = props;
+  const {
+    plugins,
+    leftButtonLabel,
+    rightButtonLabel,
+    header,
+    description,
+    finalStep = false,
+  } = props;
 
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
@@ -25,6 +33,10 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
       appName: '@akashaorg/app-notifications',
       getNavigationUrl: () => routes[CUSTOMIZATION_STEP_TWO],
     });
+  };
+
+  const goToNotificationsPage = () => {
+    // @TODO: go to notification listing page.
   };
 
   return (
@@ -47,9 +59,10 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
             variant="text"
             label={leftButtonLabel}
             color="secondaryLight dark:secondaryDark"
+            onClick={goToNotificationsPage}
           />
         )}
-        <Button variant="primary" label="Customize your notifications" onClick={goToNextStep} />
+        <Button variant="primary" label={rightButtonLabel} onClick={goToNextStep} />
       </div>
     </Card>
   );

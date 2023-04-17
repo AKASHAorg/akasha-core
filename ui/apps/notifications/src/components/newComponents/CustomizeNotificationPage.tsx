@@ -10,8 +10,8 @@ import routes, { CUSTOMIZATION_STEP_THREE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 const socialAppCheckboxes: { label: string; selected: boolean }[] = [
-  { label: 'New Followers', selected: false },
-  { label: 'Replies to my post', selected: false },
+  { label: 'New Followers', selected: true },
+  { label: 'Replies to my post', selected: true },
   { label: 'Mentions me in a post / reply', selected: true },
   { label: 'Someone sharing my post', selected: true },
   { label: 'When someone I am following posts new content', selected: true },
