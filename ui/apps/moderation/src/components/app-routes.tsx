@@ -8,6 +8,7 @@ import {
   Dashboard,
   Overview,
   Moderators,
+  ModeratorDetailPage,
   TransparencyLog,
   TransparencyLogItem,
   ModerationValue,
@@ -20,6 +21,7 @@ import routes, {
   HOME,
   MODERATION_VALUE,
   MODERATORS,
+  VIEW_MODERATOR,
 } from '../routes';
 
 const { Box } = DS;
@@ -54,7 +56,23 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
 
-          <Route path={routes[MODERATORS]} element={<Moderators {...props} />} />
+          <Route
+            path={routes[MODERATORS]}
+            element={
+              <Moderators
+                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+              />
+            }
+          />
+
+          <Route
+            path={routes[VIEW_MODERATOR]}
+            element={
+              <ModeratorDetailPage
+                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+              />
+            }
+          />
 
           <Route
             path={routes[HISTORY]}
