@@ -16,10 +16,11 @@ export interface iCheckboxProps {
   isDisabled?: boolean;
   //handler
   handleChange?: () => void;
+  customStyle?: string;
 }
 
 const baseLabelStyles = apply`
-relative inline-block pl-2
+ inline-block ml-2
 `;
 
 const basePseudoCheckboxStyles = `
@@ -40,6 +41,7 @@ const Checkbox: React.FC<iCheckboxProps> = ({
   indeterminate = false,
   isDisabled = false,
   handleChange,
+  customStyle,
 }) => {
   const checkboxRef = React.useRef<HTMLInputElement>(null);
 
@@ -121,7 +123,13 @@ const Checkbox: React.FC<iCheckboxProps> = ({
     `;
 
   return (
-    <div className={tw('leading-6 my-2 hover:text-secondaryLight dark:hover:text-secondaryDark')}>
+    <div
+      className={tw(
+        apply(
+          `leading-6 my-2 hover:text-secondaryLight dark:hover:text-secondaryDark flex ${customStyle}`,
+        ),
+      )}
+    >
       <input
         ref={checkboxRef}
         type="checkbox"

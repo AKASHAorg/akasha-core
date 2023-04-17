@@ -7,13 +7,14 @@ export interface IAccordionProps {
   customStyle?: string;
   titleNode: React.ReactNode;
   contentNode: React.ReactNode;
+  open?: boolean;
 }
 
 const Accordion: React.FC<IAccordionProps> = props => {
-  const { customStyle = '', titleNode, contentNode } = props;
+  const { customStyle = '', titleNode, contentNode, open } = props;
 
   // internal state for accordion toggle
-  const [isToggled, setIsToggled] = React.useState<boolean>(false);
+  const [isToggled, setIsToggled] = React.useState<boolean>(open);
 
   const handleToggle = () => setIsToggled(!isToggled);
 
@@ -25,6 +26,7 @@ const Accordion: React.FC<IAccordionProps> = props => {
       >
         {titleNode}
         <Icon
+          accentColor={true}
           customStyle="h-4, w-4 text-secondaryDark"
           type={isToggled ? 'ChevronUpIcon' : 'ChevronDownIcon'}
         />
