@@ -5,9 +5,7 @@ import Pill from '../';
 import { customRender } from '../../../test-utils';
 
 const label = 'Default text';
-const mockChangeHandler = jest.fn(() => {
-  console.log('clicked dismiss');
-});
+const mockChangeHandler = jest.fn();
 
 describe('<Pill /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -15,7 +13,12 @@ describe('<Pill /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <Pill label={label} trailingIcon="XMarkIcon" onPillClick={() => mockChangeHandler()} />,
+        <Pill
+          label={label}
+          trailingIcon="XMarkIcon"
+          onPillClick={mockChangeHandler}
+          clickable={true} // add this, to enable the click handler
+        />,
         {},
       );
     });
@@ -36,10 +39,13 @@ describe('<Pill /> Component', () => {
     const infoLabel = getByText(label);
     expect(infoLabel).toBeDefined();
   });
+
   it('correctly calls handler function when clicked', () => {
     const { getByTestId } = componentWrapper;
     const dismissButton = getByTestId('dismiss-button');
+
     fireEvent.click(dismissButton);
+
     expect(mockChangeHandler).toHaveBeenCalledTimes(1);
   });
 });

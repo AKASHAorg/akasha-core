@@ -1,8 +1,10 @@
 import React from 'react';
-import Icon from '../Icon';
-import { IconType } from '@akashaorg/typings/ui';
-import Text from '../Text';
 import { tw, apply } from '@twind/core';
+import { IconType } from '@akashaorg/typings/ui';
+
+import Button from '../Button';
+import Icon from '../Icon';
+import Text from '../Text';
 
 export type PillSize = 'xs' | 'sm' | 'lg';
 
@@ -63,7 +65,11 @@ const Pill: React.FC<IPillProps> = ({
         {label}
       </Text>
 
-      {trailingIcon && <Icon type={trailingIcon} customStyle="w-4 h-4" />}
+      {trailingIcon && (
+        <Button plain={true} data-testid="dismiss-button">
+          <Icon type={trailingIcon} customStyle="w-4 h-4" />
+        </Button>
+      )}
     </div>
   );
 };
