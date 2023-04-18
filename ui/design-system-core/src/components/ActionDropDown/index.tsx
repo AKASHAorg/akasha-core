@@ -17,13 +17,14 @@ export type Action = {
 export type ActionDropdownProps = {
   actions: Action[];
   customStyle?: string;
-  showBorder?: boolean;
+  //show divider between drop down items
+  showDivider?: boolean;
   ref?: LegacyRef<HTMLDivElement>;
 };
 
 const ActionDropdown: React.FC<ActionDropdownProps> = forwardRef(
-  ({ actions, customStyle, showBorder = true }, ref) => {
-    const borderStyle = showBorder
+  ({ actions, customStyle, showDivider = true }, ref) => {
+    const borderStyle = showDivider
       ? `border-b ${getColorClasses(
           {
             light: 'grey8',

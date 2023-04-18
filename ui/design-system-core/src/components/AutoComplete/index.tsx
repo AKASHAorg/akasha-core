@@ -64,7 +64,7 @@ const AutoComplete: React.FC<AutoCompleteProps & InputProps> = ({
         <div className={tw('relative')}>
           <ActionDropdown
             actions={actions}
-            showBorder={false}
+            showDivider={false}
             customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar"
           />
         </div>
