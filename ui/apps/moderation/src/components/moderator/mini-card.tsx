@@ -23,10 +23,6 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
 
   const borderBottomStyle = `${hasBorderBottom ? 'border(b-1 solid grey8 dark:grey3)' : ''}`;
 
-  // const truncateStyle = tw(
-  //   'max-w([12.5rem] md:[7.5rem]) w-fit whitespace-nowrap overflow-hidden text-ellipsis cursor-default',
-  // );
-
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
 
   const moderatorStatusIndicator = `${
@@ -86,18 +82,6 @@ const ModeratorDetailMiniCard: React.FC<IModeratorDetailMiniCardProps> = props =
         <Button plain={true} onClick={() => onCardClick(moderator.pubKey)}>
           <Icon type="ChevronRightIcon" accentColor={true} customStyle="justify-end" />
         </Button>
-
-        {/* {moderator.status === 'active' && (moderator.social?.discord || moderator.social?.email) && (
-          <div className={tw('flex')}>
-            {moderator.social?.discord && (
-              <SocialLink iconType="discord" onClick={onCardClick} />
-            )}
-
-            {moderator.social?.email && (
-              <SocialLink iconType="akasha" onClick={onCardClick} />
-            )}
-          </div>
-        )} */}
       </Box>
     </Box>
   );
