@@ -19,9 +19,10 @@ class AWF_Misc {
     });
   }
 
-  @validate(z.string())
-  public getAccountInfoFromID(serialisedID: string) {
-    return AccountId.parse(serialisedID);
+  @validate(z.string(), z.boolean().optional())
+  public getAccountInfoFromID(serialisedID: string, isDID = true) {
+    // parses strings like did:pkh:eip155:5:0xethereumaddress
+    return AccountId.parse(isDID ? serialisedID.split(':').slice(2).join(':') : serialisedID);
   }
 }
 

@@ -64,7 +64,6 @@ export default class CeramicService {
     this._didSession = await DIDSession.authorize(authMethod, {
       resources: this._composeClient.resources,
       expiresInSecs: 60 * 60 * 24 * 7, // 1 week
-      domain: window.location.hostname,
     });
     this._composeClient.setDID(this._didSession.did);
     return this._didSession;

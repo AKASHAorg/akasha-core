@@ -381,10 +381,11 @@ class AWF_Auth {
     data: Record<string, unknown> | string | Record<string, unknown>[],
     base64Format = false,
   ) {
-      return Promise.resolve({
-        signature: 'fakeSignature'
-      })
+    return Promise.resolve({
+      signature: 'fakeSignature',
+    });
   }
+
   /**
    * Sign data with the identity key
    * @param data -
