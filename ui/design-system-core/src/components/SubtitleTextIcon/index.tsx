@@ -1,7 +1,8 @@
 import React from 'react';
 import { tw, apply } from '@twind/core';
-import Icon from '../Icon';
 import { IconType } from '@akashaorg/typings/ui';
+
+import Icon from '../Icon';
 import Text from '../Text';
 
 export interface ISubtitleTextIcon {
@@ -11,10 +12,7 @@ export interface ISubtitleTextIcon {
   backgroundSize?: string;
   backgroundColor?: boolean;
   label?: string | number;
-  labelColor?: string;
-  labelSize?: 'small' | 'large';
   subtitle?: string;
-  subtitleColor?: string;
   subtitleIcon?: IconType;
   onClick?: React.EventHandler<React.SyntheticEvent>;
   gap?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large';
@@ -34,14 +32,11 @@ const baseStyles = apply`
 const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
   const {
     iconType,
-    iconSize,
+    // iconSize,
     backgroundColor,
     backgroundSize,
     label,
-    labelColor,
-    labelSize,
     subtitle,
-    subtitleColor,
     onClick,
     maxWidth,
   } = props;
@@ -81,12 +76,6 @@ const SubtitleTextIcon: React.FC<ISubtitleTextIcon> = props => {
       </div>
     </div>
   );
-};
-
-SubtitleTextIcon.defaultProps = {
-  labelColor: 'primaryText',
-  labelSize: 'large',
-  subtitleColor: 'secondaryText',
 };
 
 export default SubtitleTextIcon;
