@@ -1,25 +1,22 @@
 import { injectable, inject } from 'inversify';
 import { TYPES } from '@akashaorg/typings/sdk';
-import DB, { availableCollections } from '../db';
-import { SettingsSchema } from '../db/settings.schema';
+import DB from '../db';
 import { createFormattedValue } from '../helpers/observable';
-import { validate } from "../common/validator";
-import { z } from "zod";
+import { validate } from '../common/validator';
+import { z } from 'zod';
 
 @injectable()
 class Settings {
   constructor(@inject(TYPES.Db) private _db: DB) {}
+
   /**
    * Returns the settings object for a specified service name
    * @param service - The service name
    */
   @validate(z.string())
-  async get<T>(service: string) {
-    const collection = this._db.getCollection<SettingsSchema<T>>(availableCollections.Settings);
-    const query = {
-      serviceName: { $eq: service },
-    };
-    const doc = await collection.findOne(query);
+  async get(service: string) {
+    const collection = this._db.getCollections().settings;
+    const doc = await collection?.where('serviceName').equals(service).first();
     return createFormattedValue(doc);
   }
 
@@ -36,27 +33,25 @@ class Settings {
   ): Promise<{ data: string[] }> {
     const doc = await this.get(service);
     const objToSave = {
-      _id: doc?.data?._id || '',
+      id: doc?.data?.id || '',
       serviceName: service,
       options: options,
     };
-    const collection = this._db.getCollection<SettingsSchema<typeof options>>(
-      availableCollections.Settings,
-    );
-    const saveResult = await collection.save(objToSave);
+    const collection = this._db.getCollections().settings;
+    let saveResult;
+    if (objToSave.id) {
+      saveResult = await collection?.where('id').equals(objToSave.id).modify(objToSave);
+    } else {
+      saveResult = await collection?.put({ serviceName: service, options: options });
+    }
+
     return createFormattedValue(saveResult);
   }
 
   @validate(z.string())
   async remove(serviceName: string): Promise<void> {
-    const collection = this._db.getCollection<SettingsSchema<unknown>>(
-      availableCollections.Settings,
-    );
-    const query = { serviceName: { $eq: serviceName } };
-    const doc = await collection.findOne(query);
-    if (doc && doc._id) {
-      return collection.delete(doc._id);
-    }
+    const collection = this._db.getCollections().settings;
+    await collection?.where('name').equals(serviceName).delete();
   }
 }
 
