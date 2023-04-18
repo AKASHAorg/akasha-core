@@ -7,6 +7,7 @@ import { useIntersection } from 'react-use';
 import { getColorClasses } from '../../../utils/getColorClasses';
 import Button from '../../Button';
 import { ImageSrc } from '../../types/common.types';
+import Anchor from '../../Anchor';
 
 export type ListEntryProps = {
   followLabel: string;
@@ -77,8 +78,7 @@ const ListEntry: React.FC<ListEntryProps> = props => {
   return (
     <Stack direction="column" spacing="gap-y-4" customStyle={`px-4 pb-4 ${borderBottomStyle}`}>
       <Stack align="center" justify="between">
-        {/*@TODO: create anchor component */}
-        <a href={`${profileAnchorLink}/${pubKey}`}>
+        <Anchor href={`${profileAnchorLink}/${pubKey}`}>
           <Stack align="center" spacing="gap-x-1">
             <Avatar
               ethAddress={ethAddress}
@@ -88,13 +88,14 @@ const ListEntry: React.FC<ListEntryProps> = props => {
                 url: avatar?.url,
                 fallbackUrl: avatar?.fallbackUrl,
               }}
+              customStyle="cursor-pointer"
             />
             <Stack direction="column" justify="center">
               <Text variant="button-md">{name || userName}</Text>
               <Text variant="footnotes2">{`@${userName ? userName : 'username'}`}</Text>
             </Stack>
           </Stack>
-        </a>
+        </Anchor>
 
         <DuplexButton
           inactiveLabel={followLabel}

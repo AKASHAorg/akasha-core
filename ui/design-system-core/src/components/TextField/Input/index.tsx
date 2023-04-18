@@ -7,15 +7,17 @@ import { getInputClasses } from './getInputClasses';
 import { InputProps } from '../types';
 import { apply, tw } from '@twind/core';
 import { forwardRef } from 'react';
+import { getRadiusClasses } from '../../../utils/getRadiusClasses';
 
 export const Input: React.FC<InputProps> = forwardRef(
-  ({ status, iconLeft, iconRight, readOnly, disabled, ...rest }, ref) => {
+  ({ radius, status, iconLeft, iconRight, readOnly, disabled, ...rest }, ref) => {
     const containerStyle = getContainerClasses(disabled, status, readOnly);
     const inputStyle = getInputClasses(disabled, status, readOnly);
     const iconColor = getIconClasses(disabled, status);
+    const radiusStyle = getRadiusClasses(radius);
 
     return (
-      <Stack align="center" spacing="gap-x-2" customStyle={containerStyle}>
+      <Stack align="center" spacing="gap-x-2" customStyle={`${containerStyle} ${radiusStyle}`}>
         {iconLeft && <Icon type={iconLeft} color={iconColor} disabled={disabled} />}
         <input
           ref={ref}
