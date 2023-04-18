@@ -64,7 +64,7 @@ const ProfileEdit: React.FC<RootComponentProps & ProfilePageProps> = props => {
   return (
     <>
       <Stack direction="column" spacing="gap-y-4">
-        <Tab labels={[t('General'), t('External URLs')]}>
+        <Tab labels={[t('General'), t('External URLs'), t('Your interests')]}>
           <GeneralForm
             header={{
               title: t('Avatar & Cover Image'),

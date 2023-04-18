@@ -17,11 +17,13 @@ export type Action = {
 export type ActionDropdownProps = {
   actions: Action[];
   customStyle?: string;
-  //show divider between drop down items
   showDivider?: boolean;
   ref?: LegacyRef<HTMLDivElement>;
 };
 
+/**
+ * A dropdown of actions triggered by certain event on an external component, e.g. a button click or a change on text field
+ */
 const ActionDropdown: React.FC<ActionDropdownProps> = forwardRef(
   ({ actions, customStyle, showDivider = true }, ref) => {
     const borderStyle = showDivider

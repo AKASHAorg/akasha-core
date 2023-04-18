@@ -32,9 +32,9 @@ const EditContactInfo: React.FC<IEditContactInfoProps> = props => {
   return (
     <PageHeader {...props}>
       <Box customStyle="flex flex-col space-y-4">
-        <TextField label={usernameLabel} placeholder={usernamePlaceholderLabel} />
+        <TextField label={usernameLabel} placeholder={usernamePlaceholderLabel} type="text" />
 
-        <TextField label={emailLabel} placeholder={emailPlaceholderLabel} />
+        <TextField label={emailLabel} placeholder={emailPlaceholderLabel} type="text" />
 
         <Box customStyle="self-end">
           <Button plain={true} onClick={handleFillInfo}>

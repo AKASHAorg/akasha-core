@@ -11,7 +11,7 @@ import { getRadiusClasses } from '../../../utils/getRadiusClasses';
 const MAX_LENGTH = 280;
 
 export const Multiline: React.FC<MultlineProps> = forwardRef(
-  ({ status, disabled, ...rest }, ref) => {
+  ({ status, disabled, radius, ...rest }, ref) => {
     const [letterCount, setLetterCount] = useState(rest.value?.toString().length);
     const containerStyle = getContainerClasses(disabled, status);
     const textAreaStyle = getInputClasses(disabled, status);
