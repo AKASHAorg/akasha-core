@@ -1,16 +1,19 @@
 import { IconType } from '@akashaorg/typings/ui';
 import { Status } from '../types/common.types';
+import { Radius } from '../types/common.types';
 
 export type MultlineProps = {
-  type?: 'multiline';
+  type: 'multiline';
   status?: Status;
+  radius?: Radius;
 } & JSX.IntrinsicElements['textarea'];
 
 export type InputProps = {
   iconLeft?: IconType;
   iconRight?: IconType;
-  type?: 'text';
+  type: 'text';
   status?: Status;
+  radius?: Radius;
 } & JSX.IntrinsicElements['input'];
 
 export type LabelProps = {

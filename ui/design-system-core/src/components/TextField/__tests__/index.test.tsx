@@ -11,7 +11,7 @@ describe('<TextField /> Component', () => {
 
   beforeEach(() => {
     act(() => {
-      componentWrapper = customRender(<TextField label={label} />, {});
+      componentWrapper = customRender(<TextField type="text" label={label} />, {});
     });
   });
 
@@ -43,7 +43,7 @@ describe('<Disabled TextField /> Component', () => {
   beforeEach(() => {
     act(() => {
       componentWrapper = customRender(
-        <TextField disabled={true} label={label} placeholder={placeholder} />,
+        <TextField type="text" disabled={true} label={label} placeholder={placeholder} />,
         {},
       );
     });

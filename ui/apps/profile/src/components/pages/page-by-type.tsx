@@ -2,6 +2,7 @@ import React from 'react';
 import ProfileStat from './profile-stat';
 import ProfilePage from './profile';
 import DS from '@akashaorg/design-system';
+import ProfileEdit from './profile-edit';
 import { IProfileData, RootComponentProps } from '@akashaorg/typings/ui';
 import { LoginState } from '@akashaorg/ui-awf-hooks';
 import { ProfileLoading } from '@akashaorg/design-system-core/lib/components/ProfileCard';
@@ -82,7 +83,8 @@ const PageByType: React.FC<RootComponentProps & PageByTypeProps> = ({
       );
     }
 
-    if (pageType === 'edit') return null;
+    if (pageType === 'edit')
+      return <ProfileEdit {...rest} loginState={loginState} profileData={profileData} />;
 
     return (
       <ProfilePage {...rest} profileData={profileData} profileId={pubKey} loginState={loginState} />
