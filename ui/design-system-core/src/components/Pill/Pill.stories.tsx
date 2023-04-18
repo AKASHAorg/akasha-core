@@ -11,38 +11,35 @@ const Template = args => <Pill {...args} />;
 
 export const BasePill = Template.bind({});
 BasePill.args = {
-  leadingIcon: 'EnvelopeIcon',
-  infoLabel: 'This is a label',
-  trailingIcon: 'XMarkIcon',
+  label: 'base pill',
 };
 
 export const LargePill = Template.bind({});
 LargePill.args = {
-  leadingIcon: 'EnvelopeIcon',
-  infoLabel: 'Pill text',
-  secondaryBg: true,
-  trailingIcon: 'XMarkIcon',
-  size: 'large',
+  label: 'Large pill',
+  size: 'lg',
 };
 
-export const SecondaryPill = Template.bind({});
-SecondaryPill.args = {
-  leadingIcon: 'EnvelopeIcon',
-  infoLabel: 'Following',
-  trailingIcon: 'XMarkIcon',
+export const ClickablePill = Template.bind({});
+ClickablePill.args = {
+  label: 'Large pill',
+  clickable: true,
+};
+
+export const SecondaryBgPill = Template.bind({});
+SecondaryBgPill.args = {
+  label: 'Secondary bg pill',
   secondaryBg: true,
 };
 
 export const LeadingIconPill = Template.bind({});
 LeadingIconPill.args = {
+  label: 'leading icon pill',
   leadingIcon: 'EnvelopeIcon',
-  infoLabel: 'Pill text',
-  size: 'large',
 };
 
 export const TrailingIconPill = Template.bind({});
 TrailingIconPill.args = {
+  label: 'trailing icon pill',
   trailingIcon: 'XMarkIcon',
-  infoLabel: 'Pill text',
-  size: 'large',
 };
