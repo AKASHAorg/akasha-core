@@ -6,17 +6,19 @@ import { getInputClasses } from '../Input/getInputClasses';
 import { MultlineProps } from '../types';
 import { tw } from '@twind/core';
 import { forwardRef } from 'react';
+import { getRadiusClasses } from '../../../utils/getRadiusClasses';
 
 const MAX_LENGTH = 280;
 
 export const Multiline: React.FC<MultlineProps> = forwardRef(
-  ({ status, disabled, ...rest }, ref) => {
+  ({ status, disabled, radius, ...rest }, ref) => {
     const [letterCount, setLetterCount] = useState(rest.value?.toString().length);
     const containerStyle = getContainerClasses(disabled, status);
     const textAreaStyle = getInputClasses(disabled, status);
+    const radiusStyle = getRadiusClasses(radius);
 
     return (
-      <Stack customStyle={`${containerStyle} py-2.5`} spacing="gap-x-2">
+      <Stack customStyle={`${containerStyle} ${radiusStyle} py-2.5`} spacing="gap-x-2">
         <textarea
           {...rest}
           className={tw(`resize-none w-full ${textAreaStyle}`)}

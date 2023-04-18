@@ -15,7 +15,7 @@ export type ButtonProps = {
   plain?: boolean;
   breakPointSize?: BreakPointSize;
   customStyle?: string;
-  as?: 'button' | 'a';
+  active?: boolean;
   ref?: LegacyRef<HTMLButtonElement>;
 } & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 

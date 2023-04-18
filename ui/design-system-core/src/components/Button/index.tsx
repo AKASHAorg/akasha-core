@@ -23,6 +23,7 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
     children,
     breakPointSize,
     customStyle = '',
+    active,
     ...rest
   } = props;
 
@@ -45,13 +46,14 @@ const Button: React.FC<ButtonProps> = forwardRef((props, ref) => {
         disabled={disabled}
         breakPointSize={breakPointSize}
         customStyle={customStyle}
+        active={active}
         ref={ref}
         {...rest}
       />
     );
   }
 
-  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled });
+  const containerStyle = getContainerClasses({ variant, loading, greyBg, disabled, active });
   const textStyle = getTextClasses({ variant, loading, disabled });
   const breakPointStyle = breakPointSize
     ? BUTTON_SIZE_MAP_BY_BREAKPOINT(breakPointSize.breakPoint)[breakPointSize.size]

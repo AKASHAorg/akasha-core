@@ -23,7 +23,11 @@ const EditMaxApplicants: React.FC<IEditMaxApplicantsProps> = props => {
           {introLabel}
         </Text>
 
-        <TextField label={maxApplicantsLabel} placeholder={maxApplicantsPlaceholderLabel} />
+        <TextField
+          label={maxApplicantsLabel}
+          placeholder={maxApplicantsPlaceholderLabel}
+          type="text"
+        />
       </Box>
     </PageHeader>
   );
