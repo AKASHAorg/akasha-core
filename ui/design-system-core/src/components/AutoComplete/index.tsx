@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Stack from '../Stack';
-import ActionDropdown, { Action } from '../ActionDropDown';
+import List, { Item } from '../List';
 import TextField from '../TextField';
 import { InputProps } from '../TextField/types';
 import { useCloseActions } from '../../utils/useCloseActions';
@@ -18,17 +18,17 @@ const AutoComplete: React.FC<AutoCompleteProps & InputProps> = ({
 }) => {
   const [filters, setFilters] = useState([]);
   const [query, setQuery] = useState('');
-  const [showOptions, setShowOptions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const autoCompleteRef = useCloseActions(() => {
-    setShowOptions(false);
+    setShowSuggestions(false);
   });
 
   useEffect(() => {
     setFilters(options.filter(option => option.toLowerCase().startsWith(query.toLowerCase())));
   }, [query, options]);
 
-  const actions: Action[] = useMemo(
+  const suggestions: Item[] = useMemo(
     () =>
       filters.map(filter => ({
         label: filter,
@@ -52,18 +52,18 @@ const AutoComplete: React.FC<AutoCompleteProps & InputProps> = ({
         value={query}
         onChange={event => {
           setQuery(event.target.value);
-          setShowOptions(true);
+          setShowSuggestions(true);
         }}
         onFocus={() => {
-          setShowOptions(true);
+          setShowSuggestions(true);
         }}
         customStyle="rounded-3xl"
         radius={100}
       />
-      {showOptions && actions.length > 0 && (
+      {showSuggestions && suggestions.length > 0 && (
         <div className={tw('relative')}>
-          <ActionDropdown
-            actions={actions}
+          <List
+            items={suggestions}
             showDivider={false}
             customStyle="absolute max-h-28 w-full overflow-y-auto scrollbar"
           />
