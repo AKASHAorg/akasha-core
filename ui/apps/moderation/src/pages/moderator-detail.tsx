@@ -7,7 +7,7 @@ import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 
-import ModeratorDetail from '../components/moderator';
+import ModeratorDetailCard from '../components/moderator';
 import PaginatedTable from '../components/transparency-log/paginated-table';
 
 import { DEFAULT_LIMIT, PaginatedItem, contentTypeMap } from './transparency-log';
@@ -47,6 +47,13 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logItemsQuery.data]);
 
+  const handleClickDismissModerator = () => {
+    navigateTo?.({
+      appName: '@akashaorg/app-moderation-ewa',
+      getNavigationUrl: () => `/moderator/${moderatorPubKey}/dismiss`,
+    });
+  };
+
   const handleClickPage = (page: number) => () => {
     setCurPage(page);
   };
@@ -79,8 +86,8 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
     ]) ?? [];
 
   return (
-    <Box customStyle="space-y-2">
-      <ModeratorDetail
+    <Box customStyle="space-y-4">
+      <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}
         tenureInfoLabel={
@@ -96,6 +103,7 @@ export const ModeratorDetailPage: React.FC<IModeratorDetailPageProps> = props =>
         dismissModeratorDescLabel={t(
           "You can dismiss this moderator anytime if they have been inactive or if they violated AKASHA's code of conduct",
         )}
+        onClickDismissModerator={handleClickDismissModerator}
       />
 
       <PaginatedTable

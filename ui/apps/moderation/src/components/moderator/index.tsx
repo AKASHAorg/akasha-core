@@ -18,6 +18,7 @@ export interface IModeratorDetailCardProps {
   viewProfileLabel: string;
   dismissModeratorLabel: string;
   dismissModeratorDescLabel: string;
+  onClickDismissModerator: () => void;
 }
 
 const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
@@ -27,6 +28,7 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
     viewProfileLabel,
     dismissModeratorLabel,
     dismissModeratorDescLabel,
+    onClickDismissModerator,
   } = props;
 
   const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
@@ -115,7 +117,11 @@ const ModeratorDetailCard: React.FC<IModeratorDetailCardProps> = props => {
 
         <Text variant="footnotes2">{dismissModeratorDescLabel}</Text>
 
-        <Button label={dismissModeratorLabel} customStyle="self-end" />
+        <Button
+          label={dismissModeratorLabel}
+          customStyle="self-end"
+          onClick={onClickDismissModerator}
+        />
       </Box>
     </BasicCardBox>
   );

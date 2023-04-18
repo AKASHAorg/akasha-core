@@ -9,6 +9,7 @@ import {
   Overview,
   Moderators,
   ModeratorDetailPage,
+  DismissModeratorPage,
   TransparencyLog,
   TransparencyLogItem,
   ModerationValue,
@@ -16,6 +17,7 @@ import {
 
 import routes, {
   DASHBOARD,
+  DISMISS_MODERATOR,
   HISTORY,
   HISTORY_ITEM,
   HOME,
@@ -69,6 +71,15 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             path={routes[VIEW_MODERATOR]}
             element={
               <ModeratorDetailPage
+                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
+              />
+            }
+          />
+
+          <Route
+            path={routes[DISMISS_MODERATOR]}
+            element={
+              <DismissModeratorPage
                 navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
               />
             }
