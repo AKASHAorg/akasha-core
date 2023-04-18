@@ -1,49 +1,59 @@
 import React from 'react';
-import Icon from '../Icon';
-import { IconType } from '@akashaorg/typings/ui';
-import Text from '../Text';
 import { tw, apply } from '@twind/core';
+import { IconType } from '@akashaorg/typings/ui';
+
 import Button from '../Button';
+import Icon from '../Icon';
+import Text from '../Text';
 
-export type pillSize = 'small' | 'large';
+export type PillSize = 'xs' | 'sm' | 'lg';
 
-export interface IPill {
-  infoLabel?: string;
-  size?: pillSize;
+export interface IPillProps {
+  customStyle?: string;
+  label: string;
+  size?: PillSize;
+  clickable?: boolean;
   secondaryBg?: boolean;
   leadingIcon?: IconType;
   trailingIcon?: IconType;
-  handleDismiss?: () => void;
+  onPillClick?: () => void;
 }
 
-const Pill: React.FC<IPill> = ({
-  infoLabel = 'Pill Text',
-  size = 'small',
+const Pill: React.FC<IPillProps> = ({
+  customStyle = '',
+  label,
+  size = 'sm',
+  clickable = false,
   secondaryBg = false,
   leadingIcon,
   trailingIcon,
-  handleDismiss,
+  onPillClick,
 }) => {
-  const buttonSize = size === 'small' ? 'px-2 py-1 max-w-fit' : 'px-4 py-2 max-w-fit';
+  const buttonSizesMap = {
+    xs: '',
+    sm: 'px-2 py-1',
+    lg: 'px-4 py-2',
+  };
+
+  const handlePillClick = () => {
+    if (onPillClick && typeof onPillClick === 'function' && clickable) {
+      onPillClick();
+    }
+  };
 
   const bgColor = secondaryBg
-    ? 'bg-secondaryLight/30 dark:bg-secondaryDark text-secondaryLight dark:text-grey1'
-    : 'bg-white dark:bg-black text-secondaryLight dark:text-secondaryDark';
+    ? 'bg(secondaryLight/30 dark:secondaryDark) text(secondaryLight dark:grey1)'
+    : 'bg(white dark:black) text(secondaryLight dark:secondaryDark)';
 
-  const instanceStyle = apply`
-  flex items-center
-  ${bgColor}
-  border([1px] secondaryLight dark:secondaryDark) rounded-full
-  ${buttonSize}
+  const cursorStyle = `cursor-${clickable ? 'pointer' : 'default'}`;
+
+  const instanceStyle = apply`max-w-fit flex items-center space-x-2 ${bgColor} border(1 secondaryLight dark:secondaryDark) rounded-full ${buttonSizesMap[size]} ${cursorStyle} ${customStyle}
   `;
 
   return (
-    <div className={tw(instanceStyle)}>
-      {leadingIcon && (
-        <span className={tw('mr-2')}>
-          <Icon type={leadingIcon} customStyle="w-4 h-4" />
-        </span>
-      )}
+    <div className={tw(instanceStyle)} onClick={handlePillClick}>
+      {leadingIcon && <Icon type={leadingIcon} customStyle="w-4 h-4" />}
+
       <Text
         variant="body1"
         color={
@@ -52,15 +62,11 @@ const Pill: React.FC<IPill> = ({
             : { light: 'secondaryLight', dark: 'secondaryDark' }
         }
       >
-        {infoLabel}
+        {label}
       </Text>
+
       {trailingIcon && (
-        <Button
-          customStyle="ml-2"
-          plain={true}
-          onClick={handleDismiss}
-          data-testid="dismiss-button"
-        >
+        <Button plain={true} data-testid="dismiss-button">
           <Icon type={trailingIcon} customStyle="w-4 h-4" />
         </Button>
       )}

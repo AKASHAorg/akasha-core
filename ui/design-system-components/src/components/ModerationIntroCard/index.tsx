@@ -4,6 +4,8 @@ import { tw } from '@twind/core';
 import { IconType } from '@akashaorg/typings/ui';
 
 import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
@@ -38,12 +40,12 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
 
   return (
     <BasicCardBox pad="p-4" margin="mb-4">
-      <div className={tw('grid gap-4 grid-cols-1')}>
+      <Box customStyle="grid gap-4 grid-cols-1">
         <Text variant="h5" align="center">
           {titleLabel}
         </Text>
 
-        <div className={tw('w-40 h-40 my-2 mx-auto')}>
+        <Box customStyle="w-40 h-40 my-2 mx-auto">
           <img
             className={tw('object-contain')}
             aria-label={assetName}
@@ -51,7 +53,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
             alt={assetName}
             data-testid={`${assetName}-image`}
           />
-        </div>
+        </Box>
 
         {introLabel && (
           <Text weight="bold" align="center">
@@ -66,7 +68,7 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
         )}
 
         {codeOfConductLabel && (
-          <div onClick={onCodeOfConductClick}>
+          <Button plain={true} onClick={onCodeOfConductClick}>
             <Text
               variant="subtitle2"
               color={{ light: 'secondaryLight', dark: 'secondaryDark' }}
@@ -76,13 +78,13 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
             >
               {codeOfConductLabel}
             </Text>
-          </div>
+          </Button>
         )}
 
         {overviewCTAArr && overviewCTAArr.length > 0 && (
-          <div className={tw('flex md:px-20 justify-between')}>
+          <Box customStyle="flex md:px-20 justify-between">
             {overviewCTAArr.map(({ url, label, iconType }) => (
-              <div key={label + iconType} className={tw('grid gap-1 grid-cols-1 w-[30%]')}>
+              <Box key={label + iconType} customStyle="grid gap-1 grid-cols-1 w-[30%]">
                 <Icon size="sm" accentColor={true} type={iconType} customStyle="mx-auto my-0" />
                 <a
                   href={url}
@@ -95,11 +97,11 @@ const ModerationIntroCard: React.FC<IModerationIntroCardProps> = props => {
                 >
                   {label}
                 </a>
-              </div>
+              </Box>
             ))}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     </BasicCardBox>
   );
 };

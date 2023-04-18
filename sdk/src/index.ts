@@ -6,27 +6,29 @@
 import 'reflect-metadata';
 import 'systemjs-webpack-interop/auto-public-path';
 import * as typings from '@akashaorg/typings/sdk';
-import container from './container';
-import Logging from './logging';
-import Settings from './settings';
-import Gql from './gql';
-import GqlNew from './gql/index.new';
-import DB from './db';
-import Stash from './stash';
-import Web3Connector from './common/web3.connector';
-import EventBus from './common/event-bus';
+import container, { importLazy } from './container';
+import type Logging from './logging';
+import type Settings from './settings';
+import type Gql from './gql';
+import type GqlNew from './gql/index.new';
+import type DB from './db';
+import type Stash from './stash';
+import type Web3Connector from './common/web3.connector';
+import type EventBus from './common/event-bus';
 import type AWF_Auth from './auth';
-import AWF_Profile from './profiles';
-import AWF_ENS from './registry/ens';
-import AWF_IC_REGISTRY from './registry/icRegistry';
-import AWF_Entry from './posts/entry';
+import type AWF_Profile from './profiles';
+import type AWF_ENS from './registry/ens';
+import type AWF_IC_REGISTRY from './registry/icRegistry';
+import type AWF_Entry from './posts/entry';
 import type AWF_Comments from './posts/comments';
-import AWF_Tags from './posts/tags';
-import AWF_IpfsConnector from './common/ipfs.connector';
-import AppSettings from './settings/apps';
-import AWF_Misc from './common/misc';
-import AWF_Ceramic from "./auth-v2/ceramic";
+import type AWF_Tags from './posts/tags';
+import type AWF_IpfsConnector from './common/ipfs.connector';
+import type AppSettings from './settings/apps';
+import type AWF_Misc from './common/misc';
+import type AWF_Ceramic from './common/ceramic';
+
 export { Logger } from 'pino';
+
 export interface SDK_API {
   globalChannel: EventBus;
   auth: AWF_Auth;
@@ -106,9 +108,17 @@ export function init(): AWF_SDK {
   const appSettings = container.get<AppSettings>(TYPES.AppSettings);
   const icRegistry = container.get<AWF_IC_REGISTRY>(TYPES.ICRegistry);
   const misc = container.get<AWF_Misc>(TYPES.Misc);
-  const gqlNew = container.get<GqlNew>(TYPES.GqlNew);
+  const fetchService = async () => {
+    await importLazy();
+    const gqlNew = container.get<GqlNew>(TYPES.GqlNew);
+    console.info('new gql client', gqlNew);
+    return gqlNew;
+  };
+
+  console.log('lazy load gql client', fetchService);
+
   const ceramic = container.get<AWF_Ceramic>(TYPES.Ceramic);
-  console.info('new gql client', gqlNew);
+
   return {
     services: {
       log,

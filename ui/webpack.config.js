@@ -89,7 +89,7 @@ const exp = {
     //   profile: true,
     // }),
   ],
-  devtool: isProduction ? 'source-map' : 'inline-source-map',
+  devtool: isProduction ? undefined : 'eval-source-map',
   externals: commons.externals,
   optimization: commons.optimization,
 };
