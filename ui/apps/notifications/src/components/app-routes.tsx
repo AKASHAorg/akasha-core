@@ -7,9 +7,9 @@ import WelcomePage from './newComponents/WelcomePage';
 import CustomizeNotificationPage from './newComponents/CustomizeNotificationPage';
 
 import routes, {
-  CUSTOMIZATION_STEP_ONE,
-  CUSTOMIZATION_STEP_TWO,
-  CUSTOMIZATION_STEP_THREE,
+  CUSTOMIZE_NOTIFICATION_WELCOME_PAGE,
+  CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE,
+  CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
 } from '../routes';
 
 const AppRoutes = (props: RootComponentProps) => {
@@ -33,7 +33,7 @@ const AppRoutes = (props: RootComponentProps) => {
     if (loginQuery.data?.pubKey) {
       return navigateTo?.({
         appName: '@akashaorg/app-notifications',
-        getNavigationUrl: () => routes[CUSTOMIZATION_STEP_ONE],
+        getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,7 +43,7 @@ const AppRoutes = (props: RootComponentProps) => {
     <Router basename={props.baseRouteName}>
       <Routes>
         <Route
-          path={routes[CUSTOMIZATION_STEP_ONE]}
+          path={routes[CUSTOMIZE_NOTIFICATION_WELCOME_PAGE]}
           element={
             <WelcomePage
               header={t('Welcome to the Notification App')}
@@ -57,11 +57,11 @@ const AppRoutes = (props: RootComponentProps) => {
           }
         />
         <Route
-          path={routes[CUSTOMIZATION_STEP_TWO]}
+          path={routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]}
           element={<CustomizeNotificationPage {...props} />}
         />
         <Route
-          path={routes[CUSTOMIZATION_STEP_THREE]}
+          path={routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]}
           element={
             <WelcomePage
               header={t('All done!')}
