@@ -6,7 +6,7 @@ import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZATION_STEP_THREE } from '../../routes';
+import routes, { CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 const socialAppCheckboxes: { label: string; selected: boolean }[] = [
@@ -107,7 +107,7 @@ const CustomizeNotificationPage: React.FC<RootComponentProps> = props => {
     // navigate to final step
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[CUSTOMIZATION_STEP_THREE],
+      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE],
     });
   };
 

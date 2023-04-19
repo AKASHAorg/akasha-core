@@ -4,7 +4,7 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZATION_STEP_TWO } from '../../routes';
+import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 interface IWelcomePageProps {
@@ -31,7 +31,7 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
     // navigate to step 2
     return navigateTo?.({
       appName: '@akashaorg/app-notifications',
-      getNavigationUrl: () => routes[CUSTOMIZATION_STEP_TWO],
+      getNavigationUrl: () => routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE],
     });
   };
 

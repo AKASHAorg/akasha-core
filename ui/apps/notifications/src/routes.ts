@@ -1,11 +1,11 @@
 export const rootRoute = '/@akashaorg/app-notifications';
 
-export const CUSTOMIZATION_STEP_ONE = 'CustomizationStepOne';
-export const CUSTOMIZATION_STEP_TWO = 'CustomizationStepTwo';
-export const CUSTOMIZATION_STEP_THREE = 'CustomizationStepThree';
+export const CUSTOMIZE_NOTIFICATION_WELCOME_PAGE = 'CustomizeNotificationWelcomePage';
+export const CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE = 'CustomizeNotificationOptionsPage';
+export const CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE = 'CustomizeNotificationConfirmationPage';
 
 export default {
-  [CUSTOMIZATION_STEP_ONE]: `/onboarding/step-one`,
-  [CUSTOMIZATION_STEP_TWO]: `/onboarding/step-two`,
-  [CUSTOMIZATION_STEP_THREE]: `/onboarding/step-three`,
+  [CUSTOMIZE_NOTIFICATION_WELCOME_PAGE]: `/customize-notifications/welcome-page`,
+  [CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]: `/customize-notifications/options-page`,
+  [CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]: `/customize-notifications/confirmation-page`,
 };
