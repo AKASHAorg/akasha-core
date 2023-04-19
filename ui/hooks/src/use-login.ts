@@ -231,7 +231,7 @@ export function useSignUp(
     },
   });
 
-  const signAuthMessage = useMutation(async () => sdk.api.auth.signAuthMessage(), {
+  const signAuthMessage = useMutation(async () => sdk.api.auth.getToken(), {
     onError: (err: WalletTransactionError) => {
       if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
         analyticsActions?.trackEvent({
@@ -249,7 +249,7 @@ export function useSignUp(
     },
   });
 
-  const signComposedMessage = useMutation(async () => sdk.api.auth.signComposedMessage(), {
+  const signComposedMessage = useMutation(async () => sdk.api.auth.getToken(), {
     onError: (err: WalletTransactionError) => {
       if (err.code === PROVIDER_ERROR_CODES.UserRejected) {
         analyticsActions?.trackEvent({
@@ -269,7 +269,6 @@ export function useSignUp(
 
   const finishSignUp = useMutation(
     async () => {
-      await sdk.api.auth.signTokenMessage();
       return sdk.api.auth.signIn({
         provider,
         checkRegistered: false,

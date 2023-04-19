@@ -1,6 +1,6 @@
 {
-  "name": "Untitled GraphQL Schema",
-  "schemaPath": "./lib/schema.graphql",
+  "name": "ComposeDB GraphQL Schema",
+  "schemaPath": "./tools/composedb/lib/schema.graphql",
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
@@ -8,7 +8,7 @@
         "headers": {
           "user-agent": "JS GraphQL"
         },
-        "introspect": false
+        "introspect": true
       }
     }
   }

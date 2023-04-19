@@ -22,7 +22,7 @@ type VerifySignaturePayload = {
 
 const validateMessage = async (message: string) => {
   const sdk = getSDK();
-  const res = await sdk.api.auth.validateDevKeyFromBase64Message(message);
+  const res: any = await sdk.api.auth.validateDevKeyFromBase64Message(message);
   return res;
 };
 
@@ -134,7 +134,7 @@ export function useSignMessage() {
 
 const verifySignature = async (payload: VerifySignaturePayload) => {
   const sdk = getSDK();
-  return sdk.api.auth.verifySignature(payload);
+  return Promise.resolve(false); // stubbed
 };
 
 /**

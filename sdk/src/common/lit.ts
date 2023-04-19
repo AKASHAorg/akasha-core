@@ -2,14 +2,14 @@ import LitJsSdk from '@lit-protocol/sdk-browser';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@akashaorg/typings/sdk';
 import DB from '../db/index';
-import Web3Connector from '../common/web3.connector';
-import EventBus from '../common/event-bus';
+import Web3Connector from './web3.connector';
+import EventBus from './event-bus';
 import Logging from '../logging/index';
 import Settings from '../settings/index';
 import Gql from '../gql/index';
 import pino from 'pino';
 import { z } from 'zod';
-import { validate } from '../common/validator';
+import { validate } from './validator';
 
 const buildAccessControlConditions = (ethAddress: string) => {
   return [

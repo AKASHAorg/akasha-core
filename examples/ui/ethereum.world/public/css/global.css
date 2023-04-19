@@ -15,7 +15,8 @@ body.Dark-Theme>#splash-screen-root {
   color: #fff;
 }
 
-*/:root {
+*/
+:root {
   --color-background-default: 255 255 255;
   --color-background-dark: 13 26 45;
   --foundation-primary: #ff89b6, #4e71ff;
@@ -48,4 +49,22 @@ body.Dark-Theme>#splash-screen-root {
 
 .global-styles__inherit-width {
   width: inherit;
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #989898;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 2px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #989898;
+  border-radius: 20px;
 }

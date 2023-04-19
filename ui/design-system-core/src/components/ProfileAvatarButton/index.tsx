@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { tw } from '@twind/core';
 import { IProfileData } from '@akashaorg/typings/ui';
+
+import Avatar, { AvatarSize } from '../Avatar';
 import Text from '../Text';
-import Avatar from '../Avatar';
-import { AvatarSize } from '../Avatar';
-import { tw, apply } from '@twind/core';
 
 export interface ProfileAvatarButtonProps {
   info?: string | React.ReactElement;
@@ -20,8 +20,6 @@ export interface ProfileAvatarButtonProps {
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const BaseStyle = 'text-ellipsis overflow-hidden whitespace-nowrap truncate';
-
 const ProfileAvatarButton = React.forwardRef(
   (props: ProfileAvatarButtonProps, ref: React.Ref<HTMLElement>) => {
     const {
@@ -33,15 +31,11 @@ const ProfileAvatarButton = React.forwardRef(
       onClick,
       onClickAvatar,
       ethAddress,
-      active,
       onMouseEnter,
       onMouseLeave,
     } = props;
 
-    const InstantStyle = apply`
-    ${BaseStyle}
-    text(lg:base md:xs) max-w([7rem] xs:[2rem])
-    `;
+    const textStyle = 'text(lg:base md:xs) max-w([7rem] xs:[2rem])';
 
     return (
       <div className={tw(`inline-flex items-center justify-center ${customStyle}`)}>
@@ -54,11 +48,9 @@ const ProfileAvatarButton = React.forwardRef(
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <div className={tw(InstantStyle)}>
-            <Text variant="button-sm" weight="bold" truncate={true}>
-              {label || ethAddress}
-            </Text>
-          </div>
+          <Text variant="button-sm" weight="bold" truncate={true} customStyle={textStyle}>
+            {label || ethAddress}
+          </Text>
           <Text variant="footnotes2" color="grey7" truncate={true}>
             {info}
           </Text>

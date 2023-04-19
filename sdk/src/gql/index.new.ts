@@ -4,7 +4,7 @@ import Stash, { IQuickLRU } from '../stash';
 import { getSdk, Requester, Sdk } from './api.new';
 import Logging from '../logging/index';
 import pino from 'pino';
-import CeramicService from '../auth-v2/ceramic';
+import CeramicService from '../common/ceramic';
 import type { DocumentNode } from 'graphql';
 
 /** @internal  */

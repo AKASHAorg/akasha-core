@@ -25,3 +25,21 @@
   --feedback-error-dark: 255 146 113; /* #ff9271 */
   --elevation: 49 50 53; /* #313235 */
 }
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #989898;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 2px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #989898;
+  border-radius: 20px;
+}
