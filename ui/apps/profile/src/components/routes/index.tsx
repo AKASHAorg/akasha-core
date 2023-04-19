@@ -77,7 +77,7 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
-                  pageType="stat"
+                  pageType="edit"
                 />
               }
             />

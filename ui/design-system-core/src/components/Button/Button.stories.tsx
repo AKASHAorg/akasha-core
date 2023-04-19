@@ -86,6 +86,16 @@ LargeButtonPrimary.args = {
   variant: 'primary',
 };
 
+export const ActivePrimaryButton = Template.bind({});
+
+ActivePrimaryButton.args = {
+  label: 'Button',
+  variant: 'primary',
+  active: true,
+  icon: 'CheckIcon',
+  iconDirection: 'right',
+};
+
 export const XSmallSecondary = Template.bind({});
 
 XSmallSecondary.args = {
@@ -178,6 +188,16 @@ MediumIconOnlyPrimaryGreyBgDisabled.args = {
   variant: 'primary',
   greyBg: true,
   disabled: true,
+};
+
+export const ActiveSecondaryButton = Template.bind({});
+
+ActiveSecondaryButton.args = {
+  label: 'Button',
+  variant: 'secondary',
+  active: true,
+  icon: 'CheckIcon',
+  iconDirection: 'right',
 };
 
 export const TextButton = Template.bind({});

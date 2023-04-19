@@ -52,7 +52,7 @@ export function useGetAllInstalledApps(enabler?: boolean) {
   });
 }
 
-const appInstall = async (app: { name?: string; id?: string }) => {
+const appInstall = async (app: { name: string; id?: string }) => {
   const sdk = getSDK();
   // add true 2nd param to test local installable apps
   // in use-integration-registry, getLatestReleaseInfo app mock data can be changed
@@ -75,7 +75,7 @@ const appInstall = async (app: { name?: string; id?: string }) => {
  */
 export function useInstallApp() {
   const queryClient = useQueryClient();
-  return useMutation((app: { name?: string; id?: string }) => appInstall(app), {
+  return useMutation((app: { name: string; id?: string }) => appInstall(app), {
     onError: err => {
       logError('useAppSettings.saveInstalledApp', err as Error);
     },

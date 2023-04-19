@@ -90,7 +90,6 @@ const TrendingTagCard: React.FC<ITrendingTagCardProps> = props => {
                     onClick={() => onClickTag(tag.name)}
                     label={tag.name}
                     subtitle={`${tag.totalPosts} Posts`}
-                    labelSize="small"
                     iconType="HashtagIcon"
                     backgroundColor={true}
                   />

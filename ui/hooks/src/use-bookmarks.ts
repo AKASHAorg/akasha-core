@@ -22,13 +22,11 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
     async () => {
       const sdk = getSDK();
       try {
-        const doc = await sdk.services.settings.get<string[][]>(BOOKMARKED_ENTRIES_KEY);
+        const doc = await sdk.services.settings.get(BOOKMARKED_ENTRIES_KEY);
         if (doc.data && doc.data.options.length) {
-          const bookmarkedEntries = doc.data.options.findIndex(
-            (e: string[]) => e[0] === entriesBookmarks,
-          );
+          const bookmarkedEntries = doc.data.options.findIndex(e => e[0] === entriesBookmarks);
           if (bookmarkedEntries !== -1) {
-            return JSON.parse(doc.data.options[bookmarkedEntries][1]);
+            return JSON.parse(doc.data.options[bookmarkedEntries][1] as string);
           }
         }
       } catch (error) {

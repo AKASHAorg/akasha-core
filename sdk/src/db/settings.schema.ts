@@ -1,27 +1,9 @@
-import { JSONSchema } from '@textile/threaddb';
-
-export const schema: JSONSchema = {
-  title: 'Settings',
-  type: 'object',
-  properties: {
-    serviceName: {
-      type: 'string',
-    },
-    options: {
-      type: 'array',
-      uniqueItems: true,
-      items: {
-        type: 'array',
-      },
-    },
-  },
-};
-
-export interface SettingsSchema<T> {
+export interface SettingsSchema {
   serviceName: string;
-  options: T;
+  options: [[string, string | number | boolean]];
+  id?: number;
 }
+
 export default {
-  name: 'SETTINGS',
-  schema: schema,
+  name: 'settings',
 };

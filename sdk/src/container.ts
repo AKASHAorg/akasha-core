@@ -2,7 +2,7 @@ import { Container } from 'inversify';
 import { TYPES } from '@akashaorg/typings/sdk';
 import Logging from './logging';
 import Gql from './gql';
-import GqlNew from './gql/index.new';
+import type GqlNew from './gql/index.new';
 import Settings from './settings';
 import Stash from './stash';
 import DB from './db';
@@ -18,8 +18,8 @@ import AWF_Tags from './posts/tags';
 import AWF_IpfsConnector from './common/ipfs.connector';
 import AppSettings from './settings/apps';
 import AWF_Misc from './common/misc';
-import AWF_Lit from './auth-v2/lit';
-import AWF_Ceramic from './auth-v2/ceramic';
+import AWF_Lit from './common/lit';
+import AWF_Ceramic from './common/ceramic';
 
 const diContainer = new Container({
   defaultScope: 'Singleton',
@@ -43,5 +43,12 @@ diContainer.bind<AppSettings>(TYPES.AppSettings).to(AppSettings);
 diContainer.bind<AWF_IC_REGISTRY>(TYPES.ICRegistry).to(AWF_IC_REGISTRY);
 diContainer.bind<AWF_Lit>(TYPES.Lit).to(AWF_Lit);
 diContainer.bind<AWF_Ceramic>(TYPES.Ceramic).to(AWF_Ceramic);
-diContainer.bind<GqlNew>(TYPES.GqlNew).to(GqlNew);
+
+//@Todo: implement init watcher to prevent ambiguous service
+export const importLazy = async () => {
+  const r = await import('./gql/index.new');
+  diContainer.bind<GqlNew>(TYPES.GqlNew).to(r.default);
+};
+
+//diContainer.bind<GqlNew>(TYPES.GqlNew).to(GqlNew);
 export default diContainer;

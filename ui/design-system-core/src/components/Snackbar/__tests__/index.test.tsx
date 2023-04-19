@@ -7,9 +7,7 @@ import { customRender } from '../../../test-utils';
 const title = 'Default title';
 const description = 'Default description';
 
-const mockChangeHandler = jest.fn(() => {
-  console.log('clicked dismiss');
-});
+const mockChangeHandler = jest.fn();
 
 describe('<Snackbar /> Component', () => {
   let componentWrapper = customRender(<></>, {});
@@ -21,7 +19,7 @@ describe('<Snackbar /> Component', () => {
           type="alert"
           title={title}
           description={description}
-          handleDismiss={() => mockChangeHandler()}
+          handleDismiss={mockChangeHandler}
         />,
         {},
       );
@@ -43,6 +41,7 @@ describe('<Snackbar /> Component', () => {
     const infoTitle = getByText(title);
     expect(infoTitle).toBeDefined();
   });
+
   it('correctly calls handler function when clicked', () => {
     const { getByTestId } = componentWrapper;
     const dismissButton = getByTestId('dismiss-button');
