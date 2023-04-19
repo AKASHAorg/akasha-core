@@ -95,7 +95,7 @@ const getSearchPosts = async (
     }),
   );
 
-  const entriesResp = await lastValueFrom(forkJoin(getEntriesCalls), { defaultValue: [] });
+  const entriesResp = await Promise.all(getEntriesCalls);
 
   const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus), { defaultValue: [] });
 
@@ -157,7 +157,7 @@ const getSearchComments = async (
     }),
   );
 
-  const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls), { defaultValue: [] });
+  const commentsResp = await Promise.all(getCommentsCalls);
 
   const commentsModResp = await lastValueFrom(forkJoin(getCommentsModStatus), {
     defaultValue: [],
@@ -244,7 +244,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
     }),
   );
 
-  const profilesResp = await lastValueFrom(forkJoin(getProfilesCalls), { defaultValue: [] });
+  const profilesResp = await Promise.all(getProfilesCalls);
 
   const profilesModResp = await lastValueFrom(forkJoin(getProfilesModStatus), {
     defaultValue: [],
@@ -270,7 +270,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
     }),
   );
 
-  const entriesResp = await lastValueFrom(forkJoin(getEntriesCalls), { defaultValue: [] });
+  const entriesResp = await Promise.all(getEntriesCalls);
 
   const entriesModResp = await lastValueFrom(forkJoin(getEntriesModStatus), { defaultValue: [] });
 
@@ -291,7 +291,7 @@ const getSearch = async (searchQuery: string, loggedUser?: string) => {
     }),
   );
 
-  const commentsResp = await lastValueFrom(forkJoin(getCommentsCalls), { defaultValue: [] });
+  const commentsResp = await Promise.all(getCommentsCalls);
 
   const commentsModResp = await lastValueFrom(forkJoin(getCommentsModStatus), {
     defaultValue: [],

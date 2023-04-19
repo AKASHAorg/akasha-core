@@ -11,8 +11,6 @@ export const createError = (message: string, path: z.ZodIssue['path'] = ['sdk'])
 };
 export const throwError = (message: string, path?: z.ZodIssue['path']) => {
   const error = createError(message, path);
-  // @todo: Log the error
-  console.log(error.toString());
   throw new Error(error.toString());
 };
 

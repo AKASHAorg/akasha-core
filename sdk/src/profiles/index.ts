@@ -25,6 +25,7 @@ import { throwError } from '../common/error-handling';
 import GqlNew from '../gql/index.new';
 import { GetProfilesQueryVariables } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import { ProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
+import { DID } from 'dids';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
@@ -82,10 +83,10 @@ class AWF_Profile {
     }
     try {
       const result = await this._gql.getAPI().GetProfiles(options);
-      if (!result) {
+      if (!result.profileIndex) {
         return throwError('Failed to get profiles.', ['sdk', 'profile', 'getProfiles']);
       }
-      return createFormattedValue(result);
+      return createFormattedValue(result.profileIndex);
     } catch (err) {
       throwError(`Failed to get profiles: ${(err as Error).message}`, [
         'sdk',
@@ -111,13 +112,28 @@ class AWF_Profile {
     }
   }
 
+  getProfileByDid(did: string) {
+    try {
+      return this._gql.getAPI().GetProfileByDid({ id: did });
+    } catch (err) {
+      throwError(`Failed to get profile: ${did}: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'getProfileByDid',
+      ]);
+    }
+  }
+
   /**
    * Mutation request to add a profile provider to the profile object
    * @param opt - DataProviderInput
    */
   @validate(z.array(DataProviderInputSchema))
   async addProfileProvider(opt: DataProviderInput[]) {
-    throwError('Deprecated', ['sdk', 'profile', 'addProfileProvider']);
+    return createFormattedValue({
+      addProfileProvider: {},
+    });
+    // return throwError('Deprecated', ['sdk', 'profile', 'addProfileProvider']);
   }
 
   /**
@@ -125,8 +141,8 @@ class AWF_Profile {
    * @param opt - DataProviderInput
    */
   @validate(z.array(DataProviderInputSchema))
-  async makeDefaultProvider(opt: DataProviderInput[]) {
-    throwError('Deprecated', ['sdk', 'profile', 'makeDefaultProvider']);
+  async makeDefaultProvider(opt: DataProviderInput[]): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'makeDefaultProvider']);
   }
 
   /**
@@ -134,8 +150,8 @@ class AWF_Profile {
    * @param userName - Username
    */
   @validate(UsernameSchema)
-  async registerUserName(userName: Username) {
-    throwError('Deprecated', ['sdk', 'profile', 'registerUserName']);
+  async registerUserName(userName: Username): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'registerUserName']);
   }
 
   /**
@@ -148,8 +164,8 @@ class AWF_Profile {
       pubKey: PubKeySchema.optional(),
     }),
   )
-  async getProfile(opt: { ethAddress?: EthAddress; pubKey?: PubKey }) {
-    throwError('Not implemented', ['sdk', 'profile', 'getProfile']);
+  async getProfile(opt: { ethAddress?: EthAddress; pubKey?: PubKey }): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'getProfile']);
   }
 
   /**
@@ -157,8 +173,8 @@ class AWF_Profile {
    * @param pubKey - public key
    */
   @validate(PubKeySchema)
-  async follow(pubKey: PubKey) {
-    throwError('Not implemented', ['sdk', 'profile', 'follow']);
+  async follow(pubKey: PubKey): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'follow']);
   }
 
   /**
@@ -166,8 +182,8 @@ class AWF_Profile {
    * @param pubKey - public key
    */
   @validate(PubKeySchema)
-  async unFollow(pubKey: PubKey) {
-    throwError('Not implemented', ['sdk', 'profile', 'unFollow']);
+  async unFollow(pubKey: PubKey): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'unFollow']);
   }
 
   /**
@@ -175,8 +191,8 @@ class AWF_Profile {
    * @param opt - object - follower and following public keys
    */
   @validate(z.object({ follower: PubKeySchema, following: PubKeySchema }))
-  async isFollowing(opt: { follower: PubKey; following: PubKey }) {
-    throwError('Not implemented', ['sdk', 'profile', 'isFollowing']);
+  async isFollowing(opt: { follower: PubKey; following: PubKey }): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'isFollowing']);
   }
 
   /**
@@ -238,31 +254,15 @@ class AWF_Profile {
    * @param name - name to search for
    */
   @validate(z.string().min(3))
-  async searchProfiles(name: string) {
-    throwError('Deprecated', ['sdk', 'profile', 'searchProfiles']);
+  async searchProfiles(name: string): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'searchProfiles']);
   }
 
   /**
    *
    */
-  async getTrending() {
-    throwError('Deprecated', ['sdk', 'profile', 'getTrending']);
-  }
-
-  /**
-   *
-   * @param tagName - tag name
-   */
-  @validate(TagNameSchema)
-  async toggleTagSubscription(tagName: TagName) {
-    throwError('Not implemented', ['sdk', 'profile', 'toggleTagSubscription']);
-  }
-
-  /**
-   *
-   */
-  async getTagSubscriptions() {
-    throwError('Not implemented', ['sdk', 'profile', 'getTagSubscriptions']);
+  async getTrending(): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'getTrending']);
   }
 
   /**
@@ -270,8 +270,24 @@ class AWF_Profile {
    * @param tagName - tag name
    */
   @validate(TagNameSchema)
-  async isSubscribedToTag(tagName: TagName) {
-    throwError('Not implemented', ['sdk', 'profile', 'isSubscribedToTag']);
+  async toggleTagSubscription(tagName: TagName): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'toggleTagSubscription']);
+  }
+
+  /**
+   *
+   */
+  async getTagSubscriptions(): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'getTagSubscriptions']);
+  }
+
+  /**
+   *
+   * @param tagName - tag name
+   */
+  @validate(TagNameSchema)
+  async isSubscribedToTag(tagName: TagName): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'isSubscribedToTag']);
   }
 
   /**
@@ -279,8 +295,8 @@ class AWF_Profile {
    * @param keyword - keyword to search for
    */
   @validate(z.string().min(3))
-  async globalSearch(keyword: string) {
-    throwError('Deprecated', ['sdk', 'profile', 'globalSearch']);
+  async globalSearch(keyword: string): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'globalSearch']);
   }
 
   /**
@@ -290,8 +306,8 @@ class AWF_Profile {
    * @param offset - offset to start from
    */
   @validate(z.string(), z.number(), z.number().optional())
-  async getFollowers(pubKey: string, limit: number, offset?: number) {
-    throwError('Not implemented', ['sdk', 'profiles', 'getFollowers']);
+  async getFollowers(pubKey: string, limit: number, offset?: number): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profiles', 'getFollowers']);
   }
 
   /**
@@ -301,8 +317,8 @@ class AWF_Profile {
    * @param offset - offset to start from
    */
   @validate(z.string(), z.number(), z.number().optional())
-  async getFollowing(pubKey: string, limit: number, offset?: number) {
-    throwError('Not implemented', ['sdk', 'profiles', 'getFollowing']);
+  async getFollowing(pubKey: string, limit: number, offset?: number): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profiles', 'getFollowing']);
   }
 
   /**
@@ -310,8 +326,8 @@ class AWF_Profile {
    * @param pubKey - public key of the user
    */
   @validate(z.string())
-  async getInterests(pubKey: string) {
-    throwError('Not implemented', ['sdk', 'profiles', 'getInterests']);
+  async getInterests(pubKey: string): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profiles', 'getInterests']);
   }
 }
 
