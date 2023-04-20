@@ -2,7 +2,7 @@ import React from 'react';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import { formatRelativeTime } from '../../utils/time';
 import BasicCardBox from '../BasicCardBox';
-import BasicInfoCard from '../NotificationsComponents/BasicInfoCard';
+import BasicInfoCard from '../BasicInfoCard';
 import Box from '../Box';
 import Divider from '../Divider';
 import ProfileAvatarNotificationApp from './ProfileAvatarNotificationApp';
