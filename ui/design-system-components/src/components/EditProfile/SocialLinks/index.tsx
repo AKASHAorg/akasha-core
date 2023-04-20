@@ -3,10 +3,13 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import * as z from 'zod';
+import { apply, tw } from '@twind/core';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SocialLink } from './SocialLink';
 import { ButtonType } from '../types';
+import { Link } from '../../types/common.types';
+import { getLinkFromType } from '../../../utils/getLinkFromType';
 
 type SocialLinkFormValue = {
   links: string[];
@@ -16,9 +19,10 @@ export type SocialLinksProp = {
   title: string;
   addNewButtonLabel: string;
   description: string;
-  socialLinks: string[];
+  socialLinks: Link[];
   cancelButton: ButtonType;
   saveButton: { label: string; handleClick: (formValues: SocialLinkFormValue) => void };
+  customStyle?: string;
   onDelete: (index: number) => void;
 };
 
@@ -29,6 +33,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   socialLinks,
   cancelButton,
   saveButton,
+  customStyle,
   onDelete,
 }) => {
   const {
@@ -38,11 +43,11 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
     formState: { isDirty, isValid },
   } = useForm<SocialLinkFormValue>({
     resolver: zodResolver(schema),
-    mode: 'onBlur',
+    mode: 'onChange',
   });
 
   const linkWithPseudoId = useMemo(
-    () => socialLinks.map((link, index) => ({ _id: index, value: link })),
+    () => socialLinks.map((link, index) => ({ _id: index, value: getLinkFromType(link, true) })),
     [socialLinks],
   );
 
@@ -57,8 +62,8 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSave)}>
-      <Stack direction="column" spacing="gap-y-4">
+    <form onSubmit={handleSubmit(onSave)} className={tw(apply`h-full ${customStyle}`)}>
+      <Stack direction="column" spacing="gap-y-4" customStyle="h-full">
         <Stack spacing="gap-y-1" direction="column">
           <Stack spacing="gap-x-2" justify="between" align="center">
             <Text variant="h6">{title}</Text>
@@ -117,9 +122,8 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
 };
 
 const schema = z.object({
-  links: z.array(
-    z
-      .string({ required_error: 'Url is required' })
-      .url({ message: `Hmm this doesn't look like a URL 🤔` }),
-  ),
+  links: z
+    .string({ required_error: 'Url is required' })
+    .url({ message: `Hmm this doesn't look like a URL 🤔` })
+    .array(),
 });

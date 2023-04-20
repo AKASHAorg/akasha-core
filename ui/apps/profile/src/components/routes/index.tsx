@@ -1,8 +1,8 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
 import Index from '../pages';
 import NoProfileFound from '../pages/no-profile-found';
-import menuRoute, { EDIT, STAT } from '../../routes';
+import menuRoute, { EDIT, ENGAGEMENT } from '../../routes';
+import DS from '@akashaorg/design-system';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RootComponentProps, ModalNavigationOptions } from '@akashaorg/typings/ui';
@@ -60,13 +60,13 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
               }
             />
             <Route
-              path={`:pubKey${menuRoute[STAT]}`}
+              path={`:pubKey${menuRoute[ENGAGEMENT]}`}
               element={
                 <Index
                   {...props}
                   loginState={loginQuery.data}
                   loggedProfileData={loggedProfileQuery.data}
-                  pageType="stat"
+                  pageType="engagement"
                 />
               }
             />
