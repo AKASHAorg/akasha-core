@@ -6,6 +6,8 @@ export const EDIT_MAX_APPLICANTS = 'EditMaxApplicants';
 export const RESIGN_ROLE = 'ResignRole';
 export const RESIGN_CONFIRMATION = 'ResignConfirmation';
 export const MODERATORS = 'Moderators';
+export const VIEW_MODERATOR = 'ViewModerator';
+export const DISMISS_MODERATOR = 'DismissModerator';
 export const HISTORY = 'Transparency Log';
 export const HISTORY_ITEM = 'Transparency Log Item';
 export const MODERATION_VALUE = 'Moderation Value';
@@ -22,6 +24,8 @@ export default {
   [RESIGN_ROLE]: `${baseDashboardUrl}/resign-from-role`,
   [RESIGN_CONFIRMATION]: `${baseDashboardUrl}/resign-confirmation`,
   [MODERATORS]: '/moderators',
+  [VIEW_MODERATOR]: '/moderator/:moderatorPubKey',
+  [DISMISS_MODERATOR]: '/moderator/:moderatorPubKey/dismiss',
   [HISTORY]: '/history',
   [HISTORY_ITEM]: '/history/:itemId',
   [MODERATION_VALUE]: `${baseOverviewUrl}/values/:value`,

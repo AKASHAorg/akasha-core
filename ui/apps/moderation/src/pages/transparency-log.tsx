@@ -5,28 +5,26 @@ import { useTranslation } from 'react-i18next';
 import { ButtonValues, IModerationLogItem, NavigateToParams } from '@akashaorg/typings/ui';
 import { useInfiniteLog } from '@akashaorg/ui-awf-hooks';
 
-import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCardBox';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Dropdown from '@akashaorg/design-system-core/lib/components/Dropdown';
-import Pagination from '@akashaorg/design-system-core/lib/components/Pagination';
-import Table from '@akashaorg/design-system-core/lib/components/Table';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
 import { NoItemsFound } from '../components/error-cards';
 
 import getReasonPrefix from '../utils/getReasonPrefix';
+import PaginatedTable from '../components/transparency-log/paginated-table';
 
 export interface ITransparencyLogProps {
   user: string | null;
   navigateTo: (args: NavigateToParams) => void;
 }
 
-type PaginatedItem = IModerationLogItem[];
+export type PaginatedItem = IModerationLogItem[];
 
-const DEFAULT_LIMIT = 10;
+export const DEFAULT_LIMIT = 10;
 
-const contentTypeMap = {
+export const contentTypeMap = {
   account: 'Account',
   reply: 'Reply',
   post: 'Post',
@@ -182,17 +180,11 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         </Button>
       </Box>
 
-      <BasicCardBox pad="p-0">
-        <Table
-          theadValues={[t('Date'), t('Category'), t('Decision'), '']}
-          rows={trimmedRows}
-          hasIcons={true}
-          clickableRows={true}
-          onRowClick={handleRowClick}
-        />
-      </BasicCardBox>
-
-      <Pagination
+      <PaginatedTable
+        theadValues={[t('Date'), t('Category'), t('Decision'), '']}
+        rows={trimmedRows}
+        hasIcons={true}
+        clickableRows={true}
         customStyle="mt-3 justify-end"
         pageCount={pages.length}
         currentPage={curPage}
@@ -200,6 +192,7 @@ export const TransparencyLog: React.FC<ITransparencyLogProps> = props => {
         nextButtonLabel={t('Next')}
         prevButtonDisabled={curPage === 1}
         nextButtonDisabled={curPage === pages.length - 1}
+        onRowClick={handleRowClick}
         onClickPage={handleClickPage}
         onClickPrev={handleClickPrev}
         onClickNext={handleClickNext}

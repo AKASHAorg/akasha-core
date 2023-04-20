@@ -8,6 +8,8 @@ import {
   Dashboard,
   Overview,
   Moderators,
+  ModeratorDetailPage,
+  DismissModeratorPage,
   TransparencyLog,
   TransparencyLogItem,
   ModerationValue,
@@ -20,8 +22,10 @@ import {
 
 import routes, {
   DASHBOARD,
+  DISMISS_MODERATOR,
   EDIT_CATEGORIES,
   EDIT_CONTACT_INFO,
+  EDIT_MAX_APPLICANTS,
   RESIGN_CONFIRMATION,
   RESIGN_ROLE,
   HISTORY,
@@ -29,7 +33,7 @@ import routes, {
   HOME,
   MODERATION_VALUE,
   MODERATORS,
-  EDIT_MAX_APPLICANTS,
+  VIEW_MODERATOR,
 } from '../routes';
 
 const { Box } = DS;
@@ -101,7 +105,17 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             }
           />
 
-          <Route path={routes[MODERATORS]} element={<Moderators {...props} />} />
+          <Route path={routes[MODERATORS]} element={<Moderators navigateTo={navigateTo} />} />
+
+          <Route
+            path={routes[VIEW_MODERATOR]}
+            element={<ModeratorDetailPage navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[DISMISS_MODERATOR]}
+            element={<DismissModeratorPage navigateTo={navigateTo} />}
+          />
 
           <Route
             path={routes[HISTORY]}
