@@ -1,14 +1,7 @@
 import * as React from 'react';
 import DS from '@akashaorg/design-system';
 
-import {
-  LoginState,
-  useAnalytics,
-  useEntryNavigation,
-  useFollow,
-  useIsFollowingMultiple,
-  useUnfollow,
-} from '@akashaorg/ui-awf-hooks';
+import { LoginState, useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import {
   EntityTypes,
   IEntryData,
@@ -21,8 +14,10 @@ import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import routes, { POST } from '../../../routes';
 import { UseQueryResult } from 'react-query';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
 
-const { Box, EditorPlaceholder, EntryBox } = DS;
+const { EditorPlaceholder } = DS;
 
 type Props = {
   itemId: string;
@@ -44,7 +39,6 @@ export function OriginalItem({
   loginState,
   uiEvents,
   plugins,
-  layoutConfig,
   entryData,
   navigateToModal,
   showLoginModal,
@@ -58,12 +52,7 @@ export function OriginalItem({
   const [showAnyway, setShowAnyway] = React.useState<boolean>(false);
   const [analyticsActions] = useAnalytics();
   const handleEntryNavigate = useEntryNavigation(navigateTo, itemId);
-  const followReq = useFollow();
-  const unfollowReq = useUnfollow();
 
-  const isFollowingMultipleReq = useIsFollowingMultiple(loginState?.pubKey, [
-    entryData?.author?.pubKey,
-  ]);
   const [showReplyEditor, setShowReplyEditor] = React.useState(true);
 
   const isReported = React.useMemo(() => {
@@ -97,10 +86,6 @@ export function OriginalItem({
     }
   }
 
-  const followedProfiles = isFollowingMultipleReq.data;
-
-  const isFollowing = followedProfiles.includes(entryData?.author?.pubKey);
-
   const handleAvatarClick = (ev: React.MouseEvent<HTMLDivElement>, pubKey: string) => {
     ev.preventDefault();
     navigateTo?.({
@@ -130,18 +115,6 @@ export function OriginalItem({
       return showLoginModal({ modal: { name: 'report-modal', itemId, itemType } });
     }
     navigateToModal({ name: 'report-modal', itemId, itemType });
-  };
-
-  const handleFollow = () => {
-    if (entryData?.author?.pubKey) {
-      followReq.mutate(entryData?.author?.pubKey);
-    }
-  };
-
-  const handleUnfollow = () => {
-    if (entryData?.author?.pubKey) {
-      unfollowReq.mutate(entryData?.author?.pubKey);
-    }
   };
 
   const handleMentionClick = (pubKey: string) => {
@@ -177,35 +150,15 @@ export function OriginalItem({
   const replyActive = !action && loginState?.ethAddress;
 
   return (
-    <Box
-      round={{ corner: 'top', size: 'xsmall' }}
-      background={{ color: replyActive ? 'entryBackground' : null }}
-    >
-      <Box
-        border={
-          replyActive
-            ? null
-            : {
-                side: 'bottom',
-                size: '1px',
-                color: 'border',
-              }
-        }
-      >
+    <Box customStyle={`rounded-t-lg`}>
+      <Box customStyle={!replyActive && 'border(b grey8 dark:grey5)'}>
         <EntryBox
           isRemoved={entryData?.isRemoved}
           entryData={entryData}
-          sharePostLabel={t('Share Post')}
-          shareTextLabel={t('Share this post with your friends')}
-          sharePostUrl={`${window.location.origin}${routes[POST]}/`}
           onClickAvatar={(ev: React.MouseEvent<HTMLDivElement>) =>
             handleAvatarClick(ev, entryData?.author?.pubKey)
           }
           repliesLabel={t('Replies')}
-          repostLabel={t('Repost')}
-          repostWithCommentLabel={t('Repost with comment')}
-          shareLabel={t('Share')}
-          copyLinkLabel={t('Copy Link')}
           flagAsLabel={t('Report Post')}
           loggedProfileEthAddress={loginState.isReady && loginState?.ethAddress}
           locale={locale}
@@ -214,9 +167,6 @@ export function OriginalItem({
           repliesAnchorLink={routes[POST]}
           onRepost={handleRepost}
           onEntryFlag={handleEntryFlag(entryData?.entryId, EntityTypes.POST)}
-          handleFollowAuthor={handleFollow}
-          handleUnfollowAuthor={handleUnfollow}
-          isFollowingAuthor={isFollowing}
           onContentClick={handleEntryNavigate}
           navigateTo={navigateTo}
           contentClickable={true}
@@ -234,7 +184,6 @@ export function OriginalItem({
           disableReposting={entryData?.isRemoved || itemType === EntityTypes.REPLY}
           hideRepost={itemType === EntityTypes.REPLY}
           disableReporting={loginState.waitForAuth || loginState.isSigningIn}
-          modalSlotId={layoutConfig.modalSlotId}
           headerMenuExt={
             showEditButton && (
               <Extension
@@ -257,7 +206,7 @@ export function OriginalItem({
           }
         />
       </Box>
-      <Box margin="medium">
+      <Box customStyle="m-4">
         {!loginState?.ethAddress && (
           <EditorPlaceholder onClick={handlePlaceholderClick} ethAddress={null} />
         )}

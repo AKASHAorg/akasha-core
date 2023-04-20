@@ -103,7 +103,7 @@ const BaseEntryPage: React.FC<BaseEntryProps & RootComponentProps> = props => {
   };
 
   return (
-    <BasicCardBox style={`h-auto overflow-hidden`}>
+    <BasicCardBox style={`h-auto overflow-hidden`} elevation="sm">
       {children}
       {entryReq.isLoading && <EntryCardLoading />}
       {entryReq.isError && (

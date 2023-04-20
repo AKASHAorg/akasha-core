@@ -71,7 +71,13 @@ const EntryCard: React.FC<IEntryCardProps> = props => {
   } = props;
 
   return (
-    <BasicCardBox rootNodeRef={rootNodeRef} noBorder={noBorder} noBorderRadius={noBorderRadius}>
+    <BasicCardBox
+      rootNodeRef={rootNodeRef}
+      noBorder={noBorder}
+      noBorderRadius={noBorderRadius}
+      elevation="sm"
+      pad="p-0"
+    >
       {entryData.quotedByAuthors && entryData.quotedByAuthors.length > 0 && (
         <SocialBox
           socialData={entryData.quotedByAuthors}

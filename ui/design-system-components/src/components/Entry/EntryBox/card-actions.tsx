@@ -45,25 +45,28 @@ const CardActions: React.FC<CardActionProps> = props => {
 
   if (isModerated) {
     return (
-      <div className={tw(`flex flex-row justify-end space-x-4 w-3/4 self-center py-4`)}>
-        <button onClick={handleRepliesClick} className={tw(`flex flex-row space-x-4`)}>
-          <Text>{repliesBtnText}</Text>
+      <div
+        className={tw(`flex flex-row items-center justify-end space-x-4 w-3/4 self-center py-4`)}
+      >
+        <button onClick={handleRepliesClick} className={tw(`flex flex-row items-center space-x-2`)}>
           <Icon type="ChatBubbleLeftRightIcon" />
+          <Text>{repliesBtnText}</Text>
         </button>
         <button
           onClick={onRepost}
-          className={tw(`flex flex-row space-x-4`)}
+          className={tw(`flex flex-row items-center space-x-2`)}
           disabled={disableReposting}
         >
-          <Text>{repostsBtnText}</Text>
           <Icon type="ArrowPathIcon" />
+          <Text>{repostsBtnText}</Text>
         </button>
       </div>
     );
   }
 
   return (
-    <div className={tw(`p-4 flex flex-row justify-end space-x-4`)}>
+    <div className={tw(`p-4 flex flex-row items-center justify-end space-x-4`)}>
+      <>{actionsRightExt}</>
       <a
         onClick={e => {
           e.preventDefault();
@@ -74,25 +77,24 @@ const CardActions: React.FC<CardActionProps> = props => {
       >
         <button
           onClick={handleRepliesClick}
-          className={tw(`flex flex-row space-x-4`)}
+          className={tw(`flex flex-row items-center space-x-2`)}
           disabled={disableActions}
         >
-          <Text>{repliesBtnText}</Text>
           <Icon type="ChatBubbleLeftRightIcon" />
+          <Text>{repliesBtnText}</Text>
         </button>
       </a>
 
       {!hideRepost && (
         <button
           onClick={onRepost}
-          className={tw(`flex flex-row space-x-4`)}
+          className={tw(`flex flex-row items-center space-x-2`)}
           disabled={disableReposting || disableActions}
         >
-          <Text>{repostsBtnText}</Text>
           <Icon type="ArrowPathIcon" />
+          <Text>{repostsBtnText}</Text>
         </button>
       )}
-      <>{actionsRightExt}</>
     </div>
   );
 };

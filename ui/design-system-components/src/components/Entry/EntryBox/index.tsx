@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { tw, tx } from '@twind/core';
+import { tw } from '@twind/core';
 import CardHeaderMenu from './card-header-menu';
 import CardActions from './card-actions';
 
@@ -128,7 +128,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
   } = props;
 
   const profileRef: React.Ref<HTMLDivElement> = React.useRef(null);
-  const akashaRef: React.Ref<HTMLDivElement> = React.useRef(null);
 
   const handleRepost = (withComment: boolean) => () => {
     if (onRepost) {
@@ -220,8 +219,8 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
 
   return (
     <>
-      <div className={tx(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
-        <div className={tw(`flex flex-row justify-between pt-4 px-4 shrink-0`)}>
+      <div className={tw(`${error && 'bg-[#FFFDF1]'}`)} style={style}>
+        <div className={tw(`flex flex-row justify-between p-4 shrink-0`)}>
           <a
             className={tw(`flex min-w-0 no-underline`)}
             onClick={(e: React.SyntheticEvent) => {
@@ -247,6 +246,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
               ref={profileRef}
             />
           </a>
+
           <div className={tw(`flex flex-row gap-2 items-center shrink-0`)}>
             {entryData.time && !hidePublishTime && (
               <Tooltip placement={'top'} content={formatDate(entryData.time, locale)}>
@@ -263,7 +263,6 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
                 <Icon size="sm" type="PencilIcon" />
               </Tooltip>
             )}
-            <Icon type="akasha" size="sm" ref={akashaRef} />
             {entryData.type !== 'REMOVED' && (
               <CardHeaderMenu
                 disabled={disableActions}
@@ -303,7 +302,7 @@ const EntryBox: React.FC<IEntryBoxProps> = props => {
         )}
         {!props.isRemoved && !isEqual(entryData.slateContent, editorDefaultValue) && (
           <div
-            className={tx(
+            className={tw(
               `px-4 max-h-[50rem] ${scrollHiddenContent ? 'overflow-auto' : 'overflow-hidden'} ${
                 contentClickable ? 'cursor-pointer' : 'cursor-default'
               }`,
