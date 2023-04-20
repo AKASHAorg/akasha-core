@@ -1,9 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { tw, apply } from '@twind/core';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
-import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 
+import { RootComponentProps, AnalyticsCategories } from '@akashaorg/typings/ui';
 import {
   useTrendingTags,
   useTrendingProfiles,
@@ -15,6 +13,9 @@ import {
   useGetLogin,
   useAnalytics,
 } from '@akashaorg/ui-awf-hooks';
+
+import Box from '@akashaorg/design-system-core/lib/components/Box';
+import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 
 import TrendingTagCard from './TrendingTagCard';
 import TrendingProfileCard from './TrendingProfileCard';
@@ -112,7 +113,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
   };
 
   return (
-    <div className={tw(apply('space-y-8'))}>
+    <Box customStyle="space-y-4">
       {(trendingTagsReq.isError || trendingProfilesReq.isError) && (
         <ErrorLoader
           type="script-error"
@@ -152,7 +153,7 @@ const TrendingWidgetComponent: React.FC<RootComponentProps> = props => {
         handleUnfollowProfile={handleUnfollowProfile}
         loggedEthAddress={loginQuery.data?.ethAddress}
       />
-    </div>
+    </Box>
   );
 };
 
