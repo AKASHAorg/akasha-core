@@ -4,14 +4,16 @@ import BasicCardBox from '@akashaorg/design-system-core/lib/components/BasicCard
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE } from '../../routes';
+import routes, { CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE, SHOW_NOTIFICATIONS_PAGE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
 
 interface IWelcomePageProps {
   header: string;
   description: string;
   leftButtonLabel?: string;
+  // leftButtonClickHandler?: () => void;
   rightButtonLabel: string;
+  // rightButtonClickHandler?: () => void;
   finalStep?: boolean;
 }
 
@@ -19,7 +21,9 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
   const {
     plugins,
     leftButtonLabel,
+    // leftButtonClickHandler,
     rightButtonLabel,
+    // rightButtonClickHandler,
     header,
     description,
     finalStep = false,
@@ -35,8 +39,13 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
     });
   };
 
+  const message = 'Notification settings updated successfully';
   const goToNotificationsPage = () => {
-    // @TODO: go to notification listing page.
+    // go to notifications page
+    return navigateTo?.({
+      appName: '@akashaorg/app-notifications',
+      getNavigationUrl: () => `${routes[SHOW_NOTIFICATIONS_PAGE]}/?message=${message}&type=success`,
+    });
   };
 
   return (
@@ -62,7 +71,11 @@ const WelcomePage: React.FC<RootComponentProps & IWelcomePageProps> = props => {
             onClick={goToNotificationsPage}
           />
         )}
-        <Button variant="primary" label={rightButtonLabel} onClick={goToNextStep} />
+        <Button
+          variant="primary"
+          label={rightButtonLabel}
+          onClick={finalStep ? goToNotificationsPage : goToNextStep}
+        />
       </div>
     </Card>
   );

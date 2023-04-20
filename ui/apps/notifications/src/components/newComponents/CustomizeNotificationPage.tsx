@@ -8,6 +8,7 @@ import Divider from '@akashaorg/design-system-core/lib/components/Divider';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import routes, { CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE } from '../../routes';
 import { RootComponentProps } from '@akashaorg/typings/ui';
+import { useTranslation } from 'react-i18next';
 
 const socialAppCheckboxes: { label: string; selected: boolean }[] = [
   { label: 'New Followers', selected: true },
@@ -42,9 +43,12 @@ const CustomizeNotificationPage: React.FC<RootComponentProps> = props => {
     moderationApp: Array(moderationAppCheckboxes.map(e => e.selected)),
     integrationCenter: Array(integrationCenterCheckboxes.map(e => e.selected)),
   });
+
   const navigateTo = plugins['@akashaorg/app-routing']?.routing.navigateTo;
 
-  const changeHandler = (pos, section) => {
+  const { t } = useTranslation('app-notifications');
+
+  const changeHandler = (pos: number, section: string): void => {
     const stateArray = (() => {
       switch (section) {
         case 'social':
@@ -62,7 +66,7 @@ const CustomizeNotificationPage: React.FC<RootComponentProps> = props => {
     setAllStates({ ...allStates, [section]: updatedCheckedState });
   };
 
-  const Title = title => (
+  const Title = (title: string): JSX.Element => (
     <div className={tw('flex flex-row items-center')}>
       <Text variant="h6" align="center">
         {title}
@@ -70,13 +74,16 @@ const CustomizeNotificationPage: React.FC<RootComponentProps> = props => {
     </div>
   );
 
-  const Content = (checkboxArray, section) => {
+  const Content = (
+    checkboxArray: { label: string; selected: boolean }[],
+    section: string,
+  ): JSX.Element => {
     return (
-      <div className={tw('')}>
+      <div>
         {checkboxArray.map(({ label }, index) => (
           <div className={tw('')} key={index}>
             <Checkbox
-              label={label}
+              label={t(label)}
               value={label}
               id={index.toString()}
               isSelected={allStates[section][index]}
@@ -117,7 +124,10 @@ const CustomizeNotificationPage: React.FC<RootComponentProps> = props => {
   };
 
   const confirmHandler = () => {
-    // @TODO: save preferences somewhere
+    // @TODO: save preferences somewhere, now we just save a key in localstorage to mark as set
+    if (window.localStorage) {
+      localStorage.setItem('notification-preference', JSON.stringify('1'));
+    }
 
     // navigate to final step
     goToNextStep();
