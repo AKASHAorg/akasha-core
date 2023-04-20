@@ -1,8 +1,8 @@
 import React from 'react';
-import { tw } from '@twind/core';
 
 import { IMenuItem, IProfileData } from '@akashaorg/typings/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
+import Box from '@akashaorg/design-system-core/lib/components/Box';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
@@ -109,31 +109,26 @@ const Sidebar: React.FC<ISidebarProps> = props => {
   };
 
   return (
-    <div
-      className={tw(
-        'max-w-[19.5rem] w-[19.5rem] h-[100vh] xl:max-h-[calc(100vh - 20px)] bg-white dark:bg-grey2 border-1 border-grey8 dark:border-none rounded-r-2xl xl:rounded-2xl',
-      )}
-    >
-      <div className={tw('flex flex-row p-4 border-b-1 border-grey8')}>
-        <div className={tw('w-fit h-fit mr-2')}>
+    <Box customStyle="w-[19.5rem] max-w-[19.5rem] max-h-[calc(100vh-20px)] bg(white dark:grey2) rounded-r-2xl xl:rounded-2xl">
+      <Box customStyle="flex flex-row p-4 border-b-1 border-grey8">
+        <Box customStyle="w-fit h-fit mr-2">
           <Avatar ethAddress={loggedProfileData?.ethAddress} src={loggedProfileData?.avatar} />
-        </div>
-        <div className={tw('w-fit')}>
+        </Box>
+        <Box customStyle="w-fit">
           <Text customStyle="font-bold">{title}</Text>
           <Text variant="footnotes2" customStyle="text-grey5">
             {subtitle}
           </Text>
-        </div>
-        <div className={tw('w-fit h-fit ml-6 self-end')}>
+        </Box>
+        <Box customStyle="w-fit h-fit ml-6 self-end">
           <Button icon="BoltIcon" variant="primary" iconOnly={true} />
-        </div>
-      </div>
+        </Box>
+      </Box>
 
       {/*
-          this container will grow up to a max height of 100vh-345px.
-          [345px] currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
+          this container will grow up to a max height of 68vh, 32vh currently accounts for the height of other sections and paddings. Adjust accordingly, if necessary.
         */}
-      <div className={tw('flex flex-col max-h-[calc(100vh - 345px)] overflow-auto')}>
+      <Box customStyle="flex flex-col max-h-[68vh] overflow-auto">
         {/* container for world apps */}
         {worldApps?.length > 0 && (
           <ListSidebarApps
@@ -154,32 +149,32 @@ const Sidebar: React.FC<ISidebarProps> = props => {
             onClickMenuItem={handleAppIconClick}
           />
         )}
-      </div>
+      </Box>
 
-      <div className={tw('flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3')}>
+      <Box customStyle="flex flex-col px-8 py-4 bg-grey9 dark:bg-grey3">
         <Text variant="footnotes2" customStyle="text-grey5">
           {ctaText}
         </Text>
-        <div className={tw('w-fit h-fit mt-6')}>
+        <Box customStyle="w-fit h-fit mt-6">
           <Button label={ctaButtonLabel} variant="primary" />
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div className={tw('flex flex-col px-8 py-4')}>
+      <Box customStyle="flex flex-col px-8 py-4">
         <Text variant="footnotes2" customStyle="text-grey5">
           {footerLabel}
         </Text>
-        <div className={tw('flex w-fit h-fit mt-6')}>
+        <Box customStyle="flex w-fit h-fit mt-6">
           {footerIcons.map((icon, idx) => (
-            <div key={icon.name + idx} className={tw('mr-4')}>
+            <Box key={icon.name + idx} customStyle="mr-4">
               <a href={icon.link} target="_blank" rel="noreferrer noopener">
                 <Button icon={icon.name} variant="primary" greyBg={true} iconOnly={true} />
               </a>
-            </div>
+            </Box>
           ))}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
