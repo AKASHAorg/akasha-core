@@ -132,12 +132,12 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       worldApps={worldApps}
       currentRoute={currentLocation.pathname}
       // size={size}
-      loggedProfileData={myProfileQuery.data.viewer?.profile}
-      isLoggedIn={!!myProfileQuery.data.viewer?.profile.did}
+      loggedProfileData={myProfileQuery.data?.viewer?.profile}
+      isLoggedIn={!!myProfileQuery.data?.viewer?.profile.did}
       loadingUserInstalledApps={false}
-      title={myProfileQuery.data.viewer?.profile.name ?? t('Guest')}
+      title={myProfileQuery.data?.viewer?.profile.name ?? t('Guest')}
       subtitle={
-        myProfileQuery.data.viewer?.profile.name ??
+        myProfileQuery.data?.viewer?.profile.name ??
         t('Connect to see exclusive member only features.')
       }
       ctaText={t('Add magic to your world by installing cool apps developed by the community')}
@@ -161,7 +161,7 @@ const SidebarComponent: React.FC<RootComponentProps> = props => {
       menuItem={
         <MenuItem
           plugins={props.plugins}
-          profileId={myProfileQuery?.data.viewer.profile?.did.id}
+          profileId={myProfileQuery.data?.viewer?.profile?.did.id}
           {...({} as SidebarMenuItemProps)}
         />
       }

@@ -119,7 +119,10 @@ const Sidebar: React.FC<ISidebarProps> = props => {
     >
       <div className={tw('flex flex-row p-4 border-b-1 border-grey8')}>
         <div className={tw('w-fit h-fit mr-2')}>
-          <Avatar ethAddress={loggedProfileData.name} src={loggedProfileData?.avatar.default.src} />
+          <Avatar
+            ethAddress={loggedProfileData?.name}
+            src={loggedProfileData?.avatar?.default.src}
+          />
         </div>
         <div className={tw('w-fit')}>
           <Text customStyle="font-bold">{title}</Text>
