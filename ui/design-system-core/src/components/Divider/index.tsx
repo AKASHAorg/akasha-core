@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { apply, tw } from '@twind/core';
-import { PropsWithChildren } from 'react';
 
-type DividerProps = {
+export interface DividerProps {
   customStyle?: string;
-};
+}
 
 const Divider: React.FC<PropsWithChildren<DividerProps>> = ({ customStyle = '', children }) => {
   return (

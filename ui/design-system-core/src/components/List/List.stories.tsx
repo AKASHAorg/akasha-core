@@ -1,16 +1,16 @@
 import React from 'react';
-import ActionDropdown, { ActionDropdownProps } from './index';
+import List, { ListProps } from './index';
 
 export default {
-  title: 'Buttons/ActionDropdown',
-  component: ActionDropdown,
+  title: 'List/List',
+  component: List,
 };
 
-const Template = (args: ActionDropdownProps) => <ActionDropdown {...args} />;
+const Template = (args: ListProps) => <List {...args} />;
 
-export const BaseDialog = Template.bind({});
-BaseDialog.args = {
-  actions: [
+export const BaseList = Template.bind({});
+BaseList.args = {
+  items: [
     { label: 'Upload', icon: 'ArrowUpOnSquareIcon', onClick: () => ({}) },
     { label: 'Edit', icon: 'PencilIcon', onClick: () => ({}) },
     {

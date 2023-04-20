@@ -304,8 +304,8 @@ class AWF_Profile {
   async getTagSubscriptions() {
     try {
       const currUser = await this._auth.getCurrentUser();
-      if (currUser && currUser.pubKey) {
-        const result = await this.getInterests(currUser.pubKey);
+      if (currUser && currUser.id) {
+        const result = await this.getInterests(currUser.id);
         return createFormattedValue(result?.data);
       }
       throwError('User not authenticated', ['sdk', 'profile', 'getTagSubscriptions']);

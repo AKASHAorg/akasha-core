@@ -1,25 +1,35 @@
 import React, { Children, Fragment, PropsWithChildren, useState } from 'react';
+import { tw } from '@twind/core';
+
 import Button from '../Button';
 import Stack from '../Stack';
-import Text from '../Text';
-import { tw } from '@twind/core';
+import Text, { TextProps } from '../Text';
+
 import { getColorClasses } from '../../utils/getColorClasses';
 
 export type TabProps = {
   labels: string[];
   activeTab?: number;
   borderBottom?: boolean;
+  labelTextVariant?: TextProps['variant'];
   onChange?: (selectedIndex: number) => void;
 };
 
 const Tab: React.FC<PropsWithChildren<TabProps>> = ({
   labels,
+  labelTextVariant,
   activeTab,
   borderBottom,
-  onChange,
   children,
+  onChange,
 }) => {
   const [selectedIndex, changeSelectedIndex] = useState(activeTab || 0);
+
+  const onTabChange = (selectedIndex: number) => {
+    changeSelectedIndex(selectedIndex);
+    if (onChange) onChange(selectedIndex);
+  };
+
   const borderBottomStyle = borderBottom
     ? `border-b ${getColorClasses(
         {
@@ -30,7 +40,8 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
       )}`
     : '';
 
-  const baseStyle = `group pb-3 ${borderBottomStyle}`;
+  const baseStyle = `group p-2 ${borderBottomStyle}`;
+
   const activeStyle = `border-b ${getColorClasses(
     {
       light: 'secondaryLight',
@@ -38,6 +49,7 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
     },
     'border',
   )}`;
+
   const hoverStyle = `hover:border-b ${getColorClasses(
     {
       light: 'secondaryLight',
@@ -45,10 +57,9 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
     },
     'hover:border',
   )}`;
-  const onTabChange = (selectedIndex: number) => {
-    changeSelectedIndex(selectedIndex);
-    if (onChange) onChange(selectedIndex);
-  };
+
+  const getSelectedTabVariant = (index: number) =>
+    selectedIndex === index ? 'button-sm' : 'footnotes2';
 
   return (
     <Stack direction="column" spacing="gap-y-4" fullWidth>
@@ -61,7 +72,7 @@ const Tab: React.FC<PropsWithChildren<TabProps>> = ({
             plain
           >
             <Text
-              variant={selectedIndex === index ? 'button-sm' : 'footnotes2'}
+              variant={labelTextVariant ? labelTextVariant : getSelectedTabVariant(index)}
               color={
                 selectedIndex === index
                   ? {

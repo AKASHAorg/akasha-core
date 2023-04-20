@@ -4,7 +4,8 @@ import Stash, { IQuickLRU } from '../stash';
 import { getSdk, Requester, Sdk } from './api.new';
 import Logging from '../logging/index';
 import pino from 'pino';
-import CeramicService from '../auth-v2/ceramic';
+import CeramicService from '../common/ceramic';
+import type { DocumentNode } from 'graphql';
 
 /** @internal  */
 @injectable()
@@ -31,10 +32,16 @@ class Gql {
       maxAge: 1000 * 60 * 2,
     }).data;
     this._ceramic = ceramic;
-    const requester = (document, variables) => {
-      return this._ceramic.getComposeClient().execute(document, variables);
+    const requester = async <R, V>(doc: DocumentNode, vars: V): Promise<R> => {
+      const result = await this._ceramic
+        .getComposeClient()
+        .execute(doc, vars as Record<string, unknown> | undefined);
+      if (!result.errors || !result.errors.length) {
+        return result.data as R;
+      }
+      throw result.errors;
     };
-    // @ts-ignore
+
     this._client = getSdk(requester);
   }
 

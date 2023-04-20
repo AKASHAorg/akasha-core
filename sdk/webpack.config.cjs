@@ -99,7 +99,7 @@ const config = {
     }),
     new WebpackAssetsManifest({ integrity: true }),
   ],
-  devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'inline-source-map',
+  devtool: process.env.NODE_ENV === 'production' ? undefined : 'eval-source-map',
   mode: process.env.NODE_ENV || 'development',
   externals: [
     function ({ request }, callback) {

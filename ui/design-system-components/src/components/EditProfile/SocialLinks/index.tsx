@@ -83,6 +83,7 @@ export const SocialLinks: React.FC<SocialLinksProp> = ({
               name={`links.${index}`}
               render={({ field: { name, value, onChange, ref }, fieldState: { error } }) => (
                 <SocialLink
+                  type="text"
                   onDelete={() => {
                     unregister(`links.${index}`);
                     setLinks(links.filter(_link => _link._id !== link._id));

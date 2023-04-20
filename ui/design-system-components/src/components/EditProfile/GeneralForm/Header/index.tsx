@@ -7,9 +7,7 @@ import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
-import ActionDropdown, {
-  ActionDropdownProps,
-} from '@akashaorg/design-system-core/lib/components/ActionDropDown';
+import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
 import { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { ImageSrc } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import { tw } from '@twind/core';
@@ -68,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({
     setShowCoverDropdown(false);
   });
 
-  const dropDownActions: ActionDropdownProps['actions'] = [
+  const dropDownActions: ListProps['items'] = [
     {
       label: 'Upload',
       icon: 'ArrowUpOnSquareIcon',
@@ -166,7 +164,7 @@ export const Header: React.FC<HeaderProps> = ({
               iconOnly
             />
             {showCoverActions && (
-              <ActionDropdown actions={dropDownActions} customStyle="absolute right-0 top-7" />
+              <List items={dropDownActions} customStyle="absolute right-0 top-7" />
             )}
           </Stack>
         </Card>
@@ -202,9 +200,7 @@ export const Header: React.FC<HeaderProps> = ({
               greyBg
               iconOnly
             />
-            {showAvatarActions && (
-              <ActionDropdown actions={dropDownActions} customStyle="absolute top-7" />
-            )}
+            {showAvatarActions && <List items={dropDownActions} customStyle="absolute top-7" />}
           </div>
         </Stack>
       </div>

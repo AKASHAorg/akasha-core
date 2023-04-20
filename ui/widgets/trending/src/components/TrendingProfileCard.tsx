@@ -49,11 +49,10 @@ const TrendingProfileCard: React.FC<ITrendingProfileCardProps> = props => {
     noProfilesLabel,
     followLabel,
     unfollowLabel,
-    followersLabel,
+    // followersLabel,
     profileAnchorLink,
     followedProfiles,
   } = props;
-  console.log(isLoadingProfiles);
 
   return (
     <BasicCardBox noBorder={true} pad="0" elevation="md">

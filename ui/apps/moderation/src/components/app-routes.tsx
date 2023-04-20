@@ -8,31 +8,47 @@ import {
   Dashboard,
   Overview,
   Moderators,
+  ModeratorDetailPage,
+  DismissModeratorPage,
   TransparencyLog,
   TransparencyLogItem,
   ModerationValue,
+  EditCategoriesPage,
+  EditContactInfoPage,
+  EditMaxApplicantsPage,
+  ResignRolePage,
+  ResignConfirmationPage,
 } from '../pages';
 
 import routes, {
   DASHBOARD,
+  DISMISS_MODERATOR,
+  EDIT_CATEGORIES,
+  EDIT_CONTACT_INFO,
+  EDIT_MAX_APPLICANTS,
+  RESIGN_CONFIRMATION,
+  RESIGN_ROLE,
   HISTORY,
   HISTORY_ITEM,
   HOME,
   MODERATION_VALUE,
   MODERATORS,
+  VIEW_MODERATOR,
 } from '../routes';
 
 const { Box } = DS;
 
 const AppRoutes: React.FC<RootComponentProps> = props => {
-  const { layoutConfig } = props;
-
   const loginQuery = useGetLogin();
 
   const checkModeratorQuery = useCheckModerator(loginQuery.data?.pubKey);
   const checkModeratorResp = checkModeratorQuery.data;
 
   const isAuthorised = React.useMemo(() => checkModeratorResp === 200, [checkModeratorResp]);
+
+  const isAdmin = false;
+
+  const navigateTo = props.plugins['@akashaorg/app-routing']?.routing?.navigateTo;
 
   return (
     <Box>
@@ -46,24 +62,64 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             path={routes[DASHBOARD]}
             element={
               <Dashboard
-                {...props}
                 user={loginQuery.data?.pubKey}
                 isAuthorised={isAuthorised}
-                slotId={layoutConfig.modalSlotId}
+                isAdmin={isAdmin}
+                navigateTo={navigateTo}
               />
             }
           />
 
-          <Route path={routes[MODERATORS]} element={<Moderators {...props} />} />
+          <Route
+            path={routes[EDIT_CATEGORIES]}
+            element={<EditCategoriesPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[EDIT_CONTACT_INFO]}
+            element={<EditContactInfoPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[EDIT_MAX_APPLICANTS]}
+            element={
+              <EditMaxApplicantsPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />
+            }
+          />
+
+          <Route
+            path={routes[RESIGN_ROLE]}
+            element={
+              <ResignRolePage
+                user={loginQuery.data?.pubKey}
+                isAdmin={isAdmin}
+                navigateTo={navigateTo}
+              />
+            }
+          />
+
+          <Route
+            path={routes[RESIGN_CONFIRMATION]}
+            element={
+              <ResignConfirmationPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />
+            }
+          />
+
+          <Route path={routes[MODERATORS]} element={<Moderators navigateTo={navigateTo} />} />
+
+          <Route
+            path={routes[VIEW_MODERATOR]}
+            element={<ModeratorDetailPage navigateTo={navigateTo} />}
+          />
+
+          <Route
+            path={routes[DISMISS_MODERATOR]}
+            element={<DismissModeratorPage navigateTo={navigateTo} />}
+          />
 
           <Route
             path={routes[HISTORY]}
-            element={
-              <TransparencyLog
-                user={loginQuery.data?.pubKey}
-                navigateTo={props.plugins['@akashaorg/app-routing']?.routing?.navigateTo}
-              />
-            }
+            element={<TransparencyLog user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
           />
 
           <Route path={routes[HISTORY_ITEM]} element={<TransparencyLogItem />} />

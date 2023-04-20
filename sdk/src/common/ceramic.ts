@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '@akashaorg/typings/sdk';
 import DB from '../db/index';
-import Web3Connector from '../common/web3.connector';
-import EventBus from '../common/event-bus';
+import Web3Connector from './web3.connector';
+import EventBus from './event-bus';
 import Logging from '../logging/index';
 import Settings from '../settings/index';
 import Gql from '../gql/index';
@@ -24,6 +24,8 @@ export default class CeramicService {
   private _composeClient: ComposeClient;
   private _didSession?: DIDSession;
   private _gql: Gql;
+  private _ceramic_endpoint: string;
+
   constructor(
     @inject(TYPES.Db) db: DB,
     @inject(TYPES.Web3) web3: Web3Connector,
@@ -38,12 +40,14 @@ export default class CeramicService {
     this._log = log.create('AWF_Ceramic');
     this._settings = settings;
     this._gql = gql;
+    this._ceramic_endpoint = process.env.CERAMIC_API_ENDPOINT || '';
     this._composeClient = new ComposeClient({
-      ceramic: process.env.CERAMIC_API_ENDPOINT as string,
+      ceramic: this._ceramic_endpoint,
       definition: definition,
     });
   }
-  async connect() {
+
+  async connect(): Promise<DIDSession> {
     const chainNameSpace = 'eip155';
     const chainId = this._web3.networkId[this._web3.network];
     const chainIdNameSpace = `${chainNameSpace}:${chainId}`;
@@ -59,17 +63,45 @@ export default class CeramicService {
     const authMethod = await EthereumWebAuth.getAuthMethod(web3Provider, accountId);
     this._didSession = await DIDSession.authorize(authMethod, {
       resources: this._composeClient.resources,
+      expiresInSecs: 60 * 60 * 24 * 7, // 1 week
     });
     this._composeClient.setDID(this._didSession.did);
+    return this._didSession;
   }
+
+  async restoreSession(serialisedSession: string): Promise<DIDSession> {
+    this._didSession = await DIDSession.fromSession(serialisedSession);
+    if (this._didSession.hasSession && this._didSession.hasSession) {
+      return this.connect();
+    }
+    this._composeClient.setDID(this._didSession.did);
+    return this._didSession;
+  }
+
   getComposeClient() {
     return this._composeClient;
   }
+
+  hasSession(): boolean {
+    return !!this._didSession;
+  }
+
+  async setCeramicEndpoint(endPoint: string) {
+    this._ceramic_endpoint = endPoint;
+    await this.disconnect();
+  }
+
+  getOptions() {
+    return {
+      endpointURL: this._ceramic_endpoint,
+    };
+  }
+
   async disconnect() {
     if (this._didSession) {
       this._didSession = undefined;
       this._composeClient = new ComposeClient({
-        ceramic: process.env.CERAMIC_API_ENDPOINT as string,
+        ceramic: this._ceramic_endpoint,
         definition: definition,
       });
     }
