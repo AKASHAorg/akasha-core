@@ -1,6 +1,5 @@
 import getSDK from '@akashaorg/awf-sdk';
-import { lastValueFrom } from 'rxjs';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { logError } from './utils/error-handler';
 
 export const APP_DESCRIPTION_KEY = 'App_Description';

@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import getSDK from '@akashaorg/awf-sdk';
 import { checkStatus } from './use-moderation';

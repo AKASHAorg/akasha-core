@@ -25,7 +25,6 @@ import { throwError } from '../common/error-handling';
 import GqlNew from '../gql/index.new';
 import { GetProfilesQueryVariables } from '@akashaorg/typings/sdk/graphql-operation-types-new';
 import { ProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
-import { DID } from 'dids';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
@@ -53,6 +52,10 @@ class AWF_Profile {
     this._gql = gql;
   }
 
+  /**
+   * Create a new profile
+   * @param profileData - {@link ProfileInput} - profileData.name is mandatory
+   */
   async createProfile(profileData: ProfileInput) {
     try {
       const result = await this._gql.getAPI().CreateProfile({
@@ -76,6 +79,42 @@ class AWF_Profile {
     }
   }
 
+  /**
+   * Update a profile using the profile id.
+   * @remarks The id can be found on the root object returned from getProfileByDid call
+   * @param id - string - profileData.id received from getProfileByDid call
+   * @param profileData - ProfileInput - fields of the profile to update
+   * @see {@link GetProfileByDidQuery} for the profileData.id
+   */
+  async updateProfile(id: string, profileData: ProfileInput) {
+    try {
+      const result = await this._gql.getAPI().UpdateProfile({
+        i: {
+          content: {
+            ...profileData,
+          },
+          id,
+        },
+      });
+      if (!result.updateProfile) {
+        return throwError('Failed to update profile.', ['sdk', 'profile', 'updateProfile']);
+      }
+      return createFormattedValue(result.updateProfile.document);
+    } catch (err) {
+      throwError(`Failed to update profile: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'updateProfile',
+      ]);
+    }
+  }
+
+  /**
+   * Get a list of profiles. Defaults to last 5 profiles.
+   * @param opt - GetProfilesQueryVariables
+   * @param opt.last- number - number of X last profiles to return
+   * @param opt.first - number - number of X first profiles to return
+   */
   async getProfiles(opt?: GetProfilesQueryVariables) {
     const options = opt || {};
     if (!opt) {
@@ -96,6 +135,9 @@ class AWF_Profile {
     }
   }
 
+  /**
+   * Get the current user profile
+   */
   async getMyProfile() {
     try {
       const result = await this._gql.getAPI().GetMyProfile();
@@ -112,9 +154,16 @@ class AWF_Profile {
     }
   }
 
-  getProfileByDid(did: string) {
+  /**
+   * Get a profile by the profile id.
+   * @param did - string - profile did
+   */
+  async getProfileByDid(did: string) {
     try {
-      return this._gql.getAPI().GetProfileByDid({ id: did });
+      const resp = await this._gql.getAPI().GetProfileByDid({ id: did });
+      if (resp.node && 'profile' in resp.node) {
+        return createFormattedValue(resp.node.profile);
+      }
     } catch (err) {
       throwError(`Failed to get profile: ${did}: ${(err as Error).message}`, [
         'sdk',
@@ -123,6 +172,38 @@ class AWF_Profile {
       ]);
     }
   }
+
+  async getFollowersByDid(did: string) {
+    try {
+      const resp = await this._gql.getAPI().GetFollowersListByDid({ id: did });
+      if (resp.node && 'profile' in resp.node) {
+        return createFormattedValue(resp.node.profile?.followers);
+      }
+    } catch (err) {
+      throwError(`Failed to get followers: ${did}: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'getFollowers',
+      ]);
+    }
+  }
+
+  async getFollowingByDid(did: string) {
+    try {
+      const resp = await this._gql.getAPI().GetFollowingListByDid({ id: did });
+      if (resp.node && 'followList' in resp.node) {
+        return createFormattedValue(resp.node.followList);
+      }
+    } catch (err) {
+      throwError(`Failed to get following: ${did}: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'getFollowing',
+      ]);
+    }
+  }
+
+  async createFollow() {}
 
   /**
    * Mutation request to add a profile provider to the profile object

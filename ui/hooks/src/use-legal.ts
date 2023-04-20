@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { LEGAL_DOCS } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';

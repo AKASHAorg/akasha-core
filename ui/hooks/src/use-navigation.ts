@@ -1,10 +1,6 @@
 import React from 'react';
-import { useQueryClient } from 'react-query';
-
 import { NavigateToParams, EntityTypes } from '@akashaorg/typings/ui';
 import { IContentClickDetails } from '@akashaorg/design-system/lib/components/EntryCard/entry-box';
-
-import { COMMENT_KEY } from './index';
 
 /**
  * Hook to navigation to entry's page
