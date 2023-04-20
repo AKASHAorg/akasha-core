@@ -24,9 +24,9 @@ export const useMutationListener = <TVars>(mutationKey: MutationKey) => {
   const queryClient = useQueryClient();
   const mutationCache = queryClient.getMutationCache();
   React.useEffect(() => {
-    const unsubscribe = mutationCache.subscribe(mutation => {
-      if (mutation.mutation.options.mutationKey === mutationKey) {
-        setMutation(mutation as unknown as Mutation<unknown, unknown, TVars>);
+    const unsubscribe = mutationCache.subscribe(event => {
+      if (event.mutation && event.mutation.options.mutationKey === mutationKey) {
+        setMutation(event.mutation as unknown as Mutation<unknown, unknown, TVars>);
       }
     });
     return () => {
