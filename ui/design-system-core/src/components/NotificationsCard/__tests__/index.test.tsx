@@ -83,7 +83,7 @@ describe('<NotificationsCard /> Component', () => {
   it('has correct label based on type (POST_MENTION)', () => {
     const { getByText } = componentWrapper;
 
-    const mentionedInAPostLabel = getByText(/ mentioned you in a post/);
+    const mentionedInAPostLabel = getByText(/mentioned you in a post/i);
     expect(mentionedInAPostLabel).toBeDefined();
   });
 });
