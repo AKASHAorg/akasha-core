@@ -59,4 +59,4 @@ export enum StepStatus {
   GETTING_KEYS = 'gettingKeys',
 }
 
-export type ProfileStatType = 'followers' | 'following';
+export type EngagementType = 'followers' | 'following';

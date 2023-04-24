@@ -4,8 +4,7 @@ import { apply, tw } from '@twind/core';
 import AvatarImage from './AvatarImage';
 
 import { getAvatarFromSeed } from '../../utils/get-avatar-from-seed';
-
-export type AvatarSrc = { url?: string; fallbackUrl?: string };
+import { ImageSrc } from '../types/common.types';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
@@ -18,7 +17,7 @@ export interface IAvatarProps {
   alt?: string;
   publicImgPath?: string;
   backgroundColor?: string;
-  src?: AvatarSrc;
+  src?: ImageSrc;
   size?: AvatarSize;
   border?: AvatarBorderSize;
   borderColor?: AvatarBorderColor;
