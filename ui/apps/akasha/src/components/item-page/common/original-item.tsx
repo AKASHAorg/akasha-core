@@ -1,6 +1,4 @@
 import * as React from 'react';
-import DS from '@akashaorg/design-system';
-
 import { LoginState, useAnalytics, useEntryNavigation } from '@akashaorg/ui-awf-hooks';
 import {
   EntityTypes,
@@ -16,8 +14,7 @@ import { UseQueryResult } from 'react-query';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 import Box from '@akashaorg/design-system-core/lib/components/Box';
 import EntryBox from '@akashaorg/design-system-components/lib/components/Entry/EntryBox';
-
-const { EditorPlaceholder } = DS;
+import EditorPlaceholder from '@akashaorg/design-system-components/lib/components/EditorPlaceholder';
 
 type Props = {
   itemId: string;
