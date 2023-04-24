@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { TestThemeProvider } from '@akashaorg/design-system/src/test-utils/providers';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import i18n from 'i18next';
 
 const queryClient = new QueryClient();

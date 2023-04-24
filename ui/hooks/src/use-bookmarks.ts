@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { EntityTypes } from '@akashaorg/typings/ui';
 import { logError } from './utils/error-handler';
@@ -13,7 +13,7 @@ const entriesBookmarks = 'entries-bookmarks';
  * ```typescript
  * const getBookmarksQuery = useGetBookmarks('0x243kb4bret');
  *
-  const bookmarks = getBookmarksQuery.data;
+ const bookmarks = getBookmarksQuery.data;
  * ```
  */
 export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
@@ -48,7 +48,7 @@ export function useGetBookmarks(loggedEthAddress: string, enabler = true) {
  * ```typescript
  * const saveBookmarkQuery = useSaveBookmark();
  *
-  saveBookmarkQuery.mutate({entryId: 'dbkjjouyahljfe', itemType: 'item type'});
+ saveBookmarkQuery.mutate({entryId: 'dbkjjouyahljfe', itemType: 'item type'});
  * ```
  */
 
@@ -70,7 +70,7 @@ export function useSaveBookmark() {
     {
       onMutate: async (entryData: { entryId: string; itemType: EntityTypes }) => {
         const { entryId, itemType } = entryData;
-        await queryClient.cancelQueries(BOOKMARKED_ENTRIES_KEY);
+        await queryClient.cancelQueries([BOOKMARKED_ENTRIES_KEY]);
         const prevBmks: { entryId: string; type: EntityTypes }[] =
           queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];
         const newBmks = prevBmks.slice();
@@ -98,7 +98,7 @@ export function useSaveBookmark() {
  * ```typescript
  * const deleteBookmarkQuery = useDeleteBookmark();
  *
-  deleteBookmarkQuery.mutate('dbkjjouyahljfe');
+ deleteBookmarkQuery.mutate('dbkjjouyahljfe');
  * ```
  */
 export function useDeleteBookmark() {
@@ -115,7 +115,7 @@ export function useDeleteBookmark() {
     },
     {
       onMutate: async (itemId: string) => {
-        await queryClient.cancelQueries(BOOKMARKED_ENTRIES_KEY);
+        await queryClient.cancelQueries([BOOKMARKED_ENTRIES_KEY]);
 
         const prevBmks: { entryId: string; type: EntityTypes }[] =
           queryClient.getQueryData([BOOKMARKED_ENTRIES_KEY]) || [];

@@ -53,7 +53,8 @@ const Index = (props: IndexProps) => {
     return pubKey;
   }, [profileState, pubKey]);
 
-  const isLoading = profileDataQuery.status === 'loading' || profileDataQuery.status === 'idle';
+  const isLoading =
+    profileDataQuery.fetchStatus === 'fetching' || profileDataQuery.fetchStatus === 'idle';
 
   const handleCTAClick = () => {
     routing.navigateTo({
