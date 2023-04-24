@@ -12,6 +12,7 @@ import {
 import { LoginState } from '@akashaorg/ui-awf-hooks/lib/use-login';
 import { Logger } from '@akashaorg/awf-sdk';
 import EntryFeed from './entry-feed';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export type FeedWidgetProps = {
   logger: Logger;
@@ -47,14 +48,16 @@ export type FeedWidgetProps = {
   };
   trackEvent?: (eventData: Omit<TrackEventData, 'eventType'>) => void;
 };
-
+const queryClient = new QueryClient();
 const FeedWidgetRoot: React.FC<FeedWidgetProps> = props => {
   return (
-    <I18nextProvider i18n={props.i18n}>
-      {props.itemType === EntityTypes.POST && <EntryFeed {...props} />}
-      {props.itemType === EntityTypes.REPLY && <EntryFeed {...props} itemSpacing={0} />}
-      {/* {props.itemType === EntityTypes.PROFILE && <ProfileFeed {...props} />} */}
-    </I18nextProvider>
+    <QueryClientProvider client={queryClient}>
+      <I18nextProvider i18n={props.i18n}>
+        {props.itemType === EntityTypes.POST && <EntryFeed {...props} />}
+        {props.itemType === EntityTypes.REPLY && <EntryFeed {...props} itemSpacing={0} />}
+        {/* {props.itemType === EntityTypes.PROFILE && <ProfileFeed {...props} />} */}
+      </I18nextProvider>
+    </QueryClientProvider>
   );
 };
 

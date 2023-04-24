@@ -61,8 +61,9 @@ const FeedPage: React.FC<FeedPageProps & RootComponentProps> = props => {
   const dismissedCardId = 'dismiss-private-alpha-notification';
   const [dismissed, setDismissed] = useDismissedCard();
 
-  const { mutations: pendingPostStates } =
-    useMutationsListener<IPublishData>(CREATE_POST_MUTATION_KEY);
+  const { mutations: pendingPostStates } = useMutationsListener<IPublishData>([
+    CREATE_POST_MUTATION_KEY,
+  ]);
 
   const postsReq = useInfinitePosts(15);
 

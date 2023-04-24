@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import {
   TYPES,
-  PROFILE_EVENTS,
   TagName,
   TagNameSchema,
   PubKey,
@@ -12,19 +11,20 @@ import {
   EthAddress,
   EthAddressSchema,
 } from '@akashaorg/typings/sdk';
-import Gql from '../gql';
 import AWF_Auth from '../auth';
 import Logging from '../logging';
 import { resizeImage } from '../helpers/img';
 import EventBus from '../common/event-bus';
 import pino from 'pino';
-import { UserProfileFragmentDataFragment } from '@akashaorg/typings/sdk/graphql-operation-types';
 import { DataProviderInput } from '@akashaorg/typings/sdk/graphql-types';
 import { createFormattedValue } from '../helpers/observable';
 import IpfsConnector from '../common/ipfs.connector';
 import { z } from 'zod';
 import { validate } from '../common/validator';
 import { throwError } from '../common/error-handling';
+import GqlNew from '../gql/index.new';
+import { GetProfilesQueryVariables } from '@akashaorg/typings/sdk/graphql-operation-types-new';
+import { ProfileInput } from '@akashaorg/typings/sdk/graphql-types-new';
 // tslint:disable-next-line:no-var-requires
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const urlSource = require('ipfs-utils/src/files/url-source');
@@ -32,7 +32,7 @@ const urlSource = require('ipfs-utils/src/files/url-source');
 @injectable()
 class AWF_Profile {
   private _log: pino.Logger;
-  private _gql: Gql;
+  private _gql: GqlNew;
   private _auth: AWF_Auth;
   private _globalChannel: EventBus;
   private _ipfs: IpfsConnector;
@@ -40,17 +40,170 @@ class AWF_Profile {
 
   constructor(
     @inject(TYPES.Log) log: Logging,
-    @inject(TYPES.Gql) gql: Gql,
     @inject(TYPES.Auth) auth: AWF_Auth,
     @inject(TYPES.EventBus) globalChannel: EventBus,
     @inject(TYPES.IPFS) ipfs: IpfsConnector,
+    @inject(TYPES.GqlNew) gql: GqlNew,
   ) {
     this._log = log.create('AWF_Profile');
-    this._gql = gql;
     this._auth = auth;
     this._globalChannel = globalChannel;
     this._ipfs = ipfs;
+    this._gql = gql;
   }
+
+  /**
+   * Create a new profile
+   * @param profileData - {@link ProfileInput} - profileData.name is mandatory
+   */
+  async createProfile(profileData: ProfileInput) {
+    try {
+      const result = await this._gql.getAPI().CreateProfile({
+        i: {
+          content: {
+            ...profileData,
+            createdAt: new Date().toISOString(),
+          },
+        },
+      });
+      if (!result.createProfile) {
+        return throwError('Failed to create profile.', ['sdk', 'profile', 'createProfile']);
+      }
+      return createFormattedValue(result.createProfile.document);
+    } catch (err) {
+      throwError(`Failed to create profile: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'createProfile',
+      ]);
+    }
+  }
+
+  /**
+   * Update a profile using the profile id.
+   * @remarks The id can be found on the root object returned from getProfileByDid call
+   * @param id - string - profileData.id received from getProfileByDid call
+   * @param profileData - ProfileInput - fields of the profile to update
+   * @see {@link GetProfileByDidQuery} for the profileData.id
+   */
+  async updateProfile(id: string, profileData: ProfileInput) {
+    try {
+      const result = await this._gql.getAPI().UpdateProfile({
+        i: {
+          content: {
+            ...profileData,
+          },
+          id,
+        },
+      });
+      if (!result.updateProfile) {
+        return throwError('Failed to update profile.', ['sdk', 'profile', 'updateProfile']);
+      }
+      return createFormattedValue(result.updateProfile.document);
+    } catch (err) {
+      throwError(`Failed to update profile: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'updateProfile',
+      ]);
+    }
+  }
+
+  /**
+   * Get a list of profiles. Defaults to last 5 profiles.
+   * @param opt - GetProfilesQueryVariables
+   * @param opt.last- number - number of X last profiles to return
+   * @param opt.first - number - number of X first profiles to return
+   */
+  async getProfiles(opt?: GetProfilesQueryVariables) {
+    const options = opt || {};
+    if (!opt) {
+      options['last'] = 5;
+    }
+    try {
+      const result = await this._gql.getAPI().GetProfiles(options);
+      if (!result.profileIndex) {
+        return throwError('Failed to get profiles.', ['sdk', 'profile', 'getProfiles']);
+      }
+      return createFormattedValue(result.profileIndex);
+    } catch (err) {
+      throwError(`Failed to get profiles: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'getProfiles',
+      ]);
+    }
+  }
+
+  /**
+   * Get the current user profile
+   */
+  async getMyProfile() {
+    try {
+      const result = await this._gql.getAPI().GetMyProfile();
+      if (!result.viewer) {
+        return throwError('Failed to get my profile.', ['sdk', 'profile', 'getMyProfile']);
+      }
+      return createFormattedValue(result.viewer.profile);
+    } catch (err) {
+      throwError(`Failed to get my profile: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'getMyProfile',
+      ]);
+    }
+  }
+
+  /**
+   * Get a profile by the profile id.
+   * @param did - string - profile did
+   */
+  async getProfileByDid(did: string) {
+    try {
+      const resp = await this._gql.getAPI().GetProfileByDid({ id: did });
+      if (resp.node && 'profile' in resp.node) {
+        return createFormattedValue(resp.node.profile);
+      }
+    } catch (err) {
+      throwError(`Failed to get profile: ${did}: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'getProfileByDid',
+      ]);
+    }
+  }
+
+  async getFollowersByDid(did: string) {
+    try {
+      const resp = await this._gql.getAPI().GetFollowersListByDid({ id: did });
+      if (resp.node && 'profile' in resp.node) {
+        return createFormattedValue(resp.node.profile?.followers);
+      }
+    } catch (err) {
+      throwError(`Failed to get followers: ${did}: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'getFollowers',
+      ]);
+    }
+  }
+
+  async getFollowingByDid(did: string) {
+    try {
+      const resp = await this._gql.getAPI().GetFollowingListByDid({ id: did });
+      if (resp.node && 'followList' in resp.node) {
+        return createFormattedValue(resp.node.followList);
+      }
+    } catch (err) {
+      throwError(`Failed to get following: ${did}: ${(err as Error).message}`, [
+        'sdk',
+        'profile',
+        'getFollowing',
+      ]);
+    }
+  }
+
+  async createFollow() {}
 
   /**
    * Mutation request to add a profile provider to the profile object
@@ -58,23 +211,10 @@ class AWF_Profile {
    */
   @validate(z.array(DataProviderInputSchema))
   async addProfileProvider(opt: DataProviderInput[]) {
-    const auth = await this._auth.authenticateMutationData(
-      opt as unknown as Record<string, unknown>[],
-    );
-    const newProfileProvider = await this._gql.getAPI().AddProfileProvider(
-      { data: opt },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
-    // @emits PROFILE_EVENTS.ADD_PROVIDER
-    this._globalChannel.next({
-      data: newProfileProvider,
-      event: PROFILE_EVENTS.ADD_PROVIDER,
-      args: opt,
+    return createFormattedValue({
+      addProfileProvider: {},
     });
-    return newProfileProvider;
+    // return throwError('Deprecated', ['sdk', 'profile', 'addProfileProvider']);
   }
 
   /**
@@ -82,24 +222,8 @@ class AWF_Profile {
    * @param opt - DataProviderInput
    */
   @validate(z.array(DataProviderInputSchema))
-  async makeDefaultProvider(opt: DataProviderInput[]) {
-    const auth = await this._auth.authenticateMutationData(
-      opt as unknown as Record<string, unknown>[],
-    );
-    const makeDefaultProvider = await this._gql.getAPI().MakeDefaultProvider(
-      { data: opt },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
-    // @emits PROFILE_EVENTS.DEFAULT_PROVIDER
-    this._globalChannel.next({
-      data: makeDefaultProvider,
-      event: PROFILE_EVENTS.DEFAULT_PROVIDER,
-      args: opt,
-    });
-    return makeDefaultProvider;
+  async makeDefaultProvider(opt: DataProviderInput[]): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'makeDefaultProvider']);
   }
 
   /**
@@ -107,23 +231,8 @@ class AWF_Profile {
    * @param userName - Username
    */
   @validate(UsernameSchema)
-  async registerUserName(userName: Username) {
-    z.string().min(3).parse(userName);
-    const auth = await this._auth.authenticateMutationData(userName);
-    const registerUserName = await this._gql.getAPI().RegisterUsername(
-      { name: userName },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
-    // @emits PROFILE_EVENTS.REGISTER_USERNAME
-    this._globalChannel.next({
-      data: registerUserName,
-      event: PROFILE_EVENTS.REGISTER_USERNAME,
-      args: { userName },
-    });
-    return registerUserName;
+  async registerUserName(userName: Username): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'registerUserName']);
   }
 
   /**
@@ -136,18 +245,8 @@ class AWF_Profile {
       pubKey: PubKeySchema.optional(),
     }),
   )
-  async getProfile(opt: { ethAddress?: EthAddress; pubKey?: PubKey }) {
-    let resp: UserProfileFragmentDataFragment;
-    if (opt.pubKey) {
-      const tmp = await this._gql.getAPI().ResolveProfile({ pubKey: opt.pubKey });
-      resp = tmp.resolveProfile;
-    } else if (opt.ethAddress) {
-      const tmp = await this._gql.getAPI().GetProfile({ ethAddress: opt.ethAddress });
-      resp = tmp.getProfile;
-    } else {
-      throw new Error('Must provide ethAddress or pubKey value');
-    }
-    return createFormattedValue(resp);
+  async getProfile(opt: { ethAddress?: EthAddress; pubKey?: PubKey }): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'getProfile']);
   }
 
   /**
@@ -155,22 +254,8 @@ class AWF_Profile {
    * @param pubKey - public key
    */
   @validate(PubKeySchema)
-  async follow(pubKey: PubKey) {
-    const auth = await this._auth.authenticateMutationData(pubKey);
-    const followResult = await this._gql.getAPI().Follow(
-      { pubKey: pubKey },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
-    // @emits PROFILE_EVENTS.FOLLOW
-    this._globalChannel.next({
-      data: followResult,
-      event: PROFILE_EVENTS.FOLLOW,
-      args: { pubKey },
-    });
-    return followResult;
+  async follow(pubKey: PubKey): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'follow']);
   }
 
   /**
@@ -178,22 +263,8 @@ class AWF_Profile {
    * @param pubKey - public key
    */
   @validate(PubKeySchema)
-  async unFollow(pubKey: PubKey) {
-    const auth = await this._auth.authenticateMutationData(pubKey);
-    const unFollowResult = await this._gql.getAPI().UnFollow(
-      { pubKey: pubKey },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
-    // @emits PROFILE_EVENTS.UNFOLLOW
-    this._globalChannel.next({
-      data: unFollowResult,
-      event: PROFILE_EVENTS.UNFOLLOW,
-      args: { pubKey },
-    });
-    return unFollowResult;
+  async unFollow(pubKey: PubKey): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'unFollow']);
   }
 
   /**
@@ -201,8 +272,8 @@ class AWF_Profile {
    * @param opt - object - follower and following public keys
    */
   @validate(z.object({ follower: PubKeySchema, following: PubKeySchema }))
-  async isFollowing(opt: { follower: PubKey; following: PubKey }) {
-    return this._gql.getAPI().IsFollowing({ follower: opt.follower, following: opt.following });
+  async isFollowing(opt: { follower: PubKey; following: PubKey }): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'isFollowing']);
   }
 
   /**
@@ -264,58 +335,15 @@ class AWF_Profile {
    * @param name - name to search for
    */
   @validate(z.string().min(3))
-  async searchProfiles(name: string) {
-    return this._gql.getAPI().SearchProfiles({ name: name });
+  async searchProfiles(name: string): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'searchProfiles']);
   }
 
   /**
    *
    */
-  async getTrending() {
-    return this._gql.getAPI().SearchProfiles({ name: '' });
-  }
-
-  /**
-   *
-   * @param tagName - tag name
-   */
-  @validate(TagNameSchema)
-  async toggleTagSubscription(tagName: TagName) {
-    const auth = await this._auth.authenticateMutationData({ sub: tagName });
-    const toggledTag = await this._gql.getAPI().ToggleInterestSub(
-      { sub: tagName },
-      {
-        Authorization: `Bearer ${auth.token}`,
-        Signature: auth.signedData.signature.toString(),
-      },
-    );
-    // @emits PROFILE_EVENTS.TAG_SUBSCRIPTION
-    this._globalChannel.next({
-      data: { status: toggledTag },
-      event: PROFILE_EVENTS.TAG_SUBSCRIPTION,
-      args: { tagName },
-    });
-    return toggledTag;
-  }
-
-  /**
-   *
-   */
-  async getTagSubscriptions() {
-    try {
-      const currUser = await this._auth.getCurrentUser();
-      if (currUser && currUser.id) {
-        const result = await this.getInterests(currUser.id);
-        return createFormattedValue(result?.data);
-      }
-      throwError('User not authenticated', ['sdk', 'profile', 'getTagSubscriptions']);
-    } catch (e) {
-      throwError(`Error getting tag subscriptions: ${(e as Error).message}`, [
-        'sdk',
-        'profile',
-        'getTagSubscriptions',
-      ]);
-    }
+  async getTrending(): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'getTrending']);
   }
 
   /**
@@ -323,22 +351,24 @@ class AWF_Profile {
    * @param tagName - tag name
    */
   @validate(TagNameSchema)
-  async isSubscribedToTag(tagName: TagName) {
-    try {
-      const res = await this.getTagSubscriptions();
-      if (!res || !res?.data?.getInterests?.length) {
-        return false;
-      }
-      const el = res.data.getInterests.indexOf(tagName);
-      return el !== -1;
-    } catch (e) {
-      throwError(`Error getting tag subscriptions: ${(e as Error).message}`, [
-        'sdk',
-        'profile',
-        'isSubscribedToTag',
-        tagName,
-      ]);
-    }
+  async toggleTagSubscription(tagName: TagName): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'toggleTagSubscription']);
+  }
+
+  /**
+   *
+   */
+  async getTagSubscriptions(): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'getTagSubscriptions']);
+  }
+
+  /**
+   *
+   * @param tagName - tag name
+   */
+  @validate(TagNameSchema)
+  async isSubscribedToTag(tagName: TagName): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profile', 'isSubscribedToTag']);
   }
 
   /**
@@ -346,17 +376,8 @@ class AWF_Profile {
    * @param keyword - keyword to search for
    */
   @validate(z.string().min(3))
-  async globalSearch(keyword: string) {
-    try {
-      return this._gql.getAPI().GlobalSearch({ keyword: keyword });
-    } catch (e) {
-      throwError(`Error getting global search: ${(e as Error).message}`, [
-        'sdk',
-        'profile',
-        'globalSearch',
-        keyword,
-      ]);
-    }
+  async globalSearch(keyword: string): Promise<any> {
+    return throwError('Deprecated', ['sdk', 'profile', 'globalSearch']);
   }
 
   /**
@@ -366,18 +387,8 @@ class AWF_Profile {
    * @param offset - offset to start from
    */
   @validate(z.string(), z.number(), z.number().optional())
-  async getFollowers(pubKey: string, limit: number, offset?: number) {
-    try {
-      const resp = await this._gql.getAPI().GetFollowers({ pubKey, limit, offset });
-      return createFormattedValue(resp);
-    } catch (e) {
-      throwError(`Cannot get followers: ${(e as Error).message}`, [
-        'sdk',
-        'profiles',
-        'getFollowers',
-        pubKey,
-      ]);
-    }
+  async getFollowers(pubKey: string, limit: number, offset?: number): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profiles', 'getFollowers']);
   }
 
   /**
@@ -387,18 +398,8 @@ class AWF_Profile {
    * @param offset - offset to start from
    */
   @validate(z.string(), z.number(), z.number().optional())
-  async getFollowing(pubKey: string, limit: number, offset?: number) {
-    try {
-      const resp = await this._gql.getAPI().GetFollowing({ pubKey, limit, offset });
-      return createFormattedValue(resp);
-    } catch (e) {
-      throwError(`Cannot get following: ${(e as Error).message}`, [
-        'sdk',
-        'profiles',
-        'getFollowing',
-        pubKey,
-      ]);
-    }
+  async getFollowing(pubKey: string, limit: number, offset?: number): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profiles', 'getFollowing']);
   }
 
   /**
@@ -406,18 +407,8 @@ class AWF_Profile {
    * @param pubKey - public key of the user
    */
   @validate(z.string())
-  async getInterests(pubKey: string) {
-    try {
-      const resp = await this._gql.getAPI().GetInterests({ pubKey });
-      return createFormattedValue(resp);
-    } catch (e) {
-      throwError(`Cannot get interests: ${(e as Error).message}`, [
-        'sdk',
-        'profiles',
-        'getInterests',
-        pubKey,
-      ]);
-    }
+  async getInterests(pubKey: string): Promise<any> {
+    return throwError('Not implemented', ['sdk', 'profiles', 'getInterests']);
   }
 }
 

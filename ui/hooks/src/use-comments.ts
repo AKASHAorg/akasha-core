@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import getSDK from '@akashaorg/awf-sdk';
 import { DataProviderInput } from '@akashaorg/typings/sdk';
 import { IPublishData } from '@akashaorg/typings/ui';
@@ -251,7 +251,7 @@ export function useDeleteComment(commentID: string) {
     },
     onSettled: async () => {
       await queryClient.invalidateQueries([COMMENT_KEY, commentID]);
-      await queryClient.invalidateQueries(COMMENTS_KEY);
+      await queryClient.invalidateQueries([COMMENTS_KEY]);
     },
   });
 }
@@ -302,9 +302,9 @@ export function useCreateComment() {
       },
       onSettled: () => {
         //shouldn't await 'COMMENTS_KEY' as it creates a race condition
-        queryClient.invalidateQueries(COMMENTS_KEY);
+        queryClient.invalidateQueries([COMMENTS_KEY]);
       },
-      mutationKey: PUBLISH_PENDING_KEY,
+      mutationKey: [PUBLISH_PENDING_KEY],
     },
   );
 }
