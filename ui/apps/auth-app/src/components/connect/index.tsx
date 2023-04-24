@@ -6,15 +6,14 @@ import { EthProviders } from '@akashaorg/typings/sdk';
 import { AnalyticsCategories, RootComponentProps } from '@akashaorg/typings/ui';
 import {
   useAnalytics,
-  useConnectProvider,
   useGetLogin,
   useGetProfile,
   useInjectedProvider,
   useNetworkState,
-  useSignUp,
-  useCheckSignup,
   useIsValidToken,
   useRequiredNetworkName,
+  useConnectWallet,
+  useLogin,
 } from '@akashaorg/ui-awf-hooks';
 
 import ConnectWallet from './connect-wallet';
@@ -31,6 +30,7 @@ export enum ConnectStep {
   INVITE_CODE = 'Invite_Code',
 }
 
+// @TODO: create a getter method in the routing plugin
 export const baseAppLegalRoute = '/@akashaorg/app-legal';
 
 const mapProviders = {
@@ -44,7 +44,6 @@ const Connect: React.FC<RootComponentProps> = props => {
   const [signInComplete, setSignInComplete] = React.useState(false);
   const [inviteToken, setInviteToken] = React.useState<string>('');
   const [validInviteToken, setValidInviteToken] = React.useState<boolean>(false);
-
   const DEFAULT_TOKEN_LENGTH = 24;
 
   const { size } = useViewportSize();
@@ -58,8 +57,6 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   const { t } = useTranslation('app-auth-ewa');
 
-  const connectProviderQuery = useConnectProvider(selectedProvider);
-
   const injectedProviderQuery = useInjectedProvider();
   const injectedProvider = React.useMemo(
     () => injectedProviderQuery.data,
@@ -67,34 +64,21 @@ const Connect: React.FC<RootComponentProps> = props => {
   );
 
   const requiredNetworkQuery = useRequiredNetworkName();
-  const networkStateQuery = useNetworkState(connectProviderQuery.data);
+  const connectWallet = useConnectWallet(selectedProvider);
+  const networkStateQuery = useNetworkState(!!connectWallet.data);
 
   const requiredNetworkName = `${requiredNetworkQuery.data
     .charAt(0)
     .toLocaleUpperCase()}${requiredNetworkQuery.data.substring(1).toLocaleLowerCase()}`;
 
-  const {
-    ethAddress,
-    fullSignUp,
-    signUpState,
-    resetState,
-    connectWallet,
-    error,
-    fireRemainingMessages,
-  } = useSignUp(selectedProvider, true);
-
-  const checkSignupQuery = useCheckSignup(ethAddress);
+  const loginMutation = useLogin();
 
   const networkNotSupported = React.useMemo(() => {
-    if (
-      selectedProvider !== EthProviders.None &&
-      !networkStateQuery.isFetching &&
-      connectProviderQuery.data
-    ) {
+    if (selectedProvider !== EthProviders.None && !networkStateQuery.isFetching) {
       return networkStateQuery.data.networkNotSupported;
     }
     return false;
-  }, [networkStateQuery, selectedProvider, connectProviderQuery.data]);
+  }, [networkStateQuery, selectedProvider]);
 
   const inviteTokenQuery = useIsValidToken({
     inviteToken,
@@ -102,22 +86,12 @@ const Connect: React.FC<RootComponentProps> = props => {
   });
 
   const errorMessage = React.useMemo(() => {
-    if (error && !error.message?.includes('Profile not found')) {
-      if (error.message?.includes(`Please change the ethereum network to`)) {
-        return `To use Akasha World during the alpha period, you'll need to set the ${mapProviders[selectedProvider]} network to ${requiredNetworkName}`;
-      }
-      if (error.message?.includes('user rejected signing')) {
-        return 'You have declined the signature request. You will not be able to proceed unless you accept all signature requests';
-      }
-      if (error.message?.includes('unknown account #0')) {
-        return 'You have changed or disconnected your wallet. Please refresh the page and try again.';
-      }
+    if (requiredNetworkQuery.data !== requiredNetworkName.toLowerCase()) {
+      return `To use Akasha World during the alpha period, you'll need to set the ${mapProviders[selectedProvider]} network to ${requiredNetworkName}`;
     }
 
     return null;
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  }, [requiredNetworkQuery, requiredNetworkName, selectedProvider]);
 
   const searchParam = new URLSearchParams(location.search);
 
@@ -130,23 +104,8 @@ const Connect: React.FC<RootComponentProps> = props => {
   }, [inviteToken]);
 
   React.useEffect(() => {
-    if (connectProviderQuery.isError) {
-      setSelectedProvider(EthProviders.None);
-    }
-  }, [connectProviderQuery.isError]);
-
-  React.useEffect(() => {
-    // if not registered, show invite code page
-    if (checkSignupQuery.data === false && !validInviteToken) {
-      resetState();
-      setStep(ConnectStep.INVITE_CODE);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkSignupQuery.data, ethAddress]);
-
-  React.useEffect(() => {
     // if user is logged in, do not show the connect page
-    if (loginQuery.data?.pubKey && checkSignupQuery.data) {
+    if (loginQuery.data?.id) {
       routingPlugin.current?.handleRedirect({
         search: searchParam,
         fallback: {
@@ -154,44 +113,8 @@ const Connect: React.FC<RootComponentProps> = props => {
         },
       });
     }
-
-    // if user is signed up, do not show the connect page
-    if (loginQuery.data?.pubKey && loginQuery.data?.isNewUser) {
-      routingPlugin.current?.handleRedirect({
-        search: searchParam,
-        fallback: {
-          appName: props.worldConfig.homepageApp,
-        },
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginQuery, props.worldConfig.homepageApp]);
 
-  React.useEffect(() => {
-    if (signInComplete && profileDataReq.isSuccess && !!profileDataReq.data?.userName) {
-      routingPlugin.current?.handleRedirect({
-        search: searchParam,
-        fallback: {
-          appName: props.worldConfig.homepageApp,
-        },
-      });
-    }
-    if (signInComplete && profileDataReq.isSuccess && !profileDataReq.data?.userName) {
-      routingPlugin.current?.navigateTo({
-        appName: '@akashaorg/app-profile',
-        getNavigationUrl: navRoutes => `${navRoutes.myProfile}/edit`,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signInComplete, profileDataReq, props.worldConfig.homepageApp]);
-
-  // const handleSwitchNetworkMetamask = () => {
-  //   switchToRequiredNetwork();
-  // };
-
-  // const handleNetworkRecheck = () => {
-  //   networkStateQuery.refetch();
-  // };
   React.useEffect(() => {
     if (
       connectWallet.isError &&
@@ -218,7 +141,7 @@ const Connect: React.FC<RootComponentProps> = props => {
   };
 
   const handleDisconnect = () => {
-    resetState();
+    // resetState();
     setSelectedProvider(EthProviders.None);
     setStep(ConnectStep.CHOOSE_PROVIDER);
   };
@@ -236,9 +159,13 @@ const Connect: React.FC<RootComponentProps> = props => {
 
   const handleCancelClick = () => {
     setValidInviteToken(false);
-    resetState();
+    // resetState();
     setSelectedProvider(EthProviders.None);
     setStep(ConnectStep.CHOOSE_PROVIDER);
+  };
+
+  const handleSignIn = () => {
+    loginMutation.mutate({ selectedProvider, checkRegistered: true });
   };
 
   return (
@@ -289,39 +216,29 @@ const Connect: React.FC<RootComponentProps> = props => {
           onProviderSelect={handleProviderSelect}
         />
       )}
-      {(step === ConnectStep.CONNECT_WALLET ||
-        (signUpState > 1 && step !== ConnectStep.INVITE_CODE)) &&
+      {(step === ConnectStep.CONNECT_WALLET || step !== ConnectStep.INVITE_CODE) &&
         selectedProvider !== EthProviders.None && (
           <ConnectWallet
-            isActive={
-              (!networkNotSupported && connectProviderQuery.data && validInviteToken) ||
-              checkSignupQuery.data === true
-            }
-            titleLine1Label={t('{{connect}} to AKASHA World', {
-              connect: signUpState > 5 ? 'Connected' : 'Connecting',
-            })}
+            isActive={!networkNotSupported}
+            titleLine1Label={t('Connect to AKASHA World')}
             titleLine2Label={t('using your wallet')}
             selectedProvider={selectedProvider}
-            status={signUpState}
+            status={1}
             errorMessage={t('{{errorMessage}}', { errorMessage })}
             statusLabel={t('{{statusLabel}}', {
-              statusLabel: getStatusLabel(signUpState, errorMessage),
+              statusLabel: getStatusLabel(1, errorMessage),
             })}
             statusDescription={t('{{statusDescription}}', {
-              statusDescription: getStatusDescription(
-                signUpState,
-                errorMessage,
-                selectedProvider,
-                checkSignupQuery.data,
-              ),
+              statusDescription: getStatusDescription(1, errorMessage, selectedProvider, true),
             })}
             yourAddressLabel={t('Your Address')}
-            connectedAddress={ethAddress}
+            connectedAddress={connectWallet.data}
             connectedAddressPlaceholder={t(
               'The address you select to connect with will be shown here',
             )}
             footerLabel={t('Disconnect or change way to connect')}
-            onSignIn={checkSignupQuery.data ? fullSignUp.mutate : fireRemainingMessages}
+            onSignIn={handleSignIn}
+            //onSignIn={checkSignupQuery.data ? fullSignUp.mutate : fireRemainingMessages}
             onSignInComplete={handleSignInComplete}
             onDisconnect={handleDisconnect}
             onConnectWallet={connectWallet.mutate}

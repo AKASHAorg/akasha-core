@@ -32,7 +32,7 @@ export function PendingReply({
 }: Props) {
   const { t } = useTranslation('app-akasha-integration');
   const { mutations: pendingReplyStates } = useMutationsListener<IPublishData & { postID: string }>(
-    PUBLISH_PENDING_KEY,
+    [PUBLISH_PENDING_KEY],
   );
   const followReq = useFollow();
   const unfollowReq = useUnfollow();

@@ -19,7 +19,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ILocale } from '@akashaorg/design-system/src/utils/time';
 import routes, { POST } from '../../../routes';
-import { UseQueryResult } from 'react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import { Extension } from '@akashaorg/design-system/lib/utils/extension';
 
 const { Box, EditorPlaceholder, EntryBox } = DS;

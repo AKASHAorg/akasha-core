@@ -15,6 +15,7 @@ export type InterestsProps = {
   interests: string[];
   cancelButton: ButtonType;
   saveButton: { label: string; handleClick: () => void };
+  customStyle?: string;
 };
 
 export const Interests: React.FC<InterestsProps> = ({
@@ -27,9 +28,15 @@ export const Interests: React.FC<InterestsProps> = ({
   interests,
   cancelButton,
   saveButton,
+  customStyle,
 }) => {
   return (
-    <Stack direction="column" justify="between" spacing="gap-y-4">
+    <Stack
+      direction="column"
+      justify="between"
+      spacing="gap-y-11"
+      customStyle={`h-full ${customStyle}`}
+    >
       <Stack direction="column">
         <Text variant="h6">{title}</Text>
         <Text variant="subtitle2" color={{ light: 'grey4', dark: 'grey6' }} weight="light">
