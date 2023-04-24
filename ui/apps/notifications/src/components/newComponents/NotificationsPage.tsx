@@ -6,7 +6,7 @@ import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaorg/ui
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import NotificationsCard from '@akashaorg/design-system-core/lib/components/NotificationsCard';
-import Snackbar, { snackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
+import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
@@ -192,7 +192,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
           </Button>
         </div>
         <Tab labels={labels}>
-          {/* <Box data-testid="notifications" customStyle="flex"> */}
           <NotificationsCard
             notifications={unreadNotifications || []}
             followingLabel={'is now following you'}
@@ -207,7 +206,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
             markAsReadLabel={'Mark as read'}
             emptyTitle={'Looks like you don’t have any new notifications yet!'}
             handleMessageRead={markAsRead.mutate}
-            // handleMessageRead={handleTopMenuClick}
             handleEntryClick={handleEntryClick}
             handleProfileClick={handleAvatarClick}
             // loggedIn={!!loginQuery.data?.ethAddress}
@@ -215,7 +213,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
             isFetching={false}
             // isFetching={notifReq.isFetching}
           />
-          {/* </Box> */}
           <div>
             <NotificationsCard
               notifications={allNotifications || []}
@@ -231,7 +228,6 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
               markAsReadLabel={'Mark as read'}
               emptyTitle={'Looks like you don’t have any new notifications yet!'}
               handleMessageRead={markAsRead.mutate}
-              // handleMessageRead={handleTopMenuClick}
               handleEntryClick={handleEntryClick}
               handleProfileClick={handleAvatarClick}
               //loggedIn={!!loginQuery.data?.ethAddress}
@@ -243,12 +239,13 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
         </Tab>
       </Card>
       {showFeedback && (
-        <Snackbar
-          title={''}
-          description={message}
-          type={messageType as snackBarType}
-          handleDismiss={() => setShowFeedback(false)}
-        />
+        <div className={tw('mt-4 w-full')}>
+          <Snackbar
+            title={message}
+            type={messageType as SnackBarType}
+            handleDismiss={() => setShowFeedback(false)}
+          />
+        </div>
       )}
     </>
   );
