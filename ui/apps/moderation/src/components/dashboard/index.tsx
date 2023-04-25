@@ -10,9 +10,16 @@ import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 
-import { EDIT_CATEGORIES, EDIT_CONTACT_INFO, EDIT_MAX_APPLICANTS, RESIGN_ROLE } from '../../routes';
+import {
+  ASSIGN_NEW_ADMIN,
+  EDIT_CATEGORIES,
+  EDIT_CONTACT_INFO,
+  EDIT_MAX_APPLICANTS,
+  RESIGN_ROLE,
+} from '../../routes';
 
 export interface IModeratorDashboardProps {
+  isAdmin: boolean;
   tabLabels: string[];
   moderatorSinceLabel: string;
   moderatorSince: number;
@@ -35,6 +42,7 @@ export interface IModeratorDashboardProps {
 
 const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
   const {
+    isAdmin,
     tabLabels,
     moderatorSinceLabel,
     moderatorSince,
@@ -159,7 +167,7 @@ const ModeratorDashboard: React.FC<IModeratorDashboardProps> = props => {
               size="md"
               label={resignButtonLabel}
               customStyle="self-end mt-3"
-              onClick={onButtonClick(RESIGN_ROLE)}
+              onClick={onButtonClick(isAdmin ? ASSIGN_NEW_ADMIN : RESIGN_ROLE)}
             />
           </Box>
         </Box>

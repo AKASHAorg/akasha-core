@@ -41,6 +41,7 @@ export const Dashboard: React.FC<IDashboardProps> = props => {
 
   return (
     <ModeratorDashboard
+      isAdmin={isAdmin}
       tabLabels={tabLabels.map(label => t('{{label}}', { label }))}
       moderatorSinceLabel={t('{{role}} since', { role })}
       moderatorSince={Date.parse(new Date('01 Jan 2020').toISOString())}
