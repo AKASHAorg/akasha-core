@@ -1,3 +1,4 @@
+import { AvatarSrc } from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Moderator } from '@akashaorg/typings/ui';
 
 export const moderators: Moderator[] = [
@@ -91,6 +92,63 @@ export const moderators: Moderator[] = [
     social: {
       discord: 'babaracus',
       email: 'babaracus',
+    },
+  },
+];
+
+export type ActiveModerator = {
+  name: string;
+  userName: string;
+  avatar: AvatarSrc;
+};
+
+export const activeModerators: ActiveModerator[] = [
+  {
+    name: 'Mr.bigote',
+    userName: 'mrbigote',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+  },
+  {
+    name: 'Pugstenson',
+    userName: 'pugstenson',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+  },
+  {
+    name: 'Jordan Lake',
+    userName: 'jordanlake',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+  },
+  {
+    name: 'Joan Jett',
+    userName: 'joanjett',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+  },
+  {
+    name: 'Rocker Mill',
+    userName: 'rockermill',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
+    },
+  },
+  {
+    name: 'Dudez Jillz',
+    userName: 'dudezjillz',
+    avatar: {
+      url: '',
+      fallbackUrl: '',
     },
   },
 ];
