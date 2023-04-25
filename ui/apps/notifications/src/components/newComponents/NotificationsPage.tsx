@@ -5,18 +5,26 @@ import { useSearchParams } from 'react-router-dom';
 import { useGetLogin, useFetchNotifications, useMarkAsRead } from '@akashaorg/ui-awf-hooks';
 import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
+import List, { ListProps } from '@akashaorg/design-system-core/lib/components/List';
+import Icon from '@akashaorg/design-system-core/lib/components/Icon';
 import NotificationsCard from '@akashaorg/design-system-core/lib/components/NotificationsCard';
 import Snackbar, { SnackBarType } from '@akashaorg/design-system-core/lib/components/Snackbar';
+import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import Tab from '@akashaorg/design-system-core/lib/components/Tab';
 import Text from '@akashaorg/design-system-core/lib/components/Text';
 import { EntityTypes, RootComponentProps } from '@akashaorg/typings/ui';
-import Icon from '@akashaorg/design-system-core/lib/components/Icon';
-import routes, { CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
+import routes, { SETTINGS_PAGE, CUSTOMIZE_NOTIFICATION_WELCOME_PAGE } from '../../routes';
+
+interface Notification {
+  id: string;
+  [key: string]: any;
+}
 
 const NotificationsPage: React.FC<RootComponentProps> = props => {
   const [searchParams] = useSearchParams();
   const [message, setMessage] = React.useState('');
   const [messageType, setMessageType] = React.useState('');
+  const [showMenu, setShowMenu] = React.useState(false);
 
   React.useEffect(() => {
     /* uncomment this part when backend data becomes available */
@@ -46,6 +54,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  //find if any message is passed in the url params and display it
   React.useEffect(() => {
     if (searchParams.get('message')) {
       setMessage(searchParams.get('message'));
@@ -75,8 +84,9 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   const notifReq = useFetchNotifications(loginQuery.data?.isReady && isLoggedIn);
 
   // mock data used for displaying something. Change when there's real data
-  const allNotifications = [
+  const allNotifications: Notification[] = [
     {
+      id: '1',
       body: {
         value: {
           author: {
@@ -98,6 +108,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       createdAt: Date.now(),
     },
     {
+      id: '2',
       body: {
         value: {
           author: {
@@ -119,6 +130,7 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
       createdAt: Date.now(),
     },
     {
+      id: '3',
       body: {
         value: {
           author: {
@@ -170,8 +182,44 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
   const labels = ['New', 'All'];
 
   const handleTopMenuClick = () => {
-    // do something
+    setShowMenu(!showMenu);
   };
+
+  const markAllAsRead = () => {
+    // do something
+    unreadNotifications.map(notif => {
+      //  markAsRead.mutate(notif.id);
+      if (notif.read === undefined) {
+        markAsRead.mutate(notif.id);
+      }
+    });
+    setShowMenu(!showMenu);
+
+    setMessage('Marked all as read successfully.');
+    setMessageType('success');
+    setShowFeedback(true);
+  };
+
+  const redirectToSettingsPage = () => {
+    // go to customization page
+    return navigateTo?.({
+      appName: '@akashaorg/app-notifications',
+      getNavigationUrl: () => routes[SETTINGS_PAGE],
+    });
+  };
+
+  const dropDownActions: ListProps['items'] = [
+    {
+      label: 'Mark all as read',
+      icon: 'CheckCircleIcon',
+      onClick: () => markAllAsRead(),
+    },
+    {
+      label: 'Settings',
+      icon: 'Cog8ToothIcon',
+      onClick: () => redirectToSettingsPage(),
+    },
+  ];
 
   return (
     <>
@@ -187,9 +235,14 @@ const NotificationsPage: React.FC<RootComponentProps> = props => {
           <Text variant="h5" align="center">
             Notifications
           </Text>
-          <Button customStyle="absolute right-4 top-5" plain={true} onClick={handleTopMenuClick}>
-            <Icon type="EllipsisHorizontalIcon" accentColor={true} />
-          </Button>
+          <Stack direction="column" spacing="gap-y-1" customStyle="absolute right-4 top-5">
+            <Button customStyle="relative" plain={true} onClick={handleTopMenuClick}>
+              <Icon type="EllipsisHorizontalIcon" accentColor={true} />
+            </Button>
+            {showMenu && (
+              <List items={dropDownActions} customStyle="absolute right-0 top-7 w-max" />
+            )}
+          </Stack>
         </div>
         <Tab labels={labels}>
           <NotificationsCard

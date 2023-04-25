@@ -158,9 +158,7 @@ const NotificationsCard: React.FC<INotificationsCard> = props => {
     const name = profileData.name || profileData.userName || profileData.ethAddress;
     const fullLabel = (
       <>
-        <Text variant="footnotes2">
-          <span className="text(secondaryLight dark:secondaryDark)">{name}</span> {' ' + label}
-        </Text>
+        <span className="text(secondaryLight dark:secondaryDark)">{name}</span> {' ' + label}
       </>
     );
 

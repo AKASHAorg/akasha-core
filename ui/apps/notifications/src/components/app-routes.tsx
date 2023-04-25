@@ -11,6 +11,7 @@ import routes, {
   CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE,
   CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE,
   SHOW_NOTIFICATIONS_PAGE,
+  SETTINGS_PAGE,
 } from '../routes';
 
 const AppRoutes = (props: RootComponentProps) => {
@@ -35,7 +36,7 @@ const AppRoutes = (props: RootComponentProps) => {
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_OPTIONS_PAGE]}
-          element={<CustomizeNotificationPage {...props} />}
+          element={<CustomizeNotificationPage {...props} initial={true} />}
         />
         <Route
           path={routes[CUSTOMIZE_NOTIFICATION_CONFIRMATION_PAGE]}
@@ -52,6 +53,10 @@ const AppRoutes = (props: RootComponentProps) => {
           }
         />
         <Route path={routes[SHOW_NOTIFICATIONS_PAGE]} element={<NotificationsPage {...props} />} />
+        <Route
+          path={routes[SETTINGS_PAGE]}
+          element={<CustomizeNotificationPage {...props} initial={false} />}
+        />
       </Routes>
     </Router>
   );
