@@ -18,6 +18,7 @@ import {
   EditMaxApplicantsPage,
   ResignRolePage,
   ResignConfirmationPage,
+  AssignAdminPage,
 } from '../pages';
 
 import routes, {
@@ -34,6 +35,7 @@ import routes, {
   MODERATION_VALUE,
   MODERATORS,
   VIEW_MODERATOR,
+  ASSIGN_NEW_ADMIN,
 } from '../routes';
 
 const { Box } = DS;
@@ -103,6 +105,11 @@ const AppRoutes: React.FC<RootComponentProps> = props => {
             element={
               <ResignConfirmationPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />
             }
+          />
+
+          <Route
+            path={routes[ASSIGN_NEW_ADMIN]}
+            element={<AssignAdminPage user={loginQuery.data?.pubKey} navigateTo={navigateTo} />}
           />
 
           <Route path={routes[MODERATORS]} element={<Moderators navigateTo={navigateTo} />} />
