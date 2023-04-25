@@ -1,4 +1,4 @@
-import { AvatarSrc } from '@akashaorg/design-system-core/lib/components/Avatar';
+import { ImageSrc } from '@akashaorg/design-system-core/lib/components/types/common.types';
 import { Moderator } from '@akashaorg/typings/ui';
 
 export const moderators: Moderator[] = [
@@ -99,7 +99,7 @@ export const moderators: Moderator[] = [
 export type ActiveModerator = {
   name: string;
   userName: string;
-  avatar: AvatarSrc;
+  avatar: ImageSrc;
 };
 
 export const activeModerators: ActiveModerator[] = [
