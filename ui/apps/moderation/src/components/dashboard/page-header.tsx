@@ -10,6 +10,7 @@ export interface IPageHeaderProps {
   label: string;
   cancelButtonLabel: string;
   confirmButtonLabel: string;
+  showButtons?: boolean;
   onCancelButtonClick: () => void;
   onConfirmButtonClick: () => void;
 }
@@ -19,6 +20,7 @@ const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
     label,
     cancelButtonLabel,
     confirmButtonLabel,
+    showButtons = true,
     children,
     onCancelButtonClick,
     onConfirmButtonClick,
@@ -37,20 +39,22 @@ const PageHeader: React.FC<PropsWithChildren<IPageHeaderProps>> = props => {
         <>{children}</>
       </Box>
 
-      <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
-        <Button plain={true} onClick={onCancelButtonClick}>
-          <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
-            {cancelButtonLabel}
-          </Text>
-        </Button>
+      {showButtons && (
+        <Box customStyle="flex space-x-6 items-center justify-end p-4 my-2">
+          <Button plain={true} onClick={onCancelButtonClick}>
+            <Text weight="bold" color={{ light: 'secondaryLight', dark: 'secondaryDark' }}>
+              {cancelButtonLabel}
+            </Text>
+          </Button>
 
-        <Button
-          size="md"
-          variant="primary"
-          label={confirmButtonLabel}
-          onClick={onConfirmButtonClick}
-        />
-      </Box>
+          <Button
+            size="md"
+            variant="primary"
+            label={confirmButtonLabel}
+            onClick={onConfirmButtonClick}
+          />
+        </Box>
+      )}
     </BasicCardBox>
   );
 };
